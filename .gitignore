@@ -1,0 +1,28 @@
+# standard
+*~
+*.pyc
+*.pyo
+*.swo
+*.swp
+*.mo
+*.egg-info
+/.coverage
+.DS_Store
+
+# buildout
+/.installed.cfg
+/.mr.developer.cfg
+/bin
+/buildout
+/downloads
+/lib
+/share
+/venv
+
+# local
+/local.ini
+/local.cfg
+
+# app
+/data/*
+
