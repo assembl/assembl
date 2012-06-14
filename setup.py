@@ -8,12 +8,13 @@ CHANGES = open(os.path.join(here, 'CHANGES.txt')).read()
 
 requires = [
     'pyramid',
-    'SQLAlchemy',
-    'transaction',
-    'pyramid_tm',
     'pyramid_debugtoolbar',
-    'zope.sqlalchemy',
+    'pyramid_tm',
+    'SQLAlchemy',
+    'sqlalchemy-migrate',
+    'transaction',
     'waitress',
+    'zope.sqlalchemy',
     ]
 
 setup(name='assembl',
@@ -39,7 +40,7 @@ setup(name='assembl',
       [paste.app_factory]
       main = assembl:main
       [console_scripts]
-      initialize_assembl_db = assembl.scripts.initializedb:main
+      assembl-db-manage = assembl.scripts.db_manage:main
       """,
       )
 
