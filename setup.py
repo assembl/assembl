@@ -41,6 +41,7 @@ setup(name='assembl',
       main = assembl:main
       [console_scripts]
       assembl-db-manage = assembl.scripts.db_manage:main
+      assembl-imap-test = assembl.scripts.imap_test:main
       """,
       )
 
