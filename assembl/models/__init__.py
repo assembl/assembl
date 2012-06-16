@@ -31,3 +31,5 @@ class MyModel(TimestampedBase):
         self.name = name
         self.value = value
 
+
+from .post import Post
