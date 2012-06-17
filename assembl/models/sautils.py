@@ -2,7 +2,17 @@
 
 from datetime import datetime
 
-from sqlalchemy import Column, DateTime
+from sqlalchemy import Column, DateTime, engine_from_config
+
+from pyramid.paster import get_appsettings, setup_logging
+
+
+def create_engine(config_uri):
+    """ Return an SQLAlchemy engine configured as per the provided config. """
+    setup_logging(config_uri)
+    settings = get_appsettings(config_uri)
+    engine = engine_from_config(settings, 'sqlalchemy.')
+    return engine
 
 
 class Timestamped(object):
