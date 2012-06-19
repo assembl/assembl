@@ -1,6 +1,7 @@
 from sqlalchemy import Column, DateTime, Integer, Text, Unicode
 
 from . import TimestampedBase
+from .sautils import BaseOps
 from ..lib import email
 
 
