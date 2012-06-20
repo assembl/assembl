@@ -1,34 +1,19 @@
-from pyramid.response import Response
-from pyramid.view import view_config
+""" App URL routing is configured in this module. """
 
-from sqlalchemy.exc import DBAPIError
 
-from .models import (
-    DBSession,
-    MyModel,
-    )
+def includeme(config):
+    config.include(api, route_prefix='/api')
 
-@view_config(route_name='home', renderer='templates/mytemplate.pt')
-def my_view(request):
-    try:
-        one = DBSession.query(MyModel).filter(MyModel.name=='one').first()
-    except DBAPIError:
-        return Response(conn_err_msg, content_type='text/plain', status_int=500)
-    return {'one':one, 'project':'assembl'}
 
-conn_err_msg = """\
-Pyramid is having a problem using your SQL database.  The problem
-might be caused by one of the following things:
+def api(config):
+    config.include(api_post, route_prefix='/post')
 
-1.  You may need to run the "initialize_assembl_db" script
-    to initialize your database tables.  Check your virtual 
-    environment's "bin" directory for this script and try to run it.
 
-2.  Your database server may not be running.  Check that the
-    database server referred to by the "sqlalchemy.url" setting in
-    your "development.ini" file is running.
+def api_post(config):
+    _add = config.add_route
 
-After you fix the problem, please restart the Pyramid application to
-try it again.
-"""
-
+    _add('api.post.list', 'list')
+    _add('api.post.create', 'create')
+    _add('api.post.get', 'get/{id}')
+    _add('api.post.update', 'update/{id}')
+    _add('api.post.delete', 'delete/{id}')
