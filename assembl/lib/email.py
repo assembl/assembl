@@ -62,7 +62,11 @@ class IMAP4Mailbox(object):
 
 
 def parsedate(date_string):
-    """ Make a UTC (but naive) datetime object from a RFC2822 string. """
+    """ Make a UTC (but naive) datetime object from an RFC2822 string. """
     struct_time = email.utils.parsedate_tz(date_string)
-    timezone = struct_time[-1] or 0
-    return datetime(*list(struct_time[:6])) - timedelta(seconds=timezone)
+    try:
+        timezone = struct_time[-1] or 0
+        return datetime(*list(struct_time[:6])) - timedelta(seconds=timezone)
+    except:
+        raise ValueError('Error parsing date. Make sure to provide an RFC2822 '
+                         'date string.')
