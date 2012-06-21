@@ -3,9 +3,19 @@
 from datetime import datetime
 
 from colanderalchemy import Column, SQLAlchemyMapping
-from sqlalchemy import DateTime
+from sqlalchemy import DateTime, engine_from_config
+
+from pyramid.paster import get_appsettings, setup_logging
 
 _DB = None
+
+
+def create_engine(config_uri):
+    """ Return an SQLAlchemy engine configured as per the provided config. """
+    setup_logging(config_uri)
+    settings = get_appsettings(config_uri)
+    engine = engine_from_config(settings, 'sqlalchemy.')
+    return engine
 
 
 def db(session=None):
