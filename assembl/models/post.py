@@ -1,7 +1,8 @@
-from sqlalchemy import Column, DateTime, Integer, Text, Unicode
+import colander
+from colanderalchemy import Column
+from sqlalchemy import DateTime, Integer, Text, Unicode
 
 from . import TimestampedBase
-from .sautils import BaseOps
 from ..lib import email
 
 
@@ -11,7 +12,8 @@ class Post(TimestampedBase):
 
     id = Column(Integer, primary_key=True)
 
-    date = Column(DateTime, nullable=False)
+    date = Column(DateTime, nullable=False,
+                  ca_type=colander.DateTime(default_tzinfo=None))
     author = Column(Unicode(1024), nullable=False)
     subject = Column(Unicode(1024))
     body = Column(Text, nullable=False)

@@ -43,6 +43,8 @@ class TestSAUtils(unittest.TestCase):
             self.assertIs(bmodel.id, None)
             bmodel = BaseModel(name='two')
             bmodel.save()
+            self.assertIs(bmodel.id, None)
+            bmodel.save(flush=True)
             self.assertIsNot(bmodel.id, None)
         bmodel = BaseModel.get(name='one')
         self.assertIsNot(bmodel.id, None)

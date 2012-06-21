@@ -32,7 +32,6 @@ class TestPostAPI(unittest.TestCase):
                              values)
             self.assertIs(post.id, None)
             post.save()
-            self.assertIsNot(post.id, None)
 
         post = self.api.get(author=u'me')
         self.assertEqual(dict(post.iteritems(include=values.keys())), values)

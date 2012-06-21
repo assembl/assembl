@@ -9,6 +9,7 @@ class PostAPI(object):
 
     def create(self, **fields):
         obj = self.Model(**fields)
+        obj.save()
         return obj
 
     def get(self, **criteria):
@@ -17,12 +18,14 @@ class PostAPI(object):
     def update(self, obj, **fields):
         for key, value in fields.iteritems():
             setattr(obj, key, value)
+        obj.save()
         return obj
 
     def delete(self, obj=None, **criteria):
         if obj is None:
-            obj = self.get(**criteria)
+            obj = self.Model.get(**criteria)
         obj.delete()
+        return True
 
     def list(self, **criteria):
         return self.Model.list(**criteria)
