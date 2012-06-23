@@ -6,8 +6,8 @@ import transaction
 
 from pyramid import testing
 
+from ...lib.sautils import BaseOps
 from ...models import Base, TimestampedBase, DBSession as db
-from ...models.sautils import BaseOps
 
 
 class BaseModel(BaseOps, Base):

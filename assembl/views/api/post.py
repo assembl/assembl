@@ -15,7 +15,6 @@ def notfound(exc, request):
 
 @view_config(context=Invalid)
 def failed_validation(exc, request):
-    import ipdb; ipdb.set_trace()
     response =  Response('Validation failed')
     response.status_int = 400
     return response
@@ -54,3 +53,7 @@ class PostAPIView(object):
     def delete(self):
         criteria = self.validate(self.request.matchdict)
         return dict(result=self.api.delete(**criteria))
+
+    @view_config(route_name='api.post.list')
+    def list(self):
+        return dict(posts=[dict(p) for p in self.api.list()])

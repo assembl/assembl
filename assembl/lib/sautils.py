@@ -22,8 +22,8 @@ def db(session=None):
     """ Grab the DBSession object and avoid circular dependency. """
     global _DB
     if _DB is None:
-        if session is not None:
-            from . import DBSession as session
+        if session is None:
+            from ..models import DBSession as session
         _DB = session
     return _DB
 

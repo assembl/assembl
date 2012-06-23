@@ -3,7 +3,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import mapper, scoped_session, sessionmaker
 from zope.sqlalchemy import ZopeTransactionExtension
 
-from .sautils import insert_timestamp, Timestamped, update_timestamp
+from ..lib.sautils import insert_timestamp, Timestamped, update_timestamp
 
 
 def _declarative_bases(metadata):

@@ -2,8 +2,8 @@ from pyramid.config import Configurator
 from sqlalchemy import engine_from_config
 
 from . import views
+from .lib.alembic import ensure_db_version
 from .lib.json import json_renderer_factory
-from .alembic import ensure_db_version
 from .models import DBSession as db
 
 
@@ -19,4 +19,5 @@ def main(global_config, **settings):
     config.add_static_view('static', 'static', cache_max_age=3600)
     config.include(views)
     config.scan('.lib')
+    config.scan('.views')
     return config.make_wsgi_app()

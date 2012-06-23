@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+
 import sys
 
 from alembic import command
@@ -6,8 +8,8 @@ from alembic.migration import MigrationContext
 from alembic.script import ScriptDirectory
 import transaction
 
+from ..lib.sautils import create_engine
 from ..models import DBSession as db, metadata, MyModel
-from ..models.sautils import create_engine
 
 
 def bootstrap_db(config_uri):
