@@ -10,6 +10,7 @@ requires = [
     'alembic',
     'colander',
     'colanderalchemy',
+    'psycopg2',
     'pyramid',
     'pyramid_debugtoolbar',
     'pyramid_tm',
