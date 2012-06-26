@@ -4,11 +4,23 @@ from __future__ import absolute_import
 
 from datetime import datetime, timedelta
 import email
+import platform
 import re
 
 from pyramid.settings import asbool
 
 from .vendor import imaplib2
+
+_py2_email_header_ecre = re.compile(r'''
+  =\?                   # literal =?
+  (?P<charset>[^?]*?)   # non-greedy up to the next ? is the charset
+  \?                    # literal ?
+  (?P<encoding>[qb])    # either a "q" or a "b", case insensitive
+  \?                    # literal ?
+  (?P<encoded>.*?)      # non-greedy up to the next ?= is the encoded string
+  \?=                   # literal ?=
+  (?=[ \t)]|$)          # whitespace or the end of the string
+  ''', re.VERBOSE | re.IGNORECASE | re.MULTILINE)
 
 
 class MailboxSelectionError(Exception):
@@ -70,3 +82,23 @@ def parsedate(date_string):
     except:
         raise ValueError('Error parsing date. Make sure to provide an RFC2822 '
                          'date string.')
+
+
+def patch_stdlib(silent=False):
+    """ Patch an annoying encoded-words parser.
+
+    The bug has been fixed in a more correct way in Python 3.3 (see
+    http://bugs.python.org/issue1079) but this quick-n-dirty patch does the
+    job, at least for Python 2 (2.5 and up).
+
+    """
+    from email import header
+    major, minor = map(int, platform.python_version_tuple()[:2])
+    if major == 2 and 5 <= minor <= 7:
+        ecre = _py2_email_header_ecre
+    else:
+        ecre = None
+    if ecre and header.ecre != ecre:
+        if not silent:
+            print 'Patching stdlib email.header'
+        header.ecre = ecre
