@@ -39,13 +39,16 @@ def bootstrap_db(config_uri):
         model = MyModel(name='one', value=1)
         db.add(model)
 
+    # Clean up the sccoped session to allow a later app instantiation.
+    db.remove()
+
     if heads:
         command.stamp(config, 'head')
 
 
-def ensure_db_version(global_config, engine):
+def ensure_db_version(config_uri, engine):
     """ Exit if database is not up-to-date. """
-    config = Config(global_config['__file__'])
+    config = Config(config_uri)
     script_dir = ScriptDirectory.from_config(config)
     heads = script_dir.get_heads()
 
@@ -63,12 +66,23 @@ def ensure_db_version(global_config, engine):
     if not db_version:
         sys.stderr.write('Database not initialized.\n'
                          'Try this: "assembl-db-manage %s bootstrap".\n'
-                         % global_config['__file__'])
+                         % config_uri)
         sys.exit(2)
 
     if db_version != repo_version:
         sys.stderr.write('Stopping: DB version (%s) not up-to-date (%s).\n'
                          % (db_version, repo_version))
         sys.stderr.write('Try this: "assembl-db-manage %s upgrade head".\n'
-                         % global_config['__file__'])
+                         % config_uri)
         sys.exit(2)
+
+
+def is_migration_script():
+    """ Determine weather the current process is a migration script. """
+    return 'alembic' in sys.argv[0] or 'assembl-db-manage' in sys.argv[0]
+
+
+def includeme(config):
+    """ Initialize Alembic-related stuff at app start-up time. """
+    if not is_migration_script():
+        ensure_db_version(config.registry.settings['config_uri'], db.bind)

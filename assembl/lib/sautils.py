@@ -160,3 +160,9 @@ def update_timestamp(mapper, connection, target):
     """ Update the modified date on models that have this field. """
     if hasattr(target, 'mod_date'):
         target.mod_date = datetime.utcnow()
+
+
+def includeme(config):
+    """ Initialize SQLAlchemy at app start-up time. """
+    engine = engine_from_config(config.registry.settings, 'sqlalchemy.')
+    db().configure(bind=engine)

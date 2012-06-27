@@ -102,3 +102,8 @@ def patch_stdlib(silent=False):
         if not silent:
             print 'Patching stdlib email.header'
         header.ecre = ecre
+
+
+def includeme(config):
+    """ Initialize email-related stuff at app start-up time. """
+    patch_stdlib()
