@@ -6,7 +6,7 @@ import transaction
 
 from pyramid import testing
 
-from ...lib.sautils import BaseOps
+from ...lib.sqla import BaseOps
 from ...models import Base, TimestampedBase, DBSession as db
 
 

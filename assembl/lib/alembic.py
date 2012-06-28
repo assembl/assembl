@@ -8,7 +8,7 @@ from alembic.migration import MigrationContext
 from alembic.script import ScriptDirectory
 import transaction
 
-from ..lib.sautils import create_engine
+from ..lib.sqla import create_engine
 from ..models import DBSession as db, metadata, MyModel
 
 

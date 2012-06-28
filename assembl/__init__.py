@@ -8,7 +8,7 @@ def main(global_config, **settings):
     settings['config_uri'] = global_config['__file__']
 
     config = Configurator(settings=settings)
-    config.include('.lib.sautils')
+    config.include('.lib.sqla')
     config.include('.lib.alembic')
     config.include('.lib.email')
     config.include('.views')
