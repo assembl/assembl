@@ -20,6 +20,8 @@ requires = [
     'zope.sqlalchemy',
     ]
 
+tests_require = ['webtest']
+
 setup(name='assembl',
       version='0.0',
       description='assembl',
@@ -39,6 +41,8 @@ setup(name='assembl',
       zip_safe=False,
       test_suite='assembl',
       install_requires=requires,
+      tests_require=tests_require,
+      extras_require=dict(test=tests_require),
       entry_points="""\
       [paste.app_factory]
       main = assembl:main

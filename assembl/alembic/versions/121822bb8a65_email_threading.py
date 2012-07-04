@@ -18,7 +18,7 @@ import transaction
 
 
 from assembl import models as m
-from assembl.model.post import msg_id
+from assembl.models.post import msg_id
 
 db = m.DBSession
 

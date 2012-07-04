@@ -5,6 +5,7 @@
 *.swo
 *.swp
 *.mo
+*.egg
 *.egg-info
 /.coverage
 .DS_Store

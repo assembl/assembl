@@ -12,26 +12,29 @@ from ..lib.sqla import create_engine
 from ..models import DBSession as db, metadata, MyModel
 
 
-def bootstrap_db(config_uri):
-    """ Bring a blank database to a functional state. """
-    engine = create_engine(config_uri)
+def bootstrap_db(config_uri=None, engine=None, with_migration=True):
+    """Bring a blank database to a functional state."""
+    if engine is None:
+        engine = create_engine(config_uri)
     db.configure(bind=engine)
-    context = MigrationContext.configure(engine.connect())
-    db_version = context.get_current_revision()
 
-    if db_version:
-        sys.stderr.write('Database already initialized. Bailing out.\n')
-        sys.exit(2)
+    if with_migration:
+        context = MigrationContext.configure(engine.connect())
+        db_version = context.get_current_revision()
 
-    config = Config(config_uri)
-    script_dir = ScriptDirectory.from_config(config)
-    heads = script_dir.get_heads()
+        if db_version:
+            sys.stderr.write('Database already initialized. Bailing out.\n')
+            sys.exit(2)
 
-    if len(heads) > 1:
-        sys.stderr.write('Error: migration scripts have more than one head.\n'
-                         'Please resolve the situation before attempting to'
-                         'bootstrap the database.\n')
-        sys.exit(2)
+        config = Config(config_uri)
+        script_dir = ScriptDirectory.from_config(config)
+        heads = script_dir.get_heads()
+
+        if len(heads) > 1:
+            sys.stderr.write('Error: migration scripts have more than one '
+                             'head.\nPlease resolve the situation before '
+                             'attempting to bootstrap the database.\n')
+            sys.exit(2)
 
     metadata.create_all(engine)
 
@@ -42,12 +45,12 @@ def bootstrap_db(config_uri):
     # Clean up the sccoped session to allow a later app instantiation.
     db.remove()
 
-    if heads:
+    if with_migration and heads:
         command.stamp(config, 'head')
 
 
 def ensure_db_version(config_uri, engine):
-    """ Exit if database is not up-to-date. """
+    """Exit if database is not up-to-date."""
     config = Config(config_uri)
     script_dir = ScriptDirectory.from_config(config)
     heads = script_dir.get_heads()
@@ -78,11 +81,12 @@ def ensure_db_version(config_uri, engine):
 
 
 def is_migration_script():
-    """ Determine weather the current process is a migration script. """
+    """Determine weather the current process is a migration script."""
     return 'alembic' in sys.argv[0] or 'assembl-db-manage' in sys.argv[0]
 
 
 def includeme(config):
-    """ Initialize Alembic-related stuff at app start-up time. """
-    if not is_migration_script():
+    """Initialize Alembic-related stuff at app start-up time."""
+    skip_migration = config.registry.settings.get('app.skip_migration')
+    if not skip_migration and not is_migration_script():
         ensure_db_version(config.registry.settings['config_uri'], db.bind)

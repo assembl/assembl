@@ -6,17 +6,15 @@ import transaction
 
 from pyramid.paster import bootstrap
 
-from ..api.post import PostAPI
+from ..api import post as api
 from ..lib.email import IMAP4Mailbox, parsedate
 from ..lib.scripting import exitonbreak
-from ..models import Post, DBSession as db
 
 
 @exitonbreak
 def main():
     args = parse_args()
     env = bootstrap(args.config_uri)
-    post_api = PostAPI()
 
     try:
         imap = IMAP4Mailbox(settings=env['registry'].settings)
@@ -35,13 +33,13 @@ def main():
             print('Importing mailbox messages...'),
             with transaction.manager:
                 for msg in imap.messages:
-                    post = post_api.create(email_text=str(msg))
+                    post = api.create(email_text=str(msg))
                     count += 1
             print('imported %d messages.' % count)
             print('Threading messages...'),
             with transaction.manager:
-                posts = post_api.list()
-                post_api.thread(posts)
+                posts = api.list()
+                api.thread(posts)
             print('threaded %d messages.' % len(posts))
             print('Finished.')
     finally:
