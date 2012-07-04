@@ -110,8 +110,10 @@ class BaseOps(object):
         db().delete(self)
 
     def update(self, **values):
+        fields = self._col_names()
         for name, value in values.iteritems():
-            setattr(self, name, value)
+            if name in fields:
+                setattr(self, name, value)
 
     def save(self, flush=False):
         if self.is_new:
