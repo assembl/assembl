@@ -31,30 +31,30 @@ class PostAPIView(object):
             kwargs['include'] = fields.keys()
         return api.validator(**kwargs).deserialize(fields)
 
-    @view_config(route_name='api.post.create', request_method='POST')
+    @view_config(route_name='api.post.list', http_cache=60)
+    def list(self):
+        return dict(posts=[dict(p) for p in api.list()])
+
+    @view_config(route_name='api.post.list', request_method='POST')
     def create(self):
         fields = self.validate(dict(self.request.POST), include='__nopk__',
                                exclude=['message_id'])
         return dict(api.create(**fields))
 
-    @view_config(route_name='api.post.get', http_cache=60)
+    @view_config(route_name='api.post.item', http_cache=60)
     def get(self):
         criteria = self.validate(self.request.matchdict)
         return dict(api.get(**criteria))
 
-    @view_config(route_name='api.post.update', request_method='POST')
+    @view_config(route_name='api.post.item', request_method='PUT')
     def update(self):
         criteria = self.validate(self.request.matchdict)
         post = api.get(**criteria)
         post.update(**self.validate(dict(self.request.POST)))
         return dict(post)
 
-    @view_config(route_name='api.post.delete')
+    @view_config(route_name='api.post.item', request_method='DELETE')
     def delete(self):
         criteria = self.validate(self.request.matchdict)
         api.get(**criteria).delete()
         return dict(result=True)
-
-    @view_config(route_name='api.post.list')
-    def list(self):
-        return dict(posts=[dict(p) for p in api.list()])

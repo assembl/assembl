@@ -17,8 +17,5 @@ def api_urls(config):
 def api_post_urls(config):
     _add = config.add_route
 
-    _add('api.post.list', 'list')
-    _add('api.post.create', 'create')
-    _add('api.post.get', 'get/{id}')
-    _add('api.post.update', 'update/{id}')
-    _add('api.post.delete', 'delete/{id}')
+    _add('api.post.list', '')
+    _add('api.post.item', '{id}')
