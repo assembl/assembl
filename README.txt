@@ -8,7 +8,9 @@ Getting Started
 
 - $venv/bin/python setup.py develop
 
-- $venv/bin/populate_assembl development.ini
+- cp development.ini local.ini
 
-- $venv/bin/pserve development.ini
+- $venv/bin/assembl-db-manage local.ini bootstrap
+
+- $venv/bin/pserve --reload local.ini
 
