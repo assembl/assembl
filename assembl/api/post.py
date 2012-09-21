@@ -74,7 +74,7 @@ def to_thread_msg(post):
 
 
 def thread(posts):
-    """Thread the posts list that corresponds to the criteria."""
+    """Thread the provided list of posts."""
     posts = dict([(p.id, p) for p in posts])
     emails = (jwzt.make_message(to_thread_msg(p)) for p in posts.values())
     root = None

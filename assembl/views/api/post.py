@@ -1,10 +1,19 @@
 from colander import Invalid
+from cornice import Service
 from sqlalchemy.orm.exc import NoResultFound
 
 from pyramid.view import view_config, view_defaults
 from pyramid.response import Response
 
+from .. import cornice_paths
 from ...api import post as api
+
+
+desc = 'An API to manipulate posts.'
+posts_svc = Service(name='posts', path=cornice_paths['posts'],
+                    description=desc, renderer='json')
+post_svc = Service(name='post', path=cornice_paths['post'],
+                   description=desc, renderer='json')
 
 
 @view_config(context=NoResultFound)
@@ -20,41 +29,40 @@ def failed_validation(exc, request):
     return response
 
 
-@view_defaults(renderer='json', request_method='GET', http_cache=0)
-class PostAPIView(object):
-    """API web gateway to posts."""
-    def __init__(self, request):
-        self.request = request
+def validate(fields, **kwargs):
+    if 'include' not in kwargs and 'exclude' not in kwargs:
+        kwargs['include'] = fields.keys()
+    return api.validator(**kwargs).deserialize(fields)
 
-    def validate(self, fields, **kwargs):
-        if 'include' not in kwargs and 'exclude' not in kwargs:
-            kwargs['include'] = fields.keys()
-        return api.validator(**kwargs).deserialize(fields)
 
-    @view_config(route_name='api.post.list', http_cache=60)
-    def list(self):
-        return dict(posts=[dict(p) for p in api.list()])
+@posts_svc.get()
+def list_posts(request):
+    return dict(posts=[dict(p) for p in api.list()])
 
-    @view_config(route_name='api.post.list', request_method='POST')
-    def create(self):
-        fields = self.validate(dict(self.request.POST), include='__nopk__',
-                               exclude=['message_id'])
-        return dict(api.create(**fields))
 
-    @view_config(route_name='api.post.item', http_cache=60)
-    def get(self):
-        criteria = self.validate(self.request.matchdict)
-        return dict(api.get(**criteria))
+@posts_svc.post()
+def create_post(request):
+    fields = validate(dict(request.POST), include='__nopk__',
+                      exclude=['message_id'])
+    return dict(api.create(**fields))
 
-    @view_config(route_name='api.post.item', request_method='PUT')
-    def update(self):
-        criteria = self.validate(self.request.matchdict)
-        post = api.get(**criteria)
-        post.update(**self.validate(dict(self.request.POST)))
-        return dict(post)
 
-    @view_config(route_name='api.post.item', request_method='DELETE')
-    def delete(self):
-        criteria = self.validate(self.request.matchdict)
-        api.get(**criteria).delete()
-        return dict(result=True)
+@post_svc.get()
+def get_post(request):
+    criteria = validate(request.matchdict)
+    return dict(api.get(**criteria))
+
+
+@post_svc.post()
+def update_post(request):
+    criteria = validate(request.matchdict)
+    post = api.get(**criteria)
+    post.update(**validate(dict(request.POST)))
+    return dict(post)
+
+
+@post_svc.delete()
+def delete_post(request):
+    criteria = validate(request.matchdict)
+    api.get(**criteria).delete()
+    return dict(result=True)

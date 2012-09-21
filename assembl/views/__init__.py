@@ -3,6 +3,12 @@
 from ..lib.json import json_renderer_factory
 
 
+# We can't create cornice services here, but at least we can build URI paths.
+# They will be used in the respective view modules to create the cornice
+# services.
+cornice_paths = dict()
+
+
 def includeme(config):
     """ Initialize views and renderers at app start-up time. """
     config.add_renderer('json', json_renderer_factory)
@@ -11,11 +17,10 @@ def includeme(config):
 
 
 def api_urls(config):
-    config.include(api_post_urls, route_prefix='/post')
+    config.include(api_post_urls, route_prefix='/posts')
 
 
 def api_post_urls(config):
-    _add = config.add_route
-
-    _add('api.post.list', '')
-    _add('api.post.item', '{id}')
+    global cornice_paths
+    cornice_paths['posts'] = config.route_prefix
+    cornice_paths['post'] = '%s/{id}' % config.route_prefix
