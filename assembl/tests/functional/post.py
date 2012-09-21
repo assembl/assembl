@@ -46,25 +46,25 @@ class TestPostAPI(unittest.TestCase):
         request = testing.DummyRequest()
         values = self.s(dict(author=u'me', subject=u'test',
                              date=datetime.utcnow(), body=u'clever stuff'))
-        result = self.testapp.post('/api/post/', values, status=200)
+        result = self.testapp.post('/api/posts', values, status=200)
         r = self.l(result, values)
         self.assertEqual(self.d(values), self.d(r))
         result = self.l(result)
 
-        post = self.testapp.get('/api/post/%d' % result['id'], status=200)
+        post = self.testapp.get('/api/posts/%d' % result['id'], status=200)
         self.assertEqual(result, self.l(post))
 
         values['author'] = u'them'
-        result = self.testapp.put('/api/post/%d' % result['id'],
+        result = self.testapp.post('/api/posts/%d' % result['id'],
                                   dict(author=u'them'), status=200)
         r = self.l(result, values)
         self.assertEqual(self.d(values), self.d(r))
         result = self.l(result)
 
-        post = self.testapp.get('/api/post/%d' % result['id'], status=200)
+        post = self.testapp.get('/api/posts/%d' % result['id'], status=200)
         self.assertEqual(result, self.l(post))
 
-        post = self.testapp.delete('/api/post/%d' % result['id'],
+        post = self.testapp.delete('/api/posts/%d' % result['id'],
                                 status=200)
         self.assertTrue(self.l(post)['result'])
-        self.testapp.get('/api/post/%d' % result['id'], status=404)
+        self.testapp.get('/api/posts/%d' % result['id'], status=404)
