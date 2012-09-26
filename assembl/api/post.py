@@ -44,6 +44,21 @@ def from_email(msg):
     return post
 
 
+def get_thread(root_id, levels=None):
+    """Get the thread of messages starting at the specified post id.
+
+    The `levels` argument limits how deep to search from the root. The root
+    post itself is at level 1.
+
+    The returned posts will be sorted by distance from the root.
+
+    """
+    for post in Post.get(id=root_id).get_thread(levels):
+        post = dict(zip(post._labels, post))  # Turn NamedTuples into dicts.
+        del post['level']
+        yield Post(**post)
+
+
 def to_thread_msg(post):
     """Turn a post into a minimal email.message.Message object.
 

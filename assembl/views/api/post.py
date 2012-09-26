@@ -37,7 +37,15 @@ def validate(fields, **kwargs):
 
 @posts_svc.get()
 def list_posts(request):
-    return dict(posts=[dict(p) for p in api.list()])
+    id = request.GET.get('start', None)
+
+    if id is not None:
+        levels = request.GET.get('levels', None)
+        posts = api.get_thread(int(id), int(levels) if levels else None)
+    else:
+        posts = api.list()
+
+    return dict(posts=[dict(p) for p in posts])
 
 
 @posts_svc.post()

@@ -37,6 +37,12 @@ class BaseOps(object):
     both data storage- and web- specific stuff.
 
     """
+
+    @property
+    def db(self):
+        """Return the SQLAlchemy DBSession object."""
+        return db()
+
     def __iter__(self, **kwargs):
         """Return a generator that iterates through model columns."""
         return self.iteritems(**kwargs)
