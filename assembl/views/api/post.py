@@ -45,7 +45,7 @@ def list_posts(request):
     else:
         posts = api.list()
 
-    return dict(posts=[dict(p) for p in posts])
+    return [dict(p) for p in posts]
 
 
 @posts_svc.post()
