@@ -44,6 +44,21 @@ $(function(){
         }
     });
 
+    /* For now we are using our own Annotation model, but 
+       it has all the same properties as OpenAnnotation */
+    var Annotation = Backbone.Model.extend({
+        defaults: function() {
+            return {
+                uid: null,
+                created_date: null,
+                constrains: null, // message id this annotation is for
+                constraint_prefix: null,
+                constraint_exact: null,
+                constraint_postfix: null
+            }
+        }
+    })
+
     var PostView = Backbone.View.extend({
         //el: '#hello',
         tagName : 'li',
