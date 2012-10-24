@@ -34,32 +34,37 @@ $(function(){
         defaults: function() {
             return {
                 title: null,
-                description: null,
+                definition: null,
                 extracts: [], // Contains Open Annotations - to be determined how to model
                 children: [],
                 parent: null,
-                isTOC: false,
-                isSynthesis: false
+                featured: false, // Potentially unnecessary - if this node will appear in the short, algorithmically-generated TOC
+                isSynthesis: false // If this Node is being used to create a synthesis
             }
         }
     });
 
-    /* For now we are using our own Annotation model, but 
-       it has all the same properties as OpenAnnotation */
+    var NodeCollection = Backbone.Collection.extend({
+        model: Node,
+        url: ''
+    });
+
+    /* For now we are using our own Annotation model that is
+        somewhat similar to OpenAnnotation except 
+        instead of storing prefix and postfix, store start and end points e.g. 
+            * coordinates
+            * timestamps
+            * characters
+    */
     var Annotation = Backbone.Model.extend({
         defaults: function() {
             return {
                 creator: null, // user id of the annotation creator
                 created: null, // date of creation
-                body: null, // body of the annotation, same as what's in constraint exact
-                target: {
-                    constrains: null, // message id this annotation is for
-                    constraints: {
-                        prefix: null,
-                        exact: null,
-                        postfix: null
-                    }
-                }
+                body: null, // body of the annotation
+                annotates: null, // id of message this annotation is taken from
+                start: null, // start parameter
+                end: null // end parameter
             }
         }
     })
@@ -67,7 +72,7 @@ $(function(){
     var PostView = Backbone.View.extend({
         //el: '#hello',
         tagName : 'li',
-        className : "post",
+        className : 'post',
 
     	//initialize: function(options) {
             // instantiate a password collection
@@ -149,6 +154,41 @@ $(function(){
             //_(this._postViews).each(function(pv) {
               //$(that.el).append(pv.render().el);
             //});
+        }
+    });
+
+    var NodeView = Backbone.View.extend({
+        tagName : 'li',
+        className : 'node',
+
+        render: function() {
+            this.$el.html(ich.node(this.model.toJSON()));
+            return this;
+        }
+    });
+
+    var NodeCollectionView = Backbone.View.extend({
+        initialize : function() {
+            var that = this;
+            this._nodeViews = [];
+         
+            this.collection.each(function(node) {
+              that._nodeViews.push(new NodeView({
+                model : node,
+                tagName : 'li'
+              }));
+            });
+          },
+         
+          render : function() {
+            var that = this;
+            // Clear out this element.
+            $(this.el).empty();
+         
+            // Render each sub-view and append it to the parent view's element.
+            _(this._nodeViews).each(function(nv) {
+              $(that.el).append(nv.render().el);
+            });
         }
     });
 
