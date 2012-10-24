@@ -49,12 +49,17 @@ $(function(){
     var Annotation = Backbone.Model.extend({
         defaults: function() {
             return {
-                uid: null,
-                created_date: null,
-                constrains: null, // message id this annotation is for
-                constraint_prefix: null,
-                constraint_exact: null,
-                constraint_postfix: null
+                creator: null, // user id of the annotation creator
+                created: null, // date of creation
+                body: null, // body of the annotation, same as what's in constraint exact
+                target: {
+                    constrains: null, // message id this annotation is for
+                    constraints: {
+                        prefix: null,
+                        exact: null,
+                        postfix: null
+                    }
+                }
             }
         }
     })
