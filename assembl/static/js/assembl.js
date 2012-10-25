@@ -25,7 +25,7 @@ $(function(){
 	var PostCollection = Backbone.Collection.extend({
     	// Reference to this collection's model.
     	model: Post,
-    	url: '/api/posts?start=17&levels=6'
+    	url: '/api/posts'
     });
 
     /* A node of the full debate summary tree */
@@ -46,7 +46,7 @@ $(function(){
 
     var NodeCollection = Backbone.Collection.extend({
         model: Node,
-        url: ''
+        url: '/nodetest'
     });
 
     /* For now we are using our own Annotation model that is
@@ -90,32 +90,20 @@ $(function(){
         }
     });
 
-    var UpdatingPostView = PostView.extend({
-        initialize : function(options) {
-            this.render = _.bind(this.render, this); 
-            
-            this.model.bind('change:body', this.render);
-        }
-    });
-
+    /* Displays full list/tree of Messages, or, if option passed, only 
+       displays a subset/subthread */
     var PostCollectionView = Backbone.View.extend({
         el: '#message-list',
 
         initialize: function(options) {
-            this.posts = new PostCollection();
-            this.posts.fetch({async: false});
+            
 
-            //var that = this;
-            //this._postViews = [];
-            //this.posts.each(function(post) {
-            //    that._postViews.push(new UpdatingPostView({
-            //        model : post
-            //    }));
-            //});
         },
 
         render : function() {
-            //var that = this;
+            this.posts = new PostCollection();
+            this.posts.fetch({async: false});
+
             // Clear out this element.
             $(this.el).empty();
 
@@ -161,38 +149,78 @@ $(function(){
         tagName : 'li',
         className : 'node',
 
+        events: {
+            "click .short_title" : "openThread"
+        },
+
         render: function() {
             this.$el.html(ich.node(this.model.toJSON()));
             return this;
+        },
+
+        openThread: function() {
+            thread = new PostCollection();
+            start_id = model.get('extracts')[0];
+            alert('WHAT');
+            console.log(start_id);
+            thread.fetch({
+                data: {start: start_id}
+            });
         }
     });
 
     var NodeCollectionView = Backbone.View.extend({
+        el: '#TOC',
+
         initialize : function() {
             var that = this;
             this._nodeViews = [];
          
-            this.collection.each(function(node) {
-              that._nodeViews.push(new NodeView({
-                model : node,
-                tagName : 'li'
-              }));
-            });
+            this.nodes = new NodeCollection();
+            this.nodes.fetch({async: false});
+            
           },
          
-          render : function() {
-            var that = this;
-            // Clear out this element.
+        render : function() {
             $(this.el).empty();
-         
-            // Render each sub-view and append it to the parent view's element.
-            _(this._nodeViews).each(function(nv) {
-              $(that.el).append(nv.render().el);
+
+            var parent_stack = [];
+            var prev = null;
+            var message_html = '';
+
+            this.nodes.each(function(node){
+                if (node.get('parent_id') == null) {// root
+                    message_html += '<ul>';
+                } else {
+                    current_parent = parent_stack.length > 0 ? parent_stack[parent_stack.length-1]: null;
+                    if (node.get('parent_id') == current_parent) { // same level as prev node
+
+                    } else {
+                        if (prev == node.get('parent_id')) {
+                            parent_stack.push(prev);
+                            message_html += '<ul>';
+
+                        } else {
+                            while (parent_stack.length != 0 && parent_stack[parent_stack.length-1] != node.get('parent_id')) {
+                                parent_stack.pop();
+                                message_html += '</ul>';
+                            }
+                        }
+                    }
+                }
+
+                prev = node.id;
+                message_html += ich.nodes(node.toJSON(), true);
             });
+            
+            $(this.el).html(message_html)
+         
         }
     });
 
-    var App = new PostCollectionView;
+    var App = new PostCollectionView();
     App.render();
+    var AppNodes = new NodeCollectionView;
+    AppNodes.render();
 
 });

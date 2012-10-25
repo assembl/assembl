@@ -1,0 +1,71 @@
+[{
+	"id": 1, 
+	"title": "Lower taxes", 
+	"definition": null,
+	"parent_id": null,
+	"extracts": [17]
+},
+
+{
+	"id": 2,
+	"title": "Favor economic growth",
+	"definition": null,
+	"parent_id": 1,
+	"extracts": [17]
+},
+
+{
+	"id": 3,
+	"title": "More resource consumption",
+	"definition": null,
+	"parent_id": 2,
+	"extracts": [5]
+},
+
+{
+	"id": 4,
+	"title": "Bad for environment",
+	"definition": null,
+	"parent_id": 3,
+	"extracts": [20, 12]
+},
+
+{
+	"id": 5,
+	"title": "Federal environmental programs are ineffective",
+	"definition": null,
+	"parent_id": 4,
+	"extracts": [4]
+},
+
+{
+	"id": 6,
+	"title": "Lower government revenue",
+	"definition": null,
+	"parent_id": 1,
+	"extracts": [16]
+},
+
+{
+	"id": 7,
+	"title": "Austerity",
+	"definition": null,
+	"parent_id": 6,
+	"extracts": [5]
+},
+
+{
+	"id": 8,
+	"title": "Economic contraction",
+	"definition": null,
+	"parent_id": 7,
+	"extracts": [5]
+},
+
+{
+	"id": 9,
+	"title": "Job loss",
+	"definition": null,
+	"parent_id": 7,
+	"extracts": [14, 8, 16]
+}]
