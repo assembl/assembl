@@ -1,5 +1,28 @@
 $(function(){
 
+    var AppRouter = Backbone.Router.extend({
+        routes: {
+            ""          : "home",
+            "toc"       : "toc"
+        },
+
+        initialize: function() {
+
+        },
+
+        home: function() {
+            this.messageView = new PostCollectionView();
+            this.messageView.render();
+            this.treeView = new NodeCollectionView();
+            this.treeView.render();
+        },
+
+        toc: function() {
+            var TreeView = new NodeCollectionView();
+            TreeView.render();
+        }
+    });
+
 	var Post = Backbone.Model.extend({
 		// Default attributes for the todo item.
 	    defaults: function() {
@@ -103,9 +126,6 @@ $(function(){
         },
 
         render : function() {
-            //this.posts = new PostCollection();
-            //this.posts.fetch({async: false});
-
             // Clear out this element.
             $(this.el).empty();
 
@@ -135,6 +155,8 @@ $(function(){
                 }
 
                 prev = post.id;
+                body = post.get('body');
+                post.set({short_body: body.substring(0, 80)});
                 message_html += ich.message(post.toJSON(), true);
             });
             
@@ -149,18 +171,40 @@ $(function(){
 
     var NodeView = Backbone.View.extend({
         tagName : 'li',
-        className : 'node',
+        className : 'node droppable',
 
         events: {
             "click .short_title" : "openThread"
         },
-
+        initialize: function() {
+            /*$(this.el).droppable({
+                greedy: true,
+                over: function(e, ui) {
+                    //$(this).css({"background-color": "#ccc"})
+                },
+                out: function(e, ui) {
+                    //$(this).css({"background-color": "#fff"})
+                },
+                drop: function(event, ui) {
+                    console.log(ui.draggable);
+                    //ui.draggable.appendTo(this)
+                    $(this).append(ui.draggable)
+                    console.log(this)
+                    //$(this).css({"background-color" : "red"});
+                }
+            });*/
+        },
         render: function() {
-            this.$el.html(ich.node(this.model.toJSON()));
+            $(this.el).html(ich.node(this.model.toJSON()))
+            //this.el = ich.node(this.model.toJSON())
+            //return ich.node(this.model.toJSON())
             return this;
         },
 
-        openThread: function() {
+        openThread: function(e) {
+            e.stopPropagation(); // if we don't do this, this callback gets called on every single node
+            e.preventDefault(); // stops browser from loading "#"
+
             thread = new PostCollection();
             start_id = this.model.get('extracts')[0];
             thread.fetch({
@@ -188,7 +232,7 @@ $(function(){
         render : function() {
             $(this.el).empty();
 
-            var root = $('<ul></ul>');
+            var root = $('<ul class="draggable"></ul>').sortable({connectWith: ".draggable", items :  "li"})//.draggable();
             var cur_ul = root;
             var parent_stack = [];
             var thread_stack = [];
@@ -204,8 +248,8 @@ $(function(){
                             parent_stack.push(prev);
                             prev_ul = cur_ul;
                             thread_stack.push(cur_ul);
-                            cur_ul = $('<ul></ul>');
-                            prev_ul.append(cur_ul);
+                            cur_ul = $('<ul class="draggable"></ul>').sortable({connectWith: ".draggable", items :  "li"});//.draggable();
+                            prev_ul.children('li').last().append(cur_ul);
 
                         } else { // one level higher in tree
                             while (parent_stack.length != 0 && parent_stack[parent_stack.length-1] != node.get('parent_id')) {
@@ -220,13 +264,11 @@ $(function(){
             });
 
             $(this.el).html(root);
-         
         }
     });
 
-    var App = new PostCollectionView();
-    App.render();
-    var AppNodes = new NodeCollectionView;
-    AppNodes.render();
-
+    app = new AppRouter();
+    Backbone.history.start();
 });
+
+
