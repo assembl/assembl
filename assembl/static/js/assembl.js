@@ -96,13 +96,15 @@ $(function(){
         el: '#message-list',
 
         initialize: function(options) {
-            
-
+            if (!this.collection) {
+                this.collection = new PostCollection();
+                this.collection.fetch({ async : false }); // change this later
+            }
         },
 
         render : function() {
-            this.posts = new PostCollection();
-            this.posts.fetch({async: false});
+            //this.posts = new PostCollection();
+            //this.posts.fetch({async: false});
 
             // Clear out this element.
             $(this.el).empty();
@@ -111,7 +113,7 @@ $(function(){
             var prev = null;
             var message_html = '';
 
-            this.posts.each(function(post){
+            this.collection.each(function(post){
                 if (post.get('parent_id') == null) {// root
                     message_html += '<ul>';
                 } else {
@@ -133,7 +135,7 @@ $(function(){
                 }
 
                 prev = post.id;
-                message_html += ich.messages(post.toJSON(), true);
+                message_html += ich.message(post.toJSON(), true);
             });
             
             $(this.el).html(message_html)
@@ -160,11 +162,13 @@ $(function(){
 
         openThread: function() {
             thread = new PostCollection();
-            start_id = model.get('extracts')[0];
-            alert('WHAT');
-            console.log(start_id);
+            start_id = this.model.get('extracts')[0];
             thread.fetch({
-                data: {start: start_id}
+                data: {start: start_id},
+                success: function(data) {
+                    pcv = new PostCollectionView({collection: thread});
+                    pcv.render();
+                }
             });
         }
     });
@@ -184,36 +188,38 @@ $(function(){
         render : function() {
             $(this.el).empty();
 
+            var root = $('<ul></ul>');
+            var cur_ul = root;
             var parent_stack = [];
+            var thread_stack = [];
             var prev = null;
+            var prev_ul = null
             var message_html = '';
 
-            this.nodes.each(function(node){
-                if (node.get('parent_id') == null) {// root
-                    message_html += '<ul>';
-                } else {
+            this.nodes.each(function(node) {
+                if (node.get('parent_id') != null) {
                     current_parent = parent_stack.length > 0 ? parent_stack[parent_stack.length-1]: null;
-                    if (node.get('parent_id') == current_parent) { // same level as prev node
-
-                    } else {
-                        if (prev == node.get('parent_id')) {
+                    if (node.get('parent_id') != current_parent) {
+                        if (prev == node.get('parent_id')) { // one level lower in tree
                             parent_stack.push(prev);
-                            message_html += '<ul>';
+                            prev_ul = cur_ul;
+                            thread_stack.push(cur_ul);
+                            cur_ul = $('<ul></ul>');
+                            prev_ul.append(cur_ul);
 
-                        } else {
+                        } else { // one level higher in tree
                             while (parent_stack.length != 0 && parent_stack[parent_stack.length-1] != node.get('parent_id')) {
                                 parent_stack.pop();
-                                message_html += '</ul>';
-                            }
+                                cur_ul = thread_stack.pop();                            }
                         }
                     }
                 }
-
                 prev = node.id;
-                message_html += ich.nodes(node.toJSON(), true);
+                nv = new NodeView({model: node});
+                cur_ul.append(nv.render().el)
             });
-            
-            $(this.el).html(message_html)
+
+            $(this.el).html(root);
          
         }
     });

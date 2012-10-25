@@ -63,11 +63,11 @@
 	</div>
 </div>
 
-<script id="messages" type="text/html">
+<script id="message" type="text/html">
 	<li><strong>{{ subject }}</strong> {{ body }}</li>
 </script>
 
-<script id="nodes" type="text/html">
+<script id="node" type="text/html">
 	<li class="node">
 		<a class="short_title" href="#"><strong>{{ title }}</strong>{{ definition }}</a>
 	</li>
