@@ -5,14 +5,23 @@ import sys
 from datetime import datetime
 
 from colanderalchemy import Column, SQLAlchemyMapping
-from sqlalchemy import DateTime, engine_from_config
-from sqlalchemy.ext.declarative import declared_attr
+from sqlalchemy import DateTime, MetaData, engine_from_config, event
+from sqlalchemy.ext.declarative import declarative_base, declared_attr
+from sqlalchemy.orm import mapper, scoped_session, sessionmaker
 from sqlalchemy.orm.util import has_identity
+from zope.sqlalchemy import ZopeTransactionExtension
 
 from pyramid.paster import get_appsettings, setup_logging
 
-_DB = None
 _TABLENAME_RE = re.compile('([A-Z]+)')
+
+
+def declarative_bases(metadata):
+    """Return all declarative bases bound to a single metadata object."""
+    registry = dict()
+    return (declarative_base(metadata=metadata, class_registry=registry),
+            declarative_base(cls=Timestamped, class_registry=registry,
+                             metadata=metadata))
 
 
 def create_engine(config_uri):
@@ -21,16 +30,6 @@ def create_engine(config_uri):
     settings = get_appsettings(config_uri)
     engine = engine_from_config(settings, 'sqlalchemy.')
     return engine
-
-
-def db(session=None):
-    """Grab the DBSession object and avoid circular dependency."""
-    global _DB
-    if _DB is None:
-        if session is None:
-            from ..models import DBSession as session
-        _DB = session
-    return _DB
 
 
 class BaseOps(object):
@@ -45,10 +44,10 @@ class BaseOps(object):
         """Return a table name made out of the model class name."""
         return _TABLENAME_RE.sub(r'_\1', cls.__name__).strip('_').lower()
 
-    @property
-    def db(self):
-        """Return the SQLAlchemy DBSession object."""
-        return db()
+    @declared_attr
+    def db(cls):
+        """Return the SQLAlchemy db session object."""
+        return DBSession
 
     def __iter__(self, **kwargs):
         """Return a generator that iterates through model columns."""
@@ -115,15 +114,22 @@ class BaseOps(object):
         return obj
 
     @classmethod
-    def get(cls, **criteria):
-        return db().query(cls).filter_by(**criteria).one()
+    def get(cls, raise_=False, **criteria):
+        """Return the record corresponding to the criteria.
+
+        Throw an exception on record not found and `raise_` == True, else
+        return None.
+
+        """
+        q = DBSession.query(cls).filter_by(**criteria)
+        return raise_ and q.one() or q.first()
 
     @classmethod
-    def list(cls, **criteria):
-        return db().query(cls).filter_by(**criteria).all()
+    def find(cls, **criteria):
+        return DBSession.query(cls).filter_by(**criteria).all()
 
     def delete(self):
-        db().delete(self)
+        DBSession.delete(self)
 
     def update(self, **values):
         fields = self._col_names()
@@ -133,15 +139,21 @@ class BaseOps(object):
 
     def save(self, flush=False):
         if self.is_new:
-            db().add(self)
+            DBSession.add(self)
         if flush:
-            db().flush()
+            DBSession.flush()
 
     @classmethod
-    def inject_api(cls, name):
-        """Inject common methods in a API module."""
-        for attr in 'create', 'get', 'list', 'validator':
-            setattr(sys.modules[name], attr, getattr(cls, attr))
+    def inject_api(cls, name, as_object=False):
+        """Inject common methods in an API module."""
+        class API(object): pass
+        container = API() if as_object else sys.modules[name]
+
+        for attr in 'create', 'get', 'find', 'validator':
+            setattr(container, attr, getattr(cls, attr))
+
+        if as_object:
+            return container
 
 
 class Timestamped(BaseOps):
@@ -209,7 +221,16 @@ def update_timestamp(mapper, connection, target):
         target.mod_date = datetime.utcnow()
 
 
+DBSession = scoped_session(sessionmaker(extension=ZopeTransactionExtension()))
+
+metadata = MetaData()
+Base, TimestampedBase = declarative_bases(metadata)
+
+event.listen(mapper, 'before_insert', insert_timestamp)
+event.listen(mapper, 'before_update', update_timestamp)
+
+
 def includeme(config):
     """Initialize SQLAlchemy at app start-up time."""
     engine = engine_from_config(config.registry.settings, 'sqlalchemy.')
-    db().configure(bind=engine)
+    DBSession.configure(bind=engine)

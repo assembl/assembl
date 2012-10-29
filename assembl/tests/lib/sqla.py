@@ -36,7 +36,9 @@ class TestSAUtils(unittest.TestCase):
         testing.tearDown()
 
     def test_baseops(self):
-        self.assertRaises(NoResultFound, BaseModel.get, name='one')
+        self.assertEqual(BaseModel.get(name='one'), None)
+        self.assertRaises(NoResultFound, BaseModel.get, name='one',
+                          raise_=True)
         with transaction.manager:
             bmodel = BaseModel(name='one')
             bmodel.save(flush=False)
@@ -51,7 +53,7 @@ class TestSAUtils(unittest.TestCase):
         self.assertEqual(bmodel.name, 'one')
         with transaction.manager:
             bmodel.delete()
-        self.assertRaises(NoResultFound, BaseModel.get, name='one')
+        self.assertEqual(BaseModel.get(name='one'), None)
 
     def test_stamps(self):
         bmodel = BaseModel(name='one')

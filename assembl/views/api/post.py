@@ -43,7 +43,7 @@ def list_posts(request):
         levels = request.GET.get('levels', None)
         posts = api.get_thread(int(id), int(levels) if levels else None)
     else:
-        posts = api.list()
+        posts = api.find()
 
     return [dict(p) for p in posts]
 
@@ -58,7 +58,7 @@ def create_post(request):
 @post_svc.get()
 def get_post(request):
     criteria = validate(request.matchdict)
-    return dict(api.get(**criteria))
+    return dict(api.get(raise_=True, **criteria))
 
 
 @post_svc.post()

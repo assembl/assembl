@@ -56,12 +56,12 @@ class TestPostAPI(unittest.TestCase):
                              values)
 
         post = api.get(author=u'them')
-        self.assertRaises(NoResultFound, api.get, author=u'me')
+        self.assertEqual(api.get(author=u'me'), None)
 
         with transaction.manager:
             post = api.get(author=u'them')
             post.delete()
-        self.assertRaises(NoResultFound, api.get, author=u'them')
+        self.assertEqual(api.get(author=u'them'), None)
 
     def test_threading(self):
         with transaction.manager:
@@ -78,9 +78,9 @@ class TestPostAPI(unittest.TestCase):
             api.create(email_text=str(email))
 
         with transaction.manager:
-            api.thread(api.list())
+            api.thread(api.find())
 
-        posts = [(p.id, p) for p in api.list()]
+        posts = [(p.id, p) for p in api.find()]
         posts.sort()
         (_, p1), (_, p2) = posts
         self.assertEqual(p1.id, p2.parent_id)

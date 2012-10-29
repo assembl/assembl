@@ -38,7 +38,7 @@ def main():
             print('imported %d messages.' % count)
             print('Threading messages...'),
             with transaction.manager:
-                posts = api.list()
+                posts = api.find()
                 api.thread(posts)
             print('threaded %d messages.' % len(posts))
             print('Finished.')
