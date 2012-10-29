@@ -11,13 +11,11 @@ from ...models import Base, TimestampedBase, DBSession as db
 
 
 class BaseModel(BaseOps, Base):
-    __tablename__ = 'basemodels'
     id = Column(Integer, primary_key=True)
     name = Column(Text)
 
 
 class StampedModel(TimestampedBase):
-    __tablename__ = 'stampedmodels'
     id = Column(Integer, primary_key=True)
     name = Column(Text)
 
@@ -35,10 +33,16 @@ class TestSAUtils(unittest.TestCase):
         db.remove()
         testing.tearDown()
 
-    def test_baseops(self):
+    def test_baseops_tablename(self):
+        self.assertTrue(hasattr(BaseModel, '__tablename__'))
+        self.assertEqual(BaseModel.__tablename__, 'base_model')
+
+    def test_baseops_get(self):
         self.assertEqual(BaseModel.get(name='one'), None)
         self.assertRaises(NoResultFound, BaseModel.get, name='one',
                           raise_=True)
+
+    def test_baseops(self):
         with transaction.manager:
             bmodel = BaseModel(name='one')
             bmodel.save(flush=False)
