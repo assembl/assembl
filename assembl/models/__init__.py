@@ -32,4 +32,5 @@ class MyModel(TimestampedBase):
         self.value = value
 
 
-from .post import Post
+from .post import Email, Post
+from .toc import Document, DocumentType, Item, Selection, SelectorType

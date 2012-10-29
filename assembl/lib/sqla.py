@@ -1,15 +1,18 @@
 """Some utilities for working with SQLAlchemy."""
 
-from datetime import datetime
+import re
 import sys
+from datetime import datetime
 
 from colanderalchemy import Column, SQLAlchemyMapping
 from sqlalchemy import DateTime, engine_from_config
+from sqlalchemy.ext.declarative import declared_attr
 from sqlalchemy.orm.util import has_identity
 
 from pyramid.paster import get_appsettings, setup_logging
 
 _DB = None
+_TABLENAME_RE = re.compile('([A-Z]+)')
 
 
 def create_engine(config_uri):
@@ -37,6 +40,10 @@ class BaseOps(object):
     both data storage- and web- specific stuff.
 
     """
+    @declared_attr
+    def __tablename__(cls):
+        """Return a table name made out of the model class name."""
+        return _TABLENAME_RE.sub(r'_\1', cls.__name__).strip('_').lower()
 
     @property
     def db(self):
@@ -85,14 +92,17 @@ class BaseOps(object):
 
     @classmethod
     def _col_names(cls):
+        """Return a list of the columns, as a set."""
         return set(cls.__table__.c.keys())
 
     @classmethod
     def _pk_names(cls):
+        """Return a list of the primary keys, as a set."""
         return set(cls.__table__.primary_key.columns.keys())
 
     @property
     def is_new(self):
+        """Return True if the instance wasn't fetched from the database."""
         return not has_identity(self)
 
     @classmethod

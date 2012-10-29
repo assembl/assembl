@@ -44,6 +44,8 @@ class TestPostAPI(unittest.TestCase):
                              values)
 
         post = api.get(author=u'me')
+        self.assertNotEqual(post.document, None)
+        self.assertEqual(post.__tablename__, post.document.type)
         self.assertEqual(dict(post.iteritems(include=values.keys())), values)
         values['author'] = u'them'
 

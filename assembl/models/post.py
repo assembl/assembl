@@ -3,11 +3,12 @@ from uuid import uuid4
 import colander
 from colanderalchemy import Column
 from sqlalchemy import (DateTime, ForeignKey, Integer, String, Text, Unicode,
-                        UnicodeText, func, literal_column)
+                        UnicodeText, event, func, literal_column)
 from sqlalchemy.dialects.postgresql import ARRAY
 from sqlalchemy.orm import aliased, backref, relationship
 
 from . import TimestampedBase
+from .toc import HasDocument
 from ..lib import config
 from ..lib.utils import get_eol
 
@@ -17,10 +18,8 @@ def msg_id():
     return '<%s@%s>' % (uuid4(), config.get('assembl.domain'))
 
 
-class Post(TimestampedBase):
+class Post(HasDocument, TimestampedBase):
     """Represents a message in the system."""
-    __tablename__ = 'posts'
-
     id = Column(Integer, primary_key=True)
 
     date = Column(DateTime, nullable=False,
@@ -31,14 +30,9 @@ class Post(TimestampedBase):
     body = Column(UnicodeText, nullable=False)
     message_id = Column(String, nullable=False, default=msg_id)
 
-    parent_id = Column(Integer, ForeignKey('posts.id'))
+    parent_id = Column(Integer, ForeignKey('post.id'))
     children = relationship('Post',
                             backref=backref('parent', remote_side=[id]))
-
-    def __init__(self, *args, **kwargs):
-        if not 'message_id' in kwargs:
-            kwargs['message_id'] = msg_id()
-        super(Post, self).__init__(*args, **kwargs)
 
     def __str__(self):
         return '%s %s %s' % (self.__class__.__name__, self.id, self.message_id)
@@ -87,16 +81,23 @@ class Post(TimestampedBase):
         return self.db.query(post.union_all(children)).order_by(post.c.level)
 
 
+def _post_init(target, args, kwargs):
+    """Make sure all new instances have a message_id at creation time."""
+    if not 'message_id' in kwargs:
+        target.ensure_msg_id()
+
+
+event.listen(Post, 'init', _post_init)
+
+
 class Email(TimestampedBase):
     """Contains raw email content."""
-    __tablename__ = 'emails'
-
     id = Column(Integer, primary_key=True)
 
     headers = Column(Text, nullable=False)
     body = Column(Text, nullable=False)
 
-    post_id = Column(Integer, ForeignKey('posts.id'))
+    post_id = Column(Integer, ForeignKey('post.id'))
 
     @property
     def message(self):
