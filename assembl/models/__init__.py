@@ -1,24 +1,6 @@
-from sqlalchemy import Column, event, Integer, MetaData, Text
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import mapper, scoped_session, sessionmaker
-from zope.sqlalchemy import ZopeTransactionExtension
+from sqlalchemy import Column, Integer, Text
 
-from ..lib.sqla import insert_timestamp, Timestamped, update_timestamp
-
-
-def _declarative_bases(metadata):
-    """ Return all declarative bases bound to a single metadata object. """
-    return (declarative_base(metadata=metadata),
-            declarative_base(cls=Timestamped, metadata=metadata))
-
-
-DBSession = scoped_session(sessionmaker(extension=ZopeTransactionExtension()))
-
-metadata = MetaData()
-Base, TimestampedBase = _declarative_bases(metadata)
-
-event.listen(mapper, 'before_insert', insert_timestamp)
-event.listen(mapper, 'before_update', update_timestamp)
+from ..lib.sqla import DBSession, Base, TimestampedBase, metadata
 
 
 class MyModel(TimestampedBase):
@@ -32,4 +14,5 @@ class MyModel(TimestampedBase):
         self.value = value
 
 
-from .post import Post
+from .post import Email, Post
+from .toc import Document, DocumentType, Item, Selection, SelectorType

@@ -9,7 +9,7 @@ from alembic.script import ScriptDirectory
 import transaction
 
 from ..lib.sqla import create_engine
-from ..models import DBSession as db, metadata, MyModel
+from ..models import DBSession as db, DocumentType, MyModel, Post, metadata
 
 
 def bootstrap_db(config_uri=None, engine=None, with_migration=True):
@@ -41,6 +41,9 @@ def bootstrap_db(config_uri=None, engine=None, with_migration=True):
     with transaction.manager:
         model = MyModel(name='one', value=1)
         db.add(model)
+
+        for M in [Post,]:
+            db.add(DocumentType(code=M.__tablename__, name=M.__name__))
 
     # Clean up the sccoped session to allow a later app instantiation.
     db.remove()
