@@ -16,6 +16,7 @@ def includeme(config):
     """ Initialize views and renderers at app start-up time. """
     config.add_renderer('json', json_renderer_factory)
     config.add_route('home', '/')
+    config.add_route('toc', '/toc')
     config.add_route('nodetest', '/nodetest')
     config.include(api_urls, route_prefix='/api')
 

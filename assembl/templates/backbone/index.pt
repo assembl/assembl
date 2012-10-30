@@ -19,22 +19,20 @@
 
 <div class="container-fluid">
 	<div class="row-fluid">
-		<div class="synthesis span4">
-			<h3>Table of Contents</h3>
+		<div id="sidebar" class="span4">
 			
-			<div id="TOC">
-			</div>
 		</div>
-		
-		<div class="messages span8" style="border-left:#F2F2F2 1px solid">
+		<div id="main" class="span8" style="border-left:#F2F2F2 1px solid">
 			<div class="navbar">
 				<div class="navbar-inner">
-					<!--<ul class="nav">
-					  <li class="active"><a href="#">Home</a></li>
-					</ul>-->
+					
 					<a class="brand" href="#">Assembl.</a>
+					<ul class="nav">
+					  <li id="home-nav" class="active"><a href="/">Home</a></li>
+					  <li id="toc-nav"><a href="/toc">Table of Contents</a></li>
+					</ul>
 				</div>
-				<button class="btn">Table of Contents</button>
+
 				<div class="btn-toolbar">
 					<div class="btn-group">
 					    <button class="btn"><i class="icon-refresh"></i></button>
@@ -54,20 +52,34 @@
 				</div>
 			</div>
 
-			<ul id="message-list"></ul>
+			<div id="content"></div>
 		</div>
 	</div>
 </div>
 
 <script id="message" type="text/html">
-	<li>
 		<strong>{{ subject }}</strong> {{ short_body }}
-	</li>
+</script>
+
+<script id="link_node" type="text/html">
+	<a class="short_title" href="#"><strong>{{ title }}</strong>{{ definition }}</a>
+
 </script>
 
 <script id="node" type="text/html">
-		<a class="short_title" href="#"><strong>{{ title }}</strong>{{ definition }}</a>
+	<strong>{{ title }}</strong>{{ definition }}
 
+</script>
+
+<script id="message_list" type="text/html">
+	<ul>{{list}}</ul>
+</script>
+
+<script id="toc" type="text/html">
+	<h3>Table of Contents</h3>
+			
+	<div id="TOC">
+	</div>
 </script>
 
 </body>

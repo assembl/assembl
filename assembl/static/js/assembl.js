@@ -11,14 +11,20 @@ $(function(){
         },
 
         home: function() {
+            $('#sidebar').slideDown()
+            $('ul.nav li').removeClass('active')
+            $('#home-nav').addClass('active')
             this.messageView = new PostCollectionView();
             this.messageView.render();
-            this.treeView = new NodeCollectionView();
+            this.treeView = new NodeCollectionView({sortable: false});
             this.treeView.render();
         },
 
         toc: function() {
-            var TreeView = new NodeCollectionView();
+            $('#sidebar').slideUp();
+            $('ul.nav li').removeClass('active')
+            $('#toc-nav').addClass('active')
+            var TreeView = new NodeCollectionView({sortable: true});
             TreeView.render();
         }
     });
@@ -48,7 +54,7 @@ $(function(){
 	var PostCollection = Backbone.Collection.extend({
     	// Reference to this collection's model.
     	model: Post,
-    	url: '/api/posts'
+    	url: '/api/posts?start=17'
     });
 
     /* A node of the full debate summary tree */
@@ -97,18 +103,8 @@ $(function(){
         tagName : 'li',
         className : 'post',
 
-    	//initialize: function(options) {
-            // instantiate a password collection
-            //this.model = new Post();
-            //this.model.fetch({async: false}); //change back to true later, just for debugging
-
-            //this.collection.bind('all', this.render, this);
-            //this.collection.fetch();
-        //},
-        
-
         render: function() {
-            this.$el.html(ich.messages(this.model.toJSON()));
+            this.$el.html(ich.message(this.model.toJSON()));
             return this;
         }
     });
@@ -116,7 +112,7 @@ $(function(){
     /* Displays full list/tree of Messages, or, if option passed, only 
        displays a subset/subthread */
     var PostCollectionView = Backbone.View.extend({
-        el: '#message-list',
+        tagName : 'ul',
 
         initialize: function(options) {
             if (!this.collection) {
@@ -126,78 +122,62 @@ $(function(){
         },
 
         render : function() {
-            // Clear out this element.
             $(this.el).empty();
-
+            var root = $(this.el)
+            var cur_ul = root;
             var parent_stack = [];
+            var thread_stack = [];
             var prev = null;
-            var message_html = '';
+            var prev_ul = null
+            var that = this;
 
-            this.collection.each(function(post){
-                if (post.get('parent_id') == null) {// root
-                    message_html += '<ul>';
-                } else {
+            this.collection.each(function(post) {
+                if (post.get('parent_id') != null) {
                     current_parent = parent_stack.length > 0 ? parent_stack[parent_stack.length-1]: null;
-                    if (post.get('parent_id') == current_parent) { // same level as prev post
-
-                    } else {
-                        if (prev == post.get('parent_id')) {
+                    if (post.get('parent_id') != current_parent) {
+                        if (prev == post.get('parent_id')) { // one level lower in tree
                             parent_stack.push(prev);
-                            message_html += '<ul>';
+                            prev_ul = cur_ul;
+                            thread_stack.push(cur_ul);
+                            cur_ul = $('<ul></ul>')
+                            prev_ul.children('li').last().append(cur_ul);
 
-                        } else {
+                        } else { // one level higher in tree
                             while (parent_stack.length != 0 && parent_stack[parent_stack.length-1] != post.get('parent_id')) {
                                 parent_stack.pop();
-                                message_html += '</ul>';
-                            }
+                                cur_ul = thread_stack.pop();                            }
                         }
                     }
                 }
 
                 prev = post.id;
-                body = post.get('body');
-                post.set({short_body: body.substring(0, 80)});
-                message_html += ich.message(post.toJSON(), true);
+                pv = new PostView({model: post});
+                cur_ul.append(pv.render().el)
             });
             
-            $(this.el).html(message_html)
-         
-            // Render each sub-view and append it to the parent view's element.
-            //_(this._postViews).each(function(pv) {
-              //$(that.el).append(pv.render().el);
-            //});
+            $('#main #content').html($(this.el));
         }
     });
 
     var NodeView = Backbone.View.extend({
         tagName : 'li',
-        className : 'node droppable',
+        className : 'node',
+
+        initialize: function(options) {
+            this.sortable = this.options.sortable
+        },
 
         events: {
             "click .short_title" : "openThread"
         },
-        initialize: function() {
-            /*$(this.el).droppable({
-                greedy: true,
-                over: function(e, ui) {
-                    //$(this).css({"background-color": "#ccc"})
-                },
-                out: function(e, ui) {
-                    //$(this).css({"background-color": "#fff"})
-                },
-                drop: function(event, ui) {
-                    console.log(ui.draggable);
-                    //ui.draggable.appendTo(this)
-                    $(this).append(ui.draggable)
-                    console.log(this)
-                    //$(this).css({"background-color" : "red"});
-                }
-            });*/
-        },
+
         render: function() {
-            $(this.el).html(ich.node(this.model.toJSON()))
-            //this.el = ich.node(this.model.toJSON())
-            //return ich.node(this.model.toJSON())
+            if (this.sortable) {
+                $(this.el).html(ich.node(this.model.toJSON()))
+            } else {
+                $(this.el).html(ich.link_node(this.model.toJSON()))
+            }
+
             return this;
         },
 
@@ -220,25 +200,30 @@ $(function(){
     var NodeCollectionView = Backbone.View.extend({
         el: '#TOC',
 
-        initialize : function() {
+        initialize : function(options) {
             var that = this;
             this._nodeViews = [];
          
             this.nodes = new NodeCollection();
             this.nodes.fetch({async: false});
-            
+            this.sortable = this.options.sortable
           },
          
         render : function() {
             $(this.el).empty();
-
-            var root = $('<ul class="draggable"></ul>').sortable({connectWith: ".draggable", items :  "li"})//.draggable();
+            var root = '';
+            if (this.sortable) {
+                root = $('<ul class="sortable"></ul>').sortable({connectWith: ".sortable", items :  "li"})
+            } else {
+                root = $('<ul></ul>')
+            }
             var cur_ul = root;
             var parent_stack = [];
             var thread_stack = [];
             var prev = null;
             var prev_ul = null
             var message_html = '';
+            var that = this;
 
             this.nodes.each(function(node) {
                 if (node.get('parent_id') != null) {
@@ -248,7 +233,11 @@ $(function(){
                             parent_stack.push(prev);
                             prev_ul = cur_ul;
                             thread_stack.push(cur_ul);
-                            cur_ul = $('<ul class="draggable"></ul>').sortable({connectWith: ".draggable", items :  "li"});//.draggable();
+                            if (that.sortable) {
+                                cur_ul = $('<ul class="sortable"></ul>').sortable({connectWith: ".sortable", items :  "li"});
+                            } else {
+                                cur_ul = $('<ul></ul>')
+                            }
                             prev_ul.children('li').last().append(cur_ul);
 
                         } else { // one level higher in tree
@@ -258,17 +247,29 @@ $(function(){
                         }
                     }
                 }
+                console.log(that.sortable)
                 prev = node.id;
-                nv = new NodeView({model: node});
+                nv = new NodeView({sortable: that.sortable, model: node});
                 cur_ul.append(nv.render().el)
             });
-
-            $(this.el).html(root);
+            if (this.sortable) {
+                $('#main #content').html(root);
+            } else {
+                $('#sidebar').html(root);
+            }
         }
     });
 
     app = new AppRouter();
-    Backbone.history.start();
+    Backbone.history.start({pushState: true});
+
+    $(document).on("click", "a[href^='/']", function(event) {
+        if (!event.altKey && !event.ctrlKey && !event.metaKey && !event.shiftKey) {
+            event.preventDefault();
+            var url = $(event.currentTarget).attr("href").replace(/^\//, "");
+            app.navigate(url, { trigger: true });
+        }
+    });
 });
 
 
