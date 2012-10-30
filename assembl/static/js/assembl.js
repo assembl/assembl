@@ -247,7 +247,6 @@ $(function(){
                         }
                     }
                 }
-                console.log(that.sortable)
                 prev = node.id;
                 nv = new NodeView({sortable: that.sortable, model: node});
                 cur_ul.append(nv.render().el)

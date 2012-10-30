@@ -32,7 +32,7 @@
 					  <li id="toc-nav"><a href="/toc">Table of Contents</a></li>
 					</ul>
 				</div>
-
+<!--
 				<div class="btn-toolbar">
 					<div class="btn-group">
 					    <button class="btn"><i class="icon-refresh"></i></button>
@@ -49,7 +49,7 @@
 					  <button class="btn">Unread</button>
 					  <button class="btn">Starred</button>
 					</div>
-				</div>
+				</div> -->
 			</div>
 
 			<div id="content"></div>
