@@ -26,6 +26,10 @@
 
 # app
 /data/*
+/build
+/pyodbc
+/surf
+/virtuoso
 
 # misc
 ._*
