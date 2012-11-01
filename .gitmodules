@@ -1,0 +1,3 @@
+[submodule "assembl/static/js/lib/bootstrap"]
+	path = assembl/static/js/lib/bootstrap
+	url = git@github.com:caravancoop/bootstrap.git
