@@ -1,9 +1,9 @@
-[submodule "assembl/static/js/lib/bootstrap"]
-	path = assembl/static/js/lib/bootstrap
-	url = git@github.com:caravancoop/bootstrap.git
 [submodule "assembl/static/js/lib/backbone"]
 	path = assembl/static/js/lib/backbone
 	url = https://github.com/documentcloud/backbone.git
 [submodule "assembl/static/js/lib/JSON-js"]
 	path = assembl/static/js/lib/JSON-js
 	url = https://github.com/douglascrockford/JSON-js.git
+[submodule "assembl/static/js/lib/underscore"]
+	path = assembl/static/js/lib/underscore
+	url = https://github.com/amdjs/underscore.git
