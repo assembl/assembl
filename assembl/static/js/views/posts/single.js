@@ -1,18 +1,25 @@
 define([
+    'underscore',
     'app',
-    'icanhaz',
-    'models/post'
+    'models/post',
+    'text!templates/posts/single.html'
 ], 
 
-function(app, ich, Post){
+function(_, app, Post, tpl){
 
     var PostView = Backbone.View.extend({
         //el: '#hello',
         tagName : 'li',
         className : 'post',
 
+        initialize: function() {
+            this.template = _.template(tpl)
+        },
+
         render: function() {
-            this.$el.html(ich.message(this.model.toJSON()));
+            templ = this.template({post: this.model.toJSON()});
+            this.$el.html(templ);
+
             return this;
         }
     });

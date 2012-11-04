@@ -7,3 +7,6 @@
 [submodule "assembl/static/js/lib/underscore"]
 	path = assembl/static/js/lib/underscore
 	url = https://github.com/amdjs/underscore.git
+[submodule "assembl/static/js/lib/backbone-amd"]
+	path = assembl/static/js/lib/backbone-amd
+	url = https://github.com/amdjs/backbone.git

@@ -49,11 +49,12 @@ function(app, PostCollection, PostView){
                 }
 
                 prev = post.id;
+
                 pv = new PostView({model: post});
                 cur_ul.append(pv.render().el);
             });
             
-            $('#main #content').html($(this.el));
+            $('.page-content').html($(this.el));
         }
     });
 

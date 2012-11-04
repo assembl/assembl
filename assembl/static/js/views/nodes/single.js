@@ -1,13 +1,14 @@
 define([
+    'underscore',
     'app',
     'models/node',
     'collections/posts',
     'views/posts/list',
-    'icanhaz',
-    'text!templates/index.html'
+    'text!templates/nodes/single.html',
+    'text!templates/nodes/link.html'
 ], 
 
-function(app, Node, PostCollection, PostCollectionView, ich){
+function(_, app, Node, PostCollection, PostCollectionView, tpl_single, tpl_link){
 
     var NodeView = Backbone.View.extend({
         tagName : 'li',
@@ -15,6 +16,8 @@ function(app, Node, PostCollection, PostCollectionView, ich){
 
         initialize: function(options) {
             this.sortable = this.options.sortable
+            this.template_single = _.template(tpl_single);
+            this.template_link = _.template(tpl_link)
         },
 
         events: {
@@ -22,11 +25,13 @@ function(app, Node, PostCollection, PostCollectionView, ich){
         },
 
         render: function() {
+            
             if (this.sortable) {
-                $(this.el).html(ich.node(this.model.toJSON()))
+                tmpl = this.template_single({ node: this.model.toJSON()});
             } else {
-                $(this.el).html(ich.link_node(this.model.toJSON()))
+                tmpl = this.template_link({ node: this.model.toJSON()});
             }
+            $(this.el).html(tmpl);
 
             return this;
         },

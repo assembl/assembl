@@ -2,13 +2,13 @@ define([
     'app',
     'jqueryui',
     'collections/nodes',
-    'views/nodes/single'
+    'views/nodes/single',
+    'text!templates/nodes/list.html'
 ],
 
 function(app, sortable, NodeCollection, NodeView){
 
     var NodeCollectionView = Backbone.View.extend({
-        el: '#TOC',
 
         initialize : function(options) {
             var that = this;
@@ -61,11 +61,7 @@ function(app, sortable, NodeCollection, NodeView){
                 nv = new NodeView({sortable: that.sortable, model: node});
                 cur_ul.append(nv.render().el)
             });
-            if (this.sortable) {
-                $('#main #content').html(root);
-            } else {
-                $('#sidebar').html(root);
-            }
+            $(this.el).html(root);
         }
     });
 

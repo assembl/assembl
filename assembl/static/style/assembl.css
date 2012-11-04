@@ -1,0 +1,118 @@
+/*body {
+	position: relative;
+	min-height: 100%;
+}*/
+/*
+#container {
+	
+	float:right;
+	text-align: left;
+}
+
+aside.menu {
+	position: fixed;
+	/*float: left;
+	width: 500px;
+}*/
+html {
+	height: 100%;
+}
+body {
+	font-family: arial, sans-serif;
+	font-size: 14px;
+	margin: auto;
+	width: 1250px;
+	background-color: black;
+	height: 100%;
+}
+a {
+	text-decoration: none;
+}
+aside.menu {
+	width: 452px;
+	position: fixed;
+	background-color: #313131;
+	color: #b0b0b0;
+	min-height: 100%;
+}
+
+aside.menu ul {
+	margin: 0;
+	padding: 0;
+}
+
+aside.menu li {
+	
+	list-style-type: none;
+	padding-left: 8px;
+}
+
+aside.menu a {
+	display: inline-block;
+	line-height: 44px;
+	color: #b0b0b0;
+	height: 44px;
+	width: 452px;
+	border-top: 1px solid #202020;
+}
+
+#container {
+	left: 452px;
+	width: 798px;
+	position: relative;
+	background-color: #e4e4e3;
+	min-height: 100%;
+	padding-bottom: 10px;
+}
+/* Main navigation */
+nav {
+	height: 55px;
+	background-color: rgb(65, 65, 65); 
+    /*background-image: url(images/fallback-gradient.png); */
+    background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#444444), to(#2c2c2c));
+    background-image: -webkit-linear-gradient(top, #444444, #2c2c2c); 
+    background-image:    -moz-linear-gradient(top, #444444, #2c2c2c);
+    background-image:     -ms-linear-gradient(top, #444444, #2c2c2c);
+    background-image:      -o-linear-gradient(top, #444444, #2c2c2c);
+	color: white;
+}
+/* Contextual navigation */
+div.context-menu {
+	height: 55px;
+	background-color: rgb(65, 65, 65); 
+    /*background-image: url(images/fallback-gradient.png); */
+    background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#c7c2dd), to(#afa8cf));
+    background-image: -webkit-linear-gradient(top, #c7c2dd, #afa8cf); 
+    background-image:    -moz-linear-gradient(top, #c7c2dd, #afa8cf);
+    background-image:     -ms-linear-gradient(top, #c7c2dd, #afa8cf);
+    background-image:      -o-linear-gradient(top, #c7c2dd, #afa8cf);
+	color: #414141;
+}
+
+nav a {
+	color: white;
+	height: 55px;
+}
+
+ul.nav, ul.nav li, nav h1 {
+	display: inline-block;
+}
+
+nav h1 {
+	padding-left: 65px;
+}
+
+ul.nav {
+	padding-left: 65px;
+	margin: 0;
+}
+
+ul.nav li {
+	padding: 0;
+}
+
+ul.nav a {
+	line-height: 55px;
+	display: inline-block;
+	color: white;
+}

@@ -3,35 +3,46 @@ define([
   'views/posts/list',
   'views/nodes/list'
 ], function(app, PostCollectionView, NodeCollectionView){
-
+    
     var AppRouter = Backbone.Router.extend({
         routes: {
             ""          : "home",
             "toc"       : "toc"
         },
 
-        initialize: function() {
-
-        },
-
         home: function() {
-            $('#sidebar').slideDown()
-            $('ul.nav li').removeClass('active')
-            $('#home-nav').addClass('active')
+            $('aside.menu').show('slide', {direction: "left"});
+
             this.messageView = new PostCollectionView();
             this.messageView.render();
-            this.treeView = new NodeCollectionView({sortable: false});
+            this.treeView = new NodeCollectionView({sortable: false, el: $('aside')});
             this.treeView.render();
         },
 
         toc: function() {
-            $('#sidebar').slideUp();
-            $('ul.nav li').removeClass('active')
-            $('#toc-nav').addClass('active')
-            var TreeView = new NodeCollectionView({sortable: true});
+            $('aside.menu').hide('slide', {direction: "left"});
+
+            var TreeView = new NodeCollectionView({sortable: true, el: $('.page-content')});
             TreeView.render();
         }
     });
 
-    return AppRouter;
+    var initialize = function() {
+        var app_router = new AppRouter();
+        Backbone.history.start({pushState: true});
+
+        $(document).on("click", "a[href^='/']", function(event) {
+            if (!event.altKey && !event.ctrlKey && !event.metaKey && !event.shiftKey) {
+                event.preventDefault();
+                var url = $(event.currentTarget).attr("href").replace(/^\//, "");
+                app_router.navigate(url, { trigger: true });
+            }
+        });
+    }
+
+    //return AppRouter;
+
+    return {
+        initialize: initialize
+    };
 });
