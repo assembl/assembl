@@ -6,6 +6,8 @@ Getting Started
 
 - cd <directory containing this file>
 
+- git submodule update --init
+
 - $venv/bin/python setup.py develop
 
 - cp development.ini local.ini
