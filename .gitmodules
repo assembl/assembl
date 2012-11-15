@@ -1,12 +1,1 @@
-[submodule "assembl/static/js/lib/backbone"]
-	path = assembl/static/js/lib/backbone
-	url = https://github.com/documentcloud/backbone.git
-[submodule "assembl/static/js/lib/JSON-js"]
-	path = assembl/static/js/lib/JSON-js
-	url = https://github.com/douglascrockford/JSON-js.git
-[submodule "assembl/static/js/lib/underscore"]
-	path = assembl/static/js/lib/underscore
-	url = https://github.com/amdjs/underscore.git
-[submodule "assembl/static/js/lib/backbone-amd"]
-	path = assembl/static/js/lib/backbone-amd
-	url = https://github.com/amdjs/backbone.git
+
