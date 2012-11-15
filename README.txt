@@ -6,7 +6,7 @@ Getting Started
 
 - cd <directory containing this file>
 
-- git submodule update --init
+- git submodule update --init; git submodule update
 
 - $venv/bin/python setup.py develop
 
