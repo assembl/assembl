@@ -1,9 +1,8 @@
 from uuid import uuid4
 
 import colander
-from colanderalchemy import Column
 from sqlalchemy import (DateTime, ForeignKey, Integer, String, Text, Unicode,
-                        UnicodeText, event, func, literal_column)
+                        UnicodeText, event, func, literal_column, Column)
 from sqlalchemy.dialects.postgresql import ARRAY
 from sqlalchemy.orm import aliased, backref, relationship
 
@@ -23,7 +22,8 @@ class Post(HasDocument, TimestampedBase):
     id = Column(Integer, primary_key=True)
 
     date = Column(DateTime, nullable=False,
-                  ca_type=colander.DateTime(default_tzinfo=None))
+                  info={'colanderalchemy':
+                        {'type': colander.DateTime(default_tzinfo=None)}})
     author = Column(Unicode(1024), nullable=False)
     subject = Column(Unicode(1024))
     email = relationship('Email', uselist=False, backref='post')
