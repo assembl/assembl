@@ -72,14 +72,10 @@ def to_thread_msg(post):
 
     """
     if post.email:
-        try:
-            msg = message_from_string(post.email.message)
-        except UnicodeEncodeError, e:
-            # Let's go out on a limb and assume the badly encoded message
-            # contains text in the UTF-8 charset that just needs to be
-            # properly encoded.
-            msg_text = post.email.message.encode('utf-8')
-            msg = message_from_string(msg_text)
+        msg_text = post.email.message
+        if isinstance(post.email.message, unicode):
+            msg_text = msg_text.encode('utf-8')
+        msg = message_from_string(msg_text)
     else:
         msg = Message()
         msg.set_payload('- body omitted -', 'us-ascii')
