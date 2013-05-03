@@ -59,6 +59,12 @@ def get_thread(root_id, levels=None):
         yield Post(**post)
 
 
+def get_post(**criteria):
+    print criteria
+    post = Post.get(**criteria)
+    return post
+
+
 def to_thread_msg(post):
     """Turn a post into a minimal email.message.Message object.
 
