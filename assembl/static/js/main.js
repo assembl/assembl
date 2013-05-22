@@ -8,7 +8,7 @@ require.config({
     // Libraries.
     jquery: "lib/require-jquery",
     jqueryui: 'lib/jquery-ui-1.9.1.custom',
-    backbone: "lib/backbone-amd/backbone",
+    backbone: "lib/backbone/backbone",
     bootstrap: "lib/bootstrap",
     underscore: "lib/underscore/underscore",
     jsonjs: "lib/JSON-js/json2",
