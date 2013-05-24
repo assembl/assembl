@@ -1,22 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <link rel="stylesheet" type="text/css" href="static/style/assembl.css">
+    <meta charset="utf-8" />
+    <link rel="stylesheet" type="text/css" href="static/style/assembl.css" />
     <title>Assembl</title>
     <script data-main="static/js/main.js" src="static/js/lib/require-jquery.js"></script>
 </head>
 
 <body>
 	<aside class="menu">
-		
+
 	</aside>
 
 	<div id="container">
 		<header>
-			<nav>	
+			<nav>
 				<h1><a class="brand" href="/">Assembl</a></h1>
-				
+
 			</nav>
 	<!--
 					<div class="btn-toolbar">
@@ -38,7 +38,7 @@
 					</div> -->
 		</header>
 
-		
+
 
 		<section class="main">
 			<div class="context-menu">
@@ -52,7 +52,7 @@
 
 	</div> <!-- /container-->
 
-	
+
 
 </body>
 

@@ -18,6 +18,7 @@ def includeme(config):
     config.add_route('home', '/')
     config.add_route('toc', '/toc')
     config.add_route('nodetest', '/nodetest')
+    config.add_route('styleguide', '/styleguide')
     config.include(api_urls, route_prefix='/api')
 
 
