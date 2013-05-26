@@ -26,4 +26,4 @@ def dummy_node_data(request):
 
 @view_config(route_name='styleguide', request_method='GET', http_cache=60)
 def styleguide_view(request):
-    return render_to_response('../../templates/styleguide/index.pt', {}, request=request)
+    return render_to_response('../../templates/styleguide/index.jinja2', {}, request=request)

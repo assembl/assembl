@@ -1,0 +1,11 @@
+$bar-height: 55px;
+$bar-padding: 5px;
+
+.bar {
+    @include box-sizing( border-box );
+    display: block;
+    height: $bar-height;
+    padding: $bar-padding;
+}
+
+//434343

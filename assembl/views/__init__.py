@@ -21,6 +21,8 @@ def includeme(config):
     config.add_route('styleguide', '/styleguide')
     config.include(api_urls, route_prefix='/api')
 
+    config.include('pyramid_jinja2')
+
 
 def api_urls(config):
     config.include(api_post_urls, route_prefix='/posts')
