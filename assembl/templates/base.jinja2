@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Styleguide for Assebl</title>
+
+    <link type="text/css" rel="stylesheet" href="/static/css/style.css" />
+    <link href="//netdna.bootstrapcdn.com/font-awesome/3.1.1/css/font-awesome.css" rel="stylesheet">
+</head>
+<body>
+    <div id="wrapper">
+        <header id="header" class="container">
+            <div class="bar bar--main">
+                <div class="bar-left">
+                    <img src="/static/img/assembl.png" alt="Assembl" />
+                </div>
+                <div class="bar-right"> Icons here </div>
+            </div>
+            <div class="bar bar--title">
+                <div class="bar-center">{% block pagetitle %}Inbox{% endblock %}</div>
+            </div>
+            <div class="bar">
+                <div class="bar-center">oi ?</div>
+            </div>
+        </header>
+        <main id="main">
+            {% block content %}{% endblock %}
+        </main>
+        <footer id="footer"></footer>
+    </div>
+</body>
+</html>
