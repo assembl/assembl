@@ -21,7 +21,11 @@ Getting Started
 Compiling CSS
 -------------
 
-You have too install compass: `gem install compass`
+You have too install compass:
+
+- gem install compass
+
+To run compass:
 
 - cd <directory containing this file>
 

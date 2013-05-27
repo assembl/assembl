@@ -1,11 +1,71 @@
 $bar-height: 55px;
 $bar-padding: 5px;
 
+// Bar
+// ===
 .bar {
+    display: block;
+    text-align: center;
+    height: $bar-height;
+    position: relative;
+
+    background-color: #fcfbf7;
+    border: { top: solid 1px #e4e4e3; bottom: solid 1px #e4e4e3; }
+
+    img { vertical-align: middle; }
+}
+
+// Main bar
+// ++++++++
+.bar.bar--main {
+    @include background-image(linear-gradient(bottom, #2c2c2c, #444));
+    color: white;
+    border: none;
+}
+
+// Title bar
+// +++++++++
+.bar.bar--title {
+    background-color: rgba(238,113,77,0);
+    @include box-shadow( inset 0 2px rgba(255,255,253,.2) );
+    border: { top: solid 1px #8d88a6; bottom: solid 1px #8d88a6; }
+    @include background-image( linear-gradient(bottom, #afa8cf, #c7c2dd) );
+
+    font-size: 18px;
+    color: #2c2c2c;
+}
+
+// Left content of a bar
+// ---------------------
+.bar-left {
     @include box-sizing( border-box );
     display: block;
     height: $bar-height;
-    padding: $bar-padding;
+    line-height: $bar-height;
+    position: absolute;
+    padding: {
+        left: $bar-padding;
+        right: $bar-padding;
+    }
+    top: 0;
+    bottom: 0;
+    left: 0;
 }
 
-//434343
+// Right content of a bar
+// ---------------------
+.bar-right {
+    @extend .bar-left;
+    right: 0;
+    left: auto;
+    text-align: right;
+}
+
+// Center content of a bar
+// ---------------------
+.bar-center {
+    text-align: center;
+    display: block;
+    height: $bar-height;
+    line-height: $bar-height;
+}

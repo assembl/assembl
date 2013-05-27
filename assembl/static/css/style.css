@@ -64,6 +64,86 @@ article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, 
   display: block;
 }
 
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/base\/_common\.scss}line{font-family:\000031}}
+html {
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_bar\.scss}line{font-family:\000036}}
+.bar {
+  display: block;
+  text-align: center;
+  height: 55px;
+  position: relative;
+  background-color: #fcfbf7;
+  border-top: solid 1px #e4e4e3;
+  border-bottom: solid 1px #e4e4e3;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_bar\.scss}line{font-family:\0000315}}
+.bar img {
+  vertical-align: middle;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_bar\.scss}line{font-family:\0000320}}
+.bar.bar--main {
+  background-image: -webkit-gradient(linear, 50% 100%, 50% 0%, color-stop(0%, #2c2c2c), color-stop(100%, #444444));
+  background-image: -webkit-linear-gradient(bottom, #2c2c2c, #444444);
+  background-image: -moz-linear-gradient(bottom, #2c2c2c, #444444);
+  background-image: -o-linear-gradient(bottom, #2c2c2c, #444444);
+  background-image: linear-gradient(bottom, #2c2c2c, #444444);
+  color: white;
+  border: none;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_bar\.scss}line{font-family:\0000328}}
+.bar.bar--title {
+  background-color: rgba(238, 113, 77, 0);
+  -webkit-box-shadow: inset 0 2px rgba(255, 255, 253, 0.2);
+  -moz-box-shadow: inset 0 2px rgba(255, 255, 253, 0.2);
+  box-shadow: inset 0 2px rgba(255, 255, 253, 0.2);
+  border-top: solid 1px #8d88a6;
+  border-bottom: solid 1px #8d88a6;
+  background-image: -webkit-gradient(linear, 50% 100%, 50% 0%, color-stop(0%, #afa8cf), color-stop(100%, #c7c2dd));
+  background-image: -webkit-linear-gradient(bottom, #afa8cf, #c7c2dd);
+  background-image: -moz-linear-gradient(bottom, #afa8cf, #c7c2dd);
+  background-image: -o-linear-gradient(bottom, #afa8cf, #c7c2dd);
+  background-image: linear-gradient(bottom, #afa8cf, #c7c2dd);
+  font-size: 18px;
+  color: #2c2c2c;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_bar\.scss}line{font-family:\0000340}}
+.bar-left, .bar-right {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  display: block;
+  height: 55px;
+  line-height: 55px;
+  position: absolute;
+  padding-left: 5px;
+  padding-right: 5px;
+  top: 0;
+  bottom: 0;
+  left: 0;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_bar\.scss}line{font-family:\0000357}}
+.bar-right {
+  right: 0;
+  left: auto;
+  text-align: right;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_bar\.scss}line{font-family:\0000366}}
+.bar-center {
+  text-align: center;
+  display: block;
+  height: 55px;
+  line-height: 55px;
+}
+
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_box\.scss}line{font-family:\000033}}
 .box {
   display: block;
@@ -96,4 +176,219 @@ article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, 
   text-align: center;
   overflow-x: hidden;
   border: solid 1px purple;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_grid\.scss}line{font-family:\0000320}}
+.container {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  margin: auto;
+  width: 768px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_grid\.scss}line{font-family:\0000325}}
+.container .container {
+  max-width: 100.1%;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_grid\.scss}line{font-family:\0000328}}
+.row {
+  overflow: hidden;
+  *zoom: 1;
+  margin-left: -2.762430939%;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_grid\.scss}line{font-family:\0000333}}
+.col {
+  /*
+  $gutter-width: 2.762430939%;
+  $col-width: 5.801104972%;
+  $width: ($col-width * $size) + ($gutter-width * $size) - $gutter-width;
+  */
+  float: left;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  margin-left: 2.762430939%;
+  width: 100%;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_grid\.scss}line{font-family:\0000338}}
+.col-1 {
+  /*
+  $gutter-width: 2.762430939%;
+  $col-width: 5.801104972%;
+  $width: ($col-width * $size) + ($gutter-width * $size) - $gutter-width;
+  */
+  float: left;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  margin-left: 2.762430939%;
+  width: 5.5709%;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_grid\.scss}line{font-family:\0000338}}
+.col-2 {
+  /*
+  $gutter-width: 2.762430939%;
+  $col-width: 5.801104972%;
+  $width: ($col-width * $size) + ($gutter-width * $size) - $gutter-width;
+  */
+  float: left;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  margin-left: 2.762430939%;
+  width: 13.90424%;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_grid\.scss}line{font-family:\0000338}}
+.col-3 {
+  /*
+  $gutter-width: 2.762430939%;
+  $col-width: 5.801104972%;
+  $width: ($col-width * $size) + ($gutter-width * $size) - $gutter-width;
+  */
+  float: left;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  margin-left: 2.762430939%;
+  width: 22.23757%;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_grid\.scss}line{font-family:\0000338}}
+.col-4 {
+  /*
+  $gutter-width: 2.762430939%;
+  $col-width: 5.801104972%;
+  $width: ($col-width * $size) + ($gutter-width * $size) - $gutter-width;
+  */
+  float: left;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  margin-left: 2.762430939%;
+  width: 30.5709%;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_grid\.scss}line{font-family:\0000338}}
+.col-5 {
+  /*
+  $gutter-width: 2.762430939%;
+  $col-width: 5.801104972%;
+  $width: ($col-width * $size) + ($gutter-width * $size) - $gutter-width;
+  */
+  float: left;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  margin-left: 2.762430939%;
+  width: 38.90424%;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_grid\.scss}line{font-family:\0000338}}
+.col-6 {
+  /*
+  $gutter-width: 2.762430939%;
+  $col-width: 5.801104972%;
+  $width: ($col-width * $size) + ($gutter-width * $size) - $gutter-width;
+  */
+  float: left;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  margin-left: 2.762430939%;
+  width: 47.23757%;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_grid\.scss}line{font-family:\0000338}}
+.col-7 {
+  /*
+  $gutter-width: 2.762430939%;
+  $col-width: 5.801104972%;
+  $width: ($col-width * $size) + ($gutter-width * $size) - $gutter-width;
+  */
+  float: left;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  margin-left: 2.762430939%;
+  width: 55.5709%;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_grid\.scss}line{font-family:\0000338}}
+.col-8 {
+  /*
+  $gutter-width: 2.762430939%;
+  $col-width: 5.801104972%;
+  $width: ($col-width * $size) + ($gutter-width * $size) - $gutter-width;
+  */
+  float: left;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  margin-left: 2.762430939%;
+  width: 63.90424%;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_grid\.scss}line{font-family:\0000338}}
+.col-9 {
+  /*
+  $gutter-width: 2.762430939%;
+  $col-width: 5.801104972%;
+  $width: ($col-width * $size) + ($gutter-width * $size) - $gutter-width;
+  */
+  float: left;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  margin-left: 2.762430939%;
+  width: 72.23757%;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_grid\.scss}line{font-family:\0000338}}
+.col-10 {
+  /*
+  $gutter-width: 2.762430939%;
+  $col-width: 5.801104972%;
+  $width: ($col-width * $size) + ($gutter-width * $size) - $gutter-width;
+  */
+  float: left;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  margin-left: 2.762430939%;
+  width: 80.5709%;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_grid\.scss}line{font-family:\0000338}}
+.col-11 {
+  /*
+  $gutter-width: 2.762430939%;
+  $col-width: 5.801104972%;
+  $width: ($col-width * $size) + ($gutter-width * $size) - $gutter-width;
+  */
+  float: left;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  margin-left: 2.762430939%;
+  width: 88.90424%;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_grid\.scss}line{font-family:\0000338}}
+.col-12 {
+  /*
+  $gutter-width: 2.762430939%;
+  $col-width: 5.801104972%;
+  $width: ($col-width * $size) + ($gutter-width * $size) - $gutter-width;
+  */
+  float: left;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  margin-left: 2.762430939%;
+  width: 100%;
 }

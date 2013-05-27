@@ -1,15 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8" />
-    <title>Styleguide for Assebl</title>
+{% extends 'base.jinja2' %}
 
-    <link type="text/css" rel="stylesheet" href="/static/css/style.css" />
-</head>
-<body>
+{% block content %}
 
-    {% include "styleguide/components/bar.jinja2" %}
+    <section class="container">
+        {% include "styleguide/components/bar.jinja2" %}
+    </section>
 
+    {#
     <section>
         <div class="section-header">
             <h2>Box</h2>
@@ -29,6 +26,6 @@
             </div>
         </div>
     </section>
+    #}
 
-</body>
-</html>
+{% endblock %}
