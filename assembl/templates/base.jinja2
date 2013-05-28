@@ -12,7 +12,11 @@
         <header id="header" class="container">
             <div class="bar bar--main">
                 <div class="bar-left">
-                    <i class="icon-reorder"></i>
+                    <a id="lateralmenu-button" class="iconbutton">
+                        <i class="icon-reorder"></i>
+                        <span class="iconbutton-badge">2</span>
+                    </a>
+
                     <img src="/static/img/assembl.png" alt="Assembl" />
                 </div>
                 <div class="bar-right"> Icons here </div>
@@ -27,5 +31,14 @@
     <div class="lateralmenu">
         oi ?
     </div>
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/zepto/1.0/zepto.min.js"></script>
+    <script>
+        !function($){
+            $('#lateralmenu-button').click(function(ev){
+                document.body.classList.toggle( 'is-lateralmenu-open' );
+            });
+        }(Zepto);
+    </script>
 </body>
 </html>
