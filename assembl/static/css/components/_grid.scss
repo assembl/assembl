@@ -8,7 +8,7 @@
 
     .container { max-width: 100.1%; }
 
-    @media (min-width: 768px) and (max-width: 979px) {
+    @include medium-only {
         width: 724px;
     }
 }

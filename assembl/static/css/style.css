@@ -120,9 +120,10 @@ html {
   color: white;
   border-top-color: transparent;
   border-bottom-color: transparent;
+  font-size: 26px;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_bar\.scss}line{font-family:\0000353}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_bar\.scss}line{font-family:\0000354}}
 .bar.bar--title {
   background-color: rgba(238, 113, 77, 0);
   -webkit-box-shadow: inset 0 2px rgba(255, 255, 253, 0.2);
@@ -139,7 +140,7 @@ html {
   color: #2c2c2c;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_bar\.scss}line{font-family:\0000363}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_bar\.scss}line{font-family:\0000366}}
 .bar.bar--simple {
   height: 29px !important;
   line-height: 29px !important;
@@ -148,7 +149,7 @@ html {
   border-bottom: solid 1px #ccc;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_bar\.scss}line{font-family:\0000372}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_bar\.scss}line{font-family:\0000375}}
 .bar-left, .bar-right {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
@@ -163,27 +164,27 @@ html {
   bottom: 0;
   left: 0;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_bar\.scss}line{font-family:\0000386}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_bar\.scss}line{font-family:\0000389}}
 .bar--simple .bar-left, .bar--simple .bar-right {
   height: 29px;
   line-height: 29px;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_bar\.scss}line{font-family:\0000394}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_bar\.scss}line{font-family:\0000397}}
 .bar-right {
   right: 0;
   left: auto;
   text-align: right;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_bar\.scss}line{font-family:\00003103}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_bar\.scss}line{font-family:\00003106}}
 .bar-center {
   text-align: center;
   display: block;
   height: 55px;
   line-height: 55px;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_bar\.scss}line{font-family:\00003109}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_bar\.scss}line{font-family:\00003112}}
 .bar--simple .bar-center {
   height: 29px !important;
   line-height: 29px !important;
@@ -251,11 +252,6 @@ html {
 
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_grid\.scss}line{font-family:\0000325}}
 .col {
-  /*
-  $gutter-width: 2.762430939%;
-  $col-width: 5.801104972%;
-  $width: ($col-width * $size) + ($gutter-width * $size) - $gutter-width;
-  */
   float: left;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
@@ -266,11 +262,6 @@ html {
 
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_grid\.scss}line{font-family:\0000332}}
 .col-1 {
-  /*
-  $gutter-width: 2.762430939%;
-  $col-width: 5.801104972%;
-  $width: ($col-width * $size) + ($gutter-width * $size) - $gutter-width;
-  */
   float: left;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
@@ -281,11 +272,6 @@ html {
 
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_grid\.scss}line{font-family:\0000332}}
 .col-2 {
-  /*
-  $gutter-width: 2.762430939%;
-  $col-width: 5.801104972%;
-  $width: ($col-width * $size) + ($gutter-width * $size) - $gutter-width;
-  */
   float: left;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
@@ -296,11 +282,6 @@ html {
 
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_grid\.scss}line{font-family:\0000332}}
 .col-3 {
-  /*
-  $gutter-width: 2.762430939%;
-  $col-width: 5.801104972%;
-  $width: ($col-width * $size) + ($gutter-width * $size) - $gutter-width;
-  */
   float: left;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
@@ -311,11 +292,6 @@ html {
 
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_grid\.scss}line{font-family:\0000332}}
 .col-4 {
-  /*
-  $gutter-width: 2.762430939%;
-  $col-width: 5.801104972%;
-  $width: ($col-width * $size) + ($gutter-width * $size) - $gutter-width;
-  */
   float: left;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
@@ -326,11 +302,6 @@ html {
 
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_grid\.scss}line{font-family:\0000332}}
 .col-5 {
-  /*
-  $gutter-width: 2.762430939%;
-  $col-width: 5.801104972%;
-  $width: ($col-width * $size) + ($gutter-width * $size) - $gutter-width;
-  */
   float: left;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
@@ -341,11 +312,6 @@ html {
 
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_grid\.scss}line{font-family:\0000332}}
 .col-6 {
-  /*
-  $gutter-width: 2.762430939%;
-  $col-width: 5.801104972%;
-  $width: ($col-width * $size) + ($gutter-width * $size) - $gutter-width;
-  */
   float: left;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
@@ -356,11 +322,6 @@ html {
 
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_grid\.scss}line{font-family:\0000332}}
 .col-7 {
-  /*
-  $gutter-width: 2.762430939%;
-  $col-width: 5.801104972%;
-  $width: ($col-width * $size) + ($gutter-width * $size) - $gutter-width;
-  */
   float: left;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
@@ -371,11 +332,6 @@ html {
 
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_grid\.scss}line{font-family:\0000332}}
 .col-8 {
-  /*
-  $gutter-width: 2.762430939%;
-  $col-width: 5.801104972%;
-  $width: ($col-width * $size) + ($gutter-width * $size) - $gutter-width;
-  */
   float: left;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
@@ -386,11 +342,6 @@ html {
 
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_grid\.scss}line{font-family:\0000332}}
 .col-9 {
-  /*
-  $gutter-width: 2.762430939%;
-  $col-width: 5.801104972%;
-  $width: ($col-width * $size) + ($gutter-width * $size) - $gutter-width;
-  */
   float: left;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
@@ -401,11 +352,6 @@ html {
 
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_grid\.scss}line{font-family:\0000332}}
 .col-10 {
-  /*
-  $gutter-width: 2.762430939%;
-  $col-width: 5.801104972%;
-  $width: ($col-width * $size) + ($gutter-width * $size) - $gutter-width;
-  */
   float: left;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
@@ -416,11 +362,6 @@ html {
 
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_grid\.scss}line{font-family:\0000332}}
 .col-11 {
-  /*
-  $gutter-width: 2.762430939%;
-  $col-width: 5.801104972%;
-  $width: ($col-width * $size) + ($gutter-width * $size) - $gutter-width;
-  */
   float: left;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
@@ -431,15 +372,54 @@ html {
 
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_grid\.scss}line{font-family:\0000332}}
 .col-12 {
-  /*
-  $gutter-width: 2.762430939%;
-  $col-width: 5.801104972%;
-  $width: ($col-width * $size) + ($gutter-width * $size) - $gutter-width;
-  */
   float: left;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
   margin-left: 2.762430939%;
   width: 100%;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/layout\/_content\.scss}line{font-family:\000032}}
+#wrapper {
+  -webkit-transition: margin-left 0.6s;
+  -moz-transition: margin-left 0.6s;
+  -o-transition: margin-left 0.6s;
+  transition: margin-left 0.6s;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/layout\/_content\.scss}line{font-family:\000037}}
+.is-lateralmenu-open #wrapper {
+  margin-left: 453px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/layout\/_lateralmenu\.scss}line{font-family:\000031}}
+.lateralmenu {
+  position: fixed;
+  top: 0;
+  left: -453px;
+  background-color: rgba(52, 52, 52, 0);
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #717171), color-stop(100%, #585858));
+  background-image: -webkit-linear-gradient(top, #717171, #585858);
+  background-image: -moz-linear-gradient(top, #717171, #585858);
+  background-image: -o-linear-gradient(top, #717171, #585858);
+  background-image: linear-gradient(top, #717171, #585858);
+  -webkit-box-shadow: inset 0 2px rgba(255, 255, 255, 0.15);
+  -moz-box-shadow: inset 0 2px rgba(255, 255, 255, 0.15);
+  box-shadow: inset 0 2px rgba(255, 255, 255, 0.15);
+  border-top: solid 1px #2d2d2d;
+  border-bottom: solid 1px #2d2d2d;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  width: 453px;
+  min-height: 100%;
+  -webkit-transition: left 0.6s;
+  -moz-transition: left 0.6s;
+  -o-transition: left 0.6s;
+  transition: left 0.6s;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/layout\/_lateralmenu\.scss}line{font-family:\0000324}}
+.lateralmenu.is-open, body.is-lateralmenu-open .lateralmenu {
+  left: 0;
 }

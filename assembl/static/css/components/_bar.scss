@@ -46,6 +46,7 @@ $bar-simple-height: 29px;
     color: white;
     border-top-color: transparent;
     border-bottom-color: transparent;
+    font-size: 26px;
 }
 
 // Title bar
@@ -60,6 +61,8 @@ $bar-simple-height: 29px;
     color: #2c2c2c;
 }
 
+// Simple bar
+// +++++++++
 .bar.bar--simple {
     height: $bar-simple-height !important;
     line-height: $bar-simple-height !important;

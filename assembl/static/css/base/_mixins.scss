@@ -1,11 +1,8 @@
+// Creates the span for grid system
+//
 // @param $size=1 {number} The column size
 // @param $total-col=12 {number} The total column size of the grid
 @mixin col-span($size: 1, $total-col: 12){
-    /*
-    $gutter-width: 2.762430939%;
-    $col-width: 5.801104972%;
-    $width: ($col-width * $size) + ($gutter-width * $size) - $gutter-width;
-    */
     $col-width: $size / $total-col;
     $gutter-width: 2.762430939%;
     $width: 100%;
@@ -17,4 +14,20 @@
     @include box-sizing( border-box );
     margin-left: 2.762430939%;
     width: $width;
+}
+
+
+// Only in medium resolution
+@mixin medium-only {
+    @media (min-width: 768px) and (max-width: 979px) { @content; }
+}
+
+// Only in large resolution
+@mixin large-only {
+    @media (min-width: 980px) and (max-width: 1199px) { @content; }
+}
+
+// Only in xlarge resolution
+@mixin xlarge-only {
+    @media (min-width: 1200) { @content; }
 }
