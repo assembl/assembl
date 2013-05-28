@@ -26,7 +26,7 @@ html {
 }
 
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/base\/_reset\.scss}line{font-family:\0000326}}
-body {
+html, body {
   overflow-x: hidden;
 }
 
@@ -477,14 +477,15 @@ html {
 
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/layout\/_content\.scss}line{font-family:\000032}}
 #wrapper {
-  -webkit-transition: margin-left 0.6s;
-  -moz-transition: margin-left 0.6s;
-  -o-transition: margin-left 0.6s;
-  transition: margin-left 0.6s;
+  position: relative;
+  -webkit-transition: left 0.6s;
+  -moz-transition: left 0.6s;
+  -o-transition: left 0.6s;
+  transition: left 0.6s;
 }
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/layout\/_content\.scss}line{font-family:\000037}}
 .is-lateralmenu-open #wrapper {
-  margin-left: 453px;
+  left: 453px;
 }
 
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/layout\/_lateralmenu\.scss}line{font-family:\000031}}
