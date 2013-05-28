@@ -10,7 +10,7 @@ FIXTURE = os.path.join(os.path.dirname(__file__),
 
 @view_config(route_name='home', request_method='GET', http_cache=60)
 def home_view(request):
-    return render_to_response('../../templates/backbone/index.pt', {}, request=request)
+    return render_to_response('../../templates/index.jinja2', {}, request=request)
 
 @view_config(route_name='toc', request_method='GET', http_cache=60)
 def toc_view(request):

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
-    <title>Styleguide for Assebl</title>
+    <title>{% block title %}Assebl{% endblock %}</title>
 
     <link type="text/css" rel="stylesheet" href="/static/css/style.css" />
     <link href="//netdna.bootstrapcdn.com/font-awesome/3.1.1/css/font-awesome.css" rel="stylesheet">
@@ -12,21 +12,20 @@
         <header id="header" class="container">
             <div class="bar bar--main">
                 <div class="bar-left">
+                    <i class="icon-reorder"></i>
                     <img src="/static/img/assembl.png" alt="Assembl" />
                 </div>
                 <div class="bar-right"> Icons here </div>
-            </div>
-            <div class="bar bar--title">
-                <div class="bar-center">{% block pagetitle %}Inbox{% endblock %}</div>
-            </div>
-            <div class="bar">
-                <div class="bar-center">oi ?</div>
             </div>
         </header>
         <main id="main">
             {% block content %}{% endblock %}
         </main>
-        <footer id="footer"></footer>
+    </div>
+
+
+    <div class="lateralmenu">
+        oi ?
     </div>
 </body>
 </html>
