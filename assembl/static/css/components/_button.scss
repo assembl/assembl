@@ -1,0 +1,103 @@
+%button {
+    border: solid 1px transparent;
+    border-radius: 4px;
+    cursor: pointer;
+
+    display: inline-block;
+}
+
+// Default button
+// ==============
+.button {
+    @extend %button;
+
+    padding: 4px 12px;
+}
+
+// Default button hover state
+// **************************
+.button:hover {
+    border: solid 1px rgba(0, 0, 0, 0.7);
+    box-shadow: gba(255, 255, 255, 0.2) 0px 1px 0px 0px inset;
+    text-decoration: none;
+}
+
+
+// Iconed button
+// =============
+.iconbutton {
+    @extend %button;
+
+    position: relative;
+    font-size: 26px;
+    line-height: 1;
+}
+
+// A badge which stands at the top right
+// of the iconbutton
+// -------------------
+.iconbutton-badge {
+    position: absolute;
+    top: $badge-height / -2;
+    right: $badge-width / -2;
+
+    width: $badge-width;
+    height: $badge-height;
+    line-height: $badge-height;
+
+    background-color: #ee7f4e;
+    border-radius: 3px;
+    color: white;
+    font-size: 10px;
+    text-align: center;
+}
+
+
+// Arrow button
+// ==========
+.arrowbutton {
+    @extend %button;
+
+    position: relative;
+    margin: 5px 0;
+    line-height: $arrowbutton-height;
+    height: $arrowbutton-height;
+    @include box-sizing( border-box );
+    padding: 0 10px 0 5px;
+    margin-left: 14px;
+
+    background-color: rgba(129,133,139,0);
+    @include background-image(linear-gradient(bottom, #afa8cf, #c7c2dd));
+    @include box-shadow(0 1px rgba(255,255,255,.15), inset 0 2px rgba(255,255,253,.2));
+    color: white;
+    border: solid 1px #8d88a6;
+    border-radius: 0 $arrowbutton-radius $arrowbutton-radius 0;
+
+    &:before {
+        content: url(#{$img-dir}/arrowbutton.png);
+        position: absolute;
+        top: -1px;
+        left: -14px;
+    }
+}
+
+// Arrow button to right
+// +++++++++++++++++++++
+.arrowbutton.arrowbutton--right {
+    border-radius: $arrowbutton-radius 0 0 $arrowbutton-radius;
+    margin-left: 0;
+    margin-right: 14px;
+
+    &:before {
+        display: none;
+    }
+
+    &:after {
+        content: url(#{$img-dir}/arrowbutton.png);
+        position: absolute;
+        top: -1px;
+        right: -14px;
+
+        @include transform( rotateY(180deg) );
+    }
+}
