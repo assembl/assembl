@@ -1,5 +1,8 @@
 $bar-height: 55px;
 $bar-padding: 5px;
+$bar-border-size: 1px;
+
+$bar-simple-height: 29px;
 
 // Bar
 // ===
@@ -8,9 +11,30 @@ $bar-padding: 5px;
     text-align: center;
     height: $bar-height;
     position: relative;
+    @include box-sizing(border-box);
 
     background-color: #fcfbf7;
     border: { top: solid 1px #e4e4e3; bottom: solid 1px #e4e4e3; }
+
+    &:after,
+    &:before {
+        content: '';
+        display: block;
+
+        position: absolute;
+        top: -1px;
+        left: 100%;
+        bottom: -1px;
+
+        background: inherit;
+        border: inherit;
+        width: 9999px;
+    }
+
+    &:before {
+        left: auto;
+        right: 100%;
+    }
 
     img { vertical-align: middle; }
 }
@@ -20,7 +44,8 @@ $bar-padding: 5px;
 .bar.bar--main {
     @include background-image(linear-gradient(bottom, #2c2c2c, #444));
     color: white;
-    border: none;
+    border-top-color: transparent;
+    border-bottom-color: transparent;
 }
 
 // Title bar
@@ -33,6 +58,13 @@ $bar-padding: 5px;
 
     font-size: 18px;
     color: #2c2c2c;
+}
+
+.bar.bar--simple {
+    height: $bar-simple-height !important;
+    line-height: $bar-simple-height !important;
+    background-color: #e5e5e5;
+    border: { top: solid 1px #ccc; bottom: solid 1px #ccc; }
 }
 
 // Left content of a bar
@@ -50,6 +82,11 @@ $bar-padding: 5px;
     top: 0;
     bottom: 0;
     left: 0;
+
+    .bar--simple & {
+        height: $bar-simple-height;
+        line-height: $bar-simple-height;
+    }
 }
 
 // Right content of a bar
@@ -68,4 +105,9 @@ $bar-padding: 5px;
     display: block;
     height: $bar-height;
     line-height: $bar-height;
+
+    .bar--simple & {
+        height: $bar-simple-height !important;
+        line-height: $bar-simple-height !important;
+    }
 }

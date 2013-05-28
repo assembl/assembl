@@ -1,39 +1,33 @@
-@mixin col-span($size: 1, $total-col: 12){
-    /*
-    $gutter-width: 2.762430939%;
-    $col-width: 5.801104972%;
-    $width: ($col-width * $size) + ($gutter-width * $size) - $gutter-width;
-    */
-    $col-width: $size / $total-col;
-    $gutter-width: 2.762430939%;
-    $width: 100%;
-    @if $size < $total-col {
-        $width: percentage($col-width) - $gutter-width;
-    }
 
-    float: left;
-    @include box-sizing( border-box );
-    margin-left: 2.762430939%;
-    width: $width;
-}
-
+// The container of the grid
+// =========================
 .container {
     @include box-sizing( border-box );
     margin: auto;
-    width: 768px;
+    width: 980px;
 
     .container { max-width: 100.1%; }
+
+    @media (min-width: 768px) and (max-width: 979px) {
+        width: 724px;
+    }
 }
 
+// The row of the grid
+// =========================
 .row {
     @include clearfix();
     margin-left: -2.762430939%;
 }
 
+// The column of the grid
+// =========================
 .col {
     @include col-span(12);
 }
 
 @for $i from 1 through 12 {
+    // The column of the grid
+    // ----------------------
     .col-#{$i} { @include col-span($i); }
 }
