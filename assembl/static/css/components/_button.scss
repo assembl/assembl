@@ -29,8 +29,6 @@
     @extend %button;
 
     position: relative;
-    font-size: 26px;
-    line-height: 1;
 }
 
 // A badge which stands at the top right
@@ -74,7 +72,7 @@
     border-radius: 0 $arrowbutton-radius $arrowbutton-radius 0;
 
     &:before {
-        content: url(#{$img-dir}/arrowbutton.png);
+        content: url(#{$img-dir}/button/arrowbutton.png);
         position: absolute;
         top: -1px;
         left: -14px;
@@ -93,7 +91,7 @@
     }
 
     &:after {
-        content: url(#{$img-dir}/arrowbutton.png);
+        content: url(#{$img-dir}/button/arrowbutton.png);
         position: absolute;
         top: -1px;
         right: -14px;

@@ -1,0 +1,9 @@
+
+[class|="icon"] {
+    display: inline-block;
+    width: $icon-width;
+    height: $icon-height;
+}
+
+@import "icon/*.png";
+@include all-icon-sprites;

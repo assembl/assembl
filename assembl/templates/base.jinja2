@@ -5,9 +5,8 @@
     <title>{% block title %}Assebl{% endblock %}</title>
 
     <link type="text/css" rel="stylesheet" href="/static/css/style.css" />
-    <link href="//netdna.bootstrapcdn.com/font-awesome/3.1.1/css/font-awesome.css" rel="stylesheet">
 </head>
-<body>
+<body class="preload">
     <div id="wrapper">
         <header id="header" class="container">
             <div class="bar bar--main">
@@ -25,6 +24,7 @@
                     <a class="iconbutton"><i class="icon-user"></i></a>
                 </div>
             </div>
+            {% block extra_header %}{% endblock %}
         </header>
         <main id="main">
             {% block content %}{% endblock %}
@@ -43,6 +43,9 @@
                 document.body.classList.toggle( 'is-lateralmenu-open' );
             });
         }(Zepto);
+        $(function(){
+            document.body.classList.remove('preload');
+        });
     </script>
 </body>
 </html>

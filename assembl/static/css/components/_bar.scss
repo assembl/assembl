@@ -1,5 +1,5 @@
 $bar-height: 55px;
-$bar-padding: 5px;
+$bar-padding: 10px 5px;
 $bar-border-size: 1px;
 
 $bar-simple-height: 29px;
@@ -35,8 +35,6 @@ $bar-simple-height: 29px;
         left: auto;
         right: 100%;
     }
-
-    img { vertical-align: middle; }
 }
 
 // Main bar
@@ -77,10 +75,7 @@ $bar-simple-height: 29px;
     height: $bar-height;
     line-height: $bar-height;
     position: absolute;
-    padding: {
-        left: $bar-padding;
-        right: $bar-padding;
-    }
+    padding: $bar-padding;
     top: 0;
     bottom: 0;
     left: 0;
