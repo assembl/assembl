@@ -492,7 +492,6 @@ html {
 .lateralmenu {
   position: fixed;
   top: 0;
-  left: -453px;
   background-color: rgba(52, 52, 52, 0);
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #717171), color-stop(100%, #585858));
   background-image: -webkit-linear-gradient(top, #717171, #585858);
@@ -518,4 +517,37 @@ html {
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/layout\/_lateralmenu\.scss}line{font-family:\0000324}}
 .lateralmenu.is-open, body.is-lateralmenu-open .lateralmenu {
   left: 0;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/layout\/_lateralmenu\.scss}line{font-family:\0000331}}
+.searchbox {
+  -webkit-box-shadow: 0 1px rgba(255, 255, 255, 0.1), inset 0 1px rgba(138, 138, 138, 0.3);
+  -moz-box-shadow: 0 1px rgba(255, 255, 255, 0.1), inset 0 1px rgba(138, 138, 138, 0.3);
+  box-shadow: 0 1px rgba(255, 255, 255, 0.1), inset 0 1px rgba(138, 138, 138, 0.3);
+  border-top: solid 1px #2d2d2d;
+  border-bottom: solid 1px #2d2d2d;
+  background-color: rgba(52, 52, 52, 0);
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #717171), color-stop(100%, #585858));
+  background-image: -webkit-linear-gradient(top, #717171, #585858);
+  background-image: -moz-linear-gradient(top, #717171, #585858);
+  background-image: -o-linear-gradient(top, #717171, #585858);
+  background-image: linear-gradient(top, #717171, #585858);
+  height: 72px;
+  line-height: 72px;
+  text-align: center;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/layout\/_lateralmenu\.scss}line{font-family:\0000344}}
+.searchbox-field {
+  width: 356px;
+  height: 36px;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  -ms-border-radius: 10px;
+  -o-border-radius: 10px;
+  border-radius: 10px;
+  background: rgba(55, 55, 55, 0.67) url(/static/img/icon/search.png) right center no-repeat;
+  padding: 0 32px 0 10px;
+  color: white;
+  font-size: 16px;
 }

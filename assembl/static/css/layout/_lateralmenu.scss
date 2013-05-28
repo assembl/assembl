@@ -1,7 +1,7 @@
 .lateralmenu {
     position: fixed;
     top: 0;
-    left: $lateralmenu-width * -1;
+    //left: $lateralmenu-width * -1;
 
     background-color: rgba(52,52,52,0);
     @include background-image( linear-gradient(top, #717171, #585858) );
@@ -23,4 +23,31 @@
 // **********
 .lateralmenu.is-open {
     left: 0;
+}
+
+
+// The container for the search field
+// =====================
+.searchbox {
+    @include box-shadow(0 1px rgba(255,255,255,.1), inset 0 1px rgba(138,138,138,.3));
+    border: { top: solid 1px #2d2d2d; bottom: solid 1px #2d2d2d; }
+    background-color: rgba(52,52,52,0);
+    @include background-image(linear-gradient(top, #717171, #585858));
+
+    height: 72px;
+    line-height: 72px;
+    text-align: center;
+}
+
+// The field within the searchbox
+// --------------------
+.searchbox-field {
+    width: 356px;
+    height: 36px;
+    @include border-radius(10px);
+    background: rgba(55,55,55,.67) url(#{$img-dir}/icon/search.png) right center no-repeat;
+
+    padding: 0 32px 0 10px;
+    color: white;
+    font-size: 16px;
 }
