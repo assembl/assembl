@@ -2,3 +2,9 @@ html {
     font-family: Arial, sans-serif;
     font-size: $font-size;
 }
+
+.margin { margin: $margin; }
+.margin-top { margin-top: $margin-top; }
+.margin-right { margin-right: $margin-right; }
+.margin-bottom { margin-bottom: $margin-bottom; }
+.margin-left { margin-left: $margin-left; }

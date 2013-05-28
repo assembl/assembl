@@ -55,6 +55,10 @@ a img {
   border: none;
 }
 
+img {
+    vertical-align: middle;
+}
+
 article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section, summary {
   display: block;
 }
