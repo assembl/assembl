@@ -1,0 +1,42 @@
+{% extends 'base.jinja2' %}
+
+{% block title %}Styleguide for Assebl{% endblock %}
+
+
+{% block content %}
+
+    <section class="container">
+        {% include "styleguide/components/icon.jinja2" %}
+    </section>
+
+    <section class="container">
+        {% include "styleguide/components/button.jinja2" %}
+    </section>
+
+    <section class="container">
+        {% include "styleguide/components/bar.jinja2" %}
+    </section>
+
+    {#
+    <section>
+        <div class="section-header">
+            <h2>Box</h2>
+        </div>
+        <div class="section-body">
+
+            <div class="box">
+                <div class="box-left">
+                    Left part.
+                </div>
+                <div class="box-right">
+                    Right aoisjdas jdlasj dlkajdklas jd jasldjalsk jdklas jkdlasld japart.
+                </div>
+                <div class="box-center">
+                    Center part.
+                </div>
+            </div>
+        </div>
+    </section>
+    #}
+
+{% endblock %}

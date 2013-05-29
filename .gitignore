@@ -33,3 +33,4 @@
 
 # misc
 ._*
+.sass-cache

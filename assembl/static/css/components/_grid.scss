@@ -1,0 +1,33 @@
+
+// The container of the grid
+// =========================
+.container {
+    @include box-sizing( border-box );
+    margin: auto;
+    width: 980px;
+
+    .container { max-width: 100.1%; }
+
+    @include medium-only {
+        width: 724px;
+    }
+}
+
+// The row of the grid
+// =========================
+.row {
+    @include clearfix();
+    margin-left: -2.762430939%;
+}
+
+// The column of the grid
+// =========================
+.col {
+    @include col-span(12);
+}
+
+@for $i from 1 through 12 {
+    // The column of the grid
+    // ----------------------
+    .col-#{$i} { @include col-span($i); }
+}

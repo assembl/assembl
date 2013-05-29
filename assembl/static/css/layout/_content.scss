@@ -1,0 +1,11 @@
+// The F* and powerful wrapper
+#wrapper {
+    position: relative;
+    @include transition( left 0.6s );
+
+    // When the lateral menu is open
+    .is-lateralmenu-open & {
+        left: $lateralmenu-width;
+    }
+
+}

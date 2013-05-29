@@ -16,3 +16,17 @@ Getting Started
 
 - $venv/bin/pserve --reload local.ini
 
+
+
+Compiling CSS
+-------------
+
+You have too install compass:
+
+- gem install compass
+
+To run compass:
+
+- cd <directory containing this file>
+
+- compass watch

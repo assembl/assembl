@@ -1,2 +1,587 @@
-body {
-  background-color: red; }
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/base\/_reset\.scss}line{font-family:\0000313}}
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font: inherit;
+  font-size: 100%;
+  vertical-align: baseline;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/base\/_reset\.scss}line{font-family:\0000322}}
+html {
+  line-height: 1;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/base\/_reset\.scss}line{font-family:\0000326}}
+html, body {
+  overflow-x: hidden;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/base\/_reset\.scss}line{font-family:\0000330}}
+ol, ul {
+  list-style: none;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/base\/_reset\.scss}line{font-family:\0000334}}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/base\/_reset\.scss}line{font-family:\0000339}}
+caption, th, td {
+  text-align: left;
+  font-weight: normal;
+  vertical-align: middle;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/base\/_reset\.scss}line{font-family:\0000345}}
+q, blockquote {
+  quotes: none;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/base\/_reset\.scss}line{font-family:\0000349}}
+q:before, q:after, blockquote:before, blockquote:after {
+  content: "";
+  content: none;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/base\/_reset\.scss}line{font-family:\0000354}}
+a img {
+  border: none;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/base\/_reset\.scss}line{font-family:\0000358}}
+img {
+  vertical-align: middle;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/base\/_reset\.scss}line{font-family:\0000362}}
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section, summary {
+  display: block;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/base\/_reset\.scss}line{font-family:\0000366}}
+.preload * {
+  -webkit-transition: none !important;
+  -moz-transition: none !important;
+  -o-transition: none !important;
+  transition: none !important;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/base\/_common\.scss}line{font-family:\000031}}
+html {
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/base\/_common\.scss}line{font-family:\000036}}
+.margin {
+  margin: 10px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/base\/_common\.scss}line{font-family:\000037}}
+.margin-top {
+  margin-top: 10px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/base\/_common\.scss}line{font-family:\000038}}
+.margin-right {
+  margin-right: 10px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/base\/_common\.scss}line{font-family:\000039}}
+.margin-bottom {
+  margin-bottom: 10px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/base\/_common\.scss}line{font-family:\0000310}}
+.margin-left {
+  margin-left: 10px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_bar\.scss}line{font-family:\000039}}
+.bar {
+  display: block;
+  text-align: center;
+  height: 55px;
+  position: relative;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  background-color: #fcfbf7;
+  border-top: solid 1px #e4e4e3;
+  border-bottom: solid 1px #e4e4e3;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_bar\.scss}line{font-family:\0000320}}
+.bar:after, .bar:before {
+  content: '';
+  display: block;
+  position: absolute;
+  top: -1px;
+  left: 100%;
+  bottom: -1px;
+  background: inherit;
+  border: inherit;
+  width: 9999px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_bar\.scss}line{font-family:\0000334}}
+.bar:before {
+  left: auto;
+  right: 100%;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_bar\.scss}line{font-family:\0000342}}
+.bar.bar--main {
+  background-image: -webkit-gradient(linear, 50% 100%, 50% 0%, color-stop(0%, #2c2c2c), color-stop(100%, #444444));
+  background-image: -webkit-linear-gradient(bottom, #2c2c2c, #444444);
+  background-image: -moz-linear-gradient(bottom, #2c2c2c, #444444);
+  background-image: -o-linear-gradient(bottom, #2c2c2c, #444444);
+  background-image: linear-gradient(bottom, #2c2c2c, #444444);
+  color: white;
+  border-top-color: transparent;
+  border-bottom-color: transparent;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_bar\.scss}line{font-family:\0000351}}
+.bar.bar--title {
+  background-color: rgba(238, 113, 77, 0);
+  -webkit-box-shadow: inset 0 2px rgba(255, 255, 253, 0.2);
+  -moz-box-shadow: inset 0 2px rgba(255, 255, 253, 0.2);
+  box-shadow: inset 0 2px rgba(255, 255, 253, 0.2);
+  border-top: solid 1px #8d88a6;
+  border-bottom: solid 1px #8d88a6;
+  background-image: -webkit-gradient(linear, 50% 100%, 50% 0%, color-stop(0%, #afa8cf), color-stop(100%, #c7c2dd));
+  background-image: -webkit-linear-gradient(bottom, #afa8cf, #c7c2dd);
+  background-image: -moz-linear-gradient(bottom, #afa8cf, #c7c2dd);
+  background-image: -o-linear-gradient(bottom, #afa8cf, #c7c2dd);
+  background-image: linear-gradient(bottom, #afa8cf, #c7c2dd);
+  font-size: 18px;
+  color: #2c2c2c;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_bar\.scss}line{font-family:\0000363}}
+.bar.bar--simple {
+  height: 29px !important;
+  line-height: 29px !important;
+  background-color: #e5e5e5;
+  border-top: solid 1px #ccc;
+  border-bottom: solid 1px #ccc;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_bar\.scss}line{font-family:\0000372}}
+.bar-left, .bar-right {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  display: block;
+  height: 55px;
+  line-height: 55px;
+  position: absolute;
+  padding: 10px 5px;
+  top: 0;
+  bottom: 0;
+  left: 0;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_bar\.scss}line{font-family:\0000383}}
+.bar--simple .bar-left, .bar--simple .bar-right {
+  height: 29px;
+  line-height: 29px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_bar\.scss}line{font-family:\0000391}}
+.bar-right {
+  right: 0;
+  left: auto;
+  text-align: right;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_bar\.scss}line{font-family:\00003100}}
+.bar-center {
+  text-align: center;
+  display: block;
+  height: 55px;
+  line-height: 55px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_bar\.scss}line{font-family:\00003106}}
+.bar--simple .bar-center {
+  height: 29px !important;
+  line-height: 29px !important;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\000031}}
+.button, .iconbutton, .arrowbutton {
+  border: solid 1px transparent;
+  border-radius: 4px;
+  cursor: pointer;
+  display: inline-block;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\0000311}}
+.button {
+  padding: 4px 12px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\0000319}}
+.button:hover {
+  border: solid 1px rgba(0, 0, 0, 0.7);
+  box-shadow: gba(255, 255, 255, 0.2) 0px 1px 0px 0px inset;
+  text-decoration: none;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\0000328}}
+.iconbutton {
+  position: relative;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\0000337}}
+.iconbutton-badge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  width: 16px;
+  height: 16px;
+  line-height: 16px;
+  background-color: #ee7f4e;
+  border-radius: 3px;
+  color: white;
+  font-size: 10px;
+  text-align: center;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\0000356}}
+.arrowbutton {
+  position: relative;
+  margin: 5px 0;
+  line-height: 36px;
+  height: 36px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  padding: 0 10px 0 5px;
+  margin-left: 14px;
+  background-color: rgba(129, 133, 139, 0);
+  background-image: -webkit-gradient(linear, 50% 100%, 50% 0%, color-stop(0%, #afa8cf), color-stop(100%, #c7c2dd));
+  background-image: -webkit-linear-gradient(bottom, #afa8cf, #c7c2dd);
+  background-image: -moz-linear-gradient(bottom, #afa8cf, #c7c2dd);
+  background-image: -o-linear-gradient(bottom, #afa8cf, #c7c2dd);
+  background-image: linear-gradient(bottom, #afa8cf, #c7c2dd);
+  -webkit-box-shadow: 0 1px rgba(255, 255, 255, 0.15), inset 0 2px rgba(255, 255, 253, 0.2);
+  -moz-box-shadow: 0 1px rgba(255, 255, 255, 0.15), inset 0 2px rgba(255, 255, 253, 0.2);
+  box-shadow: 0 1px rgba(255, 255, 255, 0.15), inset 0 2px rgba(255, 255, 253, 0.2);
+  color: white;
+  border: solid 1px #8d88a6;
+  border-radius: 0 4px 4px 0;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\0000374}}
+.arrowbutton:before {
+  content: url(/static/img/button/arrowbutton.png);
+  position: absolute;
+  top: -1px;
+  left: -14px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\0000384}}
+.arrowbutton.arrowbutton--right {
+  border-radius: 4px 0 0 4px;
+  margin-left: 0;
+  margin-right: 14px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\0000389}}
+.arrowbutton.arrowbutton--right:before {
+  display: none;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\0000393}}
+.arrowbutton.arrowbutton--right:after {
+  content: url(/static/img/button/arrowbutton.png);
+  position: absolute;
+  top: -1px;
+  right: -14px;
+  -webkit-transform: rotateY(180deg);
+  -moz-transform: rotateY(180deg);
+  -ms-transform: rotateY(180deg);
+  -o-transform: rotateY(180deg);
+  transform: rotateY(180deg);
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_grid\.scss}line{font-family:\000034}}
+.container {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  margin: auto;
+  width: 980px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_grid\.scss}line{font-family:\000039}}
+.container .container {
+  max-width: 100.1%;
+}
+@media (min-width: 768px) and (max-width: 979px) {
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_grid\.scss}line{font-family:\000034}}
+  .container {
+    width: 724px;
+  }
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_grid\.scss}line{font-family:\0000318}}
+.row {
+  overflow: hidden;
+  *zoom: 1;
+  margin-left: -2.762430939%;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_grid\.scss}line{font-family:\0000325}}
+.col {
+  float: left;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  margin-left: 2.762430939%;
+  width: 100%;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_grid\.scss}line{font-family:\0000332}}
+.col-1 {
+  float: left;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  margin-left: 2.762430939%;
+  width: 5.5709%;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_grid\.scss}line{font-family:\0000332}}
+.col-2 {
+  float: left;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  margin-left: 2.762430939%;
+  width: 13.90424%;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_grid\.scss}line{font-family:\0000332}}
+.col-3 {
+  float: left;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  margin-left: 2.762430939%;
+  width: 22.23757%;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_grid\.scss}line{font-family:\0000332}}
+.col-4 {
+  float: left;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  margin-left: 2.762430939%;
+  width: 30.5709%;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_grid\.scss}line{font-family:\0000332}}
+.col-5 {
+  float: left;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  margin-left: 2.762430939%;
+  width: 38.90424%;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_grid\.scss}line{font-family:\0000332}}
+.col-6 {
+  float: left;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  margin-left: 2.762430939%;
+  width: 47.23757%;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_grid\.scss}line{font-family:\0000332}}
+.col-7 {
+  float: left;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  margin-left: 2.762430939%;
+  width: 55.5709%;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_grid\.scss}line{font-family:\0000332}}
+.col-8 {
+  float: left;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  margin-left: 2.762430939%;
+  width: 63.90424%;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_grid\.scss}line{font-family:\0000332}}
+.col-9 {
+  float: left;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  margin-left: 2.762430939%;
+  width: 72.23757%;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_grid\.scss}line{font-family:\0000332}}
+.col-10 {
+  float: left;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  margin-left: 2.762430939%;
+  width: 80.5709%;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_grid\.scss}line{font-family:\0000332}}
+.col-11 {
+  float: left;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  margin-left: 2.762430939%;
+  width: 88.90424%;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_grid\.scss}line{font-family:\0000332}}
+.col-12 {
+  float: left;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  margin-left: 2.762430939%;
+  width: 100%;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_icon\.scss}line{font-family:\000032}}
+[class|="icon"] {
+  display: inline-block;
+  width: 32px;
+  height: 32px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/icon\/\*\.png}line{font-family:\0000366}}
+.icon-sprite, .icon-cog, .icon-reorder, .icon-search, .icon-user {
+  background: url('/static/img/sprites/icon-saa15367242.png') no-repeat;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/Ruby\/Gems\/1\.8\/gems\/compass-0\.12\.2\/frameworks\/compass\/stylesheets\/compass\/utilities\/sprites\/_base\.scss}line{font-family:\0000360}}
+.icon-cog {
+  background-position: 0 0;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/Ruby\/Gems\/1\.8\/gems\/compass-0\.12\.2\/frameworks\/compass\/stylesheets\/compass\/utilities\/sprites\/_base\.scss}line{font-family:\0000360}}
+.icon-reorder {
+  background-position: 0 -96px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/Ruby\/Gems\/1\.8\/gems\/compass-0\.12\.2\/frameworks\/compass\/stylesheets\/compass\/utilities\/sprites\/_base\.scss}line{font-family:\0000360}}
+.icon-search {
+  background-position: 0 -32px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/Ruby\/Gems\/1\.8\/gems\/compass-0\.12\.2\/frameworks\/compass\/stylesheets\/compass\/utilities\/sprites\/_base\.scss}line{font-family:\0000360}}
+.icon-user {
+  background-position: 0 -64px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_image\.scss}line{font-family:\000031}}
+.image-rounded {
+  border-radius: 4px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/layout\/_content\.scss}line{font-family:\000032}}
+#wrapper {
+  position: relative;
+  -webkit-transition: left 0.6s;
+  -moz-transition: left 0.6s;
+  -o-transition: left 0.6s;
+  transition: left 0.6s;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/layout\/_content\.scss}line{font-family:\000037}}
+.is-lateralmenu-open #wrapper {
+  left: 453px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/layout\/_lateralmenu\.scss}line{font-family:\000031}}
+.lateralmenu {
+  position: fixed;
+  top: 0;
+  left: -453px;
+  background-color: #202020;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  width: 453px;
+  min-height: 100%;
+  -webkit-transition: left 0.6s;
+  -moz-transition: left 0.6s;
+  -o-transition: left 0.6s;
+  transition: left 0.6s;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/layout\/_lateralmenu\.scss}line{font-family:\0000321}}
+.lateralmenu.is-open, body.is-lateralmenu-open .lateralmenu {
+  left: 0;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/layout\/_lateralmenu\.scss}line{font-family:\0000328}}
+.searchbox, .avatarbox {
+  height: 72px;
+  line-height: 72px;
+  padding: 0 50px;
+  -webkit-box-shadow: 0 1px rgba(255, 255, 255, 0.1), inset 0 1px rgba(138, 138, 138, 0.3);
+  -moz-box-shadow: 0 1px rgba(255, 255, 255, 0.1), inset 0 1px rgba(138, 138, 138, 0.3);
+  box-shadow: 0 1px rgba(255, 255, 255, 0.1), inset 0 1px rgba(138, 138, 138, 0.3);
+  border-top: solid 1px #2d2d2d;
+  border-bottom: solid 1px #2d2d2d;
+  background-color: rgba(52, 52, 52, 0);
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #717171), color-stop(100%, #585858));
+  background-image: -webkit-linear-gradient(top, #717171, #585858);
+  background-image: -moz-linear-gradient(top, #717171, #585858);
+  background-image: -o-linear-gradient(top, #717171, #585858);
+  background-image: linear-gradient(top, #717171, #585858);
+  color: #202020;
+  font-weight: bold;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/layout\/_lateralmenu\.scss}line{font-family:\0000344}}
+.searchbox-field {
+  padding: 0 32px 0 10px;
+  width: 303px;
+  height: 36px;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  -ms-border-radius: 10px;
+  -o-border-radius: 10px;
+  border-radius: 10px;
+  background: rgba(55, 55, 55, 0.67) url(/static/img/icon/search.png) right center no-repeat;
+  font-size: 16px;
+  color: white;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/layout\/_lateralmenu\.scss}line{font-family:\0000359}}
+.avatarbox {
+  height: 52px;
+  line-height: 52px;
+}
