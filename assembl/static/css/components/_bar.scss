@@ -12,6 +12,7 @@ $bar-simple-height: 29px;
     height: $bar-height;
     position: relative;
     @include box-sizing(border-box);
+    @include transform( translateZ(0) );
 
     background-color: #fcfbf7;
     border: { top: solid 1px #e4e4e3; bottom: solid 1px #e4e4e3; }

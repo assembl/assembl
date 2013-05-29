@@ -1,7 +1,7 @@
 .lateralmenu {
     position: fixed;
     top: 0;
-    left: $lateralmenu-width * -1;
+    @include transform( translateX($lateralmenu-width * -1) );
 
     background-color: #202020;
 
@@ -9,7 +9,7 @@
     width: $lateralmenu-width;
     min-height: 100%;
 
-    @include transition( left 0.6s );
+    @include transition( transform 0.6s );
 
     body.is-lateralmenu-open & {
         @extend .lateralmenu.is-open;
@@ -19,7 +19,7 @@
 // Open state
 // **********
 .lateralmenu.is-open {
-    left: 0;
+    @include transform( translateX(0) );
 }
 
 
