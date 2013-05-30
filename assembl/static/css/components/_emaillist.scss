@@ -1,0 +1,47 @@
+$emaillist-item-level-padding: 10px;
+$emaillist-item-border: solid 1px #e4e4e3;
+
+// The list of emails
+// =================
+.emaillist {}
+
+
+// A row within the list of emails
+// -----------------
+.emaillist-item {
+    border-bottom: $emaillist-item-border;
+
+    height: 45px;
+
+    &:nth-child(even){
+        background-color: #fbfbf9;
+    }
+}
+
+.emaillist-item:hover {
+    background-color: #eaf5fc;
+}
+
+// The title of the email
+// --------------------
+.emaillist-label {
+    display: inline-block;
+    line-height: 45px;
+    padding-left: $emaillist-item-level-padding;
+
+    .emaillist-item--toplevel & {
+        background-image: url(#{$img-dir}/emaillist/emaillist-arrow.png);
+        background-position: $emaillist-item-level-padding center;
+        background-repeat: no-repeat;
+        padding-left: $emaillist-item-level-padding * 3;
+    }
+
+    $emaillist-item-margin-left: 15px;
+    @for $i from 2 through 10 {
+        .emaillist-item[data-emaillist-level="#{$i}"] & {
+            $emaillist-item-margin-left: 15px * ( $i - 1 );
+            margin-left: $emaillist-item-margin-left;
+            border-left: $emaillist-item-border;
+        }
+    }
+}

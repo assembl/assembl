@@ -638,6 +638,80 @@ html {
   border-radius: 4px;
 }
 
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\0000311}}
+.emaillist-item {
+  border-bottom: solid 1px #e4e4e3;
+  height: 45px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\0000316}}
+.emaillist-item:nth-child(even) {
+  background-color: #fbfbf9;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\0000321}}
+.emaillist-item:hover {
+  background-color: #eaf5fc;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\0000327}}
+.emaillist-label {
+  display: inline-block;
+  line-height: 45px;
+  padding-left: 10px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\0000332}}
+.emaillist-item--toplevel .emaillist-label {
+  background-image: url(/static/img/emaillist/emaillist-arrow.png);
+  background-position: 10px center;
+  background-repeat: no-repeat;
+  padding-left: 30px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\0000341}}
+.emaillist-item[data-emaillist-level="2"] .emaillist-label {
+  margin-left: 15px;
+  border-left: solid 1px #e4e4e3;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\0000341}}
+.emaillist-item[data-emaillist-level="3"] .emaillist-label {
+  margin-left: 30px;
+  border-left: solid 1px #e4e4e3;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\0000341}}
+.emaillist-item[data-emaillist-level="4"] .emaillist-label {
+  margin-left: 45px;
+  border-left: solid 1px #e4e4e3;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\0000341}}
+.emaillist-item[data-emaillist-level="5"] .emaillist-label {
+  margin-left: 60px;
+  border-left: solid 1px #e4e4e3;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\0000341}}
+.emaillist-item[data-emaillist-level="6"] .emaillist-label {
+  margin-left: 75px;
+  border-left: solid 1px #e4e4e3;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\0000341}}
+.emaillist-item[data-emaillist-level="7"] .emaillist-label {
+  margin-left: 90px;
+  border-left: solid 1px #e4e4e3;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\0000341}}
+.emaillist-item[data-emaillist-level="8"] .emaillist-label {
+  margin-left: 105px;
+  border-left: solid 1px #e4e4e3;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\0000341}}
+.emaillist-item[data-emaillist-level="9"] .emaillist-label {
+  margin-left: 120px;
+  border-left: solid 1px #e4e4e3;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\0000341}}
+.emaillist-item[data-emaillist-level="10"] .emaillist-label {
+  margin-left: 135px;
+  border-left: solid 1px #e4e4e3;
+}
+
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/layout\/_content\.scss}line{font-family:\000032}}
 #wrapper {
   position: relative;
