@@ -1,1 +1,28 @@
 {% extends 'base.jinja2' %}
+
+{% block extra_header %}
+
+    <div class="bar bar--title">
+        <div class="bar-body">
+            <div class="bar-left">
+                <a href="#" class="arrowbutton">Previous</a>
+            </div>
+
+            <div class="bar-center">Table de Matières</div>
+
+            <div class="bar-right">
+                <a href="#" class="arrowbutton arrowbutton--right">Next</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="bar">
+        <div class="bar-body">
+            <div class="bar-left">
+                <a href="#" class="button">
+                    <span class="icon icon-return"></span>
+                </a>
+            </div>
+        </div>
+    </div>
+{% endblock %}
