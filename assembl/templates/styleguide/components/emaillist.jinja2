@@ -6,6 +6,7 @@
     {% for i in '1234' %}
         <li class="emaillist-item {% if not loop.last %}emaillist-item--toplevel{% endif %}" data-emaillist-level="{{i}}">
             <span class="emaillist-label">Email level {{i}}</span>
+            <div class="fixedcounter">{{i}}</div>
         </li>
     {% endfor %}
 </ul>
@@ -18,6 +19,7 @@
     {% for i in '1234' %}
         <li class="emaillist-item {% if not loop.last %}emaillist-item--toplevel{% endif %}" data-emaillist-level="{{i}}">
             <span class="emaillist-label">Email level {{i}}</span>
+            <div class="fixedcounter">{{i}}</div>
         </li>
     {% endfor %}
 </ul>

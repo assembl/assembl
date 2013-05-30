@@ -10,13 +10,18 @@ $emaillist-item-border-color-dark: #000;
 // ++++++++++++++++++++++
 .emaillist.emaillist--dark {}
 
+// Email list made to fit in the lateralmenu
+// ++++++++++++++++++++++
+.emaillist.emaillist--lateralmenu {}
+
 
 // A row within the list of emails
 // -----------------
 .emaillist-item {
     border-bottom: $emaillist-item-border;
-
+    position: relative;
     height: 45px;
+    cursor: pointer;
 
     &:nth-child(even){
         background-color: #fbfbf9;
@@ -31,6 +36,10 @@ $emaillist-item-border-color-dark: #000;
             color: #eb5d50;
         }
     }
+
+    .emaillist--lateralmenu & {
+        padding-left: $lateralmenu-padding-left;
+    }
 }
 
 .emaillist-item:hover {
@@ -40,9 +49,15 @@ $emaillist-item-border-color-dark: #000;
 // The title of the email
 // --------------------
 .emaillist-label {
-    display: inline-block;
+    display: block;
     line-height: 45px;
     padding-left: $emaillist-item-level-padding;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    padding-right: $fixedcounter-min-width + 15px;
+    @include box-sizing( boder-box );
+
 
     .emaillist--dark & {
         border-color: $emaillist-item-border-color-dark !important;
