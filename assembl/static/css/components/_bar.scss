@@ -1,14 +1,7 @@
-$bar-height: 55px;
-$bar-padding: 10px 5px;
-$bar-border-size: 1px;
-
-$bar-simple-height: 29px;
-
 // Bar
 // ===
 .bar {
     display: block;
-    text-align: center;
     height: $bar-height;
     position: relative;
     @include box-sizing(border-box);
@@ -17,6 +10,7 @@ $bar-simple-height: 29px;
     background-color: #fcfbf7;
     border: { top: solid 1px #e4e4e3; bottom: solid 1px #e4e4e3; }
 
+    /*
     &:after,
     &:before {
         content: '';
@@ -36,6 +30,7 @@ $bar-simple-height: 29px;
         left: auto;
         right: 100%;
     }
+    */
 }
 
 // Main bar
@@ -66,6 +61,16 @@ $bar-simple-height: 29px;
     line-height: $bar-simple-height !important;
     background-color: #e5e5e5;
     border: { top: solid 1px #ccc; bottom: solid 1px #ccc; }
+}
+
+// The content of a .bar
+// ---------------------
+.bar-body {
+    @extend .container;
+
+    height: $bar-height;
+    position: relative;
+    @include box-sizing(border-box);
 }
 
 // Left content of a bar
