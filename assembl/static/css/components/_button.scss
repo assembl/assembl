@@ -68,7 +68,7 @@
     margin-left: 14px;
 
     background-color: rgba(129,133,139,0);
-    @include background-image(linear-gradient(bottom, #afa8cf, #c7c2dd));
+    @include background-linear-gradient(bottom, #afa8cf, #c7c2dd);
     @include box-shadow(0 1px rgba(255,255,255,.15), inset 0 2px rgba(255,255,253,.2));
     color: white;
     border: solid 1px #8d88a6;

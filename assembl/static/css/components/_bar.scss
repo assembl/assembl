@@ -41,7 +41,7 @@ $bar-simple-height: 29px;
 // Main bar
 // ++++++++
 .bar.bar--main {
-    @include background-image(linear-gradient(bottom, #2c2c2c, #444));
+    @include background-linear-gradient(bottom, #2c2c2c, #444);
     color: white;
     border-top-color: transparent;
     border-bottom-color: transparent;
@@ -53,7 +53,7 @@ $bar-simple-height: 29px;
     background-color: rgba(238,113,77,0);
     @include box-shadow( inset 0 2px rgba(255,255,253,.2) );
     border: { top: solid 1px #8d88a6; bottom: solid 1px #8d88a6; }
-    @include background-image( linear-gradient(bottom, #afa8cf, #c7c2dd) );
+    @include background-linear-gradient(bottom, #afa8cf, #c7c2dd);
 
     font-size: 18px;
     color: #2c2c2c;

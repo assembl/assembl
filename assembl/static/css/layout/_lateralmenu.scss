@@ -38,7 +38,7 @@
     @include box-shadow(0 1px rgba(255,255,255,.1), inset 0 1px rgba(138,138,138,.3));
     border: { top: solid 1px #2d2d2d; bottom: solid 1px #2d2d2d; }
     background-color: rgba(52,52,52,0);
-    @include background-image(linear-gradient(top, #717171, #585858));
+    @include background-linear-gradient(top, #717171, #585858);
 
     color: #202020;
     font-weight: bold;

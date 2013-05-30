@@ -16,6 +16,11 @@
     width: $width;
 }
 
+// Alias for `@include background-image(linear-gradient(...))`
+@mixin background-linear-gradient($params...){
+    background-image: -ms-linear-gradient($params);
+    @include background-image(linear-gradient($params...));
+}
 
 // Only in medium resolution
 @mixin medium-only {
