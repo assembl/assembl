@@ -113,6 +113,90 @@ html {
   margin-left: 10px;
 }
 
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_accordion\.scss}line{font-family:\0000319}}
+.accordion-header {
+  position: relative;
+  background-color: rgba(245, 245, 245, 0);
+  -webkit-box-shadow: inset 0 2px rgba(255, 255, 255, 0.15);
+  -moz-box-shadow: inset 0 2px rgba(255, 255, 255, 0.15);
+  box-shadow: inset 0 2px rgba(255, 255, 255, 0.15);
+  border: solid 1px #2d2d2d;
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #717171), color-stop(100%, #585858));
+  background-image: -webkit-linear-gradient(top, #717171, #585858);
+  background-image: -moz-linear-gradient(top, #717171, #585858);
+  background-image: -o-linear-gradient(top, #717171, #585858);
+  background-image: linear-gradient(top, #717171, #585858);
+  height: 45px;
+  line-height: 45px;
+  color: #fff;
+  cursor: pointer;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_accordion\.scss}line{font-family:\0000331}}
+.accordion-area.is-open .accordion-header {
+  background-color: rgba(52, 52, 52, 0);
+  background-image: -webkit-gradient(linear, 50% 100%, 50% 0%, color-stop(0%, #5c6f91), color-stop(100%, #738bb5));
+  background-image: -webkit-linear-gradient(bottom, #5c6f91, #738bb5);
+  background-image: -moz-linear-gradient(bottom, #5c6f91, #738bb5);
+  background-image: -o-linear-gradient(bottom, #5c6f91, #738bb5);
+  background-image: linear-gradient(bottom, #5c6f91, #738bb5);
+  font-weight: bold;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_accordion\.scss}line{font-family:\0000338}}
+.accordion--lateralmenu .accordion-header {
+  padding-left: 50px;
+  padding-right: 30px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_accordion\.scss}line{font-family:\0000345}}
+.accordion-label {
+  display: inline-block;
+  padding-left: 42px;
+  line-height: 32px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_accordion\.scss}line{font-family:\0000353}}
+.accordion-counter {
+  position: absolute;
+  top: 50%;
+  right: 30px;
+  margin-top: -11.5px;
+  display: inline-block;
+  min-width: 30px;
+  line-height: 23px;
+  text-align: center;
+  font-size: 12px;
+  margin-left: 100%;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  padding: 0 3px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
+  border-radius: 5px;
+  background-color: rgba(96, 96, 96, 0);
+  -webkit-box-shadow: 0 1px rgba(249, 255, 255, 0.18), inset 0 1px rgba(0, 0, 0, 0.35), inset 0 0 5px rgba(0, 0, 0, 0.11);
+  -moz-box-shadow: 0 1px rgba(249, 255, 255, 0.18), inset 0 1px rgba(0, 0, 0, 0.35), inset 0 0 5px rgba(0, 0, 0, 0.11);
+  box-shadow: 0 1px rgba(249, 255, 255, 0.18), inset 0 1px rgba(0, 0, 0, 0.35), inset 0 0 5px rgba(0, 0, 0, 0.11);
+  background-image: -webkit-gradient(linear, 50% 100%, 50% 0%, color-stop(0%, rgba(0, 0, 0, 0.02)), color-stop(100%, rgba(0, 0, 0, 0.05)));
+  background-image: -webkit-linear-gradient(bottom, rgba(0, 0, 0, 0.02), rgba(0, 0, 0, 0.05));
+  background-image: -moz-linear-gradient(bottom, rgba(0, 0, 0, 0.02), rgba(0, 0, 0, 0.05));
+  background-image: -o-linear-gradient(bottom, rgba(0, 0, 0, 0.02), rgba(0, 0, 0, 0.05));
+  background-image: linear-gradient(bottom, rgba(0, 0, 0, 0.02), rgba(0, 0, 0, 0.05));
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_accordion\.scss}line{font-family:\0000379}}
+.accordion-body {
+  background-color: #313131;
+  overflow: hidden;
+  height: 0;
+  -webkit-transition: height 0.4s ease;
+  -moz-transition: height 0.4s ease;
+  -o-transition: height 0.4s ease;
+  transition: height 0.4s ease;
+}
+
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_bar\.scss}line{font-family:\000039}}
 .bar {
   display: block;
@@ -250,9 +334,12 @@ html {
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\0000328}}
 .iconbutton {
   position: relative;
+  display: inline-block;
+  width: 32px;
+  height: 32px;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\0000337}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\0000340}}
 .iconbutton-badge {
   position: absolute;
   top: -8px;
@@ -267,7 +354,7 @@ html {
   text-align: center;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\0000356}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\0000359}}
 .arrowbutton {
   position: relative;
   margin: 5px 0;
@@ -291,7 +378,7 @@ html {
   border: solid 1px #8d88a6;
   border-radius: 0 4px 4px 0;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\0000374}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\0000377}}
 .arrowbutton:before {
   content: url(/static/img/button/arrowbutton.png);
   position: absolute;
@@ -299,17 +386,17 @@ html {
   left: -14px;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\0000384}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\0000387}}
 .arrowbutton.arrowbutton--right {
   border-radius: 4px 0 0 4px;
   margin-left: 0;
   margin-right: 14px;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\0000389}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\0000392}}
 .arrowbutton.arrowbutton--right:before {
   display: none;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\0000393}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\0000396}}
 .arrowbutton.arrowbutton--right:after {
   content: url(/static/img/button/arrowbutton.png);
   position: absolute;
@@ -478,16 +565,27 @@ html {
   width: 100%;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_icon\.scss}line{font-family:\000032}}
+/*
 [class|="icon"] {
-  display: inline-block;
-  width: 32px;
-  height: 32px;
+    display: inline-block;
+    width: $icon-width;
+    height: $icon-height;
+    vertical-align: middle;
+}
+*/
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/icon\/\*\.png}line{font-family:\00003122}}
+.icon-sprite, .icon-book, .icon-check, .icon-cog, .icon-file, .icon-grave, .icon-power, .icon-question, .icon-reorder, .icon-search, .icon-settings, .icon-user {
+  background: url('/static/img/sprites/icon-sd18678bec3.png') no-repeat;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/icon\/\*\.png}line{font-family:\0000366}}
-.icon-sprite, .icon-cog, .icon-reorder, .icon-search, .icon-user {
-  background: url('/static/img/sprites/icon-saa15367242.png') no-repeat;
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/Ruby\/Gems\/1\.8\/gems\/compass-0\.12\.2\/frameworks\/compass\/stylesheets\/compass\/utilities\/sprites\/_base\.scss}line{font-family:\0000360}}
+.icon-book {
+  background-position: 0 -224px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/Ruby\/Gems\/1\.8\/gems\/compass-0\.12\.2\/frameworks\/compass\/stylesheets\/compass\/utilities\/sprites\/_base\.scss}line{font-family:\0000360}}
+.icon-check {
+  background-position: 0 -128px;
 }
 
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/Ruby\/Gems\/1\.8\/gems\/compass-0\.12\.2\/frameworks\/compass\/stylesheets\/compass\/utilities\/sprites\/_base\.scss}line{font-family:\0000360}}
@@ -496,13 +594,38 @@ html {
 }
 
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/Ruby\/Gems\/1\.8\/gems\/compass-0\.12\.2\/frameworks\/compass\/stylesheets\/compass\/utilities\/sprites\/_base\.scss}line{font-family:\0000360}}
+.icon-file {
+  background-position: 0 -288px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/Ruby\/Gems\/1\.8\/gems\/compass-0\.12\.2\/frameworks\/compass\/stylesheets\/compass\/utilities\/sprites\/_base\.scss}line{font-family:\0000360}}
+.icon-grave {
+  background-position: 0 -160px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/Ruby\/Gems\/1\.8\/gems\/compass-0\.12\.2\/frameworks\/compass\/stylesheets\/compass\/utilities\/sprites\/_base\.scss}line{font-family:\0000360}}
+.icon-power {
+  background-position: 0 -192px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/Ruby\/Gems\/1\.8\/gems\/compass-0\.12\.2\/frameworks\/compass\/stylesheets\/compass\/utilities\/sprites\/_base\.scss}line{font-family:\0000360}}
+.icon-question {
+  background-position: 0 -256px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/Ruby\/Gems\/1\.8\/gems\/compass-0\.12\.2\/frameworks\/compass\/stylesheets\/compass\/utilities\/sprites\/_base\.scss}line{font-family:\0000360}}
 .icon-reorder {
-  background-position: 0 -96px;
+  background-position: 0 -320px;
 }
 
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/Ruby\/Gems\/1\.8\/gems\/compass-0\.12\.2\/frameworks\/compass\/stylesheets\/compass\/utilities\/sprites\/_base\.scss}line{font-family:\0000360}}
 .icon-search {
   background-position: 0 -32px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/Ruby\/Gems\/1\.8\/gems\/compass-0\.12\.2\/frameworks\/compass\/stylesheets\/compass\/utilities\/sprites\/_base\.scss}line{font-family:\0000360}}
+.icon-settings {
+  background-position: 0 -96px;
 }
 
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/Ruby\/Gems\/1\.8\/gems\/compass-0\.12\.2\/frameworks\/compass\/stylesheets\/compass\/utilities\/sprites\/_base\.scss}line{font-family:\0000360}}
@@ -541,24 +664,27 @@ html {
 .lateralmenu {
   position: fixed;
   top: 0;
+  left: 0;
+  height: 100%;
   -webkit-transform: translateX(-453px);
   -moz-transform: translateX(-453px);
   -ms-transform: translateX(-453px);
   -o-transform: translateX(-453px);
   transform: translateX(-453px);
   background-color: #202020;
+  overflow: auto;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
   width: 453px;
-  min-height: 100%;
   -webkit-transition: -webkit-transform 0.6s;
   -moz-transition: -moz-transform 0.6s;
   -o-transition: -o-transform 0.6s;
   transition: transform 0.6s;
+  z-index: 2;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/layout\/_lateralmenu\.scss}line{font-family:\0000321}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/layout\/_lateralmenu\.scss}line{font-family:\0000326}}
 .lateralmenu.is-open, body.is-lateralmenu-open .lateralmenu {
   -webkit-transform: translateX(0);
   -moz-transform: translateX(0);
@@ -567,7 +693,7 @@ html {
   transform: translateX(0);
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/layout\/_lateralmenu\.scss}line{font-family:\0000328}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/layout\/_lateralmenu\.scss}line{font-family:\0000333}}
 .searchbox, .avatarbox {
   height: 72px;
   line-height: 72px;
@@ -587,7 +713,7 @@ html {
   font-weight: bold;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/layout\/_lateralmenu\.scss}line{font-family:\0000344}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/layout\/_lateralmenu\.scss}line{font-family:\0000349}}
 .searchbox-field {
   padding: 0 32px 0 10px;
   width: 303px;
@@ -602,7 +728,7 @@ html {
   color: white;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/layout\/_lateralmenu\.scss}line{font-family:\0000359}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/layout\/_lateralmenu\.scss}line{font-family:\0000364}}
 .avatarbox {
   height: 52px;
   line-height: 52px;

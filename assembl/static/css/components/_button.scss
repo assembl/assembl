@@ -29,6 +29,9 @@
     @extend %button;
 
     position: relative;
+    display: inline-block;
+    width: $icon-width;
+    height: $icon-height;
 }
 
 // A badge which stands at the top right

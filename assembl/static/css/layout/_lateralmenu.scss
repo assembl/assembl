@@ -1,19 +1,24 @@
 .lateralmenu {
     position: fixed;
     top: 0;
+    left: 0;
+    height: 100%;
+
     @include transform( translateX($lateralmenu-width * -1) );
 
     background-color: #202020;
+    overflow: auto;
 
     @include box-sizing( border-box );
     width: $lateralmenu-width;
-    min-height: 100%;
 
     @include transition( transform 0.6s );
 
     body.is-lateralmenu-open & {
         @extend .lateralmenu.is-open;
     }
+
+    z-index: 2;
 }
 
 // Open state
@@ -28,7 +33,7 @@
 .searchbox {
     height: 72px;
     line-height: 72px;
-    padding: 0 50px;
+    padding: 0 $lateralmenu-padding-left;
 
     @include box-shadow(0 1px rgba(255,255,255,.1), inset 0 1px rgba(138,138,138,.3));
     border: { top: solid 1px #2d2d2d; bottom: solid 1px #2d2d2d; }
