@@ -157,40 +157,10 @@ html {
 
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_accordion\.scss}line{font-family:\0000353}}
 .accordion-counter {
-  position: absolute;
-  top: 50%;
   right: 30px;
-  margin-top: -11.5px;
-  display: inline-block;
-  min-width: 30px;
-  line-height: 23px;
-  text-align: center;
-  font-size: 12px;
-  margin-left: 100%;
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-  padding: 0 3px;
-  -webkit-border-radius: 5px;
-  -moz-border-radius: 5px;
-  -ms-border-radius: 5px;
-  -o-border-radius: 5px;
-  border-radius: 5px;
-  background-color: rgba(96, 96, 96, 0);
-  -webkit-box-shadow: 0 1px rgba(249, 255, 255, 0.18), inset 0 1px rgba(0, 0, 0, 0.35), inset 0 0 5px rgba(0, 0, 0, 0.11);
-  -moz-box-shadow: 0 1px rgba(249, 255, 255, 0.18), inset 0 1px rgba(0, 0, 0, 0.35), inset 0 0 5px rgba(0, 0, 0, 0.11);
-  box-shadow: 0 1px rgba(249, 255, 255, 0.18), inset 0 1px rgba(0, 0, 0, 0.35), inset 0 0 5px rgba(0, 0, 0, 0.11);
-  background-image: -ms-linear-gradient(bottom, rgba(0, 0, 0, 0.02), rgba(0, 0, 0, 0.05));
-  background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjUwJSIgeTE9IjEwMCUiIHgyPSI1MCUiIHkyPSIwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0icmdiYSgwLCAwLCAwLCAwLjAyKSIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0icmdiYSgwLCAwLCAwLCAwLjA1KSIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
-  background-size: 100%;
-  background-image: -webkit-gradient(linear, 50% 100%, 50% 0%, color-stop(0%, rgba(0, 0, 0, 0.02)), color-stop(100%, rgba(0, 0, 0, 0.05)));
-  background-image: -webkit-linear-gradient(bottom, rgba(0, 0, 0, 0.02), rgba(0, 0, 0, 0.05));
-  background-image: -moz-linear-gradient(bottom, rgba(0, 0, 0, 0.02), rgba(0, 0, 0, 0.05));
-  background-image: -o-linear-gradient(bottom, rgba(0, 0, 0, 0.02), rgba(0, 0, 0, 0.05));
-  background-image: linear-gradient(bottom, rgba(0, 0, 0, 0.02), rgba(0, 0, 0, 0.05));
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_accordion\.scss}line{font-family:\0000379}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_accordion\.scss}line{font-family:\0000362}}
 .accordion-body {
   background-color: #313131;
   overflow: hidden;
@@ -364,19 +334,20 @@ html {
 .buttongroup .button {
   border-radius: 0;
   font-size: 13px;
+  min-width: 100px;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\0000349}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\0000350}}
 .buttongroup .button:first-child {
   border-radius: 5px 0 0 5px;
   border-right: 0;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\0000354}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\0000355}}
 .buttongroup .button:last-child {
   border-radius: 0 5px 5px 0;
   border-left: 0;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\0000362}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\0000363}}
 .iconbutton {
   position: relative;
   display: inline-block;
@@ -385,7 +356,7 @@ html {
   vertical-align: middle;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\0000375}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\0000376}}
 .iconbutton-badge {
   position: absolute;
   top: -8px;
@@ -400,7 +371,7 @@ html {
   text-align: center;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\0000394}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\0000395}}
 .arrowbutton {
   position: relative;
   margin: 5px 0;
@@ -429,7 +400,7 @@ html {
   font-size: 14px;
   text-decoration: none;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\00003115}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\00003116}}
 .arrowbutton:before {
   content: url(/static/img/button/arrowbutton.png);
   position: absolute;
@@ -437,23 +408,140 @@ html {
   left: -14px;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\00003125}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\00003126}}
 .arrowbutton.arrowbutton--right {
   border-radius: 4px 0 0 4px;
   margin-left: 0;
   margin-right: 14px;
   padding: 0 5px 0 10px;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\00003131}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\00003132}}
 .arrowbutton.arrowbutton--right:before {
   display: none;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\00003135}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\00003136}}
 .arrowbutton.arrowbutton--right:after {
   content: url(/static/img/button/arrowbutton-right.png);
   position: absolute;
   top: -1px;
   right: -14px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\0000316}}
+.emaillist-item {
+  border-bottom: solid 1px #e4e4e3;
+  height: 45px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\0000321}}
+.emaillist-item:nth-child(even) {
+  background-color: #fbfbf9;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\0000325}}
+.emaillist--dark .emaillist-item {
+  background-color: #313131;
+  border-bottom-color: black;
+  color: #b0b0b0;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\0000330}}
+.emaillist--dark .emaillist-item:hover {
+  color: #eb5d50;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\0000342}}
+.emaillist-label {
+  display: inline-block;
+  line-height: 45px;
+  padding-left: 10px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\0000347}}
+.emaillist--dark .emaillist-label {
+  border-color: black !important;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\0000351}}
+.emaillist-item--toplevel .emaillist-label {
+  background-image: url(/static/img/emaillist/emaillist-arrow.png);
+  background-position: 10px center;
+  background-repeat: no-repeat;
+  padding-left: 30px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\0000360}}
+.emaillist-item[data-emaillist-level="2"] .emaillist-label {
+  margin-left: 15px;
+  border-left: solid 1px #e4e4e3;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\0000360}}
+.emaillist-item[data-emaillist-level="3"] .emaillist-label {
+  margin-left: 30px;
+  border-left: solid 1px #e4e4e3;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\0000360}}
+.emaillist-item[data-emaillist-level="4"] .emaillist-label {
+  margin-left: 45px;
+  border-left: solid 1px #e4e4e3;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\0000360}}
+.emaillist-item[data-emaillist-level="5"] .emaillist-label {
+  margin-left: 60px;
+  border-left: solid 1px #e4e4e3;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\0000360}}
+.emaillist-item[data-emaillist-level="6"] .emaillist-label {
+  margin-left: 75px;
+  border-left: solid 1px #e4e4e3;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\0000360}}
+.emaillist-item[data-emaillist-level="7"] .emaillist-label {
+  margin-left: 90px;
+  border-left: solid 1px #e4e4e3;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\0000360}}
+.emaillist-item[data-emaillist-level="8"] .emaillist-label {
+  margin-left: 105px;
+  border-left: solid 1px #e4e4e3;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\0000360}}
+.emaillist-item[data-emaillist-level="9"] .emaillist-label {
+  margin-left: 120px;
+  border-left: solid 1px #e4e4e3;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\0000360}}
+.emaillist-item[data-emaillist-level="10"] .emaillist-label {
+  margin-left: 135px;
+  border-left: solid 1px #e4e4e3;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_fixedcounter\.scss}line{font-family:\000033}}
+.fixedcounter, .accordion-counter {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  margin-top: -11.5px;
+  display: inline-block;
+  min-width: 30px;
+  line-height: 23px;
+  text-align: center;
+  font-size: 12px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  padding: 0 3px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
+  border-radius: 5px;
+  background-color: rgba(96, 96, 96, 0);
+  -webkit-box-shadow: 0 1px rgba(249, 255, 255, 0.18), inset 0 1px rgba(0, 0, 0, 0.35), inset 0 0 5px rgba(0, 0, 0, 0.11);
+  -moz-box-shadow: 0 1px rgba(249, 255, 255, 0.18), inset 0 1px rgba(0, 0, 0, 0.35), inset 0 0 5px rgba(0, 0, 0, 0.11);
+  box-shadow: 0 1px rgba(249, 255, 255, 0.18), inset 0 1px rgba(0, 0, 0, 0.35), inset 0 0 5px rgba(0, 0, 0, 0.11);
+  background-image: -ms-linear-gradient(bottom, rgba(0, 0, 0, 0.02), rgba(0, 0, 0, 0.05));
+  background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjUwJSIgeTE9IjEwMCUiIHgyPSI1MCUiIHkyPSIwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0icmdiYSgwLCAwLCAwLCAwLjAyKSIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0icmdiYSgwLCAwLCAwLCAwLjA1KSIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+  background-size: 100%;
+  background-image: -webkit-gradient(linear, 50% 100%, 50% 0%, color-stop(0%, rgba(0, 0, 0, 0.02)), color-stop(100%, rgba(0, 0, 0, 0.05)));
+  background-image: -webkit-linear-gradient(bottom, rgba(0, 0, 0, 0.02), rgba(0, 0, 0, 0.05));
+  background-image: -moz-linear-gradient(bottom, rgba(0, 0, 0, 0.02), rgba(0, 0, 0, 0.05));
+  background-image: -o-linear-gradient(bottom, rgba(0, 0, 0, 0.02), rgba(0, 0, 0, 0.05));
+  background-image: linear-gradient(bottom, rgba(0, 0, 0, 0.02), rgba(0, 0, 0, 0.05));
 }
 
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_grid\.scss}line{font-family:\000034}}
@@ -620,9 +708,9 @@ html {
   vertical-align: middle;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/icon\/\*\.png}line{font-family:\00003138}}
-.icon-sprite, .icon-book, .icon-check, .icon-cog, .icon-dropbox, .icon-file, .icon-grave, .icon-power, .icon-question, .icon-reorder, .icon-return, .icon-search, .icon-settings, .icon-user {
-  background: url('/static/img/sprites/icon-s4bd8d8da0b.png') no-repeat;
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/icon\/\*\.png}line{font-family:\00003146}}
+.icon-sprite, .icon-book, .icon-check, .icon-cog, .icon-dropbox, .icon-file, .icon-grave, .icon-power, .icon-question, .icon-reorder, .icon-return, .icon-search, .icon-settings, .icon-uparrow, .icon-user {
+  background: url('/static/img/sprites/icon-s6ef105fae6.png') no-repeat;
 }
 
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/Ruby\/Gems\/1\.8\/gems\/compass-0\.12\.2\/frameworks\/compass\/stylesheets\/compass\/utilities\/sprites\/_base\.scss}line{font-family:\0000360}}
@@ -647,7 +735,7 @@ html {
 
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/Ruby\/Gems\/1\.8\/gems\/compass-0\.12\.2\/frameworks\/compass\/stylesheets\/compass\/utilities\/sprites\/_base\.scss}line{font-family:\0000360}}
 .icon-file {
-  background-position: 0 -352px;
+  background-position: 0 -384px;
 }
 
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/Ruby\/Gems\/1\.8\/gems\/compass-0\.12\.2\/frameworks\/compass\/stylesheets\/compass\/utilities\/sprites\/_base\.scss}line{font-family:\0000360}}
@@ -667,7 +755,7 @@ html {
 
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/Ruby\/Gems\/1\.8\/gems\/compass-0\.12\.2\/frameworks\/compass\/stylesheets\/compass\/utilities\/sprites\/_base\.scss}line{font-family:\0000360}}
 .icon-reorder {
-  background-position: 0 -384px;
+  background-position: 0 -416px;
 }
 
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/Ruby\/Gems\/1\.8\/gems\/compass-0\.12\.2\/frameworks\/compass\/stylesheets\/compass\/utilities\/sprites\/_base\.scss}line{font-family:\0000360}}
@@ -686,6 +774,11 @@ html {
 }
 
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/Ruby\/Gems\/1\.8\/gems\/compass-0\.12\.2\/frameworks\/compass\/stylesheets\/compass\/utilities\/sprites\/_base\.scss}line{font-family:\0000360}}
+.icon-uparrow {
+  background-position: 0 -352px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/Ruby\/Gems\/1\.8\/gems\/compass-0\.12\.2\/frameworks\/compass\/stylesheets\/compass\/utilities\/sprites\/_base\.scss}line{font-family:\0000360}}
 .icon-user {
   background-position: 0 -64px;
 }
@@ -693,80 +786,6 @@ html {
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_image\.scss}line{font-family:\000031}}
 .image-rounded {
   border-radius: 4px;
-}
-
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\0000311}}
-.emaillist-item {
-  border-bottom: solid 1px #e4e4e3;
-  height: 45px;
-}
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\0000316}}
-.emaillist-item:nth-child(even) {
-  background-color: #fbfbf9;
-}
-
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\0000321}}
-.emaillist-item:hover {
-  background-color: #eaf5fc;
-}
-
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\0000327}}
-.emaillist-label {
-  display: inline-block;
-  line-height: 45px;
-  padding-left: 10px;
-}
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\0000332}}
-.emaillist-item--toplevel .emaillist-label {
-  background-image: url(/static/img/emaillist/emaillist-arrow.png);
-  background-position: 10px center;
-  background-repeat: no-repeat;
-  padding-left: 30px;
-}
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\0000341}}
-.emaillist-item[data-emaillist-level="2"] .emaillist-label {
-  margin-left: 15px;
-  border-left: solid 1px #e4e4e3;
-}
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\0000341}}
-.emaillist-item[data-emaillist-level="3"] .emaillist-label {
-  margin-left: 30px;
-  border-left: solid 1px #e4e4e3;
-}
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\0000341}}
-.emaillist-item[data-emaillist-level="4"] .emaillist-label {
-  margin-left: 45px;
-  border-left: solid 1px #e4e4e3;
-}
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\0000341}}
-.emaillist-item[data-emaillist-level="5"] .emaillist-label {
-  margin-left: 60px;
-  border-left: solid 1px #e4e4e3;
-}
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\0000341}}
-.emaillist-item[data-emaillist-level="6"] .emaillist-label {
-  margin-left: 75px;
-  border-left: solid 1px #e4e4e3;
-}
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\0000341}}
-.emaillist-item[data-emaillist-level="7"] .emaillist-label {
-  margin-left: 90px;
-  border-left: solid 1px #e4e4e3;
-}
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\0000341}}
-.emaillist-item[data-emaillist-level="8"] .emaillist-label {
-  margin-left: 105px;
-  border-left: solid 1px #e4e4e3;
-}
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\0000341}}
-.emaillist-item[data-emaillist-level="9"] .emaillist-label {
-  margin-left: 120px;
-  border-left: solid 1px #e4e4e3;
-}
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\0000341}}
-.emaillist-item[data-emaillist-level="10"] .emaillist-label {
-  margin-left: 135px;
-  border-left: solid 1px #e4e4e3;
 }
 
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/layout\/_content\.scss}line{font-family:\000032}}

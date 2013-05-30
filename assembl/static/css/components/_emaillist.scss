@@ -1,9 +1,14 @@
 $emaillist-item-level-padding: 10px;
 $emaillist-item-border: solid 1px #e4e4e3;
+$emaillist-item-border-color-dark: #000;
 
 // The list of emails
 // =================
 .emaillist {}
+
+// The dark version of list of emails
+// ++++++++++++++++++++++
+.emaillist.emaillist--dark {}
 
 
 // A row within the list of emails
@@ -16,10 +21,20 @@ $emaillist-item-border: solid 1px #e4e4e3;
     &:nth-child(even){
         background-color: #fbfbf9;
     }
+
+    .emaillist--dark & {
+        background-color: #313131;
+        border-bottom-color: $emaillist-item-border-color-dark;
+        color: #b0b0b0;
+
+        &:hover {
+            color: #eb5d50;
+        }
+    }
 }
 
 .emaillist-item:hover {
-    background-color: #eaf5fc;
+    //background-color: #eaf5fc;
 }
 
 // The title of the email
@@ -28,6 +43,10 @@ $emaillist-item-border: solid 1px #e4e4e3;
     display: inline-block;
     line-height: 45px;
     padding-left: $emaillist-item-level-padding;
+
+    .emaillist--dark & {
+        border-color: $emaillist-item-border-color-dark !important;
+    }
 
     .emaillist-item--toplevel & {
         background-image: url(#{$img-dir}/emaillist/emaillist-arrow.png);

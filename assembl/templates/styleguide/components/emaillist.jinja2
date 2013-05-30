@@ -9,3 +9,15 @@
         </li>
     {% endfor %}
 </ul>
+
+<h3>Email list Dark ( .emaillist--dark )</h3>
+<ul class="emaillist emaillist--dark">
+    <li class="emaillist-item">
+        <span class="emaillist-label">Simple email</span>
+    </li>
+    {% for i in '1234' %}
+        <li class="emaillist-item {% if not loop.last %}emaillist-item--toplevel{% endif %}" data-emaillist-level="{{i}}">
+            <span class="emaillist-label">Email level {{i}}</span>
+        </li>
+    {% endfor %}
+</ul>
