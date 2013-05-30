@@ -15,10 +15,10 @@
     @include box-sizing( border-box );
     line-height: $icon-height + 4px;
 
-    @include border-radius(5px);
+    @include border-radius($button-border-radius);
     border: solid 1px #dadad9;
     @include background-linear-gradient(bottom, #f7f7f5, #fcfbf7);
-    font-size: 13px;
+    font-size: $button-font-size;
     text-align: center;
 }
 
@@ -31,11 +31,29 @@
 
 // Default button active state
 // *******************
-.button:active {
+.button:active {}
 
 
+// Create a button group
+// ===============
+.buttongroup {
+    font-size: 0;
+
+    .button {
+        border-radius: 0;
+        font-size: $button-font-size;
+    }
+
+    .button:first-child {
+        border-radius: $button-border-radius 0 0 $button-border-radius;
+        border-right: 0;
+    }
+
+    .button:last-child {
+        border-radius: 0 $button-border-radius $button-border-radius 0;
+        border-left: 0;
+    }
 }
-
 
 // Iconed button
 // =============

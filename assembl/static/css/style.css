@@ -354,7 +354,27 @@ html {
   text-decoration: none;
 }
 
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\0000339}}
+.buttongroup {
+  font-size: 0;
+}
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\0000342}}
+.buttongroup .button {
+  border-radius: 0;
+  font-size: 13px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\0000347}}
+.buttongroup .button:first-child {
+  border-radius: 5px 0 0 5px;
+  border-right: 0;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\0000352}}
+.buttongroup .button:last-child {
+  border-radius: 0 5px 5px 0;
+  border-left: 0;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\0000360}}
 .iconbutton {
   position: relative;
   display: inline-block;
@@ -363,7 +383,7 @@ html {
   vertical-align: middle;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\0000355}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\0000373}}
 .iconbutton-badge {
   position: absolute;
   top: -8px;
@@ -378,7 +398,7 @@ html {
   text-align: center;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\0000374}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\0000392}}
 .arrowbutton {
   position: relative;
   margin: 5px 0;
@@ -407,7 +427,7 @@ html {
   font-size: 14px;
   text-decoration: none;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\0000395}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\00003113}}
 .arrowbutton:before {
   content: url(/static/img/button/arrowbutton.png);
   position: absolute;
@@ -415,18 +435,18 @@ html {
   left: -14px;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\00003105}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\00003123}}
 .arrowbutton.arrowbutton--right {
   border-radius: 4px 0 0 4px;
   margin-left: 0;
   margin-right: 14px;
   padding: 0 5px 0 10px;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\00003111}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\00003129}}
 .arrowbutton.arrowbutton--right:before {
   display: none;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\00003115}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\00003133}}
 .arrowbutton.arrowbutton--right:after {
   content: url(/static/img/button/arrowbutton-right.png);
   position: absolute;
