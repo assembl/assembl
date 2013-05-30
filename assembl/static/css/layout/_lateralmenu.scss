@@ -25,6 +25,20 @@
     @include transform( translateX(0) );
 }
 
+.lateralmenu-modal {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    display: none;
+
+    body.is-lateralmenu-open & {
+        left: $lateralmenu-width;
+        display: block;
+    }
+}
+
 
 // The container for the search field
 // =====================

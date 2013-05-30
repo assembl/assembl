@@ -79,10 +79,19 @@ document.write('<script src="/static/js/lib/'
 
 <script>
     !function($){
-        $('#lateralmenu-button').click(function(ev){
-            $(document.body).toggleClass( 'is-lateralmenu-open' );
+        var body = $(document.body),
+            lateralMenuButton = $('#lateralmenu-button');
+
+        lateralMenuButton.click(function(ev){
+            body.toggleClass( 'is-lateralmenu-open' );
         });
+
+        $('.lateralmenu-modal').on('click', function(){
+            lateralMenuButton.trigger('click');
+        });
+
     }(window.jQuery || window.Zepto);
+
     $(function(){
         $(document.body).removeClass( 'preload' );
     });
