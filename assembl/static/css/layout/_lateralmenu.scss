@@ -17,8 +17,6 @@
     body.is-lateralmenu-open & {
         @extend .lateralmenu.is-open;
     }
-
-    z-index: 2;
 }
 
 // Open state

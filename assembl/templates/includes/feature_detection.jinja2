@@ -1,0 +1,26 @@
+{#
+This javascript is the responsible to add/change the classes in the html tag
+to make easy creating the fallbacks in css.
+
+As long as this code is included directly in the html we minify it by hand.
+So, if you're going to change it, please change FIRST the commented code
+and then minify it using http://marijnhaverbeke.nl/uglifyjs
+
+<script>
+!function(documentElement, documentMode, window){
+
+    documentElement.className =
+        // Change the no-js class to js
+        documentElement.className.replace(/\bno-js\b/, 'has-js')
+
+        // Add the version for ie
+        + (documentMode ? ' ie ie'+documentMode :  ' no-ie')
+
+        // Touch detection
+        + ('ontouchstart' in window ? ' has-touch' : ' no-touch');
+
+}(document.documentElement, document.documentMode, window)
+</script>
+
+#}
+<script>!function(a,b,c){a.className=a.className.replace(/\bno-js\b/,"has-js")+(b?" ie ie"+b:" no-ie")+("ontouchstart"in c?" has-touch":" no-touch")}(document.documentElement,document.documentMode,window);</script>

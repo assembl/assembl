@@ -94,11 +94,9 @@
     }
 
     &:after {
-        content: url(#{$img-dir}/button/arrowbutton.png);
+        content: url(#{$img-dir}/button/arrowbutton-right.png);
         position: absolute;
         top: -1px;
         right: -14px;
-
-        @include transform( rotateY(180deg) );
     }
 }

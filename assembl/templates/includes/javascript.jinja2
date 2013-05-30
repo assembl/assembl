@@ -80,10 +80,10 @@ document.write('<script src="/static/js/lib/'
 <script>
     !function($){
         $('#lateralmenu-button').click(function(ev){
-            document.body.classList.toggle( 'is-lateralmenu-open' );
+            $(document.body).toggleClass( 'is-lateralmenu-open' );
         });
     }(window.jQuery || window.Zepto);
     $(function(){
-        document.body.classList.remove('preload');
+        $(document.body).removeClass( 'preload' );
     });
 </script>

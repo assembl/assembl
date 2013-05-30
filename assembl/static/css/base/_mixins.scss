@@ -18,8 +18,21 @@
 
 // Alias for `@include background-image(linear-gradient(...))`
 @mixin background-linear-gradient($params...){
+    $previous-value: $experimental-support-for-svg;
+    $experimental-support-for-svg: true;
     background-image: -ms-linear-gradient($params);
     @include background-image(linear-gradient($params...));
+
+    $experimental-support-for-svg: $previous-value;
+}
+
+// Check the $legacy-support-for-ie9 variable
+// If it is true, add the .ie9 class
+// Because we loooooooove internet explorer
+@mixin ie9 {
+    @if $legacy-support-for-ie9 {
+        .ie9 & { @content; }
+    }
 }
 
 // Only in medium resolution

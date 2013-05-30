@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="no-js">
 <head>
     <meta charset="UTF-8" />
     <title>{% block title %}Assebl{% endblock %}</title>
 
     <link type="text/css" rel="stylesheet" href="/static/css/style.css" />
+    {% include 'includes/feature_detection.jinja2' %}
 </head>
 <body class="preload">
     <div id="wrapper">
