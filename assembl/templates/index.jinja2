@@ -46,3 +46,15 @@
         </div>
     </div>
 {% endblock %}
+
+
+{% block content %}
+    <ul id="esse" class="emaillist emaillist--dark">
+        <li>oi ?</li>
+    </ul>
+
+    <script id="tmpl" type="text/x-template">
+        <span class="emaillist-label"><%= subject %></span>
+        <div class="fixedcounter"><%= total %></div>
+    </script>
+{% endblock %}
