@@ -68,12 +68,13 @@ $emaillist-item-height: 45px;
 .emaillist-checkbox {
     display: inline-block;
     line-height: $emaillist-item-height;
+    float: left;
 }
 
 // The title of the email
 // --------------------
 .emaillist-label {
-    display: inline-block;
+    display: block;
     line-height: $emaillist-item-height;
     padding-left: $emaillist-item-level-padding;
     white-space: nowrap;

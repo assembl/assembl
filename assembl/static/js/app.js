@@ -54,11 +54,11 @@ define(['jquery'], function($){
         openArea: function(area){
             closeAllAreas();
 
-            var body = area.find('.accordion-body'),
-                height = this.getBodyHeight(body);
+            var body = area.find('.accordion-body');
+                //height = this.getBodyHeight(body);
 
             area.addClass('is-open');
-            body.css('height', height);
+            //body.css('height', height);
         },
 
         /**
@@ -67,9 +67,11 @@ define(['jquery'], function($){
          */
         closeArea: function(area){
             area
-                .removeClass('is-open')
+                .removeClass('is-open');
+                /*
                 .find('.accordion-body')
-                .css('height', '0px');
+                .css('max-height', '0px');
+                */
         },
 
         /**
@@ -78,7 +80,7 @@ define(['jquery'], function($){
          * @return {Number}
          */
         getBodyHeight: function(body){
-            var height = body.attr(DATA_HEIGHT);
+            var height = null; //body.attr(DATA_HEIGHT);
 
             if( height === null ){
 

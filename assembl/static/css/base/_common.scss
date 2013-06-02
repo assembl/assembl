@@ -8,3 +8,7 @@ html {
 .margin-right { margin-right: $margin-right; }
 .margin-bottom { margin-bottom: $margin-bottom; }
 .margin-left { margin-left: $margin-left; }
+
+.no-fx {
+	@include transition( none !important );
+}

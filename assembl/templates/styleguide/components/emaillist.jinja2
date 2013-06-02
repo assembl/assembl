@@ -61,8 +61,11 @@
         <span class="emaillist-label">Simple email</span>
     </li>
     {% for i in '1234' %}
-        <li class="emaillist-item" data-emaillist-level="{{i}}">
-            <span class="emaillist-label">Email level {{i}}</span>
+        <li class="emaillist-item{% if not loop.first %} is-hidden{% endif %}" data-emaillist-level="{{i}}">
+            <span class="emaillist-label">
+                {% if not loop.last %}<span class="emaillist-label-arrow"></span>{% endif %}
+                Email level {{i}}
+            </span>
             <div class="fixedcounter">{{i}}</div>
         </li>
     {% endfor %}
@@ -76,8 +79,11 @@ function showItemInCascade(item, parentLevel){
     }
 
     var currentLevel = ~~item.attr('data-emaillist-level');
+
+
     if( currentLevel === (parentLevel+1) ){
         item.removeClass("is-hidden");
+        console.log( currentLevel,  (parentLevel+1) );
         showItemInCascade(item.next(), parentLevel);
     }
 }
