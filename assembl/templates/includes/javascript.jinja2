@@ -13,6 +13,9 @@ requirejs.config({
         },
         'jquery': {
             exports: '$'
+        },
+        'app': {
+            exports: 'app'
         }
     },
     "paths": {
@@ -24,7 +27,7 @@ requirejs.config({
 });
 
 // Load the main app module to start the app
-requirejs(["app", "views/emaillist"]);
+requirejs(["app"]);
 </script>
 
 {#

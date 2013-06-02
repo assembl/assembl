@@ -3,7 +3,7 @@ define(['backbone', 'underscore', 'jquery'], function(B, _, $){
     return B.View.extend({
         tagName: 'li',
 
-        template: _.template( $('#tmpl').html() ),
+        //template: _.template( $('#tmpl').html() ),
         events: {
             'click .fixedcounter': 'sim'
         },
@@ -16,7 +16,7 @@ define(['backbone', 'underscore', 'jquery'], function(B, _, $){
                 this.$el.addClass('emaillist-item--toplevel');
             }
 
-            this.$el.html(this.template(data));
+            //this.$el.html(this.template(data));
             return this;
         },
 

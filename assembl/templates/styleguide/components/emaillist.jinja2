@@ -8,39 +8,52 @@
     </li>
     <li class="emaillist-item is-hidden" data-emaillist-level="2">
         <span class="emaillist-label">
-            ajdkla jdlkasjd klajsd lasjdklasjd askld
+            Child level 2
         </span>
     </li>
     <li class="emaillist-item is-hidden" data-emaillist-level="2">
         <span class="emaillist-label">
-            LAJSdlkjasDLkjas LKDjaslkjdk aSKLD jALJ DAS
+            <span class="emaillist-label-arrow"></span>
+            Child level 2
         </span>
     </li>
-    <!-- 
-    <li class="emaillist-item">
+    <li class="emaillist-item is-hidden" data-emaillist-level="3">
+        <span class="emaillist-label">
+            Child level 3
+        </span>
+    </li>
+    <li class="emaillist-item" data-emaillist-level="1">
         <span class="emaillist-label">Simple email</span>
     </li>
     {% for i in '1234' %}
-        <li class="emaillist-item {% if not loop.last %}emaillist-item--toplevel{% endif %}" data-emaillist-level="{{i}}">
-            <span class="emaillist-label">Email level {{i}}</span>
+        <li class="emaillist-item{% if not loop.first %} is-hidden{% endif %}" data-emaillist-level="{{i}}">
+            <span class="emaillist-label">
+                {% if not loop.last %}<span class="emaillist-label-arrow"></span>{% endif %}
+                Email level {{i}}
+            </span>
             <div class="fixedcounter">{{i}}</div>
         </li>
     {% endfor %}
-    -->
 </ul>
+
+<br />
 
 <h3>Email list with checkboxes</h3>
 <ul class="emaillist">
-    <li class="emaillist-item" data-emaillist-level="1">
+    {% for i in "1234" %}
+    <li class="emaillist-item {% if not loop.first %} is-hidden{% endif %}" data-emaillist-level="{{i}}">
         <span class="emaillist-checkbox">
             <input type="checkbox" />
         </span>
         <span class="emaillist-label">
-            <span class="emaillist-label-arrow"></span>
-            List item with checkbox
+            {% if not loop.last %}<span class="emaillist-label-arrow"></span>{% endif %}
+            List item with checkbox level {{i}}
         </span>
     </li>
+    {% endfor %}
 </ul>
+
+<br />
 
 <h3>Email list Dark ( .emaillist--dark )</h3>
 <ul class="emaillist emaillist--dark">
@@ -48,7 +61,7 @@
         <span class="emaillist-label">Simple email</span>
     </li>
     {% for i in '1234' %}
-        <li class="emaillist-item {% if not loop.last %}emaillist-item--toplevel{% endif %}" data-emaillist-level="{{i}}">
+        <li class="emaillist-item" data-emaillist-level="{{i}}">
             <span class="emaillist-label">Email level {{i}}</span>
             <div class="fixedcounter">{{i}}</div>
         </li>
@@ -56,8 +69,70 @@
 </ul>
 
 <script>
-function vai(){
-    $('.one').toggleClass('is-open');
-    $('[data-emaillist-level="2"]').toggleClass('is-hidden');
+
+function showItemInCascade(item, parentLevel){
+    if( item.length === 0 ){
+        return;
+    }
+
+    var currentLevel = ~~item.attr('data-emaillist-level');
+    if( currentLevel === (parentLevel+1) ){
+        item.removeClass("is-hidden");
+        showItemInCascade(item.next(), parentLevel);
+    }
 }
+
+function closeItemInCascade(item, parentLevel){
+    if( item.length === 0 ){
+        return;
+    }
+
+    var currentLevel = ~~item.attr('data-emaillist-level');
+    if( currentLevel > parentLevel ){
+        item.addClass("is-hidden").removeClass('is-open');
+        closeItemInCascade(item.next(), parentLevel);
+    }
+}
+
+function open(ev){
+    var item = $(ev.currentTarget).parent().parent();
+
+    if( item.hasClass('is-open') ){
+        item.removeClass('is-open');
+        closeItemInCascade( item.next(), ~~item.attr('data-emaillist-level') );
+    } else {
+        item.addClass('is-open');
+        showItemInCascade( item.next(), ~~item.attr('data-emaillist-level') );
+    }
+    
+}
+
+/** */
+
+function onCheckboxClick(ev){
+    var chk = ev.currentTarget,
+        item = $(ev.currentTarget.parentNode.parentNode);
+
+    if( chk.checked ){
+        item.addClass('is-selected');
+    } else {
+        item.removeClass('is-selected');
+    }
+}
+
+function vai(){
+    if( ! window.$ ){
+        window.setTimeout(vai, 13);
+        return;
+    }
+
+
+    $('.emaillist-label-arrow').off('click', open).on('click', open);
+    
+    $('.emaillist input[type=checkbox]').off('click', onCheckboxClick).on('click', onCheckboxClick);
+
+    console.log('Styleguide ready');
+}
+
+vai();
 </script>

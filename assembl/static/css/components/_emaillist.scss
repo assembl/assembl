@@ -5,7 +5,7 @@ $emaillist-item-height: 45px;
 
 // The list of emails
 // =================
-.emaillist {}
+.emaillist { @include transform( translateZ(0) ); }
 
 // The dark version of list of emails
 // ++++++++++++++++++++++
@@ -29,7 +29,8 @@ $emaillist-item-height: 45px;
     //     background-color: #fbfbf9;
     // }
 
-    @include transition(height 0.4s);
+    @include transition( height 0.4s );
+    @include transform( translateZ(0) );
 
     .emaillist--dark & {
         background-color: #313131;
@@ -46,8 +47,9 @@ $emaillist-item-height: 45px;
     }
 }
 
-.emaillist-item:hover {
-    //background-color: #eaf5fc;
+// Email item is selected ( by the checkbox )
+.emaillist-item.is-selected {
+    background-color: #eaf5fc;
 }
 
 // Email list open ( showing the children )
@@ -57,7 +59,7 @@ $emaillist-item-height: 45px;
 // Email list is hidden
 // *********************
 .emaillist-item.is-hidden {
-    height: 0px;
+    height: 0; //display: none;
     border-bottom: 0;
 }
 
