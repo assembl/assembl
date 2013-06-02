@@ -1,6 +1,7 @@
 $emaillist-item-level-padding: 10px;
 $emaillist-item-border: solid 1px #e4e4e3;
 $emaillist-item-border-color-dark: #000;
+$emaillist-item-height: 45px;
 
 // The list of emails
 // =================
@@ -22,10 +23,13 @@ $emaillist-item-border-color-dark: #000;
     position: relative;
     height: 45px;
     cursor: pointer;
+    overflow: hidden;
 
-    &:nth-child(even){
-        background-color: #fbfbf9;
-    }
+    // &:nth-child(even){
+    //     background-color: #fbfbf9;
+    // }
+
+    @include transition(height 0.4s);
 
     .emaillist--dark & {
         background-color: #313131;
@@ -46,28 +50,38 @@ $emaillist-item-border-color-dark: #000;
     //background-color: #eaf5fc;
 }
 
+// Email list open ( showing the children )
+// *********************
+.emaillist-item.is-open {}
+
+// Email list is hidden
+// *********************
+.emaillist-item.is-hidden {
+    height: 0px;
+    border-bottom: 0;
+}
+
+// The checkbox to select the line
+// -------------------
+.emaillist-checkbox {
+    display: inline-block;
+    line-height: $emaillist-item-height;
+}
+
 // The title of the email
 // --------------------
 .emaillist-label {
-    display: block;
-    line-height: 45px;
+    display: inline-block;
+    line-height: $emaillist-item-height;
     padding-left: $emaillist-item-level-padding;
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
     padding-right: $fixedcounter-min-width + 15px;
-    @include box-sizing( boder-box );
-
+    @include box-sizing( border-box );
 
     .emaillist--dark & {
         border-color: $emaillist-item-border-color-dark !important;
-    }
-
-    .emaillist-item--toplevel & {
-        background-image: url(#{$img-dir}/emaillist/emaillist-arrow.png);
-        background-position: $emaillist-item-level-padding center;
-        background-repeat: no-repeat;
-        padding-left: $emaillist-item-level-padding * 3;
     }
 
     $emaillist-item-margin-left: 15px;
@@ -77,5 +91,28 @@ $emaillist-item-border-color-dark: #000;
             margin-left: $emaillist-item-margin-left;
             border-left: $emaillist-item-border;
         }
+    }
+}
+
+// The arrow within an .emaillist-label
+// ------------------------
+.emaillist-label-arrow {
+    background: url(#{$img-dir}/emaillist/emaillist-arrow.png) center left no-repeat;
+    width: $emaillist-item-level-padding;
+    margin-right: $emaillist-item-level-padding;
+    height: $emaillist-item-height;
+    display: inline-block;
+    float: left;
+
+    @include transition( transform 0.4s );
+    @include transform( rotate(-90deg) );
+    opacity: 0.55;
+
+    &:hover {
+        opacity: 1;
+    }
+
+    .emaillist-item.is-open & {
+        @include transform( rotate(0deg) );
     }
 }

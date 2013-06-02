@@ -1,5 +1,22 @@
 <h3>Email list</h3>
 <ul class="emaillist">
+    <li class="emaillist-item" data-emaillist-level="1">
+        <span class="emaillist-label">
+            <span class="emaillist-label-arrow"></span>
+            Simple list item with children
+        </span>
+    </li>
+    <li class="emaillist-item is-hidden" data-emaillist-level="2">
+        <span class="emaillist-label">
+            ajdkla jdlkasjd klajsd lasjdklasjd askld
+        </span>
+    </li>
+    <li class="emaillist-item is-hidden" data-emaillist-level="2">
+        <span class="emaillist-label">
+            LAJSdlkjasDLkjas LKDjaslkjdk aSKLD jALJ DAS
+        </span>
+    </li>
+    <!-- 
     <li class="emaillist-item">
         <span class="emaillist-label">Simple email</span>
     </li>
@@ -9,6 +26,20 @@
             <div class="fixedcounter">{{i}}</div>
         </li>
     {% endfor %}
+    -->
+</ul>
+
+<h3>Email list with checkboxes</h3>
+<ul class="emaillist">
+    <li class="emaillist-item" data-emaillist-level="1">
+        <span class="emaillist-checkbox">
+            <input type="checkbox" />
+        </span>
+        <span class="emaillist-label">
+            <span class="emaillist-label-arrow"></span>
+            List item with checkbox
+        </span>
+    </li>
 </ul>
 
 <h3>Email list Dark ( .emaillist--dark )</h3>
@@ -23,3 +54,10 @@
         </li>
     {% endfor %}
 </ul>
+
+<script>
+function vai(){
+    $('.one').toggleClass('is-open');
+    $('[data-emaillist-level="2"]').toggleClass('is-hidden');
+}
+</script>
