@@ -27,7 +27,7 @@ requirejs.config({
 });
 
 // Load the main app module to start the app
-requirejs(["app"]);
+requirejs(["app", "views/emaillist"]);
 </script>
 
 {#
@@ -40,3 +40,80 @@ requirejs(["app"]);
 
 <script>app.init();</script>
 #}
+
+<script>
+
+function showItemInCascade(item, parentLevel){
+    if( item.length === 0 ){
+        return;
+    }
+
+    var currentLevel = ~~item.attr('data-emaillist-level');
+
+
+    if( currentLevel === (parentLevel+1) ){
+        item.removeClass("is-hidden");
+        console.log( currentLevel,  (parentLevel+1) );
+        showItemInCascade(item.next(), parentLevel);
+    }
+}
+
+function closeItemInCascade(item, parentLevel){
+    if( item.length === 0 ){
+        return;
+    }
+
+    var currentLevel = ~~item.attr('data-emaillist-level');
+    if( currentLevel > parentLevel ){
+        item.addClass("is-hidden").removeClass('is-open');
+        closeItemInCascade(item.next(), parentLevel);
+    }
+}
+
+function open(ev){
+    var item = $(ev.currentTarget).parent().parent();
+
+    if( item.hasClass('is-open') ){
+        item.removeClass('is-open');
+        closeItemInCascade( item.next(), ~~item.attr('data-emaillist-level') );
+    } else {
+        item.addClass('is-open');
+        showItemInCascade( item.next(), ~~item.attr('data-emaillist-level') );
+    }
+    
+}
+
+/** */
+
+function onCheckboxClick(ev){
+    var chk = ev.currentTarget,
+        item = $(ev.currentTarget.parentNode.parentNode);
+
+    if( chk.checked ){
+        item.addClass('is-selected');
+    } else {
+        item.removeClass('is-selected');
+    }
+}
+
+function vai( scope ){
+    if( ! window.$ ){
+        window.setTimeout(function(){vai(scope);}, 13);
+        return;
+    }
+
+    $('.emaillist-label-arrow', scope).off('click', open).on('click', open);
+    
+    $('.emaillist input[type=checkbox]', scope).off('click', onCheckboxClick).on('click', onCheckboxClick);
+
+    $('.emaillist-label', scope).on('swipeLeft', function(ev){
+        $(ev.currentTarget).addClass('is-optioned');
+    }).on('swipeRight', function(ev){
+        $(ev.currentTarget).removeClass('is-optioned');
+    });
+
+    console.log('Styleguide ready');
+}
+
+vai('.lateralmenu');
+</script>

@@ -49,12 +49,22 @@
 
 
 {% block content %}
-    <ul id="esse" class="emaillist emaillist--dark">
-        <li>oi ?</li>
-    </ul>
+    <ul id="esse" class="emaillist"></ul>
 
     <script id="tmpl" type="text/x-template">
-        <span class="emaillist-label"><%= subject %></span>
+        <span class="emaillist-checkbox">
+            <input type="checkbox" />
+        </span>
+        <span class="emaillist-label">
+            <% if (hasChildren) { %><span class="emaillist-label-arrow"></span><% } %>
+            <%= subject %>
+            {{ 'Simple list item with children ' * 8 }}
+            <span class="emaillist-label-options">
+                <a class="iconbutton iconbutton--fx icon-pencil"></a>
+                <a class="iconbutton iconbutton--fx icon-rearrangeemail"></a>
+                <a class="iconbutton iconbutton--fx icon-copyfolder"></a>
+            </span>
+        </span>
         <div class="fixedcounter"><%= total %></div>
     </script>
 {% endblock %}

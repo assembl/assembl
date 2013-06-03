@@ -23,6 +23,7 @@ function(Backbone, Email, Emails, EmailView){
             });
 
             this.$el.html( data );
+            if( window.vai ) vai('#esse');
             return this;
         },
         events: {
@@ -31,10 +32,9 @@ function(Backbone, Email, Emails, EmailView){
 
         // Events
         onLiClick: function(){
-            console.log('oi');
+            //alert('you just clicked on .emaillist-item');
         }
     });
-    console.log( Viu );
 
     var viu = new Viu({collection: emails});
     viu.render();

@@ -104,10 +104,18 @@ $emaillist-options-width: $icon-width * 3;
 
 }
 
-// Hover state for .emaillist-label
-.emaillist-label:hover {
+
+// Showing the options .emaillist-label
+// ******************
+.has-touch .emaillist-label.is-optioned {
     padding-right: $emaillist-item-padding-right + $emaillist-options-width;
 }
+
+// @extends .emaillist-label.is-optioned
+.no-touch .emaillist-label:hover {
+    padding-right: $emaillist-item-padding-right + $emaillist-options-width;
+}
+
 
 // The arrow within an .emaillist-label
 // ------------------------
@@ -147,7 +155,8 @@ $emaillist-options-width: $icon-width * 3;
     font-size: 0px;
     @include transition( width 0.4s );
 
-    .emaillist-label:hover & {
+    .has-touch .emaillist-label.is-optioned &,
+    .no-touch .emaillist-label:hover & {
         width: $emaillist-options-width;
     }
 }
