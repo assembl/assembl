@@ -1,35 +1,51 @@
+{% macro label_options() -%}
+<span class="emaillist-label-options">
+    <a class="iconbutton iconbutton--fx icon-pencil"></a>
+    <a class="iconbutton iconbutton--fx icon-rearrangeemail"></a>
+    <a class="iconbutton iconbutton--fx icon-copyfolder"></a>
+</span>
+{%- endmacro %}
+
 <h3>Email list</h3>
 <ul class="emaillist">
     <li class="emaillist-item" data-emaillist-level="1">
         <span class="emaillist-label">
             <span class="emaillist-label-arrow"></span>
-            Simple list item with children
+            {{ 'Simple list item with children ' * 8 }}
+            {{ label_options() }}
         </span>
     </li>
     <li class="emaillist-item is-hidden" data-emaillist-level="2">
         <span class="emaillist-label">
             Child level 2
+            {{ label_options() }}
         </span>
     </li>
     <li class="emaillist-item is-hidden" data-emaillist-level="2">
         <span class="emaillist-label">
             <span class="emaillist-label-arrow"></span>
             Child level 2
+            {{ label_options() }}
         </span>
     </li>
     <li class="emaillist-item is-hidden" data-emaillist-level="3">
         <span class="emaillist-label">
             Child level 3
+            {{ label_options() }}
         </span>
     </li>
     <li class="emaillist-item" data-emaillist-level="1">
-        <span class="emaillist-label">Simple email</span>
+        <span class="emaillist-label">
+            Simple email
+            {{ label_options() }}
+        </span>
     </li>
     {% for i in '1234' %}
         <li class="emaillist-item{% if not loop.first %} is-hidden{% endif %}" data-emaillist-level="{{i}}">
             <span class="emaillist-label">
                 {% if not loop.last %}<span class="emaillist-label-arrow"></span>{% endif %}
                 Email level {{i}}
+                {{ label_options() }}
             </span>
             <div class="fixedcounter">{{i}}</div>
         </li>
@@ -48,6 +64,7 @@
         <span class="emaillist-label">
             {% if not loop.last %}<span class="emaillist-label-arrow"></span>{% endif %}
             List item with checkbox level {{i}}
+            {{ label_options() }}
         </span>
     </li>
     {% endfor %}
@@ -58,7 +75,9 @@
 <h3>Email list Dark ( .emaillist--dark )</h3>
 <ul class="emaillist emaillist--dark">
     <li class="emaillist-item">
-        <span class="emaillist-label">Simple email</span>
+        <span class="emaillist-label">
+            Simple email
+        </span>
     </li>
     {% for i in '1234' %}
         <li class="emaillist-item{% if not loop.first %} is-hidden{% endif %}" data-emaillist-level="{{i}}">

@@ -1,7 +1,10 @@
 $emaillist-item-level-padding: 10px;
-$emaillist-item-border: solid 1px #e4e4e3;
+$emaillist-item-padding-right: $fixedcounter-min-width + 15px;
+$emaillist-item-border-color: #e4e4e3;
+$emaillist-item-border: solid 1px $emaillist-item-border-color;
 $emaillist-item-border-color-dark: #000;
 $emaillist-item-height: 45px;
+$emaillist-options-width: $icon-width * 3;
 
 // The list of emails
 // =================
@@ -74,14 +77,17 @@ $emaillist-item-height: 45px;
 // The title of the email
 // --------------------
 .emaillist-label {
+    position: relative;
     display: block;
     line-height: $emaillist-item-height;
     padding-left: $emaillist-item-level-padding;
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
-    padding-right: $fixedcounter-min-width + 15px;
+    padding-right: $emaillist-item-padding-right;
     @include box-sizing( border-box );
+
+    @include transition( padding-right 0.4s );
 
     .emaillist--dark & {
         border-color: $emaillist-item-border-color-dark !important;
@@ -95,6 +101,12 @@ $emaillist-item-height: 45px;
             border-left: $emaillist-item-border;
         }
     }
+
+}
+
+// Hover state for .emaillist-label
+.emaillist-label:hover {
+    padding-right: $emaillist-item-padding-right + $emaillist-options-width;
 }
 
 // The arrow within an .emaillist-label
@@ -117,5 +129,25 @@ $emaillist-item-height: 45px;
 
     .emaillist-item.is-open & {
         @include transform( rotate(0deg) );
+    }
+}
+
+// The options within an .emaillist-label
+// -----------------
+.emaillist-label-options {
+    position: absolute;
+    top: 0px;
+    right: $emaillist-item-padding-right;
+
+    width: 0px;
+    height: $emaillist-item-height;
+    @include box-sizing( border-box );
+    overflow: hidden;
+
+    font-size: 0px;
+    @include transition( width 0.4s );
+
+    .emaillist-label:hover & {
+        width: $emaillist-options-width;
     }
 }
