@@ -68,3 +68,11 @@
         <div class="fixedcounter"><%= total %></div>
     </script>
 {% endblock %}
+
+{% block extra_js %}
+<script>
+requirejs(["app", "views/emaillist"], function(app){
+    alert( app );
+});
+</script>
+{% endblock %}

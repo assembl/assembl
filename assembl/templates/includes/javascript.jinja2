@@ -3,6 +3,7 @@
 <script>
 requirejs.config({
     "baseUrl": "{{ STATIC_URL }}js",
+    'urlArgs': "bust=" + (new Date()).getTime(),
     'shim': {
         'backbone': {
             deps: ['underscore', 'jquery'],
@@ -16,30 +17,26 @@ requirejs.config({
         },
         'app': {
             exports: 'app'
+        },
+        'jasmine': {
+            exports: 'jasmine'
+        },
+        'jasmine-html': {
+            deps: ['jasmine'],
+            exports: 'jasmine'
         }
     },
     "paths": {
         "app": 'app',
         'backbone': 'lib/backbone.min',
         'underscore': 'lib/underscore.min',
-        "jquery": '__proto__' in {} ? 'lib/zepto.min' : "lib/jquery.min"
+        'jquery': '__proto__' in {} ? 'lib/zepto.min' : "lib/jquery.min",
+        'jasmine': 'lib/jasmine',
+        'jasmine-html': 'lib/jasmine-html'
     }
 });
 
-// Load the main app module to start the app
-requirejs(["app", "views/emaillist"]);
 </script>
-
-{#
-<script src="{{ STATIC_URL }}js/lib/underscore.min.js"></script>
-<script src="{{ STATIC_URL }}js/lib/backbone.min.js"></script>
-
-<script src="{{ STATIC_URL }}js/app.js"></script>
-<script src="{{ STATIC_URL }}js/app.accordion.js"></script>
-<script src="{{ STATIC_URL }}js/app.lateralmenu.js"></script>
-
-<script>app.init();</script>
-#}
 
 <script>
 
