@@ -13,7 +13,7 @@ define(['jquery', 'jasmine-html'], function($, jasmine){
     var specs = [
         'tests/test_app',
         'tests/test_modelEmail',
-        //'tests/test_emailView'
+        'tests/test_emailView'
     ];
 
     $(function(){

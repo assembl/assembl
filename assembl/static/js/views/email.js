@@ -3,10 +3,10 @@ function(Backbone, _, $, app){
 
     return Backbone.View.extend({
         tagName: 'li',
-
         template: app.loadTemplate('email'),
         events: {
-            'click .fixedcounter': 'sim'
+            'click .fixedcounter': 'sim',
+            'click [type=checkbox]': 'onCheckboxClick'
         },
         render: function(){
             var data = this.model.toJSON();
@@ -28,6 +28,16 @@ function(Backbone, _, $, app){
         // Events
         sim: function(){
             alert('You just click on .fixedcounter');
+        },
+        onCheckboxClick: function(ev){
+            var chk = ev.currentTarget;
+            alert( chk );
+
+            if( chk.checked ){
+                this.$el.addClass('is-selected');
+            } else {
+                this.$el.removeClass('is-selected');
+            }
         }
     });
 
