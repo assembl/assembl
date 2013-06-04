@@ -126,7 +126,5 @@ define(['jquery'], function($){
         }
     };
 
-    app.init();
-
     return app;
 });

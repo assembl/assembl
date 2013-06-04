@@ -72,7 +72,7 @@
 {% block extra_js %}
 <script>
 requirejs(["app", "views/emaillist"], function(app){
-    alert( app );
+    app.init();
 });
 </script>
 {% endblock %}
