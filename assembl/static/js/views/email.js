@@ -1,9 +1,10 @@
-define(['backbone', 'underscore', 'jquery'], function(B, _, $){
+define(['backbone', 'underscore', 'jquery', 'app'],
+function(Backbone, _, $, app){
 
-    return B.View.extend({
+    return Backbone.View.extend({
         tagName: 'li',
 
-        template: _.template( $('#tmpl').html() ),
+        template: app.loadTemplate('email'),
         events: {
             'click .fixedcounter': 'sim'
         },

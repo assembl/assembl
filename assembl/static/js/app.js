@@ -1,4 +1,4 @@
-define(['jquery'], function($){
+define(['jquery', 'underscore'], function($, _){
     'use strict';
 
     /** Constants */
@@ -105,6 +105,15 @@ define(['jquery'], function($){
             return height;
         },
 
+        /**
+         * Returns a template from an script tag
+         * @param {string} id The id of the script tag
+         * @return {function} The _.template return
+         */
+        loadTemplate: function(id){
+            return _.template($('#tmpl-'+id).html());
+        },
+
 
         /**
          * @init
@@ -126,5 +135,5 @@ define(['jquery'], function($){
         }
     };
 
-    return app;
+    return window.app = app;
 });

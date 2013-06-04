@@ -7,9 +7,27 @@ import os.path
 FIXTURE = os.path.join(os.path.dirname(__file__),
                        '../../static/js/fixtures/nodes.json')
 
+TEMPLATE_PATH = os.path.join(os.path.dirname(__file__), '..', '..', 'templates')
+
 
 def get_default_context():
-    return { 'STATIC_URL' : '/static/' }
+    return {
+        'STATIC_URL': '/static/',
+        'templates': get_template_views() 
+    }
+
+def get_template_views():
+    """ get all .tmpl files from templates/views directory """
+    views_path = os.path.join(TEMPLATE_PATH, 'views')
+    views = []
+
+    for (dirpath, dirname, filenames) in os.walk(views_path):
+        for filename in filenames:
+            if filename.endswith('.tmpl'):
+                views.append(filename.split('.')[0])
+
+    return views
+
 
 @view_config(route_name='home', request_method='GET', http_cache=60)
 def home_view(request):

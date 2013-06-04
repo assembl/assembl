@@ -1,6 +1,9 @@
-define(['backbone'], function(B){
+define(['backbone'], function(Backbone){
 
-    return B.Model.extend({
+    /**
+     * @class EmailModel
+     */
+    var EmailModel = Backbone.Model.extend({
         defaults: {
             subject: '',
             level: 1,
@@ -8,5 +11,17 @@ define(['backbone'], function(B){
             hasChildren: false
         }
     });
+
+    /**
+     * @class EmailColleciton
+     */
+    var EmailCollection = Backbone.Collection.extend({
+        model: EmailModel
+    });
+
+    return {
+        Model: EmailModel,
+        Collection: EmailCollection
+    }
 
 });
