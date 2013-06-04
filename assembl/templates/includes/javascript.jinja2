@@ -22,6 +22,10 @@ requirejs.config({
             exports: 'jasmine'
         },
         'jasmine-html': {
+            deps: ['jasmine', 'jasmine-jquery'],
+            exports: 'jasmine'
+        },
+        'jasmine-jquery': {
             deps: ['jasmine'],
             exports: 'jasmine'
         }
@@ -31,7 +35,8 @@ requirejs.config({
         'underscore': 'lib/underscore.min',
         'jquery': '__proto__' in {} ? 'lib/zepto.min' : "lib/jquery.min",
         'jasmine': 'lib/jasmine',
-        'jasmine-html': 'lib/jasmine-html'
+        'jasmine-html': 'lib/jasmine-html',
+        'jasmine-jquery': 'lib/jasmine-jquery'
     }
 });
 
