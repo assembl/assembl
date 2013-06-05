@@ -1,0 +1,20 @@
+
+// The famous media element
+// =====================
+.media {}
+
+// To aling the object at the left
+// ---------------------
+.media-imgleft {
+    float: left;
+    margin: { 
+       right: 5px;
+       bottom: 5px;
+    }
+}
+
+// The content of the media
+// ---------------------
+.media-body {   
+    overflow: hidden;
+}
