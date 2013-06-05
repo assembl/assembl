@@ -1,7 +1,6 @@
 {% extends 'base.jinja2' %}
 
 {% block extra_header %}
-
     <div class="bar bar--title">
         <div class="bar-body">
             <div class="bar-left">
@@ -15,46 +14,22 @@
             </div>
         </div>
     </div>
-
-    <div class="bar">
-        <div class="bar-body">
-            <div class="bar-left">
-                <a href="#" class="button">
-                    <span class="icon icon-return"></span>
-                </a>
-            </div>
-
-            <div class="bar-center">
-                <div class="buttongroup">
-                    <a class="button">En vendette</a>
-                    <a class="button">Tout</a>
-                    <a class="button">Activé</a>
-                </div>
-            </div>
-
-            <div class="bar-right">
-                <a class="button">
-                    <span class="iconbutton icon-dropbox">
-                        <span class="iconbutton-badge">2</span>
-                    </span>
-                </a>
-
-                <a class="button">
-                    <span class="iconbutton icon-uparrow"></span>
-                </a>
-            </div>
-        </div>
-    </div>
 {% endblock %}
 
 {% block content %}
-    <ul id="esse" class="emaillist"></ul>
+    <div id="inbox"></div>
 {% endblock %}
 
 {% block extra_js %}
 <script>
-requirejs(["app", "views/emaillist"], function(app){
+requirejs(["app", "views/inbox", "models/email"],
+function(app, Inbox, Email){
+    'use strict';
+
     app.init();
+
+    app.inbox = new Inbox({collection: app.emails});
+    //app.inbox.render();
 });
 </script>
 {% endblock %}

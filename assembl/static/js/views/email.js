@@ -1,5 +1,6 @@
 define(['backbone', 'underscore', 'jquery', 'app'],
 function(Backbone, _, $, app){
+    'use strict';
 
     var DATA_LEVEL = 'data-emaillist-level';
 
@@ -18,7 +19,7 @@ function(Backbone, _, $, app){
             this.$el.addClass('emaillist-item');
 
             if( data.level > 1 ){
-                this.$el.addClass('is-hidden');                
+                this.$el.addClass('is-hidden');
             }
 
             this.$el.html(this.template(data));

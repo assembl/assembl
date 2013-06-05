@@ -1,14 +1,18 @@
 define(['backbone'], function(Backbone){
+    'use strict';
 
     /**
      * @class EmailModel
      */
     var EmailModel = Backbone.Model.extend({
+        url: "/static/js/tests/fixtures/email.json",
         defaults: {
             subject: '',
             level: 1,
             total: 1,
-            hasChildren: false
+            hasChildren: false,
+            featured: false,
+            active: false
         }
     });
 
@@ -16,12 +20,13 @@ define(['backbone'], function(Backbone){
      * @class EmailColleciton
      */
     var EmailCollection = Backbone.Collection.extend({
+        url: "/static/js/tests/fixtures/emails.json",
         model: EmailModel
     });
 
     return {
         Model: EmailModel,
         Collection: EmailCollection
-    }
+    };
 
 });

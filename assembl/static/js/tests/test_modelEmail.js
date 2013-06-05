@@ -10,7 +10,7 @@ define(['jasmine', 'underscore', 'models/email'], function(jasmine, _, Email){
 
         it('should have the Model', function(){
             expect(Email.Model).not.toBeUndefined();
-        })
+        });
 
         it('must have the default attributes', function(){
 
@@ -19,7 +19,9 @@ define(['jasmine', 'underscore', 'models/email'], function(jasmine, _, Email){
                 subject: '',
                 level: 1,
                 total: 1,
-                hasChildren: false
+                hasChildren: false,
+                featured: false,
+                active: false
             };
 
             for( var key in attrs )if(attrs.hasOwnProperty(key)){

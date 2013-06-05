@@ -95,7 +95,7 @@ function(jasmine, _, app, EmailView){
 
             arrow.trigger('click');
             expect(view.toggle.callCount).toBe(2);
-            expect(view.closeItemInCascade).toHaveBeenCalled();                        
+            expect(view.closeItemInCascade).toHaveBeenCalled();
         });
 
     });

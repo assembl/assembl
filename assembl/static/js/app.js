@@ -1,4 +1,5 @@
-define(['jquery', 'underscore'], function($, _){
+define(['jquery', 'underscore', 'models/email'],
+function($, _, Email, Inbox){
     'use strict';
 
     /** Constants */
@@ -32,20 +33,30 @@ define(['jquery', 'underscore'], function($, _){
     }
 
 
-    var app = {
-        /**
-         * Zepto or jQuery.
-         * The winner
-         * @type {Object}
-         */
-        $: $,
-
+    window.app = {
         /**
          * Reference to the body as Zepto object
-         * @type {Zepto}
+         * @type {jQuery}
          */
         body: $(document.body),
 
+        /**
+         * Reference to lateralmenu-button
+         * @type {jQuery}
+         */
+        lateralMenuButton: $('#lateralmenu-button'),
+
+        /**
+         * Reference to .lateralmenu-modal
+         * @type {jQuery}
+         */
+        lateralMenuModal:  $('.lateralmenu-modal'),
+
+        /**
+         * All emails
+         * @type {Email.Collection}
+         */
+        emails: new Email.Collection(),
 
         /**
          * Open a closed area
@@ -114,26 +125,25 @@ define(['jquery', 'underscore'], function($, _){
             return _.template($('#tmpl-'+id).html());
         },
 
-
         /**
          * @init
          * inits ALL app components
          */
-        init: function(scope){
+        init: function(){
 
-            lateralMenuButton.click(function(ev){
+            app.lateralMenuButton.click(function(ev){
                 app.body.toggleClass( 'is-lateralmenu-open' );
             });
 
-            lateralMenuModal.on('click', function(){
+            app.lateralMenuModal.on('click', function(){
                 lateralMenuButton.trigger('click');
             });
 
-            $('.accordion-header', scope).on('click', onHeaderClick);
+            $('.accordion-header').on('click', onHeaderClick);
 
             app.body.removeClass( 'preload' );
         }
     };
 
-    return window.app = app;
+    return window.app;
 });
