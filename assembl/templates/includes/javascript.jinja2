@@ -86,17 +86,6 @@ function open(ev){
 
 /** */
 
-function onCheckboxClick(ev){
-    var chk = ev.currentTarget,
-        item = $(ev.currentTarget.parentNode.parentNode);
-
-    if( chk.checked ){
-        item.addClass('is-selected');
-    } else {
-        item.removeClass('is-selected');
-    }
-}
-
 function vai( scope ){
     if( ! window.$ ){
         window.setTimeout(function(){vai(scope);}, 13);
@@ -104,14 +93,6 @@ function vai( scope ){
     }
 
     $('.emaillist-label-arrow', scope).off('click', open).on('click', open);
-    
-    $('.emaillist input[type=checkbox]', scope).off('click', onCheckboxClick).on('click', onCheckboxClick);
-
-    $('.emaillist-label', scope).on('swipeLeft', function(ev){
-        $(ev.currentTarget).addClass('is-optioned');
-    }).on('swipeRight', function(ev){
-        $(ev.currentTarget).removeClass('is-optioned');
-    });
 
     console.log('Styleguide ready');
 }
