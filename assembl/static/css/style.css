@@ -973,18 +973,20 @@ html {
   position: absolute;
   background: white url(/static/img/text/textbubble.png) no-repeat center right;
   background-origin: content-box;
-  opacity: 0.7;
+  opacity: 0.9;
   cursor: pointer;
   border: solid 4px #d3d3d6;
   border-radius: 6px;
   width: 150px;
+  line-height: 16px;
   padding: 5px;
+  margin-top: -64px;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_text\.scss}line{font-family:\0000325}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_text\.scss}line{font-family:\0000330}}
 .textbubble:hover {
   opacity: 1;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_text\.scss}line{font-family:\0000330}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_text\.scss}line{font-family:\0000335}}
 .textbubble:after, .textbubble:before {
   top: 100%;
   border: solid transparent;
@@ -994,7 +996,7 @@ html {
   position: absolute;
   pointer-events: none;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_text\.scss}line{font-family:\0000340}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_text\.scss}line{font-family:\0000345}}
 .textbubble:after {
   border-color: rgba(211, 211, 214, 0);
   border-top-color: #d3d3d6;
@@ -1002,7 +1004,7 @@ html {
   left: 50%;
   margin-left: -10px;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_text\.scss}line{font-family:\0000347}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_text\.scss}line{font-family:\0000352}}
 .textbubble:before {
   border-color: rgba(211, 211, 214, 0);
   border-top-color: #d3d3d6;

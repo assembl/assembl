@@ -62,47 +62,57 @@ function(app, Inbox, Email){
 
     //
 
-    var SELECTION_CLASS = 'text-selection';
-
-    function cleanSelection(){
-        $('.text-selection').removeClass(SELECTION_CLASS);
-    }
-
     function doTheSelection(ev){
-        $('.bubble').remove();
-
         window.setTimeout(function(){
             var sel = document.getSelection();
+
             if( sel.type === "None" ){
+                if( app.bubble ) {
+                    app.bubble.remove();
+                    app.bubble = null;
+                }
                 return;
             }
 
             var selectedText = sel.getRangeAt(0).cloneContents();
             if(selectedText.firstChild && selectedText.firstChild.textContent.length > 10 ){
-                showBubble(ev.x, ev.y, selectedText.firstChild.textContent);
+                showBubble(app.mouse.x, app.mouse.y, selectedText.firstChild.textContent);
             }
         })
     }
 
     function showBubble(x, y, text){
-        $('.bubble').remove();
+        if( ! app.bubble ) {
 
-        var div = $('<div>', { 'class': 'bubble' } );
-        div.text('Segment this?');
-        div.css('top', y - 30);
-        div.css('left', x - 15);
-        div.attr('data-segment', text);
-        $(document.body).append(div);
-        div.css('margin-left', div.width()/-2);
+            var div = $('<div>', { 'class': 'textbubble' } );
+            
+            $('#wrapper').append(div);
+            
+            div.click(function(ev){
+                alert( div.attr('data-segment') );
+            });
 
-        div.click(function(ev){
-            alert( div.attr('data-segment') );
-        });
+            app.bubble = div;
+        }
+
+        text = '...' + text.substr(-15);
+
+        app.bubble
+            .attr('data-segment', text)
+            .text(text)
+                .css({
+                    'top': y,
+                    'left': x,
+                    'margin-left': app.bubble.width() / -2
+                });
     }
 
-    $('.text').on('mouseup', doTheSelection);
+    //$('.text').on('mouseup', doTheSelection);
 
-    //$(document).on('selectionchange', doTheSelection);
+    $(document).on('selectionchange', doTheSelection);
+    $(document).on('mousemove', function(ev){
+        app.mouse = { x: ev.x, y: ev.y };
+    });
 });
 </script>
 {% endblock %}

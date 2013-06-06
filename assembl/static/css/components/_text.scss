@@ -9,18 +9,23 @@
 // The text bubble for when a text is selected
 // ====================
 .textbubble {
+    $textbubble-width: 150px;
+    $textbubble-height: 16px;
+
     position: absolute;
 
     background: white url(#{$img-dir}/text/textbubble.png) no-repeat center right;
     background-origin: content-box;
-    opacity: 0.7;
+    opacity: 0.9;
 
     cursor: pointer;
     border: solid 4px #d3d3d6;
     border-radius: 6px;
     
-    width: 150px;
+    width: $textbubble-width;
+    line-height: $textbubble-height;
     padding: 5px;
+    margin-top: $textbubble-height * -4;
 
     &:hover {
         opacity: 1;
