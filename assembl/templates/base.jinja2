@@ -34,6 +34,8 @@
         <main id="main">
             {% block content %}{% endblock %}
         </main>
+
+        {% include 'includes/bucket.jinja2' %}
     </div>
 
     {% for template in templates %}

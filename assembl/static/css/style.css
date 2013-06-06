@@ -968,22 +968,53 @@ html {
   font-family: "Myriad Pro";
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_text\.scss}line{font-family:\000039}}
-.text-selection {
-  background-color: #dbf2ff;
-}
-
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_text\.scss}line{font-family:\0000313}}
-.bubble {
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_text\.scss}line{font-family:\0000311}}
+.textbubble {
   position: absolute;
-  border: solid 1px red;
+  background: white url(/static/img/text/textbubble.png) no-repeat center right;
+  background-origin: content-box;
+  opacity: 0.7;
   cursor: pointer;
-  background-color: white;
+  border: solid 4px #d3d3d6;
+  border-radius: 6px;
+  width: 150px;
+  padding: 5px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_text\.scss}line{font-family:\0000325}}
+.textbubble:hover {
+  opacity: 1;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_text\.scss}line{font-family:\0000330}}
+.textbubble:after, .textbubble:before {
+  top: 100%;
+  border: solid transparent;
+  content: " ";
+  height: 0;
+  width: 0;
+  position: absolute;
+  pointer-events: none;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_text\.scss}line{font-family:\0000340}}
+.textbubble:after {
+  border-color: rgba(211, 211, 214, 0);
+  border-top-color: #d3d3d6;
+  border-width: 10px;
+  left: 50%;
+  margin-left: -10px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_text\.scss}line{font-family:\0000347}}
+.textbubble:before {
+  border-color: rgba(211, 211, 214, 0);
+  border-top-color: #d3d3d6;
+  border-width: 16px;
+  left: 50%;
+  margin-left: -16px;
 }
 
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/layout\/_content\.scss}line{font-family:\000032}}
 #wrapper {
   position: relative;
+  min-height: 100%;
   -webkit-transform: translateX(0);
   -moz-transform: translateX(0);
   -ms-transform: translateX(0);
@@ -994,13 +1025,29 @@ html {
   -o-transition: -o-transform 0.6s;
   transition: transform 0.6s;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/layout\/_content\.scss}line{font-family:\000039}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/layout\/_content\.scss}line{font-family:\0000311}}
 .is-lateralmenu-open #wrapper {
   -webkit-transform: translateX(453px);
   -moz-transform: translateX(453px);
   -ms-transform: translateX(453px);
   -o-transform: translateX(453px);
   transform: translateX(453px);
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/layout\/_bucket\.scss}line{font-family:\000033}}
+.bucket {
+  width: 300px;
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  border: solid 1px red;
+  background-color: lightgray;
+  -webkit-transition: -webkit-transform 0.4s;
+  -moz-transition: -moz-transform 0.4s;
+  -o-transition: -o-transform 0.4s;
+  transition: transform 0.4s;
 }
 
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/layout\/_lateralmenu\.scss}line{font-family:\000031}}

@@ -21,7 +21,7 @@
             </div>
         </div>
 
-        <div class="message">
+        <div class="message container">
             <div class="message-header">
                 
                 <div class="media">
@@ -69,63 +69,35 @@ function(app, Inbox, Email){
     }
 
     function doTheSelection(ev){
-        /*
-        cleanSelection();
-        var sel = window.getSelection(),
-            range = sel.getRangeAt(0),
-            content = range.cloneContents();
+        $('.bubble').remove();
 
-        if( content.firstChild === null ){
-            return;
-        }
-
-        var textBlock = $(ev.target).closest('.text');
-
-        textBlock.find('p').each(function(i, el){
-            if( sel.containsNode( el ) ) {
-                el.classList.add(SELECTION_CLASS);
+        window.setTimeout(function(){
+            var sel = document.getSelection();
+            if( sel.type === "None" ){
+                return;
             }
-        });
 
-
-        if( sel.baseNode === sel.extentNode ) {
-            // just one paragraph
-            var span = document.createElement('span');
-            span.className = SELECTION_CLASS;
-            range.surroundContents(span);
-        } else {
-
-            // The first
-            var r1 = document.createRange();
-            r1.setStart(sel.baseNode, sel.baseOffset);
-            r1.setEnd(sel.baseNode, sel.baseNode.wholeText.length);
-
-            var span = document.createElement('span');
-            span.className = SELECTION_CLASS;
-            r1.surroundContents( span );
-
-            var r2 = document.createRange();
-            r2.setStart(sel.extentNode, 0);
-            r2.setEnd(sel.extentNode, sel.extentOffset);
-
-            var span = document.createElement('span');
-            span.className = SELECTION_CLASS;
-            r2.surroundContents( span );          
-        }
-    */
-        showBubble(ev.x, ev.y);
+            var selectedText = sel.getRangeAt(0).cloneContents();
+            if(selectedText.firstChild && selectedText.firstChild.textContent.length > 10 ){
+                showBubble(ev.x, ev.y, selectedText.firstChild.textContent);
+            }
+        })
     }
 
-    function showBubble(x, y){
+    function showBubble(x, y, text){
         $('.bubble').remove();
 
         var div = $('<div>', { 'class': 'bubble' } );
         div.text('Segment this?');
         div.css('top', y - 30);
         div.css('left', x - 15);
-        //div.css('margin-left', span.offsetWidth/2);
+        div.attr('data-segment', text);
         $(document.body).append(div);
         div.css('margin-left', div.width()/-2);
+
+        div.click(function(ev){
+            alert( div.attr('data-segment') );
+        });
     }
 
     $('.text').on('mouseup', doTheSelection);

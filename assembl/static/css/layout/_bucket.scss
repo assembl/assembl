@@ -1,0 +1,17 @@
+$bucket-width: 300px;
+
+.bucket {
+    width: $bucket-width;
+    display: none;
+
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+
+    border: solid 1px red;
+    background-color: lightgray;
+
+    @include transition( transform 0.4s );
+    //@include transform( translateX( $bucket-width * -1) );
+}
