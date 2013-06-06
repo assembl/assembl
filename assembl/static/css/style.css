@@ -1,6 +1,6 @@
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/base\/_reset\.scss}line{font-family:\0000313}}
 html, body, div, span, applet, object, iframe,
-h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+h1, h2, h3, h4, h5, h6, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
 del, dfn, em, img, ins, kbd, q, s, samp,
 small, strike, sub, sup, tt, var,
@@ -65,7 +65,7 @@ img {
 }
 
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/base\/_reset\.scss}line{font-family:\0000358}}
-article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section, summary {
+article, aside, details, figcaption, figure, footer, header, hgroup, main, menu, nav, section, summary {
   display: block;
 }
 
@@ -84,31 +84,43 @@ html {
 }
 
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/base\/_common\.scss}line{font-family:\000036}}
+::selection {
+  background: #dbf2ff;
+  /* Safari */
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/base\/_common\.scss}line{font-family:\000039}}
+::-moz-selection {
+  background: #dbf2ff;
+  /* Firefox */
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/base\/_common\.scss}line{font-family:\0000313}}
 .margin {
   margin: 10px;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/base\/_common\.scss}line{font-family:\000037}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/base\/_common\.scss}line{font-family:\0000314}}
 .margin-top {
   margin-top: 10px;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/base\/_common\.scss}line{font-family:\000038}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/base\/_common\.scss}line{font-family:\0000315}}
 .margin-right {
   margin-right: 10px;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/base\/_common\.scss}line{font-family:\000039}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/base\/_common\.scss}line{font-family:\0000316}}
 .margin-bottom {
   margin-bottom: 10px;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/base\/_common\.scss}line{font-family:\0000310}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/base\/_common\.scss}line{font-family:\0000317}}
 .margin-left {
   margin-left: 10px;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/base\/_common\.scss}line{font-family:\0000312}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/base\/_common\.scss}line{font-family:\0000319}}
 .no-fx {
   -webkit-transition: none !important;
   -moz-transition: none !important;
@@ -947,6 +959,26 @@ html {
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_media\.scss}line{font-family:\0000318}}
 .media-body {
   overflow: hidden;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_text\.scss}line{font-family:\000033}}
+.text {
+  color: #a4a3a1;
+  font-size: 14px;
+  font-family: "Myriad Pro";
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_text\.scss}line{font-family:\000039}}
+.text-selection {
+  background-color: #dbf2ff;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_text\.scss}line{font-family:\0000313}}
+.bubble {
+  position: absolute;
+  border: solid 1px red;
+  cursor: pointer;
+  background-color: white;
 }
 
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/layout\/_content\.scss}line{font-family:\000032}}

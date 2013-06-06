@@ -3,6 +3,13 @@ html {
     font-size: $font-size;
 }
 
+::selection {
+    background: $text-selection-color; /* Safari */
+}
+::-moz-selection {
+    background: $text-selection-color; /* Firefox */
+}
+
 .margin { margin: $margin; }
 .margin-top { margin-top: $margin-top; }
 .margin-right { margin-right: $margin-right; }
