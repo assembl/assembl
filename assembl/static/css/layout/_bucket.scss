@@ -2,16 +2,45 @@ $bucket-width: 300px;
 
 .bucket {
     width: $bucket-width;
-    display: none;
 
     position: absolute;
     top: 0;
     left: 0;
     bottom: 0;
 
-    border: solid 1px red;
     background-color: lightgray;
 
     @include transition( transform 0.4s );
     //@include transform( translateX( $bucket-width * -1) );
+    @include transform( translateX( 0 ) );
+
+    body.is-bucket-open & {
+        @extend .bucket.is-open;
+    }
+
+
+    // todo: please, remove this
+    li {
+        padding: 5px;
+        border-bottom: solid 2px white;
+    }
 }
+
+// The bucket is being shown
+// ***********************
+.bucket.is-open {
+    @include transform( translateX( 0 ) );
+}
+
+// The bucket header
+// -----------------
+.bucket-header {}
+
+// The close button
+// -----------------
+.bucket-closebtn {
+    float: right;
+    font-size: 16px;
+    cursor: pointer;
+}
+.bucket-closebtn {}

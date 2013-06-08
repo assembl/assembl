@@ -12,7 +12,7 @@
     @include box-sizing( border-box );
     width: $lateralmenu-width;
 
-    @include transition( transform 0.6s );
+    //@include transition( transform 0.6s );
 
     body.is-lateralmenu-open & {
         @extend .lateralmenu.is-open;

@@ -1022,10 +1022,6 @@ html {
   -ms-transform: translateX(0);
   -o-transform: translateX(0);
   transform: translateX(0);
-  -webkit-transition: -webkit-transform 0.6s;
-  -moz-transition: -moz-transform 0.6s;
-  -o-transition: -o-transform 0.6s;
-  transition: transform 0.6s;
 }
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/layout\/_content\.scss}line{font-family:\0000311}}
 .is-lateralmenu-open #wrapper {
@@ -1039,17 +1035,41 @@ html {
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/layout\/_bucket\.scss}line{font-family:\000033}}
 .bucket {
   width: 300px;
-  display: none;
   position: absolute;
   top: 0;
   left: 0;
   bottom: 0;
-  border: solid 1px red;
   background-color: lightgray;
   -webkit-transition: -webkit-transform 0.4s;
   -moz-transition: -moz-transform 0.4s;
   -o-transition: -o-transform 0.4s;
   transition: transform 0.4s;
+  -webkit-transform: translateX(0);
+  -moz-transform: translateX(0);
+  -ms-transform: translateX(0);
+  -o-transform: translateX(0);
+  transform: translateX(0);
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/layout\/_bucket\.scss}line{font-family:\0000323}}
+.bucket li {
+  padding: 5px;
+  border-bottom: solid 2px white;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/layout\/_bucket\.scss}line{font-family:\0000331}}
+.bucket.is-open, body.is-bucket-open .bucket {
+  -webkit-transform: translateX(0);
+  -moz-transform: translateX(0);
+  -ms-transform: translateX(0);
+  -o-transform: translateX(0);
+  transform: translateX(0);
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/layout\/_bucket\.scss}line{font-family:\0000341}}
+.bucket-closebtn {
+  float: right;
+  font-size: 16px;
+  cursor: pointer;
 }
 
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/layout\/_lateralmenu\.scss}line{font-family:\000031}}
@@ -1069,10 +1089,6 @@ html {
   -moz-box-sizing: border-box;
   box-sizing: border-box;
   width: 453px;
-  -webkit-transition: -webkit-transform 0.6s;
-  -moz-transition: -moz-transform 0.6s;
-  -o-transition: -o-transform 0.6s;
-  transition: transform 0.6s;
 }
 
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/layout\/_lateralmenu\.scss}line{font-family:\0000324}}

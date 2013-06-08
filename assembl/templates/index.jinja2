@@ -62,21 +62,33 @@ function(app, Inbox, Email){
 
     //
 
+    var MIN_TEXT_TO_BUBBLE = 17;
+
+    function addToBucket(ev){
+        document.body.classList.add('is-bucket-open');
+
+        var li = $('<li>').text( ev.currentTarget.getAttribute('data-segment'));
+        $('#bucket').append(li);
+    };
+
     function doTheSelection(ev){
         window.setTimeout(function(){
             var sel = document.getSelection();
 
             if( sel.type === "None" ){
                 if( app.bubble ) {
-                    app.bubble.remove();
-                    app.bubble = null;
+                    app.bubble.hide();
                 }
                 return;
             }
 
             var selectedText = sel.getRangeAt(0).cloneContents();
-            if(selectedText.firstChild && selectedText.firstChild.textContent.length > 10 ){
+            if(selectedText.firstChild && selectedText.firstChild.textContent.length > MIN_TEXT_TO_BUBBLE ){
                 showBubble(app.mouse.x, app.mouse.y, selectedText.firstChild.textContent);
+            } else if(app.bubble) {
+                window.setTimeout(function(){
+                    app.bubble.hide();
+                }, 100);
             }
         })
     }
@@ -86,19 +98,20 @@ function(app, Inbox, Email){
 
             var div = $('<div>', { 'class': 'textbubble' } );
             
-            $('#wrapper').append(div);
+            $(document.body).append(div);
             
-            div.click(function(ev){
-                alert( div.attr('data-segment') );
-            });
+            div.on('click', addToBucket);
 
             app.bubble = div;
+        } else {
+            app.bubble.show();
         }
 
-        text = '...' + text.substr(-15);
+        app.bubble.attr('data-segment', text);
+
+        text = '...' + text.substr( - MIN_TEXT_TO_BUBBLE );
 
         app.bubble
-            .attr('data-segment', text)
             .text(text)
                 .css({
                     'top': y,
@@ -113,6 +126,80 @@ function(app, Inbox, Email){
     $(document).on('mousemove', function(ev){
         app.mouse = { x: ev.x, y: ev.y };
     });
+
+
+    /*
+    $('.bucket-closebtn').click(function(){
+        document.body.classList.remove('is-bucket-open');
+    })
+    */
+
+    // Tests for drag the bucket
+    var bucket = {
+        el: $('#bucket'),
+        isMoving: false,
+        wrapper: $('#wrapper'),
+        lateralmenu: $('.lateralmenu')
+    };
+
+    bucket.wrapper.css('-webkit-transform', 'translateX('+bucket.el.width()+'px)');
+    //bucket.lateralmenu.css('-webkit-transform', 'translateX(0px)');
+
+    window.bucket = bucket;
+    bucket.open = function(){
+        var time = 600,
+            lateralMenuWidth = 453,
+            width = bucket.el.width();
+
+        bucket.lateralmenu.animate({translateX: 0}, time, 'ease');
+
+        bucket.el.animate({translateX: lateralMenuWidth+'px'}, time, 'ease');
+
+        bucket.wrapper.animate({translateX: (lateralMenuWidth + width)+'px' }, time, 'ease');
+
+        bucket.isOpen = true;
+    };
+
+    bucket.close = function(){
+        var time = 600,
+            lateralMenuWidth = 453,
+            width = bucket.el.width();
+
+        bucket.lateralmenu.animate({translateX: '-453px'}, time, 'ease');
+
+        bucket.el.animate({translateX: '0px'}, time, 'ease');
+
+        bucket.wrapper.animate({translateX: width+'px' }, time, 'ease');
+
+        bucket.isOpen = false;
+    }
+
+    $('.bucket-closebtn').on('mousedown', function(ev){
+        bucket.isMoving = true;
+
+        app.body.css("-webkit-user-select", "none");
+
+        $(document).on('mousemove', function(ev){
+            if( bucket.isMoving ){
+                if( bucket.isOpen ){
+                    bucket.el.width( ev.x - 450 );
+                    bucket.wrapper.css('-webkit-transform', 'translateX('+ev.x+'px)')
+                } else {
+                    bucket.el.width( ev.x );
+                    bucket.wrapper.css('-webkit-transform', 'translateX('+ev.x+'px)')
+                }
+            }
+        });
+
+        $(document).on('mouseup', function(ev){
+            bucket.isMoving = false;
+            $(document).off('mousemove').off('mouseup');
+
+            app.body.css("-webkit-user-select", "text");
+        })
+
+    });
+
 });
 </script>
 {% endblock %}
