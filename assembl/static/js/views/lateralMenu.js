@@ -17,7 +17,7 @@ function(Backbone, _, $, app, EmailView){
          * The template
          * @type {_.template}
          */
-        template: _.template( $('#tmpl-lateralMenu').html() ),
+        template: app.loadTemplate('lateralMenu'),
 
         /**
          * The render
@@ -44,7 +44,8 @@ function(Backbone, _, $, app, EmailView){
          * @event
          */
         toggle: function(){
-            this.isOpen ? this.close() : this.open();
+            if(this.isOpen) this.close();
+            else this.open();
         },
 
         /**
@@ -53,6 +54,7 @@ function(Backbone, _, $, app, EmailView){
         open: function(){
             this.$el.animate({translateX: 0}, app.lateralMenuAnimationTime, app.ease);
             this.isOpen = true;
+            app.trigger('lateralmenu.open');
         },
 
         /**
@@ -62,6 +64,7 @@ function(Backbone, _, $, app, EmailView){
             var data = {translateX: '-' + app.lateralMenuWidth + 'px' };
             this.$el.animate(data, app.lateralMenuAnimationTime, app.ease);
             this.isOpen = false;
+            app.trigger('lateralmenu.close');
         }
 
 

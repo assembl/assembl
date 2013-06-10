@@ -54,14 +54,23 @@ requirejs([
     "jquery",
     "views/inbox",
     "views/lateralMenu",
+    "views/bucket",
     "models/email"
     ],
-function(app, $, Inbox, LateralMenu, Email){
+function(app, $, Inbox, LateralMenu, Bucket, Email){
     'use strict';
 
     app.init();
     app.lateralMenu = new LateralMenu({el: '#lateralMenu'}).render();
     $('#assembl-mainbutton').on('click', app.lateralMenu.trigger.bind(app.lateralMenu, 'toggle'));
+
+    app.bucket = new Bucket({el: '#bucket'}).render();
+    app.on('lateralmenu.open', function(){
+        app.bucket.setLeftMargin(app.lateralMenuWidth);
+    });
+    app.on('lateralmenu.close', function(){
+        app.bucket.setLeftMargin(0);
+    });
 
     //app.inbox = new Inbox({collection: app.emails});
     //app.inbox.render();
@@ -76,7 +85,9 @@ function(app, $, Inbox, LateralMenu, Email){
         document.body.classList.add('is-bucket-open');
 
         var li = $('<li>').text( ev.currentTarget.getAttribute('data-segment'));
-        $('#bucket').append(li);
+        $('#bucket-list').append(li);
+
+        app.bucket.open();
     };
 
     function doTheSelection(ev){

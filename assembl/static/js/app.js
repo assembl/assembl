@@ -34,10 +34,28 @@ function($, _, Email, Inbox){
         lateralMenuAnimationTime: 600,
 
         /**
+         * The time for all animations related to bucket
+         * @type {Number}
+         */
+        bucketAnimationTime: 600,
+
+        /**
          * The lateral menu width
          * @type {number}
          */
         lateralMenuWidth: 453,
+
+        /**
+         * The bucket min width when collapsed
+         * @type {Number}
+         */
+        bucketMinWidth: 15,
+
+        /**
+         * Default width for bucket when it is open
+         * @type {Number}
+         */
+        bucketDefaultOpenWidth: 300,
 
         /**
          * Subscribe an event
