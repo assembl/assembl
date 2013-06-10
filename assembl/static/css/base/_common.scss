@@ -16,6 +16,10 @@ html {
 .margin-bottom { margin-bottom: $margin-bottom; }
 .margin-left { margin-left: $margin-left; }
 
-.no-fx {
-	@include transition( none !important );
+.no-fx { @include transition( none !important ); }
+
+.user-select-none {
+    @include user-select(none);
+    &::selection { background: transparent; }
+    &::-moz-selection { background: transparent; }
 }

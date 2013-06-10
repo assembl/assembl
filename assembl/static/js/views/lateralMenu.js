@@ -44,7 +44,7 @@ function(Backbone, _, $, app, EmailView){
          * @event
          */
         toggle: function(){
-            if(this.isOpen) this.close();
+            if (this.isOpen) this.close();
             else this.open();
         },
 

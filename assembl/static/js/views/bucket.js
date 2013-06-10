@@ -70,7 +70,7 @@ function(Backbone, _, $, app, EmailView){
         resize: function(width, translateX){
             var bucketWidth = width >= app.bucketMinWidth ? width : app.bucketMinWidth;
 
-            this.$el.animate({ width: bucketWidth, translateX: translateX+'px' }, app.bucketAnimationTime, app.ease);
+            this.$el.animate({ width: bucketWidth+'px', translateX: translateX+'px' }, app.bucketAnimationTime, app.ease);
             this.wrapper.animate({ translateX: (width+translateX)+'px' }, app.bucketAnimationTime, app.ease);
         },
 
@@ -111,7 +111,7 @@ function(Backbone, _, $, app, EmailView){
         /**
          * @event
          */
-        startResize: function(){
+        startResize: function(ev){
             var doc, self, mousemove, mouseup;
 
             self = this;
@@ -126,8 +126,9 @@ function(Backbone, _, $, app, EmailView){
             doc.on('mousemove', mousemove)
               .on('mouseup', mouseup);
 
-            app.body.css("-webkit-user-select", "none");
+            app.body.addClass('user-select-none');
             this.isMoving = true;
+            ev.preventDefault();
         },
 
         /**
@@ -135,7 +136,7 @@ function(Backbone, _, $, app, EmailView){
          */
         stopResize: function(){
             this.isMoving = false;
-            app.body.css("-webkit-user-select", "text");
+            app.body.removeClass('user-select-none');
         },
 
         /**
@@ -146,7 +147,7 @@ function(Backbone, _, $, app, EmailView){
                 return;
             }
 
-            var x = ev.x - this.leftMargin;
+            var x = ev.clientX - this.leftMargin;
 
             var width = x >= app.bucketMinWidth ? x : app.bucketMinWidth,
                 translateX = width + this.leftMargin;
