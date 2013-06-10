@@ -2,13 +2,6 @@ define(['jquery', 'underscore', 'models/email'],
 function($, _, Email, Inbox){
     'use strict';
 
-    /** Constants */
-    var DATA_HEIGHT = 'data-accordion-height';
-
-    /** Reference to lateralmenu-button */
-    var lateralMenuButton = $('#lateralmenu-button'),
-        lateralMenuModal = $('.lateralmenu-modal');
-
     /**
      * @event
      */
@@ -41,22 +34,22 @@ function($, _, Email, Inbox){
         body: $(document.body),
 
         /**
-         * Reference to lateralmenu-button
-         * @type {jQuery}
+         * Default ease for all kids of animation
+         * @type {String}
          */
-        lateralMenuButton: $('#lateralmenu-button'),
+        ease: 'ease',
 
         /**
-         * Reference to .lateralmenu-modal
-         * @type {jQuery}
+         * The time for all animations related to lateralMenu
+         * @type {Number}
          */
-        lateralMenuModal:  $('.lateralmenu-modal'),
+        lateralMenuAnimationTime: 600,
 
         /**
-         * All emails
-         * @type {Email.Collection}
+         * The lateral menu width
+         * @type {number}
          */
-        emails: new Email.Collection(),
+        lateralMenuWidth: 453,
 
         /**
          * Open a closed area
@@ -130,14 +123,6 @@ function($, _, Email, Inbox){
          * inits ALL app components
          */
         init: function(){
-
-            app.lateralMenuButton.click(function(ev){
-                app.body.toggleClass( 'is-lateralmenu-open' );
-            });
-
-            app.lateralMenuModal.on('click', function(){
-                lateralMenuButton.trigger('click');
-            });
 
             $('.accordion-header').on('click', onHeaderClick);
 
