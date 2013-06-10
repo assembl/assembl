@@ -23,6 +23,15 @@ app.accordion = new function($){
     }
 
     /**
+     * Closes all open areas
+     */
+    function closeAllAreas(){
+        $('.accordion-area.is-open').each(function(i, el){
+            app.closeArea($(el));
+        });
+    }
+
+    /**
      * Open a closed area
      * @param  {jQuery} area
      */

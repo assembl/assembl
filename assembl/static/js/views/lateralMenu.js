@@ -3,6 +3,9 @@ function(Backbone, _, $, app, EmailView){
     'use strict';
 
     var LateralMenu = Backbone.View.extend({
+        initialize: function(){
+            this.on('toggle', this.toggle, this);
+        },
 
         /**
          * Flag whether it is open or not
@@ -15,7 +18,6 @@ function(Backbone, _, $, app, EmailView){
          * @type {_.template}
          */
         template: _.template( $('#tmpl-lateralMenu').html() ),
-
 
         /**
          * The render

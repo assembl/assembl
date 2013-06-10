@@ -49,13 +49,19 @@
 
 {% block extra_js %}
 <script type="text/javascript">
-requirejs(["app", "jquery", "views/inbox", "models/email"],
-function(app, $, Inbox, Email){
+requirejs([
+    "app",
+    "jquery",
+    "views/inbox",
+    "views/lateralMenu",
+    "models/email"
+    ],
+function(app, $, Inbox, LateralMenu, Email){
     'use strict';
 
-    //app.init();
-
-    app.body.removeClass( 'preload' );
+    app.init();
+    app.lateralMenu = new LateralMenu({el: '#lateralMenu'}).render();
+    $('#assembl-mainbutton').on('click', app.lateralMenu.trigger.bind(app.lateralMenu, 'toggle'));
 
     //app.inbox = new Inbox({collection: app.emails});
     //app.inbox.render();
@@ -133,20 +139,16 @@ function(app, $, Inbox, Email){
     var bucket = {
         el: $('#bucket'),
         isMoving: false,
-        wrapper: $('#wrapper'),
-        lateralmenu: $('.lateralmenu')
+        wrapper: $('#wrapper')
     };
 
     bucket.wrapper.css('-webkit-transform', 'translateX('+bucket.el.width()+'px)');
-    bucket.lateralmenu.css('-webkit-transform', 'translateX(-453px)');
 
     window.bucket = bucket;
     bucket.open = function(){
         var time = 600,
             lateralMenuWidth = 453,
             width = bucket.el.width();
-
-        bucket.lateralmenu.animate({translateX: 0}, time, 'ease');
 
         bucket.el.animate({translateX: lateralMenuWidth+'px'}, time, 'ease');
 
@@ -159,8 +161,6 @@ function(app, $, Inbox, Email){
         var time = 600,
             lateralMenuWidth = 453,
             width = bucket.el.width();
-
-        bucket.lateralmenu.animate({translateX: '-453px'}, time, 'ease');
 
         bucket.el.animate({translateX: '0px'}, time, 'ease');
 
@@ -197,10 +197,6 @@ function(app, $, Inbox, Email){
             app.body.css("-webkit-user-select", "text");
         })
 
-    });
-
-    $('#lateralmenu-button').on('click', function(ev){
-        bucket.isOpen ? bucket.close() : bucket.open();
     });
 
 });
