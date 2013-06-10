@@ -2,6 +2,18 @@ define(['jquery', 'underscore', 'models/email'],
 function($, _, Email, Inbox){
     'use strict';
 
+    /**
+     * The observer
+     * Who watches the watchmen ?
+     * @type {Object}
+     */
+    var o = {};
+
+    /**
+     * @class app
+     * The most important object in the world.
+     * @type {App}
+     */
     window.app = {
         /**
          * Reference to the body as Zepto object
@@ -26,6 +38,46 @@ function($, _, Email, Inbox){
          * @type {number}
          */
         lateralMenuWidth: 453,
+
+        /**
+         * Subscribe an event
+         * @param {string} eventName
+         * @param {function} eventFunction
+         */
+        on: function(eventName, eventFunction){
+            if( ! (eventName in o) ){
+                o[eventName] = [];
+            }
+
+            if( _.isFunction(eventFunction) ){
+                o[eventName].push(eventFunction);
+            }
+        },
+
+        /**
+         * Unsubscribe an event
+         * @param  {string} eventName
+         * @param  {function} eventFunction
+         */
+        off: function(eventName, eventFunction){
+            if( eventName in o ){
+                if( _.isFunction(eventFunction) ){
+                    o[eventName] = _.without(o[eventName], eventFunction);
+                } else {
+                    o[eventName] = [];
+                }
+            }
+        },
+
+        /**
+         * Triggers an event
+         * @param {string} eventName
+         */
+        trigger: function(eventName){
+            if( eventName in o ){
+                _.each(o[eventName], function(func){ func(); });
+            }
+        },
 
         /**
          * Returns a template from an script tag
