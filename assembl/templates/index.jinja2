@@ -139,75 +139,9 @@ function(app, $, Inbox, LateralMenu, Bucket, Email){
             });
     }
 
-    //$('.text').on('mouseup', doTheSelection);
     $(document).on('selectionchange', doTheSelection);
     $(document).on('mousemove', function(ev){
         app.mouse = { x: ev.x, y: ev.y };
-    });
-
-
-    // Tests for drag the bucket
-    var bucket = {
-        el: $('#bucket'),
-        isMoving: false,
-        wrapper: $('#wrapper')
-    };
-
-    bucket.wrapper.css('-webkit-transform', 'translateX('+bucket.el.width()+'px)');
-
-    window.bucket = bucket;
-    bucket.open = function(){
-        var time = 600,
-            lateralMenuWidth = 453,
-            width = bucket.el.width();
-
-        bucket.el.animate({translateX: lateralMenuWidth+'px'}, time, 'ease');
-
-        bucket.wrapper.animate({translateX: (lateralMenuWidth + width)+'px' }, time, 'ease');
-
-        bucket.isOpen = true;
-    };
-
-    bucket.close = function(){
-        var time = 600,
-            lateralMenuWidth = 453,
-            width = bucket.el.width();
-
-        bucket.el.animate({translateX: '0px'}, time, 'ease');
-
-        bucket.wrapper.animate({translateX: width+'px' }, time, 'ease');
-
-        bucket.isOpen = false;
-    }
-
-    bucket.move = function(ev){
-        if( bucket.isMoving ){
-            if( bucket.isOpen ){
-                bucket.el.width( ev.x - 450 );
-                bucket.wrapper.css('-webkit-transform', 'translateX('+ev.x+'px)')
-            } else {
-                bucket.el.width( ev.x );
-                bucket.wrapper.css('-webkit-transform', 'translateX('+ev.x+'px)')
-            }
-        }
-    }
-
-    $('.bucket-closebtn').on('mousedown', function(ev){
-        bucket.isMoving = true;
-
-        app.body.css("-webkit-user-select", "none");
-
-        $(document).on('mousemove', bucket.move);
-
-        $(document).on('mouseup', function(ev){
-            bucket.isMoving = false;
-            $(document)
-                .off('mousemove', bucket.move)
-                .off('mouseup');
-
-            app.body.css("-webkit-user-select", "text");
-        })
-
     });
 
 });
