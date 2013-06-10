@@ -48,12 +48,14 @@
 {% endblock %}
 
 {% block extra_js %}
-<script>
-requirejs(["app", "views/inbox", "models/email"],
-function(app, Inbox, Email){
+<script type="text/javascript">
+requirejs(["app", "jquery", "views/inbox", "models/email"],
+function(app, $, Inbox, Email){
     'use strict';
 
-    app.init();
+    //app.init();
+
+    app.body.removeClass( 'preload' );
 
     //app.inbox = new Inbox({collection: app.emails});
     //app.inbox.render();
@@ -90,7 +92,7 @@ function(app, Inbox, Email){
                     app.bubble.hide();
                 }, 100);
             }
-        })
+        });
     }
 
     function showBubble(x, y, text){
@@ -113,26 +115,19 @@ function(app, Inbox, Email){
 
         app.bubble
             .text(text)
-                .css({
-                    'top': y,
-                    'left': x,
-                    'margin-left': app.bubble.width() / -2
-                });
+            .css({
+                'top': y,
+                'left': x,
+                'margin-left': app.bubble.width() / -2
+            });
     }
 
     //$('.text').on('mouseup', doTheSelection);
-
     $(document).on('selectionchange', doTheSelection);
     $(document).on('mousemove', function(ev){
         app.mouse = { x: ev.x, y: ev.y };
     });
 
-
-    /*
-    $('.bucket-closebtn').click(function(){
-        document.body.classList.remove('is-bucket-open');
-    })
-    */
 
     // Tests for drag the bucket
     var bucket = {
@@ -143,7 +138,7 @@ function(app, Inbox, Email){
     };
 
     bucket.wrapper.css('-webkit-transform', 'translateX('+bucket.el.width()+'px)');
-    //bucket.lateralmenu.css('-webkit-transform', 'translateX(0px)');
+    bucket.lateralmenu.css('-webkit-transform', 'translateX(-453px)');
 
     window.bucket = bucket;
     bucket.open = function(){
@@ -174,30 +169,38 @@ function(app, Inbox, Email){
         bucket.isOpen = false;
     }
 
+    bucket.move = function(ev){
+        if( bucket.isMoving ){
+            if( bucket.isOpen ){
+                bucket.el.width( ev.x - 450 );
+                bucket.wrapper.css('-webkit-transform', 'translateX('+ev.x+'px)')
+            } else {
+                bucket.el.width( ev.x );
+                bucket.wrapper.css('-webkit-transform', 'translateX('+ev.x+'px)')
+            }
+        }
+    }
+
     $('.bucket-closebtn').on('mousedown', function(ev){
         bucket.isMoving = true;
 
         app.body.css("-webkit-user-select", "none");
 
-        $(document).on('mousemove', function(ev){
-            if( bucket.isMoving ){
-                if( bucket.isOpen ){
-                    bucket.el.width( ev.x - 450 );
-                    bucket.wrapper.css('-webkit-transform', 'translateX('+ev.x+'px)')
-                } else {
-                    bucket.el.width( ev.x );
-                    bucket.wrapper.css('-webkit-transform', 'translateX('+ev.x+'px)')
-                }
-            }
-        });
+        $(document).on('mousemove', bucket.move);
 
         $(document).on('mouseup', function(ev){
             bucket.isMoving = false;
-            $(document).off('mousemove').off('mouseup');
+            $(document)
+                .off('mousemove', bucket.move)
+                .off('mouseup');
 
             app.body.css("-webkit-user-select", "text");
         })
 
+    });
+
+    $('#lateralmenu-button').on('click', function(ev){
+        bucket.isOpen ? bucket.close() : bucket.open();
     });
 
 });

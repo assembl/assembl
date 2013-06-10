@@ -1068,8 +1068,8 @@ html {
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/layout\/_bucket\.scss}line{font-family:\0000341}}
 .bucket-closebtn {
   float: right;
-  font-size: 16px;
-  cursor: pointer;
+  font-size: 44px;
+  cursor: move;
 }
 
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/layout\/_lateralmenu\.scss}line{font-family:\000031}}
