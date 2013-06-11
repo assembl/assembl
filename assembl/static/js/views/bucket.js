@@ -54,6 +54,17 @@ function(Backbone, _, $, app, EmailView){
         },
 
         /**
+         * Add a segment to the bucket
+         * @param {string} segment
+         */
+        addSegment: function(segment){
+            var li = $('<li>').text( segment );
+            this.$('#bucket-list').append(li);
+
+            this.open();
+        },
+
+        /**
          * Sets the left margin
          * @param {Number} [leftMargin]
          */
@@ -82,8 +93,6 @@ function(Backbone, _, $, app, EmailView){
             'click  #bucket-closebutton': 'close',
             'mousedown #bucket-divisor': 'startResize'
         },
-
-        // Events
 
         /**
          * Open the bucket

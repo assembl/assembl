@@ -58,6 +58,21 @@ function($, _, Email, Inbox){
         bucketDefaultOpenWidth: 300,
 
         /**
+         * The selection tooltip.
+         * @type {jQuery}
+         */
+        selectionTooltip: null,
+
+        /**
+         * Creates the selection tooltip
+         */
+        createSelectionTooltip: function(){
+            app.selectionTooltip = $('<div>', { 'class': 'textbubble' } );
+            app.body.append(app.selectionTooltip.hide());
+            //div.on('click', addToBucket);
+        },
+
+        /**
          * Subscribe an event
          * @param {string} eventName
          * @param {function} eventFunction
@@ -107,11 +122,27 @@ function($, _, Email, Inbox){
         },
 
         /**
+         * Return the select text on the document
+         * @return {Selection}
+         */
+        getSelectedText: function(){
+            if( document.getSelection ){
+                return document.getSelection();
+            } else if( window.getSelection ){
+                return window.getSelection();
+            } else {
+                var selection = document.selection && document.selection.createRange();
+                return selection.text ? selection.text : false;
+            }
+        },
+
+        /**
          * @init
          * inits ALL app components
          */
         init: function(){
             app.body.removeClass( 'preload' );
+            app.createSelectionTooltip();
         }
     };
 

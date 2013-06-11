@@ -5,46 +5,7 @@
 {% block content %}
     <div id="inbox"></div>
 
-    <div id="message">
-
-        <div class="bar bar--title">
-            <div class="bar-body">
-                <div class="bar-left">
-                    <a href="#" class="arrowbutton">Previous</a>
-                </div>
-
-                <div class="bar-center">Message</div>
-
-                <div class="bar-right">
-                    <a href="#" class="arrowbutton arrowbutton--right">Next</a>
-                </div>
-            </div>
-        </div>
-
-        <div class="message container">
-            <div class="message-header">
-                
-                <div class="media">
-                    <div class="media-imgleft">
-                        <img src="http://www.gravatar.com/avatar/39cbf87dae724f2cb64e92accdd4d349.jpg?s=38" alt="User"  class="image-rounded" />
-                    </div>
-                    <div class="media-body">
-                        <div class="margin-bottom">
-                            <strong>Bénigne Morin</strong> a dit <time>9, juin 2013</time>
-                        </div>
-                        <span>Synthèse intermédiaire : Monnaies de récompense</span>
-                    </div>
-                </div>
-
-            </div>
-
-            <div class="message-body">
-                
-                <div class="text">{{ lipsum(n=5, html=True) }}</div>
-
-            </div>
-        </div>
-    </div>
+    <div id="message"></div>
 {% endblock %}
 
 {% block extra_js %}
@@ -55,14 +16,22 @@ requirejs([
     "views/inbox",
     "views/lateralMenu",
     "views/bucket",
+    "views/message",
     "models/email"
-], function(app, $, Inbox, LateralMenu, Bucket, Email){
+], function(app, $, Inbox, LateralMenu, Bucket, Message, Email){
     'use strict';
 
     app.init();
+
+    // Inbox
+    //app.inbox = new Inbox({collection: app.emails});
+    //app.inbox.render();
+
+    // Lateral menu
     app.lateralMenu = new LateralMenu({el: '#lateralMenu'}).render();
     $('#assembl-mainbutton').on('click', app.lateralMenu.trigger.bind(app.lateralMenu, 'toggle'));
 
+    // Bucket
     app.bucket = new Bucket({el: '#bucket'}).render();
     app.on('lateralmenu.open', function(){
         app.bucket.setLeftMargin(app.lateralMenuWidth);
@@ -71,77 +40,17 @@ requirejs([
         app.bucket.setLeftMargin(0);
     });
 
-    //app.inbox = new Inbox({collection: app.emails});
-    //app.inbox.render();
-
-    //app.message = new Message();
-
-    //
-
-    var MIN_TEXT_TO_BUBBLE = 17;
-
-    function addToBucket(ev){
-        document.body.classList.add('is-bucket-open');
-
-        var li = $('<li>').text( ev.currentTarget.getAttribute('data-segment'));
-        $('#bucket-list').append(li);
-
-        app.bucket.open();
-    };
-
-    function doTheSelection(ev){
-        window.setTimeout(function(){
-            var sel = document.getSelection();
-
-            if( sel.type === "None" ){
-                if( app.bubble ) {
-                    app.bubble.hide();
-                }
-                return;
-            }
-
-            var selectedText = sel.getRangeAt(0).cloneContents();
-            if(selectedText.firstChild && selectedText.firstChild.textContent.length > MIN_TEXT_TO_BUBBLE ){
-                showBubble(app.mouse.x, app.mouse.y, selectedText.firstChild.textContent);
-            } else if(app.bubble) {
-                window.setTimeout(function(){
-                    app.bubble.hide();
-                }, 100);
-            }
-        });
-    }
-
-    function showBubble(x, y, text){
-        if( ! app.bubble ) {
-
-            var div = $('<div>', { 'class': 'textbubble' } );
-            
-            $(document.body).append(div);
-            
-            div.on('click', addToBucket);
-
-            app.bubble = div;
-        } else {
-            app.bubble.show();
-        }
-
-        app.bubble.attr('data-segment', text);
-
-        text = '...' + text.substr( - MIN_TEXT_TO_BUBBLE );
-
-        app.bubble
-            .text(text)
-            .css({
-                'top': y,
-                'left': x,
-                'margin-left': app.bubble.width() / -2
-            });
-    }
-
-    $(document).on('selectionchange', doTheSelection);
-    $(document).on('mousemove', function(ev){
-        app.mouse = { x: ev.x, y: ev.y };
+    // Message
+    app.message = new Message({el: '#message'}).render();
+    app.on('lateralmenu.open', function(){
+        app.message.hideTooltip();
     });
+    app.selectionTooltip.on('click', function(){
+        app.selectionTooltip.hide();
+        var segment = app.selectionTooltip.attr('data-segment');
+        app.bucket.addSegment(segment);
+    });
+
 
 });
 </script>
