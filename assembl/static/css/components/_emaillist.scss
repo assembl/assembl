@@ -111,7 +111,8 @@ $emaillist-options-width: $icon-width * 3;
     padding-right: $emaillist-item-padding-right + $emaillist-options-width;
 }
 
-// @extends .emaillist-label.is-optioned
+// Showing the options on hover ONLY in no-touch devices
+// *******************
 .no-touch .emaillist-label.has-options:hover {
     padding-right: $emaillist-item-padding-right + $emaillist-options-width;
 }
