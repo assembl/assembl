@@ -11,6 +11,7 @@ define(['backbone'], function(Backbone){
             level: 1,
             total: 1,
             hasChildren: false,
+            hasOptions: true,
             featured: false,
             active: false
         }

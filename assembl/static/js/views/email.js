@@ -25,6 +25,7 @@ function(Backbone, _, $, app){
             this.$el.html(this.template(data));
             return this;
         },
+
         // Methods
         showItemInCascade: function(item, parentLevel){
             if( item.length === 0 ){

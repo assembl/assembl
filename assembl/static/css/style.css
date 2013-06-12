@@ -608,7 +608,7 @@ html {
 }
 
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\00003115}}
-.no-touch .emaillist-label:hover {
+.no-touch .emaillist-label.has-options:hover {
   padding-right: 141px;
 }
 

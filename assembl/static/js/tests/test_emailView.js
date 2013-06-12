@@ -12,7 +12,8 @@ function(jasmine, _, app, EmailView){
                 subject: 'Default Suject',
                 total: 10,
                 level: 1,
-                hasChildren: false
+                hasChildren: false,
+                hasOptions: false
             });
 
             //
@@ -96,6 +97,13 @@ function(jasmine, _, app, EmailView){
             arrow.trigger('click');
             expect(view.toggle.callCount).toBe(2);
             expect(view.closeItemInCascade).toHaveBeenCalled();
+        });
+
+        it('should have the .has-options class if hasOptions is true', function(){
+            view.model.set('hasOptions', true);
+            fixEmails.empty().append( view.render().el );
+
+            expect(view.$('.emaillist-label').get(0)).toHaveClass('has-options');
         });
 
     });

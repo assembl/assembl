@@ -112,7 +112,7 @@ $emaillist-options-width: $icon-width * 3;
 }
 
 // @extends .emaillist-label.is-optioned
-.no-touch .emaillist-label:hover {
+.no-touch .emaillist-label.has-options:hover {
     padding-right: $emaillist-item-padding-right + $emaillist-options-width;
 }
 
