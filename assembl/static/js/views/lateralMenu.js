@@ -119,7 +119,7 @@ function(Backbone, _, $, app, EmailView){
          * Close the lateralMenu
          */
         close: function(){
-            var data = { stranslateX: '-' + app.lateralMenuWidth + 'px' };
+            var data = { translateX: '-' + app.lateralMenuWidth + 'px' };
             this.$el.animate(data, app.lateralMenuAnimationTime, app.ease);
             this.isOpen = false;
             app.trigger('lateralmenu.close');
