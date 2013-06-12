@@ -207,15 +207,7 @@ html {
 .accordion-body {
   background-color: #313131;
   overflow: hidden;
-  max-height: 0;
-  -webkit-transition: max-height 0.8s ease;
-  -moz-transition: max-height 0.8s ease;
-  -o-transition: max-height 0.8s ease;
-  transition: max-height 0.8s ease;
-}
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_accordion\.scss}line{font-family:\0000370}}
-.accordion-area.is-open .accordion-body {
-  max-height: 600px;
+  height: 0;
 }
 
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_bar\.scss}line{font-family:\000033}}

@@ -63,11 +63,11 @@
 .accordion-body {
     background-color: #313131;
     overflow: hidden;
-    max-height: 0;
+    height: 0;
 
-    @include transition(max-height 0.8s ease);
+    //@include transition(max-height 0.8s ease);
 
     .accordion-area.is-open & {
-        max-height: 600px;
+        //max-height: 600px;
     }
 }
