@@ -10,6 +10,7 @@ define(['backbone'], function(Backbone){
             subject: '',
             level: 1,
             total: 1,
+            hasCheckbox: true,
             hasChildren: false,
             hasOptions: true,
             featured: false,

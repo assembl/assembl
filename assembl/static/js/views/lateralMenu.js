@@ -37,6 +37,7 @@ function(Backbone, _, $, app, EmailView){
 
                 this.emails.each(function(email){
                     var emailView = new EmailView({model:email});
+                    emailView.model.set('hasCheckbox', false);
                     emailList.append(emailView.render().el);
                 });
             }
