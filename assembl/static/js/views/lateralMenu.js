@@ -3,8 +3,14 @@ function(Backbone, _, $, app, EmailView){
     'use strict';
 
     var LateralMenu = Backbone.View.extend({
-        initialize: function(){
+        initialize: function(obj){
             this.on('toggle', this.toggle, this);
+
+            if( obj.emails ){
+                this.emails = obj.emails;
+                this.emails.on('reset', this.render, this);
+                this.emails.fetch({ reset: true });
+            }
         },
 
         /**
@@ -24,7 +30,16 @@ function(Backbone, _, $, app, EmailView){
          * @return {LateralMenu}
          */
         render: function(){
-            this.$el.html(this.template());
+            this.$el.html( this.template() );
+
+            if( this.emails ){
+                var emailList = this.$('#lateralmenu-emaillist');
+
+                this.emails.each(function(email){
+                    var emailView = new EmailView({model:email});
+                    emailList.append(emailView.render().el);
+                });
+            }
 
             return this;
         },
