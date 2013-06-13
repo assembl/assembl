@@ -53,7 +53,9 @@ function(Backbone, _, $, app, EmailView){
                 height = this.getBodyHeight(body);
 
             area.addClass('is-open');
-            body.animate({height: height+'px'}, 'fast', app.ease);
+            body.animate({height: height+'px'}, 'fast', app.ease, function(){
+                body.css('height', 'auto');
+            });
         },
 
         /**
@@ -61,10 +63,11 @@ function(Backbone, _, $, app, EmailView){
          * @param  {jQuery} area
          */
         closeArea: function(area){
-            area
-                .removeClass('is-open')
-                .find('.accordion-body')
-                .animate({height:0}, 'fast', app.ease);
+            var body = area.find('.accordion-body');
+            body.height( body.height()+'px' );
+
+            area.removeClass('is-open');
+            body.animate({height:0}, 'fast', app.ease);
         },
 
         /**
