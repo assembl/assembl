@@ -7,15 +7,15 @@ function(Backbone, InboxModel, EmailView, app){
         model: new InboxModel(),
         template: app.loadTemplate('inbox'),
 
-        initialize: function(){
-            app.emails.on('reset', this.render, this);
-            app.emails.fetch({reset:true});
+        initialize: function(obj){
+            this.collection = obj.collection;
+            this.collection.on('reset', this.render, this);
         },
 
         render: function(){
             var emailList = document.createDocumentFragment();
 
-            app.emails.each(function(email){
+            this.collection.each(function(email){
                 var emailView = new EmailView({model:email});
                 emailList.appendChild(emailView.render().el);
             });

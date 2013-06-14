@@ -81,46 +81,47 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, menu,
 html {
   font-family: Arial, sans-serif;
   font-size: 14px;
+  background-color: #fcfbf7;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/base\/_common\.scss}line{font-family:\000036}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/base\/_common\.scss}line{font-family:\000037}}
 ::selection {
   background: #dbf2ff;
   /* Safari */
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/base\/_common\.scss}line{font-family:\000039}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/base\/_common\.scss}line{font-family:\0000310}}
 ::-moz-selection {
   background: #dbf2ff;
   /* Firefox */
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/base\/_common\.scss}line{font-family:\0000313}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/base\/_common\.scss}line{font-family:\0000314}}
 .margin {
   margin: 10px;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/base\/_common\.scss}line{font-family:\0000314}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/base\/_common\.scss}line{font-family:\0000315}}
 .margin-top {
   margin-top: 10px;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/base\/_common\.scss}line{font-family:\0000315}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/base\/_common\.scss}line{font-family:\0000316}}
 .margin-right {
   margin-right: 10px;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/base\/_common\.scss}line{font-family:\0000316}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/base\/_common\.scss}line{font-family:\0000317}}
 .margin-bottom {
   margin-bottom: 10px;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/base\/_common\.scss}line{font-family:\0000317}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/base\/_common\.scss}line{font-family:\0000318}}
 .margin-left {
   margin-left: 10px;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/base\/_common\.scss}line{font-family:\0000319}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/base\/_common\.scss}line{font-family:\0000320}}
 .no-fx {
   -webkit-transition: none !important;
   -moz-transition: none !important;
@@ -128,7 +129,7 @@ html {
   transition: none !important;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/base\/_common\.scss}line{font-family:\0000321}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/base\/_common\.scss}line{font-family:\0000322}}
 .user-select-none {
   -webkit-user-select: none;
   -moz-user-select: none;
@@ -137,11 +138,11 @@ html {
   -o-user-select: none;
   user-select: none;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/base\/_common\.scss}line{font-family:\0000323}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/base\/_common\.scss}line{font-family:\0000324}}
 .user-select-none::selection {
   background: transparent;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/base\/_common\.scss}line{font-family:\0000324}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/base\/_common\.scss}line{font-family:\0000325}}
 .user-select-none::-moz-selection {
   background: transparent;
 }
@@ -607,12 +608,12 @@ html {
   padding-right: 141px;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\00003115}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\00003116}}
 .no-touch .emaillist-label.has-options:hover {
   padding-right: 141px;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\00003122}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\00003123}}
 .emaillist-label-arrow {
   background: url(/static/img/emaillist/emaillist-arrow.png) center left no-repeat;
   width: 10px;
@@ -631,11 +632,11 @@ html {
   transform: rotate(-90deg);
   opacity: 0.55;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\00003134}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\00003135}}
 .emaillist-label-arrow:hover {
   opacity: 1;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\00003138}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\00003139}}
 .emaillist-item.is-open .emaillist-label-arrow {
   -webkit-transform: rotate(0deg);
   -moz-transform: rotate(0deg);
@@ -644,7 +645,7 @@ html {
   transform: rotate(0deg);
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\00003145}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\00003146}}
 .emaillist-label-options {
   position: absolute;
   top: 0px;
@@ -661,7 +662,7 @@ html {
   -o-transition: width 0.4s;
   transition: width 0.4s;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\00003159}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\00003160}}
 .has-touch .emaillist-label.is-optioned .emaillist-label-options, .no-touch .emaillist-label:hover .emaillist-label-options {
   width: 96px;
 }
@@ -1039,56 +1040,6 @@ html {
   -ms-transform: translateX(453px);
   -o-transform: translateX(453px);
   transform: translateX(453px);
-}
-
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/layout\/_bucket\.scss}line{font-family:\000034}}
-.bucket {
-  width: 300px;
-  position: fixed;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  background-color: lightgray;
-  -webkit-transform: translateX(0px);
-  -moz-transform: translateX(0px);
-  -ms-transform: translateX(0px);
-  -o-transform: translateX(0px);
-  transform: translateX(0px);
-  width: 15px;
-  overflow: hidden;
-}
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/layout\/_bucket\.scss}line{font-family:\0000319}}
-.bucket li {
-  padding: 5px;
-  border-bottom: solid 2px white;
-}
-
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/layout\/_bucket\.scss}line{font-family:\0000332}}
-.bucket-body {
-  position: relative;
-}
-
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/layout\/_bucket\.scss}line{font-family:\0000339}}
-.bucket-divisor {
-  background-color: red;
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  width: 15px;
-  cursor: ew-resize;
-}
-
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/layout\/_bucket\.scss}line{font-family:\0000353}}
-.bucket-closebutton {
-  float: right;
-  font-size: 44px;
-  cursor: move;
-}
-
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/layout\/_bucket\.scss}line{font-family:\0000361}}
-.bucket-list {
-  min-width: 300px;
 }
 
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/layout\/_lateralmenu\.scss}line{font-family:\000031}}
