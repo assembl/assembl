@@ -19,6 +19,7 @@ define(['jasmine', 'underscore', 'models/email'], function(jasmine, _, Email){
                 subject: '',
                 level: 1,
                 total: 1,
+                hasCheckbox: true,
                 hasChildren: false,
                 hasOptions: true,
                 featured: false,

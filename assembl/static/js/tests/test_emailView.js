@@ -12,6 +12,7 @@ function(jasmine, _, app, EmailView){
                 subject: 'Default Suject',
                 total: 10,
                 level: 1,
+                hasCheckbox: true,
                 hasChildren: false,
                 hasOptions: false
             });
