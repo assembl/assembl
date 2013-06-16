@@ -1,0 +1,15 @@
+// Panel
+// ===================
+.panel {
+    @include box-sizing( border-box );
+    border-left: solid 1px $panel-border-color;
+    height: 100%;
+
+    &:first-child {
+        border-left: 0;
+    }
+}
+
+.panel-body {
+    margin: $margin;
+}

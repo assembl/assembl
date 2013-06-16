@@ -7,62 +7,17 @@
 
     {# todo: add feature detection #}
 
-    <section class="container">
-        {% include "styleguide/components/emaillist.jinja2" %}
-    </section>
-
-    <section class="container">
-        {% include "styleguide/components/accordion.jinja2" %}
-    </section>
-
-    <section class="container">
-        {% include "styleguide/components/fixedcounter.jinja2" %}
-    </section>
-
-    <section class="container">
-        {% include "styleguide/components/icon.jinja2" %}
-    </section>
-
-    <section class="container">
-        {% include "styleguide/components/button.jinja2" %}
-    </section>
-
-    <section class="container">
-        {% include "styleguide/components/bar.jinja2" %}
-    </section>
-
-    <section class="container margin-bottom">
-        <div class="row">
-            {% include "styleguide/components/text.jinja2" %}
-        </div>
-    </section>
-
-    <section class="container">
-        <div class="row">
-            {% include "styleguide/components/message.jinja2" %}
-        </div>
-    </section>
-
-    {#
-    <section>
-        <div class="section-header">
-            <h2>Box</h2>
-        </div>
-        <div class="section-body">
-
-            <div class="box">
-                <div class="box-left">
-                    Left part.
+    {% for name, path in styleguide_views.items() %}
+        <div class="sg-section container">
+            <div class="row">
+                <div class="col-3">
+                    <h2 class="sg-title">{{name}}</h2>
                 </div>
-                <div class="box-right">
-                    Right aoisjdas jdlasj dlkajdklas jd jasldjalsk jdklas jkdlasld japart.
-                </div>
-                <div class="box-center">
-                    Center part.
+                <div class="col-9">
+                    {% include path %}
                 </div>
             </div>
         </div>
-    </section>
-    #}
+    {% endfor %}
 
 {% endblock %}

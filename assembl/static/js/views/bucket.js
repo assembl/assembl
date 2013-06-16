@@ -58,10 +58,24 @@ function(Backbone, _, $, app, EmailView){
          * @param {string} segment
          */
         addSegment: function(segment){
-            var li = $('<li>').text( segment );
+            var li = $('<li>').prop('draggable', true).text( segment );
             this.$('#bucket-list').append(li);
 
-            this.open();
+            li.on('dragstart', function(ev){
+                this.style.opacity = 0.4;
+
+                ev.dataTransfer.effectAllowed = 'move';
+                ev.dataTransfer.setData('text/html', this.innerHTML);
+
+                app.bucketDraggedSegment = li;
+            });
+
+            li.on('dragend', function(ev){
+                this.style.opacity = '';
+                app.bucketDraggedSegment = null;
+            });
+
+            //this.open();
         },
 
         /**
@@ -90,7 +104,7 @@ function(Backbone, _, $, app, EmailView){
          * @type {Object}
          */
         events: {
-            'click  #bucket-closebutton': 'close',
+            //'click  #bucket-closebutton': 'close',
             'mousedown #bucket-divisor': 'startResize'
         },
 

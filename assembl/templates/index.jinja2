@@ -3,9 +3,21 @@
 {% block extra_header %}{% endblock %}
 
 {% block content %}
-    <div id="inbox"></div>
+    <div class="bar bar--title">
+        <div class="bar-left">
+            Non du débat
+        </div>
+        <div class="bar-center">
+            oi ?
+        </div>
+    </div>
+    <div class="container">
+        <div id="inbox" class="col-4 panel"></div>
 
-    <div id="message"></div>
+        <div id="bucket" class="col-4 panel"></div>
+
+        <div id="message" class="col-4 panel"></div>
+    </div>
 {% endblock %}
 
 {% block extra_js %}
@@ -24,8 +36,9 @@ requirejs([
     app.init();
 
     // Inbox
-    //app.inbox = new Inbox({collection: app.emails});
-    //app.inbox.render();
+    var inboxEmails = new Email.Collection();
+    app.inbox = new Inbox({collection: inboxEmails}).render();
+    app.inbox.collection.fetch({reset: true});
 
     // Lateral menu
     var lateralMenuEmails = new Email.Collection();

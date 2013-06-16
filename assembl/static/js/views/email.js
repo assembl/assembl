@@ -1,5 +1,5 @@
-define(['backbone', 'underscore', 'jquery', 'app'],
-function(Backbone, _, $, app){
+define(['backbone', 'underscore', 'jquery', 'models/email', 'app'],
+function(Backbone, _, $, Email, app){
     'use strict';
 
     var DATA_LEVEL = 'data-emaillist-level';
@@ -30,8 +30,43 @@ function(Backbone, _, $, app){
                 this.$el.addClass('is-hidden');
             }
 
+            this.$el.on('dragenter', function(ev){ ev.preventDefault(); this.classList.add('is-selected'); });
+            this.$el.on('dragleave', function(ev){ ev.preventDefault(); this.classList.remove('is-selected'); });
+            this.$el.on('dragover', function(ev){ev.preventDefault();});
+
+            var self = this;
+            this.$el.on('drop', function(ev){
+                ev.stopPropagation();
+                var li = app.bucketDraggedSegment;
+
+                self.addChild( li.html() );
+                li.remove();
+                return false;
+            });
+
             this.$el.html(this.template(data));
             return this;
+        },
+
+        /**
+         * add an item as child
+         * @param  {string} html
+         * @return {EmailView}
+         */
+        addChild: function(html){
+            if( !this.$el.hasClass('is-open') ){
+                this.showItemInCascade( this.$el.next(), this.model.get('level') );
+            }
+
+            var email = new Email.Model({
+                subject: html,
+                level: this.model.get('level') + 1
+            });
+
+            var emailView = new EmailView({model: email});
+            this.$el.after(emailView.render().el);
+
+            return emailView;
         },
 
         /**

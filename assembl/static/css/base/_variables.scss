@@ -12,10 +12,24 @@ $bar-height: 55px;
 $bar-padding: 0px 5px;
 $bar-border-size: 1px;
 $bar-simple-height: 29px;
+$bar-background-color: #fff;
+$bar-border-color: #e4e4e3;
+
+// Box
+$box-background-color: #fff;
+$box-border-color: #e4e4e3;
+$box-padding: 20px;
 
 // Button
 $button-border-radius: 5px;
 $button-font-size: 13px;
+
+// Dragbox
+$dragbox-background-color: #fcf8e3;
+$dragbox-border-color: #f0c36d;
+
+// Closebutton
+$closebutton-color: #e4e4e3;
 
 // Experimental
 $experimental-support-for-microsoft: true;
@@ -55,6 +69,9 @@ $padding-top: 10px;
 $padding-right: 10px;
 $padding-bottom: 10px;
 $padding-left: 10px;
+
+// Panel
+$panel-border-color: $box-border-color;
 
 // Text
 $text-color: #a4a3a1;

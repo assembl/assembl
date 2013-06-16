@@ -7,8 +7,8 @@
     @include box-sizing(border-box);
     @include transform( translateZ(0) );
 
-    background-color: #fcfbf7;
-    border: { top: solid 1px #e4e4e3; bottom: solid 1px #e4e4e3; }
+    background-color: $bar-background-color;
+    border: { top: solid 1px $bar-border-color; bottom: solid 1px $bar-border-color; }
 }
 
 // Main bar
@@ -32,25 +32,6 @@
     color: #2c2c2c;
 }
 
-// Simple bar
-// +++++++++
-.bar.bar--simple {
-    height: $bar-simple-height !important;
-    line-height: $bar-simple-height !important;
-    background-color: #e5e5e5;
-    border: { top: solid 1px #ccc; bottom: solid 1px #ccc; }
-}
-
-// The content of a .bar
-// ---------------------
-.bar-body {
-    @extend .container;
-
-    height: $bar-height;
-    position: relative;
-    @include box-sizing(border-box);
-}
-
 // Left content of a bar
 // ---------------------
 .bar-left {
@@ -63,11 +44,6 @@
     top: 0;
     bottom: 0;
     left: 0;
-
-    .bar--simple & {
-        height: $bar-simple-height;
-        line-height: $bar-simple-height;
-    }
 }
 
 // Right content of a bar
@@ -86,9 +62,4 @@
     display: block;
     height: $bar-height;
     line-height: $bar-height;
-
-    .bar--simple & {
-        height: $bar-simple-height !important;
-        line-height: $bar-simple-height !important;
-    }
 }
