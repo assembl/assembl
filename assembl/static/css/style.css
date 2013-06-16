@@ -224,7 +224,7 @@ html {
   -ms-transform: translateZ(0);
   -o-transform: translateZ(0);
   transform: translateZ(0);
-  background-color: #fcfbf7;
+  background-color: white;
   border-top: solid 1px #e4e4e3;
   border-bottom: solid 1px #e4e4e3;
 }
@@ -274,15 +274,6 @@ html {
 }
 
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_bar\.scss}line{font-family:\0000346}}
-.bar-body {
-  height: 55px;
-  position: relative;
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-}
-
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_bar\.scss}line{font-family:\0000356}}
 .bar-left, .bar-right {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
@@ -296,27 +287,27 @@ html {
   bottom: 0;
   left: 0;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_bar\.scss}line{font-family:\0000367}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_bar\.scss}line{font-family:\0000357}}
 .bar--simple .bar-left, .bar--simple .bar-right {
   height: 29px;
   line-height: 29px;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_bar\.scss}line{font-family:\0000375}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_bar\.scss}line{font-family:\0000365}}
 .bar-right {
   right: 0;
   left: auto;
   text-align: right;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_bar\.scss}line{font-family:\0000384}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_bar\.scss}line{font-family:\0000374}}
 .bar-center {
   text-align: center;
   display: block;
   height: 55px;
   line-height: 55px;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_bar\.scss}line{font-family:\0000390}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_bar\.scss}line{font-family:\0000380}}
 .bar--simple .bar-center {
   height: 29px !important;
   line-height: 29px !important;
@@ -723,7 +714,7 @@ html {
 }
 
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_grid\.scss}line{font-family:\000034}}
-.container, .bar-body {
+.container {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
@@ -731,12 +722,12 @@ html {
   width: 980px;
 }
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_grid\.scss}line{font-family:\000039}}
-.container .container, .bar-body .container, .container .bar-body, .bar-body .bar-body {
+.container .container {
   max-width: 100.1%;
 }
 @media (min-width: 768px) and (max-width: 979px) {
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_grid\.scss}line{font-family:\000034}}
-  .container, .bar-body {
+  .container {
     width: 724px;
   }
 }
@@ -998,6 +989,19 @@ html {
   margin-bottom: 10px;
 }
 
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_panel\.scss}line{font-family:\000033}}
+.panel {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  border-right: solid 1px #e4e4e3;
+  height: 100%;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_panel\.scss}line{font-family:\000038}}
+.panel:first-child {
+  border-right: 0;
+}
+
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_separator\.scss}line{font-family:\000031}}
 .separator {
   /* empty */
@@ -1187,4 +1191,5 @@ body.is-lateralmenu-open .lateralmenu-modal {
   position: absolute;
   top: 2em;
   left: 0px;
+  max-width: 220px;
 }

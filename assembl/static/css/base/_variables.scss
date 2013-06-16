@@ -12,6 +12,8 @@ $bar-height: 55px;
 $bar-padding: 0px 5px;
 $bar-border-size: 1px;
 $bar-simple-height: 29px;
+$bar-background-color: #fff;
+$bar-border-color: #e4e4e3;
 
 // Box
 $box-background-color: #fff;
@@ -63,6 +65,9 @@ $padding-top: 10px;
 $padding-right: 10px;
 $padding-bottom: 10px;
 $padding-left: 10px;
+
+// Panel
+$panel-border-color: $box-border-color;
 
 // Text
 $text-color: #a4a3a1;
