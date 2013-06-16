@@ -8,31 +8,9 @@
     {# todo: add feature detection #}
 
     {% for view in styleguide_views %}
-        <section class="container">
+        <div class="container">
             {% include view %}
-        </section>
+        </div>
     {% endfor %}
-
-    {#
-    <section>
-        <div class="section-header">
-            <h2>Box</h2>
-        </div>
-        <div class="section-body">
-
-            <div class="box">
-                <div class="box-left">
-                    Left part.
-                </div>
-                <div class="box-right">
-                    Right aoisjdas jdlasj dlkajdklas jd jasldjalsk jdklas jkdlasld japart.
-                </div>
-                <div class="box-center">
-                    Center part.
-                </div>
-            </div>
-        </div>
-    </section>
-    #}
 
 {% endblock %}
