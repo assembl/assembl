@@ -36,15 +36,17 @@
         </main>
     </div>
 
-    {% for template in templates %}
-        {% set template_path = 'views/' + template + '.tmpl' %}
-        <script id="tmpl-{{template}}" type="text/x-template">
-            {% include template_path %}
-        </script>
-    {% endfor %}
+    <div id="templates">
+        {% for template in templates %}
+            {% set template_path = 'views/' + template + '.tmpl' %}
+            <script id="tmpl-{{template}}" type="text/x-template">
+                {% include template_path %}
+            </script>
+        {% endfor %}
+    </div>
     
     {# <div id="bucket" class="bucket"></div> #}
-    {# <div id="lateralMenu" class="lateralmenu"></div> #}
+    <div id="lateralMenu" class="lateralmenu"></div>
     {% include 'includes/javascript.jinja2' %}
 
     {% block extra_js %}{% endblock %}

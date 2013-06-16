@@ -7,41 +7,11 @@
 
     {# todo: add feature detection #}
 
-    <section class="container">
-        {% include "styleguide/components/emaillist.jinja2" %}
-    </section>
-
-    <section class="container">
-        {% include "styleguide/components/accordion.jinja2" %}
-    </section>
-
-    <section class="container">
-        {% include "styleguide/components/fixedcounter.jinja2" %}
-    </section>
-
-    <section class="container">
-        {% include "styleguide/components/icon.jinja2" %}
-    </section>
-
-    <section class="container">
-        {% include "styleguide/components/button.jinja2" %}
-    </section>
-
-    <section class="container">
-        {% include "styleguide/components/bar.jinja2" %}
-    </section>
-
-    <section class="container margin-bottom">
-        <div class="row">
-            {% include "styleguide/components/text.jinja2" %}
-        </div>
-    </section>
-
-    <section class="container">
-        <div class="row">
-            {% include "styleguide/components/message.jinja2" %}
-        </div>
-    </section>
+    {% for view in styleguide_views %}
+        <section class="container">
+            {% include view %}
+        </section>
+    {% endfor %}
 
     {#
     <section>
