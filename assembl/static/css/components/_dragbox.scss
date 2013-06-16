@@ -1,0 +1,20 @@
+// Box used when user drag something
+// ======================
+.dragbox {
+    display: inline-block;
+    line-height: 20px;
+    padding: 5px;
+    
+    background-color: $dragbox-background-color;
+    @include box-shadow(0 3px 3px rgba(0,0,0,.15));
+    border: solid 1px $dragbox-border-color;
+
+    font-size: 11px;
+    color: #c7a25a;
+    cursor: move;
+
+    &:before {
+        content: url(#{$img-dir}/dragbox/dragbox-background.png);
+        margin-right: 5px;
+    }
+}

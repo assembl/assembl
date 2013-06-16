@@ -455,6 +455,26 @@ html {
   right: -14px;
 }
 
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_dragbox\.scss}line{font-family:\000033}}
+.dragbox {
+  display: inline-block;
+  line-height: 20px;
+  padding: 5px;
+  background-color: #fcf8e3;
+  -webkit-box-shadow: 0 3px 3px rgba(0, 0, 0, 0.15);
+  -moz-box-shadow: 0 3px 3px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 3px 3px rgba(0, 0, 0, 0.15);
+  border: solid 1px #f0c36d;
+  font-size: 11px;
+  color: #c7a25a;
+  cursor: move;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_dragbox\.scss}line{font-family:\0000316}}
+.dragbox:before {
+  content: url(/static/img/dragbox/dragbox-background.png);
+  margin-right: 5px;
+}
+
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_closebutton\.scss}line{font-family:\000033}}
 .closebutton {
   position: absolute;
