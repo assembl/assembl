@@ -265,15 +265,6 @@ html {
 }
 
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_bar\.scss}line{font-family:\0000337}}
-.bar.bar--simple {
-  height: 29px !important;
-  line-height: 29px !important;
-  background-color: #e5e5e5;
-  border-top: solid 1px #ccc;
-  border-bottom: solid 1px #ccc;
-}
-
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_bar\.scss}line{font-family:\0000346}}
 .bar-left, .bar-right {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
@@ -287,30 +278,20 @@ html {
   bottom: 0;
   left: 0;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_bar\.scss}line{font-family:\0000357}}
-.bar--simple .bar-left, .bar--simple .bar-right {
-  height: 29px;
-  line-height: 29px;
-}
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_bar\.scss}line{font-family:\0000365}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_bar\.scss}line{font-family:\0000351}}
 .bar-right {
   right: 0;
   left: auto;
   text-align: right;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_bar\.scss}line{font-family:\0000374}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_bar\.scss}line{font-family:\0000360}}
 .bar-center {
   text-align: center;
   display: block;
   height: 55px;
   line-height: 55px;
-}
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_bar\.scss}line{font-family:\0000380}}
-.bar--simple .bar-center {
-  height: 29px !important;
-  line-height: 29px !important;
 }
 
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_box\.scss}line{font-family:\000033}}
