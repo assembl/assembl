@@ -979,6 +979,11 @@ html {
   overflow: hidden;
 }
 
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_media\.scss}line{font-family:\0000324}}
+.media-title {
+  margin-bottom: 10px;
+}
+
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_separator\.scss}line{font-family:\000031}}
 .separator {
   /* empty */
