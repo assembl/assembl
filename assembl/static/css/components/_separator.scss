@@ -1,0 +1,10 @@
+.separator { /* empty */ }
+
+
+
+// Default spacer
+// ==============
+.spacer {
+    display: block;
+    line-height: $margin;
+}

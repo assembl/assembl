@@ -7,5 +7,18 @@
 // =====================
 .sg-section {
     position: relative;
-    margin-bottom: 50px;
+    margin-top: 50px;
+}
+
+// Title of a section
+.sg-title {
+    margin: 0;
+}
+
+// A description within an .sg-section
+// -----------------
+.sg-description {
+    position: absolute;
+    top: 2em;
+    left: 0px;
 }
