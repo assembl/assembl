@@ -1,8 +1,19 @@
 // Generic box
 // =============
 .box {
+    position: relative;
+    overflow: hidden;
+
     background: $box-background-color;
     border: solid 1px $box-border-color;
 
     padding: $box-padding;
+}
+
+// A wrapper for two or more .box
+// ====================
+.boxlist {
+    .box:not(:last-child) {
+        border-bottom: 0;
+    }
 }

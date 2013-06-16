@@ -1,6 +1,8 @@
+$emaillist-background-color: #fff;
+$emaillist-border-color: #e4e4e3;
 $emaillist-item-level-padding: 10px;
 $emaillist-item-padding-right: $fixedcounter-min-width + 15px;
-$emaillist-item-border-color: #e4e4e3;
+$emaillist-item-border-color: $emaillist-border-color;
 $emaillist-item-border: solid 1px $emaillist-item-border-color;
 $emaillist-item-border-color-dark: #000;
 $emaillist-item-height: 45px;
@@ -8,7 +10,11 @@ $emaillist-options-width: $icon-width * 3;
 
 // The list of emails
 // =================
-.emaillist { @include transform( translateZ(0) ); }
+.emaillist {
+    @include transform( translateZ(0) );
+    background-color: $emaillist-background-color;
+    border: solid 1px $emaillist-border-color;
+}
 
 // The dark version of list of emails
 // ++++++++++++++++++++++
@@ -22,18 +28,18 @@ $emaillist-options-width: $icon-width * 3;
 // A row within the list of emails
 // -----------------
 .emaillist-item {
-    border-bottom: $emaillist-item-border;
+    border-top: $emaillist-item-border;
     position: relative;
     height: 45px;
     cursor: pointer;
     overflow: hidden;
 
-    // &:nth-child(even){
-    //     background-color: #fbfbf9;
-    // }
-
     @include transition( height 0.4s );
     @include transform( translateZ(0) );
+
+    &:first-child {
+        border-top: 0;
+    }
 
     .emaillist--dark & {
         background-color: #313131;
@@ -63,7 +69,7 @@ $emaillist-options-width: $icon-width * 3;
 // *********************
 .emaillist-item.is-hidden {
     height: 0; //display: none;
-    border-bottom: 0;
+    border-top: 0;
 }
 
 // The checkbox to select the line

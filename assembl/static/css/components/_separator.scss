@@ -9,3 +9,17 @@
     line-height: $margin;
     height: $margin;
 }
+
+// A big spacer
+// +++++++++++
+.spacer.spacer--big {
+    line-height: $margin * 2;
+    height: $margin * 2;
+}
+
+// A huge spacer
+// +++++++++++
+.spacer.spacer--huge {
+    line-height: $margin * 4;
+    height: $margin * 4;
+}

@@ -8,8 +8,8 @@
 .media-imgleft {
     float: left;
     margin: { 
-       right: 5px;
-       bottom: 5px;
+       right: $margin-right;
+       bottom: $margin-right;
     }
 }
 
@@ -22,5 +22,6 @@
 // The title within a media
 // -------------------
 .media-title {
+    padding-top: 3px;
     margin-bottom: $margin-bottom;
 }
