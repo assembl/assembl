@@ -7,9 +7,16 @@
 
     {# todo: add feature detection #}
 
-    {% for view in styleguide_views %}
-        <div class="container">
-            {% include view %}
+    {% for name, path in styleguide_views.items() %}
+        <div class="sg-section container">
+            <div class="row">
+                <div class="col-3">
+                    <h2>{{name}}</h2>
+                </div>
+                <div class="col-9">
+                    {% include path %}
+                </div>
+            </div>
         </div>
     {% endfor %}
 

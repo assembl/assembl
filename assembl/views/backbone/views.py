@@ -33,13 +33,14 @@ def get_template_views():
 def get_styleguide_components():
     """ get all .jinja2 files from templates/styleguide directory """
     views_path = os.path.join(TEMPLATE_PATH, 'styleguide', 'components')
-    views = []
+    views = {}
 
     for (dirpath, dirname, filenames) in os.walk(views_path):
         for filename in filenames:
             if filename.endswith('.jinja2') and filename != 'index.jinja2':
                 view_path = os.path.join('styleguide', 'components', filename)
-                views.append(view_path)
+                view_name = filename.split('.')[0].replace('_', ' ')
+                views[view_name] = view_path
 
     return views
 

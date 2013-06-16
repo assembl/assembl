@@ -1129,3 +1129,12 @@ body.is-lateralmenu-open .lateralmenu-modal {
   height: 52px;
   line-height: 52px;
 }
+
+/**
+ * Styleguide things are prefixed with `sg`
+ */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/layout\/_styleguide\.scss}line{font-family:\000038}}
+.sg-section {
+  position: relative;
+  margin-bottom: 50px;
+}
