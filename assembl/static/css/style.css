@@ -483,6 +483,20 @@ html {
   right: -14px;
 }
 
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_closebutton\.scss}line{font-family:\000033}}
+.closebutton {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  color: #e4e4e3;
+  font-size: 20px;
+  cursor: pointer;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_closebutton\.scss}line{font-family:\0000312}}
+.closebutton:hover {
+  color: #b2b2af;
+}
+
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\0000311}}
 .emaillist {
   -webkit-transform: translateZ(0);
