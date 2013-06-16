@@ -322,6 +322,13 @@ html {
   line-height: 29px !important;
 }
 
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_box\.scss}line{font-family:\000033}}
+.box {
+  background: white;
+  border: solid 1px #e4e4e3;
+  padding: 20px;
+}
+
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\000031}}
 .button, .iconbutton, .arrowbutton {
   border: solid 1px transparent;
@@ -981,6 +988,7 @@ html {
 .spacer {
   display: block;
   line-height: 10px;
+  height: 10px;
 }
 
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_text\.scss}line{font-family:\000033}}
@@ -1032,11 +1040,6 @@ html {
   border-width: 16px;
   left: 50%;
   margin-left: -16px;
-}
-
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_title\.scss}line{font-family:\000031}}
-h1, h2, h3, h4, h5, h6 {
-  margin: 0 0 1em 0;
 }
 
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/layout\/_content\.scss}line{font-family:\000032}}
