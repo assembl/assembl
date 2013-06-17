@@ -998,6 +998,11 @@ html {
   margin-bottom: 10px;
 }
 
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_message\.scss}line{font-family:\000039}}
+.message-header {
+  position: relative;
+}
+
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_panel\.scss}line{font-family:\000033}}
 .panel {
   -webkit-box-sizing: border-box;
@@ -1041,7 +1046,7 @@ html {
 }
 
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_text\.scss}line{font-family:\000033}}
-.text {
+.text, .message {
   color: #a4a3a1;
   font-size: 14px;
   font-family: "Myriad Pro";
