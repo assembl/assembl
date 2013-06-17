@@ -68,17 +68,19 @@
     width: $icon-width;
     height: $icon-height;
     vertical-align: middle;
-}
 
-
-// Adds an small hover fx on the button
-// +++++++++++++++++++
-.iconbutton.iconbutton--fx {
     opacity: 0.55;
 
     &:hover {
         opacity: 1;
     }
+}
+
+
+// Removes the hover fx on the button
+// +++++++++++++++++++
+.iconbutton.iconbutton--nofx {
+    opacity: 1;
 } 
 
 // A badge which stands at the top right
