@@ -1,0 +1,39 @@
+$form-border-color: #dcdbd7;
+$text-muted: #999;
+
+// Default form
+// ============
+.form {}
+
+
+// Defaul form label
+// =============
+.formlabel {
+    color: $text-muted;
+    margin-bottom: 5px;
+    display: block;
+}
+
+// Default form field
+// ================
+.formfield {
+    width: 100%;
+    @include box-sizing( border-box );
+    padding: 0 5px;
+    line-height: 35px;
+
+    border: solid 1px $form-border-color;
+    font-size: 16px;
+}
+
+
+// Default textarea
+// ================
+.formtextarea {
+    width: 100%;
+    @include box-sizing( border-box );
+    resize: vertical;
+
+    border: solid 1px $form-border-color;
+    font-size: 14px;
+}

@@ -22,7 +22,7 @@
     position: relative;
     height: 45px;
     cursor: pointer;
-    //overflow: hidden;
+    overflow: hidden;
 
     @include transition( height 0.4s );
     @include transform( translateZ(0) );
@@ -63,6 +63,12 @@
     border-top: 0;
 }
 
+// Email list with the form open
+// *********************
+.emaillist-item.is-form-open {
+    height: auto;
+}
+
 // Email list when receving a dragover
 // *********************
 .emaillist-item.is-dragover {
@@ -73,6 +79,7 @@
 // *********************
 .emaillist-item.is-dragover-above {
     margin-top: $emaillist-item-dragover-height;
+    overflow: initial;
 
     &:before {
         content: "";
@@ -92,6 +99,7 @@
 // *********************
 .emaillist-item.is-dragover-below {
     margin-bottom: $emaillist-item-dragover-height;
+    overflow: initial;
 
     &:after {
         content: "";
@@ -202,3 +210,7 @@
         width: $emaillist-options-width;
     }
 }
+
+// The form within a .emaillist-item
+// ==================
+.emaillist-form {}

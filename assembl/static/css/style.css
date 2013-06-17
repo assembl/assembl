@@ -111,6 +111,16 @@ html {
 }
 
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/base\/_common\.scss}line{font-family:\0000320}}
+.float-left {
+  float: left;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/base\/_common\.scss}line{font-family:\0000321}}
+.float-right {
+  float: right;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/base\/_common\.scss}line{font-family:\0000323}}
 .no-fx {
   -webkit-transition: none !important;
   -moz-transition: none !important;
@@ -118,7 +128,7 @@ html {
   transition: none !important;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/base\/_common\.scss}line{font-family:\0000322}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/base\/_common\.scss}line{font-family:\0000325}}
 .user-select-none {
   -webkit-user-select: none;
   -moz-user-select: none;
@@ -127,11 +137,11 @@ html {
   -o-user-select: none;
   user-select: none;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/base\/_common\.scss}line{font-family:\0000324}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/base\/_common\.scss}line{font-family:\0000327}}
 .user-select-none::selection {
   background: transparent;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/base\/_common\.scss}line{font-family:\0000325}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/base\/_common\.scss}line{font-family:\0000328}}
 .user-select-none::-moz-selection {
   background: transparent;
 }
@@ -532,6 +542,7 @@ html {
   position: relative;
   height: 45px;
   cursor: pointer;
+  overflow: hidden;
   -webkit-transition: height 0.4s;
   -moz-transition: height 0.4s;
   -o-transition: height 0.4s;
@@ -573,15 +584,21 @@ html {
 }
 
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\0000368}}
+.emaillist-item.is-form-open {
+  height: auto;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\0000374}}
 .emaillist-item.is-dragover {
   background-color: #fcf8e3;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\0000374}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\0000380}}
 .emaillist-item.is-dragover-above {
   margin-top: 7px;
+  overflow: initial;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\0000377}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\0000384}}
 .emaillist-item.is-dragover-above:before {
   content: "";
   display: block;
@@ -594,11 +611,12 @@ html {
   border: solid 1px #f0c36d;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\0000393}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\00003100}}
 .emaillist-item.is-dragover-below {
   margin-bottom: 7px;
+  overflow: initial;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\0000396}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\00003104}}
 .emaillist-item.is-dragover-below:after {
   content: "";
   display: block;
@@ -611,14 +629,14 @@ html {
   border: solid 1px #f0c36d;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\00003112}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\00003120}}
 .emaillist-checkbox {
   display: inline-block;
   line-height: 45px;
   float: left;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\00003120}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\00003128}}
 .emaillist-label {
   position: relative;
   display: block;
@@ -636,67 +654,67 @@ html {
   -o-transition: padding-right 0.4s;
   transition: padding-right 0.4s;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\00003133}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\00003141}}
 .emaillist--dark .emaillist-label {
   border-color: black !important;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\00003139}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\00003147}}
 .emaillist-item[data-emaillist-level="2"] .emaillist-label {
   margin-left: 15px;
   border-left: solid 1px #e4e4e3;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\00003139}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\00003147}}
 .emaillist-item[data-emaillist-level="3"] .emaillist-label {
   margin-left: 30px;
   border-left: solid 1px #e4e4e3;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\00003139}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\00003147}}
 .emaillist-item[data-emaillist-level="4"] .emaillist-label {
   margin-left: 45px;
   border-left: solid 1px #e4e4e3;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\00003139}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\00003147}}
 .emaillist-item[data-emaillist-level="5"] .emaillist-label {
   margin-left: 60px;
   border-left: solid 1px #e4e4e3;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\00003139}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\00003147}}
 .emaillist-item[data-emaillist-level="6"] .emaillist-label {
   margin-left: 75px;
   border-left: solid 1px #e4e4e3;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\00003139}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\00003147}}
 .emaillist-item[data-emaillist-level="7"] .emaillist-label {
   margin-left: 90px;
   border-left: solid 1px #e4e4e3;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\00003139}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\00003147}}
 .emaillist-item[data-emaillist-level="8"] .emaillist-label {
   margin-left: 105px;
   border-left: solid 1px #e4e4e3;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\00003139}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\00003147}}
 .emaillist-item[data-emaillist-level="9"] .emaillist-label {
   margin-left: 120px;
   border-left: solid 1px #e4e4e3;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\00003139}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\00003147}}
 .emaillist-item[data-emaillist-level="10"] .emaillist-label {
   margin-left: 135px;
   border-left: solid 1px #e4e4e3;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\00003151}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\00003159}}
 .has-touch .emaillist-label.is-optioned {
   padding-right: 141px;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\00003157}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\00003165}}
 .no-touch .emaillist-label.has-options:hover {
   padding-right: 141px;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\00003164}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\00003172}}
 .emaillist-label-arrow {
   background: url(/static/img/emaillist/emaillist-arrow.png) center left no-repeat;
   width: 10px;
@@ -715,11 +733,11 @@ html {
   transform: rotate(-90deg);
   opacity: 0.55;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\00003176}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\00003184}}
 .emaillist-label-arrow:hover {
   opacity: 1;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\00003180}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\00003188}}
 .emaillist-item.is-open .emaillist-label-arrow {
   -webkit-transform: rotate(0deg);
   -moz-transform: rotate(0deg);
@@ -728,7 +746,7 @@ html {
   transform: rotate(0deg);
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\00003187}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\00003195}}
 .emaillist-label-options {
   position: absolute;
   top: 0px;
@@ -745,9 +763,39 @@ html {
   -o-transition: width 0.4s;
   transition: width 0.4s;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\00003201}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\00003209}}
 .has-touch .emaillist-label.is-optioned .emaillist-label-options, .no-touch .emaillist-label:hover .emaillist-label-options {
   width: 96px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_form\.scss}line{font-family:\0000311}}
+.formlabel {
+  color: #999999;
+  margin-bottom: 5px;
+  display: block;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_form\.scss}line{font-family:\0000319}}
+.formfield {
+  width: 100%;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  padding: 0 5px;
+  line-height: 35px;
+  border: solid 1px #dcdbd7;
+  font-size: 16px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_form\.scss}line{font-family:\0000332}}
+.formtextarea {
+  width: 100%;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  resize: vertical;
+  border: solid 1px #dcdbd7;
+  font-size: 14px;
 }
 
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_fixedcounter\.scss}line{font-family:\000033}}

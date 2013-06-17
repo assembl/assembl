@@ -17,6 +17,9 @@ html {
 .margin-bottom { margin-bottom: $margin-bottom; }
 .margin-left { margin-left: $margin-left; }
 
+.float-left { float: left; }
+.float-right { float: right; }
+
 .no-fx { @include transition( none !important ); }
 
 .user-select-none {
