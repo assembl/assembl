@@ -24,12 +24,16 @@ $box-padding: 20px;
 $button-border-radius: 5px;
 $button-font-size: 13px;
 
+// Closebutton
+$closebutton-color: #e4e4e3;
+
+// Icons
+$icon-width: 32px;
+$icon-height: 32px;
+
 // Dragbox
 $dragbox-background-color: #fcf8e3;
 $dragbox-border-color: #f0c36d;
-
-// Closebutton
-$closebutton-color: #e4e4e3;
 
 // Experimental
 $experimental-support-for-microsoft: true;
@@ -38,15 +42,23 @@ $experimental-support-for-microsoft: true;
 $fixedcounter-height: 23px;
 $fixedcounter-min-width: 30px;
 
+// Email list
+$emaillist-background-color: #fff;
+$emaillist-border-color: #e4e4e3;
+$emaillist-item-level-padding: 10px;
+$emaillist-item-padding-right: $fixedcounter-min-width + 15px;
+$emaillist-item-border-color: $emaillist-border-color;
+$emaillist-item-border: solid 1px $emaillist-item-border-color;
+$emaillist-item-border-color-dark: #000;
+$emaillist-item-height: 45px;
+$emaillist-options-width: $icon-width * 3;
+$emaillist-item-dragover-height: 7px;
+
 // Font
 $font-size: 14px;
 
 // Image dir
 $img-dir: "/static/img";
-
-// Icons
-$icon-width: 32px;
-$icon-height: 32px;
 
 // Layout
 $lateralmenu-width: 453px;

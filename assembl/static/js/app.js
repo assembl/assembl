@@ -151,11 +151,9 @@ function($, _, Email, Inbox){
             if( app.dragbox === null ){
                 app.dragbox = document.createElement('div');
                 app.dragbox.className = 'dragbox';
-                //app.dragbox.style.display = 'none';
 
                 document.body.appendChild(app.dragbox);
             }
-
 
             app.dragbox.innerHTML = text;
 

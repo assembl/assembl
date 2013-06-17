@@ -1,13 +1,3 @@
-$emaillist-background-color: #fff;
-$emaillist-border-color: #e4e4e3;
-$emaillist-item-level-padding: 10px;
-$emaillist-item-padding-right: $fixedcounter-min-width + 15px;
-$emaillist-item-border-color: $emaillist-border-color;
-$emaillist-item-border: solid 1px $emaillist-item-border-color;
-$emaillist-item-border-color-dark: #000;
-$emaillist-item-height: 45px;
-$emaillist-options-width: $icon-width * 3;
-
 // The list of emails
 // =================
 .emaillist {
@@ -32,7 +22,7 @@ $emaillist-options-width: $icon-width * 3;
     position: relative;
     height: 45px;
     cursor: pointer;
-    overflow: hidden;
+    //overflow: hidden;
 
     @include transition( height 0.4s );
     @include transform( translateZ(0) );
@@ -57,6 +47,7 @@ $emaillist-options-width: $icon-width * 3;
 }
 
 // Email item is selected ( by the checkbox )
+// ************************
 .emaillist-item.is-selected {
     background-color: #eaf5fc;
 }
@@ -70,6 +61,50 @@ $emaillist-options-width: $icon-width * 3;
 .emaillist-item.is-hidden {
     height: 0; //display: none;
     border-top: 0;
+}
+
+// Email list when receving a dragover
+// *********************
+.emaillist-item.is-dragover {
+    background-color: $dragbox-background-color;
+}
+
+// Email list when receving a dragover and the mouse it above the middle
+// *********************
+.emaillist-item.is-dragover-above {
+    margin-top: $emaillist-item-dragover-height;
+
+    &:before {
+        content: "";
+        display: block;
+        position: absolute;
+        bottom: 100%;
+        right: -1px;
+        left: -1px;
+        height: $emaillist-item-dragover-height;
+
+        background-color: $dragbox-background-color;
+        border: solid 1px $dragbox-border-color;
+    }
+}
+
+// Email list when receving a dragover and the mouse it below the middle
+// *********************
+.emaillist-item.is-dragover-below {
+    margin-bottom: $emaillist-item-dragover-height;
+
+    &:after {
+        content: "";
+        display: block;
+        position: absolute;
+        top: 100%;
+        right: -1px;
+        left: -1px;
+        height: $emaillist-item-dragover-height;
+
+        background-color: $dragbox-background-color;
+        border: solid 1px $dragbox-border-color;
+    }
 }
 
 // The checkbox to select the line
