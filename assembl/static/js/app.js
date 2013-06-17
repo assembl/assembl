@@ -64,6 +64,12 @@ function($, _, Email, Inbox){
         selectionTooltip: null,
 
         /**
+         * Reference to dragbox
+         * @type {HTMLDivElement}
+         */
+        dragbox: null,
+
+        /**
          * Creates the selection tooltip
          */
         createSelectionTooltip: function(){
@@ -134,6 +140,28 @@ function($, _, Email, Inbox){
                 var selection = document.selection && document.selection.createRange();
                 return selection.text ? selection.text : false;
             }
+        },
+
+        /**
+         * Shows the dragbox when user starts dragging an element
+         * @param  {Event} ev The event object
+         * @param  {String} text The text to be shown in the .dragbox
+         */
+        showDragbox: function(ev, text){
+            if( app.dragbox === null ){
+                app.dragbox = document.createElement('div');
+                app.dragbox.className = 'dragbox';
+                //app.dragbox.style.display = 'none';
+
+                document.body.appendChild(app.dragbox);
+            }
+
+
+            app.dragbox.innerHTML = text;
+
+            ev.dataTransfer.effectAllowed = 'copy';
+            ev.dataTransfer.setData("Text", text);
+            ev.dataTransfer.setDragImage(app.dragbox, 10 , 10);
         },
 
         /**
