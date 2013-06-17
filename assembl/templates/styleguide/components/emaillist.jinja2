@@ -8,43 +8,39 @@
 
 <ul class="emaillist">
     <li class="emaillist-item" data-emaillist-level="1">
-        <span class="emaillist-label">
-            <span class="emaillist-label-arrow"></span>
-            {{ 'Simple list item with children ' * 8 }}
-            {{ label_options() }}
-        </span>
+        <span class="emaillist-label">A simple item in email list (.emaillist-item)</span>
     </li>
-    <li class="emaillist-item is-hidden" data-emaillist-level="2">
-        <span class="emaillist-label">
-            Child level 2
-            {{ label_options() }}
-        </span>
-    </li>
-    <li class="emaillist-item is-hidden" data-emaillist-level="2">
-        <span class="emaillist-label">
-            <span class="emaillist-label-arrow"></span>
-            Child level 2
-            {{ label_options() }}
-        </span>
-    </li>
-    <li class="emaillist-item is-hidden" data-emaillist-level="3">
-        <span class="emaillist-label">
-            Child level 3
-            {{ label_options() }}
-        </span>
-    </li>
+
     <li class="emaillist-item" data-emaillist-level="1">
         <span class="emaillist-label">
-            Simple email
-            {{ label_options() }}
+            <span class="emaillist-label-arrow"></span>
+            Item level 1 closed with children
         </span>
     </li>
+
+    <li class="emaillist-item is-open" data-emaillist-level="1">
+        <span class="emaillist-label">
+            <span class="emaillist-label-arrow"></span>
+            Item level 1 open with children
+        </span>
+    </li>
+
+    <li class="emaillist-item" data-emaillist-level="2">
+        <span class="emaillist-label">Item level 2</span>
+    </li>
+
+    <li class="emaillist-item" data-emaillist-level="2">
+        <span class="emaillist-label">
+            <span class="emaillist-label-arrow"></span>
+            Item level 2 with children
+        </span>
+    </li>
+
     {% for i in '1234' %}
-        <li class="emaillist-item{% if not loop.first %} is-hidden{% endif %}" data-emaillist-level="{{i}}">
+        <li class="emaillist-item is-open" data-emaillist-level="{{i}}">
             <span class="emaillist-label">
                 {% if not loop.last %}<span class="emaillist-label-arrow"></span>{% endif %}
-                Email level {{i}}
-                {{ label_options() }}
+                Item level {{i}}
             </span>
             <div class="fixedcounter">{{i}}</div>
         </li>
@@ -56,7 +52,7 @@
 <h3>Email list with checkboxes</h3>
 <ul class="emaillist">
     {% for i in "1234" %}
-    <li class="emaillist-item {% if not loop.first %} is-hidden{% endif %}" data-emaillist-level="{{i}}">
+    <li class="emaillist-item is-open" data-emaillist-level="{{i}}">
         <span class="emaillist-checkbox">
             <input type="checkbox" />
         </span>
@@ -75,14 +71,14 @@
 <ul class="emaillist emaillist--dark">
     <li class="emaillist-item">
         <span class="emaillist-label">
-            Simple email
+            Simple Item
         </span>
     </li>
     {% for i in '1234' %}
-        <li class="emaillist-item{% if not loop.first %} is-hidden{% endif %}" data-emaillist-level="{{i}}">
+        <li class="emaillist-item is-open" data-emaillist-level="{{i}}">
             <span class="emaillist-label">
                 {% if not loop.last %}<span class="emaillist-label-arrow"></span>{% endif %}
-                Email level {{i}}
+                Item level {{i}}
             </span>
             <div class="fixedcounter">{{i}}</div>
         </li>
