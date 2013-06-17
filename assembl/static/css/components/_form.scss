@@ -20,6 +20,7 @@ $text-muted: #999;
     width: 100%;
     @include box-sizing( border-box );
     padding: 0 5px;
+    height: 35px;
     line-height: 35px;
 
     border: solid 1px $form-border-color;
@@ -33,6 +34,7 @@ $text-muted: #999;
     width: 100%;
     @include box-sizing( border-box );
     resize: vertical;
+    padding: 2px 5px;
 
     border: solid 1px $form-border-color;
     font-size: 14px;

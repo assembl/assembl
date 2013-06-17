@@ -67,6 +67,7 @@
 // *********************
 .emaillist-item.is-form-open {
     height: auto;
+    border: solid 5px #dbf2ff;
 }
 
 // Email list when receving a dragover
@@ -79,7 +80,7 @@
 // *********************
 .emaillist-item.is-dragover-above {
     margin-top: $emaillist-item-dragover-height;
-    overflow: initial;
+    overflow: visible;
 
     &:before {
         content: "";
@@ -99,7 +100,7 @@
 // *********************
 .emaillist-item.is-dragover-below {
     margin-bottom: $emaillist-item-dragover-height;
-    overflow: initial;
+    overflow: visible;
 
     &:after {
         content: "";
@@ -213,4 +214,6 @@
 
 // The form within a .emaillist-item
 // ==================
-.emaillist-form {}
+.emaillist-form {
+    @extend .form;
+}
