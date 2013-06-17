@@ -74,8 +74,18 @@
     &:hover {
         opacity: 1;
     }
+
+    &:active {
+        @extend .iconbutton.is-activated;
+    }
 }
 
+// Active state
+// ************
+.iconbutton.is-activated {
+    opacity: 1;
+    background-color: transparentize(#e5e5e5, 0.5);
+}
 
 // Removes the hover fx on the button
 // +++++++++++++++++++
@@ -152,4 +162,30 @@
         top: -1px;
         right: -14px;
     }
+}
+
+// Button made to fit in a .bar
+// =========================
+.barbutton {
+    @extend %button;
+
+    background-color: #aea8c7;
+    border: solid 1px #a9a3c1;
+    @include box-shadow(inset 0 1px rgba(255,255,255,.17));
+    color: #2f2f2f;
+    font-size: 14px;
+
+    padding: 10px 20px;
+    line-height: 1em;
+
+    &:active {
+        @extend .barbutton.is-activated;
+    }
+}
+
+// Active state
+// =========================
+.barbutton.is-activated {
+    background-color: #aea8c7;
+    @include box-shadow(0 1px rgba(249,255,255,.3), inset 0 1px rgba(0,0,0,.5));
 }
