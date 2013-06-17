@@ -53,3 +53,10 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, menu,
 .preload * {
   @include transition(none !important);
 }
+
+[draggable=true] {
+  -moz-user-select:none;
+  -khtml-user-drag: element;
+  cursor: move;
+}
+

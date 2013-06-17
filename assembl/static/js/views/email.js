@@ -30,12 +30,38 @@ function(Backbone, _, $, Email, app){
                 this.$el.addClass('is-hidden');
             }
 
-            this.$el.on('dragenter', function(ev){ ev.preventDefault(); this.classList.add('is-selected'); });
-            this.$el.on('dragleave', function(ev){ ev.preventDefault(); this.classList.remove('is-selected'); });
-            this.$el.on('dragover', function(ev){ev.preventDefault();});
+            function clean(el){
+                el.classList.remove('is-dragover');
+                el.classList.remove('is-dragover-above');
+                el.classList.remove('is-dragover-below');
+            }
+
+            //this.$el.on('dragenter', function(ev){ });
+            this.$el.on('dragleave', function(ev){
+                clean(this);
+            });
+
+            this.$el.on('dragover', function(ev){
+                ev.preventDefault();
+                clean(this);
+
+                var above = this.offsetTop + 10,
+                    below = this.offsetTop + 30,
+                    y = ev.clientY,
+                    cls = 'is-dragover';
+
+                if( y <= above ){
+                    cls += '-above';
+                } else if ( y >= below ){
+                    cls += '-below';
+                }
+
+                this.classList.add( cls );
+            });
 
             var self = this;
             this.$el.on('drop', function(ev){
+                this.classList.remove('is-dragover');
                 ev.stopPropagation();
                 var li = app.bucketDraggedSegment;
 

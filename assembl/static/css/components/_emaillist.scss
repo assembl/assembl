@@ -79,14 +79,11 @@
 // Email list when receving a dragover and the mouse it above the middle
 // *********************
 .emaillist-item.is-dragover-above {
-    margin-top: $emaillist-item-dragover-height;
-    overflow: visible;
-
     &:before {
         content: "";
         display: block;
         position: absolute;
-        bottom: 100%;
+        top: 0;
         right: -1px;
         left: -1px;
         height: $emaillist-item-dragover-height;
@@ -99,15 +96,12 @@
 // Email list when receving a dragover and the mouse it below the middle
 // *********************
 .emaillist-item.is-dragover-below {
-    margin-bottom: $emaillist-item-dragover-height;
-    overflow: visible;
-
     &:after {
         content: "";
         display: block;
         position: absolute;
-        top: 100%;
         right: -1px;
+        bottom: 0;
         left: -1px;
         height: $emaillist-item-dragover-height;
 

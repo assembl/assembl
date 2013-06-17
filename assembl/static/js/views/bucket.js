@@ -50,6 +50,18 @@ function(Backbone, _, $, app, EmailView){
         render: function(){
             this.$el.html(this.template());
 
+            this.$('.box').prop('draggable', true).on('dragstart', function(ev){
+                this.style.opacity = 0.4;
+
+                ev.dataTransfer.effectAllowed = 'move';
+                ev.dataTransfer.setData('text/html', this.innerHTML);
+
+                app.bucketDraggedSegment = this;
+            }).on('dragend', function(ev){
+                this.style.opacity = '';
+                app.bucketDraggedSegment = null;
+            });
+
             return this;
         },
 
