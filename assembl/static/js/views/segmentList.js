@@ -7,6 +7,8 @@ function(Backbone, _, $, app, Segment){
          * @init
          */
         initialize: function(){
+            this.segments = new Segment.Collection();
+
             this.segments.on('add', this.render, this);
             this.segments.on('remove', this.render, this);
         },
@@ -95,7 +97,7 @@ function(Backbone, _, $, app, Segment){
         onCloseButtonClick: function(ev){
             var cid = ev.currentTarget.getAttribute('data-segmentid');
             this.removeSegmentByCid(cid);
-        },
+        }
 
     });
 

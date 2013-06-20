@@ -14,8 +14,8 @@ define(['jquery', 'jasmine-html'], function($, jasmine){
         'tests/test_app',
         'tests/test_modelEmail',
         'tests/test_emailView',
-        'tests/test_lateralMenu',
-        'tests/test_bucket'
+        //'tests/test_lateralMenu',
+        'tests/test_segmentList'
     ];
 
     $(function(){
