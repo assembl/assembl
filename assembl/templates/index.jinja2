@@ -17,7 +17,7 @@
     <div>
         <div id="inbox" class="panel"></div>
 
-        <div id="bucket" class="panel"></div>
+        <div id="segmentlist" class="panel"></div>
 
         <div id="message" class="panel"></div>
     </div>
@@ -30,10 +30,10 @@ requirejs([
     "jquery",
     "views/inbox",
     "views/lateralMenu",
-    "views/bucket",
+    "views/segmentList",
     "views/message",
     "models/email"
-], function(app, $, Inbox, LateralMenu, Bucket, Message, Email){
+], function(app, $, Inbox, LateralMenu, SegmentList, Message, Email){
     'use strict';
 
     app.init();
@@ -50,8 +50,8 @@ requirejs([
 
     $('#assembl-mainbutton').on('click', app.lateralMenu.trigger.bind(app.lateralMenu, 'toggle'));
 
-    // Bucket
-    app.bucket = new Bucket({el: '#bucket'}).render();
+    // SegmentList
+    app.segmentList = new SegmentList({el: '#segmentlist'}).render();
     app.on('lateralmenu.open', function(){
         app.bucket.setLeftMargin(app.lateralMenuWidth);
     });

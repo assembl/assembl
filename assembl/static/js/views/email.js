@@ -45,6 +45,8 @@ function(Backbone, _, $, Email, app){
                 ev.preventDefault();
                 clean(this);
 
+                console.log( this.offsetTop );
+
                 var above = this.offsetTop + 10,
                     below = this.offsetTop + 30,
                     y = ev.clientY,
@@ -61,7 +63,7 @@ function(Backbone, _, $, Email, app){
 
             var self = this;
             this.$el.on('drop', function(ev){
-                this.classList.remove('is-dragover');
+                clean(this);
                 ev.stopPropagation();
                 var li = app.bucketDraggedSegment;
 

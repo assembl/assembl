@@ -60,9 +60,9 @@ function(Backbone, _, $, app){
          * @type {Object}
          */
         events: {
-            'mousedown .message-body': 'startSelection',
-            'mousemove .message-body': 'doTheSelection',
-            'mouseup .message-body': 'stopSelection'
+            'mousedown .message': 'startSelection',
+            'mousemove .message': 'doTheSelection',
+            'mouseup .message': 'stopSelection'
         },
 
         /**

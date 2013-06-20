@@ -163,6 +163,14 @@ function($, _, Email, Inbox){
         },
 
         /**
+         * Return the current time
+         * @return {timestamp}
+         */
+        getCurrentTime: function(){
+            return (new Date()).getTime();
+        },
+
+        /**
          * @init
          * inits ALL app components
          */

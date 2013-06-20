@@ -1,4 +1,4 @@
-define(['backbone', 'underscore', 'jquery', 'app', 'views/email'],
+define(['backbone', 'underscore', 'jquery', 'app', 'views/email', 'models/segment'],
 function(Backbone, _, $, app, EmailView){
     'use strict';
 
@@ -42,6 +42,12 @@ function(Backbone, _, $, app, EmailView){
          * @type {_.template}
          */
         template: app.loadTemplate('bucket'),
+
+        /**
+         * The collection
+         * @type {SegmentCollection}
+         */
+        collection: new Segment.Collection(),
 
         /**
          * The render
