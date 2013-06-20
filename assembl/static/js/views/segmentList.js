@@ -8,6 +8,7 @@ function(Backbone, _, $, app, Segment){
          */
         initialize: function(){
             this.segments.on('add', this.render, this);
+            this.segments.on('remove', this.render, this);
         },
 
         /**
@@ -45,6 +46,17 @@ function(Backbone, _, $, app, Segment){
             this.segments.add(segment);
         },
 
+        /**
+         * Removes a segment by its cid
+         * @param  {String} cid
+         */
+        removeSegmentByCid: function(cid){
+            var model = this.segments.get(cid);
+
+            if(model){
+                this.segments.remove(model);
+            }
+        },
 
         /**
          * The events
@@ -52,7 +64,8 @@ function(Backbone, _, $, app, Segment){
          */
         events: {
             'dragstart .box': "onDragStart",
-            'dragend .box': "onDragEnd"
+            'dragend .box': "onDragEnd",
+            'click .closebutton': "onCloseButtonClick"
         },
 
         /**
@@ -62,7 +75,7 @@ function(Backbone, _, $, app, Segment){
             ev.currentTarget.style.opacity = 0.4;
 
             ev.dataTransfer.effectAllowed = 'move';
-            ev.dataTransfer.setData('text/html', this.innerHTML);
+            ev.dataTransfer.setData('text/html', ev.currentTarget.innerHTML);
 
             //app.bucketDraggedSegment = this;
         },
@@ -74,7 +87,15 @@ function(Backbone, _, $, app, Segment){
             ev.currentTarget.style.opacity = '';
 
             //app.bucketDraggedSegment = null;
-        }
+        },
+
+        /**
+         * @event
+         */
+        onCloseButtonClick: function(ev){
+            var cid = ev.currentTarget.getAttribute('data-segmentid');
+            this.removeSegmentByCid(cid);
+        },
 
     });
 

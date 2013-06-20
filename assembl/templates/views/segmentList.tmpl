@@ -1,6 +1,6 @@
 
 <div class="bar">
-    <div class="bar-left">Presse-papier (4)</div>
+    <div class="bar-left">Presse-papier (<%= segments.length %>)</div>
     <div class="bar-right">
         <a class="iconbutton icon-down"></a>
     </div>
@@ -10,7 +10,7 @@
     
     <% segments.each(function(segment){ %>
     <div class="box" draggable="true">
-        <span class="closebutton">&times;</span>
+        <span data-segmentid="<%= segment.cid %>"  class="closebutton">&times;</span>
 
         <q><%= segment.get('text') %></q>
 

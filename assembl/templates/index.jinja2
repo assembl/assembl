@@ -52,12 +52,6 @@ requirejs([
 
     // SegmentList
     app.segmentList = new SegmentList({el: '#segmentlist'}).render();
-    app.on('lateralmenu.open', function(){
-        app.bucket.setLeftMargin(app.lateralMenuWidth);
-    });
-    app.on('lateralmenu.close', function(){
-        app.bucket.setLeftMargin(0);
-    });
 
     // Message
     app.message = new Message({el: '#message'}).render();
@@ -67,7 +61,7 @@ requirejs([
     app.selectionTooltip.on('click', function(){
         app.selectionTooltip.hide();
         var segment = app.selectionTooltip.attr('data-segment');
-        app.bucket.addSegment(segment);
+        app.segmentList.addSegment(segment);
     });
 
 
