@@ -29,13 +29,6 @@ function(jasmine, _, app, EmailView){
             expect(tmpl(view.model.toJSON())).toBe(view.template(view.model.toJSON()));
         });
 
-        it('must change the state to .is-selected when checkbox is selected', function(){
-            var chk = view.$('input').first();
-            chk.trigger('click');
-
-            expect(view.el).toHaveClass('is-selected');
-        });
-
         it('should have the arrow if hasChildren is true', function(){
             expect(view.el).not.toContain('span.emaillist-label-arrow');
 
