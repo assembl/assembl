@@ -23,7 +23,7 @@ define(['backbone'], function(Backbone){
      */
     var IdeaCollection = Backbone.Collection.extend({
         url: "/static/js/tests/fixtures/ideas.json",
-        model: EmailModel
+        model: IdeaModel
     });
 
     return {

@@ -1,26 +1,32 @@
 define(['jasmine', 'underscore', 'app', 'views/idea'],
 function(jasmine, _, app, IdeaView){
 
+    var view,
+        fixIdea,
+        DATA_LEVEL = 'data-idealist-level';
+
+    function getView(){
+        var v = new IdeaView();
+        v.model = new Backbone.Model({
+            subject: 'Default Suject',
+            total: 10,
+            level: 1,
+            hasCheckbox: true,
+            hasChildren: false,
+            hasOptions: false
+        });
+
+        //
+        setFixtures('<ul id="fix-idea"></ul>');
+        fixIdea = $('#fix-idea');
+        fixIdea.append( v.render().el );
+        return v;
+    }
+
     return describe('Idea view', function(){
-        var view,
-            fixIdea,
-            DATA_LEVEL = 'data-idealist-level';
 
         beforeEach(function(){
-            view = new IdealView();
-            view.model = new Backbone.Model({
-                subject: 'Default Suject',
-                total: 10,
-                level: 1,
-                hasCheckbox: true,
-                hasChildren: false,
-                hasOptions: false
-            });
-
-            //
-            setFixtures('<ul id="fix-idea"></ul>');
-            fixIdea = $('#fix-idea');
-            fixIdea.append( view.render().el );
+            view = getView();
         });
 
         it('uses the right template', function(){
@@ -73,10 +79,10 @@ function(jasmine, _, app, IdeaView){
         });
 
         it('should trigger toggle method when click in the arrow', function(){
-            spyOn(IdealView.prototype, 'toggle').andCallThrough();
-            spyOn(IdealView.prototype, 'showItemInCascade').andCallThrough();
-            spyOn(IdealView.prototype, 'closeItemInCascade').andCallThrough();
-            view = new IdealView({model:view.model});
+            spyOn(IdeaView.prototype, 'toggle').andCallThrough();
+            spyOn(IdeaView.prototype, 'showItemInCascade').andCallThrough();
+            spyOn(IdeaView.prototype, 'closeItemInCascade').andCallThrough();
+            view = new IdeaView({model:view.model});
 
             view.model.set('hasChildren', true);
             fixIdea.empty().append( view.render().el );
