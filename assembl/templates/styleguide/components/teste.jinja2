@@ -7,7 +7,7 @@
 <script>
 window.onload = function(){
 
-    requirejs(['jquery', 'app'], function($, app){
+    requirejs(['zepto', 'app'], function($, app){
 
         $('.oi').on('dragstart', function(ev){
             app.showDragbox(ev, 'sim');

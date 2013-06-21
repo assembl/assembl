@@ -1,4 +1,4 @@
-define(['backbone', 'underscore', 'jquery', 'app', 'views/email'],
+define(['backbone', 'underscore', 'zepto', 'app', 'views/email'],
 function(Backbone, _, $, app, EmailView){
     'use strict';
 

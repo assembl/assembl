@@ -1,4 +1,4 @@
-define(['jasmine', 'backbone', 'underscore', 'jquery', 'app', 'views/lateralMenu'],
+define(['jasmine', 'backbone', 'underscore', 'zepto', 'app', 'views/lateralMenu'],
 function(jasmine, Backbone, _, $, app, LateralMenu){
 
 

@@ -1,4 +1,4 @@
-define(['jquery', 'underscore'],
+define(['zepto', 'underscore'],
 function($, _){
     'use strict';
 

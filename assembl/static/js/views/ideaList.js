@@ -1,5 +1,5 @@
 define(['backbone', 'models/idea', 'views/idea', 'app'],
-function(Backbone, Idea, app){
+function(Backbone, Idea, IdeaView, app){
     'use strict';
 
     var IdeaList = Backbone.View.extend({

@@ -1,4 +1,4 @@
-define(['jasmine', 'app', 'jquery'], function(jasmine, app, $){
+define(['jasmine', 'app', 'zepto'], function(jasmine, app, $){
 
 	// Fixtures
 	var txt = '<script id="tmpl-test" type="text/x-tmpl">test something</script>'

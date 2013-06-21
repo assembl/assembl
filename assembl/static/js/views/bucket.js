@@ -1,4 +1,4 @@
-define(['backbone', 'underscore', 'jquery', 'app', 'models/segment'],
+define(['backbone', 'underscore', 'zepto', 'app', 'models/segment'],
 function(Backbone, _, $, app, Segment){
     'use strict';
 

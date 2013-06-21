@@ -6,13 +6,17 @@ requirejs.config({
     'urlArgs': "bust=" + (new Date()).getTime(),
     'shim': {
         'backbone': {
-            deps: ['underscore', 'jquery'],
+            deps: ['underscore', 'zepto'],
             exports: 'Backbone'
         },
         'underscore': {
             exports: '_'
         },
-        'jquery': {
+        'zepto': {
+            exports: '$'
+        },
+        'zepto-touch': {
+            deps: ['zepto'],
             exports: '$'
         },
         'app': {
@@ -31,9 +35,12 @@ requirejs.config({
         }
     },
     "paths": {
-        'backbone': 'lib/backbone.min',
-        'underscore': 'lib/underscore.min',
-        'jquery': '__proto__' in {} ? 'lib/zepto.min' : "lib/jquery.min",
+        'backbone': 'lib/backbone',
+        'underscore': 'lib/underscore',
+
+        'zepto': '__proto__' in {} ? 'lib/zepto' : "lib/jquery",
+        'zepto-touch': 'lib/zepto-touch',
+
         'jasmine': 'lib/jasmine',
         'jasmine-html': 'lib/jasmine-html',
         'jasmine-jquery': 'lib/jasmine-jquery'

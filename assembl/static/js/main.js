@@ -1,6 +1,6 @@
 define([
     "app",
-    "jquery",
+    "zepto",
     "views/inbox",
     "views/lateralMenu",
     "views/segmentList",

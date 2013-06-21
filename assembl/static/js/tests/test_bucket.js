@@ -1,4 +1,4 @@
-define(['jasmine', 'backbone', 'underscore', 'jquery', 'app', 'views/bucket'],
+define(['jasmine', 'backbone', 'underscore', 'zepto', 'app', 'views/bucket'],
 function(jasmine, Backbone, _, $, app, Bucket){
 
     app.bucketAnimationTime = 0;

@@ -1,4 +1,4 @@
-define(['backbone', 'underscore', 'jquery', 'models/idea', 'app'],
+define(['backbone', 'underscore', 'zepto', 'models/idea', 'app'],
 function(Backbone, _, $, Idea, app){
     'use strict';
 
