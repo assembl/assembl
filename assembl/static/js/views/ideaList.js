@@ -14,6 +14,7 @@ function(Backbone, Idea, IdeaView, app){
          */
         initialize: function(){
             this.ideas = new Idea.Collection();
+            this.ideas.on('reset', this.render, this);
         },
 
         /**
@@ -28,7 +29,7 @@ function(Backbone, Idea, IdeaView, app){
             });
 
             this.$el.html(this.template());
-            this.$('#ideaList-list').append( list );
+            this.$('.idealist').append( list );
             return this;
         }
     });

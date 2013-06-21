@@ -532,240 +532,6 @@ html {
   color: #b2b2af;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\000033}}
-.emaillist {
-  -webkit-transform: translateZ(0);
-  -moz-transform: translateZ(0);
-  -ms-transform: translateZ(0);
-  -o-transform: translateZ(0);
-  transform: translateZ(0);
-  background-color: white;
-  border: solid 1px #e4e4e3;
-}
-
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\0000320}}
-.emaillist-item {
-  border-top: solid 1px #e4e4e3;
-  position: relative;
-  height: 45px;
-  cursor: pointer;
-  overflow: hidden;
-  -webkit-transition: height 0.4s;
-  -moz-transition: height 0.4s;
-  -o-transition: height 0.4s;
-  transition: height 0.4s;
-  -webkit-transform: translateZ(0);
-  -moz-transform: translateZ(0);
-  -ms-transform: translateZ(0);
-  -o-transform: translateZ(0);
-  transform: translateZ(0);
-}
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\0000330}}
-.emaillist-item:first-child {
-  border-top: 0;
-}
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\0000334}}
-.emaillist--dark .emaillist-item {
-  background-color: #313131;
-  border-bottom-color: black;
-  color: #b0b0b0;
-}
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\0000339}}
-.emaillist--dark .emaillist-item:hover {
-  color: #eb5d50;
-}
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\0000344}}
-.emaillist--lateralmenu .emaillist-item {
-  padding-left: 50px;
-}
-
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\0000351}}
-.emaillist-item.is-selected {
-  background-color: #eaf5fc;
-}
-
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\0000361}}
-.emaillist-item.is-hidden {
-  height: 0;
-  border-top: 0;
-}
-
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\0000368}}
-.emaillist-item.is-form-open {
-  height: auto;
-  border: solid 5px #dbf2ff;
-}
-
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\0000375}}
-.emaillist-item.is-dragover {
-  background-color: #fcf8e3;
-}
-
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\0000382}}
-.emaillist-item.is-dragover-above:before {
-  content: "";
-  display: block;
-  position: absolute;
-  top: 0;
-  right: -1px;
-  left: -1px;
-  height: 7px;
-  background-color: #fcf8e3;
-  border: solid 1px #f0c36d;
-}
-
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\0000399}}
-.emaillist-item.is-dragover-below:after {
-  content: "";
-  display: block;
-  position: absolute;
-  right: -1px;
-  bottom: 0;
-  left: -1px;
-  height: 7px;
-  background-color: #fcf8e3;
-  border: solid 1px #f0c36d;
-}
-
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\00003115}}
-.emaillist-checkbox {
-  display: inline-block;
-  line-height: 45px;
-  float: left;
-}
-
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\00003123}}
-.emaillist-label {
-  position: relative;
-  display: block;
-  line-height: 45px;
-  padding-left: 10px;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  padding-right: 45px;
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-  -webkit-transition: padding-right 0.4s;
-  -moz-transition: padding-right 0.4s;
-  -o-transition: padding-right 0.4s;
-  transition: padding-right 0.4s;
-}
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\00003136}}
-.emaillist--dark .emaillist-label {
-  border-color: black !important;
-}
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\00003142}}
-.emaillist-item[data-emaillist-level="2"] .emaillist-label {
-  margin-left: 15px;
-  border-left: solid 1px #e4e4e3;
-}
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\00003142}}
-.emaillist-item[data-emaillist-level="3"] .emaillist-label {
-  margin-left: 30px;
-  border-left: solid 1px #e4e4e3;
-}
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\00003142}}
-.emaillist-item[data-emaillist-level="4"] .emaillist-label {
-  margin-left: 45px;
-  border-left: solid 1px #e4e4e3;
-}
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\00003142}}
-.emaillist-item[data-emaillist-level="5"] .emaillist-label {
-  margin-left: 60px;
-  border-left: solid 1px #e4e4e3;
-}
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\00003142}}
-.emaillist-item[data-emaillist-level="6"] .emaillist-label {
-  margin-left: 75px;
-  border-left: solid 1px #e4e4e3;
-}
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\00003142}}
-.emaillist-item[data-emaillist-level="7"] .emaillist-label {
-  margin-left: 90px;
-  border-left: solid 1px #e4e4e3;
-}
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\00003142}}
-.emaillist-item[data-emaillist-level="8"] .emaillist-label {
-  margin-left: 105px;
-  border-left: solid 1px #e4e4e3;
-}
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\00003142}}
-.emaillist-item[data-emaillist-level="9"] .emaillist-label {
-  margin-left: 120px;
-  border-left: solid 1px #e4e4e3;
-}
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\00003142}}
-.emaillist-item[data-emaillist-level="10"] .emaillist-label {
-  margin-left: 135px;
-  border-left: solid 1px #e4e4e3;
-}
-
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\00003154}}
-.has-touch .emaillist-label.is-optioned {
-  padding-right: 141px;
-}
-
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\00003160}}
-.no-touch .emaillist-label.has-options:hover {
-  padding-right: 141px;
-}
-
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\00003167}}
-.emaillist-label-arrow {
-  background: url(/static/img/emaillist/emaillist-arrow.png) center left no-repeat;
-  width: 10px;
-  margin-right: 10px;
-  height: 45px;
-  display: inline-block;
-  float: left;
-  -webkit-transition: -webkit-transform 0.4s;
-  -moz-transition: -moz-transform 0.4s;
-  -o-transition: -o-transform 0.4s;
-  transition: transform 0.4s;
-  -webkit-transform: rotate(-90deg);
-  -moz-transform: rotate(-90deg);
-  -ms-transform: rotate(-90deg);
-  -o-transform: rotate(-90deg);
-  transform: rotate(-90deg);
-  opacity: 0.55;
-}
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\00003179}}
-.emaillist-label-arrow:hover {
-  opacity: 1;
-}
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\00003183}}
-.emaillist-item.is-open .emaillist-label-arrow {
-  -webkit-transform: rotate(0deg);
-  -moz-transform: rotate(0deg);
-  -ms-transform: rotate(0deg);
-  -o-transform: rotate(0deg);
-  transform: rotate(0deg);
-}
-
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\00003190}}
-.emaillist-label-options {
-  position: absolute;
-  top: 0px;
-  right: 45px;
-  width: 0px;
-  height: 45px;
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-  overflow: hidden;
-  font-size: 0px;
-  -webkit-transition: width 0.4s;
-  -moz-transition: width 0.4s;
-  -o-transition: width 0.4s;
-  transition: width 0.4s;
-}
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_emaillist\.scss}line{font-family:\00003204}}
-.has-touch .emaillist-label.is-optioned .emaillist-label-options, .no-touch .emaillist-label:hover .emaillist-label-options {
-  width: 96px;
-}
-
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_form\.scss}line{font-family:\0000311}}
 .formlabel {
   color: #999999;
@@ -1099,6 +865,240 @@ html {
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/Ruby\/Gems\/1\.8\/gems\/compass-0\.12\.2\/frameworks\/compass\/stylesheets\/compass\/utilities\/sprites\/_base\.scss}line{font-family:\0000360}}
 .icon-user {
   background-position: 0 -64px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\000033}}
+.idealist {
+  -webkit-transform: translateZ(0);
+  -moz-transform: translateZ(0);
+  -ms-transform: translateZ(0);
+  -o-transform: translateZ(0);
+  transform: translateZ(0);
+  background-color: white;
+  border: solid 1px #e4e4e3;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\0000320}}
+.idealist-item {
+  border-top: solid 1px #e4e4e3;
+  position: relative;
+  height: 45px;
+  cursor: pointer;
+  overflow: hidden;
+  -webkit-transition: height 0.4s;
+  -moz-transition: height 0.4s;
+  -o-transition: height 0.4s;
+  transition: height 0.4s;
+  -webkit-transform: translateZ(0);
+  -moz-transform: translateZ(0);
+  -ms-transform: translateZ(0);
+  -o-transform: translateZ(0);
+  transform: translateZ(0);
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\0000330}}
+.idealist-item:first-child {
+  border-top: 0;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\0000334}}
+.idealist--dark .idealist-item {
+  background-color: #313131;
+  border-bottom-color: black;
+  color: #b0b0b0;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\0000339}}
+.idealist--dark .idealist-item:hover {
+  color: #eb5d50;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\0000344}}
+.idealist--lateralmenu .idealist-item {
+  padding-left: 50px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\0000351}}
+.idealist-item.is-selected {
+  background-color: #eaf5fc;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\0000361}}
+.idealist-item.is-hidden {
+  height: 0;
+  border-top: 0;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\0000368}}
+.idealist-item.is-form-open {
+  height: auto;
+  border: solid 5px #dbf2ff;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\0000375}}
+.idealist-item.is-dragover {
+  background-color: #fcf8e3;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\0000382}}
+.idealist-item.is-dragover-above:before {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 0;
+  right: -1px;
+  left: -1px;
+  height: 7px;
+  background-color: #fcf8e3;
+  border: solid 1px #f0c36d;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\0000399}}
+.idealist-item.is-dragover-below:after {
+  content: "";
+  display: block;
+  position: absolute;
+  right: -1px;
+  bottom: 0;
+  left: -1px;
+  height: 7px;
+  background-color: #fcf8e3;
+  border: solid 1px #f0c36d;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\00003115}}
+.idealist-checkbox {
+  display: inline-block;
+  line-height: 45px;
+  float: left;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\00003123}}
+.idealist-label {
+  position: relative;
+  display: block;
+  line-height: 45px;
+  padding-left: 10px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  padding-right: 45px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  -webkit-transition: padding-right 0.4s;
+  -moz-transition: padding-right 0.4s;
+  -o-transition: padding-right 0.4s;
+  transition: padding-right 0.4s;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\00003136}}
+.idealist--dark .idealist-label {
+  border-color: black !important;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\00003142}}
+.idealist-item[data-idealist-level="2"] .idealist-label {
+  margin-left: 15px;
+  border-left: solid 1px #e4e4e3;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\00003142}}
+.idealist-item[data-idealist-level="3"] .idealist-label {
+  margin-left: 30px;
+  border-left: solid 1px #e4e4e3;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\00003142}}
+.idealist-item[data-idealist-level="4"] .idealist-label {
+  margin-left: 45px;
+  border-left: solid 1px #e4e4e3;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\00003142}}
+.idealist-item[data-idealist-level="5"] .idealist-label {
+  margin-left: 60px;
+  border-left: solid 1px #e4e4e3;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\00003142}}
+.idealist-item[data-idealist-level="6"] .idealist-label {
+  margin-left: 75px;
+  border-left: solid 1px #e4e4e3;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\00003142}}
+.idealist-item[data-idealist-level="7"] .idealist-label {
+  margin-left: 90px;
+  border-left: solid 1px #e4e4e3;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\00003142}}
+.idealist-item[data-idealist-level="8"] .idealist-label {
+  margin-left: 105px;
+  border-left: solid 1px #e4e4e3;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\00003142}}
+.idealist-item[data-idealist-level="9"] .idealist-label {
+  margin-left: 120px;
+  border-left: solid 1px #e4e4e3;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\00003142}}
+.idealist-item[data-idealist-level="10"] .idealist-label {
+  margin-left: 135px;
+  border-left: solid 1px #e4e4e3;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\00003154}}
+.has-touch .idealist-label.is-optioned {
+  padding-right: 141px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\00003160}}
+.no-touch .idealist-label.has-options:hover {
+  padding-right: 141px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\00003167}}
+.idealist-label-arrow {
+  background: url(/static/img/idealist/idealist-arrow.png) center left no-repeat;
+  width: 10px;
+  margin-right: 10px;
+  height: 45px;
+  display: inline-block;
+  float: left;
+  -webkit-transition: -webkit-transform 0.4s;
+  -moz-transition: -moz-transform 0.4s;
+  -o-transition: -o-transform 0.4s;
+  transition: transform 0.4s;
+  -webkit-transform: rotate(-90deg);
+  -moz-transform: rotate(-90deg);
+  -ms-transform: rotate(-90deg);
+  -o-transform: rotate(-90deg);
+  transform: rotate(-90deg);
+  opacity: 0.55;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\00003179}}
+.idealist-label-arrow:hover {
+  opacity: 1;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\00003183}}
+.idealist-item.is-open .idealist-label-arrow {
+  -webkit-transform: rotate(0deg);
+  -moz-transform: rotate(0deg);
+  -ms-transform: rotate(0deg);
+  -o-transform: rotate(0deg);
+  transform: rotate(0deg);
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\00003190}}
+.idealist-label-options {
+  position: absolute;
+  top: 0px;
+  right: 45px;
+  width: 0px;
+  height: 45px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  overflow: hidden;
+  font-size: 0px;
+  -webkit-transition: width 0.4s;
+  -moz-transition: width 0.4s;
+  -o-transition: width 0.4s;
+  transition: width 0.4s;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\00003204}}
+.has-touch .idealist-label.is-optioned .idealist-label-options, .no-touch .idealist-label:hover .idealist-label-options {
+  width: 96px;
 }
 
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_image\.scss}line{font-family:\000031}}

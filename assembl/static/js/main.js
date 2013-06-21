@@ -1,8 +1,9 @@
 define([
     "app",
     "zepto",
-    "views/lateralMenu"
-], function(app, $, LateralMenu){
+    "views/lateralMenu",
+    "views/ideaList"
+], function(app, $, LateralMenu, IdeaList){
     'use strict';
 
     app.init();
@@ -12,8 +13,8 @@ define([
     $('#assembl-mainbutton').on('click', app.lateralMenu.trigger.bind(app.lateralMenu, 'toggle'));
 
     // Table of contents
-    //app.tableOfContents = new IdeaList({ el: '#table-of-contents' });
-    //app.tableOfContent.ideas.fetch({reset: true});
+    app.tableOfContents = new IdeaList({ el: '#table-of-contents' });
+    app.tableOfContents.ideas.fetch({reset: true});
 
     // var inboxEmails = new Email.Collection();
     // app.inbox = new Inbox({collection: inboxEmails}).render();
