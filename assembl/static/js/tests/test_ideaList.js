@@ -2,7 +2,7 @@ define(['jasmine', 'underscore', 'views/ideaList'], function(jasmine, _, IdeaLis
 
     function getView(){
         var v = new IdeaList();
-        v.ideas = new Backbone.Collection({});
+        v.ideas = new Backbone.Collection();
 
         setFixtures('<ul id="fix-ideaList"></ul>');
         $('#fix-ideaList').append( v.render().el );
@@ -23,7 +23,7 @@ define(['jasmine', 'underscore', 'views/ideaList'], function(jasmine, _, IdeaLis
         });
 
         it('should have the #idea-list element', function(){
-            var list = view.$('#idea-list');
+            var list = view.$('.idealist');
 
             expect(list.length).toBe(1);
         });

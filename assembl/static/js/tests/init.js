@@ -13,9 +13,9 @@ define(['zepto', 'jasmine-html'], function($, jasmine){
     var specs = [
         'tests/test_app',
         'tests/test_ideaView',
-        'tests/test_ideaList'
-        //'tests/test_modeIdea',
-        //'tests/test_lateralMenu',
+        'tests/test_ideaList',
+        'tests/test_ideaModel',
+        'tests/test_lateralMenu'
         //'tests/test_segmentList'
     ];
 

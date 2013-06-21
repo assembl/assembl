@@ -1,16 +1,10 @@
-define(['backbone', 'underscore', 'zepto', 'app', 'views/email'],
-function(Backbone, _, $, app, EmailView){
+define(['backbone', 'underscore', 'zepto', 'app'],
+function(Backbone, _, $, app){
     'use strict';
 
     var LateralMenu = Backbone.View.extend({
         initialize: function(obj){
             this.on('toggle', this.toggle, this);
-
-            if( obj.emails ){
-                this.emails = obj.emails;
-                this.emails.on('reset', this.render, this);
-                this.emails.fetch({ reset: true });
-            }
         },
 
         /**
@@ -31,16 +25,6 @@ function(Backbone, _, $, app, EmailView){
          */
         render: function(){
             this.$el.html( this.template() );
-
-            if( this.emails ){
-                var emailList = this.$('#lateralmenu-emaillist');
-
-                this.emails.each(function(email){
-                    var emailView = new EmailView({model:email});
-                    emailView.model.set('hasCheckbox', false);
-                    emailList.append(emailView.render().el);
-                });
-            }
 
             return this;
         },

@@ -1,7 +1,6 @@
 define(['jasmine', 'backbone', 'underscore', 'zepto', 'app', 'views/lateralMenu'],
 function(jasmine, Backbone, _, $, app, LateralMenu){
 
-
     // Instantaneously
     app.lateralMenuAnimationTime = 0;
 

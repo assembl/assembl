@@ -1,15 +1,15 @@
-define(['jasmine', 'underscore', 'models/email'], function(jasmine, _, Email){
+define(['jasmine', 'underscore', 'models/idea'], function(jasmine, _, Idea){
 
-    return describe('Model email', function(){
+    return describe('Idea Model', function(){
 
-        var email;
+        var idea;
 
         beforeEach(function(){
-            email = new Email.Model();
+            idea = new Idea.Model();
         });
 
         it('should have the Model', function(){
-            expect(Email.Model).not.toBeUndefined();
+            expect(Idea.Model).not.toBeUndefined();
         });
 
         it('must have the default attributes', function(){
@@ -27,7 +27,7 @@ define(['jasmine', 'underscore', 'models/email'], function(jasmine, _, Email){
             };
 
             for( var key in attrs )if(attrs.hasOwnProperty(key)){
-                expect(email.get(key)).toBe(attrs[key]);
+                expect(idea.get(key)).toBe(attrs[key]);
             }
 
         });
