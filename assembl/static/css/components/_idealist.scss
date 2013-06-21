@@ -76,27 +76,10 @@
     background-color: $dragbox-background-color;
 }
 
-// idea list when receving a dragover and the mouse it above the middle
-// *********************
-.idealist-item.is-dragover-above {
-    &:before {
-        content: "";
-        display: block;
-        position: absolute;
-        top: 0;
-        right: -1px;
-        left: -1px;
-        height: $idealist-item-dragover-height;
-
-        background-color: $dragbox-background-color;
-        border: solid 1px $dragbox-border-color;
-    }
-}
-
 // idea list when receving a dragover and the mouse it below the middle
 // *********************
 .idealist-item.is-dragover-below {
-    &:after {
+    &:before {
         content: "";
         display: block;
         position: absolute;

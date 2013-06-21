@@ -937,20 +937,7 @@ html {
 }
 
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\0000382}}
-.idealist-item.is-dragover-above:before {
-  content: "";
-  display: block;
-  position: absolute;
-  top: 0;
-  right: -1px;
-  left: -1px;
-  height: 7px;
-  background-color: #fcf8e3;
-  border: solid 1px #f0c36d;
-}
-
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\0000399}}
-.idealist-item.is-dragover-below:after {
+.idealist-item.is-dragover-below:before {
   content: "";
   display: block;
   position: absolute;
@@ -962,14 +949,14 @@ html {
   border: solid 1px #f0c36d;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\00003115}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\0000398}}
 .idealist-checkbox {
   display: inline-block;
   line-height: 45px;
   float: left;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\00003123}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\00003106}}
 .idealist-label {
   position: relative;
   display: block;
@@ -987,67 +974,67 @@ html {
   -o-transition: padding-right 0.4s;
   transition: padding-right 0.4s;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\00003136}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\00003119}}
 .idealist--dark .idealist-label {
   border-color: black !important;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\00003142}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\00003125}}
 .idealist-item[data-idealist-level="2"] .idealist-label {
   margin-left: 15px;
   border-left: solid 1px #e4e4e3;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\00003142}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\00003125}}
 .idealist-item[data-idealist-level="3"] .idealist-label {
   margin-left: 30px;
   border-left: solid 1px #e4e4e3;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\00003142}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\00003125}}
 .idealist-item[data-idealist-level="4"] .idealist-label {
   margin-left: 45px;
   border-left: solid 1px #e4e4e3;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\00003142}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\00003125}}
 .idealist-item[data-idealist-level="5"] .idealist-label {
   margin-left: 60px;
   border-left: solid 1px #e4e4e3;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\00003142}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\00003125}}
 .idealist-item[data-idealist-level="6"] .idealist-label {
   margin-left: 75px;
   border-left: solid 1px #e4e4e3;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\00003142}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\00003125}}
 .idealist-item[data-idealist-level="7"] .idealist-label {
   margin-left: 90px;
   border-left: solid 1px #e4e4e3;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\00003142}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\00003125}}
 .idealist-item[data-idealist-level="8"] .idealist-label {
   margin-left: 105px;
   border-left: solid 1px #e4e4e3;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\00003142}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\00003125}}
 .idealist-item[data-idealist-level="9"] .idealist-label {
   margin-left: 120px;
   border-left: solid 1px #e4e4e3;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\00003142}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\00003125}}
 .idealist-item[data-idealist-level="10"] .idealist-label {
   margin-left: 135px;
   border-left: solid 1px #e4e4e3;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\00003154}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\00003137}}
 .has-touch .idealist-label.is-optioned {
   padding-right: 141px;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\00003160}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\00003143}}
 .no-touch .idealist-label.has-options:hover {
   padding-right: 141px;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\00003167}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\00003150}}
 .idealist-label-arrow {
   background: url(/static/img/idealist/idealist-arrow.png) center left no-repeat;
   width: 10px;
@@ -1066,11 +1053,11 @@ html {
   transform: rotate(-90deg);
   opacity: 0.55;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\00003179}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\00003162}}
 .idealist-label-arrow:hover {
   opacity: 1;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\00003183}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\00003166}}
 .idealist-item.is-open .idealist-label-arrow {
   -webkit-transform: rotate(0deg);
   -moz-transform: rotate(0deg);
@@ -1079,7 +1066,7 @@ html {
   transform: rotate(0deg);
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\00003190}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\00003173}}
 .idealist-label-options {
   position: absolute;
   top: 0px;
@@ -1096,7 +1083,7 @@ html {
   -o-transition: width 0.4s;
   transition: width 0.4s;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\00003204}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\00003187}}
 .has-touch .idealist-label.is-optioned .idealist-label-options, .no-touch .idealist-label:hover .idealist-label-options {
   width: 96px;
 }

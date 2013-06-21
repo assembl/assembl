@@ -30,48 +30,6 @@ function(Backbone, _, $, Idea, app){
                 this.$el.addClass('is-hidden');
             }
 
-            function clean(el){
-                el.classList.remove('is-dragover');
-                el.classList.remove('is-dragover-above');
-                el.classList.remove('is-dragover-below');
-            }
-
-            //this.$el.on('dragenter', function(ev){ });
-            this.$el.on('dragleave', function(ev){
-                clean(this);
-            });
-
-            this.$el.on('dragover', function(ev){
-                ev.preventDefault();
-                clean(this);
-
-                console.log( this.offsetTop );
-
-                var above = this.offsetTop + 10,
-                    below = this.offsetTop + 30,
-                    y = ev.clientY,
-                    cls = 'is-dragover';
-
-                if( y <= above ){
-                    cls += '-above';
-                } else if ( y >= below ){
-                    cls += '-below';
-                }
-
-                this.classList.add( cls );
-            });
-
-            var self = this;
-            this.$el.on('drop', function(ev){
-                clean(this);
-                ev.stopPropagation();
-                var li = app.bucketDraggedSegment;
-
-                self.addChild( li.html() );
-                li.remove();
-                return false;
-            });
-
             this.$el.html(this.template(data));
             return this;
         },
@@ -134,6 +92,14 @@ function(Backbone, _, $, Idea, app){
         },
 
         /**
+         * Remove the states related to drag
+         */
+        clearDragStates: function(){
+            this.el.classList.remove('is-dragover');
+            this.el.classList.remove('is-dragover-below');
+        },
+
+        /**
          * The events
          * @type {Object}
          */
@@ -141,7 +107,37 @@ function(Backbone, _, $, Idea, app){
             'click [type=checkbox]': 'onCheckboxClick',
             'swipeLeft .idealist-label': 'showOptions',
             'swipeRight .idealist-label': 'hideOptions',
-            'click .idealist-label-arrow': 'toggle'
+            'click .idealist-label-arrow': 'toggle',
+            'dragleave': 'clearDragStates',
+            'dragover': 'onDragOver',
+            'drop': 'onDrop'
+        },
+
+        /**
+         * @event
+         */
+        onDragOver: function(ev){
+            ev.preventDefault();
+            this.clearDragStates();
+
+            var top = this.el.offsetParent.offsetTop + this.el.offsetTop,
+                below = top + 30,
+                cls = ev.clientY >= below ? 'is-dragover-below' : 'is-dragover';
+
+            this.el.classList.add( cls );
+        },
+
+        /**
+         * @event
+         */
+        onDrop: function(ev){
+            ev.stopPropagation();
+
+            this.clearDragStates();
+            var li = app.bucketDraggedSegment;
+
+            this.addChild( li.html() );
+            li.remove();
         },
 
         /**
