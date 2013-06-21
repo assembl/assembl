@@ -1,19 +1,19 @@
 define([
     "app",
     "zepto",
-    "views/inbox",
-    "views/lateralMenu",
-    "views/segmentList",
-    "views/message",
-    "models/idea"
-], function(app, $, Inbox, LateralMenu, SegmentList, Message, Idea){
+    "views/lateralMenu"
+], function(app, $, LateralMenu){
     'use strict';
 
     app.init();
 
+    // Lateral menu
+    app.lateralMenu = new LateralMenu({el: '#lateralMenu'}).render();
+    $('#assembl-mainbutton').on('click', app.lateralMenu.trigger.bind(app.lateralMenu, 'toggle'));
+
     // Table of contents
-    app.tableOfContents = new IdeaList({ el: '#table-of-contents' });
-    app.tableOfContent.ideas.fetch({reset: true});
+    //app.tableOfContents = new IdeaList({ el: '#table-of-contents' });
+    //app.tableOfContent.ideas.fetch({reset: true});
 
     // var inboxEmails = new Email.Collection();
     // app.inbox = new Inbox({collection: inboxEmails}).render();
@@ -23,8 +23,6 @@ define([
     // var lateralMenuEmails = new Email.Collection();
     // app.lateralMenu = new LateralMenu({el: '#lateralMenu', emails: lateralMenuEmails});
     // app.lateralMenu.emails.fetch({reset: true});
-
-    // $('#assembl-mainbutton').on('click', app.lateralMenu.trigger.bind(app.lateralMenu, 'toggle'));
 
     // SegmentList
     // app.segmentList = new SegmentList({el: '#segmentlist'}).render();

@@ -1,4 +1,4 @@
-define(['jasmine', 'backbone', 'underscore', 'zepto', 'app', 'views/lateralMenu'],
+define(['jasmine-jquery', 'backbone', 'underscore', 'zepto', 'app', 'views/lateralMenu'],
 function(jasmine, Backbone, _, $, app, LateralMenu){
 
     // Instantaneously
@@ -46,6 +46,16 @@ function(jasmine, Backbone, _, $, app, LateralMenu){
             expect(tmpl(view.model.toJSON())).toBe(view.template(view.model.toJSON()));
         });
 
+        it('must have the #assembl-mainbutton in the template', function(){
+            expect( $('#assembl-mainbutton').length ).toBe(1);
+        });
+
+        it('must have the #wrapper in the template', function(){
+            expect( $('#wrapper').length ).toBe(1);
+
+            expect( view.wrapper.get(0) ).toBe('#wrapper');
+        });
+
         it('must have the close button', function(){
             expect( view.$('#lateralmenu-button').length ).toBe(1);
         });
@@ -72,13 +82,17 @@ function(jasmine, Backbone, _, $, app, LateralMenu){
         });
 
         it('should open and close', function(){
+            var wrapperValue = 'translateX(' + app.lateralMenuWidth + 'px)',
+                elValue = 'translateX(-' + app.lateralMenuWidth + 'px)';
+
             view.open();
             testPropertyOverBrowsers(view.$el,'transform', 'translateX(0px)');
+            testPropertyOverBrowsers(view.wrapper,'transform', wrapperValue);
             expect(view.isOpen).toBeTruthy();
 
             view.close();
-            var value = 'translateX(-' + app.lateralMenuWidth + 'px)';
-            testPropertyOverBrowsers(view.$el,'transform', value);
+            testPropertyOverBrowsers(view.$el,'transform', elValue);
+            testPropertyOverBrowsers(view.wrapper,'transform', 'translateX(0px)');
             expect(view.isOpen).toBeFalsy();
         });
 

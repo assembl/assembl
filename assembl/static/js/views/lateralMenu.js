@@ -20,6 +20,12 @@ function(Backbone, _, $, app){
         template: app.loadTemplate('lateralMenu'),
 
         /**
+         * The page's wrapper
+         * @type {Zepto}
+         */
+        wrapper: $('#wrapper'),
+
+        /**
          * The render
          * @return {LateralMenu}
          */
@@ -113,7 +119,10 @@ function(Backbone, _, $, app){
          * Open the lateralmenu
          */
         open: function(){
+            var data = { translateX: app.lateralMenuWidth + 'px' };
+
             this.$el.animate({translateX: 0}, app.lateralMenuAnimationTime, app.ease);
+            this.wrapper.animate(data, app.lateralMenuAnimationTime, app.ease);
             this.isOpen = true;
             app.trigger('lateralmenu.open');
         },
@@ -124,6 +133,7 @@ function(Backbone, _, $, app){
         close: function(){
             var data = { translateX: '-' + app.lateralMenuWidth + 'px' };
             this.$el.animate(data, app.lateralMenuAnimationTime, app.ease);
+            this.wrapper.animate({translateX: 0}, app.lateralMenuAnimationTime, app.ease);
             this.isOpen = false;
             app.trigger('lateralmenu.close');
         }

@@ -15,8 +15,8 @@ define(['zepto', 'jasmine-html'], function($, jasmine){
         'tests/test_ideaView',
         'tests/test_ideaList',
         'tests/test_ideaModel',
-        'tests/test_lateralMenu'
-        //'tests/test_segmentList'
+        'tests/test_lateralMenu',
+        'tests/test_segmentList'
     ];
 
     $(function(){
