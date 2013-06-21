@@ -1,10 +1,10 @@
-define(['backbone', 'underscore', 'jquery', 'models/email', 'app'],
-function(Backbone, _, $, Email, app){
+define(['backbone', 'underscore', 'jquery', 'models/idea', 'app'],
+function(Backbone, _, $, Idea, app){
     'use strict';
 
-    var DATA_LEVEL = 'data-emaillist-level';
+    var DATA_LEVEL = 'data-idealist-level';
 
-    var EmailView = Backbone.View.extend({
+    var IdeaView = Backbone.View.extend({
         /**
          * Tag name
          * @type {String}
@@ -15,16 +15,16 @@ function(Backbone, _, $, Email, app){
          * The template
          * @type {[type]}
          */
-        template: app.loadTemplate('email'),
+        template: app.loadTemplate('idea'),
 
         /**
          * The render
-         * @return {EmailView}
+         * @return {IdeaView}
          */
         render: function(){
             var data = this.model.toJSON();
             this.el.setAttribute(DATA_LEVEL, data.level);
-            this.$el.addClass('emaillist-item');
+            this.$el.addClass('idealist-item');
 
             if( data.level > 1 ){
                 this.$el.addClass('is-hidden');
@@ -79,22 +79,22 @@ function(Backbone, _, $, Email, app){
         /**
          * add an item as child
          * @param  {string} html
-         * @return {EmailView}
+         * @return {IdeaView}
          */
         addChild: function(html){
             if( !this.$el.hasClass('is-open') ){
                 this.showItemInCascade( this.$el.next(), this.model.get('level') );
             }
 
-            var email = new Email.Model({
+            var idea = new Idea.Model({
                 subject: html,
                 level: this.model.get('level') + 1
             });
 
-            var emailView = new EmailView({model: email});
-            this.$el.after(emailView.render().el);
+            var ideaView = new IdeaView({model: idea});
+            this.$el.after(ideaView.render().el);
 
-            return emailView;
+            return ideaView;
         },
 
         /**
@@ -125,7 +125,7 @@ function(Backbone, _, $, Email, app){
                 return;
             }
 
-            var currentLevel = ~~item.attr('data-emaillist-level');
+            var currentLevel = ~~item.attr('data-idealist-level');
 
             if( currentLevel > parentLevel ){
                 item.addClass("is-hidden").removeClass('is-open');
@@ -139,9 +139,9 @@ function(Backbone, _, $, Email, app){
          */
         events: {
             'click [type=checkbox]': 'onCheckboxClick',
-            'swipeLeft .emaillist-label': 'showOptions',
-            'swipeRight .emaillist-label': 'hideOptions',
-            'click .emaillist-label-arrow': 'toggle'
+            'swipeLeft .idealist-label': 'showOptions',
+            'swipeRight .idealist-label': 'hideOptions',
+            'click .idealist-label-arrow': 'toggle'
         },
 
         /**
@@ -194,12 +194,12 @@ function(Backbone, _, $, Email, app){
     /**
      * States
      */
-    EmailView.prototype.states = {
+    IdeaView.prototype.states = {
         hidden: 'is-hidden',
         optioned: 'is-optioned',
         selected: 'is-selected',
         open: 'is-open'
     };
 
-    return EmailView;
+    return IdeaView;
 });

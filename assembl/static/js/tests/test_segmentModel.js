@@ -5,7 +5,7 @@ define(['jasmine', 'underscore', 'models/segment'], function(jasmine, _, Segment
         var segment;
 
         beforeEach(function(){
-            segment = new Email.Model();
+            segment = new Segment.Model();
         });
 
         it('should have the Model', function(){

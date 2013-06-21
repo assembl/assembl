@@ -1,13 +1,13 @@
-define(['jasmine', 'underscore', 'app', 'views/email'],
-function(jasmine, _, app, EmailView){
+define(['jasmine', 'underscore', 'app', 'views/idea'],
+function(jasmine, _, app, IdeaView){
 
-    return describe('Email view', function(){
+    return describe('Idea view', function(){
         var view,
-            fixEmails,
-            DATA_LEVEL = 'data-emaillist-level';
+            fixIdea,
+            DATA_LEVEL = 'data-idealist-level';
 
         beforeEach(function(){
-            view = new EmailView();
+            view = new IdealView();
             view.model = new Backbone.Model({
                 subject: 'Default Suject',
                 total: 10,
@@ -18,35 +18,35 @@ function(jasmine, _, app, EmailView){
             });
 
             //
-            setFixtures('<ul id="fix-email"></ul>');
-            fixEmails = $('#fix-email');
-            fixEmails.append( view.render().el );
+            setFixtures('<ul id="fix-idea"></ul>');
+            fixIdea = $('#fix-idea');
+            fixIdea.append( view.render().el );
         });
 
         it('uses the right template', function(){
-            var tmpl = app.loadTemplate('email');
+            var tmpl = app.loadTemplate('idea');
 
             expect(tmpl(view.model.toJSON())).toBe(view.template(view.model.toJSON()));
         });
 
         it('should have the arrow if hasChildren is true', function(){
-            expect(view.el).not.toContain('span.emaillist-label-arrow');
+            expect(view.el).not.toContain('span.idealist-label-arrow');
 
             view.model.set('hasChildren', true);
-            fixEmails.empty().append( view.render().el );
+            fixIdea.empty().append( view.render().el );
 
-            expect(view.el).toContain('span.emaillist-label-arrow');
+            expect(view.el).toContain('span.idealist-label-arrow');
         });
 
         it('should show the options when it swipes to left', function(){
-            var label = view.$('.emaillist-label');
+            var label = view.$('.idealist-label');
             label.trigger('swipeLeft');
 
             expect(label.get(0)).toHaveClass('is-optioned');
         });
 
         it('should hide the options when it swipes to right', function(){
-            var label = view.$('.emaillist-label');
+            var label = view.$('.idealist-label');
 
             label.addClass('is-optioned');
             label.trigger('swipeRight');
@@ -54,7 +54,7 @@ function(jasmine, _, app, EmailView){
             expect(label.get(0)).not.toHaveClass('is-optioned');
         });
 
-        it('should have the data-emaillist-level the same of level attribute', function(){
+        it('should have the data-idealist-level the same of level attribute', function(){
             var level = ~~view.el.getAttribute(DATA_LEVEL);
 
             expect( level ).toBe( view.model.get('level') );
@@ -62,7 +62,7 @@ function(jasmine, _, app, EmailView){
 
         it('should be hidden if the level is bigger than 1', function(){
             view.model.set('level', 2);
-            fixEmails.empty().append( view.render().el );
+            fixIdea.empty().append( view.render().el );
 
             expect( view.el ).toHaveClass('is-hidden');
         });
@@ -73,15 +73,15 @@ function(jasmine, _, app, EmailView){
         });
 
         it('should trigger toggle method when click in the arrow', function(){
-            spyOn(EmailView.prototype, 'toggle').andCallThrough();
-            spyOn(EmailView.prototype, 'showItemInCascade').andCallThrough();
-            spyOn(EmailView.prototype, 'closeItemInCascade').andCallThrough();
-            view = new EmailView({model:view.model});
+            spyOn(IdealView.prototype, 'toggle').andCallThrough();
+            spyOn(IdealView.prototype, 'showItemInCascade').andCallThrough();
+            spyOn(IdealView.prototype, 'closeItemInCascade').andCallThrough();
+            view = new IdealView({model:view.model});
 
             view.model.set('hasChildren', true);
-            fixEmails.empty().append( view.render().el );
+            fixIdea.empty().append( view.render().el );
 
-            var arrow = view.$('.emaillist-label-arrow');
+            var arrow = view.$('.idealist-label-arrow');
             arrow.trigger('click');
 
             expect(view.toggle).toHaveBeenCalled();
@@ -95,9 +95,9 @@ function(jasmine, _, app, EmailView){
 
         it('should have the .has-options class if hasOptions is true', function(){
             view.model.set('hasOptions', true);
-            fixEmails.empty().append( view.render().el );
+            fixIdea.empty().append( view.render().el );
 
-            expect(view.$('.emaillist-label').get(0)).toHaveClass('has-options');
+            expect(view.$('.idealist-label').get(0)).toHaveClass('has-options');
         });
 
     });

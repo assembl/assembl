@@ -1,0 +1,213 @@
+// The list of Ideas
+// =================
+.idealist {
+    @include transform( translateZ(0) );
+    background-color: $idealist-background-color;
+    border: solid 1px $idealist-border-color;
+}
+
+// The dark version of list of ideas
+// ++++++++++++++++++++++
+.idealist.idealist--dark {}
+
+// idea list made to fit in the lateralmenu
+// ++++++++++++++++++++++
+.idealist.idealist--lateralmenu {}
+
+
+// A row within the list of ideas
+// -----------------
+.idealist-item {
+    border-top: $idealist-item-border;
+    position: relative;
+    height: 45px;
+    cursor: pointer;
+    overflow: hidden;
+
+    @include transition( height 0.4s );
+    @include transform( translateZ(0) );
+
+    &:first-child {
+        border-top: 0;
+    }
+
+    .idealist--dark & {
+        background-color: #313131;
+        border-bottom-color: $idealist-item-border-color-dark;
+        color: #b0b0b0;
+
+        &:hover {
+            color: #eb5d50;
+        }
+    }
+
+    .idealist--lateralmenu & {
+        padding-left: $lateralmenu-padding-left;
+    }
+}
+
+// idea item is selected ( by the checkbox )
+// ************************
+.idealist-item.is-selected {
+    background-color: #eaf5fc;
+}
+
+// idea list open ( showing the children )
+// *********************
+.idealist-item.is-open {}
+
+// idea list is hidden
+// *********************
+.idealist-item.is-hidden {
+    height: 0; //display: none;
+    border-top: 0;
+}
+
+// idea list with the form open
+// *********************
+.idealist-item.is-form-open {
+    height: auto;
+    border: solid 5px #dbf2ff;
+}
+
+// idea list when receving a dragover
+// *********************
+.idealist-item.is-dragover {
+    background-color: $dragbox-background-color;
+}
+
+// idea list when receving a dragover and the mouse it above the middle
+// *********************
+.idealist-item.is-dragover-above {
+    &:before {
+        content: "";
+        display: block;
+        position: absolute;
+        top: 0;
+        right: -1px;
+        left: -1px;
+        height: $idealist-item-dragover-height;
+
+        background-color: $dragbox-background-color;
+        border: solid 1px $dragbox-border-color;
+    }
+}
+
+// idea list when receving a dragover and the mouse it below the middle
+// *********************
+.idealist-item.is-dragover-below {
+    &:after {
+        content: "";
+        display: block;
+        position: absolute;
+        right: -1px;
+        bottom: 0;
+        left: -1px;
+        height: $idealist-item-dragover-height;
+
+        background-color: $dragbox-background-color;
+        border: solid 1px $dragbox-border-color;
+    }
+}
+
+// The checkbox to select the line
+// -------------------
+.idealist-checkbox {
+    display: inline-block;
+    line-height: $idealist-item-height;
+    float: left;
+}
+
+// The title of the idea
+// --------------------
+.idealist-label {
+    position: relative;
+    display: block;
+    line-height: $idealist-item-height;
+    padding-left: $idealist-item-level-padding;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    padding-right: $idealist-item-padding-right;
+    @include box-sizing( border-box );
+
+    @include transition( padding-right 0.4s );
+
+    .idealist--dark & {
+        border-color: $idealist-item-border-color-dark !important;
+    }
+
+    $idealist-item-margin-left: 15px;
+    @for $i from 2 through 10 {
+        .idealist-item[data-idealist-level="#{$i}"] & {
+            $idealist-item-margin-left: 15px * ( $i - 1 );
+            margin-left: $idealist-item-margin-left;
+            border-left: $idealist-item-border;
+        }
+    }
+
+}
+
+
+// Showing the options .idealist-label
+// ******************
+.has-touch .idealist-label.is-optioned {
+    padding-right: $idealist-item-padding-right + $idealist-options-width;
+}
+
+// Showing the options on hover ONLY in no-touch devices
+// *******************
+.no-touch .idealist-label.has-options:hover {
+    padding-right: $idealist-item-padding-right + $idealist-options-width;
+}
+
+
+// The arrow within an .idealist-label
+// ------------------------
+.idealist-label-arrow {
+    background: url(#{$img-dir}/idealist/idealist-arrow.png) center left no-repeat;
+    width: $idealist-item-level-padding;
+    margin-right: $idealist-item-level-padding;
+    height: $idealist-item-height;
+    display: inline-block;
+    float: left;
+
+    @include transition( transform 0.4s );
+    @include transform( rotate(-90deg) );
+    opacity: 0.55;
+
+    &:hover {
+        opacity: 1;
+    }
+
+    .idealist-item.is-open & {
+        @include transform( rotate(0deg) );
+    }
+}
+
+// The options within an .idealist-label
+// -----------------
+.idealist-label-options {
+    position: absolute;
+    top: 0px;
+    right: $idealist-item-padding-right;
+
+    width: 0px;
+    height: $idealist-item-height;
+    @include box-sizing( border-box );
+    overflow: hidden;
+
+    font-size: 0px;
+    @include transition( width 0.4s );
+
+    .has-touch .idealist-label.is-optioned &,
+    .no-touch .idealist-label:hover & {
+        width: $idealist-options-width;
+    }
+}
+
+// The form within a .idealist-item
+// ==================
+.idealist-form {
+    @extend .form;
+}

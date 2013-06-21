@@ -15,7 +15,7 @@
         </div>
     </div>
     <div>
-        <div id="inbox" class="panel"></div>
+        <div id="table-of-contents" class="panel"></div>
 
         <div id="segmentlist" class="panel"></div>
 
@@ -24,47 +24,5 @@
 {% endblock %}
 
 {% block extra_js %}
-<script type="text/javascript">
-requirejs([
-    "app",
-    "jquery",
-    "views/inbox",
-    "views/lateralMenu",
-    "views/segmentList",
-    "views/message",
-    "models/email"
-], function(app, $, Inbox, LateralMenu, SegmentList, Message, Email){
-    'use strict';
-
-    app.init();
-
-    // Inbox
-    var inboxEmails = new Email.Collection();
-    app.inbox = new Inbox({collection: inboxEmails}).render();
-    app.inbox.collection.fetch({reset: true});
-
-    // Lateral menu
-    var lateralMenuEmails = new Email.Collection();
-    app.lateralMenu = new LateralMenu({el: '#lateralMenu', emails: lateralMenuEmails});
-    app.lateralMenu.emails.fetch({reset: true});
-
-    $('#assembl-mainbutton').on('click', app.lateralMenu.trigger.bind(app.lateralMenu, 'toggle'));
-
-    // SegmentList
-    app.segmentList = new SegmentList({el: '#segmentlist'}).render();
-
-    // Message
-    app.message = new Message({el: '#message'}).render();
-    app.on('lateralmenu.open', function(){
-        app.message.hideTooltip();
-    });
-    app.selectionTooltip.on('click', function(){
-        app.selectionTooltip.hide();
-        var segment = app.selectionTooltip.attr('data-segment');
-        app.segmentList.addSegment(segment);
-    });
-
-
-});
-</script>
+<script type="text/javascript">requirejs(["main"]);</script>
 {% endblock %}

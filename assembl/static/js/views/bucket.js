@@ -1,5 +1,5 @@
-define(['backbone', 'underscore', 'jquery', 'app', 'views/email', 'models/segment'],
-function(Backbone, _, $, app, EmailView){
+define(['backbone', 'underscore', 'jquery', 'app', 'models/segment'],
+function(Backbone, _, $, app, Segment){
     'use strict';
 
     var Bucket = Backbone.View.extend({

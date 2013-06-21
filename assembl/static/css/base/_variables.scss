@@ -42,17 +42,17 @@ $experimental-support-for-microsoft: true;
 $fixedcounter-height: 23px;
 $fixedcounter-min-width: 30px;
 
-// Email list
-$emaillist-background-color: #fff;
-$emaillist-border-color: #e4e4e3;
-$emaillist-item-level-padding: 10px;
-$emaillist-item-padding-right: $fixedcounter-min-width + 15px;
-$emaillist-item-border-color: $emaillist-border-color;
-$emaillist-item-border: solid 1px $emaillist-item-border-color;
-$emaillist-item-border-color-dark: #000;
-$emaillist-item-height: 45px;
-$emaillist-options-width: $icon-width * 3;
-$emaillist-item-dragover-height: 7px;
+// idea list
+$idealist-background-color: #fff;
+$idealist-border-color: #e4e4e3;
+$idealist-item-level-padding: 10px;
+$idealist-item-padding-right: $fixedcounter-min-width + 15px;
+$idealist-item-border-color: $idealist-border-color;
+$idealist-item-border: solid 1px $idealist-item-border-color;
+$idealist-item-border-color-dark: #000;
+$idealist-item-height: 45px;
+$idealist-options-width: $icon-width * 3;
+$idealist-item-dragover-height: 7px;
 
 // Font
 $font-size: 14px;

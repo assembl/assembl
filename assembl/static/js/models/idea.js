@@ -2,10 +2,10 @@ define(['backbone'], function(Backbone){
     'use strict';
 
     /**
-     * @class EmailModel
+     * @class Idea
      */
-    var EmailModel = Backbone.Model.extend({
-        url: "/static/js/tests/fixtures/email.json",
+    var IdeaModel = Backbone.Model.extend({
+        url: "/static/js/tests/fixtures/idea.json",
         defaults: {
             subject: '',
             level: 1,
@@ -19,16 +19,16 @@ define(['backbone'], function(Backbone){
     });
 
     /**
-     * @class EmailColleciton
+     * @class IdeaColleciton
      */
-    var EmailCollection = Backbone.Collection.extend({
-        url: "/static/js/tests/fixtures/emails.json",
+    var IdeaCollection = Backbone.Collection.extend({
+        url: "/static/js/tests/fixtures/ideas.json",
         model: EmailModel
     });
 
     return {
-        Model: EmailModel,
-        Collection: EmailCollection
+        Model: IdeaModel,
+        Collection: IdeaCollection
     };
 
 });

@@ -12,8 +12,9 @@ define(['jquery', 'jasmine-html'], function($, jasmine){
 
     var specs = [
         'tests/test_app',
-        'tests/test_modelEmail',
-        'tests/test_emailView',
+        'tests/test_ideaList',
+        'tests/test_modeIdea',
+        'tests/test_ideaView',
         //'tests/test_lateralMenu',
         'tests/test_segmentList'
     ];

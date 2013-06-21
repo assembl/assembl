@@ -1,5 +1,5 @@
-define(['jquery', 'underscore', 'models/email'],
-function($, _, Email, Inbox){
+define(['jquery', 'underscore'],
+function($, _){
     'use strict';
 
     /**
