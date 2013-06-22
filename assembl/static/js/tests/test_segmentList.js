@@ -51,6 +51,16 @@ function(jasmine, Backbone, _, $, app, SegmentList){
             expect(view.segments.length).toBe(0);
         });
 
+        it('should set the app.draggedSegment as the current dragged segment', function(){
+            view.addSegment({ text: 'nada' });
+            view.$('.box').trigger('dragstart');
+
+            expect(app.draggedSegment).toBe('.box');
+
+            view.$('.box').trigger('dragend');
+            expect(app.draggedSegment).toBe(null);
+        });
+
     });
 
 });

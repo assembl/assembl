@@ -9,7 +9,7 @@ function(Backbone, _, $, app, Segment){
 
         /**
          * The main wrapper
-         * @type {jQuery}
+         * @type {Zepto}
          */
         wrapper: $('#wrapper'),
 

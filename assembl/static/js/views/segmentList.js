@@ -76,10 +76,12 @@ function(Backbone, _, $, app, Segment){
         onDragStart: function(ev){
             ev.currentTarget.style.opacity = 0.4;
 
-            ev.dataTransfer.effectAllowed = 'move';
-            ev.dataTransfer.setData('text/html', ev.currentTarget.innerHTML);
+            if( ev.dataTransfer ) {
+                ev.dataTransfer.effectAllowed = 'move';
+                ev.dataTransfer.setData('text/html', ev.currentTarget.innerHTML);
+            }
 
-            //app.bucketDraggedSegment = this;
+            app.draggedSegment = ev.currentTarget;
         },
 
         /**
@@ -87,8 +89,7 @@ function(Backbone, _, $, app, Segment){
          */
         onDragEnd: function(ev){
             ev.currentTarget.style.opacity = '';
-
-            //app.bucketDraggedSegment = null;
+            app.draggedSegment = null;
         },
 
         /**

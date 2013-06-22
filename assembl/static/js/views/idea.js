@@ -57,7 +57,7 @@ function(Backbone, _, $, Idea, app){
 
         /**
          * Shows an item and its descendents
-         * @param  {jQuery} item
+         * @param  {Zepto} item
          * @param  {number} parentLevel
          */
         showItemInCascade: function(item, parentLevel){
@@ -75,7 +75,7 @@ function(Backbone, _, $, Idea, app){
 
         /**
          * Closes an item and its descendents
-         * @param  {jQuery} item
+         * @param  {Zepto} item
          * @param  {number} parentLevel
          */
         closeItemInCascade: function (item, parentLevel){

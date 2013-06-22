@@ -17,7 +17,7 @@ function($, _){
     window.app = {
         /**
          * Reference to the body as Zepto object
-         * @type {jQuery}
+         * @type {Zepto}
          */
         body: $(document.body),
 
@@ -32,6 +32,12 @@ function($, _){
          * @type {Number}
          */
         lateralMenuAnimationTime: 600,
+
+        /**
+         * Current dragged segment 
+         * @type {HTMLDivElement}
+         */
+        draggedSegment: null,
 
         /**
          * The time for all animations related to bucket
@@ -59,7 +65,7 @@ function($, _){
 
         /**
          * The selection tooltip.
-         * @type {jQuery}
+         * @type {Zepto}
          */
         selectionTooltip: null,
 

@@ -37,7 +37,7 @@ function(Backbone, _, $, app){
 
         /**
          * Open a closed area
-         * @param  {jQuery} area
+         * @param  {Zepto} area
          */
         openArea: function(area){
             var body = area.find('.accordion-body'),
@@ -51,7 +51,7 @@ function(Backbone, _, $, app){
 
         /**
          * Closes an open area
-         * @param  {jQuery} area
+         * @param  {Zepto} area
          */
         closeArea: function(area){
             var body = area.find('.accordion-body');
@@ -63,7 +63,7 @@ function(Backbone, _, $, app){
 
         /**
          * Returns the height of the given .accordion-body
-         * @param  {jQuery} body
+         * @param  {Zepto} body
          * @return {Number}
          */
         getBodyHeight: function(body){
