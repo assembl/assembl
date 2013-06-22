@@ -23,7 +23,8 @@ define(['jasmine', 'underscore', 'models/idea'], function(jasmine, _, Idea){
                 hasChildren: false,
                 hasOptions: true,
                 featured: false,
-                active: false
+                active: false,
+                children: Idea.IdeaCollection
             };
 
             for( var key in attrs )if(attrs.hasOwnProperty(key)){
@@ -31,6 +32,8 @@ define(['jasmine', 'underscore', 'models/idea'], function(jasmine, _, Idea){
             }
 
         });
+
+        //it('')
 
     });
 

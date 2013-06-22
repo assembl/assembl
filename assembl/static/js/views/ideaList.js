@@ -1,5 +1,5 @@
-define(['backbone', 'models/idea', 'views/idea', 'app'],
-function(Backbone, Idea, IdeaView, app){
+define(['backbone', 'underscore', 'models/idea', 'views/idea', 'app'],
+function(Backbone, _, Idea, IdeaView, app){
     'use strict';
 
     var IdeaList = Backbone.View.extend({
@@ -26,6 +26,11 @@ function(Backbone, Idea, IdeaView, app){
             this.ideas.each(function(idea){
                 var ideaView = new IdeaView({model:idea});
                 list.appendChild(ideaView.render().el);
+
+                var children = ideaView.renderChildren();
+                _.each(children, function(child){
+                    list.appendChild(child);
+                });
             });
 
             this.$el.html(this.template());

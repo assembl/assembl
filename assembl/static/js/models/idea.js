@@ -14,7 +14,8 @@ define(['backbone'], function(Backbone){
             hasChildren: false,
             hasOptions: true,
             featured: false,
-            active: false
+            active: false,
+            children: IdeaCollection
         }
     });
 

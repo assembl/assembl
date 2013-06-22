@@ -61,6 +61,14 @@ function(jasmine, Backbone, _, $, app, SegmentList){
             expect(app.draggedSegment).toBe(null);
         });
 
+        it('should remove the segment by click', function(){
+            view.addSegment({ text: 'nada' });
+            expect(view.segments.length).toBe(1);
+
+            view.$('.closebutton').trigger('click');
+            expect(view.segments.length).toBe(0);
+        });
+
     });
 
 });

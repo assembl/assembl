@@ -31,7 +31,25 @@ function(Backbone, _, $, Idea, app){
             }
 
             this.$el.html(this.template(data));
+
             return this;
+        },
+
+        /**
+         * Return an array with all children rendered
+         * @return {array}
+         */
+        renderChildren: function(){
+            var children = [];
+            _.each(this.model.get('children'), function(idea){
+                var ideaModel = ( idea.constructor !== Idea.Model ) ? new Idea.Model(idea) : idea,
+                    ideaView = new IdeaView({model:ideaModel});
+
+                children.push( ideaView.render().el );
+                children = _.union(children, ideaView.renderChildren());
+            });
+
+            return children;
         },
 
         /**

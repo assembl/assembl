@@ -106,6 +106,14 @@ function(jasmine, _, app, IdeaView){
             expect(view.$('.idealist-label').get(0)).toHaveClass('has-options');
         });
 
+        it('should add an idea if it is in .is-dragover-below state', function(){
+            //view.$el.addClass('is-dragover-below');
+
+            //view.add
+            // view.addSegment({ text: 'nada' });
+            // view.segment
+        });
+
     });
 
 });
