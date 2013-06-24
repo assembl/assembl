@@ -23,14 +23,14 @@ define(['jasmine', 'underscore', 'models/idea'], function(jasmine, _, Idea){
                 hasChildren: false,
                 hasOptions: true,
                 featured: false,
-                active: false,
-                children: Idea.IdeaCollection
+                active: false
             };
 
             for( var key in attrs )if(attrs.hasOwnProperty(key)){
                 expect(idea.get(key)).toBe(attrs[key]);
             }
 
+            expect(typeof idea.get('children')).toBe(typeof []);
         });
 
         //it('')

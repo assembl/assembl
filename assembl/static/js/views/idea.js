@@ -55,7 +55,6 @@ function(Backbone, _, $, Idea, app){
         /**
          * add an item as child
          * @param  {string} html
-         * @return {IdeaView}
          */
         addChild: function(html){
             if( !this.$el.hasClass('is-open') ){
@@ -67,10 +66,7 @@ function(Backbone, _, $, Idea, app){
                 level: this.model.get('level') + 1
             });
 
-            var ideaView = new IdeaView({model: idea});
-            this.$el.after(ideaView.render().el);
-
-            return ideaView;
+            this.model.addChild(idea);
         },
 
         /**
@@ -152,9 +148,9 @@ function(Backbone, _, $, Idea, app){
             ev.stopPropagation();
 
             this.clearDragStates();
-            var li = app.bucketDraggedSegment;
+            var li = app.draggedSegment;
 
-            this.addChild( li.html() );
+            this.addChild( li.innerHTML );
             li.remove();
         },
 

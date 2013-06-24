@@ -15,7 +15,17 @@ define(['backbone'], function(Backbone){
             hasOptions: true,
             featured: false,
             active: false,
-            children: IdeaCollection
+            children: []
+        },
+
+        /**
+         * Adds an idea as child
+         * @param  {Idea} idea
+         */
+        addChild: function(idea){
+            var children = this.get('children');
+            children.push(idea);
+            this.set('children', children);
         }
     });
 

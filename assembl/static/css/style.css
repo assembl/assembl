@@ -271,6 +271,21 @@ html {
 }
 
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_bar\.scss}line{font-family:\0000337}}
+.bar.bar--panel {
+  line-height: 56px;
+  height: 56px;
+  padding-left: 10px;
+  padding-right: 10px;
+  background-color: #f7f7f7;
+  border: solid 1px #e4e4e3;
+  -webkit-border-radius: 5px 5px 0 0;
+  -moz-border-radius: 5px 5px 0 0;
+  -ms-border-radius: 5px 5px 0 0;
+  -o-border-radius: 5px 5px 0 0;
+  border-radius: 5px 5px 0 0;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_bar\.scss}line{font-family:\0000349}}
 .bar-left, .bar-right {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
@@ -285,14 +300,14 @@ html {
   left: 0;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_bar\.scss}line{font-family:\0000351}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_bar\.scss}line{font-family:\0000363}}
 .bar-right {
   right: 0;
   left: auto;
   text-align: right;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_bar\.scss}line{font-family:\0000360}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_bar\.scss}line{font-family:\0000372}}
 .bar-center {
   text-align: center;
   display: block;
@@ -1114,26 +1129,6 @@ html {
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_message\.scss}line{font-family:\000039}}
 .message-header {
   position: relative;
-}
-
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_panel\.scss}line{font-family:\000033}}
-.panel {
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-  border-left: solid 1px #e4e4e3;
-  height: 100%;
-  float: left;
-  width: 33.3%;
-}
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_panel\.scss}line{font-family:\0000311}}
-.panel:first-child {
-  border-left: 0;
-}
-
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_panel\.scss}line{font-family:\0000316}}
-.panel-body {
-  margin: 10px;
 }
 
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_separator\.scss}line{font-family:\000031}}
