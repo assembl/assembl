@@ -41,6 +41,7 @@
 
     background-color: #f7f7f7;
     border: solid 1px #e4e4e3;
+    border-bottom: 0;
     @include border-radius( 5px 5px 0 0 );
 }
 

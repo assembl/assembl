@@ -11,6 +11,20 @@ html {
     background: $text-selection-color; /* Firefox */
 }
 
+::-webkit-scrollbar {
+    background-color: #eeeeee;
+    width:10px;
+    height:10px
+}
+
+::-webkit-scrollbar-thumb {
+    background:#c2c2c2;
+    border-radius:6px;
+    width:8px;
+    min-height:40px;
+    border:2px solid #eeeeee;
+}
+
 .margin { margin: $margin; }
 .margin-top { margin-top: $margin-top; }
 .margin-right { margin-right: $margin-right; }

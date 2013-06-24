@@ -10,9 +10,26 @@
     padding: $box-padding;
 }
 
+// Dashed box
+// +++++++++++++++
+.box.box--dashed {
+    border: dashed 2px $box-border-color;
+}
+
+// Centered box
+// +++++++++++++++
+.box.box--centered {
+    line-height: 50px;
+    text-align: center;
+}
+
 // A wrapper for two or more .box
 // ====================
 .boxlist {
+    .box:first-child:not(.box--dashed) {
+        border-top: 0;
+    }
+
     .box:not(:last-child) {
         border-bottom: 0;
     }

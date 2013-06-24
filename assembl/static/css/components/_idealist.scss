@@ -3,7 +3,7 @@
 .idealist {
     @include transform( translateZ(0) );
     background-color: $idealist-background-color;
-    border: solid 1px $idealist-border-color;
+    //border: solid 1px $idealist-border-color;
 }
 
 // The dark version of list of ideas
