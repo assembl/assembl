@@ -26,11 +26,12 @@
 // A wrapper for two or more .box
 // ====================
 .boxlist {
-    .box:first-child:not(.box--dashed) {
-        border-top: 0;
+    .box:not(.box--dashed) {
+        border: 0;
+        border-bottom: solid 1px $box-border-color;
     }
 
-    .box:not(:last-child) {
+    .box:last-child:not(.box--dashed) {
         border-bottom: 0;
     }
 }

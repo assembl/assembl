@@ -93,26 +93,6 @@
     opacity: 1;
 } 
 
-// A badge which stands at the top right
-// of the iconbutton
-// -------------------
-.iconbutton-badge {
-    position: absolute;
-    top: $badge-height / -2;
-    right: $badge-width / -2;
-
-    width: $badge-width;
-    height: $badge-height;
-    line-height: $badge-height;
-
-    background-color: #ee7f4e;
-    border-radius: 3px;
-    color: white;
-    font-size: 10px;
-    text-align: center;
-}
-
-
 // Arrow button
 // ==========
 .arrowbutton {

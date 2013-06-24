@@ -148,10 +148,9 @@ function(Backbone, _, $, Idea, app){
             ev.stopPropagation();
 
             this.clearDragStates();
-            var li = app.draggedSegment;
+            var li = app.getDraggedSegment();
 
             this.addChild( li.innerHTML );
-            li.remove();
         },
 
         /**

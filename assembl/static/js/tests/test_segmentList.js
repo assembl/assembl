@@ -69,6 +69,15 @@ function(jasmine, Backbone, _, $, app, SegmentList){
             expect(view.segments.length).toBe(0);
         });
 
+        it('should remove the segment by its wrapper', function(){
+            view.addSegment({ text: 'nada' });
+            expect(view.segments.length).toBe(1);
+
+            var seg = view.$('.box').get(0);
+            view.removeSegmentByWrapper(seg);
+            expect(view.segments.length).toBe(0);
+        });
+
     });
 
 });

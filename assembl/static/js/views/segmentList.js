@@ -61,6 +61,15 @@ function(Backbone, _, $, app, Segment){
         },
 
         /**
+         * Remove the given segment
+         * @param  {HTMLLIElement} li [description]
+         */
+        removeSegmentByWrapper: function(li){
+            var cid = li.getElementsByClassName('closebutton')[0].getAttribute('data-segmentid');
+            this.removeSegmentByCid(cid);
+        },
+
+        /**
          * The events
          * @type {Object}
          */

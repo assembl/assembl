@@ -76,6 +76,17 @@ function($, _){
         dragbox: null,
 
         /**
+         * @return {HTMLLiElement} [description]
+         */
+        getDraggedSegment: function(){
+            if( app.segmentList && app.draggedSegment ){
+                app.segmentList.removeSegmentByWrapper(app.draggedSegment);
+            }
+
+            return app.draggedSegment;
+        },
+
+        /**
          * Creates the selection tooltip
          */
         createSelectionTooltip: function(){
