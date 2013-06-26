@@ -23,6 +23,12 @@ indent_size = 4
 indent_style = space
 indent_size = 4
 
+; tmpl
+[*.tmpl]
+indent_style = space
+indent_size = 4
+
+
 ; Jinja
 [*.jinja2]
 indent_style = space
