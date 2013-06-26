@@ -1,0 +1,31 @@
+// Panel
+// ============
+.panel {
+    float: left;
+    @include box-sizing( border-box );
+
+    width: 100%;
+    padding: $padding $padding/2;
+
+    .panel-2 & {
+        width: 50%;
+    }
+
+    .panel-3 & {
+        width: 33.3%;
+    }
+
+    .panel-4 & {
+        width: 25%;
+    }
+}
+
+// Panel body
+// ----------------
+.panel-body {
+    max-height: 300px;
+    overflow-y: auto;
+
+    background-color: #fff;
+    border: solid 1px $box-border-color;
+}

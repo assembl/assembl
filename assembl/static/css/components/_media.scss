@@ -1,0 +1,27 @@
+
+// The famous media element
+// =====================
+.media {}
+
+// To aling the object at the left
+// ---------------------
+.media-imgleft {
+    float: left;
+    margin: { 
+       right: $margin-right;
+       bottom: $margin-right;
+    }
+}
+
+// The content of the media
+// ---------------------
+.media-body {   
+    overflow: hidden;
+}
+
+// The title within a media
+// -------------------
+.media-title {
+    padding-top: 3px;
+    margin-bottom: $margin-bottom;
+}

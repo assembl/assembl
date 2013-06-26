@@ -1,0 +1,59 @@
+[{
+    "subject": "Les monnaies ont plusieurs rôles",
+    "level": 1,
+    "total": 2,
+    "hasChildren": true,
+    "active": false,
+    "featured": false,
+    "children": [{
+        "subject": "In principe de résclution des dettes établi de façon contractuelle au sein d'une communauté ement pour un territoire",
+        "level": 2,
+        "total": 70,
+        "hasChildren": false,
+        "active": false,
+        "featured": false
+    }, {
+        "subject": "Moyen de paiement : elles permettent de vendre avant d'achater (facilitateur d'échange : il est possible de cloneer et de recevoir de personnes différentes contrairement au troc)",
+        "level": 2,
+        "total": 70,
+        "hasChildren": false,
+        "active": false,
+        "featured": false
+    }, {
+        "subject": "Moyen de mettre en place des mécanismes financiers (Laurent point 3) : elles permettent parfois d'achater avant de vendre (réserve de valuer)",
+        "level": 2,
+        "total": 34,
+        "hasChildren": false,
+        "active": false,
+        "featured": false
+    }, {
+        "subject": "Certainer monnaies comment les monnaies nationales actualles, permettent de prêter et d'emprunter",
+        "level": 2,
+        "total": 26,
+        "hasChildren": true,
+        "active": false,
+        "featured": false,
+        "children": [{
+            "subject": "exemple de la monnaie des enfants pour favoriser leur participation aux tâches ménagères (Thierry Gau)",
+            "level": 3,
+            "total": 70,
+            "hasChildren": false,
+            "active": false,
+            "featured": false
+        }, {
+            "subject": "exemple de la monnaie des enfants pour favoriser leur participation aux tâches ménagères (Thierry Gau)",
+            "level": 3,
+            "total": 70,
+            "hasChildren": false,
+            "active": false,
+            "featured": false
+        }, {
+            "subject": "à l'inverse, les monnaies foncantes ont pour objectif de ne pas permettre cette fonction (pour éviter la spéculation)",
+            "level": 3,
+            "total": 121,
+            "hasChildren": false,
+            "active": false,
+            "featured": false
+        }]
+    }]
+}]

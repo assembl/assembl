@@ -1,0 +1,36 @@
+<div class="bar bar--panel">
+    <div class="bar-left">Presse-papier (<%= segments.length %>)</div>
+    <div class="bar-right">
+        <a class="iconbutton icon-down"></a>
+    </div>
+</div>
+
+<div class="panel-body boxlist">
+    
+    <% segments.each(function(segment){ %>
+    <div class="box" draggable="true">
+        <span data-segmentid="<%= segment.cid %>"  class="closebutton">&times;</span>
+
+        <q><%= segment.get('text') %></q>
+
+        <div class="spacer spacer--huge"></div>
+
+        <div class="media">
+            <div class="media-imgleft">
+                <img src="//placehold.it/44x44" class="image-rounded" alt="" />
+            </div>
+            <div class="media-body">
+                <div class="media-title"><strong>Joey Ramone</strong></div>
+                <div>Attrapé il y a 1 jours</div>
+            </div>
+        </div>
+    </div>
+    <% }); %>
+
+    <% if (segments.length === 0) { %>
+    <div class="box box--dashed box--centered margin text-muted text-big">
+        Ajouter des extraits
+    </div>
+    <% } %>
+
+</div>

@@ -1,8 +1,8 @@
 html, body, div, span, applet, object, iframe,
-h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
 del, dfn, em, img, ins, kbd, q, s, samp,
-small, strike, strong, sub, sup, tt, var,
+small, strike, sub, sup, tt, var,
 b, u, i, center,
 dl, dt, dd, ol, ul, li,
 fieldset, form, label, legend,
@@ -23,10 +23,6 @@ html {
   line-height: 1;
 }
 
-html, body {
-    overflow-x: hidden;
-}
-
 ol, ul {
   list-style: none;
 }
@@ -42,27 +38,25 @@ caption, th, td {
   vertical-align: middle;
 }
 
-q, blockquote {
-  quotes: none;
-}
-
-q:before, q:after, blockquote:before, blockquote:after {
-  content: "";
-  content: none;
-}
-
 a img {
   border: none;
 }
 
 img {
-    vertical-align: middle;
+  vertical-align: middle;
 }
 
-article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section, summary {
+article, aside, details, figcaption, figure, footer, header, hgroup, main, menu, nav, section, summary {
   display: block;
 }
 
 .preload * {
   @include transition(none !important);
 }
+
+[draggable=true] {
+  -moz-user-select:none;
+  -khtml-user-drag: element;
+  cursor: move;
+}
+

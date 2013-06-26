@@ -1,7 +1,7 @@
 from . import TimestampedBase
 
-from colanderalchemy import Column
-from sqlalchemy import ForeignKey, Integer, String, Unicode, UnicodeText, event
+from sqlalchemy import (ForeignKey, Integer, String, Unicode, UnicodeText,
+                        event, Column)
 from sqlalchemy.ext.declarative import declared_attr
 from sqlalchemy.orm import backref, mapper, relationship
 

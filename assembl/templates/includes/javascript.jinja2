@@ -1,0 +1,50 @@
+<script src="{{ STATIC_URL }}js/lib/require.min.js"></script>
+
+<script>
+requirejs.config({
+    "baseUrl": "{{ STATIC_URL }}js",
+    'urlArgs': "bust=" + (new Date()).getTime(),
+    'shim': {
+        'backbone': {
+            deps: ['underscore', 'zepto'],
+            exports: 'Backbone'
+        },
+        'underscore': {
+            exports: '_'
+        },
+        'zepto': {
+            exports: '$'
+        },
+        'zepto-touch': {
+            deps: ['zepto'],
+            exports: '$'
+        },
+        'app': {
+            exports: 'app'
+        },
+        'jasmine': {
+            exports: 'jasmine'
+        },
+        'jasmine-html': {
+            deps: ['jasmine', 'jasmine-jquery'],
+            exports: 'jasmine'
+        },
+        'jasmine-jquery': {
+            deps: ['jasmine'],
+            exports: 'jasmine'
+        }
+    },
+    "paths": {
+        'backbone': 'lib/backbone',
+        'underscore': 'lib/underscore',
+
+        'zepto': '__proto__' in {} ? 'lib/zepto' : "lib/jquery",
+        'zepto-touch': 'lib/zepto-touch',
+
+        'jasmine': 'lib/jasmine',
+        'jasmine-html': 'lib/jasmine-html',
+        'jasmine-jquery': 'lib/jasmine-jquery'
+    }
+});
+
+</script>

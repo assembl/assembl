@@ -1,11 +1,19 @@
 // The F* and powerful wrapper
 #wrapper {
     position: relative;
-    @include transition( left 0.6s );
+
+    min-height: 100%;
+
+    @include transform( translateX(0) );
+    //@include transition( transform 0.6s );
 
     // When the lateral menu is open
     .is-lateralmenu-open & {
-        left: $lateralmenu-width;
+        @include transform( translateX($lateralmenu-width) );
     }
 
+}
+
+body.is-modal {
+    //overflow: hidden;
 }

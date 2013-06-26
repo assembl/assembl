@@ -1,1 +1,30 @@
 {% extends 'base.jinja2' %}
+
+{% block extra_header %}{% endblock %}
+
+{% block content %}
+    <div class="bar bar--title">
+        <div class="bar-left">
+            Non du débat
+        </div>
+        <div class="bar-center">
+            <a class="barbutton">TDM</a>
+            <a class="barbutton">Synthèse</a>
+            <a class="barbutton">Presse-papier</a>
+            <a class="barbutton">Messages</a>
+        </div>
+    </div>
+
+    <div class="table">
+        <div id="idealist" class="panel"></div>
+
+        <div id="segmentlist" class="panel"></div>
+
+        <div id="message" class="panel"></div>
+    </div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script type="text/javascript">requirejs(["main"]);</script>
+{% endblock %}

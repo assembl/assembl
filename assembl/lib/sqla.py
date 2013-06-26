@@ -4,8 +4,8 @@ import re
 import sys
 from datetime import datetime
 
-from colanderalchemy import Column, SQLAlchemyMapping
-from sqlalchemy import DateTime, MetaData, engine_from_config, event
+from colanderalchemy import SQLAlchemySchemaNode
+from sqlalchemy import DateTime, MetaData, engine_from_config, event, Column
 from sqlalchemy.ext.declarative import declarative_base, declared_attr
 from sqlalchemy.orm import mapper, scoped_session, sessionmaker
 from sqlalchemy.orm.util import has_identity
@@ -86,7 +86,7 @@ class BaseOps(object):
             includes -= set(exclude)
 
         if mapping_cls is None:
-            mapping_cls = SQLAlchemyMapping
+            mapping_cls = SQLAlchemySchemaNode
         return mapping_cls(cls, includes=list(includes))
 
     @classmethod
@@ -183,10 +183,10 @@ class Timestamped(BaseOps):
             exclude = set(exclude) | set(cls._stamps)
         kwargs['exclude'] = exclude
         return super(Timestamped, cls) \
-                .validator(mapping_cls=TimestampedSQLAlchemyMapping, **kwargs)
+                .validator(mapping_cls=TimestampedSQLAlchemySchemaNode, **kwargs)
 
 
-class TimestampedSQLAlchemyMapping(SQLAlchemyMapping):
+class TimestampedSQLAlchemySchemaNode(SQLAlchemySchemaNode):
     """The ColanderAlchemy schema mapper for TimestampedBase."""
     def __init__(self, cls, excludes=None, **kwargs):
         stamps = ['ins_date', 'mod_date']
@@ -194,7 +194,7 @@ class TimestampedSQLAlchemyMapping(SQLAlchemyMapping):
             excludes = stamps
         elif len(excludes) > 0:
             excludes = set(excludes) | set(stamps)
-        parent = super(TimestampedSQLAlchemyMapping, self)
+        parent = super(TimestampedSQLAlchemySchemaNode, self)
         return parent.__init__(cls, excludes=excludes, **kwargs)
 
 

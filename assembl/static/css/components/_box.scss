@@ -1,0 +1,37 @@
+// Generic box
+// =============
+.box {
+    position: relative;
+    overflow: hidden;
+
+    background: $box-background-color;
+    border: solid 1px $box-border-color;
+
+    padding: $box-padding;
+}
+
+// Dashed box
+// +++++++++++++++
+.box.box--dashed {
+    border: dashed 2px $box-border-color;
+}
+
+// Centered box
+// +++++++++++++++
+.box.box--centered {
+    line-height: 50px;
+    text-align: center;
+}
+
+// A wrapper for two or more .box
+// ====================
+.boxlist {
+    .box:not(.box--dashed) {
+        border: 0;
+        border-bottom: solid 1px $box-border-color;
+    }
+
+    .box:last-child:not(.box--dashed) {
+        border-bottom: 0;
+    }
+}

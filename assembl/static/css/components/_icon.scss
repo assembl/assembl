@@ -1,8 +1,9 @@
 
-[class|="icon"] {
+.icon {
     display: inline-block;
     width: $icon-width;
     height: $icon-height;
+    vertical-align: middle;
 }
 
 @import "icon/*.png";

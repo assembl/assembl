@@ -11,17 +11,52 @@
 .button {
     @extend %button;
 
-    padding: 4px 12px;
+    padding: { right: 6px; left: 6px; }
+    @include box-sizing( border-box );
+    line-height: $icon-height + 4px;
+
+    @include border-radius($button-border-radius);
+    border: solid 1px #dadad9;
+    @include background-linear-gradient(bottom, #f7f7f5, #fcfbf7);
+    font-size: $button-font-size;
+    text-align: center;
+    color: #535353;
 }
 
 // Default button hover state
 // **************************
 .button:hover {
-    border: solid 1px rgba(0, 0, 0, 0.7);
-    box-shadow: gba(255, 255, 255, 0.2) 0px 1px 0px 0px inset;
+    @include box-shadow(inset 0 -1px rgba(49,49,49,.48));
     text-decoration: none;
 }
 
+// Default button active state
+// *******************
+.button:active {}
+
+
+// Create a button group
+// ===============
+.buttongroup {
+    font-size: 0;
+    display: inline-block;
+
+    .button {
+        border-radius: 0;
+        font-size: $button-font-size;
+        min-width: 100px;
+    }
+
+    .button:first-child {
+        border-radius: $button-border-radius 0 0 $button-border-radius;
+        border-right: 0;
+    }
+
+    .button:last-child {
+        border-radius: 0 $button-border-radius $button-border-radius 0;
+        border-left: 0;
+    }
+}
 
 // Iconed button
 // =============
@@ -29,27 +64,34 @@
     @extend %button;
 
     position: relative;
+    display: inline-block;
+    width: $icon-width;
+    height: $icon-height;
+    vertical-align: middle;
+
+    opacity: 0.55;
+
+    &:hover {
+        opacity: 1;
+    }
+
+    &:active {
+        @extend .iconbutton.is-activated;
+    }
 }
 
-// A badge which stands at the top right
-// of the iconbutton
-// -------------------
-.iconbutton-badge {
-    position: absolute;
-    top: $badge-height / -2;
-    right: $badge-width / -2;
-
-    width: $badge-width;
-    height: $badge-height;
-    line-height: $badge-height;
-
-    background-color: #ee7f4e;
-    border-radius: 3px;
-    color: white;
-    font-size: 10px;
-    text-align: center;
+// Active state
+// ************
+.iconbutton.is-activated {
+    opacity: 1;
+    background-color: transparentize(#e5e5e5, 0.5);
 }
 
+// Removes the hover fx on the button
+// +++++++++++++++++++
+.iconbutton.iconbutton--nofx {
+    opacity: 1;
+} 
 
 // Arrow button
 // ==========
@@ -65,11 +107,14 @@
     margin-left: 14px;
 
     background-color: rgba(129,133,139,0);
-    @include background-image(linear-gradient(bottom, #afa8cf, #c7c2dd));
+    @include background-linear-gradient(bottom, #afa8cf, #c7c2dd);
     @include box-shadow(0 1px rgba(255,255,255,.15), inset 0 2px rgba(255,255,253,.2));
     color: white;
     border: solid 1px #8d88a6;
     border-radius: 0 $arrowbutton-radius $arrowbutton-radius 0;
+
+    font-size: 14px;
+    text-decoration: none;
 
     &:before {
         content: url(#{$img-dir}/button/arrowbutton.png);
@@ -85,17 +130,42 @@
     border-radius: $arrowbutton-radius 0 0 $arrowbutton-radius;
     margin-left: 0;
     margin-right: 14px;
+    padding: 0 5px 0 10px;
 
     &:before {
         display: none;
     }
 
     &:after {
-        content: url(#{$img-dir}/button/arrowbutton.png);
+        content: url(#{$img-dir}/button/arrowbutton-right.png);
         position: absolute;
         top: -1px;
         right: -14px;
-
-        @include transform( rotateY(180deg) );
     }
+}
+
+// Button made to fit in a .bar
+// =========================
+.barbutton {
+    @extend %button;
+
+    background-color: #aea8c7;
+    border: solid 1px #a9a3c1;
+    @include box-shadow(inset 0 1px rgba(255,255,255,.17));
+    color: #2f2f2f;
+    font-size: 14px;
+
+    padding: 10px 20px;
+    line-height: 1em;
+
+    &:active {
+        @extend .barbutton.is-activated;
+    }
+}
+
+// Active state
+// =========================
+.barbutton.is-activated {
+    background-color: #aea8c7;
+    @include box-shadow(0 1px rgba(249,255,255,.3), inset 0 1px rgba(0,0,0,.5));
 }

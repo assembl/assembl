@@ -1,0 +1,15 @@
+// Default close button
+// =====================
+.closebutton {
+    position: absolute;
+    top: $padding / 2;
+    right: $padding / 2;
+
+    color: $closebutton-color;
+    font-size: 20px;
+    cursor: pointer;
+
+    &:hover {
+        color: darken($closebutton-color, 20%);
+    }
+}

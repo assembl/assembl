@@ -1,0 +1,11 @@
+// A message block
+// ================
+.message {
+    @extend .text;
+}
+
+// A message block Header
+// --------------------
+.message-header {
+    position: relative;
+}

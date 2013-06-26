@@ -1,6 +1,28 @@
 html {
     font-family: Arial, sans-serif;
     font-size: $font-size;
+    background-color: #fcfbf7;
+}
+
+::selection {
+    background: $text-selection-color; /* Safari */
+}
+::-moz-selection {
+    background: $text-selection-color; /* Firefox */
+}
+
+::-webkit-scrollbar {
+    background-color: #eeeeee;
+    width:10px;
+    height:10px
+}
+
+::-webkit-scrollbar-thumb {
+    background:#c2c2c2;
+    border-radius:6px;
+    width:8px;
+    min-height:40px;
+    border:2px solid #eeeeee;
 }
 
 .margin { margin: $margin; }
@@ -8,3 +30,14 @@ html {
 .margin-right { margin-right: $margin-right; }
 .margin-bottom { margin-bottom: $margin-bottom; }
 .margin-left { margin-left: $margin-left; }
+
+.float-left { float: left; }
+.float-right { float: right; }
+
+.no-fx { @include transition( none !important ); }
+
+.user-select-none {
+    @include user-select(none);
+    &::selection { background: transparent; }
+    &::-moz-selection { background: transparent; }
+}

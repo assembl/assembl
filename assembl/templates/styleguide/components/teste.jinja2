@@ -1,0 +1,18 @@
+
+
+<div class="oi" draggable="true">
+    Taram ?
+</div>
+
+<script>
+window.onload = function(){
+
+    requirejs(['zepto', 'app'], function($, app){
+
+        $('.oi').on('dragstart', function(ev){
+            app.showDragbox(ev, 'sim');
+        });
+
+    });
+};
+</script>

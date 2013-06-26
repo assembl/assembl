@@ -19,6 +19,7 @@ def includeme(config):
     config.add_route('toc', '/toc')
     config.add_route('nodetest', '/nodetest')
     config.add_route('styleguide', '/styleguide')
+    config.add_route('test', '/test')
     config.include(api_urls, route_prefix='/api')
 
     config.include('pyramid_jinja2')

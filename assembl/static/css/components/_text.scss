@@ -1,0 +1,71 @@
+// The commun output for a text
+// ======================
+.text {
+    color: $text-color;
+    font-size: 14px;
+    font-family: "Myriad Pro";
+}
+
+// A muted text
+// --------------
+.text-muted {
+    color: $text-muted-color;
+}
+
+// Bigger text
+// ----------------
+.text-big {
+    font-size: 18px;
+}
+
+// The text bubble for when a text is selected
+// ====================
+.textbubble {
+    $textbubble-width: 150px;
+    $textbubble-height: 16px;
+
+    position: absolute;
+
+    background: white url(#{$img-dir}/text/textbubble.png) no-repeat 98% center;
+    opacity: 0.9;
+
+    cursor: pointer;
+    border: solid 4px #d3d3d6;
+    border-radius: 6px;
+    
+    line-height: $textbubble-height;
+    padding: 5px;
+    padding-right: 25px;
+    margin-top: $textbubble-height * -4;
+
+    &:hover {
+        opacity: 1;
+    }
+
+    &:after,
+    &:before {
+        top: 100%;
+        border: solid transparent;
+        content: " ";
+        height: 0;
+        width: 0;
+        position: absolute;
+        pointer-events: none;
+    }
+
+    &:after {
+        border-color: rgba(211, 211, 214, 0);
+        border-top-color: #d3d3d6;
+        border-width: 10px;
+        left: 50%;
+        margin-left: -10px;
+    }
+    &:before {
+        border-color: rgba(211, 211, 214, 0);
+        border-top-color: #d3d3d6;
+        border-width: 16px;
+        left: 50%;
+        margin-left: -16px;
+    }
+
+}
