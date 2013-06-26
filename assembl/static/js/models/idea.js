@@ -5,11 +5,21 @@ define(['backbone'], function(Backbone){
      * @class Idea
      */
     var IdeaModel = Backbone.Model.extend({
+        initialize: function(obj){
+            if( obj && _.isArray(obj.children) ){
+                _.each(obj.children, function(child, i){
+                    if( IdeaModel !== child.constructor ){
+                        obj.children[i] = new IdeaModel(child);
+                    }
+                });
+            }
+        },
         url: "/static/js/tests/fixtures/idea.json",
         defaults: {
             subject: '',
             level: 1,
             total: 1,
+            isOpen: false,
             hasCheckbox: true,
             hasChildren: false,
             hasOptions: true,
@@ -26,6 +36,7 @@ define(['backbone'], function(Backbone){
             var children = this.get('children');
             children.push(idea);
             this.set('children', children);
+            this.set('hasChildren', true);
         }
     });
 

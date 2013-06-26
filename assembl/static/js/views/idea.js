@@ -26,7 +26,7 @@ function(Backbone, _, $, Idea, app){
             this.el.setAttribute(DATA_LEVEL, data.level);
             this.$el.addClass('idealist-item');
 
-            if( data.level > 1 ){
+            if( data.level > 1 && !data.isOpen ){
                 this.$el.addClass('is-hidden');
             }
 
@@ -40,16 +40,21 @@ function(Backbone, _, $, Idea, app){
          * @return {array}
          */
         renderChildren: function(){
-            var children = [];
-            _.each(this.model.get('children'), function(idea){
+            var ret = [],
+                children = this.model.get('children'),
+                i = 0, len = children.length;
+
+            _.each(children, function(idea, i){
                 var ideaModel = ( idea.constructor !== Idea.Model ) ? new Idea.Model(idea) : idea,
                     ideaView = new IdeaView({model:ideaModel});
 
-                children.push( ideaView.render().el );
-                children = _.union(children, ideaView.renderChildren());
+                ret.push( ideaView.render().el );
+                if( ideaModel.get('hasChildren') ){
+                    ret = _.union(ret, ideaView.renderChildren());
+                }
             });
 
-            return children;
+            return ret;
         },
 
         /**
@@ -80,11 +85,10 @@ function(Backbone, _, $, Idea, app){
             }
 
             var currentLevel = ~~item.attr(DATA_LEVEL);
-
             if( currentLevel === (parentLevel+1) ){
                 item.removeClass("is-hidden");
-                this.showItemInCascade(item.next(), parentLevel);
             }
+            this.showItemInCascade(item.next(), parentLevel);
         },
 
         /**
@@ -150,7 +154,9 @@ function(Backbone, _, $, Idea, app){
             this.clearDragStates();
             var li = app.getDraggedSegment();
 
-            this.addChild( li.innerHTML );
+            if( li ){
+                this.addChild( 'oi' ); // li.innerText
+            }
         },
 
         /**
@@ -178,9 +184,11 @@ function(Backbone, _, $, Idea, app){
          */
         toggle: function(ev){
             if( this.$el.hasClass('is-open') ){
+                this.model.set('isOpen', false);
                 this.$el.removeClass('is-open');
                 this.closeItemInCascade( this.$el.next(), ~~this.$el.attr(DATA_LEVEL) );
             } else {
+                this.model.set('isOpen', true);
                 this.$el.addClass('is-open');
                 this.showItemInCascade( this.$el.next(), ~~this.$el.attr(DATA_LEVEL) );
             }
