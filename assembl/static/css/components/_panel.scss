@@ -7,17 +7,23 @@
     width: 100%;
     padding: $padding $padding/2;
 
-    .panel-2 & {
+    [data-panel-qty="2"] & {
         width: 50%;
     }
 
-    .panel-3 & {
+    [data-panel-qty="3"] & {
         width: 33.3%;
     }
 
-    .panel-4 & {
+    [data-panel-qty="4"] & {
         width: 25%;
     }
+}
+
+// When it is open
+// +++++++++++++++
+.panel.is-open {
+
 }
 
 // Panel body

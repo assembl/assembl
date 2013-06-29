@@ -148,6 +148,7 @@
 // =========================
 .barbutton {
     @extend %button;
+    @include no-selection;
 
     background-color: #aea8c7;
     border: solid 1px #a9a3c1;

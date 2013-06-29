@@ -520,8 +520,16 @@ html {
   padding: 10px 20px;
   line-height: 1em;
 }
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/base\/_mixins\.scss}line{font-family:\0000342}}
+.barbutton::-moz-selection {
+  background-color: transparent;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/base\/_mixins\.scss}line{font-family:\0000343}}
+.barbutton::selection {
+  background-color: transparent;
+}
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\00003168}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\00003169}}
 .barbutton.is-activated, .barbutton:active {
   background-color: #aea8c7;
   -webkit-box-shadow: 0 1px rgba(249, 255, 255, 0.3), inset 0 1px rgba(0, 0, 0, 0.5);
@@ -1158,19 +1166,19 @@ html {
   padding: 10px 5px;
 }
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_panel\.scss}line{font-family:\0000310}}
-.panel-2 .panel {
+[data-panel-qty="2"] .panel {
   width: 50%;
 }
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_panel\.scss}line{font-family:\0000314}}
-.panel-3 .panel {
+[data-panel-qty="3"] .panel {
   width: 33.3%;
 }
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_panel\.scss}line{font-family:\0000318}}
-.panel-4 .panel {
+[data-panel-qty="4"] .panel {
   width: 25%;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_panel\.scss}line{font-family:\0000325}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_panel\.scss}line{font-family:\0000331}}
 .panel-body {
   max-height: 300px;
   overflow-y: auto;

@@ -76,6 +76,59 @@ function($, _){
         dragbox: null,
 
         /**
+         * Qty of opened panels
+         * @type {Number}
+         */
+        openedPanels: 0,
+
+        /**
+         * Show or hide the given panel
+         * @param  {String} panelName
+         */
+        togglePanel: function(panelName){
+            var panel = app[panelName];
+            if( panel === undefined ){
+                return false;
+            }
+
+            if( panel.$el.hasClass('is-open') ){
+                app.closePanel(panel);
+                $('#button-'+panelName).removeClass('is-activated');
+            } else {
+                app.openPanel(panel);
+                $('#button-'+panelName).addClass('is-activated');
+            }
+        },
+
+        /**
+         * Open the given panel
+         * @param {backbone.View} panel 
+         */
+        openPanel: function(panel){
+            if( panel.$el.hasClass('is-open') ){
+                return false;
+            }
+
+            app.openedPanels += 1;
+            app.body.attr('data-panel-qty', app.openedPanels);
+            panel.$el.addClass('is-open').show();
+        },
+
+        /**
+         * Close the given panel
+         * @param {backbone.View} panel
+         */
+        closePanel: function(panel){
+            if( ! panel.$el.hasClass('is-open') ){
+                return false;
+            }
+
+            app.openedPanels -= 1;
+            app.body.attr('data-panel-qty', app.openedPanels);
+            panel.$el.removeClass('is-open').hide();
+        },
+
+        /**
          * @return {HTMLLiElement} [description]
          */
         getDraggedSegment: function(){

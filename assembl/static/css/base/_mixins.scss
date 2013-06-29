@@ -37,6 +37,12 @@
     user-select: $value; 
 }
 
+// Remove the selection background 
+@mixin no-selection {
+    &::-moz-selection { background-color: transparent; }
+    &::selection { background-color: transparent; }
+}
+
 // Check the $legacy-support-for-ie9 variable
 // If it is true, add the .ie9 class
 // Because we loooooooove internet explorer

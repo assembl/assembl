@@ -15,17 +15,24 @@ define([
     $('#assembl-mainbutton').on('click', app.lateralMenu.trigger.bind(app.lateralMenu, 'toggle'));
 
     // Idea list
-    app.ideaList = new IdeaList({ el: '#idealist' });
+    $('#button-ideaList').on('click', app.togglePanel.bind(window, 'ideaList'));
+    app.ideaList = new IdeaList({el: '#idealist'});
+    app.ideaList.$el.hide();
     app.ideaList.ideas.fetch({reset: true});
 
     // Segment List
+    $('#button-segmentList').on('click', app.togglePanel.bind(window, 'segmentList'));
     app.segmentList = new SegmentList({el: '#segmentlist'});
+    app.segmentList.$el.hide();
     app.segmentList.render();
 
     // Message
-    app.message = new Message({el: '#message'}).render();
+    $('#button-messages').on('click', app.togglePanel.bind(window, 'messages'));
+    app.messages = new Message({el: '#messages'}).render();
+    app.messages.$el.hide();
+
     app.on('lateralmenu.open', function(){
-        app.message.hideTooltip();
+        app.messages.hideTooltip();
     });
     app.selectionTooltip.on('click', function(){
         app.selectionTooltip.hide();
