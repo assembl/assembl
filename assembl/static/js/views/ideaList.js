@@ -27,10 +27,12 @@ function(Backbone, _, Idea, IdeaView, app){
                 var ideaView = new IdeaView({model:idea});
                 list.appendChild(ideaView.render().el);
 
+                /*
                 var children = ideaView.renderChildren();
                 _.each(children, function(child){
                     list.appendChild(child);
                 });
+                */
             });
 
             this.$el.html(this.template());

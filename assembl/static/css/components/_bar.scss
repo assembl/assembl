@@ -1,6 +1,7 @@
 // Bar
 // ===
 .bar {
+    @include no-selection;
     display: block;
     height: $bar-height;
     position: relative;

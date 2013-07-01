@@ -54,13 +54,26 @@
 
 // idea list open ( showing the children )
 // *********************
-.idealist-item.is-open {}
+.idealist-item.is-open {
+    height: auto;
+}
 
 // idea list is hidden
 // *********************
 .idealist-item.is-hidden {
     height: 0; //display: none;
     border-top: 0;
+}
+
+// A child collection for an .idealist-item
+// ----------------------
+.idealist-children {
+    height: 0px;
+
+    .idealist-item.is-open > & {
+        border-top: $idealist-item-border;
+        height: auto;    
+    }
 }
 
 // idea list with the form open
@@ -72,13 +85,13 @@
 
 // idea list when receving a dragover
 // *********************
-.idealist-item.is-dragover {
+.idealist-item.is-dragover > .idealist-label {
     background-color: $dragbox-background-color;
 }
 
 // idea list when receving a dragover and the mouse it below the middle
 // *********************
-.idealist-item.is-dragover-below {
+.idealist-item.is-dragover-below > .idealist-label {
     &:before {
         content: "";
         display: block;
@@ -163,7 +176,7 @@
         opacity: 1;
     }
 
-    .idealist-item.is-open & {
+    .idealist-item.is-open > .idealist-label > & {
         @include transform( rotate(0deg) );
     }
 }

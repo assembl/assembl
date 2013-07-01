@@ -9,7 +9,7 @@ function(Backbone, _, $, Idea, app){
          * Tag name
          * @type {String}
          */
-        tagName: 'li',
+        tagName: 'div',
 
         /**
          * The template
@@ -22,15 +22,22 @@ function(Backbone, _, $, Idea, app){
          * @return {IdeaView}
          */
         render: function(){
-            var data = this.model.toJSON();
+            var data = this.model.toJSON(),
+                doc = document.createDocumentFragment();
+
             this.el.setAttribute(DATA_LEVEL, data.level);
             this.$el.addClass('idealist-item');
 
-            if( data.level > 1 && !data.isOpen ){
+            if( data.level > 1 ){
                 this.$el.addClass('is-hidden');
             }
 
+            if( data.isOpen !== false ){
+                this.toggle();
+            }
+
             this.$el.html(this.template(data));
+            this.$el.append( this.getRenderedChildren() );
 
             return this;
         },
@@ -50,8 +57,27 @@ function(Backbone, _, $, Idea, app){
 
                 ret.push( ideaView.render().el );
                 if( ideaModel.get('hasChildren') ){
+
                     ret = _.union(ret, ideaView.renderChildren());
                 }
+            });
+
+            return ret;
+        },
+
+        /**
+         * Returns all children rendered
+         * @return {Array<HTMLDivElement>}
+         */
+        getRenderedChildren: function(){
+            var children = this.model.get('children'),
+                ret = [];
+
+            _.each(children, function(idea, i){
+                var ideaModel = ( idea.constructor !== Idea.Model ) ? new Idea.Model(idea) : idea,
+                    ideaView = new IdeaView({model:ideaModel});
+
+                ret.push( ideaView.render().el );
             });
 
             return ret;
@@ -157,6 +183,10 @@ function(Backbone, _, $, Idea, app){
             if( li ){
                 this.addChild( 'oi' ); // li.innerText
             }
+
+            if( app.ideaList ){
+                app.ideaList.render();
+            }
         },
 
         /**
@@ -186,11 +216,11 @@ function(Backbone, _, $, Idea, app){
             if( this.$el.hasClass('is-open') ){
                 this.model.set('isOpen', false);
                 this.$el.removeClass('is-open');
-                this.closeItemInCascade( this.$el.next(), ~~this.$el.attr(DATA_LEVEL) );
+                //this.closeItemInCascade( this.$el.next(), ~~this.$el.attr(DATA_LEVEL) );
             } else {
                 this.model.set('isOpen', true);
                 this.$el.addClass('is-open');
-                this.showItemInCascade( this.$el.next(), ~~this.$el.attr(DATA_LEVEL) );
+                //this.showItemInCascade( this.$el.next(), ~~this.$el.attr(DATA_LEVEL) );
             }
         },
 
