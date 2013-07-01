@@ -20,7 +20,6 @@
 .idealist-item {
     border-top: $idealist-item-border;
     position: relative;
-    height: 45px;
     cursor: pointer;
     overflow: hidden;
 
@@ -83,29 +82,6 @@
     border: solid 5px #dbf2ff;
 }
 
-// idea list when receving a dragover
-// *********************
-.idealist-item.is-dragover > .idealist-label {
-    background-color: $dragbox-background-color;
-}
-
-// idea list when receving a dragover and the mouse it below the middle
-// *********************
-.idealist-item.is-dragover-below > .idealist-label {
-    &:before {
-        content: "";
-        display: block;
-        position: absolute;
-        right: -1px;
-        bottom: 0;
-        left: -1px;
-        height: $idealist-item-dragover-height;
-
-        background-color: $dragbox-background-color;
-        border: solid 1px $dragbox-border-color;
-    }
-}
-
 // The checkbox to select the line
 // -------------------
 .idealist-checkbox {
@@ -126,6 +102,7 @@
     overflow: hidden;
     padding-right: $idealist-item-padding-right;
     @include box-sizing( border-box );
+    height: 45px;
 
     @include transition( padding-right 0.4s );
 
@@ -143,6 +120,30 @@
     }
 
 }
+
+// idea list when receving a dragover
+// *********************
+.idealist-label.is-dragover {
+    background-color: $dragbox-background-color;
+}
+
+// idea list when receving a dragover and the mouse it below the middle
+// *********************
+.idealist-label.is-dragover-below {
+    &:before {
+        content: "";
+        display: block;
+        position: absolute;
+        right: -1px;
+        bottom: 0;
+        left: -1px;
+        height: $idealist-item-dragover-height;
+
+        background-color: $dragbox-background-color;
+        border: solid 1px $dragbox-border-color;
+    }
+}
+
 
 
 // Showing the options .idealist-label

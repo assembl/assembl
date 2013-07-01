@@ -66,13 +66,6 @@ function(jasmine, _, app, IdeaView){
             expect( level ).toBe( view.model.get('level') );
         });
 
-        it('should be hidden if the level is bigger than 1', function(){
-            view.model.set('level', 2);
-            fixIdea.empty().append( view.render().el );
-
-            expect( view.el ).toHaveClass('is-hidden');
-        });
-
         it('should have the counter the same of the total property', function(){
             var counter = ~~ view.$('.fixedcounter').text();
             expect( counter ).toBe(view.model.get('total'));
@@ -80,23 +73,19 @@ function(jasmine, _, app, IdeaView){
 
         it('should trigger toggle method when click in the arrow', function(){
             spyOn(IdeaView.prototype, 'toggle').andCallThrough();
-            spyOn(IdeaView.prototype, 'showItemInCascade').andCallThrough();
-            spyOn(IdeaView.prototype, 'closeItemInCascade').andCallThrough();
             view = new IdeaView({model:view.model});
 
             view.model.set('hasChildren', true);
             fixIdea.empty().append( view.render().el );
 
-            var arrow = view.$('.idealist-label-arrow');
+            var arrow = view.$('.idealist-label-arrow').eq(0);
             arrow.trigger('click');
 
             expect(view.toggle).toHaveBeenCalled();
-            expect(view.showItemInCascade).toHaveBeenCalled();
             expect(view.el).toHaveClass('is-open');
 
             arrow.trigger('click');
             expect(view.toggle.callCount).toBe(2);
-            expect(view.closeItemInCascade).toHaveBeenCalled();
         });
 
         it('should have the .has-options class if hasOptions is true', function(){
@@ -106,8 +95,12 @@ function(jasmine, _, app, IdeaView){
             expect(view.$('.idealist-label').get(0)).toHaveClass('has-options');
         });
 
+        it('should have the .idealist-label in the label property', function(){
+            expect( view.label ).toBe('.idealist-label');
+        });
+
         it('should add an idea if it is in .is-dragover-below state', function(){
-            //view.$el.addClass('is-dragover-below');
+            view.label.classList.add('is-dragover-below');
 
             //view.add
             // view.addSegment({ text: 'nada' });

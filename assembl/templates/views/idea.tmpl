@@ -3,7 +3,7 @@
     <input type="checkbox" />
 </span>
 <% } */ %>
-<span class="idealist-label <% if (hasOptions) { %>has-options<% } %>" >
+<span class="idealist-label <% if (hasOptions) { %>has-options<% } %>" data-algo="<%= new Date().getTime() %>">
     <% if (hasChildren) { %><span class="idealist-label-arrow"></span><% } %>
     <%= subject %>
     <span class="idealist-label-options">
@@ -13,3 +13,5 @@
     </span>
 </span>
 <div class="fixedcounter"><%= total %></div>
+
+<div class="idealist-children"></div>

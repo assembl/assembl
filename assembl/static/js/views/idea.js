@@ -4,6 +4,23 @@ function(Backbone, _, $, Idea, app){
 
     var DATA_LEVEL = 'data-idealist-level';
 
+    /**
+     * Given the .idealist-label, returns the right offsetTop
+     * @param  {.idealist-label} el
+     * @param  {Number} [top=0] Initial top
+     * @return {Number}
+     */
+    function getTopPosition(el, top){
+        top = top || 0;
+
+        if( el.offsetParent.id === 'wrapper' ){
+            return top + el.offsetTop;
+        } else {
+            return getTopPosition(el.offsetParent, el.offsetTop);
+        }
+
+    }
+
     var IdeaView = Backbone.View.extend({
         /**
          * Tag name
@@ -18,6 +35,12 @@ function(Backbone, _, $, Idea, app){
         template: app.loadTemplate('idea'),
 
         /**
+         * The label element
+         * @type {HTMLSpanElement}
+         */
+        label: null,
+
+        /**
          * The render
          * @return {IdeaView}
          */
@@ -28,16 +51,13 @@ function(Backbone, _, $, Idea, app){
             this.el.setAttribute(DATA_LEVEL, data.level);
             this.$el.addClass('idealist-item');
 
-            if( data.level > 1 ){
-                this.$el.addClass('is-hidden');
-            }
-
-            if( data.isOpen !== false ){
-                this.toggle();
-            }
+            // if( data.isOpen !== false ){
+            //     this.toggle();
+            // }
 
             this.$el.html(this.template(data));
-            this.$el.append( this.getRenderedChildren() );
+            this.label = this.$('.idealist-label').get(0);
+            this.$('.idealist-children').append( this.getRenderedChildren() );
 
             return this;
         },
@@ -88,10 +108,6 @@ function(Backbone, _, $, Idea, app){
          * @param  {string} html
          */
         addChild: function(html){
-            if( !this.$el.hasClass('is-open') ){
-                this.showItemInCascade( this.$el.next(), this.model.get('level') );
-            }
-
             var idea = new Idea.Model({
                 subject: html,
                 level: this.model.get('level') + 1
@@ -101,46 +117,11 @@ function(Backbone, _, $, Idea, app){
         },
 
         /**
-         * Shows an item and its descendents
-         * @param  {Zepto} item
-         * @param  {number} parentLevel
-         */
-        showItemInCascade: function(item, parentLevel){
-            if( item.length === 0 ){
-                return;
-            }
-
-            var currentLevel = ~~item.attr(DATA_LEVEL);
-            if( currentLevel === (parentLevel+1) ){
-                item.removeClass("is-hidden");
-            }
-            this.showItemInCascade(item.next(), parentLevel);
-        },
-
-        /**
-         * Closes an item and its descendents
-         * @param  {Zepto} item
-         * @param  {number} parentLevel
-         */
-        closeItemInCascade: function (item, parentLevel){
-            if( item.length === 0 ){
-                return;
-            }
-
-            var currentLevel = ~~item.attr('data-idealist-level');
-
-            if( currentLevel > parentLevel ){
-                item.addClass("is-hidden").removeClass('is-open');
-                this.closeItemInCascade(item.next(), parentLevel);
-            }
-        },
-
-        /**
          * Remove the states related to drag
          */
         clearDragStates: function(){
-            this.el.classList.remove('is-dragover');
-            this.el.classList.remove('is-dragover-below');
+            this.label.classList.remove('is-dragover');
+            this.label.classList.remove('is-dragover-below');
         },
 
         /**
@@ -152,30 +133,36 @@ function(Backbone, _, $, Idea, app){
             'swipeLeft .idealist-label': 'showOptions',
             'swipeRight .idealist-label': 'hideOptions',
             'click .idealist-label-arrow': 'toggle',
-            'dragleave': 'clearDragStates',
-            'dragover': 'onDragOver',
-            'drop': 'onDrop'
+            'dragleave .idealist-label': 'clearDragStates',
+            'dragover .idealist-label': 'onDragOver',
+            'drop .idealist-label': 'onDrop'
         },
 
         /**
          * @event
          */
         onDragOver: function(ev){
-            ev.preventDefault();
+            if( ev ){
+                ev.preventDefault();
+                ev.stopPropagation();
+            }
             this.clearDragStates();
 
-            var top = this.el.offsetParent.offsetTop + this.el.offsetTop,
+            var top = getTopPosition(this.label),
                 below = top + 30,
                 cls = ev.clientY >= below ? 'is-dragover-below' : 'is-dragover';
 
-            this.el.classList.add( cls );
+            this.label.classList.add( cls );
         },
 
         /**
          * @event
          */
         onDrop: function(ev){
-            ev.stopPropagation();
+            if( ev ){
+                ev.preventDefault();
+                ev.stopPropagation();
+            }
 
             this.clearDragStates();
             var li = app.getDraggedSegment();
@@ -184,9 +171,9 @@ function(Backbone, _, $, Idea, app){
                 this.addChild( 'oi' ); // li.innerText
             }
 
-            if( app.ideaList ){
-                app.ideaList.render();
-            }
+            // if( app.ideaList ){
+            //     app.ideaList.render();
+            // }
         },
 
         /**
@@ -213,14 +200,16 @@ function(Backbone, _, $, Idea, app){
          * @param  {Event} ev
          */
         toggle: function(ev){
+            if( ev ){
+                ev.stopPropagation();
+            }
+
             if( this.$el.hasClass('is-open') ){
                 this.model.set('isOpen', false);
                 this.$el.removeClass('is-open');
-                //this.closeItemInCascade( this.$el.next(), ~~this.$el.attr(DATA_LEVEL) );
             } else {
                 this.model.set('isOpen', true);
                 this.$el.addClass('is-open');
-                //this.showItemInCascade( this.$el.next(), ~~this.$el.attr(DATA_LEVEL) );
             }
         },
 
