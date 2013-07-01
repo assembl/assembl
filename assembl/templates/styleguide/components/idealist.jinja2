@@ -6,6 +6,13 @@
 </span>
 {%- endmacro %}
 
+{% macro chk() -%}
+<label class="chk chk--idealist">
+    <input type="checkbox" class="chk-checkbox" />
+    <span class="chk-label"></span>
+</label>
+{%- endmacro %}
+
 <h3>Default .idealist</h3>
 <div class="idealist">
     <div class="idealist-item" data-idealist-level="1">
@@ -146,11 +153,9 @@
 <div class="spacer"></div>
 
 <h3>Idea list with checkboxes</h3>
-<div class="idealist">
+<div class="idealist idealist--chk">
     <div class="idealist-item is-open" data-idealist-level="1">
-        <span class="idealist-checkbox">
-            <input type="checkbox" />
-        </span>
+        {{ chk() }}
         <span class="idealist-label">
             <span class="idealist-label-arrow"></span>
             Item level 1
@@ -159,9 +164,7 @@
 
         <div class="idealist-children">
             <div class="idealist-item is-open" data-idealist-level="2">
-                <span class="idealist-checkbox">
-                    <input type="checkbox" />
-                </span>
+                {{ chk() }}
                 <span class="idealist-label">
                     <span class="idealist-label-arrow"></span>
                     Item level 2
@@ -170,9 +173,7 @@
                 
                 <div class="idealist-children">
                     <div class="idealist-item is-open" data-idealist-level="3">
-                        <span class="idealist-checkbox">
-                            <input type="checkbox" />
-                        </span>
+                        {{ chk() }}
                         <span class="idealist-label">
                             <span class="idealist-label-arrow"></span>
                             Item level 3
@@ -181,9 +182,7 @@
                         
                         <div class="idealist-children">
                             <div class="idealist-item is-open" data-idealist-level="4">
-                                <span class="idealist-checkbox">
-                                    <input type="checkbox" />
-                                </span>
+                                {{ chk() }}
                                 <span class="idealist-label">
                                     Item level 4
                                 </span>

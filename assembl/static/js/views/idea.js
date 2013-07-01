@@ -63,29 +63,6 @@ function(Backbone, _, $, Idea, app){
         },
 
         /**
-         * Return an array with all children rendered
-         * @return {array}
-         */
-        renderChildren: function(){
-            var ret = [],
-                children = this.model.get('children'),
-                i = 0, len = children.length;
-
-            _.each(children, function(idea, i){
-                var ideaModel = ( idea.constructor !== Idea.Model ) ? new Idea.Model(idea) : idea,
-                    ideaView = new IdeaView({model:ideaModel});
-
-                ret.push( ideaView.render().el );
-                if( ideaModel.get('hasChildren') ){
-
-                    ret = _.union(ret, ideaView.renderChildren());
-                }
-            });
-
-            return ret;
-        },
-
-        /**
          * Returns all children rendered
          * @return {Array<HTMLDivElement>}
          */
@@ -93,12 +70,13 @@ function(Backbone, _, $, Idea, app){
             var children = this.model.get('children'),
                 ret = [];
 
-            _.each(children, function(idea, i){
-                var ideaModel = ( idea.constructor !== Idea.Model ) ? new Idea.Model(idea) : idea,
-                    ideaView = new IdeaView({model:ideaModel});
+            if( this.model.get('hasChildren') === true ){
+                _.each(children, function(idea, i){
+                    var ideaView = new IdeaView({model:idea});
 
-                ret.push( ideaView.render().el );
-            });
+                    ret.push( ideaView.render().el );
+                });
+            }
 
             return ret;
         },
@@ -171,9 +149,7 @@ function(Backbone, _, $, Idea, app){
                 this.addChild( 'oi' ); // li.innerText
             }
 
-            // if( app.ideaList ){
-            //     app.ideaList.render();
-            // }
+            this.render();
         },
 
         /**

@@ -3,7 +3,6 @@
 .idealist {
     @include transform( translateZ(0) );
     background-color: $idealist-background-color;
-    //border: solid 1px $idealist-border-color;
 }
 
 // The dark version of list of ideas
@@ -13,6 +12,10 @@
 // idea list made to fit in the lateralmenu
 // ++++++++++++++++++++++
 .idealist.idealist--lateralmenu {}
+
+// idea list with checkboxes
+// ++++++++++++++++++++++
+.idealist.idealist--chk {}
 
 
 // A row within the list of ideas
@@ -82,14 +85,6 @@
     border: solid 5px #dbf2ff;
 }
 
-// The checkbox to select the line
-// -------------------
-.idealist-checkbox {
-    display: inline-block;
-    line-height: $idealist-item-height;
-    float: left;
-}
-
 // The title of the idea
 // --------------------
 .idealist-label {
@@ -110,6 +105,10 @@
         border-color: $idealist-item-border-color-dark !important;
     }
 
+    .idealist--chk .idealist-item[data-idealist-level="1"] & {
+        margin-left: $checkbox-width;
+    }
+
     $idealist-item-margin-left: 15px;
     @for $i from 2 through 10 {
         .idealist-item[data-idealist-level="#{$i}"] & {
@@ -117,8 +116,11 @@
             margin-left: $idealist-item-margin-left;
             border-left: $idealist-item-border;
         }
-    }
 
+        .idealist--chk .idealist-item[data-idealist-level="#{$i}"] & {
+            margin-left: $idealist-item-margin-left + $checkbox-width;
+        }
+    }
 }
 
 // idea list when receving a dragover

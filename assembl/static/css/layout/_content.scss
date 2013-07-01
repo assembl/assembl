@@ -3,6 +3,7 @@
     position: relative;
 
     min-height: 100%;
+    min-width: 980px;
 
     @include transform( translateX(0) );
     //@include transition( transform 0.6s );
