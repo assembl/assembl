@@ -193,13 +193,13 @@ function(Backbone, _, $, Idea, app){
          * @event
          */
         onCheckboxClick: function(ev){
-            var chk = ev.currentTarget;
+            // var chk = ev.currentTarget;
 
-            if( chk.checked ){
-                this.$el.addClass('is-selected');
-            } else {
-                this.$el.removeClass('is-selected');
-            }
+            // if( chk.checked ){
+            //     this.$el.addClass('is-selected');
+            // } else {
+            //     this.$el.removeClass('is-selected');
+            // }
         }
     });
 
