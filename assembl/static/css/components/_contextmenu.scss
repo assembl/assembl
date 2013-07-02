@@ -1,0 +1,29 @@
+// The right click menu
+// ====================
+.contextmenu {
+    display: inline-block;
+    padding: $padding * 2;
+
+    border: solid 1px #e4e4e3;
+    @include box-shadow(0 2px 3px #ccc);
+    border-radius: 5px;
+    background-color: #fff;
+}
+
+// A link within the .contextmenu
+// ------------------------------
+.contextmenu-item {
+    display: block;
+    line-height: 22px;
+
+    cursor: pointer;
+    color: $text-muted-color;
+
+    &:hover { @extend .contextmenu-item.is-hovered; }
+}
+
+// .contextmenu-item hovered state
+// +++++++++++
+.contextmenu-item.is-hovered {
+    color: $text-strong-color;
+}
