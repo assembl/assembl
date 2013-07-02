@@ -1386,6 +1386,67 @@ html {
   margin-left: -16px;
 }
 
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_tooltip\.scss}line{font-family:\000033}}
+.tooltip {
+  position: relative;
+  display: inline-block;
+  line-height: 20px;
+  padding: 5px;
+  text-align: center;
+  background-color: #fcf8e3;
+  -webkit-box-shadow: 0 3px 3px rgba(0, 0, 0, 0.15);
+  -moz-box-shadow: 0 3px 3px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 3px 3px rgba(0, 0, 0, 0.15);
+  border: solid 1px #f0c36d;
+  font-size: 11px;
+  color: #c7a25a;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_tooltip\.scss}line{font-family:\0000317}}
+.tooltip:after, .tooltip:before {
+  bottom: 100%;
+  border: solid transparent;
+  content: " ";
+  height: 0;
+  width: 0;
+  position: absolute;
+  pointer-events: none;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_tooltip\.scss}line{font-family:\0000327}}
+.tooltip:after {
+  border-color: rgba(252, 248, 227, 0);
+  border-bottom-color: #fcf8e3;
+  border-width: 8px;
+  left: 50%;
+  margin-left: -8px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_tooltip\.scss}line{font-family:\0000335}}
+.tooltip:before {
+  border-color: rgba(240, 195, 109, 0);
+  border-bottom-color: #f0c36d;
+  border-width: 9px;
+  left: 50%;
+  margin-left: -9px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_tooltip\.scss}line{font-family:\0000349}}
+.tooltip.tooltip--right:after, .tooltip.tooltip--right:before {
+  bottom: auto;
+  left: 100%;
+  border-bottom-color: 0;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_tooltip\.scss}line{font-family:\0000355}}
+.tooltip.tooltip--right:after {
+  top: 50%;
+  margin-top: -8px;
+  border-left-color: #f0c36d;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_tooltip\.scss}line{font-family:\0000361}}
+.tooltip.tooltip--right:before {
+  top: 50%;
+  margin-top: -9px;
+  border-left-color: #f0c36d;
+}
+
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/layout\/_content\.scss}line{font-family:\000032}}
 #wrapper {
   position: relative;

@@ -1,0 +1,67 @@
+// Tooltip element
+// ============================
+.tooltip {
+    position: relative;
+    display: inline-block;
+    line-height: 20px;
+    padding: 5px;
+    text-align: center;
+
+    background-color: $dragbox-background-color;
+    @include box-shadow(0 3px 3px rgba(0,0,0,.15));
+    border: solid 1px $dragbox-border-color;
+
+    font-size: 11px;
+    color: #c7a25a;
+
+    &:after, &:before {
+        bottom: 100%;
+        border: solid transparent;
+        content: " ";
+        height: 0;
+        width: 0;
+        position: absolute;
+        pointer-events: none;
+    }
+
+    &:after {
+        border-color: rgba(252, 248, 227, 0);
+        border-bottom-color: $dragbox-background-color;
+        border-width: 8px;
+        left: 50%;
+        margin-left: -8px;
+    }
+
+    &:before {
+        border-color: rgba(240, 195, 109, 0);
+        border-bottom-color: $dragbox-border-color;
+        border-width: 9px;
+        left: 50%;
+        margin-left: -9px;
+    }
+}
+
+// Put the arrow on the right
+// ++++++++++++++++++++
+.tooltip.tooltip--right {
+
+
+    &:after, &:before {
+        bottom: auto;
+        left: 100%;
+        border-bottom-color: 0;
+    }
+
+    &:after {
+        top: 50%;
+        margin-top: -8px;
+        border-left-color: $dragbox-border-color;
+    }
+
+    &:before {
+        top: 50%;
+        margin-top: -9px;
+        border-left-color: $dragbox-border-color;
+    }
+    
+}
