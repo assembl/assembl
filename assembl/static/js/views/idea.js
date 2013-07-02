@@ -107,6 +107,7 @@ function(Backbone, _, $, Idea, app){
          * @type {Object}
          */
         events: {
+            'mousedown': 'onClick',
             'click [type=checkbox]': 'onCheckboxClick',
             'swipeLeft .idealist-label': 'showOptions',
             'swipeRight .idealist-label': 'hideOptions',
@@ -114,6 +115,12 @@ function(Backbone, _, $, Idea, app){
             'dragleave .idealist-label': 'clearDragStates',
             'dragover .idealist-label': 'onDragOver',
             'drop .idealist-label': 'onDrop'
+        },
+
+        onClick: function(ev){
+            if( ev.which === 3 ){
+                alert('show context menu');
+            }
         },
 
         /**

@@ -1,6 +1,7 @@
 // The right click menu
 // ====================
 .contextmenu {
+    position: absolute;
     display: inline-block;
     padding: $padding * 2;
 

@@ -129,7 +129,7 @@ function($, _){
         },
 
         /**
-         * @return {HTMLLiElement} [description]
+         * @return {HTMLLiElement}
          */
         getDraggedSegment: function(){
             if( app.segmentList && app.draggedSegment ){
@@ -145,7 +145,6 @@ function($, _){
         createSelectionTooltip: function(){
             app.selectionTooltip = $('<div>', { 'class': 'textbubble' } );
             app.body.append(app.selectionTooltip.hide());
-            //div.on('click', addToBucket);
         },
 
         /**
@@ -241,11 +240,45 @@ function($, _){
         },
 
         /**
+         * Shows the context menu given the options
+         * @param {Number} x 
+         * @param {Number} y 
+         * @param {Object} scope The scope where the functions will be executed
+         * @param {Object<string:function>} items The items on the context menu
+         */
+        showContextMenu: function(x, y, scope, items){
+            var menu = $('<div>').addClass('contextmenu');
+            menu.css({'top': y, 'left': x});
+
+            _.each(items, function(func, text){
+                var item = $('<a>').addClass('contextmenu-item').text(text);
+                item.on('click', func.bind(scope) );
+                menu.append( item );
+            });
+
+            app.body.append( menu );
+            app.body.on("click", app.hideContextMenu);
+        },
+
+        /**
+         * Removes all .contextmenu on the page
+         * @param {Event} [ev=null] If given, checks to see if it was clicked outside
+         */
+        hideContextMenu: function(ev){
+            if( ev && ev.target.classList.contains('contextmenu')){
+                return;
+            }
+
+            $('.contextmenu').remove();
+            app.body.off('click', app.hideContextMenu);
+        },
+
+        /**
          * @init
          * inits ALL app components
          */
         init: function(){
-            app.body.removeClass( 'preload' );
+            app.body.removeClass('preload');
             app.createSelectionTooltip();
         }
     };

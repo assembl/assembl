@@ -595,6 +595,7 @@ html {
 
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_contextmenu\.scss}line{font-family:\000033}}
 .contextmenu {
+  position: absolute;
   display: inline-block;
   padding: 20px;
   border: solid 1px #e4e4e3;
@@ -605,7 +606,7 @@ html {
   background-color: #fff;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_contextmenu\.scss}line{font-family:\0000315}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_contextmenu\.scss}line{font-family:\0000316}}
 .contextmenu-item {
   display: block;
   line-height: 22px;
@@ -613,7 +614,7 @@ html {
   color: #c5c5c5;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_contextmenu\.scss}line{font-family:\0000327}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_contextmenu\.scss}line{font-family:\0000328}}
 .contextmenu-item.is-hovered, .contextmenu-item:hover {
   color: black;
 }
