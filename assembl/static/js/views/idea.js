@@ -153,8 +153,6 @@ function(Backbone, _, $, Idea, app){
             'click .idealist-title': 'startEditTitle',
             'keydown .idealist-field': 'onFieldKeyPress',
             'blur .idealist-field': 'saveEditTitle',
-            'swipeLeft .idealist-label': 'showOptions',
-            'swipeRight .idealist-label': 'hideOptions',
             'click .idealist-label-arrow': 'toggle',
             'dragleave .idealist-label': 'clearDragStates',
             'dragover .idealist-label': 'onDragOver',
@@ -214,24 +212,6 @@ function(Backbone, _, $, Idea, app){
             }
 
             this.render();
-        },
-
-        /**
-         * Shows the option of an item
-         * @event
-         * @param  {Event} ev
-         */
-        showOptions: function(ev){
-            $(ev.currentTarget).addClass('is-optioned');
-        },
-
-        /**
-         * Hide the options of an item
-         * @event
-         * @param  {Event} ev
-         */
-        hideOptions: function(ev){
-            $(ev.currentTarget).removeClass('is-optioned');
         },
 
         /**

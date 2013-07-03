@@ -94,7 +94,7 @@
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
-    padding-right: $idealist-item-padding-right;
+    padding-right: $fixedcounter-min-width + $padding-right;
     @include box-sizing( border-box );
     height: 45px;
 
@@ -145,19 +145,6 @@
     }
 }
 
-// Showing the options .idealist-label
-// ******************
-.has-touch .idealist-label.is-optioned {
-    padding-right: $idealist-item-padding-right + $idealist-options-width;
-}
-
-// Showing the options on hover ONLY in no-touch devices
-// *******************
-.no-touch .idealist-label.has-options:hover {
-    padding-right: $idealist-item-padding-right + $idealist-options-width;
-}
-
-
 // The arrow within an .idealist-label
 // ------------------------
 .idealist-label-arrow {
@@ -179,27 +166,6 @@
 
     .idealist-item.is-open > .idealist-label > & {
         @include transform( rotate(0deg) );
-    }
-}
-
-// The options within an .idealist-label
-// -----------------
-.idealist-label-options {
-    position: absolute;
-    top: 0px;
-    right: $idealist-item-padding-right;
-
-    width: 0px;
-    height: $idealist-item-height;
-    @include box-sizing( border-box );
-    overflow: hidden;
-
-    font-size: 0px;
-    @include transition( width 0.4s );
-
-    .has-touch .idealist-label.is-optioned &,
-    .no-touch .idealist-label:hover & {
-        width: $idealist-options-width;
     }
 }
 
