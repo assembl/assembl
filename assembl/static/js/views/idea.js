@@ -148,9 +148,9 @@ function(Backbone, _, $, Idea, app){
          * @type {Object}
          */
         events: {
-            'mousedown': 'onClick',
+            'contextmenu': 'onContextMenu',
             'click [type=checkbox]': 'onCheckboxClick',
-            'click .idealist-title': 'startEditTitle',
+            'click .idealist-title': 'onFieldClick',
             'keydown .idealist-field': 'onFieldKeyPress',
             'blur .idealist-field': 'saveEditTitle',
             'click .idealist-label-arrow': 'toggle',
@@ -159,12 +159,33 @@ function(Backbone, _, $, Idea, app){
             'drop .idealist-label': 'onDrop'
         },
 
-        onClick: function(ev){
-            if( ev.which !== 3 ){
+        /**
+         * @event
+         */
+        onContextMenu: function(ev){
+            if( ev.target.classList.contains('idealist-field') ){
                 return;
             }
 
-            //app.showContextMenu()
+            var options = {
+                'edit': this.startEditTitle
+            };
+
+            app.showContextMenu(ev.clientX, ev.clientY, this, options);
+
+            ev.preventDefault();
+            ev.stopPropagation();
+            return false;
+        },
+
+        /**
+         * @event
+         */
+        onFieldClick: function(ev){
+            if( ev.which === 1 ){
+                ev.preventDefault();
+                this.startEditTitle();
+            }
         },
 
         /**

@@ -19,6 +19,12 @@ function($, _){
          * Reference to the body as Zepto object
          * @type {Zepto}
          */
+        doc: $(document),
+
+        /**
+         * Reference to the body as Zepto object
+         * @type {Zepto}
+         */
         body: $(document.body),
 
         /**
@@ -247,6 +253,8 @@ function($, _){
          * @param {Object<string:function>} items The items on the context menu
          */
         showContextMenu: function(x, y, scope, items){
+            app.hideContextMenu();
+
             var menu = $('<div>').addClass('contextmenu');
             menu.css({'top': y, 'left': x});
 
@@ -257,7 +265,7 @@ function($, _){
             });
 
             app.body.append( menu );
-            app.body.on("click", app.hideContextMenu);
+            app.doc.on("click", app.hideContextMenu);
         },
 
         /**
@@ -270,7 +278,7 @@ function($, _){
             }
 
             $('.contextmenu').remove();
-            app.body.off('click', app.hideContextMenu);
+            app.doc.off('click', app.hideContextMenu);
         },
 
         /**
