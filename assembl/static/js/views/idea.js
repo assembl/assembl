@@ -2,7 +2,8 @@ define(['backbone', 'underscore', 'zepto', 'models/idea', 'app'],
 function(Backbone, _, $, Idea, app){
     'use strict';
 
-    var DATA_LEVEL = 'data-idealist-level';
+    var DATA_LEVEL = 'data-idealist-level',
+        PREVIOUS_VALUE = 'previous-value';
 
     /**
      * Given the .idealist-label, returns the right offsetTop
@@ -41,6 +42,18 @@ function(Backbone, _, $, Idea, app){
         label: null,
 
         /**
+         * The text field
+         * @type {HTMLInputElement}
+         */
+        field: null,
+
+        /**
+         * The title element
+         * @type {HTMLSpanElement}
+         */
+        title: null,
+
+        /**
          * The render
          * @return {IdeaView}
          */
@@ -51,12 +64,12 @@ function(Backbone, _, $, Idea, app){
             this.el.setAttribute(DATA_LEVEL, data.level);
             this.$el.addClass('idealist-item');
 
-            // if( data.isOpen !== false ){
-            //     this.toggle();
-            // }
-
             this.$el.html(this.template(data));
+
             this.label = this.$('.idealist-label').get(0);
+            this.field = this.$('.idealist-field');
+            this.title = this.$('.idealist-title');
+
             this.$('.idealist-children').append( this.getRenderedChildren() );
 
             return this;
@@ -103,12 +116,43 @@ function(Backbone, _, $, Idea, app){
         },
 
         /**
+         * Changes the interface to edit-title mode
+         */
+        startEditTitle: function(){
+            var val = this.title.hide().text();
+            this.title.data(PREVIOUS_VALUE, val);
+
+            this.field.show().val(val).focus();
+        },
+
+        /**
+         * Save the edition of a title
+         */
+        saveEditTitle: function(){
+            var val = this.field.hide().val();
+            this.title.data(PREVIOUS_VALUE, '').text(val).show();
+            this.model.set('subject', val);
+        },
+
+        /**
+         * Cancels the edition of a title ()
+         */
+        cancelEditTitle: function(){
+            var val = this.title.data(PREVIOUS_VALUE);
+            this.title.text(val).show();
+            this.field.hide();
+        },
+
+        /**
          * The events
          * @type {Object}
          */
         events: {
             'mousedown': 'onClick',
             'click [type=checkbox]': 'onCheckboxClick',
+            'click .idealist-title': 'startEditTitle',
+            'keydown .idealist-field': 'onFieldKeyPress',
+            'blur .idealist-field': 'saveEditTitle',
             'swipeLeft .idealist-label': 'showOptions',
             'swipeRight .idealist-label': 'hideOptions',
             'click .idealist-label-arrow': 'toggle',
@@ -118,8 +162,21 @@ function(Backbone, _, $, Idea, app){
         },
 
         onClick: function(ev){
-            if( ev.which === 3 ){
-                alert('show context menu');
+            if( ev.which !== 3 ){
+                return;
+            }
+
+            //app.showContextMenu()
+        },
+
+        /**
+         * @event
+         */
+        onFieldKeyPress: function(ev){
+            if( ev.which === 13 ){
+                this.saveEditTitle();
+            } else if ( ev.which === 27 ) {
+                this.cancelEditTitle();
             }
         },
 

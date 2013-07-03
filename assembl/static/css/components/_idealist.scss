@@ -23,7 +23,6 @@
 .idealist-item {
     border-top: $idealist-item-border;
     position: relative;
-    cursor: pointer;
     overflow: hidden;
 
     @include transition( height 0.4s );
@@ -146,8 +145,6 @@
     }
 }
 
-
-
 // Showing the options .idealist-label
 // ******************
 .has-touch .idealist-label.is-optioned {
@@ -170,6 +167,7 @@
     height: $idealist-item-height;
     display: inline-block;
     float: left;
+    cursor: pointer;
 
     @include transition( transform 0.4s );
     @include transform( rotate(-90deg) );
@@ -205,6 +203,17 @@
     }
 }
 
-// The form within a .idealist-item
-// ==================
-.idealist-form { }
+// The title of the .idealist-item
+// ---------------
+.idealist-title {
+    cursor: text;
+}
+
+// The field within a .idealist-item
+// ---------------
+.idealist-field {
+    @extend .formfield;
+    width: 93%;
+    border-radius: 10px;
+}
+
