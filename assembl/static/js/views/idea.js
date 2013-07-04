@@ -67,7 +67,6 @@ function(Backbone, _, $, Idea, app){
             this.$el.html(this.template(data));
 
             this.label = this.$('.idealist-label').get(0);
-            this.field = this.$('.idealist-field').eq(0);
             this.title = this.$('.idealist-title').eq(0);
 
             this.$('.idealist-children').append( this.getRenderedChildren() );
@@ -115,47 +114,15 @@ function(Backbone, _, $, Idea, app){
         },
 
         /**
-         * Changes the interface to edit-title mode
-         */
-        startEditTitle: function(){
-            var val = this.title.hide().text();
-            this.title.data(PREVIOUS_VALUE, val);
-
-            this.field.show().val(val).focus();
-        },
-
-        /**
-         * Save the edition of a title
-         */
-        saveEditTitle: function(){
-            var val = this.field.hide().val();
-            this.title.data(PREVIOUS_VALUE, '').text(val).show();
-            this.model.set('subject', val);
-        },
-
-        /**
-         * Cancels the edition of a title ()
-         */
-        cancelEditTitle: function(){
-            var val = this.title.data(PREVIOUS_VALUE);
-            this.title.text(val).show();
-            this.field.hide();
-        },
-
-        /**
          * The events
          * @type {Object}
          */
         events: {
             //'contextmenu': 'onContextMenu',
-            'click [type=checkbox]': 'onCheckboxClick',
-            //'click .idealist-title': 'onFieldClick',
-            'keydown .idealist-field': 'onFieldKeyPress',
-            'blur .idealist-field': 'onFieldBlur',
-            'click .idealist-label-arrow': 'toggle',
-            'dragleave .idealist-label': 'clearDragStates',
-            'dragover .idealist-label': 'onDragOver',
-            'drop .idealist-label': 'onDrop'
+            'click .idealist-arrow': 'toggle'
+            //'dragleave .idealist-label': 'clearDragStates',
+            //'dragover .idealist-label': 'onDragOver',
+            //'drop .idealist-label': 'onDrop'
         },
 
         /**
@@ -177,35 +144,6 @@ function(Backbone, _, $, Idea, app){
             return false;
         },
 
-        /**
-         * @event
-         */
-        onFieldClick: function(ev){
-            if( ev.which === 1 ){
-                ev.preventDefault();
-                ev.stopPropagation();
-                this.startEditTitle();
-            }
-        },
-
-        /**
-         * @event
-         */
-        onFieldBlur: function(ev){
-            this.saveEditTitle();
-            ev.stopPropagation();
-        },
-
-        /**
-         * @event
-         */
-        onFieldKeyPress: function(ev){
-            if( ev.which === 13 ){
-                this.saveEditTitle();
-            } else if ( ev.which === 27 ) {
-                this.cancelEditTitle();
-            }
-        },
 
         /**
          * @event

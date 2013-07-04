@@ -26,6 +26,7 @@
 // The table to align the .panel
 // ---------------
 .panelarea-col {
+    @include box-sizing( border-box );
     display: none;
     padding: 0 4px;
     height: 100%;

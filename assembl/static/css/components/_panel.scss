@@ -8,6 +8,8 @@
 
     border: solid 1px #e4e4e3;
     @include border-radius( 5px );
+    background-color: #fff;
+    overflow-y: hidden;
 }
 
 // The header
@@ -24,7 +26,8 @@
 // To put the content
 // -----------
 .panel-body {
-    background-color: #fff;   
+    height: 100%;
+    overflow-y: auto;
 }
 
 // The footer

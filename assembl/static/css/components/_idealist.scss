@@ -108,6 +108,7 @@
 .idealist-children {
     height: 0px;
     overflow: hidden;
+    border-top: $idealist-border;
 
     @include transition( height 0.4s );
     @include transform( translateZ(0) );
@@ -115,6 +116,10 @@
     .idealist-item.is-open > & {
         border-top: $idealist-border;
         height: auto;    
+    }
+
+    &:empty {
+        display: none;
     }
 
 }
