@@ -1,12 +1,13 @@
 // Box used when user drag something
 // ======================
 .dragbox {
-    display: inline-block;
     line-height: 20px;
     padding: 5px;
 
-    position: fixed;
-    top: -100px;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: -1;
     
     background-color: $dragbox-background-color;
     @include box-shadow(0 3px 3px rgba(0,0,0,.15));

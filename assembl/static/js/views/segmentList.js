@@ -85,11 +85,7 @@ function(Backbone, _, $, app, Segment){
         onDragStart: function(ev){
             ev.currentTarget.style.opacity = 0.4;
 
-            if( ev.dataTransfer ) {
-                ev.dataTransfer.effectAllowed = 'move';
-                ev.dataTransfer.setData('text/html', ev.currentTarget.innerHTML);
-            }
-
+            app.showDragbox(ev, ev.currentTarget.getElementsByTagName('q')[0].innerText);
             app.draggedSegment = ev.currentTarget;
         },
 

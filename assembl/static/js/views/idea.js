@@ -67,8 +67,8 @@ function(Backbone, _, $, Idea, app){
             this.$el.html(this.template(data));
 
             this.label = this.$('.idealist-label').get(0);
-            this.field = this.$('.idealist-field');
-            this.title = this.$('.idealist-title');
+            this.field = this.$('.idealist-field').eq(0);
+            this.title = this.$('.idealist-title').eq(0);
 
             this.$('.idealist-children').append( this.getRenderedChildren() );
 
@@ -112,7 +112,6 @@ function(Backbone, _, $, Idea, app){
          */
         clearDragStates: function(){
             this.label.classList.remove('is-dragover');
-            this.label.classList.remove('is-dragover-below');
         },
 
         /**
@@ -152,7 +151,7 @@ function(Backbone, _, $, Idea, app){
             'click [type=checkbox]': 'onCheckboxClick',
             'click .idealist-title': 'onFieldClick',
             'keydown .idealist-field': 'onFieldKeyPress',
-            'blur .idealist-field': 'saveEditTitle',
+            'blur .idealist-field': 'onFieldBlur',
             'click .idealist-label-arrow': 'toggle',
             'dragleave .idealist-label': 'clearDragStates',
             'dragover .idealist-label': 'onDragOver',
@@ -184,8 +183,17 @@ function(Backbone, _, $, Idea, app){
         onFieldClick: function(ev){
             if( ev.which === 1 ){
                 ev.preventDefault();
+                ev.stopPropagation();
                 this.startEditTitle();
             }
+        },
+
+        /**
+         * @event
+         */
+        onFieldBlur: function(ev){
+            this.saveEditTitle();
+            ev.stopPropagation();
         },
 
         /**
@@ -209,11 +217,7 @@ function(Backbone, _, $, Idea, app){
             }
             this.clearDragStates();
 
-            var top = getTopPosition(this.label),
-                below = top + 30,
-                cls = ev.clientY >= below ? 'is-dragover-below' : 'is-dragover';
-
-            this.label.classList.add( cls );
+            this.label.classList.add('is-dragover');
         },
 
         /**
@@ -226,13 +230,19 @@ function(Backbone, _, $, Idea, app){
             }
 
             this.clearDragStates();
+
             var li = app.getDraggedSegment();
 
+            var options = {
+                'nada': function(){ alert('sim'); }
+            };
+
             if( li ){
-                this.addChild( 'oi' ); // li.innerText
+                app.showContextMenu(ev.clientX, ev.clientY, this, options);
             }
 
-            this.render();
+            // this.addChild( 'oi' ); // li.innerText
+            // this.render();
         },
 
         /**

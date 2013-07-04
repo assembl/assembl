@@ -84,7 +84,7 @@ function(Backbone, _, $, app){
             var selectedText = app.getSelectedText(),
                 text = selectedText.getRangeAt(0).cloneContents();
 
-            text = text.firstChild ? text.firstChild.textContent : '';
+            text = text.textContent || '';
 
             if( text.length > MIN_TEXT_TO_TOOLTIP ){
                 this.showTooltip(ev.clientX, ev.clientY, text);
@@ -97,6 +97,7 @@ function(Backbone, _, $, app){
         stopSelection: function(ev){
             this.isSelecting = false;
         }
+
     });
 
     return Message;

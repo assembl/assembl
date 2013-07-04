@@ -80,7 +80,7 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, menu,
 
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/base\/_common\.scss}line{font-family:\000031}}
 html {
-  font-family: Arial, sans-serif;
+  font-family: 'Open Sans', sans-serif;
   font-size: 14px;
   background-color: #fcfbf7;
 }
@@ -626,11 +626,12 @@ html {
 
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_dragbox\.scss}line{font-family:\000033}}
 .dragbox {
-  display: inline-block;
   line-height: 20px;
   padding: 5px;
-  position: fixed;
-  top: -100px;
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: -1;
   background-color: #fcf8e3;
   -webkit-box-shadow: 0 3px 3px rgba(0, 0, 0, 0.15);
   -moz-box-shadow: 0 3px 3px rgba(0, 0, 0, 0.15);
@@ -640,7 +641,7 @@ html {
   color: #c7a25a;
   cursor: move;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_dragbox\.scss}line{font-family:\0000319}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_dragbox\.scss}line{font-family:\0000320}}
 .dragbox:before {
   content: url(/static/img/dragbox/dragbox-background.png);
   margin-right: 5px;

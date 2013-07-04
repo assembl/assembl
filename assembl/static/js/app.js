@@ -2,6 +2,9 @@ define(['zepto', 'underscore'],
 function($, _){
     'use strict';
 
+    var PANEL_QUANTITY = 'data-panel-qty',
+        DRAGBOX_MAX_LENGTH = 25;
+
     /**
      * The observer
      * Who watches the watchmen ?
@@ -116,7 +119,7 @@ function($, _){
             }
 
             app.openedPanels += 1;
-            app.body.attr('data-panel-qty', app.openedPanels);
+            app.body.attr(PANEL_QUANTITY, app.openedPanels);
             panel.$el.addClass('is-open').show();
         },
 
@@ -130,7 +133,7 @@ function($, _){
             }
 
             app.openedPanels -= 1;
-            app.body.attr('data-panel-qty', app.openedPanels);
+            app.body.attr(PANEL_QUANTITY, app.openedPanels);
             panel.$el.removeClass('is-open').hide();
         },
 
@@ -226,15 +229,27 @@ function($, _){
             if( app.dragbox === null ){
                 app.dragbox = document.createElement('div');
                 app.dragbox.className = 'dragbox';
+                app.dragbox.setAttribute('hidden', 'hidden');
 
-                document.body.appendChild(app.dragbox);
+                app.body.append(app.dragbox);
             }
 
+            app.dragbox.removeAttribute('hidden');
+
+            if( text.length > DRAGBOX_MAX_LENGTH ){
+                text = text.substring(0, DRAGBOX_MAX_LENGTH) + '...';
+            }
             app.dragbox.innerHTML = text;
 
-            ev.dataTransfer.effectAllowed = 'copy';
-            ev.dataTransfer.setData("Text", text);
-            ev.dataTransfer.setDragImage(app.dragbox, 10 , 10);
+            if( ev.dataTransfer ) {
+                ev.dataTransfer.effectAllowed = 'copy';
+                ev.dataTransfer.setData("Text", text);
+                ev.dataTransfer.setDragImage(app.dragbox, 10, 10);
+            }
+
+            $(ev.currentTarget).one("dragend", function(){
+                app.dragbox.setAttribute('hidden', 'hidden');
+            });
         },
 
         /**
