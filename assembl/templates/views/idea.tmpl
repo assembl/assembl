@@ -1,23 +1,21 @@
-<div class="idealist-item">
-    <div class="idealist-body">
-        <% if (hasCheckbox) { %>
-        <label class="chk chk--idealist">
-            <input type="checkbox" class="chk-checkbox" />
-            <span class="chk-label"></span>
-        </label>
-        <% }  %>
+<div class="idealist-body">
+    <% if (hasCheckbox) { %>
+    <label class="chk chk--idealist">
+        <input type="checkbox" class="chk-checkbox" />
+        <span class="chk-label"></span>
+    </label>
+    <% }  %>
 
-        <% for( var i=1; i<level; i+= 1) { %>
-            <span class="idealist-bar"></span>
-        <% } %>
-        
-        <% if (hasChildren) { %>
-            <span class="idealist-arrow"></span>
-        <% } %>
+    <% for( var i=1; i<level; i+= 1) { %>
+        <span class="idealist-bar"></span>
+    <% } %>
+    
+    <% if (hasChildren) { %>
+        <span class="idealist-arrow"></span>
+    <% } %>
 
-        <div class="idealist-counter"><%= total %></div>
-        <div class="idealist-title"><%= subject %></div>
-    </div>
-
-    <div class="idealist-children"></div>
+    <div class="idealist-counter"><%= total %></div>
+    <div class="idealist-title"><%= subject %></div>
 </div>
+
+<div class="idealist-children"></div>

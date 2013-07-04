@@ -2,6 +2,15 @@
 // =================
 .idealist {
     background-color: $idealist-background-color;
+
+    // Sorry =/
+    .panel & {
+        position: absolute;
+        top: $panel-header-height;
+        right: 0;
+        bottom: 0;
+        left: 0;
+    }
 }
 
 // A row within the list of ideas

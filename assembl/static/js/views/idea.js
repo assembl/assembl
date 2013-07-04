@@ -147,9 +147,9 @@ function(Backbone, _, $, Idea, app){
          * @type {Object}
          */
         events: {
-            'contextmenu': 'onContextMenu',
+            //'contextmenu': 'onContextMenu',
             'click [type=checkbox]': 'onCheckboxClick',
-            'click .idealist-title': 'onFieldClick',
+            //'click .idealist-title': 'onFieldClick',
             'keydown .idealist-field': 'onFieldKeyPress',
             'blur .idealist-field': 'onFieldBlur',
             'click .idealist-label-arrow': 'toggle',
