@@ -5,12 +5,11 @@
     <span class="chk-label"></span>
 </label>
 <% }  %>
+
 <span class="idealist-label <% if (hasOptions) { %>has-options<% } %>" data-algo="<%= new Date().getTime() %>">
     <% if (hasChildren) { %><span class="idealist-label-arrow"></span><% } %>
     
     <span class="idealist-title"><%= subject %></span>
-
-    <input type="text" class="idealist-field" hidden />
 </span>
 <div class="fixedcounter"><%= total %></div>
 

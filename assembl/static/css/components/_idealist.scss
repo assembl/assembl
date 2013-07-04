@@ -1,3 +1,73 @@
+.idealist {
+    background-color: $idealist-background-color;
+}
+
+.idealist-item {
+    @include clearfix();
+    line-height: $idealist-item-height;
+    border-top: $idealist-border;
+
+    &:first-child {
+        border-top: 0;
+    }
+}
+
+.idealist-title {
+    display: block;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    padding-left: $padding-left;
+}
+
+.idealist-counter {
+    float: right;
+    padding: 0 5px;
+    min-width: $fixedcounter-min-width;
+
+    text-align: center;
+    font-size: 14px;
+    font-weight: bold;
+    color: $fixedcounter-color;
+}
+
+.idealist-arrow {
+    background: url(#{$img-dir}/idealist/idealist-arrow.png) center center no-repeat;
+    width: 25px;
+    height: $idealist-item-height;
+    display: block;
+    float: left;
+    cursor: pointer;
+
+    @include transition( transform 0.4s );
+    @include transform( rotate(-90deg) );
+    opacity: 0.55;
+
+    &:hover {
+        opacity: 1;
+    }
+
+    // .idealist-item.is-open > .idealist-label > & {
+    //     @include transform( rotate(0deg) );
+    // }
+}
+
+.idealist-children {
+    height: 0px;
+    overflow: hidden;
+
+    @include transition( height 0.4s );
+    @include transform( translateZ(0) );
+
+    // .idealist-item.is-open > & {
+    //     border-top: $idealist-item-border;
+    //     height: auto;    
+    // }
+
+}
+
+
+/*
 // The list of Ideas
 // =================
 .idealist {
@@ -22,7 +92,7 @@
 // -----------------
 .idealist-item {
     border-top: $idealist-item-border;
-    position: relative;
+    //position: relative;
     overflow: hidden;
 
     @include transition( height 0.4s );
@@ -70,6 +140,8 @@
 // ----------------------
 .idealist-children {
     height: 0px;
+    max-width: 100%;
+    @include box-sizing( border-box );
 
     .idealist-item.is-open > & {
         border-top: $idealist-item-border;
@@ -87,14 +159,14 @@
 // The title of the idea
 // --------------------
 .idealist-label {
-    position: relative;
+    //position: relative;
     display: block;
     line-height: $idealist-item-height;
-    padding-left: $idealist-item-level-padding;
+    //padding-left: $idealist-item-level-padding;
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
-    padding-right: $fixedcounter-min-width + $padding-right;
+    //padding-right: $fixedcounter-min-width + $padding-right;
     @include box-sizing( border-box );
     height: 45px;
 
@@ -105,19 +177,19 @@
     }
 
     .idealist--chk .idealist-item[data-idealist-level="1"] & {
-        margin-left: $checkbox-width;
+        //margin-left: $checkbox-width;
     }
 
     $idealist-item-margin-left: 15px;
     @for $i from 2 through 10 {
         .idealist-item[data-idealist-level="#{$i}"] & {
             $idealist-item-margin-left: 15px * ( $i - 1 );
-            margin-left: $idealist-item-margin-left;
+            //margin-left: $idealist-item-margin-left;
             border-left: $idealist-item-border;
         }
 
         .idealist--chk .idealist-item[data-idealist-level="#{$i}"] & {
-            margin-left: $idealist-item-margin-left + $checkbox-width;
+            //margin-left: $idealist-item-margin-left + $checkbox-width;
         }
     }
 }
@@ -183,3 +255,4 @@
     border-radius: 10px;
 }
 
+*/

@@ -1,16 +1,85 @@
+{% macro chk() -%}
+<label class="chk chk--idealist">
+    <input type="checkbox" class="chk-checkbox" />
+    <span class="chk-label"></span>
+</label>
+{%- endmacro %}
+
+<div class="idealist">
+    
+    <div class="idealist-item">
+        <div class="idealist-body">
+            <div class="idealist-counter">42</div>
+            <div class="idealist-title">Simple .idealist-item</div>
+        </div>
+
+        <div class="idealist-children"></div>
+    </div>
+
+    <div class="idealist-item">
+        <div class="idealist-body">
+            {{ chk() }}
+            <div class="idealist-counter">42</div>
+            <div class="idealist-title">Simple .idealist-item with checkbox</div>
+        </div>
+
+        <div class="idealist-children"></div>
+    </div>
+
+
+    <div class="idealist-item">
+        <div class="idealist-body">
+            <span class="idealist-arrow"></span>
+            <div class="idealist-counter">87</div>
+            <div class="idealist-title">Simple .idealist-item closed with children</div>  
+        </div>
+
+        <div class="idealist-children">
+            
+            <div class="idealist-item">
+                <div class="idealist-body">
+                    <div class="idealist-counter">42</div>
+                    <div class="idealist-title">Simple .idealist-item</div>
+                </div>
+
+                <div class="idealist-children"></div>
+            </div>
+
+        </div>
+    </div>
+
+
+    <div class="idealist-item">
+        <div class="idealist-body">
+            {{chk()}}
+            <span class="idealist-arrow"></span>
+            <div class="idealist-counter">92</div>
+            <div class="idealist-title">Simple .idealist-item closed with checkbox and children</div>  
+        </div>
+
+        <div class="idealist-children">
+            
+            <div class="idealist-item">
+                <div class="idealist-body">
+                    <div class="idealist-counter">42</div>
+                    <div class="idealist-title">Simple .idealist-item</div>
+                </div>
+
+                <div class="idealist-children"></div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+{#
 {% macro label_options() -%}
 <span class="idealist-label-options">
     <a class="iconbutton icon-pencil"></a>
     <a class="iconbutton icon-rearrangeIdea"></a>
     <a class="iconbutton icon-copyfolder"></a>
 </span>
-{%- endmacro %}
-
-{% macro chk() -%}
-<label class="chk chk--idealist">
-    <input type="checkbox" class="chk-checkbox" />
-    <span class="chk-label"></span>
-</label>
 {%- endmacro %}
 
 <h3>Default .idealist</h3>
@@ -264,3 +333,4 @@
         </div>
     </div>
 </div>
+#}
