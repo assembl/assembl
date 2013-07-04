@@ -1238,34 +1238,30 @@ html {
   position: relative;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_panel\.scss}line{font-family:\000033}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_panel\.scss}line{font-family:\000031}}
 .panel {
-  float: left;
+  position: relative;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
-  width: 100%;
-  padding: 10px 5px;
-}
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_panel\.scss}line{font-family:\0000310}}
-[data-panel-qty="2"] .panel {
-  width: 50%;
-}
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_panel\.scss}line{font-family:\0000314}}
-[data-panel-qty="3"] .panel {
-  width: 33.3%;
-}
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_panel\.scss}line{font-family:\0000318}}
-[data-panel-qty="4"] .panel {
-  width: 25%;
+  height: 100%;
+  border: solid 1px red;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_panel\.scss}line{font-family:\0000331}}
-.panel-body {
-  max-height: 300px;
-  overflow-y: auto;
-  background-color: #fff;
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_panel\.scss}line{font-family:\0000311}}
+.panel-header {
+  line-height: 56px;
+  height: 56px;
+  padding-left: 10px;
+  padding-right: 10px;
+  background-color: #f7f7f7;
   border: solid 1px #e4e4e3;
+  border-bottom: 0;
+  -webkit-border-radius: 5px 5px 0 0;
+  -moz-border-radius: 5px 5px 0 0;
+  -ms-border-radius: 5px 5px 0 0;
+  -o-border-radius: 5px 5px 0 0;
+  border-radius: 5px 5px 0 0;
 }
 
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_separator\.scss}line{font-family:\000031}}
@@ -1414,7 +1410,12 @@ html {
   border-left-color: #f0c36d;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/layout\/_content\.scss}line{font-family:\000032}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/layout\/_content\.scss}line{font-family:\000031}}
+html, body {
+  height: 100%;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/layout\/_content\.scss}line{font-family:\000036}}
 #wrapper {
   position: relative;
   min-height: 100%;
@@ -1425,7 +1426,7 @@ html {
   -o-transform: translateX(0);
   transform: translateX(0);
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/layout\/_content\.scss}line{font-family:\0000312}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/layout\/_content\.scss}line{font-family:\0000316}}
 .is-lateralmenu-open #wrapper {
   -webkit-transform: translateX(453px);
   -moz-transform: translateX(453px);
@@ -1520,6 +1521,42 @@ body.is-lateralmenu-open .lateralmenu-modal {
 .avatarbox {
   height: 52px;
   line-height: 52px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/layout\/_panelarea\.scss}line{font-family:\000033}}
+.panelarea {
+  position: absolute;
+  top: 110px;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: block;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/layout\/_panelarea\.scss}line{font-family:\0000317}}
+.panelarea-table {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  display: table;
+  width: 100%;
+  height: 100%;
+  padding: 0 8px 8px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/layout\/_panelarea\.scss}line{font-family:\0000328}}
+.panelarea-col {
+  display: none;
+  padding: 0 4px;
+  height: 100%;
+  min-width: 320px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/layout\/_panelarea\.scss}line{font-family:\0000337}}
+.panelarea-col.is-visible {
+  display: table-cell;
 }
 
 /**

@@ -100,7 +100,7 @@ function($, _){
                 return false;
             }
 
-            if( panel.$el.hasClass('is-open') ){
+            if( panel.$el.hasClass('is-visible') ){
                 app.closePanel(panel);
                 $('#button-'+panelName).removeClass('is-activated');
             } else {
@@ -114,13 +114,13 @@ function($, _){
          * @param {backbone.View} panel 
          */
         openPanel: function(panel){
-            if( panel.$el.hasClass('is-open') ){
+            if( panel.$el.hasClass('is-visible') ){
                 return false;
             }
 
             app.openedPanels += 1;
             app.body.attr(PANEL_QUANTITY, app.openedPanels);
-            panel.$el.addClass('is-open').show();
+            panel.$el.addClass('is-visible');
         },
 
         /**
@@ -128,13 +128,13 @@ function($, _){
          * @param {backbone.View} panel
          */
         closePanel: function(panel){
-            if( ! panel.$el.hasClass('is-open') ){
+            if( ! panel.$el.hasClass('is-visible') ){
                 return false;
             }
 
             app.openedPanels -= 1;
             app.body.attr(PANEL_QUANTITY, app.openedPanels);
-            panel.$el.removeClass('is-open').hide();
+            panel.$el.removeClass('is-visible');
         },
 
         /**
