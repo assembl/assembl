@@ -689,28 +689,9 @@ html {
   min-width: 30px;
   line-height: 23px;
   text-align: center;
-  font-size: 12px;
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-  padding: 0 3px;
-  -webkit-border-radius: 5px;
-  -moz-border-radius: 5px;
-  -ms-border-radius: 5px;
-  -o-border-radius: 5px;
-  border-radius: 5px;
-  background-color: rgba(96, 96, 96, 0);
-  -webkit-box-shadow: 0 1px rgba(249, 255, 255, 0.18), inset 0 1px rgba(0, 0, 0, 0.35), inset 0 0 5px rgba(0, 0, 0, 0.11);
-  -moz-box-shadow: 0 1px rgba(249, 255, 255, 0.18), inset 0 1px rgba(0, 0, 0, 0.35), inset 0 0 5px rgba(0, 0, 0, 0.11);
-  box-shadow: 0 1px rgba(249, 255, 255, 0.18), inset 0 1px rgba(0, 0, 0, 0.35), inset 0 0 5px rgba(0, 0, 0, 0.11);
-  background-image: -ms-linear-gradient(bottom, rgba(0, 0, 0, 0.02), rgba(0, 0, 0, 0.05));
-  background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjUwJSIgeTE9IjEwMCUiIHgyPSI1MCUiIHkyPSIwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0icmdiYSgwLCAwLCAwLCAwLjAyKSIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0icmdiYSgwLCAwLCAwLCAwLjA1KSIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
-  background-size: 100%;
-  background-image: -webkit-gradient(linear, 50% 100%, 50% 0%, color-stop(0%, rgba(0, 0, 0, 0.02)), color-stop(100%, rgba(0, 0, 0, 0.05)));
-  background-image: -webkit-linear-gradient(bottom, rgba(0, 0, 0, 0.02), rgba(0, 0, 0, 0.05));
-  background-image: -moz-linear-gradient(bottom, rgba(0, 0, 0, 0.02), rgba(0, 0, 0, 0.05));
-  background-image: -o-linear-gradient(bottom, rgba(0, 0, 0, 0.02), rgba(0, 0, 0, 0.05));
-  background-image: linear-gradient(bottom, rgba(0, 0, 0, 0.02), rgba(0, 0, 0, 0.05));
+  font-size: 14px;
+  font-weight: bold;
+  color: #c8c9cc;
 }
 
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_grid\.scss}line{font-family:\000034}}
