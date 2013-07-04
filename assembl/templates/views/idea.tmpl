@@ -1,16 +1,23 @@
-<% if (hasCheckbox) { %>
-<label class="chk chk--idealist">
-    <input type="checkbox" class="chk-checkbox" />
-    
-    <span class="chk-label"></span>
-</label>
-<% }  %>
+<div class="idealist-item">
+    <div class="idealist-body">
+        <% if (hasCheckbox) { %>
+        <label class="chk chk--idealist">
+            <input type="checkbox" class="chk-checkbox" />
+            <span class="chk-label"></span>
+        </label>
+        <% }  %>
 
-<span class="idealist-label <% if (hasOptions) { %>has-options<% } %>" data-algo="<%= new Date().getTime() %>">
-    <% if (hasChildren) { %><span class="idealist-label-arrow"></span><% } %>
-    
-    <span class="idealist-title"><%= subject %></span>
-</span>
-<div class="fixedcounter"><%= total %></div>
+        <% for( var i=1; i<level; i+= 1) { %>
+            <span class="idealist-bar"></span>
+        <% } %>
+        
+        <% if (hasChildren) { %>
+            <span class="idealist-arrow"></span>
+        <% } %>
 
-<div class="idealist-children"></div>
+        <div class="idealist-counter"><%= total %></div>
+        <div class="idealist-title"><%= subject %></div>
+    </div>
+
+    <div class="idealist-children"></div>
+</div>

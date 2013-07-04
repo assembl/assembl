@@ -227,11 +227,6 @@ html {
 }
 
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_accordion\.scss}line{font-family:\0000354}}
-.accordion-counter {
-  right: 30px;
-}
-
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_accordion\.scss}line{font-family:\0000363}}
 .accordion-body {
   background-color: #313131;
   overflow: hidden;
@@ -565,14 +560,16 @@ html {
   float: left;
   margin-left: 5px;
   padding-top: 4.25px;
+  position: relative;
+  z-index: 10;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_checkbox\.scss}line{font-family:\0000320}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_checkbox\.scss}line{font-family:\0000325}}
 .chk-checkbox {
   display: none;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_checkbox\.scss}line{font-family:\0000326}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_checkbox\.scss}line{font-family:\0000331}}
 .chk-label {
   display: inline-block;
   width: 20px;
@@ -584,7 +581,7 @@ html {
   border-radius: 5px;
   background-color: #eceef1;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_checkbox\.scss}line{font-family:\0000334}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_checkbox\.scss}line{font-family:\0000339}}
 .chk-checkbox:checked ~ .chk-label {
   background-color: #81d6af;
 }
@@ -682,21 +679,6 @@ html {
   padding: 2px 5px;
   border: solid 1px #dcdbd7;
   font-size: 14px;
-}
-
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_fixedcounter\.scss}line{font-family:\000033}}
-.fixedcounter, .accordion-counter {
-  position: absolute;
-  top: 22px;
-  right: 10px;
-  margin-top: -11.5px;
-  display: inline-block;
-  min-width: 30px;
-  line-height: 23px;
-  text-align: center;
-  font-size: 14px;
-  font-weight: bold;
-  color: #c8c9cc;
 }
 
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_grid\.scss}line{font-family:\000034}}
@@ -968,24 +950,29 @@ html {
   background-position: 0 -64px;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\000031}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\000033}}
 .idealist {
   background-color: white;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\000035}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\000039}}
 .idealist-item {
   overflow: hidden;
   *zoom: 1;
   line-height: 40px;
   border-top: solid 1px #e4e4e3;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\0000310}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\0000314}}
 .idealist-item:first-child {
   border-top: 0;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\0000315}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\0000333}}
+.idealist-item.is-dragover > .idealist-body {
+  background-color: #fcf8e3;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\0000341}}
 .idealist-title {
   display: block;
   white-space: nowrap;
@@ -994,7 +981,7 @@ html {
   padding-left: 10px;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\0000323}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\0000351}}
 .idealist-counter {
   float: right;
   padding: 0 5px;
@@ -1005,7 +992,7 @@ html {
   color: #c8c9cc;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\0000334}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\0000364}}
 .idealist-arrow {
   background: url(/static/img/idealist/idealist-arrow.png) center center no-repeat;
   width: 25px;
@@ -1024,12 +1011,30 @@ html {
   transform: rotate(-90deg);
   opacity: 0.55;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\0000346}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\0000376}}
 .idealist-arrow:hover {
   opacity: 1;
 }
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\0000380}}
+.idealist-item.is-open > .idealist-body .idealist-arrow {
+  -webkit-transform: rotate(0deg);
+  -moz-transform: rotate(0deg);
+  -ms-transform: rotate(0deg);
+  -o-transform: rotate(0deg);
+  transform: rotate(0deg);
+}
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\0000355}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\0000387}}
+.idealist-bar {
+  display: block;
+  width: 12.5px;
+  height: 40px;
+  float: left;
+  border-right: solid 1px #e4e4e3;
+  margin-right: 12.5px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\0000399}}
 .idealist-children {
   height: 0px;
   overflow: hidden;
@@ -1042,6 +1047,11 @@ html {
   -ms-transform: translateZ(0);
   -o-transform: translateZ(0);
   transform: translateZ(0);
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\00003106}}
+.idealist-item.is-open > .idealist-children {
+  border-top: solid 1px #e4e4e3;
+  height: auto;
 }
 
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_image\.scss}line{font-family:\000031}}

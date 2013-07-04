@@ -1,7 +1,11 @@
+// The list of Ideas
+// =================
 .idealist {
     background-color: $idealist-background-color;
 }
 
+// A row within the list of ideas
+// -----------------
 .idealist-item {
     @include clearfix();
     line-height: $idealist-item-height;
@@ -12,6 +16,28 @@
     }
 }
 
+// idea list open ( showing the children )
+// *********************
+.idealist-item.is-open {}
+
+
+// When there is something being dragged over
+// *********************
+.idealist-item.is-dragover {}
+
+
+// Where the content is placed
+// --------------
+.idealist-body {
+
+    .idealist-item.is-dragover > & {
+        background-color: $dragbox-background-color;
+    }
+
+}
+
+// The title
+// ----------
 .idealist-title {
     display: block;
     white-space: nowrap;
@@ -20,20 +46,24 @@
     padding-left: $padding-left;
 }
 
+// The counter at the right
+// ------------------
 .idealist-counter {
     float: right;
     padding: 0 5px;
-    min-width: $fixedcounter-min-width;
+    min-width: $idealist-counter-minwidth;
 
     text-align: center;
     font-size: 14px;
     font-weight: bold;
-    color: $fixedcounter-color;
+    color: $idealist-counter-color;
 }
 
+// The arrow
+// ------------
 .idealist-arrow {
     background: url(#{$img-dir}/idealist/idealist-arrow.png) center center no-repeat;
-    width: 25px;
+    width: $idealist-arrow-width;
     height: $idealist-item-height;
     display: block;
     float: left;
@@ -47,212 +77,35 @@
         opacity: 1;
     }
 
-    // .idealist-item.is-open > .idealist-label > & {
-    //     @include transform( rotate(0deg) );
-    // }
-}
-
-.idealist-children {
-    height: 0px;
-    overflow: hidden;
-
-    @include transition( height 0.4s );
-    @include transform( translateZ(0) );
-
-    // .idealist-item.is-open > & {
-    //     border-top: $idealist-item-border;
-    //     height: auto;    
-    // }
-
-}
-
-
-/*
-// The list of Ideas
-// =================
-.idealist {
-    @include transform( translateZ(0) );
-    background-color: $idealist-background-color;
-}
-
-// The dark version of list of ideas
-// ++++++++++++++++++++++
-.idealist.idealist--dark {}
-
-// idea list made to fit in the lateralmenu
-// ++++++++++++++++++++++
-.idealist.idealist--lateralmenu {}
-
-// idea list with checkboxes
-// ++++++++++++++++++++++
-.idealist.idealist--chk {}
-
-
-// A row within the list of ideas
-// -----------------
-.idealist-item {
-    border-top: $idealist-item-border;
-    //position: relative;
-    overflow: hidden;
-
-    @include transition( height 0.4s );
-    @include transform( translateZ(0) );
-
-    &:first-child {
-        border-top: 0;
-    }
-
-    .idealist--dark & {
-        background-color: #313131;
-        border-bottom-color: $idealist-item-border-color-dark;
-        color: #b0b0b0;
-
-        &:hover {
-            color: #eb5d50;
-        }
-    }
-
-    .idealist--lateralmenu & {
-        padding-left: $lateralmenu-padding-left;
-    }
-}
-
-// idea item is selected ( by the checkbox )
-// ************************
-.idealist-item.is-selected {
-    background-color: #eaf5fc;
-}
-
-// idea list open ( showing the children )
-// *********************
-.idealist-item.is-open {
-    height: auto;
-}
-
-// idea list is hidden
-// *********************
-.idealist-item.is-hidden {
-    height: 0; //display: none;
-    border-top: 0;
-}
-
-// A child collection for an .idealist-item
-// ----------------------
-.idealist-children {
-    height: 0px;
-    max-width: 100%;
-    @include box-sizing( border-box );
-
-    .idealist-item.is-open > & {
-        border-top: $idealist-item-border;
-        height: auto;    
-    }
-}
-
-// idea list with the form open
-// *********************
-.idealist-item.is-form-open {
-    height: auto;
-    border: solid 5px #dbf2ff;
-}
-
-// The title of the idea
-// --------------------
-.idealist-label {
-    //position: relative;
-    display: block;
-    line-height: $idealist-item-height;
-    //padding-left: $idealist-item-level-padding;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    //padding-right: $fixedcounter-min-width + $padding-right;
-    @include box-sizing( border-box );
-    height: 45px;
-
-    @include transition( padding-right 0.4s );
-
-    .idealist--dark & {
-        border-color: $idealist-item-border-color-dark !important;
-    }
-
-    .idealist--chk .idealist-item[data-idealist-level="1"] & {
-        //margin-left: $checkbox-width;
-    }
-
-    $idealist-item-margin-left: 15px;
-    @for $i from 2 through 10 {
-        .idealist-item[data-idealist-level="#{$i}"] & {
-            $idealist-item-margin-left: 15px * ( $i - 1 );
-            //margin-left: $idealist-item-margin-left;
-            border-left: $idealist-item-border;
-        }
-
-        .idealist--chk .idealist-item[data-idealist-level="#{$i}"] & {
-            //margin-left: $idealist-item-margin-left + $checkbox-width;
-        }
-    }
-}
-
-// idea list when receving a dragover
-// *********************
-.idealist-label.is-dragover {
-    background-color: $dragbox-background-color;
-}
-
-// idea list when receving a dragover and the mouse it below the middle
-// *********************
-.idealist-label.is-dragover-below {
-    &:before {
-        content: "";
-        display: block;
-        position: absolute;
-        right: -1px;
-        bottom: 0;
-        left: -1px;
-        height: $idealist-item-dragover-height;
-
-        background-color: $dragbox-background-color;
-        border: solid 1px $dragbox-border-color;
-    }
-}
-
-// The arrow within an .idealist-label
-// ------------------------
-.idealist-label-arrow {
-    background: url(#{$img-dir}/idealist/idealist-arrow.png) center left no-repeat;
-    width: $idealist-item-level-padding;
-    margin-right: $idealist-item-level-padding;
-    height: $idealist-item-height;
-    display: inline-block;
-    float: left;
-    cursor: pointer;
-
-    @include transition( transform 0.4s );
-    @include transform( rotate(-90deg) );
-    opacity: 0.55;
-
-    &:hover {
-        opacity: 1;
-    }
-
-    .idealist-item.is-open > .idealist-label > & {
+    .idealist-item.is-open > .idealist-body & {
         @include transform( rotate(0deg) );
     }
 }
 
-// The title of the .idealist-item
-// ---------------
-.idealist-title {
-    cursor: text;
+// The bar to make an .idealist-item looks like a child
+// --------------
+.idealist-bar {
+    display: block;
+    width: $idealist-arrow-width / 2;
+    height: $idealist-item-height;
+    float: left;
+
+    border-right: $idealist-border;
+    margin-right: $idealist-arrow-width / 2;
 }
 
-// The field within a .idealist-item
-// ---------------
-.idealist-field {
-    @extend .formfield;
-    width: 93%;
-    border-radius: 10px;
-}
+// The child list
+// --------------
+.idealist-children {
+    height: 0px;
+    overflow: hidden;
 
-*/
+    @include transition( height 0.4s );
+    @include transform( translateZ(0) );
+
+    .idealist-item.is-open > & {
+        border-top: $idealist-border;
+        height: auto;    
+    }
+
+}

@@ -66,11 +66,6 @@ function(jasmine, _, app, IdeaView){
             expect( level ).toBe( view.model.get('level') );
         });
 
-        it('should have the counter the same of the total property', function(){
-            var counter = ~~ view.$('.fixedcounter').text();
-            expect( counter ).toBe(view.model.get('total'));
-        });
-
         it('should trigger toggle method when click in the arrow', function(){
             spyOn(IdeaView.prototype, 'toggle').andCallThrough();
             view = new IdeaView({model:view.model});

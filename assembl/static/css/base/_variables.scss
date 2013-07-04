@@ -42,25 +42,17 @@ $dragbox-border-color: #f0c36d;
 // Experimental
 $experimental-support-for-microsoft: true;
 
-// Fixedcounter
-$fixedcounter-height: 23px;
-$fixedcounter-min-width: 30px;
-$fixedcounter-color: #c8c9cc;
-
 // idea list
 $idealist-background-color: #fff;
 $idealist-border-color: #e4e4e3;
 $idealist-border: solid 1px $idealist-border-color;
 
 $idealist-item-height: 40px;
+$idealist-arrow-width: 25px;
 
-// $idealist-item-level-padding: 10px;
-// $idealist-item-border-color: $idealist-border-color;
-// $idealist-item-border: solid 1px $idealist-item-border-color;
-// $idealist-item-border-color-dark: #000;
-// $idealist-item-height: 45px;
-// $idealist-options-width: $icon-width * 3;
-// $idealist-item-dragover-height: 7px;
+$idealist-counter-minwidth: 30px;
+$idealist-counter-color: #c8c9cc;
+
 
 // Font
 $font-size: 14px;

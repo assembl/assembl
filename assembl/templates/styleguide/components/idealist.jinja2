@@ -5,6 +5,23 @@
 </label>
 {%- endmacro %}
 
+{% macro idealist_item(startLevel=1, endLevel=5) -%}
+    <div class="idealist-item is-open">
+        <div class="idealist-body">
+            {% for i in range(startLevel-1) %}
+                <span class="idealist-bar"></span>
+            {% endfor %}
+            <span class="idealist-arrow"></span>
+            <div class="idealist-counter">{{startLevel}}</div>
+            <div class="idealist-title">Simple .idealist-item level {{startLevel}}</div>
+        </div>
+
+        <div class="idealist-children">
+            {% if startLevel < endLevel %} {{idealist_item(startLevel+1, endLevel)}} {% endif %}
+        </div>
+    </div>
+{%- endmacro %}
+
 <div class="idealist">
     
     <div class="idealist-item">
@@ -48,6 +65,42 @@
         </div>
     </div>
 
+    <div class="idealist-item is-open">
+        <div class="idealist-body">
+            <span class="idealist-arrow"></span>
+            <div class="idealist-counter">87</div>
+            <div class="idealist-title">Simple .idealist-item open with children</div>  
+        </div>
+
+        <div class="idealist-children">
+            
+            <div class="idealist-item is-open">
+                <div class="idealist-body">
+                    <span class="idealist-bar"></span>
+                    <span class="idealist-arrow"></span>
+                    <div class="idealist-counter">42</div>
+                    <div class="idealist-title">Simple .idealist-item level 2</div>
+                </div>
+
+                <div class="idealist-children">
+
+                    <div class="idealist-item">
+                        <div class="idealist-body">
+                            <span class="idealist-bar"></span>
+                            <span class="idealist-bar"></span>
+                            <div class="idealist-counter">42</div>
+                            <div class="idealist-title">Simple .idealist-item level 3</div>
+                        </div>
+
+                        <div class="idealist-children"></div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
 
     <div class="idealist-item">
         <div class="idealist-body">
@@ -73,264 +126,47 @@
 
 </div>
 
-{#
-{% macro label_options() -%}
-<span class="idealist-label-options">
-    <a class="iconbutton icon-pencil"></a>
-    <a class="iconbutton icon-rearrangeIdea"></a>
-    <a class="iconbutton icon-copyfolder"></a>
-</span>
-{%- endmacro %}
-
-<h3>Default .idealist</h3>
-<div class="idealist">
-    <div class="idealist-item" data-idealist-level="1">
-        <span class="idealist-label">A simple item in Idea list (.idealist-item)</span>
-    </div>
-
-    <div class="idealist-item" data-idealist-level="1">
-        <span class="idealist-label">
-            <span class="idealist-label-arrow"></span>
-            Item level 1 closed with children
-        </span>
-
-        <div class="idealist-children">
-            <div class="idealist-item" data-idealist-level="2">
-                <span class="idealist-label">Item level 2</span>
-            </div>
-        </div>
-    </div>
-
-    <div class="idealist-item is-open" data-idealist-level="1">
-        <span class="idealist-label">
-            <span class="idealist-label-arrow"></span>
-            Item level 1 open with children
-        </span>
-    
-        <div class="idealist-children">
-            <div class="idealist-item" data-idealist-level="2">
-                <span class="idealist-label">Item level 2</span>
-            </div>
-
-            <div class="idealist-item" data-idealist-level="2">
-                <span class="idealist-label">
-                    <span class="idealist-label-arrow"></span>
-                    Item level 2 with children
-                </span>
-
-                <div class="idealist-children">
-                    <div class="idealist-item" data-idealist-level="3">
-                        <span class="idealist-label">Item level 3</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="idealist-item is-open" data-idealist-level="1">
-        <span class="idealist-label">
-            <span class="idealist-label-arrow"></span>
-            Item level 1
-        </span>
-        <div class="fixedcounter">4</div>
-
-        <div class="idealist-children">
-            <div class="idealist-item is-open" data-idealist-level="2">
-                <span class="idealist-label">
-                    <span class="idealist-label-arrow"></span>
-                    Item level 2
-                </span>
-                <div class="fixedcounter">3</div>
-                
-                <div class="idealist-children">
-                    <div class="idealist-item is-open" data-idealist-level="3">
-                        <span class="idealist-label">
-                            <span class="idealist-label-arrow"></span>
-                            Item level 3
-                        </span>
-                        <div class="fixedcounter">2</div>
-                      
-                        <div class="idealist-children">
-                            <div class="idealist-item is-open" data-idealist-level="4">
-                                <span class="idealist-label">
-                                    Item level 4
-                                </span>
-                                <div class="fixedcounter">1</div>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-
-            </div>
-        </div>
-
-    </div>
-</div>
 
 <div class="spacer"></div>
 
 <h3>Draggable states</h3>
 <div class="idealist">
-    <div class="idealist-item" data-idealist-level="1">
-        <span class="idealist-label">.idealist-item</span>
-    </div>
 
-    <div class="idealist-item" data-idealist-level="1">
-        <span class="idealist-label is-dragover">.idealist-item.is-dragover</span>
-    </div>
-
-    <div class="idealist-item" data-idealist-level="1">
-        <span class="idealist-label is-dragover-below">.idealist-item.is-dragover-below</span>
-    </div>
-
-    <div class="idealist-item is-open" data-idealist-level="1">
-        <span class="idealist-label is-dragover">
-            <span class="idealist-label-arrow"></span>
-            .idealist-item.is-dragover with children
-        </span>
-
-        <div class="idealist-children">
-            <div class="idealist-item" data-idealist-level="2">
-                <span class="idealist-label">.idealist-item child 1</span>
-            </div>
-
-            <div class="idealist-item" data-idealist-level="2">
-                <span class="idealist-label">.idealist-item child 2</span>
-            </div>
+    <div class="idealist-item">
+        <div class="idealist-body">
+            <div class="idealist-counter">1</div>
+            <div class="idealist-title">.idealist-item</div>
         </div>
     </div>
 
-    <div class="idealist-item is-open" data-idealist-level="1">
-        <span class="idealist-label is-dragover-below">
-            <span class="idealist-label-arrow"></span>
-            .idealist-item.is-dragover-below with children
-        </span>
-
-        <div class="idealist-children">
-            <div class="idealist-item" data-idealist-level="2">
-                <span class="idealist-label">.idealist-item child 1</span>
-            </div>
-
-            <div class="idealist-item" data-idealist-level="2">
-                <span class="idealist-label">.idealist-item child 2</span>
-            </div>
+    <div class="idealist-item is-dragover">
+        <div class="idealist-body">
+            <div class="idealist-counter">2</div>
+            <div class="idealist-title">.idealist-item.is-dragover</div>
         </div>
     </div>
-</div>
 
-<div class="spacer"></div>
-
-<h3>Idea list with checkboxes</h3>
-<div class="idealist idealist--chk">
-    <div class="idealist-item is-open" data-idealist-level="1">
-        {{ chk() }}
-        <span class="idealist-label">
-            <span class="idealist-label-arrow"></span>
-            Item level 1
-        </span>
-        <div class="fixedcounter">4</div>
+    <div class="idealist-item is-open is-dragover">
+        <div class="idealist-body">
+            <span class="idealist-arrow"></span>
+            <div class="idealist-counter">2</div>
+            <div class="idealist-title">.idealist-item.is-open.is-dragover with children</div>
+        </div>
 
         <div class="idealist-children">
-            <div class="idealist-item is-open" data-idealist-level="2">
-                {{ chk() }}
-                <span class="idealist-label">
-                    <span class="idealist-label-arrow"></span>
-                    Item level 2
-                </span>
-                <div class="fixedcounter">3</div>
-                
-                <div class="idealist-children">
-                    <div class="idealist-item is-open" data-idealist-level="3">
-                        {{ chk() }}
-                        <span class="idealist-label">
-                            <span class="idealist-label-arrow"></span>
-                            Item level 3
-                        </span>
-                        <div class="fixedcounter">2</div>
-                        
-                        <div class="idealist-children">
-                            <div class="idealist-item is-open" data-idealist-level="4">
-                                {{ chk() }}
-                                <span class="idealist-label">
-                                    Item level 4
-                                </span>
-                                <div class="fixedcounter">1</div>
-                            </div>
-                        </div>
-                    </div>
+            
+            <div class="idealist-item">
+                <div class="idealist-body">
+                    <div class="idealist-counter">1</div>
+                    <div class="idealist-title">.idealist-item</div>
                 </div>
             </div>
+
         </div>
     </div>
 </div>
 
-<div class="spacer"></div>
-
-<h3>Form inside ( .idealist-item.is-form-open )</h3>
+<h3>Going into the deepest</h3>
 <div class="idealist">
-    <div class="idealist-item is-form-open">
-        <span class="idealist-label">.idealist-item</span>
-
-        <form class="form margin">
-
-            <label class="formlabel">Titre</label>
-            <input type="text" class="formfield" />
-
-            <div class="spacer"></div>
-
-            <label class="formlabel">Description</label>
-            <textarea class="formtextarea" ></textarea>
-        </form>
-    </div>
+    {{ idealist_item(1, 30) }}
 </div>
-
-
-<div class="spacer"></div>
-
-<h3>Idea list Dark ( .idealist--dark )</h3>
-<div class="idealist idealist--dark">
-    <div class="idealist-item" data-idealist-level="1">
-        <span class="idealist-label">
-            Simple Item
-        </span>
-    </div>
-
-    <div class="idealist-item is-open" data-idealist-level="1">
-        <span class="idealist-label">
-            <span class="idealist-label-arrow"></span>
-            Item level 1
-        </span>
-        <div class="fixedcounter">4</div>
-
-        <div class="idealist-children">
-            <div class="idealist-item is-open" data-idealist-level="2">
-                <span class="idealist-label">
-                    <span class="idealist-label-arrow"></span>
-                    Item level 2
-                </span>
-                <div class="fixedcounter">3</div>
-                
-                <div class="idealist-children">
-                    <div class="idealist-item is-open" data-idealist-level="3">
-                        <span class="idealist-label">
-                            <span class="idealist-label-arrow"></span>
-                            Item level 3
-                        </span>
-                        <div class="fixedcounter">2</div>
-                        
-                        <div class="idealist-children">
-                            <div class="idealist-item is-open" data-idealist-level="4">
-                                <span class="idealist-label">
-                                    Item level 4
-                                </span>
-                                <div class="fixedcounter">1</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-#}

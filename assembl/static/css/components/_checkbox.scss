@@ -12,7 +12,12 @@
     line-height: $idealist-item-height;
     float: left;
     margin-left: 5px;
-    padding-top: 4.25px; // Don't ask
+
+    // Don't ask
+    padding-top: 4.25px; 
+    position: relative;
+    z-index: 10;
+
 }
 
 // The checkbox
