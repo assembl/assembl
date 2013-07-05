@@ -36,28 +36,12 @@ function(jasmine, _, app, IdeaView){
         });
 
         it('should have the arrow if hasChildren is true', function(){
-            expect(view.el).not.toContain('span.idealist-label-arrow');
+            expect(view.el).not.toContain('span.idealist-arrow');
 
             view.model.set('hasChildren', true);
             fixIdea.empty().append( view.render().el );
 
-            expect(view.el).toContain('span.idealist-label-arrow');
-        });
-
-        it('should show the options when it swipes to left', function(){
-            var label = view.$('.idealist-label');
-            label.trigger('swipeLeft');
-
-            expect(label.get(0)).toHaveClass('is-optioned');
-        });
-
-        it('should hide the options when it swipes to right', function(){
-            var label = view.$('.idealist-label');
-
-            label.addClass('is-optioned');
-            label.trigger('swipeRight');
-
-            expect(label.get(0)).not.toHaveClass('is-optioned');
+            expect(view.el).toContain('span.idealist-arrow');
         });
 
         it('should have the data-idealist-level the same of level attribute', function(){
@@ -73,7 +57,7 @@ function(jasmine, _, app, IdeaView){
             view.model.set('hasChildren', true);
             fixIdea.empty().append( view.render().el );
 
-            var arrow = view.$('.idealist-label-arrow').eq(0);
+            var arrow = view.$('.idealist-arrow').eq(0);
             arrow.trigger('click');
 
             expect(view.toggle).toHaveBeenCalled();
@@ -81,25 +65,6 @@ function(jasmine, _, app, IdeaView){
 
             arrow.trigger('click');
             expect(view.toggle.callCount).toBe(2);
-        });
-
-        it('should have the .has-options class if hasOptions is true', function(){
-            view.model.set('hasOptions', true);
-            fixIdea.empty().append( view.render().el );
-
-            expect(view.$('.idealist-label').get(0)).toHaveClass('has-options');
-        });
-
-        it('should have the .idealist-label in the label property', function(){
-            expect( view.label ).toBe('.idealist-label');
-        });
-
-        it('should add an idea if it is in .is-dragover-below state', function(){
-            view.label.classList.add('is-dragover-below');
-
-            //view.add
-            // view.addSegment({ text: 'nada' });
-            // view.segment
         });
 
     });

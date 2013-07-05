@@ -21,6 +21,8 @@ define(['zepto', 'jasmine-html'], function($, jasmine){
 
     $(function(){
         require(specs, function(){
+            $('#wrapper').hide();
+
             jasmineEnv.execute();
         });
     });
