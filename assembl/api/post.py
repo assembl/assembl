@@ -17,7 +17,7 @@ def create(post=None, email_text=None, flush=True, **fields):
 
     """
     if email_text is not None:
-        msg = message_from_string(email_text)
+        msg = message_from_string(email_text.encode('utf-8'))
         post = from_email(msg)
         headers, body = email_text.split(get_eol(email_text) * 2, 1)
         email = Email(headers=headers, body=body)
