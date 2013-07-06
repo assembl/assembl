@@ -2,7 +2,7 @@ define(['backbone'], function(Backbone){
     'use strict';
 
     /**
-     * @class Idea
+     * @class IdeaModel
      */
     var IdeaModel = Backbone.Model.extend({
         initialize: function(obj){

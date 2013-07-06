@@ -3,9 +3,10 @@ define([
     "zepto",
     "views/lateralMenu",
     "views/ideaList",
+    "views/ideaPanel",
     "views/segmentList",
     "views/message"
-], function(app, $, LateralMenu, IdeaList, SegmentList, Message){
+], function(app, $, LateralMenu, IdeaList, IdeaPanel, SegmentList, Message){
     'use strict';
 
     app.init();
@@ -18,6 +19,10 @@ define([
     $('#button-ideaList').on('click', app.togglePanel.bind(window, 'ideaList'));
     app.ideaList = new IdeaList({el: '#idealist'});
     app.ideaList.ideas.fetch({reset: true});
+
+    // Idea panel
+    app.ideaPanel = new IdeaPanel({el: '#ideaPanel'}).render();
+    app.togglePanel('ideaPanel');
 
     // Segment List
     $('#button-segmentList').on('click', app.togglePanel.bind(window, 'segmentList'));
