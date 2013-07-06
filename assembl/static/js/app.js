@@ -321,6 +321,14 @@ function($, _, ckeditor){
         },
 
         /**
+         * Get the current Idea
+         * @return {Idea}
+         */
+        getCurrentIdea: function(){
+            return app.ideaPanel.idea;
+        },
+
+        /**
          * @init
          * inits ALL app components
          */

@@ -31,7 +31,22 @@ function(Backbone, _, Idea, IdeaView, app){
             this.$el.html(this.template());
             this.$('.idealist').append( list );
             return this;
+        },
+
+        'events': {
+            'click #idealist-addbutton': 'addChildToSelected'
+        },
+
+        /**
+         * Add a new child to the current selected
+         */
+        addChildToSelected: function(){
+            var currentIdea = app.getCurrentIdea();
+            if( currentIdea ){
+                currentIdea.addChild( new Idea.Model() );
+            }
         }
+
     });
 
     return IdeaList;

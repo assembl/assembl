@@ -1,4 +1,4 @@
-<div class="idealist-body">
+<div class="idealist-body" draggable="true">
     <% if (hasCheckbox) { %>
     <label class="chk chk--idealist">
         <input type="checkbox" class="chk-checkbox" />
@@ -10,7 +10,7 @@
         <span class="idealist-bar"></span>
     <% } %>
     
-    <% if (hasChildren) { %>
+    <% if (children.length > 0) { %>
         <span class="idealist-arrow"></span>
     <% } %>
 

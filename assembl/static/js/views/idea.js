@@ -36,6 +36,12 @@ function(Backbone, _, $, Idea, app){
         template: app.loadTemplate('idea'),
 
         /**
+         * Counter used to open the idea when it is dragover
+         * @type {Number}
+         */
+        dragOverCounter: 0,
+
+        /**
          * @init
          */
         initialize: function(obj){
@@ -43,8 +49,15 @@ function(Backbone, _, $, Idea, app){
                 this.model = new Idea.Model();
             }
 
+            var children = this.model.get('children');
+
+            if( _.isUndefined(children) ){
+                children = new Idea.Collection();
+                this.model.set('children', children);
+            }
+
             this.model.on('change', this.render, this);
-            this.model.get('children').on('add', this.render, this);
+            children.on('add', this.render, this);
         },
 
         /**
@@ -100,25 +113,15 @@ function(Backbone, _, $, Idea, app){
         },
 
         /**
-         * add an item as child
-         * @param  {string} html
-         */
-        addChild: function(html){
-            var idea = new Idea.Model({
-                subject: html,
-                level: this.model.get('level') + 1
-            });
-
-            this.model.addChild(idea);
-        },
-
-        /**
          * The events
          * @type {Object}
          */
         events: {
             'click .idealist-title': 'onTitleClick',
             'click .idealist-arrow': 'toggle',
+
+            'dragstart .idealist-body': 'onDragStart',
+            'dragend .idealist-body': 'onDragEnd',
 
             'dragover .idealist-body': 'onDragOver',
             'dragleave .idealist-body': 'onDragLeave',
@@ -140,10 +143,33 @@ function(Backbone, _, $, Idea, app){
         /**
          * @event
          */
+        onDragStart: function(ev){
+            ev.currentTarget.style.opacity = 0.4;
+
+            app.showDragbox(ev, this.model.get('shortTitle'));
+        },
+
+        /**
+         * @event
+         */
+        onDragEnd: function(ev){
+            ev.currentTarget.style.opacity = '';
+            app.draggedSegment = null;
+        },
+
+        /**
+         * @event
+         */
         onDragOver: function(ev){
             if( ev ){
                 ev.preventDefault();
                 ev.stopPropagation();
+            }
+
+            this.dragOverCounter += 1;
+
+            if( this.dragOverCounter > 30 ){
+                this.model.set('isOpen', true);
             }
 
             this.$el.addClass('is-dragover');
@@ -153,6 +179,7 @@ function(Backbone, _, $, Idea, app){
          * @event
          */
         onDragLeave: function(ev){
+            this.dragOverCounter = 0;
             this.$el.removeClass('is-dragover').removeClass('is-dragover-below');
         },
 
@@ -169,7 +196,6 @@ function(Backbone, _, $, Idea, app){
             this.$('.idealist-body').trigger('dragleave');
 
             var segment = app.getDraggedSegment();
-
             if( segment ){
                 if( isDraggedBelow ){
                     // Add as a child
@@ -178,6 +204,8 @@ function(Backbone, _, $, Idea, app){
                     // Add as a segment
                     this.model.addSegment(segment);
                 }
+            } else {
+
             }
         },
 

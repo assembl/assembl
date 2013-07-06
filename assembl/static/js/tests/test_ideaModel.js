@@ -21,7 +21,6 @@ define(['jasmine', 'underscore', 'models/idea'], function(jasmine, _, Idea){
                 level: 1,
                 total: 1,
                 hasCheckbox: true,
-                hasChildren: false,
                 featured: false,
                 active: false
             };

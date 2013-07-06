@@ -70,10 +70,9 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, menu,
 [draggable=true] {
   -moz-user-select: none;
   -khtml-user-drag: element;
-  cursor: move;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/base\/_reset\.scss}line{font-family:\0000363}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/base\/_reset\.scss}line{font-family:\0000362}}
 [hidden] {
   display: none;
 }
@@ -1186,17 +1185,32 @@ html {
   color: #c5c5c5;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_text\.scss}line{font-family:\0000317}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_text\.scss}line{font-family:\0000315}}
 .text-small {
   font-size: .9em;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_text\.scss}line{font-family:\0000323}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_text\.scss}line{font-family:\0000319}}
 .text-big {
   font-size: 18px;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_text\.scss}line{font-family:\0000329}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_text\.scss}line{font-family:\0000323}}
+.text-left {
+  text-align: left;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_text\.scss}line{font-family:\0000327}}
+.text-center {
+  text-align: center;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_text\.scss}line{font-family:\0000331}}
+.text-right {
+  text-align: right;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_text\.scss}line{font-family:\0000335}}
 .textbubble {
   position: absolute;
   background: white url(/static/img/text/textbubble.png) no-repeat 98% center;
@@ -1209,11 +1223,11 @@ html {
   padding-right: 25px;
   margin-top: -64px;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_text\.scss}line{font-family:\0000347}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_text\.scss}line{font-family:\0000353}}
 .textbubble:hover {
   opacity: 1;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_text\.scss}line{font-family:\0000352}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_text\.scss}line{font-family:\0000358}}
 .textbubble:after, .textbubble:before {
   top: 100%;
   border: solid transparent;
@@ -1223,7 +1237,7 @@ html {
   position: absolute;
   pointer-events: none;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_text\.scss}line{font-family:\0000362}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_text\.scss}line{font-family:\0000368}}
 .textbubble:after {
   border-color: rgba(211, 211, 214, 0);
   border-top-color: #d3d3d6;
@@ -1231,7 +1245,7 @@ html {
   left: 50%;
   margin-left: -10px;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_text\.scss}line{font-family:\0000369}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_text\.scss}line{font-family:\0000375}}
 .textbubble:before {
   border-color: rgba(211, 211, 214, 0);
   border-top-color: #d3d3d6;

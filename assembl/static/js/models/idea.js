@@ -36,7 +36,6 @@ define(['backbone', 'models/segment'], function(Backbone, Segment){
             total: 1,
             isOpen: false,
             hasCheckbox: true,
-            hasChildren: false,
             featured: false,
             active: false
         },
@@ -47,7 +46,6 @@ define(['backbone', 'models/segment'], function(Backbone, Segment){
          */
         addChild: function(idea){
             this.attributes.children.add(idea);
-            this.attributes.hasChildren = true;
         },
 
         /**
