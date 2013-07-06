@@ -147,6 +147,7 @@ function(Backbone, _, $, Idea, app){
             ev.currentTarget.style.opacity = 0.4;
 
             app.showDragbox(ev, this.model.get('shortTitle'));
+            app.draggedIdea = this.model;
         },
 
         /**
@@ -204,8 +205,13 @@ function(Backbone, _, $, Idea, app){
                     // Add as a segment
                     this.model.addSegment(segment);
                 }
-            } else {
 
+                return;
+            }
+
+            var idea = app.getDraggedIdea();
+            if( idea ){
+                this.model.addChild(idea);
             }
         },
 

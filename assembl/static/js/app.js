@@ -46,9 +46,15 @@ function($, _, ckeditor){
 
         /**
          * Current dragged segment 
-         * @type {HTMLDivElement}
+         * @type {Segment}
          */
         draggedSegment: null,
+
+        /**
+         * Current dragged idea
+         * @type {Idea}
+         */
+        draggedIdea: null,
 
         /**
          * The time for all animations related to bucket
@@ -140,7 +146,7 @@ function($, _, ckeditor){
         },
 
         /**
-         * @return {HTMLLiElement}
+         * @return {Segment}
          */
         getDraggedSegment: function(){
             if( app.segmentList && app.draggedSegment ){
@@ -151,6 +157,20 @@ function($, _, ckeditor){
             app.draggedSegment = null;
 
             return segment;
+        },
+
+        /**
+         * @return {Idea}
+         */
+        getDraggedIdea: function(){
+            if( app.ideaList && app.draggedIdea ){
+                app.ideaList.removeIdea(app.draggedIdea);
+            }
+
+            var idea = app.draggedIdea;
+            app.draggedIdea = null;
+
+            return idea;
         },
 
         /**

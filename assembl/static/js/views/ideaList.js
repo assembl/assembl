@@ -33,6 +33,17 @@ function(Backbone, _, Idea, IdeaView, app){
             return this;
         },
 
+        /**
+         * Remove the given idea
+         * @param  {Idea} idea
+         */
+        removeIdea: function(idea){
+            this.ideas.remove(idea);
+        },
+
+        /**
+         * The events
+         */
         'events': {
             'click #idealist-addbutton': 'addChildToSelected'
         },

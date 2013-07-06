@@ -76,7 +76,7 @@ function(jasmine, _, app, IdeaView){
             var body = view.$('.idealist-body');
             body.trigger('dragstart');
 
-            expect(app.draggedIdea.get('text')).toBe('something');
+            expect(app.draggedIdea.get('shortTitle')).toBe('something');
         });
 
     });
