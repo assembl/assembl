@@ -62,11 +62,10 @@ function(Backbone, _, $, app, Segment){
 
         /**
          * Remove the given segment
-         * @param  {HTMLLIElement} li [description]
+         * @param {Segment} segment
          */
-        removeSegmentByWrapper: function(li){
-            var cid = li.getElementsByClassName('closebutton')[0].getAttribute('data-segmentid');
-            this.removeSegmentByCid(cid);
+        removeSegment: function(segment){
+            this.segments.remove(segment);
         },
 
         /**
@@ -85,8 +84,10 @@ function(Backbone, _, $, app, Segment){
         onDragStart: function(ev){
             ev.currentTarget.style.opacity = 0.4;
 
+            var index = $(ev.currentTarget).index();
+
             app.showDragbox(ev, ev.currentTarget.getElementsByTagName('q')[0].innerText);
-            app.draggedSegment = ev.currentTarget;
+            app.draggedSegment = this.segments.at(index);
         },
 
         /**

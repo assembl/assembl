@@ -1,6 +1,8 @@
-define(['zepto', 'underscore'],
-function($, _){
+define(['zepto', 'underscore', 'ckeditor'],
+function($, _, ckeditor){
     'use strict';
+
+    ckeditor.disableAutoInline = true;
 
     var PANEL_QUANTITY = 'data-panel-qty',
         DRAGBOX_MAX_LENGTH = 25;
@@ -142,10 +144,13 @@ function($, _){
          */
         getDraggedSegment: function(){
             if( app.segmentList && app.draggedSegment ){
-                app.segmentList.removeSegmentByWrapper(app.draggedSegment);
+                app.segmentList.removeSegment(app.draggedSegment);
             }
 
-            return app.draggedSegment;
+            var segment = app.draggedSegment;
+            app.draggedSegment = null;
+
+            return segment;
         },
 
         /**

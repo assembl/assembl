@@ -12,6 +12,10 @@
     overflow-y: hidden;
 }
 
+// When is dragging something on
+// ****************
+.panel.is-dragover {}
+
 // The header
 // ----------
 .panel-header {
@@ -32,6 +36,10 @@
     bottom: $panel-header-height;
     left: 0;
     overflow-y: auto;
+
+    .panel.is-dragover & {
+        background-color: $dragbox-background-color;
+    }
 }
 
 // The footer

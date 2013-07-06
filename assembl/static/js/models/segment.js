@@ -7,7 +7,7 @@ define(['backbone', 'app'], function(Backbone, app){
     var SegmentModel = Backbone.Model.extend({
         url: "/static/js/tests/fixtures/segment.json",
         defaults: {
-            text: '',
+            text: ' Alguma coisa ',
             idPost: null,
             date: app.getCurrentTime()
         }

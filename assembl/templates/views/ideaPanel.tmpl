@@ -1,18 +1,12 @@
-<div class="panel">
+<div class="panel" draggable="draggable">
 
     <div class="panel-header">
-        taram =DDDD
+        <span id="ideaPanel-shorttitle" contenteditable="true" style="line-height: 14px; display: inline-block; white-space: nowrap; overflow: hidden; max-width: 330px;"><%= idea.get('shortTitle') %></span>
     </div>
     
     <div class="panel-body">
       
-        <div id="ideaPanel-longtitle" class="text margin" contenteditable="true">
-            <p>
-                <strong>Texte qui résume peut-être les extraits</strong>
-            </p>
-
-            <p>présentés ci-bas, ou encore, apporte quelques précisions sur la relation ou le pourquoi de la présence de cette idée dans l’arbre.</p>
-        </div>
+        <div id="ideaPanel-longtitle" class="text margin" contenteditable="true"><%= idea.get('longTitle') %></div>
 
         <div class="spacer"></div>
 
@@ -20,41 +14,25 @@
 
         <div class="boxlist">
             
-            <div class="box">
-                <span class="closebutton">&times;</span>
+            <% idea.get('segments').each(function(segment, i){ %>
+                <div class="box">
+                    <span class="closebutton">&times;</span>
 
-                <q>qui me donnera droit à des cadeaux (ou à des avantages sur un site, ou autre)</q>
+                    <q><%= segment.get('text') %></q>
 
-                <div class="spacer spacer--huge"></div>
+                    <div class="spacer spacer--huge"></div>
 
-                <div class="media">
-                    <div class="media-imgleft">
-                        <img src="//placehold.it/44x44" class="image-rounded" alt="" />
-                    </div>
-                    <div class="media-body">
-                        <div class="media-title"><strong>Joey Ramone</strong></div>
-                        <div>Attrapé il y a 1 jours</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="box">
-                <span class="closebutton">&times;</span>
-
-                <q>qui me donnera droit à des cadeaux (ou à des avantages sur un site, ou autre)</q>
-
-                <div class="spacer spacer--huge"></div>
-
-                <div class="media">
-                    <div class="media-imgleft">
-                        <img src="//placehold.it/44x44" class="image-rounded" alt="" />
-                    </div>
-                    <div class="media-body">
-                        <div class="media-title"><strong>Joey Ramone</strong></div>
-                        <div>Attrapé il y a 1 jours</div>
+                    <div class="media">
+                        <div class="media-imgleft">
+                            <img src="//placehold.it/44x44" class="image-rounded" alt="" />
+                        </div>
+                        <div class="media-body">
+                            <div class="media-title"><strong>Joey Ramone</strong></div>
+                            <div>Attrapé il y a 1 jours</div>
+                        </div>
                     </div>
                 </div>
-            </div>
+            <% }); %>
             
             <div class="box box--dashed box--centered margin text-muted text-big">
                 Ajouter des extraits
@@ -65,7 +43,7 @@
     </div>
 
     <div class="panel-footer">
-        taram =DDDD
+        <a id="ideaPanel-clearbutton" class="text-muted">Clear ?</a>
     </div>
 
 </div>

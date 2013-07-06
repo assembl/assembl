@@ -16,8 +16,8 @@ define(['jasmine', 'underscore', 'models/idea'], function(jasmine, _, Idea){
 
             // The default attributes
             var attrs = {
-                shortTitle: '',
-                longTitle: '',
+                shortTitle: 'New idea',
+                longTitle: 'Please add a description',
                 level: 1,
                 total: 1,
                 hasCheckbox: true,
@@ -38,6 +38,14 @@ define(['jasmine', 'underscore', 'models/idea'], function(jasmine, _, Idea){
             idea.addSegment({ title: 'something'});
 
             expect(idea.attributes.segments.length).toBe(1);
+        });
+
+
+        it('should add a child', function(){
+            expect(idea.attributes.children.length).toBe(0);
+            idea.addChild({ title: 'something'});
+
+            expect(idea.attributes.children.length).toBe(1);
         });
 
     });

@@ -5,6 +5,9 @@ define(['backbone', 'models/segment'], function(Backbone, Segment){
      * @class IdeaModel
      */
     var IdeaModel = Backbone.Model.extend({
+        /**
+         * @init
+         */
         initialize: function(obj){
             obj = obj || {};
 
@@ -17,12 +20,23 @@ define(['backbone', 'models/segment'], function(Backbone, Segment){
             }
 
             obj.segments = obj.segments && obj.segments.length ? obj.segments : [];
-            this.set('segments', new Segment.Collection(obj.segments) );
+            this.set( 'segments', new Segment.Collection(obj.segments) );
+
+            this.set( 'creationDate', app.getCurrentTime() );
         },
+
+        /**
+         * Url
+         * @type {String}
+         */
         url: "/static/js/tests/fixtures/idea.json",
+
+        /**
+         * Defaults
+         */
         defaults: {
-            shortTitle: '',
-            longTitle: '',
+            shortTitle: 'New idea',
+            longTitle: 'Please add a description',
             level: 1,
             total: 1,
             isOpen: false,

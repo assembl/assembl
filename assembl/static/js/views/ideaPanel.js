@@ -2,12 +2,13 @@ define(['backbone', 'underscore', 'models/idea', 'app', 'ckeditor'],
 function(Backbone, _, Idea, app, ckeditor){
     'use strict';
 
-    var EDITOR_ID = 'ideaPanel-longtitle';
+    var LONG_TITLE_ID = 'ideaPanel-longtitle';
 
     /**
      * @class IdeaPanel
      */
     var IdeaPanel = Backbone.View.extend({
+
         /**
          * The tempate
          * @type {_.template}
@@ -15,34 +16,142 @@ function(Backbone, _, Idea, app, ckeditor){
         template: app.loadTemplate('ideaPanel'),
 
         /**
+         * @type {Idea.Model}
+         */
+        idea: null,
+
+        /**
          * @init
          */
-        initialize: function(){
+        initialize: function(obj){
+            obj = obj || {};
 
+            if( ! obj.idea ){
+                this.idea = new Idea.Model();
+            }
+
+            this.idea.on('change', this.render, this);
+            this.idea.get('segments').on('add', this.render, this);
+            this.idea.get('segments').on('remove', this.render, this);
+            this.idea.get('segments').on('reset', this.render, this);
         },
 
         /**
          * The render
          */
         render: function(){
-            this.$el.html( this.template() );
-            ckeditor.inline( EDITOR_ID ).on( 'blur', this.onLongTitleBlur.bind(this) );
+            this.$el.html( this.template( {idea:this.idea} ) );
+
+            this.panel = this.$('.panel');
+
+            ckeditor.inline( this.$('#'+LONG_TITLE_ID).get(0) ).on( 'blur', this.onLongTitleBlur.bind(this) );
 
             return this;
         },
 
         /**
+         * Add a segment
+         * @param  {Segment} segment
+         */
+        addSegment: function(segment){
+            var segments = this.idea.get('segments');
+            segments.add(segment);
+        },
+
+        /**
          * Events
          */
-        events: {},
+        events: {
+            'blur #ideaPanel-shorttitle': 'onShortTitleBlur',
+            'keydown #ideaPanel-shorttitle': 'onShortTitleKeyDown',
+            'dragover .panel': 'onDragOver',
+            'dragleave .panel': 'onDragLeave',
+            'drop .panel': 'onDrop',
+            'click .closebutton': 'onCloseButtonClick',
+            'click #ideaPanel-clearbutton': 'onClearAllClick'
+        },
+
+        /**
+         * @event
+         */
+        onShortTitleBlur: function(ev){
+            var data = $.trim(ev.currentTarget.innerText);
+            if( data === '' ){
+                data = 'New Idea';
+            }
+            this.idea.set('shortTitle', data);
+        },
+
+        /**
+         * @event
+         */
+        onShortTitleKeyDown: function(ev){
+            if( ev.which === 13 ){
+                ev.preventDefault();
+                return false;
+            }
+        },
 
         /**
          * @event
          */
         onLongTitleBlur: function(){
-            var data = ckeditor.instances[EDITOR_ID].getData();
-
+            var data = ckeditor.instances[LONG_TITLE_ID].getData();
+            data = $.trim( data );
+            if( data === '' ){
+                data = 'Add the description';
+            }
             this.idea.set('longTitle', data);
+        },
+
+        /**
+         * @event
+         */
+        onDragOver: function(ev){
+            ev.preventDefault();
+            this.panel.addClass("is-dragover");
+        },
+
+        /**
+         * @event
+         */
+        onDragLeave: function(){
+            this.panel.removeClass('is-dragover');
+        },
+
+        /**
+         * @event
+         */
+        onDrop: function(ev){
+            if( ev ){
+                ev.preventDefault();
+                ev.stopPropagation();
+            }
+
+            this.panel.trigger('dragleave');
+
+            var segment = app.getDraggedSegment();
+            if( segment ){
+                this.addSegment(segment);
+            }
+        },
+
+        /**
+         * @event
+         */
+        onCloseButtonClick: function(ev){
+            var $el = $(ev.currentTarget),
+                segments = this.idea.get('segments'),
+                segment = segments.at($el.index());
+
+            segments.remove(segment);
+        },
+
+        /**
+         * @event
+         */
+        onClearAllClick: function(ev){
+            this.idea.get('segments').reset();
         }
 
     });

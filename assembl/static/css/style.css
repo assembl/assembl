@@ -328,7 +328,6 @@ html {
 .box {
   position: relative;
   overflow: hidden;
-  background: white;
   border: solid 1px #e4e4e3;
   padding: 20px;
 }
@@ -1089,7 +1088,7 @@ html {
   overflow-y: hidden;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_panel\.scss}line{font-family:\0000317}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_panel\.scss}line{font-family:\0000321}}
 .panel-header, .panel-footer {
   line-height: 56px;
   height: 56px;
@@ -1103,7 +1102,7 @@ html {
   border-radius: 5px 5px 0 0;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_panel\.scss}line{font-family:\0000328}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_panel\.scss}line{font-family:\0000332}}
 .panel-body {
   position: absolute;
   top: 56px;
@@ -1112,8 +1111,12 @@ html {
   left: 0;
   overflow-y: auto;
 }
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_panel\.scss}line{font-family:\0000340}}
+.panel.is-dragover .panel-body {
+  background-color: #fcf8e3;
+}
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_panel\.scss}line{font-family:\0000339}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_panel\.scss}line{font-family:\0000347}}
 .panel-footer {
   position: absolute;
   right: 0;
