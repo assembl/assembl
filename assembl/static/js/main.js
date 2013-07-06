@@ -22,7 +22,6 @@ define([
 
     // Idea panel
     app.ideaPanel = new IdeaPanel({el: '#ideaPanel'}).render();
-    app.togglePanel('ideaPanel');
 
     // Segment List
     $('#button-segmentList').on('click', app.togglePanel.bind(window, 'segmentList'));

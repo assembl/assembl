@@ -38,13 +38,9 @@ function(Backbone, _, $, app, Segment){
 
         /**
          * Add a segment to the bucket
-         * @param {string} The extract
-         * @param {Email} The source
+         * @param {Segment} segment
          */
-        addSegment: function(text, email){
-            var segment = new Segment.Model();
-            segment.set('text', text);
-
+        addSegment: function(segment){
             this.segments.add(segment);
         },
 
@@ -84,10 +80,11 @@ function(Backbone, _, $, app, Segment){
         onDragStart: function(ev){
             ev.currentTarget.style.opacity = 0.4;
 
-            var index = $(ev.currentTarget).index();
+            var index = $(ev.currentTarget).index(),
+                segment = this.segments.at(index);
 
-            app.showDragbox(ev, ev.currentTarget.getElementsByTagName('q')[0].innerText);
-            app.draggedSegment = this.segments.at(index);
+            app.showDragbox(ev, segment.get('text'));
+            app.draggedSegment = segment;
         },
 
         /**

@@ -55,7 +55,7 @@ function(jasmine, Backbone, _, $, app, SegmentList){
             view.addSegment({ text: 'nada' });
             view.$('.box').trigger('dragstart');
 
-            expect(app.draggedSegment).toBe('.box');
+            expect(app.draggedSegment.get('text')).toBe('nada');
 
             view.$('.box').trigger('dragend');
             expect(app.draggedSegment).toBe(null);
@@ -66,15 +66,6 @@ function(jasmine, Backbone, _, $, app, SegmentList){
             expect(view.segments.length).toBe(1);
 
             view.$('.closebutton').trigger('click');
-            expect(view.segments.length).toBe(0);
-        });
-
-        it('should remove the segment by its wrapper', function(){
-            view.addSegment({ text: 'nada' });
-            expect(view.segments.length).toBe(1);
-
-            var seg = view.$('.box').get(0);
-            view.removeSegmentByWrapper(seg);
             expect(view.segments.length).toBe(0);
         });
 

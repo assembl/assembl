@@ -18,7 +18,7 @@ function(jasmine, _, app, IdeaView){
         });
 
         //
-        setFixtures('<ul id="fix-idea"></ul>');
+        setFixtures('<div id="fix-idea"></div>');
         fixIdea = $('#fix-idea');
         fixIdea.append( v.render().el );
         return v;

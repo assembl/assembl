@@ -68,7 +68,8 @@ function(Backbone, _, Idea, app, ckeditor){
             'dragleave .panel': 'onDragLeave',
             'drop .panel': 'onDrop',
             'click .closebutton': 'onCloseButtonClick',
-            'click #ideaPanel-clearbutton': 'onClearAllClick'
+            'click #ideaPanel-clearbutton': 'onClearAllClick',
+            'click #ideaPanel-closebutton': 'onTopCloseButtonClick'
         },
 
         /**
@@ -152,6 +153,13 @@ function(Backbone, _, Idea, app, ckeditor){
          */
         onClearAllClick: function(ev){
             this.idea.get('segments').reset();
+        },
+
+        /**
+         * @event
+         */
+        onTopCloseButtonClick: function(){
+            app.togglePanel('ideaPanel');
         }
 
     });

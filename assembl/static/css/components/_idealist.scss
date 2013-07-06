@@ -25,6 +25,8 @@
 // *********************
 .idealist-item.is-dragover {}
 
+.idealist-item.is-selected {}
+
 
 // Where the content is placed
 // --------------
@@ -32,6 +34,10 @@
 
     .idealist-item.is-dragover > & {
         background-color: $dragbox-background-color;
+    }
+
+    .idealist-item.is-selected > & {
+        background-color: $idealist-selected-bg-color;
     }
 
 }
