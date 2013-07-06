@@ -25,12 +25,19 @@
 // *********************
 .idealist-item.is-dragover {}
 
+// When there is something being dragged in below area
+// *********************
+.idealist-item.is-dragover-below {}
+
+// When it is selected
+// *********************
 .idealist-item.is-selected {}
 
 
 // Where the content is placed
 // --------------
 .idealist-body {
+    position: relative;
 
     .idealist-item.is-dragover > & {
         background-color: $dragbox-background-color;
@@ -38,6 +45,22 @@
 
     .idealist-item.is-selected > & {
         background-color: $idealist-selected-bg-color;
+    }
+
+}
+
+// Area where to drop and create a child
+// --------------
+.idealist-dropzone {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+
+    height: $padding-bottom;
+
+    .idealist-item.is-dragover-below > .idealist-body & {
+        background-color: $dragbox-background-color;
     }
 
 }

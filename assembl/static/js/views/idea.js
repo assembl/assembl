@@ -120,7 +120,9 @@ function(Backbone, _, $, Idea, app){
             'click .idealist-arrow': 'toggle',
             'dragover .idealist-body': 'onDragOver',
             'dragleave .idealist-body': 'onDragLeave',
-            'drop .idealist-body': 'onDrop'
+            'drop .idealist-body': 'onDrop',
+            'dragover .idealist-dropzone': 'onDropZoneDragOver',
+            'dragoleave .idealist-dropzone': 'onDragLeave'
         },
 
         /**
@@ -148,7 +150,7 @@ function(Backbone, _, $, Idea, app){
          * @event
          */
         onDragLeave: function(ev){
-            this.$el.removeClass('is-dragover');
+            this.$el.removeClass('is-dragover').removeClass('is-dragover-below');
         },
 
         /**
@@ -167,6 +169,18 @@ function(Backbone, _, $, Idea, app){
             if( segment ){
                 this.model.addSegment(segment);
             }
+        },
+
+        /**
+         * @event
+         */
+        onDropZoneDragOver: function(ev){
+            if( ev ){
+                ev.preventDefault();
+                ev.stopPropagation();
+            }
+
+            this.$el.removeClass('is-dragover').addClass('is-dragover-below');
         },
 
         /**

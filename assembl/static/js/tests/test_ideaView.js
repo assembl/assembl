@@ -66,12 +66,23 @@ function(jasmine, _, app, IdeaView){
         });
 
         it('should set the state to .is-dragover when there is a segment over', function(){
-            view.$el.trigger('dragover');
+            var body = view.$('.idealist-body');
+            body.trigger('dragover');
 
             expect(view.$el.hasClass('is-dragover')).toBeTruthy();
 
-            view.$el.trigger('dragleave');
+            body.trigger('dragleave');
             expect(view.$el.hasClass('is-dragover')).toBeFalsy();
+        });
+
+        it('should set the state to .is-dragover-below when there is a segment over in the below area', function(){
+            var dropzone = view.$('.idealist-dropzone');
+            dropzone.trigger('dragover');
+
+            expect(view.$el.hasClass('is-dragover-below')).toBeTruthy();
+
+            dropzone.trigger('dragleave');
+            expect(view.$el.hasClass('is-dragover-below')).toBeFalsy();
         });
 
     });
