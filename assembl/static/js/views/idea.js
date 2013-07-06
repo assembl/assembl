@@ -116,42 +116,21 @@ function(Backbone, _, $, Idea, app){
          * @type {Object}
          */
         events: {
-            'click .idealist-title': 'onClick',
-            //'contextmenu': 'onContextMenu',
-            'click .idealist-arrow': 'toggle'
-            //'dragleave .idealist-label': 'clearDragStates',
-            //'dragover .idealist-label': 'onDragOver',
-            //'drop .idealist-label': 'onDrop'
+            'click .idealist-title': 'onTitleClick',
+            'click .idealist-arrow': 'toggle',
+            'dragover .idealist-body': 'onDragOver',
+            'dragleave .idealist-body': 'onDragLeave',
+            'drop .idealist-body': 'onDrop'
         },
 
         /**
          * @event
          * Select this idea as the current idea
          */
-        onClick: function(ev){
+        onTitleClick: function(ev){
             ev.stopPropagation();
             app.setCurrentIdea(this.model);
         },
-
-        /**
-         * @event
-         */
-        onContextMenu: function(ev){
-            if( ev.target.classList.contains('idealist-field') ){
-                return;
-            }
-
-            var options = {
-                'edit': this.startEditTitle
-            };
-
-            app.showContextMenu(ev.clientX, ev.clientY, this, options);
-
-            ev.preventDefault();
-            ev.stopPropagation();
-            return false;
-        },
-
 
         /**
          * @event
@@ -161,9 +140,15 @@ function(Backbone, _, $, Idea, app){
                 ev.preventDefault();
                 ev.stopPropagation();
             }
-            this.clearDragStates();
 
-            this.label.classList.add('is-dragover');
+            this.$el.addClass('is-dragover');
+        },
+
+        /**
+         * @event
+         */
+        onDragLeave: function(ev){
+            this.$el.removeClass('is-dragover');
         },
 
         /**
@@ -175,20 +160,13 @@ function(Backbone, _, $, Idea, app){
                 ev.stopPropagation();
             }
 
-            this.clearDragStates();
+            this.$('.idealist-body').trigger('dragleave');
 
-            var li = app.getDraggedSegment();
+            var segment = app.getDraggedSegment();
 
-            var options = {
-                'nada': function(){ alert('sim'); }
-            };
-
-            if( li ){
-                app.showContextMenu(ev.clientX, ev.clientY, this, options);
+            if( segment ){
+                this.model.addSegment(segment);
             }
-
-            // this.addChild( 'oi' ); // li.innerText
-            // this.render();
         },
 
         /**
@@ -209,43 +187,9 @@ function(Backbone, _, $, Idea, app){
                 this.model.set('isOpen', true);
                 this.$el.addClass('is-open');
             }
-        },
-
-        /**
-         * @event
-         */
-        onCheckboxClick: function(ev){
-            // var chk = ev.currentTarget;
-
-            // if( chk.checked ){
-            //     this.$el.addClass('is-selected');
-            // } else {
-            //     this.$el.removeClass('is-selected');
-            // }
-        },
-
-        /**
-         * @event
-         */
-        onIsSelectedChange: function(ev){
-            var isSelected = this.model.get('isSelected');
-            if( isSelected ){
-                this.$el.addClass('is-selected');
-            } else {
-                this.$el.removeClass('is-selected');
-            }
         }
-    });
 
-    /**
-     * States
-     */
-    IdeaView.prototype.states = {
-        hidden: 'is-hidden',
-        optioned: 'is-optioned',
-        selected: 'is-selected',
-        open: 'is-open'
-    };
+    });
 
     return IdeaView;
 });

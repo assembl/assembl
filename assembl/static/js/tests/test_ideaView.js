@@ -65,6 +65,15 @@ function(jasmine, _, app, IdeaView){
             expect(view.el).toHaveClass('is-selected');
         });
 
+        it('should set the state to .is-dragover when there is a segment over', function(){
+            view.$el.trigger('dragover');
+
+            expect(view.$el.hasClass('is-dragover')).toBeTruthy();
+
+            view.$el.trigger('dragleave');
+            expect(view.$el.hasClass('is-dragover')).toBeFalsy();
+        });
+
     });
 
 });

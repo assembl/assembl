@@ -17,7 +17,7 @@
     <div class="idealist-counter"><%= total %></div>
     <div class="idealist-title">
         <%= shortTitle %>
-        <small class="idealist-longtitle text-small text-muted"><%= longTitle %></small>
+        <small class="idealist-longtitle text-small text-muted"><%= longTitle.replace(/(<([^>]+)>)/ig,"") %></small>
     </div>
 </div>
 
