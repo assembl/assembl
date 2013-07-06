@@ -302,6 +302,25 @@ function($, _, ckeditor){
         },
 
         /**
+         * Set the given Idea as the current one to be edited
+         * @param  {Idea} [idea]
+         */
+        setCurrentIdea: function(idea){
+            if( app.ideaPanel && app.ideaPanel.idea !== null ){
+                app.ideaPanel.idea.set('isSelected', false);
+            }
+
+            if( idea !== null ){
+                idea.set('isSelected', true);
+                app.openPanel(app.ideaPanel);
+            } else {
+                app.closePanel(app.ideaPanel);
+            }
+
+            app.ideaPanel.setCurrentIdea(idea);
+        },
+
+        /**
          * @init
          * inits ALL app components
          */

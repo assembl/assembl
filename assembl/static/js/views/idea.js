@@ -54,6 +54,17 @@ function(Backbone, _, $, Idea, app){
         title: null,
 
         /**
+         * @init
+         */
+        initialize: function(obj){
+            if( _.isUndefined(this.model) ){
+                this.model = new Idea.Model();
+            }
+
+            this.model.on('change', this.render, this);
+        },
+
+        /**
          * The render
          * @return {IdeaView}
          */
@@ -63,6 +74,18 @@ function(Backbone, _, $, Idea, app){
 
             this.el.setAttribute(DATA_LEVEL, data.level);
             this.$el.addClass('idealist-item');
+
+            if( data.isSelected === true ){
+                this.$el.addClass('is-selected');
+            } else {
+                this.$el.removeClass('is-selected');
+            }
+
+            if( data.isOpen === true ){
+                this.$el.addClass('is-open');
+            } else {
+                this.$el.removeClass('is-open');
+            }
 
             this.$el.html(this.template(data));
 
@@ -118,11 +141,22 @@ function(Backbone, _, $, Idea, app){
          * @type {Object}
          */
         events: {
+            'click .idealist-title': 'onClick',
             //'contextmenu': 'onContextMenu',
             'click .idealist-arrow': 'toggle'
             //'dragleave .idealist-label': 'clearDragStates',
             //'dragover .idealist-label': 'onDragOver',
             //'drop .idealist-label': 'onDrop'
+        },
+
+        /**
+         * @event
+         * Select this idea as the current idea
+         */
+        onClick: function(ev){
+            ev.stopPropagation();
+            console.log( this.model );
+            app.setCurrentIdea(this.model);
         },
 
         /**
@@ -190,6 +224,7 @@ function(Backbone, _, $, Idea, app){
          */
         toggle: function(ev){
             if( ev ){
+                ev.preventDefault();
                 ev.stopPropagation();
             }
 
@@ -213,6 +248,18 @@ function(Backbone, _, $, Idea, app){
             // } else {
             //     this.$el.removeClass('is-selected');
             // }
+        },
+
+        /**
+         * @event
+         */
+        onIsSelectedChange: function(ev){
+            var isSelected = this.model.get('isSelected');
+            if( isSelected ){
+                this.$el.addClass('is-selected');
+            } else {
+                this.$el.removeClass('is-selected');
+            }
         }
     });
 

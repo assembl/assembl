@@ -6,8 +6,7 @@ function(jasmine, _, app, IdeaView){
         DATA_LEVEL = 'data-idealist-level';
 
     function getView(){
-        var v = new IdeaView();
-        v.model = new Backbone.Model({
+        var model = new Backbone.Model({
             shortTitle: '',
             longTitle: '',
             total: 1,
@@ -16,6 +15,8 @@ function(jasmine, _, app, IdeaView){
             hasChildren: false,
             hasOptions: false
         });
+
+        var v = new IdeaView({model: model});
 
         //
         setFixtures('<div id="fix-idea"></div>');
@@ -57,9 +58,11 @@ function(jasmine, _, app, IdeaView){
 
             expect(view.toggle).toHaveBeenCalled();
             expect(view.el).toHaveClass('is-open');
+        });
 
-            arrow.trigger('click');
-            expect(view.toggle.callCount).toBe(2);
+        it('should set the isSelect flag to true when clicked', function(){
+            view.$('.idealist-title').trigger('click');
+            expect(view.el).toHaveClass('is-selected');
         });
 
     });

@@ -59,6 +59,21 @@ function(Backbone, _, Idea, app, ckeditor){
         },
 
         /**
+         * Set the given idea as the current one
+         * @param  {Idea} [idea=null]
+         */
+        setCurrentIdea: function(idea){
+            this.idea = idea || new Idea.Model();
+
+            this.idea.on('change', this.render, this);
+            this.idea.get('segments').on('add', this.render, this);
+            this.idea.get('segments').on('remove', this.render, this);
+            this.idea.get('segments').on('reset', this.render, this);
+
+            this.render();
+        },
+
+        /**
          * Events
          */
         events: {
@@ -159,7 +174,8 @@ function(Backbone, _, Idea, app, ckeditor){
          * @event
          */
         onTopCloseButtonClick: function(){
-            app.togglePanel('ideaPanel');
+            app.setCurrentIdea(null);
+            //app.togglePanel('ideaPanel');
         }
 
     });
