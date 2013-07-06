@@ -1,4 +1,4 @@
-define(['backbone'], function(Backbone){
+define(['backbone', 'models/segment'], function(Backbone, Segment){
     'use strict';
 
     /**
@@ -6,23 +6,28 @@ define(['backbone'], function(Backbone){
      */
     var IdeaModel = Backbone.Model.extend({
         initialize: function(obj){
-            if( obj && _.isArray(obj.children) ){
+            obj = obj || {};
+
+            if( _.isArray(obj.children) ){
                 _.each(obj.children, function(child, i){
                     if( IdeaModel !== child.constructor ){
                         obj.children[i] = new IdeaModel(child);
                     }
                 });
             }
+
+            obj.segments = obj.segments && obj.segments.length ? obj.segments : [];
+            this.set('segments', new Segment.Collection(obj.segments) );
         },
         url: "/static/js/tests/fixtures/idea.json",
         defaults: {
-            subject: '',
+            shortTitle: '',
+            longTitle: '',
             level: 1,
             total: 1,
             isOpen: false,
             hasCheckbox: true,
             hasChildren: false,
-            hasOptions: true,
             featured: false,
             active: false,
             children: []
@@ -37,7 +42,16 @@ define(['backbone'], function(Backbone){
             children.push(idea);
             this.set('children', children);
             this.set('hasChildren', true);
+        },
+
+        /**
+         * Adds a segment
+         * @param  {Segment} segment
+         */
+        addSegment: function(segment){
+            this.attributes.segments.add(segment);
         }
+
     });
 
     /**

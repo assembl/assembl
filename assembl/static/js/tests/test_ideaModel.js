@@ -16,12 +16,12 @@ define(['jasmine', 'underscore', 'models/idea'], function(jasmine, _, Idea){
 
             // The default attributes
             var attrs = {
-                subject: '',
+                shortTitle: '',
+                longTitle: '',
                 level: 1,
                 total: 1,
                 hasCheckbox: true,
                 hasChildren: false,
-                hasOptions: true,
                 featured: false,
                 active: false
             };
@@ -33,7 +33,12 @@ define(['jasmine', 'underscore', 'models/idea'], function(jasmine, _, Idea){
             expect(typeof idea.get('children')).toBe(typeof []);
         });
 
-        //it('')
+        it('should add a segment', function(){
+            expect(idea.attributes.segments.length).toBe(0);
+            idea.addSegment({ title: 'something'});
+
+            expect(idea.attributes.segments.length).toBe(1);
+        });
 
     });
 

@@ -8,8 +8,9 @@ function(jasmine, _, app, IdeaView){
     function getView(){
         var v = new IdeaView();
         v.model = new Backbone.Model({
-            subject: 'Default Suject',
-            total: 10,
+            shortTitle: '',
+            longTitle: '',
+            total: 1,
             level: 1,
             hasCheckbox: true,
             hasChildren: false,
@@ -27,12 +28,6 @@ function(jasmine, _, app, IdeaView){
 
         beforeEach(function(){
             view = getView();
-        });
-
-        it('uses the right template', function(){
-            var tmpl = app.loadTemplate('idea');
-
-            expect(tmpl(view.model.toJSON())).toBe(view.template(view.model.toJSON()));
         });
 
         it('should have the arrow if hasChildren is true', function(){
