@@ -75,26 +75,26 @@ function(Backbone, _, $, Idea, app){
             }
 
             this.$el.html(this.template(data));
-            this.$('.idealist-children').append( this.getRenderedChildren() );
+            this.$('.idealist-children').append( this.getRenderedChildren(data.level) );
 
             return this;
         },
 
         /**
          * Returns all children rendered
+         * @param {Number} parentLevel 
          * @return {Array<HTMLDivElement>}
          */
-        getRenderedChildren: function(){
+        getRenderedChildren: function(parentLevel){
             var children = this.model.get('children'),
                 ret = [];
 
-            if( this.model.get('hasChildren') === true ){
-                _.each(children, function(idea, i){
-                    var ideaView = new IdeaView({model:idea});
+            children.each(function(idea, i){
+                idea.set('level', parentLevel + 1);
 
-                    ret.push( ideaView.render().el );
-                });
-            }
+                var ideaView = new IdeaView({model:idea});
+                ret.push( ideaView.render().el );
+            });
 
             return ret;
         },
