@@ -44,6 +44,7 @@ function(Backbone, _, $, Idea, app){
             }
 
             this.model.on('change', this.render, this);
+            this.model.get('children').on('add', this.render, this);
         },
 
         /**
@@ -118,9 +119,11 @@ function(Backbone, _, $, Idea, app){
         events: {
             'click .idealist-title': 'onTitleClick',
             'click .idealist-arrow': 'toggle',
+
             'dragover .idealist-body': 'onDragOver',
             'dragleave .idealist-body': 'onDragLeave',
             'drop .idealist-body': 'onDrop',
+
             'dragover .idealist-dropzone': 'onDropZoneDragOver',
             'dragoleave .idealist-dropzone': 'onDragLeave'
         },
@@ -162,12 +165,19 @@ function(Backbone, _, $, Idea, app){
                 ev.stopPropagation();
             }
 
+            var isDraggedBelow = this.$el.hasClass('is-dragover-below');
             this.$('.idealist-body').trigger('dragleave');
 
             var segment = app.getDraggedSegment();
 
             if( segment ){
-                this.model.addSegment(segment);
+                if( isDraggedBelow ){
+                    // Add as a child
+                    this.model.addSegmentAsChild(segment);
+                } else {
+                    // Add as a segment
+                    this.model.addSegment(segment);
+                }
             }
         },
 
@@ -180,7 +190,7 @@ function(Backbone, _, $, Idea, app){
                 ev.stopPropagation();
             }
 
-            this.$el.removeClass('is-dragover').addClass('is-dragover-below');
+            this.$el.addClass('is-dragover-below');
         },
 
         /**

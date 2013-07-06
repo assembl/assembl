@@ -39,7 +39,7 @@
 .idealist-body {
     position: relative;
 
-    .idealist-item.is-dragover > & {
+    .idealist-item.is-dragover:not(.is-dragover-below) > & {
         background-color: $dragbox-background-color;
     }
 

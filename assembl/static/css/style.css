@@ -955,7 +955,7 @@ html {
   position: relative;
 }
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\0000342}}
-.idealist-item.is-dragover > .idealist-body {
+.idealist-item.is-dragover:not(.is-dragover-below) > .idealist-body {
   background-color: #fcf8e3;
 }
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\0000346}}

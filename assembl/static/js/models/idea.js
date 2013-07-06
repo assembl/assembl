@@ -11,13 +11,8 @@ define(['backbone', 'models/segment'], function(Backbone, Segment){
         initialize: function(obj){
             obj = obj || {};
 
-            if( _.isArray(obj.children) ){
-                _.each(obj.children, function(child, i){
-                    if( IdeaModel !== child.constructor ){
-                        obj.children[i] = new IdeaModel(child);
-                    }
-                });
-            }
+            obj.children = obj.children && obj.children.length ? obj.children : [];
+            this.set( 'children', new IdeaCollection(obj.children) );
 
             obj.segments = obj.segments && obj.segments.length ? obj.segments : [];
             this.set( 'segments', new Segment.Collection(obj.segments) );
@@ -43,8 +38,7 @@ define(['backbone', 'models/segment'], function(Backbone, Segment){
             hasCheckbox: true,
             hasChildren: false,
             featured: false,
-            active: false,
-            children: []
+            active: false
         },
 
         /**
@@ -52,10 +46,8 @@ define(['backbone', 'models/segment'], function(Backbone, Segment){
          * @param  {Idea} idea
          */
         addChild: function(idea){
-            var children = this.get('children');
-            children.push(idea);
-            this.set('children', children);
-            this.set('hasChildren', true);
+            this.attributes.children.add(idea);
+            this.attributes.hasChildren = true;
         },
 
         /**
@@ -64,6 +56,19 @@ define(['backbone', 'models/segment'], function(Backbone, Segment){
          */
         addSegment: function(segment){
             this.attributes.segments.add(segment);
+        },
+
+        /**
+         * Adds a segment as a child
+         * @param {Segment} segment
+         */
+        addSegmentAsChild: function(segment){
+            var idea = new IdeaModel({
+                shortTitle: segment.get('text').substr(0, 50),
+                longTitle: segment.get('text')
+            });
+
+            this.addChild(idea);
         }
 
     });
