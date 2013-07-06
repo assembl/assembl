@@ -104,6 +104,7 @@ function(Backbone, _, Idea, app, ckeditor){
         onShortTitleKeyDown: function(ev){
             if( ev.which === 13 ){
                 ev.preventDefault();
+                $(ev.currentTarget).trigger('blur');
                 return false;
             }
         },

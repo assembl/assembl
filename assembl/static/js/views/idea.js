@@ -36,24 +36,6 @@ function(Backbone, _, $, Idea, app){
         template: app.loadTemplate('idea'),
 
         /**
-         * The label element
-         * @type {HTMLSpanElement}
-         */
-        label: null,
-
-        /**
-         * The text field
-         * @type {HTMLInputElement}
-         */
-        field: null,
-
-        /**
-         * The title element
-         * @type {HTMLSpanElement}
-         */
-        title: null,
-
-        /**
          * @init
          */
         initialize: function(obj){
@@ -87,11 +69,11 @@ function(Backbone, _, $, Idea, app){
                 this.$el.removeClass('is-open');
             }
 
+            if( data.longTitle ){
+                data.longTitle = ' - ' + data.longTitle.substr(0, 50);
+            }
+
             this.$el.html(this.template(data));
-
-            this.label = this.$('.idealist-label').get(0);
-            this.title = this.$('.idealist-title').eq(0);
-
             this.$('.idealist-children').append( this.getRenderedChildren() );
 
             return this;
@@ -130,13 +112,6 @@ function(Backbone, _, $, Idea, app){
         },
 
         /**
-         * Remove the states related to drag
-         */
-        clearDragStates: function(){
-            this.label.classList.remove('is-dragover');
-        },
-
-        /**
          * The events
          * @type {Object}
          */
@@ -155,7 +130,6 @@ function(Backbone, _, $, Idea, app){
          */
         onClick: function(ev){
             ev.stopPropagation();
-            console.log( this.model );
             app.setCurrentIdea(this.model);
         },
 

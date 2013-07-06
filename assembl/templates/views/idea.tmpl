@@ -15,7 +15,10 @@
     <% } %>
 
     <div class="idealist-counter"><%= total %></div>
-    <div class="idealist-title"><%= shortTitle %></div>
+    <div class="idealist-title">
+        <%= shortTitle %>
+        <small class="idealist-longtitle text-small text-muted"><%= longTitle %></small>
+    </div>
 </div>
 
 <div class="idealist-children"></div>
