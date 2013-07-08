@@ -583,7 +583,7 @@ html {
 }
 
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_contextmenu\.scss}line{font-family:\000033}}
-.contextmenu {
+.contextmenu, .dropdown-list {
   position: absolute;
   display: inline-block;
   padding: 20px;
@@ -596,7 +596,7 @@ html {
 }
 
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_contextmenu\.scss}line{font-family:\0000316}}
-.contextmenu-item {
+.contextmenu-item, .dropdown-listitem {
   display: block;
   line-height: 22px;
   cursor: pointer;
@@ -604,7 +604,7 @@ html {
 }
 
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_contextmenu\.scss}line{font-family:\0000328}}
-.contextmenu-item.is-hovered, .contextmenu-item:hover {
+.contextmenu-item.is-hovered, .contextmenu-item:hover, .dropdown-listitem:hover, .is-hovered.dropdown-listitem {
   color: black;
 }
 
@@ -629,6 +629,38 @@ html {
 .dragbox:before {
   content: url(/static/img/dragbox/dragbox-background.png);
   margin-right: 5px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_dropdown\.scss}line{font-family:\000035}}
+.dropdown {
+  position: relative;
+  display: inline-block;
+  padding: 2px 4px;
+  line-height: 20px;
+  overflow: visible;
+  cursor: pointer;
+  border: solid 1px transparent;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_dropdown\.scss}line{font-family:\0000325}}
+.dropdown-list {
+  top: 0;
+  left: 0;
+  z-index: -1;
+  -webkit-transition: top 0.4s, opacity 0.4s, z-index 0 linear;
+  -webkit-transition-delay: 0s, 0s, 0;
+  -moz-transition: top 0.4s, opacity 0.4s, z-index 0 linear 0;
+  -o-transition: top 0.4s, opacity 0.4s, z-index 0 linear 0;
+  transition: top 0.4s, opacity 0.4s, z-index 0 linear 0;
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
+  opacity: 0;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_dropdown\.scss}line{font-family:\0000335}}
+.dropdown:hover .dropdown-list {
+  top: 24px;
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
+  opacity: 1;
+  z-index: 1;
 }
 
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_form\.scss}line{font-family:\0000311}}
