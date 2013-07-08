@@ -2,8 +2,7 @@ define(['jasmine', 'underscore', 'app', 'views/idea'],
 function(jasmine, _, app, IdeaView){
 
     var view,
-        fixIdea,
-        DATA_LEVEL = 'data-idealist-level';
+        fixIdea;
 
     function getView(){
         var model = new Backbone.Model({
@@ -11,6 +10,7 @@ function(jasmine, _, app, IdeaView){
             longTitle: '',
             total: 1,
             level: 1,
+            featured: false,
             hasCheckbox: true,
             hasOptions: false
         });
@@ -37,12 +37,6 @@ function(jasmine, _, app, IdeaView){
             fixIdea.empty().append( view.render().el );
 
             expect(view.el).toContain('span.idealist-arrow');
-        });
-
-        it('should have the data-idealist-level the same of level attribute', function(){
-            var level = ~~view.el.getAttribute(DATA_LEVEL);
-
-            expect( level ).toBe( view.model.get('level') );
         });
 
         it('should set the isSelect flag to true when clicked', function(){

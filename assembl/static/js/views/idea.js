@@ -2,26 +2,6 @@ define(['backbone', 'underscore', 'zepto', 'models/idea', 'app'],
 function(Backbone, _, $, Idea, app){
     'use strict';
 
-    var DATA_LEVEL = 'data-idealist-level',
-        PREVIOUS_VALUE = 'previous-value';
-
-    /**
-     * Given the .idealist-label, returns the right offsetTop
-     * @param  {.idealist-label} el
-     * @param  {Number} [top=0] Initial top
-     * @return {Number}
-     */
-    function getTopPosition(el, top){
-        top = top || 0;
-
-        if( el.offsetParent.id === 'wrapper' ){
-            return top + el.offsetTop;
-        } else {
-            return getTopPosition(el.offsetParent, el.offsetTop);
-        }
-
-    }
-
     var IdeaView = Backbone.View.extend({
         /**
          * Tag name
@@ -57,7 +37,7 @@ function(Backbone, _, $, Idea, app){
             }
 
             this.model.on('change', this.render, this);
-            children.on('add', this.render, this);
+            children.on('add', this.onAddChild, this);
             children.on('remove', this.render, this);
         },
 
@@ -69,7 +49,6 @@ function(Backbone, _, $, Idea, app){
             var data = this.model.toJSON(),
                 doc = document.createDocumentFragment();
 
-            this.el.setAttribute(DATA_LEVEL, data.level);
             this.$el.addClass('idealist-item');
 
             if( data.isSelected === true ){
@@ -147,6 +126,14 @@ function(Backbone, _, $, Idea, app){
 
             'dragover .idealist-dropzone': 'onDropZoneDragOver',
             'dragoleave .idealist-dropzone': 'onDragLeave'
+        },
+
+        /**
+         * @event
+         */
+        onAddChild: function(ev){
+            this.model.set('isOpen', true);
+            this.render();
         },
 
         /**
