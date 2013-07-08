@@ -12,13 +12,7 @@ $dropdown-height: 20px;
     cursor: pointer;
     border: solid 1px transparent;
 
-    &:hover { @extend .dropdown.is-hovered; }
 }
-
-// Hover state
-// ***********
-.dropdown.is-hovered {}
-
 
 // The option list
 // ---------------
@@ -27,15 +21,16 @@ $dropdown-height: 20px;
 
     top: 0;
     left: 0;
-    z-index: -1;
+    @include z-index("underground");
 
-    @include transition( top 0.4s, opacity 0.4s, z-index 0 linear 0 );
+    @include transition( top 0.4s, opacity 0.4s, z-index 0 linear 0.4s );
     @include opacity( 0 );
 
     .dropdown:hover & {
+        @include transition( top 0.4s, opacity 0.4s, z-index 0 linear 0 );
         top: $dropdown-height + 4px;
         @include opacity( 1 );
-        z-index: 1;
+        @include z-index("float");
     }
 }
 

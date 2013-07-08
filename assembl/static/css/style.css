@@ -543,15 +543,15 @@ html {
   margin-left: 5px;
   padding-top: 4.25px;
   position: relative;
-  z-index: 10;
+  z-index: 1;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_checkbox\.scss}line{font-family:\0000325}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_checkbox\.scss}line{font-family:\0000324}}
 .chk-checkbox {
   display: none;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_checkbox\.scss}line{font-family:\0000331}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_checkbox\.scss}line{font-family:\0000330}}
 .chk-label {
   display: inline-block;
   width: 20px;
@@ -563,7 +563,7 @@ html {
   border-radius: 5px;
   background-color: #eceef1;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_checkbox\.scss}line{font-family:\0000339}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_checkbox\.scss}line{font-family:\0000338}}
 .chk-checkbox:checked ~ .chk-label {
   background-color: #81d6af;
 }
@@ -642,25 +642,30 @@ html {
   border: solid 1px transparent;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_dropdown\.scss}line{font-family:\0000325}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_dropdown\.scss}line{font-family:\0000319}}
 .dropdown-list {
   top: 0;
   left: 0;
   z-index: -1;
   -webkit-transition: top 0.4s, opacity 0.4s, z-index 0 linear;
+  -webkit-transition-delay: 0s, 0s, 0.4s;
+  -moz-transition: top 0.4s, opacity 0.4s, z-index 0 linear 0.4s;
+  -o-transition: top 0.4s, opacity 0.4s, z-index 0 linear 0.4s;
+  transition: top 0.4s, opacity 0.4s, z-index 0 linear 0.4s;
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
+  opacity: 0;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_dropdown\.scss}line{font-family:\0000329}}
+.dropdown:hover .dropdown-list {
+  -webkit-transition: top 0.4s, opacity 0.4s, z-index 0 linear;
   -webkit-transition-delay: 0s, 0s, 0;
   -moz-transition: top 0.4s, opacity 0.4s, z-index 0 linear 0;
   -o-transition: top 0.4s, opacity 0.4s, z-index 0 linear 0;
   transition: top 0.4s, opacity 0.4s, z-index 0 linear 0;
-  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
-  opacity: 0;
-}
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_dropdown\.scss}line{font-family:\0000335}}
-.dropdown:hover .dropdown-list {
   top: 24px;
   filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
   opacity: 1;
-  z-index: 1;
+  z-index: 2;
 }
 
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_form\.scss}line{font-family:\0000311}}

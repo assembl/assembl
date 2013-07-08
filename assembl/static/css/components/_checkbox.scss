@@ -16,8 +16,7 @@
     // Don't ask
     padding-top: 4.25px; 
     position: relative;
-    z-index: 10;
-
+    @include z-index("floor");
 }
 
 // The checkbox
