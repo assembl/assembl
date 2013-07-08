@@ -38,7 +38,13 @@ function(Backbone, _, Idea, IdeaView, app){
          * @param  {Idea} idea
          */
         removeIdea: function(idea){
-            this.ideas.remove(idea);
+            var parent = idea.get('parent');
+
+            if( parent ){
+                parent.get('children').remove(idea);
+            } else {
+                this.ideas.remove(idea);
+            }
         },
 
         /**

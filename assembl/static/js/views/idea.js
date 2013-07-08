@@ -58,6 +58,7 @@ function(Backbone, _, $, Idea, app){
 
             this.model.on('change', this.render, this);
             children.on('add', this.render, this);
+            children.on('remove', this.render, this);
         },
 
         /**
@@ -144,10 +145,14 @@ function(Backbone, _, $, Idea, app){
          * @event
          */
         onDragStart: function(ev){
+            if( ev ){
+                ev.stopPropagation();
+            }
             ev.currentTarget.style.opacity = 0.4;
 
             app.showDragbox(ev, this.model.get('shortTitle'));
             app.draggedIdea = this.model;
+            console.log( this.model );
         },
 
         /**
@@ -173,7 +178,9 @@ function(Backbone, _, $, Idea, app){
                 this.model.set('isOpen', true);
             }
 
-            this.$el.addClass('is-dragover');
+            if( app.draggedSegment !== null || app.draggedIdea !== null ){
+                this.$el.addClass('is-dragover');
+            }
         },
 
         /**
@@ -209,8 +216,8 @@ function(Backbone, _, $, Idea, app){
                 return;
             }
 
-            var idea = app.getDraggedIdea();
-            if( idea ){
+            if( app.draggedIdea && app.draggedIdea.cid !== this.model.cid ){
+                var idea = app.getDraggedIdea();
                 this.model.addChild(idea);
             }
         },
@@ -224,7 +231,9 @@ function(Backbone, _, $, Idea, app){
                 ev.stopPropagation();
             }
 
-            this.$el.addClass('is-dragover-below');
+            if( app.draggedSegment !== null ){
+                this.$el.addClass('is-dragover-below');
+            }
         },
 
         /**

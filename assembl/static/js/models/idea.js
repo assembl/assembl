@@ -10,9 +10,13 @@ define(['backbone', 'models/segment'], function(Backbone, Segment){
          */
         initialize: function(obj){
             obj = obj || {};
+            var that = this;
 
             obj.children = obj.children && obj.children.length ? obj.children : [];
             this.set( 'children', new IdeaCollection(obj.children) );
+            this.get( 'children' ).each(function(child){
+                child.set('parent', that);
+            });
 
             obj.segments = obj.segments && obj.segments.length ? obj.segments : [];
             this.set( 'segments', new Segment.Collection(obj.segments) );
