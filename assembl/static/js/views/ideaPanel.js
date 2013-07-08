@@ -91,7 +91,7 @@ function(Backbone, _, Idea, app, ckeditor){
          * @event
          */
         onShortTitleBlur: function(ev){
-            var data = $.trim(ev.currentTarget.innerText);
+            var data = $.trim(ev.currentTarget.textContent);
             if( data === '' ){
                 data = 'New Idea';
             }
@@ -102,7 +102,7 @@ function(Backbone, _, Idea, app, ckeditor){
          * @event
          */
         onShortTitleKeyDown: function(ev){
-            if( ev.which === 13 ){
+            if( ev.which === 13 || ev.which === 27 ){
                 ev.preventDefault();
                 $(ev.currentTarget).trigger('blur');
                 return false;
@@ -126,7 +126,9 @@ function(Backbone, _, Idea, app, ckeditor){
          */
         onDragOver: function(ev){
             ev.preventDefault();
-            this.panel.addClass("is-dragover");
+            if( app.draggedSegment !== null ){
+                this.panel.addClass("is-dragover");
+            }
         },
 
         /**

@@ -42,7 +42,7 @@ define(['jasmine', 'underscore', 'models/idea'], function(jasmine, _, Idea){
 
         it('should add a child', function(){
             expect(idea.attributes.children.length).toBe(0);
-            idea.addChild({ title: 'something'});
+            idea.addChild( new Backbone.Model({ title: 'something'}) );
 
             expect(idea.attributes.children.length).toBe(1);
         });
