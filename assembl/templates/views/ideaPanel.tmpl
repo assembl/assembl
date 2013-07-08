@@ -18,7 +18,7 @@
         <div class="boxlist">
             
             <% idea.get('segments').each(function(segment, i){ %>
-                <div class="box">
+                <div class="box" draggable="true">
                     <span class="closebutton">&times;</span>
 
                     <q><%= segment.get('text') %></q>

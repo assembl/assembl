@@ -79,9 +79,13 @@ function(Backbone, _, Idea, app, ckeditor){
         events: {
             'blur #ideaPanel-shorttitle': 'onShortTitleBlur',
             'keydown #ideaPanel-shorttitle': 'onShortTitleKeyDown',
+
+            'dragstart .box': 'onDragStart',
+            'dragend .box': "onDragEnd",
             'dragover .panel': 'onDragOver',
             'dragleave .panel': 'onDragLeave',
             'drop .panel': 'onDrop',
+
             'click .closebutton': 'onCloseButtonClick',
             'click #ideaPanel-clearbutton': 'onClearAllClick',
             'click #ideaPanel-closebutton': 'onTopCloseButtonClick'
@@ -119,6 +123,27 @@ function(Backbone, _, Idea, app, ckeditor){
                 data = 'Add the description';
             }
             this.idea.set('longTitle', data);
+        },
+
+        /**
+         * @event
+         */
+        onDragStart: function(ev){
+            ev.currentTarget.style.opacity = 0.4;
+
+            var index = $(ev.currentTarget).index(),
+                segment = this.idea.get('segments').at(index);
+
+            app.showDragbox(ev, segment.get('text'));
+            app.draggedSegment = segment;
+        },
+
+        /**
+         * @event
+         */
+        onDragEnd: function(ev){
+            ev.currentTarget.style.opacity = '';
+            app.draggedSegment = null;
         },
 
         /**

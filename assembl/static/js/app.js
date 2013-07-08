@@ -149,8 +149,8 @@ function($, _, ckeditor){
          * @return {Segment}
          */
         getDraggedSegment: function(){
-            if( app.segmentList && app.draggedSegment ){
-                app.segmentList.removeSegment(app.draggedSegment);
+            if( app.draggedSegment.collection ){
+                app.draggedSegment.collection.remove(app.draggedSegment);
             }
 
             var segment = app.draggedSegment;

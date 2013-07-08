@@ -33,6 +33,8 @@ function(Backbone, _, $, app, Segment){
             var data = {segments:this.segments};
             this.$el.html(this.template(data));
 
+            this.panel = this.$('.panel');
+
             return this;
         },
 
@@ -71,6 +73,10 @@ function(Backbone, _, $, app, Segment){
         events: {
             'dragstart .box': "onDragStart",
             'dragend .box': "onDragEnd",
+            'dragover .panel': 'onDragOver',
+            'dragleave .panel': 'onDragLeave',
+            'drop .panel': 'onDrop',
+
             'click .closebutton': "onCloseButtonClick"
         },
 
@@ -93,6 +99,40 @@ function(Backbone, _, $, app, Segment){
         onDragEnd: function(ev){
             ev.currentTarget.style.opacity = '';
             app.draggedSegment = null;
+        },
+
+        /**
+         * @event
+         */
+        onDragOver: function(ev){
+            ev.preventDefault();
+            if( app.draggedSegment !== null ){
+                this.panel.addClass("is-dragover");
+            }
+        },
+
+        /**
+         * @event
+         */
+        onDragLeave: function(){
+            this.panel.removeClass('is-dragover');
+        },
+
+        /**
+         * @event
+         */
+        onDrop: function(ev){
+            if( ev ){
+                ev.preventDefault();
+                ev.stopPropagation();
+            }
+
+            this.panel.trigger('dragleave');
+
+            var segment = app.getDraggedSegment();
+            if( segment ){
+                this.addSegment(segment);
+            }
         },
 
         /**
