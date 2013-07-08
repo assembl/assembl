@@ -1,7 +1,7 @@
 <div class="idealist-body" draggable="true">
     <% if (hasCheckbox) { %>
     <label class="chk chk--idealist">
-        <input type="checkbox" class="chk-checkbox" />
+        <input type="checkbox" class="chk-checkbox" <% if(featured) { %>checked="checked"<% } %> />
         <span class="chk-label"></span>
     </label>
     <% }  %>

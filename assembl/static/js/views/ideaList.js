@@ -61,7 +61,6 @@ function(Backbone, _, Idea, IdeaView, app){
             var currentIdea = app.getCurrentIdea();
             if( currentIdea ){
                 currentIdea.addChild( new Idea.Model() );
-                currentIdea.open();
             }
         }
 

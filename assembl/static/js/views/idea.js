@@ -134,6 +134,7 @@ function(Backbone, _, $, Idea, app){
          * @type {Object}
          */
         events: {
+            'change [type="checkbox"]': 'onCheckboxChange',
             'click .idealist-title': 'onTitleClick',
             'click .idealist-arrow': 'toggle',
 
@@ -146,6 +147,14 @@ function(Backbone, _, $, Idea, app){
 
             'dragover .idealist-dropzone': 'onDropZoneDragOver',
             'dragoleave .idealist-dropzone': 'onDragLeave'
+        },
+
+        /**
+         * @event
+         */
+        onCheckboxChange: function(ev){
+            ev.stopPropagation();
+            this.model.set('featured', ev.currentTarget.checked);
         },
 
         /**
