@@ -50,6 +50,7 @@ define(['backbone', 'models/segment'], function(Backbone, Segment){
          */
         addChild: function(idea){
             this.attributes.children.add(idea);
+            idea.set('parent', this);
         },
 
         /**

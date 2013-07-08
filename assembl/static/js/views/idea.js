@@ -114,6 +114,22 @@ function(Backbone, _, $, Idea, app){
         },
 
         /**
+         * Show the childen
+         */
+        open: function(){
+            this.model.set('isOpen', true);
+            this.$el.addClass('is-open');
+        },
+
+        /**
+         * Hide the childen
+         */
+        close: function(){
+            this.model.set('isOpen', false);
+            this.$el.removeClass('is-open');
+        },
+
+        /**
          * The events
          * @type {Object}
          */
@@ -248,11 +264,9 @@ function(Backbone, _, $, Idea, app){
             }
 
             if( this.$el.hasClass('is-open') ){
-                this.model.set('isOpen', false);
-                this.$el.removeClass('is-open');
+                this.close();
             } else {
-                this.model.set('isOpen', true);
-                this.$el.addClass('is-open');
+                this.open();
             }
         }
 
