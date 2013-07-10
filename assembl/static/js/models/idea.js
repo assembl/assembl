@@ -31,7 +31,6 @@ define(['backbone', 'models/segment'], function(Backbone, Segment){
         defaults: {
             shortTitle: 'New idea',
             longTitle: 'Please add a description',
-            level: 1,
             total: 1,
             isOpen: false,
             hasCheckbox: true,
@@ -46,6 +45,12 @@ define(['backbone', 'models/segment'], function(Backbone, Segment){
          */
         addChild: function(idea){
             this.collection.add(idea);
+
+            if( this.isDescendantOf(idea) ){
+                window.a = this;
+                this.set('parentId', null);
+            }
+
             idea.set('parentId', this.get('id'));
         },
 
@@ -55,6 +60,45 @@ define(['backbone', 'models/segment'], function(Backbone, Segment){
          */
         getChildren: function(){
             return this.collection.where({ parentId: this.get('id') });
+        },
+
+        /**
+         * Return the parent idea
+         * @return {Idea}
+         */
+        getParent: function(){
+            return this.collection.findWhere({ id: this.get('parentId') });
+        },
+
+        /**
+         * Return if the idea is descendant of the given idea
+         * @param {Idea} idea 
+         * @return {Boolean}
+         */
+        isDescendantOf: function(idea){
+            var parentId = this.get('parentId');
+
+            if( parentId === idea.get('id') ){
+                return true;
+            }
+
+            return parentId === null ? false : this.getParent().isDescendantOf( idea );
+        },
+
+        /**
+         * Return the indentantion level
+         * @return {Number}
+         */
+        getLevel: function(){
+            var counter = 0,
+                parent = this;
+
+            do {
+                parent = parent.get('parentId') !== null ? parent.getParent() : null;
+                counter += 1;
+            } while ( parent !== null );
+
+            return counter;
         },
 
         /**

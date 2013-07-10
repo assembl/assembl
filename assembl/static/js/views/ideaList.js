@@ -15,6 +15,7 @@ function(Backbone, _, Idea, IdeaView, app){
         initialize: function(){
             this.ideas = new Idea.Collection();
             this.ideas.on('reset', this.render, this);
+            this.ideas.on('change:parentId', this.render, this);
         },
 
         /**
