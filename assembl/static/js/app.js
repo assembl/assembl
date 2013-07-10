@@ -39,6 +39,18 @@ function($, _, ckeditor){
         ease: 'ease',
 
         /**
+         * The date format
+         * @type {String}
+         */
+        dateFormat: 'd/m/Y',
+
+        /**
+         * The datetime format
+         * @type {string}
+         */
+        datetimeFormat: 'd/m/Y H:i:s',
+
+        /**
          * The time for all animations related to lateralMenu
          * @type {Number}
          */
@@ -283,6 +295,48 @@ function($, _, ckeditor){
          */
         getCurrentTime: function(){
             return (new Date()).getTime();
+        },
+
+        /**
+         * Format date
+         * @param {Date|timestamp} date
+         * @param {string} [format=app.dateFormat] The format
+         * @return {string}
+         */
+        formatDate: function(date, format){
+            format = format || app.dateFormat;
+
+            if( ! _.isDate(date) ){
+                date = new Date(date);
+            }
+
+            var addZeroIfNecessary = function(value){
+                return value < 10 ? '0' + value : value;
+            };
+
+            var dateObject = {
+                'd': 'getDate',
+                'm': 'getMonth',
+                'y': 'getFullYear',
+                'Y': 'getFullYear',
+                'H': 'getHours',
+                'i': 'getMinutes',
+                's': 'getSeconds'
+            };
+
+            return format.replace(/\w/g, function(letter, pos){
+                return (letter in dateObject) ? addZeroIfNecessary(date[dateObject[letter]]()) : letter;
+            });
+        },
+
+        /**
+         * Format date time
+         * @param {Date|timestamp} date
+         * @param {String} [format=app.datetimeFormat] The format
+         * @return {string}
+         */
+        formatDatetime: function(date, format){
+            return app.formatDate(date, format || app.datetimeFormat);
         },
 
         /**

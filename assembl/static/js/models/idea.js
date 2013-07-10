@@ -21,7 +21,8 @@ define(['backbone', 'models/segment'], function(Backbone, Segment){
             obj.segments = obj.segments && obj.segments.length ? obj.segments : [];
             this.set( 'segments', new Segment.Collection(obj.segments) );
 
-            this.set( 'creationDate', app.getCurrentTime() );
+            obj.creationDate = obj.creationDate || app.getCurrentTime();
+            this.set( 'creationDate', obj.creationDate );
         },
 
         /**
