@@ -1,14 +1,19 @@
 <div class="panel" draggable="draggable">
 
     <div class="panel-header">
-        <span id="ideaPanel-shorttitle" contenteditable="true" style="line-height: 14px; display: inline-block; white-space: nowrap; overflow: hidden; max-width: 330px;"><%= idea.get('shortTitle') %></span>
+        Current Idea
         <div class="float-right">
-            <a id="ideaPanel-closebutton" class="text-muted">Close</a>
+            <a id="ideaPanel-closebutton" class="text-muted">&times</a>
         </div>
     </div>
     
     <div class="panel-body">
-      
+        <div class="margin text-muted">Short title</div>
+        <div id="ideaPanel-shorttitle" class="margin" contenteditable="true"><%= idea.get('shortTitle') %></div>
+        
+        <div class="spacer"></div>
+        
+        <div class="margin text-muted">Long title</div>
         <div id="ideaPanel-longtitle" class="text margin" contenteditable="true"><%= idea.get('longTitle') %></div>
 
         <div class="spacer"></div>
