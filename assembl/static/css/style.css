@@ -1105,6 +1105,17 @@ html {
   border-radius: 4px;
 }
 
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_link\.scss}line{font-family:\000033}}
+.link {
+  cursor: pointer;
+  color: #c5c5c5;
+  text-decoration: none;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_link\.scss}line{font-family:\0000310}}
+.link:hover {
+  color: #2c2c2c;
+}
+
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_media\.scss}line{font-family:\000038}}
 .media-imgleft {
   float: left;
