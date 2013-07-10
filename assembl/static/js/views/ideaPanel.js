@@ -44,7 +44,9 @@ function(Backbone, _, Idea, app, ckeditor){
 
             this.panel = this.$('.panel');
 
-            ckeditor.inline( this.$('#'+LONG_TITLE_ID).get(0) ).on( 'blur', this.onLongTitleBlur.bind(this) );
+            ckeditor
+                .inline( this.$('#'+LONG_TITLE_ID).get(0) )
+                .on( 'blur', this.onLongTitleBlur.bind(this) );
 
             return this;
         },
@@ -79,6 +81,7 @@ function(Backbone, _, Idea, app, ckeditor){
         events: {
             'blur #ideaPanel-shorttitle': 'onShortTitleBlur',
             'keydown #ideaPanel-shorttitle': 'onShortTitleKeyDown',
+            'keydown #ideaPanel-longtitle': 'onLongTitleKeyDown',
 
             'dragstart .box': 'onDragStart',
             'dragend .box': "onDragEnd",
@@ -110,6 +113,16 @@ function(Backbone, _, Idea, app, ckeditor){
                 ev.preventDefault();
                 $(ev.currentTarget).trigger('blur');
                 return false;
+            }
+        },
+
+        /**
+         * @event
+         */
+        onLongTitleKeyDown: function(ev){
+            if( ev.which === 27 ){
+                ev.prenvetDefault();
+                $(ev.currentTarget).trigger('blur');
             }
         },
 

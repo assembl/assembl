@@ -27,6 +27,9 @@ define([
     $('#button-segmentList').on('click', app.togglePanel.bind(window, 'segmentList'));
     app.segmentList = new SegmentList({el: '#segmentlist'});
     app.segmentList.render();
+    app.ideaList.ideas.on('remove:segment', function(segment){
+        app.segmentList.segments.add(segment.clone());
+    });
 
     // Message
     $('#button-messages').on('click', app.togglePanel.bind(window, 'messages'));
