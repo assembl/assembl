@@ -12,12 +12,6 @@ define(['backbone', 'models/segment'], function(Backbone, Segment){
             obj = obj || {};
             var that = this;
 
-            obj.children = obj.children && obj.children.length ? obj.children : [];
-            this.set( 'children', new IdeaCollection(obj.children) );
-            this.get( 'children' ).each(function(child){
-                child.set('parent', that);
-            });
-
             obj.segments = obj.segments && obj.segments.length ? obj.segments : [];
             this.set( 'segments', new Segment.Collection(obj.segments) );
 
@@ -42,7 +36,8 @@ define(['backbone', 'models/segment'], function(Backbone, Segment){
             isOpen: false,
             hasCheckbox: true,
             featured: false,
-            active: false
+            active: false,
+            parentId: null
         },
 
         /**
@@ -50,8 +45,16 @@ define(['backbone', 'models/segment'], function(Backbone, Segment){
          * @param  {Idea} idea
          */
         addChild: function(idea){
-            this.attributes.children.add(idea);
-            idea.set('parent', this);
+            this.collection.add(idea);
+            idea.set('parentId', this.get('id'));
+        },
+
+        /**
+         * Return all children
+         * @return {Idea[]}
+         */
+        getChildren: function(){
+            return this.collection.where({ parentId: this.get('id') });
         },
 
         /**

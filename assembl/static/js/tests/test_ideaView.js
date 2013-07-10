@@ -1,11 +1,11 @@
-define(['jasmine', 'underscore', 'app', 'views/idea'],
-function(jasmine, _, app, IdeaView){
+define(['jasmine', 'underscore', 'app', 'views/idea', 'models/idea'],
+function(jasmine, _, app, IdeaView, Idea){
 
     var view,
         fixIdea;
 
     function getView(){
-        var model = new Backbone.Model({
+        var model = new Idea.Model({
             shortTitle: '',
             longTitle: '',
             total: 1,
@@ -14,6 +14,14 @@ function(jasmine, _, app, IdeaView){
             hasCheckbox: true,
             hasOptions: false
         });
+
+        model.set('id', app.getCurrentTime());
+
+        var collection = new Idea.Collection({
+            model: model
+        });
+
+        collection.add(model);
 
         var v = new IdeaView({model: model});
 
@@ -32,8 +40,7 @@ function(jasmine, _, app, IdeaView){
 
         it('should have the arrow if children.length > 0', function(){
             expect(view.el).not.toContain('span.idealist-arrow');
-
-            view.model.get('children').add({ shortTitle: 'nothing' });
+            view.model.addChild( new Idea.Model({ id: 'sim' }) );
             fixIdea.empty().append( view.render().el );
 
             expect(view.el).toContain('span.idealist-arrow');

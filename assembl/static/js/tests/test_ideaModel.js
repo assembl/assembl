@@ -2,10 +2,15 @@ define(['jasmine', 'underscore', 'models/idea'], function(jasmine, _, Idea){
 
     return describe('Idea Model', function(){
 
-        var idea;
+        var idea,
+            collection;
 
         beforeEach(function(){
             idea = new Idea.Model();
+            idea.set('id', idea.cid);
+
+            collection = new Idea.Collection();
+            collection.add(idea);
         });
 
         it('should have the Model', function(){
@@ -22,14 +27,13 @@ define(['jasmine', 'underscore', 'models/idea'], function(jasmine, _, Idea){
                 total: 1,
                 hasCheckbox: true,
                 featured: false,
-                active: false
+                active: false,
+                parentId: null
             };
 
             for( var key in attrs )if(attrs.hasOwnProperty(key)){
                 expect(idea.get(key)).toBe(attrs[key]);
             }
-
-            expect(typeof idea.get('children')).toBe(typeof []);
         });
 
         it('should add a segment', function(){
@@ -40,11 +44,19 @@ define(['jasmine', 'underscore', 'models/idea'], function(jasmine, _, Idea){
         });
 
 
-        it('should add a child', function(){
-            expect(idea.attributes.children.length).toBe(0);
-            idea.addChild( new Backbone.Model({ title: 'something'}) );
+        it('should return all children', function(){
+            var children = idea.getChildren();
+            expect(children.length).toBe(0);
+        });
 
-            expect(idea.attributes.children.length).toBe(1);
+        it('should add a child', function(){
+            var theChild = new Idea.Model();
+            idea.addChild(theChild);
+
+            var children = idea.getChildren();
+            expect(children.length).toBe(1);
+
+            expect(children[0].get('parentId')).toBe(idea.get('id'));
         });
 
     });

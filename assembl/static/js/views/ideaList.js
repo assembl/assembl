@@ -23,7 +23,9 @@ function(Backbone, _, Idea, IdeaView, app){
         render: function(){
             var list = document.createDocumentFragment();
 
-            this.ideas.each(function(idea){
+            var ideas = this.ideas.where({parentId: null});
+
+            _.each(ideas, function(idea){
                 var ideaView = new IdeaView({model:idea});
                 list.appendChild(ideaView.render().el);
             });

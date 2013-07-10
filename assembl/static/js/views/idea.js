@@ -29,16 +29,10 @@ function(Backbone, _, $, Idea, app){
                 this.model = new Idea.Model();
             }
 
-            var children = this.model.get('children');
-
-            if( _.isUndefined(children) ){
-                children = new Idea.Collection();
-                this.model.set('children', children);
-            }
 
             this.model.on('change', this.render, this);
-            children.on('add', this.onAddChild, this);
-            children.on('remove', this.render, this);
+            //children.on('add', this.onAddChild, this);
+            //children.on('remove', this.render, this);
         },
 
         /**
@@ -67,6 +61,9 @@ function(Backbone, _, $, Idea, app){
                 data.longTitle = ' - ' + data.longTitle.substr(0, 50);
             }
 
+            data.children = this.model.getChildren();
+
+
             this.$el.html(this.template(data));
             this.$('.idealist-children').append( this.getRenderedChildren(data.level) );
 
@@ -79,10 +76,11 @@ function(Backbone, _, $, Idea, app){
          * @return {Array<HTMLDivElement>}
          */
         getRenderedChildren: function(parentLevel){
-            var children = this.model.get('children'),
+            window.a = this.model;
+            var children = this.model.getChildren(),
                 ret = [];
 
-            children.each(function(idea, i){
+            _.each(children, function(idea, i){
                 idea.set('level', parentLevel + 1);
 
                 var ideaView = new IdeaView({model:idea});
@@ -164,7 +162,6 @@ function(Backbone, _, $, Idea, app){
 
             app.showDragbox(ev, this.model.get('shortTitle'));
             app.draggedIdea = this.model;
-            console.log( this.model );
         },
 
         /**
