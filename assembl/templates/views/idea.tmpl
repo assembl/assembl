@@ -1,7 +1,7 @@
 <div class="idealist-body" draggable="true">
     <% if (hasCheckbox) { %>
     <label class="chk chk--idealist">
-        <input type="checkbox" class="chk-checkbox" <% if(featured) { %>checked="checked"<% } %> />
+        <input type="checkbox" class="chk-checkbox" <% if(inSynthesis) { %>checked="checked"<% } %> />
         <span class="chk-label"></span>
     </label>
     <% }  %>
@@ -16,7 +16,7 @@
 
     <div class="idealist-counter"><%= total %></div>
     <div class="idealist-title">
-        <%= shortTitle %>
+        <%= shortTitle %> (<%= segments.length %>)
         <small class="idealist-longtitle text-small text-muted"><%= longTitle.replace(/(<([^>]+)>)/ig,"") %></small>
     </div>
     <div class="idealist-dropzone"></div>

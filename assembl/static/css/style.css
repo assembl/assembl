@@ -423,26 +423,29 @@ html {
   display: inline-block;
   width: 32px;
   height: 32px;
+  line-height: 32px;
+  font-size: 20px;
   vertical-align: middle;
+  text-align: center;
   opacity: 0.55;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\0000374}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\0000378}}
 .iconbutton:hover {
   opacity: 1;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\0000385}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\0000389}}
 .iconbutton.is-activated, .iconbutton:active {
   opacity: 1;
   background-color: rgba(229, 229, 229, 0.5);
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\0000392}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\0000396}}
 .iconbutton.iconbutton--nofx {
   opacity: 1;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\0000398}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\00003102}}
 .arrowbutton {
   position: relative;
   margin: 5px 0;
@@ -471,7 +474,7 @@ html {
   font-size: 14px;
   text-decoration: none;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\00003119}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\00003123}}
 .arrowbutton:before {
   content: url(/static/img/button/arrowbutton.png);
   position: absolute;
@@ -479,18 +482,18 @@ html {
   left: -14px;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\00003129}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\00003133}}
 .arrowbutton.arrowbutton--right {
   border-radius: 4px 0 0 4px;
   margin-left: 0;
   margin-right: 14px;
   padding: 0 5px 0 10px;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\00003135}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\00003139}}
 .arrowbutton.arrowbutton--right:before {
   display: none;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\00003139}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\00003143}}
 .arrowbutton.arrowbutton--right:after {
   content: url(/static/img/button/arrowbutton-right.png);
   position: absolute;
@@ -498,7 +501,7 @@ html {
   right: -14px;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\00003149}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\00003153}}
 .barbutton {
   background-color: #aea8c7;
   border: solid 1px #a9a3c1;
@@ -519,7 +522,7 @@ html {
   background-color: transparent;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\00003169}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\00003173}}
 .barbutton.is-activated, .barbutton:active {
   background-color: #aea8c7;
   -webkit-box-shadow: 0 1px rgba(249, 255, 255, 0.3), inset 0 1px rgba(0, 0, 0, 0.5);
@@ -857,119 +860,134 @@ html {
   width: 100%;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_icon\.scss}line{font-family:\000032}}
-.icon {
+@font-face {
+  font-family: 'fontello';
+  src: url("/static/font/icon/fontello.eot?32669288");
+  src: url("/static/font/icon/fontello.eot?32669288#iefix") format("embedded-opentype"), url("/static/font/icon/fontello.woff?32669288") format("woff"), url("/static/font/icon/fontello.ttf?32669288") format("truetype"), url("/static/font/icon/fontello.svg?32669288#fontello") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* Chrome hack: SVG is rendered more smooth in Windozze. 100% magic, uncomment if you need it. */
+/* Note, that will break hinting! In other OS-es font will be not as sharp as it could be */
+/*
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+  @font-face {
+    font-family: 'fontello';
+    src: url('../font/fontello.svg?32669288#fontello') format('svg');
+  }
+}
+*/
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_icon\.scss}line{font-family:\0000324}}
+[class^="icon-"]:before, [class*=" icon-"]:before {
+  font-family: "fontello";
+  font-style: normal;
+  font-weight: normal;
+  speak: none;
   display: inline-block;
-  width: 32px;
-  height: 32px;
-  vertical-align: middle;
+  text-decoration: inherit;
+  width: 1em;
+  margin-right: .2em;
+  text-align: center;
+  /* opacity: .8; */
+  /* For safety - reset parent styles, that can break glyph codes*/
+  font-variant: normal;
+  text-transform: none;
+  /* fix buttons height, for twitter bootstrap */
+  line-height: 1em;
+  /* Animation center compensation - margins should be symmetric */
+  /* remove if not needed */
+  margin-left: .2em;
+  /* you can be more comfortable with increased icons size */
+  /* font-size: 120%; */
+  /* Uncomment for 3D effect */
+  /* text-shadow: 1px 1px 1px rgba(127, 127, 127, 0.3); */
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/icon\/\*\.png}line{font-family:\00003194}}
-.icon-sprite, .icon-book, .icon-check, .icon-cog, .icon-copyfolder, .icon-down, .icon-dropbox, .icon-file, .icon-grave, .icon-heart, .icon-pencil, .icon-power, .icon-question, .icon-rearrangeemail, .icon-reorder, .icon-reply, .icon-return, .icon-search, .icon-settings, .icon-uparrow, .icon-user {
-  background: url('/static/img/sprites/icon-sdbc12dc0cf.png') no-repeat;
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_icon\.scss}line{font-family:\0000355}}
+.icon-menu-1:before {
+  content: '\e809';
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/Ruby\/Gems\/1\.8\/gems\/compass-0\.12\.2\/frameworks\/compass\/stylesheets\/compass\/utilities\/sprites\/_base\.scss}line{font-family:\0000360}}
-.icon-book {
-  background-position: 0 -384px;
+/* '' */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_icon\.scss}line{font-family:\0000356}}
+.icon-star-empty:before {
+  content: '\e80c';
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/Ruby\/Gems\/1\.8\/gems\/compass-0\.12\.2\/frameworks\/compass\/stylesheets\/compass\/utilities\/sprites\/_base\.scss}line{font-family:\0000360}}
-.icon-check {
-  background-position: 0 -160px;
+/* '' */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_icon\.scss}line{font-family:\0000357}}
+.icon-star:before {
+  content: '\e80b';
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/Ruby\/Gems\/1\.8\/gems\/compass-0\.12\.2\/frameworks\/compass\/stylesheets\/compass\/utilities\/sprites\/_base\.scss}line{font-family:\0000360}}
-.icon-cog {
-  background-position: 0 0;
+/* '' */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_icon\.scss}line{font-family:\0000358}}
+.icon-heart:before {
+  content: '\e802';
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/Ruby\/Gems\/1\.8\/gems\/compass-0\.12\.2\/frameworks\/compass\/stylesheets\/compass\/utilities\/sprites\/_base\.scss}line{font-family:\0000360}}
-.icon-copyfolder {
-  background-position: 0 -512px;
+/* '' */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_icon\.scss}line{font-family:\0000359}}
+.icon-pin-outline:before {
+  content: '\e806';
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/Ruby\/Gems\/1\.8\/gems\/compass-0\.12\.2\/frameworks\/compass\/stylesheets\/compass\/utilities\/sprites\/_base\.scss}line{font-family:\0000360}}
-.icon-down {
-  background-position: 0 -448px;
+/* '' */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_icon\.scss}line{font-family:\0000360}}
+.icon-pin:before {
+  content: '\e807';
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/Ruby\/Gems\/1\.8\/gems\/compass-0\.12\.2\/frameworks\/compass\/stylesheets\/compass\/utilities\/sprites\/_base\.scss}line{font-family:\0000360}}
-.icon-dropbox {
-  background-position: 0 -128px;
+/* '' */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_icon\.scss}line{font-family:\0000361}}
+.icon-heart-empty:before {
+  content: '\e803';
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/Ruby\/Gems\/1\.8\/gems\/compass-0\.12\.2\/frameworks\/compass\/stylesheets\/compass\/utilities\/sprites\/_base\.scss}line{font-family:\0000360}}
-.icon-file {
-  background-position: 0 -544px;
+/* '' */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_icon\.scss}line{font-family:\0000362}}
+.icon-cog:before {
+  content: '\e80d';
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/Ruby\/Gems\/1\.8\/gems\/compass-0\.12\.2\/frameworks\/compass\/stylesheets\/compass\/utilities\/sprites\/_base\.scss}line{font-family:\0000360}}
-.icon-grave {
-  background-position: 0 -288px;
+/* '' */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_icon\.scss}line{font-family:\0000363}}
+.icon-menu:before {
+  content: '\e808';
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/Ruby\/Gems\/1\.8\/gems\/compass-0\.12\.2\/frameworks\/compass\/stylesheets\/compass\/utilities\/sprites\/_base\.scss}line{font-family:\0000360}}
-.icon-heart {
-  background-position: 0 -256px;
+/* '' */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_icon\.scss}line{font-family:\0000364}}
+.icon-plus-squared-small:before {
+  content: '\e800';
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/Ruby\/Gems\/1\.8\/gems\/compass-0\.12\.2\/frameworks\/compass\/stylesheets\/compass\/utilities\/sprites\/_base\.scss}line{font-family:\0000360}}
-.icon-pencil {
-  background-position: 0 -32px;
+/* '' */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_icon\.scss}line{font-family:\0000365}}
+.icon-minus-squared-small:before {
+  content: '\e805';
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/Ruby\/Gems\/1\.8\/gems\/compass-0\.12\.2\/frameworks\/compass\/stylesheets\/compass\/utilities\/sprites\/_base\.scss}line{font-family:\0000360}}
-.icon-power {
-  background-position: 0 -320px;
+/* '' */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_icon\.scss}line{font-family:\0000366}}
+.icon-user:before {
+  content: '\e801';
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/Ruby\/Gems\/1\.8\/gems\/compass-0\.12\.2\/frameworks\/compass\/stylesheets\/compass\/utilities\/sprites\/_base\.scss}line{font-family:\0000360}}
-.icon-question {
-  background-position: 0 -416px;
+/* '' */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_icon\.scss}line{font-family:\0000367}}
+.icon-download:before {
+  content: '\e804';
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/Ruby\/Gems\/1\.8\/gems\/compass-0\.12\.2\/frameworks\/compass\/stylesheets\/compass\/utilities\/sprites\/_base\.scss}line{font-family:\0000360}}
-.icon-rearrangeemail {
-  background-position: 0 -608px;
+/* '' */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_icon\.scss}line{font-family:\0000368}}
+.icon-search:before {
+  content: '\e80e';
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/Ruby\/Gems\/1\.8\/gems\/compass-0\.12\.2\/frameworks\/compass\/stylesheets\/compass\/utilities\/sprites\/_base\.scss}line{font-family:\0000360}}
-.icon-reorder {
-  background-position: 0 -576px;
-}
-
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/Ruby\/Gems\/1\.8\/gems\/compass-0\.12\.2\/frameworks\/compass\/stylesheets\/compass\/utilities\/sprites\/_base\.scss}line{font-family:\0000360}}
-.icon-reply {
-  background-position: 0 -224px;
-}
-
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/Ruby\/Gems\/1\.8\/gems\/compass-0\.12\.2\/frameworks\/compass\/stylesheets\/compass\/utilities\/sprites\/_base\.scss}line{font-family:\0000360}}
-.icon-return {
-  background-position: 0 -352px;
-}
-
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/Ruby\/Gems\/1\.8\/gems\/compass-0\.12\.2\/frameworks\/compass\/stylesheets\/compass\/utilities\/sprites\/_base\.scss}line{font-family:\0000360}}
-.icon-search {
-  background-position: 0 -192px;
-}
-
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/Ruby\/Gems\/1\.8\/gems\/compass-0\.12\.2\/frameworks\/compass\/stylesheets\/compass\/utilities\/sprites\/_base\.scss}line{font-family:\0000360}}
-.icon-settings {
-  background-position: 0 -96px;
-}
-
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/Ruby\/Gems\/1\.8\/gems\/compass-0\.12\.2\/frameworks\/compass\/stylesheets\/compass\/utilities\/sprites\/_base\.scss}line{font-family:\0000360}}
-.icon-uparrow {
-  background-position: 0 -480px;
-}
-
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/Ruby\/Gems\/1\.8\/gems\/compass-0\.12\.2\/frameworks\/compass\/stylesheets\/compass\/utilities\/sprites\/_base\.scss}line{font-family:\0000360}}
-.icon-user {
-  background-position: 0 -64px;
-}
-
+/* '' */
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\000033}}
 .idealist {
   background-color: white;

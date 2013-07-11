@@ -128,7 +128,7 @@ function(Backbone, _, $, Idea, app){
          */
         onCheckboxChange: function(ev){
             ev.stopPropagation();
-            this.model.set('featured', ev.currentTarget.checked);
+            this.model.set('inSynthesis', ev.currentTarget.checked);
         },
 
         /**

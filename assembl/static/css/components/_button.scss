@@ -67,7 +67,11 @@
     display: inline-block;
     width: $icon-width;
     height: $icon-height;
+    line-height: $icon-height;
+
+    font-size: 20px;
     vertical-align: middle;
+    text-align: center;
 
     opacity: 0.55;
 

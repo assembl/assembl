@@ -136,6 +136,7 @@ function(Backbone, _, $, app, Segment){
             var segment = app.getDraggedSegment();
             if( segment ){
                 this.addSegment(segment);
+                return;
             }
         },
 

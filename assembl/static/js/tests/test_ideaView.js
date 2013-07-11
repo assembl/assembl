@@ -11,6 +11,7 @@ function(jasmine, _, app, IdeaView, Idea){
             total: 1,
             level: 1,
             featured: false,
+            inSynthesis: false,
             hasCheckbox: true,
             hasOptions: false
         });
