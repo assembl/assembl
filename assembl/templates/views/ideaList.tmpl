@@ -2,11 +2,11 @@
 
     <div class="panel-header">
         <div class="dropdown">
-            <span class="dropdown-label">Table des matières (234)</span>
+            <span class="dropdown-label"><%= title %></span>
             <ul class="dropdown-list">
-                <li class="dropdown-listitem">En vedette</li>
-                <li class="dropdown-listitem">Table des matières</li>
-                <li class="dropdown-listitem">Synthèse en cours</li>
+                <li class="dropdown-listitem"><%= featuredTitle %></li>
+                <li class="dropdown-listitem"><%= tocTitle %></li>
+                <li class="dropdown-listitem"><%= synthesisTitle %></li>
             </ul>
         </div>
 
@@ -23,7 +23,7 @@
     </div>
 
     <div class="panel-footer text-right">
-        <a id="idealist-addbutton">Add idea</a>
+        <a class="link" id="idealist-addbutton">Add idea</a>
     </div>
 
 </div>

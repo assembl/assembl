@@ -16,24 +16,21 @@ define([
     $('#assembl-mainbutton').on('click', app.lateralMenu.trigger.bind(app.lateralMenu, 'toggle'));
 
     // Idea list
-    $('#button-ideaList').on('click', app.togglePanel.bind(window, 'ideaList'));
-    app.ideaList = new IdeaList({el: '#idealist'});
+    app.ideaList = new IdeaList({el: '#idealist', button: '#button-ideaList'});
     app.ideaList.ideas.fetch({reset: true});
 
     // Idea panel
-    app.ideaPanel = new IdeaPanel({el: '#ideaPanel'}).render();
+    app.ideaPanel = new IdeaPanel({el: '#ideaPanel', button: '#button-ideaPanel'}).render();
 
     // Segment List
-    $('#button-segmentList').on('click', app.togglePanel.bind(window, 'segmentList'));
-    app.segmentList = new SegmentList({el: '#segmentlist'});
+    app.segmentList = new SegmentList({el: '#segmentlist', button: '#button-segmentList'});
     app.segmentList.render();
     app.ideaList.ideas.on('remove:segment', function(segment){
         app.segmentList.segments.add(segment.clone());
     });
 
     // Message
-    $('#button-messages').on('click', app.togglePanel.bind(window, 'messages'));
-    app.messages = new Message({el: '#messages'}).render();
+    app.messages = new Message({el: '#messages', button: '#button-messages'}).render();
 
     app.on('lateralmenu.open', function(){
         app.messages.hideTooltip();

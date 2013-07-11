@@ -37,6 +37,7 @@ define(['backbone', 'models/segment'], function(Backbone, Segment){
             hasCheckbox: true,
             featured: false,
             active: false,
+            inSynthesis: false,
             parentId: null
         },
 
@@ -48,7 +49,6 @@ define(['backbone', 'models/segment'], function(Backbone, Segment){
             this.collection.add(idea);
 
             if( this.isDescendantOf(idea) ){
-                window.a = this;
                 this.set('parentId', null);
             }
 

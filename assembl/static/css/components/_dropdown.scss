@@ -22,6 +22,7 @@ $dropdown-height: 20px;
     top: 0;
     left: 0;
     @include z-index("underground");
+    min-width: 155px;
 
     @include transition( top 0.4s, opacity 0.4s, z-index 0 linear 0.4s );
     @include opacity( 0 );

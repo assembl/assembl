@@ -12,7 +12,12 @@ function(Backbone, _, Idea, IdeaView, app){
         /**
          * @init
          */
-        initialize: function(){
+        initialize: function(obj){
+            if( obj.button ){
+                this.button = $(obj.button);
+                this.button.on('click', app.togglePanel.bind(window, 'ideaList'));
+            }
+
             this.ideas = new Idea.Collection();
             this.ideas.on('reset', this.render, this);
             this.ideas.on('change:parentId', this.render, this);
@@ -31,7 +36,15 @@ function(Backbone, _, Idea, IdeaView, app){
                 list.appendChild(ideaView.render().el);
             });
 
-            this.$el.html(this.template());
+            var data = {
+                tocTitle: "Table des matières ({0})".replace('{0}', this.ideas.length),
+                featuredTitle: "En vedette ({0})".replace('{0}', this.ideas.where({featured: true}).length),
+                synthesisTitle: "Synthèse en cours ({0})".replace('{0}', this.ideas.where({inSynthesis: true}).length)
+            };
+
+            data.title = data.tocTitle;
+
+            this.$el.html(this.template(data));
             this.$('.idealist').append( list );
             return this;
         },
@@ -62,8 +75,12 @@ function(Backbone, _, Idea, IdeaView, app){
          */
         addChildToSelected: function(){
             var currentIdea = app.getCurrentIdea();
-            if( currentIdea ){
+
+            if( this.ideas.get(currentIdea) ){
                 currentIdea.addChild( new Idea.Model() );
+            } else {
+                this.ideas.add( new Idea.Model() );
+                this.render();
             }
         }
 

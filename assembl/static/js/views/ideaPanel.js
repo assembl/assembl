@@ -26,6 +26,10 @@ function(Backbone, _, Idea, app, ckeditor){
         initialize: function(obj){
             obj = obj || {};
 
+            if( obj.button ){
+                this.button = $(obj.button).on('click', app.togglePanel.bind(window, 'ideaPanel'));
+            }
+
             if( ! obj.idea ){
                 this.idea = new Idea.Model();
             }
@@ -216,7 +220,7 @@ function(Backbone, _, Idea, app, ckeditor){
          */
         onTopCloseButtonClick: function(){
             app.setCurrentIdea(null);
-            //app.togglePanel('ideaPanel');
+            //this.button.trigger('click');
         }
 
     });

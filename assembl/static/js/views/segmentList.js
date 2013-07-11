@@ -6,11 +6,14 @@ function(Backbone, _, $, app, Segment){
         /**
          * @init
          */
-        initialize: function(){
+        initialize: function(obj){
+            if( obj.button ){
+                this.button = $(obj.button).on('click', app.togglePanel.bind(window, 'segmentList'));
+            }
+
             this.segments = new Segment.Collection();
 
-            this.segments.on('add', this.render, this);
-            this.segments.on('remove', this.render, this);
+            this.segments.on('add remove reset', this.render, this);
         },
 
         /**
@@ -77,7 +80,8 @@ function(Backbone, _, $, app, Segment){
             'dragleave .panel': 'onDragLeave',
             'drop .panel': 'onDrop',
 
-            'click .closebutton': "onCloseButtonClick"
+            'click .closebutton': "onCloseButtonClick",
+            'click #segmentList-clear': "onClearButtonClick"
         },
 
         /**
@@ -141,6 +145,13 @@ function(Backbone, _, $, app, Segment){
         onCloseButtonClick: function(ev){
             var cid = ev.currentTarget.getAttribute('data-segmentid');
             this.removeSegmentByCid(cid);
+        },
+
+        /**
+         * @event
+         */
+        onClearButtonClick: function(ev){
+            this.segments.reset();
         }
 
     });

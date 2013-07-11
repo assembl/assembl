@@ -9,6 +9,15 @@ function(Backbone, _, $, app){
      */
     var Message = Backbone.View.extend({
         /**
+         *  @init
+         */
+        initialize: function(obj){
+            if( obj.button ){
+                this.button = $(obj.button).on('click', app.togglePanel.bind(window, 'messages'));
+            }
+        },
+
+        /**
          * Flag wether it is being selected or not
          * @type {Boolean}
          */

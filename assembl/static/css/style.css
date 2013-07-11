@@ -647,6 +647,7 @@ html {
   top: 0;
   left: 0;
   z-index: -1;
+  min-width: 155px;
   -webkit-transition: top 0.4s, opacity 0.4s, z-index 0 linear;
   -webkit-transition-delay: 0s, 0s, 0.4s;
   -moz-transition: top 0.4s, opacity 0.4s, z-index 0 linear 0.4s;
@@ -655,7 +656,7 @@ html {
   filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
   opacity: 0;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_dropdown\.scss}line{font-family:\0000329}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_dropdown\.scss}line{font-family:\0000330}}
 .dropdown:hover .dropdown-list {
   -webkit-transition: top 0.4s, opacity 0.4s, z-index 0 linear;
   -webkit-transition-delay: 0s, 0s, 0;

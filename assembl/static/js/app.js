@@ -122,10 +122,8 @@ function($, _, ckeditor){
 
             if( panel.$el.hasClass('is-visible') ){
                 app.closePanel(panel);
-                $('#button-'+panelName).removeClass('is-activated');
             } else {
                 app.openPanel(panel);
-                $('#button-'+panelName).addClass('is-activated');
             }
         },
 
@@ -141,6 +139,7 @@ function($, _, ckeditor){
             app.openedPanels += 1;
             app.body.attr(PANEL_QUANTITY, app.openedPanels);
             panel.$el.addClass('is-visible');
+            panel.button.addClass('is-activated');
         },
 
         /**
@@ -155,6 +154,7 @@ function($, _, ckeditor){
             app.openedPanels -= 1;
             app.body.attr(PANEL_QUANTITY, app.openedPanels);
             panel.$el.removeClass('is-visible');
+            panel.button.removeClass('is-activated');
         },
 
         /**
