@@ -104,7 +104,8 @@ function(Backbone, _, Idea, IdeaView, app){
          */
         'events': {
             'click #idealist-addbutton': 'addChildToSelected',
-            'click #ideaList-collapse': 'toggleIdeas'
+            'click #ideaList-collapseButton': 'toggleIdeas',
+            'click #ideaList-closeButton': 'closePanel'
         },
 
         /**
@@ -121,11 +122,23 @@ function(Backbone, _, Idea, IdeaView, app){
             }
         },
 
+        /**
+         * Collapse or expand the ideas
+         */
         toggleIdeas: function(){
             if( this.collapsed ){
                 this.expandIdeas();
             } else {
                 this.collapseIdeas();
+            }
+        },
+
+        /**
+         * Closes the panel
+         */
+        closePanel: function(){
+            if(this.button){
+                this.button.trigger('click');
             }
         }
 

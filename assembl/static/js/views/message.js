@@ -65,13 +65,24 @@ function(Backbone, _, $, app){
         },
 
         /**
+         * Close the panel
+         */
+        closePanel: function(){
+            if( this.button ){
+                this.button.trigger('click');
+            }
+        },
+
+        /**
          * The events
          * @type {Object}
          */
         events: {
             'mousedown .message': 'startSelection',
             'mousemove .message': 'doTheSelection',
-            'mouseup .message': 'stopSelection'
+            'mouseup .message': 'stopSelection',
+
+            'click #message-closeButton': 'closePanel'
         },
 
         /**

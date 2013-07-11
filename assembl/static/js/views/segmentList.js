@@ -70,6 +70,15 @@ function(Backbone, _, $, app, Segment){
         },
 
         /**
+         * Closes the panel
+         */
+        closePanel: function(){
+            if( this.button ){
+                this.button.trigger('click');
+            }
+        },
+
+        /**
          * The events
          * @type {Object}
          */
@@ -81,7 +90,8 @@ function(Backbone, _, $, app, Segment){
             'drop .panel': 'onDrop',
 
             'click .closebutton': "onCloseButtonClick",
-            'click #segmentList-clear': "onClearButtonClick"
+            'click #segmentList-clear': "onClearButtonClick",
+            'click #segmentList-closeButton': "closePanel"
         },
 
         /**
