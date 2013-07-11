@@ -3,6 +3,13 @@ function(Backbone, _, Idea, IdeaView, app){
     'use strict';
 
     var IdeaList = Backbone.View.extend({
+
+        /**
+         * The collapse/expand button
+         * @type {Zepto}
+         */
+        collapsed: true,
+
         /**
          * The tempate
          * @type {_.template}
@@ -43,9 +50,14 @@ function(Backbone, _, Idea, IdeaView, app){
             };
 
             data.title = data.tocTitle;
+            data.collapsed = this.collapsed;
 
             this.$el.html(this.template(data));
             this.$('.idealist').append( list );
+
+            this.collapseButton = this.$('#ideaList-collapse');
+
+
             return this;
         },
 
@@ -64,10 +76,35 @@ function(Backbone, _, Idea, IdeaView, app){
         },
 
         /**
+         * Collapse ALL ideas
+         */
+        collapseIdeas: function(){
+            this.ideas.each(function(idea){
+                idea.attributes.isOpen = false;
+            });
+
+            this.collapsed = true;
+            this.render();
+        },
+
+        /**
+         * Expand ALL ideas
+         */
+        expandIdeas: function(){
+            this.ideas.each(function(idea){
+                idea.attributes.isOpen = true;
+            });
+
+            this.collapsed = false;
+            this.render();
+        },
+
+        /**
          * The events
          */
         'events': {
-            'click #idealist-addbutton': 'addChildToSelected'
+            'click #idealist-addbutton': 'addChildToSelected',
+            'click #ideaList-collapse': 'toggleIdeas'
         },
 
         /**
@@ -81,6 +118,14 @@ function(Backbone, _, Idea, IdeaView, app){
             } else {
                 this.ideas.add( new Idea.Model() );
                 this.render();
+            }
+        },
+
+        toggleIdeas: function(){
+            if( this.collapsed ){
+                this.expandIdeas();
+            } else {
+                this.collapseIdeas();
             }
         }
 
