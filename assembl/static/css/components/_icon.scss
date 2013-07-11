@@ -52,7 +52,8 @@ $font-icon-dir: "#{$font-dir}/icon";
   /* text-shadow: 1px 1px 1px rgba(127, 127, 127, 0.3); */
 }
  
-.icon-menu-1:before { content: '\e809'; } /* '' */
+.icon-edit:before { content: '\e80a'; } /* '' */
+.icon-cancel:before { content: '\e810'; } /* '' */
 .icon-star-empty:before { content: '\e80c'; } /* '' */
 .icon-star:before { content: '\e80b'; } /* '' */
 .icon-heart:before { content: '\e802'; } /* '' */
@@ -60,7 +61,8 @@ $font-icon-dir: "#{$font-dir}/icon";
 .icon-pin:before { content: '\e807'; } /* '' */
 .icon-heart-empty:before { content: '\e803'; } /* '' */
 .icon-cog:before { content: '\e80d'; } /* '' */
-.icon-menu:before { content: '\e808'; } /* '' */
+.icon-menu:before { content: '\e80f'; } /* '' */
+.icon-sort:before { content: '\e808'; } /* '' */
 .icon-plus-squared-small:before { content: '\e800'; } /* '' */
 .icon-minus-squared-small:before { content: '\e805'; } /* '' */
 .icon-user:before { content: '\e801'; } /* '' */

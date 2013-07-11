@@ -6,8 +6,16 @@
     right: $padding / 2;
 
     color: $closebutton-color;
+
     font-size: 20px;
     cursor: pointer;
+
+    &:after {
+        display: inline-block;
+        font-family: $font-icon;
+        content: '\e810';
+        margin-left: 5px;
+    }
 
     &:hover {
         color: darken($closebutton-color, 20%);

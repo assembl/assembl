@@ -12,6 +12,14 @@ $dropdown-height: 20px;
     cursor: pointer;
     border: solid 1px transparent;
 
+
+    &:after {
+        display: inline-block;
+
+        font-family: $font-icon;
+        content: '\e808';
+        margin-left: 5px;
+    }
 }
 
 // The option list

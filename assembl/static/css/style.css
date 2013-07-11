@@ -580,7 +580,14 @@ html {
   font-size: 20px;
   cursor: pointer;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_closebutton\.scss}line{font-family:\0000312}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_closebutton\.scss}line{font-family:\0000313}}
+.closebutton:after {
+  display: inline-block;
+  font-family: "fontello";
+  content: '\e810';
+  margin-left: 5px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_closebutton\.scss}line{font-family:\0000320}}
 .closebutton:hover {
   color: #b2b2af;
 }
@@ -644,8 +651,15 @@ html {
   cursor: pointer;
   border: solid 1px transparent;
 }
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_dropdown\.scss}line{font-family:\0000316}}
+.dropdown:after {
+  display: inline-block;
+  font-family: "fontello";
+  content: '\e808';
+  margin-left: 5px;
+}
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_dropdown\.scss}line{font-family:\0000319}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_dropdown\.scss}line{font-family:\0000327}}
 .dropdown-list {
   top: 0;
   left: 0;
@@ -659,7 +673,7 @@ html {
   filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
   opacity: 0;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_dropdown\.scss}line{font-family:\0000330}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_dropdown\.scss}line{font-family:\0000338}}
 .dropdown:hover .dropdown-list {
   -webkit-transition: top 0.4s, opacity 0.4s, z-index 0 linear;
   -webkit-transition-delay: 0s, 0s, 0;
@@ -905,84 +919,96 @@ html {
 }
 
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_icon\.scss}line{font-family:\0000355}}
-.icon-menu-1:before {
-  content: '\e809';
+.icon-edit:before {
+  content: '\e80a';
 }
 
-/* '' */
+/* '' */
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_icon\.scss}line{font-family:\0000356}}
+.icon-cancel:before {
+  content: '\e810';
+}
+
+/* '' */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_icon\.scss}line{font-family:\0000357}}
 .icon-star-empty:before {
   content: '\e80c';
 }
 
 /* '' */
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_icon\.scss}line{font-family:\0000357}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_icon\.scss}line{font-family:\0000358}}
 .icon-star:before {
   content: '\e80b';
 }
 
 /* '' */
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_icon\.scss}line{font-family:\0000358}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_icon\.scss}line{font-family:\0000359}}
 .icon-heart:before {
   content: '\e802';
 }
 
 /* '' */
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_icon\.scss}line{font-family:\0000359}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_icon\.scss}line{font-family:\0000360}}
 .icon-pin-outline:before {
   content: '\e806';
 }
 
 /* '' */
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_icon\.scss}line{font-family:\0000360}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_icon\.scss}line{font-family:\0000361}}
 .icon-pin:before {
   content: '\e807';
 }
 
 /* '' */
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_icon\.scss}line{font-family:\0000361}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_icon\.scss}line{font-family:\0000362}}
 .icon-heart-empty:before {
   content: '\e803';
 }
 
 /* '' */
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_icon\.scss}line{font-family:\0000362}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_icon\.scss}line{font-family:\0000363}}
 .icon-cog:before {
   content: '\e80d';
 }
 
 /* '' */
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_icon\.scss}line{font-family:\0000363}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_icon\.scss}line{font-family:\0000364}}
 .icon-menu:before {
+  content: '\e80f';
+}
+
+/* '' */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_icon\.scss}line{font-family:\0000365}}
+.icon-sort:before {
   content: '\e808';
 }
 
 /* '' */
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_icon\.scss}line{font-family:\0000364}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_icon\.scss}line{font-family:\0000366}}
 .icon-plus-squared-small:before {
   content: '\e800';
 }
 
 /* '' */
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_icon\.scss}line{font-family:\0000365}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_icon\.scss}line{font-family:\0000367}}
 .icon-minus-squared-small:before {
   content: '\e805';
 }
 
 /* '' */
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_icon\.scss}line{font-family:\0000366}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_icon\.scss}line{font-family:\0000368}}
 .icon-user:before {
   content: '\e801';
 }
 
 /* '' */
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_icon\.scss}line{font-family:\0000367}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_icon\.scss}line{font-family:\0000369}}
 .icon-download:before {
   content: '\e804';
 }
 
 /* '' */
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_icon\.scss}line{font-family:\0000368}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_icon\.scss}line{font-family:\0000370}}
 .icon-search:before {
   content: '\e80e';
 }

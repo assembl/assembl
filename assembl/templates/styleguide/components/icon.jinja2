@@ -1,6 +1,10 @@
 <div class="row">
     
-    {% for icon in ['menu', 'menu-1', 'star-empty', 'star', 'heart', 'pin-outline', 'pin', 'heart-empty', 'cog', 'plus-squared-small', 'minus-squared-small', 'user', 'download', 'search',] %}
+
+    {% set icon_list = ['edit', 'cancel', 'star-empty', 'star', 'heart', 'pin-outline', 'pin', 'heart-empty', 'cog', 'menu', 'plus-squared-small', 'minus-squared-small', 'user', 'download', 'search', 'sort'] %}
+
+
+    {% for icon in icon_list %}
     <div class="col-1 margin-bottom">
         <i class="icon-{{icon}}"></i>
     </div>
