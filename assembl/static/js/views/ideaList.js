@@ -13,7 +13,7 @@ function(Backbone, _, Idea, IdeaView, app){
          * @init
          */
         initialize: function(obj){
-            if( obj.button ){
+            if( obj && obj.button ){
                 this.button = $(obj.button);
                 this.button.on('click', app.togglePanel.bind(window, 'ideaList'));
             }

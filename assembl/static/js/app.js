@@ -139,7 +139,9 @@ function($, _, ckeditor){
             app.openedPanels += 1;
             app.body.attr(PANEL_QUANTITY, app.openedPanels);
             panel.$el.addClass('is-visible');
-            panel.button.addClass('is-activated');
+            if( panel.button ) {
+                panel.button.addClass('is-activated');
+            }
         },
 
         /**
@@ -154,7 +156,9 @@ function($, _, ckeditor){
             app.openedPanels -= 1;
             app.body.attr(PANEL_QUANTITY, app.openedPanels);
             panel.$el.removeClass('is-visible');
-            panel.button.removeClass('is-activated');
+            if( panel.button ) {
+                panel.button.removeClass('is-activated');
+            }
         },
 
         /**

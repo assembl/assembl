@@ -7,7 +7,7 @@ function(Backbone, _, $, app, Segment){
          * @init
          */
         initialize: function(obj){
-            if( obj.button ){
+            if( obj && obj.button ){
                 this.button = $(obj.button).on('click', app.togglePanel.bind(window, 'segmentList'));
             }
 
