@@ -1,3 +1,5 @@
+$panelarea-min-width: 320px;
+
 // The wrapper for all .panel
 // =================
 .panelarea  {
@@ -30,11 +32,17 @@
     display: none;
     padding: 0 4px;
     height: 100%;
-    min-width: 320px;
+    min-width: $panelarea-min-width;
 }
 
 // Shows the .panelarea-col
 // ++++++++++++++++
 .panelarea-col.is-visible {
     display: table-cell;
+}
+
+// Specific areas
+#segmentlist { 
+    width: $panelarea-min-width;
+    max-width: $panelarea-min-width;
 }

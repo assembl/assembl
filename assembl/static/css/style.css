@@ -1533,7 +1533,7 @@ body.is-lateralmenu-open .lateralmenu-modal {
   line-height: 52px;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/layout\/_panelarea\.scss}line{font-family:\000033}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/layout\/_panelarea\.scss}line{font-family:\000035}}
 .panelarea {
   position: absolute;
   top: 110px;
@@ -1545,7 +1545,7 @@ body.is-lateralmenu-open .lateralmenu-modal {
   overflow-y: hidden;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/layout\/_panelarea\.scss}line{font-family:\0000317}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/layout\/_panelarea\.scss}line{font-family:\0000319}}
 .panelarea-table {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
@@ -1556,7 +1556,7 @@ body.is-lateralmenu-open .lateralmenu-modal {
   padding: 8px;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/layout\/_panelarea\.scss}line{font-family:\0000328}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/layout\/_panelarea\.scss}line{font-family:\0000330}}
 .panelarea-col {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
@@ -1567,9 +1567,15 @@ body.is-lateralmenu-open .lateralmenu-modal {
   min-width: 320px;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/layout\/_panelarea\.scss}line{font-family:\0000338}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/layout\/_panelarea\.scss}line{font-family:\0000340}}
 .panelarea-col.is-visible {
   display: table-cell;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/layout\/_panelarea\.scss}line{font-family:\0000345}}
+#segmentlist {
+  width: 320px;
+  max-width: 320px;
 }
 
 /**
