@@ -1,0 +1,122 @@
+# French translations for assembl.
+# Copyright (C) 2013 ORGANIZATION
+# This file is distributed under the same license as the assembl project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2013.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: assembl 0.0\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2013-07-12 17:56-0400\n"
+"PO-Revision-Date: 2013-07-12 17:53-0400\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: fr <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n > 1)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 0.9.6\n"
+
+#: assembl/templates/index.jinja2:8
+msgid "Debat name"
+msgstr ""
+
+#: assembl/templates/index.jinja2:11
+msgid "Table of Contents"
+msgstr ""
+
+#: assembl/templates/index.jinja2:12 assembl/templates/views/ideaPanel.tmpl:8
+msgid "Idea"
+msgstr ""
+
+#: assembl/templates/index.jinja2:13
+msgid "Clipboard"
+msgstr ""
+
+#: assembl/templates/index.jinja2:14
+msgid "Messages"
+msgstr ""
+
+#: assembl/templates/index.jinja2:18
+msgid "Synthesis"
+msgstr ""
+
+#: assembl/templates/views/ideaList.tmpl:4
+msgid "Table of contents ({0})"
+msgstr ""
+
+#: assembl/templates/views/ideaList.tmpl:5
+msgid "Featured ({0})"
+msgstr ""
+
+#: assembl/templates/views/ideaList.tmpl:6
+msgid "In Synthesis ({0})"
+msgstr ""
+
+#: assembl/templates/views/ideaList.tmpl:37
+msgid "Add idea"
+msgstr ""
+
+#: assembl/templates/views/ideaPanel.tmpl:4
+#: assembl/templates/views/segmentList.tmpl:4
+msgid "Do you confirm removing all segments ?"
+msgstr ""
+
+#: assembl/templates/views/ideaPanel.tmpl:15
+msgid "Short title"
+msgstr ""
+
+#: assembl/templates/views/ideaPanel.tmpl:20
+msgid "Long title"
+msgstr ""
+
+#: assembl/templates/views/ideaPanel.tmpl:29
+#, python-format
+msgid "Created in %(date)s by %(user)s"
+msgstr ""
+
+#: assembl/templates/views/ideaPanel.tmpl:40
+#: assembl/templates/views/segmentList.tmpl:23
+msgid "Add segments"
+msgstr ""
+
+#: assembl/templates/views/ideaPanel.tmpl:48
+#: assembl/templates/views/segmentList.tmpl:29
+msgid "Clear"
+msgstr ""
+
+#: assembl/templates/views/lateralMenu.tmpl:20
+msgid "Help"
+msgstr ""
+
+#: assembl/templates/views/lateralMenu.tmpl:27
+msgid "Settings"
+msgstr ""
+
+#: assembl/templates/views/lateralMenu.tmpl:34
+msgid "Logout"
+msgstr ""
+
+#: assembl/templates/views/message.tmpl:5
+#, python-format
+msgid "Inbox (%(total)s)"
+msgstr ""
+
+#: assembl/templates/views/message.tmpl:24
+#, python-format
+msgid "<strong>%(user)s</strong> in <time>%(time)s</time>"
+msgstr ""
+
+#: assembl/templates/views/segment.tmpl:20
+#, python-format
+msgid "Extracted %(date)s"
+msgstr ""
+
+#: assembl/templates/views/segmentList.tmpl:9
+#, python-format
+msgid "Clipboard (%(quantity)s)"
+msgstr ""
+
+#~ msgid "sim"
+#~ msgstr ""
+

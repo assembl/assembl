@@ -8,6 +8,7 @@ CHANGES = open(os.path.join(here, 'CHANGES.txt')).read()
 
 requires = [
     'alembic',
+    'Babel',
     'colander',
     'colanderalchemy==0.2.0',
     'cornice',

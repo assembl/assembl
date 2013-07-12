@@ -18,4 +18,7 @@ def main(global_config, **settings):
     config.scan('.lib')
     config.scan('.views')
 
+    # jinja2
+    config.include('pyramid_jinja2')
+
     return config.make_wsgi_app()
