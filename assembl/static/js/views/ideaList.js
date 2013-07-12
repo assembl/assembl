@@ -2,7 +2,16 @@ define(['backbone', 'underscore', 'models/idea', 'views/idea', 'app'],
 function(Backbone, _, Idea, IdeaView, app){
     'use strict';
 
+    var FEATURED = 'featured',
+        IN_SYNTHESIS = 'inSynthesis';
+
     var IdeaList = Backbone.View.extend({
+
+        /**
+         * The filter applied to the idea list
+         * @type {string}
+         */
+        filter: null,
 
         /**
          * The collapse/expand button
@@ -52,11 +61,10 @@ function(Backbone, _, Idea, IdeaView, app){
             data.title = data.tocTitle;
             data.collapsed = this.collapsed;
 
-            this.$el.html(this.template(data));
+            data.filter = this.filter;
+
+            this.$el.html( this.template(data) );
             this.$('.idealist').append( list );
-
-            this.collapseButton = this.$('#ideaList-collapse');
-
 
             return this;
         },
@@ -100,12 +108,40 @@ function(Backbone, _, Idea, IdeaView, app){
         },
 
         /**
+         * Filter the current idea list by featured
+         */
+        filterByFeatured: function(){
+            this.filter = FEATURED;
+            this.render();
+        },
+
+        /**
+         * Filter the current idea list by inSynthesis
+         */
+        filterByInSynthesis: function(){
+            this.filter = IN_SYNTHESIS;
+            this.render();
+        },
+
+        /**
+         * Clear the filter applied to the idea list
+         */
+        clearFilter: function(){
+            this.filter = '';
+            this.render();
+        },
+
+        /**
          * The events
          */
         'events': {
             'click #idealist-addbutton': 'addChildToSelected',
             'click #ideaList-collapseButton': 'toggleIdeas',
-            'click #ideaList-closeButton': 'closePanel'
+            'click #ideaList-closeButton': 'closePanel',
+
+            'click #ideaList-filterByFeatured': 'filterByFeatured',
+            'click #ideaList-filterByInSynthesis': 'filterByInSynthesis',
+            'click #ideaList-filterByToc': 'clearFilter'
         },
 
         /**

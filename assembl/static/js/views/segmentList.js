@@ -46,6 +46,10 @@ function(Backbone, _, $, app, Segment){
          * @param {Segment} segment
          */
         addSegment: function(segment){
+            if( segment.collection ){
+                segment.collection.remove(segment);
+            }
+
             this.segments.add(segment);
         },
 

@@ -1,9 +1,9 @@
 <div class="panel">
     <%
     var titles = {
-        'toc': "{{ gettext('Table des matières ({0})') }}",
-        'featured': "{{ gettext('En vedette ({0})') }}",
-        'synthesis': "{{ gettext('Synthèse en cours ({0})') }}"
+        'toc': "{{ gettext('Table of contents ({0})') }}",
+        'featured': "{{ gettext('Featured ({0})') }}",
+        'synthesis': "{{ gettext('In Synthesis ({0})') }}"
     };
 
     titles.toc = titles.toc.replace('{0}', tocTotal);
@@ -13,11 +13,11 @@
 
     <div class="panel-header">
         <div class="dropdown">
-            <span class="dropdown-label"><%= titles.toc %></span>
+            <span class="dropdown-label"><%= filter === 'featured' ? titles.featured : filter === 'inSynthesis' ? titles.synthesis : titles.toc %></span>
             <ul class="dropdown-list">
-                <li class="dropdown-listitem"><%= titles.featured %></li>
-                <li class="dropdown-listitem"><%= titles.toc %></li>
-                <li class="dropdown-listitem"><%= titles.synthesis %></li>
+                <li id="ideaList-filterByFeatured" class="dropdown-listitem"><%= titles.featured %></li>
+                <li id="ideaList-filterByToc"class="dropdown-listitem"><%= titles.toc %></li>
+                <li id="ideaList-filterByInSynthesis" class="dropdown-listitem"><%= titles.synthesis %></li>
             </ul>
         </div>
 
