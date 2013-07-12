@@ -31,8 +31,12 @@ define([
     // Segment List
     app.segmentList = new SegmentList({el: '#segmentlist', button: '#button-segmentList'});
     app.segmentList.render();
-    app.ideaList.ideas.on('remove:segment', function(segment){
-        app.segmentList.segments.add(segment.clone());
+    app.on('remove:segment', function(segment){
+        if( segment && segment.collection ){
+            segment.collection.remove(segment);
+        }
+
+        app.segmentList.segments.add(segment);
     });
 
     // Message

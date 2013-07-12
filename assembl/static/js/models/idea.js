@@ -14,7 +14,6 @@ define(['backbone', 'models/segment'], function(Backbone, Segment){
 
             obj.segments = obj.segments && obj.segments.length ? obj.segments : [];
             this.set( 'segments', new Segment.Collection(obj.segments) );
-            this.get('segments').on('remove', this.triggerRemoveSegment, this);
 
             obj.creationDate = obj.creationDate || app.getCurrentTime();
             this.set( 'creationDate', obj.creationDate );
@@ -122,17 +121,6 @@ define(['backbone', 'models/segment'], function(Backbone, Segment){
 
             this.addChild(idea);
         },
-
-        /**
-         * Triggers the event when a segment is removed
-         * @event
-         * @param {Segment.Model} model
-         * @param {Segment.Collection} collection
-         * @param {object} options
-         */
-        triggerRemoveSegment: function(model, collection, options){
-            this.collection.trigger('remove:segment', model);
-        }
 
     });
 

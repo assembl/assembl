@@ -225,10 +225,13 @@ function($, _, ckeditor){
         /**
          * Triggers an event
          * @param {string} eventName
+         * @param {array} args
          */
-        trigger: function(eventName){
+        trigger: function(eventName, args){
             if( eventName in o ){
-                _.each(o[eventName], function(func){ func(); });
+                _.each(o[eventName], function(func){
+                    func.apply(window, args);
+                });
             }
         },
 

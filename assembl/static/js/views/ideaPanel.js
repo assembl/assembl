@@ -35,9 +35,7 @@ function(Backbone, _, Idea, app, ckeditor){
             }
 
             this.idea.on('change', this.render, this);
-            this.idea.get('segments').on('add', this.render, this);
-            this.idea.get('segments').on('remove', this.render, this);
-            this.idea.get('segments').on('reset', this.render, this);
+            this.idea.get('segments').on('add remove reset', this.render, this);
         },
 
         /**
@@ -72,9 +70,7 @@ function(Backbone, _, Idea, app, ckeditor){
             this.idea = idea || new Idea.Model();
 
             this.idea.on('change', this.render, this);
-            this.idea.get('segments').on('add', this.render, this);
-            this.idea.get('segments').on('remove', this.render, this);
-            this.idea.get('segments').on('reset', this.render, this);
+            this.idea.get('segments').on('add remove reset', this.render, this);
 
             this.render();
         },
@@ -206,6 +202,7 @@ function(Backbone, _, Idea, app, ckeditor){
                 segment = segments.at($el.index());
 
             segments.remove(segment);
+            app.trigger('remove:segment', [segment]);
         },
 
         /**
