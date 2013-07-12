@@ -5,15 +5,20 @@ define([
     "views/ideaList",
     "views/ideaPanel",
     "views/segmentList",
-    "views/message"
-], function(app, $, LateralMenu, IdeaList, IdeaPanel, SegmentList, Message){
+    "views/message",
+    "models/user"
+], function(app, $, LateralMenu, IdeaList, IdeaPanel, SegmentList, Message, User){
     'use strict';
 
     app.init();
 
+    app.currentUser = new User.Model();
+    app.currentUser.fetch();
+
     // Lateral menu
     app.lateralMenu = new LateralMenu({el: '#lateralMenu'}).render();
     $('#assembl-mainbutton').on('click', app.lateralMenu.trigger.bind(app.lateralMenu, 'toggle'));
+    app.currentUser.on('change', app.lateralMenu.render, app.lateralMenu);
 
     // Idea list
     app.ideaList = new IdeaList({el: '#idealist', button: '#button-ideaList'});

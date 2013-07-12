@@ -33,6 +33,12 @@ function($, _, ckeditor){
         body: $(document.body),
 
         /**
+         * Current user
+         * @type {User}
+         */
+        currentUser: null,
+
+        /**
          * Default ease for all kids of animation
          * @type {String}
          */
@@ -69,28 +75,10 @@ function($, _, ckeditor){
         draggedIdea: null,
 
         /**
-         * The time for all animations related to bucket
-         * @type {Number}
-         */
-        bucketAnimationTime: 600,
-
-        /**
          * The lateral menu width
          * @type {number}
          */
         lateralMenuWidth: 453,
-
-        /**
-         * The bucket min width when collapsed
-         * @type {Number}
-         */
-        bucketMinWidth: 15,
-
-        /**
-         * Default width for bucket when it is open
-         * @type {Number}
-         */
-        bucketDefaultOpenWidth: 300,
 
         /**
          * The selection tooltip.
@@ -243,7 +231,7 @@ function($, _, ckeditor){
          * @return {function} The _.template return
          */
         loadTemplate: function(id){
-            return _.template($('#tmpl-'+id).html());
+            return _.template( $('#tmpl-'+id).html() );
         },
 
         /**
