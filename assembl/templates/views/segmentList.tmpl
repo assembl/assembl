@@ -1,5 +1,9 @@
 <div class="panel">
 
+    <div hidden="hidden">
+        <span id="segmentList-clearConfirmationMessage">{{ gettext('Do you confirm removing all segments ?') }}</span>
+    </div>
+
     <div class="panel-header">
         {% set quantity = "<%= segments.length %>" %}
         {{ gettext("Clipboard (%(quantity)s)")|format(quantity=quantity)|safe }}

@@ -166,7 +166,10 @@ function(Backbone, _, $, app, Segment){
          * @event
          */
         onClearButtonClick: function(ev){
-            this.segments.reset();
+            var ok = confirm( this.$('#segmentList-clearConfirmationMessage').text() );
+            if( ok ){
+                this.segments.reset();
+            }
         }
 
     });

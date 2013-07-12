@@ -212,7 +212,10 @@ function(Backbone, _, Idea, app, ckeditor){
          * @event
          */
         onClearAllClick: function(ev){
-            this.idea.get('segments').reset();
+            var ok = confirm( this.$('#ideaPanel-clearConfirmationMessage').text() );
+            if( ok ){
+                this.idea.get('segments').reset();
+            }
         },
 
         /**
@@ -220,7 +223,6 @@ function(Backbone, _, Idea, app, ckeditor){
          */
         onTopCloseButtonClick: function(){
             app.setCurrentIdea(null);
-            //this.button.trigger('click');
         }
 
     });
