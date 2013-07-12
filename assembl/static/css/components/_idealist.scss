@@ -25,6 +25,10 @@
 // *********************
 .idealist-item.is-dragover {}
 
+// When there is something being dragged in above area
+// *********************
+.idealist-item.is-dragover-above {}
+
 // When there is something being dragged in below area
 // *********************
 .idealist-item.is-dragover-below {}
@@ -48,6 +52,23 @@
     }
 
 }
+
+// Area where to drop and create a sibling
+// --------------
+.idealist-abovedropzone {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+
+    height: $padding-top;
+
+    .idealist-item.is-dragover-above > .idealist-body & {
+        background-color: $dragbox-background-color;
+    }
+
+}
+
 
 // Area where to drop and create a child
 // --------------

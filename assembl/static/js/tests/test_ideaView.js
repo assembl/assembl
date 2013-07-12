@@ -84,6 +84,16 @@ function(jasmine, _, app, IdeaView, Idea){
             expect(app.draggedIdea.get('shortTitle')).toBe('something');
         });
 
+        it('should set the state to .is-dragover-above when there is an idea over the above area', function(){
+            app.draggedIdea = new Backbone.Model({ 'some': 'thing' });
+            var aboveDropZone = view.$('.idealist-abovedropzone');
+            aboveDropZone.trigger('dragover');
+
+            expect(view.$el.hasClass('is-dragover-above')).toBeTruthy();
+            aboveDropZone.trigger('dragleave');
+            expect(view.$el.hasClass('is-dragover-above')).toBeFalsy();
+        });
+
     });
 
 });

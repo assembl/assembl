@@ -1,5 +1,5 @@
-define(['zepto', 'underscore', 'ckeditor'],
-function($, _, ckeditor){
+define(['zepto', 'underscore', 'ckeditor', 'models/user'],
+function($, _, ckeditor, User){
     'use strict';
 
     ckeditor.disableAutoInline = true;
@@ -181,7 +181,7 @@ function($, _, ckeditor){
          * @return {User}
          */
         getCurrentUser: function(){
-            return app.currentUser;
+            return app.currentUser || new User.Model();
         },
 
         /**

@@ -117,10 +117,13 @@ function(Backbone, _, $, Idea, app){
 
             'dragover .idealist-body': 'onDragOver',
             'dragleave .idealist-body': 'onDragLeave',
-            'drop .idealist-body': 'onDrop',
+            'drop .idealist-body': 'onDrop'
 
-            'dragover .idealist-dropzone': 'onDropZoneDragOver',
-            'dragoleave .idealist-dropzone': 'onDragLeave'
+            // 'dragover .idealist-abovedropzone': 'onAboveDropZoneDragOver',
+            // 'dragleave .idealist-abovedropzone': 'onDragLeave',
+
+            // 'dragover .idealist-dropzone': 'onDropZoneDragOver',
+            // 'dragleave .idealist-dropzone': 'onDragLeave'
         },
 
         /**
@@ -176,8 +179,27 @@ function(Backbone, _, $, Idea, app){
                 this.model.set('isOpen', true);
             }
 
-            if( app.draggedSegment !== null || app.draggedIdea !== null ){
-                this.$el.addClass('is-dragover');
+            if( app.draggedIdea !== null ){
+
+                if( app.draggedIdea.cid === this.model.cid ){
+                    return;
+                }
+
+                if( ev.target.classList.contains('idealist-abovedropzone') ){
+                    this.$el.addClass('is-dragover-above');
+                } else if( ev.target.classList.contains('idealist-dropzone') ){
+                    this.$el.addClass('is-dragover-below');
+                } else {
+                    this.$el.addClass('is-dragover');
+                }
+            }
+
+            if( app.draggedSegment !== null ){
+                if( ev.target.classList.contains('idealist-dropzone') ){
+                    this.$el.addClass('is-dragover-below');
+                } else {
+                    this.$el.addClass('is-dragover');
+                }
             }
         },
 
@@ -186,7 +208,7 @@ function(Backbone, _, $, Idea, app){
          */
         onDragLeave: function(ev){
             this.dragOverCounter = 0;
-            this.$el.removeClass('is-dragover').removeClass('is-dragover-below');
+            this.$el.removeClass('is-dragover is-dragover-above is-dragover-below');
         },
 
         /**
@@ -217,6 +239,21 @@ function(Backbone, _, $, Idea, app){
             if( app.draggedIdea && app.draggedIdea.cid !== this.model.cid ){
                 var idea = app.getDraggedIdea();
                 this.model.addChild(idea);
+            }
+        },
+
+        /**
+         * @event
+         */
+        onAboveDropZoneDragOver: function(ev){
+            if( ev ){
+                ev.preventDefault();
+                ev.stopPropagation();
+            }
+
+
+            if( app.draggedIdea !== null ){
+                this.$el.addClass('is-dragover-above');
             }
         },
 

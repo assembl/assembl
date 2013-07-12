@@ -45,15 +45,6 @@ function(jasmine, _, app, IdeaPanel){
             expect(view.idea.get('segments').length).toBe(0);
         });
 
-        it('should remove all segments when clicking in the clean button', function(){
-            view.addSegment({ title: "Something" });
-            view.addSegment({ title: "Something else" });
-            expect(view.idea.get('segments').length).toBe(2);
-
-            view.$('#ideaPanel-clearbutton').eq(0).trigger('click');
-            expect(view.idea.get('segments').length).toBe(0);
-        });
-
     });
 
 });

@@ -1,4 +1,4 @@
-define(['backbone', 'app', 'moment'], function(Backbone, app, moment){
+define(['backbone', 'app', 'moment', 'models/user'], function(Backbone, app, moment, User){
     'use strict';
 
     /**
@@ -10,8 +10,12 @@ define(['backbone', 'app', 'moment'], function(Backbone, app, moment){
          * @init
          */
         initialize: function(){
-            if( !this.get('author') ){
+            var author = this.get('author');
+
+            if( !author ){
                 this.set( 'author', app.getCurrentUser() );
+            } else if( author.constructor !== User.Model ){
+                this.set( 'author', new User.Model(author) );
             }
 
             if( !this.get('creationDate') ){
