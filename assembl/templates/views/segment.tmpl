@@ -1,6 +1,6 @@
 {# 
     this is an included template.
-    the <%= segment %> variable should be given
+    the <%= segment %> variable should be given.
 #}
 
 <div class="box" draggable="true">
@@ -12,11 +12,12 @@
 
     <div class="media">
         <div class="media-imgleft">
-            <img src="//placehold.it/44x44" class="image-rounded" alt="" />
+            <img src="<%= segment.get('author').getAvatarUrl(44) %>" class="image-rounded" alt="" />
         </div>
         <div class="media-body">
-            <div class="media-title"><strong>Joey Ramone</strong></div>
-            <div>Attrapé il y a 1 jours</div>
+            <div class="media-title"><strong><%= segment.get('author').get('name') %></strong></div>
+            {% set segmentDate = "<%= segment.getCreationDateFormated() %>" %}
+            <div>{{ gettext('Extracted %(date)s')|format(date=segmentDate)|safe }}</div>
         </div>
     </div>
 </div>

@@ -1,15 +1,45 @@
-define(['backbone', 'app'], function(Backbone, app){
+define(['backbone', 'app', 'moment'], function(Backbone, app, moment){
     'use strict';
 
     /**
      * @class SegmentModel
      */
     var SegmentModel = Backbone.Model.extend({
+
+        /**
+         * @init
+         */
+        initialize: function(){
+            if( !this.get('author') ){
+                this.set( 'author', app.getCurrentUser() );
+            }
+
+            if( !this.get('creationDate') ){
+                this.set( 'creationDate', app.getCurrentTime() );
+            }
+        },
+
+        /**
+         * @type {String}
+         */
         url: "/static/js/tests/fixtures/segment.json",
+
+        /**
+         * @type {Object}
+         */
         defaults: {
-            text: ' Alguma coisa ',
+            text: '',
             idPost: null,
-            date: app.getCurrentTime()
+            creationDate: null,
+            author: null
+        },
+
+        /**
+         * Returns a fancy date ( ex: a few seconds ago ) 
+         * @return {string} [description]
+         */
+        getCreationDateFormated: function(){
+            return moment( this.get('creationDate') ).fromNow();
         }
     });
 

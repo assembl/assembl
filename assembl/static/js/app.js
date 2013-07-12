@@ -178,6 +178,13 @@ function($, _, ckeditor){
         },
 
         /**
+         * @return {User}
+         */
+        getCurrentUser: function(){
+            return app.currentUser;
+        },
+
+        /**
          * Creates the selection tooltip
          */
         createSelectionTooltip: function(){
