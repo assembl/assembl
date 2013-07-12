@@ -31,6 +31,7 @@ function(Backbone, _, $, Idea, app){
 
 
             this.model.on('change', this.render, this);
+            this.model.get('segments').on('add remove', this.render, this);
         },
 
         /**
