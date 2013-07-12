@@ -1014,6 +1014,12 @@ html {
 }
 
 /* '' */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_icon\.scss}line{font-family:\0000371}}
+.icon-reply:before {
+  content: '\e811';
+}
+
+/* '' */
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\000033}}
 .idealist {
   background-color: white;
