@@ -55,6 +55,34 @@ define(['backbone', 'models/segment'], function(Backbone, Segment){
         },
 
         /**
+         * Adds an idea as sibling above
+         * @param {Idea} idea
+         */
+        addSiblingAbove: function(idea){
+            var parent = this.getParent(),
+                parentId = parent ? parent.get('id') : null,
+                index = this.collection.indexOf(this);
+
+            this.collection.add(idea, { at: index });
+            idea.attributes.parentId = parentId;
+            idea.trigger('change:parentId');
+        },
+
+        /**
+         * Adds an idea as sibling below
+         * @param {Idea} idea
+         */
+        addSiblingBelow: function(idea){
+            var parent = this.getParent(),
+                parentId = parent ? parent.get('id') : null,
+                index = this.collection.indexOf(this) + 1;
+
+            this.collection.add(idea, { at: index });
+            idea.attributes.parentId = parentId;
+            idea.trigger('change:parentId');
+        },
+
+        /**
          * Return all children
          * @return {Idea[]}
          */

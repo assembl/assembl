@@ -181,6 +181,7 @@ function(Backbone, _, $, Idea, app){
 
             if( app.draggedIdea !== null ){
 
+                // Do thing if it is the same idea
                 if( app.draggedIdea.cid === this.model.cid ){
                     return;
                 }
@@ -220,7 +221,9 @@ function(Backbone, _, $, Idea, app){
                 ev.stopPropagation();
             }
 
-            var isDraggedBelow = this.$el.hasClass('is-dragover-below');
+            var isDraggedBelow = this.$el.hasClass('is-dragover-below'),
+                isDraggedAbove = this.$el.hasClass('is-dragover-above');
+
             this.$('.idealist-body').trigger('dragleave');
 
             var segment = app.getDraggedSegment();
@@ -237,8 +240,17 @@ function(Backbone, _, $, Idea, app){
             }
 
             if( app.draggedIdea && app.draggedIdea.cid !== this.model.cid ){
+
                 var idea = app.getDraggedIdea();
-                this.model.addChild(idea);
+
+                if( isDraggedAbove ){
+                    this.model.addSiblingAbove(idea);
+                } else if ( isDraggedBelow ){
+                    this.model.addSiblingBelow(idea);
+                } else {
+                    this.model.addChild(idea);
+                }
+
             }
         },
 
@@ -250,7 +262,6 @@ function(Backbone, _, $, Idea, app){
                 ev.preventDefault();
                 ev.stopPropagation();
             }
-
 
             if( app.draggedIdea !== null ){
                 this.$el.addClass('is-dragover-above');
