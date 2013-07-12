@@ -1,7 +1,8 @@
 <div class="panel">
 
     <div class="panel-header">
-        Presse-papier (<%= segments.length %>)
+        {% set quantity = "<%= segments.length %>" %}
+        {{ gettext("Clipboard (%(quantity)s)")|format(quantity=quantity)|safe }}
 
         <div class="float-right">
             <a id="segmentList-closeButton" class="iconbutton icon-cancel"></a>
@@ -11,32 +12,16 @@
     <div class="panel-body boxlist">
         
         <% segments.each(function(segment){ %>
-        <div class="box" draggable="true">
-            <span data-segmentid="<%= segment.cid %>"  class="closebutton"></span>
-
-            <q><%= segment.get('text') %></q>
-
-            <div class="spacer spacer--huge"></div>
-
-            <div class="media">
-                <div class="media-imgleft">
-                    <img src="//placehold.it/44x44" class="image-rounded" alt="" />
-                </div>
-                <div class="media-body">
-                    <div class="media-title"><strong>Joey Ramone</strong></div>
-                    <div>Attrapé il y a 1 jours</div>
-                </div>
-            </div>
-        </div>
+            {% include "views/segment.tmpl" %}
         <% }); %>
 
         <div class="box box--dashed box--centered margin text-muted text-big">
-            Ajouter des extraits
+            {{ gettext("Add segments") }}
         </div>
 
     </div>
 
     <div class="panel-footer">
-        <a id="segmentList-clear" class="link">Clear ?</a>
+        <a id="segmentList-clear" class="link">{{ gettext('Clear') }}</a>
     </div>
 </div>

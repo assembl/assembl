@@ -1,7 +1,8 @@
 <div class="panel">
 
     <div class="panel-header">
-        Boîte de réception (234)
+        {% set total = '234' %}
+        {{ gettext('Inbox (%(total)s)')|format(total=total)|safe }}
 
         <div class="float-right">
             <a class="iconbutton icon-search"></a>
@@ -18,7 +19,9 @@
                 </div>
                 <div class="media-body">
                     <div class="media-title">
-                        <strong>André Farzat</strong> a dit <time>9, juin 2013</time>
+                        {% set userName = "André Farzat" %}
+                        {% set time = "9, juin 2013" %}
+                        {{ gettext('<strong>%(user)s</strong> in <time>%(time)s</time>')|format(user=userName, time=time)|safe }}
                     </div>
                     <span>Ramones où Beatles: Qui est le meilleur ?</span>
                 </div>

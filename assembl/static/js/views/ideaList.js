@@ -44,9 +44,9 @@ function(Backbone, _, Idea, IdeaView, app){
             });
 
             var data = {
-                tocTitle: "Table des matières ({0})".replace('{0}', this.ideas.length),
-                featuredTitle: "En vedette ({0})".replace('{0}', this.ideas.where({featured: true}).length),
-                synthesisTitle: "Synthèse en cours ({0})".replace('{0}', this.ideas.where({inSynthesis: true}).length)
+                tocTotal: this.ideas.length,
+                featuredTotal: this.ideas.where({featured: true}).length,
+                synthesisTotal: this.ideas.where({inSynthesis: true}).length
             };
 
             data.title = data.tocTitle;

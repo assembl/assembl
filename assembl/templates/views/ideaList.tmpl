@@ -1,20 +1,29 @@
 <div class="panel">
+    <%
+    var titles = {
+        'toc': "{{ gettext('Table des matières ({0})') }}",
+        'featured': "{{ gettext('En vedette ({0})') }}",
+        'synthesis': "{{ gettext('Synthèse en cours ({0})') }}"
+    };
+
+    titles.toc = titles.toc.replace('{0}', tocTotal);
+    titles.featured = titles.featured.replace('{0}', featuredTotal);
+    titles.synthesis = titles.synthesis.replace('{0}', synthesisTotal);
+    %>
 
     <div class="panel-header">
         <div class="dropdown">
-            <span class="dropdown-label"><%= title %></span>
+            <span class="dropdown-label"><%= titles.toc %></span>
             <ul class="dropdown-list">
-                <li class="dropdown-listitem"><%= featuredTitle %></li>
-                <li class="dropdown-listitem"><%= tocTitle %></li>
-                <li class="dropdown-listitem"><%= synthesisTitle %></li>
+                <li class="dropdown-listitem"><%= titles.featured %></li>
+                <li class="dropdown-listitem"><%= titles.toc %></li>
+                <li class="dropdown-listitem"><%= titles.synthesis %></li>
             </ul>
         </div>
 
         <div class="float-right">
             <a id="ideaList-collapseButton" class="iconbutton <%= collapsed ? 'icon-plus-squared-small' : 'icon-minus-squared-small' %>"></a>
             <a id="ideaList-closeButton" class="iconbutton icon-cancel"></a>
-            <!-- <a class="iconbutton icon-search"></a>
-            <a class="iconbutton icon-down"></a> -->
         </div>
     </div>
     
@@ -25,7 +34,7 @@
     </div>
 
     <div class="panel-footer text-right">
-        <a class="link" id="idealist-addbutton">Add idea</a>
+        <a class="link" id="idealist-addbutton">{{ gettext('Add idea') }}</a>
     </div>
 
 </div>
