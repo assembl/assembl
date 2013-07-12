@@ -973,53 +973,59 @@ html {
 
 /* '' */
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_icon\.scss}line{font-family:\0000364}}
-.icon-menu:before {
-  content: '\e80f';
-}
-
-/* '' */
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_icon\.scss}line{font-family:\0000365}}
-.icon-sort:before {
-  content: '\e808';
-}
-
-/* '' */
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_icon\.scss}line{font-family:\0000366}}
-.icon-plus-squared-small:before {
-  content: '\e800';
-}
-
-/* '' */
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_icon\.scss}line{font-family:\0000367}}
-.icon-minus-squared-small:before {
-  content: '\e805';
-}
-
-/* '' */
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_icon\.scss}line{font-family:\0000368}}
-.icon-user:before {
-  content: '\e801';
-}
-
-/* '' */
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_icon\.scss}line{font-family:\0000369}}
-.icon-download:before {
-  content: '\e804';
-}
-
-/* '' */
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_icon\.scss}line{font-family:\0000370}}
-.icon-search:before {
-  content: '\e80e';
-}
-
-/* '' */
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_icon\.scss}line{font-family:\0000371}}
 .icon-reply:before {
   content: '\e811';
 }
 
 /* '' */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_icon\.scss}line{font-family:\0000365}}
+.icon-menu:before {
+  content: '\e80f';
+}
+
+/* '' */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_icon\.scss}line{font-family:\0000366}}
+.icon-sort:before {
+  content: '\e808';
+}
+
+/* '' */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_icon\.scss}line{font-family:\0000367}}
+.icon-plus-squared:before {
+  content: '\e809';
+}
+
+/* '' */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_icon\.scss}line{font-family:\0000368}}
+.icon-plus-squared-small:before {
+  content: '\e800';
+}
+
+/* '' */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_icon\.scss}line{font-family:\0000369}}
+.icon-minus-squared-small:before {
+  content: '\e805';
+}
+
+/* '' */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_icon\.scss}line{font-family:\0000370}}
+.icon-user:before {
+  content: '\e801';
+}
+
+/* '' */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_icon\.scss}line{font-family:\0000371}}
+.icon-download:before {
+  content: '\e804';
+}
+
+/* '' */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_icon\.scss}line{font-family:\0000372}}
+.icon-search:before {
+  content: '\e80e';
+}
+
+/* '' */
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\000033}}
 .idealist {
   background-color: white;
