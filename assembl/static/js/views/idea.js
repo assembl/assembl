@@ -118,12 +118,6 @@ function(Backbone, _, $, Idea, app){
             'dragover .idealist-body': 'onDragOver',
             'dragleave .idealist-body': 'onDragLeave',
             'drop .idealist-body': 'onDrop'
-
-            // 'dragover .idealist-abovedropzone': 'onAboveDropZoneDragOver',
-            // 'dragleave .idealist-abovedropzone': 'onDragLeave',
-
-            // 'dragover .idealist-dropzone': 'onDropZoneDragOver',
-            // 'dragleave .idealist-dropzone': 'onDragLeave'
         },
 
         /**
@@ -173,16 +167,19 @@ function(Backbone, _, $, Idea, app){
                 ev.stopPropagation();
             }
 
-            this.dragOverCounter += 1;
-
             if( this.dragOverCounter > 30 ){
                 this.model.set('isOpen', true);
             }
 
             if( app.draggedIdea !== null ){
 
-                // Do thing if it is the same idea
+                // Do nothing if it is the same idea
                 if( app.draggedIdea.cid === this.model.cid ){
+                    return;
+                }
+
+                // If it is a descendent, do nothing
+                if( this.model.isDescendantOf(app.draggedIdea) ){
                     return;
                 }
 
@@ -202,6 +199,8 @@ function(Backbone, _, $, Idea, app){
                     this.$el.addClass('is-dragover');
                 }
             }
+
+            this.dragOverCounter += 1;
         },
 
         /**
@@ -243,6 +242,11 @@ function(Backbone, _, $, Idea, app){
 
                 var idea = app.getDraggedIdea();
 
+                // If it is a descendent, do nothing
+                if( this.model.isDescendantOf(idea) ){
+                    return;
+                }
+
                 if( isDraggedAbove ){
                     this.model.addSiblingAbove(idea);
                 } else if ( isDraggedBelow ){
@@ -251,34 +255,6 @@ function(Backbone, _, $, Idea, app){
                     this.model.addChild(idea);
                 }
 
-            }
-        },
-
-        /**
-         * @event
-         */
-        onAboveDropZoneDragOver: function(ev){
-            if( ev ){
-                ev.preventDefault();
-                ev.stopPropagation();
-            }
-
-            if( app.draggedIdea !== null ){
-                this.$el.addClass('is-dragover-above');
-            }
-        },
-
-        /**
-         * @event
-         */
-        onDropZoneDragOver: function(ev){
-            if( ev ){
-                ev.preventDefault();
-                ev.stopPropagation();
-            }
-
-            if( app.draggedSegment !== null ){
-                this.$el.addClass('is-dragover-below');
             }
         },
 

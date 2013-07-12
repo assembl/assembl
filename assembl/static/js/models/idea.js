@@ -148,7 +148,7 @@ define(['backbone', 'models/segment'], function(Backbone, Segment){
             });
 
             this.addChild(idea);
-        },
+        }
 
     });
 
