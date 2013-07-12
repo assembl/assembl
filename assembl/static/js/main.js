@@ -6,8 +6,9 @@ define([
     "views/ideaPanel",
     "views/segmentList",
     "views/message",
-    "models/user"
-], function(app, $, LateralMenu, IdeaList, IdeaPanel, SegmentList, Message, User){
+    "models/user",
+    "models/segment"
+], function(app, $, LateralMenu, IdeaList, IdeaPanel, SegmentList, Message, User, Segment){
     'use strict';
 
     app.init();
@@ -42,8 +43,11 @@ define([
     });
     app.selectionTooltip.on('click', function(){
         app.selectionTooltip.hide();
-        var segment = app.selectionTooltip.attr('data-segment');
+        var text = app.selectionTooltip.attr('data-segment'),
+            segment = new Segment.Model({ text:text });
+
         app.segmentList.addSegment(segment);
+        app.openPanel(app.segmentList);
     });
 
 

@@ -34,7 +34,6 @@ function(Backbone, _, $, app, Segment){
          */
         render: function(){
             var data = {segments:this.segments};
-            window.a = data;
             this.$el.html(this.template(data));
 
             this.panel = this.$('.panel');
