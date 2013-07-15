@@ -11,6 +11,11 @@ define(['backbone', 'models/segment', 'app'], function(Backbone, Segment, app){
         initialize: function(obj){
             obj = obj || {};
 
+            if( !this.id ){
+                this.id = app.createUUID();
+                this.attributes.id = this.id;
+            }
+
             obj.creationDate = obj.creationDate || app.getCurrentTime();
             this.set('creationDate', obj.creationDate);
 
