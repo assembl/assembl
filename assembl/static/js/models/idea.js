@@ -17,6 +17,8 @@ define(['backbone', 'models/segment'], function(Backbone, Segment){
 
             obj.creationDate = obj.creationDate || app.getCurrentTime();
             this.set( 'creationDate', obj.creationDate );
+
+            this.on('change:inSynthesis', this.onInSynthesisChange, this);
         },
 
         /**
@@ -148,6 +150,14 @@ define(['backbone', 'models/segment'], function(Backbone, Segment){
             });
 
             this.addChild(idea);
+        },
+
+        /**
+         * @event
+         */
+        onInSynthesisChange: function(){
+            var value = this.get('inSynthesis');
+            this.save({ inSynthesis: value });
         }
 
     });

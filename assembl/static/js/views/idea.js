@@ -29,8 +29,9 @@ function(Backbone, _, $, Idea, app){
                 this.model = new Idea.Model();
             }
 
-            this.model.on('change', this.render, this);
             this.model.get('segments').on('add remove', this.render, this);
+            this.model.on('change:shortTitle change:longTitle', this.render, this);
+            this.model.on('change:isSelected', this.onIsSelectedChange, this);
         },
 
         /**
@@ -43,11 +44,7 @@ function(Backbone, _, $, Idea, app){
 
             this.$el.addClass('idealist-item');
 
-            if( data.isSelected === true ){
-                this.$el.addClass('is-selected');
-            } else {
-                this.$el.removeClass('is-selected');
-            }
+            this.onIsSelectedChange();
 
             if( data.isOpen === true ){
                 this.$el.addClass('is-open');
@@ -118,6 +115,19 @@ function(Backbone, _, $, Idea, app){
             'dragover .idealist-body': 'onDragOver',
             'dragleave .idealist-body': 'onDragLeave',
             'drop .idealist-body': 'onDrop'
+        },
+
+        /**
+         * @event
+         */
+        onIsSelectedChange: function(){
+            var value = this.model.get('isSelected');
+
+            if( value === true ){
+                this.$el.addClass('is-selected');
+            } else {
+                this.$el.removeClass('is-selected');
+            }
         },
 
         /**
