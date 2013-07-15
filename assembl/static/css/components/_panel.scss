@@ -19,6 +19,7 @@
 // The header
 // ----------
 .panel-header {
+    @include no-selection;
     line-height: $panel-header-height;
     height: $panel-header-height;
     padding: { left: $padding; right: $padding; };

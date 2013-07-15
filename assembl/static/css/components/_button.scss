@@ -62,6 +62,7 @@
 // =============
 .iconbutton {
     @extend %button;
+    @include no-selection;
 
     position: relative;
     display: inline-block;

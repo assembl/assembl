@@ -429,23 +429,31 @@ html {
   text-align: center;
   opacity: 0.55;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\0000378}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/base\/_mixins\.scss}line{font-family:\0000342}}
+.iconbutton::-moz-selection {
+  background-color: transparent;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/base\/_mixins\.scss}line{font-family:\0000343}}
+.iconbutton::selection {
+  background-color: transparent;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\0000379}}
 .iconbutton:hover {
   opacity: 1;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\0000389}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\0000390}}
 .iconbutton.is-activated, .iconbutton:active {
   opacity: 1;
   background-color: rgba(229, 229, 229, 0.5);
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\0000396}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\0000397}}
 .iconbutton.iconbutton--nofx {
   opacity: 1;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\00003102}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\00003103}}
 .arrowbutton {
   position: relative;
   margin: 5px 0;
@@ -474,7 +482,7 @@ html {
   font-size: 14px;
   text-decoration: none;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\00003123}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\00003124}}
 .arrowbutton:before {
   content: url(/static/img/button/arrowbutton.png);
   position: absolute;
@@ -482,18 +490,18 @@ html {
   left: -14px;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\00003133}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\00003134}}
 .arrowbutton.arrowbutton--right {
   border-radius: 4px 0 0 4px;
   margin-left: 0;
   margin-right: 14px;
   padding: 0 5px 0 10px;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\00003139}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\00003140}}
 .arrowbutton.arrowbutton--right:before {
   display: none;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\00003143}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\00003144}}
 .arrowbutton.arrowbutton--right:after {
   content: url(/static/img/button/arrowbutton-right.png);
   position: absolute;
@@ -501,7 +509,7 @@ html {
   right: -14px;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\00003153}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\00003154}}
 .barbutton {
   background-color: #aea8c7;
   border: solid 1px #a9a3c1;
@@ -522,7 +530,7 @@ html {
   background-color: transparent;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\00003173}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\00003174}}
 .barbutton.is-activated, .barbutton:active {
   background-color: #aea8c7;
   -webkit-box-shadow: 0 1px rgba(249, 255, 255, 0.3), inset 0 1px rgba(0, 0, 0, 0.5);
@@ -1239,8 +1247,16 @@ html {
   -o-border-radius: 5px 5px 0 0;
   border-radius: 5px 5px 0 0;
 }
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/base\/_mixins\.scss}line{font-family:\0000342}}
+.panel-header::-moz-selection, .panel-footer::-moz-selection {
+  background-color: transparent;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/base\/_mixins\.scss}line{font-family:\0000343}}
+.panel-header::selection, .panel-footer::selection {
+  background-color: transparent;
+}
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_panel\.scss}line{font-family:\0000332}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_panel\.scss}line{font-family:\0000333}}
 .panel-body {
   position: absolute;
   top: 56px;
@@ -1249,12 +1265,12 @@ html {
   left: 0;
   overflow-y: auto;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_panel\.scss}line{font-family:\0000340}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_panel\.scss}line{font-family:\0000341}}
 .panel.is-dragover .panel-body {
   background-color: #fcf8e3;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_panel\.scss}line{font-family:\0000347}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Library\/WebServer\/Documents\/assembl\/assembl\/static\/css\/components\/_panel\.scss}line{font-family:\0000348}}
 .panel-footer {
   position: absolute;
   right: 0;
