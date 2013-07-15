@@ -15,6 +15,7 @@ define(['backbone', 'models/segment', 'app'], function(Backbone, Segment, app){
             this.set('creationDate', obj.creationDate);
 
             this.on('change:inSynthesis', this.onInSynthesisChange, this);
+            this.on('change:shortTitle change:longTitle change:parentId', this.onAttrChange, this);
         },
 
         /**
@@ -170,7 +171,16 @@ define(['backbone', 'models/segment', 'app'], function(Backbone, Segment, app){
      * @class IdeaColleciton
      */
     var IdeaCollection = Backbone.Collection.extend({
-        url: "/static/js/tests/fixtures/ideas.json",
+        /**
+         * Url
+         * @type {String}
+         */
+        url: "/api/ideas",
+
+        /**
+         * The model
+         * @type {IdeaModel}
+         */
         model: IdeaModel
     });
 

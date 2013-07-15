@@ -28,6 +28,12 @@ def includeme(config):
     config.add_route('save_idea', '/api/idea', request_method="PUT")
     config.add_route('create_idea', '/api/idea', request_method="POST")
 
+    #  segment
+    config.add_route('get_segment', '/api/segment/{id}')
+    config.add_route('get_segments', '/api/segments')
+    config.add_route('save_segment', '/api/segment', request_method="PUT")
+    config.add_route('create_segment', '/api/segment', request_method="POST")
+
 
 
 def api_urls(config):
