@@ -39,7 +39,7 @@
         "shortTitle": "exemple de la monnaie des enfants pour favoriser leur participation aux tâches ménagères (Thierry Gau)",
         "total": 70,
         "active": false,
-        "featured": false,
+        "featured": true,
         "parentId": 4
     },{
         "id": 7,

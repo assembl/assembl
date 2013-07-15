@@ -26,12 +26,14 @@ define(['backbone', 'app', 'moment', 'models/user'], function(Backbone, app, mom
             if( !this.get('creationDate') ){
                 this.set( 'creationDate', app.getCurrentTime() );
             }
+
+            this.on('change:idIdea')
         },
 
         /**
          * @type {String}
          */
-        url: "/static/js/tests/fixtures/segment.json",
+        url: "/api/segment",
 
         /**
          * @type {Object}
@@ -45,8 +47,8 @@ define(['backbone', 'app', 'moment', 'models/user'], function(Backbone, app, mom
         },
 
         /**
-         * Returns a fancy date ( ex: a few seconds ago ) 
-         * @return {string} [description]
+         * Returns a fancy date (ex: a few seconds ago) 
+         * @return {String}
          */
         getCreationDateFormated: function(){
             return moment( this.get('creationDate') ).fromNow();
@@ -57,7 +59,14 @@ define(['backbone', 'app', 'moment', 'models/user'], function(Backbone, app, mom
      * @class SegmentColleciton
      */
     var SegmentCollection = Backbone.Collection.extend({
-        url: "/static/js/tests/fixtures/segments.json",
+        /**
+         * @type {String}
+         */
+        url: "/api/segments",
+
+        /**
+         * @type {IdeaModel}
+         */
         model: SegmentModel
     });
 

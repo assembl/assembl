@@ -14,6 +14,7 @@ cornice_paths = dict(posts='api/posts',
 
 def includeme(config):
     """ Initialize views and renderers at app start-up time. """
+
     config.add_renderer('json', json_renderer_factory)
     config.add_route('home', '/')
     config.add_route('toc', '/toc')
@@ -33,6 +34,7 @@ def includeme(config):
     config.add_route('get_segments', '/api/segments')
     config.add_route('save_segment', '/api/segment', request_method="PUT")
     config.add_route('create_segment', '/api/segment', request_method="POST")
+    config.add_route('delete_segment', '/api/segment', request_method="DELETE")
 
 
 

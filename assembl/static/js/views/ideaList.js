@@ -155,7 +155,7 @@ function(Backbone, _, Idea, IdeaView, app){
          */
         addChildToSelected: function(){
             var currentIdea = app.getCurrentIdea(),
-                newIdea = this.ideas.create();
+                newIdea = new Idea.Model();
 
             if( this.ideas.get(currentIdea) ){
                 currentIdea.addChild(newIdea);
@@ -164,6 +164,7 @@ function(Backbone, _, Idea, IdeaView, app){
                 this.render();
             }
 
+            newIdea.save();
         },
 
         /**

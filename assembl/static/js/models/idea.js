@@ -35,7 +35,7 @@ define(['backbone', 'models/segment', 'app'], function(Backbone, Segment, app){
         defaults: {
             shortTitle: 'New idea',
             longTitle: 'Please add a description',
-            total: 1,
+            total: 0,
             isOpen: false,
             hasCheckbox: true,
             featured: false,
@@ -114,7 +114,7 @@ define(['backbone', 'models/segment', 'app'], function(Backbone, Segment, app){
                 return true;
             }
 
-            return parentId === null ? false : this.getParent().isDescendantOf( idea );
+            return parentId === null ? false : this.getParent().isDescendantOf(idea);
         },
 
         /**
@@ -168,6 +168,13 @@ define(['backbone', 'models/segment', 'app'], function(Backbone, Segment, app){
         onInSynthesisChange: function(){
             var value = this.get('inSynthesis');
             this.save({ inSynthesis: value });
+        },
+
+        /**
+         * @event
+         */
+        onAttrChange: function(){
+            this.save();
         }
 
     });
