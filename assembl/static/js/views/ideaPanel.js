@@ -35,14 +35,14 @@ function(Backbone, _, Idea, app, ckeditor){
             }
 
             this.idea.on('change', this.render, this);
-            this.idea.get('segments').on('add remove reset', this.render, this);
         },
 
         /**
          * The render
          */
         render: function(){
-            this.$el.html( this.template( {idea:this.idea} ) );
+            var segments = app.getSegmentsByIdea(this.idea);
+            this.$el.html( this.template( {idea:this.idea, segments:segments} ) );
 
             this.panel = this.$('.panel');
 
@@ -70,7 +70,6 @@ function(Backbone, _, Idea, app, ckeditor){
             this.idea = idea || new Idea.Model();
 
             this.idea.on('change', this.render, this);
-            this.idea.get('segments').on('add remove reset', this.render, this);
 
             this.render();
         },
@@ -197,12 +196,15 @@ function(Backbone, _, Idea, app, ckeditor){
          * @event
          */
         onCloseButtonClick: function(ev){
-            var $el = $(ev.currentTarget),
-                segments = this.idea.get('segments'),
-                segment = segments.at($el.index());
+            var cid = ev.currentTarget.getAttribute('data-segmentid');
 
-            segments.remove(segment);
-            app.trigger('remove:segment', [segment]);
+            if( app.segmentList && app.segmentList.segments ){
+                var segment = app.segmentList.segments.get(cid);
+
+                if( segment ){
+                    segment.set('idIdea', null);
+                }
+            }
         },
 
         /**

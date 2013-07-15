@@ -3,7 +3,7 @@
     the <%= segment %> variable should be given.
 #}
 
-<div class="box" draggable="true">
+<div class="box" draggable="true" data-segmentid="<%= segment.cid %>">
     <span data-segmentid="<%= segment.cid %>" class="closebutton"></span>
 
     <q><%= segment.get('text') %></q>

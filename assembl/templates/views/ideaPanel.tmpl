@@ -32,7 +32,7 @@
 
         <div class="boxlist">
             
-            <% idea.get('segments').each(function(segment, i){ %>
+            <% _.each(segments, function(segment, i){ %>
                 {% include "views/segment.tmpl" %}
             <% }); %>
             

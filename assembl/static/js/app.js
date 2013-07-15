@@ -153,10 +153,6 @@ function($, _, ckeditor, User){
          * @return {Segment}
          */
         getDraggedSegment: function(){
-            if( app.draggedSegment && app.draggedSegment.collection ){
-                app.draggedSegment.collection.remove(app.draggedSegment);
-            }
-
             var segment = app.draggedSegment;
             app.draggedSegment = null;
 
@@ -402,6 +398,16 @@ function($, _, ckeditor, User){
          */
         getCurrentIdea: function(){
             return app.ideaPanel.idea;
+        },
+
+        /**
+         * Returns an array with all segments for the given idea
+         * @param {Idea} idea
+         * @return {Array<Segment>}
+         */
+        getSegmentsByIdea: function(idea){
+            var id = idea.get('id');
+            return app.segmentList.segments.where({idIdea:id});
         },
 
         /**

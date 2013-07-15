@@ -14,8 +14,7 @@
     </div>
 
     <div class="panel-body boxlist">
-        
-        <% segments.each(function(segment){ %>
+        <% _.each(segments, function(segment){ %>
             {% include "views/segment.tmpl" %}
         <% }); %>
 

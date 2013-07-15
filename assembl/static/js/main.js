@@ -25,19 +25,14 @@ define([
     app.ideaList = new IdeaList({el: '#idealist', button: '#button-ideaList'});
     app.ideaList.ideas.fetch({reset: true});
 
+    // Segment List
+    app.segmentList = new SegmentList({el: '#segmentlist', button: '#button-segmentList'});
+    app.segmentList.segments.on('change reset', app.ideaList.render, app.ideaList);
+    app.segmentList.segments.fetch({reset: true});
+
     // Idea panel
     app.ideaPanel = new IdeaPanel({el: '#ideaPanel', button: '#button-ideaPanel'}).render();
 
-    // Segment List
-    app.segmentList = new SegmentList({el: '#segmentlist', button: '#button-segmentList'});
-    app.segmentList.render();
-    app.on('remove:segment', function(segment){
-        if( segment && segment.collection ){
-            segment.collection.remove(segment);
-        }
-
-        app.segmentList.segments.add(segment);
-    });
 
     // Message
     app.messages = new Message({el: '#messages', button: '#button-messages'}).render();
@@ -50,7 +45,7 @@ define([
         var text = app.selectionTooltip.attr('data-segment'),
             segment = new Segment.Model({ text:text });
 
-        app.segmentList.addSegment(segment);
+        app.segmentList.segments.add(segment);
         app.openPanel(app.segmentList);
     });
 

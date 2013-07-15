@@ -1,4 +1,4 @@
-define(['backbone', 'models/segment'], function(Backbone, Segment){
+define(['backbone', 'models/segment', 'app'], function(Backbone, Segment, app){
     'use strict';
 
     /**
@@ -10,13 +10,9 @@ define(['backbone', 'models/segment'], function(Backbone, Segment){
          */
         initialize: function(obj){
             obj = obj || {};
-            var that = this;
-
-            obj.segments = obj.segments && obj.segments.length ? obj.segments : [];
-            this.set( 'segments', new Segment.Collection(obj.segments) );
 
             obj.creationDate = obj.creationDate || app.getCurrentTime();
-            this.set( 'creationDate', obj.creationDate );
+            this.set('creationDate', obj.creationDate);
 
             this.on('change:inSynthesis', this.onInSynthesisChange, this);
         },
@@ -116,8 +112,7 @@ define(['backbone', 'models/segment'], function(Backbone, Segment){
         },
 
         /**
-         * Return the indentantion level
-         * @return {Number}
+         * @return {Number} the indentantion level
          */
         getLevel: function(){
             var counter = 0,
@@ -132,11 +127,19 @@ define(['backbone', 'models/segment'], function(Backbone, Segment){
         },
 
         /**
+         * @return {array<Segment>}
+         */
+        getSegments: function(){
+            return app.getSegmentsByIdea(this);
+        },
+
+        /**
          * Adds a segment
          * @param  {Segment} segment
          */
         addSegment: function(segment){
-            this.attributes.segments.add(segment);
+            segment.set('idIdea', this.get('id'));
+            this.trigger("change:segments");
         },
 
         /**
@@ -150,6 +153,7 @@ define(['backbone', 'models/segment'], function(Backbone, Segment){
             });
 
             this.addChild(idea);
+            segment.destroy();
         },
 
         /**

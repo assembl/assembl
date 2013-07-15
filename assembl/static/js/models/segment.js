@@ -34,6 +34,7 @@ define(['backbone', 'app', 'moment', 'models/user'], function(Backbone, app, mom
         defaults: {
             text: '',
             idPost: null,
+            idIdea: null,
             creationDate: null,
             author: null
         },

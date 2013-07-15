@@ -11,8 +11,6 @@ function(Backbone, _, $, app, Segment){
                 this.button = $(obj.button).on('click', app.togglePanel.bind(window, 'segmentList'));
             }
 
-            this.segments = new Segment.Collection();
-
             this.segments.on('add remove change reset', this.render, this);
         },
 
@@ -33,7 +31,9 @@ function(Backbone, _, $, app, Segment){
          * @return {LateralMenu}
          */
         render: function(){
-            var data = {segments:this.segments};
+            var segments = this.segments.where({idIdea: null}),
+                data = {segments:segments};
+
             this.$el.html(this.template(data));
 
             this.panel = this.$('.panel');
@@ -46,10 +46,7 @@ function(Backbone, _, $, app, Segment){
          * @param {Segment} segment
          */
         addSegment: function(segment){
-            if( segment.collection ){
-                segment.collection.remove(segment);
-            }
-
+            segment.set('idIdea', null);
             this.segments.add(segment);
         },
 
@@ -104,8 +101,8 @@ function(Backbone, _, $, app, Segment){
         onDragStart: function(ev){
             ev.currentTarget.style.opacity = 0.4;
 
-            var index = $(ev.currentTarget).index(),
-                segment = this.segments.at(index);
+            var cid = ev.currentTarget.getAttribute('data-segmentid'),
+                segment = this.segments.get(cid);
 
             app.showDragbox(ev, segment.get('text'));
             app.draggedSegment = segment;

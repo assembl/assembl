@@ -1,5 +1,5 @@
-define(['backbone', 'underscore', 'zepto', 'models/idea', 'app'],
-function(Backbone, _, $, Idea, app){
+define(['backbone', 'underscore', 'zepto', 'models/idea', 'models/segment', 'app'],
+function(Backbone, _, $, Idea, Segment, app){
     'use strict';
 
     var IdeaView = Backbone.View.extend({
@@ -29,8 +29,7 @@ function(Backbone, _, $, Idea, app){
                 this.model = new Idea.Model();
             }
 
-            this.model.get('segments').on('add remove', this.render, this);
-            this.model.on('change:shortTitle change:longTitle', this.render, this);
+            this.model.on('change:shortTitle change:longTitle change:segments', this.render, this);
             this.model.on('change:isSelected', this.onIsSelectedChange, this);
         },
 
@@ -58,6 +57,7 @@ function(Backbone, _, $, Idea, app){
 
             data.children = this.model.getChildren();
             data.level = this.model.getLevel();
+            data.segments = this.model.getSegments();
 
             this.$el.html(this.template(data));
             this.$('.idealist-children').append( this.getRenderedChildren(data.level) );
