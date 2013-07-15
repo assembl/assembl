@@ -50,6 +50,7 @@ def printenv():
 
 
 ## Virtualenv
+@task
 def build_virtualenv():
     """
     Build the virtualenv
@@ -92,18 +93,6 @@ def app_db_install():
     print(cyan('Installing Django database'))
     venvcmd('./manage.py syncdb --all --noinput')
     venvcmd('./manage.py migrate --fake')
-
-
-def collect_static_files():
-    """
-    Collect static files such as pictures
-    """
-    print(cyan('Collecting static files'))
-    venvcmd('./manage.py collectstatic --noinput')
-    
-    #Workaround for collectstatic bug on prod server
-    with cd(env.venvpath + '/' + env.projectname + '/static'):
-        run('cp -Rp compiled_sass/* css/')
 
 @task
 def make_messages():
@@ -191,10 +180,9 @@ def app_install():
     (Re)install app to target server
     """
     execute(clone_repository)
-    execute(update_requirements, force=True)
+    execute(update_requirements, force=False)
     execute(compile_messages)
-    execute(app_db_install)
-    execute(collect_static_files)
+    #execute(app_db_install)
     # tests()
     execute(reloadapp)
     
@@ -209,7 +197,6 @@ def app_fullupdate():
     execute(compile_stylesheets)
     execute(update_requirements, force=False)
     #execute(app_db_update)
-    #execute(collect_static_files)
     # tests()
     execute(reloadapp)
     execute(webservers_reload)
@@ -223,7 +210,6 @@ def app_update():
     execute(compile_messages)
     execute(compile_stylesheets)
     #execute(app_db_update)
-    #execute(collect_static_files)
     # tests()
     execute(reloadapp)
     execute(webservers_reload)
