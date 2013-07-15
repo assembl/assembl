@@ -41,7 +41,7 @@ function(Backbone, _, Idea, app, ckeditor){
          * The render
          */
         render: function(){
-            var segments = app.getSegmentsByIdea(this.idea);
+            var segments = this.idea.getSegments();
             this.$el.html( this.template( {idea:this.idea, segments:segments} ) );
 
             this.panel = this.$('.panel');
@@ -58,8 +58,8 @@ function(Backbone, _, Idea, app, ckeditor){
          * @param  {Segment} segment
          */
         addSegment: function(segment){
-            var segments = this.idea.get('segments');
-            segments.add(segment);
+            var id = this.idea.get('id');
+            segment.set('idIdea', id);
         },
 
         /**
@@ -141,13 +141,15 @@ function(Backbone, _, Idea, app, ckeditor){
          * @event
          */
         onDragStart: function(ev){
-            ev.currentTarget.style.opacity = 0.4;
+            if( app.segmentList && app.segmentList.segments ){
+                ev.currentTarget.style.opacity = 0.4;
 
-            var index = $(ev.currentTarget).index(),
-                segment = this.idea.get('segments').at(index);
+                var cid = ev.currentTarget.getAttribute('data-segmentid'),
+                    segment = app.segmentList.segments.get(cid);
 
-            app.showDragbox(ev, segment.get('text'));
-            app.draggedSegment = segment;
+                app.showDragbox(ev, segment.get('text'));
+                app.draggedSegment = segment;
+            }
         },
 
         /**

@@ -58,7 +58,7 @@ function(Backbone, _, $, app, Segment){
             var model = this.segments.get(cid);
 
             if(model){
-                this.segments.remove(model);
+                model.destroy();
             }
         },
 

@@ -32,7 +32,7 @@ define([
 
     // Idea panel
     app.ideaPanel = new IdeaPanel({el: '#ideaPanel', button: '#button-ideaPanel'}).render();
-
+    app.segmentList.segments.on('change reset', app.ideaPanel.render, app.ideaPanel);
 
     // Message
     app.messages = new Message({el: '#messages', button: '#button-messages'}).render();
