@@ -131,6 +131,13 @@ function(Backbone, _, Idea, IdeaView, app){
         },
 
         /**
+         * Blocks the panel
+         */
+        blockPanel: function(){
+            this.$('.panel').addClass('is-loading');
+        },
+
+        /**
          * The events
          */
         'events': {
@@ -147,14 +154,16 @@ function(Backbone, _, Idea, IdeaView, app){
          * Add a new child to the current selected
          */
         addChildToSelected: function(){
-            var currentIdea = app.getCurrentIdea();
+            var currentIdea = app.getCurrentIdea(),
+                newIdea = this.ideas.create();
 
             if( this.ideas.get(currentIdea) ){
-                currentIdea.addChild( new Idea.Model() );
+                currentIdea.addChild(newIdea);
             } else {
-                this.ideas.add( new Idea.Model() );
+                this.ideas.add(newIdea);
                 this.render();
             }
+
         },
 
         /**

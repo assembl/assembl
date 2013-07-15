@@ -23,7 +23,7 @@ define(['backbone', 'models/segment'], function(Backbone, Segment){
          * Url
          * @type {String}
          */
-        url: "/static/js/tests/fixtures/idea.json",
+        url: "/api/idea",
 
         /**
          * Defaults

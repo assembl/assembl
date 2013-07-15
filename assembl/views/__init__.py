@@ -22,6 +22,13 @@ def includeme(config):
     config.add_route('test', '/test')
     config.include(api_urls, route_prefix='/api')
 
+    #  idea
+    config.add_route('get_idea', '/api/idea/{id}')
+    config.add_route('get_ideas', '/api/ideas')
+    config.add_route('save_idea', '/api/idea', request_method="PUT")
+    config.add_route('create_idea', '/api/idea', request_method="POST")
+
+
 
 def api_urls(config):
     config.include(api_post_urls, route_prefix='/posts')
