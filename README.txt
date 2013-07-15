@@ -16,17 +16,23 @@ Getting Started
 
 - $venv/bin/pserve --reload local.ini
 
+Getting Started (fabric)
+------------------------
 
+wget ...
+fab devenv:venvpath=~/venvassembl bootstrap_venv
 
 Compiling CSS
 -------------
 
-You have too install compass:
 
-- gem install compass
+
+You have too install compass (the first time):
+
+- fab devenv install_compass
 
 To run compass:
 
 - cd <directory containing this file>
 
-- compass watch
+- bundle exec compass watch
