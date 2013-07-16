@@ -1,15 +1,27 @@
-<% /* if (hasCheckbox) { %>
-<span class="idealist-checkbox">
-    <input type="checkbox" />
-</span>
-<% } */ %>
-<span class="idealist-label <% if (hasOptions) { %>has-options<% } %>" >
-    <% if (hasChildren) { %><span class="idealist-label-arrow"></span><% } %>
-    <%= subject %>
-    <span class="idealist-label-options">
-        <a class="iconbutton icon-pencil"></a>
-        <a class="iconbutton icon-rearrangeemail"></a>
-        <a class="iconbutton icon-copyfolder"></a>
-    </span>
-</span>
-<div class="fixedcounter"><%= total %></div>
+<div class="idealist-body" draggable="true">
+    <% if (hasCheckbox) { %>
+    <label class="chk chk--idealist">
+        <input type="checkbox" class="chk-checkbox" <% if(inSynthesis) { %>checked="checked"<% } %> />
+        <span class="chk-label"></span>
+    </label>
+    <% }  %>
+
+    <% for( var i=1; i<level; i+= 1) { %>
+        <span class="idealist-bar"></span>
+    <% } %>
+    
+    <% if (children.length > 0) { %>
+        <span class="idealist-arrow"></span>
+    <% } %>
+
+    <div class="idealist-counter"><%= total %></div>
+    <div class="idealist-title">
+        <%= shortTitle %> (<%= segments.length %>)
+        <small class="idealist-longtitle text-small text-muted"><%= longTitle.replace(/(<([^>]+)>)/ig,"") %></small>
+    </div>
+
+    <div class="idealist-abovedropzone"></div>
+    <div class="idealist-dropzone"></div>
+</div>
+
+<div class="idealist-children"></div>

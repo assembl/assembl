@@ -1,6 +1,7 @@
 // Bar
 // ===
 .bar {
+    @include no-selection;
     display: block;
     height: $bar-height;
     position: relative;
@@ -30,19 +31,6 @@
 
     font-size: 18px;
     color: #2c2c2c;
-}
-
-// Panel bar
-// +++++++++
-.bar.bar--panel {
-    line-height: 56px;
-    height: 56px;
-    padding: { left: $padding; right: $padding; };
-
-    background-color: #f7f7f7;
-    border: solid 1px #e4e4e3;
-    border-bottom: 0;
-    @include border-radius( 5px 5px 0 0 );
 }
 
 // Left content of a bar

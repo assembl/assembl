@@ -9,6 +9,15 @@ function(Backbone, _, $, app){
      */
     var Message = Backbone.View.extend({
         /**
+         *  @init
+         */
+        initialize: function(obj){
+            if( obj.button ){
+                this.button = $(obj.button).on('click', app.togglePanel.bind(window, 'messages'));
+            }
+        },
+
+        /**
          * Flag wether it is being selected or not
          * @type {Boolean}
          */
@@ -56,13 +65,24 @@ function(Backbone, _, $, app){
         },
 
         /**
+         * Close the panel
+         */
+        closePanel: function(){
+            if( this.button ){
+                this.button.trigger('click');
+            }
+        },
+
+        /**
          * The events
          * @type {Object}
          */
         events: {
             'mousedown .message': 'startSelection',
             'mousemove .message': 'doTheSelection',
-            'mouseup .message': 'stopSelection'
+            'mouseup .message': 'stopSelection',
+
+            'click #message-closeButton': 'closePanel'
         },
 
         /**
@@ -84,7 +104,7 @@ function(Backbone, _, $, app){
             var selectedText = app.getSelectedText(),
                 text = selectedText.getRangeAt(0).cloneContents();
 
-            text = text.firstChild ? text.firstChild.textContent : '';
+            text = text.textContent || '';
 
             if( text.length > MIN_TEXT_TO_TOOLTIP ){
                 this.showTooltip(ev.clientX, ev.clientY, text);
@@ -97,6 +117,7 @@ function(Backbone, _, $, app){
         stopSelection: function(ev){
             this.isSelecting = false;
         }
+
     });
 
     return Message;

@@ -1,0 +1,51 @@
+// A fancier checkbox
+// ==================
+.chk {
+    cursor: pointer;
+}
+
+// Designed to fit tin the .idealist-item
+// ++++++++++++++++
+.chk.chk--idealist {
+    @include box-sizing( border-box );
+    height: $idealist-item-height;
+    line-height: $idealist-item-height;
+    float: left;
+    margin-left: 5px;
+
+    // Don't ask
+    padding-top: 4.25px; 
+    position: relative;
+    @include z-index("floor");
+}
+
+// The checkbox
+// ---------------
+.chk-checkbox {
+    display: none;
+}
+
+// The label
+// --------------
+.chk-label {
+    display: inline-block;
+    width: $checkbox-width;
+    height: $checkbox-height;
+
+    @include border-radius( 5px );
+    background-color: #eceef1;
+
+    .chk-checkbox:checked ~ & {
+        background-color: #81d6af;
+    }
+
+    .chk--idealist & {
+        
+    }
+}
+
+// Hover state
+// ++++++++++++++++
+.chk-label:hover {
+    //background-color: #ffc694;
+}

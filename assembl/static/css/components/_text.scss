@@ -8,15 +8,27 @@
 
 // A muted text
 // --------------
-.text-muted {
-    color: $text-muted-color;
-}
+.text-muted { color: $text-muted-color; }
+
+// Smaller text
+// ----------------
+.text-small { font-size: .9em; }
 
 // Bigger text
 // ----------------
-.text-big {
-    font-size: 18px;
-}
+.text-big { font-size: 18px; }
+
+// Align text to left
+// ------------------
+.text-left { text-align: left; }
+
+// Align text to center
+// ------------------
+.text-center { text-align: center; }
+
+// Align text to right
+// ------------------
+.text-right { text-align: right; }
 
 // The text bubble for when a text is selected
 // ====================

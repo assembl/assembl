@@ -57,6 +57,9 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, menu,
 [draggable=true] {
   -moz-user-select:none;
   -khtml-user-drag: element;
-  cursor: move;
+}
+
+[hidden] {
+    display: none;
 }
 

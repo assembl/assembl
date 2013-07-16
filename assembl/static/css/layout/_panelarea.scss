@@ -1,0 +1,48 @@
+$panelarea-min-width: 320px;
+
+// The wrapper for all .panel
+// =================
+.panelarea  {
+    position: absolute;
+    top: 110px;
+    right: 0;
+    bottom: 0;
+    left: 0;
+
+    display: block;
+    overflow: { x: auto; y: hidden; }
+}
+
+
+// The table to align the .panelarea-col
+// ---------------
+.panelarea-table {
+    @include box-sizing( border-box );
+   
+    display: table;
+    width: 100%;
+    height: 100%;
+    padding: 8px;
+}
+
+// The table to align the .panel
+// ---------------
+.panelarea-col {
+    @include box-sizing( border-box );
+    display: none;
+    padding: 0 4px;
+    height: 100%;
+    min-width: $panelarea-min-width;
+}
+
+// Shows the .panelarea-col
+// ++++++++++++++++
+.panelarea-col.is-visible {
+    display: table-cell;
+}
+
+// Specific areas
+#segmentlist { 
+    width: $panelarea-min-width;
+    max-width: $panelarea-min-width;
+}

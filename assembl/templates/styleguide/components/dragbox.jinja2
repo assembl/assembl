@@ -5,3 +5,27 @@
 <div class="dragbox" style="position: static;">
     This is a .dragbox
 </div>
+
+<div class="spacer"></div>
+<div class="spacer"></div>
+
+<div class="sg-dragbox" draggable="true" style="cursor: move;">
+    Drag me
+</div>
+
+<div class="spacer"></div>
+
+<script>
+
+window.addEventListener('load', function(){
+
+    requirejs(['zepto', 'app'], function($, app){
+
+        $('.sg-dragbox').on('dragstart', function(ev){
+            app.showDragbox(ev, "It's magic");
+        });
+
+    });
+}, true);
+</script>
+

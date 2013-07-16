@@ -62,12 +62,17 @@
 // =============
 .iconbutton {
     @extend %button;
+    @include no-selection;
 
     position: relative;
     display: inline-block;
     width: $icon-width;
     height: $icon-height;
+    line-height: $icon-height;
+
+    font-size: 20px;
     vertical-align: middle;
+    text-align: center;
 
     opacity: 0.55;
 
@@ -148,6 +153,7 @@
 // =========================
 .barbutton {
     @extend %button;
+    @include no-selection;
 
     background-color: #aea8c7;
     border: solid 1px #a9a3c1;

@@ -31,6 +31,12 @@
 /surf
 /virtuoso
 
+#ide
+.project
+.pydevproject
+
 # misc
 ._*
 .sass-cache
+assembl/static/css/*.css
+vendor/

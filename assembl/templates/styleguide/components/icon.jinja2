@@ -1,7 +1,13 @@
 <div class="row">
-    {% for icon in ['reorder', 'cog', 'search', 'user', 'book', 'check', 'grave', 'question', 'file', 'settings', 'return', 'dropbox', 'uparrow', 'copyfolder', 'pencil', 'rearrangeemail', 'down', 'heart', 'reply'] %}
-        <div class="col-1">
-            <span class="iconbutton icon-{{icon}}"></span>
-        </div>
+    
+
+    {% set icon_list = ['edit', 'cancel', 'star-empty', 'star', 'heart', 'pin-outline', 'pin', 'heart-empty', 'cog', 'menu', 'plus-squared-small', 'minus-squared-small', 'user', 'download', 'search', 'sort', 'plus-squared'] %}
+
+
+    {% for icon in icon_list %}
+    <div class="col-1 margin-bottom">
+        <i class="icon-{{icon}}"></i>
+    </div>
     {% endfor %}
+
 </div>

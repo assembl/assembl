@@ -1,0 +1,48 @@
+$dropdown-height: 20px;
+
+// The dropdown
+// ============
+.dropdown {
+    position: relative;
+    display: inline-block;
+    padding: 2px 4px;
+    line-height: $dropdown-height;
+    overflow: visible;
+
+    cursor: pointer;
+    border: solid 1px transparent;
+
+
+    &:after {
+        display: inline-block;
+
+        font-family: $font-icon;
+        content: '\e808';
+        margin-left: 5px;
+    }
+}
+
+// The option list
+// ---------------
+.dropdown-list {
+    @extend .contextmenu;
+
+    top: 0;
+    left: 0;
+    @include z-index("underground");
+    min-width: 155px;
+
+    @include transition( top 0.4s, opacity 0.4s, z-index 0 linear 0.4s );
+    @include opacity( 0 );
+
+    .dropdown:hover & {
+        @include transition( top 0.4s, opacity 0.4s, z-index 0 linear 0 );
+        top: $dropdown-height + 4px;
+        @include opacity( 1 );
+        @include z-index("float");
+    }
+}
+
+.dropdown-listitem {
+    @extend .contextmenu-item;
+}

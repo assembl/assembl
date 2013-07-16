@@ -49,15 +49,6 @@
     line-height: $icon-height;
 }
 
-// The counter within an accordion header
-// ------------------
-.accordion-counter {
-    @extend .fixedcounter;$accordion-counter-height: 23px;
-
-    right: $lateralmenu-padding-right;
-}
-
-
 // The body/content of an accordion-area
 // -----------------
 .accordion-body {

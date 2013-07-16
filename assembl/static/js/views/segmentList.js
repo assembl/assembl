@@ -6,11 +6,12 @@ function(Backbone, _, $, app, Segment){
         /**
          * @init
          */
-        initialize: function(){
-            this.segments = new Segment.Collection();
+        initialize: function(obj){
+            if( obj && obj.button ){
+                this.button = $(obj.button).on('click', app.togglePanel.bind(window, 'segmentList'));
+            }
 
-            this.segments.on('add', this.render, this);
-            this.segments.on('remove', this.render, this);
+            this.segments.on('add remove change reset', this.render, this);
         },
 
         /**
@@ -30,21 +31,22 @@ function(Backbone, _, $, app, Segment){
          * @return {LateralMenu}
          */
         render: function(){
-            var data = {segments:this.segments};
+            var segments = this.segments.where({idIdea: null}),
+                data = {segments:segments};
+
             this.$el.html(this.template(data));
+
+            this.panel = this.$('.panel');
 
             return this;
         },
 
         /**
          * Add a segment to the bucket
-         * @param {string} The extract
-         * @param {Email} The source
+         * @param {Segment} segment
          */
-        addSegment: function(text, email){
-            var segment = new Segment.Model();
-            segment.set('text', text);
-
+        addSegment: function(segment){
+            segment.set('idIdea', null);
             this.segments.add(segment);
         },
 
@@ -56,17 +58,25 @@ function(Backbone, _, $, app, Segment){
             var model = this.segments.get(cid);
 
             if(model){
-                this.segments.remove(model);
+                model.destroy();
             }
         },
 
         /**
          * Remove the given segment
-         * @param  {HTMLLIElement} li [description]
+         * @param {Segment} segment
          */
-        removeSegmentByWrapper: function(li){
-            var cid = li.getElementsByClassName('closebutton')[0].getAttribute('data-segmentid');
-            this.removeSegmentByCid(cid);
+        removeSegment: function(segment){
+            this.segments.remove(segment);
+        },
+
+        /**
+         * Closes the panel
+         */
+        closePanel: function(){
+            if( this.button ){
+                this.button.trigger('click');
+            }
         },
 
         /**
@@ -76,7 +86,13 @@ function(Backbone, _, $, app, Segment){
         events: {
             'dragstart .box': "onDragStart",
             'dragend .box': "onDragEnd",
-            'click .closebutton': "onCloseButtonClick"
+            'dragover .panel': 'onDragOver',
+            'dragleave .panel': 'onDragLeave',
+            'drop .panel': 'onDrop',
+
+            'click .closebutton': "onCloseButtonClick",
+            'click #segmentList-clear': "onClearButtonClick",
+            'click #segmentList-closeButton': "closePanel"
         },
 
         /**
@@ -85,12 +101,11 @@ function(Backbone, _, $, app, Segment){
         onDragStart: function(ev){
             ev.currentTarget.style.opacity = 0.4;
 
-            if( ev.dataTransfer ) {
-                ev.dataTransfer.effectAllowed = 'move';
-                ev.dataTransfer.setData('text/html', ev.currentTarget.innerHTML);
-            }
+            var cid = ev.currentTarget.getAttribute('data-segmentid'),
+                segment = this.segments.get(cid);
 
-            app.draggedSegment = ev.currentTarget;
+            app.showDragbox(ev, segment.get('text'));
+            app.draggedSegment = segment;
         },
 
         /**
@@ -104,9 +119,54 @@ function(Backbone, _, $, app, Segment){
         /**
          * @event
          */
+        onDragOver: function(ev){
+            ev.preventDefault();
+            if( app.draggedSegment !== null ){
+                this.panel.addClass("is-dragover");
+            }
+        },
+
+        /**
+         * @event
+         */
+        onDragLeave: function(){
+            this.panel.removeClass('is-dragover');
+        },
+
+        /**
+         * @event
+         */
+        onDrop: function(ev){
+            if( ev ){
+                ev.preventDefault();
+                ev.stopPropagation();
+            }
+
+            this.panel.trigger('dragleave');
+
+            var segment = app.getDraggedSegment();
+            if( segment ){
+                this.addSegment(segment);
+                return;
+            }
+        },
+
+        /**
+         * @event
+         */
         onCloseButtonClick: function(ev){
             var cid = ev.currentTarget.getAttribute('data-segmentid');
             this.removeSegmentByCid(cid);
+        },
+
+        /**
+         * @event
+         */
+        onClearButtonClick: function(ev){
+            var ok = confirm( this.$('#segmentList-clearConfirmationMessage').text() );
+            if( ok ){
+                this.segments.reset();
+            }
         }
 
     });

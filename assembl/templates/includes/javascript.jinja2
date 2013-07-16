@@ -20,6 +20,7 @@ requirejs.config({
             exports: '$'
         },
         'app': {
+            deps: ['ckeditor'],
             exports: 'app'
         },
         'jasmine': {
@@ -32,6 +33,9 @@ requirejs.config({
         'jasmine-jquery': {
             deps: ['jasmine'],
             exports: 'jasmine'
+        },
+        'ckeditor': {
+            exports: 'CKEDITOR'
         }
     },
     "paths": {
@@ -43,7 +47,11 @@ requirejs.config({
 
         'jasmine': 'lib/jasmine',
         'jasmine-html': 'lib/jasmine-html',
-        'jasmine-jquery': 'lib/jasmine-jquery'
+        'jasmine-jquery': 'lib/jasmine-jquery',
+
+        'ckeditor': 'lib/ckeditor/ckeditor',
+
+        'moment': 'lib/moment'
     }
 });
 

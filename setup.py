@@ -6,23 +6,18 @@ here = os.path.abspath(os.path.dirname(__file__))
 README = open(os.path.join(here, 'README.txt')).read()
 CHANGES = open(os.path.join(here, 'CHANGES.txt')).read()
 
-requires = [
-    'alembic',
-    'colander',
-    'colanderalchemy==0.2.0',
-    'cornice',
-    'psycopg2',
-    'pyramid',
-    'pyramid_debugtoolbar',
-    'pyramid_jinja2',
-    'pyramid_tm',
-    'SQLAlchemy',
-    'transaction',
-    'waitress',
-    'zope.sqlalchemy',
-    ]
+from pip.req import parse_requirements
+
+# parse_requirements() returns generator of pip.req.InstallRequirement objects
+install_reqs = parse_requirements('requirements.txt')
+
+# requires is a list of requirement
+# e.g. ['django==1.5.1', 'mezzanine==1.4.6']
+requires = [str(ir.req) for ir in install_reqs]
 
 tests_require = ['webtest']
+
+
 
 setup(name='assembl',
       version='0.0',
@@ -42,6 +37,7 @@ setup(name='assembl',
       include_package_data=True,
       zip_safe=False,
       test_suite='assembl',
+      setup_requires = ['pip'],
       install_requires=requires,
       tests_require=tests_require,
       extras_require=dict(test=tests_require),

@@ -1,0 +1,51 @@
+<div class="panel" draggable="draggable">
+
+    <div hidden="hidden">
+        <span id="ideaPanel-clearConfirmationMessage">{{ gettext('Do you confirm removing all segments ?') }}</span>
+    </div>
+
+    <div class="panel-header">
+        {{ gettext('Idea') }}
+        <div class="float-right">
+            <a id="ideaPanel-closebutton" class="iconbutton icon-cancel"></a>
+        </div>
+    </div>
+    
+    <div class="panel-body">
+        <div class="margin text-muted">{{ gettext('Short title') }}</div>
+        <div id="ideaPanel-shorttitle" class="margin" contenteditable="true"><%= idea.get('shortTitle') %></div>
+        
+        <div class="spacer"></div>
+        
+        <div class="margin text-muted">{{ gettext('Long title') }}</div>
+        <div id="ideaPanel-longtitle" class="text margin" contenteditable="true"><%= idea.get('longTitle') %></div>
+
+        <div class="spacer"></div>
+
+        <p class="text-muted margin">
+            {% set creationDate = "<%= app.formatDate(idea.get('creationDate')) %>" %}
+            {% set userName = "Jean-Michel" %} {# "<%= userName %>" #}
+
+            {{- gettext('Created in %(date)s by %(user)s')|format(date=creationDate, user=userName)|safe }}
+        </p>
+            
+
+        <div class="boxlist">
+            
+            <% _.each(segments, function(segment, i){ %>
+                {% include "views/segment.tmpl" %}
+            <% }); %>
+            
+            <div class="box box--dashed box--centered margin text-muted text-big">
+                {{ gettext('Add segments') }}
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="panel-footer">
+        <a id="ideaPanel-clearbutton" class="link">{{ gettext('Clear') }}</a>
+    </div>
+
+</div>

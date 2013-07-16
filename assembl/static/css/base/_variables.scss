@@ -27,6 +27,10 @@ $button-font-size: 13px;
 // Closebutton
 $closebutton-color: #e4e4e3;
 
+// Checkbox
+$checkbox-width: 20px;
+$checkbox-height: 20px;
+
 // Icons
 $icon-width: 32px;
 $icon-height: 32px;
@@ -38,24 +42,24 @@ $dragbox-border-color: #f0c36d;
 // Experimental
 $experimental-support-for-microsoft: true;
 
-// Fixedcounter
-$fixedcounter-height: 23px;
-$fixedcounter-min-width: 30px;
-
 // idea list
 $idealist-background-color: #fff;
 $idealist-border-color: #e4e4e3;
-$idealist-item-level-padding: 10px;
-$idealist-item-padding-right: $fixedcounter-min-width + 15px;
-$idealist-item-border-color: $idealist-border-color;
-$idealist-item-border: solid 1px $idealist-item-border-color;
-$idealist-item-border-color-dark: #000;
-$idealist-item-height: 45px;
-$idealist-options-width: $icon-width * 3;
-$idealist-item-dragover-height: 7px;
+$idealist-border: solid 1px $idealist-border-color;
+
+$idealist-selected-bg-color: #dbf2ff;
+
+$idealist-item-height: 40px;
+$idealist-arrow-width: 25px;
+
+$idealist-counter-minwidth: 30px;
+$idealist-counter-color: #c8c9cc;
+
 
 // Font
+$font-dir: "/static/font";
 $font-size: 14px;
+$font-icon: "fontello";
 
 // Image dir
 $img-dir: "/static/img";
@@ -84,8 +88,15 @@ $padding-left: 10px;
 
 // Panel
 $panel-border-color: $box-border-color;
+$panel-header-height: 56px;
+$panel-header-bg-color: #f7f7f7;
 
 // Text
 $text-color: #a4a3a1;
+$text-strong-color: #000;
 $text-selection-color: #dbf2ff;
 $text-muted-color: #c5c5c5;
+
+// Link
+$link-color: $text-muted-color;
+$link-hover-color: #2c2c2c;

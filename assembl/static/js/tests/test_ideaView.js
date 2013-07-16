@@ -1,23 +1,33 @@
-define(['jasmine', 'underscore', 'app', 'views/idea'],
-function(jasmine, _, app, IdeaView){
+define(['jasmine', 'underscore', 'app', 'views/idea', 'models/idea'],
+function(jasmine, _, app, IdeaView, Idea){
 
     var view,
-        fixIdea,
-        DATA_LEVEL = 'data-idealist-level';
+        fixIdea;
 
     function getView(){
-        var v = new IdeaView();
-        v.model = new Backbone.Model({
-            subject: 'Default Suject',
-            total: 10,
+        var model = new Idea.Model({
+            shortTitle: '',
+            longTitle: '',
+            total: 1,
             level: 1,
+            featured: false,
+            inSynthesis: false,
             hasCheckbox: true,
-            hasChildren: false,
             hasOptions: false
         });
 
+        model.set('id', app.getCurrentTime());
+
+        var collection = new Idea.Collection({
+            model: model
+        });
+
+        collection.add(model);
+
+        var v = new IdeaView({model: model});
+
         //
-        setFixtures('<ul id="fix-idea"></ul>');
+        setFixtures('<div id="fix-idea"></div>');
         fixIdea = $('#fix-idea');
         fixIdea.append( v.render().el );
         return v;
@@ -29,89 +39,59 @@ function(jasmine, _, app, IdeaView){
             view = getView();
         });
 
-        it('uses the right template', function(){
-            var tmpl = app.loadTemplate('idea');
-
-            expect(tmpl(view.model.toJSON())).toBe(view.template(view.model.toJSON()));
-        });
-
-        it('should have the arrow if hasChildren is true', function(){
-            expect(view.el).not.toContain('span.idealist-label-arrow');
-
-            view.model.set('hasChildren', true);
+        it('should have the arrow if children.length > 0', function(){
+            expect(view.el).not.toContain('span.idealist-arrow');
+            view.model.addChild( new Idea.Model({ id: 'sim' }) );
             fixIdea.empty().append( view.render().el );
 
-            expect(view.el).toContain('span.idealist-label-arrow');
+            expect(view.el).toContain('span.idealist-arrow');
         });
 
-        it('should show the options when it swipes to left', function(){
-            var label = view.$('.idealist-label');
-            label.trigger('swipeLeft');
-
-            expect(label.get(0)).toHaveClass('is-optioned');
+        it('should set the isSelect flag to true when clicked', function(){
+            view.$('.idealist-title').trigger('click');
+            expect(view.el).toHaveClass('is-selected');
         });
 
-        it('should hide the options when it swipes to right', function(){
-            var label = view.$('.idealist-label');
+        it('should set the state to .is-dragover when there is a segment over', function(){
+            app.draggedIdea = new Backbone.Model({ 'some': 'thing' });
 
-            label.addClass('is-optioned');
-            label.trigger('swipeRight');
+            var body = view.$('.idealist-body');
+            body.trigger('dragover');
 
-            expect(label.get(0)).not.toHaveClass('is-optioned');
+            expect(view.$el.hasClass('is-dragover')).toBeTruthy();
+
+            body.trigger('dragleave');
+            expect(view.$el.hasClass('is-dragover')).toBeFalsy();
         });
 
-        it('should have the data-idealist-level the same of level attribute', function(){
-            var level = ~~view.el.getAttribute(DATA_LEVEL);
+        it('should set the state to .is-dragover-below when there is a segment over in the below area', function(){
+            app.draggedSegment = new Backbone.Model({ 'some': 'thing' });
+            var dropzone = view.$('.idealist-dropzone');
+            dropzone.trigger('dragover');
 
-            expect( level ).toBe( view.model.get('level') );
+            expect(view.$el.hasClass('is-dragover-below')).toBeTruthy();
+
+            dropzone.trigger('dragleave');
+            expect(view.$el.hasClass('is-dragover-below')).toBeFalsy();
         });
 
-        it('should be hidden if the level is bigger than 1', function(){
-            view.model.set('level', 2);
-            fixIdea.empty().append( view.render().el );
+        it('should set the app.draggedIdea when dragstart', function(){
+            view.model = new Backbone.Model({ shortTitle: 'something'});
 
-            expect( view.el ).toHaveClass('is-hidden');
+            var body = view.$('.idealist-body');
+            body.trigger('dragstart');
+
+            expect(app.draggedIdea.get('shortTitle')).toBe('something');
         });
 
-        it('should have the counter the same of the total property', function(){
-            var counter = ~~ view.$('.fixedcounter').text();
-            expect( counter ).toBe(view.model.get('total'));
-        });
+        it('should set the state to .is-dragover-above when there is an idea over the above area', function(){
+            app.draggedIdea = new Backbone.Model({ 'some': 'thing' });
+            var aboveDropZone = view.$('.idealist-abovedropzone');
+            aboveDropZone.trigger('dragover');
 
-        it('should trigger toggle method when click in the arrow', function(){
-            spyOn(IdeaView.prototype, 'toggle').andCallThrough();
-            spyOn(IdeaView.prototype, 'showItemInCascade').andCallThrough();
-            spyOn(IdeaView.prototype, 'closeItemInCascade').andCallThrough();
-            view = new IdeaView({model:view.model});
-
-            view.model.set('hasChildren', true);
-            fixIdea.empty().append( view.render().el );
-
-            var arrow = view.$('.idealist-label-arrow');
-            arrow.trigger('click');
-
-            expect(view.toggle).toHaveBeenCalled();
-            expect(view.showItemInCascade).toHaveBeenCalled();
-            expect(view.el).toHaveClass('is-open');
-
-            arrow.trigger('click');
-            expect(view.toggle.callCount).toBe(2);
-            expect(view.closeItemInCascade).toHaveBeenCalled();
-        });
-
-        it('should have the .has-options class if hasOptions is true', function(){
-            view.model.set('hasOptions', true);
-            fixIdea.empty().append( view.render().el );
-
-            expect(view.$('.idealist-label').get(0)).toHaveClass('has-options');
-        });
-
-        it('should add an idea if it is in .is-dragover-below state', function(){
-            //view.$el.addClass('is-dragover-below');
-
-            //view.add
-            // view.addSegment({ text: 'nada' });
-            // view.segment
+            expect(view.$el.hasClass('is-dragover-above')).toBeTruthy();
+            aboveDropZone.trigger('dragleave');
+            expect(view.$el.hasClass('is-dragover-above')).toBeFalsy();
         });
 
     });

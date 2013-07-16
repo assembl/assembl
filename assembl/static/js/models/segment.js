@@ -1,15 +1,64 @@
-define(['backbone', 'app'], function(Backbone, app){
+define(['backbone', 'app', 'moment', 'models/user'], function(Backbone, app, moment, User){
     'use strict';
 
     /**
      * @class SegmentModel
      */
     var SegmentModel = Backbone.Model.extend({
-        url: "/static/js/tests/fixtures/segment.json",
+
+        /**
+         * @init
+         */
+        initialize: function(){
+            var author = this.get('author');
+
+            if( !this.id ){
+                this.id = app.createUUID();
+                this.attributes.id = this.id;
+            }
+
+            if( !author ){
+                this.set( 'author', app.getCurrentUser() );
+            } else if( author.constructor !== User.Model ){
+                this.set( 'author', new User.Model(author) );
+            }
+
+            if( !this.get('creationDate') ){
+                this.set( 'creationDate', app.getCurrentTime() );
+            }
+
+            this.on('change:idIdea', this.onAttrChange, this);
+        },
+
+        /**
+         * @type {String}
+         */
+        url: "/api/segment",
+
+        /**
+         * @type {Object}
+         */
         defaults: {
             text: '',
             idPost: null,
-            date: app.getCurrentTime()
+            idIdea: null,
+            creationDate: null,
+            author: null
+        },
+
+        /**
+         * Returns a fancy date (ex: a few seconds ago) 
+         * @return {String}
+         */
+        getCreationDateFormated: function(){
+            return moment( this.get('creationDate') ).fromNow();
+        },
+
+        /**
+         * @event
+         */
+        onAttrChange: function(){
+            this.save();
         }
     });
 
@@ -17,7 +66,14 @@ define(['backbone', 'app'], function(Backbone, app){
      * @class SegmentColleciton
      */
     var SegmentCollection = Backbone.Collection.extend({
-        url: "/static/js/tests/fixtures/segments.json",
+        /**
+         * @type {String}
+         */
+        url: "/api/segments",
+
+        /**
+         * @type {IdeaModel}
+         */
         model: SegmentModel
     });
 

@@ -1,0 +1,14 @@
+pyramid
+pyramid_debugtoolbar
+pyramid_jinja2
+pyramid_tm
+alembic
+Babel
+colander
+colanderalchemy==0.2.0
+cornice
+psycopg2
+SQLAlchemy
+transaction
+waitress
+zope.sqlalchemy

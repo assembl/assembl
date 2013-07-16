@@ -1,0 +1,23 @@
+{# 
+    this is an included template.
+    the <%= segment %> variable should be given.
+#}
+
+<div class="box" draggable="true" data-segmentid="<%= segment.cid %>">
+    <span data-segmentid="<%= segment.cid %>" class="closebutton"></span>
+
+    <q><%= segment.get('text') %></q>
+
+    <div class="spacer spacer--huge"></div>
+
+    <div class="media">
+        <div class="media-imgleft">
+            <img src="<%= segment.get('author').getAvatarUrl(44) %>" class="image-rounded" alt="" />
+        </div>
+        <div class="media-body">
+            <div class="media-title"><strong><%= segment.get('author').get('name') %></strong></div>
+            {% set segmentDate = "<%= segment.getCreationDateFormated() %>" %}
+            <div>{{ gettext('Extracted %(date)s')|format(date=segmentDate)|safe }}</div>
+        </div>
+    </div>
+</div>

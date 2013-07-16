@@ -1,15 +1,13 @@
-define(['backbone', 'underscore', 'zepto', 'models/idea', 'app'],
-function(Backbone, _, $, Idea, app){
+define(['backbone', 'underscore', 'zepto', 'models/idea', 'models/segment', 'app'],
+function(Backbone, _, $, Idea, Segment, app){
     'use strict';
-
-    var DATA_LEVEL = 'data-idealist-level';
 
     var IdeaView = Backbone.View.extend({
         /**
          * Tag name
          * @type {String}
          */
-        tagName: 'li',
+        tagName: 'div',
 
         /**
          * The template
@@ -18,103 +16,88 @@ function(Backbone, _, $, Idea, app){
         template: app.loadTemplate('idea'),
 
         /**
+         * Counter used to open the idea when it is dragover
+         * @type {Number}
+         */
+        dragOverCounter: 0,
+
+        /**
+         * @init
+         */
+        initialize: function(obj){
+            if( _.isUndefined(this.model) ){
+                this.model = new Idea.Model();
+            }
+
+            this.model.on('change:shortTitle change:longTitle change:segments', this.render, this);
+            this.model.on('change:isSelected', this.onIsSelectedChange, this);
+        },
+
+        /**
          * The render
          * @return {IdeaView}
          */
         render: function(){
-            var data = this.model.toJSON();
-            this.el.setAttribute(DATA_LEVEL, data.level);
+            var data = this.model.toJSON(),
+                doc = document.createDocumentFragment();
+
             this.$el.addClass('idealist-item');
 
-            if( data.level > 1 && !data.isOpen ){
-                this.$el.addClass('is-hidden');
+            this.onIsSelectedChange();
+
+            if( data.isOpen === true ){
+                this.$el.addClass('is-open');
+            } else {
+                this.$el.removeClass('is-open');
             }
 
+            if( data.longTitle ){
+                data.longTitle = ' - ' + data.longTitle.substr(0, 50);
+            }
+
+            data.children = this.model.getChildren();
+            data.level = this.model.getLevel();
+            data.segments = this.model.getSegments();
+
             this.$el.html(this.template(data));
+            this.$('.idealist-children').append( this.getRenderedChildren(data.level) );
 
             return this;
         },
 
         /**
-         * Return an array with all children rendered
-         * @return {array}
+         * Returns all children rendered
+         * @param {Number} parentLevel 
+         * @return {Array<HTMLDivElement>}
          */
-        renderChildren: function(){
-            var ret = [],
-                children = this.model.get('children'),
-                i = 0, len = children.length;
+        getRenderedChildren: function(parentLevel){
+            var children = this.model.getChildren(),
+                ret = [];
 
             _.each(children, function(idea, i){
-                var ideaModel = ( idea.constructor !== Idea.Model ) ? new Idea.Model(idea) : idea,
-                    ideaView = new IdeaView({model:ideaModel});
+                idea.set('level', parentLevel + 1);
 
+                var ideaView = new IdeaView({model:idea});
                 ret.push( ideaView.render().el );
-                if( ideaModel.get('hasChildren') ){
-                    ret = _.union(ret, ideaView.renderChildren());
-                }
             });
 
             return ret;
         },
 
         /**
-         * add an item as child
-         * @param  {string} html
+         * Show the childen
          */
-        addChild: function(html){
-            if( !this.$el.hasClass('is-open') ){
-                this.showItemInCascade( this.$el.next(), this.model.get('level') );
-            }
-
-            var idea = new Idea.Model({
-                subject: html,
-                level: this.model.get('level') + 1
-            });
-
-            this.model.addChild(idea);
+        open: function(){
+            this.model.set('isOpen', true);
+            this.$el.addClass('is-open');
         },
 
         /**
-         * Shows an item and its descendents
-         * @param  {Zepto} item
-         * @param  {number} parentLevel
+         * Hide the childen
          */
-        showItemInCascade: function(item, parentLevel){
-            if( item.length === 0 ){
-                return;
-            }
-
-            var currentLevel = ~~item.attr(DATA_LEVEL);
-            if( currentLevel === (parentLevel+1) ){
-                item.removeClass("is-hidden");
-            }
-            this.showItemInCascade(item.next(), parentLevel);
-        },
-
-        /**
-         * Closes an item and its descendents
-         * @param  {Zepto} item
-         * @param  {number} parentLevel
-         */
-        closeItemInCascade: function (item, parentLevel){
-            if( item.length === 0 ){
-                return;
-            }
-
-            var currentLevel = ~~item.attr('data-idealist-level');
-
-            if( currentLevel > parentLevel ){
-                item.addClass("is-hidden").removeClass('is-open');
-                this.closeItemInCascade(item.next(), parentLevel);
-            }
-        },
-
-        /**
-         * Remove the states related to drag
-         */
-        clearDragStates: function(){
-            this.el.classList.remove('is-dragover');
-            this.el.classList.remove('is-dragover-below');
+        close: function(){
+            this.model.set('isOpen', false);
+            this.$el.removeClass('is-open');
         },
 
         /**
@@ -122,59 +105,167 @@ function(Backbone, _, $, Idea, app){
          * @type {Object}
          */
         events: {
-            'click [type=checkbox]': 'onCheckboxClick',
-            'swipeLeft .idealist-label': 'showOptions',
-            'swipeRight .idealist-label': 'hideOptions',
-            'click .idealist-label-arrow': 'toggle',
-            'dragleave': 'clearDragStates',
-            'dragover': 'onDragOver',
-            'drop': 'onDrop'
+            'change [type="checkbox"]': 'onCheckboxChange',
+            'click .idealist-title': 'onTitleClick',
+            'click .idealist-arrow': 'toggle',
+
+            'dragstart .idealist-body': 'onDragStart',
+            'dragend .idealist-body': 'onDragEnd',
+
+            'dragover .idealist-body': 'onDragOver',
+            'dragleave .idealist-body': 'onDragLeave',
+            'drop .idealist-body': 'onDrop'
+        },
+
+        /**
+         * @event
+         */
+        onIsSelectedChange: function(){
+            var value = this.model.get('isSelected');
+
+            if( value === true ){
+                this.$el.addClass('is-selected');
+            } else {
+                this.$el.removeClass('is-selected');
+            }
+        },
+
+        /**
+         * @event
+         */
+        onCheckboxChange: function(ev){
+            ev.stopPropagation();
+            this.model.set('inSynthesis', ev.currentTarget.checked);
+        },
+
+        /**
+         * @event
+         * Select this idea as the current idea
+         */
+        onTitleClick: function(ev){
+            ev.stopPropagation();
+            app.setCurrentIdea(this.model);
+        },
+
+        /**
+         * @event
+         */
+        onDragStart: function(ev){
+            if( ev ){
+                ev.stopPropagation();
+            }
+            ev.currentTarget.style.opacity = 0.4;
+
+            app.showDragbox(ev, this.model.get('shortTitle'));
+            app.draggedIdea = this.model;
+        },
+
+        /**
+         * @event
+         */
+        onDragEnd: function(ev){
+            ev.currentTarget.style.opacity = '';
+            app.draggedSegment = null;
         },
 
         /**
          * @event
          */
         onDragOver: function(ev){
-            ev.preventDefault();
-            this.clearDragStates();
+            if( ev ){
+                ev.preventDefault();
+                ev.stopPropagation();
+            }
 
-            var top = this.el.offsetParent.offsetTop + this.el.offsetTop,
-                below = top + 30,
-                cls = ev.clientY >= below ? 'is-dragover-below' : 'is-dragover';
+            if( this.dragOverCounter > 30 ){
+                this.model.set('isOpen', true);
+            }
 
-            this.el.classList.add( cls );
+            if( app.draggedIdea !== null ){
+
+                // Do nothing if it is the same idea
+                if( app.draggedIdea.cid === this.model.cid ){
+                    return;
+                }
+
+                // If it is a descendent, do nothing
+                if( this.model.isDescendantOf(app.draggedIdea) ){
+                    return;
+                }
+
+                if( ev.target.classList.contains('idealist-abovedropzone') ){
+                    this.$el.addClass('is-dragover-above');
+                } else if( ev.target.classList.contains('idealist-dropzone') ){
+                    this.$el.addClass('is-dragover-below');
+                } else {
+                    this.$el.addClass('is-dragover');
+                }
+            }
+
+            if( app.draggedSegment !== null ){
+                if( ev.target.classList.contains('idealist-dropzone') ){
+                    this.$el.addClass('is-dragover-below');
+                } else {
+                    this.$el.addClass('is-dragover');
+                }
+            }
+
+            this.dragOverCounter += 1;
+        },
+
+        /**
+         * @event
+         */
+        onDragLeave: function(ev){
+            this.dragOverCounter = 0;
+            this.$el.removeClass('is-dragover is-dragover-above is-dragover-below');
         },
 
         /**
          * @event
          */
         onDrop: function(ev){
-            ev.stopPropagation();
-
-            this.clearDragStates();
-            var li = app.getDraggedSegment();
-
-            if( li ){
-                this.addChild( 'oi' ); // li.innerText
+            if( ev ){
+                ev.preventDefault();
+                ev.stopPropagation();
             }
-        },
 
-        /**
-         * Shows the option of an item
-         * @event
-         * @param  {Event} ev
-         */
-        showOptions: function(ev){
-            $(ev.currentTarget).addClass('is-optioned');
-        },
+            var isDraggedBelow = this.$el.hasClass('is-dragover-below'),
+                isDraggedAbove = this.$el.hasClass('is-dragover-above');
 
-        /**
-         * Hide the options of an item
-         * @event
-         * @param  {Event} ev
-         */
-        hideOptions: function(ev){
-            $(ev.currentTarget).removeClass('is-optioned');
+            this.$('.idealist-body').trigger('dragleave');
+
+            var segment = app.getDraggedSegment();
+            if( segment ){
+                if( isDraggedBelow ){
+                    // Add as a child
+                    this.model.addSegmentAsChild(segment);
+                } else {
+                    // Add as a segment
+                    this.model.addSegment(segment);
+                }
+
+                return;
+            }
+
+            if( app.draggedIdea && app.draggedIdea.cid !== this.model.cid ){
+
+                var idea = app.getDraggedIdea();
+
+                // If it is a descendent, do nothing
+                if( this.model.isDescendantOf(idea) ){
+                    return;
+                }
+
+                if( isDraggedAbove ){
+                    this.model.addSiblingAbove(idea);
+                } else if ( isDraggedBelow ){
+                    this.model.addSiblingBelow(idea);
+                } else {
+                    this.model.addChild(idea);
+                }
+
+            }
         },
 
         /**
@@ -183,40 +274,19 @@ function(Backbone, _, $, Idea, app){
          * @param  {Event} ev
          */
         toggle: function(ev){
-            if( this.$el.hasClass('is-open') ){
-                this.model.set('isOpen', false);
-                this.$el.removeClass('is-open');
-                this.closeItemInCascade( this.$el.next(), ~~this.$el.attr(DATA_LEVEL) );
-            } else {
-                this.model.set('isOpen', true);
-                this.$el.addClass('is-open');
-                this.showItemInCascade( this.$el.next(), ~~this.$el.attr(DATA_LEVEL) );
+            if( ev ){
+                ev.preventDefault();
+                ev.stopPropagation();
             }
-        },
 
-        /**
-         * @event
-         */
-        onCheckboxClick: function(ev){
-            var chk = ev.currentTarget;
-
-            if( chk.checked ){
-                this.$el.addClass('is-selected');
+            if( this.$el.hasClass('is-open') ){
+                this.close();
             } else {
-                this.$el.removeClass('is-selected');
+                this.open();
             }
         }
-    });
 
-    /**
-     * States
-     */
-    IdeaView.prototype.states = {
-        hidden: 'is-hidden',
-        optioned: 'is-optioned',
-        selected: 'is-selected',
-        open: 'is-open'
-    };
+    });
 
     return IdeaView;
 });

@@ -1,59 +1,59 @@
-[{
-    "subject": "Les monnaies ont plusieurs rôles",
-    "level": 1,
-    "total": 2,
-    "hasChildren": true,
-    "active": false,
-    "featured": false,
-    "children": [{
-        "subject": "In principe de résclution des dettes établi de façon contractuelle au sein d'une communauté ement pour un territoire",
-        "level": 2,
-        "total": 70,
-        "hasChildren": false,
-        "active": false,
-        "featured": false
-    }, {
-        "subject": "Moyen de paiement : elles permettent de vendre avant d'achater (facilitateur d'échange : il est possible de cloneer et de recevoir de personnes différentes contrairement au troc)",
-        "level": 2,
-        "total": 70,
-        "hasChildren": false,
-        "active": false,
-        "featured": false
-    }, {
-        "subject": "Moyen de mettre en place des mécanismes financiers (Laurent point 3) : elles permettent parfois d'achater avant de vendre (réserve de valuer)",
-        "level": 2,
-        "total": 34,
-        "hasChildren": false,
-        "active": false,
-        "featured": false
-    }, {
-        "subject": "Certainer monnaies comment les monnaies nationales actualles, permettent de prêter et d'emprunter",
-        "level": 2,
-        "total": 26,
-        "hasChildren": true,
+[
+    {
+        "id": 1,
+        "shortTitle": "Les monnaies ont plusieurs rôles",
+        "total": 2,
         "active": false,
         "featured": false,
-        "children": [{
-            "subject": "exemple de la monnaie des enfants pour favoriser leur participation aux tâches ménagères (Thierry Gau)",
-            "level": 3,
-            "total": 70,
-            "hasChildren": false,
-            "active": false,
-            "featured": false
-        }, {
-            "subject": "exemple de la monnaie des enfants pour favoriser leur participation aux tâches ménagères (Thierry Gau)",
-            "level": 3,
-            "total": 70,
-            "hasChildren": false,
-            "active": false,
-            "featured": false
-        }, {
-            "subject": "à l'inverse, les monnaies foncantes ont pour objectif de ne pas permettre cette fonction (pour éviter la spéculation)",
-            "level": 3,
-            "total": 121,
-            "hasChildren": false,
-            "active": false,
-            "featured": false
-        }]
-    }]
-}]
+        "parentId": null
+    },{
+        "id": 2,
+        "shortTitle": "In principe de résclution des dettes établi de façon contractuelle au sein d'une communauté ement pour un territoire",
+        "total": 70,
+        "active": false,
+        "featured": false,
+        "parentId": 1
+    },{
+        "id": 3,
+        "shortTitle": "Moyen de paiement : elles permettent de vendre avant d'achater (facilitateur d'échange : il est possible de cloneer et de recevoir de personnes différentes contrairement au troc)",
+        "total": 70,
+        "active": false,
+        "featured": false,
+        "parentId": 1
+    },{
+        "id": 4,
+        "shortTitle": "Moyen de mettre en place des mécanismes financiers (Laurent point 3) : elles permettent parfois d'achater avant de vendre (réserve de valuer)",
+        "total": 34,
+        "active": false,
+        "featured": false,
+        "parentId": 1
+    },{
+        "id": 5,
+        "shortTitle": "Certainer monnaies comment les monnaies nationales actualles, permettent de prêter et d'emprunter",
+        "total": 26,
+        "active": false,
+        "featured": false,
+        "parentId": 4
+    },{
+        "id": 6,
+        "shortTitle": "exemple de la monnaie des enfants pour favoriser leur participation aux tâches ménagères (Thierry Gau)",
+        "total": 70,
+        "active": false,
+        "featured": true,
+        "parentId": 4
+    },{
+        "id": 7,
+        "shortTitle": "Un autre exemple de la monnaie des enfants pour favoriser leur participation aux tâches ménagères (Thierry Gau)",
+        "total": 70,
+        "active": false,
+        "featured": false,
+        "parentId": 4
+    },{
+        "id": 8,
+        "shortTitle": "à l'inverse, les monnaies foncantes ont pour objectif de ne pas permettre cette fonction (pour éviter la spéculation)",
+        "total": 121,
+        "active": false,
+        "featured": false,
+        "parentId": 4
+    }
+]

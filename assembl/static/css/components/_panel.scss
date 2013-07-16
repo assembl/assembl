@@ -1,31 +1,76 @@
-// Panel
-// ============
+// The panel
+// =========
 .panel {
-    float: left;
+    position: relative;
+
     @include box-sizing( border-box );
+    height: 100%;
 
-    width: 100%;
-    padding: $padding $padding/2;
+    border: solid 1px #e4e4e3;
+    @include border-radius( 5px );
+    background-color: #fff;
+    overflow-y: hidden;
+}
 
-    .panel-2 & {
-        width: 50%;
-    }
+// When is dragging something on
+// ****************
+.panel.is-dragover {}
 
-    .panel-3 & {
-        width: 33.3%;
-    }
+// blocked and with a loading message
+// ****************
+.panel.is-loading {
+    cursor: wait;
 
-    .panel-4 & {
-        width: 25%;
+    &:after {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        @include z-index("float");
+
+        display: block;
+        content: "";
+
+        @include border-radius( 5px );
+        background: rgba( 0, 0, 0, .15 ) url(#{$img-dir}/panel/loading.gif) no-repeat center center;
     }
 }
 
-// Panel body
-// ----------------
+// The header
+// ----------
+.panel-header {
+    @include no-selection;
+    line-height: $panel-header-height;
+    height: $panel-header-height;
+    padding: { left: $padding; right: $padding; };
+
+    background-color: $panel-header-bg-color;
+    @include border-radius( 5px 5px 0 0 );
+}
+
+// To put the content
+// -----------
 .panel-body {
-    max-height: 300px;
+    position: absolute;
+    top: $panel-header-height;
+    right: 0;
+    bottom: $panel-header-height;
+    left: 0;
     overflow-y: auto;
 
-    background-color: #fff;
-    border: solid 1px $box-border-color;
+    .panel.is-dragover & {
+        background-color: $dragbox-background-color;
+    }
+}
+
+// The footer
+// ----------
+.panel-footer {
+    @extend .panel-header;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    @include border-radius( 0 0 5px 5px );
 }

@@ -1,36 +1,30 @@
-<div class="bar bar--panel">
-    <div class="bar-left">Presse-papier (<%= segments.length %>)</div>
-    <div class="bar-right">
-        <a class="iconbutton icon-down"></a>
+<div class="panel">
+
+    <div hidden="hidden">
+        <span id="segmentList-clearConfirmationMessage">{{ gettext('Do you confirm removing all segments ?') }}</span>
     </div>
-</div>
 
-<div class="panel-body boxlist">
-    
-    <% segments.each(function(segment){ %>
-    <div class="box" draggable="true">
-        <span data-segmentid="<%= segment.cid %>"  class="closebutton">&times;</span>
+    <div class="panel-header">
+        {% set quantity = "<%= segments.length %>" %}
+        {{ gettext("Clipboard (%(quantity)s)")|format(quantity=quantity)|safe }}
 
-        <q><%= segment.get('text') %></q>
-
-        <div class="spacer spacer--huge"></div>
-
-        <div class="media">
-            <div class="media-imgleft">
-                <img src="//placehold.it/44x44" class="image-rounded" alt="" />
-            </div>
-            <div class="media-body">
-                <div class="media-title"><strong>Joey Ramone</strong></div>
-                <div>Attrapé il y a 1 jours</div>
-            </div>
+        <div class="float-right">
+            <a id="segmentList-closeButton" class="iconbutton icon-cancel"></a>
         </div>
     </div>
-    <% }); %>
 
-    <% if (segments.length === 0) { %>
-    <div class="box box--dashed box--centered margin text-muted text-big">
-        Ajouter des extraits
+    <div class="panel-body boxlist">
+        <% _.each(segments, function(segment){ %>
+            {% include "views/segment.tmpl" %}
+        <% }); %>
+
+        <div class="box box--dashed box--centered margin text-muted text-big">
+            {{ gettext("Add segments") }}
+        </div>
+
     </div>
-    <% } %>
 
+    <div class="panel-footer">
+        <a id="segmentList-clear" class="link">{{ gettext('Clear') }}</a>
+    </div>
 </div>

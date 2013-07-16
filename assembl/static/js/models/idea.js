@@ -1,31 +1,47 @@
-define(['backbone'], function(Backbone){
+define(['backbone', 'models/segment', 'app'], function(Backbone, Segment, app){
     'use strict';
 
     /**
-     * @class Idea
+     * @class IdeaModel
      */
     var IdeaModel = Backbone.Model.extend({
+        /**
+         * @init
+         */
         initialize: function(obj){
-            if( obj && _.isArray(obj.children) ){
-                _.each(obj.children, function(child, i){
-                    if( IdeaModel !== child.constructor ){
-                        obj.children[i] = new IdeaModel(child);
-                    }
-                });
+            obj = obj || {};
+
+            if( !this.id ){
+                this.id = app.createUUID();
+                this.attributes.id = this.id;
             }
+
+            obj.creationDate = obj.creationDate || app.getCurrentTime();
+            this.set('creationDate', obj.creationDate);
+
+            this.on('change:inSynthesis', this.onInSynthesisChange, this);
+            this.on('change:shortTitle change:longTitle change:parentId', this.onAttrChange, this);
         },
-        url: "/static/js/tests/fixtures/idea.json",
+
+        /**
+         * Url
+         * @type {String}
+         */
+        url: "/api/idea",
+
+        /**
+         * Defaults
+         */
         defaults: {
-            subject: '',
-            level: 1,
-            total: 1,
+            shortTitle: 'New idea',
+            longTitle: 'Please add a description',
+            total: 0,
             isOpen: false,
             hasCheckbox: true,
-            hasChildren: false,
-            hasOptions: true,
             featured: false,
             active: false,
-            children: []
+            inSynthesis: false,
+            parentId: null
         },
 
         /**
@@ -33,18 +49,150 @@ define(['backbone'], function(Backbone){
          * @param  {Idea} idea
          */
         addChild: function(idea){
-            var children = this.get('children');
-            children.push(idea);
-            this.set('children', children);
-            this.set('hasChildren', true);
+            this.collection.add(idea);
+
+            if( this.isDescendantOf(idea) ){
+                this.set('parentId', null);
+            }
+
+            idea.set('parentId', this.get('id'));
+        },
+
+        /**
+         * Adds an idea as sibling above
+         * @param {Idea} idea
+         */
+        addSiblingAbove: function(idea){
+            var parent = this.getParent(),
+                parentId = parent ? parent.get('id') : null,
+                index = this.collection.indexOf(this);
+
+            this.collection.add(idea, { at: index });
+            idea.attributes.parentId = parentId;
+            idea.trigger('change:parentId');
+        },
+
+        /**
+         * Adds an idea as sibling below
+         * @param {Idea} idea
+         */
+        addSiblingBelow: function(idea){
+            var parent = this.getParent(),
+                parentId = parent ? parent.get('id') : null,
+                index = this.collection.indexOf(this) + 1;
+
+            this.collection.add(idea, { at: index });
+            idea.attributes.parentId = parentId;
+            idea.trigger('change:parentId');
+        },
+
+        /**
+         * Return all children
+         * @return {Idea[]}
+         */
+        getChildren: function(){
+            return this.collection.where({ parentId: this.get('id') });
+        },
+
+        /**
+         * Return the parent idea
+         * @return {Idea}
+         */
+        getParent: function(){
+            return this.collection.findWhere({ id: this.get('parentId') });
+        },
+
+        /**
+         * Return if the idea is descendant of the given idea
+         * @param {Idea} idea 
+         * @return {Boolean}
+         */
+        isDescendantOf: function(idea){
+            var parentId = this.get('parentId');
+
+            if( parentId === idea.get('id') ){
+                return true;
+            }
+
+            return parentId === null ? false : this.getParent().isDescendantOf(idea);
+        },
+
+        /**
+         * @return {Number} the indentantion level
+         */
+        getLevel: function(){
+            var counter = 0,
+                parent = this;
+
+            do {
+                parent = parent.get('parentId') !== null ? parent.getParent() : null;
+                counter += 1;
+            } while ( parent !== null );
+
+            return counter;
+        },
+
+        /**
+         * @return {array<Segment>}
+         */
+        getSegments: function(){
+            return app.getSegmentsByIdea(this);
+        },
+
+        /**
+         * Adds a segment
+         * @param  {Segment} segment
+         */
+        addSegment: function(segment){
+            segment.set('idIdea', this.get('id'));
+            this.trigger("change:segments");
+        },
+
+        /**
+         * Adds a segment as a child
+         * @param {Segment} segment
+         */
+        addSegmentAsChild: function(segment){
+            var idea = new IdeaModel({
+                shortTitle: segment.get('text').substr(0, 50),
+                longTitle: segment.get('text')
+            });
+
+            this.addChild(idea);
+            segment.destroy();
+        },
+
+        /**
+         * @event
+         */
+        onInSynthesisChange: function(){
+            var value = this.get('inSynthesis');
+            this.save({ inSynthesis: value });
+        },
+
+        /**
+         * @event
+         */
+        onAttrChange: function(){
+            this.save();
         }
+
     });
 
     /**
      * @class IdeaColleciton
      */
     var IdeaCollection = Backbone.Collection.extend({
-        url: "/static/js/tests/fixtures/ideas.json",
+        /**
+         * Url
+         * @type {String}
+         */
+        url: "/api/ideas",
+
+        /**
+         * The model
+         * @type {IdeaModel}
+         */
         model: IdeaModel
     });
 

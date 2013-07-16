@@ -13,7 +13,7 @@ TEMPLATE_PATH = os.path.join(os.path.dirname(__file__), '..', '..', 'templates')
 def get_default_context():
     return {
         'STATIC_URL': '/static/',
-        'templates': get_template_views() 
+        'templates': get_template_views()
     }
 
 
