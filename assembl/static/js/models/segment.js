@@ -27,7 +27,7 @@ define(['backbone', 'app', 'moment', 'models/user'], function(Backbone, app, mom
                 this.set( 'creationDate', app.getCurrentTime() );
             }
 
-            this.on('change:idIdea')
+            this.on('change:idIdea', this.onAttrChange, this);
         },
 
         /**
@@ -52,6 +52,13 @@ define(['backbone', 'app', 'moment', 'models/user'], function(Backbone, app, mom
          */
         getCreationDateFormated: function(){
             return moment( this.get('creationDate') ).fromNow();
+        },
+
+        /**
+         * @event
+         */
+        onAttrChange: function(){
+            this.save();
         }
     });
 

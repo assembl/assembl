@@ -8,10 +8,9 @@ from assembl.views.api import FIXTURE_DIR
 # Create
 @view_config(renderer='json', route_name='create_segment', request_method='POST', http_cache=60)
 def create_segment(request):
-    # data = json.loads(request.body)
+    data = json.loads(request.body)
 
-    import time
-    return {'id': int(time.time())}
+    return data
 
 
 # Retrieve

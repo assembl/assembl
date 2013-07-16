@@ -37,7 +37,6 @@ def includeme(config):
     config.add_route('delete_segment', '/api/segment', request_method="DELETE")
 
 
-
 def api_urls(config):
     config.include(api_post_urls, route_prefix='/posts')
 

@@ -42,10 +42,9 @@ define([
     });
     app.selectionTooltip.on('click', function(){
         app.selectionTooltip.hide();
-        var text = app.selectionTooltip.attr('data-segment'),
-            segment = new Segment.Model({ text:text });
+        var text = app.selectionTooltip.attr('data-segment');
 
-        app.segmentList.segments.add(segment);
+        app.segmentList.segments.create({ text:text });
         app.openPanel(app.segmentList);
     });
 
