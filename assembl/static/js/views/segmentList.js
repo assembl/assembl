@@ -159,13 +159,15 @@ function(Backbone, _, $, app, Segment){
          * @event
          */
         onDrop: function(ev){
-            
+            if( ev ){
+                ev.preventDefault();
+                ev.stopPropagation();
+            }
 
             this.panel.trigger('dragleave');
 
             var segment = app.getDraggedSegment();
             if( segment ){
-                console.log( 'segment' );
                 this.addSegment(segment);
                 return;
             }
