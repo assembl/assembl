@@ -13,11 +13,11 @@ from sqlalchemy import (
 from sqlalchemy.orm import relationship, backref
 
 from .utils import hash_password
-from ..db.models import Model
+from ..db.models import SQLAlchemyBaseModel
 
 
 
-class OrganizationalUnit(Model):
+class OrganizationalUnit(SQLAlchemyBaseModel):
     """
     An organizational unit could be a person, group, bot or computer.
     """
@@ -79,7 +79,7 @@ class User(OrganizationalUnit):
         return "<User '%s'>" % self.username
 
 
-class RestrictedAccessModel(Model):
+class RestrictedAccessModel(SQLAlchemyBaseModel):
     """
     Represents a model with restricted access. 
     
@@ -110,7 +110,7 @@ class RestrictedAccessModel(Model):
         return "<RestrictedAccessModel '%s'>" % self.type
 
 
-class Permission(Model):
+class Permission(SQLAlchemyBaseModel):
     """
     A Permission determines the level of access that a user has to a particular
     part of the system.

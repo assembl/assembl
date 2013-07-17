@@ -13,7 +13,6 @@ from sqlalchemy import (
     desc
 )
 
-from ..db.models import Model
 from ..auth.models import RestrictedAccessModel
 
 

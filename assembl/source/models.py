@@ -17,12 +17,12 @@ from sqlalchemy import (
     desc
 )
 
-from ..db.models import Model
+from ..db.models import SQLAlchemyBaseModel
 from ..synthesis.models import TableOfContents
 
 
 
-class Source(Model):
+class Source(SQLAlchemyBaseModel):
     """
     A Discussion Source is where commentary that is handled in the form of
     Assembl posts comes from. 
@@ -59,7 +59,7 @@ class Source(Model):
         return "<Source '%s'>" % self.name
 
 
-class Content(Model):
+class Content(SQLAlchemyBaseModel):
     """
     Content is a polymorphic class to describe what is imported from a Source.
     """
@@ -257,7 +257,7 @@ class Email(Content):
         )
 
 
-class Post(Model):
+class Post(SQLAlchemyBaseModel):
     """
     A Post represents input into the broader discussion taking place on
     Assembl. It may be a response to another post, it may have responses, and
