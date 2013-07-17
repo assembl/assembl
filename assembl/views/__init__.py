@@ -17,6 +17,7 @@ def includeme(config):
 
     config.add_renderer('json', json_renderer_factory)
     config.add_route('home', '/')
+    config.add_route('login', '/login')
     config.add_route('toc', '/toc')
     config.add_route('nodetest', '/nodetest')
     config.add_route('styleguide', '/styleguide')

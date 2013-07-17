@@ -1,0 +1,45 @@
+{% extends 'base.jinja2' %}
+
+{% block header %}
+    <div class="bar bar--main">
+        <div class="bar-body">
+            <div class="bar-right">
+                <a> {{ gettext('Sing in') }} <i class="icon-user"></i> </a>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block content %}
+    
+    <div class="loginbox">
+        <img src="{{ STATIC_URL }}/img/loginbox/assembl.png" alt="Assembl" />
+
+        <div class="spacer spacer--big"></div>
+
+        <form class="form">
+            <input type="text" class="defaultfield" placeholder="{{ gettext('Login') }}" autofocus required /> 
+
+            <div class="spacer spacer--big"></div>
+
+            <input type="password" class="defaultfield" placeholder="{{ gettext('Password') }}" autofocus required />             
+            <div class="spacer spacer--huge"></div>
+
+            <input type="submit" value="{{ gettext('Enter') }}" class="barbutton" />
+
+            <div class="spacer spacer--huge"></div>
+
+            <div class="text text-small text-muted">
+                {% set caravan = gettext("<a href='http://caravan.coop' class='link'>Caravan</a>") %}
+                {% set imaginationForPeople = gettext("<a href='http://http://imaginationforpeople.org/' class='link'>Imagination for people</a>") %}
+
+                {{ gettext("Designed by %(caravan)s and %(imaginationForPeople)s")|format(caravan=caravan, imaginationForPeople=imaginationForPeople)|safe }}
+            </div>
+        </form>
+    </div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script type="text/javascript">requirejs(["main"]);</script>
+{% endblock %}

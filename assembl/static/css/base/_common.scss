@@ -4,25 +4,26 @@ html {
     background-color: #fcfbf7;
 }
 
-::selection {
-    background: $text-selection-color; /* Safari */
-}
-::-moz-selection {
-    background: $text-selection-color; /* Firefox */
+@include selection {
+    background: $text-selection-color;
 }
 
-::-webkit-scrollbar {
+@include scrollbar {
     background-color: #eeeeee;
     width:10px;
     height:10px
 }
 
-::-webkit-scrollbar-thumb {
+@include scrollbar-thumb {
     background:#c2c2c2;
     border-radius:6px;
     width:8px;
     min-height:40px;
     border:2px solid #eeeeee;
+}
+
+@include placeholder {
+    color: transparentize( $text-muted-color, 0.3 );
 }
 
 .margin { margin: $margin; }

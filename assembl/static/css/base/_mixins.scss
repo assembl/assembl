@@ -26,6 +26,30 @@
     $experimental-support-for-svg: $previous-value;
 }
 
+// Alias for ::placeholder
+@mixin placeholder {
+    ::-webkit-input-placeholder { @content; }
+    ::-moz-placeholder { @content; }
+    :-ms-input-placholder { @content; }
+}
+
+// Alias for ::selection
+@mixin selection {
+    ::selection { @content; }
+    ::-moz-selection { @content; }
+}
+
+// Alias for ::scrollbar
+@mixin scrollbar {
+    ::-webkit-scrollbar { @content; }    
+}
+
+// Alias for ::scrollbar-thumb
+@mixin scrollbar-thumb {
+    ::-webkit-scrollbar-thumb { @content; }
+}
+
+
 // prefixer for user-select
 // @param $value=text {string}
 @mixin user-select($value: text){
