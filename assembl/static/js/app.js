@@ -407,7 +407,7 @@ function($, _, ckeditor, User){
          */
         getSegmentsByIdea: function(idea){
             var id = idea.get('id');
-            return app.segmentList.segments.where({idIdea:id});
+            return app.segmentList && app.segmentList.segments ? app.segmentList.segments.where({idIdea:id}) : [];
         },
 
         /**
