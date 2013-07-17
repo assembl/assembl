@@ -7,13 +7,7 @@
 // A row within the list of ideas
 // -----------------
 .idealist-item {
-    @include clearfix();
     line-height: $idealist-item-height;
-    border-top: $idealist-border;
-
-    &:first-child {
-        border-top: 0;
-    }
 }
 
 // idea list open ( showing the children )
@@ -42,6 +36,11 @@
 // --------------
 .idealist-body {
     position: relative;
+    border-bottom: $idealist-border;
+
+    &:first-child {
+        border-top: 0;
+    }
 
     .idealist-item.is-dragover:not(.is-dragover-below) > & {
         background-color: $dragbox-background-color;
@@ -57,11 +56,12 @@
 // --------------
 .idealist-abovedropzone {
     position: absolute;
-    top: 0;
+    top: -1px;
     right: 0;
     left: 0;
 
     height: $padding-top;
+    border-top: $idealist-border;
 
     .idealist-item.is-dragover-above > .idealist-body & {
         background-color: $dragbox-background-color;
@@ -75,10 +75,11 @@
 .idealist-dropzone {
     position: absolute;
     right: 0;
-    bottom: 0;
+    bottom: -1px;
     left: 0;
 
     height: $padding-bottom;
+    border-bottom: $idealist-border;
 
     .idealist-item.is-dragover-below > .idealist-body & {
         background-color: $dragbox-background-color;
@@ -150,14 +151,12 @@
 .idealist-children {
     height: 0px;
     overflow: hidden;
-    border-top: $idealist-border;
 
     @include transition( height 0.4s );
     @include transform( translateZ(0) );
 
     .idealist-item.is-open > & {
-        border-top: $idealist-border;
-        height: auto;    
+        height: auto;
     }
 
     &:empty {

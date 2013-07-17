@@ -140,7 +140,7 @@ function(Backbone, _, $, app, Segment){
 
             var isText = false;
             if( ev.dataTransfer.types && ev.dataTransfer.types.indexOf('text/plain') > -1 ){
-                isText = true;
+                isText = app.draggedIdea ? false : true;
             }
 
             if( app.draggedSegment !== null || isText ){
@@ -165,6 +165,12 @@ function(Backbone, _, $, app, Segment){
             }
 
             this.panel.trigger('dragleave');
+
+            var idea = app.getDraggedIdea();
+            if( idea ){
+                // Do nothing
+                return;
+            }
 
             var segment = app.getDraggedSegment();
             if( segment ){
