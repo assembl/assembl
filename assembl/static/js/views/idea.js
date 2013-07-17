@@ -185,11 +185,13 @@ function(Backbone, _, $, Idea, Segment, app){
 
                 // Do nothing if it is the same idea
                 if( app.draggedIdea.cid === this.model.cid ){
+                    ev.dataTransfer.dropEffect = 'none';
                     return;
                 }
 
                 // If it is a descendent, do nothing
                 if( this.model.isDescendantOf(app.draggedIdea) ){
+                    ev.dataTransfer.dropEffect = 'none';
                     return;
                 }
 

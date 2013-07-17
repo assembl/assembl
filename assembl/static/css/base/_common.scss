@@ -41,3 +41,5 @@ html {
     &::selection { background: transparent; }
     &::-moz-selection { background: transparent; }
 }
+
+.cursor-nodrop { cursor: no-drop !important; }

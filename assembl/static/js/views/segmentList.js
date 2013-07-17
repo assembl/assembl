@@ -168,8 +168,7 @@ function(Backbone, _, $, app, Segment){
 
             var idea = app.getDraggedIdea();
             if( idea ){
-                // Do nothing
-                return;
+                return; // Do nothing
             }
 
             var segment = app.getDraggedSegment();
