@@ -25,6 +25,7 @@ $dropdown-height: 20px;
 // The option list
 // ---------------
 .dropdown-list {
+    $dropdown-time: 0.2s;
     @extend .contextmenu;
 
     top: 0;
@@ -32,11 +33,11 @@ $dropdown-height: 20px;
     @include z-index("underground");
     min-width: 155px;
 
-    @include transition( top 0.4s, opacity 0.4s, z-index 0 linear 0.4s );
+    @include transition( top $dropdown-time, opacity $dropdown-time, z-index 0 linear $dropdown-time );
     @include opacity( 0 );
 
     .dropdown:hover & {
-        @include transition( top 0.4s, opacity 0.4s, z-index 0 linear 0 );
+        @include transition( top $dropdown-time, opacity $dropdown-time, z-index 0 linear 0 );
         top: $dropdown-height + 4px;
         @include opacity( 1 );
         @include z-index("float");
