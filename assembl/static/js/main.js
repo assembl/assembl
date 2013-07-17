@@ -42,9 +42,14 @@ define([
     });
     app.selectionTooltip.on('click', function(){
         app.selectionTooltip.hide();
-        var text = app.selectionTooltip.attr('data-segment');
+        var currentUser = app.getCurrentUser(),
+            data = {
+                text: app.selectionTooltip.attr('data-segment'),
+                authorName: currentUser.get('name'),
+                avatarUrl: currentUser.get('avatarUrl')
+            };
 
-        app.segmentList.segments.create({ text:text });
+        app.segmentList.segments.create(data);
         app.openPanel(app.segmentList);
     });
 

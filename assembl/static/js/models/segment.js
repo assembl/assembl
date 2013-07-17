@@ -1,4 +1,5 @@
-define(['backbone', 'app', 'moment', 'models/user'], function(Backbone, app, moment, User){
+define(['backbone', 'app', 'moment', 'models/user'],
+function(Backbone, app, moment, User){
     'use strict';
 
     /**
@@ -10,17 +11,9 @@ define(['backbone', 'app', 'moment', 'models/user'], function(Backbone, app, mom
          * @init
          */
         initialize: function(){
-            var author = this.get('author');
-
             if( !this.id ){
                 this.id = app.createUUID();
                 this.attributes.id = this.id;
-            }
-
-            if( !author ){
-                this.set( 'author', app.getCurrentUser() );
-            } else if( author.constructor !== User.Model ){
-                this.set( 'author', new User.Model(author) );
             }
 
             if( !this.get('creationDate') ){
@@ -43,7 +36,8 @@ define(['backbone', 'app', 'moment', 'models/user'], function(Backbone, app, mom
             idPost: null,
             idIdea: null,
             creationDate: null,
-            author: null
+            authorName: null,
+            avatarUrl: null
         },
 
         /**

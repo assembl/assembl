@@ -431,6 +431,23 @@ function($, _, ckeditor, User){
         },
 
         /**
+         * @param  {String} url The avatar URL
+         * @param  {Number} [size=44] The avatar size
+         * @return {String} The avatar's url formatted with the given size
+         */
+        formatAvatarUrl: function(url, size){
+            size = size || 44;
+
+            if( !url ){
+                url = '//placehold.it/'+size+'x'+size;
+            } else {
+                url += '?s=44';
+            }
+
+            return url;
+        },
+
+        /**
          * @init
          * inits ALL app components
          */
