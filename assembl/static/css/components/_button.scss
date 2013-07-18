@@ -23,6 +23,13 @@
     color: #535353;
 }
 
+// Reduce the size of the button
+// ++++++++++++++++++++++
+.button.button--condensed {
+    padding: { right: 4px; left: 4px; }
+    line-height: 26px;
+}
+
 // Default button hover state
 // **************************
 .button:hover {

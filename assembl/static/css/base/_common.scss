@@ -35,6 +35,8 @@ html {
 .float-left { float: left; }
 .float-right { float: right; }
 
+.inline { display: inline-block; }
+
 .no-fx { @include transition( none !important ); }
 
 .user-select-none {

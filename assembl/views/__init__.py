@@ -37,6 +37,10 @@ def includeme(config):
     config.add_route('create_segment', '/api/segment', request_method="POST")
     config.add_route('delete_segment', '/api/segment', request_method="DELETE")
 
+    #  messages
+    config.add_route('get_messages', '/api/messages')
+    config.add_route('save_message', '/api/message', request_method="PUT")
+
 
 def api_urls(config):
     config.include(api_post_urls, route_prefix='/posts')

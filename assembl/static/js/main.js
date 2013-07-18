@@ -36,7 +36,7 @@ define([
 
     // Message
     app.messageList = new MessageList({el: '#messages', button: '#button-messages'}).render();
-    app.messageList.messages.fetch({reset: true});
+    app.messageList.loadData();
 
     app.on('lateralmenu.open', function(){
         app.messages.hideTooltip();
