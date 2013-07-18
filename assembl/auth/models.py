@@ -63,13 +63,13 @@ class User(OrganizationalUnit):
 
         super(User, self).__init__(**kwargs)
 
-    def set_password(password):
+    def set_password(self, password):
         self.password = hash_password(password)
 
-    def check_password(password):
+    def check_password(self, password):
         return hash_password(password) == self.password
 
-    def send_email(**kwargs):
+    def send_email(self, **kwargs):
         subject = kwargs.get('subject', '')
         body = kwargs.get('body', '')
 
