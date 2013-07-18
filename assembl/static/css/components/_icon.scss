@@ -52,6 +52,10 @@ $font-icon-dir: "#{$font-dir}/icon";
   /* text-shadow: 1px 1px 1px rgba(127, 127, 127, 0.3); */
 }
  
+.icon-up-dir:before { content: '\e813'; } /* '' */
+.icon-right-dir:before { content: '\e815'; } /* '' */
+.icon-down-dir:before { content: '\e812'; } /* '' */
+.icon-left-dir:before { content: '\e814'; } /* '' */
 .icon-edit:before { content: '\e80a'; } /* '' */
 .icon-cancel:before { content: '\e810'; } /* '' */
 .icon-star-empty:before { content: '\e80c'; } /* '' */
