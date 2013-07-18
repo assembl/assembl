@@ -87,6 +87,14 @@
 
 }
 
+// Subtitle ( which goes AFTER the title visually )
+// ----------------
+.idealist-subtitle {
+    float: right;
+    color: $text-muted-color;
+    margin: 0 $margin;
+}
+
 // The title
 // ----------
 .idealist-title {

@@ -19,6 +19,10 @@
     @include z-index("floor");
 }
 
+// Change the selected color to the muted color
+// ++++++++++++++++
+.chk.chk--muted {}
+
 // The checkbox
 // ---------------
 .chk-checkbox {
@@ -39,8 +43,8 @@
         background-color: #81d6af;
     }
 
-    .chk--idealist & {
-        
+    .chk.chk--muted .chk-checkbox:checked ~ & {
+        background-color: $text-muted-color;
     }
 }
 
