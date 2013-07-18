@@ -2,6 +2,7 @@
 // =========
 .panel {
     position: relative;
+    z-index: 10;
 
     @include box-sizing( border-box );
     height: 100%;
@@ -9,7 +10,7 @@
     border: solid 1px #e4e4e3;
     @include border-radius( 5px );
     background-color: #fff;
-    overflow-y: hidden;
+    overflow: hidden;
 }
 
 // When is dragging something on
@@ -37,6 +38,19 @@
     }
 }
 
+// Vertical divisor
+// ----------------
+.panel-divisor {
+    @include transition( transform 0.6s );
+
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    @include z-index("float");
+}
+
 // The header
 // ----------
 .panel-header {
@@ -47,6 +61,9 @@
 
     background-color: $panel-header-bg-color;
     @include border-radius( 5px 5px 0 0 );
+
+    position: relative;
+    @include z-index("float");
 }
 
 // To put the content

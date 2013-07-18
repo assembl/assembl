@@ -1,11 +1,10 @@
 <div class="panel">
 
-    <div class="panel-divisor">
+    <div id="messagelist-list" class="panel-divisor">
 
-        <div class="panel-header">
-            {% set inbox = '<%= inbox %>' %}
+        <div class="panel-header"><div class="dropdown">
+                {% set inbox = '<%= inbox %>' %}
 
-            <div class="dropdown">
                 <span class="dropdown-label">{{ gettext('Inbox (%(total)s)')|format(total=inbox)|safe }}</span>
                 <ul class="dropdown-list">
                     <li class="dropdown-listitem">{{ gettext('Inbox (%(total)s)')|format(total=inbox)|safe }}</li>
@@ -44,10 +43,23 @@
 
         </div>
 
+        <div class="panel-footer"></div>
+
     </div>
     
-    <div class="panel-divisor">
-        oi ?
+    <div id="messagelist-messages" class="panel-divisor">
+        
+        <div class="panel-header">
+            <a id="messagelist-returnButton" class="link">{{ gettext('Return') }}</a>
+        </div>
+
+        <div class="panel-body">
+            Hehey =D
+        </div>
+
+
+        <div class="panel-footer"></div>
+
     </div>
 
     {#
@@ -84,6 +96,4 @@
 
     </div>
     #}
-
-    <div class="panel-footer"></div>
 </div>

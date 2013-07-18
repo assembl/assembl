@@ -67,6 +67,11 @@
     &::selection { background-color: transparent; }
 }
 
+// Workaround to avoid the glich made by the css3
+@mixin no-glitch {
+    @include transform( translatez(0) );
+}
+
 // Adds the right z-index value second the zIndex scale
 // @param $value=text {string}
 @mixin z-index($value){

@@ -36,6 +36,7 @@ function(Backbone, _, $, app, Message){
                 this.$el.removeClass('is-open');
             }
 
+            data.id = this.model.get('id');
             data.children = this.model.getChildren();
             data.level = this.model.getLevel();
 

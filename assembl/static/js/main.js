@@ -35,7 +35,7 @@ define([
     app.segmentList.segments.on('change reset', app.ideaPanel.render, app.ideaPanel);
 
     // Message
-    app.messageList = new MessageList({el: '#messages', button: '#button-messages'}).render();
+    app.messageList = new MessageList({el: '#messagelist', button: '#button-messages'}).render();
     app.messageList.loadData();
 
     app.on('lateralmenu.open', function(){

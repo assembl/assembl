@@ -2,7 +2,8 @@ define(['backbone', 'underscore', 'zepto', 'app', 'views/messageListItem', 'mode
 function(Backbone, _, $, app, MessageListItem, Message){
     'use strict';
 
-    var MIN_TEXT_TO_TOOLTIP = 17;
+    var MIN_TEXT_TO_TOOLTIP = 17,
+        MESSAGE_MODE = 'is-message-mode';
 
     /**
      * @class views.MessageList
@@ -157,6 +158,17 @@ function(Backbone, _, $, app, MessageListItem, Message){
         },
 
         /**
+         * Open the message thread by the given id
+         * @param  {String} id
+         */
+        openMessageByid: function(id){
+            var message = this.messages.get(id);
+            if( message ){
+                this.$el.addClass(MESSAGE_MODE);
+            }
+        },
+
+        /**
          * The events
          * @type {Object}
          */
@@ -165,7 +177,9 @@ function(Backbone, _, $, app, MessageListItem, Message){
             'mousemove .message': 'doTheSelection',
             'mouseup .message': 'stopSelection',
 
+            'click .idealist-title': 'onTitleClick',
             'click #messageList-collapseButton': 'toggleMessages',
+            'click #messagelist-returnButton': 'onReturnButtonClick',
 
             'click #messageList-closeButton': 'closePanel'
         },
@@ -204,6 +218,15 @@ function(Backbone, _, $, app, MessageListItem, Message){
         },
 
         /**
+         * @event
+         */
+        onTitleClick: function(ev){
+            var id = ev.currentTarget.getAttribute('data-messageid');
+
+            this.openMessageByid(id);
+        },
+
+        /**
          * Collapse or expand the ideas
          */
         toggleMessages: function(){
@@ -212,6 +235,13 @@ function(Backbone, _, $, app, MessageListItem, Message){
             } else {
                 this.collapseMessages();
             }
+        },
+
+        /**
+         * @event
+         */
+        onReturnButtonClick: function(ev){
+            this.$el.removeClass(MESSAGE_MODE);
         }
 
     });
