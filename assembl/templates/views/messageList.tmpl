@@ -23,7 +23,14 @@
                 {{ gettext('%(start)s - %(end)s of %(total)s')|format(start=startIndex, end=endIndex, total=total)|safe }}
             </div>
 
-            <div class="button">oi ?</div>
+            <div class="button button--condensed margin-left">
+                <input type="checkbox" /> <i class="icon-down-dir"> </i>
+            </div>
+
+            <div class="buttongroup margin-left">
+                <a class="button button--condensed"> <i class="icon-left-dir"></i> </a>
+                <a class="button button--condensed"> <i class="icon-right-dir"></i> </a>
+            </div>
 
             <div class="float-right">
                 <a class="iconbutton icon-search"></a>
