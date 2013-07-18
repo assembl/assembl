@@ -18,7 +18,10 @@ function(Backbone, _, $, app, Message){
         /**
          * @init
          */
-        initialize: function(){},
+        initialize: function(){
+
+            this.model.on('change:read', this.onReadChange, this);
+        },
 
         /**
          * The render
@@ -88,6 +91,14 @@ function(Backbone, _, $, app, Message){
         events: {
             'change [type="checkbox"]': 'onCheckboxChange',
             'click .idealist-arrow': 'toggle'
+        },
+
+        /**
+         * @event
+         */
+        onReadChange: function(){
+            var method = this.model.get('read') ? 'removeClass' : 'addClass';
+            this.$('.idealist-title')[method]('text-bold');
         },
 
         /**

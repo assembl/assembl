@@ -164,6 +164,7 @@ function(Backbone, _, $, app, MessageListItem, Message){
         openMessageByid: function(id){
             var message = this.messages.get(id);
             if( message ){
+                message.set('read', true);
                 this.$el.addClass(MESSAGE_MODE);
             }
         },

@@ -63,8 +63,8 @@
 
 // Remove the selection background 
 @mixin no-selection {
-    &::-moz-selection { background-color: transparent; }
-    &::selection { background-color: transparent; }
+    &::-moz-selection { background-color: transparent !important; }
+    &::selection { background-color: transparent !important; }
 }
 
 // Workaround to avoid the glich made by the css3

@@ -53,47 +53,41 @@
             <a id="messagelist-returnButton" class="link">{{ gettext('Return') }}</a>
         </div>
 
-        <div class="panel-body">
-            Hehey =D
-        </div>
+            <div class="panel-body boxlist">
 
+                <div class="box">
+                    <div class="media">
+                        <div class="media-imgleft">
+                            <img src="//www.gravatar.com/avatar/39cbf87dae724f2cb64e92accdd4d349.jpg?s=44" alt="User"  class="image-rounded" />
+                        </div>
+                        <div class="media-body">
+                            <div class="media-title">
+                                {% set userName = "André Farzat" %}
+                                {% set time = "9, juin 2013" %}
+                                {{ gettext('<strong>%(user)s</strong> in <time>%(time)s</time>')|format(user=userName, time=time)|safe }}
+                            </div>
+                            <span>Ramones où Beatles: Qui est le meilleur ?</span>
+                        </div>
+                    </div>
+                
+                    <div class="spacer"></div>
+
+                    <div class="message">
+                        {{ lipsum(n=3, html=True) }}
+                    </div>
+
+                    <div class="spacer"></div>
+
+                    <div>
+                        <a class="iconbutton icon-heart"></a>
+                        <a class="iconbutton icon-reply"></a>
+                    </div>
+                </div>
+
+            </div>
 
         <div class="panel-footer"></div>
 
     </div>
 
-    {#
-    <div class="panel-body boxlist">
-
-        <div class="box">
-            <div class="media">
-                <div class="media-imgleft">
-                    <img src="//www.gravatar.com/avatar/39cbf87dae724f2cb64e92accdd4d349.jpg?s=44" alt="User"  class="image-rounded" />
-                </div>
-                <div class="media-body">
-                    <div class="media-title">
-                        {% set userName = "André Farzat" %}
-                        {% set time = "9, juin 2013" %}
-                        {{ gettext('<strong>%(user)s</strong> in <time>%(time)s</time>')|format(user=userName, time=time)|safe }}
-                    </div>
-                    <span>Ramones où Beatles: Qui est le meilleur ?</span>
-                </div>
-            </div>
-        
-            <div class="spacer"></div>
-
-            <div class="message">
-                {{ lipsum(n=3, html=True) }}
-            </div>
-
-            <div class="spacer"></div>
-
-            <div>
-                <a class="iconbutton icon-heart"></a>
-                <a class="iconbutton icon-reply"></a>
-            </div>
-        </div>
-
-    </div>
-    #}
 </div>
