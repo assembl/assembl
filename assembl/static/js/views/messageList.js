@@ -38,6 +38,12 @@ function(Backbone, _, $, app, MessageListItem, Message){
         data: {},
 
         /**
+         * The collapse/expand flag
+         * @type {Boolean}
+         */
+        collapsed: true,
+
+        /**
          * The collection
          * @type {MessageCollection}
          */
@@ -60,7 +66,8 @@ function(Backbone, _, $, app, MessageListItem, Message){
                 inbox: this.data.inbox,
                 total: this.data.total,
                 startIndex: this.data.startIndex,
-                endIndex: this.data.endIndex
+                endIndex: this.data.endIndex,
+                collapsed: this.collapsed
             };
 
             this.$el.html( this.template(data) );
@@ -82,6 +89,7 @@ function(Backbone, _, $, app, MessageListItem, Message){
         loadData: function(){
             var that = this;
             this.blockPanel();
+            this.collapsed = true;
 
             $.getJSON(this.messages.url, {}, function(data){
                 that.data = data;
@@ -125,6 +133,30 @@ function(Backbone, _, $, app, MessageListItem, Message){
         },
 
         /**
+         * Collapse ALL messages
+         */
+        collapseMessages: function(){
+            this.messages.each(function(message){
+                message.attributes.isOpen = false;
+            });
+
+            this.collapsed = true;
+            this.render();
+        },
+
+        /**
+         * Expand ALL messages
+         */
+        expandMessages: function(){
+            this.messages.each(function(message){
+                message.attributes.isOpen = true;
+            });
+
+            this.collapsed = false;
+            this.render();
+        },
+
+        /**
          * The events
          * @type {Object}
          */
@@ -133,7 +165,9 @@ function(Backbone, _, $, app, MessageListItem, Message){
             'mousemove .message': 'doTheSelection',
             'mouseup .message': 'stopSelection',
 
-            'click #message-closeButton': 'closePanel'
+            'click #messageList-collapseButton': 'toggleMessages',
+
+            'click #messageList-closeButton': 'closePanel'
         },
 
         /**
@@ -167,6 +201,17 @@ function(Backbone, _, $, app, MessageListItem, Message){
          */
         stopSelection: function(ev){
             this.isSelecting = false;
+        },
+
+        /**
+         * Collapse or expand the ideas
+         */
+        toggleMessages: function(){
+            if( this.collapsed ){
+                this.expandMessages();
+            } else {
+                this.collapseMessages();
+            }
         }
 
     });
