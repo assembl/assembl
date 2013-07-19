@@ -27,8 +27,12 @@
             </div>
 
             <div class="buttongroup margin-left">
-                <a class="button button--condensed"> <i class="icon-left-dir"></i> </a>
-                <a class="button button--condensed"> <i class="icon-right-dir"></i> </a>
+                <a id="messageList-prevButton" class="button button--condensed" <%= page == 1 ? 'disabled' : '' %>>
+                    <i class="icon-left-dir"></i>
+                </a>
+                <a id="messageList-nextButton" class="button button--condensed" <%= page >= maxPage ? 'disabled' : '' %>>
+                    <i class="icon-right-dir"></i>
+                </a>
             </div>
 
             <div class="float-right">

@@ -21,7 +21,7 @@ $dropdown-height: 20px;
 
     &:after {
         display: inline-block;
-        opacity: 0.2;
+        @include opacity( 0.2 );
 
         font-family: $font-icon;
         content: '\e808';
@@ -29,7 +29,7 @@ $dropdown-height: 20px;
     }
 
     .dropdown:hover &:after {
-        opacity: 1;
+        @include opacity( 1 );
     }
 }
 

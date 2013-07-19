@@ -40,6 +40,7 @@ def includeme(config):
     #  messages
     config.add_route('get_messages', '/api/messages')
     config.add_route('save_message', '/api/message', request_method="PUT")
+    config.add_route('get_inbox', '/api/message/inbox', request_method="GET")
 
 
 def api_urls(config):

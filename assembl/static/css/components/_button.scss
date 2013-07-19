@@ -38,6 +38,15 @@
     text-decoration: none;
 }
 
+// Disabled button
+// ***************
+.button[disabled],
+.button.is-disabled {
+    @include opacity( 0.5 );
+    @include box-shadow( none !important );
+    cursor: not-allowed;
+}
+
 // Default button active state
 // *******************
 .button:active {}

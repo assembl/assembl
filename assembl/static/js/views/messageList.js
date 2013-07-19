@@ -51,6 +51,12 @@ function(Backbone, _, $, app, MessageListItem, Message){
         messages: new Message.Collection(),
 
         /**
+         * The current message thread
+         * @type {MessageCollection}
+         */
+        messageThread: new Message.Collection(),
+
+        /**
          * The render function
          * @return {views.Message}
          */
@@ -64,6 +70,8 @@ function(Backbone, _, $, app, MessageListItem, Message){
             });
 
             var data = {
+                page: this.data.page,
+                maxPage: this.data.maxPage,
                 inbox: this.data.inbox,
                 total: this.data.total,
                 startIndex: this.data.startIndex,
@@ -88,14 +96,50 @@ function(Backbone, _, $, app, MessageListItem, Message){
          * Load the data
          */
         loadData: function(){
-            var that = this;
+            var that = this,
+                data = { 'page': this.data.page };
+
             this.blockPanel();
             this.collapsed = true;
 
-            $.getJSON(this.messages.url, {}, function(data){
+            $.getJSON('/api/message/inbox', data, function(data){
                 that.data = data;
                 that.messages.reset(data.messages);
             });
+        },
+
+        /**
+         * Load the next data
+         */
+        loadNextData: function(){
+            if( _.isNumber(this.data.page) ){
+                this.data.page += 1;
+            } else {
+                this.data.page = 1;
+            }
+
+            if( this.data.page > this.data.maxPage ){
+                this.data.page = this.data.maxPage;
+            } else {
+                this.loadData();
+            }
+        },
+
+        /**
+         * Load the previous data
+         */
+        loadPreviousData: function(){
+            if( _.isNumber(this.data.page) ){
+                this.data.page -= 1;
+            } else {
+                this.data.page = 1;
+            }
+
+            if( this.data.page < 1 ){
+                this.data.page = 1;
+            } else {
+                this.loadData();
+            }
         },
 
         /**
@@ -181,6 +225,9 @@ function(Backbone, _, $, app, MessageListItem, Message){
             'click .idealist-title': 'onTitleClick',
             'click #messageList-collapseButton': 'toggleMessages',
             'click #messagelist-returnButton': 'onReturnButtonClick',
+
+            'click #messageList-prevButton': 'loadPreviousData',
+            'click #messageList-nextButton': 'loadNextData',
 
             'click #messageList-closeButton': 'closePanel'
         },
