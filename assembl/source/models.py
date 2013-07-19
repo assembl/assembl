@@ -292,8 +292,7 @@ class Post(SQLAlchemyBaseModel):
     parent_id = Column(Integer, ForeignKey('post.id'))
     children = relationship(
         "Post",
-        backref=backref('parent'),
-        remote_side=[id],
+        backref=backref('parent', remote_side=[id]),
         order_by=desc(creation_date)
     )
 
