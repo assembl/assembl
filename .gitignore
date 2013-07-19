@@ -23,6 +23,7 @@
 # local
 /local.ini
 /local.cfg
+/assembl.db
 
 # app
 /data/*
