@@ -18,12 +18,12 @@ def main(global_config, **settings):
     config = Configurator(settings=settings)
     config.add_static_view('static', 'static', cache_max_age=3600)
     config.include('cornice')  # REST services library.
-    config.include('.lib.alembic')
-    config.include('.lib.email')
-    config.include('.views')
+    # config.include('.lib.alembic')
+    # config.include('.lib.email')
+    # config.include('.views')
 
-    config.scan('.lib')
-    config.scan('.views')
+    # config.scan('.lib')
+    # config.scan('.views')
 
     # jinja2
     config.include('pyramid_jinja2')
