@@ -3,17 +3,17 @@
 #messagelist.is-message-mode {}
 
 #messagelist-list {
-    @include transform( translatex(0%) );
+    display: block;
 
     #messagelist.is-message-mode & {
-        @include transform( translatex(-100%) );        
+        display: none;
     }
 }
 
 #messagelist-messages {
-    @include transform( translatex(100%) );
+    display: none;
 
     #messagelist.is-message-mode & {
-        @include transform( translatex(0%) );        
+        display: block;
     }
 }

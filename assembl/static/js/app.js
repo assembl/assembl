@@ -454,6 +454,14 @@ function($, _, ckeditor, User){
         init: function(){
             app.body.removeClass('preload');
             app.createSelectionTooltip();
+
+            app.doc.on('click', '.dropdown-label', function(ev){
+                var dropdown = $(ev.currentTarget.parentNode);
+                dropdown.addClass('is-open');
+                dropdown.one('mouseleave', function(){
+                    dropdown.removeClass('is-open');
+                });
+            });
         }
     };
 

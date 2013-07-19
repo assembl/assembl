@@ -40,16 +40,7 @@
 
 // Vertical divisor
 // ----------------
-.panel-divisor {
-    @include transition( transform 0.6s );
-
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    @include z-index("float");
-}
+.panel-divisor {}
 
 // The header
 // ----------
