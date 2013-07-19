@@ -17,6 +17,7 @@ from sqlalchemy import (
     desc
 )
 
+from ..db import DBSession
 from ..db.models import SQLAlchemyBaseModel
 from ..synthesis.models import TableOfContents
 
@@ -83,7 +84,8 @@ class Content(SQLAlchemyBaseModel):
         'polymorphic_on': 'type'
     }
 
-    def make_post(self):
+    def __init__(self, *args, **kwargs):
+        super(Content, self).__init__(*args, **kwargs)
         self.post = self.post or Post(content=self)
 
     def __repr__(self):
@@ -239,16 +241,35 @@ class Email(Content):
         'polymorphic_identity': 'email',
     }
 
-    def make_post(self):
-        super(Email, self).make_post()
+    def __init__(self, *args, **kwargs):
+        super(Email, self).__init__(*args, **kwargs)
+        self.associate_family()
+
+    def associate_family(self):
+        if self not in DBSession:
+            DBSession.add(self)
 
         # if there is an email.in_reply_to, search posts with content.type
         # == email and email.message_id == email.in_reply_to, then set that
         # email's post's id as the parent of this new post.
 
+        if self.in_reply_to:
+            parent_email = DBSession.query(Email).filter_by(
+                message_id=self.in_reply_to,
+            ).first()
+
+            if parent_email: self.post.parent = parent_email.post
+
         # search for emails where the in_reply_to is the same as the
         # message_id for this email, then set their post's parent to the
         # id of this new post.
+
+        child_emails = DBSession.query(Email).filter_by(
+            in_reply_to=self.message_id
+        ).all()
+
+        for child_email in child_emails:
+            child_email.post.parent = self.post
 
     def __repr__(self):
         return "<Email '%s to %s'>" % (
