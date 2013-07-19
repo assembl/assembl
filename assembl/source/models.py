@@ -117,7 +117,7 @@ class Mailbox(Source):
         'polymorphic_identity': 'mailbox',
     }
 
-    def import_content(self, only_new=False):
+    def import_content(self, only_new=True):
         if self.use_ssl:
             mailbox = IMAP4_SSL(host=self.host, port=self.port)
         else:
