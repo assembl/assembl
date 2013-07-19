@@ -447,6 +447,26 @@ function($, _, ckeditor, User){
             return url;
         },
 
+
+        /**
+         * @event
+         */
+        onDropdownClick: function(ev){
+            var dropdown = $(ev.target);
+
+            if( !dropdown.hasClass("dropdown-label") ){
+                return;
+            }
+
+            var parent = dropdown.parent();
+
+            parent
+                .addClass('is-open')
+                .one('mouseleave', function(){
+                    parent.removeClass('is-open');
+                });
+        },
+
         /**
          * @event
          */
@@ -464,14 +484,7 @@ function($, _, ckeditor, User){
             app.body.removeClass('preload');
             app.createSelectionTooltip();
 
-            app.doc.on('click', '.dropdown-label', function(ev){
-                var dropdown = $(ev.currentTarget.parentNode);
-                dropdown.addClass('is-open');
-                dropdown.one('mouseleave', function(){
-                    dropdown.removeClass('is-open');
-                });
-            });
-
+            app.doc.on('click', '.dropdown-label', app.onDropdownClick);
             app.doc.on('ajaxError', app.onAjaxError);
         }
     };

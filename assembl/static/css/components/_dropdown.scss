@@ -13,6 +13,10 @@ $dropdown-height: 20px;
     border: solid 1px transparent;
 }
 
+// Change the appearacen to a button
+// ++++++++++++++++++++++
+.dropdown.dropdown--button {}
+
 .dropdown.is-open {}
 
 .dropdown-label {
@@ -31,12 +35,23 @@ $dropdown-height: 20px;
     .dropdown:hover &:after {
         @include opacity( 1 );
     }
+
+    .dropdown--button & {
+        @extend .button, .button.button--condensed;
+
+        &:after {
+            font-family: $font-icon;
+            content: '\e812';
+            margin-left: 5px;
+        }
+
+    }
 }
 
 // The option list
 // ---------------
 .dropdown-list {
-    $dropdown-time: 0.2s;
+    $dropdown-time: 0.4s;
     @extend .contextmenu;
 
     position: absolute;
@@ -54,6 +69,11 @@ $dropdown-height: 20px;
         top: $dropdown-height + 4px;
         @include opacity( 1 );
         left: 0;
+    }
+
+    .dropdown--button.is-open & {
+        top: $button-condensed-height + 4px;
+        left: 5px;
     }
 }
 

@@ -228,6 +228,7 @@ function(Backbone, _, $, app, MessageListItem, Message){
 
             'click #messageList-prevButton': 'loadPreviousData',
             'click #messageList-nextButton': 'loadNextData',
+            'change #messagelist-mainchk': 'onChangeMainCheckbox',
 
             'click #messageList-closeButton': 'closePanel'
         },
@@ -290,6 +291,17 @@ function(Backbone, _, $, app, MessageListItem, Message){
          */
         onReturnButtonClick: function(ev){
             this.$el.removeClass(MESSAGE_MODE);
+        },
+
+        /**
+         * @event
+         */
+        onChangeMainCheckbox: function(ev){
+            var checked = ev.currentTarget.checked;
+
+            this.messages.each(function(message){
+                message.set('checked', checked);
+            });
         }
 
     });

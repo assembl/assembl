@@ -26,3 +26,12 @@
     </script>
 
 {% endblock %}
+
+
+{% block extra_js %}
+    <script type="text/javascript">
+        require(["app"], function(app){
+            app.init();
+        });
+    </script>
+{% endblock %}

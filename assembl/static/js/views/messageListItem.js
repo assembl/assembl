@@ -21,6 +21,7 @@ function(Backbone, _, $, app, Message){
         initialize: function(){
 
             this.model.on('change:read', this.onReadChange, this);
+            this.model.on('change:checked', this.onCheckedChange, this);
         },
 
         /**
@@ -107,6 +108,14 @@ function(Backbone, _, $, app, Message){
         onCheckboxChange: function(ev){
             ev.stopPropagation();
             this.model.set('inSynthesis', ev.currentTarget.checked);
+        },
+
+        /**
+         * @event
+         */
+        onCheckedChange: function(ev){
+            var checked = this.model.get('checked');
+            this.$('.chk-checkbox').get(0).checked = checked;
         },
 
         /**

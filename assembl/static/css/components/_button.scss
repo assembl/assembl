@@ -14,7 +14,7 @@
 
     padding: { right: 6px; left: 6px; }
     @include box-sizing( border-box );
-    line-height: $icon-height + 4px;
+    line-height: $button-height;
 
     @include border-radius($button-border-radius);
     border: solid 1px #dadad9;
@@ -28,7 +28,7 @@
 // ++++++++++++++++++++++
 .button.button--condensed {
     padding: { right: 4px; left: 4px; }
-    line-height: 26px;
+    line-height: $button-condensed-height;
 }
 
 // Default button hover state
