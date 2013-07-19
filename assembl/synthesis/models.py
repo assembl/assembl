@@ -13,11 +13,46 @@ from sqlalchemy import (
     desc
 )
 
+from ..db.models import SQLAlchemyBaseModel
 from ..auth.models import RestrictedAccessModel
 
 
 
-class TableOfContents(RestrictedAccessModel):
+class Discussion(RestrictedAccessModel):
+    """
+    A Discussion
+    """
+    __tablename__ = "discussion"
+
+    id = Column(
+        Integer, 
+        ForeignKey('restricted_access_model.id', ondelete='CASCADE'),
+        primary_key=True
+    )
+
+    topic = Column(Unicode(255), nullable=False)
+
+    creation_date = Column(DateTime, nullable=False, default=datetime.utcnow)
+
+    table_of_contents = relationship(
+        'TableOfContents', 
+        uselist=False,
+        backref='discussion'
+    )
+    
+    __mapper_args__ = {
+        'polymorphic_identity': 'discussion',
+    }
+
+    def __init__(self, *args, **kwargs):
+        super(Discussion, self).__init__(*args, **kwargs)
+        self.table_of_contents = TableOfContents(discussion=self)
+
+    def __repr__(self):
+        return "<Discussion '%s'>" % self.topic
+
+
+class TableOfContents(SQLAlchemyBaseModel):
     """
     Represents a Table of Contents.
 
@@ -26,19 +61,13 @@ class TableOfContents(RestrictedAccessModel):
     """
     __tablename__ = "table_of_contents"
 
-    id = Column(
-        Integer, 
-        ForeignKey('restricted_access_model.id', ondelete='CASCADE'),
-        primary_key=True
-    )
-
-    topic = Column(Unicode(115), nullable=False)
-
+    id = Column(Integer, primary_key=True)
     creation_date = Column(DateTime, nullable=False, default=datetime.utcnow)
 
-    __mapper_args__ = {
-        'polymorphic_identity': 'table_of_contents',
-    }
+    discussion_id = Column(
+        Integer,
+        ForeignKey('discussion.id')
+    )
 
     def __repr__(self):
-        return "<TableOfContents '%s'>" % self.topic
+        return "<TableOfContents '%s'>" % self.discussion.topic

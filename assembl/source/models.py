@@ -41,13 +41,13 @@ class Source(SQLAlchemyBaseModel):
     creation_date = Column(DateTime, nullable=False, default=datetime.utcnow)
     last_import = Column(DateTime)
 
-    table_of_contents_id = Column(Integer, ForeignKey(
-        'table_of_contents.id', 
+    discussion_id = Column(Integer, ForeignKey(
+        'discussion.id', 
         ondelete='CASCADE'
     ))
 
-    table_of_contents = relationship(
-        "TableOfContents", 
+    discussion = relationship(
+        "Discussion", 
         backref=backref('sources', order_by=creation_date)
     )
 
