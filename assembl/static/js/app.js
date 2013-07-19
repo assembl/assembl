@@ -458,13 +458,21 @@ function($, _, ckeditor, User){
                 return;
             }
 
-            var parent = dropdown.parent();
+            var parent = dropdown.parent(),
+                onMouseleave = function(){
+                    parent
+                        .removeClass('is-open')
+                        .off('mouseleave', onMouseleave);
+                };
+
+            if( parent.hasClass('is-open') ){
+                onMouseleave();
+                return;
+            }
 
             parent
                 .addClass('is-open')
-                .one('mouseleave', function(){
-                    parent.removeClass('is-open');
-                });
+                .on('mouseleave', onMouseleave);
         },
 
         /**

@@ -82,6 +82,8 @@ function(Backbone, _, $, app, MessageListItem, Message){
             this.$el.html( this.template(data) );
             this.$('.idealist').append( list );
 
+            this.chk = this.$('#messagelist-mainchk');
+
             return this;
         },
 
@@ -228,7 +230,12 @@ function(Backbone, _, $, app, MessageListItem, Message){
 
             'click #messageList-prevButton': 'loadPreviousData',
             'click #messageList-nextButton': 'loadNextData',
+
             'change #messagelist-mainchk': 'onChangeMainCheckbox',
+            'click #messagelist-selectall': 'selectAll',
+            'click #messagelist-selectnone': 'selectNone',
+            'click #messagelist-selectread': 'selectRead',
+            'click #messagelist-selectunread': 'selectUnread',
 
             'click #messageList-closeButton': 'closePanel'
         },
@@ -296,11 +303,48 @@ function(Backbone, _, $, app, MessageListItem, Message){
         /**
          * @event
          */
-        onChangeMainCheckbox: function(ev){
-            var checked = ev.currentTarget.checked;
+        onChangeMainCheckbox: function(){
+            var checked = this.chk.get(0).checked;
 
             this.messages.each(function(message){
                 message.set('checked', checked);
+            });
+        },
+
+
+        /**
+         * @event
+         */
+        selectAll: function(){
+            this.chk.get(0).checked = true;
+            this.onChangeMainCheckbox();
+        },
+
+        /**
+         * @event
+         */
+        selectNone: function(){
+            this.chk.get(0).checked = false;
+            this.onChangeMainCheckbox();
+        },
+
+        /**
+         * @event
+         */
+        selectRead: function(){
+            this.messages.each(function(message){
+                var isRead = message.get('read');
+                message.set('checked', isRead);
+            });
+        },
+
+        /**
+         * @event
+         */
+        selectUnread: function(){
+            this.messages.each(function(message){
+                var isUnread = !message.get('read');
+                message.set('checked', isUnread);
             });
         }
 

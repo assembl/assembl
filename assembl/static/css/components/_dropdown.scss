@@ -39,6 +39,8 @@ $dropdown-height: 20px;
     .dropdown--button & {
         @extend .button, .button.button--condensed;
 
+        padding: { right: 8px; left: 4px; }
+
         &:after {
             font-family: $font-icon;
             content: '\e812';

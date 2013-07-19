@@ -22,8 +22,16 @@
                 {{ gettext('%(start)s - %(end)s of %(total)s')|format(start=startIndex, end=endIndex, total=total)|safe }}
             </div>
 
-            <div class="button button--condensed margin-left">
-                <input id="messagelist-mainchk" type="checkbox" /> <i class="icon-down-dir"> </i>
+            <div class="dropdown dropdown--button">
+                <span class="dropdown-label">
+                    <input id="messagelist-mainchk" type="checkbox" />
+                </span>
+                <ul class="dropdown-list">
+                    <li id="messagelist-selectall" class="dropdown-listitem">{{ gettext('All') }}</li>
+                    <li id="messagelist-selectnone" class="dropdown-listitem">{{ gettext('None') }}</li>
+                    <li id="messagelist-selectread" class="dropdown-listitem">{{ gettext('Read') }}</li>
+                    <li id="messagelist-selectunread" class="dropdown-listitem">{{ gettext('Unread') }}</li>
+                </ul>
             </div>
 
             <div class="buttongroup margin-left">
