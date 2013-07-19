@@ -448,6 +448,15 @@ function($, _, ckeditor, User){
         },
 
         /**
+         * @event
+         */
+        onAjaxError: function(){
+            var message = $('#ajaxerror-message').text();
+            alert( message );
+            window.location.reload();
+        },
+
+        /**
          * @init
          * inits ALL app components
          */
@@ -462,6 +471,8 @@ function($, _, ckeditor, User){
                     dropdown.removeClass('is-open');
                 });
             });
+
+            app.doc.on('ajaxError', app.onAjaxError);
         }
     };
 

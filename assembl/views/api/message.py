@@ -31,6 +31,9 @@ def get_inbox(request):
     if data["page"] == data["maxPage"]:
         data["endIndex"] = data["total"]
 
+    from time import sleep
+    sleep(1)
+
     return data
 
 
