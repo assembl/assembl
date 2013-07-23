@@ -259,7 +259,8 @@ class Email(Content):
                 message_id=self.in_reply_to,
             ).first()
 
-            if parent_email: self.post.parent = parent_email.post
+            if parent_email: 
+                self.post.set_parent(parent_email.post)
 
         # search for emails where the in_reply_to is the same as the
         # message_id for this email, then set their post's parent to the
@@ -270,7 +271,7 @@ class Email(Content):
         ).all()
 
         for child_email in child_emails:
-            child_email.post.parent = self.post
+            child_email.post.set_parent(self.post)
 
     def __repr__(self):
         return "<Email '%s to %s'>" % (
