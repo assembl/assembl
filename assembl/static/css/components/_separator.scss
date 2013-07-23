@@ -5,6 +5,8 @@
 // Default spacer
 // ==============
 .spacer {
+    @include clearfix();
+
     display: block;
     line-height: $margin;
     height: $margin;

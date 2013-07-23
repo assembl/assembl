@@ -17,7 +17,7 @@
     <div class="idealist-counter"><%= total %></div>
     <div class="idealist-title">
         <%= shortTitle %> (<%= segments.length %>)
-        <small class="idealist-longtitle text-small text-muted"><%= longTitle.replace(/(<([^>]+)>)/ig,"") %></small>
+        <small class="idealist-longtitle text-small text-muted"><%= app.stripHtml(longTitle) %></small>
     </div>
 
     <div class="idealist-abovedropzone"></div>

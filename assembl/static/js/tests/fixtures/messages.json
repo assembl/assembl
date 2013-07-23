@@ -2,6 +2,7 @@
     {
         "id": 1,
         "checked": false,
+        "collapsed": true,
         "read": true,
         "parentId": null,
         "subject": "Is it 1955?",
@@ -19,5 +20,15 @@
         "authorName": "Dr. Brown",
         "avatarUrl": null,
         "date": 1374089266638
+    }, {
+        "id": 3,
+        "checked": false,
+        "read": false,
+        "parentId": 1,
+        "subject": "Les monnais complémentaires",
+        "body": "<p>Bon jour</p> <p>Pour une (modeste) contribution, on pourrait distinguer les monnais de récompense classiques des monnaies traçant une réputation, par exemple :</p> <p> - Si j'adopte des comportements verts, j'accumulerais de points, ce qui me donnera droit à des cadeaux (ou à des avantages sur un site, ou autre)</p> <p>versus</p> <p>Ce sont 2 systèmes très proches, mais il me semble que le 2ème est prometteur et ouvre des possibles alors que le premier, plus connu, a bien des effets pervers qui ont été relevés dans les messages précédents.</p><p>Avez-vous des idées / suggestions / expériences concrètes par rapport à ça ? Merci</p> </p>Bénigne</p>",
+        "authorName": "Html email",
+        "avatarUrl": null,
+        "date": 1374606217068
     }
 ]

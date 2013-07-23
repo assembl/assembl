@@ -449,6 +449,14 @@ function($, _, ckeditor, User){
 
 
         /**
+         * @param  {String} html
+         * @return {String} The new string without html tags
+         */
+        stripHtml: function(html){
+            return html.replace(/(<([^>]+)>)/ig,"");
+        },
+
+        /**
          * @event
          */
         onDropdownClick: function(ev){

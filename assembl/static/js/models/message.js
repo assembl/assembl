@@ -6,6 +6,13 @@ define(['backbone', 'zepto', 'app'], function(Backbone, $, app){
      */
     var MessageModel = Backbone.Model.extend({
         /**
+         * @init
+         */
+        initialize: function(){
+            this.on('change:read', this.onAttrChange, this);
+        },
+
+        /**
          * The url
          * @type {String}
          */
@@ -16,6 +23,7 @@ define(['backbone', 'zepto', 'app'], function(Backbone, $, app){
          * @type {Object}
          */
         defaults: {
+            collapsed: false,
             checked: false,
             read: true,
             parentId: null,
@@ -55,6 +63,13 @@ define(['backbone', 'zepto', 'app'], function(Backbone, $, app){
             } while ( parent !== null );
 
             return counter;
+        },
+
+        /**
+         * @event
+         */
+        onAttrChange: function(){
+            this.save();
         }
     });
 

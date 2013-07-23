@@ -1,5 +1,5 @@
-define(['backbone', 'underscore', 'zepto', 'app', 'views/messageListItem', 'models/message'],
-function(Backbone, _, $, app, MessageListItem, Message){
+define(['backbone', 'underscore', 'zepto', 'app', 'views/messageListItem', 'views/message', 'models/message'],
+function(Backbone, _, $, app, MessageListItem, MessageView, Message){
     'use strict';
 
     var MIN_TEXT_TO_TOOLTIP = 17,
@@ -18,10 +18,11 @@ function(Backbone, _, $, app, MessageListItem, Message){
             }
 
             this.messages.on('reset', this.render, this);
+            this.messageThread.on('reset', this.renderThread, this);
         },
 
         /**
-         * Flag wether it is being selected or not
+         * Flag whether it is being selected or not
          * @type {Boolean}
          */
         isSelecting: false,
@@ -83,8 +84,23 @@ function(Backbone, _, $, app, MessageListItem, Message){
             this.$('.idealist').append( list );
 
             this.chk = this.$('#messagelist-mainchk');
+            this.renderThread();
 
             return this;
+        },
+
+        /**
+         * Render the thread section
+         */
+        renderThread: function(){
+            var list = document.createDocumentFragment();
+
+            this.messageThread.each(function(message){
+                var messageView = new MessageView({model:message});
+                list.appendChild(messageView.render().el);
+            });
+
+            this.$('#messagelist-thread').empty().append(list);
         },
 
         /**
@@ -92,6 +108,13 @@ function(Backbone, _, $, app, MessageListItem, Message){
          */
         blockPanel: function(){
             this.$('.panel').addClass('is-loading');
+        },
+
+        /**
+         * Unblocks the panel
+         */
+        unblockPanel: function(){
+            this.$('.panel').removeClass('is-loading');
         },
 
         /**
@@ -209,10 +232,26 @@ function(Backbone, _, $, app, MessageListItem, Message){
          */
         openMessageByid: function(id){
             var message = this.messages.get(id);
+
             if( message ){
                 message.set('read', true);
-                this.$el.addClass(MESSAGE_MODE);
+                this.loadThreadById(id);
             }
+        },
+
+        /**
+         * Loads the message thread by id
+         * @param {Number} id
+         */
+        loadThreadById: function(id){
+            var that = this;
+
+            this.blockPanel();
+            $.getJSON('/api/messages', {'id': id}, function(json){
+                that.unblockPanel();
+                that.$el.addClass(MESSAGE_MODE);
+                that.messageThread.reset(json);
+            });
         },
 
         /**

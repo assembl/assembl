@@ -1,0 +1,46 @@
+<% if( collapsed ){ %>
+
+<div class="message-header">
+    <div class="float-left">
+        <a class="iconbutton icon-right-dir"> </a>
+        <img src="<%= app.formatAvatarUrl(avatarUrl, 32) %>" alt="{{ gettext('User') }}"  class="image-rounded" />
+    </div>
+
+    <div class="message-date"><%= date %></div>
+    <div class="message-title">
+        <span class="text-bold inline margin-right"><%= authorName %></span>
+        <span class="inline margin-right"><%= subject %></span>
+        <span class="text-muted inline"><%= app.stripHtml(body) %></span>
+    </div>
+</div>
+
+<% } else { %>
+
+<div>
+    <div class="media">
+    <div class="media-imgleft">
+            <a class="iconbutton icon-down-dir"> </a>
+            <img src="<%= app.formatAvatarUrl(avatarUrl) %>" alt="{{ gettext('User') }}"  class="image-rounded" />
+        </div>
+        <div class="media-body">
+            <div class="media-title">
+                {% set userName = "<%= authorName %>" %}
+                {% set time = "<%= date %>" %}
+                {{ gettext('<strong>%(user)s</strong> | <time>%(time)s</time>')|format(user=userName, time=time)|safe }}
+            </div>
+            <div><%= subject %></div>
+        </div>
+    </div>
+
+    <div class="spacer"></div>
+    <div class="spacer"></div>
+
+    <div class="message">
+        <%= body %>
+    </div>
+</div>
+
+<% } %>
+{#
+read: true,
+#}
