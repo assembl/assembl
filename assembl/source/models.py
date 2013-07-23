@@ -201,7 +201,7 @@ class Mailbox(Source):
             return new_email
 
         if len(email_ids):
-            new_emails = map(import_email, email_ids)
+            new_emails = [import_email(email_id) for email_id in email_ids]
 
             self.last_imported_email_uid = \
                 email_ids[len(email_ids)-1]
