@@ -69,6 +69,7 @@ class Content(SQLAlchemyBaseModel):
 
     id = Column(Integer, primary_key=True)
     type = Column(String(60), nullable=False)
+    creation_date = Column(DateTime, nullable=False, default=datetime.utcnow)
     
     import_date = Column(DateTime, default=datetime.utcnow)
 
@@ -185,7 +186,7 @@ class Mailbox(Source):
                 to_address=email_header_to_unicode(parsed_email['To']),
                 from_address=email_header_to_unicode(parsed_email['From']),
                 subject=email_header_to_unicode(parsed_email['Subject']),
-                send_date=datetime.utcfromtimestamp(
+                creation_date=datetime.utcfromtimestamp(
                     mktime(
                         email.utils.parsedate(
                             parsed_email['Date']
@@ -235,7 +236,6 @@ class Email(Content):
     message_id = Column(Unicode(255))
     in_reply_to = Column(Unicode(255))
 
-    send_date = Column(DateTime, nullable=False)
     import_date = Column(DateTime, nullable=False, default=datetime.utcnow)
 
     __mapper_args__ = {
