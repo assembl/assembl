@@ -290,6 +290,7 @@ class Post(SQLAlchemyBaseModel):
 
     id = Column(Integer, primary_key=True)
     creation_date = Column(DateTime, nullable=False, default=datetime.utcnow)
+    is_seen = Column(Boolean, nullable=False, default=False)
 
     ancestry = Column(Text)
     parent_id = Column(Integer, ForeignKey('post.id'))
