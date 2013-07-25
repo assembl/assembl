@@ -42,6 +42,9 @@ def includeme(config):
     config.add_route('save_message', '/api/message', request_method="PUT")
     config.add_route('get_inbox', '/api/message/inbox', request_method="GET")
 
+    #  authentication
+    config.include('.auth')
+
 
 def api_urls(config):
     config.include(api_post_urls, route_prefix='/posts')

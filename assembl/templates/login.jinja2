@@ -10,31 +10,62 @@
     </div>
 {% endblock %}
 
+{% macro form(name, title) %}
+{% if name in providers %}
+<form id="{{name}}" method="post" action="/login/{{name}}">
+    {% for k,v in kwargs.items() %}
+    <input type="hidden" name="{{ k }}" value="{{ v }}" />
+    {% endfor %}
+    {% if name == "openid" %}
+    <input type="text" name="openid_identifier" />
+    {% endif %}
+    <input type="submit" value="{{ gettext(title) }}" />
+</form>
+{% endif %}
+{% endmacro %}
+
 {% block content %}
-    
+
     <div class="loginbox">
         <img src="{{ STATIC_URL }}/img/loginbox/assembl.png" alt="Assembl" />
 
         <div class="spacer spacer--big"></div>
 
         <form class="form">
-            <input type="text" class="defaultfield" placeholder="{{ gettext('Login') }}" autofocus required /> 
+            <input type="text" class="defaultfield" placeholder="{{ gettext('Login') }}" autofocus required />
 
             <div class="spacer spacer--big"></div>
 
-            <input type="password" class="defaultfield" placeholder="{{ gettext('Password') }}" autofocus required />             
+            <input type="password" class="defaultfield" placeholder="{{ gettext('Password') }}" autofocus required />
             <div class="spacer spacer--huge"></div>
 
             <input type="submit" value="{{ gettext('Enter') }}" class="barbutton" />
 
-            <div class="spacer spacer--huge"></div>
+            <div class="spacer"></div>
+        </form>
 
-            <div class="text text-small text-muted">
-                {% set caravan = gettext("<a href='http://caravan.coop' class='link'>Caravan</a>") %}
-                {% set imaginationForPeople = gettext("<a href='http://http://imaginationforpeople.org/' class='link'>Imagination for people</a>") %}
+        {% if providers %}
+        <p>{{ gettext("Login with external tools")|safe }}</p>
+        {% endif %}
+        {{form('facebook', 'Login with Facebook',
+               scope='email,publish_stream,read_stream,create_event,offline_access')}}
+        {{form('twitter', 'Login with Twitter')}}
+        {{form('bitbucket', 'Login with Bitbucket')}}
+        {{form('google', 'Login with Google',
+                use_popup='false', openid_identifier='google.com')}}
+        {{form('github', 'Login with Github')}}
+        {{form('yahoo', 'Login with Yahoo',
+                oauth='true', openid_identifier='yahoo.com')}}
+        {{form('openid', 'Login with OpenID')}}
+        {{form('live', 'Login with Windows Live')}}
+        <div class="spacer spacer--huge"></div>
 
-                {{ gettext("Designed by %(caravan)s and %(imaginationForPeople)s")|format(caravan=caravan, imaginationForPeople=imaginationForPeople)|safe }}
-            </div>
+        <div class="text text-small text-muted">
+            {% set caravan = gettext("<a href='http://caravan.coop' class='link'>Caravan</a>") %}
+            {% set imaginationForPeople = gettext("<a href='http://http://imaginationforpeople.org/' class='link'>Imagination for people</a>") %}
+
+            {{ gettext("Designed by %(caravan)s and %(imaginationForPeople)s")|format(caravan=caravan, imaginationForPeople=imaginationForPeople)|safe }}
+        </div>
         </form>
     </div>
 

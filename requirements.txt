@@ -12,3 +12,4 @@ SQLAlchemy
 transaction
 waitress
 zope.sqlalchemy
+velruse
