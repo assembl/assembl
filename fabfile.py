@@ -18,12 +18,16 @@ def reloadapp():
     """
     Touch the wsgi
     """
+    if env.uses_supervisor:
+        print(cyan('Asking supervisor to restart %(projectname)s' % env))
+        run("sudo /usr/bin/supervisorctl restart %(projectname)s" % env)
     if env.uses_wsgi:
         print(cyan('Reloading all wsgi applications in : %s' % env.projectpath))
         #this may accidentally reload staging environments and the like, but it's the only reliable way to 
         #hit any multisites defined. 
-        with cd(env.projectpath):
-            run('touch apache/*')
+        if env.uses_apache:
+            with cd(env.projectpath):
+                run('touch apache/*')
     if env.uses_memcache:
         flushmemcache()
 
@@ -146,6 +150,7 @@ def bootstrap_from_checkout():
     Create the virtualenv and install the app
     """
     execute(build_virtualenv)
+    execute(install_rbenv)
     execute(app_fullupdate)
     
 def clone_repository():
@@ -186,10 +191,10 @@ def app_fullupdate():
     execute(updatemaincode)
 # Will be done from setup
 #    execute(update_requirements, force=False)
-    execute(compile_messages)
     execute(update_compass)
     execute(compile_stylesheets)
     execute(app_setup)
+    execute(compile_messages)
     #execute(app_db_update)
     # tests()
     execute(reloadapp)
@@ -201,9 +206,9 @@ def app_update():
     Fast Update: don't update requirements
     """
     execute(updatemaincode)
-    execute(compile_messages)
     execute(compile_stylesheets)
     execute(app_setup)
+    execute(compile_messages)
     #execute(app_db_update)
     # tests()
     execute(reloadapp)
@@ -331,8 +336,8 @@ def configure_rbenv():
             run('rbenv rehash')
         if(run('bundle --version').failed):
             #install bundler
-            sudo('gem install bundler', user=env.user)
-            sudo('rbenv rehash')
+            run('gem install bundler')
+            run('rbenv rehash')
         
 @task
 def install_rbenv():
@@ -340,11 +345,11 @@ def install_rbenv():
     Install the appropriate ruby environment for compass.
     """
     # Install rbenv:
-    sudo('git clone git://github.com/sstephenson/rbenv.git ~/.rbenv', user=env.user)
+    run('git clone git://github.com/sstephenson/rbenv.git ~/.rbenv')
     # Add rbenv to the path:
-    sudo('echo \'export PATH="$HOME/.rbenv/bin:$PATH"\' >> .bash_profile', user=env.user)
-    sudo('echo \'eval "$(rbenv init -)"\' >> .bash_profile', user=env.user)
-    sudo('source ~/.bash_profile', user=env.user)
+    run('echo \'export PATH="$HOME/.rbenv/bin:$PATH"\' >> .bash_profile')
+    run('echo \'eval "$(rbenv init -)"\' >> .bash_profile')
+    run('source ~/.bash_profile')
     # The above will work fine on a shell (such as on the server accessed using
     # ssh for a developement machine running a GUI, you may need to run the 
     # following from a shell (with your local user):
@@ -354,7 +359,7 @@ def install_rbenv():
     
     # Install ruby-build:
     with cd('/tmp'):
-        sudo('git clone git://github.com/sstephenson/ruby-build.git', user=env.user)
+        run('git clone git://github.com/sstephenson/ruby-build.git')
     with cd('/tmp/ruby-build'):
         sudo('./install.sh')
 
@@ -374,6 +379,7 @@ def update_compass():
     """
     Make sure compass version is up to date
     """
+    execute(configure_rbenv)
     with cd(env.projectpath):
         run('bundle install --path=vendor/bundle')
 
@@ -398,9 +404,10 @@ def commonenv(projectpath, venvpath=None):
     env.gitbranch = "master"
 
     env.uses_memcache = False
-    env.uses_wsgi = True
-    env.uses_apache = True
-    env.uses_ngnix = True
+    env.uses_wsgi = False
+    env.uses_apache = False
+    env.uses_ngnix = False
+    env.uses_supervisor = False
 # Specific environments 
 
 
@@ -426,6 +433,22 @@ def devenv(projectpath=None):
 
     env.gitbranch = "develop"
 
+@task    
+def caravan_stagenv():
+    """
+    [ENVIRONMENT] Staging
+    """
+    commonenv(os.path.normpath("/sites/assembl/"))
+    env.urlhost = "assembl.caravan.coop"
+    env.user = "www-data"
+    env.home = "www-data"
+    require('projectname', provided_by=('commonenv',))
+    env.hosts = ['assembl.caravan.coop']
+    
+    env.uses_apache = False
+    env.uses_ngnix = True
+    env.uses_supervisor = True
+    env.gitbranch = "develop"
 
 
 @task    
@@ -443,10 +466,7 @@ def coeus_stagenv():
     
     env.uses_apache = True
     env.uses_ngnix = False
-    #env.gitbranch = "release/almostspring"
     env.gitbranch = "develop"
-    #env.gitbranch = "feature/gis"
-
     
 @task
 def prodenv():
@@ -493,8 +513,6 @@ def bootstrap_full():
     execute(install_database_server)
     execute(install_webservers)
     execute(install_builddeps)
-    execute(install_rbenv)
-    execute(install_compass)
     
     execute(bootstrap)
     
