@@ -2,8 +2,7 @@ define(['backbone', 'underscore', 'zepto', 'app', 'views/messageListItem', 'view
 function(Backbone, _, $, app, MessageListItem, MessageView, Message){
     'use strict';
 
-    var MIN_TEXT_TO_TOOLTIP = 17,
-        MESSAGE_MODE = 'is-message-mode';
+    var MESSAGE_MODE = 'is-message-mode';
 
     /**
      * @class views.MessageList
@@ -168,32 +167,6 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message){
         },
 
         /**
-         * Shows the selection tooltip
-         * @param  {number} x
-         * @param  {number} y
-         * @param  {string} text
-         */
-        showTooltip: function(x, y, text){
-            var marginLeft = app.selectionTooltip.width() / -2,
-                segment = text;
-
-            text = '...' + text.substr( - MIN_TEXT_TO_TOOLTIP );
-
-            app.selectionTooltip
-              .show()
-              .attr('data-segment', segment)
-              .text(text)
-              .css({ top: y, left: x, 'margin-left': marginLeft });
-        },
-
-        /**
-         * Hide the selection tooltip
-         */
-        hideTooltip: function(){
-            app.selectionTooltip.hide();
-        },
-
-        /**
          * Close the panel
          */
         closePanel: function(){
@@ -259,10 +232,6 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message){
          * @type {Object}
          */
         events: {
-            'mousedown .message': 'startSelection',
-            'mousemove .message': 'doTheSelection',
-            'mouseup .message': 'stopSelection',
-
             'click .idealist-title': 'onTitleClick',
             'click #messageList-collapseButton': 'toggleMessages',
             'click #messagelist-returnButton': 'onReturnButtonClick',
@@ -277,39 +246,6 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message){
             'click #messagelist-selectunread': 'selectUnread',
 
             'click #messageList-closeButton': 'closePanel'
-        },
-
-        /**
-         * @event
-         */
-        startSelection: function(ev){
-            this.hideTooltip();
-            this.isSelecting = true;
-        },
-
-        /**
-         * @event
-         */
-        doTheSelection: function(ev){
-            if( ! this.isSelecting ){
-                return;
-            }
-
-            var selectedText = app.getSelectedText(),
-                text = selectedText.getRangeAt(0).cloneContents();
-
-            text = text.textContent || '';
-
-            if( text.length > MIN_TEXT_TO_TOOLTIP ){
-                this.showTooltip(ev.clientX, ev.clientY, text);
-            }
-        },
-
-        /**
-         * @event
-         */
-        stopSelection: function(ev){
-            this.isSelecting = false;
         },
 
         /**

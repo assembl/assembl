@@ -357,7 +357,9 @@ function($, _, ckeditor, User){
             });
 
             app.body.append( menu );
-            app.doc.on("click", app.hideContextMenu);
+            window.setTimeout(function(){
+                app.doc.on("click", app.hideContextMenu);
+            });
         },
 
         /**

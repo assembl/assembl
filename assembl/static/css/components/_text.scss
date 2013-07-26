@@ -42,16 +42,14 @@
 
     position: absolute;
 
-    background: white url(#{$img-dir}/text/textbubble.png) no-repeat 98% center;
+    background: white;
     opacity: 0.9;
 
-    cursor: pointer;
     border: solid 4px #d3d3d6;
     border-radius: 6px;
     
     line-height: $textbubble-height;
     padding: 5px;
-    padding-right: 25px;
     margin-top: $textbubble-height * -4;
 
     &:hover {
