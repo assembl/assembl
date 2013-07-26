@@ -5,6 +5,7 @@ function($, _, ckeditor, User){
     ckeditor.disableAutoInline = true;
 
     var PANEL_QUANTITY = 'data-panel-qty',
+        CONTEXT_MENU_WIDTH = 150,
         DRAGBOX_MAX_LENGTH = 25;
 
     /**
@@ -348,6 +349,12 @@ function($, _, ckeditor, User){
             app.hideContextMenu();
 
             var menu = $('<div>').addClass('contextmenu');
+
+            // Adjusting position
+            if( (x + CONTEXT_MENU_WIDTH) > (window.innerWidth - 50) ){
+                x = window.innerWidth - CONTEXT_MENU_WIDTH - 10;
+            }
+
             menu.css({'top': y, 'left': x});
 
             _.each(items, function(func, text){
@@ -360,6 +367,14 @@ function($, _, ckeditor, User){
             window.setTimeout(function(){
                 app.doc.on("click", app.hideContextMenu);
             });
+
+            // Adjusting menu position
+            var menuY = menu.height() + y,
+                maxY = window.innerHeight - 50;
+
+            if( menuY >= maxY ){
+                menu.css({'top': maxY - menu.height() });
+            }
         },
 
         /**

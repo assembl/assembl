@@ -192,7 +192,7 @@ function(Backbone, _, Moment, app, Message){
             }
 
             if( this.isSelecting && text.length > MIN_TEXT_TO_TOOLTIP && isInsideAMessage ){
-                this.showSelectionOptions(ev.clientX, ev.clientY);
+                this.showSelectionOptions(ev.clientX - 50, ev.clientY);
             }
 
             this.isSelecting = false;
