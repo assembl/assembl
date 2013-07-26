@@ -19,27 +19,27 @@ def reloadapp():
     Touch the wsgi
     """
     if env.uses_wsgi:
-        print(cyan('Reloading all wsgi applications in : %s' % env.venvpath + '/' + env.projectname))
+        print(cyan('Reloading all wsgi applications in : %s' % env.projectpath))
         #this may accidentally reload staging environments and the like, but it's the only reliable way to 
         #hit any multisites defined. 
-        with cd(env.venvpath + '/' + env.projectname):
+        with cd(env.projectpath):
             run('touch apache/*')
     if env.uses_memcache:
         flushmemcache()
 
 
-def venvcmd(cmd, shell=True, user=None, pty=False, subdir=""):
+def venvcmd(cmd, shell=True, user=None, pty=False):
     if not user:
         user = env.user
 
-    with cd(env.venvpath + '/' + env.projectname + '/' + subdir):
+    with cd(env.projectpath):
         return run('source %(venvpath)s/bin/activate && ' % env + cmd, shell=shell, pty=pty)
 
 def venv_prefix():
     return 'source %(venvpath)s/bin/activate' % env
 
 def remote_db_path():
-    return os.path.join(env.venvpath, env.projectname, 'current_database.sql.bz2')
+    return os.path.join(env.projectpath, 'current_database.sql.bz2')
 
 def printenv():
     """
@@ -56,7 +56,7 @@ def build_virtualenv():
     Build the virtualenv
     """
     print(cyan('Creating a fresh virtualenv'))
-    require('venvpath', provided_by=('stagenv', 'prodenv'))
+    require('venvpath', provided_by=('commonenv'))
     sudo('rm /tmp/distribute* || echo "ok"') # clean after hudson
     run('virtualenv --no-site-packages --distribute %(venvpath)s' % env)
     sudo('rm /tmp/distribute* || echo "ok"') # clean after myself
@@ -71,9 +71,9 @@ def update_requirements(force=False):
     run('%(venvpath)s/bin/pip install -U pip' % env)
     
     if force:
-        cmd = "%(venvpath)s/bin/pip install -I -r %(venvpath)s/%(projectname)s/requirements.txt" % env
+        cmd = "%(venvpath)s/bin/pip install -I -r %(projectpath)s/requirements.txt" % env
     else:
-        cmd = "%(venvpath)s/bin/pip install -r %(venvpath)s/%(projectname)s/requirements.txt" % env
+        cmd = "%(venvpath)s/bin/pip install -r %(projectpath)s/requirements.txt" % env
     run("yes w | %s" % cmd)
 
 
@@ -117,7 +117,7 @@ def compile_stylesheets():
     """
     Generate *.css files from *.scss
     """
-    with cd(env.venvpath + '/' + env.projectname):
+    with cd(env.projectpath):
         run('bundle exec compass compile --force', shell=True)
             
 def tests():
@@ -130,38 +130,39 @@ def tests():
     print(cyan('Running BDD tests'))
     venvcmd('./manage.py harvest --verbosity=2')
 
-def fixperms():
-    # Fix perms
-    with cd(env.venvpath):
-        with cd("%(projectname)s" % env):
-            run('mkdir media/uploads media/cache static/CACHE media/mugshots -p')
-            sudo('chown www-data -R media/uploads media/cache media/mugshots static/CACHE')
+
     
 @task
-def bootstrap_venv():
+def bootstrap():
+    """
+    Create the virtualenv and install the app
+    """
+    execute(clone_repository)
+    execute(bootstrap_from_checkout)
+
+@task
+def bootstrap_from_checkout():
     """
     Create the virtualenv and install the app
     """
     execute(build_virtualenv)
-    execute(app_install)
-    execute(fixperms)
-
+    execute(app_fullupdate)
+    
 def clone_repository():
     """
     Clone repository and remove the exsiting one if necessary
     """
     print(cyan('Cloning Git repository'))
 
-    with cd(env.venvpath):
-        # Remove dir if necessary
-        if exists("%(projectname)s" % env):
-            sudo("rm -rf %(projectname)s" % env)
+    # Remove dir if necessary
+    if exists("%(projectpath)s/.git" % env):
+        abort("%(projectpath)s/.git already exists" % env)
 
-        # Clone
-        run("git clone --branch {0} {1} {2}".format(env.gitbranch,
-                                                    env.gitrepo,
-                                                    env.projectname)
-        )
+    # Clone
+    run("git clone --branch {0} {1} {2}".format(env.gitbranch,
+                                                env.gitrepo,
+                                                env.projectpath)
+    )
     
             
 def updatemaincode():
@@ -169,33 +170,26 @@ def updatemaincode():
     Update code and/or switch branch
     """
     print(cyan('Updating Git repository'))
-    with cd(os.path.join(env.venvpath, '%(projectname)s' % env)):
+    with cd(os.path.join(env.projectpath)):
         run('git fetch')
         run('git checkout %s' % env.gitbranch)
         run('git pull %s %s' % (env.gitrepo, env.gitbranch))
 
-@task
-def app_install():
-    """
-    (Re)install app to target server
-    """
-    execute(clone_repository)
-    execute(update_requirements, force=False)
-    execute(compile_messages)
-    #execute(app_db_install)
-    # tests()
-    execute(reloadapp)
-    
+def app_setup():
+     venvcmd('python ./setup.py develop')
+     
 @task
 def app_fullupdate():
     """
     Full Update: maincode and dependencies
     """
     execute(updatemaincode)
+# Will be done from setup
+#    execute(update_requirements, force=False)
     execute(compile_messages)
     execute(update_compass)
     execute(compile_stylesheets)
-    execute(update_requirements, force=False)
+    execute(app_setup)
     #execute(app_db_update)
     # tests()
     execute(reloadapp)
@@ -209,6 +203,7 @@ def app_update():
     execute(updatemaincode)
     execute(compile_messages)
     execute(compile_stylesheets)
+    execute(app_setup)
     #execute(app_db_update)
     # tests()
     execute(reloadapp)
@@ -221,13 +216,12 @@ def configure_webservers():
     """
     # apache
     print(cyan('Configuring Apache'))
-    fullprojectpath = env.venvpath + '/%(projectname)s/' % env
-    sudo('cp %sapache/%s /etc/apache2/sites-available/%s' % (fullprojectpath, env.urlhost, env.urlhost))
+    sudo('cp %sapache/%s /etc/apache2/sites-available/%s' % (env.projectpath, env.urlhost, env.urlhost))
     sudo('a2ensite %s' % env.urlhost)
 
     # nginx
     print(cyan('Configuring Nginx'))
-    sudo('cp %snginx/%s /etc/nginx/sites-available/%s' % (fullprojectpath, env.urlhost, env.urlhost))
+    sudo('cp %snginx/%s /etc/nginx/sites-available/%s' % (env.projectpath, env.urlhost, env.urlhost))
     with cd('/etc/nginx/sites-enabled/'):
         sudo('ln -sf ../sites-available/%s .' % env.urlhost)
 
@@ -329,7 +323,7 @@ def install_builddeps():
 
 @task
 def configure_rbenv():
-    with cd(env.venvpath + '/' + env.projectname + '/'), settings(warn_only=True):
+    with cd(env.projectpath), settings(warn_only=True):
         if(run('rbenv local 1.9.3-p125').failed):
             # Install Ruby 1.9.3-p125:
             run('rbenv install 1.9.3-p125')
@@ -372,7 +366,7 @@ def install_compass():
     (Re)Install compass, deleting current version 
     """
     execute(configure_rbenv)
-    with cd(env.venvpath + '/' + env.projectname + '/'):
+    with cd(env.projectpath):
         run('rm -rf vendor/bundle')
         execute(update_compass)
 @task
@@ -380,16 +374,21 @@ def update_compass():
     """
     Make sure compass version is up to date
     """
-    with cd(env.venvpath + '/' + env.projectname + '/'):
+    with cd(env.projectpath):
         run('bundle install --path=vendor/bundle')
 
 ## Server scenarios
-def commonenv():
+def commonenv(projectpath, venvpath=None):
     """
     Base environment
     """
     env.projectname = "assembl"
-
+    env.projectpath = projectpath
+    if venvpath:
+        env.venvpath = venvpath
+    else: 
+        env.venvpath = os.path.join(projectpath,"venv")
+        
     env.db_user = 'assembl'
     env.db_name = 'assembl'
     env.dbdumps_dir = os.path.join(tempfile.gettempdir(), '%s_dumps' % env.projectname)
@@ -406,12 +405,15 @@ def commonenv():
 
 
 @task
-def devenv(venvpath=None):
+def devenv(projectpath=None):
     """
     [ENVIRONMENT] Developpement (must be run from the project path: 
     the one where the fabfile is)
     """
-    commonenv()
+    
+    if not projectpath:
+        projectpath = os.path.dirname(os.path.realpath(__file__))
+    commonenv(projectpath)
     env.wsginame = "dev.wsgi"
     env.urlhost = "localhost"
     #env.user = "webapp"
@@ -422,13 +424,8 @@ def devenv(venvpath=None):
     env.uses_ngnix = False
     env.hosts = ['localhost']
 
-    current_path = local('pwd',capture=True)
-    
     env.gitbranch = "develop"
-    if venvpath:
-        env.venvpath = venvpath
-    else: 
-        env.venvpath = os.path.normpath(os.path.join(current_path,"../"))
+
 
 
 @task    
@@ -436,7 +433,7 @@ def coeus_stagenv():
     """
     [ENVIRONMENT] Staging
     """
-    commonenv()
+    commonenv(os.path.normpath("/var/www/assembl/"))
     env.wsginame = "staging.wsgi"
     env.urlhost = "assembl.coeus.ca"
     env.user = "benoitg"
@@ -450,8 +447,6 @@ def coeus_stagenv():
     env.gitbranch = "develop"
     #env.gitbranch = "feature/gis"
 
-
-    env.venvpath = os.path.normpath("/var/www/assembl/virtualenv/")
     
 @task
 def prodenv():
@@ -469,13 +464,14 @@ def prodenv():
 
     env.gitbranch = "master"
 
-    env.venvpath = os.path.normpath("/var/www/assembl/virtualenv/")
-    
-
-
 
 #THE FOLLOWING COMMANDS HAVEN'T BEEN PORTED YET
-
+def fixperms():
+    # Fix perms
+    with cd(env.projectpath):
+        with cd("%(projectpath)s" % env):
+            run('mkdir media/uploads media/cache static/CACHE media/mugshots -p')
+            sudo('chown www-data -R media/uploads media/cache media/mugshots static/CACHE')
 @task
 def flushmemcache():
     """
@@ -500,7 +496,7 @@ def bootstrap_full():
     execute(install_rbenv)
     execute(install_compass)
     
-    execute(bootstrap_venv)
+    execute(bootstrap)
     
     if(env.wsginame == 'dev.wsgi'):
         execute(install_devdeps);
