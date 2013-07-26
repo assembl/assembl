@@ -163,6 +163,8 @@ function(Backbone, _, Moment, app, Message){
 
             if( text.length > MIN_TEXT_TO_TOOLTIP ){
                 this.showTooltip(ev.clientX, ev.clientY, text);
+            } else {
+                this.hideTooltip();
             }
         },
 
@@ -179,13 +181,17 @@ function(Backbone, _, Moment, app, Message){
          * @event
          */
         stopSelection: function(ev){
-            var isInsideAMessage = false;
+            var isInsideAMessage = false,
+                selectedText = app.getSelectedText(),
+                text = selectedText.getRangeAt(0).cloneContents();
+
+            text = text.textContent || '';
 
             if( ev ){
                 isInsideAMessage = $(ev.target).closest('.is-selecting').length > 0;
             }
 
-            if( this.isSelecting && isInsideAMessage ){
+            if( this.isSelecting && text.length > MIN_TEXT_TO_TOOLTIP && isInsideAMessage ){
                 this.showSelectionOptions(ev.clientX, ev.clientY);
             }
 
