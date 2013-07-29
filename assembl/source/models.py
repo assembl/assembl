@@ -350,4 +350,8 @@ class Post(SQLAlchemyBaseModel):
             ).count()
 
     def __repr__(self):
-        return "<Post '%s'>" % self.content
+        return "<Post '%s %s' %s>" % (
+            self.content.type,
+            self.content.id,
+            '*unread*' if not self.is_read else '*read*'
+        )
