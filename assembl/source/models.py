@@ -150,13 +150,16 @@ class Mailbox(Source):
             parsed_email = email.message_from_string(message_string)
 
             body = None
-            
-            if parsed_email.is_multipart():
-                for part in parsed_email.get_payload():
-                    if part['Content-Type'].split(';')[0] == 'text/plain':
-                        body = part.get_payload()
-            else:
-                body = parsed_email.get_payload()
+
+            def get_plain_text_payload(message):
+                if message.is_multipart():
+                    for part in message.walk():
+                        if part.get_content_type() == 'text/plain':
+                            return part.get_payload()
+                else:
+                    return message.get_payload()
+
+            body = get_plain_text_payload(parsed_email)
 
             def email_header_to_unicode(header_string):
                 decoded_header = decode_email_header(header_string);
