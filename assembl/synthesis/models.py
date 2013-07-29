@@ -85,9 +85,9 @@ class Discussion(RestrictedAccessModel):
         if offset:
             query = query.offset(int(offset))
 
-        posts, last_update_times = query.all()
+        posts_with_last_update_time = query.all()
 
-        return posts
+        return posts_with_last_update_time
 
     def __init__(self, *args, **kwargs):
         super(Discussion, self).__init__(*args, **kwargs)
