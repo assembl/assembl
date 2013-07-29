@@ -309,9 +309,9 @@ class Post(SQLAlchemyBaseModel):
     def get_descendants(self):
         ancestry_query_string = "%s%d,%%" % (self.ancestry or '', self.id)
 
-        descendants = DBSession.query(Post).filter(
+        descendants = DBSession.query(Post).join(Content).filter(
             Post.ancestry.like(ancestry_query_string)
-        ).all()
+        ).order_by(Content.creation_date).all()
 
         return descendants
 
