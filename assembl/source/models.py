@@ -141,7 +141,7 @@ class Mailbox(Source):
             del email_ids[0]
         
         def import_email(email_id):
-            status, message_data = mailbox.fetch(email_id, "(RFC822)")
+            status, message_data = mailbox.uid('fetch', email_id, "(RFC822)")
 
             for response_part in message_data:
                 if isinstance(response_part, tuple):
