@@ -295,15 +295,16 @@ class Post(SQLAlchemyBaseModel):
     is_read = Column(Boolean, nullable=False, default=False)
 
     ancestry = Column(Text)
+
+    content_id = Column(Integer, ForeignKey('content.id', ondelete='CASCADE'))
+    content = relationship('Content', uselist=False, lazy=False)
+
     parent_id = Column(Integer, ForeignKey('post.id'))
     children = relationship(
         "Post",
         backref=backref('parent', remote_side=[id]),
-        order_by=desc(creation_date)
+        order_by=desc('content_1_creation_date')
     )
-
-    content_id = Column(Integer, ForeignKey('content.id', ondelete='CASCADE'))
-    content = relationship('Content', uselist=False)
 
     def get_descendants(self):
         ancestry_query_string = "%s%d,%%" % (self.ancestry or '', self.id)
