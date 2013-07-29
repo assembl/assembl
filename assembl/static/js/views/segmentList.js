@@ -51,6 +51,22 @@ function(Backbone, _, $, app, Segment){
         },
 
         /**
+         * Creates a segment with the given text and adds it to the segmentList
+         * @param  {string} text
+         * @return {Segment}
+         */
+        addTextAsSegment: function(text){
+            var currentUser = app.getCurrentUser(),
+                data = {
+                    text: text,
+                    authorName: currentUser.get('name'),
+                    avatarUrl: currentUser.get('avatarUrl')
+                };
+
+            return app.segmentList.segments.create(data);
+        },
+
+        /**
          * Removes a segment by its cid
          * @param  {String} cid
          */
@@ -121,7 +137,13 @@ function(Backbone, _, $, app, Segment){
          */
         onDragOver: function(ev){
             ev.preventDefault();
-            if( app.draggedSegment !== null ){
+
+            var isText = false;
+            if( ev.dataTransfer.types && ev.dataTransfer.types.indexOf('text/plain') > -1 ){
+                isText = app.draggedIdea ? false : true;
+            }
+
+            if( app.draggedSegment !== null || isText ){
                 this.panel.addClass("is-dragover");
             }
         },
@@ -144,9 +166,20 @@ function(Backbone, _, $, app, Segment){
 
             this.panel.trigger('dragleave');
 
+            var idea = app.getDraggedIdea();
+            if( idea ){
+                return; // Do nothing
+            }
+
             var segment = app.getDraggedSegment();
             if( segment ){
                 this.addSegment(segment);
+                return;
+            }
+
+            var text = ev.dataTransfer.getData("Text");
+            if( text ){
+                this.addTextAsSegment(text);
                 return;
             }
         },

@@ -1,0 +1,17 @@
+// Login box
+// =========
+.loginbox {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    @include transform( translate(-50%, -50%) );
+
+    @include box-sizing( border-box );
+    width: 382px;
+    //height: 431px;
+    padding: $padding * 2;
+
+    @include border-radius(10px);
+    background-color: #e0e2e5;
+    text-align: center;
+}

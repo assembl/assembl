@@ -8,7 +8,7 @@
         </div>
 
         <div class="avatarbox">
-            <img src="<%= app.getCurrentUser().getAvatarUrl(38) %>" alt="User"  class="image-rounded margin-right"/>
+            <img src="<%= app.formatAvatarUrl( app.getCurrentUser().get('avatarUrl', 38) ) %>" alt="User"  class="image-rounded margin-right"/>
 
             <span><%= app.getCurrentUser().get('name') %></span>
         </div>

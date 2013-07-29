@@ -11,35 +11,71 @@ $dropdown-height: 20px;
 
     cursor: pointer;
     border: solid 1px transparent;
+}
 
+// Change the appearacen to a button
+// ++++++++++++++++++++++
+.dropdown.dropdown--button {}
+
+.dropdown.is-open {}
+
+.dropdown-label {
+    @include no-glitch;
+    display: inline-block;
 
     &:after {
         display: inline-block;
+        @include opacity( 0.2 );
 
         font-family: $font-icon;
         content: '\e808';
         margin-left: 5px;
+    }
+
+    .dropdown:hover &:after {
+        @include opacity( 1 );
+    }
+
+    .dropdown--button & {
+        @extend .button, .button.button--condensed;
+
+        padding: { right: 8px; left: 4px; }
+
+        &:after {
+            font-family: $font-icon;
+            content: '\e812';
+            margin-left: 5px;
+        }
+
     }
 }
 
 // The option list
 // ---------------
 .dropdown-list {
+    $dropdown-time: 0.4s;
     @extend .contextmenu;
 
+    position: absolute;
     top: 0;
-    left: 0;
-    @include z-index("underground");
+    left: -10000px;
+    @include z-index("float");
     min-width: 155px;
+    overflow: visible;
 
-    @include transition( top 0.4s, opacity 0.4s, z-index 0 linear 0.4s );
+    @include transition( top $dropdown-time, opacity $dropdown-time, left 0 linear $dropdown-time );
     @include opacity( 0 );
 
-    .dropdown:hover & {
-        @include transition( top 0.4s, opacity 0.4s, z-index 0 linear 0 );
+    .dropdown.is-open & {
+        @include transition( top $dropdown-time, opacity $dropdown-time, left 0 linear 0 );
         top: $dropdown-height + 4px;
         @include opacity( 1 );
-        @include z-index("float");
+        left: 0;
+    }
+
+    .dropdown--button.is-open & {
+        top: $button-condensed-height + 4px;
+        left: 5px;
     }
 }
 

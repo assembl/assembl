@@ -22,14 +22,14 @@ function(jasmine, Backbone, _, $, app, SegmentList){
             spyOn(SegmentList.prototype, 'render').andCallThrough();
             view = getView();
 
-            view.addSegment({ text: 'nada' });
+            view.addSegment( new Backbone.Model({ text: 'nada' }) );
 
             expect(view.render).toHaveBeenCalled();
             expect(view.segments.length).toBe(1);
         });
 
         it('should remove a segment by clicking in the .closebutton', function(){
-            view.addSegment({ text: 'nada' });
+            view.addSegment( new Backbone.Model({ text: 'nada' }) );
             expect(view.segments.length).toBe(1);
 
             view.$('.closebutton').trigger('click');
@@ -37,7 +37,7 @@ function(jasmine, Backbone, _, $, app, SegmentList){
         });
 
         it('should set the app.draggedSegment as the current dragged segment', function(){
-            view.addSegment({ text: 'nada' });
+            view.addSegment( new Backbone.Model({ text: 'nada' }) );
             view.$('.box').trigger('dragstart');
 
             expect(app.draggedSegment.get('text')).toBe('nada');
@@ -47,7 +47,7 @@ function(jasmine, Backbone, _, $, app, SegmentList){
         });
 
         it('should remove the segment by click', function(){
-            view.addSegment({ text: 'nada' });
+            view.addSegment( new Backbone.Model({ text: 'nada' }) );
             expect(view.segments.length).toBe(1);
 
             view.$('.closebutton').trigger('click');

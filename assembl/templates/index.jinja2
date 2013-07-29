@@ -1,6 +1,22 @@
 {% extends 'base.jinja2' %}
 
-{% block extra_header %}{% endblock %}
+{% block header %}
+    <div class="bar bar--main">
+        <div class="bar-body">
+            <div class="bar-left">
+                <a id="assembl-mainbutton" class="iconbutton iconbutton--nofx icon-menu"></a>
+
+                <img src="/static/img/assembl.png" alt="Assembl" />
+            </div>
+            <div class="bar-right">
+                Peter Parker {# todo: Change this name #}
+                <a class="iconbutton icon-user"></a>
+                <a class="iconbutton icon-search"></a>
+                <a class="iconbutton icon-cog"></a>
+            </div>
+        </div>
+    </div>
+{% endblock %}
 
 {% block content %}
     <div class="bar bar--title">
@@ -25,7 +41,7 @@
             <div id="idealist" class="panelarea-col"></div>
             <div id="ideaPanel" class="panelarea-col"></div>
             <div id="segmentlist" class="panelarea-col"></div>
-            <div id="messages" class="panelarea-col"></div>
+            <div id="messagelist" class="panelarea-col"></div>
 
         </div>
     </div>

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" class="no-js">
 <head>
-    <title>{% block title %}Assebl{% endblock %}</title>
+    <title>{% block title %}Assembl{% endblock %}</title>
 
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -15,22 +15,7 @@
 <body class="preload">
     <div id="wrapper">
         <header id="header">
-            <div class="bar bar--main">
-                <div class="bar-body">
-                    <div class="bar-left">
-                        <a id="assembl-mainbutton" class="iconbutton iconbutton--nofx icon-menu"></a>
-
-                        <img src="/static/img/assembl.png" alt="Assembl" />
-                    </div>
-                    <div class="bar-right">
-                        Peter Parker {# todo: Change this name #}
-                        <a class="iconbutton icon-user"></a>
-                        <a class="iconbutton icon-search"></a>
-                        <a class="iconbutton icon-cog"></a>
-                    </div>
-                </div>
-            </div>
-            {% block extra_header %}{% endblock %}
+            {% block header %}{% endblock %}
         </header>
         <main id="main">
             {% block content %}{% endblock %}
@@ -45,7 +30,7 @@
             </script>
         {% endfor %}
     </div>
-    
+
     <div id="lateralMenu" class="lateralmenu"></div>
 
     {% include 'includes/javascript.jinja2' %}

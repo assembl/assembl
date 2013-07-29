@@ -26,6 +26,30 @@
     $experimental-support-for-svg: $previous-value;
 }
 
+// Alias for ::placeholder
+@mixin placeholder {
+    ::-webkit-input-placeholder { @content; }
+    ::-moz-placeholder { @content; }
+    :-ms-input-placholder { @content; }
+}
+
+// Alias for ::selection
+@mixin selection {
+    ::selection { @content; }
+    ::-moz-selection { @content; }
+}
+
+// Alias for ::scrollbar
+@mixin scrollbar {
+    ::-webkit-scrollbar { @content; }    
+}
+
+// Alias for ::scrollbar-thumb
+@mixin scrollbar-thumb {
+    ::-webkit-scrollbar-thumb { @content; }
+}
+
+
 // prefixer for user-select
 // @param $value=text {string}
 @mixin user-select($value: text){
@@ -39,8 +63,13 @@
 
 // Remove the selection background 
 @mixin no-selection {
-    &::-moz-selection { background-color: transparent; }
-    &::selection { background-color: transparent; }
+    &::-moz-selection { background-color: transparent !important; }
+    &::selection { background-color: transparent !important; }
+}
+
+// Workaround to avoid the glich made by the css3
+@mixin no-glitch {
+    @include transform( translatez(0) );
 }
 
 // Adds the right z-index value second the zIndex scale

@@ -1,41 +1,67 @@
-define(['backbone', 'underscore', 'zepto', 'app'],
-function(Backbone, _, $, app){
+define(['backbone', 'underscore', 'moment', 'app', 'models/message'],
+function(Backbone, _, Moment, app, Message){
     'use strict';
 
-    var MIN_TEXT_TO_TOOLTIP = 17;
+    var MIN_TEXT_TO_TOOLTIP = 17,
+        TOOLTIP_TEXT_LENGTH = 10;
 
     /**
-     * @class views.Message
+     * @class views.MessageView
      */
-    var Message = Backbone.View.extend({
+    var MessageView = Backbone.View.extend({
         /**
-         *  @init
+         * @type {String}
          */
-        initialize: function(obj){
-            if( obj.button ){
-                this.button = $(obj.button).on('click', app.togglePanel.bind(window, 'messages'));
-            }
+        tagName: 'div',
+
+        /**
+         * @type {String}
+         */
+        className: 'message',
+
+        /**
+         * Flags if it is selecting a text or not
+         * @type {Boolean}
+         */
+        isSelecting: true,
+
+        /**
+         * @init
+         */
+        initialize: function(){
+            this.model.on('change:collapsed', this.render, this);
         },
 
         /**
-         * Flag wether it is being selected or not
-         * @type {Boolean}
-         */
-        isSelecting: false,
-
-        /**
-         * The template
+         * The thread message template
          * @type {_.template}
          */
         template: app.loadTemplate('message'),
 
         /**
-         * The render function
-         * @return {views.Message}
+         * The render
+         * @return {MessageView}
          */
         render: function(){
-            this.$el.html( this.template() );
+            var data = this.model.toJSON();
+
+            data['date'] = new Moment(data.date).fromNow();
+
+            if( data.collapsed ){
+                this.$el.addClass('message--collapsed');
+            } else {
+                this.$el.removeClass('message--collapsed');
+            }
+
+            this.$el.html(this.template(data));
             return this;
+        },
+
+        /**
+         * Hide the selection tooltip
+         */
+        hideTooltip: function(){
+            app.selectionTooltip.hide();
         },
 
         /**
@@ -48,7 +74,7 @@ function(Backbone, _, $, app){
             var marginLeft = app.selectionTooltip.width() / -2,
                 segment = text;
 
-            text = '...' + text.substr( - MIN_TEXT_TO_TOOLTIP );
+            text = text.substr(0, TOOLTIP_TEXT_LENGTH) + '...' + text.substr( - TOOLTIP_TEXT_LENGTH );
 
             app.selectionTooltip
               .show()
@@ -58,46 +84,75 @@ function(Backbone, _, $, app){
         },
 
         /**
-         * Hide the selection tooltip
+         * Shows the options to the selected text
+         * @param  {Number} x
+         * @param  {Number} y
          */
-        hideTooltip: function(){
-            app.selectionTooltip.hide();
+        showSelectionOptions: function(x, y){
+            var items = {
+                'Add to clipboard' : this.contextMenuItem1
+            };
+
+            this.hideTooltip();
+            app.showContextMenu(x, y, this, items);
         },
 
-        /**
-         * Close the panel
-         */
-        closePanel: function(){
-            if( this.button ){
-                this.button.trigger('click');
-            }
-        },
 
         /**
-         * The events
-         * @type {Object}
+         * CONTEXT MENU
          */
+        contextMenuItem1: function(){
+            app.segmentList.addTextAsSegment( app.selectionTooltip.attr('data-segment') );
+            app.openPanel(app.segmentList);
+        },
+
+
         events: {
-            'mousedown .message': 'startSelection',
-            'mousemove .message': 'doTheSelection',
-            'mouseup .message': 'stopSelection',
+            'click .iconbutton': 'onIconbuttonClick',
+            'click .message-title': 'onIconbuttonClick',
 
-            'click #message-closeButton': 'closePanel'
+            //
+            'mousedown .message-body': 'startSelection',
+            'mousemove .message-body': 'doTheSelection',
+            'mouseleave .message-body': 'onMouseLeaveMessageBody',
+            'mouseenter .message-body': 'doTheSelection'
         },
 
         /**
          * @event
          */
-        startSelection: function(ev){
+        onIconbuttonClick: function(){
+            var collapsed = this.model.get('collapsed');
+            this.model.set('collapsed', !collapsed);
+        },
+
+        /**
+         * @event
+         * Starts the selection tooltip
+         */
+        startSelection: function(){
             this.hideTooltip();
             this.isSelecting = true;
+            this.$el.addClass('is-selecting');
+
+            var that = this;
+
+            app.doc.one('mouseup', function(ev){
+                that.stopSelection(ev);
+            });
         },
 
         /**
          * @event
+         * Does the selection
          */
         doTheSelection: function(ev){
             if( ! this.isSelecting ){
+                return;
+            }
+
+            if( $(ev.target).closest('.is-selecting').length === 0 ){
+                // If it isn't inside the one which started, don't show it
                 return;
             }
 
@@ -108,6 +163,17 @@ function(Backbone, _, $, app){
 
             if( text.length > MIN_TEXT_TO_TOOLTIP ){
                 this.showTooltip(ev.clientX, ev.clientY, text);
+            } else {
+                this.hideTooltip();
+            }
+        },
+
+        /**
+         * @event
+         */
+        onMouseLeaveMessageBody: function(){
+            if( this.isSelecting ){
+                this.hideTooltip();
             }
         },
 
@@ -115,10 +181,26 @@ function(Backbone, _, $, app){
          * @event
          */
         stopSelection: function(ev){
-            this.isSelecting = false;
-        }
+            var isInsideAMessage = false,
+                selectedText = app.getSelectedText(),
+                text = selectedText.getRangeAt(0).cloneContents();
 
+            text = text.textContent || '';
+
+            if( ev ){
+                isInsideAMessage = $(ev.target).closest('.is-selecting').length > 0;
+            }
+
+            if( this.isSelecting && text.length > MIN_TEXT_TO_TOOLTIP && isInsideAMessage ){
+                this.showSelectionOptions(ev.clientX - 50, ev.clientY);
+            }
+
+            this.isSelecting = false;
+            this.$el.removeClass('is-selecting');
+        }
     });
 
-    return Message;
+
+    return MessageView;
+
 });

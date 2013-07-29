@@ -10,6 +10,13 @@
     padding: $box-padding;
 }
 
+// Collapsed box
+// +++++++++++++++
+.box.box--collapsed {
+    padding: 5px;
+}
+
+
 // Dashed box
 // +++++++++++++++
 .box.box--dashed {

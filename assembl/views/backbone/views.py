@@ -51,6 +51,12 @@ def home_view(request):
     return render_to_response('../../templates/index.jinja2', context, request=request)
 
 
+@view_config(route_name='login', request_method='GET', http_cache=60)
+def login_view(request):
+    context = get_default_context()
+    return render_to_response('../../templates/login.jinja2', context, request=request)
+
+
 @view_config(route_name='toc', request_method='GET', http_cache=60)
 def toc_view(request):
     return render_to_response('../../templates/backbone/index.pt', {}, request=request)

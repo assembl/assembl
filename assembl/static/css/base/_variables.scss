@@ -20,10 +20,6 @@ $box-background-color: #fff;
 $box-border-color: #e4e4e3;
 $box-padding: 20px;
 
-// Button
-$button-border-radius: 5px;
-$button-font-size: 13px;
-
 // Closebutton
 $closebutton-color: #e4e4e3;
 
@@ -100,3 +96,9 @@ $text-muted-color: #c5c5c5;
 // Link
 $link-color: $text-muted-color;
 $link-hover-color: #2c2c2c;
+
+// Button
+$button-border-radius: 5px;
+$button-font-size: 13px;
+$button-height: $icon-height + 4px;
+$button-condensed-height: 26px;

@@ -14,8 +14,8 @@ function(Backbone, _, Idea, IdeaView, app){
         filter: null,
 
         /**
-         * The collapse/expand button
-         * @type {Zepto}
+         * The collapse/expand flag
+         * @type {Boolean}
          */
         collapsed: true,
 

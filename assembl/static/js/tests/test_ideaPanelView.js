@@ -31,18 +31,13 @@ function(jasmine, _, app, IdeaPanel){
         });
 
         it('should add the current segment when drop', function(){
+            spyOn(IdeaPanel.prototype, 'addSegment');
             app.draggedSegment = { title: 'Something' };
 
+            view = getView();
+
             view.panel.trigger('drop');
-            expect(view.idea.get('segments').length).toBe(1);
-        });
-
-        it('should remove the segment when clicking in the .closebutton', function(){
-            var segment = { title: "Something" };
-            view.addSegment(segment);
-
-            view.$('.closebutton').eq(0).trigger('click');
-            expect(view.idea.get('segments').length).toBe(0);
+            expect(view.addSegment).toHaveBeenCalled();
         });
 
     });

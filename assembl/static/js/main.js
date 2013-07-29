@@ -5,10 +5,10 @@ define([
     "views/ideaList",
     "views/ideaPanel",
     "views/segmentList",
-    "views/message",
+    "views/messageList",
     "models/user",
     "models/segment"
-], function(app, $, LateralMenu, IdeaList, IdeaPanel, SegmentList, Message, User, Segment){
+], function(app, $, LateralMenu, IdeaList, IdeaPanel, SegmentList, MessageList, User, Segment){
     'use strict';
 
     app.init();
@@ -35,16 +35,15 @@ define([
     app.segmentList.segments.on('change reset', app.ideaPanel.render, app.ideaPanel);
 
     // Message
-    app.messages = new Message({el: '#messages', button: '#button-messages'}).render();
+    app.messageList = new MessageList({el: '#messagelist', button: '#button-messages'}).render();
+    app.messageList.loadData();
 
     app.on('lateralmenu.open', function(){
         app.messages.hideTooltip();
     });
     app.selectionTooltip.on('click', function(){
         app.selectionTooltip.hide();
-        var text = app.selectionTooltip.attr('data-segment');
-
-        app.segmentList.segments.create({ text:text });
+        app.segmentList.addTextAsSegment( app.selectionTooltip.attr('data-segment') );
         app.openPanel(app.segmentList);
     });
 

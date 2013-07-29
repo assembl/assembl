@@ -17,6 +17,7 @@ def includeme(config):
 
     config.add_renderer('json', json_renderer_factory)
     config.add_route('home', '/')
+    config.add_route('login', '/login')
     config.add_route('toc', '/toc')
     config.add_route('nodetest', '/nodetest')
     config.add_route('styleguide', '/styleguide')
@@ -35,6 +36,11 @@ def includeme(config):
     config.add_route('save_segment', '/api/segment', request_method="PUT")
     config.add_route('create_segment', '/api/segment', request_method="POST")
     config.add_route('delete_segment', '/api/segment', request_method="DELETE")
+
+    #  messages
+    config.add_route('get_messages', '/api/messages')
+    config.add_route('save_message', '/api/message', request_method="PUT")
+    config.add_route('get_inbox', '/api/message/inbox', request_method="GET")
 
 
 def api_urls(config):

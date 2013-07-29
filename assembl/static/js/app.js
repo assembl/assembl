@@ -5,6 +5,7 @@ function($, _, ckeditor, User){
     ckeditor.disableAutoInline = true;
 
     var PANEL_QUANTITY = 'data-panel-qty',
+        CONTEXT_MENU_WIDTH = 150,
         DRAGBOX_MAX_LENGTH = 25;
 
     /**
@@ -348,6 +349,12 @@ function($, _, ckeditor, User){
             app.hideContextMenu();
 
             var menu = $('<div>').addClass('contextmenu');
+
+            // Adjusting position
+            if( (x + CONTEXT_MENU_WIDTH) > (window.innerWidth - 50) ){
+                x = window.innerWidth - CONTEXT_MENU_WIDTH - 10;
+            }
+
             menu.css({'top': y, 'left': x});
 
             _.each(items, function(func, text){
@@ -357,7 +364,17 @@ function($, _, ckeditor, User){
             });
 
             app.body.append( menu );
-            app.doc.on("click", app.hideContextMenu);
+            window.setTimeout(function(){
+                app.doc.on("click", app.hideContextMenu);
+            });
+
+            // Adjusting menu position
+            var menuY = menu.height() + y,
+                maxY = window.innerHeight - 50;
+
+            if( menuY >= maxY ){
+                menu.css({'top': maxY - menu.height() });
+            }
         },
 
         /**
@@ -407,7 +424,7 @@ function($, _, ckeditor, User){
          */
         getSegmentsByIdea: function(idea){
             var id = idea.get('id');
-            return app.segmentList.segments.where({idIdea:id});
+            return app.segmentList && app.segmentList.segments ? app.segmentList.segments.where({idIdea:id}) : [];
         },
 
         /**
@@ -431,12 +448,77 @@ function($, _, ckeditor, User){
         },
 
         /**
+         * @param  {String} url The avatar URL
+         * @param  {Number} [size=44] The avatar size
+         * @return {String} The avatar's url formatted with the given size
+         */
+        formatAvatarUrl: function(url, size){
+            size = size || 44;
+
+            if( !url ){
+                url = '//placehold.it/'+size+'x'+size;
+            } else {
+                url += '?s=44';
+            }
+
+            return url;
+        },
+
+
+        /**
+         * @param  {String} html
+         * @return {String} The new string without html tags
+         */
+        stripHtml: function(html){
+            return html.replace(/(<([^>]+)>)/ig,"");
+        },
+
+        /**
+         * @event
+         */
+        onDropdownClick: function(ev){
+            var dropdown = $(ev.target);
+
+            if( !dropdown.hasClass("dropdown-label") ){
+                return;
+            }
+
+            var parent = dropdown.parent(),
+                onMouseleave = function(){
+                    parent
+                        .removeClass('is-open')
+                        .off('mouseleave', onMouseleave);
+                };
+
+            if( parent.hasClass('is-open') ){
+                onMouseleave();
+                return;
+            }
+
+            parent
+                .addClass('is-open')
+                .on('mouseleave', onMouseleave);
+        },
+
+        /**
+         * @event
+         */
+        onAjaxError: function(){
+            var message = $('#ajaxerror-message').text();
+            alert( message );
+            window.location.reload();
+        },
+
+        /**
          * @init
          * inits ALL app components
          */
         init: function(){
             app.body.removeClass('preload');
             app.createSelectionTooltip();
+
+            app.doc.on('click', '.dropdown-label', app.onDropdownClick);
+            app.doc.on('ajaxError', app.onAjaxError);
         }
     };
 

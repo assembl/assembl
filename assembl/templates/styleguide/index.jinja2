@@ -1,6 +1,6 @@
 {% extends 'base.jinja2' %}
 
-{% block title %}Styleguide for Assebl{% endblock %}
+{% block title %}Styleguide for Assembl{% endblock %}
 
 
 {% block content %}
@@ -25,4 +25,13 @@
     document.body.classList.remove('preload');
     </script>
 
+{% endblock %}
+
+
+{% block extra_js %}
+    <script type="text/javascript">
+        require(["app"], function(app){
+            app.init();
+        });
+    </script>
 {% endblock %}

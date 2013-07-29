@@ -1,11 +1,46 @@
 // A message block
 // ================
 .message {
-    @extend .text;
+    //@extend .text;
+    padding: 20px 5px;
+
+    border-bottom: solid 1px $box-border-color;
+
+    &:last-child {
+        border-bottom: 0;
+    }
+}
+
+.message.message--collapsed {
+    padding: 5px;
 }
 
 // A message block Header
 // --------------------
 .message-header {
     position: relative;
+}
+
+
+//
+.message-title {
+    @extend .idealist-title;
+
+    .message--collapsed & {
+        line-height: $icon-height;
+    }
+}
+
+//
+.message-date {
+    @extend .idealist-counter;
+
+    .message--collapsed & {
+        line-height: $icon-height;
+    }
+}
+
+//
+.message-body {
+    padding: { right: $padding * 2; left: $padding * 2; }
 }
