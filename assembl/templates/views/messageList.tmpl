@@ -2,7 +2,8 @@
 
     <div id="messagelist-list" class="panel-divisor">
 
-        <div class="panel-header"><div class="dropdown">
+        <div class="panel-header">
+            <div class="dropdown">
                 {% set inbox = '<%= inbox %>' %}
 
                 <span class="dropdown-label">{{ gettext('Inbox (%(total)s)')|format(total=inbox)|safe }}</span>
