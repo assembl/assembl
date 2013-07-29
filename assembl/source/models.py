@@ -20,7 +20,6 @@ from sqlalchemy import (
 
 from ..db import DBSession
 from ..db.models import SQLAlchemyBaseModel
-from ..synthesis.models import TableOfContents
 
 
 
