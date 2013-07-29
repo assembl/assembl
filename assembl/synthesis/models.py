@@ -47,7 +47,7 @@ class Discussion(RestrictedAccessModel):
         'polymorphic_identity': 'discussion',
     }
 
-    def root_posts(self, limit=15, offset=None):
+    def posts(self, limit=15, offset=None, parent_id=None):
         """
         Queries posts whose content comes from a source that belongs to this
         topic. The result is a list of posts sorted by their youngest
@@ -76,7 +76,7 @@ class Discussion(RestrictedAccessModel):
             Source.discussion_id==self.id,
             Content.source_id==Source.id,
             Post.content_id==Content.id,
-            upper_post.parent_id==None
+            upper_post.parent_id==parent_id
         ).order_by(descendants.c.last_update, Content.creation_date)
 
         if limit:
