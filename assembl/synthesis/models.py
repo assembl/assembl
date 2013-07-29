@@ -3,22 +3,20 @@ from datetime import datetime
 from sqlalchemy.orm import relationship, backref
 
 from sqlalchemy import (
-    Column, 
+    Column,
     Boolean,
-    Integer, 
-    Unicode, 
-    UnicodeText, 
+    Integer,
+    Unicode,
+    UnicodeText,
     DateTime,
     ForeignKey,
     desc
 )
 
 from ..db.models import Model
-from ..auth.models import RestrictedAccessModel
 
 
-
-class TableOfContents(RestrictedAccessModel):
+class TableOfContents(Model):
     """
     Represents a Table of Contents.
 
@@ -28,7 +26,7 @@ class TableOfContents(RestrictedAccessModel):
     __tablename__ = "table_of_contents"
 
     id = Column(
-        Integer, 
+        Integer,
         ForeignKey('restricted_access_model.id', ondelete='CASCADE'),
         primary_key=True
     )

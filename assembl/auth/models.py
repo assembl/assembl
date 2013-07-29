@@ -1,12 +1,13 @@
 from datetime import datetime
+from itertools import chain
 
 from sqlalchemy import (
     Boolean,
-    Column, 
-    String, 
+    Column,
+    String,
     ForeignKey,
-    Integer, 
-    Unicode, 
+    Integer,
+    Unicode,
     DateTime,
 )
 
@@ -16,40 +17,108 @@ from .utils import hash_password
 from ..db.models import Model
 
 
+class AgentAccount(Model):
+    __abstract__ = True
+    """An abstract class for accounts that identify agents"""
+    pass
 
-class OrganizationalUnit(Model):
+
+class IdentityProvider(Model):
+    """An identity provider (or sometimes a category of identity providers.)"""
+    __tablename__ = "identity_provider"
+    id = Column(Integer, primary_key=True)
+    name = Column(String(20), nullable=False)
+    # TODO: More complicated model, where trust also depends on realm.
+    trust_emails = Column(Boolean, default=False)
+
+
+class EmailAccount(AgentAccount):
+    """An email account"""
+    __tablename__ = "email_account"
+    email = Column(String(100), primary_key=True)
+    verified = Column(Boolean(), default=False)
+    preferred = Column(Boolean(), default=False)
+    active = Column(Boolean(), default=True)
+    profile_id = Column(
+        Integer,
+        ForeignKey('agent_profile.id', ondelete='CASCADE'),
+        nullable=False)
+    profile = relationship('AgentProfile', backref='email_accounts')
+
+
+class IdentityProviderAccount(AgentAccount):
+    """An account with an external identity provider"""
+    __tablename__ = "idprovider_account"
+    id = Column(Integer, primary_key=True)
+    provider_id = Column(
+        Integer,
+        ForeignKey('identity_provider.id', ondelete='CASCADE'),
+        nullable=False)
+    provider = relationship(IdentityProvider)
+    profile_id = Column(
+        Integer,
+        ForeignKey('agent_profile.id', ondelete='CASCADE'),
+        nullable=False)
+    profile = relationship('AgentProfile', backref='identity_accounts')
+    username = Column(String(200))
+    domain = Column(String(200))
+    userid = Column(String(200))
+
+
+class IdentityProviderEmail(Model):
+    """An email that is proposed by the identity provider.
+    Not confirmed by default."""
+    __tablename__ = "idprovider_email"
+    email = Column(String(100), nullable=False, primary_key=True)
+    verified = Column(Boolean(), default=False)
+    preferred = Column(Boolean(), default=False)
+    active = Column(Boolean(), default=True)
+    provider_id = Column(
+        Integer,
+        ForeignKey('identity_provider.id', ondelete='CASCADE'),
+        nullable=False, primary_key=True)
+    provider = relationship(IdentityProvider, backref='emails')
+
+
+class AgentProfile(Model):
     """
-    An organizational unit could be a person, group, bot or computer.
+    An agent could be a person, group, bot or computer.
+    Profiles describe agents, which have multiple accounts.
+    Some agents might also be users of the platforms.
     """
-    __tablename__ = "organizational_unit"
+    __tablename__ = "agent_profile"
 
     id = Column(Integer, primary_key=True)
     name = Column(Unicode(1024))
-    type = Column(String(60), nullable=False)
+    type = Column(String(60), nullable=False)  # not sure we need this?
+
+    def accounts(self):
+        """All AgentAccounts for this profile"""
+        return chain(self.identity_accounts(), self.email_accounts())
 
     __mapper_args__ = {
-        'polymorphic_identity': 'organizational_unit',
+        'polymorphic_identity': 'agent_profile',
         'polymorphic_on': type
     }
 
 
-class User(OrganizationalUnit):
+class User(Model):
     """
     A Human user.
     """
     __tablename__ = "user"
 
     id = Column(
-        Integer, 
-        ForeignKey('organizational_unit.id', ondelete='CASCADE'), 
+        Integer,
+        ForeignKey('agent_profile.id', ondelete='CASCADE'),
         primary_key=True
     )
+    profile = relationship(AgentProfile)
 
     username = Column(Unicode(20), unique=True, nullable=False)
-    email = Column(Unicode(50), nullable=False)
-
+    preferred_email = Column(Unicode(50), nullable=False)
+    verified = Column(Boolean(), default=False)
     password = Column(Unicode(115), nullable=False)
-
     last_login = Column(DateTime)
     creation_date = Column(DateTime, nullable=False, default=datetime.utcnow)
 
@@ -78,88 +147,4 @@ class User(OrganizationalUnit):
     def __repr__(self):
         return "<User '%s'>" % self.username
 
-
-class RestrictedAccessModel(Model):
-    """
-    Represents a model with restricted access. 
-    
-    Usually this means that only
-    certain people will be allowed to read, write or perform other operations
-    on or with instances of this model.
-    """
-    __tablename__ = "restricted_access_model"
-    id = Column(Integer, primary_key=True)
-    type = Column(String(60), nullable=False)
-
-    owner_id = Column(Integer, ForeignKey(
-        'organizational_unit.id', 
-        ondelete='CASCADE'
-    ))
-
-    owner = relationship(
-        "OrganizationalUnit", 
-        backref=backref('restricted_access_models')
-    )
-
-    __mapper_args__ = {
-        'polymorphic_identity': 'restricted_access_model',
-        'polymorphic_on': type
-    }
-
-    def __repr__(self):
-        return "<RestrictedAccessModel '%s'>" % self.type
-
-
-class Permission(Model):
-    """
-    A Permission determines the level of access that a user has to a particular
-    part of the system.
-
-    example usage:
-
-        Permission(
-            organizational_unit=some_user,
-            action="write", 
-            subject=some_restricted_access_model
-        )
-
-        <Permission 'Allow jeff write on table_of_contents (1)'>
-    """
-    __tablename__ = "permission"
-
-    id = Column(Integer, primary_key=True)
-    creation_date = Column(DateTime, nullable=False, default=datetime.utcnow)
-
-    allow = Column(Boolean, default=True)
-    
-    organizational_unit_id = Column(
-        Integer,
-        ForeignKey('organizational_unit.id', ondelete='CASCADE')
-    )
-
-    organizational_unit = relationship(
-        "OrganizationalUnit",
-        backref=backref('permissions', order_by=creation_date)
-    )
-
-    action = Column(Unicode(255), nullable=False)
-
-    subject_id = Column(
-        Integer, 
-        ForeignKey('restricted_access_model.id', ondelete='CASCADE'),
-    )
-
-    subject = relationship(
-        "RestrictedAccessModel",
-        backref=backref('permissions', order_by=creation_date)
-    )
-
-    def __repr__(self):
-        return "<Permission '%s'>" % " ".join([
-            'Allow' if self.allow else 'Deny',
-            self.user.username,
-            self.permission,
-            'on',
-            self.subject.type,
-            '(%s)' % self.subject.id,
-        ])
+# Note on permissions: we will use Pyramid ACLs.

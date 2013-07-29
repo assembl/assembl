@@ -13,3 +13,4 @@ transaction
 waitress
 zope.sqlalchemy
 velruse
+# hapi : a OAuth2 server for pyramid. Still very much work in progress.
