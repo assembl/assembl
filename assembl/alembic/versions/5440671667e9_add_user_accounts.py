@@ -14,7 +14,7 @@ from alembic import context, op
 import sqlalchemy as sa
 import transaction
 
-import datetime
+from datetime import datetime
 
 from assembl import models as m
 
@@ -35,8 +35,9 @@ def upgrade(pyramid_env):
             sa.Column('preferred', sa.Boolean, default=False),
             sa.Column('active', sa.Boolean, default=True),
             sa.Column(
-                'profile_id', sa.Integer, sa.ForeignKey('agent_profile.id'),
-                ondelete='CASCADE', nullable=False))
+                'profile_id', sa.Integer,
+                sa.ForeignKey('agent_profile.id', ondelete='CASCADE'),
+                nullable=False))
         op.create_table(
             'identity_provider',
             sa.Column('id', sa.Integer, primary_key=True),
@@ -56,6 +57,17 @@ def upgrade(pyramid_env):
             sa.Column('username', sa.String(200)),
             sa.Column('domain', sa.String(200)),
             sa.Column('userid', sa.String(200)))
+        op.create_table(
+            'idprovider_email',
+            sa.Column(
+                'email', sa.String(100), nullable=False, primary_key=True),
+            sa.Column('verified', sa.Boolean(), default=False),
+            sa.Column('preferred', sa.Boolean(), default=False),
+            sa.Column('active', sa.Boolean(), default=True),
+            sa.Column(
+                'provider_id', sa.Integer,
+                sa.ForeignKey('identity_provider.id', ondelete='CASCADE'),
+                nullable=False, primary_key=True))
         op.create_table(
             'user',
             sa.Column(
@@ -77,6 +89,7 @@ def upgrade(pyramid_env):
 def downgrade(pyramid_env):
     with context.begin_transaction():
         op.drop_table('user')
+        op.drop_table('idprovider_email')
         op.drop_table('idprovider_account')
         op.drop_table('identity_provider')
         op.drop_table('email_account')
