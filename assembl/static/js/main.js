@@ -6,9 +6,10 @@ define([
     "views/ideaPanel",
     "views/segmentList",
     "views/messageList",
+    "views/synthesisPanel",
     "models/user",
     "models/segment"
-], function(app, $, LateralMenu, IdeaList, IdeaPanel, SegmentList, MessageList, User, Segment){
+], function(app, $, LateralMenu, IdeaList, IdeaPanel, SegmentList, MessageList, SynthesisPanel, User, Segment){
     'use strict';
 
     app.init();
@@ -23,7 +24,6 @@ define([
 
     // Idea list
     app.ideaList = new IdeaList({el: '#idealist', button: '#button-ideaList'});
-    app.ideaList.ideas.fetch({reset: true});
 
     // Segment List
     app.segmentList = new SegmentList({el: '#segmentlist', button: '#button-segmentList'});
@@ -38,14 +38,13 @@ define([
     app.messageList = new MessageList({el: '#messagelist', button: '#button-messages'}).render();
     app.messageList.loadData();
 
+    // Synthesis
+    app.synthesisPanel = new SynthesisPanel({el: '#synthesisPanel', button: '#button-synthesis', ideas: app.ideaList.ideas });
+
+    app.ideaList.ideas.fetch({reset: true});
+
     app.on('lateralmenu.open', function(){
         app.messages.hideTooltip();
     });
-    app.selectionTooltip.on('click', function(){
-        app.selectionTooltip.hide();
-        app.segmentList.addTextAsSegment( app.selectionTooltip.attr('data-segment') );
-        app.openPanel(app.segmentList);
-    });
-
 
 });

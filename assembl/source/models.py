@@ -10,6 +10,7 @@ from sqlalchemy import (
     Boolean,
     Integer, 
     String, 
+    Text,
     Unicode, 
     UnicodeText, 
     DateTime,
@@ -17,12 +18,12 @@ from sqlalchemy import (
     desc
 )
 
-from ..db.models import Model
-from ..synthesis.models import TableOfContents
+from ..db import DBSession
+from ..db.models import SQLAlchemyBaseModel
 
 
 
-class Source(Model):
+class Source(SQLAlchemyBaseModel):
     """
     A Discussion Source is where commentary that is handled in the form of
     Assembl posts comes from. 
@@ -40,13 +41,13 @@ class Source(Model):
     creation_date = Column(DateTime, nullable=False, default=datetime.utcnow)
     last_import = Column(DateTime)
 
-    table_of_contents_id = Column(Integer, ForeignKey(
-        'table_of_contents.id', 
+    discussion_id = Column(Integer, ForeignKey(
+        'discussion.id', 
         ondelete='CASCADE'
     ))
 
-    table_of_contents = relationship(
-        "TableOfContents", 
+    discussion = relationship(
+        "Discussion", 
         backref=backref('sources', order_by=creation_date)
     )
 
@@ -59,7 +60,7 @@ class Source(Model):
         return "<Source '%s'>" % self.name
 
 
-class Content(Model):
+class Content(SQLAlchemyBaseModel):
     """
     Content is a polymorphic class to describe what is imported from a Source.
     """
@@ -67,6 +68,7 @@ class Content(Model):
 
     id = Column(Integer, primary_key=True)
     type = Column(String(60), nullable=False)
+    creation_date = Column(DateTime, nullable=False, default=datetime.utcnow)
     
     import_date = Column(DateTime, default=datetime.utcnow)
 
@@ -83,7 +85,8 @@ class Content(Model):
         'polymorphic_on': 'type'
     }
 
-    def make_post(self):
+    def __init__(self, *args, **kwargs):
+        super(Content, self).__init__(*args, **kwargs)
         self.post = self.post or Post(content=self)
 
     def __repr__(self):
@@ -115,7 +118,7 @@ class Mailbox(Source):
         'polymorphic_identity': 'mailbox',
     }
 
-    def import_content(self, only_new=False):
+    def import_content(self, only_new=True):
         if self.use_ssl:
             mailbox = IMAP4_SSL(host=self.host, port=self.port)
         else:
@@ -138,7 +141,7 @@ class Mailbox(Source):
             del email_ids[0]
         
         def import_email(email_id):
-            status, message_data = mailbox.fetch(email_id, "(RFC822)")
+            status, message_data = mailbox.uid('fetch', email_id, "(RFC822)")
 
             for response_part in message_data:
                 if isinstance(response_part, tuple):
@@ -147,13 +150,16 @@ class Mailbox(Source):
             parsed_email = email.message_from_string(message_string)
 
             body = None
-            
-            if parsed_email.is_multipart():
-                for part in parsed_email.get_payload():
-                    if part['Content-Type'].split(';')[0] == 'text/plain':
-                        body = part.get_payload()
-            else:
-                body = parsed_email.get_payload()
+
+            def get_plain_text_payload(message):
+                if message.is_multipart():
+                    for part in message.walk():
+                        if part.get_content_type() == 'text/plain':
+                            return part.get_payload()
+                else:
+                    return message.get_payload()
+
+            body = get_plain_text_payload(parsed_email)
 
             def email_header_to_unicode(header_string):
                 decoded_header = decode_email_header(header_string);
@@ -182,7 +188,7 @@ class Mailbox(Source):
                 to_address=email_header_to_unicode(parsed_email['To']),
                 from_address=email_header_to_unicode(parsed_email['From']),
                 subject=email_header_to_unicode(parsed_email['Subject']),
-                send_date=datetime.utcfromtimestamp(
+                creation_date=datetime.utcfromtimestamp(
                     mktime(
                         email.utils.parsedate(
                             parsed_email['Date']
@@ -198,7 +204,7 @@ class Mailbox(Source):
             return new_email
 
         if len(email_ids):
-            new_emails = map(import_email, email_ids)
+            new_emails = [import_email(email_id) for email_id in email_ids]
 
             self.last_imported_email_uid = \
                 email_ids[len(email_ids)-1]
@@ -232,23 +238,42 @@ class Email(Content):
     message_id = Column(Unicode(255))
     in_reply_to = Column(Unicode(255))
 
-    send_date = Column(DateTime, nullable=False)
     import_date = Column(DateTime, nullable=False, default=datetime.utcnow)
 
     __mapper_args__ = {
         'polymorphic_identity': 'email',
     }
 
-    def make_post(self):
-        super(Email, self).make_post()
+    def __init__(self, *args, **kwargs):
+        super(Email, self).__init__(*args, **kwargs)
+        self.associate_family()
+
+    def associate_family(self):
+        if self not in DBSession:
+            DBSession.add(self)
 
         # if there is an email.in_reply_to, search posts with content.type
         # == email and email.message_id == email.in_reply_to, then set that
         # email's post's id as the parent of this new post.
 
+        if self.in_reply_to:
+            parent_email = DBSession.query(Email).filter_by(
+                message_id=self.in_reply_to,
+            ).first()
+
+            if parent_email: 
+                self.post.set_parent(parent_email.post)
+
         # search for emails where the in_reply_to is the same as the
         # message_id for this email, then set their post's parent to the
         # id of this new post.
+
+        child_emails = DBSession.query(Email).filter_by(
+            in_reply_to=self.message_id
+        ).all()
+
+        for child_email in child_emails:
+            child_email.post.set_parent(self.post)
 
     def __repr__(self):
         return "<Email '%s to %s'>" % (
@@ -257,7 +282,7 @@ class Email(Content):
         )
 
 
-class Post(Model):
+class Post(SQLAlchemyBaseModel):
     """
     A Post represents input into the broader discussion taking place on
     Assembl. It may be a response to another post, it may have responses, and
@@ -267,17 +292,66 @@ class Post(Model):
 
     id = Column(Integer, primary_key=True)
     creation_date = Column(DateTime, nullable=False, default=datetime.utcnow)
+    is_read = Column(Boolean, nullable=False, default=False)
+
+    ancestry = Column(Text)
+
+    content_id = Column(Integer, ForeignKey('content.id', ondelete='CASCADE'))
+    content = relationship('Content', uselist=False, lazy=False)
 
     parent_id = Column(Integer, ForeignKey('post.id'))
     children = relationship(
         "Post",
-        backref=backref('parent'),
-        remote_side=[id],
-        order_by=desc(creation_date)
+        backref=backref('parent', remote_side=[id]),
+        order_by=desc('content_1_creation_date')
     )
 
-    content_id = Column(Integer, ForeignKey('content.id', ondelete='CASCADE'))
-    content = relationship('Content', uselist=False)
+    def get_descendants(self):
+        ancestry_query_string = "%s%d,%%" % (self.ancestry or '', self.id)
+
+        descendants = DBSession.query(Post).join(Content).filter(
+            Post.ancestry.like(ancestry_query_string)
+        ).order_by(Content.creation_date).all()
+
+        return descendants
+
+    def set_ancestry(self, new_ancestry):
+        descendants = self.get_descendants()
+        old_ancestry = self.ancestry or ''
+        self.ancestry = new_ancestry
+        DBSession.add(self)
+
+        for descendant in descendants:
+            updated_ancestry = descendant.ancestry.replace(
+                "%s%d," % (old_ancestry, self.id),
+                "%s%d," % (new_ancestry, self.id),
+                1
+            )
+
+            descendant.ancestry = updated_ancestry
+            DBSession.add(descendant)
+            
+    def set_parent(self, parent):
+        self.parent = parent
+        DBSession.add(self)
+        DBSession.add(parent)
+
+        self.set_ancestry("%s%d," % (
+            parent.ancestry or '',
+            parent.id
+        ))
+
+    def number_of_unread_descendants(self):
+        ancestry_query_string = "%s%d,%%" % (self.ancestry or '', self.id)
+        return DBSession.query(Post).filter(
+                Post.ancestry.like(ancestry_query_string)
+            ).filter_by(
+                is_read=False
+            ).count()
 
     def __repr__(self):
-        return "<Post '%s'>" % self.content
+        return "<Post '%s %s' %s>" % (
+            self.content.type,
+            self.content.id,
+            '*unread*' if not self.is_read else '*read*'
+        )

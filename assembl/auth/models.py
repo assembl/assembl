@@ -14,16 +14,16 @@ from sqlalchemy import (
 from sqlalchemy.orm import relationship, backref
 
 from .utils import hash_password
-from ..db.models import Model
+from ..db.models import SQLAlchemyBaseModel
 
 
-class AgentAccount(Model):
+class AgentAccount(SQLAlchemyBaseModel):
     __abstract__ = True
     """An abstract class for accounts that identify agents"""
     pass
 
 
-class IdentityProvider(Model):
+class IdentityProvider(SQLAlchemyBaseModel):
     """An identity provider (or sometimes a category of identity providers.)"""
     __tablename__ = "identity_provider"
     id = Column(Integer, primary_key=True)
@@ -65,7 +65,7 @@ class IdentityProviderAccount(AgentAccount):
     userid = Column(String(200))
 
 
-class IdentityProviderEmail(Model):
+class IdentityProviderEmail(SQLAlchemyBaseModel):
     """An email that is proposed by the identity provider.
     Not confirmed by default."""
     __tablename__ = "idprovider_email"
@@ -80,7 +80,7 @@ class IdentityProviderEmail(Model):
     provider = relationship(IdentityProvider, backref='emails')
 
 
-class AgentProfile(Model):
+class AgentProfile(SQLAlchemyBaseModel):
     """
     An agent could be a person, group, bot or computer.
     Profiles describe agents, which have multiple accounts.
@@ -102,7 +102,7 @@ class AgentProfile(Model):
     }
 
 
-class User(Model):
+class User(SQLAlchemyBaseModel):
     """
     A Human user.
     """
@@ -132,13 +132,13 @@ class User(Model):
 
         super(User, self).__init__(**kwargs)
 
-    def set_password(password):
+    def set_password(self, password):
         self.password = hash_password(password)
 
-    def check_password(password):
+    def check_password(self, password):
         return hash_password(password) == self.password
 
-    def send_email(**kwargs):
+    def send_email(self, **kwargs):
         subject = kwargs.get('subject', '')
         body = kwargs.get('body', '')
 

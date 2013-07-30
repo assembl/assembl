@@ -1,0 +1,17 @@
+<div class="idealist-body">
+    <% for( var i=1; i<level; i+= 1) { %>
+        <span class="idealist-bar"></span>
+    <% } %>
+    
+    <% if (children.length > 0) { %>
+        <span class="idealist-arrow"></span>
+    <% } %>
+
+    <div class="idealist-removebtn">&times;</div>
+    <div class="idealist-title">
+        <%= shortTitle %>
+        <small class="idealist-longtitle text-small text-muted"><%= app.stripHtml(longTitle) %></small>
+    </div>
+</div>
+
+<div class="idealist-children"></div>

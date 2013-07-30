@@ -119,6 +119,14 @@
     color: $idealist-counter-color;
 }
 
+// Remove button
+// --------------
+.idealist-removebtn {
+    @extend .idealist-counter;
+    font-size: 18px;
+    cursor: pointer;
+}
+
 // The arrow
 // ------------
 .idealist-arrow {

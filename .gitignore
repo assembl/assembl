@@ -23,6 +23,7 @@
 # local
 /local.ini
 /local.cfg
+/assembl.db
 
 # app
 /data/*
@@ -39,4 +40,9 @@
 ._*
 .sass-cache
 assembl/static/css/*.css
+
+# ruby
 vendor/
+.bundle
+.ruby-version
+Gemfile.lock
