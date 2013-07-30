@@ -292,7 +292,6 @@ class Post(SQLAlchemyBaseModel):
 
     id = Column(Integer, primary_key=True)
     creation_date = Column(DateTime, nullable=False, default=datetime.utcnow)
-    is_read = Column(Boolean, nullable=False, default=False)
 
     ancestry = Column(Text)
 
@@ -350,8 +349,7 @@ class Post(SQLAlchemyBaseModel):
             ).count()
 
     def __repr__(self):
-        return "<Post '%s %s' %s>" % (
+        return "<Post '%s %s' >" % (
             self.content.type,
             self.content.id,
-            '*unread*' if not self.is_read else '*read*'
         )
