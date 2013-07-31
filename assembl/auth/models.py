@@ -17,23 +17,24 @@ from ..db.models import SQLAlchemyBaseModel
 
 
 
-class OrganizationalUnit(SQLAlchemyBaseModel):
+class Actor(SQLAlchemyBaseModel):
     """
-    An organizational unit could be a person, group, bot or computer.
+    An actor could be a person, group, bot or computer. Anything that performs
+    actions.
     """
-    __tablename__ = "organizational_unit"
+    __tablename__ = "actor"
 
     id = Column(Integer, primary_key=True)
     name = Column(Unicode(1024))
     type = Column(String(60), nullable=False)
 
     __mapper_args__ = {
-        'polymorphic_identity': 'organizational_unit',
+        'polymorphic_identity': 'actor',
         'polymorphic_on': type
     }
 
 
-class User(OrganizationalUnit):
+class User(Actor):
     """
     A Human user.
     """
@@ -41,7 +42,7 @@ class User(OrganizationalUnit):
 
     id = Column(
         Integer, 
-        ForeignKey('organizational_unit.id', ondelete='CASCADE'), 
+        ForeignKey('actor.id', ondelete='CASCADE'), 
         primary_key=True
     )
 
@@ -92,12 +93,12 @@ class RestrictedAccessModel(SQLAlchemyBaseModel):
     type = Column(String(60), nullable=False)
 
     owner_id = Column(Integer, ForeignKey(
-        'organizational_unit.id', 
+        'actor.id', 
         ondelete='CASCADE'
     ))
 
     owner = relationship(
-        "OrganizationalUnit", 
+        "Actor", 
         backref=backref('restricted_access_models')
     )
 
@@ -118,7 +119,7 @@ class Permission(SQLAlchemyBaseModel):
     example usage:
 
         Permission(
-            organizational_unit=some_user,
+            actor=some_user,
             action="write", 
             subject=some_restricted_access_model
         )
@@ -132,13 +133,13 @@ class Permission(SQLAlchemyBaseModel):
 
     allow = Column(Boolean, default=True)
     
-    organizational_unit_id = Column(
+    actor_id = Column(
         Integer,
-        ForeignKey('organizational_unit.id', ondelete='CASCADE')
+        ForeignKey('actor.id', ondelete='CASCADE')
     )
 
-    organizational_unit = relationship(
-        "OrganizationalUnit",
+    actor = relationship(
+        "Actor",
         backref=backref('permissions', order_by=creation_date)
     )
 
