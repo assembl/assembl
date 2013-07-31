@@ -64,13 +64,20 @@ class Discussion(RestrictedAccessModel):
             upper_post,
         ).join(
             Content,
-            Source
         ).filter(
-            Source.discussion_id==self.id,
-            Content.source_id==Source.id,
-            Post.content_id==Content.id,
             upper_post.parent_id==parent_id
-        ).order_by(
+        )
+
+        if not parent_id:
+            query = query.join(
+                Source
+            ).filter(
+                Source.discussion_id==self.id,
+                Content.source_id==Source.id,
+                Post.content_id==Content.id,
+            )
+            
+        query = query.order_by(
             desc(latest_update),
             Content.creation_date.desc()
         )
