@@ -296,13 +296,12 @@ class Post(SQLAlchemyBaseModel):
     ancestry = Column(Text, default="")
 
     content_id = Column(Integer, ForeignKey('content.id', ondelete='CASCADE'))
-    content = relationship('Content', uselist=False, lazy=False)
+    content = relationship('Content', uselist=False)
 
     parent_id = Column(Integer, ForeignKey('post.id'))
     children = relationship(
         "Post",
-        backref=backref('parent', remote_side=[id]),
-        order_by=desc('content_1_creation_date')
+        backref=backref('parent', remote_side=[id])
     )
 
     def get_descendants(self):
