@@ -293,7 +293,7 @@ class Post(SQLAlchemyBaseModel):
     id = Column(Integer, primary_key=True)
     creation_date = Column(DateTime, nullable=False, default=datetime.utcnow)
 
-    ancestry = Column(Text)
+    ancestry = Column(Text, default="")
 
     content_id = Column(Integer, ForeignKey('content.id', ondelete='CASCADE'))
     content = relationship('Content', uselist=False, lazy=False)
