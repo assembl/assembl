@@ -3,7 +3,9 @@ from email.header import decode_header as decode_email_header
 from datetime import datetime
 from time import mktime
 from imaplib import IMAP4_SSL, IMAP4
-from sqlalchemy.orm import relationship, backref
+
+from sqlalchemy.orm import relationship, backref, aliased
+from sqlalchemy.sql import func, cast, select
 
 from sqlalchemy import (
     Column, 
@@ -346,6 +348,38 @@ class Post(SQLAlchemyBaseModel):
             ).filter_by(
                 is_read=False
             ).count()
+
+    def responses(self, limit=15, offset=None):
+        lower_post = aliased(Post, name="lower_post")
+        lower_content = aliased(Content, name="lower_content")
+        upper_post = aliased(Post, name="upper_post")
+
+        latest_response = select([
+            func.max(Content.creation_date).label('last_update'),
+        ], lower_post.content_id==lower_content.id).where(
+            lower_post.ancestry.like(
+                upper_post.ancestry + cast(upper_post.id, String) + ',%'
+            )
+        ).label("latest_response")
+
+        query = DBSession.query(
+            upper_post,
+        ).join(
+            Content,
+        ).filter(
+            upper_post.parent_id==self.id
+        ).order_by(
+            desc(latest_response),
+            Content.creation_date.desc()
+        )
+
+        if limit:
+            query = query.limit(limit)
+
+        if offset:
+            query = query.offset(offset)
+
+        return query.all()
 
     def __repr__(self):
         return "<Post '%s %s' >" % (
