@@ -341,14 +341,6 @@ class Post(SQLAlchemyBaseModel):
             parent.id
         ))
 
-    def number_of_unread_descendants(self):
-        ancestry_query_string = "%s%d,%%" % (self.ancestry or '', self.id)
-        return DBSession.query(Post).filter(
-                Post.ancestry.like(ancestry_query_string)
-            ).filter_by(
-                is_read=False
-            ).count()
-
     def responses(self, limit=15, offset=None):
         lower_post = aliased(Post, name="lower_post")
         lower_content = aliased(Content, name="lower_content")
