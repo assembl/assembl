@@ -165,3 +165,14 @@ class Idea(SQLAlchemyBaseModel):
             return "<Idea %d '%s'>" % (self.id, self.short_title)
 
         return "<Idea %d>" % self.id
+
+
+class Extract(SQLAlchemyBaseModel):
+    """
+    A part extracted from a Post.
+    """
+    __tablename__ = 'extract'
+
+    id = Column(Integer, primary_key=True)
+    creation_date = Column(DateTime, nullable=False, default=datetime.utcnow)
+    order = Column(Float, nullable=False, default=0.0)
