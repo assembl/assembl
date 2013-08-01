@@ -389,7 +389,8 @@ class Post(SQLAlchemyBaseModel):
         return query.scalar()
 
     def __repr__(self):
-        return "<Post '%s %s' >" % (
+        return "<Post %s '%s %s' >" % (
+            self.id,
             self.content.type,
             self.content.id,
         )
