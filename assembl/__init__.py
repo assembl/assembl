@@ -20,10 +20,10 @@ def main(global_config, **settings):
     config.include('cornice')  # REST services library.
     # config.include('.lib.alembic')
     # config.include('.lib.email')
-    # config.include('.views')
+    config.include('.views')
 
     # config.scan('.lib')
-    # config.scan('.views')
+    config.scan('.views')
 
     # jinja2
     config.include('pyramid_jinja2')
