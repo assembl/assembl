@@ -4,9 +4,11 @@ from sqlalchemy.orm import relationship, backref, aliased
 from sqlalchemy.sql import func, cast, select
 
 from sqlalchemy import (
+    Table,
     Column, 
     Boolean,
     Integer, 
+    Float,
     Unicode, 
     UnicodeText, 
     DateTime,
@@ -117,3 +119,48 @@ class TableOfContents(SQLAlchemyBaseModel):
 
     def __repr__(self):
         return "<TableOfContents '%s'>" % self.discussion.topic
+
+
+idea_association_table = Table(
+    'idea_association',
+    SQLAlchemyBaseModel.metadata,
+    Column('parent_id', Integer, ForeignKey('idea.id')),
+    Column('child_id', Integer, ForeignKey('idea.id')),
+)
+
+
+class Idea(SQLAlchemyBaseModel):
+    """
+    A core concept taken from the associated discussion
+    """
+    __tablename__ = "idea"
+
+    long_title = Column(Unicode(255))
+    short_title = Column(Unicode(255))
+
+    id = Column(Integer, primary_key=True)
+    creation_date = Column(DateTime, nullable=False, default=datetime.utcnow)
+    order = Column(Float, nullable=False, default=0.0)
+
+    table_of_contents_id = Column(
+        Integer,
+        ForeignKey('table_id_contents.id'),
+        nullable=False
+    )
+
+    table_of_contents = relationship(
+        'TableOfContents',
+        backref='ideas'
+    )
+
+    children = relationship(
+        "Idea",
+        secondary=idea_association_table,
+        backref="parents"
+    )
+
+    def __repr__(self):
+        if self.short_title:
+            return "<Idea %d '%s'>" % (self.id, self.short_title)
+
+        return "<Idea %d>" % self.id
