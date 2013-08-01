@@ -373,6 +373,21 @@ class Post(SQLAlchemyBaseModel):
 
         return query.all()
 
+    def last_updated(self):
+        ancestry_query_string = "%s%d,%%" % (self.ancestry or '', self.id)
+        
+        query = DBSession.query(
+            func.max(Content.creation_date)
+        ).select_from(
+            Post
+        ).join(
+            Content
+        ).filter(
+            Post.ancestry.like(ancestry_query_string)
+        )
+
+        return query.scalar()
+
     def __repr__(self):
         return "<Post '%s %s' >" % (
             self.content.type,
