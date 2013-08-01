@@ -13,3 +13,4 @@ SQLAlchemy
 transaction
 waitress
 zope.sqlalchemy
+imaplib2
