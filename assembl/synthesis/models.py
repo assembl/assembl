@@ -114,7 +114,8 @@ class TableOfContents(SQLAlchemyBaseModel):
 
     discussion_id = Column(
         Integer,
-        ForeignKey('discussion.id')
+        ForeignKey('discussion.id'),
+        nullable=False
     )
 
     def __repr__(self):
