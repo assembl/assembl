@@ -3,7 +3,9 @@ from email.header import decode_header as decode_email_header
 from datetime import datetime
 from time import mktime
 from imaplib import IMAP4_SSL, IMAP4
-from sqlalchemy.orm import relationship, backref
+
+from sqlalchemy.orm import relationship, backref, aliased
+from sqlalchemy.sql import func, cast, select
 
 from sqlalchemy import (
     Column, 
@@ -292,18 +294,16 @@ class Post(SQLAlchemyBaseModel):
 
     id = Column(Integer, primary_key=True)
     creation_date = Column(DateTime, nullable=False, default=datetime.utcnow)
-    is_read = Column(Boolean, nullable=False, default=False)
 
-    ancestry = Column(Text)
+    ancestry = Column(Text, default="")
 
     content_id = Column(Integer, ForeignKey('content.id', ondelete='CASCADE'))
-    content = relationship('Content', uselist=False, lazy=False)
+    content = relationship('Content', uselist=False)
 
     parent_id = Column(Integer, ForeignKey('post.id'))
     children = relationship(
         "Post",
-        backref=backref('parent', remote_side=[id]),
-        order_by=desc('content_1_creation_date')
+        backref=backref('parent', remote_side=[id])
     )
 
     def get_descendants(self):
@@ -349,9 +349,40 @@ class Post(SQLAlchemyBaseModel):
                 is_read=False
             ).count()
 
+    def responses(self, limit=15, offset=None):
+        lower_post = aliased(Post, name="lower_post")
+        lower_content = aliased(Content, name="lower_content")
+        upper_post = aliased(Post, name="upper_post")
+
+        latest_response = select([
+            func.max(Content.creation_date).label('last_update'),
+        ], lower_post.content_id==lower_content.id).where(
+            lower_post.ancestry.like(
+                upper_post.ancestry + cast(upper_post.id, String) + ',%'
+            )
+        ).label("latest_response")
+
+        query = DBSession.query(
+            upper_post,
+        ).join(
+            Content,
+        ).filter(
+            upper_post.parent_id==self.id
+        ).order_by(
+            desc(latest_response),
+            Content.creation_date.desc()
+        )
+
+        if limit:
+            query = query.limit(limit)
+
+        if offset:
+            query = query.offset(offset)
+
+        return query.all()
+
     def __repr__(self):
-        return "<Post '%s %s' %s>" % (
+        return "<Post '%s %s' >" % (
             self.content.type,
             self.content.id,
-            '*unread*' if not self.is_read else '*read*'
         )

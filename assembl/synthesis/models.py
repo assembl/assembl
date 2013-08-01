@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from sqlalchemy.orm import relationship, backref, aliased
-from sqlalchemy.sql import func, cast
+from sqlalchemy.sql import func, cast, select
 
 from sqlalchemy import (
     Column, 
@@ -46,47 +46,48 @@ class Discussion(SQLAlchemyBaseModel):
         'polymorphic_identity': 'discussion',
     }
 
-    def root_posts(self, limit=15, offset=None):
-        """
-        Queries posts whose content comes from a source that belongs to this
-        topic. The result is a list of posts sorted by their youngest
-        descendent in descending order.
-        """
+    def posts(self, limit=15, offset=None, parent_id=None):
+        lower_post = aliased(Post, name="lower_post")
+        lower_content = aliased(Content, name="lower_content")
         upper_post = aliased(Post, name="upper_post")
-        descendants = DBSession.query(
-            Post,
-            func.max(Content.creation_date).label('last_update')
-        ).join(
-            Content
-        ).filter(
-            Post.ancestry.like(
+
+        latest_update = select([
+            func.max(Content.creation_date).label('last_update'),
+        ], lower_post.content_id==lower_content.id).where(
+            lower_post.ancestry.like(
                 upper_post.ancestry + cast(upper_post.id, String) + ',%'
             )
-        ).subquery()
+        ).label("latest_update")
 
         query = DBSession.query(
             upper_post,
-            descendants.c.last_update
         ).join(
-            'content',
-            'source',
-            'discussion',
+            Content,
         ).filter(
-            Source.discussion_id==self.id,
-            Content.source_id==Source.id,
-            Post.content_id==Content.id,
-            upper_post.parent_id==None
-        ).order_by(descendants.c.last_update, Content.creation_date)
+            upper_post.parent_id==parent_id
+        )
+
+        if not parent_id:
+            query = query.join(
+                Source
+            ).filter(
+                Source.discussion_id==self.id,
+                Content.source_id==Source.id,
+                Post.content_id==Content.id,
+            )
+            
+        query = query.order_by(
+            desc(latest_update),
+            Content.creation_date.desc()
+        )
 
         if limit:
-            query = query.limit(int(limit))
+            query = query.limit(limit)
 
         if offset:
-            query = query.offset(int(offset))
+            query = query.offset(offset)
 
-        posts_with_last_update_time = query.all()
-
-        return posts_with_last_update_time
+        return query.all()
 
     def __init__(self, *args, **kwargs):
         super(Discussion, self).__init__(*args, **kwargs)
