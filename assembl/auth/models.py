@@ -46,6 +46,7 @@ class Actor(SQLAlchemyBaseModel):
             allow=True
         ).one()
 
+
 class User(Actor):
     """
     A Human user.
