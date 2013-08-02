@@ -1,0 +1,132 @@
+{% extends 'base.jinja2' %}
+
+{% block header %}
+    <div class="bar bar--main">
+        <div class="bar-body">
+            <div class="bar-right">
+                <a> {{ gettext('Profile') }} <i class="icon-user"></i> </a>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% macro form(name, title) %}
+{% if name in providers %}
+<form id="{{name}}" method="post" action="/login/{{name}}">
+    {% for k,v in kwargs.items() %}
+    <input type="hidden" name="{{ k }}" value="{{ v }}" />
+    {% endfor %}
+    {% if name == "openid" %}
+    <input type="text" name="openid_identifier" />
+    {% endif %}
+    <input type="submit" value="{{ gettext(title) }}" />
+</form>
+{% endif %}
+{% endmacro %}
+
+{% block content %}
+
+    <div class="loginbox">
+        <img src="{{ STATIC_URL }}/img/loginbox/assembl.png" alt="Assembl" />
+
+        <div class="spacer spacer--big"></div>
+
+        <form class="form">
+            <label>{{ gettext('Username') }}</label>
+            {% if user.username %}
+            <span>{{user.username}}</span>
+            {% else %}
+            <input type="text" name="username" autofocus />
+            {% endif %}
+
+            <!-- TODO Change password routine -->
+            <input type="password" class="defaultfield" placeholder="{{ gettext('Password') }}" autofocus required />
+
+            <label>{{ gettext('Name') }}</label>
+            <input type="text" name="name" autofocus />
+
+            <!-- TODO Avatar logic -->
+            {% if user.profile.email_accounts or user.profile.unconfirmed_emails %}
+            <!-- TODO: Preferred email logic. -->
+            <div class="spacer spacer--huge"></div>
+            <label>{{ gettext('Emails') }}</label>
+            <ul>
+            {% for email_account in user.profile.email_accounts %}
+                {% if email_account.verified %}
+                    <li>{{ email_account.email }}</li>
+                {% endif %}
+            {% endfor %}
+            {% for email_account in user.profile.email_accounts %}
+                {% if not email_account.verified %}
+                    <li>{{ email_account.email }} ({{ gettext('unconfirmed') }})
+                    <input type="button" name="confirm" value="{{ gettext('Send confirmation message') }}" onclick="send_confirm('{{email_account.email}}');"/>
+                    </li>
+                {% endif %}
+            {% endfor %}
+            {% for idp_email in user.profile.unconfirmed_emails %}
+            <li>{{ idp_email.email }} ({{ gettext('unconfirmed') }})
+                    <input type="button" name="confirm" value="{{ gettext('Send confirmation message') }}" onclick="send_confirm('{{idp_email.email}}');"/>
+            </li>
+            {% endfor %}
+            </ul>
+            {% endif %}
+
+            {% if user.profile.identity_accounts %}
+            <div class="spacer spacer--huge"></div>
+            <label>{{ gettext('Accounts') }}</label>
+            <ul>
+            {% for account in user.profile.identity_accounts %}
+            <li>
+                <label>{{ account.type }}</label>:
+                {% if account.username %}
+                    {{account.username}}
+                {% else %}
+                    {{account.userid}}
+                {% endif %}
+                <!-- TODO: Handle the case where the token expired 
+                and the user may be offered to re-login. -->
+            </li>
+            {% endfor %}
+            </ul>
+            {% endif %}
+
+            <input type="submit" value="{{ gettext('Save') }}" class="barbutton" />
+
+            <div class="spacer"></div>
+        </form>
+
+        {% if providers %}
+        <p>{{ gettext("Connect other accounts to Assembl")|safe }}</p>
+        {% endif %}
+        {{form('facebook', 'Login with Facebook',
+               scope='email,publish_stream,read_stream,create_event,offline_access')}}
+        {{form('twitter', 'Login with Twitter')}}
+        {{form('bitbucket', 'Login with Bitbucket')}}
+        {{form('google', 'Login with Google',
+                use_popup='false', openid_identifier='google.com')}}
+        {{form('github', 'Login with Github')}}
+        {{form('yahoo', 'Login with Yahoo',
+                oauth='true', openid_identifier='yahoo.com')}}
+        {{form('openid', 'Login with OpenID')}}
+        {{form('live', 'Login with Windows Live')}}
+        <div class="spacer spacer--huge"></div>
+
+        <div class="text text-small text-muted">
+            {% set caravan = gettext("<a href='http://caravan.coop' class='link'>Caravan</a>") %}
+            {% set imaginationForPeople = gettext("<a href='http://http://imaginationforpeople.org/' class='link'>Imagination for people</a>") %}
+
+            {{ gettext("Designed by %(caravan)s and %(imaginationForPeople)s")|format(caravan=caravan, imaginationForPeople=imaginationForPeople)|safe }}
+        </div>
+        </form>
+    </div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script type="text/javascript">
+    requirejs(["main"]);
+    function send_confirm(email) {
+        // TODO
+    }
+</script>
+{% endblock %}

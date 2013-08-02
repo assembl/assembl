@@ -65,8 +65,8 @@ def upgrade(pyramid_env):
             sa.Column('preferred', sa.Boolean(), default=False),
             sa.Column('active', sa.Boolean(), default=True),
             sa.Column(
-                'provider_id', sa.Integer,
-                sa.ForeignKey('identity_provider.id', ondelete='CASCADE'),
+                'idprovider_account_id', sa.Integer,
+                sa.ForeignKey('idprovider_account.id', ondelete='CASCADE'),
                 nullable=False, primary_key=True))
         op.create_table(
             'user',
@@ -78,7 +78,9 @@ def upgrade(pyramid_env):
             sa.Column('preferred_email', sa.Unicode(50), nullable=False),
             sa.Column('verified', sa.Boolean, default=False),
             sa.Column('password', sa.Unicode(115), nullable=False),
+            sa.Column('timezone', Time(True)),
             sa.Column('last_login', sa.DateTime),
+            sa.Column('login_failures', sa.Integer(4), default=0),
             sa.Column(
                 'creation_date', sa.DateTime, nullable=False,
                 default=datetime.utcnow))

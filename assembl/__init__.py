@@ -12,6 +12,7 @@ def main(global_config, **settings):
     settings['config_uri'] = global_config['__file__']
 
     # velruse requires session support
+    # TODO: Replace with beaker
     session_factory = UnencryptedCookieSessionFactoryConfig(
         settings['session.secret'],
     )
@@ -26,10 +27,10 @@ def main(global_config, **settings):
     config.include('cornice')  # REST services library.
     # config.include('.lib.alembic')
     # config.include('.lib.email')
-    # config.include('.views')
+    config.include('.views')
 
     # config.scan('.lib')
-    # config.scan('.views')
+    config.scan('.views')
 
     # jinja2
     config.include('pyramid_jinja2')

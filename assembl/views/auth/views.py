@@ -1,14 +1,30 @@
 import json
+from datetime import datetime
+
+from gettext import gettext as _
 
 from pyramid.view import view_config
+from pyramid.security import (
+    remember,
+    forget,
+    authenticated_userid,
+    NO_PERMISSION_REQUIRED
+    )
+from pyramid.httpexceptions import (
+    HTTPUnauthorized,
+    HTTPFound,
+    HTTPServerError
+    )
 
 from sqlalchemy.orm.exc import NoResultFound, MultipleResultsFound
 
 from velruse import login_url
 
 from ...auth.models import (IdentityProvider, AgentAccount, EmailAccount,
-                            IdentityProviderAccount, AgentProfile, User)
+                            IdentityProviderAccount, AgentProfile, User,
+                            IdentityProviderEmail)
 from ...auth.operations import get_identity_provider
+from ...auth.utils import hash_password, format_token
 from ...lib.sqla import DBSession
 
 
@@ -17,7 +33,13 @@ from ...lib.sqla import DBSession
     request_method='GET', http_cache=60,
     renderer='assembl:templates/login.jinja2',
 )
+@view_config(
+    renderer='users/login.jinja2',
+    context='pyramid.exceptions.Forbidden',
+    permission=NO_PERMISSION_REQUIRED
+)
 def login_view(request):
+    # TODO: In case of forbidden, get the URL and pass it along.
     return {
         'login_url': login_url,
         'providers': request.registry.settings['login_providers'],
@@ -25,67 +47,241 @@ def login_view(request):
 
 
 @view_config(
-    context='velruse.AuthenticationComplete',
-    renderer='assembl:templates/login_result.jinja2',
-)
-def login_complete_view(request):
-    context = request.context
-    profile = context.profile
-    provider = get_identity_provider(context.type)
-    email = profile.get("verifiedEmail")
-    if not email:
-        emails = profile.get("emails")
-        primary = [e.get("value") for e in emails
-                   if isinstance(e, dict) and e.get("primary")]
-        if primary and primary[0]:
-            email = primary[0]
-        elif emails:
-            email = email[0]
-            if isinstance(email, dict):
-                email = email.get("value")
+    route_name='profile',
+    request_method='GET',
+    renderer='assembl:templates/view_profile.jinja2'
+    # Add permissions to view a profile?
+    )
+def assembl_view_profile(request):
+    username = request.matchdict.get('username', '').strip()
+    try:
+        user = DBSession.query(User).filter_by(username=username).one()
+    except NoResultFound:
+        raise exception_response(404)
+    logged_in = authenticated_userid(request)
 
-    for account in profile["accounts"]:
-        try:
-            found = DBSession.query(Account).filter(
-                Account.provider == provider and
-                Account.userid == account.get("userid") and
-                Account.domain == account.get("domain") and
-                Account.username == account.get("username")
-            ).one()
-            orgunit = found.orgunit
-        except NoResultFound:
-            orgunit = OrganizationalUnit(
-                name=profile.displayName,
-                )
-            DBSession.add(orgunit)
-            user = User(
-                orgunit=orgunit
-                )
-            DBSession.add(user)
-            found = Account(
-                provider=provider,
-                userid=account.get("userid"),
-                domain=account.get("domain"),
-                username=account.get("username"),
-                email=email,
-                orgunit=orgunit
-                )
-            DBSession.add(found)
-
-    result = {
-        'profile': profile,
-        'credentials': context.credentials,
-    }
+    if logged_in == user.id:
+        # Viewing my own profile
+        return render_to_response('assembl:templates/profile.jinja2', {
+            'providers': request.registry.settings['login_providers'],
+            'user': user
+            })
+        return profile_page(request, user.profile)
     return {
-        'result': json.dumps(result, indent=4),
+        'user': user
     }
 
 
 @view_config(
+    route_name='profile',
+    request_method='POST',
+    renderer='assembl:templates/profile.jinja2'
+    # Add permissions to view a profile?
+    )
+def assembl_view_profile(request):
+    username = request.matchdict.get('username', '').strip()
+    try:
+        user = DBSession.query(User).filter_by(username=username).one()
+    except NoResultFound:
+        raise exception_response(404)
+    logged_in = authenticated_userid(request)
+    if logged_in != user.id:
+        raise HTTPUnauthorized()
+    # TODO: Save stuff
+    return {
+        'providers': request.registry.settings['login_providers'],
+        'user': user
+    }
+
+
+@view_config(
+    route_name='create_user',
+    request_method='POST',
+    permission=NO_PERMISSION_REQUIRED,
+    renderer='assembl:templates/register.jinja2'
+)
+def assembl_create_user_view(request):
+    username = request.params.get('username', '').strip()
+    password = request.params.get('password', '').strip()
+    email = request.params.get('password', '').strip()
+    # Find agent account to avoid duplicates!
+    if DBSession.query(User).filter_by(username=username).count():
+        return {
+            'error': _("This username already exists")
+        }
+    #TODO: Validate password quality
+    # otherwise create.
+    profile = AgentProfile()
+    user = User(
+        profile=profile,
+        username=username,
+        password=hash_password(password),
+        creation_date=datetime.now()
+        )
+    email_account = EmailAccount(
+        email=email,
+        profile=profile
+        )
+    DBSession.add(user)
+    DBSession.add(email_account)
+    DBSession.commit()
+    # TODO: Instead of assuming that the user is logged in now,
+    # Send confirm email and wait for confirmation.
+    headers = remember(request, user.id, tokens=format_token(user))
+    request.response.headerlist.extend(headers)
+    # Redirect to profile page. TODO: Remember another URL
+    return HTTPFound(location='/users/'+username)
+
+
+@view_config(
+    route_name='login',
+    request_method='POST',
+    permission=NO_PERMISSION_REQUIRED,
+    renderer='assembl:templates/login.jinja2'
+)
+def assembl_login_complete_view(request):
+    register = False
+    # Check if proper authorization. Otherwise send to another page.
+    username = request.params.get('username', '').strip()
+    password = request.params.get('password', '').strip()
+    logged_in = authenticated_userid(request)
+    if logged_in:
+        if logged_in != request.userid:
+            pass  # Do we need to log out old user? Forget credentials?
+        # re-logging in? Why?
+        return HTTPFound(location='/users/'+username)
+    user = DBSession.query(User).filter_by(username=username).first()
+    if not user:
+        return {
+            'error': _("This user cannot be found")
+        }
+    if user.password != hash_password(password):
+        user.login_falures += 1
+        #TODO: handle high failure count
+        DBSession.add(user)
+        DBSession.commit()
+        return {'error': _("Invalid user and password")}
+    headers = remember(request, user.id, tokens=format_token(user))
+    request.response.headerlist.extend(headers)
+    # Redirect to profile page. TODO: Remember another URL
+    return HTTPFound(location='/users/'+username)
+
+
+@view_config(
+    context='velruse.AuthenticationComplete'
+)
+def velruse_login_complete_view(request):
+    context = request.context
+    velruse_profile = context.profile
+    provider = get_identity_provider(context.type)
+    logged_in = authenticated_userid(request)
+    # find or create IDP_Accounts
+    idp_accounts = []
+    new_idp_accounts = []
+    velruse_accounts = velruse_profile['accounts']
+    for velruse_account in velruse_accounts:
+        if velruse_account['userid']:
+            idp_account = DBSession.query(IdentityProviderAccount).filter(
+                IdentityProviderAccount.provider == provider
+                and IdentityProviderAccount.domain == velruse_account['domain']
+                and IdentityProviderAccount.userid == velruse_account['userid']
+            ).first()
+            if idp_account:
+                idp_accounts.push(idp_account)
+        elif velruse_account['username']:
+            idp_account = DBSession.query(IdentityProviderAccount).filter(
+                IdentityProviderAccount.provider == provider
+                and IdentityProviderAccount.domain == velruse_account['domain']
+                and IdentityProviderAccount.username == velruse_account['username']
+            ).first()
+            if idp_account:
+                idp_accounts.push(idp_account)
+        else:
+            raise HTTPServerError()
+    if not idp_accounts:
+        idp_account = IdentityProviderAccount(
+            provider=provider,
+            domain=velruse_account['domain'],
+            userid=velruse_account['userid'],
+            username=velruse_account['username']
+            )
+        idp_accounts.push(idp_account)
+        new_idp_accounts.push(idp_account)
+        DBSession.add(idp_account)
+    # find AgentProfile
+    profiles = set((a.profile for a in idp_accounts if a.profile))
+    if len(profiles) > 1:
+        # special case: Multiple profiles. We need to combine them to 1
+        # TODO
+        pass
+    if len(profiles):
+        profile = profiles.pop()
+        username = profile.username
+    else:
+        # Create a new profile and user
+        profile = AgentProfile(name=velruse_profile['displayName'])
+
+        DBSession.add(profile)
+        username = None
+        usernames = set((a['preferredUsername'] for a in velruse_accounts
+                         if a['preferredUsername']))
+        for u in usernames:
+            if not DBSession.query(User).filter_by(username=u).count():
+                username = u
+                break
+        user = User(
+            profile=profile,
+            username=username,
+            verified=True,
+            last_login=datetime.now(),
+            creation_date=datetime.now(),
+            #timezone=velruse_profile['utcOffset'],   # needs parsing
+            )
+        DBSession.add(user)
+    for idp_account in new_idp_accounts:
+        idp_account.profile = profile
+    confirmed_email_accounts = {ea.email: ea for ea in profile.email_accounts()}
+    if profile.provider.trust_emails:
+        # There may be new emails in the accounts
+        if 'verifiedEmail' in velruse_profile:
+            email = velruse_profile['verifiedEmail']
+        if email in confirmed_email_accounts:
+            email_account = confirmed_email_accounts[email]
+            if not email_account.verified:
+                email_account.verified = True
+                DBSession.add(email_account)
+        else:
+            email_account = EmailAccount(
+                email=email,
+                verified=True,
+                profile=profile
+                )
+            confirmed_email_accounts[email] = email_account
+    for email in velruse_profile.get('emails', []):
+        if email not in confirmed_email_accounts:
+            idp_email = IdentityProviderEmail(
+                email=email['value'],
+                preferred=email.get('preferred', False),
+                idprovider_account=idp_account   
+                # TODO: Clean that mess! Though there's probably only one idp_account.
+                )
+            DBSession.add(idp_email)
+    # TODO: Clean old IdentityProviderEmails
+    DBSession.commit()
+    # TODO: Store the OAuth etc. credentials. Though that may be done by velruse?
+    # Also session stuff.
+    if username:
+        return HTTPFound(location='/users/'+username)
+    else:
+        return HTTPFound(location='/ext_user/'+user.id)
+
+
+@view_config(
     context='velruse.AuthenticationDenied',
-    renderer='assembl:templates/login_result.jinja2',
+    renderer='assembl:templates/profile.jinja2',
 )
 def login_denied_view(request):
     return {
         'result': 'denied',
     }
+    # TODO: If logged in otherwise, go to profile page. Otherwise, back to login page

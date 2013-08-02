@@ -9,6 +9,7 @@ from sqlalchemy import (
     Integer,
     Unicode,
     DateTime,
+    Time,
 )
 
 from sqlalchemy.orm import relationship, backref
@@ -73,11 +74,12 @@ class IdentityProviderEmail(SQLAlchemyBaseModel):
     verified = Column(Boolean(), default=False)
     preferred = Column(Boolean(), default=False)
     active = Column(Boolean(), default=True)
-    provider_id = Column(
+    idprovider_account_id = Column(
         Integer,
-        ForeignKey('identity_provider.id', ondelete='CASCADE'),
+        ForeignKey('idprovider_account.id', ondelete='CASCADE'),
         nullable=False, primary_key=True)
-    provider = relationship(IdentityProvider, backref='emails')
+    idprovider_account = relationship(
+        IdentityProviderAccount, backref='emails')
 
 
 class AgentProfile(SQLAlchemyBaseModel):
@@ -95,6 +97,9 @@ class AgentProfile(SQLAlchemyBaseModel):
     def accounts(self):
         """All AgentAccounts for this profile"""
         return chain(self.identity_accounts(), self.email_accounts())
+
+    def unconfirmed_emails(self):
+        return chain(*(account.emails() for account in self.identity_accounts))
 
     __mapper_args__ = {
         'polymorphic_identity': 'agent_profile',
@@ -119,7 +124,9 @@ class User(SQLAlchemyBaseModel):
     preferred_email = Column(Unicode(50), nullable=False)
     verified = Column(Boolean(), default=False)
     password = Column(Unicode(115), nullable=False)
+    timezone = Column(Time(True))
     last_login = Column(DateTime)
+    login_failures = Column(Integer(4), default=0)
     creation_date = Column(DateTime, nullable=False, default=datetime.utcnow)
 
     __mapper_args__ = {
