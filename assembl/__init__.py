@@ -2,6 +2,7 @@
 
 from pyramid.config import Configurator
 from pyramid.session import UnencryptedCookieSessionFactoryConfig
+from pyramid_beaker import session_factory_from_settings
 from sqlalchemy import engine_from_config
 
 from .db import DBSession
@@ -13,9 +14,9 @@ def main(global_config, **settings):
 
     # velruse requires session support
     # TODO: Replace with beaker
-    session_factory = UnencryptedCookieSessionFactoryConfig(
-        settings['session.secret'],
-    )
+    session_factory = session_factory_from_settings(
+        settings
+        )
     # here we create the engine and bind it to the (not really a) session
     # factory called DBSession.
     engine = engine_from_config(settings, 'sqlalchemy.')
