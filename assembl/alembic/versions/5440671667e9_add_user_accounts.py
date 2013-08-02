@@ -41,7 +41,8 @@ def upgrade(pyramid_env):
         op.create_table(
             'identity_provider',
             sa.Column('id', sa.Integer, primary_key=True),
-            sa.Column('name', sa.String(20), nullable=False),
+            sa.Column('provider_type', sa.String(20), nullable=False),
+            sa.Column('name', sa.String(60), nullable=False),
             sa.Column('trust_emails', sa.Boolean, default=False))
         op.create_table(
             'idprovider_account',

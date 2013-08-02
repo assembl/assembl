@@ -28,7 +28,8 @@ class IdentityProvider(SQLAlchemyBaseModel):
     """An identity provider (or sometimes a category of identity providers.)"""
     __tablename__ = "identity_provider"
     id = Column(Integer, primary_key=True)
-    name = Column(String(20), nullable=False)
+    provider_type = Column(String(20), nullable=False)
+    name = Column(String(60), nullable=False)
     # TODO: More complicated model, where trust also depends on realm.
     trust_emails = Column(Boolean, default=False)
 

@@ -130,7 +130,7 @@ def assembl_create_user_view(request):
     headers = remember(request, user.id, tokens=format_token(user))
     request.response.headerlist.extend(headers)
     # Redirect to profile page. TODO: Remember another URL
-    return HTTPFound(location='/users/'+username)
+    raise HTTPFound(location='/users/'+username)
 
 
 @view_config(
@@ -149,14 +149,14 @@ def assembl_login_complete_view(request):
         if logged_in != request.userid:
             pass  # Do we need to log out old user? Forget credentials?
         # re-logging in? Why?
-        return HTTPFound(location='/users/'+username)
+        raise HTTPFound(location='/users/'+username)
     user = DBSession.query(User).filter_by(username=username).first()
     if not user:
         return {
             'error': _("This user cannot be found")
         }
     if user.password != hash_password(password):
-        user.login_falures += 1
+        user.login_failures += 1
         #TODO: handle high failure count
         DBSession.add(user)
         DBSession.commit()
@@ -164,7 +164,7 @@ def assembl_login_complete_view(request):
     headers = remember(request, user.id, tokens=format_token(user))
     request.response.headerlist.extend(headers)
     # Redirect to profile page. TODO: Remember another URL
-    return HTTPFound(location='/users/'+username)
+    raise HTTPFound(location='/users/'+username)
 
 
 @view_config(
@@ -173,7 +173,7 @@ def assembl_login_complete_view(request):
 def velruse_login_complete_view(request):
     context = request.context
     velruse_profile = context.profile
-    provider = get_identity_provider(context.type)
+    provider = get_identity_provider(context)
     logged_in = authenticated_userid(request)
     # find or create IDP_Accounts
     idp_accounts = []
@@ -271,9 +271,9 @@ def velruse_login_complete_view(request):
     # TODO: Store the OAuth etc. credentials. Though that may be done by velruse?
     # Also session stuff.
     if username:
-        return HTTPFound(location='/users/'+username)
+        raise HTTPFound(location='/users/'+username)
     else:
-        return HTTPFound(location='/ext_user/'+user.id)
+        raise HTTPFound(location='/ext_user/'+user.id)
 
 
 @view_config(
