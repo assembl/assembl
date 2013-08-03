@@ -24,7 +24,6 @@ from ..db import DBSession
 from ..db.models import SQLAlchemyBaseModel
 
 
-
 class Source(SQLAlchemyBaseModel):
     """
     A Discussion Source is where commentary that is handled in the form of
@@ -47,7 +46,7 @@ class Source(SQLAlchemyBaseModel):
         'discussion.id', 
         ondelete='CASCADE'
     ))
-
+    
     discussion = relationship(
         "Discussion", 
         backref=backref('sources', order_by=creation_date)
@@ -80,16 +79,18 @@ class Content(SQLAlchemyBaseModel):
         backref=backref('contents', order_by=import_date)
     )
 
-    post = relationship("Post", uselist=False)
-
     __mapper_args__ = {
         'polymorphic_identity': 'content',
         'polymorphic_on': 'type'
     }
 
+    @property
+    def title(self):
+        return None
+
+    
     def __init__(self, *args, **kwargs):
         super(Content, self).__init__(*args, **kwargs)
-        self.post = self.post or Post(content=self)
 
     def __repr__(self):
         return "<Content '%s'>" % self.type
@@ -219,99 +220,40 @@ class Mailbox(Source):
 
     def __repr__(self):
         return "<Mailbox '%s'>" % self.name
-
-
-class Email(Content):
-    """
-    An Email refers to an email message that was imported from an Mailbox.
-    """
-    __tablename__ = "email"
-
-    id = Column(Integer, ForeignKey(
-        'content.id', 
-        ondelete='CASCADE'
-    ), primary_key=True)
-
-    to_address = Column(Unicode(1024), nullable=False)
-    from_address = Column(Unicode(1024), nullable=False)
-    subject = Column(Unicode(1024), nullable=False)
-    body = Column(UnicodeText)
-
-    full_message = Column(UnicodeText)
-
-    message_id = Column(Unicode(255))
-    in_reply_to = Column(Unicode(255))
-
-    import_date = Column(DateTime, nullable=False, default=datetime.utcnow)
-
-    __mapper_args__ = {
-        'polymorphic_identity': 'email',
-    }
-
-    def __init__(self, *args, **kwargs):
-        super(Email, self).__init__(*args, **kwargs)
-        self.associate_family()
-
-    def associate_family(self):
-        if self not in DBSession:
-            DBSession.add(self)
-
-        # if there is an email.in_reply_to, search posts with content.type
-        # == email and email.message_id == email.in_reply_to, then set that
-        # email's post's id as the parent of this new post.
-
-        if self.in_reply_to:
-            parent_email = DBSession.query(Email).filter_by(
-                message_id=self.in_reply_to,
-            ).first()
-
-            if parent_email: 
-                self.post.set_parent(parent_email.post)
-
-        # search for emails where the in_reply_to is the same as the
-        # message_id for this email, then set their post's parent to the
-        # id of this new post.
-
-        child_emails = DBSession.query(Email).filter_by(
-            in_reply_to=self.message_id
-        ).all()
-
-        for child_email in child_emails:
-            child_email.post.set_parent(self.post)
-
-    def __repr__(self):
-        return "<Email '%s to %s'>" % (
-            self.from_address.encode('utf-8'), 
-            self.to_address.encode('utf-8')
-        )
-
-
-class Post(SQLAlchemyBaseModel):
+    
+class Post(Content):
     """
     A Post represents input into the broader discussion taking place on
     Assembl. It may be a response to another post, it may have responses, and
     its content may be of any type.
     """
     __tablename__ = "post"
-
-    id = Column(Integer, primary_key=True)
-    creation_date = Column(DateTime, nullable=False, default=datetime.utcnow)
+    __mapper_args__ = {'polymorphic_identity': 'post'}
+    
+    id = Column(Integer, ForeignKey(
+        'content.id', 
+        ondelete='CASCADE'
+    ), primary_key=True)
 
     ancestry = Column(Text, default="")
 
-    content_id = Column(Integer, ForeignKey('content.id', ondelete='CASCADE'))
-    content = relationship('Content', uselist=False)
-
     parent_id = Column(Integer, ForeignKey('post.id'))
-    children = relationship(
-        "Post",
-        backref=backref('parent', remote_side=[id])
-    )
+
+    parent = relationship('Post', backref='children', primaryjoin='Post.parent_id==Post.id', remote_side=[id])
+    
+    @property
+    def author(self):
+        return None
+    
+    @property
+    def body(self):
+        return None
+    
 
     def get_descendants(self):
         ancestry_query_string = "%s%d,%%" % (self.ancestry or '', self.id)
 
-        descendants = DBSession.query(Post).join(Content).filter(
+        descendants = DBSession.query(Post).filter(
             Post.ancestry.like(ancestry_query_string)
         ).order_by(Content.creation_date).all()
 
@@ -396,3 +338,76 @@ class Post(SQLAlchemyBaseModel):
             self.content.type,
             self.content.id,
         )
+
+
+class Email(Post):
+    """
+    An Email refers to an email message that was imported from an Mailbox.
+    """
+    __tablename__ = "email"
+    __mapper_args__ = {
+        'polymorphic_identity': 'email',
+    }
+    
+    id = Column(Integer, ForeignKey(
+        'post.id', 
+        ondelete='CASCADE'
+    ), primary_key=True)
+
+    to_address = Column(Unicode(1024), nullable=False)
+    from_address = Column(Unicode(1024), nullable=False)
+    subject = Column(Unicode(1024), nullable=False)
+    body = Column(UnicodeText)
+
+    full_message = Column(UnicodeText)
+
+    message_id = Column(Unicode(255))
+    in_reply_to = Column(Unicode(255))
+
+    def __init__(self, *args, **kwargs):
+        super(Email, self).__init__(*args, **kwargs)
+        self.associate_family()
+
+    @property
+    def title(self):
+        return self.subject
+    
+    @property
+    #FIXME: Link to Profile here once implemented
+    def author(self):
+        return self.from_address
+    
+    def associate_family(self):
+        if self not in DBSession:
+            DBSession.add(self)
+
+        # if there is an email.in_reply_to, search posts with content.type
+        # == email and email.message_id == email.in_reply_to, then set that
+        # email's post's id as the parent of this new post.
+
+        if self.in_reply_to:
+            parent_email = DBSession.query(Email).filter_by(
+                message_id=self.in_reply_to,
+            ).first()
+
+            if parent_email: 
+                self.set_parent(parent_email)
+
+        # search for emails where the in_reply_to is the same as the
+        # message_id for this email, then set their post's parent to the
+        # id of this new post.
+
+        child_emails = DBSession.query(Email).filter_by(
+            in_reply_to=self.message_id
+        ).all()
+
+        for child_email in child_emails:
+            child_email.set_parent(self)
+
+    def __repr__(self):
+        return "<Email '%s to %s'>" % (
+            self.from_address.encode('utf-8'), 
+            self.to_address.encode('utf-8')
+        )
+
+

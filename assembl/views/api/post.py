@@ -1,76 +1,84 @@
-from colander import Invalid
-from cornice import Service
-from sqlalchemy.orm.exc import NoResultFound
+import json
+import os
 
-from pyramid.view import view_config, view_defaults
-from pyramid.response import Response
+from pyramid.view import view_config
+from assembl.views.api import FIXTURE_DIR
+from assembl.db import DBSession
 
-from .. import cornice_paths
-from ...api import post as api
+from assembl.source.models import Post
+from assembl.synthesis.models import Discussion
 
+# Retrieve
+@view_config(renderer='json', route_name='get_inbox', request_method='GET', http_cache=60)
+def get_inbox(request):
+    path = os.path.join(FIXTURE_DIR, 'inbox.json')
+    f = open(path)
+    data = json.loads(f.read())
+    f.close()
 
-desc = 'An API to manipulate posts.'
-posts_svc = Service(name='posts', path=cornice_paths['posts'],
-                    description=desc, renderer='json')
-post_svc = Service(name='post', path=cornice_paths['post'],
-                   description=desc, renderer='json')
+    try:
+        page = int(request.GET.getone('page'))
+    except (ValueError, KeyError):
+        page = 1
 
+    if page < 1:
+        page = 1
 
-@view_config(context=NoResultFound)
-def notfound(exc, request):
-    return Response('<h1>404 Not Found</h1>The resource could not be found',
-                    status='404 Not Found')
+    data["page"] = page
+    data["maxPage"] = 9
+    data["inbox"] = 253
+    data["total"] = 437
+    data["startIndex"] = (50 * page) - 49
+    data["endIndex"] = data["startIndex"] + 49
 
+    if data["page"] == data["maxPage"]:
+        data["endIndex"] = data["total"]
 
-@view_config(context=Invalid)
-def failed_validation(exc, request):
-    response =  Response('Validation failed')
-    response.status_int = 400
-    return response
+    from time import sleep
+    sleep(1)
 
-
-def validate(fields, **kwargs):
-    if 'include' not in kwargs and 'exclude' not in kwargs:
-        kwargs['include'] = fields.keys()
-    return api.validator(**kwargs).deserialize(fields)
-
-
-@posts_svc.get()
-def list_posts(request):
-    id = request.GET.get('start', None)
-
-    if id is not None:
-        levels = request.GET.get('levels', None)
-        posts = api.get_thread(int(id), int(levels) if levels else None)
-    else:
-        posts = api.find()
-
-    return [dict(p) for p in posts]
+    return data
 
 
-@posts_svc.post()
-def create_post(request):
-    fields = validate(dict(request.POST), include='__nopk__',
-                      exclude=['message_id'])
-    return dict(api.create(**fields))
+@view_config(renderer='json', route_name='get_posts', request_method='GET', http_cache=60)
+def get_posts(request):
+    try:
+        root_post_id = int(request.GET.getone('id'))
+    except (ValueError, KeyError):
+        root_post_id = None
+        
+    query = DBSession.query(Post)
+    #if root_post_id:
+        #query=query.get(root_post_id)
+    
+    #path = os.path.join(FIXTURE_DIR, 'posts.json')
+    #f = open(path)
+    #data = json.loads(f.read())
+    #f.close()
+    retval = []
+    for post in query:
+        data = {}
+        data["id"] = post.id
+        
+        data["checked"] = False
+        #FIXME
+        data["collapsed"] = True
+        #FIXME
+        data["read"] = True
+        data["parentId"] = post.parent_id
+        data["subject"] = post.title
+        data["body"] = post.body
+        data["authorName"] = post.author
+        #FIXME
+        data["avatarUrl"] = None
+        data["date"] = post.creation_date
+        retval.append(data)
+    return retval
 
 
-@post_svc.get()
-def get_post(request):
-    criteria = validate(request.matchdict)
-    return dict(api.get(raise_=True, **criteria))
+# Update
+@view_config(renderer='json', route_name='save_post', request_method='PUT', http_cache=60)
+def save_post(request):
+    data = json.loads(request.body)
 
-
-@post_svc.post()
-def update_post(request):
-    criteria = validate(request.matchdict)
-    post = api.get(**criteria)
-    post.update(**validate(dict(request.POST)))
-    return dict(post)
-
-
-@post_svc.delete()
-def delete_post(request):
-    criteria = validate(request.matchdict)
-    api.get(**criteria).delete()
-    return dict(result=True)
+    return data

@@ -19,7 +19,7 @@ from sqlalchemy import (
 from ..db import DBSession
 from ..db.models import SQLAlchemyBaseModel
 from ..auth.models import RestrictedAccessModel
-from ..source.models import *
+#from ..source.models import *
 
 
 
@@ -121,14 +121,12 @@ class TableOfContents(SQLAlchemyBaseModel):
     def __repr__(self):
         return "<TableOfContents '%s'>" % self.discussion.topic
 
-
 idea_association_table = Table(
     'idea_association',
     SQLAlchemyBaseModel.metadata,
     Column('parent_id', Integer, ForeignKey('idea.id')),
     Column('child_id', Integer, ForeignKey('idea.id')),
 )
-
 
 class Idea(SQLAlchemyBaseModel):
     """
@@ -145,19 +143,20 @@ class Idea(SQLAlchemyBaseModel):
 
     table_of_contents_id = Column(
         Integer,
-        ForeignKey('table_id_contents.id'),
+        ForeignKey('table_of_contents.id'),
         nullable=False
     )
-
     table_of_contents = relationship(
         'TableOfContents',
-        backref='ideas'
+        backref='ideas',
     )
 
     children = relationship(
         "Idea",
-        secondary=idea_association_table,
-        backref="parents"
+        secondary='idea_association',
+        backref="parents",
+        primaryjoin=id==idea_association_table.c.parent_id,
+        secondaryjoin=id==idea_association_table.c.child_id,
     )
 
     def __repr__(self):
@@ -165,7 +164,6 @@ class Idea(SQLAlchemyBaseModel):
             return "<Idea %d '%s'>" % (self.id, self.short_title)
 
         return "<Idea %d>" % self.id
-
 
 class Extract(SQLAlchemyBaseModel):
     """
