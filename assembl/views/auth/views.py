@@ -4,24 +4,26 @@ from datetime import datetime
 from gettext import gettext as _
 
 from pyramid.view import view_config
+from pyramid.renderers import render_to_response
 from pyramid.security import (
     remember,
-    forget,
+    # forget,
     authenticated_userid,
     NO_PERMISSION_REQUIRED
     )
 from pyramid.httpexceptions import (
+    exception_response,
     HTTPUnauthorized,
     HTTPFound,
     HTTPServerError
     )
 
-from sqlalchemy.orm.exc import NoResultFound, MultipleResultsFound
+from sqlalchemy.orm.exc import NoResultFound
 import transaction
 
 from velruse import login_url
 
-from ...auth.models import (IdentityProvider, AgentAccount, EmailAccount,
+from ...auth.models import (IdentityProvider, EmailAccount,
                             IdentityProviderAccount, AgentProfile, User,
                             IdentityProviderEmail)
 from ...auth.operations import get_identity_provider
@@ -79,7 +81,7 @@ def assembl_view_profile(request):
     renderer='assembl:templates/profile.jinja2'
     # Add permissions to view a profile?
     )
-def assembl_view_profile(request):
+def assembl_modify_profile(request):
     username = request.matchdict.get('username', '').strip()
     try:
         user = DBSession.query(User).filter_by(username=username).one()
@@ -101,21 +103,21 @@ def assembl_view_profile(request):
     renderer='assembl:templates/view_profile.jinja2'
     # Add permissions to view a profile?
     )
-def assembl_view_profile(request):
+def assembl_view_unnamed_profile(request):
     id = int(request.matchdict.get('id'))
     try:
         user = DBSession.query(User).get(id)
     except NoResultFound:
         raise exception_response(404)
     logged_in = authenticated_userid(request)
-
+    print logged_in
+    print user.id, user
     if logged_in == user.id:
         # Viewing my own profile
         return render_to_response('assembl:templates/profile.jinja2', {
             'providers': request.registry.settings['login_providers'],
             'user': user
             })
-        return profile_page(request, user.profile)
     return {
         'user': user
     }
@@ -127,7 +129,7 @@ def assembl_view_profile(request):
     renderer='assembl:templates/profile.jinja2'
     # Add permissions to view a profile?
     )
-def assembl_view_profile(request):
+def assembl_modify_unnamed_profile(request):
     id = int(request.matchdict.get('id'))
     try:
         user = DBSession.query(User).get(id)
@@ -189,7 +191,6 @@ def assembl_create_user_view(request):
     renderer='assembl:templates/login.jinja2'
 )
 def assembl_login_complete_view(request):
-    register = False
     # Check if proper authorization. Otherwise send to another page.
     username = request.params.get('username', '').strip()
     password = request.params.get('password', '').strip()
@@ -230,18 +231,18 @@ def velruse_login_complete_view(request):
     velruse_accounts = velruse_profile['accounts']
     for velruse_account in velruse_accounts:
         if 'userid' in velruse_account:
-            idp_account = DBSession.query(IdentityProviderAccount).filter(
-                IdentityProviderAccount.provider == provider
-                and IdentityProviderAccount.domain == velruse_account['domain']
-                and IdentityProviderAccount.userid == velruse_account['userid']
+            idp_account = DBSession.query(IdentityProviderAccount).filter_by(
+                provider=provider,
+                domain=velruse_account['domain'],
+                userid=velruse_account['userid']
             ).first()
             if idp_account:
                 idp_accounts.append(idp_account)
         elif 'username' in velruse_account:
-            idp_account = DBSession.query(IdentityProviderAccount).filter(
-                IdentityProviderAccount.provider == provider
-                and IdentityProviderAccount.domain == velruse_account['domain']
-                and IdentityProviderAccount.username == velruse_account['username']
+            idp_account = DBSession.query(IdentityProviderAccount).filter_by(
+                provider=provider,
+                domain=velruse_account['domain'],
+                username=velruse_account['username']
             ).first()
             if idp_account:
                 idp_accounts.append(idp_account)
