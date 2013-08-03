@@ -17,6 +17,7 @@ from pyramid.httpexceptions import (
     )
 
 from sqlalchemy.orm.exc import NoResultFound, MultipleResultsFound
+import transaction
 
 from velruse import login_url
 
@@ -25,7 +26,7 @@ from ...auth.models import (IdentityProvider, AgentAccount, EmailAccount,
                             IdentityProviderEmail)
 from ...auth.operations import get_identity_provider
 from ...auth.utils import hash_password, format_token
-from ...lib.sqla import DBSession
+from ...db import DBSession
 
 
 @view_config(
@@ -95,6 +96,54 @@ def assembl_view_profile(request):
 
 
 @view_config(
+    route_name='unnamed_profile',
+    request_method='GET',
+    renderer='assembl:templates/view_profile.jinja2'
+    # Add permissions to view a profile?
+    )
+def assembl_view_profile(request):
+    id = int(request.matchdict.get('id'))
+    try:
+        user = DBSession.query(User).get(id)
+    except NoResultFound:
+        raise exception_response(404)
+    logged_in = authenticated_userid(request)
+
+    if logged_in == user.id:
+        # Viewing my own profile
+        return render_to_response('assembl:templates/profile.jinja2', {
+            'providers': request.registry.settings['login_providers'],
+            'user': user
+            })
+        return profile_page(request, user.profile)
+    return {
+        'user': user
+    }
+
+
+@view_config(
+    route_name='unnamed_profile',
+    request_method='POST',
+    renderer='assembl:templates/profile.jinja2'
+    # Add permissions to view a profile?
+    )
+def assembl_view_profile(request):
+    id = int(request.matchdict.get('id'))
+    try:
+        user = DBSession.query(User).get(id)
+    except NoResultFound:
+        raise exception_response(404)
+    logged_in = authenticated_userid(request)
+    if logged_in != user.id:
+        raise HTTPUnauthorized()
+    # TODO: Save stuff
+    return {
+        'providers': request.registry.settings['login_providers'],
+        'user': user
+    }
+
+
+@view_config(
     route_name='create_user',
     request_method='POST',
     permission=NO_PERMISSION_REQUIRED,
@@ -124,7 +173,7 @@ def assembl_create_user_view(request):
         )
     DBSession.add(user)
     DBSession.add(email_account)
-    DBSession.commit()
+    transaction.commit()
     # TODO: Instead of assuming that the user is logged in now,
     # Send confirm email and wait for confirmation.
     headers = remember(request, user.id, tokens=format_token(user))
@@ -159,7 +208,7 @@ def assembl_login_complete_view(request):
         user.login_failures += 1
         #TODO: handle high failure count
         DBSession.add(user)
-        DBSession.commit()
+        transaction.commit()
         return {'error': _("Invalid user and password")}
     headers = remember(request, user.id, tokens=format_token(user))
     request.response.headerlist.extend(headers)
@@ -180,33 +229,33 @@ def velruse_login_complete_view(request):
     new_idp_accounts = []
     velruse_accounts = velruse_profile['accounts']
     for velruse_account in velruse_accounts:
-        if velruse_account['userid']:
+        if 'userid' in velruse_account:
             idp_account = DBSession.query(IdentityProviderAccount).filter(
                 IdentityProviderAccount.provider == provider
                 and IdentityProviderAccount.domain == velruse_account['domain']
                 and IdentityProviderAccount.userid == velruse_account['userid']
             ).first()
             if idp_account:
-                idp_accounts.push(idp_account)
-        elif velruse_account['username']:
+                idp_accounts.append(idp_account)
+        elif 'username' in velruse_account:
             idp_account = DBSession.query(IdentityProviderAccount).filter(
                 IdentityProviderAccount.provider == provider
                 and IdentityProviderAccount.domain == velruse_account['domain']
                 and IdentityProviderAccount.username == velruse_account['username']
             ).first()
             if idp_account:
-                idp_accounts.push(idp_account)
+                idp_accounts.append(idp_account)
         else:
             raise HTTPServerError()
     if not idp_accounts:
         idp_account = IdentityProviderAccount(
             provider=provider,
-            domain=velruse_account['domain'],
-            userid=velruse_account['userid'],
-            username=velruse_account['username']
+            domain=velruse_account.get('domain'),
+            userid=velruse_account.get('userid'),
+            username=velruse_account.get('username')
             )
-        idp_accounts.push(idp_account)
-        new_idp_accounts.push(idp_account)
+        idp_accounts.append(idp_account)
+        new_idp_accounts.append(idp_account)
         DBSession.add(idp_account)
     # find AgentProfile
     profiles = set((a.profile for a in idp_accounts if a.profile))
@@ -216,7 +265,9 @@ def velruse_login_complete_view(request):
         pass
     if len(profiles):
         profile = profiles.pop()
-        username = profile.username
+        user = profile.user
+        if user:
+            username = profile.user.username
     else:
         # Create a new profile and user
         profile = AgentProfile(name=velruse_profile['displayName'])
@@ -224,7 +275,7 @@ def velruse_login_complete_view(request):
         DBSession.add(profile)
         username = None
         usernames = set((a['preferredUsername'] for a in velruse_accounts
-                         if a['preferredUsername']))
+                         if 'preferredUsername' in a))
         for u in usernames:
             if not DBSession.query(User).filter_by(username=u).count():
                 username = u
@@ -240,8 +291,8 @@ def velruse_login_complete_view(request):
         DBSession.add(user)
     for idp_account in new_idp_accounts:
         idp_account.profile = profile
-    confirmed_email_accounts = {ea.email: ea for ea in profile.email_accounts()}
-    if profile.provider.trust_emails:
+    confirmed_email_accounts = {ea.email: ea for ea in profile.email_accounts}
+    if provider.trust_emails:
         # There may be new emails in the accounts
         if 'verifiedEmail' in velruse_profile:
             email = velruse_profile['verifiedEmail']
@@ -258,22 +309,34 @@ def velruse_login_complete_view(request):
                 )
             confirmed_email_accounts[email] = email_account
     for email in velruse_profile.get('emails', []):
+        preferred = False
+        if isinstance(email, dict):
+            preferred = email.get('preferred', False)
+            email = email['value']
         if email not in confirmed_email_accounts:
+            # Here, assume a single idp_account. Likely true.
+            # TODO: Cleanup
+            if idp_account not in new_idp_accounts:
+                if DBSession.query(IdentityProviderEmail).filter_by(
+                    idprovider_account=idp_account, email=email
+                    ).count():
+                        continue
             idp_email = IdentityProviderEmail(
-                email=email['value'],
-                preferred=email.get('preferred', False),
-                idprovider_account=idp_account   
-                # TODO: Clean that mess! Though there's probably only one idp_account.
+                email=email,
+                preferred=preferred,
+                idprovider_account=idp_account
                 )
             DBSession.add(idp_email)
     # TODO: Clean old IdentityProviderEmails
-    DBSession.commit()
+    DBSession.flush()
+    user_id = user.id
+    transaction.commit()
     # TODO: Store the OAuth etc. credentials. Though that may be done by velruse?
     # Also session stuff.
     if username:
         raise HTTPFound(location='/users/'+username)
     else:
-        raise HTTPFound(location='/ext_user/'+user.id)
+        raise HTTPFound(location='/ext_user/'+str(user_id))
 
 
 @view_config(

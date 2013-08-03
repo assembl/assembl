@@ -93,7 +93,7 @@ class AgentProfile(SQLAlchemyBaseModel):
 
     id = Column(Integer, primary_key=True)
     name = Column(Unicode(1024))
-    type = Column(String(60), nullable=False)  # not sure we need this?
+    type = Column(String(60))  # not sure we need this?
 
     def accounts(self):
         """All AgentAccounts for this profile"""
@@ -119,12 +119,13 @@ class User(SQLAlchemyBaseModel):
         ForeignKey('agent_profile.id', ondelete='CASCADE'),
         primary_key=True
     )
-    profile = relationship(AgentProfile)
+    profile = relationship(
+        AgentProfile, backref=backref("user", uselist=False))
 
-    username = Column(Unicode(20), unique=True, nullable=False)
-    preferred_email = Column(Unicode(50), nullable=False)
+    username = Column(Unicode(20), unique=True)
+    preferred_email = Column(Unicode(50))
     verified = Column(Boolean(), default=False)
-    password = Column(Unicode(115), nullable=False)
+    password = Column(Unicode(115))
     timezone = Column(Time(True))
     last_login = Column(DateTime)
     login_failures = Column(Integer(4), default=0)

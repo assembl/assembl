@@ -1,7 +1,5 @@
-from sqlalchemy.orm.exc import NoResultFound
-
 from models import IdentityProvider
-from ..lib.sqla import DBSession
+from ..db import DBSession
 
 
 def get_identity_provider(auth_context, create=True):

@@ -27,7 +27,7 @@ def upgrade(pyramid_env):
             'agent_profile',
             sa.Column('id', sa.Integer, primary_key=True),
             sa.Column('name', sa.Unicode(1024)),
-            sa.Column('type', sa.String(60), nullable=False))
+            sa.Column('type', sa.String(60)))
         op.create_table(
             'email_account',
             sa.Column('email', sa.String(100), primary_key=True),
@@ -52,8 +52,8 @@ def upgrade(pyramid_env):
                 sa.ForeignKey('identity_provider.id', ondelete='CASCADE'),
                 nullable=False),
             sa.Column(
-                'user_id', sa.Integer,
-                sa.ForeignKey('organizational_unit.id', ondelete='CASCADE'),
+                'profile_id', sa.Integer,
+                sa.ForeignKey('agent_profile.id', ondelete='CASCADE'),
                 nullable=False),
             sa.Column('username', sa.String(200)),
             sa.Column('domain', sa.String(200)),
@@ -75,11 +75,11 @@ def upgrade(pyramid_env):
                 'id', sa.Integer,
                 sa.ForeignKey('agent_profile.id', ondelete='CASCADE'),
                 primary_key=True),
-            sa.Column('username', sa.Unicode(20), unique=True, nullable=False),
-            sa.Column('preferred_email', sa.Unicode(50), nullable=False),
+            sa.Column('username', sa.Unicode(20), unique=True),
+            sa.Column('preferred_email', sa.Unicode(50)),
             sa.Column('verified', sa.Boolean, default=False),
-            sa.Column('password', sa.Unicode(115), nullable=False),
-            sa.Column('timezone', Time(True)),
+            sa.Column('password', sa.Unicode(115)),
+            sa.Column('timezone', sa.Time(True)),
             sa.Column('last_login', sa.DateTime),
             sa.Column('login_failures', sa.Integer(4), default=0),
             sa.Column(
@@ -91,6 +91,7 @@ def upgrade(pyramid_env):
 
 def downgrade(pyramid_env):
     with context.begin_transaction():
+        pass
         op.drop_table('user')
         op.drop_table('idprovider_email')
         op.drop_table('idprovider_account')

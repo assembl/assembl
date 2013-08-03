@@ -8,6 +8,7 @@ from sqlalchemy import engine_from_config, pool
 from pyramid.paster import bootstrap
 
 from assembl import models
+from assembl.db import DBSession
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -27,7 +28,7 @@ def run_migrations_online():
     and associate a connection with the context.
 
     """
-    engine = models.DBSession.bind
+    engine = DBSession.bind
     connection = engine.connect()
     context.configure(connection=connection, target_metadata=models.metadata)
 
