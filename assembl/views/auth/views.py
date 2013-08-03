@@ -7,7 +7,7 @@ from pyramid.view import view_config
 from pyramid.renderers import render_to_response
 from pyramid.security import (
     remember,
-    # forget,
+    forget,
     authenticated_userid,
     NO_PERMISSION_REQUIRED
     )
@@ -29,6 +29,17 @@ from ...auth.models import (IdentityProvider, EmailAccount,
 from ...auth.operations import get_identity_provider
 from ...auth.utils import hash_password, format_token
 from ...db import DBSession
+
+@view_config(
+    route_name='logout',
+    renderer='assembl:templates/login.jinja2',
+)
+def logout(request):
+    forget()
+    return {
+        'login_url': login_url,
+        'providers': request.registry.settings['login_providers'],
+    }
 
 
 @view_config(
@@ -329,6 +340,8 @@ def velruse_login_complete_view(request):
     # TODO: Clean old IdentityProviderEmails
     DBSession.flush()
     user_id = user.id
+    headers = remember(request, user_id, tokens=format_token(user))
+    request.response.headerlist.extend(headers)
     transaction.commit()
     # TODO: Store the OAuth etc. credentials. Though that may be done by velruse?
     # Also session stuff.

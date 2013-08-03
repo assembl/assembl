@@ -1,7 +1,8 @@
 """ Pyramid add start-up module. """
 
 from pyramid.config import Configurator
-from pyramid.session import UnencryptedCookieSessionFactoryConfig
+from pyramid.authentication import SessionAuthenticationPolicy
+from pyramid.authorization import ACLAuthorizationPolicy
 from pyramid_beaker import session_factory_from_settings
 from sqlalchemy import engine_from_config
 
@@ -13,7 +14,6 @@ def main(global_config, **settings):
     settings['config_uri'] = global_config['__file__']
 
     # velruse requires session support
-    # TODO: Replace with beaker
     session_factory = session_factory_from_settings(
         settings
         )
@@ -24,6 +24,8 @@ def main(global_config, **settings):
 
     config = Configurator(settings=settings)
     config.set_session_factory(session_factory)
+    config.set_authentication_policy(SessionAuthenticationPolicy())
+    config.set_authorization_policy(ACLAuthorizationPolicy())
     config.add_static_view('static', 'static', cache_max_age=3600)
     config.include('cornice')  # REST services library.
     # config.include('.lib.alembic')

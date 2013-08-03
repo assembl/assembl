@@ -102,7 +102,7 @@ class AgentProfile(SQLAlchemyBaseModel):
         return chain(self.identity_accounts(), self.email_accounts())
 
     def unconfirmed_emails(self):
-        return chain(*(account.emails() for account in self.identity_accounts))
+        return chain(*[account.emails for account in self.identity_accounts])
 
     __mapper_args__ = {
         'polymorphic_identity': 'agent_profile',
