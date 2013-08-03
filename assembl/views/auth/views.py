@@ -110,8 +110,6 @@ def assembl_view_unnamed_profile(request):
     except NoResultFound:
         raise exception_response(404)
     logged_in = authenticated_userid(request)
-    print logged_in
-    print user.id, user
     if logged_in == user.id:
         # Viewing my own profile
         return render_to_response('assembl:templates/profile.jinja2', {
