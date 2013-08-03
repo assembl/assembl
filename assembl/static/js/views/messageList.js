@@ -126,7 +126,7 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message){
             this.blockPanel();
             this.collapsed = true;
 
-            $.getJSON('/api/message/inbox', data, function(data){
+            $.getJSON('/api/post/inbox', data, function(data){
                 that.data = data;
                 that.messages.reset(data.messages);
             });
@@ -220,7 +220,7 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message){
             var that = this;
 
             this.blockPanel();
-            $.getJSON('/api/messages', {'id': id}, function(json){
+            $.getJSON('/api/posts', {'id': id}, function(json){
                 that.unblockPanel();
                 that.$el.addClass(MESSAGE_MODE);
                 that.messageThread.reset(json);
