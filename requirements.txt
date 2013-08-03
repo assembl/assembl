@@ -15,4 +15,5 @@ waitress
 zope.sqlalchemy
 velruse
 pyramid_beaker
+imaplib2
 # hapi : a OAuth2 server for pyramid. Still very much work in progress.

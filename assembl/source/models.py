@@ -2,7 +2,7 @@ import email
 from email.header import decode_header as decode_email_header
 from datetime import datetime
 from time import mktime
-from imaplib import IMAP4_SSL, IMAP4
+from imaplib2 import IMAP4_SSL, IMAP4
 
 from sqlalchemy.orm import relationship, backref, aliased
 from sqlalchemy.sql import func, cast, select
@@ -101,7 +101,6 @@ class Mailbox(Source):
     whose messages should be imported and displayed as Posts.
     """
     __tablename__ = "mailbox"
-
     id = Column(Integer, ForeignKey(
         'source.id', 
         ondelete='CASCADE'
@@ -110,6 +109,7 @@ class Mailbox(Source):
     host = Column(Unicode(1024), nullable=False)
     port = Column(Integer, nullable=False)
     username = Column(Unicode(1024), nullable=False)
+    #Note:  If using STARTTLS, this should be set to false
     use_ssl = Column(Boolean, default=True)
     password = Column(Unicode(1024), nullable=False)
     mailbox = Column(Unicode(1024), default=u"INBOX", nullable=False)
@@ -125,7 +125,9 @@ class Mailbox(Source):
             mailbox = IMAP4_SSL(host=self.host, port=self.port)
         else:
             mailbox = IMAP4(host=self.host, port=self.port)
-
+        if 'STARTTLS' in mailbox.capabilities:
+            #Always use starttls if server supports it
+            mailbox.starttls()
         mailbox.login(self.username, self.password)
         mailbox.select(self.mailbox)
 
@@ -341,14 +343,6 @@ class Post(SQLAlchemyBaseModel):
             parent.id
         ))
 
-    def number_of_unread_descendants(self):
-        ancestry_query_string = "%s%d,%%" % (self.ancestry or '', self.id)
-        return DBSession.query(Post).filter(
-                Post.ancestry.like(ancestry_query_string)
-            ).filter_by(
-                is_read=False
-            ).count()
-
     def responses(self, limit=15, offset=None):
         lower_post = aliased(Post, name="lower_post")
         lower_content = aliased(Content, name="lower_content")
@@ -381,8 +375,24 @@ class Post(SQLAlchemyBaseModel):
 
         return query.all()
 
+    def last_updated(self):
+        ancestry_query_string = "%s%d,%%" % (self.ancestry or '', self.id)
+        
+        query = DBSession.query(
+            func.max(Content.creation_date)
+        ).select_from(
+            Post
+        ).join(
+            Content
+        ).filter(
+            Post.ancestry.like(ancestry_query_string)
+        )
+
+        return query.scalar()
+
     def __repr__(self):
-        return "<Post '%s %s' >" % (
+        return "<Post %s '%s %s' >" % (
+            self.id,
             self.content.type,
             self.content.id,
         )

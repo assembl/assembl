@@ -13,8 +13,10 @@ from sqlalchemy import (
 )
 
 from sqlalchemy.orm import relationship, backref
+from sqlalchemy.sql import exists
 
-from .utils import hash_password
+from .password import hash_password
+from ..db import DBSession
 from ..db.models import SQLAlchemyBaseModel
 
 
@@ -107,6 +109,17 @@ class AgentProfile(SQLAlchemyBaseModel):
         'polymorphic_on': type
     }
 
+    def has_permission(self, verb, subject):
+        if self is subject.owner:
+            return True
+
+        return DBSession.query(Permission).filter_by(
+            actor_id=self.id,
+            subject_id=subject.id,
+            verb=verb,
+            allow=True
+        ).one()
+
 
 class User(SQLAlchemyBaseModel):
     """
@@ -157,3 +170,47 @@ class User(SQLAlchemyBaseModel):
         return "<User '%s'>" % self.username
 
 # Note on permissions: we will use Pyramid ACLs.
+
+
+class Action(SQLAlchemyBaseModel):
+    """
+    An action that can be taken by an actor.
+    """
+    __tablename__ = 'action'
+
+    id = Column(Integer, primary_key=True)
+    creation_date = Column(DateTime, nullable=False, default=datetime.utcnow)
+
+    actor_id = Column(
+        Integer,
+        ForeignKey('actor.id', ondelete='CASCADE'),
+        nullable=False
+    )
+
+    actor = relationship(
+        "Actor",
+        backref=backref('actions', order_by=creation_date)
+    )
+
+    verb = Column(Unicode(255), nullable=False)
+
+    subject_id = Column(
+        Integer,
+        ForeignKey('restricted_access_model.id', ondelete='CASCADE'),
+        nullable=False
+    )
+
+    subject = relationship(
+        "RestrictedAccessModel",
+        backref=backref('actions', order_by=creation_date)
+    )
+
+    def __repr__(self):
+        return "<Action '%s'>" % " ".join([
+            self.actor,
+            'did',
+            self.verb,
+            'on',
+            self.subject.type,
+            '(%s)' % self.subject.id,
+        ])
