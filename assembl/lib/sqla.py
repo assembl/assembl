@@ -226,6 +226,10 @@ DBSession = scoped_session(sessionmaker(extension=ZopeTransactionExtension()))
 metadata = MetaData()
 Base, TimestampedBase = declarative_bases(metadata)
 
+# If obsolete table names collide with new table names, alembic can't work
+obsolete = MetaData()
+ObsoleteBase, TimestampedObsolete = declarative_bases(obsolete)
+
 event.listen(mapper, 'before_insert', insert_timestamp)
 event.listen(mapper, 'before_update', update_timestamp)
 

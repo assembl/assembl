@@ -6,7 +6,7 @@ from sqlalchemy import (DateTime, ForeignKey, Integer, String, Text, Unicode,
 from sqlalchemy.dialects.postgresql import ARRAY
 from sqlalchemy.orm import aliased, backref, relationship
 
-from . import TimestampedBase
+from . import TimestampedObsolete
 from .toc import HasDocument
 from ..lib import config
 from ..lib.utils import get_eol
@@ -17,7 +17,7 @@ def msg_id():
     return '<%s@%s>' % (uuid4(), config.get('assembl.domain'))
 
 
-class Post(HasDocument, TimestampedBase):
+class Post(HasDocument, TimestampedObsolete):
     """Represents a message in the system."""
     id = Column(Integer, primary_key=True)
 
@@ -90,7 +90,7 @@ def _post_init(target, args, kwargs):
 event.listen(Post, 'init', _post_init)
 
 
-class Email(TimestampedBase):
+class Email(TimestampedObsolete):
     """Contains raw email content."""
     id = Column(Integer, primary_key=True)
 

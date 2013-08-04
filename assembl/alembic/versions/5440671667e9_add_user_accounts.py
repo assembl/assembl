@@ -1,14 +1,14 @@
 """add user accounts
 
 Revision ID: 5440671667e9
-Revises: 1f236361ce82
+Revises: 4c1e7a812b33
 Create Date: 2013-07-26 16:40:50.638678
 
 """
 
 # revision identifiers, used by Alembic.
 revision = '5440671667e9'
-down_revision = '1f236361ce82'
+down_revision = '4c1e7a812b33'
 
 from alembic import context, op
 import sqlalchemy as sa

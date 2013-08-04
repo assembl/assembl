@@ -1,4 +1,4 @@
-from . import TimestampedBase
+from . import TimestampedObsolete
 
 from sqlalchemy import (ForeignKey, Integer, String, Unicode, UnicodeText,
                         event, Column)
@@ -6,7 +6,8 @@ from sqlalchemy.ext.declarative import declared_attr
 from sqlalchemy.orm import backref, mapper, relationship
 
 
-class Document(TimestampedBase):
+
+class Document(TimestampedObsolete):
     """Represents a document.
 
     Documents can be posts, videos, etc. Any type of content.
@@ -17,7 +18,7 @@ class Document(TimestampedBase):
     type = Column(String(32), ForeignKey('document_type.code'), nullable=False)
 
 
-class DocumentType(TimestampedBase):
+class DocumentType(TimestampedObsolete):
     """Types of documents ("post", "video", etc)."""
     code = Column(String(32), primary_key=True)
 
@@ -57,7 +58,7 @@ def _register_has_document_init(mapper, class_):
 event.listen(mapper, 'mapper_configured', _register_has_document_init)
 
 
-class Item(TimestampedBase):
+class Item(TimestampedObsolete):
     """Represents a item in the table of contents graph."""
     id = Column(Integer, primary_key=True)
 
@@ -69,7 +70,7 @@ class Item(TimestampedBase):
     description = Column(UnicodeText())
 
 
-class Selection(TimestampedBase):
+class Selection(TimestampedObsolete):
     """Holds quotes of various content types."""
     id = Column(Integer, primary_key=True)
 
@@ -85,7 +86,7 @@ class Selection(TimestampedBase):
     text = Column(UnicodeText)
 
 
-class SelectorType(TimestampedBase):
+class SelectorType(TimestampedObsolete):
     """Represents methods for quoting content.
 
     Examples would be: "text", "video".
