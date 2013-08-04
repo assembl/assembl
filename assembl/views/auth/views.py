@@ -216,12 +216,14 @@ def assembl_login_complete_view(request):
     username = request.params.get('username', '').strip()
     password = request.params.get('password', '').strip()
     logged_in = authenticated_userid(request)
-    if logged_in:
-        if logged_in != request.userid:
-            pass  # Do we need to log out old user? Forget credentials?
-        # re-logging in? Why?
-        raise HTTPFound(location='/users/'+username)
     user = DBSession.query(User).filter_by(username=username).first()
+    if logged_in:
+        if user and user.id != logged_in:
+            # logging in as a different user
+            forget(request)
+        else:
+            # re-logging in? Why?
+            raise HTTPFound(location='/users/'+username)
     if not user:
         return dict(default_context, **{
             'error': _("This user cannot be found")
@@ -292,26 +294,34 @@ def velruse_login_complete_view(request):
         if user:
             username = profile.user.username
     else:
-        # Create a new profile and user
-        profile = AgentProfile(name=velruse_profile['displayName'])
+        # Maybe we already have a profile based on email
+        if provider.trust_emails and 'verifiedEmail' in velruse_profile:
+            email = velruse_profile['verifiedEmail']
+            email_account = DBSession.query(EmailAccount).filter_by(
+                email=email, verified=True).first()
+            if email_account:
+                profile = email_account.profile
+        if not profile:
+            # Create a new profile and user
+            profile = AgentProfile(name=velruse_profile['displayName'])
 
-        DBSession.add(profile)
-        username = None
-        usernames = set((a['preferredUsername'] for a in velruse_accounts
-                         if 'preferredUsername' in a))
-        for u in usernames:
-            if not DBSession.query(User).filter_by(username=u).count():
-                username = u
-                break
-        user = User(
-            profile=profile,
-            username=username,
-            verified=True,
-            last_login=datetime.now(),
-            creation_date=datetime.now(),
-            #timezone=velruse_profile['utcOffset'],   # needs parsing
-            )
-        DBSession.add(user)
+            DBSession.add(profile)
+            username = None
+            usernames = set((a['preferredUsername'] for a in velruse_accounts
+                             if 'preferredUsername' in a))
+            for u in usernames:
+                if not DBSession.query(User).filter_by(username=u).count():
+                    username = u
+                    break
+            user = User(
+                profile=profile,
+                username=username,
+                verified=True,
+                last_login=datetime.now(),
+                creation_date=datetime.now(),
+                #timezone=velruse_profile['utcOffset'],   # TODO: needs parsing
+                )
+            DBSession.add(user)
     for idp_account in new_idp_accounts:
         idp_account.profile = profile
     confirmed_email_accounts = {ea.email: ea for ea in profile.email_accounts}
@@ -331,6 +341,7 @@ def velruse_login_complete_view(request):
                 profile=profile
                 )
             confirmed_email_accounts[email] = email_account
+            DBSession.add(email_account)
     for email in velruse_profile.get('emails', []):
         preferred = False
         if isinstance(email, dict):
@@ -357,7 +368,6 @@ def velruse_login_complete_view(request):
     request.response.headerlist.extend(headers)
     transaction.commit()
     # TODO: Store the OAuth etc. credentials. Though that may be done by velruse?
-    # Also session stuff.
     if username:
         raise HTTPFound(location='/users/'+username)
     else:
@@ -366,10 +376,10 @@ def velruse_login_complete_view(request):
 
 @view_config(
     context='velruse.AuthenticationDenied',
-    renderer='assembl:templates/profile.jinja2',
+    renderer='assembl:templates/login.jinja2',
 )
 def login_denied_view(request):
     return dict(default_context, **{
-        'result': 'denied',
+        'error': _('Login failed, try again'),
     })
     # TODO: If logged in otherwise, go to profile page. Otherwise, back to login page
