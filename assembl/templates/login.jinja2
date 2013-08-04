@@ -40,10 +40,11 @@
             <div class="spacer spacer--huge"></div>
 
             <input type="submit" name="login" value="{{ gettext('Enter') }}" class="barbutton" />
-            <input type="submit" name="register" value="{{ gettext('Register') }}" class="barbutton" />
 
             <div class="spacer"></div>
         </form>
+        <span>{{gettext("or")}} <a href="/create_user">{{gettext("register")}}</a></span>
+
 
         {% if providers %}
         <p>{{ gettext("Login with external tools")|safe }}</p>
