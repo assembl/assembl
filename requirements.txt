@@ -2,7 +2,7 @@ pyramid
 pyramid_debugtoolbar
 pyramid_jinja2
 pyramid_tm
-alembic==0.5
+alembic
 pytz>=2013b
 Babel
 colander
@@ -16,4 +16,5 @@ zope.sqlalchemy
 velruse
 pyramid_beaker
 imaplib2
+pyramid_mailer
 # hapi : a OAuth2 server for pyramid. Still very much work in progress.

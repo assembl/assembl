@@ -12,9 +12,9 @@ from pyramid.security import (
     NO_PERMISSION_REQUIRED
     )
 from pyramid.httpexceptions import (
-    exception_response,
     HTTPUnauthorized,
     HTTPFound,
+    HTTPNotFound,
     HTTPServerError
     )
 
@@ -23,16 +23,18 @@ import transaction
 
 from velruse import login_url
 
-from ...auth.models import (IdentityProvider, EmailAccount,
-                            IdentityProviderAccount, AgentProfile, User,
-                            IdentityProviderEmail)
-from ...auth.operations import get_identity_provider
-from ...auth.utils import hash_password, format_token
+from ...auth.models import (
+    EmailAccount, IdentityProviderAccount, AgentProfile, User)
+from ...auth.password import (
+    hash_password, verify_password, format_token)
+from ...auth.operations import (
+    get_identity_provider, send_confirmation_email, verify_email_token)
 from ...db import DBSession
 
 default_context = {
     'STATIC_URL': '/static/',
 }
+
 
 @view_config(
     route_name='logout',
@@ -75,7 +77,7 @@ def assembl_view_profile(request):
     try:
         user = DBSession.query(User).filter_by(username=username).one()
     except NoResultFound:
-        raise exception_response(404)
+        raise HTTPNotFound()
     logged_in = authenticated_userid(request)
 
     if logged_in == user.id:
@@ -84,7 +86,6 @@ def assembl_view_profile(request):
             'providers': request.registry.settings['login_providers'],
             'user': user
             })
-        return profile_page(request, user.profile)
     return dict(default_context, **{
         'user': user
     })
@@ -101,7 +102,7 @@ def assembl_modify_profile(request):
     try:
         user = DBSession.query(User).filter_by(username=username).one()
     except NoResultFound:
-        raise exception_response(404)
+        raise HTTPNotFound()
     logged_in = authenticated_userid(request)
     if logged_in != user.id:
         raise HTTPUnauthorized()
@@ -120,10 +121,9 @@ def assembl_modify_profile(request):
     )
 def assembl_view_unnamed_profile(request):
     id = int(request.matchdict.get('id'))
-    try:
-        user = DBSession.query(User).get(id)
-    except NoResultFound:
-        raise exception_response(404)
+    user = DBSession.query(User).get(id)
+    if not user:
+        raise HTTPNotFound()
     logged_in = authenticated_userid(request)
     if logged_in == user.id:
         # Viewing my own profile
@@ -144,10 +144,9 @@ def assembl_view_unnamed_profile(request):
     )
 def assembl_modify_unnamed_profile(request):
     id = int(request.matchdict.get('id'))
-    try:
-        user = DBSession.query(User).get(id)
-    except NoResultFound:
-        raise exception_response(404)
+    user = DBSession.query(User).get(id)
+    if not user:
+        raise HTTPNotFound()
     logged_in = authenticated_userid(request)
     if logged_in != user.id:
         raise HTTPUnauthorized()
@@ -159,11 +158,11 @@ def assembl_modify_unnamed_profile(request):
 
 
 @view_config(
-    route_name='create_user',
+    route_name='register',
     permission=NO_PERMISSION_REQUIRED,
     renderer='assembl:templates/register.jinja2'
 )
-def assembl_create_user_view(request):
+def assembl_register_view(request):
     if not request.params.get('email'):
         return default_context
     forget(request)
@@ -196,12 +195,13 @@ def assembl_create_user_view(request):
     DBSession.add(user)
     DBSession.add(email_account)
     DBSession.flush()
-    # TODO: Instead of assuming that the user is logged in now,
-    # Send confirm email and wait for confirmation.
+    send_confirmation_email(request, email_account, False)
+    # TODO: Check that the email logic gets the proper locale. (send in URL?)
     headers = remember(request, user.id, tokens=format_token(user))
     request.response.headerlist.extend(headers)
     transaction.commit()
     # Redirect to profile page. TODO: Remember another URL
+    # TODO: Tell them to expect an email.
     raise HTTPFound(location='/users/'+username)
 
 
@@ -228,7 +228,7 @@ def assembl_login_complete_view(request):
         return dict(default_context, **{
             'error': _("This user cannot be found")
         })
-    if user.password != hash_password(password):
+    if verify_password(password, user.password):
         user.login_failures += 1
         #TODO: handle high failure count
         DBSession.add(user)
@@ -248,7 +248,7 @@ def velruse_login_complete_view(request):
     context = request.context
     velruse_profile = context.profile
     provider = get_identity_provider(context)
-    logged_in = authenticated_userid(request)
+    #logged_in = authenticated_userid(request)
     # find or create IDP_Accounts
     idp_accounts = []
     new_idp_accounts = []
@@ -285,8 +285,7 @@ def velruse_login_complete_view(request):
     # find AgentProfile
     profiles = set((a.profile for a in idp_accounts if a.profile))
     if len(profiles) > 1:
-        # special case: Multiple profiles. We need to combine them to 1
-        # TODO
+        # TODO: Multiple profiles. We need to combine them to one
         pass
     if len(profiles):
         profile = profiles.pop()
@@ -324,54 +323,102 @@ def velruse_login_complete_view(request):
             DBSession.add(user)
     for idp_account in new_idp_accounts:
         idp_account.profile = profile
-    confirmed_email_accounts = {ea.email: ea for ea in profile.email_accounts}
-    if provider.trust_emails:
-        # There may be new emails in the accounts
-        if 'verifiedEmail' in velruse_profile:
-            email = velruse_profile['verifiedEmail']
-        if email in confirmed_email_accounts:
-            email_account = confirmed_email_accounts[email]
-            if not email_account.verified:
-                email_account.verified = True
-                DBSession.add(email_account)
-        else:
-            email_account = EmailAccount(
-                email=email,
-                verified=True,
-                profile=profile
-                )
-            confirmed_email_accounts[email] = email_account
+    email_accounts = {ea.email: ea for ea in profile.email_accounts}
+    # There may be new emails in the accounts
+    if 'verifiedEmail' in velruse_profile:
+        email = velruse_profile['verifiedEmail']
+    if email in email_accounts:
+        email_account = email_accounts[email]
+        if provider.trust_emails and not email_account.verified:
+            email_account.verified = True
             DBSession.add(email_account)
+    else:
+        email_account = EmailAccount(
+            email=email,
+            verified=provider.trust_emails,
+            profile=profile
+            )
+        email_accounts[email] = email_account
+        DBSession.add(email_account)
     for email in velruse_profile.get('emails', []):
         preferred = False
         if isinstance(email, dict):
             preferred = email.get('preferred', False)
             email = email['value']
-        if email not in confirmed_email_accounts:
-            # Here, assume a single idp_account. Likely true.
-            # TODO: Cleanup
-            if idp_account not in new_idp_accounts:
-                if DBSession.query(IdentityProviderEmail).filter_by(
-                    idprovider_account=idp_account, email=email
-                    ).count():
-                        continue
-            idp_email = IdentityProviderEmail(
+        if email not in email_accounts:
+            email = EmailAccount(
                 email=email,
                 preferred=preferred,
-                idprovider_account=idp_account
+                profile=profile
                 )
-            DBSession.add(idp_email)
-    # TODO: Clean old IdentityProviderEmails
+            DBSession.add(email)
+    # Note that if an IdP account stops claiming an email, it "leaks".
     DBSession.flush()
     user_id = user.id
     headers = remember(request, user_id, tokens=format_token(user))
     request.response.headerlist.extend(headers)
     transaction.commit()
-    # TODO: Store the OAuth etc. credentials. Though that may be done by velruse?
+    # TODO: Store the OAuth etc. credentials.
+    # Though that may be done by velruse?
     if username:
         raise HTTPFound(location='/users/'+username)
     else:
         raise HTTPFound(location='/ext_user/'+str(user_id))
+
+
+@view_config(
+    route_name='users_ask_for_confirm',
+    permission=NO_PERMISSION_REQUIRED
+)
+def users_ask_for_confirm(request):
+    # TODO: How to make this not become a spambot?
+    id = int(request.matchdict.get('email_account_id'))
+    email = DBSession.query(EmailAccount).get(id)
+    if not email:
+        raise HTTPNotFound()
+    if not email.verified:
+        send_confirmation_email(request, email)
+    if email.profile.user:
+        user = email.profile.user
+        # TODO: Say we did it.
+        if user.username:
+            raise HTTPFound(location='/users/'+user.username)
+        else:
+            raise HTTPFound(location='/ext_user/'+str(user.id))
+    else:
+        # we confirmed a profile without a user? Now what?
+        raise HTTPServerError()
+
+
+@view_config(
+    route_name='user_confirm_email',
+    permission=NO_PERMISSION_REQUIRED
+)
+def user_confirm_email(request):
+    token = request.matchdict.get('ticket')
+    email = verify_email_token(token)
+    # TODO: token expiry
+    print email
+    if email and not email.verified:
+        email.verified = True
+        email.profile.verified = True
+        user = None
+        username = None
+        userid = None
+        if email.profile.user:
+            user = email.profile.user
+            username = user.username
+            userid = user.id
+        transaction.commit()
+        if username:
+            raise HTTPFound(location='/users/'+username)
+        elif userid:
+            raise HTTPFound(location='/ext_user/'+str(userid))
+        else:
+            # we confirmed a profile without a user? Now what?
+            raise HTTPServerError()
+    else:
+        raise HTTPUnauthorized("Wrong email token.")
 
 
 @view_config(
@@ -382,4 +429,5 @@ def login_denied_view(request):
     return dict(default_context, **{
         'error': _('Login failed, try again'),
     })
-    # TODO: If logged in otherwise, go to profile page. Otherwise, back to login page
+    # TODO: If logged in otherwise, go to profile page. 
+    # Otherwise, back to login page

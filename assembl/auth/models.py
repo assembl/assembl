@@ -10,6 +10,7 @@ from sqlalchemy import (
     Unicode,
     DateTime,
     Time,
+    Binary
 )
 
 from sqlalchemy.orm import relationship, backref
@@ -70,22 +71,6 @@ class IdentityProviderAccount(AgentAccount):
     userid = Column(String(200))
 
 
-class IdentityProviderEmail(SQLAlchemyBaseModel):
-    """An email that is proposed by the identity provider.
-    Not confirmed by default."""
-    __tablename__ = "idprovider_email"
-    email = Column(String(100), nullable=False, primary_key=True)
-    verified = Column(Boolean(), default=False)
-    preferred = Column(Boolean(), default=False)
-    active = Column(Boolean(), default=True)
-    idprovider_account_id = Column(
-        Integer,
-        ForeignKey('idprovider_account.id', ondelete='CASCADE'),
-        nullable=False, primary_key=True)
-    idprovider_account = relationship(
-        IdentityProviderAccount, backref='emails')
-
-
 class AgentProfile(SQLAlchemyBaseModel):
     """
     An agent could be a person, group, bot or computer.
@@ -139,7 +124,7 @@ class User(SQLAlchemyBaseModel):
     username = Column(Unicode(20), unique=True)
     preferred_email = Column(Unicode(50))
     verified = Column(Boolean(), default=False)
-    password = Column(Unicode(115))
+    password = Column(Binary(115))
     timezone = Column(Time(True))
     last_login = Column(DateTime)
     login_failures = Column(Integer(4), default=0)

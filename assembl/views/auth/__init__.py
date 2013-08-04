@@ -8,11 +8,11 @@ def includeme(config):
     config.add_route('logout', '/logout')
     config.add_route('profile', '/users/{username}')
     #config.add_route('assembl_login', '/dologin')
-    config.add_route('create_user', '/create_user')
+    config.add_route('register', '/register')
     config.add_route('unnamed_profile', '/ext_user/{id}')
-    config.add_route('users_confirm_email', '/users/email_confirm/{ticket}')
+    config.add_route('user_confirm_email', '/users/email_confirm/{ticket}')
     # TODO: secure next method to avoid spamming the user.
-    config.add_route('users_ask_for_confirm', '/users/ask_for_config/{email}')
+    config.add_route('users_ask_for_confirm', '/users/ask_for_config/{email_account_id:\d+}')
     #config.add_route('profile_search', '/usernames/{user_name}')  Do we want this?
 
     # determine which providers we want to configure

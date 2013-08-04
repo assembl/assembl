@@ -19,7 +19,6 @@ from ..auth.models import (
     IdentityProvider,
     EmailAccount,
     IdentityProviderAccount,
-    IdentityProviderEmail,
     AgentProfile,
     User,
     RestrictedAccessModel,

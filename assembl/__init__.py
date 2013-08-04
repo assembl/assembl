@@ -38,4 +38,7 @@ def main(global_config, **settings):
     # jinja2
     config.include('pyramid_jinja2')
 
+    # Mailer
+    config.include('pyramid_mailer')
+
     return config.make_wsgi_app()

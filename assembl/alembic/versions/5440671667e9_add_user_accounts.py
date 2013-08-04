@@ -60,17 +60,6 @@ def upgrade(pyramid_env):
             sa.Column('domain', sa.String(200)),
             sa.Column('userid', sa.String(200)))
         op.create_table(
-            'idprovider_email',
-            sa.Column(
-                'email', sa.String(100), nullable=False, primary_key=True),
-            sa.Column('verified', sa.Boolean(), default=False),
-            sa.Column('preferred', sa.Boolean(), default=False),
-            sa.Column('active', sa.Boolean(), default=True),
-            sa.Column(
-                'idprovider_account_id', sa.Integer,
-                sa.ForeignKey('idprovider_account.id', ondelete='CASCADE'),
-                nullable=False, primary_key=True))
-        op.create_table(
             'user',
             sa.Column(
                 'id', sa.Integer,
@@ -79,7 +68,7 @@ def upgrade(pyramid_env):
             sa.Column('username', sa.Unicode(20), unique=True),
             sa.Column('preferred_email', sa.Unicode(50)),
             sa.Column('verified', sa.Boolean, default=False),
-            sa.Column('password', sa.Unicode(115)),
+            sa.Column('password', sa.Binary(115)),
             sa.Column('timezone', sa.Time(True)),
             sa.Column('last_login', sa.DateTime),
             sa.Column('login_failures', sa.Integer(4), default=0),
@@ -94,7 +83,6 @@ def downgrade(pyramid_env):
     with context.begin_transaction():
         pass
         op.drop_table('user')
-        op.drop_table('idprovider_email')
         op.drop_table('idprovider_account')
         op.drop_table('identity_provider')
         op.drop_table('email_account')
