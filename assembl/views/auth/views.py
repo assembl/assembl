@@ -30,16 +30,20 @@ from ...auth.operations import get_identity_provider
 from ...auth.utils import hash_password, format_token
 from ...db import DBSession
 
+default_context = {
+    'STATIC_URL': '/static/',
+}
+
 @view_config(
     route_name='logout',
     renderer='assembl:templates/login.jinja2',
 )
 def logout(request):
-    forget()
-    return {
+    forget(request)
+    return dict(default_context, **{
         'login_url': login_url,
         'providers': request.registry.settings['login_providers'],
-    }
+    })
 
 
 @view_config(
@@ -54,10 +58,10 @@ def logout(request):
 )
 def login_view(request):
     # TODO: In case of forbidden, get the URL and pass it along.
-    return {
+    return dict(default_context, **{
         'login_url': login_url,
         'providers': request.registry.settings['login_providers'],
-    }
+    })
 
 
 @view_config(
@@ -81,9 +85,9 @@ def assembl_view_profile(request):
             'user': user
             })
         return profile_page(request, user.profile)
-    return {
+    return dict(default_context, **{
         'user': user
-    }
+    })
 
 
 @view_config(
@@ -102,10 +106,10 @@ def assembl_modify_profile(request):
     if logged_in != user.id:
         raise HTTPUnauthorized()
     # TODO: Save stuff
-    return {
+    return dict(default_context, **{
         'providers': request.registry.settings['login_providers'],
         'user': user
-    }
+    })
 
 
 @view_config(
@@ -127,9 +131,9 @@ def assembl_view_unnamed_profile(request):
             'providers': request.registry.settings['login_providers'],
             'user': user
             })
-    return {
+    return dict(default_context, **{
         'user': user
-    }
+    })
 
 
 @view_config(
@@ -148,30 +152,37 @@ def assembl_modify_unnamed_profile(request):
     if logged_in != user.id:
         raise HTTPUnauthorized()
     # TODO: Save stuff
-    return {
+    return dict(default_context, **{
         'providers': request.registry.settings['login_providers'],
         'user': user
-    }
+    })
 
 
 @view_config(
     route_name='create_user',
-    request_method='POST',
     permission=NO_PERMISSION_REQUIRED,
     renderer='assembl:templates/register.jinja2'
 )
 def assembl_create_user_view(request):
+    if not request.params.get('email'):
+        return default_context
+    forget(request)
+    name = request.params.get('username', '').strip()
     username = request.params.get('username', '').strip()
     password = request.params.get('password', '').strip()
-    email = request.params.get('password', '').strip()
+    email = request.params.get('email', '').strip()
     # Find agent account to avoid duplicates!
     if DBSession.query(User).filter_by(username=username).count():
-        return {
+        print "found"
+        return dict(default_context, **{
             'error': _("This username already exists")
-        }
+        })
     #TODO: Validate password quality
     # otherwise create.
-    profile = AgentProfile()
+    print "creating"
+    profile = AgentProfile(
+        name=name
+        )
     user = User(
         profile=profile,
         username=username,
@@ -184,11 +195,12 @@ def assembl_create_user_view(request):
         )
     DBSession.add(user)
     DBSession.add(email_account)
-    transaction.commit()
+    DBSession.flush()
     # TODO: Instead of assuming that the user is logged in now,
     # Send confirm email and wait for confirmation.
     headers = remember(request, user.id, tokens=format_token(user))
     request.response.headerlist.extend(headers)
+    transaction.commit()
     # Redirect to profile page. TODO: Remember another URL
     raise HTTPFound(location='/users/'+username)
 
@@ -211,15 +223,16 @@ def assembl_login_complete_view(request):
         raise HTTPFound(location='/users/'+username)
     user = DBSession.query(User).filter_by(username=username).first()
     if not user:
-        return {
+        return dict(default_context, **{
             'error': _("This user cannot be found")
-        }
+        })
     if user.password != hash_password(password):
         user.login_failures += 1
         #TODO: handle high failure count
         DBSession.add(user)
         transaction.commit()
-        return {'error': _("Invalid user and password")}
+        return dict(default_context, **{
+            'error': _("Invalid user and password")})
     headers = remember(request, user.id, tokens=format_token(user))
     request.response.headerlist.extend(headers)
     # Redirect to profile page. TODO: Remember another URL
@@ -356,7 +369,7 @@ def velruse_login_complete_view(request):
     renderer='assembl:templates/profile.jinja2',
 )
 def login_denied_view(request):
-    return {
+    return dict(default_context, **{
         'result': 'denied',
-    }
+    })
     # TODO: If logged in otherwise, go to profile page. Otherwise, back to login page

@@ -30,14 +30,15 @@ def upgrade(pyramid_env):
             sa.Column('type', sa.String(60)))
         op.create_table(
             'email_account',
-            sa.Column('email', sa.String(100), primary_key=True),
+            sa.Column('id', sa.Integer, primary_key=True),
+            sa.Column('email', sa.String(100), index=True, nullable=False),
             sa.Column('verified', sa.Boolean, default=False),
             sa.Column('preferred', sa.Boolean, default=False),
             sa.Column('active', sa.Boolean, default=True),
             sa.Column(
                 'profile_id', sa.Integer,
                 sa.ForeignKey('agent_profile.id', ondelete='CASCADE'),
-                nullable=False))
+                nullable=False, index=True))
         op.create_table(
             'identity_provider',
             sa.Column('id', sa.Integer, primary_key=True),

@@ -39,14 +39,15 @@ class IdentityProvider(SQLAlchemyBaseModel):
 class EmailAccount(AgentAccount):
     """An email account"""
     __tablename__ = "email_account"
-    email = Column(String(100), primary_key=True)
+    id = Column(Integer, primary_key=True)
+    email = Column(String(100), nullable=False, index=True)
     verified = Column(Boolean(), default=False)
     preferred = Column(Boolean(), default=False)
     active = Column(Boolean(), default=True)
     profile_id = Column(
         Integer,
         ForeignKey('agent_profile.id', ondelete='CASCADE'),
-        nullable=False)
+        nullable=False, index=True)
     profile = relationship('AgentProfile', backref='email_accounts')
 
 
