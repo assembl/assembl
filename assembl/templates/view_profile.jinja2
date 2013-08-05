@@ -1,0 +1,70 @@
+{% extends 'base.jinja2' %}
+
+{% block header %}
+    <div class="bar bar--main">
+        <div class="bar-body">
+            <div class="bar-right">
+                <a> {{ gettext('Profile') }} <i class="icon-user"></i> </a>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block content %}
+
+    <div>
+        {% if user.username %}
+        <label>{{ gettext('Username') }}</label>
+        <span>{{user.username}}</span>
+        {% endif %}
+
+        <label>{{ gettext('Name') }}</label>
+        <span>{{user.profile.name}}</span>
+
+        <!-- TODO Avatar logic -->
+        {% if user.profile.email_accounts %}
+        <!-- TODO: Preferred email logic. -->
+        <div class="spacer spacer--huge"></div>
+        <label>{{ gettext('Emails') }}</label>
+        <ul>
+        {% for email_account in user.profile.email_accounts %}
+            {% if email_account.verified %}
+                <li>{{ email_account.email }}</li>
+            {% endif %}
+        {% endfor %}
+        </ul>
+        {% endif %}
+
+        {% if user.profile.identity_accounts %}
+        <div class="spacer spacer--huge"></div>
+        <label>{{ gettext('Accounts') }}</label>
+        <ul>
+        {% for account in user.profile.identity_accounts %}
+        <li>
+            <label>{{ account.type }}:</label>
+            {% if account.username %}
+                {{account.username}}
+            {% else %}
+                {{account.userid}}
+            {% endif %}
+        </li>
+        {% endfor %}
+        </ul>
+        {% endif %}
+
+        <div class="text text-small text-muted">
+            {% set caravan = gettext("<a href='http://caravan.coop' class='link'>Caravan</a>") %}
+            {% set imaginationForPeople = gettext("<a href='http://http://imaginationforpeople.org/' class='link'>Imagination for people</a>") %}
+
+            {{ gettext("Designed by %(caravan)s and %(imaginationForPeople)s")|format(caravan=caravan, imaginationForPeople=imaginationForPeople)|safe }}
+        </div>
+        </form>
+    </div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script type="text/javascript">
+    requirejs(["main"]);
+</script>
+{% endblock %}

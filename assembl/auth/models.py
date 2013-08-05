@@ -1,37 +1,97 @@
 from datetime import datetime
+from itertools import chain
 
 from sqlalchemy import (
     Boolean,
-    Column, 
-    String, 
+    Column,
+    String,
     ForeignKey,
-    Integer, 
-    Unicode, 
+    Integer,
+    Unicode,
     DateTime,
+    Time,
+    Binary
 )
 
 from sqlalchemy.orm import relationship, backref
 from sqlalchemy.sql import exists
 
-from .password import hash_password
+from .password import hash_password, verify_password
 from ..db import DBSession
 from ..db.models import SQLAlchemyBaseModel
 
 
+class AgentAccount(SQLAlchemyBaseModel):
+    __abstract__ = True
+    """An abstract class for accounts that identify agents"""
+    pass
 
-class Actor(SQLAlchemyBaseModel):
+
+class IdentityProvider(SQLAlchemyBaseModel):
+    """An identity provider (or sometimes a category of identity providers.)"""
+    __tablename__ = "identity_provider"
+    id = Column(Integer, primary_key=True)
+    provider_type = Column(String(20), nullable=False)
+    name = Column(String(60), nullable=False)
+    # TODO: More complicated model, where trust also depends on realm.
+    trust_emails = Column(Boolean, default=False)
+
+
+class EmailAccount(AgentAccount):
+    """An email account"""
+    __tablename__ = "email_account"
+    id = Column(Integer, primary_key=True)
+    email = Column(String(100), nullable=False, index=True)
+    verified = Column(Boolean(), default=False)
+    preferred = Column(Boolean(), default=False)
+    active = Column(Boolean(), default=True)
+    profile_id = Column(
+        Integer,
+        ForeignKey('agent_profile.id', ondelete='CASCADE'),
+        nullable=False, index=True)
+    profile = relationship('AgentProfile', backref='email_accounts')
+
+
+class IdentityProviderAccount(AgentAccount):
+    """An account with an external identity provider"""
+    __tablename__ = "idprovider_account"
+    id = Column(Integer, primary_key=True)
+    provider_id = Column(
+        Integer,
+        ForeignKey('identity_provider.id', ondelete='CASCADE'),
+        nullable=False)
+    provider = relationship(IdentityProvider)
+    profile_id = Column(
+        Integer,
+        ForeignKey('agent_profile.id', ondelete='CASCADE'),
+        nullable=False)
+    profile = relationship('AgentProfile', backref='identity_accounts')
+    username = Column(String(200))
+    domain = Column(String(200))
+    userid = Column(String(200))
+
+
+class AgentProfile(SQLAlchemyBaseModel):
     """
-    An actor could be a person, group, bot or computer. Anything that performs
-    actions.
+    An agent could be a person, group, bot or computer.
+    Profiles describe agents, which have multiple accounts.
+    Some agents might also be users of the platforms.
     """
-    __tablename__ = "actor"
+    __tablename__ = "agent_profile"
 
     id = Column(Integer, primary_key=True)
     name = Column(Unicode(1024))
-    type = Column(String(60), nullable=False)
+    type = Column(String(60))  # not sure we need this?
+
+    def accounts(self):
+        """All AgentAccounts for this profile"""
+        return chain(self.identity_accounts(), self.email_accounts())
+
+    def unconfirmed_emails(self):
+        return chain(*[account.emails for account in self.identity_accounts])
 
     __mapper_args__ = {
-        'polymorphic_identity': 'actor',
+        'polymorphic_identity': 'agent_profile',
         'polymorphic_on': type
     }
 
@@ -47,24 +107,27 @@ class Actor(SQLAlchemyBaseModel):
         ).one()
 
 
-class User(Actor):
+class User(SQLAlchemyBaseModel):
     """
     A Human user.
     """
     __tablename__ = "user"
 
     id = Column(
-        Integer, 
-        ForeignKey('actor.id', ondelete='CASCADE'), 
+        Integer,
+        ForeignKey('agent_profile.id', ondelete='CASCADE'),
         primary_key=True
     )
+    profile = relationship(
+        AgentProfile, backref=backref("user", uselist=False))
 
-    username = Column(Unicode(20), unique=True, nullable=False)
-    email = Column(Unicode(50), nullable=False)
-
-    password = Column(Unicode(115), nullable=False)
-
+    username = Column(Unicode(20), unique=True)
+    preferred_email = Column(Unicode(50))
+    verified = Column(Boolean(), default=False)
+    password = Column(Binary(115))
+    timezone = Column(Time(True))
     last_login = Column(DateTime)
+    login_failures = Column(Integer(4), default=0)
     creation_date = Column(DateTime, nullable=False, default=datetime.utcnow)
 
     __mapper_args__ = {
@@ -81,7 +144,7 @@ class User(Actor):
         self.password = hash_password(password)
 
     def check_password(self, password):
-        return hash_password(password) == self.password
+        return verify_password(password, self.password)
 
     def send_email(self, **kwargs):
         subject = kwargs.get('subject', '')
@@ -93,10 +156,15 @@ class User(Actor):
         return "<User '%s'>" % self.username
 
 
+
+# MAP @Jeff: If I understand well, you want generic foreign key.
+# Not sure which is the best way to do this (before we move to RDF)
+# Discussion here:
+# http://stackoverflow.com/questions/17703239/sqlalchemy-generic-foreign-key-like-in-django-orm
 class RestrictedAccessModel(SQLAlchemyBaseModel):
     """
-    Represents a model with restricted access. 
-    
+    Represents a model with restricted access.
+
     Usually this means that only
     certain people will be allowed to read, write or perform other operations
     on or with instances of this model.
@@ -106,12 +174,12 @@ class RestrictedAccessModel(SQLAlchemyBaseModel):
     type = Column(String(60), nullable=False)
 
     owner_id = Column(Integer, ForeignKey(
-        'actor.id', 
+        'agent_profile.id',
         ondelete='CASCADE'
     ))
 
     owner = relationship(
-        "Actor", 
+        "AgentProfile",
         backref=backref('restricted_access_models')
     )
 
@@ -124,60 +192,7 @@ class RestrictedAccessModel(SQLAlchemyBaseModel):
         return "<RestrictedAccessModel '%s'>" % self.type
 
 
-class Permission(SQLAlchemyBaseModel):
-    """
-    A Permission determines the level of access that a user has to a particular
-    part of the system.
-
-    example usage:
-
-        Permission(
-            actor=some_user,
-            action="write", 
-            subject=some_restricted_access_model
-        )
-
-        <Permission 'Allow jeff write on table_of_contents (1)'>
-    """
-    __tablename__ = "permission"
-
-    id = Column(Integer, primary_key=True)
-    creation_date = Column(DateTime, nullable=False, default=datetime.utcnow)
-
-    allow = Column(Boolean, default=True)
-    
-    actor_id = Column(
-        Integer,
-        ForeignKey('actor.id', ondelete='CASCADE')
-    )
-
-    actor = relationship(
-        "Actor",
-        backref=backref('permissions', order_by=creation_date)
-    )
-
-    verb = Column(Unicode(255), nullable=False)
-
-    subject_id = Column(
-        Integer, 
-        ForeignKey('restricted_access_model.id', ondelete='CASCADE'),
-    )
-
-    subject = relationship(
-        "RestrictedAccessModel",
-        backref=backref('permissions', order_by=creation_date)
-    )
-
-    def __repr__(self):
-        return "<Permission '%s'>" % " ".join([
-            'Allow' if self.allow else 'Disallow',
-            self.actor or 'all',
-            'to',
-            self.verb,
-            'on',
-            self.subject.type,
-            '(%s)' % self.subject.id,
-        ])
+# MAP @Jeff: Deleted permissions as we will use Pyramid ACLs.
 
 
 class Action(SQLAlchemyBaseModel):
@@ -191,19 +206,19 @@ class Action(SQLAlchemyBaseModel):
 
     actor_id = Column(
         Integer,
-        ForeignKey('actor.id', ondelete='CASCADE'),
+        ForeignKey('agent_profile.id', ondelete='CASCADE'),
         nullable=False
     )
 
     actor = relationship(
-        "Actor",
+        "AgentProfile",
         backref=backref('actions', order_by=creation_date)
     )
 
     verb = Column(Unicode(255), nullable=False)
 
     subject_id = Column(
-        Integer, 
+        Integer,
         ForeignKey('restricted_access_model.id', ondelete='CASCADE'),
         nullable=False
     )

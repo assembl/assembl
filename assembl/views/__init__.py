@@ -17,7 +17,6 @@ def includeme(config):
 
     config.add_renderer('json', json_renderer_factory)
     config.add_route('home', '/')
-    config.add_route('login', '/login')
     config.add_route('toc', '/toc')
     config.add_route('nodetest', '/nodetest')
     config.add_route('styleguide', '/styleguide')
@@ -41,6 +40,9 @@ def includeme(config):
     config.add_route('get_posts', '/api/posts')
     config.add_route('save_post', '/api/post', request_method="PUT")
     config.add_route('get_inbox', '/api/post/inbox', request_method="GET")
+
+    #  authentication
+    config.include('.auth')
 
 
 def api_urls(config):

@@ -18,12 +18,10 @@ from sqlalchemy import (
 
 from ..db import DBSession
 from ..db.models import SQLAlchemyBaseModel
-from ..auth.models import RestrictedAccessModel
-#from ..source.models import *
+from ..source.models import (Source, Content, Post)
 
 
-
-class Discussion(RestrictedAccessModel):
+class Discussion(SQLAlchemyBaseModel):
     """
     A Discussion
     """

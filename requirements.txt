@@ -13,4 +13,8 @@ SQLAlchemy
 transaction
 waitress
 zope.sqlalchemy
+velruse
+pyramid_beaker
 imaplib2
+pyramid_mailer
+# hapi : a OAuth2 server for pyramid. Still very much work in progress.

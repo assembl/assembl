@@ -16,10 +16,12 @@ class MyModel(TimestampedObsolete):
 from .post import Email, Post
 from .toc import Document, DocumentType, Item, Selection, SelectorType
 from ..auth.models import (
-    Actor,
+    IdentityProvider,
+    EmailAccount,
+    IdentityProviderAccount,
+    AgentProfile,
     User,
     RestrictedAccessModel,
-    Permission,
     Action,
     )
 from ..source.models import (
