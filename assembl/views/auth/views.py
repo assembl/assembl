@@ -280,6 +280,7 @@ def velruse_login_complete_view(request):
         new_idp_accounts.append(idp_account)
         DBSession.add(idp_account)
     # find AgentProfile
+    profile = None
     profiles = set((a.profile for a in idp_accounts if a.profile))
     if len(profiles) > 1:
         # TODO: Multiple profiles. We need to combine them to one
