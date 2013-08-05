@@ -1,33 +1,22 @@
 import os
-from setuptools import setup, find_packages
-from pip.req import parse_requirements
 
+from setuptools import setup, find_packages
 
 here = os.path.abspath(os.path.dirname(__file__))
 README = open(os.path.join(here, 'README.txt')).read()
 CHANGES = open(os.path.join(here, 'CHANGES.txt')).read()
 
+from pip.req import parse_requirements
 
-class AnonymousObjectClass(object):
-    """
-    In my version of pip, if the options arguments passed to
-    parse_requiremetns is None, an error is raised. Need to passe a
-    configuraiton object with at least skip_requirements_regex.
-    """
-    def __init__(self, **kwargs):
-        self.__dict__.update(kwargs)
-
-
-install_reqs = parse_requirements(
-    'requirements.txt',
-    options=AnonymousObjectClass(skip_requirements_regex=None)
-    )
-
+# parse_requirements() returns generator of pip.req.InstallRequirement objects
+install_reqs = parse_requirements('requirements.txt')
 
 # requires is a list of requirement
 # e.g. ['django==1.5.1', 'mezzanine==1.4.6']
 requires = [str(ir.req) for ir in install_reqs]
+
 tests_require = ['webtest']
+
 
 
 setup(name='assembl',
@@ -60,3 +49,4 @@ setup(name='assembl',
       assembl-imap-test = assembl.scripts.imap_test:main
       """,
       )
+
