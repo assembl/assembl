@@ -325,11 +325,11 @@ def velruse_login_complete_view(request):
     # There may be new emails in the accounts
     if 'verifiedEmail' in velruse_profile:
         email = velruse_profile['verifiedEmail']
-    if email in email_accounts:
-        email_account = email_accounts[email]
-        if provider.trust_emails and not email_account.verified:
-            email_account.verified = True
-            DBSession.add(email_account)
+        if email in email_accounts:
+            email_account = email_accounts[email]
+            if provider.trust_emails and not email_account.verified:
+                email_account.verified = True
+                DBSession.add(email_account)
     else:
         email_account = EmailAccount(
             email=email,
