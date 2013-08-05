@@ -31,12 +31,12 @@
 
         <div class="spacer spacer--big"></div>
 
-        <form class="form">
-            <input type="text" class="defaultfield" placeholder="{{ gettext('Login') }}" autofocus required />
+        <form class="form" method="POST">
+            <input type="text" name="username" class="defaultfield" placeholder="{{ gettext('Login') }}" autofocus required />
 
             <div class="spacer spacer--big"></div>
 
-            <input type="password" class="defaultfield" placeholder="{{ gettext('Password') }}" autofocus required />
+            <input type="password" name="password" class="defaultfield" placeholder="{{ gettext('Password') }}" autofocus required />
             <div class="spacer spacer--huge"></div>
 
             <input type="submit" name="login" value="{{ gettext('Enter') }}" class="barbutton" />

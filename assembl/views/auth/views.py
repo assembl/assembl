@@ -25,8 +25,7 @@ from velruse import login_url
 
 from ...auth.models import (
     EmailAccount, IdentityProviderAccount, AgentProfile, User)
-from ...auth.password import (
-    hash_password, verify_password, format_token)
+from ...auth.password import format_token
 from ...auth.operations import (
     get_identity_provider, send_confirmation_email, verify_email_token)
 from ...db import DBSession
@@ -172,20 +171,18 @@ def assembl_register_view(request):
     email = request.params.get('email', '').strip()
     # Find agent account to avoid duplicates!
     if DBSession.query(User).filter_by(username=username).count():
-        print "found"
         return dict(default_context, **{
             'error': _("This username already exists")
         })
     #TODO: Validate password quality
     # otherwise create.
-    print "creating"
     profile = AgentProfile(
         name=name
         )
     user = User(
         profile=profile,
         username=username,
-        password=hash_password(password),
+        password=password,
         creation_date=datetime.now()
         )
     email_account = EmailAccount(
@@ -228,7 +225,7 @@ def assembl_login_complete_view(request):
         return dict(default_context, **{
             'error': _("This user cannot be found")
         })
-    if verify_password(password, user.password):
+    if not user.check_password(password):
         user.login_failures += 1
         #TODO: handle high failure count
         DBSession.add(user)
@@ -398,7 +395,6 @@ def user_confirm_email(request):
     token = request.matchdict.get('ticket')
     email = verify_email_token(token)
     # TODO: token expiry
-    print email
     if email and not email.verified:
         email.verified = True
         email.profile.verified = True

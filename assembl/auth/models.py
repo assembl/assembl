@@ -16,7 +16,7 @@ from sqlalchemy import (
 from sqlalchemy.orm import relationship, backref
 from sqlalchemy.sql import exists
 
-from .password import hash_password
+from .password import hash_password, verify_password
 from ..db import DBSession
 from ..db.models import SQLAlchemyBaseModel
 
@@ -144,7 +144,7 @@ class User(SQLAlchemyBaseModel):
         self.password = hash_password(password)
 
     def check_password(self, password):
-        return hash_password(password) == self.password
+        return verify_password(password, self.password)
 
     def send_email(self, **kwargs):
         subject = kwargs.get('subject', '')
