@@ -330,14 +330,14 @@ def velruse_login_complete_view(request):
             if provider.trust_emails and not email_account.verified:
                 email_account.verified = True
                 DBSession.add(email_account)
-    else:
-        email_account = EmailAccount(
-            email=email,
-            verified=provider.trust_emails,
-            profile=profile
-            )
-        email_accounts[email] = email_account
-        DBSession.add(email_account)
+        else:
+            email_account = EmailAccount(
+                email=email,
+                verified=provider.trust_emails,
+                profile=profile
+                )
+            email_accounts[email] = email_account
+            DBSession.add(email_account)
     for email in velruse_profile.get('emails', []):
         preferred = False
         if isinstance(email, dict):
