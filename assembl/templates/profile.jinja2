@@ -61,11 +61,6 @@
                     </li>
                 {% endif %}
             {% endfor %}
-            {% for idp_email in user.profile.unconfirmed_emails() %}
-            <li>{{ idp_email.email }} ({{ gettext('unconfirmed') }})
-                    <input type="button" name="confirm" value="{{ gettext('Send confirmation message') }}" onclick="send_confirm('{{idp_email.email}}');"/>
-            </li>
-            {% endfor %}
             </ul>
             {% endif %}
 
