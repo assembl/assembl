@@ -18,10 +18,10 @@ from sqlalchemy import (
 
 from ..db import DBSession
 from ..db.models import SQLAlchemyBaseModel
+from ..auth.models import RestrictedAccessModel
 from ..source.models import (Source, Content, Post)
 
-
-class Discussion(SQLAlchemyBaseModel):
+class Discussion(RestrictedAccessModel):
     """
     A Discussion
     """
@@ -36,7 +36,12 @@ class Discussion(SQLAlchemyBaseModel):
     topic = Column(Unicode(255), nullable=False)
 
     creation_date = Column(DateTime, nullable=False, default=datetime.utcnow)
-
+    
+    table_of_contents_id = Column(
+        Integer,
+        ForeignKey('table_of_contents.id'),
+        nullable=False
+    )
     table_of_contents = relationship(
         'TableOfContents', 
         uselist=False,
@@ -92,7 +97,7 @@ class Discussion(SQLAlchemyBaseModel):
 
     def __init__(self, *args, **kwargs):
         super(Discussion, self).__init__(*args, **kwargs)
-        self.table_of_contents = TableOfContents(discussion=self)
+        self.table_of_contents = TableOfContents()
 
     def __repr__(self):
         return "<Discussion '%s'>" % self.topic
@@ -109,12 +114,6 @@ class TableOfContents(SQLAlchemyBaseModel):
 
     id = Column(Integer, primary_key=True)
     creation_date = Column(DateTime, nullable=False, default=datetime.utcnow)
-
-    discussion_id = Column(
-        Integer,
-        ForeignKey('discussion.id'),
-        nullable=False
-    )
 
     def __repr__(self):
         return "<TableOfContents '%s'>" % self.discussion.topic
