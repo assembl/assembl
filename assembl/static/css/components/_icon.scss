@@ -21,6 +21,7 @@ $font-icon-dir: "#{$font-dir}/icon";
 }
 */
  
+ %icon:before,
  [class^="icon-"]:before, [class*=" icon-"]:before {
   font-family: "fontello";
   font-style: normal;
@@ -71,6 +72,7 @@ $font-icon-dir: "#{$font-dir}/icon";
 .icon-menu:before { content: '\e80f'; } /* '' */
 .icon-download-1:before { content: '\e818'; } /* '' */
 .icon-upload:before { content: '\e819'; } /* '' */
+.icon-blank:before { content: '\e81e'; } /* '' */
 .icon-sort:before { content: '\e808'; } /* '' */
 .icon-plus-squared:before { content: '\e81c'; } /* '' */
 .icon-plus-squared-small:before { content: '\e800'; } /* '' */
