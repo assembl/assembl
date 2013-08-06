@@ -13,7 +13,7 @@
     <% } %>
 
 
-    <div class="idealist-subtitle"><%= app.formatDate(date) %></div>
+    <div class="idealist-subtitle"><%= date %> <%= app.formatDate(date) %></div>
     <div class="idealist-subtitle"><%= authorName %></div>
     <div class="idealist-title <%= ( read ? '' : 'text-bold' ) %>" data-messageid="<%= id %>">
         <%= subject %>
