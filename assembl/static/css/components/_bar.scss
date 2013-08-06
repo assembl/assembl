@@ -45,14 +45,14 @@
     padding: $bar-padding;
     top: 0;
     bottom: 0;
-    left: 0;
+    left: 25px;
 }
 
 // Right content of a bar
 // ---------------------
 .bar-right {
     @extend .bar-left;
-    right: 0;
+    right: 25px;
     left: auto;
     text-align: right;
 }

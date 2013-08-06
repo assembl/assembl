@@ -1,4 +1,11 @@
 <div class="idealist-body">
+    <% if (hasCheckbox) { %>
+    <label class="chk chk--idealist">
+        <input type="checkbox" class="chk-checkbox" <% if(inSynthesis) { %>checked="checked"<% } %> />
+        <span class="chk-label"></span>
+    </label>
+    <% }  %>
+
     <% for( var i=1; i<level; i+= 1) { %>
         <span class="idealist-bar"></span>
     <% } %>
@@ -7,7 +14,6 @@
         <span class="idealist-arrow"></span>
     <% } %>
 
-    <div class="idealist-removebtn">&times;</div>
     <div class="idealist-title">
         <%= shortTitle %>
         <small class="idealist-longtitle text-small text-muted"><%= app.stripHtml(longTitle) %></small>
