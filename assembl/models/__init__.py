@@ -1,9 +1,8 @@
 from sqlalchemy import Column, Integer, Text
 
-from ..lib.sqla import DBSession, Base, TimestampedBase, metadata
+from ..lib.sqla import DBSession, Base, TimestampedBase, metadata, ObsoleteBase, TimestampedObsolete
 
-
-class MyModel(TimestampedBase):
+class MyModel(TimestampedObsolete):
     __tablename__ = 'models'
     id = Column(Integer, primary_key=True)
     name = Column(Text, unique=True)
@@ -16,3 +15,25 @@ class MyModel(TimestampedBase):
 
 from .post import Email, Post
 from .toc import Document, DocumentType, Item, Selection, SelectorType
+from ..auth.models import (
+    IdentityProvider,
+    EmailAccount,
+    IdentityProviderAccount,
+    AgentProfile,
+    User,
+    RestrictedAccessModel,
+    Action,
+    )
+from ..source.models import (
+    Source,
+    Content,
+    Mailbox,
+    Post,
+    Email,
+)
+from ..synthesis.models import (
+    Discussion,
+    TableOfContents,
+    Idea,
+    Extract,
+    )

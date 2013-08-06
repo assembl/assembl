@@ -7,9 +7,14 @@ pytz>=2013b
 Babel
 colander
 colanderalchemy==0.2.0
-cornice
+-e git+https://github.com/mozilla-services/cornice.git@504c1f3a1df4bee06bc11067afcc83af3a57e5a0#egg=cornice
 psycopg2
 SQLAlchemy
 transaction
 waitress
 zope.sqlalchemy
+velruse
+pyramid_beaker
+imaplib2
+pyramid_mailer
+# hapi : a OAuth2 server for pyramid. Still very much work in progress.

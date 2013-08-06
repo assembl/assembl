@@ -35,6 +35,7 @@
 #ide
 .project
 .pydevproject
+.settings
 
 # misc
 ._*

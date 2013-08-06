@@ -1,5 +1,1 @@
-from sqlalchemy.ext.declarative import declarative_base
-
-
-
-SQLAlchemyBaseModel = declarative_base()
+from ..lib.sqla import Base as SQLAlchemyBaseModel

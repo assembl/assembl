@@ -1,3 +1,5 @@
+#THIS CODE IS NOT ACTIVE!
+
 from email import message_from_string
 from email.message import Message
 

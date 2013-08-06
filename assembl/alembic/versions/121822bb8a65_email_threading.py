@@ -19,13 +19,15 @@ import transaction
 
 from assembl import models as m
 from assembl.models.post import msg_id
+from assembl.lib import config
 
 db = m.DBSession
 
 
 def upgrade(pyramid_env):
     with context.begin_transaction():
-        op.drop_column('posts', u'headers')
+        if not config.get('sqlalchemy.url').startswith('sqlite'):
+            op.drop_column('posts', u'headers')
         op.add_column('posts', sa.Column('message_id', sa.String(),
                       nullable=True))
         op.add_column('posts', sa.Column('parent_id', sa.Integer(),
@@ -53,7 +55,8 @@ def upgrade(pyramid_env):
 
 def downgrade(pyramid_env):
     with context.begin_transaction():
-        op.add_column('posts', sa.Column(u'headers', sa.TEXT(), nullable=True))
-        op.drop_column('posts', 'message_id')
-        op.drop_column('posts', 'parent_id')
+        op.add_column('posts', sa.Column(u'headers', sa.Text(), nullable=True))
+        if not config.get('sqlalchemy.url').startswith('sqlite'):
+            op.drop_column('posts', 'message_id')
+            op.drop_column('posts', 'parent_id')
         op.drop_table('emails')

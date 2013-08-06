@@ -25,9 +25,11 @@ Running:
 - cd ~/assembl
 
 Only the first time you run it:
-- $venv/bin/assembl-db-manage local.ini bootstrap
+sudo -u postgres createuser --createdb --no-createrole --no-superuser assembl
+createdb -U assembl assembl
+- $venv/bin/assembl-db-manage development.ini bootstrap
 
-- $venv/bin/pserve --reload local.ini
+- $venv/bin/pserve --reload development.ini
 
 Updating an environment:
 
@@ -50,3 +52,14 @@ To run compass:
 - cd <directory containing this file>
 
 - bundle exec compass watch
+
+
+Schema migrations
+-----------------
+
+Upgrade to latest:
+- alembic -c development.ini upgrade head
+
+Create a new one:
+- alembic -c development.ini revision --autogenerate -m "You message"
+- Make sure to verify the generated code...
