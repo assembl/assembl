@@ -50,7 +50,7 @@
 
     color: #eceef1;
 
-    .chk.chk--idealist & {
+    .chk--idealist & {
         top: 0;
         left: 0;
     }
@@ -60,8 +60,15 @@
         color: #81d6af;
     }
 
-    .chk.chk--muted .chk-checkbox:checked ~ & {
+    .chk--muted .chk-checkbox:checked ~ & {
         color: $text-muted-color;
+    }
+
+    .chk--dropdown & {
+        font-size: 16px;
+        color: white !important;
+        top: 3px;
+        left: -2px;
     }
 }
 
