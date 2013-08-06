@@ -31,6 +31,7 @@ def get_inbox(request):
     #What is "total", the total messages in the current context?
     data["total"] = base_query.count()
     data["maxPage"] = ceil(float(data["total"])/PAGE_SIZE)
+    #TODO:  Check if we want 1 based index in the api
     data["startIndex"] = (PAGE_SIZE * page) - (PAGE_SIZE-1)
 
 
@@ -40,7 +41,7 @@ def get_inbox(request):
         data["endIndex"] = data["startIndex"] + (PAGE_SIZE-1)
         
     post_data = []
-    query = base_query.limit(PAGE_SIZE).offset(data["startIndex"])
+    query = base_query.limit(PAGE_SIZE).offset(data["startIndex"]-1)
     for post in query:
         post_data.append(_get_json_structure_from_post(post))
     data["messages"] = post_data
@@ -75,7 +76,7 @@ def get_posts(request):
     
     if root_post_id:
         root = DBSession.query(Post).get(root_post_id)
-        posts = root.get_descendants()
+        posts = root.get_descendants(include_self=True)
     else:
         posts = DBSession.query(Post).all()
     

@@ -6,6 +6,7 @@ from imaplib2 import IMAP4_SSL, IMAP4
 
 from sqlalchemy.orm import relationship, backref, aliased
 from sqlalchemy.sql import func, cast, select
+from sqlalchemy import or_
 
 from sqlalchemy import (
     Column, 
@@ -250,12 +251,20 @@ class Post(Content):
         return None
     
 
-    def get_descendants(self):
+    def get_descendants(self, include_self=False):
         ancestry_query_string = "%s%d,%%" % (self.ancestry or '', self.id)
 
-        descendants = DBSession.query(Post).filter(
+        descendants = DBSession.query(Post)
+        if include_self:
+            descendants = descendants.filter(or_(
+            Post.ancestry.like(ancestry_query_string),
+            Post.id == self.id
+            ) )
+        else:
+            descendants = descendants.filter(
             Post.ancestry.like(ancestry_query_string)
-        ).order_by(Content.creation_date).all()
+            )
+        descendants = descendants.order_by(Content.creation_date).all()
 
         return descendants
 
@@ -271,6 +280,7 @@ class Post(Content):
                 "%s%d," % (new_ancestry, self.id),
                 1
             )
+            Post.id == self.id
 
             descendant.ancestry = updated_ancestry
             DBSession.add(descendant)
