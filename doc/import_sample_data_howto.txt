@@ -1,0 +1,25 @@
+#In pshell development.ini, paste:
+
+from assembl.auth.models import *
+from assembl.synthesis.models import *
+from assembl.source.models import *
+import transaction
+
+discussion = Discussion(topic=u"Sample Discussion")
+
+mailbox = Mailbox(
+name="jack layton",
+host="coeus.ca",
+port=143,
+use_ssl=False,
+mailbox="inbox",
+password="jacklayton",
+username="jacklayton"
+)
+
+mailbox.discussion = discussion
+
+mailbox.import_content()
+
+transaction.commit()
+
