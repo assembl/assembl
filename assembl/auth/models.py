@@ -1,5 +1,7 @@
 from datetime import datetime
 from itertools import chain
+import urllib
+import hashlib
 
 from sqlalchemy import (
     Boolean,
@@ -19,7 +21,7 @@ from sqlalchemy.sql import exists
 from .password import hash_password, verify_password
 from ..db import DBSession
 from ..db.models import SQLAlchemyBaseModel
-
+from ..lib import config
 
 class AgentAccount(SQLAlchemyBaseModel):
     __abstract__ = True
@@ -185,6 +187,17 @@ class User(SQLAlchemyBaseModel):
         body = kwargs.get('body', '')
 
         # Send email.
+
+    def avatar_url(self, size=32):
+        # First implementation: Use the gravatar URL
+        # TODO: store user's choice of avatar.
+        email = self.get_preferred_email()
+        default = config.get('avatar.default_image_url',
+                             '/static/img/icon/user.png')
+        gravatar_url = "http://www.gravatar.com/avatar/" + \
+            hashlib.md5(email.lower()).hexdigest() + "?"
+        gravatar_url += urllib.urlencode({'d': default, 's': str(size)})
+        return gravatar_url
 
     def display_name(self):
         if self.username:
