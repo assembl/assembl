@@ -1,3 +1,7 @@
+#dropdb -U assembl assembl
+#createdb -U assembl assembl
+#assembl-db-manage development.ini bootstrap
+
 #In pshell development.ini, paste:
 
 from assembl.auth.models import *
