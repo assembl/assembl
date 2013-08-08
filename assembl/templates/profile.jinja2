@@ -31,15 +31,15 @@
 
         <form class="form" method="POST">
             <label>{{ gettext('Username') }}:</label>
-            {% if user.username %}
-            <span>{{user.username}}</span>
+            {% if the_user.username %}
+            <span>{{the_user.username}}</span>
             {% else %}
             <input type="text" name="username" placeholder="{{ gettext('username (cannot ') }}" autofocus />
             <div class="spacer spacer--large"></div>
             {% endif %}
 
             <label>{{ gettext('Name') }}</label>
-            <input type="text" name="name" autofocus placeholder="{{ user.name }}"/>
+            <input type="text" name="name" autofocus placeholder="{{ the_user.name }}"/>
             <div class="spacer spacer--large"></div>
 
             <!-- TODO Change password routine -->
@@ -51,11 +51,11 @@
 
             <!-- TODO Avatar logic -->
 
-            {% if user.profile.email_accounts or user.profile.unconfirmed_emails %}
+            {% if the_user.profile.email_accounts or the_user.profile.unconfirmed_emails %}
             <!-- TODO: Preferred email logic. -->
             <label>{{ gettext('Emails') }}</label>
             <ul>
-            {% for email_account in user.profile.verified_emails() %}
+            {% for email_account in the_user.profile.verified_emails() %}
                 <li>{{ email_account.email }}</li>
             {% endfor %}
             {% for email_account, other_profile in unverified_emails %}
@@ -77,11 +77,11 @@
             <div class="spacer spacer--large"></div>
 
 
-            {% if user.profile.identity_accounts %}
+            {% if the_user.profile.identity_accounts %}
             <div class="spacer spacer--huge"></div>
             <label>{{ gettext('Accounts') }}</label>
             <ul>
-            {% for account in user.profile.identity_accounts %}
+            {% for account in the_user.profile.identity_accounts %}
             <li>
                 <label>{{ account.type }}</label>:
                 {% if account.username %}

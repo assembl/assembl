@@ -110,9 +110,11 @@ def assembl_profile(request):
             raise HTTPUnauthorized()
         # Add permissions to view a profile?
         return render_to_response(
-            'assembl:templates/view_profile.jinja2', dict(default_context, **{
-                'profile': profile
-            }))
+            'assembl:templates/view_profile.jinja2',
+            dict(default_context,
+                 profile=profile,
+                 user=DBSession.query(User).get(logged_in)))
+
     errors = []
     if save:
         user_id = user.id
@@ -151,12 +153,13 @@ def assembl_profile(request):
             email=ea.email, verified=True).first())
         for ea in user.profile.email_accounts if not ea.verified]
     return render_to_response(
-        'assembl:templates/profile.jinja2', dict(default_context, **{
-            'error': '<br />'.join(errors),
-            'unverified_emails': unverified_emails,
-            'providers': request.registry.settings['login_providers'],
-            'user': user
-        }))
+        'assembl:templates/profile.jinja2',
+        dict(default_context,
+             error='<br />'.join(errors),
+             unverified_emails=unverified_emails,
+             providers=request.registry.settings['login_providers'],
+             the_user=user,
+             user=DBSession.query(User).get(logged_in)))
 
 
 @view_config(
@@ -175,13 +178,11 @@ def assembl_register_view(request):
     # Find agent account to avoid duplicates!
     if DBSession.query(EmailAccount).filter_by(
         email=email, verified=True).count():
-            return dict(default_context, **{
-                'error': _("We already have a user with this email.")
-            })
+            return dict(default_context,
+                        error=_("We already have a user with this email."))
     if password != password2:
-        return dict(default_context, **{
-            'error': _("The passwords should be identical")
-        })
+        return dict(default_context,
+                    error=_("The passwords should be identical"))
 
     #TODO: Validate password quality
     # otherwise create.
@@ -231,9 +232,8 @@ def assembl_login_complete_view(request):
         user = DBSession.query(User).filter_by(username=identifier).first()
 
     if not user:
-        return dict(default_context, **{
-            'error': _("This user cannot be found")
-        })
+        return dict(default_context,
+                    error=_("This user cannot be found"))
     if logged_in:
         if user.id != logged_in:
             # logging in as a different user
@@ -249,8 +249,8 @@ def assembl_login_complete_view(request):
         #TODO: handle high failure count
         DBSession.add(user)
         transaction.commit()
-        return dict(default_context, **{
-            'error': _("Invalid user and password")})
+        return dict(default_context,
+                    error=_("Invalid user and password"))
     headers = remember(request, user.id, tokens=format_token(user))
     request.response.headerlist.extend(headers)
     # Redirect to profile page. TODO: Remember another URL
@@ -445,8 +445,7 @@ def user_confirm_email(request):
     renderer='assembl:templates/login.jinja2',
 )
 def login_denied_view(request):
-    return dict(default_context, **{
-        'error': _('Login failed, try again'),
-    })
+    return dict(default_context,
+                error=_('Login failed, try again'))
     # TODO: If logged in otherwise, go to profile page. 
     # Otherwise, back to login page
