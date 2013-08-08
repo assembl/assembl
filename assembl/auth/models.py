@@ -51,6 +51,10 @@ class EmailAccount(AgentAccount):
         nullable=False, index=True)
     profile = relationship('AgentProfile', backref='email_accounts')
 
+    def display_name(self):
+        if self.verified:
+            return self.email
+
 
 class IdentityProviderAccount(AgentAccount):
     """An account with an external identity provider"""
@@ -70,6 +74,14 @@ class IdentityProviderAccount(AgentAccount):
     domain = Column(String(200))
     userid = Column(String(200))
 
+    def display_name(self):
+        # TODO: format according to provider, ie @ for twitter.
+        if self.username:
+            name = self.username
+        else:
+            name = self.userid
+        return ":".join((self.provider.type, name))
+
 
 class AgentProfile(SQLAlchemyBaseModel):
     """
@@ -85,12 +97,22 @@ class AgentProfile(SQLAlchemyBaseModel):
 
     def accounts(self):
         """All AgentAccounts for this profile"""
-        return chain(self.identity_accounts(), self.email_accounts())
+        return chain(self.identity_accounts, self.email_accounts)
 
     __mapper_args__ = {
         'polymorphic_identity': 'agent_profile',
         'polymorphic_on': type
     }
+
+    def display_name(self):
+        # TODO: Prefer types?
+        for acc in self.accounts():
+            name = acc.display_name()
+            if name:
+                return name
+        return self.name
+
+
 
     def has_permission(self, verb, subject):
         if self is subject.owner:
@@ -143,11 +165,28 @@ class User(SQLAlchemyBaseModel):
     def check_password(self, password):
         return verify_password(password, self.password)
 
+    def get_preferred_email(self):
+        if self.preferred_email:
+            return self.preferred_email
+        emails = list(self.profile.email_accounts)
+        # should I allow unverified?
+        emails = [e for e in emails if e.verified]
+        preferred = [e for e in emails if e.preferred]
+        if preferred:
+            return preferred[0].email
+        if emails:
+            return emails[0].email
+
     def send_email(self, **kwargs):
         subject = kwargs.get('subject', '')
         body = kwargs.get('body', '')
 
         # Send email.
+
+    def display_name(self):
+        if self.username:
+            return self.username
+        return self.profile.display_name
 
     def __repr__(self):
         return "<User '%s'>" % self.username
