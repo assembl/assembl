@@ -2,12 +2,21 @@
 // ==================
 .chk {
     cursor: pointer;
+
+    display: inline-block;
+    @include box-sizing( border-box );
+    width: 20px;
+    height: 20px;
+    line-height: 20px;
+    float: left;
+
+    position: relative;
+    @include z-index("floor");
 }
 
 // Designed to fit tin the .idealist-item
 // ++++++++++++++++
 .chk.chk--idealist {
-    @include box-sizing( border-box );
     height: $idealist-item-height;
     line-height: $idealist-item-height;
     float: left;
@@ -15,8 +24,6 @@
 
     // Don't ask
     padding-top: 4.25px; 
-    position: relative;
-    @include z-index("floor");
 }
 
 // Change the selected color to the muted color
@@ -32,19 +39,36 @@
 // The label
 // --------------
 .chk-label {
+    @extend %icon;
+    @extend .icon-blank;
+
     display: inline-block;
-    width: $checkbox-width;
-    height: $checkbox-height;
+    position: absolute;
+    top: -5px;
+    left: -5px;
+    font-size: 20px;
 
-    @include border-radius( 5px );
-    background-color: #eceef1;
+    color: #eceef1;
 
-    .chk-checkbox:checked ~ & {
-        background-color: #81d6af;
+    .chk--idealist & {
+        top: 0;
+        left: 0;
     }
 
-    .chk.chk--muted .chk-checkbox:checked ~ & {
-        background-color: $text-muted-color;
+    .chk-checkbox:checked ~ & {
+        @extend .icon-ok-squared;
+        color: #81d6af;
+    }
+
+    .chk--muted .chk-checkbox:checked ~ & {
+        color: $text-muted-color;
+    }
+
+    .chk--dropdown & {
+        font-size: 16px;
+        color: white !important;
+        top: 3px;
+        left: -2px;
     }
 }
 

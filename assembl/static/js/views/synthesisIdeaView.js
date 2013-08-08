@@ -94,6 +94,8 @@ function(Backbone, _, $, Idea, Segment, app){
          * @type {Object}
          */
         events: {
+            'change [type="checkbox"]': 'onCheckboxChange',
+
             'click .idealist-arrow': 'toggle',
             'click .idealist-removebtn': 'remove'
         },
@@ -114,6 +116,14 @@ function(Backbone, _, $, Idea, Segment, app){
             } else {
                 this.open();
             }
+        },
+
+        /**
+         * @event
+         */
+        onCheckboxChange: function(ev){
+            ev.stopPropagation();
+            this.model.set('inSynthesis', ev.currentTarget.checked);
         },
 
 

@@ -2,11 +2,18 @@
   "name": "",
   "css_prefix_text": "icon-",
   "css_use_suffix": false,
+  "hinting": true,
   "glyphs": [
+    {
+      "uid": "1400d5103edd2fa6d2d61688fee79a5a",
+      "css": "ok-squared",
+      "code": 59415,
+      "src": "fontawesome"
+    },
     {
       "uid": "1a5cfa186647e8c929c2b17b9fc4dac1",
       "css": "plus-squared",
-      "code": 59401,
+      "code": 59420,
       "src": "fontawesome"
     },
     {
@@ -16,9 +23,21 @@
       "src": "fontawesome"
     },
     {
+      "uid": "f755a58fb985eeb70bd47d9b31892a34",
+      "css": "minus-squared",
+      "code": 59421,
+      "src": "fontawesome"
+    },
+    {
       "uid": "21e8b8217ed9d1a164fd02eff39c5388",
       "css": "minus-squared-small",
       "code": 59397,
+      "src": "fontawesome"
+    },
+    {
+      "uid": "f48ae54adfb27d8ada53d0fd9e34ee10",
+      "css": "trash",
+      "code": 59401,
       "src": "fontawesome"
     },
     {
@@ -46,9 +65,27 @@
       "src": "fontawesome"
     },
     {
+      "uid": "84bb9695b8662fa4783242f84c9e4682",
+      "css": "collapse",
+      "code": 59418,
+      "src": "fontawesome"
+    },
+    {
+      "uid": "7960517a504e42aea0641f15bc55fbed",
+      "css": "collapse-top",
+      "code": 59419,
+      "src": "fontawesome"
+    },
+    {
       "uid": "56a21935a5d4d79b2e91ec00f760b369",
       "css": "sort",
       "code": 59400,
+      "src": "fontawesome"
+    },
+    {
+      "uid": "2c2ca8a96b31781c9c8056d05c0a8980",
+      "css": "blank",
+      "code": 59422,
       "src": "fontawesome"
     },
     {
@@ -88,6 +125,18 @@
       "src": "mfglabs"
     },
     {
+      "uid": "348b04ea17f646fbc6a46e20ebe4fe12",
+      "css": "download-1",
+      "code": 59416,
+      "src": "mfglabs"
+    },
+    {
+      "uid": "4f3b31017c63ba04dc4f78ce7a8f02b1",
+      "css": "upload",
+      "code": 59417,
+      "src": "mfglabs"
+    },
+    {
       "uid": "628e5fc59fc5965a6b91189467b037d5",
       "css": "heart",
       "code": 59394,
@@ -109,6 +158,12 @@
       "uid": "8346e81b88fa3c57b42978f8b137a93a",
       "css": "star-empty",
       "code": 59404,
+      "src": "elusive"
+    },
+    {
+      "uid": "3ab2abf6f936d3e53ee8c184cedaed82",
+      "css": "trash-1",
+      "code": 59414,
       "src": "elusive"
     },
     {

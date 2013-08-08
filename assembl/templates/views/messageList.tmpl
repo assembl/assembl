@@ -25,8 +25,13 @@
 
             <div class="dropdown dropdown--button">
                 <span class="dropdown-label">
-                    <input id="messagelist-mainchk" type="checkbox" />
+                    <label class="chk chk--dropdown chk--muted">
+                        <input id="messagelist-mainchk" type="checkbox" class="chk-checkbox" />
+                        
+                        <span class="chk-label"></span>
+                    </label>
                 </span>
+
                 <ul class="dropdown-list">
                     <li id="messagelist-selectall" class="dropdown-listitem">{{ gettext('All') }}</li>
                     <li id="messagelist-selectnone" class="dropdown-listitem">{{ gettext('None') }}</li>
@@ -45,7 +50,7 @@
             </div>
 
             <div class="float-right">
-                <a id="messageList-collapseButton" class="iconbutton <%= collapsed ? 'icon-plus-squared-small' : 'icon-minus-squared-small' %>"></a>
+                <a id="messageList-collapseButton" class="iconbutton <%= collapsed ? 'icon-download-1' : 'icon-upload' %>"></a>
                 <a id="messageList-closeButton" class="iconbutton icon-cancel"></a>
             </div>
         </div>

@@ -1,5 +1,5 @@
-define(['zepto', 'underscore', 'ckeditor', 'models/user'],
-function($, _, ckeditor, User){
+define(['zepto', 'underscore', 'ckeditor', 'models/user', 'moment'],
+function($, _, ckeditor, User, Moment){
     'use strict';
 
     ckeditor.disableAutoInline = true;
@@ -49,13 +49,13 @@ function($, _, ckeditor, User){
          * The date format
          * @type {String}
          */
-        dateFormat: 'd/m/Y',
+        dateFormat: 'DD/MM/YYYY',
 
         /**
          * The datetime format
          * @type {string}
          */
-        datetimeFormat: 'd/m/Y H:i:s',
+        datetimeFormat: 'DD/MM/YYYY HH:mm:ss',
 
         /**
          * The time for all animations related to lateralMenu
@@ -305,27 +305,8 @@ function($, _, ckeditor, User){
         formatDate: function(date, format){
             format = format || app.dateFormat;
 
-            if( ! _.isDate(date) ){
-                date = new Date(date);
-            }
-
-            var addZeroIfNecessary = function(value){
-                return value < 10 ? '0' + value : value;
-            };
-
-            var dateObject = {
-                'd': 'getDate',
-                'm': 'getMonth',
-                'y': 'getFullYear',
-                'Y': 'getFullYear',
-                'H': 'getHours',
-                'i': 'getMinutes',
-                's': 'getSeconds'
-            };
-
-            return format.replace(/\w/g, function(letter, pos){
-                return (letter in dateObject) ? addZeroIfNecessary(date[dateObject[letter]]()) : letter;
-            });
+            date = new Moment(date);
+            return date.format(format);
         },
 
         /**

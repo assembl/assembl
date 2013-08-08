@@ -280,7 +280,6 @@ class Post(Content):
                 "%s%d," % (new_ancestry, self.id),
                 1
             )
-            Post.id == self.id
 
             descendant.ancestry = updated_ancestry
             DBSession.add(descendant)
