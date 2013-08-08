@@ -18,13 +18,15 @@ from pyramid.httpexceptions import (
     HTTPServerError
     )
 
+from sqlalchemy import desc
 from sqlalchemy.orm.exc import NoResultFound
 import transaction
 
 from velruse import login_url
 
 from ...auth.models import (
-    EmailAccount, IdentityProviderAccount, AgentProfile, User)
+    EmailAccount, IdentityProvider, IdentityProviderAccount,
+    AgentProfile, User)
 from ...auth.password import format_token
 from ...auth.operations import (
     get_identity_provider, send_confirmation_email, verify_email_token)
@@ -65,95 +67,59 @@ def login_view(request):
     })
 
 
-@view_config(
-    route_name='profile',
-    request_method='GET',
-    renderer='assembl:templates/view_profile.jinja2'
-    # Add permissions to view a profile?
-    )
-def assembl_view_profile(request):
-    username = request.matchdict.get('username', '').strip()
-    try:
-        user = DBSession.query(User).filter_by(username=username).one()
-    except NoResultFound:
-        raise HTTPNotFound()
+@view_config(route_name='profile')
+def assembl_profile(request):
+    id_type = request.matchdict.get('type').strip()
+    identifier = request.matchdict.get('identifier').strip()
+    user = None
+    if id_type == 'u':
+        user = DBSession.query(User).filter_by(username=identifier).first()
+        if not user:
+            raise HTTPNotFound()
+        profile = user.profile
+    elif id_type == 'id':
+        try:
+            id = int(identifier)
+        except:
+            raise HTTPNotFound()
+        user = DBSession.query(User).get(id)
+        if not user:
+            raise HTTPNotFound()
+        profile = user.profile
+    elif id_type == 'email':
+        account = DBSession.query(EmailAccount).filter_by(
+            email=identifier).order_by(desc(EmailAccount.verified)).first()
+        if not account:
+            raise HTTPNotFound()
+        profile = account.profile
+    else:
+        account = DBSession.query(IdentityProviderAccount).join(
+            IdentityProvider).filter(
+            IdentityProviderAccount.username == identifier and
+            IdentityProvider.type == id_type).first()
+        if not account:
+            raise HTTPNotFound()
+        profile = account.profile
     logged_in = authenticated_userid(request)
-
-    if logged_in == user.id:
-        # Viewing my own profile
-        return render_to_response('assembl:templates/profile.jinja2', {
+    save = request.method == 'POST'
+    if logged_in and not user:
+        user = profile.user
+    # if some other user
+    if not user or not logged_in or logged_in != user.id:
+        if save:
+            raise HTTPUnauthorized()
+        # Add permissions to view a profile?
+        return render_to_response(
+            'assembl:templates/view_profile.jinja2', dict(default_context, **{
+                'profile': profile
+            }))
+    if save:
+        pass  # TODO: Save stuff
+    return render_to_response(
+        'assembl:templates/profile.jinja2', dict(default_context, **{
             'providers': request.registry.settings['login_providers'],
             'user': user
-            })
-    return dict(default_context, **{
-        'user': user
-    })
-
-
-@view_config(
-    route_name='profile',
-    request_method='POST',
-    renderer='assembl:templates/profile.jinja2'
-    # Add permissions to view a profile?
-    )
-def assembl_modify_profile(request):
-    username = request.matchdict.get('username', '').strip()
-    try:
-        user = DBSession.query(User).filter_by(username=username).one()
-    except NoResultFound:
-        raise HTTPNotFound()
-    logged_in = authenticated_userid(request)
-    if logged_in != user.id:
-        raise HTTPUnauthorized()
-    # TODO: Save stuff
-    return dict(default_context, **{
-        'providers': request.registry.settings['login_providers'],
-        'user': user
-    })
-
-
-@view_config(
-    route_name='unnamed_profile',
-    request_method='GET',
-    renderer='assembl:templates/view_profile.jinja2'
-    # Add permissions to view a profile?
-    )
-def assembl_view_unnamed_profile(request):
-    id = int(request.matchdict.get('id'))
-    user = DBSession.query(User).get(id)
-    if not user:
-        raise HTTPNotFound()
-    logged_in = authenticated_userid(request)
-    if logged_in == user.id:
-        # Viewing my own profile
-        return render_to_response('assembl:templates/profile.jinja2', {
-            'providers': request.registry.settings['login_providers'],
-            'user': user
-            })
-    return dict(default_context, **{
-        'user': user
-    })
-
-
-@view_config(
-    route_name='unnamed_profile',
-    request_method='POST',
-    renderer='assembl:templates/profile.jinja2'
-    # Add permissions to view a profile?
-    )
-def assembl_modify_unnamed_profile(request):
-    id = int(request.matchdict.get('id'))
-    user = DBSession.query(User).get(id)
-    if not user:
-        raise HTTPNotFound()
-    logged_in = authenticated_userid(request)
-    if logged_in != user.id:
-        raise HTTPUnauthorized()
-    # TODO: Save stuff
-    return dict(default_context, **{
-        'providers': request.registry.settings['login_providers'],
-        'user': user
-    })
+        }))
 
 
 @view_config(
@@ -198,14 +164,14 @@ def assembl_register_view(request):
     DBSession.add(email_account)
     DBSession.flush()
     userid = user.id
-    send_confirmation_email(request, email_account, False)
+    send_confirmation_email(request, email_account)
     # TODO: Check that the email logic gets the proper locale. (send in URL?)
     headers = remember(request, user.id, tokens=format_token(user))
     request.response.headerlist.extend(headers)
     transaction.commit()
     # Redirect to profile page. TODO: Remember another URL
     # TODO: Tell them to expect an email.
-    raise HTTPFound(location='/ext_user/'+userid)
+    raise HTTPFound(location='/user/id/'+userid)
 
 
 @view_config(
@@ -238,9 +204,9 @@ def assembl_login_complete_view(request):
         else:
             # re-logging in? Why?
             if user.username:
-                raise HTTPFound(location='/users/'+user.username)
+                raise HTTPFound(location='/user/u/'+user.username)
             else:
-                raise HTTPFound(location='/ext_user/'+str(user.id))
+                raise HTTPFound(location='/user/id/'+str(user.id))
     if not user.check_password(password):
         user.login_failures += 1
         #TODO: handle high failure count
@@ -252,9 +218,9 @@ def assembl_login_complete_view(request):
     request.response.headerlist.extend(headers)
     # Redirect to profile page. TODO: Remember another URL
     if user.username:
-        raise HTTPFound(location='/users/'+user.username)
+        raise HTTPFound(location='/user/u/'+user.username)
     else:
-        raise HTTPFound(location='/ext_user/'+str(user.id))
+        raise HTTPFound(location='/user/id/'+str(user.id))
 
 
 @view_config(
@@ -378,16 +344,16 @@ def velruse_login_complete_view(request):
     # TODO: Store the OAuth etc. credentials.
     # Though that may be done by velruse?
     if username:
-        raise HTTPFound(location='/users/'+username)
+        raise HTTPFound(location='/user/u/'+username)
     else:
-        raise HTTPFound(location='/ext_user/'+str(user_id))
+        raise HTTPFound(location='/user/id/'+str(user_id))
 
 
 @view_config(
-    route_name='users_ask_for_confirm',
+    route_name='confirm_user_email',
     permission=NO_PERMISSION_REQUIRED
 )
-def users_ask_for_confirm(request):
+def confirm_user_email(request):
     # TODO: How to make this not become a spambot?
     id = int(request.matchdict.get('email_account_id'))
     email = DBSession.query(EmailAccount).get(id)
@@ -399,9 +365,9 @@ def users_ask_for_confirm(request):
         user = email.profile.user
         # TODO: Say we did it.
         if user.username:
-            raise HTTPFound(location='/users/'+user.username)
+            raise HTTPFound(location='/user/u/'+user.username)
         else:
-            raise HTTPFound(location='/ext_user/'+str(user.id))
+            raise HTTPFound(location='/user/id/'+str(user.id))
     else:
         # we confirmed a profile without a user? Now what?
         raise HTTPServerError()
@@ -427,9 +393,9 @@ def user_confirm_email(request):
             userid = user.id
         transaction.commit()
         if username:
-            raise HTTPFound(location='/users/'+username)
+            raise HTTPFound(location='/user/u/'+username)
         elif userid:
-            raise HTTPFound(location='/ext_user/'+str(userid))
+            raise HTTPFound(location='/user/id/'+str(userid))
         else:
             # we confirmed a profile without a user? Now what?
             raise HTTPServerError()
