@@ -15,7 +15,7 @@
     <div>
         {% if profile.user and profile.user.username %}
         <label>{{ gettext('Username') }}</label>
-        <span>{{user.username}}</span>
+        <span>{{profile.user.username}}</span>
         {% endif %}
 
         <label>{{ gettext('Name') }}</label>
