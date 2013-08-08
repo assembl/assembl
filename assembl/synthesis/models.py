@@ -53,6 +53,11 @@ class Discussion(RestrictedAccessModel):
     }
 
     def posts(self, limit=15, offset=None, parent_id=None):
+        """
+        Queries posts whose content comes from a source that belongs to this
+        topic. The result is a list of posts sorted by their youngest
+        descendent in descending order.
+        """
         lower_post = aliased(Post, name="lower_post")
         lower_content = aliased(Content, name="lower_content")
         upper_post = aliased(Post, name="upper_post")
@@ -162,12 +167,37 @@ class Idea(SQLAlchemyBaseModel):
 
         return "<Idea %d>" % self.id
 
+
 class Extract(SQLAlchemyBaseModel):
     """
-    A part extracted from a Post.
+    An extracted part. A quotation to be referenced by an `Idea`.
     """
     __tablename__ = 'extract'
 
     id = Column(Integer, primary_key=True)
     creation_date = Column(DateTime, nullable=False, default=datetime.utcnow)
     order = Column(Float, nullable=False, default=0.0)
+    body = Column(UnicodeText, nullable=False)
+
+    post_id = Column(Integer, ForeignKey('post.id'))
+    post = relationship('Post', backref='extracts')
+
+    idea_id = Column(Integer, ForeignKey('idea.id'))
+    idea = relationship('Idea', backref='extracts')
+
+    creator_id = Column(
+        Integer, 
+        ForeignKey('agent_profile.id'),
+    )
+    
+    creator = relationship('AgentProfile', backref='extracts_created')
+
+    owner_id = Column(
+        Integer,
+        ForeignKey('agent_profile.id')
+    )
+
+    owner = relationship('AgentProfile', backref='extracts_owned')
+
+    def __repr__(self):
+        return "<Extract %d '%s%'>" % (self.id, self.body[:20])
