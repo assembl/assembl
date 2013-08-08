@@ -216,21 +216,31 @@ def assembl_register_view(request):
 )
 def assembl_login_complete_view(request):
     # Check if proper authorization. Otherwise send to another page.
-    username = request.params.get('username', '').strip()
+    identifier = request.params.get('identifier', '').strip()
     password = request.params.get('password', '').strip()
     logged_in = authenticated_userid(request)
-    user = DBSession.query(User).filter_by(username=username).first()
-    if logged_in:
-        if user and user.id != logged_in:
-            # logging in as a different user
-            forget(request)
-        else:
-            # re-logging in? Why?
-            raise HTTPFound(location='/users/'+username)
+    if '@' in identifier:
+        account = DBSession.query(EmailAccount).filter_by(
+            email=identifier, verified=True).first()
+        if account:
+            user = account.profile.user
+    else:
+        user = DBSession.query(User).filter_by(username=identifier).first()
+
     if not user:
         return dict(default_context, **{
             'error': _("This user cannot be found")
         })
+    if logged_in:
+        if user.id != logged_in:
+            # logging in as a different user
+            forget(request)
+        else:
+            # re-logging in? Why?
+            if user.username:
+                raise HTTPFound(location='/users/'+user.username)
+            else:
+                raise HTTPFound(location='/ext_user/'+str(user.id))
     if not user.check_password(password):
         user.login_failures += 1
         #TODO: handle high failure count
@@ -241,7 +251,10 @@ def assembl_login_complete_view(request):
     headers = remember(request, user.id, tokens=format_token(user))
     request.response.headerlist.extend(headers)
     # Redirect to profile page. TODO: Remember another URL
-    raise HTTPFound(location='/users/'+username)
+    if user.username:
+        raise HTTPFound(location='/users/'+user.username)
+    else:
+        raise HTTPFound(location='/ext_user/'+str(user.id))
 
 
 @view_config(
