@@ -99,6 +99,9 @@ class AgentProfile(SQLAlchemyBaseModel):
         """All AgentAccounts for this profile"""
         return chain(self.identity_accounts, self.email_accounts)
 
+    def verified_emails(self):
+        return (e for e in self.email_accounts if e.verified)
+
     __mapper_args__ = {
         'polymorphic_identity': 'agent_profile',
         'polymorphic_on': type

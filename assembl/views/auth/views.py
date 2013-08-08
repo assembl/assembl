@@ -113,10 +113,47 @@ def assembl_profile(request):
             'assembl:templates/view_profile.jinja2', dict(default_context, **{
                 'profile': profile
             }))
+    errors = []
     if save:
-        pass  # TODO: Save stuff
+        user_id = user.id
+        redirect = False
+        username = request.params.get('username', '').strip()
+        if username:
+            # check if exists
+            if DBSession.query('User').filter_by(username == username).count():
+                errors.append(_('The username %s is already used') % (username,))
+            else:
+                user.username = username
+                if id_type == 'u':
+                    redirect = True
+        name = request.params.get('name', '').strip()
+        if name:
+            user.profile.name = name
+        p1, p2 = (request.params.get('password1', '').strip(),
+                  request.params.get('password2', '').strip())
+        if p1 != p2:
+            errors.append(_('The passwords are not identical'))
+        elif p1:
+            user.set_password(p1)
+        add_email = request.params.get('add_email', '').strip()
+        if add_email:
+            # TODO: Check it's a valid email.
+            # No need to check presence since not validated yet
+            email = EmailAccount(
+                email=add_email, profile=user.profile)
+            DBSession.add(email)
+        transaction.commit()
+        if redirect:
+            raise HTTPFound('/user/u/'+username)
+        user = DBSession.query(User).get(user_id)
+    unverified_emails = [
+        (ea, DBSession.query(EmailAccount).filter_by(
+            email=ea.email, verified=True).first())
+        for ea in user.profile.email_accounts if not ea.verified]
     return render_to_response(
         'assembl:templates/profile.jinja2', dict(default_context, **{
+            'error': '<br />'.join(errors),
+            'unverified_emails': unverified_emails,
             'providers': request.registry.settings['login_providers'],
             'user': user
         }))
