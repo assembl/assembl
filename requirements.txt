@@ -17,4 +17,5 @@ velruse
 pyramid_beaker
 imaplib2
 pyramid_mailer
+pylibmc
 # hapi : a OAuth2 server for pyramid. Still very much work in progress.
