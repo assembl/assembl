@@ -1,0 +1,65 @@
+import psycopg2
+import sys
+import unittest
+import os
+from pkg_resources import get_distribution
+from pyramid import testing
+from pyramid.paster import (
+    get_appsettings,
+    )
+from sqlalchemy import engine_from_config
+from webtest import TestApp
+import assembl
+
+TEST_SETTINGS = 'testing.ini'
+
+class ApiTest(unittest.TestCase):
+
+    def __init__(self, *a, **kw):
+        super(ApiTest, self).__init__(*a
+
+    def setUp(self):
+        from assembl.lib.alembic import bootstrap_db
+        assembl_loc = get_distribution('assembl').location
+        test_settings_loc = os.path.join(assembl_loc, TEST_SETTINGS)
+        global_config = {
+            '__file__': test_settings_loc,
+            'here': assembl_loc,
+            }
+        settings = get_appsettings(test_settings_loc)
+
+        # Reset database
+        self.__reset_database(settings)
+
+        self.app = TestApp(assembl.main(global_config, **settings))
+        bootstrap_db(test_settings_loc)
+        testing.setUp(
+            registry=self.app.app.registry,
+            settings=settings,
+            )
+
+    def __reset_database(self, settings):
+        engine = engine_from_config(settings, 'sqlalchemy.')
+        sconn = engine.connect()
+        conn = sconn.connection
+        cur = conn.cursor()
+
+        try:
+            cur.execute("SELECT table_schema,table_name FROM information_schema.tables WHERE table_schema = 'public' ORDER BY table_schema,table_name")
+            rows = cur.fetchall()
+            for row in rows:
+                print "dropping table: ", row[1]
+                engine.execute("drop table \"%s\" cascade" % row[1]) 
+        except:
+            print "Error: ", sys.exc_info()[1]
+            
+        # import pdb; pdb.set_trace()
+        
+
+    def test_poo(self):
+        self.assertTrue(True)
+
+    def test_pee(self):
+        self.assertTrue(True)
+
+

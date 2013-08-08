@@ -2,14 +2,14 @@ import os
 import json
 
 from pyramid.view import view_config
+from pyramid.httpexceptions import HTTPBadRequest
 from assembl.views.api import FIXTURE_DIR
+from assembl.synthesis.models import Extract
 
 
 # Create
 @view_config(renderer='json', route_name='create_segment', request_method='POST', http_cache=60)
 def create_segment(request):
-    data = json.loads(request.body)
-
     return data
 
 
@@ -31,10 +31,27 @@ def get_segments(request):
 
 
 # Update
-@view_config(renderer='json', route_name='save_segment', request_method='PUT', http_cache=60)
+@view_config(renderer='json',
+             route_name='save_segment',
+             request_method='PUT',
+             http_cache=60)
 def save_segment(request):
-    data = json.loads(request.body)
+    try:
+        print json.loads(request.body)
+        ext = Extract.from_json(request.body)
+    except Exception, e:
+        raise HTTPBadRequest(
+            body_template=None,
+            content_type='application/json',
+            body=json.dumps(e.asdict()),
+        )
+    # except Exception, e:
+    #     print e
+    #     import pdb; pdb.set_trace()
+        # import pdb; pdb.set_trace()
+    # import pdb; pdb.set_trace()
 
+    # data = json.loads(request.body)
     return data
 
 

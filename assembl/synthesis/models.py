@@ -15,11 +15,14 @@ from sqlalchemy import (
     ForeignKey,
     desc
 )
+from colanderalchemy import setup_schema
 
 from ..db import DBSession
 from ..db.models import SQLAlchemyBaseModel
 from ..auth.models import RestrictedAccessModel
 from ..source.models import (Source, Content, Post)
+from ..lib.models import ColanderMixin
+
 
 class Discussion(RestrictedAccessModel):
     """
@@ -168,7 +171,7 @@ class Idea(SQLAlchemyBaseModel):
         return "<Idea %d>" % self.id
 
 
-class Extract(SQLAlchemyBaseModel):
+class Extract(SQLAlchemyBaseModel, ColanderMixin):
     """
     An extracted part. A quotation to be referenced by an `Idea`.
     """
@@ -203,3 +206,9 @@ class Extract(SQLAlchemyBaseModel):
 
     def __repr__(self):
         return "<Extract %d '%s%'>" % (self.id, self.body[:20])
+
+
+setup_schema({
+    'body': 'text',
+}, Extract)
+

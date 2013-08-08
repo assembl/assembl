@@ -487,7 +487,7 @@ function($, _, ckeditor, User, Moment){
         onAjaxError: function(){
             var message = $('#ajaxerror-message').text();
             alert( message );
-            window.location.reload();
+            // window.location.reload();
         },
 
         /**
