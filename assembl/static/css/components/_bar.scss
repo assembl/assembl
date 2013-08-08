@@ -9,27 +9,19 @@
     @include transform( translateZ(0) );
 
     background-color: $bar-background-color;
-    border: { top: solid 1px $bar-border-color; bottom: solid 1px $bar-border-color; }
 }
 
 // Main bar
 // ++++++++
 .bar.bar--main {
-    background-color: #444;
-    //@include background-linear-gradient(bottom, #2c2c2c, #444);
+    background-color: #2f2f2f;
     color: white;
-    border-top-color: transparent;
-    border-bottom-color: transparent;
 }
 
 // Title bar
 // +++++++++
 .bar.bar--title {
-    background-color: #c7c2dd;
-    @include box-shadow( inset 0 2px rgba(255,255,253,.2) );
-    border: { top: solid 1px #8d88a6; bottom: solid 1px #8d88a6; }
-    //@include background-linear-gradient(bottom, #afa8cf, #c7c2dd);
-
+    background-color: $bar-title-background-color;
     font-size: 18px;
     color: #2c2c2c;
 }
@@ -45,14 +37,14 @@
     padding: $bar-padding;
     top: 0;
     bottom: 0;
-    left: 25px;
+    left: 15px;
 }
 
 // Right content of a bar
 // ---------------------
 .bar-right {
     @extend .bar-left;
-    right: 25px;
+    right: 15px;
     left: auto;
     text-align: right;
 }

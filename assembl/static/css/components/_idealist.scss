@@ -100,7 +100,7 @@
 .idealist-title {
     display: block;
     white-space: nowrap;
-    text-overflow: clip;
+    text-overflow: ellipsis;
     overflow: hidden;
     cursor: pointer;
     padding-left: $padding-left;
@@ -110,7 +110,7 @@
 // ------------------
 .idealist-counter {
     float: right;
-    padding: 0 5px;
+    padding: 0 12px 0 25px;
     min-width: $idealist-counter-minwidth;
 
     text-align: center;

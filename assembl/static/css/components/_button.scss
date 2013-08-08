@@ -103,6 +103,10 @@
     }
 }
 
+#assembl-mainbutton {
+    font-size: 22px;
+}
+
 // Active state
 // ************
 .iconbutton.is-activated {
@@ -173,9 +177,8 @@
     @extend %button;
     @include no-selection;
 
-    background-color: #aea8c7;
+    background-color: $bar-title-background-color;
     border: solid 1px #a9a3c1;
-    @include box-shadow(inset 0 1px rgba(255,255,255,.17));
     color: #2f2f2f;
     font-weight: bold;
     font-size: 14px;
@@ -192,5 +195,5 @@
 // =========================
 .barbutton.is-activated {
     background-color: #aea8c7;
-    @include box-shadow(0 1px rgba(249,255,255,.3), inset 0 1px rgba(0,0,0,.5));
+    @include box-shadow(inset #857cab 0px 0px 1px);
 }
