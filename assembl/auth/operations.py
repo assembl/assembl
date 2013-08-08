@@ -35,7 +35,7 @@ confirm_email_html = u'''<p>Hello, {name}!</p>
 '''
 
 
-def send_confirmation_email(request, email, deferred=True):
+def send_confirmation_email(request, email):
     mailer = get_mailer(request)
     confirm_what = _('email')
     if email.profile.user and not email.profile.user.verified:
@@ -53,10 +53,10 @@ def send_confirmation_email(request, email, deferred=True):
         recipients=["%s <%s>" % (email.profile.name, email.email)],
         body=_(confirm_email).format(**data),
         html=_(confirm_email_html).format(**data))
-    if deferred:
-        mailer.send_to_queue(message)
-    else:
-        mailer.send(message)
+    #if deferred:
+    #    mailer.send_to_queue(message)
+    #else:
+    mailer.send(message)
 
 
 def verify_email_token(token):
