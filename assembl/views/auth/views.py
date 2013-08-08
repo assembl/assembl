@@ -165,15 +165,21 @@ def assembl_register_view(request):
     if not request.params.get('email'):
         return default_context
     forget(request)
-    name = request.params.get('username', '').strip()
-    username = request.params.get('username', '').strip()
+    name = request.params.get('name', '').strip()
     password = request.params.get('password', '').strip()
+    password2 = request.params.get('password2', '').strip()
     email = request.params.get('email', '').strip()
     # Find agent account to avoid duplicates!
-    if DBSession.query(User).filter_by(username=username).count():
+    if DBSession.query(EmailAccount).filter_by(
+        email=email, verified=True).count():
+            return dict(default_context, **{
+                'error': _("We already have a user with this email.")
+            })
+    if password != password2:
         return dict(default_context, **{
-            'error': _("This username already exists")
+            'error': _("The passwords should be identical")
         })
+
     #TODO: Validate password quality
     # otherwise create.
     profile = AgentProfile(
@@ -181,7 +187,6 @@ def assembl_register_view(request):
         )
     user = User(
         profile=profile,
-        username=username,
         password=password,
         creation_date=datetime.now()
         )
@@ -192,6 +197,7 @@ def assembl_register_view(request):
     DBSession.add(user)
     DBSession.add(email_account)
     DBSession.flush()
+    userid = user.id
     send_confirmation_email(request, email_account, False)
     # TODO: Check that the email logic gets the proper locale. (send in URL?)
     headers = remember(request, user.id, tokens=format_token(user))
@@ -199,7 +205,7 @@ def assembl_register_view(request):
     transaction.commit()
     # Redirect to profile page. TODO: Remember another URL
     # TODO: Tell them to expect an email.
-    raise HTTPFound(location='/users/'+username)
+    raise HTTPFound(location='/ext_user/'+userid)
 
 
 @view_config(
