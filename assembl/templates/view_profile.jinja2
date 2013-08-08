@@ -13,21 +13,21 @@
 {% block content %}
 
     <div>
-        {% if user.username %}
+        {% if profile.user and profile.user.username %}
         <label>{{ gettext('Username') }}</label>
         <span>{{user.username}}</span>
         {% endif %}
 
         <label>{{ gettext('Name') }}</label>
-        <span>{{user.profile.name}}</span>
+        <span>{{profile.name}}</span>
 
         <!-- TODO Avatar logic -->
-        {% if user.profile.email_accounts %}
+        {% if profile.email_accounts %}
         <!-- TODO: Preferred email logic. -->
         <div class="spacer spacer--huge"></div>
         <label>{{ gettext('Emails') }}</label>
         <ul>
-        {% for email_account in user.profile.email_accounts %}
+        {% for email_account in profile.email_accounts %}
             {% if email_account.verified %}
                 <li>{{ email_account.email }}</li>
             {% endif %}
@@ -35,11 +35,11 @@
         </ul>
         {% endif %}
 
-        {% if user.profile.identity_accounts %}
+        {% if profile.identity_accounts %}
         <div class="spacer spacer--huge"></div>
         <label>{{ gettext('Accounts') }}</label>
         <ul>
-        {% for account in user.profile.identity_accounts %}
+        {% for account in profile.identity_accounts %}
         <li>
             <label>{{ account.type }}:</label>
             {% if account.username %}

@@ -57,7 +57,7 @@
             {% for email_account in user.profile.email_accounts %}
                 {% if not email_account.verified %}
                     <li>{{ email_account.email }} ({{ gettext('unconfirmed') }})
-                    <input type="button" name="confirm" value="{{ gettext('Send confirmation message') }}" onclick="send_confirm('{{email_account.email}}');"/>
+                    <input type="button" name="confirm" value="{{ gettext('Send confirmation message') }}" onclick="send_confirm('{{email_account.id}}');"/>
                     </li>
                 {% endif %}
             {% endfor %}
@@ -106,7 +106,7 @@
 
         <div class="text text-small text-muted">
             {% set caravan = gettext("<a href='http://caravan.coop' class='link'>Caravan</a>") %}
-            {% set imaginationForPeople = gettext("<a href='http://http://imaginationforpeople.org/' class='link'>Imagination for people</a>") %}
+            {% set imaginationForPeople = gettext("<a href='http://imaginationforpeople.org/' class='link'>Imagination for people</a>") %}
 
             {{ gettext("Designed by %(caravan)s and %(imaginationForPeople)s")|format(caravan=caravan, imaginationForPeople=imaginationForPeople)|safe }}
         </div>
@@ -118,8 +118,10 @@
 {% block extra_js %}
 <script type="text/javascript">
     requirejs(["main"]);
-    function send_confirm(email) {
-        // TODO
+    var xmlhttp=new XMLHttpRequest();
+    function send_confirm(email_id) {
+        xmlhttp.open('GET', "/user_confirm/"+email_id);
+        xmlhttp.send();
     }
 </script>
 {% endblock %}
