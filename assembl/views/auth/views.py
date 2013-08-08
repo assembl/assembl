@@ -171,7 +171,7 @@ def assembl_register_view(request):
     transaction.commit()
     # Redirect to profile page. TODO: Remember another URL
     # TODO: Tell them to expect an email.
-    raise HTTPFound(location='/user/id/'+userid)
+    raise HTTPFound(location='/user/id/'+str(userid))
 
 
 @view_config(
