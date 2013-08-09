@@ -15,11 +15,6 @@ import sqlalchemy as sa
 import transaction
 
 
-from assembl import models as m
-
-db = m.DBSession
-
-
 def upgrade(pyramid_env):
     with context.begin_transaction():
         op.add_column('extract', sa.Column(

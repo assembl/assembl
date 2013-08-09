@@ -12,22 +12,21 @@ down_revision = '4c1e7a812b33'
 
 from alembic import context, op
 import sqlalchemy as sa
-import transaction
 
 from datetime import datetime
-
-from assembl import models as m
-
-db = m.DBSession
 
 
 def upgrade(pyramid_env):
     with context.begin_transaction():
+
         op.create_table(
-            'agent_profile',
+            'action',
             sa.Column('id', sa.Integer, primary_key=True),
-            sa.Column('name', sa.Unicode(1024)),
-            sa.Column('type', sa.String(60)))
+            sa.Column('type', sa.String(60)),
+            sa.Column('creation_date', sa.DateTime,
+                      nullable=False, default=datetime.utcnow),
+            sa.Column('actor_id', sa.Integer, sa.ForeignKey(
+                'agent_profile.id', ondelete='CASCADE'), nullable=False))
         op.create_table(
             'email_account',
             sa.Column('id', sa.Integer, primary_key=True),
@@ -75,8 +74,6 @@ def upgrade(pyramid_env):
             sa.Column(
                 'creation_date', sa.DateTime, nullable=False,
                 default=datetime.utcnow))
-    with transaction.manager:
-        pass
 
 
 def downgrade(pyramid_env):
@@ -86,4 +83,4 @@ def downgrade(pyramid_env):
         op.drop_table('idprovider_account')
         op.drop_table('identity_provider')
         op.drop_table('email_account')
-        op.drop_table('agent_profile')
+        op.drop_table('action')
