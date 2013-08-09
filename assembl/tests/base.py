@@ -18,9 +18,6 @@ ASSEMBL_LOC = get_distribution('assembl').location
 TEST_SETTINGS_LOC = os.path.join(ASSEMBL_LOC, TEST_SETTINGS)
 
 
-
-
-
 def setUp():
     """
     Import me if you want your database to be cleared before going
