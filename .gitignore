@@ -1,5 +1,7 @@
 # standard
 *~
+*#
+*.#*
 *.pyc
 *.pyo
 *.swo
@@ -22,6 +24,7 @@
 
 # local
 /local.ini
+/testing.ini
 /local.cfg
 /assembl.db
 
