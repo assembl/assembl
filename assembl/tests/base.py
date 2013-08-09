@@ -55,7 +55,8 @@ class BaseTest(unittest.TestCase):
             registry=self.app.app.registry,
             settings=app_settings,
         )
-        self.session = DBSession
+        self.session = DBSession()
+        
         self.clear_rows()
         
     @classmethod
