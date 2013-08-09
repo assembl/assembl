@@ -6,10 +6,9 @@ from alembic import command
 from alembic.config import Config
 from alembic.migration import MigrationContext
 from alembic.script import ScriptDirectory
-import transaction
 
-from ..lib.sqla import create_engine
-from ..models import DBSession as db, metadata
+from ..lib.sqla import create_engine, metadata
+from assembl.db import DBSession as db
 
 
 def bootstrap_db(config_uri=None, engine=None, with_migration=True):

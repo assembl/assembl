@@ -17,7 +17,7 @@ from sqlalchemy import (
 )
 
 from ..db import DBSession
-from ..db.models import SQLAlchemyBaseModel
+from ..lib.sqla import Base as SQLAlchemyBaseModel
 from ..source.models import (Source, Content, Post)
 
 class Discussion(SQLAlchemyBaseModel):

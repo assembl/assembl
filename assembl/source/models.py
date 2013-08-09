@@ -22,7 +22,7 @@ from sqlalchemy import (
 )
 
 from ..db import DBSession
-from ..db.models import SQLAlchemyBaseModel
+from ..lib.sqla import Base as SQLAlchemyBaseModel
 
 
 class Source(SQLAlchemyBaseModel):

@@ -7,8 +7,7 @@ import sys
 from alembic.migration import MigrationContext
 
 from ..lib.alembic import bootstrap_db
-from ..lib.sqla import create_engine
-from ..models import DBSession as db
+from ..lib.sqla import create_engine, DBSession as db
 
 
 def main():
