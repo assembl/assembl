@@ -223,7 +223,7 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message){
             $.getJSON('/api/posts', {'root_post_id': id}, function(json){
                 that.unblockPanel();
                 that.$el.addClass(MESSAGE_MODE);
-                that.messageThread.reset(json);
+                that.messageThread.reset(json.posts);
             });
         },
 
