@@ -20,8 +20,8 @@ from sqlalchemy.orm import relationship, backref
 
 from .password import hash_password, verify_password
 from ..db import DBSession
-from ..db.models import SQLAlchemyBaseModel
 from ..lib import config
+from ..lib.sqla import Base as SQLAlchemyBaseModel
 
 
 class AgentAccount(SQLAlchemyBaseModel):
@@ -229,9 +229,8 @@ class LocalUserRole(SQLAlchemyBaseModel):
     discussion_id = Column(Integer, ForeignKey(
         'discussion.id', ondelete='CASCADE'))
     role_id = Column(Integer, ForeignKey('role.id', ondelete='CASCADE'))
-    user_discussion_index = Index(
-        'user_discussion_idx', 'LocalUserRole.user_id',
-        'LocalUserRole.discussion_id')
+    __table_args__ = (
+        Index('user_discussion_idx', 'user_id', 'discussion_id'),)
 
 
 class Action(SQLAlchemyBaseModel):
