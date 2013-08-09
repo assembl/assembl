@@ -240,12 +240,12 @@ class Action(SQLAlchemyBaseModel):
     __tablename__ = 'action'
 
     id = Column(Integer, primary_key=True)
-    type = Column(String(60))
+    verb = Column(Unicode(255), nullable=False)
     creation_date = Column(DateTime, nullable=False, default=datetime.utcnow)
 
     __mapper_args__ = {
         'polymorphic_identity': 'agent_profile',
-        'polymorphic_on': type
+        'polymorphic_on': verb
     }
 
     actor_id = Column(
@@ -258,8 +258,6 @@ class Action(SQLAlchemyBaseModel):
         "AgentProfile",
         backref=backref('actions', order_by=creation_date)
     )
-
-    verb = Column(Unicode(255), nullable=False)
 
     def __repr__(self):
         return "<Action '%s'>" % " ".join([

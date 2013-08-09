@@ -42,6 +42,17 @@ class Discussion(SQLAlchemyBaseModel):
         uselist=False,
         backref='discussion'
     )
+
+    owner_id = Column(
+        Integer,
+        ForeignKey('agent_profile.id'),
+        nullable=False
+    )
+
+    owner = relationship(
+        'AgentProfile',
+        backref="discussions"
+    )
     
     __mapper_args__ = {
         'polymorphic_identity': 'discussion',
