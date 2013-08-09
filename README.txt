@@ -70,3 +70,10 @@ Running tests
 
 - Copy testing.ini.example to testing.ini
 - nosetests
+
+
+Runing on Mac OS
+----------------
+
+Use brew and install the libmemcached 
+ - brew install libmemcached 
