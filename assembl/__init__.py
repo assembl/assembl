@@ -20,8 +20,9 @@ def main(global_config, **settings):
     # here we create the engine and bind it to the (not really a) session
     # factory called DBSession.
     engine = engine_from_config(settings, 'sqlalchemy.')
-    DBSession.configure(bind=engine)
-
+    if not DBSession.bind:
+        DBSession.configure(bind=engine)
+    
     config = Configurator(settings=settings)
     config.set_session_factory(session_factory)
     config.set_authentication_policy(SessionAuthenticationPolicy())

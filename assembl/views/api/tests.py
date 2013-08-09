@@ -1,7 +1,9 @@
-import psycopg2
 import sys
 import unittest
 import os
+import logging
+from logging_tree import printout
+import transaction
 from pkg_resources import get_distribution
 from pyramid import testing
 from pyramid.paster import (
@@ -9,7 +11,9 @@ from pyramid.paster import (
     )
 from sqlalchemy import engine_from_config
 from webtest import TestApp
+
 import assembl
+from assembl.db import DBSession
 
 
 TEST_SETTINGS = 'testing.ini'
@@ -18,47 +22,67 @@ TEST_SETTINGS_LOC = os.path.join(ASSEMBL_LOC, TEST_SETTINGS)
 SETTINGS = get_appsettings(TEST_SETTINGS_LOC)
 
 
+logger = logging.getLogger('testing')
+
+
+DBSession.configure(bind=engine_from_config(
+        SETTINGS, 'sqlalchemy.', echo=False))
+
 def setUp():
-    engine = engine_from_config(SETTINGS, 'sqlalchemy.')
-    global_config = {
-        '__file__': TEST_SETTINGS_LOC,
-        'here': ASSEMBL_LOC,
-    }
-    # app = TestApp(assembl.main(global_config, **SETTINGS))
-    # testing.setUp(
-    #     registry=app.app.registry,
-    #     settings=SETTINGS,
-    # )
-    ApiTest.reset_database(SETTINGS, engine)
     from assembl.lib.alembic import bootstrap_db
-    bootstrap_db(TEST_SETTINGS_LOC)
+    sess = DBSession()
+    ApiTest.drop_tables(DBSession.bind)
+    bootstrap_db(TEST_SETTINGS_LOC, engine=sess.bind)
 
 
 class ApiTest(unittest.TestCase):
 
     def setUp(self):
-        # Reset database
-        pass
+        self.session = DBSession()
 
+        global_config = {
+            '__file__': TEST_SETTINGS_LOC,
+            'here': ASSEMBL_LOC,
+            }
 
-    @classmethod
-    def reset_database(cls, settings, engine):
-        try:
-            cur.execute("SELECT table_schema,table_name FROM information_schema.tables WHERE table_schema = 'public' ORDER BY table_schema,table_name")
-            rows = cur.fetchall()
-            for row in rows:
-                print "dropping table: ", row[1]
-                engine.execute("drop table \"%s\" cascade" % row[1]) 
-        except:
-            print "Error: ", sys.exc_info()[1]
-            
-        # import pdb; pdb.set_trace()
+        self.app = TestApp(assembl.main(global_config, **SETTINGS))
+
+        testing.setUp(
+            registry=self.app.app.registry,
+            settings=SETTINGS,
+        )
+        self.clear_rows(self.session.bind)
         
 
+    @classmethod
+    def get_all_tables(cls, conn):
+        res = conn.execute(
+            'SELECT table_schema,table_name FROM '
+            'information_schema.tables WHERE table_schema = '
+            '\'public\' ORDER BY table_schema,table_name')
+        return res.fetchall()
+        
+
+    @classmethod
+    def clear_rows(cls, conn):
+        for row in cls.get_all_tables(conn):
+            # logger.info("Clearing table: %s" % row[1])
+            conn.execute("delete from \"%s\"" % row[1])
+
+    @classmethod
+    def drop_tables(cls, conn):
+        try:
+            for row in cls.get_all_tables(conn):
+                # logger.info("dropping table: %s" % row[1])
+                conn.execute("drop table \"%s\" cascade" % row[1]) 
+        except:
+            raise Exception('Error resetting database: %s' % (
+                    sys.exc_info()[1]))
+
     def test_poo(self):
-        self.assertTrue(True)
+        pass
 
-    def test_pee(self):
-        self.assertTrue(True)
-
-
+    def tearDown(self):
+        transaction.commit()
+        DBSession.flush()
+        DBSession.close_all()

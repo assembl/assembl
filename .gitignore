@@ -1,5 +1,7 @@
 # standard
 *~
+*#
+*.#*
 *.pyc
 *.pyo
 *.swo
