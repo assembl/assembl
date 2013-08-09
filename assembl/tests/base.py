@@ -24,12 +24,22 @@ DBSession.configure(bind=engine_from_config(
 
 
 def setUp():
+    """
+    Import me if you want your database to be cleared before going
+    through your test cases.
+    """
     from assembl.lib.alembic import bootstrap_db
     BaseTest.drop_tables()
     bootstrap_db(TEST_SETTINGS_LOC)
 
 
 class BaseTest(unittest.TestCase):
+    """
+    Inherit from me if you want:
+    * To have a TestApp instance that you can use to make fake HTTP
+      requests (e.g. self.app.get('/')
+    * To clear the Database rows between each tests.
+    """
     logger = logging.getLogger('testing')
 
     def setUp(self):
