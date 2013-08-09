@@ -5,9 +5,7 @@ import logging
 import transaction
 from pkg_resources import get_distribution
 from pyramid import testing
-from pyramid.paster import (
-    get_appsettings,
-    )
+from pyramid.paster import get_appsettings
 from sqlalchemy import engine_from_config
 from webtest import TestApp
 
@@ -23,6 +21,7 @@ SETTINGS = get_appsettings(TEST_SETTINGS_LOC)
 
 DBSession.configure(bind=engine_from_config(
         SETTINGS, 'sqlalchemy.', echo=False))
+
 
 def setUp():
     from assembl.lib.alembic import bootstrap_db
@@ -50,7 +49,6 @@ class BaseTest(unittest.TestCase):
         )
         self.clear_rows(self.session.bind)
         
-
     @classmethod
     def get_all_tables(cls, conn):
         res = conn.execute(
@@ -59,7 +57,6 @@ class BaseTest(unittest.TestCase):
             '\'public\' ORDER BY table_schema,table_name')
         return res.fetchall()
         
-
     @classmethod
     def clear_rows(cls, conn):
         for row in cls.get_all_tables(conn):
@@ -73,10 +70,5 @@ class BaseTest(unittest.TestCase):
                 cls.logger.info("dropping table: %s" % row[1])
                 conn.execute("drop table \"%s\" cascade" % row[1]) 
         except:
-            raise Exception('Error resetting database: %s' % (
+            raise Exception('Error dropping tables: %s' % (
                     sys.exc_info()[1]))
-
-    def tearDown(self):
-        transaction.commit()
-        DBSession.flush()
-        DBSession.close_all()
