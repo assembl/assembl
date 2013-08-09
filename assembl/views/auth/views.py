@@ -110,16 +110,56 @@ def assembl_profile(request):
             raise HTTPUnauthorized()
         # Add permissions to view a profile?
         return render_to_response(
-            'assembl:templates/view_profile.jinja2', dict(default_context, **{
-                'profile': profile
-            }))
+            'assembl:templates/view_profile.jinja2',
+            dict(default_context,
+                 profile=profile,
+                 user=DBSession.query(User).get(logged_in)))
+
+    errors = []
     if save:
-        pass  # TODO: Save stuff
+        user_id = user.id
+        redirect = False
+        username = request.params.get('username', '').strip()
+        if username:
+            # check if exists
+            if DBSession.query('User').filter_by(username == username).count():
+                errors.append(_('The username %s is already used') % (username,))
+            else:
+                user.username = username
+                if id_type == 'u':
+                    redirect = True
+        name = request.params.get('name', '').strip()
+        if name:
+            user.profile.name = name
+        p1, p2 = (request.params.get('password1', '').strip(),
+                  request.params.get('password2', '').strip())
+        if p1 != p2:
+            errors.append(_('The passwords are not identical'))
+        elif p1:
+            user.set_password(p1)
+        add_email = request.params.get('add_email', '').strip()
+        if add_email:
+            # TODO: Check it's a valid email.
+            # No need to check presence since not validated yet
+            email = EmailAccount(
+                email=add_email, profile=user.profile)
+            DBSession.add(email)
+        transaction.commit()
+        if redirect:
+            raise HTTPFound('/user/u/'+username)
+        user = DBSession.query(User).get(user_id)
+    unverified_emails = [
+        (ea, DBSession.query(EmailAccount).filter_by(
+            email=ea.email, verified=True).first())
+        for ea in user.profile.email_accounts if not ea.verified]
     return render_to_response(
-        'assembl:templates/profile.jinja2', dict(default_context, **{
-            'providers': request.registry.settings['login_providers'],
-            'user': user
-        }))
+        'assembl:templates/profile.jinja2',
+        dict(default_context,
+             error='<br />'.join(errors),
+             unverified_emails=unverified_emails,
+             providers=request.registry.settings['login_providers'],
+             the_user=user,
+             user=DBSession.query(User).get(logged_in)))
 
 
 @view_config(
@@ -138,13 +178,11 @@ def assembl_register_view(request):
     # Find agent account to avoid duplicates!
     if DBSession.query(EmailAccount).filter_by(
         email=email, verified=True).count():
-            return dict(default_context, **{
-                'error': _("We already have a user with this email.")
-            })
+            return dict(default_context,
+                        error=_("We already have a user with this email."))
     if password != password2:
-        return dict(default_context, **{
-            'error': _("The passwords should be identical")
-        })
+        return dict(default_context,
+                    error=_("The passwords should be identical"))
 
     #TODO: Validate password quality
     # otherwise create.
@@ -194,9 +232,8 @@ def assembl_login_complete_view(request):
         user = DBSession.query(User).filter_by(username=identifier).first()
 
     if not user:
-        return dict(default_context, **{
-            'error': _("This user cannot be found")
-        })
+        return dict(default_context,
+                    error=_("This user cannot be found"))
     if logged_in:
         if user.id != logged_in:
             # logging in as a different user
@@ -212,8 +249,8 @@ def assembl_login_complete_view(request):
         #TODO: handle high failure count
         DBSession.add(user)
         transaction.commit()
-        return dict(default_context, **{
-            'error': _("Invalid user and password")})
+        return dict(default_context,
+                    error=_("Invalid user and password"))
     headers = remember(request, user.id, tokens=format_token(user))
     request.response.headerlist.extend(headers)
     # Redirect to profile page. TODO: Remember another URL
@@ -408,8 +445,7 @@ def user_confirm_email(request):
     renderer='assembl:templates/login.jinja2',
 )
 def login_denied_view(request):
-    return dict(default_context, **{
-        'error': _('Login failed, try again'),
-    })
+    return dict(default_context,
+                error=_('Login failed, try again'))
     # TODO: If logged in otherwise, go to profile page. 
     # Otherwise, back to login page

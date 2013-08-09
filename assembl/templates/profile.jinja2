@@ -29,46 +29,59 @@
     <div>
         <div class="spacer spacer--big"></div>
 
-        <form class="form">
-            <label>{{ gettext('Username') }}</label>
-            {% if user.username %}
-            <span>{{user.username}}</span>
+        <form class="form" method="POST">
+            <label>{{ gettext('Username') }}:</label>
+            {% if the_user.username %}
+            <span>{{the_user.username}}</span>
             {% else %}
-            <input type="text" name="username" autofocus />
+            <input type="text" name="username" placeholder="{{ gettext('username (cannot ') }}" autofocus />
+            <div class="spacer spacer--large"></div>
             {% endif %}
-
-            <!-- TODO Change password routine -->
-            <input type="password" class="defaultfield" placeholder="{{ gettext('Password') }}" autofocus required />
 
             <label>{{ gettext('Name') }}</label>
-            <input type="text" name="name" autofocus />
+            <input type="text" name="name" autofocus placeholder="{{ the_user.name }}"/>
+            <div class="spacer spacer--large"></div>
+
+            <!-- TODO Change password routine -->
+            <label>{{ gettext('Change password') }}</label>
+            <input type="password" name="password1" placeholder="{{ gettext('New Password') }}" autofocus />
+            <div class="spacer spacer--large"></div>
+            <input type="password" name="password2" placeholder="{{ gettext('Repeat password') }}" autofocus />
+            <div class="spacer spacer--large"></div>
 
             <!-- TODO Avatar logic -->
-            {% if user.profile.email_accounts or user.profile.unconfirmed_emails %}
+
+            {% if the_user.profile.email_accounts or the_user.profile.unconfirmed_emails %}
             <!-- TODO: Preferred email logic. -->
-            <div class="spacer spacer--huge"></div>
             <label>{{ gettext('Emails') }}</label>
             <ul>
-            {% for email_account in user.profile.email_accounts %}
-                {% if email_account.verified %}
-                    <li>{{ email_account.email }}</li>
-                {% endif %}
+            {% for email_account in the_user.profile.verified_emails() %}
+                <li>{{ email_account.email }}</li>
             {% endfor %}
-            {% for email_account in user.profile.email_accounts %}
-                {% if not email_account.verified %}
-                    <li>{{ email_account.email }} ({{ gettext('unconfirmed') }})
+            {% for email_account, other_profile in unverified_emails %}
+                <li>{{ email_account.email }}
+                {% if other_profile %}
+                    (in conflict with {{other_profile.display_name() }})
+                    <input type="button" name="confirm" value="{{ gettext('Confirm and fuse accounts') }}" onclick="send_confirm('{{email_account.id}}');"/>
+                {% else %}
+                    ({{ gettext('unconfirmed') }})
                     <input type="button" name="confirm" value="{{ gettext('Send confirmation message') }}" onclick="send_confirm('{{email_account.id}}');"/>
-                    </li>
                 {% endif %}
+                </li>
             {% endfor %}
             </ul>
+            <div class="spacer spacer--large"></div>
             {% endif %}
 
-            {% if user.profile.identity_accounts %}
+            <input type="email" name="add_email" placeholder="{{ gettext('Add an email account') }}" autofocus />
+            <div class="spacer spacer--large"></div>
+
+
+            {% if the_user.profile.identity_accounts %}
             <div class="spacer spacer--huge"></div>
             <label>{{ gettext('Accounts') }}</label>
             <ul>
-            {% for account in user.profile.identity_accounts %}
+            {% for account in the_user.profile.identity_accounts %}
             <li>
                 <label>{{ account.type }}</label>:
                 {% if account.username %}

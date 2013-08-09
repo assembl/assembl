@@ -23,6 +23,9 @@ from ..auth.models import (
     User,
     RestrictedAccessModel,
     Action,
+    Role,
+    UserRole,
+    LocalUserRole
     )
 from ..source.models import (
     Source,
