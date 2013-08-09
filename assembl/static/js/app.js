@@ -484,8 +484,10 @@ function($, _, ckeditor, User, Moment){
         /**
          * @event
          */
-        onAjaxError: function(){
+        onAjaxError: function( ev, jqxhr, settings, exception ){
             var message = $('#ajaxerror-message').text();
+            message = "url: " + settings.url + "\n" + message;
+
             alert( message );
             window.location.reload();
         },
