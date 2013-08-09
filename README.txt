@@ -69,4 +69,5 @@ Running tests
 -------------
 
 - Copy testing.ini.example to testing.ini
+- Create a testing database: createdb -U assembl assembl_test
 - nosetests

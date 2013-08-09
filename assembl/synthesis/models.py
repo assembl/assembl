@@ -29,7 +29,9 @@ class Discussion(SQLAlchemyBaseModel):
     id = Column(Integer, primary_key=True)
 
     topic = Column(Unicode(255), nullable=False)
-
+    
+    slug = Column(Unicode, nullable=False, unique=True, index=True)
+    
     creation_date = Column(DateTime, nullable=False, default=datetime.utcnow)
     
     table_of_contents_id = Column(
