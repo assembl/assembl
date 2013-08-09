@@ -46,10 +46,11 @@ def bootstrap_db(config_uri=None, engine=None, with_migration=True):
     #         db.add(DocumentType(code=M.__tablename__, name=M.__name__))
 
     # Clean up the sccoped session to allow a later app instantiation.
-    db.remove()
 
     if with_migration and heads:
         command.stamp(config, 'head')
+
+    db.remove()
 
 
 def ensure_db_version(config_uri, engine):

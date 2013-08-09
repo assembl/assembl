@@ -20,22 +20,19 @@ SETTINGS = get_appsettings(TEST_SETTINGS_LOC)
 
 
 DBSession.configure(bind=engine_from_config(
-        SETTINGS, 'sqlalchemy.', echo=False))
+    SETTINGS, 'sqlalchemy.', echo=False))
 
 
 def setUp():
     from assembl.lib.alembic import bootstrap_db
-    sess = DBSession()
-    BaseTest.drop_tables(DBSession.bind)
-    bootstrap_db(TEST_SETTINGS_LOC, engine=sess.bind)
+    BaseTest.drop_tables()
+    bootstrap_db(TEST_SETTINGS_LOC)
 
 
 class BaseTest(unittest.TestCase):
     logger = logging.getLogger('testing')
 
     def setUp(self):
-        self.session = DBSession()
-
         global_config = {
             '__file__': TEST_SETTINGS_LOC,
             'here': ASSEMBL_LOC,
@@ -47,10 +44,11 @@ class BaseTest(unittest.TestCase):
             registry=self.app.app.registry,
             settings=SETTINGS,
         )
-        self.clear_rows(self.session.bind)
+        self.clear_rows()
         
     @classmethod
     def get_all_tables(cls, conn):
+
         res = conn.execute(
             'SELECT table_schema,table_name FROM '
             'information_schema.tables WHERE table_schema = '
@@ -58,17 +56,24 @@ class BaseTest(unittest.TestCase):
         return res.fetchall()
         
     @classmethod
-    def clear_rows(cls, conn):
-        for row in cls.get_all_tables(conn):
+    def clear_rows(cls):
+        engine = DBSession().bind
+        
+        for row in cls.get_all_tables(engine):
             cls.logger.info("Clearing table: %s" % row[1])
-            conn.execute("delete from \"%s\"" % row[1])
+            engine.execute("delete from \"%s\"" % row[1])
+
+        DBSession.remove()
 
     @classmethod
-    def drop_tables(cls, conn):
+    def drop_tables(cls):
+        engine = DBSession().bind
+
         try:
-            for row in cls.get_all_tables(conn):
-                cls.logger.info("dropping table: %s" % row[1])
-                conn.execute("drop table \"%s\" cascade" % row[1]) 
+            for row in cls.get_all_tables(engine):
+                cls.logger.info("Dropping table: %s" % row[1])
+                engine.execute("drop table \"%s\" cascade" % row[1]) 
         except:
             raise Exception('Error dropping tables: %s' % (
                     sys.exc_info()[1]))
+        DBSession.remove()
