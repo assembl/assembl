@@ -294,38 +294,6 @@ class Post(Content):
             parent.id
         ))
 
-    def responses(self, limit=15, offset=None):
-        lower_post = aliased(Post, name="lower_post")
-        lower_content = aliased(Content, name="lower_content")
-        upper_post = aliased(Post, name="upper_post")
-
-        latest_response = select([
-            func.max(Content.creation_date).label('last_update'),
-        ], lower_post.content_id==lower_content.id).where(
-            lower_post.ancestry.like(
-                upper_post.ancestry + cast(upper_post.id, String) + ',%'
-            )
-        ).label("latest_response")
-
-        query = DBSession.query(
-            upper_post,
-        ).join(
-            Content,
-        ).filter(
-            upper_post.parent_id==self.id
-        ).order_by(
-            desc(latest_response),
-            Content.creation_date.desc()
-        )
-
-        if limit:
-            query = query.limit(limit)
-
-        if offset:
-            query = query.offset(offset)
-
-        return query.all()
-
     def last_updated(self):
         ancestry_query_string = "%s%d,%%" % (self.ancestry or '', self.id)
         
