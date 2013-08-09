@@ -7,6 +7,20 @@ from pyramid_beaker import session_factory_from_settings
 from sqlalchemy import engine_from_config
 
 from .db import DBSession
+from .auth.models import Role, UserRole, LocalUserRole
+from .synthesis.models import Discussion
+
+
+def authentication_callback(userid, request):
+    roles = DBSession.query(Role.name).join(UserRole).filter(
+        UserRole.user_id == userid).all()
+    # TODO: Get the discussion from the request
+    discussion = DBSession.query(Discussion).first()
+    if discussion:
+        roles.extend(DBSession.query(Role.name).join(LocalUserRole).filter(
+            LocalUserRole.user_id == userid and
+            LocalUserRole.discussion_id == discussion.id).all())
+    return list(set(roles))
 
 
 def main(global_config, **settings):
@@ -25,7 +39,8 @@ def main(global_config, **settings):
     
     config = Configurator(settings=settings)
     config.set_session_factory(session_factory)
-    config.set_authentication_policy(SessionAuthenticationPolicy())
+    auth_policy = SessionAuthenticationPolicy(callback=authentication_callback)
+    config.set_authentication_policy(auth_policy)
     config.set_authorization_policy(ACLAuthorizationPolicy())
     config.add_static_view('static', 'static', cache_max_age=3600)
     config.include('cornice')  # REST services library.

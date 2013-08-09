@@ -80,23 +80,21 @@ def update_requirements(force=False):
         cmd = "%(venvpath)s/bin/pip install -r %(projectpath)s/requirements.txt" % env
     run("yes w | %s" % cmd)
 
-
-## Django
+@task
 def app_db_update():
     """
     Migrates database using south
     """
-    print(cyan('Migrating Django database'))
-    venvcmd('./manage.py syncdb --noinput')
-    venvcmd('./manage.py migrate')
+    print(cyan('Migrating database'))
+    venvcmd('alembic -c %s upgrade head' % (env.ini_file))
 
+@task
 def app_db_install():
     """
     Install db the first time and fake migrations
     """
-    print(cyan('Installing Django database'))
-    venvcmd('./manage.py syncdb --all --noinput')
-    venvcmd('./manage.py migrate --fake')
+    print(cyan('Installing database'))
+    venvcmd('assembl-db-manage %s bootstrap' % (env.ini_file))
 
 @task
 def make_messages():
@@ -195,7 +193,7 @@ def app_fullupdate():
     execute(compile_stylesheets)
     execute(app_setup)
     execute(compile_messages)
-    #execute(app_db_update)
+    execute(app_db_update)
     # tests()
     execute(reloadapp)
     execute(webservers_reload)
@@ -209,7 +207,7 @@ def app_update():
     execute(compile_stylesheets)
     execute(app_setup)
     execute(compile_messages)
-    #execute(app_db_update)
+    execute(app_db_update)
     # tests()
     execute(reloadapp)
     execute(webservers_reload)
@@ -398,7 +396,7 @@ def commonenv(projectpath, venvpath=None):
     env.db_user = 'assembl'
     env.db_name = 'assembl'
     env.dbdumps_dir = os.path.join(tempfile.gettempdir(), '%s_dumps' % env.projectname)
-    
+    env.ini_file = 'production.ini'
     #env.gitrepo = "ssh://webapp@i4p-dev.imaginationforpeople.org/var/repositories/imaginationforpeople.git"
     env.gitrepo = "git://github.com/ImaginationForPeople/assembl.git"
     env.gitbranch = "master"
@@ -423,6 +421,7 @@ def devenv(projectpath=None):
     commonenv(projectpath)
     env.wsginame = "dev.wsgi"
     env.urlhost = "localhost"
+    env.ini_file = 'development.ini'
     #env.user = "webapp"
     #env.home = "webapp"
     require('projectname', provided_by=('commonenv',))
@@ -442,6 +441,7 @@ def caravan_stagenv():
     env.urlhost = "assembl.caravan.coop"
     env.user = "www-data"
     env.home = "www-data"
+    env.ini_file = 'local.ini'
     require('projectname', provided_by=('commonenv',))
     env.hosts = ['assembl.caravan.coop']
     

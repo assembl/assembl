@@ -86,6 +86,11 @@ def upgrade(pyramid_env):
             sa.Column('full_message', sa.UnicodeText),
             sa.Column('message_id', sa.Unicode(255)),
             sa.Column('in_reply_to', sa.Unicode(255)))
+        op.create_table('restricted_access_model',
+            sa.Column('id', sa.Integer, primary_key=True),
+            sa.Column('type', sa.String(60), nullable=False),
+            sa.Column('owner_id', sa.Integer, sa.ForeignKey(
+                'agent_profile.id', ondelete='CASCADE')))
         op.create_table('discussion',
             sa.Column(
                 'id', sa.Integer,

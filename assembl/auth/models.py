@@ -1,5 +1,7 @@
 from datetime import datetime
 from itertools import chain
+import urllib
+import hashlib
 
 from sqlalchemy import (
     Boolean,
@@ -10,15 +12,16 @@ from sqlalchemy import (
     Unicode,
     DateTime,
     Time,
-    Binary
+    Binary,
+    Index
 )
 
 from sqlalchemy.orm import relationship, backref
-from sqlalchemy.sql import exists
 
 from .password import hash_password, verify_password
 from ..db import DBSession
 from ..db.models import SQLAlchemyBaseModel
+from ..lib import config
 
 
 class AgentAccount(SQLAlchemyBaseModel):
@@ -99,6 +102,9 @@ class AgentProfile(SQLAlchemyBaseModel):
         """All AgentAccounts for this profile"""
         return chain(self.identity_accounts, self.email_accounts)
 
+    def verified_emails(self):
+        return (e for e in self.email_accounts if e.verified)
+
     __mapper_args__ = {
         'polymorphic_identity': 'agent_profile',
         'polymorphic_on': type
@@ -149,10 +155,6 @@ class User(SQLAlchemyBaseModel):
     login_failures = Column(Integer(4), default=0)
     creation_date = Column(DateTime, nullable=False, default=datetime.utcnow)
 
-    __mapper_args__ = {
-        'polymorphic_identity': 'user',
-    }
-
     def __init__(self, **kwargs):
         if kwargs.get('password'):
             kwargs['password'] = hash_password(kwargs['password'])
@@ -183,6 +185,17 @@ class User(SQLAlchemyBaseModel):
 
         # Send email.
 
+    def avatar_url(self, size=32):
+        # First implementation: Use the gravatar URL
+        # TODO: store user's choice of avatar.
+        email = self.get_preferred_email()
+        default = config.get('avatar.default_image_url',
+                             '/static/img/icon/user.png')
+        gravatar_url = "http://www.gravatar.com/avatar/" + \
+            hashlib.md5(email.lower()).hexdigest() + "?"
+        gravatar_url += urllib.urlencode({'d': default, 's': str(size)})
+        return gravatar_url
+
     def display_name(self):
         if self.username:
             return self.username
@@ -192,43 +205,33 @@ class User(SQLAlchemyBaseModel):
         return "<User '%s'>" % self.username
 
 
-
-# MAP @Jeff: If I understand well, you want generic foreign key.
-# Not sure which is the best way to do this (before we move to RDF)
-# Discussion here:
-# http://stackoverflow.com/questions/17703239/sqlalchemy-generic-foreign-key-like-in-django-orm
-class RestrictedAccessModel(SQLAlchemyBaseModel):
-    """
-    Represents a model with restricted access.
-
-    Usually this means that only
-    certain people will be allowed to read, write or perform other operations
-    on or with instances of this model.
-    """
-    __tablename__ = "restricted_access_model"
+class Role(SQLAlchemyBaseModel):
+    """A role that a user may have in a discussion"""
+    __tablename__ = 'role'
     id = Column(Integer, primary_key=True)
-    type = Column(String(60), nullable=False)
-
-    owner_id = Column(Integer, ForeignKey(
-        'agent_profile.id',
-        ondelete='CASCADE'
-    ))
-
-    owner = relationship(
-        "AgentProfile",
-        backref=backref('restricted_access_models')
-    )
-
-    __mapper_args__ = {
-        'polymorphic_identity': 'restricted_access_model',
-        'polymorphic_on': type
-    }
-
-    def __repr__(self):
-        return "<RestrictedAccessModel '%s'>" % self.type
+    name = Column(String(20), nullable=False)
 
 
-# MAP @Jeff: Deleted permissions as we will use Pyramid ACLs.
+class UserRole(SQLAlchemyBaseModel):
+    """roles that a user has globally (eg admin.)"""
+    __tablename__ = 'user_role'
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey('user.id', ondelete='CASCADE'),
+                     index=True)
+    role_id = Column(Integer, ForeignKey('role.id', ondelete='CASCADE'))
+
+
+class LocalUserRole(SQLAlchemyBaseModel):
+    """The role that a user has in the context of a discussion"""
+    __tablename__ = 'local_user_role'
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey('user.id', ondelete='CASCADE'))
+    discussion_id = Column(Integer, ForeignKey(
+        'discussion.id', ondelete='CASCADE'))
+    role_id = Column(Integer, ForeignKey('role.id', ondelete='CASCADE'))
+    user_discussion_index = Index(
+        'user_discussion_idx', 'LocalUserRole.user_id',
+        'LocalUserRole.discussion_id')
 
 
 class Action(SQLAlchemyBaseModel):
@@ -238,7 +241,13 @@ class Action(SQLAlchemyBaseModel):
     __tablename__ = 'action'
 
     id = Column(Integer, primary_key=True)
+    type = Column(String(60))
     creation_date = Column(DateTime, nullable=False, default=datetime.utcnow)
+
+    __mapper_args__ = {
+        'polymorphic_identity': 'agent_profile',
+        'polymorphic_on': type
+    }
 
     actor_id = Column(
         Integer,
@@ -252,17 +261,6 @@ class Action(SQLAlchemyBaseModel):
     )
 
     verb = Column(Unicode(255), nullable=False)
-
-    subject_id = Column(
-        Integer,
-        ForeignKey('restricted_access_model.id', ondelete='CASCADE'),
-        nullable=False
-    )
-
-    subject = relationship(
-        "RestrictedAccessModel",
-        backref=backref('actions', order_by=creation_date)
-    )
 
     def __repr__(self):
         return "<Action '%s'>" % " ".join([

@@ -142,7 +142,7 @@ class Mailbox(Source):
 
         email_ids = search_result[0].split()
 
-        if only_new:
+        if only_new and self.last_imported_email_uid:
             # discard the first message, it should be the last imported email.
             del email_ids[0]
         

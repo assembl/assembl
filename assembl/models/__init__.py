@@ -21,8 +21,10 @@ from ..auth.models import (
     IdentityProviderAccount,
     AgentProfile,
     User,
-    RestrictedAccessModel,
     Action,
+    Role,
+    UserRole,
+    LocalUserRole
     )
 from ..source.models import (
     Source,
