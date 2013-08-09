@@ -18,4 +18,8 @@ pyramid_beaker
 imaplib2
 pyramid_mailer
 pylibmc
+nose
+coverage
+webtest
+pinocchio
 # hapi : a OAuth2 server for pyramid. Still very much work in progress.
