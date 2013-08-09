@@ -63,3 +63,10 @@ Upgrade to latest:
 Create a new one:
 - alembic -c development.ini revision --autogenerate -m "You message"
 - Make sure to verify the generated code...
+
+
+Running tests
+-------------
+
+- Copy testing.ini.example to testing.ini
+- nosetests
