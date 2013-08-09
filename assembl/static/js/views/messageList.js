@@ -126,9 +126,9 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message){
             this.blockPanel();
             this.collapsed = true;
 
-            $.getJSON('/api/post/inbox', data, function(data){
+            $.getJSON('/api/posts', data, function(data){
                 that.data = data;
-                that.messages.reset(data.messages);
+                that.messages.reset(data.posts);
             });
         },
 
@@ -213,14 +213,14 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message){
         },
 
         /**
-         * Loads the message thread by id
+         * Loads the message thread by post id
          * @param {Number} id
          */
         loadThreadById: function(id){
             var that = this;
 
             this.blockPanel();
-            $.getJSON('/api/posts', {'id': id}, function(json){
+            $.getJSON('/api/posts', {'root_post_id': id}, function(json){
                 that.unblockPanel();
                 that.$el.addClass(MESSAGE_MODE);
                 that.messageThread.reset(json);

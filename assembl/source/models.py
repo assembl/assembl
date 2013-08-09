@@ -250,7 +250,9 @@ class Post(Content):
     def body(self):
         return None
     
-
+    """
+    Return a query that gets the descendants of the Post
+    """
     def get_descendants(self, include_self=False):
         ancestry_query_string = "%s%d,%%" % (self.ancestry or '', self.id)
 
@@ -264,7 +266,7 @@ class Post(Content):
             descendants = descendants.filter(
             Post.ancestry.like(ancestry_query_string)
             )
-        descendants = descendants.order_by(Content.creation_date).all()
+        descendants = descendants.order_by(Content.creation_date)
 
         return descendants
 
