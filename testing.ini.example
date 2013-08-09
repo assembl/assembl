@@ -14,7 +14,7 @@ debugtoolbar.enabled = false
 debugtoolbar.hosts = 127.0.0.0/8
 debugtoolbar.intercept_exc = false
 
-#sqlalchemy.url = sqlite:///%(here)s/assembl.db
+# This database will be cleared! Be careful.
 sqlalchemy.url = postgresql+psycopg2://assembl:assembl@localhost/assembl_test
 sqlalchemy.echo=True
 
@@ -93,6 +93,7 @@ transaction = transaction
 [alembic]
 # Path to migration scripts
 script_location = assembl/alembic
+# This database will be cleared! Be careful.
 sqlalchemy.url = postgresql+psycopg2://assembl:assembl@localhost/assembl_test
 
 # Template used to generate migration files
