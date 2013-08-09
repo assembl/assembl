@@ -234,44 +234,6 @@ class LocalUserRole(SQLAlchemyBaseModel):
         'LocalUserRole.discussion_id')
 
 
-# MAP @Jeff: If I understand well, you want generic foreign key.
-# Not sure which is the best way to do this (before we move to RDF)
-# Discussion here:
-# http://stackoverflow.com/questions/17703239/sqlalchemy-generic-foreign-key-like-in-django-orm
-class RestrictedAccessModel(SQLAlchemyBaseModel):
-    """
-    Represents a model with restricted access.
-
-    Usually this means that only
-    certain people will be allowed to read, write or perform other operations
-    on or with instances of this model.
-    """
-    __tablename__ = "restricted_access_model"
-    id = Column(Integer, primary_key=True)
-    type = Column(String(60), nullable=False)
-
-    owner_id = Column(Integer, ForeignKey(
-        'agent_profile.id',
-        ondelete='CASCADE'
-    ))
-
-    owner = relationship(
-        "AgentProfile",
-        backref=backref('restricted_access_models')
-    )
-
-    __mapper_args__ = {
-        'polymorphic_identity': 'restricted_access_model',
-        'polymorphic_on': type
-    }
-
-    def __repr__(self):
-        return "<RestrictedAccessModel '%s'>" % self.type
-
-
-# MAP @Jeff: Deleted permissions as we will use Pyramid ACLs.
-
-
 class Action(SQLAlchemyBaseModel):
     """
     An action that can be taken by an actor.
@@ -279,7 +241,13 @@ class Action(SQLAlchemyBaseModel):
     __tablename__ = 'action'
 
     id = Column(Integer, primary_key=True)
+    type = Column(String(60))
     creation_date = Column(DateTime, nullable=False, default=datetime.utcnow)
+
+    __mapper_args__ = {
+        'polymorphic_identity': 'agent_profile',
+        'polymorphic_on': type
+    }
 
     actor_id = Column(
         Integer,
@@ -293,17 +261,6 @@ class Action(SQLAlchemyBaseModel):
     )
 
     verb = Column(Unicode(255), nullable=False)
-
-    subject_id = Column(
-        Integer,
-        ForeignKey('restricted_access_model.id', ondelete='CASCADE'),
-        nullable=False
-    )
-
-    subject = relationship(
-        "RestrictedAccessModel",
-        backref=backref('actions', order_by=creation_date)
-    )
 
     def __repr__(self):
         return "<Action '%s'>" % " ".join([

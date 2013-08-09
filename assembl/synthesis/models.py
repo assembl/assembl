@@ -18,20 +18,15 @@ from sqlalchemy import (
 
 from ..db import DBSession
 from ..db.models import SQLAlchemyBaseModel
-from ..auth.models import RestrictedAccessModel
 from ..source.models import (Source, Content, Post)
 
-class Discussion(RestrictedAccessModel):
+class Discussion(SQLAlchemyBaseModel):
     """
     A Discussion
     """
     __tablename__ = "discussion"
 
-    id = Column(
-        Integer, 
-        ForeignKey('restricted_access_model.id', ondelete='CASCADE'),
-        primary_key=True
-    )
+    id = Column(Integer, primary_key=True)
 
     topic = Column(Unicode(255), nullable=False)
 
