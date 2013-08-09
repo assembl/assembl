@@ -437,7 +437,8 @@ function($, _, ckeditor, User, Moment){
             size = size || 44;
 
             if( !url ){
-                url = '//placehold.it/'+size+'x'+size;
+                var randomNumber = Math.floor(Math.random() * (5 - 1) + 1); // between 1 and 4
+                url = '/static/img/avatar/placeholder-{0}.png'.replace('{0}', randomNumber);
             } else {
                 url += '?s=44';
             }
