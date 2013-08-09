@@ -1,7 +1,8 @@
 html {
-    font-family: 'Droid Sans', sans-serif;
+    font-family: 'Open Sans', sans-serif;
     font-size: $font-size;
-    background-color: #fcfbf7;
+    background-color: #e7e9ec;
+    color: $text-color;
 }
 
 @include selection {

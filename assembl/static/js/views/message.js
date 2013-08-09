@@ -45,7 +45,7 @@ function(Backbone, _, Moment, app, Message){
         render: function(){
             var data = this.model.toJSON();
 
-            data['date'] = new Moment(data.date).fromNow();
+            data['date'] = app.formatDate(data.date);
 
             if( data.collapsed ){
                 this.$el.addClass('message--collapsed');

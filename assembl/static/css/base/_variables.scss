@@ -14,6 +14,7 @@ $bar-border-size: 1px;
 $bar-simple-height: 29px;
 $bar-background-color: #fff;
 $bar-border-color: #e4e4e3;
+$bar-title-background-color: #c7c2dd;
 
 // Box
 $box-background-color: #fff;
@@ -88,10 +89,11 @@ $panel-header-height: 56px;
 $panel-header-bg-color: #f7f7f7;
 
 // Text
-$text-color: #a4a3a1;
+$text-color: #666; //#a4a3a1;
 $text-strong-color: #000;
 $text-selection-color: #dbf2ff;
 $text-muted-color: #c5c5c5;
+$text-dark-color: #2c2c2c;
 
 // Link
 $link-color: $text-muted-color;
