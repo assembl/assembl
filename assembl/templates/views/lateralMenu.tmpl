@@ -3,9 +3,11 @@
     <header>
         <a id="lateralmenu-button" class="closebutton"></a>
 
+        {#
         <div class="searchbox">
             <input type="text" class="searchbox-field" />
         </div>
+        #}
 
         <div class="avatarbox">
             <img src="<%= app.formatAvatarUrl( app.getCurrentUser().get('avatarUrl', 38) ) %>" alt="User"  class="image-rounded margin-right"/>
@@ -15,6 +17,7 @@
     </header>
 
     <div class="accordion accordion--lateralmenu">
+        {#
         <div class="accordion-area">
             <div class="accordion-header">
                 <span class="accordion-label icon-question">{{ gettext('Help') }}</span>
@@ -28,6 +31,7 @@
             </div>
             <div class="accordion-body"></div>
         </div>
+        #}
 
         <div class="accordion-area">
             <div class="accordion-header">

@@ -6,7 +6,7 @@
 
     <div class="panel-header">
         {% set quantity = "<%= segments.length %>" %}
-        {{ gettext("Clipboard (%(quantity)s)")|format(quantity=quantity)|safe }}
+        <strong>{{ gettext("Clipboard (%(quantity)s)")|format(quantity=quantity)|safe }}</strong>
 
         <div class="float-right">
             <a id="segmentList-closeButton" class="iconbutton icon-cancel"></a>
@@ -25,6 +25,6 @@
     </div>
 
     <div class="panel-footer">
-        <a id="segmentList-clear" class="link">{{ gettext('Clear') }}</a>
+        <a id="segmentList-clear" class="link"> <i class="icon-trash"></i> {{ gettext('Clear') }}</a>
     </div>
 </div>
