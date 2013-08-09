@@ -40,7 +40,7 @@ login_providers =
 # twitter
 # github
 # google
-# openid
+  openid
 
 # https://developers.facebook.com/docs/facebook-login/getting-started-web/
 # https://developers.facebook.com/apps/
@@ -67,7 +67,7 @@ login_providers =
 # google.consumer_secret =
 
 # This should be the front-facing URL
-# openid.realm=
+openid.realm = http://localhost/
 
 # Beaker settings
 # We should use memcache asap

@@ -16,11 +16,9 @@ from assembl.db import DBSession
 TEST_SETTINGS = 'testing.ini'
 ASSEMBL_LOC = get_distribution('assembl').location
 TEST_SETTINGS_LOC = os.path.join(ASSEMBL_LOC, TEST_SETTINGS)
-SETTINGS = get_appsettings(TEST_SETTINGS_LOC)
 
 
-DBSession.configure(bind=engine_from_config(
-    SETTINGS, 'sqlalchemy.', echo=False))
+
 
 
 def setUp():
@@ -28,6 +26,10 @@ def setUp():
     Import me if you want your database to be cleared before going
     through your test cases.
     """
+    DBSession.configure(bind=engine_from_config(
+        get_appsettings(TEST_SETTINGS_LOC),
+        'sqlalchemy.',
+        echo=False))
     from assembl.lib.alembic import bootstrap_db
     BaseTest.drop_tables()
     bootstrap_db(TEST_SETTINGS_LOC)
@@ -43,16 +45,18 @@ class BaseTest(unittest.TestCase):
     logger = logging.getLogger('testing')
 
     def setUp(self):
+        app_settings = get_appsettings(TEST_SETTINGS_LOC)
         global_config = {
             '__file__': TEST_SETTINGS_LOC,
             'here': ASSEMBL_LOC,
             }
 
-        self.app = TestApp(assembl.main(global_config, **SETTINGS))
+        self.app = TestApp(assembl.main(
+            global_config, **app_settings))
 
         testing.setUp(
             registry=self.app.app.registry,
-            settings=SETTINGS,
+            settings=app_settings,
         )
         self.clear_rows()
         
