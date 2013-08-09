@@ -1,6 +1,7 @@
 import json
 from assembl.tests.base import setUp, BaseTest
 from assembl.synthesis.models import Idea, TableOfContents, Discussion
+from assembl.auth.models import AgentProfile
 
 
 # PEP8
@@ -14,8 +15,11 @@ class ApiTest(BaseTest):
 
     def create_dummy_discussion(self):
         discussion = Discussion(
-            topic = 'Unicorns',
-            table_of_contents = TableOfContents(),
+            topic='Unicorns',
+            table_of_contents=TableOfContents(),
+            owner=AgentProfile(
+                name='John Doe',
+            ),
         )
         return discussion
         
@@ -29,7 +33,7 @@ class ApiTest(BaseTest):
             long_title='This is a long test',
             short_title='This is a test',
             # table_of_contents=self.discussion.table_of_contents.id,
-            table_of_contents=self.create_dummy_discussion().table_of_contents
+            table_of_contents=self.create_dummy_discussion().table_of_contents,
         )
         self.session.add(idea)
         self.session.flush()
