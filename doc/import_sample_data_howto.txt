@@ -9,7 +9,7 @@ from assembl.synthesis.models import *
 from assembl.source.models import *
 import transaction
 
-discussion = Discussion(topic=u"Sample Discussion")
+discussion = Discussion(topic=u"Jack Layton sample discussion", slug=u"jacklayton")
 
 mailbox = Mailbox(
 name="jack layton",

@@ -26,7 +26,7 @@ function(Backbone, app, moment, User){
         /**
          * @type {String}
          */
-        url: app.getApiUrl("segment"),
+        url: app.getApiUrl("extracts"),
 
         /**
          * @type {Object}
@@ -63,7 +63,7 @@ function(Backbone, app, moment, User){
         /**
          * @type {String}
          */
-        url: app.getApiUrl("segments"),
+        url: app.getApiUrl("extracts"),
 
         /**
          * @type {IdeaModel}

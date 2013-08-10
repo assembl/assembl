@@ -29,20 +29,6 @@ def includeme(config):
 
     #config.include(api_urls, route_prefix='/api')
 
-    #  idea
-    config.add_route('get_idea', '/api/idea/{id}')
-    config.add_route('get_ideas', '/api/ideas')
-    config.add_route('save_idea', '/api/idea', request_method="PUT")
-    config.add_route('create_idea', '/api/idea', request_method="POST")
-
-    #  extract
-    config.add_route('get_extract', '/api/extract/{id}')
-    config.add_route('get_extracts', '/api/extracts')
-    config.add_route('save_extract', '/api/extract', request_method="PUT")
-    config.add_route('create_extract', '/api/extract', request_method="POST")
-    config.add_route('delete_extract', '/api/extract', request_method="DELETE")
-
-
     #  authentication
     config.include('.auth')
 
