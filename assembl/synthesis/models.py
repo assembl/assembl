@@ -108,7 +108,7 @@ class Discussion(SQLAlchemyBaseModel):
 
     def __init__(self, *args, **kwargs):
         super(Discussion, self).__init__(*args, **kwargs)
-        self.table_of_contents = TableOfContents()
+        self.table_of_contents = TableOfContents(discussion=self)
 
     def __repr__(self):
         return "<Discussion '%s'>" % self.topic
