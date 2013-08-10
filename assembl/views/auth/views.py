@@ -1,7 +1,7 @@
 import json
 from datetime import datetime
 
-from gettext import gettext as _
+from pyramid.i18n import TranslationString as _
 
 from pyramid.view import view_config
 from pyramid.renderers import render_to_response
