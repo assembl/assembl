@@ -8,6 +8,7 @@ from sqlalchemy import (
     Column, 
     Boolean,
     Integer, 
+    String,
     Float,
     Unicode, 
     UnicodeText, 
