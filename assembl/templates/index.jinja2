@@ -19,7 +19,8 @@
 {% endblock %}
 
 {% block content %}
-The discussion id: {{ discussion.id }}
+    <input type="hidden" name="discussion-id" id="discussion-id" value="{{ discussion.id }}" />
+
     <div class="bar bar--title">
         <div class="bar-left">
             <span class="title-debatname">{{ gettext('Debat name') }}</span> 
