@@ -12,7 +12,7 @@
         <div class="avatarbox">
             <img src="<%= app.formatAvatarUrl( app.getCurrentUser().get('avatarUrl', 38) ) %>" alt="User"  class="image-rounded margin-right"/>
 
-            <span><%= app.getCurrentUser().get('name') %></span>
+            <span>{{ '{{' }} user.display_name {{ '}}' }}</span>
         </div>
     </header>
 

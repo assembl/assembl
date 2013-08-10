@@ -15,9 +15,9 @@
             <img src="<%= app.formatAvatarUrl( segment.get('avatarUrl') ) %>" class="image-rounded" alt="" />
         </div>
         <div class="media-body">
-            <div class="media-title"><strong><%= segment.get('authorName') %></strong></div>
+            <div class="media-title"><strong><%= segment.get('author').name %></strong></div>
             {% set segmentDate = "<%= segment.getCreationDateFormated() %>" %}
-            <div>{{ gettext('Extracted %(date)s')|format(date=segmentDate)|safe }}</div>
+            <div class="text-small">{{ gettext('Extracted %(date)s')|format(date=segmentDate)|safe }}</div>
         </div>
     </div>
 </div>

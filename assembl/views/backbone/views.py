@@ -48,6 +48,7 @@ def get_styleguide_components():
 @view_config(route_name='home', request_method='GET', http_cache=60)
 def home_view(request):
     context = get_default_context()
+    print dir(request)
     return render_to_response('../../templates/index.jinja2', context, request=request)
 
 

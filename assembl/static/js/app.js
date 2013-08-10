@@ -100,6 +100,23 @@ function($, _, ckeditor, User, Moment){
         openedPanels: 0,
 
         /**
+         * Formats the url to the current api url
+         * @param  {string} url
+         * @return {string} The url formatted
+         */
+        getApiUrl: function(url){
+            if( url[0] !== '/' ){
+                url = '/' + url;
+            }
+            
+            // todo: change this once the api is done
+            return "/api" + url;
+
+            // var id = 1;
+            // return '/api/v1/discussion/' + id + url;
+        },
+
+        /**
          * Show or hide the given panel
          * @param  {String} panelName
          */
@@ -437,7 +454,8 @@ function($, _, ckeditor, User, Moment){
             size = size || 44;
 
             if( !url ){
-                url = '//placehold.it/'+size+'x'+size;
+                var randomNumber = Math.floor(Math.random() * (5 - 1) + 1); // between 1 and 4
+                url = '/static/img/avatar/placeholder-{0}.png'.replace('{0}', randomNumber);
             } else {
                 url += '?s=44';
             }
@@ -484,8 +502,10 @@ function($, _, ckeditor, User, Moment){
         /**
          * @event
          */
-        onAjaxError: function(){
+        onAjaxError: function( ev, jqxhr, settings, exception ){
             var message = $('#ajaxerror-message').text();
+            message = "url: " + settings.url + "\n" + message;
+
             alert( message );
             window.location.reload();
         },

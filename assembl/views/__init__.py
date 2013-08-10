@@ -36,10 +36,6 @@ def includeme(config):
     config.add_route('create_segment', '/api/segment', request_method="POST")
     config.add_route('delete_segment', '/api/segment', request_method="DELETE")
 
-    #  posts
-    config.add_route('get_posts', '/api/posts')
-    config.add_route('save_post', '/api/post', request_method="PUT")
-    config.add_route('get_inbox', '/api/post/inbox', request_method="GET")
 
     #  authentication
     config.include('.auth')

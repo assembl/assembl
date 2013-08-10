@@ -42,6 +42,16 @@
         border-top: 0;
     }
 
+
+    .idealist-item.is-dragover-above > &,
+    .idealist-item.is-dragover > &,
+    .idealist-item.is-dragover-below > & {
+        border-color: transparent !important;
+
+        .idealist-abovedropzone { border-top: solid 1px $dragbox-border-color !important; }
+        .idealist-dropzone { border-color: $dragbox-border-color !important; }
+    }
+
     .idealist-item.is-dragover:not(.is-dragover-below) > & {
         background-color: $dragbox-background-color;
     }
@@ -55,13 +65,13 @@
 // Area where to drop and create a sibling
 // --------------
 .idealist-abovedropzone {
+    @include box-sizing( border-box );
     position: absolute;
-    top: -1px;
+    top: 0px;
     right: 0;
     left: 0;
 
-    height: $padding-top;
-    border-top: $idealist-border;
+    height: $padding-top;    
 
     .idealist-item.is-dragover-above > .idealist-body & {
         background-color: $dragbox-background-color;
@@ -73,6 +83,7 @@
 // Area where to drop and create a child
 // --------------
 .idealist-dropzone {
+    @include box-sizing( border-box );
     position: absolute;
     right: 0;
     bottom: -1px;

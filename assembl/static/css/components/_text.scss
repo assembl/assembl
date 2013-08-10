@@ -38,9 +38,9 @@
 // ---------------
 .text-dark { color: $text-dark-color; }
 
-// Muted text
-// ----------
-.text-muted { color: #666666; }
+// Opaque text
+// -----------
+.text-opaque { @include opacity( 0.5 ); }
 
 // The text bubble for when a text is selected
 // ====================

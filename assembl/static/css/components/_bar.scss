@@ -54,6 +54,6 @@
 .bar-center {
     text-align: center;
     display: block;
-    height: $bar-height;
-    line-height: $bar-height;
+    height: $bar-height - 3px;
+    line-height: $bar-height - 3px;
 }

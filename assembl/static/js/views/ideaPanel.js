@@ -1,4 +1,4 @@
-define(['backbone', 'underscore', 'models/idea', 'app', 'ckeditor'],
+define(['backbone', 'underscore', 'models/idea', 'app', 'ckeditor-sharedspace'],
 function(Backbone, _, Idea, app, ckeditor){
     'use strict';
 
@@ -46,9 +46,22 @@ function(Backbone, _, Idea, app, ckeditor){
 
             this.panel = this.$('.panel');
 
+            var ckeditorConfig = {
+                toolbar: [  ['Bold', 'Italic', 'Outdent', 'Indent', 'NumberedList', 'BulletedList'] ],
+                extraPlugins: 'sharedspace',
+                removePlugins: 'floatingspace,resize',
+                sharedSpaces: {
+                    top: 'ideaPanel-toptoolbar',
+                    bottom: 'ideaPanel-bottomtoolbar'
+                }
+            };
+
             ckeditor
-                .inline( this.$('#'+LONG_TITLE_ID).get(0) )
+                .inline( this.$('#'+LONG_TITLE_ID).get(0), ckeditorConfig )
                 .on( 'blur', this.onLongTitleBlur.bind(this) );
+
+            ckeditor
+                .on( 'currentInstance', this.onLontTitleFocus.bind(this) );
 
             return this;
         },
@@ -135,6 +148,13 @@ function(Backbone, _, Idea, app, ckeditor){
                 data = 'Add the description';
             }
             this.idea.set('longTitle', data);
+        },
+
+        /**
+         * @event
+         */
+        onLontTitleFocus: function(){
+            $('#ideaPanel-toptoolbar').show();
         },
 
         /**
