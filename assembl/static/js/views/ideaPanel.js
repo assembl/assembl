@@ -142,6 +142,7 @@ function(Backbone, _, Idea, app, ckeditor){
          * @event
          */
         onLongTitleBlur: function(){
+            $('#ideaPanel-toptoolbar').hide();
             var data = ckeditor.instances[LONG_TITLE_ID].getData();
             data = $.trim( data );
             if( data === '' ){

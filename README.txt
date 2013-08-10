@@ -73,7 +73,7 @@ Running tests
 - nosetests
 
 
-Runing on Mac OS
+Running on Mac OS
 ----------------
 
 Use brew and install the libmemcached 

@@ -56,11 +56,9 @@ function(Backbone, _, $, app, Segment){
          * @return {Segment}
          */
         addTextAsSegment: function(text){
-            var currentUser = app.getCurrentUser(),
-                data = {
+            var data = {
                     text: text,
-                    authorName: currentUser.get('name'),
-                    avatarUrl: currentUser.get('avatarUrl')
+                    author: app.getCurrentUser()
                 };
 
             return app.segmentList.segments.create(data);

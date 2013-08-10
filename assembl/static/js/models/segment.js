@@ -26,7 +26,7 @@ function(Backbone, app, moment, User){
         /**
          * @type {String}
          */
-        url: app.getApiUrl("extracts"),
+        urlRoot: app.getApiUrl("extracts"),
 
         /**
          * @type {Object}

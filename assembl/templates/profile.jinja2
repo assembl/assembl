@@ -32,14 +32,18 @@
         <form class="form" method="POST">
             <label>{{ gettext('Username') }}:</label>
             {% if the_user.username %}
-            <span>{{the_user.username}}</span>
+            <input type="text" name="username" value="{{ the_user.username }}" autofocus />
             {% else %}
-            <input type="text" name="username" placeholder="{{ gettext('username (cannot ') }}" autofocus />
-            <div class="spacer spacer--large"></div>
+            <input type="text" name="username" placeholder="{{ gettext('Desired username') }}" autofocus />
             {% endif %}
+            <div class="spacer spacer--large"></div>
 
             <label>{{ gettext('Name') }}</label>
-            <input type="text" name="name" autofocus placeholder="{{ the_user.name }}"/>
+            {% if the_user.profile.name %}
+            <input type="text" name="name" autofocus value="{{ the_user.profile.name }}" />
+            {% else %}
+            <input type="text" name="name" autofocus placeholder="{{ gettext('Your name') }}" />
+            {% endif %}
             <div class="spacer spacer--large"></div>
 
             <!-- TODO Change password routine -->
