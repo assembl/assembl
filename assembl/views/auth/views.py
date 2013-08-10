@@ -121,8 +121,9 @@ def assembl_profile(request):
         redirect = False
         username = request.params.get('username', '').strip()
         if username:
+            print username
             # check if exists
-            if DBSession.query('User').filter_by(username == username).count():
+            if DBSession.query(User).filter_by(username=username).count():
                 errors.append(_('The username %s is already used') % (username,))
             else:
                 user.username = username
