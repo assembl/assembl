@@ -223,6 +223,7 @@ def assembl_login_complete_view(request):
     identifier = request.params.get('identifier', '').strip()
     password = request.params.get('password', '').strip()
     logged_in = authenticated_userid(request)
+    user = None
     if '@' in identifier:
         account = DBSession.query(EmailAccount).filter_by(
             email=identifier, verified=True).first()
@@ -237,6 +238,7 @@ def assembl_login_complete_view(request):
     if logged_in:
         if user.id != logged_in:
             # logging in as a different user
+            # Could I be combining account?
             forget(request)
         else:
             # re-logging in? Why?
@@ -266,12 +268,15 @@ def assembl_login_complete_view(request):
 def velruse_login_complete_view(request):
     context = request.context
     velruse_profile = context.profile
+    logged_in = authenticated_userid(request)
     provider = get_identity_provider(context)
-    #logged_in = authenticated_userid(request)
     # find or create IDP_Accounts
     idp_accounts = []
     new_idp_accounts = []
     velruse_accounts = velruse_profile['accounts']
+    old_autoflush = DBSession.autoflush
+    # sqla mislikes creating accounts before profiles, so delay
+    DBSession.autoflush = False
     for velruse_account in velruse_accounts:
         if 'userid' in velruse_account:
             idp_account = DBSession.query(IdentityProviderAccount).filter_by(
@@ -303,46 +308,62 @@ def velruse_login_complete_view(request):
         DBSession.add(idp_account)
     # find AgentProfile
     profile = None
-    profiles = set((a.profile for a in idp_accounts if a.profile))
-    if len(profiles) > 1:
-        # TODO: Multiple profiles. We need to combine them to one
-        pass
+    user = None
+    profiles = list(set((a.profile for a in idp_accounts if a.profile)))
+    # Maybe we already have a profile based on email
+    if provider.trust_emails and 'verifiedEmail' in velruse_profile:
+        email = velruse_profile['verifiedEmail']
+        email_account = DBSession.query(EmailAccount).filter_by(
+            email=email, verified=True).first()
+        if email_account and email_account.profile:
+            profiles.push(email_account.profile)
+    # prefer profiles with verified users, then users, then oldest profiles
+    profiles.sort(key=lambda p: (
+        not(p.user and p.user.verified), not p.user, p.id))
+    if logged_in:
+        # NOTE: Must make sure that login page not available when
+        # logged in as another account.
+        user = DBSession.query(User).filter_by(id=logged_in).first()
+        if user:
+            profile = user.profile
+            if profile in profiles:
+                profiles.remove(profile)
+            profiles.insert(0, user.profile)
     if len(profiles):
-        profile = profiles.pop()
+        # first is presumably best
+        profile = profiles.pop(0)
+        while len(profiles):
+            # Multiple profiles. We need to combine them to one.
+            profile.merge(profiles.pop())
         user = profile.user
         if user:
             username = profile.user.username
+            user.last_login = datetime.now()
     else:
-        # Maybe we already have a profile based on email
-        if provider.trust_emails and 'verifiedEmail' in velruse_profile:
-            email = velruse_profile['verifiedEmail']
-            email_account = DBSession.query(EmailAccount).filter_by(
-                email=email, verified=True).first()
-            if email_account:
-                profile = email_account.profile
-        if not profile:
-            # Create a new profile and user
-            profile = AgentProfile(name=velruse_profile['displayName'])
+        # Create a new profile and user
+        profile = AgentProfile(name=velruse_profile['displayName'])
 
-            DBSession.add(profile)
-            username = None
-            usernames = set((a['preferredUsername'] for a in velruse_accounts
-                             if 'preferredUsername' in a))
-            for u in usernames:
-                if not DBSession.query(User).filter_by(username=u).count():
-                    username = u
-                    break
-            user = User(
-                profile=profile,
-                username=username,
-                verified=True,
-                last_login=datetime.now(),
-                creation_date=datetime.now(),
-                #timezone=velruse_profile['utcOffset'],   # TODO: needs parsing
-                )
-            DBSession.add(user)
+        DBSession.add(profile)
+        username = None
+        usernames = set((a['preferredUsername'] for a in velruse_accounts
+                         if 'preferredUsername' in a))
+        for u in usernames:
+            if not DBSession.query(User).filter_by(username=u).count():
+                username = u
+                break
+        user = User(
+            profile=profile,
+            username=username,
+            verified=True,
+            last_login=datetime.now(),
+            creation_date=datetime.now(),
+            #timezone=velruse_profile['utcOffset'],   # TODO: needs parsing
+            )
+        DBSession.add(user)
     for idp_account in new_idp_accounts:
         idp_account.profile = profile
+    # Now all accounts have a profile
+    DBSession.autoflush = old_autoflush
     email_accounts = {ea.email: ea for ea in profile.email_accounts}
     # There may be new emails in the accounts
     if 'verifiedEmail' in velruse_profile:
@@ -374,6 +395,7 @@ def velruse_login_complete_view(request):
             DBSession.add(email)
     # Note that if an IdP account stops claiming an email, it "leaks".
     DBSession.flush()
+
     user_id = user.id
     headers = remember(request, user_id, tokens=format_token(user))
     request.response.headerlist.extend(headers)
@@ -419,6 +441,17 @@ def user_confirm_email(request):
     email = verify_email_token(token)
     # TODO: token expiry
     if email and not email.verified:
+        # maybe another profile already verified that email
+        other_email_account = DBSession.query(EmailAccount).filter_by(
+            email=email.email, verified=True).first()
+        if other_email_account:
+            profile = email.profile
+            # We have two versions of the email, delete the unverified one
+            DBSession.delete(email)
+            if other_email_account.profile != email.profile:
+                # Give priority to the one where the email was verified last.
+                profile.merge(other_email_account.profile)
+            email = other_email_account
         email.verified = True
         email.profile.verified = True
         user = None

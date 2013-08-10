@@ -118,7 +118,42 @@ class AgentProfile(SQLAlchemyBaseModel):
                 return name
         return self.name
 
-
+    def merge(self, other_profile):
+        def idp_sig(idp):
+            return (idp.provider_id, idp.username, idp.domain, idp.userid)
+        emails = {e.email: e for e in self.email_accounts}
+        idp_accounts = {idp_sig(idp): idp
+                        for idp in self.identity_accounts}
+        for ea in other_profile.email_accounts:
+            if ea.email in emails:
+                if ea.verified:
+                    emails[ea.email].verified = True
+                DBSession.delete(ea.email)
+            else:
+                ea.profile = self
+        for idp in other_profile.identity_accounts:
+            if idp_sig(idp) in idp_accounts:
+                DBSession.delete(idp)
+            else:
+                idp.profile = self
+        if other_profile.user:
+            if self.user:
+                self.user.merge(other_profile.user)
+            else:
+                other_profile.user.profile = self
+        if other_profile.name and not self.name:
+            self.name = other_profile.name
+        for extract in other_profile.extracts_created:
+            extract.creator = self
+        for extract in other_profile.extracts_owned:
+            extract.owner = self
+        for discussion in other_profile.discussions:
+            discussion.owner = self
+        # TODO: similarly for posts        
+        for action in DBSession.query(Action).filter_by(
+            actor_id=other_profile.id).all():
+                action.actor = self
+        DBSession.delete(other_profile)
 
     def has_permission(self, verb, subject):
         if self is subject.owner:
@@ -178,6 +213,29 @@ class User(SQLAlchemyBaseModel):
             return preferred[0].email
         if emails:
             return emails[0].email
+
+    def merge(self, other_user):
+        if other_user.preferred_email and not self.preferred_email:
+            self.preferred_email = other_user.preferred_email
+        if other_user.last_login:
+            if self.last_login:
+                self.last_login = max(
+                    self.last_login, other_user.last_login)
+            else:
+                self.last_login = other_user.last_login
+        self.creation_date = min(
+            self.creation_date, other_user.creation_date)
+        if other_user.password and not self.password:
+            self.password = other_user.password
+            # NOTE: The user may be confused by the implicit change of password
+            # when we destroy the second account.
+        for user_role in DBSession.query(UserRole).filter_by(
+                user_id=other_user.id).all():
+            user_role.user = self
+        for local_user_role in DBSession.query(LocalUserRole).filter_by(
+                user_id=other_user.id).all():
+            user_role.user = self
+        DBSession.delete(other_user)
 
     def send_email(self, **kwargs):
         subject = kwargs.get('subject', '')
