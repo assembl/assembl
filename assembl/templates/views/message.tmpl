@@ -10,7 +10,7 @@
     <div class="message-title">
         <span class="text-bold inline margin-right"><%= authorName %></span>
         <span class="inline margin-right"><%= subject %></span>
-        <span class="text-muted inline"><%= app.stripHtml(body) %></span>
+        <span class="text-muted text-opaque inline"><%= app.stripHtml(body) %></span>
     </div>
 </div>
 
@@ -28,7 +28,7 @@
                 {% set time = "<%= date %>" %}
                 {{ gettext('<strong>%(user)s</strong> | <time>%(time)s</time>')|format(user=userName, time=time)|safe }}
             </div>
-            <div><%= subject %></div>
+            <div><strong><%= subject %></strong></div>
         </div>
     </div>
 

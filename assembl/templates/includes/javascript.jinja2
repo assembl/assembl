@@ -38,6 +38,10 @@ requirejs.config({
         },
         'ckeditor': {
             exports: 'CKEDITOR'
+        }, 
+        'ckeditor-sharedspace': {
+            deps: ['ckeditor'],
+            exports: 'CKEDITOR'
         }
     },
     "paths": {
@@ -52,6 +56,7 @@ requirejs.config({
         'jasmine-jquery': 'lib/jasmine-jquery',
 
         'ckeditor': 'lib/ckeditor/ckeditor',
+        'ckeditor-sharedspace': 'lib/ckeditor/plugins/sharedspace/plugin',
 
         'moment': 'lib/moment'
     }

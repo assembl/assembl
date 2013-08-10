@@ -15,14 +15,6 @@
                 </ul>
             </div>
 
-            <div class="inline margin-left">
-                {% set startIndex = '<%= startIndex %>' %}
-                {% set endIndex = '<%= endIndex %>' %}
-                {% set total = '<%= total %>' %}
-
-                {{ gettext('%(start)s - %(end)s of %(total)s')|format(start=startIndex, end=endIndex, total=total)|safe }}
-            </div>
-
             <div class="dropdown dropdown--button">
                 <span class="dropdown-label">
                     <label class="chk chk--dropdown chk--muted">
@@ -49,6 +41,14 @@
                 </a>
             </div>
 
+            <div class="inline text-muted margin-left">
+                {% set startIndex = '<%= startIndex %>' %}
+                {% set endIndex = '<%= endIndex %>' %}
+                {% set total = '<%= total %>' %}
+
+                {{ gettext('%(start)s - %(end)s of %(total)s')|format(start=startIndex, end=endIndex, total=total)|safe }}
+            </div>
+
             <div class="float-right">
                 <a id="messageList-collapseButton" class="iconbutton <%= collapsed ? 'icon-download-1' : 'icon-upload' %>"></a>
                 <a id="messageList-closeButton" class="iconbutton icon-cancel"></a>
@@ -68,7 +68,7 @@
     <div id="messagelist-messages" class="panel-divisor">
         
         <div class="panel-header">
-            <a id="messagelist-returnButton" class="link">{{ gettext('Return') }}</a>
+            <a id="messagelist-returnButton" class="link text-bold">{{ gettext('Return') }}</a>
         </div>
 
         <div id="messagelist-thread" class="panel-body boxlist">

@@ -100,6 +100,23 @@ function($, _, ckeditor, User, Moment){
         openedPanels: 0,
 
         /**
+         * Formats the url to the current api url
+         * @param  {string} url
+         * @return {string} The url formatted
+         */
+        getApiUrl: function(url){
+            if( url[0] !== '/' ){
+                url = '/' + url;
+            }
+            
+            // todo: change this once the api is done
+            return "/api" + url;
+
+            // var id = 1;
+            // return '/api/v1/discussion/' + id + url;
+        },
+
+        /**
          * Show or hide the given panel
          * @param  {String} panelName
          */

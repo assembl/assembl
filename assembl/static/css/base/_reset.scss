@@ -54,6 +54,10 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, menu,
   @include transition(none !important);
 }
 
+[contenteditable] {
+    line-height: 22px;
+}
+
 [draggable=true] {
   -moz-user-select:none;
   -khtml-user-drag: element;
