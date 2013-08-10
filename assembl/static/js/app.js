@@ -522,6 +522,11 @@ function($, _, ckeditor, User, Moment){
 
             app.doc.on('click', '.dropdown-label', app.onDropdownClick);
             app.doc.on('ajaxError', app.onAjaxError);
+
+            app.currentUser = {
+                name: 'Peter Parker',
+                avatarUrl: '//placehold.it/44'
+            };
         }
     };
 

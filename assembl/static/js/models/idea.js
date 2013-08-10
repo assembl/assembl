@@ -27,7 +27,7 @@ define(['backbone', 'models/segment', 'app'], function(Backbone, Segment, app){
          * Url
          * @type {String}
          */
-        url: app.getApiUrl("ideas"),
+        urlRoot: app.getApiUrl("ideas"),
 
         /**
          * Defaults
