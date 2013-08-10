@@ -30,7 +30,9 @@ class Discussion(SQLAlchemyBaseModel):
     id = Column(Integer, primary_key=True)
 
     topic = Column(Unicode(255), nullable=False)
-
+    
+    slug = Column(Unicode, nullable=False, unique=True, index=True)
+    
     creation_date = Column(DateTime, nullable=False, default=datetime.utcnow)
     
     table_of_contents_id = Column(
@@ -109,7 +111,7 @@ class Discussion(SQLAlchemyBaseModel):
 
     def __init__(self, *args, **kwargs):
         super(Discussion, self).__init__(*args, **kwargs)
-        self.table_of_contents = TableOfContents(discussion=self)
+        self.table_of_contents = TableOfContents()
 
     def __repr__(self):
         return "<Discussion '%s'>" % self.topic

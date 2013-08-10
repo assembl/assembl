@@ -1,8 +1,13 @@
 from pyramid.view import view_config, view_defaults
 from pyramid.response import Response
 from pyramid.renderers import render_to_response
+from pyramid.httpexceptions import HTTPNotFound
+from pyramid.i18n import TranslationString as _
 import json
 import os.path
+from assembl.db import DBSession
+from assembl.synthesis.models import Discussion
+from sqlalchemy.orm.exc import NoResultFound
 
 FIXTURE = os.path.join(os.path.dirname(__file__),
                        '../../static/js/fixtures/nodes.json')
@@ -10,10 +15,17 @@ FIXTURE = os.path.join(os.path.dirname(__file__),
 TEMPLATE_PATH = os.path.join(os.path.dirname(__file__), '..', '..', 'templates')
 
 
-def get_default_context():
+def get_default_context(request):
+    slug = request.matchdict['discussion_slug']
+    try:
+        discussion = DBSession.query(Discussion).filter(Discussion.slug==slug).one()
+    except NoResultFound:
+        raise HTTPNotFound(_("No discussion found for slug=%s" % slug))
+
     return {
         'STATIC_URL': '/static/',
-        'templates': get_template_views()
+        'templates': get_template_views(),
+        'discussion': discussion
     }
 
 
@@ -47,8 +59,7 @@ def get_styleguide_components():
 
 @view_config(route_name='home', request_method='GET', http_cache=60)
 def home_view(request):
-    context = get_default_context()
-    print dir(request)
+    context = get_default_context(request)
     return render_to_response('../../templates/index.jinja2', context, request=request)
 
 
@@ -68,12 +79,12 @@ def dummy_node_data(request):
 
 @view_config(route_name='styleguide', request_method='GET', http_cache=60)
 def styleguide_view(request):
-    context = get_default_context()
+    context = get_default_context(request)
     context['styleguide_views'] = get_styleguide_components()
     return render_to_response('../../templates/styleguide/index.jinja2', context, request=request)
 
 
 @view_config(route_name='test', request_method='GET', http_cache=60)
 def frontend_test_view(request):
-    context = get_default_context()
+    context = get_default_context(request)
     return render_to_response('../../templates/tests/index.jinja2', context, request=request)

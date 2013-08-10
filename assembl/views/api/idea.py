@@ -1,12 +1,21 @@
 import json
 import os
 
+from cornice import Service
 from pyramid.view import view_config
-from assembl.views.api import FIXTURE_DIR
+from pyramid.httpexceptions import HTTPNotFound
+from pyramid.i18n import TranslationString as _
+from assembl.views.api import FIXTURE_DIR, API_PREFIX
 
+ideas = Service(name='ideas', path=API_PREFIX + '/ideas',
+                 description="",
+                 renderer='json')
+idea = Service(name='idea', path=API_PREFIX + '/ideas/{id}',
+                 description="Manipulate a single idea")
 
+    
 # Create
-@view_config(renderer='json', route_name='create_idea', request_method='POST', http_cache=60)
+@ideas.post()
 def create_idea(request):
     #data = json.loads(request.body)
 
@@ -14,14 +23,13 @@ def create_idea(request):
     return {'id': int(time.time())}
 
 
-# Retrieve
-@view_config(renderer='json', route_name='get_idea', request_method='GET', http_cache=60)
+@idea.get()
 def get_idea(request):
     id = request.matchdict['id']
     return {'id': id, 'shortTitle': 'from server'}
 
 
-@view_config(renderer='json', route_name='get_ideas', request_method='GET', http_cache=60)
+@ideas.get()
 def get_ideas(request):
     path = os.path.join(FIXTURE_DIR, 'ideas.json')
     f = open(path)
@@ -32,7 +40,7 @@ def get_ideas(request):
 
 
 # Update
-@view_config(renderer='json', route_name='save_idea', request_method='PUT', http_cache=60)
+@idea.put()
 def save_idea(request):
     data = json.loads(request.body)
 
