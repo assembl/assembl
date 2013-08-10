@@ -4,95 +4,21 @@ from datetime import datetime
 from time import mktime
 from imaplib2 import IMAP4_SSL, IMAP4
 
-from sqlalchemy.orm import relationship, backref, aliased
-from sqlalchemy.sql import func, cast, select
+from sqlalchemy.orm import relationship, backref
 
 from sqlalchemy import (
-    Column, 
-    Boolean,
-    Integer, 
-    String, 
-    Text,
-    Unicode, 
-    UnicodeText, 
-    DateTime,
+    Column,
+    Integer,
     ForeignKey,
-    desc
+    Unicode,
+    UnicodeText,
+    DateTime,
+    Boolean
 )
 
-from ..db import DBSession
-from ..lib.sqla import Base as SQLAlchemyBaseModel
+from .generic import Source, Content
+from ...db import DBSession
 
-
-
-class Source(SQLAlchemyBaseModel):
-    """
-    A Discussion Source is where commentary that is handled in the form of
-    Assembl posts comes from. 
-
-    A discussion source should have a method for importing all content, as well
-    as only importing new content. Maybe the standard interface for this should
-    be `source.import()`.
-    """
-    __tablename__ = "source"
-
-    id = Column(Integer, primary_key=True)
-    name = Column(Unicode(60), nullable=False)
-    type = Column(String(60), nullable=False)
-
-    creation_date = Column(DateTime, nullable=False, default=datetime.utcnow)
-    last_import = Column(DateTime)
-
-    discussion_id = Column(Integer, ForeignKey(
-        'discussion.id', 
-        ondelete='CASCADE'
-    ))
-
-    discussion = relationship(
-        "Discussion", 
-        backref=backref('sources', order_by=creation_date)
-    )
-
-    __mapper_args__ = {
-        'polymorphic_identity': 'source',
-        'polymorphic_on': type
-    }
-
-    def __repr__(self):
-        return "<Source '%s'>" % self.name
-
-
-class Content(SQLAlchemyBaseModel):
-    """
-    Content is a polymorphic class to describe what is imported from a Source.
-    """
-    __tablename__ = "content"
-
-    id = Column(Integer, primary_key=True)
-    type = Column(String(60), nullable=False)
-    creation_date = Column(DateTime, nullable=False, default=datetime.utcnow)
-    
-    import_date = Column(DateTime, default=datetime.utcnow)
-
-    source_id = Column(Integer, ForeignKey('source.id', ondelete='CASCADE'))
-    source = relationship(
-        "Source",
-        backref=backref('contents', order_by=import_date)
-    )
-
-    post = relationship("Post", uselist=False)
-
-    __mapper_args__ = {
-        'polymorphic_identity': 'content',
-        'polymorphic_on': 'type'
-    }
-
-    def __init__(self, *args, **kwargs):
-        super(Content, self).__init__(*args, **kwargs)
-        self.post = self.post or Post(content=self)
-
-    def __repr__(self):
-        return "<Content '%s'>" % self.type
 
 
 class Mailbox(Source):
@@ -215,6 +141,7 @@ class Mailbox(Source):
 
             self.contents.extend(new_emails)
 
+        # TODO: remove this line, the property `last_import` does not persist.
         self.last_import = datetime.utcnow()
 
     def __repr__(self):
@@ -283,84 +210,4 @@ class Email(Content):
         return "<Email '%s to %s'>" % (
             self.from_address.encode('utf-8'), 
             self.to_address.encode('utf-8')
-        )
-
-
-class Post(SQLAlchemyBaseModel):
-    """
-    A Post represents input into the broader discussion taking place on
-    Assembl. It may be a response to another post, it may have responses, and
-    its content may be of any type.
-    """
-    __tablename__ = "post"
-
-    id = Column(Integer, primary_key=True)
-    creation_date = Column(DateTime, nullable=False, default=datetime.utcnow)
-
-    ancestry = Column(Text, default="")
-
-    content_id = Column(Integer, ForeignKey('content.id', ondelete='CASCADE'))
-    content = relationship('Content', uselist=False)
-
-    parent_id = Column(Integer, ForeignKey('post.id'))
-    children = relationship(
-        "Post",
-        backref=backref('parent', remote_side=[id])
-    )
-
-    def get_descendants(self):
-        ancestry_query_string = "%s%d,%%" % (self.ancestry or '', self.id)
-
-        descendants = DBSession.query(Post).join(Content).filter(
-            Post.ancestry.like(ancestry_query_string)
-        ).order_by(Content.creation_date).all()
-
-        return descendants
-
-    def set_ancestry(self, new_ancestry):
-        descendants = self.get_descendants()
-        old_ancestry = self.ancestry or ''
-        self.ancestry = new_ancestry
-        DBSession.add(self)
-
-        for descendant in descendants:
-            updated_ancestry = descendant.ancestry.replace(
-                "%s%d," % (old_ancestry, self.id),
-                "%s%d," % (new_ancestry, self.id),
-                1
-            )
-
-            descendant.ancestry = updated_ancestry
-            DBSession.add(descendant)
-            
-    def set_parent(self, parent):
-        self.parent = parent
-        DBSession.add(self)
-        DBSession.add(parent)
-
-        self.set_ancestry("%s%d," % (
-            parent.ancestry or '',
-            parent.id
-        ))
-
-    def last_updated(self):
-        ancestry_query_string = "%s%d,%%" % (self.ancestry or '', self.id)
-        
-        query = DBSession.query(
-            func.max(Content.creation_date)
-        ).select_from(
-            Post
-        ).join(
-            Content
-        ).filter(
-            Post.ancestry.like(ancestry_query_string)
-        )
-
-        return query.scalar()
-
-    def __repr__(self):
-        return "<Post %s '%s %s' >" % (
-            self.id,
-            self.content.type,
-            self.content.id,
         )
