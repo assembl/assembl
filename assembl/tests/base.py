@@ -90,3 +90,8 @@ class BaseTest(unittest.TestCase):
             raise Exception('Error dropping tables: %s' % (
                     sys.exc_info()[1]))
         DBSession.remove()
+
+def tearDown():
+    DBSession.close_all()
+    DBSession.remove()
+

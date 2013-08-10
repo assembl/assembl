@@ -1,11 +1,12 @@
 import json
-from assembl.tests.base import setUp, BaseTest
+from assembl.tests.base import setUp, tearDown, BaseTest
 from assembl.synthesis.models import Idea, TableOfContents, Discussion
 from assembl.auth.models import AgentProfile
 
 
 # PEP8
 setUp = setUp
+tearDown = tearDown
 
 
 class ApiTest(BaseTest):
