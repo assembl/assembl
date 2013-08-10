@@ -1,8 +1,9 @@
-define(['backbone', 'underscore', 'zepto', 'app', 'views/synthesisIdeaView'],
-function(Backbone, _, $, app, SynthesisIdeaView){
+define(['backbone', 'underscore', 'zepto', 'app', 'models/synthesis', 'views/synthesisIdeaView'],
+function(Backbone, _, $, app, Synthesis, SynthesisIdeaView){
     'use strict';
 
     var SynthesisPanel = Backbone.View.extend({
+        
         /**
          * @init
          */
@@ -25,6 +26,12 @@ function(Backbone, _, $, app, SynthesisIdeaView){
         },
 
         /**
+         * The model
+         * @type {Synthesis}
+         */
+        model: new Synthesis.Model(),
+
+        /**
          * Flag
          * @type {Boolean}
          */
@@ -42,9 +49,9 @@ function(Backbone, _, $, app, SynthesisIdeaView){
          */
         render: function(){
             var list = document.createDocumentFragment(),
-                data = { collapsed: this.collapsed },
+                data = { collapsed: this.collapsed, title: this.model.get('title') },
                 ideas = this.ideas.where({parentId: null, inSynthesis: true});
-
+console.log ( this.model.get('title') );
             _.each(ideas, function(idea){
                 var ideaView = new SynthesisIdeaView({model:idea});
                 list.appendChild(ideaView.render().el);
