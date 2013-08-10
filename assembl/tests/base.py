@@ -8,6 +8,7 @@ from pyramid import testing
 from pyramid.paster import get_appsettings
 from sqlalchemy import engine_from_config
 from webtest import TestApp
+from assembl.lib.migration import bootstrap_db
 
 import assembl
 from assembl.db import DBSession
@@ -27,7 +28,6 @@ def setUp():
         get_appsettings(TEST_SETTINGS_LOC),
         'sqlalchemy.',
         echo=False))
-    from assembl.lib.alembic import bootstrap_db
     BaseTest.drop_tables()
     bootstrap_db(TEST_SETTINGS_LOC)
 
