@@ -6,7 +6,8 @@ function($, _, ckeditor, User, Moment){
 
     var PANEL_QUANTITY = 'data-panel-qty',
         CONTEXT_MENU_WIDTH = 150,
-        DRAGBOX_MAX_LENGTH = 25;
+        DRAGBOX_MAX_LENGTH = 25,
+        DISCUSSION_ID = $('#discussion-id').val();
 
     /**
      * The observer
@@ -32,6 +33,12 @@ function($, _, ckeditor, User, Moment){
          * @type {Zepto}
          */
         body: $(document.body),
+
+        /**
+         * The currnet discussion id
+         * @type {string}
+         */
+        discussionID: null,
 
         /**
          * Current user
@@ -98,6 +105,19 @@ function($, _, ckeditor, User, Moment){
          * @type {Number}
          */
         openedPanels: 0,
+
+        /**
+         * Formats the url to the current api url
+         * @param  {string} url
+         * @return {string} The url formatted
+         */
+        getApiUrl: function(url){
+            if( url[0] !== '/' ){
+                url = '/' + url;
+            }
+
+            return '/api/v1/discussion/' + DISCUSSION_ID + url;
+        },
 
         /**
          * Show or hide the given panel
@@ -489,7 +509,7 @@ function($, _, ckeditor, User, Moment){
             message = "url: " + settings.url + "\n" + message;
 
             alert( message );
-            window.location.reload();
+            //window.location.reload();
         },
 
         /**
