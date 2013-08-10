@@ -11,9 +11,9 @@ from sqlalchemy import (
     ForeignKey,
 )
 
-from ...db.models import SQLAlchemyBaseModel
-from ...db import DBSession
-from .generic import Content
+from assembl.db.models import SQLAlchemyBaseModel
+from assembl.db import DBSession
+from assembl.source.models.generic import Content
 
 
 

@@ -10,7 +10,7 @@ from sqlalchemy import (
     ForeignKey,
 )
 
-from ...db.models import SQLAlchemyBaseModel
+from assembl.db.models import SQLAlchemyBaseModel
 
 
 

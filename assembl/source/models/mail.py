@@ -16,8 +16,8 @@ from sqlalchemy import (
     Boolean
 )
 
-from .generic import Source, Content
-from ...db import DBSession
+from assembl.source.models.generic import Source, Content
+from assembl.db import DBSession
 
 
 
