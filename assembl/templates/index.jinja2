@@ -19,9 +19,11 @@
 {% endblock %}
 
 {% block content %}
+    <input type="hidden" name="discussion-id" id="discussion-id" value="{{ discussion.id }}" />
+
     <div class="bar bar--title">
         <div class="bar-left">
-            <span class="title-debatname">{{ gettext('Debat name') }}</span> 
+            <span class="title-debatname">{{ discussion.topic }}</span> 
         </div>
         <div class="bar-center">
             <a id="button-ideaList" class="barbutton">{{ gettext('Table of Contents') }}</a>

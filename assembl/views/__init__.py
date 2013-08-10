@@ -12,37 +12,29 @@ cornice_paths = dict(posts='api/posts',
                      post='api/posts/{id}')
 
 
-def includeme(config):
-    """ Initialize views and renderers at app start-up time. """
-
-    config.add_renderer('json', json_renderer_factory)
+def backbone_include(config):
     config.add_route('home', '/')
     config.add_route('toc', '/toc')
     config.add_route('nodetest', '/nodetest')
     config.add_route('styleguide', '/styleguide')
     config.add_route('test', '/test')
-    config.include(api_urls, route_prefix='/api')
+    
+def includeme(config):
+    """ Initialize views and renderers at app start-up time. """
 
-    #  idea
-    config.add_route('get_idea', '/api/idea/{id}')
-    config.add_route('get_ideas', '/api/ideas')
-    config.add_route('save_idea', '/api/idea', request_method="PUT")
-    config.add_route('create_idea', '/api/idea', request_method="POST")
+    config.add_renderer('json', json_renderer_factory)
+    config.add_route('discussion_list', '/')
+    
+    config.include(backbone_include, route_prefix='/{discussion_slug}')
 
-    #  segment
-    config.add_route('get_segment', '/api/segment/{id}')
-    config.add_route('get_segments', '/api/segments')
-    config.add_route('save_segment', '/api/segment', request_method="PUT")
-    config.add_route('create_segment', '/api/segment', request_method="POST")
-    config.add_route('delete_segment', '/api/segment', request_method="DELETE")
-
+    #config.include(api_urls, route_prefix='/api')
 
     #  authentication
     config.include('.auth')
 
 
-def api_urls(config):
-    config.include(api_post_urls, route_prefix='/posts')
+#def api_urls(config):
+#    config.include(api_post_urls, route_prefix='/posts')
 
 
 def api_post_urls(config):

@@ -9,7 +9,9 @@ from assembl.synthesis.models import *
 from assembl.source.models import *
 import transaction
 
-discussion = Discussion(topic=u"Sample Discussion")
+#This shouldn't be needed, but in the meantime to make it run...
+agent = AgentProfile(name="Dummy agent")
+discussion = Discussion(topic=u"Jack Layton sample discussion", slug=u"jacklayton", owner=agent)
 
 mailbox = Mailbox(
 name="jack layton",
@@ -20,6 +22,7 @@ mailbox="inbox",
 password="jacklayton",
 username="jacklayton"
 )
+
 
 mailbox.discussion = discussion
 

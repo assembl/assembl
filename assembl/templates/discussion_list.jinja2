@@ -1,0 +1,13 @@
+{% extends 'base.jinja2' %}
+
+{% block content %}
+    <div class="panelarea">
+        <ul class="discussionlist">
+            {% for discussion in discussions %}
+            <li><a href='{{ discussion.slug }}/'>{{ discussion.topic }}</a></li>
+            {% else %}
+            <em>{% trans %}There are no discussions on this server yet{% endtrans %}</em>
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock %}
