@@ -7,6 +7,7 @@
 <font-face font-family="fontello" font-weight="400" font-stretch="normal" units-per-em="1000" ascent="850" descent="-150" />
 <missing-glyph horiz-adv-x="1000" />
 <glyph glyph-name="up-dir" unicode="&#xe813;" d="M571 171q0-15-11-25t-25-11l-500 0q-15 0-25 11t-11 25 11 25l250 250q11 11 25 11t25-11l250-250q11-11 11-25z" horiz-adv-x="571.429" />
+<glyph glyph-name="play" unicode="&#xe820;" d="M772 333l-741-412q-13-7-22-2t-9 20l0 821q0 15 9 20t22-2l741-412q13-7 13-17t-13-17z" horiz-adv-x="785.714" />
 <glyph glyph-name="right-dir" unicode="&#xe815;" d="M321 350q0-15-11-25l-250-250q-11-11-25-11t-25 11-11 25l0 500q0 15 11 25t25 11 25-11l250-250q11-11 11-25z" horiz-adv-x="357.143" />
 <glyph glyph-name="down-dir" unicode="&#xe812;" d="M571 457q0-15-11-25l-250-250q-11-11-25-11t-25 11l-250 250q-11 11-11 25t11 25 25 11l500 0q15 0 25-11t11-25z" horiz-adv-x="571.429" />
 <glyph glyph-name="left-dir" unicode="&#xe814;" d="M357 600l0-500q0-15-11-25t-25-11-25 11l-250 250q-11 11-11 25t11 25l250 250q11 11 25 11t25-11 11-25z" horiz-adv-x="357.143" />
