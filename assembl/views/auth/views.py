@@ -55,7 +55,7 @@ def logout(request):
     renderer='assembl:templates/login.jinja2',
 )
 @view_config(
-    renderer='users/login.jinja2',
+    renderer='assembl:templates/login.jinja2',
     context='pyramid.exceptions.Forbidden',
     permission=NO_PERMISSION_REQUIRED
 )
