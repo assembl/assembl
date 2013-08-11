@@ -111,18 +111,13 @@ port = 6543
 # Begin logging configuration
 
 [loggers]
-keys = root, assembl, sqlalchemy, alembic, testing
+keys = root, assembl, sqlalchemy, alembic
 
 [handlers]
 keys = console
 
 [formatters]
 keys = generic
-
-[logger_testing]
-level = ERROR
-handlers = console
-qualname = testing
 
 [logger_root]
 level = INFO
@@ -131,16 +126,15 @@ handlers = console
 [logger_assembl]
 level = INFO
 handlers = console
-qualname = assembl
+qualname = assembl, assembl_tests, nose.plugins.assembl
 
 [logger_sqlalchemy]
 level = INFO
 handlers = console
 qualname = sqlalchemy.engine, sqlalchemy.orm, sqlalchemy.pool, sqlalchemy.dialects
-# qualname = sqlalchemy.engine, sqlalchemy.orm, sqlalchemy.pool, sqlalchemy.dialects
-# "level = ERROR" logs SQL queries.
+# "level = INFO" logs SQL queries.
 # "level = DEBUG" logs SQL queries and results.
-# "level = ERROR" logs neither.  (Recommended for production systems.)
+# "level = WARN" logs neither.  (Recommended for production systems.)
 
 [logger_alembic]
 level = INFO
@@ -150,7 +144,7 @@ qualname = alembic, alembic.env
 [handler_console]
 class = StreamHandler
 args = (sys.stderr,)
-level = INFO
+level = NOTSET
 formatter = generic
 
 [formatter_generic]

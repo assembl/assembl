@@ -47,6 +47,7 @@ setup(name='assembl',
       [console_scripts]
       assembl-db-manage = assembl.scripts.db_manage:main
       assembl-imap-test = assembl.scripts.imap_test:main
+      [nose.plugins]
+      assembl_test_plugin = assembl.tests.plugins:Assembl
       """,
       )
-
