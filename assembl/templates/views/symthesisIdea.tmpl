@@ -7,13 +7,13 @@
     </label>
     <% }  %>
 
-    <% for( var i=1; i<level; i+= 1) { %>
+    <% for( var i=0; i<level; i+= 1) { %>
         <span class="idealist-bar"></span>
     <% } %>
     
-    <% if (children.length > 0) { %>
+    {# <% if (children.length > 0) { %>
         <span class="idealist-arrow"></span>
-    <% } %>
+    <% } %> #}
 
     <div class="idealist-title">
         <%= app.stripHtml(longTitle) %>

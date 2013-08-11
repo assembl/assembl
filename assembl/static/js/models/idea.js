@@ -133,6 +133,29 @@ define(['backbone', 'models/segment', 'app'], function(Backbone, Segment, app){
         },
 
         /**
+         * @return {Number} The level based in the parents inSynthesis flag
+         */
+        getSynthesisLevel: function(){
+            var counter = 0,
+                parent = this;
+
+            do {
+
+                if( parent.get('parentId') !== null ){
+                    parent = parent.getParent();
+                    if( parent.get('inSynthesis') ){
+                        counter += 1;
+                    }
+                } else {
+                    parent = null;
+                }
+                
+            } while ( parent !== null );
+
+            return counter;
+        },
+
+        /**
          * @return {array<Segment>}
          */
         getSegments: function(){

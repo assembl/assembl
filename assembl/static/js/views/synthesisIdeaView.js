@@ -48,19 +48,14 @@ function(Backbone, _, $, Idea, Segment, app, ckeditor){
                 doc = document.createDocumentFragment();
 
             this.$el.addClass('idealist-item');
+            this.$el.addClass('is-open');
 
-            if( data.isOpen === true ){
-                this.$el.addClass('is-open');
-            } else {
-                this.$el.removeClass('is-open');
-            }
-
-            data.children = this.model.getChildren();
-            data.level = this.model.getLevel();
+            data.children = []; //this.model.getChildren();
+            data.level = this.model.getSynthesisLevel();
             data.editing = this.model.get('editing') || false;
 
             this.$el.html( this.template(data) );
-            this.$('.idealist-children').append( this.getRenderedChildren(data.level) );
+            //this.$('.idealist-children').append( this.getRenderedChildren(data.level) );
             return this;
         },
 
