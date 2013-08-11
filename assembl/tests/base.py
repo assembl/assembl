@@ -3,6 +3,7 @@ import unittest
 import logging
 from pyramid import testing
 from webtest import TestApp
+from sqlalchemy import engine_from_config
 from sqlalchemy.orm import scoped_session, sessionmaker
 import assembl
 from .plugins import add_parser_options
@@ -30,8 +31,14 @@ class BaseTest(unittest.TestCase):
             self.app_settings_file)
 
         self.logger = logging.getLogger('assembl_tests')
-        self.session = scoped_session(
+        self.session_factory = scoped_session(
             sessionmaker(self.app_settings))
+        self.session_factory.configure(
+            bind=engine_from_config(
+                self.app_settings,
+                'sqlalchemy.',
+                echo=False))
+        self.session = self.session_factory()
 
         global_config = {
             '__file__': self.app_settings_file,
@@ -45,3 +52,7 @@ class BaseTest(unittest.TestCase):
             registry=self.app.app.registry,
             settings=self.app_settings,
         )
+
+    def tearDown(self):
+        self.session.rollback()
+        self.session.close()

@@ -6,9 +6,6 @@ from assembl.auth.models import AgentProfile
 
 
 class ApiTest(BaseTest):
-    def setUp(self):
-        super(ApiTest, self).setUp()
-
     def create_dummy_discussion(self):
         discussion = Discussion(
             topic='Unicorns',
@@ -20,18 +17,18 @@ class ApiTest(BaseTest):
         )
         return discussion
         
-
     def test_homepage_returns_200(self):
         res = self.app.get('/')
         self.assertEqual(res.status_code, 200)
 
     def test_get_extracts(self):
         discussion = self.create_dummy_discussion()
+        self.session.add(discussion)
+        self.session.flush()
+        self.session.refresh(discussion)
         res = self.app.get('/api/v1/discussion/%d/extracts' % (discussion.id))
         self.assertEqual(res.status_code, 200)
         
-
-    
     def test_get_ideas(self):
         discussion = self.create_dummy_discussion()
         idea = Idea(
