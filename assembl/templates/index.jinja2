@@ -10,13 +10,13 @@
             </div>
             <div class="bar-right">
                 {% if user %}
-                {{ user.display_name() }}
+                    {{ user.display_name() }}
+                    <a class="iconbutton icon-user"></a>
+                    <a class="iconbutton icon-search"></a>
+                    <a class="iconbutton icon-cog"></a>
                 {% else %}
-                <a href="/login">{{ gettext('Login') }}</a>
+                    <a href="/login" class="link">{{ gettext('Sign in') }} <i class="icon-user"></i> </a>
                 {% endif %}
-                <a class="iconbutton icon-user"></a>
-                <a class="iconbutton icon-search"></a>
-                <a class="iconbutton icon-cog"></a>
             </div>
         </div>
     </div>

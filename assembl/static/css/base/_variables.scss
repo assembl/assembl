@@ -100,7 +100,8 @@ $text-dark-color: #2c2c2c;
 
 // Link
 $link-color: $text-muted-color;
-$link-hover-color: #2c2c2c;
+$link-hover-color: darken($text-muted-color, 10);
+$link-active-color: darken($text-muted-color, 20);
 
 // Button
 $button-border-radius: 5px;
