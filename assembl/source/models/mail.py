@@ -4,97 +4,21 @@ from datetime import datetime
 from time import mktime
 from imaplib2 import IMAP4_SSL, IMAP4
 
-from sqlalchemy.orm import relationship, backref, aliased
-from sqlalchemy.sql import func, cast, select
-from sqlalchemy import or_
+from sqlalchemy.orm import relationship, backref
 
 from sqlalchemy import (
-    Column, 
-    Boolean,
-    Integer, 
-    String, 
-    Text,
-    Unicode, 
-    UnicodeText, 
-    DateTime,
+    Column,
+    Integer,
     ForeignKey,
-    desc
+    Unicode,
+    UnicodeText,
+    DateTime,
+    Boolean
 )
 
-from ..db import DBSession
-from ..lib.sqla import Base as SQLAlchemyBaseModel
+from assembl.source.models.generic import Source, Content
+from assembl.db import DBSession
 
-
-class Source(SQLAlchemyBaseModel):
-    """
-    A Discussion Source is where commentary that is handled in the form of
-    Assembl posts comes from. 
-
-    A discussion source should have a method for importing all content, as well
-    as only importing new content. Maybe the standard interface for this should
-    be `source.import()`.
-    """
-    __tablename__ = "source"
-
-    id = Column(Integer, primary_key=True)
-    name = Column(Unicode(60), nullable=False)
-    type = Column(String(60), nullable=False)
-
-    creation_date = Column(DateTime, nullable=False, default=datetime.utcnow)
-    last_import = Column(DateTime)
-
-    discussion_id = Column(Integer, ForeignKey(
-        'discussion.id', 
-        ondelete='CASCADE'
-    ))
-    
-    discussion = relationship(
-        "Discussion", 
-        backref=backref('sources', order_by=creation_date)
-    )
-
-    __mapper_args__ = {
-        'polymorphic_identity': 'source',
-        'polymorphic_on': type
-    }
-
-    def __repr__(self):
-        return "<Source '%s'>" % self.name
-
-
-class Content(SQLAlchemyBaseModel):
-    """
-    Content is a polymorphic class to describe what is imported from a Source.
-    """
-    __tablename__ = "content"
-
-    id = Column(Integer, primary_key=True)
-    type = Column(String(60), nullable=False)
-    creation_date = Column(DateTime, nullable=False, default=datetime.utcnow)
-    
-    import_date = Column(DateTime, default=datetime.utcnow)
-
-    source_id = Column(Integer, ForeignKey('source.id', ondelete='CASCADE'))
-    source = relationship(
-        "Source",
-        backref=backref('contents', order_by=import_date)
-    )
-
-    __mapper_args__ = {
-        'polymorphic_identity': 'content',
-        'polymorphic_on': 'type'
-    }
-
-    @property
-    def title(self):
-        return None
-
-    
-    def __init__(self, *args, **kwargs):
-        super(Content, self).__init__(*args, **kwargs)
-
-    def __repr__(self):
-        return "<Content '%s'>" % self.type
 
 
 class Mailbox(Source):
@@ -217,119 +141,21 @@ class Mailbox(Source):
 
             self.contents.extend(new_emails)
 
+        # TODO: remove this line, the property `last_import` does not persist.
         self.last_import = datetime.utcnow()
 
     def __repr__(self):
         return "<Mailbox '%s'>" % self.name
-    
-class Post(Content):
-    """
-    A Post represents input into the broader discussion taking place on
-    Assembl. It may be a response to another post, it may have responses, and
-    its content may be of any type.
-    """
-    __tablename__ = "post"
-    __mapper_args__ = {'polymorphic_identity': 'post'}
-    
-    id = Column(Integer, ForeignKey(
-        'content.id', 
-        ondelete='CASCADE'
-    ), primary_key=True)
-
-    ancestry = Column(Text, default="")
-
-    parent_id = Column(Integer, ForeignKey('post.id'))
-
-    parent = relationship('Post', backref='children', primaryjoin='Post.parent_id==Post.id', remote_side=[id])
-    
-    @property
-    def author(self):
-        return None
-    
-    @property
-    def body(self):
-        return None
-    
-    """
-    Return a query that gets the descendants of the Post
-    """
-    def get_descendants(self, include_self=False):
-        ancestry_query_string = "%s%d,%%" % (self.ancestry or '', self.id)
-
-        descendants = DBSession.query(Post)
-        if include_self:
-            descendants = descendants.filter(or_(
-            Post.ancestry.like(ancestry_query_string),
-            Post.id == self.id
-            ) )
-        else:
-            descendants = descendants.filter(
-            Post.ancestry.like(ancestry_query_string)
-            )
-        descendants = descendants.order_by(Content.creation_date)
-
-        return descendants
-
-    def set_ancestry(self, new_ancestry):
-        descendants = self.get_descendants()
-        old_ancestry = self.ancestry or ''
-        self.ancestry = new_ancestry
-        DBSession.add(self)
-
-        for descendant in descendants:
-            updated_ancestry = descendant.ancestry.replace(
-                "%s%d," % (old_ancestry, self.id),
-                "%s%d," % (new_ancestry, self.id),
-                1
-            )
-
-            descendant.ancestry = updated_ancestry
-            DBSession.add(descendant)
-            
-    def set_parent(self, parent):
-        self.parent = parent
-        DBSession.add(self)
-        DBSession.add(parent)
-
-        self.set_ancestry("%s%d," % (
-            parent.ancestry or '',
-            parent.id
-        ))
-
-    def last_updated(self):
-        ancestry_query_string = "%s%d,%%" % (self.ancestry or '', self.id)
-        
-        query = DBSession.query(
-            func.max(Content.creation_date)
-        ).select_from(
-            Post
-        ).join(
-            Content
-        ).filter(
-            Post.ancestry.like(ancestry_query_string)
-        )
-
-        return query.scalar()
-
-    def __repr__(self):
-        return "<Post %s '%s %s' >" % (
-            self.id,
-            self.content.type,
-            self.content.id,
-        )
 
 
-class Email(Post):
+class Email(Content):
     """
     An Email refers to an email message that was imported from an Mailbox.
     """
     __tablename__ = "email"
-    __mapper_args__ = {
-        'polymorphic_identity': 'email',
-    }
-    
+
     id = Column(Integer, ForeignKey(
-        'post.id', 
+        'content.id', 
         ondelete='CASCADE'
     ), primary_key=True)
 
@@ -343,19 +169,16 @@ class Email(Post):
     message_id = Column(Unicode(255))
     in_reply_to = Column(Unicode(255))
 
+    import_date = Column(DateTime, nullable=False, default=datetime.utcnow)
+
+    __mapper_args__ = {
+        'polymorphic_identity': 'email',
+    }
+
     def __init__(self, *args, **kwargs):
         super(Email, self).__init__(*args, **kwargs)
         self.associate_family()
 
-    @property
-    def title(self):
-        return self.subject
-    
-    @property
-    #FIXME: Link to Profile here once implemented
-    def author(self):
-        return self.from_address
-    
     def associate_family(self):
         if self not in DBSession:
             DBSession.add(self)
@@ -370,7 +193,7 @@ class Email(Post):
             ).first()
 
             if parent_email: 
-                self.set_parent(parent_email)
+                self.post.set_parent(parent_email.post)
 
         # search for emails where the in_reply_to is the same as the
         # message_id for this email, then set their post's parent to the
@@ -381,12 +204,10 @@ class Email(Post):
         ).all()
 
         for child_email in child_emails:
-            child_email.set_parent(self)
+            child_email.post.set_parent(self.post)
 
     def __repr__(self):
         return "<Email '%s to %s'>" % (
             self.from_address.encode('utf-8'), 
             self.to_address.encode('utf-8')
         )
-
-

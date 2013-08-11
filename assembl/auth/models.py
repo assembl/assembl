@@ -247,8 +247,8 @@ class User(SQLAlchemyBaseModel):
         # First implementation: Use the gravatar URL
         # TODO: store user's choice of avatar.
         email = self.get_preferred_email()
-        default = config.get('avatar.default_image_url',
-                             '/static/img/icon/user.png')
+        default = config.get('avatar.default_image_url') or \
+                             '/static/img/icon/user.png'
         gravatar_url = "http://www.gravatar.com/avatar/" + \
             hashlib.md5(email.lower()).hexdigest() + "?"
         gravatar_url += urllib.urlencode({'d': default, 's': str(size)})
