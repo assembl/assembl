@@ -115,8 +115,8 @@ class Mailbox(Source):
             )
 
             new_email = Email(
-                to_address=email_header_to_unicode(parsed_email['To']),
-                from_address=email_header_to_unicode(parsed_email['From']),
+                recipients=email_header_to_unicode(parsed_email['To']),
+                sender=email_header_to_unicode(parsed_email['From']),
                 subject=email_header_to_unicode(parsed_email['Subject']),
                 creation_date=datetime.utcfromtimestamp(
                     mktime(
@@ -159,8 +159,8 @@ class Email(Content):
         ondelete='CASCADE'
     ), primary_key=True)
 
-    to_address = Column(Unicode(1024), nullable=False)
-    from_address = Column(Unicode(1024), nullable=False)
+    recipients = Column(Unicode(1024), nullable=False)
+    sender = Column(Unicode(1024), nullable=False)
     subject = Column(Unicode(1024), nullable=False)
     body = Column(UnicodeText)
 
@@ -206,8 +206,14 @@ class Email(Content):
         for child_email in child_emails:
             child_email.post.set_parent(self.post)
 
+    def reply(self, sender, response_body):
+        """
+        Send a response to this email.
+        """
+        return None
+
     def __repr__(self):
         return "<Email '%s to %s'>" % (
-            self.from_address.encode('utf-8'), 
-            self.to_address.encode('utf-8')
+            self.sender.encode('utf-8'), 
+            self.recipients.encode('utf-8')
         )
