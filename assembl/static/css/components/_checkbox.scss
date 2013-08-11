@@ -57,7 +57,7 @@
 
     .chk-checkbox:checked ~ & {
         @extend .icon-ok-squared;
-        color: #81d6af;
+        color: $color-success;
     }
 
     .chk--muted .chk-checkbox:checked ~ & {

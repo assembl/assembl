@@ -51,7 +51,7 @@ function(Backbone, _, $, app, Synthesis, SynthesisIdeaView){
             var list = document.createDocumentFragment(),
                 data = { collapsed: this.collapsed, title: this.model.get('title') },
                 ideas = this.ideas.where({parentId: null, inSynthesis: true});
-console.log ( this.model.get('title') );
+
             _.each(ideas, function(idea){
                 var ideaView = new SynthesisIdeaView({model:idea});
                 list.appendChild(ideaView.render().el);

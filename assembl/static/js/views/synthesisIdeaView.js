@@ -1,6 +1,12 @@
-define(['backbone', 'underscore', 'zepto', 'models/idea', 'models/segment', 'app'],
-function(Backbone, _, $, Idea, Segment, app){
+define(['backbone', 'underscore', 'zepto', 'models/idea', 'models/segment', 'app', 'ckeditor-sharedspace'],
+function(Backbone, _, $, Idea, Segment, app, ckeditor){
     'use strict';
+
+    var CKEDITOR_CONFIG = {
+        height: '10em',
+        toolbar: [  ['Bold', 'Italic', 'Outdent', 'Indent', 'NumberedList', 'BulletedList'] ],
+        removePlugins: 'floatingspace,resize'
+    };
 
     var SymthesisIdeaView = Backbone.View.extend({
         /**
@@ -15,6 +21,13 @@ function(Backbone, _, $, Idea, Segment, app){
          */
         template: app.loadTemplate('symthesisIdea'),
 
+
+        /**
+         * CKeditor instance for this view
+         * @type {CKeditor}
+         */
+        ckInstance: null,
+
         /**
          * @init
          */
@@ -23,7 +36,7 @@ function(Backbone, _, $, Idea, Segment, app){
                 this.model = new Idea.Model();
             }
 
-            this.model.on('change:shortTitle change:longTitle change:inSynthesis', this.render, this);
+            this.model.on('change:shortTitle change:longTitle change:inSynthesis change:editing', this.render, this);
         },
 
         /**
@@ -44,10 +57,7 @@ function(Backbone, _, $, Idea, Segment, app){
 
             data.children = this.model.getChildren();
             data.level = this.model.getLevel();
-
-            if( data.longTitle ){
-                data.longTitle = ' - ' + data.longTitle.substr(0, 50);
-            }
+            data.editing = this.model.get('editing') || false;
 
             this.$el.html( this.template(data) );
             this.$('.idealist-children').append( this.getRenderedChildren(data.level) );
@@ -97,7 +107,9 @@ function(Backbone, _, $, Idea, Segment, app){
             'change [type="checkbox"]': 'onCheckboxChange',
 
             'click .idealist-arrow': 'toggle',
-            'click .idealist-removebtn': 'remove'
+            'click .idealist-title': 'changeToEditMode',
+            'click .idealist-savebtn': 'saveEdition',
+            'click .closebutton': 'cancelEdition'
         },
 
         /**
@@ -126,17 +138,39 @@ function(Backbone, _, $, Idea, Segment, app){
             this.model.set('inSynthesis', ev.currentTarget.checked);
         },
 
+        /**
+         * @event
+         */
+        changeToEditMode: function(ev){
+            ev.stopPropagation();
+            this.model.set('editing', true);
+
+            this.ckInstance = ckeditor.replace( this.$('.idealist-contenteditable')[0], CKEDITOR_CONFIG );
+            this.ckInstance.focus();
+        },
 
         /**
-         * Remove the idea from the synthesis
+         * @event
          */
-        remove: function(ev){
-            if( ev ){
-                ev.preventDefault();
-                ev.stopPropagation();
-            }
+        cancelEdition: function(ev){
+            ev.stopPropagation();
+            
+            var longTitle = this.model.get('longTitle');
+            this.ckInstance.setData(longTitle);
 
-            this.model.set('inSynthesis', false);
+            this.model.set('editing', false);
+            this.ckInstance.destroy();
+        },
+
+        /**
+         * @event
+         */
+        saveEdition: function(ev){
+            ev.stopPropagation();
+
+            var data = this.ckInstance.getData();
+            this.model.set({ 'longTitle': data, 'editing': false });
+            this.ckInstance.destroy();
         }
 
     });
