@@ -1,7 +1,7 @@
 import json
 from datetime import datetime
 
-from gettext import gettext as _
+from pyramid.i18n import TranslationString as _
 
 from pyramid.view import view_config
 from pyramid.renderers import render_to_response
@@ -55,7 +55,7 @@ def logout(request):
     renderer='assembl:templates/login.jinja2',
 )
 @view_config(
-    renderer='users/login.jinja2',
+    renderer='assembl:templates/login.jinja2',
     context='pyramid.exceptions.Forbidden',
     permission=NO_PERMISSION_REQUIRED
 )
@@ -121,8 +121,9 @@ def assembl_profile(request):
         redirect = False
         username = request.params.get('username', '').strip()
         if username:
+            print username
             # check if exists
-            if DBSession.query('User').filter_by(username == username).count():
+            if DBSession.query(User).filter_by(username=username).count():
                 errors.append(_('The username %s is already used') % (username,))
             else:
                 user.username = username

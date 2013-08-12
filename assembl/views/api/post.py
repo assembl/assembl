@@ -5,19 +5,32 @@ import os
 from math import ceil
 from cornice import Service
 from pyramid.view import view_config
-from pyramid.httpexceptions import HTTPNotFound
+from pyramid.httpexceptions import HTTPNotFound, HTTPUnauthorized
 from pyramid.i18n import TranslationString as _
+from pyramid.security import Allow, Everyone
+
 from assembl.views.api import API_PREFIX
 from assembl.db import DBSession
 
 from assembl.source.models import Post
 from assembl.synthesis.models import Discussion, Source
 
+
+POST_ACL = [
+    (Allow, 'r:participant', 'write'),
+    (Allow, 'r:moderator', 'delete'),
+    (Allow, 'r:admin', 'delete')
+]
+
+
 posts = Service(name='posts', path=API_PREFIX + '/posts',
-                 description="Post API following SIOC vocabulary as much as possible",
-                 renderer='json')
+                description="Post API following SIOC vocabulary as much as possible",
+                renderer='json', acl=lambda req: POST_ACL)
+
 post = Service(name='post', path=API_PREFIX + '/posts/{id}',
-                 description="Manipulate a single post")
+               description="Manipulate a single post",
+               acl=lambda req: POST_ACL)
+
 
 def __post_to_json_structure(post):
     data = {}
@@ -29,13 +42,14 @@ def __post_to_json_structure(post):
     #FIXME
     data["read"] = True
     data["parentId"] = post.parent_id
-    data["subject"] = post.title
-    data["body"] = post.body
-    data["authorName"] = post.author
+    data["subject"] = post.content.subject
+    data["body"] = post.content.body
+    data["authorName"] = post.content.from_address
     #FIXME
     data["avatarUrl"] = None
-    data["date"] = post.creation_date.isoformat()
+    data["date"] = post.content.creation_date.isoformat()
     return data
+
 
 @posts.get()
 def get_posts(request):
@@ -67,7 +81,7 @@ def get_posts(request):
         base_query = root.get_descendants(include_self=True)
     else:
         base_query = DBSession.query(Post)
-    base_query = base_query.join("source", "discussion").filter(Discussion.id == discussion.id )
+    base_query = base_query.join("content", "source", "discussion").filter(Discussion.id == discussion.id )
     
     data = {}
     data["page"] = page
@@ -94,12 +108,13 @@ def get_posts(request):
 
     return data
 
-@posts.post()
+
+@posts.post(permission='write')
 def create_post(request):
     """
     We use post, not put, because we don't know the id of the post
     """
     if False:  #TODO:  Check that the object doesn't exist already
-        raise Forbidden()
+        raise HTTPUnauthorized()
     data = json.loads(request.body)
     return data

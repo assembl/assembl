@@ -10,4 +10,8 @@
     &:hover {
         color: $link-hover-color;
     }
+
+    &:active {
+        color: $link-active-color;
+    }
 }

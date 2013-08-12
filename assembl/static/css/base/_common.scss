@@ -33,12 +33,23 @@ html {
 .margin-bottom { margin-bottom: $margin-bottom; }
 .margin-left { margin-left: $margin-left; }
 
+.padding { padding: $padding; }
+.padding-top { padding-top: $padding-top; }
+.padding-right { padding-right: $padding-right; }
+.padding-bottom { padding-bottom: $padding-bottom; }
+.padding-left { padding-left: $padding-left; }
+
 .float-left { float: left; }
 .float-right { float: right; }
 
 .inline { display: inline-block; }
 
 .no-fx { @include transition( none !important ); }
+
+.no-border { border: 0 !important; }
+.border { border: solid 1px $box-border-color; }
+.border-bottom { border-bottom: solid 1px $box-border-color; }
+.rounded { border-radius: 4px; }
 
 .user-select-none {
     @include user-select(none);

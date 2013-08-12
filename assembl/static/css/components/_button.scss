@@ -30,6 +30,22 @@
     line-height: $button-condensed-height;
 }
 
+// Primary button
+// ++++++++++++++
+.button.button--primary {
+    background-color: $color-success;
+    color: white;
+    font-weight: bold;
+
+    &:hover {
+        background-color: darken($color-success, 10);
+    }
+
+    &:active {
+        background-color: darken($color-success, 20);
+    }
+}
+
 // Default button hover state
 // **************************
 .button:hover {

@@ -14,13 +14,15 @@ from .synthesis.models import Discussion
 def authentication_callback(userid, request):
     roles = DBSession.query(Role.name).join(UserRole).filter(
         UserRole.user_id == userid).all()
+    roles = {x[0] for x in roles}
     # TODO: Get the discussion from the request
     discussion = DBSession.query(Discussion).first()
     if discussion:
-        roles.extend(DBSession.query(Role.name).join(LocalUserRole).filter(
+        local_roles = DBSession.query(Role.name).join(LocalUserRole).filter(
             LocalUserRole.user_id == userid and
-            LocalUserRole.discussion_id == discussion.id).all())
-    return list(set(roles))
+            LocalUserRole.discussion_id == discussion.id).all()
+        roles.update({x[0] for x in local_roles})
+    return list(roles)
 
 
 def main(global_config, **settings):

@@ -8,12 +8,20 @@
             <input type="text" class="searchbox-field" />
         </div>
         #}
-
+        {% if user %}
         <div class="avatarbox">
-            <img src="<%= app.formatAvatarUrl( app.getCurrentUser().get('avatarUrl', 38) ) %>" alt="User"  class="image-rounded margin-right"/>
+            <img src="{{user.avatar_url(38)|safe}}" alt="User"  class="image-rounded margin-right"/>
 
-            <span>{{ '{{' }} user.display_name {{ '}}' }}</span>
+            <span>{{ user.display_name() }}</span>
         </div>
+        <div class="accordion-area">
+            <div class="accordion-header">
+                <span class="accordion-label icon-power">{{ gettext('Logout') }}</span>
+            </div>
+            <div class="accordion-body"></div>
+        </div>
+        {% endif %}
+
     </header>
 
     <div class="accordion accordion--lateralmenu">
@@ -33,12 +41,6 @@
         </div>
         #}
 
-        <div class="accordion-area">
-            <div class="accordion-header">
-                <span class="accordion-label icon-power">{{ gettext('Logout') }}</span>
-            </div>
-            <div class="accordion-body"></div>
-        </div>
     </div>
 
 

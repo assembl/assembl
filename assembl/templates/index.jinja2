@@ -9,10 +9,14 @@
                 <img src="/static/img/assembl.png" alt="Assembl" />
             </div>
             <div class="bar-right">
-                {{ '{{' }} user.display_name {{ '}}' }}
-                <a class="iconbutton icon-user"></a>
-                <a class="iconbutton icon-search"></a>
-                <a class="iconbutton icon-cog"></a>
+                {% if user %}
+                    {{ user.display_name() }}
+                    <a class="iconbutton icon-user"></a>
+                    <a class="iconbutton icon-search"></a>
+                    <a class="iconbutton icon-cog"></a>
+                {% else %}
+                    <a href="/login" class="link">{{ gettext('Sign in') }} <i class="icon-user"></i> </a>
+                {% endif %}
             </div>
         </div>
     </div>

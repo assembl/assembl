@@ -7,6 +7,7 @@ import json
 import os.path
 from assembl.db import DBSession
 from assembl.synthesis.models import Discussion
+from assembl.auth import get_user
 from sqlalchemy.orm.exc import NoResultFound
 
 FIXTURE = os.path.join(os.path.dirname(__file__),
@@ -24,6 +25,7 @@ def get_default_context(request):
 
     return {
         'STATIC_URL': '/static/',
+        'user': get_user(request),
         'templates': get_template_views(),
         'discussion': discussion
     }
