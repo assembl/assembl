@@ -9,6 +9,7 @@ from sqlalchemy import (
     DateTime,
     Text,
     ForeignKey,
+    or_,
 )
 
 from assembl.db.models import SQLAlchemyBaseModel
@@ -84,7 +85,7 @@ class Post(SQLAlchemyBaseModel):
         ).join(
             Content
         ).filter(
-            Post.ancestry.like(ancestry_query_string)
+            or_(Post.ancestry.like(ancestry_query_string), Post.id == self.id)
         )
 
         return query.scalar()
