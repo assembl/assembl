@@ -308,12 +308,12 @@ class Action(SQLAlchemyBaseModel):
 
     actor_id = Column(
         Integer,
-        ForeignKey('agent_profile.id', ondelete='CASCADE'),
+        ForeignKey('user.id', ondelete='CASCADE'),
         nullable=False
     )
 
     actor = relationship(
-        "AgentProfile",
+        "User",
         backref=backref('actions', order_by=creation_date)
     )
 
