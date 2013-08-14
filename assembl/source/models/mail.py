@@ -10,6 +10,7 @@ from sqlalchemy import (
     Column,
     Integer,
     ForeignKey,
+    String,
     Unicode,
     UnicodeText,
     DateTime,
@@ -32,7 +33,7 @@ class Mailbox(Source):
         ondelete='CASCADE'
     ), primary_key=True)
 
-    host = Column(Unicode(1024), nullable=False)
+    host = Column(String(1024), nullable=False)
     port = Column(Integer, nullable=False)
     username = Column(Unicode(1024), nullable=False)
     #Note:  If using STARTTLS, this should be set to false
