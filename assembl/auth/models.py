@@ -302,7 +302,7 @@ class Action(SQLAlchemyBaseModel):
     creation_date = Column(DateTime, nullable=False, default=datetime.utcnow)
 
     __mapper_args__ = {
-        'polymorphic_identity': 'agent_profile',
+        'polymorphic_identity': 'action',
         'polymorphic_on': type
     }
 
