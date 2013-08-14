@@ -298,12 +298,12 @@ class Action(SQLAlchemyBaseModel):
     __tablename__ = 'action'
 
     id = Column(Integer, primary_key=True)
-    verb = Column(Unicode(255), nullable=False)
+    type = Column(Unicode(255), nullable=False)
     creation_date = Column(DateTime, nullable=False, default=datetime.utcnow)
 
     __mapper_args__ = {
         'polymorphic_identity': 'agent_profile',
-        'polymorphic_on': verb
+        'polymorphic_on': type
     }
 
     actor_id = Column(
@@ -317,12 +317,90 @@ class Action(SQLAlchemyBaseModel):
         backref=backref('actions', order_by=creation_date)
     )
 
+    verb = 'did something to'
+
     def __repr__(self):
-        return "<Action '%s'>" % " ".join([
-            self.actor,
-            'did',
-            self.verb,
-            'on',
-            self.subject.type,
-            '(%s)' % self.subject.id,
-        ])
+        return "<%s '%s'>" % (
+            self.__class__.__name__,
+            " ".join([
+                self.actor,
+                self.verb,
+                self.object_type
+            ])
+        )
+
+
+class ActionOnPost(Action):
+    """
+    An action that is taken on a post. (Mixin)
+    """
+
+    post_id = Column(
+        Integer, 
+        ForeignKey('post.id', ondelete="CASCADE"),
+        nullable=False
+    )
+
+    post = relationship(
+        "Post",
+        backref=backref('views')
+    )
+
+    object_type = 'post'
+
+
+
+class View(ActionOnPost):
+    """
+    A view action on a post.
+    """
+    __tablename__ = 'view'
+    __mapper_args__ = {
+        'polymorphic_identity': 'view'
+    }
+
+    id = Column(
+        Integer, 
+        ForeignKey('action.id', ondelete="CASCADE"),
+        primary_key=True
+    )
+
+    verb = 'viewed'
+
+
+
+class Expand(ActionOnPost):
+    """
+    An expansion action on a post.
+    """
+    __tablename__ = 'expand'
+    __mapper_args__ = {
+        'polymorphic_identity': 'expand'
+    }
+
+    id = Column(
+        Integer, 
+        ForeignKey('action.id', ondelete="CASCADE"),
+        primary_key=True
+    )
+
+    verb = 'expanded'
+
+
+
+class Collapse(ActionOnPost):
+    """
+    A collapse action on a post.
+    """
+    __tablename__ = 'collapse'
+    __mapper_args__ = {
+        'polymorphic_identity': 'collapse'
+    }
+
+    id = Column(
+        Integer, 
+        ForeignKey('action.id', ondelete="CASCADE"),
+        primary_key=True
+    )
+
+    verb = 'collapseed'
