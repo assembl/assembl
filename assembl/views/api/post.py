@@ -44,7 +44,7 @@ def __post_to_json_structure(post):
     data["parentId"] = post.parent_id
     data["subject"] = post.content.subject
     data["body"] = post.content.body
-    data["authorName"] = post.content.from_address
+    data["authorName"] = post.content.sender
     #FIXME
     data["avatarUrl"] = None
     data["date"] = post.content.creation_date.isoformat()
@@ -81,8 +81,7 @@ def get_posts(request):
         base_query = root.get_descendants(include_self=True)
     else:
         base_query = DBSession.query(Post)
-    base_query = base_query.join("content", "source", "discussion").filter(Discussion.id == discussion.id )
-    
+
     data = {}
     data["page"] = page
 
