@@ -48,12 +48,12 @@ class Discussion(SQLAlchemyBaseModel):
 
     owner_id = Column(
         Integer,
-        ForeignKey('agent_profile.id'),
+        ForeignKey('user.id'),
         nullable=False
     )
 
     owner = relationship(
-        'AgentProfile',
+        'User',
         backref="discussions"
     )
     
@@ -200,19 +200,19 @@ class Extract(SQLAlchemyBaseModel):
 
     creator_id = Column(
         Integer,
-        ForeignKey('agent_profile.id'),
+        ForeignKey('user.id'),
     )
 
     creator = relationship(
-        'AgentProfile', foreign_keys=[creator_id], backref='extracts_created')
+        'User', foreign_keys=[creator_id], backref='extracts_created')
 
     owner_id = Column(
         Integer,
-        ForeignKey('agent_profile.id')
+        ForeignKey('user.id')
     )
 
     owner = relationship(
-        'AgentProfile', foreign_keys=[owner_id], backref='extracts_owned')
+        'User', foreign_keys=[owner_id], backref='extracts_owned')
 
     def __repr__(self):
         return "<Extract %d '%s%'>" % (self.id, self.body[:20])
