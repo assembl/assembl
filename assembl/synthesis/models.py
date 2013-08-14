@@ -109,6 +109,10 @@ class Discussion(SQLAlchemyBaseModel):
 
         return query.all()
 
+    def import_from_sources(only_new=True):
+        for source in self.sources:
+            source.import_content(only_new=only_new)
+
     def __init__(self, *args, **kwargs):
         super(Discussion, self).__init__(*args, **kwargs)
         self.table_of_contents = TableOfContents()
