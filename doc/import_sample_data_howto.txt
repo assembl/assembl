@@ -18,7 +18,7 @@ name="jack layton",
 host="coeus.ca",
 port=143,
 use_ssl=False,
-mailbox="inbox",
+folder="inbox",
 password="jacklayton",
 username="jacklayton"
 )
