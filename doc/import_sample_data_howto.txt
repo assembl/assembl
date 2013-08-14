@@ -11,16 +11,21 @@ import transaction
 
 #This shouldn't be needed, but in the meantime to make it run...
 agent = AgentProfile(name="Dummy agent")
-discussion = Discussion(topic=u"Jack Layton sample discussion", slug=u"jacklayton", owner=agent)
+user = User(username="ben", profile=agent)
+discussion = Discussion(
+    topic=u"Jack Layton sample discussion",
+    slug=u"jacklayton", 
+    owner=user
+)
 
 mailbox = Mailbox(
-name="jack layton",
-host="coeus.ca",
-port=143,
-use_ssl=False,
-folder="inbox",
-password="jacklayton",
-username="jacklayton"
+    name="jack layton",
+    host="coeus.ca",
+    port=143,
+    use_ssl=False,
+    folder="inbox",
+    password="jacklayton",
+    username="jacklayton"
 )
 
 
