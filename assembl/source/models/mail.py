@@ -38,7 +38,7 @@ class Mailbox(Source):
     #Note:  If using STARTTLS, this should be set to false
     use_ssl = Column(Boolean, default=True)
     password = Column(Unicode(1024), nullable=False)
-    mailbox = Column(Unicode(1024), default=u"INBOX", nullable=False)
+    folder = Column(Unicode(1024), default=u"INBOX", nullable=False)
 
     last_imported_email_uid = Column(Unicode(255))
 
@@ -55,7 +55,7 @@ class Mailbox(Source):
             #Always use starttls if server supports it
             mailbox.starttls()
         mailbox.login(self.username, self.password)
-        mailbox.select(self.mailbox)
+        mailbox.select(self.folder)
 
         command = "ALL"
 
