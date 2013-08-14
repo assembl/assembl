@@ -89,6 +89,22 @@ class Post(SQLAlchemyBaseModel):
 
         return query.scalar()
 
+    def ancestors(self):
+        ancestor_ids = [
+            ancestor_id \
+            for ancestor_id \
+            in self.ancestry.split(',') \
+            if ancestor_id
+        ]
+
+        ancestors = [
+            DBSession.query(Post).get(ancestor_id) \
+            for ancestor_id \
+            in ancestor_ids
+        ]
+
+        return ancestors
+
     def __repr__(self):
         return "<Post %s '%s %s' >" % (
             self.id,
