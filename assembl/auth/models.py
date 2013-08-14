@@ -143,12 +143,6 @@ class AgentProfile(SQLAlchemyBaseModel):
                 other_profile.user.profile = self
         if other_profile.name and not self.name:
             self.name = other_profile.name
-        for extract in other_profile.extracts_created:
-            extract.creator = self
-        for extract in other_profile.extracts_owned:
-            extract.owner = self
-        for discussion in other_profile.discussions:
-            discussion.owner = self
         # TODO: similarly for posts        
         for action in DBSession.query(Action).filter_by(
             actor_id=other_profile.id).all():
@@ -235,6 +229,12 @@ class User(SQLAlchemyBaseModel):
         for local_user_role in DBSession.query(LocalUserRole).filter_by(
                 user_id=other_user.id).all():
             user_role.user = self
+        for extract in other_user.extracts_created:
+            extract.creator = self
+        for extract in other_user.extracts_owned:
+            extract.owner = self
+        for discussion in other_user.discussions:
+            discussion.owner = self
         DBSession.delete(other_user)
 
     def send_email(self, **kwargs):
