@@ -70,9 +70,13 @@ class Discussion(SQLAlchemyBaseModel):
         lower_post = aliased(Post, name="lower_post")
         lower_content = aliased(Content, name="lower_content")
         upper_post = aliased(Post, name="upper_post")
+        upper_content = aliased(Content, name="upper_content")
 
         latest_update = select([
-            func.max(Content.creation_date).label('last_update'),
+            func.coalesce(
+                func.max(lower_content.creation_date),
+                upper_content.creation_date
+            )
         ], lower_post.content_id==lower_content.id).where(
             lower_post.ancestry.like(
                 upper_post.ancestry + cast(upper_post.id, String) + ',%'
@@ -82,9 +86,11 @@ class Discussion(SQLAlchemyBaseModel):
         query = DBSession.query(
             upper_post,
         ).join(
-            Content,
+            upper_content,
         ).filter(
             upper_post.parent_id==parent_id
+        ).order_by(
+            desc(latest_update)
         )
 
         if not parent_id:
@@ -92,14 +98,8 @@ class Discussion(SQLAlchemyBaseModel):
                 Source
             ).filter(
                 Source.discussion_id==self.id,
-                Content.source_id==Source.id,
-                Post.content_id==Content.id,
+                upper_content.source_id==Source.id,
             )
-            
-        query = query.order_by(
-            desc(latest_update),
-            Content.creation_date.desc()
-        )
 
         if limit:
             query = query.limit(limit)
