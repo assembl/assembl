@@ -224,4 +224,4 @@ class Extract(SQLAlchemyBaseModel):
         'User', foreign_keys=[owner_id], backref='extracts_owned')
 
     def __repr__(self):
-        return "<Extract %d %s%>" % (self.id, repr(self.body[:20]))
+        return "<Extract %d %s>" % (self.id, repr(self.body[:20]))
