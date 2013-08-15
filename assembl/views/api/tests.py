@@ -17,8 +17,13 @@ class ApiTest(BaseTest):
         super(ApiTest, self).setUp()
         self.discussion = self.create_dummy_discussion()
 
-    def create_dummy_discussion(self):
+    def get_url(self, discussion, suffix):
+        return '/api/v1/discussion/%d/%s' % (
+            discussion.id,
+            suffix,
+        )
 
+    def create_dummy_discussion(self):
         agent = AgentProfile(name="Dummy agent")
         user = User(username="ben", profile=agent)
         discussion = Discussion(
@@ -49,14 +54,13 @@ class ApiTest(BaseTest):
             "id": "38ebdaac-c0f0-408e-8904-7f343851fc61"
         }
 
+        url = self.get_url(self.discussion, 'extracts')
         extracts = json.loads(
-            self.app.get('/api/v1/discussion/%d/extracts').body)
+            self.app.get(url).body)
         self.assertEquals(len(extracts), 0)
 
-        res = self.app.put('/api/v1/discussion/%d/extracts/%s' % (
-            self.discussion.id,
-            extract_id,
-        ), json.dumps(extract_data))
+        url = self.get_url(self.discussion, 'extracts/%s' % extract_id)
+        res = self.app.put(url, json.dumps(extract_data))
         self.assertEqual(res.status_code, 200)
 
         query = self.session.query(Extract)
@@ -65,8 +69,8 @@ class ApiTest(BaseTest):
         obj = query.first()
         self.assertEqual(obj.id, extract_id)
 
-        extracts = json.loads(
-            self.app.get('/api/v1/discussion/%d/extracts').body)
+        url = self.get_url(self.discussion, 'extracts')
+        extracts = json.loads(self.app.get(url).body)
         self.assertEquals(len(extracts), 1)
 
 
@@ -85,7 +89,8 @@ class ApiTest(BaseTest):
         self.session.flush()
         self.session.refresh(idea)
 
-        res = self.app.get('/api/v1/discussion/%d/ideas' % (self.discussion.id))
+        url = self.get_url(self.discussion, 'ideas')
+        res = self.app.get(url)
         self.assertEqual(res.status_code, 200)
 
         ideas = json.loads(res.body)
