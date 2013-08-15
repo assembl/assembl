@@ -107,7 +107,7 @@ class Post(SQLAlchemyBaseModel):
         return ancestors
 
     def __repr__(self):
-        return "<Post %s '%s %s' >" % (
+        return "<Post %d '%s %d'>" % (
             self.id,
             self.content.type,
             self.content.id,
