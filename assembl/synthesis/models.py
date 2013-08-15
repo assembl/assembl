@@ -19,6 +19,7 @@ from sqlalchemy import (
 
 from ..db import DBSession
 from ..lib.sqla import Base as SQLAlchemyBaseModel
+from ..lib.types import UUID
 from ..source.models import (Source, Content, Post)
 
 class Discussion(SQLAlchemyBaseModel):
@@ -196,7 +197,7 @@ class Extract(SQLAlchemyBaseModel):
     """
     __tablename__ = 'extract'
 
-    id = Column(Integer, primary_key=True)
+    id = Column(UUID, primary_key=True)
     creation_date = Column(DateTime, nullable=False, default=datetime.utcnow)
     order = Column(Float, nullable=False, default=0.0)
     body = Column(UnicodeText, nullable=False)
