@@ -23,3 +23,4 @@ coverage
 webtest
 pinocchio
 # hapi : a OAuth2 server for pyramid. Still very much work in progress.
+Unidecode==0.04.13
