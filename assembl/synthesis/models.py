@@ -109,6 +109,15 @@ class Discussion(SQLAlchemyBaseModel):
 
         return query.all()
 
+    def total_posts(self):
+        return DBSession.query(Post).join(
+            Content,
+            Source
+        ).filter(
+            Source.discussion_id==self.id,
+            Content.source_id==Source.id,
+        ).count()
+
     def import_from_sources(only_new=True):
         for source in self.sources:
             source.import_content(only_new=only_new)
