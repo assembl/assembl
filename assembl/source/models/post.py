@@ -17,7 +17,6 @@ from assembl.db import DBSession
 from assembl.source.models.generic import Content
 
 
-
 class Post(SQLAlchemyBaseModel):
     """
     A Post represents input into the broader discussion taking place on
@@ -117,4 +116,3 @@ class Post(SQLAlchemyBaseModel):
             self.content.type,
             self.content.id,
         )
-

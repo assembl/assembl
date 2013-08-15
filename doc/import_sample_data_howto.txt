@@ -23,7 +23,7 @@ mailbox = Mailbox(
     host="coeus.ca",
     port=143,
     use_ssl=False,
-    folder="inbox",
+    folder="ubuntu",
     password="jacklayton",
     username="jacklayton"
 )

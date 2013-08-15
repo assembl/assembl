@@ -1,7 +1,11 @@
 from datetime import datetime
-
 from sqlalchemy.orm import relationship, backref, aliased
 from sqlalchemy.sql import func, cast, select
+from colanderalchemy import (
+    setup_schema,
+    SQLAlchemySchemaNode,
+    __colanderalchemy__,
+    )
 
 from sqlalchemy import (
     Table,
@@ -19,8 +23,9 @@ from sqlalchemy import (
 
 from ..db import DBSession
 from ..lib.sqla import Base as SQLAlchemyBaseModel
-from ..lib.types import UUID
+from ..lib.types import UUID, UUIDSchema
 from ..source.models import (Source, Content, Post)
+
 
 class Discussion(SQLAlchemyBaseModel):
     """
@@ -197,7 +202,9 @@ class Extract(SQLAlchemyBaseModel):
     """
     __tablename__ = 'extract'
 
-    id = Column(UUID, primary_key=True)
+    id = Column(UUID, primary_key=True, info={'colanderalchemy': {
+        'typ': UUIDSchema,
+    }})
     creation_date = Column(DateTime, nullable=False, default=datetime.utcnow)
     order = Column(Float, nullable=False, default=0.0)
     body = Column(UnicodeText, nullable=False)
@@ -226,3 +233,9 @@ class Extract(SQLAlchemyBaseModel):
 
     def __repr__(self):
         return "<Extract %d '%s%'>" % (self.id, self.body[:20])
+
+# Similar to setup_schema(None, Extract)
+# import pdb; pdb.set_trace()
+# setattr(SQLAlchemySchemaNode(Extract), __colanderalchemy__)#, overrides={
+#         #     'id': UUIDSchema,
+#         # })

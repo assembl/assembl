@@ -117,3 +117,4 @@ def create_post(request):
         raise HTTPUnauthorized()
     data = json.loads(request.body)
     return data
+

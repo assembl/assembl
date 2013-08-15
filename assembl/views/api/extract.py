@@ -7,6 +7,7 @@ from pyramid.httpexceptions import HTTPNotFound
 from pyramid.i18n import TranslationString as _
 from assembl.views.api import FIXTURE_DIR, API_PREFIX
 from assembl.synthesis.models import Extract
+from assembl.db import DBSession
 
 extracts = Service(name='extracts', path=API_PREFIX + '/extracts',
                  description="An extract from Content that is an expression of an Idea",
@@ -22,10 +23,13 @@ def get_extract(request):
 
 @extracts.get()
 def get_extracts(request):
-    path = os.path.join(FIXTURE_DIR, 'segments.json')
-    f = open(path)
-    data = json.loads(f.read())
-    f.close()
+    import pdb; pdb.set_trace()
+    return DBSession.query(Extract)
+    
+    # path = os.path.join(FIXTURE_DIR, 'segments.json')
+    # f = open(path)
+    # data = json.loads(f.read())
+    # f.close()
 
     return data
 
@@ -35,7 +39,7 @@ def save_extract(request):
     """ The client decides the id here, 
     must handle the case where the object does and does not exist"""
     data = json.loads(request.body)
-
+    import pdb; pdb.set_trace()
     return data
 
 

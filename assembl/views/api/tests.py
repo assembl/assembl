@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import uuid
 import json
 import transaction
 from assembl.tests.base import BaseTest
@@ -53,6 +54,15 @@ class ApiTest(BaseTest):
             "creationDate": 1376573216160,
             "id": "38ebdaac-c0f0-408e-8904-7f343851fc61"
         }
+
+        ext = Extract(
+            id=uuid.UUID('38ebdaac-c0f0-408e-8904-7f343851fc61'),
+            order=0.0,
+            body='asd',
+            source_id='1',
+        )
+        self.session.add(ext)
+        import bpdb; bpdb.set_trace()
 
         url = self.get_url(self.discussion, 'extracts')
         extracts = json.loads(
