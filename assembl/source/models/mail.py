@@ -149,7 +149,7 @@ class Mailbox(Source):
         self.last_import = datetime.utcnow()
 
     def __repr__(self):
-        return "<Mailbox '%s'>" % self.name
+        return "<Mailbox %s>" % repr(self.name)
 
 
 class Email(Content):

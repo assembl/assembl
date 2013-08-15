@@ -127,7 +127,7 @@ class Discussion(SQLAlchemyBaseModel):
         self.table_of_contents = TableOfContents()
 
     def __repr__(self):
-        return "<Discussion '%s'>" % self.topic
+        return "<Discussion %s>" % repr(self.topic)
 
 
 class TableOfContents(SQLAlchemyBaseModel):
@@ -143,7 +143,7 @@ class TableOfContents(SQLAlchemyBaseModel):
     creation_date = Column(DateTime, nullable=False, default=datetime.utcnow)
 
     def __repr__(self):
-        return "<TableOfContents '%s'>" % self.discussion.topic
+        return "<TableOfContents %s>" % repr(self.discussion.topic)
 
 idea_association_table = Table(
     'idea_association',
@@ -185,7 +185,7 @@ class Idea(SQLAlchemyBaseModel):
 
     def __repr__(self):
         if self.short_title:
-            return "<Idea %d '%s'>" % (self.id, self.short_title)
+            return "<Idea %d %s>" % (self.id, repr(self.short_title))
 
         return "<Idea %d>" % self.id
 
@@ -224,4 +224,4 @@ class Extract(SQLAlchemyBaseModel):
         'User', foreign_keys=[owner_id], backref='extracts_owned')
 
     def __repr__(self):
-        return "<Extract %d '%s%'>" % (self.id, self.body[:20])
+        return "<Extract %d %s%>" % (self.id, repr(self.body[:20]))
