@@ -13,7 +13,7 @@ from assembl.views.api import API_PREFIX
 from assembl.db import DBSession
 
 from assembl.source.models import Post
-from assembl.synthesis.models import Discussion, Source
+from assembl.synthesis.models import Discussion, Source, Content
 
 
 POST_ACL = [
@@ -80,7 +80,10 @@ def get_posts(request):
             raise HTTPNotFound(_("No Post found with id=%d" % root_post_id))
         base_query = root.get_descendants(include_self=True)
     else:
-        base_query = DBSession.query(Post)
+        base_query = DBSession.query(Post).join(Content, Source).filter(
+            Source.discussion_id == discussion_id,
+            Content.source_id == Source.id,
+        )
 
     data = {}
     data["page"] = page
@@ -100,7 +103,10 @@ def get_posts(request):
         data["endIndex"] = data["startIndex"] + (page_size-1)
         
     post_data = []
-    query = base_query.limit(page_size).offset(data["startIndex"]-1)
+    query = base_query.order_by(
+        Content.creation_date.desc()
+    ).limit(page_size).offset(data["startIndex"]-1)
+
     for post in query:
         post_data.append(__post_to_json_structure(post))
     data["posts"] = post_data
