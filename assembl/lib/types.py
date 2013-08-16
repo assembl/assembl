@@ -1,8 +1,16 @@
 from sqlalchemy import types
 from sqlalchemy.databases import postgresql
 from sqlalchemy.schema import Column
-from colander import SchemaType, null
+from colander import SchemaType, null, Invalid
+from colander.compat import (
+    text_,
+    text_type,
+    )
+import translationstring
 import uuid
+
+
+_ = translationstring.TranslationStringFactory('colander')
 
 
 class UUID(types.TypeDecorator):

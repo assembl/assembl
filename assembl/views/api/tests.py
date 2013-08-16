@@ -65,16 +65,20 @@ class ApiTest(BaseTest):
         import bpdb; bpdb.set_trace()
 
         url = self.get_url(self.discussion, 'extracts')
-        extracts = json.loads(
-            self.app.get(url).body)
+        res = self.app.get(url, json.dumps(extract_data))
+        self.assertEqual(res.status_code, 200)
+        extracts = json.loads(res.body)
         self.assertEquals(len(extracts), 0)
 
         url = self.get_url(self.discussion, 'extracts/%s' % extract_id)
         res = self.app.put(url, json.dumps(extract_data))
         self.assertEqual(res.status_code, 200)
 
-        query = self.session.query(Extract)
-        self.assertEqual(query.count(), 1)
+        url = self.get_url(self.discussion, 'extracts')
+        res = self.app.get(url, json.dumps(extract_data))
+        self.assertEqual(res.status_code, 200)
+        extracts = json.loads(res.body)
+        self.assertEquals(len(extracts), 1)
 
         obj = query.first()
         self.assertEqual(obj.id, extract_id)

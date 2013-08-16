@@ -5,6 +5,7 @@ from cornice import Service
 from pyramid.view import view_config
 from pyramid.httpexceptions import HTTPNotFound
 from pyramid.i18n import TranslationString as _
+from colander import Invalid
 from assembl.views.api import FIXTURE_DIR, API_PREFIX
 from assembl.synthesis.models import Extract
 from assembl.db import DBSession
@@ -23,15 +24,14 @@ def get_extract(request):
 
 @extracts.get()
 def get_extracts(request):
-    import pdb; pdb.set_trace()
-    return DBSession.query(Extract)
-    
     # path = os.path.join(FIXTURE_DIR, 'segments.json')
     # f = open(path)
     # data = json.loads(f.read())
     # f.close()
 
-    return data
+    query = DBSession.query(Extract)
+    ca = Extract.__colanderalchemy__
+    return [ca.serialize(ca.dictify(x)) for x in query]
 
 
 @extract.put()
@@ -39,8 +39,13 @@ def save_extract(request):
     """ The client decides the id here, 
     must handle the case where the object does and does not exist"""
     data = json.loads(request.body)
-    import pdb; pdb.set_trace()
-    return data
+    ca = Extract.__colanderalchemy__
+    try:
+        data = ca.serialize(data)
+    except Invalid, e:
+        return e.as_dict()
+    else:
+        return data
 
 
 @extract.delete()

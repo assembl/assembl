@@ -205,7 +205,15 @@ class Extract(SQLAlchemyBaseModel):
     id = Column(UUID, primary_key=True, info={'colanderalchemy': {
         'typ': UUIDSchema,
     }})
-    creation_date = Column(DateTime, nullable=False, default=datetime.utcnow)
+    creation_date = Column(
+        DateTime,
+        nullable=False,
+        default=datetime.utcnow,
+        info={
+            'colanderalchemy': {
+                'name': 'createionDate',
+            }
+        })
     order = Column(Float, nullable=False, default=0.0)
     body = Column(UnicodeText, nullable=False)
 
@@ -236,6 +244,7 @@ class Extract(SQLAlchemyBaseModel):
 
 # Similar to setup_schema(None, Extract)
 # import pdb; pdb.set_trace()
+setup_schema(None, Extract)
 # setattr(SQLAlchemySchemaNode(Extract), __colanderalchemy__)#, overrides={
-#         #     'id': UUIDSchema,
-#         # })
+        #     'id': UUIDSchema,
+        # })
