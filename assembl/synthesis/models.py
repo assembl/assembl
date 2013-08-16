@@ -40,9 +40,10 @@ class Discussion(SQLAlchemyBaseModel):
     
     table_of_contents_id = Column(
         Integer,
-        ForeignKey('table_of_contents.id'),
-        nullable=False
+        ForeignKey('table_of_contents.id', ondelete="CASCADE"),
+        nullable=False,
     )
+
     table_of_contents = relationship(
         'TableOfContents', 
         uselist=False,
