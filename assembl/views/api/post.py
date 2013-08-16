@@ -92,7 +92,12 @@ def get_posts(request):
     else:
         data["endIndex"] = data["startIndex"] + (page_size-1)
         
-    posts = discussion.posts(limit=page_size, offset=data['startIndex']-1)
+    posts = discussion.posts(
+        parent_id=root_post_id,
+        limit=page_size,
+        offset=data['startIndex']-1
+    )
+
     post_data = []
 
     for post in posts:
