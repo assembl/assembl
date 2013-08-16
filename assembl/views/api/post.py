@@ -74,14 +74,21 @@ def get_posts(request):
     except (ValueError, KeyError):
         root_post_id = None
     
-    
+    if root_post_id:
+        root = DBSession.query(Post).get(root_post_id)
+        if not root:
+            raise HTTPNotFound(_("No Post found with id=%d" % root_post_id))
+        base_query = root.get_descendants(include_self=True)
+    else:
+        base_query = DBSession.query(Post)
+
     data = {}
     data["page"] = page
 
     #Rename "inbox" to "unread", the number of unread messages for the current user.
     data["inbox"] = discussion.total_posts()
     #What is "total", the total messages in the current context?
-    data["total"] = discussion.total_posts()
+    data["total"] = base_query.count()
     data["maxPage"] = max(1, ceil(float(data["total"])/page_size))
     #TODO:  Check if we want 1 based index in the api
     data["startIndex"] = (page_size * page) - (page_size-1)
@@ -92,15 +99,9 @@ def get_posts(request):
     else:
         data["endIndex"] = data["startIndex"] + (page_size-1)
         
-    posts = discussion.posts(
-        parent_id=root_post_id,
-        limit=page_size,
-        offset=data['startIndex']-1
-    )
-
     post_data = []
-
-    for post in posts:
+    query = base_query.limit(page_size).offset(data["startIndex"]-1)
+    for post in query:
         post_data.append(__post_to_json_structure(post))
     data["posts"] = post_data
 

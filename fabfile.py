@@ -43,7 +43,7 @@ def venv_prefix():
     return 'source %(venvpath)s/bin/activate' % env
 
 def remote_db_path():
-    return os.path.join(env.projectpath, 'current_database.sql.bz2')
+    return os.path.join(env.projectpath, 'current_database.pgdump')
 
 def printenv():
     """
@@ -179,6 +179,7 @@ def updatemaincode():
         run('git pull %s %s' % (env.gitrepo, env.gitbranch))
 
 def app_setup():
+     venvcmd('pip install -Iv pip==1.4')
      venvcmd('python ./setup.py develop')
      
 @task
@@ -297,7 +298,7 @@ def install_database_server():
     Install a postgresql DB
     """
     print(cyan('Installing Postgresql'))
-    sudo('apt-get install -y postgresql-8.4 postgresql-8.4 postgresql-8.4-postgis postgis')
+    sudo('apt-get install -y postgresql')
 
 def create_database_user():
     """
@@ -381,6 +382,79 @@ def update_compass():
     with cd(env.projectpath):
         run('bundle install --path=vendor/bundle')
 
+def database_create():
+    """
+    """
+    sudo('su - postgres -c "createdb -E UNICODE -Ttemplate0 -O%s %s"' % (env.db_user, env.db_name))
+
+@task
+def database_dump():
+    """
+    Dumps the database on remote site
+    """
+    if not exists(env.dbdumps_dir):
+        run('mkdir -m700 %s' % env.dbdumps_dir)
+
+    filename = 'db_%s.sql' % time.strftime('%Y%m%d')
+    compressed_filename = '%s.pgdump' % filename
+    absolute_path = os.path.join(env.dbdumps_dir, compressed_filename)
+
+    # Dump
+    with prefix(venv_prefix()), cd(env.projectpath):
+        run('pg_dump --host=%s -U%s --format=custom -b %s > %s' % (env.db_host, env.db_user,
+                                                 env.db_name,
+                                                 absolute_path)
+            )
+
+    # Make symlink to latest
+    with cd(env.dbdumps_dir):
+        run('ln -sf %s %s' % (absolute_path, remote_db_path()))
+
+@task
+def database_download():
+    """
+    Dumps and downloads the database from the target server
+    """
+    execute(database_dump)
+    get(remote_db_path())
+
+@task
+def database_upload():
+    """
+    Uploads a local database backup to the target environment's server
+    """
+    if(env.wsginame != 'dev.wsgi'):
+        put(remote_db_path())
+
+@task    
+def database_restore():
+    """
+    Restores the database backed up on the remote server
+    """
+    assert(env.wsginame in ('staging.wsgi', 'dev.wsgi'))
+    env.debug = True
+    
+    if(env.wsginame != 'dev.wsgi'):
+        execute(webservers_stop)
+    
+    # Drop db
+    with settings(warn_only=True):
+        sudo('su - postgres -c "dropdb %s"' % (env.db_name))
+
+    # Create db
+    execute(database_create)
+    
+    # Restore data
+    with prefix(venv_prefix()), cd(env.projectpath):
+        run('pg_restore --host=%s --dbname=%s -U%s --schema=public %s' % (env.db_host,
+                                                  env.db_name,
+                                                  env.db_user,
+                                                  remote_db_path())
+        )
+
+    if(env.wsginame != 'dev.wsgi'):
+        execute(webservers_start)
+
 ## Server scenarios
 def commonenv(projectpath, venvpath=None):
     """
@@ -395,6 +469,9 @@ def commonenv(projectpath, venvpath=None):
         
     env.db_user = 'assembl'
     env.db_name = 'assembl'
+    #It is recommended you keep localhost even if you have access to 
+    # unix domain sockets, it's more portable across different pg_hba configurations.
+    env.db_host = 'localhost'
     env.dbdumps_dir = os.path.join(tempfile.gettempdir(), '%s_dumps' % env.projectname)
     env.ini_file = 'production.ini'
     #env.gitrepo = "ssh://webapp@i4p-dev.imaginationforpeople.org/var/repositories/imaginationforpeople.git"
