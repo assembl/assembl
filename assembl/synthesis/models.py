@@ -14,8 +14,11 @@ from sqlalchemy import (
     UnicodeText, 
     DateTime,
     ForeignKey,
-    desc
+    desc,
+    event,
 )
+
+from assembl.lib.utils import slugify
 
 from ..db import DBSession
 from ..lib.sqla import Base as SQLAlchemyBaseModel
@@ -128,6 +131,17 @@ class Discussion(SQLAlchemyBaseModel):
 
     def __repr__(self):
         return "<Discussion %s>" % repr(self.topic)
+
+
+def slugify_topic_if_slug_is_empty(discussion, topic, oldvalue, initiator):
+    """
+    if the target doesn't have a slug, slugify the topic and use that.
+    """
+    if not discussion.slug:
+        discussion.slug = slugify(topic)
+
+
+event.listen(Discussion.topic, 'set', slugify_topic_if_slug_is_empty)
 
 
 class TableOfContents(SQLAlchemyBaseModel):
