@@ -79,7 +79,7 @@ def get_posts(request):
     data["page"] = page
 
     #Rename "inbox" to "unread", the number of unread messages for the current user.
-    data["inbox"] = 666
+    data["inbox"] = discussion.total_posts()
     #What is "total", the total messages in the current context?
     data["total"] = discussion.total_posts()
     data["maxPage"] = max(1, ceil(float(data["total"])/page_size))
