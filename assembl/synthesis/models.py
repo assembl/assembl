@@ -112,7 +112,7 @@ class Discussion(SQLAlchemyBaseModel):
             Content.source_id==Source.id,
         ).count()
 
-    def import_from_sources(only_new=True):
+    def import_from_sources(self, only_new=True):
         for source in self.sources:
             source.import_content(only_new=only_new)
 
