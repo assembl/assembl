@@ -60,10 +60,6 @@ class Discussion(SQLAlchemyBaseModel):
         'User',
         backref="discussions"
     )
-    
-    __mapper_args__ = {
-        'polymorphic_identity': 'discussion',
-    }
 
     def posts(self, limit=15, offset=None, parent_id=None):
         """
