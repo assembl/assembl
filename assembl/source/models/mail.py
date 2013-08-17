@@ -52,9 +52,9 @@ class Mailbox(Source):
 
     def import_content(self, only_new=True):
         if self.use_ssl:
-            mailbox = IMAP4_SSL(host=self.host, port=self.port)
+            mailbox = IMAP4_SSL(host=self.host.encode('utf-8'), port=self.port)
         else:
-            mailbox = IMAP4(host=self.host, port=self.port)
+            mailbox = IMAP4(host=self.host.encode('utf-8'), port=self.port)
         if 'STARTTLS' in mailbox.capabilities:
             #Always use starttls if server supports it
             mailbox.starttls()
