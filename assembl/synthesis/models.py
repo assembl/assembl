@@ -48,7 +48,6 @@ class Discussion(SQLAlchemyBaseModel):
     table_of_contents = relationship(
         'TableOfContents', 
         uselist=False,
-        backref='discussion'
     )
 
     owner_id = Column(
@@ -129,7 +128,7 @@ class Discussion(SQLAlchemyBaseModel):
 
     def __init__(self, *args, **kwargs):
         super(Discussion, self).__init__(*args, **kwargs)
-        self.table_of_contents = TableOfContents()
+        self.table_of_contents = TableOfContents(discussion=self)
 
     def __repr__(self):
         return "<Discussion %s>" % repr(self.topic)
@@ -157,6 +156,11 @@ class TableOfContents(SQLAlchemyBaseModel):
 
     id = Column(Integer, primary_key=True)
     creation_date = Column(DateTime, nullable=False, default=datetime.utcnow)
+
+    discussion = relationship(
+        'Discussion',
+        uselist=False
+    )
 
     def __repr__(self):
         return "<TableOfContents %s>" % repr(self.discussion.topic)
