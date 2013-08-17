@@ -58,9 +58,9 @@ def get_posts(request):
     if not discussion:
         raise HTTPNotFound(_("No discussion found with id=%s" % discussion_id))
 
-    DEFAULT_PAGE_SIZE = 50
+    DEFAULT_PAGE_SIZE = 25
     page_size = DEFAULT_PAGE_SIZE
-    discussion_id
+
     try:
         page = int(request.GET.getone('page'))
     except (ValueError, KeyError):
