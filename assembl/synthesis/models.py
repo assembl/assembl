@@ -61,11 +61,11 @@ class Discussion(SQLAlchemyBaseModel):
         backref="discussions"
     )
 
-    def posts(self, limit=15, offset=None, parent_id=None):
+    def posts(self, parent_id=None):
         """
-        Queries posts whose content comes from a source that belongs to this
-        topic. The result is a list of posts sorted by their youngest
-        descendent in descending order.
+        Returns an iterable query of posts whose content comes from a source
+        that belongs to this topic. The result is a list of posts sorted by
+        their youngest descendent in descending order.
         """
         lower_post = aliased(Post, name="lower_post")
         lower_content = aliased(Content, name="lower_content")
@@ -101,13 +101,7 @@ class Discussion(SQLAlchemyBaseModel):
                 upper_content.source_id==Source.id,
             )
 
-        if limit:
-            query = query.limit(limit)
-
-        if offset:
-            query = query.offset(offset)
-
-        return query.all()
+        return query
 
     def total_posts(self):
         return DBSession.query(Post).join(
