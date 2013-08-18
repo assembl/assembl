@@ -220,6 +220,7 @@ class Extract(SQLAlchemyBaseModel):
     creator_id = Column(
         Integer,
         ForeignKey('user.id'),
+        nullable=False,
     )
 
     creator = relationship(
@@ -227,7 +228,8 @@ class Extract(SQLAlchemyBaseModel):
 
     owner_id = Column(
         Integer,
-        ForeignKey('user.id')
+        ForeignKey('user.id'),
+        nullable=False,
     )
 
     owner = relationship(
