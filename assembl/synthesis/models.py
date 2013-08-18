@@ -211,7 +211,7 @@ class Extract(SQLAlchemyBaseModel):
     order = Column(Float, nullable=False, default=0.0)
     body = Column(UnicodeText, nullable=False)
 
-    source_id = Column(Integer, ForeignKey('content.id'))
+    source_id = Column(Integer, ForeignKey('content.id'), nullable=False)
     source = relationship(Content, backref='extracts')
 
     idea_id = Column(Integer, ForeignKey('idea.id'), nullable=True)
