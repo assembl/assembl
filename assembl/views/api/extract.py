@@ -46,9 +46,8 @@ def get_extracts(request):
         extract.serializable() for extract in extracts
     ]
 
-    serialized_extracts = json.dumps(serializable_extracts)
+    return serializable_extracts
 
-    return serialized_extracts
 
 
 @extract.post()
