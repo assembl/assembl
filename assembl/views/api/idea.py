@@ -26,15 +26,15 @@ def create_idea(request):
 
     with transaction.manager:
         new_idea = Idea(
-            short_title = idea_data.shortTitle,
-            long_title = idea_data.longTitle,
+            short_title = idea_data['shortTitle'],
+            long_title = idea_data['longTitle'],
             table_of_contents_id = discussion.table_of_contents_id,
             order = idea_data.get('order', 0.0)
         )
 
         if idea_data['parentId']:
             parent = DBSession.query(Idea).get(idea_data['parentId'])
-            idea.parents.append(parent)
+            new_idea.parents.append(parent)
 
         DBSession.add(new_idea)
 
