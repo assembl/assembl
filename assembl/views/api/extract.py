@@ -49,11 +49,11 @@ def get_extracts(request):
     return serializable_extracts
 
 
-
-@extract.post()
+@extracts.post()
 def post_extract(request):
-    """ The client decides the id here, 
-    must handle the case where the object does and does not exist"""
+    """
+    Create a new extract.
+    """
     extract_data = json.loads(request.body)
     user_id = authenticated_userid(request)
 
@@ -61,8 +61,8 @@ def post_extract(request):
         new_extract = Extract(
             creator_id = user_id,
             owner_id = user_id,
-            body = extract_body.get('text', '').decode('utf-8'),
-            source_id = extract_body.get('idPost')
+            body = extract_data.get('text', '').decode('utf-8'),
+            source_id = extract_data.get('idPost')
         )
 
         DBSession.add(new_extract)
