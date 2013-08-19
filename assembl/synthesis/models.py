@@ -235,5 +235,15 @@ class Extract(SQLAlchemyBaseModel):
     owner = relationship(
         'User', foreign_keys=[owner_id], backref='extracts_owned')
 
+    def serializable(self):
+        return {
+            'id': self.id,
+            'text': self.body,
+            'idPost': self.source.post.id,
+            'idIdea': self.idea_id,
+            'creationDate': self.creation_date,
+            'author': self.source.sender,
+        }
+
     def __repr__(self):
         return "<Extract %d %s>" % (self.id, repr(self.body[:20]))
