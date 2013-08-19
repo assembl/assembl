@@ -180,6 +180,7 @@ class Idea(SQLAlchemyBaseModel):
         ForeignKey('table_of_contents.id'),
         nullable=False
     )
+
     table_of_contents = relationship(
         'TableOfContents',
         backref='ideas',
@@ -192,6 +193,20 @@ class Idea(SQLAlchemyBaseModel):
         primaryjoin=id==idea_association_table.c.parent_id,
         secondaryjoin=id==idea_association_table.c.child_id,
     )
+
+    def serializable(self):
+        return {
+            'id': self.id,
+            'shortTitle': self.short_title,
+            'longTitle': self.long_title,
+            'creationDate': self.creation_date.isoformat(),
+            'order': self.order,
+            'active': False,
+            'featured': False,
+            'parentId': self.parents[0].id if self.parents else None,
+            'inSynthesis': False,
+            'total': len(self.children),
+        }
 
     def __repr__(self):
         if self.short_title:
