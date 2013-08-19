@@ -102,7 +102,7 @@ function(Backbone, _, Moment, app, Message){
          * CONTEXT MENU
          */
         contextMenuItem1: function(){
-            app.segmentList.addTextAsSegment( app.selectionTooltip.attr('data-segment') );
+            app.segmentList.addTextAsSegment( app.selectionTooltip.attr('data-segment'), this.model.id );
             app.openPanel(app.segmentList);
         },
 

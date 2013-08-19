@@ -2,6 +2,9 @@ define(['backbone', 'underscore', 'zepto', 'app', 'views/messageListItem', 'view
 function(Backbone, _, $, app, MessageListItem, MessageView, Message){
     'use strict';
 
+    /**
+     * Constants
+     */
     var MESSAGE_MODE = 'is-message-mode';
 
     /**
