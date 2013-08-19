@@ -6,7 +6,6 @@ from sqlalchemy.orm import scoped_session, sessionmaker
 from pyramid.paster import get_appsettings
 from assembl.lib.migration import bootstrap_db
 
-
 log = logging.getLogger('nose.plugins.assembl')
 
 

@@ -34,16 +34,18 @@ def get_extracts(request):
     return [ca.serialize(ca.dictify(x)) for x in query]
 
 
+# @extract.put(validator=Extract.__colanderalchemy__)
 @extract.put()
 def save_extract(request):
     """ The client decides the id here, 
     must handle the case where the object does and does not exist"""
+    import bpdb; bpdb.set_trace()
     data = json.loads(request.body)
     ca = Extract.__colanderalchemy__
     try:
-        data = ca.serialize(data)
+        data = ca.deserialize(data)
     except Invalid, e:
-        return e.as_dict()
+        return e.asdict()
     else:
         return data
 

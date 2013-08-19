@@ -210,8 +210,8 @@ class Extract(SQLAlchemyBaseModel):
         nullable=False,
         default=datetime.utcnow,
         info={
-            'colanderalchemy': {
-                'name': 'createionDate',
+            'colanderalchembuy': {
+                'name': 'creationDate',
             }
         })
     order = Column(Float, nullable=False, default=0.0)
@@ -243,6 +243,7 @@ class Extract(SQLAlchemyBaseModel):
         return "<Extract %d '%s%'>" % (self.id, self.body[:20])
 
 # Similar to setup_schema(None, Extract)
+# raise Exception('Caca')
 # import pdb; pdb.set_trace()
 setup_schema(None, Extract)
 # setattr(SQLAlchemySchemaNode(Extract), __colanderalchemy__)#, overrides={

@@ -62,7 +62,6 @@ class ApiTest(BaseTest):
             source_id='1',
         )
         self.session.add(ext)
-        import bpdb; bpdb.set_trace()
 
         url = self.get_url(self.discussion, 'extracts')
         res = self.app.get(url, json.dumps(extract_data))
@@ -73,6 +72,8 @@ class ApiTest(BaseTest):
         url = self.get_url(self.discussion, 'extracts/%s' % extract_id)
         res = self.app.put(url, json.dumps(extract_data))
         self.assertEqual(res.status_code, 200)
+        res_data = json.loads(res.body)
+        import bpdb; bpdb.set_trace()
 
         url = self.get_url(self.discussion, 'extracts')
         res = self.app.get(url, json.dumps(extract_data))
