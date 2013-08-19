@@ -1,5 +1,3 @@
-$dropdown-height: 20px;
-
 // The dropdown
 // ============
 .dropdown {
@@ -68,13 +66,13 @@ $dropdown-height: 20px;
 
     .dropdown.is-open & {
         @include transition( top $dropdown-time, opacity $dropdown-time, left 0 linear 0 );
-        top: $dropdown-height + 4px;
+        top: 8px;
         @include opacity( 1 );
         left: 0;
     }
 
     .dropdown--button.is-open & {
-        top: $button-condensed-height + 4px;
+        top: 16px;
         left: 5px;
     }
 }
