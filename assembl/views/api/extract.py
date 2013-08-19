@@ -86,6 +86,7 @@ def put_extract(request):
     with transaction.manager:
         extract.owner_id = user_id or extract.owner_id
         extract.order = updated_extract_data.get('order', extract.order)
+        extract.idea_id = updated_extract_data['idIdea']
 
         DBSession.add(extract)
 
