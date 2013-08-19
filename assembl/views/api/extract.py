@@ -30,7 +30,7 @@ def get_extracts(request):
     # f.close()
 
     query = DBSession.query(Extract)
-    ca = Extract.__colanderalchemy__
+    ca = Extract.__ca__
     return [ca.serialize(ca.dictify(x)) for x in query]
 
 
@@ -39,9 +39,9 @@ def get_extracts(request):
 def save_extract(request):
     """ The client decides the id here, 
     must handle the case where the object does and does not exist"""
-    import bpdb; bpdb.set_trace()
     data = json.loads(request.body)
-    ca = Extract.__colanderalchemy__
+    ca = Extract.__ca__
+    import bpdb; bpdb.set_trace()
     try:
         data = ca.deserialize(data)
     except Invalid, e:

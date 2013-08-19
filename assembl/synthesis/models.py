@@ -1,11 +1,6 @@
 from datetime import datetime
 from sqlalchemy.orm import relationship, backref, aliased
 from sqlalchemy.sql import func, cast, select
-from colanderalchemy import (
-    setup_schema,
-    SQLAlchemySchemaNode,
-    __colanderalchemy__,
-    )
 
 from sqlalchemy import (
     Table,
@@ -24,6 +19,7 @@ from sqlalchemy import (
 from ..db import DBSession
 from ..lib.sqla import Base as SQLAlchemyBaseModel
 from ..lib.types import UUID, UUIDSchema
+from ..lib.models import ValidateMeta
 from ..source.models import (Source, Content, Post)
 
 
@@ -200,6 +196,7 @@ class Extract(SQLAlchemyBaseModel):
     """
     An extracted part. A quotation to be referenced by an `Idea`.
     """
+    __metaclass__ = ValidateMeta
     __tablename__ = 'extract'
 
     id = Column(UUID, primary_key=True, info={'colanderalchemy': {
@@ -241,11 +238,3 @@ class Extract(SQLAlchemyBaseModel):
 
     def __repr__(self):
         return "<Extract %d '%s%'>" % (self.id, self.body[:20])
-
-# Similar to setup_schema(None, Extract)
-# raise Exception('Caca')
-# import pdb; pdb.set_trace()
-setup_schema(None, Extract)
-# setattr(SQLAlchemySchemaNode(Extract), __colanderalchemy__)#, overrides={
-        #     'id': UUIDSchema,
-        # })
