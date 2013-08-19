@@ -36,7 +36,7 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message){
          * The view's data
          * @type {Object}
          */
-        data: {},
+        data: { page: 1 },
 
         /**
          * The collapse/expand flag
