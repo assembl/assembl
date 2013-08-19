@@ -55,8 +55,9 @@ function(Backbone, _, $, app, Segment){
          * @param  {string} text
          * @return {Segment}
          */
-        addTextAsSegment: function(text){
+        addTextAsSegment: function(idPost, text){
             var data = {
+                    idPost: idPost,
                     text: text,
                     author: app.getCurrentUser()
                 };

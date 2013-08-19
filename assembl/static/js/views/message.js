@@ -79,6 +79,7 @@ function(Backbone, _, Moment, app, Message){
             app.selectionTooltip
               .show()
               .attr('data-segment', segment)
+              .attr('data-idPost', this.model.id)
               .text(text)
               .css({ top: y, left: x, 'margin-left': marginLeft });
         },
@@ -102,7 +103,10 @@ function(Backbone, _, Moment, app, Message){
          * CONTEXT MENU
          */
         contextMenuItem1: function(){
-            app.segmentList.addTextAsSegment( app.selectionTooltip.attr('data-segment') );
+            app.segmentList.addTextAsSegment(
+                app.selectionTooltip.attr('data-idPost'), 
+                app.selectionTooltip.attr('data-segment')
+            );
             app.openPanel(app.segmentList);
         },
 
