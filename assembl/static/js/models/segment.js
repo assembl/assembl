@@ -11,10 +11,10 @@ function(Backbone, app, moment, User){
          * @init
          */
         initialize: function(){
-            if( !this.id ){
-                this.id = app.createUUID();
-                this.attributes.id = this.id;
-            }
+            // if( !this.id ){
+            //     this.id = app.createUUID();
+            //     this.attributes.id = this.id;
+            // }
 
             if( !this.get('creationDate') ){
                 this.set( 'creationDate', app.getCurrentTime() );
