@@ -178,11 +178,7 @@ class User(SQLAlchemyBaseModel):
     username = Column(Unicode(20), unique=True)
     preferred_email = Column(Unicode(50))
     verified = Column(Boolean(), default=False)
-    password = Column(Binary(115), info={
-        'colanderalchemy': {
-            'typ': str
-        }
-    })
+    password = Column(Binary(115))
     timezone = Column(Time(True))
     last_login = Column(DateTime)
     login_failures = Column(Integer(4), default=0)
