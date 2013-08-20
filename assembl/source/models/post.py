@@ -17,6 +17,7 @@ from assembl.db import DBSession
 from assembl.source.models.generic import Content
 
 
+
 class Post(SQLAlchemyBaseModel):
     """
     A Post represents input into the broader discussion taking place on
@@ -39,19 +40,14 @@ class Post(SQLAlchemyBaseModel):
         backref=backref('parent', remote_side=[id])
     )
 
-    def get_descendants(self, include_self=True):
+    def get_descendants(self):
         ancestry_query_string = "%s%d,%%" % (self.ancestry or '', self.id)
 
-        filter = Post.ancestry.like(ancestry_query_string)
-        
-        if include_self:
-            filter = filter | (Post.id == self.id)
+        descendants = DBSession.query(Post).join(Content).filter(
+            Post.ancestry.like(ancestry_query_string)
+        ).order_by(Content.creation_date)
 
-        descendants = DBSession.query(Post).join(Content).filter(filter)
-
-        return descendants.order_by(Content.creation_date)
-
-        # return descendants
+        return descendants
 
     def set_ancestry(self, new_ancestry):
         descendants = self.get_descendants()
@@ -111,8 +107,9 @@ class Post(SQLAlchemyBaseModel):
         return ancestors
 
     def __repr__(self):
-        return "<Post %s '%s %s' >" % (
+        return "<Post %d '%s %d'>" % (
             self.id,
             self.content.type,
             self.content.id,
         )
+

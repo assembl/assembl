@@ -1,4 +1,5 @@
 from datetime import datetime
+
 from sqlalchemy.orm import relationship, backref, aliased
 from sqlalchemy.sql import func, cast, select
 
@@ -13,15 +14,16 @@ from sqlalchemy import (
     UnicodeText, 
     DateTime,
     ForeignKey,
-    desc
+    desc,
+    event,
 )
+
+from assembl.lib.utils import slugify
 
 from ..db import DBSession
 from ..lib.sqla import Base as SQLAlchemyBaseModel
-from ..lib.types import UUID, UUIDSchema
-from ..lib.models import ValidateMeta
+from ..lib.types import UUID
 from ..source.models import (Source, Content, Post)
-
 
 class Discussion(SQLAlchemyBaseModel):
     """
@@ -39,13 +41,13 @@ class Discussion(SQLAlchemyBaseModel):
     
     table_of_contents_id = Column(
         Integer,
-        ForeignKey('table_of_contents.id'),
-        nullable=False
+        ForeignKey('table_of_contents.id', ondelete="CASCADE"),
+        nullable=False,
     )
+
     table_of_contents = relationship(
         'TableOfContents', 
         uselist=False,
-        backref='discussion'
     )
 
     owner_id = Column(
@@ -58,16 +60,12 @@ class Discussion(SQLAlchemyBaseModel):
         'User',
         backref="discussions"
     )
-    
-    __mapper_args__ = {
-        'polymorphic_identity': 'discussion',
-    }
 
-    def posts(self, limit=15, offset=None, parent_id=None):
+    def posts(self, parent_id=None):
         """
-        Queries posts whose content comes from a source that belongs to this
-        topic. The result is a list of posts sorted by their youngest
-        descendent in descending order.
+        Returns an iterable query of posts whose content comes from a source
+        that belongs to this topic. The result is a list of posts sorted by
+        their youngest descendent in descending order.
         """
         lower_post = aliased(Post, name="lower_post")
         lower_content = aliased(Content, name="lower_content")
@@ -103,13 +101,7 @@ class Discussion(SQLAlchemyBaseModel):
                 upper_content.source_id==Source.id,
             )
 
-        if limit:
-            query = query.limit(limit)
-
-        if offset:
-            query = query.offset(offset)
-
-        return query.all()
+        return query
 
     def total_posts(self):
         return DBSession.query(Post).join(
@@ -120,16 +112,27 @@ class Discussion(SQLAlchemyBaseModel):
             Content.source_id==Source.id,
         ).count()
 
-    def import_from_sources(only_new=True):
+    def import_from_sources(self, only_new=True):
         for source in self.sources:
             source.import_content(only_new=only_new)
 
     def __init__(self, *args, **kwargs):
         super(Discussion, self).__init__(*args, **kwargs)
-        self.table_of_contents = TableOfContents()
+        self.table_of_contents = TableOfContents(discussion=self)
 
     def __repr__(self):
-        return "<Discussion '%s'>" % self.topic
+        return "<Discussion %s>" % repr(self.topic)
+
+
+def slugify_topic_if_slug_is_empty(discussion, topic, oldvalue, initiator):
+    """
+    if the target doesn't have a slug, slugify the topic and use that.
+    """
+    if not discussion.slug:
+        discussion.slug = slugify(topic)
+
+
+event.listen(Discussion.topic, 'set', slugify_topic_if_slug_is_empty)
 
 
 class TableOfContents(SQLAlchemyBaseModel):
@@ -144,8 +147,13 @@ class TableOfContents(SQLAlchemyBaseModel):
     id = Column(Integer, primary_key=True)
     creation_date = Column(DateTime, nullable=False, default=datetime.utcnow)
 
+    discussion = relationship(
+        'Discussion',
+        uselist=False
+    )
+
     def __repr__(self):
-        return "<TableOfContents '%s'>" % self.discussion.topic
+        return "<TableOfContents %s>" % repr(self.discussion.topic)
 
 idea_association_table = Table(
     'idea_association',
@@ -172,6 +180,7 @@ class Idea(SQLAlchemyBaseModel):
         ForeignKey('table_of_contents.id'),
         nullable=False
     )
+
     table_of_contents = relationship(
         'TableOfContents',
         backref='ideas',
@@ -185,9 +194,23 @@ class Idea(SQLAlchemyBaseModel):
         secondaryjoin=id==idea_association_table.c.child_id,
     )
 
+    def serializable(self):
+        return {
+            'id': self.id,
+            'shortTitle': self.short_title,
+            'longTitle': self.long_title,
+            'creationDate': self.creation_date.isoformat(),
+            'order': self.order,
+            'active': False,
+            'featured': False,
+            'parentId': self.parents[0].id if self.parents else None,
+            'inSynthesis': False,
+            'total': len(self.children),
+        }
+
     def __repr__(self):
         if self.short_title:
-            return "<Idea %d '%s'>" % (self.id, self.short_title)
+            return "<Idea %d %s>" % (self.id, repr(self.short_title))
 
         return "<Idea %d>" % self.id
 
@@ -196,25 +219,14 @@ class Extract(SQLAlchemyBaseModel):
     """
     An extracted part. A quotation to be referenced by an `Idea`.
     """
-    __metaclass__ = ValidateMeta
     __tablename__ = 'extract'
 
-    id = Column(UUID, primary_key=True, info={'colanderalchemy': {
-        'typ': UUIDSchema,
-    }})
-    creation_date = Column(
-        DateTime,
-        nullable=False,
-        default=datetime.utcnow,
-        info={
-            'colanderalchembuy': {
-                'name': 'creationDate',
-            }
-        })
+    id = Column(Integer, primary_key=True)
+    creation_date = Column(DateTime, nullable=False, default=datetime.utcnow)
     order = Column(Float, nullable=False, default=0.0)
     body = Column(UnicodeText, nullable=False)
 
-    source_id = Column(Integer, ForeignKey('content.id'))
+    source_id = Column(Integer, ForeignKey('content.id'), nullable=False)
     source = relationship(Content, backref='extracts')
 
     idea_id = Column(Integer, ForeignKey('idea.id'), nullable=True)
@@ -223,6 +235,7 @@ class Extract(SQLAlchemyBaseModel):
     creator_id = Column(
         Integer,
         ForeignKey('user.id'),
+        nullable=False,
     )
 
     creator = relationship(
@@ -230,11 +243,25 @@ class Extract(SQLAlchemyBaseModel):
 
     owner_id = Column(
         Integer,
-        ForeignKey('user.id')
+        ForeignKey('user.id'),
+        nullable=False,
     )
 
     owner = relationship(
         'User', foreign_keys=[owner_id], backref='extracts_owned')
 
+    def serializable(self):
+        return {
+            'id': self.id,
+            'text': self.body,
+            'idPost': self.source.post.id,
+            'idIdea': self.idea_id,
+            'creationDate': self.creation_date.isoformat(),
+            'author': {
+                'name': self.source.sender,
+                'avatarUrl': ''
+            }
+        }
+
     def __repr__(self):
-        return "<Extract %d '%s%'>" % (self.id, self.body[:20])
+        return "<Extract %d %s>" % (self.id, repr(self.body[:20]))

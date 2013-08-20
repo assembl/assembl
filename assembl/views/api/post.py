@@ -13,7 +13,7 @@ from assembl.views.api import API_PREFIX
 from assembl.db import DBSession
 
 from assembl.source.models import Post
-from assembl.synthesis.models import Discussion, Source
+from assembl.synthesis.models import Discussion, Source, Content
 
 
 POST_ACL = [
@@ -58,9 +58,9 @@ def get_posts(request):
     if not discussion:
         raise HTTPNotFound(_("No discussion found with id=%s" % discussion_id))
 
-    DEFAULT_PAGE_SIZE = 50
+    DEFAULT_PAGE_SIZE = 25
     page_size = DEFAULT_PAGE_SIZE
-    discussion_id
+
     try:
         page = int(request.GET.getone('page'))
     except (ValueError, KeyError):
@@ -73,22 +73,14 @@ def get_posts(request):
         root_post_id = int(request.GET.getone('root_post_id'))
     except (ValueError, KeyError):
         root_post_id = None
-    
-    if root_post_id:
-        root = DBSession.query(Post).get(root_post_id)
-        if not root:
-            raise HTTPNotFound(_("No Post found with id=%d" % root_post_id))
-        base_query = root.get_descendants(include_self=True)
-    else:
-        base_query = DBSession.query(Post)
 
     data = {}
     data["page"] = page
 
     #Rename "inbox" to "unread", the number of unread messages for the current user.
-    data["inbox"] = 666
+    data["inbox"] = discussion.total_posts()
     #What is "total", the total messages in the current context?
-    data["total"] = base_query.count()
+    data["total"] = discussion.total_posts()
     data["maxPage"] = max(1, ceil(float(data["total"])/page_size))
     #TODO:  Check if we want 1 based index in the api
     data["startIndex"] = (page_size * page) - (page_size-1)
@@ -100,9 +92,20 @@ def get_posts(request):
         data["endIndex"] = data["startIndex"] + (page_size-1)
         
     post_data = []
-    query = base_query.limit(page_size).offset(data["startIndex"]-1)
-    for post in query:
+
+    if root_post_id: 
+        post_data.append(
+            __post_to_json_structure(DBSession.query(Post).get(root_post_id))
+        )
+
+    posts = discussion.posts(parent_id=root_post_id)
+    posts = posts.limit(page_size).offset(data['startIndex']-1)
+
+    for post in posts:
         post_data.append(__post_to_json_structure(post))
+
+        for descendant in post.get_descendants():
+            post_data.append(__post_to_json_structure(descendant))
     data["posts"] = post_data
 
     return data
@@ -117,4 +120,3 @@ def create_post(request):
         raise HTTPUnauthorized()
     data = json.loads(request.body)
     return data
-

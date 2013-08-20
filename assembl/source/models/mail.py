@@ -1,4 +1,6 @@
 import email
+import re
+
 from email.header import decode_header as decode_email_header
 from datetime import datetime
 from time import mktime
@@ -14,7 +16,8 @@ from sqlalchemy import (
     Unicode,
     UnicodeText,
     DateTime,
-    Boolean
+    Boolean,
+    or_
 )
 
 from assembl.source.models.generic import Source, Content
@@ -49,9 +52,9 @@ class Mailbox(Source):
 
     def import_content(self, only_new=True):
         if self.use_ssl:
-            mailbox = IMAP4_SSL(host=self.host, port=self.port)
+            mailbox = IMAP4_SSL(host=self.host.encode('utf-8'), port=self.port)
         else:
-            mailbox = IMAP4(host=self.host, port=self.port)
+            mailbox = IMAP4(host=self.host.encode('utf-8'), port=self.port)
         if 'STARTTLS' in mailbox.capabilities:
             #Always use starttls if server supports it
             mailbox.starttls()
@@ -146,7 +149,7 @@ class Mailbox(Source):
         self.last_import = datetime.utcnow()
 
     def __repr__(self):
-        return "<Mailbox '%s'>" % self.name
+        return "<Mailbox %s>" % repr(self.name)
 
 
 class Email(Content):
@@ -189,8 +192,16 @@ class Email(Content):
         # email's post's id as the parent of this new post.
 
         if self.in_reply_to:
-            parent_email = DBSession.query(Email).filter_by(
-                message_id=self.in_reply_to,
+            parent_email_message_id = {
+                'original': self.in_reply_to,
+                'cleaned': re.search(r'<(.*)>', self.in_reply_to).group(0)
+            }
+
+            parent_email = DBSession.query(Email).filter(
+                or_(
+                    Email.message_id==parent_email_message_id['original'],
+                    Email.message_id==parent_email_message_id['cleaned']
+                )
             ).first()
 
             if parent_email: 

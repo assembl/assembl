@@ -48,7 +48,7 @@ class Source(SQLAlchemyBaseModel):
     }
 
     def __repr__(self):
-        return "<Source '%s'>" % self.name
+        return "<Source %s>" % repr(self.name)
 
 
 class Content(SQLAlchemyBaseModel):
@@ -82,4 +82,4 @@ class Content(SQLAlchemyBaseModel):
         self.post = self.post or Post(content=self)
 
     def __repr__(self):
-        return "<Content '%s'>" % self.type
+        return "<Content %s>" % repr(self.type)

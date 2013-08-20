@@ -1,56 +1,107 @@
 import os
 import json
+import transaction
 
 from cornice import Service
+
 from pyramid.view import view_config
 from pyramid.httpexceptions import HTTPNotFound
 from pyramid.i18n import TranslationString as _
-from colander import Invalid
+from pyramid.security import authenticated_userid
+
 from assembl.views.api import FIXTURE_DIR, API_PREFIX
-from assembl.synthesis.models import Extract
 from assembl.db import DBSession
+from assembl.synthesis.models import Extract
 
-extracts = Service(name='extracts', path=API_PREFIX + '/extracts',
-                 description="An extract from Content that is an expression of an Idea",
-                 renderer='json')
-extract = Service(name='extract', path=API_PREFIX + '/extracts/{id}',
-                 description="Manipulate a single extract")
+extracts = Service(
+    name='extracts', 
+    path=API_PREFIX + '/extracts',
+    description="An extract from Content that is an expression of an Idea",
+    renderer='json'
+)
 
-@extracts.get()
+extract = Service(
+    name='extract', 
+    path=API_PREFIX + '/extracts/{id}',
+    description="Manipulate a single extract"
+)
+
+@extract.get()
 def get_extract(request):
-    id = request.matchdict['id']
-    return {'id': id, 'text': 'from server'}
+    extract_id = request.matchdict['id']
+    extract = DBSession.query(Extract).get(extract_id)
+
+    return extract.serializable()
 
 
 @extracts.get()
 def get_extracts(request):
-    # path = os.path.join(FIXTURE_DIR, 'segments.json')
-    # f = open(path)
-    # data = json.loads(f.read())
-    # f.close()
+    user_id = authenticated_userid(request)
 
-    query = DBSession.query(Extract)
-    ca = Extract.__ca__
-    return [ca.serialize(ca.dictify(x)) for x in query]
+    extracts = DBSession.query(Extract).filter_by(
+        owner_id=user_id
+    ).order_by(Extract.order.desc())
+
+    serializable_extracts = [
+        extract.serializable() for extract in extracts
+    ]
+
+    return serializable_extracts
 
 
-# @extract.put(validator=Extract.__colanderalchemy__)
+@extracts.post()
+def post_extract(request):
+    """
+    Create a new extract.
+    """
+    extract_data = json.loads(request.body)
+    user_id = authenticated_userid(request)
+
+    with transaction.manager:
+        new_extract = Extract(
+            creator_id = user_id,
+            owner_id = user_id,
+            body = extract_data.get('text', '').decode('utf-8'),
+            source_id = extract_data.get('idPost')
+        )
+
+        DBSession.add(new_extract)
+
+    new_extract = DBSession.merge(new_extract)
+
+    return { 'ok': True, 'id': new_extract.id }
+
+
 @extract.put()
-def save_extract(request):
-    """ The client decides the id here, 
-    must handle the case where the object does and does not exist"""
-    data = json.loads(request.body)
-    ca = Extract.__ca__
-    try:
-        data = ca.deserialize(data)
-    except Invalid, e:
-        return e.asdict()
-    else:
-        return data
+def put_extract(request):
+    """
+    Updating an Extract
+    """
+    extract_id = request.matchdict['id']
+    user_id = authenticated_userid(request)
+
+    updated_extract_data = json.loads(request.body)
+    extract = DBSession.query(Extract).get(extract_id)
+    
+    with transaction.manager:
+        extract.owner_id = user_id or extract.owner_id
+        extract.order = updated_extract_data.get('order', extract.order)
+        extract.idea_id = updated_extract_data['idIdea']
+
+        DBSession.add(extract)
+
+    return { 'ok': True }
 
 
 @extract.delete()
 def delete_extract(request):
-    #data = json.loads(request.body)
+    extract_id = request.matchdict['id']
+    extract = DBSession.query(Extract).get(extract_id)
 
-    return {'ok': True}
+    if not extract:
+        return { 'ok': False }
+
+    with transaction.manager:
+        DBSession.delete(extract)
+
+    return { 'ok': True }
