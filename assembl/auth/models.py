@@ -342,7 +342,7 @@ class ActionOnPost(Action):
     )
 
     post = relationship(
-        "Post",
+        'Post',
         backref=backref('views')
     )
 
@@ -404,3 +404,4 @@ class Collapse(ActionOnPost):
     )
 
     verb = 'collapseed'
+

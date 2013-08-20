@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import uuid
 import json
 import transaction
 from assembl.tests.base import BaseTest
@@ -54,17 +55,30 @@ class ApiTest(BaseTest):
             "id": "38ebdaac-c0f0-408e-8904-7f343851fc61"
         }
 
+        ext = Extract(
+            id=uuid.UUID('38ebdaac-c0f0-408e-8904-7f343851fc61'),
+            order=0.0,
+            body='asd',
+            source_id='1',
+        )
+        self.session.add(ext)
+
         url = self.get_url(self.discussion, 'extracts')
-        extracts = json.loads(
-            self.app.get(url).body)
+        res = self.app.get(url, json.dumps(extract_data))
+        self.assertEqual(res.status_code, 200)
+        extracts = json.loads(res.body)
         self.assertEquals(len(extracts), 0)
 
         url = self.get_url(self.discussion, 'extracts/%s' % extract_id)
         res = self.app.put(url, json.dumps(extract_data))
         self.assertEqual(res.status_code, 200)
+        res_data = json.loads(res.body)
 
-        query = self.session.query(Extract)
-        self.assertEqual(query.count(), 1)
+        url = self.get_url(self.discussion, 'extracts')
+        res = self.app.get(url, json.dumps(extract_data))
+        self.assertEqual(res.status_code, 200)
+        extracts = json.loads(res.body)
+        self.assertEquals(len(extracts), 1)
 
         obj = query.first()
         self.assertEqual(obj.id, extract_id)

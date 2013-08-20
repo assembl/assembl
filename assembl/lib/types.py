@@ -1,7 +1,16 @@
 from sqlalchemy import types
 from sqlalchemy.databases import postgresql
 from sqlalchemy.schema import Column
+from colander import SchemaType, null, Invalid
+from colander.compat import (
+    text_,
+    text_type,
+    )
+import translationstring
 import uuid
+
+
+_ = translationstring.TranslationStringFactory('colander')
 
 
 class UUID(types.TypeDecorator):
@@ -28,3 +37,47 @@ class UUID(types.TypeDecorator):
 
     def is_mutable(self):
         return False
+
+
+class UUIDSchema(SchemaType):
+    def __init__(self, encoding=None):
+        self.encoding = encoding
+
+    def serialize(self, node, appstruct):
+        if appstruct in (null, None):
+            return null
+
+        try:
+            if isinstance(appstruct, (text_type, bytes)):
+                encoding = self.encoding
+                if encoding:
+                    result = text_(appstruct, encoding).encode(encoding)
+                else:
+                    result = text_type(appstruct)
+            else:
+                result = text_type(appstruct)
+            return result
+        except Exception as e:
+            raise Invalid(node,
+                          _('${val} cannot be serialized: ${err}',
+                            mapping={'val':appstruct, 'err':e})
+                          )
+    def deserialize(self, node, cstruct):
+        if not cstruct:
+            return null
+
+        try:
+            result = cstruct
+            if isinstance(result, (text_type, bytes)):
+                if self.encoding:
+                    result = text_(cstruct, self.encoding)
+                else:
+                    result = text_type(cstruct)
+            else:
+                result = text_type(cstruct)
+        except Exception as e:
+            raise Invalid(node,
+                          _('${val} is not a string: ${err}',
+                            mapping={'val':cstruct, 'err':e}))
+
+        return result
