@@ -73,7 +73,6 @@ class ApiTest(BaseTest):
         res = self.app.put(url, json.dumps(extract_data))
         self.assertEqual(res.status_code, 200)
         res_data = json.loads(res.body)
-        import bpdb; bpdb.set_trace()
 
         url = self.get_url(self.discussion, 'extracts')
         res = self.app.get(url, json.dumps(extract_data))

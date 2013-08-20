@@ -41,7 +41,6 @@ def save_extract(request):
     must handle the case where the object does and does not exist"""
     data = json.loads(request.body)
     ca = Extract.__ca__
-    import bpdb; bpdb.set_trace()
     try:
         data = ca.deserialize(data)
     except Invalid, e:

@@ -48,7 +48,7 @@ class ValidationTest(TestCase):
         )
         class SampleModel(SQLAlchemyBaseModel):
             __metaclass__ = ValidateMeta
-            __tablename__ = 'sample'
+            __tablename__ = 'sample_2'
             __ca_field_overrides__ = {
                 'topic': {
                     'name': 'the_topic',
