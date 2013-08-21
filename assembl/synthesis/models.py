@@ -49,11 +49,6 @@ class Discussion(SQLAlchemyBaseModel):
         uselist=False,
     )
 
-    synthesis_id = Column(
-        Integer, 
-        ForeignKey('synthesis.id', ondelete="CASCADE")
-    )
-
     synthesis = relationship('Synthesis', uselist=False)
 
     owner_id = Column(
@@ -177,7 +172,13 @@ class Synthesis(SQLAlchemyBaseModel):
     introduction = Column(UnicodeText)
     conclusion = Column(UnicodeText)
 
-    discussion = relationship('Discussion', uselist=False)
+    discussion_id = Column(
+        Integer,
+        ForeignKey('discussion.id', ondelete="CASCADE"),
+        nullable=False
+    )
+
+    discussion = relationship('Discussion')
 
     def __repr__(self):
         return "<Synthesis %s>" % repr(self.subject)
