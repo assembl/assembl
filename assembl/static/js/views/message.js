@@ -2,7 +2,7 @@ define(['backbone', 'underscore', 'moment', 'app', 'models/message'],
 function(Backbone, _, Moment, app, Message){
     'use strict';
 
-    var MIN_TEXT_TO_TOOLTIP = 17,
+    var MIN_TEXT_TO_TOOLTIP = 5,
         TOOLTIP_TEXT_LENGTH = 10;
 
     /**
