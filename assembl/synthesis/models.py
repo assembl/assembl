@@ -180,6 +180,19 @@ class Synthesis(SQLAlchemyBaseModel):
 
     discussion = relationship('Discussion')
 
+    def serializable(self):
+        return {
+            "id": self.id,
+            "creation_date": self.creation_date.isoformat(),
+            "publication_date": self.publication_date.isoformat() \
+                if self.publication_date \
+                else None,
+            "subject": self.subject,
+            "introduction": self.introduction,
+            "conclusion": self.conclusion,
+            "discussion_id": self.discussion.id,
+        }
+
     def __repr__(self):
         return "<Synthesis %s>" % repr(self.subject)
 
