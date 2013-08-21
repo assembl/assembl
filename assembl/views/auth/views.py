@@ -54,11 +54,14 @@ def logout(request):
     request_method='GET', http_cache=60,
     renderer='assembl:templates/login.jinja2',
 )
-@view_config(
-    renderer='assembl:templates/login.jinja2',
-    context='pyramid.exceptions.Forbidden',
-    permission=NO_PERMISSION_REQUIRED
-)
+#The following was executed when calls to the frontend api calls were 
+#made.  I don't know how to avoid this registration of the api paths.
+#It returns a 200 status code which breaks the API
+#@view_config(
+#    renderer='assembl:templates/login.jinja2',
+#    context='pyramid.exceptions.Forbidden',
+#    permission=NO_PERMISSION_REQUIRED
+#)
 def login_view(request):
     # TODO: In case of forbidden, get the URL and pass it along.
     return dict(default_context, **{
@@ -121,7 +124,6 @@ def assembl_profile(request):
         redirect = False
         username = request.params.get('username', '').strip()
         if username:
-            print username
             # check if exists
             if DBSession.query(User).filter_by(username=username).count():
                 errors.append(_('The username %s is already used') % (username,))

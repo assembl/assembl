@@ -1,11 +1,10 @@
 import logging
 import sys
 from nose.plugins import Plugin
-from assembl.lib.migration import bootstrap_db
 from sqlalchemy import engine_from_config
 from sqlalchemy.orm import scoped_session, sessionmaker
 from pyramid.paster import get_appsettings
-
+from assembl.lib.migration import bootstrap_db
 
 log = logging.getLogger('nose.plugins.assembl')
 
