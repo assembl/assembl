@@ -16,7 +16,7 @@ import transaction
 
 
 from assembl import models as m
-from assembl.lib import config
+from assembl.lib import config, types
 
 db = m.DBSession
 
