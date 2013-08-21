@@ -48,6 +48,9 @@ function(Backbone, _, $, app, Synthesis, SynthesisIdeaView){
          * @return {SynthesisPanel}
          */
         render: function(){
+            // Cleaning all previous listeners
+            app.off('synthesisPanel:close');
+
             var list = document.createDocumentFragment(),
                 data = { collapsed: this.collapsed, title: this.model.get('title') },
                 ideas = this.ideas.where({inSynthesis: true});
@@ -64,6 +67,7 @@ function(Backbone, _, $, app, Synthesis, SynthesisIdeaView){
         },
 
         events: {
+            'blur #synthesisPanel-title': 'onTitleBlur',
             'click #synthesisPanel-closeButton': 'closePanel',
             'click #synthesisPanel-publishButton': 'publish'
         },
@@ -76,12 +80,22 @@ function(Backbone, _, $, app, Synthesis, SynthesisIdeaView){
         },
 
         /**
+         * 
+         */
+        onTitleBlur: function(ev){
+            var title = app.stripHtml(ev.currentTarget.innerHTML);
+            this.model.set('title', title);
+        },
+
+        /**
          * Closes the panel
          */
         closePanel: function(){
             if(this.button){
                 this.button.trigger('click');
             }
+
+            app.trigger('synthesisPanel:close');
         },
 
         /**

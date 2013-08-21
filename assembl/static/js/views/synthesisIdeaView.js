@@ -37,6 +37,10 @@ function(Backbone, _, $, Idea, Segment, app, ckeditor){
             }
 
             this.model.on('change:shortTitle change:longTitle change:inSynthesis change:editing', this.render, this);
+            var that = this;
+            app.on('synthesisPanel:close', function(){
+                that.cancelEdition();
+            });
         },
 
         /**
@@ -137,7 +141,9 @@ function(Backbone, _, $, Idea, Segment, app, ckeditor){
          * @event
          */
         changeToEditMode: function(ev){
-            ev.stopPropagation();
+            if( ev ) {
+                ev.stopPropagation();
+            }
             this.model.set('editing', true);
 
             this.ckInstance = ckeditor.replace( this.$('.idealist-contenteditable')[0], CKEDITOR_CONFIG );
@@ -148,7 +154,9 @@ function(Backbone, _, $, Idea, Segment, app, ckeditor){
          * @event
          */
         cancelEdition: function(ev){
-            ev.stopPropagation();
+            if( ev ){
+                ev.stopPropagation();
+            }
             
             var longTitle = this.model.get('longTitle');
             this.ckInstance.setData(longTitle);
@@ -161,7 +169,9 @@ function(Backbone, _, $, Idea, Segment, app, ckeditor){
          * @event
          */
         saveEdition: function(ev){
-            ev.stopPropagation();
+            if( ev ){
+                ev.stopPropagation();
+            }
 
             var data = this.ckInstance.getData();
             this.model.set({ 'longTitle': data, 'editing': false });
