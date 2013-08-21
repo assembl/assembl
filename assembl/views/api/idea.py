@@ -88,6 +88,12 @@ def save_idea(request):
             parent = DBSession.query(Idea).get(idea_data['parentId'])
             idea.parents.append(parent)
 
+
+        if idea_data['inSynthesis']:
+            idea.synthesis = discussion.synthesis
+
+        else: idea.synthesis = None
+
         DBSession.add(idea)
 
     idea = DBSession.merge(idea)
