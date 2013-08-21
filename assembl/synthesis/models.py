@@ -65,8 +65,8 @@ class Discussion(SQLAlchemyBaseModel):
     def posts(self, parent_id=None):
         """
         Returns an iterable query of posts whose content comes from a source
-        that belongs to this topic. The result is a list of posts sorted by
-        their youngest descendent in descending order.
+        that belongs to this discussion. The result is a list of posts sorted
+        by their youngest descendent in descending order.
         """
         lower_post = aliased(Post, name="lower_post")
         lower_content = aliased(Content, name="lower_content")
