@@ -23,4 +23,5 @@ from .synthesis.models import (
     TableOfContents,
     Idea,
     Extract,
+    Synthesis,
     )

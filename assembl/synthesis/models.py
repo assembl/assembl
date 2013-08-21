@@ -22,7 +22,6 @@ from assembl.lib.utils import slugify
 
 from ..db import DBSession
 from ..lib.sqla import Base as SQLAlchemyBaseModel
-from ..lib.types import UUID
 from ..source.models import (Source, Content, Post)
 
 class Discussion(SQLAlchemyBaseModel):
@@ -49,6 +48,13 @@ class Discussion(SQLAlchemyBaseModel):
         'TableOfContents', 
         uselist=False,
     )
+
+    synthesis_id = Column(
+        Integer, 
+        ForeignKey('synthesis.id', ondelete="CASCADE")
+    )
+
+    synthesis = relationship('Synthesis', uselist=False)
 
     owner_id = Column(
         Integer,
@@ -119,6 +125,7 @@ class Discussion(SQLAlchemyBaseModel):
     def __init__(self, *args, **kwargs):
         super(Discussion, self).__init__(*args, **kwargs)
         self.table_of_contents = TableOfContents(discussion=self)
+        self.synthesis = Synthesis(discussion=self)
 
     def __repr__(self):
         return "<Discussion %s>" % repr(self.topic)
@@ -154,6 +161,27 @@ class TableOfContents(SQLAlchemyBaseModel):
 
     def __repr__(self):
         return "<TableOfContents %s>" % repr(self.discussion.topic)
+
+
+class Synthesis(SQLAlchemyBaseModel):
+    """
+    A synthesis of the discussion.
+    """
+    __tablename__ = "synthesis"
+
+    id = Column(Integer, primary_key=True)
+    creation_date = Column(DateTime, nullable=False, default=datetime.utcnow)
+    publication_date = Column(DateTime, default=datetime.now)
+
+    subject = Column(Unicode(255))
+    introduction = Column(UnicodeText)
+    conclusion = Column(UnicodeText)
+
+    discussion = relationship('Discussion', uselist=False)
+
+    def __repr__(self):
+        return "<Synthesis %s>" % repr(self.subject)
+
 
 idea_association_table = Table(
     'idea_association',
@@ -193,6 +221,13 @@ class Idea(SQLAlchemyBaseModel):
         primaryjoin=id==idea_association_table.c.parent_id,
         secondaryjoin=id==idea_association_table.c.child_id,
     )
+
+    synthesis_id = Column(
+        Integer,
+        ForeignKey('synthesis.id'),
+    )
+
+    synthesis = relationship('Synthesis', backref='ideas')
 
     def serializable(self):
         return {
