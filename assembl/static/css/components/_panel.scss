@@ -75,6 +75,30 @@
     }
 }
 
+// dropzone above the panel-body
+// -------
+.panel-bodyabove {
+    @include z-index("float");
+
+    position: absolute;
+    top: $panel-header-height;
+    right: 0;
+    left: 0;
+    height: 10px;
+}
+
+// dropzone below the panel-body
+// -------
+.panel-bodybelow {
+    @include z-index("float");
+
+    position: absolute;
+    bottom: $panel-header-height;
+    right: 0;
+    left: 0;
+    height: 15px;
+}
+
 // The footer
 // ----------
 .panel-footer {
