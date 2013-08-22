@@ -2,7 +2,10 @@
 
 <div class="message-header">
     <div class="float-left">
-        <a class="iconbutton icon-right-dir"> </a>
+        <% for( var i=1; i<level; i+= 1) { %>
+            <span class="message-bar"></span>
+        <% } %>
+        <a class="iconbutton icon-right-dir"></a>
         <img src="<%= app.formatAvatarUrl(avatarUrl, 32) %>" alt="{{ gettext('User') }}"  class="image-rounded" width="32" height="32" />
     </div>
 
@@ -18,10 +21,16 @@
 
 <div>
     <div class="media">
-    <div class="media-imgleft">
+        
+        <% for( var i=1; i<level; i+= 1) { %>
+            <span class="message-bar message-bar--100vertical" data-bar-level="<%= i %>"></span>
+        <% } %>
+
+        <div class="media-imgleft">
             <a class="iconbutton icon-down-dir"> </a>
             <img src="<%= app.formatAvatarUrl(avatarUrl) %>" alt="{{ gettext('User') }}"  class="image-rounded" />
         </div>
+
         <div class="media-body">
             <div class="media-title">
                 {% set userName = "<%= authorName %>" %}

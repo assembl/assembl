@@ -46,6 +46,8 @@ function(Backbone, _, Moment, app, Message){
             var data = this.model.toJSON();
 
             data['date'] = app.formatDate(data.date);
+            data['level'] = this.model.getLevel();
+            this.el.setAttribute('data-message-level', data['level']);
 
             if( data.collapsed ){
                 this.$el.addClass('message--collapsed');
