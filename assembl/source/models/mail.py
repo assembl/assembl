@@ -1,7 +1,13 @@
 import email
 import re
+import smtplib
 
-from email.header import decode_header as decode_email_header
+from email.header import decode_header as decode_email_header, Header
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+
+from pyramid.threadlocal import get_current_registry
+
 from datetime import datetime
 from time import mktime
 from imaplib2 import IMAP4_SSL, IMAP4
@@ -221,8 +227,64 @@ class Email(Content):
     def reply(self, sender, response_body):
         """
         Send a response to this email.
+
+        `sender` is a user instance.
+        `response` is a string.
         """
-        return None
+
+        sent_from = ' '.join([
+            "%(sender_name)s on Assembl" % {
+                "sender_name": sender.display_name()
+            }, 
+            "<%(sender_email)s>" % {
+                "sender_email": sender.get_preferred_email(),
+            }
+        ])
+
+        if type(response_body) == 'str':
+            response_body = response_body.decode('utf-8')
+
+        recipients = self.recipients
+
+        message = MIMEMultipart('alternative')
+        message['Subject'] = Header(self.subject, 'utf-8')
+        message['From'] = sent_from
+
+        message['To'] = self.recipients
+        message.add_header('In-Reply-To', self.message_id)
+
+        plain_text_body = response_body
+        html_body = response_body
+
+        # TODO: The plain text and html parts of the email should be different,
+        # but we'll see what we can get from the front-end.
+
+        plain_text_part = MIMEText(
+            plain_text_body.encode('utf-8'),
+            'plain',
+            'utf-8'
+        )
+
+        html_part = MIMEText(
+            html_body.encode('utf-8'),
+            'html',
+            'utf-8'
+        )
+
+        message.attach(plain_text_part)
+        message.attach(html_part)
+
+        smtp_connection = smtplib.SMTP(
+            get_current_registry().settings['mail.host']
+        )
+
+        smtp_connection.sendmail(
+            sent_from, 
+            recipients,
+            message.as_string()
+        )
+
+        smtp_connection.quit()
 
     def __repr__(self):
         return "<Email '%s to %s'>" % (
