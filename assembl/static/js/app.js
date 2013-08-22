@@ -339,6 +339,15 @@ function($, _, ckeditor, User, Moment){
         },
 
         /**
+         * Formats a plain text message to html
+         * @param  {string} str
+         * @return {string} The text formatted with HTML
+         */
+        formatMessageToDisplay: function(str){
+            return str.trim().replace(/(\n)/gi, '<br />');;
+        },
+
+        /**
          * Shows the context menu given the options
          * @param {Number} x 
          * @param {Number} y 
