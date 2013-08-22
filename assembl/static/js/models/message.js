@@ -10,6 +10,7 @@ define(['backbone', 'zepto', 'app'], function(Backbone, $, app){
          */
         initialize: function(){
             this.on('change:read', this.onAttrChange, this);
+            this.on('change:collapsed', this.render, this);
         },
 
         /**

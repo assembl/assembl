@@ -69,6 +69,10 @@
         
         <div class="panel-header">
             <a id="messagelist-returnButton" class="link text-bold">{{ gettext('Return') }}</a>
+
+            <div class="float-right">
+                <a id="messageList-message-collapseButton" class="iconbutton <%= threadCollapsed ? 'icon-download-1' : 'icon-upload' %>"></a>
+            </div>
         </div>
 
         <div id="messagelist-thread" class="panel-body boxlist">

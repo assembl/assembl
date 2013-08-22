@@ -48,6 +48,12 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message){
         collapsed: true,
 
         /**
+         * The message collapse/expand flag
+         * @type {Boolean}
+         */
+        threadCollapsed: true,
+
+        /**
          * The collection
          * @type {MessageCollection}
          */
@@ -79,7 +85,8 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message){
                 total: this.data.total,
                 startIndex: this.data.startIndex,
                 endIndex: this.data.endIndex,
-                collapsed: this.collapsed
+                collapsed: this.collapsed,
+                threadCollapsed: this.threadCollapsed
             };
 
             this.$el.html( this.template(data) );
@@ -103,6 +110,7 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message){
             });
 
             this.$('#messagelist-thread').empty().append(list);
+            this.collapseThreadMessages();
         },
 
         /**
@@ -203,6 +211,36 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message){
         },
 
         /**
+         * Expand All messages of the open thread
+         */
+        expandThreadMessages: function(){
+            this.messageThread.each(function(message){
+                message.set('collapsed', false);
+            });
+
+            this.threadCollapsed = false;
+
+            this.$('#messageList-message-collapseButton')
+                .removeClass('icon-download-1')
+                .addClass('icon-upload');
+        },
+
+        /**
+         * Collapse All messages of the open thread
+         */
+        collapseThreadMessages: function(){
+            this.messageThread.each(function(message){
+                message.set('collapsed', true);
+            });
+
+            this.threadCollapsed = true;
+
+            this.$('#messageList-message-collapseButton')
+                .removeClass('icon-upload')
+                .addClass('icon-download-1');
+        },
+
+        /**
          * Open the message thread by the given id
          * @param  {String} id
          */
@@ -239,6 +277,8 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message){
             'click #messageList-collapseButton': 'toggleMessages',
             'click #messagelist-returnButton': 'onReturnButtonClick',
 
+            'click #messageList-message-collapseButton': 'toggleThreadMessages',
+
             'click #messageList-prevButton': 'loadPreviousData',
             'click #messageList-nextButton': 'loadNextData',
 
@@ -261,13 +301,24 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message){
         },
 
         /**
-         * Collapse or expand the ideas
+         * Collapse or expand the messages
          */
         toggleMessages: function(){
             if( this.collapsed ){
                 this.expandMessages();
             } else {
                 this.collapseMessages();
+            }
+        },
+
+        /**
+         * Collapse or expand the messages of the open thread
+         */
+        toggleThreadMessages: function(){
+            if( this.threadCollapsed ){
+                this.expandThreadMessages();
+            } else {
+                this.collapseThreadMessages();
             }
         },
 
