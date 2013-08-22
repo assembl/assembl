@@ -344,7 +344,7 @@ function($, _, ckeditor, User, Moment){
          * @return {string} The text formatted with HTML
          */
         formatMessageToDisplay: function(str){
-            return str.trim().replace(/(\n)/gi, '<br />');;
+            return str.trim().replace(/(\n)/gi, '<br />');
         },
 
         /**
@@ -415,7 +415,7 @@ function($, _, ckeditor, User, Moment){
                 app.closePanel(app.ideaPanel);
             }
 
-            app.ideaPanel.setCurrentIdea(idea);
+            app.trigger('idea:select', [idea]);
         },
 
         /**

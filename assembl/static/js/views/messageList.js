@@ -21,6 +21,11 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message){
 
             this.messages.on('reset', this.render, this);
             this.messageThread.on('reset', this.renderThread, this);
+
+            var that = this;
+            app.on('idea:select', function(idea){
+                that.loadData(idea.get('id'));
+            });
         },
 
         /**
@@ -39,7 +44,7 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message){
          * The view's data
          * @type {Object}
          */
-        data: { page: 1 },
+        data: { page: 1, rootPostID: 0 },
 
         /**
          * The collapse/expand flag
@@ -129,10 +134,18 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message){
 
         /**
          * Load the data
+         * @param {number} [rootPostID=null]
          */
-        loadData: function(){
+        loadData: function(rootPostID){
+            if( rootPostID !== undefined ){
+                this.data.rootPostID = rootPostID;
+            }
+
             var that = this,
-                data = { 'page': this.data.page };
+                data = {
+                    'page': this.data.page,
+                    'root_post_id': this.data.rootPostID
+                };
 
             this.blockPanel();
             this.collapsed = true;
