@@ -115,7 +115,7 @@ def get_posts(request):
     return data
 
 
-@posts.post(permission='write')
+@posts.post()
 def create_post(request):
     """
     We use post, not put, because we don't know the id of the post
