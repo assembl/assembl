@@ -75,6 +75,9 @@ def get_posts(request):
     except (ValueError, KeyError):
         root_post_id = None
 
+    if root_post_id == 0:
+        root_post_id = None
+
     data = {}
     data["page"] = page
 
