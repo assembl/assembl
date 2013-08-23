@@ -197,6 +197,70 @@ class Mailbox(Source):
 
         return most_common_address
 
+    def email_most_common_recipient(self, sender, message_body):
+        """
+        Send an email from the given sender to the most common recipient in
+        emails from this mailbox.
+        """
+
+        sent_from = ' '.join([
+            "%(sender_name)s on Assembl" % {
+                "sender_name": sender.display_name()
+            }, 
+            "<%(sender_email)s>" % {
+                "sender_email": sender.get_preferred_email(),
+            }
+        ])
+
+        if type(message_body) == 'str':
+            message_body = message_body.decode('utf-8')
+
+        recipients = self.most_common_recipient_address()
+
+        message = MIMEMultipart('alternative')
+        message['Subject'] = Header(self.subject, 'utf-8')
+        message['From'] = sent_from
+
+        message['To'] = self.recipients
+        message.add_header('In-Reply-To', self.message_id)
+
+        plain_text_body = message_body
+        html_body = message_body
+
+        # TODO: The plain text and html parts of the email should be different,
+        # but we'll see what we can get from the front-end.
+
+        plain_text_part = MIMEText(
+            plain_text_body.encode('utf-8'),
+            'plain',
+            'utf-8'
+        )
+
+        html_part = MIMEText(
+            html_body.encode('utf-8'),
+            'html',
+            'utf-8'
+        )
+
+        message.attach(plain_text_part)
+        message.attach(html_part)
+
+        smtp_connection = smtplib.SMTP(
+            get_current_registry().settings['mail.host']
+        )
+
+        smtp_connection.sendmail(
+            sent_from, 
+            recipients,
+            message.as_string()
+        )
+
+        smtp_connection.quit()
+
+    # The send method will be a common interface on all sources.
+    def send(self, sender, message):
+        self.email_most_common_recipient(sender, message)
+
     def __repr__(self):
         return "<Mailbox %s>" % repr(self.name)
 
