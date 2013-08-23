@@ -44,7 +44,7 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message){
          * The view's data
          * @type {Object}
          */
-        data: { page: 1, rootPostID: 0 },
+        data: { page: 1, rootIdeaID: 0 },
 
         /**
          * The collapse/expand flag
@@ -134,17 +134,17 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message){
 
         /**
          * Load the data
-         * @param {number} [rootPostID=null]
+         * @param {number} [rootIdeaID=null]
          */
-        loadData: function(rootPostID){
+        loadData: function(rootIdeaID){
             var that = this,
                 data = {
                     'page': this.data.page
                 };
 
-            if( rootPostID !== undefined ){
-                this.data.rootPostID = rootPostID;
-                data['root_post_id'] = rootPostID;
+            if( rootIdeaID !== undefined ){
+                this.data.rootIdeaID = rootIdeaID;
+                data['root_idea_id'] = rootIdeaID;
             }
 
             this.blockPanel();
