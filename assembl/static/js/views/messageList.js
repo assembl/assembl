@@ -137,15 +137,15 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message){
          * @param {number} [rootPostID=null]
          */
         loadData: function(rootPostID){
-            if( rootPostID !== undefined ){
-                this.data.rootPostID = rootPostID;
-            }
-
             var that = this,
                 data = {
-                    'page': this.data.page,
-                    'root_post_id': this.data.rootPostID
+                    'page': this.data.page
                 };
+
+            if( rootPostID !== undefined ){
+                this.data.rootPostID = rootPostID;
+                data['root_post_id'] = rootPostID;
+            }
 
             this.blockPanel();
             this.collapsed = true;
