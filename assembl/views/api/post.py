@@ -7,7 +7,8 @@ from cornice import Service
 from pyramid.view import view_config
 from pyramid.httpexceptions import HTTPNotFound, HTTPUnauthorized
 from pyramid.i18n import TranslationString as _
-from pyramid.security import Allow, Everyone
+from pyramid.security import Allow, Everyone, authenticated_userid
+
 
 from assembl.views.api import API_PREFIX
 from assembl.db import DBSession
@@ -116,7 +117,35 @@ def create_post(request):
     """
     We use post, not put, because we don't know the id of the post
     """
-    if False:  #TODO:  Check that the object doesn't exist already
+    request_body = json.loads(request.body)
+    user_id = authenticated_userid(request)
+
+    message = request_body.get('message', None)
+    reply_id = request_body.get('reply_id', None)
+
+    if not user_id:
         raise HTTPUnauthorized()
-    data = json.loads(request.body)
-    return data
+
+    user = DBSession.query(User).get(user_id)
+
+    if not message:
+        raise HTTPUnauthorized()
+
+    if reply_id:
+        post = DBSession.query(Post).get(int(reply_id))
+        post.content.reply(user, post_body['message'])
+
+        return { "ok": True }
+
+    discussion_id = request.matchdict['discussion_id']
+    discussion = DBSession.query(Discussion).get(discussion_id)
+
+    if not discussion:
+        raise HTTPNotFound(
+            _("No discussion found with id=%s" % discussion_id)
+        )
+
+    for source in discussion.sources:
+        source.send(user, message)
+
+    return { "ok": True }
