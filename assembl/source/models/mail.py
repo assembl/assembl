@@ -261,6 +261,18 @@ class Mailbox(Source):
     def send(self, sender, message):
         self.email_most_common_recipient(sender, message)
 
+    def serializable(self):
+        return {
+            "name": self.name,
+            "host": self.host,
+            "port": self.port,
+            "username": self.username,
+            "use_ssl": self.use_ssl,
+            "folder": self.folder,
+            "most_common_recipient_address": \
+                self.most_common_recipient_address()
+        }
+
     def __repr__(self):
         return "<Mailbox %s>" % repr(self.name)
 
