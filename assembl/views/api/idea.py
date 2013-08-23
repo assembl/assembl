@@ -70,12 +70,12 @@ def get_ideas(request):
 @idea.put()
 def save_idea(request):
     discussion_id = request.matchdict['discussion_id']
-    discussion = DBSession.query(Discussion).get(discussion_id)
     idea_id = request.matchdict['id']
     idea_data = json.loads(request.body)
 
     with transaction.manager:
         idea = DBSession.query(Idea).get(idea_id)
+        discussion = DBSession.query(Discussion).get(discussion_id)
 
         idea.short_title = idea_data['shortTitle']
         idea.long_title = idea_data['longTitle']
