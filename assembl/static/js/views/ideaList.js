@@ -26,6 +26,11 @@ function(Backbone, _, Idea, IdeaView, app){
         template: app.loadTemplate('ideaList'),
 
         /**
+         * .panel-body
+         */
+        body: null,
+
+        /**
          * @init
          */
         initialize: function(obj){
@@ -43,6 +48,13 @@ function(Backbone, _, Idea, IdeaView, app){
          * The render
          */
         render: function(){
+            this.body = this.$('.panel-body')
+            var y = 0;
+
+            if( this.body.get(0) ){
+                y = this.body.get(0).scrollTop;
+            }
+
             var list = document.createDocumentFragment(),
                 ideas = this.ideas.where({parentId: null});
 
@@ -64,6 +76,9 @@ function(Backbone, _, Idea, IdeaView, app){
 
             this.$el.html( this.template(data) );
             this.$('.idealist').append( list );
+
+            this.body = this.$('.panel-body');
+            this.body.get(0).scrollTop = y;
 
             return this;
         },
@@ -141,6 +156,9 @@ function(Backbone, _, Idea, IdeaView, app){
          * The events
          */
         'events': {
+            'dragover .panel-bodyabove': 'onAboveDragOver',
+            'dragover .panel-bodybelow': 'onBelowDragOver',
+
             'click #idealist-addbutton': 'addChildToSelected',
             'click #ideaList-collapseButton': 'toggleIdeas',
             'click #ideaList-closeButton': 'closePanel',
@@ -185,6 +203,26 @@ function(Backbone, _, Idea, IdeaView, app){
             if(this.button){
                 this.button.trigger('click');
             }
+        },
+
+        /**
+         * @event
+         */
+        onAboveDragOver: function(ev){
+            var y = this.body.get(0).scrollTop;
+
+            if( y === 0 ){
+                return;
+            }
+
+            this.body.get(0).scrollTop -= 1;
+        },
+
+        /**
+         * @event
+         */
+        onBelowDragOver: function(ev){
+            this.body.get(0).scrollTop += 1;
         }
 
     });

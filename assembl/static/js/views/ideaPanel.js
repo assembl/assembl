@@ -35,6 +35,11 @@ function(Backbone, _, Idea, app, ckeditor){
             }
 
             this.idea.on('change', this.render, this);
+
+            var that = this;
+            app.on('idea:select', function(idea){
+                that.setCurrentIdea(idea);
+            });
         },
 
         /**

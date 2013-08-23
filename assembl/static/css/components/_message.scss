@@ -1,13 +1,21 @@
+$message-bar-width: 15px;
+
 // A message block
 // ================
 .message {
-    //@extend .text;
+    position: relative;
     padding: 20px 5px;
 
     border-bottom: solid 1px $box-border-color;
 
     &:last-child {
         border-bottom: 0;
+    }
+}
+
+@for $i from 1 through 30 {
+    .message[data-message-level="#{$i}"] {
+        padding-left: ($message-bar-width * $i) + 10px;
     }
 }
 
@@ -39,6 +47,35 @@
         line-height: $icon-height;
     }
 }
+
+// 
+.message-bar {
+    display: block;
+    width: $message-bar-width / 2;
+    height: 43px;
+    float: left;
+
+    border-right: $idealist-border;
+    margin-right: $idealist-arrow-width / 2;
+    margin-top: -5px;
+}
+
+// ++++
+.message-bar.message-bar--100vertical {
+    position: absolute;
+    top: 4px;
+    bottom: 0;
+    height: auto;
+
+    @for $i from 1 through 30 {
+
+        &[data-bar-level="#{$i}"] {
+            left: ((21px * $i) + 5px) - 21px;
+        }
+
+    }
+}
+
 
 //
 .message-body {

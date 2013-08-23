@@ -21,6 +21,11 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message){
 
             this.messages.on('reset', this.render, this);
             this.messageThread.on('reset', this.renderThread, this);
+
+            var that = this;
+            app.on('idea:select', function(idea){
+                that.loadData(idea.get('id'));
+            });
         },
 
         /**
@@ -39,13 +44,19 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message){
          * The view's data
          * @type {Object}
          */
-        data: { page: 1 },
+        data: { page: 1, rootPostID: 0 },
 
         /**
          * The collapse/expand flag
          * @type {Boolean}
          */
         collapsed: true,
+
+        /**
+         * The message collapse/expand flag
+         * @type {Boolean}
+         */
+        threadCollapsed: true,
 
         /**
          * The collection
@@ -79,7 +90,8 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message){
                 total: this.data.total,
                 startIndex: this.data.startIndex,
                 endIndex: this.data.endIndex,
-                collapsed: this.collapsed
+                collapsed: this.collapsed,
+                threadCollapsed: this.threadCollapsed
             };
 
             this.$el.html( this.template(data) );
@@ -103,6 +115,7 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message){
             });
 
             this.$('#messagelist-thread').empty().append(list);
+            this.collapseThreadMessages();
         },
 
         /**
@@ -121,15 +134,23 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message){
 
         /**
          * Load the data
+         * @param {number} [rootPostID=null]
          */
-        loadData: function(){
+        loadData: function(rootPostID){
+            if( rootPostID !== undefined ){
+                this.data.rootPostID = rootPostID;
+            }
+
             var that = this,
-                data = { 'page': this.data.page };
+                data = {
+                    'page': this.data.page,
+                    'root_post_id': this.data.rootPostID
+                };
 
             this.blockPanel();
             this.collapsed = true;
 
-            $.getJSON(  app.getApiUrl('posts'), data, function(data){
+            $.getJSON( app.getApiUrl('posts'), data, function(data){
                 that.data = data;
                 that.messages.reset(data.posts);
             });
@@ -203,6 +224,36 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message){
         },
 
         /**
+         * Expand All messages of the open thread
+         */
+        expandThreadMessages: function(){
+            this.messageThread.each(function(message){
+                message.set('collapsed', false);
+            });
+
+            this.threadCollapsed = false;
+
+            this.$('#messageList-message-collapseButton')
+                .removeClass('icon-download-1')
+                .addClass('icon-upload');
+        },
+
+        /**
+         * Collapse All messages of the open thread
+         */
+        collapseThreadMessages: function(){
+            this.messageThread.each(function(message){
+                message.set('collapsed', true);
+            });
+
+            this.threadCollapsed = true;
+
+            this.$('#messageList-message-collapseButton')
+                .removeClass('icon-upload')
+                .addClass('icon-download-1');
+        },
+
+        /**
          * Open the message thread by the given id
          * @param  {String} id
          */
@@ -239,6 +290,8 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message){
             'click #messageList-collapseButton': 'toggleMessages',
             'click #messagelist-returnButton': 'onReturnButtonClick',
 
+            'click #messageList-message-collapseButton': 'toggleThreadMessages',
+
             'click #messageList-prevButton': 'loadPreviousData',
             'click #messageList-nextButton': 'loadNextData',
 
@@ -261,13 +314,24 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message){
         },
 
         /**
-         * Collapse or expand the ideas
+         * Collapse or expand the messages
          */
         toggleMessages: function(){
             if( this.collapsed ){
                 this.expandMessages();
             } else {
                 this.collapseMessages();
+            }
+        },
+
+        /**
+         * Collapse or expand the messages of the open thread
+         */
+        toggleThreadMessages: function(){
+            if( this.threadCollapsed ){
+                this.expandThreadMessages();
+            } else {
+                this.collapseThreadMessages();
             }
         },
 

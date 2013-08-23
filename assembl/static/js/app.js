@@ -339,6 +339,15 @@ function($, _, ckeditor, User, Moment){
         },
 
         /**
+         * Formats a plain text message to html
+         * @param  {string} str
+         * @return {string} The text formatted with HTML
+         */
+        formatMessageToDisplay: function(str){
+            return str.trim().replace(/(\n)/gi, '<br />');
+        },
+
+        /**
          * Shows the context menu given the options
          * @param {Number} x 
          * @param {Number} y 
@@ -406,7 +415,7 @@ function($, _, ckeditor, User, Moment){
                 app.closePanel(app.ideaPanel);
             }
 
-            app.ideaPanel.setCurrentIdea(idea);
+            app.trigger('idea:select', [idea]);
         },
 
         /**
@@ -456,7 +465,7 @@ function($, _, ckeditor, User, Moment){
             size = size || 44;
 
             if( !url ){
-                var randomNumber = Math.floor(Math.random() * (5 - 1) + 1); // between 1 and 4
+                var randomNumber = 3; // Math.floor(Math.random() * (5 - 1) + 1); // between 1 and 4
                 url = '/static/img/avatar/placeholder-{0}.png'.replace('{0}', randomNumber);
             } else {
                 url += '?s=44';

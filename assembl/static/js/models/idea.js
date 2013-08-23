@@ -177,7 +177,8 @@ define(['backbone', 'models/segment', 'app'], function(Backbone, Segment, app){
             });
 
             this.addChild(idea);
-            segment.destroy();
+            idea.addSegment(segment);
+            //segment.destroy();
         },
 
         /**

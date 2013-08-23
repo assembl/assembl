@@ -2,7 +2,7 @@ define(['backbone', 'underscore', 'moment', 'app', 'models/message'],
 function(Backbone, _, Moment, app, Message){
     'use strict';
 
-    var MIN_TEXT_TO_TOOLTIP = 17,
+    var MIN_TEXT_TO_TOOLTIP = 5,
         TOOLTIP_TEXT_LENGTH = 10;
 
     /**
@@ -46,6 +46,8 @@ function(Backbone, _, Moment, app, Message){
             var data = this.model.toJSON();
 
             data['date'] = app.formatDate(data.date);
+            data['level'] = this.model.getLevel();
+            this.el.setAttribute('data-message-level', data['level']);
 
             if( data.collapsed ){
                 this.$el.addClass('message--collapsed');

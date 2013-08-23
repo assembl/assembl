@@ -10,6 +10,7 @@ define(['backbone', 'zepto', 'app'], function(Backbone, $, app){
          */
         initialize: function(){
             this.on('change:read', this.onAttrChange, this);
+            this.on('change:collapsed', this.render, this);
         },
 
         /**
@@ -58,8 +59,13 @@ define(['backbone', 'zepto', 'app'], function(Backbone, $, app){
                 parent = this;
 
             do {
-                parent = parent.get('parentId') !== null ? parent.getParent() : null;
-                counter += 1;
+                
+                if( parent ) {
+                    parent = parent.get('parentId') !== null ? parent.getParent() : null;
+                    counter += 1;
+                } else {
+                    parent = null;
+                }
             } while ( parent !== null );
 
             return counter;

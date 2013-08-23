@@ -10,7 +10,7 @@ define(['backbone', 'zepto', 'app'], function(Backbone, $, app){
          * @init
          */
         initialize: function(){
-            //this.on('change:read', this.onAttrChange, this);
+            this.on('change:title', this.onAttrChange, this);
         },
 
         /**
@@ -25,6 +25,13 @@ define(['backbone', 'zepto', 'app'], function(Backbone, $, app){
          */
         defaults: {
             title: 'Add a title'
+        },
+
+        /**
+         * @event
+         */
+        onAttrChange: function(){
+            this.save();
         }
 
     });
