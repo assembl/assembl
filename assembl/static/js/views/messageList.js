@@ -150,7 +150,7 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message){
             this.blockPanel();
             this.collapsed = true;
 
-            $.getJSON(  app.getApiUrl('posts'), data, function(data){
+            $.getJSON( app.getApiUrl('posts'), data, function(data){
                 that.data = data;
                 that.messages.reset(data.posts);
             });

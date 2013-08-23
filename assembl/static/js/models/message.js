@@ -59,8 +59,13 @@ define(['backbone', 'zepto', 'app'], function(Backbone, $, app){
                 parent = this;
 
             do {
-                parent = parent.get('parentId') !== null ? parent.getParent() : null;
-                counter += 1;
+                
+                if( parent ) {
+                    parent = parent.get('parentId') !== null ? parent.getParent() : null;
+                    counter += 1;
+                } else {
+                    parent = null;
+                }
             } while ( parent !== null );
 
             return counter;
