@@ -23,7 +23,8 @@ from sqlalchemy import (
     UnicodeText,
     DateTime,
     Boolean,
-    or_
+    or_,
+    func,
 )
 
 from assembl.source.models.generic import Source, Content
@@ -153,6 +154,48 @@ class Mailbox(Source):
 
         # TODO: remove this line, the property `last_import` does not persist.
         self.last_import = datetime.utcnow()
+
+
+    def most_common_recipient_address(self):
+        """
+        Find the most common recipient address of the contents of this emaila
+        address. This address can, in most use-cases can be considered the
+        mailing list address.
+        """
+
+        most_common_recipients = DBSession.query(
+            func.count(
+                Email.recipients
+            ),
+            Email.recipients,
+        ).filter(
+            Email.source_id == self.id,
+        ).group_by(Email.recipients)
+
+        most_common_addresses = {}
+
+        for frequency, recipients in most_common_recipients[:50]:
+            address_match = re.compile(
+                r'[\w\-][\w\-\.]+@[\w\-][\w\-\.]+[a-zA-Z]{1,4}'
+            )
+
+            for recipient_address in address_match.findall(recipients):
+                if recipient_address in most_common_addresses.keys():
+                    most_common_addresses[
+                        recipient_address
+                    ] += int(frequency)
+
+                else:
+                    most_common_addresses[recipient_address] = int(frequency)
+
+        most_common_address = sorted(
+            [
+                (most_common_addresses[address], address) for address in \
+                most_common_addresses.keys()
+            ], key=lambda pair: pair[0]
+        )[-1][1]
+
+        return most_common_address
 
     def __repr__(self):
         return "<Mailbox %s>" % repr(self.name)
