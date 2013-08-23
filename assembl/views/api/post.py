@@ -14,8 +14,9 @@ from assembl.views.api import API_PREFIX
 from assembl.db import DBSession
 
 from assembl.source.models import Post
-from assembl.synthesis.models import Discussion, Source, Content
+from assembl.synthesis.models import Discussion, Source, Content, Extract, Idea
 
+from sqlalchemy.orm import aliased
 
 POST_ACL = [
     (Allow, 'r:participant', 'write'),
@@ -39,7 +40,7 @@ def __post_to_json_structure(post):
     
     data["checked"] = False
     #FIXME
-    data["collapsed"] = True
+    data["collapsed"] = False
     #FIXME
     data["read"] = True
     data["parentId"] = post.parent_id
@@ -51,6 +52,39 @@ def __post_to_json_structure(post):
     data["date"] = post.content.creation_date.isoformat()
     return data
 
+def _get_idea_query():
+    """Return a query that includes the post and its following thread.
+
+
+    Beware: we use a recursive query via a CTE and the PostgreSQL-specific
+    ARRAY type. Blame this guy for that choice:
+    http://explainextended.com/2009/09/24/adjacency-list-vs-nested-sets-postgresql/
+
+    Also, that other guy provided insight into using CTE queries:
+    http://stackoverflow.com/questions/11994092/how-can-i-perform-this-recursive-common-table-expression-in-sqlalchemy
+
+    A literal column and an op complement nicely all this craziness.
+
+    All I can say is SQLAlchemy kicks ass, and so does PostgreSQL.
+
+    """
+    level = literal_column('ARRAY[id]', type_=ARRAY(Integer))
+    post = self.db.query(self.__class__) \
+                  .add_columns(level.label('level')) \
+                  .filter(self.__class__.id == self.id) \
+                  .cte(name='thread', recursive=True)
+    post_alias = aliased(post, name='post')
+    replies_alias = aliased(self.__class__, name='replies')
+    cumul_level = post_alias.c.level.op('||')(replies_alias.id)
+    parent_link = replies_alias.parent_id == post_alias.c.id
+    children = self.db.query(replies_alias).add_columns(cumul_level) \
+                      .filter(parent_link)
+
+    if levels:
+        level_limit = func.array_upper(post_alias.c.level, 1) < levels
+        children = children.filter(level_limit)
+
+    return self.db.query(post.union_all(children)).order_by(post.c.level)
 
 @posts.get()
 def get_posts(request):
@@ -74,9 +108,13 @@ def get_posts(request):
         root_post_id = int(request.GET.getone('root_post_id'))
     except (ValueError, KeyError):
         root_post_id = None
-
     if root_post_id == 0:
         root_post_id = None
+
+    try:
+        root_idea_id = int(request.GET.getone('root_idea_id'))
+    except (ValueError, KeyError):
+        root_idea_id = None
 
     data = {}
     data["page"] = page
@@ -97,19 +135,40 @@ def get_posts(request):
         
     post_data = []
 
-    if root_post_id: 
-        post_data.append(
+    if root_idea_id:
+        ideas_query = DBSession.query(Post) \
+        .from_statement("""
+WITH    RECURSIVE
+idea_dag(idea_id, parent_id, idea_depth, idea_path, idea_cycle) AS
+(
+SELECT  id as idea_id, parent_id, 1, ARRAY[idea_initial.id], false 
+FROM    idea AS idea_initial LEFT JOIN idea_association ON (idea_initial.id = idea_association.child_id) 
+WHERE id=:root_idea_id
+UNION ALL
+SELECT idea.id as idea_id, idea_association.parent_id, idea_dag.idea_depth + 1, idea_path || idea.id, idea.id = ANY(idea_path)
+FROM    (idea_dag JOIN idea_association ON (idea_dag.idea_id = idea_association.parent_id) JOIN idea ON (idea.id = idea_association.child_id)) 
+)
+SELECT DISTINCT post.id FROM idea_dag 
+JOIN extract ON (extract.idea_id = idea_dag.idea_id) 
+JOIN content ON (extract.source_id = content.id) 
+JOIN post AS root_posts ON (root_posts.content_id = content.id) JOIN post ON ((post.ancestry LIKE '%' || root_posts.ancestry || root_posts.id || ',') OR post.id = root_posts.id)
+""") \
+        .params(root_idea_id=root_idea_id)
+        posts = ideas_query.all()
+    else:
+        if root_post_id: 
+            post_data.append(
             __post_to_json_structure(DBSession.query(Post).get(root_post_id))
-        )
+            )
 
-    posts = discussion.posts(parent_id=root_post_id)
-    posts = posts.limit(page_size).offset(data['startIndex']-1)
+        posts = discussion.posts(parent_id=root_post_id)
+        posts = posts.limit(page_size).offset(data['startIndex']-1)
 
     for post in posts:
         post_data.append(__post_to_json_structure(post))
-
-        for descendant in post.get_descendants():
-            post_data.append(__post_to_json_structure(descendant))
+        if not root_idea_id:
+            for descendant in post.get_descendants():
+                post_data.append(__post_to_json_structure(descendant))
     data["posts"] = post_data
 
     return data
