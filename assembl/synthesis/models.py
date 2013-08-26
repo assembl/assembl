@@ -154,6 +154,15 @@ class TableOfContents(SQLAlchemyBaseModel):
         uselist=False
     )
 
+    def serializable(self):
+        return {
+            "topic": self.topic,
+            "slug": self.slug,
+            "id": self.id,
+            "table_of_contents_id": self.table_of_contents_id,
+            "synthesis_id": self.synthesis_id
+        }
+
     def __repr__(self):
         return "<TableOfContents %s>" % repr(self.discussion.topic)
 
