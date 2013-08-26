@@ -50,13 +50,13 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message){
          * The collapse/expand flag
          * @type {Boolean}
          */
-        collapsed: true,
+        collapsed: false,
 
         /**
          * The message collapse/expand flag
          * @type {Boolean}
          */
-        threadCollapsed: true,
+        threadCollapsed: false,
 
         /**
          * The collection
@@ -148,7 +148,7 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message){
             }
 
             this.blockPanel();
-            this.collapsed = true;
+            this.collapsed = false;
 
             $.getJSON( app.getApiUrl('posts'), data, function(data){
                 that.data = data;

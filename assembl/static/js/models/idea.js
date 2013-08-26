@@ -42,9 +42,10 @@ define(['backbone', 'models/segment', 'app'], function(Backbone, Segment, app){
         /**
          * Adds an idea as child
          * @param  {Idea} idea
+         * @param {Segment} [segment=null]
          */
-        addChild: function(idea){
-            this.collection.add(idea);
+        addChild: function(idea, segment){
+            this.collection.add(idea, { success: onSuccess });
 
             if( this.isDescendantOf(idea) ){
                 this.set('parentId', null);
@@ -171,14 +172,17 @@ define(['backbone', 'models/segment', 'app'], function(Backbone, Segment, app){
          * @param {Segment} segment
          */
         addSegmentAsChild: function(segment){
-            var idea = new IdeaModel({
+            var data = {
                 shortTitle: segment.get('text').substr(0, 50),
-                longTitle: segment.get('text')
-            });
+                longTitle: segment.get('text'),
+                parentId: this.get('id')
+            };
 
-            this.addChild(idea);
-            idea.addSegment(segment);
-            //segment.destroy();
+            var onSuccess = function(idea){
+                idea.addSegment(segment);
+            };
+
+            this.collection.create(data, { success: onSuccess });
         },
 
         /**
