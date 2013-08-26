@@ -9,7 +9,10 @@ from .auth.models import (
     Action,
     Role,
     UserRole,
-    LocalUserRole
+    LocalUserRole,
+    ViewPost,
+    ExpandPost,
+    CollapsePost,
     )
 from .source.models import (
     Source,
