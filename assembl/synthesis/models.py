@@ -122,6 +122,17 @@ class Discussion(SQLAlchemyBaseModel):
         self.table_of_contents = TableOfContents(discussion=self)
         self.synthesis = Synthesis(discussion=self)
 
+    def serializable(self):
+        return {
+            "id": self.id, 
+            "topic": self.topic,
+            "slug": self.slug,
+            "creation_date": self.creation_date.isoformat(),
+            "table_of_contents_id": self.table_of_contents_id,
+            "synthesis_id": self.synthesis.id,
+            "owner_id": self.owner_id,
+        }
+
     def __repr__(self):
         return "<Discussion %s>" % repr(self.topic)
 

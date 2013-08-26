@@ -47,6 +47,16 @@ class Source(SQLAlchemyBaseModel):
         'polymorphic_on': type
     }
 
+    def serializable(self):
+        return {
+            "id": self.id,
+            "name": self.name,
+            "type": self.type,
+            "creation_date": self.creation_date.isoformat(),
+            "last_import": self.last_import.isoformat(),
+            "discussion_id": self.discussion_id,
+        }
+
     def __repr__(self):
         return "<Source %s>" % repr(self.name)
 
@@ -80,6 +90,16 @@ class Content(SQLAlchemyBaseModel):
         super(Content, self).__init__(*args, **kwargs)
         from .post import Post
         self.post = self.post or Post(content=self)
+
+    def serializable(self):
+        return {
+            "id": self.id,
+            "type": self.type,
+            "creation_date": self.creation_date.isoformat(),
+            "import_date": self.import_date.isoformat(),
+            "source_id": self.source_id,
+            "post_id": self.post.id,
+        }
 
     def __repr__(self):
         return "<Content %s>" % repr(self.type)

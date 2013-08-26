@@ -106,6 +106,16 @@ class Post(SQLAlchemyBaseModel):
 
         return ancestors
 
+    def serializable(self, include_content=True):
+        return {
+            "id": self.id,
+            "ancestry": self.ancestry,
+            "parent_id": self.parent_id,
+            "content_id": self.content_id,
+            "content": self.content.serializable() if \
+                include_content else None,
+        }
+
     def __repr__(self):
         return "<Post %d '%s %d'>" % (
             self.id,

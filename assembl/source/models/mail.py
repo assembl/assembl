@@ -262,8 +262,9 @@ class Mailbox(Source):
         self.email_most_common_recipient(sender, message)
 
     def serializable(self):
-        return {
-            "name": self.name,
+        serializable_source = super(Mailbox, self).serializable()
+
+        serializable_source.update({
             "host": self.host,
             "port": self.port,
             "username": self.username,
@@ -271,7 +272,9 @@ class Mailbox(Source):
             "folder": self.folder,
             "most_common_recipient_address": \
                 self.most_common_recipient_address()
-        }
+        })
+
+        return serializable_source
 
     def __repr__(self):
         return "<Mailbox %s>" % repr(self.name)
@@ -404,6 +407,18 @@ class Email(Content):
         )
 
         smtp_connection.quit()
+
+    def serializable(self):
+        serializable_content = super(Email, self).serializable()
+
+        serializable_content.update({
+            "sender": self.sender,
+            "recipients": self.recipients,
+            "subject": self.subject,
+            "body": self.body,
+        })
+
+        return serializable_content
 
     def __repr__(self):
         return "<Email '%s to %s'>" % (
