@@ -404,5 +404,5 @@ class CollapsePost(ActionOnPost):
         primary_key=True
     )
 
-    verb = 'collapseed'
+    verb = 'collapsed'
 
