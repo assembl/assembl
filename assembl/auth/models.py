@@ -351,13 +351,13 @@ class ActionOnPost(Action):
 
 
 
-class View(ActionOnPost):
+class ViewPost(ActionOnPost):
     """
     A view action on a post.
     """
-    __tablename__ = 'view'
+    __tablename__ = 'action_view_post'
     __mapper_args__ = {
-        'polymorphic_identity': 'view'
+        'polymorphic_identity': 'view_post'
     }
 
     id = Column(
@@ -370,13 +370,13 @@ class View(ActionOnPost):
 
 
 
-class Expand(ActionOnPost):
+class ExpandPost(ActionOnPost):
     """
     An expansion action on a post.
     """
-    __tablename__ = 'expand'
+    __tablename__ = 'action_expand_post'
     __mapper_args__ = {
-        'polymorphic_identity': 'expand'
+        'polymorphic_identity': 'expand_post'
     }
 
     id = Column(
@@ -389,13 +389,13 @@ class Expand(ActionOnPost):
 
 
 
-class Collapse(ActionOnPost):
+class CollapsePost(ActionOnPost):
     """
     A collapse action on a post.
     """
-    __tablename__ = 'collapse'
+    __tablename__ = 'action_collapse_post'
     __mapper_args__ = {
-        'polymorphic_identity': 'collapse'
+        'polymorphic_identity': 'collapse_post'
     }
 
     id = Column(
