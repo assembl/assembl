@@ -320,10 +320,11 @@ class Action(SQLAlchemyBaseModel):
     verb = 'did something to'
 
     def __repr__(self):
+
         return "<%s '%s'>" % (
             self.__class__.__name__,
             " ".join([
-                self.actor,
+                self.actor.display_name() if self.actor else 'nobody',
                 self.verb,
                 self.object_type
             ])
