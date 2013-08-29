@@ -243,15 +243,17 @@ class User(SQLAlchemyBaseModel):
 
         # Send email.
 
-    def avatar_url(self, size=32):
+    def avatar_url(self, size=32, app_url=None):
         # First implementation: Use the gravatar URL
         # TODO: store user's choice of avatar.
         email = self.get_preferred_email()
+        args = {'s': str(size)}
         default = config.get('avatar.default_image_url') or \
-                             '/static/img/icon/user.png'
-        gravatar_url = "http://www.gravatar.com/avatar/" + \
-            hashlib.md5(email.lower()).hexdigest() + "?"
-        gravatar_url += urllib.urlencode({'d': default, 's': str(size)})
+            (app_url and app_url+'/static/img/icon/user.png')
+        if default:
+            args['d'] = default
+        gravatar_url = "http://www.gravatar.com/avatar/%s?%s" % (
+            hashlib.md5(email.lower()).hexdigest(), urllib.urlencode(args))
         return gravatar_url
 
     def display_name(self):

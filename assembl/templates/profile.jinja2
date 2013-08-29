@@ -4,7 +4,7 @@
     <div class="bar bar--main">
         <div class="bar-body">
             <div class="bar-right">
-                <a> {{ gettext('Profile') }} <i class="icon-user"></i> </a>
+                <a> {{ gettext('Profile') }} <i class="iconbutton icon-user"><img src="{{user.avatar_url(38, request.application_url)|safe}}" alt="{{ user.display_name() }}"/></i></a>
             </div>
         </div>
     </div>
