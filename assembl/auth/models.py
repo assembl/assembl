@@ -160,6 +160,25 @@ class AgentProfile(SQLAlchemyBaseModel):
             allow=True
         ).one()
 
+    def avatar_url(self, size=32, app_url=None, email=None):
+        # First implementation: Use the gravatar URL
+        if self.user and not email:
+            email = self.user.preferred_email
+        if not email:
+            accounts = self.email_accounts
+            if accounts:
+                accounts.sort(key=lambda e: (e.verified, e.preferred))
+                email = accounts[-1].email
+        default = config.get('avatar.default_image_url') or \
+            (app_url and app_url+'/static/img/icon/user.png')
+        if not email:
+            return default
+        args = {'s': str(size)}
+        if default:
+            args['d'] = default
+        gravatar_url = "http://www.gravatar.com/avatar/%s?%s" % (
+            hashlib.md5(email.lower()).hexdigest(), urllib.urlencode(args))
+        return gravatar_url
 
 class User(SQLAlchemyBaseModel):
     """
@@ -246,15 +265,7 @@ class User(SQLAlchemyBaseModel):
     def avatar_url(self, size=32, app_url=None):
         # First implementation: Use the gravatar URL
         # TODO: store user's choice of avatar.
-        email = self.get_preferred_email()
-        args = {'s': str(size)}
-        default = config.get('avatar.default_image_url') or \
-            (app_url and app_url+'/static/img/icon/user.png')
-        if default:
-            args['d'] = default
-        gravatar_url = "http://www.gravatar.com/avatar/%s?%s" % (
-            hashlib.md5(email.lower()).hexdigest(), urllib.urlencode(args))
-        return gravatar_url
+        return self.profile.avatar_url(size, app_url, self.preferred_email)
 
     def display_name(self):
         if self.username:

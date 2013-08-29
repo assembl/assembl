@@ -31,6 +31,7 @@ from ...auth.password import format_token
 from ...auth.operations import (
     get_identity_provider, send_confirmation_email, verify_email_token)
 from ...db import DBSession
+from ...lib import config
 
 default_context = {
     'STATIC_URL': '/static/',
@@ -70,8 +71,7 @@ def login_view(request):
     })
 
 
-@view_config(route_name='profile')
-def assembl_profile(request):
+def get_profile(request):
     id_type = request.matchdict.get('type').strip()
     identifier = request.matchdict.get('identifier').strip()
     user = None
@@ -103,6 +103,11 @@ def assembl_profile(request):
         if not account:
             raise HTTPNotFound()
         profile = account.profile
+    return (user, profile)
+
+@view_config(route_name='profile')
+def assembl_profile(request):
+    user, profile = get_profile(request)
     logged_in = authenticated_userid(request)
     save = request.method == 'POST'
     if logged_in and not user:
@@ -163,6 +168,18 @@ def assembl_profile(request):
              providers=request.registry.settings['login_providers'],
              the_user=user,
              user=DBSession.query(User).get(logged_in)))
+
+
+@view_config(route_name='avatar')
+def avatar(request):
+    user, profile = get_profile(request)
+    size = int(request.matchdict.get('size'))
+    if profile:
+        gravatar_url = profile.avatar_url(size, request.application_url)
+        return HTTPFound(location=gravatar_url)
+    default = config.get('avatar.default_image_url') or \
+            request.application_url+'/static/img/icon/user.png'
+    return HTTPFound(location=default)
 
 
 @view_config(
