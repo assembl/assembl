@@ -4,19 +4,27 @@ import uuid
 import json
 import transaction
 from assembl.tests.base import BaseTest
+import assembl.db
 from assembl.synthesis.models import (
     Idea,
     TableOfContents,
     Discussion,
     Extract,
     )
-from assembl.auth.models import AgentProfile, User
+from assembl.auth.models import (
+    AgentProfile, User, Role, UserRole, R_ADMINISTRATOR,
+    create_default_permissions, populate_default_permissions,
+    populate_default_roles)
 
 
 class ApiTest(BaseTest):
     def setUp(self):
         super(ApiTest, self).setUp()
+        populate_default_permissions(self.session)
+        populate_default_roles(self.session)
         self.discussion = self.create_dummy_discussion()
+        # monkeypatching for acl calculations
+        assembl.db.DBSession = self.session
 
     def get_url(self, discussion, suffix):
         return '/api/v1/discussion/%d/%s' % (
@@ -35,11 +43,17 @@ class ApiTest(BaseTest):
         )
 
         self.session.add(discussion)
+        create_default_permissions(self.session, discussion)
+        self.session.add(UserRole(
+            user=user, role=Role.get_role(
+                self.session, R_ADMINISTRATOR)))
         self.session.flush()
         self.session.refresh(discussion)
-
+        self.session.refresh(user)
+        self.config.testing_securitypolicy(userid=user.id, permissive=True)
         return discussion
-        
+
+
     def test_extracts(self):
         extract_id = '38ebdaac-c0f0-408e-8904-7f343851fc61'
         extract_data = {
@@ -64,7 +78,7 @@ class ApiTest(BaseTest):
         self.session.add(ext)
 
         url = self.get_url(self.discussion, 'extracts')
-        res = self.app.get(url, json.dumps(extract_data))
+        res = self.app.get(url)
         self.assertEqual(res.status_code, 200)
         extracts = json.loads(res.body)
         self.assertEquals(len(extracts), 0)

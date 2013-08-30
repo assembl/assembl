@@ -18,6 +18,8 @@ discussion = Discussion(
     owner=user
 )
 
+create_default_permissions(db, discussion)
+
 mailbox = Mailbox(
     name="jack layton",
     host="coeus.ca",

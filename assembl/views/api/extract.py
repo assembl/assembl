@@ -12,21 +12,27 @@ from pyramid.security import authenticated_userid
 from assembl.views.api import FIXTURE_DIR, API_PREFIX
 from assembl.db import DBSession
 from assembl.synthesis.models import Extract
+from . import acls
+from assembl.auth import (
+    P_READ, P_ADD_EXTRACT, P_EDIT_EXTRACT, P_DELETE_EXTRACT)
+
 
 extracts = Service(
     name='extracts', 
     path=API_PREFIX + '/extracts',
     description="An extract from Content that is an expression of an Idea",
-    renderer='json'
+    renderer='json', acl=acls
 )
 
 extract = Service(
     name='extract', 
     path=API_PREFIX + '/extracts/{id}',
-    description="Manipulate a single extract"
+    description="Manipulate a single extract",
+    acl=acls
 )
 
-@extract.get()
+
+@extract.get()  # permission=P_READ
 def get_extract(request):
     extract_id = request.matchdict['id']
     extract = DBSession.query(Extract).get(extract_id)
@@ -34,7 +40,7 @@ def get_extract(request):
     return extract.serializable()
 
 
-@extracts.get()
+@extracts.get()  # permission=P_READ
 def get_extracts(request):
     user_id = authenticated_userid(request)
 
@@ -49,7 +55,7 @@ def get_extracts(request):
     return serializable_extracts
 
 
-@extracts.post()
+@extracts.post()  # permission=P_ADD_EXTRACT
 def post_extract(request):
     """
     Create a new extract.
@@ -72,7 +78,7 @@ def post_extract(request):
     return { 'ok': True, 'id': new_extract.id }
 
 
-@extract.put()
+@extract.put()  # permission=P_EDIT_EXTRACT
 def put_extract(request):
     """
     Updating an Extract
@@ -93,7 +99,7 @@ def put_extract(request):
     return { 'ok': True }
 
 
-@extract.delete()
+@extract.delete()  # permission=P_DELETE_EXTRACT
 def delete_extract(request):
     extract_id = request.matchdict['id']
     extract = DBSession.query(Extract).get(extract_id)

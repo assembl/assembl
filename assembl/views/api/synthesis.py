@@ -9,12 +9,14 @@ from pyramid.i18n import TranslationString as _
 from assembl.views.api import FIXTURE_DIR, API_PREFIX
 from assembl.db import DBSession
 from assembl.synthesis.models import Idea, Discussion, Synthesis
+from . import acls
+from assembl.auth import (P_READ, P_ADD_IDEA)
 
 synthesis = Service(name='synthesis', path=API_PREFIX + '/syntheses/{id}',
-                 description="Manipulate a single synthesis")
+                 description="Manipulate a single synthesis", acl=acls)
 
-    
-@synthesis.get()
+
+@synthesis.get()  # permission=P_READ)
 def get_synthesis(request):
     synthesis_id = request.matchdict['id']
     synthesis = DBSession.query(Synthesis).get(synthesis_id)
@@ -26,7 +28,7 @@ def get_synthesis(request):
 
 
 # Update
-@synthesis.put()
+@synthesis.put()  # permission=P_ADD_IDEA)
 def save_synthesis(request):
     discussion_id = request.matchdict['discussion_id']
     discussion = DBSession.query(Discussion).get(discussion_id)

@@ -9,16 +9,18 @@ from pyramid.i18n import TranslationString as _
 from assembl.views.api import FIXTURE_DIR, API_PREFIX
 from assembl.db import DBSession
 from assembl.synthesis.models import Idea, Discussion
+from . import acls
+from assembl.auth import (P_READ, P_ADD_IDEA, P_EDIT_IDEA)
 
 ideas = Service(name='ideas', path=API_PREFIX + '/ideas',
                  description="",
-                 renderer='json')
+                 renderer='json', acl=acls)
 idea = Service(name='idea', path=API_PREFIX + '/ideas/{id}',
-                 description="Manipulate a single idea")
+                 description="Manipulate a single idea", acl=acls)
 
     
 # Create
-@ideas.post()
+@ideas.post()  # permission=P_ADD_IDEA)
 def create_idea(request):
     discussion_id = request.matchdict['discussion_id']
     discussion = DBSession.query(Discussion).get(discussion_id)
@@ -43,7 +45,7 @@ def create_idea(request):
     return { 'ok': True, 'id': new_idea.id }
 
 
-@idea.get()
+@idea.get()  # permission=P_READ)
 def get_idea(request):
     idea_id = request.matchdict['id']
     idea = DBSession.query(Idea).get(idea_id)
@@ -54,7 +56,7 @@ def get_idea(request):
     return idea.serializable()
 
 
-@ideas.get()
+@ideas.get()  # permission=P_READ)
 def get_ideas(request):
     discussion_id = request.matchdict['discussion_id']
     discussion = DBSession.query(Discussion).get(discussion_id)
@@ -67,7 +69,7 @@ def get_ideas(request):
 
 
 # Update
-@idea.put()
+@idea.put()  # permission=P_EDIT_IDEA)
 def save_idea(request):
     discussion_id = request.matchdict['discussion_id']
     idea_id = request.matchdict['id']

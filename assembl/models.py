@@ -8,6 +8,8 @@ from .auth.models import (
     User,
     Action,
     Role,
+    Permission,
+    DiscussionPermission,
     UserRole,
     LocalUserRole,
     ViewPost,
