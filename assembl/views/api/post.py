@@ -218,8 +218,6 @@ def create_post(request):
     if not user_id:
         raise HTTPUnauthorized()
 
-    user = DBSession.query(User).get(user_id)
-
     if not message:
         raise HTTPUnauthorized()
 
