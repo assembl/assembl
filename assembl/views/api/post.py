@@ -1,6 +1,6 @@
 import json
 import os
-
+import transaction
 
 from math import ceil
 from cornice import Service
@@ -15,8 +15,10 @@ from assembl.db import DBSession
 
 from assembl.source.models import Post
 from assembl.synthesis.models import Discussion, Source, Content, Extract, Idea
+from assembl.auth.models import ViewPost
 
 from sqlalchemy.orm import aliased
+from sqlalchemy.orm.exc import NoResultFound
 
 POST_ACL = [
     (Allow, 'r:participant', 'write'),
@@ -93,6 +95,8 @@ def get_posts(request):
     if not discussion:
         raise HTTPNotFound(_("No discussion found with id=%s" % discussion_id))
 
+    user_id = authenticated_userid(request)
+
     DEFAULT_PAGE_SIZE = 25
     page_size = DEFAULT_PAGE_SIZE
 
@@ -120,9 +124,13 @@ def get_posts(request):
     data["page"] = page
 
     #Rename "inbox" to "unread", the number of unread messages for the current user.
-    data["inbox"] = discussion.total_posts()
+    no_of_messages_viewed_by_user = DBSession.query(ViewPost).filter_by(
+        actor_id=user_id,
+    ).count() if user_id else 0
+
+    data["inbox"] = discussion.posts().count() - no_of_messages_viewed_by_user
     #What is "total", the total messages in the current context?
-    data["total"] = discussion.total_posts()
+    data["total"] = discussion.posts().count()
     data["maxPage"] = max(1, ceil(float(data["total"])/page_size))
     #TODO:  Check if we want 1 based index in the api
     data["startIndex"] = (page_size * page) - (page_size-1)
@@ -165,11 +173,33 @@ JOIN post AS root_posts ON (root_posts.content_id = content.id) JOIN post ON ((p
         posts = posts.limit(page_size).offset(data['startIndex']-1)
 
     for post in posts:
-        post_data.append(__post_to_json_structure(post))
+        serializable_post = __post_to_json_structure(post)
+        post_data.append(serializable_post)
+
         if not root_idea_id:
             for descendant in post.get_descendants():
                 post_data.append(__post_to_json_structure(descendant))
     data["posts"] = post_data
+
+    if user_id:
+        for serializable_post in data['posts']:
+            try:
+                DBSession.query(ViewPost).filter_by(
+                    actor_id=user_id,
+                    post_id=serializable_post['id']
+                ).one()
+                serializable_post['read'] = True
+
+            except NoResultFound:
+                serializable_post['read'] = False
+                if root_post_id:
+                    with transaction.manager:
+                        viewed_post = ViewPost(
+                            actor_id=user_id,
+                            post_id=serializable_post['id']
+                        )
+
+                        DBSession.add(viewed_post)
 
     return data
 
