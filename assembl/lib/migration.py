@@ -9,7 +9,9 @@ from alembic.script import ScriptDirectory
 
 from ..lib.sqla import create_engine, metadata
 from assembl.db import DBSession as db
-
+from assembl.auth.models import (
+    populate_default_permissions, populate_default_roles)
+import transaction
 
 def bootstrap_db(config_uri=None, engine=None, with_migration=True):
     """Bring a blank database to a functional state."""
@@ -37,13 +39,9 @@ def bootstrap_db(config_uri=None, engine=None, with_migration=True):
 
     metadata.create_all(engine)
 
-    # Obsoleted
-    # with transaction.manager:
-    #     model = MyModel(name='one', value=1)
-    #     db.add(model)
-
-    #     for M in [Post,]:
-    #         db.add(DocumentType(code=M.__tablename__, name=M.__name__))
+    with transaction.manager:
+        populate_default_permissions(db)
+        populate_default_roles(db)
 
     # Clean up the sccoped session to allow a later app instantiation.
 

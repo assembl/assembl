@@ -15,13 +15,20 @@ def authentication_callback(userid, request):
     roles = DBSession.query(Role.name).join(UserRole).filter(
         UserRole.user_id == userid).all()
     roles = {x[0] for x in roles}
-    # TODO: Get the discussion from the request
-    discussion = DBSession.query(Discussion).first()
-    if discussion:
-        local_roles = DBSession.query(Role.name).join(LocalUserRole).filter(
-            LocalUserRole.user_id == userid and
-            LocalUserRole.discussion_id == discussion.id).all()
-        roles.update({x[0] for x in local_roles})
+    if request.matchdict:
+        discussion_id = None
+        if 'discussion_id' in request.matchdict:
+            discussion_id = int(request.matchdict['discussion_id'])
+        elif 'discussion_slug' in request.matchdict:
+            discussion = DBSession.query(Discussion).filter_by(
+                slug=request.matchdict['discussion_slug']).first()
+            if discussion:
+                discussion_id = discussion.id
+        if discussion_id:
+            local_roles = DBSession.query(Role.name).join(LocalUserRole).filter(
+                LocalUserRole.user_id == userid and
+                LocalUserRole.discussion_id == discussion_id).all()
+            roles.update({x[0] for x in local_roles})
     return list(roles)
 
 

@@ -13,27 +13,23 @@ from pyramid.security import Allow, Everyone, authenticated_userid
 from assembl.views.api import API_PREFIX
 from assembl.db import DBSession
 
+from assembl.auth import P_READ, P_ADD_POST
 from assembl.source.models import Post
 from assembl.synthesis.models import Discussion, Source, Content, Extract, Idea
 from assembl.auth.models import ViewPost
+from . import acls
 
 from sqlalchemy.orm import aliased
 from sqlalchemy.orm.exc import NoResultFound
 
-POST_ACL = [
-    (Allow, 'r:participant', 'write'),
-    (Allow, 'r:moderator', 'delete'),
-    (Allow, 'r:admin', 'delete')
-]
-
 
 posts = Service(name='posts', path=API_PREFIX + '/posts',
                 description="Post API following SIOC vocabulary as much as possible",
-                renderer='json', acl=lambda req: POST_ACL)
+                renderer='json', acl=acls)
 
 post = Service(name='post', path=API_PREFIX + '/posts/{id}',
                description="Manipulate a single post",
-               acl=lambda req: POST_ACL)
+               acl=acls)
 
 
 def __post_to_json_structure(post):
@@ -88,9 +84,9 @@ def _get_idea_query():
 
     return self.db.query(post.union_all(children)).order_by(post.c.level)
 
-@posts.get()
+@posts.get()  # permission=P_READ)
 def get_posts(request):
-    discussion_id = request.matchdict['discussion_id']
+    discussion_id = int(request.matchdict['discussion_id'])
     discussion = DBSession.query(Discussion).get(discussion_id)
     if not discussion:
         raise HTTPNotFound(_("No discussion found with id=%s" % discussion_id))
@@ -204,7 +200,7 @@ JOIN post AS root_posts ON (root_posts.content_id = content.id) JOIN post ON ((p
     return data
 
 
-@posts.post()
+@posts.post()  # permission=P_ADD_POST)
 def create_post(request):
     """
     We use post, not put, because we don't know the id of the post

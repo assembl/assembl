@@ -2,6 +2,7 @@ from datetime import datetime
 from itertools import chain
 import urllib
 import hashlib
+import transaction
 
 from sqlalchemy import (
     Boolean,
@@ -17,11 +18,30 @@ from sqlalchemy import (
 )
 
 from sqlalchemy.orm import relationship, backref
+from pyramid.security import Everyone, Authenticated
 
 from .password import hash_password, verify_password
 from ..db import DBSession
 from ..lib import config
 from ..lib.sqla import Base as SQLAlchemyBaseModel
+
+
+# Roles
+R_PARTICIPANT = 'r:participant'
+R_CATCHER = 'r:catcher'
+R_MODERATOR = 'r:moderator'
+R_ADMINISTRATOR = 'r:administrator'
+
+# Permissions
+P_READ = 'read'
+P_ADD_POST = 'add_post'
+P_EDIT_POST = 'edit_post'
+P_DELETE_POST = 'delete_post'
+P_ADD_EXTRACT = 'add_extract'
+P_DELETE_EXTRACT = 'delete_extract'
+P_EDIT_EXTRACT = 'edit_extract'
+P_ADD_IDEA = 'add_idea'
+P_EDIT_IDEA = 'edit_idea'
 
 
 class AgentAccount(SQLAlchemyBaseModel):
@@ -57,6 +77,11 @@ class EmailAccount(AgentAccount):
     def display_name(self):
         if self.verified:
             return self.email
+
+    @staticmethod
+    def get_or_make_profile(email):
+        pass
+
 
 
 class IdentityProviderAccount(AgentAccount):
@@ -160,6 +185,25 @@ class AgentProfile(SQLAlchemyBaseModel):
             allow=True
         ).one()
 
+    def avatar_url(self, size=32, app_url=None, email=None):
+        # First implementation: Use the gravatar URL
+        if self.user and not email:
+            email = self.user.preferred_email
+        if not email:
+            accounts = self.email_accounts
+            if accounts:
+                accounts.sort(key=lambda e: (e.verified, e.preferred))
+                email = accounts[-1].email
+        default = config.get('avatar.default_image_url') or \
+            (app_url and app_url+'/static/img/icon/user.png')
+        if not email:
+            return default
+        args = {'s': str(size)}
+        if default:
+            args['d'] = default
+        gravatar_url = "http://www.gravatar.com/avatar/%s?%s" % (
+            hashlib.md5(email.lower()).hexdigest(), urllib.urlencode(args))
+        return gravatar_url
 
 class User(SQLAlchemyBaseModel):
     """
@@ -243,16 +287,10 @@ class User(SQLAlchemyBaseModel):
 
         # Send email.
 
-    def avatar_url(self, size=32):
+    def avatar_url(self, size=32, app_url=None):
         # First implementation: Use the gravatar URL
         # TODO: store user's choice of avatar.
-        email = self.get_preferred_email()
-        default = config.get('avatar.default_image_url') or \
-                             '/static/img/icon/user.png'
-        gravatar_url = "http://www.gravatar.com/avatar/" + \
-            hashlib.md5(email.lower()).hexdigest() + "?"
-        gravatar_url += urllib.urlencode({'d': default, 's': str(size)})
-        return gravatar_url
+        return self.profile.avatar_url(size, app_url, self.preferred_email)
 
     def display_name(self):
         if self.username:
@@ -269,6 +307,23 @@ class Role(SQLAlchemyBaseModel):
     id = Column(Integer, primary_key=True)
     name = Column(String(20), nullable=False)
 
+    @classmethod
+    def get_role(klass, session, name):
+        return session.query(klass).filter_by(name=name).first()
+
+
+def populate_default_roles(session):
+    def ensure(s):
+        # Note: Must be called within transaction manager
+        if not session.query(Role).filter_by(name=s).first():
+            session.add(Role(name=s))
+    ensure(Everyone)
+    ensure(Authenticated)
+    ensure(R_PARTICIPANT)
+    ensure(R_CATCHER)
+    ensure(R_MODERATOR)
+    ensure(R_ADMINISTRATOR)
+
 
 class UserRole(SQLAlchemyBaseModel):
     """roles that a user has globally (eg admin.)"""
@@ -276,7 +331,9 @@ class UserRole(SQLAlchemyBaseModel):
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey('user.id', ondelete='CASCADE'),
                      index=True)
+    user = relationship(User)
     role_id = Column(Integer, ForeignKey('role.id', ondelete='CASCADE'))
+    role = relationship(Role)
 
 
 class LocalUserRole(SQLAlchemyBaseModel):
@@ -284,11 +341,73 @@ class LocalUserRole(SQLAlchemyBaseModel):
     __tablename__ = 'local_user_role'
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey('user.id', ondelete='CASCADE'))
+    user = relationship(User)
     discussion_id = Column(Integer, ForeignKey(
         'discussion.id', ondelete='CASCADE'))
+    discussion = relationship('Discussion')
     role_id = Column(Integer, ForeignKey('role.id', ondelete='CASCADE'))
+    role = relationship(Role)
     __table_args__ = (
         Index('user_discussion_idx', 'user_id', 'discussion_id'),)
+
+
+class Permission(SQLAlchemyBaseModel):
+    """A permission that a user may have"""
+    __tablename__ = 'permission'
+    id = Column(Integer, primary_key=True)
+    name = Column(String(20), nullable=False)
+
+
+def populate_default_permissions(session):
+    def ensure(s):
+        # Note: Must be called within transaction manager
+        if not session.query(Permission).filter_by(name=s).first():
+            session.add(Permission(name=s))
+    ensure(P_READ)
+    ensure(P_ADD_POST)
+    ensure(P_EDIT_POST)
+    ensure(P_DELETE_POST)
+    ensure(P_ADD_EXTRACT)
+    ensure(P_EDIT_EXTRACT)
+    ensure(P_DELETE_EXTRACT)
+    ensure(P_ADD_IDEA)
+    ensure(P_EDIT_IDEA)
+
+
+class DiscussionPermission(SQLAlchemyBaseModel):
+    """Which permissions are given to which roles for a given discussion."""
+    __tablename__ = 'discussion_permission'
+    id = Column(Integer, primary_key=True)
+    discussion_id = Column(Integer, ForeignKey(
+        'discussion.id', ondelete='CASCADE'))
+    discussion = relationship('Discussion')
+    role_id = Column(Integer, ForeignKey('role.id', ondelete='CASCADE'))
+    role = relationship(Role)
+    permission_id = Column(Integer, ForeignKey(
+        'permission.id', ondelete='CASCADE'))
+    permission = relationship(Permission)
+
+
+def create_default_permissions(session, discussion):
+    permissions = {p.name: p.id for p in session.query(Permission).all()}
+    roles = {r.name: r.id for r in session.query(Role).all()}
+    def add_perm(permission_name, role_names):
+        # Note: Must be called within transaction manager
+        for role in role_names:
+            session.add(DiscussionPermission(
+                discussion=discussion, role_id=roles[role],
+                permission_id=permissions[permission_name]))
+    add_perm(P_READ, [Everyone])
+    add_perm(P_ADD_POST,
+             [R_PARTICIPANT, R_CATCHER, R_MODERATOR, R_ADMINISTRATOR])
+    add_perm(P_EDIT_POST, [R_MODERATOR, R_ADMINISTRATOR])
+    add_perm(P_DELETE_POST, [R_MODERATOR, R_ADMINISTRATOR])
+    add_perm(P_ADD_EXTRACT,
+             [R_PARTICIPANT, R_CATCHER, R_MODERATOR, R_ADMINISTRATOR])
+    add_perm(P_EDIT_EXTRACT, [R_CATCHER, R_MODERATOR, R_ADMINISTRATOR])
+    add_perm(P_DELETE_EXTRACT, [R_CATCHER, R_MODERATOR, R_ADMINISTRATOR])
+    add_perm(P_ADD_IDEA, [R_CATCHER, R_MODERATOR, R_ADMINISTRATOR])
+    add_perm(P_EDIT_IDEA, [R_CATCHER, R_MODERATOR, R_ADMINISTRATOR])
 
 
 class Action(SQLAlchemyBaseModel):
