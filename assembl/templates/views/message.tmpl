@@ -47,6 +47,20 @@
     <div class="message-body">
         <%= app.formatMessageToDisplay(body) %>
     </div>
+
+    <div class="spacer"></div>
+
+    <div class="text-right padding">
+        <a class="message-replaybox-openbtn link"><i class="icon-reply"></i> {{ gettext("Reply") }}</a>
+    </div>
+    
+    <div class="message-replybox" hidden>
+        <textarea class="formtextarea message-textarea"></textarea>
+        <div class="text-right">
+            <a class="button message-cancelbtn">{{ gettext('Cancel') }}</a>
+            <a class="button button--primary message-sendbtn">{{ gettext('Send') }}</a>
+        </div>
+    </div>
 </div>
 
 <% } %>
