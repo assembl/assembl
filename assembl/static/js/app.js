@@ -493,21 +493,19 @@ function($, _, ckeditor, User, Moment){
                 return;
             }
 
-            var parent = dropdown.parent(),
-                onMouseleave = function(){
-                    parent
-                        .removeClass('is-open')
-                        .off('mouseleave', onMouseleave);
-                };
+            var parent = dropdown.parent();
+
+            var onMouseLeave = function(ev){
+                parent.removeClass('is-open');
+            };
 
             if( parent.hasClass('is-open') ){
-                onMouseleave();
+                onMouseLeave();
                 return;
             }
 
-            parent
-                .addClass('is-open')
-                .on('mouseleave', onMouseleave);
+            parent.addClass('is-open');
+            app.body.one('click', onMouseLeave);
         },
 
         /**

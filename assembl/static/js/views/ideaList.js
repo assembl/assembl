@@ -17,7 +17,7 @@ function(Backbone, _, Idea, IdeaView, app){
          * The collapse/expand flag
          * @type {Boolean}
          */
-        collapsed: true,
+        collapsed: false,
 
         /**
          * The tempate
@@ -48,15 +48,23 @@ function(Backbone, _, Idea, IdeaView, app){
          * The render
          */
         render: function(){
-            this.body = this.$('.panel-body')
+            this.body = this.$('.panel-body');
             var y = 0;
 
             if( this.body.get(0) ){
                 y = this.body.get(0).scrollTop;
             }
 
+            var filter = { parentId: null };
+
+            if( this.filter === FEATURED){
+                filter.featured = true;
+            } else if ( this.filter === IN_SYNTHESIS ){
+                filter.inSynthesis = true;
+            }
+
             var list = document.createDocumentFragment(),
-                ideas = this.ideas.where({parentId: null});
+                ideas = this.ideas.where(filter);
 
             _.each(ideas, function(idea){
                 var ideaView = new IdeaView({model:idea});

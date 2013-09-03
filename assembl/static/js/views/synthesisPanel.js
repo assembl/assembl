@@ -52,7 +52,7 @@ function(Backbone, _, $, app, Synthesis, SynthesisIdeaView){
             app.off('synthesisPanel:close');
 
             var list = document.createDocumentFragment(),
-                data = { collapsed: this.collapsed, title: this.model.get('title') },
+                data = { collapsed: this.collapsed, subject: this.model.get('subject') },
                 ideas = this.ideas.where({inSynthesis: true});
 
             _.each(ideas, function(idea){
@@ -84,7 +84,7 @@ function(Backbone, _, $, app, Synthesis, SynthesisIdeaView){
          */
         onTitleBlur: function(ev){
             var title = app.stripHtml(ev.currentTarget.innerHTML);
-            this.model.set('title', title);
+            this.model.set('subject', title);
         },
 
         /**

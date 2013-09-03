@@ -45,7 +45,7 @@ define(['backbone', 'models/segment', 'app'], function(Backbone, Segment, app){
          * @param {Segment} [segment=null]
          */
         addChild: function(idea, segment){
-            this.collection.add(idea, { success: onSuccess });
+            this.collection.add(idea);
 
             if( this.isDescendantOf(idea) ){
                 this.set('parentId', null);
