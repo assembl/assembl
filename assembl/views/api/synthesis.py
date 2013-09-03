@@ -12,19 +12,16 @@ from assembl.synthesis.models import Idea, Discussion, Synthesis
 from . import acls
 from assembl.auth import (P_READ, P_ADD_IDEA)
 
-synthesis = Service(name='synthesis', path=API_PREFIX + '/syntheses/{id}',
-                 description="Manipulate a single synthesis", acl=acls)
+synthesis = Service(name='synthesis', path=API_PREFIX + '/synthesis/',
+                 description="Manipulate the synthesis for a discussion")
 
 
 @synthesis.get()  # permission=P_READ)
 def get_synthesis(request):
-    synthesis_id = request.matchdict['id']
-    synthesis = DBSession.query(Synthesis).get(synthesis_id)
+    discussion_id = request.matchdict['discussion_id']
+    discussion = DBSession.query(Discussion).get(discussion_id)
 
-    if not synthesis:
-        raise HTTPNotFound("Synthesis with id '%s' not found." % synthesis_id)
-
-    return synthesis.serializable()
+    return discussion.synthesis.serializable()
 
 
 # Update
