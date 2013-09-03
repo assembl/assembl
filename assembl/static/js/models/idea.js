@@ -31,7 +31,7 @@ define(['backbone', 'models/segment', 'app'], function(Backbone, Segment, app){
             shortTitle: 'New idea',
             longTitle: 'Please add a description',
             total: 0,
-            isOpen: false,
+            isOpen: true,
             hasCheckbox: true,
             featured: false,
             active: false,
