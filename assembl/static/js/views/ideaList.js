@@ -17,7 +17,7 @@ function(Backbone, _, Idea, IdeaView, app){
          * The collapse/expand flag
          * @type {Boolean}
          */
-        collapsed: true,
+        collapsed: false,
 
         /**
          * The tempate
