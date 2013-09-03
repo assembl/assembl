@@ -120,11 +120,25 @@ def get_posts(request):
     data["page"] = page
 
     #Rename "inbox" to "unread", the number of unread messages for the current user.
-    no_of_messages_viewed_by_user = DBSession.query(ViewPost).filter_by(
-        actor_id=user_id,
+    no_of_messages_viewed_by_user = DBSession.query(ViewPost).join(
+        Post,
+        Content,
+        Source
+    ).filter(
+        Source.discussion_id == discussion_id,
+        Content.source_id == Source.id,
+        ViewPost.actor_id == user_id,
     ).count() if user_id else 0
 
-    data["inbox"] = discussion.posts().count() - no_of_messages_viewed_by_user
+    no_of_posts_to_discussion = DBSession.query(Post).join(
+        Content,
+        Source,
+    ).filter(
+        Source.discussion_id == discussion_id,
+        Content.source_id == Source.id,
+    ).count()
+
+    data["inbox"] = no_of_posts_to_discussion - no_of_messages_viewed_by_user
     #What is "total", the total messages in the current context?
     data["total"] = discussion.posts().count()
     data["maxPage"] = max(1, ceil(float(data["total"])/page_size))
