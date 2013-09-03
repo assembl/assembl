@@ -29,10 +29,9 @@ def get_synthesis(request):
 def save_synthesis(request):
     discussion_id = request.matchdict['discussion_id']
     discussion = DBSession.query(Discussion).get(discussion_id)
+    synthesis = discussion.synthesis
 
     with transaction.manager:
-        synthesis = discussion.synthesis
-
         synthesis.subject = synthesis_data.get('subject')
         synthesis.introduction = synthesis_data.get('introduction')
         synthesis.conclusion = synthesis_data.get('conclusion')
