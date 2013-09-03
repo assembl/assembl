@@ -91,6 +91,11 @@ def get_posts(request):
     if not discussion:
         raise HTTPNotFound(_("No discussion found with id=%s" % discussion_id))
 
+    # TODO: import new messages somewhere else.
+    # This is probably going to slow things down a bit, but we need the latest
+    # data all the time for testing purposes.
+    discussion.import_from_sources()
+
     user_id = authenticated_userid(request)
 
     DEFAULT_PAGE_SIZE = 25
