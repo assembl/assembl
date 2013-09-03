@@ -16,7 +16,7 @@ from assembl.db import DBSession
 from assembl.auth import P_READ, P_ADD_POST
 from assembl.source.models import Post
 from assembl.synthesis.models import Discussion, Source, Content, Extract, Idea
-from assembl.auth.models import ViewPost
+from assembl.auth.models import ViewPost, User
 from . import acls
 
 from sqlalchemy.orm import aliased
@@ -207,6 +207,7 @@ def create_post(request):
     """
     request_body = json.loads(request.body)
     user_id = authenticated_userid(request)
+    user = DBSession.query(User).filter_by(user_id=user_id).one()
 
     message = request_body.get('message', None)
     reply_id = request_body.get('reply_id', None)
