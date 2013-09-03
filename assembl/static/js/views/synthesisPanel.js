@@ -23,6 +23,8 @@ function(Backbone, _, $, app, Synthesis, SynthesisIdeaView){
 
             this.ideas.on('reset', this.render, this);
             this.ideas.on('change:parentId change:inSynthesis', this.render, this);
+
+            this.model.on('reset', this.render, this);
         },
 
         /**

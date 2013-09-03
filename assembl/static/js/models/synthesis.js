@@ -27,6 +27,10 @@ define(['backbone', 'zepto', 'app'], function(Backbone, $, app){
             subject: 'Add a title'
         },
 
+        /**
+         * Overwritting the default method
+         * @return {Boolean}
+         */
         isNew: function(){
             return false;
         },
@@ -35,7 +39,7 @@ define(['backbone', 'zepto', 'app'], function(Backbone, $, app){
          * @event
          */
         onAttrChange: function(){
-            this.save({ subject: 'nada' });
+            this.save();
         }
 
     });
