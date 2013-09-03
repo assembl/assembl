@@ -59,7 +59,7 @@ function(Backbone, _, $, Idea, Segment, app, ckeditor){
             data.editing = this.model.get('editing') || false;
 
             this.$el.html( this.template(data) );
-            //this.$('.idealist-children').append( this.getRenderedChildren(data.level) );
+            this.$('.idealist-children').append( this.getRenderedChildren(data.level) );
             return this;
         },
 
@@ -73,10 +73,12 @@ function(Backbone, _, $, Idea, Segment, app, ckeditor){
                 ret = [];
 
             _.each(children, function(idea, i){
-                idea.set('level', parentLevel + 1);
+                if( idea.get('inSynthesis') === true ){
+                    idea.set('level', parentLevel + 1);
 
-                var ideaView = new SymthesisIdeaView({model:idea});
-                ret.push( ideaView.render().el );
+                    var ideaView = new SymthesisIdeaView({model:idea});
+                    ret.push( ideaView.render().el );
+                }
             });
 
             return ret;
