@@ -35,9 +35,14 @@ function(Backbone, _, $, Idea, Segment, app){
 
         /**
          * The render
+         * @param {Boolean} [loadChildren=true]
          * @return {IdeaView}
          */
-        render: function(){
+        render: function(loadChildren){
+            if( loadChildren === undefined ){
+                loadChildren = true;
+            }
+
             var data = this.model.toJSON(),
                 doc = document.createDocumentFragment();
 
@@ -60,7 +65,9 @@ function(Backbone, _, $, Idea, Segment, app){
             data.segments = this.model.getSegments();
 
             this.$el.html(this.template(data));
-            this.$('.idealist-children').append( this.getRenderedChildren(data.level) );
+            if( loadChildren === true ){
+                this.$('.idealist-children').append( this.getRenderedChildren(data.level) );
+            }
 
             return this;
         },
