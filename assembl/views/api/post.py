@@ -221,7 +221,7 @@ def create_post(request):
     """
     request_body = json.loads(request.body)
     user_id = authenticated_userid(request)
-    user = DBSession.query(User).filter_by(user_id=user_id).one()
+    user = DBSession.query(User).filter_by(id=user_id).one()
 
     message = request_body.get('message', None)
     reply_id = request_body.get('reply_id', None)
@@ -234,7 +234,7 @@ def create_post(request):
 
     if reply_id:
         post = DBSession.query(Post).get(int(reply_id))
-        post.content.reply(user, post_body['message'])
+        post.content.reply(user, message)
 
         return { "ok": True }
 
