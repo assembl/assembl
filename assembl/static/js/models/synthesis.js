@@ -10,7 +10,7 @@ define(['backbone', 'zepto', 'app'], function(Backbone, $, app){
          * @init
          */
         initialize: function(){
-            this.on('change:subject', this.onAttrChange, this);
+            this.on('change', this.onAttrChange, this);
         },
 
         /**
@@ -24,7 +24,9 @@ define(['backbone', 'zepto', 'app'], function(Backbone, $, app){
          * @type {Object}
          */
         defaults: {
-            subject: 'Add a title'
+            subject: 'Add a title',
+            introduction: 'Add an introduction',
+            conclusion: 'Add a conclution'
         },
 
         /**
