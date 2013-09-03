@@ -225,6 +225,7 @@ def create_post(request):
 
     message = request_body.get('message', None)
     reply_id = request_body.get('reply_id', None)
+    subject = request_body.get('subject', None)
 
     if not user_id:
         raise HTTPUnauthorized()
@@ -241,12 +242,14 @@ def create_post(request):
     discussion_id = request.matchdict['discussion_id']
     discussion = DBSession.query(Discussion).get(discussion_id)
 
+    subject = subject or discussion.topic
+
     if not discussion:
         raise HTTPNotFound(
             _("No discussion found with id=%s" % discussion_id)
         )
 
     for source in discussion.sources:
-        source.send(user, message)
+        source.send(user, message, subject=subject)
 
     return { "ok": True }

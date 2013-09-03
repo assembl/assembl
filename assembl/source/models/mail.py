@@ -197,7 +197,12 @@ class Mailbox(Source):
 
         return most_common_address
 
-    def email_most_common_recipient(self, sender, message_body):
+    def email_most_common_recipient(
+        self, 
+        sender, 
+        message_body,
+        subject='[Assembl]', 
+    ):
         """
         Send an email from the given sender to the most common recipient in
         emails from this mailbox.
@@ -218,7 +223,7 @@ class Mailbox(Source):
         recipients = self.most_common_recipient_address()
 
         message = MIMEMultipart('alternative')
-        message['Subject'] = Header(self.subject, 'utf-8')
+        message['Subject'] = Header(subject, 'utf-8')
         message['From'] = sent_from
 
         message['To'] = self.recipients
