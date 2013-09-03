@@ -11,7 +11,7 @@
             <div class="bar-right">
                 {% if user %}
                     {{ user.display_name() }}
-                    <a class="iconbutton iconbutton--nofx"><img src="/user/id/{{user.id}}/avatar/32" alt="{{ user.display_name() }}" /></a>
+                    <a class="iconbutton iconbutton--nofx"><img src="/user/id/{{user.id}}/avatar/32" alt="{{ user.display_name() }}" class="image-rounded" /></a>
                     <a class="iconbutton icon-search"></a>
                     <a class="iconbutton icon-cog"></a>
                 {% else %}
