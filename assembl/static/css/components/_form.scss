@@ -31,12 +31,14 @@ $text-muted: #999;
 // Default textarea
 // ================
 .formtextarea {
+    min-height: 4em;
     width: 100%;
     @include box-sizing( border-box );
     resize: vertical;
     padding: 2px 5px;
 
     border: solid 1px $form-border-color;
+    border-radius: 6px;
     font-size: 14px;
 }
 

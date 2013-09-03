@@ -115,7 +115,7 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message){
             });
 
             this.$('#messagelist-thread').empty().append(list);
-            this.collapseThreadMessages();
+            //this.collapseThreadMessages();
         },
 
         /**

@@ -81,3 +81,9 @@ $message-bar-width: 15px;
 .message-body {
     padding: { right: $padding * 2; left: $padding * 4; }
 }
+
+//
+.message-replybox {
+    padding: $padding;
+    text-align: right;
+}
