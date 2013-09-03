@@ -104,10 +104,30 @@ function(Backbone, _, Moment, ckeditor, app, Message){
         /**
          * Sends the message to the server
          */
-        sendMessage: function(){
-            // Todo: finish this
-            alert( "message: " + this.$('.message-textarea').val() );
-            this.closeReplyBox();
+        sendMessage: function(ev){
+            var btn = $(ev.currentTarget),
+                url = app.getApiUrl('posts'),
+                data = {},
+                that = this;
+
+            data.message = this.$('.message-textarea').val();
+            if( this.model.get('id') ){
+                data.reply_id = this.model.get('id');
+            }
+
+            btn.text('Sending...');
+
+            $.ajax({
+                type: "post",
+                data: JSON.stringify(data),
+                contentType: 'application/json',
+                url: url,
+                success: function(){
+                    btn.text('Send');
+                    that.closeReplyBox();
+                }
+            });
+
         },
 
         /**
