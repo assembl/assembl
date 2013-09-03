@@ -316,6 +316,20 @@ function($, _, ckeditor, User, Moment){
         },
 
         /**
+         * Format string function
+         * @param {string} string
+         * @param {string} ...
+         * @return {string}
+         */
+        format: function(str){
+            var args = [].slice.call(arguments, 1);
+
+            return str.replace(/\{(\d+)\}/g, function(a,b){
+                return typeof args[b] != 'undefined' ? args[b] : a;
+            });
+        },
+
+        /**
          * Format date
          * @param {Date|timestamp} date
          * @param {string} [format=app.dateFormat] The format

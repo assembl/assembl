@@ -99,7 +99,6 @@ function(Backbone, _, $, app, Synthesis, SynthesisIdeaView){
          */
         onIntroductionBlur: function(ev){
             var introduction = app.stripHtml(ev.currentTarget.innerHTML);
-            alert('sim')
             this.model.set("introduction", introduction);
         },
 
@@ -127,8 +126,30 @@ function(Backbone, _, $, app, Synthesis, SynthesisIdeaView){
          */
         publish: function(){
             var ok = confirm("Do you want to publish the synthesis?");
-            if( ok ) ok = confirm("Are you sure? Do you really want to publish this?");
-            if( ok ) ok = confirm("Published!");
+            if( ok ){
+                this._publish();
+            }
+        },
+
+        /**
+         * Publishes the synthesis
+         */
+        _publish: function(){
+            var json = this.model.toJSON(),
+                data = {},
+                url = app.getApiUrl('posts');
+
+            data.message = app.format("Subject: {0} \n Introduction: {1} \n Conclusion: {2}", json.subject, json.introduction, json.conclusion);
+
+            $.ajax({
+                type: "post",
+                data: JSON.stringify(data),
+                contentType: 'application/json',
+                url: url,
+                success: function(){
+                    alert("Synthesis published!");
+                }
+            });
         }
     });
 
