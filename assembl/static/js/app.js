@@ -480,7 +480,7 @@ function($, _, ckeditor, User, Moment){
          * @return {String} The new string without html tags
          */
         stripHtml: function(html){
-            return html.replace(/(<([^>]+)>)/ig,"");
+            return html ? html.replace(/(<([^>]+)>)/ig,"") : html;
         },
 
         /**

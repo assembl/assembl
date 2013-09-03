@@ -23,6 +23,8 @@ function(Backbone, _, $, app, Synthesis, SynthesisIdeaView){
 
             this.ideas.on('reset', this.render, this);
             this.ideas.on('change:parentId change:inSynthesis', this.render, this);
+
+            this.model.on('reset', this.render, this);
         },
 
         /**
@@ -52,8 +54,10 @@ function(Backbone, _, $, app, Synthesis, SynthesisIdeaView){
             app.off('synthesisPanel:close');
 
             var list = document.createDocumentFragment(),
-                data = { collapsed: this.collapsed, subject: this.model.get('subject') },
+                data = this.model.toJSON(),
                 ideas = this.ideas.where({inSynthesis: true});
+
+            data.collapsed = this.collapsed;
 
             _.each(ideas, function(idea){
                 var ideaView = new SynthesisIdeaView({model:idea});
@@ -68,6 +72,9 @@ function(Backbone, _, $, app, Synthesis, SynthesisIdeaView){
 
         events: {
             'blur #synthesisPanel-title': 'onTitleBlur',
+            'blur #synthesisPanel-introduction': 'onIntroductionBlur',
+            'blur #synthesisPanel-conclusion': 'onConclusionBlur',
+
             'click #synthesisPanel-closeButton': 'closePanel',
             'click #synthesisPanel-publishButton': 'publish'
         },
@@ -85,6 +92,23 @@ function(Backbone, _, $, app, Synthesis, SynthesisIdeaView){
         onTitleBlur: function(ev){
             var title = app.stripHtml(ev.currentTarget.innerHTML);
             this.model.set('subject', title);
+        },
+
+        /**
+         * 
+         */
+        onIntroductionBlur: function(ev){
+            var introduction = app.stripHtml(ev.currentTarget.innerHTML);
+            alert('sim')
+            this.model.set("introduction", introduction);
+        },
+
+        /**
+         * 
+         */
+        onConclusionBlur: function(ev){
+            var conclusion = app.stripHtml(ev.currentTarget.innerHTML);
+            this.model.set('conclusion', conclusion);
         },
 
         /**
