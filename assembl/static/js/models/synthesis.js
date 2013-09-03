@@ -10,28 +10,32 @@ define(['backbone', 'zepto', 'app'], function(Backbone, $, app){
          * @init
          */
         initialize: function(){
-            this.on('change:title', this.onAttrChange, this);
+            this.on('change:subject', this.onAttrChange, this);
         },
 
         /**
          * The url
          * @type {String}
          */
-        urlRoot: app.getApiUrl('synthesis'),
+        url: app.getApiUrl('synthesis/'),
 
         /**
          * Default values
          * @type {Object}
          */
         defaults: {
-            title: 'Add a title'
+            subject: 'Add a title'
+        },
+
+        isNew: function(){
+            return false;
         },
 
         /**
          * @event
          */
         onAttrChange: function(){
-            this.save();
+            this.save({ subject: 'nada' });
         }
 
     });
