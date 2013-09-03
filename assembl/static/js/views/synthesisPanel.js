@@ -55,7 +55,7 @@ function(Backbone, _, $, app, Synthesis, SynthesisIdeaView){
 
             var list = document.createDocumentFragment(),
                 data = this.model.toJSON(),
-                ideas = this.ideas.where({inSynthesis: true});
+                ideas = this.ideas.getInSynthesisIdeas();
 
             data.collapsed = this.collapsed;
 
@@ -70,6 +70,9 @@ function(Backbone, _, $, app, Synthesis, SynthesisIdeaView){
             return this;
         },
 
+        /**
+         * 
+         */
         events: {
             'blur #synthesisPanel-title': 'onTitleBlur',
             'blur #synthesisPanel-introduction': 'onIntroductionBlur',

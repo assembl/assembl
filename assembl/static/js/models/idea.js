@@ -1,4 +1,4 @@
-define(['backbone', 'models/segment', 'app'], function(Backbone, Segment, app){
+define(['backbone','underscore', 'models/segment', 'app'], function(Backbone, _, Segment, app){
     'use strict';
 
     /**
@@ -216,7 +216,25 @@ define(['backbone', 'models/segment', 'app'], function(Backbone, Segment, app){
          * The model
          * @type {IdeaModel}
          */
-        model: IdeaModel
+        model: IdeaModel,
+
+        /**
+         * Returns the ideas to compose the synsthesis panel
+         */
+        getInSynthesisIdeas: function(){
+            var ideas = this.where({inSynthesis: true}),
+                result = [];
+
+            _.each(ideas, function(idea){
+                console.log( idea.getSynthesisLevel() );
+                if( idea.getSynthesisLevel() === 0 ){
+                    result.push( idea );
+                }
+            });
+
+            return result;
+        }
+
     });
 
     return {
