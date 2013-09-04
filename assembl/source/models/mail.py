@@ -226,8 +226,7 @@ class Mailbox(Source):
         message['Subject'] = Header(subject, 'utf-8')
         message['From'] = sent_from
 
-        message['To'] = self.recipients
-        message.add_header('In-Reply-To', self.message_id)
+        message['To'] = recipients
 
         plain_text_body = message_body
         html_body = message_body
