@@ -262,8 +262,8 @@ class Mailbox(Source):
         smtp_connection.quit()
 
     # The send method will be a common interface on all sources.
-    def send(self, sender, message):
-        self.email_most_common_recipient(sender, message)
+    def send(self, sender, message, subject):
+        self.email_most_common_recipient(sender, message, subject=subject)
 
     def serializable(self):
         serializable_source = super(Mailbox, self).serializable()
