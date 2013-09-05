@@ -30,6 +30,7 @@ function(Backbone, _, $, app){
          * @return {LateralMenu}
          */
         render: function(){
+            app.trigger('render');
             this.$el.html( this.template() );
 
             return this;

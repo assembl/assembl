@@ -51,8 +51,9 @@
     color: #eceef1;
 
     .chk--idealist & {
-        top: 0;
+        top: 10px;
         left: 0;
+        line-height: 20px;
     }
 
     .chk-checkbox:checked ~ & {

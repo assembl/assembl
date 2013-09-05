@@ -534,12 +534,20 @@ function($, _, ckeditor, User, Moment){
         },
 
         /**
+         * Removes all tooltips from the screen
+         */
+        cleanTooltips: function(){
+            $('.tipsy').remove();
+        },
+
+        /**
          * @init
          */
         initTooltips: function(){
             // reference: http://onehackoranother.com/projects/jquery/tipsy/
 
             $('[data-tooltip]').tipsy({
+                gravity: 's',
                 live: true,
                 fade: true,
                 title: function() { return this.getAttribute('data-tooltip'); }
@@ -557,6 +565,8 @@ function($, _, ckeditor, User, Moment){
 
             app.doc.on('click', '.dropdown-label', app.onDropdownClick);
             app.doc.on('ajaxError', app.onAjaxError);
+
+            app.on('render', app.cleanTooltips);
 
             app.currentUser = {
                 name: 'Peter Parker',

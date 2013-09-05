@@ -50,6 +50,8 @@ function(Backbone, _, $, app, Synthesis, SynthesisIdeaView){
          * @return {SynthesisPanel}
          */
         render: function(){
+            app.trigger('render');
+
             // Cleaning all previous listeners
             app.off('synthesisPanel:close');
 

@@ -29,6 +29,7 @@ function(Backbone, _, $, app, Message){
          * @return {MessageListView}
          */
         render: function(){
+            app.trigger('render');
             var data = this.model.toJSON(),
                 doc = document.createDocumentFragment();
 

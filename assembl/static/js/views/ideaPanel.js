@@ -46,6 +46,8 @@ function(Backbone, _, Idea, app, ckeditor){
          * The render
          */
         render: function(){
+            app.trigger('render');
+
             var segments = this.idea.getSegments();
             this.$el.html( this.template( {idea:this.idea, segments:segments} ) );
 

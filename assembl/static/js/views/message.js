@@ -43,6 +43,7 @@ function(Backbone, _, Moment, ckeditor, app, Message){
          * @return {MessageView}
          */
         render: function(){
+            app.trigger('render');
             var data = this.model.toJSON();
 
             data['date'] = app.formatDate(data.date);
