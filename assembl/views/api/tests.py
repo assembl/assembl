@@ -58,12 +58,13 @@ class ApiTest(BaseTest):
         extract_id = '38ebdaac-c0f0-408e-8904-7f343851fc61'
         extract_data = {
             "idIdea": None,
-            "author": {
+            "creator": {
+                "id": 1,
                 "name": "André Farzat",
-                "avatarUrl": "http://www.gravatar.com/avatar/39cbf87dae724f2cb64e92accdd4d349.jpg"},
+                "type": "User"},
             "text": "Let's lower taxes to fav",
             "avatarUrl": None,
-            "authorName": None,
+            "creator": None,
             "idPost": None,
             "creationDate": 1376573216160,
             "id": "38ebdaac-c0f0-408e-8904-7f343851fc61"

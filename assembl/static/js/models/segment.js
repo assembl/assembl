@@ -31,7 +31,8 @@ function(Backbone, app, moment, User){
             idPost: null,
             idIdea: null,
             creationDate: null,
-            author: {}
+            creator: {},
+            quote_creator: {}
         },
 
         /**

@@ -1,3 +1,5 @@
+
+
 {# 
     this is an included template.
     the <%= segment %> variable should be given.
@@ -12,10 +14,10 @@
 
     <div class="media">
         <div class="media-imgleft">
-            <img src="<%= app.formatAvatarUrl( segment.get('avatarUrl') ) %>" class="image-rounded" alt="" />
+            <img src="/user/id/<%= segment.get('creator')['id'] %>/avatar/24" class="image-rounded" alt="" />
         </div>
         <div class="media-body">
-            <div class="media-title"><strong><%= segment.get('author').name %></strong></div>
+            <div class="media-title"><strong><%= segment.get('creator')['name'] %></strong></div>
             {% set segmentDate = "<%= segment.getCreationDateFormated() %>" %}
             <div class="text-small">{{ gettext('Extracted %(date)s')|format(date=segmentDate)|safe }}</div>
         </div>

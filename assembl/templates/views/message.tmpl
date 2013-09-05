@@ -6,12 +6,12 @@
             <span class="message-bar"></span>
         <% } %>
         <a class="iconbutton icon-right-dir"></a>
-        <img src="<%= app.formatAvatarUrl(avatarUrl, 32) %>" alt="{{ gettext('User') }}"  class="image-rounded" width="32" height="32" />
+        <img src="/user/id/<%= creator.id %>/avatar/24" alt="{{ gettext('User') }}"  class="image-rounded" width="32" height="32" />
     </div>
 
     <div class="message-date"><%= date %></div>
     <div class="message-title">
-        <span class="text-bold inline margin-right"><%= authorName %></span>
+        <span class="text-bold inline margin-right"><%= creator.name %></span>
         <span class="inline margin-right"><%= subject %></span>
         <span class="text-muted text-opaque inline"><%= app.stripHtml(body) %></span>
     </div>
@@ -28,12 +28,12 @@
 
         <div class="media-imgleft">
             <a class="iconbutton icon-down-dir"> </a>
-            <img src="<%= app.formatAvatarUrl(avatarUrl) %>" alt="{{ gettext('User') }}"  class="image-rounded" />
+            <img src="/user/id/<%= creator.id %>/avatar/24" alt="{{ gettext('User') }}"  class="image-rounded" />
         </div>
 
         <div class="media-body">
             <div class="media-title">
-                {% set userName = "<%= authorName %>" %}
+                {% set userName = "<%= creator.name %>" %}
                 {% set time = "<%= date %>" %}
                 {{ gettext('<strong>%(user)s</strong> | <time>%(time)s</time>')|format(user=userName, time=time)|safe }}
             </div>

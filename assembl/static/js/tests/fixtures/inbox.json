@@ -12,7 +12,7 @@
             "parentId": null,
             "subject": "Is it 1955?",
             "body": "Did the lightning happen on the clocktower?",
-            "authorName": "Martin McFly",
+            "creator": {"id":1, "name":"Martin McFly", "email":"mmcfly@example.com"},
             "avatarUrl": null,
             "date": 1374089157345
         },{
@@ -22,7 +22,7 @@
             "parentId": 1,
             "subject": "We need get you back to the future!",
             "body": "Let's fix the delorean and expect the lightning",
-            "authorName": "Dr. Brown",
+            "creator": {"id":2, "name":"Dr Brown.", "email":"dbrown@example.com"},
             "avatarUrl": null,
             "date": 1374089266638
         }

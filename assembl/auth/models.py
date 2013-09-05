@@ -44,73 +44,6 @@ P_ADD_IDEA = 'add_idea'
 P_EDIT_IDEA = 'edit_idea'
 
 
-class AgentAccount(SQLAlchemyBaseModel):
-    __abstract__ = True
-    """An abstract class for accounts that identify agents"""
-    pass
-
-
-class IdentityProvider(SQLAlchemyBaseModel):
-    """An identity provider (or sometimes a category of identity providers.)"""
-    __tablename__ = "identity_provider"
-    id = Column(Integer, primary_key=True)
-    provider_type = Column(String(20), nullable=False)
-    name = Column(String(60), nullable=False)
-    # TODO: More complicated model, where trust also depends on realm.
-    trust_emails = Column(Boolean, default=False)
-
-
-class EmailAccount(AgentAccount):
-    """An email account"""
-    __tablename__ = "email_account"
-    id = Column(Integer, primary_key=True)
-    email = Column(String(100), nullable=False, index=True)
-    verified = Column(Boolean(), default=False)
-    preferred = Column(Boolean(), default=False)
-    active = Column(Boolean(), default=True)
-    profile_id = Column(
-        Integer,
-        ForeignKey('agent_profile.id', ondelete='CASCADE'),
-        nullable=False, index=True)
-    profile = relationship('AgentProfile', backref='email_accounts')
-
-    def display_name(self):
-        if self.verified:
-            return self.email
-
-    @staticmethod
-    def get_or_make_profile(email):
-        pass
-
-
-
-class IdentityProviderAccount(AgentAccount):
-    """An account with an external identity provider"""
-    __tablename__ = "idprovider_account"
-    id = Column(Integer, primary_key=True)
-    provider_id = Column(
-        Integer,
-        ForeignKey('identity_provider.id', ondelete='CASCADE'),
-        nullable=False)
-    provider = relationship(IdentityProvider)
-    profile_id = Column(
-        Integer,
-        ForeignKey('agent_profile.id', ondelete='CASCADE'),
-        nullable=False)
-    profile = relationship('AgentProfile', backref='identity_accounts')
-    username = Column(String(200))
-    domain = Column(String(200))
-    userid = Column(String(200))
-
-    def display_name(self):
-        # TODO: format according to provider, ie @ for twitter.
-        if self.username:
-            name = self.username
-        else:
-            name = self.userid
-        return ":".join((self.provider.provider_type, name))
-
-
 class AgentProfile(SQLAlchemyBaseModel):
     """
     An agent could be a person, group, bot or computer.
@@ -201,9 +134,110 @@ class AgentProfile(SQLAlchemyBaseModel):
         args = {'s': str(size)}
         if default:
             args['d'] = default
-        gravatar_url = "http://www.gravatar.com/avatar/%s?%s" % (
-            hashlib.md5(email.lower()).hexdigest(), urllib.urlencode(args))
+        gravatar_url = "http://www.gravatar.com/avatar/%s?s=%d&amp;d=%s" % (
+            hashlib.md5(email.lower()).hexdigest(), size, urllib.quote(default))
         return gravatar_url
+
+    def serializable(self, use_email=None):
+        r = {
+            'type': "AgentProfile",
+            'id': self.id,
+            'name': self.name or self.display_name()
+        }
+        if use_email:
+            r['email'] = use_email
+        if self.user:
+            r['type'] = 'User'
+            r['username'] = self.user.username
+            if not use_email:
+                r['email'] = self.user.get_preferred_email()
+        return r
+
+
+class AgentAccount(SQLAlchemyBaseModel):
+    __abstract__ = True
+    """An abstract class for accounts that identify agents"""
+    pass
+
+
+class EmailAccount(AgentAccount):
+    """An email account"""
+    __tablename__ = "email_account"
+    id = Column(Integer, primary_key=True)
+    email = Column(String(100), nullable=False, index=True)
+    verified = Column(Boolean(), default=False)
+    preferred = Column(Boolean(), default=False)
+    active = Column(Boolean(), default=True)
+    profile_id = Column(
+        Integer,
+        ForeignKey('agent_profile.id', ondelete='CASCADE'),
+        nullable=False, index=True)
+    profile = relationship('AgentProfile', backref='email_accounts')
+
+    def display_name(self):
+        if self.verified:
+            return self.email
+
+    def serialize_profile(self):
+        return self.profile.serializable(self.email)
+
+    @staticmethod
+    def get_or_make_profile(session, email, name=None):
+        emails = list(session.query(EmailAccount).filter_by(
+            email=email).all())
+        # We do not want unverified user emails
+        # This is costly. I should have proper boolean markers
+        emails = [e for e in emails if e.verified or not e.profile.user]
+        user_emails = [e for e in emails if e.profile.user]
+        if user_emails:
+            assert len(user_emails) == 1
+            return user_emails[0]
+        elif emails:
+            # should also be 1 but less confident.
+            return emails[0]
+        else:
+            profile = AgentProfile(name=name)
+            emailAccount = EmailAccount(email=email, profile=profile)
+            session.add(emailAccount)
+            return emailAccount
+
+
+class IdentityProvider(SQLAlchemyBaseModel):
+    """An identity provider (or sometimes a category of identity providers.)"""
+    __tablename__ = "identity_provider"
+    id = Column(Integer, primary_key=True)
+    provider_type = Column(String(20), nullable=False)
+    name = Column(String(60), nullable=False)
+    # TODO: More complicated model, where trust also depends on realm.
+    trust_emails = Column(Boolean, default=False)
+
+
+class IdentityProviderAccount(AgentAccount):
+    """An account with an external identity provider"""
+    __tablename__ = "idprovider_account"
+    id = Column(Integer, primary_key=True)
+    provider_id = Column(
+        Integer,
+        ForeignKey('identity_provider.id', ondelete='CASCADE'),
+        nullable=False)
+    provider = relationship(IdentityProvider)
+    profile_id = Column(
+        Integer,
+        ForeignKey('agent_profile.id', ondelete='CASCADE'),
+        nullable=False)
+    profile = relationship('AgentProfile', backref='identity_accounts')
+    username = Column(String(200))
+    domain = Column(String(200))
+    userid = Column(String(200))
+
+    def display_name(self):
+        # TODO: format according to provider, ie @ for twitter.
+        if self.username:
+            name = self.username
+        else:
+            name = self.userid
+        return ":".join((self.provider.provider_type, name))
+
 
 class User(SQLAlchemyBaseModel):
     """
@@ -295,7 +329,10 @@ class User(SQLAlchemyBaseModel):
     def display_name(self):
         if self.username:
             return self.username
-        return self.profile.display_name
+        return self.profile.display_name()
+
+    def serializable(self):
+        return self.profile.serializable()
 
     def __repr__(self):
         return "<User '%s'>" % self.username

@@ -60,7 +60,7 @@ function(Backbone, _, $, app, Segment){
         addTextAsSegment: function(text, idPost){
             var data = {
                 text: text,
-                author: app.getCurrentUser(),
+                creator: app.getCurrentUser(),
                 idPost: idPost || null
             };
 

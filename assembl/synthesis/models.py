@@ -326,10 +326,8 @@ class Extract(SQLAlchemyBaseModel):
             'idPost': self.source.post.id,
             'idIdea': self.idea_id,
             'creationDate': self.creation_date.isoformat(),
-            'author': {
-                'name': self.source.sender,
-                'avatarUrl': ''
-            }
+            'creator': self.creator.serializable(),
+            'source_creator': self.source.post.creator.serializable()
         }
 
     def __repr__(self):

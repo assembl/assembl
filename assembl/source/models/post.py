@@ -15,7 +15,7 @@ from sqlalchemy import (
 from assembl.db.models import SQLAlchemyBaseModel
 from assembl.db import DBSession
 from assembl.source.models.generic import Content
-
+from assembl.auth.models import AgentProfile
 
 
 class Post(SQLAlchemyBaseModel):
@@ -39,6 +39,9 @@ class Post(SQLAlchemyBaseModel):
         "Post",
         backref=backref('parent', remote_side=[id])
     )
+
+    creator_id = Column(Integer, ForeignKey('agent_profile.id'))
+    creator = relationship(AgentProfile)
 
     def get_descendants(self):
         ancestry_query_string = "%s%d,%%" % (self.ancestry or '', self.id)

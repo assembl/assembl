@@ -30,7 +30,7 @@ define(['backbone', 'zepto', 'app'], function(Backbone, $, app){
             parentId: null,
             subject: null,
             body: null,
-            authorName: null,
+            creator: null,
             avatarUrl: null,
             date: null
         },

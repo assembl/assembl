@@ -5,6 +5,7 @@ import smtplib
 from email.header import decode_header as decode_email_header, Header
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+from email.utils import parseaddr
 
 from pyramid.threadlocal import get_current_registry
 
@@ -29,7 +30,7 @@ from sqlalchemy import (
 
 from assembl.source.models.generic import Source, Content
 from assembl.db import DBSession
-
+from assembl.auth.models import EmailAccount
 
 
 class Mailbox(Source):
@@ -125,9 +126,13 @@ class Mailbox(Source):
                 new_in_reply_to
             )
 
+            sender = email_header_to_unicode(parsed_email.get('From'))
+            sender_name, sender_email = parseaddr(sender)
+            sender_email_account = EmailAccount.get_or_make_profile(DBSession, sender_email, sender_name)
+
             new_email = Email(
                 recipients=email_header_to_unicode(parsed_email['To']),
-                sender=email_header_to_unicode(parsed_email['From']),
+                sender=sender,
                 subject=email_header_to_unicode(parsed_email['Subject']),
                 creation_date=datetime.utcfromtimestamp(
                     mktime(
@@ -141,6 +146,7 @@ class Mailbox(Source):
                 body=body.strip().decode('ISO-8859-1'),
                 full_message=str(parsed_email).decode('ISO-8859-1')
             )
+            email.post.creator = sender_email_account.profile
 
             return new_email
 
@@ -418,6 +424,7 @@ class Email(Content):
 
         serializable_content.update({
             "sender": self.sender,
+            "sender_profile": self.post.creator.serializable(),
             "recipients": self.recipients,
             "subject": self.subject,
             "body": self.body,
