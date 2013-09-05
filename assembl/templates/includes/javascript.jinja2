@@ -21,6 +21,10 @@ requirejs.config({
             deps: ['zepto'],
             exports: '$'
         },
+        'zepto-data': {
+            deps: ['zepto'],
+            exports: '$'
+        },
         'app': {
             deps: ['ckeditor', 'tipsy'],
             exports: 'app'
@@ -51,8 +55,9 @@ requirejs.config({
         'backbone': 'lib/backbone',
         'underscore': 'lib/underscore',
 
-        'zepto': '__proto__' in {} ? 'lib/zepto' : "lib/jquery",
+        'zepto': 'lib/jquery', // '__proto__' in {} ? 'lib/zepto' : "lib/jquery",
         'zepto-touch': 'lib/zepto-touch',
+        'zepto-data': 'lib/zepto-data',
 
         'tipsy': 'lib/jquery.tipsy',
 

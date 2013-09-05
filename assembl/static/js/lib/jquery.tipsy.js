@@ -177,7 +177,12 @@
             var binder   = options.live ? 'live' : 'bind',
                 eventIn  = options.trigger == 'hover' ? 'mouseenter' : 'focus',
                 eventOut = options.trigger == 'hover' ? 'mouseleave' : 'blur';
-            this[binder](eventIn, enter)[binder](eventOut, leave);
+
+            if( binder === 'live' ){
+                $(document).on(eventIn, this.selector, {}, enter).on(eventOut, this.selector, {}, leave);
+            } else {
+                this[binder](eventIn, enter)[binder](eventOut, leave);
+            }
         }
         
         return this;

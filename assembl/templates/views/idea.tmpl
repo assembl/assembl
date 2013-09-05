@@ -2,7 +2,7 @@
     <% if (hasCheckbox) { %>
     <label class="chk chk--idealist">
         <input type="checkbox" class="chk-checkbox" <% if(inSynthesis) { %>checked="checked"<% } %> />
-        <span class="chk-label"></span>
+        <span class="chk-label" data-tooltip="{{ gettext('Activate') }}"></span>
     </label>
     <% }  %>
 

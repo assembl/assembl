@@ -537,8 +537,10 @@ function($, _, ckeditor, User, Moment){
          * @init
          */
         initTooltips: function(){
-            alert( $('[data-tooltip]').length );
+            // reference: http://onehackoranother.com/projects/jquery/tipsy/
+
             $('[data-tooltip]').tipsy({
+                live: true,
                 fade: true,
                 title: function() { return this.getAttribute('data-tooltip'); }
             });
