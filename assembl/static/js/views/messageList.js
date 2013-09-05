@@ -291,6 +291,8 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message){
             'click #messageList-collapseButton': 'toggleMessages',
             'click #messagelist-returnButton': 'onReturnButtonClick',
 
+            'click #messagelist-inbox': 'loadInbox',
+
             'click #messageList-message-collapseButton': 'toggleThreadMessages',
 
             'click #messageList-prevButton': 'loadPreviousData',
@@ -312,6 +314,14 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message){
             var id = ev.currentTarget.getAttribute('data-messageid');
 
             this.openMessageByid(id);
+        },
+
+        /**
+         * @event
+         * Load the inbox without filtering
+         */
+        loadInbox: function(){
+            this.loadData();
         },
 
         /**

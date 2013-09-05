@@ -6,12 +6,12 @@
             <div class="dropdown">
                 {% set inbox = '<%= inbox %>' %}
 
-                <span class="dropdown-label text-bold">{{ gettext('Inbox (%(total)s)')|format(total=inbox)|safe }}</span>
+                <span class="dropdown-label text-bold">{{ gettext('Messages (%(total)s)')|format(total=inbox)|safe }}</span>
                 <ul class="dropdown-list">
-                    <li class="dropdown-listitem">{{ gettext('Inbox (%(total)s)')|format(total=inbox)|safe }}</li>
-                    <li class="dropdown-listitem">{{ gettext('Unread') }}</li>
+                    <li id="messagelist-inbox" class="dropdown-listitem">{{ gettext('Inbox') }}</li>
+                    {# <li class="dropdown-listitem">{{ gettext('Unread') }}</li>
                     <li class="dropdown-listitem">{{ gettext('Uncaught') }}</li>
-                    <li class="dropdown-listitem">{{ gettext('Followed') }}</li>
+                    <li class="dropdown-listitem">{{ gettext('Followed') }}</li> #}
                 </ul>
             </div>
 
