@@ -24,6 +24,7 @@ define([
 
     // Idea list
     app.ideaList = new IdeaList({el: '#idealist', button: '#button-ideaList'});
+    app.openPanel(app.ideaList);
 
     // Segment List
     app.segmentList = new SegmentList({el: '#segmentlist', button: '#button-segmentList'});
@@ -37,6 +38,7 @@ define([
     // Message
     app.messageList = new MessageList({el: '#messagelist', button: '#button-messages'}).render();
     app.messageList.loadData();
+    app.openPanel(app.messageList);
 
     // Synthesis
     app.synthesisPanel = new SynthesisPanel({el: '#synthesisPanel', button: '#button-synthesis', ideas: app.ideaList.ideas });
