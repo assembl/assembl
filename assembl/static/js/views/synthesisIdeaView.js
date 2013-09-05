@@ -52,6 +52,7 @@ function(Backbone, _, $, Idea, Segment, app, ckeditor){
          * @return {IdeaView}
          */
         render: function(){
+            app.trigger('render');
             var data = this.model.toJSON(),
                 doc = document.createDocumentFragment();
 

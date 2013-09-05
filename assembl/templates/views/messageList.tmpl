@@ -50,8 +50,8 @@
             </div>
 
             <div class="float-right">
-                <a id="messageList-collapseButton" class="iconbutton <%= collapsed ? 'icon-download-1' : 'icon-upload' %>"></a>
-                <a id="messageList-closeButton" class="iconbutton icon-cancel"></a>
+                <a id="messageList-collapseButton" data-tooltip="<%= collapsed ? '{{gettext('Expand all')}}' : '{{gettext('Collapse all')}}' %>" class="iconbutton <%= collapsed ? 'icon-download-1' : 'icon-upload' %>"></a>
+                <a id="messageList-closeButton" data-tooltip="{{gettext('Close panel')}}" class="iconbutton icon-cancel"></a>
             </div>
         </div>
 

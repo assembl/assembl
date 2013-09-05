@@ -78,6 +78,7 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message){
          * @return {views.Message}
          */
         render: function(){
+            app.trigger('render');
             var list = document.createDocumentFragment(),
                 messages = this.messages.where({parentId: null});
 

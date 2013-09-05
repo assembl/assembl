@@ -31,6 +31,7 @@ function(Backbone, _, $, app, Segment){
          * @return {LateralMenu}
          */
         render: function(){
+            app.trigger('render');
             var segments = this.segments.where({idIdea: null}),
                 data = {segments:segments};
 
