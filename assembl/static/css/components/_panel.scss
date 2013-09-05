@@ -78,11 +78,22 @@
     }
 }
 
+// +++++++
 .panel-editablearea.panel-editablearea--small {
     width: auto;
     max-width: 240px;
     white-space: nowrap;
     margin: auto;
+}
+
+// The container for an editablearea
+// ------------------
+.panel-editablebox {
+    
+    &.is-editing {
+        background: #dbf2ff;
+    }
+
 }
 
 // To put the content

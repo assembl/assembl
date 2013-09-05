@@ -141,7 +141,7 @@ function(Backbone, _, Idea, app, ckeditor){
          * @event
          */
         onLongTitleFocus: function(ev){
-            this.$('.ideaPanel-longtitlearea').css('background', '#dbf2ff');
+            this.$('.panel-editablebox').addClass('is-editing');
 
             $('#ideaPanel-toptoolbar').removeClass('invisible');
             this.$('.ideaPanel-longtitle-closebtn').show();
@@ -168,7 +168,7 @@ function(Backbone, _, Idea, app, ckeditor){
          * @event
          */
         onLongTitleBlur: function(ev){
-            this.$('.ideaPanel-longtitlearea').css('background', '');
+            this.$('.panel-editablebox').removeClass('is-editing');
 
             $('#ideaPanel-toptoolbar').addClass('invisible');
             this.$('.ideaPanel-longtitle-closebtn').hide();

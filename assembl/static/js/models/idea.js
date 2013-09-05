@@ -226,7 +226,6 @@ define(['backbone','underscore', 'models/segment', 'app'], function(Backbone, _,
                 result = [];
 
             _.each(ideas, function(idea){
-                console.log( idea.getSynthesisLevel() );
                 if( idea.getSynthesisLevel() === 0 ){
                     result.push( idea );
                 }

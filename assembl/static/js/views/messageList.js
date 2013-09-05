@@ -25,7 +25,9 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message){
             var that = this;
             app.on('idea:select', function(idea){
                 app.openPanel(app.messageList);
-                that.loadData(idea.get('id'));
+                if( idea ){
+                    that.loadData(idea.get('id'));
+                }
             });
         },
 

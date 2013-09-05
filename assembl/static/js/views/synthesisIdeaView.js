@@ -3,9 +3,13 @@ function(Backbone, _, $, Idea, Segment, app, ckeditor){
     'use strict';
 
     var CKEDITOR_CONFIG = {
-        height: '10em',
         toolbar: [  ['Bold', 'Italic', 'Outdent', 'Indent', 'NumberedList', 'BulletedList'] ],
-        removePlugins: 'floatingspace,resize'
+        extraPlugins: 'sharedspace',
+        removePlugins: 'floatingspace,resize',
+        sharedSpaces: {
+            top: 'synthesisIdea-toptoolbar',
+            bottom: 'synthesisIdea-bottomtoolbar'
+        }
     };
 
     var SymthesisIdeaView = Backbone.View.extend({
@@ -19,7 +23,7 @@ function(Backbone, _, $, Idea, Segment, app, ckeditor){
          * The template
          * @type {[type]}
          */
-        template: app.loadTemplate('symthesisIdea'),
+        template: app.loadTemplate('synthesisIdea'),
 
 
         /**
@@ -60,6 +64,13 @@ function(Backbone, _, $, Idea, Segment, app, ckeditor){
 
             this.$el.html( this.template(data) );
             this.$('.idealist-children').append( this.getRenderedChildren(data.level) );
+
+            if( data.editing === true ){
+                var editablearea = this.$('.panel-editablearea')[0];
+                this.ckInstance = ckeditor.inline( editablearea, CKEDITOR_CONFIG );
+                editablearea.focus();
+            }
+
             return this;
         },
 
@@ -146,10 +157,8 @@ function(Backbone, _, $, Idea, Segment, app, ckeditor){
             if( ev ) {
                 ev.stopPropagation();
             }
-            this.model.set('editing', true);
 
-            this.ckInstance = ckeditor.replace( this.$('.idealist-contenteditable')[0], CKEDITOR_CONFIG );
-            this.ckInstance.focus();
+            this.model.set('editing', true);
         },
 
         /**

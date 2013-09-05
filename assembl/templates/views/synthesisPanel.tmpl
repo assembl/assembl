@@ -10,20 +10,22 @@
 
 
     <div class="panel-body">
-        <div class="margin text-muted">{{ gettext('Subject') }}</div>
-        <div id="synthesisPanel-title" class="padding" contenteditable="true"><%= app.stripHtml(subject) %></div>
+        <div class="margin-left margin-top text-muted">{{ gettext('Subject') }}</div>
+        <div id="synthesisPanel-title" class="panel-editablearea" contenteditable="true"><%= app.stripHtml(subject) %></div>
 
         <div class="spacer"></div>
 
-        <div class="margin text-muted">{{ gettext('Introduction') }}</div>
-        <div id="synthesisPanel-introduction" class="padding border-bottom" contenteditable="true"><%= app.stripHtml(introduction) %></div>
+        <div class="border-bottom">
+            <div class="margin-left text-muted">{{ gettext('Introduction') }}</div>
+            <div id="synthesisPanel-introduction" class="panel-editablearea" contenteditable="true"><%= app.stripHtml(introduction) %></div>
+        </div>
 
         <div class="idealist"></div>
 
         <div class="spacer"></div>
         
-        <div class="margin text-muted">{{ gettext('Conclusion') }}</div>
-        <div id="synthesisPanel-conclusion" class="padding" contenteditable="true"><%= app.stripHtml(conclusion) %></div>
+        <div class="margin-left text-muted">{{ gettext('Conclusion') }}</div>
+        <div id="synthesisPanel-conclusion" class="panel-editablearea" contenteditable="true"><%= app.stripHtml(conclusion) %></div>
     </div>
 
     <div class="panel-footer text-right">
