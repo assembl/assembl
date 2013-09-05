@@ -535,11 +535,23 @@ function($, _, ckeditor, User, Moment){
 
         /**
          * @init
+         */
+        initTooltips: function(){
+            alert( $('[data-tooltip]').length );
+            $('[data-tooltip]').tipsy({
+                fade: true,
+                title: function() { return this.getAttribute('data-tooltip'); }
+            });
+        },
+
+        /**
+         * @init
          * inits ALL app components
          */
         init: function(){
             app.body.removeClass('preload');
             app.createSelectionTooltip();
+            app.initTooltips();
 
             app.doc.on('click', '.dropdown-label', app.onDropdownClick);
             app.doc.on('ajaxError', app.onAjaxError);
