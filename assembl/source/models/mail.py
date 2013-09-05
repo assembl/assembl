@@ -155,6 +155,9 @@ class Mailbox(Source):
         # TODO: remove this line, the property `last_import` does not persist.
         self.last_import = datetime.utcnow()
 
+        mailbox.close()
+        mailbox.logout()
+
 
     def most_common_recipient_address(self):
         """
