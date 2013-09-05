@@ -29,7 +29,7 @@ define(['backbone','underscore', 'models/segment', 'app'], function(Backbone, _,
          */
         defaults: {
             shortTitle: 'New idea',
-            longTitle: 'Please add a description',
+            longTitle: '',
             total: 0,
             isOpen: true,
             hasCheckbox: true,

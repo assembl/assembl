@@ -5,22 +5,19 @@
     </div>
 
     <div class="panel-header">
-        <strong>{{ gettext('Idea') }}</strong>
+        <strong id="ideaPanel-shorttitle" title="<%= idea.get('shortTitle') %>" class="panel-editablearea panel-editablearea--small" contenteditable="true"><%= idea.get('shortTitle') %></strong>
         <div class="float-right">
             <a id="ideaPanel-closebutton" class="iconbutton icon-cancel"></a>
         </div>
     </div>
     
     <div class="panel-body">
-        <div class="margin text-muted">{{ gettext('Short title') }}</div>
-        <div id="ideaPanel-shorttitle" class="margin" contenteditable="true"><%= idea.get('shortTitle') %></div>
-        
-        <div class="spacer"></div>
-        
-        <div class="margin text-muted">{{ gettext('Long title') }}</div>
-        <div id="ideaPanel-toptoolbar" hidden></div>
-        <div id="ideaPanel-longtitle" class="text margin" contenteditable="true"><%= idea.get('longTitle') %></div>
-        <div id="ideaPanel-bottomtoolbar" hidden></div>
+        <a class="ideaPanel-longtitle-closebtn iconbutton icon-cancel" style="display: none;"></a>
+        <div class="ideaPanel-longtitlearea">
+            <div id="ideaPanel-toptoolbar" class="invisible"></div>
+            <div id="ideaPanel-longtitle" class="text margin panel-editablearea" contenteditable="true"><%= idea.get('longTitle') %></div>
+            <div id="ideaPanel-bottomtoolbar" hidden></div>
+        </div>
 
         <div class="spacer"></div>
 
@@ -28,7 +25,7 @@
             {% set creationDate = "<%= app.formatDate(idea.get('creationDate')) %>" %}
             {% set userName = "Jean-Michel" %} {# "<%= userName %>" #}
 
-            {{- gettext('Created in %(date)s by %(user)s')|format(date=creationDate, user=userName)|safe }}
+            {{- gettext('Created in %(date)s')|format(date=creationDate)|safe }}
         </p>
             
 

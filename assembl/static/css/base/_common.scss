@@ -60,3 +60,6 @@ html {
 .cursor-nodrop { cursor: no-drop !important; }
 
 .clearfix { @include clearfix; }
+
+.visible { visibility: visible; }
+.invisible { visibility: hidden; }

@@ -49,6 +49,7 @@ function(Backbone, _, Idea, app, ckeditor){
             var segments = this.idea.getSegments();
             this.$el.html( this.template( {idea:this.idea, segments:segments} ) );
 
+
             this.panel = this.$('.panel');
 
             var ckeditorConfig = {
@@ -98,7 +99,10 @@ function(Backbone, _, Idea, app, ckeditor){
         events: {
             'blur #ideaPanel-shorttitle': 'onShortTitleBlur',
             'keydown #ideaPanel-shorttitle': 'onShortTitleKeyDown',
+
+            'focus #ideaPanel-longtitle': 'onLongTitleFocus',
             'keydown #ideaPanel-longtitle': 'onLongTitleKeyDown',
+            //'blur #ideaPanel-longtitle': 'onLongTitleBlur',
 
             'dragstart .box': 'onDragStart',
             'dragend .box': "onDragEnd",
@@ -136,6 +140,16 @@ function(Backbone, _, Idea, app, ckeditor){
         /**
          * @event
          */
+        onLongTitleFocus: function(ev){
+            this.$('.ideaPanel-longtitlearea').css('background', '#dbf2ff');
+
+            $('#ideaPanel-toptoolbar').removeClass('invisible');
+            this.$('.ideaPanel-longtitle-closebtn').show();
+        },
+
+        /**
+         * @event
+         */
         onLongTitleKeyDown: function(ev){
             if( ev.which === 27 ){
                 ev.prenvetDefault();
@@ -146,21 +160,25 @@ function(Backbone, _, Idea, app, ckeditor){
         /**
          * @event
          */
-        onLongTitleBlur: function(){
-            $('#ideaPanel-toptoolbar').hide();
+        onLontTitleFocus: function(){
+            $('#ideaPanel-toptoolbar').removeClass('invisible');
+        },
+
+        /**
+         * @event
+         */
+        onLongTitleBlur: function(ev){
+            this.$('.ideaPanel-longtitlearea').css('background', '');
+
+            $('#ideaPanel-toptoolbar').addClass('invisible');
+            this.$('.ideaPanel-longtitle-closebtn').hide();
+
             var data = ckeditor.instances[LONG_TITLE_ID].getData();
             data = $.trim( data );
             if( data === '' ){
                 data = 'Add the description';
             }
             this.idea.set('longTitle', data);
-        },
-
-        /**
-         * @event
-         */
-        onLontTitleFocus: function(){
-            $('#ideaPanel-toptoolbar').show();
         },
 
         /**
