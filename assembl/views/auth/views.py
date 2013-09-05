@@ -85,10 +85,9 @@ def get_profile(request):
             id = int(identifier)
         except:
             raise HTTPNotFound()
-        user = DBSession.query(User).get(id)
-        if not user:
+        profile = DBSession.query(AgentProfile).get(id)
+        if not profile:
             raise HTTPNotFound()
-        profile = user.profile
     elif id_type == 'email':
         account = DBSession.query(EmailAccount).filter_by(
             email=identifier).order_by(desc(EmailAccount.verified)).first()
@@ -103,6 +102,8 @@ def get_profile(request):
         if not account:
             raise HTTPNotFound()
         profile = account.profile
+    if profile and not user:
+        user = profile.user
     return (user, profile)
 
 @view_config(route_name='profile')
