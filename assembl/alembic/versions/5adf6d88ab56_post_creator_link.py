@@ -1,14 +1,14 @@
 """post creator link
 
 Revision ID: 5adf6d88ab56
-Revises: 4f44fb7f3d6a
+Revises: 3525142c66cb
 Create Date: 2013-09-05 16:12:46.180472
 
 """
 
 # revision identifiers, used by Alembic.
 revision = '5adf6d88ab56'
-down_revision = '4f44fb7f3d6a'
+down_revision = '3525142c66cb'
 
 from alembic import context, op
 import sqlalchemy as sa
