@@ -8,7 +8,7 @@ from pyramid.httpexceptions import HTTPNotFound
 from pyramid.i18n import TranslationString as _
 from assembl.views.api import FIXTURE_DIR, API_PREFIX
 from assembl.db import DBSession
-from assembl.synthesis.models import Idea, Discussion
+from assembl.synthesis.models import Idea, Discussion, Extract
 from . import acls
 from assembl.auth import (P_READ, P_ADD_IDEA, P_EDIT_IDEA)
 
@@ -18,6 +18,8 @@ ideas = Service(name='ideas', path=API_PREFIX + '/ideas',
 idea = Service(name='idea', path=API_PREFIX + '/ideas/{id}',
                  description="Manipulate a single idea", acl=acls)
 
+idea_extracts = Service(name='idea_extracts', path=API_PREFIX + '/ideas/{id}/extracts',
+                 description="Get the extracts of a single idea", acl=acls)
     
 # Create
 @ideas.post()  # permission=P_ADD_IDEA)
@@ -104,3 +106,21 @@ def save_idea(request):
 
 # Delete
 # WE DON'T DELETE IDEAS. LIVE WITH IT
+
+@idea_extracts.get()  # permission=P_READ
+def get_idea_extracts(request):
+    idea_id = request.matchdict['id']
+    idea = DBSession.query(Idea).get(idea_id)
+
+    if not idea:
+        raise HTTPNotFound("Idea with id '%s' not found." % idea_id)
+
+    extracts = DBSession.query(Extract).filter(
+        Extract.idea_id==idea.id
+    ).order_by(Extract.order.desc())
+
+    serializable_extracts = [
+        extract.serializable() for extract in extracts
+    ]
+
+    return serializable_extracts
