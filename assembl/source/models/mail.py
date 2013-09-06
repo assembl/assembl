@@ -161,6 +161,9 @@ class Mailbox(Source):
         # TODO: remove this line, the property `last_import` does not persist.
         self.last_import = datetime.utcnow()
 
+        mailbox.close()
+        mailbox.logout()
+
 
     def most_common_recipient_address(self):
         """
@@ -232,8 +235,7 @@ class Mailbox(Source):
         message['Subject'] = Header(subject, 'utf-8')
         message['From'] = sent_from
 
-        message['To'] = self.recipients
-        message.add_header('In-Reply-To', self.message_id)
+        message['To'] = recipients
 
         plain_text_body = message_body
         html_body = message_body
@@ -269,8 +271,8 @@ class Mailbox(Source):
         smtp_connection.quit()
 
     # The send method will be a common interface on all sources.
-    def send(self, sender, message):
-        self.email_most_common_recipient(sender, message)
+    def send(self, sender, message, subject):
+        self.email_most_common_recipient(sender, message, subject=subject)
 
     def serializable(self):
         serializable_source = super(Mailbox, self).serializable()

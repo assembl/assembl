@@ -1,4 +1,5 @@
-from .lib.sqla import DBSession, Base, TimestampedBase, metadata
+from .lib.sqla import Base, TimestampedBase, metadata
+from assembl.db import DBSession
 
 from .auth.models import (
     IdentityProvider,
