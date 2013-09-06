@@ -13,6 +13,8 @@ function(Backbone, InboxModel, EmailView, app){
         },
 
         render: function(){
+            app.trigger('render');
+
             var emailList = document.createDocumentFragment();
 
             this.collection.each(function(email){

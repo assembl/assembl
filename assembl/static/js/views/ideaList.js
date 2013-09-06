@@ -48,6 +48,8 @@ function(Backbone, _, Idea, IdeaView, app){
          * The render
          */
         render: function(){
+            app.trigger('render');
+
             this.body = this.$('.panel-body');
             var y = 0;
 

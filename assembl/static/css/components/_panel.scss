@@ -60,6 +60,42 @@
     @include z-index("float");
 }
 
+// An editable area within the .panel-header
+// ----------------
+.panel-editablearea {
+    @include box-sizing( border-box );
+    display: inline-block;
+    overflow-x: hidden;
+    width: 96%;
+    border: solid 1px transparent;
+    border-radius: 4px;
+    margin: 2%;
+
+    &:hover,
+    &:focus {
+        border-color: lightgray;
+        background-color: white;
+    }
+}
+
+// +++++++
+.panel-editablearea.panel-editablearea--small {
+    width: auto;
+    max-width: 240px;
+    white-space: nowrap;
+    margin: auto;
+}
+
+// The container for an editablearea
+// ------------------
+.panel-editablebox {
+    
+    &.is-editing {
+        background: #dbf2ff;
+    }
+
+}
+
 // To put the content
 // -----------
 .panel-body {

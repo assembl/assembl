@@ -85,10 +85,9 @@ def get_profile(request):
             id = int(identifier)
         except:
             raise HTTPNotFound()
-        user = DBSession.query(User).get(id)
-        if not user:
+        profile = DBSession.query(AgentProfile).get(id)
+        if not profile:
             raise HTTPNotFound()
-        profile = user.profile
     elif id_type == 'email':
         account = DBSession.query(EmailAccount).filter_by(
             email=identifier).order_by(desc(EmailAccount.verified)).first()
@@ -103,11 +102,14 @@ def get_profile(request):
         if not account:
             raise HTTPNotFound()
         profile = account.profile
+    if profile and not user:
+        user = profile.user
     return (user, profile)
 
 @view_config(route_name='profile')
 def assembl_profile(request):
     user, profile = get_profile(request)
+    id_type = request.matchdict.get('type').strip()
     logged_in = authenticated_userid(request)
     save = request.method == 'POST'
     if logged_in and not user:
@@ -121,7 +123,7 @@ def assembl_profile(request):
             'assembl:templates/view_profile.jinja2',
             dict(default_context,
                  profile=profile,
-                 user=DBSession.query(User).get(logged_in)))
+                 user=logged_in and DBSession.query(User).get(logged_in)))
 
     errors = []
     if save:

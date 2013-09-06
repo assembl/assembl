@@ -21,8 +21,12 @@ requirejs.config({
             deps: ['zepto'],
             exports: '$'
         },
+        'zepto-data': {
+            deps: ['zepto'],
+            exports: '$'
+        },
         'app': {
-            deps: ['ckeditor'],
+            deps: ['ckeditor', 'tipsy'],
             exports: 'app'
         },
         'jasmine': {
@@ -42,14 +46,20 @@ requirejs.config({
         'ckeditor-sharedspace': {
             deps: ['ckeditor'],
             exports: 'CKEDITOR'
+        },
+        'tipsy': {
+            deps: ['zepto'],
         }
     },
     "paths": {
         'backbone': 'lib/backbone',
         'underscore': 'lib/underscore',
 
-        'zepto': '__proto__' in {} ? 'lib/zepto' : "lib/jquery",
+        'zepto': 'lib/jquery', // '__proto__' in {} ? 'lib/zepto' : "lib/jquery",
         'zepto-touch': 'lib/zepto-touch',
+        'zepto-data': 'lib/zepto-data',
+
+        'tipsy': 'lib/jquery.tipsy',
 
         'jasmine': 'lib/jasmine',
         'jasmine-html': 'lib/jasmine-html',

@@ -25,7 +25,9 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message){
             var that = this;
             app.on('idea:select', function(idea){
                 app.openPanel(app.messageList);
-                that.loadData(idea.get('id'));
+                if( idea ){
+                    that.loadData(idea.get('id'));
+                }
             });
         },
 
@@ -76,6 +78,7 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message){
          * @return {views.Message}
          */
         render: function(){
+            app.trigger('render');
             var list = document.createDocumentFragment(),
                 messages = this.messages.where({parentId: null});
 
@@ -291,6 +294,8 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message){
             'click #messageList-collapseButton': 'toggleMessages',
             'click #messagelist-returnButton': 'onReturnButtonClick',
 
+            'click #messagelist-inbox': 'loadInbox',
+
             'click #messageList-message-collapseButton': 'toggleThreadMessages',
 
             'click #messageList-prevButton': 'loadPreviousData',
@@ -312,6 +317,14 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message){
             var id = ev.currentTarget.getAttribute('data-messageid');
 
             this.openMessageByid(id);
+        },
+
+        /**
+         * @event
+         * Load the inbox without filtering
+         */
+        loadInbox: function(){
+            this.loadData();
         },
 
         /**

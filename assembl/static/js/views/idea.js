@@ -39,6 +39,8 @@ function(Backbone, _, $, Idea, Segment, app){
          * @return {IdeaView}
          */
         render: function(loadChildren){
+            app.trigger('render');
+
             if( loadChildren === undefined ){
                 loadChildren = true;
             }

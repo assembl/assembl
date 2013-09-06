@@ -16,14 +16,24 @@
 
 .cke_inner {
     padding: 0 10px !important;
+    background: transparent !important;
 }
 
 .cke_toolgroup,
 .cke_toolgroup:hover {
     border: 0 !important;
     background: 0 !important;
+    box-shadow: none !important;
+}
+
+a.cke_button_off:hover,
+a.cke_button_off:focus,
+a.cke_button_off:active,
+a.cke_button_disabled:hover,
+a.cke_button_disabled:focus,
+a.cke_button_disabled:active {
+    background: #ebebeb !important;
 }
 
 .cke_button {}
-
 .cke_button_icon {}
