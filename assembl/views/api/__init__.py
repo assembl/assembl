@@ -6,8 +6,10 @@ from assembl.auth.models import DiscussionPermission
 import assembl.db
 
 
-FIXTURE_DIR = os.path.join(os.path.dirname(__file__), '..', '..', 'static', 'js', 'tests', 'fixtures')
-API_PREFIX = '/api/v1/discussion/{discussion_id}'
+FIXTURE_DIR = os.path.join(
+    os.path.dirname(__file__), '..', '..', 'static', 'js', 'tests', 'fixtures')
+API_PREFIX = '/api/v1/'
+API_DISCUSSION_PREFIX = API_PREFIX + 'discussion/{discussion_id}'
 
 
 def acls(request):

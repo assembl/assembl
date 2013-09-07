@@ -1,19 +1,18 @@
 import json
-import os
 import transaction
 
 from cornice import Service
-from pyramid.view import view_config
-from pyramid.httpexceptions import HTTPNotFound
-from pyramid.i18n import TranslationString as _
-from assembl.views.api import FIXTURE_DIR, API_PREFIX
+from assembl.views.api import API_DISCUSSION_PREFIX
 from assembl.db import DBSession
-from assembl.synthesis.models import Idea, Discussion, Synthesis
-from . import acls
+from assembl.synthesis.models import Discussion
 from assembl.auth import (P_READ, P_ADD_IDEA)
+from . import acls
 
-synthesis = Service(name='synthesis', path=API_PREFIX + '/synthesis/',
-                 description="Manipulate the synthesis for a discussion")
+synthesis = Service(
+    name='synthesis',
+    path=API_DISCUSSION_PREFIX + '/synthesis/',
+    description="Manipulate the synthesis for a discussion",
+    acl=acls)
 
 
 @synthesis.get()  # permission=P_READ)
@@ -41,4 +40,4 @@ def save_synthesis(request):
 
     synthesis = DBSession.merge(synthesis)
 
-    return { 'ok': True, 'id': synthesis.id }
+    return {'ok': True, 'id': synthesis.id}

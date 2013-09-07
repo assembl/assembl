@@ -1,15 +1,11 @@
-import os
 import json
 import transaction
 
 from cornice import Service
 
-from pyramid.view import view_config
-from pyramid.httpexceptions import HTTPNotFound
-from pyramid.i18n import TranslationString as _
 from pyramid.security import authenticated_userid
 
-from assembl.views.api import FIXTURE_DIR, API_PREFIX
+from assembl.views.api import API_DISCUSSION_PREFIX
 from assembl.db import DBSession
 from assembl.synthesis.models import Extract
 from . import acls
@@ -18,15 +14,15 @@ from assembl.auth import (
 
 
 extracts = Service(
-    name='extracts', 
-    path=API_PREFIX + '/extracts',
+    name='extracts',
+    path=API_DISCUSSION_PREFIX + '/extracts',
     description="An extract from Content that is an expression of an Idea",
     renderer='json', acl=acls
 )
 
 extract = Service(
-    name='extract', 
-    path=API_PREFIX + '/extracts/{id}',
+    name='extract',
+    path=API_DISCUSSION_PREFIX + '/extracts/{id}',
     description="Manipulate a single extract",
     acl=acls
 )
@@ -65,17 +61,17 @@ def post_extract(request):
 
     with transaction.manager:
         new_extract = Extract(
-            creator_id = user_id,
-            owner_id = user_id,
-            body = extract_data.get('text', '').decode('utf-8'),
-            source_id = extract_data.get('idPost')
+            creator_id=user_id,
+            owner_id=user_id,
+            body=extract_data.get('text', '').decode('utf-8'),
+            source_id=extract_data.get('idPost')
         )
 
         DBSession.add(new_extract)
 
     new_extract = DBSession.merge(new_extract)
 
-    return { 'ok': True, 'id': new_extract.id }
+    return {'ok': True, 'id': new_extract.id}
 
 
 @extract.put()  # permission=P_EDIT_EXTRACT
@@ -88,7 +84,7 @@ def put_extract(request):
 
     updated_extract_data = json.loads(request.body)
     extract = DBSession.query(Extract).get(extract_id)
-    
+
     with transaction.manager:
         extract.owner_id = user_id or extract.owner_id
         extract.order = updated_extract_data.get('order', extract.order)
@@ -96,7 +92,7 @@ def put_extract(request):
 
         DBSession.add(extract)
 
-    return { 'ok': True }
+    return {'ok': True}
 
 
 @extract.delete()  # permission=P_DELETE_EXTRACT
@@ -105,9 +101,9 @@ def delete_extract(request):
     extract = DBSession.query(Extract).get(extract_id)
 
     if not extract:
-        return { 'ok': False }
+        return {'ok': False}
 
     with transaction.manager:
         DBSession.delete(extract)
 
-    return { 'ok': True }
+    return {'ok': True}

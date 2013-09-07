@@ -1,33 +1,32 @@
 import json
-import os
 import transaction
 
 from math import ceil
 from cornice import Service
-from pyramid.view import view_config
 from pyramid.httpexceptions import HTTPNotFound, HTTPUnauthorized
 from pyramid.i18n import TranslationString as _
-from pyramid.security import Allow, Everyone, authenticated_userid
+from pyramid.security import authenticated_userid
 
+from sqlalchemy import func, ARRAY, Integer
+from sqlalchemy.orm import aliased
+from sqlalchemy.orm.exc import NoResultFound
+from sqlalchemy.sql.expression import literal_column
 
-from assembl.views.api import API_PREFIX
+from assembl.views.api import API_DISCUSSION_PREFIX
 from assembl.db import DBSession
 
 from assembl.auth import P_READ, P_ADD_POST
 from assembl.source.models import Post
-from assembl.synthesis.models import Discussion, Source, Content, Extract, Idea
+from assembl.synthesis.models import Discussion, Source, Content, Idea
 from assembl.auth.models import ViewPost, User
 from . import acls
 
-from sqlalchemy.orm import aliased
-from sqlalchemy.orm.exc import NoResultFound
 
-
-posts = Service(name='posts', path=API_PREFIX + '/posts',
+posts = Service(name='posts', path=API_DISCUSSION_PREFIX + '/posts',
                 description="Post API following SIOC vocabulary as much as possible",
                 renderer='json', acl=acls)
 
-post = Service(name='post', path=API_PREFIX + '/posts/{id}',
+post = Service(name='post', path=API_DISCUSSION_PREFIX + '/posts/{id}',
                description="Manipulate a single post",
                acl=acls)
 
@@ -35,7 +34,7 @@ post = Service(name='post', path=API_PREFIX + '/posts/{id}',
 def __post_to_json_structure(post):
     data = {}
     data["id"] = post.id
-    
+
     data["checked"] = False
     #FIXME
     data["collapsed"] = False
@@ -50,7 +49,8 @@ def __post_to_json_structure(post):
     data["date"] = post.content.creation_date.isoformat()
     return data
 
-def _get_idea_query():
+
+def _get_idea_query(post, levels=None):
     """Return a query that includes the post and its following thread.
 
 
@@ -67,22 +67,23 @@ def _get_idea_query():
 
     """
     level = literal_column('ARRAY[id]', type_=ARRAY(Integer))
-    post = self.db.query(self.__class__) \
-                  .add_columns(level.label('level')) \
-                  .filter(self.__class__.id == self.id) \
-                  .cte(name='thread', recursive=True)
+    post = DBSession.query(post.__class__) \
+                    .add_columns(level.label('level')) \
+                    .filter(post.__class__.id == post.id) \
+                    .cte(name='thread', recursive=True)
     post_alias = aliased(post, name='post')
-    replies_alias = aliased(self.__class__, name='replies')
+    replies_alias = aliased(post.__class__, name='replies')
     cumul_level = post_alias.c.level.op('||')(replies_alias.id)
     parent_link = replies_alias.parent_id == post_alias.c.id
-    children = self.db.query(replies_alias).add_columns(cumul_level) \
-                      .filter(parent_link)
+    children = DBSession.query(replies_alias).add_columns(cumul_level) \
+                        .filter(parent_link)
 
     if levels:
         level_limit = func.array_upper(post_alias.c.level, 1) < levels
         children = children.filter(level_limit)
 
-    return self.db.query(post.union_all(children)).order_by(post.c.level)
+    return DBSession.query(post.union_all(children)).order_by(post.c.level)
+
 
 @posts.get()  # permission=P_READ)
 def get_posts(request):
@@ -103,7 +104,7 @@ def get_posts(request):
 
     if page < 1:
         page = 1
-        
+
     try:
         root_post_id = int(request.GET.getone('root_post_id'))
     except (ValueError, KeyError):
@@ -145,24 +146,21 @@ def get_posts(request):
     #TODO:  Check if we want 1 based index in the api
     data["startIndex"] = (page_size * page) - (page_size-1)
 
-
     if data["page"] == data["maxPage"]:
         data["endIndex"] = data["total"]
     else:
         data["endIndex"] = data["startIndex"] + (page_size-1)
-        
+
     post_data = []
 
     if root_idea_id:
         ideas_query = DBSession.query(Post) \
-        .from_statement(Idea._get_related_post_statement()) \
-        .params(root_idea_id=root_idea_id)
+            .from_statement(Idea._get_related_post_statement()) \
+            .params(root_idea_id=root_idea_id)
         posts = ideas_query.all()
-    else:
-        if root_post_id: 
-            post_data.append(
-            __post_to_json_structure(DBSession.query(Post).get(root_post_id))
-            )
+    elif root_post_id:
+        post_data.append(
+            __post_to_json_structure(DBSession.query(Post).get(root_post_id)))
 
         posts = discussion.posts(parent_id=root_post_id)
         posts = posts.limit(page_size).offset(data['startIndex']-1)
@@ -222,7 +220,7 @@ def create_post(request):
         post = DBSession.query(Post).get(int(reply_id))
         post.content.reply(user, message)
 
-        return { "ok": True }
+        return {"ok": True}
 
     discussion_id = request.matchdict['discussion_id']
     discussion = DBSession.query(Discussion).get(discussion_id)
@@ -237,4 +235,4 @@ def create_post(request):
     for source in discussion.sources:
         source.send(user, message, subject=subject)
 
-    return { "ok": True }
+    return {"ok": True}
