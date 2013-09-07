@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from sqlalchemy.orm import relationship, backref, aliased
-from sqlalchemy.sql import func, cast, select
+from sqlalchemy.sql import func, cast, select, text
 
 from sqlalchemy import (
     Table,
@@ -275,7 +275,48 @@ class Idea(SQLAlchemyBaseModel):
             'parentId': self.parents[0].id if self.parents else None,
             'inSynthesis': False,
             'total': len(self.children),
+            'num_posts': self.num_posts,
         }
+        
+    @staticmethod
+    def _get_idea_dag_statement():
+                return """
+WITH    RECURSIVE
+idea_dag(idea_id, parent_id, idea_depth, idea_path, idea_cycle) AS
+(
+SELECT  id as idea_id, parent_id, 1, ARRAY[idea_initial.id], false 
+FROM    idea AS idea_initial LEFT JOIN idea_association ON (idea_initial.id = idea_association.child_id) 
+WHERE id=:root_idea_id
+UNION ALL
+SELECT idea.id as idea_id, idea_association.parent_id, idea_dag.idea_depth + 1, idea_path || idea.id, idea.id = ANY(idea_path)
+FROM    (idea_dag JOIN idea_association ON (idea_dag.idea_id = idea_association.parent_id) JOIN idea ON (idea.id = idea_association.child_id)) 
+)
+"""
+    @staticmethod
+    def _get_related_post_statement():
+        return Idea._get_idea_dag_statement() + """
+SELECT DISTINCT post.id FROM idea_dag 
+JOIN extract ON (extract.idea_id = idea_dag.idea_id) 
+JOIN content ON (extract.source_id = content.id) 
+JOIN post AS root_posts ON (root_posts.content_id = content.id) JOIN post ON ((post.ancestry LIKE '%' || root_posts.ancestry || root_posts.id || ',') OR post.id = root_posts.id)
+"""
+
+    @staticmethod
+    def _get_count_related_post_statement():
+        return Idea._get_idea_dag_statement() + """
+SELECT COUNT(DISTINCT post.id) as total_count FROM idea_dag 
+JOIN extract ON (extract.idea_id = idea_dag.idea_id) 
+JOIN content ON (extract.source_id = content.id) 
+JOIN post AS root_posts ON (root_posts.content_id = content.id) JOIN post ON ((post.ancestry LIKE '%' || root_posts.ancestry || root_posts.id || ',') OR post.id = root_posts.id)
+"""
+    
+    @property
+    def num_posts(self):
+        """ This is extremely naive and slow, but as this is all temp code 
+        until we move to a graph database, it will probably do for now """ 
+        result = DBSession.execute(text(Idea._get_count_related_post_statement()),
+                                   {"root_idea_id":self.id})
+        return result.first()['total_count']
 
     def __repr__(self):
         if self.short_title:

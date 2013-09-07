@@ -155,22 +155,7 @@ def get_posts(request):
 
     if root_idea_id:
         ideas_query = DBSession.query(Post) \
-        .from_statement("""
-WITH    RECURSIVE
-idea_dag(idea_id, parent_id, idea_depth, idea_path, idea_cycle) AS
-(
-SELECT  id as idea_id, parent_id, 1, ARRAY[idea_initial.id], false 
-FROM    idea AS idea_initial LEFT JOIN idea_association ON (idea_initial.id = idea_association.child_id) 
-WHERE id=:root_idea_id
-UNION ALL
-SELECT idea.id as idea_id, idea_association.parent_id, idea_dag.idea_depth + 1, idea_path || idea.id, idea.id = ANY(idea_path)
-FROM    (idea_dag JOIN idea_association ON (idea_dag.idea_id = idea_association.parent_id) JOIN idea ON (idea.id = idea_association.child_id)) 
-)
-SELECT DISTINCT post.id FROM idea_dag 
-JOIN extract ON (extract.idea_id = idea_dag.idea_id) 
-JOIN content ON (extract.source_id = content.id) 
-JOIN post AS root_posts ON (root_posts.content_id = content.id) JOIN post ON ((post.ancestry LIKE '%' || root_posts.ancestry || root_posts.id || ',') OR post.id = root_posts.id)
-""") \
+        .from_statement(Idea._get_related_post_statement()) \
         .params(root_idea_id=root_idea_id)
         posts = ideas_query.all()
     else:
