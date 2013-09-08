@@ -145,7 +145,7 @@ function(Backbone, _, Idea, app, ckeditor){
         onLongTitleFocus: function(ev){
             this.$('.panel-editablebox').addClass('is-editing');
 
-            $('#ideaPanel-toptoolbar').removeClass('invisible');
+            $('#ideaPanel-toptoolbar').show();
             this.$('.ideaPanel-longtitle-closebtn').show();
         },
 
@@ -163,7 +163,7 @@ function(Backbone, _, Idea, app, ckeditor){
          * @event
          */
         onLontTitleFocus: function(){
-            $('#ideaPanel-toptoolbar').removeClass('invisible');
+            $('#ideaPanel-toptoolbar').show();
         },
 
         /**
@@ -172,7 +172,7 @@ function(Backbone, _, Idea, app, ckeditor){
         onLongTitleBlur: function(ev){
             this.$('.panel-editablebox').removeClass('is-editing');
 
-            $('#ideaPanel-toptoolbar').addClass('invisible');
+            $('#ideaPanel-toptoolbar').hide();
             this.$('.ideaPanel-longtitle-closebtn').hide();
 
             var data = ckeditor.instances[LONG_TITLE_ID].getData();

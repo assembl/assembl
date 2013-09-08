@@ -89,7 +89,8 @@
 // The container for an editablearea
 // ------------------
 .panel-editablebox {
-    
+    position: relative;
+
     &.is-editing {
         background: #dbf2ff;
     }
