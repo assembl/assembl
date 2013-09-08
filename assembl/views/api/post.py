@@ -203,6 +203,17 @@ def get_posts(request):
     return data
 
 
+@post.get()  # permission=P_READ)
+def get_post(request):
+    post_id = request.matchdict['id']
+    post = DBSession.query(Post).get(post_id)
+
+    if not post:
+        raise HTTPNotFound("Post with id '%s' not found." % post_id)
+
+    return post.serializable()
+
+
 @posts.post()  # permission=P_ADD_POST)
 def create_post(request):
     """
