@@ -99,7 +99,12 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message){
             };
 
             this.$el.html( this.template(data) );
-            this.$('.idealist').append( list );
+            if( messages.length > 0 ){
+                this.$('.idealist').append( list );
+            } else {
+                this.$('.idealist').append( "<div class='margin'>No messages</div>" );
+            }
+            
 
             this.chk = this.$('#messagelist-mainchk');
             this.renderThread();
