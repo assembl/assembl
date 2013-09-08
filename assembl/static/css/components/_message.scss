@@ -15,7 +15,7 @@ $message-bar-width: 15px;
 
 @for $i from 1 through 30 {
     .message[data-message-level="#{$i}"] {
-        padding-left: ($message-bar-width * $i) + 10px;
+        padding-left: ((21px * $i) + 5px) - 21px;
     }
 }
 

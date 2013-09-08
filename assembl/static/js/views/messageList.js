@@ -108,6 +108,7 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message){
 
             this.chk = this.$('#messagelist-mainchk');
             this.renderThread();
+            this.closeThread();
 
             return this;
         },
@@ -291,6 +292,13 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message){
         },
 
         /**
+         * Closes the thread panel and returns to the message lists
+         */
+        closeThread: function(){
+            this.$el.removeClass(MESSAGE_MODE);
+        },
+
+        /**
          * The events
          * @type {Object}
          */
@@ -358,7 +366,7 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message){
          * @event
          */
         onReturnButtonClick: function(ev){
-            this.$el.removeClass(MESSAGE_MODE);
+            this.closeThread();
         },
 
         /**
