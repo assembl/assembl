@@ -44,7 +44,25 @@
             content: '\e812';
             margin-left: 5px;
         }
+    }
+}
 
+// +++++++
+.dropdown-label.dropdown-label--arrow {
+    @include box-sizing( border-box );
+    background: url(#{$img-dir}/idealist/idealist-arrow.png) center center no-repeat;
+    width: $idealist-arrow-width;
+    height: $idealist-arrow-width;
+    border-radius: 50%;
+    border: solid 1px #ddd;
+    opacity: 0.55;
+
+    &:hover {
+        opacity: 1;
+    }
+
+    &:after {
+        display: none;
     }
 }
 
@@ -61,11 +79,11 @@
     min-width: 155px;
     overflow: visible;
 
-    @include transition( top $dropdown-time, opacity $dropdown-time, left 0 linear $dropdown-time );
+    @include transition( top $dropdown-time, opacity $dropdown-time, left 0 linear $dropdown-time, right 0 linear $dropdown-time );
     @include opacity( 0 );
 
     .dropdown.is-open & {
-        @include transition( top $dropdown-time, opacity $dropdown-time, left 0 linear 0 );
+        @include transition( top $dropdown-time, opacity $dropdown-time, left 0 linear 0, right 0 linear 0 );
         top: 8px;
         @include opacity( 1 );
         left: 0;
@@ -77,6 +95,19 @@
     }
 }
 
+// +++++
+.dropdown-list.dropdown-list--bottomright {
+    left: auto;
+    right: -10000px;
+
+    .dropdown.is-open & {
+        top: 15px;
+        right: 5px;
+        left: auto;
+    }
+}
+
+//
 .dropdown-listitem {
     @extend .contextmenu-item;
 }

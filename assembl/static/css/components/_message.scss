@@ -7,6 +7,7 @@ $message-bar-width: 15px;
     padding: 20px 5px;
 
     border-bottom: solid 1px $box-border-color;
+    overflow-x: hidden;
 
     &:last-child {
         border-bottom: 0;
@@ -86,4 +87,11 @@ $message-bar-width: 15px;
 .message-replybox {
     padding: $padding;
     text-align: right;
+}
+
+//
+.message-menu {
+    position: absolute;
+    top: 5px;
+    right: 5px;
 }
