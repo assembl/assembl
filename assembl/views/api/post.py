@@ -7,7 +7,12 @@ from pyramid.httpexceptions import HTTPNotFound, HTTPUnauthorized
 from pyramid.i18n import TranslationString as _
 from pyramid.security import authenticated_userid
 
-from sqlalchemy import func, ARRAY, Integer
+try:
+    from sqlalchemy import func, ARRAY, Integer
+except ImportError:
+    from sqlalchemy import func, Integer
+    from sqlalchemy.dialects.postgresql.base import ARRAY
+
 from sqlalchemy.orm import aliased
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.sql.expression import literal_column
@@ -152,6 +157,7 @@ def get_posts(request):
         data["endIndex"] = data["startIndex"] + (page_size-1)
 
     post_data = []
+    posts = []
 
     if root_idea_id:
         ideas_query = DBSession.query(Post) \
