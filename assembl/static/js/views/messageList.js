@@ -271,7 +271,6 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message){
             var message = this.messages.get(id);
 
             if( message ){
-                message.set('read', true);
                 this.loadThreadById(id);
             }
         },

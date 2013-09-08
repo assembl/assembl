@@ -17,7 +17,7 @@ define(['backbone', 'zepto', 'app'], function(Backbone, $, app){
          * The url
          * @type {String}
          */
-        urlRoot: app.getApiUrl('message'),
+        urlRoot: app.getApiUrl('post'),
 
         /**
          * Default values
@@ -85,7 +85,7 @@ define(['backbone', 'zepto', 'app'], function(Backbone, $, app){
          * The url
          * @type {String}
          */
-        url: app.getApiUrl("messages"),
+        url: app.getApiUrl("posts"),
 
         /**
          * The model

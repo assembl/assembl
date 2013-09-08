@@ -92,6 +92,10 @@ function(Backbone, _, Moment, ckeditor, app, Message){
         openReplyBox: function(){
             this.$('.message-replaybox-openbtn').hide();
             this.$('.message-replybox').show();
+            var that = this;
+            window.setTimeout(function(){
+                that.$('.message-textarea').focus();
+            }, 100);
         },
 
         /**
@@ -168,7 +172,11 @@ function(Backbone, _, Moment, ckeditor, app, Message){
             'mousedown .message-body': 'startSelection',
             'mousemove .message-body': 'doTheSelection',
             'mouseleave .message-body': 'onMouseLeaveMessageBody',
-            'mouseenter .message-body': 'doTheSelection'
+            'mouseenter .message-body': 'doTheSelection',
+
+            // menu
+            'click #message-markasunread': 'markAsUnread',
+            'click #message-replybtn': 'openReplyBox'
         },
 
         /**
@@ -250,6 +258,15 @@ function(Backbone, _, Moment, ckeditor, app, Message){
 
             this.isSelecting = false;
             this.$el.removeClass('is-selecting');
+        },
+
+
+        /**
+         * Mark the current message as unread
+         */
+        markAsUnread: function(){
+            this.model.set('read', false);
+            //this.model.save();
         }
     });
 
