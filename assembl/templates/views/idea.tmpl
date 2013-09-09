@@ -14,7 +14,7 @@
         <span class="idealist-arrow"></span>
     <% } %>
 
-    <div class="idealist-counter" data-tooltip="{{ gettext('Number of messages related to this idea or it\'s descendants') }}"><%= num_posts %></div>
+    <div class="idealist-counter"><span data-tooltip="{{ gettext('Number of messages related to this idea or it\'s descendants') }}"><%= num_posts %></span></div>
     <div class="idealist-title">
         <%= shortTitle %> (<span class="num-segments" data-tooltip="{{ gettext('Number of caught segments expressing this idea') }}"><%= segments.length %></span>)
         {# <small class="idealist-longtitle text-small text-muted"><%= app.stripHtml(longTitle) %></small> #}
