@@ -164,9 +164,13 @@ def get_posts(request):
             .from_statement(Idea._get_related_post_statement()) \
             .params(root_idea_id=root_idea_id)
         posts = ideas_query.all()
-    elif root_post_id:
-        post_data.append(
-            __post_to_json_structure(DBSession.query(Post).get(root_post_id)))
+    else: 
+        if root_post_id:
+            post_data.append(
+                __post_to_json_structure(
+                    DBSession.query(Post).get(root_post_id)
+                )
+            )
 
         posts = discussion.posts(parent_id=root_post_id)
         posts = posts.limit(page_size).offset(data['startIndex']-1)
