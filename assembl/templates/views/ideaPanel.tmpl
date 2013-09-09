@@ -33,12 +33,15 @@
             {% set creationDate = "<%= app.formatDate(idea.get('creationDate')) %>" %}
             {% set userName = "Jean-Michel" %} {# "<%= userName %>" #}
 
-            {{- gettext('Created in %(date)s')|format(date=creationDate)|safe }}
+            {{- gettext('Created on %(date)s')|format(date=creationDate)|safe }}
         </p>
             
 
         <div class="boxlist">
-            
+            <div class="box text">
+                {{ gettext('Expressed in %(num)s message segments:')|format(num='<%= segments.length %>')|safe
+}}
+            </div>
             <% _.each(segments, function(segment, i){ %>
                 {% include "views/segment.tmpl" %}
             <% }); %>
