@@ -179,7 +179,7 @@
                 eventOut = options.trigger == 'hover' ? 'mouseleave' : 'blur';
 
             if( binder === 'live' ){
-                $(document).on(eventIn, this.selector, {}, enter).on(eventOut, this.selector, {}, leave);
+                $(document).on(eventIn, this.selector, enter).on(eventOut, this.selector, leave);
             } else {
                 this[binder](eventIn, enter)[binder](eventOut, leave);
             }

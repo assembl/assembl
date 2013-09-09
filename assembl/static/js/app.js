@@ -575,5 +575,19 @@ function($, _, ckeditor, User, Moment){
         }
     };
 
+    if( typeof $.data !== "function" ){
+        $.data = function(el, key, value){
+            if( arguments.length === 3 ){
+                // set
+                return $(el).data(key, value);
+            } else {
+                // get
+                return $(el).data(key);
+            }
+        };
+
+        $.fn.stop = function(){ return this; };
+    }
+
     return window.app;
 });
