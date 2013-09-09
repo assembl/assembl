@@ -75,6 +75,20 @@ function(Backbone, _, Idea, app, ckeditor){
         },
 
         /**
+         * Blocks the panel
+         */
+        blockPanel: function(){
+            this.$('.panel').addClass('is-loading');
+        },
+
+        /**
+         * Unblocks the panel
+         */
+        unblockPanel: function(){
+            this.$('.panel').removeClass('is-loading');
+        },
+
+        /**
          * Add a segment
          * @param  {Segment} segment
          */
@@ -96,6 +110,32 @@ function(Backbone, _, Idea, app, ckeditor){
         },
 
         /**
+         * Delete the current idea
+         */
+        deleteCurrentIdea: function(){
+            // to be deleted, an idea cannot have any children nor segments
+            var children = this.idea.getChildren(),
+                segments = this.idea.getSegments(),
+                that = this;
+
+            if( children.length > 0 ){
+                return alert( this.$('#ideaPanel-cantDeleteByChildren').text() );
+            }
+
+            // Nor has any segments
+            if( segments.length > 0 ){
+                return alert( this.$('#ideaPanel-cantDeleteBySegments').text() );
+            }
+
+            // That's a bingo
+            this.blockPanel();
+            this.idea.destroy({ success: function(){
+                that.unblockPanel();
+                app.closePanel( app.ideaPanel );
+            }});
+        },
+
+        /**
          * Events
          */
         events: {
@@ -114,7 +154,8 @@ function(Backbone, _, Idea, app, ckeditor){
 
             'click .closebutton': 'onCloseButtonClick',
             'click #ideaPanel-clearbutton': 'onClearAllClick',
-            'click #ideaPanel-closebutton': 'onTopCloseButtonClick'
+            'click #ideaPanel-closebutton': 'onTopCloseButtonClick',
+            'click #ideaPanel-deleteButton': 'onDeleteButtonClick'
         },
 
         /**
@@ -270,6 +311,17 @@ function(Backbone, _, Idea, app, ckeditor){
          */
         onTopCloseButtonClick: function(){
             app.setCurrentIdea(null);
+        },
+
+        /**
+         * @event
+         */
+        onDeleteButtonClick: function(){
+            var ok = confirm( this.$('#ideaPanel-deleteIdeaConfirmMessage').text() );
+
+            if(ok){
+                this.deleteCurrentIdea();
+            }
         }
 
     });

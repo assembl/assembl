@@ -2,6 +2,9 @@
 
     <div hidden="hidden">
         <span id="ideaPanel-clearConfirmationMessage">{{ gettext('Do you confirm removing all segments ?') }}</span>
+        <span id="ideaPanel-deleteIdeaConfirmMessage">{{ gettext('Do you confirm deleting this idea ?') }}</span>
+        <span id="ideaPanel-cantDeleteByChildren">{{ gettext('You cannot delete an idea which has children ideas.') }}</span>
+        <span id="ideaPanel-cantDeleteBySegments">{{ gettext('You cannot delete an idea which has segments attached.') }}</span>
     </div>
 
     <div class="panel-header">
@@ -49,7 +52,10 @@
     </div>
 
     <div class="panel-footer">
-        <a id="ideaPanel-clearbutton" class="link">{{ gettext('Clear') }}</a>
+        <div class="float-right">
+            <a id="ideaPanel-deleteButton" class="link">{{ gettext('Delete idea') }}</a>
+        </div>
+        <a id="ideaPanel-clearbutton" class="link">{{ gettext('Clear segments') }}</a>
     </div>
 
 </div>
