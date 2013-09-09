@@ -2,7 +2,7 @@ import json
 import transaction
 
 from cornice import Service
-from pyramid.httpexceptions import HTTPNotFound
+from pyramid.httpexceptions import HTTPNotFound, HTTPBadRequest, HTTPNoContent
 from assembl.views.api import API_DISCUSSION_PREFIX
 from assembl.db import DBSession
 from assembl.synthesis.models import Idea, Discussion, Extract
@@ -103,7 +103,22 @@ def save_idea(request):
     return {'ok': True, 'id': idea.id}
 
 # Delete
-# WE DON'T DELETE IDEAS. LIVE WITH IT
+@idea.delete()  # permission=P_EDIT_IDEA
+def delete_idea(request):
+    idea_id = request.matchdict['id']
+    idea = DBSession.query(Idea).get(idea_id)
+
+    if not idea:
+        raise HTTPNotFound("Idea with id '%s' not found." % idea_id)
+    num_childrens = len(idea.children)
+    if num_childrens > 0:
+        raise HTTPBadRequest("Idea cannot be deleted because it still has %d child ideas." % num_childrens)
+    num_extracts = len(idea.extracts)
+    if num_extracts > 0:
+        raise HTTPBadRequest("Idea cannot be deleted because it still has %d extracts." % num_extracts)
+    DBSession.delete(idea)
+    request.response.status = HTTPNoContent.code
+    return None
 
 
 @idea_extracts.get()  # permission=P_READ
