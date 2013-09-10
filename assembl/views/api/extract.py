@@ -8,6 +8,7 @@ from pyramid.security import authenticated_userid
 from assembl.views.api import API_DISCUSSION_PREFIX
 from assembl.db import DBSession
 from assembl.synthesis.models import Extract
+from assembl.source.models import Source, Content
 from . import acls
 from assembl.auth import (
     P_READ, P_ADD_EXTRACT, P_EDIT_EXTRACT, P_DELETE_EXTRACT)
@@ -38,14 +39,18 @@ def get_extract(request):
 
 @extracts.get()  # permission=P_READ
 def get_extracts(request):
-    user_id = authenticated_userid(request)
+    discussion_id = int(request.matchdict['discussion_id'])
 
-    extracts = DBSession.query(Extract).filter_by(
-        owner_id=user_id
-    ).order_by(Extract.order.desc())
+    all_extracts = DBSession.query(Extract).join(
+        Content,
+        Source
+    ).filter(
+        Source.discussion_id==discussion_id,
+        Content.source_id==Source.id
+    )
 
     serializable_extracts = [
-        extract.serializable() for extract in extracts
+        extract.serializable() for extract in all_extracts
     ]
 
     return serializable_extracts
