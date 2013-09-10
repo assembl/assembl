@@ -1,5 +1,5 @@
-define(['backbone', 'underscore', 'zepto', 'app', 'models/segment'],
-function(Backbone, _, $, app, Segment){
+define(['backbone', 'underscore', 'zepto', 'app', 'models/segment', 'i18n'],
+function(Backbone, _, $, app, Segment, i18n){
     'use strict';
 
     var SegmentList = Backbone.View.extend({
@@ -197,7 +197,7 @@ function(Backbone, _, $, app, Segment){
          * @event
          */
         onClearButtonClick: function(ev){
-            var ok = confirm( this.$('#segmentList-clearConfirmationMessage').text() );
+            var ok = confirm( i18n.gettext('segmentList-clearConfirmationMessage') );
             if( ok ){
                 this.segments.reset();
             }

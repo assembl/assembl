@@ -1,5 +1,5 @@
-define(['backbone', 'underscore', 'models/idea', 'app', 'ckeditor-sharedspace'],
-function(Backbone, _, Idea, app, ckeditor){
+define(['backbone', 'underscore', 'models/idea', 'app', 'ckeditor-sharedspace', 'i18n'],
+function(Backbone, _, Idea, app, ckeditor, i18n){
     'use strict';
 
     var LONG_TITLE_ID = 'ideaPanel-longtitle';
@@ -119,12 +119,12 @@ function(Backbone, _, Idea, app, ckeditor){
                 that = this;
 
             if( children.length > 0 ){
-                return alert( this.$('#ideaPanel-cantDeleteByChildren').text() );
+                return alert( i18n.gettext('ideaPanel-cantDeleteByChildren') );
             }
 
             // Nor has any segments
             if( segments.length > 0 ){
-                return alert( this.$('#ideaPanel-cantDeleteBySegments').text() );
+                return alert( i18n.gettext('ideaPanel-cantDeleteBySegments') );
             }
 
             // That's a bingo
@@ -164,7 +164,7 @@ function(Backbone, _, Idea, app, ckeditor){
         onShortTitleBlur: function(ev){
             var data = $.trim(ev.currentTarget.textContent);
             if( data === '' ){
-                data = 'New Idea';
+                data = i18n.gettext('New Idea');
             }
             this.idea.set('shortTitle', data);
         },
@@ -219,7 +219,7 @@ function(Backbone, _, Idea, app, ckeditor){
             var data = ckeditor.instances[LONG_TITLE_ID].getData();
             data = $.trim( data );
             if( data === '' ){
-                data = 'Add the description';
+                data = i18n.gettext('Add the description');
             }
             this.idea.set('longTitle', data);
         },
@@ -300,7 +300,7 @@ function(Backbone, _, Idea, app, ckeditor){
          * @event
          */
         onClearAllClick: function(ev){
-            var ok = confirm( this.$('#ideaPanel-clearConfirmationMessage').text() );
+            var ok = confirm( i18n.gettext('ideaPanel-clearConfirmationMessage') );
             if( ok ){
                 this.idea.get('segments').reset();
             }
@@ -317,7 +317,7 @@ function(Backbone, _, Idea, app, ckeditor){
          * @event
          */
         onDeleteButtonClick: function(){
-            var ok = confirm( this.$('#ideaPanel-deleteIdeaConfirmMessage').text() );
+            var ok = confirm( i18n.gettext('ideaPanel-deleteIdeaConfirmMessage') );
 
             if(ok){
                 this.deleteCurrentIdea();

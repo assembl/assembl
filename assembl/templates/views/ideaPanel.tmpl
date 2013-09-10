@@ -1,12 +1,5 @@
 <div class="panel" draggable="draggable">
 
-    <div hidden="hidden">
-        <span id="ideaPanel-clearConfirmationMessage">{{ gettext('Do you confirm removing all segments ?') }}</span>
-        <span id="ideaPanel-deleteIdeaConfirmMessage">{{ gettext('Do you confirm deleting this idea ?') }}</span>
-        <span id="ideaPanel-cantDeleteByChildren">{{ gettext('You cannot delete an idea which has children ideas.') }}</span>
-        <span id="ideaPanel-cantDeleteBySegments">{{ gettext('You cannot delete an idea which has segments attached.') }}</span>
-    </div>
-
     <div class="panel-header">
         <strong>{{ gettext('Idea') }}</strong>
         <div class="float-right">
@@ -33,12 +26,15 @@
             {% set creationDate = "<%= app.formatDate(idea.get('creationDate')) %>" %}
             {% set userName = "Jean-Michel" %} {# "<%= userName %>" #}
 
-            {{- gettext('Created in %(date)s')|format(date=creationDate)|safe }}
+            {{- gettext('Created on %(date)s')|format(date=creationDate)|safe }}
         </p>
             
 
         <div class="boxlist">
-            
+            <div class="box text">
+                {{ gettext('Expressed in %(num)s message segments:')|format(num='<%= segments.length %>')|safe
+}}
+            </div>
             <% _.each(segments, function(segment, i){ %>
                 {% include "views/segment.tmpl" %}
             <% }); %>

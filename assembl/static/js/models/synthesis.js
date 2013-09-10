@@ -1,4 +1,4 @@
-define(['backbone', 'zepto', 'app'], function(Backbone, $, app){
+define(['backbone', 'zepto', 'app', 'i18n'], function(Backbone, $, app, i18n){
     'use strict';
 
     /**
@@ -24,9 +24,9 @@ define(['backbone', 'zepto', 'app'], function(Backbone, $, app){
          * @type {Object}
          */
         defaults: {
-            subject: 'Add a title',
-            introduction: 'Add an introduction',
-            conclusion: 'Add a conclution'
+            subject: i18n.gettext('Add a title'),
+            introduction: i18n.gettext('Add an introduction'),
+            conclusion: i18n.gettext('Add a conclution')
         },
 
         /**

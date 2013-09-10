@@ -1,4 +1,4 @@
-define(['backbone','underscore', 'models/segment', 'app'], function(Backbone, _, Segment, app){
+define(['backbone','underscore', 'models/segment', 'app', 'i18n'], function(Backbone, _, Segment, app, i18n){
     'use strict';
 
     /**
@@ -28,7 +28,7 @@ define(['backbone','underscore', 'models/segment', 'app'], function(Backbone, _,
          * Defaults
          */
         defaults: {
-            shortTitle: 'New idea',
+            shortTitle: i18n.gettext('New idea'),
             longTitle: '',
             total: 0,
             isOpen: true,

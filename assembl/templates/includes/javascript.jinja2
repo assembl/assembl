@@ -1,5 +1,3 @@
-<script id="ajaxerror-message" type="text/message">{{gettext('Unfortunatelly, something went wrong. Please, reload your browser.')}}</script>
-
 <script src="{{ STATIC_URL }}js/lib/require.min.js"></script>
 
 <script>
@@ -26,8 +24,11 @@ requirejs.config({
             exports: '$'
         },
         'app': {
-            deps: ['ckeditor', 'tipsy'],
+            deps: ['ckeditor', 'tipsy', 'i18n'],
             exports: 'app'
+        },
+        'i18n': {
+            exports: 'i18n'
         },
         'jasmine': {
             exports: 'jasmine'
@@ -54,6 +55,7 @@ requirejs.config({
     "paths": {
         'backbone': 'lib/backbone',
         'underscore': 'lib/underscore',
+        'i18n': 'lib/i18n',
 
         'zepto': '__proto__' in {} ? 'lib/zepto' : "lib/jquery",
         'zepto-touch': 'lib/zepto-touch',
@@ -73,4 +75,33 @@ requirejs.config({
     }
 });
 
+</script>
+
+<script>
+require(['i18n'], function(i18n){
+    i18n({
+        'ajaxerror-message' : "{{ gettext('Unfortunatelly, something went wrong. Please, reload your browser.') }}",
+
+        'ideaPanel-clearConfirmationMessage' : "{{ gettext('Do you confirm removing all segments ?') }}",
+        'ideaPanel-deleteIdeaConfirmMessage' : "{{ gettext('Do you confirm deleting this idea ?') }}",
+        'ideaPanel-cantDeleteByChildren' : "{{ gettext('You cannot delete an idea which has children ideas.') }}",
+        'ideaPanel-cantDeleteBySegments' : "{{ gettext('You cannot delete an idea which has segments attached.') }}",
+
+        'segmentList-clearConfirmationMessage': "{{ gettext('Do you confirm removing all segments ?') }}",
+
+        'Add the description': "{{ gettext('Add the description') }}",
+        'New Idea': "{{ gettext('New Idea') }}",
+
+        'Add a title': "{{ gettext('Add a title') }}",
+        'Add an introduction': "{{ gettext('Add an introduction') }}",
+        'Add a conclution': "{{ gettext('Add a conclution') }}",
+
+        'Sending...': "{{ gettext('Sending...') }}",
+        'Do you want to publish the synthesis?': "{{ gettext('Do you want to publish the synthesis?') }}",
+        'Add to clipboard': "{{ gettext('Add to clipboard') }}",
+
+        "Subject: {0} \n Introduction: {1} \n Conclusion: {2}": '{{ gettext("Subject: {0} \n Introduction: {1} \n Conclusion: {2}") }}',
+        "Synthesis published!": "{{ gettext('Synthesis published!') }}"
+    });
+});
 </script>
