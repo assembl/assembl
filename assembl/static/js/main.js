@@ -1,6 +1,6 @@
 define([
     "app",
-    "zepto",
+    "zepto-touch",
     "views/lateralMenu",
     "views/ideaList",
     "views/ideaPanel",

@@ -1,4 +1,4 @@
-define(['zepto', 'jasmine-html'], function($, jasmine){
+define(['zepto-touch', 'jasmine-html'], function($, jasmine){
     var jasmineEnv = jasmine.getEnv();
     jasmineEnv.updateInterval = 1000;
 

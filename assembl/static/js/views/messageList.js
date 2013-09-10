@@ -1,4 +1,4 @@
-define(['backbone', 'underscore', 'zepto', 'app', 'views/messageListItem', 'views/message', 'models/message', 'i18n'],
+define(['backbone', 'underscore', 'zepto-touch', 'app', 'views/messageListItem', 'views/message', 'models/message', 'i18n'],
 function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
     'use strict';
 

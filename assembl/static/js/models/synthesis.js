@@ -1,4 +1,4 @@
-define(['backbone', 'zepto', 'app', 'i18n'], function(Backbone, $, app, i18n){
+define(['backbone', 'zepto-touch', 'app', 'i18n'], function(Backbone, $, app, i18n){
     'use strict';
 
     /**

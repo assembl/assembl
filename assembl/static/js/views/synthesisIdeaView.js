@@ -1,4 +1,4 @@
-define(['backbone', 'underscore', 'zepto', 'models/idea', 'models/segment', 'app', 'ckeditor-sharedspace'],
+define(['backbone', 'underscore', 'zepto-touch', 'models/idea', 'models/segment', 'app', 'ckeditor-sharedspace'],
 function(Backbone, _, $, Idea, Segment, app, ckeditor){
     'use strict';
 

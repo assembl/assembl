@@ -1,4 +1,4 @@
-define(['backbone', 'underscore', 'zepto', 'models/idea', 'models/segment', 'app'],
+define(['backbone', 'underscore', 'zepto-touch', 'models/idea', 'models/segment', 'app'],
 function(Backbone, _, $, Idea, Segment, app){
     'use strict';
 

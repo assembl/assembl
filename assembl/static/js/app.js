@@ -1,4 +1,4 @@
-define(['zepto', 'underscore', 'ckeditor', 'models/user', 'moment', 'i18n'],
+define(['zepto-touch', 'underscore', 'ckeditor', 'models/user', 'moment', 'i18n'],
 function($, _, ckeditor, User, Moment, i18n){
     'use strict';
 

@@ -6,22 +6,26 @@ requirejs.config({
     'urlArgs': "bust=" + (new Date()).getTime(),
     'shim': {
         'backbone': {
-            deps: ['underscore', 'zepto'],
+            deps: ['underscore', 'zepto-touch'],
             exports: 'Backbone'
         },
         'underscore': {
             exports: '_'
         },
         'zepto': {
-            exports: '$'
+            exports: 'Zepto'
         },
         'zepto-touch': {
-            deps: ['zepto'],
-            exports: '$'
+            deps: ['zepto', 'zepto-data'],
+            exports: 'Zepto'
         },
         'zepto-data': {
             deps: ['zepto'],
-            exports: '$'
+            exports: 'Zepto'
+        },
+        'zepto-fx': {
+            deps: ['zepto'],
+            exports: 'Zepto'
         },
         'app': {
             deps: ['ckeditor', 'tipsy', 'i18n'],
@@ -49,7 +53,7 @@ requirejs.config({
             exports: 'CKEDITOR'
         },
         'tipsy': {
-            deps: ['zepto', 'zepto-data', 'zepto-fx'],
+            deps: ['zepto', 'zepto-touch', 'zepto-data', 'zepto-fx'],
         }
     },
     "paths": {

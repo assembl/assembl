@@ -1,4 +1,4 @@
-define(['backbone', 'underscore', 'zepto', 'app', 'models/synthesis', 'views/synthesisIdeaView', 'i18n'],
+define(['backbone', 'underscore', 'zepto-touch', 'app', 'models/synthesis', 'views/synthesisIdeaView', 'i18n'],
 function(Backbone, _, $, app, Synthesis, SynthesisIdeaView, i18n){
     'use strict';
 
