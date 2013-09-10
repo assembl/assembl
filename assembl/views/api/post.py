@@ -97,6 +97,8 @@ def get_posts(request):
     if not discussion:
         raise HTTPNotFound(_("No discussion found with id=%s" % discussion_id))
 
+    discussion.import_from_sources()
+
     user_id = authenticated_userid(request)
 
     DEFAULT_PAGE_SIZE = 25
