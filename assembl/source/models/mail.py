@@ -146,7 +146,7 @@ class Mailbox(Source):
                 body=body.strip().decode('ISO-8859-1'),
                 full_message=str(parsed_email).decode('ISO-8859-1')
             )
-            email.post.creator = sender_email_account.profile
+            new_email.post.creator = sender_email_account.profile
 
             return new_email
 
