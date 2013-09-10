@@ -471,21 +471,13 @@ function($, _, ckeditor, User, Moment, i18n){
         },
 
         /**
-         * @param  {String} url The avatar URL
+         * @param  {Number} userID The user's ID
          * @param  {Number} [size=44] The avatar size
          * @return {String} The avatar's url formatted with the given size
          */
-        formatAvatarUrl: function(url, size){
+        formatAvatarUrl: function(userID, size){
             size = size || 44;
-
-            if( !url ){
-                var randomNumber = 3; // Math.floor(Math.random() * (5 - 1) + 1); // between 1 and 4
-                url = '/static/img/avatar/placeholder-{0}.png'.replace('{0}', randomNumber);
-            } else {
-                url += '?s=44';
-            }
-
-            return url;
+            return app.format("/user/id/{0}/avatar/{1}", userID, size);
         },
 
 

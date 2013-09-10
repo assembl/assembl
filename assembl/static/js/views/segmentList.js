@@ -61,6 +61,7 @@ function(Backbone, _, $, app, Segment, i18n){
             var data = {
                 text: text,
                 creator: app.getCurrentUser(),
+                source_creator: app.getCurrentUser(),
                 idPost: idPost || null
             };
 

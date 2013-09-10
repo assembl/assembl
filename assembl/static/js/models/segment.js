@@ -32,7 +32,7 @@ function(Backbone, app, moment, User){
             idIdea: null,
             creationDate: null,
             creator: {},
-            quote_creator: {}
+            source_creator: {}
         },
 
         /**
