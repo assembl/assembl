@@ -1,5 +1,5 @@
-define(['zepto', 'underscore', 'ckeditor', 'models/user', 'moment'],
-function($, _, ckeditor, User, Moment){
+define(['zepto', 'underscore', 'ckeditor', 'models/user', 'moment', 'i18n'],
+function($, _, ckeditor, User, Moment, i18n){
     'use strict';
 
     ckeditor.disableAutoInline = true;
@@ -526,7 +526,7 @@ function($, _, ckeditor, User, Moment){
          * @event
          */
         onAjaxError: function( ev, jqxhr, settings, exception ){
-            var message = $('#ajaxerror-message').text();
+            var message = i18n._('ajaxerror-message');
             message = "url: " + settings.url + "\n" + message;
 
             alert( message );

@@ -1,5 +1,5 @@
-define(['backbone', 'underscore', 'moment', 'ckeditor', 'app', 'models/message'],
-function(Backbone, _, Moment, ckeditor, app, Message){
+define(['backbone', 'underscore', 'moment', 'ckeditor', 'app', 'models/message', 'i18n'],
+function(Backbone, _, Moment, ckeditor, app, Message, i18n){
     'use strict';
 
     var MIN_TEXT_TO_TOOLTIP = 5,
@@ -120,7 +120,7 @@ function(Backbone, _, Moment, ckeditor, app, Message){
                 data.reply_id = this.model.get('id');
             }
 
-            btn.text('Sending...');
+            btn.text( i18n.gettext('Sending...') );
 
             $.ajax({
                 type: "post",
@@ -141,9 +141,8 @@ function(Backbone, _, Moment, ckeditor, app, Message){
          * @param  {Number} y
          */
         showSelectionOptions: function(x, y){
-            var items = {
-                'Add to clipboard' : this.contextMenuItem1
-            };
+            var items = {};
+            items[ i18n.gettext('Add to clipboard') ] = this.contextMenuItem1;
 
             this.hideTooltip();
             app.showContextMenu(x, y, this, items);

@@ -1,5 +1,5 @@
-define(['backbone', 'underscore', 'zepto', 'app', 'views/messageListItem', 'views/message', 'models/message'],
-function(Backbone, _, $, app, MessageListItem, MessageView, Message){
+define(['backbone', 'underscore', 'zepto', 'app', 'views/messageListItem', 'views/message', 'models/message', 'i18n'],
+function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
     'use strict';
 
     /**
@@ -102,7 +102,7 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message){
             if( messages.length > 0 ){
                 this.$('.idealist').append( list );
             } else {
-                this.$('.idealist').append( "<div class='margin'>No messages</div>" );
+                this.$('.idealist').append( app.format("<div class='margin'>{0}</div>", i18n.gettext('No messages')) );
             }
             
 

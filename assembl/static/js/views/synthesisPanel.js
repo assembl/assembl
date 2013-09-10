@@ -1,5 +1,5 @@
-define(['backbone', 'underscore', 'zepto', 'app', 'models/synthesis', 'views/synthesisIdeaView'],
-function(Backbone, _, $, app, Synthesis, SynthesisIdeaView){
+define(['backbone', 'underscore', 'zepto', 'app', 'models/synthesis', 'views/synthesisIdeaView', 'i18n'],
+function(Backbone, _, $, app, Synthesis, SynthesisIdeaView, i18n){
     'use strict';
 
     var SynthesisPanel = Backbone.View.extend({
@@ -130,7 +130,7 @@ function(Backbone, _, $, app, Synthesis, SynthesisIdeaView){
          * Publish the synthesis
          */
         publish: function(){
-            var ok = confirm("Do you want to publish the synthesis?");
+            var ok = confirm( i18n.gettext("Do you want to publish the synthesis?") );
             if( ok ){
                 this._publish();
             }
@@ -144,7 +144,7 @@ function(Backbone, _, $, app, Synthesis, SynthesisIdeaView){
                 data = {},
                 url = app.getApiUrl('posts');
 
-            data.message = app.format("Subject: {0} \n Introduction: {1} \n Conclusion: {2}", json.subject, json.introduction, json.conclusion);
+            data.message = app.format( i18n.gettext("Subject: {0} \n Introduction: {1} \n Conclusion: {2}"), json.subject, json.introduction, json.conclusion);
 
             $.ajax({
                 type: "post",
@@ -152,7 +152,7 @@ function(Backbone, _, $, app, Synthesis, SynthesisIdeaView){
                 contentType: 'application/json',
                 url: url,
                 success: function(){
-                    alert("Synthesis published!");
+                    alert( i18n.gettext("Synthesis published!") );
                 }
             });
         }
