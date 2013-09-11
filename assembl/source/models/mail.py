@@ -206,10 +206,12 @@ class Mailbox(Source):
 
         return most_common_address
 
-    def email_most_common_recipient(
+    # The send method will be a common interface on all sources.
+    def send(
         self, 
         sender, 
         message_body,
+        html_body=None,
         subject='[Assembl]', 
     ):
         """
@@ -238,7 +240,7 @@ class Mailbox(Source):
         message['To'] = recipients
 
         plain_text_body = message_body
-        html_body = message_body
+        html_body = html_body or message_body
 
         # TODO: The plain text and html parts of the email should be different,
         # but we'll see what we can get from the front-end.
@@ -270,9 +272,6 @@ class Mailbox(Source):
 
         smtp_connection.quit()
 
-    # The send method will be a common interface on all sources.
-    def send(self, sender, message, subject):
-        self.email_most_common_recipient(sender, message, subject=subject)
 
     def serializable(self):
         serializable_source = super(Mailbox, self).serializable()
