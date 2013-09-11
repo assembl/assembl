@@ -230,6 +230,7 @@ def create_post(request):
     user = DBSession.query(User).filter_by(id=user_id).one()
 
     message = request_body.get('message', None)
+    html = request_body.get('html', None)
     reply_id = request_body.get('reply_id', None)
     subject = request_body.get('subject', None)
 
@@ -256,6 +257,6 @@ def create_post(request):
         )
 
     for source in discussion.sources:
-        source.send(user, message, subject=subject)
+        source.send(user, message, subject=subject, html_body=html)
 
     return {"ok": True}
