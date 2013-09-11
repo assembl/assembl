@@ -273,7 +273,7 @@ class Idea(SQLAlchemyBaseModel):
             'active': False,
             'featured': False,
             'parentId': self.parents[0].id if self.parents else None,
-            'inSynthesis': False,
+            'inSynthesis': True if self.synthesis_id else False,
             'total': len(self.children),
             'num_posts': self.num_posts,
         }
