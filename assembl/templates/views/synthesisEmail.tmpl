@@ -1,0 +1,31 @@
+<strong>{{ gettext('Subject:') }} <%= subject %></strong>
+<p>&nbsp;</p>
+
+<h3>{{ gettext('Introduction') }}</h3>
+<div><%= introduction %></div>
+
+<p>&nbsp;</p>
+
+<ul>
+
+    <% _.each(ideas, function(idea){ %>
+        <%= app.printIdea(idea) %>
+    <% }); %>
+
+    {#
+        <li>
+            <a href="#"><%= idea.get('shortTitle') %></a> (<a href="mailto:">{{ gettext('react') }}</a>)
+            <ul>
+            <%
+                var children = idea.getSynthesisChildren();
+                _.each(function())
+            %>
+            </ul>
+        </li>
+    <% }); %>
+    #}
+</ul>
+
+<p>&nbsp;</p>
+<h3>{{ gettext('Conclusion') }}</h3>
+<div><%= conclusion %></div>
