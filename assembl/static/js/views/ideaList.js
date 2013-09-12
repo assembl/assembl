@@ -42,6 +42,11 @@ function(Backbone, _, Idea, IdeaView, app){
             this.ideas = new Idea.Collection();
             this.ideas.on('reset', this.render, this);
             this.ideas.on('change:parentId change:inSynthesis', this.render, this);
+
+            var that = this;
+            app.on('idea:delete', function(){
+                that.render();
+            });
         },
 
         /**

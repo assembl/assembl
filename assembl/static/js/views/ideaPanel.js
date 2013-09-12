@@ -132,6 +132,7 @@ function(Backbone, _, Idea, app, ckeditor, i18n){
             this.idea.destroy({ success: function(){
                 that.unblockPanel();
                 app.closePanel( app.ideaPanel );
+                app.trigger('idea:delete');
             }});
         },
 
