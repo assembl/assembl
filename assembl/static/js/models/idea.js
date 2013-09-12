@@ -31,6 +31,7 @@ define(['backbone','underscore', 'models/segment', 'app', 'i18n'], function(Back
             shortTitle: i18n.gettext('New idea'),
             longTitle: '',
             total: 0,
+            num_posts: 0,
             isOpen: true,
             hasCheckbox: true,
             featured: false,

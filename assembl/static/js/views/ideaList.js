@@ -198,6 +198,7 @@ function(Backbone, _, Idea, IdeaView, app){
             }
 
             newIdea.save();
+            app.setCurrentIdea(newIdea);
         },
 
         /**
