@@ -100,6 +100,14 @@ define(['backbone','underscore', 'models/segment', 'app', 'i18n'], function(Back
         },
 
         /**
+         * Return all children which belongs to the synthesis
+         * @return {Idea[]}
+         */
+        getSynthesisChildren: function(){
+            return this.collection.where({ parentId: this.get('id'), inSynthesis: true });
+        },
+
+        /**
          * Return if the idea is descendant of the given idea
          * @param {Idea} idea 
          * @return {Boolean}

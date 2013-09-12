@@ -532,6 +532,23 @@ function($, _, ckeditor, User, Moment, i18n){
             $('.tipsy').remove();
         },
 
+        printIdea: function(idea){
+            var html = "<li>";
+            html += app.format('<a href="#">{0}</a> (<a href="mailto:">{1}</a>)', idea.get("shortTitle"), i18n.gettext('react'));
+
+            var children = idea.getSynthesisChildren();
+            if( children ) {
+                html += "\n<ul>";
+                _.each(children, function(idea){
+                    html += app.printIdea(idea);
+                });
+                html += "</ul>";
+            }
+            
+            html += "</li>";
+            return html;
+        },
+
         /**
          * @init
          */

@@ -91,7 +91,6 @@ function(Backbone, app, moment, User){
                 }
 
                 if( creator ){
-                    console.log( creator.id, currentUser.id );
                     return creator.id == currentUser.id;
                 }
                 return false;
