@@ -32,7 +32,7 @@ function(Backbone, _, $, app, Segment, i18n){
          */
         render: function(){
             app.trigger('render');
-            var segments = this.segments.where({idIdea: null}),
+            var segments = this.segments.getClipboard(),
                 data = {segments:segments};
 
             this.$el.html(this.template(data));
@@ -201,7 +201,9 @@ function(Backbone, _, $, app, Segment, i18n){
             var ok = confirm( i18n.gettext('segmentList-clearConfirmationMessage') );
             if( ok ){
                 var segments = this.segments.getClipboard();
-                //this.segments.reset();
+                _.each(segments, function(segment){
+                    segment.destroy();
+                });
             }
         }
 

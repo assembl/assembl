@@ -80,7 +80,22 @@ function(Backbone, app, moment, User){
          * @return {Array<Segment>}
          */
         getClipboard: function(){
-            return this.where({idIdea: null});
+            var currentUser = app.getCurrentUser(),
+                segments;
+
+            return this.filter(function(item){
+                var creator = item.get('source_creator');
+
+                if( item.get('idIdea') !== null ){
+                    return false;
+                }
+
+                if( creator ){
+                    console.log( creator.id, currentUser.id );
+                    return creator.id == currentUser.id;
+                }
+                return false;
+            });
         }
     });
 
