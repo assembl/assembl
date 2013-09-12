@@ -200,7 +200,8 @@ function(Backbone, _, $, app, Segment, i18n){
         onClearButtonClick: function(ev){
             var ok = confirm( i18n.gettext('segmentList-clearConfirmationMessage') );
             if( ok ){
-                this.segments.reset();
+                var segments = this.segments.getClipboard();
+                //this.segments.reset();
             }
         }
 

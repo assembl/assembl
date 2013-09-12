@@ -36,6 +36,16 @@ function(Backbone, app, moment, User){
         },
 
         /**
+         * Validation
+         */
+        validate: function(attrs, options){
+            var currentUser = app.getCurrentUser();
+            if( ! currentUser.id ){
+                return i18n.gettext('You must be logged in to create segments');
+            }
+        },
+
+        /**
          * Returns a fancy date (ex: a few seconds ago) 
          * @return {String}
          */
@@ -63,7 +73,15 @@ function(Backbone, app, moment, User){
         /**
          * @type {IdeaModel}
          */
-        model: SegmentModel
+        model: SegmentModel,
+
+        /**
+         * Return the segments to compose the clipboard
+         * @return {Array<Segment>}
+         */
+        getClipboard: function(){
+            return this.where({idIdea: null});
+        }
     });
 
     return {

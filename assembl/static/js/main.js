@@ -15,7 +15,7 @@ define([
     app.init();
 
     app.currentUser = new User.Model();
-    app.currentUser.fetch();
+    app.currentUser.loadCurrentUser();
 
     // Lateral menu
     app.lateralMenu = new LateralMenu({el: '#lateralMenu'}).render();
@@ -29,6 +29,7 @@ define([
     // Segment List
     app.segmentList = new SegmentList({el: '#segmentlist', button: '#button-segmentList'});
     app.segmentList.segments.on('change reset', app.ideaList.render, app.ideaList);
+    app.segmentList.segments.on('invalid', function(model, error){ alert(error); });
     app.segmentList.segments.fetch({reset: true});
 
     // Idea panel
