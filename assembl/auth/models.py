@@ -86,7 +86,7 @@ class AgentProfile(SQLAlchemyBaseModel):
             if ea.email in emails:
                 if ea.verified:
                     emails[ea.email].verified = True
-                DBSession.delete(ea.email)
+                DBSession.delete(ea)
             else:
                 ea.profile = self
         for idp in other_profile.identity_accounts:
