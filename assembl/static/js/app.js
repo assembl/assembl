@@ -533,8 +533,8 @@ function($, _, ckeditor, User, Moment, i18n){
         },
 
         printIdea: function(idea){
-            var html = "<li>";
-            html += app.format('<a href="#">{0}</a> (<a href="mailto:">{1}</a>)', idea.get("shortTitle"), i18n.gettext('react'));
+            var html = "\n<li>";
+            html += app.format('\n{0} (<a href="mailto:">{1}</a>)', idea.get("shortTitle"), i18n.gettext('react'));
 
             var children = idea.getSynthesisChildren();
             if( children ) {
@@ -542,10 +542,10 @@ function($, _, ckeditor, User, Moment, i18n){
                 _.each(children, function(idea){
                     html += app.printIdea(idea);
                 });
-                html += "</ul>";
+                html += "\n</ul>";
             }
             
-            html += "</li>";
+            html += "\n</li>";
             return html;
         },
 

@@ -152,9 +152,6 @@ function(Backbone, _, $, app, Synthesis, SynthesisIdeaView, i18n){
                 ideas: this.ideas.getInSynthesisIdeas()
             });
 
-            console.log( data.message );
-            return;
-
             $.ajax({
                 type: "post",
                 data: JSON.stringify(data),
