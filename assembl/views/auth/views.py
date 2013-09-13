@@ -44,6 +44,9 @@ default_context = {
 )
 def logout(request):
     forget(request)
+    next_view = request.params.get('next_view')
+    if next_view:
+        return HTTPFound(next_view)
     return dict(default_context, **{
         'login_url': login_url,
         'providers': request.registry.settings['login_providers'],
@@ -68,6 +71,7 @@ def login_view(request):
     return dict(default_context, **{
         'login_url': login_url,
         'providers': request.registry.settings['login_providers'],
+        'next_view': request.params.get('next_view', '/')
     })
 
 
@@ -191,7 +195,8 @@ def avatar(request):
 )
 def assembl_register_view(request):
     if not request.params.get('email'):
-        return default_context
+        return dict(default_context,
+                    next_view=request.params.get('next_view', '/'))
     forget(request)
     name = request.params.get('name', '').strip()
     password = request.params.get('password', '').strip()
@@ -229,9 +234,8 @@ def assembl_register_view(request):
     headers = remember(request, user.id, tokens=format_token(user))
     request.response.headerlist.extend(headers)
     transaction.commit()
-    # Redirect to profile page. TODO: Remember another URL
     # TODO: Tell them to expect an email.
-    raise HTTPFound(location='/user/id/'+str(userid))
+    raise HTTPFound(location=request.params.get('next_view', '/'))
 
 
 @view_config(
@@ -264,10 +268,7 @@ def assembl_login_complete_view(request):
             forget(request)
         else:
             # re-logging in? Why?
-            if user.username:
-                raise HTTPFound(location='/user/u/'+user.username)
-            else:
-                raise HTTPFound(location='/user/id/'+str(user.id))
+            raise HTTPFound(location=request.params.get('next_view') or '/')
     if not user.check_password(password):
         user.login_failures += 1
         #TODO: handle high failure count
@@ -277,11 +278,7 @@ def assembl_login_complete_view(request):
                     error=_("Invalid user and password"))
     headers = remember(request, user.id, tokens=format_token(user))
     request.response.headerlist.extend(headers)
-    # Redirect to profile page. TODO: Remember another URL
-    if user.username:
-        raise HTTPFound(location='/user/u/'+user.username)
-    else:
-        raise HTTPFound(location='/user/id/'+str(user.id))
+    raise HTTPFound(location=request.params.get('next_view') or '/')
 
 
 @view_config(

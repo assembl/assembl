@@ -16,7 +16,7 @@
         </div>
         <div class="accordion-area">
             <div class="accordion-header">
-                <span class="accordion-label icon-power">{{ gettext('Logout') }}</span>
+                <span class="accordion-label icon-power"><a href="/logout?next_view={{request.current_route_path()}}">{{ gettext('Logout') }}</a></span>
             </div>
             <div class="accordion-body"></div>
         </div>

@@ -15,7 +15,7 @@
                     <a class="iconbutton icon-search"></a>
                     <a class="iconbutton icon-cog"></a>
                 {% else %}
-                    <a href="/login" class="link">{{ gettext('Sign in') }} <i class="icon-user"></i> </a>
+                    <a href="/login?next_view={{request.current_route_path()}}" class="link">{{ gettext('Sign in') }} <i class="icon-user"></i> </a>
                 {% endif %}
             </div>
         </div>
