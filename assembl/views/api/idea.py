@@ -65,8 +65,9 @@ def get_ideas(request):
     ideas = DBSession.query(Idea).filter_by(
         table_of_contents_id=discussion.table_of_contents_id
     )
-
-    return [idea.serializable() for idea in ideas]
+    retval = [idea.serializable() for idea in ideas]
+    retval.append(Idea.serializable_unsorded_posts_pseudo_idea())
+    return retval
 
 
 # Update

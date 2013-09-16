@@ -2,6 +2,7 @@ from datetime import datetime
 
 from sqlalchemy.orm import relationship, backref, aliased
 from sqlalchemy.sql import func, cast, select, text
+from pyramid.i18n import TranslationString as _
 
 from sqlalchemy import (
     Table,
@@ -229,6 +230,7 @@ class Idea(SQLAlchemyBaseModel):
     A core concept taken from the associated discussion
     """
     __tablename__ = "idea"
+    ORPHAN_POSTS_IDEA_ID = 'orphan_posts'
 
     long_title = Column(Unicode(255))
     short_title = Column(Unicode(255))
@@ -277,24 +279,49 @@ class Idea(SQLAlchemyBaseModel):
             'total': len(self.children),
             'num_posts': self.num_posts,
         }
-        
     @staticmethod
-    def _get_idea_dag_statement():
-                return """
+    def serializable_unsorded_posts_pseudo_idea():
+        """
+        Returns a "fake" idea linking the posts unreacheable by navigating
+        post threads linked to any other idea
+        """
+        return {
+            'id': Idea.ORPHAN_POSTS_IDEA_ID,
+            'shortTitle': _('Unsorted posts'),
+            'longTitle': '',
+            'creationDate': None,
+            'order': 1000000000,
+            'active': False,
+            'featured': False,
+            'parentId': None,
+            'inSynthesis': False,
+            'total': 0,
+            'num_posts': Idea.get_num_orphan_posts(),
+        }
+    @staticmethod
+    def _get_idea_dag_statement(skip_where=False):
+        retval = """
 WITH    RECURSIVE
 idea_dag(idea_id, parent_id, idea_depth, idea_path, idea_cycle) AS
 (
 SELECT  id as idea_id, parent_id, 1, ARRAY[idea_initial.id], false 
 FROM    idea AS idea_initial LEFT JOIN idea_association ON (idea_initial.id = idea_association.child_id) 
+"""
+        if(not skip_where):
+            retval = retval + """
 WHERE id=:root_idea_id
+"""
+        retval = retval + """
 UNION ALL
 SELECT idea.id as idea_id, idea_association.parent_id, idea_dag.idea_depth + 1, idea_path || idea.id, idea.id = ANY(idea_path)
 FROM    (idea_dag JOIN idea_association ON (idea_dag.idea_id = idea_association.parent_id) JOIN idea ON (idea.id = idea_association.child_id)) 
 )
 """
+        return retval
+    
     @staticmethod
-    def _get_related_post_statement():
-        return Idea._get_idea_dag_statement() + """
+    def _get_related_posts_statement(skip_where=False):
+        return Idea._get_idea_dag_statement(skip_where) + """
 SELECT DISTINCT post.id FROM idea_dag 
 JOIN extract ON (extract.idea_id = idea_dag.idea_id) 
 JOIN content ON (extract.source_id = content.id) 
@@ -302,20 +329,40 @@ JOIN post AS root_posts ON (root_posts.content_id = content.id) JOIN post ON ((p
 """
 
     @staticmethod
-    def _get_count_related_post_statement():
+    def _get_count_related_posts_statement():
         return Idea._get_idea_dag_statement() + """
 SELECT COUNT(DISTINCT post.id) as total_count FROM idea_dag 
 JOIN extract ON (extract.idea_id = idea_dag.idea_id) 
 JOIN content ON (extract.source_id = content.id) 
 JOIN post AS root_posts ON (root_posts.content_id = content.id) JOIN post ON ((post.ancestry LIKE '%' || root_posts.ancestry || root_posts.id || ',') OR post.id = root_posts.id)
 """
+
+    @staticmethod
+    def _get_count_orphan_posts_statement():
+        return """
+SELECT COUNT(post.id) as total_count FROM post
+WHERE post.id NOT IN (
+""" + Idea._get_related_posts_statement(True) + ")"
+
+    @staticmethod
+    def _get_orphan_posts_statement():
+        return """
+SELECT post.id FROM post 
+WHERE post.id NOT IN (
+""" + Idea._get_related_posts_statement(True) + ")"
     
     @property
     def num_posts(self):
         """ This is extremely naive and slow, but as this is all temp code 
         until we move to a graph database, it will probably do for now """ 
-        result = DBSession.execute(text(Idea._get_count_related_post_statement()),
+        result = DBSession.execute(text(Idea._get_count_related_posts_statement()),
                                    {"root_idea_id":self.id})
+        return result.first()['total_count']
+
+    @staticmethod
+    def get_num_orphan_posts():
+        """ The number of posts unrelated to any idea """ 
+        result = DBSession.execute(text(Idea._get_count_orphan_posts_statement()))
         return result.first()['total_count']
 
     def __repr__(self):

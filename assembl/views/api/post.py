@@ -120,9 +120,12 @@ def get_posts(request):
         root_post_id = None
 
     try:
-        root_idea_id = int(request.GET.getone('root_idea_id'))
-    except (ValueError, KeyError):
+        root_idea_id = request.GET.getone('root_idea_id')
+        if(root_idea_id != Idea.ORPHAN_POSTS_IDEA_ID):
+            root_idea_id = int(root_idea_id)
+    except (KeyError):
         root_idea_id = None
+        
 
     data = {}
     data["page"] = page
@@ -162,9 +165,13 @@ def get_posts(request):
     posts = []
 
     if root_idea_id:
-        ideas_query = DBSession.query(Post) \
-            .from_statement(Idea._get_related_post_statement()) \
-            .params(root_idea_id=root_idea_id)
+        if root_idea_id == Idea.ORPHAN_POSTS_IDEA_ID:
+            ideas_query = DBSession.query(Post) \
+                .from_statement(Idea._get_orphan_posts_statement())
+        else:
+            ideas_query = DBSession.query(Post) \
+                .from_statement(Idea._get_related_posts_statement()) \
+                .params(root_idea_id=root_idea_id)
         posts = ideas_query.all()
     else: 
         if root_post_id:
