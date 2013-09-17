@@ -532,9 +532,11 @@ function($, _, ckeditor, User, Moment, i18n){
             $('.tipsy').remove();
         },
 
-        printIdea: function(idea){
-            var html = "\n<li>";
-            html += app.format('\n{0} (<a href="mailto:">{1}</a>)', idea.get("shortTitle"), i18n.gettext('react'));
+        printIdea: function(idea, email){
+            var html = "\n<li>",
+                longTitle = escape(app.stripHtml(idea.get('longTitle')));
+
+            html += app.format('\n{0} (<a href="mailto:{1}?subject={2}">{3}</a>)', idea.get("shortTitle"), email, longTitle, i18n.gettext('react'));
 
             var children = idea.getSynthesisChildren();
             if( children ) {
