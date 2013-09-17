@@ -9,12 +9,12 @@
 <ul>
 
     <% _.each(ideas, function(idea){ %>
-        <%= app.printIdea(idea) %>
+        <%= app.printIdea(idea, email) %>
     <% }); %>
 
     {#
         <li>
-            <%= idea.get('shortTitle') %> (<a href="mailto:">{{ gettext('react') }}</a>)
+            <%= idea.get('shortTitle') %> (<a href="mailto:<%= email %>?subject=<%= idea.get('longTitle') %>">{{ gettext('react') }}</a>)
             <ul>
             <%
                 var children = idea.getSynthesisChildren();

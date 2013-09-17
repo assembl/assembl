@@ -92,6 +92,13 @@ function(Backbone, _, $, app, Synthesis, SynthesisIdeaView, i18n){
         },
 
         /**
+         * Unblocks the panel
+         */
+        unblockPanel: function(){
+            this.$('.panel').removeClass('is-loading');
+        },
+
+        /**
          * 
          */
         onTitleBlur: function(ev){
@@ -143,24 +150,40 @@ function(Backbone, _, $, app, Synthesis, SynthesisIdeaView, i18n){
             var json = this.model.toJSON(),
                 data = {},
                 url = app.getApiUrl('posts'),
-                template = app.loadTemplate('synthesisEmail');
+                template = app.loadTemplate('synthesisEmail'),
+                ideas = this.ideas.getInSynthesisIdeas();
 
-            data.message = template({
-                subject: json.subject,
-                introduction: json.introduction,
-                conclusion: data.conclusion,
-                ideas: this.ideas.getInSynthesisIdeas()
-            });
+            var onSuccess = function(resp){
+                data.message = template({
+                    email: resp[0].most_common_recipient_address,
+                    subject: json.subject,
+                    introduction: json.introduction,
+                    conclusion: data.conclusion,
+                    ideas: ideas
+                });
 
+                // Sending the synthesis
+                $.ajax({
+                    type: "post",
+                    data: JSON.stringify(data),
+                    contentType: 'application/json',
+                    url: url,
+                    success: function(){
+                        alert( i18n.gettext("Synthesis published!") );
+                        this.unblockPanel();
+                    }
+                });
+            };
+
+            // getting the most_common_recipient_address
             $.ajax({
-                type: "post",
-                data: JSON.stringify(data),
+                type: 'get',
+                url: app.getApiUrl('sources/'),
                 contentType: 'application/json',
-                url: url,
-                success: function(){
-                    alert( i18n.gettext("Synthesis published!") );
-                }
+                success: onSuccess
             });
+
+            this.blockPanel();
         }
     });
 
