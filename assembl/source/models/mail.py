@@ -94,10 +94,20 @@ class Mailbox(Source):
             body = None
 
             def get_plain_text_payload(message):
+                html_part = None
+                text_part = None
                 if message.is_multipart():
                     for part in message.walk():
                         if part.get_content_type() == 'text/plain':
-                            return part.get_payload()
+                            text_part = part
+                        elif part.get_content_type() == 'text/html':
+                            html_part = part
+                    if text_part:
+                        return text_part.get_payload()
+                    elif html_part:
+                        return html_part.get_payload()
+                    else:
+                        return "Sorry, no assembl-supported mime type found in multipart message"
                 else:
                     return message.get_payload()
 
@@ -303,15 +313,15 @@ class Email(Content):
         ondelete='CASCADE'
     ), primary_key=True)
 
-    recipients = Column(Unicode(1024), nullable=False)
-    sender = Column(Unicode(1024), nullable=False)
-    subject = Column(Unicode(1024), nullable=False)
+    recipients = Column(Unicode(), nullable=False)
+    sender = Column(Unicode(), nullable=False)
+    subject = Column(Unicode(), nullable=False)
     body = Column(UnicodeText)
 
     full_message = Column(UnicodeText)
 
-    message_id = Column(Unicode(255))
-    in_reply_to = Column(Unicode(255))
+    message_id = Column(Unicode())
+    in_reply_to = Column(Unicode())
 
     import_date = Column(DateTime, nullable=False, default=datetime.utcnow)
 
