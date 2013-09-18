@@ -8,7 +8,7 @@ from pyramid.security import authenticated_userid
 from assembl.views.api import API_DISCUSSION_PREFIX
 from assembl.db import DBSession
 from assembl.synthesis.models import Extract
-from assembl.source.models import Source, Content
+from assembl.source.models import Source, Content, Post
 from . import acls
 from assembl.auth import (
     P_READ, P_ADD_EXTRACT, P_EDIT_EXTRACT, P_DELETE_EXTRACT)
@@ -63,13 +63,18 @@ def post_extract(request):
     """
     extract_data = json.loads(request.body)
     user_id = authenticated_userid(request)
-
+    
+    post_id = extract_data.get('idPost')
+    
     with transaction.manager:
+        post = DBSession.query(Post).get(post_id)
+        if not post:
+            raise HTTPNotFound("Post with id '%s' not found." % post_id)
         new_extract = Extract(
             creator_id=user_id,
             owner_id=user_id,
             body=extract_data.get('text', '').decode('utf-8'),
-            source_id=extract_data.get('idPost')
+            source_id=post.content.id
         )
 
         DBSession.add(new_extract)
