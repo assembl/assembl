@@ -167,7 +167,8 @@ def get_posts(request):
     if root_idea_id:
         if root_idea_id == Idea.ORPHAN_POSTS_IDEA_ID:
             ideas_query = DBSession.query(Post) \
-                .from_statement(Idea._get_orphan_posts_statement())
+                .from_statement(Idea._get_orphan_posts_statement()) \
+                .params(discussion_id=discussion_id)
         else:
             ideas_query = DBSession.query(Post) \
                 .from_statement(Idea._get_related_posts_statement()) \

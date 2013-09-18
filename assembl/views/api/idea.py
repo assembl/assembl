@@ -61,12 +61,14 @@ def get_idea(request):
 def get_ideas(request):
     discussion_id = request.matchdict['discussion_id']
     discussion = DBSession.query(Discussion).get(discussion_id)
+    if not discussion:
+        raise HTTPNotFound("Discussion with id '%s' not found." % discussion_id)
 
     ideas = DBSession.query(Idea).filter_by(
         table_of_contents_id=discussion.table_of_contents_id
     )
     retval = [idea.serializable() for idea in ideas]
-    retval.append(Idea.serializable_unsorded_posts_pseudo_idea())
+    retval.append(Idea.serializable_unsorded_posts_pseudo_idea(discussion))
     return retval
 
 
