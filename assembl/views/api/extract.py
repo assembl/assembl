@@ -70,10 +70,11 @@ def post_extract(request):
         post = DBSession.query(Post).get(post_id)
         if not post:
             raise HTTPNotFound("Post with id '%s' not found." % post_id)
+        extract_body = extract_data.get('text', '')
         new_extract = Extract(
             creator_id=user_id,
             owner_id=user_id,
-            body=extract_data.get('text', '').decode('utf-8'),
+            body=extract_body,
             source_id=post.content.id
         )
 
