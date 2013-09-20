@@ -1,3 +1,4 @@
+# coding=UTF-8
 import email
 import re
 import smtplib
@@ -21,6 +22,7 @@ from sqlalchemy import (
     ForeignKey,
     String,
     Unicode,
+    Binary,
     UnicodeText,
     DateTime,
     Boolean,
@@ -90,26 +92,30 @@ class Mailbox(Source):
                     message_string = response_part[1]
 
             parsed_email = email.message_from_string(message_string)
-
             body = None
 
             def get_plain_text_payload(message):
+                """ Returns the text/plain body as a unicode object, falling back to text/html body """
                 html_part = None
                 text_part = None
                 if message.is_multipart():
-                    for part in message.walk():
-                        if part.get_content_type() == 'text/plain':
-                            text_part = part
-                        elif part.get_content_type() == 'text/html':
-                            html_part = part
+                    for part in message.get_payload():
+                        charset = part.get_content_charset(message.get_charset()) or 'ISO-8859-1'
+                        decoded_part = part.get_payload(decode=True)
+                        if decoded_part:
+                            decoded_part = decoded_part.decode(charset,'replace')
+                            if part.get_content_type() == 'text/plain':
+                                text_part = decoded_part
+                            elif part.get_content_type() == 'text/html':
+                                html_part = decoded_part
                     if text_part:
-                        return text_part.get_payload()
+                        return text_part
                     elif html_part:
-                        return html_part.get_payload()
+                        return html_part
                     else:
-                        return "Sorry, no assembl-supported mime type found in multipart message"
+                        return u"Sorry, no assembl-supported mime type found in multipart message"
                 else:
-                    return message.get_payload()
+                    return message.get_payload(decode=True).decode(message.get_content_charset(message.get_charset()) or 'ISO-8859-1','replace')
 
             body = get_plain_text_payload(parsed_email)
 
@@ -153,8 +159,8 @@ class Mailbox(Source):
                 ),
                 message_id=new_message_id,
                 in_reply_to=new_in_reply_to,
-                body=body.strip().decode('ISO-8859-1'),
-                full_message=str(parsed_email).decode('ISO-8859-1')
+                body=body.strip(),
+                full_message=message_string
             )
             new_email.post.creator = sender_email_account.profile
 
@@ -318,7 +324,7 @@ class Email(Content):
     subject = Column(Unicode(), nullable=False)
     body = Column(UnicodeText)
 
-    full_message = Column(UnicodeText)
+    full_message = Column(Binary())
 
     message_id = Column(Unicode())
     in_reply_to = Column(Unicode())
