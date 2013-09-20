@@ -127,9 +127,6 @@ def get_posts(request):
         root_idea_id = None
         
 
-    data = {}
-    data["page"] = page
-
     #Rename "inbox" to "unread", the number of unread messages for the current user.
     no_of_messages_viewed_by_user = DBSession.query(ViewPost).join(
         Post,
@@ -141,29 +138,23 @@ def get_posts(request):
         ViewPost.actor_id == user_id,
     ).count() if user_id else 0
 
-    no_of_posts_to_discussion = DBSession.query(Post).join(
+    discussion_posts = DBSession.query(Post).join(
         Content,
         Source,
     ).filter(
         Source.discussion_id == discussion_id,
         Content.source_id == Source.id,
-    ).count()
-
-    data["inbox"] = no_of_posts_to_discussion - no_of_messages_viewed_by_user
-    #What is "total", the total messages in the current context?
-    data["total"] = discussion.posts().count()
-    data["maxPage"] = max(1, ceil(float(data["total"])/page_size))
-    #TODO:  Check if we want 1 based index in the api
-    data["startIndex"] = (page_size * page) - (page_size-1)
-
-    if data["page"] == data["maxPage"]:
-        data["endIndex"] = data["total"]
-    else:
-        data["endIndex"] = data["startIndex"] + (page_size-1)
+    )
+    no_of_posts_to_discussion = discussion_posts.count()
 
     post_data = []
     posts = []
-
+    discussion_posts = DBSession.query(Post).join(
+        Content,
+        Source
+        ).filter(
+                 Source.discussion_id == discussion_id
+                 )
     if root_idea_id:
         if root_idea_id == Idea.ORPHAN_POSTS_IDEA_ID:
             ideas_query = DBSession.query(Post) \
@@ -182,9 +173,13 @@ def get_posts(request):
                 )
             )
 
-        posts = discussion.posts(parent_id=root_post_id)
-        posts = posts.limit(page_size).offset(data['startIndex']-1)
+        #Benoitg:  For now, this completely garbles threading without intelligent
+        # handling of pagination.  Disabling
+        #posts = discussion.posts(parent_id=root_post_id)
+        #posts = posts.limit(page_size).offset(data['startIndex']-1)
 
+        posts = discussion_posts.order_by(Content.creation_date)
+    
     for post in posts:
         serializable_post = __post_to_json_structure(post)
         post_data.append(serializable_post)
@@ -192,10 +187,8 @@ def get_posts(request):
         if not root_idea_id:
             for descendant in post.get_descendants():
                 post_data.append(__post_to_json_structure(descendant))
-    data["posts"] = post_data
-
     if user_id:
-        for serializable_post in data['posts']:
+        for serializable_post in post_data:
             try:
                 DBSession.query(ViewPost).filter_by(
                     actor_id=user_id,
@@ -213,6 +206,23 @@ def get_posts(request):
                         )
 
                         DBSession.add(viewed_post)
+
+    data = {}
+    data["page"] = page
+    data["inbox"] = no_of_posts_to_discussion - no_of_messages_viewed_by_user
+    #What is "total", the total messages in the current context?
+    #This gave wrong count, I don't know why. benoitg
+    #data["total"] = discussion.posts().count()
+    data["total"] = no_of_posts_to_discussion
+    data["maxPage"] = max(1, ceil(float(data["total"])/page_size))
+    #TODO:  Check if we want 1 based index in the api
+    data["startIndex"] = (page_size * page) - (page_size-1)
+
+    if data["page"] == data["maxPage"]:
+        data["endIndex"] = data["total"]
+    else:
+        data["endIndex"] = data["startIndex"] + (page_size-1)
+    data["posts"] = post_data
 
     return data
 
