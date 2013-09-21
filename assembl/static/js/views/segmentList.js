@@ -66,7 +66,8 @@ function(Backbone, _, $, app, Segment, i18n){
             });
 
             if( segment.isValid() ){
-                return this.addSegment(segment);
+                this.addSegment(segment);
+                segment.save();
             }
         },
 

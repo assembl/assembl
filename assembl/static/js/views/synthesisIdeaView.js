@@ -81,16 +81,14 @@ function(Backbone, _, $, Idea, Segment, app, ckeditor){
          * @return {Array<HTMLDivElement>}
          */
         getRenderedChildren: function(parentLevel){
-            var children = this.model.getChildren(),
+            var children = this.model.getSynthesisChildren(),
                 ret = [];
 
             _.each(children, function(idea, i){
-                if( idea.get('inSynthesis') === true ){
-                    idea.set('level', parentLevel + 1);
+                idea.set('level', parentLevel + 1);
 
-                    var ideaView = new SymthesisIdeaView({model:idea});
-                    ret.push( ideaView.render().el );
-                }
+                var ideaView = new SymthesisIdeaView({model:idea});
+                ret.push( ideaView.render().el );
             });
 
             return ret;
