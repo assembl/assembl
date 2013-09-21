@@ -58,14 +58,16 @@ function(Backbone, _, $, app, Segment, i18n){
          * @return {Segment}
          */
         addTextAsSegment: function(text, idPost){
-            var data = {
+            var segment = new Segment.Model({
                 text: text,
                 creator: app.getCurrentUser(),
                 source_creator: app.getCurrentUser(),
                 idPost: idPost || null
-            };
+            });
 
-            return app.segmentList.segments.create(data);
+            if( segment.isValid() ){
+                return this.addSegment(segment);
+            }
         },
 
         /**
