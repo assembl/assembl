@@ -154,7 +154,7 @@ function(Backbone, _, $, app, Synthesis, SynthesisIdeaView, i18n){
 
             var onSuccess = function(resp){
                 var data = {
-                    subject: json.subject,
+                    subject: app.format(i18n.gettext('[synthesis] {0}'), json.subject),
                     message: template({
                         email: resp[0].most_common_recipient_address,
                         subject: json.subject,
