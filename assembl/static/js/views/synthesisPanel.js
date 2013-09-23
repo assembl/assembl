@@ -148,19 +148,21 @@ function(Backbone, _, $, app, Synthesis, SynthesisIdeaView, i18n){
          */
         _publish: function(){
             var json = this.model.toJSON(),
-                data = {},
                 url = app.getApiUrl('posts'),
                 template = app.loadTemplate('synthesisEmail'),
                 ideas = this.ideas.getInSynthesisIdeas();
 
             var onSuccess = function(resp){
-                data.message = template({
-                    email: resp[0].most_common_recipient_address,
+                var data = {
                     subject: json.subject,
-                    introduction: json.introduction,
-                    conclusion: data.conclusion,
-                    ideas: ideas
-                });
+                    message: template({
+                        email: resp[0].most_common_recipient_address,
+                        subject: json.subject,
+                        introduction: json.introduction,
+                        conclusion: data.conclusion,
+                        ideas: ideas
+                    })
+                };
 
                 // Sending the synthesis
                 $.ajax({
