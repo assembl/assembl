@@ -62,7 +62,7 @@ define(['backbone', 'zepto-touch', 'app'], function(Backbone, $, app){
             }
 
             var parent = this.getParent(),
-                current = this;
+                current = null;
 
             do {
 
@@ -73,7 +73,7 @@ define(['backbone', 'zepto-touch', 'app'], function(Backbone, $, app){
                     parent = null;
                 }
 
-            } while ( parent !== null);
+            } while (parent !== null);
 
             return current;
 

@@ -80,7 +80,7 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
         render: function(){
             app.trigger('render');
             var list = document.createDocumentFragment(),
-                messages = this.messages.where({parentId: null});
+                messages = this.messages.getRootMessages();
 
             _.each(messages, function(message){
                 var messageListItem = new MessageListItem({model:message});
