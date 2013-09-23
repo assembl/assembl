@@ -61,7 +61,7 @@ Upgrade to latest:
 - alembic -c development.ini upgrade head
 
 Create a new one:
-- alembic -c development.ini revision --autogenerate -m "You message"
+- alembic -c development.ini revision --autogenerate -m "Your message"
 - Make sure to verify the generated code...
 
 

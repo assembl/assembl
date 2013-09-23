@@ -7,21 +7,19 @@ from pyramid.httpexceptions import HTTPNotFound, HTTPUnauthorized
 from pyramid.i18n import TranslationString as _
 from pyramid.security import authenticated_userid
 
-try:
-    from sqlalchemy import func, ARRAY, Integer, String
-except ImportError:
-    from sqlalchemy import func, Integer, String
-    from sqlalchemy.dialects.postgresql.base import ARRAY
+from sqlalchemy import func, Integer, String, text
+from sqlalchemy.dialects.postgresql.base import ARRAY
 
-from sqlalchemy.orm import aliased
+from sqlalchemy.orm import aliased, joinedload, joinedload_all
 from sqlalchemy.orm.exc import NoResultFound
-from sqlalchemy.sql.expression import literal_column
+from sqlalchemy.sql.expression import literal_column, bindparam
 from sqlalchemy.sql import cast
 
 from assembl.views.api import API_DISCUSSION_PREFIX
 from assembl.db import DBSession
 
 from assembl.auth import P_READ, P_ADD_POST
+from assembl.auth.models import AgentProfile
 from assembl.source.models import Post
 from assembl.synthesis.models import Discussion, Source, Content, Idea
 from assembl.auth.models import ViewPost, User
@@ -156,22 +154,20 @@ def get_posts(request):
 
     post_data = []
 
-    discussion_posts = DBSession.query(Post).join(
-        Content,
-        Source
-        ).filter(
-                 Source.discussion_id == discussion_id
-                 )
     if root_idea_id:
         if root_idea_id == Idea.ORPHAN_POSTS_IDEA_ID:
             ideas_query = DBSession.query(Post) \
-                .from_statement(Idea._get_orphan_posts_statement()) \
-                .params(discussion_id=discussion_id)
+                .filter(Post.id.in_(text(Idea._get_orphan_posts_statement(),
+                                         bindparams=[bindparam('discussion_id', discussion_id)]
+                                         )))
         else:
             ideas_query = DBSession.query(Post) \
-                .from_statement(Idea._get_related_posts_statement()) \
-                .params(root_idea_id=root_idea_id)
-        posts = ideas_query
+                .filter(Post.id.in_(text(Idea._get_related_posts_statement(),
+                                         bindparams=[bindparam('root_idea_id', root_idea_id)]
+                                         )))
+        posts = ideas_query.join(Content,
+                                 Source,
+                                 )
     else:
         posts = discussion_posts
         if root_post_id:
@@ -187,34 +183,39 @@ def get_posts(request):
         #Benoitg:  For now, this completely garbles threading without intelligent
         #handling of pagination.  Disabling
         #posts = posts.limit(page_size).offset(data['startIndex']-1)
-        posts = posts.order_by(Content.creation_date)
+        
+    if user_id:
+        posts = posts.outerjoin(ViewPost).filter_by(
+                    actor_id=user_id,
+                    post_id=Post.id
+                )
+        posts = posts.options(joinedload_all(Post.views))
+
+    posts = posts.options(joinedload_all(Post.content, Content.source),joinedload_all(Post.creator, AgentProfile.user))
+    posts = posts.order_by(Content.creation_date)
     
-        if 'synthesis' in filter_names:
-            posts = posts.filter(Post.is_synthesis==True)
+    if 'synthesis' in filter_names:
+        posts = posts.filter(Post.is_synthesis==True)
 
     for post in posts:
+        #print(repr(posts))
+        #exit()
         serializable_post = __post_to_json_structure(post)
-        post_data.append(serializable_post)
-
-    if user_id:
-        for serializable_post in post_data:
-            try:
-                DBSession.query(ViewPost).filter_by(
-                    actor_id=user_id,
-                    post_id=serializable_post['id']
-                ).one()
+        if user_id:
+            if(post.views):
                 serializable_post['read'] = True
-
-            except NoResultFound:
+            else:
                 serializable_post['read'] = False
                 if root_post_id:
                     with transaction.manager:
                         viewed_post = ViewPost(
                             actor_id=user_id,
-                            post_id=serializable_post['id']
+                            post_id=post.id
                         )
 
                         DBSession.add(viewed_post)
+                        
+        post_data.append(serializable_post)
 
     data = {}
     data["page"] = page

@@ -83,7 +83,8 @@ class Content(SQLAlchemyBaseModel):
 
     __mapper_args__ = {
         'polymorphic_identity': 'content',
-        'polymorphic_on': 'type'
+        'polymorphic_on': 'type',
+        'with_polymorphic':'*'
     }
 
     def __init__(self, *args, **kwargs):

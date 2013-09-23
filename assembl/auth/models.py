@@ -56,17 +56,18 @@ class AgentProfile(SQLAlchemyBaseModel):
     name = Column(Unicode(1024))
     type = Column(String(60))  # not sure we need this?
 
+    __mapper_args__ = {
+        'polymorphic_identity': 'agent_profile',
+        'polymorphic_on': type,
+        'with_polymorphic':'*'
+    }
+
     def accounts(self):
         """All AgentAccounts for this profile"""
         return chain(self.identity_accounts, self.email_accounts)
 
     def verified_emails(self):
         return (e for e in self.email_accounts if e.verified)
-
-    __mapper_args__ = {
-        'polymorphic_identity': 'agent_profile',
-        'polymorphic_on': type
-    }
 
     def display_name(self):
         # TODO: Prefer types?
@@ -154,16 +155,29 @@ class AgentProfile(SQLAlchemyBaseModel):
         return r
 
 
-class AgentAccount(SQLAlchemyBaseModel):
-    __abstract__ = True
+class AbstractAgentAccount(SQLAlchemyBaseModel):
+    __tablename__ = "abstract_agent_account"
+    id = Column(Integer, primary_key=True)
+    type = Column(String(60))
+    __mapper_args__ = {
+        'polymorphic_identity': 'abstract_agent_account',
+        'polymorphic_on': type,
+        'with_polymorphic':'*'
+    }
     """An abstract class for accounts that identify agents"""
     pass
 
 
-class EmailAccount(AgentAccount):
+class EmailAccount(AbstractAgentAccount):
     """An email account"""
-    __tablename__ = "email_account"
-    id = Column(Integer, primary_key=True)
+    __tablename__ = "agent_email_account"
+    __mapper_args__ = {
+        'polymorphic_identity': 'agent_email_account',
+    }
+    id = Column(Integer, ForeignKey(
+        'abstract_agent_account.id', 
+        ondelete='CASCADE'
+    ), primary_key=True)
     email = Column(String(100), nullable=False, index=True)
     verified = Column(Boolean(), default=False)
     preferred = Column(Boolean(), default=False)
@@ -212,10 +226,13 @@ class IdentityProvider(SQLAlchemyBaseModel):
     trust_emails = Column(Boolean, default=False)
 
 
-class IdentityProviderAccount(AgentAccount):
+class IdentityProviderAccount(AbstractAgentAccount):
     """An account with an external identity provider"""
-    __tablename__ = "idprovider_account"
-    id = Column(Integer, primary_key=True)
+    __tablename__ = "idprovider_agent_account"
+    id = Column(Integer, ForeignKey(
+        'abstract_agent_account.id', 
+        ondelete='CASCADE'
+    ), primary_key=True)
     provider_id = Column(
         Integer,
         ForeignKey('identity_provider.id', ondelete='CASCADE'),
@@ -459,7 +476,8 @@ class Action(SQLAlchemyBaseModel):
 
     __mapper_args__ = {
         'polymorphic_identity': 'action',
-        'polymorphic_on': type
+        'polymorphic_on': type,
+        'with_polymorphic':'*'
     }
 
     actor_id = Column(
