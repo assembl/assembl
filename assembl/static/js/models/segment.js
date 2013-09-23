@@ -16,6 +16,9 @@ function(Backbone, app, moment, User){
             }
 
             this.on('change:idIdea', this.onAttrChange, this);
+            this.on('invalid', function(model, error){
+                alert( error );
+            }, this)
         },
 
         /**

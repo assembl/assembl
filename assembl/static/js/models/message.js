@@ -51,6 +51,34 @@ define(['backbone', 'zepto-touch', 'app'], function(Backbone, $, app){
             return this.collection.findWhere({ id: this.get('parentId') });
         },
 
+
+        /**
+         * Returns the toppest parent
+         * @return {MessageModel}
+         */
+        getRootParent: function(){
+            if( this.get('parentId') === null ){
+                return null;
+            }
+
+            var parent = this.getParent(),
+                current = this;
+
+            do {
+
+                if( parent ){
+                    current = parent;
+                    parent = parent.get('parentId') !== null ? parent.getParent() : null;
+                } else {
+                    parent = null;
+                }
+
+            } while ( parent !== null);
+
+            return current;
+
+        },
+
         /**
          * @return {Number} the indentantion level
          */
@@ -91,7 +119,25 @@ define(['backbone', 'zepto-touch', 'app'], function(Backbone, $, app){
          * The model
          * @type {MessageModel}
          */
-        model: MessageModel
+        model: MessageModel,
+
+        /**
+         * Returns the messages with no parent
+         * @return {Message[]}
+         */
+        getRootMessages: function(){
+            var toReturn = [];
+
+            _.each(this.models, function(model){
+                if( model.get('parentId') === null ){
+                    toReturn.push(model);
+                } else if( model.getRootParent() === null ){
+                    toReturn.push(model);
+                }
+            });
+
+            return toReturn;
+        }
     });
 
     return {

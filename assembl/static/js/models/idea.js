@@ -104,7 +104,18 @@ define(['backbone','underscore', 'models/segment', 'app', 'i18n'], function(Back
          * @return {Idea[]}
          */
         getSynthesisChildren: function(){
-            return this.collection.where({ parentId: this.get('id'), inSynthesis: true });
+            var children = this.collection.where({ parentId: this.get('id') }),
+                result = [];
+
+            _.each(children, function(child){
+                if( child.get('inSynthesis') === true ){
+                    result.push(child);
+                } else {
+                    result = _.union(result, child.getSynthesisChildren());
+                }
+            });
+
+            return result;
         },
 
         /**
