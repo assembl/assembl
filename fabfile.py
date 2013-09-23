@@ -42,8 +42,11 @@ def venvcmd(cmd, shell=True, user=None, pty=False):
 def venv_prefix():
     return 'source %(venvpath)s/bin/activate' % env
 
+def get_db_dump_name():
+    return 'current_database.pgdump'
+
 def remote_db_path():
-    return os.path.join(env.projectpath, 'current_database.pgdump')
+    return os.path.join(env.projectpath, get_db_dump_name())
 
 def printenv():
     """
@@ -61,9 +64,8 @@ def build_virtualenv():
     """
     print(cyan('Creating a fresh virtualenv'))
     require('venvpath', provided_by=('commonenv'))
-    sudo('rm /tmp/distribute* || echo "ok"') # clean after hudson
     run('virtualenv --no-site-packages --distribute %(venvpath)s' % env)
-    sudo('rm /tmp/distribute* || echo "ok"') # clean after myself
+    run('rm /tmp/distribute* || echo "ok"') # clean after myself
     
 
 @task
@@ -149,7 +151,7 @@ def bootstrap_from_checkout():
     """
     execute(build_virtualenv)
     execute(install_rbenv)
-    execute(app_fullupdate)
+    execute(app_fullupdate_rbenv)
     
 def clone_repository():
     """
@@ -339,6 +341,15 @@ def configure_rbenv():
             run('rbenv rehash')
         
 @task
+def install_ruby_build():
+    if(run('ruby-build --help').failed):
+        # Install ruby-build:
+        with cd('/tmp'):
+            run('git clone git://github.com/sstephenson/ruby-build.git')
+        with cd('/tmp/ruby-build'):
+            sudo('./install.sh')
+
+@task
 def install_rbenv():
     """
     Install the appropriate ruby environment for compass.
@@ -356,12 +367,7 @@ def install_rbenv():
     #    echo 'eval "$(rbenv init -)"' >> ~/.profile;
     #    source ~/.profile;
     
-    # Install ruby-build:
-    with cd('/tmp'):
-        run('git clone git://github.com/sstephenson/ruby-build.git')
-    with cd('/tmp/ruby-build'):
-        sudo('./install.sh')
-
+    execute(install_ruby_build)
     execute(configure_rbenv)
 
 @task
@@ -424,7 +430,7 @@ def database_upload():
     Uploads a local database backup to the target environment's server
     """
     if(env.wsginame != 'dev.wsgi'):
-        put(remote_db_path())
+        put(get_db_dump_name(), remote_db_path())
 
 @task    
 def database_restore():
@@ -478,7 +484,7 @@ def commonenv(projectpath, venvpath=None):
     env.gitrepo = "git://github.com/ImaginationForPeople/assembl.git"
     env.gitbranch = "master"
 
-    env.uses_memcache = False
+    env.uses_memcache = True
     env.uses_wsgi = False
     env.uses_apache = False
     env.uses_ngnix = False
@@ -536,8 +542,9 @@ def coeus_stagenv():
     commonenv(os.path.normpath("/var/www/assembl/"))
     env.wsginame = "staging.wsgi"
     env.urlhost = "assembl.coeus.ca"
-    env.user = "benoitg"
-    env.home = "benoitg"
+    env.user = "www-data"
+    env.home = "www-data"
+    env.ini_file = 'development.ini'
     require('projectname', provided_by=('commonenv',))
     env.hosts = ['coeus.ca']
     
@@ -561,14 +568,6 @@ def prodenv():
 
     env.gitbranch = "master"
 
-
-#THE FOLLOWING COMMANDS HAVEN'T BEEN PORTED YET
-def fixperms():
-    # Fix perms
-    with cd(env.projectpath):
-        with cd("%(projectpath)s" % env):
-            run('mkdir media/uploads media/cache static/CACHE media/mugshots -p')
-            sudo('chown www-data -R media/uploads media/cache media/mugshots static/CACHE')
 @task
 def flushmemcache():
     """
@@ -577,6 +576,15 @@ def flushmemcache():
     if env.uses_memcache:
         print(cyan('Resetting all data in memcached :'))
         run('echo "flush_all" | /bin/netcat -q 2 127.0.0.1 11211')
+
+
+#THE FOLLOWING COMMANDS HAVEN'T BEEN PORTED YET
+def fixperms():
+    # Fix perms
+    with cd(env.projectpath):
+        with cd("%(projectpath)s" % env):
+            run('mkdir media/uploads media/cache static/CACHE media/mugshots -p')
+            sudo('chown www-data -R media/uploads media/cache media/mugshots static/CACHE')
 
 
 @task

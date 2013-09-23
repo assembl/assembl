@@ -159,7 +159,7 @@ function(Backbone, _, $, app, Synthesis, SynthesisIdeaView, i18n){
                         email: resp[0].most_common_recipient_address,
                         subject: json.subject,
                         introduction: json.introduction,
-                        conclusion: data.conclusion,
+                        conclusion: json.conclusion,
                         ideas: ideas
                     })
                 };
