@@ -160,6 +160,13 @@
         @include transform( rotate(0deg) );
     }
 }
+// Reserves the space if there are no children to maintain indentation
+.idealist-noarrow {
+    width: $idealist-arrow-width;
+    height: $idealist-item-height;
+    display: block;
+    float: left;
+}
 
 // The bar to make an .idealist-item looks like a child
 // --------------

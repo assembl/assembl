@@ -12,6 +12,9 @@
     
     <% if (children.length > 0) { %>
         <span class="idealist-arrow"></span>
+    <% }
+       else { %>
+        <span class="idealist-noarrow"></span>
     <% } %>
 
     <div class="idealist-counter"><span data-tooltip="{{ gettext('Number of messages related to this idea or it\'s descendants') }}"><%= num_posts %></span></div>

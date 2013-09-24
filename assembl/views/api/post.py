@@ -8,14 +8,15 @@ from pyramid.i18n import TranslationString as _
 from pyramid.security import authenticated_userid
 
 try:
-    from sqlalchemy import func, ARRAY, Integer
+    from sqlalchemy import func, ARRAY, Integer, String
 except ImportError:
-    from sqlalchemy import func, Integer
+    from sqlalchemy import func, Integer, String
     from sqlalchemy.dialects.postgresql.base import ARRAY
 
 from sqlalchemy.orm import aliased
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.sql.expression import literal_column
+from sqlalchemy.sql import cast
 
 from assembl.views.api import API_DISCUSSION_PREFIX
 from assembl.db import DBSession
@@ -148,7 +149,7 @@ def get_posts(request):
     no_of_posts_to_discussion = discussion_posts.count()
 
     post_data = []
-    posts = []
+
     discussion_posts = DBSession.query(Post).join(
         Content,
         Source
@@ -164,29 +165,28 @@ def get_posts(request):
             ideas_query = DBSession.query(Post) \
                 .from_statement(Idea._get_related_posts_statement()) \
                 .params(root_idea_id=root_idea_id)
-        posts = ideas_query.all()
-    else: 
+        posts = ideas_query
+    else:
+        posts = discussion_posts
         if root_post_id:
-            post_data.append(
-                __post_to_json_structure(
-                    DBSession.query(Post).get(root_post_id)
+            root_post = DBSession.query(Post).get(root_post_id)
+
+            posts = posts.filter(
+                (Post.ancestry.like(
+                root_post.ancestry + cast(root_post.id, String) + ',%'
+                ))
+                |
+                (Post.id==root_post.id)
                 )
-            )
-
         #Benoitg:  For now, this completely garbles threading without intelligent
-        # handling of pagination.  Disabling
-        #posts = discussion.posts(parent_id=root_post_id)
+        #handling of pagination.  Disabling
         #posts = posts.limit(page_size).offset(data['startIndex']-1)
-
-        posts = discussion_posts.order_by(Content.creation_date)
+        posts = posts.order_by(Content.creation_date)
     
     for post in posts:
         serializable_post = __post_to_json_structure(post)
         post_data.append(serializable_post)
 
-        if not root_idea_id:
-            for descendant in post.get_descendants():
-                post_data.append(__post_to_json_structure(descendant))
     if user_id:
         for serializable_post in post_data:
             try:
