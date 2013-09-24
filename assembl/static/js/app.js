@@ -254,7 +254,7 @@ function($, _, ckeditor, User, Moment, i18n){
         /**
          * Returns a template from an script tag
          * @param {string} id The id of the script tag
-         * @return {function} The _.template return
+         * @return {function} The Underscore.js _.template return
          */
         loadTemplate: function(id){
             return _.template( $('#tmpl-'+id).html() );
@@ -486,7 +486,7 @@ function($, _, ckeditor, User, Moment, i18n){
          * @return {String} The new string without html tags
          */
         stripHtml: function(html){
-            return html ? html.replace(/(<([^>]+)>)/ig,"") : html;
+            return html ? $.trim( $('<div>'+html+'</div>').text() ) : html;
         },
 
         /**
@@ -519,7 +519,7 @@ function($, _, ckeditor, User, Moment, i18n){
          */
         onAjaxError: function( ev, jqxhr, settings, exception ){
             var message = i18n._('ajaxerror-message');
-            message = "url: " + settings.url + "\n" + message;
+            message = "url: " + settings.url + "\n" + message + "\n" + exception;
 
             alert( message );
             //window.location.reload();

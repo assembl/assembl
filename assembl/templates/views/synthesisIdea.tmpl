@@ -16,7 +16,18 @@
     <% } %> #}
 
     <div class="idealist-title">
-        <%= app.stripHtml(longTitle) %>
+        <% 
+        var title;
+        if((title = app.stripHtml(longTitle))!='') {
+            print(title);
+        }
+        else if ((title = app.stripHtml(shortTitle))!='') {
+            print(title);
+        }
+        else {
+            print(i18n.gettext('Add the description'))
+        }
+        %>
     </div>
 </div>
 
