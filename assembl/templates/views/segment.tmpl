@@ -8,7 +8,7 @@
 <div class="box" draggable="true" data-segmentid="<%= segment.cid %>">
     <span data-segmentid="<%= segment.cid %>" class="closebutton"></span>
 
-    <q><%= segment.get('text') %></q>
+    <q class="text text-quotation"><%= segment.get('text') %></q>
 
     <div class="spacer spacer--big"></div>
 
@@ -19,7 +19,7 @@
         <div class="media-body">
             <div class="media-title"><strong><%= segment.get('source_creator').name %></strong></div>
             {% set segmentDate = "<%= segment.getCreationDateFormated() %>" %}
-            <div class="text-small">
+            <div class="text-small text-muted">
                 {{ gettext('Extracted %(date)s by ')|format(date=segmentDate)|safe }}
                 <img src="<%= app.formatAvatarUrl(segment.get('creator').id, 24) %>" class="image-rounded" alt="" />
                 <%= segment.get('creator')['name'] %>
