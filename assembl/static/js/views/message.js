@@ -153,7 +153,7 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
          * CONTEXT MENU
          */
         contextMenuItem1: function(){
-            app.segmentList.addTextAsSegment( app.selectionTooltip.attr('data-segment'), this.model.id );
+            app.segmentList.addTextAsSegment( app.selectionTooltip.attr('data-segment'), this.model );
             app.openPanel(app.segmentList);
         },
 

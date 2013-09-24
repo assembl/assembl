@@ -87,7 +87,7 @@ function(Backbone, app, moment, User){
                 segments;
 
             return this.filter(function(item){
-                var creator = item.get('source_creator');
+                var creator = item.get('creator');
 
                 if( item.get('idIdea') !== null ){
                     return false;
