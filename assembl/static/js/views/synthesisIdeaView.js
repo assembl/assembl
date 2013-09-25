@@ -12,7 +12,7 @@ function(Backbone, _, $, Idea, Segment, app, ckeditor){
         }
     };
 
-    var SymthesisIdeaView = Backbone.View.extend({
+    var SynthesisIdeaView = Backbone.View.extend({
         /**
          * Tag name
          * @type {String}
@@ -62,7 +62,7 @@ function(Backbone, _, $, Idea, Segment, app, ckeditor){
             data.children = []; //this.model.getChildren();
             data.level = this.model.getSynthesisLevel();
             data.editing = this.model.get('editing') || false;
-
+            data.synthesis_expression_text = this.model.getlongTitleDisplayText();
             this.$el.html( this.template(data) );
             this.$('.idealist-children').append( this.getRenderedChildren(data.level) );
 
@@ -74,7 +74,9 @@ function(Backbone, _, $, Idea, Segment, app, ckeditor){
 
             return this;
         },
+        
 
+        
         /**
          * Returns all children rendered
          * @param {Number} parentLevel 
@@ -87,7 +89,7 @@ function(Backbone, _, $, Idea, Segment, app, ckeditor){
             _.each(children, function(idea, i){
                 idea.set('level', parentLevel + 1);
 
-                var ideaView = new SymthesisIdeaView({model:idea});
+                var ideaView = new SynthesisIdeaView({model:idea});
                 ret.push( ideaView.render().el );
             });
 
@@ -184,11 +186,16 @@ function(Backbone, _, $, Idea, Segment, app, ckeditor){
             }
 
             var data = this.ckInstance.getData();
-            this.model.set({ 'longTitle': data, 'editing': false });
+            if(data!=this.model.getlongTitleDisplayText()){
+                this.model.set({ 'longTitle': $.trim(data), 'editing': false });
+            }
+            else {
+                this.model.set({ 'editing': false });
+            }
             this.ckInstance.destroy();
         }
 
     });
 
-    return SymthesisIdeaView;
+    return SynthesisIdeaView;
 });

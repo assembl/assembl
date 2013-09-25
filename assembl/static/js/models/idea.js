@@ -39,7 +39,30 @@ define(['backbone','underscore', 'models/segment', 'app', 'i18n'], function(Back
             inSynthesis: false,
             parentId: null
         },
-
+        /* The following should be mostly in view code, but currently the 
+         * longTitle editor code isn't common in ideaPanel and synthesisView
+         * At least this is mostly DRY
+         */
+        /**
+         * Returns the display text for a synthesis idea.
+         * Will return the first non-empty from:
+         * longTitle, shortTitle, i18n.gettext('Add the description')
+         * @param  
+         * @return {Text>}
+         */
+        getlongTitleDisplayText: function(){
+            var text;
+            if((app.stripHtml(this.get('longTitle')))!='') {
+                text = this.get('longTitle');
+            }
+            else if ((app.stripHtml(this.get('shortTitle')))!='') {
+                text=this.get('shortTitle');
+            }
+            else {
+                text = i18n.gettext('Add the description');
+            }
+            return text;
+        },
         /**
          * Adds an idea as child
          * @param  {Idea} idea

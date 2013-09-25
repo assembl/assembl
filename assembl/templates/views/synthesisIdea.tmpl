@@ -17,16 +17,7 @@
 
     <div class="idealist-title">
         <% 
-        var title;
-        if((title = app.stripHtml(longTitle))!='') {
-            print(title);
-        }
-        else if ((title = app.stripHtml(shortTitle))!='') {
-            print(title);
-        }
-        else {
-            print(i18n.gettext('Add the description'))
-        }
+        print(app.stripHtml(synthesis_expression_text));
         %>
     </div>
 </div>
@@ -37,7 +28,14 @@
     <span class="closebutton closebutton--ckeditor"></span>
     <div class="panel-editablebox is-editing">
         <div id="synthesisIdea-toptoolbar"></div>
-        <div class="panel-editablearea" contenteditable="true"> <%= longTitle %> </div>
+        <div class="panel-editablearea" contenteditable="true">
+        <%  if(app.stripHtml(longTitle)==''){
+                print(synthesis_expression_text)
+            }
+            else{
+                print(longTitle);
+            } %>
+        </div>
         <div id="synthesisIdea-bottomtoolbar" hidden></div>
         <div class="text-right padding"><a class="button button--primary idealist-savebtn">Save</a></div>
     </div>
