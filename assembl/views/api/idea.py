@@ -66,7 +66,7 @@ def get_ideas(request):
 
     ideas = DBSession.query(Idea).filter_by(
         table_of_contents_id=discussion.table_of_contents_id
-    )
+    ).order_by(Idea.order, Idea.creation_date)
     retval = [idea.serializable() for idea in ideas]
     retval.append(Idea.serializable_unsorded_posts_pseudo_idea(discussion))
     return retval
