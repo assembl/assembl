@@ -48,13 +48,13 @@ class Mailbox(Source):
 
     host = Column(String(1024), nullable=False)
     port = Column(Integer, nullable=False)
-    username = Column(Unicode(1024), nullable=False)
+    username = Column(UnicodeText, nullable=False)
     #Note:  If using STARTTLS, this should be set to false
     use_ssl = Column(Boolean, default=True)
-    password = Column(Unicode(1024), nullable=False)
-    folder = Column(Unicode(1024), default=u"INBOX", nullable=False)
+    password = Column(UnicodeText, nullable=False)
+    folder = Column(UnicodeText, default=u"INBOX", nullable=False)
 
-    last_imported_email_uid = Column(Unicode(255))
+    last_imported_email_uid = Column(UnicodeText)
 
     __mapper_args__ = {
         'polymorphic_identity': 'mailbox',
