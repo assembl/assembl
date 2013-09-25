@@ -1,7 +1,7 @@
 <div class="panel">
     <%
     var titles = {
-        'toc': "{{ gettext('Table of contents ({0})') }}",
+        'toc': "{{ gettext('Table of ideas ({0})') }}",
         'featured': "{{ gettext('Featured ({0})') }}",
         'synthesis': "{{ gettext('In Synthesis ({0})') }}"
     };
@@ -15,7 +15,7 @@
         <div class="dropdown">
             <span class="dropdown-label text-bold"><%= filter === 'featured' ? titles.featured : filter === 'inSynthesis' ? titles.synthesis : titles.toc %></span>
             <ul class="dropdown-list">
-                <li id="ideaList-filterByFeatured" class="dropdown-listitem"><%= titles.featured %></li>
+                <!--<li id="ideaList-filterByFeatured" class="dropdown-listitem"><%= titles.featured %></li>-->
                 <li id="ideaList-filterByToc"class="dropdown-listitem"><%= titles.toc %></li>
                 <li id="ideaList-filterByInSynthesis" class="dropdown-listitem"><%= titles.synthesis %></li>
             </ul>
