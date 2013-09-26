@@ -53,7 +53,7 @@ function(Backbone, _, $, app, Message){
 
         /**
          * Returns all children rendered
-         * @param {Number} parentLevel 
+         * @param {Number} parentLevel
          * @return {Array<HTMLDivElement>}
          */
         getRenderedChildren: function(parentLevel){

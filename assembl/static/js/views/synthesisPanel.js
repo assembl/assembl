@@ -3,7 +3,7 @@ function(Backbone, _, $, app, Synthesis, SynthesisIdeaView, i18n){
     'use strict';
 
     var SynthesisPanel = Backbone.View.extend({
-        
+
         /**
          * @init
          */
@@ -73,7 +73,7 @@ function(Backbone, _, $, app, Synthesis, SynthesisIdeaView, i18n){
         },
 
         /**
-         * 
+         *
          */
         events: {
             'blur #synthesisPanel-title': 'onTitleBlur',
@@ -99,7 +99,7 @@ function(Backbone, _, $, app, Synthesis, SynthesisIdeaView, i18n){
         },
 
         /**
-         * 
+         *
          */
         onTitleBlur: function(ev){
             var title = app.stripHtml(ev.currentTarget.innerHTML);
@@ -107,7 +107,7 @@ function(Backbone, _, $, app, Synthesis, SynthesisIdeaView, i18n){
         },
 
         /**
-         * 
+         *
          */
         onIntroductionBlur: function(ev){
             var introduction = app.stripHtml(ev.currentTarget.innerHTML);
@@ -115,7 +115,7 @@ function(Backbone, _, $, app, Synthesis, SynthesisIdeaView, i18n){
         },
 
         /**
-         * 
+         *
          */
         onConclusionBlur: function(ev){
             var conclusion = app.stripHtml(ev.currentTarget.innerHTML);
@@ -150,7 +150,8 @@ function(Backbone, _, $, app, Synthesis, SynthesisIdeaView, i18n){
             var json = this.model.toJSON(),
                 url = app.getApiUrl('posts'),
                 template = app.loadTemplate('synthesisEmail'),
-                ideas = this.ideas.getInSynthesisIdeas();
+                ideas = this.ideas.getInSynthesisIdeas(),
+                that = this;
 
             var onSuccess = function(resp){
                 var data = {
@@ -172,7 +173,7 @@ function(Backbone, _, $, app, Synthesis, SynthesisIdeaView, i18n){
                     url: url,
                     success: function(){
                         alert( i18n.gettext("Synthesis published!") );
-                        this.unblockPanel();
+                        that.unblockPanel();
                     }
                 });
             };
@@ -185,7 +186,7 @@ function(Backbone, _, $, app, Synthesis, SynthesisIdeaView, i18n){
                 success: onSuccess
             });
 
-            this.blockPanel();
+            that.blockPanel();
         }
     });
 

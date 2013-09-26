@@ -37,9 +37,33 @@ define(['backbone','underscore', 'models/segment', 'app', 'i18n'], function(Back
             featured: false,
             active: false,
             inSynthesis: false,
-            parentId: null
+            parentId: null,
+            order: 1
         },
-
+        /* The following should be mostly in view code, but currently the
+         * longTitle editor code isn't common in ideaPanel and synthesisView
+         * At least this is mostly DRY
+         */
+        /**
+         * Returns the display text for a synthesis idea.
+         * Will return the first non-empty from:
+         * longTitle, shortTitle, i18n.gettext('Add the description')
+         * @param
+         * @return {Text>}
+         */
+        getlongTitleDisplayText: function(){
+            var text;
+            if((app.stripHtml(this.get('longTitle')))!='') {
+                text = this.get('longTitle');
+            }
+            else if ((app.stripHtml(this.get('shortTitle')))!='') {
+                text=this.get('shortTitle');
+            }
+            else {
+                text = i18n.gettext('Add the description');
+            }
+            return text;
+        },
         /**
          * Adds an idea as child
          * @param  {Idea} idea
@@ -52,6 +76,7 @@ define(['backbone','underscore', 'models/segment', 'app', 'i18n'], function(Back
                 this.set('parentId', null);
             }
 
+            idea.set('order', this.getOrderForNewChild());
             idea.set('parentId', this.get('id'));
         },
 
@@ -62,11 +87,19 @@ define(['backbone','underscore', 'models/segment', 'app', 'i18n'], function(Back
         addSiblingAbove: function(idea){
             var parent = this.getParent(),
                 parentId = parent ? parent.get('id') : null,
-                index = this.collection.indexOf(this);
+                index = this.collection.indexOf(this),
+                order = this.get('order') - 0.1;
 
             this.collection.add(idea, { at: index });
             idea.attributes.parentId = parentId;
+            idea.attributes.order = order;
             idea.trigger('change:parentId');
+
+            if( parent ){
+                parent.updateChildrenOrder();
+            } else {
+                app.updateIdealistOrder();
+            }
         },
 
         /**
@@ -76,11 +109,19 @@ define(['backbone','underscore', 'models/segment', 'app', 'i18n'], function(Back
         addSiblingBelow: function(idea){
             var parent = this.getParent(),
                 parentId = parent ? parent.get('id') : null,
-                index = this.collection.indexOf(this) + 1;
+                index = this.collection.indexOf(this) + 1,
+                order = this.get('order') + 0.1;
 
             this.collection.add(idea, { at: index });
             idea.attributes.parentId = parentId;
+            idea.attributes.order = order;
             idea.trigger('change:parentId');
+
+            if( parent ){
+                parent.updateChildrenOrder();
+            } else {
+                app.updateIdealistOrder();
+            }
         },
 
         /**
@@ -120,7 +161,7 @@ define(['backbone','underscore', 'models/segment', 'app', 'i18n'], function(Back
 
         /**
          * Return if the idea is descendant of the given idea
-         * @param {Idea} idea 
+         * @param {Idea} idea
          * @return {Boolean}
          */
         isDescendantOf: function(idea){
@@ -149,6 +190,13 @@ define(['backbone','underscore', 'models/segment', 'app', 'i18n'], function(Back
         },
 
         /**
+         * @return {Number} The order number for a new child
+         */
+        getOrderForNewChild: function(){
+            return this.getChildren().length + 1;
+        },
+
+        /**
          * @return {Number} The level based in the parents inSynthesis flag
          */
         getSynthesisLevel: function(){
@@ -165,7 +213,7 @@ define(['backbone','underscore', 'models/segment', 'app', 'i18n'], function(Back
                 } else {
                     parent = null;
                 }
-                
+
             } while ( parent !== null );
 
             return counter;
@@ -195,7 +243,8 @@ define(['backbone','underscore', 'models/segment', 'app', 'i18n'], function(Back
             var data = {
                 shortTitle: segment.get('text').substr(0, 50),
                 longTitle: segment.get('text'),
-                parentId: this.get('id')
+                parentId: this.get('id'),
+                order: this.getOrderForNewChild()
             };
 
             var onSuccess = function(idea){
@@ -218,6 +267,20 @@ define(['backbone','underscore', 'models/segment', 'app', 'i18n'], function(Back
          */
         onAttrChange: function(){
             this.save();
+        },
+
+        /**
+         * Updates the order in all children
+         */
+        updateChildrenOrder: function(){
+            var children = _.sortBy(this.getChildren(), function(child){ return child.get('order'); }),
+                currentOrder = 1;
+
+            _.each(children, function(child){
+                child.set('order', currentOrder);
+                child.save();
+                currentOrder += 1;
+            });
         }
 
     });

@@ -15,6 +15,7 @@ def includeme(config):
 
     config.add_renderer('json', json_renderer_factory)
     config.add_route('discussion_list', '/')
+    config.add_route('discussion_admin', '/admin/discussions/')
     
     config.include(backbone_include, route_prefix='/{discussion_slug}')
 

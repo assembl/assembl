@@ -5,7 +5,9 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
     /**
      * Constants
      */
-    var MESSAGE_MODE = 'is-message-mode';
+    var MESSAGE_MODE = 'is-message-mode',
+        NO_FILTER = '',
+        SYNTHESIS_FILTER = 'synthesis';
 
     /**
      * @class views.MessageList
@@ -24,9 +26,10 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
 
             var that = this;
             app.on('idea:select', function(idea){
-                app.openPanel(app.messageList);
                 if( idea ){
+                    app.openPanel(app.messageList);
                     that.loadData(idea.get('id'));
+                    that.$el.addClass(MESSAGE_MODE);
                 }
             });
         },
@@ -48,6 +51,12 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
          * @type {Object}
          */
         data: { page: 1, rootIdeaID: 0 },
+
+        /**
+         * Default filter for the request
+         * @type {String}
+         */
+        filters: NO_FILTER,
 
         /**
          * The collapse/expand flag
@@ -104,11 +113,11 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
             } else {
                 this.$('.idealist').append( app.format("<div class='margin'>{0}</div>", i18n.gettext('No messages')) );
             }
-            
+
 
             this.chk = this.$('#messagelist-mainchk');
             this.renderThread();
-            this.closeThread();
+            //this.closeThread();
 
             return this;
         },
@@ -117,15 +126,27 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
          * Render the thread section
          */
         renderThread: function(){
-            var list = document.createDocumentFragment();
+            var list = document.createDocumentFragment(),
+                messages = this.messageThread.getRootMessages();
 
-            this.messageThread.each(function(message){
-                var messageView = new MessageView({model:message});
-                list.appendChild(messageView.render().el);
+            _.each(messages, function(message){
+                var messageView = new MessageView({model:message}),
+                    view = messageView.render(),
+                    children = view.getRenderedChildrenInCascade();
+
+                list.appendChild(view.el);
+                _.each(children, function(child){
+                    list.appendChild(child);
+                });
             });
 
-            this.$('#messagelist-thread').empty().append(list);
-            //this.collapseThreadMessages();
+
+
+            if( messages.length > 0 ){
+                this.$('#messagelist-thread').empty().append(list);
+            } else {
+                this.$('#messagelist-thread').empty().append( app.format("<div class='margin'>{0}</div>", i18n.gettext('No messages')) );
+            }
         },
 
         /**
@@ -152,6 +173,10 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
                     'page': this.data.page
                 };
 
+            if( this.filters !== NO_FILTER ){
+                data.filters = this.filters;
+            }
+
             if( rootIdeaID !== undefined ){
                 this.data.rootIdeaID = rootIdeaID;
                 data['root_idea_id'] = rootIdeaID;
@@ -162,7 +187,9 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
 
             $.getJSON( app.getApiUrl('posts'), data, function(data){
                 that.data = data;
+                that.data.rootIdeaID = rootIdeaID;
                 that.messages.reset(data.posts);
+                that.messageThread.reset(data.posts);
             });
         },
 
@@ -307,6 +334,7 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
             'click #messagelist-returnButton': 'onReturnButtonClick',
 
             'click #messagelist-inbox': 'loadInbox',
+            'click #messagelist-insynthesis': 'loadSynthesisMessages',
 
             'click #messageList-message-collapseButton': 'toggleThreadMessages',
 
@@ -336,7 +364,16 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
          * Load the inbox without filtering
          */
         loadInbox: function(){
+            this.filters = NO_FILTER;
             this.loadData();
+        },
+
+        /**
+         * @event
+         */
+        loadSynthesisMessages: function(){
+            this.filters = SYNTHESIS_FILTER;
+            this.loadData(this.data.rootIdeaID);
         },
 
         /**

@@ -218,11 +218,10 @@ function(Backbone, _, Idea, app, ckeditor, i18n){
             this.$('.ideaPanel-longtitle-closebtn').hide();
 
             var data = ckeditor.instances[LONG_TITLE_ID].getData();
-            data = $.trim( data );
-            if( data === '' ){
-                data = i18n.gettext('Add the description');
+            if(data!=this.idea.getlongTitleDisplayText()){
+                this.idea.set({ 'longTitle': $.trim(data)});
             }
-            this.idea.set('longTitle', data);
+            data = this.idea.getlongTitleDisplayText();
         },
 
         /**

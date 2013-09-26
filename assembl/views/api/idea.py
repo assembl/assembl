@@ -66,7 +66,7 @@ def get_ideas(request):
 
     ideas = DBSession.query(Idea).filter_by(
         table_of_contents_id=discussion.table_of_contents_id
-    )
+    ).order_by(Idea.order, Idea.creation_date)
     retval = [idea.serializable() for idea in ideas]
     retval.append(Idea.serializable_unsorded_posts_pseudo_idea(discussion))
     return retval
@@ -79,6 +79,10 @@ def save_idea(request):
     idea_id = request.matchdict['id']
     idea_data = json.loads(request.body)
 
+    # Special items in TOC, like unsorted posts.
+    if idea_id in ['orphan_posts']:
+        return {'ok': False, 'id': idea_id}
+        
     with transaction.manager:
         idea = DBSession.query(Idea).get(idea_id)
         discussion = DBSession.query(Discussion).get(discussion_id)

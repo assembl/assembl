@@ -1,0 +1,73 @@
+{% extends 'base.jinja2' %}
+
+{% block content %}
+<table>
+  <tr>
+    <td>
+      <h2>Créer une discussion</h2>
+      <form method="post" action=".">
+	<p>
+	  <label for="topic">Topic</label>
+	  <input type="text" name="topic" id="topic"/>
+	</p>
+	
+	<p>
+	  <label for="slug">Slug</label>
+	  <input type="text" name="slug" id="slug"/>
+	</p>
+
+	<h3>Mailbox configuration</h3>
+
+	<p>
+	  <label for="mbox_name">Name</label>
+	  <input type="text" name="mbox_name" id="mbox_name"/>
+	</p>
+
+	<p>
+	  <label for="host">Host</label>
+	  <input type="text" name="host" id="host"/>
+	</p>
+
+	<p>
+	  <label for="port">Port</label>
+	  <input type="text" name="port" id="port"/>
+	</p>
+
+	<p>
+	  <label for="ssl">SSL?</label>
+	  <input type="checkbox" name="ssl" id="ssl" />
+	</p>
+
+	<p>
+	  <label for="folder">Folder</label>
+	  <input type="text" name="folder" id="folder"/>
+	</p>
+
+	<p>
+	  <label for="username">Username</label>
+	  <input type="text" name="username" id="username"/>
+	</p>
+
+	<p>
+	  <label for="password">Password</label>
+	  <input type="password" name="password" id="password"/>
+	</p>
+
+	<p>
+	  <input type="submit" value="Create"/>
+	</p>
+      </form>
+    </td>
+    <td>
+      <h2>Discussions existantes</h2>
+      <ul class="discussionlist">
+        {% for discussion in discussions %}
+        <li><a href='/{{ discussion.slug }}/'>{{ discussion.topic }}</a></li>
+        {% else %}
+        <em>{% trans %}There are no discussions on this server yet{% endtrans %}</em>
+        {% endfor %}
+      </ul>
+    </td>
+  </tr>
+</table>
+{% endblock %}

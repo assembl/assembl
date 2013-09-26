@@ -64,7 +64,7 @@ function(Backbone, _, Idea, IdeaView, app){
 
             var filter = { parentId: null };
 
-            if( this.filter === FEATURED){
+            if( this.filter === FEATURED ){
                 filter.featured = true;
             } else if ( this.filter === IN_SYNTHESIS ){
                 filter.inSynthesis = true;
@@ -72,6 +72,10 @@ function(Backbone, _, Idea, IdeaView, app){
 
             var list = document.createDocumentFragment(),
                 ideas = this.ideas.where(filter);
+
+            ideas = _.sortBy(ideas, function(idea){
+                return idea.get('order');
+            });
 
             _.each(ideas, function(idea){
                 var ideaView = new IdeaView({model:idea});
@@ -171,6 +175,7 @@ function(Backbone, _, Idea, IdeaView, app){
          * The events
          */
         'events': {
+            'click .panel-body': 'onPanelBodyClick',
             'dragover .panel-bodyabove': 'onAboveDragOver',
             'dragover .panel-bodybelow': 'onBelowDragOver',
 
@@ -184,6 +189,15 @@ function(Backbone, _, Idea, IdeaView, app){
         },
 
         /**
+         * @event
+         */
+        onPanelBodyClick: function(ev){
+            if( $(ev.target).hasClass('panel-body') ){
+                app.setCurrentIdea(null);
+            }
+        },
+
+        /**
          * Add a new child to the current selected
          */
         addChildToSelected: function(){
@@ -191,8 +205,10 @@ function(Backbone, _, Idea, IdeaView, app){
                 newIdea = new Idea.Model();
 
             if( this.ideas.get(currentIdea) ){
+                newIdea.set('order', currentIdea.getOrderForNewChild());
                 currentIdea.addChild(newIdea);
             } else {
+                newIdea.set('order', app.getOrderForNewRootIdea());
                 this.ideas.add(newIdea);
                 this.render();
             }

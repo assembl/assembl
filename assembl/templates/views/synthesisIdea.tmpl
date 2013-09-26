@@ -16,7 +16,9 @@
     <% } %> #}
 
     <div class="idealist-title">
-        <%= app.stripHtml(longTitle) %>
+        <% 
+        print(app.stripHtml(synthesis_expression_text));
+        %>
     </div>
 </div>
 
@@ -26,7 +28,14 @@
     <span class="closebutton closebutton--ckeditor"></span>
     <div class="panel-editablebox is-editing">
         <div id="synthesisIdea-toptoolbar"></div>
-        <div class="panel-editablearea" contenteditable="true"> <%= longTitle %> </div>
+        <div class="panel-editablearea" contenteditable="true">
+        <%  if(app.stripHtml(longTitle)==''){
+                print(synthesis_expression_text)
+            }
+            else{
+                print(longTitle);
+            } %>
+        </div>
         <div id="synthesisIdea-bottomtoolbar" hidden></div>
         <div class="text-right padding"><a class="button button--primary idealist-savebtn">Save</a></div>
     </div>

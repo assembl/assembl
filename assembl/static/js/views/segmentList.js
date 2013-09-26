@@ -54,15 +54,22 @@ function(Backbone, _, $, app, Segment, i18n){
         /**
          * Creates a segment with the given text and adds it to the segmentList
          * @param  {string} text
-         * @param  {string} [idPost=null] The id of the origin post
+         * @param  {string} [post=null] The origin post
          * @return {Segment}
          */
-        addTextAsSegment: function(text, idPost){
+        addTextAsSegment: function(text, post){
+            var idPost = null
+            var source_creator = null
+            if(post){
+                var idPost = post.id
+                source_creator = post.attributes.creator
+            }
+
             var segment = new Segment.Model({
                 text: text,
                 creator: app.getCurrentUser(),
-                source_creator: app.getCurrentUser(),
-                idPost: idPost || null
+                source_creator: source_creator,
+                idPost: idPost
             });
 
             if( segment.isValid() ){

@@ -71,7 +71,7 @@ function($, _, ckeditor, User, Moment, i18n){
         lateralMenuAnimationTime: 600,
 
         /**
-         * Current dragged segment 
+         * Current dragged segment
          * @type {Segment}
          */
         draggedSegment: null,
@@ -137,7 +137,7 @@ function($, _, ckeditor, User, Moment, i18n){
 
         /**
          * Open the given panel
-         * @param {backbone.View} panel 
+         * @param {backbone.View} panel
          */
         openPanel: function(panel){
             if( panel.$el.hasClass('is-visible') ){
@@ -254,7 +254,7 @@ function($, _, ckeditor, User, Moment, i18n){
         /**
          * Returns a template from an script tag
          * @param {string} id The id of the script tag
-         * @return {function} The _.template return
+         * @return {function} The Underscore.js _.template return
          */
         loadTemplate: function(id){
             return _.template( $('#tmpl-'+id).html() );
@@ -363,8 +363,8 @@ function($, _, ckeditor, User, Moment, i18n){
 
         /**
          * Shows the context menu given the options
-         * @param {Number} x 
-         * @param {Number} y 
+         * @param {Number} x
+         * @param {Number} y
          * @param {Object} scope The scope where the functions will be executed
          * @param {Object<string:function>} items The items on the context menu
          */
@@ -451,6 +451,28 @@ function($, _, ckeditor, User, Moment, i18n){
         },
 
         /**
+         * Returns the order number for a new root idea
+         * @return {Number}
+         */
+        getOrderForNewRootIdea: function(){
+            return app.ideaList.ideas.last().get('order') + 1;
+        },
+
+        /**
+         * Updates the order in the idea list
+         */
+        updateIdealistOrder: function(){
+            var children = app.ideaList.ideas.where({ parentId: null }),
+                currentOrder = 1;
+
+            _.each(children, function(child){
+                child.set('order', currentOrder);
+                child.save();
+                currentOrder += 1;
+            });
+        },
+
+        /**
          * @see http://blog.snowfinch.net/post/3254029029/uuid-v4-js
          * @return {String} an uuid
          */
@@ -486,7 +508,7 @@ function($, _, ckeditor, User, Moment, i18n){
          * @return {String} The new string without html tags
          */
         stripHtml: function(html){
-            return html ? html.replace(/(<([^>]+)>)/ig,"") : html;
+            return html ? $.trim( $('<div>'+html+'</div>').text() ) : html;
         },
 
         /**
@@ -519,7 +541,7 @@ function($, _, ckeditor, User, Moment, i18n){
          */
         onAjaxError: function( ev, jqxhr, settings, exception ){
             var message = i18n._('ajaxerror-message');
-            message = "url: " + settings.url + "\n" + message;
+            message = "url: " + settings.url + "\n" + message + "\n" + exception;
 
             alert( message );
             //window.location.reload();
@@ -546,7 +568,7 @@ function($, _, ckeditor, User, Moment, i18n){
                 });
                 html += "\n</ul>";
             }
-            
+
             html += "\n</li>";
             return html;
         },

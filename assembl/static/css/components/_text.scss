@@ -42,6 +42,19 @@
 // -----------
 .text-opaque { @include opacity( 0.5 ); }
 
+// Quotation text
+// -----------
+.text-quotation {     
+    &:before {
+        content: "\00AB";
+    }
+
+    &:after {
+        content: "\00BB";
+    }
+ }
+
+
 // The text bubble for when a text is selected
 // ====================
 .textbubble {

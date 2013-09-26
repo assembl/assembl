@@ -4,7 +4,7 @@ from sqlalchemy.orm import relationship, backref
 from sqlalchemy import (
     Column,
     Integer,
-    Unicode,
+    UnicodeText,
     String,
     DateTime,
     ForeignKey,
@@ -26,7 +26,7 @@ class Source(SQLAlchemyBaseModel):
     __tablename__ = "source"
 
     id = Column(Integer, primary_key=True)
-    name = Column(Unicode(60), nullable=False)
+    name = Column(UnicodeText, nullable=False)
     type = Column(String(60), nullable=False)
 
     creation_date = Column(DateTime, nullable=False, default=datetime.utcnow)

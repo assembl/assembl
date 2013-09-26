@@ -33,9 +33,9 @@ class Discussion(SQLAlchemyBaseModel):
 
     id = Column(Integer, primary_key=True)
 
-    topic = Column(Unicode(255), nullable=False)
+    topic = Column(UnicodeText, nullable=False)
     
-    slug = Column(Unicode, nullable=False, unique=True, index=True)
+    slug = Column(UnicodeText, nullable=False, unique=True, index=True)
     
     creation_date = Column(DateTime, nullable=False, default=datetime.utcnow)
     
@@ -189,7 +189,7 @@ class Synthesis(SQLAlchemyBaseModel):
     creation_date = Column(DateTime, nullable=False, default=datetime.utcnow)
     publication_date = Column(DateTime, default=datetime.now)
 
-    subject = Column(Unicode(255))
+    subject = Column(UnicodeText)
     introduction = Column(UnicodeText)
     conclusion = Column(UnicodeText)
 
@@ -232,8 +232,8 @@ class Idea(SQLAlchemyBaseModel):
     __tablename__ = "idea"
     ORPHAN_POSTS_IDEA_ID = 'orphan_posts'
 
-    long_title = Column(Unicode(255))
-    short_title = Column(Unicode(255))
+    long_title = Column(UnicodeText)
+    short_title = Column(UnicodeText)
 
     id = Column(Integer, primary_key=True)
     creation_date = Column(DateTime, nullable=False, default=datetime.utcnow)

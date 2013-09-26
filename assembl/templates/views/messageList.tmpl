@@ -8,7 +8,8 @@
 
                 <span class="dropdown-label text-bold">{{ gettext('Messages (%(total)s)')|format(total=inbox)|safe }}</span>
                 <ul class="dropdown-list">
-                    <li id="messagelist-inbox" class="dropdown-listitem">{{ gettext('Inbox') }}</li>
+                    <li id="messagelist-inbox" class="dropdown-listitem">{{ gettext('All messages') }}</li>
+                    <li id="messagelist-insynthesis" class="dropdown-listitem">{{ gettext('Synthesis Messages') }}</li>
                     {# <li class="dropdown-listitem">{{ gettext('Unread') }}</li>
                     <li class="dropdown-listitem">{{ gettext('Uncaught') }}</li>
                     <li class="dropdown-listitem">{{ gettext('Followed') }}</li> #}
@@ -19,7 +20,7 @@
                 <span class="dropdown-label">
                     <label class="chk chk--dropdown chk--muted">
                         <input id="messagelist-mainchk" type="checkbox" class="chk-checkbox" />
-                        
+
                         <span class="chk-label"></span>
                     </label>
                 </span>
@@ -56,7 +57,7 @@
         </div>
 
         <div class="panel-body">
-            
+
             <div id="messageList-list" class="idealist"></div>
 
         </div>
@@ -64,9 +65,9 @@
         <div class="panel-footer"></div>
 
     </div>
-    
+
     <div id="messagelist-messages" class="panel-divisor">
-        
+
         <div class="panel-header">
             <a id="messagelist-returnButton" class="link text-bold">{{ gettext('Return') }}</a>
 
