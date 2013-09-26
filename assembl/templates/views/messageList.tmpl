@@ -6,7 +6,7 @@
             <div class="dropdown">
                 {% set inbox = '<%= inbox %>' %}
 
-                <span class="dropdown-label text-bold">{{ gettext('Messages (%(total)s)')|format(total=inbox)|safe }}</span>
+                <span class="dropdown-label text-bold">{{ gettext('Messages (%(total)s unread)')|format(total=inbox)|safe }}</span>
                 <ul class="dropdown-list">
                     <li id="messagelist-inbox" class="dropdown-listitem">{{ gettext('All messages') }}</li>
                     <li id="messagelist-insynthesis" class="dropdown-listitem">{{ gettext('Synthesis Messages') }}</li>
@@ -33,6 +33,7 @@
                 </ul>
             </div>
 
+            {#
             <div class="buttongroup margin-left">
                 <a id="messageList-prevButton" class="button button--condensed" <%= page == 1 ? 'disabled' : '' %>>
                     <i class="icon-left-dir"></i>
@@ -41,13 +42,15 @@
                     <i class="icon-right-dir"></i>
                 </a>
             </div>
+            #}
 
             <div class="inline text-muted margin-left">
                 {% set startIndex = '<%= startIndex %>' %}
                 {% set endIndex = '<%= endIndex %>' %}
                 {% set total = '<%= total %>' %}
 
-                {{ gettext('%(start)s - %(end)s of %(total)s')|format(start=startIndex, end=endIndex, total=total)|safe }}
+                {# {{ gettext('%(start)s - %(end)s of %(total)s')|format(start=startIndex, end=endIndex, total=total)|safe }} #}
+                {{ gettext('%(total)s messages')|format(start=startIndex, end=endIndex, total=total)|safe }}
             </div>
 
             <div class="float-right">
@@ -69,7 +72,7 @@
     <div id="messagelist-messages" class="panel-divisor">
 
         <div class="panel-header">
-            <a id="messagelist-returnButton" class="link text-bold">{{ gettext('Return') }}</a>
+            <a id="messagelist-returnButton" class="link text-bold">{{ gettext('Return to all messages') }}</a>
 
             <div class="float-right">
                 <a id="messageList-message-collapseButton" class="iconbutton <%= threadCollapsed ? 'icon-download-1' : 'icon-upload' %>"></a>

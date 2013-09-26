@@ -1,7 +1,7 @@
 <div class="panel" draggable="draggable">
 
     <div class="panel-header">
-        <strong>{{ gettext('Idea') }}</strong>
+        <strong data-tooltip="{{gettext('Detailled information about the currently selected idea in the Table of ideas')}}">{{ gettext('Idea') }}</strong>
         <div class="float-right">
             <a id="ideaPanel-closebutton" class="iconbutton icon-cancel" data-tooltip="{{gettext('Close panel')}}"></a>
         </div>
@@ -47,7 +47,7 @@
             <% }); %>
             
             <div class="box box--dashed box--centered margin text-muted text-big">
-                {{ gettext('Add segments') }}
+                {{ gettext('Add segments of posts') }}
             </div>
 
         </div>
