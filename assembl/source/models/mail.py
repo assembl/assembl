@@ -353,14 +353,18 @@ class Email(Content):
         if self.in_reply_to:
             parent_email_message_id = {
                 'original': self.in_reply_to,
-                'cleaned': re.search(r'<(.*)>', self.in_reply_to).group(0)
+                'cleaned': re.search(r'<(.*)>', self.in_reply_to).group(0) if \
+                    re.search(r'<(.*)>', self.in_reply_to) else None
             }
 
+            filter_clause = or_(
+                Email.message_id==parent_email_message_id['original'],
+                Email.message_id==parent_email_message_id['cleaned']
+            ) if parent_email_message_id['cleaned'] else \
+                Email.message_id==parent_email_message_id['original']
+
             parent_email = DBSession.query(Email).filter(
-                or_(
-                    Email.message_id==parent_email_message_id['original'],
-                    Email.message_id==parent_email_message_id['cleaned']
-                )
+                filter_clause
             ).first()
 
             if parent_email: 
