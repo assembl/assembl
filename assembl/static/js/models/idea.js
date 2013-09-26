@@ -76,6 +76,7 @@ define(['backbone','underscore', 'models/segment', 'app', 'i18n'], function(Back
                 this.set('parentId', null);
             }
 
+            idea.set('order', this.getOrderForNewChild());
             idea.set('parentId', this.get('id'));
         },
 
@@ -86,10 +87,12 @@ define(['backbone','underscore', 'models/segment', 'app', 'i18n'], function(Back
         addSiblingAbove: function(idea){
             var parent = this.getParent(),
                 parentId = parent ? parent.get('id') : null,
-                index = this.collection.indexOf(this);
+                index = this.collection.indexOf(this),
+                order = parent ? parent.getOrderForNewChild() : app.getOrderForNewRootIdea();
 
             this.collection.add(idea, { at: index });
             idea.attributes.parentId = parentId;
+            idea.attributes.order = order;
             idea.trigger('change:parentId');
         },
 
@@ -100,10 +103,12 @@ define(['backbone','underscore', 'models/segment', 'app', 'i18n'], function(Back
         addSiblingBelow: function(idea){
             var parent = this.getParent(),
                 parentId = parent ? parent.get('id') : null,
-                index = this.collection.indexOf(this) + 1;
+                index = this.collection.indexOf(this) + 1,
+                order = parent ? parent.getOrderForNewChild() : app.getOrderForNewRootIdea();
 
             this.collection.add(idea, { at: index });
             idea.attributes.parentId = parentId;
+            idea.attributes.order = order;
             idea.trigger('change:parentId');
         },
 
@@ -173,6 +178,21 @@ define(['backbone','underscore', 'models/segment', 'app', 'i18n'], function(Back
         },
 
         /**
+         * @return {Number} The order number for a new child
+         */
+        getOrderForNewChild: function(){
+            var orderMultipler = 10,
+                order = 1;
+
+            _.times(this.getLevel(), function(){
+                orderMultipler = orderMultipler * 10;
+            });
+
+            order = order / orderMultipler;
+            return this.get('order') + order;
+        },
+
+        /**
          * @return {Number} The level based in the parents inSynthesis flag
          */
         getSynthesisLevel: function(){
@@ -219,7 +239,8 @@ define(['backbone','underscore', 'models/segment', 'app', 'i18n'], function(Back
             var data = {
                 shortTitle: segment.get('text').substr(0, 50),
                 longTitle: segment.get('text'),
-                parentId: this.get('id')
+                parentId: this.get('id'),
+                order: this.getOrderForNewChild()
             };
 
             var onSuccess = function(idea){
@@ -261,13 +282,6 @@ define(['backbone','underscore', 'models/segment', 'app', 'i18n'], function(Back
          * @type {IdeaModel}
          */
         model: IdeaModel,
-
-        /**
-         * The comparator
-         */
-        comparator: function(idea){
-            return idea.get('order');
-        },
 
         /**
          * Returns the ideas to compose the synsthesis panel

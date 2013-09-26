@@ -39,6 +39,7 @@ function(Backbone, _, $, Idea, Segment, app){
          */
         render: function(){
             app.trigger('render');
+            console.log( this.model.get('order') );
 
             var data = this.model.toJSON(),
                 doc = document.createDocumentFragment();

@@ -71,7 +71,7 @@ function($, _, ckeditor, User, Moment, i18n){
         lateralMenuAnimationTime: 600,
 
         /**
-         * Current dragged segment 
+         * Current dragged segment
          * @type {Segment}
          */
         draggedSegment: null,
@@ -137,7 +137,7 @@ function($, _, ckeditor, User, Moment, i18n){
 
         /**
          * Open the given panel
-         * @param {backbone.View} panel 
+         * @param {backbone.View} panel
          */
         openPanel: function(panel){
             if( panel.$el.hasClass('is-visible') ){
@@ -363,8 +363,8 @@ function($, _, ckeditor, User, Moment, i18n){
 
         /**
          * Shows the context menu given the options
-         * @param {Number} x 
-         * @param {Number} y 
+         * @param {Number} x
+         * @param {Number} y
          * @param {Object} scope The scope where the functions will be executed
          * @param {Object<string:function>} items The items on the context menu
          */
@@ -448,6 +448,14 @@ function($, _, ckeditor, User, Moment, i18n){
         getSegmentsByIdea: function(idea){
             var id = idea.get('id');
             return app.segmentList && app.segmentList.segments ? app.segmentList.segments.where({idIdea:id}) : [];
+        },
+
+        /**
+         * Returns the order number for a new root idea
+         * @return {Number}
+         */
+        getOrderForNewRootIdea: function(){
+            return app.ideaList.ideas.last().get('order') + 1;
         },
 
         /**
@@ -546,7 +554,7 @@ function($, _, ckeditor, User, Moment, i18n){
                 });
                 html += "\n</ul>";
             }
-            
+
             html += "\n</li>";
             return html;
         },

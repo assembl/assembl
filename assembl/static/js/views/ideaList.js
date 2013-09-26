@@ -205,20 +205,10 @@ function(Backbone, _, Idea, IdeaView, app){
                 newIdea = new Idea.Model();
 
             if( this.ideas.get(currentIdea) ){
-                var level = currentIdea.getLevel(),
-                    orderMultipler = 10,
-                    order = 1;
-
-                _.times(level, function(){
-                    orderMultipler = orderMultipler * 10;
-                });
-
-                order = order / orderMultipler;
-
-                newIdea.set('order', currentIdea.get('order') + order);
+                newIdea.set('order', currentIdea.getOrderForNewChild());
                 currentIdea.addChild(newIdea);
             } else {
-                newIdea.set('order', app.ideaList.ideas.last().get('order') + 1);
+                newIdea.set('order', app.getOrderForNewRootIdea());
                 this.ideas.add(newIdea);
                 this.render();
             }
