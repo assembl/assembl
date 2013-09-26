@@ -189,7 +189,7 @@ def get_posts(request):
         #posts = posts.limit(page_size).offset(data['startIndex']-1)
         posts = posts.order_by(Content.creation_date)
     
-    if 'syntheses' in filter_names:
+    if 'synthesis' in filter_names:
         posts = posts.filter(Post.is_synthesis==True)
 
     for post in posts:
