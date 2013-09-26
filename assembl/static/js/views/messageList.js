@@ -27,6 +27,7 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
                 app.openPanel(app.messageList);
                 if( idea ){
                     that.loadData(idea.get('id'));
+                    that.$el.addClass(MESSAGE_MODE);
                 }
             });
         },
@@ -104,11 +105,11 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
             } else {
                 this.$('.idealist').append( app.format("<div class='margin'>{0}</div>", i18n.gettext('No messages')) );
             }
-            
+
 
             this.chk = this.$('#messagelist-mainchk');
             this.renderThread();
-            this.closeThread();
+            //this.closeThread();
 
             return this;
         },
@@ -117,15 +118,21 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
          * Render the thread section
          */
         renderThread: function(){
-            var list = document.createDocumentFragment();
+            var list = document.createDocumentFragment(),
+                messages = this.messageThread.getRootMessages();
 
-            this.messageThread.each(function(message){
-                var messageView = new MessageView({model:message});
-                list.appendChild(messageView.render().el);
+            _.each(messages, function(message){
+                var messageView = new MessageView({model:message}),
+                    view = messageView.render(),
+                    children = view.getRenderedChildrenInCascade();
+
+                list.appendChild(view.el);
+                _.each(children, function(child){
+                    list.appendChild(child);
+                });
             });
 
             this.$('#messagelist-thread').empty().append(list);
-            //this.collapseThreadMessages();
         },
 
         /**
@@ -163,6 +170,7 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
             $.getJSON( app.getApiUrl('posts'), data, function(data){
                 that.data = data;
                 that.messages.reset(data.posts);
+                that.messageThread.reset(data.posts);
             });
         },
 

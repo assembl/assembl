@@ -37,9 +37,10 @@ define(['backbone','underscore', 'models/segment', 'app', 'i18n'], function(Back
             featured: false,
             active: false,
             inSynthesis: false,
-            parentId: null
+            parentId: null,
+            order: 0
         },
-        /* The following should be mostly in view code, but currently the 
+        /* The following should be mostly in view code, but currently the
          * longTitle editor code isn't common in ideaPanel and synthesisView
          * At least this is mostly DRY
          */
@@ -47,7 +48,7 @@ define(['backbone','underscore', 'models/segment', 'app', 'i18n'], function(Back
          * Returns the display text for a synthesis idea.
          * Will return the first non-empty from:
          * longTitle, shortTitle, i18n.gettext('Add the description')
-         * @param  
+         * @param
          * @return {Text>}
          */
         getlongTitleDisplayText: function(){
@@ -143,7 +144,7 @@ define(['backbone','underscore', 'models/segment', 'app', 'i18n'], function(Back
 
         /**
          * Return if the idea is descendant of the given idea
-         * @param {Idea} idea 
+         * @param {Idea} idea
          * @return {Boolean}
          */
         isDescendantOf: function(idea){
@@ -188,7 +189,7 @@ define(['backbone','underscore', 'models/segment', 'app', 'i18n'], function(Back
                 } else {
                     parent = null;
                 }
-                
+
             } while ( parent !== null );
 
             return counter;

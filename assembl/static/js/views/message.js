@@ -29,7 +29,7 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
          * @init
          */
         initialize: function(){
-            this.model.on('change:collapsed', this.render, this);
+            this.model.on('change:collapsed', this.onCollapsedChange, this);
         },
 
         /**
@@ -56,8 +56,49 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
                 this.$el.removeClass('message--collapsed');
             }
 
-            this.$el.html(this.template(data));
+            this.$el.html( this.template(data) );
             return this;
+        },
+
+        /**
+         * Returns all children rendered
+         * @param {Number} parentLevel
+         * @return {Array<HTMLDivElement>}
+         */
+        getRenderedChildren: function(parentLevel){
+            var children = this.model.getChildren(),
+                ret = [];
+
+            _.each(children, function(message, i){
+                message.set('level', parentLevel + 1);
+
+                var messageView = new MessageView({model:message});
+                ret.push( messageView.render().el );
+            });
+
+            return ret;
+        },
+
+        /**
+         * Returns all children recursively rendered
+         * @param {Number} parentLevel
+         * @return {Array<HTMLDivElement>}
+         */
+        getRenderedChildrenInCascade: function(parentLevel){
+            var children = this.model.getChildren(),
+                ret = [];
+
+            _.each(children, function(message, i){
+                message.set('level', parentLevel + 1);
+
+                var messageView = new MessageView({model:message});
+                ret.push( messageView.render().el );
+
+                var grandChildren = messageView.getRenderedChildrenInCascade();
+                ret = _.union(ret, grandChildren);
+            });
+
+            return ret;
         },
 
         /**
@@ -87,7 +128,7 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
         },
 
         /**
-         *  Opens the reply box and removes the reply button 
+         *  Opens the reply box and removes the reply button
          */
         openReplyBox: function(){
             this.$('.message-replaybox-openbtn').hide();
@@ -99,7 +140,7 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
         },
 
         /**
-         *  Closes the reply box and shows the reply button 
+         *  Closes the reply box and shows the reply button
          */
         closeReplyBox: function(){
             this.$('.message-replaybox-openbtn').show();
@@ -257,6 +298,13 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
 
             this.isSelecting = false;
             this.$el.removeClass('is-selecting');
+        },
+
+        /**
+         * @event
+         */
+        onCollapsedChange: function(){
+            this.render(false);
         },
 
 
