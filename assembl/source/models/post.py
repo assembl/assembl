@@ -9,6 +9,7 @@ from sqlalchemy import (
     DateTime,
     Text,
     ForeignKey,
+    Boolean,
     or_,
 )
 
@@ -28,7 +29,7 @@ class Post(SQLAlchemyBaseModel):
 
     id = Column(Integer, primary_key=True)
     creation_date = Column(DateTime, nullable=False, default=datetime.utcnow)
-
+    is_synthesis = Column(Boolean, default=False)
     ancestry = Column(Text, default="")
 
     content_id = Column(Integer, ForeignKey('content.id', ondelete='CASCADE'))
