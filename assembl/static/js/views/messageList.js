@@ -132,7 +132,13 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
                 });
             });
 
-            this.$('#messagelist-thread').empty().append(list);
+
+
+            if( messages.length > 0 ){
+                this.$('#messagelist-thread').empty().append(list);
+            } else {
+                this.$('#messagelist-thread').empty().append( app.format("<div class='margin'>{0}</div>", i18n.gettext('No messages')) );
+            }
         },
 
         /**
