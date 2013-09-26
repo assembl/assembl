@@ -78,6 +78,7 @@ function(Backbone, _, Idea, IdeaView, app){
             });
 
             _.each(ideas, function(idea){
+                console.log( idea.get('shortTitle'), idea.get('order') );
                 var ideaView = new IdeaView({model:idea});
                 list.appendChild(ideaView.render().el);
             });

@@ -88,7 +88,14 @@ define(['backbone','underscore', 'models/segment', 'app', 'i18n'], function(Back
             var parent = this.getParent(),
                 parentId = parent ? parent.get('id') : null,
                 index = this.collection.indexOf(this),
-                order = parent ? parent.getOrderForNewChild() : app.getOrderForNewRootIdea();
+                order;
+
+            if( parent ){
+                order = parent.getOrderForNewChild();
+            } else {
+                order = parent.
+                 = parent ?  : app.getOrderForNewRootIdea()
+            }
 
             this.collection.add(idea, { at: index });
             idea.attributes.parentId = parentId;
@@ -181,7 +188,14 @@ define(['backbone','underscore', 'models/segment', 'app', 'i18n'], function(Back
          * @return {Number} The order number for a new child
          */
         getOrderForNewChild: function(){
-            var orderMultipler = 10,
+            var orders = [];
+
+            _.each(this.getChildren(), function(child){
+                orders.push( child.get('order') );
+            });
+
+            var maxOrder = _.max(order),
+                orderMultipler = 10,
                 order = 1;
 
             _.times(this.getLevel(), function(){
@@ -189,7 +203,11 @@ define(['backbone','underscore', 'models/segment', 'app', 'i18n'], function(Back
             });
 
             order = order / orderMultipler;
-            return this.get('order') + order;
+            if( maxOrder > 0 ){
+                return maxOrder + order;
+            } else {
+                return this.get('order') + order;
+            }
         },
 
         /**
