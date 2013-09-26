@@ -536,7 +536,7 @@ function($, _, ckeditor, User, Moment, i18n){
             var html = "\n<li>",
                 longTitle = escape(app.stripHtml(idea.get('longTitle')));
 
-            html += app.format('\n{0} (<a href="mailto:{1}?subject={2}">{3}</a>)', idea.get("shortTitle"), email, longTitle, i18n.gettext('react'));
+            html += app.format('\n{0} (<a href="mailto:{1}?subject={2}">{3}</a>)', idea.get("longTitle"), email, longTitle, i18n.gettext('react'));
 
             var children = idea.getSynthesisChildren();
             if( children ) {
