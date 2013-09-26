@@ -105,6 +105,12 @@ def get_posts(request):
     DEFAULT_PAGE_SIZE = 25
     page_size = DEFAULT_PAGE_SIZE
 
+    filter_names = [ 
+        filter_name for filter_name \
+        in request.GET.getone('filters').split(',') \
+        if filter_name
+    ] if request.GET.get('filters') else []
+
     try:
         page = int(request.GET.getone('page'))
     except (ValueError, KeyError):
