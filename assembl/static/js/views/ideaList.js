@@ -64,7 +64,7 @@ function(Backbone, _, Idea, IdeaView, app){
 
             var filter = { parentId: null };
 
-            if( this.filter === FEATURED){
+            if( this.filter === FEATURED ){
                 filter.featured = true;
             } else if ( this.filter === IN_SYNTHESIS ){
                 filter.inSynthesis = true;
@@ -72,6 +72,10 @@ function(Backbone, _, Idea, IdeaView, app){
 
             var list = document.createDocumentFragment(),
                 ideas = this.ideas.where(filter);
+
+            ideas = _.sortBy(ideas, function(idea){
+                return idea.get('order');
+            });
 
             _.each(ideas, function(idea){
                 var ideaView = new IdeaView({model:idea});
@@ -201,8 +205,20 @@ function(Backbone, _, Idea, IdeaView, app){
                 newIdea = new Idea.Model();
 
             if( this.ideas.get(currentIdea) ){
+                var level = currentIdea.getLevel(),
+                    orderMultipler = 10,
+                    order = 1;
+
+                _.times(level, function(){
+                    orderMultipler = orderMultipler * 10;
+                });
+
+                order = order / orderMultipler;
+
+                newIdea.set('order', currentIdea.get('order') + order);
                 currentIdea.addChild(newIdea);
             } else {
+                newIdea.set('order', app.ideaList.ideas.last().get('order') + 1);
                 this.ideas.add(newIdea);
                 this.render();
             }

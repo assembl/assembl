@@ -15,7 +15,7 @@ define(['backbone','underscore', 'models/segment', 'app', 'i18n'], function(Back
             this.set('creationDate', obj.creationDate);
 
             this.on('change:inSynthesis', this.onInSynthesisChange, this);
-            this.on('change:shortTitle change:longTitle change:parentId', this.onAttrChange, this);
+            this.on('change:shortTitle change:longTitle change:parentId change:order', this.onAttrChange, this);
         },
 
         /**
@@ -38,7 +38,7 @@ define(['backbone','underscore', 'models/segment', 'app', 'i18n'], function(Back
             active: false,
             inSynthesis: false,
             parentId: null,
-            order: 0
+            order: 1
         },
         /* The following should be mostly in view code, but currently the
          * longTitle editor code isn't common in ideaPanel and synthesisView
@@ -261,6 +261,13 @@ define(['backbone','underscore', 'models/segment', 'app', 'i18n'], function(Back
          * @type {IdeaModel}
          */
         model: IdeaModel,
+
+        /**
+         * The comparator
+         */
+        comparator: function(idea){
+            return idea.get('order');
+        },
 
         /**
          * Returns the ideas to compose the synsthesis panel
