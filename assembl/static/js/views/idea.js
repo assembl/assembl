@@ -145,7 +145,11 @@ function(Backbone, _, $, Idea, Segment, app){
          */
         onTitleClick: function(ev){
             ev.stopPropagation();
-            app.setCurrentIdea(this.model);
+            if( this.model === app.getCurrentIdea() ){
+                app.setCurrentIdea(null);
+            } else {
+                app.setCurrentIdea(this.model);
+            }
         },
 
         /**

@@ -171,6 +171,7 @@ function(Backbone, _, Idea, IdeaView, app){
          * The events
          */
         'events': {
+            'click .panel-body': 'onPanelBodyClick',
             'dragover .panel-bodyabove': 'onAboveDragOver',
             'dragover .panel-bodybelow': 'onBelowDragOver',
 
@@ -181,6 +182,15 @@ function(Backbone, _, Idea, IdeaView, app){
             'click #ideaList-filterByFeatured': 'filterByFeatured',
             'click #ideaList-filterByInSynthesis': 'filterByInSynthesis',
             'click #ideaList-filterByToc': 'clearFilter'
+        },
+
+        /**
+         * @event
+         */
+        onPanelBodyClick: function(ev){
+            if( $(ev.target).hasClass('panel-body') ){
+                app.setCurrentIdea(null);
+            }
         },
 
         /**
