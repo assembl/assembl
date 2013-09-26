@@ -459,6 +459,20 @@ function($, _, ckeditor, User, Moment, i18n){
         },
 
         /**
+         * Updates the order in the idea list
+         */
+        updateIdealistOrder: function(){
+            var children = app.ideaList.ideas.where({ parentId: null }),
+                currentOrder = 1;
+
+            _.each(children, function(child){
+                child.set('order', currentOrder);
+                child.save();
+                currentOrder += 1;
+            });
+        },
+
+        /**
          * @see http://blog.snowfinch.net/post/3254029029/uuid-v4-js
          * @return {String} an uuid
          */

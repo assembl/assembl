@@ -15,7 +15,7 @@ define(['backbone','underscore', 'models/segment', 'app', 'i18n'], function(Back
             this.set('creationDate', obj.creationDate);
 
             this.on('change:inSynthesis', this.onInSynthesisChange, this);
-            this.on('change:shortTitle change:longTitle change:parentId change:order', this.onAttrChange, this);
+            this.on('change:shortTitle change:longTitle change:parentId', this.onAttrChange, this);
         },
 
         /**
@@ -88,19 +88,18 @@ define(['backbone','underscore', 'models/segment', 'app', 'i18n'], function(Back
             var parent = this.getParent(),
                 parentId = parent ? parent.get('id') : null,
                 index = this.collection.indexOf(this),
-                order;
-
-            if( parent ){
-                order = parent.getOrderForNewChild();
-            } else {
-                order = parent.
-                 = parent ?  : app.getOrderForNewRootIdea()
-            }
+                order = this.get('order') - 0.1;
 
             this.collection.add(idea, { at: index });
             idea.attributes.parentId = parentId;
             idea.attributes.order = order;
             idea.trigger('change:parentId');
+
+            if( parent ){
+                parent.updateChildrenOrder();
+            } else {
+                app.updateIdealistOrder();
+            }
         },
 
         /**
@@ -111,12 +110,18 @@ define(['backbone','underscore', 'models/segment', 'app', 'i18n'], function(Back
             var parent = this.getParent(),
                 parentId = parent ? parent.get('id') : null,
                 index = this.collection.indexOf(this) + 1,
-                order = parent ? parent.getOrderForNewChild() : app.getOrderForNewRootIdea();
+                order = this.get('order') + 0.1;
 
             this.collection.add(idea, { at: index });
             idea.attributes.parentId = parentId;
             idea.attributes.order = order;
             idea.trigger('change:parentId');
+
+            if( parent ){
+                parent.updateChildrenOrder();
+            } else {
+                app.updateIdealistOrder();
+            }
         },
 
         /**
@@ -188,26 +193,7 @@ define(['backbone','underscore', 'models/segment', 'app', 'i18n'], function(Back
          * @return {Number} The order number for a new child
          */
         getOrderForNewChild: function(){
-            var orders = [];
-
-            _.each(this.getChildren(), function(child){
-                orders.push( child.get('order') );
-            });
-
-            var maxOrder = _.max(order),
-                orderMultipler = 10,
-                order = 1;
-
-            _.times(this.getLevel(), function(){
-                orderMultipler = orderMultipler * 10;
-            });
-
-            order = order / orderMultipler;
-            if( maxOrder > 0 ){
-                return maxOrder + order;
-            } else {
-                return this.get('order') + order;
-            }
+            return this.getChildren().length + 1;
         },
 
         /**
@@ -281,6 +267,20 @@ define(['backbone','underscore', 'models/segment', 'app', 'i18n'], function(Back
          */
         onAttrChange: function(){
             this.save();
+        },
+
+        /**
+         * Updates the order in all children
+         */
+        updateChildrenOrder: function(){
+            var children = _.sortBy(this.getChildren(), function(child){ return child.get('order'); }),
+                currentOrder = 1;
+
+            _.each(children, function(child){
+                child.set('order', currentOrder);
+                child.save();
+                currentOrder += 1;
+            });
         }
 
     });

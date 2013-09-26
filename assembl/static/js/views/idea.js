@@ -75,6 +75,10 @@ function(Backbone, _, $, Idea, Segment, app){
             var children = this.model.getChildren(),
                 ret = [];
 
+            children = _.sortBy(children, function(child){
+                return child.get('order');
+            });
+
             _.each(children, function(idea, i){
                 idea.set('level', parentLevel + 1);
 
