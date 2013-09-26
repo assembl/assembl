@@ -5,7 +5,9 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
     /**
      * Constants
      */
-    var MESSAGE_MODE = 'is-message-mode';
+    var MESSAGE_MODE = 'is-message-mode',
+        NO_FILTER = '',
+        SYNTHESIS_FILTER = 'synthesis';
 
     /**
      * @class views.MessageList
@@ -49,6 +51,12 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
          * @type {Object}
          */
         data: { page: 1, rootIdeaID: 0 },
+
+        /**
+         * Default filter for the request
+         * @type {String}
+         */
+        filters: NO_FILTER,
 
         /**
          * The collapse/expand flag
@@ -165,6 +173,10 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
                     'page': this.data.page
                 };
 
+            if( this.filters !== NO_FILTER ){
+                data.filters = this.filters;
+            }
+
             if( rootIdeaID !== undefined ){
                 this.data.rootIdeaID = rootIdeaID;
                 data['root_idea_id'] = rootIdeaID;
@@ -175,6 +187,7 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
 
             $.getJSON( app.getApiUrl('posts'), data, function(data){
                 that.data = data;
+                that.data.rootIdeaID = rootIdeaID;
                 that.messages.reset(data.posts);
                 that.messageThread.reset(data.posts);
             });
@@ -321,6 +334,7 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
             'click #messagelist-returnButton': 'onReturnButtonClick',
 
             'click #messagelist-inbox': 'loadInbox',
+            'click #messagelist-insynthesis': 'loadSynthesisMessages',
 
             'click #messageList-message-collapseButton': 'toggleThreadMessages',
 
@@ -350,7 +364,16 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
          * Load the inbox without filtering
          */
         loadInbox: function(){
+            this.filters = NO_FILTER;
             this.loadData();
+        },
+
+        /**
+         * @event
+         */
+        loadSynthesisMessages: function(){
+            this.filters = SYNTHESIS_FILTER;
+            this.loadData(this.data.rootIdeaID);
         },
 
         /**
