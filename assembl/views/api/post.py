@@ -189,6 +189,9 @@ def get_posts(request):
         #posts = posts.limit(page_size).offset(data['startIndex']-1)
         posts = posts.order_by(Content.creation_date)
     
+    if 'syntheses' in filter_names:
+        posts = posts.filter(Post.is_synthesis==True)
+
     for post in posts:
         serializable_post = __post_to_json_structure(post)
         post_data.append(serializable_post)
