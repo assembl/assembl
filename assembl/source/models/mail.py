@@ -337,6 +337,9 @@ class Email(Content):
 
     def __init__(self, *args, **kwargs):
         super(Email, self).__init__(*args, **kwargs)
+        if self.subject.startswith('[synthesis]'):
+            self.post.is_synthesis = True
+
         self.associate_family()
 
     def associate_family(self):
