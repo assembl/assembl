@@ -79,6 +79,10 @@ def save_idea(request):
     idea_id = request.matchdict['id']
     idea_data = json.loads(request.body)
 
+    # Special items in TOC, like unsorted posts.
+    if idea_id in ['orphan_posts']:
+        return {'ok': False, 'id': idea_id}
+        
     with transaction.manager:
         idea = DBSession.query(Idea).get(idea_id)
         discussion = DBSession.query(Discussion).get(discussion_id)
