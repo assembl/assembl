@@ -1,14 +1,14 @@
 """post 'is synthesis' field
 
 Revision ID: 3fc4f31ea2
-Revises: 42a76adf343c
+Revises: 2392157306a8
 Create Date: 2013-09-25 16:07:05.244144
 
 """
 
 # revision identifiers, used by Alembic.
 revision = '3fc4f31ea2'
-down_revision = '42a76adf343c'
+down_revision = '2392157306a8'
 
 from alembic import context, op
 import sqlalchemy as sa
