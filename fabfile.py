@@ -544,7 +544,7 @@ def coeus_stagenv():
     env.urlhost = "assembl.coeus.ca"
     env.user = "www-data"
     env.home = "www-data"
-    env.ini_file = 'development.ini'
+    env.ini_file = 'local.ini'
     require('projectname', provided_by=('commonenv',))
     env.hosts = ['coeus.ca']
     
