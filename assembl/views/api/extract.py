@@ -4,10 +4,12 @@ import transaction
 from cornice import Service
 
 from pyramid.security import authenticated_userid
+from sqlalchemy.orm import aliased, joinedload, joinedload_all, contains_eager
 
 from assembl.views.api import API_DISCUSSION_PREFIX
 from assembl.db import DBSession
 from assembl.synthesis.models import Extract
+from assembl.auth.models import AgentProfile, User
 from assembl.source.models import Source, Content, Post
 from . import acls
 from assembl.auth import (
@@ -48,7 +50,8 @@ def get_extracts(request):
         Source.discussion_id==discussion_id,
         Content.source_id==Source.id
     )
-
+    all_extracts = all_extracts.options(joinedload_all(Extract.source, Content.post, Post.creator, AgentProfile.user))
+    all_extracts = all_extracts.options(joinedload_all(Extract.creator, User.profile))
     serializable_extracts = [
         extract.serializable() for extract in all_extracts
     ]
