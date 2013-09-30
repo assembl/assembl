@@ -14,7 +14,7 @@ from datetime import datetime
 from time import mktime
 from imaplib2 import IMAP4_SSL, IMAP4
 
-from sqlalchemy.orm import relationship, backref
+from sqlalchemy.orm import relationship, backref, deferred
 
 from sqlalchemy import (
     Column,
@@ -319,12 +319,12 @@ class Email(Content):
         ondelete='CASCADE'
     ), primary_key=True)
 
-    recipients = Column(Unicode(), nullable=False)
-    sender = Column(Unicode(), nullable=False)
+    recipients = deferred(Column(Unicode(), nullable=False), group='raw_details')
+    sender = deferred(Column(Unicode(), nullable=False), group='raw_details')
     subject = Column(Unicode(), nullable=False)
     body = Column(UnicodeText)
 
-    full_message = Column(Binary())
+    full_message = deferred(Column(Binary), group='raw_details')
 
     message_id = Column(Unicode())
     in_reply_to = Column(Unicode())

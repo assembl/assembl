@@ -162,7 +162,7 @@ class AbstractAgentAccount(SQLAlchemyBaseModel):
     __mapper_args__ = {
         'polymorphic_identity': 'abstract_agent_account',
         'polymorphic_on': type,
-        'with_polymorphic':'*'
+        'with_polymorphic': '*'
     }
     """An abstract class for accounts that identify agents"""
     pass

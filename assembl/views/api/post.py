@@ -1,5 +1,4 @@
 import json
-import transaction
 
 from math import ceil
 from cornice import Service
@@ -10,7 +9,7 @@ from pyramid.security import authenticated_userid
 from sqlalchemy import func, Integer, String, text
 from sqlalchemy.dialects.postgresql.base import ARRAY
 
-from sqlalchemy.orm import aliased, joinedload, joinedload_all
+from sqlalchemy.orm import aliased, joinedload, joinedload_all, contains_eager
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.sql.expression import literal_column, bindparam
 from sqlalchemy.sql import cast
@@ -20,7 +19,7 @@ from assembl.db import DBSession
 
 from assembl.auth import P_READ, P_ADD_POST
 from assembl.auth.models import AgentProfile
-from assembl.source.models import Post
+from assembl.source.models import Post, Email
 from assembl.synthesis.models import Discussion, Source, Content, Idea
 from assembl.auth.models import ViewPost, User
 from . import acls
@@ -189,9 +188,10 @@ def get_posts(request):
                     actor_id=user_id,
                     post_id=Post.id
                 )
-        posts = posts.options(joinedload_all(Post.views))
+        posts = posts.options(joinedload(Post.views))
+    posts = posts.options(contains_eager(Post.content, Content.source))
+    posts = posts.options(joinedload_all(Post.creator, AgentProfile.user))
 
-    posts = posts.options(joinedload_all(Post.content, Content.source),joinedload_all(Post.creator, AgentProfile.user))
     posts = posts.order_by(Content.creation_date)
     
     if 'synthesis' in filter_names:
