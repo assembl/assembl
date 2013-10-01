@@ -44,7 +44,7 @@ def __post_to_json_structure(post):
     #FIXME
     data["read"] = True
     data["parentId"] = post.parent_id
-    data["subject"] = post.content.subject
+    data["subject"] = post.content.source.mangle_mail_subject(post.content.subject)
     data["body"] = post.content.body
     data["creator"] = post.creator.serializable()
     #FIXME

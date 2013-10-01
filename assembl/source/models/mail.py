@@ -55,11 +55,36 @@ class Mailbox(Source):
     folder = Column(UnicodeText, default=u"INBOX", nullable=False)
 
     last_imported_email_uid = Column(UnicodeText)
-
+    subject_mangling_regex = Column(UnicodeText, nullable=True)
+    subject_mangling_replacement = Column(UnicodeText, nullable=True)
+    __compiled_subject_mangling_regex = None
+    
+    def _compile_subject_mangling_regex(self):
+        print('_compile_subject_mangling_regex')
+        print(self.subject_mangling_regex)
+        if(self.subject_mangling_regex):
+            self.__compiled_subject_mangling_regex = re.compile(self.subject_mangling_regex)
+        else:
+            self.__compiled_subject_mangling_regex = None
+        
     __mapper_args__ = {
         'polymorphic_identity': 'mailbox',
     }
 
+    def mangle_mail_subject(self, subject):
+        if self.__compiled_subject_mangling_regex == None:
+            self._compile_subject_mangling_regex()
+            
+        if self.__compiled_subject_mangling_regex:
+            if self.subject_mangling_replacement:
+                repl=self.subject_mangling_replacement
+            else:
+                repl=''
+            (retval, num) =  self.__compiled_subject_mangling_regex.subn(repl, subject)
+            return retval
+        else:
+            return subject
+    
     def import_content(self, only_new=True):
         if self.use_ssl:
             mailbox = IMAP4_SSL(host=self.host.encode('utf-8'), port=self.port)
@@ -222,6 +247,12 @@ class Mailbox(Source):
 
         return most_common_address
 
+    def get_send_address(self):
+        """
+        Get the email address to send a message to the discussion
+        """
+        return self.most_common_recipient_address()
+
     # The send method will be a common interface on all sources.
     def send(
         self, 
@@ -247,7 +278,7 @@ class Mailbox(Source):
         if type(message_body) == 'str':
             message_body = message_body.decode('utf-8')
 
-        recipients = self.most_common_recipient_address()
+        recipients = self.get_send_address()
 
         message = MIMEMultipart('alternative')
         message['Subject'] = Header(subject, 'utf-8')
@@ -307,7 +338,29 @@ class Mailbox(Source):
     def __repr__(self):
         return "<Mailbox %s>" % repr(self.name)
 
-
+class MailingList(Mailbox):
+    """
+    A mailbox with mailing list semantics 
+    (single post address, subjetc mangling, etc.)
+    """
+    __tablename__ = "source_mailinglist"
+    id = Column(Integer, ForeignKey(
+        'mailbox.id', 
+        ondelete='CASCADE'
+    ), primary_key=True)
+    
+    post_email_address = Column(UnicodeText, nullable=True)
+    
+    __mapper_args__ = {
+        'polymorphic_identity': 'source_mailinglist',
+    }
+    
+    def get_send_address(self):
+        """
+        Get the email address to send a message to the discussion
+        """
+        return self.post_email()
+    
 class Email(Content):
     """
     An Email refers to an email message that was imported from an Mailbox.
