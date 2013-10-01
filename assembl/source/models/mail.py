@@ -60,8 +60,6 @@ class Mailbox(Source):
     __compiled_subject_mangling_regex = None
     
     def _compile_subject_mangling_regex(self):
-        print('_compile_subject_mangling_regex')
-        print(self.subject_mangling_regex)
         if(self.subject_mangling_regex):
             self.__compiled_subject_mangling_regex = re.compile(self.subject_mangling_regex)
         else:
