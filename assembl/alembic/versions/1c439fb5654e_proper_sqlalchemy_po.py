@@ -33,6 +33,7 @@ def upgrade(pyramid_env):
         op.rename_table(u'idprovider_account', 'idprovider_agent_account')
         op.execute("INSERT INTO abstract_agent_account (id) (SELECT id FROM agent_email_account)")
         op.execute("UPDATE abstract_agent_account SET type='agent_email_account'")
+        op.execute("select setval('abstract_agent_account_id_seq', (SELECT max(id)+1 FROM abstract_agent_account), false)")
         op.create_foreign_key('fk_id','agent_email_account', 'abstract_agent_account', ['id'], ['id'], ondelete='CASCADE')
         op.create_foreign_key('fk_id','idprovider_agent_account', 'abstract_agent_account', ['id'], ['id'], ondelete='CASCADE')
 
