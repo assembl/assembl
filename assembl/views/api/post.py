@@ -11,11 +11,12 @@ from sqlalchemy.dialects.postgresql.base import ARRAY
 
 from sqlalchemy.orm import aliased, joinedload, joinedload_all, contains_eager
 from sqlalchemy.orm.exc import NoResultFound
-from sqlalchemy.sql.expression import literal_column, bindparam
+from sqlalchemy.sql.expression import literal_column, bindparam, and_
 from sqlalchemy.sql import cast
 
 from assembl.views.api import API_DISCUSSION_PREFIX
 from assembl.db import DBSession
+import transaction
 
 from assembl.auth import P_READ, P_ADD_POST
 from assembl.auth.models import AgentProfile
@@ -184,9 +185,8 @@ def get_posts(request):
         #posts = posts.limit(page_size).offset(data['startIndex']-1)
         
     if user_id:
-        posts = posts.outerjoin(ViewPost).filter_by(
-                    actor_id=user_id,
-                    post_id=Post.id
+        posts = posts.outerjoin(ViewPost,
+                    and_(ViewPost.actor_id==user_id, ViewPost.post_id==Post.id)
                 )
         posts = posts.options(joinedload(Post.views))
     posts = posts.options(contains_eager(Post.content, Content.source))

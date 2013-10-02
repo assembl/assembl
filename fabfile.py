@@ -422,7 +422,7 @@ def database_download():
     Dumps and downloads the database from the target server
     """
     execute(database_dump)
-    get(remote_db_path())
+    get(remote_db_path(), './')
 
 @task
 def database_upload():
