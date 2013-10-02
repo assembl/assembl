@@ -15,7 +15,7 @@ from time import mktime
 from imaplib2 import IMAP4_SSL, IMAP4
 
 from sqlalchemy.orm import relationship, backref, deferred
-
+from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy import (
     Column,
     Integer,
@@ -82,7 +82,125 @@ class Mailbox(Source):
             return retval
         else:
             return subject
-    
+
+    def parse_email(self, message_string, existing_email=None):
+        parsed_email = email.message_from_string(message_string)
+        body = None
+
+        def get_plain_text_payload(message):
+            """ Returns the first text/plain body as a unicode object, falling back to text/html body """
+            
+            def process_part(part, default_charset, text_part, html_part):
+                if part.is_multipart():
+                    for part in part.get_payload():
+                        charset = part.get_content_charset(default_charset)
+                        (text_part, html_part) = process_part(part, charset, text_part, html_part)
+                else:
+                    charset = part.get_content_charset(default_charset)
+                    decoded_part = part.get_payload(decode=True)
+                    decoded_part = decoded_part.decode(charset,'replace')
+                    if part.get_content_type() == 'text/plain' and text_part==None:
+                        text_part = decoded_part
+                    elif part.get_content_type() == 'text/html' and html_part==None:
+                        html_part = decoded_part
+                return (text_part, html_part)
+                
+            html_part = None
+            text_part = None
+            default_charset = message.get_charset() or 'ISO-8859-1'
+            (text_part, html_part) = process_part(message, default_charset, text_part, html_part)
+            
+            if text_part:
+                return text_part
+            elif html_part:
+                return html_part
+            else:
+                return u"Sorry, no assembl-supported mime type found in message parts"
+
+        body = get_plain_text_payload(parsed_email)
+
+        def email_header_to_unicode(header_string):
+            decoded_header = decode_email_header(header_string);
+            default_charset = 'ASCII'
+            
+            text = ''.join(
+                [ 
+                    unicode(t[0], t[1] or default_charset) for t in \
+                    decoded_header 
+                ]
+            )
+
+            return text
+
+        new_message_id = parsed_email.get('Message-ID', None)
+        if new_message_id: new_message_id = email_header_to_unicode(
+            new_message_id
+        )
+
+        new_in_reply_to = parsed_email.get('In-Reply-To', None)
+        if new_in_reply_to: new_in_reply_to = email_header_to_unicode(
+            new_in_reply_to
+        )
+
+        sender = email_header_to_unicode(parsed_email.get('From'))
+        sender_name, sender_email = parseaddr(sender)
+        sender_email_account = EmailAccount.get_or_make_profile(DBSession, sender_email, sender_name)
+        creation_date = datetime.utcfromtimestamp(
+                    mktime(
+                        email.utils.parsedate(
+                            parsed_email['Date']
+                        )
+                    )
+                )
+        subject = email_header_to_unicode(parsed_email['Subject'])
+        recipients = email_header_to_unicode(parsed_email['To'])
+        body = body.strip()
+        # Try/except for a normal situation is an antipattern,
+        # but sqlalchemy doesn't have a function that returns
+        # 0, 1 result or an exception
+        try:
+            email_object = DBSession.query(Email).filter(
+                Email.message_id == new_message_id,
+                Email.source_id == self.id,
+                ).one()
+            if existing_email and existing_email!=email_object:
+                raise ValueError("The existing object isn't the same as the one found by message id")
+            email_object.recipients=recipients
+            email_object.sender=sender
+            email_object.subject=subject
+            email_object.creation_date=creation_date
+            email_object.message_id=new_message_id
+            email_object.in_reply_to=new_in_reply_to
+            email_object.body=body
+            email_object.full_message=message_string
+        except NoResultFound:
+            email_object = Email(
+                recipients=recipients,
+                sender=sender,
+                subject=subject,
+                creation_date=creation_date,
+                message_id=new_message_id,
+                in_reply_to=new_in_reply_to,
+                body=body,
+                full_message=message_string
+            )
+        email_object.post.creator = sender_email_account.profile
+        email_object.associate_family()
+        email_object.source = self
+        email_object = DBSession.merge(email_object)
+        return email_object
+        
+    def reprocess_content(self):
+        """ Allows re-parsing all content as if it were imported for the first time
+            but without re-hitting the source, or changing the object ids.
+            Call when a code change would change the representation in the database
+            """
+        emails = DBSession.query(Email).filter(
+                Email.source_id == self.id,
+                )
+        for email in emails:
+            self.parse_email(email.full_message, email)
+
     def import_content(self, only_new=True):
         if self.use_ssl:
             mailbox = IMAP4_SSL(host=self.host.encode('utf-8'), port=self.port)
@@ -106,7 +224,7 @@ class Mailbox(Source):
         if only_new and self.last_imported_email_uid:
             # discard the first message, it should be the last imported email.
             del email_ids[0]
-        
+
         def import_email(email_id):
             status, message_data = mailbox.uid('fetch', email_id, "(RFC822)")
 
@@ -114,88 +232,15 @@ class Mailbox(Source):
                 if isinstance(response_part, tuple):
                     message_string = response_part[1]
 
-            parsed_email = email.message_from_string(message_string)
-            body = None
-
-            def get_plain_text_payload(message):
-                """ Returns the text/plain body as a unicode object, falling back to text/html body """
-                html_part = None
-                text_part = None
-                if message.is_multipart():
-                    for part in message.get_payload():
-                        charset = part.get_content_charset(message.get_charset()) or 'ISO-8859-1'
-                        decoded_part = part.get_payload(decode=True)
-                        if decoded_part:
-                            decoded_part = decoded_part.decode(charset,'replace')
-                            if part.get_content_type() == 'text/plain':
-                                text_part = decoded_part
-                            elif part.get_content_type() == 'text/html':
-                                html_part = decoded_part
-                    if text_part:
-                        return text_part
-                    elif html_part:
-                        return html_part
-                    else:
-                        return u"Sorry, no assembl-supported mime type found in multipart message"
-                else:
-                    return message.get_payload(decode=True).decode(message.get_content_charset(message.get_charset()) or 'ISO-8859-1','replace')
-
-            body = get_plain_text_payload(parsed_email)
-
-            def email_header_to_unicode(header_string):
-                decoded_header = decode_email_header(header_string);
-                default_charset = 'ASCII'
-                
-                text = ''.join(
-                    [ 
-                        unicode(t[0], t[1] or default_charset) for t in \
-                        decoded_header 
-                    ]
-                )
-
-                return text
-
-            new_message_id = parsed_email.get('Message-ID', None)
-            if new_message_id: new_message_id = email_header_to_unicode(
-                new_message_id
-            )
-
-            new_in_reply_to = parsed_email.get('In-Reply-To', None)
-            if new_in_reply_to: new_in_reply_to = email_header_to_unicode(
-                new_in_reply_to
-            )
-
-            sender = email_header_to_unicode(parsed_email.get('From'))
-            sender_name, sender_email = parseaddr(sender)
-            sender_email_account = EmailAccount.get_or_make_profile(DBSession, sender_email, sender_name)
-
-            new_email = Email(
-                recipients=email_header_to_unicode(parsed_email['To']),
-                sender=sender,
-                subject=email_header_to_unicode(parsed_email['Subject']),
-                creation_date=datetime.utcfromtimestamp(
-                    mktime(
-                        email.utils.parsedate(
-                            parsed_email['Date']
-                        )
-                    )
-                ),
-                message_id=new_message_id,
-                in_reply_to=new_in_reply_to,
-                body=body.strip(),
-                full_message=message_string
-            )
-            new_email.post.creator = sender_email_account.profile
-
-            return new_email
+            self.parse_email(message_string)
+            
+            
 
         if len(email_ids):
             new_emails = [import_email(email_id) for email_id in email_ids]
 
             self.last_imported_email_uid = \
                 email_ids[len(email_ids)-1]
-
-            self.contents.extend(new_emails)
 
         # TODO: remove this line, the property `last_import` does not persist.
         self.last_import = datetime.utcnow()
@@ -390,8 +435,6 @@ class Email(Content):
         super(Email, self).__init__(*args, **kwargs)
         if self.subject.startswith('[synthesis]'):
             self.post.is_synthesis = True
-
-        self.associate_family()
 
     def associate_family(self):
         if self not in DBSession:
