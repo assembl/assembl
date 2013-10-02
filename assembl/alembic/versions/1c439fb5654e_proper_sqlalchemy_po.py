@@ -35,10 +35,12 @@ def upgrade(pyramid_env):
         op.execute("UPDATE idprovider_agent_account SET id = id + (SELECT max(id) FROM agent_email_account)")
         op.execute("INSERT INTO abstract_agent_account (SELECT id, 'idprovider_account' FROM idprovider_agent_account)")
         op.execute("select setval('abstract_agent_account_id_seq', (SELECT max(id)+1 FROM abstract_agent_account), false)")
+        op.execute("alter table agent_email_account alter column id drop default")
+        op.execute("alter table idprovider_agent_account alter column id drop default")
         op.create_foreign_key('fk_id', 'agent_email_account', 'abstract_agent_account', ['id'], ['id'], ondelete='CASCADE')
         op.create_foreign_key('fk_id', 'idprovider_agent_account', 'abstract_agent_account', ['id'], ['id'], ondelete='CASCADE')
-        op.drop_sequence('email_account_id_seq')
-        op.drop_sequence('idprovider_account_id_seq')
+        op.execute('drop sequence email_account_id_seq')
+        op.execute('drop sequence idprovider_account_id_seq')
 
         ### end Alembic commands ###
 
