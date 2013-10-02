@@ -59,7 +59,7 @@ class AgentProfile(SQLAlchemyBaseModel):
     __mapper_args__ = {
         'polymorphic_identity': 'agent_profile',
         'polymorphic_on': type,
-        'with_polymorphic':'*'
+        'with_polymorphic': '*'
     }
 
     def accounts(self):
@@ -102,7 +102,7 @@ class AgentProfile(SQLAlchemyBaseModel):
                 other_profile.user.profile = self
         if other_profile.name and not self.name:
             self.name = other_profile.name
-        # TODO: similarly for posts        
+        # TODO: similarly for posts
         for action in DBSession.query(Action).filter_by(
             actor_id=other_profile.id).all():
                 action.actor = self
@@ -136,7 +136,8 @@ class AgentProfile(SQLAlchemyBaseModel):
         if default:
             args['d'] = default
         gravatar_url = "http://www.gravatar.com/avatar/%s?s=%d&amp;d=%s" % (
-            hashlib.md5(email.lower()).hexdigest(), size, urllib.quote(default))
+            hashlib.md5(
+                email.lower()).hexdigest(), size, urllib.quote(default))
         return gravatar_url
 
     def serializable(self, use_email=None):
@@ -175,7 +176,7 @@ class EmailAccount(AbstractAgentAccount):
         'polymorphic_identity': 'agent_email_account',
     }
     id = Column(Integer, ForeignKey(
-        'abstract_agent_account.id', 
+        'abstract_agent_account.id',
         ondelete='CASCADE'
     ), primary_key=True)
     email = Column(String(100), nullable=False, index=True)
@@ -229,8 +230,11 @@ class IdentityProvider(SQLAlchemyBaseModel):
 class IdentityProviderAccount(AbstractAgentAccount):
     """An account with an external identity provider"""
     __tablename__ = "idprovider_agent_account"
+    __mapper_args__ = {
+        'polymorphic_identity': 'idprovider_account',
+    }
     id = Column(Integer, ForeignKey(
-        'abstract_agent_account.id', 
+        'abstract_agent_account.id',
         ondelete='CASCADE'
     ), primary_key=True)
     provider_id = Column(
@@ -448,6 +452,7 @@ class DiscussionPermission(SQLAlchemyBaseModel):
 def create_default_permissions(session, discussion):
     permissions = {p.name: p.id for p in session.query(Permission).all()}
     roles = {r.name: r.id for r in session.query(Role).all()}
+
     def add_perm(permission_name, role_names):
         # Note: Must be called within transaction manager
         for role in role_names:
@@ -480,7 +485,7 @@ class Action(SQLAlchemyBaseModel):
     __mapper_args__ = {
         'polymorphic_identity': 'action',
         'polymorphic_on': type,
-        'with_polymorphic':'*'
+        'with_polymorphic': '*'
     }
 
     actor_id = Column(
@@ -514,7 +519,7 @@ class ActionOnPost(Action):
     """
 
     post_id = Column(
-        Integer, 
+        Integer,
         ForeignKey('post.id', ondelete="CASCADE"),
         nullable=False
     )
@@ -527,7 +532,6 @@ class ActionOnPost(Action):
     object_type = 'post'
 
 
-
 class ViewPost(ActionOnPost):
     """
     A view action on a post.
@@ -538,13 +542,12 @@ class ViewPost(ActionOnPost):
     }
 
     id = Column(
-        Integer, 
+        Integer,
         ForeignKey('action.id', ondelete="CASCADE"),
         primary_key=True
     )
 
     verb = 'viewed'
-
 
 
 class ExpandPost(ActionOnPost):
@@ -557,13 +560,12 @@ class ExpandPost(ActionOnPost):
     }
 
     id = Column(
-        Integer, 
+        Integer,
         ForeignKey('action.id', ondelete="CASCADE"),
         primary_key=True
     )
 
     verb = 'expanded'
-
 
 
 class CollapsePost(ActionOnPost):
@@ -576,10 +578,9 @@ class CollapsePost(ActionOnPost):
     }
 
     id = Column(
-        Integer, 
+        Integer,
         ForeignKey('action.id', ondelete="CASCADE"),
         primary_key=True
     )
 
     verb = 'collapsed'
-
