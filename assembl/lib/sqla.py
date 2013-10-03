@@ -223,7 +223,9 @@ def update_timestamp(mapper, connection, target):
 
 DBSession = scoped_session(sessionmaker(extension=ZopeTransactionExtension()))
 
+db_schema = 'assembl'
 metadata = MetaData()
+metadata.schema = db_schema
 Base, TimestampedBase = declarative_bases(metadata)
 
 # If obsolete table names collide with new table names, alembic can't work

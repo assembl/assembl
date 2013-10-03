@@ -1,1 +1,1 @@
-from ..lib.sqla import Base as SQLAlchemyBaseModel
+from ..lib.sqla import Base as SQLAlchemyBaseModel, db_schema

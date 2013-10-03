@@ -22,6 +22,7 @@ from sqlalchemy import (
 from assembl.lib.utils import slugify
 
 from ..db import DBSession
+from ..db.models import db_schema
 from ..lib.sqla import Base as SQLAlchemyBaseModel
 from ..source.models import (Source, Content, Post)
 
@@ -223,6 +224,7 @@ idea_association_table = Table(
     SQLAlchemyBaseModel.metadata,
     Column('parent_id', Integer, ForeignKey('idea.id')),
     Column('child_id', Integer, ForeignKey('idea.id')),
+    schema = db_schema
 )
 
 class Idea(SQLAlchemyBaseModel):
@@ -252,7 +254,7 @@ class Idea(SQLAlchemyBaseModel):
 
     children = relationship(
         "Idea",
-        secondary='idea_association',
+        secondary=idea_association_table,
         backref="parents",
         primaryjoin=id==idea_association_table.c.parent_id,
         secondaryjoin=id==idea_association_table.c.child_id,
