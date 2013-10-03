@@ -2,12 +2,11 @@ pyramid
 pyramid_debugtoolbar
 pyramid_jinja2
 pyramid_tm
-alembic
-pytz>=2013b
+pytz>=2013d
 Babel
 colander
 colanderalchemy==0.2.0
--e git+https://github.com/mozilla-services/cornice.git@504c1f3a1df4bee06bc11067afcc83af3a57e5a0#egg=cornice
+-e git+https://github.com/mozilla-services/cornice.git@master#egg=cornice
 psycopg2
 SQLAlchemy
 transaction
@@ -24,3 +23,10 @@ webtest
 pinocchio
 # hapi : a OAuth2 server for pyramid. Still very much work in progress.
 Unidecode==0.04.13
+requests
+rdflib
+lxml
+-e git://github.com/RDFLib/rdflib-jsonld#egg=rdflib_jsonld
+-e git://github.com/maparent/pyodbc.git@v2.1-virtuoso#egg=pyodbc
+-e git://github.com/maparent/alembic.git#egg=alembic
+-e hg+https://bitbucket.org/maparent/virtuoso#egg=virtuoso
