@@ -27,6 +27,6 @@ requests
 rdflib
 lxml
 -e git://github.com/RDFLib/rdflib-jsonld#egg=rdflib_jsonld
--e git://github.com/maparent/pyodbc.git@v2.1-virtuoso#egg=pyodbc
+-e git://github.com/maparent/pyodbc.git@v3-virtuoso#egg=pyodbc
 -e git://github.com/maparent/alembic.git#egg=alembic
 -e hg+https://bitbucket.org/maparent/virtuoso#egg=virtuoso
