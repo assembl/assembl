@@ -54,7 +54,7 @@ def discussion_admin(request):
         mailbox = Mailbox(
             name=name,
             host=host,
-            port=port,
+            port=int(port),
             username=username,
             use_ssl=ssl,
             folder=folder,
