@@ -62,7 +62,7 @@ def discussion_admin(request):
             )
 
         mailbox.discussion = discussion
-        transaction.commit()
+        DBSession.commit()
 
 
     return render_to_response(
