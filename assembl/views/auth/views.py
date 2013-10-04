@@ -158,7 +158,7 @@ def assembl_profile(request):
             email = EmailAccount(
                 email=add_email, profile=user.profile)
             DBSession.add(email)
-        DBSession.commit()
+        transaction.commit()
         if redirect:
             raise HTTPFound('/user/u/'+username)
         user = DBSession.query(User).get(user_id)
@@ -233,7 +233,7 @@ def assembl_register_view(request):
     # TODO: Check that the email logic gets the proper locale. (send in URL?)
     headers = remember(request, user.id, tokens=format_token(user))
     request.response.headerlist.extend(headers)
-    DBSession.commit()
+    transaction.commit()
     # TODO: Tell them to expect an email.
     raise HTTPFound(location=request.params.get('next_view', '/'))
 
@@ -273,7 +273,7 @@ def assembl_login_complete_view(request):
         user.login_failures += 1
         #TODO: handle high failure count
         DBSession.add(user)
-        DBSession.commit()
+        transaction.commit()
         return dict(default_context,
                     error=_("Invalid user and password"))
     headers = remember(request, user.id, tokens=format_token(user))
@@ -418,7 +418,7 @@ def velruse_login_complete_view(request):
     user_id = user.id
     headers = remember(request, user_id, tokens=format_token(user))
     request.response.headerlist.extend(headers)
-    DBSession.commit()
+    transaction.commit()
     # TODO: Store the OAuth etc. credentials.
     # Though that may be done by velruse?
     if username:
@@ -480,7 +480,7 @@ def user_confirm_email(request):
             user = email.profile.user
             username = user.username
             userid = user.id
-        DBSession.commit()
+        transaction.commit()
         if username:
             raise HTTPFound(location='/user/u/'+username)
         elif userid:

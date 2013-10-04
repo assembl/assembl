@@ -25,9 +25,8 @@ Running:
 - cd ~/assembl
 
 Only the first time you run it:
-- echo "user_create('assembl', 'assembl');"|isql-vt 1111 dba dba
-- echo "grant select on db..tables to assembl;grant select on db..sys_users to assembl;"|isql-vt 1111 dba dba
-- echo "db..user_set_qualifier ('assembl', 'assembl');"|isql-vt 1111 dba dba
+sudo -u postgres createuser --createdb --no-createrole --no-superuser assembl --pwprompt
+createdb -U assembl assembl
 - $venv/bin/assembl-db-manage development.ini bootstrap
 
 - $venv/bin/pserve --reload development.ini
@@ -79,8 +78,3 @@ Running on Mac OS
 
 Use brew and install the libmemcached 
  - brew install libmemcached 
-
- Running on Ubuntu
- -----------------
- 
- apt-get install unixodbc-dev virtuoso-opensource libxslt1-dev
