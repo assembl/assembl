@@ -8,7 +8,8 @@ colander
 colanderalchemy==0.2.0
 -e git+https://github.com/mozilla-services/cornice.git@master#egg=cornice
 psycopg2
-SQLAlchemy
+#SQLAlchemy
+-e git://github.com/zzzeek/sqlalchemy.git@rel_0_8_2#egg=SQLAlchemy
 transaction
 waitress
 zope.sqlalchemy
@@ -27,6 +28,11 @@ requests
 rdflib
 lxml
 -e git://github.com/RDFLib/rdflib-jsonld#egg=rdflib_jsonld
--e git://github.com/maparent/pyodbc.git@v3-virtuoso#egg=pyodbc
+# Temporairily disabled, compile manually for linux:
+#git clone git://github.com/maparent/pyodbc.git
+#cd pyodbc
+#git checkout --track origin/v2.1-virtuoso
+#python setup.py develop
+#-e git://github.com/maparent/pyodbc.git@v3-virtuoso#egg=pyodbc
 -e git://github.com/maparent/alembic.git#egg=alembic
 -e hg+https://bitbucket.org/maparent/virtuoso#egg=virtuoso
