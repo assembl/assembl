@@ -151,7 +151,7 @@ def bootstrap_from_checkout():
     """
     execute(build_virtualenv)
     execute(install_rbenv)
-    execute(app_fullupdate_rbenv)
+    execute(app_fullupdate)
     
 def clone_repository():
     """
