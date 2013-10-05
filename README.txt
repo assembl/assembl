@@ -17,6 +17,7 @@ From scratch:
 
 From a checkout
 
+- git clone git@github.com:ImaginationForPeople/assembl.git your_checkout
 - cd your_checkout
 - fab devenv bootstrap_from_checkout
 
