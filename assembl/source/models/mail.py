@@ -13,6 +13,7 @@ from pyramid.threadlocal import get_current_registry
 from datetime import datetime
 from time import mktime
 from imaplib2 import IMAP4_SSL, IMAP4
+import transaction
 
 from sqlalchemy.orm import relationship, backref, deferred
 from sqlalchemy.orm.exc import NoResultFound
@@ -83,7 +84,8 @@ class Mailbox(Source):
         else:
             return subject
 
-    def parse_email(self, message_string, existing_email=None):
+    @staticmethod
+    def parse_email(mailbox, message_string, existing_email=None):
         parsed_email = email.message_from_string(message_string)
         body = None
 
@@ -186,20 +188,23 @@ class Mailbox(Source):
             )
         email_object.post.creator = sender_email_account.profile
         email_object.associate_family()
-        email_object.source = self
-        email_object = DBSession.merge(email_object)
-        return email_object
-        
+        email_object.source = mailbox
+        DBSession.add(email_object)
+        transaction.commit()
+        DBSession.remove()
+
     def reprocess_content(self):
         """ Allows re-parsing all content as if it were imported for the first time
             but without re-hitting the source, or changing the object ids.
             Call when a code change would change the representation in the database
             """
         emails = DBSession.query(Email).filter(
-                Email.source_id == self.id,
-                )
+            Email.source_id == self.id)
+        mailbox = self
         for email in emails:
-            self.parse_email(email.full_message, email)
+            session = DBSession()
+            mailbox = session.merge(mailbox)
+            Mailbox.parse_email(mailbox, email.full_message, email)
 
     def import_content(self, only_new=True):
         if self.use_ssl:
@@ -225,25 +230,28 @@ class Mailbox(Source):
             # discard the first message, it should be the last imported email.
             del email_ids[0]
 
-        def import_email(email_id):
+        def import_email(mailbox_obj, email_id):
+            session = DBSession()
+            mailbox_obj = session.merge(mailbox_obj)
             status, message_data = mailbox.uid('fetch', email_id, "(RFC822)")
 
             for response_part in message_data:
                 if isinstance(response_part, tuple):
                     message_string = response_part[1]
 
-            self.parse_email(message_string)
-            
-            
+            Mailbox.parse_email(mailbox_obj, message_string)
 
+        mailbox_obj = self
         if len(email_ids):
-            new_emails = [import_email(email_id) for email_id in email_ids]
+            new_emails = [import_email(mailbox_obj, email_id) for email_id in email_ids]
 
-            self.last_imported_email_uid = \
+            session = DBSession()
+            mailbox_obj = session.merge(mailbox_obj)
+            mailbox_obj.last_imported_email_uid = \
                 email_ids[len(email_ids)-1]
 
         # TODO: remove this line, the property `last_import` does not persist.
-        self.last_import = datetime.utcnow()
+        mailbox_obj.last_import = datetime.utcnow()
 
         mailbox.close()
         mailbox.logout()
