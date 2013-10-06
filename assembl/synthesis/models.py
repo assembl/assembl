@@ -302,34 +302,20 @@ class Idea(SQLAlchemyBaseModel):
         }
     @staticmethod
     def _get_idea_dag_statement(skip_where=False):
-        retval = """
-WITH    RECURSIVE
-idea_dag(idea_id, parent_id, idea_depth, idea_path, idea_cycle) AS
-(
-SELECT  id as idea_id, parent_id, 1, ARRAY[idea_initial.id], false 
-FROM    idea AS idea_initial LEFT JOIN idea_association ON (idea_initial.id = idea_association.child_id) 
-"""
-        if(not skip_where):
-            retval = retval + """
-WHERE id=:root_idea_id
-"""
-        retval = retval + """
-UNION ALL
-SELECT idea.id as idea_id, idea_association.parent_id, idea_dag.idea_depth + 1, idea_path || idea.id, idea.id = ANY(idea_path)
-FROM    (idea_dag JOIN idea_association ON (idea_dag.idea_id = idea_association.parent_id) JOIN idea ON (idea.id = idea_association.child_id)) 
-)
-"""
-        return retval
+        return """SELECT child_id as idea_id FROM (
+            SELECT transitive t_in (1) t_out (2) t_distinct T_NO_CYCLES parent_id, child_id from idea_association
+                UNION SELECT id as parent_id, id as child_id FROM idea
+            ) ia where ia.parent_id = :root_idea_id"""
 
     @staticmethod
     def _get_related_posts_statement_no_select(select, skip_where):
-        return Idea._get_idea_dag_statement(skip_where) + select + """
-FROM idea_dag 
+        return select + " FROM (" + Idea._get_idea_dag_statement(skip_where) + """)
+AS idea_dag 
 JOIN extract ON (extract.idea_id = idea_dag.idea_id) 
 JOIN content ON (extract.source_id = content.id) 
 JOIN post AS root_posts ON (root_posts.content_id = content.id)
 JOIN post ON (
-    (post.ancestry != '' 
+    (post.ancestry <> '' 
     AND post.ancestry LIKE root_posts.ancestry || root_posts.id || ',' || '%'
     )
     OR post.id = root_posts.id
