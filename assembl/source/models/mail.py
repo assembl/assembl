@@ -415,7 +415,8 @@ class Email(Content):
         ondelete='CASCADE'
     ), primary_key=True)
 
-    recipients = deferred(Column(Unicode(), nullable=False), group='raw_details')
+    # in virtuoso, varchar is 1024 bytes and sizeof(wchar)==4, so varchar is 256 chars
+    recipients = deferred(Column(UnicodeText, nullable=False), group='raw_details')
     sender = deferred(Column(Unicode(), nullable=False), group='raw_details')
     subject = Column(Unicode(), nullable=False)
     body = Column(UnicodeText)
