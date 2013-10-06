@@ -43,7 +43,7 @@ class Mailbox(Source):
     """
     __tablename__ = "mailbox"
     id = Column(Integer, ForeignKey(
-        'source.id', 
+        'source.id',
         ondelete='CASCADE'
     ), primary_key=True)
 
@@ -59,27 +59,29 @@ class Mailbox(Source):
     subject_mangling_regex = Column(UnicodeText, nullable=True)
     subject_mangling_replacement = Column(UnicodeText, nullable=True)
     __compiled_subject_mangling_regex = None
-    
+
     def _compile_subject_mangling_regex(self):
         if(self.subject_mangling_regex):
-            self.__compiled_subject_mangling_regex = re.compile(self.subject_mangling_regex)
+            self.__compiled_subject_mangling_regex =\
+                re.compile(self.subject_mangling_regex)
         else:
             self.__compiled_subject_mangling_regex = None
-        
+
     __mapper_args__ = {
         'polymorphic_identity': 'mailbox',
     }
 
     def mangle_mail_subject(self, subject):
-        if self.__compiled_subject_mangling_regex == None:
+        if self.__compiled_subject_mangling_regex is None:
             self._compile_subject_mangling_regex()
-            
+
         if self.__compiled_subject_mangling_regex:
             if self.subject_mangling_replacement:
-                repl=self.subject_mangling_replacement
+                repl = self.subject_mangling_replacement
             else:
-                repl=''
-            (retval, num) =  self.__compiled_subject_mangling_regex.subn(repl, subject)
+                repl = ''
+            (retval, num) =\
+                self.__compiled_subject_mangling_regex.subn(repl, subject)
             return retval
         else:
             return subject
@@ -91,27 +93,28 @@ class Mailbox(Source):
 
         def get_plain_text_payload(message):
             """ Returns the first text/plain body as a unicode object, falling back to text/html body """
-            
+
             def process_part(part, default_charset, text_part, html_part):
                 if part.is_multipart():
                     for part in part.get_payload():
                         charset = part.get_content_charset(default_charset)
-                        (text_part, html_part) = process_part(part, charset, text_part, html_part)
+                        (text_part, html_part) = process_part(
+                            part, charset, text_part, html_part)
                 else:
                     charset = part.get_content_charset(default_charset)
                     decoded_part = part.get_payload(decode=True)
-                    decoded_part = decoded_part.decode(charset,'replace')
-                    if part.get_content_type() == 'text/plain' and text_part==None:
+                    decoded_part = decoded_part.decode(charset, 'replace')
+                    if part.get_content_type() == 'text/plain' and text_part is None:
                         text_part = decoded_part
-                    elif part.get_content_type() == 'text/html' and html_part==None:
+                    elif part.get_content_type() == 'text/html' and html_part is None:
                         html_part = decoded_part
                 return (text_part, html_part)
-                
+
             html_part = None
             text_part = None
             default_charset = message.get_charset() or 'ISO-8859-1'
             (text_part, html_part) = process_part(message, default_charset, text_part, html_part)
-            
+
             if text_part:
                 return text_part
             elif html_part:
@@ -122,38 +125,33 @@ class Mailbox(Source):
         body = get_plain_text_payload(parsed_email)
 
         def email_header_to_unicode(header_string):
-            decoded_header = decode_email_header(header_string);
+            decoded_header = decode_email_header(header_string)
             default_charset = 'ASCII'
-            
+
             text = ''.join(
-                [ 
-                    unicode(t[0], t[1] or default_charset) for t in \
-                    decoded_header 
+                [
+                    unicode(t[0], t[1] or default_charset) for t in
+                    decoded_header
                 ]
             )
 
             return text
 
         new_message_id = parsed_email.get('Message-ID', None)
-        if new_message_id: new_message_id = email_header_to_unicode(
-            new_message_id
-        )
+        if new_message_id:
+            new_message_id = email_header_to_unicode(
+                new_message_id)
 
         new_in_reply_to = parsed_email.get('In-Reply-To', None)
-        if new_in_reply_to: new_in_reply_to = email_header_to_unicode(
-            new_in_reply_to
-        )
+        if new_in_reply_to:
+            new_in_reply_to = email_header_to_unicode(
+                new_in_reply_to)
 
         sender = email_header_to_unicode(parsed_email.get('From'))
         sender_name, sender_email = parseaddr(sender)
         sender_email_account = EmailAccount.get_or_make_profile(DBSession, sender_email, sender_name)
         creation_date = datetime.utcfromtimestamp(
-                    mktime(
-                        email.utils.parsedate(
-                            parsed_email['Date']
-                        )
-                    )
-                )
+            mktime(email.utils.parsedate(parsed_email['Date'])))
         subject = email_header_to_unicode(parsed_email['Subject'])
         recipients = email_header_to_unicode(parsed_email['To'])
         body = body.strip()
@@ -163,18 +161,18 @@ class Mailbox(Source):
         try:
             email_object = DBSession.query(Email).filter(
                 Email.message_id == new_message_id,
-                Email.source_id == self.id,
-                ).one()
-            if existing_email and existing_email!=email_object:
+                Email.source_id == mailbox.id,
+            ).one()
+            if existing_email and existing_email != email_object:
                 raise ValueError("The existing object isn't the same as the one found by message id")
-            email_object.recipients=recipients
-            email_object.sender=sender
-            email_object.subject=subject
-            email_object.creation_date=creation_date
-            email_object.message_id=new_message_id
-            email_object.in_reply_to=new_in_reply_to
-            email_object.body=body
-            email_object.full_message=message_string
+            email_object.recipients = recipients
+            email_object.sender = sender
+            email_object.subject = subject
+            email_object.creation_date = creation_date
+            email_object.message_id = new_message_id
+            email_object.in_reply_to = new_in_reply_to
+            email_object.body = body
+            email_object.full_message = message_string
         except NoResultFound:
             email_object = Email(
                 recipients=recipients,
@@ -221,7 +219,7 @@ class Mailbox(Source):
 
         if only_new and self.last_imported_email_uid:
             command = "(UID %s:*)" % self.last_imported_email_uid
-        
+
         search_status, search_result = mailbox.uid('search', None, command)
 
         email_ids = search_result[0].split()
@@ -234,7 +232,6 @@ class Mailbox(Source):
             session = DBSession()
             mailbox_obj = session.merge(mailbox_obj)
             status, message_data = mailbox.uid('fetch', email_id, "(RFC822)")
-
             for response_part in message_data:
                 if isinstance(response_part, tuple):
                     message_string = response_part[1]
@@ -255,7 +252,6 @@ class Mailbox(Source):
 
         mailbox.close()
         mailbox.logout()
-
 
     def most_common_recipient_address(self):
         """
@@ -291,7 +287,7 @@ class Mailbox(Source):
 
         most_common_address = sorted(
             [
-                (most_common_addresses[address], address) for address in \
+                (most_common_addresses[address], address) for address in
                 most_common_addresses.keys()
             ], key=lambda pair: pair[0]
         )[-1][1]
@@ -306,11 +302,11 @@ class Mailbox(Source):
 
     # The send method will be a common interface on all sources.
     def send(
-        self, 
-        sender, 
+        self,
+        sender,
         message_body,
         html_body=None,
-        subject='[Assembl]', 
+        subject='[Assembl]'
     ):
         """
         Send an email from the given sender to the most common recipient in
@@ -320,7 +316,7 @@ class Mailbox(Source):
         sent_from = ' '.join([
             "%(sender_name)s on Assembl" % {
                 "sender_name": sender.display_name()
-            }, 
+            },
             "<%(sender_email)s>" % {
                 "sender_email": sender.get_preferred_email(),
             }
@@ -363,13 +359,12 @@ class Mailbox(Source):
         )
 
         smtp_connection.sendmail(
-            sent_from, 
+            sent_from,
             recipients,
             message.as_string()
         )
 
         smtp_connection.quit()
-
 
     def serializable(self):
         serializable_source = super(Mailbox, self).serializable()
@@ -380,8 +375,8 @@ class Mailbox(Source):
             "username": self.username,
             "use_ssl": self.use_ssl,
             "folder": self.folder,
-            "most_common_recipient_address": \
-                self.most_common_recipient_address()
+            "most_common_recipient_address":
+            self.most_common_recipient_address()
         })
 
         return serializable_source
@@ -389,29 +384,31 @@ class Mailbox(Source):
     def __repr__(self):
         return "<Mailbox %s>" % repr(self.name)
 
+
 class MailingList(Mailbox):
     """
-    A mailbox with mailing list semantics 
+    A mailbox with mailing list semantics
     (single post address, subjetc mangling, etc.)
     """
     __tablename__ = "source_mailinglist"
     id = Column(Integer, ForeignKey(
-        'mailbox.id', 
+        'mailbox.id',
         ondelete='CASCADE'
     ), primary_key=True)
-    
+
     post_email_address = Column(UnicodeText, nullable=True)
-    
+
     __mapper_args__ = {
         'polymorphic_identity': 'source_mailinglist',
     }
-    
+
     def get_send_address(self):
         """
         Get the email address to send a message to the discussion
         """
         return self.post_email()
-    
+
+
 class Email(Content):
     """
     An Email refers to an email message that was imported from an Mailbox.
@@ -419,7 +416,7 @@ class Email(Content):
     __tablename__ = "email"
 
     id = Column(Integer, ForeignKey(
-        'content.id', 
+        'content.id',
         ondelete='CASCADE'
     ), primary_key=True)
 
@@ -456,21 +453,21 @@ class Email(Content):
         if self.in_reply_to:
             parent_email_message_id = {
                 'original': self.in_reply_to,
-                'cleaned': re.search(r'<(.*)>', self.in_reply_to).group(0) if \
-                    re.search(r'<(.*)>', self.in_reply_to) else None
+                'cleaned': re.search(r'<(.*)>', self.in_reply_to).group(0) if
+                re.search(r'<(.*)>', self.in_reply_to) else None
             }
 
             filter_clause = or_(
-                Email.message_id==parent_email_message_id['original'],
-                Email.message_id==parent_email_message_id['cleaned']
+                Email.message_id == parent_email_message_id['original'],
+                Email.message_id == parent_email_message_id['cleaned']
             ) if parent_email_message_id['cleaned'] else \
-                Email.message_id==parent_email_message_id['original']
+                Email.message_id == parent_email_message_id['original']
 
             parent_email = DBSession.query(Email).filter(
                 filter_clause
             ).first()
 
-            if parent_email: 
+            if parent_email:
                 self.post.set_parent(parent_email.post)
 
         # search for emails where the in_reply_to is the same as the
@@ -495,7 +492,7 @@ class Email(Content):
         sent_from = ' '.join([
             "%(sender_name)s on Assembl" % {
                 "sender_name": sender.display_name()
-            }, 
+            },
             "<%(sender_email)s>" % {
                 "sender_email": sender.get_preferred_email(),
             }
@@ -539,7 +536,7 @@ class Email(Content):
         )
 
         smtp_connection.sendmail(
-            sent_from, 
+            sent_from,
             recipients,
             message.as_string()
         )
@@ -561,6 +558,6 @@ class Email(Content):
 
     def __repr__(self):
         return "<Email '%s to %s'>" % (
-            self.sender.encode('utf-8'), 
+            self.sender.encode('utf-8'),
             self.recipients.encode('utf-8')
         )
