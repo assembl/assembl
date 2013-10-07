@@ -31,6 +31,8 @@ Only the first time you run it:
 - echo "db..user_set_qualifier ('assembl', 'assembl');"|isql-vt 1111 dba dba
 - $venv/bin/assembl-db-manage development.ini bootstrap
 
+In two separate terminals:
+- $venv/bin/celery worker -l info -A assembl.tasks.imap -b sqla+virtuoso://assembl:assembl@VOS
 - $venv/bin/pserve --reload development.ini
 
 Updating an environment:

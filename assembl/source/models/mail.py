@@ -34,7 +34,7 @@ from sqlalchemy import (
 from assembl.source.models.generic import Source, Content
 from assembl.db import DBSession
 from assembl.auth.models import EmailAccount
-
+from assembl.tasks.imap import import_mails
 
 class Mailbox(Source):
     """
@@ -86,8 +86,7 @@ class Mailbox(Source):
         else:
             return subject
 
-    @staticmethod
-    def parse_email(mailbox, message_string, existing_email=None):
+    def parse_email(self, message_string, existing_email=None):
         parsed_email = email.message_from_string(message_string)
         body = None
 
@@ -161,7 +160,7 @@ class Mailbox(Source):
         try:
             email_object = DBSession.query(Email).filter(
                 Email.message_id == new_message_id,
-                Email.source_id == mailbox.id,
+                Email.source_id == self.id,
             ).one()
             if existing_email and existing_email != email_object:
                 raise ValueError("The existing object isn't the same as the one found by message id")
@@ -186,69 +185,79 @@ class Mailbox(Source):
             )
         email_object.post.creator = sender_email_account.profile
         email_object.associate_family()
-        email_object.source = mailbox
-        DBSession.add(email_object)
-        transaction.commit()
-        DBSession.remove()
+        email_object.source_id = self.id
+        return email_object
 
-    def reprocess_content(self):
+    @staticmethod
+    def reprocess_content(mailbox, dbsession=DBSession):
         """ Allows re-parsing all content as if it were imported for the first time
             but without re-hitting the source, or changing the object ids.
             Call when a code change would change the representation in the database
             """
-        emails = DBSession.query(Email).filter(
-            Email.source_id == self.id)
-        mailbox = self
+        emails = dbsession.query(Email).filter(
+            Email.source_id == mailbox.id)
         for email in emails:
-            session = DBSession()
-            mailbox = session.merge(mailbox)
-            Mailbox.parse_email(mailbox, email.full_message, email)
+            session = dbsession()
+            email_object = mailbox.parse_email(email.full_message, email)
+            dbsession.add(email_object)
+            transaction.commit()
+            dbsession.remove()
+            mailbox = session.get(Mailbox).get(mailbox.id)
+
 
     def import_content(self, only_new=True):
-        if self.use_ssl:
-            mailbox = IMAP4_SSL(host=self.host.encode('utf-8'), port=self.port)
+        #Mailbox.do_import_content(self, only_new)
+        import_mails.delay(self.id, only_new)
+
+    @staticmethod
+    def do_import_content(mbox, only_new=True, dbsession=DBSession):
+        if mbox.use_ssl:
+            mailbox = IMAP4_SSL(host=mbox.host.encode('utf-8'), port=mbox.port)
         else:
-            mailbox = IMAP4(host=self.host.encode('utf-8'), port=self.port)
+            mailbox = IMAP4(host=mbox.host.encode('utf-8'), port=mbox.port)
         if 'STARTTLS' in mailbox.capabilities:
             #Always use starttls if server supports it
             mailbox.starttls()
-        mailbox.login(self.username, self.password)
-        mailbox.select(self.folder)
+        mailbox.login(mbox.username, mbox.password)
+        mailbox.select(mbox.folder)
 
         command = "ALL"
 
-        if only_new and self.last_imported_email_uid:
-            command = "(UID %s:*)" % self.last_imported_email_uid
+        if only_new and mbox.last_imported_email_uid:
+            command = "(UID %s:*)" % mbox.last_imported_email_uid
 
         search_status, search_result = mailbox.uid('search', None, command)
 
         email_ids = search_result[0].split()
 
-        if only_new and self.last_imported_email_uid:
+        if only_new and mbox.last_imported_email_uid:
             # discard the first message, it should be the last imported email.
             del email_ids[0]
 
         def import_email(mailbox_obj, email_id):
-            session = DBSession()
+            session = dbsession()
             mailbox_obj = session.merge(mailbox_obj)
             status, message_data = mailbox.uid('fetch', email_id, "(RFC822)")
             for response_part in message_data:
                 if isinstance(response_part, tuple):
                     message_string = response_part[1]
 
-            Mailbox.parse_email(mailbox_obj, message_string)
+            email_object = mailbox.parse_email(message_string)
+            dbsession.add(email_object)
+            transaction.commit()
+            dbsession.remove()
+            mailbox = session.get(Mailbox).get(mailbox.id)
 
-        mailbox_obj = self
         if len(email_ids):
-            new_emails = [import_email(mailbox_obj, email_id) for email_id in email_ids]
+            new_emails = [import_email(mbox, email_id) for email_id in email_ids]
 
-            session = DBSession()
-            mailbox_obj = session.merge(mailbox_obj)
-            mailbox_obj.last_imported_email_uid = \
+            session = dbsession()
+            mbox = session.query(Mailbox).get(mbox.id)
+            mbox.last_imported_email_uid = \
                 email_ids[len(email_ids)-1]
 
         # TODO: remove this line, the property `last_import` does not persist.
-        mailbox_obj.last_import = datetime.utcnow()
+        mbox.last_import = datetime.utcnow()
 
         mailbox.close()
         mailbox.logout()
