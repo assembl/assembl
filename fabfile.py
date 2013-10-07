@@ -182,7 +182,7 @@ def updatemaincode():
 
 def app_setup():
      venvcmd('pip install -Iv pip==1.4')
-     venvcmd('python ./setup.py develop')
+     venvcmd('pip install -e ./')
      
 @task
 def app_fullupdate():
@@ -190,23 +190,23 @@ def app_fullupdate():
     Full Update: maincode and dependencies
     """
     execute(updatemaincode)
-# Will be done from setup
-#    execute(update_requirements, force=False)
+    execute(update_requirements, force=False)
     execute(update_compass)
-    execute(compile_stylesheets)
-    execute(app_setup)
-    execute(compile_messages)
-    execute(app_db_update)
-    # tests()
-    execute(reloadapp)
-    execute(webservers_reload)
-
+    execute(app_compile)
+    
 @task
 def app_update():
     """
     Fast Update: don't update requirements
     """
     execute(updatemaincode)
+    execute(app_compile)
+
+@task
+def app_compile():
+    """
+    Fast Update: don't update requirements
+    """
     execute(compile_stylesheets)
     execute(app_setup)
     execute(compile_messages)
