@@ -36,7 +36,7 @@ class Discussion(SQLAlchemyBaseModel):
 
     topic = Column(UnicodeText, nullable=False)
     
-    slug = Column(UnicodeText, nullable=False, unique=True, index=True)
+    slug = Column(Unicode, nullable=False, unique=True, index=True)
     
     creation_date = Column(DateTime, nullable=False, default=datetime.utcnow)
     
