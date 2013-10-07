@@ -314,8 +314,8 @@ class Idea(SQLAlchemyBaseModel):
     def _get_related_posts_statement_no_select(select, skip_where):
         return select + " FROM (" + Idea._get_idea_dag_statement(skip_where) + """)
 AS idea_dag 
-JOIN extract ON (extract.idea_id = idea_dag.idea_id) 
-JOIN content ON (extract.source_id = content.id) 
+JOIN "extract" ON ("extract".idea_id = idea_dag.idea_id) 
+JOIN content ON ("extract".source_id = content.id) 
 JOIN post AS root_posts ON (root_posts.content_id = content.id)
 JOIN post ON (
     (post.ancestry <> '' 
