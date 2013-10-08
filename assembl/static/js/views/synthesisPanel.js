@@ -81,7 +81,8 @@ function(Backbone, _, $, app, Synthesis, SynthesisIdeaView, i18n){
             'blur #synthesisPanel-conclusion': 'onConclusionBlur',
 
             'click #synthesisPanel-closeButton': 'closePanel',
-            'click #synthesisPanel-publishButton': 'publish'
+            'click #synthesisPanel-publishButton': 'publish',
+            'click #synthesisPanel-fullscreenButton': 'setFullscreen'
         },
 
         /**
@@ -96,6 +97,13 @@ function(Backbone, _, $, app, Synthesis, SynthesisIdeaView, i18n){
          */
         unblockPanel: function(){
             this.$('.panel').removeClass('is-loading');
+        },
+
+        /**
+         * Sets the panel as full screen
+         */
+        setFullscreen: function(){
+            app.setFullscreen(this);
         },
 
         /**

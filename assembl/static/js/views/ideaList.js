@@ -172,6 +172,13 @@ function(Backbone, _, Idea, IdeaView, app){
         },
 
         /**
+         * Sets the panel as full screen
+         */
+        setFullscreen: function(){
+            app.setFullscreen(this);
+        },
+
+        /**
          * The events
          */
         'events': {
@@ -182,6 +189,7 @@ function(Backbone, _, Idea, IdeaView, app){
             'click #idealist-addbutton': 'addChildToSelected',
             'click #ideaList-collapseButton': 'toggleIdeas',
             'click #ideaList-closeButton': 'closePanel',
+            'click #ideaList-fullscreenButton': 'setFullscreen',
 
             'click #ideaList-filterByFeatured': 'filterByFeatured',
             'click #ideaList-filterByInSynthesis': 'filterByInSynthesis',

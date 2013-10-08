@@ -164,6 +164,13 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
         },
 
         /**
+         * Sets the panel as full screen
+         */
+        setFullscreen: function(){
+            app.setFullscreen(this);
+        },
+
+        /**
          * Load the data
          * @param {number} [rootIdeaID=null]
          */
@@ -347,7 +354,8 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
             'click #messagelist-selectread': 'selectRead',
             'click #messagelist-selectunread': 'selectUnread',
 
-            'click #messageList-closeButton': 'closePanel'
+            'click #messageList-closeButton': 'closePanel',
+            'click #messageList-fullscreenButton': 'setFullscreen',
         },
 
         /**

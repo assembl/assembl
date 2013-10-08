@@ -3,6 +3,8 @@
   "css_prefix_text": "icon-",
   "css_use_suffix": false,
   "hinting": true,
+  "units_per_em": 1000,
+  "ascent": 850,
   "glyphs": [
     {
       "uid": "1400d5103edd2fa6d2d61688fee79a5a",
@@ -182,6 +184,18 @@
       "uid": "6083c8aa5e3345476a24a28ac1afaa61",
       "css": "cog",
       "code": 59405,
+      "src": "elusive"
+    },
+    {
+      "uid": "57776e51a50e3b4d92701bdbbba01588",
+      "css": "resize-full",
+      "code": 59425,
+      "src": "elusive"
+    },
+    {
+      "uid": "8c7e34dcc8cc90ed5f4fd59949201f41",
+      "css": "resize-small",
+      "code": 59426,
       "src": "elusive"
     },
     {

@@ -512,6 +512,26 @@ function($, _, ckeditor, User, Moment, i18n){
         },
 
         /**
+         * Sets the given panel as fullscreen closing all other ones
+         * @param {Panel} targetPanel
+         */
+        setFullscreen: function(targetPanel){
+            var panels = [
+                app.ideaList,
+                app.segmentList,
+                app.ideaPanel,
+                app.messageList,
+                app.synthesisPanel
+            ];
+
+            _.each(panels, function(panel){
+                if( targetPanel !== panel ){
+                    app.closePanel(panel);
+                }
+            });
+        },
+
+        /**
          * @event
          */
         onDropdownClick: function(ev){
