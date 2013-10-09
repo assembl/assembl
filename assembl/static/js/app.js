@@ -146,7 +146,9 @@ function($, _, ckeditor, User, Moment, i18n){
 
             app.openedPanels += 1;
             app.body.attr(PANEL_QUANTITY, app.openedPanels);
+            app.body.removeClass('is-fullscreen');
             panel.$el.addClass('is-visible');
+
             if( panel.button ) {
                 panel.button.addClass('is-activated');
             }
@@ -163,10 +165,23 @@ function($, _, ckeditor, User, Moment, i18n){
 
             app.openedPanels -= 1;
             app.body.attr(PANEL_QUANTITY, app.openedPanels);
+            if( app.isInFullscreen() ){
+                app.body.addClass('is-fullscreen');
+            }
+
             panel.$el.removeClass('is-visible');
             if( panel.button ) {
                 panel.button.removeClass('is-activated');
             }
+        },
+
+        /**
+         * Checks if there is a panel in fullscreen mode
+         * ( i.e.: there is only one open )
+         * @return {Boolean}
+         */
+        isInFullscreen: function(){
+            return app.openedPanels === 1;
         },
 
         /**
@@ -527,6 +542,7 @@ function($, _, ckeditor, User, Moment, i18n){
             _.each(panels, function(panel){
                 if( targetPanel !== panel ){
                     app.closePanel(panel);
+                    app.body.addClass('is-fullscreen');
                 }
             });
         },
