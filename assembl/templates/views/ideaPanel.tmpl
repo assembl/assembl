@@ -16,7 +16,7 @@
             <div class="panel-editablebox is-editing">
                 <div id="ideaPanel-toptoolbar"></div>
                 <div id="ideaPanel-longtitle" class="text margin panel-editablearea" contenteditable="true">
-                    <%= app.stripHtml(idea.get('longTitle')) == '' ? idea.getlongTitleDisplayText() : idea.get('longTitle') %>
+                    <%= app.stripHtml(idea.get('longTitle')) == '' ? idea.getLongTitleDisplayText() : idea.get('longTitle') %>
                 </div>
                 <div id="ideaPanel-bottomtoolbar"></div>
                 <div id="ideaPanel-buttons" class="text-right padding">
@@ -27,7 +27,7 @@
         <% } else { %>
             <div class="panel-editablebox">
                 <div id="ideaPanel-longtitle" class="text margin panel-editablearea">
-                    <%= app.stripHtml(idea.get('longTitle')) == '' ? idea.getlongTitleDisplayText() : idea.get('longTitle') %>
+                    <%= app.stripHtml(idea.get('longTitle')) == '' ? idea.getLongTitleDisplayText() : idea.get('longTitle') %>
                 </div>
             </div>
         <% } %>

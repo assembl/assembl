@@ -39,6 +39,10 @@ function(Backbone, _, $, Idea, Segment, app, ckeditor){
             app.on('synthesisPanel:close', function(){
                 that.cancelEdition();
             });
+
+            app.on('synthesis:startEditing', function(){
+                that.cancelEdition();
+            });
         },
 
         /**
@@ -56,7 +60,7 @@ function(Backbone, _, $, Idea, Segment, app, ckeditor){
             data.children = []; //this.model.getChildren();
             data.level = this.model.getSynthesisLevel();
             data.editing = this.model.get('editing') || false;
-            data.synthesis_expression_text = this.model.getlongTitleDisplayText();
+            data.synthesis_expression_text = this.model.getLongTitleDisplayText();
             this.$el.html( this.template(data) );
             this.$('.idealist-children').append( this.getRenderedChildren(data.level) );
 
@@ -153,6 +157,7 @@ function(Backbone, _, $, Idea, Segment, app, ckeditor){
                 ev.stopPropagation();
             }
 
+            app.trigger('synthesis:startEditing');
             this.model.set('editing', true);
         },
 
@@ -163,12 +168,14 @@ function(Backbone, _, $, Idea, Segment, app, ckeditor){
             if( ev ){
                 ev.stopPropagation();
             }
-            
-            var longTitle = this.model.get('longTitle');
-            this.ckInstance.setData(longTitle);
 
-            this.model.set('editing', false);
-            this.ckInstance.destroy();
+            if( this.model.get('editing') ){
+                var longTitle = this.model.get('longTitle');
+                this.ckInstance.setData(longTitle);
+
+                this.model.set('editing', false);
+                this.ckInstance.destroy();
+            }    
         },
 
         /**
@@ -180,7 +187,7 @@ function(Backbone, _, $, Idea, Segment, app, ckeditor){
             }
 
             var data = this.ckInstance.getData();
-            if(data!=this.model.getlongTitleDisplayText()){
+            if(data!=this.model.getLongTitleDisplayText()){
                 this.model.set({ 'longTitle': $.trim(data), 'editing': false });
             }
             else {

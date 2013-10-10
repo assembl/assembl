@@ -59,7 +59,7 @@ function(Backbone, _, Idea, app, ckeditor, i18n){
             app.trigger('render');
 
             var segments = this.idea.getSegments(),
-                editing = this.idea.get('editing') || false;
+                editing = this.idea.get('ideaPanel-editing') || false;
 
             this.$el.html( this.template( {idea:this.idea, segments:segments, editing:editing} ) );
 
@@ -303,7 +303,7 @@ function(Backbone, _, Idea, app, ckeditor, i18n){
                 ev.stopPropagation();
             }
 
-            this.idea.set('editing', true);
+            this.idea.set('ideaPanel-editing', true);
         },
 
         /**
@@ -317,7 +317,7 @@ function(Backbone, _, Idea, app, ckeditor, i18n){
             var longTitle = this.idea.get('longTitle');
             this.ckInstance.setData(longTitle);
 
-            this.idea.set('editing', false);
+            this.idea.set('ideaPanel-editing', false);
             this.ckInstance.destroy();
         },
 
@@ -332,7 +332,7 @@ function(Backbone, _, Idea, app, ckeditor, i18n){
             var text = this.ckInstance.getData();
             text = $.trim(text);
             
-            this.idea.set({ 'longTitle': text, 'editing': false });
+            this.idea.set({ 'longTitle': text, 'ideaPanel-editing': false });
             this.ckInstance.destroy();
         }
 

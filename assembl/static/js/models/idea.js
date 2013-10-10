@@ -51,7 +51,7 @@ define(['backbone','underscore', 'models/segment', 'app', 'i18n'], function(Back
          * @param
          * @return {Text>}
          */
-        getlongTitleDisplayText: function(){
+        getLongTitleDisplayText: function(){
             var text;
             if((app.stripHtml(this.get('longTitle')))!='') {
                 text = this.get('longTitle');

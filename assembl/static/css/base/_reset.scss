@@ -73,3 +73,15 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, menu,
     display: none;
 }
 
+output {
+  * {
+    margin: {
+      top: 0;
+      right: 5px;
+      bottom: 0;
+      left: 0 !important;
+    }
+    padding: 0;
+    display: inline;
+  }
+}

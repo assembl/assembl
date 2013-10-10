@@ -601,6 +601,14 @@ function($, _, ckeditor, User, Moment, i18n){
             $('.tipsy').remove();
         },
 
+        /**
+         * Returns (yep, it doesn't actually prints) the idea formatted to be displayed
+         * at the synthesis email
+         * 
+         * @param  {Idea} idea
+         * @param  {string} email
+         * @return {string}
+         */
         printIdea: function(idea, email){
             var html = "\n<li>",
                 longTitle = escape(app.stripHtml(idea.get('longTitle')));
