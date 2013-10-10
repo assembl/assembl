@@ -2,7 +2,11 @@ define(['backbone', 'underscore', 'models/idea', 'app', 'ckeditor-sharedspace', 
 function(Backbone, _, Idea, app, ckeditor, i18n){
     'use strict';
 
-    var LONG_TITLE_ID = 'ideaPanel-longtitle';
+    var LONG_TITLE_ID = 'ideaPanel-longtitle',
+
+        CKEDITOR_CONFIG = _.extend({}, app.CKEDITOR_CONFIG, {
+            sharedSpaces: { top: 'ideaPanel-toptoolbar', bottom: 'ideaPanel-bottomtoolbar' }
+        });
 
     /**
      * @class IdeaPanel
@@ -19,6 +23,12 @@ function(Backbone, _, Idea, app, ckeditor, i18n){
          * @type {Idea.Model}
          */
         idea: null,
+
+        /**
+         * CKeditor instance for this view
+         * @type {CKeditor}
+         */
+        ckInstance: null,
 
         /**
          * @init
@@ -48,28 +58,22 @@ function(Backbone, _, Idea, app, ckeditor, i18n){
         render: function(){
             app.trigger('render');
 
-            var segments = this.idea.getSegments();
-            this.$el.html( this.template( {idea:this.idea, segments:segments} ) );
+            var segments = this.idea.getSegments(),
+                editing = this.idea.get('editing') || false;
 
+            this.$el.html( this.template( {idea:this.idea, segments:segments, editing:editing} ) );
 
             this.panel = this.$('.panel');
 
-            var ckeditorConfig = {
-                toolbar: [  ['Bold', 'Italic', 'Outdent', 'Indent', 'NumberedList', 'BulletedList'] ],
-                extraPlugins: 'sharedspace',
-                removePlugins: 'floatingspace,resize',
-                sharedSpaces: {
-                    top: 'ideaPanel-toptoolbar',
-                    bottom: 'ideaPanel-bottomtoolbar'
-                }
-            };
-
-            ckeditor
-                .inline( this.$('#'+LONG_TITLE_ID).get(0), ckeditorConfig )
-                .on( 'blur', this.onLongTitleBlur.bind(this) );
-
-            ckeditor
-                .on( 'currentInstance', this.onLontTitleFocus.bind(this) );
+            if( this.ckInstance ){
+                this.ckInstance.destroy();
+            }
+            
+            if( editing ){
+                var editingarea = this.$('#'+LONG_TITLE_ID).get(0);
+                this.ckInstance = ckeditor.inline( editingarea, CKEDITOR_CONFIG );
+                editingarea.focus();
+            }
 
             return this;
         },
@@ -143,9 +147,9 @@ function(Backbone, _, Idea, app, ckeditor, i18n){
             'blur #ideaPanel-shorttitle': 'onShortTitleBlur',
             'keydown #ideaPanel-shorttitle': 'onShortTitleKeyDown',
 
-            'focus #ideaPanel-longtitle': 'onLongTitleFocus',
-            'keydown #ideaPanel-longtitle': 'onLongTitleKeyDown',
-            //'blur #ideaPanel-longtitle': 'onLongTitleBlur',
+            'click #ideaPanel-longtitle': 'changeToEditMode',
+            'click .ideaPanel-savebtn': 'saveEdition',
+            'click .ideaPanel-cancelbtn': 'cancelEdition',
 
             'dragstart .box': 'onDragStart',
             'dragend .box': "onDragEnd",
@@ -184,44 +188,11 @@ function(Backbone, _, Idea, app, ckeditor, i18n){
         /**
          * @event
          */
-        onLongTitleFocus: function(ev){
-            this.$('.panel-editablebox').addClass('is-editing');
-
-            $('#ideaPanel-toptoolbar').show();
-            this.$('.ideaPanel-longtitle-closebtn').show();
-        },
-
-        /**
-         * @event
-         */
         onLongTitleKeyDown: function(ev){
             if( ev.which === 27 ){
                 ev.prenvetDefault();
-                $(ev.currentTarget).trigger('blur');
+                this.cancelEdition();
             }
-        },
-
-        /**
-         * @event
-         */
-        onLontTitleFocus: function(){
-            $('#ideaPanel-toptoolbar').show();
-        },
-
-        /**
-         * @event
-         */
-        onLongTitleBlur: function(ev){
-            this.$('.panel-editablebox').removeClass('is-editing');
-
-            $('#ideaPanel-toptoolbar').hide();
-            this.$('.ideaPanel-longtitle-closebtn').hide();
-
-            var data = ckeditor.instances[LONG_TITLE_ID].getData();
-            if(data!=this.idea.getlongTitleDisplayText()){
-                this.idea.set({ 'longTitle': $.trim(data)});
-            }
-            data = this.idea.getlongTitleDisplayText();
         },
 
         /**
@@ -322,6 +293,47 @@ function(Backbone, _, Idea, app, ckeditor, i18n){
             if(ok){
                 this.deleteCurrentIdea();
             }
+        },
+
+        /**
+         * @event
+         */
+        changeToEditMode: function(ev){
+            if( ev ) {
+                ev.stopPropagation();
+            }
+
+            this.idea.set('editing', true);
+        },
+
+        /**
+         * @event
+         */
+        cancelEdition: function(ev){
+            if( ev ){
+                ev.stopPropagation();
+            }
+
+            var longTitle = this.idea.get('longTitle');
+            this.ckInstance.setData(longTitle);
+
+            this.idea.set('editing', false);
+            this.ckInstance.destroy();
+        },
+
+        /**
+         * @event
+         */
+        saveEdition: function(ev){
+            if( ev ){
+                ev.stopPropagation();
+            }
+
+            var text = this.ckInstance.getData();
+            text = $.trim(text);
+            
+            this.idea.set({ 'longTitle': text, 'editing': false });
+            this.ckInstance.destroy();
         }
 
     });

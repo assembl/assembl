@@ -2,15 +2,9 @@ define(['backbone', 'underscore', 'zepto-touch', 'models/idea', 'models/segment'
 function(Backbone, _, $, Idea, Segment, app, ckeditor){
     'use strict';
 
-    var CKEDITOR_CONFIG = {
-        toolbar: [  ['Bold', 'Italic', 'Outdent', 'Indent', 'NumberedList', 'BulletedList'] ],
-        extraPlugins: 'sharedspace',
-        removePlugins: 'floatingspace,resize',
-        sharedSpaces: {
-            top: 'synthesisIdea-toptoolbar',
-            bottom: 'synthesisIdea-bottomtoolbar'
-        }
-    };
+    var CKEDITOR_CONFIG = _.extend({}, app.CKEDITOR_CONFIG, {
+        sharedSpaces: { top: 'synthesisIdea-toptoolbar', bottom: 'synthesisIdea-bottomtoolbar' }
+    });
 
     var SynthesisIdeaView = Backbone.View.extend({
         /**
@@ -122,7 +116,7 @@ function(Backbone, _, $, Idea, Segment, app, ckeditor){
             'click .idealist-arrow': 'toggle',
             'click .idealist-title': 'changeToEditMode',
             'click .idealist-savebtn': 'saveEdition',
-            'click .closebutton': 'cancelEdition'
+            'click .idealist-cancelbtn': 'cancelEdition'
         },
 
         /**

@@ -35,6 +35,17 @@ function($, _, ckeditor, User, Moment, i18n){
         body: $(document.body),
 
         /**
+         * Ckeditor default configuration
+         * @type {object}
+         */
+        CKEDITOR_CONFIG: {
+            toolbar: [  ['Bold', 'Italic', 'Outdent', 'Indent', 'NumberedList', 'BulletedList'] ],
+            extraPlugins: 'sharedspace',
+            removePlugins: 'floatingspace,resize',
+            sharedSpaces: { top: 'ckeditor-toptoolbar', bottom: 'ckeditor-bottomtoolbar' }
+        },
+
+        /**
          * The currnet discussion id
          * @type {string}
          */
