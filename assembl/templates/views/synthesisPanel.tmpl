@@ -21,7 +21,14 @@
             <div id="synthesisPanel-introduction" class="panel-editablearea" contenteditable="true"><%= app.stripHtml(introduction) %></div>
         </div>
 
-        <div class="idealist"></div>
+        <ul>
+            <% _.each(ideas, function(idea){ %>
+                <%= app.printIdea(idea,  '') %>
+            <% }); %>
+        </ul>
+
+
+        {# <div class="idealist"></div> #}
 
         <div class="spacer"></div>
         

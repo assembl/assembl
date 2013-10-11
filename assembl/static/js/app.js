@@ -606,14 +606,21 @@ function($, _, ckeditor, User, Moment, i18n){
          * at the synthesis email
          * 
          * @param  {Idea} idea
-         * @param  {string} email
+         * @param  {string} email The react's email
          * @return {string}
          */
         printIdea: function(idea, email){
             var html = "\n<li>",
-                longTitle = escape(app.stripHtml(idea.get('longTitle')));
+                longTitle = escape(app.stripHtml(idea.get('longTitle'))),
+                span = $("<span>"+idea.get("longTitle")+"</span>"),
+                formattedLongTitle;
 
-            html += app.format('\n{0} (<a href="mailto:{1}?subject={2}">{3}</a>)', idea.get("longTitle"), email, longTitle, i18n.gettext('react'));
+            span.find('p:first-child').css('margin-top', 0);
+            span.find('p:last-child').css('margin-bottom', 0);
+            formattedLongTitle = span.html();
+
+
+            html += app.format('\n{0} (<a href="mailto:{1}?subject={2}">{3}</a>)', formattedLongTitle, email, longTitle, i18n.gettext('react'));
 
             var children = idea.getSynthesisChildren();
             if( children ) {
