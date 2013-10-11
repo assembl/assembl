@@ -304,17 +304,17 @@ class Idea(SQLAlchemyBaseModel):
             'num_posts': Idea.get_num_orphan_posts(discussion),
         }
     @staticmethod
-    def _get_idea_dag_statement(skip_where=False):
-        return """SELECT child_id as idea_id FROM (
+    def _get_idea_dag_statement():
+        """requires root_idea_id parameter """
+        return """(SELECT child_id as id FROM (
             SELECT transitive t_in (1) t_out (2) t_distinct T_NO_CYCLES parent_id, child_id from idea_association
                 UNION SELECT id as parent_id, id as child_id FROM idea
-            ) ia where ia.parent_id = :root_idea_id"""
+            ) ia where ia.parent_id = :root_idea_id) AS idea_dag """
 
     @staticmethod
-    def _get_related_posts_statement_no_select(select, skip_where):
-        return select + " FROM (" + Idea._get_idea_dag_statement(skip_where) + """)
-AS idea_dag 
-JOIN "extract" ON ("extract".idea_id = idea_dag.idea_id) 
+    def _get_related_posts_statement_no_select(select, idea_dag_statement):
+        return select + " FROM " + idea_dag_statement + """ 
+JOIN "extract" ON ("extract".idea_id = idea_dag.id) 
 JOIN content ON ("extract".source_id = content.id) 
 JOIN post AS root_posts ON (root_posts.content_id = content.id)
 JOIN post ON (
@@ -325,12 +325,12 @@ JOIN post ON (
 )
 """
     @staticmethod
-    def _get_related_posts_statement(skip_where=False):
-        return Idea._get_related_posts_statement_no_select("SELECT DISTINCT post.id", skip_where)
+    def _get_related_posts_statement():
+        return Idea._get_related_posts_statement_no_select("SELECT DISTINCT post.id", Idea._get_idea_dag_statement())
 
     @staticmethod
     def _get_count_related_posts_statement():
-        return Idea._get_related_posts_statement_no_select("SELECT COUNT(DISTINCT post.id) as total_count", False)
+        return Idea._get_related_posts_statement_no_select("SELECT COUNT(DISTINCT post.id) as total_count", Idea._get_idea_dag_statement())
 
     @staticmethod
     def _get_orphan_posts_statement_no_select(select):
@@ -341,7 +341,9 @@ JOIN content ON (post.content_id = content.id)
 JOIN source ON (content.source_id = source.id)
 JOIN discussion ON (source.discussion_id = discussion.id)
 WHERE post.id NOT IN (
-""" + Idea._get_related_posts_statement(True) + """
+""" + Idea._get_related_posts_statement_no_select("SELECT DISTINCT post.id", \
+    "idea AS idea_dag JOIN synthesis ON (idea_dag.synthesis_id=synthesis.id AND synthesis.discussion_id=:discussion_id)") \
+     + """
 )
 AND discussion.id=:discussion_id
 """

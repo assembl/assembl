@@ -34,6 +34,6 @@ lxml
 #cd pyodbc
 #git checkout --track origin/v2.1-virtuoso
 #python setup.py develop
-#-e git://github.com/maparent/pyodbc.git@v3-virtuoso#egg=pyodbc
+-e git://github.com/maparent/pyodbc.git@v3-virtuoso#egg=pyodbc
 -e git://github.com/maparent/alembic.git#egg=alembic
 -e hg+https://bitbucket.org/maparent/virtuoso#egg=virtuoso

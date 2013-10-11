@@ -26,6 +26,9 @@ Running:
 - cd ~/assembl
 
 Only the first time you run it:
+In your odbc.ini, make sure you have Driver = /usr/lib/odbc/virtodbcu.so and NOT 
+virtodbcu.so (otherwise, all unicode characters will be mangled).
+
 - echo "user_create('assembl', 'assembl');"|isql-vt 1111 dba dba
 - echo "grant select on db..tables to assembl;grant select on db..sys_users to assembl;"|isql-vt 1111 dba dba
 - echo "db..user_set_qualifier ('assembl', 'assembl');"|isql-vt 1111 dba dba
