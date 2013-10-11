@@ -277,7 +277,7 @@ class User(SQLAlchemyBaseModel):
     profile = relationship(
         AgentProfile, backref=backref("user", uselist=False))
 
-    username = Column(Unicode(20), unique=True)
+    username = Column(Unicode(20), nullable=False, unique=True)
     preferred_email = Column(Unicode(50))
     verified = Column(Boolean(), default=False)
     password = Column(Binary(115))
