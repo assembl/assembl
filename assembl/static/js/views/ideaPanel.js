@@ -70,9 +70,14 @@ function(Backbone, _, Idea, app, ckeditor, i18n){
             }
             
             if( editing ){
-                var editingarea = this.$('#'+LONG_TITLE_ID).get(0);
+                var editingarea = this.$('#'+LONG_TITLE_ID).get(0),
+                    that = this;
+
                 this.ckInstance = ckeditor.inline( editingarea, CKEDITOR_CONFIG );
                 editingarea.focus();
+                this.ckInstance.element.on('blur', function(){
+                    that.saveEdition();
+                });
             }
 
             return this;

@@ -556,6 +556,8 @@ function($, _, ckeditor, User, Moment, i18n){
                     app.body.addClass('is-fullscreen');
                 }
             });
+
+            app.setCurrentIdea(null);
         },
 
         /**

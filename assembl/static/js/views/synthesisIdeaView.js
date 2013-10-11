@@ -65,9 +65,14 @@ function(Backbone, _, $, Idea, Segment, app, ckeditor){
             this.$('.idealist-children').append( this.getRenderedChildren(data.level) );
 
             if( data.editing === true ){
-                var editablearea = this.$('.panel-editablearea')[0];
+                var editablearea = this.$('.panel-editablearea')[0],
+                    that = this;
+
                 this.ckInstance = ckeditor.inline( editablearea, CKEDITOR_CONFIG );
                 editablearea.focus();
+                this.ckInstance.element.on('blur', function(){
+                    that.saveEdition();
+                });
             }
 
             return this;
