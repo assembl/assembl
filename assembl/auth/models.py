@@ -274,7 +274,6 @@ class User(SQLAlchemyBaseModel):
     profile = relationship(
         AgentProfile, backref=backref("user", uselist=False))
 
-    username = Column(Unicode(20), unique=True)
     preferred_email = Column(Unicode(50))
     verified = Column(Boolean(), default=False)
     password = Column(Binary(115))
@@ -334,6 +333,8 @@ class User(SQLAlchemyBaseModel):
             extract.owner = self
         for discussion in other_user.discussions:
             discussion.owner = self
+        if other_user.username and not self.username:
+            self.username = other_user.username
         DBSession.delete(other_user)
 
     def send_email(self, **kwargs):
@@ -349,7 +350,7 @@ class User(SQLAlchemyBaseModel):
 
     def display_name(self):
         if self.username:
-            return self.username
+            return self.username.username
         return self.profile.display_name()
 
     def serializable(self):
@@ -357,6 +358,16 @@ class User(SQLAlchemyBaseModel):
 
     def __repr__(self):
         return "<User '%s'>" % self.username
+
+
+class Username(SQLAlchemyBaseModel):
+    "Optional usernames for users"
+    __tablename__ = 'username'
+    user_id = Column(Integer,
+                     ForeignKey('user.id', ondelete='CASCADE'),
+                     unique=True)
+    username = Column(Unicode(20), primary_key=True)
+    user = relationship(User, backref=backref('username', uselist=False))
 
 
 class Role(SQLAlchemyBaseModel):

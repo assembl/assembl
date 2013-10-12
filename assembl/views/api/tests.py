@@ -34,7 +34,8 @@ class ApiTest(BaseTest):
 
     def create_dummy_discussion(self):
         agent = AgentProfile(name="Dummy agent")
-        user = User(username="ben", profile=agent)
+        user = User(profile=agent)
+        username = Username(username="ben", user=user)
         discussion = Discussion(
             topic='Unicorns',
             slug='discussion_slug',
@@ -43,6 +44,7 @@ class ApiTest(BaseTest):
         )
 
         self.session.add(discussion)
+        self.session.add(username)
         create_default_permissions(self.session, discussion)
         self.session.add(UserRole(
             user=user, role=Role.get_role(
