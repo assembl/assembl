@@ -22,12 +22,12 @@
         <span>{{profile.name}}</span>
 
         <!-- TODO Avatar logic -->
-        {% if profile.email_accounts %}
+        {% if profile.email_accounts() %}
         <!-- TODO: Preferred email logic. -->
         <div class="spacer spacer--huge"></div>
         <label>{{ gettext('Emails') }}</label>
         <ul>
-        {% for email_account in profile.email_accounts %}
+        {% for email_account in profile.email_accounts() %}
             {% if email_account.verified %}
                 <li>{{ email_account.email }}</li>
             {% endif %}
@@ -35,13 +35,13 @@
         </ul>
         {% endif %}
 
-        {% if profile.identity_accounts %}
+        {% if profile.identity_accounts() %}
         <div class="spacer spacer--huge"></div>
         <label>{{ gettext('Accounts') }}</label>
         <ul>
-        {% for account in profile.identity_accounts %}
+        {% for account in profile.identity_accounts() %}
         <li>
-            <label>{{ account.type }}:</label>
+            <label>{{ account.provider.provider_type }}:</label>
             {% if account.username %}
                 {{account.username}}
             {% else %}

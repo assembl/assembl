@@ -62,12 +62,21 @@ class AgentProfile(SQLAlchemyBaseModel):
         'with_polymorphic': '*'
     }
 
-    def accounts(self):
-        """All AgentAccounts for this profile"""
-        return chain(self.identity_accounts, self.email_accounts)
+    def identity_accounts(self):
+        return DBSession.query(
+            IdentityProviderAccount
+            ).join(AbstractAgentAccount
+            ).filter_by(profile_id=self.id)
+
+    def email_accounts(self):
+        return DBSession.query(
+            EmailAccount
+            ).join(AbstractAgentAccount
+            ).filter_by(profile_id=self.id)
 
     def verified_emails(self):
-        return (e for e in self.email_accounts if e.verified)
+        # TODO: Filter request? Is there a way to know if preloaded?
+        return (e for e in self.email_accounts() if e.verified)
 
     def display_name(self):
         # TODO: Prefer types?
@@ -78,23 +87,14 @@ class AgentProfile(SQLAlchemyBaseModel):
         return self.name
 
     def merge(self, other_profile):
-        def idp_sig(idp):
-            return (idp.provider_id, idp.username, idp.domain, idp.userid)
-        emails = {e.email: e for e in self.email_accounts}
-        idp_accounts = {idp_sig(idp): idp
-                        for idp in self.identity_accounts}
-        for ea in other_profile.email_accounts:
-            if ea.email in emails:
-                if ea.verified:
-                    emails[ea.email].verified = True
-                DBSession.delete(ea)
+        my_accounts = {a.signature(): a for a in self.accounts}
+        for other_account in other_profile.accounts:
+            my_account = my_accounts.get(other_account.signature())
+            if my_account:
+                my_account.merge(other_account)
+                DBSession.delete(other_account)
             else:
-                ea.profile = self
-        for idp in other_profile.identity_accounts:
-            if idp_sig(idp) in idp_accounts:
-                DBSession.delete(idp)
-            else:
-                idp.profile = self
+                other_account.profile = self
         if other_profile.user:
             if self.user:
                 self.user.merge(other_profile.user)
@@ -124,7 +124,7 @@ class AgentProfile(SQLAlchemyBaseModel):
         if self.user and not email:
             email = self.user.preferred_email
         if not email:
-            accounts = self.email_accounts
+            accounts = list(self.email_accounts())
             if accounts:
                 accounts.sort(key=lambda e: (e.verified, e.preferred))
                 email = accounts[-1].email
@@ -157,16 +157,26 @@ class AgentProfile(SQLAlchemyBaseModel):
 
 
 class AbstractAgentAccount(SQLAlchemyBaseModel):
+    """An abstract class for accounts that identify agents"""
     __tablename__ = "abstract_agent_account"
     id = Column(Integer, primary_key=True)
     type = Column(String(60))
+    profile_id = Column(
+        Integer,
+        ForeignKey('agent_profile.id', ondelete='CASCADE'),
+        nullable=False)
+    profile = relationship('AgentProfile', backref='accounts')
+    def signature(self):
+        "Identity of signature implies identity of underlying account"
+        return ('abstract_agent_account', self.id)
+    def merge(self, other):
+        pass
     __mapper_args__ = {
         'polymorphic_identity': 'abstract_agent_account',
         'polymorphic_on': type,
         'with_polymorphic': '*'
     }
-    """An abstract class for accounts that identify agents"""
-    pass
+
 
 
 class EmailAccount(AbstractAgentAccount):
@@ -183,11 +193,6 @@ class EmailAccount(AbstractAgentAccount):
     verified = Column(Boolean(), default=False)
     preferred = Column(Boolean(), default=False)
     active = Column(Boolean(), default=True)
-    profile_id = Column(
-        Integer,
-        ForeignKey('agent_profile.id', ondelete='CASCADE'),
-        nullable=False, index=True)
-    profile = relationship('AgentProfile', backref='email_accounts')
 
     def display_name(self):
         if self.verified:
@@ -195,6 +200,13 @@ class EmailAccount(AbstractAgentAccount):
 
     def serialize_profile(self):
         return self.profile.serializable(self.email)
+
+    def signature(self):
+        return ('agent_email_account', self.email,)
+
+    def merge(self, other):
+        if other.verified:
+            self.verified = True
 
     @staticmethod
     def get_or_make_profile(session, email, name=None):
@@ -242,14 +254,13 @@ class IdentityProviderAccount(AbstractAgentAccount):
         ForeignKey('identity_provider.id', ondelete='CASCADE'),
         nullable=False)
     provider = relationship(IdentityProvider)
-    profile_id = Column(
-        Integer,
-        ForeignKey('agent_profile.id', ondelete='CASCADE'),
-        nullable=False)
-    profile = relationship('AgentProfile', backref='identity_accounts')
     username = Column(String(200))
     domain = Column(String(200))
     userid = Column(String(200))
+
+    def signature(self):
+        return ('idprovider_account', self.provider_id, self.username,
+                self.domain, self.userid)
 
     def display_name(self):
         # TODO: format according to provider, ie @ for twitter.
@@ -297,7 +308,7 @@ class User(SQLAlchemyBaseModel):
     def get_preferred_email(self):
         if self.preferred_email:
             return self.preferred_email
-        emails = list(self.profile.email_accounts)
+        emails = list(self.profile.email_accounts())
         # should I allow unverified?
         emails = [e for e in emails if e.verified]
         preferred = [e for e in emails if e.preferred]
