@@ -35,6 +35,17 @@ function($, _, ckeditor, User, Moment, i18n){
         body: $(document.body),
 
         /**
+         * Ckeditor default configuration
+         * @type {object}
+         */
+        CKEDITOR_CONFIG: {
+            toolbar: [  ['Bold', 'Italic', 'Outdent', 'Indent', 'NumberedList', 'BulletedList'] ],
+            extraPlugins: 'sharedspace',
+            removePlugins: 'floatingspace,resize',
+            sharedSpaces: { top: 'ckeditor-toptoolbar', bottom: 'ckeditor-bottomtoolbar' }
+        },
+
+        /**
          * The currnet discussion id
          * @type {string}
          */
@@ -146,7 +157,9 @@ function($, _, ckeditor, User, Moment, i18n){
 
             app.openedPanels += 1;
             app.body.attr(PANEL_QUANTITY, app.openedPanels);
+            app.body.removeClass('is-fullscreen');
             panel.$el.addClass('is-visible');
+
             if( panel.button ) {
                 panel.button.addClass('is-activated');
             }
@@ -163,10 +176,23 @@ function($, _, ckeditor, User, Moment, i18n){
 
             app.openedPanels -= 1;
             app.body.attr(PANEL_QUANTITY, app.openedPanels);
+            if( app.isInFullscreen() ){
+                app.body.addClass('is-fullscreen');
+            }
+
             panel.$el.removeClass('is-visible');
             if( panel.button ) {
                 panel.button.removeClass('is-activated');
             }
+        },
+
+        /**
+         * Checks if there is a panel in fullscreen mode
+         * ( i.e.: there is only one open )
+         * @return {Boolean}
+         */
+        isInFullscreen: function(){
+            return app.openedPanels === 1;
         },
 
         /**
@@ -512,6 +538,29 @@ function($, _, ckeditor, User, Moment, i18n){
         },
 
         /**
+         * Sets the given panel as fullscreen closing all other ones
+         * @param {Panel} targetPanel
+         */
+        setFullscreen: function(targetPanel){
+            var panels = [
+                app.ideaList,
+                app.segmentList,
+                app.ideaPanel,
+                app.messageList,
+                app.synthesisPanel
+            ];
+
+            _.each(panels, function(panel){
+                if( targetPanel !== panel ){
+                    app.closePanel(panel);
+                    app.body.addClass('is-fullscreen');
+                }
+            });
+
+            app.setCurrentIdea(null);
+        },
+
+        /**
          * @event
          */
         onDropdownClick: function(ev){
@@ -554,11 +603,26 @@ function($, _, ckeditor, User, Moment, i18n){
             $('.tipsy').remove();
         },
 
+        /**
+         * Returns (yep, it doesn't actually prints) the idea formatted to be displayed
+         * at the synthesis email
+         * 
+         * @param  {Idea} idea
+         * @param  {string} email The react's email
+         * @return {string}
+         */
         printIdea: function(idea, email){
             var html = "\n<li>",
-                longTitle = escape(app.stripHtml(idea.get('longTitle')));
+                longTitle = escape(app.stripHtml(idea.get('longTitle'))),
+                span = $("<span>"+idea.get("longTitle")+"</span>"),
+                formattedLongTitle;
 
-            html += app.format('\n{0} (<a href="mailto:{1}?subject={2}">{3}</a>)', idea.get("longTitle"), email, longTitle, i18n.gettext('react'));
+            span.find('p:first-child').css('margin-top', 0);
+            span.find('p:last-child').css('margin-bottom', 0);
+            formattedLongTitle = span.html();
+
+
+            html += app.format('\n{0} (<a href="mailto:{1}?subject={2}">{3}</a>)', formattedLongTitle, email, longTitle, i18n.gettext('react'));
 
             var children = idea.getSynthesisChildren();
             if( children ) {

@@ -60,20 +60,15 @@ function(Backbone, _, $, app, Synthesis, SynthesisIdeaView, i18n){
                 ideas = this.ideas.getInSynthesisIdeas();
 
             data.collapsed = this.collapsed;
-
-            _.each(ideas, function(idea){
-                var ideaView = new SynthesisIdeaView({model:idea});
-                list.appendChild(ideaView.render().el);
-            });
+            data.ideas = ideas;
 
             this.$el.html( this.template(data) );
-            this.$('.idealist').append( list );
 
             return this;
         },
 
         /**
-         *
+         * @events
          */
         events: {
             'blur #synthesisPanel-title': 'onTitleBlur',
@@ -81,7 +76,8 @@ function(Backbone, _, $, app, Synthesis, SynthesisIdeaView, i18n){
             'blur #synthesisPanel-conclusion': 'onConclusionBlur',
 
             'click #synthesisPanel-closeButton': 'closePanel',
-            'click #synthesisPanel-publishButton': 'publish'
+            'click #synthesisPanel-publishButton': 'publish',
+            'click #synthesisPanel-fullscreenButton': 'setFullscreen'
         },
 
         /**
@@ -96,6 +92,13 @@ function(Backbone, _, $, app, Synthesis, SynthesisIdeaView, i18n){
          */
         unblockPanel: function(){
             this.$('.panel').removeClass('is-loading');
+        },
+
+        /**
+         * Sets the panel as full screen
+         */
+        setFullscreen: function(){
+            app.setFullscreen(this);
         },
 
         /**

@@ -3,7 +3,18 @@
 .text {
     color: $text-color;
     font-size: 14px;
-    font-family: "Myriad Pro";
+
+    ol, ul {
+        margin: 0;
+    }
+
+    p:first-child {
+      margin-top: 0;
+    }
+
+    p:last-child {
+      margin-bottom: 0;
+    }
 }
 
 // A muted text

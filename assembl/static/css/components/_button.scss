@@ -136,6 +136,30 @@
     opacity: 1;
 } 
 
+// Enter fullscreen mode button
+// +++++++++++++++++
+.iconbutton.iconbutton--resizefull {
+    @extend %icon;
+    @extend .icon-resize-full;
+
+    .is-fullscreen & {
+        display: none;
+    }
+}
+
+// Leave fullscreen mode button
+// +++++++++++++++++
+.iconbutton.iconbutton--resizesmall {
+    @extend %icon;
+    @extend .icon-resize-small;
+
+    display: none;
+    
+    .is-fullscreen & {
+        display: inline-block;
+    }
+}
+
 // Arrow button
 // ==========
 .arrowbutton {

@@ -1,0 +1,60 @@
+<script src="{{ STATIC_URL }}js/lib/browser-detect.js"></script>
+
+<script id="asn-template" type="text/x-template">
+    <div id="asn-warning" style="position: fixed; left: 0px; border-bottom-style: solid; border-bottom-width: 1px; border-bottom-color: rgb(223, 221, 203); top: 0px; margin: 0px; width: 100%; z-index: 99999; color: rgb(111, 109, 91); font-size: 10pt; padding: 0px; background-color: rgb(255, 252, 223); text-align: left; background-position: initial initial; background-repeat: initial initial;">
+        <a href="http://www.updateyourbrowser.net/" style="color: rgb(79, 77, 59); text-decoration: none; font-style: normal; font-variant: normal; font-weight: normal; font-size: 9pt; line-height: 14px; font-family: 'Trebuchet MS', Arial, Helvetica; padding-right: 30px; display: block;" target="_blank">
+            <span id="asn-outofdate" style="display: block;  color: #fff; float: left; padding: 10px 18px 10px 8px; background: #bd695b url('http://www.updateyourbrowser.net/_static/imagens/arrow.gif') no-repeat right -2px; ">
+                {{ gettext('Your browser is out of date') }}
+            </span>
+            <span style="display: block; padding: 10px 10px; float: left;">
+                {{ gettext("You're using an old version of <strong>{0}</strong>.")|safe }}
+                {{ gettext('For the best experience, please <span style="text-decoration: underline;">update your browser</span>.')|safe }}            
+            </span>
+        </a>
+        <a href="javascript://" onclick="document.body.removeChild( this.parentNode.parentNode )" id="asn-close" style="position: absolute; text-decoration: none; width: 12px; border: none; padding: 3px; top: 8px; right: 14px; color: rgb(79, 77, 59); height: 14px; font-style: normal; font-variant: normal; font-weight: normal; font-size: 8pt; line-height: 14px; font-family: 'Trebuchet MS', Arial, Helvetica; background-image: url(http://www.updateyourbrowser.net/_static/imagens/close_03.gif);"></a>
+    </div>
+</script>
+
+
+<script type="text/javascript"> 
+(function(BrowserDetect){
+    'use strict';
+
+    if( !BrowserDetect ){
+        return;
+    }
+
+    /**
+     * The browsers minimun version
+     * @type {Object}
+     */
+    var browsers = {
+            "Explorer": { version: 9, name: 'Internet explorer' },
+            "Firefox": { version: 20, name: 'Firefox' },
+            "Opera": { version: 10, name: "Opera" },
+            "Safari": { version: 5, name: "Safari" },
+            "Chrome": { version: 24, name: "Google Chrome" }
+        },
+
+        /**
+         * Current browser
+         * @type {Object}
+         */
+        currentBrowser = browsers[BrowserDetect.browser];
+
+    BrowserDetect.showMsg = function(name){
+        var div = document.createElement('div');
+        div.innerHTML = document.getElementById('asn-template').innerHTML.replace('{0}', name || 'Browser name');
+        document.body.appendChild(div);
+    };
+
+    if( !currentBrowser ){
+        return;
+    }
+
+    if( BrowserDetect.version <= currentBrowser.version ){
+        BrowserDetect.showMsg(currentBrowser.name);
+    }
+
+})(window.BrowserDetect);
+</script> 

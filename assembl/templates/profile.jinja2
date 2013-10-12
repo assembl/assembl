@@ -55,7 +55,7 @@
 
             <!-- TODO Avatar logic -->
 
-            {% if the_user.profile.email_accounts or the_user.profile.unconfirmed_emails %}
+            {% if the_user.profile.email_accounts() or the_user.profile.unconfirmed_emails() %}
             <!-- TODO: Preferred email logic. -->
             <label>{{ gettext('Emails') }}</label>
             <ul>
@@ -81,13 +81,13 @@
             <div class="spacer spacer--large"></div>
 
 
-            {% if the_user.profile.identity_accounts %}
+            {% if the_user.profile.identity_accounts() %}
             <div class="spacer spacer--huge"></div>
             <label>{{ gettext('Accounts') }}</label>
             <ul>
-            {% for account in the_user.profile.identity_accounts %}
+            {% for account in the_user.profile.identity_accounts() %}
             <li>
-                <label>{{ account.type }}</label>:
+                <label>{{ account.provider.provider_type }}</label>:
                 {% if account.username %}
                     {{account.username}}
                 {% else %}

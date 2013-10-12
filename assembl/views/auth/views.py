@@ -26,7 +26,7 @@ from velruse import login_url
 
 from ...auth.models import (
     EmailAccount, IdentityProvider, IdentityProviderAccount,
-    AgentProfile, User)
+    AgentProfile, User, Username)
 from ...auth.password import format_token
 from ...auth.operations import (
     get_identity_provider, send_confirmation_email, verify_email_token)
@@ -80,9 +80,10 @@ def get_profile(request):
     identifier = request.matchdict.get('identifier').strip()
     user = None
     if id_type == 'u':
-        user = DBSession.query(User).filter_by(username=identifier).first()
-        if not user:
+        username = DBSession.query(Username).filter_by(username=identifier).first()
+        if not username:
             raise HTTPNotFound()
+        user = username.user
         profile = user.profile
     elif id_type == 'id':
         try:
@@ -136,10 +137,10 @@ def assembl_profile(request):
         username = request.params.get('username', '').strip()
         if username:
             # check if exists
-            if DBSession.query(User).filter_by(username=username).count():
+            if DBSession.query(Username).filter_by(username=username).count():
                 errors.append(_('The username %s is already used') % (username,))
             else:
-                user.username = username
+                DBSession.add(Username(username=username, user=user))
                 if id_type == 'u':
                     redirect = True
         name = request.params.get('name', '').strip()
@@ -165,7 +166,7 @@ def assembl_profile(request):
     unverified_emails = [
         (ea, DBSession.query(EmailAccount).filter_by(
             email=ea.email, verified=True).first())
-        for ea in user.profile.email_accounts if not ea.verified]
+        for ea in user.profile.email_accounts() if not ea.verified]
     return render_to_response(
         'assembl:templates/profile.jinja2',
         dict(default_context,
@@ -256,7 +257,8 @@ def assembl_login_complete_view(request):
         if account:
             user = account.profile.user
     else:
-        user = DBSession.query(User).filter_by(username=identifier).first()
+        username = DBSession.query(Username).filter_by(username=identifier).first()
+        user = username.user
 
     if not user:
         return dict(default_context,
@@ -367,23 +369,24 @@ def velruse_login_complete_view(request):
         usernames = set((a['preferredUsername'] for a in velruse_accounts
                          if 'preferredUsername' in a))
         for u in usernames:
-            if not DBSession.query(User).filter_by(username=u).count():
+            if not DBSession.query(Username).filter_by(username=u).count():
                 username = u
                 break
         user = User(
             profile=profile,
-            username=username,
             verified=True,
             last_login=datetime.now(),
             creation_date=datetime.now(),
             #timezone=velruse_profile['utcOffset'],   # TODO: needs parsing
             )
         DBSession.add(user)
+        if username:
+            DBSession.add(Username(username=username, user=user))
     for idp_account in new_idp_accounts:
         idp_account.profile = profile
     # Now all accounts have a profile
     DBSession.autoflush = old_autoflush
-    email_accounts = {ea.email: ea for ea in profile.email_accounts}
+    email_accounts = {ea.email: ea for ea in profile.email_accounts()}
     # There may be new emails in the accounts
     if 'verifiedEmail' in velruse_profile:
         email = velruse_profile['verifiedEmail']

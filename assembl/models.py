@@ -4,9 +4,11 @@ from assembl.db import DBSession
 from .auth.models import (
     IdentityProvider,
     EmailAccount,
+    AbstractAgentAccount,
     IdentityProviderAccount,
     AgentProfile,
     User,
+    Username,
     Action,
     Role,
     Permission,
