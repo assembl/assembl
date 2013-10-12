@@ -250,9 +250,6 @@ class IdentityProviderAccount(AbstractAgentAccount):
     username = Column(String(200))
     domain = Column(String(200))
     userid = Column(String(200))
-    __mapper_args__ = {
-        'polymorphic_identity': 'idprovider_agent_account',
-    }
 
     def display_name(self):
         # TODO: format according to provider, ie @ for twitter.
