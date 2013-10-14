@@ -399,21 +399,21 @@ class Extract(SQLAlchemyBaseModel):
 
     creator_id = Column(
         Integer,
-        ForeignKey('user.id'),
+        ForeignKey('agent_profile.id'),
         nullable=False,
     )
 
     creator = relationship(
-        'User', foreign_keys=[creator_id], backref='extracts_created')
+        'AgentProfile', foreign_keys=[creator_id], backref='extracts_created')
 
     owner_id = Column(
         Integer,
-        ForeignKey('user.id'),
+        ForeignKey('agent_profile.id'),
         nullable=False,
     )
 
     owner = relationship(
-        'User', foreign_keys=[owner_id], backref='extracts_owned')
+        'AgentProfile', foreign_keys=[owner_id], backref='extracts_owned')
 
     def serializable(self):
         return {
