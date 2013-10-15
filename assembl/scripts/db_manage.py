@@ -28,8 +28,8 @@ def main():
 
     if sys.argv[1] == 'bootstrap':
         admin_engine = create_engine_sqla('virtuoso://dba:dba@VOSU')
-        sessionmaker = sessionmaker(admin_engine)
-        session = sessionmaker()
+        SessionMaker = sessionmaker(admin_engine)
+        session = SessionMaker()
         if not session.execute(
                 "select count(*) from db..sys_users"
                 " where u_name = 'assembl'").scalar():
