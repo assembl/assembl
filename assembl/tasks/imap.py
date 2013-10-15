@@ -14,7 +14,7 @@ db_connection = settings.get('app:main', 'sqlalchemy.url')
 engine = create_engine(db_connection)
 
 #celery_broker = 'redis://localhost:6379/0'
-celery_broker = db_connection
+celery_broker = 'sqla+' + db_connection
 celery = Celery('imapreader', broker=celery_broker)
 
 DBSession = scoped_session(sessionmaker(extension=ZopeTransactionExtension()))
