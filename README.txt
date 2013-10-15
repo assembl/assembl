@@ -37,10 +37,12 @@ If you have installed it with a configure-make-make install, it would be
 - cd ~/assembl
 
 Only the first time you run it:
+
 - $venv/bin/assembl-ini-files development.ini
 - $venv/bin/supervisord
 (wait for virtuoso to start)
 - $venv/bin/assembl-db-manage development.ini bootstrap
+- $venv/bin/supervisorctl start celery_imap
 
 On subsequent runs, just make sure supervisord is running.
 
