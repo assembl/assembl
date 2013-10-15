@@ -8,11 +8,13 @@ from zope.sqlalchemy import ZopeTransactionExtension
 
 settings = ConfigParser()
 # TODO: Choose config.file
-settings.read('local.ini')
+settings.read('development.ini')
 
-engine = create_engine(settings.get('app:main', 'sqlalchemy.url'))
+db_connection = settings.get('app:main', 'sqlalchemy.url')
+engine = create_engine(db_connection)
+
 #celery_broker = 'redis://localhost:6379/0'
-celery_broker = 'sqla+virtuoso://assembl:assembl@VOS'
+celery_broker = db_connection
 celery = Celery('imapreader', broker=celery_broker)
 
 DBSession = scoped_session(sessionmaker(extension=ZopeTransactionExtension()))

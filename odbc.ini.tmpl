@@ -1,0 +1,16 @@
+[ODBC Data Sources]
+VOSU = localhost virtuoso
+
+[VOSU]
+Description = Open Virtuoso
+Driver      = %(VIRTUOSO_ROOT)s/lib/virtodbcu.so
+UserName    = dba
+Password    = dba
+Address     = localhost:%(VIRTUOSO_PORT)d
+Locale      = en.UTF-8
+
+[ODBC]
+;Trace = 1
+TraceFile = /tmp/odbctrace.log
+;Debug = 1
+DebugFile = /tmp/odbcdebug.log

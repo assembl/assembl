@@ -8,6 +8,14 @@ from alembic.migration import MigrationContext
 
 from ..lib.migration import bootstrap_db
 from ..lib.sqla import create_engine, DBSession as db
+from sqlalchemy import create_engine as create_engine_sqla
+from sqlalchemy.orm import sessionmaker
+
+init_instructions = [
+    "user_create('assembl', 'assembl')",
+    "grant select on db..tables to assembl",
+    "grant select on db..sys_users to assembl",
+    "db..user_set_qualifier ('assembl', 'assembl')"]
 
 
 def main():
@@ -19,6 +27,15 @@ def main():
     config_uri = sys.argv.pop(1)
 
     if sys.argv[1] == 'bootstrap':
+        admin_engine = create_engine_sqla('virtuoso://dba:dba@VOSU')
+        sessionmaker = sessionmaker(admin_engine)
+        session = sessionmaker()
+        if not session.execute(
+                "select count(*) from db..sys_users"
+                " where u_name = 'assembl'").scalar():
+            for i in init_instructions:
+                session.execute(i)
+            session.commit()
         bootstrap_db(config_uri)
     else:
         engine = create_engine(config_uri)

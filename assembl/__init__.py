@@ -1,5 +1,7 @@
 """ Pyramid add start-up module. """
 
+from os import putenv
+
 from pyramid.config import Configurator
 from pyramid.authentication import SessionAuthenticationPolicy
 from pyramid.authorization import ACLAuthorizationPolicy
@@ -9,6 +11,10 @@ from sqlalchemy import engine_from_config
 from .db import DBSession
 from .auth.models import Role, UserRole, LocalUserRole
 from .synthesis.models import Discussion
+
+
+#Use a local odbc.ini
+putenv('ODBCINI', './odbc.ini')
 
 
 def authentication_callback(userid, request):

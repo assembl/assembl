@@ -27,6 +27,7 @@ Unidecode==0.04.13
 requests
 rdflib
 celery
+supervisor
 uricore
 lxml
 -e git://github.com/RDFLib/rdflib-jsonld#egg=rdflib_jsonld

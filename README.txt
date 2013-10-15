@@ -23,20 +23,29 @@ From a checkout
 
 Running:
 
+Install Virtuoso.
+On Ubuntu, you would probably sudo apt-get install virtuoso-server
+On OS X, if you have MacPorts, you would sudo port install virtuoso
+From source: http://virtuoso.openlinksw.com/dataspace/doc/dav/wiki/Main/VOSDownload
+
+You need to set the environment variable VIRTUOSO_ROOT to the root of your virtuoso install.
+On linux, this is probably /usr
+If you have installed it with MacPorts, it would be /opt/local.
+If you have installed it with a configure-make-make install, it would be 
+/usr/local/virtuoso-opensource
+
 - cd ~/assembl
 
 Only the first time you run it:
-In your odbc.ini, make sure you have Driver = /usr/lib/odbc/virtodbcu.so and NOT 
-virtodbcu.so (otherwise, all unicode characters will be mangled).
-
-- echo "user_create('assembl', 'assembl');"|isql-vt 1111 dba dba
-- echo "grant select on db..tables to assembl;grant select on db..sys_users to assembl;"|isql-vt 1111 dba dba
-- echo "db..user_set_qualifier ('assembl', 'assembl');"|isql-vt 1111 dba dba
+- $venv/bin/assembl-ini-files development.ini
+- $venv/bin/supervisord
+(wait for virtuoso to start)
 - $venv/bin/assembl-db-manage development.ini bootstrap
 
-In two separate terminals:
-- $venv/bin/celery worker -l info -A assembl.tasks.imap -b sqla+virtuoso://assembl:assembl@VOS
-- $venv/bin/pserve --reload development.ini
+On subsequent runs, just make sure supervisord is running.
+
+Then, start the development server and compass with this command:
+supervisorctl start dev:
 
 Updating an environment:
 
@@ -48,9 +57,7 @@ Updating an environment:
 Compiling CSS
 -------------
 
-
-
-You have too install compass (the first time, already done if you've used bootstrap above):
+You have to install compass (the first time, already done if you've used bootstrap above):
 
 - fab devenv install_compass
 
