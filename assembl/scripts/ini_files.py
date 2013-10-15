@@ -24,6 +24,11 @@ def main():
     vroot_var = join(vroot, 'var')
     if not exists(vroot_var):
         vroot_var = '/var'
+    vroot_lib = join(vroot, 'lib')
+    assert exists(vroot_lib)
+    if not exists(join(vroot_lib, 'virtodbcu.so'))\
+            and exists(join(vroot_lib, 'odbc', 'virtodbcu.so'))
+        vroot_lib = join(vroot_lib, 'odbc')
     vname = 'virtuoso'
     if not exists(join(vroot, 'share', vname)):
         names = listdir(join(vroot, 'share'))
@@ -40,6 +45,7 @@ def main():
         'VIRTUOSO_PORT': config.getint('virtuoso', 'port'),
         'VIRTUOSO_ROOT': vroot,
         'VIRTUOSO_ROOT_VAR': vroot_var,
+        'VIRTUOSO_ROOT_LIB': vroot_lib,
         'VIRTUOSO_SUBDIR_NAME': vname
     }
     for fname in ('var/db/virtuoso.ini', 'odbc.ini'):
