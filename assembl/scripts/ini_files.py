@@ -27,7 +27,7 @@ def main():
     vroot_lib = join(vroot, 'lib')
     assert exists(vroot_lib)
     if not exists(join(vroot_lib, 'virtodbcu.so'))\
-            and exists(join(vroot_lib, 'odbc', 'virtodbcu.so'))
+            and exists(join(vroot_lib, 'odbc', 'virtodbcu.so')):
         vroot_lib = join(vroot_lib, 'odbc')
     vname = 'virtuoso'
     if not exists(join(vroot, 'share', vname)):
