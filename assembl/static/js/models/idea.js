@@ -10,12 +10,17 @@ define(['backbone','underscore', 'models/segment', 'app', 'i18n'], function(Back
          */
         initialize: function(obj){
             obj = obj || {};
+            var that = this;
 
             obj.creationDate = obj.creationDate || app.getCurrentTime();
             this.set('creationDate', obj.creationDate);
 
             this.on('change:inSynthesis', this.onInSynthesisChange, this);
             this.on('change:shortTitle change:longTitle change:parentId', this.onAttrChange, this);
+
+            app.on('synthesisPanel:edit', function(){
+                that.attributes['synthesisPanel-editing'] = false;
+            });
         },
 
         /**
