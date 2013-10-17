@@ -51,7 +51,7 @@ def get_extracts(request):
         Content.source_id==Source.id
     )
     all_extracts = all_extracts.options(joinedload_all(Extract.source, Content.post, Post.creator, AgentProfile.user))
-    all_extracts = all_extracts.options(joinedload_all(Extract.creator, User.profile))
+    all_extracts = all_extracts.options(joinedload_all(Extract.creator, AgentProfile.user))
     serializable_extracts = [
         extract.serializable() for extract in all_extracts
     ]
