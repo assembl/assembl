@@ -243,7 +243,7 @@ class IdentityProviderAccount(AbstractAgentAccount):
     """An account with an external identity provider"""
     __tablename__ = "idprovider_agent_account"
     __mapper_args__ = {
-        'polymorphic_identity': 'idprovider_account',
+        'polymorphic_identity': 'idprovider_agent_account',
     }
     id = Column(Integer, ForeignKey(
         'abstract_agent_account.id',
@@ -259,7 +259,7 @@ class IdentityProviderAccount(AbstractAgentAccount):
     userid = Column(String(200))
 
     def signature(self):
-        return ('idprovider_account', self.provider_id, self.username,
+        return ('idprovider_agent_account', self.provider_id, self.username,
                 self.domain, self.userid)
 
     def display_name(self):

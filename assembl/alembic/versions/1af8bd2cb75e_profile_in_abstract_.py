@@ -33,11 +33,14 @@ def upgrade(pyramid_env):
                 SELECT profile_id FROM agent_email_account 
                     WHERE agent_email_account.id = abstract_agent_account.id)
                 WHERE "type" = 'agent_email_account' ''')
+        op.execute('''UPDATE abstract_agent_account 
+                SET type = 'idprovider_agent_account'
+                WHERE type = 'idprovider_account' ''')
         op.execute(
             '''UPDATE abstract_agent_account SET profile_id=(
                 SELECT profile_id FROM idprovider_agent_account 
                     WHERE idprovider_agent_account.id = abstract_agent_account.id)
-                WHERE "type" = 'idprovider_account' ''')
+                WHERE "type" = 'idprovider_agent_account' ''')
         op.drop_column('idprovider_agent_account', 'profile_id')
         op.drop_column('agent_email_account', 'profile_id')
         op.alter_column('abstract_agent_account', 'profile_id', nullable=False)

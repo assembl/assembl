@@ -33,7 +33,7 @@ def upgrade(pyramid_env):
         op.rename_table(u'idprovider_account', 'idprovider_agent_account')
         op.execute("INSERT INTO abstract_agent_account (SELECT id, 'agent_email_account' FROM agent_email_account)")
         op.execute("UPDATE idprovider_agent_account SET id = id + (SELECT max(id) FROM agent_email_account)")
-        op.execute("INSERT INTO abstract_agent_account (SELECT id, 'idprovider_account' FROM idprovider_agent_account)")
+        op.execute("INSERT INTO abstract_agent_account (SELECT id, 'idprovider_agent_account' FROM idprovider_agent_account)")
         op.execute("select setval('abstract_agent_account_id_seq', (SELECT max(id)+1 FROM abstract_agent_account), false)")
         op.execute("alter table agent_email_account alter column id drop default")
         op.execute("alter table idprovider_agent_account alter column id drop default")
