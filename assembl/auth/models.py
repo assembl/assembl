@@ -80,7 +80,7 @@ class AgentProfile(SQLAlchemyBaseModel):
 
     def display_name(self):
         # TODO: Prefer types?
-        for acc in self.accounts():
+        for acc in self.accounts:
             name = acc.display_name()
             if name:
                 return name
