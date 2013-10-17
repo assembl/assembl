@@ -150,7 +150,7 @@ class AgentProfile(SQLAlchemyBaseModel):
             r['email'] = use_email
         if self.user:
             r['type'] = 'User'
-            r['username'] = self.user.username
+            r['username'] = self.user.display_name()
             if not use_email:
                 r['email'] = self.user.get_preferred_email()
         return r
