@@ -4,6 +4,12 @@ assembl README
 Getting Started
 ---------------
 
+Install required development libraries
+
+- python-dev
+- build-essential
+- unixodbc-dev
+
 Setup a development environment:
 
 From scratch:
@@ -24,7 +30,11 @@ From a checkout
 Running:
 
 Install Virtuoso.
-On Ubuntu, you would probably sudo apt-get install virtuoso-server
+
+On Ubuntu:
+
+- sudo apt-get install virtuoso-server virtuoso-vad-conductor
+
 On OS X, if you have MacPorts, you would sudo port install virtuoso
 From source: http://virtuoso.openlinksw.com/dataspace/doc/dav/wiki/Main/VOSDownload
 
