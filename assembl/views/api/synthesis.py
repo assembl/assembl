@@ -18,7 +18,7 @@ synthesis = Service(
 @synthesis.get()  # permission=P_READ)
 def get_synthesis(request):
     discussion_id = request.matchdict['discussion_id']
-    discussion = DBSession.query(Discussion).get(discussion_id)
+    discussion = DBSession.query(Discussion).get(int(discussion_id))
 
     return discussion.synthesis.serializable()
 
@@ -27,7 +27,7 @@ def get_synthesis(request):
 @synthesis.put()  # permission=P_ADD_IDEA)
 def save_synthesis(request):
     discussion_id = request.matchdict['discussion_id']
-    discussion = DBSession.query(Discussion).get(discussion_id)
+    discussion = DBSession.query(Discussion).get(int(discussion_id))
     synthesis_data = json.loads(request.body)
     synthesis = discussion.synthesis
 

@@ -34,7 +34,7 @@ extract = Service(
 @extract.get()  # permission=P_READ
 def get_extract(request):
     extract_id = request.matchdict['id']
-    extract = DBSession.query(Extract).get(extract_id)
+    extract = DBSession.query(Extract).get(int(extract_id))
 
     return extract.serializable()
 
@@ -70,7 +70,7 @@ def post_extract(request):
     post_id = extract_data.get('idPost')
     
     with transaction.manager:
-        post = DBSession.query(Post).get(post_id)
+        post = DBSession.query(Post).get(int(post_id))
         if not post:
             raise HTTPNotFound("Post with id '%s' not found." % post_id)
         extract_body = extract_data.get('text', '')
@@ -97,7 +97,7 @@ def put_extract(request):
     user_id = authenticated_userid(request)
 
     updated_extract_data = json.loads(request.body)
-    extract = DBSession.query(Extract).get(extract_id)
+    extract = DBSession.query(Extract).get(int(extract_id))
 
     with transaction.manager:
         extract.owner_id = user_id or extract.owner_id
@@ -112,7 +112,7 @@ def put_extract(request):
 @extract.delete()  # permission=P_DELETE_EXTRACT
 def delete_extract(request):
     extract_id = request.matchdict['id']
-    extract = DBSession.query(Extract).get(extract_id)
+    extract = DBSession.query(Extract).get(int(extract_id))
 
     if not extract:
         return {'ok': False}
