@@ -30,17 +30,17 @@
 
 	<p>
 	  <label for="port">Port</label>
-	  <input type="text" name="port" id="port"/>
+	  <input type="text" name="port" id="port" value="143"/>
 	</p>
 
 	<p>
-	  <label for="ssl">SSL?</label>
+	  <label for="ssl">SSL? (leave off if you use STARTTLS)</label>
 	  <input type="checkbox" name="ssl" id="ssl" />
 	</p>
 
 	<p>
 	  <label for="folder">Folder</label>
-	  <input type="text" name="folder" id="folder"/>
+	  <input type="text" name="folder" id="folder" value="inbox"/>
 	</p>
 
 	<p>
@@ -53,6 +53,11 @@
 	  <input type="password" name="password" id="password"/>
 	</p>
 
+    <p>
+      <label for="mailing_list_address">Mailing list address (if not empty, object will be a Mailing list instead of a mailbox)</label>
+      <input type="text" name="mailing_list_address" id="mailing_list_address"/>
+    </p>
+    
 	<p>
 	  <input type="submit" value="Create"/>
 	</p>

@@ -8,7 +8,7 @@ from pyramid.httpexceptions import HTTPFound
 from assembl.db import DBSession
 from assembl.synthesis.models import Discussion
 from assembl.views.home.views import get_default_context
-from assembl.source.models.mail import Mailbox
+from assembl.source.models.mail import Mailbox, MailingList
 from assembl.auth.models import create_default_permissions, User
 
 
@@ -50,8 +50,8 @@ def discussion_admin(request):
         DBSession.add(discussion)
 
         create_default_permissions(DBSession, discussion)
-
-        mailbox = Mailbox(
+        mailbox_class = MailingList if g('mailing_list_address') else Mailbox
+        mailbox = mailbox_class(
             name=name,
             host=host,
             port=int(port),
@@ -61,6 +61,8 @@ def discussion_admin(request):
             password=password,
             )
 
+        if(g('mailing_list_address')):
+            mailbox.post_email_address = g('mailing_list_address')
         mailbox.discussion = discussion
         transaction.commit()
 
