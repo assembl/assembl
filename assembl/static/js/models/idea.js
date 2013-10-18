@@ -307,7 +307,7 @@ define(['backbone','underscore', 'models/segment', 'app', 'i18n'], function(Back
         model: IdeaModel,
 
         /**
-         * Returns the ideas to compose the synsthesis panel
+         * Returns the ideas to compose the synthesis panel
          */
         getInSynthesisIdeas: function(){
             var ideas = this.where({inSynthesis: true}),

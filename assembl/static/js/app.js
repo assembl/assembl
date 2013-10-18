@@ -615,14 +615,18 @@ function($, _, ckeditor, User, Moment, i18n){
             var longTitle = escape(app.stripHtml(idea.get('longTitle'))),
                 span = $("<span>"+idea.get("longTitle")+"</span>"),
                 children = [],
+                segments = [],
                 tmpl = app.loadTemplate('synthesisIdeaEmail'),
-                authors;
+                authors = [];
 
             span.find('p:first-child').css('margin-top', 0);
             span.find('p:last-child').css('margin-bottom', 0);
-
-            authors = ['Neil Armstrong', 'Joey Ramone'];
-
+            
+            segments = app.getSegmentsByIdea(idea);
+            segments.forEach(function(segment) {
+                authors.push(segment.get("source_creator").name);
+            });
+            authors = _.uniq(authors);
             _.each(idea.getSynthesisChildren(), function(child){
                 children.push( app.printIdea(child) );
             });

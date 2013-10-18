@@ -23,7 +23,9 @@
     </div>
 
     <small style="line-height: 2em; white-space: nowrap;">
-        {{ gettext('By') }}
+        <% if( authors.length ) { %>
+            {{ gettext('By') }}
+        <% } %>
         <% _.each(authors, function(author, index, list) { %>
             <i style='font-style: italic'><%= author %></i>
             <% if( index < list.length-1 ) { %>,<% } %>
