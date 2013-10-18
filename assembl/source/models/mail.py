@@ -242,11 +242,11 @@ class Mailbox(Source):
                 if isinstance(response_part, tuple):
                     message_string = response_part[1]
 
-            email_object = mailbox.parse_email(message_string)
+            email_object = mailbox_obj.parse_email(message_string)
             dbsession.add(email_object)
             transaction.commit()
             dbsession.remove()
-            mailbox = session.get(Mailbox).get(mailbox.id)
+            mailbox_obj = session.get(Mailbox).get(mailbox.id)
 
         if len(email_ids):
             new_emails = [import_email(mbox, email_id) for email_id in email_ids]
