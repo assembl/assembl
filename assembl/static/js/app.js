@@ -615,18 +615,17 @@ function($, _, ckeditor, User, Moment, i18n){
             var longTitle = escape(idea.getLongTitleDisplayText()),
                 span = $("<span>"+idea.getLongTitleDisplayText()+"</span>"),
                 children = [],
-                segments = [],
+                segments = app.getSegmentsByIdea(idea),
                 tmpl = app.loadTemplate('synthesisIdeaEmail'),
                 authors = [];
 
             span.find('p:first-child').css('margin-top', 0);
             span.find('p:last-child').css('margin-bottom', 0);
             
-            segments = app.getSegmentsByIdea(idea);
             segments.forEach(function(segment) {
                 authors.push(segment.get("source_creator").name);
             });
-            authors = _.uniq(authors);
+
             _.each(idea.getSynthesisChildren(), function(child){
                 children.push( app.printIdea(child) );
             });
@@ -636,7 +635,7 @@ function($, _, ckeditor, User, Moment, i18n){
                 level: idea.getSynthesisLevel(),
                 editing: idea.get('synthesisPanel-editing') || false,
                 longTitle: span.html(),
-                authors: authors,
+                authors: _.uniq(authors),
                 email: email,
                 subject: longTitle,
                 reactLabel: i18n.gettext('react'),
