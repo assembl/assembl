@@ -612,8 +612,8 @@ function($, _, ckeditor, User, Moment, i18n){
          * @return {string}
          */
         printIdea: function(idea, email){
-            var longTitle = escape(app.stripHtml(idea.get('longTitle'))),
-                span = $("<span>"+idea.get("longTitle")+"</span>"),
+            var longTitle = escape(idea.getLongTitleDisplayText()),
+                span = $("<span>"+idea.getLongTitleDisplayText()+"</span>"),
                 children = [],
                 segments = [],
                 tmpl = app.loadTemplate('synthesisIdeaEmail'),
