@@ -10,8 +10,7 @@ from sqlalchemy import (
     ForeignKey,
 )
 
-from assembl.db.models import SQLAlchemyBaseModel
-
+from assembl.lib.sqla import Base as SQLAlchemyBaseModel
 
 
 class Source(SQLAlchemyBaseModel):

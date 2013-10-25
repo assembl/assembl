@@ -4,10 +4,12 @@ config files. """
 import subprocess
 import sys
 
+from pyramid.paster import get_appsettings
+import transaction
 from alembic.migration import MigrationContext
 
 from ..lib.migration import bootstrap_db
-from ..lib.sqla import create_engine, DBSession as db
+from ..lib.sqla import configure_engine, mark_changed
 
 
 def main():
@@ -19,10 +21,12 @@ def main():
     config_uri = sys.argv.pop(1)
 
     if sys.argv[1] == 'bootstrap':
+        settings = get_appsettings(config_uri)
+        engine = configure_engine(settings, True)
         bootstrap_db(config_uri)
+        mark_changed()
+        transaction.commit()
     else:
-        engine = create_engine(config_uri)
-        db.configure(bind=engine)
         context = MigrationContext.configure(engine.connect())
         db_version = context.get_current_revision()
 

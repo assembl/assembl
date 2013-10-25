@@ -2,25 +2,23 @@ from __future__ import absolute_import
 
 import sys
 
+from pyramid.paster import get_appsettings
 from alembic import command
 from alembic.config import Config
 from alembic.migration import MigrationContext
 from alembic.script import ScriptDirectory
 
-from ..lib.sqla import create_engine, metadata
-from assembl.db import DBSession as db
-from assembl.auth.models import (
-    populate_default_permissions, populate_default_roles)
+from ..lib.sqla import configure_engine, metadata, get_session_maker
 import transaction
 
-def bootstrap_db(config_uri=None, engine=None, with_migration=True):
+
+def bootstrap_db(config_uri=None, with_migration=True):
     """Bring a blank database to a functional state."""
-    if engine is None:
-        engine = create_engine(config_uri)
-    db.configure(bind=engine)
+
+    db = get_session_maker()
 
     if with_migration:
-        context = MigrationContext.configure(engine.connect())
+        context = MigrationContext.configure(db().connection())
         db_version = context.get_current_revision()
 
         if db_version:
@@ -37,21 +35,22 @@ def bootstrap_db(config_uri=None, engine=None, with_migration=True):
                              'attempting to bootstrap the database.\n')
             sys.exit(2)
 
-    metadata.create_all(engine)
 
-    with transaction.manager:
-        populate_default_permissions(db)
-        populate_default_roles(db)
+    metadata.create_all(db().connection())
+    # import after session to delay loading of BaseOps
+    from assembl.auth.models import (
+        populate_default_permissions, populate_default_roles)
+    populate_default_permissions(db())
+    populate_default_roles(db())
 
     # Clean up the sccoped session to allow a later app instantiation.
 
     if with_migration and heads:
-        command.stamp(config, 'head')
+        context = MigrationContext.configure(db().connection())
+        context._update_current_rev(db_version, heads[0])
 
-    db.remove()
 
-
-def ensure_db_version(config_uri, engine):
+def ensure_db_version(config_uri, session_maker):
     """Exit if database is not up-to-date."""
     config = Config(config_uri)
     script_dir = ScriptDirectory.from_config(config)
@@ -65,7 +64,7 @@ def ensure_db_version(config_uri, engine):
     else:
         repo_version = heads[0] if heads else None
 
-    context = MigrationContext.configure(engine.connect())
+    context = MigrationContext.configure(session_maker()().connect())
     db_version = context.get_current_revision()
 
     if not db_version:
@@ -91,4 +90,4 @@ def includeme(config):
     """Initialize Alembic-related stuff at app start-up time."""
     skip_migration = config.registry.settings.get('app.skip_migration')
     if not skip_migration and not is_migration_script():
-        ensure_db_version(config.registry.settings['config_uri'], db.bind)
+        ensure_db_version(config.registry.settings['config_uri'], get_session_maker())

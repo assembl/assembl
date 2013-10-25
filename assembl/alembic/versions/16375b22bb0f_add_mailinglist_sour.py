@@ -18,8 +18,6 @@ import transaction
 from assembl import models as m
 from assembl.lib import config
 
-db = m.DBSession
-
 
 def upgrade(pyramid_env):
     with context.begin_transaction():

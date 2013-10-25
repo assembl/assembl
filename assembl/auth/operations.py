@@ -5,13 +5,14 @@ from pyramid_mailer.message import Message
 
 from assembl.lib import config
 from models import IdentityProvider, EmailAccount
-from ..db import DBSession
+from ..models import get_session_maker
 from .password import email_token, verify_password
 
 
 def get_identity_provider(auth_context, create=True):
     provider = None
-    provider = DBSession.query(IdentityProvider).filter_by(
+    session = get_session_maker()()
+    provider = IdentityProvider.db.query(IdentityProvider).filter_by(
         provider_type=auth_context.provider_type,
         name=auth_context.provider_name
         ).first()
@@ -19,7 +20,7 @@ def get_identity_provider(auth_context, create=True):
         provider = IdentityProvider(
             provider_type=auth_context.provider_type,
             name=auth_context.provider_name)
-        DBSession.add(provider)
+        session.add(provider)
     return provider
 
 
@@ -61,7 +62,7 @@ def send_confirmation_email(request, email):
 
 def verify_email_token(token):
     id, hash = token.split('f', 1)
-    email = DBSession.query(EmailAccount).get(int(id))
+    email = EmailAccount.get(id=int(id))
     if email and verify_password(
         str(email.id) + email.email + config.get(
             'security.email_token_salt'), hash, True):

@@ -30,7 +30,6 @@ from ...auth.models import (
 from ...auth.password import format_token
 from ...auth.operations import (
     get_identity_provider, send_confirmation_email, verify_email_token)
-from ...db import DBSession
 from ...lib import config
 
 default_context = {
@@ -79,8 +78,9 @@ def get_profile(request):
     id_type = request.matchdict.get('type').strip()
     identifier = request.matchdict.get('identifier').strip()
     user = None
+    session = AgentProfile.db
     if id_type == 'u':
-        username = DBSession.query(Username).filter_by(username=identifier).first()
+        username = session.query(Username).filter_by(username=identifier).first()
         if not username:
             raise HTTPNotFound()
         user = username.user
@@ -90,17 +90,17 @@ def get_profile(request):
             id = int(identifier)
         except:
             raise HTTPNotFound()
-        profile = DBSession.query(AgentProfile).get(id)
+        profile = session.query(AgentProfile).get(id)
         if not profile:
             raise HTTPNotFound()
     elif id_type == 'email':
-        account = DBSession.query(EmailAccount).filter_by(
+        account = session.query(EmailAccount).filter_by(
             email=identifier).order_by(desc(EmailAccount.verified)).first()
         if not account:
             raise HTTPNotFound()
         profile = account.profile
     else:
-        account = DBSession.query(IdentityProviderAccount).join(
+        account = session.query(IdentityProviderAccount).join(
             IdentityProvider).filter(
             IdentityProviderAccount.username == identifier and
             IdentityProvider.type == id_type).first()
@@ -113,6 +113,7 @@ def get_profile(request):
 
 @view_config(route_name='profile')
 def assembl_profile(request):
+    session = AgentProfile.db
     user, profile = get_profile(request)
     id_type = request.matchdict.get('type').strip()
     logged_in = authenticated_userid(request)
@@ -128,7 +129,7 @@ def assembl_profile(request):
             'assembl:templates/view_profile.jinja2',
             dict(default_context,
                  profile=profile,
-                 user=logged_in and DBSession.query(User).get(logged_in)))
+                 user=logged_in and session.query(User).get(logged_in)))
 
     errors = []
     if save:
@@ -137,10 +138,10 @@ def assembl_profile(request):
         username = request.params.get('username', '').strip()
         if username:
             # check if exists
-            if DBSession.query(Username).filter_by(username=username).count():
+            if session.query(Username).filter_by(username=username).count():
                 errors.append(_('The username %s is already used') % (username,))
             else:
-                DBSession.add(Username(username=username, user=user))
+                session.add(Username(username=username, user=user))
                 if id_type == 'u':
                     redirect = True
         name = request.params.get('name', '').strip()
@@ -158,13 +159,13 @@ def assembl_profile(request):
             # No need to check presence since not validated yet
             email = EmailAccount(
                 email=add_email, profile=user.profile)
-            DBSession.add(email)
+            session.add(email)
         transaction.commit()
         if redirect:
             raise HTTPFound('/user/u/'+username)
-        user = DBSession.query(User).get(user_id)
+        user = session.query(User).get(user_id)
     unverified_emails = [
-        (ea, DBSession.query(EmailAccount).filter_by(
+        (ea, session.query(EmailAccount).filter_by(
             email=ea.email, verified=True).first())
         for ea in user.profile.email_accounts() if not ea.verified]
     return render_to_response(
@@ -174,7 +175,7 @@ def assembl_profile(request):
              unverified_emails=unverified_emails,
              providers=request.registry.settings['login_providers'],
              the_user=user,
-             user=DBSession.query(User).get(logged_in)))
+             user=session.query(User).get(logged_in)))
 
 
 @view_config(route_name='avatar')
@@ -199,12 +200,13 @@ def assembl_register_view(request):
         return dict(default_context,
                     next_view=request.params.get('next_view', '/'))
     forget(request)
+    session = AgentProfile.db
     name = request.params.get('name', '').strip()
     password = request.params.get('password', '').strip()
     password2 = request.params.get('password2', '').strip()
     email = request.params.get('email', '').strip()
     # Find agent account to avoid duplicates!
-    if DBSession.query(EmailAccount).filter_by(
+    if session.query(EmailAccount).filter_by(
         email=email, verified=True).count():
             return dict(default_context,
                         error=_("We already have a user with this email."))
@@ -226,9 +228,9 @@ def assembl_register_view(request):
         email=email,
         profile=profile
         )
-    DBSession.add(user)
-    DBSession.add(email_account)
-    DBSession.flush()
+    session.add(user)
+    session.add(email_account)
+    session.flush()
     userid = user.id
     send_confirmation_email(request, email_account)
     # TODO: Check that the email logic gets the proper locale. (send in URL?)
@@ -247,17 +249,18 @@ def assembl_register_view(request):
 )
 def assembl_login_complete_view(request):
     # Check if proper authorization. Otherwise send to another page.
+    session = AgentProfile.db
     identifier = request.params.get('identifier', '').strip()
     password = request.params.get('password', '').strip()
     logged_in = authenticated_userid(request)
     user = None
     if '@' in identifier:
-        account = DBSession.query(EmailAccount).filter_by(
+        account = session.query(EmailAccount).filter_by(
             email=identifier, verified=True).first()
         if account:
             user = account.profile.user
     else:
-        username = DBSession.query(Username).filter_by(username=identifier).first()
+        username = session.query(Username).filter_by(username=identifier).first()
         user = username.user
 
     if not user:
@@ -274,7 +277,7 @@ def assembl_login_complete_view(request):
     if not user.check_password(password):
         user.login_failures += 1
         #TODO: handle high failure count
-        DBSession.add(user)
+        session.add(user)
         transaction.commit()
         return dict(default_context,
                     error=_("Invalid user and password"))
@@ -287,6 +290,7 @@ def assembl_login_complete_view(request):
     context='velruse.AuthenticationComplete'
 )
 def velruse_login_complete_view(request):
+    session = AgentProfile.db
     context = request.context
     velruse_profile = context.profile
     logged_in = authenticated_userid(request)
@@ -295,12 +299,12 @@ def velruse_login_complete_view(request):
     idp_accounts = []
     new_idp_accounts = []
     velruse_accounts = velruse_profile['accounts']
-    old_autoflush = DBSession.autoflush
+    old_autoflush = session.autoflush
     # sqla mislikes creating accounts before profiles, so delay
-    DBSession.autoflush = False
+    session.autoflush = False
     for velruse_account in velruse_accounts:
         if 'userid' in velruse_account:
-            idp_account = DBSession.query(IdentityProviderAccount).filter_by(
+            idp_account = session.query(IdentityProviderAccount).filter_by(
                 provider=provider,
                 domain=velruse_account['domain'],
                 userid=velruse_account['userid']
@@ -308,7 +312,7 @@ def velruse_login_complete_view(request):
             if idp_account:
                 idp_accounts.append(idp_account)
         elif 'username' in velruse_account:
-            idp_account = DBSession.query(IdentityProviderAccount).filter_by(
+            idp_account = session.query(IdentityProviderAccount).filter_by(
                 provider=provider,
                 domain=velruse_account['domain'],
                 username=velruse_account['username']
@@ -326,7 +330,7 @@ def velruse_login_complete_view(request):
             )
         idp_accounts.append(idp_account)
         new_idp_accounts.append(idp_account)
-        DBSession.add(idp_account)
+        session.add(idp_account)
     # find AgentProfile
     profile = None
     user = None
@@ -334,7 +338,7 @@ def velruse_login_complete_view(request):
     # Maybe we already have a profile based on email
     if provider.trust_emails and 'verifiedEmail' in velruse_profile:
         email = velruse_profile['verifiedEmail']
-        email_account = DBSession.query(EmailAccount).filter_by(
+        email_account = session.query(EmailAccount).filter_by(
             email=email, verified=True).first()
         if email_account and email_account.profile:
             profiles.push(email_account.profile)
@@ -344,7 +348,7 @@ def velruse_login_complete_view(request):
     if logged_in:
         # NOTE: Must make sure that login page not available when
         # logged in as another account.
-        user = DBSession.query(User).filter_by(id=logged_in).first()
+        user = session.query(User).filter_by(id=logged_in).first()
         if user:
             profile = user.profile
             if profile in profiles:
@@ -364,12 +368,12 @@ def velruse_login_complete_view(request):
         # Create a new profile and user
         profile = AgentProfile(name=velruse_profile['displayName'])
 
-        DBSession.add(profile)
+        session.add(profile)
         username = None
         usernames = set((a['preferredUsername'] for a in velruse_accounts
                          if 'preferredUsername' in a))
         for u in usernames:
-            if not DBSession.query(Username).filter_by(username=u).count():
+            if not session.query(Username).filter_by(username=u).count():
                 username = u
                 break
         user = User(
@@ -379,13 +383,13 @@ def velruse_login_complete_view(request):
             creation_date=datetime.now(),
             #timezone=velruse_profile['utcOffset'],   # TODO: needs parsing
             )
-        DBSession.add(user)
+        session.add(user)
         if username:
-            DBSession.add(Username(username=username, user=user))
+            session.add(Username(username=username, user=user))
     for idp_account in new_idp_accounts:
         idp_account.profile = profile
     # Now all accounts have a profile
-    DBSession.autoflush = old_autoflush
+    session.autoflush = old_autoflush
     email_accounts = {ea.email: ea for ea in profile.email_accounts()}
     # There may be new emails in the accounts
     if 'verifiedEmail' in velruse_profile:
@@ -394,7 +398,7 @@ def velruse_login_complete_view(request):
             email_account = email_accounts[email]
             if provider.trust_emails and not email_account.verified:
                 email_account.verified = True
-                DBSession.add(email_account)
+                session.add(email_account)
         else:
             email_account = EmailAccount(
                 email=email,
@@ -402,7 +406,7 @@ def velruse_login_complete_view(request):
                 profile=profile
                 )
             email_accounts[email] = email_account
-            DBSession.add(email_account)
+            session.add(email_account)
     for email in velruse_profile.get('emails', []):
         preferred = False
         if isinstance(email, dict):
@@ -414,9 +418,9 @@ def velruse_login_complete_view(request):
                 preferred=preferred,
                 profile=profile
                 )
-            DBSession.add(email)
+            session.add(email)
     # Note that if an IdP account stops claiming an email, it "leaks".
-    DBSession.flush()
+    session.flush()
 
     user_id = user.id
     headers = remember(request, user_id, tokens=format_token(user))
@@ -437,7 +441,7 @@ def velruse_login_complete_view(request):
 def confirm_user_email(request):
     # TODO: How to make this not become a spambot?
     id = int(request.matchdict.get('email_account_id'))
-    email = DBSession.query(EmailAccount).get(id)
+    email = EmailAccount.get(id=id)
     if not email:
         raise HTTPNotFound()
     if not email.verified:
@@ -461,15 +465,16 @@ def confirm_user_email(request):
 def user_confirm_email(request):
     token = request.matchdict.get('ticket')
     email = verify_email_token(token)
+    session = EmailAccount.db
     # TODO: token expiry
     if email and not email.verified:
         # maybe another profile already verified that email
-        other_email_account = DBSession.query(EmailAccount).filter_by(
+        other_email_account = session.query(EmailAccount).filter_by(
             email=email.email, verified=True).first()
         if other_email_account:
             profile = email.profile
             # We have two versions of the email, delete the unverified one
-            DBSession.delete(email)
+            session.delete(email)
             if other_email_account.profile != email.profile:
                 # Give priority to the one where the email was verified last.
                 profile.merge(other_email_account.profile)

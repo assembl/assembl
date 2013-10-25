@@ -15,7 +15,6 @@ from sqlalchemy.sql.expression import literal_column, bindparam, and_
 from sqlalchemy.sql import cast
 
 from assembl.views.api import API_DISCUSSION_PREFIX
-from assembl.db import DBSession
 import transaction
 
 from assembl.auth import P_READ, P_ADD_POST
@@ -71,7 +70,7 @@ def _get_idea_query(post, levels=None):
 
     """
     level = literal_column('ARRAY[id]', type_=ARRAY(Integer))
-    post = DBSession.query(post.__class__) \
+    post = Post.db.query(post.__class__) \
                     .add_columns(level.label('level')) \
                     .filter(post.__class__.id == post.id) \
                     .cte(name='thread', recursive=True)
@@ -79,20 +78,20 @@ def _get_idea_query(post, levels=None):
     replies_alias = aliased(post.__class__, name='replies')
     cumul_level = post_alias.c.level.op('||')(replies_alias.id)
     parent_link = replies_alias.parent_id == post_alias.c.id
-    children = DBSession.query(replies_alias).add_columns(cumul_level) \
+    children = Post.db.query(replies_alias).add_columns(cumul_level) \
                         .filter(parent_link)
 
     if levels:
         level_limit = func.array_upper(post_alias.c.level, 1) < levels
         children = children.filter(level_limit)
 
-    return DBSession.query(post.union_all(children)).order_by(post.c.level)
+    return Post.db.query(post.union_all(children)).order_by(post.c.level)
 
 
 @posts.get()  # permission=P_READ)
 def get_posts(request):
     discussion_id = int(request.matchdict['discussion_id'])
-    discussion = DBSession.query(Discussion).get(discussion_id)
+    discussion = Discussion.get(id=discussion_id)
     if not discussion:
         raise HTTPNotFound(_("No discussion found with id=%s" % discussion_id))
 
@@ -133,7 +132,7 @@ def get_posts(request):
         
 
     #Rename "inbox" to "unread", the number of unread messages for the current user.
-    no_of_messages_viewed_by_user = DBSession.query(ViewPost).join(
+    no_of_messages_viewed_by_user = Post.db.query(ViewPost).join(
         Post,
         Content,
         Source
@@ -143,7 +142,7 @@ def get_posts(request):
         ViewPost.actor_id == user_id,
     ).count() if user_id else 0
 
-    discussion_posts = DBSession.query(Post).join(
+    discussion_posts = Post.db.query(Post).join(
         Content,
         Source,
     ).filter(
@@ -156,12 +155,12 @@ def get_posts(request):
 
     if root_idea_id:
         if root_idea_id == Idea.ORPHAN_POSTS_IDEA_ID:
-            ideas_query = DBSession.query(Post) \
+            ideas_query = Post.db.query(Post) \
                 .filter(Post.id.in_(text(Idea._get_orphan_posts_statement(),
                                          bindparams=[bindparam('discussion_id', discussion_id)]
                                          )))
         else:
-            ideas_query = DBSession.query(Post) \
+            ideas_query = Post.db.query(Post) \
                 .filter(Post.id.in_(text(Idea._get_related_posts_statement(),
                                          bindparams=[bindparam('root_idea_id', root_idea_id)]
                                          )))
@@ -171,7 +170,7 @@ def get_posts(request):
     else:
         posts = discussion_posts
         if root_post_id:
-            root_post = DBSession.query(Post).get(root_post_id)
+            root_post = Post.get(id=root_post_id)
 
             posts = posts.filter(
                 (Post.ancestry.like(
@@ -213,7 +212,7 @@ def get_posts(request):
                             post_id=post.id
                         )
 
-                        DBSession.add(viewed_post)
+                        Post.db.add(viewed_post)
                         
         post_data.append(serializable_post)
 
@@ -240,7 +239,7 @@ def get_posts(request):
 @post.get()  # permission=P_READ)
 def get_post(request):
     post_id = request.matchdict['id']
-    post = DBSession.query(Post).get(post_id)
+    post = Post.get(id=post_id)
 
     if not post:
         raise HTTPNotFound("Post with id '%s' not found." % post_id)
@@ -255,7 +254,7 @@ def create_post(request):
     """
     request_body = json.loads(request.body)
     user_id = authenticated_userid(request)
-    user = DBSession.query(User).filter_by(id=user_id).one()
+    user = Post.db.query(User).filter_by(id=user_id).one()
 
     message = request_body.get('message', None)
     html = request_body.get('html', None)
@@ -269,13 +268,13 @@ def create_post(request):
         raise HTTPUnauthorized()
 
     if reply_id:
-        post = DBSession.query(Post).get(int(reply_id))
+        post = Post.get(id=int(reply_id))
         post.content.reply(user, message)
 
         return {"ok": True}
 
     discussion_id = request.matchdict['discussion_id']
-    discussion = DBSession.query(Discussion).get(discussion_id)
+    discussion = Discussion.get(id=discussion_id)
 
     subject = subject or discussion.topic
 

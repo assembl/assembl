@@ -4,10 +4,10 @@ import transaction
 from cornice import Service
 
 from pyramid.security import authenticated_userid
+from pyramid.httpexceptions import HTTPNotFound
 from sqlalchemy.orm import aliased, joinedload, joinedload_all, contains_eager
 
 from assembl.views.api import API_DISCUSSION_PREFIX
-from assembl.db import DBSession
 from assembl.synthesis.models import Extract
 from assembl.auth.models import AgentProfile, User
 from assembl.source.models import Source, Content, Post
@@ -34,7 +34,7 @@ extract = Service(
 @extract.get()  # permission=P_READ
 def get_extract(request):
     extract_id = request.matchdict['id']
-    extract = DBSession.query(Extract).get(extract_id)
+    extract = Extract.get(id=extract_id)
 
     return extract.serializable()
 
@@ -43,7 +43,7 @@ def get_extract(request):
 def get_extracts(request):
     discussion_id = int(request.matchdict['discussion_id'])
 
-    all_extracts = DBSession.query(Extract).join(
+    all_extracts = Extract.db.query(Extract).join(
         Content,
         Source
     ).filter(
@@ -66,11 +66,11 @@ def post_extract(request):
     """
     extract_data = json.loads(request.body)
     user_id = authenticated_userid(request)
-    
+
     post_id = extract_data.get('idPost')
-    
+
     with transaction.manager:
-        post = DBSession.query(Post).get(post_id)
+        post = Post.get(id=post_id)
         if not post:
             raise HTTPNotFound("Post with id '%s' not found." % post_id)
         extract_body = extract_data.get('text', '')
@@ -81,9 +81,9 @@ def post_extract(request):
             source_id=post.content.id
         )
 
-        DBSession.add(new_extract)
+        Extract.db.add(new_extract)
 
-    new_extract = DBSession.merge(new_extract)
+    new_extract = Extract.db.merge(new_extract)
 
     return {'ok': True, 'id': new_extract.id}
 
@@ -97,14 +97,16 @@ def put_extract(request):
     user_id = authenticated_userid(request)
 
     updated_extract_data = json.loads(request.body)
-    extract = DBSession.query(Extract).get(extract_id)
+    extract = Extract.get(id=extract_id)
+    if not extract:
+        raise HTTPNotFound("Extract with id '%s' not found." % extract_id)
 
     with transaction.manager:
         extract.owner_id = user_id or extract.owner_id
         extract.order = updated_extract_data.get('order', extract.order)
         extract.idea_id = updated_extract_data['idIdea']
 
-        DBSession.add(extract)
+        Extract.db.add(extract)
 
     return {'ok': True}
 
@@ -112,12 +114,12 @@ def put_extract(request):
 @extract.delete()  # permission=P_DELETE_EXTRACT
 def delete_extract(request):
     extract_id = request.matchdict['id']
-    extract = DBSession.query(Extract).get(extract_id)
+    extract = Extract.get(id=extract_id)
 
     if not extract:
         return {'ok': False}
 
     with transaction.manager:
-        DBSession.delete(extract)
+        Extract.db.delete(extract)
 
     return {'ok': True}

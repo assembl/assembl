@@ -21,7 +21,6 @@ from sqlalchemy.orm import relationship, backref
 from pyramid.security import Everyone, Authenticated
 
 from .password import hash_password, verify_password
-from ..db import DBSession
 from ..lib import config
 from ..lib.sqla import Base as SQLAlchemyBaseModel
 
@@ -63,13 +62,13 @@ class AgentProfile(SQLAlchemyBaseModel):
     }
 
     def identity_accounts(self):
-        return DBSession.query(
+        return self.db.query(
             IdentityProviderAccount
             ).join(AbstractAgentAccount
             ).filter_by(profile_id=self.id)
 
     def email_accounts(self):
-        return DBSession.query(
+        return self.db.query(
             EmailAccount
             ).join(AbstractAgentAccount
             ).filter_by(profile_id=self.id)
@@ -87,12 +86,13 @@ class AgentProfile(SQLAlchemyBaseModel):
         return self.name
 
     def merge(self, other_profile):
+        session = self.db
         my_accounts = {a.signature(): a for a in self.accounts}
         for other_account in other_profile.accounts:
             my_account = my_accounts.get(other_account.signature())
             if my_account:
                 my_account.merge(other_account)
-                DBSession.delete(other_account)
+                session.delete(other_account)
             else:
                 other_account.profile = self
         if other_profile.user:
@@ -103,16 +103,16 @@ class AgentProfile(SQLAlchemyBaseModel):
         if other_profile.name and not self.name:
             self.name = other_profile.name
         # TODO: similarly for posts
-        for action in DBSession.query(Action).filter_by(
+        for action in session.query(Action).filter_by(
             actor_id=other_profile.id).all():
                 action.actor = self
-        DBSession.delete(other_profile)
+        session.delete(other_profile)
 
     def has_permission(self, verb, subject):
         if self is subject.owner:
             return True
 
-        return DBSession.query(Permission).filter_by(
+        return self.db.query(Permission).filter_by(
             actor_id=self.id,
             subject_id=subject.id,
             verb=verb,
@@ -318,6 +318,7 @@ class User(SQLAlchemyBaseModel):
             return emails[0].email
 
     def merge(self, other_user):
+        session = self.db
         if other_user.preferred_email and not self.preferred_email:
             self.preferred_email = other_user.preferred_email
         if other_user.last_login:
@@ -332,10 +333,10 @@ class User(SQLAlchemyBaseModel):
             self.password = other_user.password
             # NOTE: The user may be confused by the implicit change of password
             # when we destroy the second account.
-        for user_role in DBSession.query(UserRole).filter_by(
+        for user_role in session.query(UserRole).filter_by(
                 user_id=other_user.id).all():
             user_role.user = self
-        for local_user_role in DBSession.query(LocalUserRole).filter_by(
+        for local_user_role in session.query(LocalUserRole).filter_by(
                 user_id=other_user.id).all():
             user_role.user = self
         for extract in other_user.extracts_created:
@@ -346,7 +347,7 @@ class User(SQLAlchemyBaseModel):
             discussion.owner = self
         if other_user.username and not self.username:
             self.username = other_user.username
-        DBSession.delete(other_user)
+        session.delete(other_user)
 
     def send_email(self, **kwargs):
         subject = kwargs.get('subject', '')

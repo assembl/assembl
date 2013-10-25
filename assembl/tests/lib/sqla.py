@@ -6,7 +6,10 @@ import transaction
 
 from pyramid import testing
 
-from ...lib.sqla import BaseOps, Base, TimestampedBase, DBSession as db
+from ...lib.sqla import BaseOps, Base, TimestampedBase, get_session_maker
+
+
+db = get_session_maker()
 
 
 class BaseModel(BaseOps, Base):

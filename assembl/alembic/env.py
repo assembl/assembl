@@ -3,12 +3,11 @@ from __future__ import with_statement
 from logging.config import fileConfig
 
 from alembic import context
-from sqlalchemy import engine_from_config, pool
+from sqlalchemy import pool
 
 from pyramid.paster import bootstrap
 
-from assembl import models
-from assembl.db import DBSession
+from assembl.lib.sqla import get_session_maker, metadata
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -19,7 +18,7 @@ config = context.config
 fileConfig(config.config_file_name)
 
 pyramid_env = bootstrap(config.config_file_name)
-
+get_session_maker(False)
 
 def run_migrations_online():
     """Run migrations in 'online' mode.
@@ -28,9 +27,9 @@ def run_migrations_online():
     and associate a connection with the context.
 
     """
-    engine = DBSession.bind
+    engine = get_session_maker(False).bind
     connection = engine.connect()
-    context.configure(connection=connection, target_metadata=models.metadata)
+    context.configure(connection=connection, target_metadata=metadata)
 
     try:
         context.run_migrations(pyramid_env=pyramid_env)

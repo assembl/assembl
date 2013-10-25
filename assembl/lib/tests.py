@@ -35,7 +35,6 @@ class ValidationTest(TestCase):
         self.assertEquals(inst.id, 12)
         self.assertEquals(inst.topic, 'truc')
 
-            
     def test_validation_override(self):
         from colanderalchemy import (
             SQLAlchemySchemaNode,
@@ -92,18 +91,18 @@ class ValidationTest(TestCase):
             'the_topic': 'truc',
             'gerbil': 'wak',
         }
+        # objectify not yet in colanderalchemy 0.2
+        # new_obj = SampleModel.__ca__.objectify(data)
+        # self.assertEquals(new_obj.id, 12)
+        # self.assertEquals(new_obj.topic, 'truc')
+        # self.assertEquals(new_obj.gerbil, 'wak')
 
-        new_obj = SampleModel.__ca__.objectify(data)
-        self.assertEquals(new_obj.id, 12)
-        self.assertEquals(new_obj.topic, 'truc')
-        self.assertEquals(new_obj.gerbil, 'wak')
+        # data = {
+        #     'the_id': 12,
+        #     'topic': 'truc',
+        #     'gerbil': 'wak',
+        # }
 
-        data = {
-            'the_id': 12,
-            'topic': 'truc',
-            'gerbil': 'wak',
-        }
-
-        self.assertRaises(
-            Invalid, SampleModel.__ca__.objectify, data)
+        # self.assertRaises(
+        #     Invalid, SampleModel.__ca__.objectify, data)
 

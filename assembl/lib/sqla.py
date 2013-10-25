@@ -9,27 +9,24 @@ from sqlalchemy import DateTime, MetaData, engine_from_config, event, Column
 from sqlalchemy.ext.declarative import declarative_base, declared_attr
 from sqlalchemy.orm import mapper, scoped_session, sessionmaker
 from sqlalchemy.orm.util import has_identity
+from sqlalchemy.util import classproperty
 from zope.sqlalchemy import ZopeTransactionExtension
+from zope.sqlalchemy.datamanager import mark_changed as z_mark_changed
 
 from pyramid.paster import get_appsettings, setup_logging
 
 _TABLENAME_RE = re.compile('([A-Z]+)')
 
+_session_maker = None
+
 
 def declarative_bases(metadata):
     """Return all declarative bases bound to a single metadata object."""
     registry = dict()
-    return (declarative_base(metadata=metadata, class_registry=registry),
-            declarative_base(cls=Timestamped, class_registry=registry,
-                             metadata=metadata))
-
-
-def create_engine(config_uri):
-    """Return an SQLAlchemy engine configured as per the provided config."""
-    setup_logging(config_uri)
-    settings = get_appsettings(config_uri)
-    engine = engine_from_config(settings, 'sqlalchemy.')
-    return engine
+    return (declarative_base(cls=BaseOps, metadata=metadata,
+                             class_registry=registry),
+            declarative_base(cls=Timestamped, metadata=metadata,
+                             class_registry=registry))
 
 
 class BaseOps(object):
@@ -39,15 +36,16 @@ class BaseOps(object):
     both data storage- and web- specific stuff.
 
     """
-    @declared_attr
-    def __tablename__(cls):
-        """Return a table name made out of the model class name."""
-        return _TABLENAME_RE.sub(r'_\1', cls.__name__).strip('_').lower()
+    # @declared_attr
+    # def __tablename__(cls):
+    #     """Return a table name made out of the model class name."""
+    #     return _TABLENAME_RE.sub(r'_\1', cls.__name__).strip('_').lower()
 
-    @declared_attr
+    @classproperty
     def db(cls):
-        """Return the SQLAlchemy db session object."""
-        return DBSession
+        """Return the SQLAlchemy db session maker object."""
+        assert _session_maker is not None
+        return _session_maker
 
     def __iter__(self, **kwargs):
         """Return a generator that iterates through model columns."""
@@ -64,7 +62,7 @@ class BaseOps(object):
             exclude = None
         for c in self.__table__.columns:
             if ((not include or c.name in include)
-            and (not exclude or c.name not in exclude)):
+                    and (not exclude or c.name not in exclude)):
                 yield(c.name, getattr(self, c.name))
 
     @classmethod
@@ -121,15 +119,15 @@ class BaseOps(object):
         return None.
 
         """
-        q = DBSession.query(cls).filter_by(**criteria)
+        q = _session_maker.query(cls).filter_by(**criteria)
         return raise_ and q.one() or q.first()
 
     @classmethod
     def find(cls, **criteria):
-        return DBSession.query(cls).filter_by(**criteria).all()
+        return _session_maker.query(cls).filter_by(**criteria).all()
 
     def delete(self):
-        DBSession.delete(self)
+        _session_maker.delete(self)
 
     def update(self, **values):
         fields = self._col_names()
@@ -139,14 +137,15 @@ class BaseOps(object):
 
     def save(self, flush=False):
         if self.is_new:
-            DBSession.add(self)
+            _session_maker.add(self)
         if flush:
-            DBSession.flush()
+            _session_maker.flush()
 
     @classmethod
     def inject_api(cls, name, as_object=False):
         """Inject common methods in an API module."""
-        class API(object): pass
+        class API(object):
+            pass
         container = API() if as_object else sys.modules[name]
 
         for attr in 'create', 'get', 'find', 'validator':
@@ -183,7 +182,7 @@ class Timestamped(BaseOps):
             exclude = set(exclude) | set(cls._stamps)
         kwargs['exclude'] = exclude
         return super(Timestamped, cls) \
-                .validator(mapping_cls=TimestampedSQLAlchemySchemaNode, **kwargs)
+            .validator(mapping_cls=TimestampedSQLAlchemySchemaNode, **kwargs)
 
 
 class TimestampedSQLAlchemySchemaNode(SQLAlchemySchemaNode):
@@ -221,8 +220,6 @@ def update_timestamp(mapper, connection, target):
         target.mod_date = datetime.utcnow()
 
 
-DBSession = scoped_session(sessionmaker(extension=ZopeTransactionExtension()))
-
 metadata = MetaData()
 Base, TimestampedBase = declarative_bases(metadata)
 
@@ -234,7 +231,42 @@ event.listen(mapper, 'before_insert', insert_timestamp)
 event.listen(mapper, 'before_update', update_timestamp)
 
 
+def get_session_maker(zope_tr=True):
+    global _session_maker
+    if _session_maker is None:
+        # This path is executed once, and maybe not when you expect it.
+        # nosetest may fail if the session_maker is built with the ZTE.
+        # This will happen if any of the models is imported before the
+        # nose plugin is configured. In that case, trace the importation thus:
+        # print "ZOPISH SESSIONS: ", zope_tr
+        # import traceback; traceback.print_stack();
+        ext = None
+        if zope_tr:
+            ext = ZopeTransactionExtension()
+        _session_maker = scoped_session(sessionmaker(extension=ext))
+    return _session_maker
+
+
+def configure_engine(settings, zope_tr=True, session_maker=None):
+    """Return an SQLAlchemy engine configured as per the provided config."""
+    if session_maker is None:
+        session_maker = get_session_maker(zope_tr)
+    engine = session_maker.session_factory.kw['bind']
+    if engine:
+        return engine
+    engine = engine_from_config(settings, 'sqlalchemy.')
+    session_maker.configure(bind=engine)
+    return engine
+
+
+def is_zopish():
+    return isinstance(
+        _session_maker.session_factory.kw.get('extension'),
+        ZopeTransactionExtension)
+
+def mark_changed():
+    z_mark_changed(get_session_maker()())
+
 def includeme(config):
     """Initialize SQLAlchemy at app start-up time."""
-    engine = engine_from_config(config.registry.settings, 'sqlalchemy.')
-    DBSession.configure(bind=engine)
+    configure_engine(config.registry.settings)

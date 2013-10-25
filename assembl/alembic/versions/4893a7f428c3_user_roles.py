@@ -13,8 +13,6 @@ down_revision = '1d136380561f'
 from alembic import context, op
 import sqlalchemy as sa
 
-
-from assembl.db import DBSession as db
 from assembl.auth.models import Role
 
 def upgrade(pyramid_env):
@@ -41,6 +39,7 @@ def upgrade(pyramid_env):
                       sa.ForeignKey('role.id', ondelete='CASCADE')))
         op.create_index('user_discussion_idx',
                         'local_user_role', ['user_id', 'discussion_id'])
+        db = m.get_session_maker()()
         db.add(Role(name='r:admin'))
         db.add(Role(name='r:moderator'))
         db.add(Role(name='r:catcher'))

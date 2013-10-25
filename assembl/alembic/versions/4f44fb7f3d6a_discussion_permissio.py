@@ -20,8 +20,6 @@ from assembl.auth.models import (populate_default_roles,
     populate_default_permissions, create_default_permissions)
 from assembl.lib.sqla import Base as SQLAlchemyBaseModel
 
-db = m.DBSession
-
 
 def upgrade(pyramid_env):
     with context.begin_transaction():
@@ -44,6 +42,7 @@ def upgrade(pyramid_env):
 
     # Do stuff with the app's models here.
     SQLAlchemyBaseModel.metadata.bind = op.get_bind()
+    db = m.get_session_maker()()
     with transaction.manager:
         populate_default_roles(db)
         populate_default_permissions(db)
