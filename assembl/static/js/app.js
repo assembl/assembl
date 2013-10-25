@@ -1,4 +1,4 @@
-define(['zepto-touch', 'underscore', 'ckeditor', 'models/user', 'moment', 'i18n'],
+define(['jquery', 'underscore', 'ckeditor', 'models/user', 'moment', 'i18n'],
 function($, _, ckeditor, User, Moment, i18n){
     'use strict';
 
@@ -23,14 +23,14 @@ function($, _, ckeditor, User, Moment, i18n){
      */
     window.app = {
         /**
-         * Reference to the body as Zepto object
-         * @type {Zepto}
+         * Reference to the body as jQuery object
+         * @type {jQuery}
          */
         doc: $(document),
 
         /**
-         * Reference to the body as Zepto object
-         * @type {Zepto}
+         * Reference to the body as jQuery object
+         * @type {jQuery}
          */
         body: $(document.body),
 
@@ -101,7 +101,7 @@ function($, _, ckeditor, User, Moment, i18n){
 
         /**
          * The selection tooltip.
-         * @type {Zepto}
+         * @type {jQuery}
          */
         selectionTooltip: null,
 

@@ -1,4 +1,4 @@
-define(['jasmine', 'backbone', 'underscore', 'zepto', 'app', 'views/segmentList'],
+define(['jasmine', 'backbone', 'underscore', 'jquery', 'app', 'views/segmentList'],
 function(jasmine, Backbone, _, $, app, SegmentList){
 
     function getView(){

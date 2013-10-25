@@ -19,7 +19,7 @@
 
 window.addEventListener('load', function(){
 
-    requirejs(['zepto', 'app'], function($, app){
+    requirejs(['jquery', 'app'], function($, app){
 
         $('.sg-dragbox').on('dragstart', function(ev){
             app.showDragbox(ev, "It's magic");

@@ -1,4 +1,4 @@
-define(['backbone', 'underscore', 'zepto', 'app'],
+define(['backbone', 'underscore', 'jquery', 'app'],
 function(Backbone, _, $, app){
     'use strict';
 
@@ -21,7 +21,7 @@ function(Backbone, _, $, app){
 
         /**
          * The page's wrapper
-         * @type {Zepto}
+         * @type {jQuery}
          */
         wrapper: $('#wrapper'),
 
@@ -38,7 +38,7 @@ function(Backbone, _, $, app){
 
         /**
          * Open a closed area
-         * @param  {Zepto} area
+         * @param  {jQuery} area
          */
         openArea: function(area){
             var body = area.find('.accordion-body'),
@@ -52,7 +52,7 @@ function(Backbone, _, $, app){
 
         /**
          * Closes an open area
-         * @param  {Zepto} area
+         * @param  {jQuery} area
          */
         closeArea: function(area){
             var body = area.find('.accordion-body');
@@ -64,7 +64,7 @@ function(Backbone, _, $, app){
 
         /**
          * Returns the height of the given .accordion-body
-         * @param  {Zepto} body
+         * @param  {jQuery} body
          * @return {Number}
          */
         getBodyHeight: function(body){

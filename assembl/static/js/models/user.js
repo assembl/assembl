@@ -1,4 +1,4 @@
-define(['backbone', 'app', 'zepto'], function(Backbone, app, $){
+define(['backbone', 'app', 'jquery'], function(Backbone, app, $){
     'use strict';
 
     /**
