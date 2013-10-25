@@ -5,10 +5,9 @@ from pyramid.renderers import render_to_response
 from pyramid.security import authenticated_userid
 from pyramid.httpexceptions import HTTPFound
 
-from assembl.db import DBSession
 from assembl.synthesis.models import Discussion
 from assembl.views.home.views import get_default_context
-from assembl.source.models.mail import Mailbox
+from assembl.source.models.mail import Mailbox, MailingList
 from assembl.auth.models import create_default_permissions, User
 
 
@@ -19,10 +18,11 @@ def discussion_admin(request):
     if not user_id:
         return HTTPFound('/login?next_view=/admin/discussions/')
 
-    user = DBSession.query(User).filter_by(id=user_id).one()
+    session = User.db
+    user = session.query(User).filter_by(id=user_id).one()
         
     context = get_default_context()
-    context['discussions'] = DBSession.query(Discussion)
+    context['discussions'] = session.query(Discussion)
 
     if request.method == 'POST':
 
@@ -47,11 +47,11 @@ def discussion_admin(request):
             owner=user,
             )
 
-        DBSession.add(discussion)
+        session.add(discussion)
 
-        create_default_permissions(DBSession, discussion)
-
-        mailbox = Mailbox(
+        create_default_permissions(session, discussion)
+        mailbox_class = MailingList if g('mailing_list_address') else Mailbox
+        mailbox = mailbox_class(
             name=name,
             host=host,
             port=int(port),
@@ -61,6 +61,8 @@ def discussion_admin(request):
             password=password,
             )
 
+        if(g('mailing_list_address')):
+            mailbox.post_email_address = g('mailing_list_address')
         mailbox.discussion = discussion
         transaction.commit()
 

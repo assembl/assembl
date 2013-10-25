@@ -18,11 +18,10 @@ import transaction
 from assembl import models as m
 from assembl.lib import config
 
-db = m.DBSession
-
 
 def upgrade(pyramid_env):
     # Do stuff with the app's models here.
+    db = m.get_session_maker()()
     with transaction.manager:
         discussions_without_synthesis = db.query(
             m.Discussion

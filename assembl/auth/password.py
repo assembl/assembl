@@ -3,7 +3,6 @@ from binascii import hexlify, unhexlify
 import hashlib
 
 from ..lib import config
-from ..db import DBSession
 
 SALT_SIZE = 8
 

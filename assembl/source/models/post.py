@@ -13,8 +13,7 @@ from sqlalchemy import (
     or_,
 )
 
-from assembl.db.models import SQLAlchemyBaseModel
-from assembl.db import DBSession
+from assembl.lib.sqla import Base as SQLAlchemyBaseModel
 from assembl.source.models.generic import Content
 from assembl.auth.models import AgentProfile
 
@@ -47,7 +46,7 @@ class Post(SQLAlchemyBaseModel):
     def get_descendants(self):
         ancestry_query_string = "%s%d,%%" % (self.ancestry or '', self.id)
 
-        descendants = DBSession.query(Post).join(Content).filter(
+        descendants = self.db.query(Post).join(Content).filter(
             Post.ancestry.like(ancestry_query_string)
         ).order_by(Content.creation_date)
 
@@ -57,7 +56,7 @@ class Post(SQLAlchemyBaseModel):
         descendants = self.get_descendants()
         old_ancestry = self.ancestry or ''
         self.ancestry = new_ancestry
-        DBSession.add(self)
+        self.db.add(self)
 
         for descendant in descendants:
             updated_ancestry = descendant.ancestry.replace(
@@ -67,12 +66,12 @@ class Post(SQLAlchemyBaseModel):
             )
 
             descendant.ancestry = updated_ancestry
-            DBSession.add(descendant)
+            self.db.add(descendant)
             
     def set_parent(self, parent):
         self.parent = parent
-        DBSession.add(self)
-        DBSession.add(parent)
+        self.db.add(self)
+        self.db.add(parent)
 
         self.set_ancestry("%s%d," % (
             parent.ancestry or '',
@@ -82,7 +81,7 @@ class Post(SQLAlchemyBaseModel):
     def last_updated(self):
         ancestry_query_string = "%s%d,%%" % (self.ancestry or '', self.id)
         
-        query = DBSession.query(
+        query = self.db.query(
             func.max(Content.creation_date)
         ).select_from(
             Post
@@ -103,7 +102,7 @@ class Post(SQLAlchemyBaseModel):
         ]
 
         ancestors = [
-            DBSession.query(Post).get(ancestor_id) \
+            Post.get(id=ancestor_id) \
             for ancestor_id \
             in ancestor_ids
         ]

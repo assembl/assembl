@@ -9,7 +9,6 @@
         </div>
     </div>
 
-
     <div class="panel-body">
         <div class="margin-left margin-top text-muted">{{ gettext('Subject') }}</div>
         <div id="synthesisPanel-title" class="panel-editablearea" contenteditable="true"><%= app.stripHtml(subject) %></div>
@@ -21,14 +20,11 @@
             <div id="synthesisPanel-introduction" class="panel-editablearea" contenteditable="true"><%= app.stripHtml(introduction) %></div>
         </div>
 
-        <ul>
+        <div id="synthesisPanel-ideas">
             <% _.each(ideas, function(idea){ %>
                 <%= app.printIdea(idea,  '') %>
             <% }); %>
-        </ul>
-
-
-        {# <div class="idealist"></div> #}
+        </div>
 
         <div class="spacer"></div>
         

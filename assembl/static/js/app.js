@@ -612,29 +612,35 @@ function($, _, ckeditor, User, Moment, i18n){
          * @return {string}
          */
         printIdea: function(idea, email){
-            var html = "\n<li>",
-                longTitle = escape(app.stripHtml(idea.get('longTitle'))),
-                span = $("<span>"+idea.get("longTitle")+"</span>"),
-                formattedLongTitle;
+            var longTitle = escape(idea.getLongTitleDisplayText()),
+                span = $("<span>"+idea.getLongTitleDisplayText()+"</span>"),
+                children = [],
+                segments = app.getSegmentsByIdea(idea),
+                tmpl = app.loadTemplate('synthesisIdeaEmail'),
+                authors = [];
 
             span.find('p:first-child').css('margin-top', 0);
             span.find('p:last-child').css('margin-bottom', 0);
-            formattedLongTitle = span.html();
+            
+            segments.forEach(function(segment) {
+                authors.push(segment.get("source_creator").name);
+            });
 
+            _.each(idea.getSynthesisChildren(), function(child){
+                children.push( app.printIdea(child) );
+            });
 
-            html += app.format('\n{0} (<a href="mailto:{1}?subject={2}">{3}</a>)', formattedLongTitle, email, longTitle, i18n.gettext('react'));
-
-            var children = idea.getSynthesisChildren();
-            if( children ) {
-                html += "\n<ul>";
-                _.each(children, function(idea){
-                    html += app.printIdea(idea);
-                });
-                html += "\n</ul>";
-            }
-
-            html += "\n</li>";
-            return html;
+            return tmpl({
+                id: idea.get('id'),
+                level: idea.getSynthesisLevel(),
+                editing: idea.get('synthesisPanel-editing') || false,
+                longTitle: span.html(),
+                authors: _.uniq(authors),
+                email: email,
+                subject: longTitle,
+                reactLabel: i18n.gettext('react'),
+                children: children
+            });
         },
 
         /**
@@ -644,9 +650,9 @@ function($, _, ckeditor, User, Moment, i18n){
             // reference: http://onehackoranother.com/projects/jquery/tipsy/
 
             $('[data-tooltip]').tipsy({
-                gravity: 's',
+                delayIn: 400,
                 live: true,
-                fade: true,
+                gravity: function(){ return this.getAttribute('data-tooltip-position') || 's'; },
                 title: function() { return this.getAttribute('data-tooltip'); }
             });
         },

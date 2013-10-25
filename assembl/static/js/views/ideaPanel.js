@@ -49,6 +49,7 @@ function(Backbone, _, Idea, app, ckeditor, i18n){
             var that = this;
             app.on('idea:select', function(idea){
                 that.setCurrentIdea(idea);
+                that.cancelEdition();
             });
         },
 
@@ -70,11 +71,11 @@ function(Backbone, _, Idea, app, ckeditor, i18n){
             }
             
             if( editing ){
-                var editingarea = this.$('#'+LONG_TITLE_ID).get(0),
+                var editingArea = this.$('#'+LONG_TITLE_ID).get(0),
                     that = this;
 
-                this.ckInstance = ckeditor.inline( editingarea, CKEDITOR_CONFIG );
-                editingarea.focus();
+                this.ckInstance = ckeditor.inline( editingArea, CKEDITOR_CONFIG );
+                editingArea.focus();
                 this.ckInstance.element.on('blur', function(){
                     that.saveEdition();
                 });
@@ -319,11 +320,13 @@ function(Backbone, _, Idea, app, ckeditor, i18n){
                 ev.stopPropagation();
             }
 
-            var longTitle = this.idea.get('longTitle');
-            this.ckInstance.setData(longTitle);
+            if( this.ckInstance ){
+                var longTitle = this.idea.get('longTitle');
+                this.ckInstance.setData(longTitle);
+                this.ckInstance.destroy();
+            }
 
             this.idea.set('ideaPanel-editing', false);
-            this.ckInstance.destroy();
         },
 
         /**

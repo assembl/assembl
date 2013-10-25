@@ -3,8 +3,7 @@ import transaction
 
 from cornice import Service
 from assembl.views.api import API_DISCUSSION_PREFIX
-from assembl.db import DBSession
-from assembl.synthesis.models import Discussion
+from assembl.synthesis.models import Discussion, Synthesis
 from assembl.auth import (P_READ, P_ADD_IDEA)
 from . import acls
 
@@ -18,7 +17,7 @@ synthesis = Service(
 @synthesis.get()  # permission=P_READ)
 def get_synthesis(request):
     discussion_id = request.matchdict['discussion_id']
-    discussion = DBSession.query(Discussion).get(int(discussion_id))
+    discussion = Discussion.get(id=int(discussion_id))
 
     return discussion.synthesis.serializable()
 
@@ -27,7 +26,7 @@ def get_synthesis(request):
 @synthesis.put()  # permission=P_ADD_IDEA)
 def save_synthesis(request):
     discussion_id = request.matchdict['discussion_id']
-    discussion = DBSession.query(Discussion).get(int(discussion_id))
+    discussion = Discussion.get(id=int(discussion_id))
     synthesis_data = json.loads(request.body)
     synthesis = discussion.synthesis
 
@@ -36,8 +35,8 @@ def save_synthesis(request):
         synthesis.introduction = synthesis_data.get('introduction')
         synthesis.conclusion = synthesis_data.get('conclusion')
 
-        DBSession.add(synthesis)
+        Synthesis.db.add(synthesis)
 
-    synthesis = DBSession.merge(synthesis)
+    synthesis = Synthesis.db.merge(synthesis)
 
     return {'ok': True, 'id': synthesis.id}

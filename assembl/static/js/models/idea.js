@@ -10,12 +10,17 @@ define(['backbone','underscore', 'models/segment', 'app', 'i18n'], function(Back
          */
         initialize: function(obj){
             obj = obj || {};
+            var that = this;
 
             obj.creationDate = obj.creationDate || app.getCurrentTime();
             this.set('creationDate', obj.creationDate);
 
             this.on('change:inSynthesis', this.onInSynthesisChange, this);
             this.on('change:shortTitle change:longTitle change:parentId', this.onAttrChange, this);
+
+            app.on('synthesisPanel:edit', function(){
+                that.attributes['synthesisPanel-editing'] = false;
+            });
         },
 
         /**
@@ -44,6 +49,7 @@ define(['backbone','underscore', 'models/segment', 'app', 'i18n'], function(Back
          * longTitle editor code isn't common in ideaPanel and synthesisView
          * At least this is mostly DRY
          */
+
         /**
          * Returns the display text for a synthesis idea.
          * Will return the first non-empty from:
@@ -52,17 +58,15 @@ define(['backbone','underscore', 'models/segment', 'app', 'i18n'], function(Back
          * @return {Text>}
          */
         getLongTitleDisplayText: function(){
-            var text;
-            if((app.stripHtml(this.get('longTitle')))!='') {
-                text = this.get('longTitle');
+
+            if( app.stripHtml(this.get('longTitle')) != '' ){
+                return this.get('longTitle');
+            } else if ( app.stripHtml(this.get('shortTitle')) != '' ){
+                return this.get('shortTitle');
+            } else {
+                return i18n.gettext('Add the description');
             }
-            else if ((app.stripHtml(this.get('shortTitle')))!='') {
-                text=this.get('shortTitle');
-            }
-            else {
-                text = i18n.gettext('Add the description');
-            }
-            return text;
+
         },
         /**
          * Adds an idea as child
@@ -302,7 +306,7 @@ define(['backbone','underscore', 'models/segment', 'app', 'i18n'], function(Back
         model: IdeaModel,
 
         /**
-         * Returns the ideas to compose the synsthesis panel
+         * Returns the ideas to compose the synthesis panel
          */
         getInSynthesisIdeas: function(){
             var ideas = this.where({inSynthesis: true}),

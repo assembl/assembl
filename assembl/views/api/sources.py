@@ -6,7 +6,6 @@ from pyramid.httpexceptions import HTTPNotFound
 from cornice import Service
 
 from assembl.views.api import API_DISCUSSION_PREFIX
-from assembl.db import DBSession
 
 from assembl.synthesis.models import Discussion
 
@@ -23,7 +22,7 @@ sources = Service(
 @sources.get()
 def get_sources(request):
     discussion_id = int(request.matchdict['discussion_id'])
-    discussion = DBSession.query(Discussion).get(int(discussion_id))
+    discussion = Discussion.get(id=int(discussion_id))
 
     if not discussion:
         raise HTTPNotFound(

@@ -20,8 +20,6 @@ from assembl.lib import config
 from assembl.lib.sqla import Base as SQLAlchemyBaseModel
 from assembl.models import Email, EmailAccount
 
-db = m.DBSession
-
 
 def upgrade(pyramid_env):
     with context.begin_transaction():
@@ -30,6 +28,7 @@ def upgrade(pyramid_env):
     SQLAlchemyBaseModel.metadata.bind = op.get_bind()
 
     # Do stuff with the app's models here.
+    db = m.get_session_maker()()
     with transaction.manager:
         for mail in db.query(Email).all():
             sender_name, sender_email = parseaddr(mail.sender)

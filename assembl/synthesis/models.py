@@ -21,9 +21,7 @@ from sqlalchemy import (
 
 from assembl.lib.utils import slugify
 
-from ..db import DBSession
-from ..db.models import db_schema
-from ..lib.sqla import Base as SQLAlchemyBaseModel
+from ..lib.sqla import db_schema, Base as SQLAlchemyBaseModel
 from ..source.models import (Source, Content, Post)
 
 class Discussion(SQLAlchemyBaseModel):
@@ -86,7 +84,7 @@ class Discussion(SQLAlchemyBaseModel):
             )
         ).label("latest_update")
 
-        query = DBSession.query(
+        query = self.db.query(
             upper_post,
         ).join(
             upper_content,
@@ -107,7 +105,7 @@ class Discussion(SQLAlchemyBaseModel):
         return query
 
     def total_posts(self):
-        return DBSession.query(Post).join(
+        return self.db.query(Post).join(
             Content,
             Source
         ).filter(
@@ -362,14 +360,14 @@ AND discussion.id=:discussion_id
     def num_posts(self):
         """ This is extremely naive and slow, but as this is all temp code 
         until we move to a graph database, it will probably do for now """ 
-        result = DBSession.execute(text(Idea._get_count_related_posts_statement()),
+        result = self.db.execute(text(Idea._get_count_related_posts_statement()),
                                    {"root_idea_id":self.id})
         return result.first()['total_count']
 
     @staticmethod
     def get_num_orphan_posts(discussion):
         """ The number of posts unrelated to any idea in the current discussion """ 
-        result = DBSession.execute(text(Idea._get_count_orphan_posts_statement()) \
+        result = Idea.db.execute(text(Idea._get_count_orphan_posts_statement()) \
                                    .params(discussion_id=discussion.id))
         return result.first()['total_count']
 

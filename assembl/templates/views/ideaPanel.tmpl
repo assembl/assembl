@@ -1,5 +1,4 @@
 <div class="panel" draggable="draggable">
-
     <div class="panel-header">
         <strong data-tooltip="{{gettext('Detailled information about the currently selected idea in the Table of ideas')}}">{{ gettext('Idea') }}</strong>
         <div class="float-right">
@@ -16,7 +15,7 @@
             <div class="panel-editablebox is-editing">
                 <div id="ideaPanel-toptoolbar"></div>
                 <div id="ideaPanel-longtitle" class="text margin panel-editablearea" contenteditable="true">
-                    <%= app.stripHtml(idea.get('longTitle')) == '' ? idea.getLongTitleDisplayText() : idea.get('longTitle') %>
+                    <%= idea.getLongTitleDisplayText() %>
                 </div>
                 <div id="ideaPanel-bottomtoolbar"></div>
                 <div id="ideaPanel-buttons" class="text-right padding">
@@ -27,7 +26,7 @@
         <% } else { %>
             <div class="panel-editablebox">
                 <div id="ideaPanel-longtitle" class="text margin panel-editablearea">
-                    <%= app.stripHtml(idea.get('longTitle')) == '' ? idea.getLongTitleDisplayText() : idea.get('longTitle') %>
+                    <%= idea.getLongTitleDisplayText() %>
                 </div>
             </div>
         <% } %>

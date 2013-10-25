@@ -6,53 +6,29 @@ from pyramid.config import Configurator
 from pyramid.authentication import SessionAuthenticationPolicy
 from pyramid.authorization import ACLAuthorizationPolicy
 from pyramid_beaker import session_factory_from_settings
-from sqlalchemy import engine_from_config
+from .lib.sqla import configure_engine
 
-from .db import DBSession
-from .auth.models import Role, UserRole, LocalUserRole
-from .synthesis.models import Discussion
 
+# Do not import models here, it will break tests.
 
 #Use a local odbc.ini
 putenv('ODBCINI', './odbc.ini')
-
-
-def authentication_callback(userid, request):
-    roles = DBSession.query(Role.name).join(UserRole).filter(
-        UserRole.user_id == userid).all()
-    roles = {x[0] for x in roles}
-    if request.matchdict:
-        discussion_id = None
-        if 'discussion_id' in request.matchdict:
-            discussion_id = int(request.matchdict['discussion_id'])
-        elif 'discussion_slug' in request.matchdict:
-            discussion = DBSession.query(Discussion).filter_by(
-                slug=request.matchdict['discussion_slug']).first()
-            if discussion:
-                discussion_id = discussion.id
-        if discussion_id:
-            local_roles = DBSession.query(Role.name).join(LocalUserRole).filter(
-                LocalUserRole.user_id == userid and
-                LocalUserRole.discussion_id == discussion_id).all()
-            roles.update({x[0] for x in local_roles})
-    return list(roles)
 
 
 def main(global_config, **settings):
     """ Return a Pyramid WSGI application. """
     settings['config_uri'] = global_config['__file__']
 
-    # velruse requires session support
-    session_factory = session_factory_from_settings(
-        settings
-        )
     # here we create the engine and bind it to the (not really a) session
-    # factory called DBSession.
-    engine = engine_from_config(settings, 'sqlalchemy.')
-    DBSession.configure(bind=engine)
-    
+    # factory
+    configure_engine(settings)
+
     config = Configurator(settings=settings)
+    session_factory = session_factory_from_settings(
+        settings)
     config.set_session_factory(session_factory)
+    # import after session to delay loading of BaseOps
+    from auth import authentication_callback
     auth_policy = SessionAuthenticationPolicy(callback=authentication_callback)
     config.set_authentication_policy(auth_policy)
     config.set_authorization_policy(ACLAuthorizationPolicy())
@@ -71,5 +47,4 @@ def main(global_config, **settings):
     # Mailer
     config.include('pyramid_mailer')
 
-    
     return config.make_wsgi_app()

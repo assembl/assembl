@@ -4,11 +4,13 @@ config files. """
 import subprocess
 import sys
 
+from pyramid.paster import get_appsettings
+import transaction
+from sqlalchemy import create_engine as create_engine_sqla
 from alembic.migration import MigrationContext
 
 from ..lib.migration import bootstrap_db
-from ..lib.sqla import create_engine, DBSession as db
-from sqlalchemy import create_engine as create_engine_sqla
+from ..lib.sqla import configure_engine, mark_changed
 from sqlalchemy.orm import sessionmaker
 
 init_instructions = [
@@ -26,6 +28,8 @@ def main():
 
     config_uri = sys.argv.pop(1)
 
+    settings = get_appsettings(config_uri)
+    engine = configure_engine(settings, True)
     if sys.argv[1] == 'bootstrap':
         admin_engine = create_engine_sqla('virtuoso://dba:dba@VOSU')
         SessionMaker = sessionmaker(admin_engine)
@@ -37,9 +41,9 @@ def main():
                 session.execute(i)
             session.commit()
         bootstrap_db(config_uri)
+        mark_changed()
+        transaction.commit()
     else:
-        engine = create_engine(config_uri)
-        db.configure(bind=engine)
         context = MigrationContext.configure(engine.connect())
         db_version = context.get_current_revision()
 

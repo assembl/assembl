@@ -5,7 +5,6 @@ from pyramid.httpexceptions import HTTPNotFound
 from pyramid.i18n import TranslationString as _
 import json
 import os.path
-from assembl.db import DBSession
 from assembl.synthesis.models import Discussion
 from assembl.auth import get_user
 from sqlalchemy.orm.exc import NoResultFound
@@ -19,7 +18,7 @@ TEMPLATE_PATH = os.path.join(os.path.dirname(__file__), '..', '..', 'templates')
 def get_default_context(request):
     slug = request.matchdict['discussion_slug']
     try:
-        discussion = DBSession.query(Discussion).filter(Discussion.slug==slug).one()
+        discussion = Discussion.db.query(Discussion).filter(Discussion.slug==slug).one()
     except NoResultFound:
         raise HTTPNotFound(_("No discussion found for slug=%s" % slug))
 

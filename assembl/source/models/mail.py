@@ -32,9 +32,9 @@ from sqlalchemy import (
 )
 
 from assembl.source.models.generic import Source, Content
-from assembl.db import DBSession
 from assembl.auth.models import EmailAccount
 from assembl.tasks.imap import import_mails
+
 
 class Mailbox(Source):
     """
@@ -148,7 +148,7 @@ class Mailbox(Source):
 
         sender = email_header_to_unicode(parsed_email.get('From'))
         sender_name, sender_email = parseaddr(sender)
-        sender_email_account = EmailAccount.get_or_make_profile(DBSession, sender_email, sender_name)
+        sender_email_account = EmailAccount.get_or_make_profile(self.db, sender_email, sender_name)
         creation_date = datetime.utcfromtimestamp(
             mktime(email.utils.parsedate(parsed_email['Date'])))
         subject = email_header_to_unicode(parsed_email['Subject'])
@@ -158,7 +158,7 @@ class Mailbox(Source):
         # but sqlalchemy doesn't have a function that returns
         # 0, 1 result or an exception
         try:
-            email_object = DBSession.query(Email).filter(
+            email_object = self.db.query(Email).filter(
                 Email.message_id == new_message_id,
                 Email.source_id == self.id,
             ).one()
@@ -185,7 +185,8 @@ class Mailbox(Source):
             )
         email_object.post.creator = sender_email_account.profile
         email_object.associate_family()
-        email_object.source_id = self.id
+        email_object.source = self
+        email_object = self.db.merge(email_object)
         return email_object
 
     @staticmethod
@@ -194,7 +195,7 @@ class Mailbox(Source):
             but without re-hitting the source, or changing the object ids.
             Call when a code change would change the representation in the database
             """
-        emails = dbsession.query(Email).filter(
+        emails = Email.db.query(Email).filter(
             Email.source_id == mailbox.id)
         for email in emails:
             session = dbsession()
@@ -203,7 +204,6 @@ class Mailbox(Source):
             transaction.commit()
             dbsession.remove()
             mailbox = session.get(Mailbox).get(mailbox.id)
-
 
     def import_content(self, only_new=True):
         #Mailbox.do_import_content(self, only_new)
@@ -269,7 +269,7 @@ class Mailbox(Source):
         mailing list address.
         """
 
-        most_common_recipients = DBSession.query(
+        most_common_recipients = self.db.query(
             func.count(
                 Email.recipients
             ),
@@ -452,8 +452,8 @@ class Email(Content):
             self.post.is_synthesis = True
 
     def associate_family(self):
-        if self not in DBSession:
-            DBSession.add(self)
+        if self not in self.db:
+            self.db.add(self)
 
         # if there is an email.in_reply_to, search posts with content.type
         # == email and email.message_id == email.in_reply_to, then set that
@@ -472,7 +472,7 @@ class Email(Content):
             ) if parent_email_message_id['cleaned'] else \
                 Email.message_id == parent_email_message_id['original']
 
-            parent_email = DBSession.query(Email).filter(
+            parent_email = self.db.query(Email).filter(
                 filter_clause
             ).first()
 
@@ -483,7 +483,7 @@ class Email(Content):
         # message_id for this email, then set their post's parent to the
         # id of this new post.
 
-        child_emails = DBSession.query(Email).filter_by(
+        child_emails = self.db.query(Email).filter_by(
             in_reply_to=self.message_id
         ).all()
 

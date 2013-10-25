@@ -1,6 +1,10 @@
-define(['backbone', 'underscore', 'zepto-touch', 'app', 'models/synthesis', 'views/synthesisIdeaView', 'i18n'],
-function(Backbone, _, $, app, Synthesis, SynthesisIdeaView, i18n){
+define(['backbone', 'underscore', 'zepto-touch', 'app', 'models/synthesis', 'views/synthesisIdeaView', 'ckeditor-sharedspace', 'i18n'],
+function(Backbone, _, $, app, Synthesis, SynthesisIdeaView, ckeditor, i18n){
     'use strict';
+
+    var CKEDITOR_CONFIG = _.extend({}, app.CKEDITOR_CONFIG, {
+        sharedSpaces: { top: 'synthesisPanel-toptoolbar', bottom: 'synthesisPanel-bottomtoolbar' }
+    });
 
     var SynthesisPanel = Backbone.View.extend({
 
@@ -22,7 +26,7 @@ function(Backbone, _, $, app, Synthesis, SynthesisIdeaView, i18n){
             }
 
             this.ideas.on('reset', this.render, this);
-            this.ideas.on('change:parentId change:inSynthesis', this.render, this);
+            this.ideas.on('change', this.render, this);
 
             this.model.on('reset', this.render, this);
         },
@@ -40,6 +44,12 @@ function(Backbone, _, $, app, Synthesis, SynthesisIdeaView, i18n){
         collapsed: false,
 
         /**
+         * CKeditor instance for this view
+         * @type {CKeditor}
+         */
+        ckInstance: null,
+
+        /**
          * The template
          * @type {_.template}
          */
@@ -55,6 +65,12 @@ function(Backbone, _, $, app, Synthesis, SynthesisIdeaView, i18n){
             // Cleaning all previous listeners
             app.off('synthesisPanel:close');
 
+            // Cleaning previous ckeditor instance
+            if( this.ckinstance ){
+                this.ckinstance.destroy();
+                this.ckinstance = null;
+            }
+
             var list = document.createDocumentFragment(),
                 data = this.model.toJSON(),
                 ideas = this.ideas.getInSynthesisIdeas();
@@ -62,7 +78,23 @@ function(Backbone, _, $, app, Synthesis, SynthesisIdeaView, i18n){
             data.collapsed = this.collapsed;
             data.ideas = ideas;
 
+            // Getting the scroll position
+            var body = this.$('.panel-body'),
+                y = body.get(0) ? body.get(0).scrollTop : 0;
+
             this.$el.html( this.template(data) );
+
+            this.$('.panel-body').get(0).scrollTop = y;
+
+            var editingArea = this.$('#synthesisPanel-ideas [contenteditable]').get(0),
+                that = this;
+
+            if( editingArea ){
+                this.ckInstance = ckeditor.inline( editingArea, CKEDITOR_CONFIG );
+                editingArea.focus();
+
+                this.ckInstance.element.on('blur', that.saveEdition, this);
+            }
 
             return this;
         },
@@ -77,7 +109,11 @@ function(Backbone, _, $, app, Synthesis, SynthesisIdeaView, i18n){
 
             'click #synthesisPanel-closeButton': 'closePanel',
             'click #synthesisPanel-publishButton': 'publish',
-            'click #synthesisPanel-fullscreenButton': 'setFullscreen'
+            'click #synthesisPanel-fullscreenButton': 'setFullscreen',
+
+            'click [data-idea-id]': 'onEditableAreaClick',
+            'click .synthesisPanel-savebtn': 'saveEdition',
+            'click .synthesisPanel-cancelbtn': 'cancelEdition'
         },
 
         /**
@@ -123,6 +159,48 @@ function(Backbone, _, $, app, Synthesis, SynthesisIdeaView, i18n){
         onConclusionBlur: function(ev){
             var conclusion = app.stripHtml(ev.currentTarget.innerHTML);
             this.model.set('conclusion', conclusion);
+        },
+
+        /**
+         * @event
+         */
+        onEditableAreaClick: function(ev){
+            var id = ev.currentTarget.getAttribute('data-idea-id'),
+                idea = app.ideaList.ideas.get(id);
+
+            app.trigger('synthesisPanel:edit');
+
+            if( idea ){
+                idea.set('synthesisPanel-editing', true);
+                this.currentId = id;
+            }
+        },
+
+        /**
+         * @event
+         */
+        saveEdition: function(ev){
+            var id = this.currentId || ev.currentTarget.getAttribute('data-idea-id'),
+                idea = app.ideaList.ideas.get(id),
+                text = this.ckInstance.getData();
+
+            text = $.trim(text);
+
+            if( idea ){
+                idea.set({ 'longTitle': text, 'synthesisPanel-editing': false });
+            }
+        },
+
+        /**
+         * @event
+         */
+        cancelEdition: function(ev){
+            var id = ev.currentTarget.getAttribute('data-idea-id'),
+                idea = app.ideaList.ideas.get(id);
+
+            if( idea ){
+                idea.set('synthesisPanel-editing', false);
+            }            
         },
 
         /**
