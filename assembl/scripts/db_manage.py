@@ -14,10 +14,10 @@ from ..lib.sqla import configure_engine, mark_changed
 from sqlalchemy.orm import sessionmaker
 
 init_instructions = [
-    "user_create('assembl', 'assembl')",
-    "grant select on db..tables to assembl",
-    "grant select on db..sys_users to assembl",
-    "db..user_set_qualifier ('assembl', 'assembl')"]
+    "user_create('%(db_user)s', '%(db_password)s')",
+    "grant select on db..tables to %(db_user)s",
+    "grant select on db..sys_users to %(db_user)s",
+    "db..user_set_qualifier ('%(db_user)s', '%(db_schema)s')"]
 
 
 def main():
@@ -36,9 +36,9 @@ def main():
         session = SessionMaker()
         if not session.execute(
                 "select count(*) from db..sys_users"
-                " where u_name = 'assembl'").scalar():
+                " where u_name = '%(db_user)s'" % settings).scalar():
             for i in init_instructions:
-                session.execute(i)
+                session.execute(i % settings)
             session.commit()
         bootstrap_db(config_uri)
         mark_changed()

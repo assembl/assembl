@@ -33,14 +33,15 @@ class Assembl(Plugin):
 
     def options(self, parser, env):
         super(Assembl, self).options(parser, env)
-        # TODO store schema
         add_parser_options(parser)
 
     def get_all_tables(self, reversed=True):
+        schema = self._app_settings.get('db_schema', 'assembl_test')
+        # TODO: Quote schema name!
         res = self._session.execute(
-            'SELECT table_name FROM '
-            'information_schema.tables WHERE table_schema = '
-            '\'public\' ORDER BY table_name').fetchall()
+            "SELECT table_name FROM "
+            "information_schema.tables WHERE table_schema = "
+            "'%s' ORDER BY table_name" % (schema,)).fetchall()
         res = {row[0] for row in res}
         # get the ordered version to minimize cascade.
         # cascade is not reliable.

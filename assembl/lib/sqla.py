@@ -18,7 +18,12 @@ from pyramid.paster import get_appsettings, setup_logging
 _TABLENAME_RE = re.compile('([A-Z]+)')
 
 _session_maker = None
-
+db_schema = None
+metadata = None
+Base = TimestampedBase = None
+# If obsolete table names collide with new table names, alembic can't work
+obsolete = None
+ObsoleteBase = TimestampedObsolete = None
 
 def declarative_bases(metadata):
     """Return all declarative bases bound to a single metadata object."""
@@ -220,15 +225,6 @@ def update_timestamp(mapper, connection, target):
         target.mod_date = datetime.utcnow()
 
 
-db_schema = 'assembl'
-metadata = MetaData()
-metadata.schema = db_schema
-Base, TimestampedBase = declarative_bases(metadata)
-
-# If obsolete table names collide with new table names, alembic can't work
-obsolete = MetaData()
-ObsoleteBase, TimestampedObsolete = declarative_bases(obsolete)
-
 event.listen(mapper, 'before_insert', insert_timestamp)
 event.listen(mapper, 'before_update', update_timestamp)
 
@@ -274,3 +270,9 @@ def mark_changed():
 def includeme(config):
     """Initialize SQLAlchemy at app start-up time."""
     configure_engine(config.registry.settings)
+    global db_schema, metadata, Base, TimestampedBase, ObsoleteBase, TimestampedObsolete
+    db_schema = config.get_settings()['db_schema']
+    metadata = MetaData(schema=db_schema)
+    Base, TimestampedBase = declarative_bases(metadata)
+    obsolete = MetaData(schema=db_schema)
+    ObsoleteBase, TimestampedObsolete = declarative_bases(obsolete)
