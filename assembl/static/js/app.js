@@ -650,9 +650,9 @@ function($, _, ckeditor, User, Moment, i18n){
             // reference: http://onehackoranother.com/projects/jquery/tipsy/
 
             $('[data-tooltip]').tipsy({
-                gravity: 's',
+                delayIn: 400,
                 live: true,
-                fade: true,
+                gravity: function(){ return this.getAttribute('data-tooltip-position') || 's'; },
                 title: function() { return this.getAttribute('data-tooltip'); }
             });
         },
