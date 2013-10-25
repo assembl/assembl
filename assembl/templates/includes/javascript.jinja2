@@ -6,29 +6,17 @@ requirejs.config({
     'urlArgs': "bust=" + (new Date()).getTime(),
     'shim': {
         'backbone': {
-            deps: ['underscore', 'zepto-touch'],
+            deps: ['underscore', 'jquery'],
             exports: 'Backbone'
         },
         'underscore': {
             exports: '_'
         },
-        'zepto': {
-            exports: 'Zepto'
-        },
-        'zepto-touch': {
-            deps: ['zepto', 'zepto-data'],
-            exports: 'Zepto'
-        },
-        'zepto-data': {
-            deps: ['zepto'],
-            exports: 'Zepto'
-        },
-        'zepto-fx': {
-            deps: ['zepto'],
-            exports: 'Zepto'
+        'jquery': {
+            exports: 'jQuery'
         },
         'app': {
-            deps: ['ckeditor', 'tipsy', 'i18n'],
+            deps: ['ckeditor', 'tipsy', 'i18n', 'annotator'],
             exports: 'app'
         },
         'i18n': {
@@ -53,20 +41,20 @@ requirejs.config({
             exports: 'CKEDITOR'
         },
         'tipsy': {
-            deps: ['zepto', 'zepto-touch', 'zepto-data', 'zepto-fx'],
+            deps: ['jquery'],
+        },
+        'annotator' : {
+            deps: ['jquery']
         }
     },
     "paths": {
+        'jquery': "lib/jquery",
         'backbone': 'lib/backbone',
         'underscore': 'lib/underscore',
+
         'i18n': 'lib/i18n',
-
-        'zepto': '__proto__' in {} ? 'lib/zepto' : "lib/jquery",
-        'zepto-touch': 'lib/zepto-touch',
-        'zepto-data': 'lib/zepto-data',
-        'zepto-fx': 'lib/zepto-fx',
-
         'tipsy': 'lib/jquery.tipsy',
+        'annotator': 'lib/annotator-full.min',
 
         'jasmine': 'lib/jasmine',
         'jasmine-html': 'lib/jasmine-html',

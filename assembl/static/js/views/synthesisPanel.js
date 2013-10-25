@@ -1,4 +1,4 @@
-define(['backbone', 'underscore', 'zepto-touch', 'app', 'models/synthesis', 'views/synthesisIdeaView', 'ckeditor-sharedspace', 'i18n'],
+define(['backbone', 'underscore', 'jquery', 'app', 'models/synthesis', 'views/synthesisIdeaView', 'ckeditor-sharedspace', 'i18n'],
 function(Backbone, _, $, app, Synthesis, SynthesisIdeaView, ckeditor, i18n){
     'use strict';
 
