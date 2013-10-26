@@ -7,7 +7,7 @@ import transaction
 
 from ..lib.migration import bootstrap_db
 from ..lib.sqla import (configure_engine, get_session_maker,
-                        metadata, is_zopish, mark_changed)
+                        get_metadata, is_zopish, mark_changed)
 
 log = logging.getLogger('nose.plugins.assembl')
 
@@ -44,8 +44,10 @@ class Assembl(Plugin):
             "'%s' ORDER BY table_name" % (schema,)).fetchall()
         res = {row[0] for row in res}
         # get the ordered version to minimize cascade.
-        # cascade is not reliable.
-        ordered = [t.name for t in metadata.sorted_tables if t.name in res]
+        # cascade does not exist on virtuoso.
+        import assembl.models
+        ordered = [t.name for t in get_metadata().sorted_tables if t.name in res]
+        print ordered
         ordered.extend([t for t in res if t not in ordered])
         if reversed:
             ordered.reverse()
@@ -63,7 +65,7 @@ class Assembl(Plugin):
             if row in ('permission', 'role'):
                 continue
             log.debug("Clearing table: %s" % row)
-            self._session.execute("delete from \"%s\" cascade" % row)
+            self._session.execute("delete from \"%s\"" % row)
         mark_changed()
         transaction.commit()
         self._session = self.session_factory()
@@ -73,7 +75,7 @@ class Assembl(Plugin):
         try:
             for row in self.get_all_tables():
                 log.debug("Dropping table: %s" % row)
-                self._session.execute("drop table \"%s\" cascade" % row)
+                self._session.execute("drop table \"%s\"" % row)
         except:
             raise Exception('Error dropping tables: %s' % (
                 sys.exc_info()[1]))

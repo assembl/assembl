@@ -8,7 +8,7 @@ from alembic.config import Config
 from alembic.migration import MigrationContext
 from alembic.script import ScriptDirectory
 
-from ..lib.sqla import configure_engine, metadata, get_session_maker
+from ..lib.sqla import configure_engine, get_metadata, get_session_maker
 import transaction
 
 
@@ -36,7 +36,7 @@ def bootstrap_db(config_uri=None, with_migration=True):
             sys.exit(2)
 
 
-    metadata.create_all(db().connection())
+    get_metadata().create_all(db().connection())
     # import after session to delay loading of BaseOps
     from assembl.auth.models import (
         populate_default_permissions, populate_default_roles)

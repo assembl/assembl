@@ -19,11 +19,12 @@ _TABLENAME_RE = re.compile('([A-Z]+)')
 
 _session_maker = None
 db_schema = None
-metadata = None
+_metadata = None
 Base = TimestampedBase = None
 # If obsolete table names collide with new table names, alembic can't work
 obsolete = None
 ObsoleteBase = TimestampedObsolete = None
+
 
 def declarative_bases(metadata):
     """Return all declarative bases bound to a single metadata object."""
@@ -254,6 +255,12 @@ def configure_engine(settings, zope_tr=True, session_maker=None):
         return engine
     engine = engine_from_config(settings, 'sqlalchemy.')
     session_maker.configure(bind=engine)
+    global db_schema, _metadata, Base, TimestampedBase, ObsoleteBase, TimestampedObsolete
+    db_schema = settings['db_schema']
+    _metadata = MetaData(schema=db_schema)
+    Base, TimestampedBase = declarative_bases(_metadata)
+    obsolete = MetaData(schema=db_schema)
+    ObsoleteBase, TimestampedObsolete = declarative_bases(obsolete)
     return engine
 
 
@@ -267,12 +274,10 @@ def mark_changed():
     z_mark_changed(get_session_maker()())
 
 
+def get_metadata():
+    global _metadata
+    return _metadata
+
 def includeme(config):
     """Initialize SQLAlchemy at app start-up time."""
     configure_engine(config.registry.settings)
-    global db_schema, metadata, Base, TimestampedBase, ObsoleteBase, TimestampedObsolete
-    db_schema = config.get_settings()['db_schema']
-    metadata = MetaData(schema=db_schema)
-    Base, TimestampedBase = declarative_bases(metadata)
-    obsolete = MetaData(schema=db_schema)
-    ObsoleteBase, TimestampedObsolete = declarative_bases(obsolete)
