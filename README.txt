@@ -9,6 +9,7 @@ Install required development libraries
 - python-dev
 - build-essential
 - unixodbc-dev
+- redis
 
 Setup a development environment:
 
@@ -38,6 +39,9 @@ On Ubuntu:
 On OS X, if you have MacPorts, you would sudo port install virtuoso
 From source: http://virtuoso.openlinksw.com/dataspace/doc/dav/wiki/Main/VOSDownload
 
+Note that you should use virtuoso 6; there are some terrible regressions with subquery joins
+in virtuoso 7.
+
 You need to set the environment variable VIRTUOSO_ROOT to the root of your virtuoso install.
 On linux, this is probably /usr
 If you have installed it with MacPorts, it would be /opt/local.
@@ -52,6 +56,7 @@ Only the first time you run it:
 - $venv/bin/supervisord
 (wait for virtuoso to start)
 - $venv/bin/assembl-db-manage development.ini bootstrap
+- $venv/bin/assembl-db-manage testing.ini bootstrap
 - $venv/bin/supervisorctl start celery_imap
 
 On subsequent runs, just make sure supervisord is running.
@@ -95,7 +100,6 @@ Running tests
 -------------
 
 - Copy testing.ini.example to testing.ini
-- Create a testing database: createdb -U assembl assembl_test
 - nosetests
 
 

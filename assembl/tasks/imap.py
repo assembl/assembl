@@ -9,8 +9,8 @@ settings = get_appsettings('development.ini')
 
 engine = configure_engine(settings, False)
 
-#celery_broker = 'redis://localhost:6379/0'
-celery_broker = 'sqla+' + db_connection
+celery_broker = 'redis://localhost:6379/0'
+#celery_broker = 'sqla+' + settings.get('sqlalchemy.url')
 celery = Celery('imapreader', broker=celery_broker)
 DBSession = get_session_maker(False)
 
