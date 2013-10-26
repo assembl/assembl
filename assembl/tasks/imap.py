@@ -1,28 +1,22 @@
-from ConfigParser import ConfigParser
-
-from sqlalchemy import create_engine
-from sqlalchemy.orm import scoped_session, sessionmaker
 from celery import Celery
-from zope.sqlalchemy import ZopeTransactionExtension
+from pyramid.paster import get_appsettings
+
+from ..lib.sqla import configure_engine, get_session_maker
 
 
-settings = ConfigParser()
 # TODO: Choose config.file
-settings.read('development.ini')
+settings = get_appsettings('development.ini')
 
-db_connection = settings.get('app:main', 'sqlalchemy.url')
-engine = create_engine(db_connection)
+engine = configure_engine(settings, False)
 
 #celery_broker = 'redis://localhost:6379/0'
 celery_broker = 'sqla+' + db_connection
 celery = Celery('imapreader', broker=celery_broker)
-
-DBSession = scoped_session(sessionmaker(extension=ZopeTransactionExtension()))
-DBSession.configure(bind=engine)
+DBSession = get_session_maker(False)
 
 
 @celery.task
 def import_mails(mbox_id, only_new=True):
-    from ..source.models.mail import Mailbox
+    from ..models import Mailbox
     mailbox = DBSession.query(Mailbox).get(mbox_id)
-    Mailbox.do_import_content(mailbox, DBSession, only_new)
+    Mailbox.do_import_content(mailbox, only_new)
