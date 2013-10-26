@@ -428,8 +428,13 @@ class LocalUserRole(SQLAlchemyBaseModel):
     discussion = relationship('Discussion')
     role_id = Column(Integer, ForeignKey('role.id', ondelete='CASCADE'))
     role = relationship(Role)
-    __table_args__ = (
-        Index('user_discussion_idx', 'user_id', 'discussion_id'),)
+    # BUG in virtuoso: It will often refuse to create an index
+    # whose name exists in another schema. So having this index in
+    # schemas assembl and assembl_test always fails.
+    # TODO: Bug virtuoso about this,
+    # or introduce the schema name in the index name as workaround.
+    # __table_args__ = (
+    #     Index('user_discussion_idx', 'user_id', 'discussion_id'),)
 
 
 class Permission(SQLAlchemyBaseModel):
