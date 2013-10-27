@@ -52,6 +52,41 @@ function(Backbone, _, $, app, Segment, i18n){
         },
 
         /**
+         * Add annotation as segment
+         * @param {annotation}
+         * @param {post} [post=null] The origin post
+         * @return {Segment}
+         */
+        addAnnotationAsSegment: function(annotation, post){
+            var idPost = null,
+                sourceCreator = null;
+
+            if(post){
+                idPost = post.id;
+                sourceCreator = post.get('creator');
+            }
+
+            // cleaning the annoation
+            delete annotation.highlights;
+
+            var segment = new Segment.Model({
+                text: annotation.quote,
+                creator: app.getCurrentUser(),
+                source_creator: sourceCreator,
+                annotation: annotation
+            });
+
+            if( segment.isValid() ){
+                this.addSegment(segment);
+                segment.save();
+            } else {
+                alert( segment.validationError );
+            }
+
+            return segment;
+        },
+
+        /**
          * Creates a segment with the given text and adds it to the segmentList
          * @param  {string} text
          * @param  {string} [post=null] The origin post

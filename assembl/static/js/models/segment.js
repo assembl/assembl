@@ -16,9 +16,7 @@ function(Backbone, app, moment, User){
             }
 
             this.on('change:idIdea', this.onAttrChange, this);
-            this.on('invalid', function(model, error){
-                alert( error );
-            }, this)
+            //this.on('invalid', function(model, error){ alert( error ); }, this);
         },
 
         /**
@@ -35,7 +33,8 @@ function(Backbone, app, moment, User){
             idIdea: null,
             creationDate: null,
             creator: {},
-            source_creator: {}
+            source_creator: {},
+            annotation: null
         },
 
         /**
@@ -44,7 +43,7 @@ function(Backbone, app, moment, User){
         validate: function(attrs, options){
             var currentUser = app.getCurrentUser();
             if( ! currentUser.id ){
-                return i18n.gettext('You must be logged in to create segments');
+                //return i18n.gettext('You must be logged in to create segments');
             }
         },
 

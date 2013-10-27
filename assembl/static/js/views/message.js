@@ -39,6 +39,12 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
         template: app.loadTemplate('message'),
 
         /**
+         * The lastest annotation created by annotator
+         * @type {Annotation}
+         */
+        currentAnnotation: null,
+
+        /**
          * The render
          * @return {MessageView}
          */
@@ -57,6 +63,10 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
             }
 
             this.$el.html( this.template(data) );
+
+            // Init annotator
+            this.initAnnotator();
+
             return this;
         },
 
@@ -102,6 +112,45 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
         },
 
         /**
+         * Inits the annotator instance
+         */
+        initAnnotator: function(){
+            this.body = this.$('.message-body').annotator();
+            
+            var annotator = this.body.data('annotator'),
+                that = this;
+
+            if( !annotator ){
+                return;
+            }
+
+            annotator.subscribe('annotationCreated', function(annotation){
+                var segment = app.segmentList.addAnnotationAsSegment( annotation, this.model );
+                
+                if( !segment.isValid() ){
+                    annotation.destroy();
+                }
+            });
+
+            annotator.subscribe('annotationEditorShown', function(editor, annotation){
+                $(document.body).append(editor.element);
+
+                var textarea = editor.fields[0].element.firstChild;
+                if(textarea){
+                    textarea.value = annotation.quote;
+                    textarea.readOnly = true;
+                }
+
+                // Removing the resizer button
+                $(editor.fields[0].element).find('.annotator-resize').remove();
+
+                that.annotatorEditor = editor.element;
+            });
+
+
+        },
+
+        /**
          * Hide the selection tooltip
          */
         hideTooltip: function(){
@@ -133,6 +182,7 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
         openReplyBox: function(){
             this.$('.message-replaybox-openbtn').hide();
             this.$('.message-replybox').show();
+
             var that = this;
             window.setTimeout(function(){
                 that.$('.message-textarea').focus();
@@ -182,6 +232,19 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
          * @param  {Number} y
          */
         showSelectionOptions: function(x, y){
+            this.hideTooltip();
+
+            var annotator = this.body.data('annotator');
+            annotator.onAdderClick.call(annotator);
+
+            if( this.annotatorEditor ){
+                this.annotatorEditor.css({
+                    'top': y,
+                    'left': x + 50
+                });
+            }
+
+            return;
             var items = {};
             items[ i18n.gettext('Add to clipboard') ] = this.contextMenuItem1;
 
@@ -193,7 +256,14 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
         /**
          * CONTEXT MENU
          */
-        contextMenuItem1: function(){
+        contextMenuItem1: function(ev){
+            if( ev ){
+                ev.preventDefault();
+                ev.stopPropagation();
+            }
+
+
+            //this.currentAnnotation
             app.segmentList.addTextAsSegment( app.selectionTooltip.attr('data-segment'), this.model );
             app.openPanel(app.segmentList);
         },
