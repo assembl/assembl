@@ -554,3 +554,9 @@ class Email(Content):
             self.sender.encode('utf-8'), 
             self.recipients.encode('utf-8')
         )
+
+    def get_body(self):
+        return self.body
+
+    def get_title(self):
+        return self.subject

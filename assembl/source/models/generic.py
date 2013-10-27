@@ -103,3 +103,9 @@ class Content(SQLAlchemyBaseModel):
 
     def __repr__(self):
         return "<Content %s>" % repr(self.type)
+
+    def get_body(self):
+        return ""
+
+    def get_title(self):
+        return ""
