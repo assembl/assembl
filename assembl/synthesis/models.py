@@ -1,4 +1,5 @@
 from datetime import datetime
+import re
 
 from sqlalchemy.orm import relationship, backref, aliased
 from sqlalchemy.sql import func, cast, select, text
@@ -403,6 +404,8 @@ class Extract(SQLAlchemyBaseModel):
     idea_id = Column(Integer, ForeignKey('idea.id'), nullable=True)
     idea = relationship('Idea', backref='extracts')
 
+    annotation_text = Column(UnicodeText)
+
     creator_id = Column(
         Integer,
         ForeignKey('agent_profile.id'),
@@ -424,13 +427,80 @@ class Extract(SQLAlchemyBaseModel):
     def serializable(self):
         return {
             'id': self.id,
-            'text': self.body,
+            'quote': self.body,
+            'ranges': [tfi.__json__() for tfi 
+                       in self.text_fragment_identifiers],
             'idPost': self.source.post.id,
             'idIdea': self.idea_id,
-            'creationDate': self.creation_date.isoformat(),
-            'creator': self.creator.serializable(),
+            'created': self.creation_date.isoformat(),
+            'user': self.creator.serializable(),
+            'text': self.annotation_text,
             'source_creator': self.source.post.creator.serializable()
         }
 
     def __repr__(self):
         return "<Extract %d %s>" % (self.id, repr(self.body[:20]))
+
+    def infer_text_fragment(self):
+        text = self.source.get_body()
+        start = text.find(self.body)
+        lookin = 'message-body'
+        if start < 0:
+            xpath = "//div[@id='%s']/div[class='post_title']"
+            text = self.source.get_title()
+            start = text.find(self.body)
+            if start < 0:
+                return None
+            lookin = 'message-subject'
+        xpath = "//div[@data-message-id='%d']//span[@class='%s']" % (
+            self.source.post.id, lookin)
+        return TextFragmentIdentifier(
+            extract=self, xpath_start=xpath, offset_start=start,
+            xpath_end=xpath, offset_end=start+len(self.body))
+
+
+class TextFragmentIdentifier(SQLAlchemyBaseModel):
+    __tablename__ = 'text_fragment_identifier'
+    id = Column(Integer, primary_key=True)
+    extract_id = Column(Integer, ForeignKey(Extract.id))
+    xpath_start = Column(String)
+    offset_start = Column(Integer)
+    xpath_end = Column(String)
+    offset_end = Column(Integer)
+    extract = relationship(Extract, backref='text_fragment_identifiers')
+
+    xpath_re = re.compile(
+        r'xpointer\(start-point\(string-range\(([^,]+),([^,]+),([^,]+)\)\)'
+        r'/range-to\(string-range\(([^,]+),([^,]+),([^,]+)\)\)\)')
+
+    def __string__(self):
+        return ("xpointer(start-point(string-range(%s,'',%d))/range-to(string-range(%s,'',%d)))" % (
+            self.xpath_start, self.offset_start,
+            self.xpath_end, self.offset_end))
+
+    def __json__(self):
+        return {"start": self.xpath_start, "startOffset": self.offset_start,
+                "end": self.xpath_end, "endOffset": self.offset_end}
+
+    @classmethod
+    def from_xpointer(cls, extract_id, xpointer):
+        m = xpath_re.match(xpointer)
+        if m:
+            try:
+                (xpath_start, start_text, offset_start,
+                    xpath_end, end_text, offset_end) = m.groups()
+                offset_start = int(offset_start)
+                offset_end = int(end_offset)
+                xpath_start = xpath_start.strip()
+                assert xpath_start[0] in "\"'"
+                xpath_start = xpath_start.strip(xpath_start[0])
+                xpath_end = xpath_end.strip()
+                assert xpath_end[0] in "\"'"
+                xpath_end = xpath_end.strip(xpath_end[0])
+                return TextFragmentIdentifier(
+                    extract_id=extract_id,
+                    xpath_start=xpath_start, offset_start=offset_start,
+                    xpath_end=xpath_end, offset_end=offset_end)
+            except:
+                pass
+        return None

@@ -8,7 +8,7 @@ from pyramid.httpexceptions import HTTPNotFound
 from sqlalchemy.orm import aliased, joinedload, joinedload_all, contains_eager
 
 from assembl.views.api import API_DISCUSSION_PREFIX
-from assembl.synthesis.models import Extract
+from assembl.synthesis.models import Extract, TextFragmentIdentifier
 from assembl.auth.models import AgentProfile, User
 from assembl.source.models import Source, Content, Post
 from . import acls
@@ -65,25 +65,34 @@ def post_extract(request):
     Create a new extract.
     """
     extract_data = json.loads(request.body)
+    print "post_extract:", extract_data
     user_id = authenticated_userid(request)
 
     post_id = extract_data.get('idPost')
 
-    with transaction.manager:
-        post = Post.get(id=post_id)
-        if not post:
-            raise HTTPNotFound("Post with id '%s' not found." % post_id)
-        extract_body = extract_data.get('text', '')
-        new_extract = Extract(
-            creator_id=user_id,
-            owner_id=user_id,
-            body=extract_body,
-            source_id=post.content.id
-        )
+    post = Post.get(id=post_id)
+    if not post:
+        raise HTTPNotFound("Post with id '%s' not found." % post_id)
+    extract_body = extract_data.get('text', '')
+    new_extract = Extract(
+        creator_id=user_id,
+        owner_id=user_id,
+        body=extract_body,
+        source_id=post.content.id
+    )
 
-        Extract.db.add(new_extract)
-
-    new_extract = Extract.db.merge(new_extract)
+    Extract.db.add(new_extract)
+    for range_data in extract_data.get('ranges', []):
+        # Hack until we get correct xpaths from annotator
+        xpath = "//div[@data-message-id='%d']//span[@class='message-body']" % (post_id)
+        range = TextFragmentIdentifier(
+            extract = new_extract,
+            xpath_start = xpath, # range_data['start'],
+            offset_start = range_data['startOffset'],
+            xpath_end = xpath, # range_data['end'],
+            offset_end = range_data['endOffset'])
+        TextFragmentIdentifier.db.add(range)
+    Extract.db.flush()
 
     return {'ok': True, 'id': new_extract.id}
 
@@ -101,12 +110,12 @@ def put_extract(request):
     if not extract:
         raise HTTPNotFound("Extract with id '%s' not found." % extract_id)
 
-    with transaction.manager:
-        extract.owner_id = user_id or extract.owner_id
-        extract.order = updated_extract_data.get('order', extract.order)
-        extract.idea_id = updated_extract_data['idIdea']
+    extract.owner_id = user_id or extract.owner_id
+    extract.order = updated_extract_data.get('order', extract.order)
+    extract.idea_id = updated_extract_data['idIdea']
 
-        Extract.db.add(extract)
+    Extract.db.add(extract)
+    #TODO: Merge ranges. Sigh.
 
     return {'ok': True}
 
