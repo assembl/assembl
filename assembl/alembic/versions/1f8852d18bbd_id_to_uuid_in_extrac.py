@@ -14,8 +14,6 @@ from alembic import context, op
 import sqlalchemy as sa
 import transaction
 
-
-from assembl import models as m
 from assembl.lib import config, types
 
 

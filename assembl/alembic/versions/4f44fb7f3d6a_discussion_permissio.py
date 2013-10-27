@@ -14,12 +14,7 @@ from alembic import context, op
 import sqlalchemy as sa
 import transaction
 
-
-from assembl import models as m
-from assembl.auth.models import (populate_default_roles,
-    populate_default_permissions, create_default_permissions)
-from assembl.lib.sqla import Base as SQLAlchemyBaseModel
-
+from assembl.lib.sqla import get_session_maker, Base as SQLAlchemyBaseModel
 
 def upgrade(pyramid_env):
     with context.begin_transaction():
@@ -41,12 +36,15 @@ def upgrade(pyramid_env):
                 sa.ForeignKey('permission.id', ondelete='CASCADE')))
 
     # Do stuff with the app's models here.
+    from assembl.auth.models import (populate_default_roles,
+        populate_default_permissions, create_default_permissions)
+    from assembl.models import Discussion
     SQLAlchemyBaseModel.metadata.bind = op.get_bind()
-    db = m.get_session_maker()()
+    db = get_session_maker()()
     with transaction.manager:
         populate_default_roles(db)
         populate_default_permissions(db)
-        for d in db.query(m.Discussion).all():
+        for d in db.query(Discussion).all():
             create_default_permissions(db, d)
 
 
