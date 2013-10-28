@@ -425,18 +425,31 @@ class Extract(SQLAlchemyBaseModel):
         'AgentProfile', foreign_keys=[owner_id], backref='extracts_owned')
 
     def serializable(self):
-        return {
+        json = {
             'id': self.id,
+            'annotator_schema_version': 'v1.0',
             'quote': self.body,
             'ranges': [tfi.__json__() for tfi 
                        in self.text_fragment_identifiers],
-            'idPost': self.source.post.id,
-            'idIdea': self.idea_id,
+            'target': {
+                '@type': self.source.type
+            },
             'created': self.creation_date.isoformat(),
-            'user': self.creator.serializable(),
+            'user': self.creator.serializable(), #TODO: Use username or id.
             'text': self.annotation_text,
             'source_creator': self.source.post.creator.serializable()
         }
+        if self.idea_id:
+            json['idIdea'] = self.idea_id
+            #json['text'] += '<a href="%s">%s</a>' % (
+            #   self.idea.get_uri(), self.idea.short_title)
+        if self.source.type == 'email':
+            json['target']['@id'] = self.source.post.id
+            #json['url'] = self.source.post.get_uri()
+        elif self.source.type == 'webpage':
+            json['target']['url'] = self.source.url
+            json['url'] = self.source.url
+        return json
 
     def __repr__(self):
         return "<Extract %d %s>" % (self.id, repr(self.body[:20]))
