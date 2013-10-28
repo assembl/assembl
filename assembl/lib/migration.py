@@ -35,7 +35,7 @@ def bootstrap_db(config_uri=None, with_migration=True):
                              'attempting to bootstrap the database.\n')
             sys.exit(2)
 
-
+    import assembl.models
     metadata.create_all(db().connection())
     # import after session to delay loading of BaseOps
     from assembl.auth.models import (
