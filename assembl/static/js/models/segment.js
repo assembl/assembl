@@ -34,7 +34,7 @@ function(Backbone, app, moment, User){
             creationDate: null,
             creator: {},
             source_creator: {},
-            annotation: null
+            ranges: []
         },
 
         /**

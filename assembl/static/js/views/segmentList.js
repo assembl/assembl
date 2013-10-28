@@ -70,10 +70,11 @@ function(Backbone, _, $, app, Segment, i18n){
             delete annotation.highlights;
 
             var segment = new Segment.Model({
+                idPost: idPost,
                 text: annotation.quote,
                 creator: app.getCurrentUser(),
                 source_creator: sourceCreator,
-                annotation: annotation
+                ranges: annotation.ranges
             });
 
             if( segment.isValid() ){
