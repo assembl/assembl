@@ -435,7 +435,8 @@ class Extract(SQLAlchemyBaseModel):
                 '@type': self.source.type
             },
             'created': self.creation_date.isoformat(),
-            'user': self.creator.serializable(), #TODO: Use username or id.
+            'creator': self.creator.serializable(),
+            #'user': self.creator.get_uri(),
             'text': self.annotation_text,
             'source_creator': self.source.post.creator.serializable()
         }
