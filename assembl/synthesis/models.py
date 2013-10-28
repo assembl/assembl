@@ -446,6 +446,7 @@ class Extract(SQLAlchemyBaseModel):
             #   self.idea.get_uri(), self.idea.short_title)
         if self.source.type == 'email':
             json['target']['@id'] = self.source.post.id
+            json['idPost'] = self.source.post.id  # legacy
             #json['url'] = self.source.post.get_uri()
         elif self.source.type == 'webpage':
             json['target']['url'] = self.source.url
