@@ -125,7 +125,7 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
             }
 
             annotator.subscribe('annotationCreated', function(annotation){
-                var segment = app.segmentList.addAnnotationAsSegment( annotation, this.model );
+                var segment = app.segmentList.addAnnotationAsSegment( annotation, that.model );
                 
                 if( !segment.isValid() ){
                     annotation.destroy();
