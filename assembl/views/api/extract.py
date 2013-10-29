@@ -83,13 +83,11 @@ def post_extract(request):
 
     Extract.db.add(new_extract)
     for range_data in extract_data.get('ranges', []):
-        # Hack until we get correct xpaths from annotator
-        xpath = "//div[@data-message-id='%d']//span[@class='message-body']" % (post_id)
         range = TextFragmentIdentifier(
             extract = new_extract,
-            xpath_start = xpath, # range_data['start'],
+            xpath_start = range_data['start'],
             offset_start = range_data['startOffset'],
-            xpath_end = xpath, # range_data['end'],
+            xpath_end = range_data['end'],
             offset_end = range_data['endOffset'])
         TextFragmentIdentifier.db.add(range)
     Extract.db.flush()

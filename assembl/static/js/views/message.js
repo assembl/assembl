@@ -118,10 +118,15 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
             this.body = this.$('.message-body').annotator();
             
             var annotator = this.body.data('annotator'),
+                annotations = this.model.getAnnotations(),
                 that = this;
 
             if( !annotator ){
                 return;
+            }
+
+            if( annotations.length ){
+                annotator.loadAnnotations( annotations );
             }
 
             annotator.subscribe('annotationCreated', function(annotation){
@@ -133,7 +138,7 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
             });
 
             annotator.subscribe('annotationEditorShown', function(editor, annotation){
-                $(document.body).append(editor.element);
+                app.body.append(editor.element);
 
                 var textarea = editor.fields[0].element.firstChild;
                 if(textarea){

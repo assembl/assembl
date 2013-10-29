@@ -51,6 +51,32 @@ define(['backbone', 'jquery', 'app'], function(Backbone, $, app){
             return this.collection.findWhere({ id: this.get('parentId') });
         },
 
+        /**
+         * Return all segments related to this message
+         * @return {Segment[]}
+         */
+        getSegments: function(){
+            return app.segmentList.segments.where({ idPost: this.get('id') });
+        },
+
+        /**
+         * Return all segments in the annotator format
+         * @return {Object[]}
+         */
+        getAnnotations: function(){
+            var segments = this.getSegments(),
+                ret = [];
+
+            _.each(segments, function(segment){
+                segment.attributes.ranges[0].start = '';
+                segment.attributes.ranges[0].end = '';
+
+                ret.push( segment.attributes );
+            });
+
+            return ret;
+        },
+
 
         /**
          * Returns the toppest parent

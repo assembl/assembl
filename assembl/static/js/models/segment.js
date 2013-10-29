@@ -11,12 +11,20 @@ function(Backbone, app, moment, User){
          * @init
          */
         initialize: function(){
-            if( !this.get('creationDate') ){
-                this.set( 'creationDate', app.getCurrentTime() );
-            }
-
             this.on('change:idIdea', this.onAttrChange, this);
             //this.on('invalid', function(model, error){ alert( error ); }, this);
+
+            if( this.attributes.quote ){
+                this.attributes.text = this.attributes.quote;
+            }
+
+            if( this.attributes.created ){
+                this.attributes.creationDate = this.attributes.created;
+            }
+
+            if( ! this.get('creationDate') ){
+                this.set( 'creationDate', app.getCurrentTime() );
+            }
         },
 
         /**
