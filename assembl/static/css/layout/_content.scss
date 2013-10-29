@@ -2,6 +2,10 @@ html, body {
     height: 100%;
 }
 
+body {
+    overflow-x: hidden;
+}
+
 // The F* and powerful wrapper
 #wrapper {
     position: relative;

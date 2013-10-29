@@ -66,9 +66,6 @@ function(Backbone, _, $, app, Segment, i18n){
                 sourceCreator = post.get('creator');
             }
 
-            // cleaning the annoation
-            delete annotation.highlights;
-
             var segment = new Segment.Model({
                 idPost: idPost,
                 text: annotation.quote,
@@ -94,11 +91,12 @@ function(Backbone, _, $, app, Segment, i18n){
          * @return {Segment}
          */
         addTextAsSegment: function(text, post){
-            var idPost = null
-            var source_creator = null
-            if(post){
-                var idPost = post.id
-                source_creator = post.attributes.creator
+            var idPost = null,
+                source_creator = null;
+
+            if( post ){
+                idPost = post.id;
+                source_creator = post.attributes.creator;
             }
 
             var segment = new Segment.Model({

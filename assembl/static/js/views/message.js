@@ -141,9 +141,6 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
                     textarea.readOnly = true;
                 }
 
-                // Removing the resizer button
-                //$(editor.fields[0].element).find('.annotator-resize').remove();
-
                 that.annotatorEditor = editor.element;
             });
 
@@ -245,34 +242,10 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
             if( this.annotatorEditor ){
                 this.annotatorEditor.css({
                     'top': y,
-                    'left': x + 50
+                    'left': x
                 });
             }
-
-            return;
-            var items = {};
-            items[ i18n.gettext('Add to clipboard') ] = this.contextMenuItem1;
-
-            this.hideTooltip();
-            app.showContextMenu(x, y, this, items);
         },
-
-
-        /**
-         * CONTEXT MENU
-         */
-        contextMenuItem1: function(ev){
-            if( ev ){
-                ev.preventDefault();
-                ev.stopPropagation();
-            }
-
-
-            //this.currentAnnotation
-            app.segmentList.addTextAsSegment( app.selectionTooltip.attr('data-segment'), this.model );
-            app.openPanel(app.segmentList);
-        },
-
 
         events: {
             'click .iconbutton': 'onIconbuttonClick',
