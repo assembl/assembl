@@ -66,11 +66,12 @@ define(['backbone', 'jquery', 'app'], function(Backbone, $, app){
         getAnnotations: function(){
             var segments = this.getSegments(),
                 ret = [];
-
             _.each(segments, function(segment){
-                segment.attributes.ranges[0].start = '';
-                segment.attributes.ranges[0].end = '';
-
+                _.each(segment.attributes.ranges, function(range, key){
+                    /* BIG FAT WARNING:  The old ranges are NOT actually converted yet! */
+                    segment.attributes.ranges[key].start = '';
+                    segment.attributes.ranges[key].end = '';
+                });
                 ret.push( segment.attributes );
             });
 
