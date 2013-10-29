@@ -43,7 +43,7 @@ function(Backbone, app, moment, User){
         validate: function(attrs, options){
             var currentUser = app.getCurrentUser();
             if( ! currentUser.id ){
-                //return i18n.gettext('You must be logged in to create segments');
+                return i18n.gettext('You must be logged in to create segments');
             }
         },
 

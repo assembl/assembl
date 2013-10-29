@@ -142,9 +142,14 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
                 }
 
                 // Removing the resizer button
-                $(editor.fields[0].element).find('.annotator-resize').remove();
+                //$(editor.fields[0].element).find('.annotator-resize').remove();
 
                 that.annotatorEditor = editor.element;
+            });
+
+            annotator.subscribe('annotationViewerShown', function(viewer, annotation){
+                // We do not need the annotator's tooltip
+                viewer.hide();
             });
 
 

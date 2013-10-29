@@ -384,6 +384,13 @@ function($, _, ckeditor, User, Moment, i18n){
          * @return {string} The text formatted with HTML
          */
         formatMessageToDisplay: function(str){
+            // We were having problem for anything inside < > where 
+            // being traited as a tag. So, if there is an @ inside chevrons
+            // we're going to translate < to &lt; and > to &gt;
+            str = str.replace(/(<.+@.+\.?>)/g, function(text) {
+                return text.replace('<', '&lt;').replace('>', '&gt;');
+            });
+
             return str.trim().replace(/(\n)/gi, '<br />');
         },
 
