@@ -542,8 +542,16 @@
 .annotator-hl-filtered { background-color: transparent }
 
 
-// Added by us
+/**
+ * Added by us
+ */
+
 .annotator-resize,
 .annotator-adder {
     display: none !important;
+}
+
+
+.annotator-hl {
+    cursor: pointer;
 }

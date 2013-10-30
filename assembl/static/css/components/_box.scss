@@ -4,8 +4,10 @@
     position: relative;
     overflow: hidden;
 
-    //background: $box-background-color;
     border: solid 1px $box-border-color;
+    background-color: #ffffff;
+
+    @include transition(background-color 1s);
 
     padding: $box-padding;
 }
@@ -28,6 +30,13 @@
 .box.box--centered {
     //line-height: 50px;
     text-align: center;
+}
+
+
+// Highlighted box
+// ***************
+.box.is-highlighted {
+  background-color: #ffff99;
 }
 
 // A wrapper for two or more .box

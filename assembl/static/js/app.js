@@ -492,6 +492,27 @@ function($, _, ckeditor, User, Moment, i18n){
         },
 
         /**
+         * Shows the related segment from the given annotation
+         * @param  {annotation} annotation
+         */
+        showSegmentByAnnotation: function(annotation){
+            var segment = app.segmentList.segments.getByAnnotation(annotation);
+
+            if( !segment ){
+                return;
+            }
+
+            if( segment.get('idIdea') ){
+                // It is in the ideaList
+            } else {
+                // It is in the segmentList
+                app.segmentList.showSegment(segment);
+            }
+
+
+        },
+
+        /**
          * Updates the order in the idea list
          */
         updateIdealistOrder: function(){

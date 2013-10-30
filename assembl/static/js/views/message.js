@@ -125,9 +125,18 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
                 return;
             }
 
-            if( annotations.length ){
-                annotator.loadAnnotations( annotations );
-            }
+            annotator.subscribe('annotationsLoaded', function(annotations){
+                _.each(annotations, function(annotation){
+                    
+                    var highlights = annotation.highlights,
+                        func = app.showSegmentByAnnotation.bind(window, annotation);
+
+                    _.each(highlights, function(highlight){
+                        $(highlight).on('click', func);
+                    });
+
+                });
+            });
 
             annotator.subscribe('annotationCreated', function(annotation){
                 var segment = app.segmentList.addAnnotationAsSegment( annotation, that.model );
@@ -154,6 +163,10 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
                 viewer.hide();
             });
 
+            // Loading the annotations
+            if( annotations.length ){
+                annotator.loadAnnotations( annotations );
+            }
 
         },
 

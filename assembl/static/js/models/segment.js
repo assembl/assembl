@@ -105,6 +105,15 @@ function(Backbone, app, moment, User){
                 }
                 return false;
             });
+        },
+
+        /**
+         * Returns the segment related to the annotation
+         * @param  {annotation} annotation
+         * @return {Segment}
+         */
+        getByAnnotation: function(annotation){
+            return this.get(annotation.id);
         }
     });
 

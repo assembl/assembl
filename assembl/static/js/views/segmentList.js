@@ -132,6 +132,24 @@ function(Backbone, _, $, app, Segment, i18n){
             this.segments.remove(segment);
         },
 
+
+        /**
+         * Shows the given segment with an small fx
+         * @param {Segment} segment
+         */
+        
+        showSegment: function(segment){
+            app.openPanel(app.segmentList);
+
+            var selector = app.format('.box[data-segmentid={0}]', segment.cid),
+                box = this.$(selector);
+
+            if( box ){
+                app.segmentList.$('.panel-body').animate({'scrollTop': box.position().top});
+                box.highlight();
+            }
+        },
+        
         /**
          * Closes the panel
          */

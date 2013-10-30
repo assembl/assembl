@@ -15,8 +15,12 @@ requirejs.config({
         'jquery': {
             exports: 'jQuery'
         },
+        'jquery-highlight': {
+            exports: 'jQuery',
+            deps: ['jquery']
+        },
         'app': {
-            deps: ['ckeditor', 'tipsy', 'i18n', 'annotator'],
+            deps: ['ckeditor', 'tipsy', 'i18n', 'annotator', 'jquery-highlight'],
             exports: 'app'
         },
         'i18n': {
@@ -44,7 +48,8 @@ requirejs.config({
             deps: ['jquery'],
         },
         'annotator' : {
-            deps: ['jquery']
+            deps: ['jquery'],
+            exports: 'Annotator'
         }
     },
     "paths": {
@@ -55,6 +60,7 @@ requirejs.config({
         'i18n': 'lib/i18n',
         'tipsy': 'lib/jquery.tipsy',
         'annotator': 'lib/annotator-full.min',
+        'jquery-highlight': 'lib/jquery.highlight',
 
         'jasmine': 'lib/jasmine',
         'jasmine-html': 'lib/jasmine-html',
