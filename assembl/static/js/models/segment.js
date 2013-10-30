@@ -25,6 +25,9 @@ function(Backbone, app, moment, User){
             if( ! this.get('creationDate') ){
                 this.set( 'creationDate', app.getCurrentTime() );
             }
+
+            // cleaning
+            delete this.attributes.highlights;
         },
 
         /**

@@ -504,6 +504,7 @@ function($, _, ckeditor, User, Moment, i18n){
 
             if( segment.get('idIdea') ){
                 // It is in the ideaList
+                app.ideaPanel.showSegment(segment);
             } else {
                 // It is in the segmentList
                 app.segmentList.showSegment(segment);

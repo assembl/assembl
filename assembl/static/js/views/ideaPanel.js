@@ -103,8 +103,33 @@ function(Backbone, _, Idea, app, ckeditor, i18n){
          * @param  {Segment} segment
          */
         addSegment: function(segment){
+            delete segment.attributes.highlights;
+
             var id = this.idea.get('id');
             segment.set('idIdea', id);
+        },
+
+        /**
+         * Shows the given segment with an small fx
+         * @param {Segment} segment
+         */
+        showSegment: function(segment){
+            var selector = app.format('.box[data-segmentid={0}]', segment.cid),
+                idIdea = segment.get('idIdea'),
+                idea = app.ideaList.ideas.get(idIdea),
+                box;
+
+            if( !idea ){
+                return;
+            }
+
+            this.setCurrentIdea(idea);
+            box = this.$(selector);
+
+            if( box.length ){
+                app.ideaPanel.$('.panel-body').animate({'scrollTop': box.position().top});
+                box.highlight();
+            }
         },
 
         /**
@@ -112,6 +137,11 @@ function(Backbone, _, Idea, app, ckeditor, i18n){
          * @param  {Idea} [idea=null]
          */
         setCurrentIdea: function(idea){
+            if( this.idea.id == idea.id ){
+                // already the current one
+                return;
+            }
+
             this.idea = idea || new Idea.Model();
 
             this.idea.on('change', this.render, this);

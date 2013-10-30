@@ -47,6 +47,8 @@ function(Backbone, _, $, app, Segment, i18n){
          * @param {Segment} segment
          */
         addSegment: function(segment){
+            delete segment.attributes.highlights;
+
             segment.set('idIdea', null);
             this.segments.add(segment);
         },
@@ -137,14 +139,13 @@ function(Backbone, _, $, app, Segment, i18n){
          * Shows the given segment with an small fx
          * @param {Segment} segment
          */
-        
         showSegment: function(segment){
             app.openPanel(app.segmentList);
 
             var selector = app.format('.box[data-segmentid={0}]', segment.cid),
                 box = this.$(selector);
 
-            if( box ){
+            if( box.length ){
                 app.segmentList.$('.panel-body').animate({'scrollTop': box.position().top});
                 box.highlight();
             }
@@ -203,7 +204,7 @@ function(Backbone, _, $, app, Segment, i18n){
             ev.preventDefault();
 
             var isText = false;
-            if( ev.dataTransfer.types && ev.dataTransfer.types.indexOf('text/plain') > -1 ){
+            if( ev.dataTransfer && ev.dataTransfer.types && ev.dataTransfer.types.indexOf('text/plain') > -1 ){
                 isText = app.draggedIdea ? false : true;
             }
 
