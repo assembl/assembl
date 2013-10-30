@@ -47,4 +47,25 @@ define([
 
     // Fetching the ideas
     app.ideaList.ideas.fetch({reset: true});
+
+
+
+    /**
+     * WARNING:
+     * This is a workaround to update the segmentList using ajax
+     * In a perfect world, this would be done using websockets
+     * or something really cool.
+     */
+    function updateSegmentList(){
+        var promisse = app.segmentList.segments.fetch({reset: true}),
+            time = 60 * 5 * 1000; // 5 minutes
+
+        promisse.then(function(){
+            setTimeout(function(){
+                updateSegmentList();
+            }, time);
+        });
+    }
+
+    updateSegmentList();
 });

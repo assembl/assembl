@@ -137,7 +137,7 @@ function(Backbone, _, Idea, app, ckeditor, i18n){
          * @param  {Idea} [idea=null]
          */
         setCurrentIdea: function(idea){
-            if( this.idea.id == idea.id ){
+            if( idea && this.idea.id == idea.id ){
                 // already the current one
                 return;
             }
