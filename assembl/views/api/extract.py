@@ -4,13 +4,14 @@ import transaction
 from cornice import Service
 
 from pyramid.security import authenticated_userid
-from pyramid.httpexceptions import HTTPNotFound
+from pyramid.httpexceptions import HTTPNotFound, HTTPClientError
 from sqlalchemy.orm import aliased, joinedload, joinedload_all, contains_eager
 
 from assembl.views.api import API_DISCUSSION_PREFIX
 from assembl.synthesis.models import Extract, TextFragmentIdentifier
 from assembl.auth.models import AgentProfile, User
 from assembl.source.models import Source, Content, Post
+from assembl.annotation.models import Webpage
 from . import acls
 from assembl.auth import (
     P_READ, P_ADD_EXTRACT, P_EDIT_EXTRACT, P_DELETE_EXTRACT)
@@ -47,8 +48,8 @@ def get_extracts(request):
         Content,
         Source
     ).filter(
-        Source.discussion_id==discussion_id,
-        Content.source_id==Source.id
+        Source.discussion_id == discussion_id,
+        Content.source_id == Source.id
     )
     all_extracts = all_extracts.options(joinedload_all(Extract.source, Content.post, Post.creator, AgentProfile.user))
     all_extracts = all_extracts.options(joinedload_all(Extract.creator, AgentProfile.user))
@@ -67,28 +68,38 @@ def post_extract(request):
     extract_data = json.loads(request.body)
     print "post_extract:", extract_data
     user_id = authenticated_userid(request)
-
-    post_id = extract_data.get('idPost')
-
-    post = Post.get(id=post_id)
-    if not post:
-        raise HTTPNotFound("Post with id '%s' not found." % post_id)
+    # TODO: Handle unauthenticated user.
+    target = extract_data.get('target')
+    if not target:
+        raise HTTPClientError("No target")
+    target_type = target.get('@type')
+    if target_type == 'email':
+        post_id = target.get('@id')
+        post = Post.get(id=post_id)
+        if not post:
+            raise HTTPNotFound("Post with id '%s' not found." % post_id)
+        source = post.content
+    elif target_type == 'webpage':
+        url = target.get('url')
+        source = Webpage.db.get(url=url)
+        if not source:
+            source = Webpage(url=url)
     extract_body = extract_data.get('text', '')
     new_extract = Extract(
         creator_id=user_id,
         owner_id=user_id,
         body=extract_body,
-        source_id=post.content.id
+        source=source
     )
 
     Extract.db.add(new_extract)
     for range_data in extract_data.get('ranges', []):
         range = TextFragmentIdentifier(
-            extract = new_extract,
-            xpath_start = range_data['start'],
-            offset_start = range_data['startOffset'],
-            xpath_end = range_data['end'],
-            offset_end = range_data['endOffset'])
+            extract=new_extract,
+            xpath_start=range_data['start'],
+            offset_start=range_data['startOffset'],
+            xpath_end=range_data['end'],
+            offset_end=range_data['endOffset'])
         TextFragmentIdentifier.db.add(range)
     Extract.db.flush()
 

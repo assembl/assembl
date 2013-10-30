@@ -69,7 +69,10 @@ function(Backbone, _, $, app, Segment, i18n){
             }
 
             var segment = new Segment.Model({
-                idPost: idPost,
+                target: {
+                    "@id": idPost,
+                    "@type": "email"
+                },
                 text: annotation.quote,
                 creator: app.getCurrentUser(),
                 source_creator: sourceCreator,

@@ -1,12 +1,6 @@
 from sqlalchemy import Column, Integer, ForeignKey, DateTime, Unicode, String
 
-from rdflib import URIRef, RDF
-from rdflib.extras.infixowl import Property
-
-from ..source.generic import Source, Content
-from ..synthesis.models import Extract, Idea, Discussion
-from ..auth.models import (IdentityProvider, IdentityProviderAccount,
-                           AgentProfile, AgentAccount)
+from ..source.models.generic import Source, Content
 
 
 class Webpage(Content):
