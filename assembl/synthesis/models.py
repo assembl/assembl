@@ -438,7 +438,6 @@ class Extract(SQLAlchemyBaseModel):
             'creator': self.creator.serializable(),
             #'user': self.creator.get_uri(),
             'text': self.annotation_text,
-            'source_creator': self.source.post.creator.serializable()
         }
         if self.idea_id:
             json['idIdea'] = self.idea_id
@@ -447,10 +446,12 @@ class Extract(SQLAlchemyBaseModel):
         if self.source.type == 'email':
             json['target']['@id'] = self.source.post.id
             json['idPost'] = self.source.post.id  # legacy
+            json['source_creator'] = self.source.post.creator.serializable()
             #json['url'] = self.source.post.get_uri()
         elif self.source.type == 'webpage':
             json['target']['url'] = self.source.url
-            json['url'] = self.source.url
+            json['uri'] = self.source.url
+            json['text'] = "Cf " + self.source.source.discussion.topic
         return json
 
     def __repr__(self):
