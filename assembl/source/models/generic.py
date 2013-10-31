@@ -91,8 +91,6 @@ class Content(SQLAlchemyBaseModel):
 
     def __init__(self, *args, **kwargs):
         super(Content, self).__init__(*args, **kwargs)
-        from .post import Post
-        self.post = self.post or Post(content=self)
 
     def serializable(self):
         return {
