@@ -59,6 +59,9 @@ class Source(SQLAlchemyBaseModel):
     def __repr__(self):
         return "<Source %s>" % repr(self.name)
 
+    def import_content(self, only_new=True):
+        pass
+
 
 class Content(SQLAlchemyBaseModel):
     """
