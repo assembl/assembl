@@ -20,3 +20,8 @@ def acls(request):
         acls = [(Allow, p.role.name, p.permission.name) for p in permissions]
         return acls
     return []
+
+def includeme(config):
+    """ Initialize views and renderers at app start-up time. """
+
+    config.add_route('csrf_token', 'api/v1/token')
