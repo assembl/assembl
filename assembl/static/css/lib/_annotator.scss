@@ -554,4 +554,9 @@
 
 .annotator-hl {
     cursor: pointer;
+    @include transition(background-color 1s);
+}
+
+.annotator-hl.is-highlighted {
+    background-color: #ccff99;
 }

@@ -312,8 +312,9 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
         /**
          * Loads the message thread by post id
          * @param {Number} id
+         * @param {Function} [callback] Callback function
          */
-        loadThreadById: function(id){
+        loadThreadById: function(id, callback){
             var that = this;
 
             this.blockPanel();
@@ -321,6 +322,10 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
                 that.unblockPanel();
                 that.$el.addClass(MESSAGE_MODE);
                 that.messageThread.reset(json.posts);
+
+                if( _.isFunction(callback) ){
+                    callback(json);
+                }
             });
         },
 

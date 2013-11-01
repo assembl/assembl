@@ -30,7 +30,7 @@
             <div class="text-small text-muted">
                 {{ gettext('by') }}
                 <img src="<%= app.formatAvatarUrl(segment.get('creator').id, 24) %>" class="image-rounded" alt="" />
-                <%= segment.get('creator')['name'] %>
+                <%= segment.get('creator').name %>
             </div>
         </div>
     </div>
