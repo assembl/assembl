@@ -509,8 +509,25 @@ function($, _, ckeditor, User, Moment, i18n){
                 // It is in the segmentList
                 app.segmentList.showSegment(segment);
             }
+        },
 
+        /**
+         * Shows the segment source in the better way related to the source
+         * e.g.: If it is an email, opens it, if it is a website, open in another window ...
+         * @param {Segment} segment
+         */
+        showTargetBySegment: function(segment){
+            var target = segment.get('target');
+            
+            switch(target['@type']){
+                case 'website':
+                    window.open(target.url, "_blank");
+                    break;
+                default:
 
+                    // todo: open the message here
+                    break;
+            }
         },
 
         /**

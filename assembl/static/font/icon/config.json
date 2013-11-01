@@ -205,9 +205,21 @@
       "src": "websymbols"
     },
     {
+      "uid": "cba6018f5de17c76f70b7d2c06037e5a",
+      "css": "mail",
+      "code": 59427,
+      "src": "websymbols"
+    },
+    {
       "uid": "fd3128bf109153952b1b775ea574504b",
       "css": "user",
       "code": 59393,
+      "src": "websymbols"
+    },
+    {
+      "uid": "3c4a596e8ee3584c4c9e7002371db19f",
+      "css": "link",
+      "code": 59428,
       "src": "websymbols"
     },
     {

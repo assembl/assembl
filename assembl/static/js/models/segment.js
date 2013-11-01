@@ -14,14 +14,6 @@ function(Backbone, app, moment, User){
             this.on('change:idIdea', this.onAttrChange, this);
             //this.on('invalid', function(model, error){ alert( error ); }, this);
 
-            if( this.attributes.quote ){
-                this.attributes.quote = this.attributes.quote;
-            }
-
-            if( this.attributes.text ){
-                this.attributes.text = this.attributes.text;
-            }
-
             if( this.attributes.created ){
                 this.attributes.creationDate = this.attributes.created;
             }
@@ -76,6 +68,39 @@ function(Backbone, app, moment, User){
          */
         onAttrChange: function(){
             this.save();
+        },
+
+        /**
+         * @return {Boolean} True if there is a source_creator
+         */
+        hasSourceCreator: function(){
+            return this.attributes.source_creator && this.attributes.source_creator.id !== undefined;
+        },
+
+
+        /**
+         * Return the html markup to the icon
+         * @return {string}
+         */
+        getTypeIcon: function(){
+            var cls = 'icon-',
+                type = this.get('target')['@type'];
+
+            switch(type){
+                case 'website': 
+                    cls += 'link';
+                    break;
+
+                case 'email':
+                default:
+                    cls += 'mail';
+            }
+
+            // <% if (segment.get('target')['@type'] == 'webpage') { %>
+            //         <a href="<%= segment.get('target').url %>" target="new">{{ gettext("source") }}</a>
+            //     <% } %>
+
+            return app.format("<i class='{0}'></i>", cls);
         }
     });
 

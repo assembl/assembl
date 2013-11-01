@@ -7,27 +7,28 @@
 
 <div class="box" draggable="true" data-segmentid="<%= segment.cid %>">
     <span data-segmentid="<%= segment.cid %>" class="closebutton"></span>
-    <img class="segmenttype"  src="{{ STATIC_URL }}img/icon/types/<%= segment.get('target')['@type'] %>.png" width="32" />
+
     <q class="text text-quotation"><%= segment.get('quote') %></q>
-    <% if (segment.get('target')['@type'] == 'webpage') { %>
-    <a href="<%= segment.get('target').url %>" target="new">{{ gettext("source") }}</a>
-    <% } %>
 
     <div class="spacer spacer--big"></div>
 
     <div class="media">
-        <% if (segment.get('source_creator').id !== undefined) { %>
+        <% if ( segment.hasSourceCreator() ) { %>
         <div class="media-imgleft">
             <img src="<%= app.formatAvatarUrl(segment.get('source_creator').id, 50)%>" class="image-rounded" alt="" />
         </div>
         <% } %>
         <div class="media-body">
-            <% if (segment.get('source_creator').id !== undefined) { %>
-            <div class="media-title"><strong><%= segment.get('source_creator').name %></strong></div>
+            <% if ( segment.hasSourceCreator() ) { %>
+                <div class="media-title"><strong><%= segment.get('source_creator').name %></strong></div>
             <% } %>
             {% set segmentDate = "<%= segment.getCreationDateFormated() %>" %}
             <div class="text-small text-muted">
-                {{ gettext('Extracted %(date)s by ')|format(date=segmentDate)|safe }}
+                {{ gettext('Extracted %(date)s from')|format(date=segmentDate)|safe }}
+                <a class="segment-link" data-segmentid="<%= segment.cid %>"><%= segment.getTypeIcon() %></a>
+            </div>
+            <div class="text-small text-muted">
+                {{ gettext('by') }}
                 <img src="<%= app.formatAvatarUrl(segment.get('creator').id, 24) %>" class="image-rounded" alt="" />
                 <%= segment.get('creator')['name'] %>
             </div>
