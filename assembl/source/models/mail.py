@@ -174,6 +174,7 @@ class Mailbox(Source):
             email_object.full_message=message_string
         except NoResultFound:
             email_object = Email(
+                post=Post(),
                 recipients=recipients,
                 sender=sender,
                 subject=subject,
