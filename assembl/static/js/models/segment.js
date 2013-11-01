@@ -76,6 +76,13 @@ function(Backbone, app, moment, User){
          */
         onAttrChange: function(){
             this.save();
+        },
+
+        /**
+         * @return {Boolean} True if there is a source_creator
+         */
+        hasSourceCreator: function(){
+            return this.attributes.source_creator && this.attributes.source_creator.id !== undefined;
         }
     });
 
