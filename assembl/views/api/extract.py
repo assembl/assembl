@@ -114,7 +114,7 @@ def post_extract(request):
             source = Source(name='Annotator', discussion_id=discussion_id, type='source')
             Source.db.merge(source)
             content = Webpage(url=uri, source=source)
-    extract_body = extract_data.get('text', '')
+    extract_body = extract_data.get('quote', '')
     new_extract = Extract(
         creator_id=user_id,
         owner_id=user_id,

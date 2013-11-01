@@ -73,7 +73,8 @@ function(Backbone, _, $, app, Segment, i18n){
                     "@id": idPost,
                     "@type": "email"
                 },
-                text: annotation.quote,
+                text: annotation.text,
+                quote: annotation.quote,
                 creator: app.getCurrentUser(),
                 source_creator: sourceCreator,
                 ranges: annotation.ranges
@@ -106,6 +107,7 @@ function(Backbone, _, $, app, Segment, i18n){
 
             var segment = new Segment.Model({
                 text: text,
+                quote: text,
                 creator: app.getCurrentUser(),
                 source_creator: source_creator,
                 idPost: idPost
@@ -188,7 +190,7 @@ function(Backbone, _, $, app, Segment, i18n){
             var cid = ev.currentTarget.getAttribute('data-segmentid'),
                 segment = this.segments.get(cid);
 
-            app.showDragbox(ev, segment.get('text'));
+            app.showDragbox(ev, segment.get('quote'));
             app.draggedSegment = segment;
         },
 

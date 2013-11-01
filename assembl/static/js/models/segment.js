@@ -15,7 +15,11 @@ function(Backbone, app, moment, User){
             //this.on('invalid', function(model, error){ alert( error ); }, this);
 
             if( this.attributes.quote ){
-                this.attributes.text = this.attributes.quote;
+                this.attributes.quote = this.attributes.quote;
+            }
+
+            if( this.attributes.text ){
+                this.attributes.text = this.attributes.text;
             }
 
             if( this.attributes.created ){
@@ -40,6 +44,7 @@ function(Backbone, app, moment, User){
          */
         defaults: {
             text: '',
+            quote: '',
             idPost: null,
             idIdea: null,
             creationDate: null,
