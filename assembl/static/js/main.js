@@ -58,7 +58,7 @@ define([
      */
     function updateSegmentList(){
         var promisse = app.segmentList.segments.fetch({reset: true}),
-            time = 60 * 5 * 1000; // 5 minutes
+            time = 60 * 1 * 1000; // 1 minute
 
         promisse.then(function(){
             setTimeout(function(){

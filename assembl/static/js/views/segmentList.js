@@ -27,17 +27,33 @@ function(Backbone, _, $, app, Segment, i18n){
         segments: new Segment.Collection(),
 
         /**
+         * The panel element
+         * @type {jQuery}
+         */
+        panel: null,
+
+        /**
          * The render
          * @return {LateralMenu}
          */
         render: function(){
             app.trigger('render');
+
             var segments = this.segments.getClipboard(),
-                data = {segments:segments};
+                data = {segments:segments},
+                top = 0;
+
+            if( this.panel ){
+                top = this.panel.find('.panel-body')[0].scrollTop;
+            }
 
             this.$el.html(this.template(data));
 
             this.panel = this.$('.panel');
+
+            if( top > 0 ){
+                this.panel.find('.panel-body')[0].scrollTop = top;
+            }
 
             return this;
         },
