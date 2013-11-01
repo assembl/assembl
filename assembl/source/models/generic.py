@@ -81,7 +81,7 @@ class Content(SQLAlchemyBaseModel):
         backref=backref('contents', order_by=import_date)
     )
 
-    post = relationship("Post", uselist=False)
+    post = relationship("Post", uselist=False, backref="content")
 
     __mapper_args__ = {
         'polymorphic_identity': 'content',

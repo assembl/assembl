@@ -32,7 +32,6 @@ class Post(SQLAlchemyBaseModel):
     ancestry = Column(Text, default="")
 
     content_id = Column(Integer, ForeignKey('content.id', ondelete='CASCADE'))
-    content = relationship('Content', uselist=False)
 
     parent_id = Column(Integer, ForeignKey('post.id'))
     children = relationship(
