@@ -7,7 +7,7 @@
 
 <div class="box" draggable="true" data-segmentid="<%= segment.cid %>">
     <span data-segmentid="<%= segment.cid %>" class="closebutton"></span>
-
+    <img class="segmenttype"  src="{{ STATIC_URL }}img/icon/types/<%= segment.get('target')['@type'] %>.png" width="32" />
     <q class="text text-quotation"><%= segment.get('quote') %></q>
     <% if (segment.get('target')['@type'] == 'webpage') { %>
     <a href="<%= segment.get('target').url %>" target="new">{{ gettext("source") }}</a>
