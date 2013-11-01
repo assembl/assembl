@@ -457,18 +457,20 @@ class Extract(SQLAlchemyBaseModel):
         return "<Extract %d %s>" % (self.id, repr(self.body[:20]))
 
     def infer_text_fragment(self):
-        text = self.source.get_body()
-        start = text.find(self.body)
+        return self._infer_text_fragment_inner(
+            self.source.get_title(), self.source.get_body(), self.source.post.id)
+
+    def _infer_text_fragment_inner(self, title, body, post_id):
+        start = body.find(self.body)
         lookin = 'message-body'
         if start < 0:
-            xpath = "//div[@id='%s']/div[class='post_title']"
-            text = self.source.get_title()
-            start = text.find(self.body)
+            xpath = "//div[@id='%s']/div[class='post_title']" % (post_id)
+            start = title.find(self.body)
             if start < 0:
                 return None
             lookin = 'message-subject'
         xpath = "//div[@data-message-id='%d']//span[@class='%s']" % (
-            self.source.post.id, lookin)
+            post_id, lookin)
         return TextFragmentIdentifier(
             extract=self, xpath_start=xpath, offset_start=start,
             xpath_end=xpath, offset_end=start+len(self.body))
