@@ -70,8 +70,8 @@ $font-icon-dir: "#{$font-dir}/icon";
 .icon-blank:before { content: '\e81e'; } /* '' */
 .icon-pin-outline:before { content: '\e806'; } /* '' */
 .icon-pin:before { content: '\e807'; } /* '' */
+.icon-menu-1:before { content: '\e81f'; } /* '' */
 .icon-plus-squared:before { content: '\e81c'; } /* '' */
-.icon-download:before { content: '\e804'; } /* '' */
 .icon-edit:before { content: '\e80a'; } /* '' */
 .icon-menu:before { content: '\e80f'; } /* '' */
 .icon-cancel:before { content: '\e810'; } /* '' */
@@ -86,5 +86,7 @@ $font-icon-dir: "#{$font-dir}/icon";
 .icon-resize-full:before { content: '\e821'; } /* '' */
 .icon-resize-small:before { content: '\e822'; } /* '' */
 .icon-search:before { content: '\e80e'; } /* '' */
+.icon-mail:before { content: '\e823'; } /* '' */
 .icon-user:before { content: '\e801'; } /* '' */
-.icon-menu-1:before { content: '\e81f'; } /* '' */
+.icon-link:before { content: '\e824'; } /* '' */
+.icon-download:before { content: '\e804'; } /* '' */

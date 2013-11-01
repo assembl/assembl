@@ -509,8 +509,15 @@ function($, _, ckeditor, User, Moment, i18n){
                 // It is in the segmentList
                 app.segmentList.showSegment(segment);
             }
+        },
 
-
+        /**
+         * Shows the segment source in the better way related to the source
+         * e.g.: If it is an email, opens it, if it is a website, open in another window ...
+         * @param {Segment} segment
+         */
+        showTargetBySegment: function(segment){
+            alert( segment.get('target') );
         },
 
         /**

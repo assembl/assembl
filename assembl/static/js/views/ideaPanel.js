@@ -196,7 +196,9 @@ function(Backbone, _, Idea, app, ckeditor, i18n){
             'click .closebutton': 'onCloseButtonClick',
             'click #ideaPanel-clearbutton': 'onClearAllClick',
             'click #ideaPanel-closebutton': 'onTopCloseButtonClick',
-            'click #ideaPanel-deleteButton': 'onDeleteButtonClick'
+            'click #ideaPanel-deleteButton': 'onDeleteButtonClick',
+
+            'click .segment-link': "onSegmentLinkClick"
         },
 
         /**
@@ -372,6 +374,16 @@ function(Backbone, _, Idea, app, ckeditor, i18n){
             
             this.idea.set({ 'longTitle': text, 'ideaPanel-editing': false });
             this.ckInstance.destroy();
+        },
+
+        /**
+         * @event
+         */
+        onSegmentLinkClick: function(ev){
+            var cid = ev.currentTarget.getAttribute('data-segmentid'),
+                segment = app.segmentList.segments.get(cid);
+
+            app.showTargetBySegment(segment);
         }
 
     });

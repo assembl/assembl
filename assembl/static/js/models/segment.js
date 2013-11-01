@@ -75,6 +75,32 @@ function(Backbone, app, moment, User){
          */
         hasSourceCreator: function(){
             return this.attributes.source_creator && this.attributes.source_creator.id !== undefined;
+        },
+
+
+        /**
+         * Return the html markup to the icon
+         * @return {string}
+         */
+        getTypeIcon: function(){
+            var cls = 'icon-',
+                type = this.get('target')['@type'];
+
+            switch(type){
+                case 'website': 
+                    cls += 'link';
+                    break;
+
+                case 'email':
+                default:
+                    cls += 'mail';
+            }
+
+            // <% if (segment.get('target')['@type'] == 'webpage') { %>
+            //         <a href="<%= segment.get('target').url %>" target="new">{{ gettext("source") }}</a>
+            //     <% } %>
+
+            return app.format("<i class='{0}'></i>", cls);
         }
     });
 

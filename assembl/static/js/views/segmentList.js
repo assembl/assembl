@@ -69,10 +69,7 @@ function(Backbone, _, $, app, Segment, i18n){
             }
 
             var segment = new Segment.Model({
-                target: {
-                    "@id": idPost,
-                    "@type": "email"
-                },
+                target: { "@id": idPost, "@type": "email" },
                 text: annotation.text,
                 quote: annotation.quote,
                 creator: app.getCurrentUser(),
@@ -178,7 +175,9 @@ function(Backbone, _, $, app, Segment, i18n){
 
             'click .closebutton': "onCloseButtonClick",
             'click #segmentList-clear': "onClearButtonClick",
-            'click #segmentList-closeButton': "closePanel"
+            'click #segmentList-closeButton': "closePanel",
+
+            'click .segment-link': "onSegmentLinkClick"
         },
 
         /**
@@ -273,6 +272,16 @@ function(Backbone, _, $, app, Segment, i18n){
                     segment.destroy();
                 });
             }
+        },
+
+        /**
+         * @event
+         */
+        onSegmentLinkClick: function(ev){
+            var cid = ev.currentTarget.getAttribute('data-segmentid'),
+                segment = this.segments.get(cid);
+
+            app.showTargetBySegment(segment);
         }
 
     });
