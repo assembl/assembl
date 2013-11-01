@@ -517,7 +517,17 @@ function($, _, ckeditor, User, Moment, i18n){
          * @param {Segment} segment
          */
         showTargetBySegment: function(segment){
-            alert( segment.get('target') );
+            var target = segment.get('target');
+            
+            switch(target['@type']){
+                case 'website':
+                    window.open(target.url, "_blank");
+                    break;
+                default:
+
+                    // todo: open the message here
+                    break;
+            }
         },
 
         /**
