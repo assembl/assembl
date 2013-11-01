@@ -480,7 +480,7 @@ def commonenv(projectpath, venvpath=None):
     #It is recommended you keep localhost even if you have access to 
     # unix domain sockets, it's more portable across different pg_hba configurations.
     env.db_host = 'localhost'
-    env.dbdumps_dir = os.path.join(tempfile.gettempdir(), '%s_dumps' % env.projectname)
+    env.dbdumps_dir = os.path.join(projectpath, '%s_dumps' % env.projectname)
     env.ini_file = 'production.ini'
     #env.gitrepo = "ssh://webapp@i4p-dev.imaginationforpeople.org/var/repositories/imaginationforpeople.git"
     env.gitrepo = "git://github.com/ImaginationForPeople/assembl.git"
