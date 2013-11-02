@@ -87,7 +87,7 @@ function(Backbone, app, moment, User){
                 type = this.get('target')['@type'];
 
             switch(type){
-                case 'website': 
+                case 'webpage': 
                     cls += 'link';
                     break;
 

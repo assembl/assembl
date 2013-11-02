@@ -513,14 +513,14 @@ function($, _, ckeditor, User, Moment, i18n){
 
         /**
          * Shows the segment source in the better way related to the source
-         * e.g.: If it is an email, opens it, if it is a website, open in another window ...
+         * e.g.: If it is an email, opens it, if it is a webpage, open in another window ...
          * @param {Segment} segment
          */
         showTargetBySegment: function(segment){
             var target = segment.get('target');
             
             switch(target['@type']){
-                case 'website':
+                case 'webpage':
                     window.open(target.url, "_blank");
                     break;
 
