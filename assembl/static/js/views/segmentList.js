@@ -92,6 +92,13 @@ function(Backbone, _, $, app, Segment, i18n){
                 source_creator: sourceCreator,
                 ranges: annotation.ranges
             });
+            // TEMPORARY CODE, until the ranges are anchored up
+            var xpath = "//div[@data-message-id='" + idPost +
+                "']//div[@class='message-body']";
+            _.each(segment.attributes.ranges,function(r) {
+                r.start = r.end = xpath;
+            });
+            // END TEMPORARY CODE
 
             if( segment.isValid() ){
                 this.addSegment(segment);
