@@ -67,11 +67,6 @@ define(['backbone', 'jquery', 'app'], function(Backbone, $, app){
             var segments = this.getSegments(),
                 ret = [];
             _.each(segments, function(segment){
-                _.each(segment.attributes.ranges, function(range, key){
-                    /* BIG FAT WARNING:  The old ranges are NOT actually converted yet! */
-                    segment.attributes.ranges[key].start = '';
-                    segment.attributes.ranges[key].end = '';
-                });
                 ret.push( segment.attributes );
             });
 
