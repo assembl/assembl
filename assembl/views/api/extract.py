@@ -86,6 +86,7 @@ def post_extract(request):
     # TODO: Handle unauthenticated user.
     content = None
     uri = extract_data.get('uri')
+    annotation_text = None
     if uri:
         # Straight from annotator
         token = request.headers.get('X-Annotator-Auth-Token')
@@ -93,6 +94,7 @@ def post_extract(request):
             token = decode_token(token, request.registry.settings['session.secret'])
             if token:
                 user_id = token['userId']
+        annotation_text = extract_data.get('text')
     else:
         target = extract_data.get('target')
         if not (target or uri):
@@ -119,6 +121,7 @@ def post_extract(request):
         creator_id=user_id,
         owner_id=user_id,
         body=extract_body,
+        annotation_text = annotation_text,
         source=content
     )
 
