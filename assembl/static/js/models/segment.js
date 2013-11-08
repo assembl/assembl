@@ -1,5 +1,5 @@
-define(['backbone', 'app', 'moment', 'models/user'],
-function(Backbone, app, moment, User){
+define(['backbone', 'app', 'models/user', 'models/message'],
+function(Backbone, app, User, Message){
     'use strict';
 
     /**
@@ -59,7 +59,6 @@ function(Backbone, app, moment, User){
             idIdea: null,
             creationDate: null,
             creator: {},
-            source_creator: {},
             ranges: []
         },
 
@@ -74,11 +73,23 @@ function(Backbone, app, moment, User){
         },
 
         /**
-         * Returns a fancy date (ex: a few seconds ago) 
-         * @return {String}
+         * @return {Idea} The Post the segments is associated to, if any
+         * 
+         * FIXME:  Once proper lazy loading is implemented, this must be changed
+         * to use it.  As it is, it will leak memory
+         * 
          */
-        getCreationDateFormated: function(){
-            return moment( this.get('creationDate') ).fromNow();
+        getAssociatedPost: function(){
+            var posts = app.messageList.messages.where({id:this.attributes.idPost});
+            var post = null;
+            if(posts.length){
+                 post = posts[0];
+            }
+            else {
+                post = new Message.Model({id: this.attributes.idPost});
+                post.fetch({async:false});
+            }
+            return post;
         },
 
         /**
@@ -87,14 +98,6 @@ function(Backbone, app, moment, User){
         onAttrChange: function(){
             this.save();
         },
-
-        /**
-         * @return {Boolean} True if there is a source_creator
-         */
-        hasSourceCreator: function(){
-            return this.attributes.source_creator && this.attributes.source_creator.id !== undefined;
-        },
-
 
         /**
          * Return the html markup to the icon

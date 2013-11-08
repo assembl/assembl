@@ -447,7 +447,6 @@ class Extract(SQLAlchemyBaseModel):
         if self.source.type == 'email':
             json['target']['@id'] = self.source.post.id
             json['idPost'] = self.source.post.id  # legacy
-            json['source_creator'] = self.source.post.creator.serializable()
             #json['url'] = self.source.post.get_uri()
         elif self.source.type == 'webpage':
             json['target']['url'] = self.source.url

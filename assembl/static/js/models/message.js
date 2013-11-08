@@ -17,7 +17,7 @@ define(['backbone', 'jquery', 'app'], function(Backbone, $, app){
          * The url
          * @type {String}
          */
-        urlRoot: app.getApiUrl('post'),
+        urlRoot: app.getApiUrl('posts'),
 
         /**
          * Default values
@@ -104,7 +104,7 @@ define(['backbone', 'jquery', 'app'], function(Backbone, $, app){
         },
 
         /**
-         * @return {Number} the indentantion level
+         * @return {Number} the indentation level
          */
         getLevel: function(){
             var counter = 0,

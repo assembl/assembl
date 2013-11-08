@@ -77,7 +77,6 @@ function(Backbone, _, $, app, Segment, i18n){
          */
         addAnnotationAsSegment: function(annotation, post){
             var idPost = post.id,
-                sourceCreator = post.get('creator'),
                 rootElement = $('#message-'+idPost).get(0);
 
             // arranging the ranges
@@ -92,7 +91,6 @@ function(Backbone, _, $, app, Segment, i18n){
                 text: annotation.text,
                 quote: annotation.quote,
                 creator: app.getCurrentUser(),
-                source_creator: sourceCreator,
                 ranges: annotation.ranges
             });
 
@@ -113,19 +111,16 @@ function(Backbone, _, $, app, Segment, i18n){
          * @return {Segment}
          */
         addTextAsSegment: function(text, post){
-            var idPost = null,
-                source_creator = null;
+            var idPost = null;
 
             if( post ){
                 idPost = post.id;
-                source_creator = post.attributes.creator;
             }
 
             var segment = new Segment.Model({
                 text: text,
                 quote: text,
                 creator: app.getCurrentUser(),
-                source_creator: source_creator,
                 idPost: idPost
             });
 
