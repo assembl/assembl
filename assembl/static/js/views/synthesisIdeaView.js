@@ -71,7 +71,21 @@ function(Backbone, _, $, Idea, Segment, app, ckeditor){
                 this.ckInstance = ckeditor.inline( editablearea, CKEDITOR_CONFIG );
                 editablearea.focus();
                 this.ckInstance.element.on('blur', function(){
-                    that.saveEdition();
+                    
+                    // Firefox triggers the blur event if we paste (ctrl+v)
+                    // in the ckeditor, so instead of calling the function direct
+                    // we wait to see if the focus is still in the ckeditor
+                    setTimeout(function(){
+                        if( !that.ckInstance.element ){
+                            return;
+                        }
+
+                        var hasFocus = document.hasFocus(that.ckInstance.element.$);
+                        if( !hasFocus ){
+                            that.saveEdition();
+                        }
+                    }, 100);
+
                 });
             }
 
