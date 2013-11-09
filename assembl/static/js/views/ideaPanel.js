@@ -156,9 +156,17 @@ function(Backbone, _, Idea, app, ckeditor, i18n){
                 return;
             }
 
-            this.idea = idea || new Idea.Model();
+            if( idea !== null ){
+                this.idea = idea;
+                this.idea.set('isSelected', true);
+                app.openPanel(app.ideaPanel);
+            } else {
+                this.idea = new Idea.Model();
+                app.closePanel(app.ideaPanel);
+            }
 
             this.idea.on('change', this.render, this);
+            app.trigger('idea:select', [idea]);
 
             this.render();
         },

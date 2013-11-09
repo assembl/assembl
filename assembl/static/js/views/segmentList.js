@@ -71,18 +71,20 @@ function(Backbone, _, $, app, Segment, i18n){
 
         /**
          * Add annotation as segment
-         * @param {annotation}
-         * @param {post} [post=null] The origin post
+         * @param {annotation} annotation
+         * @param {post} post The origin post
          * @return {Segment}
          */
         addAnnotationAsSegment: function(annotation, post){
-            var idPost = null,
-                sourceCreator = null;
+            var idPost = post.id,
+                sourceCreator = post.get('creator'),
+                rootElement = $('[data-message-id="'+idPost+'"]').get(0);
 
-            if(post){
-                idPost = post.id;
-                sourceCreator = post.get('creator');
-            }
+            // arranging the ranges
+            _.each(annotation.ranges, function(range){
+                range.start = app.getXPath( range.start );
+                range.end = app.getXPath( range.end );
+            });
 
             var segment = new Segment.Model({
                 target: { "@id": idPost, "@type": "email" },
@@ -92,13 +94,6 @@ function(Backbone, _, $, app, Segment, i18n){
                 source_creator: sourceCreator,
                 ranges: annotation.ranges
             });
-            // TEMPORARY CODE, until the ranges are anchored up
-            var xpath = "//div[@data-message-id='" + idPost +
-                "']//div[@class='message-body']";
-            _.each(segment.attributes.ranges,function(r) {
-                r.start = r.end = xpath;
-            });
-            // END TEMPORARY CODE
 
             if( segment.isValid() ){
                 this.addSegment(segment);

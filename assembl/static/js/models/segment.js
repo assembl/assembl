@@ -22,6 +22,24 @@ function(Backbone, app, moment, User){
                 this.set( 'creationDate', app.getCurrentTime() );
             }
 
+            var ranges = this.attributes.ranges,
+                _serializedRange = [],
+                _ranges = [];
+
+            _.each(ranges, function(range, index){
+
+                if( !(range instanceof Range.SerializedRange) ){
+                    ranges[index] = new Range.SerializedRange(range);
+                }
+
+                _ranges[index] = ranges[index];
+
+            });
+
+            // We need to create a copy 'cause annotator destroy all ranges
+            // once it creates the highlight
+            this.attributes._ranges = _ranges;
+
             // cleaning
             delete this.attributes.highlights;
         },
@@ -95,10 +113,6 @@ function(Backbone, app, moment, User){
                 default:
                     cls += 'mail';
             }
-
-            // <% if (segment.get('target')['@type'] == 'webpage') { %>
-            //         <a href="<%= segment.get('target').url %>" target="new">{{ gettext("source") }}</a>
-            //     <% } %>
 
             return app.format("<i class='{0}'></i>", cls);
         }

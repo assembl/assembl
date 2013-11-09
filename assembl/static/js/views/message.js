@@ -64,9 +64,6 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
 
             this.$el.html( this.template(data) );
 
-            // Init annotator
-            this.initAnnotator();
-
             return this;
         },
 
@@ -109,66 +106,6 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
             });
 
             return ret;
-        },
-
-        /**
-         * Inits the annotator instance
-         */
-        initAnnotator: function(){
-            this.body = this.$('.message-body').annotator();
-            
-            var annotator = this.body.data('annotator'),
-                annotations = this.model.getAnnotations(),
-                that = this;
-
-            if( !annotator ){
-                return;
-            }
-
-            annotator.subscribe('annotationsLoaded', function(annotations){
-                _.each(annotations, function(annotation){
-                    
-                    var highlights = annotation.highlights,
-                        func = app.showSegmentByAnnotation.bind(window, annotation);
-
-                    _.each(highlights, function(highlight){
-                        highlight.setAttribute('data-annotation-id', annotation.id);
-                        $(highlight).on('click', func);
-                    });
-
-                });
-            });
-
-            annotator.subscribe('annotationCreated', function(annotation){
-                var segment = app.segmentList.addAnnotationAsSegment( annotation, that.model );
-                
-                if( !segment.isValid() ){
-                    annotation.destroy();
-                }
-            });
-
-            annotator.subscribe('annotationEditorShown', function(editor, annotation){
-                app.body.append(editor.element);
-
-                var textarea = editor.fields[0].element.firstChild;
-                if(textarea){
-                    textarea.value = annotation.quote;
-                    textarea.readOnly = true;
-                }
-
-                that.annotatorEditor = editor.element;
-            });
-
-            annotator.subscribe('annotationViewerShown', function(viewer, annotation){
-                // We do not need the annotator's tooltip
-                viewer.hide();
-            });
-
-            // Loading the annotations
-            if( annotations.length ){
-                annotator.loadAnnotations( annotations );
-            }
-
         },
 
         /**
@@ -255,11 +192,11 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
         showSelectionOptions: function(x, y){
             this.hideTooltip();
 
-            var annotator = this.body.data('annotator');
+            var annotator = this.$el.closest('#messagelist-thread').data('annotator');
             annotator.onAdderClick.call(annotator);
 
-            if( this.annotatorEditor ){
-                this.annotatorEditor.css({
+            if( app.messageList.annotatorEditor ){
+                app.messageList.annotatorEditor.css({
                     'top': y,
                     'left': x
                 });
@@ -372,6 +309,7 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
          */
         onCollapsedChange: function(){
             this.render(false);
+            app.messageList.initAnnotator();
         },
 
 

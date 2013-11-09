@@ -66,7 +66,9 @@ define(['backbone', 'jquery', 'app'], function(Backbone, $, app){
         getAnnotations: function(){
             var segments = this.getSegments(),
                 ret = [];
+
             _.each(segments, function(segment){
+                segment.attributes.ranges = segment.attributes._ranges;
                 ret.push( segment.attributes );
             });
 
@@ -151,15 +153,32 @@ define(['backbone', 'jquery', 'app'], function(Backbone, $, app){
             var toReturn = [];
 
             _.each(this.models, function(model){
+
                 if( model.get('parentId') === null ){
                     toReturn.push(model);
                 } else if( model.getRootParent() === null ){
                     toReturn.push(model);
                 }
+
             });
 
             return toReturn;
-        }
+        },
+
+        /**
+         * Return all segments in all messages in the annotator format
+         * @return {Object[]}
+         */
+        getAnnotations: function(){
+            var ret = [];
+
+            _.each(this.models, function(model){                
+                ret = _.union(ret, model.getAnnotations() );
+            });
+
+            return ret;
+        },
+
     });
 
     return {

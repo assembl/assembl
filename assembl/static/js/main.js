@@ -30,7 +30,7 @@ define([
     app.segmentList = new SegmentList({el: '#segmentlist', button: '#button-segmentList'});
     app.segmentList.segments.on('change reset', app.ideaList.render, app.ideaList);
     app.segmentList.segments.on('invalid', function(model, error){ alert(error); });
-    app.segmentList.segments.fetch({reset: true});
+    //app.segmentList.segments.fetch({reset: true});
 
     // Idea panel
     app.ideaPanel = new IdeaPanel({el: '#ideaPanel', button: '#button-ideaPanel'}).render();
@@ -47,7 +47,6 @@ define([
 
     // Fetching the ideas
     app.ideaList.ideas.fetch({reset: true});
-
 
 
     /**
