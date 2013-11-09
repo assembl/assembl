@@ -458,18 +458,9 @@ function($, _, ckeditor, User, Moment, i18n){
          * @param  {Idea} [idea]
          */
         setCurrentIdea: function(idea){
-            if( app.ideaPanel && app.ideaPanel.idea !== null ){
-                app.ideaPanel.idea.set('isSelected', false);
+            if( app.ideaPanel ){
+                app.ideaPanel.setCurrentIdea(idea);
             }
-
-            if( idea !== null ){
-                idea.set('isSelected', true);
-                app.openPanel(app.ideaPanel);
-            } else {
-                app.closePanel(app.ideaPanel);
-            }
-
-            app.trigger('idea:select', [idea]);
         },
 
         /**

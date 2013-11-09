@@ -422,7 +422,9 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
                 that.messageThread.reset(json.posts);
 
                 if( _.isFunction(callback) ){
-                    callback(json);
+                    setTimeout(function(){
+                        callback(json);
+                    }, 10);
                 }
             });
         },
