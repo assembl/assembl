@@ -163,7 +163,10 @@ function(Backbone, _, $, Idea, Segment, app){
             if( ev ){
                 ev.stopPropagation();
             }
+
             ev.currentTarget.style.opacity = 0.4;
+            ev.originalEvent.dataTransfer.effectAllowed = 'move';
+            ev.originalEvent.dataTransfer.dropEffect = 'all';
 
             app.showDragbox(ev, this.model.get('shortTitle'));
             app.draggedIdea = this.model;
@@ -173,6 +176,10 @@ function(Backbone, _, $, Idea, Segment, app){
          * @event
          */
         onDragEnd: function(ev){
+            if( ev ){
+                ev.preventDefault();
+                ev.stopPropagation();
+            }
             ev.currentTarget.style.opacity = '';
             app.draggedSegment = null;
         },
@@ -186,9 +193,15 @@ function(Backbone, _, $, Idea, Segment, app){
                 ev.stopPropagation();
             }
 
+            if( ev.originalEvent ){
+                ev = ev.originalEvent;
+            }
+
             if( this.dragOverCounter > 30 ){
                 this.model.set('isOpen', true);
             }
+
+            ev.dataTransfer.dropEffect = 'all';
 
             if( app.draggedIdea !== null ){
 
@@ -228,6 +241,11 @@ function(Backbone, _, $, Idea, Segment, app){
          * @event
          */
         onDragLeave: function(ev){
+            if( ev ){
+                ev.preventDefault();
+                ev.stopPropagation();
+            }
+
             this.dragOverCounter = 0;
             this.$el.removeClass('is-dragover is-dragover-above is-dragover-below');
         },

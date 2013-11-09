@@ -244,9 +244,12 @@ define(['backbone','underscore', 'models/segment', 'app', 'i18n'], function(Back
          * @param {Segment} segment
          */
         addSegmentAsChild: function(segment){
+            // Cleaning
+            delete segment.attributes.highlights;
+
             var data = {
-                shortTitle: segment.get('text').substr(0, 50),
-                longTitle: segment.get('text'),
+                shortTitle: segment.get('quote').substr(0, 50),
+                longTitle: segment.get('quote'),
                 parentId: this.get('id'),
                 order: this.getOrderForNewChild()
             };

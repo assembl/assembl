@@ -257,7 +257,7 @@ function(Backbone, _, Idea, app, ckeditor, i18n){
                 var cid = ev.currentTarget.getAttribute('data-segmentid'),
                     segment = app.segmentList.segments.get(cid);
 
-                app.showDragbox(ev, segment.get('text'));
+                app.showDragbox(ev, segment.get('quote'));
                 app.draggedSegment = segment;
             }
         },

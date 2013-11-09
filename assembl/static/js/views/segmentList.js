@@ -220,6 +220,11 @@ function(Backbone, _, $, app, Segment, i18n){
          * @event
          */
         onDragEnd: function(ev){
+            if( ev ){
+                ev.preventDefault();
+                ev.stopPropagation();
+            }
+
             ev.currentTarget.style.opacity = '';
             app.draggedSegment = null;
         },

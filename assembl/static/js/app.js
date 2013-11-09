@@ -307,6 +307,10 @@ function($, _, ckeditor, User, Moment, i18n){
          * @param  {String} text The text to be shown in the .dragbox
          */
         showDragbox: function(ev, text){
+            if( ev.originalEvent ){
+                ev = ev.originalEvent;
+            }
+
             if( app.dragbox === null ){
                 app.dragbox = document.createElement('div');
                 app.dragbox.className = 'dragbox';
@@ -323,8 +327,9 @@ function($, _, ckeditor, User, Moment, i18n){
             app.dragbox.innerHTML = text;
 
             if( ev.dataTransfer ) {
+                ev.dataTransfer.dropEffect = 'all';
                 ev.dataTransfer.effectAllowed = 'copy';
-                ev.dataTransfer.setData("Text", text);
+                ev.dataTransfer.setData("text/plain", text);
                 ev.dataTransfer.setDragImage(app.dragbox, 10, 10);
             }
 
