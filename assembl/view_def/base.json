@@ -1,0 +1,33 @@
+{
+    "Permission": {},
+    "AgentProfile": {},
+    "User": {
+        "password":false
+    },
+    "EmailAccount": {},
+    "IdentityProviderAccount": {},
+    "IdentityProvider": {},
+
+    "Source": {},
+    "Webpage": {},
+    "Mailbox": {},
+    "Email": {},
+    "Post": {
+        "creator":"base"
+        },
+
+    "Discussion": {
+        "slug": true,
+        "table_of_contents_id": true,
+        "creation_date": true,
+        "topic": true,
+        "synthesis_id": true,
+        "owner_id": true,
+        "id": "@id"
+    },
+    "Idea": {},
+    "TableOfContents": {},
+    "Synthesis": {},
+    "Extract": {},
+    "TextFragmentIdentifier": {}
+}
