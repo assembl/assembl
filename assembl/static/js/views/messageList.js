@@ -196,7 +196,7 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
             this.annotator.subscribe('annotationCreated', function(annotation){
                 var span = $(annotation.highlights[0]),
                     messageId = span.closest('[id^="message-"]').attr('id'),
-                    post = app.messageList.messages.get(messageId),
+                    post = app.messageList.messages.get(messageId.substr(8)),
                     segment = app.segmentList.addAnnotationAsSegment( annotation, post );
                 
                 if( !segment.isValid() ){

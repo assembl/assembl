@@ -78,7 +78,7 @@ function(Backbone, _, $, app, Segment, i18n){
         addAnnotationAsSegment: function(annotation, post){
             var idPost = post.id,
                 sourceCreator = post.get('creator'),
-                rootElement = $('#message-"'+idPost).get(0);
+                rootElement = $('#message-'+idPost).get(0);
 
             // arranging the ranges
             // Obsolete with true IDs.
