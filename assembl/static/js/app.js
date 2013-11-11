@@ -94,6 +94,12 @@ function($, _, ckeditor, User, Moment, i18n){
         draggedIdea: null,
 
         /**
+         * Current dragged annotation
+         * @type {Annotation}
+         */
+        draggedAnnotation: null,
+
+        /**
          * The lateral menu width
          * @type {number}
          */
@@ -202,7 +208,9 @@ function($, _, ckeditor, User, Moment, i18n){
             var segment = app.draggedSegment;
             app.draggedSegment = null;
 
-            delete segment.attributes.highlights;
+            if( segment ){
+                delete segment.attributes.highlights;
+            }
 
             return segment;
         },
@@ -219,6 +227,17 @@ function($, _, ckeditor, User, Moment, i18n){
             app.draggedIdea = null;
 
             return idea;
+        },
+
+
+        /**
+         * @return {Annotation}
+         */
+        getDraggedAnnotation: function(){
+            var annotation = app.draggedAnnotation;
+            app.draggedAnnotation = null;
+
+            return annotation;
         },
 
         /**

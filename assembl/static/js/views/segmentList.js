@@ -72,19 +72,12 @@ function(Backbone, _, $, app, Segment, i18n){
         /**
          * Add annotation as segment
          * @param {annotation} annotation
-         * @param {post} post The origin post
          * @return {Segment}
          */
-        addAnnotationAsSegment: function(annotation, post){
-            var idPost = post.id,
-                rootElement = $('#message-'+idPost).get(0);
-
-            // arranging the ranges
-            // Obsolete with true IDs.
-            // _.each(annotation.ranges, function(range){
-            //     range.start = app.getXPath( range.start );
-            //     range.end = app.getXPath( range.end );
-            // });
+        addAnnotationAsSegment: function(annotation){
+            var post = annotation.post,
+                idPost = post.id,
+                sourceCreator = post.get('creator');
 
             var segment = new Segment.Model({
                 target: { "@id": idPost, "@type": "email" },
@@ -234,6 +227,10 @@ function(Backbone, _, $, app, Segment, i18n){
             if( app.draggedSegment !== null || isText ){
                 this.panel.addClass("is-dragover");
             }
+
+            if( app.draggedAnnotation !== null ){
+                this.panel.addClass("is-dragover");
+            }
         },
 
         /**
@@ -262,6 +259,15 @@ function(Backbone, _, $, app, Segment, i18n){
             var segment = app.getDraggedSegment();
             if( segment ){
                 this.addSegment(segment);
+                return;
+            }
+
+            var annotation = app.getDraggedAnnotation();
+            if( annotation ){
+                if( app.messageList.annotatorEditor ){
+                    app.messageList.annotatorEditor.find('.annotator-save').click()    
+                }
+
                 return;
             }
 

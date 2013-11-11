@@ -196,8 +196,10 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
             this.annotator.subscribe('annotationCreated', function(annotation){
                 var span = $(annotation.highlights[0]),
                     messageId = span.closest('[id^="message-"]').attr('id'),
-                    post = app.messageList.messages.get(messageId.substr(8)),
-                    segment = app.segmentList.addAnnotationAsSegment( annotation, post );
+                    segment;
+
+                annotation.post = app.messageList.messages.get(messageId.substr(8));
+                segment = app.segmentList.addAnnotationAsSegment( annotation );
                 
                 if( !segment.isValid() ){
                     annotation.destroy();
@@ -207,12 +209,21 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
             this.annotator.subscribe('annotationEditorShown', function(editor, annotation){
                 app.body.append(editor.element);
 
-                var textarea = editor.fields[0].element.firstChild;
-                if(textarea){
-                    textarea.value = annotation.quote;
-                    textarea.readOnly = true;
-                }
+                var textarea = editor.fields[0].element.firstChild,
+                    div = $('<div>', { 'draggable': true, 'class': 'annotator-textarea' });
 
+                div.html(annotation.quote);
+
+                div.on('dragstart', function(ev){
+                    app.showDragbox(ev, annotation.quote);
+                    app.draggedAnnotation = annotation;
+                });
+
+                div.on('dragend', function(ev){
+                    app.draggedAnnotation = null;
+                });
+
+                $(textarea).replaceWith(div);
                 that.annotatorEditor = editor.element;
             });
 
