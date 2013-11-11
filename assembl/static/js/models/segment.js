@@ -80,14 +80,17 @@ function(Backbone, app, User, Message){
          * 
          */
         getAssociatedPost: function(){
-            var posts = app.messageList.messages.where({id:this.attributes.idPost});
             var post = null;
-            if(posts.length){
-                 post = posts[0];
-            }
-            else {
-                post = new Message.Model({id: this.attributes.idPost});
-                post.fetch({async:false});
+            if (this.attributes.idPost) {
+                var posts = app.messageList.messages.where({id:this.attributes.idPost});
+                if(posts.length){
+                    post = posts[0];
+                }
+                else {
+                    post = new Message.Model({id: this.attributes.idPost});
+                    post.fetch({async:false});
+                    console.log(post);
+                }
             }
             return post;
         },
