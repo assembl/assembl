@@ -564,7 +564,7 @@ class Email(Content):
 
         serializable_content.update({
             "sender": self.sender,
-            "sender_profile": self.post.creator.serializable(),
+            "creator": self.post.creator.serializable(),
             "recipients": self.recipients,
             "subject": self.subject,
             "body": self.body,

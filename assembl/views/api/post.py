@@ -248,7 +248,7 @@ def get_post(request):
     if not post:
         raise HTTPNotFound("Post with id '%s' not found." % post_id)
 
-    return post.serializable()
+    return __post_to_json_structure(post)
 
 
 @posts.post()  # permission=P_ADD_POST)

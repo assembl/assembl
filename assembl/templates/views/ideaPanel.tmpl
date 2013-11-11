@@ -1,4 +1,4 @@
-<div class="panel" draggable="draggable">
+<div class="panel ideaPanel" draggable="draggable">
     <div class="panel-header">
         <strong data-tooltip="{{gettext('Detailled information about the currently selected idea in the Table of ideas')}}">{{ gettext('Idea') }}</strong>
         <div class="float-right">
@@ -7,10 +7,38 @@
     </div>
     
     <div class="panel-body">
-        <strong id="ideaPanel-shorttitle" title="<%= idea.get('shortTitle') %>" class="panel-editablearea" contenteditable="true"><%= idea.get('shortTitle') %></strong>
-
-        <div class="spacer"></div>
+        <fieldset id="ideaPanel-section-summary" class="panel-section">
+            <legend data-tooltip="{{gettext('Basic information about the idea being discussed')}}">
+                <span>{{ gettext('Summary') }}</span>
+            </legend>
+            <label data-tooltip="{{gettext('Expression of the idea in the table of ideas')}}">{{ gettext('Title') }}</label><strong id="ideaPanel-shorttitle" title="<%= idea.get('shortTitle') %>" class="panel-editablearea" contenteditable="true"><%= idea.get('shortTitle') %></strong>
+    
+            <div class="spacer"></div>
+    
+            <p class="text-muted margin">
+                {% set creationDate = "<%= app.formatDate(idea.get('creationDate')) %>" %}
+                {{- gettext('Created on %(date)s')|format(date=creationDate)|safe }}
+            </p>
+        </fieldset>
         
+        <fieldset id="ideaPanel-section-segments" class="panel-section">
+            <legend data-tooltip="{{gettext('Expressions of this idea in segments of posts or on the web')}}">
+                <span>{{ gettext('Harvested in %(num)s segments')|format(num='<%= segments.length %>')|safe }}</span>
+            </legend>
+            <div class="postitlist">
+                <% _.each(segments, function(segment, i){ %>
+                    {% include "views/segment.tmpl" %}
+                <% }); %>
+            </div>
+            <div class="box box--dashed box--centered margin text-muted text-big">
+                {{ gettext('Add segments by dragging them in this panel from the clipboard') }}
+            </div>
+        </fieldset>
+        
+        <fieldset id="ideaPanel-section-synthesis" class="panel-section">
+            <legend data-tooltip="{{gettext('Expression of this idea in the next synthesis.  You probably want to edit it in the synthesis panel, not here.')}}">
+                <span>{{ gettext('Expression in next synthesis') }}</span>
+            </legend>
         <% if(editing){ %>
             <div class="panel-editablebox is-editing">
                 <div id="ideaPanel-toptoolbar"></div>
@@ -30,38 +58,15 @@
                 </div>
             </div>
         <% } %>
-
-        <div class="spacer"></div>
-
-        <p class="text-muted margin">
-            {% set creationDate = "<%= app.formatDate(idea.get('creationDate')) %>" %}
-            {% set userName = "Jean-Michel" %} {# "<%= userName %>" #}
-
-            {{- gettext('Created on %(date)s')|format(date=creationDate)|safe }}
-        </p>
-            
-
-        <div class="boxlist">
-            <div class="box text">
-                {{ gettext('Expressed in %(num)s message segments:')|format(num='<%= segments.length %>')|safe }}
-            </div>
-            <% _.each(segments, function(segment, i){ %>
-                {% include "views/segment.tmpl" %}
-            <% }); %>
-            
-            <div class="box box--dashed box--centered margin text-muted text-big">
-                {{ gettext('Add segments of posts') }}
-            </div>
-
-        </div>
-
+        </fieldset>
+        
     </div>
 
     <div class="panel-footer">
         <div class="float-right">
-            <a id="ideaPanel-deleteButton" class="link">{{ gettext('Delete idea') }}</a>
+            <a id="ideaPanel-deleteButton" class="link" data-tooltip="{{gettext('Delete this idea completely')}}">{{ gettext('Delete idea') }}</a>
         </div>
-        <a id="ideaPanel-clearbutton" class="link">{{ gettext('Clear segments') }}</a>
+        <a id="ideaPanel-clearbutton" class="link" data-tooltip="{{gettext('Removed segments will be available in your clipboard')}}">{{ gettext('Remove all segments') }}</a>
     </div>
 
 </div>

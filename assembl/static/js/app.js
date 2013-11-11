@@ -560,6 +560,13 @@ function($, _, ckeditor, User, Moment, i18n){
             return app.format("/user/id/{0}/avatar/{1}", userID, size);
         },
 
+        /**
+         * Returns a fancy date (ex: a few seconds ago) 
+         * @return {String}
+         */
+        getDateFormated: function(date){
+            return moment( date ).fromNow();
+        },
 
         /**
          * @param  {String} html
@@ -693,7 +700,10 @@ function($, _, ckeditor, User, Moment, i18n){
             span.find('p:last-child').css('margin-bottom', 0);
             
             segments.forEach(function(segment) {
-                authors.push(segment.get("source_creator").name);
+                var post = segment.getAssociatedPost();
+                if(post) {
+                    authors.push(post.get("creator").name);
+                }
             });
 
             _.each(idea.getSynthesisChildren(), function(child){
