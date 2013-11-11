@@ -26,6 +26,9 @@
             {% set postCreatorName = '<%= post.get("creator").name %>' %}
             {% set postDate = '<%= app.getDateFormated(post.get("date")) %>' %}
             {{ gettext('%(img)s Posted %(date)s in %(link)s by <strong>%(name)s</strong>')|format(name=postCreatorName, img=postCreatorAvatarImg, date=postDate, link=segmentLink)|safe }}
+        <% } 
+        else { %>
+            {{ gettext('From webpage %(link)s')|format(link=segmentLink)|safe }}
         <% } %>
     </div>
     <div class="segment-harvester">
