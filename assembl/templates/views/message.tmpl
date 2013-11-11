@@ -1,6 +1,6 @@
 <% if( collapsed ){ %>
 
-<div class="message-header" data-message-id="<%= id %>">
+<div class="message-header" id="message-<%= content_id %>">
     <div class="float-left">
         <% for( var i=1; i<level; i+= 1) { %>
             <span class="message-bar"></span>
@@ -23,7 +23,7 @@
 
 <% } else { %>
 
-<div data-message-id="<%= id %>">
+<div id="message-<%= id %>">
     <div class="media">
 
         <% for( var i=1; i<level; i+= 1) { %>
@@ -50,9 +50,7 @@
     <div class="spacer"></div>
     <div class="spacer"></div>
 
-    <div class="message-body">
-        <%= app.formatMessageToDisplay(body) %>
-    </div>
+    <div class="message-body"><%= app.formatMessageToDisplay(body) %></div>
 
     <div class="spacer"></div>
 

@@ -470,7 +470,7 @@ class Extract(SQLAlchemyBaseModel):
             if start < 0:
                 return None
             lookin = 'message-subject'
-        xpath = "//div[@data-message-id='%d']//div[@class='%s']" % (
+        xpath = "//div[@id='message-%d']//div[@class='%s']" % (
             post_id, lookin)
         return TextFragmentIdentifier(
             extract=self, xpath_start=xpath, offset_start=start,

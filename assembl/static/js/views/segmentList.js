@@ -78,13 +78,14 @@ function(Backbone, _, $, app, Segment, i18n){
         addAnnotationAsSegment: function(annotation, post){
             var idPost = post.id,
                 sourceCreator = post.get('creator'),
-                rootElement = $('[data-message-id="'+idPost+'"]').get(0);
+                rootElement = $('#message-"'+idPost).get(0);
 
             // arranging the ranges
-            _.each(annotation.ranges, function(range){
-                range.start = app.getXPath( range.start );
-                range.end = app.getXPath( range.end );
-            });
+            // Obsolete with true IDs.
+            // _.each(annotation.ranges, function(range){
+            //     range.start = app.getXPath( range.start );
+            //     range.end = app.getXPath( range.end );
+            // });
 
             var segment = new Segment.Model({
                 target: { "@id": idPost, "@type": "email" },
