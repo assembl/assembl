@@ -477,7 +477,6 @@ class Extract(SQLAlchemyBaseModel):
         start = body.find(quote)
         lookin = 'message-body'
         if start < 0:
-            print "NOT FOUND", self.body, "IN\n", body
             xpath = "//div[@id='%s']/div[class='post_title']" % (post_id)
             start = title.find(quote)
             if start < 0:
