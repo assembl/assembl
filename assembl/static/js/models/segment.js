@@ -89,7 +89,6 @@ function(Backbone, app, User, Message){
                 else {
                     post = new Message.Model({id: this.attributes.idPost});
                     post.fetch({async:false});
-                    console.log(post);
                 }
             }
             return post;
