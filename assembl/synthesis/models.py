@@ -1,5 +1,6 @@
 from datetime import datetime
 import re
+import quopri
 
 from sqlalchemy.orm import relationship, backref, aliased
 from sqlalchemy.sql import func, cast, select, text
@@ -23,7 +24,7 @@ from sqlalchemy import (
 from assembl.lib.utils import slugify
 
 from ..lib.sqla import Base as SQLAlchemyBaseModel
-from ..source.models import (Source, Content, Post)
+from ..source.models import (Source, Content, Post, Mailbox)
 
 class Discussion(SQLAlchemyBaseModel):
     """
@@ -462,19 +463,36 @@ class Extract(SQLAlchemyBaseModel):
             self.source.get_title(), self.source.get_body(), self.source.post.id)
 
     def _infer_text_fragment_inner(self, title, body, post_id):
-        start = body.find(self.body)
+        body = Mailbox.sanitize_html(body, [])
+        quote = self.body.replace("\r", "")
+        try:
+            # for historical reasons
+            quote = quopri.decodestring(quote)
+        except:
+            pass
+        quote = Mailbox.sanitize_html(quote, [])
+        if quote != self.body:
+            self.body = quote
+        quote = quote.replace("\n", "")
+        start = body.find(quote)
         lookin = 'message-body'
         if start < 0:
+            print "NOT FOUND", self.body, "IN\n", body
             xpath = "//div[@id='%s']/div[class='post_title']" % (post_id)
-            start = title.find(self.body)
+            start = title.find(quote)
             if start < 0:
                 return None
             lookin = 'message-subject'
         xpath = "//div[@id='message-%d']//div[@class='%s']" % (
             post_id, lookin)
-        return TextFragmentIdentifier(
-            extract=self, xpath_start=xpath, offset_start=start,
-            xpath_end=xpath, offset_end=start+len(self.body))
+        tfi = self.db.query(TextFragmentIdentifier).filter_by(
+            extract=self).first()
+        if not tfi:
+            tfi = TextFragmentIdentifier(extract=self)
+        tfi.xpath_start = tfi.xpath_end = xpath
+        tfi.offset_start = start
+        tfi.offset_end = start+len(quote)
+        return tfi
 
 
 class TextFragmentIdentifier(SQLAlchemyBaseModel):
