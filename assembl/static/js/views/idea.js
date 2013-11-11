@@ -226,7 +226,7 @@ function(Backbone, _, $, Idea, Segment, app){
                 }
             }
 
-            if( app.draggedSegment !== null ){
+            if( app.draggedSegment !== null || app.draggedAnnotation !== null ){
                 if( ev.target.classList.contains('idealist-dropzone') ){
                     this.$el.addClass('is-dragover-below');
                 } else {
@@ -274,6 +274,22 @@ function(Backbone, _, $, Idea, Segment, app){
                     this.model.addSegment(segment);
                 }
 
+                return;
+            }
+
+            var annotation = app.getDraggedAnnotation();
+            if( annotation ){
+
+                if( isDraggedBelow ){
+                    // Add as a child
+                    app.currentAnnotationIdea = this.model;
+                    app.saveCurrentAnnotator();
+                } else {
+                    // Add as a segment
+                    app.currentAnnotationIdIdea = this.model.get('id');
+                    app.saveCurrentAnnotator();
+                }
+                
                 return;
             }
 

@@ -70,12 +70,18 @@ function(Backbone, _, $, app, Segment, i18n){
         },
 
         /**
-         * Add annotation as segment
+         * Add annotation as segment. 
          * @param {annotation} annotation
+         * @param {Number} [idIdea=null] 
          * @return {Segment}
          */
+<<<<<<< HEAD
         addAnnotationAsSegment: function(annotation){
             var post = annotation.post,
+=======
+        addAnnotationAsSegment: function(annotation, idIdea){
+            var post = app.getPostFromAnnotation(annotation),
+>>>>>>> Making possible dragdrop from annotator editor direct to idealist
                 idPost = post.id,
                 sourceCreator = post.get('creator');
 
@@ -84,11 +90,19 @@ function(Backbone, _, $, app, Segment, i18n){
                 text: annotation.text,
                 quote: annotation.quote,
                 creator: app.getCurrentUser(),
+<<<<<<< HEAD
                 ranges: annotation.ranges
+=======
+                source_creator: sourceCreator,
+                ranges: annotation.ranges,
+                idIdea: idIdea
+>>>>>>> Making possible dragdrop from annotator editor direct to idealist
             });
 
             if( segment.isValid() ){
-                this.addSegment(segment);
+                delete segment.attributes.highlights;
+
+                this.segments.add(segment);
                 segment.save();
             } else {
                 alert( segment.validationError );
@@ -264,10 +278,7 @@ function(Backbone, _, $, app, Segment, i18n){
 
             var annotation = app.getDraggedAnnotation();
             if( annotation ){
-                if( app.messageList.annotatorEditor ){
-                    app.messageList.annotatorEditor.find('.annotator-save').click()    
-                }
-
+                app.saveCurrentAnnotator();
                 return;
             }
 

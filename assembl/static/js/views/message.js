@@ -196,7 +196,7 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
             annotator.onAdderClick.call(annotator);
 
             if( app.messageList.annotatorEditor ){
-                app.messageList.annotatorEditor.css({
+                app.messageList.annotatorEditor.element.css({
                     'top': y,
                     'left': x
                 });

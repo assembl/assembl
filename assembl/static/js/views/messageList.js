@@ -194,16 +194,16 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
             });
 
             this.annotator.subscribe('annotationCreated', function(annotation){
-                var span = $(annotation.highlights[0]),
-                    messageId = span.closest('[id^="message-"]').attr('id'),
-                    segment;
+                var segment = app.segmentList.addAnnotationAsSegment( annotation, app.currentAnnotationIdIdea );
 
-                annotation.post = app.messageList.messages.get(messageId.substr(8));
-                segment = app.segmentList.addAnnotationAsSegment( annotation );
-                
                 if( !segment.isValid() ){
-                    annotation.destroy();
+                    annotator.deleteAnnotation(annotation);
+                } else if( app.currentAnnotationIdea ){
+                    app.currentAnnotationIdea.addSegmentAsChild(segment);
                 }
+
+                app.currentAnnotationIdea = null
+                app.currentAnnotationIdIdea = null;
             });
 
             this.annotator.subscribe('annotationEditorShown', function(editor, annotation){
@@ -224,7 +224,7 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
                 });
 
                 $(textarea).replaceWith(div);
-                that.annotatorEditor = editor.element;
+                that.annotatorEditor = editor;
             });
 
             this.annotator.subscribe('annotationViewerShown', function(viewer, annotation){

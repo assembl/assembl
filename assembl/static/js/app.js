@@ -247,6 +247,30 @@ function($, _, ckeditor, User, Moment, i18n){
             return app.currentUser || new User.Model();
         },
 
+
+        /**
+         * Return the Post related to the given annotation
+         * @param {Annotation} annotation
+         * @return {Message}
+         */
+        getPostFromAnnotation: function(annotation){
+            var span = $(annotation.highlights[0]),
+                messageId = span.closest('[id^="message-"]').attr('id');
+
+            return app.messageList.messages.get(messageId.substr(8));
+        },
+
+
+        /**
+         * Saves the current annotation if there is any
+         */
+        
+        saveCurrentAnnotator: function(){
+            if( app.messageList.annotatorEditor ){
+                app.messageList.annotatorEditor.element.find('.annotator-save').click()
+            }
+        },
+
         /**
          * Creates the selection tooltip
          */
