@@ -194,24 +194,7 @@ class BaseOps(object):
         }
 
         for name, spec in local_view.iteritems():
-            if spec is True and name in cols:
-                result[name] = getattr(self, name)
-            elif spec in cols:
-                result[name] = getattr(self, spec, None)
-            elif spec is False:
-                pass
-            elif (spec is True and name in relns) or spec in relns:
-                rname = name if spec is True else spec
-                reln = relns[rname]
-                if len(reln._calculated_foreign_keys) == 1 \
-                        and reln._calculated_foreign_keys < fkeys:
-                    # shortcut, avoid fetch
-                    fkey = list(reln._calculated_foreign_keys)[0]
-                    result[name] = reln.mapper.class_.uri_generic(
-                        base_uri, getattr(self, fkey.name))
-                else:
-                    result[name] = getattr(self, rname).uri(base_uri)
-            elif type(spec) is list:
+            if type(spec) is list:
                 assert len(spec) == 1
                 assert name in relns
                 view_name = spec[0]
@@ -238,6 +221,23 @@ class BaseOps(object):
                     ob.uri(base_uri):
                     ob.generic_json(base_uri, view_name)
                     for ob in getattr(self, name, [])}
+            elif spec is True and name in cols:
+                result[name] = getattr(self, name)
+            elif spec in cols:
+                result[name] = getattr(self, spec, None)
+            elif spec is False:
+                pass
+            elif (spec is True and name in relns) or spec in relns:
+                rname = name if spec is True else spec
+                reln = relns[rname]
+                if len(reln._calculated_foreign_keys) == 1 \
+                        and reln._calculated_foreign_keys < fkeys:
+                    # shortcut, avoid fetch
+                    fkey = list(reln._calculated_foreign_keys)[0]
+                    result[name] = reln.mapper.class_.uri_generic(
+                        base_uri, getattr(self, fkey.name))
+                else:
+                    result[name] = getattr(self, rname).uri(base_uri)
             elif name in relns and get_view_def(spec) is not None:
                 assert not relns[name].uselist
                 result[name] = getattr(self, name).generic_json(base_uri, spec)

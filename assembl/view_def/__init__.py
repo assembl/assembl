@@ -18,10 +18,10 @@ _def_cache = {}
 # @id, @type and @view will always be defined.
 # IDs will always take the form local:<discussionid>/<type>/<object_id>
 
-def get_view_def(name, use_cache=True):
+def get_view_def(name, use_cache=False):
     global _def_cache
     if use_cache and name in _def_cache:
-        return _def_cache(name)
+        return _def_cache[name]
 
     fname = join(dirname(__file__), name+".json")
     if exists(fname):

@@ -9,14 +9,17 @@
     "IdentityProvider": {},
 
     "Source": {
-        "contents":["partial"]
     },
     "Webpage": {},
-    "Mailbox": {
-        "contents":["partial"]
-    },
+    "Mailbox": {},
     "Email": {
-        "full_message":false
+        "body":false,
+        "full_message":false,
+        "import_date":false,
+        "message_id":false,
+        "id":false,
+        "in_reply_to":false,
+        "type":false
         },
     "Post": {
         "creator":"base"
@@ -24,18 +27,21 @@
 
     "Discussion": {
         "slug": true,
-        "table_of_contents": "base",
+        "table_of_contents_id": true,
         "creation_date": true,
         "topic": true,
         "synthesis_id": true,
         "owner_id": true,
-        "id": "@id",
-        "sources":["base"]
+        "id": "@id"
     },
-    "Idea": {},
-    "TableOfContents": {
-        "ideas":["partial"]
+    "Idea": {
+        "long_title":false,
+        "table_of_contents_id":false,
+        "table_of_contents":false,
+        "id":false,
+        "creation_date":false
         },
+    "TableOfContents": {},
     "Synthesis": {},
     "Extract": {},
     "TextFragmentIdentifier": {}
