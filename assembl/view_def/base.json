@@ -1,4 +1,7 @@
 {
+    "_default": {
+        "id":false
+    },
     "Permission": {},
     "AgentProfile": {},
     "User": {
@@ -11,12 +14,15 @@
     "Source": {
         "contents":["partial"]
     },
-    "Webpage": {},
+    "Webpage": {
+        "extracts":["partial"]
+    },
     "Mailbox": {
         "contents":["partial"]
     },
     "Email": {
-        "full_message":false
+        "full_message":false,
+        "extracts":["partial"]
         },
     "Post": {
         "creator":"base"
@@ -29,7 +35,6 @@
         "topic": true,
         "synthesis_id": true,
         "owner_id": true,
-        "id": "@id",
         "sources":["base"]
     },
     "Idea": {},
@@ -37,6 +42,8 @@
         "ideas":["partial"]
         },
     "Synthesis": {},
-    "Extract": {},
+    "Extract": {
+        "text_fragment_identifiers":["base"]
+        },
     "TextFragmentIdentifier": {}
 }

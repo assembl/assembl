@@ -169,6 +169,8 @@ class BaseOps(object):
 
     @classmethod
     def uri_generic(cls, base_uri, id):
+        if not id:
+            return None
         return base_uri + cls.external_typename() + "/" + str(id)
 
     def uri(self, base_uri):
@@ -194,6 +196,8 @@ class BaseOps(object):
         }
 
         for name, spec in local_view.iteritems():
+            if name == "_default":
+                continue
             if type(spec) is list:
                 assert len(spec) == 1
                 assert name in relns
@@ -241,22 +245,22 @@ class BaseOps(object):
             elif name in relns and get_view_def(spec) is not None:
                 assert not relns[name].uselist
                 result[name] = getattr(self, name).generic_json(base_uri, spec)
+        if local_view.get('_default') is False:
+            return result
+        defaults = view_def.get('_default', {})
         for name, col in cols.items():
             if name in local_view:
                 continue  # already done
+            if defaults.get(name) is False:
+                continue
             as_rel = fkeys_of_reln.get(frozenset((col, )))
             if as_rel:
                 name = as_rel.key
-                if name in local_view:
+                if name in local_view or defaults.get(name) is False:
                     continue
                 else:
-                    if as_rel.uselist:
-                        result[name] = [
-                            ob.uri(base_uri) for ob in getattr(self, name, [])]
-                    else:
-                        ob = getattr(self, name, None)
-                        if ob:
-                            result[name] = ob.uri(base_uri)
+                    result[name] = as_rel.mapper.class_.uri_generic(
+                        base_uri, getattr(self, col.key))
             else:
                 result[name] = getattr(self, name, None)
         print result
