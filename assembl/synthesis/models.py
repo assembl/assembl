@@ -399,8 +399,8 @@ class Extract(SQLAlchemyBaseModel):
     order = Column(Float, nullable=False, default=0.0)
     body = Column(UnicodeText, nullable=False)
 
-    source_id = Column(Integer, ForeignKey('content.id'), nullable=False)
-    source = relationship(Content, backref='extracts')
+    source_id = Column(Integer, ForeignKey('content.id', ondelete="CASCADE"), nullable=False)
+    source = relationship(Content, backref='extracts', )
 
     idea_id = Column(Integer, ForeignKey('idea.id'), nullable=True)
     idea = relationship('Idea', backref='extracts')
@@ -496,7 +496,7 @@ class Extract(SQLAlchemyBaseModel):
 class TextFragmentIdentifier(SQLAlchemyBaseModel):
     __tablename__ = 'text_fragment_identifier'
     id = Column(Integer, primary_key=True)
-    extract_id = Column(Integer, ForeignKey(Extract.id))
+    extract_id = Column(Integer, ForeignKey(Extract.id, ondelete="CASCADE"))
     xpath_start = Column(String)
     offset_start = Column(Integer)
     xpath_end = Column(String)
