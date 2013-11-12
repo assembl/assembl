@@ -22,7 +22,7 @@
     <div class="segment-author">
         <% var post = segment.getAssociatedPost();
         if ( post ) { %>
-            {% set postCreatorAvatarImg = '<img src="<%= app.formatAvatarUrl(post.get(\'creator\').id, 40)%>" class="image-rounded" alt="" />' %}
+            {% set postCreatorAvatarImg = '<img src="<%= app.formatAvatarUrl(post.get(\'creator\').id, 35)%>" class="image-rounded" alt="" />' %}
             {% set postCreatorName = '<%= post.get("creator").name %>' %}
             {% set postDate = '<%= app.getDateFormated(post.get("date")) %>' %}
             {{ gettext('%(img)s Posted %(date)s in %(link)s by <strong>%(name)s</strong>')|format(name=postCreatorName, img=postCreatorAvatarImg, date=postDate, link=segmentLink)|safe }}

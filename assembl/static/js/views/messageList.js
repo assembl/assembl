@@ -208,7 +208,8 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
 
             this.annotator.subscribe('annotationEditorShown', function(editor, annotation){
                 app.body.append(editor.element);
-
+                var save = $(editor.element).find(".annotator-save");
+                save.text(i18n.gettext('Send to clipboard'));
                 var textarea = editor.fields[0].element.firstChild,
                     div = $('<div>', { 'draggable': true, 'class': 'annotator-textarea' });
 
@@ -224,6 +225,9 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
                 });
 
                 $(textarea).replaceWith(div);
+                if( $(editor.element).find(".annotator-draganddrop-help").length == 0 ) {
+                    $(editor.element).find(".annotator-textarea").after("<div class='annotator-draganddrop-help'>" + i18n.gettext('You can drag the segment above directly to the table of idea') + "</div>");
+                }
                 that.annotatorEditor = editor;
             });
 
