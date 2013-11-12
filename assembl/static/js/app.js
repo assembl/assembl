@@ -776,7 +776,8 @@ function($, _, ckeditor, User, Moment, i18n){
                 delayIn: 400,
                 live: true,
                 gravity: function(){ return this.getAttribute('data-tooltip-position') || 's'; },
-                title: function() { return this.getAttribute('data-tooltip'); }
+                title: function() { return this.getAttribute('data-tooltip'); },
+                opacity: 0.95
             });
         },
 

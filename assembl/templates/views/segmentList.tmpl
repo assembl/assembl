@@ -4,21 +4,25 @@
         {% set quantity = "<%= segments.length %>" %}
         <strong>{{ gettext("Clipboard (%(quantity)s)")|format(quantity=quantity)|safe }}</strong>
 
-        <a class="bookmarklet" href="javascript:(function(a,b){r='http://{{ request.server_name }}:{{ request.server_port }}',a._annotatorConfig={root:r,discussion:{{ discussion.id }}},s=b.body.appendChild(b.createElement('script')),s.language='javascript',s.src=r+'/static/js/annotator_bkmklet.min.js'})(this,this.document);">{{ gettext('Web capture to') }} {{ discussion.slug }}</a>
-
         <div class="float-right">
             <a id="segmentList-closeButton" class="iconbutton icon-cancel" data-tooltip="{{gettext('Close panel')}}"></a>
         </div>
     </div>
-
-    <div class="panel-body postitlist">
-        <% _.each(segments, function(segment){ %>
-            {% include "views/segment.tmpl" %}
-        <% }); %>
-
+    
+    <div class="panel-body">
+        <div class="box">
+            <a class="bookmarklet" data-tooltip="{{gettext('Drag this bookmarklet to your favorite bar.  You can then capture segments from any non-https webpage to this discussion by clicking on the bookmarklet and selecting a zone of text in the webpage.')}}" href="javascript:(function(a,b){r='http://{{ request.server_name }}:{{ request.server_port }}',a._annotatorConfig={root:r,discussion:{{ discussion.id }}},s=b.body.appendChild(b.createElement('script')),s.language='javascript',s.src=r+'/static/js/annotator_bkmklet.min.js'})(this,this.document);">{{ gettext('Web capture to') }} {{ discussion.slug }}</a>
+        </div>
+        <div class="postitlist">
+            <% _.each(segments, function(segment){ %>
+                {% include "views/segment.tmpl" %}
+            <% }); %>
+        </div>
+        {#
         <div class="box box--dashed box--centered margin text-muted text-big">
             {{ gettext("Add segments") }}
         </div>
+        #}
 
     </div>
 
