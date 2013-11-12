@@ -20,8 +20,8 @@
     <div class="spacer spacer--big"></div>
     <div class="postit-footer">
     <div class="segment-author">
-        <% 
-        type = segment.get("target")["@type"];
+        <%
+        var type = segment.get("target")["@type"];
         if ( type == "email" ) { 
             var post = segment.getAssociatedPost();
             %>

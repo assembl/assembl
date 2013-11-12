@@ -93,8 +93,8 @@ function(Backbone, app, User, Message){
                     post = new Message.Model({id: this.attributes.idPost});
                     post.fetch({async:false});
                 }
+                app.segmentPostCache[post.id] = post;
             }
-            app.segmentPostCache[post.id] = post;
             return post;
         },
 

@@ -87,6 +87,7 @@ function(Backbone, _, $, app, Segment, i18n){
                 creator: app.getCurrentUser(),
                 source_creator: sourceCreator,
                 ranges: annotation.ranges,
+                idPost: idPost,
                 idIdea: idIdea
             });
 
