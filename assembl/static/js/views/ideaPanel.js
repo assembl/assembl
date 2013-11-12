@@ -151,12 +151,16 @@ function(Backbone, _, Idea, app, ckeditor, i18n){
          * @param  {Idea} [idea=null]
          */
         setCurrentIdea: function(idea){
-            if( idea && this.idea.id == idea.id ){
-                // already the current one
-                return;
-            }
-
             if( idea !== null ){
+                if( this.idea ) {
+                    if( this.idea.id == idea.id ){
+                        // already the current one
+                        return;
+                    }
+                    else {
+                    app.ideaPanel.idea.set('isSelected', false);
+                    }
+                }
                 this.idea = idea;
                 this.idea.set('isSelected', true);
                 app.openPanel(app.ideaPanel);
