@@ -12,17 +12,19 @@ import assembl.models
 
 generic = Service(
     name='generic',
-    path=API_DISCUSSION_PREFIX + '/generic/{cls}/{id}/{view}',
+    path=API_DISCUSSION_PREFIX + '/generic/{cls}/{id}{view:(/[^/]+)?}',
     description="Retrieve an arbitrary object.",
     renderer='json', acl=acls)
 
 
 @generic.get()  # P_ADMIN)
 def get_object(request):
-    basis = API_DISCUSSION_PREFIX.replace('{discussion_id}', request.matchdict['discussion_id']) + "/generic"
+    basis = API_DISCUSSION_PREFIX.replace(
+        '{discussion_id}', request.matchdict['discussion_id']) + "/generic/"
     classname = request.matchdict['cls']
     id = request.matchdict['id']
-    view = request.matchdict['view'] or 'base'
+    view = request.matchdict['view'] or '/base'
+    view = view[1:]
     cls = getattr(assembl.models, classname, None)
     if not cls:
         raise HTTPNotFound("Class '%s' not found." % classname)
