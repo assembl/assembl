@@ -11,14 +11,16 @@
             <legend data-tooltip="{{gettext('Basic information about the idea being discussed')}}">
                 <span>{{ gettext('Summary') }}</span>
             </legend>
-            <label data-tooltip="{{gettext('Expression of the idea in the table of ideas')}}">{{ gettext('Title') }}</label><strong id="ideaPanel-shorttitle" title="<%= idea.get('shortTitle') %>" class="panel-editablearea" contenteditable="true"><%= idea.get('shortTitle') %></strong>
-    
-            <div class="spacer"></div>
+            <strong id="ideaPanel-shorttitle" data-tooltip="{{gettext('Expression of the idea in the table of ideas')}}" class="panel-editablearea" contenteditable="true"><%= idea.get('shortTitle') %></strong>
     
             <p class="text-muted margin">
                 {% set creationDate = "<%= app.formatDate(idea.get('creationDate')) %>" %}
                 {{- gettext('Created on %(date)s')|format(date=creationDate)|safe }}
             </p>
+                    <textarea class="formtextarea message-textarea"></textarea>
+        <div class="text-right">
+            <a class="button button--primary message-sendbtn">{{ gettext('Comment on this idea') }}</a>
+        </div>
         </fieldset>
         
         <fieldset id="ideaPanel-section-segments" class="panel-section">
