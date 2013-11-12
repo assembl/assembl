@@ -1,6 +1,7 @@
 {
     "_default": {
-        "id":false
+        "id":false,
+        "type":false
     },
     "Permission": {},
     "AgentProfile": {},
