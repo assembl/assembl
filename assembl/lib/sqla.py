@@ -205,7 +205,8 @@ class BaseOps(object):
                 assert type(view_name) == str
                 assert relns[name].uselist
                 if view_name == "@id":
-                    result[name] = [ob.uri(base_uri) for ob in getattr(self, name)]
+                    result[name] = [ob.uri(base_uri)
+                                    for ob in getattr(self, name)]
                 elif get_view_def(view_name) is not None:
                     result[name] = [
                         ob.generic_json(base_uri, view_name)
@@ -225,10 +226,13 @@ class BaseOps(object):
                     ob.uri(base_uri):
                     ob.generic_json(base_uri, view_name)
                     for ob in getattr(self, name, [])}
-            elif spec is True and name in cols:
-                result[name] = getattr(self, name)
-            elif spec in cols:
-                result[name] = getattr(self, spec, None)
+            elif (spec is True and name in cols) or spec in cols:
+                cname = name if spec is True else spec
+                val = getattr(self, cname)
+                if val:
+                    if type(val) == datetime:
+                        val = val.isoformat()
+                    result[name] = val
             elif spec is False:
                 pass
             elif (spec is True and name in relns) or spec in relns:
@@ -239,13 +243,19 @@ class BaseOps(object):
                         and reln._calculated_foreign_keys < fkeys:
                     # shortcut, avoid fetch
                     fkey = list(reln._calculated_foreign_keys)[0]
-                    result[name] = reln.mapper.class_.uri_generic(
-                        base_uri, getattr(self, fkey.name))
+                    ob_id = getattr(self, fkey.name)
+                    if ob_id:
+                        result[name] = reln.mapper.class_.uri_generic(
+                            base_uri, ob_id)
                 else:
-                    result[name] = getattr(self, rname).uri(base_uri)
+                    ob = getattr(self, rname)
+                    if ob:
+                        result[name] = ob.uri(base_uri)
             elif name in relns and get_view_def(spec) is not None:
                 assert not relns[name].uselist
-                result[name] = getattr(self, name).generic_json(base_uri, spec)
+                ob = getattr(self, name)
+                if ob:
+                    result[name] = getattr(self, name).generic_json(base_uri, spec)
         if local_view.get('_default') is False:
             return result
         defaults = view_def.get('_default', {})
@@ -260,10 +270,14 @@ class BaseOps(object):
                 if name in local_view or defaults.get(name) is False:
                     continue
                 else:
-                    result[name] = as_rel.mapper.class_.uri_generic(
-                        base_uri, getattr(self, col.key))
+                    ob_id = getattr(self, col.key)
+                    if ob_id:
+                        result[name] = as_rel.mapper.class_.uri_generic(
+                            base_uri, ob_id)
             else:
-                result[name] = getattr(self, name, None)
+                ob = getattr(self, name)
+                if ob:
+                    result[name] = ob
         return result
 
 
