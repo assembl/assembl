@@ -232,6 +232,7 @@ class BaseOps(object):
             elif spec is False:
                 pass
             elif (spec is True and name in relns) or spec in relns:
+                assert not relns[name].uselist
                 rname = name if spec is True else spec
                 reln = relns[rname]
                 if len(reln._calculated_foreign_keys) == 1 \
@@ -263,7 +264,6 @@ class BaseOps(object):
                         base_uri, getattr(self, col.key))
             else:
                 result[name] = getattr(self, name, None)
-        print result
         return result
 
 
