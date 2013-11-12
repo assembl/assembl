@@ -20,15 +20,21 @@
     <div class="spacer spacer--big"></div>
     <div class="postit-footer">
     <div class="segment-author">
-        <% var post = segment.getAssociatedPost();
-        if ( post ) { %>
+        <% 
+        type = segment.get("target")["@type"];
+        if ( type == "email" ) { 
+            var post = segment.getAssociatedPost();
+            %>
             {% set postCreatorAvatarImg = '<img src="<%= app.formatAvatarUrl(post.get(\'creator\').id, 35)%>" class="image-rounded" alt="" />' %}
             {% set postCreatorName = '<%= post.get("creator").name %>' %}
             {% set postDate = '<%= app.getDateFormated(post.get("date")) %>' %}
             {{ gettext('%(img)s Posted %(date)s in %(link)s by <strong>%(name)s</strong>')|format(name=postCreatorName, img=postCreatorAvatarImg, date=postDate, link=segmentLink)|safe }}
         <% } 
-        else { %>
+        else if (type == "webpage") { %>
             {{ gettext('From webpage %(link)s')|format(link=segmentLink)|safe }}
+        <% }
+        else { %>
+            {{ gettext('Unknown segment type') }}
         <% } %>
     </div>
     <div class="segment-harvester">

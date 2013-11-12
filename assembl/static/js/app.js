@@ -46,11 +46,18 @@ function($, _, ckeditor, User, Moment, i18n){
         },
 
         /**
-         * The currnet discussion id
+         * The current discussion id
          * @type {string}
          */
         discussionID: null,
 
+        /**
+         * The a cache for posts linked by segments
+         * FIXME:  Remove once lazy loading is implemented
+         * @type {string}
+         */
+        segmentPostCache: {},
+        
         /**
          * Current user
          * @type {User}

@@ -82,6 +82,9 @@ function(Backbone, app, User, Message){
         getAssociatedPost: function(){
             var post = null;
             if (this.attributes.idPost) {
+                if(app.segmentPostCache[this.attributes.idPost]) {
+                    return app.segmentPostCache[this.attributes.idPost];
+                }
                 var posts = app.messageList.messages.where({id:this.attributes.idPost});
                 if(posts.length){
                     post = posts[0];
@@ -91,6 +94,7 @@ function(Backbone, app, User, Message){
                     post.fetch({async:false});
                 }
             }
+            app.segmentPostCache[post.id] = post;
             return post;
         },
 

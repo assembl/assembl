@@ -116,6 +116,7 @@ function(Backbone, _, $, app, Segment, i18n){
             }
 
             var segment = new Segment.Model({
+                target: { "@id": idPost, "@type": "email" },
                 text: text,
                 quote: text,
                 creator: app.getCurrentUser(),
