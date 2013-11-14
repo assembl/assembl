@@ -226,7 +226,7 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
 
                 $(textarea).replaceWith(div);
                 if( $(editor.element).find(".annotator-draganddrop-help").length == 0 ) {
-                    $(editor.element).find(".annotator-textarea").after("<div class='annotator-draganddrop-help'>" + i18n.gettext('You can drag the segment above directly to the table of idea') + "</div>");
+                    $(editor.element).find(".annotator-textarea").after("<div class='annotator-draganddrop-help'>" + i18n.gettext('You can drag the segment above directly to the table of ideas') + "</div>");
                 }
                 that.annotatorEditor = editor;
             });

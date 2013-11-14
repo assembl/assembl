@@ -34,6 +34,7 @@ from sqlalchemy import (
 )
 
 from assembl.source.models.generic import Source, Content
+from assembl.source.models.post import Post
 from assembl.auth.models import EmailAccount
 
 
