@@ -46,11 +46,18 @@ function($, _, ckeditor, User, Moment, i18n){
         },
 
         /**
-         * The currnet discussion id
+         * The current discussion id
          * @type {string}
          */
         discussionID: null,
 
+        /**
+         * The a cache for posts linked by segments
+         * FIXME:  Remove once lazy loading is implemented
+         * @type {string}
+         */
+        segmentPostCache: {},
+        
         /**
          * Current user
          * @type {User}
@@ -92,6 +99,12 @@ function($, _, ckeditor, User, Moment, i18n){
          * @type {Idea}
          */
         draggedIdea: null,
+
+        /**
+         * Current dragged annotation
+         * @type {Annotation}
+         */
+        draggedAnnotation: null,
 
         /**
          * The lateral menu width
@@ -202,7 +215,9 @@ function($, _, ckeditor, User, Moment, i18n){
             var segment = app.draggedSegment;
             app.draggedSegment = null;
 
-            delete segment.attributes.highlights;
+            if( segment ){
+                delete segment.attributes.highlights;
+            }
 
             return segment;
         },
@@ -221,11 +236,46 @@ function($, _, ckeditor, User, Moment, i18n){
             return idea;
         },
 
+
+        /**
+         * @return {Annotation}
+         */
+        getDraggedAnnotation: function(){
+            var annotation = app.draggedAnnotation;
+            app.draggedAnnotation = null;
+
+            return annotation;
+        },
+
         /**
          * @return {User}
          */
         getCurrentUser: function(){
             return app.currentUser || new User.Model();
+        },
+
+
+        /**
+         * Return the Post related to the given annotation
+         * @param {Annotation} annotation
+         * @return {Message}
+         */
+        getPostFromAnnotation: function(annotation){
+            var span = $(annotation.highlights[0]),
+                messageId = span.closest('[id^="message-"]').attr('id');
+
+            return app.messageList.messages.get(messageId.substr(8));
+        },
+
+
+        /**
+         * Saves the current annotation if there is any
+         */
+        
+        saveCurrentAnnotator: function(){
+            if( app.messageList.annotatorEditor ){
+                app.messageList.annotatorEditor.element.find('.annotator-save').click()
+            }
         },
 
         /**
@@ -560,6 +610,13 @@ function($, _, ckeditor, User, Moment, i18n){
             return app.format("/user/id/{0}/avatar/{1}", userID, size);
         },
 
+        /**
+         * Returns a fancy date (ex: a few seconds ago) 
+         * @return {String}
+         */
+        getDateFormated: function(date){
+            return moment( date ).fromNow();
+        },
 
         /**
          * @param  {String} html
@@ -693,7 +750,10 @@ function($, _, ckeditor, User, Moment, i18n){
             span.find('p:last-child').css('margin-bottom', 0);
             
             segments.forEach(function(segment) {
-                authors.push(segment.get("source_creator").name);
+                var post = segment.getAssociatedPost();
+                if(post) {
+                    authors.push(post.get("creator").name);
+                }
             });
 
             _.each(idea.getSynthesisChildren(), function(child){
@@ -723,7 +783,8 @@ function($, _, ckeditor, User, Moment, i18n){
                 delayIn: 400,
                 live: true,
                 gravity: function(){ return this.getAttribute('data-tooltip-position') || 's'; },
-                title: function() { return this.getAttribute('data-tooltip'); }
+                title: function() { return this.getAttribute('data-tooltip'); },
+                opacity: 0.95
             });
         },
 

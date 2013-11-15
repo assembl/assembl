@@ -194,26 +194,41 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
             });
 
             this.annotator.subscribe('annotationCreated', function(annotation){
-                var span = $(annotation.highlights[0]),
-                    messageId = span.closest('[id^="message-"]').attr('id'),
-                    post = app.messageList.messages.get(messageId.substr(8)),
-                    segment = app.segmentList.addAnnotationAsSegment( annotation, post );
-                
+                var segment = app.segmentList.addAnnotationAsSegment( annotation, app.currentAnnotationIdIdea );
+
                 if( !segment.isValid() ){
-                    annotation.destroy();
+                    annotator.deleteAnnotation(annotation);
+                } else if( app.currentAnnotationIdea ){
+                    app.currentAnnotationIdea.addSegmentAsChild(segment);
                 }
+
+                app.currentAnnotationIdea = null
+                app.currentAnnotationIdIdea = null;
             });
 
             this.annotator.subscribe('annotationEditorShown', function(editor, annotation){
                 app.body.append(editor.element);
+                var save = $(editor.element).find(".annotator-save");
+                save.text(i18n.gettext('Send to clipboard'));
+                var textarea = editor.fields[0].element.firstChild,
+                    div = $('<div>', { 'draggable': true, 'class': 'annotator-textarea' });
 
-                var textarea = editor.fields[0].element.firstChild;
-                if(textarea){
-                    textarea.value = annotation.quote;
-                    textarea.readOnly = true;
+                div.html(annotation.quote);
+
+                div.on('dragstart', function(ev){
+                    app.showDragbox(ev, annotation.quote);
+                    app.draggedAnnotation = annotation;
+                });
+
+                div.on('dragend', function(ev){
+                    app.draggedAnnotation = null;
+                });
+
+                $(textarea).replaceWith(div);
+                if( $(editor.element).find(".annotator-draganddrop-help").length == 0 ) {
+                    $(editor.element).find(".annotator-textarea").after("<div class='annotator-draganddrop-help'>" + i18n.gettext('You can drag the segment above directly to the table of ideas') + "</div>");
                 }
-
-                that.annotatorEditor = editor.element;
+                that.annotatorEditor = editor;
             });
 
             this.annotator.subscribe('annotationViewerShown', function(viewer, annotation){

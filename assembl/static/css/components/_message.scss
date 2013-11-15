@@ -95,4 +95,14 @@ $message-bar-width: 15px;
     position: absolute;
     top: 5px;
     right: 5px;
+    display: table;
+    .message-replybox-openbtn {
+        display: table-cell;
+        vertical-align: middle;
+        padding-right: 1em;
+        }
+    .dropdown {
+        display: table-cell;
+        vertical-align: middle;
+        }
 }

@@ -1,0 +1,52 @@
+{
+    "_default": {
+        "id":false,
+        "type":false
+    },
+    "Permission": {},
+    "AgentProfile": {},
+    "User": {
+        "password":false
+    },
+    "EmailAccount": {},
+    "IdentityProviderAccount": {},
+    "IdentityProvider": {},
+
+    "Source": {
+    },
+    "Webpage": {},
+    "Mailbox": {},
+    "Email": {
+        "body":false,
+        "full_message":false,
+        "import_date":false,
+        "message_id":false,
+        "id":false,
+        "in_reply_to":false,
+        "type":false
+        },
+    "Post": {
+        "creator":"base"
+        },
+
+    "Discussion": {
+        "slug": true,
+        "table_of_contents_id": true,
+        "creation_date": true,
+        "topic": true,
+        "synthesis_id": true,
+        "owner_id": true,
+        "id": "@id"
+    },
+    "Idea": {
+        "long_title":false,
+        "table_of_contents_id":false,
+        "table_of_contents":false,
+        "id":false,
+        "creation_date":false
+        },
+    "TableOfContents": {},
+    "Synthesis": {},
+    "Extract": {},
+    "TextFragmentIdentifier": {}
+}

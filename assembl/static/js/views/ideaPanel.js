@@ -1,5 +1,5 @@
-define(['backbone', 'underscore', 'models/idea', 'app', 'ckeditor-sharedspace', 'i18n'],
-function(Backbone, _, Idea, app, ckeditor, i18n){
+define(['backbone', 'underscore', 'models/idea', 'models/message', 'app', 'ckeditor-sharedspace', 'i18n'],
+function(Backbone, _, Idea, Message, app, ckeditor, i18n){
     'use strict';
 
     var LONG_TITLE_ID = 'ideaPanel-longtitle',
@@ -151,12 +151,16 @@ function(Backbone, _, Idea, app, ckeditor, i18n){
          * @param  {Idea} [idea=null]
          */
         setCurrentIdea: function(idea){
-            if( idea && this.idea.id == idea.id ){
-                // already the current one
-                return;
-            }
-
             if( idea !== null ){
+                if( this.idea ) {
+                    if( this.idea.id == idea.id ){
+                        // already the current one
+                        return;
+                    }
+                    else {
+                    app.ideaPanel.idea.set('isSelected', false);
+                    }
+                }
                 this.idea = idea;
                 this.idea.set('isSelected', true);
                 app.openPanel(app.ideaPanel);
@@ -208,6 +212,7 @@ function(Backbone, _, Idea, app, ckeditor, i18n){
             'click #ideaPanel-longtitle': 'changeToEditMode',
             'click .ideaPanel-savebtn': 'saveEdition',
             'click .ideaPanel-cancelbtn': 'cancelEdition',
+            'click .message-sendbtn': 'sendMessage',
 
             'dragstart .box': 'onDragStart',
             'dragend .box': "onDragEnd",
@@ -325,6 +330,35 @@ function(Backbone, _, Idea, app, ckeditor, i18n){
                     segment.set('idIdea', null);
                 }
             }
+        },
+        /**
+         * Sends the message to the server
+         */
+        sendMessage: function(ev){
+            var btn = $(ev.currentTarget),
+                url = app.getApiUrl('posts'),
+                data = {},
+                that = this,
+                btn_original_text=btn.text();
+
+            data.message = this.$('.message-textarea').val();
+            if( this.idea.get('id') ){
+                data.idea_id = this.idea.get('id');
+            }
+
+            btn.text( i18n.gettext('Sending...') );
+
+            $.ajax({
+                type: "post",
+                data: JSON.stringify(data),
+                contentType: 'application/json',
+                url: url,
+                success: function(){
+                    btn.text(btn_original_text);
+                    that.closeReplyBox();
+                }
+            });
+
         },
 
         /**

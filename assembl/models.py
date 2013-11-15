@@ -33,3 +33,6 @@ from .synthesis.models import (
     Synthesis,
     TextFragmentIdentifier,
     )
+from .annotation.models import (
+    Webpage,
+    )

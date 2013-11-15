@@ -70,22 +70,15 @@ function(Backbone, _, $, app, Segment, i18n){
         },
 
         /**
-         * Add annotation as segment
+         * Add annotation as segment. 
          * @param {annotation} annotation
-         * @param {post} post The origin post
+         * @param {Number} [idIdea=null] 
          * @return {Segment}
          */
-        addAnnotationAsSegment: function(annotation, post){
-            var idPost = post.id,
-                sourceCreator = post.get('creator'),
-                rootElement = $('#message-'+idPost).get(0);
-
-            // arranging the ranges
-            // Obsolete with true IDs.
-            // _.each(annotation.ranges, function(range){
-            //     range.start = app.getXPath( range.start );
-            //     range.end = app.getXPath( range.end );
-            // });
+        addAnnotationAsSegment: function(annotation, idIdea){
+            var post = app.getPostFromAnnotation(annotation),
+                idPost = post.id,
+                sourceCreator = post.get('creator');
 
             var segment = new Segment.Model({
                 target: { "@id": idPost, "@type": "email" },
@@ -93,11 +86,15 @@ function(Backbone, _, $, app, Segment, i18n){
                 quote: annotation.quote,
                 creator: app.getCurrentUser(),
                 source_creator: sourceCreator,
-                ranges: annotation.ranges
+                ranges: annotation.ranges,
+                idPost: idPost,
+                idIdea: idIdea
             });
 
             if( segment.isValid() ){
-                this.addSegment(segment);
+                delete segment.attributes.highlights;
+
+                this.segments.add(segment);
                 segment.save();
             } else {
                 alert( segment.validationError );
@@ -113,19 +110,17 @@ function(Backbone, _, $, app, Segment, i18n){
          * @return {Segment}
          */
         addTextAsSegment: function(text, post){
-            var idPost = null,
-                source_creator = null;
+            var idPost = null;
 
             if( post ){
                 idPost = post.id;
-                source_creator = post.attributes.creator;
             }
 
             var segment = new Segment.Model({
+                target: { "@id": idPost, "@type": "email" },
                 text: text,
                 quote: text,
                 creator: app.getCurrentUser(),
-                source_creator: source_creator,
                 idPost: idPost
             });
 
@@ -239,6 +234,10 @@ function(Backbone, _, $, app, Segment, i18n){
             if( app.draggedSegment !== null || isText ){
                 this.panel.addClass("is-dragover");
             }
+
+            if( app.draggedAnnotation !== null ){
+                this.panel.addClass("is-dragover");
+            }
         },
 
         /**
@@ -267,6 +266,12 @@ function(Backbone, _, $, app, Segment, i18n){
             var segment = app.getDraggedSegment();
             if( segment ){
                 this.addSegment(segment);
+                return;
+            }
+
+            var annotation = app.getDraggedAnnotation();
+            if( annotation ){
+                app.saveCurrentAnnotator();
                 return;
             }
 

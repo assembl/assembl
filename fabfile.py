@@ -552,7 +552,7 @@ def coeus_stagenv():
     
     env.uses_apache = True
     env.uses_ngnix = False
-    env.gitbranch = "develop"
+    env.gitbranch = "master"
     
 @task    
 def coeus_stagenv2():
@@ -571,7 +571,7 @@ def coeus_stagenv2():
     
     env.uses_apache = True
     env.uses_ngnix = False
-    env.gitbranch = "annotator"
+    env.gitbranch = "develop"
     
 @task
 def prodenv():

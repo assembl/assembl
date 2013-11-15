@@ -4,34 +4,44 @@
     this is an included template.
     the <%= segment %> variable should be given.
 #}
+{% set segmentDate = '<%= app.getDateFormated(segment.get("creationDate")) %>' %}
+{% set segmentCreatorName = '<%= segment.get("creator").name %>' %}
+{% set harverterTooltip = gettext('Harvested by %(name)s %(date)s')|format(date=segmentDate, name=segmentCreatorName) %}
+{% set segmentCreatorAvatarImg = '<a class="profile-link" href="#" data-tooltip="' + harverterTooltip + '"><img src="<%= app.formatAvatarUrl(segment.get("creator").id, 24) %>" class="image-rounded" alt="" /></a>' %}
+{% set segmentLinkTooltip = gettext('Click here to see the original contribution this segment is quoted from.') %}
+{% set segmentLink = '<a class="segment-link" data-segmentid="<%= segment.cid %>" data-tooltip="' + segmentLinkTooltip + '"><%= segment.getTypeIcon() %></a>' %}
 
-<div class="box" draggable="true" data-segmentid="<%= segment.cid %>">
+
+<div class="box postit" draggable="true" data-segmentid="<%= segment.cid %>">
     <span data-segmentid="<%= segment.cid %>" class="closebutton"></span>
 
     <q class="text text-quotation"><%= segment.get('quote') %></q>
 
     <div class="spacer spacer--big"></div>
-
-    <div class="media">
-        <% if ( segment.hasSourceCreator() ) { %>
-        <div class="media-imgleft">
-            <img src="<%= app.formatAvatarUrl(segment.get('source_creator').id, 50)%>" class="image-rounded" alt="" />
-        </div>
+    <div class="postit-footer">
+    <div class="segment-author">
+        <%
+        var type = segment.get("target")["@type"];
+        if ( type == "email" ) { 
+            var post = segment.getAssociatedPost();
+            %>
+            {% set postCreatorAvatarImg = '<img src="<%= app.formatAvatarUrl(post.get(\'creator\').id, 35)%>" class="image-rounded" alt="" />' %}
+            {% set postCreatorName = '<%= post.get("creator").name %>' %}
+            {% set postDate = '<%= app.getDateFormated(post.get("date")) %>' %}
+            {{ gettext('%(img)s Posted %(date)s in %(link)s by <strong>%(name)s</strong>')|format(name=postCreatorName, img=postCreatorAvatarImg, date=postDate, link=segmentLink)|safe }}
+        <% } 
+        else if (type == "webpage") { %>
+            {{ gettext('From webpage %(link)s')|format(link=segmentLink)|safe }}
+        <% }
+        else { %>
+            {{ gettext('Unknown segment type') }}
         <% } %>
-        <div class="media-body">
-            <% if ( segment.hasSourceCreator() ) { %>
-                <div class="media-title"><strong><%= segment.get('source_creator').name %></strong></div>
-            <% } %>
-            {% set segmentDate = "<%= segment.getCreationDateFormated() %>" %}
-            <div class="text-small text-muted">
-                {{ gettext('Extracted %(date)s from')|format(date=segmentDate)|safe }}
-                <a class="segment-link" data-segmentid="<%= segment.cid %>"><%= segment.getTypeIcon() %></a>
-            </div>
-            <div class="text-small text-muted">
-                {{ gettext('by') }}
-                <img src="<%= app.formatAvatarUrl(segment.get('creator').id, 24) %>" class="image-rounded" alt="" />
-                <%= segment.get('creator').name %>
-            </div>
+    </div>
+    <div class="segment-harvester">
+        <div class="text-small text-muted">
+            {{ gettext('Harvester: %(img)s')|format(link=segmentLink, img=segmentCreatorAvatarImg)|safe }}
         </div>
     </div>
+    </div>
+
 </div>

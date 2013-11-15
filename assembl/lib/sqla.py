@@ -5,7 +5,8 @@ import sys
 from datetime import datetime
 
 from colanderalchemy import SQLAlchemySchemaNode
-from sqlalchemy import DateTime, MetaData, engine_from_config, event, Column
+from sqlalchemy import (
+    DateTime, MetaData, engine_from_config, event, Column, ForeignKey)
 from sqlalchemy.ext.declarative import declarative_base, declared_attr
 from sqlalchemy.orm import mapper, scoped_session, sessionmaker
 from sqlalchemy.orm.util import has_identity
@@ -14,6 +15,8 @@ from zope.sqlalchemy import ZopeTransactionExtension
 from zope.sqlalchemy.datamanager import mark_changed as z_mark_changed
 
 from pyramid.paster import get_appsettings, setup_logging
+
+from ..view_def import get_view_def
 
 _TABLENAME_RE = re.compile('([A-Z]+)')
 
@@ -159,6 +162,129 @@ class BaseOps(object):
 
         if as_object:
             return container
+
+    def get_id_as_str(self):
+        id = getattr(self, 'id', None)
+        if not id:
+            raise NotImplemented()
+        return str(id)
+
+    @classmethod
+    def external_typename(cls):
+        return cls.__name__
+
+    @classmethod
+    def uri_generic(cls, base_uri, id):
+        if not id:
+            return None
+        return base_uri + cls.external_typename() + "/" + str(id)
+
+    def uri(self, base_uri):
+        return self.uri_generic(base_uri, self.get_id_as_str())
+
+    def generic_json(self, base_uri='local:', view_def_name='base'):
+        view_def = get_view_def(view_def_name)
+        my_typename = self.external_typename()
+        my_id = self.uri(base_uri)
+        result = {
+            '@id': my_id,
+            '@type': my_typename,
+            '@view': view_def_name
+        }
+        local_view = view_def.get(my_typename, {})
+        mapper = self.__class__.__mapper__
+        relns = {r.key: r for r in mapper.relationships}
+        cols = {c.key: c for c in mapper.columns}
+        fkeys = {c for c in mapper.columns if isinstance(c, ForeignKey)}
+        fkeys_of_reln = {
+            frozenset(r._calculated_foreign_keys): r
+            for r in mapper.relationships
+        }
+
+        for name, spec in local_view.iteritems():
+            if name == "_default":
+                continue
+            if type(spec) is list:
+                assert len(spec) == 1
+                assert name in relns
+                view_name = spec[0]
+                assert type(view_name) == str
+                assert relns[name].uselist
+                if view_name == "@id":
+                    result[name] = [ob.uri(base_uri)
+                                    for ob in getattr(self, name)]
+                elif get_view_def(view_name) is not None:
+                    result[name] = [
+                        ob.generic_json(base_uri, view_name)
+                        for ob in getattr(self, name)]
+                else:
+                    raise "view does not exist", view_name
+            elif type(spec) is dict:
+                assert len(spec) == 1
+                assert "@id" in spec
+                assert name in relns
+                view_name = spec['@id']
+                assert type(view_name) == str
+                assert relns[name].uselist
+                view = get_view_def(view_name)
+                assert view
+                result[name] = {
+                    ob.uri(base_uri):
+                    ob.generic_json(base_uri, view_name)
+                    for ob in getattr(self, name, [])}
+            elif (spec is True and name in cols) or spec in cols:
+                cname = name if spec is True else spec
+                val = getattr(self, cname)
+                if val:
+                    if type(val) == datetime:
+                        val = val.isoformat()
+                    result[name] = val
+            elif spec is False:
+                pass
+            elif (spec is True and name in relns) or spec in relns:
+                assert not relns[name].uselist
+                rname = name if spec is True else spec
+                reln = relns[rname]
+                if len(reln._calculated_foreign_keys) == 1 \
+                        and reln._calculated_foreign_keys < fkeys:
+                    # shortcut, avoid fetch
+                    fkey = list(reln._calculated_foreign_keys)[0]
+                    ob_id = getattr(self, fkey.name)
+                    if ob_id:
+                        result[name] = reln.mapper.class_.uri_generic(
+                            base_uri, ob_id)
+                else:
+                    ob = getattr(self, rname)
+                    if ob:
+                        result[name] = ob.uri(base_uri)
+            elif name in relns and get_view_def(spec) is not None:
+                assert not relns[name].uselist
+                ob = getattr(self, name)
+                if ob:
+                    result[name] = getattr(self, name).generic_json(base_uri, spec)
+        if local_view.get('_default') is False:
+            return result
+        defaults = view_def.get('_default', {})
+        for name, col in cols.items():
+            if name in local_view:
+                continue  # already done
+            if defaults.get(name) is False:
+                continue
+            as_rel = fkeys_of_reln.get(frozenset((col, )))
+            if as_rel:
+                name = as_rel.key
+                if name in local_view or defaults.get(name) is False:
+                    continue
+                else:
+                    ob_id = getattr(self, col.key)
+                    if ob_id:
+                        result[name] = as_rel.mapper.class_.uri_generic(
+                            base_uri, ob_id)
+            else:
+                ob = getattr(self, name)
+                if ob:
+                    result[name] = ob
+        return result
 
 
 class Timestamped(BaseOps):

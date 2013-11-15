@@ -138,7 +138,7 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
          *  Opens the reply box and removes the reply button
          */
         openReplyBox: function(){
-            this.$('.message-replaybox-openbtn').hide();
+            this.$('.message-replybox-openbtn').hide();
             this.$('.message-replybox').show();
 
             var that = this;
@@ -151,7 +151,7 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
          *  Closes the reply box and shows the reply button
          */
         closeReplyBox: function(){
-            this.$('.message-replaybox-openbtn').show();
+            this.$('.message-replybox-openbtn').show();
             this.$('.message-replybox').hide();
         },
 
@@ -162,7 +162,8 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
             var btn = $(ev.currentTarget),
                 url = app.getApiUrl('posts'),
                 data = {},
-                that = this;
+                that = this,
+                btn_original_text=btn.text();
 
             data.message = this.$('.message-textarea').val();
             if( this.model.get('id') ){
@@ -177,7 +178,7 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
                 contentType: 'application/json',
                 url: url,
                 success: function(){
-                    btn.text('Send');
+                    btn.text(btn_original_text);
                     that.closeReplyBox();
                 }
             });
@@ -196,7 +197,7 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
             annotator.onAdderClick.call(annotator);
 
             if( app.messageList.annotatorEditor ){
-                app.messageList.annotatorEditor.css({
+                app.messageList.annotatorEditor.element.css({
                     'top': y,
                     'left': x
                 });
@@ -208,7 +209,7 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
             'click .message-title': 'onIconbuttonClick',
 
             //
-            'click .message-replaybox-openbtn': 'openReplyBox',
+            'click .message-replybox-openbtn': 'openReplyBox',
             'click .message-cancelbtn': 'closeReplyBox',
             'click .message-sendbtn': 'sendMessage',
 
