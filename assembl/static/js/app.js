@@ -202,6 +202,8 @@ function($, _, ckeditor, User, Moment, i18n){
             var segment = app.draggedSegment;
             app.draggedSegment = null;
 
+            delete segment.attributes.highlights;
+
             return segment;
         },
 
@@ -307,6 +309,10 @@ function($, _, ckeditor, User, Moment, i18n){
          * @param  {String} text The text to be shown in the .dragbox
          */
         showDragbox: function(ev, text){
+            if( ev.originalEvent ){
+                ev = ev.originalEvent;
+            }
+
             if( app.dragbox === null ){
                 app.dragbox = document.createElement('div');
                 app.dragbox.className = 'dragbox';
@@ -323,8 +329,9 @@ function($, _, ckeditor, User, Moment, i18n){
             app.dragbox.innerHTML = text;
 
             if( ev.dataTransfer ) {
+                ev.dataTransfer.dropEffect = 'all';
                 ev.dataTransfer.effectAllowed = 'copy';
-                ev.dataTransfer.setData("Text", text);
+                ev.dataTransfer.setData("text/plain", text);
                 ev.dataTransfer.setDragImage(app.dragbox, 10, 10);
             }
 
@@ -376,15 +383,6 @@ function($, _, ckeditor, User, Moment, i18n){
          */
         formatDatetime: function(date, format){
             return app.formatDate(date, format || app.datetimeFormat);
-        },
-
-        /**
-         * Formats a plain text message to html
-         * @param  {string} str
-         * @return {string} The text formatted with HTML
-         */
-        formatMessageToDisplay: function(str){
-            return str.trim().replace(/(\n)/gi, '<br />');
         },
 
         /**
@@ -444,18 +442,9 @@ function($, _, ckeditor, User, Moment, i18n){
          * @param  {Idea} [idea]
          */
         setCurrentIdea: function(idea){
-            if( app.ideaPanel && app.ideaPanel.idea !== null ){
-                app.ideaPanel.idea.set('isSelected', false);
+            if( app.ideaPanel ){
+                app.ideaPanel.setCurrentIdea(idea);
             }
-
-            if( idea !== null ){
-                idea.set('isSelected', true);
-                app.openPanel(app.ideaPanel);
-            } else {
-                app.closePanel(app.ideaPanel);
-            }
-
-            app.trigger('idea:select', [idea]);
         },
 
         /**
@@ -482,6 +471,49 @@ function($, _, ckeditor, User, Moment, i18n){
          */
         getOrderForNewRootIdea: function(){
             return app.ideaList.ideas.last().get('order') + 1;
+        },
+
+        /**
+         * Shows the related segment from the given annotation
+         * @param  {annotation} annotation
+         */
+        showSegmentByAnnotation: function(annotation){
+            var segment = app.segmentList.segments.getByAnnotation(annotation);
+
+            if( !segment ){
+                return;
+            }
+
+            if( segment.get('idIdea') ){
+                // It is in the ideaList
+                app.ideaPanel.showSegment(segment);
+            } else {
+                // It is in the segmentList
+                app.segmentList.showSegment(segment);
+            }
+        },
+
+        /**
+         * Shows the segment source in the better way related to the source
+         * e.g.: If it is an email, opens it, if it is a webpage, open in another window ...
+         * @param {Segment} segment
+         */
+        showTargetBySegment: function(segment){
+            var target = segment.get('target');
+            
+            switch(target['@type']){
+                case 'webpage':
+                    window.open(target.url, "_blank");
+                    break;
+
+                case 'email':
+                default:
+                    var selector = app.format('[data-annotation-id={0}]', segment.id);
+                    app.messageList.loadThreadById(segment.get('idPost'), function(){
+                        $(selector).addClass('is-highlighted');
+                    });
+                    break;
+            }
         },
 
         /**
@@ -535,6 +567,44 @@ function($, _, ckeditor, User, Moment, i18n){
          */
         stripHtml: function(html){
             return html ? $.trim( $('<div>'+html+'</div>').text() ) : html;
+        },
+
+        /**
+         * Return the xpath related to the given root element
+         * 
+         * @param {string} xpath
+         * @return {String}
+         */
+        getXPath: function(xpath){
+            if( app.messageList.messageThreadPanel === null ){
+                return '';
+            }
+
+            var rootElement = app.messageList.messageThreadPanel.get(0),
+                path = '',
+                isInMessage = false,
+                tagName, index, node;
+
+            node = document.evaluate('./'+xpath, rootElement, null, XPathResult.ANY_TYPE, null).iterateNext();
+
+            while( node && node.nodeType === Node.ELEMENT_NODE && node != rootElement ){
+                tagName = node.tagName.replace(":", "\\:");
+
+                if( node.classList.contains('message-body') ){
+                    isInMessage = true;
+                    break;
+                }
+
+                index = $(node.parentNode).children(tagName).index(node) + 1;
+                path = app.format("/{0}[{1}]{2}", node.tagName.toLowerCase(), index, path);
+                node = node.parentNode;
+            }
+
+            if( isInMessage ){
+                path = app.format("//div[@data-message-id='{0}']/div[@class='message-body']{1}", node.parentNode.getAttribute('data-message-id'), path);
+            }            
+
+            return path;
         },
 
         /**

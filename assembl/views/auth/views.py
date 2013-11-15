@@ -232,7 +232,7 @@ def assembl_register_view(request):
     session.add(email_account)
     session.flush()
     userid = user.id
-    #send_confirmation_email(request, email_account)
+    send_confirmation_email(request, email_account)
     # TODO: Check that the email logic gets the proper locale. (send in URL?)
     headers = remember(request, user.id, tokens=format_token(user))
     request.response.headerlist.extend(headers)
@@ -261,7 +261,8 @@ def assembl_login_complete_view(request):
             user = account.profile.user
     else:
         username = session.query(Username).filter_by(username=identifier).first()
-        user = username.user
+        if username:
+            user = username.user
 
     if not user:
         return dict(default_context,

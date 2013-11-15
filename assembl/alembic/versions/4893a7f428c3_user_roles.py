@@ -13,9 +13,9 @@ down_revision = '1d136380561f'
 from alembic import context, op
 import sqlalchemy as sa
 
-from assembl.auth.models import Role
 
 def upgrade(pyramid_env):
+    from assembl.auth.models import Role
     with context.begin_transaction():
         op.create_table('role',
             sa.Column('id', sa.Integer, primary_key=True),
@@ -39,7 +39,7 @@ def upgrade(pyramid_env):
                       sa.ForeignKey('role.id', ondelete='CASCADE')))
         op.create_index('user_discussion_idx',
                         'local_user_role', ['user_id', 'discussion_id'])
-        db = m.get_session_maker()()
+        db = Role.db()
         db.add(Role(name='r:admin'))
         db.add(Role(name='r:moderator'))
         db.add(Role(name='r:catcher'))

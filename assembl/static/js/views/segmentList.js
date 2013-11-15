@@ -27,17 +27,33 @@ function(Backbone, _, $, app, Segment, i18n){
         segments: new Segment.Collection(),
 
         /**
+         * The panel element
+         * @type {jQuery}
+         */
+        panel: null,
+
+        /**
          * The render
          * @return {LateralMenu}
          */
         render: function(){
             app.trigger('render');
+
             var segments = this.segments.getClipboard(),
-                data = {segments:segments};
+                data = {segments:segments},
+                top = 0;
+
+            if( this.panel ){
+                top = this.panel.find('.panel-body')[0].scrollTop;
+            }
 
             this.$el.html(this.template(data));
 
             this.panel = this.$('.panel');
+
+            if( top > 0 ){
+                this.panel.find('.panel-body')[0].scrollTop = top;
+            }
 
             return this;
         },
@@ -47,8 +63,47 @@ function(Backbone, _, $, app, Segment, i18n){
          * @param {Segment} segment
          */
         addSegment: function(segment){
+            delete segment.attributes.highlights;
+
             segment.set('idIdea', null);
             this.segments.add(segment);
+        },
+
+        /**
+         * Add annotation as segment
+         * @param {annotation} annotation
+         * @param {post} post The origin post
+         * @return {Segment}
+         */
+        addAnnotationAsSegment: function(annotation, post){
+            var idPost = post.id,
+                sourceCreator = post.get('creator'),
+                rootElement = $('#message-'+idPost).get(0);
+
+            // arranging the ranges
+            // Obsolete with true IDs.
+            // _.each(annotation.ranges, function(range){
+            //     range.start = app.getXPath( range.start );
+            //     range.end = app.getXPath( range.end );
+            // });
+
+            var segment = new Segment.Model({
+                target: { "@id": idPost, "@type": "email" },
+                text: annotation.text,
+                quote: annotation.quote,
+                creator: app.getCurrentUser(),
+                source_creator: sourceCreator,
+                ranges: annotation.ranges
+            });
+
+            if( segment.isValid() ){
+                this.addSegment(segment);
+                segment.save();
+            } else {
+                alert( segment.validationError );
+            }
+
+            return segment;
         },
 
         /**
@@ -58,15 +113,17 @@ function(Backbone, _, $, app, Segment, i18n){
          * @return {Segment}
          */
         addTextAsSegment: function(text, post){
-            var idPost = null
-            var source_creator = null
-            if(post){
-                var idPost = post.id
-                source_creator = post.attributes.creator
+            var idPost = null,
+                source_creator = null;
+
+            if( post ){
+                idPost = post.id;
+                source_creator = post.attributes.creator;
             }
 
             var segment = new Segment.Model({
                 text: text,
+                quote: text,
                 creator: app.getCurrentUser(),
                 source_creator: source_creator,
                 idPost: idPost
@@ -98,6 +155,23 @@ function(Backbone, _, $, app, Segment, i18n){
             this.segments.remove(segment);
         },
 
+
+        /**
+         * Shows the given segment with an small fx
+         * @param {Segment} segment
+         */
+        showSegment: function(segment){
+            app.openPanel(app.segmentList);
+
+            var selector = app.format('.box[data-segmentid={0}]', segment.cid),
+                box = this.$(selector);
+
+            if( box.length ){
+                app.segmentList.$('.panel-body').animate({'scrollTop': box.position().top});
+                box.highlight();
+            }
+        },
+        
         /**
          * Closes the panel
          */
@@ -120,7 +194,9 @@ function(Backbone, _, $, app, Segment, i18n){
 
             'click .closebutton': "onCloseButtonClick",
             'click #segmentList-clear': "onClearButtonClick",
-            'click #segmentList-closeButton': "closePanel"
+            'click #segmentList-closeButton': "closePanel",
+
+            'click .segment-link': "onSegmentLinkClick"
         },
 
         /**
@@ -132,7 +208,7 @@ function(Backbone, _, $, app, Segment, i18n){
             var cid = ev.currentTarget.getAttribute('data-segmentid'),
                 segment = this.segments.get(cid);
 
-            app.showDragbox(ev, segment.get('text'));
+            app.showDragbox(ev, segment.get('quote'));
             app.draggedSegment = segment;
         },
 
@@ -140,6 +216,11 @@ function(Backbone, _, $, app, Segment, i18n){
          * @event
          */
         onDragEnd: function(ev){
+            if( ev ){
+                ev.preventDefault();
+                ev.stopPropagation();
+            }
+
             ev.currentTarget.style.opacity = '';
             app.draggedSegment = null;
         },
@@ -151,7 +232,7 @@ function(Backbone, _, $, app, Segment, i18n){
             ev.preventDefault();
 
             var isText = false;
-            if( ev.dataTransfer.types && ev.dataTransfer.types.indexOf('text/plain') > -1 ){
+            if( ev.dataTransfer && ev.dataTransfer.types && ev.dataTransfer.types.indexOf('text/plain') > -1 ){
                 isText = app.draggedIdea ? false : true;
             }
 
@@ -215,6 +296,16 @@ function(Backbone, _, $, app, Segment, i18n){
                     segment.destroy();
                 });
             }
+        },
+
+        /**
+         * @event
+         */
+        onSegmentLinkClick: function(ev){
+            var cid = ev.currentTarget.getAttribute('data-segmentid'),
+                segment = this.segments.get(cid);
+
+            app.showTargetBySegment(segment);
         }
 
     });

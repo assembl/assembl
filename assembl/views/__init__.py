@@ -24,3 +24,4 @@ def includeme(config):
     #  authentication
     config.include('.auth')
 
+    config.include('.api')

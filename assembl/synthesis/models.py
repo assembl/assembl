@@ -1,4 +1,6 @@
 from datetime import datetime
+import re
+import quopri
 
 from sqlalchemy.orm import relationship, backref, aliased
 from sqlalchemy.sql import func, cast, select, text
@@ -22,7 +24,7 @@ from sqlalchemy import (
 from assembl.lib.utils import slugify
 
 from ..lib.sqla import db_schema, Base as SQLAlchemyBaseModel
-from ..source.models import (Source, Content, Post)
+from ..source.models import (Source, Content, Post, Mailbox)
 
 class Discussion(SQLAlchemyBaseModel):
     """
@@ -394,6 +396,8 @@ class Extract(SQLAlchemyBaseModel):
     idea_id = Column(Integer, ForeignKey('idea.id'), nullable=True)
     idea = relationship('Idea', backref='extracts')
 
+    annotation_text = Column(UnicodeText)
+
     creator_id = Column(
         Integer,
         ForeignKey('agent_profile.id'),
@@ -413,15 +417,116 @@ class Extract(SQLAlchemyBaseModel):
         'AgentProfile', foreign_keys=[owner_id], backref='extracts_owned')
 
     def serializable(self):
-        return {
+        json = {
             'id': self.id,
-            'text': self.body,
-            'idPost': self.source.post.id,
-            'idIdea': self.idea_id,
-            'creationDate': self.creation_date.isoformat(),
+            'annotator_schema_version': 'v1.0',
+            'quote': self.body,
+            'ranges': [tfi.__json__() for tfi 
+                       in self.text_fragment_identifiers],
+            'target': {
+                '@type': self.source.type
+            },
+            'created': self.creation_date.isoformat(),
             'creator': self.creator.serializable(),
-            'source_creator': self.source.post.creator.serializable()
+            #'user': self.creator.get_uri(),
+            'text': self.annotation_text,
         }
+        if self.idea_id:
+            json['idIdea'] = self.idea_id
+            #json['text'] += '<a href="%s">%s</a>' % (
+            #   self.idea.get_uri(), self.idea.short_title)
+        if self.source.type == 'email':
+            json['target']['@id'] = self.source.post.id
+            json['idPost'] = self.source.post.id  # legacy
+            json['source_creator'] = self.source.post.creator.serializable()
+            #json['url'] = self.source.post.get_uri()
+        elif self.source.type == 'webpage':
+            json['target']['url'] = self.source.url
+            json['uri'] = self.source.url
+            json['text'] = "Cf " + self.source.source.discussion.topic
+        return json
 
     def __repr__(self):
         return "<Extract %d %s>" % (self.id, repr(self.body[:20]))
+
+    def infer_text_fragment(self):
+        return self._infer_text_fragment_inner(
+            self.source.get_title(), self.source.get_body(), self.source.post.id)
+
+    def _infer_text_fragment_inner(self, title, body, post_id):
+        body = Mailbox.sanitize_html(body, [])
+        quote = self.body.replace("\r", "")
+        try:
+            # for historical reasons
+            quote = quopri.decodestring(quote)
+        except:
+            pass
+        quote = Mailbox.sanitize_html(quote, [])
+        if quote != self.body:
+            self.body = quote
+        quote = quote.replace("\n", "")
+        start = body.find(quote)
+        lookin = 'message-body'
+        if start < 0:
+            xpath = "//div[@id='%s']/div[class='post_title']" % (post_id)
+            start = title.find(quote)
+            if start < 0:
+                return None
+            lookin = 'message-subject'
+        xpath = "//div[@id='message-%d']//div[@class='%s']" % (
+            post_id, lookin)
+        tfi = self.db.query(TextFragmentIdentifier).filter_by(
+            extract=self).first()
+        if not tfi:
+            tfi = TextFragmentIdentifier(extract=self)
+        tfi.xpath_start = tfi.xpath_end = xpath
+        tfi.offset_start = start
+        tfi.offset_end = start+len(quote)
+        return tfi
+
+
+class TextFragmentIdentifier(SQLAlchemyBaseModel):
+    __tablename__ = 'text_fragment_identifier'
+    id = Column(Integer, primary_key=True)
+    extract_id = Column(Integer, ForeignKey(Extract.id))
+    xpath_start = Column(String)
+    offset_start = Column(Integer)
+    xpath_end = Column(String)
+    offset_end = Column(Integer)
+    extract = relationship(Extract, backref='text_fragment_identifiers')
+
+    xpath_re = re.compile(
+        r'xpointer\(start-point\(string-range\(([^,]+),([^,]+),([^,]+)\)\)'
+        r'/range-to\(string-range\(([^,]+),([^,]+),([^,]+)\)\)\)')
+
+    def __string__(self):
+        return ("xpointer(start-point(string-range(%s,'',%d))/range-to(string-range(%s,'',%d)))" % (
+            self.xpath_start, self.offset_start,
+            self.xpath_end, self.offset_end))
+
+    def __json__(self):
+        return {"start": self.xpath_start, "startOffset": self.offset_start,
+                "end": self.xpath_end, "endOffset": self.offset_end}
+
+    @classmethod
+    def from_xpointer(cls, extract_id, xpointer):
+        m = xpath_re.match(xpointer)
+        if m:
+            try:
+                (xpath_start, start_text, offset_start,
+                    xpath_end, end_text, offset_end) = m.groups()
+                offset_start = int(offset_start)
+                offset_end = int(end_offset)
+                xpath_start = xpath_start.strip()
+                assert xpath_start[0] in "\"'"
+                xpath_start = xpath_start.strip(xpath_start[0])
+                xpath_end = xpath_end.strip()
+                assert xpath_end[0] in "\"'"
+                xpath_end = xpath_end.strip(xpath_end[0])
+                return TextFragmentIdentifier(
+                    extract_id=extract_id,
+                    xpath_start=xpath_start, offset_start=offset_start,
+                    xpath_end=xpath_end, offset_end=offset_end)
+            except:
+                pass
+        return None

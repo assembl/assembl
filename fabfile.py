@@ -74,7 +74,7 @@ def update_requirements(force=False):
     update external dependencies on remote host
     """
     print(cyan('Updating requirements using PIP'))
-    run('%(venvpath)s/bin/pip install -U pip' % env)
+    run('%(venvpath)s/bin/pip install -U pip==1.4.1' % env)
     
     if force:
         cmd = "%(venvpath)s/bin/pip install -I -r %(projectpath)s/requirements.txt" % env
@@ -181,7 +181,7 @@ def updatemaincode():
         run('git pull %s %s' % (env.gitrepo, env.gitbranch))
 
 def app_setup():
-     venvcmd('pip install -Iv pip==1.4')
+     venvcmd('pip install -Iv pip==1.4.1')
      venvcmd('pip install -e ./')
      
 @task
@@ -480,7 +480,7 @@ def commonenv(projectpath, venvpath=None):
     #It is recommended you keep localhost even if you have access to 
     # unix domain sockets, it's more portable across different pg_hba configurations.
     env.db_host = 'localhost'
-    env.dbdumps_dir = os.path.join(tempfile.gettempdir(), '%s_dumps' % env.projectname)
+    env.dbdumps_dir = os.path.join(projectpath, '%s_dumps' % env.projectname)
     env.ini_file = 'production.ini'
     #env.gitrepo = "ssh://webapp@i4p-dev.imaginationforpeople.org/var/repositories/imaginationforpeople.git"
     env.gitrepo = "git://github.com/ImaginationForPeople/assembl.git"
@@ -553,6 +553,25 @@ def coeus_stagenv():
     env.uses_apache = True
     env.uses_ngnix = False
     env.gitbranch = "develop"
+    
+@task    
+def coeus_stagenv2():
+    """
+    [ENVIRONMENT] Staging
+    """
+    commonenv(os.path.normpath("/var/www/assembl2/"))
+    env.wsginame = "staging.wsgi"
+    env.urlhost = "assembl2.coeus.ca"
+    env.user = "www-data"
+    env.home = "www-data"
+    env.db_name = 'assembl2'
+    env.ini_file = 'local.ini'
+    require('projectname', provided_by=('commonenv',))
+    env.hosts = ['coeus.ca']
+    
+    env.uses_apache = True
+    env.uses_ngnix = False
+    env.gitbranch = "annotator"
     
 @task
 def prodenv():

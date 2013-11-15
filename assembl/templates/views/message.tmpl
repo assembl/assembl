@@ -1,52 +1,56 @@
 <% if( collapsed ){ %>
 
-<div class="message-header">
+<div class="message-header" id="message-<%= content_id %>">
     <div class="float-left">
         <% for( var i=1; i<level; i+= 1) { %>
             <span class="message-bar"></span>
         <% } %>
         <a class="iconbutton icon-right-dir"></a>
+        <% if (creator) { %>
         <img src="<%= app.formatAvatarUrl(creator.id, 32) %>" alt="{{ gettext('User') }}"  class="image-rounded" width="32" height="32" />
+        <% } %>
     </div>
 
     <div class="message-date"><%= date %></div>
     <div class="message-title">
+        <% if (creator) { %>
         <span class="text-bold inline margin-right"><%= creator.name %></span>
-        <span class="inline margin-right"><%= subject %></span>
+        <% } %>
+        <span class="inline margin-right"><span class="message-subject"><%= subject %></span></span>
         <span class="text-muted text-opaque inline"><%= app.stripHtml(body) %></span>
     </div>
 </div>
 
 <% } else { %>
 
-<div>
+<div id="message-<%= id %>">
     <div class="media">
 
         <% for( var i=1; i<level; i+= 1) { %>
             <span class="message-bar message-bar--100vertical" data-bar-level="<%= i %>"></span>
         <% } %>
 
+        <% if (creator) { %>
         <div class="media-imgleft">
             <a class="iconbutton icon-down-dir"> </a>
             <img src="<%= app.formatAvatarUrl(creator.id, 24) %>" alt="{{ gettext('User') }}"  class="image-rounded" width="24" height="24" />
         </div>
+        <% } %>
 
         <div class="media-body">
             <div class="media-title">
-                {% set userName = "<%= creator.name %>" %}
+                {% set userName = "<%= creator ? creator.name : '' %>" %}
                 {% set time = "<%= date %>" %}
                 {{ gettext('<strong>%(user)s</strong> | <time>%(time)s</time>')|format(user=userName, time=time)|safe }}
             </div>
-            <div><strong><%= subject %></strong></div>
+            <div><strong><span class="message-subject"><%= subject %></span></strong></div>
         </div>
     </div>
 
     <div class="spacer"></div>
     <div class="spacer"></div>
 
-    <div class="message-body">
-        <%= app.formatMessageToDisplay(body) %>
-    </div>
+    <div class="message-body"><%= body %></div>
 
     <div class="spacer"></div>
 

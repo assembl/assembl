@@ -59,6 +59,9 @@ class Source(SQLAlchemyBaseModel):
     def __repr__(self):
         return "<Source %s>" % repr(self.name)
 
+    def import_content(self, only_new=True):
+        pass
+
 
 class Content(SQLAlchemyBaseModel):
     """
@@ -78,7 +81,7 @@ class Content(SQLAlchemyBaseModel):
         backref=backref('contents', order_by=import_date)
     )
 
-    post = relationship("Post", uselist=False)
+    post = relationship("Post", uselist=False, backref="content")
 
     __mapper_args__ = {
         'polymorphic_identity': 'content',
@@ -88,8 +91,6 @@ class Content(SQLAlchemyBaseModel):
 
     def __init__(self, *args, **kwargs):
         super(Content, self).__init__(*args, **kwargs)
-        from .post import Post
-        self.post = self.post or Post(content=self)
 
     def serializable(self):
         return {
@@ -103,3 +104,9 @@ class Content(SQLAlchemyBaseModel):
 
     def __repr__(self):
         return "<Content %s>" % repr(self.type)
+
+    def get_body(self):
+        return ""
+
+    def get_title(self):
+        return ""

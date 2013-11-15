@@ -30,7 +30,7 @@ define([
     app.segmentList = new SegmentList({el: '#segmentlist', button: '#button-segmentList'});
     app.segmentList.segments.on('change reset', app.ideaList.render, app.ideaList);
     app.segmentList.segments.on('invalid', function(model, error){ alert(error); });
-    app.segmentList.segments.fetch({reset: true});
+    //app.segmentList.segments.fetch({reset: true});
 
     // Idea panel
     app.ideaPanel = new IdeaPanel({el: '#ideaPanel', button: '#button-ideaPanel'}).render();
@@ -47,4 +47,24 @@ define([
 
     // Fetching the ideas
     app.ideaList.ideas.fetch({reset: true});
+
+
+    /**
+     * WARNING:
+     * This is a workaround to update the segmentList using ajax
+     * In a perfect world, this would be done using websockets
+     * or something really cool.
+     */
+    function updateSegmentList(){
+        var promisse = app.segmentList.segments.fetch({reset: true}),
+            time = 60 * 1 * 1000; // 1 minute
+
+        promisse.then(function(){
+            setTimeout(function(){
+                updateSegmentList();
+            }, time);
+        });
+    }
+
+    updateSegmentList();
 });

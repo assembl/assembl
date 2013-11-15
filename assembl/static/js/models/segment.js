@@ -11,14 +11,37 @@ function(Backbone, app, moment, User){
          * @init
          */
         initialize: function(){
-            if( !this.get('creationDate') ){
+            this.on('change:idIdea', this.onAttrChange, this);
+            //this.on('invalid', function(model, error){ alert( error ); }, this);
+
+            if( this.attributes.created ){
+                this.attributes.creationDate = this.attributes.created;
+            }
+
+            if( ! this.get('creationDate') ){
                 this.set( 'creationDate', app.getCurrentTime() );
             }
 
-            this.on('change:idIdea', this.onAttrChange, this);
-            this.on('invalid', function(model, error){
-                alert( error );
-            }, this)
+            var ranges = this.attributes.ranges,
+                _serializedRange = [],
+                _ranges = [];
+
+            _.each(ranges, function(range, index){
+
+                if( !(range instanceof Range.SerializedRange) ){
+                    ranges[index] = new Range.SerializedRange(range);
+                }
+
+                _ranges[index] = ranges[index];
+
+            });
+
+            // We need to create a copy 'cause annotator destroy all ranges
+            // once it creates the highlight
+            this.attributes._ranges = _ranges;
+
+            // cleaning
+            delete this.attributes.highlights;
         },
 
         /**
@@ -31,11 +54,13 @@ function(Backbone, app, moment, User){
          */
         defaults: {
             text: '',
+            quote: '',
             idPost: null,
             idIdea: null,
             creationDate: null,
             creator: {},
-            source_creator: {}
+            source_creator: {},
+            ranges: []
         },
 
         /**
@@ -61,6 +86,35 @@ function(Backbone, app, moment, User){
          */
         onAttrChange: function(){
             this.save();
+        },
+
+        /**
+         * @return {Boolean} True if there is a source_creator
+         */
+        hasSourceCreator: function(){
+            return this.attributes.source_creator && this.attributes.source_creator.id !== undefined;
+        },
+
+
+        /**
+         * Return the html markup to the icon
+         * @return {string}
+         */
+        getTypeIcon: function(){
+            var cls = 'icon-',
+                type = this.get('target')['@type'];
+
+            switch(type){
+                case 'webpage': 
+                    cls += 'link';
+                    break;
+
+                case 'email':
+                default:
+                    cls += 'mail';
+            }
+
+            return app.format("<i class='{0}'></i>", cls);
         }
     });
 
@@ -98,6 +152,15 @@ function(Backbone, app, moment, User){
                 }
                 return false;
             });
+        },
+
+        /**
+         * Returns the segment related to the annotation
+         * @param  {annotation} annotation
+         * @return {Segment}
+         */
+        getByAnnotation: function(annotation){
+            return this.get(annotation.id);
         }
     });
 

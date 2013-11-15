@@ -31,4 +31,5 @@ from .synthesis.models import (
     Idea,
     Extract,
     Synthesis,
+    TextFragmentIdentifier,
     )

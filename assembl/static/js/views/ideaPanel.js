@@ -77,7 +77,21 @@ function(Backbone, _, Idea, app, ckeditor, i18n){
                 this.ckInstance = ckeditor.inline( editingArea, CKEDITOR_CONFIG );
                 editingArea.focus();
                 this.ckInstance.element.on('blur', function(){
-                    that.saveEdition();
+
+                    // Firefox triggers the blur event if we paste (ctrl+v)
+                    // in the ckeditor, so instead of calling the function direct
+                    // we wait to see if the focus is still in the ckeditor
+                    setTimeout(function(){
+                        if( !that.ckInstance.element ){
+                            return;
+                        }
+
+                        var hasFocus = document.hasFocus(that.ckInstance.element.$);
+                        if( !hasFocus ){
+                            that.saveEdition();
+                        }
+                    }, 100);
+
                 });
             }
 
@@ -103,8 +117,33 @@ function(Backbone, _, Idea, app, ckeditor, i18n){
          * @param  {Segment} segment
          */
         addSegment: function(segment){
+            delete segment.attributes.highlights;
+
             var id = this.idea.get('id');
             segment.set('idIdea', id);
+        },
+
+        /**
+         * Shows the given segment with an small fx
+         * @param {Segment} segment
+         */
+        showSegment: function(segment){
+            var selector = app.format('.box[data-segmentid={0}]', segment.cid),
+                idIdea = segment.get('idIdea'),
+                idea = app.ideaList.ideas.get(idIdea),
+                box;
+
+            if( !idea ){
+                return;
+            }
+
+            this.setCurrentIdea(idea);
+            box = this.$(selector);
+
+            if( box.length ){
+                app.ideaPanel.$('.panel-body').animate({'scrollTop': box.position().top});
+                box.highlight();
+            }
         },
 
         /**
@@ -112,9 +151,22 @@ function(Backbone, _, Idea, app, ckeditor, i18n){
          * @param  {Idea} [idea=null]
          */
         setCurrentIdea: function(idea){
-            this.idea = idea || new Idea.Model();
+            if( idea && this.idea.id == idea.id ){
+                // already the current one
+                return;
+            }
+
+            if( idea !== null ){
+                this.idea = idea;
+                this.idea.set('isSelected', true);
+                app.openPanel(app.ideaPanel);
+            } else {
+                this.idea = new Idea.Model();
+                app.closePanel(app.ideaPanel);
+            }
 
             this.idea.on('change', this.render, this);
+            app.trigger('idea:select', [idea]);
 
             this.render();
         },
@@ -166,7 +218,9 @@ function(Backbone, _, Idea, app, ckeditor, i18n){
             'click .closebutton': 'onCloseButtonClick',
             'click #ideaPanel-clearbutton': 'onClearAllClick',
             'click #ideaPanel-closebutton': 'onTopCloseButtonClick',
-            'click #ideaPanel-deleteButton': 'onDeleteButtonClick'
+            'click #ideaPanel-deleteButton': 'onDeleteButtonClick',
+
+            'click .segment-link': "onSegmentLinkClick"
         },
 
         /**
@@ -211,7 +265,7 @@ function(Backbone, _, Idea, app, ckeditor, i18n){
                 var cid = ev.currentTarget.getAttribute('data-segmentid'),
                     segment = app.segmentList.segments.get(cid);
 
-                app.showDragbox(ev, segment.get('text'));
+                app.showDragbox(ev, segment.get('quote'));
                 app.draggedSegment = segment;
             }
         },
@@ -342,6 +396,16 @@ function(Backbone, _, Idea, app, ckeditor, i18n){
             
             this.idea.set({ 'longTitle': text, 'ideaPanel-editing': false });
             this.ckInstance.destroy();
+        },
+
+        /**
+         * @event
+         */
+        onSegmentLinkClick: function(ev){
+            var cid = ev.currentTarget.getAttribute('data-segmentid'),
+                segment = app.segmentList.segments.get(cid);
+
+            app.showTargetBySegment(segment);
         }
 
     });

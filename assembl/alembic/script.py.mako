@@ -19,10 +19,7 @@ import sqlalchemy as sa
 import transaction
 ${imports if imports else ''}
 
-from assembl import models as m
 from assembl.lib import config
-
-db = m.DBSession
 
 
 def upgrade(pyramid_env):
@@ -30,6 +27,8 @@ def upgrade(pyramid_env):
     ${indent(upgrades if upgrades else 'pass')}
 
     # Do stuff with the app's models here.
+    from assembl import models as m
+    db = m.get_session_maker()()
     with transaction.manager:
         pass
 

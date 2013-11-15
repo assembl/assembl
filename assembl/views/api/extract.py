@@ -4,30 +4,46 @@ import transaction
 from cornice import Service
 
 from pyramid.security import authenticated_userid
-from pyramid.httpexceptions import HTTPNotFound
+from pyramid.httpexceptions import HTTPNotFound, HTTPClientError
 from sqlalchemy.orm import aliased, joinedload, joinedload_all, contains_eager
 
 from assembl.views.api import API_DISCUSSION_PREFIX
-from assembl.synthesis.models import Extract
+from assembl.synthesis.models import Extract, TextFragmentIdentifier
 from assembl.auth.models import AgentProfile, User
 from assembl.source.models import Source, Content, Post
+from assembl.annotation.models import Webpage
 from . import acls
 from assembl.auth import (
     P_READ, P_ADD_EXTRACT, P_EDIT_EXTRACT, P_DELETE_EXTRACT)
+from assembl.auth.token import decode_token
+
+
+cors_policy = dict(enabled=True,
+              headers=('Location', 'Content-Type', 'Content-Length'),
+              origins=('*',),
+              credentials=True,
+              max_age=86400)
 
 
 extracts = Service(
     name='extracts',
     path=API_DISCUSSION_PREFIX + '/extracts',
     description="An extract from Content that is an expression of an Idea",
-    renderer='json', acl=acls
+    renderer='json', acl=acls, cors_policy=cors_policy
 )
 
 extract = Service(
     name='extract',
     path=API_DISCUSSION_PREFIX + '/extracts/{id}',
     description="Manipulate a single extract",
-    acl=acls
+    acl=acls, cors_policy=cors_policy
+)
+
+search_extracts = Service(
+    name = 'search_extracts',
+    path = API_DISCUSSION_PREFIX + '/search_extracts',
+    description = "search for extracts matching a URL",
+    renderer='json', acl = acls, cors_policy=cors_policy
 )
 
 
@@ -47,8 +63,8 @@ def get_extracts(request):
         Content,
         Source
     ).filter(
-        Source.discussion_id==discussion_id,
-        Content.source_id==Source.id
+        Source.discussion_id == discussion_id,
+        Content.source_id == Source.id
     )
     all_extracts = all_extracts.options(joinedload_all(Extract.source, Content.post, Post.creator, AgentProfile.user))
     all_extracts = all_extracts.options(joinedload_all(Extract.creator, AgentProfile.user))
@@ -65,25 +81,60 @@ def post_extract(request):
     Create a new extract.
     """
     extract_data = json.loads(request.body)
+    print "post_extract:", extract_data
     user_id = authenticated_userid(request)
+    # TODO: Handle unauthenticated user.
+    content = None
+    uri = extract_data.get('uri')
+    annotation_text = None
+    if uri:
+        # Straight from annotator
+        token = request.headers.get('X-Annotator-Auth-Token')
+        if token:
+            token = decode_token(token, request.registry.settings['session.secret'])
+            if token:
+                user_id = token['userId']
+        annotation_text = extract_data.get('text')
+    else:
+        target = extract_data.get('target')
+        if not (target or uri):
+            raise HTTPClientError("No target")
 
-    post_id = extract_data.get('idPost')
+        target_type = target.get('@type')
+        if target_type == 'email':
+            post_id = int(target.get('@id'))
+            post = Post.get(id=post_id)
+            if not post:
+                raise HTTPNotFound("Post with id '%s' not found." % post_id)
+            content = post.content
+        elif target_type == 'webpage':
+            uri = target.get('url')
+    if uri and not content:
+        content = Webpage.get(url=uri)
+        if not content:
+            discussion_id = int(request.matchdict['discussion_id'])
+            source = Source(name='Annotator', discussion_id=discussion_id, type='source')
+            Source.db.merge(source)
+            content = Webpage(url=uri, source=source)
+    extract_body = extract_data.get('quote', '')
+    new_extract = Extract(
+        creator_id=user_id,
+        owner_id=user_id,
+        body=extract_body,
+        annotation_text = annotation_text,
+        source=content
+    )
+    Extract.db.add(new_extract)
 
-    with transaction.manager:
-        post = Post.get(id=int(post_id))
-        if not post:
-            raise HTTPNotFound("Post with id '%s' not found." % post_id)
-        extract_body = extract_data.get('text', '')
-        new_extract = Extract(
-            creator_id=user_id,
-            owner_id=user_id,
-            body=extract_body,
-            source_id=post.content.id
-        )
-
-        Extract.db.add(new_extract)
-
-    new_extract = Extract.db.merge(new_extract)
+    for range_data in extract_data.get('ranges', []):
+        range = TextFragmentIdentifier(
+            extract=new_extract,
+            xpath_start=range_data['start'],
+            offset_start=range_data['startOffset'],
+            xpath_end=range_data['end'],
+            offset_end=range_data['endOffset'])
+        TextFragmentIdentifier.db.add(range)
+    Extract.db.flush()
 
     return {'ok': True, 'id': new_extract.id}
 
@@ -101,12 +152,12 @@ def put_extract(request):
     if not extract:
         raise HTTPNotFound("Extract with id '%s' not found." % extract_id)
 
-    with transaction.manager:
-        extract.owner_id = user_id or extract.owner_id
-        extract.order = updated_extract_data.get('order', extract.order)
-        extract.idea_id = updated_extract_data['idIdea']
+    extract.owner_id = user_id or extract.owner_id
+    extract.order = updated_extract_data.get('order', extract.order)
+    extract.idea_id = updated_extract_data['idIdea']
 
-        Extract.db.add(extract)
+    Extract.db.add(extract)
+    #TODO: Merge ranges. Sigh.
 
     return {'ok': True}
 
@@ -123,3 +174,16 @@ def delete_extract(request):
         Extract.db.delete(extract)
 
     return {'ok': True}
+
+
+@search_extracts.get()  # permission=P_READ
+def do_search_extracts(request):
+    uri = request.GET['uri']
+    if not uri:
+        return HTTPClientError("Please specify a search uri")
+    source = Webpage.get(url=uri)
+    if source:
+        extracts = Extract.db.query(Extract).filter_by(source=source).all()
+        return {"total": len(extracts), "rows": [extract.serializable() for extract in extracts]}
+    return {"total": 0, "rows": []}
+

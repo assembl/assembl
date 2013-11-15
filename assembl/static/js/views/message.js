@@ -39,6 +39,12 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
         template: app.loadTemplate('message'),
 
         /**
+         * The lastest annotation created by annotator
+         * @type {Annotation}
+         */
+        currentAnnotation: null,
+
+        /**
          * The render
          * @return {MessageView}
          */
@@ -57,6 +63,7 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
             }
 
             this.$el.html( this.template(data) );
+
             return this;
         },
 
@@ -133,6 +140,7 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
         openReplyBox: function(){
             this.$('.message-replaybox-openbtn').hide();
             this.$('.message-replybox').show();
+
             var that = this;
             window.setTimeout(function(){
                 that.$('.message-textarea').focus();
@@ -182,22 +190,18 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
          * @param  {Number} y
          */
         showSelectionOptions: function(x, y){
-            var items = {};
-            items[ i18n.gettext('Add to clipboard') ] = this.contextMenuItem1;
-
             this.hideTooltip();
-            app.showContextMenu(x, y, this, items);
+
+            var annotator = this.$el.closest('#messagelist-thread').data('annotator');
+            annotator.onAdderClick.call(annotator);
+
+            if( app.messageList.annotatorEditor ){
+                app.messageList.annotatorEditor.css({
+                    'top': y,
+                    'left': x
+                });
+            }
         },
-
-
-        /**
-         * CONTEXT MENU
-         */
-        contextMenuItem1: function(){
-            app.segmentList.addTextAsSegment( app.selectionTooltip.attr('data-segment'), this.model );
-            app.openPanel(app.segmentList);
-        },
-
 
         events: {
             'click .iconbutton': 'onIconbuttonClick',
@@ -305,6 +309,7 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
          */
         onCollapsedChange: function(){
             this.render(false);
+            app.messageList.initAnnotator();
         },
 
 

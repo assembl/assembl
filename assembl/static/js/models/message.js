@@ -51,6 +51,30 @@ define(['backbone', 'jquery', 'app'], function(Backbone, $, app){
             return this.collection.findWhere({ id: this.get('parentId') });
         },
 
+        /**
+         * Return all segments related to this message
+         * @return {Segment[]}
+         */
+        getSegments: function(){
+            return app.segmentList.segments.where({ idPost: this.get('id') });
+        },
+
+        /**
+         * Return all segments in the annotator format
+         * @return {Object[]}
+         */
+        getAnnotations: function(){
+            var segments = this.getSegments(),
+                ret = [];
+
+            _.each(segments, function(segment){
+                segment.attributes.ranges = segment.attributes._ranges;
+                ret.push( segment.attributes );
+            });
+
+            return ret;
+        },
+
 
         /**
          * Returns the toppest parent
@@ -129,15 +153,32 @@ define(['backbone', 'jquery', 'app'], function(Backbone, $, app){
             var toReturn = [];
 
             _.each(this.models, function(model){
+
                 if( model.get('parentId') === null ){
                     toReturn.push(model);
                 } else if( model.getRootParent() === null ){
                     toReturn.push(model);
                 }
+
             });
 
             return toReturn;
-        }
+        },
+
+        /**
+         * Return all segments in all messages in the annotator format
+         * @return {Object[]}
+         */
+        getAnnotations: function(){
+            var ret = [];
+
+            _.each(this.models, function(model){                
+                ret = _.union(ret, model.getAnnotations() );
+            });
+
+            return ret;
+        },
+
     });
 
     return {

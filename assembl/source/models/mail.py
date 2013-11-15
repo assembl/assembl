@@ -2,11 +2,14 @@
 import email
 import re
 import smtplib
+from cgi import escape as html_escape
 
 from email.header import decode_header as decode_email_header, Header
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.utils import parseaddr
+
+from bs4 import BeautifulSoup, Comment
 
 from pyramid.threadlocal import get_current_registry
 
@@ -87,6 +90,25 @@ class Mailbox(Source):
         else:
             return subject
 
+    VALID_TAGS = ['strong', 'em', 'p', 'ul', 'li', 'br']
+    @staticmethod
+    def sanitize_html(html_value, valid_tags=VALID_TAGS):
+        soup = BeautifulSoup(html_value)
+        comments = soup.findAll(text=lambda text:isinstance(text, Comment))
+        [comment.extract() for comment in comments]
+        for tag in soup.find_all(True):
+            if tag.name not in valid_tags:
+                tag.hidden = True
+
+        return soup.decode_contents()
+
+    @staticmethod
+    def body_as_html(text_value):
+        text_value = html_escape(text_value)
+        text_value = text_value.replace("\r", '').replace("\n", "<br />")
+        return text_value
+
+
     def parse_email(self, message_string, existing_email=None):
         parsed_email = email.message_from_string(message_string)
         body = None
@@ -114,11 +136,10 @@ class Mailbox(Source):
             text_part = None
             default_charset = message.get_charset() or 'ISO-8859-1'
             (text_part, html_part) = process_part(message, default_charset, text_part, html_part)
-
-            if text_part:
-                return text_part
-            elif html_part:
-                return html_part
+            if html_part:
+                return self.sanitize_html(html_part)
+            elif text_part:
+                return self.body_as_html(text_part)
             else:
                 return u"Sorry, no assembl-supported mime type found in message parts"
 
@@ -175,6 +196,7 @@ class Mailbox(Source):
             email_object.full_message = message_string
         except NoResultFound:
             email_object = Email(
+                post=Post(),
                 recipients=recipients,
                 sender=sender,
                 subject=subject,
@@ -571,3 +593,9 @@ class Email(Content):
             self.sender.encode('utf-8'),
             self.recipients.encode('utf-8')
         )
+
+    def get_body(self):
+        return self.body
+
+    def get_title(self):
+        return self.subject

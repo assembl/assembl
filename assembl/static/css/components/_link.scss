@@ -15,3 +15,10 @@
         color: $link-active-color;
     }
 }
+
+
+// Segment link
+// ============
+.segment-link {
+    @extend .link;
+}

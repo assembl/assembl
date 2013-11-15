@@ -11,11 +11,11 @@ engine = configure_engine(settings, False)
 
 celery_broker = 'redis://localhost:6379/0'
 #celery_broker = 'sqla+' + settings.get('sqlalchemy.url')
-celery = Celery('imapreader', broker=celery_broker)
+app = Celery(broker=celery_broker)
 DBSession = get_session_maker(False)
 
 
-@celery.task
+@app.task
 def import_mails(mbox_id, only_new=True):
     from ..models import Mailbox
     mailbox = DBSession.query(Mailbox).get(mbox_id)

@@ -83,6 +83,18 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
         messageThread: new Message.Collection(),
 
         /**
+         * The panel for message thread
+         * @type {jQuery}
+         */
+        messageThreadPanel: null,
+
+        /**
+         * The annotator reference
+         * @type {Annotator}
+         */
+        annotator: null,
+
+        /**
          * The render function
          * @return {views.Message}
          */
@@ -116,6 +128,8 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
 
 
             this.chk = this.$('#messagelist-mainchk');
+            this.messageThreadPanel = this.$('#messagelist-thread');
+
             this.renderThread();
             //this.closeThread();
 
@@ -140,13 +154,97 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
                 });
             });
 
-
-
             if( messages.length > 0 ){
-                this.$('#messagelist-thread').empty().append(list);
+                this.messageThreadPanel.empty().append(list);
             } else {
-                this.$('#messagelist-thread').empty().append( app.format("<div class='margin'>{0}</div>", i18n.gettext('No messages')) );
+                this.messageThreadPanel.empty().append( app.format("<div class='margin'>{0}</div>", i18n.gettext('No messages')) );
             }
+
+            this.initAnnotator();
+        },
+
+        /**
+         * Inits the annotator instance
+         */
+        initAnnotator: function(){
+            this.destroyAnnotator();
+
+            this.messageThreadPanel.annotator();
+            this.annotator = this.messageThreadPanel.data('annotator');
+
+            if( ! this.annotator ){
+                return;
+            }
+
+            var annotations = this.messages.getAnnotations(),
+                that = this;
+
+            this.annotator.subscribe('annotationsLoaded', function(annotations){
+                _.each(annotations, function(annotation){
+                    
+                    var highlights = annotation.highlights,
+                        func = app.showSegmentByAnnotation.bind(window, annotation);
+
+                    _.each(highlights, function(highlight){
+                        highlight.setAttribute('data-annotation-id', annotation.id);
+                        $(highlight).on('click', func);
+                    });
+
+                });
+            });
+
+            this.annotator.subscribe('annotationCreated', function(annotation){
+                var span = $(annotation.highlights[0]),
+                    messageId = span.closest('[id^="message-"]').attr('id'),
+                    post = app.messageList.messages.get(messageId.substr(8)),
+                    segment = app.segmentList.addAnnotationAsSegment( annotation, post );
+                
+                if( !segment.isValid() ){
+                    annotation.destroy();
+                }
+            });
+
+            this.annotator.subscribe('annotationEditorShown', function(editor, annotation){
+                app.body.append(editor.element);
+
+                var textarea = editor.fields[0].element.firstChild;
+                if(textarea){
+                    textarea.value = annotation.quote;
+                    textarea.readOnly = true;
+                }
+
+                that.annotatorEditor = editor.element;
+            });
+
+            this.annotator.subscribe('annotationViewerShown', function(viewer, annotation){
+                // We do not need the annotator's tooltip
+                viewer.hide();
+            });
+
+            // Loading the annotations
+            if( annotations.length ){
+                setTimeout(function(){
+                    that.annotator.loadAnnotations( annotations ); 
+                }, 10);
+            }
+
+        },
+
+
+        /**
+         * destroy the current annotator instance and remove all listeners
+         */
+        destroyAnnotator: function(){
+            if( !this.annotator ){
+                return;
+            }
+
+            this.annotator.unsubscribe('annotationsLoaded');
+            this.annotator.unsubscribe('annotationCreated');
+            this.annotator.unsubscribe('annotationEditorShown');
+            this.annotator.unsubscribe('annotationViewerShown');
+
+            this.annotator.destroy();
         },
 
         /**
@@ -312,8 +410,9 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
         /**
          * Loads the message thread by post id
          * @param {Number} id
+         * @param {Function} [callback] Callback function
          */
-        loadThreadById: function(id){
+        loadThreadById: function(id, callback){
             var that = this;
 
             this.blockPanel();
@@ -321,6 +420,12 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
                 that.unblockPanel();
                 that.$el.addClass(MESSAGE_MODE);
                 that.messageThread.reset(json.posts);
+
+                if( _.isFunction(callback) ){
+                    setTimeout(function(){
+                        callback(json);
+                    }, 10);
+                }
             });
         },
 
