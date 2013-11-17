@@ -60,6 +60,9 @@ class ApiTest(BaseTest):
             "owner": extract_user,
             "text": "Let's lower taxes to fav",
             "creationDate": 1376573216160,
+            "target": {
+                "@type": "email",
+            }
         }
 
         creator = AgentProfile(id=2, name="André Farzat", type="agent_profile")
@@ -76,7 +79,7 @@ class ApiTest(BaseTest):
         self.session.add(ext)
         self.session.add(post)
         self.session.flush()
-        extract_data['idPost'] = post.id
+        extract_data["target"]['@id'] = post.id
         assert self.session.query(Post).get(post.id)
 
         if self.zopish:
