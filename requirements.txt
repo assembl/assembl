@@ -27,3 +27,4 @@ Unidecode==0.04.13
 datetime
 iso8601
 PyJWT
+pyzmq

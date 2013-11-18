@@ -4,6 +4,7 @@ import re
 import sys
 from datetime import datetime
 
+from anyjson import dumps
 from colanderalchemy import SQLAlchemySchemaNode
 from sqlalchemy import (
     DateTime, MetaData, engine_from_config, event, Column, ForeignKey)
@@ -11,12 +12,15 @@ from sqlalchemy.ext.declarative import declarative_base, declared_attr
 from sqlalchemy.orm import mapper, scoped_session, sessionmaker
 from sqlalchemy.orm.util import has_identity
 from sqlalchemy.util import classproperty
+from sqlalchemy.orm.session import object_session
 from zope.sqlalchemy import ZopeTransactionExtension
 from zope.sqlalchemy.datamanager import mark_changed as z_mark_changed
+import zmq
 
 from pyramid.paster import get_appsettings, setup_logging
 
 from ..view_def import get_view_def
+from .zmqlib import context as zmq_context
 
 _TABLENAME_RE = re.compile('([A-Z]+)')
 
@@ -375,6 +379,49 @@ def get_session_maker(zope_tr=True):
     return _session_maker
 
 
+def orm_update_listener(mapper, connection, target):
+    session = object_session(target)
+    if session.is_modified(target, include_collections=False):
+        if 'cdict' not in connection.info:
+            connection.info['cdict'] = {}
+        connection.info['cdict'][target.uri()] = target.generic_json(view_def_name='local')
+
+
+def orm_insert_listener(mapper, connection, target):
+    if 'cdict' not in connection.info:
+        connection.info['cdict'] = {}
+    connection.info['cdict'][target.uri()] = target.generic_json(view_def_name='local')
+
+
+def orm_delete_listener(mapper, connection, target):
+    if 'cdict' not in connection.info:
+        connection.info['cdict'] = {}
+    connection.info['cdict'][target.uri()] = {
+        "@type":target.external_typename(),
+        "@id":target.uri(),
+        "@tombstone":True}
+
+
+def commit_listener(connection):
+    if 'cdict' in connection.info:
+        # TODO: Attach discussion info when appropriate for downstream filtering.
+        socket = zmq_context.socket(zmq.PUB)
+        socket.connect('inproc://assemblchanges')
+        socket.send_json(connection.info['cdict'].values())
+        # TODO: Check if the following is needed.
+        # socket.disconnect('inproc://assemblchanges')
+        # socket.close()
+
+
+def rollback_listener(connection):
+    connection.info['cdict'] = {}
+
+
+event.listen(BaseOps, 'after_insert', orm_insert_listener, propagate=True)
+event.listen(BaseOps, 'after_update', orm_update_listener, propagate=True)
+event.listen(BaseOps, 'after_delete', orm_delete_listener, propagate=True)
+
+
 def configure_engine(settings, zope_tr=True, session_maker=None):
     """Return an SQLAlchemy engine configured as per the provided config."""
     if session_maker is None:
@@ -384,6 +431,8 @@ def configure_engine(settings, zope_tr=True, session_maker=None):
         return engine
     engine = engine_from_config(settings, 'sqlalchemy.')
     session_maker.configure(bind=engine)
+    event.listen(engine, 'commit', commit_listener)
+    event.listen(engine, 'rollback', rollback_listener)
     return engine
 
 
