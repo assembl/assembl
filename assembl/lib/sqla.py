@@ -173,7 +173,7 @@ class BaseOps(object):
             return None
         return base_uri + cls.external_typename() + "/" + str(id)
 
-    def uri(self, base_uri):
+    def uri(self, base_uri='local:'):
         return self.uri_generic(base_uri, self.get_id_as_str())
 
     def generic_json(self, base_uri='local:', view_def_name='base'):
@@ -277,6 +277,8 @@ class BaseOps(object):
             else:
                 ob = getattr(self, name)
                 if ob:
+                    if type(ob) == datetime:
+                        ob = ob.isoformat()
                     result[name] = ob
         return result
 
