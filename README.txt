@@ -77,5 +77,6 @@ Running tests
 Running on Mac OS
 ----------------
 
-Use brew and install the libmemcached 
+Use brew and install the libmemcached and zeromq
  - brew install libmemcached 
+ - brew install zeromq
