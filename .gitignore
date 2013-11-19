@@ -50,3 +50,9 @@ vendor/
 .bundle
 .ruby-version
 Gemfile.lock
+
+# Vagrant
+.bash_profile
+.rbenv-version
+.vagrant
+VagrantFile
