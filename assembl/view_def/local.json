@@ -1,0 +1,12 @@
+{
+    "_default": {
+        "id":false,
+        "type":false,
+    }
+    "User": {
+        "password":false
+    },
+    "Email": {
+        "full_message":false,
+    }
+}
