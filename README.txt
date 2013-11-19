@@ -73,6 +73,10 @@ Running tests
 - Create a testing database: createdb -U assembl assembl_test
 - nosetests
 
+Running on Linux
+----------------
+
+sudo apt-get install libzmq3-dev memcached
 
 Running on Mac OS
 ----------------

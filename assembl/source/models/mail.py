@@ -8,6 +8,7 @@ from email.header import decode_header as decode_email_header, Header
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.utils import parseaddr
+import jwzthreading 
 
 from bs4 import BeautifulSoup, Comment
 
@@ -18,6 +19,7 @@ from time import mktime
 from imaplib2 import IMAP4_SSL, IMAP4
 
 from sqlalchemy.orm import relationship, backref, deferred
+from sqlalchemy.orm import joinedload_all
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy import (
     Column,
@@ -208,11 +210,85 @@ class Mailbox(Source):
                 full_message=message_string
             )
         email_object.post.creator = sender_email_account.profile
-        email_object.associate_family()
         email_object.source = self
         email_object = self.db.merge(email_object)
-        return email_object
+        return (email_object, parsed_email)
         
+    """
+    emails have to be a complete set
+    """
+    @staticmethod
+    def thread_mails(emails):
+        print('Threading...')
+        emails_for_threading = []
+        for mail in emails:
+            email_for_threading = jwzthreading.make_message(email.message_from_string(mail.full_message))
+            #Store our emailsubject, jwzthreading does not decode subject itself
+            email_for_threading.subject = mail.subject
+            #Store our email object pointer instead of the raw message text
+            email_for_threading.message = mail
+            emails_for_threading.append(email_for_threading)
+
+        threaded_emails = jwzthreading.thread(emails_for_threading)
+
+        # Output
+        L = threaded_emails.items()
+        L.sort()
+        for subj, container in L:
+            jwzthreading.print_container(container, 0, True)
+            
+        def update_threading(threaded_emails, parent=None):
+            
+
+            for container in threaded_emails:
+                #jwzthreading.print_container(container)
+                #print (repr(container))
+                
+                ##print "parent: "+repr(container.parent)
+                ##print "children: "+repr(container.children)
+                ##print("\nProcessing:  " + repr(container.message.subject) + " " + repr(container.message.message_id))
+                
+
+                if(container.message):
+                    current_parent = container.message.message.post.parent
+                    if(current_parent):
+                        db_parent_message_id = current_parent.content.message_id
+                    else:
+                        db_parent_message_id = None
+
+                    if parent:
+                        if parent.message:
+                            #jwzthreading strips the <>, re-add them
+                            algorithm_parent_message_id = unicode("<"+parent.message.message_id+">")
+                        else:
+                            # Parent was a dummy container, we may need to handle this case better
+                            # we just potentially lost sibbling relationships
+                            algorithm_parent_message_id = None
+                    else:
+                        algorithm_parent_message_id = None
+                    #print("Current parent from algorithm: " + repr(algorithm_parent_message_id))
+                    #print("References: " + repr(container.message.references))
+                    if algorithm_parent_message_id != db_parent_message_id:
+                        # Don't reparent if the current parent isn't an email, the threading algorithm only considers mails
+                        if current_parent == None or isinstance(current_parent.content, Email):
+                            #print("UPDATING PARENT for :" + repr(container.message.message.message_id))
+                            new_parent = parent.message.message.post if algorithm_parent_message_id else None
+                            #print repr(new_parent)
+                            container.message.message.post.set_parent(new_parent)
+                    if current_parent and current_parent.content.source_id != container.message.message.source_id:
+                        #This is to correct past mistakes in the database, remove it once everyone ran it benoitg 2013-11-20
+                        print("UPDATING PARENT, BAD ORIGINAL SOURCE" + repr(current_parent.content.source_id) + " " + repr(container.message.message.source_id))
+                        new_parent = parent.message.message.post if algorithm_parent_message_id else None
+                        #print repr(new_parent)
+                        container.message.message.post.set_parent(new_parent)
+                        
+                    update_threading(container.children, container)
+                else:
+                    #print "Current message ID: None, was a dummy container"
+                    update_threading(container.children, parent)
+                
+        update_threading(threaded_emails.values())
+
     def reprocess_content(self):
         """ Allows re-parsing all content as if it were imported for the first time
             but without re-hitting the source, or changing the object ids.
@@ -220,10 +296,13 @@ class Mailbox(Source):
             """
         emails = self.db.query(Email).filter(
                 Email.source_id == self.id,
-                )
+                ).options(joinedload_all(Email.post, Post.parent, Post.content))
+
         for email in emails:
             self.parse_email(email.full_message, email)
 
+        self.thread_mails(emails)
+        
     def import_content(self, only_new=True):
         if self.use_ssl:
             mailbox = IMAP4_SSL(host=self.host.encode('utf-8'), port=self.port)
@@ -258,18 +337,22 @@ class Mailbox(Source):
             self.parse_email(message_string)
             
             
-
         if len(email_ids):
             new_emails = [import_email(email_id) for email_id in email_ids]
 
             self.last_imported_email_uid = \
                 email_ids[len(email_ids)-1]
 
-        # TODO: remove this line, the property `last_import` does not persist.
-        self.last_import = datetime.utcnow()
-
         mailbox.close()
         mailbox.logout()
+
+        if len(email_ids):
+            #We imported mails, we need to re-thread
+            emails = self.db.query(Email).filter(
+                Email.source_id == self.id,
+                ).options(joinedload_all(Email.post, Post.parent, Post.content))
+
+            self.thread_mails(emails)
 
 
     def most_common_recipient_address(self):
@@ -458,45 +541,6 @@ class Email(Content):
         super(Email, self).__init__(*args, **kwargs)
         if self.subject.startswith('[synthesis]'):
             self.post.is_synthesis = True
-
-    def associate_family(self):
-        if self not in self.db:
-            self.db.add(self)
-
-        # if there is an email.in_reply_to, search posts with content.type
-        # == email and email.message_id == email.in_reply_to, then set that
-        # email's post's id as the parent of this new post.
-
-        if self.in_reply_to:
-            parent_email_message_id = {
-                'original': self.in_reply_to,
-                'cleaned': re.search(r'<(.*)>', self.in_reply_to).group(0) if \
-                    re.search(r'<(.*)>', self.in_reply_to) else None
-            }
-
-            filter_clause = or_(
-                Email.message_id==parent_email_message_id['original'],
-                Email.message_id==parent_email_message_id['cleaned']
-            ) if parent_email_message_id['cleaned'] else \
-                Email.message_id==parent_email_message_id['original']
-
-            parent_email = self.db.query(Email).filter(
-                filter_clause
-            ).first()
-
-            if parent_email: 
-                self.post.set_parent(parent_email.post)
-
-        # search for emails where the in_reply_to is the same as the
-        # message_id for this email, then set their post's parent to the
-        # id of this new post.
-
-        child_emails = self.db.query(Email).filter_by(
-            in_reply_to=self.message_id
-        ).all()
-
-        for child_email in child_emails:
-            child_email.post.set_parent(self.post)
 
     def reply(self, sender, response_body):
         """
