@@ -35,7 +35,6 @@ define([
     app.segmentList.segments.on('change reset', app.ideaList.render, app.ideaList);
     app.segmentList.segments.on('invalid', function(model, error){ alert(error); });
     app.users.on('reset', app.segmentList.render, app.segmentList);
-    //app.segmentList.segments.fetch({reset: true});
     
     // Idea panel
     app.ideaPanel = new IdeaPanel({el: '#ideaPanel', button: '#button-ideaPanel'}).render();
