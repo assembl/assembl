@@ -78,13 +78,13 @@ function(Backbone, _, $, app, Segment, i18n){
         addAnnotationAsSegment: function(annotation, idIdea){
             var post = app.getPostFromAnnotation(annotation),
                 idPost = post.id,
-                sourceCreator = post.get('creator');
+                sourceCreator = post.getCreator().get('id');
 
             var segment = new Segment.Model({
                 target: { "@id": idPost, "@type": "email" },
                 text: annotation.text,
                 quote: annotation.quote,
-                creator: app.getCurrentUser(),
+                creator: app.getCurrentUser().get('id'),
                 source_creator: sourceCreator,
                 ranges: annotation.ranges,
                 idPost: idPost,

@@ -44,6 +44,7 @@ function(Backbone, _, $, app, Message){
             data.id = this.model.get('id');
             data.children = this.model.getChildren();
             data.level = this.model.getLevel();
+            data.creator = this.model.getCreator();
 
             this.$el.html( this.template(data) );
             this.$('.idealist-children').append( this.getRenderedChildren(data.level) );

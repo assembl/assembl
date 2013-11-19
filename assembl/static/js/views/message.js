@@ -54,6 +54,8 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
 
             data['date'] = app.formatDate(data.date);
             data['level'] = this.model.getLevel();
+            data['creator'] = this.model.getCreator();
+
             this.el.setAttribute('data-message-level', data['level']);
 
             if( data.collapsed ){

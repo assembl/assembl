@@ -118,9 +118,21 @@ define(['backbone', 'jquery', 'app'], function(Backbone, $, app){
                 } else {
                     parent = null;
                 }
+
             } while ( parent !== null );
 
             return counter;
+        },
+
+        /**
+         * Returns the user's creator
+         * @return {User}
+         */
+        getCreator: function(){
+            var creator = this.get('creator'),
+                creatorId = _.isObject(creator) ? creator.id : creator;
+
+            return app.users.getById(creatorId);
         },
 
         /**

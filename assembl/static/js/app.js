@@ -1,5 +1,5 @@
-define(['jquery', 'underscore', 'ckeditor', 'models/user', 'moment', 'i18n'],
-function($, _, ckeditor, User, Moment, i18n){
+define(['jquery', 'underscore', 'ckeditor', 'moment', 'i18n'],
+function($, _, ckeditor, Moment, i18n){
     'use strict';
 
     ckeditor.disableAutoInline = true;
@@ -251,7 +251,7 @@ function($, _, ckeditor, User, Moment, i18n){
          * @return {User}
          */
         getCurrentUser: function(){
-            return app.currentUser || new User.Model();
+            return app.currentUser;
         },
 
 
@@ -752,7 +752,7 @@ function($, _, ckeditor, User, Moment, i18n){
             segments.forEach(function(segment) {
                 var post = segment.getAssociatedPost();
                 if(post) {
-                    authors.push(post.get("creator").name);
+                    authors.push(post.getCreator.get("name"));
                 }
             });
 
