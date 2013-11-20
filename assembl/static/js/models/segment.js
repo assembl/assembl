@@ -58,10 +58,9 @@ function(Backbone, _, app, User, Message){
             idPost: null,
             idIdea: null,
             creationDate: null,
-            creator: null,
+            idCreator: null,
             ranges: [],
-            target: null,
-            source_creator: null
+            target: null
         },
 
         /**
@@ -129,24 +128,11 @@ function(Backbone, _, app, User, Message){
         },
 
         /**
-         * Returns the user's creator
+         * Returns the segent's creator
          * @return {User}
          */
         getCreator: function(){
-            var creator = this.get('creator'),
-                creatorId = _.isObject(creator) ? creator.id : creator;
-
-            return app.users.getById(creatorId);
-        },
-
-        /**
-         * Returns the source creator's user
-         * @return {User}
-         */
-        getSourceCreator: function(){
-            var creator = this.get('source_creator'),
-                creatorId = _.isObject(creator) ? creator.id : creator;
-
+            var creatorId = this.get('idCreator');
             return app.users.getById(creatorId);
         }
     });
