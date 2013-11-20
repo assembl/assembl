@@ -49,10 +49,7 @@ def __post_to_json_structure(post):
         subject = post.content.source.mangle_mail_subject(subject)
     data["subject"] = subject
     data["body"] = post.content.get_body()
-    if post.creator:
-        data["creator"] = post.creator.serializable()
-    #FIXME
-    data["avatarUrl"] = None
+    data["idCreator"] = post.creator_id
     data["date"] = post.content.creation_date.isoformat()
     return data
 
