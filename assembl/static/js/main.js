@@ -61,17 +61,30 @@ define([
      * or something really cool.
      */
     function updateSegmentList(){
-        var promisse = app.segmentList.segments.fetch({reset: true}),
-            time = 10 * 1 * 1000; // 10 seconds
+        var func, promisse;
 
-        promisse.then(function(){
-            setTimeout(function(){
-                updateSegmentList();
-            }, time);
-        });
+        func = function(){
+            setTimeout(updateSegmentList, updateSegmentList.time);
+        };
+
+        if( updateSegmentList.canUpdate() ){
+            promisse = app.segmentList.segments.fetch({reset: true});
+            promisse.then(func);
+        } else {
+            func();
+        }
+
     }
+    updateSegmentList.time = 10 * 1 * 100; // 10 seconds
+    updateSegmentList.disallowedTagNames = ['TEXTAREA', 'INPUT', 'SELECT'];
+    updateSegmentList.canUpdate = function(){
+        // Checks to see if the activeElement is editable or not
+        var el = document.activeElement,
+            isEditableField = el.hasAttribute('contenteditable');
+        
+        return ! (isEditableField || $.inArray(el.tagName, updateSegmentList.disallowedTagNames) > -1);
+    };
 
+    // Starting the segment list update loop
     updateSegmentList();
-
-
 });
