@@ -28,3 +28,4 @@ datetime
 iso8601
 PyJWT
 pyzmq
+anyjson
