@@ -75,7 +75,7 @@ define([
         }
 
     }
-    updateSegmentList.time = 10 * 1 * 100; // 10 seconds
+    updateSegmentList.time = 10 * 1 * 1000; // 10 seconds
     updateSegmentList.disallowedTagNames = ['TEXTAREA', 'INPUT', 'SELECT'];
     updateSegmentList.canUpdate = function(){
         // Checks to see if the activeElement is editable or not
