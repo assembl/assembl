@@ -31,11 +31,10 @@ define([
     app.currentUser.on('change', app.lateralMenu.render, app.lateralMenu);
 
     // Idea list
-    app.ideaList = new IdeaList({el: '#idealist', button: '#button-ideaList'});
-    app.openPanel(app.ideaList);
+    app.ideaList = new IdeaList({el: '#ideaList', button: '#button-ideaList'});
 
     // Segment List
-    app.segmentList = new SegmentList({el: '#segmentlist', button: '#button-segmentList'});
+    app.segmentList = new SegmentList({el: '#segmentList', button: '#button-segmentList'});
     app.segmentList.segments.on('change reset', app.ideaList.render, app.ideaList);
     app.segmentList.segments.on('invalid', function(model, error){ alert(error); });
     app.users.on('reset', app.segmentList.render, app.segmentList);
@@ -46,9 +45,8 @@ define([
     app.users.on('reset', app.ideaPanel.render, app.ideaPanel);
 
     // Message
-    app.messageList = new MessageList({el: '#messagelist', button: '#button-messages'}).render();
+    app.messageList = new MessageList({el: '#messageList', button: '#button-messages'}).render();
     app.messageList.loadData();
-    app.openPanel(app.messageList);
 
     // Synthesis
     app.synthesisPanel = new SynthesisPanel({el: '#synthesisPanel', button: '#button-synthesis', ideas: app.ideaList.ideas });
@@ -93,6 +91,19 @@ define([
     updateSegmentList();
 
     // Let the game begins...
-    Backbone.history.start({hashChange: false, root: "/" + app.slug });
+    var historied = Backbone.history.start({hashChange: false, root: "/" + app.slug });
+
+    if( ! historied ){
+        
+        // Open the previous panels
+        var panels = app.getPanelsFromStorage();
+        _.each(panels, function(value, name){
+            var panel = app[name];
+            if( panel && name !== 'ideaPanel' ){
+                app.openPanel(panel);
+            }
+        });
+
+    }
 
 });

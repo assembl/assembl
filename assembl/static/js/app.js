@@ -180,6 +180,8 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard){
             app.body.removeClass('is-fullscreen');
             panel.$el.addClass('is-visible');
 
+            app.addPanelToStorage(panel.el.id);
+
             if( panel.button ) {
                 panel.button.addClass('is-activated');
             }
@@ -201,9 +203,46 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard){
             }
 
             panel.$el.removeClass('is-visible');
+            
+            app.removePanelFromStorage(panel.el.id);
+
             if( panel.button ) {
                 panel.button.removeClass('is-activated');
             }
+        },
+
+        /**
+         * @return {Object} The Object with all panels in the localStorage
+         */
+        getPanelsFromStorage: function(){
+            var panels = JSON.parse(localStorage.getItem('panels')) || {};
+            return panels;
+        },
+
+        /**
+         * Adds a panel in the localStoage
+         * @param {string} panelId
+         * @return {Object} The current object
+         */
+        addPanelToStorage: function(panelId){
+            var panels = app.getPanelsFromStorage();
+            panels[panelId] = 'open';
+            localStorage.setItem('panels', JSON.stringify(panels));
+
+            return panels;
+        },
+
+        /**
+         * Remove a panel from the localStorage by its id
+         * @param  {string} panelId
+         * @return {Object} The remaining panels
+         */
+        removePanelFromStorage: function(panelId){
+            var panels = app.getPanelsFromStorage();
+            delete panels[panelId];
+            localStorage.setItem('panels', JSON.stringify(panels));
+
+            return panels;
         },
 
         /**
@@ -803,7 +842,7 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard){
                 ZeroClipboard.setDefaults( { moviePath: '/static/flash/ZeroClipboard.swf' } );
                 app.clipboard = new ZeroClipboard();
                 app.clipboard.on('complete', function(client, args){
-                    history.pushState(null, null, args.text);
+                    // Nothing to do, nowhere to go uouuu ...
                 });
 
                 app.clipboard.on('mouseover', function(client, args){

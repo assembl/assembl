@@ -1,19 +1,19 @@
-#messagelist {}
+#messageList {}
 
-#messagelist.is-message-mode {}
+#messageList.is-message-mode {}
 
-#messagelist-list {
+#messageList-list {
     display: block;
 
-    #messagelist.is-message-mode & {
+    #messageList.is-message-mode & {
         display: none;
     }
 }
 
-#messagelist-messages {
+#messageList-messages {
     display: none;
 
-    #messagelist.is-message-mode & {
+    #messageList.is-message-mode & {
         display: block;
     }
 }

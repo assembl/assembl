@@ -8,6 +8,7 @@ define(['backbone', 'jquery', 'app'], function(Backbone, $, app){
         },
 
         idea: function(id){
+            app.openPanel( app.ideaList );
             app.ideaList.ideas.once('reset', function(){
 
                 var idea = app.ideaList.ideas.get(id);
