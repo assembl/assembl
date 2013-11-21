@@ -798,7 +798,10 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard){
             segments.forEach(function(segment) {
                 var post = segment.getAssociatedPost();
                 if(post) {
-                    authors.push(post.getCreator.get("name"));
+                    var creator = post.getCreator();
+                    if(creator) {
+                        authors.push(creator.get("name"));
+                    }
                 }
             });
 

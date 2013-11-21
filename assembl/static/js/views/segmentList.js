@@ -34,7 +34,7 @@ function(Backbone, _, $, app, Segment, i18n){
 
         /**
          * The render
-         * @return {LateralMenu}
+         * @return {segmentList}
          */
         render: function(){
             app.trigger('render');
