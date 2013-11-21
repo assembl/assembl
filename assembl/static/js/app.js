@@ -1,5 +1,5 @@
-define(['jquery', 'underscore', 'ckeditor', 'moment', 'i18n'],
-function($, _, ckeditor, Moment, i18n){
+define(['jquery', 'underscore', 'ckeditor', 'moment', 'i18n', 'zeroclipboard'],
+function($, _, ckeditor, Moment, i18n, ZeroClipboard){
     'use strict';
 
     ckeditor.disableAutoInline = true;
@@ -7,6 +7,7 @@ function($, _, ckeditor, Moment, i18n){
     var PANEL_QUANTITY = 'data-panel-qty',
         CONTEXT_MENU_WIDTH = 150,
         DRAGBOX_MAX_LENGTH = 25,
+        DISCUSSION_SLUG = $('#discussion-slug').val(),
         DISCUSSION_ID = $('#discussion-id').val();
 
     /**
@@ -46,10 +47,16 @@ function($, _, ckeditor, Moment, i18n){
         },
 
         /**
+         * The current slug for the discussion
+         * @type {String}
+         */
+        slug: DISCUSSION_SLUG,
+
+        /**
          * The current discussion id
          * @type {string}
          */
-        discussionID: null,
+        discussionID: DISCUSSION_ID,
 
         /**
          * The a cache for posts linked by segments
@@ -785,6 +792,36 @@ function($, _, ckeditor, Moment, i18n){
                 gravity: function(){ return this.getAttribute('data-tooltip-position') || 's'; },
                 title: function() { return this.getAttribute('data-tooltip'); },
                 opacity: 0.95
+            });
+        },
+
+        /**
+         * @init
+         */
+        initClipboard: function(){
+            if( ! app.clipboard ){
+                ZeroClipboard.setDefaults( { moviePath: '/static/flash/ZeroClipboard.swf' } );
+                app.clipboard = new ZeroClipboard();
+                app.clipboard.on('complete', function(client, args){
+                    history.pushState(null, null, args.text);
+                });
+
+                app.clipboard.on('mouseover', function(client, args){
+                    $(this).trigger('mouseover');
+                });
+
+                app.clipboard.on('mouseout', function(client, args){
+                    $(this).trigger('mouseout');
+                });
+            }
+
+            $('[data-copy-text]').each(function(i, el){
+                var text = el.getAttribute('data-copy-text');
+                text = app.format('{0}//{1}/{2}{3}', location.protocol, location.host, DISCUSSION_SLUG, text);
+                el.removeAttribute('data-copy-text');
+
+                el.setAttribute('data-clipboard-text', text);
+                app.clipboard.glue(el);
             });
         },
 

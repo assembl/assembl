@@ -63,8 +63,9 @@ function(Backbone, _, Idea, Message, app, ckeditor, i18n){
                 editing = this.idea.get('ideaPanel-editing') || false;
 
             this.$el.html( this.template( {idea:this.idea, segments:segments, editing:editing} ) );
-
             this.panel = this.$('.panel');
+
+            app.initClipboard();
 
             if( this.ckInstance ){
                 this.ckInstance.destroy();

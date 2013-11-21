@@ -8,14 +8,18 @@ define([
     "views/messageList",
     "views/synthesisPanel",
     "models/user",
-    "models/segment"
-], function(app, $, LateralMenu, IdeaList, IdeaPanel, SegmentList, MessageList, SynthesisPanel, User, Segment){
+    "models/segment",
+    "router"
+], function(app, $, LateralMenu, IdeaList, IdeaPanel, SegmentList, MessageList, SynthesisPanel, User, Segment, Router){
     'use strict';
 
     app.init();
 
     app.currentUser = new User.Model();
     app.currentUser.loadCurrentUser();
+
+    // The router
+    app.router = new Router();
 
     // User
     app.users = new User.Collection();
@@ -87,4 +91,8 @@ define([
 
     // Starting the segment list update loop
     updateSegmentList();
+
+    // Let the game begins...
+    Backbone.history.start({hashChange: false, root: "/" + app.slug });
+
 });

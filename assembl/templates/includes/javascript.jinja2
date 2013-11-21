@@ -20,7 +20,7 @@ requirejs.config({
             deps: ['jquery']
         },
         'app': {
-            deps: ['ckeditor', 'tipsy', 'i18n', 'annotator', 'jquery-highlight'],
+            deps: ['ckeditor', 'tipsy', 'i18n', 'annotator', 'jquery-highlight', 'zeroclipboard'],
             exports: 'app'
         },
         'i18n': {
@@ -50,6 +50,9 @@ requirejs.config({
         'annotator' : {
             deps: ['jquery'],
             exports: 'Annotator'
+        },
+        'zeroclipboard' : {
+            exports: 'ZeroClipboard'
         }
     },
     "paths": {
@@ -69,7 +72,8 @@ requirejs.config({
         'ckeditor': 'lib/ckeditor/ckeditor',
         'ckeditor-sharedspace': 'lib/ckeditor/plugins/sharedspace/plugin',
 
-        'moment': 'lib/moment'
+        'moment': 'lib/moment',
+        'zeroclipboard': 'lib/ZeroClipboard'
     }
 });
 
