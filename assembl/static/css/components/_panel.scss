@@ -30,7 +30,7 @@
             top: -0.9em; // 1/2 x height
             background-color: #fff;
             padding: 0;
-            margin-left: 2em;
+            margin-left: 1em;
             font-weight: bold;
 
             //border-top: none;
@@ -40,11 +40,23 @@
                 line-height: 1.8em;
                 display: block;
                 margin: 0 0.5em 0.5em 0.5em;
-                background: #fff;
-                padding: 0px 20px;
             }
         }
-
+        &#ideaPanel-section-summary > legend > span{
+                background: #fff url(#{$img-dir}/icon/idea.svg) no-repeat left center;
+                padding-left: 2em;
+                background-size: auto 90%;
+        }
+        &#ideaPanel-section-segments > legend > span{
+                background: #fff url(#{$img-dir}/icon/quotes.svg) no-repeat left center;
+                padding-left: 2em;
+                background-size: auto 90%;
+        }
+        &#ideaPanel-section-synthesis > legend > span{
+                background: #fff url(#{$img-dir}/icon/map.svg) no-repeat left center;
+                padding-left: 2em;
+                background-size: auto 90%;
+        }
     }
     
 }
