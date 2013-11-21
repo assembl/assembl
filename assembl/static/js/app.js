@@ -251,7 +251,7 @@ function($, _, ckeditor, Moment, i18n){
          * @return {User}
          */
         getCurrentUser: function(){
-            return app.currentUser;
+            return app.currentUser || app.users.getUnknownUser();
         },
 
 
@@ -801,27 +801,8 @@ function($, _, ckeditor, Moment, i18n){
             app.doc.on('ajaxError', app.onAjaxError);
 
             app.on('render', app.cleanTooltips);
-
-            app.currentUser = {
-                name: 'Peter Parker',
-                avatarUrl: '//placehold.it/44'
-            };
         }
     };
-
-    if( typeof $.data !== "function" ){
-        $.data = function(el, key, value){
-            if( arguments.length === 3 ){
-                // set
-                return $(el).data(key, value);
-            } else {
-                // get
-                return $(el).data(key);
-            }
-        };
-
-        $.fn.stop = function(){ return this; };
-    }
 
     return window.app;
 });
