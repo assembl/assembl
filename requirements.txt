@@ -30,3 +30,5 @@ PyJWT
 pyzmq
 anyjson
 -e git+https://github.com/benoitg/jwzthreading.git@master#egg=jwzthreading
+tornado
+sockjs_tornado
