@@ -3,6 +3,7 @@
 import re
 import sys
 from datetime import datetime
+from itertools import groupby
 
 from anyjson import dumps
 from colanderalchemy import SQLAlchemySchemaNode
@@ -167,6 +168,10 @@ class BaseOps(object):
             raise NotImplemented()
         return str(id)
 
+    def get_discussion_id(self):
+        "Get the ID of an associated discussion object, if any."
+        return None
+
     @classmethod
     def external_typename(cls):
         return cls.__name__
@@ -259,7 +264,8 @@ class BaseOps(object):
                 assert not relns[name].uselist
                 ob = getattr(self, name)
                 if ob:
-                    result[name] = getattr(self, name).generic_json(base_uri, spec)
+                    result[name] = getattr(self, name).generic_json(
+                        base_uri, spec)
         if local_view.get('_default') is False:
             return result
         defaults = view_def.get('_default', {})
@@ -384,33 +390,45 @@ def orm_update_listener(mapper, connection, target):
     if session.is_modified(target, include_collections=False):
         if 'cdict' not in connection.info:
             connection.info['cdict'] = {}
-        connection.info['cdict'][target.uri()] = target.generic_json(view_def_name='local')
+        connection.info['cdict'][target.uri()] = (
+            target.get_discussion_id(),
+            target.generic_json(view_def_name='local'))
 
 
 def orm_insert_listener(mapper, connection, target):
     if 'cdict' not in connection.info:
         connection.info['cdict'] = {}
-    connection.info['cdict'][target.uri()] = target.generic_json(view_def_name='local')
+    connection.info['cdict'][target.uri()] = (
+        target.get_discussion_id(),
+        target.generic_json(view_def_name='local'))
 
 
 def orm_delete_listener(mapper, connection, target):
     if 'cdict' not in connection.info:
         connection.info['cdict'] = {}
-    connection.info['cdict'][target.uri()] = {
-        "@type":target.external_typename(),
-        "@id":target.uri(),
-        "@tombstone":True}
+    connection.info['cdict'][target.uri()] = (
+        target.get_discussion_id(), {
+            "@type": target.external_typename(),
+            "@id": target.uri(),
+            "@tombstone": True})
 
 
 def commit_listener(connection):
     if 'cdict' in connection.info:
-        # TODO: Attach discussion info when appropriate for downstream filtering.
         socket = zmq_context.socket(zmq.PUB)
         socket.connect('inproc://assemblchanges')
-        socket.send_json(connection.info['cdict'].values())
+        for discussion, changes in groupby(
+                connection.info['cdict'].values(), lambda x: x[0]):
+            discussion = bytes(discussion or "*")
+            changes = [x[1] for x in changes]
+            socket.send(discussion, zmq.SNDMORE)
+            socket.send_json(changes)
+            print "sent", discussion, changes
         # TODO: Check if the following is needed.
         # socket.disconnect('inproc://assemblchanges')
-        # socket.close()
+        socket.close(linger=500)
+    else:
+        print "EMPTY CDICT!"
 
 
 def rollback_listener(connection):

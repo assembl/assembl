@@ -135,6 +135,9 @@ class Discussion(SQLAlchemyBaseModel):
             "owner_id": self.owner_id,
         }
 
+    def get_discussion_id(self):
+        return self.id
+
     def __repr__(self):
         return "<Discussion %s>" % repr(self.topic)
 
@@ -176,6 +179,10 @@ class TableOfContents(SQLAlchemyBaseModel):
             "synthesis_id": self.synthesis_id
         }
 
+    def get_discussion_id(self):
+        if self.discussion:
+            return self.discussion.id
+
     def __repr__(self):
         return "<TableOfContents %s>" % repr(self.discussion.topic)
 
@@ -214,6 +221,9 @@ class Synthesis(SQLAlchemyBaseModel):
             "conclusion": self.conclusion,
             "discussion_id": self.discussion.id,
         }
+
+    def get_discussion_id(self):
+        return self.discussion_id
 
     def __repr__(self):
         return "<Synthesis %s>" % repr(self.subject)
@@ -381,6 +391,12 @@ AND discussion.id=:discussion_id
                                    .params(discussion_id=discussion.id))
         return result.first()['total_count']
 
+    def get_discussion_id(self):
+        if self.table_of_contents_id:
+            if self.table_of_contents:
+                return self.table_of_contents.get_discussion_id()
+            return TableOfContents.get(id=self.table_of_contents_id).get_discussion_id()
+
     def __repr__(self):
         if self.short_title:
             return "<Idea %d %s>" % (self.id, repr(self.short_title))
@@ -492,6 +508,11 @@ class Extract(SQLAlchemyBaseModel):
         tfi.offset_end = start+len(quote)
         return tfi
 
+    def get_discussion_id(self):
+        if self.source_id:
+            if self.source:
+                return self.source.get_discussion_id()
+            return Content.get(id=self.source_id).get_discussion_id()
 
 class TextFragmentIdentifier(SQLAlchemyBaseModel):
     __tablename__ = 'text_fragment_identifier'
@@ -538,3 +559,9 @@ class TextFragmentIdentifier(SQLAlchemyBaseModel):
             except:
                 pass
         return None
+
+    def get_discussion_id(self):
+        if self.extract_id:
+            if self.extract:
+                return self.extract.get_discussion_id()
+            return Extract.get(id=extract_id).get_discussion_id()

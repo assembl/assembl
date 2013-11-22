@@ -62,6 +62,9 @@ class Source(SQLAlchemyBaseModel):
     def import_content(self, only_new=True):
         pass
 
+    def get_discussion_id(self):
+        return self.discussion_id
+
 
 class Content(SQLAlchemyBaseModel):
     """
@@ -110,3 +113,9 @@ class Content(SQLAlchemyBaseModel):
 
     def get_title(self):
         return ""
+
+    def get_discussion_id(self):
+        if self.source_id:
+            if self.source:
+                return self.source.get_discussion_id()
+            return Source.get(id=self.source_id).get_discussion_id()
