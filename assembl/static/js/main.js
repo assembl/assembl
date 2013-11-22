@@ -9,8 +9,9 @@ define([
     "views/synthesisPanel",
     "models/user",
     "models/segment",
-    "router"
-], function(app, $, LateralMenu, IdeaList, IdeaPanel, SegmentList, MessageList, SynthesisPanel, User, Segment, Router){
+    "router",
+    "socket"
+], function(app, $, LateralMenu, IdeaList, IdeaPanel, SegmentList, MessageList, SynthesisPanel, User, Segment, Router, Socket){
     'use strict';
 
     app.init();
@@ -20,6 +21,11 @@ define([
 
     // The router
     app.router = new Router();
+
+    // The socket
+    app.socket = new Socket();
+    app.on('socket:open', function(){ $('#onlinedot').addClass('is-online').attr('title', 'online'); });
+    app.on('socket:close', function(){ $('#onlinedot').removeClass('is-online').attr('title', 'offline'); });
 
     // User
     app.users = new User.Collection();

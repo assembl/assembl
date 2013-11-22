@@ -20,11 +20,14 @@ requirejs.config({
             deps: ['jquery']
         },
         'app': {
-            deps: ['ckeditor', 'tipsy', 'i18n', 'annotator', 'jquery-highlight', 'zeroclipboard', 'sockjs'],
+            deps: ['ckeditor', 'tipsy', 'i18n', 'annotator', 'jquery-highlight', 'zeroclipboard'],
             exports: 'app'
         },
         'i18n': {
             exports: 'i18n'
+        },
+        'socket': {
+            deps: ['sockjs']
         },
         'jasmine': {
             exports: 'jasmine'
@@ -63,6 +66,7 @@ requirejs.config({
         'app': 'app/app',
         'i18n': 'app/i18n',
         'router': 'app/router',
+        'socket': 'app/socket',
 
         'jquery': "lib/jquery/jquery",
         'tipsy': 'lib/jquery/jquery.tipsy',
