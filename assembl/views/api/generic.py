@@ -19,7 +19,7 @@ generic = Service(
 
 @generic.get()  # P_ADMIN)
 def get_object(request):
-    basis = "local:" + request.matchdict['discussion_id'] + "/generic/"
+    basis = "local:"
     classname = request.matchdict['cls']
     id = request.matchdict['id']
     view = request.matchdict['view'] or '/base'
