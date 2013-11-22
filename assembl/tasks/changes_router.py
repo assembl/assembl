@@ -35,7 +35,7 @@ class ZMQRouter(SockJSConnection):
         self.loop.on_recv(self.on_recv)
 
     def on_recv(self, data):
-        self.send(data)
+        self.send(data[1])
 
     def on_message(self, msg):
         print "got message", msg
