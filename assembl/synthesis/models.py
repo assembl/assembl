@@ -148,13 +148,13 @@ class Discussion(SQLAlchemyBaseModel):
         byrole = groupby(roleperms, lambda (r, p): r)
         return {r: [p for (r2,p) in rps] for (r, rps) in byrole}
 
-    def get_role_by_permission(self):
+    def get_roles_by_permission(self):
         permroles = self.db().query(Permission.name, Role.name).select_from(
             DiscussionPermission).join(Role, Permission).filter(
             DiscussionPermission.discussion_id==self.id).all()
         permroles.sort()
         byperm = groupby(permroles, lambda (p, r): p)
-        return {p: [r for (r,p2) in prs] for (p, prs) in byperm}
+        return {p: [r for (p2, r) in prs] for (p, prs) in byperm}
 
     def __repr__(self):
         return "<Discussion %s>" % repr(self.topic)
