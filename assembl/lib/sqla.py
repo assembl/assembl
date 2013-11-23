@@ -4,6 +4,7 @@ import re
 import sys
 from datetime import datetime
 from itertools import groupby
+import inspect
 
 from anyjson import dumps
 from colanderalchemy import SQLAlchemySchemaNode
@@ -203,25 +204,32 @@ class BaseOps(object):
             frozenset(r._calculated_foreign_keys): r
             for r in mapper.relationships
         }
-
+        methods = dict(inspect.getmembers(
+            self, lambda m: inspect.ismethod(m)
+                            and m.func_code.co_argcount == 1))
         for name, spec in local_view.iteritems():
             if name == "_default":
                 continue
-            if type(spec) is list:
-                assert len(spec) == 1
+            elif spec is False:
+                pass
+            elif type(spec) is list:
+                assert len(spec) <= 1
                 assert name in relns
-                view_name = spec[0]
-                assert type(view_name) == str
                 assert relns[name].uselist
-                if view_name == "@id":
-                    result[name] = [ob.uri(base_uri)
-                                    for ob in getattr(self, name)]
-                elif get_view_def(view_name) is not None:
-                    result[name] = [
-                        ob.generic_json(base_uri, view_name)
-                        for ob in getattr(self, name)]
+                val = getattr(self, name)
+                if not val:
+                    continue
+                if len(spec):
+                    view_name = spec[0]
+                    assert type(view_name) == str
+                    if get_view_def(view_name) is not None:
+                        result[name] = [
+                            ob.generic_json(base_uri, view_name)
+                            for ob in val]
+                    else:
+                        raise "view does not exist", view_name
                 else:
-                    raise "view does not exist", view_name
+                    result[name] = [ob.uri(base_uri) for ob in val]
             elif type(spec) is dict:
                 assert len(spec) == 1
                 assert "@id" in spec
@@ -231,10 +239,12 @@ class BaseOps(object):
                 assert relns[name].uselist
                 view = get_view_def(view_name)
                 assert view
-                result[name] = {
-                    ob.uri(base_uri):
-                    ob.generic_json(base_uri, view_name)
-                    for ob in getattr(self, name, [])}
+                val = getattr(self, name, [])
+                if val:
+                    result[name] = {
+                        ob.uri(base_uri):
+                        ob.generic_json(base_uri, view_name)
+                        for ob in val}
             elif (spec is True and name in cols) or spec in cols:
                 cname = name if spec is True else spec
                 val = getattr(self, cname)
@@ -242,10 +252,7 @@ class BaseOps(object):
                     if type(val) == datetime:
                         val = val.isoformat()
                     result[name] = val
-            elif spec is False:
-                pass
             elif (spec is True and name in relns) or spec in relns:
-                assert not relns[name].uselist
                 rname = name if spec is True else spec
                 reln = relns[rname]
                 if len(reln._calculated_foreign_keys) == 1 \
@@ -258,14 +265,23 @@ class BaseOps(object):
                             base_uri, ob_id)
                 else:
                     ob = getattr(self, rname)
-                    if ob:
+                    if isinstance(ob, list):
+                        if ob:
+                            result[name] = [o.uri(base_uri) for o in ob]
+                    elif ob:
                         result[name] = ob.uri(base_uri)
             elif name in relns and get_view_def(spec) is not None:
-                assert not relns[name].uselist
                 ob = getattr(self, name)
-                if ob:
-                    result[name] = getattr(self, name).generic_json(
-                        base_uri, spec)
+                if isinstance(ob, list):
+                    if ob:
+                        result[name] = [o.generic_json(base_uri, spec)
+                                        for o in ob]
+                elif ob:
+                    result[name] = ob.generic_json(base_uri, spec)
+            elif isinstance(spec, str) and spec.startswith("&") and spec[1:] in methods:
+                # Function call. PLEASE RETURN JSON.
+                # TODO: Run through filters.
+                result[name] = getattr(self, spec[1:])()
         if local_view.get('_default') is False:
             return result
         defaults = view_def.get('_default', {})
