@@ -186,7 +186,7 @@ class BaseOps(object):
     def uri(self, base_uri='local:'):
         return self.uri_generic(self.get_id_as_str(), base_uri)
 
-    def generic_json(self, base_uri='local:', view_def_name='base'):
+    def generic_json(self, view_def_name='base', base_uri='local:'):
         view_def = get_view_def(view_def_name)
         my_typename = self.external_typename()
         my_id = self.uri(base_uri)
@@ -224,7 +224,7 @@ class BaseOps(object):
                     assert type(view_name) == str
                     if get_view_def(view_name) is not None:
                         result[name] = [
-                            ob.generic_json(base_uri, view_name)
+                            ob.generic_json(view_name, base_uri)
                             for ob in val]
                     else:
                         raise "view does not exist", view_name
@@ -243,7 +243,7 @@ class BaseOps(object):
                 if val:
                     result[name] = {
                         ob.uri(base_uri):
-                        ob.generic_json(base_uri, view_name)
+                        ob.generic_json(view_name, base_uri)
                         for ob in val}
             elif (spec is True and name in cols) or spec in cols:
                 cname = name if spec is True else spec
@@ -274,10 +274,10 @@ class BaseOps(object):
                 ob = getattr(self, name)
                 if isinstance(ob, list):
                     if ob:
-                        result[name] = [o.generic_json(base_uri, spec)
+                        result[name] = [o.generic_json(spec, base_uri)
                                         for o in ob]
                 elif ob:
-                    result[name] = ob.generic_json(base_uri, spec)
+                    result[name] = ob.generic_json(spec, base_uri)
             elif isinstance(spec, str) and spec.startswith("&") and spec[1:] in methods:
                 # Function call. PLEASE RETURN JSON.
                 # TODO: Run through filters.
@@ -408,7 +408,7 @@ def orm_update_listener(mapper, connection, target):
             connection.info['cdict'] = {}
         connection.info['cdict'][target.uri()] = (
             target.get_discussion_id(),
-            target.generic_json(view_def_name='local'))
+            target.generic_json('local'))
 
 
 def orm_insert_listener(mapper, connection, target):
@@ -416,7 +416,7 @@ def orm_insert_listener(mapper, connection, target):
         connection.info['cdict'] = {}
     connection.info['cdict'][target.uri()] = (
         target.get_discussion_id(),
-        target.generic_json(view_def_name='local'))
+        target.generic_json('local'))
 
 
 def orm_delete_listener(mapper, connection, target):
