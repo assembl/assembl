@@ -392,9 +392,9 @@ AND discussion.id=:discussion_id
         return result.first()['total_count']
 
     def get_discussion_id(self):
-        if self.table_of_contents_id:
-            if self.table_of_contents:
-                return self.table_of_contents.get_discussion_id()
+        if self.table_of_contents:
+            return self.table_of_contents.get_discussion_id()
+        elif self.table_of_contents_id:
             return TableOfContents.get(id=self.table_of_contents_id).get_discussion_id()
 
     def __repr__(self):
@@ -509,9 +509,9 @@ class Extract(SQLAlchemyBaseModel):
         return tfi
 
     def get_discussion_id(self):
-        if self.source_id:
-            if self.source:
-                return self.source.get_discussion_id()
+        if self.source:
+            return self.source.get_discussion_id()
+        elif self.source_id:
             return Content.get(id=self.source_id).get_discussion_id()
 
 class TextFragmentIdentifier(SQLAlchemyBaseModel):
@@ -561,7 +561,7 @@ class TextFragmentIdentifier(SQLAlchemyBaseModel):
         return None
 
     def get_discussion_id(self):
-        if self.extract_id:
-            if self.extract:
-                return self.extract.get_discussion_id()
+        if self.extract:
+            return self.extract.get_discussion_id()
+        elif self.extract_id:
             return Extract.get(id=extract_id).get_discussion_id()

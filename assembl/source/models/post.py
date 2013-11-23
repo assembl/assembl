@@ -109,9 +109,9 @@ class Post(SQLAlchemyBaseModel):
         return ancestors
 
     def get_discussion_id(self):
-        if self.content_id:
-            if self.content:
-                return self.content.get_discussion_id()
+        if self.content:
+            return self.content.get_discussion_id()
+        elif self.content_id:
             return Content.get(id=self.content_id).get_discussion_id()
 
     def __repr__(self):

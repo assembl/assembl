@@ -115,7 +115,7 @@ class Content(SQLAlchemyBaseModel):
         return ""
 
     def get_discussion_id(self):
-        if self.source_id:
-            if self.source:
-                return self.source.get_discussion_id()
+        if self.source:
+            return self.source.get_discussion_id()
+        elif self.source_id:
             return Source.get(id=self.source_id).get_discussion_id()
