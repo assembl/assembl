@@ -6,7 +6,8 @@
     "Permission": {},
     "AgentProfile": {},
     "User": {
-        "password":false
+        "password":false,
+        "permissions":"&get_all_permissions"
     },
     "EmailAccount": {},
     "IdentityProviderAccount": {},

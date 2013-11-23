@@ -371,6 +371,18 @@ class User(SQLAlchemyBaseModel):
     def __repr__(self):
         return "<User '%s'>" % self.username
 
+    def get_permissions(self, discussion_id):
+        from . import get_permissions
+        return get_permissions(self.id, discussion_id)
+
+    def get_all_permissions(self):
+        from . import get_permissions
+        from ..models import Discussion
+        permissions = {
+            d_id: get_permissions(self.id, d_id)
+            for (d_id,) in self.db.query(Discussion.id)}
+        return permissions
+
 
 class Username(SQLAlchemyBaseModel):
     "Optional usernames for users"
