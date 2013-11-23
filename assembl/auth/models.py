@@ -30,6 +30,11 @@ R_PARTICIPANT = 'r:participant'
 R_CATCHER = 'r:catcher'
 R_MODERATOR = 'r:moderator'
 R_ADMINISTRATOR = 'r:administrator'
+R_SYSADMIN = 'r:sysadmin'
+
+SYSTEM_ROLES = set(
+    (Everyone, Authenticated, R_PARTICIPANT, R_CATCHER,
+     R_MODERATOR, R_ADMINISTRATOR, R_SYSADMIN))
 
 # Permissions
 P_READ = 'read'
@@ -41,6 +46,8 @@ P_DELETE_EXTRACT = 'delete_extract'
 P_EDIT_EXTRACT = 'edit_extract'
 P_ADD_IDEA = 'add_idea'
 P_EDIT_IDEA = 'edit_idea'
+P_ADMIN_DISC = 'administrate discussion'
+P_SYSADMIN = 'sysadmin'
 
 
 class AgentProfile(SQLAlchemyBaseModel):
@@ -416,6 +423,7 @@ def populate_default_roles(session):
     ensure(R_CATCHER)
     ensure(R_MODERATOR)
     ensure(R_ADMINISTRATOR)
+    ensure(R_SYSADMIN)
 
 
 class UserRole(SQLAlchemyBaseModel):
@@ -465,6 +473,8 @@ def populate_default_permissions(session):
     ensure(P_DELETE_EXTRACT)
     ensure(P_ADD_IDEA)
     ensure(P_EDIT_IDEA)
+    ensure(P_ADMIN_DISC)
+    ensure(P_SYSADMIN)
 
 
 class DiscussionPermission(SQLAlchemyBaseModel):
@@ -502,6 +512,8 @@ def create_default_permissions(session, discussion):
     add_perm(P_DELETE_EXTRACT, [R_CATCHER, R_MODERATOR, R_ADMINISTRATOR])
     add_perm(P_ADD_IDEA, [R_CATCHER, R_MODERATOR, R_ADMINISTRATOR])
     add_perm(P_EDIT_IDEA, [R_CATCHER, R_MODERATOR, R_ADMINISTRATOR])
+    add_perm(P_ADMIN_DISC, [R_ADMINISTRATOR, R_SYSADMIN])
+    add_perm(P_SYSADMIN, [R_ADMINISTRATOR, R_SYSADMIN])
 
 
 class Action(SQLAlchemyBaseModel):

@@ -1,8 +1,9 @@
 import os
 
-from pyramid.security import Allow
+from pyramid.security import Allow, ALL_PERMISSIONS
 
-from assembl.auth.models import DiscussionPermission
+from assembl.auth.models import (
+    DiscussionPermission, Role, Permission, P_SYSADMIN)
 
 
 FIXTURE_DIR = os.path.join(
@@ -14,10 +15,12 @@ API_DISCUSSION_PREFIX = API_PREFIX + 'discussion/{discussion_id}'
 def acls(request):
     if request.matchdict and 'discussion_id' in request.matchdict:
         discussion_id = int(request.matchdict['discussion_id'])
-        permissions = DiscussionPermission.db.query(
-            DiscussionPermission).filter_by(
-            discussion_id=discussion_id)
-        acls = [(Allow, p.role.name, p.permission.name) for p in permissions]
+        rps = DiscussionPermission.db.query(
+            Role.name, Permission.name).select_from(
+            DiscussionPermission).join(Role, Permission).filter(
+            DiscussionPermission.discussion_id==discussion_id)
+        acls = [(Allow, r, p) for (r, p) in rps]
+        acls.append((Allow, P_SYSADMIN, ALL_PERMISSIONS))
         return acls
     return []
 
