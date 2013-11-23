@@ -27,24 +27,38 @@ td.start()
 class ZMQRouter(SockJSConnection):
 
     def on_open(self, request):
-        self.socket = context.socket(zmq.SUB)
-        self.socket.connect('inproc://assemblchanges')
-        # TODO: choose discussion.
-        self.socket.setsockopt(zmq.SUBSCRIBE, '')
-        self.loop = zmqstream.ZMQStream(self.socket, io_loop=io_loop)
-        self.loop.on_recv(self.on_recv)
+        self.valid = True
 
     def on_recv(self, data):
         self.send(data[1])
 
     def on_message(self, msg):
-        print "got message", msg
+        if msg.startswith('discussion:') and self.valid:
+            discussion = msg.split(':', 1)[1]
+            self.socket = context.socket(zmq.SUB)
+            self.socket.connect('inproc://assemblchanges')
+            self.socket.setsockopt(zmq.SUBSCRIBE, '*')
+            self.socket.setsockopt(zmq.SUBSCRIBE, discussion)
+            self.loop = zmqstream.ZMQStream(self.socket, io_loop=io_loop)
+            self.loop.on_recv(self.on_recv)
+            print "connected"
 
     def on_close(self):
         self.loop.stop_on_recv()
         self.socket.close()
         print "closing"
 
+def logger(msg):
+    print msg
+
+def log_queue():
+    socket = context.socket(zmq.SUB)
+    socket.connect('inproc://assemblchanges')
+    socket.setsockopt(zmq.SUBSCRIBE, '')
+    loop = zmqstream.ZMQStream(socket, io_loop=io_loop)
+    loop.on_recv(logger)
+
+log_queue()
 
 sockjs_router = SockJSRouter(ZMQRouter, io_loop=io_loop)
 routes = sockjs_router.urls
@@ -54,7 +68,7 @@ web_app = web.Application(routes, debug=False)
 def term(*_ignore):
     web_server.stop()
     io_loop.add_timeout(time.time() + 0.3, io_loop.stop)
-    io_loop.start() # Let the IO loop finish its work
+    io_loop.start()  # Let the IO loop finish its work
 
 signal.signal(signal.SIGTERM, term)
 

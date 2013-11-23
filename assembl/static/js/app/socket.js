@@ -19,6 +19,7 @@ define(['app'], function(app, socketjs){
      * @event
      */
     Socket.prototype.onOpen = function(ev){
+        this.socket.send("discussion:" + app.discussionID);
         app.trigger('socket:open', [this.socket, ev]);
     };
 
@@ -27,7 +28,9 @@ define(['app'], function(app, socketjs){
      * @event
      */
     Socket.prototype.onMessage = function(ev){
-        app.trigger('socket:message', [this.socket, ev]);
+        var data = JSON.parse(ev.data)
+        app.trigger('socket:message', [this.socket, data]);
+        //console.log(data);
     };
 
     /**
