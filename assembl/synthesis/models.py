@@ -1,6 +1,7 @@
 from datetime import datetime
 import re
 import quopri
+from itertools import groupby
 
 from sqlalchemy.orm import relationship, backref, aliased
 from sqlalchemy.sql import func, cast, select, text
@@ -25,6 +26,7 @@ from assembl.lib.utils import slugify
 
 from ..lib.sqla import Base as SQLAlchemyBaseModel
 from ..source.models import (Source, Content, Post, Mailbox)
+from ..auth.models import DiscussionPermission, Role, Permission
 
 class Discussion(SQLAlchemyBaseModel):
     """
@@ -137,6 +139,22 @@ class Discussion(SQLAlchemyBaseModel):
 
     def get_discussion_id(self):
         return self.id
+
+    def get_permissions_by_role(self):
+        roleperms = self.db().query(Role.name, Permission.name).select_from(
+            DiscussionPermission).join(Role, Permission).filter(
+            DiscussionPermission.discussion_id==self.id).all()
+        roleperms.sort()
+        byrole = groupby(roleperms, lambda (r, p): r)
+        return {r: [p for (r2,p) in rps] for (r, rps) in byrole}
+
+    def get_role_by_permission(self):
+        permroles = self.db().query(Permission.name, Role.name).select_from(
+            DiscussionPermission).join(Role, Permission).filter(
+            DiscussionPermission.discussion_id==self.id).all()
+        permroles.sort()
+        byperm = groupby(permroles, lambda (p, r): p)
+        return {p: [r for (r,p2) in prs] for (p, prs) in byperm}
 
     def __repr__(self):
         return "<Discussion %s>" % repr(self.topic)

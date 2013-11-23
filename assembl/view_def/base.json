@@ -37,7 +37,8 @@
         "topic": true,
         "synthesis_id": true,
         "owner_id": true,
-        "sources":["base"]
+        "sources":["base"],
+        "permissions":"&get_permissions_by_role"
     },
     "Idea": {},
     "TableOfContents": {
