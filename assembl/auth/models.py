@@ -379,7 +379,7 @@ class User(SQLAlchemyBaseModel):
         from . import get_permissions
         from ..models import Discussion
         permissions = {
-            d_id: get_permissions(self.id, d_id)
+            Discussion.uri_generic(d_id): get_permissions(self.id, d_id)
             for (d_id,) in self.db.query(Discussion.id)}
         return permissions
 

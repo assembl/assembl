@@ -178,13 +178,13 @@ class BaseOps(object):
         return cls.__name__
 
     @classmethod
-    def uri_generic(cls, base_uri, id):
+    def uri_generic(cls, id, base_uri='local:'):
         if not id:
             return None
         return base_uri + cls.external_typename() + "/" + str(id)
 
     def uri(self, base_uri='local:'):
-        return self.uri_generic(base_uri, self.get_id_as_str())
+        return self.uri_generic(self.get_id_as_str(), base_uri)
 
     def generic_json(self, base_uri='local:', view_def_name='base'):
         view_def = get_view_def(view_def_name)
@@ -262,7 +262,7 @@ class BaseOps(object):
                     ob_id = getattr(self, fkey.name)
                     if ob_id:
                         result[name] = reln.mapper.class_.uri_generic(
-                            base_uri, ob_id)
+                            ob_id, base_uri)
                 else:
                     ob = getattr(self, rname)
                     if isinstance(ob, list):
@@ -299,7 +299,7 @@ class BaseOps(object):
                     ob_id = getattr(self, col.key)
                     if ob_id:
                         result[name] = as_rel.mapper.class_.uri_generic(
-                            base_uri, ob_id)
+                            ob_id, base_uri)
             else:
                 ob = getattr(self, name)
                 if ob:
