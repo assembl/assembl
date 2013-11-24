@@ -2,6 +2,7 @@ from datetime import datetime
 import re
 import quopri
 from itertools import groupby
+import traceback
 
 from sqlalchemy.orm import relationship, backref, aliased
 from sqlalchemy.sql import func, cast, select, text
@@ -119,7 +120,10 @@ class Discussion(SQLAlchemyBaseModel):
 
     def import_from_sources(self, only_new=True):
         for source in self.sources:
-            source.import_content(only_new=only_new)
+            try:
+                source.import_content(only_new=only_new)
+            except:
+                traceback.print_exc()
 
     def __init__(self, *args, **kwargs):
         super(Discussion, self).__init__(*args, **kwargs)
