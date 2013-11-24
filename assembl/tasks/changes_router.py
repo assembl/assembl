@@ -19,7 +19,7 @@ td = zmq.devices.ThreadDevice(zmq.FORWARDER, zmq.XSUB, zmq.XPUB)
 td.connect_in('ipc:///tmp/assembl_changes/0')
 td.bind_out('inproc://assemblchanges')
 td.setsockopt_in(zmq.IDENTITY, 'SUB')
-#td.setsockopt_in(zmq.SUBSCRIBE, "")
+td.setsockopt_in(zmq.SUBSCRIBE, '')
 td.setsockopt_out(zmq.IDENTITY, 'PUB')
 td.start()
 
