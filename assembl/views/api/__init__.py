@@ -3,7 +3,7 @@ import os
 from pyramid.security import Allow, ALL_PERMISSIONS
 
 from assembl.auth.models import (
-    DiscussionPermission, Role, Permission, P_SYSADMIN)
+    DiscussionPermission, Role, Permission, R_SYSADMIN)
 
 
 FIXTURE_DIR = os.path.join(
@@ -20,7 +20,7 @@ def acls(request):
             DiscussionPermission).join(Role, Permission).filter(
             DiscussionPermission.discussion_id==discussion_id)
         acls = [(Allow, r, p) for (r, p) in rps]
-        acls.append((Allow, P_SYSADMIN, ALL_PERMISSIONS))
+        acls.append((Allow, R_SYSADMIN, ALL_PERMISSIONS))
         return acls
     return []
 
