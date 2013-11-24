@@ -46,7 +46,7 @@ P_DELETE_EXTRACT = 'delete_extract'
 P_EDIT_EXTRACT = 'edit_extract'
 P_ADD_IDEA = 'add_idea'
 P_EDIT_IDEA = 'edit_idea'
-P_ADMIN_DISC = 'administrate discussion'
+P_ADMIN_DISC = 'admin_discussion'
 P_SYSADMIN = 'sysadmin'
 
 
