@@ -30,7 +30,7 @@ class ZMQRouter(SockJSConnection):
         self.valid = True
 
     def on_recv(self, data):
-        self.send(data[1])
+        self.send(data[-1])
 
     def on_message(self, msg):
         if msg.startswith('discussion:') and self.valid:

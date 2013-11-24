@@ -3,7 +3,7 @@
 import re
 import sys
 from datetime import datetime
-from itertools import groupby
+from itertools import groupby, count
 import inspect
 
 from anyjson import dumps
@@ -429,20 +429,25 @@ def orm_delete_listener(mapper, connection, target):
             "@tombstone": True})
 
 
+_counter = count()
+
 def commit_listener(connection):
-    if 'cdict' in connection.info:
+    if 'zsocket' not in connection.info:
         socket = zmq_context.socket(zmq.PUB)
         socket.connect('inproc://assemblchanges')
+        connection.info['zsocket'] = socket
+    else:
+        socket = connection.info['zsocket']
+    if 'cdict' in connection.info:
         for discussion, changes in groupby(
                 connection.info['cdict'].values(), lambda x: x[0]):
             discussion = bytes(discussion or "*")
             changes = [x[1] for x in changes]
+            order = _counter.next()
             socket.send(discussion, zmq.SNDMORE)
+            socket.send(str(order), zmq.SNDMORE)
             socket.send_json(changes)
-            print "sent", discussion, changes
-        # TODO: Check if the following is needed.
-        # socket.disconnect('inproc://assemblchanges')
-        socket.close(linger=500)
+            # print "sent", order, discussion, changes
     else:
         print "EMPTY CDICT!"
 
