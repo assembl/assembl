@@ -400,6 +400,8 @@ class Username(SQLAlchemyBaseModel):
     username = Column(Unicode(20), primary_key=True)
     user = relationship(User, backref=backref('username', uselist=False))
 
+    def get_id_as_str(self):
+        return str(self.user_id)
 
 class Role(SQLAlchemyBaseModel):
     """A role that a user may have in a discussion"""
