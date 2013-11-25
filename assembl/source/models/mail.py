@@ -563,45 +563,6 @@ class Email(Content):
         if self.subject.startswith('[synthesis]'):
             self.post.is_synthesis = True
 
-    def associate_family(self):
-        if self not in self.db:
-            self.db.add(self)
-
-        # if there is an email.in_reply_to, search posts with content.type
-        # == email and email.message_id == email.in_reply_to, then set that
-        # email's post's id as the parent of this new post.
-
-        if self.in_reply_to:
-            parent_email_message_id = {
-                'original': self.in_reply_to,
-                'cleaned': re.search(r'<(.*)>', self.in_reply_to).group(0) if
-                re.search(r'<(.*)>', self.in_reply_to) else None
-            }
-
-            filter_clause = or_(
-                Email.message_id == parent_email_message_id['original'],
-                Email.message_id == parent_email_message_id['cleaned']
-            ) if parent_email_message_id['cleaned'] else \
-                Email.message_id == parent_email_message_id['original']
-
-            parent_email = self.db.query(Email).filter(
-                filter_clause
-            ).first()
-
-            if parent_email:
-                self.post.set_parent(parent_email.post)
-
-        # search for emails where the in_reply_to is the same as the
-        # message_id for this email, then set their post's parent to the
-        # id of this new post.
-
-        child_emails = self.db.query(Email).filter_by(
-            in_reply_to=self.message_id
-        ).all()
-
-        for child_email in child_emails:
-            child_email.post.set_parent(self.post)
-
     def reply(self, sender, response_body):
         """
         Send a response to this email.
