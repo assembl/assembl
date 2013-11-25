@@ -1,4 +1,4 @@
-from .lib.sqla import Base, TimestampedBase, metadata, get_session_maker
+from .lib.sqla import Base, TimestampedBase, get_metadata, get_session_maker
 
 from .auth.models import (
     IdentityProvider,

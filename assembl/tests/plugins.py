@@ -7,7 +7,7 @@ import transaction
 
 from ..lib.migration import bootstrap_db
 from ..lib.sqla import (configure_engine, get_session_maker,
-                        metadata, is_zopish, mark_changed)
+                        get_metadata, is_zopish, mark_changed)
 
 log = logging.getLogger('nose.plugins.assembl')
 
@@ -44,7 +44,8 @@ class Assembl(Plugin):
         res = {row[0] for row in res}
         # get the ordered version to minimize cascade.
         # cascade is not reliable.
-        ordered = [t.name for t in metadata.sorted_tables if t.name in res]
+        ordered = [t.name for t in get_metadata().sorted_tables
+                   if t.name in res]
         ordered.extend([t for t in res if t not in ordered])
         if reversed:
             ordered.reverse()

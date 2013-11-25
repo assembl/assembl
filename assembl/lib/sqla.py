@@ -27,6 +27,12 @@ from .zmqlib import context as zmq_context
 _TABLENAME_RE = re.compile('([A-Z]+)')
 
 _session_maker = None
+db_schema = None
+_metadata = None
+Base = TimestampedBase = None
+# If obsolete table names collide with new table names, alembic can't work
+obsolete = None
+ObsoleteBase = TimestampedObsolete = None
 
 
 def declarative_bases(metadata):
@@ -374,13 +380,6 @@ def update_timestamp(mapper, connection, target):
         target.mod_date = datetime.utcnow()
 
 
-metadata = MetaData()
-Base, TimestampedBase = declarative_bases(metadata)
-
-# If obsolete table names collide with new table names, alembic can't work
-obsolete = MetaData()
-ObsoleteBase, TimestampedObsolete = declarative_bases(obsolete)
-
 event.listen(mapper, 'before_insert', insert_timestamp)
 event.listen(mapper, 'before_update', update_timestamp)
 
@@ -431,6 +430,7 @@ def orm_delete_listener(mapper, connection, target):
 
 _counter = count()
 
+
 def commit_listener(connection):
     if 'zsocket' not in connection.info:
         socket = zmq_context.socket(zmq.PUB)
@@ -470,6 +470,12 @@ def configure_engine(settings, zope_tr=True, session_maker=None):
         return engine
     engine = engine_from_config(settings, 'sqlalchemy.')
     session_maker.configure(bind=engine)
+    global db_schema, _metadata, Base, TimestampedBase, ObsoleteBase, TimestampedObsolete
+    db_schema = None  # settings['db_schema']
+    _metadata = MetaData(schema=db_schema)
+    Base, TimestampedBase = declarative_bases(_metadata)
+    obsolete = MetaData(schema=db_schema)
+    ObsoleteBase, TimestampedObsolete = declarative_bases(obsolete)
     event.listen(engine, 'commit', commit_listener)
     event.listen(engine, 'rollback', rollback_listener)
     return engine
@@ -483,6 +489,11 @@ def is_zopish():
 
 def mark_changed():
     z_mark_changed(get_session_maker()())
+
+
+def get_metadata():
+    global _metadata
+    return _metadata
 
 
 def includeme(config):

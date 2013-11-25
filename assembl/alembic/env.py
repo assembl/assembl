@@ -7,7 +7,7 @@ from sqlalchemy import pool
 
 from pyramid.paster import bootstrap
 
-from assembl.lib.sqla import get_session_maker, metadata
+from assembl.lib.sqla import get_session_maker, get_metadata
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -20,6 +20,7 @@ fileConfig(config.config_file_name)
 pyramid_env = bootstrap(config.config_file_name)
 get_session_maker(False)
 
+
 def run_migrations_online():
     """Run migrations in 'online' mode.
 
@@ -29,7 +30,8 @@ def run_migrations_online():
     """
     engine = get_session_maker(False).bind
     connection = engine.connect()
-    context.configure(connection=connection, target_metadata=metadata)
+    context.configure(connection=connection,
+                      target_metadata=get_metadata())
 
     try:
         context.run_migrations(pyramid_env=pyramid_env)
@@ -44,10 +46,10 @@ def run_migrations_offline():
     and not an Engine, though an Engine is acceptable
     here as well.  By skipping the Engine creation
     we don't even need a DBAPI to be available.
-    
+
     Calls to context.execute() here emit the given string to the
     script output.
-    
+
     """
     url = config.get_main_option("sqlalchemy.url")
     context.configure(url=url)
@@ -60,4 +62,3 @@ if context.is_offline_mode():
     run_migrations_offline()
 else:
     run_migrations_online()
-
