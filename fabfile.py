@@ -2,6 +2,7 @@
 # -*- coding:utf-8 -*-
 from __future__ import with_statement
 
+from os import getenv
 import os.path
 import time
 import pipes
@@ -504,7 +505,7 @@ def devenv(projectpath=None):
     
     if not projectpath:
         projectpath = os.path.dirname(os.path.realpath(__file__))
-    commonenv(projectpath)
+    commonenv(projectpath, getenv('VIRTUAL_ENV', None))
     env.wsginame = "dev.wsgi"
     env.urlhost = "localhost"
     env.ini_file = 'development.ini'
