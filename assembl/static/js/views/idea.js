@@ -69,7 +69,7 @@ function(Backbone, _, $, Idea, Segment, app){
         /**
          * Returns all children rendered
          * @param {Number} parentLevel
-         * @return {Array<HTMLDivElement>}
+         * @return {HTMLDivElement[]}
          */
         getRenderedChildren: function(parentLevel){
             var children = this.model.getChildren(),

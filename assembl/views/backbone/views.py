@@ -63,6 +63,9 @@ def home_view(request):
     context = get_default_context(request)
     return render_to_response('../../templates/index.jinja2', context, request=request)
 
+@view_config(route_name='home_idea', request_method='GET', http_cache=60)
+def idea_view(request):
+    return home_view(request)
 
 @view_config(route_name='toc', request_method='GET', http_cache=60)
 def toc_view(request):

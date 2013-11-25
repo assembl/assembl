@@ -34,7 +34,7 @@ function(Backbone, _, $, app, Segment, i18n){
 
         /**
          * The render
-         * @return {LateralMenu}
+         * @return {segmentList}
          */
         render: function(){
             app.trigger('render');
@@ -77,15 +77,13 @@ function(Backbone, _, $, app, Segment, i18n){
          */
         addAnnotationAsSegment: function(annotation, idIdea){
             var post = app.getPostFromAnnotation(annotation),
-                idPost = post.id,
-                sourceCreator = post.get('creator');
+                idPost = post.id;
 
             var segment = new Segment.Model({
                 target: { "@id": idPost, "@type": "email" },
                 text: annotation.text,
                 quote: annotation.quote,
-                creator: app.getCurrentUser(),
-                source_creator: sourceCreator,
+                idCreator: app.getCurrentUser().get('id'),
                 ranges: annotation.ranges,
                 idPost: idPost,
                 idIdea: idIdea
@@ -120,7 +118,7 @@ function(Backbone, _, $, app, Segment, i18n){
                 target: { "@id": idPost, "@type": "email" },
                 text: text,
                 quote: text,
-                creator: app.getCurrentUser(),
+                idCreator: app.getCurrentUser().get('id'),
                 idPost: idPost
             });
 

@@ -36,7 +36,9 @@ div.postitlist {
             @include box-shadow(2px 15px 5px rgba(0, 0, 0, 0.40) );
             @include transform( matrix(-1, -0.1, 0, 1, 0, 0) );
         }
-        
+        a.segment-link {
+            display: block;
+        }
         .closebutton {
             top: 10px;
             right: 10px;
@@ -44,7 +46,9 @@ div.postitlist {
         .postit-footer {
             width: 100%;
             position: relative;
-            
+            a.segment-link {
+                display: inline-block;
+            }
             .segment-author {
                 > img {
                     float: left;

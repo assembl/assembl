@@ -24,6 +24,8 @@
 
 {% block content %}
     <input type="hidden" name="discussion-id" id="discussion-id" value="{{ discussion.id }}" />
+    <input type="hidden" name="discussion-slug" id="discussion-slug" value="{{ discussion.slug }}" />
+
     {% if user %}
         <input type="hidden" name="user-id" id="user-id" value="{{ user.id }}" />
         <input type="hidden" name="user-displayname" id="user-displayname" value="{{ user.display_name() }}" />
@@ -31,6 +33,7 @@
  
     <div class="bar bar--title">
         <div class="bar-left">
+            <span id="onlinedot" class="dot"></span>
             <span class="title-debatname">{{ discussion.topic }}</span> 
         </div>
         <div class="bar-center">
@@ -49,10 +52,10 @@
     <div class="panelarea">
         <div class="panelarea-table">
             
-            <div id="idealist" class="panelarea-col"></div>
+            <div id="ideaList" class="panelarea-col"></div>
             <div id="ideaPanel" class="panelarea-col"></div>
-            <div id="segmentlist" class="panelarea-col"></div>
-            <div id="messagelist" class="panelarea-col"></div>
+            <div id="segmentList" class="panelarea-col"></div>
+            <div id="messageList" class="panelarea-col"></div>
             <div id="synthesisPanel" class="panelarea-col"></div>
 
         </div>

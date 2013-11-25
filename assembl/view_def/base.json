@@ -6,7 +6,8 @@
     "Permission": {},
     "AgentProfile": {},
     "User": {
-        "password":false
+        "password":false,
+        "permissions":"&get_all_permissions"
     },
     "EmailAccount": {},
     "IdentityProviderAccount": {},
@@ -36,7 +37,8 @@
         "topic": true,
         "synthesis_id": true,
         "owner_id": true,
-        "sources":["base"]
+        "sources":["base"],
+        "permissions":"&get_roles_by_permission"
     },
     "Idea": {},
     "TableOfContents": {

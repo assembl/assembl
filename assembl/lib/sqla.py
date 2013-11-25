@@ -3,7 +3,10 @@
 import re
 import sys
 from datetime import datetime
+from itertools import groupby, count
+import inspect
 
+from anyjson import dumps
 from colanderalchemy import SQLAlchemySchemaNode
 from sqlalchemy import (
     DateTime, MetaData, engine_from_config, event, Column, ForeignKey)
@@ -11,12 +14,15 @@ from sqlalchemy.ext.declarative import declarative_base, declared_attr
 from sqlalchemy.orm import mapper, scoped_session, sessionmaker
 from sqlalchemy.orm.util import has_identity
 from sqlalchemy.util import classproperty
+from sqlalchemy.orm.session import object_session
 from zope.sqlalchemy import ZopeTransactionExtension
 from zope.sqlalchemy.datamanager import mark_changed as z_mark_changed
+import zmq
 
 from pyramid.paster import get_appsettings, setup_logging
 
 from ..view_def import get_view_def
+from .zmqlib import context as zmq_context
 
 _TABLENAME_RE = re.compile('([A-Z]+)')
 
@@ -169,20 +175,24 @@ class BaseOps(object):
             raise NotImplemented()
         return str(id)
 
+    def get_discussion_id(self):
+        "Get the ID of an associated discussion object, if any."
+        return None
+
     @classmethod
     def external_typename(cls):
         return cls.__name__
 
     @classmethod
-    def uri_generic(cls, base_uri, id):
+    def uri_generic(cls, id, base_uri='local:'):
         if not id:
             return None
         return base_uri + cls.external_typename() + "/" + str(id)
 
-    def uri(self, base_uri):
-        return self.uri_generic(base_uri, self.get_id_as_str())
+    def uri(self, base_uri='local:'):
+        return self.uri_generic(self.get_id_as_str(), base_uri)
 
-    def generic_json(self, base_uri='local:', view_def_name='base'):
+    def generic_json(self, view_def_name='base', base_uri='local:'):
         view_def = get_view_def(view_def_name)
         my_typename = self.external_typename()
         my_id = self.uri(base_uri)
@@ -200,25 +210,32 @@ class BaseOps(object):
             frozenset(r._calculated_foreign_keys): r
             for r in mapper.relationships
         }
-
+        methods = dict(inspect.getmembers(
+            self, lambda m: inspect.ismethod(m)
+                            and m.func_code.co_argcount == 1))
         for name, spec in local_view.iteritems():
             if name == "_default":
                 continue
-            if type(spec) is list:
-                assert len(spec) == 1
+            elif spec is False:
+                pass
+            elif type(spec) is list:
+                assert len(spec) <= 1
                 assert name in relns
-                view_name = spec[0]
-                assert type(view_name) == str
                 assert relns[name].uselist
-                if view_name == "@id":
-                    result[name] = [ob.uri(base_uri)
-                                    for ob in getattr(self, name)]
-                elif get_view_def(view_name) is not None:
-                    result[name] = [
-                        ob.generic_json(base_uri, view_name)
-                        for ob in getattr(self, name)]
+                val = getattr(self, name)
+                if not val:
+                    continue
+                if len(spec):
+                    view_name = spec[0]
+                    assert type(view_name) == str
+                    if get_view_def(view_name) is not None:
+                        result[name] = [
+                            ob.generic_json(view_name, base_uri)
+                            for ob in val]
+                    else:
+                        raise "view does not exist", view_name
                 else:
-                    raise "view does not exist", view_name
+                    result[name] = [ob.uri(base_uri) for ob in val]
             elif type(spec) is dict:
                 assert len(spec) == 1
                 assert "@id" in spec
@@ -228,10 +245,12 @@ class BaseOps(object):
                 assert relns[name].uselist
                 view = get_view_def(view_name)
                 assert view
-                result[name] = {
-                    ob.uri(base_uri):
-                    ob.generic_json(base_uri, view_name)
-                    for ob in getattr(self, name, [])}
+                val = getattr(self, name, [])
+                if val:
+                    result[name] = {
+                        ob.uri(base_uri):
+                        ob.generic_json(view_name, base_uri)
+                        for ob in val}
             elif (spec is True and name in cols) or spec in cols:
                 cname = name if spec is True else spec
                 val = getattr(self, cname)
@@ -239,10 +258,7 @@ class BaseOps(object):
                     if type(val) == datetime:
                         val = val.isoformat()
                     result[name] = val
-            elif spec is False:
-                pass
             elif (spec is True and name in relns) or spec in relns:
-                assert not relns[name].uselist
                 rname = name if spec is True else spec
                 reln = relns[rname]
                 if len(reln._calculated_foreign_keys) == 1 \
@@ -252,16 +268,26 @@ class BaseOps(object):
                     ob_id = getattr(self, fkey.name)
                     if ob_id:
                         result[name] = reln.mapper.class_.uri_generic(
-                            base_uri, ob_id)
+                            ob_id, base_uri)
                 else:
                     ob = getattr(self, rname)
-                    if ob:
+                    if isinstance(ob, list):
+                        if ob:
+                            result[name] = [o.uri(base_uri) for o in ob]
+                    elif ob:
                         result[name] = ob.uri(base_uri)
             elif name in relns and get_view_def(spec) is not None:
-                assert not relns[name].uselist
                 ob = getattr(self, name)
-                if ob:
-                    result[name] = getattr(self, name).generic_json(base_uri, spec)
+                if isinstance(ob, list):
+                    if ob:
+                        result[name] = [o.generic_json(spec, base_uri)
+                                        for o in ob]
+                elif ob:
+                    result[name] = ob.generic_json(spec, base_uri)
+            elif isinstance(spec, str) and spec.startswith("&") and spec[1:] in methods:
+                # Function call. PLEASE RETURN JSON.
+                # TODO: Run through filters.
+                result[name] = getattr(self, spec[1:])()
         if local_view.get('_default') is False:
             return result
         defaults = view_def.get('_default', {})
@@ -279,10 +305,12 @@ class BaseOps(object):
                     ob_id = getattr(self, col.key)
                     if ob_id:
                         result[name] = as_rel.mapper.class_.uri_generic(
-                            base_uri, ob_id)
+                            ob_id, base_uri)
             else:
                 ob = getattr(self, name)
                 if ob:
+                    if type(ob) == datetime:
+                        ob = ob.isoformat()
                     result[name] = ob
         return result
 
@@ -372,6 +400,66 @@ def get_session_maker(zope_tr=True):
     return _session_maker
 
 
+def orm_update_listener(mapper, connection, target):
+    session = object_session(target)
+    if session.is_modified(target, include_collections=False):
+        if 'cdict' not in connection.info:
+            connection.info['cdict'] = {}
+        connection.info['cdict'][target.uri()] = (
+            target.get_discussion_id(),
+            target.generic_json('local'))
+
+
+def orm_insert_listener(mapper, connection, target):
+    if 'cdict' not in connection.info:
+        connection.info['cdict'] = {}
+    connection.info['cdict'][target.uri()] = (
+        target.get_discussion_id(),
+        target.generic_json('local'))
+
+
+def orm_delete_listener(mapper, connection, target):
+    if 'cdict' not in connection.info:
+        connection.info['cdict'] = {}
+    connection.info['cdict'][target.uri()] = (
+        target.get_discussion_id(), {
+            "@type": target.external_typename(),
+            "@id": target.uri(),
+            "@tombstone": True})
+
+
+_counter = count()
+
+def commit_listener(connection):
+    if 'zsocket' not in connection.info:
+        socket = zmq_context.socket(zmq.PUB)
+        socket.connect('inproc://assemblchanges')
+        connection.info['zsocket'] = socket
+    else:
+        socket = connection.info['zsocket']
+    if 'cdict' in connection.info:
+        for discussion, changes in groupby(
+                connection.info['cdict'].values(), lambda x: x[0]):
+            discussion = bytes(discussion or "*")
+            changes = [x[1] for x in changes]
+            order = _counter.next()
+            socket.send(discussion, zmq.SNDMORE)
+            socket.send(str(order), zmq.SNDMORE)
+            socket.send_json(changes)
+            # print "sent", order, discussion, changes
+    else:
+        print "EMPTY CDICT!"
+
+
+def rollback_listener(connection):
+    connection.info['cdict'] = {}
+
+
+event.listen(BaseOps, 'after_insert', orm_insert_listener, propagate=True)
+event.listen(BaseOps, 'after_update', orm_update_listener, propagate=True)
+event.listen(BaseOps, 'after_delete', orm_delete_listener, propagate=True)
+
+
 def configure_engine(settings, zope_tr=True, session_maker=None):
     """Return an SQLAlchemy engine configured as per the provided config."""
     if session_maker is None:
@@ -387,6 +475,8 @@ def configure_engine(settings, zope_tr=True, session_maker=None):
     Base, TimestampedBase = declarative_bases(_metadata)
     obsolete = MetaData(schema=db_schema)
     ObsoleteBase, TimestampedObsolete = declarative_bases(obsolete)
+    event.listen(engine, 'commit', commit_listener)
+    event.listen(engine, 'rollback', rollback_listener)
     return engine
 
 

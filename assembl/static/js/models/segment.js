@@ -1,5 +1,5 @@
-define(['backbone', 'app', 'models/user', 'models/message'],
-function(Backbone, app, User, Message){
+define(['backbone', 'underscore', 'app', 'models/user', 'models/message'],
+function(Backbone, _, app, User, Message){
     'use strict';
 
     /**
@@ -58,8 +58,9 @@ function(Backbone, app, User, Message){
             idPost: null,
             idIdea: null,
             creationDate: null,
-            creator: {},
-            ranges: []
+            idCreator: null,
+            ranges: [],
+            target: null
         },
 
         /**
@@ -67,7 +68,7 @@ function(Backbone, app, User, Message){
          */
         validate: function(attrs, options){
             var currentUser = app.getCurrentUser();
-            if( ! currentUser.id ){
+            if( ! currentUser.get('id') ){
                 return i18n.gettext('You must be logged in to create segments');
             }
         },
@@ -124,6 +125,15 @@ function(Backbone, app, User, Message){
             }
 
             return app.format("<i class='{0}'></i>", cls);
+        },
+
+        /**
+         * Returns the segent's creator
+         * @return {User}
+         */
+        getCreator: function(){
+            var creatorId = this.get('idCreator');
+            return app.users.getById(creatorId);
         }
     });
 
@@ -150,16 +160,11 @@ function(Backbone, app, User, Message){
                 segments;
 
             return this.filter(function(item){
-                var creator = item.get('creator');
-
                 if( item.get('idIdea') !== null ){
                     return false;
                 }
 
-                if( creator ){
-                    return creator.id == currentUser.id;
-                }
-                return false;
+                return item.getCreator().get('id') == currentUser.id;
             });
         },
 

@@ -102,14 +102,15 @@ Running tests
 - Copy testing.ini.example to testing.ini
 - nosetests
 
-
 Running on Mac OS
 ----------------
 
-Use brew and install the libmemcached 
+Use brew and install the libmemcached and zeromq
  - brew install libmemcached 
+ - brew install zeromq
 
- Running on Ubuntu
- -----------------
- 
- apt-get install unixodbc-dev virtuoso-opensource libxslt1-dev
+Running on Ubuntu
+-----------------
+
+apt-get install libzmq3-dev memcached unixodbc-dev virtuoso-opensource libxslt1-dev
+

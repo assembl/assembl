@@ -1,5 +1,5 @@
-define(['jquery', 'underscore', 'ckeditor', 'models/user', 'moment', 'i18n'],
-function($, _, ckeditor, User, Moment, i18n){
+define(['jquery', 'underscore', 'ckeditor', 'moment', 'i18n', 'zeroclipboard'],
+function($, _, ckeditor, Moment, i18n, ZeroClipboard){
     'use strict';
 
     ckeditor.disableAutoInline = true;
@@ -7,6 +7,7 @@ function($, _, ckeditor, User, Moment, i18n){
     var PANEL_QUANTITY = 'data-panel-qty',
         CONTEXT_MENU_WIDTH = 150,
         DRAGBOX_MAX_LENGTH = 25,
+        DISCUSSION_SLUG = $('#discussion-slug').val(),
         DISCUSSION_ID = $('#discussion-id').val();
 
     /**
@@ -46,10 +47,16 @@ function($, _, ckeditor, User, Moment, i18n){
         },
 
         /**
+         * The current slug for the discussion
+         * @type {String}
+         */
+        slug: DISCUSSION_SLUG,
+
+        /**
          * The current discussion id
          * @type {string}
          */
-        discussionID: null,
+        discussionID: DISCUSSION_ID,
 
         /**
          * The a cache for posts linked by segments
@@ -173,6 +180,8 @@ function($, _, ckeditor, User, Moment, i18n){
             app.body.removeClass('is-fullscreen');
             panel.$el.addClass('is-visible');
 
+            app.addPanelToStorage(panel.el.id);
+
             if( panel.button ) {
                 panel.button.addClass('is-activated');
             }
@@ -194,9 +203,46 @@ function($, _, ckeditor, User, Moment, i18n){
             }
 
             panel.$el.removeClass('is-visible');
+            
+            app.removePanelFromStorage(panel.el.id);
+
             if( panel.button ) {
                 panel.button.removeClass('is-activated');
             }
+        },
+
+        /**
+         * @return {Object} The Object with all panels in the localStorage
+         */
+        getPanelsFromStorage: function(){
+            var panels = JSON.parse(localStorage.getItem('panels')) || {};
+            return panels;
+        },
+
+        /**
+         * Adds a panel in the localStoage
+         * @param {string} panelId
+         * @return {Object} The current object
+         */
+        addPanelToStorage: function(panelId){
+            var panels = app.getPanelsFromStorage();
+            panels[panelId] = 'open';
+            localStorage.setItem('panels', JSON.stringify(panels));
+
+            return panels;
+        },
+
+        /**
+         * Remove a panel from the localStorage by its id
+         * @param  {string} panelId
+         * @return {Object} The remaining panels
+         */
+        removePanelFromStorage: function(panelId){
+            var panels = app.getPanelsFromStorage();
+            delete panels[panelId];
+            localStorage.setItem('panels', JSON.stringify(panels));
+
+            return panels;
         },
 
         /**
@@ -251,7 +297,7 @@ function($, _, ckeditor, User, Moment, i18n){
          * @return {User}
          */
         getCurrentUser: function(){
-            return app.currentUser || new User.Model();
+            return app.currentUser || app.users.getUnknownUser();
         },
 
 
@@ -752,7 +798,10 @@ function($, _, ckeditor, User, Moment, i18n){
             segments.forEach(function(segment) {
                 var post = segment.getAssociatedPost();
                 if(post) {
-                    authors.push(post.get("creator").name);
+                    var creator = post.getCreator();
+                    if(creator) {
+                        authors.push(creator.get("name"));
+                    }
                 }
             });
 
@@ -790,6 +839,36 @@ function($, _, ckeditor, User, Moment, i18n){
 
         /**
          * @init
+         */
+        initClipboard: function(){
+            if( ! app.clipboard ){
+                ZeroClipboard.setDefaults( { moviePath: '/static/flash/ZeroClipboard.swf' } );
+                app.clipboard = new ZeroClipboard();
+                app.clipboard.on('complete', function(client, args){
+                    // Nothing to do, nowhere to go uouuu ...
+                });
+
+                app.clipboard.on('mouseover', function(client, args){
+                    $(this).trigger('mouseover');
+                });
+
+                app.clipboard.on('mouseout', function(client, args){
+                    $(this).trigger('mouseout');
+                });
+            }
+
+            $('[data-copy-text]').each(function(i, el){
+                var text = el.getAttribute('data-copy-text');
+                text = app.format('{0}//{1}/{2}{3}', location.protocol, location.host, DISCUSSION_SLUG, text);
+                el.removeAttribute('data-copy-text');
+
+                el.setAttribute('data-clipboard-text', text);
+                app.clipboard.glue(el);
+            });
+        },
+
+        /**
+         * @init
          * inits ALL app components
          */
         init: function(){
@@ -801,27 +880,8 @@ function($, _, ckeditor, User, Moment, i18n){
             app.doc.on('ajaxError', app.onAjaxError);
 
             app.on('render', app.cleanTooltips);
-
-            app.currentUser = {
-                name: 'Peter Parker',
-                avatarUrl: '//placehold.it/44'
-            };
         }
     };
-
-    if( typeof $.data !== "function" ){
-        $.data = function(el, key, value){
-            if( arguments.length === 3 ){
-                // set
-                return $(el).data(key, value);
-            } else {
-                // get
-                return $(el).data(key);
-            }
-        };
-
-        $.fn.stop = function(){ return this; };
-    }
 
     return window.app;
 });

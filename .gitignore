@@ -11,6 +11,7 @@
 *.egg-info
 /.coverage
 .DS_Store
+.directory
 
 # buildout
 /.installed.cfg
@@ -50,3 +51,9 @@ vendor/
 .bundle
 .ruby-version
 Gemfile.lock
+
+# Vagrant
+.bash_profile
+.rbenv-version
+.vagrant
+VagrantFile

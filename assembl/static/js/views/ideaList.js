@@ -186,7 +186,7 @@ function(Backbone, _, Idea, IdeaView, app){
             'dragover .panel-bodyabove': 'onAboveDragOver',
             'dragover .panel-bodybelow': 'onBelowDragOver',
 
-            'click #idealist-addbutton': 'addChildToSelected',
+            'click #ideaList-addbutton': 'addChildToSelected',
             'click #ideaList-collapseButton': 'toggleIdeas',
             'click #ideaList-closeButton': 'closePanel',
             'click #ideaList-fullscreenButton': 'setFullscreen',

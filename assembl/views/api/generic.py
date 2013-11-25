@@ -19,7 +19,6 @@ generic = Service(
 
 @generic.get()  # P_ADMIN)
 def get_object(request):
-    basis = "local:" + request.matchdict['discussion_id'] + "/generic/"
     classname = request.matchdict['cls']
     id = request.matchdict['id']
     view = request.matchdict['view'] or '/base'
@@ -33,4 +32,4 @@ def get_object(request):
     if not get_view_def(view):
         raise HTTPNotFound("View '%s' not found." % view)
 
-    return obj.generic_json(basis, view)
+    return obj.generic_json(view)

@@ -326,6 +326,7 @@ def install_builddeps():
     """
     print(cyan('Installing compilers and required libraries'))
     sudo('apt-get install -y build-essential python-dev libjpeg62-dev libpng12-dev zlib1g-dev libfreetype6-dev liblcms-dev libpq-dev libxslt1-dev libxml2-dev')
+    sudo('apt-get install -y libzmq3-dev')
 
 @task
 def configure_rbenv():

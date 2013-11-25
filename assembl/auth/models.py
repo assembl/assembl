@@ -30,6 +30,11 @@ R_PARTICIPANT = 'r:participant'
 R_CATCHER = 'r:catcher'
 R_MODERATOR = 'r:moderator'
 R_ADMINISTRATOR = 'r:administrator'
+R_SYSADMIN = 'r:sysadmin'
+
+SYSTEM_ROLES = set(
+    (Everyone, Authenticated, R_PARTICIPANT, R_CATCHER,
+     R_MODERATOR, R_ADMINISTRATOR, R_SYSADMIN))
 
 # Permissions
 P_READ = 'read'
@@ -41,6 +46,8 @@ P_DELETE_EXTRACT = 'delete_extract'
 P_EDIT_EXTRACT = 'edit_extract'
 P_ADD_IDEA = 'add_idea'
 P_EDIT_IDEA = 'edit_idea'
+P_ADMIN_DISC = 'admin_discussion'
+P_SYSADMIN = 'sysadmin'
 
 
 class AgentProfile(SQLAlchemyBaseModel):
@@ -371,6 +378,18 @@ class User(SQLAlchemyBaseModel):
     def __repr__(self):
         return "<User '%s'>" % self.username
 
+    def get_permissions(self, discussion_id):
+        from . import get_permissions
+        return get_permissions(self.id, discussion_id)
+
+    def get_all_permissions(self):
+        from . import get_permissions
+        from ..models import Discussion
+        permissions = {
+            Discussion.uri_generic(d_id): get_permissions(self.id, d_id)
+            for (d_id,) in self.db.query(Discussion.id)}
+        return permissions
+
 
 class Username(SQLAlchemyBaseModel):
     "Optional usernames for users"
@@ -381,6 +400,8 @@ class Username(SQLAlchemyBaseModel):
     username = Column(Unicode(20), primary_key=True)
     user = relationship(User, backref=backref('username', uselist=False))
 
+    def get_id_as_str(self):
+        return str(self.user_id)
 
 class Role(SQLAlchemyBaseModel):
     """A role that a user may have in a discussion"""
@@ -404,6 +425,7 @@ def populate_default_roles(session):
     ensure(R_CATCHER)
     ensure(R_MODERATOR)
     ensure(R_ADMINISTRATOR)
+    ensure(R_SYSADMIN)
 
 
 class UserRole(SQLAlchemyBaseModel):
@@ -458,6 +480,8 @@ def populate_default_permissions(session):
     ensure(P_DELETE_EXTRACT)
     ensure(P_ADD_IDEA)
     ensure(P_EDIT_IDEA)
+    ensure(P_ADMIN_DISC)
+    ensure(P_SYSADMIN)
 
 
 class DiscussionPermission(SQLAlchemyBaseModel):
@@ -495,6 +519,8 @@ def create_default_permissions(session, discussion):
     add_perm(P_DELETE_EXTRACT, [R_CATCHER, R_MODERATOR, R_ADMINISTRATOR])
     add_perm(P_ADD_IDEA, [R_CATCHER, R_MODERATOR, R_ADMINISTRATOR])
     add_perm(P_EDIT_IDEA, [R_CATCHER, R_MODERATOR, R_ADMINISTRATOR])
+    add_perm(P_ADMIN_DISC, [R_ADMINISTRATOR])
+    add_perm(P_SYSADMIN, [R_ADMINISTRATOR])
 
 
 class Action(SQLAlchemyBaseModel):

@@ -22,16 +22,15 @@
         <%= longTitle %>
     </div>
 
-    <small style="line-height: 2em; white-space: nowrap;">
+    <div style="line-height: 2em;">
         <% if( authors.length ) { %>
             {{ gettext('By') }}
         <% } %>
         <% _.each(authors, function(author, index, list) { %>
-            <i style='font-style: italic'><%= author %></i>
-            <% if( index < list.length-1 ) { %>,<% } %>
+            <i style='font-style: italic;font-size:80%;'><%= author %></i><% if( index < list.length-1 ) { %>,<% } %>
         <% }) %>
         (<a href="mailto:<%= email %>?subject=<%= subject %>"><%= reactLabel %></a>)
-    </small>
+    </div>
 
 </div>
 

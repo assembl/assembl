@@ -1,6 +1,8 @@
 from datetime import datetime
 import re
 import quopri
+from itertools import groupby
+import traceback
 
 from sqlalchemy.orm import relationship, backref, aliased
 from sqlalchemy.sql import func, cast, select, text
@@ -25,6 +27,7 @@ from assembl.lib.utils import slugify
 
 from ..lib.sqla import db_schema, Base as SQLAlchemyBaseModel
 from ..source.models import (Source, Content, Post, Mailbox)
+from ..auth.models import DiscussionPermission, Role, Permission
 
 class Discussion(SQLAlchemyBaseModel):
     """
@@ -119,7 +122,10 @@ class Discussion(SQLAlchemyBaseModel):
         # refetch after calling
         for source in self.sources:
             source = Source.db.merge(source)
-            source.import_content(only_new=only_new)
+            try:
+                source.import_content(only_new=only_new)
+            except:
+                traceback.print_exc()
 
     def __init__(self, *args, **kwargs):
         super(Discussion, self).__init__(*args, **kwargs)
@@ -136,6 +142,25 @@ class Discussion(SQLAlchemyBaseModel):
             "synthesis_id": self.synthesis.id,
             "owner_id": self.owner_id,
         }
+
+    def get_discussion_id(self):
+        return self.id
+
+    def get_permissions_by_role(self):
+        roleperms = self.db().query(Role.name, Permission.name).select_from(
+            DiscussionPermission).join(Role, Permission).filter(
+            DiscussionPermission.discussion_id==self.id).all()
+        roleperms.sort()
+        byrole = groupby(roleperms, lambda (r, p): r)
+        return {r: [p for (r2,p) in rps] for (r, rps) in byrole}
+
+    def get_roles_by_permission(self):
+        permroles = self.db().query(Permission.name, Role.name).select_from(
+            DiscussionPermission).join(Role, Permission).filter(
+            DiscussionPermission.discussion_id==self.id).all()
+        permroles.sort()
+        byperm = groupby(permroles, lambda (p, r): p)
+        return {p: [r for (p2, r) in prs] for (p, prs) in byperm}
 
     def __repr__(self):
         return "<Discussion %s>" % repr(self.topic)
@@ -178,6 +203,10 @@ class TableOfContents(SQLAlchemyBaseModel):
             "synthesis_id": self.synthesis_id
         }
 
+    def get_discussion_id(self):
+        if self.discussion:
+            return self.discussion.id
+
     def __repr__(self):
         return "<TableOfContents %s>" % repr(self.discussion.topic)
 
@@ -216,6 +245,9 @@ class Synthesis(SQLAlchemyBaseModel):
             "conclusion": self.conclusion,
             "discussion_id": self.discussion.id,
         }
+
+    def get_discussion_id(self):
+        return self.discussion_id
 
     def __repr__(self):
         return "<Synthesis %s>" % repr(self.subject)
@@ -372,6 +404,12 @@ AND discussion.id=:discussion_id
                                    .params(discussion_id=discussion.id))
         return result.first()['total_count']
 
+    def get_discussion_id(self):
+        if self.table_of_contents:
+            return self.table_of_contents.get_discussion_id()
+        elif self.table_of_contents_id:
+            return TableOfContents.get(id=self.table_of_contents_id).get_discussion_id()
+
     def __repr__(self):
         if self.short_title:
             return "<Idea %d %s>" % (self.id, repr(self.short_title))
@@ -427,7 +465,7 @@ class Extract(SQLAlchemyBaseModel):
                 '@type': self.source.type
             },
             'created': self.creation_date.isoformat(),
-            'creator': self.creator.serializable(),
+            'idCreator': self.creator_id,
             #'user': self.creator.get_uri(),
             'text': self.annotation_text,
         }
@@ -483,6 +521,11 @@ class Extract(SQLAlchemyBaseModel):
         tfi.offset_end = start+len(quote)
         return tfi
 
+    def get_discussion_id(self):
+        if self.source:
+            return self.source.get_discussion_id()
+        elif self.source_id:
+            return Content.get(id=self.source_id).get_discussion_id()
 
 class TextFragmentIdentifier(SQLAlchemyBaseModel):
     __tablename__ = 'text_fragment_identifier'
@@ -529,3 +572,9 @@ class TextFragmentIdentifier(SQLAlchemyBaseModel):
             except:
                 pass
         return None
+
+    def get_discussion_id(self):
+        if self.extract:
+            return self.extract.get_discussion_id()
+        elif self.extract_id:
+            return Extract.get(id=extract_id).get_discussion_id()

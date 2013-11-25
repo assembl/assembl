@@ -8,6 +8,7 @@ from email.header import decode_header as decode_email_header, Header
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.utils import parseaddr
+import jwzthreading
 
 from bs4 import BeautifulSoup, Comment
 
@@ -19,6 +20,7 @@ from imaplib2 import IMAP4_SSL, IMAP4
 import transaction
 
 from sqlalchemy.orm import relationship, backref, deferred
+from sqlalchemy.orm import joinedload_all
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy import (
     Column,
@@ -92,6 +94,7 @@ class Mailbox(Source):
             return subject
 
     VALID_TAGS = ['strong', 'em', 'p', 'ul', 'li', 'br']
+
     @staticmethod
     def sanitize_html(html_value, valid_tags=VALID_TAGS):
         soup = BeautifulSoup(html_value)
@@ -208,19 +211,94 @@ class Mailbox(Source):
                 full_message=message_string
             )
         email_object.post.creator = sender_email_account.profile
-        email_object.associate_family()
         email_object.source = self
         email_object = self.db.merge(email_object)
-        return email_object
-
+        return (email_object, parsed_email)
+        
+    """
+    emails have to be a complete set
+    """
     @staticmethod
-    def reprocess_content(mailbox):
+    def thread_mails(emails):
+        print('Threading...')
+        emails_for_threading = []
+        for mail in emails:
+            email_for_threading = jwzthreading.make_message(email.message_from_string(mail.full_message))
+            #Store our emailsubject, jwzthreading does not decode subject itself
+            email_for_threading.subject = mail.subject
+            #Store our email object pointer instead of the raw message text
+            email_for_threading.message = mail
+            emails_for_threading.append(email_for_threading)
+
+        threaded_emails = jwzthreading.thread(emails_for_threading)
+
+        # Output
+        L = threaded_emails.items()
+        L.sort()
+        for subj, container in L:
+            jwzthreading.print_container(container, 0, True)
+            
+        def update_threading(threaded_emails, parent=None):
+            
+
+            for container in threaded_emails:
+                #jwzthreading.print_container(container)
+                #print (repr(container))
+                
+                ##print "parent: "+repr(container.parent)
+                ##print "children: "+repr(container.children)
+                ##print("\nProcessing:  " + repr(container.message.subject) + " " + repr(container.message.message_id))
+                
+
+                if(container.message):
+                    current_parent = container.message.message.post.parent
+                    if(current_parent):
+                        db_parent_message_id = current_parent.content.message_id
+                    else:
+                        db_parent_message_id = None
+
+                    if parent:
+                        if parent.message:
+                            #jwzthreading strips the <>, re-add them
+                            algorithm_parent_message_id = unicode("<"+parent.message.message_id+">")
+                        else:
+                            # Parent was a dummy container, we may need to handle this case better
+                            # we just potentially lost sibbling relationships
+                            algorithm_parent_message_id = None
+                    else:
+                        algorithm_parent_message_id = None
+                    #print("Current parent from algorithm: " + repr(algorithm_parent_message_id))
+                    #print("References: " + repr(container.message.references))
+                    if algorithm_parent_message_id != db_parent_message_id:
+                        # Don't reparent if the current parent isn't an email, the threading algorithm only considers mails
+                        if current_parent == None or isinstance(current_parent.content, Email):
+                            #print("UPDATING PARENT for :" + repr(container.message.message.message_id))
+                            new_parent = parent.message.message.post if algorithm_parent_message_id else None
+                            #print repr(new_parent)
+                            container.message.message.post.set_parent(new_parent)
+                    if current_parent and current_parent.content.source_id != container.message.message.source_id:
+                        #This is to correct past mistakes in the database, remove it once everyone ran it benoitg 2013-11-20
+                        print("UPDATING PARENT, BAD ORIGINAL SOURCE" + repr(current_parent.content.source_id) + " " + repr(container.message.message.source_id))
+                        new_parent = parent.message.message.post if algorithm_parent_message_id else None
+                        #print repr(new_parent)
+                        container.message.message.post.set_parent(new_parent)
+                        
+                    update_threading(container.children, container)
+                else:
+                    #print "Current message ID: None, was a dummy container"
+                    update_threading(container.children, parent)
+                
+        update_threading(threaded_emails.values())
+
+    def reprocess_content(self):
         """ Allows re-parsing all content as if it were imported for the first time
             but without re-hitting the source, or changing the object ids.
             Call when a code change would change the representation in the database
             """
-        emails = Email.db.query(Email).filter(
-            Email.source_id == mailbox.id)
+        emails = self.db.query(Email).filter(
+                Email.source_id == self.id,
+                ).options(joinedload_all(Email.post, Post.parent, Post.content))
+
         for email in emails:
             session = Email.db()
             email_object = mailbox.parse_email(email.full_message, email)
@@ -229,6 +307,8 @@ class Mailbox(Source):
             session.remove()
             mailbox = session.get(Mailbox).get(mailbox.id)
 
+        self.thread_mails(emails)
+        
     def import_content(self, only_new=True):
         #Mailbox.do_import_content(self, only_new)
         import_mails.delay(self.id, only_new)
@@ -285,6 +365,14 @@ class Mailbox(Source):
 
         mailbox.close()
         mailbox.logout()
+
+        if len(email_ids):
+            #We imported mails, we need to re-thread
+            emails = self.db.query(Email).filter(
+                Email.source_id == self.id,
+                ).options(joinedload_all(Email.post, Post.parent, Post.content))
+
+            self.thread_mails(emails)
 
     def most_common_recipient_address(self):
         """

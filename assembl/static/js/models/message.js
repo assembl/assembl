@@ -30,7 +30,7 @@ define(['backbone', 'jquery', 'app'], function(Backbone, $, app){
             parentId: null,
             subject: null,
             body: null,
-            creator: null,
+            idCreator: null,
             avatarUrl: null,
             date: null
         },
@@ -118,9 +118,19 @@ define(['backbone', 'jquery', 'app'], function(Backbone, $, app){
                 } else {
                     parent = null;
                 }
+
             } while ( parent !== null );
 
             return counter;
+        },
+
+        /**
+         * Returns the post's creator
+         * @return {User}
+         */
+        getCreator: function(){
+            var creatorId = this.get('idCreator');
+            return app.users.getById(creatorId);
         },
 
         /**

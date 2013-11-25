@@ -54,6 +54,8 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
 
             data['date'] = app.formatDate(data.date);
             data['level'] = this.model.getLevel();
+            data['creator'] = this.model.getCreator();
+
             this.el.setAttribute('data-message-level', data['level']);
 
             if( data.collapsed ){
@@ -193,7 +195,7 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
         showSelectionOptions: function(x, y){
             this.hideTooltip();
 
-            var annotator = this.$el.closest('#messagelist-thread').data('annotator');
+            var annotator = this.$el.closest('#messageList-thread').data('annotator');
             annotator.onAdderClick.call(annotator);
 
             if( app.messageList.annotatorEditor ){

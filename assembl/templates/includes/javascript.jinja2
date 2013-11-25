@@ -1,4 +1,4 @@
-<script src="{{ STATIC_URL }}js/lib/require.min.js"></script>
+<script src="{{ STATIC_URL }}js/lib/require/require.min.js"></script>
 
 <script>
 requirejs.config({
@@ -20,11 +20,14 @@ requirejs.config({
             deps: ['jquery']
         },
         'app': {
-            deps: ['ckeditor', 'tipsy', 'i18n', 'annotator', 'jquery-highlight'],
+            deps: ['ckeditor', 'tipsy', 'i18n', 'annotator', 'jquery-highlight', 'zeroclipboard'],
             exports: 'app'
         },
         'i18n': {
             exports: 'i18n'
+        },
+        'socket': {
+            deps: ['sockjs']
         },
         'jasmine': {
             exports: 'jasmine'
@@ -50,26 +53,40 @@ requirejs.config({
         'annotator' : {
             deps: ['jquery'],
             exports: 'Annotator'
+        },
+        'zeroclipboard' : {
+            exports: 'ZeroClipboard'
+        },
+        'sockjs': {
+            deps: ['jquery'],
+            exports: 'SockJS'
         }
     },
     "paths": {
-        'jquery': "lib/jquery",
-        'backbone': 'lib/backbone',
-        'underscore': 'lib/underscore',
+        'app': 'app/app',
+        'i18n': 'app/i18n',
+        'router': 'app/router',
+        'socket': 'app/socket',
 
-        'i18n': 'lib/i18n',
-        'tipsy': 'lib/jquery.tipsy',
-        'annotator': 'lib/annotator-full.min',
-        'jquery-highlight': 'lib/jquery.highlight',
+        'jquery': "lib/jquery/jquery",
+        'tipsy': 'lib/jquery/jquery.tipsy',
+        'jquery-highlight': 'lib/jquery/jquery.highlight',
 
-        'jasmine': 'lib/jasmine',
-        'jasmine-html': 'lib/jasmine-html',
-        'jasmine-jquery': 'lib/jasmine-jquery',
+        'backbone': 'lib/backbone/backbone',
+        'underscore': 'lib/underscore/underscore',
+
+        'annotator': 'lib/annotator/annotator-full.min',
+
+        'jasmine': 'lib/jasmine/jasmine',
+        'jasmine-html': 'lib/jasmine/jasmine-html',
+        'jasmine-jquery': 'lib/jasmine/jasmine-jquery',
 
         'ckeditor': 'lib/ckeditor/ckeditor',
         'ckeditor-sharedspace': 'lib/ckeditor/plugins/sharedspace/plugin',
 
-        'moment': 'lib/moment'
+        'moment': 'lib/moment/moment',
+        'zeroclipboard': 'lib/zeroclipboard/ZeroClipboard',
+        'sockjs': 'lib/sockjs/sockjs'
     }
 });
 

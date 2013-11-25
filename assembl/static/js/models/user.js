@@ -1,4 +1,4 @@
-define(['backbone', 'app', 'jquery'], function(Backbone, app, $){
+define(['backbone', 'app', 'jquery', 'i18n'], function(Backbone, app, $, i18n){
     'use strict';
 
     /**
@@ -6,14 +6,17 @@ define(['backbone', 'app', 'jquery'], function(Backbone, app, $){
      */
     var UserModel = Backbone.Model.extend({
 
-        // Todo: add the right endpoint here
-        url: "/static/js/tests/fixtures/user.json",
+        /**
+         * @type {String}
+         */
+        url: app.getApiUrl('agents/'),
 
         /**
          * Defaults
          * @type {Object}
          */
         defaults: {
+            id: null,
             name: '',
             avatarUrl: ''
         },
@@ -24,12 +27,68 @@ define(['backbone', 'app', 'jquery'], function(Backbone, app, $){
         loadCurrentUser: function(){
             this.set('id', $('#user-id').val());
             this.set('name', $('#user-displayname').val());
+        },
+
+        /**
+         * return the avatar's url
+         * @param  {Number} [size=44] The avatar size
+         * @return {string}
+         */
+        getAvatarUrl: function(size){
+            return app.formatAvatarUrl(this.get('id'), size);
         }
     });
 
 
+
+    /**
+     * @class UserCollection
+     */
+    var UserCollection = Backbone.Collection.extend({
+        /**
+         * @type {String}
+         */
+        url: app.getApiUrl('agents/'),
+
+        /**
+         * The model
+         * @type {UserModel}
+         */
+        model: UserModel,
+
+        /**
+         * Returns the user by his/her id, or return the unknown user
+         * @param {Number} id
+         * @type {User}
+         */
+        getById: function(id){
+            var user = this.get(id);
+            return user || this.getUnknownUser();
+        },
+
+
+        /**
+         * Returns the unknown user
+         * @return {User}
+         */
+        getUnknownUser: function(){
+            return UNKNOWN_USER;
+        }
+    });
+
+    /**
+     * The unknown User
+     * @type {UserModel}
+     */
+    var UNKNOWN_USER = new UserModel({
+        id: 0,
+        name: i18n.gettext('Unknown user')
+    });
+
+
     return {
-        Model: UserModel
+        Model: UserModel,
+        Collection: UserCollection
     };
 
 });

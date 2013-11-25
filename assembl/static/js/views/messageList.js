@@ -127,8 +127,8 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
             }
 
 
-            this.chk = this.$('#messagelist-mainchk');
-            this.messageThreadPanel = this.$('#messagelist-thread');
+            this.chk = this.$('#messageList-mainchk');
+            this.messageThreadPanel = this.$('#messageList-thread');
 
             this.renderThread();
             //this.closeThread();
@@ -458,21 +458,21 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
         events: {
             'click .idealist-title': 'onTitleClick',
             'click #messageList-collapseButton': 'toggleMessages',
-            'click #messagelist-returnButton': 'onReturnButtonClick',
+            'click #messageList-returnButton': 'onReturnButtonClick',
 
-            'click #messagelist-inbox': 'loadInbox',
-            'click #messagelist-insynthesis': 'loadSynthesisMessages',
+            'click #messageList-inbox': 'loadInbox',
+            'click #messageList-insynthesis': 'loadSynthesisMessages',
 
             'click #messageList-message-collapseButton': 'toggleThreadMessages',
 
             'click #messageList-prevButton': 'loadPreviousData',
             'click #messageList-nextButton': 'loadNextData',
 
-            'change #messagelist-mainchk': 'onChangeMainCheckbox',
-            'click #messagelist-selectall': 'selectAll',
-            'click #messagelist-selectnone': 'selectNone',
-            'click #messagelist-selectread': 'selectRead',
-            'click #messagelist-selectunread': 'selectUnread',
+            'change #messageList-mainchk': 'onChangeMainCheckbox',
+            'click #messageList-selectall': 'selectAll',
+            'click #messageList-selectnone': 'selectNone',
+            'click #messageList-selectread': 'selectRead',
+            'click #messageList-selectunread': 'selectUnread',
 
             'click #messageList-closeButton': 'closePanel',
             'click #messageList-fullscreenButton': 'setFullscreen',
