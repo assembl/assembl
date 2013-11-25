@@ -1,5 +1,7 @@
 import signal
 import time
+from os import mkdir
+from os.path import exists
 
 import zmq
 from zmq.eventloop import ioloop
@@ -15,12 +17,15 @@ context = zmq.Context.instance()
 ioloop.install()
 io_loop = ioloop.IOLoop.instance()  # ZMQ loop
 
-td = zmq.devices.ThreadDevice(zmq.FORWARDER, zmq.SUB, zmq.PUB)
-td.connect_in('ipc:///tmp/assembl_changes/0')
+if not exists("/tmp/assembl_changes"):
+    mkdir("/tmp/assembl_changes")
+
+td = zmq.devices.ThreadDevice(zmq.FORWARDER, zmq.XSUB, zmq.XPUB)
+td.bind_in('ipc:///tmp/assembl_changes/0')
 td.bind_out('inproc://assemblchanges')
-td.setsockopt_in(zmq.IDENTITY, 'SUB')
-td.setsockopt_in(zmq.SUBSCRIBE, '')
-td.setsockopt_out(zmq.IDENTITY, 'PUB')
+td.setsockopt_in(zmq.IDENTITY, 'XSUB')
+#td.setsockopt_in(zmq.SUBSCRIBE, '')
+td.setsockopt_out(zmq.IDENTITY, 'XPUB')
 td.start()
 
 
