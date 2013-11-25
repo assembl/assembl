@@ -8,7 +8,7 @@ from email.header import decode_header as decode_email_header, Header
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.utils import parseaddr
-import jwzthreading 
+import jwzthreading
 
 from bs4 import BeautifulSoup, Comment
 
@@ -17,6 +17,7 @@ from pyramid.threadlocal import get_current_registry
 from datetime import datetime
 from time import mktime
 from imaplib2 import IMAP4_SSL, IMAP4
+import transaction
 
 from sqlalchemy.orm import relationship, backref, deferred
 from sqlalchemy.orm import joinedload_all
@@ -38,6 +39,8 @@ from sqlalchemy import (
 from assembl.source.models.generic import Source, Content
 from assembl.source.models.post import Post
 from assembl.auth.models import EmailAccount
+from assembl.tasks.imap import import_mails
+from assembl.lib.sqla import mark_changed
 
 
 class Mailbox(Source):
@@ -47,7 +50,7 @@ class Mailbox(Source):
     """
     __tablename__ = "mailbox"
     id = Column(Integer, ForeignKey(
-        'source.id', 
+        'source.id',
         ondelete='CASCADE'
     ), primary_key=True)
 
@@ -63,32 +66,35 @@ class Mailbox(Source):
     subject_mangling_regex = Column(UnicodeText, nullable=True)
     subject_mangling_replacement = Column(UnicodeText, nullable=True)
     __compiled_subject_mangling_regex = None
-    
+
     def _compile_subject_mangling_regex(self):
         if(self.subject_mangling_regex):
-            self.__compiled_subject_mangling_regex = re.compile(self.subject_mangling_regex)
+            self.__compiled_subject_mangling_regex =\
+                re.compile(self.subject_mangling_regex)
         else:
             self.__compiled_subject_mangling_regex = None
-        
+
     __mapper_args__ = {
         'polymorphic_identity': 'mailbox',
     }
 
     def mangle_mail_subject(self, subject):
-        if self.__compiled_subject_mangling_regex == None:
+        if self.__compiled_subject_mangling_regex is None:
             self._compile_subject_mangling_regex()
-            
+
         if self.__compiled_subject_mangling_regex:
             if self.subject_mangling_replacement:
-                repl=self.subject_mangling_replacement
+                repl = self.subject_mangling_replacement
             else:
-                repl=''
-            (retval, num) =  self.__compiled_subject_mangling_regex.subn(repl, subject)
+                repl = ''
+            (retval, num) =\
+                self.__compiled_subject_mangling_regex.subn(repl, subject)
             return retval
         else:
             return subject
 
     VALID_TAGS = ['strong', 'em', 'p', 'ul', 'li', 'br']
+
     @staticmethod
     def sanitize_html(html_value, valid_tags=VALID_TAGS):
         soup = BeautifulSoup(html_value)
@@ -113,27 +119,27 @@ class Mailbox(Source):
 
         def get_plain_text_payload(message):
             """ Returns the first text/plain body as a unicode object, falling back to text/html body """
-            
+
             def process_part(part, default_charset, text_part, html_part):
                 if part.is_multipart():
                     for part in part.get_payload():
                         charset = part.get_content_charset(default_charset)
-                        (text_part, html_part) = process_part(part, charset, text_part, html_part)
+                        (text_part, html_part) = process_part(
+                            part, charset, text_part, html_part)
                 else:
                     charset = part.get_content_charset(default_charset)
                     decoded_part = part.get_payload(decode=True)
-                    decoded_part = decoded_part.decode(charset,'replace')
-                    if part.get_content_type() == 'text/plain' and text_part==None:
+                    decoded_part = decoded_part.decode(charset, 'replace')
+                    if part.get_content_type() == 'text/plain' and text_part is None:
                         text_part = decoded_part
-                    elif part.get_content_type() == 'text/html' and html_part==None:
+                    elif part.get_content_type() == 'text/html' and html_part is None:
                         html_part = decoded_part
                 return (text_part, html_part)
-                
+
             html_part = None
             text_part = None
             default_charset = message.get_charset() or 'ISO-8859-1'
             (text_part, html_part) = process_part(message, default_charset, text_part, html_part)
-            
             if html_part:
                 return self.sanitize_html(html_part)
             elif text_part:
@@ -144,38 +150,33 @@ class Mailbox(Source):
         body = get_plain_text_payload(parsed_email)
 
         def email_header_to_unicode(header_string):
-            decoded_header = decode_email_header(header_string);
+            decoded_header = decode_email_header(header_string)
             default_charset = 'ASCII'
-            
+
             text = ''.join(
-                [ 
-                    unicode(t[0], t[1] or default_charset) for t in \
-                    decoded_header 
+                [
+                    unicode(t[0], t[1] or default_charset) for t in
+                    decoded_header
                 ]
             )
 
             return text
 
         new_message_id = parsed_email.get('Message-ID', None)
-        if new_message_id: new_message_id = email_header_to_unicode(
-            new_message_id
-        )
+        if new_message_id:
+            new_message_id = email_header_to_unicode(
+                new_message_id)
 
         new_in_reply_to = parsed_email.get('In-Reply-To', None)
-        if new_in_reply_to: new_in_reply_to = email_header_to_unicode(
-            new_in_reply_to
-        )
+        if new_in_reply_to:
+            new_in_reply_to = email_header_to_unicode(
+                new_in_reply_to)
 
         sender = email_header_to_unicode(parsed_email.get('From'))
         sender_name, sender_email = parseaddr(sender)
         sender_email_account = EmailAccount.get_or_make_profile(self.db, sender_email, sender_name)
         creation_date = datetime.utcfromtimestamp(
-                    mktime(
-                        email.utils.parsedate(
-                            parsed_email['Date']
-                        )
-                    )
-                )
+            mktime(email.utils.parsedate(parsed_email['Date'])))
         subject = email_header_to_unicode(parsed_email['Subject'])
         recipients = email_header_to_unicode(parsed_email['To'])
         body = body.strip()
@@ -186,17 +187,17 @@ class Mailbox(Source):
             email_object = self.db.query(Email).filter(
                 Email.message_id == new_message_id,
                 Email.source_id == self.id,
-                ).one()
-            if existing_email and existing_email!=email_object:
+            ).one()
+            if existing_email and existing_email != email_object:
                 raise ValueError("The existing object isn't the same as the one found by message id")
-            email_object.recipients=recipients
-            email_object.sender=sender
-            email_object.subject=subject
-            email_object.creation_date=creation_date
-            email_object.message_id=new_message_id
-            email_object.in_reply_to=new_in_reply_to
-            email_object.body=body
-            email_object.full_message=message_string
+            email_object.recipients = recipients
+            email_object.sender = sender
+            email_object.subject = subject
+            email_object.creation_date = creation_date
+            email_object.message_id = new_message_id
+            email_object.in_reply_to = new_in_reply_to
+            email_object.body = body
+            email_object.full_message = message_string
         except NoResultFound:
             email_object = Email(
                 post=Post(),
@@ -299,49 +300,68 @@ class Mailbox(Source):
                 ).options(joinedload_all(Email.post, Post.parent, Post.content))
 
         for email in emails:
-            self.parse_email(email.full_message, email)
+            session = Email.db()
+            email_object = mailbox.parse_email(email.full_message, email)
+            session.add(email_object)
+            transaction.commit()
+            session.remove()
+            mailbox = session.get(Mailbox).get(mailbox.id)
 
         self.thread_mails(emails)
         
     def import_content(self, only_new=True):
-        if self.use_ssl:
-            mailbox = IMAP4_SSL(host=self.host.encode('utf-8'), port=self.port)
+        #Mailbox.do_import_content(self, only_new)
+        import_mails.delay(self.id, only_new)
+
+    @staticmethod
+    def do_import_content(mbox, only_new=True):
+        if mbox.use_ssl:
+            mailbox = IMAP4_SSL(host=mbox.host.encode('utf-8'), port=mbox.port)
         else:
-            mailbox = IMAP4(host=self.host.encode('utf-8'), port=self.port)
+            mailbox = IMAP4(host=mbox.host.encode('utf-8'), port=mbox.port)
         if 'STARTTLS' in mailbox.capabilities:
             #Always use starttls if server supports it
             mailbox.starttls()
-        mailbox.login(self.username, self.password)
-        mailbox.select(self.folder)
+        mailbox.login(mbox.username, mbox.password)
+        mailbox.select(mbox.folder)
 
         command = "ALL"
 
-        if only_new and self.last_imported_email_uid:
-            command = "(UID %s:*)" % self.last_imported_email_uid
-        
+        if only_new and mbox.last_imported_email_uid:
+            command = "(UID %s:*)" % mbox.last_imported_email_uid
+
         search_status, search_result = mailbox.uid('search', None, command)
 
         email_ids = search_result[0].split()
 
-        if only_new and self.last_imported_email_uid:
+        if only_new and mbox.last_imported_email_uid:
             # discard the first message, it should be the last imported email.
             del email_ids[0]
 
-        def import_email(email_id):
+        def import_email(mailbox_obj, email_id):
+            session = Email.db()
+            mailbox_obj = session.merge(mailbox_obj)
             status, message_data = mailbox.uid('fetch', email_id, "(RFC822)")
-
             for response_part in message_data:
                 if isinstance(response_part, tuple):
                     message_string = response_part[1]
 
-            self.parse_email(message_string)
-            
-            
-        if len(email_ids):
-            new_emails = [import_email(email_id) for email_id in email_ids]
+            email_object = mailbox_obj.parse_email(message_string)
+            session.add(email_object)
+            transaction.commit()
+            mailbox_obj = Mailbox.get(id=mailbox_obj.id)
 
-            self.last_imported_email_uid = \
+        if len(email_ids):
+            new_emails = [import_email(mbox, email_id) for email_id in email_ids]
+
+            mbox = Mailbox.get(id=mbox.id)
+            mbox.last_imported_email_uid = \
                 email_ids[len(email_ids)-1]
+
+        # TODO: remove this line, the property `last_import` does not persist.
+        mbox.last_import = datetime.utcnow()
+        mark_changed()
+        transaction.commit()
 
         mailbox.close()
         mailbox.logout()
@@ -353,7 +373,6 @@ class Mailbox(Source):
                 ).options(joinedload_all(Email.post, Post.parent, Post.content))
 
             self.thread_mails(emails)
-
 
     def most_common_recipient_address(self):
         """
@@ -389,7 +408,7 @@ class Mailbox(Source):
 
         most_common_address = sorted(
             [
-                (most_common_addresses[address], address) for address in \
+                (most_common_addresses[address], address) for address in
                 most_common_addresses.keys()
             ], key=lambda pair: pair[0]
         )[-1][1]
@@ -404,11 +423,11 @@ class Mailbox(Source):
 
     # The send method will be a common interface on all sources.
     def send(
-        self, 
-        sender, 
+        self,
+        sender,
         message_body,
         html_body=None,
-        subject='[Assembl]', 
+        subject='[Assembl]'
     ):
         """
         Send an email from the given sender to the most common recipient in
@@ -418,7 +437,7 @@ class Mailbox(Source):
         sent_from = ' '.join([
             "%(sender_name)s on Assembl" % {
                 "sender_name": sender.display_name()
-            }, 
+            },
             "<%(sender_email)s>" % {
                 "sender_email": sender.get_preferred_email(),
             }
@@ -461,13 +480,12 @@ class Mailbox(Source):
         )
 
         smtp_connection.sendmail(
-            sent_from, 
+            sent_from,
             recipients,
             message.as_string()
         )
 
         smtp_connection.quit()
-
 
     def serializable(self):
         serializable_source = super(Mailbox, self).serializable()
@@ -478,8 +496,8 @@ class Mailbox(Source):
             "username": self.username,
             "use_ssl": self.use_ssl,
             "folder": self.folder,
-            "most_common_recipient_address": \
-                self.most_common_recipient_address()
+            "most_common_recipient_address":
+            self.most_common_recipient_address()
         })
 
         return serializable_source
@@ -487,29 +505,31 @@ class Mailbox(Source):
     def __repr__(self):
         return "<Mailbox %s>" % repr(self.name)
 
+
 class MailingList(Mailbox):
     """
-    A mailbox with mailing list semantics 
+    A mailbox with mailing list semantics
     (single post address, subjetc mangling, etc.)
     """
     __tablename__ = "source_mailinglist"
     id = Column(Integer, ForeignKey(
-        'mailbox.id', 
+        'mailbox.id',
         ondelete='CASCADE'
     ), primary_key=True)
-    
+
     post_email_address = Column(UnicodeText, nullable=True)
-    
+
     __mapper_args__ = {
         'polymorphic_identity': 'source_mailinglist',
     }
-    
+
     def get_send_address(self):
         """
         Get the email address to send a message to the discussion
         """
         return self.post_email()
-    
+
+
 class Email(Content):
     """
     An Email refers to an email message that was imported from an Mailbox.
@@ -517,11 +537,12 @@ class Email(Content):
     __tablename__ = "email"
 
     id = Column(Integer, ForeignKey(
-        'content.id', 
+        'content.id',
         ondelete='CASCADE'
     ), primary_key=True)
 
-    recipients = deferred(Column(Unicode(), nullable=False), group='raw_details')
+    # in virtuoso, varchar is 1024 bytes and sizeof(wchar)==4, so varchar is 256 chars
+    recipients = deferred(Column(UnicodeText, nullable=False), group='raw_details')
     sender = deferred(Column(Unicode(), nullable=False), group='raw_details')
     subject = Column(Unicode(), nullable=False)
     body = Column(UnicodeText)
@@ -553,7 +574,7 @@ class Email(Content):
         sent_from = ' '.join([
             "%(sender_name)s on Assembl" % {
                 "sender_name": sender.display_name()
-            }, 
+            },
             "<%(sender_email)s>" % {
                 "sender_email": sender.get_preferred_email(),
             }
@@ -597,7 +618,7 @@ class Email(Content):
         )
 
         smtp_connection.sendmail(
-            sent_from, 
+            sent_from,
             recipients,
             message.as_string()
         )
@@ -619,7 +640,7 @@ class Email(Content):
 
     def __repr__(self):
         return "<Email '%s to %s'>" % (
-            self.sender.encode('utf-8'), 
+            self.sender.encode('utf-8'),
             self.recipients.encode('utf-8')
         )
 

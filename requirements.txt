@@ -3,7 +3,7 @@ pyramid_debugtoolbar
 pyramid_jinja2
 pyramid_tm
 alembic
-pytz>=2013b
+pytz
 Babel
 colander
 colanderalchemy==0.2.0
@@ -23,7 +23,7 @@ coverage
 webtest
 pinocchio
 # hapi : a OAuth2 server for pyramid. Still very much work in progress.
-Unidecode==0.04.13
+Unidecode
 datetime
 iso8601
 PyJWT
@@ -32,3 +32,5 @@ anyjson
 -e git+https://github.com/benoitg/jwzthreading.git@master#egg=jwzthreading
 tornado
 sockjs_tornado
+celery
+supervisor
