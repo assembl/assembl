@@ -44,6 +44,7 @@ class Assembl(Plugin):
         res = {row[0] for row in res}
         # get the ordered version to minimize cascade.
         # cascade is not reliable.
+        import assembl.models
         ordered = [t.name for t in get_metadata().sorted_tables
                    if t.name in res]
         ordered.extend([t for t in res if t not in ordered])
