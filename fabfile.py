@@ -229,6 +229,7 @@ def configure_webservers():
     sudo('a2ensite %s' % env.urlhost)
 
     # nginx
+    # TODO: Mac
     print(cyan('Configuring Nginx'))
     sudo('cp %snginx/%s /etc/nginx/sites-available/%s' % (env.projectpath, env.urlhost, env.urlhost))
     with cd('/etc/nginx/sites-enabled/'):
@@ -243,8 +244,12 @@ def install_webservers():
     Install the webserver stack
     """
     print(cyan('Installing web servers'))
-    sudo('apt-get install apache2-mpm-prefork libapache2-mod-wsgi -y')
-    sudo('apt-get install nginx -y')
+    if not env.mac:
+        sudo('apt-get install apache2-mpm-prefork libapache2-mod-wsgi -y')
+        sudo('apt-get install nginx -y')
+
+apache_files = ('/etc/init.d/apache2', '/opt/local/apache2/bin/apachectl',
+                '/usr/sbin/apachectl')
 
 @task
 def webservers_reload():
@@ -255,13 +260,19 @@ def webservers_reload():
         print(cyan("Reloading apache"))
         # Apache (sudo is part of command line here because we don't have full
         # sudo access
-        run('sudo /etc/init.d/apache2 reload')
+        for f in apache_files:
+            if exists(f):
+                run('sudo %s reload' % (f,))
+                break
 
     if env.uses_ngnix:
         # Nginx (sudo is part of command line here because we don't have full
         # sudo access
         print(cyan("Reloading nginx"))
-        run('sudo /etc/init.d/nginx reload')
+        if exists('/etc/init.d/nginx'):
+            run('sudo /etc/init.d/nginx reload')
+        elif env.mac:
+            sudo('killall -HUP nginx')
 
 def webservers_stop():
     """
@@ -269,11 +280,17 @@ def webservers_stop():
     """
     if env.uses_apache:
         # Apache
-        sudo('/etc/init.d/apache2 stop')
+        for f in apache_files:
+            if exists(f):
+                run('sudo %s stop' % (f,))
+                break
 
     if env.uses_ngnix:
         # Nginx
-        sudo('/etc/init.d/nginx stop')    
+        if exists('/etc/init.d/nginx'):
+            sudo('/etc/init.d/nginx stop')    
+        elif env.mac:
+            sudo('killall nginx')
 
 def webservers_start():
     """
@@ -281,11 +298,17 @@ def webservers_start():
     """
     if env.uses_apache:
         # Apache
-        sudo('/etc/init.d/apache2 start')
+        for f in apache_files:
+            if exists(f):
+                run('sudo %s start' % (f,))
+                break
 
     if env.uses_ngnix:
         # Nginx
-        sudo('/etc/init.d/nginx start')
+        if exists('/etc/init.d/nginx'):
+            sudo('/etc/init.d/nginx start')    
+        elif env.mac and exists('/usr/local/nginx/sbin/nginx'):
+            sudo('/usr/local/nginx/sbin/nginx')
 
     
 def check_or_install_logdir():
@@ -303,7 +326,10 @@ def install_database_server():
     Install a postgresql DB
     """
     print(cyan('Installing Postgresql'))
-    sudo('apt-get install -y postgresql')
+    if env.mac:
+        sudo('brew install postgresql')
+    else:
+        sudo('apt-get install -y postgresql')
 
 def create_database_user():
     """
@@ -319,17 +345,27 @@ def install_basetools():
     Install required base tools
     """
     print(cyan('Installing base tools'))
-    sudo('apt-get install -y python-virtualenv python-pip')
-    sudo('apt-get install -y git mercurial subversion')
-    sudo('apt-get install -y gettext')
+    if env.mac:
+        run('cd /tmp; curl -O https://raw.github.com/pypa/pip/master/contrib/get-pip.py')
+        sudo('python /tmp/get-pip.py')
+        sudo('pip install virtualenv mercurial')
+    else:
+        sudo('apt-get install -y python-virtualenv python-pip')
+        sudo('apt-get install -y git mercurial subversion')
+        sudo('apt-get install -y gettext')
 
 def install_builddeps():
     """
     Will install commonly needed build deps for pip django virtualenvs.
     """
     print(cyan('Installing compilers and required libraries'))
-    sudo('apt-get install -y build-essential python-dev libjpeg62-dev libpng12-dev zlib1g-dev libfreetype6-dev liblcms-dev libpq-dev libxslt1-dev libxml2-dev')
-    sudo('apt-get install -y libzmq3-dev redis memcached')
+    if mac:
+        if not exists('/usr/local/bin/brew'):
+            sudo('ruby -e "$(curl -fsSL https://raw.github.com/mxcl/homebrew/go/install)"')
+        sudo('brew install memcached zeromq redis postgresql')
+    else:
+        sudo('apt-get install -y build-essential python-dev libjpeg62-dev libpng12-dev zlib1g-dev libfreetype6-dev liblcms-dev libpq-dev libxslt1-dev libxml2-dev')
+        sudo('apt-get install -y libzmq3-dev redis memcached')
 
 @task
 def configure_rbenv():
@@ -495,6 +531,7 @@ def commonenv(projectpath, venvpath=None):
     env.uses_apache = False
     env.uses_ngnix = False
     env.uses_global_supervisor = False
+    env.mac = False
 # Specific environments 
 
 
@@ -508,6 +545,7 @@ def devenv(projectpath=None):
     if not projectpath:
         projectpath = os.path.dirname(os.path.realpath(__file__))
     commonenv(projectpath, getenv('VIRTUAL_ENV', None))
+    env.mac = getenv('OSTYPE').startswith('darwin')
     env.wsginame = "dev.wsgi"
     env.urlhost = "localhost"
     env.ini_file = 'development.ini'
