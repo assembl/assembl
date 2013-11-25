@@ -21,6 +21,18 @@ From a checkout
 - cd your_checkout
 - fab devenv bootstrap_from_checkout
 
+On the Mac:
+
+Use brew and install these components:
+ - brew install memcached zeromq redis postgresql
+
+
+Compiling CSS
+-------------
+The previous steps should install compass. Otherwise,
+
+- fab devenv install_compass
+
 Running:
 
 - cd ~/assembl
@@ -29,8 +41,20 @@ Only the first time you run it:
 sudo -u postgres createuser --createdb --no-createrole --no-superuser assembl --pwprompt
 createdb -U assembl assembl
 - $venv/bin/assembl-db-manage development.ini bootstrap
+- compass compile
 
-- $venv/bin/pserve --reload development.ini
+Thereafter:
+- $venv/bin/supervisord
+- $venv/bin/supervisorctl start dev:
+
+You can monitor any of the processes, for example pserve, with these commands:
+- $venv/bin/supervisorctl tail -f dev:pserve 
+- $venv/bin/supervisorctl tail -f dev:pserve stderr
+
+In production:
+
+- $venv/bin/supervisorctl start prod:
+(Instead of dev:. You may have to stop dev:)
 
 Updating an environment:
 
@@ -39,20 +63,6 @@ Updating an environment:
 - fab devenv app_fullupdate
 
 
-Compiling CSS
--------------
-
-
-
-You have too install compass (the first time, already done if you've used bootstrap above):
-
-- fab devenv install_compass
-
-To run compass:
-
-- cd <directory containing this file>
-
-- bundle exec compass watch
 
 
 Schema migrations
@@ -73,14 +83,3 @@ Running tests
 - Create a testing database: createdb -U assembl assembl_test
 - nosetests
 
-Running on Linux
-----------------
-
-sudo apt-get install libzmq3-dev memcached
-
-Running on Mac OS
-----------------
-
-Use brew and install the libmemcached and zeromq
- - brew install libmemcached 
- - brew install zeromq
