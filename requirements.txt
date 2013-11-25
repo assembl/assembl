@@ -34,3 +34,4 @@ tornado
 sockjs_tornado
 celery
 supervisor
+redis
