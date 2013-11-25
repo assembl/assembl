@@ -50,7 +50,7 @@ search_extracts = Service(
 @extract.get()  # permission=P_READ
 def get_extract(request):
     extract_id = request.matchdict['id']
-    extract = Extract.get(id=extract_id)
+    extract = Extract.get(id=int(extract_id))
 
     return extract.serializable()
 
@@ -102,7 +102,7 @@ def post_extract(request):
 
         target_type = target.get('@type')
         if target_type == 'email':
-            post_id = target.get('@id')
+            post_id = int(target.get('@id'))
             post = Post.get(id=post_id)
             if not post:
                 raise HTTPNotFound("Post with id '%s' not found." % post_id)
@@ -124,8 +124,8 @@ def post_extract(request):
         annotation_text = annotation_text,
         source=content
     )
-
     Extract.db.add(new_extract)
+
     for range_data in extract_data.get('ranges', []):
         range = TextFragmentIdentifier(
             extract=new_extract,
@@ -148,7 +148,7 @@ def put_extract(request):
     user_id = authenticated_userid(request)
 
     updated_extract_data = json.loads(request.body)
-    extract = Extract.get(id=extract_id)
+    extract = Extract.get(id=int(extract_id))
     if not extract:
         raise HTTPNotFound("Extract with id '%s' not found." % extract_id)
 
@@ -165,7 +165,7 @@ def put_extract(request):
 @extract.delete()  # permission=P_DELETE_EXTRACT
 def delete_extract(request):
     extract_id = request.matchdict['id']
-    extract = Extract.get(id=extract_id)
+    extract = Extract.get(id=int(extract_id))
 
     if not extract:
         return {'ok': False}

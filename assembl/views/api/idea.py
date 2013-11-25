@@ -25,7 +25,7 @@ idea_extracts = Service(
 def create_idea(request):
     discussion_id = request.matchdict['discussion_id']
     session = Discussion.db()
-    discussion = session.query(Discussion).get(discussion_id)
+    discussion = session.query(Discussion).get(int(discussion_id))
     idea_data = json.loads(request.body)
 
     with transaction.manager:
@@ -49,7 +49,7 @@ def create_idea(request):
 @idea.get()  # permission=P_READ)
 def get_idea(request):
     idea_id = request.matchdict['id']
-    idea = Idea.get(id=idea_id)
+    idea = Idea.get(id=int(idea_id))
 
     if not idea:
         raise HTTPNotFound("Idea with id '%s' not found." % idea_id)
@@ -60,7 +60,7 @@ def get_idea(request):
 @ideas.get()  # permission=P_READ)
 def get_ideas(request):
     discussion_id = request.matchdict['discussion_id']
-    discussion = Discussion.get(id=discussion_id)
+    discussion = Discussion.get(id=int(discussion_id))
     if not discussion:
         raise HTTPNotFound("Discussion with id '%s' not found." % discussion_id)
 
@@ -82,10 +82,10 @@ def save_idea(request):
     # Special items in TOC, like unsorted posts.
     if idea_id in ['orphan_posts']:
         return {'ok': False, 'id': idea_id}
-        
+
     with transaction.manager:
-        idea = Idea.get(id=idea_id)
-        discussion = Discussion.get(id=discussion_id)
+        idea = Idea.get(id=int(idea_id))
+        discussion = Discussion.get(id=int(discussion_id))
 
         idea.short_title = idea_data['shortTitle']
         idea.long_title = idea_data['longTitle']
@@ -113,7 +113,7 @@ def save_idea(request):
 @idea.delete()  # permission=P_EDIT_IDEA
 def delete_idea(request):
     idea_id = request.matchdict['id']
-    idea = Idea.get(id=idea_id)
+    idea = Idea.get(id=int(idea_id))
 
     if not idea:
         raise HTTPNotFound("Idea with id '%s' not found." % idea_id)
@@ -131,7 +131,7 @@ def delete_idea(request):
 @idea_extracts.get()  # permission=P_READ
 def get_idea_extracts(request):
     idea_id = request.matchdict['id']
-    idea = Idea.get(id=idea_id)
+    idea = Idea.get(id=int(idea_id))
 
     if not idea:
         raise HTTPNotFound("Idea with id '%s' not found." % idea_id)

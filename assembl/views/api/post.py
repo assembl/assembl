@@ -92,7 +92,7 @@ def _get_idea_query(post, levels=None):
 @posts.get()  # permission=P_READ)
 def get_posts(request):
     discussion_id = int(request.matchdict['discussion_id'])
-    discussion = Discussion.get(id=discussion_id)
+    discussion = Discussion.get(id=int(discussion_id))
     if not discussion:
         raise HTTPNotFound(_("No discussion found with id=%s" % discussion_id))
 
@@ -240,7 +240,7 @@ def get_posts(request):
 @post.get()  # permission=P_READ)
 def get_post(request):
     post_id = request.matchdict['id']
-    post = Post.get(id=post_id)
+    post = Post.get(id=int(post_id))
 
     if not post:
         raise HTTPNotFound("Post with id '%s' not found." % post_id)
@@ -275,7 +275,7 @@ def create_post(request):
         return {"ok": True}
 
     discussion_id = request.matchdict['discussion_id']
-    discussion = Discussion.get(id=discussion_id)
+    discussion = Discussion.get(id=int(discussion_id))
 
     subject = subject or discussion.topic
 
