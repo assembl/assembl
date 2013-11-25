@@ -25,7 +25,7 @@ from sqlalchemy import (
 
 from assembl.lib.utils import slugify
 
-from ..lib.sqla import Base as SQLAlchemyBaseModel
+from ..lib.sqla import db_schema, Base as SQLAlchemyBaseModel
 from ..source.models import (Source, Content, Post, Mailbox)
 from ..auth.models import DiscussionPermission, Role, Permission
 
@@ -39,7 +39,7 @@ class Discussion(SQLAlchemyBaseModel):
 
     topic = Column(UnicodeText, nullable=False)
     
-    slug = Column(UnicodeText, nullable=False, unique=True, index=True)
+    slug = Column(Unicode, nullable=False, unique=True, index=True)
     
     creation_date = Column(DateTime, nullable=False, default=datetime.utcnow)
     
@@ -120,6 +120,8 @@ class Discussion(SQLAlchemyBaseModel):
 
     def import_from_sources(self, only_new=True):
         for source in self.sources:
+            # refetch after calling
+            source = Source.db.merge(source)
             try:
                 source.import_content(only_new=only_new)
             except:
@@ -256,6 +258,7 @@ idea_association_table = Table(
     SQLAlchemyBaseModel.metadata,
     Column('parent_id', Integer, ForeignKey('idea.id')),
     Column('child_id', Integer, ForeignKey('idea.id')),
+    schema = db_schema
 )
 
 class Idea(SQLAlchemyBaseModel):
@@ -285,7 +288,7 @@ class Idea(SQLAlchemyBaseModel):
 
     children = relationship(
         "Idea",
-        secondary='idea_association',
+        secondary=idea_association_table,
         backref="parents",
         primaryjoin=id==idea_association_table.c.parent_id,
         secondaryjoin=id==idea_association_table.c.child_id,
