@@ -15,7 +15,7 @@ context = zmq.Context.instance()
 ioloop.install()
 io_loop = ioloop.IOLoop.instance()  # ZMQ loop
 
-td = zmq.devices.ThreadDevice(zmq.FORWARDER, zmq.XSUB, zmq.XPUB)
+td = zmq.devices.ThreadDevice(zmq.FORWARDER, zmq.SUB, zmq.PUB)
 td.connect_in('ipc:///tmp/assembl_changes/0')
 td.bind_out('inproc://assemblchanges')
 td.setsockopt_in(zmq.IDENTITY, 'SUB')

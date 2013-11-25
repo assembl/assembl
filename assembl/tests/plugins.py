@@ -46,8 +46,8 @@ class Assembl(Plugin):
         # get the ordered version to minimize cascade.
         # cascade does not exist on virtuoso.
         import assembl.models
-        ordered = [t.name for t in get_metadata().sorted_tables if t.name in res]
-        print ordered
+        ordered = [t.name for t in get_metadata().sorted_tables
+                   if t.name in res]
         ordered.extend([t for t in res if t not in ordered])
         if reversed:
             ordered.reverse()

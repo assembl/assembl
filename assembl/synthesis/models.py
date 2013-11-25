@@ -119,8 +119,8 @@ class Discussion(SQLAlchemyBaseModel):
         ).count()
 
     def import_from_sources(self, only_new=True):
-        # refetch after calling
         for source in self.sources:
+            # refetch after calling
             source = Source.db.merge(source)
             try:
                 source.import_content(only_new=only_new)

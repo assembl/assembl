@@ -2,7 +2,6 @@ pyramid
 pyramid_debugtoolbar
 pyramid_jinja2
 pyramid_tm
-#alembic
 -e git://github.com/maparent/alembic.git#egg=alembic
 pytz
 Babel
@@ -26,16 +25,6 @@ webtest
 pinocchio
 # hapi : a OAuth2 server for pyramid. Still very much work in progress.
 Unidecode
-pyramid-mako>=0.3
-requests
-rdflib
-celery
-supervisor
-uricore
-lxml
--e git://github.com/RDFLib/rdflib-jsonld#egg=rdflib_jsonld
--e git://github.com/maparent/pyodbc.git@v3-virtuoso#egg=pyodbc
--e hg+https://bitbucket.org/maparent/virtuoso#egg=virtuoso
 datetime
 iso8601
 PyJWT
@@ -44,3 +33,13 @@ anyjson
 -e git+https://github.com/benoitg/jwzthreading.git@master#egg=jwzthreading
 tornado
 sockjs_tornado
+celery
+supervisor
+pyramid-mako>=0.3
+requests
+rdflib
+uricore
+lxml
+-e git://github.com/RDFLib/rdflib-jsonld#egg=rdflib_jsonld
+-e git://github.com/maparent/pyodbc.git@v3-virtuoso#egg=pyodbc
+-e hg+https://bitbucket.org/maparent/virtuoso#egg=virtuoso

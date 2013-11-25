@@ -430,6 +430,7 @@ def orm_delete_listener(mapper, connection, target):
 
 _counter = count()
 
+
 def commit_listener(connection):
     if 'zsocket' not in connection.info:
         socket = zmq_context.socket(zmq.PUB)
@@ -493,6 +494,7 @@ def mark_changed():
 def get_metadata():
     global _metadata
     return _metadata
+
 
 def includeme(config):
     """Initialize SQLAlchemy at app start-up time."""
