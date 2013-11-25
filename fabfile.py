@@ -19,7 +19,7 @@ def reloadapp():
     """
     Touch the wsgi
     """
-    if env.uses_supervisor:
+    if env.uses_global_supervisor:
         print(cyan('Asking supervisor to restart %(projectname)s' % env))
         run("sudo /usr/bin/supervisorctl restart %(projectname)s" % env)
     if env.uses_wsgi:
@@ -29,6 +29,8 @@ def reloadapp():
         if env.uses_apache:
             with cd(env.projectpath):
                 run('touch apache/*')
+    else:
+        venvcmd("supervisorctl restart all")
     if env.uses_memcache:
         flushmemcache()
 
@@ -492,7 +494,7 @@ def commonenv(projectpath, venvpath=None):
     env.uses_wsgi = False
     env.uses_apache = False
     env.uses_ngnix = False
-    env.uses_supervisor = False
+    env.uses_global_supervisor = False
 # Specific environments 
 
 
@@ -534,7 +536,7 @@ def caravan_stagenv():
     
     env.uses_apache = False
     env.uses_ngnix = True
-    env.uses_supervisor = True
+    env.uses_global_supervisor = True
     env.gitbranch = "develop"
 
 
