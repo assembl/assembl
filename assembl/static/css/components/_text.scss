@@ -57,11 +57,13 @@
 // -----------
 .text-quotation {     
     &:before {
-        content: "\00AB\00a0 ";
+        //content: "\00AB\00a0 ";
+        content: "\275D\00a0 ";
     }
 
     &:after {
-        content: "\00a0\00BB";
+        //content: "\00a0\00BB";
+        content: "\00a0\275E";
     }
  }
 

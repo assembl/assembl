@@ -10,7 +10,7 @@ div.postitlist {
     > div.postit {
         overflow: visible;
         min-width: 200px; //Width from the shadow below.  
-        margin: 1em;    
+        margin: 1em;
         padding: 1em;
         position:relative;   
         border-right: 1px solid #E8E8E8;  
@@ -24,7 +24,10 @@ div.postitlist {
                       linear-gradient(top, $postit-color-dark, $postit-color-dark 40px, transparent 40px),
                       linear-gradient(top left, $postit-color-light, $postit-color-dark)
                       );
-
+        q {
+            margin-right: 0.8em;
+            display: inline-block;
+        }
         &:after {
             content: "";
             position:absolute;
