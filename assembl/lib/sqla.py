@@ -3,7 +3,7 @@
 import re
 import sys
 from datetime import datetime
-from itertools import groupby, count
+from itertools import groupby
 import inspect
 
 from anyjson import dumps
@@ -17,12 +17,11 @@ from sqlalchemy.util import classproperty
 from sqlalchemy.orm.session import object_session
 from zope.sqlalchemy import ZopeTransactionExtension
 from zope.sqlalchemy.datamanager import mark_changed as z_mark_changed
-import zmq
 
 from pyramid.paster import get_appsettings, setup_logging
 
 from ..view_def import get_view_def
-from .zmqlib import context as zmq_context
+from .zmqlib import get_pub_socket, send_changes
 
 _TABLENAME_RE = re.compile('([A-Z]+)')
 
@@ -428,26 +427,15 @@ def orm_delete_listener(mapper, connection, target):
             "@tombstone": True})
 
 
-_counter = count()
-
-
 def commit_listener(connection):
     if 'zsocket' not in connection.info:
-        socket = zmq_context.socket(zmq.PUB)
-        socket.connect('inproc://assemblchanges')
-        connection.info['zsocket'] = socket
-    else:
-        socket = connection.info['zsocket']
+        connection.info['zsocket'] = get_pub_socket()
     if 'cdict' in connection.info:
         for discussion, changes in groupby(
                 connection.info['cdict'].values(), lambda x: x[0]):
             discussion = bytes(discussion or "*")
             changes = [x[1] for x in changes]
-            order = _counter.next()
-            socket.send(discussion, zmq.SNDMORE)
-            socket.send(str(order), zmq.SNDMORE)
-            socket.send_json(changes)
-            # print "sent", order, discussion, changes
+            send_changes(connection.info['zsocket'], discussion, changes)
     else:
         print "EMPTY CDICT!"
 

@@ -2,15 +2,16 @@ from celery import Celery
 from pyramid.paster import get_appsettings
 
 from ..lib.sqla import configure_engine, get_session_maker
-
+from ..lib.zmqlib import configure_zmq
 
 # TODO: Choose config.file
 settings = get_appsettings('development.ini')
 
+configure_zmq(settings['changes.socket'], False)
 engine = configure_engine(settings, False)
 
-celery_broker = 'redis://localhost:6379/0'
-#celery_broker = 'sqla+' + settings.get('sqlalchemy.url')
+celery_broker = settings['celery.broker']
+
 app = Celery(broker=celery_broker)
 DBSession = get_session_maker(False)
 
