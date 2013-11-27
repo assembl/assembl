@@ -8,7 +8,8 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard){
         CONTEXT_MENU_WIDTH = 150,
         DRAGBOX_MAX_LENGTH = 25,
         DISCUSSION_SLUG = $('#discussion-slug').val(),
-        DISCUSSION_ID = $('#discussion-id').val();
+        DISCUSSION_ID = $('#discussion-id').val(),
+        SOCKET_URL = $('#socket-url').val();
 
     /**
      * The observer
@@ -51,6 +52,13 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard){
          * @type {String}
          */
         slug: DISCUSSION_SLUG,
+
+
+        /**
+         * The url for the changes websocket
+         * @type {String}
+         */
+        socket_url: SOCKET_URL,
 
         /**
          * The current discussion id
