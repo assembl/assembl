@@ -26,3 +26,6 @@ def includeme(config):
     config.include('.auth')
 
     config.include('.api')
+
+    config.include('.home')
+    config.include('.backbone')

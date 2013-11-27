@@ -33,7 +33,7 @@ from ...auth.operations import (
 from ...lib import config
 
 default_context = {
-    'STATIC_URL': '/static/',
+    'STATIC_URL': '/static/'
 }
 
 
@@ -510,3 +510,9 @@ def login_denied_view(request):
                 error=_('Login failed, try again'))
     # TODO: If logged in otherwise, go to profile page. 
     # Otherwise, back to login page
+
+
+def includeme(config):
+    print "hello authviews"
+    default_context['socket_url'] = \
+        config.registry.settings['changes.websocket.url']
