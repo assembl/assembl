@@ -8,7 +8,7 @@ define(['app'], function(app, socketjs){
      */
     var Socket = function(){
         // TODO : Fetch {{socket_url}} from one of the templates.
-        this.socket = new SockJS('http://localhost:8080/');
+        this.socket = new SockJS('http://localhost:8085/');
 
         this.socket.onopen = this.onOpen.bind(this);
         this.socket.onmessage = this.onMessage.bind(this);
