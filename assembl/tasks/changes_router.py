@@ -1,5 +1,6 @@
 import signal
 import time
+import sys
 from os import makedirs
 from os.path import exists, dirname
 
@@ -16,7 +17,11 @@ from pyramid.paster import get_appsettings
 
 # Inspired by socksproxy.
 
-settings = get_appsettings('development.ini')
+if len(sys.argv) != 2:
+    print "usage: python changes_router.py configuration.ini"
+    exit()
+
+settings = get_appsettings(sys.argv[-1])
 CHANGES_SOCKET = settings['changes.socket']
 
 context = zmq.Context.instance()
@@ -85,7 +90,7 @@ def term(*_ignore):
 signal.signal(signal.SIGTERM, term)
 
 web_server = HTTPServer(web_app)
-web_server.listen(8080)
+web_server.listen(settings['changes.websocket.port'])
 try:
     io_loop.start()
 except KeyboardInterrupt:
