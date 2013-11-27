@@ -28,6 +28,18 @@ From a checkout
 - cd your_checkout
 - fab devenv bootstrap_from_checkout
 
+On the Mac:
+
+Use brew and install these components:
+ - brew install memcached zeromq redis postgresql
+
+
+Compiling CSS
+-------------
+The previous steps should install compass. Otherwise,
+
+- fab devenv install_compass
+
 Running:
 
 Install Virtuoso.
@@ -70,19 +82,28 @@ Updating an environment:
 
 - fab devenv app_fullupdate
 
+- compass compile
 
-Compiling CSS
--------------
+Thereafter:
+- $venv/bin/supervisord
+- $venv/bin/supervisorctl start dev:
 
-You have to install compass (the first time, already done if you've used bootstrap above):
+You can monitor any of the processes, for example pserve, with these commands:
+- $venv/bin/supervisorctl tail -f dev:pserve 
+- $venv/bin/supervisorctl tail -f dev:pserve stderr
 
-- fab devenv install_compass
+In production:
 
-To run compass:
+- $venv/bin/supervisorctl start prod:
+(Instead of dev:. You may have to stop dev:)
 
-- cd <directory containing this file>
+Updating an environment:
 
-- bundle exec compass watch
+- cd ~/assembl
+
+- fab devenv app_fullupdate
+
+
 
 
 Schema migrations
@@ -101,16 +122,4 @@ Running tests
 
 - Copy testing.ini.example to testing.ini
 - nosetests
-
-Running on Mac OS
-----------------
-
-Use brew and install the libmemcached and zeromq
- - brew install libmemcached 
- - brew install zeromq
-
-Running on Ubuntu
------------------
-
-apt-get install libzmq3-dev memcached unixodbc-dev virtuoso-opensource libxslt1-dev
 

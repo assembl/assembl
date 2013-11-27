@@ -25,8 +25,8 @@ def main(global_config, **settings):
     configure_engine(settings)
 
     config = Configurator(settings=settings)
-    session_factory = session_factory_from_settings(
-        settings)
+    config.include('.lib.zmqlib')
+    session_factory = session_factory_from_settings(settings)
     config.set_session_factory(session_factory)
     # import after session to delay loading of BaseOps
     from auth import authentication_callback

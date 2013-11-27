@@ -35,6 +35,7 @@ tornado
 sockjs_tornado
 celery
 supervisor
+redis
 pyramid-mako>=0.3
 requests
 rdflib

@@ -1,5 +1,7 @@
 import signal
 import time
+from os import makedirs
+from os.path import exists, dirname
 
 import zmq
 from zmq.eventloop import ioloop
@@ -9,18 +11,28 @@ from tornado import web
 from sockjs.tornado import SockJSRouter, SockJSConnection
 from tornado.httpserver import HTTPServer
 
+from assembl.lib.zmqlib import INTERNAL_SOCKET
+from pyramid.paster import get_appsettings
+
 # Inspired by socksproxy.
+
+settings = get_appsettings('development.ini')
+CHANGES_SOCKET = settings['changes.socket']
 
 context = zmq.Context.instance()
 ioloop.install()
 io_loop = ioloop.IOLoop.instance()  # ZMQ loop
 
-td = zmq.devices.ThreadDevice(zmq.FORWARDER, zmq.SUB, zmq.PUB)
-td.connect_in('ipc:///tmp/assembl_changes/0')
-td.bind_out('inproc://assemblchanges')
-td.setsockopt_in(zmq.IDENTITY, 'SUB')
-td.setsockopt_in(zmq.SUBSCRIBE, '')
-td.setsockopt_out(zmq.IDENTITY, 'PUB')
+if CHANGES_SOCKET.startswith('ipc://'):
+    dir = dirname(CHANGES_SOCKET[6:])
+    if not exists(dir):
+        makedirs(dir)
+
+td = zmq.devices.ThreadDevice(zmq.FORWARDER, zmq.XSUB, zmq.XPUB)
+td.bind_in(CHANGES_SOCKET)
+td.bind_out(INTERNAL_SOCKET)
+td.setsockopt_in(zmq.IDENTITY, 'XSUB')
+td.setsockopt_out(zmq.IDENTITY, 'XPUB')
 td.start()
 
 
@@ -36,7 +48,7 @@ class ZMQRouter(SockJSConnection):
         if msg.startswith('discussion:') and self.valid:
             discussion = msg.split(':', 1)[1]
             self.socket = context.socket(zmq.SUB)
-            self.socket.connect('inproc://assemblchanges')
+            self.socket.connect(INTERNAL_SOCKET)
             self.socket.setsockopt(zmq.SUBSCRIBE, '*')
             self.socket.setsockopt(zmq.SUBSCRIBE, discussion)
             self.loop = zmqstream.ZMQStream(self.socket, io_loop=io_loop)
@@ -53,7 +65,7 @@ def logger(msg):
 
 def log_queue():
     socket = context.socket(zmq.SUB)
-    socket.connect('inproc://assemblchanges')
+    socket.connect(INTERNAL_SOCKET)
     socket.setsockopt(zmq.SUBSCRIBE, '')
     loop = zmqstream.ZMQStream(socket, io_loop=io_loop)
     loop.on_recv(logger)
