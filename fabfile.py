@@ -3,6 +3,7 @@
 from __future__ import with_statement
 
 from os import getenv
+from platform import system
 import os.path
 import time
 import pipes
@@ -98,6 +99,7 @@ def app_db_install():
     """
     Install db the first time and fake migrations
     """
+    execute(database_create)
     print(cyan('Installing database'))
     venvcmd('assembl-db-manage %s bootstrap' % (env.ini_file))
 
@@ -545,7 +547,7 @@ def devenv(projectpath=None):
     if not projectpath:
         projectpath = os.path.dirname(os.path.realpath(__file__))
     commonenv(projectpath, getenv('VIRTUAL_ENV', None))
-    env.mac = getenv('OSTYPE').startswith('darwin') if getenv('OSTYPE') else False
+    env.mac = system().startswith('Darwin')
     env.wsginame = "dev.wsgi"
     env.urlhost = "localhost"
     env.ini_file = 'development.ini'
