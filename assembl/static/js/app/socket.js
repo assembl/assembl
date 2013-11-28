@@ -29,7 +29,6 @@ define(['app'], function(app, socketjs){
     Socket.prototype.onMessage = function(ev){
         var data = JSON.parse(ev.data)
         app.trigger('socket:message', [this.socket, data]);
-        //console.log(data);
     };
 
     /**

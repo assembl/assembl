@@ -52,7 +52,6 @@ define([
 
     // Message
     app.messageList = new MessageList({el: '#messageList', button: '#button-messages'}).render();
-    app.messageList.loadData();
 
     // Synthesis
     app.synthesisPanel = new SynthesisPanel({el: '#synthesisPanel', button: '#button-synthesis', ideas: app.ideaList.ideas });
@@ -97,19 +96,6 @@ define([
     updateSegmentList();
 
     // Let the game begins...
-    var historied = Backbone.history.start({hashChange: false, root: "/" + app.slug });
-
-    if( ! historied ){
-        
-        // Open the previous panels
-        var panels = app.getPanelsFromStorage();
-        _.each(panels, function(value, name){
-            var panel = app[name];
-            if( panel && name !== 'ideaPanel' ){
-                app.openPanel(panel);
-            }
-        });
-
-    }
+    Backbone.history.start({hashChange: false, root: "/" + app.slug });
 
 });

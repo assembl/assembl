@@ -69,6 +69,10 @@ def home_view(request):
 def idea_view(request):
     return home_view(request)
 
+@view_config(route_name='home_message', request_method='GET', http_cache=60)
+def message_view(request):
+    return home_view(request)
+
 @view_config(route_name='toc', request_method='GET', http_cache=60)
 def toc_view(request):
     return render_to_response('../../templates/backbone/index.pt', {}, request=request)

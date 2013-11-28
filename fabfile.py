@@ -545,7 +545,7 @@ def devenv(projectpath=None):
     if not projectpath:
         projectpath = os.path.dirname(os.path.realpath(__file__))
     commonenv(projectpath, getenv('VIRTUAL_ENV', None))
-    env.mac = getenv('OSTYPE').startswith('darwin')
+    env.mac = getenv('OSTYPE').startswith('darwin') if getenv('OSTYPE') else False
     env.wsginame = "dev.wsgi"
     env.urlhost = "localhost"
     env.ini_file = 'development.ini'
