@@ -20,7 +20,7 @@ import transaction
 from assembl.auth import P_READ, P_ADD_POST
 from assembl.models import (
     get_database_id, get_named_object, AgentProfile, Post, Email,
-    Discussion, Source, Content, Idea, ViewPost, User)
+    Discussion, PostSource, Content, Idea, ViewPost, User)
 from . import acls
 
 
@@ -31,7 +31,6 @@ posts = Service(name='posts', path=API_DISCUSSION_PREFIX + '/posts',
 post = Service(name='post', path=API_DISCUSSION_PREFIX + '/posts/{id:.+}',
                description="Manipulate a single post",
                acl=acls)
-
 
 
 def _get_idea_query(post, levels=None):
@@ -107,39 +106,38 @@ def get_posts(request):
 
     #Rename "inbox" to "unread", the number of unread messages for the current user.
     no_of_messages_viewed_by_user = Post.db.query(ViewPost).join(
-        Post,
-        Content,
-        Source
+        Post
     ).filter(
-        Source.discussion_id == discussion_id,
-        Content.source_id == Source.id,
+        Post.discussion_id == discussion_id,
         ViewPost.actor_id == user_id,
     ).count() if user_id else 0
 
-    discussion_posts = Post.db.query(Post).join(
-        Content,
-        Source,
-    ).filter(
-        Source.discussion_id == discussion_id,
-        Content.source_id == Source.id,
+    if 'synthesis' in filter_names:
+        posts = Post.db.query(SynthesisPost)
+    else:
+        posts = Post.db.query(Post)
+
+    discussion_posts = posts.filter(
+        Post.discussion_id == discussion_id,
     )
     no_of_posts_to_discussion = discussion_posts.count()
 
     post_data = []
 
+        
     if root_idea_id:
         if root_idea_id == Idea.ORPHAN_POSTS_IDEA_ID:
-            ideas_query = Post.db.query(Post) \
+            posts = posts \
                 .filter(Post.id.in_(text(Idea._get_orphan_posts_statement(),
                                          bindparams=[bindparam('discussion_id', discussion_id)]
                                          )))
         else:
-            ideas_query = Post.db.query(Post) \
+            posts = posts \
                 .filter(Post.id.in_(text(Idea._get_related_posts_statement(),
                                          bindparams=[bindparam('root_idea_id', root_idea_id)]
                                          )))
-        posts = ideas_query.join(Content,
-                                 Source,
+        posts = posts.join(Content,
+                                 PostSource,
                                  )
     else:
         posts = discussion_posts
@@ -162,13 +160,10 @@ def get_posts(request):
                     and_(ViewPost.actor_id==user_id, ViewPost.post_id==Post.id)
                 )
         posts = posts.options(joinedload(Post.views))
-    posts = posts.options(contains_eager(Post.content, Content.source))
+    #posts = posts.options(contains_eager(Post.source))
     posts = posts.options(joinedload_all(Post.creator, AgentProfile.user))
 
     posts = posts.order_by(Content.creation_date)
-
-    if 'synthesis' in filter_names:
-        posts = posts.filter(Post.is_synthesis==True)
 
     for post in posts:
         #print(repr(posts))
@@ -181,14 +176,14 @@ def get_posts(request):
             else:
                 serializable_post['read'] = False
                 if root_post_id:
-                    with transaction.manager:
-                        viewed_post = ViewPost(
-                            actor_id=user_id,
-                            post_id=post.id
-                        )
+                    #Save that the post has been read
+                    viewed_post = ViewPost(
+                        actor_id=user_id,
+                        post_id=post.id
+                    )
 
-                        Post.db.add(viewed_post)
-                        
+                    Post.db.add(viewed_post)
+
         post_data.append(serializable_post)
 
     data = {}
@@ -244,7 +239,7 @@ def create_post(request):
 
     if reply_id:
         post = Post.get_instance(reply_id)
-        post.content.reply(user, message)
+        post.reply(user, message)
 
         return {"ok": True}
 

@@ -633,7 +633,8 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard, Types){
          * @return {Number}
          */
         getOrderForNewRootIdea: function(){
-            return app.ideaList.ideas.last().get('order') + 1;
+            var last_idea = app.ideaList.ideas.last();
+            return last_idea ? last_idea.get('order') + 1:0;
         },
 
         /**

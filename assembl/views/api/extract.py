@@ -5,16 +5,16 @@ from cornice import Service
 
 from pyramid.security import authenticated_userid, Everyone, ACLDenied
 from pyramid.httpexceptions import (
-    HTTPNotFound, HTTPClientError, HTTPForbidden, HTTPServerError)
+    HTTPNotFound, HTTPClientError, HTTPForbidden, HTTPServerError, HTTPBadRequest)
 from sqlalchemy.orm import aliased, joinedload, joinedload_all, contains_eager
 
 from assembl.views.api import API_DISCUSSION_PREFIX
 from assembl.models import (
     get_named_object, get_database_id, Extract, TextFragmentIdentifier,
-    AgentProfile, User, Source, Content, Post, Webpage)
+    AgentProfile, User, PostSource, Content, Post, Webpage, Idea)
 from . import acls
 from assembl.auth import (
-    P_READ, P_ADD_EXTRACT, P_EDIT_EXTRACT, P_DELETE_EXTRACT, get_permissions)
+    P_READ, P_ADD_EXTRACT, P_EDIT_EXTRACT, P_DELETE_EXTRACT, get_permissions, user_has_permission)
 from assembl.lib.token import decode_token
 
 
@@ -66,10 +66,10 @@ def get_extracts(request):
 
     all_extracts = Extract.db.query(Extract).join(
         Content,
-        Source
+        PostSource
     ).filter(
-        Source.discussion_id == discussion_id,
-        Content.source_id == Source.id
+        PostSource.discussion_id == discussion_id,
+        Content.source_id == PostSource.id
     )
     # all_extracts = all_extracts.options(joinedload_all(
     #     Extract.source, Content.post, Post.creator))
@@ -100,8 +100,10 @@ def post_extract(request):
                 user_id = token['userId']
     if not user_id:
         user_id = Everyone
-    if P_ADD_EXTRACT not in get_permissions(user_id, discussion_id):
-        return HTTPForbidden(result=ACLDenied(permission=P_ADD_EXTRACT))
+    if not user_has_permission(discussion_id, user_id, P_ADD_EXTRACT):
+        #TODO: maparent:  restore this code once it works:
+        #return HTTPForbidden(result=ACLDenied(permission=P_ADD_EXTRACT))
+        return HTTPForbidden()
     if user_id == Everyone:
         # TODO: Create an anonymous user.
         raise HTTPServerError("Anonymous extracts are not implemeted yet.")
@@ -123,12 +125,13 @@ def post_extract(request):
             if not post:
                 raise HTTPNotFound(
                     "Post with id '%s' not found." % post_id)
-            content = post.content
+            content = post
         elif target_type == 'webpage':
             uri = target.get('url')
     if uri and not content:
         content = Webpage.get_instance(uri)
         if not content:
+            #TODO: BEN:  Make sure to create an AnnotatorSource or something...
             source = Source.get(name='Annotator', discussion_id=discussion_id)
             if not source:
                 source = Source(
@@ -139,6 +142,7 @@ def post_extract(request):
     new_extract = Extract(
         creator_id=user_id,
         owner_id=user_id,
+        discussion_id=discussion_id,
         body=extract_body,
         annotation_text=annotation_text,
         source=content
@@ -173,6 +177,10 @@ def put_extract(request):
 
     extract.owner_id = user_id or get_database_id("User", extract.owner_id)
     extract.order = updated_extract_data.get('order', extract.order)
+    idea_id = get_database_id("Idea", updated_extract_data['idIdea'])
+    if(Idea.get_instance(idea_id).table_of_contents.discussion != extract.discussion):
+        raise HTTPBadRequest(
+            "Extract from discussion %s cannot be associated with an idea from a different discussion." % extract.discussion_id)
     extract.idea_id = get_database_id("Idea", updated_extract_data['idIdea'])
 
     Extract.db.add(extract)

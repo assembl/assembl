@@ -27,11 +27,13 @@ from sqlalchemy import (
 from assembl.lib.utils import slugify
 
 from ..lib.sqla import db_schema, Base as SQLAlchemyBaseModel
-from ..source.models import (Source, Content, Post, Mailbox)
+
+from ..source.models import (ContentSource, PostSource, Content, Post, Mailbox)
 from ..auth.models import (
     DiscussionPermission, Role, Permission, AgentProfile, User,
     UserRole, LocalUserRole, DiscussionPermission, P_READ)
 from assembl.auth import get_permissions
+
 
 class Discussion(SQLAlchemyBaseModel):
     """
@@ -59,17 +61,6 @@ class Discussion(SQLAlchemyBaseModel):
     )
 
     synthesis = relationship('Synthesis', uselist=False)
-
-    owner_id = Column(
-        Integer,
-        ForeignKey('user.id'),
-        nullable=False
-    )
-
-    owner = relationship(
-        'User',
-        backref="discussions"
-    )
 
     def posts(self, parent_id=None):
         """
@@ -105,10 +96,10 @@ class Discussion(SQLAlchemyBaseModel):
 
         if not parent_id:
             query = query.join(
-                Source
+                PostSource
             ).filter(
-                Source.discussion_id==self.id,
-                upper_content.source_id==Source.id,
+                PostSource.discussion_id==self.id,
+                upper_content.source_id==PostSource.id,
             )
 
         return query
@@ -116,16 +107,16 @@ class Discussion(SQLAlchemyBaseModel):
     def total_posts(self):
         return self.db.query(Post).join(
             Content,
-            Source
+            PostSource
         ).filter(
-            Source.discussion_id==self.id,
-            Content.source_id==Source.id,
+            PostSource.discussion_id==self.id,
+            Content.source_id==PostSource.id,
         ).count()
 
     def import_from_sources(self, only_new=True):
         for source in self.sources:
             # refetch after calling
-            source = Source.db.merge(source)
+            source = PostSource.db.merge(source)
             try:
                 source.import_content(only_new=only_new)
             except:
@@ -205,12 +196,8 @@ class Discussion(SQLAlchemyBaseModel):
     def get_ideas_preload(self):
         return json.dumps([idea.serializable() for idea in self.table_of_contents.ideas])
 
-    def get_ideas_preload(self):
-        return json.dumps([idea.serializable() for idea in self.table_of_contents.ideas])
-
     def get_related_extracts(self):
-        return self.db().query(Extract).join(
-            Content, Source).filter(Source.discussion == self).all()
+        return self.extracts
 
     def get_related_extracts_preload(self):
         return json.dumps([e.serializable() for e in self.get_related_extracts()])
@@ -333,6 +320,7 @@ class Idea(SQLAlchemyBaseModel):
 
     long_title = Column(UnicodeText)
     short_title = Column(UnicodeText)
+    definition = Column(UnicodeText)
 
     id = Column(Integer, primary_key=True)
     creation_date = Column(DateTime, nullable=False, default=datetime.utcnow)
@@ -425,8 +413,7 @@ FROM    (idea_dag JOIN idea_association ON (idea_dag.idea_id = idea_association.
         return Idea._get_idea_dag_statement(skip_where) + select + """
 FROM idea_dag 
 JOIN extract ON (extract.idea_id = idea_dag.idea_id) 
-JOIN content ON (extract.source_id = content.id) 
-JOIN post AS root_posts ON (root_posts.content_id = content.id)
+JOIN post AS root_posts ON (extract.source_id = root_posts.id) 
 JOIN post ON (
     (post.ancestry != '' 
     AND post.ancestry LIKE root_posts.ancestry || root_posts.id || ',' || '%'
@@ -447,9 +434,7 @@ JOIN post ON (
         """ Requires discussion_id bind parameters """
         return select + """
 FROM post
-JOIN content ON (post.content_id = content.id)
-JOIN source ON (content.source_id = source.id)
-JOIN discussion ON (source.discussion_id = discussion.id)
+JOIN discussion ON (post.discussion_id = discussion.id)
 WHERE post.id NOT IN (
 """ + Idea._get_related_posts_statement(True) + """
 )
@@ -511,12 +496,15 @@ class Extract(SQLAlchemyBaseModel):
     order = Column(Float, nullable=False, default=0.0)
     body = Column(UnicodeText, nullable=False)
 
-    source_id = Column(Integer, ForeignKey('content.id', ondelete="CASCADE"), nullable=False)
+    source_id = Column(Integer, ForeignKey('content.id', ondelete="CASCADE", onupdate="CASCADE"), nullable=False)
     source = relationship(Content, backref='extracts', )
 
     idea_id = Column(Integer, ForeignKey('idea.id'), nullable=True)
     idea = relationship('Idea', backref='extracts')
 
+    discussion_id = Column(Integer, ForeignKey('discussion.id', ondelete="CASCADE", onupdate="CASCADE"), nullable=False)
+    discussion = relationship('Discussion', backref='extracts')
+    
     annotation_text = Column(UnicodeText)
 
     creator_id = Column(
@@ -558,9 +546,9 @@ class Extract(SQLAlchemyBaseModel):
             #json['text'] += '<a href="%s">%s</a>' % (
             #   self.idea.get_uri(), self.idea.short_title)
         if self.source.type == 'email':
-            json['target']['@id'] = Post.uri_generic(self.source.post.id)
-            json['idPost'] = Post.uri_generic(self.source.post.id)  # legacy
-            #json['url'] = self.source.post.get_uri()
+            json['target']['@id'] = Post.uri_generic(self.source.id)
+            json['idPost'] = Post.uri_generic(self.source.id)  # legacy
+            #json['url'] = self.post.get_uri()
         elif self.source.type == 'webpage':
             json['target']['url'] = self.source.url
             json['uri'] = self.source.url
@@ -571,18 +559,15 @@ class Extract(SQLAlchemyBaseModel):
         return "<Extract %d %s>" % (self.id, repr(self.body[:20]))
 
     def get_target(self):
-        if self.source.type == 'email':
-            return self.source.post
-        else:
             return self.source
 
     def get_post(self):
         if self.source.type == 'email':
-            return self.source.post
+            return self.source
 
     def infer_text_fragment(self):
         return self._infer_text_fragment_inner(
-            self.source.get_title(), self.source.get_body(), self.source.post.id)
+            self.source.get_title(), self.source.get_body(), self.post.id)
 
     def _infer_text_fragment_inner(self, title, body, post_id):
         body = Mailbox.sanitize_html(body, [])

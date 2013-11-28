@@ -4,7 +4,7 @@ import uuid
 import json
 import transaction
 from assembl.tests.base import BaseTest
-from assembl.source.models import Source, Content, Post
+from assembl.source.models import PostSource, Content, Post
 from assembl.synthesis.models import (
     Idea,
     TableOfContents,
@@ -66,7 +66,7 @@ class ApiTest(BaseTest):
         }
 
         creator = AgentProfile(id=2, name="André Farzat", type="agent_profile")
-        source = Source(name='a source', type='source', discussion=self.discussion)
+        source = PostSource(name='a source', type='source', discussion=self.discussion)
         post = Post(creator=creator)
         content = Content(source=source, type='content', post=post)
         ext = Extract(

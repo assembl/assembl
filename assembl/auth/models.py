@@ -2,7 +2,6 @@ from datetime import datetime
 from itertools import chain
 import urllib
 import hashlib
-import transaction
 
 from sqlalchemy import (
     Boolean,

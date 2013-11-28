@@ -71,7 +71,6 @@
     },
     "Discussion": {
         "creation_date": true,
-        "owner_id": "owner",
         "slug": true,
         "synthesis_id": "synthesis",
         "table_of_contents_id": "table_of_contents",

@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from sqlalchemy.orm import relationship, backref, aliased
+from sqlalchemy.orm import relationship, backref
 from sqlalchemy.sql import func
 
 from sqlalchemy import (
@@ -9,16 +9,15 @@ from sqlalchemy import (
     DateTime,
     String,
     ForeignKey,
-    Boolean,
+    Unicode,
     or_,
 )
 
-from assembl.lib.sqla import Base as SQLAlchemyBaseModel
 from assembl.source.models.generic import Content
 from assembl.auth.models import AgentProfile
 
 
-class Post(SQLAlchemyBaseModel):
+class Post(Content):
     """
     A Post represents input into the broader discussion taking place on
     Assembl. It may be a response to another post, it may have responses, and
@@ -26,26 +25,50 @@ class Post(SQLAlchemyBaseModel):
     """
     __tablename__ = "post"
 
-    id = Column(Integer, primary_key=True)
-    creation_date = Column(DateTime, nullable=False, default=datetime.utcnow)
-    is_synthesis = Column(Boolean, default=False)
-    ancestry = Column(String, default="")
+    id = Column(Integer, ForeignKey(
+        'content.id',
+        ondelete='CASCADE',
+        onupdate='CASCADE'
+    ), primary_key=True)
+    
+    discussion_id = Column(Integer, ForeignKey(
+            'discussion.id', 
+            ondelete='CASCADE',
+            onupdate='CASCADE',
+        ),
+        nullable=False,)
 
-    content_id = Column(Integer, ForeignKey('content.id', ondelete='CASCADE'))
+    message_id = Column(Unicode(),
+                        nullable=False,
+                        index=True,
+                        doc="The email-compatible message-id for the post.",)
+    
+    creation_date = Column(DateTime, nullable=False, default=datetime.utcnow)
+    
+    discussion = relationship(
+        "Discussion", 
+        backref=backref('posts', order_by=creation_date)
+    )
+    
+    ancestry = Column(String, default="")
 
     parent_id = Column(Integer, ForeignKey('post.id'))
     children = relationship(
         "Post",
-        backref=backref('parent', remote_side=[id])
+        foreign_keys=[parent_id],
+        backref=backref('parent', remote_side=[id]),
     )
 
     creator_id = Column(Integer, ForeignKey('agent_profile.id'))
     creator = relationship(AgentProfile)
 
+    __mapper_args__ = {
+        'polymorphic_identity': 'post',
+    }
     def get_descendants(self):
         ancestry_query_string = "%s%d,%%" % (self.ancestry or '', self.id)
 
-        descendants = self.db.query(Post).join(Content).filter(
+        descendants = self.db.query(Post).filter(
             Post.ancestry.like(ancestry_query_string)
         ).order_by(Content.creation_date)
 
@@ -118,12 +141,6 @@ class Post(SQLAlchemyBaseModel):
 
         return ancestors
 
-    def get_discussion_id(self):
-        if self.content:
-            return self.content.get_discussion_id()
-        elif self.content_id:
-            return Content.get(id=self.content_id).get_discussion_id()
-
     def serializable(self):
         data = {}
         data["@id"] = self.uri()
@@ -135,19 +152,75 @@ class Post(SQLAlchemyBaseModel):
         #FIXME
         data["read"] = True
         data["parentId"] = Post.uri_generic(self.parent_id)
-        subject = self.content.get_title()
-        if self.content.type == 'email':
-            subject = self.content.source.mangle_mail_subject(subject)
+        subject = self.get_title()
+        if self.type == 'email':
+            subject = self.source.mangle_mail_subject(subject)
         data["subject"] = subject
-        data["body"] = self.content.get_body()
+        data["body"] = self.get_body()
         data["idCreator"] = AgentProfile.uri_generic(self.creator_id)
-        data["date"] = self.content.creation_date.isoformat()
+        data["date"] = self.creation_date.isoformat()
         return data
 
     def __repr__(self):
         return "<Post %d '%s %d'>" % (
             self.id,
-            self.content.type,
-            self.content.id,
+            self.type,
         )
 
+class AssemblPost(Post):
+    """
+    A Post that originated directly on the Assembl system (wasn't imported from elsewhere).
+    """
+    __tablename__ = "assembl_post"
+
+    id = Column(Integer, ForeignKey(
+        'post.id',
+        ondelete='CASCADE',
+        onupdate='CASCADE'
+    ), primary_key=True)
+
+
+    __mapper_args__ = {
+        'polymorphic_identity': 'assembl_post',
+    }
+
+class SynthesisPost(AssemblPost):
+    """
+    A Post that originated directly on the Assembl system (wasn't imported from elsewhere).
+    """
+    __tablename__ = "synthesis_post"
+
+    id = Column(Integer, ForeignKey(
+        'assembl_post.id',
+        ondelete='CASCADE',
+        onupdate='CASCADE'
+    ), primary_key=True)
+
+
+    __mapper_args__ = {
+        'polymorphic_identity': 'synthesis_post',
+    }
+
+class ImportedPost(Post):
+    """
+    A Post that originated outside of the Assembl system (was imported from elsewhere).
+    """
+    __tablename__ = "imported_post"
+
+    id = Column(Integer, ForeignKey(
+        'post.id',
+        ondelete='CASCADE',
+        onupdate='CASCADE'
+    ), primary_key=True)
+
+    import_date = Column(DateTime, nullable=False, default=datetime.utcnow)
+
+    source_id = Column(Integer, ForeignKey('post_source.id', ondelete='CASCADE'))
+    source = relationship(
+        "PostSource",
+        backref=backref('contents', order_by=import_date)
+    )
+
+    __mapper_args__ = {
+        'polymorphic_identity': 'imported_post',
+    }

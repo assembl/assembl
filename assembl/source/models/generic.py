@@ -12,37 +12,20 @@ from sqlalchemy import (
 
 from assembl.lib.sqla import Base as SQLAlchemyBaseModel
 
-
-class Source(SQLAlchemyBaseModel):
+class ContentSource(SQLAlchemyBaseModel):
     """
-    A Discussion Source is where commentary that is handled in the form of
-    Assembl posts comes from. 
-
-    A discussion source should have a method for importing all content, as well
-    as only importing new content. Maybe the standard interface for this should
-    be `source.import()`.
+    A ContentSource is where any outside content comes from. .
     """
-    __tablename__ = "source"
+    __tablename__ = "content_source"
 
     id = Column(Integer, primary_key=True)
     name = Column(UnicodeText, nullable=False)
     type = Column(String(60), nullable=False)
 
     creation_date = Column(DateTime, nullable=False, default=datetime.utcnow)
-    last_import = Column(DateTime)
-
-    discussion_id = Column(Integer, ForeignKey(
-        'discussion.id', 
-        ondelete='CASCADE'
-    ))
-
-    discussion = relationship(
-        "Discussion", 
-        backref=backref('sources', order_by=creation_date)
-    )
 
     __mapper_args__ = {
-        'polymorphic_identity': 'source',
+        'polymorphic_identity': 'content_source',
         'polymorphic_on': type
     }
 
@@ -58,7 +41,63 @@ class Source(SQLAlchemyBaseModel):
         }
 
     def __repr__(self):
-        return "<Source %s>" % repr(self.name)
+        return "<PostSource %s>" % repr(self.name)
+
+    def import_content(self, only_new=True):
+        pass
+
+    def get_discussion_id(self):
+        return self.discussion_id
+
+
+
+class PostSource(ContentSource):
+    """
+    A Discussion PostSource is where commentary that is handled in the form of
+    Assembl posts comes from. 
+
+    A discussion source should have a method for importing all content, as well
+    as only importing new content. Maybe the standard interface for this should
+    be `source.import()`.
+    """
+    __tablename__ = "post_source"
+
+    id = Column(Integer, ForeignKey(
+        'content_source.id',
+        ondelete='CASCADE',
+        onupdate='CASCADE'
+    ), primary_key=True)
+
+    last_import = Column(DateTime)
+
+    discussion_id = Column(Integer, ForeignKey(
+        'discussion.id', 
+        ondelete='CASCADE',
+        onupdate='CASCADE'
+    ))
+
+    discussion = relationship(
+        "Discussion", 
+        backref=backref('sources', order_by=ContentSource.creation_date)
+    )
+
+    __mapper_args__ = {
+        'polymorphic_identity': 'content_source',
+    }
+
+    def serializable(self):
+        from assembl.models import Discussion
+        return {
+            "@id": self.uri_generic(self.id),
+            "@type": self.external_typename(),
+            "name": self.name,
+            "creation_date": self.creation_date.isoformat(),
+            "last_import": self.last_import.isoformat() if self.last_import else None,
+            "discussion_id": Discussion.uri_generic(self.discussion_id),
+        }
+
+    def __repr__(self):
+        return "<PostSource %s>" % repr(self.name)
 
     def import_content(self, only_new=True):
         pass
@@ -79,14 +118,6 @@ class Content(SQLAlchemyBaseModel):
     
     import_date = Column(DateTime, default=datetime.utcnow)
 
-    source_id = Column(Integer, ForeignKey('source.id', ondelete='CASCADE'))
-    source = relationship(
-        "Source",
-        backref=backref('contents', order_by=import_date)
-    )
-
-    post = relationship("Post", uselist=False, backref="content")
-
     __mapper_args__ = {
         'polymorphic_identity': 'content',
         'polymorphic_on': 'type',
@@ -95,16 +126,6 @@ class Content(SQLAlchemyBaseModel):
 
     def __init__(self, *args, **kwargs):
         super(Content, self).__init__(*args, **kwargs)
-
-    def serializable(self):
-        return {
-            "@id": self.uri_generic(self.id),
-            "@type": self.external_typename(),
-            "creation_date": self.creation_date.isoformat(),
-            "import_date": self.import_date.isoformat(),
-            "source_id": Source.uri_generic(self.source_id),
-            "post_id": Post.uri_generic(self.post.id),
-        }
 
     def __repr__(self):
         return "<Content %s>" % repr(self.type)
@@ -119,4 +140,4 @@ class Content(SQLAlchemyBaseModel):
         if self.source:
             return self.source.get_discussion_id()
         elif self.source_id:
-            return Source.get(id=self.source_id).get_discussion_id()
+            return PostSource.get(id=self.source_id).get_discussion_id()
