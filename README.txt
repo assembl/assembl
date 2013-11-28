@@ -26,6 +26,7 @@ On the Mac:
 Use brew and install these components:
  - brew install memcached zeromq redis postgresql
 
+On linux:  fab devenv install_builddeps
 
 Compiling CSS
 -------------
@@ -44,8 +45,9 @@ createdb -U assembl assembl
 - compass compile
 
 Thereafter:
+Note:  memcached, redis and postgres must be running already.
 - $venv/bin/supervisord
-- $venv/bin/supervisorctl start dev:
+- $venv/bin/supervisorctl start dev:*
 
 You can monitor any of the processes, for example pserve, with these commands:
 - $venv/bin/supervisorctl tail -f dev:pserve 
@@ -53,8 +55,8 @@ You can monitor any of the processes, for example pserve, with these commands:
 
 In production:
 
-- $venv/bin/supervisorctl start prod:
-(Instead of dev:. You may have to stop dev:)
+- $venv/bin/supervisorctl start prod:*
+(Instead of dev:*. You may have to stop dev:*)
 
 Updating an environment:
 
