@@ -3,10 +3,20 @@ define(['backbone', 'jquery', 'app'], function(Backbone, $, app){
 
     var Router = Backbone.Router.extend({
 
+        /**
+         * Router strings
+         * @type {Object}
+         */
         routes: {
-            "idea/:id" : "idea"
+            "": "home",
+            "idea/:id" : "idea",
+            "message/:id" : "message"
         },
 
+        /**
+         * Router for Idea
+         * @param  {Number} id
+         */
         idea: function(id){
             app.openPanel( app.ideaList );
             app.ideaList.ideas.once('reset', function(){
@@ -17,6 +27,30 @@ define(['backbone', 'jquery', 'app'], function(Backbone, $, app){
                 }
 
             });
+        },
+
+        /**
+         * Router for Message
+         * @param  {Number} id
+         */
+        message: function(id){
+            app.openPanel( app.messageList );
+            app.messageList.loadThreadById(id);
+        },
+
+        /**
+         * Default home page
+         */
+        home: function(){
+            var panels = app.getPanelsFromStorage();
+            _.each(panels, function(value, name){
+                var panel = app[name];
+                if( panel && name !== 'ideaPanel' ){
+                    app.openPanel(panel);
+                }
+            });
+
+            app.messageList.loadData();
         }
 
     });

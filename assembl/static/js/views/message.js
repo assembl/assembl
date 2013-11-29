@@ -66,6 +66,8 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
 
             this.$el.html( this.template(data) );
 
+            app.initClipboard();
+
             return this;
         },
 
@@ -229,7 +231,14 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
         /**
          * @event
          */
-        onIconbuttonClick: function(){
+        onIconbuttonClick: function(ev){
+            if( ev ){
+                // Avoiding collapse if clicked on the link
+                if( ev.target.id === 'message-linkbutton' ){
+                    return;
+                }
+            }
+
             var collapsed = this.model.get('collapsed');
             this.model.set('collapsed', !collapsed);
         },

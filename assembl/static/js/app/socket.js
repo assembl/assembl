@@ -7,8 +7,7 @@ define(['app'], function(app, socketjs){
      * @param {string} url
      */
     var Socket = function(){
-        this.socket = new SockJS('http://localhost:8080/');
-
+        this.socket = new SockJS(app.socket_url);
         this.socket.onopen = this.onOpen.bind(this);
         this.socket.onmessage = this.onMessage.bind(this);
         this.socket.onclose = this.onClose.bind(this);
@@ -30,7 +29,6 @@ define(['app'], function(app, socketjs){
     Socket.prototype.onMessage = function(ev){
         var data = JSON.parse(ev.data)
         app.trigger('socket:message', [this.socket, data]);
-        //console.log(data);
     };
 
     /**

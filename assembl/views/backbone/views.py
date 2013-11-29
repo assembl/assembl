@@ -15,6 +15,10 @@ FIXTURE = os.path.join(os.path.dirname(__file__),
 TEMPLATE_PATH = os.path.join(os.path.dirname(__file__), '..', '..', 'templates')
 
 
+default_context = {
+    'STATIC_URL': '/static/'
+}
+
 def get_default_context(request):
     slug = request.matchdict['discussion_slug']
     try:
@@ -22,12 +26,10 @@ def get_default_context(request):
     except NoResultFound:
         raise HTTPNotFound(_("No discussion found for slug=%s" % slug))
 
-    return {
-        'STATIC_URL': '/static/',
-        'user': get_user(request),
-        'templates': get_template_views(),
-        'discussion': discussion
-    }
+    return dict(default_context,
+        user=get_user(request),
+        templates=get_template_views(),
+        discussion=discussion)
 
 
 def get_template_views():
@@ -67,6 +69,10 @@ def home_view(request):
 def idea_view(request):
     return home_view(request)
 
+@view_config(route_name='home_message', request_method='GET', http_cache=60)
+def message_view(request):
+    return home_view(request)
+
 @view_config(route_name='toc', request_method='GET', http_cache=60)
 def toc_view(request):
     return render_to_response('../../templates/backbone/index.pt', {}, request=request)
@@ -92,3 +98,9 @@ def styleguide_view(request):
 def frontend_test_view(request):
     context = get_default_context(request)
     return render_to_response('../../templates/tests/index.jinja2', context, request=request)
+
+
+def includeme(config):
+    print "hello backviews"
+    default_context['socket_url'] = \
+        config.registry.settings['changes.websocket.url']

@@ -67,3 +67,4 @@ def includeme(config):
             consumer_key=settings['yahoo.consumer_key'],
             consumer_secret=settings['yahoo.consumer_secret'],
         )
+    config.include('.views')

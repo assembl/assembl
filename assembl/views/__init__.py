@@ -6,6 +6,7 @@ from ..lib.json import json_renderer_factory
 def backbone_include(config):
     config.add_route('home', '/')
     config.add_route('home_idea', '/idea/{idea_id}')
+    config.add_route('home_message', '/message/{message_id}')
     config.add_route('toc', '/toc')
     config.add_route('nodetest', '/nodetest')
     config.add_route('styleguide', '/styleguide')
@@ -26,3 +27,6 @@ def includeme(config):
     config.include('.auth')
 
     config.include('.api')
+
+    config.include('.home')
+    config.include('.backbone')
