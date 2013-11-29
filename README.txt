@@ -85,3 +85,8 @@ Running tests
 - Create a testing database: createdb -U assembl assembl_test
 - nosetests
 
+
+A note on vagrant
+-----------------
+
+If you use vagrant, we have a few processes that expect to use socket files in %(here)s. Vagrant does not allow creating sockets in a shared folder; so if you insist on using vagrant, make sure to move sockets locations. There is one is supervisord.conf, and one in an unkonwn location. 
