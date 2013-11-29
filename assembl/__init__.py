@@ -51,4 +51,7 @@ def main(global_config, **settings):
     # Mailer
     config.include('pyramid_mailer')
 
+    # Tasks
+    config.include('.tasks')
+
     return config.make_wsgi_app()
