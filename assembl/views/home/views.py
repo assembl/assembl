@@ -21,6 +21,5 @@ def discussion_list_view(request):
 
 
 def includeme(config):
-    print "hello homeviews"
     default_context['socket_url'] = \
         config.registry.settings['changes.websocket.url']

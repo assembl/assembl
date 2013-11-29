@@ -101,6 +101,5 @@ def frontend_test_view(request):
 
 
 def includeme(config):
-    print "hello backviews"
     default_context['socket_url'] = \
         config.registry.settings['changes.websocket.url']
