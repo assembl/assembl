@@ -14,39 +14,39 @@
     "IdentityProvider": {},
 
     "Source": {
-        "contents":["partial"]
+        "contents":[":partial"]
     },
     "Webpage": {
-        "extracts":["partial"]
+        "extracts":[":partial"]
     },
     "Mailbox": {
-        "contents":["partial"]
+        "contents":[":partial"]
     },
     "Email": {
         "full_message":false,
-        "extracts":["partial"]
+        "extracts":[":partial"]
         },
     "Post": {
-        "creator":"base"
+        "creator":":base"
         },
 
     "Discussion": {
         "slug": true,
-        "table_of_contents": "base",
+        "table_of_contents": ":base",
         "creation_date": true,
         "topic": true,
-        "synthesis_id": true,
+        "synthesis": true,
         "owner_id": true,
-        "sources":["base"],
+        "sources":[":base"],
         "permissions":"&get_roles_by_permission"
     },
     "Idea": {},
     "TableOfContents": {
-        "ideas":["partial"]
+        "ideas":[":partial"]
         },
     "Synthesis": {},
     "Extract": {
-        "text_fragment_identifiers":["base"]
+        "text_fragment_identifiers":[":base"]
         },
     "TextFragmentIdentifier": {}
 }

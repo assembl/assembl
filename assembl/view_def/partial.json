@@ -34,9 +34,8 @@
         "table_of_contents_id": true,
         "creation_date": true,
         "topic": true,
-        "synthesis_id": true,
-        "owner_id": true,
-        "id": "@id"
+        "synthesis": true,
+        "owner_id": true
     },
     "Idea": {
         "long_title":false,
