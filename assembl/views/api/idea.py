@@ -4,7 +4,8 @@ import transaction
 from cornice import Service
 from pyramid.httpexceptions import HTTPNotFound, HTTPBadRequest, HTTPNoContent
 from assembl.views.api import API_DISCUSSION_PREFIX
-from assembl.synthesis.models import Idea, Discussion, Extract
+from assembl.models import (
+    get_named_object, Idea, Discussion, Extract)
 from . import acls
 from assembl.auth import (P_READ, P_ADD_IDEA, P_EDIT_IDEA)
 
@@ -95,7 +96,7 @@ def save_idea(request):
             idea.parents.remove(parent)
 
         if idea_data['parentId']:
-            parent = Idea.get(id=idea_data['parentId'])
+            parent = get_named_object('Idea', idea_data['parentId'])
             idea.parents.append(parent)
 
         if idea_data['inSynthesis']:

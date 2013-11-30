@@ -20,3 +20,16 @@ class Webpage(Content):
 
     def get_title(self):
         return self.url
+
+    @classmethod
+    def get_instance(cls, uri):
+        page = cls.get(url=uri)
+        if page:
+            return page
+        return Content.get_instance(uri)
+
+    @classmethod
+    def get_database_id(cls, identifier):
+        page = cls.get(url=identifier)
+        if page:
+            return page.id

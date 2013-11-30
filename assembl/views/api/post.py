@@ -18,10 +18,9 @@ from assembl.views.api import API_DISCUSSION_PREFIX
 import transaction
 
 from assembl.auth import P_READ, P_ADD_POST
-from assembl.auth.models import AgentProfile
-from assembl.source.models import Post, Email
-from assembl.synthesis.models import Discussion, Source, Content, Idea
-from assembl.auth.models import ViewPost, User
+from assembl.models import (
+    get_named_object, AgentProfile, Post, Email,
+    Discussion, Source, Content, Idea, ViewPost, User)
 from . import acls
 
 
@@ -89,7 +88,7 @@ def _get_idea_query(post, levels=None):
     return Post.db.query(post.union_all(children)).order_by(post.c.level)
 
 
-@posts.get()  # permission=P_READ)
+@posts.get(permission=P_READ)
 def get_posts(request):
     discussion_id = int(request.matchdict['discussion_id'])
     discussion = Discussion.get(id=int(discussion_id))
@@ -237,7 +236,7 @@ def get_posts(request):
     return data
 
 
-@post.get()  # permission=P_READ)
+@post.get(permission=P_READ)
 def get_post(request):
     post_id = request.matchdict['id']
     post = Post.get(id=int(post_id))
@@ -248,7 +247,7 @@ def get_post(request):
     return __post_to_json_structure(post)
 
 
-@posts.post()  # permission=P_ADD_POST)
+@posts.post(permission=P_ADD_POST)
 def create_post(request):
     """
     We use post, not put, because we don't know the id of the post
@@ -269,7 +268,7 @@ def create_post(request):
         raise HTTPUnauthorized()
 
     if reply_id:
-        post = Post.get(id=int(reply_id))
+        post = get_named_object("Post", reply_id)
         post.content.reply(user, message)
 
         return {"ok": True}

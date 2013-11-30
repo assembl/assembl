@@ -32,11 +32,13 @@ Base = TimestampedBase = None
 # If obsolete table names collide with new table names, alembic can't work
 obsolete = None
 ObsoleteBase = TimestampedObsolete = None
+class_registry = dict()
+aliased_class_registry = None
 
-
-def declarative_bases(metadata):
+def declarative_bases(metadata, registry=None):
     """Return all declarative bases bound to a single metadata object."""
-    registry = dict()
+    if registry is None:
+        registry = dict()
     return (declarative_base(cls=BaseOps, metadata=metadata,
                              class_registry=registry),
             declarative_base(cls=Timestamped, metadata=metadata,
@@ -187,6 +189,27 @@ class BaseOps(object):
         if not id:
             return None
         return base_uri + cls.external_typename() + "/" + str(id)
+
+    @classmethod
+    def get_instance(cls, identifier):
+        num = cls.get_database_id(identifier)
+        if not num:
+            # temporary hack
+            try:
+                num = int(identifier)
+            except ValueError:
+                pass
+        if num:
+            return cls.get(id=num)
+
+    @classmethod
+    def get_database_id(cls, uri):
+        if uri.startswith('local:%s/' % (cls.external_typename())):
+            num = uri.split('/', 1)[1]
+            try:
+                return int(num)
+            except ValueError:
+                pass
 
     def uri(self, base_uri='local:'):
         return self.uri_generic(self.get_id_as_str(), base_uri)
@@ -517,7 +540,7 @@ def configure_engine(settings, zope_tr=True, session_maker=None):
     global db_schema, _metadata, Base, TimestampedBase, ObsoleteBase, TimestampedObsolete
     db_schema = None  # settings['db_schema']
     _metadata = MetaData(schema=db_schema)
-    Base, TimestampedBase = declarative_bases(_metadata)
+    Base, TimestampedBase = declarative_bases(_metadata, class_registry)
     obsolete = MetaData(schema=db_schema)
     ObsoleteBase, TimestampedObsolete = declarative_bases(obsolete)
     event.listen(engine, 'commit', commit_listener)
@@ -538,6 +561,35 @@ def mark_changed():
 def get_metadata():
     global _metadata
     return _metadata
+
+
+def get_named_class(typename):
+    global aliased_class_registry
+    if not aliased_class_registry:
+        aliased_class_registry = {
+            cls.external_typename(): cls
+            for cls in class_registry.itervalues()
+            if getattr(cls, 'external_typename', None)
+        }
+    return aliased_class_registry.get(typename, None)
+
+
+# In theory, the identifier should be enough... at some point.
+def get_named_object(typename, identifier):
+    "Get an object given a typename and identifier"
+    # A numeric identifier will often be accepted.
+    cls = get_named_class(typename)
+    if cls:
+        return cls.get_instance(identifier)
+
+
+def get_database_id(typename, identifier):
+    try:
+        return int(identifier)
+    except ValueError:
+        cls = get_named_class(typename)
+        if cls:
+            return cls.get_database_id(identifier)
 
 
 def includeme(config):
