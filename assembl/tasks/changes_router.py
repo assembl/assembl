@@ -23,6 +23,7 @@ if len(sys.argv) != 2:
 
 settings = get_appsettings(sys.argv[-1])
 CHANGES_SOCKET = settings['changes.socket']
+CHANGES_PREFIX = settings.get('changes.prefix', '')
 
 context = zmq.Context.instance()
 ioloop.install()
@@ -77,7 +78,8 @@ def log_queue():
 
 log_queue()
 
-sockjs_router = SockJSRouter(ZMQRouter, io_loop=io_loop)
+sockjs_router = SockJSRouter(
+    ZMQRouter, prefix=CHANGES_PREFIX, io_loop=io_loop)
 routes = sockjs_router.urls
 web_app = web.Application(routes, debug=False)
 
