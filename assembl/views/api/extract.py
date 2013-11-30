@@ -106,7 +106,7 @@ def post_extract(request):
         target_type = target.get('@type')
         if target_type == 'email':
             post_id = target.get('@id')
-            post = get_named_object('Email', post_id)
+            post = get_named_object('Post', post_id)
             if not post:
                 raise HTTPNotFound(
                     "Post with id '%s' not found." % post_id)
