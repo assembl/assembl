@@ -192,19 +192,18 @@ class BaseOps(object):
 
     @classmethod
     def get_instance(cls, identifier):
-        num = cls.get_database_id(identifier)
-        if not num:
+        try:
             # temporary hack
-            try:
-                num = int(identifier)
-            except ValueError:
-                pass
+            num = int(identifier)
+        except ValueError:
+            num = cls.get_database_id(identifier)
         if num:
             return cls.get(id=num)
 
     @classmethod
     def get_database_id(cls, uri):
-        if uri.startswith('local:%s/' % (cls.external_typename())):
+        if isinstance(uri, str) and\
+                uri.startswith('local:%s/' % (cls.external_typename())):
             num = uri.split('/', 1)[1]
             try:
                 return int(num)
