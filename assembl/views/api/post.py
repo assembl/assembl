@@ -42,13 +42,13 @@ def __post_to_json_structure(post):
     data["collapsed"] = False
     #FIXME
     data["read"] = True
-    data["parentId"] = post.parent_id
+    data["parentId"] = Post.uri_generic(post.parent_id)
     subject = post.content.get_title()
     if post.content.type == 'email':
         subject = post.content.source.mangle_mail_subject(subject)
     data["subject"] = subject
     data["body"] = post.content.get_body()
-    data["idCreator"] = post.creator_id
+    data["idCreator"] = AgentProfile.uri_generic(post.creator_id)
     data["date"] = post.content.creation_date.isoformat()
     return data
 

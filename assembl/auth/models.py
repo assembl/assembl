@@ -149,8 +149,8 @@ class AgentProfile(SQLAlchemyBaseModel):
 
     def serializable(self, use_email=None):
         r = {
-            'type': "AgentProfile",
-            'id': self.id,
+            'type': self.external_typename(),
+            'id': self.uri_generic(self.id),
             'name': self.name or self.display_name()
         }
         if use_email:
