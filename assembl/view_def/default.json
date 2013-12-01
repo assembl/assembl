@@ -27,17 +27,17 @@
         "extracts":[":partial"]
         },
     "Post": {
-        "creator":":base"
+        "creator":":"
         },
 
     "Discussion": {
         "slug": true,
-        "table_of_contents": ":base",
+        "table_of_contents": ":",
         "creation_date": true,
         "topic": true,
         "synthesis": true,
         "owner_id": true,
-        "sources":[":base"],
+        "sources":[":"],
         "permissions":"&get_roles_by_permission"
     },
     "Idea": {},
@@ -46,7 +46,7 @@
         },
     "Synthesis": {},
     "Extract": {
-        "text_fragment_identifiers":[":base"]
+        "text_fragment_identifiers":[":"]
         },
     "TextFragmentIdentifier": {}
 }
