@@ -3,10 +3,71 @@
         "id":false,
         "type":false
     },
+    "Permission": {},
+    "AgentProfile": {
+        "user":":partial"
+    },
     "User": {
         "password":false
     },
+    "EmailAccount": {},
+    "IdentityProviderAccount": {},
+    "IdentityProvider": {},
+
+    "Source": {
+        "discussion_id":"discussion"
+    },
+    "Webpage": {
+    },
+    "Mailbox": {
+       "discussion_id":"discussion"
+    },
     "Email": {
         "full_message":false
+    },
+    "Post": {
+        "idCreator":"creator",
+        "parentId": "parent",
+        "date": "creation_date"
+    },
+
+    "Discussion": {
+        "slug": true,
+        "table_of_contents_id": "table_of_contents",
+        "creation_date": true,
+        "topic": true,
+        "synthesis_id": "synthesis",
+        "owner_id": "owner"
+    },
+    "Idea": {
+        "longTitle": "long_title",
+        "total": "&get_num_children",
+        "creationDate": "creation_date",
+        "shortTitle": "short_title",
+        "parents":true
+    },
+    "TableOfContents": {
+    },
+    "Synthesis": {
+        "discussion_id":"discussion"
+    },
+    "Extract": {
+        "ranges":["text_fragment_identifiers:partial"],
+        "idIdea":"idea",
+        "text":"annotation_text",
+        "created":"creation_date",
+        "quote":"body",
+        "idCreator":"creator",
+        "idIdea":"idea",
+        "target":"&get_target",
+        "source":true,
+        "idPost":"&get_post"
+        },
+    "TextFragmentIdentifier": {
+        "start":"xpath_start",
+        "end":"xpath_end",
+        "startOffset":"offset_start",
+        "endOffset":"offset_end",
+        "extract_id":false
     }
 }
