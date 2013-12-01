@@ -9,7 +9,7 @@ from itertools import groupby
 import inspect
 from types import StringTypes
 
-from anyjson import dumps
+from anyjson import dumps, loads
 from colanderalchemy import SQLAlchemySchemaNode
 from sqlalchemy import (
     DateTime, MetaData, engine_from_config, event, Column, ForeignKey)
@@ -275,6 +275,10 @@ class BaseOps(object):
                 assert isinstance(subspec, StringTypes),\
                     "in viewdef %s, class %s, name %s, spec not a string" % (
                         view_def_name, my_typename, name)
+                if subspec[0] == "'":
+                    # literals. 
+                    result[name] = loads(subspec[1:])
+                    continue
                 if ':' in subspec:
                     prop_name, view_name = subspec.split(':', 1)
                     if not view_name:
@@ -293,9 +297,14 @@ class BaseOps(object):
                 assert prop_name in methods,\
                     "in viewdef %s, class %s, name %s, unknown method %s" % (
                         view_def_name, my_typename, name, prop_name)
-                # Function call. PLEASE RETURN JSON.
-                # TODO: Run through filters.
-                result[name] = getattr(self, prop_name)()
+                # Function call. PLEASE RETURN JSON or Base object.
+                val = getattr(self, prop_name)()
+                if isinstance(val, Base):
+                    if view_name:
+                        val = val.generic_json(view_name, base_uri)
+                    else:
+                        val = val.uri(base_uri)
+                result[name] = val
                 continue
             if prop_name in cols:
                 assert not view_name,\
@@ -309,7 +318,7 @@ class BaseOps(object):
                         view_def_name, my_typename, prop_name)
                 known.add(prop_name)
                 val = getattr(self, prop_name)
-                if val:
+                if val is not None:
                     if type(val) == datetime:
                         val = val.isoformat()
                     result[name] = val

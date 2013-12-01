@@ -18,8 +18,9 @@ _def_cache = {}
 #   - { "name": [true] } will give an array of @id.
 #   - { "name": {"@id":"relation:viewdef"} } will give the relation as a dict, indexed by @id.
 #       Same shortcuts apply (ommitting relation or default (base) viewdef. No viewdef makes no sense.)
-#   - { "name": "&method_name" } will call the method with no arguments. 
-#       DANGER! PLEASE RETURN JSON.
+#   - { "name": "&method_name:viewdef" } will call the method with no arguments. 
+#       DANGER! PLEASE RETURN JSON or a Base object (in which case viewdef or url applies.)
+#   - { "name": "'<json literal>"} This allows to specify literal values.
 #
 # @id, @type and @view will always be defined.
 # Unspecified relation will be given as URL
