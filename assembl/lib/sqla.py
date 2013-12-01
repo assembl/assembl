@@ -216,7 +216,7 @@ class BaseOps(object):
     def uri(self, base_uri='local:'):
         return self.uri_generic(self.get_id_as_str(), base_uri)
 
-    def generic_json(self, view_def_name='base', base_uri='local:'):
+    def generic_json(self, view_def_name='default', base_uri='local:'):
         view_def = get_view_def(view_def_name)
         my_typename = self.external_typename()
         my_id = self.uri(base_uri)
@@ -278,7 +278,7 @@ class BaseOps(object):
                 if ':' in subspec:
                     prop_name, view_name = subspec.split(':', 1)
                     if not view_name:
-                        view_name = 'basic'
+                        view_name = 'default'
                     if not prop_name:
                         prop_name = name
                 else:
@@ -487,7 +487,7 @@ def orm_update_listener(mapper, connection, target):
             connection.info['cdict'] = {}
         connection.info['cdict'][target.uri()] = (
             target.get_discussion_id(),
-            target.generic_json('local'))
+            target.generic_json('changes'))
 
 
 def orm_insert_listener(mapper, connection, target):
@@ -495,7 +495,7 @@ def orm_insert_listener(mapper, connection, target):
         connection.info['cdict'] = {}
     connection.info['cdict'][target.uri()] = (
         target.get_discussion_id(),
-        target.generic_json('local'))
+        target.generic_json('changes'))
 
 
 def orm_delete_listener(mapper, connection, target):

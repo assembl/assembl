@@ -21,7 +21,7 @@ generic = Service(
 def get_object(request):
     classname = request.matchdict['cls']
     id = request.matchdict['id']
-    view = request.matchdict['view'] or '/base'
+    view = request.matchdict['view'] or '/default'
     view = view[1:]
     cls = getattr(assembl.models, classname, None)
     if not cls:
