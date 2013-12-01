@@ -54,4 +54,6 @@ def main(global_config, **settings):
     # Tasks
     config.include('.tasks')
 
+    config.include('.view_def')
+
     return config.make_wsgi_app()

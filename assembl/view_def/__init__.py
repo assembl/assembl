@@ -2,8 +2,10 @@ import traceback
 from os.path import exists, join, dirname
 
 import simplejson
+from pyramid.settings import asbool
 
 _def_cache = {}
+_use_cache = True
 
 # generic syntax: { "name": "property:viewdef" }
 # variants:
@@ -30,17 +32,21 @@ _def_cache = {}
 # IDs will always take the form 
 # local:<classname>/<object_id>
 
-def get_view_def(name, use_cache=False):
-    global _def_cache
-    if use_cache and name in _def_cache:
+def get_view_def(name):
+    global _def_cache, _use_cache
+    if _use_cache and name in _def_cache:
         return _def_cache[name]
 
     fname = join(dirname(__file__), name+".json")
     if exists(fname):
         try:
             json = simplejson.load(open(fname))
-            if use_cache:
+            if _use_cache:
                 _def_cache[name] = json
             return json
         except:
             traceback.print_exc()
+
+def includeme(config):
+    global _use_cache
+    _use_cache = asbool(config.registry.settings.get('cache_viewdefs', True))
