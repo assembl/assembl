@@ -19,7 +19,7 @@ import transaction
 
 from assembl.auth import P_READ, P_ADD_POST
 from assembl.models import (
-    get_named_object, AgentProfile, Post, Email,
+    get_database_id, get_named_object, AgentProfile, Post, Email,
     Discussion, Source, Content, Idea, ViewPost, User)
 from . import acls
 
@@ -28,7 +28,7 @@ posts = Service(name='posts', path=API_DISCUSSION_PREFIX + '/posts',
                 description="Post API following SIOC vocabulary as much as possible",
                 renderer='json', acl=acls)
 
-post = Service(name='post', path=API_DISCUSSION_PREFIX + '/posts/{id}',
+post = Service(name='post', path=API_DISCUSSION_PREFIX + '/posts/{id:.+}',
                description="Manipulate a single post",
                acl=acls)
 
@@ -116,20 +116,13 @@ def get_posts(request):
     if page < 1:
         page = 1
 
-    try:
-        root_post_id = int(request.GET.getone('root_post_id'))
-    except (ValueError, KeyError):
-        root_post_id = None
-    if root_post_id == 0:
-        root_post_id = None
+    root_post_id = request.GET.getall('root_post_id')
+    if root_post_id:
+        root_post_id = get_database_id("Post", root_post_id[0])
 
-    try:
-        root_idea_id = request.GET.getone('root_idea_id')
-        if(root_idea_id != Idea.ORPHAN_POSTS_IDEA_ID):
-            root_idea_id = int(root_idea_id)
-    except (KeyError):
-        root_idea_id = None
-        
+    root_idea_id = request.GET.getall('root_idea_id')
+    if root_idea_id:
+        root_idea_id = get_database_id("Idea", root_idea_id[0])
 
     #Rename "inbox" to "unread", the number of unread messages for the current user.
     no_of_messages_viewed_by_user = Post.db.query(ViewPost).join(
@@ -239,7 +232,7 @@ def get_posts(request):
 @post.get(permission=P_READ)
 def get_post(request):
     post_id = request.matchdict['id']
-    post = Post.get(id=int(post_id))
+    post = Post.get_instance(post_id)
 
     if not post:
         raise HTTPNotFound("Post with id '%s' not found." % post_id)
@@ -268,7 +261,7 @@ def create_post(request):
         raise HTTPUnauthorized()
 
     if reply_id:
-        post = get_named_object("Post", reply_id)
+        post = Post.get_instance(reply_id)
         post.content.reply(user, message)
 
         return {"ok": True}

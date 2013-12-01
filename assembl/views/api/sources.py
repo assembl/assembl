@@ -22,7 +22,7 @@ sources = Service(
 @sources.get()
 def get_sources(request):
     discussion_id = int(request.matchdict['discussion_id'])
-    discussion = Discussion.get(id=int(discussion_id))
+    discussion = Discussion.get_instance(discussion_id)
 
     if not discussion:
         raise HTTPNotFound(

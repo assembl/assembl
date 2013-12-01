@@ -8,10 +8,9 @@ from pyramid.httpexceptions import HTTPNotFound, HTTPBadRequest
 from sqlalchemy.orm import aliased, joinedload, joinedload_all, contains_eager
 
 from assembl.views.api import API_DISCUSSION_PREFIX
-from assembl.auth.models import (
-    AgentProfile, User, Role, Permission, UserRole,
-    LocalUserRole, DiscussionPermission)
-from assembl.synthesis.models import Discussion
+from assembl.models import (
+    get_database_id, AgentProfile, User, Role, Permission, UserRole,
+    LocalUserRole, DiscussionPermission, Discussion)
 from . import acls
 from assembl.auth import (
     P_READ, P_ADMIN_DISC, P_SYSADMIN, SYSTEM_ROLES)
@@ -46,14 +45,14 @@ roles = Service(
 
 global_roles_for_user = Service(
     name='generic_roles_for_user',
-    path=API_DISCUSSION_PREFIX + '/roles/for/{user_id}/global',
+    path=API_DISCUSSION_PREFIX + '/roles/globalfor/{user_id:.+}',
     description="The universal roles of a given user",
     renderer='json', acl=acls, cors_policy=cors_policy
 )
 
 discussion_roles_for_user = Service(
     name='discussion_roles_for_user',
-    path=API_DISCUSSION_PREFIX + '/roles/for/{user_id}/local',
+    path=API_DISCUSSION_PREFIX + '/roles/localfor/{user_id:.+}',
     description="The per-discussion roles of a given user",
     renderer='json', acl=acls, cors_policy=cors_policy
 )
@@ -64,6 +63,8 @@ def get_permissions_for_discussion(request):
     discussion_id = request.matchdict['discussion_id']
     session = Discussion.db()
     discussion = session.query(Discussion).get(discussion_id)
+    if not discussion:
+        raise HTTPNotFound("Discussion %s does not exist" % (discussion_id,))
     return discussion.get_permissions_by_role()
 
 
@@ -73,6 +74,8 @@ def get_permissions_for_role(request):
     role_name = request.matchdict['role_name']
     session = Discussion.db()
     discussion = session.query(Discussion).get(discussion_id)
+    if not discussion:
+        raise HTTPNotFound("Discussion %s does not exist" % (discussion_id,))
     role = Role.get(name=role_name)
     if not role:
         raise HTTPNotFound("Role %s does not exist" % (role_name,))
@@ -85,6 +88,8 @@ def put_permissions_for_role(request):
     role_name = request.matchdict['role_name']
     session = Discussion.db()
     discussion = session.query(Discussion).get(discussion_id)
+    if not discussion:
+        raise HTTPNotFound("Discussion %s does not exist" % (discussion_id,))
     role = Role.get(name=role_name)
     if not role:
         raise HTTPNotFound("Role %s does not exist" % (role_name,))
@@ -119,6 +124,7 @@ def get_roles(request):
     session = Role.db()
     roles = session.query(Role)
     return [r.name for r in roles]
+
 
 @roles.put(permission=P_SYSADMIN)
 def put_roles(request):
@@ -159,8 +165,8 @@ def get_global_roles_for_user(request):
 @global_roles_for_user.put(permission=P_SYSADMIN)
 def put_global_roles_for_user(request):
     user_id = request.matchdict['user_id']
+    user = User.get_instance(user_id)
     session = User.db()
-    user = session.query(User).get(user_id)
     if not user:
         raise HTTPNotFound("User id %d does not exist" % (user_id,))
     try:
@@ -191,7 +197,7 @@ def put_global_roles_for_user(request):
 @discussion_roles_for_user.get(permission=P_READ)
 def get_discussion_roles_for_user(request):
     discussion_id = request.matchdict['discussion_id']
-    user_id = request.matchdict['user_id']
+    user_id = get_database_id("User", request.matchdict['user_id'])
     session = Discussion.db()
     if not session.query(User).get(user_id):
         raise HTTPNotFound("User id %d does not exist" % (user_id,))
@@ -205,15 +211,17 @@ def get_discussion_roles_for_user(request):
 def put_discussion_roles_for_user(request):
     discussion_id = request.matchdict['discussion_id']
     user_id = request.matchdict['user_id']
-    session = Discussion.db()
-    discussion = session.query(Discussion).get(discussion_id)
-    user = session.query(User).get(user_id)
+    discussion = Discussion.get_instance(discussion_id)
+    if not discussion:
+        raise HTTPNotFound("Discussion %s does not exist" % (discussion_id,))
+    user = User.get_instance(user_id)
     if not user:
         raise HTTPNotFound("User id %d does not exist" % (user_id,))
     try:
         data = json.loads(request.body)
     except Exception as e:
         raise HTTPBadRequest("Malformed Json")
+    session = Discussion.db()
     if not isinstance(data, list):
         raise HTTPBadRequest("Not a list")
     if data and frozenset((type(x) for x in data)) != frozenset((str,)):

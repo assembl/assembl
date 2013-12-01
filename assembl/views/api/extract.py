@@ -34,7 +34,7 @@ extracts = Service(
 
 extract = Service(
     name='extract',
-    path=API_DISCUSSION_PREFIX + '/extracts/{id}',
+    path=API_DISCUSSION_PREFIX + '/extracts/{id:.+}',
     description="Manipulate a single extract",
     acl=acls, cors_policy=cors_policy
 )
@@ -50,7 +50,7 @@ search_extracts = Service(
 @extract.get(permission=P_READ)
 def get_extract(request):
     extract_id = request.matchdict['id']
-    extract = Extract.get(id=int(extract_id))
+    extract = Extract.get_instance(extract_id)
 
     return extract.serializable()
 
@@ -106,7 +106,7 @@ def post_extract(request):
         target_type = target.get('@type')
         if target_type == 'email':
             post_id = target.get('@id')
-            post = get_named_object('Post', post_id)
+            post = Post.get_instance(post_id)
             if not post:
                 raise HTTPNotFound(
                     "Post with id '%s' not found." % post_id)
@@ -114,7 +114,7 @@ def post_extract(request):
         elif target_type == 'webpage':
             uri = target.get('url')
     if uri and not content:
-        content = get_named_object('Webpage', uri)
+        content = Webpage.get_instance(uri)
         if not content:
             discussion_id = int(request.matchdict['discussion_id'])
             source = Source.get(name='Annotator', discussion_id=discussion_id)

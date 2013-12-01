@@ -12,12 +12,13 @@ from assembl.auth import (P_READ, P_ADD_IDEA, P_EDIT_IDEA)
 ideas = Service(name='ideas', path=API_DISCUSSION_PREFIX + '/ideas',
                 description="",
                 renderer='json', acl=acls)
-idea = Service(name='idea', path=API_DISCUSSION_PREFIX + '/ideas/{id}',
+
+idea = Service(name='idea', path=API_DISCUSSION_PREFIX + '/ideas/{id:.+}',
                description="Manipulate a single idea", acl=acls)
 
 idea_extracts = Service(
     name='idea_extracts',
-    path=API_DISCUSSION_PREFIX + '/ideas/{id}/extracts',
+    path=API_DISCUSSION_PREFIX + '/ideas_extracts/{id:.+}',
     description="Get the extracts of a single idea", acl=acls)
 
 
@@ -37,7 +38,7 @@ def create_idea(request):
             order=idea_data.get('order', 0.0))
 
         if idea_data['parentId']:
-            parent = session.query(Idea).get(idea_data['parentId'])
+            parent = Idea.get_instance(idea_data['parentId'])
             new_idea.parents.append(parent)
 
         session.add(new_idea)
@@ -47,10 +48,10 @@ def create_idea(request):
     return {'ok': True, 'id': new_idea.id}
 
 
-@idea.get()  # permission=P_READ)
+@idea.get(permission=P_READ)
 def get_idea(request):
     idea_id = request.matchdict['id']
-    idea = Idea.get(id=int(idea_id))
+    idea = Idea.get_instance(idea_id)
 
     if not idea:
         raise HTTPNotFound("Idea with id '%s' not found." % idea_id)
@@ -58,7 +59,7 @@ def get_idea(request):
     return idea.serializable()
 
 
-@ideas.get()  # permission=P_READ)
+@ideas.get(permission=P_READ)
 def get_ideas(request):
     discussion_id = request.matchdict['discussion_id']
     discussion = Discussion.get(id=int(discussion_id))
@@ -85,7 +86,7 @@ def save_idea(request):
         return {'ok': False, 'id': idea_id}
 
     with transaction.manager:
-        idea = Idea.get(id=int(idea_id))
+        idea = Idea.get_instance(idea_id)
         discussion = Discussion.get(id=int(discussion_id))
 
         idea.short_title = idea_data['shortTitle']
@@ -96,7 +97,7 @@ def save_idea(request):
             idea.parents.remove(parent)
 
         if idea_data['parentId']:
-            parent = get_named_object('Idea', idea_data['parentId'])
+            parent = Idea.get_instance(idea_data['parentId'])
             idea.parents.append(parent)
 
         if idea_data['inSynthesis']:
@@ -114,7 +115,7 @@ def save_idea(request):
 @idea.delete()  # permission=P_EDIT_IDEA
 def delete_idea(request):
     idea_id = request.matchdict['id']
-    idea = Idea.get(id=int(idea_id))
+    idea = Idea.get_instance(idea_id)
 
     if not idea:
         raise HTTPNotFound("Idea with id '%s' not found." % idea_id)
@@ -132,7 +133,7 @@ def delete_idea(request):
 @idea_extracts.get()  # permission=P_READ
 def get_idea_extracts(request):
     idea_id = request.matchdict['id']
-    idea = Idea.get(id=int(idea_id))
+    idea = Idea.get_instance(idea_id)
 
     if not idea:
         raise HTTPNotFound("Idea with id '%s' not found." % idea_id)
