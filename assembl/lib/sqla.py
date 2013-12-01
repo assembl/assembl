@@ -1,10 +1,13 @@
 """Some utilities for working with SQLAlchemy."""
 
+from __future__ import absolute_import
+
 import re
 import sys
 from datetime import datetime
 from itertools import groupby
 import inspect
+from types import StringTypes
 
 from anyjson import dumps
 from colanderalchemy import SQLAlchemySchemaNode
@@ -202,7 +205,7 @@ class BaseOps(object):
 
     @classmethod
     def get_database_id(cls, uri):
-        if isinstance(uri, str) and\
+        if isinstance(uri, StringTypes) and\
                 uri.startswith('local:%s/' % (cls.external_typename())):
             num = uri.split('/', 1)[1]
             try:
@@ -269,7 +272,7 @@ class BaseOps(object):
                 prop_name = name
                 view_name = None
             else:
-                assert isinstance(subspec, str),\
+                assert isinstance(subspec, StringTypes),\
                     "in viewdef %s, class %s, name %s, spec not a string" % (
                         view_def_name, my_typename, name)
                 if ':' in subspec:
