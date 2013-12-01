@@ -176,7 +176,10 @@ class BaseOps(object):
     def get_id_as_str(self):
         id = getattr(self, 'id', None)
         if not id:
-            raise NotImplemented()
+            if 'id' not in self.__class__.__dict__:
+                raise NotImplementedError("get_id_as_str on "+
+                    self.__class__.__name__)
+            return None
         return str(id)
 
     def get_discussion_id(self):
