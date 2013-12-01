@@ -4,7 +4,9 @@
         "type":false
     },
     "Permission": {},
-    "AgentProfile": {},
+    "AgentProfile": {
+        "user":":"
+    },
     "User": {
         "password":false,
         "permissions":"&get_all_permissions"
@@ -14,39 +16,75 @@
     "IdentityProvider": {},
 
     "Source": {
-        "contents":[":partial"]
+        "contents":[":partial"],
+        "discussion_id":"discussion"
     },
     "Webpage": {
         "extracts":[":partial"]
     },
     "Mailbox": {
-        "contents":[":partial"]
+        "contents":[":partial"],
+        "most_common_recipient_address":"&most_common_recipient_address",
+        "discussion_id":"discussion",
+        "use_ssl":true
     },
     "Email": {
         "full_message":false,
         "extracts":[":partial"]
         },
     "Post": {
-        "creator":":"
-        },
+        "idCreator":"creator",
+        "read":"&is_read",
+        "views":[":"],
+        "parentId": "parent",
+        "date": "creation_date",
+        "subject": "&get_title"
+    },
 
     "Discussion": {
         "slug": true,
         "table_of_contents": ":",
         "creation_date": true,
         "topic": true,
-        "synthesis": true,
-        "owner_id": true,
+        "synthesis_id": "synthesis",
+        "owner_id": "owner",
         "sources":[":"],
         "permissions":"&get_roles_by_permission"
     },
-    "Idea": {},
+    "Idea": {
+        "extracts":[":partial"],
+        "longTitle": "long_title",
+        "total": "&get_num_children",
+        "inSynthesis": "&is_in_synthesis",
+        "creationDate": "creation_date",
+        "shortTitle": "short_title",
+        "parents":true,
+        "order":true
+    },
     "TableOfContents": {
         "ideas":[":partial"]
-        },
-    "Synthesis": {},
+    },
+    "Synthesis": {
+        "discussion_id":"discussion"
+    },
     "Extract": {
-        "text_fragment_identifiers":[":"]
+        "ranges":["text_fragment_identifiers:"],
+        "idIdea":"idea",
+        "text":"annotation_text",
+        "created":"creation_date",
+        "quote":"body",
+        "idCreator":"creator",
+        "idIdea":"idea",
+        "target":"&get_target:partial",
+        "source":false,
+        "idPost":"&get_post",
+        "annotator_schema_version": "'\"v1.0\""
         },
-    "TextFragmentIdentifier": {}
+    "TextFragmentIdentifier": {
+        "start":"xpath_start",
+        "end":"xpath_end",
+        "startOffset":"offset_start",
+        "endOffset":"offset_end",
+        "extract_id":false
+    }
 }

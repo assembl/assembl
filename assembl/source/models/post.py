@@ -51,6 +51,16 @@ class Post(SQLAlchemyBaseModel):
 
         return descendants
 
+    def is_read(self):
+        # TODO: Make it user-specific.
+        return self.views is not None
+
+    def get_title(self):
+        return self.content.get_title()
+
+    def get_body(self):
+        return self.content.get_body()
+
     def set_ancestry(self, new_ancestry):
         descendants = self.get_descendants()
         old_ancestry = self.ancestry or ''

@@ -185,7 +185,7 @@ def get_posts(request):
     posts = posts.options(joinedload_all(Post.creator, AgentProfile.user))
 
     posts = posts.order_by(Content.creation_date)
-    
+
     if 'synthesis' in filter_names:
         posts = posts.filter(Post.is_synthesis==True)
 
@@ -194,6 +194,7 @@ def get_posts(request):
         #exit()
         serializable_post = __post_to_json_structure(post)
         if user_id:
+            # TODO: THIS DOES NOT WORK. We get all views, not just the join above.
             if(post.views):
                 serializable_post['read'] = True
             else:
