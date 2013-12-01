@@ -9,7 +9,7 @@ from assembl.auth.models import (
 FIXTURE_DIR = os.path.join(
     os.path.dirname(__file__), '..', '..', 'static', 'js', 'tests', 'fixtures')
 API_PREFIX = '/api/v1/'
-API_DISCUSSION_PREFIX = API_PREFIX + 'discussion/{discussion_id}'
+API_DISCUSSION_PREFIX = API_PREFIX + 'discussion/{discussion_id:\d+}'
 
 
 def acls(request):

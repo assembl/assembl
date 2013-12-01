@@ -1,12 +1,15 @@
 """Some utilities for working with SQLAlchemy."""
 
+from __future__ import absolute_import
+
 import re
 import sys
 from datetime import datetime
 from itertools import groupby
 import inspect
+from types import StringTypes
 
-from anyjson import dumps
+from anyjson import dumps, loads
 from colanderalchemy import SQLAlchemySchemaNode
 from sqlalchemy import (
     DateTime, MetaData, engine_from_config, event, Column, ForeignKey)
@@ -32,11 +35,13 @@ Base = TimestampedBase = None
 # If obsolete table names collide with new table names, alembic can't work
 obsolete = None
 ObsoleteBase = TimestampedObsolete = None
+class_registry = dict()
+aliased_class_registry = None
 
-
-def declarative_bases(metadata):
+def declarative_bases(metadata, registry=None):
     """Return all declarative bases bound to a single metadata object."""
-    registry = dict()
+    if registry is None:
+        registry = dict()
     return (declarative_base(cls=BaseOps, metadata=metadata,
                              class_registry=registry),
             declarative_base(cls=Timestamped, metadata=metadata,
@@ -171,7 +176,10 @@ class BaseOps(object):
     def get_id_as_str(self):
         id = getattr(self, 'id', None)
         if not id:
-            raise NotImplemented()
+            if 'id' not in self.__class__.__dict__:
+                raise NotImplementedError("get_id_as_str on "+
+                    self.__class__.__name__)
+            return None
         return str(id)
 
     def get_discussion_id(self):
@@ -188,10 +196,30 @@ class BaseOps(object):
             return None
         return base_uri + cls.external_typename() + "/" + str(id)
 
+    @classmethod
+    def get_instance(cls, identifier):
+        try:
+            # temporary hack
+            num = int(identifier)
+        except ValueError:
+            num = cls.get_database_id(identifier)
+        if num:
+            return cls.get(id=num)
+
+    @classmethod
+    def get_database_id(cls, uri):
+        if isinstance(uri, StringTypes) and\
+                uri.startswith('local:%s/' % (cls.external_typename())):
+            num = uri.split('/', 1)[1]
+            try:
+                return int(num)
+            except ValueError:
+                pass
+
     def uri(self, base_uri='local:'):
         return self.uri_generic(self.get_id_as_str(), base_uri)
 
-    def generic_json(self, view_def_name='base', base_uri='local:'):
+    def generic_json(self, view_def_name='default', base_uri='local:'):
         view_def = get_view_def(view_def_name)
         my_typename = self.external_typename()
         my_id = self.uri(base_uri)
@@ -201,6 +229,13 @@ class BaseOps(object):
             '@view': view_def_name
         }
         local_view = view_def.get(my_typename, {})
+        if local_view is False:
+            return None
+        assert isinstance(local_view, dict),\
+            "in viewdef %s, definition for class %s is not a dict" % (view_def_name, my_typename)
+        default_view = dict(view_def.get('_default', {}))
+        default_view.update(local_view)
+        local_view = default_view
         mapper = self.__class__.__mapper__
         relns = {r.key: r for r in mapper.relationships}
         cols = {c.key: c for c in mapper.columns}
@@ -212,93 +247,151 @@ class BaseOps(object):
         methods = dict(inspect.getmembers(
             self, lambda m: inspect.ismethod(m)
                             and m.func_code.co_argcount == 1))
+        known = set()
         for name, spec in local_view.iteritems():
             if name == "_default":
                 continue
             elif spec is False:
-                pass
+                known.add(name)
+                continue
             elif type(spec) is list:
-                assert len(spec) <= 1
-                assert name in relns
-                assert relns[name].uselist
-                val = getattr(self, name)
-                if not val:
-                    continue
-                if len(spec):
-                    view_name = spec[0]
-                    assert type(view_name) == str
-                    if get_view_def(view_name) is not None:
-                        result[name] = [
-                            ob.generic_json(view_name, base_uri)
-                            for ob in val]
-                    else:
-                        raise "view does not exist", view_name
-                else:
-                    result[name] = [ob.uri(base_uri) for ob in val]
+                if not spec:
+                    spec = [True]
+                assert len(spec) == 1,\
+                    "in viewdef %s, class %s, name %s, len(list) > 1" % (
+                        view_def_name, my_typename, name)
+                subspec = spec[0]
             elif type(spec) is dict:
-                assert len(spec) == 1
-                assert "@id" in spec
-                assert name in relns
-                view_name = spec['@id']
-                assert type(view_name) == str
-                assert relns[name].uselist
-                view = get_view_def(view_name)
-                assert view
-                val = getattr(self, name, [])
-                if val:
-                    result[name] = {
-                        ob.uri(base_uri):
-                        ob.generic_json(view_name, base_uri)
-                        for ob in val}
-            elif (spec is True and name in cols) or spec in cols:
-                cname = name if spec is True else spec
-                val = getattr(self, cname)
-                if val:
+                assert len(spec) == 1,\
+                    "in viewdef %s, class %s, name %s, len(dict) > 1" % (
+                        view_def_name, my_typename, name)
+                assert "@id" in spec,\
+                    "in viewdef %s, class %s, name %s, key should be '@id'" % (
+                        view_def_name, my_typename, name)
+                subspec = spec["@id"]
+            else:
+                subspec = spec
+            if subspec is True:
+                prop_name = name
+                view_name = None
+            else:
+                assert isinstance(subspec, StringTypes),\
+                    "in viewdef %s, class %s, name %s, spec not a string" % (
+                        view_def_name, my_typename, name)
+                if subspec[0] == "'":
+                    # literals. 
+                    result[name] = loads(subspec[1:])
+                    continue
+                if ':' in subspec:
+                    prop_name, view_name = subspec.split(':', 1)
+                    if not view_name:
+                        view_name = 'default'
+                    if not prop_name:
+                        prop_name = name
+                else:
+                    prop_name = subspec
+                    view_name = None
+            if view_name:
+                assert get_view_def(view_name),\
+                    "in viewdef %s, class %s, name %s, unknown viewdef %s" % (
+                        view_def_name, my_typename, name, view_name)
+            if prop_name[0] == '&':
+                prop_name = prop_name[1:]
+                assert prop_name in methods,\
+                    "in viewdef %s, class %s, name %s, unknown method %s" % (
+                        view_def_name, my_typename, name, prop_name)
+                # Function call. PLEASE RETURN JSON or Base object.
+                val = getattr(self, prop_name)()
+                if isinstance(val, Base):
+                    if view_name:
+                        val = val.generic_json(view_name, base_uri)
+                    else:
+                        val = val.uri(base_uri)
+                result[name] = val
+                continue
+            if prop_name in cols:
+                assert not view_name,\
+                    "in viewdef %s, class %s, viewdef for literal property %s" % (
+                        view_def_name, my_typename, prop_name)
+                assert not isinstance(spec, list),\
+                    "in viewdef %s, class %s, list for literal property %s" % (
+                        view_def_name, my_typename, prop_name)
+                assert not isinstance(spec, dict),\
+                    "in viewdef %s, class %s, dict for literal property %s" % (
+                        view_def_name, my_typename, prop_name)
+                known.add(prop_name)
+                val = getattr(self, prop_name)
+                if val is not None:
                     if type(val) == datetime:
                         val = val.isoformat()
                     result[name] = val
-            elif (spec is True and name in relns) or spec in relns:
-                rname = name if spec is True else spec
-                reln = relns[rname]
+                continue
+            assert prop_name in relns,\
+                    "in viewdef %s, class %s, prop_name %s not a column or relation" % (
+                        view_def_name, my_typename, prop_name)
+            known.add(prop_name)
+            # Add derived prop?
+            reln = relns[prop_name]
+            if reln.uselist:
+                vals = getattr(self, prop_name)
+                if not vals:
+                    continue
+                if view_name:
+                    if isinstance(spec, dict):
+                        result[name] = {
+                            ob.uri(base_uri):
+                            ob.generic_json(view_name, base_uri)
+                            for ob in vals}
+                    else:
+                        result[name] = [
+                            ob.generic_json(view_name, base_uri)
+                            for ob in vals]
+                else:
+                    assert not isinstance(spec, dict),\
+                        "in viewdef %s, class %s, dict without viewname for %s" % (
+                        view_def_name, my_typename, name)
+                    result[name] = [ob.uri(base_uri) for ob in vals]
+                continue
+            assert not isinstance(spec, dict),\
+                "in viewdef %s, class %s, dict for non-list relation %s" % (
+                    view_def_name, my_typename, prop_name)
+            if view_name:
+                ob = getattr(self, prop_name)
+                if ob:
+                    val = ob.generic_json(view_name, base_uri)
+                    if isinstance(spec, list):
+                        result[name] = [val]
+                    else:
+                        result[name] = val
+            else:
+                uri = None
                 if len(reln._calculated_foreign_keys) == 1 \
                         and reln._calculated_foreign_keys < fkeys:
                     # shortcut, avoid fetch
                     fkey = list(reln._calculated_foreign_keys)[0]
                     ob_id = getattr(self, fkey.name)
                     if ob_id:
-                        result[name] = reln.mapper.class_.uri_generic(
+                        uri = reln.mapper.class_.uri_generic(
                             ob_id, base_uri)
                 else:
-                    ob = getattr(self, rname)
-                    if isinstance(ob, list):
-                        if ob:
-                            result[name] = [o.uri(base_uri) for o in ob]
-                    elif ob:
-                        result[name] = ob.uri(base_uri)
-            elif name in relns and get_view_def(spec) is not None:
-                ob = getattr(self, name)
-                if isinstance(ob, list):
+                    ob = getattr(self, prop_name)
                     if ob:
-                        result[name] = [o.generic_json(spec, base_uri)
-                                        for o in ob]
-                elif ob:
-                    result[name] = ob.generic_json(spec, base_uri)
-            elif isinstance(spec, str) and spec.startswith("&") and spec[1:] in methods:
-                # Function call. PLEASE RETURN JSON.
-                # TODO: Run through filters.
-                result[name] = getattr(self, spec[1:])()
+                        uri = ob.uri(base_uri)
+                if uri:
+                    if isinstance(spec, list):
+                        result[name] = [uri]
+                    else:
+                        result[name] = uri
+
         if local_view.get('_default') is False:
             return result
-        defaults = view_def.get('_default', {})
         for name, col in cols.items():
-            if name in local_view:
+            if name in known:
                 continue  # already done
-            if defaults.get(name) is False:
-                continue
             as_rel = fkeys_of_reln.get(frozenset((col, )))
             if as_rel:
                 name = as_rel.key
-                if name in local_view or defaults.get(name) is False:
+                if name in known:
                     continue
                 else:
                     ob_id = getattr(self, col.key)
@@ -406,7 +499,7 @@ def orm_update_listener(mapper, connection, target):
             connection.info['cdict'] = {}
         connection.info['cdict'][target.uri()] = (
             target.get_discussion_id(),
-            target.generic_json('local'))
+            target.generic_json('changes'))
 
 
 def orm_insert_listener(mapper, connection, target):
@@ -414,7 +507,7 @@ def orm_insert_listener(mapper, connection, target):
         connection.info['cdict'] = {}
     connection.info['cdict'][target.uri()] = (
         target.get_discussion_id(),
-        target.generic_json('local'))
+        target.generic_json('changes'))
 
 
 def orm_delete_listener(mapper, connection, target):
@@ -461,7 +554,7 @@ def configure_engine(settings, zope_tr=True, session_maker=None):
     global db_schema, _metadata, Base, TimestampedBase, ObsoleteBase, TimestampedObsolete
     db_schema = settings['db_schema']
     _metadata = MetaData(schema=db_schema)
-    Base, TimestampedBase = declarative_bases(_metadata)
+    Base, TimestampedBase = declarative_bases(_metadata, class_registry)
     obsolete = MetaData(schema=db_schema)
     ObsoleteBase, TimestampedObsolete = declarative_bases(obsolete)
     event.listen(engine, 'commit', commit_listener)
@@ -482,6 +575,35 @@ def mark_changed():
 def get_metadata():
     global _metadata
     return _metadata
+
+
+def get_named_class(typename):
+    global aliased_class_registry
+    if not aliased_class_registry:
+        aliased_class_registry = {
+            cls.external_typename(): cls
+            for cls in class_registry.itervalues()
+            if getattr(cls, 'external_typename', None)
+        }
+    return aliased_class_registry.get(typename, None)
+
+
+# In theory, the identifier should be enough... at some point.
+def get_named_object(typename, identifier):
+    "Get an object given a typename and identifier"
+    # A numeric identifier will often be accepted.
+    cls = get_named_class(typename)
+    if cls:
+        return cls.get_instance(identifier)
+
+
+def get_database_id(typename, identifier):
+    try:
+        return int(identifier)
+    except ValueError:
+        cls = get_named_class(typename)
+        if cls:
+            return cls.get_database_id(identifier)
 
 
 def includeme(config):

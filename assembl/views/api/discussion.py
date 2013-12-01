@@ -21,9 +21,8 @@ discussion = Service(
 
 @discussion.get()
 def get_discussion(request):
-    discussion_id = int(request.matchdict['discussion_id'])
-
-    discussion = Discussion.get(id=discussion_id)
+    discussion_id = request.matchdict['discussion_id']
+    discussion = Discussion.get_instance(discussion_id)
 
     if not discussion:
         raise HTTPNotFound(

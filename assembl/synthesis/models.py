@@ -10,13 +10,13 @@ from pyramid.i18n import TranslationString as _
 
 from sqlalchemy import (
     Table,
-    Column, 
+    Column,
     Boolean,
-    Integer, 
+    Integer,
     String,
     Float,
-    Unicode, 
-    UnicodeText, 
+    Unicode,
+    UnicodeText,
     DateTime,
     ForeignKey,
     desc,
@@ -27,7 +27,9 @@ from assembl.lib.utils import slugify
 
 from ..lib.sqla import db_schema, Base as SQLAlchemyBaseModel
 from ..source.models import (Source, Content, Post, Mailbox)
-from ..auth.models import DiscussionPermission, Role, Permission
+from ..auth.models import (
+    DiscussionPermission, Role, Permission, AgentProfile)
+
 
 class Discussion(SQLAlchemyBaseModel):
     """
@@ -38,11 +40,11 @@ class Discussion(SQLAlchemyBaseModel):
     id = Column(Integer, primary_key=True)
 
     topic = Column(UnicodeText, nullable=False)
-    
+
     slug = Column(Unicode, nullable=False, unique=True, index=True)
-    
+
     creation_date = Column(DateTime, nullable=False, default=datetime.utcnow)
-    
+
     table_of_contents_id = Column(
         Integer,
         ForeignKey('table_of_contents.id', ondelete="CASCADE"),
@@ -410,6 +412,12 @@ AND discussion.id=:discussion_id
         elif self.table_of_contents_id:
             return TableOfContents.get(id=self.table_of_contents_id).get_discussion_id()
 
+    def get_num_children(self):
+        return len(self.children)
+
+    def is_in_synthesis(self):
+        return self.synthesis_id is not None
+
     def __repr__(self):
         if self.short_title:
             return "<Idea %d %s>" % (self.id, repr(self.short_title))
@@ -485,6 +493,16 @@ class Extract(SQLAlchemyBaseModel):
 
     def __repr__(self):
         return "<Extract %d %s>" % (self.id, repr(self.body[:20]))
+
+    def get_target(self):
+        if self.source.type == 'email':
+            return self.source.post
+        else:
+            return self.source
+
+    def get_post(self):
+        if self.source.type == 'email':
+            return self.source.post
 
     def infer_text_fragment(self):
         return self._infer_text_fragment_inner(

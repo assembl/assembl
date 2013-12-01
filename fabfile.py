@@ -356,18 +356,19 @@ def install_basetools():
         sudo('apt-get install -y git mercurial subversion')
         sudo('apt-get install -y gettext')
 
+@task
 def install_builddeps():
     """
     Will install commonly needed build deps for pip django virtualenvs.
     """
     print(cyan('Installing compilers and required libraries'))
-    if mac:
+    if env.mac:
         if not exists('/usr/local/bin/brew'):
             sudo('ruby -e "$(curl -fsSL https://raw.github.com/mxcl/homebrew/go/install)"')
         sudo('brew install memcached zeromq redis postgresql')
     else:
         sudo('apt-get install -y build-essential python-dev libjpeg62-dev libpng12-dev zlib1g-dev libfreetype6-dev liblcms-dev libpq-dev libxslt1-dev libxml2-dev')
-        sudo('apt-get install -y libzmq3-dev redis memcached unixodbc-dev virtuoso-opensource')
+        sudo('apt-get install -y libzmq3-dev redis-server memcached unixodbc-dev virtuoso-opensource')
 
 @task
 def configure_rbenv():

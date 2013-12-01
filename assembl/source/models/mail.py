@@ -290,24 +290,30 @@ class Mailbox(Source):
                 
         update_threading(threaded_emails.values())
 
-    def reprocess_content(self):
+    @staticmethod
+    def reprocess_content(mailbox):
         """ Allows re-parsing all content as if it were imported for the first time
             but without re-hitting the source, or changing the object ids.
             Call when a code change would change the representation in the database
             """
-        emails = self.db.query(Email).filter(
-                Email.source_id == self.id,
+        mailbox_id = mailbox.id
+        emails = mailbox.db.query(Email).filter(
+                Email.source_id == mailbox_id,
                 ).options(joinedload_all(Email.post, Post.parent, Post.content))
-
-        for email in emails:
+        email_ids = [email.id for email in emails]
+        for email_id in email_ids:
             session = Email.db()
-            email_object = mailbox.parse_email(email.full_message, email)
+            email = Email.get(id=email_id)
+            (email_object, _) = mailbox.parse_email(email.full_message, email)
             session.add(email_object)
+            
             transaction.commit()
-            session.remove()
-            mailbox = session.get(Mailbox).get(mailbox.id)
-
-        self.thread_mails(emails)
+            Email.db.remove()
+            mailbox = Mailbox.get(id=mailbox_id)
+        emails = mailbox.db.query(Email).filter(
+                Email.source_id == mailbox_id,
+                ).options(joinedload_all(Email.post, Post.parent, Post.content))
+        mailbox.thread_mails(emails)
         
     def import_content(self, only_new=True):
         #Mailbox.do_import_content(self, only_new)
@@ -346,7 +352,7 @@ class Mailbox(Source):
                 if isinstance(response_part, tuple):
                     message_string = response_part[1]
 
-            email_object = mailbox_obj.parse_email(message_string)
+            (email_object, _) = mailbox_obj.parse_email(message_string)
             session.add(email_object)
             transaction.commit()
             mailbox_obj = Mailbox.get(id=mailbox_obj.id)

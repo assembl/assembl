@@ -1,4 +1,6 @@
-from .lib.sqla import Base, TimestampedBase, get_metadata, get_session_maker
+from .lib.sqla import (
+    Base, TimestampedBase, get_metadata, get_session_maker,
+    get_named_object, get_database_id)
 
 from .auth.models import (
     IdentityProvider,
@@ -17,7 +19,7 @@ from .auth.models import (
     ViewPost,
     ExpandPost,
     CollapsePost,
-    )
+)
 from .source.models import (
     Source,
     Content,
@@ -32,7 +34,7 @@ from .synthesis.models import (
     Extract,
     Synthesis,
     TextFragmentIdentifier,
-    )
+)
 from .annotation.models import (
     Webpage,
-    )
+)

@@ -102,7 +102,9 @@ changes.websocket.url = http://localhost:8085
 celery.broker = redis://localhost:6379/0
 
 [pshell]
-setup = assembl.lib.pshell_session.setup
+db = assembl.lib.pshell_session.db
+models = assembl.models
+transaction = transaction
 
 [alembic]
 # Path to migration scripts

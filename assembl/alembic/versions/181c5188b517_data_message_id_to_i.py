@@ -26,7 +26,7 @@ def upgrade(pyramid_env):
     db = Mailbox.db()
     with transaction.manager:
         for mb in db.query(Mailbox).all():
-            mb.reprocess_content()
+            Mailbox.reprocess_content(mb)
     db = Extract.db()
     with transaction.manager:
         q = db.execute('''

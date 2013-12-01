@@ -31,7 +31,7 @@ agents = Service(
     renderer='json', acl=acls)
 
 agent = Service(
-    name='agent', path=API_DISCUSSION_PREFIX + '/agents/{id}',
+    name='agent', path=API_DISCUSSION_PREFIX + '/agents/{id:.+}',
     description="Retrieve a single agent", renderer='json', acl=acls)
 
 
@@ -54,9 +54,9 @@ def get_agents(request, discussion_only=False):
 @agent.get()  # permission=P_READ)
 def get_agent(request):
     agent_id = request.matchdict['id']
-    agent = AgentProfile.get(id=agent_id)
+    agent = AgentProfile.get_instance(agent_id)
 
     if not agent:
-        raise HTTPNotFound("Agent with id '%s' not found." % post_id)
+        raise HTTPNotFound("Agent with id '%s' not found." % agent_id)
 
     return agent.serializable()

@@ -33,6 +33,7 @@ On the Mac:
 Use brew and install these components:
  - brew install memcached zeromq redis postgresql
 
+On linux:  fab devenv install_builddeps
 
 Compiling CSS
 -------------
@@ -85,8 +86,9 @@ Updating an environment:
 - compass compile
 
 Thereafter:
+Note:  memcached, redis and postgres must be running already.
 - $venv/bin/supervisord
-- $venv/bin/supervisorctl start dev:
+- $venv/bin/supervisorctl start dev:*
 
 You can monitor any of the processes, for example pserve, with these commands:
 - $venv/bin/supervisorctl tail -f dev:pserve 
@@ -94,8 +96,8 @@ You can monitor any of the processes, for example pserve, with these commands:
 
 In production:
 
-- $venv/bin/supervisorctl start prod:
-(Instead of dev:. You may have to stop dev:)
+- $venv/bin/supervisorctl start prod:*
+(Instead of dev:*. You may have to stop dev:*)
 
 Updating an environment:
 
@@ -123,3 +125,8 @@ Running tests
 - Copy testing.ini.example to testing.ini
 - nosetests
 
+
+A note on vagrant
+-----------------
+
+If you use vagrant, we have a few processes that expect to use socket files in %(here)s. Vagrant does not allow creating sockets in a shared folder; so if you insist on using vagrant, make sure to move sockets locations. There is one is supervisord.conf, and one in an unkonwn location. 
