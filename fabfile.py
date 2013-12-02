@@ -436,7 +436,11 @@ def update_compass():
 def database_create():
     """
     """
-    sudo('su - postgres -c "createdb -E UNICODE -Ttemplate0 -O%s %s"' % (env.db_user, env.db_name))
+    if env.uses_virtuoso:
+        venvcmd('export VIRTUOSO_ROOT=/usr ; assembl-ini-files local.ini')
+        venvcmd('export VIRTUOSO_ROOT=/usr ; supervisord; sleep 8')
+    else:
+        sudo('su - postgres -c "createdb -E UNICODE -Ttemplate0 -O%s %s"' % (env.db_user, env.db_name))
 
 @task
 def database_dump():
@@ -533,6 +537,7 @@ def commonenv(projectpath, venvpath=None):
     env.uses_wsgi = False
     env.uses_apache = False
     env.uses_ngnix = False
+    env.uses_virtuoso = False
     env.uses_global_supervisor = False
     env.mac = False
 # Specific environments 
@@ -597,6 +602,7 @@ def coeus_stagenv():
     
     env.uses_apache = True
     env.uses_ngnix = False
+    env.uses_virtuoso = True
     env.gitbranch = "virtuoso"
     
 @task    
