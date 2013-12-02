@@ -188,6 +188,7 @@ def updatemaincode():
 def app_setup():
      venvcmd('pip install -Iv pip==1.4.1')
      venvcmd('pip install -e ./')
+     venvcmd('assembl-ini-files '+env.ini_file)
      
 @task
 def app_fullupdate():
