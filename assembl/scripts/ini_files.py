@@ -2,8 +2,9 @@
 
 import sys
 from os import getenv, listdir, mkdir
-from os.path import exists, join
+from os.path import exists, join, dirname
 from ConfigParser import ConfigParser
+
 
 def main():
     if len(sys.argv) < 2:
@@ -46,14 +47,18 @@ def main():
         'VIRTUOSO_ROOT': vroot,
         'VIRTUOSO_ROOT_VAR': vroot_var,
         'VIRTUOSO_ROOT_LIB': vroot_lib,
-        'VIRTUOSO_SUBDIR_NAME': vname
+        'VIRTUOSO_SUBDIR_NAME': vname,
+        'CELERY_BROKER': config.get('app:main', 'celery.broker'),
+        'here': dirname(__file__),
+        'CONFIG_FILE': config_uri
     }
-    for fname in ('var/db/virtuoso.ini', 'odbc.ini'):
-        if not exists(fname):
-            tmpl = open(fname+'.tmpl').read()
-            inifile = open(fname, 'w')
-            inifile.write(tmpl % vars)
-            inifile.close()
+    for fname in ('var/db/virtuoso.ini', 'odbc.ini', 'supervisord.conf',):
+        tmpl = open(fname+'.tmpl').read()
+        inifile = open(fname, 'w')
+        inifile.write(tmpl % vars)
+        inifile.close()
+    if not exists('var'):
+        mkdir('var')
     if not exists('var/log'):
         mkdir('var/log')
     if not exists('var/run'):

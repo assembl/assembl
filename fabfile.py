@@ -188,7 +188,9 @@ def updatemaincode():
 def app_setup():
      venvcmd('pip install -Iv pip==1.4.1')
      venvcmd('pip install -e ./')
-     
+     venvcmd('export VIRTUOSO_ROOT=%s ; assembl-ini-files %s' % (
+        env.use_virtuoso or '/usr', env.ini_file))
+
 @task
 def app_fullupdate():
     """
@@ -437,7 +439,6 @@ def database_create():
     """
     """
     if env.use_virtuoso:
-        venvcmd('export VIRTUOSO_ROOT=%s ; assembl-ini-files local.ini' % (env.use_virtuoso,))
         venvcmd('export VIRTUOSO_ROOT=%s ; supervisord; sleep 8' % (env.use_virtuoso,))
     else:
         sudo('su - postgres -c "createdb -E UNICODE -Ttemplate0 -O%s %s"' % (env.db_user, env.db_name))
