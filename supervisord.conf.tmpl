@@ -25,13 +25,13 @@ supervisor.rpcinterface_factory = supervisor.rpcinterface:make_main_rpcinterface
 
 [program:celery_imap]
 directory = %(here)s
-command = celery worker -l info -A assembl.tasks.imap -b redis://localhost:6379/0
+command = celery worker -l info -A assembl.tasks.imap -b %(CELERY_BROKER)s
 autorestart = true
 startsecs = 2
 
 [program:changes_router]
 directory = %(here)s
-command = python assembl/tasks/changes_router.py development.ini
+command = python assembl/tasks/changes_router.py %(CONFIG_FILE)s
 autorestart = true
 
 [group:dev]
@@ -42,7 +42,7 @@ programs = uwsgi
 
 [program:pserve]
 directory = %(here)s
-command = pserve --reload development.ini
+command = pserve --reload %(CONFIG_FILE)s
 autostart = false
 autorestart = false
 
@@ -54,7 +54,7 @@ autorestart = true
 
 [program:uwsgi]
 directory = %(here)s
-command=uwsgi --ini-paste production.ini
+command=uwsgi --ini-paste %(CONFIG_FILE)s
 stopsignal=QUIT
 umask=002
 autostart = false
