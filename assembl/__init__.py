@@ -1,6 +1,7 @@
 """ Pyramid add start-up module. """
 
 from os import putenv
+from os.path import dirname, join
 import transaction
 
 from pyramid.config import Configurator
@@ -12,7 +13,7 @@ from .lib.sqla import configure_engine
 # Do not import models here, it will break tests.
 
 #Use a local odbc.ini
-putenv('ODBCINI', './odbc.ini')
+putenv('ODBCINI', join(dirname(dirname(__file__)), 'odbc.ini'))
 
 
 # Do not import models here, it will break tests.
