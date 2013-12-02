@@ -49,8 +49,8 @@ class Source(SQLAlchemyBaseModel):
     def serializable(self):
         from assembl.models import Discussion
         return {
-            "id": self.uri_generic(self.id),
-            "type": self.external_typename(),
+            "@id": self.uri_generic(self.id),
+            "@type": self.external_typename(),
             "name": self.name,
             "creation_date": self.creation_date.isoformat(),
             "last_import": self.last_import.isoformat() if self.last_import else None,
@@ -98,8 +98,8 @@ class Content(SQLAlchemyBaseModel):
 
     def serializable(self):
         return {
-            "id": self.uri_generic(self.id),
-            "type": self.external_typename(),
+            "@id": self.uri_generic(self.id),
+            "@type": self.external_typename(),
             "creation_date": self.creation_date.isoformat(),
             "import_date": self.import_date.isoformat(),
             "source_id": Source.uri_generic(self.source_id),

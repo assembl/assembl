@@ -136,7 +136,8 @@ class Discussion(SQLAlchemyBaseModel):
 
     def serializable(self):
         return {
-            "id": self.uri_generic(self.id),
+            "@id": self.uri_generic(self.id),
+            "@type": self.external_typename(),
             "topic": self.topic,
             "slug": self.slug,
             "creation_date": self.creation_date.isoformat(),
@@ -199,7 +200,8 @@ class TableOfContents(SQLAlchemyBaseModel):
 
     def serializable(self):
         return {
-            "id": self.uri_generic(self.id),
+            "@id": self.uri_generic(self.id),
+            "@type": self.external_typename(),
             "topic": self.topic,
             "slug": self.slug,
             "table_of_contents_id":
@@ -240,7 +242,8 @@ class Synthesis(SQLAlchemyBaseModel):
 
     def serializable(self):
         return {
-            "id": self.uri_generic(self.id),
+            "@id": self.uri_generic(self.id),
+            "@type": self.external_typename(),
             "creation_date": self.creation_date.isoformat(),
             "publication_date": self.publication_date.isoformat() \
                 if self.publication_date \
@@ -308,7 +311,8 @@ class Idea(SQLAlchemyBaseModel):
 
     def serializable(self):
         return {
-            'id': self.uri_generic(self.id),
+            '@id': self.uri_generic(self.id),
+            '@type': self.external_typename(),
             'shortTitle': self.short_title,
             'longTitle': self.long_title,
             'creationDate': self.creation_date.isoformat(),
@@ -327,7 +331,8 @@ class Idea(SQLAlchemyBaseModel):
         post threads linked to any other idea
         """
         return {
-            'id': Idea.ORPHAN_POSTS_IDEA_ID,
+            '@id': Idea.ORPHAN_POSTS_IDEA_ID,
+            '@type': self.external_typename(),
             'shortTitle': _('Unsorted posts'),
             'longTitle': '',
             'creationDate': None,
@@ -479,13 +484,14 @@ class Extract(SQLAlchemyBaseModel):
 
     def serializable(self):
         json = {
-            'id': self.uri_generic(self.id),
+            '@id': self.uri_generic(self.id),
+            '@type': self.external_typename(),
             'annotator_schema_version': 'v1.0',
             'quote': self.body,
             'ranges': [tfi.__json__() for tfi 
                        in self.text_fragment_identifiers],
             'target': {
-                '@type': self.source.type
+                '@type': self.source.external_typename()
             },
             'created': self.creation_date.isoformat(),
             'idCreator': AgentProfile.uri_generic(self.creator_id),
