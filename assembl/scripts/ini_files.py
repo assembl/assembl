@@ -49,7 +49,7 @@ def main():
         'VIRTUOSO_ROOT_LIB': vroot_lib,
         'VIRTUOSO_SUBDIR_NAME': vname,
         'CELERY_BROKER': config.get('app:main', 'celery.broker'),
-        'here': dirname(__file__),
+        'here': dirname(dirname(dirname(__file__))),
         'CONFIG_FILE': config_uri
     }
     for fname in ('var/db/virtuoso.ini', 'odbc.ini', 'supervisord.conf',):
