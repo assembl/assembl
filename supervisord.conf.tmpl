@@ -25,7 +25,7 @@ supervisor.rpcinterface_factory = supervisor.rpcinterface:make_main_rpcinterface
 
 [program:virtuoso]
 directory = %(here)s/var/db
-command = %(ENV_VIRTUOSO_ROOT)s/bin/virtuoso-t +foreground
+command = %(VIRTUOSO_ROOT)s/bin/virtuoso-t +foreground
 autorestart = true
 startsecs = 10
 
