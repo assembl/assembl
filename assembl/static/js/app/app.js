@@ -678,7 +678,8 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard){
          * @return {String}
          */
         getDateFormated: function(date){
-            return moment( date ).fromNow();
+            var momentDate = moment(date);
+            return momentDate ? momentDate.fromNow() : momentDate;
         },
 
         /**
