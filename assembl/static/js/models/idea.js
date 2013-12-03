@@ -12,6 +12,10 @@ define(['backbone','underscore', 'models/segment', 'app', 'i18n'], function(Back
             obj = obj || {};
             var that = this;
 
+            if( this.attributes['@id'] ){
+                this.url = app.getGenericApiUrl(this.attributes['@id']);
+            }
+
             obj.creationDate = obj.creationDate || app.getCurrentTime();
             this.set('creationDate', obj.creationDate);
 

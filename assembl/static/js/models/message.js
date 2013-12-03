@@ -11,6 +11,10 @@ define(['backbone', 'jquery', 'app'], function(Backbone, $, app){
         initialize: function(){
             //this.on('change:read', this.onAttrChange, this);
             this.on('change:collapsed', this.render, this);
+
+            if( this.attributes['@id'] ){
+                this.url = app.getGenericApiUrl(this.attributes['@id']);
+            }
         },
 
         /**

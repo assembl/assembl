@@ -12,7 +12,10 @@ function(Backbone, _, app, User, Message){
          */
         initialize: function(){
             this.on('change:idIdea', this.onAttrChange, this);
-            //this.on('invalid', function(model, error){ alert( error ); }, this);
+            
+            if( this.attributes['@id'] ){
+                this.url = app.getGenericApiUrl(this.attributes['@id']);
+            }
 
             if( this.attributes.created ){
                 this.attributes.creationDate = this.attributes.created;
@@ -51,11 +54,6 @@ function(Backbone, _, app, User, Message){
         idAttribute: '@id',
 
         /**
-         * @type {String}
-         */
-        urlRoot: app.getApiUrl("extracts"),
-
-        /**
          * @type {Object}
          */
         defaults: {
@@ -73,8 +71,10 @@ function(Backbone, _, app, User, Message){
          * Validation
          */
         validate: function(attrs, options){
-            var currentUser = app.getCurrentUser();
-            if( ! currentUser.get('id') ){
+            var currentUser = app.getCurrentUser(),
+                id = currentUser.get('id') || currentUser.get('@id');
+
+            if( !id ){
                 return i18n.gettext('You must be logged in to create segments');
             }
         },
@@ -87,20 +87,22 @@ function(Backbone, _, app, User, Message){
          * 
          */
         getAssociatedPost: function(){
-            var post = null;
-            if (this.attributes.idPost) {
-                if(app.segmentPostCache[this.attributes.idPost]) {
-                    return app.segmentPostCache[this.attributes.idPost];
+            var post = null,
+                idPost = this.attributes.idPost;
+
+            if (idPost) {
+                if(app.segmentPostCache[idPost]) {
+                    return app.segmentPostCache[idPost];
                 }
-                var posts = app.messageList.messages.where({id:this.attributes.idPost});
+                var posts = app.messageList.messages.where({id:idPost});
                 if(posts.length){
                     post = posts[0];
                 }
                 else {
-                    post = new Message.Model({id: this.attributes.idPost});
+                    post = new Message.Model({id: idPost});
                     post.fetch({async:false});
                 }
-                app.segmentPostCache[post.id] = post;
+                app.segmentPostCache[idPost] = post;
             }
             return post;
         },
@@ -147,6 +149,7 @@ function(Backbone, _, app, User, Message){
      * @class SegmentColleciton
      */
     var SegmentCollection = Backbone.Collection.extend({
+
         /**
          * @type {String}
          */

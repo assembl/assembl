@@ -154,7 +154,20 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard){
             if( url[0] !== '/' ){
                 url = '/' + url;
             }
+
             return '/api/v1/discussion/' + DISCUSSION_ID + url;
+        },
+
+        /**
+         * Formats the given to the generic api url
+         * @param {string} id The class name used in the api
+         * @return {string} The url formatted
+         *
+         * ex: 'local:Extract/1' -> '/api/v1/discussion/1/generic/Extract/1'
+         */
+        getGenericApiUrl: function(id){
+            var url = '/api/v1/discussion/' + DISCUSSION_ID + '/generic/';
+            return id.replace('local:', url);
         },
 
         /**
@@ -450,6 +463,15 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard){
          */
         getCurrentTime: function(){
             return (new Date()).getTime();
+        },
+
+        /**
+         * Capitalize the first letter of the string
+         * @param {string} str
+         * @return {string}
+         */
+        capitalize: function(str){
+            return str.charAt(0).toUpperCase() + str.slice(1);
         },
 
         /**

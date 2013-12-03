@@ -171,6 +171,7 @@ def put_extract(request):
 
 @extract.delete()  # permission=P_DELETE_EXTRACT
 def delete_extract(request):
+    import pdb;pdb.set_trace()
     extract_id = request.matchdict['id']
     extract = Extract.get(id=int(extract_id))
 
