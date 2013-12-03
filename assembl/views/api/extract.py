@@ -155,7 +155,7 @@ def put_extract(request):
     user_id = authenticated_userid(request)
 
     updated_extract_data = json.loads(request.body)
-    extract = Extract.get(id=int(extract_id))
+    extract = Extract.get_instance(extract_id)
     if not extract:
         raise HTTPNotFound("Extract with id '%s' not found." % extract_id)
 
@@ -172,7 +172,7 @@ def put_extract(request):
 @extract.delete()  # permission=P_DELETE_EXTRACT
 def delete_extract(request):
     extract_id = request.matchdict['id']
-    extract = Extract.get(id=int(extract_id))
+    extract = Extract.get_instance(extract_id)
 
     if not extract:
         return {'ok': False}
