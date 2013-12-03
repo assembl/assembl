@@ -655,13 +655,13 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard){
         },
 
         /**
-         * Extract the id from 'string id'
-         * @param  {string} str
-         * @return {string} The extracted id
+         * Given the string in the format "local:ModelName/{id}" returns the id
+         * @param  {String} str
+         * @return {String}
          */
         extractId: function(str){
-            // todo: Finish this (aqui)
-        }
+            return str.split('/')[1];
+        },
 
         /**
          * @param  {Number} userID The user's ID

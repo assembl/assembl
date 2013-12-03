@@ -1,6 +1,8 @@
 define(['backbone', 'app', 'jquery', 'i18n'], function(Backbone, app, $, i18n){
     'use strict';
 
+    var AVATAR_PLACEHOLDER = '//placehold.it/{0}';
+
     /**
      * @class UserModel
      */
@@ -41,8 +43,9 @@ define(['backbone', 'app', 'jquery', 'i18n'], function(Backbone, app, $, i18n){
          * @return {string}
          */
         getAvatarUrl: function(size){
-            var id = app.extractId(this.get('@id'));
-            return app.formatAvatarUrl(id, size);
+            var id = this.get('@id');
+
+            return id ? app.formatAvatarUrl(app.extractId(id), size) : app.format(AVATAR_PLACEHOLDER, size);
         }
     });
 
