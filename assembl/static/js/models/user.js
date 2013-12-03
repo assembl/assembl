@@ -7,6 +7,12 @@ define(['backbone', 'app', 'jquery', 'i18n'], function(Backbone, app, $, i18n){
     var UserModel = Backbone.Model.extend({
 
         /**
+         * Overwritting the idAttribute
+         * @type {String}
+         */
+        idAttribute: '@id',
+
+        /**
          * @type {String}
          */
         url: app.getApiUrl('agents/'),
@@ -35,7 +41,8 @@ define(['backbone', 'app', 'jquery', 'i18n'], function(Backbone, app, $, i18n){
          * @return {string}
          */
         getAvatarUrl: function(size){
-            return app.formatAvatarUrl(this.get('id'), size);
+            var id = app.extractId(this.get('@id'));
+            return app.formatAvatarUrl(id, size);
         }
     });
 

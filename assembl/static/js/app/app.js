@@ -655,6 +655,15 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard){
         },
 
         /**
+         * Extract the id from 'string id'
+         * @param  {string} str
+         * @return {string} The extracted id
+         */
+        extractId: function(str){
+            // todo: Finish this (aqui)
+        }
+
+        /**
          * @param  {Number} userID The user's ID
          * @param  {Number} [size=44] The avatar size
          * @return {String} The avatar's url formatted with the given size

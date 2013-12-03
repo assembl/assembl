@@ -24,6 +24,12 @@ define(['backbone','underscore', 'models/segment', 'app', 'i18n'], function(Back
         },
 
         /**
+         * Overwritting the idAttribute
+         * @type {String}
+         */
+        idAttribute: '@id',
+
+        /**
          * Url
          * @type {String}
          */

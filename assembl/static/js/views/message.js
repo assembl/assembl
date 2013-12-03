@@ -52,6 +52,7 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
             app.trigger('render');
             var data = this.model.toJSON();
 
+            data['id'] = data['@id'];
             data['date'] = app.formatDate(data.date);
             data['level'] = this.model.getLevel();
             data['creator'] = this.model.getCreator();

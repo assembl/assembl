@@ -45,6 +45,12 @@ function(Backbone, _, app, User, Message){
         },
 
         /**
+         * Overwritting the idAttribute
+         * @type {String}
+         */
+        idAttribute: '@id',
+
+        /**
          * @type {String}
          */
         urlRoot: app.getApiUrl("extracts"),

@@ -332,7 +332,7 @@ class Idea(SQLAlchemyBaseModel):
         """
         return {
             '@id': Idea.ORPHAN_POSTS_IDEA_ID,
-            '@type': self.external_typename(),
+            '@type': Idea.external_typename(),
             'shortTitle': _('Unsorted posts'),
             'longTitle': '',
             'creationDate': None,

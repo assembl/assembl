@@ -14,6 +14,12 @@ define(['backbone', 'jquery', 'app', 'i18n'], function(Backbone, $, app, i18n){
         },
 
         /**
+         * Overwritting the idAttribute
+         * @type {String}
+         */
+        idAttribute: '@id',
+
+        /**
          * The url
          * @type {String}
          */
