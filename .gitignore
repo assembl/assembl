@@ -57,3 +57,6 @@ Gemfile.lock
 .rbenv-version
 .vagrant
 VagrantFile
+
+# supervisor
+supervisord.conf
