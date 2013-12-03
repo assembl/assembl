@@ -58,7 +58,12 @@ In production:
 - $venv/bin/supervisorctl start prod:*
 (Instead of dev:*. You may have to stop dev:*)
 
-Updating an environment:
+Updating an environment after switching branch locally (will regenerate css,
+ all compiled files, update dependencies, database schema, etc.):
+
+- fab devenv app_compile
+
+Updating an environment to it's specified branch, tag or revision:
 
 - cd ~/assembl
 
