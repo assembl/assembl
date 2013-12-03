@@ -1,5 +1,5 @@
 [unix_http_server]
-file=/tmp/assembl_supervisor.sock
+file=%(here)s/var/run/supervisor.sock
 chmod=0700
 
 [supervisord]
@@ -18,7 +18,7 @@ nocleanup = true
 childlogdir = /tmp
 
 [supervisorctl]
-serverurl = unix:///tmp/assembl_supervisor.sock
+serverurl = unix:///%(here)s/var/run/supervisor.sock
 
 [rpcinterface:supervisor]
 supervisor.rpcinterface_factory = supervisor.rpcinterface:make_main_rpcinterface
