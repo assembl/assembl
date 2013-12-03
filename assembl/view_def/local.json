@@ -1,0 +1,16 @@
+{
+    "_default": {
+        "id":false,
+        "type":false
+    },
+    "User": {
+        "password":false
+    },
+    "Email": {
+        "full_message":false
+    },
+    "Extract": {
+        "text_fragment_identifiers": ["local"],
+        "idea_id": false
+    }
+}

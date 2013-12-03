@@ -10,7 +10,7 @@
 {% set harverterTooltip = gettext('Harvested by %(name)s %(date)s')|format(date=segmentDate, name=segmentCreatorName) %}
 {% set segmentCreatorAvatarImg = '<a class="profile-link" href="#" data-tooltip="'+harverterTooltip+'"><img src="<%= segment.getCreator().getAvatarUrl(24) %>" class="image-rounded" alt="" /></a>' %}
 {% set segmentLinkTooltip = gettext('Click here to see the original contribution this segment is quoted from.') %}
-{% set segmentTextLink = '<a class="segment-link" data-segmentid="<%= segment.cid %>" data-tooltip="'+segmentLinkTooltip+'">'+gettext('See&nbsp;in&nbsp;context')+'<%= segment.getTypeIcon() %>&nbsp;></a>' %}
+{% set segmentTextLink = '<a class="segment-link" data-segmentid="<%= segment.cid %>" data-tooltip="'+segmentLinkTooltip+'">'+gettext('See&nbsp;in&nbsp;context')+'<%= segment.getTypeIcon() %>&nbsp;</a>' %}
 
 
 <div class="box postit" draggable="true" data-segmentid="<%= segment.cid %>">

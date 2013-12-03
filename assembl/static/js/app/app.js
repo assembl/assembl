@@ -154,6 +154,7 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard){
             if( url[0] !== '/' ){
                 url = '/' + url;
             }
+
             return '/api/v1/discussion/' + DISCUSSION_ID + url;
         },
 
