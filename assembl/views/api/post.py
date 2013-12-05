@@ -35,7 +35,7 @@ post = Service(name='post', path=API_DISCUSSION_PREFIX + '/posts/{id:.+}',
 
 def __post_to_json_structure(post):
     data = {}
-    data["@id"] = post.id
+    data["@id"] = post.uri()
     data["@type"] = Post.external_typename()
 
     data["checked"] = False
