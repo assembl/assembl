@@ -77,7 +77,7 @@ function(Backbone, _, $, app, Segment, i18n){
          */
         addAnnotationAsSegment: function(annotation, idIdea){
             var post = app.getPostFromAnnotation(annotation),
-                idPost = post.id;
+                idPost = post.getId();
 
             var segment = new Segment.Model({
                 target: { "@id": idPost, "@type": "email" },
@@ -111,7 +111,7 @@ function(Backbone, _, $, app, Segment, i18n){
             var idPost = null;
 
             if( post ){
-                idPost = post.id;
+                idPost = post.getId();
             }
 
             var segment = new Segment.Model({

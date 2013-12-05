@@ -1,10 +1,10 @@
-define(['models/base','underscore', 'models/segment', 'app', 'i18n'], function(BaseModel, _, Segment, app, i18n){
+define(['models/base','underscore', 'models/segment', 'app', 'i18n'], function(Base, _, Segment, app, i18n){
     'use strict';
 
     /**
      * @class IdeaModel
      */
-    var IdeaModel = BaseModel.extend({
+    var IdeaModel = Base.Model.extend({
 
         /**
          * @init
@@ -143,7 +143,7 @@ define(['models/base','underscore', 'models/segment', 'app', 'i18n'], function(B
          * @return {Idea}
          */
         getParent: function(){
-            return this.collection.findWhere({ id: this.get('parentId') });
+            return this.collection.findWhere({ '@id': this.get('parentId') });
         },
 
         /**

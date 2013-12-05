@@ -1,11 +1,11 @@
 define(['models/base', 'underscore', 'app', 'models/user', 'models/message'],
-function(BaseModel, _, app, User, Message){
+function(Base, _, app, User, Message){
     'use strict';
 
     /**
      * @class SegmentModel
      */
-    var SegmentModel = BaseModel.extend({
+    var SegmentModel = Base.Model.extend({
 
         /**
          * @init

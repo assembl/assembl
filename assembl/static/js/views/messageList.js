@@ -7,7 +7,8 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
      */
     var MESSAGE_MODE = 'is-message-mode',
         NO_FILTER = '',
-        SYNTHESIS_FILTER = 'synthesis';
+        SYNTHESIS_FILTER = 'synthesis',
+        DIV_ANNOTATOR_HELP = "<div class='annotator-draganddrop-help'>" + i18n.gettext('You can drag the segment above directly to the table of ideas') + "</div>";
 
     /**
      * @class views.MessageList
@@ -194,6 +195,7 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
             });
 
             this.annotator.subscribe('annotationCreated', function(annotation){
+                debugger;
                 var segment = app.segmentList.addAnnotationAsSegment( annotation, app.currentAnnotationIdIdea );
 
                 if( !segment.isValid() ){
@@ -202,7 +204,7 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
                     app.currentAnnotationIdea.addSegmentAsChild(segment);
                 }
 
-                app.currentAnnotationIdea = null
+                app.currentAnnotationIdea = null;
                 app.currentAnnotationIdIdea = null;
             });
 
@@ -225,8 +227,8 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
                 });
 
                 $(textarea).replaceWith(div);
-                if( $(editor.element).find(".annotator-draganddrop-help").length == 0 ) {
-                    $(editor.element).find(".annotator-textarea").after("<div class='annotator-draganddrop-help'>" + i18n.gettext('You can drag the segment above directly to the table of ideas') + "</div>");
+                if( $(editor.element).find(".annotator-draganddrop-help").length === 0 ) {
+                    $(editor.element).find(".annotator-textarea").after(DIV_ANNOTATOR_HELP);
                 }
                 that.annotatorEditor = editor;
             });
@@ -239,7 +241,7 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
             // Loading the annotations
             if( annotations.length ){
                 setTimeout(function(){
-                    that.annotator.loadAnnotations( annotations ); 
+                    that.annotator.loadAnnotations( annotations );
                 }, 10);
             }
 

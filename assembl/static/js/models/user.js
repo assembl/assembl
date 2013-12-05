@@ -1,4 +1,4 @@
-define(['models/base', 'app', 'jquery', 'i18n'], function(BaseModel, app, $, i18n){
+define(['models/base', 'app', 'jquery', 'i18n'], function(Base, app, $, i18n){
     'use strict';
 
     var AVATAR_PLACEHOLDER = '//placehold.it/{0}';
@@ -6,7 +6,7 @@ define(['models/base', 'app', 'jquery', 'i18n'], function(BaseModel, app, $, i18
     /**
      * @class UserModel
      */
-    var UserModel = BaseModel.extend({
+    var UserModel = Base.Model.extend({
 
         /**
          * @type {String}
@@ -24,20 +24,12 @@ define(['models/base', 'app', 'jquery', 'i18n'], function(BaseModel, app, $, i18
         },
 
         /**
-         * If there is an user logged in, get his/her information
-         */
-        loadCurrentUser: function(){
-            this.set('id', $('#user-id').val());
-            this.set('name', $('#user-displayname').val());
-        },
-
-        /**
          * return the avatar's url
          * @param  {Number} [size=44] The avatar size
          * @return {string}
          */
         getAvatarUrl: function(size){
-            var id = this.get('@id');
+            var id = this.getId();
 
             return id ? app.formatAvatarUrl(app.extractId(id), size) : app.format(AVATAR_PLACEHOLDER, size);
         }
@@ -48,7 +40,7 @@ define(['models/base', 'app', 'jquery', 'i18n'], function(BaseModel, app, $, i18
     /**
      * @class UserCollection
      */
-    var UserCollection = Backbone.Collection.extend({
+    var UserCollection = Base.Collection.extend({
         /**
          * @type {String}
          */
@@ -69,7 +61,6 @@ define(['models/base', 'app', 'jquery', 'i18n'], function(BaseModel, app, $, i18
             var user = this.get(id);
             return user || this.getUnknownUser();
         },
-
 
         /**
          * Returns the unknown user

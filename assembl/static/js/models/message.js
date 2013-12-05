@@ -1,10 +1,10 @@
-define(['backbone', 'jquery', 'app'], function(Backbone, $, app){
+define(['models/base', 'jquery', 'app'], function(Base, $, app){
     'use strict';
 
     /**
      * @class MessageModel
      */
-    var MessageModel = Backbone.Model.extend({
+    var MessageModel = Base.Model.extend({
         /**
          * @init
          */
@@ -54,7 +54,7 @@ define(['backbone', 'jquery', 'app'], function(Backbone, $, app){
          * @return {MessageModel}
          */
         getParent: function(){
-            return this.collection.findWhere({ id: this.get('parentId') });
+            return this.collection.findWhere({ '@id': this.get('parentId') });
         },
 
         /**

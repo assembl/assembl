@@ -70,7 +70,7 @@ function(Backbone, _, Idea, Message, app, ckeditor, i18n){
             if( this.ckInstance ){
                 this.ckInstance.destroy();
             }
-            
+
             if( editing ){
                 var editingArea = this.$('#'+LONG_TITLE_ID).get(0),
                     that = this;
@@ -83,7 +83,6 @@ function(Backbone, _, Idea, Message, app, ckeditor, i18n){
                     // in the ckeditor, so instead of calling the function directly
                     // we wait to see if the focus is still in the ckeditor
                     setTimeout(function(){
-                        debugger;
                         if( !that.ckInstance.element ){
                             return;
                         }
@@ -155,12 +154,10 @@ function(Backbone, _, Idea, Message, app, ckeditor, i18n){
         setCurrentIdea: function(idea){
             if( idea !== null ){
                 if( this.idea ) {
-                    if( this.idea.id == idea.id ){
-                        // already the current one
-                        return;
-                    }
-                    else {
-                        app.ideaPanel.idea.set('isSelected', false);
+                    if( this.idea.getId() === idea.getId() ){
+                        return; // already the current one
+                    } else {
+                        this.idea.set('isSelected', false);
                     }
                 }
                 this.idea = idea;

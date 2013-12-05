@@ -1,10 +1,10 @@
-define(['models/base', 'jquery', 'app', 'i18n'], function(BaseModel, $, app, i18n){
+define(['models/base', 'jquery', 'app', 'i18n'], function(Base, $, app, i18n){
     'use strict';
 
     /**
      * @class SynthesisModel
      */
-    var SynthesisModel = BaseModel.extend({
+    var SynthesisModel = Base.Model.extend({
 
         /**
          * @init

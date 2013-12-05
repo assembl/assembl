@@ -9,7 +9,8 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard){
         DRAGBOX_MAX_LENGTH = 25,
         DISCUSSION_SLUG = $('#discussion-slug').val(),
         DISCUSSION_ID = $('#discussion-id').val(),
-        SOCKET_URL = $('#socket-url').val();
+        SOCKET_URL = $('#socket-url').val(),
+        CURRENT_USER_ID = $('#user-id').val();
 
     /**
      * The observer
@@ -315,6 +316,15 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard){
         },
 
         /**
+         * fulfill app.currentUser
+         */
+        loadCurrentUser: function(){
+            if( app.users ){
+                app.currentUser = app.users.getByNumericId(CURRENT_USER_ID);
+            }
+        },
+
+        /**
          * @return {User}
          */
         getCurrentUser: function(){
@@ -341,7 +351,7 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard){
         
         saveCurrentAnnotator: function(){
             if( app.messageList.annotatorEditor ){
-                app.messageList.annotatorEditor.element.find('.annotator-save').click()
+                app.messageList.annotatorEditor.element.find('.annotator-save').click();
             }
         },
 
@@ -912,6 +922,8 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard){
          * inits ALL app components
          */
         init: function(){
+            app.loadCurrentUser();
+
             app.body.removeClass('preload');
             app.createSelectionTooltip();
             app.initTooltips();
