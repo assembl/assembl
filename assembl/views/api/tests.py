@@ -51,9 +51,9 @@ class ApiTest(BaseTest):
 
     def test_extracts(self):
         extract_user = {
-            "id": 2,
+            "@id": 'local:Idea/2',
             "name": "André Farzat",
-            "type": "agent_profile"}
+            "@type": "AgentProfile"}
         extract_data = {
             "idIdea": None,
             "creator": extract_user,
@@ -98,7 +98,7 @@ class ApiTest(BaseTest):
         res = self.app.post(url, json.dumps(extract_data))
         self.assertEqual(res.status_code, 200)
         res_data = json.loads(res.body)
-        extract_id = int(res_data['id'])
+        extract_id = res_data['id']
 
         url = self.get_url(self.discussion, 'extracts')
         res = self.app.get(url, json.dumps(extract_data))
@@ -106,7 +106,7 @@ class ApiTest(BaseTest):
         extracts = json.loads(res.body)
         self.assertEquals(len(extracts), 2)
 
-        self.assertTrue(extract_id in [e['id'] for e in extracts])
+        self.assertIn(extract_id, [e['@id'] for e in extracts])
 
     def test_homepage_returns_200(self):
         res = self.app.get('/')

@@ -39,4 +39,4 @@ def save_synthesis(request):
 
     synthesis = Synthesis.db.merge(synthesis)
 
-    return {'ok': True, 'id': synthesis.id}
+    return {'ok': True, 'id': synthesis.uri()}

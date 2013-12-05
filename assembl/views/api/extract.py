@@ -147,7 +147,7 @@ def post_extract(request):
         TextFragmentIdentifier.db.add(range)
     Extract.db.flush()
 
-    return {'ok': True, 'id': new_extract.id}
+    return {'ok': True, 'id': new_extract.uri()}
 
 
 @extract.put()  # permission=P_EDIT_EXTRACT
