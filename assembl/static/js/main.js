@@ -91,7 +91,8 @@ define([
     };
 
     // Starting the segment list update loop
-    updateSegmentList();
+    //updateSegmentList();
+    app.segmentList.segments.fetch({reset: true});
 
     // Let the game begins...
     Backbone.history.start({hashChange: false, root: "/" + app.slug });

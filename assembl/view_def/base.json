@@ -1,0 +1,50 @@
+{
+    "_default": {
+        "id":false,
+        "type":false
+    },
+    "Permission": {},
+    "AgentProfile": {},
+    "User": {
+        "password":false,
+        "permissions":"&get_all_permissions"
+    },
+    "EmailAccount": {},
+    "IdentityProviderAccount": {},
+    "IdentityProvider": {},
+    "Source": {
+        "contents":[":partial"]
+    },
+    "Webpage": {
+        "extracts":[":partial"]
+    },
+    "Mailbox": {
+        "contents":[":partial"]
+    },
+    "Email": {
+        "full_message":false,
+        "extracts":[":partial"]
+    },
+    "Post": {
+        "creator":":base"
+    },
+    "Discussion": {
+        "slug": true,
+        "table_of_contents": ":base",
+        "creation_date": true,
+        "topic": true,
+        "synthesis": true,
+        "owner_id": true,
+        "sources":[":base"],
+        "permissions":"&get_roles_by_permission"
+    },
+    "Idea": {},
+    "TableOfContents": {
+        "ideas":[":partial"]
+    },
+    "Synthesis": {},
+    "Extract": {
+        "text_fragment_identifiers":[":base"]
+    },
+    "TextFragmentIdentifier": {}
+}
