@@ -1,4 +1,4 @@
-define(['backbone', 'app', 'jquery', 'i18n'], function(Backbone, app, $, i18n){
+define(['models/base', 'app', 'jquery', 'i18n'], function(BaseModel, app, $, i18n){
     'use strict';
 
     var AVATAR_PLACEHOLDER = '//placehold.it/{0}';
@@ -6,13 +6,7 @@ define(['backbone', 'app', 'jquery', 'i18n'], function(Backbone, app, $, i18n){
     /**
      * @class UserModel
      */
-    var UserModel = Backbone.Model.extend({
-
-        /**
-         * Overwritting the idAttribute
-         * @type {String}
-         */
-        idAttribute: '@id',
+    var UserModel = BaseModel.extend({
 
         /**
          * @type {String}

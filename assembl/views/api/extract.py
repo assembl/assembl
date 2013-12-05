@@ -2,6 +2,7 @@ import json
 import transaction
 
 from cornice import Service
+from webob import exc
 
 from pyramid.security import authenticated_userid
 from pyramid.httpexceptions import HTTPNotFound, HTTPClientError
@@ -51,6 +52,9 @@ search_extracts = Service(
 def get_extract(request):
     extract_id = request.matchdict['id']
     extract = Extract.get_instance(extract_id)
+
+    if extract is None:
+        raise exc.HTTPNotFound()
 
     return extract.serializable()
 

@@ -1,10 +1,10 @@
-define(['backbone', 'jquery', 'app', 'i18n'], function(Backbone, $, app, i18n){
+define(['models/base', 'jquery', 'app', 'i18n'], function(BaseModel, $, app, i18n){
     'use strict';
 
     /**
      * @class SynthesisModel
      */
-    var SynthesisModel = Backbone.Model.extend({
+    var SynthesisModel = BaseModel.extend({
 
         /**
          * @init
@@ -12,12 +12,6 @@ define(['backbone', 'jquery', 'app', 'i18n'], function(Backbone, $, app, i18n){
         initialize: function(){
             this.on('change', this.onAttrChange, this);
         },
-
-        /**
-         * Overwritting the idAttribute
-         * @type {String}
-         */
-        idAttribute: '@id',
 
         /**
          * The url

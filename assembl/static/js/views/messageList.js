@@ -28,7 +28,7 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
             app.on('idea:select', function(idea){
                 if( idea ){
                     app.openPanel(app.messageList);
-                    that.loadData(idea.get('id'));
+                    that.loadData(idea.getId());
                     that.$el.addClass(MESSAGE_MODE);
                 }
             });

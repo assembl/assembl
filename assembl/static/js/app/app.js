@@ -587,7 +587,7 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard){
          * @return {Array<Segment>}
          */
         getSegmentsByIdea: function(idea){
-            var id = idea.get('id');
+            var id = idea.getId();
             return app.segmentList && app.segmentList.segments ? app.segmentList.segments.where({idIdea:id}) : [];
         },
 
@@ -850,7 +850,7 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard){
             });
 
             return tmpl({
-                id: idea.get('id'),
+                id: idea.getId(),
                 level: idea.getSynthesisLevel(),
                 editing: idea.get('synthesisPanel-editing') || false,
                 longTitle: span.html(),

@@ -1,11 +1,11 @@
-define(['backbone', 'underscore', 'app', 'models/user', 'models/message'],
-function(Backbone, _, app, User, Message){
+define(['models/base', 'underscore', 'app', 'models/user', 'models/message'],
+function(BaseModel, _, app, User, Message){
     'use strict';
 
     /**
      * @class SegmentModel
      */
-    var SegmentModel = Backbone.Model.extend({
+    var SegmentModel = BaseModel.extend({
 
         /**
          * @init
@@ -13,10 +13,6 @@ function(Backbone, _, app, User, Message){
         initialize: function(){
             this.on('change:idIdea', this.onAttrChange, this);
             
-            if( this.attributes['@id'] ){
-                this.url = app.getGenericApiUrl(this.attributes['@id']);
-            }
-
             if( this.attributes.created ){
                 this.attributes.creationDate = this.attributes.created;
             }
@@ -48,10 +44,9 @@ function(Backbone, _, app, User, Message){
         },
 
         /**
-         * Overwritting the idAttribute
-         * @type {String}
+         * @type {string}
          */
-        idAttribute: '@id',
+        urlBase: app.getApiUrl("extracts"),
 
         /**
          * @type {Object}
@@ -72,7 +67,7 @@ function(Backbone, _, app, User, Message){
          */
         validate: function(attrs, options){
             var currentUser = app.getCurrentUser(),
-                id = currentUser.get('id') || currentUser.get('@id');
+                id = currentUser.getId();
 
             if( !id ){
                 return i18n.gettext('You must be logged in to create segments');
@@ -123,7 +118,7 @@ function(Backbone, _, app, User, Message){
                 type = this.get('target')['@type'];
 
             switch(type){
-                case 'webpage': 
+                case 'webpage':
                     cls += 'link';
                     break;
 
@@ -173,7 +168,7 @@ function(Backbone, _, app, User, Message){
                     return false;
                 }
 
-                return item.getCreator().get('id') == currentUser.id;
+                return item.getCreator().getId() == currentUser.getId();
             });
         },
 

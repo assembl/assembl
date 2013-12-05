@@ -83,7 +83,7 @@ function(Backbone, _, $, app, Segment, i18n){
                 target: { "@id": idPost, "@type": "email" },
                 text: annotation.text,
                 quote: annotation.quote,
-                idCreator: app.getCurrentUser().get('id'),
+                idCreator: app.getCurrentUser().getId(),
                 ranges: annotation.ranges,
                 idPost: idPost,
                 idIdea: idIdea
@@ -118,7 +118,7 @@ function(Backbone, _, $, app, Segment, i18n){
                 target: { "@id": idPost, "@type": "email" },
                 text: text,
                 quote: text,
-                idCreator: app.getCurrentUser().get('id'),
+                idCreator: app.getCurrentUser().getId(),
                 idPost: idPost
             });
 

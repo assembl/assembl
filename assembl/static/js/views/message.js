@@ -171,8 +171,8 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
                 btn_original_text=btn.text();
 
             data.message = this.$('.message-textarea').val();
-            if( this.model.get('id') ){
-                data.reply_id = this.model.get('id');
+            if( this.model.getId() ){
+                data.reply_id = this.model.getId();
             }
 
             btn.text( i18n.gettext('Sending...') );

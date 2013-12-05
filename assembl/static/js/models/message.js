@@ -11,10 +11,6 @@ define(['backbone', 'jquery', 'app'], function(Backbone, $, app){
         initialize: function(){
             //this.on('change:read', this.onAttrChange, this);
             this.on('change:collapsed', this.render, this);
-
-            if( this.attributes['@id'] ){
-                this.url = app.getGenericApiUrl(this.attributes['@id']);
-            }
         },
 
         /**
@@ -50,7 +46,7 @@ define(['backbone', 'jquery', 'app'], function(Backbone, $, app){
          * @return {MessageModel[]}
          */
         getChildren: function(){
-            return this.collection.where({ parentId: this.get('id') });
+            return this.collection.where({ parentId: this.getId() });
         },
 
         /**
@@ -66,7 +62,7 @@ define(['backbone', 'jquery', 'app'], function(Backbone, $, app){
          * @return {Segment[]}
          */
         getSegments: function(){
-            return app.segmentList.segments.where({ idPost: this.get('id') });
+            return app.segmentList.segments.where({ idPost: this.getId() });
         },
 
         /**
