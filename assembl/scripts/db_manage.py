@@ -10,7 +10,7 @@ from alembic.migration import MigrationContext
 
 from ..lib.migration import bootstrap_db
 from ..lib.sqla import configure_engine, mark_changed
-
+from ..lib.zmqlib import configure_zmq
 
 def main():
     if len(sys.argv) < 3:
@@ -22,6 +22,7 @@ def main():
 
     if sys.argv[1] == 'bootstrap':
         settings = get_appsettings(config_uri)
+        configure_zmq(settings['changes.socket'], False)
         engine = configure_engine(settings, True)
         bootstrap_db(config_uri)
         mark_changed()
