@@ -341,7 +341,7 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard){
             var span = $(annotation.highlights[0]),
                 messageId = span.closest('[id^="message-"]').attr('id');
 
-            return app.messageList.messages.getByNumericId(messageId.substr(8));
+            return app.messageList.messages.get(messageId.substr(8));
         },
 
 
