@@ -341,8 +341,7 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard){
             var span = $(annotation.highlights[0]),
                 messageId = span.closest('[id^="message-"]').attr('id');
 
-            // TEMPORARY HACK
-            return app.messageList.messages.get("local:Post/"+messageId.substr(8));
+            return app.messageList.messages.getByNumericId(messageId.substr(8));
         },
 
 
