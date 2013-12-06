@@ -136,7 +136,7 @@ class Discussion(SQLAlchemyBaseModel):
 
     def serializable(self):
         return {
-            "@id": self.uri_generic(self.id),
+            "@id": self.uri(),
             "@type": self.external_typename(),
             "topic": self.topic,
             "slug": self.slug,
@@ -549,8 +549,8 @@ class Extract(SQLAlchemyBaseModel):
             if start < 0:
                 return None
             lookin = 'message-subject'
-        xpath = "//div[@id='message-%d']//div[@class='%s']" % (
-            post_id, lookin)
+        xpath = "//div[@id='message-%s']//div[@class='%s']" % (
+            Post.uri_generic(post_id), lookin)
         tfi = self.db.query(TextFragmentIdentifier).filter_by(
             extract=self).first()
         if not tfi:
