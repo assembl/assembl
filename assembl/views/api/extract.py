@@ -52,6 +52,10 @@ def get_extract(request):
     extract_id = request.matchdict['id']
     extract = Extract.get_instance(extract_id)
 
+    if extract is None:
+        raise HTTPNotFound(
+            "Extract with id '%s' not found." % extract_id)
+
     return extract.serializable()
 
 
@@ -143,7 +147,7 @@ def post_extract(request):
         TextFragmentIdentifier.db.add(range)
     Extract.db.flush()
 
-    return {'ok': True, 'id': new_extract.id}
+    return {'ok': True, 'id': new_extract.uri()}
 
 
 @extract.put()  # permission=P_EDIT_EXTRACT
@@ -155,7 +159,7 @@ def put_extract(request):
     user_id = authenticated_userid(request)
 
     updated_extract_data = json.loads(request.body)
-    extract = Extract.get(id=int(extract_id))
+    extract = Extract.get_instance(extract_id)
     if not extract:
         raise HTTPNotFound("Extract with id '%s' not found." % extract_id)
 
@@ -172,7 +176,7 @@ def put_extract(request):
 @extract.delete()  # permission=P_DELETE_EXTRACT
 def delete_extract(request):
     extract_id = request.matchdict['id']
-    extract = Extract.get(id=int(extract_id))
+    extract = Extract.get_instance(extract_id)
 
     if not extract:
         return {'ok': False}

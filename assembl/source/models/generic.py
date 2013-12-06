@@ -47,13 +47,14 @@ class Source(SQLAlchemyBaseModel):
     }
 
     def serializable(self):
+        from assembl.models import Discussion
         return {
-            "id": self.id,
+            "@id": self.uri_generic(self.id),
+            "@type": self.external_typename(),
             "name": self.name,
-            "type": self.type,
             "creation_date": self.creation_date.isoformat(),
-            "last_import": self.last_import.isoformat(),
-            "discussion_id": self.discussion_id,
+            "last_import": self.last_import.isoformat() if self.last_import else None,
+            "discussion_id": Discussion.uri_generic(self.discussion_id),
         }
 
     def __repr__(self):
@@ -97,12 +98,12 @@ class Content(SQLAlchemyBaseModel):
 
     def serializable(self):
         return {
-            "id": self.id,
-            "type": self.type,
+            "@id": self.uri_generic(self.id),
+            "@type": self.external_typename(),
             "creation_date": self.creation_date.isoformat(),
             "import_date": self.import_date.isoformat(),
-            "source_id": self.source_id,
-            "post_id": self.post.id,
+            "source_id": Source.uri_generic(self.source_id),
+            "post_id": Post.uri_generic(self.post.id),
         }
 
     def __repr__(self):

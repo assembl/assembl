@@ -10,7 +10,7 @@
 {% set harverterTooltip = gettext('Harvested by %(name)s %(date)s')|format(date=segmentDate, name=segmentCreatorName) %}
 {% set segmentCreatorAvatarImg = '<a class="profile-link" href="#" data-tooltip="'+harverterTooltip+'"><img src="<%= segment.getCreator().getAvatarUrl(24) %>" class="image-rounded" alt="" /></a>' %}
 {% set segmentLinkTooltip = gettext('Click here to see the original contribution this segment is quoted from.') %}
-{% set segmentTextLink = '<a class="segment-link" data-segmentid="<%= segment.cid %>" data-tooltip="'+segmentLinkTooltip+'">'+gettext('See&nbsp;in&nbsp;context')+'<%= segment.getTypeIcon() %>&nbsp;></a>' %}
+{% set segmentTextLink = '<a class="segment-link" data-segmentid="<%= segment.cid %>" data-tooltip="'+segmentLinkTooltip+'">'+gettext('See&nbsp;in&nbsp;context')+'<%= segment.getTypeIcon() %>&nbsp;</a>' %}
 
 
 <div class="box postit" draggable="true" data-segmentid="<%= segment.cid %>">
@@ -23,13 +23,13 @@
     <div class="segment-author">
         <%
         var type = segment.get("target")["@type"];
-        if ( type == "email" ) { var post = segment.getAssociatedPost(); %>
+        if ( type == "Email" ) { var post = segment.getAssociatedPost(); %>
             {% set postCreatorAvatarImg = '<img src="<%= post.getCreator().getAvatarUrl(35) %>" class="image-rounded" alt="" />' %}
             {% set postCreatorName = '<%= post.getCreator().get("name") %>' %}
             {% set postDate = '<%= app.getDateFormated(post.get("date")) %>' %}
             
             {{ gettext('%(img)s Posted %(date)s by <strong>%(name)s</strong>')|format(name=postCreatorName, img=postCreatorAvatarImg, date=postDate)|safe }}
-        <% } else if (type == "webpage") { %>
+        <% } else if (type == "Webpage") { %>
             <img src="/static/img/icon/search_document.svg" width="35" height="35" class="image-rounded" alt="{{ gettext('Document extracted from the web') }}" />
             {{ gettext('Harvested from webpage') }}
         <% } else { %>

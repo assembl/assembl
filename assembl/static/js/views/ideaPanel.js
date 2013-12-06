@@ -70,7 +70,7 @@ function(Backbone, _, Idea, Message, app, ckeditor, i18n){
             if( this.ckInstance ){
                 this.ckInstance.destroy();
             }
-            
+
             if( editing ){
                 var editingArea = this.$('#'+LONG_TITLE_ID).get(0),
                     that = this;
@@ -80,7 +80,7 @@ function(Backbone, _, Idea, Message, app, ckeditor, i18n){
                 this.ckInstance.element.on('blur', function(){
 
                     // Firefox triggers the blur event if we paste (ctrl+v)
-                    // in the ckeditor, so instead of calling the function direct
+                    // in the ckeditor, so instead of calling the function directly
                     // we wait to see if the focus is still in the ckeditor
                     setTimeout(function(){
                         if( !that.ckInstance.element ){
@@ -120,7 +120,7 @@ function(Backbone, _, Idea, Message, app, ckeditor, i18n){
         addSegment: function(segment){
             delete segment.attributes.highlights;
 
-            var id = this.idea.get('id');
+            var id = this.idea.getId();
             segment.set('idIdea', id);
         },
 
@@ -154,12 +154,10 @@ function(Backbone, _, Idea, Message, app, ckeditor, i18n){
         setCurrentIdea: function(idea){
             if( idea !== null ){
                 if( this.idea ) {
-                    if( this.idea.id == idea.id ){
-                        // already the current one
-                        return;
-                    }
-                    else {
-                    app.ideaPanel.idea.set('isSelected', false);
+                    if( this.idea.getId() === idea.getId() ){
+                        return; // already the current one
+                    } else {
+                        this.idea.set('isSelected', false);
                     }
                 }
                 this.idea = idea;
@@ -171,7 +169,6 @@ function(Backbone, _, Idea, Message, app, ckeditor, i18n){
             }
 
             this.idea.on('change', this.render, this);
-            app.trigger('idea:select', [idea]);
 
             this.render();
         },
@@ -332,6 +329,7 @@ function(Backbone, _, Idea, Message, app, ckeditor, i18n){
                 }
             }
         },
+
         /**
          * Sends the message to the server
          */
@@ -343,8 +341,8 @@ function(Backbone, _, Idea, Message, app, ckeditor, i18n){
                 btn_original_text=btn.text();
 
             data.message = this.$('.message-textarea').val();
-            if( this.idea.get('id') ){
-                data.idea_id = this.idea.get('id');
+            if( this.idea.getId() ){
+                data.idea_id = this.idea.getId();
             }
 
             btn.text( i18n.gettext('Sending...') );

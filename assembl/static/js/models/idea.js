@@ -1,10 +1,11 @@
-define(['backbone','underscore', 'models/segment', 'app', 'i18n'], function(Backbone, _, Segment, app, i18n){
+define(['models/base','underscore', 'models/segment', 'app', 'i18n'], function(Base, _, Segment, app, i18n){
     'use strict';
 
     /**
      * @class IdeaModel
      */
-    var IdeaModel = Backbone.Model.extend({
+    var IdeaModel = Base.Model.extend({
+
         /**
          * @init
          */
@@ -59,15 +60,16 @@ define(['backbone','underscore', 'models/segment', 'app', 'i18n'], function(Back
          */
         getLongTitleDisplayText: function(){
 
-            if( app.stripHtml(this.get('longTitle')) != '' ){
+            if( app.stripHtml(this.get('longTitle')) !== '' ){
                 return this.get('longTitle');
-            } else if ( app.stripHtml(this.get('shortTitle')) != '' ){
+            } else if ( app.stripHtml(this.get('shortTitle')) !== '' ){
                 return this.get('shortTitle');
             } else {
                 return i18n.gettext('Add the description');
             }
 
         },
+
         /**
          * Adds an idea as child
          * @param  {Idea} idea
@@ -81,7 +83,7 @@ define(['backbone','underscore', 'models/segment', 'app', 'i18n'], function(Back
             }
 
             idea.set('order', this.getOrderForNewChild());
-            idea.set('parentId', this.get('id'));
+            idea.set('parentId', this.getId());
         },
 
         /**
@@ -90,7 +92,7 @@ define(['backbone','underscore', 'models/segment', 'app', 'i18n'], function(Back
          */
         addSiblingAbove: function(idea){
             var parent = this.getParent(),
-                parentId = parent ? parent.get('id') : null,
+                parentId = parent ? parent.getId() : null,
                 index = this.collection.indexOf(this),
                 order = this.get('order') - 0.1;
 
@@ -112,7 +114,7 @@ define(['backbone','underscore', 'models/segment', 'app', 'i18n'], function(Back
          */
         addSiblingBelow: function(idea){
             var parent = this.getParent(),
-                parentId = parent ? parent.get('id') : null,
+                parentId = parent ? parent.getId() : null,
                 index = this.collection.indexOf(this) + 1,
                 order = this.get('order') + 0.1;
 
@@ -133,7 +135,7 @@ define(['backbone','underscore', 'models/segment', 'app', 'i18n'], function(Back
          * @return {Idea[]}
          */
         getChildren: function(){
-            return this.collection.where({ parentId: this.get('id') });
+            return this.collection.where({ parentId: this.getId() });
         },
 
         /**
@@ -141,7 +143,7 @@ define(['backbone','underscore', 'models/segment', 'app', 'i18n'], function(Back
          * @return {Idea}
          */
         getParent: function(){
-            return this.collection.findWhere({ id: this.get('parentId') });
+            return this.collection.findWhere({ '@id': this.get('parentId') });
         },
 
         /**
@@ -149,7 +151,7 @@ define(['backbone','underscore', 'models/segment', 'app', 'i18n'], function(Back
          * @return {Idea[]}
          */
         getSynthesisChildren: function(){
-            var children = this.collection.where({ parentId: this.get('id') }),
+            var children = this.collection.where({ parentId: this.getId() }),
                 result = [];
 
             _.each(children, function(child){
@@ -171,7 +173,7 @@ define(['backbone','underscore', 'models/segment', 'app', 'i18n'], function(Back
         isDescendantOf: function(idea){
             var parentId = this.get('parentId');
 
-            if( parentId === idea.get('id') ){
+            if( parentId === idea.getId() ){
                 return true;
             }
 
@@ -235,7 +237,7 @@ define(['backbone','underscore', 'models/segment', 'app', 'i18n'], function(Back
          * @param  {Segment} segment
          */
         addSegment: function(segment){
-            segment.set('idIdea', this.get('id'));
+            segment.set('idIdea', this.getId());
             this.trigger("change:segments");
         },
 
@@ -250,7 +252,7 @@ define(['backbone','underscore', 'models/segment', 'app', 'i18n'], function(Back
             var data = {
                 shortTitle: segment.get('quote').substr(0, 50),
                 longTitle: segment.get('quote'),
-                parentId: this.get('id'),
+                parentId: this.getId(),
                 order: this.getOrderForNewChild()
             };
 

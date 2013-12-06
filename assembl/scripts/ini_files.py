@@ -2,7 +2,7 @@
 
 import sys
 from os import getenv, listdir, mkdir
-from os.path import exists, join, dirname
+from os.path import exists, join, dirname, abspath
 from ConfigParser import ConfigParser
 
 
@@ -49,7 +49,7 @@ def main():
         'VIRTUOSO_ROOT_LIB': vroot_lib,
         'VIRTUOSO_SUBDIR_NAME': vname,
         'CELERY_BROKER': config.get('app:main', 'celery.broker'),
-        'here': dirname(dirname(dirname(__file__))),
+        'here': dirname(abspath('supervisord.conf')),
         'CONFIG_FILE': config_uri
     }
     for fname in ('var/db/virtuoso.ini', 'odbc.ini', 'supervisord.conf',):

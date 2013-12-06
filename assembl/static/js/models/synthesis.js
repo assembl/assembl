@@ -1,10 +1,10 @@
-define(['backbone', 'jquery', 'app', 'i18n'], function(Backbone, $, app, i18n){
+define(['models/base', 'jquery', 'app', 'i18n'], function(Base, $, app, i18n){
     'use strict';
 
     /**
      * @class SynthesisModel
      */
-    var SynthesisModel = Backbone.Model.extend({
+    var SynthesisModel = Base.Model.extend({
 
         /**
          * @init

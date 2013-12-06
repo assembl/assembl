@@ -1,10 +1,10 @@
-define(['backbone', 'jquery', 'app'], function(Backbone, $, app){
+define(['models/base', 'jquery', 'app'], function(Base, $, app){
     'use strict';
 
     /**
      * @class MessageModel
      */
-    var MessageModel = Backbone.Model.extend({
+    var MessageModel = Base.Model.extend({
         /**
          * @init
          */
@@ -12,6 +12,12 @@ define(['backbone', 'jquery', 'app'], function(Backbone, $, app){
             //this.on('change:read', this.onAttrChange, this);
             this.on('change:collapsed', this.render, this);
         },
+
+        /**
+         * Overwritting the idAttribute
+         * @type {String}
+         */
+        idAttribute: '@id',
 
         /**
          * The url
@@ -40,7 +46,7 @@ define(['backbone', 'jquery', 'app'], function(Backbone, $, app){
          * @return {MessageModel[]}
          */
         getChildren: function(){
-            return this.collection.where({ parentId: this.get('id') });
+            return this.collection.where({ parentId: this.getId() });
         },
 
         /**
@@ -48,7 +54,7 @@ define(['backbone', 'jquery', 'app'], function(Backbone, $, app){
          * @return {MessageModel}
          */
         getParent: function(){
-            return this.collection.findWhere({ id: this.get('parentId') });
+            return this.collection.findWhere({ '@id': this.get('parentId') });
         },
 
         /**
@@ -56,7 +62,7 @@ define(['backbone', 'jquery', 'app'], function(Backbone, $, app){
          * @return {Segment[]}
          */
         getSegments: function(){
-            return app.segmentList.segments.where({ idPost: this.get('id') });
+            return app.segmentList.segments.where({ idPost: this.getId() });
         },
 
         /**

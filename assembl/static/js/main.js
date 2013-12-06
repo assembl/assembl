@@ -16,9 +16,6 @@ define([
 
     app.init();
 
-    app.currentUser = new User.Model();
-    app.currentUser.loadCurrentUser();
-
     // The router
     app.router = new Router();
 
@@ -29,12 +26,13 @@ define([
 
     // User
     app.users = new User.Collection();
+    app.users.on('reset', app.loadCurrentUser);
     app.users.fetch({ reset: true });
 
     // Lateral menu
-    app.lateralMenu = new LateralMenu({el: '#lateralMenu'}).render();
-    $('#assembl-mainbutton').on('click', app.lateralMenu.trigger.bind(app.lateralMenu, 'toggle'));
-    app.currentUser.on('change', app.lateralMenu.render, app.lateralMenu);
+    // app.lateralMenu = new LateralMenu({el: '#lateralMenu'}).render();
+    // $('#assembl-mainbutton').on('click', app.lateralMenu.trigger.bind(app.lateralMenu, 'toggle'));
+    // app.getCurrentUser().on('change', app.lateralMenu.render, app.lateralMenu);
 
     // Idea list
     app.ideaList = new IdeaList({el: '#ideaList', button: '#button-ideaList'});
@@ -93,7 +91,8 @@ define([
     };
 
     // Starting the segment list update loop
-    updateSegmentList();
+    //updateSegmentList();
+    app.segmentList.segments.fetch({reset: true});
 
     // Let the game begins...
     Backbone.history.start({hashChange: false, root: "/" + app.slug });

@@ -9,7 +9,8 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard){
         DRAGBOX_MAX_LENGTH = 25,
         DISCUSSION_SLUG = $('#discussion-slug').val(),
         DISCUSSION_ID = $('#discussion-id').val(),
-        SOCKET_URL = $('#socket-url').val();
+        SOCKET_URL = $('#socket-url').val(),
+        CURRENT_USER_ID = $('#user-id').val();
 
     /**
      * The observer
@@ -154,7 +155,20 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard){
             if( url[0] !== '/' ){
                 url = '/' + url;
             }
+
             return '/api/v1/discussion/' + DISCUSSION_ID + url;
+        },
+
+        /**
+         * Formats the given to the generic api url
+         * @param {string} id The class name used in the api
+         * @return {string} The url formatted
+         *
+         * ex: 'local:Extract/1' -> '/api/v1/discussion/1/generic/Extract/1'
+         */
+        getGenericApiUrl: function(id){
+            var url = '/api/v1/discussion/' + DISCUSSION_ID + '/generic/';
+            return id.replace('local:', url);
         },
 
         /**
@@ -302,6 +316,15 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard){
         },
 
         /**
+         * fulfill app.currentUser
+         */
+        loadCurrentUser: function(){
+            if( app.users ){
+                app.currentUser = app.users.getByNumericId(CURRENT_USER_ID);
+            }
+        },
+
+        /**
          * @return {User}
          */
         getCurrentUser: function(){
@@ -328,7 +351,7 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard){
         
         saveCurrentAnnotator: function(){
             if( app.messageList.annotatorEditor ){
-                app.messageList.annotatorEditor.element.find('.annotator-save').click()
+                app.messageList.annotatorEditor.element.find('.annotator-save').click();
             }
         },
 
@@ -453,6 +476,15 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard){
         },
 
         /**
+         * Capitalize the first letter of the string
+         * @param {string} str
+         * @return {string}
+         */
+        capitalize: function(str){
+            return str.charAt(0).toUpperCase() + str.slice(1);
+        },
+
+        /**
          * Format string function
          * @param {string} string
          * @param {string} ...
@@ -565,7 +597,7 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard){
          * @return {Array<Segment>}
          */
         getSegmentsByIdea: function(idea){
-            var id = idea.get('id');
+            var id = idea.getId();
             return app.segmentList && app.segmentList.segments ? app.segmentList.segments.where({idIdea:id}) : [];
         },
 
@@ -655,6 +687,15 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard){
         },
 
         /**
+         * Given the string in the format "local:ModelName/{id}" returns the id
+         * @param  {String} str
+         * @return {String}
+         */
+        extractId: function(str){
+            return str.split('/')[1];
+        },
+
+        /**
          * @param  {Number} userID The user's ID
          * @param  {Number} [size=44] The avatar size
          * @return {String} The avatar's url formatted with the given size
@@ -669,7 +710,8 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard){
          * @return {String}
          */
         getDateFormated: function(date){
-            return moment( date ).fromNow();
+            var momentDate = moment(date);
+            return momentDate ? momentDate.fromNow() : momentDate;
         },
 
         /**
@@ -818,7 +860,7 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard){
             });
 
             return tmpl({
-                id: idea.get('id'),
+                id: idea.getId(),
                 level: idea.getSynthesisLevel(),
                 editing: idea.get('synthesisPanel-editing') || false,
                 longTitle: span.html(),
@@ -880,6 +922,8 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard){
          * inits ALL app components
          */
         init: function(){
+            app.loadCurrentUser();
+
             app.body.removeClass('preload');
             app.createSelectionTooltip();
             app.initTooltips();

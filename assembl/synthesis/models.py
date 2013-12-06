@@ -136,13 +136,15 @@ class Discussion(SQLAlchemyBaseModel):
 
     def serializable(self):
         return {
-            "id": self.id, 
+            "@id": self.uri(),
+            "@type": self.external_typename(),
             "topic": self.topic,
             "slug": self.slug,
             "creation_date": self.creation_date.isoformat(),
-            "table_of_contents_id": self.table_of_contents_id,
-            "synthesis_id": self.synthesis.id,
-            "owner_id": self.owner_id,
+            "table_of_contents_id":
+                TableOfContents.uri_generic(self.table_of_contents_id),
+            "synthesis_id": Synthesis.uri_generic(self.synthesis.id),
+            "owner_id": AgentProfile.uri_generic(self.owner_id),
         }
 
     def get_discussion_id(self):
@@ -198,11 +200,14 @@ class TableOfContents(SQLAlchemyBaseModel):
 
     def serializable(self):
         return {
+            "@id": self.uri_generic(self.id),
+            "@type": self.external_typename(),
             "topic": self.topic,
             "slug": self.slug,
-            "id": self.id,
-            "table_of_contents_id": self.table_of_contents_id,
-            "synthesis_id": self.synthesis_id
+            "table_of_contents_id":
+                TableOfContents.uri_generic(self.table_of_contents_id),
+            "synthesis_id":
+                Synthesis.uri_generic(self.synthesis_id)
         }
 
     def get_discussion_id(self):
@@ -237,7 +242,8 @@ class Synthesis(SQLAlchemyBaseModel):
 
     def serializable(self):
         return {
-            "id": self.id,
+            "@id": self.uri_generic(self.id),
+            "@type": self.external_typename(),
             "creation_date": self.creation_date.isoformat(),
             "publication_date": self.publication_date.isoformat() \
                 if self.publication_date \
@@ -245,7 +251,7 @@ class Synthesis(SQLAlchemyBaseModel):
             "subject": self.subject,
             "introduction": self.introduction,
             "conclusion": self.conclusion,
-            "discussion_id": self.discussion.id,
+            "discussion_id": Discussion.uri_generic(self.discussion.id),
         }
 
     def get_discussion_id(self):
@@ -305,14 +311,15 @@ class Idea(SQLAlchemyBaseModel):
 
     def serializable(self):
         return {
-            'id': self.id,
+            '@id': self.uri_generic(self.id),
+            '@type': self.external_typename(),
             'shortTitle': self.short_title,
             'longTitle': self.long_title,
             'creationDate': self.creation_date.isoformat(),
             'order': self.order,
             'active': False,
             'featured': False,
-            'parentId': self.parents[0].id if self.parents else None,
+            'parentId': Idea.uri_generic(self.parents[0].id) if self.parents else None,
             'inSynthesis': True if self.synthesis_id else False,
             'total': len(self.children),
             'num_posts': self.num_posts,
@@ -324,7 +331,8 @@ class Idea(SQLAlchemyBaseModel):
         post threads linked to any other idea
         """
         return {
-            'id': Idea.ORPHAN_POSTS_IDEA_ID,
+            '@id': Idea.ORPHAN_POSTS_IDEA_ID,
+            '@type': Idea.external_typename(),
             'shortTitle': _('Unsorted posts'),
             'longTitle': '',
             'creationDate': None,
@@ -464,26 +472,27 @@ class Extract(SQLAlchemyBaseModel):
 
     def serializable(self):
         json = {
-            'id': self.id,
+            '@id': self.uri_generic(self.id),
+            '@type': self.external_typename(),
             'annotator_schema_version': 'v1.0',
             'quote': self.body,
             'ranges': [tfi.__json__() for tfi 
                        in self.text_fragment_identifiers],
             'target': {
-                '@type': self.source.type
+                '@type': self.source.external_typename()
             },
             'created': self.creation_date.isoformat(),
-            'idCreator': self.creator_id,
+            'idCreator': AgentProfile.uri_generic(self.creator_id),
             #'user': self.creator.get_uri(),
             'text': self.annotation_text,
         }
         if self.idea_id:
-            json['idIdea'] = self.idea_id
+            json['idIdea'] = Idea.uri_generic(self.idea_id)
             #json['text'] += '<a href="%s">%s</a>' % (
             #   self.idea.get_uri(), self.idea.short_title)
         if self.source.type == 'email':
-            json['target']['@id'] = self.source.post.id
-            json['idPost'] = self.source.post.id  # legacy
+            json['target']['@id'] = Post.uri_generic(self.source.post.id)
+            json['idPost'] = Post.uri_generic(self.source.post.id)  # legacy
             #json['url'] = self.source.post.get_uri()
         elif self.source.type == 'webpage':
             json['target']['url'] = self.source.url
@@ -528,8 +537,8 @@ class Extract(SQLAlchemyBaseModel):
             if start < 0:
                 return None
             lookin = 'message-subject'
-        xpath = "//div[@id='message-%d']//div[@class='%s']" % (
-            post_id, lookin)
+        xpath = "//div[@id='message-%s']//div[@class='%s']" % (
+            Post.uri_generic(post_id), lookin)
         tfi = self.db.query(TextFragmentIdentifier).filter_by(
             extract=self).first()
         if not tfi:

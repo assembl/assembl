@@ -45,7 +45,7 @@ def create_idea(request):
 
     new_idea = session.merge(new_idea)
 
-    return {'ok': True, 'id': new_idea.id}
+    return {'ok': True, 'id': new_idea.uri()}
 
 
 @idea.get(permission=P_READ)
@@ -83,7 +83,7 @@ def save_idea(request):
 
     # Special items in TOC, like unsorted posts.
     if idea_id in ['orphan_posts']:
-        return {'ok': False, 'id': idea_id}
+        return {'ok': False, 'id': Idea.uri_generic(idea_id)}
 
     with transaction.manager:
         idea = Idea.get_instance(idea_id)
@@ -109,7 +109,7 @@ def save_idea(request):
 
     idea = Idea.db.merge(idea)
 
-    return {'ok': True, 'id': idea.id}
+    return {'ok': True, 'id': idea.uri() }
 
 # Delete
 @idea.delete()  # permission=P_EDIT_IDEA
