@@ -148,7 +148,7 @@ function(Base, _, app, User, Message){
     /**
      * @class SegmentColleciton
      */
-    var SegmentCollection = Backbone.Collection.extend({
+    var SegmentCollection = Base.Collection.extend({
 
         /**
          * @type {String}
