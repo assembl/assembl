@@ -27,7 +27,7 @@ define([
     // User
     app.users = new User.Collection();
     app.users.on('reset', app.loadCurrentUser);
-    app.users.fetch({ reset: true });
+    app.users.fetch({ reset: true, async: false });
 
     // Lateral menu
     // app.lateralMenu = new LateralMenu({el: '#lateralMenu'}).render();

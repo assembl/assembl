@@ -54,6 +54,8 @@ define(['app', 'underscore', 'sockjs'], function(app, _, SockJS){
         var collection = app.getCollectionByType(item),
             model;
 
+        console.log( item['@id'], item );
+
         if( collection === null ){
             // TODO: Handle singletons like discussion etc.
             return;
