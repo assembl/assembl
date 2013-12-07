@@ -2,15 +2,6 @@ define(['app', 'underscore', 'sockjs'], function(app, _, SockJS){
     'use strict';
 
     /**
-     * Given the string in the format "local:ModelName/{id}" returns the id
-     * @param  {String} str
-     * @return {String}
-     */
-    function extractId(str){
-        return str.split('/')[1];
-    }
-
-    /**
      * @class Socket
      *
      * @param {string} url
@@ -41,10 +32,7 @@ define(['app', 'underscore', 'sockjs'], function(app, _, SockJS){
             len = data.length;
 
         for(; i<len; i += 1){
-            var method = _methods[ data[i]['@type'] ];
-            if(method) {
-                method(data[i]);
-            }
+            this.processData(data[i]);
         }
 
         app.trigger('socket:message', [this.socket, data]);
@@ -56,6 +44,26 @@ define(['app', 'underscore', 'sockjs'], function(app, _, SockJS){
      */
     Socket.prototype.onClose = function(ev){
         app.trigger('socket:close', [this.socket, ev]);
+    };
+
+    /**
+     * Processes one item from a data array from the server
+     * @param {Object]} item
+     */
+    Socket.prototype.processData = function(item) {
+        var collection = app.getCollectionByType(item),
+            model;
+
+        if( collection === null ){
+            return;
+        }
+
+        if( item['@tombstone'] ){
+            collection.removeById(item['@id']);
+            return;
+        }
+
+        collection.add(item, {merge: true});
     };
 
 

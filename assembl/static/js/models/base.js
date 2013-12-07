@@ -53,6 +53,16 @@ define(['backbone', 'app'], function(Backbone, app){
             }
 
             return model;
+        },
+
+
+        /**
+         * Removes a model by the given id
+         * @param  {string} id
+         */
+        removeById: function(id){
+            var model = this.get(id);
+            this.remove(model);
         }
 
     });

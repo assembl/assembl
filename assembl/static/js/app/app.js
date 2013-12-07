@@ -1,5 +1,5 @@
-define(['jquery', 'underscore', 'ckeditor', 'moment', 'i18n', 'zeroclipboard'],
-function($, _, ckeditor, Moment, i18n, ZeroClipboard){
+define(['jquery', 'underscore', 'ckeditor', 'moment', 'i18n', 'zeroclipboard', 'types'],
+function($, _, ckeditor, Moment, i18n, ZeroClipboard, Types){
     'use strict';
 
     ckeditor.disableAutoInline = true;
@@ -607,6 +607,24 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard){
          */
         getOrderForNewRootIdea: function(){
             return app.ideaList.ideas.last().get('order') + 1;
+        },
+
+        /**
+         * Returns the collection from the giving object's @type
+         * @param {BaseModel} item
+         * @param {String} [type=item['@type']] The model type
+         * @return {BaseCollection}
+         */
+        getCollectionByType: function(item, type){
+            type = type || item['@type'];
+            var collection = null;
+
+            switch(type){
+                case Types.EXTRACT:
+                    collection = app.segmentList;
+            }
+
+            return collection;
         },
 
         /**
