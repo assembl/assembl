@@ -13,9 +13,12 @@
     "IdentityProvider": {},
 
     "Source": {
+        "discussion_id":"discussion"
     },
     "Webpage": {},
-    "Mailbox": {},
+    "Mailbox": {
+        "discussion_id":"discussion"
+    },
     "Email": {
         "body":false,
         "full_message":false,
@@ -24,28 +27,50 @@
         "id":false,
         "in_reply_to":false,
         "type":false
-        },
+    },
     "Post": {
-        "creator":true
-        },
+        "idCreator":"creator",
+        "parentId": "parent",
+        "date": "creation_date",
+        "subject": "&get_title"
+    },
 
     "Discussion": {
         "slug": true,
         "table_of_contents_id": true,
         "creation_date": true,
         "topic": true,
-        "synthesis": true,
+        "synthesis_id": true,
         "owner_id": true
     },
     "Idea": {
-        "long_title":false,
+        "longTitle": "long_title",
+        "creationDate": "creation_date",
+        "shortTitle": "short_title",
+        "parents":true,
         "table_of_contents_id":false,
-        "table_of_contents":false,
-        "id":false,
-        "creation_date":false
-        },
+        "table_of_contents":false
+    },
     "TableOfContents": {},
-    "Synthesis": {},
-    "Extract": {},
-    "TextFragmentIdentifier": {}
+    "Synthesis": {
+        "discussion_id":"discussion"
+    },
+    "Extract": {
+        "ranges":["text_fragment_identifiers:partial"],
+        "idIdea":"idea",
+        "text":"annotation_text",
+        "created":"creation_date",
+        "quote":"body",
+        "idCreator":"creator",
+        "target":"&get_target",
+        "source":true,
+        "idPost":"&get_post"
+    },
+    "TextFragmentIdentifier": {
+        "start":"xpath_start",
+        "end":"xpath_end",
+        "startOffset":"offset_start",
+        "endOffset":"offset_end",
+        "extract_id":false
+    }
 }
