@@ -56,7 +56,7 @@ define([
     app.synthesisPanel.model.fetch({reset: true});
 
     // Fetching the ideas
-    app.ideaList.ideas.fetch({reset: true});
+    app.ideaList.ideas.fetchFromScriptTag('ideas-json');
 
 
     /**

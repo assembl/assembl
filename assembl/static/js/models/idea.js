@@ -297,7 +297,7 @@ define(['models/base','underscore', 'models/segment', 'app', 'i18n'], function(B
     /**
      * @class IdeaColleciton
      */
-    var IdeaCollection = Backbone.Collection.extend({
+    var IdeaCollection = Base.Collection.extend({
         /**
          * Url
          * @type {String}
