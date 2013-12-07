@@ -3,6 +3,7 @@ import re
 import quopri
 from itertools import groupby
 import traceback
+import anyjson as json
 
 from sqlalchemy.orm import relationship, backref, aliased
 from sqlalchemy.sql import func, cast, select, text
@@ -191,10 +192,10 @@ class Discussion(SQLAlchemyBaseModel):
         return users
 
     def get_readers_preload(self):
-        return [user.serializable() for user in self.get_readers()]
+        return json.dumps([user.serializable() for user in self.get_readers()])
 
     def get_ideas_preload(self):
-        return [idea.serializable() for idea in self.table_of_contents.ideas]       
+        return json.dumps([idea.serializable() for idea in self.table_of_contents.ideas])
 
     def __repr__(self):
         return "<Discussion %s>" % repr(self.topic)
