@@ -33,26 +33,6 @@ post = Service(name='post', path=API_DISCUSSION_PREFIX + '/posts/{id:.+}',
                acl=acls)
 
 
-def __post_to_json_structure(post):
-    data = {}
-    data["@id"] = post.uri()
-    data["@type"] = Post.external_typename()
-
-    data["checked"] = False
-    #FIXME
-    data["collapsed"] = False
-    #FIXME
-    data["read"] = True
-    data["parentId"] = Post.uri_generic(post.parent_id)
-    subject = post.content.get_title()
-    if post.content.type == 'email':
-        subject = post.content.source.mangle_mail_subject(subject)
-    data["subject"] = subject
-    data["body"] = post.content.get_body()
-    data["idCreator"] = AgentProfile.uri_generic(post.creator_id)
-    data["date"] = post.content.creation_date.isoformat()
-    return data
-
 
 def _get_idea_query(post, levels=None):
     """Return a query that includes the post and its following thread.
@@ -193,7 +173,7 @@ def get_posts(request):
     for post in posts:
         #print(repr(posts))
         #exit()
-        serializable_post = __post_to_json_structure(post)
+        serializable_post = post.serializable()
         if user_id:
             # TODO: THIS DOES NOT WORK. We get all views, not just the join above.
             if(post.views):
@@ -239,7 +219,7 @@ def get_post(request):
     if not post:
         raise HTTPNotFound("Post with id '%s' not found." % post_id)
 
-    return __post_to_json_structure(post)
+    return post.serializable()
 
 
 @posts.post(permission=P_ADD_POST)

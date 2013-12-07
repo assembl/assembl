@@ -124,6 +124,26 @@ class Post(SQLAlchemyBaseModel):
         elif self.content_id:
             return Content.get(id=self.content_id).get_discussion_id()
 
+    def serializable(self):
+        data = {}
+        data["@id"] = self.uri()
+        data["@type"] = Post.external_typename()
+
+        data["checked"] = False
+        #FIXME
+        data["collapsed"] = False
+        #FIXME
+        data["read"] = True
+        data["parentId"] = Post.uri_generic(self.parent_id)
+        subject = self.content.get_title()
+        if self.content.type == 'email':
+            subject = self.content.source.mangle_mail_subject(subject)
+        data["subject"] = subject
+        data["body"] = self.content.get_body()
+        data["idCreator"] = AgentProfile.uri_generic(self.creator_id)
+        data["date"] = self.content.creation_date.isoformat()
+        return data
+
     def __repr__(self):
         return "<Post %d '%s %d'>" % (
             self.id,

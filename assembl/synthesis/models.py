@@ -503,7 +503,7 @@ class Extract(SQLAlchemyBaseModel):
             #json['text'] += '<a href="%s">%s</a>' % (
             #   self.idea.get_uri(), self.idea.short_title)
         if self.source.type == 'email':
-            json['target']['@id'] = Post.uri_generic(self.source.post.id)
+            json['target'] = self.source.post.serializable()
             json['idPost'] = Post.uri_generic(self.source.post.id)  # legacy
             #json['url'] = self.source.post.get_uri()
         elif self.source.type == 'webpage':
