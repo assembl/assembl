@@ -28,7 +28,8 @@ from assembl.lib.utils import slugify
 from ..lib.sqla import db_schema, Base as SQLAlchemyBaseModel
 from ..source.models import (Source, Content, Post, Mailbox)
 from ..auth.models import (
-    DiscussionPermission, Role, Permission, AgentProfile)
+    DiscussionPermission, Role, Permission, AgentProfile, User,
+    UserRole, LocalUserRole, DiscussionPermission, P_READ)
 
 
 class Discussion(SQLAlchemyBaseModel):
@@ -165,6 +166,30 @@ class Discussion(SQLAlchemyBaseModel):
         permroles.sort()
         byperm = groupby(permroles, lambda (p, r): p)
         return {p: [r for (p2, r) in prs] for (p, prs) in byperm}
+
+
+    def get_readers(self):
+        users = self.db().query(User).join(
+            UserRole, Role, DiscussionPermission, Permission).filter(
+                DiscussionPermission.discussion_id == self.id and
+                Permission.name == P_READ
+            ).union(self.db().query(User).join(
+                LocalUserRole, Role, DiscussionPermission, Permission).filter(
+                    DiscussionPermission.discussion_id == self.id and
+                    LocalUserRole.discussion_id == self.id and
+                     Permission.name == P_READ)).all()
+        # authenticated = session.query(DiscussionPermission).join(
+        #     Role, DiscussionPermission, Permission).filter(
+        #         DiscussionPermission.discussion_id == self.id and
+        #         Permission.name == P_READ and
+        #         LocalUserRole.user_id == Authenticated).all()
+        # everyone = session.query(LocalUserRole).join(
+        #             Role, DiscussionPermission, Permission).filter(
+        #                 DiscussionPermission.discussion_id == self.id and
+        #                 Permission.name == P_READ and
+        #                 LocalUserRole.user_id == Everyone).all()
+        return [user.serializable() for user in users]
+
 
     def __repr__(self):
         return "<Discussion %s>" % repr(self.topic)
