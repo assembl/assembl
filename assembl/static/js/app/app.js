@@ -621,7 +621,20 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard, Types){
 
             switch(type){
                 case Types.EXTRACT:
-                    collection = app.segmentList;
+                    collection = app.segmentList.segments;
+                    break;
+
+                case Types.IDEA:
+                    collection = app.ideaList.ideas;
+                    break;
+
+                case Types.POST:
+                    collection = app.messageList.messages;
+                    break;
+
+                case Types.USER:
+                    collection = app.users;
+                    break;
             }
 
             return collection;

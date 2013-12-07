@@ -55,13 +55,14 @@ define(['app', 'underscore', 'sockjs'], function(app, _, SockJS){
             model;
 
         if( collection === null ){
+            // TODO: Handle singletons like discussion etc.
             return;
         }
 
         model = collection.get(item['@id']);
 
         if( item['@tombstone'] ){
-            //if( model) model.before_delete();
+            //if( model ) model.before_delete();
             collection.remove(model);
             return;
         }
@@ -76,72 +77,6 @@ define(['app', 'underscore', 'sockjs'], function(app, _, SockJS){
 
             //model.before_update(item);
             collection.add(item, {merge: true});
-        }
-    };
-
-
-    /**
-     * Methods related to the type of data sent from server
-     * @type {Object}
-     */
-    var _methods = {
-
-        /**
-         * Processes Extract data
-         * @param  {Object} item
-         */
-        "Extract": function(item){
-            if( !app.segmentList ){
-                return;
-            }
-
-            var id = extractId(item['@id']),
-                segment = app.segmentList.segments.get(id),
-                model;
-
-            if( segment ){
-                // Update
-                segment.fetch();
-                return
-            }
-
-            // Create
-            model = new app.segmentList.segments.model({
-                id: extractId(item['@id']),
-                text: item['body'],
-                quote: item['body'],
-                idPost: extractId(item["source"]),
-                idIdea: null,
-                creationDate: item['creation_date'],
-                idCreator: extractId(item['creator']),
-                ranges: [{
-                    'start': item['text_fragment_identifiers'][0]['xpath_start'],
-                    'offset_start': item['text_fragment_identifiers'][0]['offset_start'],
-                    'end': item['text_fragment_identifiers'][0]['xpath_end'],
-                    'offset_end': item['text_fragment_identifiers'][0]['offset_end'],
-                }],
-                target: null
-            });
-
-            app.segmentList.segments.add(model);
-            
-            // TODO: Delete
-        },
-
-        /**
-         * Processes Mailbox data
-         * @param {Object} item
-         */
-        "Mailbox": function(item){
-            if( !app.messageList ){
-                return;
-            }
-
-            console.log('Mailbox', item);
-
-            // Create
-            // Update
-            // Delete
         }
     };
 
