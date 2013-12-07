@@ -48,7 +48,7 @@ define(['app', 'underscore', 'sockjs'], function(app, _, SockJS){
 
     /**
      * Processes one item from a data array from the server
-     * @param {Object]} item
+     * @param  {Object]} item
      */
     Socket.prototype.processData = function(item) {
         var collection = app.getCollectionByType(item),
@@ -58,12 +58,25 @@ define(['app', 'underscore', 'sockjs'], function(app, _, SockJS){
             return;
         }
 
+        model = collection.get(item['@id']);
+
         if( item['@tombstone'] ){
-            collection.removeById(item['@id']);
+            //if( model) model.before_delete();
+            collection.remove(model);
             return;
         }
 
-        collection.add(item, {merge: true});
+        if( model === null ){
+            // oops, doesn't exist
+
+            collection.add(item);
+            //model.after_add();
+        } else {
+            // yeah, it exists
+
+            //model.before_update(item);
+            collection.add(item, {merge: true});
+        }
     };
 
 

@@ -773,7 +773,7 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard, Types){
 
             if( isInMessage ){
                 path = app.format("//div[@data-message-id='{0}']/div[@class='message-body']{1}", node.parentNode.getAttribute('data-message-id'), path);
-            }            
+            }
 
             return path;
         },
