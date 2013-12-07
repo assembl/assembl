@@ -137,6 +137,14 @@ function(Base, _, app, User, Message){
         getCreator: function(){
             var creatorId = this.get('idCreator');
             return app.users.getById(creatorId);
+        },
+
+        /**
+         * Alias for `.get('quote') || .get('text')`
+         * @return {String}
+         */
+        getQuote: function(){
+            return this.get('quote') || this.get('text');
         }
     });
 

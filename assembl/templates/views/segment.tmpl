@@ -16,7 +16,7 @@
 <div class="box postit" draggable="true" data-segmentid="<%= segment.cid %>">
     <span data-segmentid="<%= segment.cid %>" class="closebutton"></span>
 
-    <q class="text text-quotation"><%= segment.get('quote') %></q>
+    <q class="text text-quotation"><%= segment.getQuote() %></q>
     {{ segmentTextLink|safe }}
     <div class="spacer spacer--big"></div>
     <div class="postit-footer">
