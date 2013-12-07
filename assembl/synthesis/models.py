@@ -188,8 +188,13 @@ class Discussion(SQLAlchemyBaseModel):
         #                 DiscussionPermission.discussion_id == self.id and
         #                 Permission.name == P_READ and
         #                 LocalUserRole.user_id == Everyone).all()
-        return [user.serializable() for user in users]
+        return users
 
+    def get_readers_preload(self):
+        return [user.serializable() for user in self.get_readers()]
+
+    def get_ideas_preload(self):
+        return [idea.serializable() for idea in self.table_of_contents.ideas]       
 
     def __repr__(self):
         return "<Discussion %s>" % repr(self.topic)
