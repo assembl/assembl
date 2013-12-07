@@ -23,7 +23,7 @@
     <div class="segment-author">
         <%
         var type = segment.get("target")["@type"];
-        if ( type == "Email" ) { var post = segment.getAssociatedPost(); %>
+        if ( type == "Post" ) { var post = segment.getAssociatedPost(); %>
             {% set postCreatorAvatarImg = '<img src="<%= post.getCreator().getAvatarUrl(35) %>" class="image-rounded" alt="" />' %}
             {% set postCreatorName = '<%= post.getCreator().get("name") %>' %}
             {% set postDate = '<%= app.getDateFormated(post.get("date")) %>' %}

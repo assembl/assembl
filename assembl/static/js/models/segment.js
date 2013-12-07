@@ -89,12 +89,9 @@ function(Base, _, app, User, Message){
                 if(app.segmentPostCache[idPost]) {
                     return app.segmentPostCache[idPost];
                 }
-                var posts = app.messageList.messages.where({id:idPost});
-                if(posts.length){
-                    post = posts[0];
-                }
-                else {
-                    post = new Message.Model({id: idPost});
+                post = app.messageList.messages.get(idPost);
+                if( !post ){
+                    post = new Message.Model({'@id': idPost});
                     post.fetch({async:false});
                 }
                 app.segmentPostCache[idPost] = post;
