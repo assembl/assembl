@@ -163,9 +163,9 @@ def put_extract(request):
     if not extract:
         raise HTTPNotFound("Extract with id '%s' not found." % extract_id)
 
-    extract.owner_id = user_id or get_database_id(extract.owner_id)
+    extract.owner_id = user_id or get_database_id("User", extract.owner_id)
     extract.order = updated_extract_data.get('order', extract.order)
-    extract.idea_id = get_database_id(updated_extract_data['idIdea'])
+    extract.idea_id = get_database_id("Idea", updated_extract_data['idIdea'])
 
     Extract.db.add(extract)
     #TODO: Merge ranges. Sigh.
