@@ -65,6 +65,6 @@
 {% endblock %}
 
 {% block extra_js %}
-<script type="text/json" id="users_preload">{{ discussion.get_readers()|safe }}</script>
+<script type="text/json" id="users-json">{{ discussion.get_readers()|safe }}</script>
 <script type="text/javascript">requirejs(["main"]);</script>
 {% endblock %}

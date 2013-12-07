@@ -32,6 +32,30 @@ define(['backbone', 'app'], function(Backbone, app){
     var BaseCollection = Backbone.Collection.extend({
 
         /**
+         * Get the innerText from the given `id` element
+         * Parses the json and execute `.reset` method in the collection
+         *
+         * @param {String} id The script tag id
+         */
+        fetchFromScriptTag: function(id){
+            var script = document.getElementById(id),
+                json;
+
+            if( !script ){
+                throw new Error(app.format("Script tag #{0} doesn't exist", id));
+            }
+
+            try {
+                json = JSON.parse(script.innerText);
+            } catch(e){
+                throw new Error("Invalid json");
+            }
+            
+            this.reset(json);
+        },
+        
+
+        /**
          * Find the model by numeric id instead of string
          * ex: finds 'local:ModelName/30' if given '30'
          *
