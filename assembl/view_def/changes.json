@@ -58,7 +58,6 @@
         "created":"creation_date",
         "quote":"body",
         "idCreator":"creator",
-        "idIdea":"idea",
         "target":"&get_target",
         "source":true,
         "idPost":"&get_post"

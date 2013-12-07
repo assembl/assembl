@@ -43,12 +43,11 @@ def configure_zmq(sockdef, multiplex):
     assert isinstance(sockdef, str)
     CHANGES_SOCKET = sockdef
     MULTIPLEX = multiplex
+    if MULTIPLEX:
+        start_dispatch_thread()
 
 
 def includeme(config):
     settings = config.registry.settings
     configure_zmq(settings['changes.socket'],
                   settings['changes.multiplex'])
-    if MULTIPLEX:
-        start_dispatch_thread()
-        print "started dispatch"
