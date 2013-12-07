@@ -191,11 +191,28 @@ class Discussion(SQLAlchemyBaseModel):
         #                 LocalUserRole.user_id == Everyone).all()
         return users
 
+    def get_all_agents(self):
+        # TODO: Remove emails, and/or limit to senders.
+        return self.db().query(AgentProfile).all()
+
+    def get_all_agents_preload(self):
+        return json.dumps([ap.serializable() for ap in self.get_all_agents()])
+
     def get_readers_preload(self):
         return json.dumps([user.serializable() for user in self.get_readers()])
 
     def get_ideas_preload(self):
         return json.dumps([idea.serializable() for idea in self.table_of_contents.ideas])
+
+    def get_ideas_preload(self):
+        return json.dumps([idea.serializable() for idea in self.table_of_contents.ideas])
+
+    def get_related_extracts(self):
+        return self.db().query(Extract).join(
+            Content, Source).filter(Source.discussion == self).all()
+
+    def get_related_extracts_preload(self):
+        return json.dumps([e.serializable() for e in self.get_related_extracts()])
 
     def __repr__(self):
         return "<Discussion %s>" % repr(self.topic)
