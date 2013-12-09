@@ -495,19 +495,21 @@ def get_session_maker(zope_tr=True):
 def orm_update_listener(mapper, connection, target):
     session = object_session(target)
     if session.is_modified(target, include_collections=False):
-        if 'cdict' not in connection.info:
-            connection.info['cdict'] = {}
-        connection.info['cdict'][target.uri()] = (
-            target.get_discussion_id(),
-            target.generic_json('changes'))
+        json = target.generic_json('changes')
+        if json:
+            if 'cdict' not in connection.info:
+                connection.info['cdict'] = {}
+            connection.info['cdict'][target.uri()] = (
+                target.get_discussion_id(), json)
 
 
 def orm_insert_listener(mapper, connection, target):
-    if 'cdict' not in connection.info:
-        connection.info['cdict'] = {}
-    connection.info['cdict'][target.uri()] = (
-        target.get_discussion_id(),
-        target.generic_json('changes'))
+    json = target.generic_json('changes')
+    if json:
+        if 'cdict' not in connection.info:
+            connection.info['cdict'] = {}
+        connection.info['cdict'][target.uri()] = (
+            target.get_discussion_id(), json)
 
 
 def orm_delete_listener(mapper, connection, target):

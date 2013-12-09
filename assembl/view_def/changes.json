@@ -11,8 +11,8 @@
     "User": {
         "password":false
     },
-    "EmailAccount": {},
-    "IdentityProviderAccount": {},
+    "EmailAccount": false,
+    "IdentityProviderAccount": false,
     "IdentityProvider": {},
 
     "Source": {

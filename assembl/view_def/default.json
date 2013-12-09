@@ -12,8 +12,8 @@
         "password":false,
         "permissions":"&get_all_permissions"
     },
-    "EmailAccount": {},
-    "IdentityProviderAccount": {},
+    "EmailAccount": false,
+    "IdentityProviderAccount": false,
     "IdentityProvider": {},
 
     "Source": {

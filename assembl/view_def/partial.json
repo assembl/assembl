@@ -9,8 +9,8 @@
         "password":false,
         "preferred_email":false
     },
-    "EmailAccount": {},
-    "IdentityProviderAccount": {},
+    "EmailAccount": false,
+    "IdentityProviderAccount": false,
     "IdentityProvider": {},
 
     "Source": {
