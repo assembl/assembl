@@ -5,7 +5,8 @@
     },
     "Permission": {},
     "AgentProfile": {
-        "user":":"
+        "user":":",
+        "preferred_email":false
     },
     "User": {
         "password":false,
