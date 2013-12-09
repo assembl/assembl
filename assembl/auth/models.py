@@ -153,13 +153,13 @@ class AgentProfile(SQLAlchemyBaseModel):
             '@id': self.uri_generic(self.id),
             'name': self.name or self.display_name()
         }
-        if use_email:
-            r['email'] = use_email
+        # if use_email:
+        #     r['email'] = use_email
         if self.user:
             r['@type'] = 'User'
             r['username'] = self.user.display_name()
-            if not use_email:
-                r['email'] = self.user.get_preferred_email()
+            # if not use_email:
+            #     r['email'] = self.user.get_preferred_email()
         return r
 
 
