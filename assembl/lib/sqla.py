@@ -210,6 +210,8 @@ class BaseOps(object):
     def get_database_id(cls, uri):
         if isinstance(uri, StringTypes):
             for cls in cls.mro():
+                if getattr(cls, 'external_typename', None) is None:
+                    break
                 if  uri.startswith('local:%s/' % (cls.external_typename())):
                     num = uri.split('/', 1)[1]
                     try:
