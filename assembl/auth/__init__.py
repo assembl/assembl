@@ -61,3 +61,80 @@ def authentication_callback(user_id, request):
             if discussion:
                 discussion_id = discussion.id
     return get_roles(user_id, discussion_id)
+
+
+def discussions_with_access(userid, permission=P_READ):
+    db = Discussion.db()
+    if userid in (Authenticated, Everyone):
+        discussions = db.query(Discussion.id).join(
+                DiscussionPermission, Role, Permission).filter(
+                Permission.name == permission and
+                Role.name == userid)
+    else:
+        discussions = db.query(Discussion.id).join(
+            DiscussionPermission, Role, Permission, UserRole, User).filter(
+                User.id == userid).filter(
+                Permission.name == permission
+            ).union(db.query(Discussion.id).join(
+                DiscussionPermission, Role, Permission).join(
+                LocalUserRole, (LocalUserRole.discussion_id == Discussion.id)).join(
+                User).filter(
+                User.id == userid).filter(
+                Permission.name == permission)
+            ).union(db.query(Discussion.id).join(
+                DiscussionPermission, Role, Permission).filter(
+                Role.name.in_((Authenticated, Everyone))).filter(
+                Permission.name == permission)
+            )
+    return [x[0] for x in discussions]
+
+def user_has_permission(discussion_id, user_id, permission):
+    # assume all ids valid
+    db = Discussion.db()
+    if user_id in (Authenticated, Everyone):
+        permission = db.query(DiscussionPermission).join(
+            Permission, Role).filter(
+                DiscussionPermission.discussion_id == discussion_id).filter(
+                    Role.name == user_id).filter(
+                        Permission.name == permission).first()
+        return permission is not None
+    sysadmin = db.query(UserRole).filter_by(
+        user_id=user_id).join(Role).filter_by(name=R_SYSADMIN).first()
+    if sysadmin:
+        return True
+    permission = db.query(DiscussionPermission).join(
+        Permission, Role, UserRole).filter(
+            DiscussionPermission.discussion_id == discussion_id).filter(
+                UserRole.user_id == user_id).filter(
+                    Permission.name == permission
+                ).union(
+                    db.query(DiscussionPermission).join(
+                        Permission, Role, LocalUserRole).filter(
+                            DiscussionPermission.discussion_id == discussion_id
+                        ).filter(LocalUserRole.user_id == user_id).filter(
+                            Permission.name == permission)).first()
+    return permission is not None
+
+
+def permissions_for_user(discussion_id, user_id):
+    # assume all ids valid
+    db = Discussion.db()
+    if user_id in (Authenticated, Everyone):
+        permissions = db.query(Permission.name).join(
+            DiscussionPermission, Role).filter(
+                DiscussionPermission.discussion_id == discussion_id).filter(
+                    Role.name == user_id)
+        return [x[0] for x in permissions]
+    sysadmin = db.query(UserRole).filter_by(
+        user_id=user_id).join(Role).filter_by(name=R_SYSADMIN).first()
+    if sysadmin:
+        return [x[0] for x in db.query(Permission.name).all()]
+    permissions = db.query(Permission.name).join(
+        DiscussionPermission, Role, UserRole).filter(
+            DiscussionPermission.discussion_id == discussion_id).filter(
+                UserRole.user_id == user_id).union(
+                    db.query(Permission.name).join(
+                        DiscussionPermission, Role, LocalUserRole).filter(
+                            DiscussionPermission.discussion_id == discussion_id
+                        ).filter(LocalUserRole.user_id == user_id))
+    return [x[0] for x in permissions]
