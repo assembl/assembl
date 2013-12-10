@@ -60,6 +60,7 @@
         "extracts":[":partial"],
         "full_message":false,
         "import_date": false,
+        "in_reply_to":false,
         "message_id": false,
         "recipients": true,
         "sender": true,
