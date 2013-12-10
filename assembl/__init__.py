@@ -32,10 +32,10 @@ def main(global_config, **settings):
     from models import get_session_maker
     from auth.models import (
         populate_default_roles, populate_default_permissions)
-    session = get_session_maker()
-    populate_default_roles(session)
-    populate_default_permissions(session)
-    session.close()
+    with transaction.manager:
+        session = get_session_maker()
+        populate_default_roles(session)
+        populate_default_permissions(session)
     config.add_static_view('static', 'static', cache_max_age=3600)
     config.include('cornice')  # REST services library.
     # config.include('.lib.alembic')

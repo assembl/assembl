@@ -46,6 +46,8 @@ P_DELETE_EXTRACT = 'delete_extract'
 P_EDIT_EXTRACT = 'edit_extract'
 P_ADD_IDEA = 'add_idea'
 P_EDIT_IDEA = 'edit_idea'
+P_EDIT_SYNTHESIS = 'edit_synthesis'
+P_SEND_SYNTHESIS = 'send_synthesis'
 P_ADMIN_DISC = 'admin_discussion'
 P_SYSADMIN = 'sysadmin'
 
@@ -475,6 +477,8 @@ def populate_default_permissions(session):
     ensure(P_DELETE_EXTRACT)
     ensure(P_ADD_IDEA)
     ensure(P_EDIT_IDEA)
+    ensure(P_EDIT_SYNTHESIS)
+    ensure(P_SEND_SYNTHESIS)
     ensure(P_ADMIN_DISC)
     ensure(P_SYSADMIN)
 
