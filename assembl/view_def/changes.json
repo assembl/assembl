@@ -29,7 +29,9 @@
     "Post": {
         "idCreator":"creator",
         "parentId": "parent",
-        "date": "creation_date"
+        "date": "creation_date",
+        "read":"&is_read",
+        "subject": "&get_title"
     },
 
     "Discussion": {
