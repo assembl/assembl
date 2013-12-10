@@ -503,7 +503,7 @@ class DiscussionPermission(SQLAlchemyBaseModel):
         return self.permission.name
 
     def get_discussion_id(self):
-        return discussion_id
+        return self.discussion_id
 
 def create_default_permissions(session, discussion):
     permissions = {p.name: p.id for p in session.query(Permission).all()}
