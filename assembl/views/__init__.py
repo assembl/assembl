@@ -17,7 +17,6 @@ def includeme(config):
 
     config.add_renderer('json', json_renderer_factory)
     config.add_route('discussion_list', '/')
-    config.add_route('discussion_admin', '/admin/discussions/')
     
     config.include(backbone_include, route_prefix='/{discussion_slug}')
 
@@ -30,3 +29,4 @@ def includeme(config):
 
     config.include('.home')
     config.include('.backbone')
+    config.include('.admin')
