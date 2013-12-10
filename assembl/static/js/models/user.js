@@ -2,6 +2,7 @@ define(['models/base', 'app', 'jquery', 'i18n'], function(Base, app, $, i18n){
     'use strict';
 
     var AVATAR_PLACEHOLDER = '//placehold.it/{0}';
+    var UNKNOWN_USER_ID = 'system.Everyone';
 
     /**
      * @class UserModel
@@ -31,7 +32,7 @@ define(['models/base', 'app', 'jquery', 'i18n'], function(Base, app, $, i18n){
         getAvatarUrl: function(size){
             var id = this.getId();
 
-            return id ? app.formatAvatarUrl(app.extractId(id), size) : app.format(AVATAR_PLACEHOLDER, size);
+            return id != UNKNOWN_USER_ID ? app.formatAvatarUrl(app.extractId(id), size) : app.format(AVATAR_PLACEHOLDER, size);
         }
     });
 
@@ -76,7 +77,7 @@ define(['models/base', 'app', 'jquery', 'i18n'], function(Base, app, $, i18n){
      * @type {UserModel}
      */
     var UNKNOWN_USER = new UserModel({
-        id: 0,
+        id: UNKNOWN_USER_ID,
         name: i18n.gettext('Unknown user')
     });
 
