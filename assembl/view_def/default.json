@@ -123,5 +123,10 @@
         "extract_id":false,
         "start":"xpath_start",
         "startOffset":"offset_start"
+    },
+    "DiscussionPermission": {
+        "discussion": true,
+        "permission": "&permission_name",
+        "role": "&role_name"
     }
 }

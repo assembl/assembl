@@ -492,6 +492,14 @@ class DiscussionPermission(SQLAlchemyBaseModel):
         'permission.id', ondelete='CASCADE'))
     permission = relationship(Permission)
 
+    def role_name(self):
+        return self.role.name
+
+    def permission_name(self):
+        return self.permission.name
+
+    def get_discussion_id(self):
+        return discussion_id
 
 def create_default_permissions(session, discussion):
     permissions = {p.name: p.id for p in session.query(Permission).all()}

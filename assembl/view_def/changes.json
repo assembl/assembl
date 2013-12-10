@@ -71,5 +71,10 @@
         "startOffset":"offset_start",
         "endOffset":"offset_end",
         "extract_id":false
+    }, 
+    "DiscussionPermission": {
+        "discussion": true,
+        "permission": "&permission_name",
+        "role": "&role_name"
     }
 }
