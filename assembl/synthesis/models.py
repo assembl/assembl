@@ -31,7 +31,7 @@ from ..source.models import (Source, Content, Post, Mailbox)
 from ..auth.models import (
     DiscussionPermission, Role, Permission, AgentProfile, User,
     UserRole, LocalUserRole, DiscussionPermission, P_READ)
-
+from assembl.auth import get_permissions
 
 class Discussion(SQLAlchemyBaseModel):
     """
@@ -214,6 +214,12 @@ class Discussion(SQLAlchemyBaseModel):
 
     def get_related_extracts_preload(self):
         return json.dumps([e.serializable() for e in self.get_related_extracts()])
+
+    def get_user_permissions(self, user_id):
+        return get_permissions(user_id, self.id)
+
+    def get_user_permissions_preload(self, user_id):
+        return json.dumps(self.get_user_permissions(user_id))
 
     def __repr__(self):
         return "<Discussion %s>" % repr(self.topic)

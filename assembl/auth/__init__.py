@@ -9,7 +9,6 @@ from models import (
     R_SYSADMIN, SYSTEM_ROLES, Role, UserRole, LocalUserRole, Permission,
     DiscussionPermission
 )
-from ..synthesis.models import Discussion
 from ..lib.sqla import get_session_maker
 
 
@@ -51,6 +50,7 @@ def get_permissions(user_id, discussion_id):
 
 
 def authentication_callback(user_id, request):
+    from ..synthesis.models import Discussion
     discussion_id = None
     if request.matchdict:
         if 'discussion_id' in request.matchdict:
@@ -70,31 +70,35 @@ def authentication_callback(user_id, request):
 
 
 def discussions_with_access(userid, permission=P_READ):
+    from ..synthesis.models import Discussion
     db = Discussion.db()
     if userid in (Authenticated, Everyone):
         discussions = db.query(Discussion.id).join(
-                DiscussionPermission, Role, Permission).filter(
+            DiscussionPermission, Role, Permission).filter(
                 Permission.name == permission and
                 Role.name == userid)
     else:
         discussions = db.query(Discussion.id).join(
             DiscussionPermission, Role, Permission, UserRole, User).filter(
                 User.id == userid).filter(
-                Permission.name == permission
-            ).union(db.query(Discussion.id).join(
-                DiscussionPermission, Role, Permission).join(
-                LocalUserRole, (LocalUserRole.discussion_id == Discussion.id)).join(
-                User).filter(
-                User.id == userid).filter(
-                Permission.name == permission)
-            ).union(db.query(Discussion.id).join(
-                DiscussionPermission, Role, Permission).filter(
-                Role.name.in_((Authenticated, Everyone))).filter(
-                Permission.name == permission)
-            )
+                    Permission.name == permission
+                ).union(db.query(Discussion.id).join(
+                    DiscussionPermission, Role, Permission).join(
+                        LocalUserRole, (
+                            LocalUserRole.discussion_id == Discussion.id)
+                    ).join(User).filter(
+                        User.id == userid).filter(
+                            Permission.name == permission)
+                ).union(db.query(Discussion.id).join(
+                    DiscussionPermission, Role, Permission).filter(
+                        Role.name.in_((Authenticated, Everyone))).filter(
+                            Permission.name == permission)
+                )
     return [x[0] for x in discussions]
 
+
 def user_has_permission(discussion_id, user_id, permission):
+    from ..synthesis.models import Discussion
     # assume all ids valid
     db = Discussion.db()
     if user_id in (Authenticated, Everyone):
@@ -123,6 +127,7 @@ def user_has_permission(discussion_id, user_id, permission):
 
 
 def permissions_for_user(discussion_id, user_id):
+    from ..synthesis.models import Discussion
     # assume all ids valid
     db = Discussion.db()
     if user_id in (Authenticated, Everyone):
