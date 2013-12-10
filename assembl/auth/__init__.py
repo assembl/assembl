@@ -39,10 +39,10 @@ def get_permissions(user_id, discussion_id):
             DiscussionPermission, Role).filter(
                 Role.name == user_id)
     else:
-        sysadmin = db.query(UserRole).filter_by(
+        sysadmin = session.query(UserRole).filter_by(
             user_id=user_id).join(Role).filter_by(name=R_SYSADMIN).first()
         if sysadmin:
-            return [x[0] for x in db.query(Permission.name).all()]
+            return [x[0] for x in session.query(Permission.name).all()]
         permissions = session.query(Permission.name).join(
             DiscussionPermission, Role, UserRole).filter(
                 UserRole.user_id == user_id
