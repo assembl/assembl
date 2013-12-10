@@ -1,12 +1,12 @@
 import json
 import transaction
 
-from pyramid.security import authenticated_userid
+from pyramid.security import authenticated_userid, Everyone
 from pyramid.httpexceptions import HTTPUnauthorized
 from pyramid.view import view_config
 from pyramid.response import Response
 
-from assembl.auth.token import encode_token
+from assembl.lib.token import encode_token
 
 _ac = 'Access-Control-'
 option_headers = [
@@ -32,17 +32,8 @@ def auth_token(request, extra_headers={}):
         ])
         headers.extend(extra_headers)
     user_id = authenticated_userid(request)
-    if user_id:
-        #user = User.get(id=user_id)
-        #c = Consumer.fetch('annotateit')
-        payload = {
-            'consumerKey': 'assembl-annotator', 'userId': user_id, 'ttl': 86400
-        }
-        # if g.user.is_admin:
-        #     payload['admin'] = True
-        token = encode_token(payload, request.registry.settings['session.secret'])
-        return Response(token, 200, headers, content_type='text/plain')
-    else:
-        return HTTPUnauthorized(
-            'Please go to {0} to log in!'.format(request.host_url+"/login"),
-            headers)
+    payload = {
+        'consumerKey': 'assembl', 'userId': (user_id or Everyone), 'ttl': 86400
+    }
+    token = encode_token(payload, request.registry.settings['session.secret'])
+    return Response(token, 200, headers, content_type='text/plain')

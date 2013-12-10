@@ -81,6 +81,12 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard, Types){
         currentUser: null,
 
         /**
+         * Csrf token
+         * @type {String}
+         */
+        csrfToken: null,
+
+        /**
          * Default ease for all kids of animation
          * @type {String}
          */
@@ -321,6 +327,7 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard, Types){
         loadCurrentUser: function(){
             if( app.users ){
                 app.currentUser = app.users.getByNumericId(CURRENT_USER_ID);
+                app.loadCsrfToken(true);
             }
         },
 
@@ -331,6 +338,26 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard, Types){
             return app.currentUser || app.users.getUnknownUser();
         },
 
+        /**
+         * fallback: synchronously load app.csrfToken
+         */
+        loadCsrfToken: function(async){
+            $.ajax('/api/v1/token', {
+                async: async,
+                dataType: 'text',
+                success: function(data) {
+                    app.csrfToken = data;
+                }
+            });
+            return app.csrfToken;
+        },
+
+        /**
+         * @return {User}
+         */
+        getCsrfToken: function(){
+            return app.csrfToken || app.loadCsrfToken(false);
+        },
 
         /**
          * Return the Post related to the given annotation

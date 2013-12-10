@@ -179,20 +179,21 @@ class Discussion(SQLAlchemyBaseModel):
                     DiscussionPermission.discussion_id == self.id and
                     LocalUserRole.discussion_id == self.id and
                      Permission.name == P_READ)).all()
-        # authenticated = session.query(DiscussionPermission).join(
-        #     Role, DiscussionPermission, Permission).filter(
-        #         DiscussionPermission.discussion_id == self.id and
-        #         Permission.name == P_READ and
-        #         LocalUserRole.user_id == Authenticated).all()
-        # everyone = session.query(LocalUserRole).join(
-        #             Role, DiscussionPermission, Permission).filter(
-        #                 DiscussionPermission.discussion_id == self.id and
-        #                 Permission.name == P_READ and
-        #                 LocalUserRole.user_id == Everyone).all()
+        if session.query(DiscussionPermission).join(
+            Role, Permission).filter(
+                DiscussionPermission.discussion_id == self.id and
+                Permission.name == P_READ and
+                Role.name == Authenticated).first():
+            pass # add a pseudo-authenticated user???
+        if session.query(DiscussionPermission).join(
+                    Role, Permission).filter(
+                        DiscussionPermission.discussion_id == self.id and
+                        Permission.name == P_READ and
+                        Role.name == Everyone).first():
+            pass # add a pseudo-anonymous user?
         return users
 
     def get_all_agents(self):
-        # TODO: Remove emails, and/or limit to senders.
         return self.db().query(AgentProfile).all()
 
     def get_all_agents_preload(self):

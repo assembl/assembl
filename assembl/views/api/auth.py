@@ -16,7 +16,7 @@ from assembl.auth import (
     P_READ, P_ADMIN_DISC, P_SYSADMIN, R_SYSADMIN, SYSTEM_ROLES,
     user_has_permission as a_user_has_permission,
     permissions_for_user as a_permissions_for_user)
-from assembl.auth.token import decode_token
+from assembl.lib.token import decode_token
 
 
 cors_policy = dict(
@@ -68,7 +68,7 @@ permissions_for_user = Service(
 
 user_has_permission = Service(
     name='user_has_permission',
-    path=API_DISCUSSION_PREFIX + '/permissions/{permission}/u/{user_id:.+}/',
+    path=API_DISCUSSION_PREFIX + '/permissions/{permission}/u/{user_id:.+}',
     description="Whether a given user has a specific permission",
     renderer='json', acl=acls, cors_policy=cors_policy
 )

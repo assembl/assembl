@@ -3,8 +3,9 @@ import transaction
 
 from cornice import Service
 
-from pyramid.security import authenticated_userid
-from pyramid.httpexceptions import HTTPNotFound, HTTPClientError
+from pyramid.security import authenticated_userid, Everyone, ACLDenied
+from pyramid.httpexceptions import (
+    HTTPNotFound, HTTPClientError, HTTPForbidden, HTTPServerError)
 from sqlalchemy.orm import aliased, joinedload, joinedload_all, contains_eager
 
 from assembl.views.api import API_DISCUSSION_PREFIX
@@ -13,8 +14,8 @@ from assembl.models import (
     AgentProfile, User, Source, Content, Post, Webpage)
 from . import acls
 from assembl.auth import (
-    P_READ, P_ADD_EXTRACT, P_EDIT_EXTRACT, P_DELETE_EXTRACT)
-from assembl.auth.token import decode_token
+    P_READ, P_ADD_EXTRACT, P_EDIT_EXTRACT, P_DELETE_EXTRACT, get_permissions)
+from assembl.lib.token import decode_token
 
 
 cors_policy = dict(
@@ -81,19 +82,15 @@ def get_extracts(request):
     return serializable_extracts
 
 
-@extracts.post()  # permission=P_ADD_EXTRACT
+@extracts.post()
 def post_extract(request):
     """
     Create a new extract.
     """
     extract_data = json.loads(request.body)
-    print "post_extract:", extract_data
+    discussion_id = int(request.matchdict['discussion_id'])
     user_id = authenticated_userid(request)
-    # TODO: Handle unauthenticated user.
-    content = None
-    uri = extract_data.get('uri')
-    annotation_text = None
-    if uri:
+    if not user_id:
         # Straight from annotator
         token = request.headers.get('X-Annotator-Auth-Token')
         if token:
@@ -101,6 +98,18 @@ def post_extract(request):
                 token, request.registry.settings['session.secret'])
             if token:
                 user_id = token['userId']
+    if not user_id:
+        user_id = Everyone
+    if P_ADD_EXTRACT not in get_permissions(user_id, discussion_id):
+        return HTTPForbidden(result=ACLDenied(permission=P_ADD_EXTRACT))
+    if user_id == Everyone:
+        # TODO: Create an anonymous user.
+        raise HTTPServerError("Anonymous extracts are not implemeted yet.")
+    content = None
+    uri = extract_data.get('uri')
+    annotation_text = None
+    if uri:
+        # Straight from annotator
         annotation_text = extract_data.get('text')
     else:
         target = extract_data.get('target')
@@ -120,7 +129,6 @@ def post_extract(request):
     if uri and not content:
         content = Webpage.get_instance(uri)
         if not content:
-            discussion_id = int(request.matchdict['discussion_id'])
             source = Source.get(name='Annotator', discussion_id=discussion_id)
             if not source:
                 source = Source(
