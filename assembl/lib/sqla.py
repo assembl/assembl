@@ -208,13 +208,14 @@ class BaseOps(object):
 
     @classmethod
     def get_database_id(cls, uri):
-        if isinstance(uri, StringTypes) and\
-                uri.startswith('local:%s/' % (cls.external_typename())):
-            num = uri.split('/', 1)[1]
-            try:
-                return int(num)
-            except ValueError:
-                pass
+        if isinstance(uri, StringTypes):
+            for cls in cls.mro():
+                if  uri.startswith('local:%s/' % (cls.external_typename())):
+                    num = uri.split('/', 1)[1]
+                    try:
+                        return int(num)
+                    except ValueError:
+                        pass
 
     def uri(self, base_uri='local:'):
         return self.uri_generic(self.get_id_as_str(), base_uri)
