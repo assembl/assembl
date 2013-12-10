@@ -1,6 +1,6 @@
 from pyramid.security import (
     authenticated_userid, Everyone, Authenticated)
-
+from pyramid.httpexceptions import HTTPNotFound
 from models import (
     User, R_PARTICIPANT, R_CATCHER, R_MODERATOR, R_ADMINISTRATOR,
     P_READ, P_ADD_POST, P_EDIT_POST, P_DELETE_POST, P_ADD_EXTRACT,
@@ -54,12 +54,17 @@ def authentication_callback(user_id, request):
     if request.matchdict:
         if 'discussion_id' in request.matchdict:
             discussion_id = int(request.matchdict['discussion_id'])
+            discussion = Discussion.get_instance(discussion_id)
+            if not discussion:
+                raise HTTPNotFound("No discussion ID %d" % (discussion_id,))
         elif 'discussion_slug' in request.matchdict:
+            slug = request.matchdict['discussion_slug']
             session = get_session_maker()()
             discussion = session.query(Discussion).filter_by(
-                slug=request.matchdict['discussion_slug']).first()
-            if discussion:
-                discussion_id = discussion.id
+                slug=slug).first()
+            if not discussion:
+                raise HTTPNotFound("No discussion named %s" % (slug,))
+            discussion_id = discussion.id
     return get_roles(user_id, discussion_id)
 
 

@@ -1,10 +1,11 @@
 import os
 
 from pyramid.security import Allow, ALL_PERMISSIONS
+from pyramid.httpexceptions import HTTPNotFound, HTTPInternalServerError
 
 from assembl.auth.models import (
     DiscussionPermission, Role, Permission, R_SYSADMIN)
-
+from assembl.models import Discussion
 
 FIXTURE_DIR = os.path.join(
     os.path.dirname(__file__), '..', '..', 'static', 'js', 'tests', 'fixtures')
@@ -20,6 +21,12 @@ def acls(request):
             DiscussionPermission).join(Role, Permission).filter(
             DiscussionPermission.discussion_id==discussion_id)
         acls = [(Allow, r, p) for (r, p) in rps]
+        if not acls:
+            discussion = Discussion.get_instance(discussion_id)
+            if not discussion:
+                raise HTTPNotFound("No discussion ID %d" % (discussion_id,))
+            raise HTTPInternalServerError(
+                "Discussion ID %d has no permissions" % (discussion_id,))
         acls.append((Allow, R_SYSADMIN, ALL_PERMISSIONS))
         return acls
     return []
