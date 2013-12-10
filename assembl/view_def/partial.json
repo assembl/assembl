@@ -8,7 +8,7 @@
         "name":true
     },
     "AgentProfile": {
-        "preferred_email":false,
+        "preferred_email":false
     },
     "User": {
         "creation_date": true,
@@ -16,7 +16,7 @@
         "login_failures": false,
         "password":false,
         "preferred_email": false,
-        "verified": true,
+        "verified": true
     },
     "EmailAccount": false,
     "IdentityProviderAccount": false,
@@ -85,7 +85,7 @@
         "table_of_contents": false
     },
     "TableOfContents": {
-        "creation_date": true,
+        "creation_date": true
     },
     "Synthesis": {
         "creation_date": true,
