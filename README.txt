@@ -6,7 +6,7 @@ Getting Started
 
 Setup a development environment:
 
-From scratch:
+From scratch (you need fabric and a ssh server installed):
 - wget https://raw.github.com/ImaginationForPeople/assembl/develop/fabfile.py
 
 - fab devenv:projectpath=~/assembl bootstrap
@@ -21,12 +21,10 @@ From a checkout
 - cd your_checkout
 - fab devenv bootstrap_from_checkout
 
-On the Mac:
+Dependencies: 
 
-Use brew and install these components:
- - brew install memcached zeromq redis postgresql
+fab devenv install_builddeps
 
-On linux:  fab devenv install_builddeps
 
 Compiling CSS
 -------------
@@ -34,19 +32,28 @@ The previous steps should install compass. Otherwise,
 
 - fab devenv install_compass
 
-Running:
+Setup the database
+------------------
+Only the first time you run it...
+
+- sudo -u postgres createuser --createdb --no-createrole --no-superuser assembl --pwprompt
+- createdb --host localhost -U assembl assembl
+- venv/bin/assembl-db-manage development.ini bootstrap
+
+Running
+-------
+Note:  memcached, redis and postgres must be running already.
 
 - cd ~/assembl
 
-Only the first time you run it:
-sudo -u postgres createuser --createdb --no-createrole --no-superuser assembl --pwprompt
-createdb -U assembl assembl
-- $venv/bin/assembl-db-manage development.ini bootstrap
-- compass compile
+- source venv/bin/activate
+- supervisord
+(NOTE: Currently, just running $venv/bin/supervisord does NOT work, as celery will run command line
+ tools, thus breaking out of the environment.  You need to run source 
+ venv/bin/activate from the same terminal before running the above)
 
-Thereafter:
-Note:  memcached, redis and postgres must be running already.
-- $venv/bin/supervisord
+And then:
+
 - $venv/bin/supervisorctl start dev:*
 
 You can monitor any of the processes, for example pserve, with these commands:
