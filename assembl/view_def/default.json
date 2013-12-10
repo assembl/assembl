@@ -34,7 +34,9 @@
         "last_import": true
     },
     "Webpage": {
-        "extracts":[":partial"]
+        "extracts":[":partial"],
+        "last_modified_date":true,
+        "url":true
     },
     "Mailbox": {
         "contents":[":partial"],
@@ -107,7 +109,6 @@
         "annotator_schema_version": "'\"v1.0\"",
         "created":"creation_date",
         "idCreator":"creator",
-        "idIdea":"idea",
         "idIdea":"idea",
         "idPost":"&get_post",
         "owner":true,
