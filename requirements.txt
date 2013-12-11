@@ -31,7 +31,7 @@ pyzmq
 anyjson
 -e git+https://github.com/benoitg/jwzthreading.git@master#egg=jwzthreading
 tornado
-sockjs_tornado
+-e git+https://github.com/mrjoes/sockjs-tornado.git#egg=sockjs_tornado
 celery>=3.1
 supervisor
 redis
