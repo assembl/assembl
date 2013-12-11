@@ -18,7 +18,7 @@ from assembl.auth.models import (
     SYSTEM_ROLES)
 
 
-@view_config(route_name='discussion_admin')
+@view_config(route_name='discussion_admin', permission="P_SYSADMIN")
 def discussion_admin(request):
     user_id = authenticated_userid(request)
 
@@ -79,7 +79,7 @@ def discussion_admin(request):
         request=request)
 
 
-@view_config(route_name='discussion_permissions')
+@view_config(route_name='discussion_permissions', permission="P_ADMIN_DISC")
 def discussion_permissions(request):
     user_id = authenticated_userid(request)
     db = Discussion.db()
@@ -207,7 +207,7 @@ def discussion_permissions(request):
         request=request)
 
 
-@view_config(route_name='general_permissions')
+@view_config(route_name='general_permissions', permission="P_SYSADMIN")
 def general_permissions(request):
     user_id = authenticated_userid(request)
     db = Discussion.db()
