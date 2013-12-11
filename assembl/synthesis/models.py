@@ -7,6 +7,7 @@ import anyjson as json
 
 from sqlalchemy.orm import relationship, backref, aliased
 from sqlalchemy.sql import func, cast, select, text
+from pyramid.security import Allow, ALL_PERMISSIONS
 from pyramid.i18n import TranslationString as _
 
 from sqlalchemy import (
@@ -30,7 +31,8 @@ from ..lib.sqla import db_schema, Base as SQLAlchemyBaseModel
 from ..source.models import (Source, Content, Post, Mailbox)
 from ..auth.models import (
     DiscussionPermission, Role, Permission, AgentProfile, User,
-    UserRole, LocalUserRole, DiscussionPermission, P_READ)
+    UserRole, LocalUserRole, DiscussionPermission, P_READ,
+    R_SYSADMIN)
 from assembl.auth import get_permissions
 
 class Discussion(SQLAlchemyBaseModel):
@@ -220,6 +222,17 @@ class Discussion(SQLAlchemyBaseModel):
 
     def get_user_permissions_preload(self, user_id):
         return json.dumps(self.get_user_permissions(user_id))
+
+    # Properties as a route context
+    __parent__ = None
+    @property
+    def __name__(self):
+        return self.slug
+    @property
+    def __acl__(self):
+        acls = [(Allow, dp.role.name, dp.permission.name) for dp in self.acls]
+        acls.append((Allow, R_SYSADMIN, ALL_PERMISSIONS))
+        return acls
 
     def __repr__(self):
         return "<Discussion %s>" % repr(self.topic)

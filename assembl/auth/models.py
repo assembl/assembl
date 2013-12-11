@@ -438,7 +438,7 @@ class UserRole(SQLAlchemyBaseModel):
                      index=True)
     user = relationship(User)
     role_id = Column(Integer, ForeignKey('role.id', ondelete='CASCADE'))
-    role = relationship(Role)
+    role = relationship(Role, lazy="joined")
 
 
 class LocalUserRole(SQLAlchemyBaseModel):
@@ -451,7 +451,7 @@ class LocalUserRole(SQLAlchemyBaseModel):
         'discussion.id', ondelete='CASCADE'))
     discussion = relationship('Discussion')
     role_id = Column(Integer, ForeignKey('role.id', ondelete='CASCADE'))
-    role = relationship(Role)
+    role = relationship(Role, lazy="joined")
     __table_args__ = (
         Index('user_discussion_idx', 'user_id', 'discussion_id'),)
 
@@ -489,12 +489,13 @@ class DiscussionPermission(SQLAlchemyBaseModel):
     id = Column(Integer, primary_key=True)
     discussion_id = Column(Integer, ForeignKey(
         'discussion.id', ondelete='CASCADE'))
-    discussion = relationship('Discussion')
+    discussion = relationship(
+        'Discussion', backref=backref("acls", lazy="joined"))
     role_id = Column(Integer, ForeignKey('role.id', ondelete='CASCADE'))
-    role = relationship(Role)
+    role = relationship(Role, lazy="joined")
     permission_id = Column(Integer, ForeignKey(
         'permission.id', ondelete='CASCADE'))
-    permission = relationship(Permission)
+    permission = relationship(Permission, lazy="joined")
 
     def role_name(self):
         return self.role.name
