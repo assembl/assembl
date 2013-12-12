@@ -352,25 +352,30 @@ def install_basetools():
     if env.mac:
         run('cd /tmp; curl -O https://raw.github.com/pypa/pip/master/contrib/get-pip.py')
         sudo('python /tmp/get-pip.py')
-        sudo('pip install virtualenv mercurial')
+        sudo('pip install virtualenv')
     else:
         sudo('apt-get install -y python-virtualenv python-pip')
-        sudo('apt-get install -y git mercurial subversion')
-        sudo('apt-get install -y gettext')
+        sudo('apt-get install -y git')
+        #sudo('apt-get install -y gettext')
 
 @task
 def install_builddeps():
     """
     Will install commonly needed build deps for pip django virtualenvs.
     """
+    execute(install_basetools)
     print(cyan('Installing compilers and required libraries'))
     if env.mac:
         if not exists('/usr/local/bin/brew'):
             sudo('ruby -e "$(curl -fsSL https://raw.github.com/mxcl/homebrew/go/install)"')
         sudo('brew install memcached zeromq redis postgresql')
     else:
-        sudo('apt-get install -y build-essential python-dev libjpeg62-dev libpng12-dev zlib1g-dev libfreetype6-dev liblcms-dev libpq-dev libxslt1-dev libxml2-dev')
-        sudo('apt-get install -y libzmq3-dev redis-server memcached unixodbc-dev virtuoso-opensource')
+        sudo('apt-get install -y build-essential python-dev ruby-build')
+        #For specific python packages in requirements.txt
+        sudo('apt-get install -y postgresql-server-dev-all libmemcached-dev libzmq3-dev')
+        # libjpeg62-dev libpng12-dev zlib1g-dev libfreetype6-dev liblcms-dev libpq-dev libxslt1-dev libxml2-dev
+        #Runtime requirements (even in develop)
+        sudo('apt-get install -y redis-server memcached unixodbc-dev virtuoso-opensource')
 
 @task
 def configure_rbenv():
@@ -400,19 +405,23 @@ def install_rbenv():
     Install the appropriate ruby environment for compass.
     """
     with cd(env.projectpath), settings(warn_only=True):
-        if(run('ls ~/.rbenv').failed):    
+        if(run('rbenv version').failed and run('ls ~/.rbenv').failed):    
             # Install rbenv:
             run('git clone git://github.com/sstephenson/rbenv.git ~/.rbenv')
-            # Add rbenv to the path:
-            run('echo \'export PATH="$HOME/.rbenv/bin:$PATH"\' >> .bash_profile')
-            run('echo \'eval "$(rbenv init -)"\' >> .bash_profile')
-            run('source ~/.bash_profile')
+    # Add rbenv to the path:
+    run('echo \'export PATH="$HOME/.rbenv/bin:$PATH"\' >> .bash_profile')
+    run('echo \'eval "$(rbenv init -)"\' >> .bash_profile')
+    run('source ~/.bash_profile')
     # The above will work fine on a shell (such as on the server accessed using
     # ssh for a developement machine running a GUI, you may need to run the 
     # following from a shell (with your local user):
     #    echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.profile;
     #    echo 'eval "$(rbenv init -)"' >> ~/.profile;
     #    source ~/.profile;
+    
+    run('echo \'export PATH="$HOME/.rbenv/bin:$PATH"\' >> .profile')
+    run('echo \'eval "$(rbenv init -)"\' >> .profile')
+    run('source ~/.profile')
     
     execute(install_ruby_build)
     execute(configure_rbenv)

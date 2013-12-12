@@ -1,0 +1,77 @@
+{% extends 'base.jinja2' %}
+
+{% block content %}
+<h2>{% trans %}Discussion {% endtrans %}{{discussion.topic}}</h2>
+<h3>{% trans %}Role permissions:{% endtrans %}</h3>
+<form method="POST" action="#">
+<table>
+    <thead>
+        <th>{% trans %}Roles{% endtrans %}\{% trans %}Permissions{% endtrans %}</th>
+        {% for permission in permissions %}
+        <th>
+            {{permission}}
+        </th>
+        {% endfor %}
+        <th>{% trans %}delete role{% endtrans %}</th>
+    </thead>
+    <tbody>
+        {% for role in roles %}
+        <tr>
+            <th>{{role}}</th>
+            {% for permission in permissions %}
+            <td>
+                <input type="checkbox" name="allowed_{{role}}_{{permission}}" 
+                {% if allowed(role,permission) %} checked {% endif %}>
+            </td>
+            {% endfor %}
+            <td>
+                {% if not is_system_role(role) %}
+                <input type="checkbox" name="delete_{{role}}">
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+        <tr>
+            <th><input type="submit" name="submit_add_role" value="{% trans %}Add a role{% endtrans %}"></th>
+            <th colspan="{{permissions|length}}">r:<input name="new_role"/></th>
+        </tr>
+    </tbody>
+</table>
+<input type="submit" name="submit_role_permissions" value="{% trans %}Save{% endtrans %}">
+</form>
+<h3>{% trans %}User roles specific to this discussion:{% endtrans %}</h3>
+<form method="POST" action="#">
+<table>
+    <thead>
+        <th>{% trans %}Users{% endtrans %}\{% trans %}Roles{% endtrans %}</th>
+        {% for role in roles %}
+        {% if role.startswith('r:') %}
+        <th>
+            {{role}}
+        </th>
+        {% endif %}
+        {% endfor %}
+    </thead>
+    <tbody>
+        {% for user in users %}
+        <tr>
+            <th>{{user.profile.name}}</th>
+            {% for role in roles %}
+            {% if role.startswith('r:') %}
+            <td>
+                <input type="checkbox" name="has_{{role}}_{{user.id}}" 
+                {% if has_local_role(user.id,role) %} checked {% endif %}>
+            </td>
+            {% endif %}
+            {% endfor %}
+        </tr>
+        {% endfor %}
+        <tr>
+            <th><input type="submit" name="submit_look_for_user" value="{% trans %}Search for users{% endtrans %}"></th>
+            <th colspan="{{roles|length}}"><input name="user_search"/></th>
+        </tr>
+    </tbody>
+</table>
+<input type="submit" name="submit_user_roles" value="{% trans %}Save{% endtrans %}">
+</form>
+{% endblock %}

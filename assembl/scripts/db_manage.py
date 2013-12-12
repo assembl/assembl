@@ -11,6 +11,7 @@ from alembic.migration import MigrationContext
 
 from ..lib.migration import bootstrap_db
 from ..lib.sqla import configure_engine, mark_changed
+from ..lib.zmqlib import configure_zmq
 from sqlalchemy.orm import sessionmaker
 
 init_instructions = [
@@ -29,6 +30,7 @@ def main():
     config_uri = sys.argv.pop(1)
 
     settings = get_appsettings(config_uri)
+    configure_zmq(settings['changes.socket'], False)
     engine = configure_engine(settings, True)
     if sys.argv[1] == 'bootstrap':
         admin_engine = create_engine_sqla('virtuoso://dba:dba@VOSU')

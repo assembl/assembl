@@ -208,13 +208,18 @@ class BaseOps(object):
 
     @classmethod
     def get_database_id(cls, uri):
-        if isinstance(uri, StringTypes) and\
-                uri.startswith('local:%s/' % (cls.external_typename())):
-            num = uri.split('/', 1)[1]
-            try:
-                return int(num)
-            except ValueError:
-                pass
+        if isinstance(uri, StringTypes):
+            if not uri.startswith('local:') or '/' not in uri:
+                return
+            uriclsname, num = uri[6:].split('/', 1)
+            uricls = get_named_class(uriclsname)
+            if not uricls:
+                return
+            if uricls == cls or uricls in cls.mro() or cls in uricls.mro():
+                try:
+                    return int(num)
+                except ValueError:
+                    pass
 
     def uri(self, base_uri='local:'):
         return self.uri_generic(self.get_id_as_str(), base_uri)
@@ -495,19 +500,21 @@ def get_session_maker(zope_tr=True):
 def orm_update_listener(mapper, connection, target):
     session = object_session(target)
     if session.is_modified(target, include_collections=False):
-        if 'cdict' not in connection.info:
-            connection.info['cdict'] = {}
-        connection.info['cdict'][target.uri()] = (
-            target.get_discussion_id(),
-            target.generic_json('changes'))
+        json = target.generic_json('changes')
+        if json:
+            if 'cdict' not in connection.info:
+                connection.info['cdict'] = {}
+            connection.info['cdict'][target.uri()] = (
+                target.get_discussion_id(), json)
 
 
 def orm_insert_listener(mapper, connection, target):
-    if 'cdict' not in connection.info:
-        connection.info['cdict'] = {}
-    connection.info['cdict'][target.uri()] = (
-        target.get_discussion_id(),
-        target.generic_json('changes'))
+    json = target.generic_json('changes')
+    if json:
+        if 'cdict' not in connection.info:
+            connection.info['cdict'] = {}
+        connection.info['cdict'][target.uri()] = (
+            target.get_discussion_id(), json)
 
 
 def orm_delete_listener(mapper, connection, target):

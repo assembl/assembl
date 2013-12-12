@@ -89,12 +89,9 @@ function(Base, _, app, User, Message){
                 if(app.segmentPostCache[idPost]) {
                     return app.segmentPostCache[idPost];
                 }
-                var posts = app.messageList.messages.where({id:idPost});
-                if(posts.length){
-                    post = posts[0];
-                }
-                else {
-                    post = new Message.Model({id: idPost});
+                post = app.messageList.messages.get(idPost);
+                if( !post ){
+                    post = new Message.Model({'@id': idPost});
                     post.fetch({async:false});
                 }
                 app.segmentPostCache[idPost] = post;
@@ -137,13 +134,21 @@ function(Base, _, app, User, Message){
         getCreator: function(){
             var creatorId = this.get('idCreator');
             return app.users.getById(creatorId);
+        },
+
+        /**
+         * Alias for `.get('quote') || .get('text')`
+         * @return {String}
+         */
+        getQuote: function(){
+            return this.get('quote') || this.get('text');
         }
     });
 
     /**
      * @class SegmentColleciton
      */
-    var SegmentCollection = Backbone.Collection.extend({
+    var SegmentCollection = Base.Collection.extend({
 
         /**
          * @type {String}

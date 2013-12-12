@@ -3,9 +3,11 @@ import re
 import quopri
 from itertools import groupby
 import traceback
+import anyjson as json
 
 from sqlalchemy.orm import relationship, backref, aliased
 from sqlalchemy.sql import func, cast, select, text
+from pyramid.security import Allow, ALL_PERMISSIONS
 from pyramid.i18n import TranslationString as _
 
 from sqlalchemy import (
@@ -28,8 +30,10 @@ from assembl.lib.utils import slugify
 from ..lib.sqla import db_schema, Base as SQLAlchemyBaseModel
 from ..source.models import (Source, Content, Post, Mailbox)
 from ..auth.models import (
-    DiscussionPermission, Role, Permission, AgentProfile)
-
+    DiscussionPermission, Role, Permission, AgentProfile, User,
+    UserRole, LocalUserRole, DiscussionPermission, P_READ,
+    R_SYSADMIN)
+from assembl.auth import get_permissions
 
 class Discussion(SQLAlchemyBaseModel):
     """
@@ -165,6 +169,70 @@ class Discussion(SQLAlchemyBaseModel):
         permroles.sort()
         byperm = groupby(permroles, lambda (p, r): p)
         return {p: [r for (p2, r) in prs] for (p, prs) in byperm}
+
+
+    def get_readers(self):
+        users = self.db().query(User).join(
+            UserRole, Role, DiscussionPermission, Permission).filter(
+                DiscussionPermission.discussion_id == self.id and
+                Permission.name == P_READ
+            ).union(self.db().query(User).join(
+                LocalUserRole, Role, DiscussionPermission, Permission).filter(
+                    DiscussionPermission.discussion_id == self.id and
+                    LocalUserRole.discussion_id == self.id and
+                     Permission.name == P_READ)).all()
+        if session.query(DiscussionPermission).join(
+            Role, Permission).filter(
+                DiscussionPermission.discussion_id == self.id and
+                Permission.name == P_READ and
+                Role.name == Authenticated).first():
+            pass # add a pseudo-authenticated user???
+        if session.query(DiscussionPermission).join(
+                    Role, Permission).filter(
+                        DiscussionPermission.discussion_id == self.id and
+                        Permission.name == P_READ and
+                        Role.name == Everyone).first():
+            pass # add a pseudo-anonymous user?
+        return users
+
+    def get_all_agents(self):
+        return self.db().query(AgentProfile).all()
+
+    def get_all_agents_preload(self):
+        return json.dumps([ap.serializable() for ap in self.get_all_agents()])
+
+    def get_readers_preload(self):
+        return json.dumps([user.serializable() for user in self.get_readers()])
+
+    def get_ideas_preload(self):
+        return json.dumps([idea.serializable() for idea in self.table_of_contents.ideas])
+
+    def get_ideas_preload(self):
+        return json.dumps([idea.serializable() for idea in self.table_of_contents.ideas])
+
+    def get_related_extracts(self):
+        return self.db().query(Extract).join(
+            Content, Source).filter(Source.discussion == self).all()
+
+    def get_related_extracts_preload(self):
+        return json.dumps([e.serializable() for e in self.get_related_extracts()])
+
+    def get_user_permissions(self, user_id):
+        return get_permissions(user_id, self.id)
+
+    def get_user_permissions_preload(self, user_id):
+        return json.dumps(self.get_user_permissions(user_id))
+
+    # Properties as a route context
+    __parent__ = None
+    @property
+    def __name__(self):
+        return self.slug
+    @property
+    def __acl__(self):
+        acls = [(Allow, dp.role.name, dp.permission.name) for dp in self.acls]
+        acls.append((Allow, R_SYSADMIN, ALL_PERMISSIONS))
+        return acls
 
     def __repr__(self):
         return "<Discussion %s>" % repr(self.topic)

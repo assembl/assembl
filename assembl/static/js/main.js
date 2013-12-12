@@ -27,7 +27,7 @@ define([
     // User
     app.users = new User.Collection();
     app.users.on('reset', app.loadCurrentUser);
-    app.users.fetch({ reset: true });
+    app.users.fetchFromScriptTag('users-json');
 
     // Lateral menu
     // app.lateralMenu = new LateralMenu({el: '#lateralMenu'}).render();
@@ -39,7 +39,7 @@ define([
 
     // Segment List
     app.segmentList = new SegmentList({el: '#segmentList', button: '#button-segmentList'});
-    app.segmentList.segments.on('change reset', app.ideaList.render, app.ideaList);
+    app.segmentList.segments.on('add change reset', app.ideaList.render, app.ideaList);
     app.segmentList.segments.on('invalid', function(model, error){ alert(error); });
     app.users.on('reset', app.segmentList.render, app.segmentList);
     
@@ -56,43 +56,8 @@ define([
     app.synthesisPanel.model.fetch({reset: true});
 
     // Fetching the ideas
-    app.ideaList.ideas.fetch({reset: true});
-
-
-    /**
-     * WARNING:
-     * This is a workaround to update the segmentList using ajax
-     * In a perfect world, this would be done using websockets
-     * or something really cool.
-     */
-    function updateSegmentList(){
-        var func, promisse;
-
-        func = function(){
-            setTimeout(updateSegmentList, updateSegmentList.time);
-        };
-
-        if( updateSegmentList.canUpdate() ){
-            promisse = app.segmentList.segments.fetch({reset: true});
-            promisse.then(func);
-        } else {
-            func();
-        }
-
-    }
-    updateSegmentList.time = 30 * 1 * 1000; // 30 seconds
-    updateSegmentList.disallowedTagNames = ['TEXTAREA', 'INPUT', 'SELECT'];
-    updateSegmentList.canUpdate = function(){
-        // Checks to see if the activeElement is editable or not
-        var el = document.activeElement,
-            isEditableField = el.hasAttribute('contenteditable');
-        
-        return ! (isEditableField || $.inArray(el.tagName, updateSegmentList.disallowedTagNames) > -1);
-    };
-
-    // Starting the segment list update loop
-    //updateSegmentList();
-    app.segmentList.segments.fetch({reset: true});
+    app.ideaList.ideas.fetchFromScriptTag('ideas-json');
+    app.segmentList.segments.fetchFromScriptTag('extracts-json');
 
     // Let the game begins...
     Backbone.history.start({hashChange: false, root: "/" + app.slug });

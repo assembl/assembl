@@ -46,6 +46,8 @@ P_DELETE_EXTRACT = 'delete_extract'
 P_EDIT_EXTRACT = 'edit_extract'
 P_ADD_IDEA = 'add_idea'
 P_EDIT_IDEA = 'edit_idea'
+P_EDIT_SYNTHESIS = 'edit_synthesis'
+P_SEND_SYNTHESIS = 'send_synthesis'
 P_ADMIN_DISC = 'admin_discussion'
 P_SYSADMIN = 'sysadmin'
 
@@ -153,13 +155,13 @@ class AgentProfile(SQLAlchemyBaseModel):
             '@id': self.uri_generic(self.id),
             'name': self.name or self.display_name()
         }
-        if use_email:
-            r['email'] = use_email
+        # if use_email:
+        #     r['email'] = use_email
         if self.user:
             r['@type'] = 'User'
             r['username'] = self.user.display_name()
-            if not use_email:
-                r['email'] = self.user.get_preferred_email()
+            # if not use_email:
+            #     r['email'] = self.user.get_preferred_email()
         return r
 
 
@@ -436,7 +438,7 @@ class UserRole(SQLAlchemyBaseModel):
                      index=True)
     user = relationship(User)
     role_id = Column(Integer, ForeignKey('role.id', ondelete='CASCADE'))
-    role = relationship(Role)
+    role = relationship(Role, lazy="joined")
 
 
 class LocalUserRole(SQLAlchemyBaseModel):
@@ -449,7 +451,7 @@ class LocalUserRole(SQLAlchemyBaseModel):
         'discussion.id', ondelete='CASCADE'))
     discussion = relationship('Discussion')
     role_id = Column(Integer, ForeignKey('role.id', ondelete='CASCADE'))
-    role = relationship(Role)
+    role = relationship(Role, lazy="joined")
     # BUG in virtuoso: It will often refuse to create an index
     # whose name exists in another schema. So having this index in
     # schemas assembl and assembl_test always fails.
@@ -480,6 +482,8 @@ def populate_default_permissions(session):
     ensure(P_DELETE_EXTRACT)
     ensure(P_ADD_IDEA)
     ensure(P_EDIT_IDEA)
+    ensure(P_EDIT_SYNTHESIS)
+    ensure(P_SEND_SYNTHESIS)
     ensure(P_ADMIN_DISC)
     ensure(P_SYSADMIN)
 
@@ -490,13 +494,22 @@ class DiscussionPermission(SQLAlchemyBaseModel):
     id = Column(Integer, primary_key=True)
     discussion_id = Column(Integer, ForeignKey(
         'discussion.id', ondelete='CASCADE'))
-    discussion = relationship('Discussion')
+    discussion = relationship(
+        'Discussion', backref=backref("acls", lazy="joined"))
     role_id = Column(Integer, ForeignKey('role.id', ondelete='CASCADE'))
-    role = relationship(Role)
+    role = relationship(Role, lazy="joined")
     permission_id = Column(Integer, ForeignKey(
         'permission.id', ondelete='CASCADE'))
-    permission = relationship(Permission)
+    permission = relationship(Permission, lazy="joined")
 
+    def role_name(self):
+        return self.role.name
+
+    def permission_name(self):
+        return self.permission.name
+
+    def get_discussion_id(self):
+        return self.discussion_id
 
 def create_default_permissions(session, discussion):
     permissions = {p.name: p.id for p in session.query(Permission).all()}
@@ -519,6 +532,8 @@ def create_default_permissions(session, discussion):
     add_perm(P_DELETE_EXTRACT, [R_CATCHER, R_MODERATOR, R_ADMINISTRATOR])
     add_perm(P_ADD_IDEA, [R_CATCHER, R_MODERATOR, R_ADMINISTRATOR])
     add_perm(P_EDIT_IDEA, [R_CATCHER, R_MODERATOR, R_ADMINISTRATOR])
+    add_perm(P_EDIT_SYNTHESIS, [R_MODERATOR, R_ADMINISTRATOR])
+    add_perm(P_SEND_SYNTHESIS, [R_MODERATOR, R_ADMINISTRATOR])
     add_perm(P_ADMIN_DISC, [R_ADMINISTRATOR])
     add_perm(P_SYSADMIN, [R_ADMINISTRATOR])
 

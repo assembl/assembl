@@ -8,6 +8,7 @@ from sqlalchemy import pool
 from pyramid.paster import bootstrap
 
 from assembl.lib.sqla import get_session_maker, get_metadata
+from assembl.lib.zmqlib import configure_zmq
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -18,6 +19,8 @@ config = context.config
 fileConfig(config.config_file_name)
 
 pyramid_env = bootstrap(config.config_file_name)
+configure_zmq(pyramid_env['registry'].settings['changes.socket'], False)
+
 get_session_maker(False)
 
 

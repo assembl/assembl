@@ -1,5 +1,5 @@
-define(['jquery', 'underscore', 'ckeditor', 'moment', 'i18n', 'zeroclipboard'],
-function($, _, ckeditor, Moment, i18n, ZeroClipboard){
+define(['jquery', 'underscore', 'ckeditor', 'moment', 'i18n', 'zeroclipboard', 'types'],
+function($, _, ckeditor, Moment, i18n, ZeroClipboard, Types){
     'use strict';
 
     ckeditor.disableAutoInline = true;
@@ -79,6 +79,12 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard){
          * @type {User}
          */
         currentUser: null,
+
+        /**
+         * Csrf token
+         * @type {String}
+         */
+        csrfToken: null,
 
         /**
          * Default ease for all kids of animation
@@ -321,6 +327,7 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard){
         loadCurrentUser: function(){
             if( app.users ){
                 app.currentUser = app.users.getByNumericId(CURRENT_USER_ID);
+                app.loadCsrfToken(true);
             }
         },
 
@@ -331,6 +338,26 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard){
             return app.currentUser || app.users.getUnknownUser();
         },
 
+        /**
+         * fallback: synchronously load app.csrfToken
+         */
+        loadCsrfToken: function(async){
+            $.ajax('/api/v1/token', {
+                async: async,
+                dataType: 'text',
+                success: function(data) {
+                    app.csrfToken = data;
+                }
+            });
+            return app.csrfToken;
+        },
+
+        /**
+         * @return {User}
+         */
+        getCsrfToken: function(){
+            return app.csrfToken || app.loadCsrfToken(false);
+        },
 
         /**
          * Return the Post related to the given annotation
@@ -610,6 +637,37 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard){
         },
 
         /**
+         * Returns the collection from the giving object's @type
+         * @param {BaseModel} item
+         * @param {String} [type=item['@type']] The model type
+         * @return {BaseCollection}
+         */
+        getCollectionByType: function(item, type){
+            type = type || item['@type'];
+            var collection = null;
+
+            switch(type){
+                case Types.EXTRACT:
+                    collection = app.segmentList.segments;
+                    break;
+
+                case Types.IDEA:
+                    collection = app.ideaList.ideas;
+                    break;
+
+                case Types.POST:
+                    collection = app.messageList.messages;
+                    break;
+
+                case Types.USER:
+                    collection = app.users;
+                    break;
+            }
+
+            return collection;
+        },
+
+        /**
          * Shows the related segment from the given annotation
          * @param  {annotation} annotation
          */
@@ -755,7 +813,7 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard){
 
             if( isInMessage ){
                 path = app.format("//div[@data-message-id='{0}']/div[@class='message-body']{1}", node.parentNode.getAttribute('data-message-id'), path);
-            }            
+            }
 
             return path;
         },

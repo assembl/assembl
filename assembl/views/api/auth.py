@@ -3,7 +3,7 @@ import transaction
 
 from cornice import Service
 
-from pyramid.security import authenticated_userid
+from pyramid.security import authenticated_userid, Everyone, Authenticated
 from pyramid.httpexceptions import HTTPNotFound, HTTPBadRequest
 from sqlalchemy.orm import aliased, joinedload, joinedload_all, contains_eager
 
@@ -13,8 +13,10 @@ from assembl.models import (
     LocalUserRole, DiscussionPermission, Discussion)
 from . import acls
 from assembl.auth import (
-    P_READ, P_ADMIN_DISC, P_SYSADMIN, SYSTEM_ROLES)
-from assembl.auth.token import decode_token
+    P_READ, P_ADMIN_DISC, P_SYSADMIN, R_SYSADMIN, SYSTEM_ROLES,
+    user_has_permission as a_user_has_permission,
+    permissions_for_user as a_permissions_for_user)
+from assembl.lib.token import decode_token
 
 
 cors_policy = dict(
@@ -55,6 +57,20 @@ discussion_roles_for_user = Service(
     path=API_DISCUSSION_PREFIX + '/roles/localfor/{user_id:.+}',
     description="The per-discussion roles of a given user",
     renderer='json', acl=acls, cors_policy=cors_policy
+)
+
+permissions_for_user = Service(
+    name='permissions_for_user',
+    path=API_DISCUSSION_PREFIX + '/permissions/u/{user_id:.+}',
+    description="The per-discussion permissions of a given user",
+    renderer='json', acl=acls, cors_policy=cors_policy
+)
+
+user_has_permission = Service(
+    name='user_has_permission',
+    path=API_DISCUSSION_PREFIX + '/permissions/{permission}/u/{user_id:.+}',
+    description="Whether a given user has a specific permission",
+    renderer='json'
 )
 
 
@@ -242,3 +258,32 @@ def put_discussion_roles_for_user(request):
             user=user, role=role, discussion=discussion))
     return {"added": list(roles - known_roles),
             "removed": list(known_roles - roles)}
+
+
+@permissions_for_user.get()
+def get_permissions_for_user(request):
+    discussion_id = request.matchdict['discussion_id']
+    user_id = request.matchdict['user_id']
+    discussion = Discussion.get_instance(discussion_id)
+    if not discussion:
+        raise HTTPNotFound("Discussion %s does not exist" % (discussion_id,))
+    if user_id not in (Authenticated, Everyone):
+        user = User.get_instance(user_id)
+        if not user:
+            raise HTTPNotFound("User id %d does not exist" % (user_id,))
+    return a_permissions_for_user(discussion_id, user_id)
+
+
+@user_has_permission.get()
+def get_user_has_permission(request):
+    discussion_id = request.matchdict['discussion_id']
+    user_id = request.matchdict['user_id']
+    permission = request.matchdict['permission']
+    discussion = Discussion.get_instance(discussion_id)
+    if not discussion:
+        raise HTTPNotFound("Discussion %s does not exist" % (discussion_id,))
+    if user_id not in (Authenticated, Everyone):
+        user = User.get_instance(user_id)
+        if not user:
+            raise HTTPNotFound("User id %d does not exist" % (user_id,))
+    return a_user_has_permission(discussion_id, user_id, permission)

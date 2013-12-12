@@ -4,7 +4,7 @@ import transaction
 from cornice import Service
 from assembl.views.api import API_DISCUSSION_PREFIX
 from assembl.synthesis.models import Discussion, Synthesis
-from assembl.auth import (P_READ, P_ADD_IDEA)
+from assembl.auth import (P_READ, P_EDIT_SYNTHESIS, P_SEND_SYNTHESIS)
 from . import acls
 
 synthesis = Service(
@@ -23,7 +23,7 @@ def get_synthesis(request):
 
 
 # Update
-@synthesis.put()  # permission=P_ADD_IDEA)
+@synthesis.put()  # permission=P_EDIT_SYNTHESIS)
 def save_synthesis(request):
     discussion_id = request.matchdict['discussion_id']
     discussion = Discussion.get_instance(discussion_id)

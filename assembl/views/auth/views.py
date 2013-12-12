@@ -43,13 +43,8 @@ default_context = {
 )
 def logout(request):
     forget(request)
-    next_view = request.params.get('next_view')
-    if next_view:
-        return HTTPFound(next_view)
-    return dict(default_context, **{
-        'login_url': login_url,
-        'providers': request.registry.settings['login_providers'],
-    })
+    next_view = request.params.get('next_view') or '/login'
+    return HTTPFound(next_view)
 
 
 @view_config(

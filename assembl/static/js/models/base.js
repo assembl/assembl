@@ -32,6 +32,29 @@ define(['backbone', 'app'], function(Backbone, app){
     var BaseCollection = Backbone.Collection.extend({
 
         /**
+         * Get the innerText from the given `id` element
+         * Parses the json and execute `.reset` method in the collection
+         *
+         * @param {String} id The script tag id
+         */
+        fetchFromScriptTag: function(id){
+            var script = document.getElementById(id),
+                json;
+
+            if( !script ){
+                throw new Error(app.format("Script tag #{0} doesn't exist", id));
+            }
+
+            try {
+                json = JSON.parse(script.textContent);
+                this.reset(json);
+            } catch(e){
+                throw new Error("Invalid json");
+            }
+        },
+        
+
+        /**
          * Find the model by numeric id instead of string
          * ex: finds 'local:ModelName/30' if given '30'
          *
@@ -53,6 +76,16 @@ define(['backbone', 'app'], function(Backbone, app){
             }
 
             return model;
+        },
+
+
+        /**
+         * Removes a model by the given id
+         * @param  {string} id
+         */
+        removeById: function(id){
+            var model = this.get(id);
+            this.remove(model);
         }
 
     });

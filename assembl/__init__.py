@@ -25,7 +25,8 @@ def main(global_config, **settings):
     # factory
     configure_engine(settings)
 
-    config = Configurator(settings=settings)
+    from views import root_factory
+    config = Configurator(settings=settings, root_factory=root_factory)
     config.include('.lib.zmqlib')
     session_factory = session_factory_from_settings(settings)
     config.set_session_factory(session_factory)
@@ -39,10 +40,10 @@ def main(global_config, **settings):
     from models import get_session_maker
     from auth.models import (
         populate_default_roles, populate_default_permissions)
-    session = get_session_maker()
-    populate_default_roles(session)
-    populate_default_permissions(session)
-    session.close()
+    with transaction.manager:
+        session = get_session_maker()
+        populate_default_roles(session)
+        populate_default_permissions(session)
     config.add_static_view('static', 'static', cache_max_age=3600)
     config.include('cornice')  # REST services library.
     # config.include('.lib.alembic')

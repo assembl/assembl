@@ -31,13 +31,13 @@ def upgrade(pyramid_env):
             xpo = tfi.xpath_start
             print xpo
             match = reg.match(xpo)
-            assert match
-            id, remainder = match.groups()
-            uri = Post.uri_generic(id)
-            xp = "//div[@id='message-%s']%s" % (
-                uri, remainder)
-            print xp
-            tfi.xpath_start = tfi.xpath_end = xp
+            if match:
+                id, remainder = match.groups()
+                uri = Post.uri_generic(id)
+                xp = "//div[@id='message-%s']%s" % (
+                    uri, remainder)
+                print xp
+                tfi.xpath_start = tfi.xpath_end = xp
 
 def downgrade(pyramid_env):
     pass

@@ -2,15 +2,6 @@ define(['app', 'underscore', 'sockjs'], function(app, _, SockJS){
     'use strict';
 
     /**
-     * Given the string in the format "local:ModelName/{id}" returns the id
-     * @param  {String} str
-     * @return {String}
-     */
-    function extractId(str){
-        return str.split('/')[1];
-    }
-
-    /**
      * @class Socket
      *
      * @param {string} url
@@ -27,6 +18,7 @@ define(['app', 'underscore', 'sockjs'], function(app, _, SockJS){
      * @event
      */
     Socket.prototype.onOpen = function(ev){
+        this.socket.send("token:" + app.getCsrfToken());
         this.socket.send("discussion:" + app.discussionID);
         app.trigger('socket:open', [this.socket, ev]);
     };
@@ -41,10 +33,7 @@ define(['app', 'underscore', 'sockjs'], function(app, _, SockJS){
             len = data.length;
 
         for(; i<len; i += 1){
-            var method = _methods[ data[i]['@type'] ];
-            if(method) {
-                method(data[i]);
-            }
+            this.processData(data[i]);
         }
 
         app.trigger('socket:message', [this.socket, data]);
@@ -58,69 +47,39 @@ define(['app', 'underscore', 'sockjs'], function(app, _, SockJS){
         app.trigger('socket:close', [this.socket, ev]);
     };
 
-
     /**
-     * Methods related to the type of data sent from server
-     * @type {Object}
+     * Processes one item from a data array from the server
+     * @param  {Object]} item
      */
-    var _methods = {
+    Socket.prototype.processData = function(item) {
+        var collection = app.getCollectionByType(item),
+            model;
 
-        /**
-         * Processes Extract data
-         * @param  {Object} item
-         */
-        "Extract": function(item){
-            if( !app.segmentList ){
-                return;
-            }
+        console.log( item['@id'], item );
 
-            var id = extractId(item['@id']),
-                segment = app.segmentList.segments.get(id),
-                model;
+        if( collection === null ){
+            // TODO: Handle singletons like discussion etc.
+            return;
+        }
 
-            if( segment ){
-                // Update
-                segment.fetch();
-                return
-            }
+        model = collection.get(item['@id']);
 
-            // Create
-            model = new app.segmentList.segments.model({
-                id: extractId(item['@id']),
-                text: item['body'],
-                quote: item['body'],
-                idPost: extractId(item["source"]),
-                idIdea: null,
-                creationDate: item['creation_date'],
-                idCreator: extractId(item['creator']),
-                ranges: [{
-                    'start': item['text_fragment_identifiers'][0]['xpath_start'],
-                    'offset_start': item['text_fragment_identifiers'][0]['offset_start'],
-                    'end': item['text_fragment_identifiers'][0]['xpath_end'],
-                    'offset_end': item['text_fragment_identifiers'][0]['offset_end'],
-                }],
-                target: null
-            });
+        if( item['@tombstone'] ){
+            //if( model ) model.before_delete();
+            collection.remove(model);
+            return;
+        }
 
-            app.segmentList.segments.add(model);
-            
-            // TODO: Delete
-        },
+        if( model === null ){
+            // oops, doesn't exist
 
-        /**
-         * Processes Mailbox data
-         * @param {Object} item
-         */
-        "Mailbox": function(item){
-            if( !app.messageList ){
-                return;
-            }
+            collection.add(item);
+            //model.after_add();
+        } else {
+            // yeah, it exists
 
-            console.log('Mailbox', item);
-
-            // Create
-            // Update
-            // Delete
+            //model.before_update(item);
+            collection.add(item, {merge: true});
         }
     };
 
