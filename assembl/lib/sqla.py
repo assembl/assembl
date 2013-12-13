@@ -251,7 +251,6 @@ class BaseOps(object):
                             and m.func_code.co_argcount == 1))
         properties = dict(inspect.getmembers(
             self.__class__, lambda p: inspect.isdatadescriptor(p)))
-        print "properties:", properties
         known = set()
         for name, spec in local_view.iteritems():
             if name == "_default":
