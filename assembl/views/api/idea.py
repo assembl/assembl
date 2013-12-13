@@ -5,7 +5,7 @@ from cornice import Service
 from pyramid.httpexceptions import HTTPNotFound, HTTPBadRequest, HTTPNoContent
 from assembl.views.api import API_DISCUSSION_PREFIX
 from assembl.models import (
-    get_named_object, Idea, Discussion, Extract)
+    get_named_object, Idea, IdeaLink, Discussion, Extract)
 from . import acls
 from assembl.auth import (P_READ, P_ADD_IDEA, P_EDIT_IDEA)
 
@@ -87,18 +87,27 @@ def save_idea(request):
 
     with transaction.manager:
         idea = Idea.get_instance(idea_id)
+        if not idea:
+            raise HTTPNotFound("No such idea: %s" % (idea_id))
         discussion = Discussion.get(id=int(discussion_id))
 
         idea.short_title = idea_data['shortTitle']
         idea.long_title = idea_data['longTitle']
         idea.order = idea_data.get('order', idea.order)
 
-        for parent in idea.parents:
-            idea.parents.remove(parent)
-
-        if idea_data['parentId']:
+        if 'parentId' in idea_data:
+            # TODO: Make sure this is sent as a list!
             parent = Idea.get_instance(idea_data['parentId'])
-            idea.parents.append(parent)
+            if not parent:
+                raise HTTPNotFound("Missing parentId %s" % (idea_data['parentId']))
+            if parent not in idea.parents:
+                idea.parent_links.append(IdeaLink(parent=parent, child=idea))
+            to_remove = []
+            for pl in idea.parent_links:
+                if pl.parent != parent:
+                    to_remove.append(pl)
+            for pl in to_remove:
+                idea.parent_links.remove(pl)
 
         if idea_data['inSynthesis']:
             idea.synthesis = discussion.synthesis
