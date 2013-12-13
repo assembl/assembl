@@ -31,6 +31,7 @@ from .synthesis.models import (
     Discussion,
     TableOfContents,
     Idea,
+    IdeaLink,
     Extract,
     Synthesis,
     TextFragmentIdentifier,
