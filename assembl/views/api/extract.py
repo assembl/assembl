@@ -173,7 +173,15 @@ def put_extract(request):
 
     extract.owner_id = user_id or get_database_id("User", extract.owner_id)
     extract.order = updated_extract_data.get('order', extract.order)
-    extract.idea_id = get_database_id("Idea", updated_extract_data['idIdea'])
+    idea_id = updated_extract_data.get('idIdea', None)
+    if idea_id:
+        idea = Idea.get_instance(idea_id)
+        if(idea.table_of_contents.discussion != extract.discussion):
+            raise HTTPBadRequest(
+                "Extract from discussion %s cannot be associated with an idea from a different discussion." % extract.discussion_id)
+        extract.idea = idea
+    else:
+        extract.idea = None
 
     Extract.db.add(extract)
     #TODO: Merge ranges. Sigh.
