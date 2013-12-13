@@ -18,7 +18,8 @@ def main(global_config, **settings):
     # factory
     configure_engine(settings)
 
-    config = Configurator(settings=settings)
+    from views import root_factory
+    config = Configurator(settings=settings, root_factory=root_factory)
     config.include('.lib.zmqlib')
     session_factory = session_factory_from_settings(settings)
     config.set_session_factory(session_factory)

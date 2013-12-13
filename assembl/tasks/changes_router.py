@@ -23,15 +23,15 @@ if len(sys.argv) != 2:
     exit()
 
 
-settings = ConfigParser({'changes.prefix':''})
+settings = ConfigParser({'changes.prefix': ''})
 settings.read(sys.argv[-1])
 CHANGES_SOCKET = settings.get('app:main', 'changes.socket')
 CHANGES_PREFIX = settings.get('app:main', 'changes.prefix')
 TOKEN_SECRET = settings.get('app:main', 'session.secret')
 WEBSERVER_PORT = settings.getint('app:main', 'changes.websocket.port')
 # NOTE: Not sure those are always what we want.
-SERVER_HOST = settings.get('server:main', 'host')
-SERVER_PORT = settings.getint('server:main', 'port')
+SERVER_HOST = settings.get('app:main', 'public_hostname')
+SERVER_PORT = settings.getint('app:main', 'public_port')
 
 context = zmq.Context.instance()
 ioloop.install()
@@ -78,7 +78,8 @@ class ZMQRouter(SockJSConnection):
             # Check if token authorizes discussion
             r = requests.get(
                 'http://%s:%d/api/v1/discussion/%s/permissions/read/u/%s' %
-                (SERVER_HOST, SERVER_PORT, self.discussion, self.token['userId']))
+                (SERVER_HOST, SERVER_PORT, self.discussion,
+                    self.token['userId']))
             print r.text
             if r.text != 'true':
                 return
@@ -89,14 +90,17 @@ class ZMQRouter(SockJSConnection):
             self.loop = zmqstream.ZMQStream(self.socket, io_loop=io_loop)
             self.loop.on_recv(self.on_recv)
             print "connected"
+            self.send('[{"@type":"Connection"}]')
 
     def on_close(self):
         self.loop.stop_on_recv()
         self.socket.close()
         print "closing"
 
+
 def logger(msg):
     print msg
+
 
 def log_queue():
     socket = context.socket(zmq.SUB)

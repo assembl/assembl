@@ -70,7 +70,7 @@ user_has_permission = Service(
     name='user_has_permission',
     path=API_DISCUSSION_PREFIX + '/permissions/{permission}/u/{user_id:.+}',
     description="Whether a given user has a specific permission",
-    renderer='json', acl=acls, cors_policy=cors_policy
+    renderer='json'
 )
 
 

@@ -1,0 +1,28 @@
+{
+    "_default": {
+        "id": false,
+        "type": false,
+        "_default": false
+    },
+    "Discussion": {
+        "elements": "table_of_contents:",
+        "creation_date": false,
+        "owner": false,
+        "slug": false,
+        "sources": false,
+        "synthesis_id": false,
+        "topic": false
+    },
+    "Idea": {
+        "id": "self",
+        "data": "self:idea_graph_jit2",
+        "name": "short_title",
+        "children": ["children:"]
+    },
+    "TableOfContents": {
+        "creation_date": false,
+        "id": "self",
+        "name": "'\"root\"",
+        "children": ["&get_top_ideas:"]
+    }
+}

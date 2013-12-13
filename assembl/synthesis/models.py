@@ -1,12 +1,13 @@
 from datetime import datetime
 import re
 import quopri
-from itertools import groupby
+from itertools import groupby, chain
 import traceback
 import anyjson as json
 
 from sqlalchemy.orm import relationship, backref, aliased
 from sqlalchemy.sql import func, cast, select, text
+from pyramid.security import Allow, ALL_PERMISSIONS
 from pyramid.i18n import TranslationString as _
 
 from sqlalchemy import (
@@ -31,7 +32,8 @@ from ..lib.sqla import db_schema, Base as SQLAlchemyBaseModel
 from ..source.models import (ContentSource, PostSource, Content, Post, Mailbox)
 from ..auth.models import (
     DiscussionPermission, Role, Permission, AgentProfile, User,
-    UserRole, LocalUserRole, DiscussionPermission, P_READ)
+    UserRole, LocalUserRole, DiscussionPermission, P_READ,
+    R_SYSADMIN)
 from assembl.auth import get_permissions
 
 
@@ -208,6 +210,17 @@ class Discussion(SQLAlchemyBaseModel):
     def get_user_permissions_preload(self, user_id):
         return json.dumps(self.get_user_permissions(user_id))
 
+    # Properties as a route context
+    __parent__ = None
+    @property
+    def __name__(self):
+        return self.slug
+    @property
+    def __acl__(self):
+        acls = [(Allow, dp.role.name, dp.permission.name) for dp in self.acls]
+        acls.append((Allow, R_SYSADMIN, ALL_PERMISSIONS))
+        return acls
+
     def __repr__(self):
         return "<Discussion %s>" % repr(self.topic)
 
@@ -256,6 +269,16 @@ class TableOfContents(SQLAlchemyBaseModel):
         if self.discussion:
             return self.discussion.id
 
+    def get_idea_links(self):
+        return Idea.get_all_idea_links(self.id)
+
+    def get_idea_and_links(self):
+        return chain(self.ideas, self.get_idea_links())
+
+    def get_top_ideas(self):
+        return self.db().query(Idea).filter(
+            Idea.table_of_contents_id == self.id).filter(~Idea.parent_links.any()).all()
+
     def __repr__(self):
         return "<TableOfContents %s>" % repr(self.discussion.topic)
 
@@ -303,13 +326,18 @@ class Synthesis(SQLAlchemyBaseModel):
         return "<Synthesis %s>" % repr(self.subject)
 
 
-idea_association_table = Table(
-    'idea_association',
-    SQLAlchemyBaseModel.metadata,
-    Column('parent_id', Integer, ForeignKey('idea.id')),
-    Column('child_id', Integer, ForeignKey('idea.id')),
-    schema = db_schema
-)
+class IdeaLink(SQLAlchemyBaseModel):
+    __tablename__ = 'idea_association'
+    id = Column(Integer, primary_key=True)
+    parent_id = Column(Integer, ForeignKey('idea.id'))
+    child_id = Column(Integer, ForeignKey('idea.id'))
+    parent = relationship(
+        'Idea', backref='child_links',
+        foreign_keys=(parent_id))
+    child = relationship(
+        'Idea', backref='parent_links',
+        foreign_keys=(child_id))
+
 
 class Idea(SQLAlchemyBaseModel):
     """
@@ -337,13 +365,13 @@ class Idea(SQLAlchemyBaseModel):
         backref='ideas',
     )
 
-    children = relationship(
-        "Idea",
-        secondary=idea_association_table,
-        backref="parents",
-        primaryjoin=id==idea_association_table.c.parent_id,
-        secondaryjoin=id==idea_association_table.c.child_id,
-    )
+    @property
+    def children(self):
+        return [cl.child for cl in self.child_links]
+
+    @property
+    def parents(self):
+        return [cl.parent for cl in self.parent_links]
 
     synthesis_id = Column(
         Integer,
@@ -393,12 +421,12 @@ class Idea(SQLAlchemyBaseModel):
 WITH    RECURSIVE
 idea_dag(idea_id, parent_id, idea_depth, idea_path, idea_cycle) AS
 (
-SELECT  id as idea_id, parent_id, 1, ARRAY[idea_initial.id], false 
+SELECT  idea_initial.id as idea_id, parent_id, 1, ARRAY[idea_initial.id], false 
 FROM    idea AS idea_initial LEFT JOIN idea_association ON (idea_initial.id = idea_association.child_id) 
 """
         if(not skip_where):
             retval = retval + """
-WHERE id=:root_idea_id
+WHERE idea_initial.id=:root_idea_id
 """
         retval = retval + """
 UNION ALL
@@ -483,6 +511,16 @@ AND discussion.id=:discussion_id
             return "<Idea %d %s>" % (self.id, repr(self.short_title))
 
         return "<Idea %d>" % self.id
+
+    @classmethod
+    def get_all_idea_links(cls, table_of_contents_id):
+        child = aliased(cls)
+        parent = aliased(cls)
+        return cls.db().query(IdeaLink
+            ).join(parent, parent.id == IdeaLink.parent_id
+            ).join(child, child.id == IdeaLink.child_id
+            ).filter(child.table_of_contents_id == table_of_contents_id
+            ).filter(parent.table_of_contents_id == table_of_contents_id).all()
 
 
 class Extract(SQLAlchemyBaseModel):

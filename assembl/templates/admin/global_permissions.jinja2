@@ -1,0 +1,40 @@
+{% extends 'base.jinja2' %}
+
+{% block content %}
+<h2>{% trans %}Global roles{% endtrans %}</h2>
+<form method="POST" action="#">
+<table>
+    <thead>
+        <th>{% trans %}Users{% endtrans %}\{% trans %}Roles{% endtrans %}</th>
+        {% for role in roles %}
+        {% if role.startswith('r:') %}
+        <th>
+            {{role}}
+        </th>
+        {% endif %}
+        {% endfor %}
+    </thead>
+    <tbody>
+        {% for user in users %}
+        <tr>
+            <th>{{user.profile.name}}</th>
+            {% for role in roles %}
+            {% if role.startswith('r:') %}
+            <td>
+                <input type="checkbox" name="has_{{role}}_{{user.id}}" 
+                {% if has_role(user.id,role) %} checked {% endif %}>
+            </td>
+            {% endif %}
+            {% endfor %}
+        </tr>
+        {% endfor %}
+        <tr>
+            <th><input type="submit" name="submit_look_for_user" value="{% trans %}Search for users{% endtrans %}"></th>
+            <th colspan="{{roles|length}}"><input name="user_search"/></th>
+        </tr>
+    </tbody>
+</table>
+<input type="submit" name="submit_user_roles" value="{% trans %}Save{% endtrans %}">
+</form>
+
+{% endblock %}
