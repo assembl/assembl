@@ -1,26 +1,25 @@
 {
     "_default": {
-        "id":false,
-        "type":false,
-        "_default":false
+        "id": false,
+        "type": false,
+        "_default": false
     },
     "Discussion": {
-        "style":"'[{\"selector\": \"node\",\"css\": {\"content\": \"data(short_title)\"}}]",
-        "elements":"table_of_contents:idea_graph",
+        "elements": "table_of_contents:",
         "creation_date": false,
         "owner": false,
         "slug": false,
-        "sources":false,
+        "sources": false,
         "synthesis_id": false,
         "topic": false
     },
     "Idea": {
         "data": "self:idea_graph2",
         "creation_date": true,
-        "extracts":false,
+        "extracts": false,
         "long_title": true,
         "name": "short_title",
-        "order":true,
+        "order": true,
         "table_of_contents": false
     },
     "IdeaLink": {
@@ -28,7 +27,7 @@
     },
     "TableOfContents": {
         "creation_date": false,
-        "nodes":["ideas:idea_graph"],
-        "edges":["&get_idea_links:idea_graph"]
+        "nodes": ["ideas:"],
+        "edges": ["&get_idea_links:"]
     }
 }

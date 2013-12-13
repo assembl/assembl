@@ -1,0 +1,60 @@
+{% extends "base.jinja2" %}
+
+{% block content %}
+<div id="cy">
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script type="text/json" id="ideas-json">{{ discussion.generic_json("idea_graph", use_dumps=True) |safe }}</script>
+<script type="text/javascript">
+requirejs(["jquery", "cytoscape"], function($, cytoscape) {
+    var script = document.getElementById("ideas-json");
+    //try {
+      var json = JSON.parse(script.textContent),
+      options = {
+        showOverlay: false,
+        minZoom: 0.5,
+        maxZoom: 2,
+
+        style: cytoscape.stylesheet()
+          .selector("node")
+            .css({
+              "content": "data(name)",
+              "font-family": "helvetica",
+              "font-size": 14,
+              "text-outline-width": 3,
+              "text-outline-color": "#888",
+              "text-valign": "center",
+              "color": "#fff",
+              "width": "mapData(weight, 30, 80, 20, 50)",
+              "height": "mapData(height, 0, 200, 10, 45)",
+              "border-color": "#fff"
+            })
+          .selector(":selected")
+            .css({
+              "background-color": "#000",
+              "line-color": "#000",
+              "target-arrow-color": "#000",
+              "text-outline-color": "#000"
+            })
+          .selector("edge")
+            .css({
+              "width": 2,
+              "target-arrow-shape": "triangle"
+            })
+        ,
+
+        elements: json,
+
+        ready: function(){
+          cy = this;
+        }
+      };
+
+      $("#cy").cytoscape(options);
+
+    });
+</script>
+
+{% endblock %}

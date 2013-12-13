@@ -1,8 +1,8 @@
 {
     "_default": {
-        "id":false,
-        "type":false,
-        "_default":false
+        "id": false,
+        "type": false,
+        "_default": false
     },
     "Idea": {
         "id": "self"

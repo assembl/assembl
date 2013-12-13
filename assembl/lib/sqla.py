@@ -290,7 +290,7 @@ class BaseOps(object):
                 if ':' in subspec:
                     prop_name, view_name = subspec.split(':', 1)
                     if not view_name:
-                        view_name = 'default'
+                        view_name = view_def_name
                     if not prop_name:
                         prop_name = name
                 else:

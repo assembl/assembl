@@ -1,50 +1,50 @@
 {
     "_default": {
-        "id":false,
-        "type":false,
+        "id": false,
+        "type": false,
         "@id": "self",
         "@type": "&external_typename",
         "@view": "@view",
-        "_default":false
+        "_default": false
     },
     "Permission": {
-        "name":true
+        "name": true
     },
     "AgentProfile": {
-        "preferred_email":false,
-        "user":":"
+        "preferred_email": false,
+        "user": ":"
     },
     "User": {
         "creation_date": true,
         "last_login": true,
         "login_failures": false,
-        "password":false,
+        "password": false,
         "preferred_email": false,
         "verified": true,
-        "permissions":"&get_all_permissions"
+        "permissions": "&get_all_permissions"
     },
     "EmailAccount": false,
     "IdentityProviderAccount": false,
     "IdentityProvider": {
         "name": true,
         "provider_type": true,
-        "trust_emails":true
+        "trust_emails": true
         },
     "Source": {
-        "contents":[":partial"],
+        "contents": [":partial"],
         "creation_date": true,
-        "discussion_id":"discussion",
+        "discussion_id": "discussion",
         "last_import": true
     },
     "Webpage": {
-        "extracts":[":partial"],
-        "last_modified_date":true,
-        "url":true
+        "extracts": [":partial"],
+        "last_modified_date": true,
+        "url": true
     },
     "Mailbox": {
-        "contents":[":partial"],
+        "contents": [":partial"],
         "creation_date": true,
-        "discussion_id":"discussion",
+        "discussion_id": "discussion",
         "folder": true,
         "host": true,
         "last_import": true,
@@ -53,17 +53,17 @@
         "password": false,
         "port": true,
         "use_ssl": true,
-        "use_ssl":true,
+        "use_ssl": true,
         "username": false,
-        "most_common_recipient_address":"&most_common_recipient_address"
+        "most_common_recipient_address": "&most_common_recipient_address"
     },
     "Email": {
         "body": true,
         "creation_date": true,
-        "extracts":[":partial"],
-        "full_message":false,
+        "extracts": [":partial"],
+        "full_message": false,
         "import_date": false,
-        "in_reply_to":false,
+        "in_reply_to": false,
         "message_id": false,
         "recipients": true,
         "sender": true,
@@ -73,28 +73,28 @@
     "Post": {
         "content": true,
         "date": "creation_date",
-        "idCreator":"creator",
+        "idCreator": "creator",
         "parentId": "parent",
-        "read":"&is_read",
+        "read": "&is_read",
         "subject": "&get_title",
-        "views":[":"]
+        "views": [": "]
     },
     "Discussion": {
         "creation_date": true,
         "owner_id": "owner",
         "slug": true,
-        "sources":[":"],
+        "sources": [":"],
         "synthesis_id": "synthesis",
         "table_of_contents": ":",
         "topic": true,
-        "permissions":"&get_roles_by_permission"
+        "permissions": "&get_roles_by_permission"
     },
     "Idea": {
         "creationDate": "creation_date",
-        "extracts":[":partial"],
+        "extracts": [":partial"],
         "longTitle": "long_title",
-        "order":true,
-        "parents":"&parents",
+        "order": true,
+        "parents": "&parents",
         "shortTitle": "short_title",
         "table_of_contents": true,
         "inSynthesis": "&is_in_synthesis",
@@ -102,32 +102,32 @@
     },
     "TableOfContents": {
         "creation_date": true,
-        "ideas":[":partial"]
+        "ideas": [":partial"]
     },
     "Synthesis": {
         "creation_date": true,
-        "discussion_id":"discussion",
+        "discussion_id": "discussion",
         "publication_date": true
     },
     "Extract": {
         "annotator_schema_version": "'\"v1.0\"",
-        "created":"creation_date",
-        "idCreator":"creator",
-        "idIdea":"idea",
-        "idPost":"&get_post",
-        "owner":true,
-        "quote":"body",
-        "ranges":["text_fragment_identifiers:"],
-        "source":false,
-        "target":"&get_target:partial",
-        "text":"annotation_text"
+        "created": "creation_date",
+        "idCreator": "creator",
+        "idIdea": "idea",
+        "idPost": "&get_post",
+        "owner": true,
+        "quote": "body",
+        "ranges": ["text_fragment_identifiers:"],
+        "source": false,
+        "target": "&get_target:partial",
+        "text": "annotation_text"
         },
     "TextFragmentIdentifier": {
-        "end":"xpath_end",
-        "endOffset":"offset_end",
-        "extract_id":false,
-        "start":"xpath_start",
-        "startOffset":"offset_start"
+        "end": "xpath_end",
+        "endOffset": "offset_end",
+        "extract_id": false,
+        "start": "xpath_start",
+        "startOffset": "offset_start"
     },
     "DiscussionPermission": {
         "discussion": true,
