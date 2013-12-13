@@ -14,6 +14,7 @@ def backbone_include(config):
     config.add_route('nodetest', '/nodetest')
     config.add_route('styleguide', '/styleguide')
     config.add_route('test', '/test')
+    config.add_route('graph_view', '/graph')
 
 
 class _DefaultRoot(object):

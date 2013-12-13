@@ -1,22 +1,32 @@
 {% extends "base.jinja2" %}
 
 {% block content %}
-<div id="cy">
+<div id="cy" width="1000" height="1000">
 </div>
 {% endblock %}
 
 {% block extra_js %}
-<script type="text/json" id="ideas-json">{{ discussion.generic_json("idea_graph", use_dumps=True) |safe }}</script>
+<script type="text/json" id="ideas-json">{{ discussion.table_of_contents.generic_json("idea_graph", use_dumps=True) |safe }}</script>
 <script type="text/javascript">
+var cyto_ob;
 requirejs(["jquery", "cytoscape"], function($, cytoscape) {
+
+    setTimeout(function(){
+      cytoscape.defaults( window.options );
+    }, 100);
+
     var script = document.getElementById("ideas-json");
     //try {
-      var json = JSON.parse(script.textContent),
+      var elements = JSON.parse(script.textContent),
       options = {
+        container: document.getElementById('cy'),
         showOverlay: false,
         minZoom: 0.5,
         maxZoom: 2,
-
+        layout: {
+            name: "random",
+            fit:true
+        },
         style: cytoscape.stylesheet()
           .selector("node")
             .css({
@@ -27,8 +37,10 @@ requirejs(["jquery", "cytoscape"], function($, cytoscape) {
               "text-outline-color": "#888",
               "text-valign": "center",
               "color": "#fff",
-              "width": "mapData(weight, 30, 80, 20, 50)",
-              "height": "mapData(height, 0, 200, 10, 45)",
+              // "width": "mapData(weight, 30, 80, 20, 50)",
+              // "height": "mapData(height, 0, 200, 10, 45)",
+              "width": 200,
+              "height": 20,
               "border-color": "#fff"
             })
           .selector(":selected")
@@ -45,14 +57,15 @@ requirejs(["jquery", "cytoscape"], function($, cytoscape) {
             })
         ,
 
-        elements: json,
+        elements: elements,
 
         ready: function(){
-          cy = this;
+          cyto_ob = this;
+          this.layout({name:"random",fit:true});
         }
       };
-
       $("#cy").cytoscape(options);
+      //cyto_ob.layout({name:"breadthfirst"});
 
     });
 </script>

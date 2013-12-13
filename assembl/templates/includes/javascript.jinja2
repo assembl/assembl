@@ -60,6 +60,14 @@ requirejs.config({
         'sockjs': {
             deps: ['jquery'],
             exports: 'SockJS'
+        },
+        'cytoscape': {
+            deps: ['jquery'],
+            exports: 'cytoscape'
+        },
+        'jit': {
+            deps: [],
+            exports: '$jit'
         }
     },
     "paths": {
@@ -87,7 +95,9 @@ requirejs.config({
 
         'moment': 'lib/moment/moment',
         'zeroclipboard': 'lib/zeroclipboard/ZeroClipboard',
-        'sockjs': 'lib/sockjs/sockjs'
+        'sockjs': 'lib/sockjs/sockjs',
+        'cytoscape': 'lib/cytoscape/cytoscape',
+        'jit': 'lib/infovis/jit'
     }
 });
 

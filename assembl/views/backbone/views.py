@@ -99,6 +99,11 @@ def frontend_test_view(request):
     context = get_default_context(request)
     return render_to_response('../../templates/tests/index.jinja2', context, request=request)
 
+@view_config(route_name='graph_view', request_method='GET', http_cache=60)
+def graph_view(request):
+    context = get_default_context(request)
+    return render_to_response(os.path.join(TEMPLATE_PATH, 'infovis.jinja2'), context, request=request)
+
 
 def includeme(config):
     default_context['socket_url'] = \

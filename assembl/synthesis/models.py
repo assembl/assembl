@@ -288,6 +288,10 @@ class TableOfContents(SQLAlchemyBaseModel):
     def get_idea_and_links(self):
         return chain(self.ideas, self.get_idea_links())
 
+    def get_top_ideas(self):
+        return self.db().query(Idea).filter(
+            Idea.table_of_contents_id == self.id).filter(~Idea.parent_links.any()).all()
+
     def __repr__(self):
         return "<TableOfContents %s>" % repr(self.discussion.topic)
 
