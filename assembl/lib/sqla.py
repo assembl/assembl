@@ -7,7 +7,8 @@ import sys
 from datetime import datetime
 from itertools import groupby
 import inspect
-from types import StringTypes
+import types
+from collections import Iterable
 
 from anyjson import dumps, loads
 from colanderalchemy import SQLAlchemySchemaNode
@@ -208,7 +209,7 @@ class BaseOps(object):
 
     @classmethod
     def get_database_id(cls, uri):
-        if isinstance(uri, StringTypes):
+        if isinstance(uri, types.StringTypes):
             if not uri.startswith('local:') or '/' not in uri:
                 return
             uriclsname, num = uri[6:].split('/', 1)
@@ -228,12 +229,8 @@ class BaseOps(object):
         view_def = get_view_def(view_def_name)
         my_typename = self.external_typename()
         my_id = self.uri(base_uri)
-        result = {
-            '@id': my_id,
-            '@type': my_typename,
-            '@view': view_def_name
-        }
-        local_view = view_def.get(my_typename, {})
+        result = {}
+        local_view = view_def.get(my_typename, False)
         if local_view is False:
             return None
         assert isinstance(local_view, dict),\
@@ -250,8 +247,11 @@ class BaseOps(object):
             for r in mapper.relationships
         }
         methods = dict(inspect.getmembers(
-            self, lambda m: inspect.ismethod(m)
+            self.__class__, lambda m: inspect.ismethod(m)
                             and m.func_code.co_argcount == 1))
+        properties = dict(inspect.getmembers(
+            self.__class__, lambda p: inspect.isdatadescriptor(p)))
+        print "properties:", properties
         known = set()
         for name, spec in local_view.iteritems():
             if name == "_default":
@@ -280,7 +280,7 @@ class BaseOps(object):
                 prop_name = name
                 view_name = None
             else:
-                assert isinstance(subspec, StringTypes),\
+                assert isinstance(subspec, types.StringTypes),\
                     "in viewdef %s, class %s, name %s, spec not a string" % (
                         view_def_name, my_typename, name)
                 if subspec[0] == "'":
@@ -300,21 +300,44 @@ class BaseOps(object):
                 assert get_view_def(view_name),\
                     "in viewdef %s, class %s, name %s, unknown viewdef %s" % (
                         view_def_name, my_typename, name, view_name)
-            if prop_name[0] == '&':
+
+            def translate_to_json(v):
+                if isinstance(v, Base):
+                    if view_name:
+                        return v.generic_json(view_name)
+                    else:
+                        return v.uri(base_uri)
+                elif isinstance(v, (str, unicode, int, float, bool, types.NoneType)):
+                    return v
+                elif isinstance(v, datetime):
+                    return v.isoformat()
+                elif isinstance(v, dict):
+                    return {translate_to_json(k): translate_to_json(v)
+                            for k, v in v.items()}
+                elif isinstance(v, Iterable):
+                    return [translate_to_json(i) for i in v]
+                else:
+                    raise NotImplementedError("Cannot translate", v)
+
+            if prop_name == 'self':
+                if view_name:
+                    result[name] = self.generic_json(view_name, base_uri)
+                else:
+                    result[name] = self.uri()
+                continue
+            elif prop_name == '@view':
+                result[name] = view_def_name
+                continue
+            elif prop_name[0] == '&':
                 prop_name = prop_name[1:]
                 assert prop_name in methods,\
                     "in viewdef %s, class %s, name %s, unknown method %s" % (
                         view_def_name, my_typename, name, prop_name)
                 # Function call. PLEASE RETURN JSON or Base object.
                 val = getattr(self, prop_name)()
-                if isinstance(val, Base):
-                    if view_name:
-                        val = val.generic_json(view_name, base_uri)
-                    else:
-                        val = val.uri(base_uri)
-                result[name] = val
+                result[name] = translate_to_json(val)
                 continue
-            if prop_name in cols:
+            elif prop_name in cols:
                 assert not view_name,\
                     "in viewdef %s, class %s, viewdef for literal property %s" % (
                         view_def_name, my_typename, prop_name)
@@ -331,8 +354,14 @@ class BaseOps(object):
                         val = val.isoformat()
                     result[name] = val
                 continue
+            elif prop_name in properties:
+                known.add(prop_name)
+                val = getattr(self, prop_name)
+                if val is not None:
+                    result[name] = translate_to_json(val)
+                continue
             assert prop_name in relns,\
-                    "in viewdef %s, class %s, prop_name %s not a column or relation" % (
+                    "in viewdef %s, class %s, prop_name %s not a column, property or relation" % (
                         view_def_name, my_typename, prop_name)
             known.add(prop_name)
             # Add derived prop?

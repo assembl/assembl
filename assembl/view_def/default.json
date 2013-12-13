@@ -2,6 +2,9 @@
     "_default": {
         "id":false,
         "type":false,
+        "@id": "self",
+        "@type": "&external_typename",
+        "@view": "@view",
         "_default":false
     },
     "Permission": {
@@ -91,7 +94,7 @@
         "extracts":[":partial"],
         "longTitle": "long_title",
         "order":true,
-        "parents":true,
+        "parents":"&parents",
         "shortTitle": "short_title",
         "table_of_contents": true,
         "inSynthesis": "&is_in_synthesis",
