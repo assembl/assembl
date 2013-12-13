@@ -225,7 +225,7 @@ class BaseOps(object):
     def uri(self, base_uri='local:'):
         return self.uri_generic(self.get_id_as_str(), base_uri)
 
-    def generic_json(self, view_def_name='default', base_uri='local:'):
+    def generic_json(self, view_def_name='default', base_uri='local:', use_dumps=False):
         view_def = get_view_def(view_def_name)
         my_typename = self.external_typename()
         my_id = self.uri(base_uri)
@@ -417,27 +417,28 @@ class BaseOps(object):
                     else:
                         result[name] = uri
 
-        if local_view.get('_default') is False:
-            return result
-        for name, col in cols.items():
-            if name in known:
-                continue  # already done
-            as_rel = fkeys_of_reln.get(frozenset((col, )))
-            if as_rel:
-                name = as_rel.key
+        if local_view.get('_default') is not False:
+            for name, col in cols.items():
                 if name in known:
-                    continue
+                    continue  # already done
+                as_rel = fkeys_of_reln.get(frozenset((col, )))
+                if as_rel:
+                    name = as_rel.key
+                    if name in known:
+                        continue
+                    else:
+                        ob_id = getattr(self, col.key)
+                        if ob_id:
+                            result[name] = as_rel.mapper.class_.uri_generic(
+                                ob_id, base_uri)
                 else:
-                    ob_id = getattr(self, col.key)
-                    if ob_id:
-                        result[name] = as_rel.mapper.class_.uri_generic(
-                            ob_id, base_uri)
-            else:
-                ob = getattr(self, name)
-                if ob:
-                    if type(ob) == datetime:
-                        ob = ob.isoformat()
-                    result[name] = ob
+                    ob = getattr(self, name)
+                    if ob:
+                        if type(ob) == datetime:
+                            ob = ob.isoformat()
+                        result[name] = ob
+        if use_dumps:
+            return dumps(result)
         return result
 
 

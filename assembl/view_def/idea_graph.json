@@ -5,7 +5,8 @@
         "_default":false
     },
     "Discussion": {
-        "table_of_contents":":idea_graph",
+        "style":"'[{\"selector\": \"node\",\"css\": {\"content\": \"data(short_title)\"}}]",
+        "elements":"table_of_contents:idea_graph",
         "creation_date": false,
         "owner": false,
         "slug": false,
@@ -14,22 +15,20 @@
         "topic": false
     },
     "Idea": {
-        "group": "'\"nodes\"",
         "data": "self:idea_graph2",
         "creation_date": true,
         "extracts":false,
         "long_title": true,
-        "short_title": true,
+        "name": "short_title",
         "order":true,
         "table_of_contents": false
     },
     "IdeaLink": {
-        "group": "'\"edges\"",
         "data": "self:idea_graph2"
     },
     "TableOfContents": {
         "creation_date": false,
-        "style":"'[{\"selector\": \"node\",\"css\": {\"content\": \"data(short_title)\"}}]",
-        "elements":["&get_idea_and_links:idea_graph"]
+        "nodes":["ideas:idea_graph"],
+        "edges":["&get_idea_links:idea_graph"]
     }
 }

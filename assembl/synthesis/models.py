@@ -282,8 +282,11 @@ class TableOfContents(SQLAlchemyBaseModel):
         if self.discussion:
             return self.discussion.id
 
+    def get_idea_links(self):
+        return Idea.get_all_idea_links(self.id)
+
     def get_idea_and_links(self):
-        return chain(self.ideas, Idea.get_all_idea_links(self.id))
+        return chain(self.ideas, self.get_idea_links())
 
     def __repr__(self):
         return "<TableOfContents %s>" % repr(self.discussion.topic)
