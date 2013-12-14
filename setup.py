@@ -48,6 +48,7 @@ setup(name='assembl',
       assembl-db-manage = assembl.scripts.db_manage:main
       assembl-ini-files = assembl.scripts.ini_files:main
       assembl-imap-test = assembl.scripts.imap_test:main
+      assembl-add-user  = assembl.scripts.add_user:main
       [nose.plugins]
       assembl_test_plugin = assembl.tests.plugins:Assembl
       """,
