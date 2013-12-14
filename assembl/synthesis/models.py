@@ -342,8 +342,8 @@ class Synthesis(SQLAlchemyBaseModel):
 class IdeaLink(SQLAlchemyBaseModel):
     __tablename__ = 'idea_association'
     id = Column(Integer, primary_key=True)
-    parent_id = Column(Integer, ForeignKey('idea.id'))
-    child_id = Column(Integer, ForeignKey('idea.id'))
+    parent_id = Column(Integer, ForeignKey('idea.id', ondelete="CASCADE"))
+    child_id = Column(Integer, ForeignKey('idea.id', ondelete="CASCADE"))
     parent = relationship(
         'Idea', backref='child_links',
         foreign_keys=(parent_id))
