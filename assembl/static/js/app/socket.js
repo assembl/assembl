@@ -11,6 +11,7 @@ define(['app', 'underscore', 'sockjs'], function(app, _, SockJS){
         this.socket.onopen = this.onOpen.bind(this);
         this.socket.onmessage = this.onMessage.bind(this);
         this.socket.onclose = this.onClose.bind(this);
+        this.state = 0;
     };
 
     /**
@@ -20,7 +21,7 @@ define(['app', 'underscore', 'sockjs'], function(app, _, SockJS){
     Socket.prototype.onOpen = function(ev){
         this.socket.send("token:" + app.getCsrfToken());
         this.socket.send("discussion:" + app.discussionID);
-        app.trigger('socket:open', [this.socket, ev]);
+        this.state = 1;
     };
 
     /**
@@ -28,6 +29,10 @@ define(['app', 'underscore', 'sockjs'], function(app, _, SockJS){
      * @event
      */
     Socket.prototype.onMessage = function(ev){
+        if (this.state == 1) {
+            app.trigger('socket:open', [this.socket, ev]);
+            this.state = 2;
+        }
         var data = JSON.parse(ev.data),
             i = 0,
             len = data.length;
@@ -45,6 +50,7 @@ define(['app', 'underscore', 'sockjs'], function(app, _, SockJS){
      */
     Socket.prototype.onClose = function(ev){
         app.trigger('socket:close', [this.socket, ev]);
+        this.state = 0;
     };
 
     /**
