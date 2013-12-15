@@ -565,6 +565,7 @@ def commit_listener(connection):
             discussion = bytes(discussion or "*")
             changes = [x[1] for x in changes]
             send_changes(connection.info['zsocket'], discussion, changes)
+        del connection.info['cdict']
     else:
         print "EMPTY CDICT!"
 
