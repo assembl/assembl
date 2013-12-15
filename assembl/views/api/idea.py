@@ -30,20 +30,19 @@ def create_idea(request):
     discussion = session.query(Discussion).get(int(discussion_id))
     idea_data = json.loads(request.body)
 
-    with transaction.manager:
-        new_idea = Idea(
-            short_title=idea_data['shortTitle'],
-            long_title=idea_data['longTitle'],
-            table_of_contents_id=discussion.table_of_contents_id,
-            order=idea_data.get('order', 0.0))
+    new_idea = Idea(
+        short_title=idea_data['shortTitle'],
+        long_title=idea_data['longTitle'],
+        table_of_contents_id=discussion.table_of_contents_id,
+        order=idea_data.get('order', 0.0))
 
-        if idea_data['parentId']:
-            parent = Idea.get_instance(idea_data['parentId'])
-            new_idea.parents.append(parent)
+    session.add(new_idea)
 
-        session.add(new_idea)
+    if idea_data['parentId']:
+        parent = Idea.get_instance(idea_data['parentId'])
+        session.add(IdeaLink(parent=parent, child=new_idea))
 
-    new_idea = session.merge(new_idea)
+    session.flush()
 
     return {'ok': True, 'id': new_idea.uri()}
 
