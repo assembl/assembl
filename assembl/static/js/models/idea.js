@@ -188,9 +188,9 @@ define(['models/base','underscore', 'models/segment', 'app', 'i18n'], function(B
                 parent = this;
 
             do {
-                parent = parent.get('parentId') !== null ? parent.getParent() : null;
+                parent = parent.get('parentId') != null ? parent.getParent() : null;
                 counter += 1;
-            } while ( parent !== null );
+            } while ( parent != null );
 
             return counter;
         },
