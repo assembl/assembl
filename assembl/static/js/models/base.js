@@ -19,7 +19,13 @@ define(['backbone', 'app'], function(Backbone, app){
          * @return {string}
          */
         getId: function(){
-            return this.get('id') || this.get('@id');
+            return this.get('@id') || this.get('id');
+        },
+
+        parse: function(resp, options) {
+            if (resp['ok'] == true && resp['id'] !== undefined) {
+                this['@id'] = resp['id'];
+            }
         }
     });
 

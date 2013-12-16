@@ -799,6 +799,9 @@
     // Get a model from the set by id.
     get: function(obj) {
       if (obj == null) return void 0;
+      if (obj.idAttribute !== undefined) {
+        return this._byId[obj[obj.idAttribute]] || this._byId[obj.cid];
+      }
       return this._byId[obj] || this._byId[obj.id] || this._byId[obj.cid];
     },
 
