@@ -76,9 +76,12 @@ define(['app', 'underscore', 'sockjs'], function(app, _, SockJS){
             return;
         }
 
-        if( model === null ){
+        // TODO André: the following fails. I see objects
+        // without collection, and the prototype is "Surrogate".
+        item.collection = collection;
+        item.prototype = collection.model.prototype;
+        if( model == null ){
             // oops, doesn't exist
-
             collection.add(item);
             //model.after_add();
         } else {
