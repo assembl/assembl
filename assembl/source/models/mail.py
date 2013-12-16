@@ -412,8 +412,12 @@ class Mailbox(PostSource):
         """
         return self.most_common_recipient_address()
 
-    # The send method will be a common interface on all sources.
-    def send(
+    def send_post(self, post):
+        #TODO benoitg
+        print "TODO: Mail::send_post():  Actually queue message"
+        #self.send_mail(sender=post.creator, message_body=post.body, subject=post.subject)
+        
+    def send_mail(
         self,
         sender,
         message_body,
@@ -536,8 +540,6 @@ class Email(ImportedPost):
     # in virtuoso, varchar is 1024 bytes and sizeof(wchar)==4, so varchar is 256 chars
     recipients = deferred(Column(UnicodeText, nullable=False), group='raw_details')
     sender = deferred(Column(Unicode(), nullable=False), group='raw_details')
-    subject = Column(Unicode(), nullable=False)
-    body = Column(UnicodeText)
 
     full_message = deferred(Column(Binary), group='raw_details')
 
@@ -550,7 +552,7 @@ class Email(ImportedPost):
     def __init__(self, *args, **kwargs):
         super(Email, self).__init__(*args, **kwargs)
 
-    def reply(self, sender, response_body):
+    def REWRITEMEreply(self, sender, response_body):
         """
         Send a response to this email.
 

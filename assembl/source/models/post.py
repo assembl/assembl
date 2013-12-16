@@ -10,6 +10,7 @@ from sqlalchemy import (
     String,
     ForeignKey,
     Unicode,
+    UnicodeText,
     or_,
 )
 
@@ -61,6 +62,9 @@ class Post(Content):
 
     creator_id = Column(Integer, ForeignKey('agent_profile.id'))
     creator = relationship(AgentProfile)
+    
+    subject = Column(Unicode(), nullable=True)
+    body = Column(UnicodeText, nullable=False)
 
     __mapper_args__ = {
         'polymorphic_identity': 'post',
@@ -79,10 +83,10 @@ class Post(Content):
         return self.views is not None
 
     def get_title(self):
-        return self.content.get_title()
+        return self.subject
 
     def get_body(self):
-        return self.content.get_body()
+        return self.body
 
     def set_ancestry(self, new_ancestry):
         descendants = self.get_descendants()

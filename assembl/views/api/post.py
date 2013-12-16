@@ -19,10 +19,10 @@ import transaction
 
 from assembl.auth import P_READ, P_ADD_POST
 from assembl.models import (
-    get_database_id, get_named_object, AgentProfile, Post, Email,
+    get_database_id, get_named_object, AgentProfile, Post, AssemblPost,
     Discussion, PostSource, Content, Idea, ViewPost, User)
 from . import acls
-
+import uuid
 
 posts = Service(name='posts', path=API_DISCUSSION_PREFIX + '/posts',
                 description="Post API following SIOC vocabulary as much as possible",
@@ -238,22 +238,33 @@ def create_post(request):
         raise HTTPUnauthorized()
 
     if reply_id:
-        post = Post.get_instance(reply_id)
-        post.reply(user, message)
-
-        return {"ok": True}
-
+        in_reply_to_post = Post.get_instance(reply_id)
+    else:
+        in_reply_to_post = None
+    
     discussion_id = request.matchdict['discussion_id']
-    discussion = Discussion.get(id=int(discussion_id))
-
-    subject = subject or discussion.topic
+    discussion = Discussion.get_instance(discussion_id)
 
     if not discussion:
         raise HTTPNotFound(
             _("No discussion found with id=%s" % discussion_id)
         )
+    
+    #TODO benoitg:  Support replying to an idea
+    subject = subject or ("Re: " + in_reply_to_post.subject if in_reply_to_post else None) or discussion.topic
+
+    new_post = AssemblPost(discussion_id=discussion.id,
+                           creator_id=user_id,
+                           subject=subject,
+                           body=html if html else message,
+                           message_id=uuid.uuid1().urn)
+    AssemblPost.db.add(new_post)
+    AssemblPost.db.flush()
+    print(repr(in_reply_to_post))
+    if in_reply_to_post:
+        new_post.set_parent(in_reply_to_post)
 
     for source in discussion.sources:
-        source.send(user, message, subject=subject, html_body=html)
+        source.send_post(new_post)
 
     return {"ok": True}

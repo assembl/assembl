@@ -1,3 +1,3 @@
 from generic import ContentSource, PostSource, Content
 from mail import Mailbox, Email
-from post import Post
+from post import Post, AssemblPost, SynthesisPost

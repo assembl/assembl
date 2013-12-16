@@ -25,6 +25,7 @@ from .source.models import (
     Content,
     Mailbox,
     Post,
+    AssemblPost,
     Email,
 )
 from .synthesis.models import (

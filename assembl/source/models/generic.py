@@ -105,6 +105,9 @@ class PostSource(ContentSource):
     def get_discussion_id(self):
         return self.discussion_id
 
+    def send_post(self, post):
+        """ Send a new post in the discussion to the source. """
+        raise "Source %s did not implement PostSource::send_post() " % self.__class__.__name__
 
 class Content(SQLAlchemyBaseModel):
     """
