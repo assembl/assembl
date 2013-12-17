@@ -94,7 +94,7 @@ def save_idea(request):
         idea.long_title = idea_data['longTitle']
         idea.order = idea_data.get('order', idea.order)
 
-        if 'parentId' in idea_data:
+        if 'parentId' in idea_data and idea_data['parentId'] is not None:
             # TODO: Make sure this is sent as a list!
             parent = Idea.get_instance(idea_data['parentId'])
             if not parent:
