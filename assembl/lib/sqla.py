@@ -188,20 +188,24 @@ class BaseOps(object):
         return None
 
     @classmethod
-    def external_typename(cls, use_inheritance=False):
-        if use_inheritance and cls.__mapper__.polymorphic_identity is not None:
+    def external_typename(cls):
+        return cls.__name__
+
+    @classmethod
+    def external_typename_with_inheritance(cls):
+        if cls.__mapper__.polymorphic_identity is not None:
             for nextclass in cls.mro():
                 if getattr(nextclass, '__mapper__', None) is None:
                     break
                 if nextclass.__mapper__.polymorphic_identity is not None:
                     cls = nextclass
-        return cls.__name__
+        return cls.external_typename()
 
     @classmethod
     def uri_generic(cls, id, base_uri='local:'):
         if not id:
             return None
-        return base_uri + cls.external_typename(True) + "/" + str(id)
+        return base_uri + cls.external_typename_with_inheritance() + "/" + str(id)
 
     @classmethod
     def get_instance(cls, identifier):
