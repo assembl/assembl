@@ -88,11 +88,10 @@ class Post(Content):
     def get_body(self):
         return self.body
 
-    def set_ancestry(self, new_ancestry):
+    def _set_ancestry(self, new_ancestry):
         descendants = self.get_descendants()
         old_ancestry = self.ancestry or ''
         self.ancestry = new_ancestry
-        self.db.add(self)
 
         for descendant in descendants:
             updated_ancestry = descendant.ancestry.replace(
@@ -100,19 +99,18 @@ class Post(Content):
                 "%s%d," % (new_ancestry, self.id),
                 1
             )
-
             descendant.ancestry = updated_ancestry
-            self.db.add(descendant)
             
     def set_parent(self, parent):
         self.parent = parent
-        self.db.add(self)
-        self.db.add(parent)
 
-        self.set_ancestry("%s%d," % (
+        self._set_ancestry("%s%d," % (
             parent.ancestry or '',
             parent.id
         ))
+        
+        self.db.add(self)
+        self.db.flush()
 
     def last_updated(self):
         ancestry_query_string = "%s%d,%%" % (self.ancestry or '', self.id)

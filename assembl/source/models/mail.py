@@ -239,16 +239,17 @@ class Mailbox(PostSource):
         for subj, container in L:
             jwzthreading.print_container(container, 0, True)
             
-        def update_threading(threaded_emails, parent=None):
-            
-
+        def update_threading(threaded_emails, parent=None, debug=False):
+            if debug:
+                print "\n\nEntering update_threading() for %s mails:" % len(threaded_emails)
             for container in threaded_emails:
-                #jwzthreading.print_container(container)
-                #print (repr(container))
-                
-                ##print "parent: "+repr(container.parent)
-                ##print "children: "+repr(container.children)
-                ##print("\nProcessing:  " + repr(container.message.subject) + " " + repr(container.message.message_id))
+                if debug:
+                    #jwzthreading.print_container(container)
+                    print("\nProcessing:  " + repr(container.message.subject) + " " + repr(container.message.message_id)+ " " + repr(container.message.message.id))
+                    print "container: " + (repr(container))
+                    print "parent: " + repr(container.parent)
+                    print "children: " + repr(container.children)
+
                 
 
                 if(container.message):
@@ -263,26 +264,37 @@ class Mailbox(PostSource):
                             #jwzthreading strips the <>, re-add them
                             algorithm_parent_message_id = unicode("<"+parent.message.message_id+">")
                         else:
-                            # Parent was a dummy container, we may need to handle this case better
-                            # we just potentially lost sibbling relationships
+                            if debug:
+                                print "Parent was a dummy container, we may need \
+                                     to handle this case better, as we just \
+                                     potentially lost sibbling relationships"
                             algorithm_parent_message_id = None
                     else:
                         algorithm_parent_message_id = None
-                    #print("Current parent from algorithm: " + repr(algorithm_parent_message_id))
-                    #print("References: " + repr(container.message.references))
+                    if debug:
+                        print("Current parent from database: " + repr(db_parent_message_id))
+                        print("Current parent from algorithm: " + repr(algorithm_parent_message_id))
+                        print("References: " + repr(container.message.references))
                     if algorithm_parent_message_id != db_parent_message_id:
-                        # Don't reparent if the current parent isn't an email, the threading algorithm only considers mails
                         if current_parent == None or isinstance(current_parent, Email):
-                            #print("UPDATING PARENT for :" + repr(container.message.message.message_id))
+                            if debug:
+                                print("UPDATING PARENT for :" + repr(container.message.message.message_id))
                             new_parent = parent.message.message if algorithm_parent_message_id else None
-                            #print repr(new_parent)
+                            if debug:
+                                print repr(new_parent)
                             container.message.message.set_parent(new_parent)
-                    update_threading(container.children, container)
+                        else:
+                            if debug:
+                                print "Skipped reparenting:  the current parent \
+                                isn't an email, the threading algorithm only \
+                                considers mails"
+                    update_threading(container.children, container, debug=debug)
                 else:
-                    #print "Current message ID: None, was a dummy container"
-                    update_threading(container.children, parent)
+                    if debug: 
+                        print "Current message ID: None, was a dummy container"
+                    update_threading(container.children, parent, debug=debug)
                 
-        update_threading(threaded_emails.values())
+        update_threading(threaded_emails.values(), debug=False)
 
     def reprocess_content(self):
         """ Allows re-parsing all content as if it were imported for the first time
@@ -618,11 +630,9 @@ class Email(ImportedPost):
         serializable_content = super(Email, self).serializable()
 
         serializable_content.update({
-            "sender": self.sender,
-            "creator": self.creator.serializable(),
+            #"sender": self.sender,
+            #"creator": self.creator.serializable(),
             "recipients": self.recipients,
-            "subject": self.subject,
-            "body": self.body,
         })
 
         return serializable_content
