@@ -28,11 +28,11 @@ define(['backbone', 'app'], function(Backbone, app){
                 if (this.collection !== undefined) {
                     var existing = this.collection.get(id);
                     if (existing == null) {
-                        this['@id'] = id;
-                        this.collection._byId[id] = this;
+                        this.set('@id', id);
                     } else if (existing !== this) {
                         // those websockets are fast!
                         this.collection.remove(this);
+                        this.trigger("replaced", existing);
                     } else {
                         // this should not happen, but no harm.
                     }

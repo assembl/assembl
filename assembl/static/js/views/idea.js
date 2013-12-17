@@ -31,6 +31,7 @@ function(Backbone, _, $, Idea, Segment, app){
 
             this.model.on('change:shortTitle change:longTitle change:segments', this.render, this);
             this.model.on('change:isSelected', this.onIsSelectedChange, this);
+            this.model.on('replaced', this.onReplaced, this);
         },
 
         /**
@@ -134,6 +135,18 @@ function(Backbone, _, $, Idea, Segment, app){
                 this.$el.removeClass('is-selected');
             }
         },
+
+        /**
+         * @event
+         */
+        onReplaced: function(newObject) {
+            this.setElement(newObject);
+            // TODO André: I'm sure this is overkill. Please optimize.
+            app.ideaList.render();
+            app.ideaPanel.idea = newObject;
+            app.ideaPanel.render();
+        },
+
 
         /**
          * @event
