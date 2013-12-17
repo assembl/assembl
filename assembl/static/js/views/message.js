@@ -30,6 +30,7 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
          */
         initialize: function(){
             this.model.on('change:collapsed', this.onCollapsedChange, this);
+            this.model.on('replaced', this.onReplaced, this);
         },
 
         /**
@@ -325,6 +326,15 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
             app.messageList.initAnnotator();
         },
 
+        /**
+         * @event
+         */
+         onReplaced: function(newObject) {
+             this.setElement(newObject);
+             // TODO André: also look at this one, please!
+             // It will not be triggered for a while, though.
+             this.render();
+         },
 
         /**
          * Mark the current message as unread
