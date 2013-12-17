@@ -11,8 +11,15 @@ define(['app', 'underscore', 'sockjs'], function(app, _, SockJS){
         this.socket.onopen = this.onOpen.bind(this);
         this.socket.onmessage = this.onMessage.bind(this);
         this.socket.onclose = this.onClose.bind(this);
-        this.state = 0;
+        this.state = Socket.STATE_CLOSED;
     };
+
+    /**
+     * @const
+     */
+    Socket.STATE_CLOSED = 0;
+    Socket.STATE_CONNECTING = 1;
+    Socket.STATE_OPEN = 2;
 
     /**
      * Triggered when the connection opens
@@ -21,17 +28,17 @@ define(['app', 'underscore', 'sockjs'], function(app, _, SockJS){
     Socket.prototype.onOpen = function(ev){
         this.socket.send("token:" + app.getCsrfToken());
         this.socket.send("discussion:" + app.discussionID);
-        this.state = 1;
+        this.state = Socket.STATE_CONNECTING;
     };
 
     /**
-     * Triggered when the receives a message form server
+     * Triggered when the client receives a message form server
      * @event
      */
     Socket.prototype.onMessage = function(ev){
-        if (this.state == 1) {
+        if (this.state == Socket.STATE_CONNECTING) {
             app.trigger('socket:open', [this.socket, ev]);
-            this.state = 2;
+            this.state = Socket.STATE_OPEN;
         }
         var data = JSON.parse(ev.data),
             i = 0,
@@ -50,7 +57,7 @@ define(['app', 'underscore', 'sockjs'], function(app, _, SockJS){
      */
     Socket.prototype.onClose = function(ev){
         app.trigger('socket:close', [this.socket, ev]);
-        this.state = 0;
+        this.state = Socket.STATE_CLOSED;
     };
 
     /**
@@ -76,9 +83,11 @@ define(['app', 'underscore', 'sockjs'], function(app, _, SockJS){
             return;
         }
 
+        // TODO André: the following fails. I see objects
+        // without collection, and the prototype is "Surrogate".
+        item = new collection.model(item);
         if( model === null ){
             // oops, doesn't exist
-
             collection.add(item);
             //model.after_add();
         } else {

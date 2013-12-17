@@ -19,7 +19,26 @@ define(['backbone', 'app'], function(Backbone, app){
          * @return {string}
          */
         getId: function(){
-            return this.get('id') || this.get('@id');
+            return this.get('@id') || this.get('id');
+        },
+
+        parse: function(resp, options) {
+            if (resp['ok'] == true && resp['id'] !== undefined) {
+                var id = resp['id']
+                if (this.collection !== undefined) {
+                    var existing = this.collection.get(id);
+                    if (existing == null) {
+                        this['@id'] = id;
+                        this.collection._byId[id] = this;
+                    } else if (existing !== this) {
+                        // those websockets are fast!
+                        this.collection.remove(this);
+                    } else {
+                        // this should not happen, but no harm.
+                    }
+                }
+            }
+            return resp;
         }
     });
 
