@@ -11,7 +11,7 @@ from sqlalchemy.orm import aliased, joinedload, joinedload_all, contains_eager
 from assembl.views.api import API_DISCUSSION_PREFIX
 from assembl.models import (
     get_named_object, get_database_id, Extract, TextFragmentIdentifier,
-    AgentProfile, User, Source, Content, Post, Webpage)
+    AgentProfile, User, Source, Content, Post, Webpage, Idea)
 from . import acls
 from assembl.auth import (
     P_READ, P_ADD_EXTRACT, P_EDIT_EXTRACT, P_DELETE_EXTRACT, get_permissions)
