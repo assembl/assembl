@@ -592,6 +592,9 @@ class ActionOnPost(Action):
 
     object_type = 'post'
 
+    def get_discussion_id(self):
+        return self.post.get_discussion_id()
+
 
 class ViewPost(ActionOnPost):
     """

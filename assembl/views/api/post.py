@@ -159,9 +159,9 @@ def get_posts(request):
         
     if user_id:
         posts = posts.outerjoin(ViewPost,
-                    and_(ViewPost.actor_id==user_id, ViewPost.post_id==Post.id)
+                    ViewPost.actor_id==user_id and ViewPost.post_id==Post.id
                 )
-        posts = posts.options(joinedload(Post.views))
+        posts.add_entity(ViewPost)
     posts = posts.options(contains_eager(Post.content, Content.source))
     posts = posts.options(joinedload_all(Post.creator, AgentProfile.user))
 
@@ -170,25 +170,29 @@ def get_posts(request):
     if 'synthesis' in filter_names:
         posts = posts.filter(Post.is_synthesis==True)
 
-    for post in posts:
+    for x in posts:
+        if isinstance(x, tuple):
+            post, viewpost = x
+        else:
+            post = x
+            viewpost = None
         #print(repr(posts))
         #exit()
         serializable_post = post.serializable()
         if user_id:
             # TODO: THIS DOES NOT WORK. We get all views, not just the join above.
-            if(post.views):
+            if viewpost:
                 serializable_post['read'] = True
             else:
                 serializable_post['read'] = False
                 if root_post_id:
-                    with transaction.manager:
-                        viewed_post = ViewPost(
-                            actor_id=user_id,
-                            post_id=post.id
-                        )
+                    viewed_post = ViewPost(
+                        actor_id=user_id,
+                        post=post
+                    )
 
-                        Post.db.add(viewed_post)
-                        
+                    Post.db.add(viewed_post)
+
         post_data.append(serializable_post)
 
     data = {}

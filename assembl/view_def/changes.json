@@ -119,5 +119,9 @@
         "discussion": true,
         "permission": "&permission_name",
         "role": "&role_name"
+    },
+    "ViewPost": {
+        "actor": true,
+        "post": true
     }
 }
