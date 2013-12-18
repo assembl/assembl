@@ -5,10 +5,7 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
     /**
      * Constants
      */
-    var MESSAGE_MODE = 'is-message-mode',
-        NO_FILTER = '',
-        SYNTHESIS_FILTER = 'synthesis',
-        DIV_ANNOTATOR_HELP = "<div class='annotator-draganddrop-help'>" + i18n.gettext('You can drag the segment above directly to the table of ideas') + "</div>";
+    var DIV_ANNOTATOR_HELP = app.format("<div class='annotator-draganddrop-help'>{0}</div>", i18n.gettext('You can drag the segment above directly to the table of ideas') );
 
     /**
      * @class views.MessageList
@@ -23,23 +20,15 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
             }
 
             this.messages.on('reset', this.render, this);
-            this.messageThread.on('reset', this.renderThread, this);
 
             var that = this;
             app.on('idea:select', function(idea){
                 if( idea ){
                     app.openPanel(app.messageList);
-                    that.loadData(idea.getId());
-                    that.$el.addClass(MESSAGE_MODE);
+                    that.loadDataByIdeaId(idea.getId());
                 }
             });
         },
-
-        /**
-         * Flag whether it is being selected or not
-         * @type {Boolean}
-         */
-        isSelecting: false,
 
         /**
          * The template
@@ -48,46 +37,16 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
         template: app.loadTemplate('messageList'),
 
         /**
-         * The view's data
-         * @type {Object}
-         */
-        data: { page: 1, rootIdeaID: 0 },
-
-        /**
-         * Default filter for the request
-         * @type {String}
-         */
-        filters: NO_FILTER,
-
-        /**
          * The collapse/expand flag
          * @type {Boolean}
          */
         collapsed: false,
 
         /**
-         * The message collapse/expand flag
-         * @type {Boolean}
-         */
-        threadCollapsed: false,
-
-        /**
          * The collection
          * @type {MessageCollection}
          */
         messages: new Message.Collection(),
-
-        /**
-         * The current message thread
-         * @type {MessageCollection}
-         */
-        messageThread: new Message.Collection(),
-
-        /**
-         * The panel for message thread
-         * @type {jQuery}
-         */
-        messageThreadPanel: null,
 
         /**
          * The annotator reference
@@ -105,63 +64,26 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
                 messages = this.messages.getRootMessages();
 
             _.each(messages, function(message){
-                var messageListItem = new MessageListItem({model:message});
+                var messageListItem = new MessageView({model:message});
                 list.appendChild(messageListItem.render().el);
             });
 
             var data = {
-                page: this.data.page,
-                maxPage: this.data.maxPage,
-                inbox: this.data.inbox,
-                total: this.data.total,
-                startIndex: this.data.startIndex,
-                endIndex: this.data.endIndex,
-                collapsed: this.collapsed,
-                threadCollapsed: this.threadCollapsed
+                inbox: this.messages.length,
+                total: this.messages.length,
+                collapsed: this.collapsed
             };
 
             this.$el.html( this.template(data) );
+
             if( messages.length > 0 ){
                 this.$('.idealist').append( list );
             } else {
                 this.$('.idealist').append( app.format("<div class='margin'>{0}</div>", i18n.gettext('No messages')) );
             }
 
-
             this.chk = this.$('#messageList-mainchk');
-            this.messageThreadPanel = this.$('#messageList-thread');
-
-            this.renderThread();
-            //this.closeThread();
-
             return this;
-        },
-
-        /**
-         * Render the thread section
-         */
-        renderThread: function(){
-            var list = document.createDocumentFragment(),
-                messages = this.messageThread.getRootMessages();
-
-            _.each(messages, function(message){
-                var messageView = new MessageView({model:message}),
-                    view = messageView.render(),
-                    children = view.getRenderedChildrenInCascade();
-
-                list.appendChild(view.el);
-                _.each(children, function(child){
-                    list.appendChild(child);
-                });
-            });
-
-            if( messages.length > 0 ){
-                this.messageThreadPanel.empty().append(list);
-            } else {
-                this.messageThreadPanel.empty().append( app.format("<div class='margin'>{0}</div>", i18n.gettext('No messages')) );
-            }
-
-            this.initAnnotator();
         },
 
         /**
@@ -170,12 +92,8 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
         initAnnotator: function(){
             this.destroyAnnotator();
 
-            this.messageThreadPanel.annotator();
-            this.annotator = this.messageThreadPanel.data('annotator');
-
-            if( ! this.annotator ){
-                return;
-            }
+            // Saving the annotator reference
+            this.annotator = this.$('#messageList-list').annotator().data('annotator');
 
             var annotations = this.messages.getAnnotations(),
                 that = this;
@@ -261,6 +179,7 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
             this.annotator.unsubscribe('annotationViewerShown');
 
             this.annotator.destroy();
+            this.annotator = null;
         },
 
         /**
@@ -285,67 +204,17 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
         },
 
         /**
-         * Load the data
-         * @param {number} [rootIdeaID=null]
+         * Load the initial data to populate the collection
          */
-        loadData: function(rootIdeaID){
-            var that = this,
-                data = {
-                    'page': this.data.page
-                };
-
-            if( this.filters !== NO_FILTER ){
-                data.filters = this.filters;
-            }
-
-            if( rootIdeaID !== undefined ){
-                this.data.rootIdeaID = rootIdeaID;
-                data['root_idea_id'] = rootIdeaID;
-            }
+        loadInitialData: function(){
+            var that = this;
 
             this.blockPanel();
             this.collapsed = false;
 
-            $.getJSON( app.getApiUrl('posts'), data, function(data){
-                that.data = data;
-                that.data.rootIdeaID = rootIdeaID;
+            $.getJSON( app.getApiUrl('posts'), function(data){
                 that.messages.reset(data.posts);
-                that.messageThread.reset(data.posts);
             });
-        },
-
-        /**
-         * Load the next data
-         */
-        loadNextData: function(){
-            if( _.isNumber(this.data.page) ){
-                this.data.page += 1;
-            } else {
-                this.data.page = 1;
-            }
-
-            if( this.data.page > this.data.maxPage ){
-                this.data.page = this.data.maxPage;
-            } else {
-                this.loadData();
-            }
-        },
-
-        /**
-         * Load the previous data
-         */
-        loadPreviousData: function(){
-            if( _.isNumber(this.data.page) ){
-                this.data.page -= 1;
-            } else {
-                this.data.page = 1;
-            }
-
-            if( this.data.page < 1 ){
-                this.data.page = 1;
-            } else {
-                this.loadData();
-            }
         },
 
         /**
@@ -382,77 +251,6 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
         },
 
         /**
-         * Expand All messages of the open thread
-         */
-        expandThreadMessages: function(){
-            this.messageThread.each(function(message){
-                message.set('collapsed', false);
-            });
-
-            this.threadCollapsed = false;
-
-            this.$('#messageList-message-collapseButton')
-                .removeClass('icon-download-1')
-                .addClass('icon-upload');
-        },
-
-        /**
-         * Collapse All messages of the open thread
-         */
-        collapseThreadMessages: function(){
-            this.messageThread.each(function(message){
-                message.set('collapsed', true);
-            });
-
-            this.threadCollapsed = true;
-
-            this.$('#messageList-message-collapseButton')
-                .removeClass('icon-upload')
-                .addClass('icon-download-1');
-        },
-
-        /**
-         * Open the message thread by the given id
-         * @param  {String} id
-         */
-        openMessageByid: function(id){
-            var message = this.messages.get(id);
-
-            if( message ){
-                this.loadThreadById(id);
-            }
-        },
-
-        /**
-         * Loads the message thread by post id
-         * @param {Number} id
-         * @param {Function} [callback] Callback function
-         */
-        loadThreadById: function(id, callback){
-            var that = this;
-
-            this.blockPanel();
-            $.getJSON( app.getApiUrl('posts'), {'root_post_id': id}, function(json){
-                that.unblockPanel();
-                that.$el.addClass(MESSAGE_MODE);
-                that.messageThread.reset(json.posts);
-
-                if( _.isFunction(callback) ){
-                    setTimeout(function(){
-                        callback(json);
-                    }, 10);
-                }
-            });
-        },
-
-        /**
-         * Closes the thread panel and returns to the message lists
-         */
-        closeThread: function(){
-            this.$el.removeClass(MESSAGE_MODE);
-        },
-
-        /**
          * The events
          * @type {Object}
          */
@@ -461,13 +259,10 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
             'click #messageList-collapseButton': 'toggleMessages',
             'click #messageList-returnButton': 'onReturnButtonClick',
 
-            'click #messageList-inbox': 'loadInbox',
+            'click #messageList-inbox': 'showInbox',
             'click #messageList-insynthesis': 'loadSynthesisMessages',
 
             'click #messageList-message-collapseButton': 'toggleThreadMessages',
-
-            'click #messageList-prevButton': 'loadPreviousData',
-            'click #messageList-nextButton': 'loadNextData',
 
             'change #messageList-mainchk': 'onChangeMainCheckbox',
             'click #messageList-selectall': 'selectAll',
@@ -490,19 +285,10 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
 
         /**
          * @event
-         * Load the inbox without filtering
+         * Shows the inbox
          */
-        loadInbox: function(){
-            this.filters = NO_FILTER;
+        showInbox: function(){
             this.loadData();
-        },
-
-        /**
-         * @event
-         */
-        loadSynthesisMessages: function(){
-            this.filters = SYNTHESIS_FILTER;
-            this.loadData(this.data.rootIdeaID);
         },
 
         /**
@@ -513,17 +299,6 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
                 this.expandMessages();
             } else {
                 this.collapseMessages();
-            }
-        },
-
-        /**
-         * Collapse or expand the messages of the open thread
-         */
-        toggleThreadMessages: function(){
-            if( this.threadCollapsed ){
-                this.expandThreadMessages();
-            } else {
-                this.collapseThreadMessages();
             }
         },
 

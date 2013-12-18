@@ -14,12 +14,6 @@ define(['models/base', 'jquery', 'app'], function(Base, $, app){
         },
 
         /**
-         * Overwritting the idAttribute
-         * @type {String}
-         */
-        idAttribute: '@id',
-
-        /**
          * The url
          * @type {String}
          */
@@ -188,7 +182,7 @@ define(['models/base', 'jquery', 'app'], function(Base, $, app){
         getAnnotations: function(){
             var ret = [];
 
-            _.each(this.models, function(model){                
+            _.each(this.models, function(model){
                 ret = _.union(ret, model.getAnnotations() );
             });
 

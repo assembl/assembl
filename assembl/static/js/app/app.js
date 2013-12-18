@@ -375,7 +375,6 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard, Types){
         /**
          * Saves the current annotation if there is any
          */
-        
         saveCurrentAnnotator: function(){
             if( app.messageList.annotatorEditor ){
                 app.messageList.annotatorEditor.element.find('.annotator-save').click();
@@ -533,6 +532,10 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard, Types){
          */
         formatDate: function(date, format){
             format = format || app.dateFormat;
+
+            if( date === null ){
+                return '';
+            }
 
             date = new Moment(date);
             return date.format(format);
@@ -779,44 +782,6 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard, Types){
          */
         stripHtml: function(html){
             return html ? $.trim( $('<div>'+html+'</div>').text() ) : html;
-        },
-
-        /**
-         * Return the xpath related to the given root element
-         * 
-         * @param {string} xpath
-         * @return {String}
-         */
-        getXPath: function(xpath){
-            if( app.messageList.messageThreadPanel === null ){
-                return '';
-            }
-
-            var rootElement = app.messageList.messageThreadPanel.get(0),
-                path = '',
-                isInMessage = false,
-                tagName, index, node;
-
-            node = document.evaluate('./'+xpath, rootElement, null, XPathResult.ANY_TYPE, null).iterateNext();
-
-            while( node && node.nodeType === Node.ELEMENT_NODE && node != rootElement ){
-                tagName = node.tagName.replace(":", "\\:");
-
-                if( node.classList.contains('message-body') ){
-                    isInMessage = true;
-                    break;
-                }
-
-                index = $(node.parentNode).children(tagName).index(node) + 1;
-                path = app.format("/{0}[{1}]{2}", node.tagName.toLowerCase(), index, path);
-                node = node.parentNode;
-            }
-
-            if( isInMessage ){
-                path = app.format("//div[@data-message-id='{0}']/div[@class='message-body']{1}", node.parentNode.getAttribute('data-message-id'), path);
-            }
-
-            return path;
         },
 
         /**

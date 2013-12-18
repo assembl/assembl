@@ -1,93 +1,59 @@
 <div class="panel">
 
-    <div id="messageList-list" class="panel-divisor">
+    <div class="panel-header">
+        <div class="dropdown">
+            {% set inbox = '<%= inbox %>' %}
 
-        <div class="panel-header">
-            <div class="dropdown">
-                {% set inbox = '<%= inbox %>' %}
-
-                <span class="dropdown-label text-bold">{{ gettext('Messages (%(total)s unread)')|format(total=inbox)|safe }}</span>
-                <ul class="dropdown-list">
-                    <li id="messageList-inbox" class="dropdown-listitem">{{ gettext('All messages') }}</li>
-                    <li id="messageList-insynthesis" class="dropdown-listitem">{{ gettext('Synthesis Messages') }}</li>
-                    {# <li class="dropdown-listitem">{{ gettext('Unread') }}</li>
-                    <li class="dropdown-listitem">{{ gettext('Uncaught') }}</li>
-                    <li class="dropdown-listitem">{{ gettext('Followed') }}</li> #}
-                </ul>
-            </div>
-
-            <div class="dropdown dropdown--button">
-                <span class="dropdown-label">
-                    <label class="chk chk--dropdown chk--muted">
-                        <input id="messageList-mainchk" type="checkbox" class="chk-checkbox" />
-
-                        <span class="chk-label"></span>
-                    </label>
-                </span>
-
-                <ul class="dropdown-list">
-                    <li id="messageList-selectall" class="dropdown-listitem">{{ gettext('All') }}</li>
-                    <li id="messageList-selectnone" class="dropdown-listitem">{{ gettext('None') }}</li>
-                    <li id="messageList-selectread" class="dropdown-listitem">{{ gettext('Read') }}</li>
-                    <li id="messageList-selectunread" class="dropdown-listitem">{{ gettext('Unread') }}</li>
-                </ul>
-            </div>
-
-            {#
-            <div class="buttongroup margin-left">
-                <a id="messageList-prevButton" class="button button--condensed" <%= page == 1 ? 'disabled' : '' %>>
-                    <i class="icon-left-dir"></i>
-                </a>
-                <a id="messageList-nextButton" class="button button--condensed" <%= page >= maxPage ? 'disabled' : '' %>>
-                    <i class="icon-right-dir"></i>
-                </a>
-            </div>
-            #}
-
-            <div class="inline text-muted margin-left">
-                {% set startIndex = '<%= startIndex %>' %}
-                {% set endIndex = '<%= endIndex %>' %}
-                {% set total = '<%= total %>' %}
-
-                {# {{ gettext('%(start)s - %(end)s of %(total)s')|format(start=startIndex, end=endIndex, total=total)|safe }} #}
-                {{ gettext('%(total)s messages')|format(start=startIndex, end=endIndex, total=total)|safe }}
-            </div>
-
-            <div class="float-right">
-                <a id="messageList-collapseButton" data-tooltip="<%= collapsed ? '{{gettext('Expand all')}}' : '{{gettext('Collapse all')}}' %>" class="iconbutton <%= collapsed ? 'icon-download-1' : 'icon-upload' %>"></a>
-                <a id="messageList-fullscreenButton" class="iconbutton iconbutton--resizefull" data-tooltip="{{ gettext('Fullsize') }}"></a>
-                <a id="messageList-closeButton" data-tooltip="{{gettext('Close panel')}}" class="iconbutton icon-cancel"></a>
-            </div>
+            <span class="dropdown-label text-bold">
+                <% if (inbox > 0) { %>{{ gettext('Messages (%(total)s unread)')|format(total=inbox)|safe }}
+                <% } else { %>{{ gettext('No Messages') }}<% } %>
+            </span>
+            <ul class="dropdown-list">
+                <li id="messageList-inbox" class="dropdown-listitem">{{ gettext('All messages') }}</li>
+                <li id="messageList-insynthesis" class="dropdown-listitem">{{ gettext('Synthesis Messages') }}</li>
+                {#
+                <li class="dropdown-listitem">{{ gettext('Unread') }}</li>
+                <li class="dropdown-listitem">{{ gettext('Uncaught') }}</li>
+                <li class="dropdown-listitem">{{ gettext('Followed') }}</li>
+                #}
+            </ul>
         </div>
 
-        <div class="panel-body">
+        <div class="dropdown dropdown--button">
+            <span class="dropdown-label">
+                <label class="chk chk--dropdown chk--muted">
+                    <input id="messageList-mainchk" type="checkbox" class="chk-checkbox" />
 
-            <div id="messageList-list" class="idealist"></div>
+                    <span class="chk-label"></span>
+                </label>
+            </span>
 
+            <ul class="dropdown-list">
+                <li id="messageList-selectall" class="dropdown-listitem">{{ gettext('All') }}</li>
+                <li id="messageList-selectnone" class="dropdown-listitem">{{ gettext('None') }}</li>
+                <li id="messageList-selectread" class="dropdown-listitem">{{ gettext('Read') }}</li>
+                <li id="messageList-selectunread" class="dropdown-listitem">{{ gettext('Unread') }}</li>
+            </ul>
         </div>
 
-        <div class="panel-footer"></div>
+        <div class="inline text-muted margin-left">
+            {% set total = '<%= total %>' %}
+            {{ gettext('%(total)s messages')|format(total=total)|safe }}
+        </div>
+
+        <div class="float-right">
+            <a id="messageList-collapseButton" data-tooltip="<%= collapsed ? '{{gettext('Expand all')}}' : '{{gettext('Collapse all')}}' %>" class="iconbutton <%= collapsed ? 'icon-download-1' : 'icon-upload' %>"></a>
+            <a id="messageList-fullscreenButton" class="iconbutton iconbutton--resizefull" data-tooltip="{{ gettext('Fullsize') }}"></a>
+            <a id="messageList-closeButton" data-tooltip="{{gettext('Close panel')}}" class="iconbutton icon-cancel"></a>
+        </div>
+    </div>
+
+    <div class="panel-body">
+
+        <div id="messageList-list" class="idealist"></div>
 
     </div>
 
-    <div id="messageList-messages" class="panel-divisor">
-
-        <div class="panel-header">
-            <a id="messageList-returnButton" class="link text-bold">{{ gettext('Return to all messages') }}</a>
-
-            <div class="float-right">
-                <a id="messageList-message-collapseButton" class="iconbutton <%= threadCollapsed ? 'icon-download-1' : 'icon-upload' %>"></a>
-                <a id="messageList-fullscreenButton" class="iconbutton iconbutton--resizefull" data-tooltip="{{ gettext('Fullsize') }}"></a>
-                <a id="messageList-closeButton" data-tooltip="{{gettext('Close panel')}}" class="iconbutton icon-cancel"></a>
-            </div>
-        </div>
-
-        <div id="messageList-thread" class="panel-body boxlist">
-            {{ gettext('Loading...') }}
-        </div>
-
-        <div class="panel-footer"></div>
-
-    </div>
+    <div class="panel-footer"></div>
 
 </div>
