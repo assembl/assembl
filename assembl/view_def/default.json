@@ -77,7 +77,7 @@
         "parentId": "parent",
         "read": "&is_read",
         "subject": "&get_title",
-        "views": [": "]
+        "views": [":"]
     },
     "Discussion": {
         "creation_date": true,

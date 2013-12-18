@@ -105,6 +105,9 @@ def get_posts(request):
     if root_idea_id:
         root_idea_id = get_database_id("Idea", root_idea_id[0])
 
+    view_def = request.GET.get('view')
+
+
     #Rename "inbox" to "unread", the number of unread messages for the current user.
     no_of_messages_viewed_by_user = Post.db.query(ViewPost).join(
         Post,
@@ -159,9 +162,9 @@ def get_posts(request):
         
     if user_id:
         posts = posts.outerjoin(ViewPost,
-                    ViewPost.actor_id==user_id and ViewPost.post_id==Post.id
+                    and_(ViewPost.actor_id==user_id, ViewPost.post_id==Post.id)
                 )
-        posts.add_entity(ViewPost)
+        posts = posts.add_entity(ViewPost)
     posts = posts.options(contains_eager(Post.content, Content.source))
     posts = posts.options(joinedload_all(Post.creator, AgentProfile.user))
 
@@ -170,17 +173,12 @@ def get_posts(request):
     if 'synthesis' in filter_names:
         posts = posts.filter(Post.is_synthesis==True)
 
-    for x in posts:
-        if isinstance(x, tuple):
-            post, viewpost = x
-        else:
-            post = x
-            viewpost = None
-        #print(repr(posts))
-        #exit()
-        serializable_post = post.serializable()
-        if user_id:
-            # TODO: THIS DOES NOT WORK. We get all views, not just the join above.
+    if user_id:
+        for post, viewpost in posts:
+            if view_def:
+                serializable_post = post.generic_json(view_def)
+            else:
+                serializable_post = post.serializable()
             if viewpost:
                 serializable_post['read'] = True
             else:
@@ -192,8 +190,14 @@ def get_posts(request):
                     )
 
                     Post.db.add(viewed_post)
-
-        post_data.append(serializable_post)
+            post_data.append(serializable_post)
+    else:
+        for post in posts:
+            if view_def:
+                serializable_post = post.generic_json(view_def)
+            else:
+                serializable_post = post.serializable()
+            post_data.append(serializable_post)
 
     data = {}
     data["page"] = page
@@ -219,11 +223,15 @@ def get_posts(request):
 def get_post(request):
     post_id = request.matchdict['id']
     post = Post.get_instance(post_id)
+    view_def = request.GET.get('view')
 
     if not post:
         raise HTTPNotFound("Post with id '%s' not found." % post_id)
 
-    return post.serializable()
+    if view_def:
+        return post.generic_json(view_def)
+    else:
+        return post.serializable()
 
 
 @posts.post(permission=P_ADD_POST)
