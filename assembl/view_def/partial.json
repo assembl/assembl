@@ -75,8 +75,6 @@
         "creation_date": true,
         "owner_id": "owner",
         "slug": true,
-        "synthesis_id": "synthesis",
-        "table_of_contents_id": "table_of_contents",
         "topic": true
     },
     "Idea": {
@@ -85,7 +83,7 @@
         "order": true,
         "parents": true,
         "shortTitle": "short_title",
-        "table_of_contents": false
+        "discussion": false
     },
     "TableOfContents": {
         "creation_date": true

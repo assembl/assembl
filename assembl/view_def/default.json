@@ -84,8 +84,6 @@
         "owner_id": "owner",
         "slug": true,
         "sources": [":"],
-        "synthesis_id": "synthesis",
-        "table_of_contents": ":",
         "topic": true,
         "permissions": "&get_roles_by_permission"
     },
@@ -96,9 +94,9 @@
         "order": true,
         "parents": "&parents",
         "shortTitle": "short_title",
-        "table_of_contents": true,
-        "inSynthesis": "&is_in_synthesis",
-        "total": "&get_num_children"
+        "discussion": false,
+        "inNextSynthesis": "&is_in_next_synthesis",
+        "numChildIdea": "&get_num_children"
     },
     "TableOfContents": {
         "creation_date": true,

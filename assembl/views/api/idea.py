@@ -5,7 +5,7 @@ from cornice import Service
 from pyramid.httpexceptions import HTTPNotFound, HTTPBadRequest, HTTPNoContent
 from assembl.views.api import API_DISCUSSION_PREFIX
 from assembl.models import (
-    get_named_object, Idea, IdeaLink, Discussion, Extract)
+    get_named_object, Idea, IdeaLink, Discussion, Extract, SubGraphIdeaAssociation)
 from . import acls
 from assembl.auth import (P_READ, P_ADD_IDEA, P_EDIT_IDEA)
 
@@ -33,7 +33,7 @@ def create_idea(request):
     new_idea = Idea(
         short_title=idea_data['shortTitle'],
         long_title=idea_data['longTitle'],
-        table_of_contents_id=discussion.table_of_contents_id,
+        discussion=discussion,
         order=idea_data.get('order', 0.0))
 
     session.add(new_idea)
@@ -64,11 +64,23 @@ def get_ideas(request):
     discussion = Discussion.get(id=int(discussion_id))
     if not discussion:
         raise HTTPNotFound("Discussion with id '%s' not found." % discussion_id)
-
+    next_synthesis = discussion.get_next_synthesis()
     ideas = Idea.db.query(Idea).filter_by(
-        table_of_contents_id=discussion.table_of_contents_id
+        discussion_id=discussion.id
     ).order_by(Idea.order, Idea.creation_date)
-    retval = [idea.serializable() for idea in ideas]
+    #TODO:  Append here...
+    ideas = ideas.outerjoin(SubGraphIdeaAssociation,
+                    and_(SubGraphIdeaAssociation.sub_graph_id==next_synthesis.id, SubGraphIdeaAssociation.idea_id==Idea.id)
+        )
+    ideas = ideas.options(joinedload(SubGraphIdeaAssociation))
+    #'inNextSynthesis': True if self.synthesis_id else False,
+    retval = []
+    for idea in ideas:
+        print(repr(idea))
+        serialized_idea = idea.serializable()
+        serialized_idea['inNextSynthesis'] = True if idea.id else False,
+
+        retval.append(serialized_idea)
     retval.append(Idea.serializable_unsorded_posts_pseudo_idea(discussion))
     return retval
 
@@ -89,12 +101,15 @@ def save_idea(request):
         if not idea:
             raise HTTPNotFound("No such idea: %s" % (idea_id))
         discussion = Discussion.get(id=int(discussion_id))
+        if(idea.discussion_id != discussion.id):
+            raise HTTPBadRequest(
+                "Idea from discussion %s cannot saved from different discussion (%s)." % (idea.discussion_id,discussion.id ))
 
         idea.short_title = idea_data['shortTitle']
         idea.long_title = idea_data['longTitle']
         idea.order = idea_data.get('order', idea.order)
 
-        if 'parentId' in idea_data:
+        if 'parentId' in idea_data and idea_data['parentId'] is not None:
             # TODO: Make sure this is sent as a list!
             parent = Idea.get_instance(idea_data['parentId'])
             if not parent:
@@ -108,10 +123,13 @@ def save_idea(request):
             for pl in to_remove:
                 idea.parent_links.remove(pl)
 
-        if idea_data['inSynthesis']:
-            idea.synthesis = discussion.synthesis
+        next_synthesis = discussion.get_next_synthesis()
+        if idea_data['inNextSynthesis']:
+            if idea not in next_synthesis.ideas:
+                next_synthesis.ideas.append(idea)
         else:
-            idea.synthesis = None
+            if idea in next_synthesis.ideas:
+                next_synthesis.ideas.remove(idea)
 
         Idea.db.add(idea)
 

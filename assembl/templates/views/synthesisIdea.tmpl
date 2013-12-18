@@ -2,8 +2,8 @@
 <div class="idealist-body">
     <% if (hasCheckbox) { %>
     <label class="chk chk--idealist">
-        <input type="checkbox" class="chk-checkbox" <% if(inSynthesis) { %>checked="checked"<% } %> />
-        <span class="chk-label" <% if(inSynthesis) { %>data-tooltip="{{ gettext('Deactivate') }}"<% } else { %>data-tooltip="{{ gettext('Activate') }}"<% } %>></span>
+        <input type="checkbox" class="chk-checkbox" <% if(inNextSynthesis) { %>checked="checked"<% } %> />
+        <span class="chk-label" <% if(inNextSynthesis) { %>data-tooltip="{{ gettext('Deactivate') }}"<% } else { %>data-tooltip="{{ gettext('Activate') }}"<% } %>></span>
     </label>
     <% }  %>
 

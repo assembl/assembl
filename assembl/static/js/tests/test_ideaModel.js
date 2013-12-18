@@ -28,7 +28,7 @@ define(['jasmine', 'underscore', 'models/idea'], function(jasmine, _, Idea){
             var attrs = {
                 shortTitle: 'New idea',
                 longTitle: 'Please add a description',
-                total: 0,
+                numChildIdea: 0,
                 hasCheckbox: true,
                 featured: false,
                 active: false,

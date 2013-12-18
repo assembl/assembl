@@ -74,8 +74,6 @@
     "Discussion": {
         "creation_date": true,
         "slug": true,
-        "synthesis_id": "synthesis",
-        "table_of_contents_id": "table_of_contents",
         "topic": true
     },
     "Idea": {
@@ -84,8 +82,8 @@
         "order": true,
         "parents": true,
         "shortTitle": "short_title",
-        "table_of_contents": true,
-        "total": "&get_num_children"
+        "inNextSynthesis": "&is_in_next_synthesis",
+        "numChildIdea": "&get_num_children"
     },
     "TableOfContents": {
         "creation_date": true
@@ -93,7 +91,7 @@
     "Synthesis": {
         "creation_date": true,
         "discussion_id": "discussion",
-        "publication_date": true
+        "published_in_post": true
     },
     "Extract": {
         "created": "creation_date",

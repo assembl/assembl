@@ -180,7 +180,7 @@ def put_extract(request):
     idea_id = updated_extract_data.get('idIdea', None)
     if idea_id:
         idea = Idea.get_instance(idea_id)
-        if(idea.table_of_contents.discussion != extract.discussion):
+        if(idea.discussion != extract.discussion):
             raise HTTPBadRequest(
                 "Extract from discussion %s cannot be associated with an idea from a different discussion." % extract.discussion_id)
         extract.idea = idea

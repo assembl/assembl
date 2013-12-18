@@ -8,8 +8,8 @@ from assembl.auth import (P_READ, P_EDIT_SYNTHESIS, P_SEND_SYNTHESIS)
 from . import acls
 
 synthesis = Service(
-    name='synthesis',
-    path=API_DISCUSSION_PREFIX + '/synthesis/',
+    name='next_synthesis',
+    path=API_DISCUSSION_PREFIX + '/next_synthesis/',
     description="Manipulate the synthesis for a discussion",
     acl=acls)
 
@@ -19,7 +19,7 @@ def get_synthesis(request):
     discussion_id = request.matchdict['discussion_id']
     discussion = Discussion.get_instance(discussion_id)
 
-    return discussion.synthesis.serializable()
+    return discussion.get_next_synthesis().serializable()
 
 
 # Update
@@ -28,7 +28,7 @@ def save_synthesis(request):
     discussion_id = request.matchdict['discussion_id']
     discussion = Discussion.get_instance(discussion_id)
     synthesis_data = json.loads(request.body)
-    synthesis = discussion.synthesis
+    synthesis = discussion.get_next_synthesis()
 
     with transaction.manager:
         synthesis.subject = synthesis_data.get('subject')

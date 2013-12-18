@@ -140,7 +140,7 @@ function(Backbone, _, $, Idea, Segment, app){
          */
         onCheckboxChange: function(ev){
             ev.stopPropagation();
-            this.model.set('inSynthesis', ev.currentTarget.checked);
+            this.model.set('inNextSynthesis', ev.currentTarget.checked);
         },
 
         /**

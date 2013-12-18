@@ -8,10 +8,10 @@ function(jasmine, _, app, IdeaView, Idea){
         var model = new Idea.Model({
             shortTitle: '',
             longTitle: '',
-            total: 1,
+            numChildIdea: 1,
             level: 1,
             featured: false,
-            inSynthesis: false,
+            inNextSynthesis: false,
             hasCheckbox: true,
             hasOptions: false
         });

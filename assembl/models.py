@@ -26,6 +26,7 @@ from .source.models import (
     Mailbox,
     Post,
     AssemblPost,
+    SynthesisPost,
     Email,
 )
 from .synthesis.models import (
@@ -34,6 +35,10 @@ from .synthesis.models import (
     Idea,
     IdeaLink,
     Extract,
+    IdeaGraphView,
+    SubGraphIdeaAssociation,
+    SubGraphIdeaLinkAssociation,
+    ExplicitSubGraphView,
     Synthesis,
     TextFragmentIdentifier,
 )

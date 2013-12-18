@@ -3,7 +3,7 @@ function(Backbone, _, Idea, IdeaView, app){
     'use strict';
 
     var FEATURED = 'featured',
-        IN_SYNTHESIS = 'inSynthesis';
+        IN_SYNTHESIS = 'inNextSynthesis';
 
     var IdeaList = Backbone.View.extend({
 
@@ -41,7 +41,7 @@ function(Backbone, _, Idea, IdeaView, app){
 
             this.ideas = new Idea.Collection();
             this.ideas.on('reset', this.render, this);
-            this.ideas.on('change:parentId change:inSynthesis', this.render, this);
+            this.ideas.on('change:parentId change:inNextSynthesis', this.render, this);
 
             var that = this;
             app.on('idea:delete', function(){
@@ -67,7 +67,7 @@ function(Backbone, _, Idea, IdeaView, app){
             if( this.filter === FEATURED ){
                 filter.featured = true;
             } else if ( this.filter === IN_SYNTHESIS ){
-                filter.inSynthesis = true;
+                filter.inNextSynthesis = true;
             }
 
             var list = document.createDocumentFragment(),
@@ -85,7 +85,7 @@ function(Backbone, _, Idea, IdeaView, app){
             var data = {
                 tocTotal: this.ideas.length,
                 featuredTotal: this.ideas.where({featured: true}).length,
-                synthesisTotal: this.ideas.where({inSynthesis: true}).length
+                synthesisTotal: this.ideas.where({inNextSynthesis: true}).length
             };
 
             data.title = data.tocTitle;
@@ -149,9 +149,9 @@ function(Backbone, _, Idea, IdeaView, app){
         },
 
         /**
-         * Filter the current idea list by inSynthesis
+         * Filter the current idea list by inNextSynthesis
          */
-        filterByInSynthesis: function(){
+        filterByInNextSynthesis: function(){
             this.filter = IN_SYNTHESIS;
             this.render();
         },
@@ -192,7 +192,7 @@ function(Backbone, _, Idea, IdeaView, app){
             'click #ideaList-fullscreenButton': 'setFullscreen',
 
             'click #ideaList-filterByFeatured': 'filterByFeatured',
-            'click #ideaList-filterByInSynthesis': 'filterByInSynthesis',
+            'click #ideaList-filterByInNextSynthesis': 'filterByInNextSynthesis',
             'click #ideaList-filterByToc': 'clearFilter'
         },
 

@@ -32,13 +32,6 @@ class Post(Content):
         onupdate='CASCADE'
     ), primary_key=True)
     
-    discussion_id = Column(Integer, ForeignKey(
-            'discussion.id', 
-            ondelete='CASCADE',
-            onupdate='CASCADE',
-        ),
-        nullable=False,)
-
     message_id = Column(Unicode(),
                         nullable=False,
                         index=True,
@@ -46,6 +39,13 @@ class Post(Content):
     
     creation_date = Column(DateTime, nullable=False, default=datetime.utcnow)
     
+    discussion_id = Column(Integer, ForeignKey(
+            'discussion.id', 
+            ondelete='CASCADE',
+            onupdate='CASCADE',
+        ),
+        nullable=False,)
+
     discussion = relationship(
         "Discussion", 
         backref=backref('posts', order_by=creation_date)
@@ -188,7 +188,7 @@ class AssemblPost(Post):
 
 class SynthesisPost(AssemblPost):
     """
-    A Post that originated directly on the Assembl system (wasn't imported from elsewhere).
+    A Post that publishes a synthesis.
     """
     __tablename__ = "synthesis_post"
 
@@ -198,7 +198,15 @@ class SynthesisPost(AssemblPost):
         onupdate='CASCADE'
     ), primary_key=True)
 
-
+    publishes_synthesis_id = Column(
+        Integer,
+        ForeignKey('synthesis.id', ondelete="CASCADE", onupdate="CASCADE"),
+        nullable=False
+    )
+    
+    publishes_synthesis = relationship('Synthesis',
+                                     backref=backref('published_in_post',uselist=False))
+    
     __mapper_args__ = {
         'polymorphic_identity': 'synthesis_post',
     }

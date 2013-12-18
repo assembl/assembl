@@ -19,8 +19,8 @@ import transaction
 
 from assembl.auth import P_READ, P_ADD_POST
 from assembl.models import (
-    get_database_id, get_named_object, AgentProfile, Post, AssemblPost,
-    Discussion, PostSource, Content, Idea, ViewPost, User)
+    get_database_id, get_named_object, AgentProfile, Post, AssemblPost, SynthesisPost, 
+    Synthesis, Discussion, PostSource, Content, Idea, ViewPost, User)
 from . import acls
 import uuid
 
@@ -189,9 +189,6 @@ def get_posts(request):
     data = {}
     data["page"] = page
     data["inbox"] = no_of_posts_to_discussion - no_of_messages_viewed_by_user
-    #What is "total", the total messages in the current context?
-    #This gave wrong count, I don't know why. benoitg
-    #data["total"] = discussion.posts().count()
     data["total"] = no_of_posts_to_discussion
     data["maxPage"] = max(1, ceil(float(data["total"])/page_size))
     #TODO:  Check if we want 1 based index in the api
@@ -230,7 +227,8 @@ def create_post(request):
     html = request_body.get('html', None)
     reply_id = request_body.get('reply_id', None)
     subject = request_body.get('subject', None)
-
+    publishes_synthesis_id = request_body.get('publishes_synthesis_id', None)
+    
     if not user_id:
         raise HTTPUnauthorized()
 
@@ -249,17 +247,33 @@ def create_post(request):
         raise HTTPNotFound(
             _("No discussion found with id=%s" % discussion_id)
         )
+
+    post_constructor_args = {
+        'discussion': discussion,
+        'message_id': uuid.uuid1().urn,
+        'creator_id': user_id,
+        'subject': subject,
+        'body': html if html else message
+        }
+    
+    
+    if publishes_synthesis_id:
+        published_synthesis = Synthesis.get_instance(publishes_synthesis_id)
+        post_constructor_args['publishes_synthesis'] = published_synthesis
+        new_post = SynthesisPost(**post_constructor_args)
+        # Publication is the end of a synthesis's lifecycle, create a new next_synthesis,
+        # copy the published sysnthesis as the basis of the next one. 
+        next_synthesis = published_synthesis.copy()
+        AssemblPost.db.add(next_synthesis)
+        print("CREATED!")
+    else:
+        new_post = AssemblPost(**post_constructor_args)
     
     #TODO benoitg:  Support replying to an idea
     subject = subject or ("Re: " + in_reply_to_post.subject if in_reply_to_post else None) or discussion.topic
 
-    new_post = AssemblPost(discussion_id=discussion.id,
-                           creator_id=user_id,
-                           subject=subject,
-                           body=html if html else message,
-                           message_id=uuid.uuid1().urn)
-    AssemblPost.db.add(new_post)
-    AssemblPost.db.flush()
+    new_post.db.add(new_post)
+    new_post.db.flush()
     print(repr(in_reply_to_post))
     if in_reply_to_post:
         new_post.set_parent(in_reply_to_post)

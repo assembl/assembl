@@ -6,7 +6,7 @@ define([], function(){
         IDEA: 'Idea',
         POST: 'Post',
         SYNTHESIS: 'Synthesis',
-        TABLE_OF_CONTENTS: 'TableOfContents',
+        TABLE_OF_CONTENTS: 'TableOfIdeas',
         USER: 'User',
         WEBPAGE: 'Webpage'
     };

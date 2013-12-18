@@ -20,7 +20,7 @@
         "long_title": true,
         "name": "short_title",
         "order": true,
-        "table_of_contents": false
+        "discussion": false
     },
     "IdeaLink": {
         "data": "self:idea_graph2"

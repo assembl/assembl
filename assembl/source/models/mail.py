@@ -321,6 +321,8 @@ class Mailbox(PostSource):
 
     @staticmethod
     def do_import_content(mbox, only_new=True):
+        mbox = mbox.db.merge(mbox)
+        mbox.db.add(mbox)
         if mbox.use_ssl:
             mailbox = IMAP4_SSL(host=mbox.host.encode('utf-8'), port=mbox.port)
         else:
@@ -345,8 +347,7 @@ class Mailbox(PostSource):
             del email_ids[0]
 
         def import_email(mailbox_obj, email_id):
-            session = Email.db()
-            mailbox_obj = session.merge(mailbox_obj)
+            session = mailbox_obj.db()
             status, message_data = mailbox.uid('fetch', email_id, "(RFC822)")
             for response_part in message_data:
                 if isinstance(response_part, tuple):
@@ -368,7 +369,7 @@ class Mailbox(PostSource):
 
         mailbox.close()
         mailbox.logout()
-
+        mbox.db.add(mbox)
         if len(email_ids):
             #We imported mails, we need to re-thread
             emails = Email.db().query(Email).filter(

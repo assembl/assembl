@@ -23,7 +23,9 @@ from sqlalchemy import (
     ForeignKey,
     desc,
     event,
+    and_,
 )
+from sqlalchemy.ext.associationproxy import association_proxy
 
 from assembl.lib.utils import slugify
 
@@ -51,70 +53,6 @@ class Discussion(SQLAlchemyBaseModel):
 
     creation_date = Column(DateTime, nullable=False, default=datetime.utcnow)
 
-    table_of_contents_id = Column(
-        Integer,
-        ForeignKey('table_of_contents.id', ondelete="CASCADE"),
-        nullable=False,
-    )
-
-    table_of_contents = relationship(
-        'TableOfContents', 
-        uselist=False,
-    )
-
-    synthesis = relationship('Synthesis', uselist=False)
-
-    def posts(self, parent_id=None):
-        """
-        Returns an iterable query of posts whose content comes from a source
-        that belongs to this discussion. The result is a list of posts sorted
-        by their youngest descendent in descending order.
-        """
-        lower_post = aliased(Post, name="lower_post")
-        lower_content = aliased(Content, name="lower_content")
-        upper_post = aliased(Post, name="upper_post")
-        upper_content = aliased(Content, name="upper_content")
-
-        latest_update = select([
-            func.coalesce(
-                func.max(lower_content.creation_date),
-                upper_content.creation_date
-            )
-        ], lower_post.content_id==lower_content.id).where(
-            lower_post.ancestry.like(
-                upper_post.ancestry + cast(upper_post.id, String) + ',%'
-            )
-        ).label("latest_update")
-
-        query = self.db.query(
-            upper_post,
-        ).join(
-            upper_content,
-        ).filter(
-            upper_post.parent_id==parent_id
-        ).order_by(
-            desc(latest_update)
-        )
-
-        if not parent_id:
-            query = query.join(
-                PostSource
-            ).filter(
-                PostSource.discussion_id==self.id,
-                upper_content.source_id==PostSource.id,
-            )
-
-        return query
-
-    def total_posts(self):
-        return self.db.query(Post).join(
-            Content,
-            PostSource
-        ).filter(
-            PostSource.discussion_id==self.id,
-            Content.source_id==PostSource.id,
-        ).count()
-
     def import_from_sources(self, only_new=True):
         for source in self.sources:
             # refetch after calling
@@ -126,8 +64,8 @@ class Discussion(SQLAlchemyBaseModel):
 
     def __init__(self, *args, **kwargs):
         super(Discussion, self).__init__(*args, **kwargs)
-        self.table_of_contents = TableOfContents(discussion=self)
-        self.synthesis = Synthesis(discussion=self)
+        table_of_contents = TableOfContents(discussion=self)
+        self.db.add(table_of_contents)
 
     def serializable(self):
         return {
@@ -144,6 +82,31 @@ class Discussion(SQLAlchemyBaseModel):
 
     def get_discussion_id(self):
         return self.id
+    
+    def get_next_synthesis(self):
+        next_synthesis =  self.db().query(Synthesis).filter(
+                and_(Synthesis.discussion_id == self.id, 
+                Synthesis.published_in_post==None)
+            ).all()
+        print"Next Synthesis"
+        print(repr(next_synthesis))
+        #There should only be a single next synthesis
+        assert len(next_synthesis) <= 1
+        if(len(next_synthesis) == 1):
+            return next_synthesis[0]
+
+
+        else:
+            next_synthesis = Synthesis(discussion=self)
+            self.db.add(next_synthesis)
+            self.db.flush()
+            return next_synthesis
+
+    def get_last_published_synthesis(self):
+        return self.db().query(Synthesis).filter(
+                Synthesis.discussion_id == self.id and 
+                Synthesis.published_in_post!=None
+            ).order_by(Synthesis.published_in_post.creation_date.desc()).first()
 
     def get_permissions_by_role(self):
         roleperms = self.db().query(Role.name, Permission.name).select_from(
@@ -196,7 +159,7 @@ class Discussion(SQLAlchemyBaseModel):
         return json.dumps([user.serializable() for user in self.get_readers()])
 
     def get_ideas_preload(self):
-        return json.dumps([idea.serializable() for idea in self.table_of_contents.ideas])
+        return json.dumps([idea.serializable() for idea in self.ideas])
 
     def get_related_extracts(self):
         return self.extracts
@@ -235,23 +198,100 @@ def slugify_topic_if_slug_is_empty(discussion, topic, oldvalue, initiator):
 
 event.listen(Discussion.topic, 'set', slugify_topic_if_slug_is_empty)
 
-
-class TableOfContents(SQLAlchemyBaseModel):
+class IdeaGraphView(SQLAlchemyBaseModel):
     """
-    Represents a Table of Contents.
+    A view on the graph of idea.
+    """
+    __tablename__ = "idea_graph_view"
+    
+    type = Column(String(60), nullable=False)
+    id = Column(Integer, primary_key=True)
 
-    A ToC in Assembl is used to organize the core ideas of a discussion in a
+    creation_date = Column(DateTime, nullable=False, default=datetime.utcnow)
+
+    discussion_id = Column(
+        Integer,
+        ForeignKey('discussion.id', ondelete="CASCADE", onupdate="CASCADE"),
+        nullable=False
+    )
+    discussion = relationship('Discussion')
+    
+    __mapper_args__ = {
+        'polymorphic_identity': 'idea_graph_view',
+        'polymorphic_on': 'type',
+        'with_polymorphic':'*'
+    }
+    
+    def copy(self):
+        retval = self.__class__()
+        retval.discussion = self.discussion
+        return retval
+
+class SubGraphIdeaAssociation(SQLAlchemyBaseModel):
+    __tablename__ = 'sub_graph_idea_association'
+    id = Column(Integer, primary_key=True)
+    sub_graph_id = Column(Integer, ForeignKey('explicit_sub_graph_view.id', ondelete="CASCADE", onupdate="CASCADE"))
+    sub_graph = relationship("ExplicitSubGraphView")
+    idea_id = Column(Integer, ForeignKey('idea.id', ondelete="CASCADE", onupdate="CASCADE"))
+        # reference to the "Keyword" object
+    idea = relationship("Idea")
+    def __init__(self, idea=None, sub_graph=None):
+        self.idea = idea
+        self.sub_graph = sub_graph
+
+    
+class SubGraphIdeaLinkAssociation(SQLAlchemyBaseModel):
+    """TODO:  Benoitg: make it work! """
+    __tablename__ = 'sub_graph_idea_link_association'
+    id = Column(Integer, primary_key=True)
+    sub_graph_id = Column(Integer, ForeignKey('explicit_sub_graph_view.id', ondelete="CASCADE", onupdate="CASCADE"))
+    idea_link_id = Column(Integer, ForeignKey('idea_association.id', ondelete="CASCADE", onupdate="CASCADE"))
+
+class ExplicitSubGraphView(IdeaGraphView):
+    """
+    A view where the Ideas and/or ideaLinks have been explicitely selected.
+    """
+    __tablename__ = "explicit_sub_graph_view"
+    
+    id = Column(Integer, ForeignKey(
+        'idea_graph_view.id',
+        ondelete='CASCADE',
+        onupdate='CASCADE'
+    ), primary_key=True)
+        
+    ideas_associations = relationship(SubGraphIdeaAssociation)
+    idea_links_associations = relationship(SubGraphIdeaLinkAssociation)
+    
+    # proxy the 'idea' attribute from the 'ideas_associations' relationship
+    ideas = association_proxy('ideas_associations', 'idea')
+    
+    __mapper_args__ = {
+        'polymorphic_identity': 'explicit_sub_graph_view',
+    }
+    
+    def copy(self):
+        retval = IdeaGraphView.copy(self)
+        retval.ideas = self.ideas
+        return retval
+        
+class TableOfContents(IdeaGraphView):
+    """
+    Represents a Table of Ideas.
+
+    A ToI in Assembl is used to organize the core ideas of a discussion in a
     threaded hierarchy.
     """
     __tablename__ = "table_of_contents"
-
-    id = Column(Integer, primary_key=True)
-    creation_date = Column(DateTime, nullable=False, default=datetime.utcnow)
-
-    discussion = relationship(
-        'Discussion',
-        uselist=False
-    )
+    
+    id = Column(Integer, ForeignKey(
+        'idea_graph_view.id',
+        ondelete='CASCADE',
+        onupdate='CASCADE'
+    ), primary_key=True)
+    
+    __mapper_args__ = {
+        'polymorphic_identity': 'table_of_contents',
+    }
 
     def serializable(self):
         return {
@@ -266,8 +306,7 @@ class TableOfContents(SQLAlchemyBaseModel):
         }
 
     def get_discussion_id(self):
-        if self.discussion:
-            return self.discussion.id
+        return self.discussion.id
 
     def get_idea_links(self):
         return Idea.get_all_idea_links(self.id)
@@ -277,42 +316,44 @@ class TableOfContents(SQLAlchemyBaseModel):
 
     def get_top_ideas(self):
         return self.db().query(Idea).filter(
-            Idea.table_of_contents_id == self.id).filter(~Idea.parent_links.any()).all()
+            Idea.discussion_id == self.discussion_id).filter(~Idea.parent_links.any()).all()
 
     def __repr__(self):
         return "<TableOfContents %s>" % repr(self.discussion.topic)
 
 
-class Synthesis(SQLAlchemyBaseModel):
+class Synthesis(ExplicitSubGraphView):
     """
-    A synthesis of the discussion.
+    A synthesis of the discussion.  A selection of ideas, associated with comments, sent periodically
+    to the discussion.s
     """
     __tablename__ = "synthesis"
-
-    id = Column(Integer, primary_key=True)
-    creation_date = Column(DateTime, nullable=False, default=datetime.utcnow)
-    publication_date = Column(DateTime, default=datetime.now)
-
+    
+    id = Column(Integer, ForeignKey(
+        'explicit_sub_graph_view.id',
+        ondelete='CASCADE',
+        onupdate='CASCADE'
+    ), primary_key=True)
+    
     subject = Column(UnicodeText)
     introduction = Column(UnicodeText)
     conclusion = Column(UnicodeText)
 
-    discussion_id = Column(
-        Integer,
-        ForeignKey('discussion.id', ondelete="CASCADE"),
-        nullable=False
-    )
-
-    discussion = relationship('Discussion')
+    __mapper_args__ = {
+        'polymorphic_identity': 'synthesis',
+    }
+    def copy(self):
+        retval = ExplicitSubGraphView.copy(self)
+        retval.subject = self.subject
+        retval.introduction = self.introduction
+        retval.conclusion = self.conclusion
+        return retval
 
     def serializable(self):
         return {
             "@id": self.uri_generic(self.id),
             "@type": self.external_typename(),
             "creation_date": self.creation_date.isoformat(),
-            "publication_date": self.publication_date.isoformat() \
-                if self.publication_date \
-                else None,
             "subject": self.subject,
             "introduction": self.introduction,
             "conclusion": self.conclusion,
@@ -329,8 +370,8 @@ class Synthesis(SQLAlchemyBaseModel):
 class IdeaLink(SQLAlchemyBaseModel):
     __tablename__ = 'idea_association'
     id = Column(Integer, primary_key=True)
-    parent_id = Column(Integer, ForeignKey('idea.id', ondelete="CASCADE"))
-    child_id = Column(Integer, ForeignKey('idea.id', ondelete="CASCADE"))
+    parent_id = Column(Integer, ForeignKey('idea.id', ondelete="CASCADE", onupdate="CASCADE"))
+    child_id = Column(Integer, ForeignKey('idea.id', ondelete="CASCADE", onupdate="CASCADE"))
     parent = relationship(
         'Idea', backref='child_links',
         foreign_keys=(parent_id))
@@ -354,16 +395,18 @@ class Idea(SQLAlchemyBaseModel):
     creation_date = Column(DateTime, nullable=False, default=datetime.utcnow)
     order = Column(Float, nullable=False, default=0.0)
 
-    table_of_contents_id = Column(
-        Integer,
-        ForeignKey('table_of_contents.id'),
-        nullable=False
+    discussion_id = Column(Integer, ForeignKey(
+            'discussion.id', 
+            ondelete='CASCADE',
+            onupdate='CASCADE',
+        ),
+        nullable=False,)
+
+    discussion = relationship(
+        "Discussion", 
+        backref=backref('ideas', order_by=creation_date)
     )
 
-    table_of_contents = relationship(
-        'TableOfContents',
-        backref='ideas',
-    )
 
     @property
     def children(self):
@@ -372,13 +415,6 @@ class Idea(SQLAlchemyBaseModel):
     @property
     def parents(self):
         return [cl.parent for cl in self.parent_links]
-
-    synthesis_id = Column(
-        Integer,
-        ForeignKey('synthesis.id'),
-    )
-
-    synthesis = relationship('Synthesis', backref='ideas')
 
     def serializable(self):
         return {
@@ -391,8 +427,8 @@ class Idea(SQLAlchemyBaseModel):
             'active': False,
             'featured': False,
             'parentId': Idea.uri_generic(self.parents[0].id) if self.parents else None,
-            'inSynthesis': True if self.synthesis_id else False,
-            'total': len(self.children),
+            'inNextSynthesis': self.is_in_next_synthesis(),
+            'numChildIdea': self.get_num_children(),
             'num_posts': self.num_posts,
         }
     @staticmethod
@@ -411,7 +447,7 @@ class Idea(SQLAlchemyBaseModel):
             'active': False,
             'featured': False,
             'parentId': None,
-            'inSynthesis': False,
+            'inNextSynthesis': False,
             'total': 0,
             'num_posts': Idea.get_num_orphan_posts(discussion),
         }
@@ -495,16 +531,14 @@ AND discussion.id=:discussion_id
         return result.first()['total_count']
 
     def get_discussion_id(self):
-        if self.table_of_contents:
-            return self.table_of_contents.get_discussion_id()
-        elif self.table_of_contents_id:
-            return TableOfContents.get(id=self.table_of_contents_id).get_discussion_id()
+        return self.discussion_id
 
     def get_num_children(self):
         return len(self.children)
 
-    def is_in_synthesis(self):
-        return self.synthesis_id is not None
+    def is_in_next_synthesis(self):
+        next_synthesis = self.discussion.get_next_synthesis()
+        return True if self in next_synthesis.ideas else False
 
     def __repr__(self):
         if self.short_title:

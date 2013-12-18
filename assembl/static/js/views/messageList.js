@@ -462,7 +462,7 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
             'click #messageList-returnButton': 'onReturnButtonClick',
 
             'click #messageList-inbox': 'loadInbox',
-            'click #messageList-insynthesis': 'loadSynthesisMessages',
+            'click #messageList-innextsynthesis': 'loadSynthesisMessages',
 
             'click #messageList-message-collapseButton': 'toggleThreadMessages',
 
