@@ -5,7 +5,7 @@ from cornice import Service
 from pyramid.httpexceptions import HTTPNotFound, HTTPBadRequest, HTTPNoContent
 from assembl.views.api import API_DISCUSSION_PREFIX
 from assembl.models import (
-    get_named_object, Idea, IdeaLink, Discussion, Extract)
+    get_named_object, get_database_id, Idea, IdeaLink, Discussion, Extract)
 from . import acls
 from assembl.auth import (P_READ, P_ADD_IDEA, P_EDIT_IDEA)
 
@@ -69,10 +69,16 @@ def get_ideas(request):
     if not discussion:
         raise HTTPNotFound("Discussion with id '%s' not found." % discussion_id)
     view_def = request.GET.get('view')
+    ids = request.GET.getall('ids')
 
     ideas = Idea.db.query(Idea).filter_by(
         table_of_contents_id=discussion.table_of_contents_id
     ).order_by(Idea.order, Idea.creation_date)
+
+    if ids:
+        ids = [get_database_id("Idea", id) for id in ids]
+        ideas = ideas.filter(Idea.id.in_(ids))
+
     if view_def:
         retval = [idea.generic_json(view_def) for idea in ideas]
     else:
