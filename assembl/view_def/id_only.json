@@ -1,5 +1,8 @@
 {
-    "_default": {},
+    "_default": {
+        "@id": "self",
+        "_default": false
+    },
     "Post": {},
     "Permission": {},
     "AgentProfile": {},

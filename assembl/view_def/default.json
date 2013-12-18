@@ -94,7 +94,7 @@
         "extracts": [":partial"],
         "longTitle": "long_title",
         "order": true,
-        "parents": "&parents",
+        "parents": "parents",
         "shortTitle": "short_title",
         "table_of_contents": true,
         "inSynthesis": "&is_in_synthesis",

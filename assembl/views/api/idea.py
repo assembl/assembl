@@ -51,11 +51,15 @@ def create_idea(request):
 def get_idea(request):
     idea_id = request.matchdict['id']
     idea = Idea.get_instance(idea_id)
+    view_def = request.GET.get('view')
 
     if not idea:
         raise HTTPNotFound("Idea with id '%s' not found." % idea_id)
 
-    return idea.serializable()
+    if view_def:
+        return idea.generic_json(view_def)
+    else:
+        return idea.serializable()
 
 
 @ideas.get(permission=P_READ)
@@ -64,12 +68,16 @@ def get_ideas(request):
     discussion = Discussion.get(id=int(discussion_id))
     if not discussion:
         raise HTTPNotFound("Discussion with id '%s' not found." % discussion_id)
+    view_def = request.GET.get('view')
 
     ideas = Idea.db.query(Idea).filter_by(
         table_of_contents_id=discussion.table_of_contents_id
     ).order_by(Idea.order, Idea.creation_date)
-    retval = [idea.serializable() for idea in ideas]
-    retval.append(Idea.serializable_unsorded_posts_pseudo_idea(discussion))
+    if view_def:
+        retval = [idea.generic_json(view_def) for idea in ideas]
+    else:
+        retval = [idea.serializable() for idea in ideas]
+    retval.append(Idea.serializable_unsorted_posts_pseudo_idea(discussion))
     return retval
 
 
@@ -145,6 +153,7 @@ def delete_idea(request):
 def get_idea_extracts(request):
     idea_id = request.matchdict['id']
     idea = Idea.get_instance(idea_id)
+    view_def = request.GET.get('view')
 
     if not idea:
         raise HTTPNotFound("Idea with id '%s' not found." % idea_id)
@@ -153,8 +162,7 @@ def get_idea_extracts(request):
         Extract.idea_id == idea.id
     ).order_by(Extract.order.desc())
 
-    serializable_extracts = [
-        extract.serializable() for extract in extracts
-    ]
-
-    return serializable_extracts
+    if view_def:
+        return [extract.generic_json(view_def) for extract in extracts]
+    else:
+        return [extract.serializable() for extract in extracts]

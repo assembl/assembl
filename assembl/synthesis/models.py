@@ -408,7 +408,7 @@ class Idea(SQLAlchemyBaseModel):
             'num_posts': self.num_posts,
         }
     @staticmethod
-    def serializable_unsorded_posts_pseudo_idea(discussion):
+    def serializable_unsorted_posts_pseudo_idea(discussion):
         """
         Returns a "fake" idea linking the posts unreacheable by navigating
         post threads linked to any other idea
