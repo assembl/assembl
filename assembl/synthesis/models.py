@@ -32,7 +32,7 @@ from ..source.models import (Source, Content, Post, Mailbox)
 from ..auth.models import (
     DiscussionPermission, Role, Permission, AgentProfile, User,
     UserRole, LocalUserRole, DiscussionPermission, P_READ,
-    R_SYSADMIN)
+    R_SYSADMIN, ViewPost)
 from assembl.auth import get_permissions
 
 class Discussion(SQLAlchemyBaseModel):
@@ -120,9 +120,25 @@ class Discussion(SQLAlchemyBaseModel):
             Content,
             Source
         ).filter(
-            Source.discussion_id==self.id,
-            Content.source_id==Source.id,
+            Source.discussion_id == self.id,
+            Content.source_id == Source.id,
         ).count()
+
+    def read_post_ids(self, user_id):
+        return (x[0] for x in self.db.query(Post.id).join(
+            Content,
+            Source,
+            ViewPost
+        ).filter(
+            Source.discussion_id == self.id,
+            Content.source_id == Source.id,
+            ViewPost.actor_id == user_id,
+            ViewPost.post_id == Post.id
+        ))
+
+    def get_read_posts_ids_preload(self, user_id):
+        return json.dumps([
+            Post.uri_generic(id) for id in self.read_post_ids(user_id)])
 
     def import_from_sources(self, only_new=True):
         for source in self.sources:
