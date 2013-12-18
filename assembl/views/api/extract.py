@@ -68,6 +68,7 @@ def get_extract(request):
 def get_extracts(request):
     discussion_id = int(request.matchdict['discussion_id'])
     view_def = request.GET.get('view')
+    ids = request.GET.getall('ids')
 
     all_extracts = Extract.db.query(Extract).join(
         Content,
@@ -76,6 +77,9 @@ def get_extracts(request):
         Source.discussion_id == discussion_id,
         Content.source_id == Source.id
     )
+    if ids:
+        ids = [get_database_id("Extract", id) for id in ids]
+        all_extracts = all_extracts.filter(Extract.id.in_(ids))
     # all_extracts = all_extracts.options(joinedload_all(
     #     Extract.source, Content.post, Post.creator))
     all_extracts = all_extracts.options(joinedload_all(
