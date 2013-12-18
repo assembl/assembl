@@ -52,17 +52,22 @@ search_extracts = Service(
 def get_extract(request):
     extract_id = request.matchdict['id']
     extract = Extract.get_instance(extract_id)
+    view_def = request.GET.get('view')
 
     if extract is None:
         raise HTTPNotFound(
             "Extract with id '%s' not found." % extract_id)
 
-    return extract.serializable()
+    if view_def:
+        return extract.generic_json(view_def)
+    else:
+        return extract.serializable()
 
 
 @extracts.get(permission=P_READ)
 def get_extracts(request):
     discussion_id = int(request.matchdict['discussion_id'])
+    view_def = request.GET.get('view')
 
     all_extracts = Extract.db.query(Extract).join(
         Content,
@@ -75,11 +80,11 @@ def get_extracts(request):
     #     Extract.source, Content.post, Post.creator))
     all_extracts = all_extracts.options(joinedload_all(
         Extract.creator, AgentProfile.user))
-    serializable_extracts = [
-        extract.serializable() for extract in all_extracts
-    ]
 
-    return serializable_extracts
+    if view_def:
+        return [extract.generic_json(view_def) for extract in all_extracts]
+    else:
+        return [extract.serializable() for extract in all_extracts]
 
 
 @extracts.post()
@@ -206,11 +211,16 @@ def delete_extract(request):
 @search_extracts.get(permission=P_READ)
 def do_search_extracts(request):
     uri = request.GET['uri']
+    view_def = request.GET.get('view')
+
     if not uri:
         return HTTPClientError("Please specify a search uri")
     source = Webpage.get(url=uri)
     if source:
         extracts = Extract.db.query(Extract).filter_by(source=source).all()
-        return {"total": len(extracts),
-                "rows": [extract.serializable() for extract in extracts]}
+        if view_def:
+            rows = [extract.generic_json(view_def) for extract in extracts]
+        else:
+            rows = [extract.serializable() for extract in extracts]
+        return {"total": len(extracts), "rows": rows}
     return {"total": 0, "rows": []}
