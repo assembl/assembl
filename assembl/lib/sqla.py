@@ -578,7 +578,9 @@ def before_commit_listener(session):
         changes = defaultdict(list)
         for (uri, (discussion, target)) in info['cdict'].iteritems():
             discussion = bytes(discussion or "*")
-            changes[discussion].append(target.generic_json('changes'))
+            json = target.generic_json('changes')
+            if json:
+                changes[discussion].append(json)
         del info['cdict']
         session.cdict2 = changes
     else:
