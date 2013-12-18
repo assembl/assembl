@@ -105,6 +105,10 @@ def get_posts(request):
     if root_idea_id:
         root_idea_id = get_database_id("Idea", root_idea_id[0])
 
+    ids = request.GET.getall('ids')
+    if ids:
+        ids = [get_database_id("Post", id) for id in ids]
+
     view_def = request.GET.get('view')
 
 
@@ -119,14 +123,14 @@ def get_posts(request):
         ViewPost.actor_id == user_id,
     ).count() if user_id else 0
 
-    discussion_posts = Post.db.query(Post).join(
+    posts = Post.db.query(Post).join(
         Content,
         Source,
     ).filter(
         Source.discussion_id == discussion_id,
         Content.source_id == Source.id,
     )
-    no_of_posts_to_discussion = discussion_posts.count()
+    no_of_posts_to_discussion = posts.count()
 
     post_data = []
 
@@ -144,22 +148,22 @@ def get_posts(request):
         posts = ideas_query.join(Content,
                                  Source,
                                  )
-    else:
-        posts = discussion_posts
-        if root_post_id:
-            root_post = Post.get(id=root_post_id)
+    elif root_post_id:
+        root_post = Post.get(id=root_post_id)
 
-            posts = posts.filter(
-                (Post.ancestry.like(
-                root_post.ancestry + cast(root_post.id, String) + ',%'
-                ))
-                |
-                (Post.id==root_post.id)
-                )
+        posts = posts.filter(
+            (Post.ancestry.like(
+            root_post.ancestry + cast(root_post.id, String) + ',%'
+            ))
+            |
+            (Post.id==root_post.id)
+            )
         #Benoitg:  For now, this completely garbles threading without intelligent
         #handling of pagination.  Disabling
         #posts = posts.limit(page_size).offset(data['startIndex']-1)
-        
+    elif ids:
+        posts = posts.filter(Post.id.in_(ids))
+
     if user_id:
         posts = posts.outerjoin(ViewPost,
                     and_(ViewPost.actor_id==user_id, ViewPost.post_id==Post.id)
