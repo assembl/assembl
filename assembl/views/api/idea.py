@@ -98,38 +98,42 @@ def save_idea(request):
     if idea_id in ['orphan_posts']:
         return {'ok': False, 'id': Idea.uri_generic(idea_id)}
 
-    with transaction.manager:
-        idea = Idea.get_instance(idea_id)
-        if not idea:
-            raise HTTPNotFound("No such idea: %s" % (idea_id))
-        discussion = Discussion.get(id=int(discussion_id))
+    idea = Idea.get_instance(idea_id)
+    if not idea:
+        raise HTTPNotFound("No such idea: %s" % (idea_id))
+    discussion = Discussion.get(id=int(discussion_id))
+    if not discussion:
+        raise HTTPNotFound("Discussion with id '%s' not found." % discussion_id)
 
-        idea.short_title = idea_data['shortTitle']
-        idea.long_title = idea_data['longTitle']
-        idea.order = idea_data.get('order', idea.order)
+    idea.short_title = idea_data['shortTitle']
+    idea.long_title = idea_data['longTitle']
+    idea.order = idea_data.get('order', idea.order)
 
-        if 'parentId' in idea_data and idea_data['parentId'] is not None:
-            # TODO: Make sure this is sent as a list!
-            parent = Idea.get_instance(idea_data['parentId'])
-            if not parent:
-                raise HTTPNotFound("Missing parentId %s" % (idea_data['parentId']))
-            if parent not in idea.parents:
-                idea.parent_links.append(IdeaLink(parent=parent, child=idea))
-            to_remove = []
-            for pl in idea.parent_links:
-                if pl.parent != parent:
-                    to_remove.append(pl)
-            for pl in to_remove:
-                idea.parent_links.remove(pl)
+    if 'parentId' in idea_data and idea_data['parentId'] is not None:
+        # TODO: Make sure this is sent as a list!
+        parent = Idea.get_instance(idea_data['parentId'])
+        if not parent:
+            raise HTTPNotFound("Missing parentId %s" % (idea_data['parentId']))
+        if parent not in idea.parents:
+            idea.parent_links.append(IdeaLink(parent=parent, child=idea))
+            parent.send_to_changes()
+        to_remove = []
+        for pl in idea.parent_links:
+            if pl.parent != parent:
+                to_remove.append(pl)
+                # The following does not seem necessary
+                # pl.parent.send_to_changes()
+        for pl in to_remove:
+            idea.parent_links.remove(pl)
+        idea.send_to_changes()
 
-        if idea_data['inSynthesis']:
-            idea.synthesis = discussion.synthesis
-        else:
-            idea.synthesis = None
+    if idea_data['inSynthesis']:
+        idea.synthesis = discussion.synthesis
+    else:
+        idea.synthesis = None
 
-        Idea.db.add(idea)
-
-    idea = Idea.db.merge(idea)
+    Idea.db.add(idea)
+    Idea.db.flush()
 
     return {'ok': True, 'id': idea.uri() }
 
