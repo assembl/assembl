@@ -186,6 +186,16 @@ class BaseOps(object):
         "Get the ID of an associated discussion object, if any."
         return None
 
+    def send_to_changes(self, connection=None):
+        if not connection:
+            # WARNING: invalidate has to be called within an active transaction.
+            # This should be the case in general, no need to add a transaction manager.
+            connection = self.db().connection()
+        if 'cdict' not in connection.info:
+            connection.info['cdict'] = {}
+        connection.info['cdict'][self.uri()] = (
+            self.get_discussion_id(), self)
+
     @classmethod
     def external_typename(cls):
         return cls.__name__
@@ -548,17 +558,11 @@ class Tombstone(object):
 def orm_update_listener(mapper, connection, target):
     session = object_session(target)
     if session.is_modified(target, include_collections=False):
-        if 'cdict' not in connection.info:
-            connection.info['cdict'] = {}
-        connection.info['cdict'][target.uri()] = (
-            target.get_discussion_id(), target)
+        target.send_to_changes(connection)
 
 
 def orm_insert_listener(mapper, connection, target):
-    if 'cdict' not in connection.info:
-        connection.info['cdict'] = {}
-    connection.info['cdict'][target.uri()] = (
-        target.get_discussion_id(), target)
+    target.send_to_changes(connection)
 
 
 def orm_delete_listener(mapper, connection, target):
