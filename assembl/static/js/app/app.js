@@ -697,13 +697,14 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard, Types){
             var target = segment.get('target');
             
             switch(target['@type']){
-                case 'webpage':
+                case 'Webpage':
                     window.open(target.url, "_blank");
                     break;
 
-                case 'email':
+                case 'Email':
+                case 'Post':
                 default:
-                    var selector = app.format('[data-annotation-id={0}]', segment.id);
+                    var selector = app.format('[data-annotation-id="{0}"]', segment.id);
                     app.messageList.loadThreadById(segment.get('idPost'), function(){
                         $(selector).addClass('is-highlighted');
                     });

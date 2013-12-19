@@ -21,7 +21,9 @@ from .auth.models import (
     CollapsePost,
 )
 from .source.models import (
+    ContentSource,
     PostSource,
+    AnnotatorSource,
     Content,
     Mailbox,
     Post,

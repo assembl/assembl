@@ -83,16 +83,14 @@ define(['app', 'underscore', 'sockjs'], function(app, _, SockJS){
             return;
         }
 
-        // TODO André: the following fails. I see objects
-        // without collection, and the prototype is "Surrogate".
         item = new collection.model(item);
-        if( model === null ){
+        // can be undefined
+        if( model == null ){
             // oops, doesn't exist
             collection.add(item);
             //model.after_add();
         } else {
             // yeah, it exists
-
             //model.before_update(item);
             collection.add(item, {merge: true});
         }

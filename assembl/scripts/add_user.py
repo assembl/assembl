@@ -103,20 +103,16 @@ def add_user(name, email, password, role, force=False, username=None,
         role = all_roles[role]
         ur = None
         if old_user:
-            ur = db.query(UserRole).filter_by(user=user).first()
-        if ur:
-            ur.role = role
-        else:
+            ur = db.query(UserRole).filter_by(user=user, role=role).first()
+        if not ur:
             db.add(UserRole(user=user, role=role))
     if localrole:
         localrole = all_roles[localrole]
         lur = None
         if old_user:
             lur = db.query(LocalUserRole).filter_by(
-                user=user, discussion=discussion).first()
-        if lur:
-            lur.role = localrole
-        else:
+                user=user, discussion=discussion, role=role).first()
+        if not lur:
             db.add(LocalUserRole(
                 user=user, role=localrole, discussion=discussion))
 

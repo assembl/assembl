@@ -41,7 +41,7 @@ class ContentSource(SQLAlchemyBaseModel):
         }
 
     def __repr__(self):
-        return "<PostSource %s>" % repr(self.name)
+        return "<ContentSource %s>" % repr(self.name)
 
     def import_content(self, only_new=True):
         pass
@@ -108,6 +108,24 @@ class PostSource(ContentSource):
     def send_post(self, post):
         """ Send a new post in the discussion to the source. """
         raise "Source %s did not implement PostSource::send_post() " % self.__class__.__name__
+
+class AnnotatorSource(ContentSource):
+    """
+    A source of content coming from annotator
+    """
+    __tablename__ = "annotator_source"
+
+    id = Column(Integer, ForeignKey(
+        'content_source.id',
+        ondelete='CASCADE',
+        onupdate='CASCADE'
+    ), primary_key=True)
+
+    __mapper_args__ = {
+        'polymorphic_identity': 'annotator_source',
+    }
+
+
 
 class Content(SQLAlchemyBaseModel):
     """

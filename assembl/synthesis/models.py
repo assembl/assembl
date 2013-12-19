@@ -35,7 +35,7 @@ from ..source.models import (ContentSource, PostSource, Content, Post, Mailbox)
 from ..auth.models import (
     DiscussionPermission, Role, Permission, AgentProfile, User,
     UserRole, LocalUserRole, DiscussionPermission, P_READ,
-    R_SYSADMIN)
+    R_SYSADMIN, ViewPost)
 from assembl.auth import get_permissions
 
 
@@ -52,6 +52,19 @@ class Discussion(SQLAlchemyBaseModel):
     slug = Column(Unicode, nullable=False, unique=True, index=True)
 
     creation_date = Column(DateTime, nullable=False, default=datetime.utcnow)
+
+    def read_post_ids(self, user_id):
+        return (x[0] for x in self.db.query(Post.id).join(
+            ViewPost
+        ).filter(
+            Post.discussion_id == self.id,
+            ViewPost.actor_id == user_id,
+            ViewPost.post_id == Post.id
+        ))
+
+    def get_read_posts_ids_preload(self, user_id):
+        return json.dumps([
+            Post.uri_generic(id) for id in self.read_post_ids(user_id)])
 
     def import_from_sources(self, only_new=True):
         for source in self.sources:
@@ -74,10 +87,6 @@ class Discussion(SQLAlchemyBaseModel):
             "topic": self.topic,
             "slug": self.slug,
             "creation_date": self.creation_date.isoformat(),
-            "table_of_contents_id":
-                TableOfContents.uri_generic(self.table_of_contents_id),
-            "synthesis_id": Synthesis.uri_generic(self.synthesis.id),
-            "owner_id": AgentProfile.uri_generic(self.owner_id),
         }
 
     def get_discussion_id(self):
@@ -441,7 +450,7 @@ class Idea(SQLAlchemyBaseModel):
             'num_posts': self.num_posts,
         }
     @staticmethod
-    def serializable_unsorded_posts_pseudo_idea(discussion):
+    def serializable_unsorted_posts_pseudo_idea(discussion):
         """
         Returns a "fake" idea linking the posts unreacheable by navigating
         post threads linked to any other idea
@@ -682,10 +691,7 @@ class Extract(SQLAlchemyBaseModel):
         return tfi
 
     def get_discussion_id(self):
-        if self.source:
-            return self.source.get_discussion_id()
-        elif self.source_id:
-            return Content.get(id=self.source_id).get_discussion_id()
+        return self.discussion_id
 
 class TextFragmentIdentifier(SQLAlchemyBaseModel):
     __tablename__ = 'text_fragment_identifier'

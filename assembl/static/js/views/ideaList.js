@@ -40,8 +40,11 @@ function(Backbone, _, Idea, IdeaView, app){
             }
 
             this.ideas = new Idea.Collection();
-            this.ideas.on('reset', this.render, this);
-            this.ideas.on('change:parentId change:inNextSynthesis', this.render, this);
+
+            // TODO: André: these are necessary for synchronization between browsers.
+            // They may duplicate other events, could you check that we're not rendering needlessly?
+            var events = ['reset', 'change:parentId', 'change:inNextSynthesis', 'remove', 'add'];
+            this.ideas.on(events.join(' '), this.render, this);
 
             var that = this;
             app.on('idea:delete', function(){

@@ -77,7 +77,7 @@
         "parentId": "parent",
         "read": "&is_read",
         "subject": "&get_title",
-        "views": [": "]
+        "views": [":"]
     },
     "Discussion": {
         "creation_date": true,
@@ -92,7 +92,7 @@
         "extracts": [":partial"],
         "longTitle": "long_title",
         "order": true,
-        "parents": "&parents",
+        "parents": "parents",
         "shortTitle": "short_title",
         "discussion": false,
         "inNextSynthesis": "&is_in_next_synthesis",

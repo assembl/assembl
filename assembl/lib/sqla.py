@@ -5,10 +5,9 @@ from __future__ import absolute_import
 import re
 import sys
 from datetime import datetime
-from itertools import groupby
 import inspect
 import types
-from collections import Iterable
+from collections import Iterable, defaultdict
 
 from anyjson import dumps, loads
 from colanderalchemy import SQLAlchemySchemaNode
@@ -18,7 +17,7 @@ from sqlalchemy.ext.declarative import declarative_base, declared_attr
 from sqlalchemy.orm import mapper, scoped_session, sessionmaker
 from sqlalchemy.orm.util import has_identity
 from sqlalchemy.util import classproperty
-from sqlalchemy.orm.session import object_session
+from sqlalchemy.orm.session import object_session, Session
 from zope.sqlalchemy import ZopeTransactionExtension
 from zope.sqlalchemy.datamanager import mark_changed as z_mark_changed
 
@@ -186,6 +185,16 @@ class BaseOps(object):
     def get_discussion_id(self):
         "Get the ID of an associated discussion object, if any."
         return None
+
+    def send_to_changes(self, connection=None):
+        if not connection:
+            # WARNING: invalidate has to be called within an active transaction.
+            # This should be the case in general, no need to add a transaction manager.
+            connection = self.db().connection()
+        if 'cdict' not in connection.info:
+            connection.info['cdict'] = {}
+        connection.info['cdict'][self.uri()] = (
+            self.get_discussion_id(), self)
 
     @classmethod
     def external_typename(cls):
@@ -536,52 +545,66 @@ def get_session_maker(zope_tr=True):
     return _session_maker
 
 
+class Tombstone(object):
+    def __init__(self, ob):
+        self.typename = ob.external_typename()
+        self.uri = ob.uri()
+
+    def generic_json(self, *vargs, **kwargs):
+        return {"@type": self.typename,
+                "@id": self.uri,
+                "@tombstone": True}
+
 def orm_update_listener(mapper, connection, target):
     session = object_session(target)
     if session.is_modified(target, include_collections=False):
-        json = target.generic_json('changes')
-        if json:
-            if 'cdict' not in connection.info:
-                connection.info['cdict'] = {}
-            connection.info['cdict'][target.uri()] = (
-                target.get_discussion_id(), json)
+        target.send_to_changes(connection)
 
 
 def orm_insert_listener(mapper, connection, target):
-    json = target.generic_json('changes')
-    if json:
-        if 'cdict' not in connection.info:
-            connection.info['cdict'] = {}
-        connection.info['cdict'][target.uri()] = (
-            target.get_discussion_id(), json)
+    target.send_to_changes(connection)
 
 
 def orm_delete_listener(mapper, connection, target):
     if 'cdict' not in connection.info:
         connection.info['cdict'] = {}
     connection.info['cdict'][target.uri()] = (
-        target.get_discussion_id(), {
-            "@type": target.external_typename(),
-            "@id": target.uri(),
-            "@tombstone": True})
+        target.get_discussion_id(), Tombstone(target))
 
 
-def commit_listener(connection):
-    if 'zsocket' not in connection.info:
-        connection.info['zsocket'] = get_pub_socket()
-    if 'cdict' in connection.info:
-        for discussion, changes in groupby(
-                connection.info['cdict'].values(), lambda x: x[0]):
+def before_commit_listener(session):
+    info = session.connection().info
+    if 'cdict' in info:
+        changes = defaultdict(list)
+        for (uri, (discussion, target)) in info['cdict'].iteritems():
             discussion = bytes(discussion or "*")
-            changes = [x[1] for x in changes]
-            send_changes(connection.info['zsocket'], discussion, changes)
-        del connection.info['cdict']
+            json = target.generic_json('changes')
+            if json:
+                changes[discussion].append(json)
+        del info['cdict']
+        session.cdict2 = changes
     else:
         print "EMPTY CDICT!"
 
 
-def rollback_listener(connection):
-    connection.info['cdict'] = {}
+def after_commit_listener(session):
+    if not getattr(session, 'zsocket', None):
+        session.zsocket = get_pub_socket()
+    if getattr(session, 'cdict2', None):
+        for discussion, changes in session.cdict2.iteritems():
+            send_changes(session.zsocket, discussion, changes)
+        del session.cdict2
+
+
+def session_rollback_listener(session):
+    if getattr(session, 'cdict2', None):
+        del session.cdict2
+
+
+def engine_rollback_listener(connection):
+    info = connection.info
+    if 'cdict' in connection.info:
+        del info['cdict']
 
 
 event.listen(BaseOps, 'after_insert', orm_insert_listener, propagate=True)
@@ -604,8 +627,10 @@ def configure_engine(settings, zope_tr=True, session_maker=None):
     Base, TimestampedBase = declarative_bases(_metadata, class_registry)
     obsolete = MetaData(schema=db_schema)
     ObsoleteBase, TimestampedObsolete = declarative_bases(obsolete)
-    event.listen(engine, 'commit', commit_listener)
-    event.listen(engine, 'rollback', rollback_listener)
+    event.listen(Session, 'before_commit', before_commit_listener)
+    event.listen(Session, 'after_commit', after_commit_listener)
+    event.listen(Session, 'after_rollback', session_rollback_listener)
+    event.listen(engine, 'rollback', engine_rollback_listener)
     return engine
 
 
