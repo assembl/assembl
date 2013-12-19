@@ -76,8 +76,7 @@ def get_extracts(request):
     if ids:
         ids = [get_database_id("Extract", id) for id in ids]
         all_extracts = all_extracts.filter(Extract.id.in_(ids))
-    # all_extracts = all_extracts.options(joinedload_all(
-    #     Extract.source, Content.post, Post.creator))
+
     all_extracts = all_extracts.options(joinedload_all(
         Extract.creator, AgentProfile.user))
 
@@ -151,7 +150,7 @@ def post_extract(request):
         discussion_id=discussion_id,
         body=extract_body,
         annotation_text=annotation_text,
-        source=content
+        content=content
     )
     Extract.db.add(new_extract)
 
@@ -220,9 +219,9 @@ def do_search_extracts(request):
 
     if not uri:
         return HTTPClientError("Please specify a search uri")
-    source = Webpage.get(url=uri)
-    if source:
-        extracts = Extract.db.query(Extract).filter_by(source=source).all()
+    content = Webpage.get(url=uri)
+    if content:
+        extracts = Extract.db.query(Extract).filter_by(content=content).all()
         if view_def:
             rows = [extract.generic_json(view_def) for extract in extracts]
         else:

@@ -101,7 +101,7 @@
         "owner": true,
         "quote": "body",
         "ranges": ["text_fragment_identifiers:"],
-        "source": true,
+        "source": "content",
         "target": "&get_target:",
         "annotation_text": false
         },

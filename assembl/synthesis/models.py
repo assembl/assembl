@@ -386,6 +386,11 @@ class Synthesis(ExplicitSubGraphView):
 
 
 class IdeaLink(SQLAlchemyBaseModel):
+    """
+    A generic link between two ideas
+    """
+    # TODO:  maparent:  shouldn't we manage link ordering here instead of 
+    # directly in ideas
     __tablename__ = 'idea_association'
     id = Column(Integer, primary_key=True)
     parent_id = Column(Integer, ForeignKey('idea.id', ondelete="CASCADE", onupdate="CASCADE"))
@@ -494,8 +499,9 @@ FROM    (idea_dag JOIN idea_association ON (idea_dag.idea_id = idea_association.
     def _get_related_posts_statement_no_select(select, skip_where):
         return Idea._get_idea_dag_statement(skip_where) + select + """
 FROM idea_dag 
-JOIN extract ON (extract.idea_id = idea_dag.idea_id) 
-JOIN post AS root_posts ON (extract.source_id = root_posts.id) 
+JOIN idea_content_link ON (idea_content_link.idea_id = idea_dag.idea_id) 
+JOIN idea_content_positive_link ON (idea_content_positive_link.id = idea_content_link.id)
+JOIN post AS root_posts ON (idea_content_link.content_id = root_posts.id) 
 JOIN post ON (
     (post.ancestry != '' 
     AND post.ancestry LIKE root_posts.ancestry || root_posts.id || ',' || '%'
@@ -574,28 +580,22 @@ AND discussion.id=:discussion_id
             ).filter(child.table_of_contents_id == table_of_contents_id
             ).filter(parent.table_of_contents_id == table_of_contents_id).all()
 
-
-class Extract(SQLAlchemyBaseModel):
+class IdeaContentLink(SQLAlchemyBaseModel):
     """
-    An extracted part. A quotation to be referenced by an `Idea`.
+    Abstract class representing a generic link between an idea and a Content (typically a Post)
     """
-    __tablename__ = 'extract'
-
+    __tablename__ = 'idea_content_link'
     id = Column(Integer, primary_key=True)
-    creation_date = Column(DateTime, nullable=False, default=datetime.utcnow)
-    order = Column(Float, nullable=False, default=0.0)
-    body = Column(UnicodeText, nullable=False)
-
-    source_id = Column(Integer, ForeignKey('content.id', ondelete="CASCADE", onupdate="CASCADE"), nullable=False)
-    source = relationship(Content, backref='extracts', )
-
-    idea_id = Column(Integer, ForeignKey('idea.id'), nullable=True)
-    idea = relationship('Idea', backref='extracts')
-
-    discussion_id = Column(Integer, ForeignKey('discussion.id', ondelete="CASCADE", onupdate="CASCADE"), nullable=False)
-    discussion = relationship('Discussion', backref='extracts')
+    type = Column(String(60))
     
-    annotation_text = Column(UnicodeText)
+    #This is nullable, because in the case of extracts, the idea can be attached later.
+    idea_id = Column(Integer, ForeignKey('idea.id'), nullable=True)
+    idea = relationship('Idea')
+    
+    content_id = Column(Integer, ForeignKey('content.id', ondelete="CASCADE", onupdate="CASCADE"), nullable=False)
+    content = relationship(Content)
+    
+    creation_date = Column(DateTime, nullable=False, default=datetime.utcnow)
 
     creator_id = Column(
         Integer,
@@ -606,6 +606,62 @@ class Extract(SQLAlchemyBaseModel):
     creator = relationship(
         'AgentProfile', foreign_keys=[creator_id], backref='extracts_created')
 
+    __mapper_args__ = {
+        'polymorphic_identity': 'idea_content_link',
+        'polymorphic_on': type,
+        'with_polymorphic': '*'
+    }
+
+class IdeaContentPositiveLink(IdeaContentLink):
+    """
+    A normal link between an idea and a Content.  Such links should be traversed.
+    """
+    __tablename__ = 'idea_content_positive_link'
+    
+    id = Column(Integer, ForeignKey(
+        'idea_content_link.id',
+        ondelete='CASCADE', onupdate='CASCADE'
+    ), primary_key=True)
+    
+    __mapper_args__ = {
+        'polymorphic_identity': 'idea_content_positive_link',
+    }
+
+class IdeaRelatedPostLink(IdeaContentPositiveLink):
+    """
+    A post that is relevant, as a whole, to an idea, without having a specific
+    extract harvested.
+    """
+    __tablename__ = 'idea_related_post_link'
+    
+    id = Column(Integer, ForeignKey(
+        'idea_content_positive_link.id',
+        ondelete='CASCADE', onupdate='CASCADE'
+    ), primary_key=True)
+    
+    __mapper_args__ = {
+        'polymorphic_identity': 'idea_related_post_link',
+    }
+
+class Extract(IdeaContentPositiveLink):
+    """
+    An extracted part of a Content. A quotation to be referenced by an `Idea`.
+    """
+    __tablename__ = 'extract'
+
+    id = Column(Integer, ForeignKey(
+        'idea_content_positive_link.id',
+        ondelete='CASCADE', onupdate='CASCADE'
+    ), primary_key=True)
+
+    order = Column(Float, nullable=False, default=0.0)
+    body = Column(UnicodeText, nullable=False)
+
+    discussion_id = Column(Integer, ForeignKey('discussion.id', ondelete="CASCADE", onupdate="CASCADE"), nullable=False)
+    discussion = relationship('Discussion', backref='extracts')
+    
+    annotation_text = Column(UnicodeText)
+
     owner_id = Column(
         Integer,
         ForeignKey('agent_profile.id'),
@@ -615,6 +671,9 @@ class Extract(SQLAlchemyBaseModel):
     owner = relationship(
         'AgentProfile', foreign_keys=[owner_id], backref='extracts_owned')
 
+    __mapper_args__ = {
+        'polymorphic_identity': 'extract',
+    }
     def serializable(self):
         json = {
             '@id': self.uri_generic(self.id),
@@ -624,7 +683,7 @@ class Extract(SQLAlchemyBaseModel):
             'ranges': [tfi.__json__() for tfi 
                        in self.text_fragment_identifiers],
             'target': {
-                '@type': self.source.external_typename()
+                '@type': self.content.external_typename()
             },
             'created': self.creation_date.isoformat(),
             'idCreator': AgentProfile.uri_generic(self.creator_id),
@@ -635,29 +694,29 @@ class Extract(SQLAlchemyBaseModel):
             json['idIdea'] = Idea.uri_generic(self.idea_id)
             #json['text'] += '<a href="%s">%s</a>' % (
             #   self.idea.get_uri(), self.idea.short_title)
-        if self.source.type == 'email':
-            json['target']['@id'] = Post.uri_generic(self.source.id)
-            json['idPost'] = Post.uri_generic(self.source.id)  # legacy
+        if isinstance(self.content, Post):
+            json['target']['@id'] = Post.uri_generic(self.content.id)
+            json['idPost'] = Post.uri_generic(self.content.id)  # legacy
             #json['url'] = self.post.get_uri()
-        elif self.source.type == 'webpage':
-            json['target']['url'] = self.source.url
-            json['uri'] = self.source.url
-            json['text'] = "Cf " + self.source.source.discussion.topic
+        elif self.content.type == 'webpage':
+            json['target']['url'] = self.content.url
+            json['uri'] = self.content.url
+            json['text'] = "Cf " + self.content.source.discussion.topic
         return json
 
     def __repr__(self):
         return "<Extract %d %s>" % (self.id, repr(self.body[:20]))
 
     def get_target(self):
-            return self.source
+            return self.content
 
     def get_post(self):
-        if self.source.type == 'email':
-            return self.source
+        if isinstance(self.content, Post):
+            return self.content
 
     def infer_text_fragment(self):
         return self._infer_text_fragment_inner(
-            self.source.get_title(), self.source.get_body(), self.post.id)
+            self.content.get_title(), self.content.get_body(), self.get_post().id)
 
     def _infer_text_fragment_inner(self, title, body, post_id):
         body = Mailbox.sanitize_html(body, [])
@@ -692,6 +751,39 @@ class Extract(SQLAlchemyBaseModel):
 
     def get_discussion_id(self):
         return self.discussion_id
+
+class IdeaContentNegativeLink(IdeaContentLink):
+    """
+    A negative link between an idea and a Content.  Such links mean that
+    a transitive context should be considered broken.  Used for thread breaking
+    """
+    __tablename__ = 'idea_content_negative_link'
+    
+    id = Column(Integer, ForeignKey(
+        'idea_content_link.id',
+        ondelete='CASCADE', onupdate='CASCADE'
+    ), primary_key=True)
+    
+    __mapper_args__ = {
+        'polymorphic_identity': 'idea_content_negative_link',
+    }
+    
+class IdeaThreadContextBreakLink(IdeaContentNegativeLink):
+    """
+    Used for a Post the inherits an Idea from an ancester in the thread. 
+    It indicates that from this point on in the thread, this idea is no longer 
+    discussed.
+    """
+    __tablename__ = 'idea_thread_context_break_link'
+    
+    id = Column(Integer, ForeignKey(
+        'idea_content_negative_link.id',
+        ondelete='CASCADE', onupdate='CASCADE'
+    ), primary_key=True)
+    
+    __mapper_args__ = {
+        'polymorphic_identity': 'idea_thread_context_break_link',
+    }
 
 class TextFragmentIdentifier(SQLAlchemyBaseModel):
     __tablename__ = 'text_fragment_identifier'
