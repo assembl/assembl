@@ -44,7 +44,13 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
         collapsed: true,
 
         /**
-         * The collection
+         * Collection with all messsages. Used to be filtered and replace `this.messages`
+         * @type {MessageCollection}
+         */
+        allMessages: new Message.Collection(),
+
+        /**
+         * The collection which is being displayed
          * @type {MessageCollection}
          */
         messages: new Message.Collection(),
@@ -255,7 +261,42 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
                 _.each(data.posts, function(post){
                     post.collapsed = true;
                 });
+                that.allMessages.reset(data.posts);
                 that.messages.reset(data.posts);
+            });
+        },
+
+        /**
+         * Shows the related to the given idea
+         * @param  {String} ideaId
+         */
+        loadDataByIdeaId: function(ideaId){
+            var that = this,
+                url = app.getApiUrl('posts'),
+                params = {};
+
+            params.root_idea_id = ideaId;
+            params.view = 'id_only';
+
+            this.blockPanel();
+            this.collapsed = true;
+
+            $.getJSON(url, params, function(data){
+                var ids = {},
+                    messages = [];
+
+                _.each(data.posts, function(post){
+                    ids[post['@id']] = post;
+                });
+
+                that.allMessages.each(function(message){
+                    if( message.get('@id') in ids ){
+                        messages.push(message);
+                    }
+                });
+
+                that.unblockPanel();
+                that.messages.reset(messages);
             });
         },
 

@@ -608,9 +608,7 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard, Types){
          * @param  {Idea} [idea]
          */
         setCurrentIdea: function(idea){
-            if( app.ideaPanel ){
-                app.ideaPanel.setCurrentIdea(idea);
-            }
+            app.trigger('idea:select', [idea]);
         },
 
         /**
