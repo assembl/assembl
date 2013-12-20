@@ -111,21 +111,26 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
         /**
          * Return a list with all views.el already rendered
          * @param {Message.Model[]} messages
+         * @param {Number} [level=1] The current hierarchy level
          * @return {HTMLDivElement[]}
          */
-        getRenderedMessages: function(messages){
+        getRenderedMessages: function(messages, level){
             var list = [],
                 i = 0,
                 len = messages.length,
                 view, model, children;
+
+            if( _.isUndefined(level) ){
+                level = 1;
+            }
 
             for(; i < len; i += 1){
                 model = messages[i];
                 view = new MessageView({model:model});
                 children = model.getChildren();
 
-                list.push(view.render().el);
-                list = _.union(list, this.getRenderedMessages(children));
+                list.push(view.render(level).el);
+                list = _.union(list, this.getRenderedMessages(children, level+1));
             }
 
             return list;
