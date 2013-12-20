@@ -30,11 +30,72 @@
         "provider_type": true,
         "trust_emails": true
         },
-    "Source": {
-        "contents": [":partial"],
+    "ContentSource": {
+        "discussion": true,
+        "name": true,
         "creation_date": true,
-        "discussion_id": "discussion",
+        "contents": [":partial"]
+    },
+    "PostSource": {
+        "contents": [":partial"],
+        "name": true,
+        "creation_date": true,
         "last_import": true
+    },
+    "AnnotatorSource": {
+        "contents": [":partial"],
+        "name": true,
+        "creation_date": true
+    },
+    "Content": {
+        "discussion": true,
+        "creation_date": true,
+        "import_date": false
+    },
+    "Post": {
+        "discussion": true,
+        "creation_date": true,
+        "message_id": false,
+        "ancestry": false,
+        "parent": true,
+        "creator": true,
+        "subject": true,
+        "body": true,
+        "extracts": [":partial"]
+    },
+    "AssemblPost": {
+        "creation_date": true,
+        "message_id": false,
+        "discussion": true,
+        "ancestry": false,
+        "parent": true,
+        "creator": true,
+        "subject": true,
+        "body": true,
+        "extracts": [":partial"]
+    },
+    "SynthesisPost": {
+        "creation_date": true,
+        "message_id": false,
+        "discussion": true,
+        "ancestry": false,
+        "parent": true,
+        "creator": true,
+        "subject": true,
+        "body": true
+    },
+    "ImportedPost": {
+        "creation_date": true,
+        "message_id": false,
+        "discussion": true,
+        "ancestry": false,
+        "parent": true,
+        "creator": true,
+        "subject": true,
+        "body": true,
+        "import_date": false,
+        "source": true,
+        "extracts": [":partial"]
     },
     "Webpage": {
         "extracts": [":partial"],

@@ -12,6 +12,7 @@ from sqlalchemy import (
 
 from assembl.lib.sqla import Base as SQLAlchemyBaseModel
 
+
 class ContentSource(SQLAlchemyBaseModel):
     """
     A ContentSource is where any outside content comes from. .
@@ -24,20 +25,29 @@ class ContentSource(SQLAlchemyBaseModel):
 
     creation_date = Column(DateTime, nullable=False, default=datetime.utcnow)
 
+    discussion_id = Column(Integer, ForeignKey(
+        'discussion.id',
+        ondelete='CASCADE',
+        onupdate='CASCADE'
+    ))
+
+    discussion = relationship(
+        "Discussion",
+        backref=backref('sources', order_by=ContentSource.creation_date)
+    )
+
     __mapper_args__ = {
         'polymorphic_identity': 'content_source',
         'polymorphic_on': type
     }
 
     def serializable(self):
-        from assembl.models import Discussion
         return {
             "@id": self.uri_generic(self.id),
             "@type": self.external_typename(),
             "name": self.name,
             "creation_date": self.creation_date.isoformat(),
-            "last_import": self.last_import.isoformat() if self.last_import else None,
-            "discussion_id": Discussion.uri_generic(self.discussion_id),
+            "discussion_id": self.discussion_id
         }
 
     def __repr__(self):
@@ -46,15 +56,11 @@ class ContentSource(SQLAlchemyBaseModel):
     def import_content(self, only_new=True):
         pass
 
-    def get_discussion_id(self):
-        return self.discussion_id
-
-
 
 class PostSource(ContentSource):
     """
     A Discussion PostSource is where commentary that is handled in the form of
-    Assembl posts comes from. 
+    Assembl posts comes from.
 
     A discussion source should have a method for importing all content, as well
     as only importing new content. Maybe the standard interface for this should
@@ -70,31 +76,16 @@ class PostSource(ContentSource):
 
     last_import = Column(DateTime)
 
-    discussion_id = Column(Integer, ForeignKey(
-        'discussion.id', 
-        ondelete='CASCADE',
-        onupdate='CASCADE'
-    ))
-
-    discussion = relationship(
-        "Discussion", 
-        backref=backref('sources', order_by=ContentSource.creation_date)
-    )
-
     __mapper_args__ = {
         'polymorphic_identity': 'content_source',
     }
 
     def serializable(self):
         from assembl.models import Discussion
-        return {
-            "@id": self.uri_generic(self.id),
-            "@type": self.external_typename(),
-            "name": self.name,
-            "creation_date": self.creation_date.isoformat(),
-            "last_import": self.last_import.isoformat() if self.last_import else None,
-            "discussion_id": Discussion.uri_generic(self.discussion_id),
-        }
+        ser = super(self, PostSource).serializable()
+        ser["last_import"] = \
+            self.last_import.isoformat() if self.last_import else None
+        return ser
 
     def __repr__(self):
         return "<PostSource %s>" % repr(self.name)
@@ -107,7 +98,9 @@ class PostSource(ContentSource):
 
     def send_post(self, post):
         """ Send a new post in the discussion to the source. """
-        raise "Source %s did not implement PostSource::send_post() " % self.__class__.__name__
+        raise "Source %s did not implement PostSource::send_post() "\
+            % self.__class__.__name__
+
 
 class AnnotatorSource(ContentSource):
     """
@@ -126,7 +119,6 @@ class AnnotatorSource(ContentSource):
     }
 
 
-
 class Content(SQLAlchemyBaseModel):
     """
     Content is a polymorphic class to describe what is imported from a Source.
@@ -136,13 +128,23 @@ class Content(SQLAlchemyBaseModel):
     id = Column(Integer, primary_key=True)
     type = Column(String(60), nullable=False)
     creation_date = Column(DateTime, nullable=False, default=datetime.utcnow)
-    
-    import_date = Column(DateTime, default=datetime.utcnow)
+
+    discussion_id = Column(Integer, ForeignKey(
+        'discussion.id',
+        ondelete='CASCADE',
+        onupdate='CASCADE',
+    ),
+        nullable=False,)
+
+    discussion = relationship(
+        "Discussion",
+        backref=backref('posts', order_by=creation_date)
+    )
 
     __mapper_args__ = {
         'polymorphic_identity': 'content',
         'polymorphic_on': 'type',
-        'with_polymorphic':'*'
+        'with_polymorphic': '*'
     }
 
     def __init__(self, *args, **kwargs):
@@ -158,7 +160,4 @@ class Content(SQLAlchemyBaseModel):
         return ""
 
     def get_discussion_id(self):
-        if self.source:
-            return self.source.get_discussion_id()
-        elif self.source_id:
-            return PostSource.get(id=self.source_id).get_discussion_id()
+        return self.discussion_id

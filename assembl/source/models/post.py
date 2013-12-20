@@ -36,21 +36,7 @@ class Post(Content):
                         nullable=False,
                         index=True,
                         doc="The email-compatible message-id for the post.",)
-    
-    creation_date = Column(DateTime, nullable=False, default=datetime.utcnow)
-    
-    discussion_id = Column(Integer, ForeignKey(
-            'discussion.id', 
-            ondelete='CASCADE',
-            onupdate='CASCADE',
-        ),
-        nullable=False,)
 
-    discussion = relationship(
-        "Discussion", 
-        backref=backref('posts', order_by=creation_date)
-    )
-    
     ancestry = Column(String, default="")
 
     parent_id = Column(Integer, ForeignKey('post.id'))
@@ -168,6 +154,9 @@ class Post(Content):
             self.id,
             self.type,
         )
+
+    def get_discussion_id(self):
+        return self.discussion_id
 
 class AssemblPost(Post):
     """

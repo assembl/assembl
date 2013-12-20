@@ -671,6 +671,8 @@ class Extract(IdeaContentPositiveLink):
     owner = relationship(
         'AgentProfile', foreign_keys=[owner_id], backref='extracts_owned')
 
+    extract_source = relationship(Content, backref="extracts")
+
     __mapper_args__ = {
         'polymorphic_identity': 'extract',
     }
