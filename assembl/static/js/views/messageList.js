@@ -320,11 +320,11 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
          */
         setCollapsed: function(value){
             this.messages.each(function(message){
-                message.set('collapsed', value);
+                message.set('collapsed', value, {silent: true});
             });
 
             this.collapsed = value;
-            this.renderCollapseButton();
+            this.render();
         },
 
         /**
