@@ -239,9 +239,9 @@ class IdeaGraphView(SQLAlchemyBaseModel):
 class SubGraphIdeaAssociation(SQLAlchemyBaseModel):
     __tablename__ = 'sub_graph_idea_association'
     id = Column(Integer, primary_key=True)
-    sub_graph_id = Column(Integer, ForeignKey('explicit_sub_graph_view.id', ondelete="CASCADE", onupdate="CASCADE"))
+    sub_graph_id = Column(Integer, ForeignKey('explicit_sub_graph_view.id', ondelete="CASCADE", onupdate="CASCADE"), index=True)
     sub_graph = relationship("ExplicitSubGraphView")
-    idea_id = Column(Integer, ForeignKey('idea.id', ondelete="CASCADE", onupdate="CASCADE"))
+    idea_id = Column(Integer, ForeignKey('idea.id', ondelete="CASCADE", onupdate="CASCADE"), index=True)
     # reference to the "Idea" object for proxying
     idea = relationship("Idea")
     def __init__(self, idea=None, sub_graph=None):
@@ -250,20 +250,26 @@ class SubGraphIdeaAssociation(SQLAlchemyBaseModel):
 
     
 class SubGraphIdeaLinkAssociation(SQLAlchemyBaseModel):
-    """TODO:  Benoitg: make it work! """
+    """
+    
+    """
     __tablename__ = 'sub_graph_idea_link_association'
     id = Column(Integer, primary_key=True)
-    sub_graph_id = Column(Integer, ForeignKey('explicit_sub_graph_view.id', ondelete="CASCADE", onupdate="CASCADE"))
-    idea_link_id = Column(Integer, ForeignKey('idea_association.id', ondelete="CASCADE", onupdate="CASCADE"))
+    sub_graph_id = Column(Integer, ForeignKey('explicit_sub_graph_view.id', ondelete="CASCADE", onupdate="CASCADE"), index=True)
+    idea_link_id = Column(Integer, ForeignKey('idea_idea_link.id', ondelete="CASCADE", onupdate="CASCADE"), index=True)
     # reference to the "IdeaLink" object for proxying
     idea_link = relationship("IdeaLink")
-    def __init__(self, idea=None, sub_graph=None):
-        self.idea = idea
+    def __init__(self, idea_link=None, sub_graph=None):
+        self.idea_link = idea_link
         self.sub_graph = sub_graph
 
 class ExplicitSubGraphView(IdeaGraphView):
     """
-    A view where the Ideas and/or ideaLinks have been explicitely selected.
+    A view where the Ideas and/or ideaLinks have been explicitly selected.
+    
+    Note that ideaLinks may point to ideas that are not in the graph.  They
+    should be followed transitively (if their nature is compatible) to reach 
+    every idea in graph as if the were directly linked.
     """
     __tablename__ = "explicit_sub_graph_view"
     
@@ -343,7 +349,11 @@ class TableOfContents(IdeaGraphView):
 class Synthesis(ExplicitSubGraphView):
     """
     A synthesis of the discussion.  A selection of ideas, associated with comments, sent periodically
-    to the discussion.s
+    to the discussion.
+    
+    A synthesis only has link's to ideas before publication (as it is edited)
+    Once published, if freezes the links by copying toombstoned versions of each
+    link in the discussion.
     """
     __tablename__ = "synthesis"
     
@@ -366,7 +376,23 @@ class Synthesis(ExplicitSubGraphView):
         retval.introduction = self.introduction
         retval.conclusion = self.conclusion
         return retval
-
+    
+    def publish(self):
+        """ Publication is the end of a synthesis's lifecycle.
+        It creates a new next_synthesis, copied from this one.
+        Return's the new discussion next_synthesis """
+        next_synthesis = self.copy()
+        self.db.add(next_synthesis)
+        
+        #Copy toombstoned versions of all idea links in the current discussion
+        links = Idea.get_all_idea_links(self.discussion_id)
+        for link in links:
+            new_link = link.copy()
+            new_link.is_toombstone = True
+            self.idea_links.append(new_link)
+        self.db.add(self)
+        return next_synthesis
+    
     def serializable(self):
         return {
             "@id": self.uri_generic(self.id),
@@ -391,17 +417,26 @@ class IdeaLink(SQLAlchemyBaseModel):
     """
     # TODO:  maparent:  shouldn't we manage link ordering here instead of 
     # directly in ideas
-    __tablename__ = 'idea_association'
+    __tablename__ = 'idea_idea_link'
     id = Column(Integer, primary_key=True)
-    parent_id = Column(Integer, ForeignKey('idea.id', ondelete="CASCADE", onupdate="CASCADE"))
-    child_id = Column(Integer, ForeignKey('idea.id', ondelete="CASCADE", onupdate="CASCADE"))
+    parent_id = Column(Integer, ForeignKey('idea.id', ondelete="CASCADE", onupdate="CASCADE"), nullable=False, index=True)
+    child_id = Column(Integer, ForeignKey('idea.id', ondelete="CASCADE", onupdate="CASCADE"), nullable=False, index=True)
     parent = relationship(
         'Idea', backref='child_links',
         foreign_keys=(parent_id))
     child = relationship(
         'Idea', backref='parent_links',
         foreign_keys=(child_id))
-
+    is_toombstone = Column(Boolean, nullable=False, default=False, index=True)
+    
+    def copy(self):
+        retval = self.__class__(parent_id = self.parent_id, 
+                                child_id = self.child_id,
+                                is_toombstone = self.is_toombstone
+                                )
+        self.db.add(retval)
+        return retval
+    
 
 class Idea(SQLAlchemyBaseModel):
     """
@@ -423,7 +458,8 @@ class Idea(SQLAlchemyBaseModel):
             ondelete='CASCADE',
             onupdate='CASCADE',
         ),
-        nullable=False,)
+        nullable=False,
+        index=True,)
 
     discussion = relationship(
         "Discussion", 
@@ -481,7 +517,10 @@ WITH    RECURSIVE
 idea_dag(idea_id, parent_id, idea_depth, idea_path, idea_cycle) AS
 (
 SELECT  idea_initial.id as idea_id, parent_id, 1, ARRAY[idea_initial.id], false 
-FROM    idea AS idea_initial LEFT JOIN idea_association ON (idea_initial.id = idea_association.child_id) 
+FROM    idea AS idea_initial LEFT JOIN idea_idea_link ON (
+idea_initial.id = idea_idea_link.child_id
+AND idea_idea_link.is_toombstone=FALSE
+) 
 """
         if(not skip_where):
             retval = retval + """
@@ -489,8 +528,13 @@ WHERE idea_initial.id=:root_idea_id
 """
         retval = retval + """
 UNION ALL
-SELECT idea.id as idea_id, idea_association.parent_id, idea_dag.idea_depth + 1, idea_path || idea.id, idea.id = ANY(idea_path)
-FROM    (idea_dag JOIN idea_association ON (idea_dag.idea_id = idea_association.parent_id) JOIN idea ON (idea.id = idea_association.child_id)) 
+SELECT idea.id as idea_id, idea_idea_link.parent_id, idea_dag.idea_depth + 1, idea_path || idea.id, idea.id = ANY(idea_path)
+FROM (
+    idea_dag JOIN idea_idea_link ON (
+    idea_dag.idea_id = idea_idea_link.parent_id
+    AND idea_idea_link.is_toombstone=FALSE
+    ) JOIN idea ON (idea.id = idea_idea_link.child_id)
+)
 )
 """
         return retval
@@ -571,14 +615,16 @@ AND discussion.id=:discussion_id
         return "<Idea %d>" % self.id
 
     @classmethod
-    def get_all_idea_links(cls, table_of_contents_id):
+    def get_all_idea_links(cls, discussion_id):
         child = aliased(cls)
         parent = aliased(cls)
         return cls.db().query(IdeaLink
             ).join(parent, parent.id == IdeaLink.parent_id
             ).join(child, child.id == IdeaLink.child_id
-            ).filter(child.table_of_contents_id == table_of_contents_id
-            ).filter(parent.table_of_contents_id == table_of_contents_id).all()
+            ).filter(child.discussion_id == discussion_id
+            ).filter(parent.discussion_id == discussion_id
+            ).filter(IdeaLink.is_toombstone == False
+            ).all()
 
 class IdeaContentLink(SQLAlchemyBaseModel):
     """
@@ -589,10 +635,10 @@ class IdeaContentLink(SQLAlchemyBaseModel):
     type = Column(String(60))
     
     #This is nullable, because in the case of extracts, the idea can be attached later.
-    idea_id = Column(Integer, ForeignKey('idea.id'), nullable=True)
+    idea_id = Column(Integer, ForeignKey('idea.id'), nullable=True, index=True)
     idea = relationship('Idea')
     
-    content_id = Column(Integer, ForeignKey('content.id', ondelete="CASCADE", onupdate="CASCADE"), nullable=False)
+    content_id = Column(Integer, ForeignKey('content.id', ondelete="CASCADE", onupdate="CASCADE"), nullable=False, index=True)
     content = relationship(Content)
     
     creation_date = Column(DateTime, nullable=False, default=datetime.utcnow)
@@ -657,7 +703,7 @@ class Extract(IdeaContentPositiveLink):
     order = Column(Float, nullable=False, default=0.0)
     body = Column(UnicodeText, nullable=False)
 
-    discussion_id = Column(Integer, ForeignKey('discussion.id', ondelete="CASCADE", onupdate="CASCADE"), nullable=False)
+    discussion_id = Column(Integer, ForeignKey('discussion.id', ondelete="CASCADE", onupdate="CASCADE"), nullable=False, index=True)
     discussion = relationship('Discussion', backref='extracts')
     
     annotation_text = Column(UnicodeText)
@@ -790,7 +836,7 @@ class IdeaThreadContextBreakLink(IdeaContentNegativeLink):
 class TextFragmentIdentifier(SQLAlchemyBaseModel):
     __tablename__ = 'text_fragment_identifier'
     id = Column(Integer, primary_key=True)
-    extract_id = Column(Integer, ForeignKey(Extract.id, ondelete="CASCADE"))
+    extract_id = Column(Integer, ForeignKey(Extract.id, ondelete="CASCADE"), index=True)
     xpath_start = Column(String)
     offset_start = Column(Integer)
     xpath_end = Column(String)

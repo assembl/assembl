@@ -277,11 +277,6 @@ def create_post(request):
         published_synthesis = Synthesis.get_instance(publishes_synthesis_id)
         post_constructor_args['publishes_synthesis'] = published_synthesis
         new_post = SynthesisPost(**post_constructor_args)
-        # Publication is the end of a synthesis's lifecycle, create a new next_synthesis,
-        # copy the published sysnthesis as the basis of the next one. 
-        next_synthesis = published_synthesis.copy()
-        AssemblPost.db.add(next_synthesis)
-        print("CREATED!")
     else:
         new_post = AssemblPost(**post_constructor_args)
     

@@ -199,6 +199,10 @@ class SynthesisPost(AssemblPost):
     __mapper_args__ = {
         'polymorphic_identity': 'synthesis_post',
     }
+    
+    def __init__(self, *args, **kwargs):
+        super(SynthesisPost, self).__init__(*args, **kwargs)
+        self.publishes_synthesis.publish()
 
 class ImportedPost(Post):
     """

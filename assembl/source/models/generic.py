@@ -82,8 +82,7 @@ class PostSource(ContentSource):
     }
 
     def serializable(self):
-        from assembl.models import Discussion
-        ser = super(self, PostSource).serializable()
+        ser = super(PostSource, self).serializable()
         ser["last_import"] = \
             self.last_import.isoformat() if self.last_import else None
         return ser
