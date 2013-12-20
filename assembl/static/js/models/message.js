@@ -137,6 +137,16 @@ define(['models/base', 'jquery', 'app'], function(Base, $, app){
          */
         onAttrChange: function(){
             this.save();
+        },
+
+        /**
+         * Return `false` if the parent is `null` or it is NOT in the given collection
+         * @param {Base.Collection} collection
+         * @return {Boolean}
+         */
+        isParentInCollection: function(collection){
+            var parentId = this.get('parentId');
+            return !! collection.get(parentId);
         }
     });
 
@@ -155,18 +165,18 @@ define(['models/base', 'jquery', 'app'], function(Base, $, app){
         model: MessageModel,
 
         /**
-         * Returns the messages with no parent
+         * Returns the messages with no parent in the collection
          * @return {Message[]}
          */
         getRootMessages: function(){
-            var toReturn = [];
+            var toReturn = [],
+                that = this;
 
             _.each(this.models, function(model){
 
-                if( model.get('parentId') === null ){
+                if( ! model.isParentInCollection(that) ){
                     toReturn.push(model);
-                } else if( model.getRootParent() === null ){
-                    toReturn.push(model);
+                    return;
                 }
 
             });
@@ -186,7 +196,7 @@ define(['models/base', 'jquery', 'app'], function(Base, $, app){
             });
 
             return ret;
-        },
+        }
 
     });
 
