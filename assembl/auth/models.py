@@ -580,12 +580,12 @@ class ActionOnPost(Action):
 
     post_id = Column(
         Integer,
-        ForeignKey('post.id', ondelete="CASCADE", onupdate='CASCADE'),
+        ForeignKey('content.id', ondelete="CASCADE", onupdate='CASCADE'),
         nullable=False
     )
 
     post = relationship(
-        'Post',
+        'Content',
         backref=backref('views')
     )
 
