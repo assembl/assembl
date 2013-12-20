@@ -33,12 +33,13 @@ class ContentSource(SQLAlchemyBaseModel):
 
     discussion = relationship(
         "Discussion",
-        backref=backref('sources', order_by=ContentSource.creation_date)
+        backref=backref('sources', order_by=creation_date)
     )
 
     __mapper_args__ = {
         'polymorphic_identity': 'content_source',
-        'polymorphic_on': type
+        'polymorphic_on': type,
+        'with_polymorphic': '*'
     }
 
     def serializable(self):
@@ -77,7 +78,7 @@ class PostSource(ContentSource):
     last_import = Column(DateTime)
 
     __mapper_args__ = {
-        'polymorphic_identity': 'content_source',
+        'polymorphic_identity': 'post_source',
     }
 
     def serializable(self):
