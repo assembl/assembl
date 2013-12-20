@@ -105,6 +105,13 @@ def get_posts(request):
     if root_idea_id:
         root_idea_id = get_database_id("Idea", root_idea_id[0])
 
+    ids = request.GET.getall('ids')
+    if ids:
+        ids = [get_database_id("Post", id) for id in ids]
+
+    view_def = request.GET.get('view')
+
+
     #Rename "inbox" to "unread", the number of unread messages for the current user.
     no_of_messages_viewed_by_user = Post.db.query(ViewPost).join(
         Post,
@@ -116,14 +123,14 @@ def get_posts(request):
         ViewPost.actor_id == user_id,
     ).count() if user_id else 0
 
-    discussion_posts = Post.db.query(Post).join(
+    posts = Post.db.query(Post).join(
         Content,
         Source,
     ).filter(
         Source.discussion_id == discussion_id,
         Content.source_id == Source.id,
     )
-    no_of_posts_to_discussion = discussion_posts.count()
+    no_of_posts_to_discussion = posts.count()
 
     post_data = []
 
@@ -141,27 +148,27 @@ def get_posts(request):
         posts = ideas_query.join(Content,
                                  Source,
                                  )
-    else:
-        posts = discussion_posts
-        if root_post_id:
-            root_post = Post.get(id=root_post_id)
+    elif root_post_id:
+        root_post = Post.get(id=root_post_id)
 
-            posts = posts.filter(
-                (Post.ancestry.like(
-                root_post.ancestry + cast(root_post.id, String) + ',%'
-                ))
-                |
-                (Post.id==root_post.id)
-                )
+        posts = posts.filter(
+            (Post.ancestry.like(
+            root_post.ancestry + cast(root_post.id, String) + ',%'
+            ))
+            |
+            (Post.id==root_post.id)
+            )
         #Benoitg:  For now, this completely garbles threading without intelligent
         #handling of pagination.  Disabling
         #posts = posts.limit(page_size).offset(data['startIndex']-1)
-        
+    elif ids:
+        posts = posts.filter(Post.id.in_(ids))
+
     if user_id:
         posts = posts.outerjoin(ViewPost,
                     and_(ViewPost.actor_id==user_id, ViewPost.post_id==Post.id)
                 )
-        posts = posts.options(joinedload(Post.views))
+        posts = posts.add_entity(ViewPost)
     posts = posts.options(contains_eager(Post.content, Content.source))
     posts = posts.options(joinedload_all(Post.creator, AgentProfile.user))
 
@@ -170,26 +177,31 @@ def get_posts(request):
     if 'synthesis' in filter_names:
         posts = posts.filter(Post.is_synthesis==True)
 
-    for post in posts:
-        #print(repr(posts))
-        #exit()
-        serializable_post = post.serializable()
-        if user_id:
-            # TODO: THIS DOES NOT WORK. We get all views, not just the join above.
-            if(post.views):
+    if user_id:
+        for post, viewpost in posts:
+            if view_def:
+                serializable_post = post.generic_json(view_def)
+            else:
+                serializable_post = post.serializable()
+            if viewpost:
                 serializable_post['read'] = True
             else:
                 serializable_post['read'] = False
                 if root_post_id:
-                    with transaction.manager:
-                        viewed_post = ViewPost(
-                            actor_id=user_id,
-                            post_id=post.id
-                        )
+                    viewed_post = ViewPost(
+                        actor_id=user_id,
+                        post=post
+                    )
 
-                        Post.db.add(viewed_post)
-                        
-        post_data.append(serializable_post)
+                    Post.db.add(viewed_post)
+            post_data.append(serializable_post)
+    else:
+        for post in posts:
+            if view_def:
+                serializable_post = post.generic_json(view_def)
+            else:
+                serializable_post = post.serializable()
+            post_data.append(serializable_post)
 
     data = {}
     data["page"] = page
@@ -215,11 +227,15 @@ def get_posts(request):
 def get_post(request):
     post_id = request.matchdict['id']
     post = Post.get_instance(post_id)
+    view_def = request.GET.get('view')
 
     if not post:
         raise HTTPNotFound("Post with id '%s' not found." % post_id)
 
-    return post.serializable()
+    if view_def:
+        return post.generic_json(view_def)
+    else:
+        return post.serializable()
 
 
 @posts.post(permission=P_ADD_POST)

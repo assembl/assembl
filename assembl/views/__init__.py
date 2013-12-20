@@ -14,6 +14,7 @@ def backbone_include(config):
     config.add_route('nodetest', '/nodetest')
     config.add_route('styleguide', '/styleguide')
     config.add_route('test', '/test')
+    config.add_route('graph_view', '/graph')
 
 
 class _DefaultRoot(object):
@@ -32,8 +33,9 @@ def root_factory(request):
             raise HTTPNotFound("No discussion ID %d" % (discussion_id,))
         return discussion
     elif request.matchdict and 'discussion_slug' in request.matchdict:
+        discussion_slug = request.matchdict['discussion_slug']
         discussion = Discussion.db.query(Discussion).filter_by(
-            slug=request.matchdict['discussion_slug']).first()
+            slug=discussion_slug).first()
         if not discussion:
             raise HTTPNotFound("No discussion named %s" % (discussion_slug,))
         return discussion

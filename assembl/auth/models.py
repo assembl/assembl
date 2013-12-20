@@ -512,15 +512,15 @@ class DiscussionPermission(SQLAlchemyBaseModel):
         return self.discussion_id
 
 def create_default_permissions(session, discussion):
-    permissions = {p.name: p.id for p in session.query(Permission).all()}
-    roles = {r.name: r.id for r in session.query(Role).all()}
+    permissions = {p.name: p for p in session.query(Permission).all()}
+    roles = {r.name: r for r in session.query(Role).all()}
 
     def add_perm(permission_name, role_names):
         # Note: Must be called within transaction manager
         for role in role_names:
             session.add(DiscussionPermission(
-                discussion=discussion, role_id=roles[role],
-                permission_id=permissions[permission_name]))
+                discussion=discussion, role=roles[role],
+                permission=permissions[permission_name]))
     add_perm(P_READ, [Everyone])
     add_perm(P_ADD_POST,
              [R_PARTICIPANT, R_CATCHER, R_MODERATOR, R_ADMINISTRATOR])
@@ -596,6 +596,9 @@ class ActionOnPost(Action):
     )
 
     object_type = 'post'
+
+    def get_discussion_id(self):
+        return self.post.get_discussion_id()
 
 
 class ViewPost(ActionOnPost):

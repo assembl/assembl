@@ -5,7 +5,7 @@ from cornice import Service
 from pyramid.httpexceptions import HTTPNotFound, HTTPBadRequest, HTTPNoContent
 from assembl.views.api import API_DISCUSSION_PREFIX
 from assembl.models import (
-    get_named_object, Idea, Discussion, Extract)
+    get_named_object, get_database_id, Idea, IdeaLink, Discussion, Extract)
 from . import acls
 from assembl.auth import (P_READ, P_ADD_IDEA, P_EDIT_IDEA)
 
@@ -30,20 +30,19 @@ def create_idea(request):
     discussion = session.query(Discussion).get(int(discussion_id))
     idea_data = json.loads(request.body)
 
-    with transaction.manager:
-        new_idea = Idea(
-            short_title=idea_data['shortTitle'],
-            long_title=idea_data['longTitle'],
-            table_of_contents_id=discussion.table_of_contents_id,
-            order=idea_data.get('order', 0.0))
+    new_idea = Idea(
+        short_title=idea_data['shortTitle'],
+        long_title=idea_data['longTitle'],
+        table_of_contents_id=discussion.table_of_contents_id,
+        order=idea_data.get('order', 0.0))
 
-        if idea_data['parentId']:
-            parent = Idea.get_instance(idea_data['parentId'])
-            new_idea.parents.append(parent)
+    session.add(new_idea)
 
-        session.add(new_idea)
+    if idea_data['parentId']:
+        parent = Idea.get_instance(idea_data['parentId'])
+        session.add(IdeaLink(parent=parent, child=new_idea))
 
-    new_idea = session.merge(new_idea)
+    session.flush()
 
     return {'ok': True, 'id': new_idea.uri()}
 
@@ -52,11 +51,15 @@ def create_idea(request):
 def get_idea(request):
     idea_id = request.matchdict['id']
     idea = Idea.get_instance(idea_id)
+    view_def = request.GET.get('view')
 
     if not idea:
         raise HTTPNotFound("Idea with id '%s' not found." % idea_id)
 
-    return idea.serializable()
+    if view_def:
+        return idea.generic_json(view_def)
+    else:
+        return idea.serializable()
 
 
 @ideas.get(permission=P_READ)
@@ -65,12 +68,22 @@ def get_ideas(request):
     discussion = Discussion.get(id=int(discussion_id))
     if not discussion:
         raise HTTPNotFound("Discussion with id '%s' not found." % discussion_id)
+    view_def = request.GET.get('view')
+    ids = request.GET.getall('ids')
 
     ideas = Idea.db.query(Idea).filter_by(
         table_of_contents_id=discussion.table_of_contents_id
     ).order_by(Idea.order, Idea.creation_date)
-    retval = [idea.serializable() for idea in ideas]
-    retval.append(Idea.serializable_unsorded_posts_pseudo_idea(discussion))
+
+    if ids:
+        ids = [get_database_id("Idea", id) for id in ids]
+        ideas = ideas.filter(Idea.id.in_(ids))
+
+    if view_def:
+        retval = [idea.generic_json(view_def) for idea in ideas]
+    else:
+        retval = [idea.serializable() for idea in ideas]
+    retval.append(Idea.serializable_unsorted_posts_pseudo_idea(discussion))
     return retval
 
 
@@ -85,29 +98,42 @@ def save_idea(request):
     if idea_id in ['orphan_posts']:
         return {'ok': False, 'id': Idea.uri_generic(idea_id)}
 
-    with transaction.manager:
-        idea = Idea.get_instance(idea_id)
-        discussion = Discussion.get(id=int(discussion_id))
+    idea = Idea.get_instance(idea_id)
+    if not idea:
+        raise HTTPNotFound("No such idea: %s" % (idea_id))
+    discussion = Discussion.get(id=int(discussion_id))
+    if not discussion:
+        raise HTTPNotFound("Discussion with id '%s' not found." % discussion_id)
 
-        idea.short_title = idea_data['shortTitle']
-        idea.long_title = idea_data['longTitle']
-        idea.order = idea_data.get('order', idea.order)
+    idea.short_title = idea_data['shortTitle']
+    idea.long_title = idea_data['longTitle']
+    idea.order = idea_data.get('order', idea.order)
 
-        for parent in idea.parents:
-            idea.parents.remove(parent)
+    if 'parentId' in idea_data and idea_data['parentId'] is not None:
+        # TODO: Make sure this is sent as a list!
+        parent = Idea.get_instance(idea_data['parentId'])
+        if not parent:
+            raise HTTPNotFound("Missing parentId %s" % (idea_data['parentId']))
+        if parent not in idea.parents:
+            idea.parent_links.append(IdeaLink(parent=parent, child=idea))
+            parent.send_to_changes()
+        to_remove = []
+        for pl in idea.parent_links:
+            if pl.parent != parent:
+                to_remove.append(pl)
+                # The following does not seem necessary
+                # pl.parent.send_to_changes()
+        for pl in to_remove:
+            idea.parent_links.remove(pl)
+        idea.send_to_changes()
 
-        if idea_data['parentId']:
-            parent = Idea.get_instance(idea_data['parentId'])
-            idea.parents.append(parent)
+    if idea_data['inSynthesis']:
+        idea.synthesis = discussion.synthesis
+    else:
+        idea.synthesis = None
 
-        if idea_data['inSynthesis']:
-            idea.synthesis = discussion.synthesis
-        else:
-            idea.synthesis = None
-
-        Idea.db.add(idea)
-
-    idea = Idea.db.merge(idea)
+    Idea.db.add(idea)
+    Idea.db.flush()
 
     return {'ok': True, 'id': idea.uri() }
 
@@ -125,7 +151,10 @@ def delete_idea(request):
     num_extracts = len(idea.extracts)
     if num_extracts > 0:
         raise HTTPBadRequest("Idea cannot be deleted because it still has %d extracts." % num_extracts)
-    Idea.db.delete(idea)
+    db = Idea.db()
+    for idealink in IdeaLink.db().query(IdeaLink).filter_by(child=idea):
+        db.delete(idealink)
+    db.delete(idea)
     request.response.status = HTTPNoContent.code
     return None
 
@@ -134,6 +163,7 @@ def delete_idea(request):
 def get_idea_extracts(request):
     idea_id = request.matchdict['id']
     idea = Idea.get_instance(idea_id)
+    view_def = request.GET.get('view')
 
     if not idea:
         raise HTTPNotFound("Idea with id '%s' not found." % idea_id)
@@ -142,8 +172,7 @@ def get_idea_extracts(request):
         Extract.idea_id == idea.id
     ).order_by(Extract.order.desc())
 
-    serializable_extracts = [
-        extract.serializable() for extract in extracts
-    ]
-
-    return serializable_extracts
+    if view_def:
+        return [extract.generic_json(view_def) for extract in extracts]
+    else:
+        return [extract.serializable() for extract in extracts]

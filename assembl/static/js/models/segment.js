@@ -115,11 +115,12 @@ function(Base, _, app, User, Message){
                 type = this.get('target')['@type'];
 
             switch(type){
-                case 'webpage':
+                case 'Webpage':
                     cls += 'link';
                     break;
 
-                case 'email':
+                case 'Email':
+                case 'Post':
                 default:
                     cls += 'mail';
             }

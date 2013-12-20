@@ -1,7 +1,7 @@
 from datetime import datetime
 import re
 import quopri
-from itertools import groupby
+from itertools import groupby, chain
 import traceback
 import anyjson as json
 
@@ -32,7 +32,7 @@ from ..source.models import (Source, Content, Post, Mailbox)
 from ..auth.models import (
     DiscussionPermission, Role, Permission, AgentProfile, User,
     UserRole, LocalUserRole, DiscussionPermission, P_READ,
-    R_SYSADMIN)
+    R_SYSADMIN, ViewPost)
 from assembl.auth import get_permissions
 
 class Discussion(SQLAlchemyBaseModel):
@@ -120,9 +120,25 @@ class Discussion(SQLAlchemyBaseModel):
             Content,
             Source
         ).filter(
-            Source.discussion_id==self.id,
-            Content.source_id==Source.id,
+            Source.discussion_id == self.id,
+            Content.source_id == Source.id,
         ).count()
+
+    def read_post_ids(self, user_id):
+        return (x[0] for x in self.db.query(Post.id).join(
+            Content,
+            Source,
+            ViewPost
+        ).filter(
+            Source.discussion_id == self.id,
+            Content.source_id == Source.id,
+            ViewPost.actor_id == user_id,
+            ViewPost.post_id == Post.id
+        ))
+
+    def get_read_posts_ids_preload(self, user_id):
+        return json.dumps([
+            Post.uri_generic(id) for id in self.read_post_ids(user_id)])
 
     def import_from_sources(self, only_new=True):
         for source in self.sources:
@@ -282,6 +298,16 @@ class TableOfContents(SQLAlchemyBaseModel):
         if self.discussion:
             return self.discussion.id
 
+    def get_idea_links(self):
+        return Idea.get_all_idea_links(self.id)
+
+    def get_idea_and_links(self):
+        return chain(self.ideas, self.get_idea_links())
+
+    def get_top_ideas(self):
+        return self.db().query(Idea).filter(
+            Idea.table_of_contents_id == self.id).filter(~Idea.parent_links.any()).all()
+
     def __repr__(self):
         return "<TableOfContents %s>" % repr(self.discussion.topic)
 
@@ -329,13 +355,18 @@ class Synthesis(SQLAlchemyBaseModel):
         return "<Synthesis %s>" % repr(self.subject)
 
 
-idea_association_table = Table(
-    'idea_association',
-    SQLAlchemyBaseModel.metadata,
-    Column('parent_id', Integer, ForeignKey('idea.id')),
-    Column('child_id', Integer, ForeignKey('idea.id')),
-    schema = db_schema
-)
+class IdeaLink(SQLAlchemyBaseModel):
+    __tablename__ = 'idea_association'
+    id = Column(Integer, primary_key=True)
+    parent_id = Column(Integer, ForeignKey('idea.id', ondelete="CASCADE"))
+    child_id = Column(Integer, ForeignKey('idea.id', ondelete="CASCADE"))
+    parent = relationship(
+        'Idea', backref='child_links',
+        foreign_keys=(parent_id))
+    child = relationship(
+        'Idea', backref='parent_links',
+        foreign_keys=(child_id))
+
 
 class Idea(SQLAlchemyBaseModel):
     """
@@ -362,13 +393,13 @@ class Idea(SQLAlchemyBaseModel):
         backref='ideas',
     )
 
-    children = relationship(
-        "Idea",
-        secondary=idea_association_table,
-        backref="parents",
-        primaryjoin=id==idea_association_table.c.parent_id,
-        secondaryjoin=id==idea_association_table.c.child_id,
-    )
+    @property
+    def children(self):
+        return [cl.child for cl in self.child_links]
+
+    @property
+    def parents(self):
+        return [cl.parent for cl in self.parent_links]
 
     synthesis_id = Column(
         Integer,
@@ -393,7 +424,7 @@ class Idea(SQLAlchemyBaseModel):
             'num_posts': self.num_posts,
         }
     @staticmethod
-    def serializable_unsorded_posts_pseudo_idea(discussion):
+    def serializable_unsorted_posts_pseudo_idea(discussion):
         """
         Returns a "fake" idea linking the posts unreacheable by navigating
         post threads linked to any other idea
@@ -412,13 +443,15 @@ class Idea(SQLAlchemyBaseModel):
             'total': 0,
             'num_posts': Idea.get_num_orphan_posts(discussion),
         }
+
     @staticmethod
-    def _get_idea_dag_statement():
+    def _get_idea_dag_statement(skip_where=False):
         """requires root_idea_id parameter """
+        where_clause =  "" if skip_where else "where ia.parent_id = :root_idea_id"
         return """(SELECT child_id as id FROM (
             SELECT transitive t_in (1) t_out (2) t_distinct T_NO_CYCLES parent_id, child_id from idea_association
                 UNION SELECT id as parent_id, id as child_id FROM idea
-            ) ia where ia.parent_id = :root_idea_id) AS idea_dag """
+            ) ia %s) AS idea_dag """ % (where_clause,)
 
     @staticmethod
     def _get_related_posts_statement_no_select(select, idea_dag_statement):
@@ -499,6 +532,16 @@ AND discussion.id=:discussion_id
             return "<Idea %d %s>" % (self.id, repr(self.short_title))
 
         return "<Idea %d>" % self.id
+
+    @classmethod
+    def get_all_idea_links(cls, table_of_contents_id):
+        child = aliased(cls)
+        parent = aliased(cls)
+        return cls.db().query(IdeaLink
+            ).join(parent, parent.id == IdeaLink.parent_id
+            ).join(child, child.id == IdeaLink.child_id
+            ).filter(child.table_of_contents_id == table_of_contents_id
+            ).filter(parent.table_of_contents_id == table_of_contents_id).all()
 
 
 class Extract(SQLAlchemyBaseModel):

@@ -1,0 +1,33 @@
+{
+    "_default": {
+        "id": false,
+        "type": false,
+        "_default": false
+    },
+    "Discussion": {
+        "elements": "table_of_contents:",
+        "creation_date": false,
+        "owner": false,
+        "slug": false,
+        "sources": false,
+        "synthesis_id": false,
+        "topic": false
+    },
+    "Idea": {
+        "data": "self:idea_graph2",
+        "creation_date": true,
+        "extracts": false,
+        "long_title": true,
+        "name": "short_title",
+        "order": true,
+        "table_of_contents": false
+    },
+    "IdeaLink": {
+        "data": "self:idea_graph2"
+    },
+    "TableOfContents": {
+        "creation_date": false,
+        "nodes": ["ideas:"],
+        "edges": ["&get_idea_links:"]
+    }
+}

@@ -11,7 +11,7 @@ from sqlalchemy.orm import aliased, joinedload, joinedload_all, contains_eager
 from assembl.views.api import API_DISCUSSION_PREFIX
 from assembl.models import (
     get_named_object, get_database_id, Extract, TextFragmentIdentifier,
-    AgentProfile, User, Source, Content, Post, Webpage)
+    AgentProfile, User, Source, Content, Post, Webpage, Idea)
 from . import acls
 from assembl.auth import (
     P_READ, P_ADD_EXTRACT, P_EDIT_EXTRACT, P_DELETE_EXTRACT, get_permissions)
@@ -52,17 +52,23 @@ search_extracts = Service(
 def get_extract(request):
     extract_id = request.matchdict['id']
     extract = Extract.get_instance(extract_id)
+    view_def = request.GET.get('view')
 
     if extract is None:
         raise HTTPNotFound(
             "Extract with id '%s' not found." % extract_id)
 
-    return extract.serializable()
+    if view_def:
+        return extract.generic_json(view_def)
+    else:
+        return extract.serializable()
 
 
 @extracts.get(permission=P_READ)
 def get_extracts(request):
     discussion_id = int(request.matchdict['discussion_id'])
+    view_def = request.GET.get('view')
+    ids = request.GET.getall('ids')
 
     all_extracts = Extract.db.query(Extract).join(
         Content,
@@ -71,15 +77,18 @@ def get_extracts(request):
         Source.discussion_id == discussion_id,
         Content.source_id == Source.id
     )
+    if ids:
+        ids = [get_database_id("Extract", id) for id in ids]
+        all_extracts = all_extracts.filter(Extract.id.in_(ids))
     # all_extracts = all_extracts.options(joinedload_all(
     #     Extract.source, Content.post, Post.creator))
     all_extracts = all_extracts.options(joinedload_all(
         Extract.creator, AgentProfile.user))
-    serializable_extracts = [
-        extract.serializable() for extract in all_extracts
-    ]
 
-    return serializable_extracts
+    if view_def:
+        return [extract.generic_json(view_def) for extract in all_extracts]
+    else:
+        return [extract.serializable() for extract in all_extracts]
 
 
 @extracts.post()
@@ -173,7 +182,15 @@ def put_extract(request):
 
     extract.owner_id = user_id or get_database_id("User", extract.owner_id)
     extract.order = updated_extract_data.get('order', extract.order)
-    extract.idea_id = get_database_id("Idea", updated_extract_data['idIdea'])
+    idea_id = updated_extract_data.get('idIdea', None)
+    if idea_id:
+        idea = Idea.get_instance(idea_id)
+        if(idea.get_discussion_id() != extract.get_discussion_id()):
+            raise HTTPBadRequest(
+                "Extract from discussion %s cannot be associated with an idea from a different discussion." % extract.get_discussion_id())
+        extract.idea = idea
+    else:
+        extract.idea = None
 
     Extract.db.add(extract)
     #TODO: Merge ranges. Sigh.
@@ -198,11 +215,16 @@ def delete_extract(request):
 @search_extracts.get(permission=P_READ)
 def do_search_extracts(request):
     uri = request.GET['uri']
+    view_def = request.GET.get('view')
+
     if not uri:
         return HTTPClientError("Please specify a search uri")
     source = Webpage.get(url=uri)
     if source:
         extracts = Extract.db.query(Extract).filter_by(source=source).all()
-        return {"total": len(extracts),
-                "rows": [extract.serializable() for extract in extracts]}
+        if view_def:
+            rows = [extract.generic_json(view_def) for extract in extracts]
+        else:
+            rows = [extract.serializable() for extract in extracts]
+        return {"total": len(extracts), "rows": rows}
     return {"total": 0, "rows": []}

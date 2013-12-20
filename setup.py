@@ -15,7 +15,7 @@ install_reqs = parse_requirements('requirements.txt')
 # e.g. ['django==1.5.1', 'mezzanine==1.4.6']
 requires = [str(ir.req) for ir in install_reqs]
 
-tests_require = ['webtest']
+tests_require = ['WebTest']
 
 
 
@@ -48,6 +48,7 @@ setup(name='assembl',
       assembl-db-manage = assembl.scripts.db_manage:main
       assembl-ini-files = assembl.scripts.ini_files:main
       assembl-imap-test = assembl.scripts.imap_test:main
+      assembl-add-user  = assembl.scripts.add_user:main
       [nose.plugins]
       assembl_test_plugin = assembl.tests.plugins:Assembl
       """,

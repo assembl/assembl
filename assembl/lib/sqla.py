@@ -5,9 +5,9 @@ from __future__ import absolute_import
 import re
 import sys
 from datetime import datetime
-from itertools import groupby
 import inspect
-from types import StringTypes
+import types
+from collections import Iterable, defaultdict
 
 from anyjson import dumps, loads
 from colanderalchemy import SQLAlchemySchemaNode
@@ -17,7 +17,7 @@ from sqlalchemy.ext.declarative import declarative_base, declared_attr
 from sqlalchemy.orm import mapper, scoped_session, sessionmaker
 from sqlalchemy.orm.util import has_identity
 from sqlalchemy.util import classproperty
-from sqlalchemy.orm.session import object_session
+from sqlalchemy.orm.session import object_session, Session
 from zope.sqlalchemy import ZopeTransactionExtension
 from zope.sqlalchemy.datamanager import mark_changed as z_mark_changed
 
@@ -186,15 +186,35 @@ class BaseOps(object):
         "Get the ID of an associated discussion object, if any."
         return None
 
+    def send_to_changes(self, connection=None):
+        if not connection:
+            # WARNING: invalidate has to be called within an active transaction.
+            # This should be the case in general, no need to add a transaction manager.
+            connection = self.db().connection()
+        if 'cdict' not in connection.info:
+            connection.info['cdict'] = {}
+        connection.info['cdict'][self.uri()] = (
+            self.get_discussion_id(), self)
+
     @classmethod
     def external_typename(cls):
         return cls.__name__
 
     @classmethod
+    def external_typename_with_inheritance(cls):
+        if cls.__mapper__.polymorphic_identity is not None:
+            for nextclass in cls.mro():
+                if getattr(nextclass, '__mapper__', None) is None:
+                    break
+                if nextclass.__mapper__.polymorphic_identity is not None:
+                    cls = nextclass
+        return cls.external_typename()
+
+    @classmethod
     def uri_generic(cls, id, base_uri='local:'):
         if not id:
             return None
-        return base_uri + cls.external_typename() + "/" + str(id)
+        return base_uri + cls.external_typename_with_inheritance() + "/" + str(id)
 
     @classmethod
     def get_instance(cls, identifier):
@@ -208,7 +228,7 @@ class BaseOps(object):
 
     @classmethod
     def get_database_id(cls, uri):
-        if isinstance(uri, StringTypes):
+        if isinstance(uri, types.StringTypes):
             if not uri.startswith('local:') or '/' not in uri:
                 return
             uriclsname, num = uri[6:].split('/', 1)
@@ -224,16 +244,12 @@ class BaseOps(object):
     def uri(self, base_uri='local:'):
         return self.uri_generic(self.get_id_as_str(), base_uri)
 
-    def generic_json(self, view_def_name='default', base_uri='local:'):
+    def generic_json(self, view_def_name='default', base_uri='local:', use_dumps=False):
         view_def = get_view_def(view_def_name)
         my_typename = self.external_typename()
         my_id = self.uri(base_uri)
-        result = {
-            '@id': my_id,
-            '@type': my_typename,
-            '@view': view_def_name
-        }
-        local_view = view_def.get(my_typename, {})
+        result = {}
+        local_view = view_def.get(my_typename, False)
         if local_view is False:
             return None
         assert isinstance(local_view, dict),\
@@ -250,8 +266,10 @@ class BaseOps(object):
             for r in mapper.relationships
         }
         methods = dict(inspect.getmembers(
-            self, lambda m: inspect.ismethod(m)
+            self.__class__, lambda m: inspect.ismethod(m)
                             and m.func_code.co_argcount == 1))
+        properties = dict(inspect.getmembers(
+            self.__class__, lambda p: inspect.isdatadescriptor(p)))
         known = set()
         for name, spec in local_view.iteritems():
             if name == "_default":
@@ -280,7 +298,7 @@ class BaseOps(object):
                 prop_name = name
                 view_name = None
             else:
-                assert isinstance(subspec, StringTypes),\
+                assert isinstance(subspec, types.StringTypes),\
                     "in viewdef %s, class %s, name %s, spec not a string" % (
                         view_def_name, my_typename, name)
                 if subspec[0] == "'":
@@ -290,7 +308,7 @@ class BaseOps(object):
                 if ':' in subspec:
                     prop_name, view_name = subspec.split(':', 1)
                     if not view_name:
-                        view_name = 'default'
+                        view_name = view_def_name
                     if not prop_name:
                         prop_name = name
                 else:
@@ -300,21 +318,44 @@ class BaseOps(object):
                 assert get_view_def(view_name),\
                     "in viewdef %s, class %s, name %s, unknown viewdef %s" % (
                         view_def_name, my_typename, name, view_name)
-            if prop_name[0] == '&':
+
+            def translate_to_json(v):
+                if isinstance(v, Base):
+                    if view_name:
+                        return v.generic_json(view_name)
+                    else:
+                        return v.uri(base_uri)
+                elif isinstance(v, (str, unicode, int, float, bool, types.NoneType)):
+                    return v
+                elif isinstance(v, datetime):
+                    return v.isoformat()
+                elif isinstance(v, dict):
+                    return {translate_to_json(k): translate_to_json(v)
+                            for k, v in v.items()}
+                elif isinstance(v, Iterable):
+                    return [translate_to_json(i) for i in v]
+                else:
+                    raise NotImplementedError("Cannot translate", v)
+
+            if prop_name == 'self':
+                if view_name:
+                    result[name] = self.generic_json(view_name, base_uri)
+                else:
+                    result[name] = self.uri()
+                continue
+            elif prop_name == '@view':
+                result[name] = view_def_name
+                continue
+            elif prop_name[0] == '&':
                 prop_name = prop_name[1:]
                 assert prop_name in methods,\
                     "in viewdef %s, class %s, name %s, unknown method %s" % (
                         view_def_name, my_typename, name, prop_name)
                 # Function call. PLEASE RETURN JSON or Base object.
                 val = getattr(self, prop_name)()
-                if isinstance(val, Base):
-                    if view_name:
-                        val = val.generic_json(view_name, base_uri)
-                    else:
-                        val = val.uri(base_uri)
-                result[name] = val
+                result[name] = translate_to_json(val)
                 continue
-            if prop_name in cols:
+            elif prop_name in cols:
                 assert not view_name,\
                     "in viewdef %s, class %s, viewdef for literal property %s" % (
                         view_def_name, my_typename, prop_name)
@@ -331,8 +372,14 @@ class BaseOps(object):
                         val = val.isoformat()
                     result[name] = val
                 continue
+            elif prop_name in properties:
+                known.add(prop_name)
+                val = getattr(self, prop_name)
+                if val is not None:
+                    result[name] = translate_to_json(val)
+                continue
             assert prop_name in relns,\
-                    "in viewdef %s, class %s, prop_name %s not a column or relation" % (
+                    "in viewdef %s, class %s, prop_name %s not a column, property or relation" % (
                         view_def_name, my_typename, prop_name)
             known.add(prop_name)
             # Add derived prop?
@@ -388,27 +435,28 @@ class BaseOps(object):
                     else:
                         result[name] = uri
 
-        if local_view.get('_default') is False:
-            return result
-        for name, col in cols.items():
-            if name in known:
-                continue  # already done
-            as_rel = fkeys_of_reln.get(frozenset((col, )))
-            if as_rel:
-                name = as_rel.key
+        if local_view.get('_default') is not False:
+            for name, col in cols.items():
                 if name in known:
-                    continue
+                    continue  # already done
+                as_rel = fkeys_of_reln.get(frozenset((col, )))
+                if as_rel:
+                    name = as_rel.key
+                    if name in known:
+                        continue
+                    else:
+                        ob_id = getattr(self, col.key)
+                        if ob_id:
+                            result[name] = as_rel.mapper.class_.uri_generic(
+                                ob_id, base_uri)
                 else:
-                    ob_id = getattr(self, col.key)
-                    if ob_id:
-                        result[name] = as_rel.mapper.class_.uri_generic(
-                            ob_id, base_uri)
-            else:
-                ob = getattr(self, name)
-                if ob:
-                    if type(ob) == datetime:
-                        ob = ob.isoformat()
-                    result[name] = ob
+                    ob = getattr(self, name)
+                    if ob:
+                        if type(ob) == datetime:
+                            ob = ob.isoformat()
+                        result[name] = ob
+        if use_dumps:
+            return dumps(result)
         return result
 
 
@@ -497,51 +545,66 @@ def get_session_maker(zope_tr=True):
     return _session_maker
 
 
+class Tombstone(object):
+    def __init__(self, ob):
+        self.typename = ob.external_typename()
+        self.uri = ob.uri()
+
+    def generic_json(self, *vargs, **kwargs):
+        return {"@type": self.typename,
+                "@id": self.uri,
+                "@tombstone": True}
+
 def orm_update_listener(mapper, connection, target):
     session = object_session(target)
     if session.is_modified(target, include_collections=False):
-        json = target.generic_json('changes')
-        if json:
-            if 'cdict' not in connection.info:
-                connection.info['cdict'] = {}
-            connection.info['cdict'][target.uri()] = (
-                target.get_discussion_id(), json)
+        target.send_to_changes(connection)
 
 
 def orm_insert_listener(mapper, connection, target):
-    json = target.generic_json('changes')
-    if json:
-        if 'cdict' not in connection.info:
-            connection.info['cdict'] = {}
-        connection.info['cdict'][target.uri()] = (
-            target.get_discussion_id(), json)
+    target.send_to_changes(connection)
 
 
 def orm_delete_listener(mapper, connection, target):
     if 'cdict' not in connection.info:
         connection.info['cdict'] = {}
     connection.info['cdict'][target.uri()] = (
-        target.get_discussion_id(), {
-            "@type": target.external_typename(),
-            "@id": target.uri(),
-            "@tombstone": True})
+        target.get_discussion_id(), Tombstone(target))
 
 
-def commit_listener(connection):
-    if 'zsocket' not in connection.info:
-        connection.info['zsocket'] = get_pub_socket()
-    if 'cdict' in connection.info:
-        for discussion, changes in groupby(
-                connection.info['cdict'].values(), lambda x: x[0]):
+def before_commit_listener(session):
+    info = session.connection().info
+    if 'cdict' in info:
+        changes = defaultdict(list)
+        for (uri, (discussion, target)) in info['cdict'].iteritems():
             discussion = bytes(discussion or "*")
-            changes = [x[1] for x in changes]
-            send_changes(connection.info['zsocket'], discussion, changes)
+            json = target.generic_json('changes')
+            if json:
+                changes[discussion].append(json)
+        del info['cdict']
+        session.cdict2 = changes
     else:
         print "EMPTY CDICT!"
 
 
-def rollback_listener(connection):
-    connection.info['cdict'] = {}
+def after_commit_listener(session):
+    if not getattr(session, 'zsocket', None):
+        session.zsocket = get_pub_socket()
+    if getattr(session, 'cdict2', None):
+        for discussion, changes in session.cdict2.iteritems():
+            send_changes(session.zsocket, discussion, changes)
+        del session.cdict2
+
+
+def session_rollback_listener(session):
+    if getattr(session, 'cdict2', None):
+        del session.cdict2
+
+
+def engine_rollback_listener(connection):
+    info = connection.info
+    if 'cdict' in connection.info:
+        del info['cdict']
 
 
 event.listen(BaseOps, 'after_insert', orm_insert_listener, propagate=True)
@@ -564,8 +627,10 @@ def configure_engine(settings, zope_tr=True, session_maker=None):
     Base, TimestampedBase = declarative_bases(_metadata, class_registry)
     obsolete = MetaData(schema=db_schema)
     ObsoleteBase, TimestampedObsolete = declarative_bases(obsolete)
-    event.listen(engine, 'commit', commit_listener)
-    event.listen(engine, 'rollback', rollback_listener)
+    event.listen(Session, 'before_commit', before_commit_listener)
+    event.listen(Session, 'after_commit', after_commit_listener)
+    event.listen(Session, 'after_rollback', session_rollback_listener)
+    event.listen(engine, 'rollback', engine_rollback_listener)
     return engine
 
 

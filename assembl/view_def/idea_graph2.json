@@ -1,0 +1,15 @@
+{
+    "_default": {
+        "id": false,
+        "type": false,
+        "_default": false
+    },
+    "Idea": {
+        "id": "self"
+    },
+    "IdeaLink": {
+        "id": "self",
+        "source": "parent",
+        "target": "child"
+    }
+}

@@ -1,0 +1,25 @@
+{
+    "_default": {
+        "@id": "self",
+        "_default": false
+    },
+    "Post": {},
+    "Permission": {},
+    "AgentProfile": {},
+    "User": {},
+    "EmailAccount": {},
+    "IdentityProviderAccount": {},
+    "IdentityProvider": {},
+    "Source": {},
+    "Webpage": {},
+    "Mailbox": {},
+    "Email": {},
+    "Post": {},
+    "Discussion": {},
+    "Idea": {},
+    "TableOfContents": {},
+    "Synthesis": {},
+    "Extract": {},
+    "TextFragmentIdentifier": {},
+    "DiscussionPermission": {}
+}
