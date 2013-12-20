@@ -35,7 +35,11 @@ define(['backbone', 'jquery', 'app'], function(Backbone, $, app){
          */
         message: function(id){
             app.openPanel( app.messageList );
-            app.messageList.loadThreadById(id);
+            app.messageList.messages.once('reset', function(){
+
+                app.messageList.loadThreadById(id);
+
+            });
         },
 
         /**
@@ -49,8 +53,6 @@ define(['backbone', 'jquery', 'app'], function(Backbone, $, app){
                     app.openPanel(panel);
                 }
             });
-
-            app.messageList.loadData();
         }
 
     });

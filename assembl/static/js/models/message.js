@@ -9,15 +9,8 @@ define(['models/base', 'jquery', 'app'], function(Base, $, app){
          * @init
          */
         initialize: function(){
-            //this.on('change:read', this.onAttrChange, this);
             this.on('change:collapsed', this.render, this);
         },
-
-        /**
-         * Overwritting the idAttribute
-         * @type {String}
-         */
-        idAttribute: '@id',
 
         /**
          * The url
@@ -144,6 +137,16 @@ define(['models/base', 'jquery', 'app'], function(Base, $, app){
          */
         onAttrChange: function(){
             this.save();
+        },
+
+        /**
+         * Return `false` if the parent is `null` or it is NOT in the given collection
+         * @param {Base.Collection} collection
+         * @return {Boolean}
+         */
+        isParentInCollection: function(collection){
+            var parentId = this.get('parentId');
+            return !! collection.get(parentId);
         }
     });
 
@@ -162,18 +165,18 @@ define(['models/base', 'jquery', 'app'], function(Base, $, app){
         model: MessageModel,
 
         /**
-         * Returns the messages with no parent
+         * Returns the messages with no parent in the collection
          * @return {Message[]}
          */
         getRootMessages: function(){
-            var toReturn = [];
+            var toReturn = [],
+                that = this;
 
             _.each(this.models, function(model){
 
-                if( model.get('parentId') === null ){
+                if( ! model.isParentInCollection(that) ){
                     toReturn.push(model);
-                } else if( model.getRootParent() === null ){
-                    toReturn.push(model);
+                    return;
                 }
 
             });
@@ -188,12 +191,12 @@ define(['models/base', 'jquery', 'app'], function(Base, $, app){
         getAnnotations: function(){
             var ret = [];
 
-            _.each(this.models, function(model){                
+            _.each(this.models, function(model){
                 ret = _.union(ret, model.getAnnotations() );
             });
 
             return ret;
-        },
+        }
 
     });
 
