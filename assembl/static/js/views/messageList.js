@@ -19,7 +19,8 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
                 this.button = $(obj.button).on('click', app.togglePanel.bind(window, 'messageList'));
             }
 
-            this.messages.on('reset', this.render, this);
+            this.listenTo(this.messages, 'reset', this.render);
+            this.listenTo(this.messages, 'change', this.initAnnotator);
 
             var that = this;
             app.on('idea:select', function(idea){
@@ -83,6 +84,8 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
             }
 
             this.chk = this.$('#messageList-mainchk');
+            this.initAnnotator();
+
             return this;
         },
 

@@ -323,7 +323,6 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
          */
         onCollapsedChange: function(){
             this.render(false);
-            app.messageList.initAnnotator();
         },
 
         /**
