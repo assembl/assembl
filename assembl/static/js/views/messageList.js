@@ -41,7 +41,7 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
          * The collapse/expand flag
          * @type {Boolean}
          */
-        collapsed: false,
+        collapsed: true,
 
         /**
          * The collection
@@ -61,13 +61,10 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
          */
         render: function(){
             app.trigger('render');
-            var list = document.createDocumentFragment(),
-                messages = this.messages.getRootMessages();
 
-            _.each(messages, function(message){
-                var messageListItem = new MessageView({model:message});
-                list.appendChild(messageListItem.render().el);
-            });
+            var that = this,
+                rootMessages = this.messages.getRootMessages(),
+                views = this.getRenderedMessages(rootMessages);
 
             var data = {
                 inbox: this.messages.length,
@@ -77,16 +74,55 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
 
             this.$el.html( this.template(data) );
 
-            if( messages.length > 0 ){
-                this.$('.idealist').append( list );
+            if( rootMessages.length > 0 ){
+                this.$('.idealist').append( views );
             } else {
                 this.$('.idealist').append( app.format("<div class='margin'>{0}</div>", i18n.gettext('No messages')) );
             }
 
+            this.renderCollapseButton();
             this.chk = this.$('#messageList-mainchk');
             this.initAnnotator();
 
             return this;
+        },
+
+        /**
+         * Rendes the collapse button
+         */
+        renderCollapseButton: function(){
+            var btn = this.$('#messageList-collapseButton');
+
+            if( this.collapsed ){
+                btn.attr('data-tooltip', i18n.gettext('Expand all'));
+                btn.removeClass('icon-upload').addClass('icon-download-1');
+            } else {
+                btn.attr('data-tooltip', i18n.gettext('Collapse all'));
+                btn.removeClass('icon-download-1').addClass('icon-upload');
+            }
+        },
+
+        /**
+         * Return a list with all views.el already rendered
+         * @param {Message.Model[]} messages
+         * @return {HTMLDivElement[]}
+         */
+        getRenderedMessages: function(messages){
+            var list = [],
+                i = 0,
+                len = messages.length,
+                view, model, children;
+
+            for(; i < len; i += 1){
+                model = messages[i];
+                view = new MessageView({model:model});
+                children = model.getChildren();
+
+                list.push(view.render().el);
+                list = _.union(list, this.getRenderedMessages(children));
+            }
+
+            return list;
         },
 
         /**
@@ -213,9 +249,12 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
             var that = this;
 
             this.blockPanel();
-            this.collapsed = false;
+            this.collapsed = true;
 
             $.getJSON( app.getApiUrl('posts'), function(data){
+                _.each(data.posts, function(post){
+                    post.collapsed = true;
+                });
                 that.messages.reset(data.posts);
             });
         },
@@ -230,27 +269,30 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
         },
 
         /**
+         * Set the new status for collapsed property
+         * @param {boolean} value
+         */
+        setCollapsed: function(value){
+            this.messages.each(function(message){
+                message.set('collapsed', value);
+            });
+
+            this.collapsed = value;
+            this.renderCollapseButton();
+        },
+
+        /**
          * Collapse ALL messages
          */
         collapseMessages: function(){
-            this.messages.each(function(message){
-                message.attributes.isOpen = false;
-            });
-
-            this.collapsed = true;
-            this.render();
+            this.setCollapsed(true);
         },
 
         /**
          * Expand ALL messages
          */
         expandMessages: function(){
-            this.messages.each(function(message){
-                message.attributes.isOpen = true;
-            });
-
-            this.collapsed = false;
-            this.render();
+            this.setCollapsed(false);
         },
 
         /**
