@@ -91,20 +91,18 @@ class Discussion(SQLAlchemyBaseModel):
 
     def get_discussion_id(self):
         return self.id
-    
+
     def get_next_synthesis(self):
-        next_synthesis =  self.db().query(Synthesis).filter(
-                and_(Synthesis.discussion_id == self.id, 
-                Synthesis.published_in_post==None)
-            ).all()
+        next_synthesis = self.db().query(Synthesis).filter(
+            and_(Synthesis.discussion_id == self.id,
+                 Synthesis.published_in_post is None)
+        ).all()
         print"Next Synthesis"
         print(repr(next_synthesis))
         #There should only be a single next synthesis
         assert len(next_synthesis) <= 1
         if(len(next_synthesis) == 1):
             return next_synthesis[0]
-
-
         else:
             next_synthesis = Synthesis(discussion=self)
             self.db.add(next_synthesis)
@@ -113,26 +111,26 @@ class Discussion(SQLAlchemyBaseModel):
 
     def get_last_published_synthesis(self):
         return self.db().query(Synthesis).filter(
-                Synthesis.discussion_id == self.id and 
-                Synthesis.published_in_post!=None
-            ).order_by(Synthesis.published_in_post.creation_date.desc()).first()
+            Synthesis.discussion_id == self.id and
+            Synthesis.published_in_post is not None
+        ).order_by(Synthesis.published_in_post.creation_date.desc()
+                   ).first()
 
     def get_permissions_by_role(self):
         roleperms = self.db().query(Role.name, Permission.name).select_from(
             DiscussionPermission).join(Role, Permission).filter(
-            DiscussionPermission.discussion_id==self.id).all()
+                DiscussionPermission.discussion_id == self.id).all()
         roleperms.sort()
         byrole = groupby(roleperms, lambda (r, p): r)
-        return {r: [p for (r2,p) in rps] for (r, rps) in byrole}
+        return {r: [p for (r2, p) in rps] for (r, rps) in byrole}
 
     def get_roles_by_permission(self):
         permroles = self.db().query(Permission.name, Role.name).select_from(
             DiscussionPermission).join(Role, Permission).filter(
-            DiscussionPermission.discussion_id==self.id).all()
+                DiscussionPermission.discussion_id == self.id).all()
         permroles.sort()
         byperm = groupby(permroles, lambda (p, r): p)
         return {p: [r for (p2, r) in prs] for (p, prs) in byperm}
-
 
     def get_readers(self):
         users = self.db().query(User).join(
@@ -143,19 +141,19 @@ class Discussion(SQLAlchemyBaseModel):
                 LocalUserRole, Role, DiscussionPermission, Permission).filter(
                     DiscussionPermission.discussion_id == self.id and
                     LocalUserRole.discussion_id == self.id and
-                     Permission.name == P_READ)).all()
+                    Permission.name == P_READ)).all()
         if session.query(DiscussionPermission).join(
             Role, Permission).filter(
                 DiscussionPermission.discussion_id == self.id and
                 Permission.name == P_READ and
                 Role.name == Authenticated).first():
-            pass # add a pseudo-authenticated user???
+            pass  # add a pseudo-authenticated user???
         if session.query(DiscussionPermission).join(
-                    Role, Permission).filter(
-                        DiscussionPermission.discussion_id == self.id and
-                        Permission.name == P_READ and
-                        Role.name == Everyone).first():
-            pass # add a pseudo-anonymous user?
+            Role, Permission).filter(
+                DiscussionPermission.discussion_id == self.id and
+                Permission.name == P_READ and
+                Role.name == Everyone).first():
+            pass  # add a pseudo-anonymous user?
         return users
 
     def get_all_agents(self):
@@ -174,7 +172,8 @@ class Discussion(SQLAlchemyBaseModel):
         return self.extracts
 
     def get_related_extracts_preload(self):
-        return json.dumps([e.serializable() for e in self.get_related_extracts()])
+        return json.dumps(
+            [e.serializable() for e in self.get_related_extracts()])
 
     def get_user_permissions(self, user_id):
         return get_permissions(user_id, self.id)
@@ -184,9 +183,11 @@ class Discussion(SQLAlchemyBaseModel):
 
     # Properties as a route context
     __parent__ = None
+
     @property
     def __name__(self):
         return self.slug
+
     @property
     def __acl__(self):
         acls = [(Allow, dp.role.name, dp.permission.name) for dp in self.acls]
@@ -207,12 +208,13 @@ def slugify_topic_if_slug_is_empty(discussion, topic, oldvalue, initiator):
 
 event.listen(Discussion.topic, 'set', slugify_topic_if_slug_is_empty)
 
+
 class IdeaGraphView(SQLAlchemyBaseModel):
     """
     A view on the graph of idea.
     """
     __tablename__ = "idea_graph_view"
-    
+
     type = Column(String(60), nullable=False)
     id = Column(Integer, primary_key=True)
 
@@ -224,80 +226,94 @@ class IdeaGraphView(SQLAlchemyBaseModel):
         nullable=False
     )
     discussion = relationship('Discussion')
-    
+
     __mapper_args__ = {
         'polymorphic_identity': 'idea_graph_view',
         'polymorphic_on': 'type',
-        'with_polymorphic':'*'
+        'with_polymorphic': '*'
     }
-    
+
     def copy(self):
         retval = self.__class__()
         retval.discussion = self.discussion
         return retval
 
+
 class SubGraphIdeaAssociation(SQLAlchemyBaseModel):
     __tablename__ = 'sub_graph_idea_association'
     id = Column(Integer, primary_key=True)
-    sub_graph_id = Column(Integer, ForeignKey('explicit_sub_graph_view.id', ondelete="CASCADE", onupdate="CASCADE"), index=True)
+    sub_graph_id = Column(Integer, ForeignKey(
+        'explicit_sub_graph_view.id', ondelete="CASCADE", onupdate="CASCADE"),
+        index=True)
     sub_graph = relationship("ExplicitSubGraphView")
-    idea_id = Column(Integer, ForeignKey('idea.id', ondelete="CASCADE", onupdate="CASCADE"), index=True)
+    idea_id = Column(Integer, ForeignKey(
+        'idea.id', ondelete="CASCADE", onupdate="CASCADE"), index=True)
     # reference to the "Idea" object for proxying
     idea = relationship("Idea")
+
     def __init__(self, idea=None, sub_graph=None):
         self.idea = idea
         self.sub_graph = sub_graph
 
-    
+
 class SubGraphIdeaLinkAssociation(SQLAlchemyBaseModel):
-    """
-    
-    """
     __tablename__ = 'sub_graph_idea_link_association'
     id = Column(Integer, primary_key=True)
-    sub_graph_id = Column(Integer, ForeignKey('explicit_sub_graph_view.id', ondelete="CASCADE", onupdate="CASCADE"), index=True)
-    idea_link_id = Column(Integer, ForeignKey('idea_idea_link.id', ondelete="CASCADE", onupdate="CASCADE"), index=True)
+
+    sub_graph_id = Column(Integer, ForeignKey(
+        'explicit_sub_graph_view.id', ondelete="CASCADE", onupdate="CASCADE"),
+        index=True)
+
+    idea_link_id = Column(Integer, ForeignKey(
+        'idea_idea_link.id', ondelete="CASCADE", onupdate="CASCADE"),
+        index=True)
+
     # reference to the "IdeaLink" object for proxying
     idea_link = relationship("IdeaLink")
+
     def __init__(self, idea_link=None, sub_graph=None):
         self.idea_link = idea_link
         self.sub_graph = sub_graph
 
+
 class ExplicitSubGraphView(IdeaGraphView):
     """
     A view where the Ideas and/or ideaLinks have been explicitly selected.
-    
+
     Note that ideaLinks may point to ideas that are not in the graph.  They
-    should be followed transitively (if their nature is compatible) to reach 
+    should be followed transitively (if their nature is compatible) to reach
     every idea in graph as if the were directly linked.
     """
     __tablename__ = "explicit_sub_graph_view"
-    
+
     id = Column(Integer, ForeignKey(
         'idea_graph_view.id',
         ondelete='CASCADE',
         onupdate='CASCADE'
     ), primary_key=True)
-        
+
     ideas_associations = relationship(SubGraphIdeaAssociation)
-    # proxy the 'idea' attribute from the 'ideas_associations' relationship 
+
+    # proxy the 'idea' attribute from the 'ideas_associations' relationship
     # for direct access
     ideas = association_proxy('ideas_associations', 'idea')
-    
+
     idea_links_associations = relationship(SubGraphIdeaLinkAssociation)
-    # proxy the 'idea_link' attribute from the 'idea_links_associations' 
+
+    # proxy the 'idea_link' attribute from the 'idea_links_associations'
     # relationship for direct access
-    idea_links = association_proxy('idea_links_associations', 'idea_link') 
-    
+    idea_links = association_proxy('idea_links_associations', 'idea_link')
+
     __mapper_args__ = {
         'polymorphic_identity': 'explicit_sub_graph_view',
     }
-    
+
     def copy(self):
         retval = IdeaGraphView.copy(self)
         retval.ideas = self.ideas
         return retval
-        
+
+
 class TableOfContents(IdeaGraphView):
     """
     Represents a Table of Ideas.
@@ -306,13 +322,13 @@ class TableOfContents(IdeaGraphView):
     threaded hierarchy.
     """
     __tablename__ = "table_of_contents"
-    
+
     id = Column(Integer, ForeignKey(
         'idea_graph_view.id',
         ondelete='CASCADE',
         onupdate='CASCADE'
     ), primary_key=True)
-    
+
     __mapper_args__ = {
         'polymorphic_identity': 'table_of_contents',
     }
@@ -324,9 +340,9 @@ class TableOfContents(IdeaGraphView):
             "topic": self.topic,
             "slug": self.slug,
             "table_of_contents_id":
-                TableOfContents.uri_generic(self.table_of_contents_id),
+            TableOfContents.uri_generic(self.table_of_contents_id),
             "synthesis_id":
-                Synthesis.uri_generic(self.synthesis_id)
+            Synthesis.uri_generic(self.synthesis_id)
         }
 
     def get_discussion_id(self):
@@ -340,7 +356,8 @@ class TableOfContents(IdeaGraphView):
 
     def get_top_ideas(self):
         return self.db().query(Idea).filter(
-            Idea.discussion_id == self.discussion_id).filter(~Idea.parent_links.any()).all()
+            Idea.discussion_id == self.discussion_id).filter(
+                ~Idea.parent_links.any()).all()
 
     def __repr__(self):
         return "<TableOfContents %s>" % repr(self.discussion.topic)
@@ -348,21 +365,21 @@ class TableOfContents(IdeaGraphView):
 
 class Synthesis(ExplicitSubGraphView):
     """
-    A synthesis of the discussion.  A selection of ideas, associated with comments, sent periodically
-    to the discussion.
-    
+    A synthesis of the discussion.  A selection of ideas, associated with
+    comments, sent periodically to the discussion.
+
     A synthesis only has link's to ideas before publication (as it is edited)
-    Once published, if freezes the links by copying toombstoned versions of each
-    link in the discussion.
+    Once published, if freezes the links by copying toombstoned versions of
+    each link in the discussion.
     """
     __tablename__ = "synthesis"
-    
+
     id = Column(Integer, ForeignKey(
         'explicit_sub_graph_view.id',
         ondelete='CASCADE',
         onupdate='CASCADE'
     ), primary_key=True)
-    
+
     subject = Column(UnicodeText)
     introduction = Column(UnicodeText)
     conclusion = Column(UnicodeText)
@@ -370,20 +387,21 @@ class Synthesis(ExplicitSubGraphView):
     __mapper_args__ = {
         'polymorphic_identity': 'synthesis',
     }
+
     def copy(self):
         retval = ExplicitSubGraphView.copy(self)
         retval.subject = self.subject
         retval.introduction = self.introduction
         retval.conclusion = self.conclusion
         return retval
-    
+
     def publish(self):
         """ Publication is the end of a synthesis's lifecycle.
         It creates a new next_synthesis, copied from this one.
         Return's the new discussion next_synthesis """
         next_synthesis = self.copy()
         self.db.add(next_synthesis)
-        
+
         #Copy toombstoned versions of all idea links in the current discussion
         links = Idea.get_all_idea_links(self.discussion_id)
         for link in links:
@@ -392,7 +410,7 @@ class Synthesis(ExplicitSubGraphView):
             self.idea_links.append(new_link)
         self.db.add(self)
         return next_synthesis
-    
+
     def serializable(self):
         return {
             "@id": self.uri_generic(self.id),
@@ -415,12 +433,16 @@ class IdeaLink(SQLAlchemyBaseModel):
     """
     A generic link between two ideas
     """
-    # TODO:  maparent:  shouldn't we manage link ordering here instead of 
+    # TODO:  maparent:  shouldn't we manage link ordering here instead of
     # directly in ideas
     __tablename__ = 'idea_idea_link'
     id = Column(Integer, primary_key=True)
-    parent_id = Column(Integer, ForeignKey('idea.id', ondelete="CASCADE", onupdate="CASCADE"), nullable=False, index=True)
-    child_id = Column(Integer, ForeignKey('idea.id', ondelete="CASCADE", onupdate="CASCADE"), nullable=False, index=True)
+    parent_id = Column(Integer, ForeignKey(
+        'idea.id', ondelete="CASCADE", onupdate="CASCADE"),
+        nullable=False, index=True)
+    child_id = Column(Integer, ForeignKey(
+        'idea.id', ondelete="CASCADE", onupdate="CASCADE"),
+        nullable=False, index=True)
     parent = relationship(
         'Idea', backref='child_links',
         foreign_keys=(parent_id))
@@ -428,15 +450,15 @@ class IdeaLink(SQLAlchemyBaseModel):
         'Idea', backref='parent_links',
         foreign_keys=(child_id))
     is_toombstone = Column(Boolean, nullable=False, default=False, index=True)
-    
+
     def copy(self):
-        retval = self.__class__(parent_id = self.parent_id, 
-                                child_id = self.child_id,
-                                is_toombstone = self.is_toombstone
+        retval = self.__class__(parent_id=self.parent_id,
+                                child_id=self.child_id,
+                                is_toombstone=self.is_toombstone
                                 )
         self.db.add(retval)
         return retval
-    
+
 
 class Idea(SQLAlchemyBaseModel):
     """
@@ -454,18 +476,16 @@ class Idea(SQLAlchemyBaseModel):
     order = Column(Float, nullable=False, default=0.0)
 
     discussion_id = Column(Integer, ForeignKey(
-            'discussion.id', 
-            ondelete='CASCADE',
-            onupdate='CASCADE',
-        ),
+        'discussion.id',
+        ondelete='CASCADE',
+        onupdate='CASCADE'),
         nullable=False,
         index=True,)
 
     discussion = relationship(
-        "Discussion", 
+        "Discussion",
         backref=backref('ideas', order_by=creation_date)
     )
-
 
     @property
     def children(self):
@@ -485,11 +505,13 @@ class Idea(SQLAlchemyBaseModel):
             'order': self.order,
             'active': False,
             'featured': False,
-            'parentId': Idea.uri_generic(self.parents[0].id) if self.parents else None,
+            'parentId': Idea.uri_generic(self.parents[0].id)
+            if self.parents else None,
             'inNextSynthesis': self.is_in_next_synthesis(),
             'numChildIdea': self.get_num_children(),
             'num_posts': self.num_posts,
         }
+
     @staticmethod
     def serializable_unsorted_posts_pseudo_idea(discussion):
         """
@@ -510,17 +532,18 @@ class Idea(SQLAlchemyBaseModel):
             'total': 0,
             'num_posts': Idea.get_num_orphan_posts(discussion),
         }
+
     @staticmethod
     def _get_idea_dag_statement(skip_where=False):
         retval = """
 WITH    RECURSIVE
 idea_dag(idea_id, parent_id, idea_depth, idea_path, idea_cycle) AS
 (
-SELECT  idea_initial.id as idea_id, parent_id, 1, ARRAY[idea_initial.id], false 
+SELECT  idea_initial.id as idea_id, parent_id, 1, ARRAY[idea_initial.id], false
 FROM    idea AS idea_initial LEFT JOIN idea_idea_link ON (
 idea_initial.id = idea_idea_link.child_id
 AND idea_idea_link.is_toombstone=FALSE
-) 
+)
 """
         if(not skip_where):
             retval = retval + """
@@ -528,7 +551,8 @@ WHERE idea_initial.id=:root_idea_id
 """
         retval = retval + """
 UNION ALL
-SELECT idea.id as idea_id, idea_idea_link.parent_id, idea_dag.idea_depth + 1, idea_path || idea.id, idea.id = ANY(idea_path)
+SELECT idea.id as idea_id, idea_idea_link.parent_id, idea_dag.idea_depth + 1,
+       idea_path || idea.id, idea.id = ANY(idea_path)
 FROM (
     idea_dag JOIN idea_idea_link ON (
     idea_dag.idea_id = idea_idea_link.parent_id
@@ -542,24 +566,28 @@ FROM (
     @staticmethod
     def _get_related_posts_statement_no_select(select, skip_where):
         return Idea._get_idea_dag_statement(skip_where) + select + """
-FROM idea_dag 
-JOIN idea_content_link ON (idea_content_link.idea_id = idea_dag.idea_id) 
-JOIN idea_content_positive_link ON (idea_content_positive_link.id = idea_content_link.id)
-JOIN post AS root_posts ON (idea_content_link.content_id = root_posts.id) 
+FROM idea_dag
+JOIN idea_content_link ON (idea_content_link.idea_id = idea_dag.idea_id)
+JOIN idea_content_positive_link
+    ON (idea_content_positive_link.id = idea_content_link.id)
+JOIN post AS root_posts ON (idea_content_link.content_id = root_posts.id)
 JOIN post ON (
-    (post.ancestry != '' 
+    (post.ancestry != ''
     AND post.ancestry LIKE root_posts.ancestry || root_posts.id || ',' || '%'
     )
     OR post.id = root_posts.id
 )
 """
+
     @staticmethod
     def _get_related_posts_statement(skip_where=False):
-        return Idea._get_related_posts_statement_no_select("SELECT DISTINCT post.id", skip_where)
+        return Idea._get_related_posts_statement_no_select(
+            "SELECT DISTINCT post.id", skip_where)
 
     @staticmethod
     def _get_count_related_posts_statement():
-        return Idea._get_related_posts_statement_no_select("SELECT COUNT(DISTINCT post.id) as total_count", False)
+        return Idea._get_related_posts_statement_no_select(
+            "SELECT COUNT(DISTINCT post.id) as total_count", False)
 
     @staticmethod
     def _get_orphan_posts_statement_no_select(select):
@@ -576,26 +604,29 @@ AND discussion.id=:discussion_id
     @staticmethod
     def _get_count_orphan_posts_statement():
         """ Requires discussion_id bind parameters """
-        return Idea._get_orphan_posts_statement_no_select("SELECT COUNT(post.id) as total_count")
- 
+        return Idea._get_orphan_posts_statement_no_select(
+            "SELECT COUNT(post.id) as total_count")
+
     @staticmethod
     def _get_orphan_posts_statement():
         """ Requires discussion_id bind parameters """
         return Idea._get_orphan_posts_statement_no_select("SELECT post.id")
-    
+
     @property
     def num_posts(self):
-        """ This is extremely naive and slow, but as this is all temp code 
-        until we move to a graph database, it will probably do for now """ 
-        result = self.db.execute(text(Idea._get_count_related_posts_statement()),
-                                   {"root_idea_id":self.id})
+        """ This is extremely naive and slow, but as this is all temp code
+        until we move to a graph database, it will probably do for now """
+        result = self.db.execute(text(
+            Idea._get_count_related_posts_statement()),
+            {"root_idea_id": self.id})
         return result.first()['total_count']
 
     @staticmethod
     def get_num_orphan_posts(discussion):
-        """ The number of posts unrelated to any idea in the current discussion """ 
-        result = Idea.db.execute(text(Idea._get_count_orphan_posts_statement()) \
-                                   .params(discussion_id=discussion.id))
+        "The number of posts unrelated to any idea in the current discussion"
+        result = Idea.db.execute(text(
+            Idea._get_count_orphan_posts_statement()).params(
+                discussion_id=discussion.id))
         return result.first()['total_count']
 
     def get_discussion_id(self):
@@ -618,29 +649,35 @@ AND discussion.id=:discussion_id
     def get_all_idea_links(cls, discussion_id):
         child = aliased(cls)
         parent = aliased(cls)
-        return cls.db().query(IdeaLink
-            ).join(parent, parent.id == IdeaLink.parent_id
-            ).join(child, child.id == IdeaLink.child_id
-            ).filter(child.discussion_id == discussion_id
-            ).filter(parent.discussion_id == discussion_id
-            ).filter(IdeaLink.is_toombstone == False
-            ).all()
+        return cls.db().query(
+            IdeaLink).join(
+                parent, parent.id == IdeaLink.parent_id).join(
+                    child, child.id == IdeaLink.child_id).filter(
+                        child.discussion_id == discussion_id).filter(
+                            parent.discussion_id == discussion_id).filter(
+                                IdeaLink.is_toombstone is False).all()
+
 
 class IdeaContentLink(SQLAlchemyBaseModel):
     """
-    Abstract class representing a generic link between an idea and a Content (typically a Post)
+    Abstract class representing a generic link between an idea and a Content
+    (typically a Post)
     """
     __tablename__ = 'idea_content_link'
     id = Column(Integer, primary_key=True)
     type = Column(String(60))
-    
-    #This is nullable, because in the case of extracts, the idea can be attached later.
-    idea_id = Column(Integer, ForeignKey('idea.id'), nullable=True, index=True)
+
+    # This is nullable, because in the case of extracts, the idea can be
+    # attached later.
+    idea_id = Column(Integer, ForeignKey('idea.id'),
+                     nullable=True, index=True)
     idea = relationship('Idea')
-    
-    content_id = Column(Integer, ForeignKey('content.id', ondelete="CASCADE", onupdate="CASCADE"), nullable=False, index=True)
+
+    content_id = Column(Integer, ForeignKey(
+        'content.id', ondelete="CASCADE", onupdate="CASCADE"),
+        nullable=False, index=True)
     content = relationship(Content)
-    
+
     creation_date = Column(DateTime, nullable=False, default=datetime.utcnow)
 
     creator_id = Column(
@@ -658,20 +695,23 @@ class IdeaContentLink(SQLAlchemyBaseModel):
         'with_polymorphic': '*'
     }
 
+
 class IdeaContentPositiveLink(IdeaContentLink):
     """
-    A normal link between an idea and a Content.  Such links should be traversed.
+    A normal link between an idea and a Content.
+    Such links should be traversed.
     """
     __tablename__ = 'idea_content_positive_link'
-    
+
     id = Column(Integer, ForeignKey(
         'idea_content_link.id',
         ondelete='CASCADE', onupdate='CASCADE'
     ), primary_key=True)
-    
+
     __mapper_args__ = {
         'polymorphic_identity': 'idea_content_positive_link',
     }
+
 
 class IdeaRelatedPostLink(IdeaContentPositiveLink):
     """
@@ -679,15 +719,16 @@ class IdeaRelatedPostLink(IdeaContentPositiveLink):
     extract harvested.
     """
     __tablename__ = 'idea_related_post_link'
-    
+
     id = Column(Integer, ForeignKey(
         'idea_content_positive_link.id',
         ondelete='CASCADE', onupdate='CASCADE'
     ), primary_key=True)
-    
+
     __mapper_args__ = {
         'polymorphic_identity': 'idea_related_post_link',
     }
+
 
 class Extract(IdeaContentPositiveLink):
     """
@@ -703,9 +744,11 @@ class Extract(IdeaContentPositiveLink):
     order = Column(Float, nullable=False, default=0.0)
     body = Column(UnicodeText, nullable=False)
 
-    discussion_id = Column(Integer, ForeignKey('discussion.id', ondelete="CASCADE", onupdate="CASCADE"), nullable=False, index=True)
+    discussion_id = Column(Integer, ForeignKey(
+        'discussion.id', ondelete="CASCADE", onupdate="CASCADE"),
+        nullable=False, index=True)
     discussion = relationship('Discussion', backref='extracts')
-    
+
     annotation_text = Column(UnicodeText)
 
     owner_id = Column(
@@ -722,13 +765,14 @@ class Extract(IdeaContentPositiveLink):
     __mapper_args__ = {
         'polymorphic_identity': 'extract',
     }
+
     def serializable(self):
         json = {
             '@id': self.uri_generic(self.id),
             '@type': self.external_typename(),
             'annotator_schema_version': 'v1.0',
             'quote': self.body,
-            'ranges': [tfi.__json__() for tfi 
+            'ranges': [tfi.__json__() for tfi
                        in self.text_fragment_identifiers],
             'target': {
                 '@type': self.content.external_typename()
@@ -756,7 +800,7 @@ class Extract(IdeaContentPositiveLink):
         return "<Extract %d %s>" % (self.id, repr(self.body[:20]))
 
     def get_target(self):
-            return self.content
+        return self.content
 
     def get_post(self):
         if isinstance(self.content, Post):
@@ -764,7 +808,8 @@ class Extract(IdeaContentPositiveLink):
 
     def infer_text_fragment(self):
         return self._infer_text_fragment_inner(
-            self.content.get_title(), self.content.get_body(), self.get_post().id)
+            self.content.get_title(), self.content.get_body(),
+            self.get_post().id)
 
     def _infer_text_fragment_inner(self, title, body, post_id):
         body = Mailbox.sanitize_html(body, [])
@@ -800,43 +845,47 @@ class Extract(IdeaContentPositiveLink):
     def get_discussion_id(self):
         return self.discussion_id
 
+
 class IdeaContentNegativeLink(IdeaContentLink):
     """
     A negative link between an idea and a Content.  Such links mean that
     a transitive context should be considered broken.  Used for thread breaking
     """
     __tablename__ = 'idea_content_negative_link'
-    
+
     id = Column(Integer, ForeignKey(
         'idea_content_link.id',
         ondelete='CASCADE', onupdate='CASCADE'
     ), primary_key=True)
-    
+
     __mapper_args__ = {
         'polymorphic_identity': 'idea_content_negative_link',
     }
-    
+
+
 class IdeaThreadContextBreakLink(IdeaContentNegativeLink):
     """
-    Used for a Post the inherits an Idea from an ancester in the thread. 
-    It indicates that from this point on in the thread, this idea is no longer 
+    Used for a Post the inherits an Idea from an ancester in the thread.
+    It indicates that from this point on in the thread, this idea is no longer
     discussed.
     """
     __tablename__ = 'idea_thread_context_break_link'
-    
+
     id = Column(Integer, ForeignKey(
         'idea_content_negative_link.id',
         ondelete='CASCADE', onupdate='CASCADE'
     ), primary_key=True)
-    
+
     __mapper_args__ = {
         'polymorphic_identity': 'idea_thread_context_break_link',
     }
 
+
 class TextFragmentIdentifier(SQLAlchemyBaseModel):
     __tablename__ = 'text_fragment_identifier'
     id = Column(Integer, primary_key=True)
-    extract_id = Column(Integer, ForeignKey(Extract.id, ondelete="CASCADE"), index=True)
+    extract_id = Column(Integer, ForeignKey(
+        Extract.id, ondelete="CASCADE"), index=True)
     xpath_start = Column(String)
     offset_start = Column(Integer)
     xpath_end = Column(String)
@@ -848,9 +897,10 @@ class TextFragmentIdentifier(SQLAlchemyBaseModel):
         r'/range-to\(string-range\(([^,]+),([^,]+),([^,]+)\)\)\)')
 
     def __string__(self):
-        return ("xpointer(start-point(string-range(%s,'',%d))/range-to(string-range(%s,'',%d)))" % (
-            self.xpath_start, self.offset_start,
-            self.xpath_end, self.offset_end))
+        return ("xpointer(start-point(string-range(%s,'',%d))/"
+                "range-to(string-range(%s,'',%d)))" % (
+                self.xpath_start, self.offset_start,
+                self.xpath_end, self.offset_end))
 
     def __json__(self):
         return {"start": self.xpath_start, "startOffset": self.offset_start,
