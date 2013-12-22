@@ -369,7 +369,7 @@ class Synthesis(ExplicitSubGraphView):
     comments, sent periodically to the discussion.
 
     A synthesis only has link's to ideas before publication (as it is edited)
-    Once published, if freezes the links by copying toombstoned versions of
+    Once published, if freezes the links by copying tombstoned versions of
     each link in the discussion.
     """
     __tablename__ = "synthesis"
@@ -402,11 +402,11 @@ class Synthesis(ExplicitSubGraphView):
         next_synthesis = self.copy()
         self.db.add(next_synthesis)
 
-        #Copy toombstoned versions of all idea links in the current discussion
+        #Copy tombstoned versions of all idea links in the current discussion
         links = Idea.get_all_idea_links(self.discussion_id)
         for link in links:
             new_link = link.copy()
-            new_link.is_toombstone = True
+            new_link.is_tombstone = True
             self.idea_links.append(new_link)
         self.db.add(self)
         return next_synthesis
@@ -449,12 +449,12 @@ class IdeaLink(SQLAlchemyBaseModel):
     child = relationship(
         'Idea', backref='parent_links',
         foreign_keys=(child_id))
-    is_toombstone = Column(Boolean, nullable=False, default=False, index=True)
+    is_tombstone = Column(Boolean, nullable=False, default=False, index=True)
 
     def copy(self):
         retval = self.__class__(parent_id=self.parent_id,
                                 child_id=self.child_id,
-                                is_toombstone=self.is_toombstone
+                                is_tombstone=self.is_tombstone
                                 )
         self.db.add(retval)
         return retval
@@ -542,7 +542,7 @@ idea_dag(idea_id, parent_id, idea_depth, idea_path, idea_cycle) AS
 SELECT  idea_initial.id as idea_id, parent_id, 1, ARRAY[idea_initial.id], false
 FROM    idea AS idea_initial LEFT JOIN idea_idea_link ON (
 idea_initial.id = idea_idea_link.child_id
-AND idea_idea_link.is_toombstone=FALSE
+AND idea_idea_link.is_tombstone=FALSE
 )
 """
         if(not skip_where):
@@ -556,7 +556,7 @@ SELECT idea.id as idea_id, idea_idea_link.parent_id, idea_dag.idea_depth + 1,
 FROM (
     idea_dag JOIN idea_idea_link ON (
     idea_dag.idea_id = idea_idea_link.parent_id
-    AND idea_idea_link.is_toombstone=FALSE
+    AND idea_idea_link.is_tombstone=FALSE
     ) JOIN idea ON (idea.id = idea_idea_link.child_id)
 )
 )
@@ -655,7 +655,7 @@ AND discussion.id=:discussion_id
                     child, child.id == IdeaLink.child_id).filter(
                         child.discussion_id == discussion_id).filter(
                             parent.discussion_id == discussion_id).filter(
-                                IdeaLink.is_toombstone is False).all()
+                                IdeaLink.is_tombstone is False).all()
 
 
 class IdeaContentLink(SQLAlchemyBaseModel):
