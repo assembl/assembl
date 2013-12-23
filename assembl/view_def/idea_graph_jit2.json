@@ -7,6 +7,6 @@
     "Idea": {
         "creation_date": true,
         "long_title": true,
-        "order": true
+         "&get_order_from_first_parent",
     }
 }

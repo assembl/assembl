@@ -9,7 +9,7 @@
     },
     "IdeaLink": {
         "id": "self",
-        "source": "parent",
-        "target": "child"
+        "source": true,
+        "target": true
     }
 }

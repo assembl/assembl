@@ -52,6 +52,9 @@ class Discussion(SQLAlchemyBaseModel):
     slug = Column(Unicode, nullable=False, unique=True, index=True)
 
     creation_date = Column(DateTime, nullable=False, default=datetime.utcnow)
+    
+
+    
 
     def read_post_ids(self, user_id):
         return (x[0] for x in self.db.query(Post.id).join(
@@ -77,6 +80,9 @@ class Discussion(SQLAlchemyBaseModel):
 
     def __init__(self, *args, **kwargs):
         super(Discussion, self).__init__(*args, **kwargs)
+        self.db.add(self)
+        self.db.flush()
+        self.root_idea = RootIdea(discussion_id=self.id)
         table_of_contents = TableOfContents(discussion=self)
         synthesis = Synthesis(discussion=self)
         self.db.add(table_of_contents)
@@ -89,6 +95,7 @@ class Discussion(SQLAlchemyBaseModel):
             "topic": self.topic,
             "slug": self.slug,
             "creation_date": self.creation_date.isoformat(),
+            "root_idea": self.root_idea.uri()
         }
 
     def get_discussion_id(self):
@@ -99,8 +106,6 @@ class Discussion(SQLAlchemyBaseModel):
             and_(Synthesis.discussion_id == self.id,
                  Synthesis.published_in_post == None)
         ).all()
-        print"Next Synthesis"
-        print(repr(next_synthesis))
         #There should only be a single next synthesis
         assert len(next_synthesis) == 1
         return next_synthesis[0]
@@ -353,7 +358,7 @@ class TableOfContents(IdeaGraphView):
     def get_top_ideas(self):
         return self.db().query(Idea).filter(
             Idea.discussion_id == self.discussion_id).filter(
-                ~Idea.parent_links.any()).all()
+                ~Idea.source_links.any()).all()
 
     def __repr__(self):
         return "<TableOfContents %s>" % repr(self.discussion.topic)
@@ -428,28 +433,29 @@ class Synthesis(ExplicitSubGraphView):
 class IdeaLink(SQLAlchemyBaseModel):
     """
     A generic link between two ideas
+    
+    If a parent-child relation, the parent is the source, the child the target
     """
-    # TODO:  maparent:  shouldn't we manage link ordering here instead of
-    # directly in ideas
     __tablename__ = 'idea_idea_link'
     id = Column(Integer, primary_key=True)
-    parent_id = Column(Integer, ForeignKey(
+    source_id = Column(Integer, ForeignKey(
         'idea.id', ondelete="CASCADE", onupdate="CASCADE"),
         nullable=False, index=True)
-    child_id = Column(Integer, ForeignKey(
+    target_id = Column(Integer, ForeignKey(
         'idea.id', ondelete="CASCADE", onupdate="CASCADE"),
         nullable=False, index=True)
-    parent = relationship(
-        'Idea', backref='child_links',
-        foreign_keys=(parent_id))
-    child = relationship(
-        'Idea', backref='parent_links',
-        foreign_keys=(child_id))
+    source = relationship(
+        'Idea', backref='target_links',
+        foreign_keys=(source_id))
+    target = relationship(
+        'Idea', backref='source_links',
+        foreign_keys=(target_id))
+    order = Column(Float, nullable=False, default=0.0)
     is_tombstone = Column(Boolean, nullable=False, default=False, index=True)
 
     def copy(self):
-        retval = self.__class__(parent_id=self.parent_id,
-                                child_id=self.child_id,
+        retval = self.__class__(source_id=self.source_id,
+                                target_id=self.target_id,
                                 is_tombstone=self.is_tombstone
                                 )
         self.db.add(retval)
@@ -462,14 +468,14 @@ class Idea(SQLAlchemyBaseModel):
     """
     __tablename__ = "idea"
     ORPHAN_POSTS_IDEA_ID = 'orphan_posts'
-
+    sqla_type = Column(String(60), nullable=False)
+    
     long_title = Column(UnicodeText)
     short_title = Column(UnicodeText)
     definition = Column(UnicodeText)
 
     id = Column(Integer, primary_key=True)
     creation_date = Column(DateTime, nullable=False, default=datetime.utcnow)
-    order = Column(Float, nullable=False, default=0.0)
 
     discussion_id = Column(Integer, ForeignKey(
         'discussion.id',
@@ -482,15 +488,31 @@ class Idea(SQLAlchemyBaseModel):
         "Discussion",
         backref=backref('ideas', order_by=creation_date)
     )
+    
+    __mapper_args__ = {
+        'polymorphic_identity': 'idea',
+        'polymorphic_on': sqla_type,
+        # Not worth it for now, as the only other class is RootIdea, and there
+        # is only one per discussion - benoitg 2013-12-23
+        #'with_polymorphic': '*'
+    }
+
 
     @property
     def children(self):
-        return [cl.child for cl in self.child_links]
+        return [cl.target for cl in self.target_links]
 
     @property
     def parents(self):
-        return [cl.parent for cl in self.parent_links]
-
+        return [cl.source for cl in self.source_links]
+    
+    def get_order_from_first_parent(self):
+        return self.source_links[0].order if self.source_links else None
+    
+    def get_first_parent_uri(self):
+        return Idea.uri_generic(self.source_links[0].source_id
+            ) if self.source_links else None
+            
     def serializable(self):
         return {
             '@id': self.uri_generic(self.id),
@@ -498,11 +520,10 @@ class Idea(SQLAlchemyBaseModel):
             'shortTitle': self.short_title,
             'longTitle': self.long_title,
             'creationDate': self.creation_date.isoformat(),
-            'order': self.order,
+            'order': self.get_order_from_first_parent(),
             'active': False,
             'featured': False,
-            'parentId': Idea.uri_generic(self.parents[0].id)
-            if self.parents else None,
+            'parentId': self.get_first_parent_uri(),
             'inNextSynthesis': self.is_in_next_synthesis(),
             'numChildIdea': self.get_num_children(),
             'num_posts': self.num_posts,
@@ -533,11 +554,11 @@ class Idea(SQLAlchemyBaseModel):
     def _get_idea_dag_statement(skip_where=False):
         retval = """
 WITH    RECURSIVE
-idea_dag(idea_id, parent_id, idea_depth, idea_path, idea_cycle) AS
+idea_dag(idea_id, source_id, idea_depth, idea_path, idea_cycle) AS
 (
-SELECT  idea_initial.id as idea_id, parent_id, 1, ARRAY[idea_initial.id], false
+SELECT  idea_initial.id as idea_id, source_id, 1, ARRAY[idea_initial.id], false
 FROM    idea AS idea_initial LEFT JOIN idea_idea_link ON (
-idea_initial.id = idea_idea_link.child_id
+idea_initial.id = idea_idea_link.target_id
 AND idea_idea_link.is_tombstone=FALSE
 )
 """
@@ -547,13 +568,13 @@ WHERE idea_initial.id=:root_idea_id
 """
         retval = retval + """
 UNION ALL
-SELECT idea.id as idea_id, idea_idea_link.parent_id, idea_dag.idea_depth + 1,
+SELECT idea.id as idea_id, idea_idea_link.source_id, idea_dag.idea_depth + 1,
        idea_path || idea.id, idea.id = ANY(idea_path)
 FROM (
     idea_dag JOIN idea_idea_link ON (
-    idea_dag.idea_id = idea_idea_link.parent_id
+    idea_dag.idea_id = idea_idea_link.source_id
     AND idea_idea_link.is_tombstone=FALSE
-    ) JOIN idea ON (idea.id = idea_idea_link.child_id)
+    ) JOIN idea ON (idea.id = idea_idea_link.target_id)
 )
 )
 """
@@ -645,17 +666,38 @@ WHERE post.id NOT IN (
 
     @classmethod
     def get_all_idea_links(cls, discussion_id):
-        child = aliased(cls)
-        parent = aliased(cls)
+        target = aliased(cls)
+        source = aliased(cls)
         return cls.db().query(
             IdeaLink).join(
-                parent, parent.id == IdeaLink.parent_id).join(
-                    child, child.id == IdeaLink.child_id).filter(
-                        child.discussion_id == discussion_id).filter(
-                            parent.discussion_id == discussion_id).filter(
+                source, source.id == IdeaLink.source_id).join(
+                    target, target.id == IdeaLink.target_id).filter(
+                        target.discussion_id == discussion_id).filter(
+                            source.discussion_id == discussion_id).filter(
                                 IdeaLink.is_tombstone is False).all()
 
+class RootIdea(Idea):
+    """
+    The root idea.  It represents the discussion.
+    
+    If has implicit links to all content and posts in the discussion.
+    """
+    __tablename__ = "root_idea"
 
+    id = Column(Integer, ForeignKey(
+        'idea.id',
+        ondelete='CASCADE',
+        onupdate='CASCADE'
+    ), primary_key=True)
+    
+    root_for_discussion = relationship('Discussion',
+        backref=backref('root_idea', uselist=False),
+        )
+    
+    __mapper_args__ = {
+        'polymorphic_identity': 'root_idea',
+    }
+    
 class IdeaContentLink(SQLAlchemyBaseModel):
     """
     Abstract class representing a generic link between an idea and a Content
@@ -676,6 +718,8 @@ class IdeaContentLink(SQLAlchemyBaseModel):
         nullable=False, index=True)
     content = relationship(Content)
 
+    order = Column(Float, nullable=False, default=0.0)
+    
     creation_date = Column(DateTime, nullable=False, default=datetime.utcnow)
 
     creator_id = Column(
@@ -739,7 +783,6 @@ class Extract(IdeaContentPositiveLink):
         ondelete='CASCADE', onupdate='CASCADE'
     ), primary_key=True)
 
-    order = Column(Float, nullable=False, default=0.0)
     body = Column(UnicodeText, nullable=False)
 
     discussion_id = Column(Integer, ForeignKey(

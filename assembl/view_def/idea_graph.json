@@ -19,7 +19,7 @@
         "extracts": false,
         "long_title": true,
         "name": "short_title",
-        "order": true,
+        "order": "&get_order_from_first_parent",
         "discussion": false
     },
     "IdeaLink": {

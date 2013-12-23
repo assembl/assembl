@@ -155,15 +155,16 @@
         "shortTitle": "short_title",
         "definition": true,
         "creationDate": "creation_date",
-        "order": true,
+        "order": "&get_order_from_first_parent",
         "discussion": false,
         "parents": true,
         "inNextSynthesis": "&is_in_next_synthesis",
         "numChildIdea": "&get_num_children"
     },
     "IdeaLink": {
-        "child": true,
-        "parent": true
+        "target": true,
+        "source": true,
+        "order": true
     },
     "IdeaGraphView": {
         "creation_date": true,

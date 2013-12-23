@@ -172,7 +172,7 @@
         "shortTitle": "short_title",
         "definition": true,
         "creationDate": "creation_date",
-        "order": true,
+        "order": "&get_order_from_first_parent",
         "discussion": false,
         "extracts": [":partial"],
         "parents": true,
@@ -180,8 +180,9 @@
         "numChildIdea": "&get_num_children"
     },
     "IdeaLink": {
-        "child": true,
-        "parent": true
+        "target": true,
+        "source": true,
+        "order": true
     },
     "IdeaGraphView": {
         "creation_date": true,
