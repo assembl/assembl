@@ -8,6 +8,8 @@ from assembl.models import (
     get_named_object, get_database_id, Idea, IdeaLink, Discussion, Extract, SubGraphIdeaAssociation)
 from . import acls
 from assembl.auth import (P_READ, P_ADD_IDEA, P_EDIT_IDEA)
+from sqlalchemy import and_
+from sqlalchemy.orm import joinedload
 
 ideas = Service(name='ideas', path=API_DISCUSSION_PREFIX + '/ideas',
                 description="",
@@ -79,7 +81,6 @@ def get_ideas(request):
     ideas = ideas.outerjoin(SubGraphIdeaAssociation,
                     and_(SubGraphIdeaAssociation.sub_graph_id==next_synthesis.id, SubGraphIdeaAssociation.idea_id==Idea.id)
         )
-    ideas = ideas.options(joinedload(SubGraphIdeaAssociation))
     
     if ids:
         ids = [get_database_id("Idea", id) for id in ids]

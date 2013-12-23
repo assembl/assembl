@@ -590,11 +590,13 @@ JOIN post ON (
         """ Requires discussion_id bind parameters """
         return select + """
 FROM post
-JOIN discussion ON (post.discussion_id = discussion.id)
+JOIN content ON (
+    content.id = post.id
+    AND content.discussion_id = :discussion_id
+)
 WHERE post.id NOT IN (
 """ + Idea._get_related_posts_statement(True) + """
 )
-AND discussion.id=:discussion_id
 """
 
     @staticmethod
