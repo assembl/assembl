@@ -78,7 +78,9 @@ class Discussion(SQLAlchemyBaseModel):
     def __init__(self, *args, **kwargs):
         super(Discussion, self).__init__(*args, **kwargs)
         table_of_contents = TableOfContents(discussion=self)
+        synthesis = Synthesis(discussion=self)
         self.db.add(table_of_contents)
+        self.db.add(synthesis)
 
     def serializable(self):
         return {
@@ -95,19 +97,13 @@ class Discussion(SQLAlchemyBaseModel):
     def get_next_synthesis(self):
         next_synthesis = self.db().query(Synthesis).filter(
             and_(Synthesis.discussion_id == self.id,
-                 Synthesis.published_in_post is None)
+                 Synthesis.published_in_post == None)
         ).all()
         print"Next Synthesis"
         print(repr(next_synthesis))
         #There should only be a single next synthesis
-        assert len(next_synthesis) <= 1
-        if(len(next_synthesis) == 1):
-            return next_synthesis[0]
-        else:
-            next_synthesis = Synthesis(discussion=self)
-            self.db.add(next_synthesis)
-            self.db.flush()
-            return next_synthesis
+        assert len(next_synthesis) == 1
+        return next_synthesis[0]
 
     def get_last_published_synthesis(self):
         return self.db().query(Synthesis).filter(
