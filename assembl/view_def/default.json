@@ -226,6 +226,18 @@
         "creation_date": true,
         "creator": true
     },
+    "IdeaContentNegativeLink": {
+        "idea": true,
+        "content": true,
+        "creation_date": true,
+        "creator": true
+    },
+    "IdeaThreadContextBreakLink": {
+        "idea": true,
+        "content": true,
+        "creation_date": true,
+        "creator": true
+    },
     "Extract": {
         "idIdea": "idea",
         "target": "content",
