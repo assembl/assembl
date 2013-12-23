@@ -108,7 +108,7 @@ class Discussion(SQLAlchemyBaseModel):
     def get_last_published_synthesis(self):
         return self.db().query(Synthesis).filter(
             Synthesis.discussion_id == self.id and
-            Synthesis.published_in_post is not None
+            Synthesis.published_in_post != None
         ).order_by(Synthesis.published_in_post.creation_date.desc()
                    ).first()
 
