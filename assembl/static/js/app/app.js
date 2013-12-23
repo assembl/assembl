@@ -646,27 +646,26 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard, Types){
          */
         getCollectionByType: function(item, type){
             type = type || item['@type'];
-            var collection = null;
 
             switch(type){
                 case Types.EXTRACT:
-                    collection = app.segmentList.segments;
-                    break;
+                    return app.segmentList.segments;
 
                 case Types.IDEA:
-                    collection = app.ideaList.ideas;
-                    break;
+                    return app.ideaList.ideas;
 
                 case Types.POST:
-                    collection = app.messageList.messages;
-                    break;
+                case Types.ASSEMBL_POST:
+                case Types.SYNTHESIS_POST:
+                case Types.IMPORTED_POST:
+                case Types.EMAIL:
+                    return app.messageList.messages;
 
                 case Types.USER:
-                    collection = app.users;
-                    break;
+                    return app.users;
             }
 
-            return collection;
+            return null;
         },
 
         /**
@@ -704,6 +703,9 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard, Types){
 
                 case 'Email':
                 case 'Post':
+                case 'AssemblPost':
+                case 'SynthesisPost':
+                case 'ImportedPost':
                 default:
                     var selector = app.format('[data-annotation-id="{0}"]', segment.id);
                     app.messageList.loadThreadById(segment.get('idPost'), function(){
