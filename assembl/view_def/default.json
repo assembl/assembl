@@ -31,20 +31,20 @@
         "trust_emails": true
         },
     "ContentSource": {
-        "discussion_id": true,
+        "discussion_id": "discussion",
         "name": true,
         "creation_date": true,
         "contents": [":partial"]
     },
     "PostSource": {
-        "discussion_id": true,
+        "discussion_id": "discussion",
         "name": true,
         "creation_date": true,
         "last_import": true,
         "contents": [":partial"]
     },
     "AnnotatorSource": {
-        "discussion_id": true,
+        "discussion_id": "discussion",
         "contents": [":partial"],
         "name": true,
         "creation_date": true
@@ -108,7 +108,7 @@
         "extracts": [":partial"]
     },
     "Mailbox": {
-        "discussion_id": true,
+        "discussion_id": "discussion",
         "name": true,
         "creation_date": true,
         "last_import": true,
@@ -125,7 +125,7 @@
         "most_common_recipient_address": "&most_common_recipient_address"
     },
     "MailingList": {
-        "discussion_id": true,
+        "discussion_id": "discussion",
         "name": true,
         "creation_date": true,
         "last_import": true,
@@ -139,7 +139,7 @@
         "last_imported_email_uid": false,
         "subject_mangling_regex": false,
         "subject_mangling_replacement": false,
-        "post_email_address":true,
+        "post_email_address": true,
         "most_common_recipient_address": "&most_common_recipient_address"
     },
     "Email": {
@@ -164,7 +164,8 @@
         "slug": true,
         "sources": [":"],
         "topic": true,
-        "permissions": "&get_roles_by_permission"
+        "permissions": "&get_roles_by_permission",
+        "source": [":partial"]
     },
     "Idea": {
         "longTitle": "long_title",
@@ -174,7 +175,7 @@
         "order": true,
         "discussion": false,
         "extracts": [":partial"],
-        "parents": "parents",
+        "parents": true,
         "inNextSynthesis": "&is_in_next_synthesis",
         "numChildIdea": "&get_num_children"
     },
@@ -249,5 +250,9 @@
         "discussion": true,
         "permission": "&permission_name",
         "role": "&role_name"
+    },
+    "ViewPost": {
+        "actor": true,
+        "post": true
     }
 }
