@@ -200,7 +200,7 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
         showSelectionOptions: function(x, y){
             this.hideTooltip();
 
-            var annotator = this.$el.closest('#messageList-thread').data('annotator');
+            var annotator = this.$el.closest('#messageList-list').data('annotator');
             annotator.onAdderClick.call(annotator);
 
             if( app.messageList.annotatorEditor ){
