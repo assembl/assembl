@@ -530,27 +530,6 @@ class Idea(SQLAlchemyBaseModel):
         }
 
     @staticmethod
-    def serializable_unsorted_posts_pseudo_idea(discussion):
-        """
-        Returns a "fake" idea linking the posts unreacheable by navigating
-        post threads linked to any other idea
-        """
-        return {
-            '@id': Idea.ORPHAN_POSTS_IDEA_ID,
-            '@type': Idea.external_typename(),
-            'shortTitle': _('Unsorted posts'),
-            'longTitle': '',
-            'creationDate': None,
-            'order': 1000000000,
-            'active': False,
-            'featured': False,
-            'parentId': None,
-            'inNextSynthesis': False,
-            'total': 0,
-            'num_posts': Idea.get_num_orphan_posts(discussion),
-        }
-
-    @staticmethod
     def _get_idea_dag_statement(skip_where=False):
         retval = """
 WITH    RECURSIVE
@@ -640,14 +619,6 @@ WHERE post.id NOT IN (
             {"root_idea_id": self.id})
         return result.first()['total_count']
 
-    @staticmethod
-    def get_num_orphan_posts(discussion):
-        "The number of posts unrelated to any idea in the current discussion"
-        result = Idea.db.execute(text(
-            Idea._get_count_orphan_posts_statement()).params(
-                discussion_id=discussion.id))
-        return result.first()['total_count']
-
     def get_discussion_id(self):
         return self.discussion_id
 
@@ -697,7 +668,43 @@ class RootIdea(Idea):
     __mapper_args__ = {
         'polymorphic_identity': 'root_idea',
     }
+
+    @property
+    def num_posts(self):
+        """ In the root idea, this is the count of all mesages in the system """
+        result = self.db.query(Post).filter(
+            Post.discussion_id == self.discussion_id
+            ).count()
+        return result
     
+    def get_num_orphan_posts(self):
+        "The number of posts unrelated to any idea in the current discussion"
+        result = self.db.execute(text(
+            Idea._get_count_orphan_posts_statement()).params(
+                discussion_id=self.discussion_id))
+        return result.first()['total_count']
+
+    @staticmethod
+    def serializable_unsorted_posts_pseudo_idea(discussion):
+        """
+        Returns a "fake" idea linking the posts unreacheable by navigating
+        post threads linked to any other idea
+        """
+        return {
+            '@id': Idea.ORPHAN_POSTS_IDEA_ID,
+            '@type': Idea.external_typename(),
+            'shortTitle': _('Unsorted posts'),
+            'longTitle': '',
+            'creationDate': None,
+            'order': 1000000000,
+            'active': False,
+            'featured': False,
+            'parentId': None,
+            'inNextSynthesis': False,
+            'total': 0,
+            'num_posts': discussion.root_idea.get_num_orphan_posts(),
+        }
+
 class IdeaContentLink(SQLAlchemyBaseModel):
     """
     Abstract class representing a generic link between an idea and a Content
