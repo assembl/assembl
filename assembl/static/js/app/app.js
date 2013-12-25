@@ -701,14 +701,12 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard, Types){
                     window.open(target.url, "_blank");
                     break;
 
-                case 'Email':
-                case 'Post':
-                case 'AssemblPost':
-                case 'SynthesisPost':
-                case 'ImportedPost':
                 default:
+                    // This will treat:
+                    // ['Email', 'Post', 'AssemblPost', 'SynthesisPost', 'ImportedPost']
+
                     var selector = app.format('[data-annotation-id="{0}"]', segment.id);
-                    app.messageList.loadThreadById(segment.get('idPost'), function(){
+                    app.messageList.showMessageById(segment.get('idPost'), function(){
                         $(selector).addClass('is-highlighted');
                     });
                     break;

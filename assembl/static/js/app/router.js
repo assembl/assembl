@@ -10,7 +10,9 @@ define(['backbone', 'jquery', 'app'], function(Backbone, $, app){
         routes: {
             "": "home",
             "idea/:id" : "idea",
-            "message/:id" : "message"
+            "idea/:slug/:id" : "ideaSlug",
+            "message/:id": "message",
+            "message/:slug/:id" : "messageSlug"
         },
 
         /**
@@ -19,14 +21,17 @@ define(['backbone', 'jquery', 'app'], function(Backbone, $, app){
          */
         idea: function(id){
             app.openPanel( app.ideaList );
-            app.ideaList.ideas.once('reset', function(){
+            var idea = app.ideaList.ideas.get(id);
+            if( idea ){
+                app.setCurrentIdea(idea);
+            }
+        },
 
-                var idea = app.ideaList.ideas.get(id);
-                if( idea ){
-                    app.setCurrentIdea(idea);
-                }
-
-            });
+        /**
+         * Alias for `idea`
+         */
+        ideaSlug: function(slug, id){
+            return this.idea(slug +'/'+ id);
         },
 
         /**
@@ -36,10 +41,15 @@ define(['backbone', 'jquery', 'app'], function(Backbone, $, app){
         message: function(id){
             app.openPanel( app.messageList );
             app.messageList.messages.once('reset', function(){
-
-                app.messageList.loadThreadById(id);
-
+                app.messageList.showMessageById(id);
             });
+        },
+
+        /**
+         * Alias for `message`
+         */
+        messageSlug: function(slug, id){
+            return this.message(slug +'/'+ id);
         },
 
         /**
