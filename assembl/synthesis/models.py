@@ -705,6 +705,11 @@ class RootIdea(Idea):
             'num_posts': discussion.root_idea.get_num_orphan_posts(),
         }
 
+    def serializable(self):
+        ser = super(RootIdea, self).serializable()
+        ser['root'] = True
+        return ser
+
 class IdeaContentLink(SQLAlchemyBaseModel):
     """
     Abstract class representing a generic link between an idea and a Content
