@@ -14,7 +14,7 @@
 
     {#
         <li>
-            <%= idea.get('shortTitle') %> (<a href="mailto:<%= email %>?subject=<%= idea.get('longTitle') %>">{{ gettext('react') }}</a>)
+            <%= idea.getShortTitleDisplayText() %> (<a href="mailto:<%= email %>?subject=<%= idea.get('longTitle') %>">{{ gettext('react') }}</a>)
             <ul>
             <%
                 var children = idea.getSynthesisChildren();

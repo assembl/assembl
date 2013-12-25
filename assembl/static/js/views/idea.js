@@ -61,6 +61,7 @@ function(Backbone, _, $, Idea, Segment, app){
             data.children = this.model.getChildren();
             data.level = this.model.getLevel();
             data.segments = this.model.getSegments();
+            data.shortTitle = this.model.getShortTitleDisplayText();
 
             this.$el.html(this.template(data));
             this.$('.idealist-children').append( this.getRenderedChildren(data.level) );

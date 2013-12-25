@@ -59,7 +59,9 @@ define(['models/base','underscore', 'models/segment', 'app', 'i18n'], function(B
          * @return {Text>}
          */
         getLongTitleDisplayText: function(){
-
+            if (this.get('root') == true) {
+                return i18n.gettext('The root idea will not be in the synthesis');
+            }
             if( app.stripHtml(this.get('longTitle')) !== '' ){
                 return this.get('longTitle');
             } else if ( app.stripHtml(this.get('shortTitle')) !== '' ){
@@ -68,6 +70,13 @@ define(['models/base','underscore', 'models/segment', 'app', 'i18n'], function(B
                 return i18n.gettext('Add the description');
             }
 
+        },
+
+        getShortTitleDisplayText: function(){
+            if (this.get('root') == true) {
+                return i18n.gettext('All posts');
+            }
+            return this.get('shortTitle');
         },
 
         /**
@@ -186,8 +195,9 @@ define(['models/base','underscore', 'models/segment', 'app', 'i18n'], function(B
         getLevel: function(){
             var counter = 0,
                 parent = this;
-
             do {
+                if (parent.get('root') == true)
+                    break;
                 parent = parent.get('parentId') != null ? parent.getParent() : null;
                 counter += 1;
             } while ( parent != null );
