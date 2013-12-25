@@ -652,6 +652,7 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard, Types){
                     return app.segmentList.segments;
 
                 case Types.IDEA:
+                case Types.ROOT_IDEA:
                     return app.ideaList.ideas;
 
                 case Types.POST:

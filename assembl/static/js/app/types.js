@@ -3,6 +3,7 @@ define([], function(){
     var Types = {
         DISCUSSION: 'Discussion',
         EXTRACT: 'Extract',
+        ROOT_IDEA: 'RootIdea',
         IDEA: 'Idea',
         POST: 'Post',
         ASSEMBL_POST: 'AssemblPost',
