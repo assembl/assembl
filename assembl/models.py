@@ -35,6 +35,7 @@ from .synthesis.models import (
     Discussion,
     TableOfContents,
     Idea,
+    RootIdea,
     IdeaLink,
     Extract,
     IdeaGraphView,
