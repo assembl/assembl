@@ -50,6 +50,7 @@ define([
 
     // Message
     app.messageList = new MessageList({el: '#messageList', button: '#button-messages'}).render();
+    app.messageList.loadInitialData();
 
     // Synthesis
     app.synthesisPanel = new SynthesisPanel({el: '#synthesisPanel', button: '#button-synthesis', ideas: app.ideaList.ideas });

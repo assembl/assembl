@@ -16,7 +16,7 @@ define(['models/base','underscore', 'models/segment', 'app', 'i18n'], function(B
             obj.creationDate = obj.creationDate || app.getCurrentTime();
             this.set('creationDate', obj.creationDate);
 
-            this.on('change:inSynthesis', this.onInSynthesisChange, this);
+            this.on('change:inNextSynthesis', this.onInNextSynthesisChange, this);
             this.on('change:shortTitle change:longTitle change:parentId', this.onAttrChange, this);
 
             app.on('synthesisPanel:edit', function(){
@@ -36,13 +36,13 @@ define(['models/base','underscore', 'models/segment', 'app', 'i18n'], function(B
         defaults: {
             shortTitle: i18n.gettext('New idea'),
             longTitle: '',
-            total: 0,
+            numChildIdea: 0,
             num_posts: 0,
             isOpen: true,
             hasCheckbox: true,
             featured: false,
             active: false,
-            inSynthesis: false,
+            inNextSynthesis: false,
             parentId: null,
             order: 1
         },
@@ -59,7 +59,9 @@ define(['models/base','underscore', 'models/segment', 'app', 'i18n'], function(B
          * @return {Text>}
          */
         getLongTitleDisplayText: function(){
-
+            if (this.get('root') == true) {
+                return i18n.gettext('The root idea will not be in the synthesis');
+            }
             if( app.stripHtml(this.get('longTitle')) !== '' ){
                 return this.get('longTitle');
             } else if ( app.stripHtml(this.get('shortTitle')) !== '' ){
@@ -68,6 +70,13 @@ define(['models/base','underscore', 'models/segment', 'app', 'i18n'], function(B
                 return i18n.gettext('Add the description');
             }
 
+        },
+
+        getShortTitleDisplayText: function(){
+            if (this.get('root') == true) {
+                return i18n.gettext('All posts');
+            }
+            return this.get('shortTitle');
         },
 
         /**
@@ -155,7 +164,7 @@ define(['models/base','underscore', 'models/segment', 'app', 'i18n'], function(B
                 result = [];
 
             _.each(children, function(child){
-                if( child.get('inSynthesis') === true ){
+                if( child.get('inNextSynthesis') === true ){
                     result.push(child);
                 } else {
                     result = _.union(result, child.getSynthesisChildren());
@@ -186,8 +195,9 @@ define(['models/base','underscore', 'models/segment', 'app', 'i18n'], function(B
         getLevel: function(){
             var counter = 0,
                 parent = this;
-
             do {
+                if (parent.get('root') == true)
+                    break;
                 parent = parent.get('parentId') != null ? parent.getParent() : null;
                 counter += 1;
             } while ( parent != null );
@@ -203,7 +213,7 @@ define(['models/base','underscore', 'models/segment', 'app', 'i18n'], function(B
         },
 
         /**
-         * @return {Number} The level based in the parents inSynthesis flag
+         * @return {Number} The level based in the parents inNextSynthesis flag
          */
         getSynthesisLevel: function(){
             var counter = 0,
@@ -213,7 +223,7 @@ define(['models/base','underscore', 'models/segment', 'app', 'i18n'], function(B
 
                 if( parent.get('parentId') !== null ){
                     parent = parent.getParent();
-                    if( parent.get('inSynthesis') ){
+                    if( parent.get('inNextSynthesis') ){
                         counter += 1;
                     }
                 } else {
@@ -266,9 +276,9 @@ define(['models/base','underscore', 'models/segment', 'app', 'i18n'], function(B
         /**
          * @event
          */
-        onInSynthesisChange: function(){
-            var value = this.get('inSynthesis');
-            this.save({ inSynthesis: value });
+        onInNextSynthesisChange: function(){
+            var value = this.get('inNextSynthesis');
+            this.save({ inNextSynthesis: value });
         },
 
         /**
@@ -313,8 +323,8 @@ define(['models/base','underscore', 'models/segment', 'app', 'i18n'], function(B
         /**
          * Returns the ideas to compose the synthesis panel
          */
-        getInSynthesisIdeas: function(){
-            var ideas = this.where({inSynthesis: true}),
+        getInNextSynthesisIdeas: function(){
+            var ideas = this.where({inNextSynthesis: true}),
                 result = [];
 
             _.each(ideas, function(idea){

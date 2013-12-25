@@ -29,6 +29,7 @@ function(Backbone, _, $, app, Synthesis, SynthesisIdeaView, ckeditor, i18n){
             this.ideas.on('change', this.render, this);
 
             this.model.on('reset', this.render, this);
+            this.model.on('change', this.render, this);
         },
 
         /**
@@ -73,7 +74,7 @@ function(Backbone, _, $, app, Synthesis, SynthesisIdeaView, ckeditor, i18n){
 
             var list = document.createDocumentFragment(),
                 data = this.model.toJSON(),
-                ideas = this.ideas.getInSynthesisIdeas();
+                ideas = this.ideas.getInNextSynthesisIdeas();
 
             data.collapsed = this.collapsed;
             data.ideas = ideas;
@@ -245,13 +246,15 @@ function(Backbone, _, $, app, Synthesis, SynthesisIdeaView, ckeditor, i18n){
          */
         _publish: function(){
             var json = this.model.toJSON(),
+                publishes_synthesis_id = this.model.id,
                 url = app.getApiUrl('posts'),
                 template = app.loadTemplate('synthesisEmail'),
-                ideas = this.ideas.getInSynthesisIdeas(),
+                ideas = this.ideas.getInNextSynthesisIdeas(),
                 that = this;
 
             var onSuccess = function(resp){
                 var data = {
+                    publishes_synthesis_id: publishes_synthesis_id,
                     subject: app.format(i18n.gettext('[synthesis] {0}'), json.subject),
                     message: template({
                         email: resp[0].most_common_recipient_address,

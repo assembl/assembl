@@ -3,7 +3,7 @@
         <strong data-tooltip="{{gettext('Detailled information about the currently selected idea in the Table of ideas')}}">{{ gettext('Idea') }}</strong>
         <div class="float-right">
             <% if( idea.getId() ) { %>
-                <a id="ideaPanel-linkbutton" class="iconbutton icon-link" data-copy-text="/idea/<%= idea.getId() %>" data-tooltip="{{gettext('Copy the link to this idea to clipboard')}}"></a>
+                <a id="ideaPanel-linkbutton" class="iconbutton icon-link" data-copy-text="/idea/<%= escape(idea.getId()) %>" data-tooltip="{{gettext('Copy the link to this idea to clipboard')}}"></a>
             <% } %>
             <a id="ideaPanel-closebutton" class="iconbutton icon-cancel" data-tooltip="{{gettext('Close panel')}}"></a>
         </div>
@@ -14,7 +14,7 @@
             <legend data-tooltip="{{gettext('Basic information about the idea being discussed')}}">
                 <span>{{ gettext('Summary') }}</span>
             </legend>
-            <strong id="ideaPanel-shorttitle" data-tooltip="{{gettext('Expression of the idea in the table of ideas')}}" class="panel-editablearea" contenteditable="true"><%= idea.get('shortTitle') %></strong>
+            <strong id="ideaPanel-shorttitle" data-tooltip="{{gettext('Expression of the idea in the table of ideas')}}" class="panel-editablearea" contenteditable="true"><%= idea.getShortTitleDisplayText() %></strong>
     
             <p class="text-muted margin">
                 {% set creationDate = "<%= app.formatDate(idea.get('creationDate')) %>" %}

@@ -12,12 +12,18 @@ define(['models/base', 'jquery', 'app', 'i18n'], function(Base, $, app, i18n){
         initialize: function(){
             this.on('change', this.onAttrChange, this);
         },
-
+        
+        /**
+         * Overwritting the idAttribute
+         * @type {String}
+         */
+        idAttribute: '@id',
+        
         /**
          * The url
          * @type {String}
          */
-        url: app.getApiUrl('synthesis/'),
+        url: app.getApiUrl('next_synthesis/'),
 
         /**
          * Default values

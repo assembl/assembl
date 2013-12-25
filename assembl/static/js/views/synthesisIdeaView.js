@@ -34,7 +34,7 @@ function(Backbone, _, $, Idea, Segment, app, ckeditor){
                 this.model = new Idea.Model();
             }
 
-            this.model.on('change:shortTitle change:longTitle change:inSynthesis change:editing', this.render, this);
+            this.model.on('change:shortTitle change:longTitle change:inNextSynthesis change:editing', this.render, this);
             var that = this;
             app.on('synthesisPanel:close', function(){
                 that.cancelEdition();
@@ -165,7 +165,7 @@ function(Backbone, _, $, Idea, Segment, app, ckeditor){
          */
         onCheckboxChange: function(ev){
             ev.stopPropagation();
-            this.model.set('inSynthesis', ev.currentTarget.checked);
+            this.model.set('inNextSynthesis', ev.currentTarget.checked);
         },
 
         /**

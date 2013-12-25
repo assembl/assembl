@@ -5,16 +5,16 @@ from cornice import Service
 
 from pyramid.security import authenticated_userid, Everyone, ACLDenied
 from pyramid.httpexceptions import (
-    HTTPNotFound, HTTPClientError, HTTPForbidden, HTTPServerError)
+    HTTPNotFound, HTTPClientError, HTTPForbidden, HTTPServerError, HTTPBadRequest)
 from sqlalchemy.orm import aliased, joinedload, joinedload_all, contains_eager
 
 from assembl.views.api import API_DISCUSSION_PREFIX
 from assembl.models import (
     get_named_object, get_database_id, Extract, TextFragmentIdentifier,
-    AgentProfile, User, Source, Content, Post, Webpage, Idea)
+    AgentProfile, User, ContentSource, AnnotatorSource, Content, Post, Webpage, Idea)
 from . import acls
 from assembl.auth import (
-    P_READ, P_ADD_EXTRACT, P_EDIT_EXTRACT, P_DELETE_EXTRACT, get_permissions)
+    P_READ, P_ADD_EXTRACT, P_EDIT_EXTRACT, P_DELETE_EXTRACT, get_permissions, user_has_permission)
 from assembl.lib.token import decode_token
 
 
@@ -70,18 +70,13 @@ def get_extracts(request):
     view_def = request.GET.get('view')
     ids = request.GET.getall('ids')
 
-    all_extracts = Extract.db.query(Extract).join(
-        Content,
-        Source
-    ).filter(
-        Source.discussion_id == discussion_id,
-        Content.source_id == Source.id
+    all_extracts = Extract.db.query(Extract).filter(
+        Extract.discussion_id == discussion_id
     )
     if ids:
         ids = [get_database_id("Extract", id) for id in ids]
         all_extracts = all_extracts.filter(Extract.id.in_(ids))
-    # all_extracts = all_extracts.options(joinedload_all(
-    #     Extract.source, Content.post, Post.creator))
+
     all_extracts = all_extracts.options(joinedload_all(
         Extract.creator, AgentProfile.user))
 
@@ -109,8 +104,10 @@ def post_extract(request):
                 user_id = token['userId']
     if not user_id:
         user_id = Everyone
-    if P_ADD_EXTRACT not in get_permissions(user_id, discussion_id):
-        return HTTPForbidden(result=ACLDenied(permission=P_ADD_EXTRACT))
+    if not user_has_permission(discussion_id, user_id, P_ADD_EXTRACT):
+        #TODO: maparent:  restore this code once it works:
+        #return HTTPForbidden(result=ACLDenied(permission=P_ADD_EXTRACT))
+        return HTTPForbidden()
     if user_id == Everyone:
         # TODO: Create an anonymous user.
         raise HTTPServerError("Anonymous extracts are not implemeted yet.")
@@ -132,15 +129,17 @@ def post_extract(request):
             if not post:
                 raise HTTPNotFound(
                     "Post with id '%s' not found." % post_id)
-            content = post.content
+            content = post
         elif target_type == 'webpage':
             uri = target.get('url')
     if uri and not content:
         content = Webpage.get_instance(uri)
         if not content:
-            source = Source.get(name='Annotator', discussion_id=discussion_id)
+            # TODO: maparent:  This is actually a singleton pattern, should be
+            # handled by the AnnotatorSource now that it exists...
+            source = AnnotatorSource.get(name='Annotator', discussion_id=discussion_id)
             if not source:
-                source = Source(
+                source = AnnotatorSource(
                     name='Annotator', discussion_id=discussion_id,
                     type='source')
             content = Webpage(url=uri, source=source)
@@ -148,9 +147,10 @@ def post_extract(request):
     new_extract = Extract(
         creator_id=user_id,
         owner_id=user_id,
+        discussion_id=discussion_id,
         body=extract_body,
         annotation_text=annotation_text,
-        source=content
+        content=content
     )
     Extract.db.add(new_extract)
 
@@ -185,7 +185,7 @@ def put_extract(request):
     idea_id = updated_extract_data.get('idIdea', None)
     if idea_id:
         idea = Idea.get_instance(idea_id)
-        if(idea.get_discussion_id() != extract.get_discussion_id()):
+        if(idea.discussion != extract.discussion):
             raise HTTPBadRequest(
                 "Extract from discussion %s cannot be associated with an idea from a different discussion." % extract.get_discussion_id())
         extract.idea = idea
@@ -219,9 +219,9 @@ def do_search_extracts(request):
 
     if not uri:
         return HTTPClientError("Please specify a search uri")
-    source = Webpage.get(url=uri)
-    if source:
-        extracts = Extract.db.query(Extract).filter_by(source=source).all()
+    content = Webpage.get(url=uri)
+    if content:
+        extracts = Extract.db.query(Extract).filter_by(content=content).all()
         if view_def:
             rows = [extract.generic_json(view_def) for extract in extracts]
         else:

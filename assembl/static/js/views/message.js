@@ -47,15 +47,16 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
 
         /**
          * The render
+         * @param {Number} [level] The hierarchy level
          * @return {MessageView}
          */
-        render: function(){
+        render: function(level){
             app.trigger('render');
             var data = this.model.toJSON();
 
             data['id'] = data['@id'];
             data['date'] = app.formatDate(data.date);
-            data['level'] = this.model.getLevel();
+            data['level'] = level || this.model.getLevel();
             data['creator'] = this.model.getCreator();
 
             this.el.setAttribute('data-message-level', data['level']);
@@ -199,7 +200,7 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
         showSelectionOptions: function(x, y){
             this.hideTooltip();
 
-            var annotator = this.$el.closest('#messageList-thread').data('annotator');
+            var annotator = this.$el.closest('#messageList-list').data('annotator');
             annotator.onAdderClick.call(annotator);
 
             if( app.messageList.annotatorEditor ){
@@ -323,7 +324,6 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
          */
         onCollapsedChange: function(){
             this.render(false);
-            app.messageList.initAnnotator();
         },
 
         /**

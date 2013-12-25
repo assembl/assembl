@@ -23,11 +23,11 @@ define(['backbone', 'app'], function(Backbone, app){
         },
 
         parse: function(resp, options) {
-            if (resp['ok'] == true && resp['id'] !== undefined) {
-                var id = resp['id']
+            if (resp['ok'] === true && resp['id'] !== undefined) {
+                var id = resp['id'];
                 if (this.collection !== undefined) {
                     var existing = this.collection.get(id);
-                    if (existing == null) {
+                    if (existing === null) {
                         this.set('@id', id);
                     } else if (existing !== this) {
                         // those websockets are fast!

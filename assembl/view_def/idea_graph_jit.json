@@ -19,6 +19,12 @@
         "name": "short_title",
         "children": ["children:"]
     },
+    "RootIdea": {
+        "id": "self",
+        "data": "self:idea_graph_jit2",
+        "name": "short_title",
+        "children": ["children:"]
+    },
     "TableOfContents": {
         "creation_date": false,
         "id": "self",

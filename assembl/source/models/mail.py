@@ -36,22 +36,23 @@ from sqlalchemy import (
     func,
 )
 
-from assembl.source.models.generic import Source, Content
-from assembl.source.models.post import Post
+from assembl.source.models.generic import PostSource, Content
+from assembl.source.models.post import ImportedPost
 from assembl.auth.models import EmailAccount
 from assembl.tasks.imap import import_mails
 from assembl.lib.sqla import mark_changed
 
 
-class Mailbox(Source):
+class Mailbox(PostSource):
     """
     A Mailbox refers to an Email inbox that can be accessed with IMAP, and
     whose messages should be imported and displayed as Posts.
     """
     __tablename__ = "mailbox"
     id = Column(Integer, ForeignKey(
-        'source.id',
-        ondelete='CASCADE'
+        'post_source.id',
+        ondelete='CASCADE',
+        onupdate='CASCADE'
     ), primary_key=True)
 
     host = Column(String(1024), nullable=False)
@@ -186,7 +187,7 @@ class Mailbox(Source):
         try:
             email_object = self.db.query(Email).filter(
                 Email.message_id == new_message_id,
-                Email.source_id == self.id,
+                Email.discussion_id == self.discussion_id,
             ).one()
             if existing_email and existing_email != email_object:
                 raise ValueError("The existing object isn't the same as the one found by message id")
@@ -200,7 +201,7 @@ class Mailbox(Source):
             email_object.full_message = message_string
         except NoResultFound:
             email_object = Email(
-                post=Post(),
+                discussion_id=self.discussion_id,
                 recipients=recipients,
                 sender=sender,
                 subject=subject,
@@ -210,7 +211,7 @@ class Mailbox(Source):
                 body=body,
                 full_message=message_string
             )
-        email_object.post.creator = sender_email_account.profile
+        email_object.creator = sender_email_account.profile
         email_object.source = self
         email_object = self.db.merge(email_object)
         return (email_object, parsed_email)
@@ -238,22 +239,23 @@ class Mailbox(Source):
         for subj, container in L:
             jwzthreading.print_container(container, 0, True)
             
-        def update_threading(threaded_emails, parent=None):
-            
-
+        def update_threading(threaded_emails, parent=None, debug=False):
+            if debug:
+                print "\n\nEntering update_threading() for %s mails:" % len(threaded_emails)
             for container in threaded_emails:
-                #jwzthreading.print_container(container)
-                #print (repr(container))
-                
-                ##print "parent: "+repr(container.parent)
-                ##print "children: "+repr(container.children)
-                ##print("\nProcessing:  " + repr(container.message.subject) + " " + repr(container.message.message_id))
+                if debug:
+                    #jwzthreading.print_container(container)
+                    print("\nProcessing:  " + repr(container.message.subject) + " " + repr(container.message.message_id)+ " " + repr(container.message.message.id))
+                    print "container: " + (repr(container))
+                    print "parent: " + repr(container.parent)
+                    print "children: " + repr(container.children)
+
                 
 
                 if(container.message):
-                    current_parent = container.message.message.post.parent
+                    current_parent = container.message.message.parent
                     if(current_parent):
-                        db_parent_message_id = current_parent.content.message_id
+                        db_parent_message_id = current_parent.message_id
                     else:
                         db_parent_message_id = None
 
@@ -262,58 +264,56 @@ class Mailbox(Source):
                             #jwzthreading strips the <>, re-add them
                             algorithm_parent_message_id = unicode("<"+parent.message.message_id+">")
                         else:
-                            # Parent was a dummy container, we may need to handle this case better
-                            # we just potentially lost sibbling relationships
+                            if debug:
+                                print "Parent was a dummy container, we may need \
+                                     to handle this case better, as we just \
+                                     potentially lost sibbling relationships"
                             algorithm_parent_message_id = None
                     else:
                         algorithm_parent_message_id = None
-                    #print("Current parent from algorithm: " + repr(algorithm_parent_message_id))
-                    #print("References: " + repr(container.message.references))
+                    if debug:
+                        print("Current parent from database: " + repr(db_parent_message_id))
+                        print("Current parent from algorithm: " + repr(algorithm_parent_message_id))
+                        print("References: " + repr(container.message.references))
                     if algorithm_parent_message_id != db_parent_message_id:
-                        # Don't reparent if the current parent isn't an email, the threading algorithm only considers mails
-                        if current_parent == None or isinstance(current_parent.content, Email):
-                            #print("UPDATING PARENT for :" + repr(container.message.message.message_id))
-                            new_parent = parent.message.message.post if algorithm_parent_message_id else None
-                            #print repr(new_parent)
-                            container.message.message.post.set_parent(new_parent)
-                    if current_parent and current_parent.content.source_id != container.message.message.source_id:
-                        #This is to correct past mistakes in the database, remove it once everyone ran it benoitg 2013-11-20
-                        print("UPDATING PARENT, BAD ORIGINAL SOURCE" + repr(current_parent.content.source_id) + " " + repr(container.message.message.source_id))
-                        new_parent = parent.message.message.post if algorithm_parent_message_id else None
-                        #print repr(new_parent)
-                        container.message.message.post.set_parent(new_parent)
-                        
-                    update_threading(container.children, container)
+                        if current_parent == None or isinstance(current_parent, Email):
+                            if debug:
+                                print("UPDATING PARENT for :" + repr(container.message.message.message_id))
+                            new_parent = parent.message.message if algorithm_parent_message_id else None
+                            if debug:
+                                print repr(new_parent)
+                            container.message.message.set_parent(new_parent)
+                        else:
+                            if debug:
+                                print "Skipped reparenting:  the current parent \
+                                isn't an email, the threading algorithm only \
+                                considers mails"
+                    update_threading(container.children, container, debug=debug)
                 else:
-                    #print "Current message ID: None, was a dummy container"
-                    update_threading(container.children, parent)
+                    if debug: 
+                        print "Current message ID: None, was a dummy container"
+                    update_threading(container.children, parent, debug=debug)
                 
-        update_threading(threaded_emails.values())
+        update_threading(threaded_emails.values(), debug=False)
 
-    @staticmethod
-    def reprocess_content(mailbox):
+    def reprocess_content(self):
         """ Allows re-parsing all content as if it were imported for the first time
             but without re-hitting the source, or changing the object ids.
             Call when a code change would change the representation in the database
             """
-        mailbox_id = mailbox.id
-        emails = mailbox.db.query(Email).filter(
-                Email.source_id == mailbox_id,
-                ).options(joinedload_all(Email.post, Post.parent, Post.content))
-        email_ids = [email.id for email in emails]
-        for email_id in email_ids:
-            session = Email.db()
-            email = Email.get(id=email_id)
-            (email_object, _) = mailbox.parse_email(email.full_message, email)
-            session.add(email_object)
-            
-            transaction.commit()
-            Email.db.remove()
-            mailbox = Mailbox.get(id=mailbox_id)
-        emails = mailbox.db.query(Email).filter(
-                Email.source_id == mailbox_id,
-                ).options(joinedload_all(Email.post, Post.parent, Post.content))
-        mailbox.thread_mails(emails)
+        emails = self.db.query(Email).filter(
+                Email.source_id == self.id,
+                ).options(joinedload_all(Email.parent))
+        session = self.db
+        for email in emails:
+            #session = Email.db
+            #session.add(email)
+            (email_object, _) = self.parse_email(email.full_message, email)
+            #session.add(email_object)
+            session.commit()
+            #session.remove()
+
+        self.thread_mails(emails)
         
     def import_content(self, only_new=True):
         #Mailbox.do_import_content(self, only_new)
@@ -321,6 +321,8 @@ class Mailbox(Source):
 
     @staticmethod
     def do_import_content(mbox, only_new=True):
+        mbox = mbox.db.merge(mbox)
+        mbox.db.add(mbox)
         if mbox.use_ssl:
             mailbox = IMAP4_SSL(host=mbox.host.encode('utf-8'), port=mbox.port)
         else:
@@ -345,8 +347,7 @@ class Mailbox(Source):
             del email_ids[0]
 
         def import_email(mailbox_obj, email_id):
-            session = Email.db()
-            mailbox_obj = session.merge(mailbox_obj)
+            session = mailbox_obj.db()
             status, message_data = mailbox.uid('fetch', email_id, "(RFC822)")
             for response_part in message_data:
                 if isinstance(response_part, tuple):
@@ -360,25 +361,22 @@ class Mailbox(Source):
         if len(email_ids):
             new_emails = [import_email(mbox, email_id) for email_id in email_ids]
 
-            mbox = Mailbox.get(id=mbox.id)
             mbox.last_imported_email_uid = \
                 email_ids[len(email_ids)-1]
 
-        # TODO: remove this line, the property `last_import` does not persist.
-        mbox.last_import = datetime.utcnow()
         mark_changed()
         transaction.commit()
 
         mailbox.close()
         mailbox.logout()
-
+        mbox.db.add(mbox)
         if len(email_ids):
             #We imported mails, we need to re-thread
-            emails = self.db.query(Email).filter(
-                Email.source_id == self.id,
-                ).options(joinedload_all(Email.post, Post.parent, Post.content))
+            emails = Email.db().query(Email).filter(
+                Email.discussion_id == mbox.discussion_id,
+                ).options(joinedload_all(Email.parent))
 
-            self.thread_mails(emails)
+            Mailbox.thread_mails(emails)
 
     def most_common_recipient_address(self):
         """
@@ -427,8 +425,12 @@ class Mailbox(Source):
         """
         return self.most_common_recipient_address()
 
-    # The send method will be a common interface on all sources.
-    def send(
+    def send_post(self, post):
+        #TODO benoitg
+        print "TODO: Mail::send_post():  Actually queue message"
+        #self.send_mail(sender=post.creator, message_body=post.body, subject=post.subject)
+        
+    def send_mail(
         self,
         sender,
         message_body,
@@ -536,29 +538,25 @@ class MailingList(Mailbox):
         return self.post_email()
 
 
-class Email(Content):
+class Email(ImportedPost):
     """
     An Email refers to an email message that was imported from an Mailbox.
     """
     __tablename__ = "email"
 
     id = Column(Integer, ForeignKey(
-        'content.id',
-        ondelete='CASCADE'
+        'imported_post.id',
+        ondelete='CASCADE',
+        onupdate='CASCADE'
     ), primary_key=True)
 
     # in virtuoso, varchar is 1024 bytes and sizeof(wchar)==4, so varchar is 256 chars
     recipients = deferred(Column(UnicodeText, nullable=False), group='raw_details')
     sender = deferred(Column(Unicode(), nullable=False), group='raw_details')
-    subject = Column(Unicode(), nullable=False)
-    body = Column(UnicodeText)
 
     full_message = deferred(Column(Binary), group='raw_details')
 
-    message_id = Column(Unicode())
     in_reply_to = Column(Unicode())
-
-    import_date = Column(DateTime, nullable=False, default=datetime.utcnow)
 
     __mapper_args__ = {
         'polymorphic_identity': 'email',
@@ -566,10 +564,8 @@ class Email(Content):
 
     def __init__(self, *args, **kwargs):
         super(Email, self).__init__(*args, **kwargs)
-        if self.subject.startswith('[synthesis]'):
-            self.post.is_synthesis = True
 
-    def reply(self, sender, response_body):
+    def REWRITEMEreply(self, sender, response_body):
         """
         Send a response to this email.
 
@@ -635,11 +631,9 @@ class Email(Content):
         serializable_content = super(Email, self).serializable()
 
         serializable_content.update({
-            "sender": self.sender,
-            "creator": self.post.creator.serializable(),
+            #"sender": self.sender,
+            #"creator": self.creator.serializable(),
             "recipients": self.recipients,
-            "subject": self.subject,
-            "body": self.body,
         })
 
         return serializable_content

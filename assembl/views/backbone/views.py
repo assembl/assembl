@@ -69,8 +69,16 @@ def home_view(request):
 def idea_view(request):
     return home_view(request)
 
+@view_config(route_name='home_idea_slug', request_method='GET', http_cache=60)
+def idea_slug_view(request):
+    return home_view(request)
+
 @view_config(route_name='home_message', request_method='GET', http_cache=60)
 def message_view(request):
+    return home_view(request)
+
+@view_config(route_name='home_message_slug', request_method='GET', http_cache=60)
+def message_slug_view(request):
     return home_view(request)
 
 @view_config(route_name='toc', request_method='GET', http_cache=60)

@@ -19,10 +19,10 @@ import transaction
 
 from assembl.auth import P_READ, P_ADD_POST
 from assembl.models import (
-    get_database_id, get_named_object, AgentProfile, Post, Email,
-    Discussion, Source, Content, Idea, ViewPost, User)
+    get_database_id, get_named_object, AgentProfile, Post, AssemblPost, SynthesisPost, 
+    Synthesis, Discussion, PostSource, Content, Idea, ViewPost, User)
 from . import acls
-
+import uuid
 
 posts = Service(name='posts', path=API_DISCUSSION_PREFIX + '/posts',
                 description="Post API following SIOC vocabulary as much as possible",
@@ -31,7 +31,6 @@ posts = Service(name='posts', path=API_DISCUSSION_PREFIX + '/posts',
 post = Service(name='post', path=API_DISCUSSION_PREFIX + '/posts/{id:.+}',
                description="Manipulate a single post",
                acl=acls)
-
 
 
 def _get_idea_query(post, levels=None):
@@ -114,40 +113,36 @@ def get_posts(request):
 
     #Rename "inbox" to "unread", the number of unread messages for the current user.
     no_of_messages_viewed_by_user = Post.db.query(ViewPost).join(
-        Post,
-        Content,
-        Source
+        Post
     ).filter(
-        Source.discussion_id == discussion_id,
-        Content.source_id == Source.id,
+        Post.discussion_id == discussion_id,
         ViewPost.actor_id == user_id,
     ).count() if user_id else 0
 
-    posts = Post.db.query(Post).join(
-        Content,
-        Source,
-    ).filter(
-        Source.discussion_id == discussion_id,
-        Content.source_id == Source.id,
+    if 'synthesis' in filter_names:
+        posts = Post.db.query(SynthesisPost)
+    else:
+        posts = Post.db.query(Post)
+
+    posts = posts.filter(
+        Post.discussion_id == discussion_id,
     )
     no_of_posts_to_discussion = posts.count()
 
     post_data = []
 
+        
     if root_idea_id:
         if root_idea_id == Idea.ORPHAN_POSTS_IDEA_ID:
-            ideas_query = Post.db.query(Post) \
+            posts = posts \
                 .filter(Post.id.in_(text(Idea._get_orphan_posts_statement(),
                                          bindparams=[bindparam('discussion_id', discussion_id)]
                                          )))
         else:
-            ideas_query = Post.db.query(Post) \
+            posts = posts \
                 .filter(Post.id.in_(text(Idea._get_related_posts_statement(),
                                          bindparams=[bindparam('root_idea_id', root_idea_id)]
                                          )))
-        posts = ideas_query.join(Content,
-                                 Source,
-                                 )
     elif root_post_id:
         root_post = Post.get(id=root_post_id)
 
@@ -169,13 +164,10 @@ def get_posts(request):
                     and_(ViewPost.actor_id==user_id, ViewPost.post_id==Post.id)
                 )
         posts = posts.add_entity(ViewPost)
-    posts = posts.options(contains_eager(Post.content, Content.source))
+    #posts = posts.options(contains_eager(Post.source))
     posts = posts.options(joinedload_all(Post.creator, AgentProfile.user))
 
     posts = posts.order_by(Content.creation_date)
-
-    if 'synthesis' in filter_names:
-        posts = posts.filter(Post.is_synthesis==True)
 
     if user_id:
         for post, viewpost in posts:
@@ -206,9 +198,6 @@ def get_posts(request):
     data = {}
     data["page"] = page
     data["inbox"] = no_of_posts_to_discussion - no_of_messages_viewed_by_user
-    #What is "total", the total messages in the current context?
-    #This gave wrong count, I don't know why. benoitg
-    #data["total"] = discussion.posts().count()
     data["total"] = no_of_posts_to_discussion
     data["maxPage"] = max(1, ceil(float(data["total"])/page_size))
     #TODO:  Check if we want 1 based index in the api
@@ -251,7 +240,8 @@ def create_post(request):
     html = request_body.get('html', None)
     reply_id = request_body.get('reply_id', None)
     subject = request_body.get('subject', None)
-
+    publishes_synthesis_id = request_body.get('publishes_synthesis_id', None)
+    
     if not user_id:
         raise HTTPUnauthorized()
 
@@ -259,22 +249,44 @@ def create_post(request):
         raise HTTPUnauthorized()
 
     if reply_id:
-        post = Post.get_instance(reply_id)
-        post.content.reply(user, message)
-
-        return {"ok": True}
-
+        in_reply_to_post = Post.get_instance(reply_id)
+    else:
+        in_reply_to_post = None
+    
     discussion_id = request.matchdict['discussion_id']
-    discussion = Discussion.get(id=int(discussion_id))
-
-    subject = subject or discussion.topic
+    discussion = Discussion.get_instance(discussion_id)
 
     if not discussion:
         raise HTTPNotFound(
             _("No discussion found with id=%s" % discussion_id)
         )
 
+    post_constructor_args = {
+        'discussion': discussion,
+        'message_id': uuid.uuid1().urn,
+        'creator_id': user_id,
+        'subject': subject,
+        'body': html if html else message
+        }
+    
+    
+    if publishes_synthesis_id:
+        published_synthesis = Synthesis.get_instance(publishes_synthesis_id)
+        post_constructor_args['publishes_synthesis'] = published_synthesis
+        new_post = SynthesisPost(**post_constructor_args)
+    else:
+        new_post = AssemblPost(**post_constructor_args)
+    
+    #TODO benoitg:  Support replying to an idea
+    subject = subject or ("Re: " + in_reply_to_post.subject if in_reply_to_post else None) or discussion.topic
+
+    new_post.db.add(new_post)
+    new_post.db.flush()
+    print(repr(in_reply_to_post))
+    if in_reply_to_post:
+        new_post.set_parent(in_reply_to_post)
+
     for source in discussion.sources:
-        source.send(user, message, subject=subject, html_body=html)
+        source.send_post(new_post)
 
     return {"ok": True}

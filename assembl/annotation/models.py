@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, ForeignKey, DateTime, Unicode, String
 
-from ..source.models.generic import Source, Content
+from ..source.models.generic import Content
 
 
 class Webpage(Content):

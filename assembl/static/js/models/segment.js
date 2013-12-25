@@ -121,6 +121,9 @@ function(Base, _, app, User, Message){
 
                 case 'Email':
                 case 'Post':
+                case 'AssemblPost':
+                case 'SynthesisPost':
+                case 'ImportedPost':
                 default:
                     cls += 'mail';
             }

@@ -21,18 +21,27 @@ from .auth.models import (
     CollapsePost,
 )
 from .source.models import (
-    Source,
+    ContentSource,
+    PostSource,
+    AnnotatorSource,
     Content,
     Mailbox,
     Post,
+    AssemblPost,
+    SynthesisPost,
     Email,
 )
 from .synthesis.models import (
     Discussion,
     TableOfContents,
     Idea,
+    RootIdea,
     IdeaLink,
     Extract,
+    IdeaGraphView,
+    SubGraphIdeaAssociation,
+    SubGraphIdeaLinkAssociation,
+    ExplicitSubGraphView,
     Synthesis,
     TextFragmentIdentifier,
 )

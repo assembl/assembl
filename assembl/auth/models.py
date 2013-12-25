@@ -2,7 +2,6 @@ from datetime import datetime
 from itertools import chain
 import urllib
 import hashlib
-import transaction
 
 from sqlalchemy import (
     Boolean,
@@ -62,7 +61,7 @@ class AgentProfile(SQLAlchemyBaseModel):
 
     id = Column(Integer, primary_key=True)
     name = Column(Unicode(1024))
-    type = Column(String(60))  # not sure we need this?
+    type = Column(String(60))
 
     __mapper_args__ = {
         'polymorphic_identity': 'agent_profile',
@@ -172,7 +171,7 @@ class AbstractAgentAccount(SQLAlchemyBaseModel):
     type = Column(String(60))
     profile_id = Column(
         Integer,
-        ForeignKey('agent_profile.id', ondelete='CASCADE'),
+        ForeignKey('agent_profile.id', ondelete='CASCADE', onupdate='CASCADE'),
         nullable=False)
     profile = relationship('AgentProfile', backref='accounts')
     def signature(self):
@@ -196,7 +195,7 @@ class EmailAccount(AbstractAgentAccount):
     }
     id = Column(Integer, ForeignKey(
         'abstract_agent_account.id',
-        ondelete='CASCADE'
+        ondelete='CASCADE', onupdate='CASCADE'
     ), primary_key=True)
     email = Column(String(100), nullable=False, index=True)
     verified = Column(Boolean(), default=False)
@@ -256,11 +255,11 @@ class IdentityProviderAccount(AbstractAgentAccount):
     }
     id = Column(Integer, ForeignKey(
         'abstract_agent_account.id',
-        ondelete='CASCADE'
+        ondelete='CASCADE', onupdate='CASCADE'
     ), primary_key=True)
     provider_id = Column(
         Integer,
-        ForeignKey('identity_provider.id', ondelete='CASCADE'),
+        ForeignKey('identity_provider.id', ondelete='CASCADE', onupdate='CASCADE'),
         nullable=False)
     provider = relationship(IdentityProvider)
     username = Column(String(200))
@@ -288,7 +287,7 @@ class User(SQLAlchemyBaseModel):
 
     id = Column(
         Integer,
-        ForeignKey('agent_profile.id', ondelete='CASCADE'),
+        ForeignKey('agent_profile.id', ondelete='CASCADE', onupdate='CASCADE'),
         primary_key=True
     )
     profile = relationship(
@@ -397,7 +396,7 @@ class Username(SQLAlchemyBaseModel):
     "Optional usernames for users"
     __tablename__ = 'username'
     user_id = Column(Integer,
-                     ForeignKey('user.id', ondelete='CASCADE'),
+                     ForeignKey('user.id', ondelete='CASCADE', onupdate='CASCADE'),
                      unique=True)
     username = Column(Unicode(20), primary_key=True)
     user = relationship(User, backref=backref('username', uselist=False))
@@ -434,10 +433,10 @@ class UserRole(SQLAlchemyBaseModel):
     """roles that a user has globally (eg admin.)"""
     __tablename__ = 'user_role'
     id = Column(Integer, primary_key=True)
-    user_id = Column(Integer, ForeignKey('user.id', ondelete='CASCADE'),
+    user_id = Column(Integer, ForeignKey('user.id', ondelete='CASCADE', onupdate='CASCADE'),
                      index=True)
     user = relationship(User)
-    role_id = Column(Integer, ForeignKey('role.id', ondelete='CASCADE'))
+    role_id = Column(Integer, ForeignKey('role.id', ondelete='CASCADE', onupdate='CASCADE'))
     role = relationship(Role, lazy="joined")
 
 
@@ -445,12 +444,12 @@ class LocalUserRole(SQLAlchemyBaseModel):
     """The role that a user has in the context of a discussion"""
     __tablename__ = 'local_user_role'
     id = Column(Integer, primary_key=True)
-    user_id = Column(Integer, ForeignKey('user.id', ondelete='CASCADE'))
+    user_id = Column(Integer, ForeignKey('user.id', ondelete='CASCADE', onupdate='CASCADE'))
     user = relationship(User)
     discussion_id = Column(Integer, ForeignKey(
         'discussion.id', ondelete='CASCADE'))
     discussion = relationship('Discussion')
-    role_id = Column(Integer, ForeignKey('role.id', ondelete='CASCADE'))
+    role_id = Column(Integer, ForeignKey('role.id', ondelete='CASCADE', onupdate='CASCADE'))
     role = relationship(Role, lazy="joined")
     # BUG in virtuoso: It will often refuse to create an index
     # whose name exists in another schema. So having this index in
@@ -493,13 +492,13 @@ class DiscussionPermission(SQLAlchemyBaseModel):
     __tablename__ = 'discussion_permission'
     id = Column(Integer, primary_key=True)
     discussion_id = Column(Integer, ForeignKey(
-        'discussion.id', ondelete='CASCADE'))
+        'discussion.id', ondelete='CASCADE', onupdate='CASCADE'))
     discussion = relationship(
         'Discussion', backref=backref("acls", lazy="joined"))
-    role_id = Column(Integer, ForeignKey('role.id', ondelete='CASCADE'))
+    role_id = Column(Integer, ForeignKey('role.id', ondelete='CASCADE', onupdate='CASCADE'))
     role = relationship(Role, lazy="joined")
     permission_id = Column(Integer, ForeignKey(
-        'permission.id', ondelete='CASCADE'))
+        'permission.id', ondelete='CASCADE', onupdate='CASCADE'))
     permission = relationship(Permission, lazy="joined")
 
     def role_name(self):
@@ -556,7 +555,7 @@ class Action(SQLAlchemyBaseModel):
 
     actor_id = Column(
         Integer,
-        ForeignKey('user.id', ondelete='CASCADE'),
+        ForeignKey('user.id', ondelete='CASCADE', onupdate='CASCADE'),
         nullable=False
     )
 
@@ -586,12 +585,12 @@ class ActionOnPost(Action):
 
     post_id = Column(
         Integer,
-        ForeignKey('post.id', ondelete="CASCADE"),
+        ForeignKey('content.id', ondelete="CASCADE", onupdate='CASCADE'),
         nullable=False
     )
 
     post = relationship(
-        'Post',
+        'Content',
         backref=backref('views')
     )
 
@@ -612,7 +611,7 @@ class ViewPost(ActionOnPost):
 
     id = Column(
         Integer,
-        ForeignKey('action.id', ondelete="CASCADE"),
+        ForeignKey('action.id', ondelete="CASCADE", onupdate='CASCADE'),
         primary_key=True
     )
 
@@ -630,7 +629,7 @@ class ExpandPost(ActionOnPost):
 
     id = Column(
         Integer,
-        ForeignKey('action.id', ondelete="CASCADE"),
+        ForeignKey('action.id', ondelete="CASCADE", onupdate='CASCADE'),
         primary_key=True
     )
 
@@ -648,7 +647,7 @@ class CollapsePost(ActionOnPost):
 
     id = Column(
         Integer,
-        ForeignKey('action.id', ondelete="CASCADE"),
+        ForeignKey('action.id', ondelete="CASCADE", onupdate='CASCADE'),
         primary_key=True
     )
 

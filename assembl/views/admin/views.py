@@ -50,8 +50,7 @@ def discussion_admin(request):
 
         discussion = Discussion(
             topic=topic,
-            slug=slug,
-            owner=user,
+            slug=slug
         )
 
         session.add(discussion)
