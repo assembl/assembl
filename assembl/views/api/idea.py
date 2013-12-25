@@ -5,7 +5,8 @@ from cornice import Service
 from pyramid.httpexceptions import HTTPNotFound, HTTPBadRequest, HTTPNoContent
 from assembl.views.api import API_DISCUSSION_PREFIX
 from assembl.models import (
-    get_named_object, get_database_id, Idea, IdeaLink, Discussion, Extract, SubGraphIdeaAssociation)
+    get_named_object, get_database_id, Idea, RootIdea, IdeaLink, Discussion,
+    Extract, SubGraphIdeaAssociation)
 from . import acls
 from assembl.auth import (P_READ, P_ADD_IDEA, P_EDIT_IDEA)
 from sqlalchemy import and_
@@ -119,6 +120,8 @@ def save_idea(request):
     idea = Idea.get_instance(idea_id)
     if not idea:
         raise HTTPNotFound("No such idea: %s" % (idea_id))
+    if isinstance(idea, RootIdea):
+        raise HTTPBadRequest("Cannot edit root idea.")
     discussion = Discussion.get(id=int(discussion_id))
     if not discussion:
         raise HTTPNotFound("Discussion with id '%s' not found." % discussion_id)
@@ -175,6 +178,8 @@ def delete_idea(request):
 
     if not idea:
         raise HTTPNotFound("Idea with id '%s' not found." % idea_id)
+    if isinstance(idea, RootIdea):
+        raise HTTPBadRequest("Cannot delete root idea.")
     num_childrens = len(idea.children)
     if num_childrens > 0:
         raise HTTPBadRequest("Idea cannot be deleted because it still has %d child ideas." % num_childrens)
