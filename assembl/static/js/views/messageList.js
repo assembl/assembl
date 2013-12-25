@@ -273,7 +273,7 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
 
         /**
          * Shows the related to the given idea
-         * @param  {String} ideaId
+         * @param {String} ideaId
          */
         loadDataByIdeaId: function(ideaId){
             var that = this,
@@ -303,6 +303,34 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
                 that.unblockPanel();
                 that.messages.reset(messages);
             });
+        },
+
+        /**
+         * Highlights the message by the given id
+         * @param {String} id
+         * @param {Function} [callback] The callback function
+         */
+        showMessageById: function(id, callback){
+            var message = this.messages.get(id),
+                 selector = app.format('[id="message-{0}"]', id),
+                 el;
+            
+            if( ! _.isFunction(callback) ){
+                callback = $.noop;
+            }
+
+            if( message ){
+                message.set('collapsed', false);
+                el = $(selector);
+                if( el[0] ){
+                    // Scrolling to the element
+                    var top = el[0].parentElement.offsetTop;
+                    this.$('.panel-body').animate({ scrollTop: top }, { complete: callback });
+                } else {
+                    callback();
+                }
+            }
+
         },
 
         /**
