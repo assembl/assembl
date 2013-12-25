@@ -22,6 +22,15 @@
         "order": "&get_order_from_first_parent",
         "discussion": false
     },
+    "RootIdea": {
+        "data": "self:idea_graph2",
+        "creation_date": true,
+        "extracts": false,
+        "long_title": true,
+        "name": "short_title",
+        "order": "&get_order_from_first_parent",
+        "discussion": false
+    },
     "IdeaLink": {
         "data": "self:idea_graph2"
     },

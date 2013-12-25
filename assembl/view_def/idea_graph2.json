@@ -7,6 +7,9 @@
     "Idea": {
         "id": "self"
     },
+    "RootIdea": {
+        "id": "self"
+    },
     "IdeaLink": {
         "id": "self",
         "source": true,
