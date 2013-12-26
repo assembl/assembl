@@ -3,6 +3,7 @@ import email
 import re
 import smtplib
 from cgi import escape as html_escape
+from collections import defaultdict
 
 from email.header import decode_header as decode_email_header, Header
 from email.mime.multipart import MIMEMultipart
@@ -378,6 +379,10 @@ class Mailbox(PostSource):
 
             Mailbox.thread_mails(emails)
 
+    _address_match_re = re.compile(
+        r'[\w\-][\w\-\.]+@[\w\-][\w\-\.]+[a-zA-Z]{1,4}'
+    )
+
     def most_common_recipient_address(self):
         """
         Find the most common recipient address of the contents of this emaila
@@ -385,39 +390,22 @@ class Mailbox(PostSource):
         mailing list address.
         """
 
-        most_common_recipients = self.db.query(
-            func.count(
-                Email.recipients
-            ),
+        recipients = self.db.query(
             Email.recipients,
         ).filter(
             Email.source_id == self.id,
-        ).group_by(Email.recipients)
+        )
 
-        most_common_addresses = {}
+        addresses = defaultdict(int)
 
-        for frequency, recipients in most_common_recipients[:50]:
-            address_match = re.compile(
-                r'[\w\-][\w\-\.]+@[\w\-][\w\-\.]+[a-zA-Z]{1,4}'
-            )
+        for (recipients, ) in recipients:
+            for address in self._address_match_re.findall(recipients):
+                addresses[address] += 1
 
-            for recipient_address in address_match.findall(recipients):
-                if recipient_address in most_common_addresses.keys():
-                    most_common_addresses[
-                        recipient_address
-                    ] += int(frequency)
-
-                else:
-                    most_common_addresses[recipient_address] = int(frequency)
-
-        most_common_address = sorted(
-            [
-                (most_common_addresses[address], address) for address in
-                most_common_addresses.keys()
-            ], key=lambda pair: pair[0]
-        )[-1][1]
-
-        return most_common_address
+        if addresses:
+            addresses = addresses.items()
+            addresses.sort(key=lambda (address, count): count)
+            return addresses[-1][0]
 
     def get_send_address(self):
         """
