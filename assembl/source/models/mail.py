@@ -410,14 +410,15 @@ class Mailbox(PostSource):
                 else:
                     most_common_addresses[recipient_address] = int(frequency)
 
-        most_common_address = sorted(
-            [
-                (most_common_addresses[address], address) for address in
-                most_common_addresses.keys()
-            ], key=lambda pair: pair[0]
-        )[-1][1]
+        if most_common_addresses:
+            most_common_address = sorted(
+                [
+                    (most_common_addresses[address], address) for address in
+                    most_common_addresses.keys()
+                ], key=lambda pair: pair[0]
+            )[-1][1]
 
-        return most_common_address
+            return most_common_address
 
     def get_send_address(self):
         """
