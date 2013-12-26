@@ -364,19 +364,21 @@ class Mailbox(PostSource):
             mbox.last_imported_email_uid = \
                 email_ids[len(email_ids)-1]
 
+        discussion_id = mbox.discussion_id
+        mailbox.close()
+        mailbox.logout()
         mark_changed()
         transaction.commit()
 
-        mailbox.close()
-        mailbox.logout()
-        mbox.db.add(mbox)
-        if len(email_ids):
-            #We imported mails, we need to re-thread
-            emails = Email.db().query(Email).filter(
-                Email.discussion_id == mbox.discussion_id,
-                ).options(joinedload_all(Email.parent))
+        with transaction.manager:
+            if len(email_ids):
+                #We imported mails, we need to re-thread
+                emails = Email.db().query(Email).filter(
+                    Email.discussion_id == discussion_id,
+                    ).options(joinedload_all(Email.parent))
 
-            Mailbox.thread_mails(emails)
+                Mailbox.thread_mails(emails)
+                mark_changed()
 
     def most_common_recipient_address(self):
         """
