@@ -18,6 +18,13 @@
     padding: 5px;
 }
 
+// Only border in bottom
+// ++++++++++++++
+.box.box--bottomborder {
+    border: none;
+    border-bottom: solid 1px $box-border-color;
+}
+
 
 // Dashed box
 // +++++++++++++++

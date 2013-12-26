@@ -10,7 +10,7 @@
     </div>
     
     <div class="panel-body">
-        <div class="box">
+        <div class="box box--bottomborder">
             <a class="bookmarklet" data-tooltip="{{gettext('Drag this bookmarklet to your favorite bar.  You can then capture segments from any non-https webpage to this discussion by clicking on the bookmarklet and selecting a zone of text in the webpage.')}}" href="javascript:(function(a,b){r='http://{{ request.server_name }}:{{ request.server_port }}',a._annotatorConfig={root:r,discussion:{{ discussion.id }}},s=b.body.appendChild(b.createElement('script')),s.language='javascript',s.src=r+'/static/js/annotator_bkmklet.min.js'})(this,this.document);">{{ gettext('Web capture to') }} {{ discussion.slug }}</a>
         </div>
         <div class="postitlist">

@@ -165,7 +165,7 @@
         "sources": [":"],
         "topic": true,
         "permissions": "&get_roles_by_permission",
-        "source": [":partial"]
+        "sources": [":partial"]
     },
     "Idea": {
         "longTitle": "long_title",
