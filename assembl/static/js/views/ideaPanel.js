@@ -164,6 +164,10 @@ function(Backbone, _, Idea, Message, app, ckeditor, i18n){
                 this.idea.set('isSelected', true);
                 app.openPanel(app.ideaPanel);
             } else {
+                if( this.idea ){
+                    this.idea.set('isSelected', false);
+                }
+
                 this.idea = new Idea.Model();
                 app.closePanel(app.ideaPanel);
             }
