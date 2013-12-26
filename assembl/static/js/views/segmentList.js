@@ -7,11 +7,17 @@ function(Backbone, _, $, app, Segment, i18n){
          * @init
          */
         initialize: function(obj){
+            var that = this;
+
             if( obj && obj.button ){
                 this.button = $(obj.button).on('click', app.togglePanel.bind(window, 'segmentList'));
             }
 
             this.segments.on('add remove change reset', this.render, this);
+
+            this.segments.on('add', function(segment){
+                that.showSegment(segment);
+            });
         },
 
         /**

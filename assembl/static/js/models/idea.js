@@ -196,11 +196,11 @@ define(['models/base','underscore', 'models/segment', 'app', 'i18n'], function(B
             var counter = 0,
                 parent = this;
             do {
-                if (parent.get('root') == true)
+                if (parent.get('root') === true)
                     break;
-                parent = parent.get('parentId') != null ? parent.getParent() : null;
+                parent = parent.get('parentId') !== null ? parent.getParent() : null;
                 counter += 1;
-            } while ( parent != null );
+            } while ( parent !== null );
 
             return counter;
         },
