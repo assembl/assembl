@@ -27,6 +27,8 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
                 if( idea ){
                     app.openPanel(app.messageList);
                     that.loadDataByIdeaId(idea.getId());
+                } else {
+                    that.loadDataByIdeaId(null);
                 }
             });
         },
