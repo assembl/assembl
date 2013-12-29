@@ -239,6 +239,8 @@ class IdeaGraphView(SQLAlchemyBaseModel):
         retval.discussion = self.discussion
         return retval
 
+    def get_discussion_id(self):
+        return self.discussion_id
 
 class SubGraphIdeaAssociation(SQLAlchemyBaseModel):
     __tablename__ = 'sub_graph_idea_association'
@@ -256,6 +258,12 @@ class SubGraphIdeaAssociation(SQLAlchemyBaseModel):
         self.idea = idea
         self.sub_graph = sub_graph
 
+    def get_discussion_id(self):
+        if self.sub_graph:
+            return self.sub_graph.get_discussion_id()
+        else:
+            return IdeaGraphView.get(id=self.sub_graph_id).get_discussion_id()
+        
 
 class SubGraphIdeaLinkAssociation(SQLAlchemyBaseModel):
     __tablename__ = 'sub_graph_idea_link_association'
@@ -264,6 +272,7 @@ class SubGraphIdeaLinkAssociation(SQLAlchemyBaseModel):
     sub_graph_id = Column(Integer, ForeignKey(
         'explicit_sub_graph_view.id', ondelete="CASCADE", onupdate="CASCADE"),
         index=True)
+    sub_graph = relationship("ExplicitSubGraphView")
 
     idea_link_id = Column(Integer, ForeignKey(
         'idea_idea_link.id', ondelete="CASCADE", onupdate="CASCADE"),
@@ -275,6 +284,12 @@ class SubGraphIdeaLinkAssociation(SQLAlchemyBaseModel):
     def __init__(self, idea_link=None, sub_graph=None):
         self.idea_link = idea_link
         self.sub_graph = sub_graph
+
+    def get_discussion_id(self):
+        if self.sub_graph:
+            return self.sub_graph.get_discussion_id()
+        else:
+            return IdeaGraphView.get(id=self.sub_graph_id).get_discussion_id()
 
 
 class ExplicitSubGraphView(IdeaGraphView):
@@ -461,6 +476,11 @@ class IdeaLink(SQLAlchemyBaseModel):
         self.db.add(retval)
         return retval
 
+    def get_discussion_id(self):
+        if self.source:
+            return self.source.get_discussion_id()
+        else:
+            return Idea.get(id=self.source_id).get_discussion_id()
 
 class Idea(SQLAlchemyBaseModel):
     """
@@ -749,6 +769,12 @@ class IdeaContentLink(SQLAlchemyBaseModel):
         'with_polymorphic': '*'
     }
 
+    def get_discussion_id(self):
+        if self.idea:
+            return self.idea.get_discussion_id()
+        elif self.idea_id:
+            return Idea.get(id=self.idea_id).get_discussion_id()
+
 
 class IdeaContentPositiveLink(IdeaContentLink):
     """
@@ -987,4 +1013,4 @@ class TextFragmentIdentifier(SQLAlchemyBaseModel):
         if self.extract:
             return self.extract.get_discussion_id()
         elif self.extract_id:
-            return Extract.get(id=extract_id).get_discussion_id()
+            return Extract.get(id=self.extract_id).get_discussion_id()
