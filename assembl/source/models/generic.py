@@ -57,6 +57,9 @@ class ContentSource(SQLAlchemyBaseModel):
     def import_content(self, only_new=True):
         pass
 
+    def get_discussion_id(self):
+        return self.discussion_id
+
 
 class PostSource(ContentSource):
     """
