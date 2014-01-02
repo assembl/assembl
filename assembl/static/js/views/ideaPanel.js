@@ -158,6 +158,7 @@ function(Backbone, _, Idea, Message, app, ckeditor, i18n){
                         return; // already the current one
                     } else {
                         this.idea.set('isSelected', false);
+                        this.idea.off('change', this.render);
                     }
                 }
                 this.idea = idea;
