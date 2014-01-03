@@ -76,5 +76,5 @@ zope.interface==4.0.5
 zope.sqlalchemy==0.7.3
 -e git://github.com/RDFLib/rdflib-jsonld#egg=rdflib_jsonld
 -e git://github.com/maparent/pyodbc.git@v3-virtuoso#egg=pyodbc
--e hg+https://bitbucket.org/maparent/virtuoso#egg=virtuoso
+-e git://github.com/maparent/virtuoso-python#egg=virtuoso
 # hapi : a OAuth2 server for pyramid. Still very much work in progress.
