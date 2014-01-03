@@ -169,6 +169,17 @@ class Discussion(SQLAlchemyBaseModel):
     def get_ideas_preload(self):
         return json.dumps([idea.serializable() for idea in self.ideas])
 
+    def get_idea_links(self):
+        return Idea.get_all_idea_links(self.id)
+
+    def get_idea_and_links(self):
+        return chain(self.ideas, self.get_idea_links())
+
+    def get_top_ideas(self):
+        return self.db().query(Idea).filter(
+            Idea.discussion_id == self.id).filter(
+                ~Idea.source_links.any()).all()
+
     def get_related_extracts(self):
         return self.extracts
 
@@ -363,17 +374,6 @@ class TableOfContents(IdeaGraphView):
 
     def get_discussion_id(self):
         return self.discussion.id
-
-    def get_idea_links(self):
-        return Idea.get_all_idea_links(self.id)
-
-    def get_idea_and_links(self):
-        return chain(self.ideas, self.get_idea_links())
-
-    def get_top_ideas(self):
-        return self.db().query(Idea).filter(
-            Idea.discussion_id == self.discussion_id).filter(
-                ~Idea.source_links.any()).all()
 
     def __repr__(self):
         return "<TableOfContents %s>" % repr(self.discussion.topic)
@@ -665,7 +665,7 @@ WHERE post.id NOT IN (
                     target, target.id == IdeaLink.target_id).filter(
                         target.discussion_id == discussion_id).filter(
                             source.discussion_id == discussion_id).filter(
-                                IdeaLink.is_tombstone is False).all()
+                                IdeaLink.is_tombstone == False).all()
 
 class RootIdea(Idea):
     """

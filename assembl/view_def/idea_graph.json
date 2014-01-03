@@ -5,13 +5,8 @@
         "_default": false
     },
     "Discussion": {
-        "elements": "table_of_contents:",
-        "creation_date": false,
-        "owner": false,
-        "slug": false,
-        "sources": false,
-        "synthesis_id": false,
-        "topic": false
+        "nodes": ["ideas:idea_graph"],
+        "edges": ["&get_idea_links:idea_graph"]
     },
     "Idea": {
         "data": "self:idea_graph2",
@@ -28,15 +23,10 @@
         "extracts": false,
         "long_title": true,
         "name": "short_title",
-        "order": "&get_order_from_first_parent",
+        "order": "'0",
         "discussion": false
     },
     "IdeaLink": {
         "data": "self:idea_graph2"
-    },
-    "TableOfContents": {
-        "creation_date": false,
-        "nodes": ["ideas:"],
-        "edges": ["&get_idea_links:"]
     }
 }

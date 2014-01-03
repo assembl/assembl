@@ -7,11 +7,6 @@
     "Idea": {
         "creation_date": true,
         "long_title": true,
-         "&get_order_from_first_parent"
-    },
-    "RootIdea": {
-        "creation_date": true,
-        "long_title": true,
-         "&get_order_from_first_parent"
+        "order": "&get_order_from_first_parent"
     }
 }

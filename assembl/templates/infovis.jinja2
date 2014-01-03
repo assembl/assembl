@@ -12,7 +12,7 @@
 {% endblock %}
 
 {% block extra_js %}
-<script type="text/json" id="ideas-json">{{ discussion.table_of_contents.generic_json("idea_graph_jit", use_dumps=True) |safe }}</script>
+<script type="text/json" id="ideas-json">{{ discussion.root_idea.generic_json("idea_graph_jit", use_dumps=True) |safe }}</script>
 <script type="text/javascript">
 requirejs(["jit"], function($jit) {
   var script = document.getElementById("ideas-json");
