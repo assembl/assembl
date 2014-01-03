@@ -133,6 +133,31 @@ define(['models/base', 'jquery', 'app'], function(Base, $, app){
         },
 
         /**
+         * Set the message as read
+         * @param {Boolean} value
+         */
+        setRead: function(value){
+            var isRead = this.get('read');
+            if( value === isRead ){
+                return; // Nothing to do
+            }
+
+            this.set('read', value, { silent: true });
+
+            var that = this,
+                url = app.getApiUrl('post_read/') + this.getId(),
+                ajax;
+
+            ajax = $.ajax(url, {
+                method: 'PUT',
+                data: { 'read': value },
+                complete: function(){
+                    that.trigger('change:read', [value]);
+                }
+            });
+        },
+
+        /**
          * Return `false` if the parent is `null` or it is NOT in the given collection
          * @param {Base.Collection} collection
          * @return {Boolean}

@@ -327,7 +327,7 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
                 read = this.model.get('read');
 
             if( collapsed === false && read === false ){
-                this.model.set('read', true);
+                this.model.setRead(true);
             }
 
             this.render(false);
