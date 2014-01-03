@@ -32,6 +32,9 @@ post = Service(name='post', path=API_DISCUSSION_PREFIX + '/posts/{id:.+}',
                description="Manipulate a single post",
                acl=acls)
 
+post_read = Service(name='post_read', path=API_DISCUSSION_PREFIX + '/post_read/{id:.+}',
+               description="Signal that a post was read",
+               acl=acls)
 
 def _get_idea_query(post, levels=None):
     """Return a query that includes the post and its following thread.
@@ -225,6 +228,19 @@ def get_post(request):
         return post.generic_json(view_def)
     else:
         return post.serializable()
+
+
+@post_read.put(permission=P_READ)
+def mark_post_read(request):
+    post_id = request.matchdict['id']
+    post = Post.get_instance(post_id)
+    assert(post)
+    user_id = authenticated_userid(request)
+    if not user_id:
+        raise HTTPUnauthorized()
+    vp = ViewPost(post=post, actor_id=user_id)
+    vp.db().merge(vp)
+    return { "ok": True }
 
 
 @posts.post(permission=P_ADD_POST)
