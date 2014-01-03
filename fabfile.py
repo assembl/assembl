@@ -198,6 +198,7 @@ def app_fullupdate():
     execute(updatemaincode)
     execute(update_requirements, force=False)
     execute(update_compass)
+    execute(update_bower)
     execute(app_compile)
     
 @task
@@ -358,6 +359,17 @@ def install_basetools():
         #sudo('apt-get install -y gettext')
 
 @task
+def install_bower():
+    with cd(env.projectpath):
+        run('npm install bower')
+
+@task
+def update_bower():
+    with cd(env.projectpath):
+        run('npm update bower')
+
+
+@task
 def install_builddeps():
     """
     Will install commonly needed build deps for pip django virtualenvs.
@@ -368,13 +380,18 @@ def install_builddeps():
         if not exists('/usr/local/bin/brew'):
             sudo('ruby -e "$(curl -fsSL https://raw.github.com/mxcl/homebrew/go/install)"')
         sudo('brew install memcached zeromq redis postgresql')
+        sudo('brew install nodejs npm')
     else:
         sudo('apt-get install -y build-essential python-dev ruby-build')
+        sudo('apt-get install -y nodejs npm')
         #For specific python packages in requirements.txt
         sudo('apt-get install -y postgresql-server-dev-all libmemcached-dev libzmq3-dev')
         # libjpeg62-dev libpng12-dev zlib1g-dev libfreetype6-dev liblcms-dev libpq-dev libxslt1-dev libxml2-dev
         #Runtime requirements (even in develop)
         sudo('apt-get install -y redis-server memcached')
+    execute(install_bower)
+
+
 
 @task
 def configure_rbenv():

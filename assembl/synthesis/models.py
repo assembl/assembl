@@ -547,6 +547,7 @@ class Idea(SQLAlchemyBaseModel):
             'inNextSynthesis': self.is_in_next_synthesis(),
             'numChildIdea': self.get_num_children(),
             'num_posts': self.num_posts,
+            'num_read_posts': self.num_read_posts,
         }
 
     @staticmethod
@@ -637,6 +638,22 @@ WHERE post.id NOT IN (
         result = self.db.execute(text(
             Idea._get_count_related_posts_statement()),
             {"root_idea_id": self.id})
+        return result.first()['total_count']
+
+    @property
+    def num_read_posts(self):
+        """ Worse than above... but temporary """
+        connection = self.db().connection()
+        user_id = connection.info.get('userid', None)
+        if not user_id:
+            return 0
+        join = """JOIN action ON (action.post_id = post.id)
+                  JOIN action_view_post ON (action.id = action_view_post.id)
+                  WHERE action.actor_id = :user_id"""
+
+        result = self.db.execute(text(
+            Idea._get_count_related_posts_statement() + join),
+            {"root_idea_id": self.id, "user_id": user_id})
         return result.first()['total_count']
 
     def get_discussion_id(self):
