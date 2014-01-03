@@ -54,7 +54,9 @@ define([
 
     // Synthesis
     app.synthesisPanel = new SynthesisPanel({el: '#synthesisPanel', button: '#button-synthesis', ideas: app.ideaList.ideas });
-    app.synthesisPanel.model.fetch({reset: true});
+    app.synthesisPanel.model.fetch({silent: true, success: function(){
+        app.synthesisPanel.render();
+    }});
 
     // Fetching the ideas
     app.ideaList.ideas.fetchFromScriptTag('ideas-json');
