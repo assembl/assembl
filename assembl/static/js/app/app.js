@@ -326,7 +326,7 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard, Types){
          */
         loadCurrentUser: function(){
             if( app.users ){
-                app.currentUser = app.users.getByNumericId(CURRENT_USER_ID);
+                app.currentUser = app.users.getByNumericId(CURRENT_USER_ID) || app.users.getUnknownUser();
                 app.currentUser.fetchPermissionsFromScripTag();
                 app.loadCsrfToken(true);
             }

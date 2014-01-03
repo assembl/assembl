@@ -73,7 +73,7 @@ define(['backbone', 'app'], function(Backbone, app){
                 json = JSON.parse(script.textContent);
                 this.reset(json);
             } catch(e){
-                throw new Error("Invalid json");
+                throw new Error("Invalid json. " + e.message);
             }
         },
         

@@ -1,4 +1,4 @@
-define(['models/base', 'jquery', 'app', 'i18n'], function(Base, $, app, i18n){
+define(['models/base', 'jquery', 'app', 'i18n', 'permissions'], function(Base, $, app, i18n, Permissions){
     'use strict';
 
     /**
@@ -47,12 +47,13 @@ define(['models/base', 'jquery', 'app', 'i18n'], function(Base, $, app, i18n){
          * @event
          */
         onAttrChange: function(){
-            this.save();
+            var currentUser = app.getCurrentUser();
+            if( currentUser.can(Permissions.EDIT_SYNTHESIS) ){
+                this.save();
+            }
         }
 
     });
-
-
 
     return {
         Model: SynthesisModel
