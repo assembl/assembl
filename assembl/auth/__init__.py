@@ -56,6 +56,8 @@ def get_permissions(user_id, discussion_id):
 def authentication_callback(user_id, request):
     from ..synthesis.models import Discussion
     discussion_id = None
+    connection = Discussion.db().connection()
+    connection.info['userid'] = user_id
     if request.matchdict:
         if 'discussion_id' in request.matchdict:
             discussion_id = int(request.matchdict['discussion_id'])
