@@ -78,20 +78,17 @@ define(['app', 'underscore', 'sockjs'], function(app, _, SockJS){
         model = collection.get(item['@id']);
 
         if( item['@tombstone'] ){
-            //if( model ) model.before_delete();
             collection.remove(model);
             return;
         }
 
         item = new collection.model(item);
         // can be undefined
-        if( model == null ){
+        if( model == null ){ 
             // oops, doesn't exist
             collection.add(item);
-            //model.after_add();
         } else {
             // yeah, it exists
-            //model.before_update(item);
             collection.add(item, {merge: true});
         }
     };

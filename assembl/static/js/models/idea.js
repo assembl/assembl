@@ -73,7 +73,7 @@ define(['models/base','underscore', 'models/segment', 'app', 'i18n'], function(B
         },
 
         getShortTitleDisplayText: function(){
-            if (this.get('root') == true) {
+            if (this.get('root') === true) {
                 return i18n.gettext('All posts');
             }
             return this.get('shortTitle');

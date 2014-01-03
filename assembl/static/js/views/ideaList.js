@@ -230,17 +230,10 @@ function(Backbone, _, Idea, IdeaView, app){
             } else {
                 newIdea.set('order', app.getOrderForNewRootIdea());
                 this.ideas.add(newIdea);
+                newIdea.save();
             }
 
-            this.blockPanel();
-            newIdea.save(null, {
-                success: function(){
-                    that.unblockPanel();
-                    app.setCurrentIdea(newIdea);
-                }, error: function(){
-                    that.unblockPanel();
-                }
-            });
+            app.setCurrentIdea(newIdea);
         },
 
         /**
