@@ -48,6 +48,7 @@ define(['models/base', 'jquery', 'app', 'i18n', 'permissions'], function(Base, $
          */
         onAttrChange: function(){
             var currentUser = app.getCurrentUser();
+
             if( currentUser.can(Permissions.EDIT_SYNTHESIS) ){
                 this.save();
             }

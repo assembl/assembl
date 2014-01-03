@@ -1,0 +1,33 @@
+{
+  "name": "assembl",
+  "version": "0.0.0",
+  "homepage": "https://github.com/ImaginationForPeople/assembl",
+  "authors": [
+    "Andre Farzat <andrefarzat@gmail.com>"
+  ],
+  "description": "I4P online debate and synthesis platform",
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~2.0.3",
+    "backbone": "~1.1.0",
+    "ckeditor": "*",
+    "cytoscape": "*",
+    "jit": "~2.0.2",
+    "jasmine": "~2.0.0",
+    "momentjs": "~2.5.0",
+    "requirejs": "~2.1.9",
+    "sockjs": "~0.3.4",
+    "underscore": "~1.5.2",
+    "zeroclipboard": "~1.2.3",
+    "tipsy": "~0.1.7",
+    "jasmine-jquery": "~1.7.0"
+  }
+}

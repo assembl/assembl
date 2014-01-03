@@ -15,6 +15,6 @@ http_generated_images_path = '/static/img/sprites'
 
 javascripts_dir = "assembl/static/js"
 
-additional_import_paths = [ ]
+additional_import_paths = ['../js/bower']
 
 sass_options = { :debug_info => true } # activing source maps

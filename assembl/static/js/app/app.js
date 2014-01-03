@@ -917,7 +917,7 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard, Types){
          */
         initClipboard: function(){
             if( ! app.clipboard ){
-                ZeroClipboard.setDefaults( { moviePath: '/static/flash/ZeroClipboard.swf' } );
+                ZeroClipboard.setDefaults( { moviePath: '/static/js/bower/zeroclipboard/ZeroClipboard.swf' } );
                 app.clipboard = new ZeroClipboard();
                 app.clipboard.on('complete', function(client, args){
                     // Nothing to do, nowhere to go uouuu ...

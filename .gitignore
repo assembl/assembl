@@ -52,6 +52,10 @@ vendor/
 .ruby-version
 Gemfile.lock
 
+# node
+node_modules/
+assembl/static/js/bower/
+
 # Vagrant
 .bash_profile
 .rbenv-version
