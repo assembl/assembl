@@ -1,5 +1,5 @@
-define(['models/base', 'underscore', 'app', 'models/user', 'models/message'],
-function(Base, _, app, User, Message){
+define(['app', 'models/base', 'underscore', 'models/user', 'models/message'],
+function(app, Base, _, User, Message){
     'use strict';
 
     /**
