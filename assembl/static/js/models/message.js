@@ -6,13 +6,6 @@ define(['models/base', 'jquery', 'app'], function(Base, $, app){
      */
     var MessageModel = Base.Model.extend({
         /**
-         * @init
-         */
-        initialize: function(){
-            this.on('change:collapsed', this.render, this);
-        },
-
-        /**
          * The url
          * @type {String}
          */
@@ -25,7 +18,7 @@ define(['models/base', 'jquery', 'app'], function(Base, $, app){
         defaults: {
             collapsed: false,
             checked: false,
-            read: true,
+            read: false,
             parentId: null,
             subject: null,
             body: null,

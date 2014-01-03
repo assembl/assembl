@@ -323,6 +323,13 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
          * @event
          */
         onCollapsedChange: function(){
+            var collapsed = this.model.get('collapsed'),
+                read = this.model.get('read');
+
+            if( collapsed === false && read === false ){
+                this.model.set('read', true);
+            }
+
             this.render(false);
         },
 
