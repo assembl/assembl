@@ -698,13 +698,14 @@ WHERE post.id NOT IN (
         WHERE root_posts.id IN (
             SELECT CAST(pid AS INTEGER) FROM 
                 regexp_split_to_table((
-                    SELECT rp.ancestry||rp.id FROM post AS rp WHERE rp.id = 18
+                    SELECT rp.ancestry||rp.id FROM post AS rp WHERE rp.id = :post_id
                     ), ',') AS pid)
         UNION SELECT id FROM root_idea AS idea_id
         """
         connection = cls.db().connection()
-        for idea in cls.db().query(cls).filter(cls.id.in_(text(stmt)):
-            send_to_changes(idea, connection)
+        for idea in cls.db().query(cls).filter(
+                cls.id.in_(text(stmt).params({'post_id': post_id}))):
+            idea.send_to_changes(connection)
 
     @classmethod
     def get_all_idea_links(cls, discussion_id):
