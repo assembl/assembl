@@ -654,7 +654,8 @@ WHERE post.id NOT IN (
 
         result = self.db.execute(text(
             Idea._get_count_related_posts_statement() + join),
-            {"root_idea_id": self.id, "user_id": user_id})
+            {"root_idea_id": self.id, "user_id": user_id,
+             "discussion_id": self.discussion_id})
         return result.first()['total_count']
 
     def get_discussion_id(self):
