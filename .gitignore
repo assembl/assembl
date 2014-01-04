@@ -64,3 +64,12 @@ VagrantFile
 
 # supervisor
 supervisord.conf
+
+#virtuoso
+odbc.ini
+var/db/virtuoso-temp.db
+var/db/virtuoso.db
+var/db/virtuoso.ini
+var/db/virtuoso.log
+var/db/virtuoso.pxa
+var/db/virtuoso.trx
