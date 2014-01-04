@@ -199,6 +199,7 @@ def app_fullupdate():
     execute(update_requirements, force=False)
     execute(update_compass)
     execute(update_bower)
+    execute(bower_install)
     execute(app_compile)
     
 @task
@@ -207,6 +208,7 @@ def app_update():
     Fast Update: don't update requirements
     """
     execute(updatemaincode)
+    execute(bower_update)
     execute(app_compile)
 
 @task
@@ -367,6 +369,28 @@ def install_bower():
 def update_bower():
     with cd(env.projectpath):
         run('npm update bower')
+
+
+def bower_cmd(cmd):
+    node_cmd = run('which nodejs', warn_only=True)
+    if node_cmd.failed:
+        node_cmd = run('which node')
+    with cd(env.projectpath):
+        bower_cmd = 'node_modules/bower/bin/bower'
+        if not exists(bower_cmd):
+            print "Please install bower."
+            exit(1)
+        run(' '.join((node_cmd, bower_cmd, cmd)))
+
+
+@task
+def bower_install():
+    bower_cmd('install')
+
+
+@task
+def bower_update():
+    bower_cmd('update')
 
 
 @task
