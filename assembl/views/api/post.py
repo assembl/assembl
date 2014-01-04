@@ -20,7 +20,7 @@ import transaction
 from assembl.auth import P_READ, P_ADD_POST
 from assembl.models import (
     get_database_id, get_named_object, AgentProfile, Post, AssemblPost, SynthesisPost, 
-    Synthesis, Discussion, PostSource, Content, Idea, ViewPost, User)
+    Synthesis, Discussion, PostSource, Content, Idea, ViewPost, User, Action)
 from . import acls
 import uuid
 
@@ -232,15 +232,44 @@ def get_post(request):
 
 @post_read.put(permission=P_READ)
 def mark_post_read(request):
+    discussion_id = int(request.matchdict['discussion_id'])
+    discussion = Discussion.get_instance(discussion_id)
     post_id = request.matchdict['id']
     post = Post.get_instance(post_id)
-    assert(post)
+    if not post:
+        raise HTTPNotFound("Post with id '%s' not found." % post_id)
     user_id = authenticated_userid(request)
     if not user_id:
         raise HTTPUnauthorized()
-    vp = ViewPost(post=post, actor_id=user_id)
-    vp.db().merge(vp)
-    return { "ok": True }
+    read_data = json.loads(request.body)
+    db = Discussion.db()
+    change = False
+    with transaction.manager:
+        if read_data.get('read', None) is False:
+            view = db.query(ViewPost).filter(
+                ViewPost.post_id==post_id).filter(
+                Action.actor_id==user_id).first()
+            if view:
+                change = True
+                db.delete(view)
+        else:
+            count = db.query(ViewPost).filter(
+                ViewPost.post_id==post_id).filter(
+                Action.actor_id==user_id).count()
+            if not count:
+                change = True
+                db.add(ViewPost(post=post, actor_id=user_id))
+
+    new_counts = []
+    if change:
+        new_counts = Idea.idea_counts(discussion_id, post_id, user_id)
+    
+    return { "ok": True, "ideas": [
+        {"@id": Idea.uri_generic(idea_id),
+         "@type": "Idea",
+         "num_posts": total_posts,
+         "num_read_posts": read_posts
+        } for (idea_id, total_posts, read_posts) in new_counts] }
 
 
 @posts.post(permission=P_ADD_POST)
