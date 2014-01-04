@@ -144,7 +144,8 @@ def get_posts(request):
         else:
             posts = posts \
                 .filter(Post.id.in_(text(Idea._get_related_posts_statement(),
-                                         bindparams=[bindparam('root_idea_id', root_idea_id)]
+                                         bindparams=[bindparam('root_idea_id', root_idea_id),
+                                                     bindparam('discussion_id', discussion_id)]
                                          )))
     elif root_post_id:
         root_post = Post.get(id=root_post_id)
