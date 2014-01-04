@@ -35,9 +35,10 @@ fab devenv install_builddeps
 
 Compiling CSS
 -------------
-The previous steps should install compass. Otherwise,
+The previous steps should install compass and bower. Otherwise,
 
 - fab devenv install_compass
+- fab devenv install_bower
 
 Setup the database
 ------------------

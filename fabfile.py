@@ -199,6 +199,8 @@ def app_fullupdate():
     execute(updatemaincode)
     execute(update_requirements, force=False)
     execute(update_compass)
+    execute(update_bower)
+    execute(bower_install)
     execute(app_compile)
     
 @task
@@ -207,6 +209,7 @@ def app_update():
     Fast Update: don't update requirements
     """
     execute(updatemaincode)
+    execute(bower_update)
     execute(app_compile)
 
 @task
@@ -359,6 +362,39 @@ def install_basetools():
         #sudo('apt-get install -y gettext')
 
 @task
+def install_bower():
+    with cd(env.projectpath):
+        run('npm install bower')
+
+@task
+def update_bower():
+    with cd(env.projectpath):
+        run('npm update bower')
+
+
+def bower_cmd(cmd):
+    node_cmd = run('which nodejs', warn_only=True)
+    if node_cmd.failed:
+        node_cmd = run('which node')
+    with cd(env.projectpath):
+        bower_cmd = 'node_modules/bower/bin/bower'
+        if not exists(bower_cmd):
+            print "Please install bower."
+            exit(1)
+        run(' '.join((node_cmd, bower_cmd, cmd)))
+
+
+@task
+def bower_install():
+    bower_cmd('install')
+
+
+@task
+def bower_update():
+    bower_cmd('update')
+
+
+@task
 def install_builddeps():
     """
     Will install commonly needed build deps for pip django virtualenvs.
@@ -369,13 +405,17 @@ def install_builddeps():
         if not exists('/usr/local/bin/brew'):
             sudo('ruby -e "$(curl -fsSL https://raw.github.com/mxcl/homebrew/go/install)"')
         sudo('brew install memcached zeromq redis postgresql')
+        sudo('brew install nodejs npm')
     else:
         sudo('apt-get install -y build-essential python-dev ruby-build')
+        sudo('apt-get install -y nodejs npm')
         #For specific python packages in requirements.txt
         sudo('apt-get install -y postgresql-server-dev-all libmemcached-dev libzmq3-dev')
         # libjpeg62-dev libpng12-dev zlib1g-dev libfreetype6-dev liblcms-dev libpq-dev libxslt1-dev libxml2-dev
         #Runtime requirements (even in develop)
         sudo('apt-get install -y redis-server memcached unixodbc-dev virtuoso-opensource')
+    execute(install_bower)
+
 
 @task
 def configure_rbenv():

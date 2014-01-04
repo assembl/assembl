@@ -326,7 +326,8 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard, Types){
          */
         loadCurrentUser: function(){
             if( app.users ){
-                app.currentUser = app.users.getByNumericId(CURRENT_USER_ID);
+                app.currentUser = app.users.getByNumericId(CURRENT_USER_ID) || app.users.getUnknownUser();
+                app.currentUser.fetchPermissionsFromScripTag();
                 app.loadCsrfToken(true);
             }
         },
@@ -634,8 +635,8 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard, Types){
          * @return {Number}
          */
         getOrderForNewRootIdea: function(){
-            var last_idea = app.ideaList.ideas.last();
-            return last_idea ? last_idea.get('order') + 1:0;
+            var lastIdea = app.ideaList.ideas.last();
+            return lastIdea ? lastIdea.get('order') + 1 : 0;
         },
 
         /**
@@ -916,7 +917,7 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard, Types){
          */
         initClipboard: function(){
             if( ! app.clipboard ){
-                ZeroClipboard.setDefaults( { moviePath: '/static/flash/ZeroClipboard.swf' } );
+                ZeroClipboard.setDefaults( { moviePath: '/static/js/bower/zeroclipboard/ZeroClipboard.swf' } );
                 app.clipboard = new ZeroClipboard();
                 app.clipboard.on('complete', function(client, args){
                     // Nothing to do, nowhere to go uouuu ...

@@ -157,6 +157,7 @@
         "order": "&get_order_from_first_parent",
         "discussion": false,
         "parents": true,
+        "parentId": "&get_first_parent_uri",
         "inNextSynthesis": "&is_in_next_synthesis",
         "numChildIdea": "&get_num_children"
     },

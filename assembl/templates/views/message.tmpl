@@ -12,8 +12,8 @@
     <div class="message-date"><%= date %></div>
     <div class="message-title">
         <span class="text-bold inline margin-right"><%= creator.get('name') %></span>
-        <span class="inline margin-right"><span class="message-subject"><%= subject %></span></span>
-        <span class="text-muted text-opaque inline"><%= app.stripHtml(body) %></span>
+        <span class="inline margin-right"><span class="message-subject <%= ( read ? '' : 'text-bold' ) %>"><%= subject %></span></span>
+        <span class="text-muted text-opaque inline"><%= app.stripHtml(body) %> </span>
     </div>
 </div>
 

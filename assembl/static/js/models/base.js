@@ -15,17 +15,22 @@ define(['backbone', 'app'], function(Backbone, app){
         idAttribute: '@id',
 
         /**
-         * Alias for `.get('id') || .get('@id')`
+         * Alias for `.get('id') || .get('@id') || .cid`
          * @return {string}
          */
         getId: function(){
-            return this.get('@id') || this.get('id');
+            return this.get('@id') || this.get('id') || this.cid;
         },
 
+        /**
+         * Overwritting backbone's parse function
+         * @return {Object} [description]
+         */
         parse: function(resp, options) {
-            if (resp['ok'] === true && resp['id'] !== undefined) {
-                var id = resp['id'];
-                if (this.collection !== undefined) {
+            var id = resp['id'];
+
+            if (resp['ok'] === true && id !== undefined){
+                if (this.collection !== undefined){
                     var existing = this.collection.get(id);
                     if (existing === null) {
                         this.set('@id', id);
@@ -66,10 +71,11 @@ define(['backbone', 'app'], function(Backbone, app){
 
             try {
                 json = JSON.parse(script.textContent);
-                this.reset(json);
             } catch(e){
-                throw new Error("Invalid json");
+                throw new Error("Invalid json. " + e.message);
             }
+
+            this.reset(json);
         },
         
 

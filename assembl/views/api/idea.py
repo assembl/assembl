@@ -162,11 +162,8 @@ def save_idea(request):
     else:
         if idea in next_synthesis.ideas:
             next_synthesis.ideas.remove(idea)
-            
-    idea.send_to_changes()
 
-    Idea.db.add(idea)
-    idea = Idea.db.merge(idea)
+    idea.send_to_changes()
 
     return {'ok': True, 'id': idea.uri() }
 

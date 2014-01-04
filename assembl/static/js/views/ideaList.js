@@ -175,6 +175,13 @@ function(Backbone, _, Idea, IdeaView, app){
         },
 
         /**
+         * Unblocks the panel
+         */
+        unblockPanel: function(){
+            this.$('.panel').removeClass('is-loading');
+        },
+
+        /**
          * Sets the panel as full screen
          */
         setFullscreen: function(){
@@ -209,11 +216,13 @@ function(Backbone, _, Idea, IdeaView, app){
         },
 
         /**
-         * Add a new child to the current selected
+         * Add a new child to the current selected.
+         * If no idea is selected, add it at the root level ( no parent )
          */
         addChildToSelected: function(){
             var currentIdea = app.getCurrentIdea(),
-                newIdea = new Idea.Model();
+                newIdea = new Idea.Model(),
+                that = this;
 
             if( this.ideas.get(currentIdea) ){
                 newIdea.set('order', currentIdea.getOrderForNewChild());
@@ -221,10 +230,9 @@ function(Backbone, _, Idea, IdeaView, app){
             } else {
                 newIdea.set('order', app.getOrderForNewRootIdea());
                 this.ideas.add(newIdea);
-                this.render();
+                newIdea.save();
             }
 
-            newIdea.save();
             app.setCurrentIdea(newIdea);
         },
 

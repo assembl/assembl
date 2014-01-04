@@ -6,13 +6,6 @@ define(['models/base', 'jquery', 'app'], function(Base, $, app){
      */
     var MessageModel = Base.Model.extend({
         /**
-         * @init
-         */
-        initialize: function(){
-            this.on('change:collapsed', this.render, this);
-        },
-
-        /**
          * The url
          * @type {String}
          */
@@ -25,7 +18,7 @@ define(['models/base', 'jquery', 'app'], function(Base, $, app){
         defaults: {
             collapsed: false,
             checked: false,
-            read: true,
+            read: false,
             parentId: null,
             subject: null,
             body: null,
@@ -137,6 +130,31 @@ define(['models/base', 'jquery', 'app'], function(Base, $, app){
          */
         onAttrChange: function(){
             this.save();
+        },
+
+        /**
+         * Set the message as read
+         * @param {Boolean} value
+         */
+        setRead: function(value){
+            var isRead = this.get('read');
+            if( value === isRead ){
+                return; // Nothing to do
+            }
+
+            this.set('read', value, { silent: true });
+
+            var that = this,
+                url = app.getApiUrl('post_read/') + this.getId(),
+                ajax;
+
+            ajax = $.ajax(url, {
+                method: 'PUT',
+                data: { 'read': value },
+                complete: function(){
+                    that.trigger('change:read', [value]);
+                }
+            });
         },
 
         /**

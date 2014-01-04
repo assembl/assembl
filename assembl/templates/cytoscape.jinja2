@@ -6,7 +6,7 @@
 {% endblock %}
 
 {% block extra_js %}
-<script type="text/json" id="ideas-json">{{ discussion.table_of_contents.generic_json("idea_graph", use_dumps=True) |safe }}</script>
+<script type="text/json" id="ideas-json">{{ discussion.generic_json("idea_graph", use_dumps=True) |safe }}</script>
 <script type="text/javascript">
 var cyto_ob;
 requirejs(["jquery", "cytoscape"], function($, cytoscape) {

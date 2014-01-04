@@ -140,12 +140,8 @@ function(Backbone, _, $, Idea, Segment, app){
         /**
          * @event
          */
-        onReplaced: function(newObject) {
-            this.setElement(newObject);
-            // TODO André: I'm sure this is overkill. Please optimize.
-            app.ideaList.render();
-            app.ideaPanel.idea = newObject;
-            app.ideaPanel.render();
+        onReplaced: function(newObject){
+            app.setCurrentIdea(newObject);
         },
 
 

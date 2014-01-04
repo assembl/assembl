@@ -64,6 +64,12 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
         annotator: null,
 
         /**
+         * The current idea's id loaded
+         * @type {id}
+         */
+        loadedIdeaId: null,
+
+        /**
          * The render function
          * @return {views.Message}
          */
@@ -281,6 +287,13 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
             var that = this,
                 url = app.getApiUrl('posts'),
                 params = {};
+
+            if( this.loadedIdeaId === ideaId ){
+                // already loaded
+                return;
+            }
+
+            this.loadedIdeaId = ideaId;
 
             params.root_idea_id = ideaId;
             params.view = 'id_only';
