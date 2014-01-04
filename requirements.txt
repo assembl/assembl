@@ -27,7 +27,7 @@ colander==1.0b1
 coverage==3.7.1
 ecdsa==0.10
 greenlet==0.4.1
-html5lib==0.999
+html5lib==0.95
 imaplib2==2.28.1
 iso8601==0.1.8
 -e git+https://github.com/benoitg/jwzthreading.git@master#egg=jwzthreading
