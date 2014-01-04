@@ -560,10 +560,11 @@ FROM    idea AS idea_initial LEFT JOIN idea_idea_link ON (
 idea_initial.id = idea_idea_link.target_id
 AND idea_idea_link.is_tombstone=FALSE
 )
+WHERE idea_initial.discussion_id = :discussion_id
 """
         if(not skip_where):
             retval = retval + """
-WHERE idea_initial.id=:root_idea_id
+AND idea_initial.id=:root_idea_id
 """
         retval = retval + """
 UNION ALL
@@ -573,7 +574,8 @@ FROM (
     idea_dag JOIN idea_idea_link ON (
     idea_dag.idea_id = idea_idea_link.source_id
     AND idea_idea_link.is_tombstone=FALSE
-    ) JOIN idea ON (idea.id = idea_idea_link.target_id)
+    ) JOIN idea ON (idea.id = idea_idea_link.target_id
+    AND idea.discussion_id = :discussion_id)
 )
 )
 """
@@ -636,7 +638,7 @@ WHERE post.id NOT IN (
         until we move to a graph database, it will probably do for now """
         result = self.db.execute(text(
             Idea._get_count_related_posts_statement()),
-            {"root_idea_id": self.id})
+            {"root_idea_id": self.id, "discussion_id": self.discussion_id})
         return result.first()['total_count']
 
     @property
@@ -672,13 +674,14 @@ WHERE post.id NOT IN (
         return "<Idea %d>" % self.id
 
     @classmethod
-    def invalidate_ideas(cls, post_id):
+    def invalidate_ideas(cls, discussion_id, post_id):
         stmt = """
         WITH    RECURSIVE
         idea_dag(idea_id, source_id, idea_depth, idea_path, idea_cycle) AS
         (
         SELECT  idea_initial.id as idea_id, idea_initial.id as source_id, 0, ARRAY[idea_initial.id], false
         FROM    idea AS idea_initial
+        WHERE idea_initial.discussion_id = :discussion_id
         UNION ALL
         SELECT idea.id as idea_id, idea_dag.source_id, idea_dag.idea_depth + 1,
                idea_path || idea.id, idea.id = ANY(idea_path)
@@ -686,7 +689,8 @@ WHERE post.id NOT IN (
             idea_dag JOIN idea_idea_link ON (
             idea_dag.idea_id = idea_idea_link.source_id
             AND idea_idea_link.is_tombstone=FALSE
-            ) JOIN idea ON (idea.id = idea_idea_link.target_id)
+            ) JOIN idea ON (idea.id = idea_idea_link.target_id
+                AND idea.discussion_id = :discussion_id)
         )
         )
         SELECT DISTINCT idea_dag.source_id AS idea_id
@@ -704,8 +708,82 @@ WHERE post.id NOT IN (
         """
         connection = cls.db().connection()
         for idea in cls.db().query(cls).filter(
-                cls.id.in_(text(stmt).params({'post_id': post_id}))):
+                cls.id.in_(text(stmt).params(
+                    {'post_id': post_id, "discussion_id": discussion_id}))):
             idea.send_to_changes(connection)
+
+    @classmethod
+    def idea_counts(cls, discussion_id, post_id, user_id):
+        "Given a post and a user, give the total and read count of posts for each affected idea"
+        stmt = """
+        WITH RECURSIVE
+        idea_dag(idea_id, source_id, idea_depth, idea_path, idea_cycle) AS
+        (
+            SELECT  idea_initial.id as idea_id, idea_initial.id as source_id, 0, ARRAY[idea_initial.id], false
+            FROM    idea AS idea_initial
+            WHERE idea_initial.discussion_id = :discussion_id
+            UNION ALL
+            SELECT idea.id as idea_id, idea_dag.source_id, idea_dag.idea_depth + 1,
+                   idea_path || idea.id, idea.id = ANY(idea_path)
+            FROM (
+                idea_dag JOIN idea_idea_link ON (
+                idea_dag.idea_id = idea_idea_link.source_id
+                AND idea_idea_link.is_tombstone=FALSE
+                ) JOIN idea ON (idea.id = idea_idea_link.target_id
+                AND idea.discussion_id = :discussion_id)
+            )
+        )
+        SELECT source_id AS idea_id, 
+            COUNT(DISTINCT post.id) as total_count,
+            COUNT(DISTINCT action_view_post.id) as read_count
+        FROM idea_dag
+        JOIN idea_content_link ON (idea_content_link.idea_id = idea_dag.idea_id)
+        JOIN idea_content_positive_link
+            ON (idea_content_positive_link.id = idea_content_link.id)
+        JOIN post AS root_posts ON (idea_content_link.content_id = root_posts.id)
+        JOIN post ON (
+            (post.ancestry != ''
+             AND post.ancestry LIKE root_posts.ancestry || root_posts.id || ',' || '%')
+            OR post.id = root_posts.id) 
+        LEFT JOIN action ON (action.post_id = post.id AND action.actor_id = :user_id)
+        LEFT JOIN action_view_post ON (action.id = action_view_post.id)
+        WHERE source_id IN (
+            SELECT DISTINCT source_id AS target_idea_id
+            FROM idea_dag AS target_idea_dag
+            JOIN idea_content_link AS target_idea_content_link
+                ON (target_idea_content_link.idea_id = target_idea_dag.idea_id)
+            JOIN idea_content_positive_link AS target_idea_content_positive_link
+                ON (target_idea_content_positive_link.id = target_idea_content_link.id)
+            JOIN post AS target_posts
+                ON (target_idea_content_link.content_id = target_posts.id)
+            WHERE target_posts.id IN (
+                SELECT CAST(pid AS INTEGER) FROM 
+                    regexp_split_to_table((
+                        SELECT rp.ancestry||rp.id FROM post AS rp WHERE rp.id = :post_id
+                        ), ',') AS pid))
+        AND source_id NOT IN (
+            SELECT id from root_idea 
+                JOIN idea USING (id) 
+                WHERE discussion_id = :discussion_id)
+        GROUP BY source_id
+        UNION (
+            SELECT MIN(root_idea.id) as idea_id,
+                COUNT(DISTINCT post.id) as total_count,
+                COUNT(DISTINCT action_view_post.id) as read_count
+                FROM root_idea
+                JOIN idea ON (idea.id = root_idea.id)
+                CROSS JOIN post
+                JOIN content ON (post.id = content.id)
+                LEFT JOIN action ON (action.post_id = post.id AND action.actor_id = :user_id)
+                LEFT JOIN action_view_post ON (action.id = action_view_post.id)
+                WHERE idea.discussion_id = :discussion_id
+                AND content.discussion_id = :discussion_id)
+        """
+        return list(cls.db().execute(text(stmt).params(
+            {'post_id': post_id,
+             "discussion_id": discussion_id,
+             "user_id": user_id})))
+
 
     @classmethod
     def get_all_idea_links(cls, discussion_id):
