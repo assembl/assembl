@@ -145,7 +145,7 @@ define(['models/base', 'jquery', 'app'], function(Base, $, app){
             this.set('read', value, { silent: true });
 
             var that = this,
-                url = app.getApiUrl('post_read/') + this.getNumericId(),
+                url = app.getApiUrl('post_read/') + this.getId(),
                 ajax;
 
             ajax = $.ajax(url, {

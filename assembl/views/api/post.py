@@ -239,6 +239,7 @@ def mark_post_read(request):
     post = Post.get_instance(post_id)
     if not post:
         raise HTTPNotFound("Post with id '%s' not found." % post_id)
+    post_id = post.id
     user_id = authenticated_userid(request)
     if not user_id:
         raise HTTPUnauthorized()
