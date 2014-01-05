@@ -133,7 +133,7 @@ define(['models/base', 'jquery', 'app'], function(Base, $, app){
         },
 
         /**
-         * Set the message as read
+         * Set the `read` property
          * @param {Boolean} value
          */
         setRead: function(value){
@@ -145,14 +145,17 @@ define(['models/base', 'jquery', 'app'], function(Base, $, app){
             this.set('read', value, { silent: true });
 
             var that = this,
-                url = app.getApiUrl('post_read/') + this.getId(),
+                url = app.getApiUrl('post_read/') + this.getNumericId(),
                 ajax;
 
             ajax = $.ajax(url, {
                 method: 'PUT',
-                data: { 'read': value },
-                complete: function(){
+                data: JSON.stringify({ 'read': value }),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function(data){
                     that.trigger('change:read', [value]);
+                    app.trigger('ideas:update', [data.ideas]);
                 }
             });
         },

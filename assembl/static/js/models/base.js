@@ -23,6 +23,17 @@ define(['backbone', 'app'], function(Backbone, app){
         },
 
         /**
+         * Returns the numberic id
+         * example: returns `17` in `ViewPost/17`
+         *
+         * @return {Number}
+         */
+        getNumericId: function(){
+            var id = this.getId();
+            return id.indexOf('/') >= 0 ? id.split('/')[1] : id;
+        },
+
+        /**
          * Overwritting backbone's parse function
          * @return {Object} [description]
          */

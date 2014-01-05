@@ -50,6 +50,11 @@ function(Backbone, _, Idea, IdeaView, app){
             app.on('idea:delete', function(){
                 that.render();
             });
+
+            app.on('ideas:update', function(ideas){
+                that.ideas.add(ideas, {merge: true, silent: true});
+                that.render();
+            });
         },
 
         /**
