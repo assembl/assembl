@@ -378,8 +378,8 @@ def bower_cmd(cmd):
     with cd(env.projectpath):
         bower_cmd = 'node_modules/bower/bin/bower'
         if not exists(bower_cmd):
-            print "Please install bower."
-            exit(1)
+            print "Bower not present, installing..."
+            execute(install_bower)
         run(' '.join((node_cmd, bower_cmd, cmd)))
 
 
