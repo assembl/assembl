@@ -66,17 +66,8 @@ def get_idea(request):
     else:
         return idea.serializable()
 
-
-@ideas.get(permission=P_READ)
-def get_ideas(request):
-    discussion_id = request.matchdict['discussion_id']
-    discussion = Discussion.get(id=int(discussion_id))
-    if not discussion:
-        raise HTTPNotFound("Discussion with id '%s' not found." % discussion_id)
+def _get_ideas_real(discussion, view_def=None, ids=None):
     next_synthesis = discussion.get_next_synthesis()
-    view_def = request.GET.get('view')
-    ids = request.GET.getall('ids')
-
     ideas = Idea.db.query(Idea).filter_by(
         discussion_id=discussion.id
     )
@@ -102,9 +93,18 @@ def get_ideas(request):
         else:
             serialized_idea = idea.serializable()
         retval.append(serialized_idea)
-    retval.append(Idea.serializable_unsorted_posts_pseudo_idea(discussion))
+    retval.append(RootIdea.serializable_unsorted_posts_pseudo_idea(discussion))
     return retval
 
+@ideas.get(permission=P_READ)
+def get_ideas(request):
+    discussion_id = request.matchdict['discussion_id']
+    discussion = Discussion.get(id=int(discussion_id))
+    if not discussion:
+        raise HTTPNotFound("Discussion with id '%s' not found." % discussion_id)
+    view_def = request.GET.get('view')
+    ids = request.GET.getall('ids')
+    return _get_ideas_real(discussion=discussion, view_def=view_def, ids=ids)
 
 # Update
 @idea.put()  # permission=P_EDIT_IDEA)

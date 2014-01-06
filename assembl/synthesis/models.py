@@ -154,17 +154,16 @@ class Discussion(SQLAlchemyBaseModel):
             pass  # add a pseudo-anonymous user?
         return users
 
-    def get_all_agents(self):
-        return self.db().query(AgentProfile).all()
-
     def get_all_agents_preload(self):
-        return json.dumps([ap.serializable() for ap in self.get_all_agents()])
+        from assembl.views.api.agent import _get_agents_real
+        return json.dumps(_get_agents_real(discussion=self))
 
     def get_readers_preload(self):
         return json.dumps([user.serializable() for user in self.get_readers()])
 
     def get_ideas_preload(self):
-        return json.dumps([idea.serializable() for idea in self.ideas])
+        from assembl.views.api.idea import _get_ideas_real
+        return json.dumps(_get_ideas_real(discussion=self))
 
     def get_idea_links(self):
         return Idea.get_all_idea_links(self.id)
@@ -177,17 +176,19 @@ class Discussion(SQLAlchemyBaseModel):
             Idea.discussion_id == self.id).filter(
                 ~Idea.source_links.any()).all()
 
-    def get_related_extracts(self):
-        return self.extracts
-
     def get_related_extracts_preload(self):
-        return json.dumps(
-            [e.serializable() for e in self.get_related_extracts()])
+        from assembl.views.api.extract import _get_extracts_real
+        return json.dumps(_get_extracts_real(discussion=self))
 
     def get_user_permissions(self, user_id):
         return get_permissions(user_id, self.id)
 
     def get_user_permissions_preload(self, user_id):
+        # TODO: maparent:  This ultimately calls auth.get_permissions while
+        # the auth API ultimately calls auth.get_permissions_for_user.  I don't
+        # understand why these two differ, if they are meant to differ, and if 
+        # so which the preload is supposed to use.  Leaving as is for now
+        # benoitg 2014-01-06
         return json.dumps(self.get_user_permissions(user_id))
 
     # Properties as a route context

@@ -31,7 +31,7 @@ def get_roles(user_id, discussion_id=None):
     roles = session.query(Role.name).select_from(roles.subquery()).distinct()
     return [x[0] for x in roles]
 
-
+""" TODO: maparent:  Explain how this is different from permissions_for_user """
 def get_permissions(user_id, discussion_id):
     session = get_session_maker()()
     if user_id in (Everyone, Authenticated):

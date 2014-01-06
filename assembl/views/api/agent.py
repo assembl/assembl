@@ -34,17 +34,7 @@ agent = Service(
     name='agent', path=API_DISCUSSION_PREFIX + '/agents/{id:.+}',
     description="Retrieve a single agent", renderer='json', acl=acls)
 
-
-@agents.get()  # P_READ)
-def get_agents(request, discussion_only=False):
-    # discussion_id = int(request.matchdict['discussion_id'])
-    # discussion = Discussion.get(id=discussion_id)
-    view_def = request.GET.get('view')
-
-    # if not discussion:
-    #     raise HTTPNotFound(
-    #         "Discussion with id '%s' not found." % discussion_id
-    #     )
+def _get_agents_real(discussion, view_def=None):
     agents = AgentProfile.db().query(AgentProfile).all()
     # TODO: Only those in the discussion...
     # look at permissions, posts, extracts... argh!
@@ -54,6 +44,14 @@ def get_agents(request, discussion_only=False):
     else:
         return [agent.serializable() for agent in agents]
 
+@agents.get()  # P_READ)
+def get_agents(request, discussion_only=False):
+    discussion_id = int(request.matchdict['discussion_id'])
+    discussion = Discussion.get(id=int(discussion_id))
+    if not discussion:
+        raise HTTPNotFound("Discussion with id '%s' not found." % discussion_id)
+    view_def = request.GET.get('view')
+    return _get_agents_real(discussion=discussion, view_def=view_def)
 
 @agent.get()  # permission=P_READ)
 def get_agent(request):
