@@ -11,7 +11,7 @@ from sqlalchemy.orm import aliased, joinedload, joinedload_all, contains_eager
 from assembl.views.api import API_DISCUSSION_PREFIX
 from assembl.models import (
     get_named_object, get_database_id, Extract, TextFragmentIdentifier,
-    AgentProfile, User, ContentSource, AnnotatorSource, Content, Post, Webpage, Idea)
+    Discussion, AgentProfile, User, ContentSource, AnnotatorSource, Content, Post, Webpage, Idea)
 from . import acls
 from assembl.auth import (
     P_READ, P_ADD_EXTRACT, P_EDIT_EXTRACT, P_DELETE_EXTRACT, get_permissions, user_has_permission)
@@ -63,15 +63,9 @@ def get_extract(request):
     else:
         return extract.serializable()
 
-
-@extracts.get(permission=P_READ)
-def get_extracts(request):
-    discussion_id = int(request.matchdict['discussion_id'])
-    view_def = request.GET.get('view')
-    ids = request.GET.getall('ids')
-
+def _get_extracts_real(discussion, view_def=None, ids=None):
     all_extracts = Extract.db.query(Extract).filter(
-        Extract.discussion_id == discussion_id
+        Extract.discussion_id == discussion.id
     )
     if ids:
         ids = [get_database_id("Extract", id) for id in ids]
@@ -84,6 +78,17 @@ def get_extracts(request):
         return [extract.generic_json(view_def) for extract in all_extracts]
     else:
         return [extract.serializable() for extract in all_extracts]
+
+@extracts.get(permission=P_READ)
+def get_extracts(request):
+    discussion_id = int(request.matchdict['discussion_id'])
+    discussion = Discussion.get(id=int(discussion_id))
+    if not discussion:
+        raise HTTPNotFound("Discussion with id '%s' not found." % discussion_id)
+    view_def = request.GET.get('view')
+    ids = request.GET.getall('ids')
+
+    return _get_extracts_real(discussion=discussion, view_def=view_def, ids=ids)
 
 
 @extracts.post()

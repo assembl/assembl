@@ -22,6 +22,7 @@ define(['backbone', 'app'], function(Backbone, app){
             return this.get('@id') || this.get('id') || this.cid;
         },
 
+
         /**
          * Overwritting backbone's parse function
          * @return {Object} [description]

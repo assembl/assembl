@@ -13,7 +13,7 @@ Install required development libraries
 
 Setup a development environment:
 
-From scratch (you need fabric and a ssh server installed):
+From scratch (you need fabric 1.8.1 and a ssh server installed):
 - wget https://raw.github.com/ImaginationForPeople/assembl/develop/fabfile.py
 
 - fab devenv:projectpath=~/assembl bootstrap

@@ -66,17 +66,8 @@ def get_idea(request):
     else:
         return idea.serializable()
 
-
-@ideas.get(permission=P_READ)
-def get_ideas(request):
-    discussion_id = request.matchdict['discussion_id']
-    discussion = Discussion.get(id=int(discussion_id))
-    if not discussion:
-        raise HTTPNotFound("Discussion with id '%s' not found." % discussion_id)
+def _get_ideas_real(discussion, view_def=None, ids=None):
     next_synthesis = discussion.get_next_synthesis()
-    view_def = request.GET.get('view')
-    ids = request.GET.getall('ids')
-
     ideas = Idea.db.query(Idea).filter_by(
         discussion_id=discussion.id
     )
@@ -102,9 +93,18 @@ def get_ideas(request):
         else:
             serialized_idea = idea.serializable()
         retval.append(serialized_idea)
-    retval.append(Idea.serializable_unsorted_posts_pseudo_idea(discussion))
+    retval.append(RootIdea.serializable_unsorted_posts_pseudo_idea(discussion))
     return retval
 
+@ideas.get(permission=P_READ)
+def get_ideas(request):
+    discussion_id = request.matchdict['discussion_id']
+    discussion = Discussion.get(id=int(discussion_id))
+    if not discussion:
+        raise HTTPNotFound("Discussion with id '%s' not found." % discussion_id)
+    view_def = request.GET.get('view')
+    ids = request.GET.getall('ids')
+    return _get_ideas_real(discussion=discussion, view_def=view_def, ids=ids)
 
 # Update
 @idea.put()  # permission=P_EDIT_IDEA)
@@ -140,20 +140,21 @@ def save_idea(request):
 
         to_remove = []
         current_parent = None
-        for pl in idea.source_links:
-            if pl.source != parent:
-                to_remove.append(pl)
+        for parent_link in idea.source_links:
+            if parent_link.source != parent:
+                to_remove.append(parent_link)
                 # The following does not seem necessary
-                # pl.source.send_to_changes()
+                # parent_link.source.send_to_changes()
             else:
                 
-                pl.order = order
-                current_parent = pl
+                parent_link.order = order
+                current_parent = parent_link
         if current_parent is None:
-            idea.source_links.append(IdeaLink(source=parent, target=idea, order=order))
+            link = IdeaLink(source=parent, target=idea, order=order)
+            idea.source_links.append(link)
             parent.send_to_changes()
-        for pl in to_remove:
-            idea.source_links.remove(pl)
+        for parent_link in to_remove:
+            Idea.db.delete(parent_link)
         
     next_synthesis = discussion.get_next_synthesis()
     if idea_data['inNextSynthesis']:
@@ -184,8 +185,6 @@ def delete_idea(request):
     if num_extracts > 0:
         raise HTTPBadRequest("Idea cannot be deleted because it still has %d extracts." % num_extracts)
     db = Idea.db()
-    for idealink in db.query(IdeaLink).filter_by(target=idea):
-        db.delete(idealink)
     db.delete(idea)
     request.response.status = HTTPNoContent.code
     return None

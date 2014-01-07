@@ -2,6 +2,7 @@ from datetime import datetime
 import re
 import quopri
 from itertools import groupby, chain
+from collections import defaultdict
 import traceback
 import anyjson as json
 
@@ -52,9 +53,6 @@ class Discussion(SQLAlchemyBaseModel):
     slug = Column(Unicode, nullable=False, unique=True, index=True)
 
     creation_date = Column(DateTime, nullable=False, default=datetime.utcnow)
-    
-
-    
 
     def read_post_ids(self, user_id):
         return (x[0] for x in self.db.query(Post.id).join(
@@ -157,17 +155,16 @@ class Discussion(SQLAlchemyBaseModel):
             pass  # add a pseudo-anonymous user?
         return users
 
-    def get_all_agents(self):
-        return self.db().query(AgentProfile).all()
-
     def get_all_agents_preload(self):
-        return json.dumps([ap.serializable() for ap in self.get_all_agents()])
+        from assembl.views.api.agent import _get_agents_real
+        return json.dumps(_get_agents_real(discussion=self))
 
     def get_readers_preload(self):
         return json.dumps([user.serializable() for user in self.get_readers()])
 
     def get_ideas_preload(self):
-        return json.dumps([idea.serializable() for idea in self.ideas])
+        from assembl.views.api.idea import _get_ideas_real
+        return json.dumps(_get_ideas_real(discussion=self))
 
     def get_idea_links(self):
         return Idea.get_all_idea_links(self.id)
@@ -180,17 +177,19 @@ class Discussion(SQLAlchemyBaseModel):
             Idea.discussion_id == self.id).filter(
                 ~Idea.source_links.any()).all()
 
-    def get_related_extracts(self):
-        return self.extracts
-
     def get_related_extracts_preload(self):
-        return json.dumps(
-            [e.serializable() for e in self.get_related_extracts()])
+        from assembl.views.api.extract import _get_extracts_real
+        return json.dumps(_get_extracts_real(discussion=self))
 
     def get_user_permissions(self, user_id):
         return get_permissions(user_id, self.id)
 
     def get_user_permissions_preload(self, user_id):
+        # TODO: maparent:  This ultimately calls auth.get_permissions while
+        # the auth API ultimately calls auth.get_permissions_for_user.  I don't
+        # understand why these two differ, if they are meant to differ, and if
+        # so which the preload is supposed to use.  Leaving as is for now
+        # benoitg 2014-01-06
         return json.dumps(self.get_user_permissions(user_id))
 
     # Properties as a route context
@@ -253,6 +252,7 @@ class IdeaGraphView(SQLAlchemyBaseModel):
     def get_discussion_id(self):
         return self.discussion_id
 
+
 class SubGraphIdeaAssociation(SQLAlchemyBaseModel):
     __tablename__ = 'sub_graph_idea_association'
     id = Column(Integer, primary_key=True)
@@ -274,7 +274,7 @@ class SubGraphIdeaAssociation(SQLAlchemyBaseModel):
             return self.sub_graph.get_discussion_id()
         else:
             return IdeaGraphView.get(id=self.sub_graph_id).get_discussion_id()
-        
+
 
 class SubGraphIdeaLinkAssociation(SQLAlchemyBaseModel):
     __tablename__ = 'sub_graph_idea_link_association'
@@ -448,7 +448,7 @@ class Synthesis(ExplicitSubGraphView):
 class IdeaLink(SQLAlchemyBaseModel):
     """
     A generic link between two ideas
-    
+
     If a parent-child relation, the parent is the source, the child the target
     """
     __tablename__ = 'idea_idea_link'
@@ -460,10 +460,10 @@ class IdeaLink(SQLAlchemyBaseModel):
         'idea.id', ondelete="CASCADE", onupdate="CASCADE"),
         nullable=False, index=True)
     source = relationship(
-        'Idea', backref='target_links',
+        'Idea', backref=backref('target_links', cascade="all, delete-orphan"),
         foreign_keys=(source_id))
     target = relationship(
-        'Idea', backref='source_links',
+        'Idea', backref=backref('source_links', cascade="all, delete-orphan"),
         foreign_keys=(target_id))
     order = Column(Float, nullable=False, default=0.0)
     is_tombstone = Column(Boolean, nullable=False, default=False, index=True)
@@ -482,6 +482,7 @@ class IdeaLink(SQLAlchemyBaseModel):
         else:
             return Idea.get(id=self.source_id).get_discussion_id()
 
+
 class Idea(SQLAlchemyBaseModel):
     """
     A core concept taken from the associated discussion
@@ -489,7 +490,7 @@ class Idea(SQLAlchemyBaseModel):
     __tablename__ = "idea"
     ORPHAN_POSTS_IDEA_ID = 'orphan_posts'
     sqla_type = Column(String(60), nullable=False)
-    
+
     long_title = Column(UnicodeText)
     short_title = Column(UnicodeText)
     definition = Column(UnicodeText)
@@ -508,7 +509,7 @@ class Idea(SQLAlchemyBaseModel):
         "Discussion",
         backref=backref('ideas', order_by=creation_date)
     )
-    
+
     __mapper_args__ = {
         'polymorphic_identity': 'idea',
         'polymorphic_on': sqla_type,
@@ -517,7 +518,6 @@ class Idea(SQLAlchemyBaseModel):
         #'with_polymorphic': '*'
     }
 
-
     @property
     def children(self):
         return [cl.target for cl in self.target_links]
@@ -525,14 +525,15 @@ class Idea(SQLAlchemyBaseModel):
     @property
     def parents(self):
         return [cl.source for cl in self.source_links]
-    
+
     def get_order_from_first_parent(self):
         return self.source_links[0].order if self.source_links else None
-    
+
     def get_first_parent_uri(self):
-        return Idea.uri_generic(self.source_links[0].source_id
-            ) if self.source_links else None
-            
+        return Idea.uri_generic(
+            self.source_links[0].source_id
+        ) if self.source_links else None
+
     def serializable(self):
         return {
             '@id': self.uri_generic(self.id),
@@ -552,15 +553,23 @@ class Idea(SQLAlchemyBaseModel):
 
     @staticmethod
     def _get_idea_dag_statement(skip_where=False):
-        """requires root_idea_id parameter """
-        # TODO maparent: optimize by restricting to current discussion.
+        """requires root_idea_id and discussion_id parameters"""
         if skip_where:
-            return """idea_idea_link AS idea_dag"""
+            where_clause = \
+                '''(SELECT root_idea.id FROM root_idea
+                    JOIN idea ON (idea.id = root_idea.id)
+                    WHERE idea.discussion_id=:discussion_id)'''
+        else:
+            where_clause = ':root_idea_id'
         return """(SELECT source_id, target_id FROM (
             SELECT transitive t_in (1) t_out (2) t_distinct T_NO_CYCLES
                         source_id, target_id FROM idea_idea_link
                 UNION SELECT id as source_id, id as target_id FROM idea
-            ) ia WHERE ia.source_id = :root_idea_id) AS idea_dag """
+            ) ia
+            JOIN idea AS dag_idea ON (ia.source_id = dag_idea.id)
+            WHERE dag_idea.discussion_id = :discussion_id 
+                AND ia.source_id = %s)
+            AS idea_dag""" % (where_clause,)
 
     @staticmethod
     def _get_related_posts_statement_no_select(select, skip_where):
@@ -618,7 +627,7 @@ WHERE post.id NOT IN (
         until we move to a graph database, it will probably do for now """
         result = self.db.execute(text(
             Idea._get_count_related_posts_statement()),
-            {"root_idea_id": self.id})
+            {"root_idea_id": self.id, "discussion_id": self.discussion_id})
         return result.first()['total_count']
 
     @property
@@ -634,7 +643,8 @@ WHERE post.id NOT IN (
 
         result = self.db.execute(text(
             Idea._get_count_related_posts_statement() + join),
-            {"root_idea_id": self.id, "user_id": user_id})
+            {"root_idea_id": self.id, "user_id": user_id,
+             "discussion_id": self.discussion_id})
         return result.first()['total_count']
 
     def get_discussion_id(self):
@@ -654,6 +664,52 @@ WHERE post.id NOT IN (
         return "<Idea %d>" % self.id
 
     @classmethod
+    def invalidate_ideas(cls, discussion_id, post_id):
+        raise NotImplemented()
+
+    @classmethod
+    def idea_counts(cls, discussion_id, post_id, user_id):
+        "Given a post and a user, give the total and read count of posts for each affected idea"
+        stmt1 = """SELECT idea.id, root_post.id FROM idea 
+            JOIN idea_content_link ON (idea_content_link.idea_id = idea.id)
+            JOIN idea_content_positive_link
+                ON (idea_content_positive_link.id = idea_content_link.id)
+            JOIN post AS root_post ON (idea_content_link.content_id = root_post.id)
+            WHERE root_post.id = :post_id OR root_post.id IN
+            (SELECT parent_id, id FROM (
+                    SELECT transitive t_in (1) t_out (2) T_DISTINCT T_NO_CYCLES
+                        parent_id, id FROM post
+                    UNION SELECT id AS parent_id, id FROM POST
+                    ) pa 
+                JOIN content USING (id) WHERE id = :post_id AND content.discussion_id = :discussion_id)"""
+        roots = defaultdict(list)
+        for idea_id, post_id in cls.db().execute(text(stmt1).params(
+            {'post_id': post_id,
+             "discussion_id": discussion_id})):
+            roots[idea_id].append(post_id)
+        result = []
+        for idea_id, post_ids in roots.iteritems():
+            stmt2 = ' UNION '.join(["""
+                SELECT  pa.id as post_id, action_view_post.id as view_id FROM (
+                    SELECT transitive t_in (1) t_out (2) T_DISTINCT T_NO_CYCLES
+                        parent_id, id FROM post
+                    UNION SELECT id AS parent_id, id FROM POST
+                    ) pa 
+                JOIN content USING (id) 
+                LEFT JOIN action ON (action.post_id = pa.id
+                                     AND action.actor_id = :user_id)
+                LEFT JOIN action_view_post ON (action.id = action_view_post.id)
+                WHERE parent_id = :post_id_%d AND content.discussion_id= :discussion_id
+                """ % n for n in range(len(post_ids))])
+            stmt2 = "SELECT COUNT(x.post_id), COUNT(x.view_id) FROM (%s) x" % (stmt2,)
+            params = {'post_id_'+str(n): post_id for n, post_id in enumerate(post_ids)}
+            params["discussion_id"] = discussion_id
+            params["user_id"] = user_id
+            cpost, cview = list(cls.db().execute(text(stmt2).params(params))).pop()
+            result.append((idea_id, cpost, cview))
+        return result
+
+    @classmethod
     def get_all_idea_links(cls, discussion_id):
         target = aliased(cls)
         source = aliased(cls)
@@ -665,10 +721,11 @@ WHERE post.id NOT IN (
                             source.discussion_id == discussion_id).filter(
                                 IdeaLink.is_tombstone == False).all()
 
+
 class RootIdea(Idea):
     """
     The root idea.  It represents the discussion.
-    
+
     If has implicit links to all content and posts in the discussion.
     """
     __tablename__ = "root_idea"
@@ -678,11 +735,12 @@ class RootIdea(Idea):
         ondelete='CASCADE',
         onupdate='CASCADE'
     ), primary_key=True)
-    
-    root_for_discussion = relationship('Discussion',
+
+    root_for_discussion = relationship(
+        'Discussion',
         backref=backref('root_idea', uselist=False),
-        )
-    
+    )
+
     __mapper_args__ = {
         'polymorphic_identity': 'root_idea',
     }
@@ -692,9 +750,9 @@ class RootIdea(Idea):
         """ In the root idea, this is the count of all mesages in the system """
         result = self.db.query(Post).filter(
             Post.discussion_id == self.discussion_id
-            ).count()
+        ).count()
         return result
-    
+
     def get_num_orphan_posts(self):
         "The number of posts unrelated to any idea in the current discussion"
         result = self.db.execute(text(
@@ -728,6 +786,7 @@ class RootIdea(Idea):
         ser['root'] = True
         return ser
 
+
 class IdeaContentLink(SQLAlchemyBaseModel):
     """
     Abstract class representing a generic link between an idea and a Content
@@ -749,7 +808,7 @@ class IdeaContentLink(SQLAlchemyBaseModel):
     content = relationship(Content)
 
     order = Column(Float, nullable=False, default=0.0)
-    
+
     creation_date = Column(DateTime, nullable=False, default=datetime.utcnow)
 
     creator_id = Column(
