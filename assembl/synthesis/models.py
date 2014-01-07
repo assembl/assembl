@@ -459,10 +459,10 @@ class IdeaLink(SQLAlchemyBaseModel):
         'idea.id', ondelete="CASCADE", onupdate="CASCADE"),
         nullable=False, index=True)
     source = relationship(
-        'Idea', backref='target_links',
+        'Idea', backref=backref('target_links', cascade="all, delete-orphan"),
         foreign_keys=(source_id))
     target = relationship(
-        'Idea', backref='source_links',
+        'Idea', backref=backref('source_links', cascade="all, delete-orphan"),
         foreign_keys=(target_id))
     order = Column(Float, nullable=False, default=0.0)
     is_tombstone = Column(Boolean, nullable=False, default=False, index=True)
