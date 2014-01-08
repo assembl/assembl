@@ -298,7 +298,7 @@ class User(SQLAlchemyBaseModel):
     password = Column(Binary(115))
     timezone = Column(Time(True))
     last_login = Column(DateTime)
-    login_failures = Column(Integer(4), default=0)
+    login_failures = Column(Integer, default=0)
     creation_date = Column(DateTime, nullable=False, default=datetime.utcnow)
 
     def __init__(self, **kwargs):

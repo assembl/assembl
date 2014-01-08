@@ -278,48 +278,86 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
                 that.messages.reset(data.posts);
             });
         },
-
         /**
-         * Shows the related to the given idea
+         * Query the posts.  Any param set to null has no effect
          * @param {String} ideaId
          */
-        loadDataByIdeaId: function(ideaId){
+        loadDataByQuery: function(ideaId, onlySynthesis, isUnread){
             var that = this,
-                url = app.getApiUrl('posts'),
-                params = {};
+            url = app.getApiUrl('posts'),
+            params = {};
 
             if( this.loadedIdeaId === ideaId ){
                 // already loaded
                 return;
             }
-
+    
             this.loadedIdeaId = ideaId;
-
+    
             params.root_idea_id = ideaId;
+            
+            if(onlySynthesis === true){
+                params.only_synthesis = true;
+            }
+            
+            if(isUnread === true){
+                params.is_unread = true;
+            } else if(isUnread === false) {
+                params.is_unread = false;
+            }
             params.view = 'id_only';
-
+    
             this.blockPanel();
             this.collapsed = true;
-
+    
             $.getJSON(url, params, function(data){
                 var ids = {},
                     messages = [];
-
+    
                 _.each(data.posts, function(post){
                     ids[post['@id']] = post;
                 });
-
+    
                 that.allMessages.each(function(message){
                     if( message.get('@id') in ids ){
                         messages.push(message);
                     }
                 });
-
+    
                 that.unblockPanel();
                 that.messages.reset(messages);
             });
         },
+        /**
+         * Shows the related posts to the given idea
+         * @param {String} ideaId
+         */
+        loadDataByIdeaId: function(ideaId){
+            this.loadDataByQuery(ideaId);
+        },
 
+        /**
+         * @event
+         * Shows the inbox
+         */
+        showInbox: function(){
+            //This function doesn't exist anymore... benoitg
+            this.loadDataByQuery();
+        },
+        /**
+         * Load posts that are synthesis posts
+         * @param {String} ideaId
+         */
+        loadSynthesisMessages: function(){
+            this.loadDataByQuery(null, true);
+        },
+        /**
+         * Load posts that are read or unread
+         * @param {String} ideaId
+         */
+        loadUnreadMessages: function(){
+            this.loadDataByQuery(null, null, true);
+        },
         /**
          * Highlights the message by the given id
          * @param {String} id
@@ -394,7 +432,8 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
             'click #messageList-returnButton': 'onReturnButtonClick',
 
             'click #messageList-inbox': 'showInbox',
-            'click #messageList-innextsynthesis': 'loadSynthesisMessages',
+            'click #messageList-onlysynthesis': 'loadSynthesisMessages',
+            'click #messageList-isunread': 'loadUnreadMessages',
 
             'click #messageList-message-collapseButton': 'toggleThreadMessages',
 
@@ -415,14 +454,6 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
             var id = ev.currentTarget.getAttribute('data-messageid');
 
             this.openMessageByid(id);
-        },
-
-        /**
-         * @event
-         * Shows the inbox
-         */
-        showInbox: function(){
-            this.loadData();
         },
 
         /**
