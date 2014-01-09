@@ -138,23 +138,26 @@ def save_idea(request):
         if not parent:
             raise HTTPNotFound("Missing parentId %s" % (idea_data['parentId']))
 
-        to_remove = []
         current_parent = None
         for parent_link in idea.source_links:
             if parent_link.source != parent:
-                to_remove.append(parent_link)
-                # The following does not seem necessary
-                # parent_link.source.send_to_changes()
+                parent_link.is_tombstone=True
             else:
-                
                 parent_link.order = order
                 current_parent = parent_link
+            Idea.db.expire(parent_link.source, ['target_links'])
+            parent_link.source.send_to_changes()
+            for ancestor in parent_link.source.get_all_ancestors():
+                ancestor.send_to_changes()
+            
         if current_parent is None:
             link = IdeaLink(source=parent, target=idea, order=order)
             idea.source_links.append(link)
+            Idea.db.expire(parent, ['target_links'])
             parent.send_to_changes()
-        for parent_link in to_remove:
-            Idea.db.delete(parent_link)
+            for ancestor in parent.get_all_ancestors():
+                ancestor.send_to_changes()
+        Idea.db.expire(idea, ['source_links'])
         
     next_synthesis = discussion.get_next_synthesis()
     if idea_data['inNextSynthesis']:
@@ -163,7 +166,6 @@ def save_idea(request):
     else:
         if idea in next_synthesis.ideas:
             next_synthesis.ideas.remove(idea)
-
     idea.send_to_changes()
 
     return {'ok': True, 'id': idea.uri() }
