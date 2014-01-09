@@ -39,8 +39,8 @@
             <div class="spacer spacer--large"></div>
 
             <label>{{ gettext('Name') }}</label>
-            {% if the_user.profile.name %}
-            <input type="text" name="name" autofocus value="{{ the_user.profile.name }}" />
+            {% if the_user.name %}
+            <input type="text" name="name" autofocus value="{{ the_user.name }}" />
             {% else %}
             <input type="text" name="name" autofocus placeholder="{{ gettext('Your name') }}" />
             {% endif %}
@@ -55,11 +55,11 @@
 
             <!-- TODO Avatar logic -->
 
-            {% if the_user.profile.email_accounts() or the_user.profile.unconfirmed_emails() %}
+            {% if the_user.email_accounts() or the_user.unconfirmed_emails() %}
             <!-- TODO: Preferred email logic. -->
             <label>{{ gettext('Emails') }}</label>
             <ul>
-            {% for email_account in the_user.profile.verified_emails() %}
+            {% for email_account in the_user.verified_emails() %}
                 <li>{{ email_account.email }}</li>
             {% endfor %}
             {% for email_account, other_profile in unverified_emails %}
@@ -81,11 +81,11 @@
             <div class="spacer spacer--large"></div>
 
 
-            {% if the_user.profile.identity_accounts() %}
+            {% if the_user.identity_accounts() %}
             <div class="spacer spacer--huge"></div>
             <label>{{ gettext('Accounts') }}</label>
             <ul>
-            {% for account in the_user.profile.identity_accounts() %}
+            {% for account in the_user.identity_accounts() %}
             <li>
                 <label>{{ account.provider.provider_type }}</label>:
                 {% if account.username %}

@@ -13,9 +13,9 @@
 {% block content %}
 
     <div>
-        {% if profile.user and profile.user.username %}
+        {% if profile.username %}
         <label>{{ gettext('Username') }}</label>
-        <span>{{profile.user.username}}</span>
+        <span>{{profile.username}}</span>
         {% endif %}
 
         <label>{{ gettext('Name') }}</label>

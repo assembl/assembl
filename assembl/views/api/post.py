@@ -147,7 +147,7 @@ def get_posts(request):
             raise HTTPBadRequest(_("You must be logged in to view which posts are read"))
         
     #posts = posts.options(contains_eager(Post.source))
-    posts = posts.options(joinedload_all(Post.creator, AgentProfile.user))
+    posts = posts.options(joinedload_all(Post.creator))
 
     posts = posts.order_by(Content.creation_date)
 

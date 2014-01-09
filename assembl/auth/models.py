@@ -208,8 +208,8 @@ class EmailAccount(AbstractAgentAccount):
             email=email).all())
         # We do not want unverified user emails
         # This is costly. I should have proper boolean markers
-        emails = [e for e in emails if e.verified or not e.profile.user]
-        user_emails = [e for e in emails if e.profile.user]
+        emails = [e for e in emails if e.verified or not isinstance(e.profile, User)]
+        user_emails = [e for e in emails if isinstance(e.profile, User)]
         if user_emails:
             assert len(user_emails) == 1
             return user_emails[0]
@@ -280,8 +280,6 @@ class User(AgentProfile):
         ForeignKey('agent_profile.id', ondelete='CASCADE', onupdate='CASCADE'),
         primary_key=True
     )
-    profile = relationship(
-        AgentProfile, backref=backref("user", uselist=False))
 
     preferred_email = Column(Unicode(50))
     verified = Column(Boolean(), default=False)
