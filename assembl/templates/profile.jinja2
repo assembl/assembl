@@ -32,7 +32,7 @@
         <form class="form" method="POST">
             <label>{{ gettext('Username') }}:</label>
             {% if the_user.username %}
-            <input type="text" name="username" value="{{ the_user.username }}" autofocus />
+            <input type="text" name="username" value="{{ the_user.username.username }}" autofocus />
             {% else %}
             <input type="text" name="username" placeholder="{{ gettext('Desired username') }}" autofocus />
             {% endif %}

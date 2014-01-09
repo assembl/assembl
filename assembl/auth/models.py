@@ -95,6 +95,8 @@ class AgentProfile(SQLAlchemyBaseModel):
 
     def merge(self, other_profile):
         session = self.db
+        assert not (
+            isinstance(other_profile, User) and not isinstance(self, User))
         my_accounts = {a.signature(): a for a in self.accounts}
         for other_account in other_profile.accounts:
             my_account = my_accounts.get(other_account.signature())
@@ -103,18 +105,12 @@ class AgentProfile(SQLAlchemyBaseModel):
                 session.delete(other_account)
             else:
                 other_account.profile = self
-        if other_profile.user:
-            if self.user:
-                self.user.merge(other_profile.user)
-            else:
-                other_profile.user.profile = self
         if other_profile.name and not self.name:
             self.name = other_profile.name
         # TODO: similarly for posts
         for action in session.query(Action).filter_by(
             actor_id=other_profile.id).all():
                 action.actor = self
-        session.delete(other_profile)
 
     def has_permission(self, verb, subject):
         if self is subject.owner:
@@ -129,8 +125,6 @@ class AgentProfile(SQLAlchemyBaseModel):
 
     def avatar_url(self, size=32, app_url=None, email=None):
         # First implementation: Use the gravatar URL
-        if self.user and not email:
-            email = self.user.preferred_email
         if not email:
             accounts = list(self.email_accounts())
             if accounts:
@@ -149,19 +143,11 @@ class AgentProfile(SQLAlchemyBaseModel):
         return gravatar_url
 
     def serializable(self, use_email=None):
-        r = {
+        return {
             '@type': self.external_typename(),
             '@id': self.uri_generic(self.id),
             'name': self.name or self.display_name()
         }
-        # if use_email:
-        #     r['email'] = use_email
-        if self.user:
-            r['@type'] = 'User'
-            r['username'] = self.user.display_name()
-            # if not use_email:
-            #     r['email'] = self.user.get_preferred_email()
-        return r
 
 
 class AbstractAgentAccount(SQLAlchemyBaseModel):
@@ -279,11 +265,15 @@ class IdentityProviderAccount(AbstractAgentAccount):
         return ":".join((self.provider.provider_type, name))
 
 
-class User(SQLAlchemyBaseModel):
+class User(AgentProfile):
     """
     A Human user.
     """
     __tablename__ = "user"
+
+    __mapper_args__ = {
+        'polymorphic_identity': 'user'
+    }
 
     id = Column(
         Integer,
@@ -316,7 +306,7 @@ class User(SQLAlchemyBaseModel):
     def get_preferred_email(self):
         if self.preferred_email:
             return self.preferred_email
-        emails = list(self.profile.email_accounts())
+        emails = list(self.email_accounts())
         # should I allow unverified?
         emails = [e for e in emails if e.verified]
         preferred = [e for e in emails if e.preferred]
@@ -326,36 +316,38 @@ class User(SQLAlchemyBaseModel):
             return emails[0].email
 
     def merge(self, other_user):
-        session = self.db
-        if other_user.preferred_email and not self.preferred_email:
-            self.preferred_email = other_user.preferred_email
-        if other_user.last_login:
-            if self.last_login:
-                self.last_login = max(
-                    self.last_login, other_user.last_login)
-            else:
-                self.last_login = other_user.last_login
-        self.creation_date = min(
-            self.creation_date, other_user.creation_date)
-        if other_user.password and not self.password:
-            self.password = other_user.password
-            # NOTE: The user may be confused by the implicit change of password
-            # when we destroy the second account.
-        for user_role in session.query(UserRole).filter_by(
-                user_id=other_user.id).all():
-            user_role.user = self
-        for local_user_role in session.query(LocalUserRole).filter_by(
-                user_id=other_user.id).all():
-            user_role.user = self
-        for extract in other_user.extracts_created:
-            extract.creator = self
-        for extract in other_user.extracts_owned:
-            extract.owner = self
-        for discussion in other_user.discussions:
-            discussion.owner = self
-        if other_user.username and not self.username:
-            self.username = other_user.username
-        session.delete(other_user)
+        super(User, self).merge(other_user)
+        if isinstance(other_user, User):
+            session = self.db
+            if other_user.preferred_email and not self.preferred_email:
+                self.preferred_email = other_user.preferred_email
+            if other_user.last_login:
+                if self.last_login:
+                    self.last_login = max(
+                        self.last_login, other_user.last_login)
+                else:
+                    self.last_login = other_user.last_login
+            self.creation_date = min(
+                self.creation_date, other_user.creation_date)
+            if other_user.password and not self.password:
+                self.password = other_user.password
+                # NOTE: The user may be confused by the implicit change of password
+                # when we destroy the second account.
+                # Maybe check latest login on either account?
+            for user_role in session.query(UserRole).filter_by(
+                    user_id=other_user.id).all():
+                user_role.user = self
+            for local_user_role in session.query(LocalUserRole).filter_by(
+                    user_id=other_user.id).all():
+                user_role.user = self
+            for extract in other_user.extracts_created:
+                extract.creator = self
+            for extract in other_user.extracts_owned:
+                extract.owner = self
+            for discussion in other_user.discussions:
+                discussion.owner = self
+            if other_user.username and not self.username:
+                self.username = other_user.username
 
     def send_email(self, **kwargs):
         subject = kwargs.get('subject', '')
@@ -363,18 +355,14 @@ class User(SQLAlchemyBaseModel):
 
         # Send email.
 
-    def avatar_url(self, size=32, app_url=None):
-        # First implementation: Use the gravatar URL
-        # TODO: store user's choice of avatar.
-        return self.profile.avatar_url(size, app_url, self.preferred_email)
+    def avatar_url(self, size=32, app_url=None, email=None):
+        return super(User, self).avatar_url(
+            size, app_url, email or self.preferred_email)
 
     def display_name(self):
         if self.username:
             return self.username.username
-        return self.profile.display_name()
-
-    def serializable(self):
-        return self.profile.serializable()
+        return super(User, self).display_name()
 
     def __repr__(self):
         return "<User '%s'>" % self.username
@@ -390,6 +378,12 @@ class User(SQLAlchemyBaseModel):
             Discussion.uri_generic(d_id): get_permissions(self.id, d_id)
             for (d_id,) in self.db.query(Discussion.id)}
         return permissions
+
+    def serializable(self, use_email=None):
+        ser = super(User, self).serializable()
+        ser['username'] = self.display_name()
+        #r['email'] = use_email or self.get_preferred_email()
+        return ser
 
 
 class Username(SQLAlchemyBaseModel):
