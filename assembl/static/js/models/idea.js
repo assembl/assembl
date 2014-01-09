@@ -16,9 +16,6 @@ define(['models/base','underscore', 'models/segment', 'app', 'i18n'], function(B
             obj.creationDate = obj.creationDate || app.getCurrentTime();
             this.set('creationDate', obj.creationDate);
 
-            this.on('change:inNextSynthesis', this.onInNextSynthesisChange, this);
-            this.on('change:shortTitle change:longTitle change:parentId', this.onAttrChange, this);
-
             app.on('synthesisPanel:edit', function(){
                 that.attributes['synthesisPanel-editing'] = false;
             });
@@ -59,7 +56,7 @@ define(['models/base','underscore', 'models/segment', 'app', 'i18n'], function(B
          * @return {Text>}
          */
         getLongTitleDisplayText: function(){
-            if (this.get('root') == true) {
+            if (this.get('root') === true) {
                 return i18n.gettext('The root idea will not be in the synthesis');
             }
             if( app.stripHtml(this.get('longTitle')) !== '' ){
@@ -82,17 +79,20 @@ define(['models/base','underscore', 'models/segment', 'app', 'i18n'], function(B
         /**
          * Adds an idea as child
          * @param  {Idea} idea
-         * @param {Segment} [segment=null]
          */
-        addChild: function(idea, segment){
+        addChild: function(idea){
             this.collection.add(idea);
 
             if( this.isDescendantOf(idea) ){
                 this.set('parentId', null);
             }
 
-            idea.set('order', this.getOrderForNewChild());
-            idea.set('parentId', this.getId());
+            idea.set({
+                'order':this.getOrderForNewChild(),
+                'parentId': this.getId()
+            });
+
+            idea.save();
         },
 
         /**
@@ -271,21 +271,6 @@ define(['models/base','underscore', 'models/segment', 'app', 'i18n'], function(B
             };
 
             this.collection.create(data, { success: onSuccess });
-        },
-
-        /**
-         * @event
-         */
-        onInNextSynthesisChange: function(){
-            var value = this.get('inNextSynthesis');
-            this.save({ inNextSynthesis: value });
-        },
-
-        /**
-         * @event
-         */
-        onAttrChange: function(){
-            this.save();
         },
 
         /**

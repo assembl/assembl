@@ -112,6 +112,28 @@ define(['backbone', 'app'], function(Backbone, app){
         removeById: function(id){
             var model = this.get(id);
             this.remove(model);
+        },
+
+        /**
+         * Updates the given model into the collection
+         * @param {object} item
+         */
+        updateFromSocket: function(item){
+            var model = this.get(item['@id']);
+
+            if( item['@tombstone'] ){
+                this.remove(model);
+                return;
+            }
+
+            if( model === null || model === undefined ){
+                // oops, doesn't exist
+                this.add(item);
+            } else {
+                // yeah, it exists
+                this.add(item, {merge: true});
+            }
+
         }
 
     });

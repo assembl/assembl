@@ -1,5 +1,5 @@
-define(['backbone', 'underscore', 'models/idea', 'views/idea', 'app'],
-function(Backbone, _, Idea, IdeaView, app){
+define(['backbone', 'underscore', 'models/idea', 'views/idea', 'app', 'types'],
+function(Backbone, _, Idea, IdeaView, app, Types){
     'use strict';
 
     var FEATURED = 'featured',
