@@ -84,15 +84,13 @@ define(['models/base','underscore', 'models/segment', 'app', 'i18n'], function(B
             this.collection.add(idea);
 
             if( this.isDescendantOf(idea) ){
-                this.set('parentId', null);
+                this.save('parentId', null);
             }
 
-            idea.set({
+            idea.save({
                 'order':this.getOrderForNewChild(),
                 'parentId': this.getId()
             });
-
-            idea.save();
         },
 
         /**

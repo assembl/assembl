@@ -70,6 +70,12 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
         loadedIdeaId: null,
 
         /**
+         * The current filter applied to messages
+         * @type {Object}
+         */
+        currentFilter: {},
+
+        /**
          * The render function
          * @return {views.Message}
          */
@@ -81,8 +87,8 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
                 views = this.getRenderedMessages(rootMessages);
 
             var data = {
-                inbox: this.messages.length,
-                total: this.messages.length,
+                inbox: views.length,
+                total: views.length,
                 collapsed: this.collapsed
             };
 
@@ -124,9 +130,10 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
          */
         getRenderedMessages: function(messages, level){
             var list = [],
+                filter = this.currentFilter,
                 i = 0,
                 len = messages.length,
-                view, model, children;
+                view, model, children, prop, isValid;
 
             if( _.isUndefined(level) ){
                 level = 1;
@@ -134,10 +141,27 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
 
             for(; i < len; i += 1){
                 model = messages[i];
-                view = new MessageView({model:model});
-                children = model.getChildren();
+                isValid = true;
 
-                list.push(view.render(level).el);
+                // Let's pass it through the filter
+                for( prop in filter ){
+                    if( filter.hasOwnProperty(prop) ){
+                        // 5th level of depth. Yes! We! Can!
+                        if( model.get(prop) !== filter[prop] ){
+                            isValid = false;
+                            break;
+                        }
+                    }
+                }
+
+                if( isValid ){
+                    view = new MessageView({model:model});
+                    list.push(view.render(level).el);
+                } else {
+                    level -= 1;
+                }
+
+                children = model.getChildren();
                 list = _.union(list, this.getRenderedMessages(children, level+1));
             }
 
@@ -278,14 +302,15 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
                 that.messages.reset(data.posts);
             });
         },
+
         /**
          * Query the posts.  Any param set to null has no effect
          * @param {String} ideaId
          */
         loadDataByQuery: function(ideaId, onlySynthesis, isUnread){
             var that = this,
-            url = app.getApiUrl('posts'),
-            params = {};
+                url = app.getApiUrl('posts'),
+                params = {};
 
             if( this.loadedIdeaId === ideaId ){
                 // already loaded
