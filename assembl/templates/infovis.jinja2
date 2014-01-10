@@ -106,6 +106,9 @@ requirejs(["jit"], function($jit) {
   });  
   //load JSON data.  
   ht.loadJSON(json);  
+  window.setIdea = function(id) {
+    ht.onClick(id);
+  };
   //compute positions and plot.  
   ht.refresh();
 });
