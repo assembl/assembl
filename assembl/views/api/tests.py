@@ -3,6 +3,9 @@
 import uuid
 import json
 import transaction
+import traceback
+from nose.plugins.skip import Skip
+
 from assembl.tests.base import BaseTest
 from assembl.source.models import PostSource, Content, Post
 from assembl.synthesis.models import (
@@ -10,17 +13,40 @@ from assembl.synthesis.models import (
     TableOfContents,
     Discussion,
     Extract,
-    )
+)
 from assembl.auth.models import (
-    AgentProfile, User, Role, UserRole, Username, R_ADMINISTRATOR,
+    AgentProfile, User, Role, UserRole, Username, R_SYSADMIN,
     create_default_permissions, populate_default_permissions,
     populate_default_roles, Permission)
+from assembl.tests import get_fixture
+from assembl.tests.fixtures import setup_data
 
 
 class ApiTest(BaseTest):
     def setUp(self):
         super(ApiTest, self).setUp()
-        self.discussion = self.create_dummy_discussion()
+        self.fixture = get_fixture(self.session_factory)
+        try:
+            self.data = setup_data(self.fixture)
+        except Exception as e:
+            traceback.print_exc()
+            raise e
+        self.discussion = self.session.query(Discussion).get(
+            self.data.DiscussionData.jacklayton.id)
+        role = Role.get_role(self.session, R_SYSADMIN)
+        self.data.UserRoleData.admin_role.role = role
+        self.session.flush()
+        dummy_policy = self.config.testing_securitypolicy(
+            userid=self.data.UserData.admin.id, permissive=True)
+        self.config.set_authorization_policy(dummy_policy)
+        self.config.set_authentication_policy(dummy_policy)
+
+    def tearDown(self):
+        #self.data.teardown()
+        super(ApiTest, self).tearDown()
+        #self.data.loaded.clear()
+        # from fixture.dataset import dataset_registry
+        # dataset_registry.clear()
 
     def get_url(self, discussion, suffix):
         return '/api/v1/discussion/%d/%s' % (
@@ -34,9 +60,7 @@ class ApiTest(BaseTest):
         username = Username(username="ben", user=user)
         discussion = Discussion(
             topic='Unicorns',
-            slug='discussion_slug',
-            table_of_contents=TableOfContents(),
-            owner=user,
+            slug='discussion_slug'
         )
 
         self.session.add(discussion)
@@ -50,10 +74,11 @@ class ApiTest(BaseTest):
         return discussion
 
     def test_extracts(self):
+        user = self.data.UserData.participant1
         extract_user = {
-            "@id": 'local:Idea/2',
-            "name": "André Farzat",
-            "@type": "AgentProfile"}
+            "@id": 'local:AgentProfile/'+str(user.id),
+            "name": user.name,
+            "@type": "User"}
         extract_data = {
             "idIdea": None,
             "creator": extract_user,
@@ -62,31 +87,9 @@ class ApiTest(BaseTest):
             "creationDate": 1376573216160,
             "target": {
                 "@type": "email",
+                "@id": 'local:Post/'+str(self.data.PostData.reply_post_1.id)
             }
         }
-
-        creator = AgentProfile(id=2, name="André Farzat", type="agent_profile")
-        source = PostSource(name='a source', type='source', discussion=self.discussion)
-        post = Post(creator=creator)
-        content = Content(source=source, type='content', post=post)
-        ext = Extract(
-            order=0.0,
-            body='asd',
-            creator=creator,
-            owner=creator,
-            source=content
-        )
-        self.session.add(ext)
-        self.session.add(post)
-        self.session.flush()
-        extract_data["target"]['@id'] = post.id
-        assert self.session.query(Post).get(post.id)
-
-        if self.zopish:
-            transaction.commit()
-            self.session = self.session_factory()
-            post = self.session.merge(post)
-            self.discussion = self.session.merge(self.discussion)
 
         url = self.get_url(self.discussion, 'extracts')
         res = self.app.get(url)
@@ -113,20 +116,22 @@ class ApiTest(BaseTest):
         self.assertEqual(res.status_code, 200)
 
     def test_get_ideas(self):
-        idea = Idea(
-            long_title='This is a long test',
-            short_title='This is a test',
-            table_of_contents=self.discussion.table_of_contents,
-        )
-        self.session.add(idea)
-        if self.zopish:
-            transaction.commit()
-            self.session = self.session_factory()
-            self.discussion = self.session.merge(self.discussion)
         url = self.get_url(self.discussion, 'ideas')
         res = self.app.get(url)
         self.assertEqual(res.status_code, 200)
 
         ideas = json.loads(res.body)
-        self.assertEquals(len(ideas), 2) # orphan_posts
-        
+        num_ideas = len(ideas)
+
+        idea = Idea(
+            long_title='This is a long test',
+            short_title='This is a test',
+            discussion=self.discussion
+        )
+        self.session.add(idea)
+        url = self.get_url(self.discussion, 'ideas')
+        res = self.app.get(url)
+        self.assertEqual(res.status_code, 200)
+
+        ideas = json.loads(res.body)
+        self.assertEquals(len(ideas), num_ideas+1)
