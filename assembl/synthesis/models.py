@@ -532,6 +532,9 @@ class Idea(SQLAlchemyBaseModel):
         return [cl.source for cl in self.source_links]
 
     def get_all_ancestors(self):
+        """ Get all ancestors of this idea by following source links.  
+        This is naive and slow, but not used very much for now.
+        TODO:  Rewrite once we migrate to virtuoso"""
         ancestors = []
         for source_link in self.source_links:
             ancestors.append(source_link.source)
@@ -878,7 +881,6 @@ class RootIdea(Idea):
         ser['root'] = True
         return ser
 
-
 class IdeaContentLink(SQLAlchemyBaseModel):
     """
     Abstract class representing a generic link between an idea and a Content
@@ -892,7 +894,7 @@ class IdeaContentLink(SQLAlchemyBaseModel):
     # attached later.
     idea_id = Column(Integer, ForeignKey('idea.id'),
                      nullable=True, index=True)
-    idea = relationship('Idea')
+    idea = relationship('Idea', active_history=True)
 
     content_id = Column(Integer, ForeignKey(
         'content.id', ondelete="CASCADE", onupdate="CASCADE"),
@@ -924,6 +926,17 @@ class IdeaContentLink(SQLAlchemyBaseModel):
         elif self.idea_id:
             return Idea.get(id=self.idea_id).get_discussion_id()
 
+@event.listens_for(IdeaContentLink.idea, 'set', propagate=True, active_history=True)
+def idea_content_link_idea_set_listener(target, value, oldvalue, initiator):
+    print "idea_content_link_idea_set_listener for target: %s set to %s, was %s" % (target, value, oldvalue)
+    if oldvalue is not None:
+        oldvalue.send_to_changes()
+        for ancestor in oldvalue.get_all_ancestors():
+            ancestor.send_to_changes()
+    if value is not None:
+        value.send_to_changes()
+        for ancestor in value.get_all_ancestors():
+            ancestor.send_to_changes()
 
 class IdeaContentPositiveLink(IdeaContentLink):
     """
