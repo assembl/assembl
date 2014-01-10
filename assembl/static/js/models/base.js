@@ -78,6 +78,20 @@ define(['backbone', 'app'], function(Backbone, app){
 
             this.reset(json);
         },
+
+        /**
+         * Find the model by the given cid
+         * @return {BaseModel}
+         */
+        getByCid: function(cid){
+            var result = null;
+            this.each(function(model){
+                if(model.cid === cid){
+                    result = model;
+                }
+            });
+            return result;
+        },
         
 
         /**
