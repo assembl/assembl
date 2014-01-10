@@ -165,16 +165,6 @@ define(['models/base', 'jquery', 'app', 'underscore'], function(Base, $, app, _)
                     app.trigger('ideas:update', [data.ideas]);
                 }
             });
-        },
-
-        /**
-         * Return `false` if the parent is `null` or it is NOT in the given collection
-         * @param {Base.Collection} collection
-         * @return {Boolean}
-         */
-        isParentInCollection: function(collection){
-            var parentId = this.get('parentId');
-            return !! collection.get(parentId);
         }
     });
 
@@ -191,26 +181,6 @@ define(['models/base', 'jquery', 'app', 'underscore'], function(Base, $, app, _)
          * @type {MessageModel}
          */
         model: MessageModel,
-
-        /**
-         * Returns the messages with no parent in the collection
-         * @return {Message[]}
-         */
-        getRootMessages: function(){
-            var toReturn = [],
-                that = this;
-
-            _.each(this.models, function(model){
-
-                if( ! model.isParentInCollection(that) ){
-                    toReturn.push(model);
-                    return;
-                }
-
-            });
-
-            return toReturn;
-        },
 
         /**
          * Return all segments in all messages in the annotator format
