@@ -25,6 +25,11 @@ $message-bar-width: 15px;
     padding-bottom: 0px;
 }
 
+.message.message--unread {
+    .message-title {
+        @extend .text-bold
+    }
+}
 // A message block Header
 // --------------------
 .message-header {

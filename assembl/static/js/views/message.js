@@ -76,6 +76,13 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
             } else {
                 this.$el.removeClass('message--collapsed');
             }
+            if( data.read ){
+                this.$el.removeClass('message--unread');
+                this.$el.addClass('message--read');
+            } else {
+                this.$el.removeClass('message--read');
+                this.$el.addClass('message--unread');
+            }
 
             this.$el.html( this.template(data) );
 
