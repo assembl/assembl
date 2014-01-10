@@ -55,7 +55,7 @@
     <tbody>
         {% for user in users %}
         <tr>
-            <th>{{user.profile.name}}</th>
+            <th>{{user.name}}</th>
             {% for role in roles %}
             {% if role.startswith('r:') %}
             <td>

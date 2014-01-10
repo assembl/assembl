@@ -2,7 +2,7 @@ import json
 
 from math import ceil
 from cornice import Service
-from pyramid.httpexceptions import HTTPNotFound, HTTPUnauthorized
+from pyramid.httpexceptions import HTTPNotFound, HTTPUnauthorized, HTTPBadRequest
 from pyramid.i18n import TranslationString as _
 from pyramid.security import authenticated_userid
 
@@ -36,43 +36,16 @@ post_read = Service(name='post_read', path=API_DISCUSSION_PREFIX + '/post_read/{
                description="Signal that a post was read",
                acl=acls)
 
-def _get_idea_query(post, levels=None):
-    """Return a query that includes the post and its following thread.
-
-
-    Beware: we use a recursive query via a CTE and the PostgreSQL-specific
-    ARRAY type. Blame this guy for that choice:
-    http://explainextended.com/2009/09/24/adjacency-list-vs-nested-sets-postgresql/
-
-    Also, that other guy provided insight into using CTE queries:
-    http://stackoverflow.com/questions/11994092/how-can-i-perform-this-recursive-common-table-expression-in-sqlalchemy
-
-    A literal column and an op complement nicely all this craziness.
-
-    All I can say is SQLAlchemy kicks ass, and so does PostgreSQL.
-
-    """
-    level = literal_column('ARRAY[id]', type_=ARRAY(Integer))
-    post = Post.db.query(post.__class__) \
-                    .add_columns(level.label('level')) \
-                    .filter(post.__class__.id == post.id) \
-                    .cte(name='thread', recursive=True)
-    post_alias = aliased(post, name='post')
-    replies_alias = aliased(post.__class__, name='replies')
-    cumul_level = post_alias.c.level.op('||')(replies_alias.id)
-    parent_link = replies_alias.parent_id == post_alias.c.id
-    children = Post.db.query(replies_alias).add_columns(cumul_level) \
-                        .filter(parent_link)
-
-    if levels:
-        level_limit = func.array_upper(post_alias.c.level, 1) < levels
-        children = children.filter(level_limit)
-
-    return Post.db.query(post.union_all(children)).order_by(post.c.level)
-
 
 @posts.get(permission=P_READ)
 def get_posts(request):
+    """
+    Query interface on posts
+    Filters have two forms:
+    only_*, is for filters that cannot be reversed (ex: only_synthesis)
+    is_*, is for filters that can be reversed (ex:is_unread=true returns only unread
+    message, is_unread=false returns only read messages)
+    """
     discussion_id = int(request.matchdict['discussion_id'])
     discussion = Discussion.get(id=int(discussion_id))
     if not discussion:
@@ -112,17 +85,10 @@ def get_posts(request):
         ids = [get_database_id("Post", id) for id in ids]
 
     view_def = request.GET.get('view')
+    
 
-
-    #Rename "inbox" to "unread", the number of unread messages for the current user.
-    no_of_messages_viewed_by_user = Post.db.query(ViewPost).join(
-        Post
-    ).filter(
-        Post.discussion_id == discussion_id,
-        ViewPost.actor_id == user_id,
-    ).count() if user_id else 0
-
-    if 'synthesis' in filter_names:
+    only_synthesis = request.GET.get('only_synthesis')
+    if only_synthesis == "true":
         posts = Post.db.query(SynthesisPost)
     else:
         posts = Post.db.query(Post)
@@ -130,7 +96,9 @@ def get_posts(request):
     posts = posts.filter(
         Post.discussion_id == discussion_id,
     )
-    no_of_posts_to_discussion = posts.count()
+    ##no_of_posts_to_discussion = posts.count()
+
+
 
     post_data = []
 
@@ -157,52 +125,77 @@ def get_posts(request):
             |
             (Post.id==root_post.id)
             )
-        #Benoitg:  For now, this completely garbles threading without intelligent
-        #handling of pagination.  Disabling
-        #posts = posts.limit(page_size).offset(data['startIndex']-1)
     elif ids:
         posts = posts.filter(Post.id.in_(ids))
 
+    # Post read/unread management
+    is_unread = request.GET.get('is_unread')
+    print "\n"+repr(is_unread)+"\n"
     if user_id:
         posts = posts.outerjoin(ViewPost,
                     and_(ViewPost.actor_id==user_id, ViewPost.post_id==Post.id)
                 )
         posts = posts.add_entity(ViewPost)
+        
+        if is_unread == "true":
+            posts = posts.filter(ViewPost.id == None)
+        elif is_unread == "false":
+            posts = posts.filter(ViewPost.id != None)
+    else:
+        #If there is no user_id, all posts are always unread
+        if is_unread == "false":
+            raise HTTPBadRequest(_("You must be logged in to view which posts are read"))
+        
     #posts = posts.options(contains_eager(Post.source))
-    posts = posts.options(joinedload_all(Post.creator, AgentProfile.user))
+    posts = posts.options(joinedload_all(Post.creator))
 
     posts = posts.order_by(Content.creation_date)
 
-    if user_id:
-        for post, viewpost in posts:
-            if view_def:
-                serializable_post = post.generic_json(view_def)
-            else:
-                serializable_post = post.serializable()
-            if viewpost:
-                serializable_post['read'] = True
-            else:
-                serializable_post['read'] = False
-                if root_post_id:
-                    viewed_post = ViewPost(
-                        actor_id=user_id,
-                        post=post
-                    )
+    no_of_posts = 0
+    no_of_posts_viewed_by_user = 0
+    
 
-                    Post.db.add(viewed_post)
-            post_data.append(serializable_post)
-    else:
-        for post in posts:
-            if view_def:
-                serializable_post = post.generic_json(view_def)
-            else:
-                serializable_post = post.serializable()
-            post_data.append(serializable_post)
+    for query_result in posts:
+        if user_id:
+            post, viewpost = query_result
+        else:
+            post, viewpost = query_result, None
+        no_of_posts += 1
+        if view_def:
+            serializable_post = post.generic_json(view_def)
+        else:
+            serializable_post = post.serializable()
+        if viewpost:
+            serializable_post['read'] = True
+            no_of_posts_viewed_by_user += 1
+        else:
+            serializable_post['read'] = False
+            if root_post_id:
+                viewed_post = ViewPost(
+                    actor_id=user_id,
+                    post=post
+                )
+
+                Post.db.add(viewed_post)
+        post_data.append(serializable_post)
+
+    # Benoitg:  For now, this completely garbles threading without intelligent
+    #handling of pagination.  Disabling
+    #posts = posts.limit(page_size).offset(data['startIndex']-1)
+    # This code isn't up to date.  If limiting the query by page, we need to 
+    # calculate the counts with a separate query to have the right number of 
+    # results
+    #no_of_messages_viewed_by_user = Post.db.query(ViewPost).join(
+    #    Post
+    #).filter(
+    #    Post.discussion_id == discussion_id,
+    #    ViewPost.actor_id == user_id,
+    #).count() if user_id else 0
 
     data = {}
     data["page"] = page
-    data["inbox"] = no_of_posts_to_discussion - no_of_messages_viewed_by_user
-    data["total"] = no_of_posts_to_discussion
+    data["unread"] = no_of_posts - no_of_posts_viewed_by_user
+    data["total"] = no_of_posts
     data["maxPage"] = max(1, ceil(float(data["total"])/page_size))
     #TODO:  Check if we want 1 based index in the api
     data["startIndex"] = (page_size * page) - (page_size-1)

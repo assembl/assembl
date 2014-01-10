@@ -11,8 +11,7 @@
         "name": true
     },
     "AgentProfile": {
-        "preferred_email": false,
-        "user": ":"
+        "preferred_email": false
     },
     "User": {
         "creation_date": true,

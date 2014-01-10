@@ -39,7 +39,7 @@ confirm_email_html = u'''<p>Hello, {name}!</p>
 def send_confirmation_email(request, email):
     mailer = get_mailer(request)
     confirm_what = _('email')
-    if email.profile.user and not email.profile.user.verified:
+    if isinstance(email.profile, User) and not email.profile.verified:
         confirm_what = _('account')
     data = {
         'name': email.profile.name,

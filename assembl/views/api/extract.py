@@ -72,7 +72,7 @@ def _get_extracts_real(discussion, view_def=None, ids=None):
         all_extracts = all_extracts.filter(Extract.id.in_(ids))
 
     all_extracts = all_extracts.options(joinedload_all(
-        Extract.creator, AgentProfile.user))
+        Extract.creator))
 
     if view_def:
         return [extract.generic_json(view_def) for extract in all_extracts]

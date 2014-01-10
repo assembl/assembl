@@ -70,6 +70,12 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
         loadedIdeaId: null,
 
         /**
+         * The current filter applied to messages
+         * @type {Object}
+         */
+        currentFilter: {},
+
+        /**
          * The render function
          * @return {views.Message}
          */
@@ -81,8 +87,8 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
                 views = this.getRenderedMessages(rootMessages);
 
             var data = {
-                inbox: this.messages.length,
-                total: this.messages.length,
+                inbox: views.length,
+                total: views.length,
                 collapsed: this.collapsed
             };
 
@@ -124,9 +130,10 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
          */
         getRenderedMessages: function(messages, level){
             var list = [],
+                filter = this.currentFilter,
                 i = 0,
                 len = messages.length,
-                view, model, children;
+                view, model, children, prop, isValid;
 
             if( _.isUndefined(level) ){
                 level = 1;
@@ -134,10 +141,27 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
 
             for(; i < len; i += 1){
                 model = messages[i];
-                view = new MessageView({model:model});
-                children = model.getChildren();
+                isValid = true;
 
-                list.push(view.render(level).el);
+                // Let's pass it through the filter
+                for( prop in filter ){
+                    if( filter.hasOwnProperty(prop) ){
+                        // 5th level of depth. Yes! We! Can!
+                        if( model.get(prop) !== filter[prop] ){
+                            isValid = false;
+                            break;
+                        }
+                    }
+                }
+
+                if( isValid ){
+                    view = new MessageView({model:model});
+                    list.push(view.render(level).el);
+                } else {
+                    level -= 1;
+                }
+
+                children = model.getChildren();
                 list = _.union(list, this.getRenderedMessages(children, level+1));
             }
 
@@ -280,10 +304,10 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
         },
 
         /**
-         * Shows the related to the given idea
+         * Query the posts.  Any param set to null has no effect
          * @param {String} ideaId
          */
-        loadDataByIdeaId: function(ideaId){
+        loadDataByQuery: function(ideaId, onlySynthesis, isUnread){
             var that = this,
                 url = app.getApiUrl('posts'),
                 params = {};
@@ -292,34 +316,73 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
                 // already loaded
                 return;
             }
-
+    
             this.loadedIdeaId = ideaId;
-
+    
             params.root_idea_id = ideaId;
+            
+            if(onlySynthesis === true){
+                params.only_synthesis = true;
+            }
+            
+            if(isUnread === true){
+                params.is_unread = true;
+            } else if(isUnread === false) {
+                params.is_unread = false;
+            }
             params.view = 'id_only';
-
+    
             this.blockPanel();
             this.collapsed = true;
-
+    
             $.getJSON(url, params, function(data){
                 var ids = {},
                     messages = [];
-
+    
                 _.each(data.posts, function(post){
                     ids[post['@id']] = post;
                 });
-
+    
                 that.allMessages.each(function(message){
                     if( message.get('@id') in ids ){
                         messages.push(message);
                     }
                 });
-
+    
                 that.unblockPanel();
                 that.messages.reset(messages);
             });
         },
+        /**
+         * Shows the related posts to the given idea
+         * @param {String} ideaId
+         */
+        loadDataByIdeaId: function(ideaId){
+            this.loadDataByQuery(ideaId);
+        },
 
+        /**
+         * @event
+         * Shows the inbox
+         */
+        showInbox: function(){
+            //This function doesn't exist anymore... benoitg
+            this.loadDataByQuery();
+        },
+        /**
+         * Load posts that are synthesis posts
+         * @param {String} ideaId
+         */
+        loadSynthesisMessages: function(){
+            this.loadDataByQuery(null, true);
+        },
+        /**
+         * Load posts that are read or unread
+         * @param {String} ideaId
+         */
+        loadUnreadMessages: function(){
+            this.loadDataByQuery(null, null, true);
+        },
         /**
          * Highlights the message by the given id
          * @param {String} id
@@ -394,7 +457,8 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
             'click #messageList-returnButton': 'onReturnButtonClick',
 
             'click #messageList-inbox': 'showInbox',
-            'click #messageList-innextsynthesis': 'loadSynthesisMessages',
+            'click #messageList-onlysynthesis': 'loadSynthesisMessages',
+            'click #messageList-isunread': 'loadUnreadMessages',
 
             'click #messageList-message-collapseButton': 'toggleThreadMessages',
 
@@ -415,14 +479,6 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
             var id = ev.currentTarget.getAttribute('data-messageid');
 
             this.openMessageByid(id);
-        },
-
-        /**
-         * @event
-         * Shows the inbox
-         */
-        showInbox: function(){
-            this.loadData();
         },
 
         /**

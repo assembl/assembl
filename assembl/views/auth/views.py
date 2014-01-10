@@ -72,14 +72,12 @@ def login_view(request):
 def get_profile(request):
     id_type = request.matchdict.get('type').strip()
     identifier = request.matchdict.get('identifier').strip()
-    user = None
     session = AgentProfile.db
     if id_type == 'u':
         username = session.query(Username).filter_by(username=identifier).first()
         if not username:
             raise HTTPNotFound()
-        user = username.user
-        profile = user.profile
+        profile = username.user
     elif id_type == 'id':
         try:
             id = int(identifier)
@@ -102,21 +100,17 @@ def get_profile(request):
         if not account:
             raise HTTPNotFound()
         profile = account.profile
-    if profile and not user:
-        user = profile.user
-    return (user, profile)
+    return profile
 
 @view_config(route_name='profile')
 def assembl_profile(request):
     session = AgentProfile.db
-    user, profile = get_profile(request)
+    profile = get_profile(request)
     id_type = request.matchdict.get('type').strip()
     logged_in = authenticated_userid(request)
     save = request.method == 'POST'
-    if logged_in and not user:
-        user = profile.user
     # if some other user
-    if not user or not logged_in or logged_in != user.id:
+    if not profile or not logged_in or logged_in != profile.id:
         if save:
             raise HTTPUnauthorized()
         # Add permissions to view a profile?
@@ -128,7 +122,7 @@ def assembl_profile(request):
 
     errors = []
     if save:
-        user_id = user.id
+        user_id = profile.id
         redirect = False
         username = request.params.get('username', '').strip()
         if username:
@@ -136,46 +130,46 @@ def assembl_profile(request):
             if session.query(Username).filter_by(username=username).count():
                 errors.append(_('The username %s is already used') % (username,))
             else:
-                session.add(Username(username=username, user=user))
+                session.add(Username(username=username, user=profile))
                 if id_type == 'u':
                     redirect = True
         name = request.params.get('name', '').strip()
         if name:
-            user.profile.name = name
+            profile.name = name
         p1, p2 = (request.params.get('password1', '').strip(),
                   request.params.get('password2', '').strip())
         if p1 != p2:
             errors.append(_('The passwords are not identical'))
         elif p1:
-            user.set_password(p1)
+            profile.set_password(p1)
         add_email = request.params.get('add_email', '').strip()
         if add_email:
             # TODO: Check it's a valid email.
             # No need to check presence since not validated yet
             email = EmailAccount(
-                email=add_email, profile=user.profile)
+                email=add_email, profile=profile)
             session.add(email)
         transaction.commit()
         if redirect:
             raise HTTPFound('/user/u/'+username)
-        user = session.query(User).get(user_id)
+        profile = session.query(User).get(user_id)
     unverified_emails = [
         (ea, session.query(EmailAccount).filter_by(
             email=ea.email, verified=True).first())
-        for ea in user.profile.email_accounts() if not ea.verified]
+        for ea in profile.email_accounts() if not ea.verified]
     return render_to_response(
         'assembl:templates/profile.jinja2',
         dict(default_context,
              error='<br />'.join(errors),
              unverified_emails=unverified_emails,
              providers=request.registry.settings['login_providers'],
-             the_user=user,
+             the_user=profile,
              user=session.query(User).get(logged_in)))
 
 
 @view_config(route_name='avatar')
 def avatar(request):
-    user, profile = get_profile(request)
+    profile = get_profile(request)
     size = int(request.matchdict.get('size'))
     if profile:
         gravatar_url = profile.avatar_url(size, request.application_url)
@@ -211,17 +205,14 @@ def assembl_register_view(request):
 
     #TODO: Validate password quality
     # otherwise create.
-    profile = AgentProfile(
-        name=name
-        )
     user = User(
-        profile=profile,
+        name=name,
         password=password,
         creation_date=datetime.now()
         )
     email_account = EmailAccount(
         email=email,
-        profile=profile
+        profile=user
         )
     session.add(user)
     session.add(email_account)
@@ -253,7 +244,7 @@ def assembl_login_complete_view(request):
         account = session.query(EmailAccount).filter_by(
             email=identifier, verified=True).first()
         if account:
-            user = account.profile.user
+            user = account.profile
     else:
         username = session.query(Username).filter_by(username=identifier).first()
         if username:
@@ -340,29 +331,35 @@ def velruse_login_complete_view(request):
             profiles.push(email_account.profile)
     # prefer profiles with verified users, then users, then oldest profiles
     profiles.sort(key=lambda p: (
-        not(p.user and p.user.verified), not p.user, p.id))
+        not(isinstance(p, User) and p.verified), not isinstance(p, User), p.id))
     if logged_in:
         # NOTE: Must make sure that login page not available when
         # logged in as another account.
         user = session.query(User).filter_by(id=logged_in).first()
         if user:
-            profile = user.profile
-            if profile in profiles:
-                profiles.remove(profile)
-            profiles.insert(0, user.profile)
+            if user in profiles:
+                profiles.remove(user)
+            profiles.insert(0, user)
     if len(profiles):
         # first is presumably best
         profile = profiles.pop(0)
         while len(profiles):
+            other = profiles.pop()
             # Multiple profiles. We need to combine them to one.
-            profile.merge(profiles.pop())
-        user = profile.user
-        if user:
-            username = profile.user.username
-            user.last_login = datetime.now()
+            profile.merge(other)
+            session.delete(other)
+        if isinstance(profile, User):
+            username = profile.username
+            profile.last_login = datetime.now()
     else:
-        # Create a new profile and user
-        profile = AgentProfile(name=velruse_profile['displayName'])
+        # Create a new user
+        profile = User(
+            name=velruse_profile['displayName'],
+            verified=True,
+            last_login=datetime.now(),
+            creation_date=datetime.now(),
+            #timezone=velruse_profile['utcOffset'],   # TODO: needs parsing
+            )
 
         session.add(profile)
         username = None
@@ -372,16 +369,8 @@ def velruse_login_complete_view(request):
             if not session.query(Username).filter_by(username=u).count():
                 username = u
                 break
-        user = User(
-            profile=profile,
-            verified=True,
-            last_login=datetime.now(),
-            creation_date=datetime.now(),
-            #timezone=velruse_profile['utcOffset'],   # TODO: needs parsing
-            )
-        session.add(user)
         if username:
-            session.add(Username(username=username, user=user))
+            session.add(Username(username=username, user=profile))
     for idp_account in new_idp_accounts:
         idp_account.profile = profile
     # Now all accounts have a profile
@@ -418,8 +407,8 @@ def velruse_login_complete_view(request):
     # Note that if an IdP account stops claiming an email, it "leaks".
     session.flush()
 
-    user_id = user.id
-    headers = remember(request, user_id, tokens=format_token(user))
+    user_id = profile.id
+    headers = remember(request, user_id, tokens=format_token(profile))
     request.response.headerlist.extend(headers)
     transaction.commit()
     # TODO: Store the OAuth etc. credentials.
@@ -442,8 +431,8 @@ def confirm_user_email(request):
         raise HTTPNotFound()
     if not email.verified:
         send_confirmation_email(request, email)
-    if email.profile.user:
-        user = email.profile.user
+    if isinstance(email.profile, User):
+        user = email.profile
         # TODO: Say we did it.
         if user.username:
             raise HTTPFound(location='/user/u/'+user.username)
@@ -480,8 +469,8 @@ def user_confirm_email(request):
         user = None
         username = None
         userid = None
-        if email.profile.user:
-            user = email.profile.user
+        if isinstance(email.profile, User):
+            user = email.profile
             username = user.username
             userid = user.id
         transaction.commit()

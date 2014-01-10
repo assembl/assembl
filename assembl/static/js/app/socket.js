@@ -75,22 +75,8 @@ define(['app', 'underscore', 'sockjs'], function(app, _, SockJS){
             return;
         }
 
-        model = collection.get(item['@id']);
-
-        if( item['@tombstone'] ){
-            collection.remove(model);
-            return;
-        }
-
-        item = new collection.model(item);
-        // can be undefined
-        if( model == null ){ 
-            // oops, doesn't exist
-            collection.add(item);
-        } else {
-            // yeah, it exists
-            collection.add(item, {merge: true});
-        }
+        // Each collection must know what to do
+        collection.updateFromSocket(item);
     };
 
     return Socket;

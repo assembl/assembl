@@ -36,7 +36,6 @@ def add_user(name, email, password, role, force=False, username=None,
     # refetch within transaction
     all_roles = {r.name: r for r in Role.db.query(Role).all()}
     user = None
-    profile = None
     if discussion and localrole:
         discussion_ob = db.query(Discussion).filter_by(slug=discussion).first()
         assert discussion_ob,\
@@ -52,20 +51,17 @@ def add_user(name, email, password, role, force=False, username=None,
         assert force or not existing_username,\
             "User with username %s already exists" % (username,)
         assert not existing_email or not existing_username or \
-            existing_username.user.profile == existing_email.profile,\
+            existing_username.user == existing_email.profile,\
             "Two different users already exist with "\
             "username %s and email %s." % (username, email)
     if existing_email:
-        profile = existing_email.profile
-        user = profile.user
+        user = existing_email.profile
     elif username and existing_username:
         user = existing_username.user
-        profile = user.profile
-    old_user = bool(user)
+    old_user = isinstance(user, User)
     if old_user:
-        profile = user.profile
         user.preferred_email = email
-        user.profile.name = name
+        user.name = name
         user.verified = True
         user.set_password(password)
         if username:
@@ -74,27 +70,32 @@ def add_user(name, email, password, role, force=False, username=None,
             else:
                 db.add(Username(username=username, user=user))
     else:
-        if not profile:
+        if user:
             # Profile may have come from userless existing AgentProfile
-            profile = AgentProfile(name=name)
-            db.add(profile)
-        user = User(
-            profile=profile,
-            preferred_email=email,
-            verified=True,
-            password=password,
-            creation_date=datetime.now())
+            user = User(
+                    id = user.id,
+                    preferred_email=email,
+                    verified=True,
+                    password=password,
+                    creation_date=datetime.now())
+        else:
+            user = User(
+                name=name,
+                preferred_email=email,
+                verified=True,
+                password=password,
+                creation_date=datetime.now())
         db.add(user)
         if username:
             db.add(Username(username=username, user=user))
-    for account in profile.accounts:
+    for account in user.accounts:
         if isinstance(account, EmailAccount) and account.email == email:
             account.verified = True
             account.preferred = True
             break
     else:
         account = EmailAccount(
-            profile=profile,
+            profile=user,
             email=email,
             preferred=True,
             verified=True)

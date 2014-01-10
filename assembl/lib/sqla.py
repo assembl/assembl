@@ -573,6 +573,9 @@ def orm_delete_listener(mapper, connection, target):
 
 
 def before_commit_listener(session):
+    # If there hasn't been a flush yet, make sure any sql error occur BEFORE
+    # we send changes to the socket.
+    session.flush()
     info = session.connection().info
     if 'cdict' in info:
         changes = defaultdict(list)

@@ -11,8 +11,6 @@ function(app, Base, _, User, Message){
          * @init
          */
         initialize: function(){
-            this.on('change:idIdea', this.onAttrChange, this);
-            
             if( this.attributes.created ){
                 this.attributes.creationDate = this.attributes.created;
             }
@@ -97,13 +95,6 @@ function(app, Base, _, User, Message){
                 app.segmentPostCache[idPost] = post;
             }
             return post;
-        },
-
-        /**
-         * @event
-         */
-        onAttrChange: function(){
-            this.save();
         },
 
         /**

@@ -121,7 +121,7 @@ function(Backbone, _, Idea, Message, app, ckeditor, i18n){
             delete segment.attributes.highlights;
 
             var id = this.idea.getId();
-            segment.set('idIdea', id);
+            segment.save('idIdea', id);
         },
 
         /**
@@ -174,7 +174,6 @@ function(Backbone, _, Idea, Message, app, ckeditor, i18n){
             }
 
             this.idea.on('change', this.render, this);
-
             this.render();
         },
 
@@ -239,7 +238,7 @@ function(Backbone, _, Idea, Message, app, ckeditor, i18n){
             if( data === '' ){
                 data = i18n.gettext('New Idea');
             }
-            this.idea.set('shortTitle', data);
+            this.idea.save('shortTitle', data);
         },
 
         /**
@@ -330,7 +329,7 @@ function(Backbone, _, Idea, Message, app, ckeditor, i18n){
                 var segment = app.segmentList.segments.get(cid);
 
                 if( segment ){
-                    segment.set('idIdea', null);
+                    segment.save('idIdea', null);
                 }
             }
         },
@@ -432,7 +431,7 @@ function(Backbone, _, Idea, Message, app, ckeditor, i18n){
             var text = this.ckInstance.getData();
             text = $.trim(text);
             
-            this.idea.set({ 'longTitle': text, 'ideaPanel-editing': false });
+            this.idea.save({ 'longTitle': text, 'ideaPanel-editing': false });
             this.ckInstance.destroy();
         },
 

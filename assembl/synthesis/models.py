@@ -460,10 +460,16 @@ class IdeaLink(SQLAlchemyBaseModel):
         'idea.id', ondelete="CASCADE", onupdate="CASCADE"),
         nullable=False, index=True)
     source = relationship(
-        'Idea', backref=backref('target_links', cascade="all, delete-orphan"),
+        'Idea', 
+        primaryjoin="and_(Idea.id==IdeaLink.source_id, "
+                        "IdeaLink.is_tombstone==False)",
+        backref=backref('target_links', cascade="all, delete-orphan"),
         foreign_keys=(source_id))
     target = relationship(
-        'Idea', backref=backref('source_links', cascade="all, delete-orphan"),
+        'Idea',
+        primaryjoin="and_(Idea.id==IdeaLink.target_id, "
+                        "IdeaLink.is_tombstone==False)",
+        backref=backref('source_links', cascade="all, delete-orphan"),
         foreign_keys=(target_id))
     order = Column(Float, nullable=False, default=0.0)
     is_tombstone = Column(Boolean, nullable=False, default=False, index=True)
@@ -526,6 +532,13 @@ class Idea(SQLAlchemyBaseModel):
     def parents(self):
         return [cl.source for cl in self.source_links]
 
+    def get_all_ancestors(self):
+        ancestors = []
+        for source_link in self.source_links:
+            ancestors.append(source_link.source)
+            ancestors += source_link.source.get_all_ancestors()
+        return ancestors
+    
     def get_order_from_first_parent(self):
         return self.source_links[0].order if self.source_links else None
 

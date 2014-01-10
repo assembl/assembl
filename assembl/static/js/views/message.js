@@ -46,6 +46,12 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
         currentAnnotation: null,
 
         /**
+         * Stores the current level
+         * @type {Number}
+         */
+        currentLevel: null,
+
+        /**
          * The render
          * @param {Number} [level] The hierarchy level
          * @return {MessageView}
@@ -54,10 +60,14 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
             app.trigger('render');
             var data = this.model.toJSON();
 
+            if( ! _.isUndefined(level) ){
+                this.currentLevel = level;
+            }
+
             data['id'] = data['@id'];
             data['date'] = app.formatDate(data.date);
-            data['level'] = level || this.model.getLevel();
             data['creator'] = this.model.getCreator();
+            data['level'] = this.currentLevel !== null ? this.currentLevel : this.model.getLevel();
 
             this.el.setAttribute('data-message-level', data['level']);
 
@@ -170,7 +180,7 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
                 url = app.getApiUrl('posts'),
                 data = {},
                 that = this,
-                btn_original_text=btn.text();
+                btn_original_text = btn.text();
 
             data.message = this.$('.message-textarea').val();
             if( this.model.getId() ){
@@ -330,7 +340,7 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
                 this.model.setRead(true);
             }
 
-            this.render(false);
+            this.render();
         },
 
         /**
