@@ -44,7 +44,7 @@ class BaseTest(unittest.TestCase):
         }
 
         self.app = TestApp(assembl.main(
-            global_config, **self.app_settings))
+            global_config, nosecurity=True, **self.app_settings))
 
         self.config = testing.setUp(
             registry=self.app.app.registry,
