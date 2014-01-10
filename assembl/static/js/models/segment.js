@@ -178,7 +178,7 @@ function(app, Base, _, User, Message){
          * @return {Segment}
          */
         getByAnnotation: function(annotation){
-            return this.get(annotation.id);
+            return this.get(annotation['@id']);
         }
     });
 
