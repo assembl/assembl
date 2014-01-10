@@ -59,6 +59,7 @@ define(['models/base','underscore', 'models/segment', 'app', 'i18n'], function(B
             if (this.get('root') === true) {
                 return i18n.gettext('The root idea will not be in the synthesis');
             }
+
             if( app.stripHtml(this.get('longTitle')) !== '' ){
                 return this.get('longTitle');
             } else if ( app.stripHtml(this.get('shortTitle')) !== '' ){
@@ -66,7 +67,6 @@ define(['models/base','underscore', 'models/segment', 'app', 'i18n'], function(B
             } else {
                 return i18n.gettext('Add the description');
             }
-
         },
 
         getShortTitleDisplayText: function(){

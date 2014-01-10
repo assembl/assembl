@@ -195,7 +195,7 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
             });
 
             this.annotator.subscribe('annotationCreated', function(annotation){
-                var segment = app.segmentList.addAnnotationAsSegment( annotation, app.currentAnnotationIdIdea );
+                var segment = app.segmentList.addAnnotationAsSegment(annotation, app.currentAnnotationIdIdea);
 
                 if( !segment.isValid() ){
                     annotator.deleteAnnotation(annotation);

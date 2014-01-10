@@ -296,7 +296,7 @@ function(Backbone, _, $, Idea, Segment, app){
                     app.saveCurrentAnnotation();
                 } else {
                     // Add as a segment
-                    app.currentAnnotationIdIdea = this.model.get('id');
+                    app.currentAnnotationIdIdea = this.model.getId();
                     app.saveCurrentAnnotation();
                 }
                 
