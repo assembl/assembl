@@ -80,6 +80,13 @@ define(['models/base', 'app', 'jquery', 'i18n', 'permissions'], function(Base, a
          */
         can: function(permission){
             return this.hasPermission(permission);
+        },
+
+        /**
+         * @return {Boolean} true if the user is an unknown user
+         */
+        isUnknownUser: function(){
+            return this.getId() == UNKNOWN_USER_ID;
         }
 
     });

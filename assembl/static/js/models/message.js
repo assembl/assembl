@@ -137,6 +137,13 @@ define(['models/base', 'jquery', 'app'], function(Base, $, app){
          * @param {Boolean} value
          */
         setRead: function(value){
+            var user = app.getCurrentUser();
+
+            if( user.isUnknownUser() ){
+                // Unknown User can't mark as read
+                return;
+            }
+
             var isRead = this.get('read');
             if( value === isRead ){
                 return; // Nothing to do
