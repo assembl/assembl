@@ -687,9 +687,9 @@ WHERE post.id NOT IN (
 
     def __repr__(self):
         if self.short_title:
-            return "<Idea %d %s>" % (self.id, repr(self.short_title))
+            return "<Idea %d %s>" % (self.id or -1, repr(self.short_title))
 
-        return "<Idea %d>" % self.id
+        return "<Idea %d>" % (self.id or -1,)
 
     @classmethod
     def invalidate_ideas(cls, discussion_id, post_id):
@@ -1039,7 +1039,7 @@ class Extract(IdeaContentPositiveLink):
         return json
 
     def __repr__(self):
-        return "<Extract %d %s>" % (self.id, repr(self.body[:20]))
+        return "<Extract %d %s>" % (self.id or -1, repr(self.body[:20]))
 
     def get_target(self):
         return self.content
