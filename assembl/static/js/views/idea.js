@@ -293,11 +293,11 @@ function(Backbone, _, $, Idea, Segment, app){
                 if( isDraggedBelow ){
                     // Add as a child
                     app.currentAnnotationIdea = this.model;
-                    app.saveCurrentAnnotator();
+                    app.saveCurrentAnnotation();
                 } else {
                     // Add as a segment
                     app.currentAnnotationIdIdea = this.model.get('id');
-                    app.saveCurrentAnnotator();
+                    app.saveCurrentAnnotation();
                 }
                 
                 return;

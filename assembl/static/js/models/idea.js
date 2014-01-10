@@ -245,7 +245,7 @@ define(['models/base','underscore', 'models/segment', 'app', 'i18n'], function(B
          * @param  {Segment} segment
          */
         addSegment: function(segment){
-            segment.set('idIdea', this.getId());
+            segment.save('idIdea', this.getId());
             this.trigger("change:segments");
         },
 
@@ -279,8 +279,7 @@ define(['models/base','underscore', 'models/segment', 'app', 'i18n'], function(B
                 currentOrder = 1;
 
             _.each(children, function(child){
-                child.set('order', currentOrder);
-                child.save();
+                child.save('order', currentOrder);
                 currentOrder += 1;
             });
         }

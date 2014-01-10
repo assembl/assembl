@@ -187,7 +187,7 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
                         func = app.showSegmentByAnnotation.bind(window, annotation);
 
                     _.each(highlights, function(highlight){
-                        highlight.setAttribute('data-annotation-id', annotation.id);
+                        highlight.setAttribute('data-annotation-id', annotation['@id']);
                         $(highlight).on('click', func);
                     });
 

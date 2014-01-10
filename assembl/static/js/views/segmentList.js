@@ -207,7 +207,7 @@ function(Backbone, _, $, app, Segment, i18n){
             var cid = ev.currentTarget.getAttribute('data-segmentid'),
                 segment = this.segments.get(cid);
 
-            app.showDragbox(ev, segment.get('quote'));
+            app.showDragbox(ev, segment.getQuote());
             app.draggedSegment = segment;
         },
 
@@ -275,7 +275,7 @@ function(Backbone, _, $, app, Segment, i18n){
 
             var annotation = app.getDraggedAnnotation();
             if( annotation ){
-                app.saveCurrentAnnotator();
+                app.saveCurrentAnnotation();
                 return;
             }
 

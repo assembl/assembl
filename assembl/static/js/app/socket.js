@@ -7,11 +7,7 @@ define(['app', 'underscore', 'sockjs'], function(app, _, SockJS){
      * @param {string} url
      */
     var Socket = function(){
-        this.socket = new SockJS(app.socket_url);
-        this.socket.onopen = this.onOpen.bind(this);
-        this.socket.onmessage = this.onMessage.bind(this);
-        this.socket.onclose = this.onClose.bind(this);
-        this.state = Socket.STATE_CLOSED;
+        this.init();
     };
 
     /**
@@ -20,6 +16,18 @@ define(['app', 'underscore', 'sockjs'], function(app, _, SockJS){
     Socket.STATE_CLOSED = 0;
     Socket.STATE_CONNECTING = 1;
     Socket.STATE_OPEN = 2;
+    Socket.CONNECTION_TIMEOUT_TIME = 5000;
+
+    /**
+     * @init
+     */
+    Socket.prototype.init = function(){
+        this.socket = new SockJS(app.socket_url);
+        this.socket.onopen = this.onOpen.bind(this);
+        this.socket.onmessage = this.onMessage.bind(this);
+        this.socket.onclose = this.onClose.bind(this);
+        this.state = Socket.STATE_CLOSED;
+    };
 
     /**
      * Triggered when the connection opens
@@ -57,7 +65,11 @@ define(['app', 'underscore', 'sockjs'], function(app, _, SockJS){
      */
     Socket.prototype.onClose = function(ev){
         app.trigger('socket:close', [this.socket, ev]);
-        this.state = Socket.STATE_CLOSED;
+        
+        var that = this;
+        window.setTimeout(function(){
+            that.init();
+        }, Socket.CONNECTION_TIMEOUT_TIME);
     };
 
     /**
