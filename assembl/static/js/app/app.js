@@ -663,7 +663,7 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard, Types){
                 case Types.SYNTHESIS_POST:
                 case Types.IMPORTED_POST:
                 case Types.EMAIL:
-                    return app.messageList.messages;
+                    return app.messageList.allMessages;
 
                 case Types.USER:
                     return app.users;
