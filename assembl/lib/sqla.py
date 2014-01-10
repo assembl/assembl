@@ -325,7 +325,7 @@ class BaseOps(object):
                         return v.generic_json(view_name)
                     else:
                         return v.uri(base_uri)
-                elif isinstance(v, (str, unicode, int, float, bool, types.NoneType)):
+                elif isinstance(v, (str, unicode, int, long, float, bool, types.NoneType)):
                     return v
                 elif isinstance(v, datetime):
                     return v.isoformat()

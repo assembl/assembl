@@ -656,7 +656,7 @@ WHERE post.id NOT IN (
         result = self.db.execute(text(
             Idea._get_count_related_posts_statement()),
             {"root_idea_id": self.id, "discussion_id": self.discussion_id})
-        return result.first()['total_count']
+        return int(result.first()['total_count'])
 
     @property
     def num_read_posts(self):
@@ -673,7 +673,7 @@ WHERE post.id NOT IN (
             Idea._get_count_related_posts_statement() + join),
             {"root_idea_id": self.id, "user_id": user_id,
              "discussion_id": self.discussion_id})
-        return result.first()['total_count']
+        return int(result.first()['total_count'])
 
     def get_discussion_id(self):
         return self.discussion_id
@@ -846,14 +846,14 @@ class RootIdea(Idea):
         result = self.db.query(Post).filter(
             Post.discussion_id == self.discussion_id
         ).count()
-        return result
+        return int(result)
 
     def get_num_orphan_posts(self):
         "The number of posts unrelated to any idea in the current discussion"
         result = self.db.execute(text(
             Idea._get_count_orphan_posts_statement()).params(
                 discussion_id=self.discussion_id))
-        return result.first()['total_count']
+        return int(result.first()['total_count'])
 
     @staticmethod
     def serializable_unsorted_posts_pseudo_idea(discussion):
