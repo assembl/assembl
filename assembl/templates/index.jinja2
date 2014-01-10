@@ -33,8 +33,10 @@
  
     <div class="bar bar--title">
         <div class="bar-left">
-            <span id="onlinedot" class="dot"></span>
-            <span class="title-debatname">{{ discussion.topic }}</span> 
+            <span id="onlinedot" class="dot">
+                <small class="dot-offline">{{ gettext('Connecting...') }}</small>
+                <span class="dot-online title-debatname">{{ discussion.topic }}</span>
+            </span>
         </div>
         <div class="bar-center">
             <a id="button-ideaList" class="barbutton" data-tooltip-position="n"

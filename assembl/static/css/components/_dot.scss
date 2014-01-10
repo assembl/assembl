@@ -20,6 +20,14 @@
         }
     }
 
+    .dot-offline {
+        display: initial;
+    }
+
+    .dot-online {
+        display: none;
+    }
+
 }
 
 
@@ -29,6 +37,14 @@
 
     &:before {
         background-color: #13a89e;
+    }
+
+    .dot-offline {
+        display: none;
+    }
+
+    .dot-online {
+        display: initial;
     }
 
 }
