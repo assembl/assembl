@@ -258,8 +258,8 @@ define(['models/base','underscore', 'models/segment', 'app', 'i18n'], function(B
             delete segment.attributes.highlights;
 
             var data = {
-                shortTitle: segment.get('quote').substr(0, 50),
-                longTitle: segment.get('quote'),
+                shortTitle: segment.getQuote().substr(0, 50),
+                longTitle: segment.getQuote(),
                 parentId: this.getId(),
                 order: this.getOrderForNewChild()
             };

@@ -477,6 +477,8 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard, Types){
 
             app.dragbox.removeAttribute('hidden');
 
+            text = text || i18n.gettext('Extract');
+
             if( text.length > DRAGBOX_MAX_LENGTH ){
                 text = text.substring(0, DRAGBOX_MAX_LENGTH) + '...';
             }

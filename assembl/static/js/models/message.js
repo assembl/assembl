@@ -1,4 +1,4 @@
-define(['models/base', 'jquery', 'app'], function(Base, $, app){
+define(['models/base', 'jquery', 'app', 'underscore'], function(Base, $, app, _){
     'use strict';
 
     /**
@@ -61,7 +61,7 @@ define(['models/base', 'jquery', 'app'], function(Base, $, app){
 
             _.each(segments, function(segment){
                 segment.attributes.ranges = segment.attributes._ranges;
-                ret.push( segment.attributes );
+                ret.push( _.clone(segment.attributes) );
             });
 
             return ret;
