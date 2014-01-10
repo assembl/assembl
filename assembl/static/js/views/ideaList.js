@@ -194,6 +194,14 @@ function(Backbone, _, Idea, IdeaView, app, Types){
         },
 
         /**
+         * Load the graph view
+         */
+        loadGraphView: function() {
+            app.loadGraphView();
+        },
+
+
+        /**
          * The events
          */
         'events': {
@@ -203,6 +211,7 @@ function(Backbone, _, Idea, IdeaView, app, Types){
 
             'click #ideaList-addbutton': 'addChildToSelected',
             'click #ideaList-collapseButton': 'toggleIdeas',
+            'click #ideaList-graphButton': 'loadGraphView',
             'click #ideaList-closeButton': 'closePanel',
             'click #ideaList-fullscreenButton': 'setFullscreen',
 

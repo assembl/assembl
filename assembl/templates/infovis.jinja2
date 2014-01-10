@@ -9,6 +9,11 @@
 {% block extra_css %}
 <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/lib/jit/base.css" />
 <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/lib/jit/Hypertree.css" />
+
+<style media="screen" type="text/css">
+#infovis {background: black;}
+</style>
+
 {% endblock %}
 
 {% block extra_js %}
@@ -80,7 +85,13 @@ requirejs(["jit"], function($jit) {
         //This is done by collecting the information (stored in the data property)   
         //for all the nodes adjacent to the centered node.  
         var node = ht.graph.getClosestNodeToOrigin("current");  
-        var html = "<h4>" + node.name + "</h4><b>Connections:</b>";  
+        var html = "<h4>" + node.name + "</h4><b>Connections:</b>";
+        if (callerApp !== undefined) {
+            var idea = callerApp.ideaList.ideas.get(node.id);
+            if (idea !== undefined) {
+                callerApp.setCurrentIdea(idea);
+            }
+        }
         html += "<ul>";  
         node.eachAdjacency(function(adj){  
             var child = adj.nodeTo;  
@@ -96,7 +107,7 @@ requirejs(["jit"], function($jit) {
   //load JSON data.  
   ht.loadJSON(json);  
   //compute positions and plot.  
-  ht.refresh();  
+  ht.refresh();
 });
 </script>
 

@@ -233,6 +233,12 @@
       "css": "reply",
       "code": 59409,
       "src": "websymbols"
+    },
+    {
+      "uid": "8a1d446e5555e76f82ddb1c8b526f579",
+      "css": "flow-tree",
+      "code": 59429,
+      "src": "entypo"
     }
   ]
 }
