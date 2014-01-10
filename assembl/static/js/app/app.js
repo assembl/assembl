@@ -709,8 +709,7 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard, Types){
 
                     var selector = app.format('[data-annotation-id="{0}"]', segment.id);
                     app.messageList.showMessageById(segment.get('idPost'), function(){
-                        console.log( selector, $(selector).length );
-                        $(selector).addClass('is-highlighted');
+                        $(selector).highlight();
                     });
                     break;
             }
