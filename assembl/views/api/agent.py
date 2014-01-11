@@ -9,6 +9,7 @@ from assembl.views.api import API_DISCUSSION_PREFIX
 from assembl.synthesis.models import Discussion
 
 from assembl.auth.models import (
+    P_READ,
     IdentityProvider,
     EmailAccount,
     AbstractAgentAccount,
@@ -44,7 +45,7 @@ def _get_agents_real(discussion, view_def=None):
     else:
         return [agent.serializable() for agent in agents]
 
-@agents.get()  # P_READ)
+@agents.get(permission=P_READ)
 def get_agents(request, discussion_only=False):
     discussion_id = int(request.matchdict['discussion_id'])
     discussion = Discussion.get(id=int(discussion_id))
@@ -53,7 +54,7 @@ def get_agents(request, discussion_only=False):
     view_def = request.GET.get('view')
     return _get_agents_real(discussion=discussion, view_def=view_def)
 
-@agent.get()  # permission=P_READ)
+@agent.get(permission=P_READ)
 def get_agent(request):
     view_def = request.GET.get('view')
     agent_id = request.matchdict['id']

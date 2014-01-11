@@ -9,7 +9,7 @@ from assembl.views.api import API_DISCUSSION_PREFIX
 
 from assembl.synthesis.models import Discussion
 
-
+from assembl.auth import P_READ
 
 sources = Service(
     name='sources',
@@ -19,7 +19,7 @@ sources = Service(
 )
 
 
-@sources.get()
+@sources.get(permission=P_READ)
 def get_sources(request):
     discussion_id = int(request.matchdict['discussion_id'])
     discussion = Discussion.get_instance(discussion_id)

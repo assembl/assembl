@@ -179,6 +179,21 @@ def put_extract(request):
     """
     extract_id = request.matchdict['id']
     user_id = authenticated_userid(request)
+    discussion_id = int(request.matchdict['discussion_id'])
+
+    if not user_id:
+        # Straight from annotator
+        token = request.headers.get('X-Annotator-Auth-Token')
+        if token:
+            token = decode_token(
+                token, request.registry.settings['session.secret'])
+            if token:
+                user_id = token['userId']
+    if not user_id:
+        user_id = Everyone
+    if not user_has_permission(discussion_id, user_id, P_EDIT_EXTRACT):
+        return HTTPForbidden()
+
 
     updated_extract_data = json.loads(request.body)
     extract = Extract.get_instance(extract_id)
@@ -205,6 +220,22 @@ def put_extract(request):
 
 @extract.delete()  # permission=P_DELETE_EXTRACT
 def delete_extract(request):
+    user_id = authenticated_userid(request)
+    discussion_id = int(request.matchdict['discussion_id'])
+
+    if not user_id:
+        # Straight from annotator
+        token = request.headers.get('X-Annotator-Auth-Token')
+        if token:
+            token = decode_token(
+                token, request.registry.settings['session.secret'])
+            if token:
+                user_id = token['userId']
+    if not user_id:
+        user_id = Everyone
+    if not user_has_permission(discussion_id, user_id, P_DELETE_EXTRACT):
+        return HTTPForbidden()
+
     extract_id = request.matchdict['id']
     extract = Extract.get_instance(extract_id)
 
