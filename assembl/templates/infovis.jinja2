@@ -84,9 +84,9 @@ requirejs(["jit"], function($jit) {
         //Build the right column relations list.  
         //This is done by collecting the information (stored in the data property)   
         //for all the nodes adjacent to the centered node.  
-        var node = ht.graph.getClosestNodeToOrigin("current");  
+        var node = ht.graph.getClosestNodeToOrigin("current");
         var html = "<h4>" + node.name + "</h4><b>Connections:</b>";
-        if (callerApp !== undefined) {
+        if (window.callerApp !== undefined) {
             var idea = callerApp.ideaList.ideas.get(node.id);
             if (idea !== undefined) {
                 callerApp.setCurrentIdea(idea);
@@ -97,7 +97,7 @@ requirejs(["jit"], function($jit) {
             var child = adj.nodeTo;  
             if (child.data) {  
                 var rel = (child.data.band == node.name) ? child.data.relation : node.data.relation;  
-                html += "<li>" + child.name + " " + "<div class=\"relation\">(relation: " + rel + ")</div></li>";  
+                html += "<li onmouseup='setIdea(\""+child.id+"\");'>" + child.name+"</li>";  
             }  
         });
         html += "</ul>";  
@@ -107,7 +107,11 @@ requirejs(["jit"], function($jit) {
   //load JSON data.  
   ht.loadJSON(json);  
   window.setIdea = function(id) {
-    ht.onClick(id);
+    ht.onClick(id, {  
+        onComplete: function() {  
+            ht.controller.onComplete();  
+        }  
+    });
   };
   //compute positions and plot.  
   ht.refresh();

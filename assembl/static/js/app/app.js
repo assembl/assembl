@@ -617,10 +617,12 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard, Types){
          * @param  {Idea} [idea]
          */
         setCurrentIdea: function(idea){
-            app.trigger('idea:select', [idea]);
-            if (this.graphWindow !== undefined && 
-                this.graphWindow.setIdea !== undefined) {
-                this.graphWindow.setIdea(idea.getId());
+            if (idea != this.getCurrentIdea()) {
+                app.trigger('idea:select', [idea]);
+                if (this.graphWindow !== undefined && 
+                    this.graphWindow.setIdea !== undefined) {
+                    this.graphWindow.setIdea(idea.getId());
+                }
             }
         },
 
