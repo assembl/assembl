@@ -4,7 +4,7 @@ Chameleon==2.14
 ColanderAlchemy==0.3.0
 DateTime==4.0.1
 Fabric==1.8.1
-Jinja2==2.7.1
+Jinja2==2.7.2
 Mako==0.9.1
 MarkupSafe==0.18
 PasteDeploy==1.5.2
@@ -14,7 +14,7 @@ SQLAlchemy==0.9.1
 Unidecode==0.04.14
 WebOb==1.3.1
 WebTest==2.0.11
-alembic==0.6.1
+alembic==0.6.2
 amqp==1.3.3
 anyjson==0.3.3
 anykeystore==0.2
@@ -26,7 +26,7 @@ colander==1.0b1
 coverage==3.7.1
 ecdsa==0.10
 -e git+https://github.com/maparent/fixture.git@master#egg=fixture
-greenlet==0.4.1
+greenlet==0.4.2
 imaplib2==2.28.1
 iso8601==0.1.8
 -e git+https://github.com/benoitg/jwzthreading.git@master#egg=jwzthreading
@@ -34,9 +34,9 @@ kombu==3.0.8
 meld3==0.6.10
 nose==1.3.0
 oauthlib==0.6.0
-paramiko==1.12.0
-pinocchio==0.3.1
-psycopg2==2.5.1
+paramiko==1.12.1
+pinocchio==0.4.1
+psycopg2==2.5.2
 pycrypto==2.6.1
 pylibmc==1.2.3
 pyramid==1.4.5
@@ -47,15 +47,15 @@ pyramid-mailer==0.13
 pyramid-mako==0.3.1
 pyramid-tm==0.7
 python-openid==2.2.5
-pytz==2013.8
+pytz==2013.9
 pyzmq==14.0.1
-redis==2.8.0
+redis==2.9.0
 repoze.lru==0.6
 repoze.sendmail==4.1
-requests==2.1.0
+requests==2.2.0
 requests-oauthlib==0.4.0
-simplejson==3.3.1
-six==1.4.1
+simplejson==3.3.2
+six==1.5.2
 -e git+https://github.com/mrjoes/sockjs-tornado.git@master#egg=sockjs_tornado
 sockjsproxy==0.7.1
 supervisor==3.0
@@ -68,4 +68,4 @@ waitress==0.8.8
 wsgiref==0.1.2
 zope.deprecation==4.1.0
 zope.interface==4.0.5
-zope.sqlalchemy==0.7.3
+zope.sqlalchemy==0.7.4
