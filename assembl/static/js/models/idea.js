@@ -59,6 +59,7 @@ define(['models/base','underscore', 'models/segment', 'app', 'i18n'], function(B
             if (this.get('root') === true) {
                 return i18n.gettext('The root idea will not be in the synthesis');
             }
+
             if( app.stripHtml(this.get('longTitle')) !== '' ){
                 return this.get('longTitle');
             } else if ( app.stripHtml(this.get('shortTitle')) !== '' ){
@@ -66,7 +67,6 @@ define(['models/base','underscore', 'models/segment', 'app', 'i18n'], function(B
             } else {
                 return i18n.gettext('Add the description');
             }
-
         },
 
         getShortTitleDisplayText: function(){
@@ -245,7 +245,7 @@ define(['models/base','underscore', 'models/segment', 'app', 'i18n'], function(B
          * @param  {Segment} segment
          */
         addSegment: function(segment){
-            segment.set('idIdea', this.getId());
+            segment.save('idIdea', this.getId());
             this.trigger("change:segments");
         },
 
@@ -258,8 +258,8 @@ define(['models/base','underscore', 'models/segment', 'app', 'i18n'], function(B
             delete segment.attributes.highlights;
 
             var data = {
-                shortTitle: segment.get('quote').substr(0, 50),
-                longTitle: segment.get('quote'),
+                shortTitle: segment.getQuote().substr(0, 50),
+                longTitle: segment.getQuote(),
                 parentId: this.getId(),
                 order: this.getOrderForNewChild()
             };
@@ -279,8 +279,7 @@ define(['models/base','underscore', 'models/segment', 'app', 'i18n'], function(B
                 currentOrder = 1;
 
             _.each(children, function(child){
-                child.set('order', currentOrder);
-                child.save();
+                child.save('order', currentOrder);
                 currentOrder += 1;
             });
         }

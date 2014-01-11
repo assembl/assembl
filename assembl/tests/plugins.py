@@ -56,19 +56,15 @@ class Assembl(Plugin):
 
     def clear_rows(self):
         log.info('Clearing database rows.')
-        transaction.begin()
-        self._session = self.session_factory()
-        for row in self.get_all_tables():
-            # OR rebuild default permissions afterwards?
-            # TODO: Separate table creation from base data fixture
-            # in bootstrap_db
-            if row in ('permission', 'role'):
-                continue
-            log.debug("Clearing table: %s" % row)
-            self._session.execute("delete from \"%s\"" % row)
-        mark_changed()
-        transaction.commit()
-        self._session = self.session_factory()
+        with transaction.manager:
+            for row in self.get_all_tables():
+                # OR rebuild default permissions afterwards?
+                # TODO: Separate table creation from base data fixture
+                # in bootstrap_db
+                if row in ('permission', 'role'):
+                    continue
+                log.debug("Clearing table: %s" % row)
+                self._session.execute("delete from \"%s\"" % row)
 
     def drop_tables(self):
         log.info('Dropping all tables.')

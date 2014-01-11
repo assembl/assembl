@@ -153,6 +153,12 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard, Types){
         openedPanels: 0,
 
         /**
+         * The window reference of the infovis graph
+         * @type {Window}
+         */
+        graphWindow: undefined,
+
+        /**
          * Formats the url to the current api url
          * @param  {string} url
          * @return {string} The url formatted
@@ -376,7 +382,7 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard, Types){
         /**
          * Saves the current annotation if there is any
          */
-        saveCurrentAnnotator: function(){
+        saveCurrentAnnotation: function(){
             if( app.messageList.annotatorEditor ){
                 app.messageList.annotatorEditor.element.find('.annotator-save').click();
             }
@@ -476,6 +482,8 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard, Types){
             }
 
             app.dragbox.removeAttribute('hidden');
+
+            text = text || i18n.gettext('Extract');
 
             if( text.length > DRAGBOX_MAX_LENGTH ){
                 text = text.substring(0, DRAGBOX_MAX_LENGTH) + '...';
@@ -609,7 +617,13 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard, Types){
          * @param  {Idea} [idea]
          */
         setCurrentIdea: function(idea){
-            app.trigger('idea:select', [idea]);
+            if (idea != this.getCurrentIdea()) {
+                app.trigger('idea:select', [idea]);
+                if (this.graphWindow !== undefined && 
+                    this.graphWindow.setIdea !== undefined) {
+                    this.graphWindow.setIdea(idea.getId());
+                }
+            }
         },
 
         /**
@@ -709,7 +723,7 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard, Types){
 
                     var selector = app.format('[data-annotation-id="{0}"]', segment.id);
                     app.messageList.showMessageById(segment.get('idPost'), function(){
-                        $(selector).addClass('is-highlighted');
+                        $(selector).highlight();
                     });
                     break;
             }
@@ -849,6 +863,23 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard, Types){
          */
         cleanTooltips: function(){
             $('.tipsy').remove();
+        },
+
+        /**
+         * Load the graph view
+         */
+        loadGraphView: function() {
+            this.graphWindow = window.open("/"+this.slug+"/graph", "graphWindow");
+            var that = this;
+            window.setTimeout(function() {
+                that.graphWindow.callerApp = that;
+                var idea = that.getCurrentIdea();
+                if (idea !== undefined) {
+                    if (that.graphWindow.setIdea !== undefined) {
+                        that.graphWindow.setIdea(idea.getId());
+                    }
+                }
+            }, 1000);
         },
 
         /**

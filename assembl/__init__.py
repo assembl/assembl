@@ -30,12 +30,13 @@ def main(global_config, **settings):
     config.include('.lib.zmqlib')
     session_factory = session_factory_from_settings(settings)
     config.set_session_factory(session_factory)
-    # import after session to delay loading of BaseOps
-    from auth import authentication_callback
-    auth_policy = SessionAuthenticationPolicy(
-        callback=authentication_callback)
-    config.set_authentication_policy(auth_policy)
-    config.set_authorization_policy(ACLAuthorizationPolicy())
+    if not settings.get('nosecurity', False):
+        # import after session to delay loading of BaseOps
+        from auth import authentication_callback
+        auth_policy = SessionAuthenticationPolicy(
+            callback=authentication_callback)
+        config.set_authentication_policy(auth_policy)
+        config.set_authorization_policy(ACLAuthorizationPolicy())
     # ensure default roles and permissions at startup
     from models import get_session_maker
     from auth.models import (

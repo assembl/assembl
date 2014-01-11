@@ -270,9 +270,9 @@ function(Backbone, _, Idea, Message, app, ckeditor, i18n){
                 ev.currentTarget.style.opacity = 0.4;
 
                 var cid = ev.currentTarget.getAttribute('data-segmentid'),
-                    segment = app.segmentList.segments.get(cid);
+                    segment = app.segmentList.segments.getByCid(cid);
 
-                app.showDragbox(ev, segment.get('quote'));
+                app.showDragbox(ev, segment.getQuote());
                 app.draggedSegment = segment;
             }
         },

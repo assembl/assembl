@@ -254,7 +254,7 @@
     },
     "Extract": {
         "idIdea": "idea",
-        "target": "content",
+        "idPost": "content",
         "created": "creation_date",
         "idCreator": "creator",
         "annotator_schema_version": "'\"v1.0\"",

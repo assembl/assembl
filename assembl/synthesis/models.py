@@ -533,6 +533,9 @@ class Idea(SQLAlchemyBaseModel):
         return [cl.source for cl in self.source_links]
 
     def get_all_ancestors(self):
+        """ Get all ancestors of this idea by following source links.  
+        This is naive and slow, but not used very much for now.
+        TODO:  Rewrite once we migrate to virtuoso"""
         ancestors = []
         for source_link in self.source_links:
             ancestors.append(source_link.source)
@@ -641,7 +644,7 @@ WHERE post.id NOT IN (
         result = self.db.execute(text(
             Idea._get_count_related_posts_statement()),
             {"root_idea_id": self.id, "discussion_id": self.discussion_id})
-        return result.first()['total_count']
+        return int(result.first()['total_count'])
 
     @property
     def num_read_posts(self):
@@ -658,7 +661,7 @@ WHERE post.id NOT IN (
             Idea._get_count_related_posts_statement() + join),
             {"root_idea_id": self.id, "user_id": user_id,
              "discussion_id": self.discussion_id})
-        return result.first()['total_count']
+        return int(result.first()['total_count'])
 
     def get_discussion_id(self):
         return self.discussion_id
@@ -672,9 +675,9 @@ WHERE post.id NOT IN (
 
     def __repr__(self):
         if self.short_title:
-            return "<Idea %d %s>" % (self.id, repr(self.short_title))
+            return "<Idea %d %s>" % (self.id or -1, repr(self.short_title))
 
-        return "<Idea %d>" % self.id
+        return "<Idea %d>" % (self.id or -1,)
 
     @classmethod
     def invalidate_ideas(cls, discussion_id, post_id):
@@ -776,14 +779,14 @@ class RootIdea(Idea):
         result = self.db.query(Post).filter(
             Post.discussion_id == self.discussion_id
         ).count()
-        return result
+        return int(result)
 
     def get_num_orphan_posts(self):
         "The number of posts unrelated to any idea in the current discussion"
         result = self.db.execute(text(
             Idea._get_count_orphan_posts_statement()).params(
                 discussion_id=self.discussion_id))
-        return result.first()['total_count']
+        return int(result.first()['total_count'])
 
     @staticmethod
     def serializable_unsorted_posts_pseudo_idea(discussion):
@@ -811,7 +814,6 @@ class RootIdea(Idea):
         ser['root'] = True
         return ser
 
-
 class IdeaContentLink(SQLAlchemyBaseModel):
     """
     Abstract class representing a generic link between an idea and a Content
@@ -825,7 +827,7 @@ class IdeaContentLink(SQLAlchemyBaseModel):
     # attached later.
     idea_id = Column(Integer, ForeignKey('idea.id'),
                      nullable=True, index=True)
-    idea = relationship('Idea')
+    idea = relationship('Idea', active_history=True)
 
     content_id = Column(Integer, ForeignKey(
         'content.id', ondelete="CASCADE", onupdate="CASCADE"),
@@ -857,6 +859,17 @@ class IdeaContentLink(SQLAlchemyBaseModel):
         elif self.idea_id:
             return Idea.get(id=self.idea_id).get_discussion_id()
 
+@event.listens_for(IdeaContentLink.idea, 'set', propagate=True, active_history=True)
+def idea_content_link_idea_set_listener(target, value, oldvalue, initiator):
+    print "idea_content_link_idea_set_listener for target: %s set to %s, was %s" % (target, value, oldvalue)
+    if oldvalue is not None:
+        oldvalue.send_to_changes()
+        for ancestor in oldvalue.get_all_ancestors():
+            ancestor.send_to_changes()
+    if value is not None:
+        value.send_to_changes()
+        for ancestor in value.get_all_ancestors():
+            ancestor.send_to_changes()
 
 class IdeaContentPositiveLink(IdeaContentLink):
     """
@@ -959,7 +972,7 @@ class Extract(IdeaContentPositiveLink):
         return json
 
     def __repr__(self):
-        return "<Extract %d %s>" % (self.id, repr(self.body[:20]))
+        return "<Extract %d %s>" % (self.id or -1, repr(self.body[:20]))
 
     def get_target(self):
         return self.content

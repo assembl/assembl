@@ -26,6 +26,7 @@ colander==1.0b1
 -e git+https://github.com/mozilla-services/cornice.git@master#egg=cornice
 coverage==3.7.1
 ecdsa==0.10
+-e git+https://github.com/maparent/fixture.git@master#egg=fixture
 greenlet==0.4.1
 html5lib==0.95
 imaplib2==2.28.1

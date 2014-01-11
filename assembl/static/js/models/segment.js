@@ -103,7 +103,10 @@ function(app, Base, _, User, Message){
          */
         getTypeIcon: function(){
             var cls = 'icon-',
-                type = this.get('target')['@type'];
+                type = this.get('idPost')['@type'];
+
+            // todo(Marc-Antonie): review this `type` because `idPost`
+            // is a string and doesn't have `@type` attribute
 
             switch(type){
                 case 'Webpage':
@@ -178,7 +181,7 @@ function(app, Base, _, User, Message){
          * @return {Segment}
          */
         getByAnnotation: function(annotation){
-            return this.get(annotation.id);
+            return this.get(annotation['@id']);
         }
     });
 

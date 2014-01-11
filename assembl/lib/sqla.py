@@ -325,7 +325,7 @@ class BaseOps(object):
                         return v.generic_json(view_name)
                     else:
                         return v.uri(base_uri)
-                elif isinstance(v, (str, unicode, int, float, bool, types.NoneType)):
+                elif isinstance(v, (str, unicode, int, long, float, bool, types.NoneType)):
                     return v
                 elif isinstance(v, datetime):
                     return v.isoformat()
@@ -386,8 +386,6 @@ class BaseOps(object):
             reln = relns[prop_name]
             if reln.uselist:
                 vals = getattr(self, prop_name)
-                if not vals:
-                    continue
                 if view_name:
                     if isinstance(spec, dict):
                         result[name] = {
@@ -415,6 +413,11 @@ class BaseOps(object):
                         result[name] = [val]
                     else:
                         result[name] = val
+                else:
+                    if isinstance(spec, list):
+                        result[name] = []
+                    else:
+                        result[name] = None
             else:
                 uri = None
                 if len(reln._calculated_foreign_keys) == 1 \
@@ -434,6 +437,11 @@ class BaseOps(object):
                         result[name] = [uri]
                     else:
                         result[name] = uri
+                else:
+                    if isinstance(spec, list):
+                        result[name] = []
+                    else:
+                        result[name] = None
 
         if local_view.get('_default') is not False:
             for name, col in cols.items():
@@ -449,12 +457,16 @@ class BaseOps(object):
                         if ob_id:
                             result[name] = as_rel.mapper.class_.uri_generic(
                                 ob_id, base_uri)
+                        else:
+                            result[name] = None
                 else:
                     ob = getattr(self, name)
                     if ob:
                         if type(ob) == datetime:
                             ob = ob.isoformat()
                         result[name] = ob
+                    else:
+                        result[name] = None
         if use_dumps:
             return dumps(result)
         return result

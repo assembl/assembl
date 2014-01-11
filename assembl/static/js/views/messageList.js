@@ -46,13 +46,13 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
         collapsed: true,
 
         /**
-         * Collection with all messsages. Used to be filtered and replace `this.messages`
+         * List of message id's to be displayed in the interface
          * @type {MessageCollection}
          */
-        allMessages: new Message.Collection(),
+        messageIdsToDisplay: [],
 
         /**
-         * The collection which is being displayed
+         * Collection with all messsages in the discussion.
          * @type {MessageCollection}
          */
         messages: new Message.Collection(),
@@ -74,16 +74,45 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
          * @type {Object}
          */
         currentFilter: {},
-
+        
+        /**
+         * Returns the messages with no parent in the messages to be rendered
+         * TODO:  This is used in threading, but is sub-optimal as it won't 
+         * tie messages to their grandparent in partial views.
+         * @return {Message[]}
+         */
+        getRootMessages: function(){
+            var toReturn = [],
+                that = this,
+                messages = this.messages;
+            messages.each(function(model){
+                var parentId = model.get('parentId');
+                var id = model.getId();
+                if( that.messageIdsToDisplay.indexOf(id) >= 0
+                    && (parentId == null 
+                        || that.messageIdsToDisplay.indexOf(parentId) == -1 
+                        )
+                    ){
+                    toReturn.push(model);
+                }
+            });
+            return toReturn;
+        },
         /**
          * The render function
          * @return {views.Message}
          */
         render: function(){
+            /*console.log("render is firing, collection is: ");
+            this.messages.map(function(message){
+                console.log(message.getId())
+            })
+            console.log("messageIdsToDisplay is: ");
+            console.log(this.messageIdsToDisplay);*/
             app.trigger('render');
 
             var that = this,
-                rootMessages = this.messages.getRootMessages(),
+                rootMessages = this.getRootMessages(),
                 views = this.getRenderedMessages(rootMessages);
 
             var data = {
@@ -108,7 +137,7 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
         },
 
         /**
-         * Rendes the collapse button
+         * Renders the collapse button
          */
         renderCollapseButton: function(){
             var btn = this.$('#messageList-collapseButton');
@@ -142,27 +171,32 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
             for(; i < len; i += 1){
                 model = messages[i];
                 isValid = true;
-
-                // Let's pass it through the filter
-                for( prop in filter ){
-                    if( filter.hasOwnProperty(prop) ){
-                        // 5th level of depth. Yes! We! Can!
-                        if( model.get(prop) !== filter[prop] ){
-                            isValid = false;
-                            break;
+                if(this.messageIdsToDisplay.indexOf(model.getId()) >= 0){
+                    // We only process messages that are to be displayed
+                    
+                    // Let's pass it through the filter
+                    for( prop in filter ){
+                        if( filter.hasOwnProperty(prop) ){
+                            // 5th level of depth. Yes! We! Can!
+                            if( model.get(prop) !== filter[prop] ){
+                                isValid = false;
+                                break;
+                            }
                         }
                     }
+                    var parentId = model.get('parentId');
+                    if( isValid ){
+                        view = new MessageView({model:model});
+                        list.push(view.render(level).el);
+                    } else {
+                        //Why did we want this:
+                        //level -= 1;
+                        ;
+                    }
+    
+                    children = model.getChildren();
+                    list = _.union(list, this.getRenderedMessages(children, level+1));
                 }
-
-                if( isValid ){
-                    view = new MessageView({model:model});
-                    list.push(view.render(level).el);
-                } else {
-                    level -= 1;
-                }
-
-                children = model.getChildren();
-                list = _.union(list, this.getRenderedMessages(children, level+1));
             }
 
             return list;
@@ -187,7 +221,7 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
                         func = app.showSegmentByAnnotation.bind(window, annotation);
 
                     _.each(highlights, function(highlight){
-                        highlight.setAttribute('data-annotation-id', annotation.id);
+                        highlight.setAttribute('data-annotation-id', annotation['@id']);
                         $(highlight).on('click', func);
                     });
 
@@ -195,7 +229,7 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
             });
 
             this.annotator.subscribe('annotationCreated', function(annotation){
-                var segment = app.segmentList.addAnnotationAsSegment( annotation, app.currentAnnotationIdIdea );
+                var segment = app.segmentList.addAnnotationAsSegment(annotation, app.currentAnnotationIdIdea);
 
                 if( !segment.isValid() ){
                     annotator.deleteAnnotation(annotation);
@@ -298,7 +332,6 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
                 _.each(data.posts, function(post){
                     post.collapsed = true;
                 });
-                that.allMessages.reset(data.posts);
                 that.messages.reset(data.posts);
             });
         },
@@ -310,12 +343,14 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
         loadDataByQuery: function(ideaId, onlySynthesis, isUnread){
             var that = this,
                 url = app.getApiUrl('posts'),
-                params = {};
+                params = {},
+                id = null;
 
-            if( this.loadedIdeaId === ideaId ){
+            //TODO benoitg: Fix this
+            /*if( this.loadedIdeaId === ideaId ){
                 // already loaded
                 return;
-            }
+            }*/
     
             this.loadedIdeaId = ideaId;
     
@@ -342,15 +377,16 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
                 _.each(data.posts, function(post){
                     ids[post['@id']] = post;
                 });
-    
-                that.allMessages.each(function(message){
-                    if( message.get('@id') in ids ){
-                        messages.push(message);
+                
+                that.messageIdsToDisplay = [];
+                that.messages.each(function(message){
+                    id = message.get('@id')
+                    if( id in ids ){
+                        that.messageIdsToDisplay.push(id);
                     }
                 });
-    
                 that.unblockPanel();
-                that.messages.reset(messages);
+                that.render();
             });
         },
         /**

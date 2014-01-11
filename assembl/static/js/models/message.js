@@ -1,4 +1,4 @@
-define(['models/base', 'jquery', 'app'], function(Base, $, app){
+define(['models/base', 'jquery', 'app', 'underscore'], function(Base, $, app, _){
     'use strict';
 
     /**
@@ -61,7 +61,7 @@ define(['models/base', 'jquery', 'app'], function(Base, $, app){
 
             _.each(segments, function(segment){
                 segment.attributes.ranges = segment.attributes._ranges;
-                ret.push( segment.attributes );
+                ret.push( _.clone(segment.attributes) );
             });
 
             return ret;
@@ -137,6 +137,13 @@ define(['models/base', 'jquery', 'app'], function(Base, $, app){
          * @param {Boolean} value
          */
         setRead: function(value){
+            var user = app.getCurrentUser();
+
+            if( user.isUnknownUser() ){
+                // Unknown User can't mark as read
+                return;
+            }
+
             var isRead = this.get('read');
             if( value === isRead ){
                 return; // Nothing to do
@@ -158,16 +165,6 @@ define(['models/base', 'jquery', 'app'], function(Base, $, app){
                     app.trigger('ideas:update', [data.ideas]);
                 }
             });
-        },
-
-        /**
-         * Return `false` if the parent is `null` or it is NOT in the given collection
-         * @param {Base.Collection} collection
-         * @return {Boolean}
-         */
-        isParentInCollection: function(collection){
-            var parentId = this.get('parentId');
-            return !! collection.get(parentId);
         }
     });
 
@@ -184,26 +181,6 @@ define(['models/base', 'jquery', 'app'], function(Base, $, app){
          * @type {MessageModel}
          */
         model: MessageModel,
-
-        /**
-         * Returns the messages with no parent in the collection
-         * @return {Message[]}
-         */
-        getRootMessages: function(){
-            var toReturn = [],
-                that = this;
-
-            _.each(this.models, function(model){
-
-                if( ! model.isParentInCollection(that) ){
-                    toReturn.push(model);
-                    return;
-                }
-
-            });
-
-            return toReturn;
-        },
 
         /**
          * Return all segments in all messages in the annotator format
