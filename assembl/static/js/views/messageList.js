@@ -1,5 +1,5 @@
-define(['backbone', 'underscore', 'jquery', 'app', 'views/messageListItem', 'views/message', 'models/message', 'i18n'],
-function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
+define(['backbone', 'underscore', 'jquery', 'app', 'views/messageListItem', 'views/message', 'models/message', 'i18n', 'views/messageListPostQuery'],
+function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n, PostQuery){
     'use strict';
 
     /**
@@ -64,18 +64,18 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
         annotator: null,
 
         /**
-         * The current idea's id loaded
-         * @type {id}
-         */
-        loadedIdeaId: null,
-
-        /**
-         * The current filter applied to messages
+         * The current client-side filter applied to messages
          * @type {Object}
          */
         currentFilter: {},
         
         /**
+         * The current server-side query applied to messages
+         * @type {Object}
+         */
+        currentQuery: new PostQuery(),
+        
+         /**
          * Returns the messages with no parent in the messages to be rendered
          * TODO:  This is used in threading, but is sub-optimal as it won't 
          * tie messages to their grandparent in partial views.
@@ -118,7 +118,8 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
             var data = {
                 inbox: views.length,
                 total: views.length,
-                collapsed: this.collapsed
+                collapsed: this.collapsed,
+                queryInfo: "WRITEME!"
             };
 
             this.$el.html( this.template(data) );
@@ -341,50 +342,12 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
          * @param {String} ideaId
          */
         loadDataByQuery: function(ideaId, onlySynthesis, isUnread){
-            var that = this,
-                url = app.getApiUrl('posts'),
-                params = {},
-                id = null;
-
-            //TODO benoitg: Fix this
-            /*if( this.loadedIdeaId === ideaId ){
-                // already loaded
-                return;
-            }*/
-    
-            this.loadedIdeaId = ideaId;
-    
-            params.root_idea_id = ideaId;
-            
-            if(onlySynthesis === true){
-                params.only_synthesis = true;
-            }
-            
-            if(isUnread === true){
-                params.is_unread = true;
-            } else if(isUnread === false) {
-                params.is_unread = false;
-            }
-            params.view = 'id_only';
+            var that = this
     
             this.blockPanel();
             this.collapsed = true;
-    
-            $.getJSON(url, params, function(data){
-                var ids = {},
-                    messages = [];
-    
-                _.each(data.posts, function(post){
-                    ids[post['@id']] = post;
-                });
-                
-                that.messageIdsToDisplay = [];
-                that.messages.each(function(message){
-                    id = message.get('@id')
-                    if( id in ids ){
-                        that.messageIdsToDisplay.push(id);
-                    }
-                });
+            this.currentQuery._queryServer(ideaId, onlySynthesis, isUnread, function(data){
+                that.messageIdsToDisplay = data;
                 that.unblockPanel();
                 that.render();
             });

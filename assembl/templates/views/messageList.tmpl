@@ -19,6 +19,7 @@
             </ul>
         </div>
 
+        {#
         <div class="dropdown dropdown--button">
             <span class="dropdown-label">
                 <label class="chk chk--dropdown chk--muted">
@@ -35,7 +36,8 @@
                 <li id="messageList-selectunread" class="dropdown-listitem">{{ gettext('Unread') }}</li>
             </ul>
         </div>
-
+        #}
+        
         <div class="inline text-muted margin-left">
             {% set total = '<%= total %>' %}
             {{ gettext('%(total)s messages')|format(total=total)|safe }}
@@ -49,7 +51,7 @@
     </div>
 
     <div class="panel-body">
-
+        <div id="messageList-query-info" class=""><%= queryInfo %></div>
         <div id="messageList-list" class="idealist"></div>
 
     </div>
