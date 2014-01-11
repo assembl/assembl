@@ -147,7 +147,10 @@ def setup_data(fixture):
         DiscussionData, UserData, UserRoleData, RootIdeaData,
         IdeaData, IdeaLinkData, PostData, ExtractData)
     data.setup()
-    data.PostData.reply_post_1.parent = data.PostData.root_post_1
-    data.PostData.reply_post_2.parent = data.PostData.reply_post_1
-    data.PostData.reply_post_3.parent = data.PostData.root_post_1
+    data.PostData.reply_post_1._stored_object().parent = \
+        data.PostData.root_post_1._stored_object()
+    data.PostData.reply_post_2._stored_object().parent = \
+        data.PostData.reply_post_1._stored_object()
+    data.PostData.reply_post_3._stored_object().parent = \
+        data.PostData.root_post_1._stored_object()
     return data

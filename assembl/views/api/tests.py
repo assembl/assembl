@@ -31,8 +31,7 @@ class ApiTest(BaseTest):
         except Exception as e:
             traceback.print_exc()
             raise e
-        self.discussion = self.session.query(Discussion).get(
-            self.data.DiscussionData.jacklayton.id)
+        self.discussion = self.data.DiscussionData.jacklayton._stored_object()
         role = Role.get_role(self.session, R_SYSADMIN)
         self.data.UserRoleData.admin_role.role = role
         self.session.flush()
@@ -42,36 +41,14 @@ class ApiTest(BaseTest):
         self.config.set_authentication_policy(dummy_policy)
 
     def tearDown(self):
-        #self.data.teardown()
+        self.data.teardown()
         super(ApiTest, self).tearDown()
-        #self.data.loaded.clear()
-        # from fixture.dataset import dataset_registry
-        # dataset_registry.clear()
 
     def get_url(self, discussion, suffix):
         return '/api/v1/discussion/%d/%s' % (
             discussion.id,
             suffix,
         )
-
-    def create_dummy_discussion(self):
-        agent = AgentProfile(name="Dummy agent")
-        user = User(profile=agent)
-        username = Username(username="ben", user=user)
-        discussion = Discussion(
-            topic='Unicorns',
-            slug='discussion_slug'
-        )
-
-        self.session.add(discussion)
-        self.session.add(username)
-        create_default_permissions(self.session, discussion)
-        self.session.add(UserRole(
-            user=user, role=Role.get_role(
-                self.session, R_ADMINISTRATOR)))
-        self.session.flush()
-        self.config.testing_securitypolicy(userid=user.id, permissive=True)
-        return discussion
 
     def test_extracts(self):
         user = self.data.UserData.participant1
