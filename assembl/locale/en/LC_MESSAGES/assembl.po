@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: assembl 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2013-07-12 18:35-0400\n"
+"POT-Creation-Date: 2014-01-12 12:22-0500\n"
 "PO-Revision-Date: 2013-07-12 17:53-0400\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: en <LL@li.org>\n"
@@ -15,34 +15,435 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 0.9.6\n"
+"Generated-By: Babel 1.3\n"
 
-#: assembl/templates/index.jinja2:8
-msgid "Debat name"
+#: assembl/auth/operations.py:31 assembl/templates/register.jinja2:31
+msgid "email"
 msgstr ""
 
-#: assembl/templates/index.jinja2:11
-msgid "Table of Contents"
+#: assembl/auth/operations.py:33
+msgid "account"
 msgstr ""
 
-#: assembl/templates/index.jinja2:12 assembl/templates/views/ideaPanel.tmpl:8
+#: assembl/auth/operations.py:42
+msgid "confirm_title"
+msgstr ""
+
+#: assembl/auth/operations.py:45
+msgid "confirm_email"
+msgstr ""
+
+#: assembl/auth/operations.py:49
+msgid "confirm_email_html"
+msgstr ""
+
+#: assembl/lib/types.py:62
+msgid "${val} cannot be serialized: ${err}"
+msgstr ""
+
+#: assembl/lib/types.py:80
+msgid "${val} is not a string: ${err}"
+msgstr ""
+
+#: assembl/static/js/models/idea.js:34
+msgid "New idea"
+msgstr ""
+
+#: assembl/static/js/models/idea.js:60
+#: assembl/templates/includes/javascript.jinja2:135
+msgid "The root idea will not be in the synthesis"
+msgstr ""
+
+#: assembl/static/js/models/idea.js:68
+#: assembl/templates/includes/javascript.jinja2:120
+msgid "Add the description"
+msgstr ""
+
+#: assembl/static/js/models/idea.js:74
+#: assembl/templates/includes/javascript.jinja2:136
+msgid "All posts"
+msgstr ""
+
+#: assembl/static/js/models/segment.js:71
+#: assembl/templates/includes/javascript.jinja2:132
+msgid "You must be logged in to create segments"
+msgstr ""
+
+#: assembl/static/js/models/synthesis.js:33
+#: assembl/templates/includes/javascript.jinja2:123
+msgid "Add a title"
+msgstr ""
+
+#: assembl/static/js/models/synthesis.js:34
+#: assembl/templates/includes/javascript.jinja2:124
+msgid "Add an introduction"
+msgstr ""
+
+#: assembl/static/js/models/synthesis.js:35
+#: assembl/templates/includes/javascript.jinja2:125
+msgid "Add a conclusion"
+msgstr ""
+
+#: assembl/static/js/models/user.js:135
+msgid "Unknown user"
+msgstr ""
+
+#: assembl/static/js/views/ideaPanel.js:190
+msgid "ideaPanel-cantDeleteByChildren"
+msgstr ""
+
+#: assembl/static/js/views/ideaPanel.js:195
+msgid "ideaPanel-cantDeleteBySegments"
+msgstr ""
+
+#: assembl/static/js/views/ideaPanel.js:239
+#: assembl/templates/includes/javascript.jinja2:121
+msgid "New Idea"
+msgstr ""
+
+#: assembl/static/js/views/ideaPanel.js:352
+#: assembl/static/js/views/message.js:190
+#: assembl/templates/includes/javascript.jinja2:127
+msgid "Sending..."
+msgstr ""
+
+#: assembl/static/js/views/ideaPanel.js:371
+msgid "ideaPanel-clearConfirmationMessage"
+msgstr ""
+
+#: assembl/static/js/views/ideaPanel.js:388
+msgid "ideaPanel-deleteIdeaConfirmMessage"
+msgstr ""
+
+#: assembl/static/js/views/messageList.js:8
+msgid "You can drag the segment above directly to the table of ideas"
+msgstr ""
+
+#: assembl/static/js/views/messageList.js:129
+msgid "No messages"
+msgstr ""
+
+#: assembl/static/js/views/messageList.js:146
+#: assembl/templates/views/ideaList.tmpl:26
+#: assembl/templates/views/messageList.tmpl:45
+msgid "Expand all"
+msgstr ""
+
+#: assembl/static/js/views/messageList.js:149
+#: assembl/templates/views/ideaList.tmpl:26
+#: assembl/templates/views/messageList.tmpl:45
+msgid "Collapse all"
+msgstr ""
+
+#: assembl/static/js/views/messageList.js:247
+msgid "Send to clipboard"
+msgstr ""
+
+#: assembl/static/js/views/segmentList.js:301
+msgid "segmentList-clearConfirmationMessage"
+msgstr ""
+
+#: assembl/static/js/views/synthesisPanel.js:238
+#: assembl/templates/includes/javascript.jinja2:128
+msgid "Do you want to publish the synthesis?"
+msgstr ""
+
+#: assembl/static/js/views/synthesisPanel.js:258
+#: assembl/templates/includes/javascript.jinja2:134
+msgid "[synthesis] {0}"
+msgstr ""
+
+#: assembl/static/js/views/synthesisPanel.js:275
+#: assembl/templates/includes/javascript.jinja2:131
+msgid "Synthesis published!"
+msgstr ""
+
+#: assembl/synthesis/models.py:867
+msgid "Unsorted posts"
+msgstr ""
+
+#: assembl/templates/discussion_list.jinja2:9
+#: assembl/templates/admin/discussions.jinja2:72
+msgid "There are no discussions on this server yet"
+msgstr ""
+
+#: assembl/templates/index.jinja2:15
+msgid "Sign out"
+msgstr ""
+
+#: assembl/templates/index.jinja2:17 assembl/templates/login.jinja2:7
+#: assembl/templates/register.jinja2:7
+msgid "Sign in"
+msgstr ""
+
+#: assembl/templates/index.jinja2:37
+msgid "Connecting..."
+msgstr ""
+
+#: assembl/templates/index.jinja2:43
+msgid ""
+"To add an idea in the table of ideas: select add idea and drag the new "
+"idea either 1) on the inner edge of an existing idea to add it as a "
+"sibling or 2) in the middle of an existing idea to add it as a sub-idea."
+msgstr ""
+
+#: assembl/templates/index.jinja2:43
+msgid "Table of Ideas"
+msgstr ""
+
+#: assembl/templates/index.jinja2:44 assembl/templates/views/ideaPanel.tmpl:3
 msgid "Idea"
 msgstr ""
 
-#: assembl/templates/index.jinja2:13
+#: assembl/templates/index.jinja2:45
 msgid "Clipboard"
 msgstr ""
 
-#: assembl/templates/index.jinja2:14
+#: assembl/templates/index.jinja2:46
 msgid "Messages"
 msgstr ""
 
-#: assembl/templates/index.jinja2:18
+#: assembl/templates/index.jinja2:50
+#: assembl/templates/views/synthesisPanel.tmpl:3
 msgid "Synthesis"
 msgstr ""
 
+#: assembl/templates/login.jinja2:37
+msgid "Email or username"
+msgstr ""
+
+#: assembl/templates/login.jinja2:41 assembl/templates/register.jinja2:35
+msgid "Password"
+msgstr ""
+
+#: assembl/templates/login.jinja2:44
+msgid "Enter"
+msgstr ""
+
+#: assembl/templates/login.jinja2:48 assembl/templates/register.jinja2:48
+msgid "or"
+msgstr ""
+
+#: assembl/templates/login.jinja2:48
+msgid "register"
+msgstr ""
+
+#: assembl/templates/login.jinja2:52
+msgid "Login with external tools"
+msgstr ""
+
+#: assembl/templates/login.jinja2:68 assembl/templates/profile.jinja2:125
+#: assembl/templates/register.jinja2:53
+#: assembl/templates/view_profile.jinja2:56
+msgid "<a href='http://caravan.coop' class='link'>Caravan</a>"
+msgstr ""
+
+#: assembl/templates/login.jinja2:69 assembl/templates/register.jinja2:54
+#: assembl/templates/view_profile.jinja2:57
+msgid ""
+"<a href='http://http://imaginationforpeople.org/' "
+"class='link'>Imagination for people</a>"
+msgstr ""
+
+#: assembl/templates/login.jinja2:71 assembl/templates/profile.jinja2:128
+#: assembl/templates/register.jinja2:56
+#: assembl/templates/view_profile.jinja2:59
+#, python-format
+msgid "Designed by %(caravan)s and %(imaginationForPeople)s"
+msgstr ""
+
+#: assembl/templates/profile.jinja2:7 assembl/templates/view_profile.jinja2:7
+msgid "Profile"
+msgstr ""
+
+#: assembl/templates/profile.jinja2:33 assembl/templates/view_profile.jinja2:17
+msgid "Username"
+msgstr ""
+
+#: assembl/templates/profile.jinja2:37
+msgid "Desired username"
+msgstr ""
+
+#: assembl/templates/profile.jinja2:41 assembl/templates/register.jinja2:27
+#: assembl/templates/view_profile.jinja2:21
+msgid "Name"
+msgstr ""
+
+#: assembl/templates/profile.jinja2:45
+msgid "Your name"
+msgstr ""
+
+#: assembl/templates/profile.jinja2:50
+msgid "Change password"
+msgstr ""
+
+#: assembl/templates/profile.jinja2:51
+msgid "New Password"
+msgstr ""
+
+#: assembl/templates/profile.jinja2:53 assembl/templates/register.jinja2:39
+msgid "Repeat password"
+msgstr ""
+
+#: assembl/templates/profile.jinja2:60 assembl/templates/view_profile.jinja2:28
+msgid "Emails"
+msgstr ""
+
+#: assembl/templates/profile.jinja2:69
+msgid "Confirm and fuse accounts"
+msgstr ""
+
+#: assembl/templates/profile.jinja2:71
+msgid "unconfirmed"
+msgstr ""
+
+#: assembl/templates/profile.jinja2:72
+msgid "Send confirmation message"
+msgstr ""
+
+#: assembl/templates/profile.jinja2:80
+msgid "Add an email account"
+msgstr ""
+
+#: assembl/templates/profile.jinja2:86 assembl/templates/view_profile.jinja2:40
+msgid "Accounts"
+msgstr ""
+
+#: assembl/templates/profile.jinja2:103
+#: assembl/templates/admin/discussion_permissions.jinja2:40
+#: assembl/templates/admin/discussion_permissions.jinja2:75
+#: assembl/templates/admin/global_permissions.jinja2:37
+#: assembl/templates/views/ideaPanel.tmpl:56
+#: assembl/templates/views/synthesisIdea.tmpl:34
+#: assembl/templates/views/synthesisIdeaEmail.tmpl:11
+msgid "Save"
+msgstr ""
+
+#: assembl/templates/profile.jinja2:109
+msgid "Connect other accounts to Assembl"
+msgstr ""
+
+#: assembl/templates/profile.jinja2:126
+msgid ""
+"<a href='http://imaginationforpeople.org/' class='link'>Imagination for "
+"people</a>"
+msgstr ""
+
+#: assembl/templates/register.jinja2:43
+msgid "Register"
+msgstr ""
+
+#: assembl/templates/register.jinja2:48
+msgid "login"
+msgstr ""
+
+#: assembl/templates/admin/discussion_permissions.jinja2:4
+msgid "Discussion "
+msgstr ""
+
+#: assembl/templates/admin/discussion_permissions.jinja2:5
+msgid "Role permissions:"
+msgstr ""
+
+#: assembl/templates/admin/discussion_permissions.jinja2:9
+#: assembl/templates/admin/discussion_permissions.jinja2:46
+#: assembl/templates/admin/global_permissions.jinja2:8
+msgid "Roles"
+msgstr ""
+
+#: assembl/templates/admin/discussion_permissions.jinja2:9
+msgid "Permissions"
+msgstr ""
+
+#: assembl/templates/admin/discussion_permissions.jinja2:15
+msgid "delete role"
+msgstr ""
+
+#: assembl/templates/admin/discussion_permissions.jinja2:35
+msgid "Add a role"
+msgstr ""
+
+#: assembl/templates/admin/discussion_permissions.jinja2:42
+msgid "User roles specific to this discussion:"
+msgstr ""
+
+#: assembl/templates/admin/discussion_permissions.jinja2:46
+#: assembl/templates/admin/global_permissions.jinja2:8
+msgid "Users"
+msgstr ""
+
+#: assembl/templates/admin/discussion_permissions.jinja2:70
+#: assembl/templates/admin/global_permissions.jinja2:32
+msgid "Search for users"
+msgstr ""
+
+#: assembl/templates/admin/global_permissions.jinja2:4
+msgid "Global roles"
+msgstr ""
+
+#: assembl/templates/includes/javascript.jinja2:111
+msgid "Unfortunately, something went wrong. Please, reload your browser."
+msgstr ""
+
+#: assembl/templates/includes/javascript.jinja2:113
+#: assembl/templates/includes/javascript.jinja2:118
+msgid "Do you confirm removing all segments ?"
+msgstr ""
+
+#: assembl/templates/includes/javascript.jinja2:114
+msgid "Do you confirm deleting this idea ?"
+msgstr ""
+
+#: assembl/templates/includes/javascript.jinja2:115
+msgid "You cannot delete an idea which has children ideas."
+msgstr ""
+
+#: assembl/templates/includes/javascript.jinja2:116
+msgid "You cannot delete an idea which has segments attached."
+msgstr ""
+
+#: assembl/templates/includes/javascript.jinja2:129
+msgid "Add to clipboard"
+msgstr ""
+
+#: assembl/templates/includes/javascript.jinja2:133
+msgid "react"
+msgstr ""
+
+#: assembl/templates/includes/updatebrowser.jinja2:7
+msgid "Your browser is out of date"
+msgstr ""
+
+#: assembl/templates/includes/updatebrowser.jinja2:10
+msgid "You're using an old version of <strong>{0}</strong>."
+msgstr ""
+
+#: assembl/templates/includes/updatebrowser.jinja2:11
+msgid ""
+"For the best experience, please <span style=\"text-decoration: "
+"underline;\">update your browser</span>."
+msgstr ""
+
+#: assembl/templates/views/idea.tmpl:5
+#: assembl/templates/views/synthesisIdea.tmpl:6
+msgid "Deactivate"
+msgstr ""
+
+#: assembl/templates/views/idea.tmpl:5
+#: assembl/templates/views/synthesisIdea.tmpl:6
+msgid "Activate"
+msgstr ""
+
+#: assembl/templates/views/idea.tmpl:20
+msgid "Number of messages related to this idea or it's descendants"
+msgstr ""
+
+#: assembl/templates/views/idea.tmpl:22
+msgid "Number of caught segments expressing this idea"
+msgstr ""
+
 #: assembl/templates/views/ideaList.tmpl:4
-msgid "Table of contents ({0})"
+msgid "Table of ideas ({0})"
 msgstr ""
 
 #: assembl/templates/views/ideaList.tmpl:5
@@ -50,70 +451,362 @@ msgid "Featured ({0})"
 msgstr ""
 
 #: assembl/templates/views/ideaList.tmpl:6
-msgid "In Synthesis ({0})"
+msgid "In next Synthesis ({0})"
 msgstr ""
 
-#: assembl/templates/views/ideaList.tmpl:37
+#: assembl/templates/views/ideaList.tmpl:25
+msgid "Graph of ideas"
+msgstr ""
+
+#: assembl/templates/views/ideaList.tmpl:27
+#: assembl/templates/views/messageList.tmpl:46
+#: assembl/templates/views/synthesisPanel.tmpl:6
+msgid "Fullsize"
+msgstr ""
+
+#: assembl/templates/views/ideaList.tmpl:28
+#: assembl/templates/views/ideaPanel.tmpl:8
+#: assembl/templates/views/messageList.tmpl:47
+#: assembl/templates/views/segmentList.tmpl:8
+#: assembl/templates/views/synthesisPanel.tmpl:8
+msgid "Close panel"
+msgstr ""
+
+#: assembl/templates/views/ideaList.tmpl:42
 msgid "Add idea"
 msgstr ""
 
-#: assembl/templates/views/ideaPanel.tmpl:4
-#: assembl/templates/views/segmentList.tmpl:4
-msgid "Do you confirm removing all segments ?"
+#: assembl/templates/views/ideaPanel.tmpl:3
+msgid ""
+"Detailled information about the currently selected idea in the Table of "
+"ideas"
+msgstr ""
+
+#: assembl/templates/views/ideaPanel.tmpl:6
+msgid "Copy the link to this idea to clipboard"
+msgstr ""
+
+#: assembl/templates/views/ideaPanel.tmpl:14
+msgid "Basic information about the idea being discussed"
 msgstr ""
 
 #: assembl/templates/views/ideaPanel.tmpl:15
-msgid "Short title"
+msgid "Summary"
 msgstr ""
 
-#: assembl/templates/views/ideaPanel.tmpl:20
-msgid "Long title"
+#: assembl/templates/views/ideaPanel.tmpl:17
+msgid "Expression of the idea in the table of ideas"
 msgstr ""
 
-#: assembl/templates/views/ideaPanel.tmpl:29
+#: assembl/templates/views/ideaPanel.tmpl:21
 #, python-format
-msgid "Created in %(date)s by %(user)s"
+msgid "Created on %(date)s"
 msgstr ""
 
-#: assembl/templates/views/ideaPanel.tmpl:40
-#: assembl/templates/views/segmentList.tmpl:23
-msgid "Add segments"
+#: assembl/templates/views/ideaPanel.tmpl:25
+msgid "Comment on this idea"
 msgstr ""
 
-#: assembl/templates/views/ideaPanel.tmpl:48
-#: assembl/templates/views/segmentList.tmpl:29
-msgid "Clear"
+#: assembl/templates/views/ideaPanel.tmpl:30
+msgid "Expressions of this idea in segments of posts or on the web"
 msgstr ""
 
-#: assembl/templates/views/lateralMenu.tmpl:20
-msgid "Help"
+#: assembl/templates/views/ideaPanel.tmpl:31
+#, python-format
+msgid "Harvested in %(num)s segments"
 msgstr ""
 
-#: assembl/templates/views/lateralMenu.tmpl:27
-msgid "Settings"
+#: assembl/templates/views/ideaPanel.tmpl:39
+msgid "Add segments by dragging them in this panel from the clipboard"
 msgstr ""
 
-#: assembl/templates/views/lateralMenu.tmpl:34
+#: assembl/templates/views/ideaPanel.tmpl:44
+msgid ""
+"Expression of this idea in the next synthesis.  You probably want to edit"
+" it in the synthesis panel, not here."
+msgstr ""
+
+#: assembl/templates/views/ideaPanel.tmpl:45
+msgid "Expression in next synthesis"
+msgstr ""
+
+#: assembl/templates/views/ideaPanel.tmpl:55
+#: assembl/templates/views/message.tmpl:54
+#: assembl/templates/views/synthesisIdea.tmpl:33
+#: assembl/templates/views/synthesisIdeaEmail.tmpl:10
+msgid "Cancel"
+msgstr ""
+
+#: assembl/templates/views/ideaPanel.tmpl:72
+msgid "Delete this idea completely"
+msgstr ""
+
+#: assembl/templates/views/ideaPanel.tmpl:72
+msgid "Delete idea"
+msgstr ""
+
+#: assembl/templates/views/ideaPanel.tmpl:74
+msgid "Removed segments will be available in your clipboard"
+msgstr ""
+
+#: assembl/templates/views/ideaPanel.tmpl:74
+msgid "Remove all segments"
+msgstr ""
+
+#: assembl/templates/views/lateralMenu.tmpl:19
 msgid "Logout"
 msgstr ""
 
-#: assembl/templates/views/message.tmpl:5
-#, python-format
-msgid "Inbox (%(total)s)"
+#: assembl/templates/views/message.tmpl:9
+#: assembl/templates/views/message.tmpl:31
+msgid "User"
 msgstr ""
 
-#: assembl/templates/views/message.tmpl:24
+#: assembl/templates/views/message.tmpl:38
 #, python-format
-msgid "<strong>%(user)s</strong> in <time>%(time)s</time>"
+msgid "<strong>%(user)s</strong> | <time>%(time)s</time>"
 msgstr ""
 
-#: assembl/templates/views/segment.tmpl:20
-#, python-format
-msgid "Extracted %(date)s"
+#: assembl/templates/views/message.tmpl:55
+msgid "Send"
 msgstr ""
 
-#: assembl/templates/views/segmentList.tmpl:9
+#: assembl/templates/views/message.tmpl:60
+msgid "Copy the link to this message to clipboard"
+msgstr ""
+
+#: assembl/templates/views/message.tmpl:61
+#: assembl/templates/views/message.tmpl:65
+msgid "Reply"
+msgstr ""
+
+#: assembl/templates/views/message.tmpl:66
+msgid "Mark as unread"
+msgstr ""
+
+#: assembl/templates/views/messageList.tmpl:8
+#, python-format
+msgid "Messages (%(total)s unread)"
+msgstr ""
+
+#: assembl/templates/views/messageList.tmpl:9
+msgid "No Messages"
+msgstr ""
+
+#: assembl/templates/views/messageList.tmpl:12
+msgid "All messages"
+msgstr ""
+
+#: assembl/templates/views/messageList.tmpl:13
+msgid "Synthesis Messages"
+msgstr ""
+
+#: assembl/templates/views/messageList.tmpl:14
+#: assembl/templates/views/messageList.tmpl:35
+msgid "Unread"
+msgstr ""
+
+#: assembl/templates/views/messageList.tmpl:32
+msgid "All"
+msgstr ""
+
+#: assembl/templates/views/messageList.tmpl:33
+msgid "None"
+msgstr ""
+
+#: assembl/templates/views/messageList.tmpl:34
+msgid "Read"
+msgstr ""
+
+#: assembl/templates/views/messageList.tmpl:41
+#, python-format
+msgid "%(total)s messages"
+msgstr ""
+
+#: assembl/templates/views/messageListItem.tmpl:4
+msgid "Unselect"
+msgstr ""
+
+#: assembl/templates/views/messageListItem.tmpl:4
+msgid "Select"
+msgstr ""
+
+#: assembl/templates/views/segment.tmpl:10
+#, python-format
+msgid "Harvested by %(name)s %(date)s"
+msgstr ""
+
+#: assembl/templates/views/segment.tmpl:12
+msgid "Click here to see the original contribution this segment is quoted from."
+msgstr ""
+
+#: assembl/templates/views/segment.tmpl:13
+msgid "See&nbsp;in&nbsp;context"
+msgstr ""
+
+#: assembl/templates/views/segment.tmpl:31
+#, python-format
+msgid "%(img)s Posted %(date)s by <strong>%(name)s</strong>"
+msgstr ""
+
+#: assembl/templates/views/segment.tmpl:33
+msgid "Document extracted from the web"
+msgstr ""
+
+#: assembl/templates/views/segment.tmpl:34
+msgid "Harvested from webpage"
+msgstr ""
+
+#: assembl/templates/views/segment.tmpl:36
+msgid "Unknown segment type"
+msgstr ""
+
+#: assembl/templates/views/segment.tmpl:41
+#, python-format
+msgid "%(img)s"
+msgstr ""
+
+#: assembl/templates/views/segmentList.tmpl:5
 #, python-format
 msgid "Clipboard (%(quantity)s)"
 msgstr ""
+
+#: assembl/templates/views/segmentList.tmpl:14
+msgid ""
+"Drag this bookmarklet to your favorite bar.  You can then capture "
+"segments from any non-https webpage to this discussion by clicking on the"
+" bookmarklet and selecting a zone of text in the webpage."
+msgstr ""
+
+#: assembl/templates/views/segmentList.tmpl:14
+msgid "Web capture to"
+msgstr ""
+
+#: assembl/templates/views/segmentList.tmpl:30
+msgid "Clear"
+msgstr ""
+
+#: assembl/templates/views/synthesisEmail.tmpl:1
+msgid "Subject:"
+msgstr ""
+
+#: assembl/templates/views/synthesisEmail.tmpl:4
+#: assembl/templates/views/synthesisPanel.tmpl:19
+msgid "Introduction"
+msgstr ""
+
+#: assembl/templates/views/synthesisEmail.tmpl:30
+#: assembl/templates/views/synthesisPanel.tmpl:31
+msgid "Conclusion"
+msgstr ""
+
+#: assembl/templates/views/synthesisIdeaEmail.tmpl:20
+msgid "Empty long title. Click to add."
+msgstr ""
+
+#: assembl/templates/views/synthesisIdeaEmail.tmpl:27
+msgid "By"
+msgstr ""
+
+#: assembl/templates/views/synthesisPanel.tmpl:13
+msgid "Subject"
+msgstr ""
+
+#: assembl/templates/views/synthesisPanel.tmpl:36
+msgid "Publish"
+msgstr ""
+
+#: assembl/views/api/post.py:52 assembl/views/api/post.py:301
+#, python-format
+msgid "No discussion found with id=%s"
+msgstr ""
+
+#: assembl/views/api/post.py:147
+msgid "You must be logged in to view which posts are read"
+msgstr ""
+
+#: assembl/views/auth/views.py:131
+#, python-format
+msgid "The username %s is already used"
+msgstr ""
+
+#: assembl/views/auth/views.py:142
+msgid "The passwords are not identical"
+msgstr ""
+
+#: assembl/views/auth/views.py:201
+msgid "We already have a user with this email."
+msgstr ""
+
+#: assembl/views/auth/views.py:204
+msgid "The passwords should be identical"
+msgstr ""
+
+#: assembl/views/auth/views.py:255
+msgid "This user cannot be found"
+msgstr ""
+
+#: assembl/views/auth/views.py:270
+msgid "Invalid user and password"
+msgstr ""
+
+#: assembl/views/auth/views.py:494
+msgid "Login failed, try again"
+msgstr ""
+
+#: assembl/views/backbone/views.py:27
+#, python-format
+msgid "No discussion found for slug=%s"
+msgstr ""
+
+#~ msgid "Debat name"
+#~ msgstr ""
+
+#~ msgid "Table of Contents"
+#~ msgstr ""
+
+#~ msgid "Table of contents ({0})"
+#~ msgstr ""
+
+#~ msgid "In Synthesis ({0})"
+#~ msgstr ""
+
+#~ msgid "Short title"
+#~ msgstr ""
+
+#~ msgid "Long title"
+#~ msgstr ""
+
+#~ msgid "Created in %(date)s by %(user)s"
+#~ msgstr ""
+
+#~ msgid "Add segments"
+#~ msgstr ""
+
+#~ msgid "Help"
+#~ msgstr ""
+
+#~ msgid "Settings"
+#~ msgstr ""
+
+#~ msgid "Inbox (%(total)s)"
+#~ msgstr ""
+
+#~ msgid "<strong>%(user)s</strong> in <time>%(time)s</time>"
+#~ msgstr ""
+
+#~ msgid "Extracted %(date)s"
+#~ msgstr ""
+
+#~ msgid "Add a conclution"
+#~ msgstr ""
+
+#~ msgid ""
+#~ msgstr ""
+
+#~ msgid "Unfortunatelly, something went wrong. Please, reload your browser."
+#~ msgstr ""
+
+#~ msgid "Please confirm your email with Assembl"
+#~ msgstr ""
 
