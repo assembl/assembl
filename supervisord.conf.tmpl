@@ -60,7 +60,7 @@ autorestart = true
 
 [program:uwsgi]
 directory = %(here)s
-command=uwsgi --ini-paste %(CONFIG_FILE)s
+command=uwsgi --ini %(CONFIG_FILE)s
 stopsignal=QUIT
 umask=002
 autostart = false
