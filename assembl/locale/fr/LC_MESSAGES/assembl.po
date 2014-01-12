@@ -74,7 +74,7 @@ msgstr "Tous les messages"
 #: assembl/static/js/models/segment.js:71
 #: assembl/templates/includes/javascript.jinja2:132
 msgid "You must be logged in to create segments"
-msgstr "Vous devez être connecté pour créer des segments"
+msgstr "Vous devez être connecté pour créer des extraits"
 
 #: assembl/static/js/models/synthesis.js:33
 #: assembl/templates/includes/javascript.jinja2:123
@@ -101,7 +101,7 @@ msgstr "Vous ne pouvez pas effacer une idée ayant des sous-idées."
 
 #: assembl/static/js/views/ideaPanel.js:195
 msgid "ideaPanel-cantDeleteBySegments"
-msgstr "Vous ne pouvez pas effacer une idée associée à des segments."
+msgstr "Vous ne pouvez pas effacer une idée associée à des extraits."
 
 #: assembl/static/js/views/ideaPanel.js:239
 #: assembl/templates/includes/javascript.jinja2:121
@@ -125,8 +125,7 @@ msgstr "Confirmez que vous souhaitez supprimer cette idée."
 #: assembl/static/js/views/messageList.js:8
 msgid "You can drag the segment above directly to the table of ideas"
 msgstr ""
-"Vous pouvez glisser le segment ci-dessus directement sur la table des "
-"idées"
+"Vous pouvez glisser le segment ci-dessus directement sur la table des matières"
 
 #: assembl/static/js/views/messageList.js:129
 msgid "No messages"
@@ -150,7 +149,7 @@ msgstr "Ajouter au presse-papier"
 
 #: assembl/static/js/views/segmentList.js:301
 msgid "segmentList-clearConfirmationMessage"
-msgstr "Confirmez que vous souhaitez supprimer tous les segments."
+msgstr "Confirmez que vous souhaitez supprimer tous les extraits."
 
 #: assembl/static/js/views/synthesisPanel.js:238
 #: assembl/templates/includes/javascript.jinja2:128
@@ -195,8 +194,8 @@ msgid ""
 "idea either 1) on the inner edge of an existing idea to add it as a "
 "sibling or 2) in the middle of an existing idea to add it as a sub-idea."
 msgstr ""
-"Pour ajouter une idée à la table des idées: Sélectionner 'ajouter "
-"uneidée', puis glissez-là soit 1) sur le bord interne d'une idée "
+"Pour ajouter une idée à la table des matières: Sélectionner 'ajouter "
+"une idée', puis glissez-là soit 1) sur le bord interne d'une idée "
 "existante, pour l'ajouter comme soeur, soit 2) au milieu d'une idée "
 "existante pour l'ajouter comme sous-idée."
 
@@ -407,7 +406,7 @@ msgstr ""
 #: assembl/templates/includes/javascript.jinja2:113
 #: assembl/templates/includes/javascript.jinja2:118
 msgid "Do you confirm removing all segments ?"
-msgstr "Confirmez-vous la suppression de tous les segments?"
+msgstr "Confirmez-vous la suppression de tous les extraits?"
 
 #: assembl/templates/includes/javascript.jinja2:114
 msgid "Do you confirm deleting this idea ?"
@@ -460,7 +459,7 @@ msgstr "Nombre de messages liées à cette idée et ses descendants"
 
 #: assembl/templates/views/idea.tmpl:22
 msgid "Number of caught segments expressing this idea"
-msgstr "Nombre de segments attrapés exprimant cette idée"
+msgstr "Nombre d'extraits attrapés exprimant cette idée"
 
 #: assembl/templates/views/ideaList.tmpl:4
 msgid "Table of ideas ({0})"
@@ -500,7 +499,7 @@ msgstr "Ajouter une idée"
 msgid ""
 "Detailled information about the currently selected idea in the Table of "
 "ideas"
-msgstr "Information détaillée sur l'idée qui est sélectionnée dans la table des idées"
+msgstr "Information détaillée sur l'idée qui est sélectionnée dans la table des matières"
 
 #: assembl/templates/views/ideaPanel.tmpl:6
 msgid "Copy the link to this idea to clipboard"
@@ -516,7 +515,7 @@ msgstr "Sommaire"
 
 #: assembl/templates/views/ideaPanel.tmpl:17
 msgid "Expression of the idea in the table of ideas"
-msgstr "Expression de l'idée dans la table des idées"
+msgstr "Expression de l'idée dans la table des matières"
 
 #: assembl/templates/views/ideaPanel.tmpl:21
 #, python-format
@@ -534,11 +533,11 @@ msgstr "Expressions de cette idée dans des extraits de messages ou de pages Web
 #: assembl/templates/views/ideaPanel.tmpl:31
 #, python-format
 msgid "Harvested in %(num)s segments"
-msgstr "Attrappée dans %(num)s segments"
+msgstr "Attrappée dans %(num)s extraits"
 
 #: assembl/templates/views/ideaPanel.tmpl:39
 msgid "Add segments by dragging them in this panel from the clipboard"
-msgstr "Ajoutez des segments en les glissant du presse-papier vers ce panneau"
+msgstr "Ajoutez des extraits en les glissant du presse-papier vers ce panneau"
 
 #: assembl/templates/views/ideaPanel.tmpl:44
 msgid ""
@@ -567,11 +566,11 @@ msgstr "Supprimer l'idée"
 
 #: assembl/templates/views/ideaPanel.tmpl:74
 msgid "Removed segments will be available in your clipboard"
-msgstr "Les segments supprimés seront remis dans le presse-papier."
+msgstr "Les extraits supprimés seront remis dans le presse-papier."
 
 #: assembl/templates/views/ideaPanel.tmpl:74
 msgid "Remove all segments"
-msgstr "Supprimer tous les segments"
+msgstr "Supprimer tous les extraits"
 
 #: assembl/templates/views/lateralMenu.tmpl:19
 msgid "Logout"
@@ -658,7 +657,7 @@ msgstr "Attrappé par %(name)s %(date)s"
 
 #: assembl/templates/views/segment.tmpl:12
 msgid "Click here to see the original contribution this segment is quoted from."
-msgstr "Cliquez ici pour voir la contribution originale d'où ce segment a été extrait."
+msgstr "Cliquez ici pour voir la contribution originale d'où a été tiré cet extrait."
 
 #: assembl/templates/views/segment.tmpl:13
 msgid "See&nbsp;in&nbsp;context"
@@ -793,6 +792,6 @@ msgstr "Nous n'avons pas de discussion sous le code '%s'"
 #~ msgstr "Titre long"
 
 #~ msgid "Add segments"
-#~ msgstr "Ajouter des segments"
+#~ msgstr "Ajouter des extraits"
 
 
