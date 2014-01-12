@@ -9,6 +9,7 @@ from cornice import Service
 from assembl.views.api import API_DISCUSSION_PREFIX
 
 import assembl.models
+from assembl.auth import P_READ
 
 generic = Service(
     name='generic',
@@ -17,7 +18,7 @@ generic = Service(
     renderer='json', acl=acls)
 
 
-@generic.get()  # P_ADMIN)
+@generic.get(permission=P_READ)
 def get_object(request):
     classname = request.matchdict['cls']
     id = request.matchdict['id']

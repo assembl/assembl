@@ -1,4 +1,5 @@
-from gettext import gettext as _
+from pyramid.i18n import TranslationStringFactory
+
 
 from pyramid_mailer import get_mailer
 from pyramid_mailer.message import Message
@@ -8,6 +9,7 @@ from models import IdentityProvider, EmailAccount
 from ..models import get_session_maker
 from .password import email_token, verify_password
 
+_ = TranslationStringFactory('assembl')
 
 def get_identity_provider(auth_context, create=True):
     provider = None
@@ -24,20 +26,9 @@ def get_identity_provider(auth_context, create=True):
     return provider
 
 
-# TODO: Use Jinja?
-
-confirm_email = u'''Hello, {name}!
-Please confirm your {confirm_what} <{email}> with Assembl by clicking on the link below.
-<{confirm_url}>
-'''
-
-confirm_email_html = u'''<p>Hello, {name}!</p>
-<p>Please <a href="{confirm_url}">confirm your {confirm_what}</a> &lt;{email}&gt; with Assembl.</p>
-'''
-
-
 def send_confirmation_email(request, email):
     mailer = get_mailer(request)
+    localizer = request.localizer
     confirm_what = _('email')
     if isinstance(email.profile, User) and not email.profile.verified:
         confirm_what = _('account')
@@ -49,11 +40,16 @@ def send_confirmation_email(request, email):
                                          ticket=email_token(email))
     }
     message = Message(
-        subject=_("Please confirm your email with Assembl"),
+        subject=localizer.translate(_('confirm_title', default="Please confirm your {confirm_what} with Assembl", mapping=data)),
         sender=config.get('assembl.admin_email'),
         recipients=["%s <%s>" % (email.profile.name, email.email)],
-        body=_(confirm_email).format(**data),
-        html=_(confirm_email_html).format(**data))
+        body=localizer.translate(_('confirm_email', default=u"""Hello, {name}!
+Please confirm your {confirm_what} <{email}> with Assembl by clicking on the link below.
+<{confirm_url}>
+""", mapping=data)),
+        html=localizer.translate(_('confirm_email_html', default=u"""<p>Hello, {name}!</p>
+<p>Please <a href="{confirm_url}">confirm your {confirm_what}</a> &lt;{email}&gt; with Assembl.</p>
+""", mapping=data)))
     #if deferred:
     #    mailer.send_to_queue(message)
     #else:

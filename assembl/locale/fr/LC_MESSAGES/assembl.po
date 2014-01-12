@@ -6,114 +6,792 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: assembl 0.0\n"
-"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2013-07-12 18:35-0400\n"
+"Report-Msgid-Bugs-To: maparent@acm.org\n"
+"POT-Creation-Date: 2014-01-12 12:22-0500\n"
 "PO-Revision-Date: 2013-07-12 17:53-0400\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Last-Translator: Marc-Antoine Parent <maparent@acm.org>\n"
 "Language-Team: fr <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n > 1)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 0.9.6\n"
+"Generated-By: Babel 1.3\n"
 
-#: assembl/templates/index.jinja2:8
-msgid "Debat name"
+#: assembl/auth/operations.py:31 assembl/templates/register.jinja2:31
+msgid "email"
+msgstr "courriel"
+
+#: assembl/auth/operations.py:33
+msgid "account"
+msgstr "compte"
+
+#: assembl/auth/operations.py:42
+msgid "confirm_title"
+msgstr "Veuillez confirmer votre {confirm_what} auprès d'Assembl"
+
+#: assembl/auth/operations.py:45
+msgid "confirm_email"
 msgstr ""
+"Bonjour, {name}!\n"
+"Veuillez confirmer votre {confirm_what} <{email}> auprès d'Assembl en suivant le lien ci-dessous.\n"
+"<{confirm_url}>\n"
 
-#: assembl/templates/index.jinja2:11
-msgid "Table of Contents"
+
+#: assembl/auth/operations.py:49
+msgid "confirm_email_html"
 msgstr ""
+"<p>Bonjour, {name}!</p>\n"
+"<p>Veuillez <a href="{confirm_url}">confirmer votre {confirm_what}</a> &lt;{email}&gt; auprès d'Assembl.</p>\n"
 
-#: assembl/templates/index.jinja2:12 assembl/templates/views/ideaPanel.tmpl:8
+
+#: assembl/lib/types.py:62
+msgid "${val} cannot be serialized: ${err}"
+msgstr "${val} ne peut être sérialisé: ${err}"
+
+#: assembl/lib/types.py:80
+msgid "${val} is not a string: ${err}"
+msgstr "${val} n'est pas une chaîne: ${err}"
+
+#: assembl/static/js/models/idea.js:34
+msgid "New idea"
+msgstr "Ajouter une idée"
+
+#: assembl/static/js/models/idea.js:60
+#: assembl/templates/includes/javascript.jinja2:135
+msgid "The root idea will not be in the synthesis"
+msgstr "L'idée-racine ne fera pas partie de la synthèse"
+
+#: assembl/static/js/models/idea.js:68
+#: assembl/templates/includes/javascript.jinja2:120
+msgid "Add the description"
+msgstr "Ajoutez la description"
+
+#: assembl/static/js/models/idea.js:74
+#: assembl/templates/includes/javascript.jinja2:136
+msgid "All posts"
+msgstr "Tous les messages"
+
+#: assembl/static/js/models/segment.js:71
+#: assembl/templates/includes/javascript.jinja2:132
+msgid "You must be logged in to create segments"
+msgstr "Vous devez être connecté pour créer des extraits"
+
+#: assembl/static/js/models/synthesis.js:33
+#: assembl/templates/includes/javascript.jinja2:123
+msgid "Add a title"
+msgstr "Ajouter un titre"
+
+#: assembl/static/js/models/synthesis.js:34
+#: assembl/templates/includes/javascript.jinja2:124
+msgid "Add an introduction"
+msgstr "Ajouter une introduction"
+
+#: assembl/static/js/models/synthesis.js:35
+#: assembl/templates/includes/javascript.jinja2:125
+msgid "Add a conclusion"
+msgstr "Ajouter une conclusion"
+
+#: assembl/static/js/models/user.js:135
+msgid "Unknown user"
+msgstr "Utilisateur non-identifié"
+
+#: assembl/static/js/views/ideaPanel.js:190
+msgid "ideaPanel-cantDeleteByChildren"
+msgstr "Vous ne pouvez pas effacer une idée ayant des sous-idées."
+
+#: assembl/static/js/views/ideaPanel.js:195
+msgid "ideaPanel-cantDeleteBySegments"
+msgstr "Vous ne pouvez pas effacer une idée associée à des extraits."
+
+#: assembl/static/js/views/ideaPanel.js:239
+#: assembl/templates/includes/javascript.jinja2:121
+msgid "New Idea"
+msgstr "Ajouter une idée"
+
+#: assembl/static/js/views/ideaPanel.js:352
+#: assembl/static/js/views/message.js:190
+#: assembl/templates/includes/javascript.jinja2:127
+msgid "Sending..."
+msgstr "Envoi en cours..."
+
+#: assembl/static/js/views/ideaPanel.js:371
+msgid "ideaPanel-clearConfirmationMessage"
+msgstr "Confirmez que vous souhaitez supprimer toutes les idées."
+
+#: assembl/static/js/views/ideaPanel.js:388
+msgid "ideaPanel-deleteIdeaConfirmMessage"
+msgstr "Confirmez que vous souhaitez supprimer cette idée."
+
+#: assembl/static/js/views/messageList.js:8
+msgid "You can drag the segment above directly to the table of ideas"
+msgstr ""
+"Vous pouvez glisser le segment ci-dessus directement sur la table des matières"
+
+#: assembl/static/js/views/messageList.js:129
+msgid "No messages"
+msgstr "Pas de messages"
+
+#: assembl/static/js/views/messageList.js:146
+#: assembl/templates/views/ideaList.tmpl:26
+#: assembl/templates/views/messageList.tmpl:45
+msgid "Expand all"
+msgstr "Tout déployer"
+
+#: assembl/static/js/views/messageList.js:149
+#: assembl/templates/views/ideaList.tmpl:26
+#: assembl/templates/views/messageList.tmpl:45
+msgid "Collapse all"
+msgstr "Tout replier"
+
+#: assembl/static/js/views/messageList.js:247
+msgid "Send to clipboard"
+msgstr "Ajouter au presse-papier"
+
+#: assembl/static/js/views/segmentList.js:301
+msgid "segmentList-clearConfirmationMessage"
+msgstr "Confirmez que vous souhaitez supprimer tous les extraits."
+
+#: assembl/static/js/views/synthesisPanel.js:238
+#: assembl/templates/includes/javascript.jinja2:128
+msgid "Do you want to publish the synthesis?"
+msgstr "Voulez-vous publier la synthèse?"
+
+#: assembl/static/js/views/synthesisPanel.js:258
+#: assembl/templates/includes/javascript.jinja2:134
+msgid "[synthesis] {0}"
+msgstr "[synthèse] {0}"
+
+#: assembl/static/js/views/synthesisPanel.js:275
+#: assembl/templates/includes/javascript.jinja2:131
+msgid "Synthesis published!"
+msgstr "Synthèse publiée!"
+
+#: assembl/synthesis/models.py:867
+msgid "Unsorted posts"
+msgstr "Messages non classés"
+
+#: assembl/templates/discussion_list.jinja2:9
+#: assembl/templates/admin/discussions.jinja2:72
+msgid "There are no discussions on this server yet"
+msgstr "Il n'y a pas encore de discussions sur ce serveur."
+
+#: assembl/templates/index.jinja2:15
+msgid "Sign out"
+msgstr "Déconnexion"
+
+#: assembl/templates/index.jinja2:17 assembl/templates/login.jinja2:7
+#: assembl/templates/register.jinja2:7
+msgid "Sign in"
+msgstr "Connexion"
+
+#: assembl/templates/index.jinja2:37
+msgid "Connecting..."
+msgstr "Connection en cours..."
+
+#: assembl/templates/index.jinja2:43
+msgid ""
+"To add an idea in the table of ideas: select add idea and drag the new "
+"idea either 1) on the inner edge of an existing idea to add it as a "
+"sibling or 2) in the middle of an existing idea to add it as a sub-idea."
+msgstr ""
+"Pour ajouter une idée à la table des matières: Sélectionner 'ajouter "
+"une idée', puis glissez-là soit 1) sur le bord interne d'une idée "
+"existante, pour l'ajouter comme soeur, soit 2) au milieu d'une idée "
+"existante pour l'ajouter comme sous-idée."
+
+#: assembl/templates/index.jinja2:43
+msgid "Table of Ideas"
+msgstr "Table des matières"
+
+#: assembl/templates/index.jinja2:44 assembl/templates/views/ideaPanel.tmpl:3
 msgid "Idea"
-msgstr ""
+msgstr "Idée"
 
-#: assembl/templates/index.jinja2:13
+#: assembl/templates/index.jinja2:45
 msgid "Clipboard"
-msgstr ""
+msgstr "Presse-papier"
 
-#: assembl/templates/index.jinja2:14
+#: assembl/templates/index.jinja2:46
 msgid "Messages"
-msgstr ""
+msgstr "Messages"
 
-#: assembl/templates/index.jinja2:18
+#: assembl/templates/index.jinja2:50
+#: assembl/templates/views/synthesisPanel.tmpl:3
 msgid "Synthesis"
+msgstr "Synthèse"
+
+#: assembl/templates/login.jinja2:37
+msgid "Email or username"
+msgstr "Courriel ou nom d'utilisateur"
+
+#: assembl/templates/login.jinja2:41 assembl/templates/register.jinja2:35
+msgid "Password"
+msgstr "Mot de passe"
+
+#: assembl/templates/login.jinja2:44
+msgid "Enter"
+msgstr "Entrer"
+
+#: assembl/templates/login.jinja2:48 assembl/templates/register.jinja2:48
+msgid "or"
+msgstr "ou"
+
+#: assembl/templates/login.jinja2:48
+msgid "register"
+msgstr "enregistrement"
+
+#: assembl/templates/login.jinja2:52
+msgid "Login with external tools"
+msgstr "Connectez-vous à l'aide d'un compte externe"
+
+#: assembl/templates/login.jinja2:68 assembl/templates/profile.jinja2:125
+#: assembl/templates/register.jinja2:53
+#: assembl/templates/view_profile.jinja2:56
+msgid "<a href='http://caravan.coop' class='link'>Caravan</a>"
+msgstr "<a href='http://caravan.coop' class='link'>Caravan</a>"
+
+#: assembl/templates/login.jinja2:69 assembl/templates/register.jinja2:54
+#: assembl/templates/view_profile.jinja2:57
+msgid ""
+"<a href='http://http://imaginationforpeople.org/' "
+"class='link'>Imagination for people</a>"
 msgstr ""
+"<a href='http://http://imaginationforpeople.org/' "
+"class='link'>Imagination for people</a>"
+
+#: assembl/templates/login.jinja2:71 assembl/templates/profile.jinja2:128
+#: assembl/templates/register.jinja2:56
+#: assembl/templates/view_profile.jinja2:59
+#, python-format
+msgid "Designed by %(caravan)s and %(imaginationForPeople)s"
+msgstr "Conçu par %(caravan)s et %(imaginationForPeople)s"
+
+#: assembl/templates/profile.jinja2:7 assembl/templates/view_profile.jinja2:7
+msgid "Profile"
+msgstr "Profil"
+
+#: assembl/templates/profile.jinja2:33 assembl/templates/view_profile.jinja2:17
+msgid "Username"
+msgstr "Nom d'utilisateur"
+
+#: assembl/templates/profile.jinja2:37
+msgid "Desired username"
+msgstr "Nom d'utilisateur souhaité"
+
+#: assembl/templates/profile.jinja2:41 assembl/templates/register.jinja2:27
+#: assembl/templates/view_profile.jinja2:21
+msgid "Name"
+msgstr "Nom"
+
+#: assembl/templates/profile.jinja2:45
+msgid "Your name"
+msgstr "Votre nom"
+
+#: assembl/templates/profile.jinja2:50
+msgid "Change password"
+msgstr "Changer de mot de passe"
+
+#: assembl/templates/profile.jinja2:51
+msgid "New Password"
+msgstr "Nouveau mot de passe"
+
+#: assembl/templates/profile.jinja2:53 assembl/templates/register.jinja2:39
+msgid "Repeat password"
+msgstr "Répéter le mot de passe"
+
+#: assembl/templates/profile.jinja2:60 assembl/templates/view_profile.jinja2:28
+msgid "Emails"
+msgstr "Courriels"
+
+#: assembl/templates/profile.jinja2:69
+msgid "Confirm and fuse accounts"
+msgstr "Confirmer et fusionner les comptes"
+
+#: assembl/templates/profile.jinja2:71
+msgid "unconfirmed"
+msgstr "non-confirmé"
+
+#: assembl/templates/profile.jinja2:72
+msgid "Send confirmation message"
+msgstr "Envoyer un message de confirmation"
+
+#: assembl/templates/profile.jinja2:80
+msgid "Add an email account"
+msgstr "Ajouter une adresse de courriel"
+
+#: assembl/templates/profile.jinja2:86 assembl/templates/view_profile.jinja2:40
+msgid "Accounts"
+msgstr "Comptes"
+
+#: assembl/templates/profile.jinja2:103
+#: assembl/templates/admin/discussion_permissions.jinja2:40
+#: assembl/templates/admin/discussion_permissions.jinja2:75
+#: assembl/templates/admin/global_permissions.jinja2:37
+#: assembl/templates/views/ideaPanel.tmpl:56
+#: assembl/templates/views/synthesisIdea.tmpl:34
+#: assembl/templates/views/synthesisIdeaEmail.tmpl:11
+msgid "Save"
+msgstr "Enregister"
+
+#: assembl/templates/profile.jinja2:109
+msgid "Connect other accounts to Assembl"
+msgstr "Connecter d'autres comptes à Assembl"
+
+#: assembl/templates/profile.jinja2:126
+msgid ""
+"<a href='http://imaginationforpeople.org/' class='link'>Imagination for "
+"people</a>"
+msgstr ""
+"<a href='http://imaginationforpeople.org/' class='link'>Imagination for "
+"people</a>"
+
+#: assembl/templates/register.jinja2:43
+msgid "Register"
+msgstr "S'enregistrer"
+
+#: assembl/templates/register.jinja2:48
+msgid "login"
+msgstr "connexion"
+
+#: assembl/templates/admin/discussion_permissions.jinja2:4
+msgid "Discussion "
+msgstr "Discussion "
+
+#: assembl/templates/admin/discussion_permissions.jinja2:5
+msgid "Role permissions:"
+msgstr "Permissions pour les rôles:"
+
+#: assembl/templates/admin/discussion_permissions.jinja2:9
+#: assembl/templates/admin/discussion_permissions.jinja2:46
+#: assembl/templates/admin/global_permissions.jinja2:8
+msgid "Roles"
+msgstr "Rôles"
+
+#: assembl/templates/admin/discussion_permissions.jinja2:9
+msgid "Permissions"
+msgstr "Permissions"
+
+#: assembl/templates/admin/discussion_permissions.jinja2:15
+msgid "delete role"
+msgstr "effacer le rôle"
+
+#: assembl/templates/admin/discussion_permissions.jinja2:35
+msgid "Add a role"
+msgstr "Ajouter un rôle"
+
+#: assembl/templates/admin/discussion_permissions.jinja2:42
+msgid "User roles specific to this discussion:"
+msgstr "Rôles spécifiques à cette discussion:"
+
+#: assembl/templates/admin/discussion_permissions.jinja2:46
+#: assembl/templates/admin/global_permissions.jinja2:8
+msgid "Users"
+msgstr "Utilisateurs"
+
+#: assembl/templates/admin/discussion_permissions.jinja2:70
+#: assembl/templates/admin/global_permissions.jinja2:32
+msgid "Search for users"
+msgstr "Chercher des utilisateurs"
+
+#: assembl/templates/admin/global_permissions.jinja2:4
+msgid "Global roles"
+msgstr "Rôles globaux"
+
+#: assembl/templates/includes/javascript.jinja2:111
+msgid "Unfortunately, something went wrong. Please, reload your browser."
+msgstr ""
+"Nous faisons face à un imprévu malencontreux. Veuillez recharger Assembl "
+"dans votre fureteur."
+
+#: assembl/templates/includes/javascript.jinja2:113
+#: assembl/templates/includes/javascript.jinja2:118
+msgid "Do you confirm removing all segments ?"
+msgstr "Confirmez-vous la suppression de tous les extraits?"
+
+#: assembl/templates/includes/javascript.jinja2:114
+msgid "Do you confirm deleting this idea ?"
+msgstr "Confirmez-vous la suppression de cette idée?"
+
+#: assembl/templates/includes/javascript.jinja2:115
+msgid "You cannot delete an idea which has children ideas."
+msgstr "Impossible de supprimer une idée ayant des sous-idées"
+
+#: assembl/templates/includes/javascript.jinja2:116
+msgid "You cannot delete an idea which has segments attached."
+msgstr "Impossible de supprimer une idée à laquelle des extraits sont associés"
+
+#: assembl/templates/includes/javascript.jinja2:129
+msgid "Add to clipboard"
+msgstr "Ajouter au presse-papier"
+
+#: assembl/templates/includes/javascript.jinja2:133
+msgid "react"
+msgstr "réagir"
+
+#: assembl/templates/includes/updatebrowser.jinja2:7
+msgid "Your browser is out of date"
+msgstr "Votre fureteur est obsolète"
+
+#: assembl/templates/includes/updatebrowser.jinja2:10
+msgid "You're using an old version of <strong>{0}</strong>."
+msgstr "Vous utilisez une version obsolète de <strong>{0}</strong>."
+
+#: assembl/templates/includes/updatebrowser.jinja2:11
+msgid ""
+"For the best experience, please <span style=\"text-decoration: "
+"underline;\">update your browser</span>."
+msgstr "Pour une expérinence optimale, veuillez <span style=\"text-decoration: "
+"underline;\">mettre votre fureteur à jour</span>."
+
+#: assembl/templates/views/idea.tmpl:5
+#: assembl/templates/views/synthesisIdea.tmpl:6
+msgid "Deactivate"
+msgstr "Désactiver"
+
+#: assembl/templates/views/idea.tmpl:5
+#: assembl/templates/views/synthesisIdea.tmpl:6
+msgid "Activate"
+msgstr "Activer"
+
+#: assembl/templates/views/idea.tmpl:20
+msgid "Number of messages related to this idea or it's descendants"
+msgstr "Nombre de messages liées à cette idée et ses descendants"
+
+#: assembl/templates/views/idea.tmpl:22
+msgid "Number of caught segments expressing this idea"
+msgstr "Nombre d'extraits attrapés exprimant cette idée"
 
 #: assembl/templates/views/ideaList.tmpl:4
-msgid "Table of contents ({0})"
-msgstr ""
+msgid "Table of ideas ({0})"
+msgstr "Table des matières ({0})"
 
 #: assembl/templates/views/ideaList.tmpl:5
 msgid "Featured ({0})"
-msgstr ""
+msgstr "En vedette ({0})"
 
 #: assembl/templates/views/ideaList.tmpl:6
-msgid "In Synthesis ({0})"
-msgstr ""
+msgid "In next Synthesis ({0})"
+msgstr "Dans la prochaine synthèse ({0})"
 
-#: assembl/templates/views/ideaList.tmpl:37
+#: assembl/templates/views/ideaList.tmpl:25
+msgid "Graph of ideas"
+msgstr "Graphe des idées"
+
+#: assembl/templates/views/ideaList.tmpl:27
+#: assembl/templates/views/messageList.tmpl:46
+#: assembl/templates/views/synthesisPanel.tmpl:6
+msgid "Fullsize"
+msgstr "Agrandir"
+
+#: assembl/templates/views/ideaList.tmpl:28
+#: assembl/templates/views/ideaPanel.tmpl:8
+#: assembl/templates/views/messageList.tmpl:47
+#: assembl/templates/views/segmentList.tmpl:8
+#: assembl/templates/views/synthesisPanel.tmpl:8
+msgid "Close panel"
+msgstr "Fermer le panneau"
+
+#: assembl/templates/views/ideaList.tmpl:42
 msgid "Add idea"
-msgstr ""
+msgstr "Ajouter une idée"
 
-#: assembl/templates/views/ideaPanel.tmpl:4
-#: assembl/templates/views/segmentList.tmpl:4
-msgid "Do you confirm removing all segments ?"
-msgstr ""
+#: assembl/templates/views/ideaPanel.tmpl:3
+msgid ""
+"Detailled information about the currently selected idea in the Table of "
+"ideas"
+msgstr "Information détaillée sur l'idée qui est sélectionnée dans la table des matières"
+
+#: assembl/templates/views/ideaPanel.tmpl:6
+msgid "Copy the link to this idea to clipboard"
+msgstr "Copier un lien vers cette idée dans le presse-papier"
+
+#: assembl/templates/views/ideaPanel.tmpl:14
+msgid "Basic information about the idea being discussed"
+msgstr "Information de base sur l'idée discutée"
 
 #: assembl/templates/views/ideaPanel.tmpl:15
-msgid "Short title"
-msgstr ""
+msgid "Summary"
+msgstr "Sommaire"
 
-#: assembl/templates/views/ideaPanel.tmpl:20
-msgid "Long title"
-msgstr ""
+#: assembl/templates/views/ideaPanel.tmpl:17
+msgid "Expression of the idea in the table of ideas"
+msgstr "Expression de l'idée dans la table des matières"
 
-#: assembl/templates/views/ideaPanel.tmpl:29
+#: assembl/templates/views/ideaPanel.tmpl:21
 #, python-format
-msgid "Created in %(date)s by %(user)s"
-msgstr ""
+msgid "Created on %(date)s"
+msgstr "Créé le %(date)s"
 
-#: assembl/templates/views/ideaPanel.tmpl:40
-#: assembl/templates/views/segmentList.tmpl:23
-msgid "Add segments"
-msgstr ""
+#: assembl/templates/views/ideaPanel.tmpl:25
+msgid "Comment on this idea"
+msgstr "Commenter cette idée"
 
-#: assembl/templates/views/ideaPanel.tmpl:48
-#: assembl/templates/views/segmentList.tmpl:29
-msgid "Clear"
-msgstr ""
+#: assembl/templates/views/ideaPanel.tmpl:30
+msgid "Expressions of this idea in segments of posts or on the web"
+msgstr "Expressions de cette idée dans des extraits de messages ou de pages Web"
 
-#: assembl/templates/views/lateralMenu.tmpl:20
-msgid "Help"
-msgstr ""
+#: assembl/templates/views/ideaPanel.tmpl:31
+#, python-format
+msgid "Harvested in %(num)s segments"
+msgstr "Attrappée dans %(num)s extraits"
 
-#: assembl/templates/views/lateralMenu.tmpl:27
-msgid "Settings"
-msgstr ""
+#: assembl/templates/views/ideaPanel.tmpl:39
+msgid "Add segments by dragging them in this panel from the clipboard"
+msgstr "Ajoutez des extraits en les glissant du presse-papier vers ce panneau"
 
-#: assembl/templates/views/lateralMenu.tmpl:34
+#: assembl/templates/views/ideaPanel.tmpl:44
+msgid ""
+"Expression of this idea in the next synthesis.  You probably want to edit"
+" it in the synthesis panel, not here."
+msgstr "Expression de cette idée dans la prochaine synthèse. Vous pouvez plutôt l'éditer dans le panneau de synthèse."
+
+#: assembl/templates/views/ideaPanel.tmpl:45
+msgid "Expression in next synthesis"
+msgstr "Expression dans la prochaine synthèse"
+
+#: assembl/templates/views/ideaPanel.tmpl:55
+#: assembl/templates/views/message.tmpl:54
+#: assembl/templates/views/synthesisIdea.tmpl:33
+#: assembl/templates/views/synthesisIdeaEmail.tmpl:10
+msgid "Cancel"
+msgstr "Annuler"
+
+#: assembl/templates/views/ideaPanel.tmpl:72
+msgid "Delete this idea completely"
+msgstr "Supprimer cette idée complètement"
+
+#: assembl/templates/views/ideaPanel.tmpl:72
+msgid "Delete idea"
+msgstr "Supprimer l'idée"
+
+#: assembl/templates/views/ideaPanel.tmpl:74
+msgid "Removed segments will be available in your clipboard"
+msgstr "Les extraits supprimés seront remis dans le presse-papier."
+
+#: assembl/templates/views/ideaPanel.tmpl:74
+msgid "Remove all segments"
+msgstr "Supprimer tous les extraits"
+
+#: assembl/templates/views/lateralMenu.tmpl:19
 msgid "Logout"
-msgstr ""
+msgstr "Déconnexion"
 
-#: assembl/templates/views/message.tmpl:5
+#: assembl/templates/views/message.tmpl:9
+#: assembl/templates/views/message.tmpl:31
+msgid "User"
+msgstr "Utilisateur"
+
+#: assembl/templates/views/message.tmpl:38
 #, python-format
-msgid "Inbox (%(total)s)"
-msgstr ""
+msgid "<strong>%(user)s</strong> | <time>%(time)s</time>"
+msgstr "<strong>%(user)s</strong> | <time>%(time)s</time>"
 
-#: assembl/templates/views/message.tmpl:24
+#: assembl/templates/views/message.tmpl:55
+msgid "Send"
+msgstr "Envoyer"
+
+#: assembl/templates/views/message.tmpl:60
+msgid "Copy the link to this message to clipboard"
+msgstr "Copier un lien vers ce message dans le presse-papier"
+
+#: assembl/templates/views/message.tmpl:61
+#: assembl/templates/views/message.tmpl:65
+msgid "Reply"
+msgstr "Répondre"
+
+#: assembl/templates/views/message.tmpl:66
+msgid "Mark as unread"
+msgstr "Marquer comme non-lu"
+
+#: assembl/templates/views/messageList.tmpl:8
 #, python-format
-msgid "<strong>%(user)s</strong> in <time>%(time)s</time>"
-msgstr ""
+msgid "Messages (%(total)s unread)"
+msgstr "Messages (%(total)s non-lus)"
 
-#: assembl/templates/views/segment.tmpl:20
+#: assembl/templates/views/messageList.tmpl:9
+msgid "No Messages"
+msgstr "Pas de messages"
+
+#: assembl/templates/views/messageList.tmpl:12
+msgid "All messages"
+msgstr "Tous les messages"
+
+#: assembl/templates/views/messageList.tmpl:13
+msgid "Synthesis Messages"
+msgstr "Messages de la synthèse"
+
+#: assembl/templates/views/messageList.tmpl:14
+#: assembl/templates/views/messageList.tmpl:35
+msgid "Unread"
+msgstr "Non-lus"
+
+#: assembl/templates/views/messageList.tmpl:32
+msgid "All"
+msgstr "Tous"
+
+#: assembl/templates/views/messageList.tmpl:33
+msgid "None"
+msgstr "Aucun"
+
+#: assembl/templates/views/messageList.tmpl:34
+msgid "Read"
+msgstr "Lus"
+
+#: assembl/templates/views/messageList.tmpl:41
 #, python-format
-msgid "Extracted %(date)s"
-msgstr ""
+msgid "%(total)s messages"
+msgstr "%(total)s messages"
 
-#: assembl/templates/views/segmentList.tmpl:9
+#: assembl/templates/views/messageListItem.tmpl:4
+msgid "Unselect"
+msgstr "Désélectionner"
+
+#: assembl/templates/views/messageListItem.tmpl:4
+msgid "Select"
+msgstr "Sélectionner"
+
+#: assembl/templates/views/segment.tmpl:10
+#, python-format
+msgid "Harvested by %(name)s %(date)s"
+msgstr "Attrappé par %(name)s %(date)s"
+
+#: assembl/templates/views/segment.tmpl:12
+msgid "Click here to see the original contribution this segment is quoted from."
+msgstr "Cliquez ici pour voir la contribution originale d'où a été tiré cet extrait."
+
+#: assembl/templates/views/segment.tmpl:13
+msgid "See&nbsp;in&nbsp;context"
+msgstr "Voir&nbsp;en&nbsp;contexte"
+
+#: assembl/templates/views/segment.tmpl:31
+#, python-format
+msgid "%(img)s Posted %(date)s by <strong>%(name)s</strong>"
+msgstr "%(img)s Posté le %(date)s par <strong>%(name)s</strong>"
+
+#: assembl/templates/views/segment.tmpl:33
+msgid "Document extracted from the web"
+msgstr "Document extrait du Web"
+
+#: assembl/templates/views/segment.tmpl:34
+msgid "Harvested from webpage"
+msgstr "Extrait d'une page Web"
+
+#: assembl/templates/views/segment.tmpl:36
+msgid "Unknown segment type"
+msgstr "Type d'extrait inconnu"
+
+#: assembl/templates/views/segment.tmpl:41
+#, python-format
+msgid "%(img)s"
+msgstr "%(img)s"
+
+#: assembl/templates/views/segmentList.tmpl:5
 #, python-format
 msgid "Clipboard (%(quantity)s)"
+msgstr "Presse-papier (%(quantity)s)"
+
+#: assembl/templates/views/segmentList.tmpl:14
+msgid ""
+"Drag this bookmarklet to your favorite bar.  You can then capture "
+"segments from any non-https webpage to this discussion by clicking on the"
+" bookmarklet and selecting a zone of text in the webpage."
 msgstr ""
+"Glissez ce signet intelligent sur la barre de favoris de votre fureteur."
+"Vous pourrez ensuite capturer des signets de toute page Web (non-sécurisée) "
+"vers cette discussion en cliquant sur le signet et en sélectionnant une zone "
+"de texte dans la page Web."
+
+#: assembl/templates/views/segmentList.tmpl:14
+msgid "Web capture to"
+msgstr "Capture du Web vers"
+
+#: assembl/templates/views/segmentList.tmpl:30
+msgid "Clear"
+msgstr "Effacer"
+
+#: assembl/templates/views/synthesisEmail.tmpl:1
+msgid "Subject:"
+msgstr "Sujet:"
+
+#: assembl/templates/views/synthesisEmail.tmpl:4
+#: assembl/templates/views/synthesisPanel.tmpl:19
+msgid "Introduction"
+msgstr "Introduction"
+
+#: assembl/templates/views/synthesisEmail.tmpl:30
+#: assembl/templates/views/synthesisPanel.tmpl:31
+msgid "Conclusion"
+msgstr "Conclusion"
+
+#: assembl/templates/views/synthesisIdeaEmail.tmpl:20
+msgid "Empty long title. Click to add."
+msgstr "Titre long non-défini. Cliquez pour l'ajouter."
+
+#: assembl/templates/views/synthesisIdeaEmail.tmpl:27
+msgid "By"
+msgstr "Par"
+
+#: assembl/templates/views/synthesisPanel.tmpl:13
+msgid "Subject"
+msgstr "Sujet"
+
+#: assembl/templates/views/synthesisPanel.tmpl:36
+msgid "Publish"
+msgstr "Publier"
+
+#: assembl/views/api/post.py:52 assembl/views/api/post.py:301
+#, python-format
+msgid "No discussion found with id=%s"
+msgstr "Aucune discussion trouvée avec l'id=%s"
+
+#: assembl/views/api/post.py:147
+msgid "You must be logged in to view which posts are read"
+msgstr "Vous devez être connecté pour voir quels messages ont été lus"
+
+#: assembl/views/auth/views.py:131
+#, python-format
+msgid "The username %s is already used"
+msgstr "Le nom d'utilisateur %s est déjà pris"
+
+#: assembl/views/auth/views.py:142
+msgid "The passwords are not identical"
+msgstr "Les mots de passe ne correspondent pas"
+
+#: assembl/views/auth/views.py:201
+msgid "We already have a user with this email."
+msgstr "Nous avons déjà un utilisateur ayant ce courriel."
+
+#: assembl/views/auth/views.py:204
+msgid "The passwords should be identical"
+msgstr "Les mots de passe doivent correspondre"
+
+#: assembl/views/auth/views.py:255
+msgid "This user cannot be found"
+msgstr "Je ne trouve pas cet utilisateur"
+
+#: assembl/views/auth/views.py:270
+msgid "Invalid user and password"
+msgstr "Utilisateur et mot de passe invalides."
+
+#: assembl/views/auth/views.py:494
+msgid "Login failed, try again"
+msgstr "Échec de connexion, veuillez réessayer."
+
+#: assembl/views/backbone/views.py:27
+#, python-format
+msgid "No discussion found for slug=%s"
+msgstr "Nous n'avons pas de discussion sous le code '%s'"
+
+#~ msgid "Debat name"
+#~ msgstr "Nom du débat"
+
+#~ msgid "Short title"
+#~ msgstr "Titre court"
+
+#~ msgid "Long title"
+#~ msgstr "Titre long"
+
+#~ msgid "Add segments"
+#~ msgstr "Ajouter des extraits"
+
 

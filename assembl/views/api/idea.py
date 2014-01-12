@@ -26,7 +26,7 @@ idea_extracts = Service(
 
 
 # Create
-@ideas.post()  # permission=P_ADD_IDEA)
+@ideas.post(permission=P_ADD_IDEA)
 def create_idea(request):
     discussion_id = request.matchdict['discussion_id']
     session = Discussion.db()
@@ -107,7 +107,7 @@ def get_ideas(request):
     return _get_ideas_real(discussion=discussion, view_def=view_def, ids=ids)
 
 # Update
-@idea.put()  # permission=P_EDIT_IDEA)
+@idea.put(permission=P_EDIT_IDEA)
 def save_idea(request):
     discussion_id = request.matchdict['discussion_id']
     idea_id = request.matchdict['id']
@@ -171,7 +171,7 @@ def save_idea(request):
     return {'ok': True, 'id': idea.uri() }
 
 # Delete
-@idea.delete()  # permission=P_EDIT_IDEA
+@idea.delete(permission=P_EDIT_IDEA)
 def delete_idea(request):
     idea_id = request.matchdict['id']
     idea = Idea.get_instance(idea_id)
@@ -192,7 +192,7 @@ def delete_idea(request):
     return None
 
 
-@idea_extracts.get()  # permission=P_READ
+@idea_extracts.get(permission=P_READ)
 def get_idea_extracts(request):
     idea_id = request.matchdict['id']
     idea = Idea.get_instance(idea_id)
