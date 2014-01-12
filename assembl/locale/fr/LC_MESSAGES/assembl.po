@@ -6,10 +6,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: assembl 0.0\n"
-"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"Report-Msgid-Bugs-To: maparent@acm.org\n"
 "POT-Creation-Date: 2014-01-12 12:22-0500\n"
 "PO-Revision-Date: 2013-07-12 17:53-0400\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Last-Translator: Marc-Antoine Parent <maparent@acm.org>\n"
 "Language-Team: fr <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n > 1)\n"
 "MIME-Version: 1.0\n"
@@ -415,11 +415,11 @@ msgstr "Confirmez-vous la suppression de cette idée?"
 
 #: assembl/templates/includes/javascript.jinja2:115
 msgid "You cannot delete an idea which has children ideas."
-msgstr ""
+msgstr "Impossible de supprimer une idée ayant des sous-idées"
 
 #: assembl/templates/includes/javascript.jinja2:116
 msgid "You cannot delete an idea which has segments attached."
-msgstr ""
+msgstr "Impossible de supprimer une idée à laquelle des extraits sont associés"
 
 #: assembl/templates/includes/javascript.jinja2:129
 msgid "Add to clipboard"
@@ -427,39 +427,40 @@ msgstr "Ajouter au presse-papier"
 
 #: assembl/templates/includes/javascript.jinja2:133
 msgid "react"
-msgstr ""
+msgstr "réagir"
 
 #: assembl/templates/includes/updatebrowser.jinja2:7
 msgid "Your browser is out of date"
-msgstr ""
+msgstr "Votre fureteur est obsolète"
 
 #: assembl/templates/includes/updatebrowser.jinja2:10
 msgid "You're using an old version of <strong>{0}</strong>."
-msgstr ""
+msgstr "Vous utilisez une version obsolète de <strong>{0}</strong>."
 
 #: assembl/templates/includes/updatebrowser.jinja2:11
 msgid ""
 "For the best experience, please <span style=\"text-decoration: "
 "underline;\">update your browser</span>."
-msgstr ""
+msgstr "Pour une expérinence optimale, veuillez <span style=\"text-decoration: "
+"underline;\">mettre votre fureteur à jour</span>."
 
 #: assembl/templates/views/idea.tmpl:5
 #: assembl/templates/views/synthesisIdea.tmpl:6
 msgid "Deactivate"
-msgstr ""
+msgstr "Désactiver"
 
 #: assembl/templates/views/idea.tmpl:5
 #: assembl/templates/views/synthesisIdea.tmpl:6
 msgid "Activate"
-msgstr ""
+msgstr "Activer"
 
 #: assembl/templates/views/idea.tmpl:20
 msgid "Number of messages related to this idea or it's descendants"
-msgstr ""
+msgstr "Nombre de messages liées à cette idée et ses descendants"
 
 #: assembl/templates/views/idea.tmpl:22
 msgid "Number of caught segments expressing this idea"
-msgstr ""
+msgstr "Nombre de segments attrapés exprimant cette idée"
 
 #: assembl/templates/views/ideaList.tmpl:4
 msgid "Table of ideas ({0})"
@@ -475,13 +476,13 @@ msgstr "Dans la prochaine synthèse ({0})"
 
 #: assembl/templates/views/ideaList.tmpl:25
 msgid "Graph of ideas"
-msgstr ""
+msgstr "Graphe des idées"
 
 #: assembl/templates/views/ideaList.tmpl:27
 #: assembl/templates/views/messageList.tmpl:46
 #: assembl/templates/views/synthesisPanel.tmpl:6
 msgid "Fullsize"
-msgstr ""
+msgstr "Agrandir"
 
 #: assembl/templates/views/ideaList.tmpl:28
 #: assembl/templates/views/ideaPanel.tmpl:8
@@ -489,7 +490,7 @@ msgstr ""
 #: assembl/templates/views/segmentList.tmpl:8
 #: assembl/templates/views/synthesisPanel.tmpl:8
 msgid "Close panel"
-msgstr ""
+msgstr "Fermer le panneau"
 
 #: assembl/templates/views/ideaList.tmpl:42
 msgid "Add idea"
@@ -499,15 +500,15 @@ msgstr "Ajouter une idée"
 msgid ""
 "Detailled information about the currently selected idea in the Table of "
 "ideas"
-msgstr ""
+msgstr "Information détaillée sur l'idée qui est sélectionnée dans la table des idées"
 
 #: assembl/templates/views/ideaPanel.tmpl:6
 msgid "Copy the link to this idea to clipboard"
-msgstr ""
+msgstr "Copier un lien vers cette idée dans le presse-papier"
 
 #: assembl/templates/views/ideaPanel.tmpl:14
 msgid "Basic information about the idea being discussed"
-msgstr ""
+msgstr "Information de base sur l'idée discutée"
 
 #: assembl/templates/views/ideaPanel.tmpl:15
 msgid "Summary"
@@ -515,7 +516,7 @@ msgstr "Sommaire"
 
 #: assembl/templates/views/ideaPanel.tmpl:17
 msgid "Expression of the idea in the table of ideas"
-msgstr ""
+msgstr "Expression de l'idée dans la table des idées"
 
 #: assembl/templates/views/ideaPanel.tmpl:21
 #, python-format
@@ -528,22 +529,22 @@ msgstr "Commenter cette idée"
 
 #: assembl/templates/views/ideaPanel.tmpl:30
 msgid "Expressions of this idea in segments of posts or on the web"
-msgstr ""
+msgstr "Expressions de cette idée dans des extraits de messages ou de pages Web"
 
 #: assembl/templates/views/ideaPanel.tmpl:31
 #, python-format
 msgid "Harvested in %(num)s segments"
-msgstr ""
+msgstr "Attrappée dans %(num)s segments"
 
 #: assembl/templates/views/ideaPanel.tmpl:39
 msgid "Add segments by dragging them in this panel from the clipboard"
-msgstr ""
+msgstr "Ajoutez des segments en les glissant du presse-papier vers ce panneau"
 
 #: assembl/templates/views/ideaPanel.tmpl:44
 msgid ""
 "Expression of this idea in the next synthesis.  You probably want to edit"
 " it in the synthesis panel, not here."
-msgstr ""
+msgstr "Expression de cette idée dans la prochaine synthèse. Vous pouvez plutôt l'éditer dans le panneau de synthèse."
 
 #: assembl/templates/views/ideaPanel.tmpl:45
 msgid "Expression in next synthesis"
@@ -566,7 +567,7 @@ msgstr "Supprimer l'idée"
 
 #: assembl/templates/views/ideaPanel.tmpl:74
 msgid "Removed segments will be available in your clipboard"
-msgstr ""
+msgstr "Les segments supprimés seront remis dans le presse-papier."
 
 #: assembl/templates/views/ideaPanel.tmpl:74
 msgid "Remove all segments"
@@ -592,7 +593,7 @@ msgstr "Envoyer"
 
 #: assembl/templates/views/message.tmpl:60
 msgid "Copy the link to this message to clipboard"
-msgstr ""
+msgstr "Copier un lien vers ce message dans le presse-papier"
 
 #: assembl/templates/views/message.tmpl:61
 #: assembl/templates/views/message.tmpl:65
@@ -653,11 +654,11 @@ msgstr "Sélectionner"
 #: assembl/templates/views/segment.tmpl:10
 #, python-format
 msgid "Harvested by %(name)s %(date)s"
-msgstr ""
+msgstr "Attrappé par %(name)s %(date)s"
 
 #: assembl/templates/views/segment.tmpl:12
 msgid "Click here to see the original contribution this segment is quoted from."
-msgstr ""
+msgstr "Cliquez ici pour voir la contribution originale d'où ce segment a été extrait."
 
 #: assembl/templates/views/segment.tmpl:13
 msgid "See&nbsp;in&nbsp;context"
@@ -666,7 +667,7 @@ msgstr "Voir&nbsp;en&nbsp;contexte"
 #: assembl/templates/views/segment.tmpl:31
 #, python-format
 msgid "%(img)s Posted %(date)s by <strong>%(name)s</strong>"
-msgstr ""
+msgstr "%(img)s Posté le %(date)s par <strong>%(name)s</strong>"
 
 #: assembl/templates/views/segment.tmpl:33
 msgid "Document extracted from the web"
@@ -696,6 +697,10 @@ msgid ""
 "segments from any non-https webpage to this discussion by clicking on the"
 " bookmarklet and selecting a zone of text in the webpage."
 msgstr ""
+"Glissez ce signet intelligent sur la barre de favoris de votre fureteur."
+"Vous pourrez ensuite capturer des signets de toute page Web (non-sécurisée) "
+"vers cette discussion en cliquant sur le signet et en sélectionnant une zone "
+"de texte dans la page Web."
 
 #: assembl/templates/views/segmentList.tmpl:14
 msgid "Web capture to"
@@ -747,7 +752,7 @@ msgstr "Vous devez être connecté pour voir quels messages ont été lus"
 #: assembl/views/auth/views.py:131
 #, python-format
 msgid "The username %s is already used"
-msgstr ""
+msgstr "Le nom d'utilisateur %s est déjà pris"
 
 #: assembl/views/auth/views.py:142
 msgid "The passwords are not identical"
