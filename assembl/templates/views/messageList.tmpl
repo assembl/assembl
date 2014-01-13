@@ -5,8 +5,7 @@
             {% set inbox = '<%= inbox %>' %}
 
             <span class="dropdown-label text-bold">
-                <% if (inbox > 0) { %>{{ gettext('Messages (%(total)s unread)')|format(total=inbox)|safe }}
-                <% } else { %>{{ gettext('No Messages') }}<% } %>
+                {{ gettext('Add filter')|safe }}
             </span>
             <ul class="dropdown-list">
                 <li id="messageList-inbox" class="dropdown-listitem">{{ gettext('All messages') }}</li>
@@ -36,13 +35,13 @@
                 <li id="messageList-selectunread" class="dropdown-listitem">{{ gettext('Unread') }}</li>
             </ul>
         </div>
-        #}
+
         
         <div class="inline text-muted margin-left">
             {% set total = '<%= total %>' %}
             {{ gettext('%(total)s messages')|format(total=total)|safe }}
         </div>
-
+        #}
         <div class="float-right">
             <a id="messageList-collapseButton" data-tooltip="<%= collapsed ? '{{gettext('Expand all')}}' : '{{gettext('Collapse all')}}' %>" class="iconbutton <%= collapsed ? 'icon-download-1' : 'icon-upload' %>"></a>
             <a id="messageList-fullscreenButton" class="iconbutton iconbutton--resizefull" data-tooltip="{{ gettext('Fullsize') }}"></a>

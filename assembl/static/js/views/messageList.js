@@ -119,7 +119,7 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n, PostQ
                 inbox: views.length,
                 total: views.length,
                 collapsed: this.collapsed,
-                queryInfo: "WRITEME!"
+                queryInfo: this.currentQuery.getHtmlDescription()
             };
 
             this.$el.html( this.template(data) );
@@ -341,12 +341,12 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n, PostQ
          * Query the posts.  Any param set to null has no effect
          * @param {String} ideaId
          */
-        loadDataByQuery: function(ideaId, onlySynthesis, isUnread){
+        loadDataByQuery: function(){
             var that = this
     
             this.blockPanel();
             this.collapsed = true;
-            this.currentQuery._queryServer(ideaId, onlySynthesis, isUnread, function(data){
+            this.currentQuery.execute(function(data){
                 that.messageIdsToDisplay = data;
                 that.unblockPanel();
                 that.render();
@@ -357,7 +357,9 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n, PostQ
          * @param {String} ideaId
          */
         loadDataByIdeaId: function(ideaId){
-            this.loadDataByQuery(ideaId);
+            this.currentQuery.clearAllFilters();
+            this.currentQuery.addFilter(this.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, ideaId);
+            this.loadDataByQuery();
         },
 
         /**
@@ -373,14 +375,18 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n, PostQ
          * @param {String} ideaId
          */
         loadSynthesisMessages: function(){
-            this.loadDataByQuery(null, true);
+            this.currentQuery.clearAllFilters();
+            this.currentQuery.addFilter(this.currentQuery.availableFilters.POST_IS_SYNTHESIS, true);
+            this.loadDataByQuery();
         },
         /**
          * Load posts that are read or unread
          * @param {String} ideaId
          */
         loadUnreadMessages: function(){
-            this.loadDataByQuery(null, null, true);
+            this.currentQuery.clearAllFilters();
+            this.currentQuery.addFilter(this.currentQuery.availableFilters.POST_IS_UNREAD, true);
+            this.loadDataByQuery();
         },
         /**
          * Highlights the message by the given id
