@@ -142,6 +142,10 @@
 // ------------
 .idealist-arrow {
     background: url(#{$img-dir}/idealist/idealist-arrow-closed.png) center center no-repeat;
+    &.level1 {
+        background: url(#{$img-dir}/idealist/idealist-arrow-closed-l1.png) center center no-repeat;
+    }
+
     width: $idealist-arrow-width;
     height: $idealist-item-height;
     display: block;
@@ -150,14 +154,17 @@
 
     // @include transition( transform 0.4s );
     // @include transform( rotate(-90deg) );
-    opacity: 0.55;
+    // opacity: 0.55;
 
-    &:hover {
-        opacity: 1;
-    }
+    // &:hover {
+    //     opacity: 1;
+    // }
 
     .idealist-item.is-open > .idealist-body & {
         background: url(#{$img-dir}/idealist/idealist-arrow-open.png) center center no-repeat;
+        &.level1 {
+            background: url(#{$img-dir}/idealist/idealist-arrow-open-l1.png) center center no-repeat;
+        }
         // @include transform( rotate(0deg) );
     }
 }

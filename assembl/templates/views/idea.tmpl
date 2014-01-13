@@ -22,10 +22,13 @@
     } %>
 
 
-    <% if (children.length > 0) { %>
-        <span class="idealist-arrow"></span>
-    <% }
-       else { %>
+    <% if (children.length > 0) { 
+        if (level > 1) { %>
+            <span class="idealist-arrow"></span>
+        <% } else { %>
+            <span class="idealist-arrow level1"></span>
+        <% }
+       } else { %>
         <span class="idealist-noarrow"></span>
     <% } %>
 
