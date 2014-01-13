@@ -5,11 +5,23 @@
         <span class="chk-label" <% if(inNextSynthesis) { %>data-tooltip="{{ gettext('Deactivate') }}"<% } else { %>data-tooltip="{{ gettext('Activate') }}"<% } %> ></span>
     </label>
     <% }  %>
+    <%  var i;
+    for( var i=1; i<level - 1; i+= 1) { 
+        if (last_sibling_chain[i]) { %>
+            <span class="idealist-space"></span>
+        <% } else { %>
+            <span class="idealist-bar"></span>
+        <% }
+    } %>
+    <% if (level > 1) {
+        if (last_sibling_chain[i]) { %>
+            <span class="idealist-link-last"></span>
+        <% } else { %>
+            <span class="idealist-link"></span>
+        <% }
+    } %>
 
-    <% for( var i=1; i<level; i+= 1) { %>
-        <span class="idealist-bar"></span>
-    <% } %>
-    
+
     <% if (children.length > 0) { %>
         <span class="idealist-arrow"></span>
     <% }

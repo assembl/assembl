@@ -24,11 +24,14 @@ function(Backbone, _, $, Idea, Segment, app){
         /**
          * @init
          */
-        initialize: function(obj){
+        initialize: function(obj, last_sibling_chain){
             if( _.isUndefined(this.model) ){
                 this.model = new Idea.Model();
             }
-
+            if ( _.isUndefined(last_sibling_chain)) {
+                last_sibling_chain = [];
+            }
+            this.last_sibling_chain = last_sibling_chain;
             this.model.on('change:shortTitle change:longTitle change:segments', this.render, this);
             this.model.on('change:isSelected', this.onIsSelectedChange, this);
             this.model.on('replaced', this.onReplaced, this);
@@ -62,6 +65,7 @@ function(Backbone, _, $, Idea, Segment, app){
             data.level = this.model.getLevel();
             data.segments = this.model.getSegments();
             data.shortTitle = this.model.getShortTitleDisplayText();
+            data.last_sibling_chain = this.last_sibling_chain;
 
             this.$el.html(this.template(data));
             this.$('.idealist-children').append( this.getRenderedChildren(data.level) );
@@ -75,16 +79,21 @@ function(Backbone, _, $, Idea, Segment, app){
          */
         getRenderedChildren: function(parentLevel){
             var children = this.model.getChildren(),
+                num_last_child = children.length - 1,
+                last_sibling_chain = this.last_sibling_chain.slice(),
+                last_chain_elem = last_sibling_chain.length,
                 ret = [];
 
             children = _.sortBy(children, function(child){
                 return child.get('order');
             });
+            last_sibling_chain.push(false);
 
             _.each(children, function(idea, i){
                 idea.set('level', parentLevel + 1);
+                last_sibling_chain[last_chain_elem] = (i == num_last_child);
 
-                var ideaView = new IdeaView({model:idea});
+                var ideaView = new IdeaView({model:idea}, last_sibling_chain);
                 ret.push( ideaView.render().el );
             });
 
