@@ -230,7 +230,7 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
 
         events: {
             'click .iconbutton': 'onIconbuttonClick',
-            'click .message-title': 'onIconbuttonClick',
+            'click .message-title': 'onMessageTitleClick',
 
             //
             'click .message-replybox-openbtn': 'openReplyBox',
@@ -250,6 +250,7 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
 
         /**
          * @event
+         * Collapse icon has been toggled
          */
         onIconbuttonClick: function(ev){
             if( ev ){
@@ -259,6 +260,21 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
                 }
             }
 
+            var collapsed = this.model.get('collapsed');
+            this.model.set('collapsed', !collapsed);
+        },
+        
+        /**
+         * @event
+         */
+        onMessageTitleClick: function(ev){
+            if( ev ){
+                // Avoiding collapse if clicked on the link
+                if( ev.target.id === 'message-linkbutton' ){
+                    return;
+                }
+            }
+            app.messageList.addFilterByPostId(this.model.getId());
             var collapsed = this.model.get('collapsed');
             this.model.set('collapsed', !collapsed);
         },

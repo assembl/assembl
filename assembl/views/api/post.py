@@ -115,7 +115,7 @@ def get_posts(request):
                                          bindparams=[bindparam('root_idea_id', root_idea_id),
                                                      bindparam('discussion_id', discussion_id)]
                                          )))
-    elif root_post_id:
+    if root_post_id:
         root_post = Post.get(id=root_post_id)
 
         posts = posts.filter(
@@ -125,7 +125,8 @@ def get_posts(request):
             |
             (Post.id==root_post.id)
             )
-    elif ids:
+    
+    if ids:
         posts = posts.filter(Post.id.in_(ids))
 
     # Post read/unread management

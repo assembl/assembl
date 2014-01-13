@@ -363,6 +363,15 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n, PostQ
         },
 
         /**
+         * Shows the related posts to the given idea
+         * @param {String} ideaId
+         */
+        addFilterByPostId: function(postId){
+            this.currentQuery.addFilter(this.currentQuery.availableFilters.POST_IS_DESCENDENT_OF_POST, postId);
+            this.loadDataByQuery();
+        },
+        
+        /**
          * @event
          * Shows the inbox
          */
