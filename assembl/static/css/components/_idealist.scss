@@ -36,7 +36,7 @@
 // --------------
 .idealist-body {
     position: relative;
-    border-bottom: $idealist-border;
+    //border-bottom: $idealist-border;
 
     &:first-child {
         border-top: 0;
@@ -90,7 +90,7 @@
     left: 0;
 
     height: $padding-bottom;
-    border-bottom: $idealist-border;
+    //border-bottom: $idealist-border;
 
     .idealist-item.is-dragover-below > .idealist-body & {
         background-color: $dragbox-background-color;
