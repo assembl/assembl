@@ -28,9 +28,13 @@
         <% } else { %>
             <span class="idealist-arrow level1"></span>
         <% }
-       } else { %>
-        <span class="idealist-noarrow"></span>
-    <% } %>
+       } else { 
+        if (level > 1) { %>
+            <span class="idealist-noarrow"></span>
+        <% } else { %>
+            <span class="idealist-space"></span>
+        <% }
+    } %>
 
     <div class="idealist-counter"><span data-tooltip="{{ gettext('Number of messages related to this idea or it\'s descendants') }}"><%= num_posts %></span></div>
     <div class="idealist-title" title="<%= shortTitle %> (<%= segments.length %>)">
