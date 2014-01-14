@@ -1,5 +1,5 @@
-define(['backbone', 'underscore', 'jquery', 'app', 'views/messageListItem', 'views/message', 'models/message', 'i18n', 'views/messageListPostQuery'],
-function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n, PostQuery){
+define(['backbone', 'underscore', 'jquery', 'app', 'views/message', 'models/message', 'i18n', 'views/messageListPostQuery'],
+function(Backbone, _, $, app, MessageView, Message, i18n, PostQuery){
     'use strict';
 
     /**
