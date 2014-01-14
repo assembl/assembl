@@ -41,8 +41,6 @@ function(Backbone, _, Idea, IdeaView, app, Types){
 
             this.ideas = new Idea.Collection();
 
-            // TODO: André: these are necessary for synchronization between browsers.
-            // They may duplicate other events, could you check that we're not rendering needlessly?
             var events = ['reset', 'change:parentId', 'change:inNextSynthesis', 'remove', 'add'];
             this.ideas.on(events.join(' '), this.render, this);
 

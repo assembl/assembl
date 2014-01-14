@@ -76,11 +76,11 @@ define(['app', 'underscore', 'sockjs'], function(app, _, SockJS){
      * Processes one item from a data array from the server
      * @param  {Object]} item
      */
-    Socket.prototype.processData = function(item) {
+    Socket.prototype.processData = function(item){
         var collection = app.getCollectionByType(item),
             model;
 
-        console.log( item['@id'], item );
+        console.log( item['@id'] || item['@type'], item );
 
         if( collection === null ){
             // TODO: Handle singletons like discussion etc.
