@@ -163,7 +163,12 @@ function(Backbone, _, Idea, Message, app, ckeditor, i18n){
                 }
                 this.idea = idea;
                 this.idea.set('isSelected', true);
-                app.openPanel(app.ideaPanel);
+
+                if( this.idea.isRootIdea() ){
+                    app.closePanel(app.ideaPanel);
+                } else {
+                    app.openPanel(app.ideaPanel);
+                }
             } else {
                 if( this.idea ){
                     this.idea.set('isSelected', false);

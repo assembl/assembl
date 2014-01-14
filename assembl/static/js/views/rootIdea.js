@@ -12,7 +12,20 @@ function(Backbone, _, $, Idea, app, IdeaView){
         /**
          * @events
          */
-        events: {}
+        events: {
+            'click .idealist-title': 'onTitleClick'
+        },
+
+        /**
+         * @event
+         */
+        onTitleClick: function(){
+            app.setCurrentIdea(this.model);
+
+            if( app.messageList ){
+                app.messageList.showAllMessages();
+            }
+        }
     });
 
 
