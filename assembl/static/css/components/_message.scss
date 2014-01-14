@@ -80,7 +80,7 @@ $message-bar-width: 15px;
     //     opacity: 1;
     // }
 
-    .message--collapsed > & {
+    .message--collapsed > .message-header > & {
         background: url(#{$img-dir}/messagelist/messagelist-arrow-closed.png) center center no-repeat;
         &.level1 {
             background: url(#{$img-dir}/messagelist/messagelist-arrow-closed-l1.png) center center no-repeat;
