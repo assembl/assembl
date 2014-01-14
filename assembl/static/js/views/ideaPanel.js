@@ -164,7 +164,7 @@ function(Backbone, _, Idea, Message, app, ckeditor, i18n, Types){
                 this.idea = idea;
                 this.idea.set('isSelected', true);
 
-                if( this.idea.get('@type') === Types. ){
+                if( this.idea.get('@type') === Types.IDEA ){
                     app.openPanel(app.ideaPanel);
                 } else {
                     app.closePanel(app.ideaPanel);

@@ -90,7 +90,7 @@ function(Backbone, _, Idea, IdeaView, app, Types, RootIdeaView, OrphanIdeaView){
             });
 
             // Orphan idea
-            var orphanIdea = new Idea.Model({ 'num_orphan_posts' : rootIdea.get('num_orphan_posts')}),
+            var orphanIdea = new Idea.Model({'num_orphan_posts' : rootIdea.get('num_orphan_posts')}),
                 orphanView = new OrphanIdeaView({model: orphanIdea});
             list.appendChild(orphanView.render().el);
 
