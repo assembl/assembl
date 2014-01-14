@@ -54,6 +54,37 @@ define(['app', 'i18n', 'sprintf'], function(app, i18n, sprintf){
          */
         this._query = {};
         
+            this.availableViews = {
+                    THREADED: {
+                        id: 'threaded',
+                        name: i18n._('Threaded view'),
+                        _supports_paging: false,
+                        _server_order_param_value: 'chronological',
+                        _client_side_implementation: null
+                    },
+                        
+                    CHRONOLOGICAL: {
+                        id: 'chronological',
+                        name: i18n._('Chronological'),
+                        _supports_paging: true,
+                        _server_order_param_value: 'chronological',
+                        _client_side_implementation: null
+                    },
+                    REVERSE_CHRONOLOGICAL: {
+                        id: 'reverse_chronological',
+                        name: i18n._('Activity feed (reverse chronological)'),
+                        _supports_paging: true,
+                        _server_order_param_value: 'reverse_chronological',
+                        _client_side_implementation: null
+                    }
+                };        
+            /**
+             * Has a property with the name of the filterDef id for each active 
+             * filter, containing then a list of objects with a propery "value"
+             * for each value the filter filters.
+             */
+            this._view = this.availableViews.REVERSE_CHRONOLOGICAL;
+            
         /**
          * Information on the query result once executed, such as the number of 
          * read/unread posts found.
@@ -126,7 +157,7 @@ define(['app', 'i18n', 'sprintf'], function(app, i18n, sprintf){
             //console.log(this._query);
             return retval;
         };
-        
+
         /**
          * Remove a single filter from the query
          * @param {filterDef} filterDef
@@ -159,6 +190,23 @@ define(['app', 'i18n', 'sprintf'], function(app, i18n, sprintf){
         };
         
         /**
+         * The order the posts are sorted for.
+         * @param {viewDef} viewDef
+         * @return true on success, false on failure
+         */
+        this.setView = function(viewDef){
+            var retval = false;
+            if(viewDef in this.availableViews) {
+                this._view = viewDef;
+                retval = true;
+            }
+            else {
+                console.log("ERROR:  setView() viewDef " + oderingDef + " not found in available views");
+            }
+            return retval;
+        };
+
+        /**
          * Execute the query
          * @param {function} success callback to call when query is complete
          */
@@ -181,6 +229,7 @@ define(['app', 'i18n', 'sprintf'], function(app, i18n, sprintf){
                 }
             }
 
+            params.order = this._view._server_order_param_value
             params.view = 'id_only';
             that._queryResultInfo = null;
             $.getJSON(url, params, function(data){
@@ -244,40 +293,6 @@ define(['app', 'i18n', 'sprintf'], function(app, i18n, sprintf){
             return retval;
         };
         
-        /**
-         * Query the posts.  Any param set to null has no effect
-         * @param {String} ideaId
-         */
-        this._queryServer = function(ideaId, onlySynthesis, isUnread, success){
-            var that = this,
-                url = app.getApiUrl('posts'),
-                params = {},
-                id = null;
-    
-            params.root_idea_id = ideaId;
-            
-            if(onlySynthesis === true){
-                params.only_synthesis = true;
-            }
-            
-            if(isUnread === true){
-                params.is_unread = true;
-            } else if(isUnread === false) {
-                params.is_unread = false;
-            }
-            params.view = 'id_only';
-    
-            $.getJSON(url, params, function(data){
-                var ids = [];
-    
-                _.each(data.posts, function(post){
-                    ids.push(post['@id']);
-                });
-                
-                success(ids);
-            });
-        };
-
     };
 
     return PostQuery;

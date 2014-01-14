@@ -6,7 +6,7 @@ from pyramid.httpexceptions import HTTPNotFound, HTTPUnauthorized, HTTPBadReques
 from pyramid.i18n import TranslationString as _
 from pyramid.security import authenticated_userid
 
-from sqlalchemy import func, Integer, String, text
+from sqlalchemy import func, Integer, String, text, desc
 from sqlalchemy.dialects.postgresql.base import ARRAY
 
 from sqlalchemy.orm import aliased, joinedload, joinedload_all, contains_eager
@@ -44,6 +44,7 @@ def get_posts(request):
     Filters have two forms:
     only_*, is for filters that cannot be reversed (ex: only_synthesis)
     is_*, is for filters that can be reversed (ex:is_unread=true returns only unread
+    order can be chronological, reverse_chronological
     message, is_unread=false returns only read messages)
     """
     discussion_id = int(request.matchdict['discussion_id'])
@@ -69,6 +70,12 @@ def get_posts(request):
     except (ValueError, KeyError):
         page = 1
 
+    try:
+        order = int(request.GET.getone('order'))
+    except (ValueError, KeyError):
+        order = 'chronological'
+    assert order in ('chronological', 'reverse_chronological')
+        
     if page < 1:
         page = 1
 
@@ -149,8 +156,10 @@ def get_posts(request):
         
     #posts = posts.options(contains_eager(Post.source))
     posts = posts.options(joinedload_all(Post.creator))
-
-    posts = posts.order_by(Content.creation_date)
+    if order == 'chronological':
+        posts = posts.order_by(Content.creation_date)
+    elif order == 'reverse_chronological':
+        posts = posts.order_by(desc(Content.creation_date))
 
     no_of_posts = 0
     no_of_posts_viewed_by_user = 0
