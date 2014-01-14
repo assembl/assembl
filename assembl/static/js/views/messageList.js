@@ -76,7 +76,7 @@ function(Backbone, _, $, app, MessageView, Message, i18n, PostQuery){
          */
         currentQuery: new PostQuery(),
         
-         /**
+        /**
          * Returns the messages with no parent in the messages to be rendered
          * TODO:  This is used in threading, but is sub-optimal as it won't 
          * tie messages to their grandparent in partial views.
@@ -193,7 +193,6 @@ function(Backbone, _, $, app, MessageView, Message, i18n, PostQuery){
                     } else {
                         //Why did we want this:
                         //level -= 1;
-                        ;
                     }
     
                     children = model.getChildren();
@@ -343,7 +342,7 @@ function(Backbone, _, $, app, MessageView, Message, i18n, PostQuery){
          * @param {String} ideaId
          */
         loadDataByQuery: function(){
-            var that = this
+            var that = this;
     
             this.blockPanel();
             this.collapsed = true;
@@ -381,6 +380,7 @@ function(Backbone, _, $, app, MessageView, Message, i18n, PostQuery){
             this.currentQuery.clearAllFilters();
             this.loadDataByQuery();
         },
+        
         /**
          * Load posts that are synthesis posts
          * @param {String} ideaId
@@ -389,6 +389,7 @@ function(Backbone, _, $, app, MessageView, Message, i18n, PostQuery){
             this.currentQuery.addFilter(this.currentQuery.availableFilters.POST_IS_SYNTHESIS, true);
             this.loadDataByQuery();
         },
+
         /**
          * Load posts that are synthesis posts
          * @param {String} ideaId
@@ -407,6 +408,7 @@ function(Backbone, _, $, app, MessageView, Message, i18n, PostQuery){
             this.currentQuery.addFilter(this.currentQuery.availableFilters.POST_IS_UNREAD, true);
             this.loadDataByQuery();
         },
+
         /**
          * Highlights the message by the given id
          * @param {String} id

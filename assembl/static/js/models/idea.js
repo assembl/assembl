@@ -1,4 +1,5 @@
-define(['models/base','underscore', 'models/segment', 'app', 'i18n'], function(Base, _, Segment, app, i18n){
+define(['models/base','underscore', 'models/segment', 'app', 'i18n', 'types'],
+function(Base, _, Segment, app, i18n, Types){
     'use strict';
 
     /**
@@ -69,11 +70,18 @@ define(['models/base','underscore', 'models/segment', 'app', 'i18n'], function(B
             }
         },
 
+        /**
+         * @return {String} The short Title to be displayed
+         */
         getShortTitleDisplayText: function(){
-            if (this.get('root') === true) {
-                return i18n.gettext('All posts');
-            }
-            return this.get('shortTitle');
+            return this.isRootIdea() ? i18n.gettext('All posts') : this.get('shortTitle');
+        },
+
+        /**
+         * @return {Boolean} true if the current idea is the root idea
+         */
+        isRootIdea: function(){
+            return this.get('@type') === Types.ROOT_IDEA;
         },
 
         /**

@@ -1,5 +1,5 @@
-define(['backbone', 'underscore', 'models/idea', 'views/idea', 'app', 'types'],
-function(Backbone, _, Idea, IdeaView, app, Types){
+define(['backbone', 'underscore', 'models/idea', 'views/idea', 'app', 'types', 'views/rootIdea'],
+function(Backbone, _, Idea, IdeaView, app, Types, RootIdeaView){
     'use strict';
 
     var FEATURED = 'featured',
@@ -84,7 +84,7 @@ function(Backbone, _, Idea, IdeaView, app, Types){
             });
 
             _.each(ideas, function(idea){
-                var ideaView = new IdeaView({model:idea});
+                var ideaView = idea.isRootIdea() ? new RootIdeaView({model:idea}) : new IdeaView({model:idea});
                 list.appendChild(ideaView.render().el);
             });
 
