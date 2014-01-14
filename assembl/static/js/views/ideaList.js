@@ -1,5 +1,5 @@
-define(['backbone', 'underscore', 'models/idea', 'views/idea', 'app', 'types', 'views/rootIdea'],
-function(Backbone, _, Idea, IdeaView, app, Types, RootIdeaView){
+define(['backbone', 'underscore', 'models/idea', 'views/idea', 'app', 'types', 'views/rootIdea', 'views/orphanIdea'],
+function(Backbone, _, Idea, IdeaView, app, Types, RootIdeaView, OrphanIdeaView){
     'use strict';
 
     var FEATURED = 'featured',
@@ -77,7 +77,8 @@ function(Backbone, _, Idea, IdeaView, app, Types, RootIdeaView){
             }
 
             var list = document.createDocumentFragment(),
-                ideas = this.ideas.where(filter);
+                ideas = this.ideas.where(filter),
+                rootIdea = this.ideas.getRootIdea();
 
             ideas = _.sortBy(ideas, function(idea){
                 return idea.get('order');
@@ -87,6 +88,11 @@ function(Backbone, _, Idea, IdeaView, app, Types, RootIdeaView){
                 var ideaView = idea.isRootIdea() ? new RootIdeaView({model:idea}) : new IdeaView({model:idea});
                 list.appendChild(ideaView.render().el);
             });
+
+            // Orphan idea
+            var orphanIdea = new Idea.Model({ 'num_orphan_posts' : rootIdea.get('num_orphan_posts')}),
+                orphanView = new OrphanIdeaView({model: orphanIdea});
+            list.appendChild(orphanView.render().el);
 
             var data = {
                 tocTotal: this.ideas.length,

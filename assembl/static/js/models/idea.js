@@ -324,6 +324,13 @@ function(Base, _, Segment, app, i18n, Types){
             });
 
             return result;
+        },
+
+        /**
+         * @return {Idea} The rood idea
+         */
+        getRootIdea: function(){
+            return this.findWhere({ '@type': Types.ROOT_IDEA }) || null;
         }
 
     });
