@@ -26,6 +26,7 @@ function(Backbone, _, $, app, MessageView, Message, i18n, PostQuery){
             app.on('idea:select', function(idea){
                 that.currentQuery.clearFilter(that.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, null);
                 if( idea ){
+                    that.currentQuery.clearFilter(that.currentQuery.availableFilters.POST_IS_ORPHAN, null);
                     that.currentQuery.addFilter(that.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, idea.getId());
                     app.openPanel(app.messageList);
                 }
@@ -384,8 +385,18 @@ function(Backbone, _, $, app, MessageView, Message, i18n, PostQuery){
          * Load posts that are synthesis posts
          * @param {String} ideaId
          */
-        addFilterIsSynthesisMessage: function(){
+        addFilterIsSynthesMessage: function(){
             this.currentQuery.addFilter(this.currentQuery.availableFilters.POST_IS_SYNTHESIS, true);
+            this.loadDataByQuery();
+        },
+        /**
+         * Load posts that are synthesis posts
+         * @param {String} ideaId
+         */
+        addFilterIsOrphanMessage: function(){
+            //Can't filter on an idea at the same time as getting orphan messages
+            this.currentQuery.clearFilter(this.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, null);
+            this.currentQuery.addFilter(this.currentQuery.availableFilters.POST_IS_ORPHAN, true);
             this.loadDataByQuery();
         },
         /**
@@ -470,8 +481,9 @@ function(Backbone, _, $, app, MessageView, Message, i18n, PostQuery){
             'click #messageList-collapseButton': 'toggleMessages',
             'click #messageList-returnButton': 'onReturnButtonClick',
 
-            'click #messageList-inbox': 'showAllMessages',
-            'click #messageList-onlysynthesis': 'addFilterIsSynthesisMessage',
+            'click #messageList-allmessages': 'showAllMessages',
+            'click #messageList-onlyorphan': 'addFilterIsOrphanMessage',            
+            'click #messageList-onlysynthesis': 'addFilterIsSynthesMessage',
             'click #messageList-isunread': 'addFilterIsUnreadMessage',
 
             'click #messageList-message-collapseButton': 'toggleThreadMessages',

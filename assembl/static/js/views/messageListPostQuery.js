@@ -28,11 +28,20 @@ define(['app', 'i18n', 'sprintf'], function(app, i18n, sprintf){
                     _server_param: 'root_post_id',
                     _client_side_implementation: null
                 },
+                POST_IS_ORPHAN: {
+                    id: 'only_orphan_posts',
+                    name: i18n._('Post is orphan'),
+                    help_text:  i18n._('Only include messages that are not found in any idea.'),
+                    _value_is_boolean: true,
+                    _can_be_reversed: false,
+                    _server_param: 'only_orphan',
+                    _client_side_implementation: null
+                },
                 POST_IS_SYNTHESIS: {
                     id: 'only_synthesis_posts',
                     name: i18n._('Post is synthesis'),
                     help_text:  i18n._('Only include messages that publish a synthesis of a discussion.'),
-                    _value_is_boolean: false,
+                    _value_is_boolean: true,
                     _can_be_reversed: false,
                     _server_param: 'only_synthesis',
                     _client_side_implementation: null

@@ -64,7 +64,7 @@ def get_idea(request):
     if view_def:
         return idea.generic_json(view_def)
     else:
-        return idea.serializable()
+        return idea.generic_json()
 
 def _get_ideas_real(discussion, view_def=None, ids=None):
     next_synthesis = discussion.get_next_synthesis()
@@ -91,9 +91,8 @@ def _get_ideas_real(discussion, view_def=None, ids=None):
         if view_def:
             serialized_idea = idea.generic_json(view_def)
         else:
-            serialized_idea = idea.serializable()
+            serialized_idea = idea.generic_json()
         retval.append(serialized_idea)
-    retval.append(RootIdea.serializable_unsorted_posts_pseudo_idea(discussion))
     return retval
 
 @ideas.get(permission=P_READ)

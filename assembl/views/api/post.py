@@ -99,29 +99,32 @@ def get_posts(request):
         posts = Post.db.query(SynthesisPost)
     else:
         posts = Post.db.query(Post)
-
+    
     posts = posts.filter(
         Post.discussion_id == discussion_id,
     )
     ##no_of_posts_to_discussion = posts.count()
 
-
-
     post_data = []
-
-        
+    
+    only_orphan = request.GET.get('only_orphan')
+    if only_orphan == "true":
+        if root_idea_id:
+            raise HTTPBadRequest(_("Getting orphan posts of a specific idea isn't supported."))
+        posts = posts \
+            .filter(Post.id.in_(text(Idea._get_orphan_posts_statement(),
+                        bindparams=[bindparam('discussion_id', discussion_id)]
+                        )))
+    elif only_orphan == "false":
+        raise HTTPBadRequest(_("Getting non-orphan posts isn't supported."))
+    
     if root_idea_id:
-        if root_idea_id == Idea.ORPHAN_POSTS_IDEA_ID:
-            posts = posts \
-                .filter(Post.id.in_(text(Idea._get_orphan_posts_statement(),
-                                         bindparams=[bindparam('discussion_id', discussion_id)]
-                                         )))
-        else:
-            posts = posts \
-                .filter(Post.id.in_(text(Idea._get_related_posts_statement(),
-                                         bindparams=[bindparam('root_idea_id', root_idea_id),
-                                                     bindparam('discussion_id', discussion_id)]
-                                         )))
+        posts = posts \
+            .filter(Post.id.in_(text(Idea._get_related_posts_statement(),
+                    bindparams=[bindparam('root_idea_id', root_idea_id),
+                    bindparam('discussion_id', discussion_id)]
+                    )))
+
     if root_post_id:
         root_post = Post.get(id=root_post_id)
 
