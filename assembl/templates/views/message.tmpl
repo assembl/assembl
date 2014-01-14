@@ -1,3 +1,5 @@
+<div class="messagelist-widgets">
+
 <%  var i;
 for( var i=1; i<level - 1; i+= 1) { 
     if (last_sibling_chain[i]) { %>
@@ -24,6 +26,8 @@ for( var i=1; i<level - 1; i+= 1) {
     <span class="messagelist-noarrow"></span>
 <% } %>
 
+</div>
+<div class="messagelist-content">
 <% if( !bodyShown ){ %>
 
 <div class="message-header" id="message-<%= id %>">
@@ -88,3 +92,4 @@ for( var i=1; i<level - 1; i+= 1) {
 
 <% } %>
 <div class="messagelist-children"></div>
+</div>

@@ -102,13 +102,13 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
 
             if (this.$el !== undefined) {
                 // let's not recalculate the rendered children, shall we?
-                children = this.$el.find('> .messagelist-children');
+                children = this.$el.find('>.messagelist-content>.messagelist-children');
             }
 
             this.$el.html( this.template(data) );
 
             if (children !== undefined && children.length == 1) {
-                this.$el.find('> .messagelist-children').replaceWith(children);
+                this.$el.find('>.messagelist-content>.messagelist-children').replaceWith(children);
             }
 
             app.initClipboard();
@@ -270,7 +270,7 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
         },
 
         events: {
-            'click >.messagelist-arrow': 'onIconbuttonClick',
+            'click >.messagelist-widgets>.messagelist-arrow': 'onIconbuttonClick',
             'click .message-title': 'onMessageTitleClick',
 
             //
@@ -394,7 +394,7 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
          */
         onCollapsedChange: function(){
             var collapsed = this.model.get('collapsed');
-            var children = this.$el.children().filter('.messagelist-children');
+            var children = this.$el.find('>.messagelist-content>.messagelist-children');
             if( collapsed ){
                 this.$el.addClass('message--collapsed');
                 children.hide();
