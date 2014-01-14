@@ -24,12 +24,12 @@ function(Backbone, _, $, app, MessageView, Message, i18n, PostQuery){
 
             var that = this;
             app.on('idea:select', function(idea){
+                that.currentQuery.clearFilter(that.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, null);
                 if( idea ){
+                    that.currentQuery.addFilter(that.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, idea.getId());
                     app.openPanel(app.messageList);
-                    that.loadDataByIdeaId(idea.getId());
-                } else {
-                    that.loadDataByIdeaId(null);
                 }
+                that.loadDataByQuery();
             });
         },
 
@@ -352,12 +352,13 @@ function(Backbone, _, $, app, MessageView, Message, i18n, PostQuery){
                 that.render();
             });
         },
+
+        
         /**
          * Shows the related posts to the given idea
          * @param {String} ideaId
          */
-        loadDataByIdeaId: function(ideaId){
-            this.currentQuery.clearAllFilters();
+        addFilterByIdeaId: function(ideaId){
             this.currentQuery.addFilter(this.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, ideaId);
             this.loadDataByQuery();
         },
@@ -373,18 +374,17 @@ function(Backbone, _, $, app, MessageView, Message, i18n, PostQuery){
         
         /**
          * @event
-         * Shows the inbox
+         * Shows all messages (clears all filters)
          */
-        showInbox: function(){
-            //This function doesn't exist anymore... benoitg
+        showAllMessages: function(){
+            this.currentQuery.clearAllFilters();
             this.loadDataByQuery();
         },
         /**
          * Load posts that are synthesis posts
          * @param {String} ideaId
          */
-        loadSynthesisMessages: function(){
-            this.currentQuery.clearAllFilters();
+        addFilterIsSynthesisMessage: function(){
             this.currentQuery.addFilter(this.currentQuery.availableFilters.POST_IS_SYNTHESIS, true);
             this.loadDataByQuery();
         },
@@ -392,8 +392,7 @@ function(Backbone, _, $, app, MessageView, Message, i18n, PostQuery){
          * Load posts that are read or unread
          * @param {String} ideaId
          */
-        loadUnreadMessages: function(){
-            this.currentQuery.clearAllFilters();
+        addFilterIsUnreadMessage: function(){
             this.currentQuery.addFilter(this.currentQuery.availableFilters.POST_IS_UNREAD, true);
             this.loadDataByQuery();
         },
@@ -467,12 +466,13 @@ function(Backbone, _, $, app, MessageView, Message, i18n, PostQuery){
          */
         events: {
             'click .idealist-title': 'onTitleClick',
+            'click #post-query-filter-info .closebutton': 'onFilterDeleteClick',
             'click #messageList-collapseButton': 'toggleMessages',
             'click #messageList-returnButton': 'onReturnButtonClick',
 
-            'click #messageList-inbox': 'showInbox',
-            'click #messageList-onlysynthesis': 'loadSynthesisMessages',
-            'click #messageList-isunread': 'loadUnreadMessages',
+            'click #messageList-inbox': 'showAllMessages',
+            'click #messageList-onlysynthesis': 'addFilterIsSynthesisMessage',
+            'click #messageList-isunread': 'addFilterIsUnreadMessage',
 
             'click #messageList-message-collapseButton': 'toggleThreadMessages',
 
@@ -493,6 +493,17 @@ function(Backbone, _, $, app, MessageView, Message, i18n, PostQuery){
             var id = ev.currentTarget.getAttribute('data-messageid');
 
             this.openMessageByid(id);
+        },
+        
+        /**
+         * @event
+         */
+        onFilterDeleteClick: function(ev){
+            var valueindex = ev.currentTarget.getAttribute('data-valueindex');
+            var filterid = ev.currentTarget.getAttribute('data-filterid');
+            var filter = this.currentQuery.getFilterDefById(filterid);
+            this.currentQuery.clearFilter(filter, value);
+            this.loadDataByQuery();
         },
 
         /**

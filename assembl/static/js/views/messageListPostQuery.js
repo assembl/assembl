@@ -61,6 +61,22 @@ define(['app', 'i18n', 'sprintf'], function(app, i18n, sprintf){
         this._queryResultInfo = null;
         
         /**
+         * get a filter defintion by id
+         * @param {filterDef.id}
+         * @return {filterDef}
+         */
+        this.getFilterDefById = function(filterDefId){
+            for (var filterDefPropName in this.availableFilters) {
+                filterDef = this.availableFilters[filterDefPropName]
+                if(filterDef.id == filterDefId) {
+                    return filterDef;
+                }
+            }
+            console.log("ERROR: getFilterDefById(): No filter definition with id "+filterDefId);
+            return null;
+        }
+
+        /**
          * A filter restriction on the collection.  Setting a filter value to 
          * null is equivalent to removing the filter
          * @param {String} ideaId
@@ -69,73 +85,79 @@ define(['app', 'i18n', 'sprintf'], function(app, i18n, sprintf){
         this.addFilter = function(filterDef, value){
             var retval = true;
             
-            if (value == null) {
-                // null value is equivalent to clearing the filter
-                // How about non-boolean filters?  Let's postpone that for now...
-                // benoitg
-                if(filterDef.id in this._query) {
-                    delete this._query[filterDef.id];
+
+            // Validate values
+            if (filterDef._value_is_boolean) {
+                if (! (value === true || value === false) ) {
+                    console.log("ERROR:  filter " + filterDef.name + " expects a boolean value and received value " + value);
+                    return false;
+                }
+                if (filterDef._can_be_reversed === false && value === false) {
+                    console.log("ERROR:  filter " + filterDef.name + " cannot be reversed, but received value " + value);
+                    return false;
+                }
+            }
+
+            if(filterDef.id in this._query) {
+
+                for (var i=0;i<this._query[filterDef.id].length;i++) {
+                    if(this._query[filterDef.id][i].value == value) {
+                        // Replace the value
+                        /* Useless for now, but will allow changing the 
+                                boolean operator later */
+                        this._query[filterDef.id][i].value = value;
+                        valueWasReplaced = true;
+                    }
+                }
+                if (valueWasReplaced == false && value != null) {
+                    //Append the new filter value
+                    this._query[filterDef.id].push({value: value});
                 }
             }
             else {
-                // Validate values
-                if (filterDef._value_is_boolean) {
-                    if (! (value === true || value === false) ) {
-                        console.log("ERROR:  filter " + filterDef.name + " expects a boolean value and received value " + value);
-                        return false;
-                    }
-                    if (filterDef._can_be_reversed === false && value === false) {
-                        console.log("ERROR:  filter " + filterDef.name + " cannot be reversed, but reveived value " + value);
-                        return false;
-                    }
-                }
-                if(filterDef.id in this._query) {
-                    if (filterDef._value_is_boolean) {
-                        // Replace the entire filter
-                        this._query[filterDef.id] = [{value: value}];
-                    }
-                    else {
-                        var valueWasReplaced = false;
-                        for (var i=0;i<this._query[filterDef.id].length;i++) {
-                            if(this._query[filterDef.id][i].value == value) {
-                                // Replace the value
-                                /* Useless for now, but will allow changing the 
-                                boolean operator later */
-                                this._query[filterDef.id][i].value = value;
-                                valueWasReplaced = true;
-                            }
-                            else {
-                                //Append the new filter value
-                                this._query[filterDef.id].push({value: value});
-                            }
-                        }
-                    }
-                }
-                else {
+                if (value != null) {
                     // Append the new filter instance
                     this._query[filterDef.id] = [{value: value}];
                 }
-                
             }
-            console.log("Filters after addfilter:")
-            console.log(this._query);
+            
+
+            //console.log("Filters after addfilter:");
+            //console.log(this._query);
             return retval;
-        }
+        };
+        
         /**
          * Remove a single filter from the query
          * @param {filterDef} filterDef
          */
         this.clearAllFilters = function(filterDef){
             this._query = {};
-        }
+        };
         
         /**
          * Remove a single filter from the query
          * @param {filterDef} filterDef
+         * @param {value}  The value for which to clear the filter.  If null
+         *  all values for that filter will be cleared.
+         * @return true if filter(s) were cleared
          */
-        this.clearFilter = function(){
-            return this.addFilter(filterDef, null);
-        }
+        this.clearFilter = function(filterDef, value){
+            var retval = false;
+            if(filterDef.id in this._query) {
+                for (var i=0;i<this._query[filterDef.id].length;i++) {
+                    if(this._query[filterDef.id][i].value == value || value == null) {
+                        this._query[filterDef.id].splice(i, 1);
+                        retval = true;
+                    }
+                }
+                if(this._query[filterDef.id].length == 0) {
+                    delete this._query[filterDef.id];
+                }
+            }
+            return retval;
+        };
+        
         /**
          * Execute the query
          * @param {function} success callback to call when query is complete
@@ -147,12 +169,11 @@ define(['app', 'i18n', 'sprintf'], function(app, i18n, sprintf){
                 id = null,
                 filterDef = null,
                 value = null;
-            
+            //console.log("execute query for: ");
+            //console.log(this._query);
             for (var filterDefPropName in this.availableFilters) {
                 filterDef = this.availableFilters[filterDefPropName]
-                console.log(filterDef);
                 if(filterDef.id in this._query) {
-                    console.log("filter in query: " + filterDef.id);
                     for (var i=0;i<this._query[filterDef.id].length;i++) {
                         value = this._query[filterDef.id][i].value;
                         params[filterDef._server_param] = value;
@@ -180,11 +201,12 @@ define(['app', 'i18n', 'sprintf'], function(app, i18n, sprintf){
         
         this.getResultNumUnread = function(){
             return this._queryResultInfo.unread;
-        }
+        };
         
         this.getResultNumTotal = function(){
             return this._queryResultInfo.total;
-        }
+        };
+        
         /**
          * Return a HTML description of the results shown to the user
          * @param {String} ideaId
@@ -210,7 +232,8 @@ define(['app', 'i18n', 'sprintf'], function(app, i18n, sprintf){
                         values = [];
                         for (var i=0;i<this._query[filterDef.id].length;i++) {
                             value = this._query[filterDef.id][i].value;
-                            values.push(value);
+                            span = '<span class="closebutton" data-filterid="'+filterDef.id+'" data-value="'+value+'"></span>\n';
+                            values.push(value + span);
                         }
                         retval += sprintf(i18n._("Filter %s for %s"), filterDef.name, values.join(', '));
                         retval += '</li>';
@@ -219,7 +242,7 @@ define(['app', 'i18n', 'sprintf'], function(app, i18n, sprintf){
                 retval += '</ul>'
             }
             return retval;
-        }
+        };
         
         /**
          * Query the posts.  Any param set to null has no effect
