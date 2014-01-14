@@ -270,7 +270,7 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
         },
 
         events: {
-            'click >.message-header>.messagelist-arrow': 'onIconbuttonClick',
+            'click >.messagelist-arrow': 'onIconbuttonClick',
             'click .message-title': 'onMessageTitleClick',
 
             //
