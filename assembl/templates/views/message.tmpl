@@ -1,33 +1,54 @@
-<% if( collapsed ){ %>
+<div class="messagelist-widgets">
+
+<%  var i;
+for( var i=1; i<level - 1; i+= 1) { 
+    if (last_sibling_chain[i]) { %>
+        <span class="messagelist-space"></span>
+    <% } else { %>
+        <span class="messagelist-bar"></span>
+    <% }
+} %>
+<% if (level > 1) {
+    if (last_sibling_chain[i]) { %>
+        <span class="messagelist-link-last"></span>
+    <% } else { %>
+        <span class="messagelist-link"></span>
+    <% }
+} %>
+
+<% if (hasChildren) {
+    if (level > 1) { %>
+        <span class="messagelist-arrow"></span>
+    <% } else { %>
+        <span class="messagelist-arrow level1"></span>
+    <% }
+   } else { %>
+    <span class="messagelist-noarrow"></span>
+<% } %>
+
+</div>
+<div class="messagelist-content">
+<% if( !bodyShown ){ %>
 
 <div class="message-header" id="message-<%= id %>">
     <div class="float-left">
-        <% for( var i=1; i<level; i+= 1) { %>
-            <span class="message-bar"></span>
-        <% } %>
-        <a class="iconbutton icon-right-dir"></a>
-        <img src="<%= creator.getAvatarUrl(32) %>" alt="{{ gettext('User') }}"  class="image-rounded" width="32" height="32" />
+        <img src="<%= creator.getAvatarUrl(30) %>" alt="{{ gettext('User') }}"  class="image-rounded" width="30" height="30" />
     </div>
 
     <div class="message-date"><%= date %></div>
     <div class="message-title">
-        <span class="text-bold inline margin-right"><%= creator.get('name') %></span>
-        <span class="inline margin-right"><span class="message-subject <%= ( read ? '' : 'text-bold' ) %>"><%= subject %></span></span>
+        <span class="inline margin-right"><%= creator.get('name') %></span>
+        <span class="inline margin-right"><span class="message-subject"><%= subject %></span></span>
         <span class="text-muted text-opaque inline"><%= app.stripHtml(body) %> </span>
     </div>
 </div>
 
 <% } else { %>
 
-<div id="message-<%= id %>">
+<div class="message-opened" id="message-<%= id %>">
     <div class="media">
 
-        <% for( var i=1; i<level; i+= 1) { %>
-            <span class="message-bar message-bar--100vertical" data-bar-level="<%= i %>"></span>
-        <% } %>
-
         <div class="media-imgleft">
-            <a class="iconbutton icon-down-dir"> </a>
             <img src="<%= creator.getAvatarUrl(24) %>" alt="{{ gettext('User') }}"  class="image-rounded" width="24" height="24" />
         </div>
 
@@ -70,3 +91,5 @@
 </div>
 
 <% } %>
+<div class="messagelist-children"></div>
+</div>

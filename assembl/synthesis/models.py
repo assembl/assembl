@@ -32,7 +32,8 @@ from assembl.lib.utils import slugify
 
 from ..lib.sqla import db_schema, Base as SQLAlchemyBaseModel
 
-from ..source.models import (ContentSource, PostSource, Content, Post, Mailbox)
+from ..source.models import (ContentSource, PostSource, Content, Post,
+    SynthesisPost, Mailbox)
 from ..auth.models import (
     DiscussionPermission, Role, Permission, AgentProfile, User,
     UserRole, LocalUserRole, DiscussionPermission, P_READ,
@@ -550,23 +551,6 @@ class Idea(SQLAlchemyBaseModel):
             self.source_links[0].source_id
         ) if self.source_links else None
 
-    def serializable(self):
-        return {
-            '@id': self.uri_generic(self.id),
-            '@type': self.external_typename(),
-            'shortTitle': self.short_title,
-            'longTitle': self.long_title,
-            'creationDate': self.creation_date.isoformat(),
-            'order': self.get_order_from_first_parent(),
-            'active': False,
-            'featured': False,
-            'parentId': self.get_first_parent_uri(),
-            'inNextSynthesis': self.is_in_next_synthesis(),
-            'numChildIdea': self.get_num_children(),
-            'num_posts': self.num_posts,
-            'num_read_posts': self.num_read_posts,
-        }
-
     @staticmethod
     def _get_idea_dag_statement(skip_where=False):
         """requires root_idea_id and discussion_id parameters"""
@@ -781,38 +765,21 @@ class RootIdea(Idea):
         ).count()
         return int(result)
 
-    def get_num_orphan_posts(self):
+    @property
+    def num_orphan_posts(self):
         "The number of posts unrelated to any idea in the current discussion"
         result = self.db.execute(text(
             Idea._get_count_orphan_posts_statement()).params(
                 discussion_id=self.discussion_id))
         return int(result.first()['total_count'])
-
-    @staticmethod
-    def serializable_unsorted_posts_pseudo_idea(discussion):
-        """
-        Returns a "fake" idea linking the posts unreacheable by navigating
-        post threads linked to any other idea
-        """
-        return {
-            '@id': Idea.ORPHAN_POSTS_IDEA_ID,
-            '@type': Idea.external_typename(),
-            'shortTitle': _('Unsorted posts'),
-            'longTitle': '',
-            'creationDate': None,
-            'order': 1000000000,
-            'active': False,
-            'featured': False,
-            'parentId': None,
-            'inNextSynthesis': False,
-            'total': 0,
-            'num_posts': discussion.root_idea.get_num_orphan_posts(),
-        }
-
-    def serializable(self):
-        ser = super(RootIdea, self).serializable()
-        ser['root'] = True
-        return ser
+    
+    @property
+    def num_synthesis_posts(self):
+        """ In the root idea, this is the count of all mesages in the system """
+        result = self.db.query(SynthesisPost).filter(
+            Post.discussion_id == self.discussion_id
+        ).count()
+        return int(result)
 
 class IdeaContentLink(SQLAlchemyBaseModel):
     """

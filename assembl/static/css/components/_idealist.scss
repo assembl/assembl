@@ -36,7 +36,7 @@
 // --------------
 .idealist-body {
     position: relative;
-    border-bottom: $idealist-border;
+    //border-bottom: $idealist-border;
 
     &:first-child {
         border-top: 0;
@@ -60,6 +60,14 @@
         background-color: $idealist-selected-bg-color;
     }
 
+}
+
+// For an root idea
+// +++++++
+.idealist-body.idealist-body--rootidea {
+    font-size: 12px;
+    line-height: 20px;
+    background-color: #e2f5ec;
 }
 
 // Area where to drop and create a sibling
@@ -90,7 +98,7 @@
     left: 0;
 
     height: $padding-bottom;
-    border-bottom: $idealist-border;
+    //border-bottom: $idealist-border;
 
     .idealist-item.is-dragover-below > .idealist-body & {
         background-color: $dragbox-background-color;
@@ -141,23 +149,31 @@
 // The arrow
 // ------------
 .idealist-arrow {
-    background: url(#{$img-dir}/idealist/idealist-arrow.png) center center no-repeat;
+    background: url(#{$img-dir}/idealist/idealist-arrow-closed.png) center center no-repeat;
+    &.level1 {
+        background: url(#{$img-dir}/idealist/idealist-arrow-closed-l1.png) center center no-repeat;
+    }
+
     width: $idealist-arrow-width;
     height: $idealist-item-height;
     display: block;
     float: left;
     cursor: pointer;
 
-    @include transition( transform 0.4s );
-    @include transform( rotate(-90deg) );
-    opacity: 0.55;
+    // @include transition( transform 0.4s );
+    // @include transform( rotate(-90deg) );
+    // opacity: 0.55;
 
-    &:hover {
-        opacity: 1;
-    }
+    // &:hover {
+    //     opacity: 1;
+    // }
 
     .idealist-item.is-open > .idealist-body & {
-        @include transform( rotate(0deg) );
+        background: url(#{$img-dir}/idealist/idealist-arrow-open.png) center center no-repeat;
+        &.level1 {
+            background: url(#{$img-dir}/idealist/idealist-arrow-open-l1.png) center center no-repeat;
+        }
+        // @include transform( rotate(0deg) );
     }
 }
 // Reserves the space if there are no children to maintain indentation
@@ -168,16 +184,42 @@
     float: left;
 }
 
+// An empty space for indentation
+// --------------
+.idealist-space {
+    display: block;
+    width: $idealist-arrow-width;
+    height: $idealist-item-height;
+    float: left;
+}
+
 // The bar to make an .idealist-item looks like a child
 // --------------
 .idealist-bar {
+    background: url(#{$img-dir}/idealist/idealist-bar.png) center center no-repeat;
     display: block;
-    width: $idealist-arrow-width / 2;
+    width: $idealist-arrow-width;
     height: $idealist-item-height;
     float: left;
+}
 
-    border-right: $idealist-border;
-    margin-right: $idealist-arrow-width / 2;
+
+// The link between an idealist and its parent
+// --------------
+.idealist-link {
+    background: url(#{$img-dir}/idealist/idealist-link.png) center center no-repeat;
+    display: block;
+    width: $idealist-arrow-width;
+    height: $idealist-item-height;
+    float: left;
+}
+
+.idealist-link-last {
+    background: url(#{$img-dir}/idealist/idealist-link-last.png) center center no-repeat;
+    display: block;
+    width: $idealist-arrow-width;
+    height: $idealist-item-height;
+    float: left;
 }
 
 // The child list

@@ -1,4 +1,12 @@
-#messageList {}
+#messageList {
+    #messageList-query-info {
+        .closebutton {
+            position: relative;
+            right: 0px;
+            top: 0px;
+        }
+    } 
+}
 
 #messageList.is-message-mode {}
 
@@ -17,3 +25,4 @@
         display: block;
     }
 }
+

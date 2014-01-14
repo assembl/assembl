@@ -1,5 +1,5 @@
-define(['backbone', 'underscore', 'models/idea', 'views/idea', 'app', 'types'],
-function(Backbone, _, Idea, IdeaView, app, Types){
+define(['backbone', 'underscore', 'models/idea', 'views/idea', 'app', 'types', 'views/rootIdea', 'views/orphanIdea'],
+function(Backbone, _, Idea, IdeaView, app, Types, RootIdeaView, OrphanIdeaView){
     'use strict';
 
     var FEATURED = 'featured',
@@ -41,8 +41,6 @@ function(Backbone, _, Idea, IdeaView, app, Types){
 
             this.ideas = new Idea.Collection();
 
-            // TODO: André: these are necessary for synchronization between browsers.
-            // They may duplicate other events, could you check that we're not rendering needlessly?
             var events = ['reset', 'change:parentId', 'change:inNextSynthesis', 'remove', 'add'];
             this.ideas.on(events.join(' '), this.render, this);
 
@@ -79,16 +77,22 @@ function(Backbone, _, Idea, IdeaView, app, Types){
             }
 
             var list = document.createDocumentFragment(),
-                ideas = this.ideas.where(filter);
+                ideas = this.ideas.where(filter),
+                rootIdea = this.ideas.getRootIdea();
 
             ideas = _.sortBy(ideas, function(idea){
                 return idea.get('order');
             });
 
             _.each(ideas, function(idea){
-                var ideaView = new IdeaView({model:idea});
+                var ideaView = idea.isRootIdea() ? new RootIdeaView({model:idea}) : new IdeaView({model:idea});
                 list.appendChild(ideaView.render().el);
             });
+
+            // Orphan idea
+            var orphanIdea = new Idea.Model({'num_orphan_posts' : rootIdea.get('num_orphan_posts')}),
+                orphanView = new OrphanIdeaView({model: orphanIdea});
+            list.appendChild(orphanView.render().el);
 
             var data = {
                 tocTotal: this.ideas.length,

@@ -1,5 +1,5 @@
-define(['backbone', 'underscore', 'models/idea', 'models/message', 'app', 'ckeditor-sharedspace', 'i18n'],
-function(Backbone, _, Idea, Message, app, ckeditor, i18n){
+define(['backbone', 'underscore', 'models/idea', 'models/message', 'app', 'ckeditor-sharedspace', 'i18n', 'types'],
+function(Backbone, _, Idea, Message, app, ckeditor, i18n, Types){
     'use strict';
 
     var LONG_TITLE_ID = 'ideaPanel-longtitle',
@@ -163,7 +163,12 @@ function(Backbone, _, Idea, Message, app, ckeditor, i18n){
                 }
                 this.idea = idea;
                 this.idea.set('isSelected', true);
-                app.openPanel(app.ideaPanel);
+
+                if( this.idea.get('@type') === Types.IDEA ){
+                    app.openPanel(app.ideaPanel);
+                } else {
+                    app.closePanel(app.ideaPanel);
+                }
             } else {
                 if( this.idea ){
                     this.idea.set('isSelected', false);

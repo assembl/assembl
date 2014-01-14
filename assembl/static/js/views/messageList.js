@@ -1,5 +1,5 @@
-define(['backbone', 'underscore', 'jquery', 'app', 'views/messageListItem', 'views/message', 'models/message', 'i18n'],
-function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
+define(['backbone', 'underscore', 'jquery', 'app', 'views/message', 'models/message', 'i18n', 'views/messageListPostQuery'],
+function(Backbone, _, $, app, MessageView, Message, i18n, PostQuery){
     'use strict';
 
     /**
@@ -24,12 +24,13 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
 
             var that = this;
             app.on('idea:select', function(idea){
+                that.currentQuery.clearFilter(that.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, null);
                 if( idea ){
+                    that.currentQuery.clearFilter(that.currentQuery.availableFilters.POST_IS_ORPHAN, null);
+                    that.currentQuery.addFilter(that.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, idea.getId());
                     app.openPanel(app.messageList);
-                    that.loadDataByIdeaId(idea.getId());
-                } else {
-                    that.loadDataByIdeaId(null);
                 }
+                that.loadDataByQuery();
             });
         },
 
@@ -64,16 +65,16 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
         annotator: null,
 
         /**
-         * The current idea's id loaded
-         * @type {id}
-         */
-        loadedIdeaId: null,
-
-        /**
-         * The current filter applied to messages
+         * The current client-side filter applied to messages
          * @type {Object}
          */
         currentFilter: {},
+        
+        /**
+         * The current server-side query applied to messages
+         * @type {Object}
+         */
+        currentQuery: new PostQuery(),
         
         /**
          * Returns the messages with no parent in the messages to be rendered
@@ -113,12 +114,13 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
 
             var that = this,
                 rootMessages = this.getRootMessages(),
-                views = this.getRenderedMessages(rootMessages);
+                views = this.getRenderedMessages(rootMessages, 1, []);
 
             var data = {
                 inbox: views.length,
                 total: views.length,
-                collapsed: this.collapsed
+                collapsed: this.collapsed,
+                queryInfo: this.currentQuery.getHtmlDescription()
             };
 
             this.$el.html( this.template(data) );
@@ -155,9 +157,11 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
          * Return a list with all views.el already rendered
          * @param {Message.Model[]} messages
          * @param {Number} [level=1] The current hierarchy level
+         * @param {Array[boolean]} last_sibling_chain which of the view's ancestors
+         *   are the last child of their respective parents.
          * @return {HTMLDivElement[]}
          */
-        getRenderedMessages: function(messages, level){
+        getRenderedMessages: function(messages, level, last_sibling_chain){
             var list = [],
                 filter = this.currentFilter,
                 i = 0,
@@ -167,14 +171,20 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
             if( _.isUndefined(level) ){
                 level = 1;
             }
+            if( _.isUndefined(last_sibling_chain) ){
+                last_sibling_chain = [];
+            }
+            last_sibling_chain = last_sibling_chain.slice();
+            last_sibling_chain.push(true);
 
-            for(; i < len; i += 1){
+            // We need to identify the "last" message of the series while taking
+            // the filter into account. It is easier to start from the end.
+            var found = false, justfound = true;
+            for (var i = len - 1; i >= 0; i--) {
                 model = messages[i];
-                isValid = true;
-                if(this.messageIdsToDisplay.indexOf(model.getId()) >= 0){
-                    // We only process messages that are to be displayed
-                    
-                    // Let's pass it through the filter
+                isValid = (this.messageIdsToDisplay.indexOf(model.getId()) >= 0)
+                if (isValid) {
+                    // Also check old-style filter... this may die soon.
                     for( prop in filter ){
                         if( filter.hasOwnProperty(prop) ){
                             // 5th level of depth. Yes! We! Can!
@@ -184,23 +194,55 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
                             }
                         }
                     }
-                    var parentId = model.get('parentId');
-                    if( isValid ){
-                        view = new MessageView({model:model});
-                        list.push(view.render(level).el);
-                    } else {
-                        //Why did we want this:
-                        //level -= 1;
-                        ;
-                    }
-    
+                }
+                if( isValid ) {
+                    view = new MessageView({model:model}, last_sibling_chain);
+                    found = true;
                     children = model.getChildren();
-                    list = _.union(list, this.getRenderedMessages(children, level+1));
+                    var subviews = this.getRenderedMessages(
+                        children, level+1, last_sibling_chain);
+                    view.hasChildren = (subviews.length > 0);
+                    list.push(view.render(level).el);
+                    view.$('.messagelist-children').append( subviews );
+                }
+                if (!found && this.hasDescendantsInFilter(model)) {
+                    found = true;
+                }
+                if (found && justfound) {
+                    justfound = false;
+                    last_sibling_chain = last_sibling_chain.slice();
+                    last_sibling_chain.pop();
+                    last_sibling_chain.push(false);
+                }
+                if (isValid || !found) {
+                    // optimization: we already computed descendants.
+                    continue;
+                }
+                if (!isValid && this.hasDescendantsInFilter(model)) {
+                    var view = $('<div class="message message--skip"><div class="skipped-message"></div><div class="messagelist-children"></div></div>');
+                    list.push(view);
+                    children = model.getChildren();
+                    view.$('.messagelist-children').append( this.getRenderedMessages(
+                        children, level+1, last_sibling_chain) );
                 }
             }
-
+            list.reverse();
             return list;
         },
+
+        hasDescendantsInFilter: function(model){
+            if (this.messageIdsToDisplay.indexOf(model.getId()) >= 0) {
+                return true;
+            }
+            var children = model.getChildren();
+            for (var i = children.length - 1; i >= 0; i--) {
+                if (this.hasDescendantsInFilter(children[i])) {
+                    return true;
+                }
+            }
+            return false;
+        },
+
 
         /**
          * Inits the annotator instance
@@ -326,11 +368,12 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
             var that = this;
 
             this.blockPanel();
-            this.collapsed = true;
+            this.collapsed = false;
 
             $.getJSON( app.getApiUrl('posts'), function(data){
                 _.each(data.posts, function(post){
-                    post.collapsed = true;
+                    post.collapsed = false;
+                    post.showBody = false;
                 });
                 that.messages.reset(data.posts);
             });
@@ -340,85 +383,74 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
          * Query the posts.  Any param set to null has no effect
          * @param {String} ideaId
          */
-        loadDataByQuery: function(ideaId, onlySynthesis, isUnread){
-            var that = this,
-                url = app.getApiUrl('posts'),
-                params = {},
-                id = null;
-
-            //TODO benoitg: Fix this
-            /*if( this.loadedIdeaId === ideaId ){
-                // already loaded
-                return;
-            }*/
-    
-            this.loadedIdeaId = ideaId;
-    
-            params.root_idea_id = ideaId;
-            
-            if(onlySynthesis === true){
-                params.only_synthesis = true;
-            }
-            
-            if(isUnread === true){
-                params.is_unread = true;
-            } else if(isUnread === false) {
-                params.is_unread = false;
-            }
-            params.view = 'id_only';
+        loadDataByQuery: function(){
+            var that = this;
     
             this.blockPanel();
-            this.collapsed = true;
-    
-            $.getJSON(url, params, function(data){
-                var ids = {},
-                    messages = [];
-    
-                _.each(data.posts, function(post){
-                    ids[post['@id']] = post;
-                });
-                
-                that.messageIdsToDisplay = [];
-                that.messages.each(function(message){
-                    id = message.get('@id')
-                    if( id in ids ){
-                        that.messageIdsToDisplay.push(id);
-                    }
-                });
+            this.collapsed = false;
+            this.currentQuery.execute(function(data){
+                that.messageIdsToDisplay = data;
                 that.unblockPanel();
                 that.render();
             });
         },
+
+        
         /**
          * Shows the related posts to the given idea
          * @param {String} ideaId
          */
-        loadDataByIdeaId: function(ideaId){
-            this.loadDataByQuery(ideaId);
+        addFilterByIdeaId: function(ideaId){
+            this.currentQuery.addFilter(this.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, ideaId);
+            this.loadDataByQuery();
         },
 
         /**
-         * @event
-         * Shows the inbox
+         * Shows the related posts to the given idea
+         * @param {String} ideaId
          */
-        showInbox: function(){
-            //This function doesn't exist anymore... benoitg
+        addFilterByPostId: function(postId){
+            this.currentQuery.addFilter(this.currentQuery.availableFilters.POST_IS_DESCENDENT_OF_POST, postId);
             this.loadDataByQuery();
         },
+        
+        /**
+         * @event
+         * Shows all messages (clears all filters)
+         */
+        showAllMessages: function(){
+            this.currentQuery.clearAllFilters();
+            this.loadDataByQuery();
+        },
+        
         /**
          * Load posts that are synthesis posts
          * @param {String} ideaId
          */
-        loadSynthesisMessages: function(){
-            this.loadDataByQuery(null, true);
+        addFilterIsSynthesMessage: function(){
+            this.currentQuery.addFilter(this.currentQuery.availableFilters.POST_IS_SYNTHESIS, true);
+            this.loadDataByQuery();
+        },
+
+        /**
+         * Load posts that are synthesis posts
+         * @param {String} ideaId
+         */
+        addFilterIsOrphanMessage: function(){
+            //Can't filter on an idea at the same time as getting orphan messages
+            this.currentQuery.clearFilter(this.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, null);
+            this.currentQuery.addFilter(this.currentQuery.availableFilters.POST_IS_ORPHAN, true);
+            this.loadDataByQuery();
         },
         /**
          * Load posts that are read or unread
          * @param {String} ideaId
          */
-        loadUnreadMessages: function(){
-            this.loadDataByQuery(null, null, true);
+        addFilterIsUnreadMessage: function(){
+            this.currentQuery.addFilter(this.currentQuery.availableFilters.POST_IS_UNREAD, true);
+            this.loadDataByQuery();
         },
+
         /**
          * Highlights the message by the given id
          * @param {String} id
@@ -434,7 +466,7 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
             }
 
             if( message ){
-                message.set('collapsed', false);
+                message.set('showBody', false);
                 el = $(selector);
                 if( el[0] ){
                     // Scrolling to the element
@@ -489,12 +521,14 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
          */
         events: {
             'click .idealist-title': 'onTitleClick',
+            'click #post-query-filter-info .closebutton': 'onFilterDeleteClick',
             'click #messageList-collapseButton': 'toggleMessages',
             'click #messageList-returnButton': 'onReturnButtonClick',
 
-            'click #messageList-inbox': 'showInbox',
-            'click #messageList-onlysynthesis': 'loadSynthesisMessages',
-            'click #messageList-isunread': 'loadUnreadMessages',
+            'click #messageList-allmessages': 'showAllMessages',
+            'click #messageList-onlyorphan': 'addFilterIsOrphanMessage',            
+            'click #messageList-onlysynthesis': 'addFilterIsSynthesMessage',
+            'click #messageList-isunread': 'addFilterIsUnreadMessage',
 
             'click #messageList-message-collapseButton': 'toggleThreadMessages',
 
@@ -515,6 +549,17 @@ function(Backbone, _, $, app, MessageListItem, MessageView, Message, i18n){
             var id = ev.currentTarget.getAttribute('data-messageid');
 
             this.openMessageByid(id);
+        },
+        
+        /**
+         * @event
+         */
+        onFilterDeleteClick: function(ev){
+            var valueindex = ev.currentTarget.getAttribute('data-valueindex');
+            var filterid = ev.currentTarget.getAttribute('data-filterid');
+            var filter = this.currentQuery.getFilterDefById(filterid);
+            this.currentQuery.clearFilter(filter, value);
+            this.loadDataByQuery();
         },
 
         /**

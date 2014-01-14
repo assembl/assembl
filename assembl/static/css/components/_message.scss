@@ -4,27 +4,34 @@ $message-bar-width: 15px;
 // ================
 .message {
     position: relative;
-    padding: 20px 5px;
+    //padding: 20px 5px;
+    padding: 0;
 
-    border-bottom: solid 1px $box-border-color;
+    //border-bottom: solid 1px $box-border-color;
     overflow-x: hidden;
+    clear:left;
 
-    &:last-child {
-        border-bottom: 0;
-    }
+    // &:last-child {
+    //     border-bottom: 0;
+    // }
 }
 
-@for $i from 1 through 30 {
-    .message[data-message-level="#{$i}"] {
-        padding-left: ((21px * $i) + 5px) - 21px;
-    }
-}
+// @for $i from 1 through 30 {
+//     .message[data-message-level="#{$i}"] {
+//         padding-left: ((21px * $i) + 5px) - 21px;
+//     }
+// }
 
 .message.message--collapsed {
-    padding: 5px;
-    padding-bottom: 0px;
+    //padding: 5px;
+    //padding-bottom: 0px;
 }
 
+.message.message--unread {
+    .message-title {
+        @extend .text-bold
+    }
+}
 // A message block Header
 // --------------------
 .message-header {
@@ -35,10 +42,16 @@ $message-bar-width: 15px;
 //
 .message-title {
     @extend .idealist-title;
+    overflow:hidden;
 
     .message--collapsed & {
         line-height: $icon-height;
     }
+}
+
+#messageList-query-info {
+    @extend .idealist-title;
+    border-bottom: solid 1px $box-border-color;
 }
 
 //
@@ -50,16 +63,86 @@ $message-bar-width: 15px;
     }
 }
 
-// 
-.message-bar {
-    display: block;
-    width: $message-bar-width / 2;
-    height: 43px;
-    float: left;
+// The arrow
+// ------------
+.messagelist-arrow {
+    background: url(#{$img-dir}/messagelist/messagelist-arrow-open.png) center center no-repeat;
+    &.level1 {
+        background: url(#{$img-dir}/messagelist/messagelist-arrow-open-l1.png) center center no-repeat;
+    }
 
-    border-right: $idealist-border;
-    margin-right: $idealist-arrow-width / 2;
+    width: $messagelist-arrow-width;
+    height: $messagelist-item-height;
+    display: block;
+    float: left;
+    cursor: pointer;
+
+    // @include transition( transform 0.4s );
+    // @include transform( rotate(-90deg) );
+    // opacity: 0.55;
+
+    // &:hover {
+    //     opacity: 1;
+    // }
+
+    .message--collapsed > .messagelist-widgets > & {
+        background: url(#{$img-dir}/messagelist/messagelist-arrow-closed.png) center center no-repeat;
+        &.level1 {
+            background: url(#{$img-dir}/messagelist/messagelist-arrow-closed-l1.png) center center no-repeat;
+        }
+        // @include transform( rotate(0deg) );
+    }
+}
+
+.messagelist-widgets {
+    height: available;
+    margin: 0;
+    display: block;
+}
+
+.messagelist-content {
+    margin: 0;
+    display: block;
+}
+
+// An empty space for indentation
+// --------------
+.messagelist-space {
+    display: block;
+    width: $messagelist-arrow-width;
+    height: $messagelist-item-height;
+    height: 43px;
     margin-top: -5px;
+    float: left;
+}
+
+// The bar to make an .messagelist-item looks like a child
+// --------------
+.messagelist-bar {
+    background: url(#{$img-dir}/messagelist/messagelist-bar.png) center center no-repeat;
+    display: block;
+    width: $messagelist-arrow-width;
+    height: $messagelist-item-height;
+    float: left;
+}
+
+
+// The link between an messagelist and its parent
+// --------------
+.messagelist-link {
+    background: url(#{$img-dir}/messagelist/messagelist-link.png) center center no-repeat;
+    display: block;
+    width: $messagelist-arrow-width;
+    height: $messagelist-item-height;
+    float: left;
+}
+
+.messagelist-link-last {
+    background: url(#{$img-dir}/messagelist/messagelist-link-last.png) center center no-repeat;
+    display: block;
+    width: $messagelist-arrow-width;
+    height: $messagelist-item-height;
+    float: left;
 }
 
 // ++++
@@ -105,4 +188,22 @@ $message-bar-width: 15px;
         display: table-cell;
         vertical-align: middle;
         }
+}
+
+// The child list
+// --------------
+.messagelist-children {
+    height: 0px;
+    overflow: hidden;
+    clear:left;
+
+    @include transition( height 0.4s );
+    @include transform( translateZ(0) );
+
+    height: auto;
+
+    &:empty {
+        display: none;
+    }
+
 }
