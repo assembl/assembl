@@ -8,15 +8,35 @@ define(['app', 'i18n', 'sprintf'], function(app, i18n, sprintf){
      * be done inside this class, to ease unit testing and code clarity.
      */
     var PostQuery = function(){
+        this._returnHtmlDescriptionPostInContextOfIdea = function(filterDef, queryObjects) {
+            var retval = '',
+            idea = null,
+            valuesText = [];
+            for (var i=0;i<queryObjects.length;i++) {
+                value = queryObjects[i].value;
+                idea = app.ideaList.ideas.get(value);
+                span = '<span class="closebutton" data-filterid="'+filterDef.id+'" data-value="'+value+'"></span>\n';
+                valuesText.push(idea.get('shortTitle') + span);
+            }
+            retval += sprintf(i18n.pluralize({1:"Discuss idea %s",2:"Discuss ideas: %s"},valuesText.length), valuesText.join(', '));
+            return retval;
+        }
+        this._returnHtmlDescriptionPostIsUnread = function(filterDef, queryObjects) {
+            var retval = '';
+            retval += (queryObjects[0].value===true)?i18n._("You haven't read yet"):i18n._("You've already read");
+
+            return retval;
+        }        
         this.availableFilters = {
                 POST_IS_IN_CONTEXT_OF_IDEA: {
-                    id: 'idea',
+                    id: 'post_in_context_of_idea',
                     name: i18n._('Idea'),
                     help_text:  i18n._('Only include messages related to the specified idea.  The filter is recursive:  Messages related to ideas that are descendents of the idea are included.'),
                     _value_is_boolean: false,
                     _can_be_reversed: false,
                     _server_param: 'root_idea_id',
-                    _client_side_implementation: null
+                    _client_side_implementation: null,
+                    _filter_description: this._returnHtmlDescriptionPostInContextOfIdea
                 },
                     
                 POST_IS_DESCENDENT_OF_POST: {
@@ -26,34 +46,38 @@ define(['app', 'i18n', 'sprintf'], function(app, i18n, sprintf){
                     _value_is_boolean: false,
                     _can_be_reversed: false,
                     _server_param: 'root_post_id',
-                    _client_side_implementation: null
+                    _client_side_implementation: null,
+                    _filter_description: null
                 },
                 POST_IS_ORPHAN: {
                     id: 'only_orphan_posts',
-                    name: i18n._('Post is orphan'),
+                    name: i18n._('Are orphan (not relevent to any idea so far)'),
                     help_text:  i18n._('Only include messages that are not found in any idea.'),
                     _value_is_boolean: true,
                     _can_be_reversed: false,
                     _server_param: 'only_orphan',
-                    _client_side_implementation: null
+                    _client_side_implementation: null,
+                    _filter_description: null
                 },
                 POST_IS_SYNTHESIS: {
                     id: 'only_synthesis_posts',
-                    name: i18n._('Post is synthesis'),
+                    name: i18n._('Publish a synthesis of the discussion'),
                     help_text:  i18n._('Only include messages that publish a synthesis of a discussion.'),
                     _value_is_boolean: true,
                     _can_be_reversed: false,
                     _server_param: 'only_synthesis',
-                    _client_side_implementation: null
+                    _client_side_implementation: null,
+                    _filter_description: null
                 },
                 POST_IS_UNREAD: {
                     id: 'is_unread_post',
-                    name: i18n._('Post is unread'),
+                    name: i18n._('not read yet'),
                     help_text:  i18n._('Only include unread messages.'),
                     _value_is_boolean: false,
                     _can_be_reversed: true,
                     _server_param: 'is_unread',
-                    _client_side_implementation: null
+                    _client_side_implementation: null,
+                    _filter_description: this._returnHtmlDescriptionPostIsUnread
                 }
             };
         /**
@@ -271,7 +295,7 @@ define(['app', 'i18n', 'sprintf'], function(app, i18n, sprintf){
          */
         this.getHtmlDescription = function(){
             var retval = '',
-            values = [];
+            valuesText = [];
             if(this._queryResultInfo == null) {
                 retval += '<div id="post-query-results-info">';
                 retval += i18n._("No query has been executed yet");
@@ -287,13 +311,26 @@ define(['app', 'i18n', 'sprintf'], function(app, i18n, sprintf){
                     
                     if(filterDef.id in this._query) {
                         retval += '<li class="filter" id="'+filterDef.id+'">';
-                        values = [];
-                        for (var i=0;i<this._query[filterDef.id].length;i++) {
-                            value = this._query[filterDef.id][i].value;
-                            span = '<span class="closebutton" data-filterid="'+filterDef.id+'" data-value="'+value+'"></span>\n';
-                            values.push(value + span);
+                        if(filterDef._filter_description) {
+                            retval += filterDef._filter_description(filterDef, this._query[filterDef.id]);
                         }
-                        retval += sprintf(i18n._("Filter %s for %s"), filterDef.name, values.join(', '));
+                        else {
+
+                            if (filterDef._value_is_boolean) {
+                                console.log(this._query[filterDef.id]);
+                                retval += sprintf((this._query[filterDef.id][0].value===true)?i18n._("%s"):i18n._("NOT %s"), filterDef.name);
+                            }
+                            else {
+                                valuesText = [];
+                                for (var i=0;i<this._query[filterDef.id].length;i++) {
+                                    value = this._query[filterDef.id][i].value;
+                                    span = '<span class="closebutton" data-filterid="'+filterDef.id+'" data-value="'+value+'"></span>\n';
+                                    valuesText.push(value + span);
+                                }
+                                retval += sprintf(i18n._("%s for values %s"), filterDef.name, valuesText.join(', '));
+                            }
+                            
+                        }
                         retval += '</li>';
                     }
                 }

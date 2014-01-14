@@ -49,6 +49,11 @@ $message-bar-width: 15px;
     }
 }
 
+#messageList-query-info {
+    @extend .idealist-title;
+    border-bottom: solid 1px $box-border-color;
+}
+
 //
 .message-date {
     @extend .idealist-counter;
