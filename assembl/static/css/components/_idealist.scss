@@ -178,6 +178,7 @@
 }
 // Reserves the space if there are no children to maintain indentation
 .idealist-noarrow {
+    background: url(#{$img-dir}/idealist/idealist-noarrow.png) center center no-repeat;
     width: $idealist-arrow-width;
     height: $idealist-item-height;
     display: block;
