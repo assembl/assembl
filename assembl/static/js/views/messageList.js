@@ -114,7 +114,7 @@ function(Backbone, _, $, app, MessageView, Message, i18n, PostQuery){
 
             var that = this,
                 rootMessages = this.getRootMessages(),
-                views = this.getRenderedMessages(rootMessages);
+                views = this.getRenderedMessages(rootMessages, 1, []);
 
             var data = {
                 inbox: views.length,
@@ -157,9 +157,11 @@ function(Backbone, _, $, app, MessageView, Message, i18n, PostQuery){
          * Return a list with all views.el already rendered
          * @param {Message.Model[]} messages
          * @param {Number} [level=1] The current hierarchy level
+         * @param {Array[boolean]} last_sibling_chain which of the view's ancestors
+         *   are the last child of their respective parents.
          * @return {HTMLDivElement[]}
          */
-        getRenderedMessages: function(messages, level){
+        getRenderedMessages: function(messages, level, last_sibling_chain){
             var list = [],
                 filter = this.currentFilter,
                 i = 0,
@@ -169,14 +171,20 @@ function(Backbone, _, $, app, MessageView, Message, i18n, PostQuery){
             if( _.isUndefined(level) ){
                 level = 1;
             }
+            if( _.isUndefined(last_sibling_chain) ){
+                last_sibling_chain = [];
+            }
+            last_sibling_chain = last_sibling_chain.slice();
+            last_sibling_chain.push(true);
 
-            for(; i < len; i += 1){
+            // We need to identify the "last" message of the series while taking
+            // the filter into account. It is easier to start from the end.
+            var found = false, justfound = true;
+            for (var i = len - 1; i >= 0; i--) {
                 model = messages[i];
-                isValid = true;
-                if(this.messageIdsToDisplay.indexOf(model.getId()) >= 0){
-                    // We only process messages that are to be displayed
-                    
-                    // Let's pass it through the filter
+                isValid = (this.messageIdsToDisplay.indexOf(model.getId()) >= 0)
+                if (isValid) {
+                    // Also check old-style filter... this may die soon.
                     for( prop in filter ){
                         if( filter.hasOwnProperty(prop) ){
                             // 5th level of depth. Yes! We! Can!
@@ -186,22 +194,55 @@ function(Backbone, _, $, app, MessageView, Message, i18n, PostQuery){
                             }
                         }
                     }
-                    var parentId = model.get('parentId');
-                    if( isValid ){
-                        view = new MessageView({model:model});
-                        list.push(view.render(level).el);
-                    } else {
-                        //Why did we want this:
-                        //level -= 1;
-                    }
-    
+                }
+                if( isValid ) {
+                    view = new MessageView({model:model}, last_sibling_chain);
+                    found = true;
                     children = model.getChildren();
-                    list = _.union(list, this.getRenderedMessages(children, level+1));
+                    var subviews = this.getRenderedMessages(
+                        children, level+1, last_sibling_chain);
+                    view.hasChildren = (subviews.length > 0);
+                    list.push(view.render(level).el);
+                    view.$('.messagelist-children').append( subviews );
+                }
+                if (!found && this.hasDescendantsInFilter(model)) {
+                    found = true;
+                }
+                if (found && justfound) {
+                    justfound = false;
+                    last_sibling_chain = last_sibling_chain.slice();
+                    last_sibling_chain.pop();
+                    last_sibling_chain.push(false);
+                }
+                if (isValid || !found) {
+                    // optimization: we already computed descendants.
+                    continue;
+                }
+                if (!isValid && this.hasDescendantsInFilter(model)) {
+                    var view = $('<div class="message message--skip"><div class="skipped-message"></div><div class="messagelist-children"></div></div>');
+                    list.push(view);
+                    children = model.getChildren();
+                    view.$('.messagelist-children').append( this.getRenderedMessages(
+                        children, level+1, last_sibling_chain) );
                 }
             }
-
+            list.reverse();
             return list;
         },
+
+        hasDescendantsInFilter: function(model){
+            if (this.messageIdsToDisplay.indexOf(model.getId()) >= 0) {
+                return true;
+            }
+            var children = model.getChildren();
+            for (var i = children.length - 1; i >= 0; i--) {
+                if (this.hasDescendantsInFilter(children[i])) {
+                    return true;
+                }
+            }
+            return false;
+        },
+
 
         /**
          * Inits the annotator instance
@@ -327,11 +368,12 @@ function(Backbone, _, $, app, MessageView, Message, i18n, PostQuery){
             var that = this;
 
             this.blockPanel();
-            this.collapsed = true;
+            this.collapsed = false;
 
             $.getJSON( app.getApiUrl('posts'), function(data){
                 _.each(data.posts, function(post){
-                    post.collapsed = true;
+                    post.collapsed = false;
+                    post.showBody = false;
                 });
                 that.messages.reset(data.posts);
             });
@@ -345,7 +387,7 @@ function(Backbone, _, $, app, MessageView, Message, i18n, PostQuery){
             var that = this;
     
             this.blockPanel();
-            this.collapsed = true;
+            this.collapsed = false;
             this.currentQuery.execute(function(data){
                 that.messageIdsToDisplay = data;
                 that.unblockPanel();
@@ -424,7 +466,7 @@ function(Backbone, _, $, app, MessageView, Message, i18n, PostQuery){
             }
 
             if( message ){
-                message.set('collapsed', false);
+                message.set('showBody', false);
                 el = $(selector);
                 if( el[0] ){
                     // Scrolling to the element

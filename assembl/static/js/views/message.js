@@ -27,9 +27,18 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
 
         /**
          * @init
+         * @param {MessageModel} obj the model
+         * @param {Array[boolean]} last_sibling_chain which of the view's ancestors
+         *   are the last child of their respective parents.
          */
-        initialize: function(){
+        initialize: function(obj, last_sibling_chain){
+            if ( _.isUndefined(last_sibling_chain)) {
+                last_sibling_chain = [];
+            }
+            this.last_sibling_chain = last_sibling_chain;
             this.model.on('change:collapsed', this.onCollapsedChange, this);
+            this.model.on('change:bodyShown', this.onBodyShownChange, this);
+            this.model.on('change:isSelected', this.onIsSelectedChange, this);
             this.model.on('replaced', this.onReplaced, this);
         },
 
@@ -58,7 +67,7 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
          */
         render: function(level){
             app.trigger('render');
-            var data = this.model.toJSON();
+            var data = this.model.toJSON(), children;
 
             if( ! _.isUndefined(level) ){
                 this.currentLevel = level;
@@ -68,6 +77,8 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
             data['date'] = app.formatDate(data.date);
             data['creator'] = this.model.getCreator();
             data['level'] = this.currentLevel !== null ? this.currentLevel : this.model.getLevel();
+            data['last_sibling_chain'] = this.last_sibling_chain;
+            data['hasChildren'] = this.hasChildren;
 
             this.el.setAttribute('data-message-level', data['level']);
 
@@ -75,6 +86,11 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
                 this.$el.addClass('message--collapsed');
             } else {
                 this.$el.removeClass('message--collapsed');
+            }
+            if( data.bodyShown ){
+                this.$el.addClass('message--showbody');
+            } else {
+                this.$el.removeClass('message--showbody');
             }
             if( data.read ){
                 this.$el.removeClass('message--unread');
@@ -84,7 +100,16 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
                 this.$el.addClass('message--unread');
             }
 
+            if (this.$el !== undefined) {
+                // let's not recalculate the rendered children, shall we?
+                children = this.$el.find('> .messagelist-children');
+            }
+
             this.$el.html( this.template(data) );
+
+            if (children !== undefined && children.length == 1) {
+                this.$el.find('> .messagelist-children').replaceWith(children);
+            }
 
             app.initClipboard();
 
@@ -98,14 +123,22 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
          */
         getRenderedChildren: function(parentLevel){
             var children = this.model.getChildren(),
+                num_last_child = children.length - 1,
+                chain_t = this.last_sibling_chain.slice(),
+                chain_f = this.last_sibling_chain.slice(),
+                last_chain_elem = this.last_sibling_chain.length,
                 ret = [];
 
+            chain_t.push(true);
+            chain_f.push(false);
             _.each(children, function(message, i){
                 message.set('level', parentLevel + 1);
+                var chain = (i == num_last_child)?chain_t:chain_f;
 
-                var messageView = new MessageView({model:message});
+                var messageView = new MessageView({model:message}, chain);
                 ret.push( messageView.render().el );
             });
+            this.hasChildren = (children.length > 0);
 
             return ret;
         },
@@ -117,17 +150,25 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
          */
         getRenderedChildrenInCascade: function(parentLevel){
             var children = this.model.getChildren(),
+                num_last_child = children.length - 1,
+                chain_t = this.last_sibling_chain.slice(),
+                chain_f = this.last_sibling_chain.slice(),
+                last_chain_elem = this.last_sibling_chain.length,
                 ret = [];
 
+            chain_t.push(true);
+            chain_f.push(false);
             _.each(children, function(message, i){
                 message.set('level', parentLevel + 1);
+                var chain = (i == num_last_child)?chain_t:chain_f;
 
-                var messageView = new MessageView({model:message});
+                var messageView = new MessageView({model:message}, chain);
                 ret.push( messageView.render().el );
-
+                // TODO maparent: fix this.  This does not work anymore.
                 var grandChildren = messageView.getRenderedChildrenInCascade();
                 ret = _.union(ret, grandChildren);
             });
+            this.hasChildren = (children.length > 0);
 
             return ret;
         },
@@ -229,7 +270,7 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
         },
 
         events: {
-            'click .iconbutton': 'onIconbuttonClick',
+            'click >.messagelist-arrow': 'onIconbuttonClick',
             'click .message-title': 'onMessageTitleClick',
 
             //
@@ -253,13 +294,6 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
          * Collapse icon has been toggled
          */
         onIconbuttonClick: function(ev){
-            if( ev ){
-                // Avoiding collapse if clicked on the link
-                if( ev.target.id === 'message-linkbutton' ){
-                    return;
-                }
-            }
-
             var collapsed = this.model.get('collapsed');
             this.model.set('collapsed', !collapsed);
         },
@@ -275,8 +309,11 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
                 }
             }
             app.messageList.addFilterByPostId(this.model.getId());
-            var collapsed = this.model.get('collapsed');
-            this.model.set('collapsed', !collapsed);
+            var bodyShown = this.model.get('bodyShown');
+            this.model.set('bodyShown', !bodyShown);
+            if (!bodyShown) {
+                this.model.set('collapsed', false);
+            }
         },
 
         /**
@@ -356,10 +393,27 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
          * @event
          */
         onCollapsedChange: function(){
-            var collapsed = this.model.get('collapsed'),
+            var collapsed = this.model.get('collapsed');
+            var children = this.$el.children().filter('.messagelist-children');
+            if( collapsed ){
+                this.$el.addClass('message--collapsed');
+                children.hide();
+            } else {
+                this.$el.removeClass('message--collapsed');
+                children.show();
+            }
+
+            //this.render();
+        },
+
+        /**
+         * @event
+         */
+        onBodyShownChange: function(){
+            var bodyShown = this.model.get('bodyShown'),
                 read = this.model.get('read');
 
-            if( collapsed === false && read === false ){
+            if( bodyShown === true && read === false ){
                 this.model.setRead(true);
             }
 
