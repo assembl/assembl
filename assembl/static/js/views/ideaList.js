@@ -90,10 +90,18 @@ function(Backbone, _, Idea, IdeaView, app, Types, RootIdeaView, OrphanIdeaView, 
                     synthesisView = new SynthesisInIdeaListView({model:synthesisIdea});
                 list.appendChild(synthesisView.render().el);
             }
+            
+            if( rootIdea.get('num_posts') > 0 ){
+                // Root idea (represents the discussion)
+                var rootIdeaView = new RootIdeaView({model:rootIdea});
+                list.appendChild(rootIdeaView.render().el);
+            }
 
             _.each(ideas, function(idea){
-                var ideaView = idea.isRootIdea() ? new RootIdeaView({model:idea}) : new IdeaView({model:idea});
-                list.appendChild(ideaView.render().el);
+                if(idea.isRootIdea() == false) {
+                    var ideaView =  new IdeaView({model:idea});
+                    list.appendChild(ideaView.render().el);
+                }
             });
 
             if( rootIdea.get('num_orphan_posts') > 0 ){
