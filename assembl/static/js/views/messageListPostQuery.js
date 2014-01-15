@@ -87,37 +87,37 @@ define(['app', 'i18n', 'sprintf'], function(app, i18n, sprintf){
          */
         this._query = {};
         
-            this.availableViews = {
-                    THREADED: {
-                        id: 'threaded',
-                        name: i18n._('Threaded view'),
-                        _supports_paging: false,
-                        _server_order_param_value: 'chronological',
-                        _client_side_implementation: null
-                    },
-                        
-                    CHRONOLOGICAL: {
-                        id: 'chronological',
-                        name: i18n._('Chronological'),
-                        _supports_paging: true,
-                        _server_order_param_value: 'chronological',
-                        _client_side_implementation: null
-                    },
-                    REVERSE_CHRONOLOGICAL: {
-                        id: 'reverse_chronological',
-                        name: i18n._('Activity feed (reverse chronological)'),
-                        _supports_paging: true,
-                        _server_order_param_value: 'reverse_chronological',
-                        _client_side_implementation: null
-                    }
-                };        
-            /**
-             * Has a property with the name of the filterDef id for each active 
-             * filter, containing then a list of objects with a propery "value"
-             * for each value the filter filters.
-             */
-            this._view = this.availableViews.REVERSE_CHRONOLOGICAL;
-            
+        this.availableViews = {
+                THREADED: {
+                    id: 'threaded',
+                    name: i18n._('Threaded view'),
+                    _supports_paging: false,
+                    _server_order_param_value: 'chronological',
+                    _client_side_implementation: null
+                },
+
+                CHRONOLOGICAL: {
+                    id: 'chronological',
+                    name: i18n._('Chronological'),
+                    _supports_paging: true,
+                    _server_order_param_value: 'chronological',
+                    _client_side_implementation: null
+                },
+                REVERSE_CHRONOLOGICAL: {
+                    id: 'reverse_chronological',
+                    name: i18n._('Activity feed (reverse chronological)'),
+                    _supports_paging: true,
+                    _server_order_param_value: 'reverse_chronological',
+                    _client_side_implementation: null
+                }
+        };        
+        /**
+         * Has a property with the name of the filterDef id for each active 
+         * filter, containing then a list of objects with a propery "value"
+         * for each value the filter filters.
+         */
+        this._view = this.availableViews.REVERSE_CHRONOLOGICAL;
+
         /**
          * Information on the query result once executed, such as the number of 
          * read/unread posts found.
@@ -229,12 +229,12 @@ define(['app', 'i18n', 'sprintf'], function(app, i18n, sprintf){
          */
         this.setView = function(viewDef){
             var retval = false;
-            if(viewDef in this.availableViews) {
+            if(viewDef) {
                 this._view = viewDef;
                 retval = true;
             }
             else {
-                console.log("ERROR:  setView() viewDef " + oderingDef + " not found in available views");
+                console.log("ERROR:  setView() viewDef is empty");
             }
             return retval;
         };

@@ -70,9 +70,8 @@ def get_posts(request):
     except (ValueError, KeyError):
         page = 1
 
-    try:
-        order = int(request.GET.getone('order'))
-    except (ValueError, KeyError):
+    order = request.GET.get('order')
+    if order == None:
         order = 'chronological'
     assert order in ('chronological', 'reverse_chronological')
         
@@ -162,7 +161,7 @@ def get_posts(request):
     if order == 'chronological':
         posts = posts.order_by(Content.creation_date)
     elif order == 'reverse_chronological':
-        posts = posts.order_by(desc(Content.creation_date))
+        posts = posts.order_by(Content.creation_date.desc())
 
     no_of_posts = 0
     no_of_posts_viewed_by_user = 0
