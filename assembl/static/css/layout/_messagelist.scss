@@ -1,5 +1,8 @@
 #messageList {
     #messageList-query-info {
+        @extend .idealist-title;
+        border-bottom: solid 1px $box-border-color;
+        white-space: normal;
         .closebutton {
             position: relative;
             right: 0px;

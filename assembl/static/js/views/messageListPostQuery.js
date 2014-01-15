@@ -16,9 +16,22 @@ define(['app', 'i18n', 'sprintf'], function(app, i18n, sprintf){
                 value = queryObjects[i].value;
                 idea = app.ideaList.ideas.get(value);
                 span = '<span class="closebutton" data-filterid="'+filterDef.id+'" data-value="'+value+'"></span>\n';
-                valuesText.push(idea.get('shortTitle') + span);
+                valuesText.push('"' + idea.get('shortTitle') + '"' + span);
             }
-            retval += sprintf(i18n.pluralize({1:"Discuss idea %s",2:"Discuss ideas: %s"},valuesText.length), valuesText.join(', '));
+            retval += sprintf(i18n.pluralize({1:"Discuss idea %s",2:"Discuss ideas: %s"},valuesText.length), valuesText.join(i18n._(' AND ')));
+            return retval;
+        }
+        this._returnHtmlDescriptionPostIsDescendentOfPost = function(filterDef, queryObjects) {
+            var retval = '',
+            post = null,
+            valuesText = [];
+            for (var i=0;i<queryObjects.length;i++) {
+                value = queryObjects[i].value;
+                post = app.messageList.messages.get(value);
+                span = '<span class="closebutton" data-filterid="'+filterDef.id+'" data-value="'+value+'"></span>\n';
+                valuesText.push('"' + post.get('subject') + '"' + span);
+            }
+            retval += sprintf(i18n.pluralize({1:"Are in the conversation that follows post %s",2:"Are in the conversation that follows posts: %s"},valuesText.length), valuesText.join(i18n._(' AND ')));
             return retval;
         }
         this._returnHtmlDescriptionPostIsUnread = function(filterDef, queryObjects) {
@@ -47,7 +60,7 @@ define(['app', 'i18n', 'sprintf'], function(app, i18n, sprintf){
                     _can_be_reversed: false,
                     _server_param: 'root_post_id',
                     _client_side_implementation: null,
-                    _filter_description: null
+                    _filter_description: this._returnHtmlDescriptionPostIsDescendentOfPost
                 },
                 POST_IS_ORPHAN: {
                     id: 'only_orphan_posts',
@@ -147,7 +160,8 @@ define(['app', 'i18n', 'sprintf'], function(app, i18n, sprintf){
          * @return true on success, false on failure
          */
         this.addFilter = function(filterDef, value){
-            var retval = true;
+            var retval = true,
+            valueWasReplaced = false;
             
 
             // Validate values
@@ -304,7 +318,16 @@ define(['app', 'i18n', 'sprintf'], function(app, i18n, sprintf){
             }
             else{
                 retval += '<div id="post-query-results-info">';
-                retval += sprintf(i18n._("%d messages found (%d unread) that:"), this.getResultNumTotal(), this.getResultNumUnread());
+                if(this.getResultNumTotal() == 0) {
+                    retval += i18n._("There are no messages that:");
+                }
+                else {
+                    var unreadText = '';
+                    if(this.getResultNumUnread() > 0) {
+                        unreadText = sprintf(i18n._("(%d unread)"), this.getResultNumUnread());
+                    }
+                    retval += sprintf(i18n._("Showing the %d messages %s that:"), this.getResultNumTotal(), unreadText);
+                }
                 retval += '</div>';
                 retval += '<ul id="post-query-filter-info">';
                 for (var filterDefPropName in this.availableFilters) {

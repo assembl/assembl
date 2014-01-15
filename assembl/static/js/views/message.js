@@ -376,10 +376,16 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
         /**
          * Mark the current message as unread
          */
-        markAsUnread: function(){
-            this.model.set('read', false);
-            //this.model.save();
-        }
+         markAsUnread: function(){
+             this.model.setRead(false);
+         },
+         
+         /**
+          * Mark the current message as read
+          */
+         markAsRead: function(){
+             this.model.setRead(true);
+         }
     });
 
 

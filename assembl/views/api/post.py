@@ -273,7 +273,7 @@ def mark_post_read(request):
     
     return { "ok": True, "ideas": [
         {"@id": Idea.uri_generic(idea_id),
-         "@type": "Idea",
+         "@type": db.query(Idea).get(idea_id).external_typename(),
          "num_posts": total_posts,
          "num_read_posts": read_posts
         } for (idea_id, total_posts, read_posts) in new_counts] }
