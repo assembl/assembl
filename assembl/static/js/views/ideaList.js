@@ -1,5 +1,5 @@
-define(['backbone', 'underscore', 'models/idea', 'views/idea', 'app', 'types', 'views/rootIdea', 'views/orphanIdea'],
-function(Backbone, _, Idea, IdeaView, app, Types, RootIdeaView, OrphanIdeaView){
+define(['backbone', 'underscore', 'models/idea', 'views/idea', 'app', 'types', 'views/rootIdea', 'views/orphanIdea', 'views/synthesisInIdeaList'],
+function(Backbone, _, Idea, IdeaView, app, Types, RootIdeaView, OrphanIdeaView, SynthesisInIdeaListView){
     'use strict';
 
     var FEATURED = 'featured',
@@ -84,15 +84,24 @@ function(Backbone, _, Idea, IdeaView, app, Types, RootIdeaView, OrphanIdeaView){
                 return idea.get('order');
             });
 
+            if( rootIdea.get('num_synthesis_posts') > 0 ){
+                // Synthesis idea
+                var synthesisIdea = new Idea.Model({'num_synthesis_posts': rootIdea.get('num_synthesis_posts')}),
+                    synthesisView = new SynthesisInIdeaListView({model:synthesisIdea});
+                list.appendChild(synthesisView.render().el);
+            }
+
             _.each(ideas, function(idea){
                 var ideaView = idea.isRootIdea() ? new RootIdeaView({model:idea}) : new IdeaView({model:idea});
                 list.appendChild(ideaView.render().el);
             });
 
-            // Orphan idea
-            var orphanIdea = new Idea.Model({'num_orphan_posts' : rootIdea.get('num_orphan_posts')}),
-                orphanView = new OrphanIdeaView({model: orphanIdea});
-            list.appendChild(orphanView.render().el);
+            if( rootIdea.get('num_orphan_posts') > 0 ){
+                // Orphan idea
+                var orphanIdea = new Idea.Model({'num_orphan_posts': rootIdea.get('num_orphan_posts')}),
+                    orphanView = new OrphanIdeaView({model: orphanIdea});
+                list.appendChild(orphanView.render().el);
+            }
 
             var data = {
                 tocTotal: this.ideas.length,

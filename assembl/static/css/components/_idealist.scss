@@ -70,6 +70,13 @@
     background-color: #e2f5ec;
 }
 
+.idealist-body.idealist-body--synthesis {
+    @extend .idealist-body.idealist-body--rootidea;
+
+    border-bottom: solid 1px darken(#e2f5ec, 20%);
+}
+
+
 // Area where to drop and create a sibling
 // --------------
 .idealist-abovedropzone {
