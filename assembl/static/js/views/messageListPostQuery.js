@@ -211,6 +211,7 @@ define(['app', 'i18n', 'sprintf'], function(app, i18n, sprintf){
             if(filterDef.id in this._query) {
                 for (var i=0;i<this._query[filterDef.id].length;i++) {
                     if(this._query[filterDef.id][i].value == value || value == null) {
+                        //console.log("clearFilter(): clearing "+filterDef.id+" for value "+value);
                         this._query[filterDef.id].splice(i, 1);
                         retval = true;
                     }

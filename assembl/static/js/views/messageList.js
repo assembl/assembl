@@ -655,7 +655,8 @@ function(Backbone, _, $, app, MessageView, Message, i18n, PostQuery){
          * @event
          */
         onFilterDeleteClick: function(ev){
-            var valueindex = ev.currentTarget.getAttribute('data-valueindex');
+            console.log(ev);
+            var value = ev.currentTarget.getAttribute('data-value');
             var filterid = ev.currentTarget.getAttribute('data-filterid');
             var filter = this.currentQuery.getFilterDefById(filterid);
             this.currentQuery.clearFilter(filter, value);
