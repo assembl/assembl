@@ -134,12 +134,17 @@ class AgentProfile(SQLAlchemyBaseModel):
             (app_url and app_url+'/static/img/icon/user.png')
         if not email:
             return default
+        else:
+            gravatar_default = config.get('avatar.gravatar_default')
+            if gravatar_default:
+                default = gravatar_default
         args = {'s': str(size)}
         if default:
             args['d'] = default
-        gravatar_url = "http://www.gravatar.com/avatar/%s?s=%d&amp;d=%s" % (
+        gravatar_url_pattern = "http://www.gravatar.com/avatar/%s?%s"
+        gravatar_url = gravatar_url_pattern % (
             hashlib.md5(
-                email.lower()).hexdigest(), size, urllib.quote(default))
+                email.lower()).hexdigest(), urllib.urlencode(args))
         return gravatar_url
 
     def serializable(self, use_email=None):
