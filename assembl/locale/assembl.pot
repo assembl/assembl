@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: assembl 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-01-14 15:32-0500\n"
+"POT-Creation-Date: 2014-01-15 18:34-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -101,7 +101,7 @@ msgstr ""
 msgid "New Idea"
 msgstr ""
 
-#: assembl/static/js/views/ideaPanel.js:357 assembl/static/js/views/message.js:238
+#: assembl/static/js/views/ideaPanel.js:357 assembl/static/js/views/message.js:181
 #: assembl/templates/includes/javascript.jinja2:132
 msgid "Sending..."
 msgstr ""
@@ -118,110 +118,126 @@ msgstr ""
 msgid "You can drag the segment above directly to the table of ideas"
 msgstr ""
 
-#: assembl/static/js/views/messageList.js:131
+#: assembl/static/js/views/messageList.js:170
 msgid "No messages"
 msgstr ""
 
-#: assembl/static/js/views/messageList.js:148
+#: assembl/static/js/views/messageList.js:187
 #: assembl/templates/views/ideaList.tmpl:26
-#: assembl/templates/views/messageList.tmpl:47
+#: assembl/templates/views/messageList.tmpl:56
 msgid "Expand all"
 msgstr ""
 
-#: assembl/static/js/views/messageList.js:151
+#: assembl/static/js/views/messageList.js:190
 #: assembl/templates/views/ideaList.tmpl:26
-#: assembl/templates/views/messageList.tmpl:47
+#: assembl/templates/views/messageList.tmpl:56
 msgid "Collapse all"
 msgstr ""
 
-#: assembl/static/js/views/messageList.js:289
+#: assembl/static/js/views/messageList.js:355
 msgid "Send to clipboard"
 msgstr ""
 
-#: assembl/static/js/views/messageListPostQuery.js:26
+#: assembl/static/js/views/messageListPostQuery.js:21
+#: assembl/static/js/views/messageListPostQuery.js:34
+msgid " AND "
+msgstr ""
+
+#: assembl/static/js/views/messageListPostQuery.js:39
 msgid "You haven't read yet"
 msgstr ""
 
-#: assembl/static/js/views/messageListPostQuery.js:26
+#: assembl/static/js/views/messageListPostQuery.js:39
 msgid "You've already read"
 msgstr ""
 
-#: assembl/static/js/views/messageListPostQuery.js:33
+#: assembl/static/js/views/messageListPostQuery.js:46
 #: assembl/templates/index.jinja2:44 assembl/templates/views/ideaPanel.tmpl:3
 msgid "Idea"
 msgstr ""
 
-#: assembl/static/js/views/messageListPostQuery.js:34
+#: assembl/static/js/views/messageListPostQuery.js:47
 msgid ""
 "Only include messages related to the specified idea.  The filter is "
 "recursive:  Messages related to ideas that are descendents of the idea are "
 "included."
 msgstr ""
 
-#: assembl/static/js/views/messageListPostQuery.js:44
+#: assembl/static/js/views/messageListPostQuery.js:57
 msgid "Post thread"
 msgstr ""
 
-#: assembl/static/js/views/messageListPostQuery.js:45
+#: assembl/static/js/views/messageListPostQuery.js:58
 msgid "Only include messages that are in the specified post reply thread."
 msgstr ""
 
-#: assembl/static/js/views/messageListPostQuery.js:54
+#: assembl/static/js/views/messageListPostQuery.js:67
 msgid "Are orphan (not relevent to any idea so far)"
 msgstr ""
 
-#: assembl/static/js/views/messageListPostQuery.js:55
+#: assembl/static/js/views/messageListPostQuery.js:68
 msgid "Only include messages that are not found in any idea."
 msgstr ""
 
-#: assembl/static/js/views/messageListPostQuery.js:64
+#: assembl/static/js/views/messageListPostQuery.js:77
 msgid "Publish a synthesis of the discussion"
 msgstr ""
 
-#: assembl/static/js/views/messageListPostQuery.js:65
+#: assembl/static/js/views/messageListPostQuery.js:78
 msgid "Only include messages that publish a synthesis of a discussion."
 msgstr ""
 
-#: assembl/static/js/views/messageListPostQuery.js:74
+#: assembl/static/js/views/messageListPostQuery.js:87
 msgid "not read yet"
 msgstr ""
 
-#: assembl/static/js/views/messageListPostQuery.js:75
+#: assembl/static/js/views/messageListPostQuery.js:88
 msgid "Only include unread messages."
 msgstr ""
 
-#: assembl/static/js/views/messageListPostQuery.js:93
+#: assembl/static/js/views/messageListPostQuery.js:106
+#: assembl/templates/views/messageList.tmpl:26
 msgid "Threaded view"
 msgstr ""
 
-#: assembl/static/js/views/messageListPostQuery.js:101
+#: assembl/static/js/views/messageListPostQuery.js:114
+#: assembl/templates/views/messageList.tmpl:28
 msgid "Chronological"
 msgstr ""
 
-#: assembl/static/js/views/messageListPostQuery.js:108
+#: assembl/static/js/views/messageListPostQuery.js:121
 msgid "Activity feed (reverse chronological)"
 msgstr ""
 
-#: assembl/static/js/views/messageListPostQuery.js:301
+#: assembl/static/js/views/messageListPostQuery.js:316
 msgid "No query has been executed yet"
 msgstr ""
 
-#: assembl/static/js/views/messageListPostQuery.js:306
-#, python-format
-msgid "%d messages found (%d unread) that:"
+#: assembl/static/js/views/messageListPostQuery.js:322
+msgid "There are no messages that:"
 msgstr ""
 
-#: assembl/static/js/views/messageListPostQuery.js:321
+#: assembl/static/js/views/messageListPostQuery.js:327
+#, python-format
+msgid "(%d unread)"
+msgstr ""
+
+#: assembl/static/js/views/messageListPostQuery.js:329
+#, python-format
+msgid "Showing the %d messages %s that:"
+msgstr ""
+
+#: assembl/static/js/views/messageListPostQuery.js:345
 #, python-format
 msgid "%s"
 msgstr ""
 
-#: assembl/static/js/views/messageListPostQuery.js:321
+#: assembl/static/js/views/messageListPostQuery.js:345
 #, python-format
 msgid "NOT %s"
 msgstr ""
 
-#: assembl/static/js/views/messageListPostQuery.js:330
+#: assembl/static/js/views/messageListPostQuery.js:354
 #, python-format
 msgid "%s for values %s"
 msgstr ""
@@ -508,12 +524,11 @@ msgstr ""
 msgid "Activate"
 msgstr ""
 
-#: assembl/templates/views/idea.tmpl:35 assembl/templates/views/orphanIdea.tmpl:3
-#: assembl/templates/views/rootIdea.tmpl:3
+#: assembl/templates/views/idea.tmpl:39
 msgid "Number of messages related to this idea or it's descendants"
 msgstr ""
 
-#: assembl/templates/views/idea.tmpl:37 assembl/templates/views/rootIdea.tmpl:5
+#: assembl/templates/views/idea.tmpl:41
 msgid "Number of caught segments expressing this idea"
 msgstr ""
 
@@ -534,14 +549,14 @@ msgid "Graph of ideas"
 msgstr ""
 
 #: assembl/templates/views/ideaList.tmpl:27
-#: assembl/templates/views/messageList.tmpl:48
+#: assembl/templates/views/messageList.tmpl:57
 #: assembl/templates/views/synthesisPanel.tmpl:6
 msgid "Fullsize"
 msgstr ""
 
 #: assembl/templates/views/ideaList.tmpl:28
 #: assembl/templates/views/ideaPanel.tmpl:8
-#: assembl/templates/views/messageList.tmpl:49
+#: assembl/templates/views/messageList.tmpl:58
 #: assembl/templates/views/segmentList.tmpl:8
 #: assembl/templates/views/synthesisPanel.tmpl:8
 msgid "Close panel"
@@ -655,24 +670,32 @@ msgstr ""
 msgid "Mark as unread"
 msgstr ""
 
-#: assembl/templates/views/messageList.tmpl:8
+#: assembl/templates/views/messageList.tmpl:7
 msgid "Add filter"
 msgstr ""
 
-#: assembl/templates/views/messageList.tmpl:11
+#: assembl/templates/views/messageList.tmpl:10
 msgid "All messages"
 msgstr ""
 
-#: assembl/templates/views/messageList.tmpl:12
+#: assembl/templates/views/messageList.tmpl:11
 msgid "Orphan messages only"
 msgstr ""
 
-#: assembl/templates/views/messageList.tmpl:13
+#: assembl/templates/views/messageList.tmpl:12
 msgid "Synthesis Messages"
 msgstr ""
 
-#: assembl/templates/views/messageList.tmpl:14
+#: assembl/templates/views/messageList.tmpl:13
 msgid "Unread"
+msgstr ""
+
+#: assembl/templates/views/messageList.tmpl:23
+msgid "Select view"
+msgstr ""
+
+#: assembl/templates/views/messageList.tmpl:27
+msgid "Activity feed"
 msgstr ""
 
 #: assembl/templates/views/messageListItem.tmpl:4
@@ -683,9 +706,21 @@ msgstr ""
 msgid "Select"
 msgstr ""
 
+#: assembl/templates/views/orphanIdea.tmpl:3
+msgid "Number of posts"
+msgstr ""
+
 #: assembl/templates/views/orphanIdea.tmpl:4
 #: assembl/templates/views/orphanIdea.tmpl:5
-msgid "Orphan posts"
+msgid "View posts not yet sorted anywhere"
+msgstr ""
+
+#: assembl/templates/views/rootIdea.tmpl:3
+msgid "Number of posts in the entire discussion"
+msgstr ""
+
+#: assembl/templates/views/rootIdea.tmpl:4 assembl/templates/views/rootIdea.tmpl:5
+msgid "View all posts in this discussion"
 msgstr ""
 
 #: assembl/templates/views/segment.tmpl:10
@@ -765,6 +800,15 @@ msgstr ""
 msgid "By"
 msgstr ""
 
+#: assembl/templates/views/synthesisInIdeaList.tmpl:3
+msgid "Number of syntheses in the discussion"
+msgstr ""
+
+#: assembl/templates/views/synthesisInIdeaList.tmpl:4
+#: assembl/templates/views/synthesisInIdeaList.tmpl:5
+msgid "View syntheses"
+msgstr ""
+
 #: assembl/templates/views/synthesisPanel.tmpl:13
 msgid "Subject"
 msgstr ""
@@ -773,20 +817,20 @@ msgstr ""
 msgid "Publish"
 msgstr ""
 
-#: assembl/views/api/post.py:53 assembl/views/api/post.py:314
+#: assembl/views/api/post.py:53 assembl/views/api/post.py:313
 #, python-format
 msgid "No discussion found with id=%s"
 msgstr ""
 
-#: assembl/views/api/post.py:113
+#: assembl/views/api/post.py:112
 msgid "Getting orphan posts of a specific idea isn't supported."
 msgstr ""
 
-#: assembl/views/api/post.py:119
+#: assembl/views/api/post.py:118
 msgid "Getting non-orphan posts isn't supported."
 msgstr ""
 
-#: assembl/views/api/post.py:158
+#: assembl/views/api/post.py:157
 msgid "You must be logged in to view which posts are read"
 msgstr ""
 

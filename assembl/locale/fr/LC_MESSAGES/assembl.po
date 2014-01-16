@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: assembl 0.0\n"
 "Report-Msgid-Bugs-To: maparent@acm.org\n"
-"POT-Creation-Date: 2014-01-14 15:32-0500\n"
+"POT-Creation-Date: 2014-01-15 18:34-0500\n"
 "PO-Revision-Date: 2013-07-12 17:53-0400\n"
 "Last-Translator: Marc-Antoine Parent <maparent@acm.org>\n"
 "Language-Team: fr <LL@li.org>\n"
@@ -109,7 +109,7 @@ msgid "New Idea"
 msgstr "Ajouter une idée"
 
 #: assembl/static/js/views/ideaPanel.js:357
-#: assembl/static/js/views/message.js:238
+#: assembl/static/js/views/message.js:181
 #: assembl/templates/includes/javascript.jinja2:132
 msgid "Sending..."
 msgstr "Envoi en cours..."
@@ -128,112 +128,131 @@ msgstr ""
 "Vous pouvez glisser le segment ci-dessus directement sur la table des "
 "matières"
 
-#: assembl/static/js/views/messageList.js:131
+#: assembl/static/js/views/messageList.js:170
 msgid "No messages"
 msgstr "Pas de messages"
 
-#: assembl/static/js/views/messageList.js:148
+#: assembl/static/js/views/messageList.js:187
 #: assembl/templates/views/ideaList.tmpl:26
-#: assembl/templates/views/messageList.tmpl:47
+#: assembl/templates/views/messageList.tmpl:56
 msgid "Expand all"
 msgstr "Tout déployer"
 
-#: assembl/static/js/views/messageList.js:151
+#: assembl/static/js/views/messageList.js:190
 #: assembl/templates/views/ideaList.tmpl:26
-#: assembl/templates/views/messageList.tmpl:47
+#: assembl/templates/views/messageList.tmpl:56
 msgid "Collapse all"
 msgstr "Tout replier"
 
-#: assembl/static/js/views/messageList.js:289
+#: assembl/static/js/views/messageList.js:355
 msgid "Send to clipboard"
 msgstr "Ajouter au presse-papier"
 
-#: assembl/static/js/views/messageListPostQuery.js:26
+#: assembl/static/js/views/messageListPostQuery.js:21
+#: assembl/static/js/views/messageListPostQuery.js:34
+msgid " AND "
+msgstr " ET "
+
+#: assembl/static/js/views/messageListPostQuery.js:39
 msgid "You haven't read yet"
 msgstr "Vous n'avez pas encore lu"
 
-#: assembl/static/js/views/messageListPostQuery.js:26
+#: assembl/static/js/views/messageListPostQuery.js:39
 msgid "You've already read"
 msgstr "Vous avez déjà lu"
 
-#: assembl/static/js/views/messageListPostQuery.js:33
+#: assembl/static/js/views/messageListPostQuery.js:46
 #: assembl/templates/index.jinja2:44 assembl/templates/views/ideaPanel.tmpl:3
 msgid "Idea"
 msgstr "Idée"
 
-#: assembl/static/js/views/messageListPostQuery.js:34
+#: assembl/static/js/views/messageListPostQuery.js:47
 msgid ""
 "Only include messages related to the specified idea.  The filter is "
 "recursive:  Messages related to ideas that are descendents of the idea "
 "are included."
 msgstr ""
 "N'incluez que les messages relatifs à une idée spéciique. Le filtre est "
-"récursif: Les messages liés à des idées en-dessous de l'idée courante seront inclus."
+"récursif: Les messages liés à des idées en-dessous de l'idée courante "
+"seront inclus."
 
-#: assembl/static/js/views/messageListPostQuery.js:44
+#: assembl/static/js/views/messageListPostQuery.js:57
 msgid "Post thread"
 msgstr "Enfilade du message"
 
-#: assembl/static/js/views/messageListPostQuery.js:45
+#: assembl/static/js/views/messageListPostQuery.js:58
 msgid "Only include messages that are in the specified post reply thread."
-msgstr "N'inclure que les messages qui sont dans l'enfilade de réponses au message courant."
+msgstr ""
+"N'inclure que les messages qui sont dans l'enfilade de réponses au "
+"message courant."
 
-#: assembl/static/js/views/messageListPostQuery.js:54
+#: assembl/static/js/views/messageListPostQuery.js:67
 msgid "Are orphan (not relevent to any idea so far)"
 msgstr "Sont orphelins (ne sont encore liés à aucune idée)"
 
-#: assembl/static/js/views/messageListPostQuery.js:55
+#: assembl/static/js/views/messageListPostQuery.js:68
 msgid "Only include messages that are not found in any idea."
 msgstr "N'inclure que des messages qui ne se trouvent liés à aucune idée"
 
-#: assembl/static/js/views/messageListPostQuery.js:64
+#: assembl/static/js/views/messageListPostQuery.js:77
 msgid "Publish a synthesis of the discussion"
 msgstr "Publier une synthèse de la discussion"
 
-#: assembl/static/js/views/messageListPostQuery.js:65
+#: assembl/static/js/views/messageListPostQuery.js:78
 msgid "Only include messages that publish a synthesis of a discussion."
 msgstr "N'inclure que des messages qui publient une synthèse de la discussion"
 
-#: assembl/static/js/views/messageListPostQuery.js:74
+#: assembl/static/js/views/messageListPostQuery.js:87
 msgid "not read yet"
 msgstr "pas encore lus"
 
-#: assembl/static/js/views/messageListPostQuery.js:75
+#: assembl/static/js/views/messageListPostQuery.js:88
 msgid "Only include unread messages."
 msgstr "N'inclure que des messages non-lus"
 
-#: assembl/static/js/views/messageListPostQuery.js:93
+#: assembl/static/js/views/messageListPostQuery.js:106
+#: assembl/templates/views/messageList.tmpl:26
 msgid "Threaded view"
 msgstr "Vue en enfilade"
 
-#: assembl/static/js/views/messageListPostQuery.js:101
+#: assembl/static/js/views/messageListPostQuery.js:114
+#: assembl/templates/views/messageList.tmpl:28
 msgid "Chronological"
 msgstr "Chronologique"
 
-#: assembl/static/js/views/messageListPostQuery.js:108
+#: assembl/static/js/views/messageListPostQuery.js:121
 msgid "Activity feed (reverse chronological)"
 msgstr "Fil d'activité (ordre chronologique inverse)"
 
-#: assembl/static/js/views/messageListPostQuery.js:301
+#: assembl/static/js/views/messageListPostQuery.js:316
 msgid "No query has been executed yet"
 msgstr "Aucune requête n'a été formulée"
 
-#: assembl/static/js/views/messageListPostQuery.js:306
-#, python-format
-msgid "%d messages found (%d unread) that:"
-msgstr "%d messages (dont %d non-lus) trouvés selon:"
+#: assembl/static/js/views/messageListPostQuery.js:322
+msgid "There are no messages that:"
+msgstr "Il n'y a aucun message tel que:"
 
-#: assembl/static/js/views/messageListPostQuery.js:321
+#: assembl/static/js/views/messageListPostQuery.js:327
+#, python-format
+msgid "(%d unread)"
+msgstr "(%d non-lus)"
+
+#: assembl/static/js/views/messageListPostQuery.js:329
+#, python-format
+msgid "Showing the %d messages %s that:"
+msgstr "Affichage des %d messages %s tels que:"
+
+#: assembl/static/js/views/messageListPostQuery.js:345
 #, python-format
 msgid "%s"
 msgstr "%s"
 
-#: assembl/static/js/views/messageListPostQuery.js:321
+#: assembl/static/js/views/messageListPostQuery.js:345
 #, python-format
 msgid "NOT %s"
 msgstr "PAS %s"
 
-#: assembl/static/js/views/messageListPostQuery.js:330
+#: assembl/static/js/views/messageListPostQuery.js:354
 #, python-format
 msgid "%s for values %s"
 msgstr "%s pour les valeurs %s"
@@ -537,13 +556,11 @@ msgstr "Désactiver"
 msgid "Activate"
 msgstr "Activer"
 
-#: assembl/templates/views/idea.tmpl:35
-#: assembl/templates/views/orphanIdea.tmpl:3
-#: assembl/templates/views/rootIdea.tmpl:3
+#: assembl/templates/views/idea.tmpl:39
 msgid "Number of messages related to this idea or it's descendants"
 msgstr "Nombre de messages liées à cette idée et ses descendants"
 
-#: assembl/templates/views/idea.tmpl:37 assembl/templates/views/rootIdea.tmpl:5
+#: assembl/templates/views/idea.tmpl:41
 msgid "Number of caught segments expressing this idea"
 msgstr "Nombre d'extraits attrapés exprimant cette idée"
 
@@ -564,14 +581,14 @@ msgid "Graph of ideas"
 msgstr "Graphe des idées"
 
 #: assembl/templates/views/ideaList.tmpl:27
-#: assembl/templates/views/messageList.tmpl:48
+#: assembl/templates/views/messageList.tmpl:57
 #: assembl/templates/views/synthesisPanel.tmpl:6
 msgid "Fullsize"
 msgstr "Agrandir"
 
 #: assembl/templates/views/ideaList.tmpl:28
 #: assembl/templates/views/ideaPanel.tmpl:8
-#: assembl/templates/views/messageList.tmpl:49
+#: assembl/templates/views/messageList.tmpl:58
 #: assembl/templates/views/segmentList.tmpl:8
 #: assembl/templates/views/synthesisPanel.tmpl:8
 msgid "Close panel"
@@ -693,25 +710,33 @@ msgstr "Répondre"
 msgid "Mark as unread"
 msgstr "Marquer comme non-lu"
 
-#: assembl/templates/views/messageList.tmpl:8
+#: assembl/templates/views/messageList.tmpl:7
 msgid "Add filter"
 msgstr "Ajouter un filtre"
 
-#: assembl/templates/views/messageList.tmpl:11
+#: assembl/templates/views/messageList.tmpl:10
 msgid "All messages"
 msgstr "Tous les messages"
 
-#: assembl/templates/views/messageList.tmpl:12
+#: assembl/templates/views/messageList.tmpl:11
 msgid "Orphan messages only"
 msgstr "Messages orphelins seulement"
 
-#: assembl/templates/views/messageList.tmpl:13
+#: assembl/templates/views/messageList.tmpl:12
 msgid "Synthesis Messages"
 msgstr "Messages de la synthèse"
 
-#: assembl/templates/views/messageList.tmpl:14
+#: assembl/templates/views/messageList.tmpl:13
 msgid "Unread"
 msgstr "Non-lus"
+
+#: assembl/templates/views/messageList.tmpl:23
+msgid "Select view"
+msgstr "Sélectionner une vue"
+
+#: assembl/templates/views/messageList.tmpl:27
+msgid "Activity feed"
+msgstr "Fil d'activité"
 
 #: assembl/templates/views/messageListItem.tmpl:4
 msgid "Unselect"
@@ -721,10 +746,23 @@ msgstr "Désélectionner"
 msgid "Select"
 msgstr "Sélectionner"
 
+#: assembl/templates/views/orphanIdea.tmpl:3
+msgid "Number of posts"
+msgstr "Nombre de messages"
+
 #: assembl/templates/views/orphanIdea.tmpl:4
 #: assembl/templates/views/orphanIdea.tmpl:5
-msgid "Orphan posts"
-msgstr "Messages orphelins"
+msgid "View posts not yet sorted anywhere"
+msgstr "Voir les messages qui n'ont pas encore été classés"
+
+#: assembl/templates/views/rootIdea.tmpl:3
+msgid "Number of posts in the entire discussion"
+msgstr "Nombre de messages dans toute la discussion"
+
+#: assembl/templates/views/rootIdea.tmpl:4
+#: assembl/templates/views/rootIdea.tmpl:5
+msgid "View all posts in this discussion"
+msgstr "Voir tous les messages de la discussion"
 
 #: assembl/templates/views/segment.tmpl:10
 #, python-format
@@ -809,6 +847,15 @@ msgstr "Titre long non-défini. Cliquez pour l'ajouter."
 msgid "By"
 msgstr "Par"
 
+#: assembl/templates/views/synthesisInIdeaList.tmpl:3
+msgid "Number of syntheses in the discussion"
+msgstr "Nombre de synthèses dans la discussion"
+
+#: assembl/templates/views/synthesisInIdeaList.tmpl:4
+#: assembl/templates/views/synthesisInIdeaList.tmpl:5
+msgid "View syntheses"
+msgstr "Voir les synthèses"
+
 #: assembl/templates/views/synthesisPanel.tmpl:13
 msgid "Subject"
 msgstr "Sujet"
@@ -817,20 +864,22 @@ msgstr "Sujet"
 msgid "Publish"
 msgstr "Publier"
 
-#: assembl/views/api/post.py:53 assembl/views/api/post.py:314
+#: assembl/views/api/post.py:53 assembl/views/api/post.py:313
 #, python-format
 msgid "No discussion found with id=%s"
 msgstr "Aucune discussion trouvée avec l'id=%s"
 
-#: assembl/views/api/post.py:113
+#: assembl/views/api/post.py:112
 msgid "Getting orphan posts of a specific idea isn't supported."
-msgstr "Il n'est pas possible d'obtenir les messages orphelins d'une idée spécifique."
+msgstr ""
+"Il n'est pas possible d'obtenir les messages orphelins d'une idée "
+"spécifique."
 
-#: assembl/views/api/post.py:119
+#: assembl/views/api/post.py:118
 msgid "Getting non-orphan posts isn't supported."
 msgstr "Il n'est pas (encore) possible d'obtenir les messages non-orphelins."
 
-#: assembl/views/api/post.py:158
+#: assembl/views/api/post.py:157
 msgid "You must be logged in to view which posts are read"
 msgstr "Vous devez être connecté pour voir quels messages ont été lus"
 
@@ -897,4 +946,10 @@ msgstr "Nous n'avons pas de discussion sous le code '%s'"
 
 #~ msgid "%(total)s messages"
 #~ msgstr "%(total)s messages"
+
+#~ msgid "%d messages found (%d unread) that:"
+#~ msgstr "%d messages (dont %d non-lus) trouvés selon:"
+
+#~ msgid "Orphan posts"
+#~ msgstr "Messages orphelins"
 

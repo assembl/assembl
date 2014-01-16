@@ -109,37 +109,17 @@ requirejs.config({
 });
 
 </script>
-
+<script type="text/json" id="translations">{{ translations|safe }}</script>
 <script>
+var script = document.getElementById("translations"),
+    json;
+try {
+    json = JSON.parse(script.textContent);
+} catch(e){
+    throw new Error("Invalid json");
+}
 require(['i18n'], function(i18n){
-    i18n({
-        'ajaxerror-message' : "{{ gettext('Unfortunately, something went wrong. Please, reload your browser.') }}",
-
-        'ideaPanel-clearConfirmationMessage' : "{{ gettext('Do you confirm removing all segments ?') }}",
-        'ideaPanel-deleteIdeaConfirmMessage' : "{{ gettext('Do you confirm deleting this idea ?') }}",
-        'ideaPanel-cantDeleteByChildren' : "{{ gettext('You cannot delete an idea which has children ideas.') }}",
-        'ideaPanel-cantDeleteBySegments' : "{{ gettext('You cannot delete an idea which has segments attached.') }}",
-
-        'segmentList-clearConfirmationMessage': "{{ gettext('Do you confirm removing all segments ?') }}",
-
-        'Add the description': "{{ gettext('Add the description') }}",
-        'New Idea': "{{ gettext('New Idea') }}",
-
-        'Add a title': "{{ gettext('Add a title') }}",
-        'Add an introduction': "{{ gettext('Add an introduction') }}",
-        'Add a conclusion': "{{ gettext('Add a conclusion') }}",
-
-        'Sending...': "{{ gettext('Sending...') }}",
-        'Do you want to publish the synthesis?': "{{ gettext('Do you want to publish the synthesis?') }}",
-        'Add to clipboard': "{{ gettext('Add to clipboard') }}",
-
-        "Synthesis published!": "{{ gettext('Synthesis published!') }}",
-        'You must be logged in to create segments': "{{ gettext('You must be logged in to create segments') }}",
-        'react': "{{ gettext('react') }}",
-        '[synthesis] {0}': "{{ gettext('[synthesis] {0}') }}",
-        'The root idea will not be in the synthesis': "{{ gettext('The root idea will not be in the synthesis') }}",
-        'All posts': "{{ gettext('All posts') }}"
-    });
+    i18n(json);
 });
 </script>
 <script type="text/javascript">requirejs(["main"]);</script>
