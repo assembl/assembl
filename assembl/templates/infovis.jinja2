@@ -11,7 +11,7 @@
 <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/lib/jit/Hypertree.css" />
 
 <style media="screen" type="text/css">
-#infovis {background: black;}
+#infovis {background: white;}
 </style>
 
 {% endblock %}
@@ -33,11 +33,11 @@ requirejs(["jit"], function($jit) {
     //color, width and dimensions.  
     Node: {  
         dim: 9,  
-        color: "#f00"  
+        color: "#a9a3c1"  
     },  
     Edge: {  
         lineWidth: 2,  
-        color: "#088"  
+        color: "#c7c2dd"  
     },  
     onBeforeCompute: function(node){  
         console.log("centering");  
@@ -63,11 +63,11 @@ requirejs(["jit"], function($jit) {
         style.cursor = 'pointer';  
         if (node._depth <= 1) {  
             style.fontSize = "1.1em";  
-            style.color = "#ddd";  
+            style.color = "#111";  
     
         } else if(node._depth == 2){  
             style.fontSize = "0.9em";  
-            style.color = "#bbb";  
+            style.color = "#333";  
     
         } else {  
             style.display = 'none';  
