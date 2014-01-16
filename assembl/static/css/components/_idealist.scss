@@ -70,6 +70,13 @@
     background-color: #e2f5ec;
 }
 
+.idealist-body.idealist-body--synthesis {
+    @extend .idealist-body.idealist-body--rootidea;
+
+    border-bottom: solid 1px darken(#e2f5ec, 20%);
+}
+
+
 // Area where to drop and create a sibling
 // --------------
 .idealist-abovedropzone {
@@ -178,6 +185,7 @@
 }
 // Reserves the space if there are no children to maintain indentation
 .idealist-noarrow {
+    background: url(#{$img-dir}/idealist/idealist-noarrow.png) center center no-repeat;
     width: $idealist-arrow-width;
     height: $idealist-item-height;
     display: block;

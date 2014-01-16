@@ -1,13 +1,13 @@
 define(['backbone', 'underscore', 'jquery', 'models/idea', 'app', 'views/rootIdea'],
 function(Backbone, _, $, Idea, app, RootIdeaView){
     'use strict';
-    
-    var OrphanIdeaView = RootIdeaView.extend({
+
+    var SynthesisIdeaView = RootIdeaView.extend({
         /**
          * The template
          * @type {[type]}
          */
-        template: app.loadTemplate('orphanIdea'),
+        template: app.loadTemplate('synthesisInIdeaList'),
 
         /**
          * The render
@@ -36,11 +36,11 @@ function(Backbone, _, $, Idea, app, RootIdeaView){
             app.setCurrentIdea(this.model);
 
             if( app.messageList ){
-                app.messageList.addFilterIsOrphanMessage();
+                app.messageList.addFilterIsSynthesMessage();
             }
         }
     });
 
 
-    return OrphanIdeaView;
+    return SynthesisIdeaView;
 });

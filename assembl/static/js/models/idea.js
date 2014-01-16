@@ -327,10 +327,15 @@ function(Base, _, Segment, app, i18n, Types){
         },
 
         /**
-         * @return {Idea} The rood idea
+         * @return {Idea} The root idea
          */
         getRootIdea: function(){
-            return this.findWhere({ '@type': Types.ROOT_IDEA }) || null;
+            var retval = this.findWhere({ '@type': Types.ROOT_IDEA });
+            if (!retval) {
+                console.log("ERROR: getRootIdea() failed!");
+                console.log(this);
+            }
+            return retval;
         }
 
     });

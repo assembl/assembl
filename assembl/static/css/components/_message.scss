@@ -15,6 +15,17 @@ $message-bar-width: 15px;
     //     border-bottom: 0;
     // }
 }
+#messageList-list.reverse_chronological, #messageList-list.chronological {
+    .message {
+        padding: 5px;
+    
+        border-bottom: solid 1px $box-border-color;
+    
+        &:last-child {
+            border-bottom: 0;
+        }
+    }
+}
 
 // @for $i from 1 through 30 {
 //     .message[data-message-level="#{$i}"] {
@@ -47,11 +58,6 @@ $message-bar-width: 15px;
     .message--collapsed & {
         line-height: $icon-height;
     }
-}
-
-#messageList-query-info {
-    @extend .idealist-title;
-    border-bottom: solid 1px $box-border-color;
 }
 
 //

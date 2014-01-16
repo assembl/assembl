@@ -7,10 +7,18 @@ function(Backbone, _, $, app, MessageView, Message, i18n, PostQuery){
      */
     var DIV_ANNOTATOR_HELP = app.format("<div class='annotator-draganddrop-help'>{0}</div>", i18n.gettext('You can drag the segment above directly to the table of ideas') );
 
+    
     /**
      * @class views.MessageList
      */
     var MessageList = Backbone.View.extend({
+        ViewStyles: {
+            THREADED: "threaded",
+            CHRONOLOGICAL: "chronological",
+            REVERSE_CHRONOLOGICAL: "reverse_chronological"
+        },
+        
+        currentViewStyle: null,
         /**
          *  @init
          */
@@ -18,7 +26,9 @@ function(Backbone, _, $, app, MessageView, Message, i18n, PostQuery){
             if( obj.button ){
                 this.button = $(obj.button).on('click', app.togglePanel.bind(window, 'messageList'));
             }
-
+            this.currentViewStyle = this.ViewStyles.REVERSE_CHRONOLOGICAL;
+            this.currentQuery.setView(this.currentQuery.availableViews.REVERSE_CHRONOLOGICAL)
+            
             this.listenTo(this.messages, 'reset', this.render);
             this.listenTo(this.messages, 'change', this.initAnnotator);
 
@@ -32,6 +42,7 @@ function(Backbone, _, $, app, MessageView, Message, i18n, PostQuery){
                 }
                 that.loadDataByQuery();
             });
+            this.loadDataByQuery();
         },
 
         /**
@@ -79,10 +90,10 @@ function(Backbone, _, $, app, MessageView, Message, i18n, PostQuery){
         /**
          * Returns the messages with no parent in the messages to be rendered
          * TODO:  This is used in threading, but is sub-optimal as it won't 
-         * tie messages to their grandparent in partial views.
+         * tie messages to their grandparent in partial views.  benoitg
          * @return {Message[]}
          */
-        getRootMessages: function(){
+        getRootMessagesToDisplay: function(){
             var toReturn = [],
                 that = this,
                 messages = this.messages;
@@ -99,6 +110,28 @@ function(Backbone, _, $, app, MessageView, Message, i18n, PostQuery){
             });
             return toReturn;
         },
+        
+        /**
+         * Returns the the messages to be rendered
+         * @return {Message[]}
+         */
+        getAllMessagesToDisplay: function(){
+            var toReturn = [],
+                that = this,
+                model = null,
+                messages = this.messages;
+            that.messageIdsToDisplay.forEach(function(id){
+                model = messages.get(id);
+                if (model){
+                    toReturn.push(model);
+                }
+                else {
+                    console.log('ERROR:  getAllMessagesToDisplay():  Message with id '+id+' not found!')
+                }
+            });
+            return toReturn;
+        },
+        
         /**
          * The render function
          * @return {views.Message}
@@ -113,11 +146,17 @@ function(Backbone, _, $, app, MessageView, Message, i18n, PostQuery){
             app.trigger('render');
 
             var that = this,
-                rootMessages = this.getRootMessages(),
-                views = this.getRenderedMessages(rootMessages, 1, []);
+                views = null;
+            
+            if (this.currentViewStyle == this.ViewStyles.THREADED) {
+                views = this.getRenderedMessagesThreaded(this.getRootMessagesToDisplay(), 1, []);
+            }
+            else {
+                views = this.getRenderedMessagesFlat(this.getAllMessagesToDisplay());
+            }
 
             var data = {
-                inbox: views.length,
+                viewStyle: this.currentViewStyle,
                 total: views.length,
                 collapsed: this.collapsed,
                 queryInfo: this.currentQuery.getHtmlDescription()
@@ -125,7 +164,7 @@ function(Backbone, _, $, app, MessageView, Message, i18n, PostQuery){
 
             this.$el.html( this.template(data) );
 
-            if( rootMessages.length > 0 ){
+            if( views.length > 0 ){
                 this.$('.idealist').append( views );
             } else {
                 this.$('.idealist').append( app.format("<div class='margin'>{0}</div>", i18n.gettext('No messages')) );
@@ -154,14 +193,40 @@ function(Backbone, _, $, app, MessageView, Message, i18n, PostQuery){
         },
 
         /**
-         * Return a list with all views.el already rendered
+         * Return a list with all views.el already rendered for a flat view
          * @param {Message.Model[]} messages
          * @param {Number} [level=1] The current hierarchy level
          * @param {Array[boolean]} last_sibling_chain which of the view's ancestors
          *   are the last child of their respective parents.
          * @return {HTMLDivElement[]}
          */
-        getRenderedMessages: function(messages, level, last_sibling_chain){
+        getRenderedMessagesFlat: function(messages){
+            var list = [],
+            level = 1,
+            filter = this.currentFilter,
+            len = messages.length,
+            view, model, children, prop, isValid;
+            for (var i = len - 1; i >= 0; i--) {
+                model = messages[i];
+                isValid = (this.messageIdsToDisplay.indexOf(model.getId()) >= 0)
+                if( isValid ) {
+                    view = new MessageView({model:model});
+                    view.hasChildren = false;
+                    list.push(view.render(level).el);
+                }
+            }
+            return list;
+        },
+        
+        /**
+         * Return a list with all views.el already rendered for threaded views
+         * @param {Message.Model[]} messages
+         * @param {Number} [level=1] The current hierarchy level
+         * @param {Array[boolean]} last_sibling_chain which of the view's ancestors
+         *   are the last child of their respective parents.
+         * @return {HTMLDivElement[]}
+         */
+        getRenderedMessagesThreaded: function(messages, level, last_sibling_chain){
             var list = [],
                 filter = this.currentFilter,
                 i = 0,
@@ -199,7 +264,7 @@ function(Backbone, _, $, app, MessageView, Message, i18n, PostQuery){
                     view = new MessageView({model:model}, last_sibling_chain);
                     found = true;
                     children = model.getChildren();
-                    var subviews = this.getRenderedMessages(
+                    var subviews = this.getRenderedMessagesThreaded(
                         children, level+1, last_sibling_chain);
                     view.hasChildren = (subviews.length > 0);
                     list.push(view.render(level).el);
@@ -219,10 +284,11 @@ function(Backbone, _, $, app, MessageView, Message, i18n, PostQuery){
                     continue;
                 }
                 if (!isValid && this.hasDescendantsInFilter(model)) {
+                    //Generate ghost message
                     var view = $('<div class="message message--skip"><div class="skipped-message"></div><div class="messagelist-children"></div></div>');
                     list.push(view);
                     children = model.getChildren();
-                    view.$('.messagelist-children').append( this.getRenderedMessages(
+                    view.$('.messagelist-children').append( this.getRenderedMessagesThreaded(
                         children, level+1, last_sibling_chain) );
                 }
             }
@@ -452,6 +518,36 @@ function(Backbone, _, $, app, MessageView, Message, i18n, PostQuery){
         },
 
         /**
+         * @event
+         * Set the view to threaded view
+         */
+        setViewStyleThreaded: function(){
+            this.currentViewStyle = this.ViewStyles.THREADED;
+            this.currentQuery.setView(this.currentQuery.availableViews.THREADED)
+            this.loadDataByQuery();
+        },
+        
+        /**
+         * @event
+         * Set the view to a flat reverse chronological view
+         */
+        setViewStyleActivityFeed: function(){
+            this.currentViewStyle = this.ViewStyles.REVERSE_CHRONOLOGICAL;
+            this.currentQuery.setView(this.currentQuery.availableViews.REVERSE_CHRONOLOGICAL)
+            this.loadDataByQuery();
+        },
+        
+        /**
+         * @event
+         * Set the view to a flat chronological view
+         */
+        setViewStyleChronological: function(){
+            this.currentViewStyle = this.ViewStyles.CHRONOLOGICAL;
+            this.currentQuery.setView(this.currentQuery.availableViews.CHRONOLOGICAL)
+            this.loadDataByQuery();
+        },
+
+        /**
          * Highlights the message by the given id
          * @param {String} id
          * @param {Function} [callback] The callback function
@@ -530,6 +626,10 @@ function(Backbone, _, $, app, MessageView, Message, i18n, PostQuery){
             'click #messageList-onlysynthesis': 'addFilterIsSynthesMessage',
             'click #messageList-isunread': 'addFilterIsUnreadMessage',
 
+            'click #messageList-view-threaded': 'setViewStyleThreaded',
+            'click #messageList-view-activityfeed': 'setViewStyleActivityFeed',
+            'click #messageList-view-chronological': 'setViewStyleChronological',
+            
             'click #messageList-message-collapseButton': 'toggleThreadMessages',
 
             'change #messageList-mainchk': 'onChangeMainCheckbox',
@@ -555,7 +655,8 @@ function(Backbone, _, $, app, MessageView, Message, i18n, PostQuery){
          * @event
          */
         onFilterDeleteClick: function(ev){
-            var valueindex = ev.currentTarget.getAttribute('data-valueindex');
+            console.log(ev);
+            var value = ev.currentTarget.getAttribute('data-value');
             var filterid = ev.currentTarget.getAttribute('data-filterid');
             var filter = this.currentQuery.getFilterDefById(filterid);
             this.currentQuery.clearFilter(filter, value);

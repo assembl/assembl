@@ -117,63 +117,6 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
         },
 
         /**
-         * Returns all children rendered
-         * @param {Number} parentLevel
-         * @return {Array<HTMLDivElement>}
-         */
-        getRenderedChildren: function(parentLevel){
-            var children = this.model.getChildren(),
-                num_last_child = children.length - 1,
-                chain_t = this.last_sibling_chain.slice(),
-                chain_f = this.last_sibling_chain.slice(),
-                last_chain_elem = this.last_sibling_chain.length,
-                ret = [];
-
-            chain_t.push(true);
-            chain_f.push(false);
-            _.each(children, function(message, i){
-                message.set('level', parentLevel + 1);
-                var chain = (i == num_last_child)?chain_t:chain_f;
-
-                var messageView = new MessageView({model:message}, chain);
-                ret.push( messageView.render().el );
-            });
-            this.hasChildren = (children.length > 0);
-
-            return ret;
-        },
-
-        /**
-         * Returns all children recursively rendered
-         * @param {Number} parentLevel
-         * @return {Array<HTMLDivElement>}
-         */
-        getRenderedChildrenInCascade: function(parentLevel){
-            var children = this.model.getChildren(),
-                num_last_child = children.length - 1,
-                chain_t = this.last_sibling_chain.slice(),
-                chain_f = this.last_sibling_chain.slice(),
-                last_chain_elem = this.last_sibling_chain.length,
-                ret = [];
-
-            chain_t.push(true);
-            chain_f.push(false);
-            _.each(children, function(message, i){
-                message.set('level', parentLevel + 1);
-                var chain = (i == num_last_child)?chain_t:chain_f;
-
-                var messageView = new MessageView({model:message}, chain);
-                ret.push( messageView.render().el );
-                // TODO maparent: fix this.  This does not work anymore.
-                var grandChildren = messageView.getRenderedChildrenInCascade();
-                ret = _.union(ret, grandChildren);
-            });
-            this.hasChildren = (children.length > 0);
-
-            return ret;
-        },
-
-        /**
          * Hide the selection tooltip
          */
         hideTooltip: function(){
@@ -433,10 +376,16 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
         /**
          * Mark the current message as unread
          */
-        markAsUnread: function(){
-            this.model.set('read', false);
-            //this.model.save();
-        }
+         markAsUnread: function(){
+             this.model.setRead(false);
+         },
+         
+         /**
+          * Mark the current message as read
+          */
+         markAsRead: function(){
+             this.model.setRead(true);
+         }
     });
 
 

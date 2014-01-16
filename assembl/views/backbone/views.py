@@ -8,6 +8,7 @@ import os.path
 from assembl.synthesis.models import Discussion
 from assembl.auth import get_user
 from sqlalchemy.orm.exc import NoResultFound
+from pyramid.i18n import get_localizer, TranslationString
 
 FIXTURE = os.path.join(os.path.dirname(__file__),
                        '../../static/js/fixtures/nodes.json')
@@ -19,17 +20,32 @@ default_context = {
     'STATIC_URL': '/static/'
 }
 
+def js_message_ids():
+    from babel.messages.pofile import read_po
+    pot = read_po(open(os.path.join(os.path.dirname(__file__), '..', '..', 'locale', 'assembl.pot')))
+    def is_js(msg):
+        for (filename, lineno) in msg.locations:
+            if filename.endswith('.js'):
+                return True
+    return [m.id for m in pot if is_js(m)]
+
+JS_MESSAGE_IDS = js_message_ids()
+
 def get_default_context(request):
     slug = request.matchdict['discussion_slug']
     try:
         discussion = Discussion.db.query(Discussion).filter(Discussion.slug==slug).one()
     except NoResultFound:
         raise HTTPNotFound(_("No discussion found for slug=%s" % slug))
+    localizer = get_localizer(request)
 
     return dict(default_context,
         user=get_user(request),
         templates=get_template_views(),
-        discussion=discussion)
+        discussion=discussion,
+        translations=json.dumps({
+            id:localizer.translate(TranslationString(id), domain='assembl')
+                for id in JS_MESSAGE_IDS}))
 
 
 def get_template_views():

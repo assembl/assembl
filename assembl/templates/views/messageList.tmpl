@@ -2,7 +2,6 @@
 
     <div class="panel-header">
         <div class="dropdown">
-            {% set inbox = '<%= inbox %>' %}
 
             <span class="dropdown-label text-bold">
                 {{ gettext('Add filter')|safe }}
@@ -18,7 +17,17 @@
                 #}
             </ul>
         </div>
-
+        
+        <div class="dropdown">
+            <span class="dropdown-label text-bold">
+                {{ gettext('Select view')|safe }}
+            </span>
+            <ul class="dropdown-list">
+                <li id="messageList-view-threaded" class="dropdown-listitem">{{ gettext('Threaded view') }}</li>
+                <li id="messageList-view-activityfeed" class="dropdown-listitem">{{ gettext('Activity feed') }}</li>
+                <li id="messageList-view-chronological" class="dropdown-listitem">{{ gettext('Chronological') }}</li>
+            </ul>
+        </div>
         {#
         <div class="dropdown dropdown--button">
             <span class="dropdown-label">
@@ -52,7 +61,7 @@
 
     <div class="panel-body">
         <div id="messageList-query-info" class=""><%= queryInfo %></div>
-        <div id="messageList-list" class="idealist"></div>
+        <div id="messageList-list" class="idealist <%= viewStyle %>"></div>
 
     </div>
 
