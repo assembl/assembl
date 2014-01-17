@@ -82,11 +82,6 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
 
             this.el.setAttribute('data-message-level', data['level']);
 
-            if( data.collapsed ){
-                this.$el.addClass('message--collapsed');
-            } else {
-                this.$el.removeClass('message--collapsed');
-            }
             if( data.bodyShown ){
                 this.$el.addClass('message--showbody');
             } else {
@@ -110,6 +105,7 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
             if (children !== undefined && children.length == 1) {
                 this.$el.find('>.messagelist-content>.messagelist-children').replaceWith(children);
             }
+            this.onCollapsedChange();
 
             app.initClipboard();
 
@@ -213,7 +209,8 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
         },
 
         events: {
-            'click >.messagelist-widgets>.messagelist-arrow': 'onIconbuttonClick',
+            'click >.messagelist-arrow>.link-img': 'onIconbuttonClick',
+            'click >.messagelist-link>.messagelist-arrow>.link-img': 'onIconbuttonClick',
             'click .message-title': 'onMessageTitleClick',
 
             //
@@ -337,13 +334,29 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
          */
         onCollapsedChange: function(){
             var collapsed = this.model.get('collapsed');
-            var children = this.$el.find('>.messagelist-content>.messagelist-children');
+            var target = this.$el;
+            var link = target.find(">.messagelist-link");
+            if (link.length == 1) {
+                target = link;
+            }
+            var children = target.find(">.messagelist-children").last();
+            var arrow = target.find(">.messagelist-arrow>img");
+            var lev1 = "";
+            if (arrow.length == 1 && arrow.hasClass('level1')) {
+                lev1 = "-l1";
+            }
             if( collapsed ){
-                this.$el.addClass('message--collapsed');
+                this.$el.removeClass('message--expanded');
                 children.hide();
+                if (arrow.length == 1) {
+                    arrow[0].src = "/static/img/messagelist/messagelist-arrow-closed"+lev1+".png"
+                }
             } else {
-                this.$el.removeClass('message--collapsed');
+                this.$el.addClass('message--expanded');
                 children.show();
+                if (arrow.length == 1) {
+                    arrow[0].src = "/static/img/messagelist/messagelist-arrow-open"+lev1+".png"
+                }
             }
 
             //this.render();
