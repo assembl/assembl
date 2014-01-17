@@ -935,7 +935,6 @@ class Extract(IdeaContentPositiveLink):
         elif self.content.type == 'webpage':
             json['target']['url'] = self.content.url
             json['uri'] = self.content.url
-            json['text'] = "Cf " + self.content.source.discussion.topic
         return json
 
     def __repr__(self):
