@@ -36,6 +36,7 @@ function(Base, _, Segment, app, i18n, Types){
             longTitle: '',
             numChildIdea: 0,
             num_posts: 0,
+            num_read_posts: 0,
             isOpen: true,
             hasCheckbox: true,
             featured: false,

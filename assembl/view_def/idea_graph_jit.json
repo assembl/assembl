@@ -14,5 +14,8 @@
         "id": "self",
         "name": "'\"All posts\"",
         "children": ["children:"]
+    },
+    "Discussion": {
+        "graph": "root_idea:"
     }
 }

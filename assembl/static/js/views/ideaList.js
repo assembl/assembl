@@ -1,5 +1,5 @@
-define(['backbone', 'underscore', 'models/idea', 'views/idea', 'app', 'types', 'views/rootIdea', 'views/orphanIdea', 'views/synthesisInIdeaList'],
-function(Backbone, _, Idea, IdeaView, app, Types, RootIdeaView, OrphanIdeaView, SynthesisInIdeaListView){
+define(['backbone', 'underscore', 'models/idea', 'views/idea', "views/ideaGraph", 'app', 'types', 'views/rootIdea', 'views/orphanIdea', 'views/synthesisInIdeaList'],
+function(Backbone, _, Idea, IdeaView, ideaGraphLoader, app, Types, RootIdeaView, OrphanIdeaView, SynthesisInIdeaListView){
     'use strict';
 
     var FEATURED = 'featured',
@@ -29,6 +29,12 @@ function(Backbone, _, Idea, IdeaView, app, Types, RootIdeaView, OrphanIdeaView, 
          * .panel-body
          */
         body: null,
+
+        /**
+         * Are we showing the graph or the list?
+         * @type {Boolean}
+         */
+        show_graph: false,
 
         /**
          * @init
@@ -218,7 +224,30 @@ function(Backbone, _, Idea, IdeaView, app, Types, RootIdeaView, OrphanIdeaView, 
          * Load the graph view
          */
         loadGraphView: function() {
-            app.loadGraphView();
+            if (this.show_graph) {
+                this.$('#idealist-graph').hide();
+                this.$('#idealist-list').show();
+            } else {
+                var that = this;
+                $.getJSON( app.getApiUrl('generic')+"/Discussion/"+app.discussionID+"/idea_graph_jit", function(data){
+                    that.$('#idealist-list').hide();
+                    var graphpanel = that.$('#idealist-graph');
+                    var infovis = that.$('#infovis');
+                    graphpanel.width(graphpanel.parent().innerWidth() - 10);
+                    graphpanel.height(graphpanel.parent().innerHeight() - 10);
+                    infovis.width(graphpanel.width());
+                    infovis.height(graphpanel.height() - 50);
+                    graphpanel.show();
+
+                    that.hypertree = ideaGraphLoader(data['graph']);
+                    that.hypertree.onClick(app.getCurrentIdea().getId(), {
+                        onComplete: function() {
+                            that.hypertree.controller.onComplete();
+                        }
+                    });
+                });
+            }
+            this.show_graph = !this.show_graph;
         },
 
 

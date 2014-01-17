@@ -71,84 +71,83 @@ $message-bar-width: 15px;
 
 // The arrow
 // ------------
+.messagelist-noarrow {
+    display: block;
+    padding-left: $messagelist-arrow-width/2;
+    margin-left: $messagelist-arrow-width/2;
+}
+
+.link-img {
+    float:left;
+    margin-left: -13px;
+    margin-top:0;
+}
+
 .messagelist-arrow {
-    background: url(#{$img-dir}/messagelist/messagelist-arrow-open.png) center center no-repeat;
-    &.level1 {
-        background: url(#{$img-dir}/messagelist/messagelist-arrow-open-l1.png) center center no-repeat;
-    }
-
-    width: $messagelist-arrow-width;
-    height: $messagelist-item-height;
+    padding-left: $messagelist-arrow-width/2;
+    margin-left: $messagelist-arrow-width/2;
     display: block;
-    float: left;
     cursor: pointer;
-
-    // @include transition( transform 0.4s );
-    // @include transform( rotate(-90deg) );
-    // opacity: 0.55;
-
-    // &:hover {
-    //     opacity: 1;
-    // }
-
-    .message--collapsed > .messagelist-widgets > & {
-        background: url(#{$img-dir}/messagelist/messagelist-arrow-closed.png) center center no-repeat;
-        &.level1 {
-            background: url(#{$img-dir}/messagelist/messagelist-arrow-closed-l1.png) center center no-repeat;
-        }
-        // @include transform( rotate(0deg) );
+    .msg-img-closed {
+        display: block;
     }
-}
+    .msg-img-open {
+        display: none;
+    }
 
-.messagelist-widgets {
-    height: available;
-    margin: 0;
-    display: block;
-}
-
-.messagelist-content {
-    margin: 0;
-    display: block;
+    .message--expanded > .messagelist-link > & {
+        border-left: solid 1px $hry-line-color;
+        margin-left: $messagelist-arrow-width/2 - 1;
+        .msg-img-closed {
+            display: none;
+        }
+        .msg-img-open {
+            display: block;
+        }
+    }
+    .message--expanded > & {
+        border-left: solid 1px $hry-line-color;
+        margin-left: $messagelist-arrow-width/2 - 1;
+        .msg-img-closed {
+            display: none;
+        }
+        .msg-img-open {
+            display: block;
+        }
+    }
 }
 
 // An empty space for indentation
 // --------------
 .messagelist-space {
     display: block;
-    width: $messagelist-arrow-width;
-    height: $messagelist-item-height;
-    height: 43px;
-    margin-top: -5px;
-    float: left;
+    padding-left: $messagelist-arrow-width/2;
+    margin-left: $messagelist-arrow-width/2;
 }
 
 // The bar to make an .messagelist-item looks like a child
 // --------------
 .messagelist-bar {
-    background: url(#{$img-dir}/messagelist/messagelist-bar.png) center center no-repeat;
     display: block;
-    width: $messagelist-arrow-width;
-    height: $messagelist-item-height;
-    float: left;
+    padding-left: $messagelist-arrow-width/2;
+    margin-left: $messagelist-arrow-width/2 - 1;
+    border-left: solid 1px $hry-line-color;
 }
 
 
 // The link between an messagelist and its parent
 // --------------
 .messagelist-link {
-    background: url(#{$img-dir}/messagelist/messagelist-link.png) center center no-repeat;
+    // background: url(#{$img-dir}/messagelist/messagelist-link.png) -6 top no-repeat;
     display: block;
-    width: $messagelist-arrow-width;
-    height: $messagelist-item-height;
-    float: left;
-}
-
-.messagelist-link-last {
-    background: url(#{$img-dir}/messagelist/messagelist-link-last.png) center center no-repeat;
-    display: block;
-    width: $messagelist-arrow-width;
-    height: $messagelist-item-height;
-    float: left;
+    padding-left: $messagelist-arrow-width/2;
+    margin-left: $messagelist-arrow-width/2 - 1;
+    border-left: solid 1px $hry-line-color;
+    &.last-link {
+        // background: url(#{$img-dir}/messagelist/messagelist-link-last.png) -6 top no-repeat;
+        border-left: none;
+        margin-left: $messagelist-arrow-width/2;
+    }
 }
 
 // ++++

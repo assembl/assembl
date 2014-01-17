@@ -1,33 +1,28 @@
-<div class="messagelist-widgets">
-
-<%  var i;
-for( var i=1; i<level - 1; i+= 1) { 
-    if (last_sibling_chain[i]) { %>
-        <span class="messagelist-space"></span>
+<%
+if (level > 1) {
+    if (last_sibling_chain[level-1]) { %>
+        <div class="messagelist-link last-link">
+            <img src="/static/img/messagelist/messagelist-link-last.png" class="link-img" />
     <% } else { %>
-        <span class="messagelist-bar"></span>
-    <% }
-} %>
-<% if (level > 1) {
-    if (last_sibling_chain[i]) { %>
-        <span class="messagelist-link-last"></span>
-    <% } else { %>
-        <span class="messagelist-link"></span>
+        <div class="messagelist-link">
+            <img src="/static/img/messagelist/messagelist-link.png" class="link-img" />
     <% }
 } %>
 
 <% if (hasChildren) {
     if (level > 1) { %>
-        <span class="messagelist-arrow"></span>
+        <div class="messagelist-arrow">
+            <img src="/static/img/messagelist/messagelist-arrow-closed.png" class="link-img msg-img-closed" />
+            <img src="/static/img/messagelist/messagelist-arrow-open.png" class="link-img msg-img-open" />
     <% } else { %>
-        <span class="messagelist-arrow level1"></span>
+        <div class="messagelist-arrow level1">
+            <img src="/static/img/messagelist/messagelist-arrow-closed-l1.png" class="link-img msg-img-closed" />
+            <img src="/static/img/messagelist/messagelist-arrow-open-l1.png" class="link-img msg-img-open" />
     <% }
    } else { %>
-    <span class="messagelist-noarrow"></span>
+    <div class="messagelist-noarrow">
 <% } %>
 
-</div>
-<div class="messagelist-content">
 <% if( !bodyShown ){ %>
 
 <div class="message-header" id="message-<%= id %>">
@@ -91,5 +86,6 @@ for( var i=1; i<level - 1; i+= 1) {
 </div>
 
 <% } %>
-<div class="messagelist-children"></div>
 </div>
+<div class="messagelist-children"></div>
+<% if (level > 1) { %></div><% } %>

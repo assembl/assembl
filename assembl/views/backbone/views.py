@@ -6,7 +6,7 @@ from pyramid.i18n import TranslationString as _
 import json
 import os.path
 from assembl.synthesis.models import Discussion
-from assembl.auth import get_user
+from assembl.auth import get_user, P_READ
 from sqlalchemy.orm.exc import NoResultFound
 from pyramid.i18n import get_localizer, TranslationString
 
@@ -76,7 +76,7 @@ def get_styleguide_components():
     return views
 
 
-@view_config(route_name='home', request_method='GET', http_cache=60)
+@view_config(route_name='home', request_method='GET', http_cache=60, permission=P_READ)
 def home_view(request):
     context = get_default_context(request)
     return render_to_response('../../templates/index.jinja2', context, request=request)

@@ -1,31 +1,11 @@
-{% extends "base.jinja2" %}
-
-{% block content %}
-<div id="infovis" width="100%" height="100%">
-</div>
-<div id="inner-details"></div>
-{% endblock %}
-
-{% block extra_css %}
-<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/lib/jit/base.css" />
-<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/lib/jit/Hypertree.css" />
-
-<style media="screen" type="text/css">
-#infovis {background: white;}
-</style>
-
-{% endblock %}
-
-{% block extra_js %}
-<script type="text/json" id="ideas-json">{{ discussion.root_idea.generic_json("idea_graph_jit", use_dumps=True) |safe }}</script>
-<script type="text/javascript">
-requirejs(["jit"], function($jit) {
-  var script = document.getElementById("ideas-json");
-  var json = JSON.parse(script.textContent);
-  var div = document.getElementById("infovis");
-  var ht = new $jit.Hypertree({
-    //id of the visualization container  
-    injectInto: 'infovis',  
+define(['jit', 'app'], function($jit, app) {
+function loadHypertreeInDiv(div) {
+    if (div.hypertree !== undefined) {
+        return div.hypertree;
+    }
+    var ht = new $jit.Hypertree({
+    //id of the visualization container
+    injectInto: div.id,  
     //canvas width and height  
     width: div.width,  
     height: div.height,
@@ -80,18 +60,26 @@ requirejs(["jit"], function($jit) {
       
     onComplete: function(){  
         console.log("done");  
-          
+
         //Build the right column relations list.  
         //This is done by collecting the information (stored in the data property)   
         //for all the nodes adjacent to the centered node.  
         var node = ht.graph.getClosestNodeToOrigin("current");
-        var html = "<h4>" + node.name + "</h4><b>Connections:</b>";
-        if (window.callerApp !== undefined) {
-            var idea = callerApp.ideaList.ideas.get(node.id);
-            if (idea !== undefined) {
-                callerApp.setCurrentIdea(idea);
+        var idea = app.ideaList.ideas.get(node.id);
+        var suffix = "";
+        if (idea !== undefined) {
+            app.setCurrentIdea(idea);
+            var num_posts = idea.get('num_posts'),
+                num_read_posts = idea.get('num_read_posts');
+            if (num_read_posts == num_posts) {
+                suffix = " ("+num_posts+")";
+            } else if (num_read_posts == 0) {
+                suffix = " (<b>"+num_posts+"</b>)";
+            } else {
+                suffix = " (<b>"+(num_posts - num_read_posts)+"</b>/"+num_posts+")";
             }
         }
+        var html = "<h4>" + node.name + suffix + "</h4><b>Connections:</b>";
         html += "<ul>";  
         node.eachAdjacency(function(adj){  
             var child = adj.nodeTo;  
@@ -102,20 +90,20 @@ requirejs(["jit"], function($jit) {
         });
         html += "</ul>";  
         $jit.id('inner-details').innerHTML = html;  
-    }  
-  });  
-  //load JSON data.  
-  ht.loadJSON(json);  
-  window.setIdea = function(id) {
-    ht.onClick(id, {  
-        onComplete: function() {  
-            ht.controller.onComplete();  
-        }  
-    });
-  };
-  //compute positions and plot.  
-  ht.refresh();
-});
-</script>
+    }
+  });
+    div.hypertree = ht;
+    return ht;
+}
 
-{% endblock %}
+function ideaGraphLoader(json) {
+    var div = document.getElementById("infovis");
+    var hypertree = loadHypertreeInDiv(div);
+    //load JSON data.
+    hypertree.loadJSON(json);
+    hypertree.refresh();
+    return hypertree;
+}
+
+return ideaGraphLoader;
+});

@@ -139,10 +139,13 @@
     padding: 0 12px 0 25px;
     min-width: $idealist-counter-minwidth;
 
-    text-align: center;
+    text-align: right;
     font-size: 14px;
     font-weight: bold;
     color: $idealist-counter-color;
+    .idea-unread-posts {
+        color:#555;
+    }
 }
 
 // Remove button

@@ -118,7 +118,8 @@ class Mailbox(PostSource):
     def parse_email(self, message_string, existing_email=None):
         parsed_email = email.message_from_string(message_string)
         body = None
-
+        error_description = None
+        
         def get_plain_text_payload(message):
             """ Returns the first text/plain body as a unicode object, falling back to text/html body """
 
@@ -168,7 +169,15 @@ class Mailbox(PostSource):
         if new_message_id:
             new_message_id = email_header_to_unicode(
                 new_message_id)
-
+        else:
+            print(repr(message_string))
+            print(repr(parsed_email));
+            error_description("Unable to parse the Message-ID")
+            return (None, None, error_description)
+        
+        assert new_message_id;
+        assert new_message_id != ''
+        
         new_in_reply_to = parsed_email.get('In-Reply-To', None)
         if new_in_reply_to:
             new_in_reply_to = email_header_to_unicode(
@@ -215,7 +224,7 @@ class Mailbox(PostSource):
         email_object.creator = sender_email_account.profile
         email_object.source = self
         email_object = self.db.merge(email_object)
-        return (email_object, parsed_email)
+        return (email_object, parsed_email, error_description)
         
     """
     emails have to be a complete set
@@ -354,16 +363,17 @@ class Mailbox(PostSource):
                 if isinstance(response_part, tuple):
                     message_string = response_part[1]
 
-            (email_object, _) = mailbox_obj.parse_email(message_string)
+            (email_object, dummy, error) = mailbox_obj.parse_email(message_string)
+            if error:
+                raise Exception("error")
             session.add(email_object)
+            mailbox_obj.last_imported_email_uid = \
+                email_ids[len(email_ids)-1]
             transaction.commit()
             mailbox_obj = Mailbox.get(id=mailbox_obj.id)
 
         if len(email_ids):
             new_emails = [import_email(mbox, email_id) for email_id in email_ids]
-
-            mbox.last_imported_email_uid = \
-                email_ids[len(email_ids)-1]
 
         discussion_id = mbox.discussion_id
         mailbox.close()

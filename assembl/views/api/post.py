@@ -180,7 +180,7 @@ def get_posts(request):
         if viewpost:
             serializable_post['read'] = True
             no_of_posts_viewed_by_user += 1
-        else:
+        elif user_id:
             serializable_post['read'] = False
             if root_post_id:
                 viewed_post = ViewPost(
