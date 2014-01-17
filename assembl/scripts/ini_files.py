@@ -35,7 +35,7 @@ def main():
         names = listdir(join(vroot, 'share'))
         names = [n for n in names
                  if exists(join(vroot, 'share', n, 'vad'))]
-        assert len(names) == 1, "Cannot identify the var directory"
+        assert len(names) == 1, "Cannot identify the vad directory"
         vname = names[0]
     assert exists(join(vroot_var, 'lib', vname, 'vsp')),\
         "Cannot identify the VSP directory"
