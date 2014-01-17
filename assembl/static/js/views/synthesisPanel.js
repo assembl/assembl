@@ -1,5 +1,5 @@
-define(['backbone', 'underscore', 'jquery', 'app', 'models/synthesis', 'views/synthesisIdea', 'ckeditor-sharedspace', 'i18n'],
-function(Backbone, _, $, app, Synthesis, SynthesisIdeaView, ckeditor, i18n){
+define(['backbone', 'underscore', 'jquery', 'app', 'models/synthesis', 'views/synthesisIdea', 'ckeditor-sharedspace', 'i18n', 'views/editableField'],
+function(Backbone, _, $, app, Synthesis, SynthesisIdeaView, ckeditor, i18n, EditableField){
     'use strict';
 
     var CKEDITOR_CONFIG = _.extend({}, app.CKEDITOR_CONFIG, {
@@ -87,31 +87,23 @@ function(Backbone, _, $, app, Synthesis, SynthesisIdeaView, ckeditor, i18n){
 
             this.$('.panel-body').get(0).scrollTop = y;
 
-            var editingArea = this.$('#synthesisPanel-ideas [contenteditable]').get(0),
-                that = this;
+            var titleField = new EditableField({
+                model: this.model,
+                modelProp: 'subject'
+            });
+            titleField.renderTo('#synthesisPanel-title');
 
-            if( editingArea ){
-                this.ckInstance = ckeditor.inline( editingArea, CKEDITOR_CONFIG );
-                editingArea.focus();
+            var introductionField = new EditableField({
+                model: this.model,
+                modelProp: 'introduction'
+            });
+            introductionField.renderTo('#synthesisPanel-introduction');
 
-                this.ckInstance.element.on('blur', function(){
-
-                    // Firefox triggers the blur event if we paste (ctrl+v)
-                    // in the ckeditor, so instead of calling the function direct
-                    // we wait to see if the focus is still in the ckeditor
-                    setTimeout(function(){
-                        if( !that.ckInstance.element ){
-                            return;
-                        }
-
-                        var hasFocus = document.hasFocus(that.ckInstance.element.$);
-                        if( !hasFocus ){
-                            that.saveEdition(ev);
-                        }
-                    }, 100);
-
-                });
-            }
+            var conclusionField = new EditableField({
+                model: this.model,
+                modelProp: 'conclusion'
+            });
+            conclusionField.renderTo('#synthesisPanel-conclusion');
 
             return this;
         },
@@ -120,7 +112,6 @@ function(Backbone, _, $, app, Synthesis, SynthesisIdeaView, ckeditor, i18n){
          * @events
          */
         events: {
-            'blur #synthesisPanel-title': 'onTitleBlur',
             'blur #synthesisPanel-introduction': 'onIntroductionBlur',
             'blur #synthesisPanel-conclusion': 'onConclusionBlur',
 
@@ -152,14 +143,6 @@ function(Backbone, _, $, app, Synthesis, SynthesisIdeaView, ckeditor, i18n){
          */
         setFullscreen: function(){
             app.setFullscreen(this);
-        },
-
-        /**
-         *
-         */
-        onTitleBlur: function(ev){
-            var title = app.stripHtml(ev.currentTarget.innerHTML);
-            this.model.set('subject', title);
         },
 
         /**

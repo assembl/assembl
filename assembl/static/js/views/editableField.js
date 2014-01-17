@@ -62,7 +62,7 @@ define(['backbone', 'underscore'], function(Backbone, _){
 
         /**
          * Renders inside the given jquery or HTML elemenent given
-         * @param {jQuery|HTMLElement} el
+         * @param {jQuery|HTMLElement|string} el
          */
         renderTo: function(el){
             $(el).append( this.render().el );
