@@ -44,6 +44,10 @@ define(['backbone', 'underscore'], function(Backbone, _){
                 this.modelProp = obj.modelProp;
             }
 
+            if( 'placeholder' in obj ){
+                this.placeholder = obj.placeholder;
+            }
+
             if( this.model === null ){
                 throw new Error('EditableField needs a model');
             }
@@ -53,9 +57,8 @@ define(['backbone', 'underscore'], function(Backbone, _){
          * The render
          */
         render: function(){
-            if( this.model ){
-                this.el.innerHTML = this.model.get(this.modelProp);
-            }
+            var text = this.model.get(this.modelProp);
+            this.el.innerHTML = text || this.placeholder;
 
             return this;
         },
@@ -80,11 +83,10 @@ define(['backbone', 'underscore'], function(Backbone, _){
          * @event
          */
         onBlur: function(ev){
-            var data = $.trim(ev.currentTarget.textContent);
-            if( data === '' ){
-                data = this.placeholder;
-                this.model.set(this.modelProp, data);
-            } else {
+            var data = app.stripHtml(ev.currentTarget.textContent);
+            data = $.trim(data);
+
+            if( data != this.placeholder ){
                 this.model.save(this.modelProp, data);
             }
         },
