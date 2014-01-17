@@ -20,7 +20,7 @@
         
         <div class="dropdown">
             <span class="dropdown-label text-bold">
-                {{ gettext('Select view')|safe }}
+                <%= currentViewStyle.label %>
             </span>
             <ul class="dropdown-list">
                 <li id="messageList-view-threaded" class="dropdown-listitem">{{ gettext('Threaded view') }}</li>
@@ -61,7 +61,7 @@
 
     <div class="panel-body">
         <div id="messageList-query-info" class=""><%= queryInfo %></div>
-        <div id="messageList-list" class="idealist <%= viewStyle %>"></div>
+        <div id="messageList-list" class="idealist <%= currentViewStyle.id %>"></div>
 
     </div>
 
