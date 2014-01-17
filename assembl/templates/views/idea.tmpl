@@ -36,7 +36,14 @@
         <% }
     } %>
 
-    <div class="idealist-counter"><span data-tooltip="{{ gettext('Number of messages related to this idea or it\'s descendants') }}"><%= num_posts %></span></div>
+    <div class="idealist-counter">
+        <% if (num_posts > num_read_posts) { %>
+        <span class="idea-unread-posts" data-tooltip="{{ gettext('Number of unread messages related to this idea or it\'s descendants') }}"><%= (num_posts - num_read_posts) %></span><% }
+        if (num_posts > num_read_posts && num_read_posts != 0) { %>/<% }
+        if (num_posts == num_read_posts || num_read_posts != 0) { 
+        %><span data-tooltip="{{ gettext('Number of messages related to this idea or it\'s descendants') }}"><%= num_posts %></span>
+        <% } %>
+    </div>
     <div class="idealist-title" title="<%= shortTitle %> (<%= segments.length %>)">
         <%= shortTitle %> (<span class="num-segments" data-tooltip="{{ gettext('Number of caught segments expressing this idea') }}"><%= segments.length %></span>)
         {# <small class="idealist-longtitle text-small text-muted"><%= app.stripHtml(longTitle) %></small> #}

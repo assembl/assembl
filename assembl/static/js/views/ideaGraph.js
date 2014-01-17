@@ -65,11 +65,21 @@ function loadHypertreeInDiv(div) {
         //This is done by collecting the information (stored in the data property)   
         //for all the nodes adjacent to the centered node.  
         var node = ht.graph.getClosestNodeToOrigin("current");
-        var html = "<h4>" + node.name + "</h4><b>Connections:</b>";
         var idea = app.ideaList.ideas.get(node.id);
+        var suffix = "";
         if (idea !== undefined) {
             app.setCurrentIdea(idea);
+            var num_posts = idea.get('num_posts'),
+                num_read_posts = idea.get('num_read_posts');
+            if (num_read_posts == num_posts) {
+                suffix = " ("+num_posts+")";
+            } else if (num_read_posts == 0) {
+                suffix = " (<b>"+num_posts+"</b>)";
+            } else {
+                suffix = " (<b>"+(num_posts - num_read_posts)+"</b>/"+num_posts+")";
+            }
         }
+        var html = "<h4>" + node.name + suffix + "</h4><b>Connections:</b>";
         html += "<ul>";  
         node.eachAdjacency(function(adj){  
             var child = adj.nodeTo;  
