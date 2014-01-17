@@ -30,6 +30,12 @@ define(['backbone', 'underscore', 'app', 'ckeditor-sharedspace'], function(Backb
         modelProp: '',
 
         /**
+         * The text to be shown if the model is empty
+         * @type {String}
+         */
+        placeholder: '',
+
+        /**
          * @init
          */
         initialize: function(obj){
@@ -39,6 +45,10 @@ define(['backbone', 'underscore', 'app', 'ckeditor-sharedspace'], function(Backb
 
             if( 'modelProp' in obj ){
                 this.modelProp = obj.modelProp;
+            }
+
+            if( 'placeholder' in obj ){
+                this.placeholder = obj.placeholder;
             }
 
             if( this.model === null ){
@@ -60,7 +70,7 @@ define(['backbone', 'underscore', 'app', 'ckeditor-sharedspace'], function(Backb
                 topId: this.topId,
                 fieldId: this.fieldId,
                 bottomId: this.bottomId,
-                text: this.model.get(this.modelProp),
+                text: this.model.get(this.modelProp) || this.placeholder,
                 editing: editing
             };
 
@@ -148,8 +158,14 @@ define(['backbone', 'underscore', 'app', 'ckeditor-sharedspace'], function(Backb
 
             var text = this.ckInstance.getData();
             text = $.trim(text);
-            
-            this.model.save(this.modelProp, text);
+
+            if( text === '' ){
+                text = this.placeholder;
+                this.model.set(this.modelProp, text);
+            } else {
+                this.model.save(this.modelProp, text);
+            }
+
             this.render(false);
         },
 

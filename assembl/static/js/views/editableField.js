@@ -83,9 +83,10 @@ define(['backbone', 'underscore'], function(Backbone, _){
             var data = $.trim(ev.currentTarget.textContent);
             if( data === '' ){
                 data = this.placeholder;
+                this.model.set(this.modelProp, data);
+            } else {
+                this.model.save(this.modelProp, data);
             }
-
-            this.model.save(this.modelProp, data);
         },
 
         /**

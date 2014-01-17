@@ -1,5 +1,5 @@
-define(['backbone', 'underscore', 'models/idea', 'models/message', 'app', 'ckeditor-sharedspace', 'i18n', 'types', 'views/editableField', 'views/ckeditorField'],
-function(Backbone, _, Idea, Message, app, ckeditor, i18n, Types, EditableField, CKEditorField){
+define(['backbone', 'underscore', 'models/idea', 'models/message', 'app', 'i18n', 'types', 'views/editableField', 'views/ckeditorField'],
+function(Backbone, _, Idea, Message, app, i18n, Types, EditableField, CKEditorField){
     'use strict';
 
     var LONG_TITLE_ID = 'ideaPanel-longtitle';
@@ -66,7 +66,8 @@ function(Backbone, _, Idea, Message, app, ckeditor, i18n, Types, EditableField, 
 
             this.ckeditor = new CKEditorField({
                 'model': this.idea,
-                'modelProp': 'longTitle'
+                'modelProp': 'longTitle',
+                'placeholder': i18n.gettext('Add the description')
             });
 
             this.ckeditor.renderTo( this.$('#ideaPanel-longtitle') );
