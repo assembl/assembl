@@ -987,7 +987,10 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard, Types){
             app.doc.on('click', '.dropdown-label', app.onDropdownClick);
             app.doc.on('ajaxError', app.onAjaxError);
 
-            app.on('render', app.cleanTooltips);
+            app.on('render', function(){
+                app.cleanTooltips();
+                window.setTimeout(app.initTooltips, 500);
+            });
         }
     };
 
