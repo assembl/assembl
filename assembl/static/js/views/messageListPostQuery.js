@@ -100,6 +100,10 @@ define(['app', 'i18n', 'sprintf'], function(app, i18n, sprintf){
          */
         this._query = {};
         
+        this._results = [];
+        
+        this._resultsAreValid = false;
+        
         this.availableViews = {
                 THREADED: {
                     id: 'threaded',
@@ -160,6 +164,7 @@ define(['app', 'i18n', 'sprintf'], function(app, i18n, sprintf){
          * @return true on success, false on failure
          */
         this.addFilter = function(filterDef, value){
+            this.invalidateResults();
             var retval = true,
             valueWasReplaced = false;
             
@@ -210,7 +215,16 @@ define(['app', 'i18n', 'sprintf'], function(app, i18n, sprintf){
          * @param {filterDef} filterDef
          */
         this.clearAllFilters = function(filterDef){
+            this.invalidateResults();
             this._query = {};
+        };
+        
+        /**
+         * Remove a single filter from the query
+         * @param {filterDef} filterDef
+         */
+        this.invalidateResults = function(){
+            this._resultsAreValid = false;
         };
         
         /**
@@ -222,6 +236,7 @@ define(['app', 'i18n', 'sprintf'], function(app, i18n, sprintf){
          */
         this.clearFilter = function(filterDef, value){
             var retval = false;
+            this.invalidateResults();
             if(filterDef.id in this._query) {
                 for (var i=0;i<this._query[filterDef.id].length;i++) {
                     if(this._query[filterDef.id][i].value == value || value == null) {
@@ -244,6 +259,7 @@ define(['app', 'i18n', 'sprintf'], function(app, i18n, sprintf){
          */
         this.setView = function(viewDef){
             var retval = false;
+            this.invalidateResults();
             if(viewDef) {
                 this._view = viewDef;
                 retval = true;
@@ -267,33 +283,42 @@ define(['app', 'i18n', 'sprintf'], function(app, i18n, sprintf){
                 value = null;
             //console.log("execute query for: ");
             //console.log(this._query);
-            for (var filterDefPropName in this.availableFilters) {
-                filterDef = this.availableFilters[filterDefPropName]
-                if(filterDef.id in this._query) {
-                    for (var i=0;i<this._query[filterDef.id].length;i++) {
-                        value = this._query[filterDef.id][i].value;
-                        params[filterDef._server_param] = value;
+            
+            if (this._resultsAreValid){
+                    success(that._results);
+                }
+            else {
+                for (var filterDefPropName in this.availableFilters) {
+                    filterDef = this.availableFilters[filterDefPropName]
+                    if(filterDef.id in this._query) {
+                        for (var i=0;i<this._query[filterDef.id].length;i++) {
+                            value = this._query[filterDef.id][i].value;
+                            params[filterDef._server_param] = value;
+                        }
                     }
                 }
-            }
 
-            params.order = this._view._server_order_param_value
-            params.view = 'id_only';
-            that._queryResultInfo = null;
-            $.getJSON(url, params, function(data){
-                that._queryResultInfo = {};
-                that._queryResultInfo.unread = data.unread;
-                that._queryResultInfo.total = data.total;
-                that._queryResultInfo.startIndex = data.startIndex;
-                that._queryResultInfo.page = data.page;
-                that._queryResultInfo.maxPage = data.maxPage;
-                
-                var ids = [];
-                _.each(data.posts, function(post){
-                    ids.push(post['@id']);
+                params.order = this._view._server_order_param_value
+                params.view = 'id_only';
+                that._queryResultInfo = null;
+                $.getJSON(url, params, function(data){
+                    that._queryResultInfo = {};
+                    that._queryResultInfo.unread = data.unread;
+                    that._queryResultInfo.total = data.total;
+                    that._queryResultInfo.startIndex = data.startIndex;
+                    that._queryResultInfo.page = data.page;
+                    that._queryResultInfo.maxPage = data.maxPage;
+
+                    var ids = [];
+                    _.each(data.posts, function(post){
+                        ids.push(post['@id']);
+                    });
+                    that._results=ids;
+                    that._resultsAreValid = true;
+                    success(that._results);
                 });
-                success(ids);
-            });
+            }
+            
         };
         
         this.getResultNumUnread = function(){
