@@ -71,7 +71,7 @@ function(Backbone, _, $, app, Segment, i18n){
         addSegment: function(segment){
             delete segment.attributes.highlights;
 
-            segment.set('idIdea', null);
+            segment.save('idIdea', null);
             this.segments.add(segment);
         },
 
