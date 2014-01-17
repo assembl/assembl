@@ -27,7 +27,8 @@ def start_dispatch_thread():
 
 
 def get_pub_socket():
-    start_dispatch_thread()
+    if MULTIPLEX:
+        start_dispatch_thread()
     socket = context.socket(zmq.PUB)
     if MULTIPLEX:
         socket.connect(INTERNAL_SOCKET)
