@@ -212,7 +212,7 @@ function(Backbone, _, Idea, Message, app, ckeditor, i18n, Types, EditableField, 
 
                 var cid = ev.currentTarget.getAttribute('data-segmentid'),
                     segment = app.segmentList.segments.getByCid(cid);
-
+                console.log( cid );
                 app.showDragbox(ev, segment.getQuote());
                 app.draggedSegment = segment;
             }
