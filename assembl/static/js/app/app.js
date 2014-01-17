@@ -153,12 +153,6 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard, Types){
         openedPanels: 0,
 
         /**
-         * The window reference of the infovis graph
-         * @type {Window}
-         */
-        graphWindow: undefined,
-
-        /**
          * Formats the url to the current api url
          * @param  {string} url
          * @return {string} The url formatted
@@ -619,10 +613,6 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard, Types){
         setCurrentIdea: function(idea){
             if (idea != this.getCurrentIdea()) {
                 app.trigger('idea:select', [idea]);
-                if (this.graphWindow !== undefined && 
-                    this.graphWindow.setIdea !== undefined) {
-                    this.graphWindow.setIdea(idea.getId());
-                }
             }
         },
 
@@ -863,23 +853,6 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard, Types){
          */
         cleanTooltips: function(){
             $('.tipsy').remove();
-        },
-
-        /**
-         * Load the graph view
-         */
-        loadGraphView: function() {
-            this.graphWindow = window.open("/"+this.slug+"/graph", "graphWindow");
-            var that = this;
-            window.setTimeout(function() {
-                that.graphWindow.callerApp = that;
-                var idea = that.getCurrentIdea();
-                if (idea !== undefined) {
-                    if (that.graphWindow.setIdea !== undefined) {
-                        that.graphWindow.setIdea(idea.getId());
-                    }
-                }
-            }, 1000);
         },
 
         /**
