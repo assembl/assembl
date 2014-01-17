@@ -1,12 +1,8 @@
-define(['backbone', 'underscore', 'models/idea', 'models/message', 'app', 'ckeditor-sharedspace', 'i18n', 'types', 'views/editableField'],
-function(Backbone, _, Idea, Message, app, ckeditor, i18n, Types, EditableField){
+define(['backbone', 'underscore', 'models/idea', 'models/message', 'app', 'ckeditor-sharedspace', 'i18n', 'types', 'views/editableField', 'views/ckeditorField'],
+function(Backbone, _, Idea, Message, app, ckeditor, i18n, Types, EditableField, CKEditorField){
     'use strict';
 
-    var LONG_TITLE_ID = 'ideaPanel-longtitle',
-
-        CKEDITOR_CONFIG = _.extend({}, app.CKEDITOR_CONFIG, {
-            sharedSpaces: { top: 'ideaPanel-toptoolbar', bottom: 'ideaPanel-bottomtoolbar' }
-        });
+    var LONG_TITLE_ID = 'ideaPanel-longtitle';
 
     /**
      * @class IdeaPanel
@@ -23,12 +19,6 @@ function(Backbone, _, Idea, Message, app, ckeditor, i18n, Types, EditableField){
          * @type {Idea.Model}
          */
         idea: null,
-
-        /**
-         * CKeditor instance for this view
-         * @type {CKeditor}
-         */
-        ckInstance: null,
 
         /**
          * @init
@@ -49,7 +39,6 @@ function(Backbone, _, Idea, Message, app, ckeditor, i18n, Types, EditableField){
             var that = this;
             app.on('idea:select', function(idea){
                 that.setCurrentIdea(idea);
-                that.cancelEdition();
             });
         },
 
@@ -75,35 +64,12 @@ function(Backbone, _, Idea, Message, app, ckeditor, i18n, Types, EditableField){
 
             app.initClipboard();
 
-            if( this.ckInstance ){
-                this.ckInstance.destroy();
-            }
+            this.ckeditor = new CKEditorField({
+                'model': this.idea,
+                'modelProp': 'longTitle'
+            });
 
-            if( editing ){
-                var editingArea = this.$('#'+LONG_TITLE_ID).get(0),
-                    that = this;
-
-                this.ckInstance = ckeditor.inline( editingArea, CKEDITOR_CONFIG );
-                editingArea.focus();
-                this.ckInstance.element.on('blur', function(){
-
-                    // Firefox triggers the blur event if we paste (ctrl+v)
-                    // in the ckeditor, so instead of calling the function directly
-                    // we wait to see if the focus is still in the ckeditor
-                    setTimeout(function(){
-                        if( !that.ckInstance.element ){
-                            return;
-                        }
-
-                        var hasFocus = document.hasFocus(that.ckInstance.element.$);
-                        if( !hasFocus ){
-                            that.saveEdition();
-                        }
-                    }, 100);
-
-                });
-            }
-
+            this.ckeditor.renderTo( this.$('#ideaPanel-longtitle') );
             return this;
         },
 
@@ -221,12 +187,6 @@ function(Backbone, _, Idea, Message, app, ckeditor, i18n, Types, EditableField){
          * Events
          */
         events: {
-            'blur #ideaPanel-shorttitle': 'onShortTitleBlur',
-            'keydown #ideaPanel-shorttitle': 'onShortTitleKeyDown',
-
-            'click #ideaPanel-longtitle': 'changeToEditMode',
-            'click .ideaPanel-savebtn': 'saveEdition',
-            'click .ideaPanel-cancelbtn': 'cancelEdition',
             'click .message-sendbtn': 'sendMessage',
 
             'dragstart .box': 'onDragStart',
@@ -241,38 +201,6 @@ function(Backbone, _, Idea, Message, app, ckeditor, i18n, Types, EditableField){
             'click #ideaPanel-deleteButton': 'onDeleteButtonClick',
 
             'click .segment-link': "onSegmentLinkClick"
-        },
-
-        /**
-         * @event
-         */
-        onShortTitleBlur: function(ev){
-            var data = $.trim(ev.currentTarget.textContent);
-            if( data === '' ){
-                data = i18n.gettext('New Idea');
-            }
-            this.idea.save('shortTitle', data);
-        },
-
-        /**
-         * @event
-         */
-        onShortTitleKeyDown: function(ev){
-            if( ev.which === 13 || ev.which === 27 ){
-                ev.preventDefault();
-                $(ev.currentTarget).trigger('blur');
-                return false;
-            }
-        },
-
-        /**
-         * @event
-         */
-        onLongTitleKeyDown: function(ev){
-            if( ev.which === 27 ){
-                ev.prenvetDefault();
-                this.cancelEdition();
-            }
         },
 
         /**
@@ -403,49 +331,6 @@ function(Backbone, _, Idea, Message, app, ckeditor, i18n, Types, EditableField){
             if(ok){
                 this.deleteCurrentIdea();
             }
-        },
-
-        /**
-         * @event
-         */
-        changeToEditMode: function(ev){
-            if( ev ) {
-                ev.stopPropagation();
-            }
-
-            this.idea.set('ideaPanel-editing', true);
-        },
-
-        /**
-         * @event
-         */
-        cancelEdition: function(ev){
-            if( ev ){
-                ev.stopPropagation();
-            }
-
-            if( this.ckInstance ){
-                var longTitle = this.idea.get('longTitle');
-                this.ckInstance.setData(longTitle);
-                this.ckInstance.destroy();
-            }
-
-            this.idea.set('ideaPanel-editing', false);
-        },
-
-        /**
-         * @event
-         */
-        saveEdition: function(ev){
-            if( ev ){
-                ev.stopPropagation();
-            }
-
-            var text = this.ckInstance.getData();
-            text = $.trim(text);
-            
-            this.idea.save({ 'longTitle': text, 'ideaPanel-editing': false });
-            this.ckInstance.destroy();
         },
 
         /**
