@@ -1,0 +1,16 @@
+<% if(editing){ %>
+    <div class="panel-editablebox is-editing">
+        <div id="<%= topId %>"></div>
+        <div id="<%= fieldId %>" class="text margin panel-editablearea" contenteditable="true"><%= text %></div>
+        {# <div id="<%= bottomId %>"></div> #}
+        
+        <div class="text-right padding">
+            <a class="button ckeditorField-cancelbtn">{{ gettext('Cancel') }}</a>
+            <a class="button button--primary ckeditorField-savebtn">{{ gettext('Save') }}</a>
+        </div>
+    </div>
+<% } else { %>
+    <div class="panel-editablebox">
+        <div class="ckeditorField-mainfield text margin panel-editablearea"><%= text %></div>
+    </div>
+<% } %>

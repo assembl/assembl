@@ -44,25 +44,8 @@
             <legend data-tooltip="{{gettext('Expression of this idea in the next synthesis.  You probably want to edit it in the synthesis panel, not here.')}}">
                 <span>{{ gettext('Expression in next synthesis') }}</span>
             </legend>
-            <% if(editing){ %>
-                <div class="panel-editablebox is-editing">
-                    <div id="ideaPanel-toptoolbar"></div>
-                    <div id="ideaPanel-longtitle" class="text margin panel-editablearea" contenteditable="true">
-                        <%= idea.getLongTitleDisplayText() %>
-                    </div>
-                    <div id="ideaPanel-bottomtoolbar"></div>
-                    <div id="ideaPanel-buttons" class="text-right padding">
-                        <a class="button ideaPanel-cancelbtn">{{ gettext('Cancel') }}</a>
-                        <a class="button button--primary ideaPanel-savebtn">{{ gettext('Save') }}</a>
-                    </div>
-                </div>
-            <% } else { %>
-                <div class="panel-editablebox">
-                    <div id="ideaPanel-longtitle" class="text margin panel-editablearea">
-                        <%= idea.getLongTitleDisplayText() %>
-                    </div>
-                </div>
-            <% } %>
+
+            <div id="ideaPanel-longtitle"></div>
         </fieldset>
         
     </div>
