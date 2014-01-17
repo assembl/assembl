@@ -102,6 +102,10 @@ $message-bar-width: 15px;
         //     background: url(#{$img-dir}/messagelist/messagelist-arrow-open-l1.png) -6 top no-repeat;
         // }
     }
+    .message--expanded > & {
+        border-left: solid 1px $hry-line-color;
+        margin-left: $messagelist-arrow-width/2 - 1;
+    }
 }
 
 // An empty space for indentation
