@@ -58,7 +58,8 @@ function(Backbone, _, Idea, Message, app, i18n, Types, EditableField, CKEditorFi
                 'model': this.idea,
                 'modelProp': 'shortTitle',
                 'class': 'panel-editablearea text-bold',
-                'data-tooltip': i18n.gettext('Expression of the idea in the table of ideas')
+                'data-tooltip': i18n.gettext('Expression of the idea in the table of ideas'),
+                'placeholder': i18n.gettext('New idea')
             });
             shortTitleField.renderTo(this.$('#ideaPanel-shorttitle'));
 

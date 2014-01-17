@@ -70,8 +70,9 @@ define(['backbone', 'underscore', 'app', 'ckeditor-sharedspace'], function(Backb
                 topId: this.topId,
                 fieldId: this.fieldId,
                 bottomId: this.bottomId,
-                text: this.model.get(this.modelProp) || this.placeholder,
-                editing: editing
+                text: this.model.get(this.modelProp),
+                editing: editing,
+                placeholder: this.placeholder
             };
 
             this.$el.html( this.template(data) );
@@ -159,13 +160,7 @@ define(['backbone', 'underscore', 'app', 'ckeditor-sharedspace'], function(Backb
             var text = this.ckInstance.getData();
             text = $.trim(text);
 
-            if( text === '' ){
-                text = this.placeholder;
-                this.model.set(this.modelProp, text);
-            } else {
-                this.model.save(this.modelProp, text);
-            }
-
+            this.model.save(this.modelProp, text);
             this.render(false);
         },
 
