@@ -13,9 +13,15 @@ function(Backbone, _, $, app, MessageView, Message, i18n, PostQuery){
      */
     var MessageList = Backbone.View.extend({
         ViewStyles: {
-            THREADED: "threaded",
-            CHRONOLOGICAL: "chronological",
-            REVERSE_CHRONOLOGICAL: "reverse_chronological"
+            THREADED: {id: "threaded",
+                        label: i18n._('Threaded view')
+                        },
+            CHRONOLOGICAL: {id: "chronological",
+                        label: i18n._('Chronological view')
+                        },
+            REVERSE_CHRONOLOGICAL: {id: "reverse_chronological",
+                        label: i18n._('Activity feed view')
+                        },
         },
         
         currentViewStyle: null,
@@ -40,9 +46,8 @@ function(Backbone, _, $, app, MessageView, Message, i18n, PostQuery){
                     that.currentQuery.addFilter(that.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, idea.getId());
                     app.openPanel(app.messageList);
                 }
-                that.loadDataByQuery();
+                that.render();
             });
-            this.loadDataByQuery();
         },
 
         /**
@@ -68,7 +73,8 @@ function(Backbone, _, $, app, MessageView, Message, i18n, PostQuery){
          * @type {MessageCollection}
          */
         messages: new Message.Collection(),
-
+        messagesFinishedLoading: false,
+        
         /**
          * The annotator reference
          * @type {Annotator}
@@ -133,31 +139,21 @@ function(Backbone, _, $, app, MessageView, Message, i18n, PostQuery){
         },
         
         /**
-         * The render function
+         * The actual rendering for the render function
          * @return {views.Message}
          */
-        render: function(){
-            /*console.log("render is firing, collection is: ");
-            this.messages.map(function(message){
-                console.log(message.getId())
-            })
-            console.log("messageIdsToDisplay is: ");
-            console.log(this.messageIdsToDisplay);*/
-            app.trigger('render');
-
+        render_real: function(){
             var that = this,
-                views = null;
-            
+                views = [];
+
             if (this.currentViewStyle == this.ViewStyles.THREADED) {
                 views = this.getRenderedMessagesThreaded(this.getRootMessagesToDisplay(), 1, []);
             }
             else {
                 views = this.getRenderedMessagesFlat(this.getAllMessagesToDisplay());
             }
-
             var data = {
-                viewStyle: this.currentViewStyle,
-                total: views.length,
+                currentViewStyle: this.currentViewStyle,
                 collapsed: this.collapsed,
                 queryInfo: this.currentQuery.getHtmlDescription()
             };
@@ -176,7 +172,35 @@ function(Backbone, _, $, app, MessageView, Message, i18n, PostQuery){
 
             return this;
         },
+        /**
+         * The render function
+         * @return {views.Message}
+         */
+        render: function(){
+            var that = this;
+            /*console.log("render is firing, collection is: ");
+            this.messages.map(function(message){
+                console.log(message.getId())
+            })
+            console.log("messageIdsToDisplay is: ");
+            console.log(this.messageIdsToDisplay);*/
+            app.trigger('render');
+            if(this.messagesFinishedLoading) {
+                this.blockPanel();
+                this.collapsed = false;
+                this.currentQuery.execute(function(data){
+                    that.messageIdsToDisplay = data;
+                    that = that.render_real();
+                    that.unblockPanel();
+                });
+            }
+            else {
+                this.render_real();
+                this.blockPanel();
+            }
 
+            return this;
+        },
         /**
          * Renders the collapse button
          */
@@ -206,14 +230,14 @@ function(Backbone, _, $, app, MessageView, Message, i18n, PostQuery){
             filter = this.currentFilter,
             len = messages.length,
             view, model, children, prop, isValid;
-            for (var i = len - 1; i >= 0; i--) {
+            for (var i = 0; i < len; i++) {
                 model = messages[i];
-                isValid = (this.messageIdsToDisplay.indexOf(model.getId()) >= 0)
-                if( isValid ) {
-                    view = new MessageView({model:model});
-                    view.hasChildren = false;
-                    list.push(view.render(level).el);
-                }
+
+                view = new MessageView({
+                    model : model
+                });
+                view.hasChildren = false;
+                list.push(view.render(level).el);
             }
             return list;
         },
@@ -433,7 +457,6 @@ function(Backbone, _, $, app, MessageView, Message, i18n, PostQuery){
         loadInitialData: function(){
             var that = this;
 
-            this.blockPanel();
             this.collapsed = false;
 
             $.getJSON( app.getApiUrl('posts'), function(data){
@@ -442,25 +465,11 @@ function(Backbone, _, $, app, MessageView, Message, i18n, PostQuery){
                     post.showBody = false;
                 });
                 that.messages.reset(data.posts);
+                that.messagesFinishedLoading = true;
+                that = that.render();
             });
         },
-
-        /**
-         * Query the posts.  Any param set to null has no effect
-         * @param {String} ideaId
-         */
-        loadDataByQuery: function(){
-            var that = this;
-    
-            this.blockPanel();
-            this.collapsed = false;
-            this.currentQuery.execute(function(data){
-                that.messageIdsToDisplay = data;
-                that.unblockPanel();
-                that.render();
-            });
-        },
-
+        
         
         /**
          * Shows the related posts to the given idea
@@ -468,7 +477,7 @@ function(Backbone, _, $, app, MessageView, Message, i18n, PostQuery){
          */
         addFilterByIdeaId: function(ideaId){
             this.currentQuery.addFilter(this.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, ideaId);
-            this.loadDataByQuery();
+            this.render();
         },
 
         /**
@@ -477,7 +486,7 @@ function(Backbone, _, $, app, MessageView, Message, i18n, PostQuery){
          */
         addFilterByPostId: function(postId){
             this.currentQuery.addFilter(this.currentQuery.availableFilters.POST_IS_DESCENDENT_OF_POST, postId);
-            this.loadDataByQuery();
+            this.render();
         },
         
         /**
@@ -486,7 +495,7 @@ function(Backbone, _, $, app, MessageView, Message, i18n, PostQuery){
          */
         showAllMessages: function(){
             this.currentQuery.clearAllFilters();
-            this.loadDataByQuery();
+            this.render();
         },
         
         /**
@@ -495,7 +504,7 @@ function(Backbone, _, $, app, MessageView, Message, i18n, PostQuery){
          */
         addFilterIsSynthesMessage: function(){
             this.currentQuery.addFilter(this.currentQuery.availableFilters.POST_IS_SYNTHESIS, true);
-            this.loadDataByQuery();
+            this.render();
         },
 
         /**
@@ -506,7 +515,7 @@ function(Backbone, _, $, app, MessageView, Message, i18n, PostQuery){
             //Can't filter on an idea at the same time as getting orphan messages
             this.currentQuery.clearFilter(this.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, null);
             this.currentQuery.addFilter(this.currentQuery.availableFilters.POST_IS_ORPHAN, true);
-            this.loadDataByQuery();
+            this.render();
         },
         /**
          * Load posts that are read or unread
@@ -514,7 +523,7 @@ function(Backbone, _, $, app, MessageView, Message, i18n, PostQuery){
          */
         addFilterIsUnreadMessage: function(){
             this.currentQuery.addFilter(this.currentQuery.availableFilters.POST_IS_UNREAD, true);
-            this.loadDataByQuery();
+            this.render();
         },
 
         /**
@@ -524,7 +533,7 @@ function(Backbone, _, $, app, MessageView, Message, i18n, PostQuery){
         setViewStyleThreaded: function(){
             this.currentViewStyle = this.ViewStyles.THREADED;
             this.currentQuery.setView(this.currentQuery.availableViews.THREADED)
-            this.loadDataByQuery();
+            this.render();
         },
         
         /**
@@ -534,7 +543,7 @@ function(Backbone, _, $, app, MessageView, Message, i18n, PostQuery){
         setViewStyleActivityFeed: function(){
             this.currentViewStyle = this.ViewStyles.REVERSE_CHRONOLOGICAL;
             this.currentQuery.setView(this.currentQuery.availableViews.REVERSE_CHRONOLOGICAL)
-            this.loadDataByQuery();
+            this.render();
         },
         
         /**
@@ -544,7 +553,7 @@ function(Backbone, _, $, app, MessageView, Message, i18n, PostQuery){
         setViewStyleChronological: function(){
             this.currentViewStyle = this.ViewStyles.CHRONOLOGICAL;
             this.currentQuery.setView(this.currentQuery.availableViews.CHRONOLOGICAL)
-            this.loadDataByQuery();
+            this.render();
         },
 
         /**
@@ -660,7 +669,7 @@ function(Backbone, _, $, app, MessageView, Message, i18n, PostQuery){
             var filterid = ev.currentTarget.getAttribute('data-filterid');
             var filter = this.currentQuery.getFilterDefById(filterid);
             this.currentQuery.clearFilter(filter, value);
-            this.loadDataByQuery();
+            this.render();
         },
 
         /**
