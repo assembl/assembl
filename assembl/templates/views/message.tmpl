@@ -12,10 +12,12 @@ if (level > 1) {
 <% if (hasChildren) {
     if (level > 1) { %>
         <div class="messagelist-arrow">
-            <img src="/static/img/messagelist/messagelist-arrow-closed.png" class="link-img" />
+            <img src="/static/img/messagelist/messagelist-arrow-closed.png" class="link-img msg-img-closed" />
+            <img src="/static/img/messagelist/messagelist-arrow-open.png" class="link-img msg-img-open" />
     <% } else { %>
         <div class="messagelist-arrow level1">
-            <img src="/static/img/messagelist/messagelist-arrow-closed-l1.png" class="link-img" />
+            <img src="/static/img/messagelist/messagelist-arrow-closed-l1.png" class="link-img msg-img-closed" />
+            <img src="/static/img/messagelist/messagelist-arrow-open-l1.png" class="link-img msg-img-open" />
     <% }
    } else { %>
     <div class="messagelist-noarrow">

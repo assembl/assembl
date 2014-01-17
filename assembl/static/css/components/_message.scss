@@ -84,27 +84,36 @@ $message-bar-width: 15px;
 }
 
 .messagelist-arrow {
-    // background: url(#{$img-dir}/messagelist/messagelist-arrow-closed.png) -6 top no-repeat;
-    // &.level1 {
-    //     background: url(#{$img-dir}/messagelist/messagelist-arrow-closed-l1.png) -6 top no-repeat;
-    // }
-
     padding-left: $messagelist-arrow-width/2;
     margin-left: $messagelist-arrow-width/2;
     display: block;
     cursor: pointer;
+    .msg-img-closed {
+        display: block;
+    }
+    .msg-img-open {
+        display: none;
+    }
 
     .message--expanded > .messagelist-link > & {
         border-left: solid 1px $hry-line-color;
         margin-left: $messagelist-arrow-width/2 - 1;
-        // background: url(#{$img-dir}/messagelist/messagelist-arrow-open.png) -6 top no-repeat;
-        // &.level1 {
-        //     background: url(#{$img-dir}/messagelist/messagelist-arrow-open-l1.png) -6 top no-repeat;
-        // }
+        .msg-img-closed {
+            display: none;
+        }
+        .msg-img-open {
+            display: block;
+        }
     }
     .message--expanded > & {
         border-left: solid 1px $hry-line-color;
         margin-left: $messagelist-arrow-width/2 - 1;
+        .msg-img-closed {
+            display: none;
+        }
+        .msg-img-open {
+            display: block;
+        }
     }
 }
 

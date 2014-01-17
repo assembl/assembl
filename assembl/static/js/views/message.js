@@ -340,23 +340,12 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
                 target = link;
             }
             var children = target.find(">.messagelist-children").last();
-            var arrow = target.find(">.messagelist-arrow>img");
-            var lev1 = "";
-            if (arrow.length == 1 && arrow.hasClass('level1')) {
-                lev1 = "-l1";
-            }
             if( collapsed ){
                 this.$el.removeClass('message--expanded');
                 children.hide();
-                if (arrow.length == 1) {
-                    arrow[0].src = "/static/img/messagelist/messagelist-arrow-closed"+lev1+".png"
-                }
             } else {
                 this.$el.addClass('message--expanded');
                 children.show();
-                if (arrow.length == 1) {
-                    arrow[0].src = "/static/img/messagelist/messagelist-arrow-open"+lev1+".png"
-                }
             }
 
             //this.render();
