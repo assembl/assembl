@@ -27,7 +27,7 @@ function(Backbone, _, $, app, MessageView, Message, i18n, PostQuery){
                 this.button = $(obj.button).on('click', app.togglePanel.bind(window, 'messageList'));
             }
             this.currentViewStyle = this.ViewStyles.REVERSE_CHRONOLOGICAL;
-            this.currentQuery.setView(this.currentQuery.availableViews.REVERSE_CHRONOLOGICAL)
+            this.currentQuery.setView(this.currentQuery.availableViews.REVERSE_CHRONOLOGICAL);
             
             this.listenTo(this.messages, 'reset', this.render);
             this.listenTo(this.messages, 'change', this.initAnnotator);

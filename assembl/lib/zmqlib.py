@@ -8,20 +8,26 @@ context = zmq.Context.instance()
 INTERNAL_SOCKET = 'inproc://assemblchanges'
 CHANGES_SOCKET = None
 MULTIPLEX = True
+INITED = False
 
 _counter = count()
 
 
 def start_dispatch_thread():
+    global INITED
+    if INITED:
+        return
     td = zmq.devices.ThreadDevice(zmq.FORWARDER, zmq.XSUB, zmq.XPUB)
     td.bind_in(INTERNAL_SOCKET)
     td.connect_out(CHANGES_SOCKET)
     td.setsockopt_in(zmq.IDENTITY, 'XSUB')
     td.setsockopt_out(zmq.IDENTITY, 'XPUB')
     td.start()
+    INITED = True
 
 
 def get_pub_socket():
+    start_dispatch_thread()
     socket = context.socket(zmq.PUB)
     if MULTIPLEX:
         socket.connect(INTERNAL_SOCKET)
@@ -43,8 +49,6 @@ def configure_zmq(sockdef, multiplex):
     assert isinstance(sockdef, str)
     CHANGES_SOCKET = sockdef
     MULTIPLEX = multiplex
-    if MULTIPLEX:
-        start_dispatch_thread()
 
 
 def includeme(config):
