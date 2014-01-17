@@ -103,24 +103,30 @@ function(app, Base, _, User, Message){
          */
         getTypeIcon: function(){
             var cls = 'icon-',
-                type = this.get('idPost')['@type'];
+                target = this.get('target'),
+                idPost = this.idPost;
 
             // todo(Marc-Antonie): review this `type` because `idPost`
             // is a string and doesn't have `@type` attribute
 
-            switch(type){
-                case 'Webpage':
-                    cls += 'link';
-                    break;
+            if (target != null) {
+                switch(target['@type']){
+                    case 'Webpage':
+                        cls += 'link';
+                        break;
 
-                case 'Email':
-                case 'Post':
-                case 'AssemblPost':
-                case 'SynthesisPost':
-                case 'ImportedPost':
-                default:
-                    cls += 'mail';
+                    case 'Email':
+                    case 'Post':
+                    case 'AssemblPost':
+                    case 'SynthesisPost':
+                    case 'ImportedPost':
+                    default:
+                        cls += 'mail';
+                }
+            } else if (idPost != null) {
+                cls += 'mail';
             }
+
 
             return app.format("<i class='{0}'></i>", cls);
         },
