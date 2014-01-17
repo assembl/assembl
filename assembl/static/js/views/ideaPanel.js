@@ -1,5 +1,5 @@
-define(['backbone', 'underscore', 'models/idea', 'models/message', 'app', 'ckeditor-sharedspace', 'i18n', 'types'],
-function(Backbone, _, Idea, Message, app, ckeditor, i18n, Types){
+define(['backbone', 'underscore', 'models/idea', 'models/message', 'app', 'ckeditor-sharedspace', 'i18n', 'types', 'views/editableField'],
+function(Backbone, _, Idea, Message, app, ckeditor, i18n, Types, EditableField){
     'use strict';
 
     var LONG_TITLE_ID = 'ideaPanel-longtitle',
@@ -64,6 +64,14 @@ function(Backbone, _, Idea, Message, app, ckeditor, i18n, Types){
 
             this.$el.html( this.template( {idea:this.idea, segments:segments, editing:editing} ) );
             this.panel = this.$('.panel');
+
+            var shortTitleField = new EditableField({
+                'model': this.idea,
+                'modelProp': 'shortTitle',
+                'class': 'panel-editablearea text-bold',
+                'data-tooltip': i18n.gettext('Expression of the idea in the table of ideas')
+            });
+            shortTitleField.renderTo(this.$('#ideaPanel-shorttitle'));
 
             app.initClipboard();
 
