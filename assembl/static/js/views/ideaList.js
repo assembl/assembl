@@ -59,6 +59,8 @@ function(Backbone, _, Idea, IdeaView, ideaGraphLoader, app, Types, RootIdeaView,
                 that.ideas.add(ideas, {merge: true, silent: true});
                 that.render();
             });
+            app.on("panel:open", function(){that.resizeGraphView();});
+            app.on("panel:close", function(){that.resizeGraphView();});
         },
 
         /**
@@ -220,34 +222,51 @@ function(Backbone, _, Idea, IdeaView, ideaGraphLoader, app, Types, RootIdeaView,
             app.setFullscreen(this);
         },
 
+        toggleGraphView: function() {
+            this.show_graph = !this.show_graph;
+            if (this.show_graph) {
+                this.$('#idealist-graph').show();
+                this.$('#idealist-list').hide();
+                this.loadGraphView();
+            } else {
+                this.$('#idealist-graph').hide();
+                this.$('#idealist-list').show();
+            }
+        },
+
         /**
          * Load the graph view
          */
         loadGraphView: function() {
             if (this.show_graph) {
-                this.$('#idealist-graph').hide();
-                this.$('#idealist-list').show();
-            } else {
                 var that = this;
                 $.getJSON( app.getApiUrl('generic')+"/Discussion/"+app.discussionID+"/idea_graph_jit", function(data){
-                    that.$('#idealist-list').hide();
-                    var graphpanel = that.$('#idealist-graph');
-                    var infovis = that.$('#infovis');
-                    graphpanel.width(graphpanel.parent().innerWidth() - 10);
-                    graphpanel.height(graphpanel.parent().innerHeight() - 10);
-                    infovis.width(graphpanel.width());
-                    infovis.height(graphpanel.height() - 50);
-                    graphpanel.show();
-
-                    that.hypertree = ideaGraphLoader(data['graph']);
-                    that.hypertree.onClick(app.getCurrentIdea().getId(), {
-                        onComplete: function() {
-                            that.hypertree.controller.onComplete();
-                        }
-                    });
+                    that.graphData = data['graph'];
+                    that.hypertree = ideaGraphLoader(that.graphData);
+                    try {
+                        that.hypertree.onClick(app.getCurrentIdea().getId(), {
+                            // onComplete: function() {
+                            //     that.hypertree.controller.onComplete();
+                            // },
+                            duration: 0
+                        });
+                    } catch (Exception) {}
                 });
             }
-            this.show_graph = !this.show_graph;
+        },
+
+        /**
+         * Load the graph view
+         */
+        resizeGraphView: function() {
+            if (this.show_graph && this.graphData !== undefined) {
+                try {
+                    this.hypertree = ideaGraphLoader(this.graphData);
+                    this.hypertree.onClick(app.getCurrentIdea().getId(), {
+                        duration: 0
+                    });
+                } catch (Exception) {}
+            }
         },
 
 
@@ -261,7 +280,7 @@ function(Backbone, _, Idea, IdeaView, ideaGraphLoader, app, Types, RootIdeaView,
 
             'click #ideaList-addbutton': 'addChildToSelected',
             'click #ideaList-collapseButton': 'toggleIdeas',
-            'click #ideaList-graphButton': 'loadGraphView',
+            'click #ideaList-graphButton': 'toggleGraphView',
             'click #ideaList-closeButton': 'closePanel',
             'click #ideaList-fullscreenButton': 'setFullscreen',
 
