@@ -233,6 +233,24 @@
     float: left;
 }
 
+
+// the graph
+// ---------
+
+#idealist-graph {
+    height: 100%;
+    width: 100%;
+    #infovis {
+        height: 100%;
+        width: 100%;
+    }
+    #inner-details {
+        height: auto;
+        width: 100%;
+    }
+}
+
+
 // The child list
 // --------------
 .idealist-children {

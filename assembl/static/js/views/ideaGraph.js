@@ -1,7 +1,7 @@
 define(['jit', 'app'], function($jit, app) {
 function loadHypertreeInDiv(div) {
-    if (div.hypertree !== undefined) {
-        return div.hypertree;
+    while (div.hasChildNodes()) {
+        div.removeChild(div.childNodes[0]);
     }
     var ht = new $jit.Hypertree({
     //id of the visualization container
@@ -14,11 +14,11 @@ function loadHypertreeInDiv(div) {
     Node: {  
         dim: 9,  
         color: "#a9a3c1"  
-    },  
+    },
     Edge: {  
         lineWidth: 2,  
         color: "#c7c2dd"  
-    },  
+    },
     onBeforeCompute: function(node){  
         console.log("centering");  
     },  
@@ -92,7 +92,6 @@ function loadHypertreeInDiv(div) {
         $jit.id('inner-details').innerHTML = html;  
     }
   });
-    div.hypertree = ht;
     return ht;
 }
 

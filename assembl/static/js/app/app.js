@@ -213,6 +213,7 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard, Types){
             if( panel.button ) {
                 panel.button.addClass('is-activated');
             }
+            app.trigger("panel:open", [panel]);
         },
 
         /**
@@ -237,6 +238,7 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard, Types){
             if( panel.button ) {
                 panel.button.removeClass('is-activated');
             }
+            app.trigger("panel:close", [panel]);
         },
 
         /**
