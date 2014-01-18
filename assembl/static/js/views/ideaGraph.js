@@ -1,9 +1,38 @@
 define(['jit', 'app'], function($jit, app) {
+
+// Hackity node that changes shape according to data.
+var ht;
+$jit.Hypertree.Plot.NodeTypes.implement({
+  varShapeNode: {
+      render: function(node, canvas) {
+        var proto;
+        if (node.data.order === undefined) {
+            proto = ht.tips.nodeTypes.square;
+        } else {
+            proto = ht.tips.nodeTypes.circle;
+        }
+        proto.node = this.node;
+        proto.nodeHelper = this.nodeHelper;
+        proto.render(node, canvas);
+      },
+      contains: function(node, pos) {
+        var proto;
+        if (node.data.order === undefined) {
+            proto = ht.tips.nodeTypes.square;
+        } else {
+            proto = ht.tips.nodeTypes.circle;
+        }
+        proto.node = this.node;
+        proto.nodeHelper = this.nodeHelper;
+        return proto.contains(node, canvas);
+      }
+    }
+});
 function loadHypertreeInDiv(div) {
     while (div.hasChildNodes()) {
         div.removeChild(div.childNodes[0]);
     }
-    var ht = new $jit.Hypertree({
+    ht = new $jit.Hypertree({
     //id of the visualization container
     injectInto: div.id,  
     //canvas width and height  
@@ -11,9 +40,10 @@ function loadHypertreeInDiv(div) {
     height: div.height,
     //Change node and edge styles such as  
     //color, width and dimensions.  
-    Node: {  
-        dim: 9,  
-        color: "#a9a3c1"  
+    Node: {
+        dim: 9,
+        type: 'varShapeNode',
+        color: "#a9a3c1"
     },
     Edge: {  
         lineWidth: 2,  
