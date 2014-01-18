@@ -12,7 +12,7 @@
     },
     "RootIdea": {
         "id": "self",
-        "name": "'\"All posts\"",
+        "name": "&discussion_topic",
         "children": ["children:"]
     },
     "Discussion": {
