@@ -848,6 +848,9 @@ class RootIdea(Idea):
         ).count()
         return int(result)
 
+    def discussion_topic(self):
+        return self.discussion.topic
+
 class IdeaContentLink(SQLAlchemyBaseModel):
     """
     Abstract class representing a generic link between an idea and a Content
