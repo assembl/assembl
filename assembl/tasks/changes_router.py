@@ -65,8 +65,9 @@ class ZMQRouter(SockJSConnection):
         if getattr(self, 'socket', None):
             print "closing old socket"
             self.loop.stop_on_recv()
-            self.socket.close()
+            self.loop.close()
             self.socket = None
+            self.loop = None
         if msg.startswith('discussion:') and self.valid:
             self.discussion = msg.split(':', 1)[1]
         if msg.startswith('token:') and self.valid:
@@ -94,7 +95,9 @@ class ZMQRouter(SockJSConnection):
 
     def on_close(self):
         self.loop.stop_on_recv()
-        self.socket.close()
+        self.loop.close()
+        self.socket = None
+        self.loop = None
         print "closing"
 
 
