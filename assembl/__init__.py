@@ -36,6 +36,10 @@ def main(global_config, **settings):
     config = Configurator(settings=settings, root_factory=root_factory)
     config.add_translation_dirs('assembl:locale/')
     config.set_locale_negotiator(my_locale_negotiator)
+    config.add_tween(
+        'assembl.tweens.virtuoso_deadlock.transient_deadlock_tween_factory',
+        under="pyramid_tm.tm_tween_factory")
+
 
     config.include('.lib.zmqlib')
     session_factory = session_factory_from_settings(settings)
