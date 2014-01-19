@@ -1,15 +1,16 @@
 <% if( editing ) { %>
 <div class="panel-editablebox is-editing">
 
+    <div id="synthesisPanel-longtitle"></div>
+    {#
     <div id="synthesisPanel-toptoolbar"></div>
-    <div id="synthesisPanel-longtitle" class="text margin panel-editablearea" contenteditable="true">
-        <%= longTitle %>
-    </div>
+    <div id="synthesisPanel-longtitle" class="text margin panel-editablearea" contenteditable="true"><%= longTitle %></div>
     <div id="synthesisPanel-bottomtoolbar"></div>
     <div id="synthesisPanel-buttons" class="text-right padding">
         <a class="button synthesisPanel-cancelbtn" data-idea-id="<%= id %>">{{ gettext('Cancel') }}</a>
         <a class="button button--primary synthesisPanel-savebtn" data-idea-id="<%= id %>">{{ gettext('Save') }}</a>
     </div>
+    #}
 
 </div>
 <% } else { %>

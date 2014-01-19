@@ -337,6 +337,13 @@ function(Base, _, Segment, app, i18n, Types){
                 console.log(this);
             }
             return retval;
+        },
+
+        /**
+         * @return {Idea} The idea which is being edited in synthesis Panel
+         */
+        getEditingIdeaInSynthesisPanel: function(){
+            return app.ideaList.ideas.findWhere({ 'synthesisPanel-editing': true });
         }
 
     });

@@ -1,10 +1,6 @@
-define(['backbone', 'underscore', 'jquery', 'app', 'models/synthesis', 'views/synthesisIdea', 'ckeditor-sharedspace', 'i18n', 'views/editableField'],
-function(Backbone, _, $, app, Synthesis, SynthesisIdeaView, ckeditor, i18n, EditableField){
+define(['backbone', 'underscore', 'jquery', 'app', 'models/synthesis', 'views/synthesisIdea', 'i18n', 'views/editableField', 'views/ckeditorField'],
+function(Backbone, _, $, app, Synthesis, SynthesisIdeaView, i18n, EditableField, CKEditorField){
     'use strict';
-
-    var CKEDITOR_CONFIG = _.extend({}, app.CKEDITOR_CONFIG, {
-        sharedSpaces: { top: 'synthesisPanel-toptoolbar', bottom: 'synthesisPanel-bottomtoolbar' }
-    });
 
     var SynthesisPanel = Backbone.View.extend({
 
@@ -48,7 +44,7 @@ function(Backbone, _, $, app, Synthesis, SynthesisIdeaView, ckeditor, i18n, Edit
          * CKeditor instance for this view
          * @type {CKeditor}
          */
-        ckInstance: null,
+        ckeditor: null,
 
         /**
          * The template
@@ -67,9 +63,9 @@ function(Backbone, _, $, app, Synthesis, SynthesisIdeaView, ckeditor, i18n, Edit
             app.off('synthesisPanel:close');
 
             // Cleaning previous ckeditor instance
-            if( this.ckinstance ){
-                this.ckinstance.destroy();
-                this.ckinstance = null;
+            if( this.ckeditor ){
+                this.ckeditor.destroy();
+                this.ckeditor = null;
             }
 
             var list = document.createDocumentFragment(),
@@ -105,23 +101,45 @@ function(Backbone, _, $, app, Synthesis, SynthesisIdeaView, ckeditor, i18n, Edit
             });
             conclusionField.renderTo('#synthesisPanel-conclusion');
 
+            this.renderCKEditor();
+
             return this;
+        },
+
+
+        /**
+         * renders the ckEditor if there is one editable field
+         */
+        renderCKEditor: function(){
+            var editingIdea = this.ideas.getEditingIdeaInSynthesisPanel();
+            if( !editingIdea ){
+                return;
+            }
+
+            this.ckeditor = new CKEditorField({
+                'model': editingIdea,
+                'modelProp': 'longTitle',
+                'placeholder': i18n.gettext('Add the description')
+            });
+
+            this.ckeditor.on('save cancel', function(idea){
+                idea.set('synthesisPanel-editing', false);
+            });
+
+            var area = this.$('#synthesisPanel-longtitle');
+            this.ckeditor.renderTo( area );
+            this.ckeditor.changeToEditMode();
         },
 
         /**
          * @events
          */
         events: {
-            'blur #synthesisPanel-introduction': 'onIntroductionBlur',
-            'blur #synthesisPanel-conclusion': 'onConclusionBlur',
-
             'click #synthesisPanel-closeButton': 'closePanel',
             'click #synthesisPanel-publishButton': 'publish',
             'click #synthesisPanel-fullscreenButton': 'setFullscreen',
 
-            'click [data-idea-id]': 'onEditableAreaClick',
-            'click .synthesisPanel-savebtn': 'saveEdition',
-            'click .synthesisPanel-cancelbtn': 'cancelEdition'
+            'click [data-idea-id]': 'onEditableAreaClick'
         },
 
         /**
@@ -146,22 +164,6 @@ function(Backbone, _, $, app, Synthesis, SynthesisIdeaView, ckeditor, i18n, Edit
         },
 
         /**
-         *
-         */
-        onIntroductionBlur: function(ev){
-            var introduction = app.stripHtml(ev.currentTarget.innerHTML);
-            this.model.set("introduction", introduction);
-        },
-
-        /**
-         *
-         */
-        onConclusionBlur: function(ev){
-            var conclusion = app.stripHtml(ev.currentTarget.innerHTML);
-            this.model.set('conclusion', conclusion);
-        },
-
-        /**
          * @event
          */
         onEditableAreaClick: function(ev){
@@ -174,33 +176,6 @@ function(Backbone, _, $, app, Synthesis, SynthesisIdeaView, ckeditor, i18n, Edit
                 idea.set('synthesisPanel-editing', true);
                 this.currentId = id;
             }
-        },
-
-        /**
-         * @event
-         */
-        saveEdition: function(ev){
-            var id = this.currentId || ev.currentTarget.getAttribute('data-idea-id'),
-                idea = app.ideaList.ideas.get(id),
-                text = this.ckInstance.getData();
-
-            text = $.trim(text);
-
-            if( idea ){
-                idea.set({ 'longTitle': text, 'synthesisPanel-editing': false });
-            }
-        },
-
-        /**
-         * @event
-         */
-        cancelEdition: function(ev){
-            var id = ev.currentTarget.getAttribute('data-idea-id'),
-                idea = app.ideaList.ideas.get(id);
-
-            if( idea ){
-                idea.set('synthesisPanel-editing', false);
-            }            
         },
 
         /**
