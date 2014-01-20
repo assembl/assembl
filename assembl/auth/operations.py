@@ -33,7 +33,7 @@ def send_confirmation_email(request, email):
     data = {
         'name': email.profile.name,
         'email': email.email,
-        'confirm_what': confirm_what,
+        'confirm_what': localizer.translate(confirm_what),
         'confirm_url': request.route_url('user_confirm_email',
                                          ticket=email_token(email))
     }
