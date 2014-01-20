@@ -27,22 +27,22 @@ msgstr "compte"
 
 #: assembl/auth/operations.py:43
 msgid "confirm_title"
-msgstr "Veuillez confirmer votre {confirm_what} auprès d'Assembl"
+msgstr "Veuillez confirmer votre ${confirm_what} auprès d'Assembl"
 
 #: assembl/auth/operations.py:46
 msgid "confirm_email"
 msgstr ""
-"Bonjour, {name}!\n"
-"Veuillez confirmer votre {confirm_what} <{email}> auprès d'Assembl en "
+"Bonjour, ${name}!\n"
+"Veuillez confirmer votre ${confirm_what} <${email}> auprès d'Assembl en "
 "suivant le lien ci-dessous.\n"
-"<{confirm_url}>\n"
+"<${confirm_url}>\n"
 
 #: assembl/auth/operations.py:50
 msgid "confirm_email_html"
 msgstr ""
-"<p>Bonjour, {name}!</p>\n"
-"<p>Veuillez <a href=\"{confirm_url}\">confirmer votre {confirm_what}</a> "
-"&lt;{email}&gt; auprès d'Assembl.</p>\n"
+"<p>Bonjour, ${name}!</p>\n"
+"<p>Veuillez <a href=\"${confirm_url}\">confirmer votre ${confirm_what}</a> "
+"&lt;${email}&gt; auprès d'Assembl.</p>\n"
 
 #: assembl/lib/types.py:62
 msgid "${val} cannot be serialized: ${err}"
