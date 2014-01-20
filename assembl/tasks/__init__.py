@@ -31,3 +31,5 @@ def init():
     _inited = True
 
 
+def includeme(config):
+    configure(config.registry.settings)
