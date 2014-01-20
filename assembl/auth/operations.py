@@ -37,16 +37,17 @@ def send_confirmation_email(request, email):
         'confirm_url': request.route_url('user_confirm_email',
                                          ticket=email_token(email))
     }
+    import pdb; pdb.set_trace()
     message = Message(
-        subject=localizer.translate(_('confirm_title', default="Please confirm your {confirm_what} with Assembl", mapping=data)),
+        subject=localizer.translate(_('confirm_title', default="Please confirm your ${confirm_what} with Assembl", mapping=data)),
         sender=config.get('assembl.admin_email'),
         recipients=["%s <%s>" % (email.profile.name, email.email)],
-        body=localizer.translate(_('confirm_email', default=u"""Hello, {name}!
-Please confirm your {confirm_what} <{email}> with Assembl by clicking on the link below.
-<{confirm_url}>
+        body=localizer.translate(_('confirm_email', default=u"""Hello, ${name}!
+Please confirm your ${confirm_what} <${email}> with Assembl by clicking on the link below.
+<${confirm_url}>
 """, mapping=data)),
-        html=localizer.translate(_('confirm_email_html', default=u"""<p>Hello, {name}!</p>
-<p>Please <a href="{confirm_url}">confirm your {confirm_what}</a> &lt;{email}&gt; with Assembl.</p>
+        html=localizer.translate(_('confirm_email_html', default=u"""<p>Hello, ${name}!</p>
+<p>Please <a href="${confirm_url}">confirm your ${confirm_what}</a> &lt;${email}&gt; with Assembl.</p>
 """, mapping=data)))
     #if deferred:
     #    mailer.send_to_queue(message)
