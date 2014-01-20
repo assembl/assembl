@@ -362,16 +362,12 @@ function(Backbone, _, $, app, MessageView, Message, i18n, PostQuery){
             });
 
             this.annotator.subscribe('annotationCreated', function(annotation){
-                console.log("app.segmentList.addAnnotationAsSegment about to be called...");
                 var segment = app.segmentList.addAnnotationAsSegment(annotation, app.currentAnnotationIdIdea);
-                console.log("app.segmentList.addAnnotationAsSegment returned:");
-                console.log(segment);
                 if( !segment.isValid() ){
                     annotator.deleteAnnotation(annotation);
                 } else if( app.currentAnnotationIdea ){
                     app.currentAnnotationIdea.addSegmentAsChild(segment);
                 }
-                console.log("this.annotator.subscribe callback about to return...");
                 app.currentAnnotationIdea = null;
                 app.currentAnnotationIdIdea = null;
             });
@@ -667,7 +663,7 @@ function(Backbone, _, $, app, MessageView, Message, i18n, PostQuery){
          * @event
          */
         onFilterDeleteClick: function(ev){
-            console.log(ev);
+            //console.log(ev);
             var value = ev.currentTarget.getAttribute('data-value');
             var filterid = ev.currentTarget.getAttribute('data-filterid');
             var filter = this.currentQuery.getFilterDefById(filterid);
