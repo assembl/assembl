@@ -580,7 +580,7 @@ JOIN idea_content_positive_link
 JOIN post AS root_posts ON (idea_content_link.content_id = root_posts.id)
 JOIN post ON (
     (post.ancestry <> ''
-    AND post.ancestry LIKE root_posts.ancestry || root_posts.id || ',' || '%%'
+    AND post.ancestry LIKE root_posts.ancestry || cast(root_posts.id as varchar) || ',' || '%%'
     )
     OR post.id = root_posts.id
 )

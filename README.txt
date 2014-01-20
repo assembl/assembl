@@ -141,6 +141,11 @@ Running tests
 - Copy testing.ini.example to testing.ini
 - nosetests
 
+Raw sql connection
+------------------
+
+isql-vt localhost:5132 dba dba
+
 
 A note on vagrant
 -----------------
