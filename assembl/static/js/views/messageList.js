@@ -362,14 +362,16 @@ function(Backbone, _, $, app, MessageView, Message, i18n, PostQuery){
             });
 
             this.annotator.subscribe('annotationCreated', function(annotation){
+                console.log("app.segmentList.addAnnotationAsSegment about to be called...");
                 var segment = app.segmentList.addAnnotationAsSegment(annotation, app.currentAnnotationIdIdea);
-
+                console.log("app.segmentList.addAnnotationAsSegment returned:");
+                console.log(segment);
                 if( !segment.isValid() ){
                     annotator.deleteAnnotation(annotation);
                 } else if( app.currentAnnotationIdea ){
                     app.currentAnnotationIdea.addSegmentAsChild(segment);
                 }
-
+                console.log("this.annotator.subscribe callback about to return...");
                 app.currentAnnotationIdea = null;
                 app.currentAnnotationIdIdea = null;
             });

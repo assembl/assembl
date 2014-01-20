@@ -977,7 +977,18 @@ class Extract(IdeaContentPositiveLink):
     __mapper_args__ = {
         'polymorphic_identity': 'extract',
     }
+    @property
+    def target(self):
+        retval = {
+                '@type': self.content.external_typename()
+                }
+        if isinstance(self.content, Post):
+            retval['@id'] = Post.uri_generic(self.content.id)
+        elif self.content.type == 'webpage':
+            retval['url'] = self.content.url
+        return retval
 
+        
     def serializable(self):
         json = {
             '@id': self.uri_generic(self.id),
@@ -986,9 +997,7 @@ class Extract(IdeaContentPositiveLink):
             'quote': self.body,
             'ranges': [tfi.__json__() for tfi
                        in self.text_fragment_identifiers],
-            'target': {
-                '@type': self.content.external_typename()
-            },
+            'target': self.target,
             'created': self.creation_date.isoformat(),
             'idCreator': AgentProfile.uri_generic(self.creator_id),
             #'user': self.creator.get_uri(),
@@ -999,11 +1008,9 @@ class Extract(IdeaContentPositiveLink):
             #json['text'] += '<a href="%s">%s</a>' % (
             #   self.idea.get_uri(), self.idea.short_title)
         if isinstance(self.content, Post):
-            json['target']['@id'] = Post.uri_generic(self.content.id)
             json['idPost'] = Post.uri_generic(self.content.id)  # legacy
             #json['url'] = self.post.get_uri()
         elif self.content.type == 'webpage':
-            json['target']['url'] = self.content.url
             json['uri'] = self.content.url
         return json
 
