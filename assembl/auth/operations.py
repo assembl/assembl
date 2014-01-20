@@ -1,11 +1,9 @@
-from pyramid.i18n import TranslationStringFactory
-
+from pyramid.i18n import get_localizer, TranslationStringFactory
 
 from pyramid_mailer import get_mailer
 from pyramid_mailer.message import Message
-
 from assembl.lib import config
-from models import IdentityProvider, EmailAccount
+from models import IdentityProvider, EmailAccount, User
 from ..models import get_session_maker
 from .password import email_token, verify_password
 
@@ -28,7 +26,7 @@ def get_identity_provider(auth_context, create=True):
 
 def send_confirmation_email(request, email):
     mailer = get_mailer(request)
-    localizer = request.localizer
+    localizer = get_localizer(request)
     confirm_what = _('email')
     if isinstance(email.profile, User) and not email.profile.verified:
         confirm_what = _('account')

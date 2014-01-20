@@ -2,19 +2,19 @@ from pyramid.view import view_config, view_defaults
 from pyramid.response import Response
 from pyramid.renderers import render_to_response
 from pyramid.httpexceptions import HTTPNotFound
-from pyramid.i18n import TranslationString as _
+from pyramid.i18n import get_localizer, TranslationStringFactory
 import json
 import os.path
 from assembl.synthesis.models import Discussion
 from assembl.auth import get_user, P_READ
 from sqlalchemy.orm.exc import NoResultFound
-from pyramid.i18n import get_localizer, TranslationString
 
 FIXTURE = os.path.join(os.path.dirname(__file__),
                        '../../static/js/fixtures/nodes.json')
 
 TEMPLATE_PATH = os.path.join(os.path.dirname(__file__), '..', '..', 'templates')
 
+_ = TranslationStringFactory('assembl')
 
 default_context = {
     'STATIC_URL': '/static/'
@@ -44,8 +44,7 @@ def get_default_context(request):
         templates=get_template_views(),
         discussion=discussion,
         translations=json.dumps({
-            id:localizer.translate(TranslationString(id), domain='assembl')
-                for id in JS_MESSAGE_IDS}))
+            id:localizer.translate(_(id)) for id in JS_MESSAGE_IDS}))
 
 
 def get_template_views():
