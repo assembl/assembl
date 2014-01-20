@@ -48,7 +48,8 @@ function(Backbone, _, $, app, Segment, i18n){
             var segments = this.segments.getClipboard(),
                 data = {segments:segments},
                 top = 0;
-
+            console.log("segmentlist about to render:");
+            console.log(segments);
             if( this.panel ){
                 top = this.panel.find('.panel-body')[0].scrollTop;
             }

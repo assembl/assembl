@@ -236,6 +236,7 @@
     "Extract": {
         "idIdea": "idea",
         "idPost": "content",
+        "target": true,
         "created": "creation_date",
         "idCreator": "creator",
         "owner": true,
