@@ -66,7 +66,7 @@ def main(global_config, **settings):
     config.include('pyramid_mailer')
 
     # Tasks
-    #config.include('.tasks')
+    config.include('.tasks')
 
     config.include('.view_def')
 
