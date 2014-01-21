@@ -441,6 +441,7 @@ def confirm_user_email(request):
         raise HTTPNotFound()
     if not email.verified:
         send_confirmation_email(request, email)
+        transaction.commit()
     if isinstance(email.profile, User):
         user = email.profile
         # TODO: Say we did it.
