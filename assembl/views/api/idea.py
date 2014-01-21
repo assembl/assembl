@@ -111,7 +111,7 @@ def save_idea(request):
     discussion_id = request.matchdict['discussion_id']
     idea_id = request.matchdict['id']
     idea_data = json.loads(request.body)
-
+    #Idea.db.execute('set transaction isolation level read committed')
     # Special items in TOC, like unsorted posts.
     if idea_id in ['orphan_posts']:
         return {'ok': False, 'id': Idea.uri_generic(idea_id)}

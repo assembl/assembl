@@ -170,7 +170,7 @@ define(['models/base', 'jquery', 'app', 'underscore'], function(Base, $, app, _)
     });
 
 
-    var MessageCollection = Backbone.Collection.extend({
+    var MessageCollection = Base.Collection.extend({
         /**
          * The url
          * @type {String}

@@ -285,6 +285,7 @@ define(['app', 'i18n', 'sprintf'], function(app, i18n, sprintf){
             //console.log(this._query);
             
             if (this._resultsAreValid){
+                    //console.log("results are valid");
                     success(that._results);
                 }
             else {
