@@ -1,3 +1,5 @@
+from sqlalchemy.sql.expression import and_
+
 from pyramid.security import (
     authenticated_userid, Everyone, Authenticated)
 from pyramid.httpexceptions import HTTPNotFound
@@ -47,9 +49,13 @@ def get_permissions(user_id, discussion_id):
             DiscussionPermission, Role, UserRole).filter(
                 UserRole.user_id == user_id
             ).union(session.query(Permission.name).join(
-                DiscussionPermission, Role, LocalUserRole).filter(
-                    LocalUserRole.user_id == user_id and
+                DiscussionPermission, Role, LocalUserRole).filter(and_(
+                    LocalUserRole.user_id == user_id,
                     LocalUserRole.discussion_id == discussion_id))
+            ).union(session.query(Permission.name).join(
+                DiscussionPermission, Role).filter(and_(
+                    DiscussionPermission.discussion_id == discussion_id,
+                    Role.name.in_((Authenticated, Everyone)))))
     return [x[0] for x in permissions.distinct()]
 
 
@@ -160,9 +166,16 @@ def permissions_for_user(discussion_id, user_id):
     permissions = db.query(Permission.name).join(
         DiscussionPermission, Role, UserRole).filter(
             DiscussionPermission.discussion_id == discussion_id).filter(
-                UserRole.user_id == user_id).union(
-                    db.query(Permission.name).join(
-                        DiscussionPermission, Role, LocalUserRole).filter(
-                            DiscussionPermission.discussion_id == discussion_id
-                        ).filter(LocalUserRole.user_id == user_id))
+                UserRole.user_id == user_id
+        ).union(
+            db.query(Permission.name).join(
+                DiscussionPermission, Role, LocalUserRole).filter(
+                    DiscussionPermission.discussion_id == discussion_id
+                ).filter(LocalUserRole.user_id == user_id)
+        ).union(
+            db.query(Permission.name).join(
+                DiscussionPermission, Role).filter(and_(
+                    DiscussionPermission.discussion_id == discussion_id,
+                    Role.name.in_((Authenticated, Everyone))))
+        )
     return [x[0] for x in permissions]
