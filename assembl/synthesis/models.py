@@ -537,11 +537,17 @@ class Idea(SQLAlchemyBaseModel):
         """ Get all ancestors of this idea by following source links.  
         This is naive and slow, but not used very much for now.
         TODO:  Rewrite once we migrate to virtuoso"""
-        ancestors = []
-        for source_link in self.source_links:
-            ancestors.append(source_link.source)
-            ancestors += source_link.source.get_all_ancestors()
-        return ancestors
+        sql = '''SELECT * FROM idea JOIN (
+                  SELECT source_id FROM (
+                    SELECT transitive t_in (1) t_out (2) t_distinct T_NO_CYCLES
+                        source_id, target_id FROM idea_idea_link) ia
+                  JOIN idea AS dag_idea ON (ia.source_id = dag_idea.id)
+                  WHERE dag_idea.discussion_id = :discussion_id
+                  AND ia.target_id=:idea_id) x on (id=source_id)'''
+        ancestors = self.db().query(Idea).from_statement(text(sql).bindparams(
+            discussion_id= self.discussion_id, idea_id= self.id))
+
+        return ancestors.all()
     
     def get_order_from_first_parent(self):
         return self.source_links[0].order if self.source_links else None
@@ -615,6 +621,40 @@ WHERE post.id NOT IN (
         """ Requires discussion_id bind parameters """
         return Idea._get_orphan_posts_statement_no_select(
             "SELECT COUNT(post.id) as total_count")
+
+
+    # use assembl;
+    # select count(id) from (
+    # SELECT post.id as id
+    # FROM post 
+    # JOIN content ON (
+    #     content.id = post.id
+    #     AND content.discussion_id = 1
+    # )
+    # except corresponding by (id)
+    # SELECT post.id as id FROM (SELECT source_id, target_id FROM (
+    #             SELECT transitive t_in (1) t_out (2) t_distinct T_NO_CYCLES
+    #                         source_id, target_id FROM idea_idea_link
+    #                 UNION SELECT id as source_id, id as target_id FROM idea
+    #             ) ia
+    #             JOIN idea AS dag_idea ON (ia.source_id = dag_idea.id)
+    #             WHERE dag_idea.discussion_id = 1
+    #                 AND ia.source_id = (SELECT root_idea.id FROM root_idea
+    #                     JOIN idea ON (idea.id = root_idea.id)
+    #                     WHERE idea.discussion_id=1))
+    #             AS idea_dag
+    # JOIN idea_content_link ON (idea_content_link.idea_id = idea_dag.target_id)
+    # JOIN idea_content_positive_link
+    #     ON (idea_content_positive_link.id = idea_content_link.id)
+    # JOIN post AS root_posts ON (idea_content_link.content_id = root_posts.id)
+    # JOIN post ON (
+    #     (post.ancestry <> ''
+    #     AND post.ancestry LIKE root_posts.ancestry || cast(root_posts.id as varchar) || ',' || '%'
+    #     )
+    #     OR post.id = root_posts.id
+    # )
+    # ) as orphans
+
 
     @staticmethod
     def _get_orphan_posts_statement():
