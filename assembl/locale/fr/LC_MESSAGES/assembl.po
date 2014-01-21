@@ -874,7 +874,7 @@ msgstr "Les mots de passe doivent correspondre"
 
 #: assembl/views/auth/views.py:256
 msgid "This account was not verified yet"
-msgstr "Se compte n'a pas encore été confirmé"
+msgstr "Ce compte n'a pas encore été confirmé"
 
 #: assembl/views/auth/views.py:265
 msgid "This user cannot be found"
