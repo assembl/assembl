@@ -131,10 +131,11 @@ def save_idea(request):
     idea.short_title = idea_data['shortTitle']
     idea.long_title = idea_data['longTitle']
     if 'parentId' in idea_data and idea_data['parentId'] is not None:
-        # calculate it early to maximize contention.
-        ancestors = parent.get_all_ancestors()
         # TODO: Make sure this is sent as a list!
         parent = Idea.get_instance(idea_data['parentId'])
+        # calculate it early to maximize contention.
+        ancestors = parent.get_all_ancestors()
+
         order = idea_data.get('order', 0.0)
         if not parent:
             raise HTTPNotFound("Missing parentId %s" % (idea_data['parentId']))
