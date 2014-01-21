@@ -97,27 +97,6 @@ define(['models/base', 'jquery', 'app', 'underscore'], function(Base, $, app, _)
         },
 
         /**
-         * @return {Number} the indentation level
-         */
-        getLevel: function(){
-            var counter = 0,
-                parent = this;
-
-            do {
-                
-                if( parent ) {
-                    parent = parent.get('parentId') !== null ? parent.getParent() : null;
-                    counter += 1;
-                } else {
-                    parent = null;
-                }
-
-            } while ( parent !== null );
-
-            return counter;
-        },
-
-        /**
          * Returns the post's creator
          * @return {User}
          */
