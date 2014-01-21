@@ -292,7 +292,7 @@ function(Backbone, _, Idea, Message, app, i18n, Types, EditableField, CKEditorFi
                 data.idea_id = this.idea.getId();
             }
 
-            btn.text( i18n.gettext('Sending...') );
+            btn.text( i18n.gettext('Sending comment...') );
 
             $.ajax({
                 type: "post",
@@ -300,8 +300,11 @@ function(Backbone, _, Idea, Message, app, i18n, Types, EditableField, CKEditorFi
                 contentType: 'application/json',
                 url: url,
                 success: function(){
-                    btn.text(btn_original_text);
-                    that.closeReplyBox();
+                    btn.text( i18n.gettext('Comment posted!') );
+                    setTimeout(function(){ 
+                        btn.text(btn_original_text);}, 3000); 
+                    
+                    //that.closeReplyBox();
                 }
             });
 

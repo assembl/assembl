@@ -134,20 +134,39 @@ define(['backbone', 'app'], function(Backbone, app){
          */
         updateFromSocket: function(item){
             var model = this.get(item['@id']);
-
+            var debug = false;
             if( item['@tombstone'] ){
+                if (debug){
+                    console.log("Removing from socket:")
+                    console.log(model);
+                }
                 this.remove(model);
-                return;
             }
-
-            if( model === null || model === undefined ){
+            else if( model === null || model === undefined ){
                 // oops, doesn't exist
                 this.add(item);
-            } else {
-                // yeah, it exists
-                this.add(item, {merge: true});
-            }
+                if (debug){
+                    console.log("Adding from socket:")
+                    console.log(item);
+                }
 
+            } 
+            else {
+                // yeah, it exists
+                if (debug){
+                    console.log("Merging from socket:")
+                    console.log(item);
+                }
+                this.add(item, {merge: true});
+                if (debug){
+                    console.log("Item is now:");
+                            console.log(item);
+                }
+            }
+            if (debug){
+                console.log("collection is now:");
+                console.log(this);
+            }
         }
 
     });

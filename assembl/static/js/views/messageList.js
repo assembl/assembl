@@ -35,8 +35,8 @@ function(Backbone, _, $, app, MessageView, Message, i18n, PostQuery){
             this.currentViewStyle = this.ViewStyles.REVERSE_CHRONOLOGICAL;
             this.currentQuery.setView(this.currentQuery.availableViews.REVERSE_CHRONOLOGICAL);
             
-            this.listenTo(this.messages, 'reset', this.currentQuery.invalidateResults());
-            this.listenTo(this.messages, 'reset', this.render);
+            this.listenTo(this.messages, 'reset', this.invalidateResultsAndRender);
+            this.listenTo(this.messages, 'add', this.invalidateResultsAndRender);
             this.listenTo(this.messages, 'change', this.initAnnotator);
 
             var that = this;
@@ -50,7 +50,11 @@ function(Backbone, _, $, app, MessageView, Message, i18n, PostQuery){
                 that.render();
             });
         },
-
+        
+        invalidateResultsAndRender: function(){
+            this.currentQuery.invalidateResults();
+            this.render();
+        },
         /**
          * The template
          * @type {_.template}

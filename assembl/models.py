@@ -37,6 +37,7 @@ from .synthesis.models import (
     Idea,
     RootIdea,
     IdeaLink,
+    IdeaRelatedPostLink,
     Extract,
     IdeaGraphView,
     SubGraphIdeaAssociation,

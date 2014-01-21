@@ -20,9 +20,11 @@ import transaction
 from assembl.auth import P_READ, P_ADD_POST
 from assembl.models import (
     get_database_id, get_named_object, AgentProfile, Post, AssemblPost, SynthesisPost, 
-    Synthesis, Discussion, PostSource, Content, Idea, ViewPost, User, Action)
+    Synthesis, Discussion, PostSource, Content, Idea, ViewPost, User, Action, 
+    IdeaRelatedPostLink)
 from . import acls
 import uuid
+from jwzthreading import restrip_pat
 
 posts = Service(name='posts', path=API_DISCUSSION_PREFIX + '/posts',
                 description="Post API following SIOC vocabulary as much as possible",
@@ -291,6 +293,7 @@ def create_post(request):
     message = request_body.get('message', None)
     html = request_body.get('html', None)
     reply_id = request_body.get('reply_id', None)
+    idea_id = request_body.get('idea_id', None)
     subject = request_body.get('subject', None)
     publishes_synthesis_id = request_body.get('publishes_synthesis_id', None)
     
@@ -305,6 +308,11 @@ def create_post(request):
     else:
         in_reply_to_post = None
     
+    if idea_id:        
+        in_reply_to_idea = Idea.get_instance(idea_id)
+    else:
+        in_reply_to_idea = None
+    
     discussion_id = request.matchdict['discussion_id']
     discussion = Discussion.get_instance(discussion_id)
 
@@ -312,6 +320,16 @@ def create_post(request):
         raise HTTPNotFound(
             _("No discussion found with id=%s" % discussion_id)
         )
+
+    if subject:
+        subject = subject
+    elif in_reply_to_post:
+        subject = in_reply_to_post.subject
+    elif in_reply_to_idea:
+        subject = in_reply_to_idea.short_title
+    else:
+        subject = discussion.topic
+    subject = "Re: " + restrip_pat.sub('', subject)
 
     post_constructor_args = {
         'discussion': discussion,
@@ -329,15 +347,19 @@ def create_post(request):
     else:
         new_post = AssemblPost(**post_constructor_args)
     
-    #TODO benoitg:  Support replying to an idea
-    subject = subject or ("Re: " + in_reply_to_post.subject if in_reply_to_post else None) or discussion.topic
-
     new_post.db.add(new_post)
     new_post.db.flush()
-    print(repr(in_reply_to_post))
+
     if in_reply_to_post:
         new_post.set_parent(in_reply_to_post)
-
+    if in_reply_to_idea:
+        idea_post_link = IdeaRelatedPostLink(
+            creator_id=user_id,
+            content=new_post,
+            idea=in_reply_to_idea
+        )
+        IdeaRelatedPostLink.db.add(idea_post_link)
+        
     for source in discussion.sources:
         source.send_post(new_post)
 
