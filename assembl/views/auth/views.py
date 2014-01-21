@@ -246,9 +246,15 @@ def assembl_login_complete_view(request):
     user = None
     if '@' in identifier:
         account = session.query(EmailAccount).filter_by(
-            email=identifier, verified=True).first()
+            email=identifier).order_by(EmailAccount.verified.desc()).first()
         if account:
             user = account.profile
+            if not account.verified:
+                resend_url = request.route_url('confirm_user_email',
+                                               email_account_id=account.id)
+                return dict(default_context,
+                    error=localizer.translate(_("This account was not verified yet")),
+                    resend_url=resend_url)
     else:
         username = session.query(Username).filter_by(username=identifier).first()
         if username:
