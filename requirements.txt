@@ -40,9 +40,10 @@ nose==1.3.0
 oauthlib==0.6.1
 paramiko==1.12.1
 pinocchio==0.4.1
-https://bitbucket.org/izi/polib/downloads/polib-1.0.3.tar.gz
+https://bitbucket.org/izi/polib/downloads/polib-1.0.3.tar.gz#egg=polib
 psycopg2==2.5.2
 pycrypto==2.6.1
+pytest==2.5.1
 pylibmc==1.2.3
 pyparsing==1.5.7
 pyramid==1.4.5
