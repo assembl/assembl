@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: assembl 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-01-17 22:46-0500\n"
+"POT-Creation-Date: 2014-01-21 09:40-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,23 +17,23 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 1.3\n"
 
-#: assembl/auth/operations.py:32 assembl/templates/register.jinja2:31
+#: assembl/auth/operations.py:30 assembl/templates/register.jinja2:31
 msgid "email"
 msgstr ""
 
-#: assembl/auth/operations.py:34
+#: assembl/auth/operations.py:32
 msgid "account"
 msgstr ""
 
-#: assembl/auth/operations.py:43
+#: assembl/auth/operations.py:41
 msgid "confirm_title"
 msgstr ""
 
-#: assembl/auth/operations.py:46
+#: assembl/auth/operations.py:44
 msgid "confirm_email"
 msgstr ""
 
-#: assembl/auth/operations.py:50
+#: assembl/auth/operations.py:48
 msgid "confirm_email_html"
 msgstr ""
 
@@ -54,6 +54,7 @@ msgid "The root idea will not be in the synthesis"
 msgstr ""
 
 #: assembl/static/js/models/idea.js:70 assembl/static/js/views/ideaPanel.js:71
+#: assembl/static/js/views/synthesisPanel.js:122
 msgid "Add the description"
 msgstr ""
 
@@ -93,16 +94,24 @@ msgstr ""
 msgid "ideaPanel-cantDeleteBySegments"
 msgstr ""
 
-#: assembl/static/js/views/ideaPanel.js:295 assembl/static/js/views/message.js:177
-msgid "Sending..."
+#: assembl/static/js/views/ideaPanel.js:295
+msgid "Sending comment..."
 msgstr ""
 
-#: assembl/static/js/views/ideaPanel.js:314
+#: assembl/static/js/views/ideaPanel.js:303
+msgid "Comment posted!"
+msgstr ""
+
+#: assembl/static/js/views/ideaPanel.js:317
 msgid "ideaPanel-clearConfirmationMessage"
 msgstr ""
 
-#: assembl/static/js/views/ideaPanel.js:331
+#: assembl/static/js/views/ideaPanel.js:334
 msgid "ideaPanel-deleteIdeaConfirmMessage"
+msgstr ""
+
+#: assembl/static/js/views/message.js:177
+msgid "Sending..."
 msgstr ""
 
 #: assembl/static/js/views/messageList.js:8
@@ -123,23 +132,23 @@ msgstr ""
 msgid "Activity feed view"
 msgstr ""
 
-#: assembl/static/js/views/messageList.js:167
+#: assembl/static/js/views/messageList.js:171
 msgid "No messages"
-msgstr ""
-
-#: assembl/static/js/views/messageList.js:212
-#: assembl/templates/views/ideaList.tmpl:26
-#: assembl/templates/views/messageList.tmpl:56
-msgid "Expand all"
 msgstr ""
 
 #: assembl/static/js/views/messageList.js:215
 #: assembl/templates/views/ideaList.tmpl:26
 #: assembl/templates/views/messageList.tmpl:56
+msgid "Expand all"
+msgstr ""
+
+#: assembl/static/js/views/messageList.js:218
+#: assembl/templates/views/ideaList.tmpl:26
+#: assembl/templates/views/messageList.tmpl:56
 msgid "Collapse all"
 msgstr ""
 
-#: assembl/static/js/views/messageList.js:380
+#: assembl/static/js/views/messageList.js:381
 msgid "Send to clipboard"
 msgstr ""
 
@@ -209,52 +218,52 @@ msgstr ""
 msgid "Activity feed (reverse chronological)"
 msgstr ""
 
-#: assembl/static/js/views/messageListPostQuery.js:341
+#: assembl/static/js/views/messageListPostQuery.js:342
 msgid "No query has been executed yet"
 msgstr ""
 
-#: assembl/static/js/views/messageListPostQuery.js:347
+#: assembl/static/js/views/messageListPostQuery.js:348
 msgid "There are no messages that:"
 msgstr ""
 
-#: assembl/static/js/views/messageListPostQuery.js:352
+#: assembl/static/js/views/messageListPostQuery.js:353
 #, python-format
 msgid "(%d unread)"
 msgstr ""
 
-#: assembl/static/js/views/messageListPostQuery.js:354
+#: assembl/static/js/views/messageListPostQuery.js:355
 #, python-format
 msgid "Showing the %d messages %s that:"
 msgstr ""
 
-#: assembl/static/js/views/messageListPostQuery.js:370
+#: assembl/static/js/views/messageListPostQuery.js:371
 #, python-format
 msgid "%s"
 msgstr ""
 
-#: assembl/static/js/views/messageListPostQuery.js:370
+#: assembl/static/js/views/messageListPostQuery.js:371
 #, python-format
 msgid "NOT %s"
 msgstr ""
 
-#: assembl/static/js/views/messageListPostQuery.js:379
+#: assembl/static/js/views/messageListPostQuery.js:380
 #, python-format
 msgid "%s for values %s"
 msgstr ""
 
-#: assembl/static/js/views/segmentList.js:301
+#: assembl/static/js/views/segmentList.js:300
 msgid "segmentList-clearConfirmationMessage"
 msgstr ""
 
-#: assembl/static/js/views/synthesisPanel.js:221
+#: assembl/static/js/views/synthesisPanel.js:196
 msgid "Do you want to publish the synthesis?"
 msgstr ""
 
-#: assembl/static/js/views/synthesisPanel.js:241
+#: assembl/static/js/views/synthesisPanel.js:216
 msgid "[synthesis] {0}"
 msgstr ""
 
-#: assembl/static/js/views/synthesisPanel.js:258
+#: assembl/static/js/views/synthesisPanel.js:233
 msgid "Synthesis published!"
 msgstr ""
 
@@ -299,43 +308,47 @@ msgstr ""
 msgid "Synthesis"
 msgstr ""
 
-#: assembl/templates/login.jinja2:37
+#: assembl/templates/login.jinja2:35 assembl/templates/profile.jinja2:72
+msgid "Send confirmation message"
+msgstr ""
+
+#: assembl/templates/login.jinja2:40
 msgid "Email or username"
 msgstr ""
 
-#: assembl/templates/login.jinja2:41 assembl/templates/register.jinja2:35
+#: assembl/templates/login.jinja2:44 assembl/templates/register.jinja2:35
 msgid "Password"
 msgstr ""
 
-#: assembl/templates/login.jinja2:44
+#: assembl/templates/login.jinja2:47
 msgid "Enter"
 msgstr ""
 
-#: assembl/templates/login.jinja2:48 assembl/templates/register.jinja2:48
+#: assembl/templates/login.jinja2:51 assembl/templates/register.jinja2:48
 msgid "or"
 msgstr ""
 
-#: assembl/templates/login.jinja2:48
+#: assembl/templates/login.jinja2:51
 msgid "register"
 msgstr ""
 
-#: assembl/templates/login.jinja2:52
+#: assembl/templates/login.jinja2:55
 msgid "Login with external tools"
 msgstr ""
 
-#: assembl/templates/login.jinja2:68 assembl/templates/profile.jinja2:125
+#: assembl/templates/login.jinja2:71 assembl/templates/profile.jinja2:125
 #: assembl/templates/register.jinja2:53 assembl/templates/view_profile.jinja2:56
 msgid "<a href='http://caravan.coop' class='link'>Caravan</a>"
 msgstr ""
 
-#: assembl/templates/login.jinja2:69 assembl/templates/register.jinja2:54
+#: assembl/templates/login.jinja2:72 assembl/templates/register.jinja2:54
 #: assembl/templates/view_profile.jinja2:57
 msgid ""
 "<a href='http://http://imaginationforpeople.org/' class='link'>Imagination "
 "for people</a>"
 msgstr ""
 
-#: assembl/templates/login.jinja2:71 assembl/templates/profile.jinja2:128
+#: assembl/templates/login.jinja2:74 assembl/templates/profile.jinja2:128
 #: assembl/templates/register.jinja2:56 assembl/templates/view_profile.jinja2:59
 #, python-format
 msgid "Designed by %(caravan)s and %(imaginationForPeople)s"
@@ -386,10 +399,6 @@ msgstr ""
 msgid "unconfirmed"
 msgstr ""
 
-#: assembl/templates/profile.jinja2:72
-msgid "Send confirmation message"
-msgstr ""
-
 #: assembl/templates/profile.jinja2:80
 msgid "Add an email account"
 msgstr ""
@@ -404,7 +413,6 @@ msgstr ""
 #: assembl/templates/admin/global_permissions.jinja2:37
 #: assembl/templates/views/ckeditorField.tmpl:9
 #: assembl/templates/views/synthesisIdea.tmpl:34
-#: assembl/templates/views/synthesisIdeaEmail.tmpl:11
 msgid "Save"
 msgstr ""
 
@@ -485,9 +493,8 @@ msgid ""
 msgstr ""
 
 #: assembl/templates/views/ckeditorField.tmpl:8
-#: assembl/templates/views/message.tmpl:70
+#: assembl/templates/views/message.tmpl:71
 #: assembl/templates/views/synthesisIdea.tmpl:33
-#: assembl/templates/views/synthesisIdeaEmail.tmpl:10
 msgid "Cancel"
 msgstr ""
 
@@ -622,19 +629,23 @@ msgstr ""
 msgid "<strong>%(user)s</strong> | <time>%(time)s</time>"
 msgstr ""
 
-#: assembl/templates/views/message.tmpl:71
+#: assembl/templates/views/message.tmpl:72
 msgid "Send"
 msgstr ""
 
-#: assembl/templates/views/message.tmpl:76
+#: assembl/templates/views/message.tmpl:77
+msgid "Hoist this message (show only this messages and it's replies)"
+msgstr ""
+
+#: assembl/templates/views/message.tmpl:78
 msgid "Copy the link to this message to clipboard"
 msgstr ""
 
-#: assembl/templates/views/message.tmpl:77 assembl/templates/views/message.tmpl:81
+#: assembl/templates/views/message.tmpl:79 assembl/templates/views/message.tmpl:83
 msgid "Reply"
 msgstr ""
 
-#: assembl/templates/views/message.tmpl:82
+#: assembl/templates/views/message.tmpl:84
 msgid "Mark as unread"
 msgstr ""
 
@@ -756,11 +767,11 @@ msgstr ""
 msgid "Conclusion"
 msgstr ""
 
-#: assembl/templates/views/synthesisIdeaEmail.tmpl:20
+#: assembl/templates/views/synthesisIdeaEmail.tmpl:21
 msgid "Empty long title. Click to add."
 msgstr ""
 
-#: assembl/templates/views/synthesisIdeaEmail.tmpl:27
+#: assembl/templates/views/synthesisIdeaEmail.tmpl:28
 msgid "By"
 msgstr ""
 
@@ -781,49 +792,53 @@ msgstr ""
 msgid "Publish"
 msgstr ""
 
-#: assembl/views/api/post.py:53 assembl/views/api/post.py:313
+#: assembl/views/api/post.py:59 assembl/views/api/post.py:333
 #, python-format
 msgid "No discussion found with id=%s"
 msgstr ""
 
-#: assembl/views/api/post.py:112
+#: assembl/views/api/post.py:119
 msgid "Getting orphan posts of a specific idea isn't supported."
 msgstr ""
 
-#: assembl/views/api/post.py:118
+#: assembl/views/api/post.py:126
 msgid "Getting non-orphan posts isn't supported."
 msgstr ""
 
-#: assembl/views/api/post.py:157
+#: assembl/views/api/post.py:168
 msgid "You must be logged in to view which posts are read"
 msgstr ""
 
-#: assembl/views/auth/views.py:131
+#: assembl/views/auth/views.py:133
 #, python-format
 msgid "The username %s is already used"
 msgstr ""
 
-#: assembl/views/auth/views.py:142
+#: assembl/views/auth/views.py:144
 msgid "The passwords are not identical"
 msgstr ""
 
-#: assembl/views/auth/views.py:201
+#: assembl/views/auth/views.py:204
 msgid "We already have a user with this email."
 msgstr ""
 
-#: assembl/views/auth/views.py:204
+#: assembl/views/auth/views.py:207
 msgid "The passwords should be identical"
 msgstr ""
 
-#: assembl/views/auth/views.py:255
+#: assembl/views/auth/views.py:256
+msgid "This account was not verified yet"
+msgstr ""
+
+#: assembl/views/auth/views.py:265
 msgid "This user cannot be found"
 msgstr ""
 
-#: assembl/views/auth/views.py:270
+#: assembl/views/auth/views.py:280
 msgid "Invalid user and password"
 msgstr ""
 
-#: assembl/views/auth/views.py:494
+#: assembl/views/auth/views.py:505
 msgid "Login failed, try again"
 msgstr ""
 
