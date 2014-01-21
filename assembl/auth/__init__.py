@@ -93,7 +93,7 @@ def discussions_with_access(userid, permission=P_READ):
         sysadmin = db.query(UserRole).filter_by(
             user_id=userid).join(Role).filter_by(name=R_SYSADMIN).first()
         if sysadmin:
-            return [x[0] for x in db.query(Discussion.id).all()]
+            return db.query(Discussion).all()
         discussions = db.query(Discussion).join(
             DiscussionPermission, Role, Permission, UserRole, User).filter(
                 User.id == userid).filter(
