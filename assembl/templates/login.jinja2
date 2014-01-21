@@ -31,6 +31,9 @@
 
         <div class="spacer spacer--big"></div>
         <div class="error-message">{{error}}</div>
+        {% if resend_url %}
+        <a href="{{resend_url}}">{{ gettext("Send confirmation message") }}</a>
+        {% endif %}
         <form class="form" method="POST">
             <input type="hidden" name="next_view" value="{{next_view}}" />
 
