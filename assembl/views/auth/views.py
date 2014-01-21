@@ -1,7 +1,7 @@
 import json
 from datetime import datetime
 
-from pyramid.i18n import TranslationString as _
+from pyramid.i18n import get_localizer, TranslationStringFactory
 
 from pyramid.view import view_config
 from pyramid.renderers import render_to_response
@@ -36,6 +36,7 @@ default_context = {
     'STATIC_URL': '/static/'
 }
 
+_ = TranslationStringFactory('assembl')
 
 @view_config(
     route_name='logout',
@@ -105,6 +106,7 @@ def get_profile(request):
 @view_config(route_name='profile')
 def assembl_profile(request):
     session = AgentProfile.db
+    localizer = get_localizer(request)
     profile = get_profile(request)
     id_type = request.matchdict.get('type').strip()
     logged_in = authenticated_userid(request)
@@ -128,7 +130,7 @@ def assembl_profile(request):
         if username:
             # check if exists
             if session.query(Username).filter_by(username=username).count():
-                errors.append(_('The username %s is already used') % (username,))
+                errors.append(localizer.translate(_('The username %s is already used')) % (username,))
             else:
                 session.add(Username(username=username, user=profile))
                 if id_type == 'u':
@@ -139,7 +141,7 @@ def assembl_profile(request):
         p1, p2 = (request.params.get('password1', '').strip(),
                   request.params.get('password2', '').strip())
         if p1 != p2:
-            errors.append(_('The passwords are not identical'))
+            errors.append(localizer.translate(_('The passwords are not identical')))
         elif p1:
             profile.set_password(p1)
         add_email = request.params.get('add_email', '').strip()
@@ -190,6 +192,7 @@ def assembl_register_view(request):
                     next_view=request.params.get('next_view', '/'))
     forget(request)
     session = AgentProfile.db
+    localizer = get_localizer(request)
     name = request.params.get('name', '').strip()
     password = request.params.get('password', '').strip()
     password2 = request.params.get('password2', '').strip()
@@ -198,10 +201,10 @@ def assembl_register_view(request):
     if session.query(EmailAccount).filter_by(
         email=email, verified=True).count():
             return dict(default_context,
-                        error=_("We already have a user with this email."))
+                        error=localizer.translate(_("We already have a user with this email.")))
     if password != password2:
         return dict(default_context,
-                    error=_("The passwords should be identical"))
+                    error=localizer.translate(_("The passwords should be identical")))
 
     #TODO: Validate password quality
     # otherwise create.
@@ -239,6 +242,7 @@ def assembl_login_complete_view(request):
     identifier = request.params.get('identifier', '').strip()
     password = request.params.get('password', '').strip()
     logged_in = authenticated_userid(request)
+    localizer = get_localizer(request)
     user = None
     if '@' in identifier:
         account = session.query(EmailAccount).filter_by(
@@ -252,7 +256,7 @@ def assembl_login_complete_view(request):
 
     if not user:
         return dict(default_context,
-                    error=_("This user cannot be found"))
+                    error=localizer.translate(_("This user cannot be found")))
     if logged_in:
         if user.id != logged_in:
             # logging in as a different user
@@ -267,7 +271,7 @@ def assembl_login_complete_view(request):
         session.add(user)
         transaction.commit()
         return dict(default_context,
-                    error=_("Invalid user and password"))
+                    error=localizer.translate(_("Invalid user and password")))
     headers = remember(request, user.id, tokens=format_token(user))
     request.response.headerlist.extend(headers)
     raise HTTPFound(location=request.params.get('next_view') or '/')
@@ -490,8 +494,9 @@ def user_confirm_email(request):
     renderer='assembl:templates/login.jinja2',
 )
 def login_denied_view(request):
+    localizer = get_localizer(request)
     return dict(default_context,
-                error=_('Login failed, try again'))
+                error=localizer.translate(_('Login failed, try again')))
     # TODO: If logged in otherwise, go to profile page. 
     # Otherwise, back to login page
 

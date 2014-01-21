@@ -3,7 +3,8 @@ import json
 from math import ceil
 from cornice import Service
 from pyramid.httpexceptions import HTTPNotFound, HTTPUnauthorized, HTTPBadRequest
-from pyramid.i18n import TranslationString as _
+from pyramid.i18n import get_localizer, TranslationStringFactory
+
 from pyramid.security import authenticated_userid
 
 from sqlalchemy import func, Integer, String, text, desc
@@ -19,8 +20,8 @@ import transaction
 
 from assembl.auth import P_READ, P_ADD_POST
 from assembl.models import (
-    get_database_id, get_named_object, AgentProfile, Post, AssemblPost, SynthesisPost, 
-    Synthesis, Discussion, PostSource, Content, Idea, ViewPost, User, Action, 
+    get_database_id, get_named_object, AgentProfile, Post, AssemblPost, SynthesisPost,
+    Synthesis, Discussion, PostSource, Content, Idea, ViewPost, User, Action,
     IdeaRelatedPostLink)
 from . import acls
 import uuid
@@ -38,6 +39,7 @@ post_read = Service(name='post_read', path=API_DISCUSSION_PREFIX + '/post_read/{
                description="Signal that a post was read",
                acl=acls)
 
+_ = TranslationStringFactory('assembl')
 
 @posts.get(permission=P_READ)
 def get_posts(request):
@@ -49,10 +51,12 @@ def get_posts(request):
     order can be chronological, reverse_chronological
     message, is_unread=false returns only read messages)
     """
+    localizer = get_localizer(request)
     discussion_id = int(request.matchdict['discussion_id'])
     discussion = Discussion.get(id=int(discussion_id))
     if not discussion:
-        raise HTTPNotFound(_("No discussion found with id=%s" % discussion_id))
+        raise HTTPNotFound(localizer.translate(
+            _("No discussion found with id=%s")) % discussion_id)
 
     discussion.import_from_sources()
 
@@ -111,13 +115,15 @@ def get_posts(request):
     only_orphan = request.GET.get('only_orphan')
     if only_orphan == "true":
         if root_idea_id:
-            raise HTTPBadRequest(_("Getting orphan posts of a specific idea isn't supported."))
+            raise HTTPBadRequest(localizer.translate(
+                _("Getting orphan posts of a specific idea isn't supported.")))
         posts = posts \
             .filter(Post.id.in_(text(Idea._get_orphan_posts_statement(),
                         bindparams=[bindparam('discussion_id', discussion_id)]
                         )))
     elif only_orphan == "false":
-        raise HTTPBadRequest(_("Getting non-orphan posts isn't supported."))
+        raise HTTPBadRequest(localizer.translate(
+            _("Getting non-orphan posts isn't supported.")))
     
     if root_idea_id:
         posts = posts \
@@ -158,7 +164,8 @@ def get_posts(request):
     else:
         #If there is no user_id, all posts are always unread
         if is_unread == "false":
-            raise HTTPBadRequest(_("You must be logged in to view which posts are read"))
+            raise HTTPBadRequest(localizer.translate(
+                _("You must be logged in to view which posts are read")))
         
     #posts = posts.options(contains_eager(Post.source))
     posts = posts.options(joinedload_all(Post.creator))
@@ -290,6 +297,7 @@ def create_post(request):
     """
     We use post, not put, because we don't know the id of the post
     """
+    localizer = get_localizer(request)
     request_body = json.loads(request.body)
     user_id = authenticated_userid(request)
     user = Post.db.query(User).filter_by(id=user_id).one()
@@ -322,7 +330,7 @@ def create_post(request):
 
     if not discussion:
         raise HTTPNotFound(
-            _("No discussion found with id=%s" % discussion_id)
+            localizer.translate(_("No discussion found with id=%s" % discussion_id))
         )
 
     if subject:

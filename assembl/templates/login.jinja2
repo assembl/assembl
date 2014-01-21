@@ -30,7 +30,7 @@
         <img src="{{ STATIC_URL }}/img/loginbox/assembl.png" alt="Assembl" />
 
         <div class="spacer spacer--big"></div>
-
+        <div class="error-message">{{error}}</div>
         <form class="form" method="POST">
             <input type="hidden" name="next_view" value="{{next_view}}" />
 
