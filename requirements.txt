@@ -57,6 +57,7 @@ python-openid==2.2.5
 pytz==2013.9
 pyzmq==14.0.1
 rdflib==4.1.0
+redis==2.9.0
 repoze.lru==0.6
 repoze.sendmail==4.1
 requests==2.2.0
