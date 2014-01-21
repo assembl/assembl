@@ -128,7 +128,14 @@ def get_posts(request):
 
     if root_post_id:
         root_post = Post.get(id=root_post_id)
-
+        if user_id:
+            #Mark post read, we requested it explicitely
+            viewed_post = ViewPost(
+                actor_id=user_id,
+                post=root_post
+                )
+            Post.db.add(viewed_post)
+                
         posts = posts.filter(
             (Post.ancestry.like(
             root_post.ancestry + cast(root_post.id, String) + ',%'
@@ -184,13 +191,7 @@ def get_posts(request):
             no_of_posts_viewed_by_user += 1
         elif user_id:
             serializable_post['read'] = False
-            if root_post_id:
-                viewed_post = ViewPost(
-                    actor_id=user_id,
-                    post=post
-                )
 
-                Post.db.add(viewed_post)
         post_data.append(serializable_post)
 
     # Benoitg:  For now, this completely garbles threading without intelligent
