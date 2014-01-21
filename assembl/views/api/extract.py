@@ -6,6 +6,8 @@ from cornice import Service
 from pyramid.security import authenticated_userid, Everyone, ACLDenied
 from pyramid.httpexceptions import (
     HTTPNotFound, HTTPClientError, HTTPForbidden, HTTPServerError, HTTPBadRequest)
+from sqlalchemy import Unicode
+from sqlalchemy.sql.expression import cast
 from sqlalchemy.orm import aliased, joinedload, joinedload_all, contains_eager
 
 from assembl.views.api import API_DISCUSSION_PREFIX
@@ -142,7 +144,9 @@ def post_extract(request):
         if not content:
             # TODO: maparent:  This is actually a singleton pattern, should be
             # handled by the AnnotatorSource now that it exists...
-            source = AnnotatorSource.get(name='Annotator', discussion_id=discussion_id)
+            source = AnnotatorSource.db.query(AnnotatorSource).filter_by(
+                discussion_id=discussion_id).filter(
+                cast(AnnotatorSource.name, Unicode) == 'Annotator').first()
             if not source:
                 source = AnnotatorSource(
                     name='Annotator', discussion_id=discussion_id,
