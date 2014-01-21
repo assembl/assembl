@@ -128,13 +128,6 @@ def get_posts(request):
 
     if root_post_id:
         root_post = Post.get(id=root_post_id)
-        if user_id:
-            #Mark post read, we requested it explicitely
-            viewed_post = ViewPost(
-                actor_id=user_id,
-                post=root_post
-                )
-            Post.db.add(viewed_post)
                 
         posts = posts.filter(
             (Post.ancestry.like(
@@ -143,6 +136,8 @@ def get_posts(request):
             |
             (Post.id==root_post.id)
             )
+    else:
+        root_post = None
     
     if ids:
         posts = posts.filter(Post.id.in_(ids))
@@ -189,7 +184,15 @@ def get_posts(request):
         if viewpost:
             serializable_post['read'] = True
             no_of_posts_viewed_by_user += 1
-        elif user_id:
+        elif user_id and root_post is not None and root_post.id == post.id:
+            #Mark post read, we requested it explicitely
+            viewed_post = ViewPost(
+                actor_id=user_id,
+                post=root_post
+                )
+            Post.db.add(viewed_post)
+            serializable_post['read'] = True
+        else:
             serializable_post['read'] = False
 
         post_data.append(serializable_post)
