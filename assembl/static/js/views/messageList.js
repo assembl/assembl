@@ -65,7 +65,7 @@ function(Backbone, _, $, app, MessageView, Message, i18n, PostQuery){
          * The collapse/expand flag
          * @type {Boolean}
          */
-        collapsed: true,
+        collapsed: false,
 
         /**
          * List of message id's to be displayed in the interface
@@ -192,7 +192,6 @@ function(Backbone, _, $, app, MessageView, Message, i18n, PostQuery){
             app.trigger('render');
             if(this.messagesFinishedLoading) {
                 this.blockPanel();
-                this.collapsed = false;
                 this.currentQuery.execute(function(data){
                     that.messageIdsToDisplay = data;
                     that = that.render_real();
@@ -231,7 +230,6 @@ function(Backbone, _, $, app, MessageView, Message, i18n, PostQuery){
          */
         getRenderedMessagesFlat: function(messages){
             var list = [],
-            level = 1,
             filter = this.currentFilter,
             len = messages.length,
             view, model, children, prop, isValid;
@@ -242,7 +240,7 @@ function(Backbone, _, $, app, MessageView, Message, i18n, PostQuery){
                     model : model
                 });
                 view.hasChildren = false;
-                list.push(view.render(level).el);
+                list.push(view.render().el);
             }
             return list;
         },
@@ -291,12 +289,13 @@ function(Backbone, _, $, app, MessageView, Message, i18n, PostQuery){
                 }
                 if( isValid ) {
                     view = new MessageView({model:model}, last_sibling_chain);
+                    view.currentLevel = level;
                     found = true;
                     children = model.getChildren();
                     var subviews = this.getRenderedMessagesThreaded(
                         children, level+1, last_sibling_chain);
                     view.hasChildren = (subviews.length > 0);
-                    list.push(view.render(level).el);
+                    list.push(view.render().el);
                     view.$('.messagelist-children').append( subviews );
                 }
                 if (!found && this.hasDescendantsInFilter(model)) {
@@ -460,11 +459,9 @@ function(Backbone, _, $, app, MessageView, Message, i18n, PostQuery){
         loadInitialData: function(){
             var that = this;
 
-            this.collapsed = false;
-
             $.getJSON( app.getApiUrl('posts'), function(data){
                 _.each(data.posts, function(post){
-                    post.collapsed = false;
+                    post.collapsed = that.collapsed;
                     post.showBody = false;
                 });
                 that.messages.reset(data.posts);

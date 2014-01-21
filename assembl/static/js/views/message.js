@@ -76,7 +76,7 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
             data['id'] = data['@id'];
             data['date'] = app.formatDate(data.date);
             data['creator'] = this.model.getCreator();
-            data['level'] = this.currentLevel !== null ? this.currentLevel : this.model.getLevel();
+            data['level'] = this.currentLevel !== null ? this.currentLevel : 0;
             data['last_sibling_chain'] = this.last_sibling_chain;
             data['hasChildren'] = this.hasChildren;
 
@@ -97,13 +97,13 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
 
             if (this.$el !== undefined) {
                 // let's not recalculate the rendered children, shall we?
-                children = this.$el.find('>.messagelist-content>.messagelist-children');
+                children = this.$el.find('>.messagelist-link>.messagelist-children, >.messagelist-children');
             }
 
             this.$el.html( this.template(data) );
 
             if (children !== undefined && children.length == 1) {
-                this.$el.find('>.messagelist-content>.messagelist-children').replaceWith(children);
+                this.$el.find('>.messagelist-link>.messagelist-children, >.messagelist-children').replaceWith(children);
             }
             this.onCollapsedChange();
 
@@ -212,6 +212,7 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
             'click >.messagelist-arrow>.link-img': 'onIconbuttonClick',
             'click >.messagelist-link>.messagelist-arrow>.link-img': 'onIconbuttonClick',
             'click .message-title': 'onMessageTitleClick',
+            'click .message-hoistbtn': 'onMessageHoistClick',
 
             //
             'click .message-replybox-openbtn': 'openReplyBox',
@@ -241,6 +242,13 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
         /**
          * @event
          */
+        onMessageHoistClick: function(ev){
+            app.messageList.addFilterByPostId(this.model.getId());
+        },
+        
+        /**
+         * @event
+         */
         onMessageTitleClick: function(ev){
             if( ev ){
                 // Avoiding collapse if clicked on the link
@@ -248,7 +256,7 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
                     return;
                 }
             }
-            app.messageList.addFilterByPostId(this.model.getId());
+            console.log('onMessageHoistClick');
             var bodyShown = this.model.get('bodyShown');
             this.model.set('bodyShown', !bodyShown);
             if (!bodyShown) {

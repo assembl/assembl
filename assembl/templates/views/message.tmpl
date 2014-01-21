@@ -44,16 +44,17 @@ if (level > 1) {
     <div class="media">
 
         <div class="media-imgleft">
-            <img src="<%= creator.getAvatarUrl(24) %>" alt="{{ gettext('User') }}"  class="image-rounded" width="24" height="24" />
+            <img src="<%= creator.getAvatarUrl(30) %>" alt="{{ gettext('User') }}"  class="image-rounded" width="30" height="30" />
         </div>
 
         <div class="media-body">
-            <div class="media-title">
+            <div class="message-title">
                 {% set userName = "<%= creator.get('name') %>" %}
                 {% set time = "<%= date %>" %}
                 {{ gettext('<strong>%(user)s</strong> | <time>%(time)s</time>')|format(user=userName, time=time)|safe }}
+                <div><strong><span class="message-subject"><%= subject %></span></strong></div>
             </div>
-            <div><strong><span class="message-subject"><%= subject %></span></strong></div>
+            
         </div>
     </div>
 
@@ -73,6 +74,7 @@ if (level > 1) {
     </div>
 
     <div class="message-menu">
+        <a class="message-hoistbtn iconbutton icon-download" data-id="<%= escape(id) %>" data-tooltip="{{gettext('Hoist this message (show only this messages and it\'s replies)')}}"></a>
         <a id="message-linkbutton" class="iconbutton icon-link" data-copy-text="/message/<%= escape(id) %>" data-tooltip="{{gettext('Copy the link to this message to clipboard')}}"></a>
         <a class="message-replybox-openbtn link"><i class="icon-reply"></i> {{ gettext("Reply") }}</a>
         <div class="dropdown">
