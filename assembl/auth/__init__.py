@@ -132,7 +132,14 @@ def user_has_permission(discussion_id, user_id, permission):
                         Permission, Role, LocalUserRole).filter(
                             DiscussionPermission.discussion_id == discussion_id
                         ).filter(LocalUserRole.user_id == user_id).filter(
-                            Permission.name == permission)).first()
+                            Permission.name == permission)
+                ).union(
+                    db.query(DiscussionPermission).join(
+                            Permission, Role).filter(
+                                DiscussionPermission.discussion_id == discussion_id).filter(
+                                    Role.name.in_((Authenticated, Everyone))).filter(
+                                        Permission.name == permission)
+                ).first()
     return permission is not None
 
 
