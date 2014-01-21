@@ -131,6 +131,8 @@ def save_idea(request):
     idea.short_title = idea_data['shortTitle']
     idea.long_title = idea_data['longTitle']
     if 'parentId' in idea_data and idea_data['parentId'] is not None:
+        # calculate it early to maximize contention.
+        ancestors = parent.get_all_ancestors()
         # TODO: Make sure this is sent as a list!
         parent = Idea.get_instance(idea_data['parentId'])
         order = idea_data.get('order', 0.0)
@@ -139,6 +141,7 @@ def save_idea(request):
 
         current_parent = None
         for parent_link in idea.source_links:
+            pl_ancestors = parent_link.source.get_all_ancestors()
             if parent_link.source != parent:
                 parent_link.is_tombstone=True
             else:
@@ -146,7 +149,7 @@ def save_idea(request):
                 current_parent = parent_link
             Idea.db.expire(parent_link.source, ['target_links'])
             parent_link.source.send_to_changes()
-            for ancestor in parent_link.source.get_all_ancestors():
+            for ancestor in pl_ancestors:
                 ancestor.send_to_changes()
             
         if current_parent is None:
@@ -154,7 +157,7 @@ def save_idea(request):
             idea.source_links.append(link)
             Idea.db.expire(parent, ['target_links'])
             parent.send_to_changes()
-            for ancestor in parent.get_all_ancestors():
+            for ancestor in ancestors:
                 ancestor.send_to_changes()
         Idea.db.expire(idea, ['source_links'])
         
