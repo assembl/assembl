@@ -147,7 +147,7 @@ function(Backbone, _, $, app, MessageView, Message, i18n, PostQuery){
          * The actual rendering for the render function
          * @return {views.Message}
          */
-        render_real: function(){
+        render_real: function(success){
             var that = this,
                 views = [];
 
@@ -174,7 +174,7 @@ function(Backbone, _, $, app, MessageView, Message, i18n, PostQuery){
             this.renderCollapseButton();
             this.chk = this.$('#messageList-mainchk');
             this.initAnnotator();
-
+            this.trigger("render_complete", "Render complete");
             return this;
         },
         /**
@@ -462,7 +462,7 @@ function(Backbone, _, $, app, MessageView, Message, i18n, PostQuery){
             $.getJSON( app.getApiUrl('posts'), function(data){
                 _.each(data.posts, function(post){
                     post.collapsed = that.collapsed;
-                    post.showBody = false;
+                    post.bodyShown = false;
                 });
                 that.messages.reset(data.posts);
                 that.messagesFinishedLoading = true;
@@ -559,27 +559,51 @@ function(Backbone, _, $, app, MessageView, Message, i18n, PostQuery){
         /**
          * Highlights the message by the given id
          * @param {String} id
-         * @param {Function} [callback] The callback function
+         * @param {Function} [callback] The callback function to call if message is not found
          */
         showMessageById: function(id, callback){
             var message = this.messages.get(id),
                  selector = app.format('[id="message-{0}"]', id),
-                 el;
+                 el,
+                 messageIsDisplayed = false,
+                 that = this;
             
+            this.messageIdsToDisplay.forEach(function(displayedId){
+                if (displayedId == id){
+                    messageIsDisplayed = true;
+                }
+            });
+            
+            if( !messageIsDisplayed ){
+                //The current filters might not include the message
+                this.currentQuery.clearAllFilters();
+                var success = function() {
+                    that.showMessageById(id, callback);
+                    that.off("render_complete",this);
+                }
+                this.on("render_complete",success);
+                this.render();
+                return;
+            }
             if( ! _.isFunction(callback) ){
                 callback = $.noop;
             }
-
             if( message ){
-                message.set('showBody', false);
+                message.set('bodyShown', true);
                 el = $(selector);
                 if( el[0] ){
+                    var panelBody = this.$('.panel-body');
+                    var panelOffset = panelBody.offset().top;
+                    var offset = el.offset().top;
                     // Scrolling to the element
-                    var top = el[0].parentElement.offsetTop;
-                    this.$('.panel-body').animate({ scrollTop: top }, { complete: callback });
+                    var target = offset - panelOffset + panelBody.scrollTop();
+                    panelBody.animate({ scrollTop: target }, { complete: callback });
                 } else {
                     callback();
                 }
+            }
+            else {
+                console.log("showMessageById(): ERROR:  Message not found in collection");
             }
 
         },

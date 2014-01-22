@@ -251,7 +251,6 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
                     return;
                 }
             }
-            console.log('onMessageHoistClick');
             var bodyShown = this.model.get('bodyShown');
             this.model.set('bodyShown', !bodyShown);
             if (!bodyShown) {
