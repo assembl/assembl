@@ -26,6 +26,14 @@
         </div>
         </fieldset>
         
+        <fieldset id="ideaPanel-section-synthesis" class="panel-section">
+            <legend data-tooltip="{{gettext('Expression of this idea in the next synthesis.  You probably want to edit it in the synthesis panel, not here.')}}">
+                <span>{{ gettext('Expression in next synthesis') }}</span>
+            </legend>
+
+            <div id="ideaPanel-longtitle"></div>
+        </fieldset>
+        
         <fieldset id="ideaPanel-section-segments" class="panel-section">
             <legend data-tooltip="{{gettext('Expressions of this idea in segments of posts or on the web')}}">
                 <span>{{ gettext('Harvested in %(num)s segments')|format(num='<%= segments.length %>')|safe }}</span>
@@ -38,14 +46,6 @@
             <div class="box box--dashed box--centered margin text-muted text-big">
                 {{ gettext('Add segments by dragging them in this panel from the clipboard') }}
             </div>
-        </fieldset>
-        
-        <fieldset id="ideaPanel-section-synthesis" class="panel-section">
-            <legend data-tooltip="{{gettext('Expression of this idea in the next synthesis.  You probably want to edit it in the synthesis panel, not here.')}}">
-                <span>{{ gettext('Expression in next synthesis') }}</span>
-            </legend>
-
-            <div id="ideaPanel-longtitle"></div>
         </fieldset>
         
     </div>
