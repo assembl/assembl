@@ -595,7 +595,7 @@ JOIN post ON (
     @staticmethod
     def _get_related_posts_statement(skip_where=False):
         return Idea._get_related_posts_statement_no_select(
-            "SELECT DISTINCT post.id", skip_where)
+            "SELECT DISTINCT post.id as post_id", skip_where)
 
     @staticmethod
     def _get_count_related_posts_statement():
@@ -611,55 +611,19 @@ JOIN content ON (
     content.id = post.id
     AND content.discussion_id = :discussion_id
 )
-WHERE post.id NOT IN (
-""" + Idea._get_related_posts_statement(True) + """
-)
-"""
+EXCEPT corresponding BY (post_id)
+""" + Idea._get_related_posts_statement(True)
 
     @staticmethod
     def _get_count_orphan_posts_statement():
         """ Requires discussion_id bind parameters """
-        return Idea._get_orphan_posts_statement_no_select(
-            "SELECT COUNT(post.id) as total_count")
-
-
-    # use assembl;
-    # select count(id) from (
-    # SELECT post.id as id
-    # FROM post 
-    # JOIN content ON (
-    #     content.id = post.id
-    #     AND content.discussion_id = 1
-    # )
-    # except corresponding by (id)
-    # SELECT post.id as id FROM (SELECT source_id, target_id FROM (
-    #             SELECT transitive t_in (1) t_out (2) t_distinct T_NO_CYCLES
-    #                         source_id, target_id FROM idea_idea_link
-    #                 UNION SELECT id as source_id, id as target_id FROM idea
-    #             ) ia
-    #             JOIN idea AS dag_idea ON (ia.source_id = dag_idea.id)
-    #             WHERE dag_idea.discussion_id = 1
-    #                 AND ia.source_id = (SELECT root_idea.id FROM root_idea
-    #                     JOIN idea ON (idea.id = root_idea.id)
-    #                     WHERE idea.discussion_id=1))
-    #             AS idea_dag
-    # JOIN idea_content_link ON (idea_content_link.idea_id = idea_dag.target_id)
-    # JOIN idea_content_positive_link
-    #     ON (idea_content_positive_link.id = idea_content_link.id)
-    # JOIN post AS root_posts ON (idea_content_link.content_id = root_posts.id)
-    # JOIN post ON (
-    #     (post.ancestry <> ''
-    #     AND post.ancestry LIKE root_posts.ancestry || cast(root_posts.id as varchar) || ',' || '%'
-    #     )
-    #     OR post.id = root_posts.id
-    # )
-    # ) as orphans
-
+        return "SELECT COUNT(post_id) as total_count from (%s) orphans" % (
+            Idea._get_orphan_posts_statement())
 
     @staticmethod
     def _get_orphan_posts_statement():
         """ Requires discussion_id bind parameters """
-        return Idea._get_orphan_posts_statement_no_select("SELECT post.id")
+        return Idea._get_orphan_posts_statement_no_select("SELECT post.id as post_id")
 
     @property
     def num_posts(self):
