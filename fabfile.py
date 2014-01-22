@@ -653,7 +653,7 @@ def coeus_stagenv():
     env.uses_apache = True
     env.uses_ngnix = False
     env.use_virtuoso = "/usr"
-    env.gitbranch = "virtuoso"
+    env.gitbranch = "develop"
     
 @task
 def coeus_stagenv2():
