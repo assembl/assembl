@@ -189,7 +189,7 @@ function(Backbone, _, Idea, Message, app, i18n, Types, EditableField, CKEditorFi
          * Events
          */
         events: {
-            'click .message-sendbtn': 'sendMessage',
+            'click .message-sendbtn': 'onSendMessageButtonClick',
 
             'dragstart .box': 'onDragStart',
             'dragend .box': "onDragEnd",
@@ -278,35 +278,27 @@ function(Backbone, _, Idea, Message, app, i18n, Types, EditableField, CKEditorFi
         },
 
         /**
+         * @event
          * Sends the message to the server
          */
-        sendMessage: function(ev){
+        onSendMessageButtonClick: function(ev){
             var btn = $(ev.currentTarget),
-                url = app.getApiUrl('posts'),
-                data = {},
-                that = this,
-                btn_original_text=btn.text();
-
-            data.message = this.$('.message-textarea').val();
-            if( this.idea.getId() ){
-                data.idea_id = this.idea.getId();
-            }
+            url = app.getApiUrl('posts'),
+            data = {},
+            that = this,
+            btn_original_text=btn.text(),
+            message_body = this.$('.message-textarea').val(),
+            reply_idea_id = this.idea.getId(),
+            success_callback = null;
 
             btn.text( i18n.gettext('Sending comment...') );
-
-            $.ajax({
-                type: "post",
-                data: JSON.stringify(data),
-                contentType: 'application/json',
-                url: url,
-                success: function(){
-                    btn.text( i18n.gettext('Comment posted!') );
-                    setTimeout(function(){ 
-                        btn.text(btn_original_text);}, 3000); 
-                    
-                    //that.closeReplyBox();
-                }
-            });
+            success_callback = function(){
+                btn.text( i18n.gettext('Comment posted!') );
+                that.$('.message-textarea').val('');
+                setTimeout(function(){ 
+                    btn.text(btn_original_text);}, 3000);
+            }
+            app.sendPostToServer(message_body, null, null, reply_idea_id, success_callback);
 
         },
 

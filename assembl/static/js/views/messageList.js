@@ -649,6 +649,7 @@ function(Backbone, _, $, app, MessageView, Message, i18n, PostQuery){
 
             'click #messageList-closeButton': 'closePanel',
             'click #messageList-fullscreenButton': 'setFullscreen',
+            'click #messagelist-replybox .message-sendbtn': 'onSendMessageButtonClick',
         },
 
         /**
@@ -660,6 +661,23 @@ function(Backbone, _, $, app, MessageView, Message, i18n, PostQuery){
             this.openMessageByid(id);
         },
         
+        /**
+         * @event
+         */
+        onSendMessageButtonClick: function(ev){
+            var btn = $(ev.currentTarget),
+                that = this,
+                btn_original_text = btn.text(),
+                message_body = this.$('.message-textarea').val(),
+                success_callback = null;
+
+            btn.text( i18n.gettext('Sending...') );
+            success_callback = function(){
+                btn.text(btn_original_text);
+            }
+            app.sendPostToServer(message_body, null, null, null, success_callback);
+
+        },
         /**
          * @event
          */

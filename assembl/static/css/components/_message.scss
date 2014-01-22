@@ -1,5 +1,10 @@
 $message-bar-width: 15px;
 
+#messagelist-replybox {
+    padding: 5px;
+    border-top: solid 1px $box-border-color;
+}
+
 // A message block
 // ================
 .message {

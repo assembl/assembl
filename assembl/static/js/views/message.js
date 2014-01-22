@@ -158,34 +158,29 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
             this.$('.message-replybox-openbtn').show();
             this.$('.message-replybox').hide();
         },
-
+                
         /**
          * Sends the message to the server
          */
-        sendMessage: function(ev){
+        onSendMessageButtonClick: function(ev){
             var btn = $(ev.currentTarget),
-                url = app.getApiUrl('posts'),
-                data = {},
                 that = this,
-                btn_original_text = btn.text();
+                btn_original_text = btn.text(),
+                reply_message_id = null,
+                message_body = this.$('.message-textarea').val(),
+                success_callback = null;
 
-            data.message = this.$('.message-textarea').val();
+
             if( this.model.getId() ){
-                data.reply_id = this.model.getId();
+                reply_message_id = this.model.getId();
             }
 
             btn.text( i18n.gettext('Sending...') );
-
-            $.ajax({
-                type: "post",
-                data: JSON.stringify(data),
-                contentType: 'application/json',
-                url: url,
-                success: function(){
-                    btn.text(btn_original_text);
-                    that.closeReplyBox();
-                }
-            });
+            success_callback = function(){
+                btn.text(btn_original_text);
+                that.closeReplyBox();
+            }
+            app.sendPostToServer(message_body, null, reply_message_id, null, success_callback)
 
         },
 
@@ -217,7 +212,7 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
             //
             'click .message-replybox-openbtn': 'openReplyBox',
             'click .message-cancelbtn': 'closeReplyBox',
-            'click .message-sendbtn': 'sendMessage',
+            'click .message-sendbtn': 'onSendMessageButtonClick',
 
             //
             'mousedown .message-body': 'startSelection',
