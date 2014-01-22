@@ -110,8 +110,8 @@ def discussions_with_access(userid, permission=P_READ):
                     Role, Permission).filter(
                         Role.name.in_((Authenticated, Everyone))).filter(
                             Permission.name == permission)
-                ).join(Discussion).all()
-        return [dp.discussion for dp in perms]
+                )
+        return db.query(Discussion).join(perms.subquery('perms'))
 
 
 def user_has_permission(discussion_id, user_id, permission):
