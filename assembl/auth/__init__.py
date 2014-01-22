@@ -85,7 +85,7 @@ def discussions_with_access(userid, permission=P_READ):
     from ..synthesis.models import Discussion
     db = Discussion.db()
     if userid in (Authenticated, Everyone):
-        discussions = db.query(Discussion).join(
+        return db.query(Discussion).join(
             DiscussionPermission, Role, Permission).filter(and_(
                 Permission.name == permission,
                 Role.name == userid))
@@ -94,23 +94,24 @@ def discussions_with_access(userid, permission=P_READ):
             user_id=userid).join(Role).filter_by(name=R_SYSADMIN).first()
         if sysadmin:
             return db.query(Discussion).all()
-        discussions = db.query(Discussion).join(
-            DiscussionPermission, Role, Permission, UserRole, User).filter(
+
+        perms = db.query(DiscussionPermission).join(
+            Role, Permission, UserRole, User).filter(
                 User.id == userid).filter(
                     Permission.name == permission
-                ).union(db.query(Discussion).join(
-                    DiscussionPermission, Role, Permission).join(
+                ).union(db.query(DiscussionPermission).join(
+                    Role, Permission).join(
                         LocalUserRole, (
-                            LocalUserRole.discussion_id == Discussion.id)
+                            LocalUserRole.discussion_id == DiscussionPermission.discussion_id)
                     ).join(User).filter(
                         User.id == userid).filter(
                             Permission.name == permission)
-                ).union(db.query(Discussion).join(
-                    DiscussionPermission, Role, Permission).filter(
+                ).union(db.query(DiscussionPermission).join(
+                    Role, Permission).filter(
                         Role.name.in_((Authenticated, Everyone))).filter(
                             Permission.name == permission)
-                )
-    return discussions
+                ).join(Discussion).all()
+        return [dp.discussion for dp in perms]
 
 
 def user_has_permission(discussion_id, user_id, permission):
