@@ -17,7 +17,7 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
         /**
          * @type {String}
          */
-        className: 'message',
+        className: 'message-family-container',
 
         /**
          * Flags if it is selecting a text or not
@@ -67,8 +67,10 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
          */
         render: function(level){
             app.trigger('render');
-            var data = this.model.toJSON(), children;
-
+            var data = this.model.toJSON(),
+            children,
+            level;
+            level = this.currentLevel !== null ? this.currentLevel : 1;
             if( ! _.isUndefined(level) ){
                 this.currentLevel = level;
             }
@@ -76,10 +78,20 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
             data['id'] = data['@id'];
             data['date'] = app.formatDate(data.date);
             data['creator'] = this.model.getCreator();
-            data['level'] = this.currentLevel !== null ? this.currentLevel : 0;
+            data['level'] = level;
             data['last_sibling_chain'] = this.last_sibling_chain;
             data['hasChildren'] = this.hasChildren;
 
+            if (level > 1) {
+                if (this.last_sibling_chain[level - 1]) {
+                    this.$el.addClass('last-child');
+                } else {
+                    this.$el.addClass('child');
+                }
+            } else {
+                this.$el.addClass('root');
+            }
+            
             this.el.setAttribute('data-message-level', data['level']);
 
             if( data.bodyShown ){
@@ -87,23 +99,16 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
             } else {
                 this.$el.removeClass('message--showbody');
             }
-            if( data.read ){
-                this.$el.removeClass('message--unread');
-                this.$el.addClass('message--read');
-            } else {
-                this.$el.removeClass('message--read');
-                this.$el.addClass('message--unread');
-            }
 
             if (this.$el !== undefined) {
                 // let's not recalculate the rendered children, shall we?
-                children = this.$el.find('>.messagelist-link>.messagelist-children, >.messagelist-children');
+                children = this.$el.find('>.messagelist-children');
             }
 
             this.$el.html( this.template(data) );
 
             if (children !== undefined && children.length == 1) {
-                this.$el.find('>.messagelist-link>.messagelist-children, >.messagelist-children').replaceWith(children);
+                this.$el.find('>.messagelist-children').replaceWith(children);
             }
             this.onCollapsedChange();
 
@@ -205,24 +210,24 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
 
         events: {
             'click >.messagelist-arrow>.link-img': 'onIconbuttonClick',
-            'click >.messagelist-link>.messagelist-arrow>.link-img': 'onIconbuttonClick',
-            'click .message-title': 'onMessageTitleClick',
-            'click .message-hoistbtn': 'onMessageHoistClick',
+            //'click >.message-family-container>.messagelist-arrow>.link-img': 'onIconbuttonClick',
+            'click >.message .message-title': 'onMessageTitleClick',
+            'click >.message .message-hoistbtn': 'onMessageHoistClick',
 
             //
-            'click .message-replybox-openbtn': 'openReplyBox',
-            'click .message-cancelbtn': 'closeReplyBox',
-            'click .message-sendbtn': 'onSendMessageButtonClick',
+            'click >.message .message-replybox-openbtn': 'openReplyBox',
+            'click >.message .message-cancelbtn': 'closeReplyBox',
+            'click >.message .message-sendbtn': 'onSendMessageButtonClick',
 
             //
-            'mousedown .message-body': 'startSelection',
-            'mousemove .message-body': 'doTheSelection',
-            'mouseleave .message-body': 'onMouseLeaveMessageBody',
-            'mouseenter .message-body': 'doTheSelection',
+            'mousedown >.message .message-body': 'startSelection',
+            'mousemove >.message .message-body': 'doTheSelection',
+            'mouseleave >.message .message-body': 'onMouseLeaveMessageBody',
+            'mouseenter >.message .message-body': 'doTheSelection',
 
             // menu
-            'click #message-markasunread': 'markAsUnread',
-            'click #message-replybtn': 'openReplyBox'
+            'click >.message #message-markasunread': 'markAsUnread',
+            'click >.message #message-replybtn': 'openReplyBox'
         },
 
         /**
@@ -337,7 +342,7 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
         onCollapsedChange: function(){
             var collapsed = this.model.get('collapsed');
             var target = this.$el;
-            var link = target.find(">.messagelist-link");
+            var link = target.find(">.message-family-container");
             if (link.length == 1) {
                 target = link;
             }

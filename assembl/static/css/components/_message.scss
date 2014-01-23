@@ -1,4 +1,5 @@
 $message-bar-width: 15px;
+$message-imagelink-height: 43px;
 
 #messagelist-replybox {
     padding: 5px;
@@ -10,20 +11,18 @@ $message-bar-width: 15px;
 .message {
     position: relative;
     //padding: 20px 5px;
-    padding: 0;
-
+    padding: 6px 0px;
+    min-height: $message-imagelink-height - 12px;
     //border-bottom: solid 1px $box-border-color;
-    overflow-x: hidden;
-    clear:left;
+    //overflow-x: hidden;
+
 
     // &:last-child {
     //     border-bottom: 0;
     // }
 }
 #messageList-list.reverse_chronological, #messageList-list.chronological {
-    .message {
-        padding: 5px;
-    
+    .message-family-container {    
         border-bottom: solid 1px $box-border-color;
     
         &:last-child {
@@ -38,12 +37,12 @@ $message-bar-width: 15px;
 //     }
 // }
 
-.message.message--collapsed {
+.message-family-container.message--collapsed {
     //padding: 5px;
     //padding-bottom: 0px;
 }
 
-.message.message--unread {
+.message.unread {
     .message-title {
         @extend .text-bold
     }
@@ -60,8 +59,12 @@ $message-bar-width: 15px;
 //
 .message-title {
     @extend .idealist-title;
-    overflow:hidden;
 
+    overflow:hidden;
+    text-overflow: ellipsis;
+    white-space:nowrap;
+
+    max-height: $message-imagelink-height - 12px;
     .message--collapsed & {
         line-height: $icon-height;
     }
@@ -102,7 +105,7 @@ $message-bar-width: 15px;
         display: none;
     }
 
-    .message--expanded > .messagelist-link > & {
+    .message--expanded > .message-family-container > & {
         border-left: solid 1px $hry-line-color;
         margin-left: $messagelist-arrow-width/2 - 1;
         .msg-img-closed {
@@ -144,16 +147,28 @@ $message-bar-width: 15px;
 
 // The link between an messagelist and its parent
 // --------------
-.messagelist-link {
+.message-family-container {
     // background: url(#{$img-dir}/messagelist/messagelist-link.png) -6 top no-repeat;
     display: block;
+    clear:left;
     padding-left: $messagelist-arrow-width/2;
-    margin-left: $messagelist-arrow-width/2 - 1;
-    border-left: solid 1px $hry-line-color;
-    &.last-link {
+    margin-left: $messagelist-arrow-width/2;
+
+    &.root {
+        //Root does not have border, bump it right
+        margin-left: 0;
+    }
+    &.child {
         // background: url(#{$img-dir}/messagelist/messagelist-link-last.png) -6 top no-repeat;
-        border-left: none;
-        margin-left: $messagelist-arrow-width/2;
+        border-left: solid 1px $hry-line-color;
+        //Collapse border in the parent's border
+        margin-left: $messagelist-arrow-width/2 - 1;
+        
+        &.last-child {
+            // background: url(#{$img-dir}/messagelist/messagelist-link-last.png) -6 top no-repeat;
+            border-left: none;
+            margin-left: $messagelist-arrow-width/2
+        }
     }
 }
 
