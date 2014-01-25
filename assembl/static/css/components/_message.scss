@@ -1,5 +1,4 @@
 $message-bar-width: 15px;
-$message-imagelink-height: 43px;
 
 #messagelist-replybox {
     padding: 5px;
@@ -12,7 +11,7 @@ $message-imagelink-height: 43px;
     position: relative;
     //padding: 20px 5px;
     padding: 6px 0px;
-    min-height: $message-imagelink-height - 12px;
+    min-height: $messagelist-item-height - 12px;
     //border-bottom: solid 1px $box-border-color;
     //overflow-x: hidden;
 
@@ -64,7 +63,7 @@ $message-imagelink-height: 43px;
     text-overflow: ellipsis;
     white-space:nowrap;
 
-    max-height: $message-imagelink-height - 12px;
+    max-height: $messagelist-item-height - 12px;
     .message--collapsed & {
         line-height: $icon-height;
     }
@@ -81,7 +80,7 @@ $message-imagelink-height: 43px;
 
 // The arrow
 // ------------
-.messagelist-noarrow {
+.message-family-arrow.noarrow {
     display: block;
     padding-left: $messagelist-arrow-width/2;
     margin-left: $messagelist-arrow-width/2;
@@ -93,7 +92,7 @@ $message-imagelink-height: 43px;
     margin-top:0;
 }
 
-.messagelist-arrow {
+.message-family-arrow.arrow {
     padding-left: $messagelist-arrow-width/2;
     margin-left: $messagelist-arrow-width/2;
     display: block;

@@ -1,93 +1,66 @@
-<%
-if (level > 1) {
-    if (last_sibling_chain[level-1]) { %>
-            <img src="/static/img/messagelist/messagelist-link-last.png" class="link-img" />
-    <% } else { %>
-            <img src="/static/img/messagelist/messagelist-link.png" class="link-img" />
-    <% }
-} %>
+<% if( !bodyShown ){ %>
 
-    <% if (hasChildren) {
-        if (level > 1) { %>
-            <div class="messagelist-arrow">
-                <img src="/static/img/messagelist/messagelist-arrow-closed.png" class="link-img msg-img-closed" />
-                <img src="/static/img/messagelist/messagelist-arrow-open.png" class="link-img msg-img-open" />
-        <% } else { %>
-            <div class="messagelist-arrow level1">
-                <img src="/static/img/messagelist/messagelist-arrow-closed-l1.png" class="link-img msg-img-closed" />
-                <img src="/static/img/messagelist/messagelist-arrow-open-l1.png" class="link-img msg-img-open" />
-        <% }
-       } else { %>
-        <div class="messagelist-noarrow">
-    <% } %>
-    <div class="message <% if( read ){ %>read<% } else { %>unread<% } %>" id="message-<%= id %>">
-    
-        <% if( !bodyShown ){ %>
-        
-        <div class="message-header">
-            <div class="float-left">
-                <img src="<%= creator.getAvatarUrl(30) %>" alt="{{ gettext('User') }}"  class="image-rounded" width="30" height="30" />
-            </div>
-        
-            <div class="message-date"><%= date %></div>
-            <div class="message-title">
-                <span class="margin-right"><%= creator.get('name') %></span>
-                <span class="margin-right"><span class="message-subject"><%= subject %></span></span>
-                <span class="text-muted text-opaque"><%= app.stripHtml(body) %> </span>
-            </div>
-        </div>
-        
-        <% } else { %>
-        
-        <div class="message-opened">
-            <div class="media">
-        
-                <div class="media-imgleft">
-                    <img src="<%= creator.getAvatarUrl(30) %>" alt="{{ gettext('User') }}"  class="image-rounded" width="30" height="30" />
-                </div>
-        
-                <div class="media-body">
-                    <div class="message-title">
-                        {% set userName = "<%= creator.get('name') %>" %}
-                        {% set time = "<%= date %>" %}
-                        {{ gettext('<strong>%(user)s</strong> | <time>%(time)s</time>')|format(user=userName, time=time)|safe }}
-                        <div><strong><span class="message-subject"><%= subject %></span></strong></div>
-                    </div>
-                    
-                </div>
-            </div>
-        
-            <div class="spacer"></div>
-            <div class="spacer"></div>
-        
-            <div class="message-body"><%= body %></div>
-        
-            <div class="spacer"></div>
-        
-            <div class="message-replybox" hidden>
-                <textarea class="formtextarea message-textarea"></textarea>
-                <div class="text-right">
-                    <a class="button message-cancelbtn">{{ gettext('Cancel') }}</a>
-                    <a class="button button--primary message-sendbtn">{{ gettext('Send') }}</a>
-                </div>
-            </div>
-        
-            <div class="message-menu">
-                <a class="message-hoistbtn iconbutton icon-download" data-id="<%= escape(id) %>" data-tooltip="{{gettext('Hoist this message (show only this messages and it\'s replies)')}}"></a>
-                <a id="message-linkbutton" class="iconbutton icon-link" data-copy-text="/message/<%= escape(id) %>" data-tooltip="{{gettext('Copy the link to this message to clipboard')}}"></a>
-                <a class="message-replybox-openbtn link"><i class="icon-reply"></i> {{ gettext("Reply") }}</a>
-                <div class="dropdown">
-                    <span class="dropdown-label dropdown-label--arrow"></span>
-                    <ul class="dropdown-list dropdown-list--bottomright">
-                        <li id="message-replybtn" class="dropdown-listitem">{{ gettext('Reply') }}</li>
-                        <li id="message-markasunread" class="dropdown-listitem">{{ gettext('Mark as unread') }}</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    
-        <% } %>
+<div class="message-header">
+    <div class="float-left">
+        <img src="<%= creator.getAvatarUrl(30) %>" alt="{{ gettext('User') }}"  class="image-rounded" width="30" height="30" />
+    </div>
+
+    <div class="message-date"><%= date %></div>
+    <div class="message-title">
+        <span class="margin-right"><%= creator.get('name') %></span>
+        <span class="margin-right"><span class="message-subject"><%= subject %></span></span>
+        <span class="text-muted text-opaque"><%= app.stripHtml(body) %> </span>
     </div>
 </div>
-<div class="messagelist-children"></div>
+
+<% } else { %>
+
+<div class="message-opened">
+    <div class="media">
+
+        <div class="media-imgleft">
+            <img src="<%= creator.getAvatarUrl(30) %>" alt="{{ gettext('User') }}"  class="image-rounded" width="30" height="30" />
+        </div>
+
+        <div class="media-body">
+            <div class="message-title">
+                {% set userName = "<%= creator.get('name') %>" %}
+                {% set time = "<%= date %>" %}
+                {{ gettext('<strong>%(user)s</strong> | <time>%(time)s</time>')|format(user=userName, time=time)|safe }}
+                <div><strong><span class="message-subject"><%= subject %></span></strong></div>
+            </div>
+            
+        </div>
+    </div>
+
+    <div class="spacer"></div>
+    <div class="spacer"></div>
+
+    <div class="message-body"><%= body %></div>
+
+    <div class="spacer"></div>
+
+    <div class="message-replybox" hidden>
+        <textarea class="formtextarea message-textarea"></textarea>
+        <div class="text-right">
+            <a class="button message-cancelbtn">{{ gettext('Cancel') }}</a>
+            <a class="button button--primary message-sendbtn">{{ gettext('Send') }}</a>
+        </div>
+    </div>
+
+    <div class="message-menu">
+        <a class="message-hoistbtn iconbutton icon-download" data-id="<%= escape(id) %>" data-tooltip="{{gettext('Hoist this message (show only this messages and it\'s replies)')}}"></a>
+        <a id="message-linkbutton" class="iconbutton icon-link" data-copy-text="/message/<%= escape(id) %>" data-tooltip="{{gettext('Copy the link to this message to clipboard')}}"></a>
+        <a class="message-replybox-openbtn link"><i class="icon-reply"></i> {{ gettext("Reply") }}</a>
+        <div class="dropdown">
+            <span class="dropdown-label dropdown-label--arrow"></span>
+            <ul class="dropdown-list dropdown-list--bottomright">
+                <li id="message-replybtn" class="dropdown-listitem">{{ gettext('Reply') }}</li>
+                <li id="message-markasunread" class="dropdown-listitem">{{ gettext('Mark as unread') }}</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<% } %>
 

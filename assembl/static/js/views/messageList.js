@@ -1,5 +1,5 @@
-define(['backbone', 'underscore', 'jquery', 'app', 'views/message', 'models/message', 'i18n', 'views/messageListPostQuery'],
-function(Backbone, _, $, app, MessageView, Message, i18n, PostQuery){
+define(['backbone', 'underscore', 'jquery', 'app', 'views/messageFamily', 'models/message', 'i18n', 'views/messageListPostQuery'],
+function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery){
     'use strict';
 
     /**
@@ -236,7 +236,7 @@ function(Backbone, _, $, app, MessageView, Message, i18n, PostQuery){
             for (var i = 0; i < len; i++) {
                 model = messages[i];
 
-                view = new MessageView({
+                view = new MessageFamilyView({
                     model : model
                 });
                 view.hasChildren = false;
@@ -288,7 +288,7 @@ function(Backbone, _, $, app, MessageView, Message, i18n, PostQuery){
                     }
                 }
                 if( isValid ) {
-                    view = new MessageView({model:model}, last_sibling_chain);
+                    view = new MessageFamilyView({model:model}, last_sibling_chain);
                     view.currentLevel = level;
                     found = true;
                     children = model.getChildren();
