@@ -603,7 +603,7 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery){
                 }
             }
             else {
-                console.log("showMessageById(): ERROR:  Message not found in collection");
+                console.log("showMessageById(): ERROR:  Message " + id + " not found in collection");
             }
 
         },

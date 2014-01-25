@@ -184,8 +184,8 @@ function(Backbone, _, $, app, Segment, i18n){
          * @type {Object}
          */
         events: {
-            'dragstart .box': "onDragStart",
-            'dragend .box': "onDragEnd",
+            'dragstart .postit': "onDragStart",
+            'dragend .postit': "onDragEnd",
             'dragover .panel': 'onDragOver',
             'dragleave .panel': 'onDragLeave',
             'drop .panel': 'onDrop',
