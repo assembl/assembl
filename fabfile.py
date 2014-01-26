@@ -197,10 +197,7 @@ def app_fullupdate():
     Full Update: maincode and dependencies
     """
     execute(updatemaincode)
-    execute(update_requirements, force=False)
-    execute(update_compass)
-    execute(update_bower)
-    execute(bower_install)
+    execute(app_update_dependencies)
     execute(app_compile)
     
 @task
@@ -209,9 +206,16 @@ def app_update():
     Fast Update: don't update requirements
     """
     execute(updatemaincode)
-    execute(bower_update)
     execute(app_compile)
 
+@task
+def app_update_dependencies():
+    execute(update_requirements, force=False)
+    execute(update_compass)
+    execute(update_bower)
+    execute(bower_install)
+    execute(bower_update)
+    
 @task
 def app_compile():
     """

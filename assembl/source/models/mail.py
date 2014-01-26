@@ -318,7 +318,7 @@ class Mailbox(PostSource):
         for email in emails:
             #session = Email.db
             #session.add(email)
-            (email_object, _) = self.parse_email(email.full_message, email)
+            (email_object, dummy, error) = self.parse_email(email.full_message, email)
             #session.add(email_object)
             session.commit()
             #session.remove()
