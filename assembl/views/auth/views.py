@@ -17,6 +17,7 @@ from pyramid.httpexceptions import (
     HTTPNotFound,
     HTTPServerError
     )
+from pyramid.settings import asbool
 
 from sqlalchemy import desc
 from sqlalchemy.orm.exc import NoResultFound
@@ -201,27 +202,35 @@ def assembl_register_view(request):
     if session.query(EmailAccount).filter_by(
         email=email, verified=True).count():
             return dict(default_context,
-                        error=localizer.translate(_("We already have a user with this email.")))
+                        error=localizer.translate(_(
+                            "We already have a user with this email.")))
     if password != password2:
         return dict(default_context,
-                    error=localizer.translate(_("The passwords should be identical")))
+                    error=localizer.translate(_(
+                        "The passwords should be identical")))
 
     #TODO: Validate password quality
     # otherwise create.
+    validate_registration = asbool(config.get(
+        'assembl.validate_registration_emails'))
+
     user = User(
         name=name,
         password=password,
+        verified=not validate_registration,
         creation_date=datetime.now()
         )
     email_account = EmailAccount(
         email=email,
+        verified=not validate_registration,
         profile=user
         )
     session.add(user)
     session.add(email_account)
     session.flush()
     userid = user.id
-    send_confirmation_email(request, email_account)
+    if validate_registration:
+        send_confirmation_email(request, email_account)
     # TODO: Check that the email logic gets the proper locale. (send in URL?)
     headers = remember(request, user.id, tokens=format_token(user))
     request.response.headerlist.extend(headers)
