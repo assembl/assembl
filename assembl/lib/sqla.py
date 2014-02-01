@@ -12,12 +12,16 @@ from collections import Iterable, defaultdict
 from anyjson import dumps, loads
 from colanderalchemy import SQLAlchemySchemaNode
 from sqlalchemy import (
-    DateTime, MetaData, engine_from_config, event, Column, ForeignKey)
+    DateTime, MetaData, engine_from_config, event, Column, ForeignKey,
+    Integer)
 from sqlalchemy.ext.declarative import declarative_base, declared_attr
 from sqlalchemy.orm import mapper, scoped_session, sessionmaker
 from sqlalchemy.orm.util import has_identity
 from sqlalchemy.util import classproperty
 from sqlalchemy.orm.session import object_session, Session
+from virtuoso.vmapping import (
+    PatternIriClass, LiteralQuadMapPattern, ClassQuadMapPattern,
+    IriSubjectQuadMapPattern)
 from zope.sqlalchemy import ZopeTransactionExtension
 from zope.sqlalchemy.datamanager import mark_changed as z_mark_changed
 
@@ -25,6 +29,7 @@ from pyramid.paster import get_appsettings, setup_logging
 
 from ..view_def import get_view_def
 from .zmqlib import get_pub_socket, send_changes
+from ..namespaces import QUADNAMES
 
 _TABLENAME_RE = re.compile('([A-Z]+)')
 
@@ -37,6 +42,7 @@ obsolete = None
 ObsoleteBase = TimestampedObsolete = None
 class_registry = dict()
 aliased_class_registry = None
+
 
 def declarative_bases(metadata, registry=None):
     """Return all declarative bases bound to a single metadata object."""
@@ -177,7 +183,7 @@ class BaseOps(object):
         id = getattr(self, 'id', None)
         if not id:
             if 'id' not in self.__class__.__dict__:
-                raise NotImplementedError("get_id_as_str on "+
+                raise NotImplementedError("get_id_as_str on " +
                     self.__class__.__name__)
             return None
         return str(id)
@@ -215,6 +221,59 @@ class BaseOps(object):
         if not id:
             return None
         return base_uri + cls.external_typename_with_inheritance() + "/" + str(id)
+
+    @classmethod
+    def iri_class(cls, nsm=None):
+        id_column = getattr(cls, 'id', None)
+        if id_column is None:
+            return None
+        clsname = cls.external_typename_with_inheritance()
+        iri_name = clsname+"_iri"
+        return PatternIriClass(
+            getattr(QUADNAMES, iri_name),
+            'local:'+clsname+'/%d', nsm, ('id', Integer, False))
+
+    @classmethod
+    def subject_quad_pattern(cls, nsm=None):
+        id_column = getattr(cls, 'id', None)
+        if id_column is None:
+            return None
+        clsname = cls.external_typename_with_inheritance()
+        iri_subject_name = clsname+"_subject"
+        iri_qmp = cls.iri_class(nsm)
+        return IriSubjectQuadMapPattern(
+            iri_qmp, getattr(QUADNAMES, iri_subject_name), nsm, id_column)
+
+    @classmethod
+    def special_quad_pattern(cls, nsm=None):
+        return []
+
+    @classmethod
+    def class_pattern_name(cls, rdf_class):
+        return getattr(QUADNAMES, 'class_pattern_'+rdf_class.md5_term_hash())
+
+    @classmethod
+    def column_pattern_name(cls, rdf_class, column):
+        return getattr(QUADNAMES, 'col_pattern_%s_%s' % (
+            rdf_class.md5_term_hash(), column.name))
+
+    @classmethod
+    def class_quad_pattern(cls, nsm=None):
+        mapper = cls.__mapper__
+        rdf_class = mapper.mapped_table.info.get('rdf_class', None)
+        if not rdf_class:
+            return
+        # Transform into a local name
+        subject_pattern = cls.subject_quad_pattern(nsm)
+        patterns = cls.special_quad_pattern(nsm)
+        for c in mapper.columns:
+            if 'rdf' in c.info:
+                qmp = c.info['rdf']
+                if not qmp.name:
+                    qmp.name = cls.column_pattern_name(rdf_class, c)
+        return ClassQuadMapPattern(
+            cls, rdf_class, subject_pattern, cls.class_pattern_name(rdf_class),
+            nsm, *patterns)
 
     @classmethod
     def get_instance(cls, identifier):
@@ -302,7 +361,7 @@ class BaseOps(object):
                     "in viewdef %s, class %s, name %s, spec not a string" % (
                         view_def_name, my_typename, name)
                 if subspec[0] == "'":
-                    # literals. 
+                    # literals.
                     result[name] = loads(subspec[1:])
                     continue
                 if ':' in subspec:
@@ -566,6 +625,7 @@ class Tombstone(object):
         return {"@type": self.typename,
                 "@id": self.uri,
                 "@tombstone": True}
+
 
 def orm_update_listener(mapper, connection, target):
     session = object_session(target)

@@ -39,6 +39,8 @@ from ..auth.models import (
     UserRole, LocalUserRole, DiscussionPermission, P_READ,
     R_SYSADMIN, ViewPost)
 from assembl.auth import get_permissions
+from assembl.namespaces import  SIOC, IDEA, ASSEMBL, DCTERMS
+from virtuoso.vmapping import LiteralQuadMapPattern, IriQuadMapPattern
 
 
 class Discussion(SQLAlchemyBaseModel):
@@ -46,14 +48,18 @@ class Discussion(SQLAlchemyBaseModel):
     A Discussion
     """
     __tablename__ = "discussion"
+    __table_args__ = {'info': {'rdf_class': ASSEMBL.Discussion}}
 
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True,
+        info= {'rdf': LiteralQuadMapPattern(ASSEMBL.db_id)})
 
-    topic = Column(UnicodeText, nullable=False)
+    topic = Column(UnicodeText, nullable=False,
+        info= {'rdf': LiteralQuadMapPattern(DCTERMS.title)})
 
     slug = Column(Unicode, nullable=False, unique=True, index=True)
 
-    creation_date = Column(DateTime, nullable=False, default=datetime.utcnow)
+    creation_date = Column(DateTime, nullable=False, default=datetime.utcnow,
+        info= {'rdf': LiteralQuadMapPattern(DCTERMS.created)})
 
     def read_post_ids(self, user_id):
         return (x[0] for x in self.db.query(Post.id).join(
@@ -495,6 +501,7 @@ class Idea(SQLAlchemyBaseModel):
     A core concept taken from the associated discussion
     """
     __tablename__ = "idea"
+    __table_args__ = {'info': {'rdf_class': IDEA.GenericIdea}}
     ORPHAN_POSTS_IDEA_ID = 'orphan_posts'
     sqla_type = Column(String(60), nullable=False)
 
@@ -502,15 +509,19 @@ class Idea(SQLAlchemyBaseModel):
     short_title = Column(UnicodeText)
     definition = Column(UnicodeText)
 
-    id = Column(Integer, primary_key=True)
-    creation_date = Column(DateTime, nullable=False, default=datetime.utcnow)
+    id = Column(Integer, primary_key=True,
+                info= {'rdf': LiteralQuadMapPattern(ASSEMBL.db_id)})
+    creation_date = Column(
+        DateTime, nullable=False, default=datetime.utcnow,
+        info = {'rdf': LiteralQuadMapPattern(DCTERMS.created)})
 
     discussion_id = Column(Integer, ForeignKey(
         'discussion.id',
         ondelete='CASCADE',
         onupdate='CASCADE'),
         nullable=False,
-        index=True,)
+        index=True,
+        info = {'rdf': IriQuadMapPattern(Discussion.iri_class(), SIOC.has_container)})
 
     discussion = relationship(
         "Discussion",
