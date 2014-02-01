@@ -31,6 +31,7 @@ assembl.imap4.password =
 assembl.imap4.mailbox = INBOX
 
 assembl.domain = assembl.net
+assembl.validate_registration_emails = false
 mail.host = localhost
 assembl.admin_email = webmaster@assembl.net
 
@@ -88,6 +89,23 @@ security.email_token_salt = [enter a key]
 store = sqlalchemy
 store.url = sqlite:///%(here)s/assembl.db
 
+# change this to the hostname visible from outside
+public_hostname = localhost
+public_port = 6543
+
+# ZMQ model changes socket
+changes.socket = ipc:///tmp/assembl_changes/0
+changes.multiplex = true
+changes.websocket.port = 8085
+changes.prefix = /socket
+# Use the second version if proxying through nginx
+changes.websocket.url = http://localhost:%(changes.websocket.port)s%(changes.prefix)s/
+#changes.websocket.url = http://%(public_hostname)s:%(public_port)s%(changes.prefix)s/
+
+# celery broker
+celery.broker = redis://localhost:6379/0
+
+cache_viewdefs = true
 
 test_with_zope = false
 
