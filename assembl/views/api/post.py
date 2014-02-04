@@ -13,7 +13,7 @@ from sqlalchemy.dialects.postgresql.base import ARRAY
 from sqlalchemy.orm import aliased, joinedload, joinedload_all, contains_eager
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.sql.expression import literal_column, bindparam, and_
-from sqlalchemy.sql import cast
+from sqlalchemy.sql import cast, column
 
 from assembl.views.api import API_DISCUSSION_PREFIX
 import transaction
@@ -100,13 +100,11 @@ def get_posts(request):
     
 
     only_synthesis = request.GET.get('only_synthesis')
-    if only_synthesis == "true":
-        posts = Post.db.query(SynthesisPost)
-    else:
-        posts = Post.db.query(Post)
-    
+    PostClass = SythesisPost if only_synthesis == "true" else Post
+    posts = Post.db.query(PostClass)
+
     posts = posts.filter(
-        Post.discussion_id == discussion_id,
+        PostClass.discussion_id == discussion_id,
     )
     ##no_of_posts_to_discussion = posts.count()
 
@@ -117,20 +115,20 @@ def get_posts(request):
         if root_idea_id:
             raise HTTPBadRequest(localizer.translate(
                 _("Getting orphan posts of a specific idea isn't supported.")))
-        posts = posts \
-            .filter(Post.id.in_(text(Idea._get_orphan_posts_statement(),
+        orphans = text(Idea._get_orphan_posts_statement(),
                         bindparams=[bindparam('discussion_id', discussion_id)]
-                        )))
+                        ).columns(column('post_id')).alias('orphans')
+        posts = posts.join(orphans, PostClass.id==orphans.c.post_id)
     elif only_orphan == "false":
         raise HTTPBadRequest(localizer.translate(
             _("Getting non-orphan posts isn't supported.")))
-    
+
     if root_idea_id:
-        posts = posts \
-            .filter(Post.id.in_(text(Idea._get_related_posts_statement(),
+        related = text(Idea._get_related_posts_statement(),
                     bindparams=[bindparam('root_idea_id', root_idea_id),
                     bindparam('discussion_id', discussion_id)]
-                    )))
+                    ).columns(column('post_id')).alias('related')
+        posts = posts.join(related, PostClass.id==related.c.post_id)
 
     if root_post_id:
         root_post = Post.get(id=root_post_id)
@@ -140,7 +138,7 @@ def get_posts(request):
             root_post.ancestry + cast(root_post.id, String) + ',%'
             ))
             |
-            (Post.id==root_post.id)
+            (PostClass.id==root_post.id)
             )
     else:
         root_post = None
@@ -153,7 +151,7 @@ def get_posts(request):
     print "\n"+repr(is_unread)+"\n"
     if user_id:
         posts = posts.outerjoin(ViewPost,
-                    and_(ViewPost.actor_id==user_id, ViewPost.post_id==Post.id)
+                    and_(ViewPost.actor_id==user_id, ViewPost.post_id==PostClass.id)
                 )
         posts = posts.add_entity(ViewPost)
         
