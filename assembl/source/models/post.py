@@ -150,7 +150,7 @@ class Post(Content):
         return data
 
     def __repr__(self):
-        return "<Post %d '%s %d'>" % (
+        return "<Post %d '%s'>" % (
             self.id,
             self.type,
         )
