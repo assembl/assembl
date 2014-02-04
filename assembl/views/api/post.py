@@ -100,7 +100,7 @@ def get_posts(request):
     
 
     only_synthesis = request.GET.get('only_synthesis')
-    PostClass = SythesisPost if only_synthesis == "true" else Post
+    PostClass = SynthesisPost if only_synthesis == "true" else Post
     posts = Post.db.query(PostClass)
 
     posts = posts.filter(
