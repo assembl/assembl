@@ -3,7 +3,9 @@
 <script>
 requirejs.config({
     "baseUrl": "{{ STATIC_URL }}js",
+    {% if cache_bust == "true" %}
     'urlArgs': "bust=" + (new Date()).getTime(),
+    {% endif %}
     'waitSeconds': 20,
     'shim': {
         'backbone': {

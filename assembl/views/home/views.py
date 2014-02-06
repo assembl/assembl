@@ -34,3 +34,5 @@ def discussion_list_view(request):
 def includeme(config):
     default_context['socket_url'] = \
         config.registry.settings['changes.websocket.url']
+    default_context['cache_bust'] = \
+        config.registry.settings['requirejs.cache_bust']
