@@ -75,15 +75,10 @@ def reloadapp():
     if env.uses_global_supervisor:
         print(cyan('Asking supervisor to restart %(projectname)s' % env))
         run("sudo /usr/bin/supervisorctl restart %(projectname)s" % env)
-    if env.uses_wsgi:
-        print(cyan('Reloading all wsgi applications in : %s' % env.projectpath))
-        #this may accidentally reload staging environments and the like, but it's the only reliable way to 
-        #hit any multisites defined. 
-        if env.uses_apache:
-            with cd(env.projectpath):
-                run('touch apache/*')
     else:
-        venvcmd("supervisorctl restart all")
+        venvcmd("supervisorctl restart celery_imap changes_router")
+        if env.uses_uwsgi:
+            venvcmd("supervisorctl restart prod:uwsgi")
     if env.uses_memcache:
         flushmemcache()
 
@@ -643,7 +638,7 @@ def commonenv(projectpath, venvpath=None):
     env.gitbranch = "master"
 
     env.uses_memcache = True
-    env.uses_wsgi = False
+    env.uses_uwsgi = False
     env.uses_apache = False
     env.uses_ngnix = False
     env.use_virtuoso = None
@@ -669,7 +664,6 @@ def devenv(projectpath=None):
     #env.user = "webapp"
     #env.home = "webapp"
     require('projectname', provided_by=('commonenv',))
-    env.uses_wsgi = False
     env.uses_apache = False
     env.uses_ngnix = False
     env.hosts = ['localhost']
@@ -710,7 +704,8 @@ def coeus_stagenv():
     env.hosts = ['coeus.ca']
     
     env.uses_apache = True
-    env.uses_ngnix = False
+    env.uses_ngnix = True
+    env.uses_uwsgi = True
     env.use_virtuoso = "/usr"
     env.gitbranch = "develop"
     
@@ -730,7 +725,8 @@ def coeus_stagenv2():
     env.hosts = ['coeus.ca']
     
     env.uses_apache = True
-    env.uses_ngnix = False
+    env.uses_ngnix = True
+    env.uses_uwsgi = True
     env.gitbranch = "develop"
     
 @task
