@@ -21,7 +21,7 @@ from sqlalchemy.util import classproperty
 from sqlalchemy.orm.session import object_session, Session
 from virtuoso.vmapping import (
     PatternIriClass, LiteralQuadMapPattern, ClassQuadMapPattern,
-    IriSubjectQuadMapPattern)
+    ApplyIriClass, RdfClassQuadMapPattern)
 from zope.sqlalchemy import ZopeTransactionExtension
 from zope.sqlalchemy.datamanager import mark_changed as z_mark_changed
 
@@ -231,48 +231,72 @@ class BaseOps(object):
         iri_name = clsname+"_iri"
         return PatternIriClass(
             getattr(QUADNAMES, iri_name),
-            'local:'+clsname+'/%d', nsm, ('id', Integer, False))
+            '^{DynamicLocalFormat}^/'+clsname+'/%d', nsm, ('id', Integer, False))
 
     @classmethod
     def subject_quad_pattern(cls, nsm=None):
         id_column = getattr(cls, 'id', None)
         if id_column is None:
             return None
-        clsname = cls.external_typename_with_inheritance()
-        iri_subject_name = clsname+"_subject"
         iri_qmp = cls.iri_class(nsm)
-        return IriSubjectQuadMapPattern(
-            iri_qmp, getattr(QUADNAMES, iri_subject_name), nsm, id_column)
+        return ApplyIriClass(iri_qmp, id_column)
 
     @classmethod
     def special_quad_pattern(cls, nsm=None):
         return []
 
     @classmethod
-    def class_pattern_name(cls, rdf_class):
-        return getattr(QUADNAMES, 'class_pattern_'+rdf_class.md5_term_hash())
+    def class_pattern_name(cls):
+        return getattr(QUADNAMES, 'class_pattern_'+cls.external_typename())
 
     @classmethod
-    def column_pattern_name(cls, rdf_class, column):
+    def class_type_pattern_name(cls):
+        return getattr(QUADNAMES, 'class_'+cls.external_typename()+'_type')
+
+    @classmethod
+    def class_graph_name(cls):
+        return getattr(QUADNAMES, 'class_'+cls.external_typename()+'_graph')
+
+    @classmethod
+    def class_graph_pattern_name(cls):
+        return getattr(QUADNAMES, 'class_'+cls.external_typename()+'_graph_quad_map')
+
+    @classmethod
+    def column_pattern_name(cls, column):
         return getattr(QUADNAMES, 'col_pattern_%s_%s' % (
-            rdf_class.md5_term_hash(), column.name))
+            cls.external_typename(), column.name))
 
     @classmethod
     def class_quad_pattern(cls, nsm=None):
         mapper = cls.__mapper__
-        rdf_class = mapper.mapped_table.info.get('rdf_class', None)
-        if not rdf_class:
+        info = getattr(mapper.mapped_table, 'info', {})
+        subject_pattern = cls.subject_quad_pattern(nsm) or\
+            info.get('rdf_subject_pattern', None)
+        if not subject_pattern:
             return
-        # Transform into a local name
-        subject_pattern = cls.subject_quad_pattern(nsm)
         patterns = cls.special_quad_pattern(nsm)
+        for p in patterns:
+            assert p.name
+        rdf_class = info.get('rdf_class', None)
+        if rdf_class:
+            patterns.append(RdfClassQuadMapPattern(
+                rdf_class, cls.class_type_pattern_name()))
+        info_patterns = info.get('rdf_patterns', [])
+        for p in info_patterns:
+            assert p.name
+        found = len(patterns) + len(info_patterns)
         for c in mapper.columns:
+            if c.table != mapper.local_table:
+                continue
             if 'rdf' in c.info:
+                found += 1
                 qmp = c.info['rdf']
                 if not qmp.name:
-                    qmp.name = cls.column_pattern_name(rdf_class, c)
+                    qmp.name = cls.column_pattern_name(c)
+        if not found:
+            return
         return ClassQuadMapPattern(
-            cls, rdf_class, subject_pattern, cls.class_pattern_name(rdf_class),
+            cls, subject_pattern, cls.class_pattern_name(),
             nsm, *patterns)
 
     @classmethod

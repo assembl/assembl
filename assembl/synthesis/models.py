@@ -10,6 +10,7 @@ from sqlalchemy.orm import relationship, backref, aliased
 from sqlalchemy.sql import func, cast, select, text
 from pyramid.security import Allow, ALL_PERMISSIONS
 from pyramid.i18n import TranslationString as _
+from virtuoso.alchemy import IRI_ID
 
 from sqlalchemy import (
     Table,
@@ -39,8 +40,9 @@ from ..auth.models import (
     UserRole, LocalUserRole, DiscussionPermission, P_READ,
     R_SYSADMIN, ViewPost)
 from assembl.auth import get_permissions
-from assembl.namespaces import  SIOC, IDEA, ASSEMBL, DCTERMS
-from virtuoso.vmapping import LiteralQuadMapPattern, IriQuadMapPattern
+from assembl.namespaces import  SIOC, IDEA, ASSEMBL, DCTERMS, VirtRDF, RDF, QUADNAMES
+from virtuoso.vmapping import (
+    LiteralQuadMapPattern, IriQuadMapPattern, IriClass, ApplyIriClass)
 
 
 class Discussion(SQLAlchemyBaseModel):
@@ -452,62 +454,27 @@ class Synthesis(ExplicitSubGraphView):
         return "<Synthesis %s>" % repr(self.subject)
 
 
-class IdeaLink(SQLAlchemyBaseModel):
-    """
-    A generic link between two ideas
-
-    If a parent-child relation, the parent is the source, the child the target
-    """
-    __tablename__ = 'idea_idea_link'
-    id = Column(Integer, primary_key=True)
-    source_id = Column(Integer, ForeignKey(
-        'idea.id', ondelete="CASCADE", onupdate="CASCADE"),
-        nullable=False, index=True)
-    target_id = Column(Integer, ForeignKey(
-        'idea.id', ondelete="CASCADE", onupdate="CASCADE"),
-        nullable=False, index=True)
-    source = relationship(
-        'Idea', 
-        primaryjoin="and_(Idea.id==IdeaLink.source_id, "
-                        "IdeaLink.is_tombstone==False)",
-        backref=backref('target_links', cascade="all, delete-orphan"),
-        foreign_keys=(source_id))
-    target = relationship(
-        'Idea',
-        primaryjoin="and_(Idea.id==IdeaLink.target_id, "
-                        "IdeaLink.is_tombstone==False)",
-        backref=backref('source_links', cascade="all, delete-orphan"),
-        foreign_keys=(target_id))
-    order = Column(Float, nullable=False, default=0.0)
-    is_tombstone = Column(Boolean, nullable=False, default=False, index=True)
-
-    def copy(self):
-        retval = self.__class__(source_id=self.source_id,
-                                target_id=self.target_id,
-                                is_tombstone=self.is_tombstone
-                                )
-        self.db.add(retval)
-        return retval
-
-    def get_discussion_id(self):
-        if self.source:
-            return self.source.get_discussion_id()
-        else:
-            return Idea.get(id=self.source_id).get_discussion_id()
-
-
 class Idea(SQLAlchemyBaseModel):
     """
     A core concept taken from the associated discussion
     """
     __tablename__ = "idea"
-    __table_args__ = {'info': {'rdf_class': IDEA.GenericIdea}}
+    # __table_args__ = {'info': {'rdf_patterns': [
+    #     IriQuadMapPattern(RDF.type, ApplyIriClass(IriClass(VirtRDF.iri_id), 'rdf_class'),
+    #                       QUADNAMES.class_Idea_class)]}}
+    __table_args__ = {'info': {'rdf_class': IDEA.Idea}}
     ORPHAN_POSTS_IDEA_ID = 'orphan_posts'
     sqla_type = Column(String(60), nullable=False)
 
-    long_title = Column(UnicodeText)
-    short_title = Column(UnicodeText)
-    definition = Column(UnicodeText)
+    long_title = Column(
+        UnicodeText,
+        info= {'rdf': LiteralQuadMapPattern(DCTERMS.alternative)})
+    short_title = Column(UnicodeText,
+        info= {'rdf': LiteralQuadMapPattern(DCTERMS.title)})
+    definition = Column(UnicodeText,
+        info= {'rdf': LiteralQuadMapPattern(DCTERMS.description)})
+
+    #rdf_class = Column(IRI_ID)
 
     id = Column(Integer, primary_key=True,
                 info= {'rdf': LiteralQuadMapPattern(ASSEMBL.db_id)})
@@ -521,7 +488,7 @@ class Idea(SQLAlchemyBaseModel):
         onupdate='CASCADE'),
         nullable=False,
         index=True,
-        info = {'rdf': IriQuadMapPattern(Discussion.iri_class(), SIOC.has_container)})
+        info = {'rdf': IriQuadMapPattern(SIOC.has_container, ApplyIriClass(Discussion.iri_class()))})
 
     discussion = relationship(
         "Discussion",
@@ -799,6 +766,56 @@ class RootIdea(Idea):
     def discussion_topic(self):
         return self.discussion.topic
 
+
+class IdeaLink(SQLAlchemyBaseModel):
+    """
+    A generic link between two ideas
+
+    If a parent-child relation, the parent is the source, the child the target
+    """
+    __tablename__ = 'idea_idea_link'
+    __table_args__ = {'info': {'rdf_class': IDEA.DirectedIdeaRelation}}
+    id = Column(Integer, primary_key=True,
+        info= {'rdf': LiteralQuadMapPattern(ASSEMBL.db_id)})
+    source_id = Column(Integer, ForeignKey(
+            'idea.id', ondelete="CASCADE", onupdate="CASCADE"),
+        nullable=False, index=True,
+        info= {'rdf': IriQuadMapPattern(IDEA.source_idea, ApplyIriClass(Idea.iri_class()))})
+    target_id = Column(Integer, ForeignKey(
+        'idea.id', ondelete="CASCADE", onupdate="CASCADE"),
+        nullable=False, index=True,
+        info= {'rdf': IriQuadMapPattern(IDEA.destination_idea, ApplyIriClass(Idea.iri_class()))})
+    source = relationship(
+        'Idea', 
+        primaryjoin="and_(Idea.id==IdeaLink.source_id, "
+                        "IdeaLink.is_tombstone==False)",
+        backref=backref('target_links', cascade="all, delete-orphan"),
+        foreign_keys=(source_id))
+    target = relationship(
+        'Idea',
+        primaryjoin="and_(Idea.id==IdeaLink.target_id, "
+                        "IdeaLink.is_tombstone==False)",
+        backref=backref('source_links', cascade="all, delete-orphan"),
+        foreign_keys=(target_id))
+    order = Column(Float, nullable=False, default=0.0,
+        info= {'rdf': LiteralQuadMapPattern(ASSEMBL.link_order)})
+    is_tombstone = Column(Boolean, nullable=False, default=False, index=True)
+
+    def copy(self):
+        retval = self.__class__(source_id=self.source_id,
+                                target_id=self.target_id,
+                                is_tombstone=self.is_tombstone
+                                )
+        self.db.add(retval)
+        return retval
+
+    def get_discussion_id(self):
+        if self.source:
+            return self.source.get_discussion_id()
+        else:
+            return Idea.get(id=self.source_id).get_discussion_id()
+
+
 class IdeaContentLink(SQLAlchemyBaseModel):
     """
     Abstract class representing a generic link between an idea and a Content
@@ -895,17 +912,20 @@ class Extract(IdeaContentPositiveLink):
     An extracted part of a Content. A quotation to be referenced by an `Idea`.
     """
     __tablename__ = 'extract'
+    __table_args__ = {'info': {'rdf_class': ASSEMBL.Excerpt}}
 
     id = Column(Integer, ForeignKey(
-        'idea_content_positive_link.id',
-        ondelete='CASCADE', onupdate='CASCADE'
-    ), primary_key=True)
+            'idea_content_positive_link.id',
+            ondelete='CASCADE', onupdate='CASCADE'
+        ), primary_key=True, info= {
+            'rdf': LiteralQuadMapPattern(ASSEMBL.db_id)})
 
     body = Column(UnicodeText, nullable=False)
 
     discussion_id = Column(Integer, ForeignKey(
         'discussion.id', ondelete="CASCADE", onupdate="CASCADE"),
-        nullable=False, index=True)
+        nullable=False, index=True,
+        info = {'rdf': IriQuadMapPattern(SIOC.has_container, ApplyIriClass(Discussion.iri_class()))})
     discussion = relationship('Discussion', backref='extracts')
 
     annotation_text = Column(UnicodeText)
@@ -936,7 +956,6 @@ class Extract(IdeaContentPositiveLink):
             retval['url'] = self.content.url
         return retval
 
-        
     def serializable(self):
         json = {
             '@id': self.uri_generic(self.id),
