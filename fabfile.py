@@ -11,8 +11,60 @@ import pipes
 import fabric.operations
 from fabric.operations import put, get
 from fabric.api import *
-from fabric.colors import cyan
+from fabric.colors import cyan, red, green
 from fabric.contrib.files import *
+from time import sleep
+
+@task
+def database_start():
+    """
+    Makes sure the database server is running
+    """
+    execute(supervisor_process_start, 'virtuoso')
+        
+def supervisor_process_start(process_name):
+    """
+    Starts a supervisord process, and waits till it started to return
+    """
+    print(cyan('Asking supervisor to start %s' % process_name))
+    supervisor_pid_regex = re.compile('^\d+')
+    status_regex = re.compile('^%s\s*(\S*)' % process_name)
+    with hide('running', 'stdout'):
+        supervisord_cmd_result = venvcmd("supervisorctl pid")
+    match = supervisor_pid_regex.match(supervisord_cmd_result)
+    if not match:
+        if env.uses_global_supervisor:
+            print(red('Supervisors doesn\'t seem to be running, aborting'))
+            exit()
+        else:
+            print(red('Supervisors doesn\'t seem to be running, trying to start it'))
+            supervisord_cmd_result = venvcmd("supervisord")
+            if supervisord_cmd_result.failed:
+                print(red('Failed starting supervisord'))
+                exit()
+    for try_num in range(20):
+        with hide('running', 'stdout'):
+            status_cmd_result = venvcmd("supervisorctl status %s" % process_name)
+        
+        match = status_regex.match(status_cmd_result)
+        if match:
+            status = match.group(1)
+            if(status == 'RUNNING'):
+                print(green("%s is running" % process_name))
+                break
+            elif(status == 'STOPPED'):
+                venvcmd("supervisorctl start %s" % process_name)
+            elif(status == 'STARTING'):
+                print(status)
+            else:
+                print("unexpected status: %s" % status)
+            sleep(1)
+            
+        else:
+            print(red('Unable to parse status (bad regex?)'))
+            print(status_cmd_result)
+            exit()
+
 
 
 @task
@@ -91,6 +143,7 @@ def app_db_update():
     """
     Migrates database using south
     """
+    execute(database_start)
     print(cyan('Migrating database'))
     venvcmd('alembic -c %s upgrade head' % (env.ini_file))
 
@@ -492,7 +545,9 @@ def database_create():
     """
     """
     if env.use_virtuoso:
-        venvcmd('export VIRTUOSO_ROOT=%s ; supervisord; sleep 8' % (env.use_virtuoso,))
+        execute(database_start)
+        #Not shure what VIRTUOSO_ROOT was used for benoitg
+        #venvcmd('export VIRTUOSO_ROOT=%s ; supervisord; sleep 8' % (env.use_virtuoso,))
     else:
         sudo('su - postgres -c "createdb -E UNICODE -Ttemplate0 -O%s %s"' % (env.db_user, env.db_name))
 
