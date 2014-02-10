@@ -223,7 +223,7 @@ class BaseOps(object):
         return base_uri + cls.external_typename_with_inheritance() + "/" + str(id)
 
     @classmethod
-    def iri_class(cls, nsm=None):
+    def iri_class(cls):
         id_column = getattr(cls, 'id', None)
         if id_column is None:
             return None
@@ -231,18 +231,18 @@ class BaseOps(object):
         iri_name = clsname+"_iri"
         return PatternIriClass(
             getattr(QUADNAMES, iri_name),
-            '^{DynamicLocalFormat}^/'+clsname+'/%d', nsm, ('id', Integer, False))
+            '^{DynamicLocalFormat}^/'+clsname+'/%d', ('id', Integer, False))
 
     @classmethod
-    def subject_quad_pattern(cls, nsm=None):
+    def subject_quad_pattern(cls):
         id_column = getattr(cls, 'id', None)
         if id_column is None:
             return None
-        iri_qmp = cls.iri_class(nsm)
+        iri_qmp = cls.iri_class()
         return ApplyIriClass(iri_qmp, id_column)
 
     @classmethod
-    def special_quad_pattern(cls, nsm=None):
+    def special_quad_pattern(cls):
         return []
 
     @classmethod
@@ -267,14 +267,14 @@ class BaseOps(object):
             cls.external_typename(), column.name))
 
     @classmethod
-    def class_quad_pattern(cls, nsm=None):
+    def class_quad_pattern(cls):
         mapper = cls.__mapper__
         info = getattr(mapper.mapped_table, 'info', {})
-        subject_pattern = cls.subject_quad_pattern(nsm) or\
+        subject_pattern = cls.subject_quad_pattern() or\
             info.get('rdf_subject_pattern', None)
         if not subject_pattern:
             return
-        patterns = cls.special_quad_pattern(nsm)
+        patterns = cls.special_quad_pattern()
         for p in patterns:
             assert p.name
         rdf_class = info.get('rdf_class', None)
@@ -297,7 +297,7 @@ class BaseOps(object):
             return
         return ClassQuadMapPattern(
             cls, subject_pattern, cls.class_pattern_name(),
-            nsm, *patterns)
+            *patterns)
 
     @classmethod
     def get_instance(cls, identifier):

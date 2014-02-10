@@ -75,17 +75,17 @@ def get_quadstorage(session):
     for cls in class_registry.itervalues():
         if not getattr(cls, 'class_quad_pattern', None):
             continue
-        p = cls.class_quad_pattern(nsm)
+        p = cls.class_quad_pattern()
         if p:
             class_patterns.append(p)
     # TODO: one per discussion.
     gqm = [
         GraphQuadMapPattern(
             cp.sqla_cls.class_graph_name(),
-            cp.sqla_cls.class_graph_pattern_name(), nsm, None, cp)
+            cp.sqla_cls.class_graph_pattern_name(), None, cp)
         for cp in class_patterns]
     return QuadStorage(
-        ASSEMBL.discussion_storage, gqm, None, False, nsm)
+        ASSEMBL.discussion_storage, gqm, None, False)
 
 
 def create_graphs(session):
