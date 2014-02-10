@@ -281,19 +281,19 @@ class BaseOps(object):
         if rdf_class:
             patterns.append(RdfClassQuadMapPattern(
                 rdf_class, cls.class_type_pattern_name()))
-        info_patterns = info.get('rdf_patterns', [])
-        for p in info_patterns:
+        patterns.extend(info.get('rdf_patterns', []))
+        for p in patterns:
             assert p.name
-        found = len(patterns) + len(info_patterns)
         for c in mapper.columns:
             if c.table != mapper.local_table:
                 continue
             if 'rdf' in c.info:
-                found += 1
                 qmp = c.info['rdf']
+                qmp.set_columns(c)
                 if not qmp.name:
                     qmp.name = cls.column_pattern_name(c)
-        if not found:
+                patterns.append(qmp)
+        if not len(patterns):
             return
         return ClassQuadMapPattern(
             cls, subject_pattern, cls.class_pattern_name(),

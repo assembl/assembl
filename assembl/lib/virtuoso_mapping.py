@@ -70,9 +70,7 @@ def load_ontologies(session, reload=None):
         print "loaded"
 
 
-def create_graphs(session):
-    for stmt in iri_function_definition_stmts:
-        session.execute(stmt)
+def get_quadstorage(session):
     class_patterns = []
     for cls in class_registry.itervalues():
         if not getattr(cls, 'class_quad_pattern', None):
@@ -86,8 +84,14 @@ def create_graphs(session):
             cp.sqla_cls.class_graph_name(),
             cp.sqla_cls.class_graph_pattern_name(), nsm, None, cp)
         for cp in class_patterns]
-    qs = QuadStorage(
+    return QuadStorage(
         ASSEMBL.discussion_storage, gqm, None, False, nsm)
+
+
+def create_graphs(session):
+    for stmt in iri_function_definition_stmts:
+        session.execute(stmt)
+    qs = get_quadstorage(session)
     defn = qs.definition_statement(nsm, session.bind)
     list(session.execute('sparql '+defn))
     # store = Virtuoso(connection=session.bind.connect(), quad_storage=qs.name)
