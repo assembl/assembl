@@ -77,7 +77,7 @@ def get_quadstorage(session):
             continue
         p = cls.class_quad_pattern()
         if p:
-            class_patterns.append(p)
+            class_patterns.extend(list(p))
     # TODO: one per discussion.
     gqm = [
         GraphQuadMapPattern(

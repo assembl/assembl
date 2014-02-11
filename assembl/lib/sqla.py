@@ -223,81 +223,117 @@ class BaseOps(object):
         return base_uri + cls.external_typename_with_inheritance() + "/" + str(id)
 
     @classmethod
-    def iri_class(cls):
+    def rdf_entitynames(cls):
+        "A list of strings for tables that correspond to multiple RDF entities"
+        return None
+
+    @classmethod
+    def iri_class(cls, entityname=None):
         id_column = getattr(cls, 'id', None)
         if id_column is None:
             return None
         clsname = cls.external_typename_with_inheritance()
-        iri_name = clsname+"_iri"
+        if entityname:
+            clsname += '_'.entityname
+        iri_name = clsname + "_iri"
         return PatternIriClass(
             getattr(QUADNAMES, iri_name),
             '^{DynamicLocalFormat}^/'+clsname+'/%d', ('id', Integer, False))
 
     @classmethod
-    def subject_quad_pattern(cls):
+    def subject_quad_pattern(cls, entityname=None):
         id_column = getattr(cls, 'id', None)
         if id_column is None:
             return None
-        iri_qmp = cls.iri_class()
+        iri_qmp = cls.iri_class(entityname)
         return ApplyIriClass(iri_qmp, id_column)
 
     @classmethod
-    def special_quad_pattern(cls):
+    def special_quad_patterns(cls, entityname=None):
+        # Note: If defined somewhere, override in subclasses to avoid inheritance.
         return []
 
     @classmethod
-    def class_pattern_name(cls):
-        return getattr(QUADNAMES, 'class_pattern_'+cls.external_typename())
+    def class_pattern_name(cls, entityname=None):
+        clsname = cls.external_typename()
+        if entityname:
+            clsname += '_'.entityname
+        return getattr(QUADNAMES, 'class_pattern_'+clsname)
 
     @classmethod
-    def class_type_pattern_name(cls):
-        return getattr(QUADNAMES, 'class_'+cls.external_typename()+'_type')
+    def class_type_pattern_name(cls, entityname=None):
+        clsname = cls.external_typename()
+        if entityname:
+            clsname += '_'.entityname
+        return getattr(QUADNAMES, 'class_'+clsname+'_type')
 
     @classmethod
-    def class_graph_name(cls):
-        return getattr(QUADNAMES, 'class_'+cls.external_typename()+'_graph')
+    def class_graph_name(cls, entityname=None):
+        clsname = cls.external_typename()
+        if entityname:
+            clsname += '_'.entityname
+        return getattr(QUADNAMES, 'class_'+clsname+'_graph')
 
     @classmethod
-    def class_graph_pattern_name(cls):
-        return getattr(QUADNAMES, 'class_'+cls.external_typename()+'_graph_quad_map')
+    def class_graph_pattern_name(cls, entityname=None):
+        clsname = cls.external_typename()
+        if entityname:
+            clsname += '_'.entityname
+        return getattr(QUADNAMES, 'class_'+clsname+'_graph_quad_map')
 
     @classmethod
-    def column_pattern_name(cls, column):
+    def column_pattern_name(cls, column, entityname=None):
+        clsname = cls.external_typename()
+        if entityname:
+            clsname += '_'.entityname
         return getattr(QUADNAMES, 'col_pattern_%s_%s' % (
-            cls.external_typename(), column.name))
+            clsname, column.name))
 
     @classmethod
     def class_quad_pattern(cls):
         mapper = cls.__mapper__
         info = getattr(mapper.mapped_table, 'info', {})
-        subject_pattern = cls.subject_quad_pattern() or\
-            info.get('rdf_subject_pattern', None)
-        if not subject_pattern:
+        entitynames = cls.rdf_entitynames()
+        if entitynames:
+            assert isinstance(entitynames, list)
+            subject_patterns = {entityname: cls.subject_quad_pattern(entityname) for entityname in entitynames}
+        else:
+            subject_patterns = cls.subject_quad_pattern()
+        if not subject_patterns:
             return
-        patterns = cls.special_quad_pattern()
-        for p in patterns:
-            assert p.name
-        rdf_class = info.get('rdf_class', None)
-        if rdf_class:
-            patterns.append(RdfClassQuadMapPattern(
-                rdf_class, cls.class_type_pattern_name()))
-        patterns.extend(info.get('rdf_patterns', []))
-        for p in patterns:
-            assert p.name
-        for c in mapper.columns:
-            if c.table != mapper.local_table:
-                continue
-            if 'rdf' in c.info:
-                qmp = c.info['rdf']
-                qmp.set_columns(c)
-                if not qmp.name:
-                    qmp.name = cls.column_pattern_name(c)
-                patterns.append(qmp)
-        if not len(patterns):
-            return
-        return ClassQuadMapPattern(
-            cls, subject_pattern, cls.class_pattern_name(),
-            *patterns)
+        if not isinstance(subject_patterns, dict):
+            subject_patterns = {None: subject_patterns}
+        for entityname, subject_pattern in subject_patterns.items():
+            patterns = cls.special_quad_patterns(entityname)
+            # only direct, not inherited
+            rdf_class = cls.__dict__.get('rdf_class', None)
+            if rdf_class:
+                assert (entityname is None) != isinstance(rdf_class, dict)
+                if entityname:
+                    rdf_class = rdf_class[entityname]
+                patterns.append(RdfClassQuadMapPattern(
+                    rdf_class, cls.class_type_pattern_name(entityname)))
+            for c in mapper.columns:
+                if c.table != mapper.local_table:
+                    continue
+                if 'rdf' in c.info:
+                    qmp = c.info['rdf']
+                    assert (entityname is None) != isinstance(qmp, tuple)
+                    if entityname:
+                        qmp, entitynames = qmp
+                        if entityname not in entitynames:
+                            continue
+                    qmp.set_columns(c)
+                    if not qmp.name:
+                        qmp.name = cls.column_pattern_name(c)
+                    patterns.append(qmp)
+            if not len(patterns):
+                return
+            for p in patterns:
+                assert p.name
+            yield ClassQuadMapPattern(
+                cls, subject_pattern, cls.class_pattern_name(),
+                *patterns)
 
     @classmethod
     def get_instance(cls, identifier):

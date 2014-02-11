@@ -50,7 +50,7 @@ class Discussion(SQLAlchemyBaseModel):
     A Discussion
     """
     __tablename__ = "discussion"
-    __table_args__ = {'info': {'rdf_class': ASSEMBL.Discussion}}
+    rdf_class = ASSEMBL.Discussion
 
     id = Column(Integer, primary_key=True,
         info= {'rdf': LiteralQuadMapPattern(ASSEMBL.db_id)})
@@ -459,10 +459,8 @@ class Idea(SQLAlchemyBaseModel):
     A core concept taken from the associated discussion
     """
     __tablename__ = "idea"
-    # __table_args__ = {'info': {'rdf_patterns': [
-    #     IriQuadMapPattern(RDF.type, ApplyIriClass(IriClass(VirtRDF.iri_id), 'rdf_class'),
-    #                       QUADNAMES.class_Idea_class)]}}
-    __table_args__ = {'info': {'rdf_class': IDEA.Idea}}
+    rdf_class = IDEA.Idea
+    #rdf_class_id = Column(IRI_ID)
     ORPHAN_POSTS_IDEA_ID = 'orphan_posts'
     sqla_type = Column(String(60), nullable=False)
 
@@ -474,7 +472,6 @@ class Idea(SQLAlchemyBaseModel):
     definition = Column(UnicodeText,
         info= {'rdf': LiteralQuadMapPattern(DCTERMS.description)})
 
-    #rdf_class = Column(IRI_ID)
 
     id = Column(Integer, primary_key=True,
                 info= {'rdf': LiteralQuadMapPattern(ASSEMBL.db_id)})
@@ -502,6 +499,12 @@ class Idea(SQLAlchemyBaseModel):
         # is only one per discussion - benoitg 2013-12-23
         #'with_polymorphic': '*'
     }
+
+    # @classmethod
+    # def special_quad_patterns(cls, entityname=None):
+    #     return [IriQuadMapPattern(
+    #         RDF.type, ApplyIriClass(IriClass(VirtRDF.iri_id), 'rdf_class_id'),
+    #         QUADNAMES.class_Idea_class)]
 
     @property
     def children(self):
@@ -774,7 +777,7 @@ class IdeaLink(SQLAlchemyBaseModel):
     If a parent-child relation, the parent is the source, the child the target
     """
     __tablename__ = 'idea_idea_link'
-    __table_args__ = {'info': {'rdf_class': IDEA.DirectedIdeaRelation}}
+    rdf_class = IDEA.DirectedIdeaRelation
     id = Column(Integer, primary_key=True,
         info= {'rdf': LiteralQuadMapPattern(ASSEMBL.db_id)})
     source_id = Column(Integer, ForeignKey(
@@ -912,7 +915,7 @@ class Extract(IdeaContentPositiveLink):
     An extracted part of a Content. A quotation to be referenced by an `Idea`.
     """
     __tablename__ = 'extract'
-    __table_args__ = {'info': {'rdf_class': ASSEMBL.Excerpt}}
+    rdf_class = ASSEMBL.Excerpt
 
     id = Column(Integer, ForeignKey(
             'idea_content_positive_link.id',
