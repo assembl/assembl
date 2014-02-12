@@ -128,7 +128,9 @@ def get_posts(request):
                     bindparams=[bindparam('root_idea_id', root_idea_id),
                     bindparam('discussion_id', discussion_id)]
                     ).columns(column('post_id')).alias('related')
-        posts = posts.join(related, PostClass.id==related.c.post_id)
+        #Virtuoso bug: This should work...
+        #posts = posts.join(related, PostClass.id==related.c.post_id)
+        posts = posts.filter(PostClass.id.in_(related))
 
     if root_post_id:
         root_post = Post.get(id=root_post_id)
