@@ -13,6 +13,7 @@ pyramid.includes =
 debugtoolbar.enabled = false
 debugtoolbar.hosts = 127.0.0.0/8
 debugtoolbar.intercept_exc = false
+requirejs.cache_bust=false
 
 # This database will be cleared! Be careful.
 sqlalchemy.url = virtuoso://assembl_test:assembl_test@VOSU
