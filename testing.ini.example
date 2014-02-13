@@ -15,7 +15,7 @@ debugtoolbar.hosts = 127.0.0.0/8
 debugtoolbar.intercept_exc = false
 
 # This database will be cleared! Be careful.
-sqlalchemy.url = postgresql+psycopg2://assembl:assembl@localhost/assembl_test
+sqlalchemy.url = virtuoso://assembl_test:assembl_test@VOSU
 sqlalchemy.echo=True
 db_user = assembl_test
 db_password = assembl_test
@@ -108,16 +108,6 @@ celery.broker = redis://localhost:6379/0
 cache_viewdefs = true
 
 test_with_zope = false
-
-# ZMQ model changes socket
-changes.socket = ipc:///tmp/assembl_changes/0
-changes.multiplex = false
-changes.websocket.port = 8085
-# This may use another port than above, in case of reverse proxying.
-changes.websocket.url = http://localhost:8085
-
-# celery broker
-celery.broker = redis://localhost:6379/0
 
 [pshell]
 db = assembl.lib.pshell_session.db
