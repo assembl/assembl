@@ -267,7 +267,7 @@ class SubGraphIdeaAssociation(SQLAlchemyBaseModel):
     id = Column(Integer, primary_key=True)
     sub_graph_id = Column(Integer, ForeignKey(
         'explicit_sub_graph_view.id', ondelete="CASCADE", onupdate="CASCADE"),
-        index=True)
+        index=True, nullable=False)
     sub_graph = relationship("ExplicitSubGraphView")
     idea_id = Column(Integer, ForeignKey(
         'idea.id', ondelete="CASCADE", onupdate="CASCADE"), index=True)
@@ -291,7 +291,7 @@ class SubGraphIdeaLinkAssociation(SQLAlchemyBaseModel):
 
     sub_graph_id = Column(Integer, ForeignKey(
         'explicit_sub_graph_view.id', ondelete="CASCADE", onupdate="CASCADE"),
-        index=True)
+        index=True, nullable=False)
     sub_graph = relationship("ExplicitSubGraphView")
 
     idea_link_id = Column(Integer, ForeignKey(
@@ -328,13 +328,15 @@ class ExplicitSubGraphView(IdeaGraphView):
         onupdate='CASCADE'
     ), primary_key=True)
 
-    ideas_associations = relationship(SubGraphIdeaAssociation)
+    ideas_associations = relationship(SubGraphIdeaAssociation,
+                                      cascade="all, delete-orphan")
 
     # proxy the 'idea' attribute from the 'ideas_associations' relationship
     # for direct access
     ideas = association_proxy('ideas_associations', 'idea')
 
-    idea_links_associations = relationship(SubGraphIdeaLinkAssociation)
+    idea_links_associations = relationship(SubGraphIdeaLinkAssociation,
+                                           cascade="all, delete-orphan")
 
     # proxy the 'idea_link' attribute from the 'idea_links_associations'
     # relationship for direct access
