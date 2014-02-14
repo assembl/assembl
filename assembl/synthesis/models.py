@@ -318,7 +318,7 @@ class ExplicitSubGraphView(IdeaGraphView):
 
     Note that ideaLinks may point to ideas that are not in the graph.  They
     should be followed transitively (if their nature is compatible) to reach
-    every idea in graph as if the were directly linked.
+    every idea in graph as if they were directly linked.
     """
     __tablename__ = "explicit_sub_graph_view"
 

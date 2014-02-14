@@ -703,7 +703,7 @@ def coeus_stagenv():
     require('projectname', provided_by=('commonenv',))
     env.hosts = ['coeus.ca']
     
-    env.uses_apache = True
+    env.uses_apache = False
     env.uses_ngnix = True
     env.uses_uwsgi = True
     env.use_virtuoso = "/usr"
@@ -724,7 +724,7 @@ def coeus_stagenv2():
     require('projectname', provided_by=('commonenv',))
     env.hosts = ['coeus.ca']
     
-    env.uses_apache = True
+    env.uses_apache = False
     env.uses_ngnix = True
     env.uses_uwsgi = True
     env.gitbranch = "develop"

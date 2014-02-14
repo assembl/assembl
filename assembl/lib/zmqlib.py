@@ -2,6 +2,7 @@ from itertools import count
 
 import zmq
 import zmq.devices
+from time import sleep
 
 context = zmq.Context.instance()
 
@@ -23,6 +24,8 @@ def start_dispatch_thread():
     td.setsockopt_in(zmq.IDENTITY, 'XSUB')
     td.setsockopt_out(zmq.IDENTITY, 'XPUB')
     td.start()
+    #Fix weird nosetests problems.  TODOfind and fix underlying problem
+    sleep(0.01)
     INITED = True
 
 
