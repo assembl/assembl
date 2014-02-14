@@ -44,27 +44,35 @@ class MailboxData(DataSet):
 
 class RootIdeaData(DataSet):
     class root_idea:
+        #A root idea is created by the discussion, so this is not truly the
+        #root idea...
+        id = 2
         discussion = DiscussionData.jacklayton
 
 
 class IdeaData(DataSet):
     class idea1:
+        id = 3
         discussion = DiscussionData.jacklayton
         short_title = u"idea 1"
 
     class idea11:
+        id = 4
         discussion = DiscussionData.jacklayton
         short_title = u"idea 1.1"
 
     class idea2:
+        id = 5
         discussion = DiscussionData.jacklayton
         short_title = u"idea 2"
 
     class idea21:
+        id = 6
         discussion = DiscussionData.jacklayton
         short_title = u"idea 2.1"
 
     class idea211:
+        id = 7
         discussion = DiscussionData.jacklayton
         short_title = u"idea 2.1.1"
 
@@ -100,6 +108,7 @@ class PostSourceData(DataSet):
 
 class PostData(DataSet):
     class root_post_1:
+        id = 1
         creator = UserData.participant1
         subject = u"a root post"
         body = u"post body"
@@ -108,6 +117,7 @@ class PostData(DataSet):
         discussion = DiscussionData.jacklayton
 
     class reply_post_1:
+        id = 2
         creator = UserData.participant2
         subject = u"re1: root post"
         body = u"post body"
@@ -116,6 +126,7 @@ class PostData(DataSet):
         discussion = DiscussionData.jacklayton
 
     class reply_post_2:
+        id = 3
         creator = UserData.participant2
         subject = u"re2: root post"
         body = u"post body"
@@ -124,6 +135,7 @@ class PostData(DataSet):
         discussion = DiscussionData.jacklayton
 
     class reply_post_3:
+        id = 4
         creator = UserData.participant2
         subject = u"re3: root post"
         body = u"post body"
@@ -137,8 +149,8 @@ class ExtractData(DataSet):
         body = u"body"
         creator = UserData.participant2
         owner = UserData.participant2
-        content = PostData.reply_post_2
-        idea = IdeaData.idea21
+        content_id = PostData.reply_post_2.id
+        idea_id = IdeaData.idea21.id
         discussion = DiscussionData.jacklayton
 
 

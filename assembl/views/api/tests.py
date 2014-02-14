@@ -26,11 +26,12 @@ class ApiTest(BaseTest):
     def setUp(self):
         super(ApiTest, self).setUp()
         self.fixture = get_fixture(self.session_factory)
-        try:
-            self.data = setup_data(self.fixture)
-        except Exception as e:
-            traceback.print_exc()
-            raise e
+        self.data = setup_data(self.fixture)
+        #try:
+        #    self.data = setup_data(self.fixture)
+        #except Exception as e:
+        #    traceback.print_exc()
+        #    raise e
         self.discussion = self.data.DiscussionData.jacklayton._stored_object()
         role = Role.get_role(self.session, R_SYSADMIN)
         self.data.UserRoleData.admin_role.role = role
