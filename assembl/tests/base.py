@@ -9,7 +9,7 @@ from webtest import TestApp
 from pyramid.paster import get_appsettings
 from pkg_resources import get_distribution
 
-from .plugins import add_parser_options
+from .nose_plugin import add_parser_options
 from ..lib.sqla import get_session_maker, is_zopish
 import assembl
 
