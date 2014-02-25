@@ -1,7 +1,6 @@
 import logging
 import sys
 
-from pyramid.paster import get_appsettings
 import transaction
 
 from ..lib.migration import bootstrap_db
@@ -10,10 +9,12 @@ from ..lib.sqla import (configure_engine, get_session_maker,
 
 log = logging.getLogger('nose.plugins.assembl')
 
+
 def as_boolean(s):
     if isinstance(s, bool):
         return s
     return str(s).lower() in ['true', '1', 'on', 'yes']
+
 
 def get_all_tables(app_settings, session, reversed=True):
     schema = app_settings.get('db_schema', 'assembl_test')
@@ -34,6 +35,7 @@ def get_all_tables(app_settings, session, reversed=True):
     log.debug('Current tables: %s' % str(ordered))
     return ordered
 
+
 def clear_rows(app_settings, session):
     log.info('Clearing database rows.')
     for row in get_all_tables(app_settings, session):
@@ -47,6 +49,7 @@ def clear_rows(app_settings, session):
     session.commit()
     session.transaction.close()
 
+
 def drop_tables(app_settings, session):
     log.info('Dropping all tables.')
     try:
@@ -56,22 +59,3 @@ def drop_tables(app_settings, session):
     except:
         raise Exception('Error dropping tables: %s' % (
             sys.exc_info()[1]))
-
-def configure(app_settings_file, app_settings):
-    with_zope = as_boolean(app_settings.get('test_with_zope'))
-    engine = configure_engine(app_settings, with_zope)
-
-    session_factory = get_session_maker()
-    assert with_zope == is_zopish(), "Session manager was not well "\
-        "built. We recommend tracing assembl.lib.sqla.get_session_maker."
-
-    transaction.begin()
-    session = session_factory()
-
-    drop_tables(app_settings, session)
-
-    log.info('Creating tables and running migrations.')
-    bootstrap_db(app_settings_file, engine)
-    transaction.commit()
-    return session_factory
-
