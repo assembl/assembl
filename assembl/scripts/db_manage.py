@@ -53,7 +53,7 @@ def main():
     elif args.command == "backup":
         admin_engine.execute("backup_context_clear()")
         
-        filename_prefix = 'assembl-virtuoso-backup_%s_' % time.strftime('%Y%m%d%H%M%S')
+        filename_prefix = 'assembl-virtuoso-backup' # % time.strftime('%Y%m%d%H%M%S')
         #virtuoso will add this suffix to the filename no matter what we do
         virtuoso_suffix = "1.bp"
         # Unfortunately adding , 3600, vector('"+os.getcwd()+"') typically

@@ -34,10 +34,10 @@ def supervisor_process_start(process_name):
     match = supervisor_pid_regex.match(supervisord_cmd_result)
     if not match:
         if env.uses_global_supervisor:
-            print(red('Supervisors doesn\'t seem to be running, aborting'))
+            print(red('Supervisord doesn\'t seem to be running, aborting'))
             exit()
         else:
-            print(red('Supervisors doesn\'t seem to be running, trying to start it'))
+            print(red('Supervisord doesn\'t seem to be running, trying to start it'))
             supervisord_cmd_result = venvcmd("supervisord")
             if supervisord_cmd_result.failed:
                 print(red('Failed starting supervisord'))
@@ -546,6 +546,9 @@ def database_create():
     else:
         sudo('su - postgres -c "createdb -E UNICODE -Ttemplate0 -O%s %s"' % (env.db_user, env.db_name))
 
+def virtuoso_db_directory():
+    return os.path.join(env.projectpath, 'var/db')
+
 @task
 def database_dump():
     """
@@ -553,6 +556,8 @@ def database_dump():
     """
     if not exists(env.dbdumps_dir):
         run('mkdir -m700 %s' % env.dbdumps_dir)
+
+    execute(supervisor_process_start, 'virtuoso')
 
     filename = 'db_%s.bp' % time.strftime('%Y%m%d')
     absolute_path = os.path.join(env.dbdumps_dir, filename)
@@ -564,7 +569,7 @@ def database_dump():
     if backup_output.failed:
         print(red('Failed virtuoso backup'))
         exit()
-    backup_file_path = os.path.join(env.projectpath, 'var/db', backup_output)
+    backup_file_path = os.path.join(virtuoso_db_directory(), backup_output)
     if not os.path.isfile(backup_file_path):
         print(red('Virtuoso backup did not error, but unable to find the file %s.' % (backup_file_path)))
         exit()
@@ -574,6 +579,7 @@ def database_dump():
     # Make symlink to latest
     with cd(env.dbdumps_dir):
         run('ln -sf %s %s' % (absolute_path, remote_db_path()))
+
 
 @task
 def database_download():
@@ -601,22 +607,32 @@ def database_restore():
     
     if(env.wsginame != 'dev.wsgi'):
         execute(webservers_stop)
-    
+    with prefix(venv_prefix()), cd(virtuoso_db_directory()):
+        venvcmd("supervisorctl stop virtuoso")
     # Drop db
-    with settings(warn_only=True):
-        sudo('su - postgres -c "dropdb %s"' % (env.db_name))
+    with cd(virtuoso_db_directory()):
+        run('rm *.db *.trx', warn_only=True)
 
     # Create db
-    execute(database_create)
+    #execute(database_create)
     
+    # Make symlink to latest
+    #this MUST match the code in db_manage or virtuoso will refuse to restore
+    restore_dump_prefix = "assembl-virtuoso-backup"
+    restore_dump_name = restore_dump_prefix+"1.bp"
+    with cd(virtuoso_db_directory()):
+        run('cat %s > %s' % (remote_db_path(), os.path.join(virtuoso_db_directory(), restore_dump_name)))
     # Restore data
-    with prefix(venv_prefix()), cd(env.projectpath):
-        run('pg_restore --host=%s --dbname=%s -U%s --schema=public %s' % (env.db_host,
-                                                  env.db_name,
-                                                  env.db_user,
-                                                  remote_db_path())
-        )
+    with prefix(venv_prefix()), cd(virtuoso_db_directory()):
+        venvcmd("supervisorctl stop virtuoso")
+        run("virtuoso-t +configfile %s +restore-backup %s" % (os.path.join(virtuoso_db_directory(), 'virtuoso.ini'), restore_dump_prefix))
+        
+    #clean up
+    with cd(virtuoso_db_directory()):
+        run('rm  %s' % (os.path.join(virtuoso_db_directory(),restore_dump_name)))
 
+    execute(supervisor_process_start, 'virtuoso')
+    
     if(env.wsginame != 'dev.wsgi'):
         execute(webservers_start)
 
