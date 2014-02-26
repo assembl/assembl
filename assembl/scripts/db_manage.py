@@ -1,8 +1,11 @@
 """ Wrapper over the command line migrate tool to better work with
 config files. """
-
+#To test:  python -m assembl.scripts.db_manage
+import argparse
 import subprocess
 import sys
+import os
+import time
 
 from pyramid.paster import get_appsettings
 import transaction
@@ -12,6 +15,7 @@ from alembic.migration import MigrationContext
 from ..lib.migration import bootstrap_db, bootstrap_db_data
 from ..lib.sqla import configure_engine, mark_changed
 from ..lib.zmqlib import configure_zmq
+from ..lib.config import set_config
 from sqlalchemy.orm import sessionmaker
 
 init_instructions = [
@@ -22,18 +26,17 @@ init_instructions = [
 
 
 def main():
-    if len(sys.argv) < 3:
-        sys.stderr.write('Usage: %s CONFIG_URI {bootstrap | ALEMBIC_OPTS}\n'
-                         % sys.argv[0])
-        sys.exit(1)
-
-    config_uri = sys.argv.pop(1)
-
-    settings = get_appsettings(config_uri)
+    parser = argparse.ArgumentParser(description="Manage database bootstrap, backup and restore.")
+    parser.add_argument("configuration", help="configuration file")
+    parser.add_argument("command", help="command",  choices=['bootstrap', 'backup', 'restore'])
+    args = parser.parse_args()
+    settings = get_appsettings(args.configuration)
+    set_config(settings)
     configure_zmq(settings['changes.socket'], False)
     engine = configure_engine(settings, True)
-    if sys.argv[1] == 'bootstrap':
-        admin_engine = create_engine_sqla('virtuoso://dba:dba@VOSU')
+    admin_engine = create_engine_sqla('virtuoso://dba:dba@VOSU')
+    if args.command == "bootstrap":
+        
         SessionMaker = sessionmaker(admin_engine)
         session = SessionMaker()
         if not session.execute(
@@ -42,10 +45,23 @@ def main():
             for i in init_instructions:
                 session.execute(i % settings)
             session.commit()
-        db = bootstrap_db(config_uri)
+        db = bootstrap_db(args.configuration)
         bootstrap_db_data(db)
         mark_changed()
         transaction.commit()
+
+    elif args.command == "backup":
+        admin_engine.execute("backup_context_clear()")
+        
+        filename_prefix = 'assembl-virtuoso-backup_%s_' % time.strftime('%Y%m%d%H%M%S')
+        #virtuoso will add this suffix to the filename no matter what we do
+        virtuoso_suffix = "1.bp"
+        # Unfortunately adding , 3600, vector('"+os.getcwd()+"') typically
+        # doesn't work as forbidden by default virtuoso configuration.
+        admin_engine.execute("backup_online('"+filename_prefix+"', 524288)")
+        
+        sys.stdout.write(filename_prefix+virtuoso_suffix+'\n')
+
     else:
         context = MigrationContext.configure(engine.connect())
         db_version = context.get_current_revision()
@@ -59,3 +75,6 @@ def main():
         cmd = ['alembic', '-c', config_uri] + sys.argv[1:]
 
         print(subprocess.check_output(cmd))
+            
+if __name__ == '__main__':
+    main()

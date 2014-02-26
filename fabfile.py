@@ -94,7 +94,7 @@ def venv_prefix():
     return 'source %(venvpath)s/bin/activate' % env
 
 def get_db_dump_name():
-    return 'current_database.pgdump'
+    return 'assembl-virtuoso-backup.bp'
 
 def remote_db_path():
     return os.path.join(env.projectpath, get_db_dump_name())
@@ -554,17 +554,23 @@ def database_dump():
     if not exists(env.dbdumps_dir):
         run('mkdir -m700 %s' % env.dbdumps_dir)
 
-    filename = 'db_%s.sql' % time.strftime('%Y%m%d')
-    compressed_filename = '%s.pgdump' % filename
-    absolute_path = os.path.join(env.dbdumps_dir, compressed_filename)
+    filename = 'db_%s.bp' % time.strftime('%Y%m%d')
+    absolute_path = os.path.join(env.dbdumps_dir, filename)
 
     # Dump
     with prefix(venv_prefix()), cd(env.projectpath):
-        run('pg_dump --host=%s -U%s --format=custom -b %s > %s' % (env.db_host, env.db_user,
-                                                 env.db_name,
-                                                 absolute_path)
+        backup_output = run('assembl-db-manage %s backup' % (env.ini_file)
             )
-
+    if backup_output.failed:
+        print(red('Failed virtuoso backup'))
+        exit()
+    backup_file_path = os.path.join(env.projectpath, 'var/db', backup_output)
+    if not os.path.isfile(backup_file_path):
+        print(red('Virtuoso backup did not error, but unable to find the file %s.' % (backup_file_path)))
+        exit()
+    #Move to dbdumps_dir
+    os.rename(backup_file_path, absolute_path)
+    
     # Make symlink to latest
     with cd(env.dbdumps_dir):
         run('ln -sf %s %s' % (absolute_path, remote_db_path()))
