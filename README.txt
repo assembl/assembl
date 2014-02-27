@@ -140,10 +140,10 @@ Running tests
 
 - Copy testing.ini.example to testing.ini
 - that change router must be running (supervisorctl start changes_router)
-- nosetests
+- py.test assembl
 
 To run a specific test, the syntax is: 
-nosetests assembl.views.api.tests:ApiTest.test_get_ideas
+py.test -k test_get_ideas
 
 Raw sql connection
 ------------------
