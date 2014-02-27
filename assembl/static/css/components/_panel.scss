@@ -122,7 +122,9 @@
     padding: 5px;
     cursor: text;
     min-height: 2rem;
-
+    p {
+    
+    }
     &:hover,
     &:focus {
         border-color: lightgray;

@@ -130,6 +130,8 @@ def save_idea(request):
 
     idea.short_title = idea_data['shortTitle']
     idea.long_title = idea_data['longTitle']
+    idea.definition = idea_data['definition']
+    
     if 'parentId' in idea_data and idea_data['parentId'] is not None:
         # TODO: Make sure this is sent as a list!
         parent = Idea.get_instance(idea_data['parentId'])

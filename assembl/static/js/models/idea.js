@@ -34,6 +34,7 @@ function(Base, _, Segment, app, i18n, Types){
         defaults: {
             shortTitle: i18n.gettext('New idea'),
             longTitle: '',
+            definition: '',
             numChildIdea: 0,
             num_posts: 0,
             num_read_posts: 0,

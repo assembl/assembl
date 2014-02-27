@@ -65,13 +65,20 @@ function(Backbone, _, Idea, Message, app, i18n, Types, EditableField, CKEditorFi
 
             app.initClipboard();
 
-            this.ckeditor = new CKEditorField({
+            this.longTitleField = new CKEditorField({
                 'model': this.idea,
                 'modelProp': 'longTitle',
                 'placeholder': i18n.gettext('Add the description')
             });
-
-            this.ckeditor.renderTo( this.$('#ideaPanel-longtitle') );
+            this.longTitleField.renderTo( this.$('#ideaPanel-longtitle') );
+            
+            this.definitionField = new CKEditorField({
+                'model': this.idea,
+                'modelProp': 'definition',
+                'placeholder': i18n.gettext('Add the description')
+            });
+            this.definitionField.renderTo( this.$('#ideaPanel-definition') );
+            
             return this;
         },
 
