@@ -541,8 +541,6 @@ def database_create():
     """
     if env.use_virtuoso:
         execute(database_start)
-        #Not shure what VIRTUOSO_ROOT was used for benoitg
-        #venvcmd('export VIRTUOSO_ROOT=%s ; supervisord; sleep 8' % (env.use_virtuoso,))
     else:
         sudo('su - postgres -c "createdb -E UNICODE -Ttemplate0 -O%s %s"' % (env.db_user, env.db_name))
 
@@ -625,7 +623,9 @@ def database_restore():
     # Restore data
     with prefix(venv_prefix()), cd(virtuoso_db_directory()):
         venvcmd("supervisorctl stop virtuoso")
-        run("virtuoso-t +configfile %s +restore-backup %s" % (os.path.join(virtuoso_db_directory(), 'virtuoso.ini'), restore_dump_prefix))
+        run("%s/bin/virtuoso-t +configfile %s +restore-backup %s" % (
+            env.use_virtuoso, os.path.join(virtuoso_db_directory(), 'virtuoso.ini'),
+        restore_dump_prefix))
         
     #clean up
     with cd(virtuoso_db_directory()):
