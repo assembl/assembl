@@ -49,7 +49,5 @@ setup(name='assembl',
       assembl-ini-files = assembl.scripts.ini_files:main
       assembl-imap-test = assembl.scripts.imap_test:main
       assembl-add-user  = assembl.scripts.add_user:main
-      [pytest11]
-      assembl_test_plugin = assembl.tests.pytest_plugin
       """,
       )

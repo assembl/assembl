@@ -4,8 +4,9 @@ import sys
 from pyramid.paster import get_appsettings
 import transaction
 
-from ..lib.sqla import configure_engine
-from .utils import as_boolean, log
+from .lib.sqla import configure_engine
+from .tests.utils import as_boolean, log
+from .tests.pytest_fixtures import *
 
 
 engine = None

@@ -3,7 +3,6 @@ import sys
 
 import transaction
 
-from ..lib.migration import bootstrap_db
 from ..lib.sqla import (configure_engine, get_session_maker,
                         get_metadata, is_zopish, mark_changed)
 
@@ -40,11 +39,6 @@ def get_all_tables(app_settings, session, reversed=True):
 def clear_rows(app_settings, session):
     log.info('Clearing database rows.')
     for row in get_all_tables(app_settings, session):
-        # OR rebuild default permissions afterwards?
-        # TODO: Separate table creation from base data fixture
-        # in bootstrap_db
-        if row in ('permission', 'role'):
-            continue
         log.debug("Clearing table: %s" % row)
         session.execute("delete from \"%s\"" % row)
     session.commit()
@@ -57,6 +51,7 @@ def drop_tables(app_settings, session):
         for row in get_all_tables(app_settings, session):
             log.debug("Dropping table: %s" % row)
             session.execute("drop table \"%s\"" % row)
+        mark_changed()
     except:
         raise Exception('Error dropping tables: %s' % (
             sys.exc_info()[1]))

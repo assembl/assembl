@@ -8,7 +8,8 @@ from alembic.config import Config
 from alembic.migration import MigrationContext
 from alembic.script import ScriptDirectory
 
-from ..lib.sqla import configure_engine, get_metadata, get_session_maker
+from ..lib.sqla import (
+    configure_engine, get_metadata, get_session_maker, mark_changed)
 import transaction
 
 
@@ -37,17 +38,21 @@ def bootstrap_db(config_uri=None, with_migration=True):
 
     import assembl.models
     get_metadata().create_all(db().connection())
+
+    # Clean up the sccoped session to allow a later app instantiation.
+    if with_migration and heads:
+        context = MigrationContext.configure(db().connection())
+        context._update_current_rev(db_version, heads[0])
+    return db
+
+
+def bootstrap_db_data(db):
     # import after session to delay loading of BaseOps
     from assembl.auth.models import (
         populate_default_permissions, populate_default_roles)
     populate_default_permissions(db())
     populate_default_roles(db())
-
-    # Clean up the sccoped session to allow a later app instantiation.
-
-    if with_migration and heads:
-        context = MigrationContext.configure(db().connection())
-        context._update_current_rev(db_version, heads[0])
+    mark_changed()
 
 
 def ensure_db_version(config_uri, session_maker):
@@ -90,4 +95,5 @@ def includeme(config):
     """Initialize Alembic-related stuff at app start-up time."""
     skip_migration = config.registry.settings.get('app.skip_migration')
     if not skip_migration and not is_migration_script():
-        ensure_db_version(config.registry.settings['config_uri'], get_session_maker())
+        ensure_db_version(
+            config.registry.settings['config_uri'], get_session_maker())

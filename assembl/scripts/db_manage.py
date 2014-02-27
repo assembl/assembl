@@ -9,7 +9,7 @@ import transaction
 from sqlalchemy import create_engine as create_engine_sqla
 from alembic.migration import MigrationContext
 
-from ..lib.migration import bootstrap_db
+from ..lib.migration import bootstrap_db, bootstrap_db_data
 from ..lib.sqla import configure_engine, mark_changed
 from ..lib.zmqlib import configure_zmq
 from sqlalchemy.orm import sessionmaker
@@ -42,7 +42,8 @@ def main():
             for i in init_instructions:
                 session.execute(i % settings)
             session.commit()
-        bootstrap_db(config_uri)
+        db = bootstrap_db(config_uri)
+        bootstrap_db_data(db)
         mark_changed()
         transaction.commit()
     else:

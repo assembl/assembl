@@ -18,7 +18,7 @@ from assembl.auth.models import (
     AgentProfile, User, Role, UserRole, Username, R_SYSADMIN,
     create_default_permissions, populate_default_permissions,
     populate_default_roles, Permission)
-from assembl.tests.pytest_fixtures import *
+#from assembl.conftest import *
 
 
 def get_url(discussion, suffix):
@@ -72,7 +72,7 @@ def test_homepage_returns_200(test_app):
     assert res.status_code == 200
 
 
-def test_get_ideas(discussion, test_app, module_session):
+def test_get_ideas(discussion, test_app, test_session):
     url = get_url(discussion, 'ideas')
     res = test_app.get(url)
     assert res.status_code == 200
@@ -85,7 +85,7 @@ def test_get_ideas(discussion, test_app, module_session):
         short_title='This is a test',
         discussion=discussion
     )
-    module_session.add(idea)
+    test_session.add(idea)
     url = get_url(discussion, 'ideas')
     res = test_app.get(url)
     assert res.status_code == 200
