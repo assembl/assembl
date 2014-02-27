@@ -7,7 +7,8 @@ from ..lib.migration import bootstrap_db
 from ..lib.sqla import (configure_engine, get_session_maker,
                         get_metadata, is_zopish, mark_changed)
 
-log = logging.getLogger('nose.plugins.assembl')
+
+log = logging.getLogger('pytest.assembl')
 
 
 def as_boolean(s):

@@ -12,7 +12,7 @@ from pkg_resources import get_distribution
 import assembl
 from assembl.lib.migration import bootstrap_db
 from assembl.lib.sqla import get_session_maker
-from .plugins import (as_boolean, clear_rows, drop_tables)
+from .utils import clear_rows, drop_tables
 from .pytest_plugin import engine
 
 
