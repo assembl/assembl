@@ -26,9 +26,10 @@ init_instructions = [
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Manage database bootstrap, backup and restore.")
+    parser = argparse.ArgumentParser(description="Manage database bootstrap, backup and update.")
     parser.add_argument("configuration", help="configuration file")
-    parser.add_argument("command", help="command",  choices=['bootstrap', 'backup', 'restore'])
+    parser.add_argument("command", help="command",  choices=['bootstrap', 'backup', 'alembic'])
+    parser.add_argument('alembic_args', nargs='*')
     args = parser.parse_args()
     settings = get_appsettings(args.configuration)
     set_config(settings)
@@ -61,18 +62,17 @@ def main():
         admin_engine.execute("backup_online('"+filename_prefix+"', 524288)")
         
         sys.stdout.write(filename_prefix+virtuoso_suffix+'\n')
-
-    else:
+    elif args.command == "alembic":
         context = MigrationContext.configure(engine.connect())
         db_version = context.get_current_revision()
 
         if not db_version:
             sys.stderr.write('Database not initialized.\n'
                              'Try this: "assembl-db-manage %s bootstrap"\n'
-                             % config_uri)
+                             % args.configuration)
             sys.exit(2)
 
-        cmd = ['alembic', '-c', config_uri] + sys.argv[1:]
+        cmd = ['alembic', '-c', args.configuration] + args.alembic_args
 
         print(subprocess.check_output(cmd))
             
