@@ -562,17 +562,18 @@ def database_dump():
 
     # Dump
     with prefix(venv_prefix()), cd(env.projectpath):
-        backup_output = run('assembl-db-manage %s backup' % (env.ini_file)
+        backup_output = venvcmd('assembl-db-manage %s backup' % (env.ini_file)
             )
     if backup_output.failed:
         print(red('Failed virtuoso backup'))
         exit()
     backup_file_path = os.path.join(virtuoso_db_directory(), backup_output)
-    if not os.path.isfile(backup_file_path):
-        print(red('Virtuoso backup did not error, but unable to find the file %s.' % (backup_file_path)))
-        exit()
     #Move to dbdumps_dir
-    os.rename(backup_file_path, absolute_path)
+    move_result = run('mv %s %s' % (backup_file_path, absolute_path), warn_only=True)
+    if move_result.failed:
+        print(red('Virtuoso backup did not error, but unable to move the file from %s to %s.\nYou may need to clear the file %s manually or your next backup will fail.' % (backup_file_path, absolute_path, backup_file_path)))
+        exit()
+
     
     # Make symlink to latest
     with cd(env.dbdumps_dir):
@@ -584,8 +585,12 @@ def database_download():
     """
     Dumps and downloads the database from the target server
     """
+    destination = os.path.join('./',get_db_dump_name())
+    if os.path.islink(destination):
+        print('Clearing symlink at %s to make way for downloaded file' % (destination))
+        local('rm %s' % (destination))
     execute(database_dump)
-    get(remote_db_path(), './')
+    get(remote_db_path(), destination)
 
 @task
 def database_upload():
