@@ -52,15 +52,36 @@ function(Base, _, Segment, app, i18n, Types){
          */
 
         /**
-         * Returns the display text for a synthesis idea.
+         * Returns the display text for a idea definition.
          * Will return the first non-empty from:
-         * longTitle, shortTitle, i18n.gettext('Add the description')
+         * definition, longTitle, i18n.gettext('Add a definition for this idea')
+         * @param
+         * @return {Text>}
+         */
+        getDefinitionDisplayText: function(){
+            if (this.get('root') === true) {
+                return i18n.gettext('The root idea will not be in the synthesis');
+            }
+
+            if( app.stripHtml(this.get('definition')) !== '' ){
+                return this.get('definition');
+            } else if( app.stripHtml(this.get('longTitle')) !== '' ){
+                return this.get('longTitle');
+            } else {
+                return i18n.gettext('Add a definition for this idea');
+            }
+        },
+
+        /**
+         * Returns the display text for a idea synthesis expression.
+         * Will return the first non-empty from:
+         * longTitle, shortTitle, i18n.gettext('Add and expression for the next synthesis')
          * @param
          * @return {Text>}
          */
         getLongTitleDisplayText: function(){
             if (this.get('root') === true) {
-                return i18n.gettext('The root idea will not be in the synthesis');
+                return i18n.gettext('The root idea will never be in the synthesis');
             }
 
             if( app.stripHtml(this.get('longTitle')) !== '' ){
@@ -68,7 +89,7 @@ function(Base, _, Segment, app, i18n, Types){
             } else if ( app.stripHtml(this.get('shortTitle')) !== '' ){
                 return this.get('shortTitle');
             } else {
-                return i18n.gettext('Add the description');
+                return i18n.gettext('Add and expression for the next synthesis');
             }
         },
 

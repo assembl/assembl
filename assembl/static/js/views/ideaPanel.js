@@ -58,7 +58,7 @@ function(Backbone, _, Idea, Message, app, i18n, Types, EditableField, CKEditorFi
                 'model': this.idea,
                 'modelProp': 'shortTitle',
                 'class': 'panel-editablearea text-bold',
-                'data-tooltip': i18n.gettext('Expression of the idea in the table of ideas'),
+                'data-tooltip': i18n.gettext('Short expression (only a few words) of the idea in the table of ideas.'),
                 'placeholder': i18n.gettext('New idea')
             });
             shortTitleField.renderTo(this.$('#ideaPanel-shorttitle'));
@@ -68,14 +68,14 @@ function(Backbone, _, Idea, Message, app, i18n, Types, EditableField, CKEditorFi
             this.longTitleField = new CKEditorField({
                 'model': this.idea,
                 'modelProp': 'longTitle',
-                'placeholder': i18n.gettext('Add the description')
+                'placeholder': this.idea.getLongTitleDisplayText()
             });
             this.longTitleField.renderTo( this.$('#ideaPanel-longtitle') );
             
             this.definitionField = new CKEditorField({
                 'model': this.idea,
                 'modelProp': 'definition',
-                'placeholder': i18n.gettext('Add the description')
+                'placeholder': this.idea.getDefinitionDisplayText()
             });
             this.definitionField.renderTo( this.$('#ideaPanel-definition') );
             

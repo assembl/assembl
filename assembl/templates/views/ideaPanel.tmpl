@@ -14,17 +14,17 @@
             <legend data-tooltip="{{gettext('Basic information about the idea being discussed')}}">
                 <span>{{ gettext('Summary') }}</span>
             </legend>
-            <div id="ideaPanel-shorttitle" class="text-bold"></div>
+            <div id="ideaPanel-shorttitle" class="text-bold" data-tooltip="{{gettext('The name of this idea in the table of ideas')}}"></div>
             <div id="ideaPanel-definition" data-tooltip="{{gettext('A definition of this idea')}}"></div>
             <p class="text-muted margin">
                 {% set creationDate = "<%= app.formatDate(idea.get('creationDate')) %>" %}
-                {{- gettext('Created on %(date)s')|format(date=creationDate)|safe }}
             </p>
             
             <textarea class="formtextarea message-textarea"></textarea>
-        <div class="text-right">
-            <a class="button button--primary message-sendbtn">{{ gettext('Comment on this idea') }}</a>
-        </div>
+            <div class="text-right">
+                <a class="button button--primary message-sendbtn">{{ gettext('Comment on this idea') }}</a>
+            </div>
+            {{- gettext('Idea created %(date)s')|format(date=creationDate)|safe }}
         </fieldset>
         
         <fieldset id="ideaPanel-section-synthesis" class="panel-section">

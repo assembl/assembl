@@ -86,8 +86,14 @@ define(['backbone', 'underscore'], function(Backbone, _){
             var data = app.stripHtml(ev.currentTarget.textContent);
             data = $.trim(data);
 
-            if( data != this.placeholder ){
-                this.model.save(this.modelProp, data);
+            if(data != this.placeholder || data == ''){
+                /* we never save placeholder values to the model */
+                if(this.model.get(this.modelProp) != data) {
+                    /* Nor save to the database and fire change events
+                     * if the value didn't change from the model
+                     */ 
+                    this.model.save(this.modelProp, data);
+                }
             }
         },
 

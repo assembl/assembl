@@ -106,7 +106,7 @@ define(['backbone', 'underscore', 'app', 'ckeditor-sharedspace'], function(Backb
                         return;
                     }
 
-                    var hasFocus = document.hasFocus(that.ckInstance.element.$);
+                    var hasFocus = $(that.ckInstance.element).is(":focus");
                     if( !hasFocus ){
                         that.saveEdition();
                     }
@@ -159,10 +159,17 @@ define(['backbone', 'underscore', 'app', 'ckeditor-sharedspace'], function(Backb
 
             var text = this.ckInstance.getData();
             text = $.trim(text);
-
-            this.model.save(this.modelProp, text);
+            if(text != this.placeholder || text == ''){
+                /* We never save placeholder values to the model */
+                if(this.model.get(this.modelProp) != text) {
+                    /* Nor save to the database and fire change events
+                     * if the value didn't change from the model
+                     */ 
+                    this.model.save(this.modelProp, text);
+                    this.trigger('save', [this]);
+                }
+            }
             this.render(false);
-            this.trigger('save', [this]);
         },
 
         /**
