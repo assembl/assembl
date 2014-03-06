@@ -155,3 +155,8 @@ A note on vagrant
 -----------------
 
 If you use vagrant, we have a few processes that expect to use socket files in %(here)s. Vagrant does not allow creating sockets in a shared folder; so if you insist on using vagrant, make sure to move sockets locations. There is one is supervisord.conf, and one in an unkonwn location. 
+
+
+Translations
+------------
+We use gettext through Babel. Instead of the usual gettext commands, extract strings from files throught `python setup.py extract_messages`, update the catalogs with `python setup.py update_catalog`, edit the catalogs in `assembl/locale/[language]/LC_MESSAGES/assembl.po`, and compile the catalogs with `python setup.py compile_catalog`.
