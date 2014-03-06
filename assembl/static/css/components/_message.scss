@@ -41,43 +41,62 @@ $message-bar-width: 15px;
     //padding-bottom: 0px;
 }
 
-.message.unread {
-    .message-title {
-        @extend .text-bold
-    }
-}
 // A message block Header
 // --------------------
 .message-header {
     position: relative;
+    min-height: $messagelist-item-height - 12px;
+    
 }
 .message-opened {
     position: relative;
+    .message-date {
+        float: none;
+    }
 }
 
 //
-.message-title {
+.message-subheader {
     @extend .idealist-title;
-
-    overflow:hidden;
+    overflow: hidden;
     text-overflow: ellipsis;
-    white-space:nowrap;
-
+    white-space: nowrap;
+    text-align:  baseline;
     max-height: $messagelist-item-height - 12px;
+    > span {
+            vertical-align: middle;
+            }
     .message--collapsed & {
         line-height: $icon-height;
+    }
+    .message-author {
+        display: inline-block;
+        width: 10em;
+        overflow:hidden; 
+        text-overflow: ellipsis;
+        &:hover {
+            position: relative;
+            min-width: 10em;
+            width: auto;
+        }
     }
 }
 
 //
 .message-date {
-    @extend .idealist-counter;
-
+    float: right;
     .message--collapsed & {
         line-height: $icon-height;
-    }
+        
+    } 
 }
 
+.message.unread {
+    .message-author, .message-subject, .message-date {
+        @extend .text-bold
+    }
+
+}
 // The arrow
 // ------------
 .message-family-arrow.noarrow {
@@ -189,13 +208,15 @@ $message-bar-width: 15px;
 
 
 //
-.message-body {
-    padding: { right: $padding * 2; left: $padding * 4; }
+.message-body, .message-replybox {
+    padding: {
+        right: $padding * 2;
+        left: $padding * 4;
+    }
 }
 
 //
 .message-replybox {
-    padding: $padding;
     text-align: right;
 }
 

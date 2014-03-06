@@ -6,10 +6,10 @@
     </div>
 
     <div class="message-date"><%= date %></div>
-    <div class="message-title">
-        <span class="margin-right"><%= creator.get('name') %></span>
-        <span class="margin-right"><span class="message-subject"><%= subject %></span></span>
-        <span class="text-muted text-opaque"><%= app.stripHtml(body) %> </span>
+    <div class="message-subheader">
+        <span class="message-author margin-right"><%= creator.get('name') %></span>
+        <span class="message-subject margin-right"><%= subject %></span>
+        <span class="text-muted"><%= app.stripHtml(body) %></span>
     </div>
 </div>
 
@@ -18,27 +18,26 @@
 <div class="message-opened">
     <div class="media">
 
-        <div class="media-imgleft">
+        <div class="float-left">
             <img src="<%= creator.getAvatarUrl(30) %>" alt="{{ gettext('User') }}"  class="image-rounded" width="30" height="30" />
         </div>
 
-        <div class="media-body">
-            <div class="message-title">
+
+            <div class="message-subheader">
                 {% set userName = "<%= creator.get('name') %>" %}
                 {% set time = "<%= date %>" %}
-                {{ gettext('<strong>%(user)s</strong> | <time>%(time)s</time>')|format(user=userName, time=time)|safe }}
-                <div><strong><span class="message-subject"><%= subject %></span></strong></div>
+                <span class="message-author">{{ gettext('%(user)s')|format(user=userName)|safe }}</span>
+                |
+                <span class="message-date">{{ gettext('<time>%(time)s</time>')|format(time=time)|safe }}</span>
+                <div><span class="message-subject"><%= subject %></span></div>
             </div>
             
-        </div>
     </div>
 
     <div class="spacer"></div>
     <div class="spacer"></div>
 
     <div class="message-body"><%= body %></div>
-
-    <div class="spacer"></div>
 
     <div class="message-replybox" hidden>
         <textarea class="formtextarea message-textarea"></textarea>

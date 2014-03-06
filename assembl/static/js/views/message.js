@@ -180,7 +180,7 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
         },
 
         events: {
-            'click .message-title': 'onMessageTitleClick',
+            'click .message-subheader': 'onMessageTitleClick',
             'click .message-hoistbtn': 'onMessageHoistClick',
 
             //
@@ -221,6 +221,7 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
             this.model.set('bodyShown', !bodyShown);
             if (!bodyShown) {
                 this.model.set('collapsed', false);
+                this.openReplyBox();
             }
         },
 
