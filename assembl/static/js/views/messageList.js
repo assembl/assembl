@@ -462,7 +462,6 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery){
             $.getJSON( app.getApiUrl('posts'), function(data){
                 _.each(data.posts, function(post){
                     post.collapsed = that.collapsed;
-                    post.bodyShown = false;
                 });
                 that.messages.reset(data.posts);
                 that.messagesFinishedLoading = true;
@@ -589,7 +588,7 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery){
                 callback = $.noop;
             }
             if( message ){
-                message.set('bodyShown', true);
+                message.trigger('showBody');
                 el = $(selector);
                 if( el[0] ){
                     var panelBody = this.$('.panel-body');

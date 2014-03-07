@@ -17,7 +17,6 @@ define(['models/base', 'jquery', 'app', 'underscore'], function(Base, $, app, _)
          */
         defaults: {
             collapsed: false,
-            bodyShown: false,
             checked: false,
             read: false,
             parentId: null,

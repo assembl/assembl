@@ -19,7 +19,75 @@ $message-bar-width: 15px;
     // &:last-child {
     //     border-bottom: 0;
     // }
+    
+    &.viewStyleFullMessage {
+        .message-date {
+            float: none;
+        }
+        .message-subheader {
+            max-height: none;
+        }
+        .message-author {
+            width: auto;
+        }
+    }
+    &.viewStyleTitleOnly {
+        .message-date {
+            float: right;
+            line-height: $icon-height;
+        }
+    }
+    
+    &.unread {
+        .message-author, .message-subject, .message-date {
+            @extend .text-bold
+        }
+    }
+    // A message block Header
+    // --------------------
+    .message-header {
+        position: relative;
+        min-height: $messagelist-item-height - 12px;
+        
+                    //
+
+    }
+    //
+    .message-subheader {
+        @extend .idealist-title;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        text-align:  baseline;
+        max-height: $messagelist-item-height - 12px;
+        > span {
+                vertical-align: middle;
+                }
+        .message--collapsed & {
+            line-height: $icon-height;
+        }
+
+    
+        .message-author {
+            display: inline-block;
+            width: 10em;
+            overflow:hidden; 
+            text-overflow: ellipsis;
+            &:hover {
+                position: relative;
+                min-width: 10em;
+                width: auto;
+            }
+        }
+    }
+
+    .message-body {
+        margin-top: 1em;
+    }
 }
+
+
+
 #messageList-list.reverse_chronological, #messageList-list.chronological {
     .message-family-container {    
         border-bottom: solid 1px $box-border-color;
@@ -41,62 +109,8 @@ $message-bar-width: 15px;
     //padding-bottom: 0px;
 }
 
-// A message block Header
-// --------------------
-.message-header {
-    position: relative;
-    min-height: $messagelist-item-height - 12px;
-    
-}
-.message-opened {
-    position: relative;
-    .message-date {
-        float: none;
-    }
-}
 
-//
-.message-subheader {
-    @extend .idealist-title;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    text-align:  baseline;
-    max-height: $messagelist-item-height - 12px;
-    > span {
-            vertical-align: middle;
-            }
-    .message--collapsed & {
-        line-height: $icon-height;
-    }
-    .message-author {
-        display: inline-block;
-        width: 10em;
-        overflow:hidden; 
-        text-overflow: ellipsis;
-        &:hover {
-            position: relative;
-            min-width: 10em;
-            width: auto;
-        }
-    }
-}
 
-//
-.message-date {
-    float: right;
-    .message--collapsed & {
-        line-height: $icon-height;
-        
-    } 
-}
-
-.message.unread {
-    .message-author, .message-subject, .message-date {
-        @extend .text-bold
-    }
-
-}
 // The arrow
 // ------------
 .message-family-arrow.noarrow {
@@ -215,9 +229,11 @@ $message-bar-width: 15px;
     }
 }
 
+
 //
 .message-replybox {
     text-align: right;
+    margin-top: 1em;
 }
 
 //

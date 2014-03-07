@@ -32,9 +32,10 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
          *   are the last child of their respective parents.
          */
         initialize: function(obj){
-            this.model.on('change:bodyShown', this.onBodyShownChange, this);
             this.model.on('change:isSelected', this.onIsSelectedChange, this);
             this.model.on('replaced', this.onReplaced, this);
+            this.model.on('showBody', this.onShowBody, this);
+            this.viewStyle = "viewStyleTitleOnly";
         },
 
         /**
@@ -63,23 +64,19 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
                 this.currentLevel = level;
             }
 
+            this.setViewStyle(this.viewStyle);
+                
             data['id'] = data['@id'];
             data['date'] = app.formatDate(data.date);
             data['creator'] = this.model.getCreator();
-
+            data['viewStyle'] = this.viewStyle;
+            
             this.$el.attr("id","message-"+ data['@id']);
                 if (this.model.get('read')) {
                     this.$el.addClass('read');
                 } else {
                     this.$el.addClass('unread');
                 }
-
-            if( data.bodyShown ){
-                this.$el.addClass('message--showbody');
-            } else {
-                this.$el.removeClass('message--showbody');
-            }
-
 
             this.$el.html( this.template(data) );
 
@@ -115,24 +112,37 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
         },
 
         /**
-         *  Opens the reply box and removes the reply button
-         */
-        openReplyBox: function(){
-            this.$('.message-replybox-openbtn').hide();
-            this.$('.message-replybox').show();
+         *  Focus on the reply box, and open it if closed
+         **/
+        focusReplyBox: function(){
+            this.openReplyBox();
 
             var that = this;
             window.setTimeout(function(){
                 that.$('.message-textarea').focus();
             }, 100);
         },
+        
+        /**
+         *  Opens the reply box the reply button
+         */
+        openReplyBox: function(){
+            this.$('.message-replybox').show();
+        },
 
+        /**
+         *  Closes the reply box
+         */
+        closeReplyBox: function(){
+            this.$('.message-replybox').hide();
+            this.$('.message-replybox-buttons').hide();
+        },
+        
         /**
          *  Closes the reply box and shows the reply button
          */
-        closeReplyBox: function(){
-            this.$('.message-replybox-openbtn').show();
-            this.$('.message-replybox').hide();
+        showReplyBoxButtons: function(){
+            this.$('.message-replybox-buttons').show();
         },
                 
         /**
@@ -180,11 +190,13 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
         },
 
         events: {
+            
             'click .message-subheader': 'onMessageTitleClick',
             'click .message-hoistbtn': 'onMessageHoistClick',
 
             //
-            'click .message-replybox-openbtn': 'openReplyBox',
+            'focus .message-replybox': 'showReplyBoxButtons',
+            'click .message-replybox-openbtn': 'focusReplyBox',
             'click .message-cancelbtn': 'closeReplyBox',
             'click .message-sendbtn': 'onSendMessageButtonClick',
 
@@ -195,8 +207,7 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
             'mouseenter .message-body': 'doTheSelection',
 
             // menu
-            'click #message-markasunread': 'markAsUnread',
-            'click #message-replybtn': 'openReplyBox'
+            'click #message-markasunread': 'markAsUnread'
         },
 
         
@@ -210,6 +221,48 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
         /**
          * @event
          */
+        onShowBody: function(){
+            var read = this.model.get('read');
+            
+            this.setViewStyle('viewStyleFullMessage');
+            
+            if( read === false ){
+                this.model.setRead(true);
+            }
+            
+            this.render();
+        },
+
+        /**
+         * You need to re-render after this
+         */
+        setViewStyle: function(style) {
+            if(style == "viewStyleTitleOnly") {
+                this.$el.removeClass('viewStyleFullMessage');
+                this.$el.addClass('viewStyleTitleOnly');
+                this.viewStyle = style;
+            }
+            else if(style == "viewStyleFullMessage"){
+                this.$el.removeClass('viewStyleTitleOnly');
+                this.$el.addClass('viewStyleFullMessage');
+                this.model.set('collapsed', false);
+                this.viewStyle = style;
+            } else {
+                console.log("unsupported view style :" +style );
+            }
+        },
+        
+        toggleViewStyle: function() {
+            if(this.viewStyle == "viewStyleTitleOnly") {
+                this.setViewStyle("viewStyleFullMessage");
+            }
+            else if(this.viewStyle == "viewStyleFullMessage"){
+                this.setViewStyle("viewStyleTitleOnly");
+            }
+        },
+        /**
+         * @event
+         */
         onMessageTitleClick: function(ev){
             if( ev ){
                 // Avoiding collapse if clicked on the link
@@ -217,10 +270,9 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
                     return;
                 }
             }
-            var bodyShown = this.model.get('bodyShown');
-            this.model.set('bodyShown', !bodyShown);
-            if (!bodyShown) {
-                this.model.set('collapsed', false);
+            this.toggleViewStyle();
+            this.render();
+            if (this.viewStyle == "viewStyleFullMessage") {
                 this.openReplyBox();
             }
         },
@@ -296,20 +348,6 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
 
             this.isSelecting = false;
             this.$el.removeClass('is-selecting');
-        },
-
-        /**
-         * @event
-         */
-        onBodyShownChange: function(){
-            var bodyShown = this.model.get('bodyShown'),
-                read = this.model.get('read');
-
-            if( bodyShown === true && read === false ){
-                this.model.setRead(true);
-            }
-
-            this.render();
         },
 
         /**

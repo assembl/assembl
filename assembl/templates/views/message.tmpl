@@ -1,4 +1,4 @@
-<% if( !bodyShown ){ %>
+<% if( viewStyle != "viewStyleFullMessage"){ %>
 
 <div class="message-header">
     <div class="float-left">
@@ -15,8 +15,8 @@
 
 <% } else { %>
 
-<div class="message-opened">
-    <div class="media">
+
+    <div class="message-header">
 
         <div class="float-left">
             <img src="<%= creator.getAvatarUrl(30) %>" alt="{{ gettext('User') }}"  class="image-rounded" width="30" height="30" />
@@ -33,15 +33,12 @@
             </div>
             
     </div>
-
-    <div class="spacer"></div>
-    <div class="spacer"></div>
-
+    
     <div class="message-body"><%= body %></div>
 
     <div class="message-replybox" hidden>
         <textarea class="formtextarea message-textarea"></textarea>
-        <div class="text-right">
+        <div class="message-replybox-buttons text-right" hidden>
             <a class="button message-cancelbtn">{{ gettext('Cancel') }}</a>
             <a class="button button--primary message-sendbtn">{{ gettext('Send') }}</a>
         </div>
@@ -54,12 +51,11 @@
         <div class="dropdown">
             <span class="dropdown-label dropdown-label--arrow"></span>
             <ul class="dropdown-list dropdown-list--bottomright">
-                <li id="message-replybtn" class="dropdown-listitem">{{ gettext('Reply') }}</li>
                 <li id="message-markasunread" class="dropdown-listitem">{{ gettext('Mark as unread') }}</li>
             </ul>
         </div>
     </div>
-</div>
+
 
 <% } %>
 
