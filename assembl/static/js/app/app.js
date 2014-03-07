@@ -49,6 +49,12 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard, Types){
         },
 
         /**
+         * Prefix used to generate the id of the element used by annotator to find it's annotation
+         * @type {string}
+         */
+        ANNOTATOR_MESSAGE_BODY_ID_PREFIX: "message-body-",
+        
+        /**
          * The current slug for the discussion
          * @type {String}
          */
@@ -369,9 +375,9 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard, Types){
          */
         getPostFromAnnotation: function(annotation){
             var span = $(annotation.highlights[0]),
-                messageId = span.closest('[id^="message-"]').attr('id');
+                messageId = span.closest('[id^="'+this.ANNOTATOR_MESSAGE_BODY_ID_PREFIX+'"]').attr('id');
 
-            return app.messageList.messages.get(messageId.substr(8));
+            return app.messageList.messages.get(messageId.substr(this.ANNOTATOR_MESSAGE_BODY_ID_PREFIX.length));
         },
 
 

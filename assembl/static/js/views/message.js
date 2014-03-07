@@ -70,6 +70,11 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
             data['date'] = app.formatDate(data.date);
             data['creator'] = this.model.getCreator();
             data['viewStyle'] = this.viewStyle;
+            // Do NOT change this, it's the message id stored in the database 
+            // by annotator when storing message annotations
+            // It has to contain ONLY raw content of the message provided by the
+            // database for annotator to parse it back properly
+            data['messageBodyId'] = app.ANNOTATOR_MESSAGE_BODY_ID_PREFIX + data['@id'];
             
             this.$el.attr("id","message-"+ data['@id']);
                 if (this.model.get('read')) {
