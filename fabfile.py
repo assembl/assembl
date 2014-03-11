@@ -204,8 +204,11 @@ def bootstrap_from_checkout():
     """
     execute(build_virtualenv)
     execute(install_rbenv)
-    execute(app_fullupdate)
-    
+    execute(updatemaincode)
+    execute(app_update_dependencies)
+    execute(app_setup)
+
+@task
 def clone_repository():
     """
     Clone repository and remove the exsiting one if necessary
@@ -269,8 +272,8 @@ def app_compile():
     """
     Fast Update: don't update requirements
     """
-    execute(compile_stylesheets)
     execute(app_setup)
+    execute(compile_stylesheets)
     execute(compile_messages)
     execute(app_db_update)
     # tests()
@@ -755,7 +758,27 @@ def coeus_stagenv2():
     env.uses_ngnix = True
     env.uses_uwsgi = True
     env.gitbranch = "develop"
+
+@task    
+def inm_prodenv():
+    """
+    [ENVIRONMENT] INM
+    """
+    commonenv(os.path.normpath("/var/www/assembl_inm/"))
+    env.wsginame = "prod.wsgi"
+    env.urlhost = "agora.inm.qc.ca"
+    env.user = "www-data"
+    env.home = "www-data"
+    env.ini_file = 'local.ini'
+    require('projectname', provided_by=('commonenv',))
+    env.hosts = ['coeus.ca']
     
+    env.uses_apache = False
+    env.uses_ngnix = True
+    env.uses_uwsgi = True
+    env.use_virtuoso = "/usr"
+    env.gitbranch = "develop"
+
 @task
 def prodenv():
     """

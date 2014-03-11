@@ -145,6 +145,34 @@ Running tests
 To run a specific test, the syntax is: 
 py.test -k test_get_ideas
 
+Installing a new production environment
+---------------------------------------
+
+Setup your environment in the fabfile
+
+fab your_env bootstrap
+
+Setup your ini file.  Typically you'll want to copy production.ini to local.ini
+and change at least:  
+
+[app:main]
+sqlalchemy.url
+db_user
+db_password
+changes.websocket.port 
+[alembic]
+sqlalchemy.url
+[virtuoso]
+port
+[virtuoso]
+http_port
+[server:main]
+port
+
+fab your_env app_db_install
+fab your_env app_fullupdate
+
+
 Raw sql connection
 ------------------
 
