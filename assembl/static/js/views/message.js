@@ -35,7 +35,24 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
             this.model.on('change:isSelected', this.onIsSelectedChange, this);
             this.model.on('replaced', this.onReplaced, this);
             this.model.on('showBody', this.onShowBody, this);
-            this.viewStyle = "viewStyleTitleOnly";
+            //this.viewStyle = "viewStyleTitleOnly";
+            this.viewStyle = "viewStyleFullMessage"
+            this.messageListView = obj.messageListView;
+            //this.annotator = this.$el.closest('#messageList-list').data('annotator');
+            this.messageListView.on('annotator:initComplete', this.onAnnotatorInitComplete, this);
+            
+            /**
+             * The collection of annotations loaded in annotator for this message.
+             * They do not need to be re-loaded on render
+             * @type {Annotation}
+             */
+            this.loadedAnnotations = {};
+            
+            /**
+             * The list of already rendered annotation id's in the message body
+             * @type {Annotation}
+             */
+            this._renderedAnnotationIds = [];
         },
 
         /**
@@ -44,11 +61,7 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
          */
         template: app.loadTemplate('message'),
 
-        /**
-         * The lastest annotation created by annotator
-         * @type {Annotation}
-         */
-        currentAnnotation: null,
+        
 
         /**
          * The render
@@ -86,10 +99,85 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
             this.$el.html( this.template(data) );
 
             app.initClipboard();
+            this.loadAnnotations();
 
             return this;
         },
+        
+        /**
+         * Render annotator's annotations in the message body
+         * Safe to call multiple times, will not double load annotations.
+         */
+        loadAnnotations: function(){
+            if(this.annotator) {
+                var that = this,
+                
+                annotations = this.model.getAnnotations(),
+                annotationsToLoad = [];
+                
+                _.each(annotations, function(annotation){
+                    if(!(annotation['@id'] in that.loadedAnnotations)) {
+                        annotationsToLoad.push(annotation);
+                    }
+                });
+                
+                //console.log("loadAnnotations for "+this.model.id+" thinks this is loaded:");
+                //console.log(this.loadedAnnotations);
+                //console.log("loadAnnotations will load");
+                //console.log(annotationsToLoad);
+    
+                // Loading the annotations
+                if( annotationsToLoad.length ) {
+                    // This call is synchronous I believe - benoitg
+                    that.annotator.loadAnnotations( _.clone(annotationsToLoad) );
+                    _.each(annotationsToLoad, function(annotation){
+                        that.loadedAnnotations[annotation['@id']] =  annotation;
+                        //console.log("Added " + annotation['@id'] + " to messageView " + that.model.id);
+                        });
+                    setTimeout(function(){
+                        that.renderAnnotations(annotationsToLoad);
+                    }, 1);
 
+
+                //console.log("loadAnnotations should have loaded:");
+                //console.log(annotationsToLoad);
+                }
+            }
+        },
+        
+        /**
+         * Render annotator's annotations in the message body
+         */
+        renderAnnotations: function(annotations){
+            var that = this;
+
+            _.each(annotations, function(annotation){
+                if(_.indexOf(that._renderedAnnotationIds, annotation['@id']) == -1 ) {
+                    console.log("renderAnnotations rendering:");
+                    console.log(annotation);
+                    var highlights = annotation.highlights,
+                    func = app.showSegmentByAnnotation.bind(window, annotation);
+                    console.log(highlights)
+                    _.each(highlights, function(highlight){
+                        highlight.setAttribute('data-annotation-id', annotation['@id']);
+                        $(highlight).on('click', func);
+                    });
+                    that._renderedAnnotationIds.push(annotation['@id']);
+                }
+            });
+
+        },
+        
+        /**
+         * @event
+         * param Annotator object
+         */
+        onAnnotatorInitComplete: function(annotator){
+            this.annotator = annotator;
+            //Normally render has been called by this point, no need for a full render
+            this.loadAnnotations();
+        },
+        
         /**
          * Hide the selection tooltip
          */

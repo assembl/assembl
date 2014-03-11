@@ -27,6 +27,7 @@ function(Backbone, _, Moment, ckeditor, app, Message, MessageView, i18n){
                 last_sibling_chain = [];
             }
             this.last_sibling_chain = last_sibling_chain;
+            this.messageListView = obj.messageListView;
             this.model.on('change:collapsed', this.onCollapsedChange, this);
         },
 
@@ -57,7 +58,8 @@ function(Backbone, _, Moment, ckeditor, app, Message, MessageView, i18n){
                 this.currentLevel = level;
             }
             var messageView = new MessageView({
-                model : this.model
+                model : this.model,
+                messageListView: this.messageListView
             });
             
             messageView.render();

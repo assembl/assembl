@@ -37,6 +37,8 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery){
             
             this.listenTo(this.messages, 'reset', this.invalidateResultsAndRender);
             this.listenTo(this.messages, 'add', this.invalidateResultsAndRender);
+            //TODO:  Benoitg:  I didn'T write this part, but i think it needs a
+            // re-render, not just an init
             this.listenTo(this.messages, 'change', this.initAnnotator);
 
             var that = this;
@@ -151,6 +153,7 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery){
             var that = this,
                 views = [];
 
+                
             if (this.currentViewStyle == this.ViewStyles.THREADED) {
                 views = this.getRenderedMessagesThreaded(this.getRootMessagesToDisplay(), 1, []);
             }
@@ -158,10 +161,10 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery){
                 views = this.getRenderedMessagesFlat(this.getAllMessagesToDisplay());
             }
             var data = {
-                currentViewStyle: this.currentViewStyle,
-                collapsed: this.collapsed,
-                queryInfo: this.currentQuery.getHtmlDescription()
-            };
+                    currentViewStyle: this.currentViewStyle,
+                    collapsed: this.collapsed,
+                    queryInfo: this.currentQuery.getHtmlDescription()
+                };
 
             this.$el.html( this.template(data) );
 
@@ -237,7 +240,8 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery){
                 model = messages[i];
 
                 view = new MessageFamilyView({
-                    model : model
+                    model : model,
+                    messageListView : this
                 });
                 view.hasChildren = false;
                 list.push(view.render().el);
@@ -288,7 +292,7 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery){
                     }
                 }
                 if( isValid ) {
-                    view = new MessageFamilyView({model:model}, last_sibling_chain);
+                    view = new MessageFamilyView({model:model, messageListView:this}, last_sibling_chain);
                     view.currentLevel = level;
                     found = true;
                     children = model.getChildren();
@@ -342,28 +346,15 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery){
          * Inits the annotator instance
          */
         initAnnotator: function(){
+            // Won't this cause problems?  Benoitg
             this.destroyAnnotator();
 
             // Saving the annotator reference
             this.annotator = this.$('#messageList-list').annotator().data('annotator');
 
-            var annotations = this.messages.getAnnotations(),
-                that = this;
+            var that = this;
 
-            this.annotator.subscribe('annotationsLoaded', function(annotations){
-                _.each(annotations, function(annotation){
-                    
-                    var highlights = annotation.highlights,
-                        func = app.showSegmentByAnnotation.bind(window, annotation);
-
-                    _.each(highlights, function(highlight){
-                        highlight.setAttribute('data-annotation-id', annotation['@id']);
-                        $(highlight).on('click', func);
-                    });
-
-                });
-            });
-
+            //TODO:  Re-render message in messagelist if an annotation was added...
             this.annotator.subscribe('annotationCreated', function(annotation){
                 var segment = app.segmentList.addAnnotationAsSegment(annotation, app.currentAnnotationIdIdea);
                 if( !segment.isValid() ){
@@ -404,16 +395,13 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery){
                 // We do not need the annotator's tooltip
                 viewer.hide();
             });
-
-            // Loading the annotations
-            if( annotations.length ){
-                setTimeout(function(){
-                    that.annotator.loadAnnotations( annotations );
-                }, 10);
-            }
+            //We need extra time for annotator to be ready, but I don't 
+            // know why and how much.  benoitg 2014-03-10
+            setTimeout( function (){
+                that.trigger("annotator:initComplete", that.annotator);
+            }, 1000);
 
         },
-
 
         /**
          * destroy the current annotator instance and remove all listeners
