@@ -32,6 +32,7 @@ from ...auth.password import format_token
 from ...auth.operations import (
     get_identity_provider, send_confirmation_email, verify_email_token)
 from ...lib import config
+from .. import get_default_context
 
 default_context = {
     'STATIC_URL': '/static/'
@@ -64,9 +65,11 @@ def logout(request):
 #)
 def login_view(request):
     # TODO: In case of forbidden, get the URL and pass it along.
-    return dict(default_context, **{
+    localizer = get_localizer(request)
+    return dict(get_default_context(request), **{
         'login_url': login_url,
         'providers': request.registry.settings['login_providers'],
+        'google_consumer_key': request.registry.settings['google.consumer_key'],
         'next_view': request.params.get('next_view', '/')
     })
 
@@ -162,10 +165,11 @@ def assembl_profile(request):
         for ea in profile.email_accounts() if not ea.verified]
     return render_to_response(
         'assembl:templates/profile.jinja2',
-        dict(default_context,
+        dict(get_default_context(request),
              error='<br />'.join(errors),
              unverified_emails=unverified_emails,
              providers=request.registry.settings['login_providers'],
+             google_consumer_key=request.registry.settings['google.consumer_key'],
              the_user=profile,
              user=session.query(User).get(logged_in)))
 

@@ -9,6 +9,8 @@ from assembl.synthesis.models import Discussion
 from assembl.auth import get_user, P_READ
 from sqlalchemy.orm.exc import NoResultFound
 
+from .. import get_default_context as base_default_context
+
 FIXTURE = os.path.join(os.path.dirname(__file__),
                        '../../static/js/fixtures/nodes.json')
 
@@ -32,19 +34,13 @@ def js_message_ids():
 JS_MESSAGE_IDS = js_message_ids()
 
 def get_default_context(request):
+    base = base_default_context(request)
     slug = request.matchdict['discussion_slug']
     try:
         discussion = Discussion.db.query(Discussion).filter(Discussion.slug==slug).one()
     except NoResultFound:
         raise HTTPNotFound(_("No discussion found for slug=%s" % slug))
-    localizer = get_localizer(request)
-
-    return dict(default_context,
-        user=get_user(request),
-        templates=get_template_views(),
-        discussion=discussion,
-        translations=json.dumps({
-            id:localizer.translate(_(id)) for id in JS_MESSAGE_IDS}))
+    return dict(base, template=get_template_views(), discussion=discussion)
 
 
 def get_template_views():
