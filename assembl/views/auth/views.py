@@ -370,7 +370,8 @@ def velruse_login_complete_view(request):
             profile.merge(other)
             session.delete(other)
         if isinstance(profile, User):
-            username = profile.username.username
+            if profile.username:
+                username = profile.username.username
             profile.last_login = datetime.now()
     else:
         # Create a new user
