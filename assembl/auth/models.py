@@ -347,8 +347,10 @@ class User(AgentProfile):
                 extract.creator = self
             for extract in other_user.extracts_owned:
                 extract.owner = self
-            for discussion in other_user.discussions:
-                discussion.owner = self
+            for role in other_user.roles:
+                role.user = self
+            for role in other_user.local_roles:
+                role.user = self
             if other_user.username and not self.username:
                 self.username = other_user.username
 
@@ -432,7 +434,7 @@ class UserRole(SQLAlchemyBaseModel):
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey('user.id', ondelete='CASCADE', onupdate='CASCADE'),
                      index=True)
-    user = relationship(User)
+    user = relationship(User, backref="roles")
     role_id = Column(Integer, ForeignKey('role.id', ondelete='CASCADE', onupdate='CASCADE'))
     role = relationship(Role, lazy="joined")
 
@@ -442,7 +444,7 @@ class LocalUserRole(SQLAlchemyBaseModel):
     __tablename__ = 'local_user_role'
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey('user.id', ondelete='CASCADE', onupdate='CASCADE'))
-    user = relationship(User)
+    user = relationship(User, backref="local_roles")
     discussion_id = Column(Integer, ForeignKey(
         'discussion.id', ondelete='CASCADE'))
     discussion = relationship('Discussion')
