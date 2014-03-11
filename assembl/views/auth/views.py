@@ -374,7 +374,7 @@ def velruse_login_complete_view(request):
     else:
         # Create a new user
         profile = User(
-            name=velruse_profile['displayName'],
+            name=velruse_profile.get('displayName', ''),
             verified=True,
             last_login=datetime.now(),
             creation_date=datetime.now(),
