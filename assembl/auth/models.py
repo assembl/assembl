@@ -62,6 +62,8 @@ class AgentProfile(SQLAlchemyBaseModel):
     id = Column(Integer, primary_key=True)
     name = Column(Unicode(1024))
     type = Column(String(60))
+    accounts = relationship('AbstractAgentAccount',
+        backref='profile', cascade="all, delete-orphan")
 
     __mapper_args__ = {
         'polymorphic_identity': 'agent_profile',
@@ -164,7 +166,6 @@ class AbstractAgentAccount(SQLAlchemyBaseModel):
         Integer,
         ForeignKey('agent_profile.id', ondelete='CASCADE', onupdate='CASCADE'),
         nullable=False)
-    profile = relationship('AgentProfile', backref='accounts')
     def signature(self):
         "Identity of signature implies identity of underlying account"
         return ('abstract_agent_account', self.id)
