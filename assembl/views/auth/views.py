@@ -446,17 +446,20 @@ def velruse_login_complete_view(request):
 def confirm_user_email(request):
     # TODO: How to make this not become a spambot?
     id = int(request.matchdict.get('email_account_id'))
+    username = None
     email = EmailAccount.get(id=id)
     if not email:
         raise HTTPNotFound()
     if not email.verified:
+        profile = email.profile
+        if isinstance(profile, User):
+            username = profile.username
         send_confirmation_email(request, email)
         transaction.commit()
-    if isinstance(email.profile, User):
-        user = email.profile
+    if isinstance(profile, User):
         # TODO: Say we did it.
-        if user.username:
-            raise HTTPFound(location='/user/u/'+user.username)
+        if username:
+            raise HTTPFound(location='/user/u/'+username)
         else:
             raise HTTPFound(location='/user/id/'+str(user.id))
     else:
@@ -483,7 +486,9 @@ def user_confirm_email(request):
             session.delete(email)
             if other_email_account.profile != email.profile:
                 # Give priority to the one where the email was verified last.
-                profile.merge(other_email_account.profile)
+                other_profile = other_email_account.profile
+                profile.merge(other_profile)
+                session.delete(other_profile)
             email = other_email_account
         email.verified = True
         email.profile.verified = True
