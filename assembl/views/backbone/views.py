@@ -123,9 +123,3 @@ def graph_view(request):
     context = get_default_context(request)
     return render_to_response(os.path.join(TEMPLATE_PATH, 'infovis.jinja2'), context, request=request)
 
-
-def includeme(config):
-    default_context['socket_url'] = \
-        config.registry.settings['changes.websocket.url']
-    default_context['cache_bust'] = \
-        config.registry.settings['requirejs.cache_bust']

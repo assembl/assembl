@@ -97,5 +97,8 @@ def includeme(config):
     config.include('.api')
 
     config.include('.home')
-    config.include('.backbone')
     config.include('.admin')
+    default_context['socket_url'] = \
+        config.registry.settings['changes.websocket.url']
+    default_context['cache_bust'] = \
+        config.registry.settings['requirejs.cache_bust']
