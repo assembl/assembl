@@ -28,6 +28,8 @@ directory = %(here)s/var/db
 command = %(VIRTUOSO_ROOT)s/bin/virtuoso-t +foreground
 autorestart = true
 startsecs = 10
+#Start virtuoso before other processes
+priority = 100
 
 [program:celery_imap]
 directory = %(here)s
