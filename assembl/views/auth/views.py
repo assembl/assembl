@@ -314,21 +314,17 @@ def velruse_login_complete_view(request):
     session.autoflush = False
     for velruse_account in velruse_accounts:
         if 'userid' in velruse_account:
-            idp_account = session.query(IdentityProviderAccount).filter_by(
+            idp_accounts.extend(session.query(IdentityProviderAccount).filter_by(
                 provider=provider,
                 domain=velruse_account['domain'],
                 userid=velruse_account['userid']
-            ).first()
-            if idp_account:
-                idp_accounts.append(idp_account)
+            ).all())
         elif 'username' in velruse_account:
-            idp_account = session.query(IdentityProviderAccount).filter_by(
+            idp_accounts.extend(session.query(IdentityProviderAccount).filter_by(
                 provider=provider,
                 domain=velruse_account['domain'],
                 username=velruse_account['username']
-            ).first()
-            if idp_account:
-                idp_accounts.append(idp_account)
+            ).all())
         else:
             raise HTTPServerError()
     if not idp_accounts:
@@ -344,14 +340,15 @@ def velruse_login_complete_view(request):
     # find AgentProfile
     profile = None
     user = None
-    profiles = list(set((a.profile for a in idp_accounts if a.profile)))
+    profiles = [a.profile for a in idp_accounts if a.profile]
     # Maybe we already have a profile based on email
     if provider.trust_emails and 'verifiedEmail' in velruse_profile:
         email = velruse_profile['verifiedEmail']
         email_account = session.query(EmailAccount).filter_by(
             email=email, verified=True).first()
-        if email_account and email_account.profile:
+        if email_account and email_account.profile and email_account.profile not in profiles:
             profiles.push(email_account.profile)
+    profiles = list(set(profile))
     # prefer profiles with verified users, then users, then oldest profiles
     profiles.sort(key=lambda p: (
         not(isinstance(p, User) and p.verified), not isinstance(p, User), p.id))

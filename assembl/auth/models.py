@@ -337,12 +337,6 @@ class User(AgentProfile):
                 # NOTE: The user may be confused by the implicit change of password
                 # when we destroy the second account.
                 # Maybe check latest login on either account?
-            for user_role in session.query(UserRole).filter_by(
-                    user_id=other_user.id).all():
-                user_role.user = self
-            for local_user_role in session.query(LocalUserRole).filter_by(
-                    user_id=other_user.id).all():
-                user_role.user = self
             for extract in other_user.extracts_created:
                 extract.creator = self
             for extract in other_user.extracts_owned:
