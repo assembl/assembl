@@ -47,12 +47,6 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
              * @type {Annotation}
              */
             this.loadedAnnotations = {};
-            
-            /**
-             * The list of already rendered annotation id's in the message body
-             * @type {Annotation}
-             */
-            this._renderedAnnotationIds = [];
         },
 
         /**
@@ -99,6 +93,11 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
             this.$el.html( this.template(data) );
 
             app.initClipboard();
+            /* This may cause leaks in annotator, but annotator does'nt have an 
+             * API to unload annotations.  Re-loading annotator every time a
+             * message re-renders would be intolerably slow.  benoitg 2014-03-11
+             */
+            this.loadedAnnotations = {};
             this.loadAnnotations();
 
             return this;
@@ -120,11 +119,6 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
                         annotationsToLoad.push(annotation);
                     }
                 });
-                
-                //console.log("loadAnnotations for "+this.model.id+" thinks this is loaded:");
-                //console.log(this.loadedAnnotations);
-                //console.log("loadAnnotations will load");
-                //console.log(annotationsToLoad);
     
                 // Loading the annotations
                 if( annotationsToLoad.length ) {
@@ -137,10 +131,6 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
                     setTimeout(function(){
                         that.renderAnnotations(annotationsToLoad);
                     }, 1);
-
-
-                //console.log("loadAnnotations should have loaded:");
-                //console.log(annotationsToLoad);
                 }
             }
         },
@@ -150,20 +140,14 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
          */
         renderAnnotations: function(annotations){
             var that = this;
-
             _.each(annotations, function(annotation){
-                if(_.indexOf(that._renderedAnnotationIds, annotation['@id']) == -1 ) {
-                    console.log("renderAnnotations rendering:");
-                    console.log(annotation);
-                    var highlights = annotation.highlights,
-                    func = app.showSegmentByAnnotation.bind(window, annotation);
-                    console.log(highlights)
-                    _.each(highlights, function(highlight){
-                        highlight.setAttribute('data-annotation-id', annotation['@id']);
-                        $(highlight).on('click', func);
-                    });
-                    that._renderedAnnotationIds.push(annotation['@id']);
-                }
+                var highlights = annotation.highlights,
+                func = app.showSegmentByAnnotation.bind(window, annotation);
+                console.log(highlights)
+                _.each(highlights, function(highlight){
+                    highlight.setAttribute('data-annotation-id', annotation['@id']);
+                    $(highlight).on('click', func);
+                });
             });
 
         },

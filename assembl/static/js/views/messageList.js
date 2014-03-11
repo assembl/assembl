@@ -399,7 +399,7 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery){
             // know why and how much.  benoitg 2014-03-10
             setTimeout( function (){
                 that.trigger("annotator:initComplete", that.annotator);
-            }, 1000);
+            }, 10);
 
         },
 

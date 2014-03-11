@@ -165,7 +165,12 @@ function(Backbone, _, $, app, Segment, i18n){
                 box = this.$(selector);
 
             if( box.length ){
-                app.segmentList.$('.panel-body').animate({'scrollTop': box.position().top});
+                var panelBody = this.$('.panel-body');
+                var panelOffset = panelBody.offset().top;
+                var offset = box.offset().top;
+                // Scrolling to the element
+                var target = offset - panelOffset + panelBody.scrollTop();
+                panelBody.animate({ scrollTop: target });
                 box.highlight();
             }
         },
