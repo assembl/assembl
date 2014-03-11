@@ -69,7 +69,7 @@ def login_view(request):
     return dict(get_default_context(request), **{
         'login_url': login_url,
         'providers': request.registry.settings['login_providers'],
-        'google_consumer_key': request.registry.settings['google.consumer_key'],
+        'google_consumer_key': request.registry.settings.get('google.consumer_key', ''),
         'next_view': request.params.get('next_view', '/')
     })
 
@@ -169,7 +169,7 @@ def assembl_profile(request):
              error='<br />'.join(errors),
              unverified_emails=unverified_emails,
              providers=request.registry.settings['login_providers'],
-             google_consumer_key=request.registry.settings['google.consumer_key'],
+             google_consumer_key=request.registry.settings.get('google.consumer_key',''),
              the_user=profile,
              user=session.query(User).get(logged_in)))
 
@@ -181,7 +181,7 @@ def avatar(request):
     if profile:
         gravatar_url = profile.avatar_url(size, request.application_url)
         return HTTPFound(location=gravatar_url)
-    default = config.get('avatar.default_image_url') or \
+    default = request.registry.settings.get('avatar.default_image_url', '') or \
             request.application_url+'/static/img/icon/user.png'
     return HTTPFound(location=default)
 
