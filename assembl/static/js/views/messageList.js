@@ -565,10 +565,11 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery){
                 //The current filters might not include the message
                 this.currentQuery.clearAllFilters();
                 var success = function() {
+                    console.log("showMessageById() calling showMessageById()");
                     that.showMessageById(id, callback);
                     that.off("render_complete",this);
                 }
-                this.on("render_complete",success);
+                this.once("render_complete",success);
                 this.render();
                 return;
             }

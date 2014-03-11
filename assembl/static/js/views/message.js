@@ -143,7 +143,6 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
             _.each(annotations, function(annotation){
                 var highlights = annotation.highlights,
                 func = app.showSegmentByAnnotation.bind(window, annotation);
-                console.log(highlights)
                 _.each(highlights, function(highlight){
                     highlight.setAttribute('data-annotation-id', annotation['@id']);
                     $(highlight).on('click', func);
