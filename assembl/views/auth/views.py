@@ -360,6 +360,7 @@ def velruse_login_complete_view(request):
             if user in profiles:
                 profiles.remove(user)
             profiles.insert(0, user)
+    username = None
     if len(profiles):
         # first is presumably best
         profile = profiles.pop(0)
@@ -369,7 +370,7 @@ def velruse_login_complete_view(request):
             profile.merge(other)
             session.delete(other)
         if isinstance(profile, User):
-            username = profile.username
+            username = profile.username.username
             profile.last_login = datetime.now()
     else:
         # Create a new user
@@ -382,7 +383,6 @@ def velruse_login_complete_view(request):
             )
 
         session.add(profile)
-        username = None
         usernames = set((a['preferredUsername'] for a in velruse_accounts
                          if 'preferredUsername' in a))
         for u in usernames:
