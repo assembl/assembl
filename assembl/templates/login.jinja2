@@ -28,72 +28,6 @@
 {% endif %}
 {% endmacro %}
 
-{% macro google_login() %}
-<!-- Place this asynchronous JavaScript just before your </body> tag -->
-<link href="http://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
-<script type="text/javascript">
-window.___gcfg = {
-  lang: '{{locale}}'
-};
-(function() {
-  var po = document.createElement('script');
-  po.type = 'text/javascript'; po.async = true;
-  po.src = 'https://apis.google.com/js/client:plusone.js?onload=render';
-  var s = document.getElementsByTagName('script')[0];
-  s.parentNode.insertBefore(po, s);
-})();
-
-function render() {
-  gapi.signin.render('customBtn', {
-    'clientid': '{{google_consumer_key}}',
-    'cookiepolicy': 'single_host_origin',
-    'requestvisibleactions': 'http://schemas.google.com/AddActivity',
-    'scope': 'https://www.googleapis.com/auth/plus.login'
-  });
-}
-</script>
-<style type="text/css">
-  #google_button {
-    display: inline-block;
-    background: #dd4b39;
-    color: white;
-    width: 165px;
-    border-radius: 5px;
-    white-space: nowrap;
-  }
-  #google_button:hover {
-    background: #e74b37;
-    cursor: hand;
-  }
-  span.google_icon {
-    background: url('{{ STATIC_URL }}img/loginbox/google.png') transparent 5px 50% no-repeat;
-    display: inline-block;
-    vertical-align: middle;
-    width: 35px;
-    height: 35px;
-    border-right: #bb3f30 1px solid;
-  }
-  span.google_buttonText {
-    display: inline-block;
-    vertical-align: middle;
-    padding-left: 35px;
-    padding-right: 35px;
-    font-size: 14px;
-    font-weight: bold;
-    /* Use the Roboto font that is loaded in the <head> */
-    font-family: 'Roboto',arial,sans-serif;
-  }
-</style>
-<!-- In the callback, you would hide the gSignInWrapper element on a
-successful sign in -->
-<div id="gSignInWrapper">
-  <div id="google_button" class="customGPlusSignIn">
-    <span class="google_icon"></span>
-    <span class="google_buttonText">Google</span>
-  </div>
-</div>
-{% endmacro %}
-
 {% block content %}
 
     <div class="loginbox">
@@ -124,18 +58,15 @@ successful sign in -->
         {% if providers %}
         <p>{{ gettext("Login with external tools")|safe }}</p>
         {% endif %}
-        {{form('facebook', 'Login with Facebook', true)}}
-
+        {{form('google', 'Login with Google', true)}}
         {{form('twitter', 'Login with Twitter', true)}}
-        {{form('bitbucket', 'Login with Bitbucket', false)}}
-        {% if 'google' in providers %}
-        {{google_login()}}
-        {% endif %}
-        {{form('github', 'Login with Github', false)}}
+        {{form('facebook', 'Login with Facebook', true)}}
         {{form('yahoo', 'Login with Yahoo', true,
                 oauth='true', openid_identifier='yahoo.com')}}
-        {{form('openid', 'Login with OpenID', true)}}
         {{form('live', 'Login with Windows Live', false)}}
+        {{form('github', 'Login with Github', false)}}
+        {{form('bitbucket', 'Login with Bitbucket', false)}}
+        {{form('openid', 'Login with OpenID', true)}}
         <div class="spacer spacer--huge"></div>
 
         <div class="text text-small text-muted">
