@@ -89,7 +89,14 @@ Only the first time you run it:
 On subsequent runs, just make sure supervisord is running.
 
 Then, start the development server and compass with this command:
-supervisorctl start dev:
+supervisorctl start dev:*
+
+By default (development.ini), your assembl will be at:
+http://localhost:6543/
+Your virtuoso conductor (to peek at your database) will be at:
+http://localhost:8892/
+
+
 
 Updating an environment:
 
@@ -147,6 +154,18 @@ py.test -k test_get_ideas
 
 Installing a new production environment
 ---------------------------------------
+
+IMPORTANT NOTE ABOUT UWSGI:
+
+As recently as ubuntu saucy (12.10) ubuntu includes a version of uwsgi that 
+links with an old version of libzmq (if ldd /usr/bin/uwsgi shows that you link with
+libzmq.so.1, you will be unable to connect to the zmq socket.  If it links with
+libzmq.so.3, or doesn't link with libzmq.so at all, you should be fine)
+
+To fix it on ubuntu:
+
+sudo apt-add-repository ppa:chris-lea/uwsgi
+sudo apt-get install uwsgi
 
 Setup your environment in the fabfile
 
