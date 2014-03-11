@@ -125,7 +125,7 @@ def update_requirements(force=False):
     update external dependencies on remote host
     """
     print(cyan('Updating requirements using PIP'))
-    run('%(venvpath)s/bin/pip install -U pip==1.5.1' % env)
+    run('%(venvpath)s/bin/pip install -U pip>=1.5.1' % env)
     
     if force:
         cmd = "%(venvpath)s/bin/pip install -I -r %(projectpath)s/requirements.txt" % env
