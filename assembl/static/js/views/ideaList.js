@@ -70,13 +70,14 @@ function(Backbone, _, Idea, IdeaView, ideaGraphLoader, app, Types, RootIdeaView,
             app.trigger('render');
 
             this.body = this.$('.panel-body');
-            var y = 0;
+            var y = 0,
+            rootIdea = this.ideas.getRootIdea(),
+            ideaModels = [],
+            filter = {"num_read_posts": 0};
 
             if( this.body.get(0) ){
                 y = this.body.get(0).scrollTop;
             }
-
-            var filter = { parentId: null };
 
             if( this.filter === FEATURED ){
                 filter.featured = true;
@@ -84,11 +85,21 @@ function(Backbone, _, Idea, IdeaView, ideaGraphLoader, app, Types, RootIdeaView,
                 filter.inNextSynthesis = true;
             }
 
-            var list = document.createDocumentFragment(),
-                ideas = this.ideas.where(filter),
-                rootIdea = this.ideas.getRootIdea();
+            var list = document.createDocumentFragment();
 
-            ideas = _.sortBy(ideas, function(idea){
+            if(Object.keys(filter).length > 0) {
+                ideaModels = this.ideas.where(filter);
+            }
+            else {
+                ideaModels = this.ideas.models;
+            }
+
+            ideaModels = ideaModels.filter(function(idea) {
+                return (idea.get("parentId") == rootIdea.id) || (idea.get("parentId") == null && idea.id != rootIdea.id); 
+                }
+            );
+
+            ideaModels = _.sortBy(ideaModels, function(idea){
                 return idea.get('order');
             });
 
@@ -105,7 +116,7 @@ function(Backbone, _, Idea, IdeaView, ideaGraphLoader, app, Types, RootIdeaView,
                 list.appendChild(rootIdeaView.render().el);
             }
 
-            _.each(ideas, function(idea){
+            _.each(ideaModels, function(idea){
                 if(idea.isRootIdea() == false) {
                     var ideaView =  new IdeaView({model:idea});
                     list.appendChild(ideaView.render().el);
@@ -120,7 +131,7 @@ function(Backbone, _, Idea, IdeaView, ideaGraphLoader, app, Types, RootIdeaView,
             }
 
             var data = {
-                tocTotal: this.ideas.length,
+                tocTotal: ideaModels.length,
                 featuredTotal: this.ideas.where({featured: true}).length,
                 synthesisTotal: this.ideas.where({inNextSynthesis: true}).length
             };
