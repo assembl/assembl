@@ -47,7 +47,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <th><label>{{ gettext('Name') }}</label></th>
+                    <th><label>{{ gettext('Name') }}:</label></th>
                     <td>
                         {% if the_user.name %}
                         <input type="text" name="name" autofocus value="{{ the_user.name }}" />
@@ -76,7 +76,7 @@
                 {% if the_user.email_accounts() or the_user.unconfirmed_emails() %}
                 <tr>
                     <th>
-                        <label>{{ gettext('Emails') }}</label>
+                        <label>{{ gettext('Emails') }}:</label>
                     </th>
                     <td>
                     <!-- TODO: Preferred email logic. -->
@@ -110,7 +110,7 @@
                 {% if the_user.identity_accounts() %}
                 <tr>
                     <th>
-                        <label>{{ gettext('Accounts') }}</label>
+                        <label>{{ gettext('Accounts') }}:</label>
                     <!-- TODO: Handle the case where the token expired 
                     and the user may be offered to re-login. -->
                     </th>
