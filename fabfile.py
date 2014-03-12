@@ -240,7 +240,7 @@ def app_setup():
      venvcmd('pip install -Iv pip==1.5.1')
      venvcmd('pip install -e ./')
      venvcmd('export VIRTUOSO_ROOT=%s ; assembl-ini-files %s' % (
-        env.use_virtuoso or '/usr', env.ini_file))
+        env.use_virtuoso, env.ini_file))
 
 @task
 def app_fullupdate():
@@ -542,10 +542,7 @@ def update_compass():
 def database_create():
     """
     """
-    if env.use_virtuoso:
-        execute(database_start)
-    else:
-        sudo('su - postgres -c "createdb -E UNICODE -Ttemplate0 -O%s %s"' % (env.db_user, env.db_name))
+    execute(database_start)
 
 def virtuoso_db_directory():
     return os.path.join(env.projectpath, 'var/db')
@@ -619,9 +616,6 @@ def database_restore():
     with cd(virtuoso_db_directory()):
         run('rm *.db *.trx', warn_only=True)
 
-    # Create db
-    #execute(database_create)
-    
     # Make symlink to latest
     #this MUST match the code in db_manage or virtuoso will refuse to restore
     restore_dump_prefix = "assembl-virtuoso-backup"
@@ -671,7 +665,8 @@ def commonenv(projectpath, venvpath=None):
     env.uses_uwsgi = False
     env.uses_apache = False
     env.uses_ngnix = False
-    env.use_virtuoso = None
+    #Where do we find the virtuoso binaries
+    env.use_virtuoso = getenv('VIRTUOSO_ROOT', '/usr')
     env.uses_global_supervisor = False
     env.mac = False
 # Specific environments 
@@ -697,7 +692,6 @@ def devenv(projectpath=None):
     env.uses_apache = False
     env.uses_ngnix = False
     env.hosts = ['localhost']
-    env.use_virtuoso = getenv('VIRTUOSO_ROOT', None)
     env.gitbranch = "develop"
 
 @task    
