@@ -153,11 +153,23 @@ def post_extract(request):
                     type='source')
             content = Webpage(url=uri, discussion_id=discussion_id)
     extract_body = extract_data.get('quote', '')
+
+    idea_id = extract_data.get('idIdea', None)
+    if idea_id:
+        idea = Idea.get_instance(idea_id)
+        if(idea.discussion.id != discussion_id):
+            raise HTTPBadRequest(
+                "Extract from discussion %s cannot be associated with an idea from a different discussion." % extract.get_discussion_id())
+    else:
+        idea = None
+
+
     new_extract = Extract(
         creator_id=user_id,
         owner_id=user_id,
         discussion_id=discussion_id,
         body=extract_body,
+        idea=idea,
         annotation_text=annotation_text,
         content=content
     )
