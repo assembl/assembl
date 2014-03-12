@@ -365,7 +365,10 @@ class User(AgentProfile):
         return super(User, self).display_name()
 
     def __repr__(self):
-        return "<User '%s'>" % self.username
+        if self.username:
+            return "<User '%s'>" % self.username.username
+        else:
+            return "<User id=%d>" % self.id
 
     def get_permissions(self, discussion_id):
         from . import get_permissions
