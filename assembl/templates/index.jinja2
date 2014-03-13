@@ -11,7 +11,7 @@
             <div class="bar-right">
                 {% if user %}
                     {{ user.display_name() }}
-                    <a class="iconbutton iconbutton--nofx"><img src="/user/id/{{user.id}}/avatar/32" alt="{{ user.display_name() }}" class="image-rounded" /></a>
+                    {# <a class="iconbutton iconbutton--nofx"> #}<img src="/user/id/{{user.id}}/avatar/32" alt="{{ user.display_name() }}" class="image-rounded" />{# </a> #}
                     <a href="/logout" class="link iconbutton icon-logout-1" title="{{ gettext('Sign out') }}"></a>
                 {% else %}
                     <a href="/login?next_view={{request.current_route_path()}}" class="link">{{ gettext('Sign in') }} <i class="icon-user"></i> </a>
