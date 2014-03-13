@@ -10,19 +10,6 @@ function(Backbone, _, $, Idea, app, RootIdeaView){
         template: app.loadTemplate('synthesisInIdeaList'),
 
         /**
-         * The render
-         */
-        render: function(){
-            app.trigger('render');
-
-            var data = this.model.toJSON();
-
-            this.$el.addClass('idealist-item');
-            this.$el.html(this.template(data));
-            return this;
-        },
-
-        /**
          * @events
          */
         events: {

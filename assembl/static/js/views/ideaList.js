@@ -72,8 +72,8 @@ function(Backbone, _, Idea, IdeaView, ideaGraphLoader, app, Types, RootIdeaView,
             this.body = this.$('.panel-body');
             var y = 0,
             rootIdea = this.ideas.getRootIdea(),
-            ideaModels = [],
-            filter = {"num_read_posts": 0};
+            rootIdeaDirectChildrenModels = [],
+            filter = {};
 
             if( this.body.get(0) ){
                 y = this.body.get(0).scrollTop;
@@ -88,18 +88,18 @@ function(Backbone, _, Idea, IdeaView, ideaGraphLoader, app, Types, RootIdeaView,
             var list = document.createDocumentFragment();
 
             if(Object.keys(filter).length > 0) {
-                ideaModels = this.ideas.where(filter);
+                rootIdeaDirectChildrenModels = this.ideas.where(filter);
             }
             else {
-                ideaModels = this.ideas.models;
+                rootIdeaDirectChildrenModels = this.ideas.models;
             }
 
-            ideaModels = ideaModels.filter(function(idea) {
+            rootIdeaDirectChildrenModels = rootIdeaDirectChildrenModels.filter(function(idea) {
                 return (idea.get("parentId") == rootIdea.id) || (idea.get("parentId") == null && idea.id != rootIdea.id); 
                 }
             );
 
-            ideaModels = _.sortBy(ideaModels, function(idea){
+            rootIdeaDirectChildrenModels = _.sortBy(rootIdeaDirectChildrenModels, function(idea){
                 return idea.get('order');
             });
 
@@ -115,12 +115,10 @@ function(Backbone, _, Idea, IdeaView, ideaGraphLoader, app, Types, RootIdeaView,
                 var rootIdeaView = new RootIdeaView({model:rootIdea});
                 list.appendChild(rootIdeaView.render().el);
             }
-
-            _.each(ideaModels, function(idea){
-                if(idea.isRootIdea() == false) {
-                    var ideaView =  new IdeaView({model:idea});
-                    list.appendChild(ideaView.render().el);
-                }
+            
+            _.each(rootIdeaDirectChildrenModels, function(idea){
+                var ideaView =  new IdeaView({model:idea});
+                list.appendChild(ideaView.render().el);
             });
 
             if( rootIdea.get('num_orphan_posts') > 0 ){
@@ -131,7 +129,7 @@ function(Backbone, _, Idea, IdeaView, ideaGraphLoader, app, Types, RootIdeaView,
             }
 
             var data = {
-                tocTotal: ideaModels.length,
+                tocTotal: this.ideas.length,
                 featuredTotal: this.ideas.where({featured: true}).length,
                 synthesisTotal: this.ideas.where({inNextSynthesis: true}).length
             };

@@ -10,6 +10,19 @@ function(Backbone, _, $, Idea, app, IdeaView){
         template: app.loadTemplate('rootIdea'),
 
         /**
+         * The render
+         */
+        render: function(){
+            app.trigger('render');
+
+            var data = this.model.toJSON();
+
+            this.$el.addClass('idealist-item');
+            this.$el.html(this.template(data));
+            return this;
+        },
+
+        /**
          * @events
          */
         events: {
