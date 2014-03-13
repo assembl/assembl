@@ -16,7 +16,7 @@ from sqlalchemy import (
     Index
 )
 
-from sqlalchemy.orm import relationship, backref
+from sqlalchemy.orm import relationship, backref, deferred
 from pyramid.security import Everyone, Authenticated
 
 from .password import hash_password, verify_password
@@ -289,7 +289,7 @@ class User(AgentProfile):
 
     preferred_email = Column(Unicode(50))
     verified = Column(Boolean(), default=False)
-    password = Column(Binary(115))
+    password = deferred(Column(Binary(115)))
     timezone = Column(Time(True))
     last_login = Column(DateTime)
     login_failures = Column(Integer, default=0)
