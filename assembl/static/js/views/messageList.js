@@ -680,14 +680,28 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery){
             var btn = $(ev.currentTarget),
                 that = this,
                 btn_original_text = btn.text(),
-                message_body = this.$('.message-textarea').val(),
+                message_body_field = this.$('#messagelist-replybox .message-textarea'),
+                message_body = message_body_field.val(),
+                message_subject_field = this.$('#messagelist-replybox .topic-subject .formfield'),
+                message_subject = message_subject_field.val(),
                 success_callback = null;
 
+            if(!message_subject) {
+                alert(i18n.gettext('You need to set a subject to add a new topic'));
+                return;
+            }
+            if(!message_body) {
+                alert(i18n.gettext('You need to type a first message to add a new topic'));
+                return;
+            }
             btn.text( i18n.gettext('Sending...') );
             success_callback = function(){
+                message_body_field.val('');
+                message_subject_field.val(''),
                 btn.text(btn_original_text);
+                
             }
-            app.sendPostToServer(message_body, null, null, null, success_callback);
+            app.sendPostToServer(message_body, message_subject, null, null, success_callback);
 
         },
         /**

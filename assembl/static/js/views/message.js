@@ -229,13 +229,16 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
                 that = this,
                 btn_original_text = btn.text(),
                 reply_message_id = null,
-                message_body = this.$('.message-textarea').val(),
+                message_body_field = this.$('.message-textarea'),
+                message_body = message_body_field.val(),
                 success_callback = null;
 
-
-            if( this.model.getId() ){
-                reply_message_id = this.model.getId();
+            if(!message_body) {
+                alert(i18n.gettext('You did not type a response yet...'));
+                return;
             }
+            
+            reply_message_id = this.model.getId();
 
             btn.text( i18n.gettext('Sending...') );
             success_callback = function(){

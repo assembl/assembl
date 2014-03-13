@@ -237,7 +237,7 @@ def updatemaincode():
         run('git pull %s %s' % (env.gitrepo, env.gitbranch))
 
 def app_setup():
-     venvcmd('pip install -Iv pip==1.5.1')
+     venvcmd('pip install -Iv pip>=1.5.1')
      venvcmd('pip install -e ./')
      venvcmd('export VIRTUOSO_ROOT=%s ; assembl-ini-files %s' % (
         env.use_virtuoso, env.ini_file))

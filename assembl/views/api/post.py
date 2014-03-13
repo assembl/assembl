@@ -313,7 +313,8 @@ def create_post(request):
         raise HTTPUnauthorized()
 
     if not message:
-        raise HTTPUnauthorized()
+        raise HTTPBadRequest(localizer.translate(
+                _("Your message is empty")))
 
     if reply_id:
         in_reply_to_post = Post.get_instance(reply_id)

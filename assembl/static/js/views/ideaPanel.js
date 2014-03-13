@@ -299,16 +299,23 @@ function(Backbone, _, Idea, Message, app, i18n, Types, EditableField, CKEditorFi
             data = {},
             that = this,
             btn_original_text=btn.text(),
-            message_body = this.$('.message-textarea').val(),
+            message_body_field = this.$('.message-textarea'),
+            message_body = message_body_field.val(),
             reply_idea_id = this.idea.getId(),
             success_callback = null;
-
+            
+            if(!message_body) {
+                alert(i18n.gettext('You need to type a comment first...'));
+                return;
+            }
             btn.text( i18n.gettext('Sending comment...') );
             success_callback = function(){
+                message_body_field.val('');
                 btn.text( i18n.gettext('Comment posted!') );
-                that.$('.message-textarea').val('');
-                setTimeout(function(){ 
-                    btn.text(btn_original_text);}, 3000);
+                setTimeout(function(){
+                    that.$('.message-textarea').val('');
+                    btn.text(btn_original_text);
+                    }, 5000);
             }
             app.sendPostToServer(message_body, null, null, reply_idea_id, success_callback);
 

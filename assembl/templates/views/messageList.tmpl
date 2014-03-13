@@ -63,6 +63,10 @@
         <div id="messageList-query-info" class=""><%= queryInfo %></div>
         <div id="messageList-list" class="idealist <%= currentViewStyle.id %>"></div>
     <div id="messagelist-replybox">
+        <div class="topic-subject">
+            <span class="topic-subject-label">{{gettext('New topic subject:')}}</span>
+            <span class="topic-subject-input"><input type="text" class="formfield" /></span>
+        </div>
         <textarea class="formtextarea message-textarea"></textarea>
         <div class="text-right">
             <a class="button button--primary message-sendbtn">{{ gettext('Start a new topic in this discussion') }}</a>
