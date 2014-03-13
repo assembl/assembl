@@ -7,15 +7,9 @@ from pyramid.security import authenticated_userid, Everyone
 
 from assembl.models import Discussion, User
 from assembl.auth import discussions_with_access
+from .. import get_default_context
 
 TEMPLATE_PATH = os.path.join(os.path.dirname(__file__), '..', '..', 'templates')
-
-default_context = {
-    'STATIC_URL': '/static/'
-}
-
-def get_default_context():
-    return default_context
 
 @view_config(
     route_name='discussion_list', request_method='GET',
@@ -25,14 +19,7 @@ def discussion_list_view(request):
     user = None
     if user_id != Everyone:
         user = User.get(id=user_id)
-    context = get_default_context()
+    context = get_default_context(request)
     context['discussions'] = discussions_with_access(user_id)
     context['user'] = user
     return context
-
-
-def includeme(config):
-    default_context['socket_url'] = \
-        config.registry.settings['changes.websocket.url']
-    default_context['cache_bust'] = \
-        config.registry.settings['requirejs.cache_bust']

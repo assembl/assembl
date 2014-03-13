@@ -16,6 +16,14 @@
                 {% else %}
                     <a href="/login?next_view={{request.current_route_path()}}" class="link">{{ gettext('Sign in') }} <i class="icon-user"></i> </a>
                 {% endif %}
+                {% if locales.__len__ > 1 %}
+                    <span class="locale active">{{locale}}</span>
+                    {% for loc in locales %}
+                        {% if (loc != locale) %}
+                            <span onmouseup="window.app.setLocale('{{loc}}')" class="locale">{{loc}}</span>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
             </div>
         </div>
     </div>

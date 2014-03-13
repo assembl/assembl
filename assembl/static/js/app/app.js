@@ -933,6 +933,11 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard, Types){
 
         },
 
+        setLocale: function(locale){
+            document.cookie = "_LOCALE_="+locale+"; path=/";
+            location.reload(true);
+        },
+
         /**
          * @init
          */

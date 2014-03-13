@@ -9,14 +9,12 @@ from pyramid.security import (
     remember,
     forget,
     authenticated_userid,
-    NO_PERMISSION_REQUIRED
-    )
+    NO_PERMISSION_REQUIRED)
 from pyramid.httpexceptions import (
     HTTPUnauthorized,
     HTTPFound,
     HTTPNotFound,
-    HTTPServerError
-    )
+    HTTPServerError)
 from pyramid.settings import asbool
 
 from sqlalchemy import desc
@@ -34,11 +32,8 @@ from ...auth.operations import (
 from ...lib import config
 from .. import get_default_context
 
-default_context = {
-    'STATIC_URL': '/static/'
-}
-
 _ = TranslationStringFactory('assembl')
+
 
 @view_config(
     route_name='logout',
@@ -122,7 +117,7 @@ def assembl_profile(request):
         # Add permissions to view a profile?
         return render_to_response(
             'assembl:templates/view_profile.jinja2',
-            dict(default_context,
+            dict(get_default_context(request),
                  profile=profile,
                  user=logged_in and session.query(User).get(logged_in)))
 
@@ -193,7 +188,7 @@ def avatar(request):
 )
 def assembl_register_view(request):
     if not request.params.get('email'):
-        return dict(default_context,
+        return dict(get_default_context(request),
                     next_view=request.params.get('next_view', '/'))
     forget(request)
     session = AgentProfile.db
@@ -205,11 +200,11 @@ def assembl_register_view(request):
     # Find agent account to avoid duplicates!
     if session.query(EmailAccount).filter_by(
         email=email, verified=True).count():
-            return dict(default_context,
+            return dict(get_default_context(request),
                         error=localizer.translate(_(
                             "We already have a user with this email.")))
     if password != password2:
-        return dict(default_context,
+        return dict(get_default_context(request),
                     error=localizer.translate(_(
                         "The passwords should be identical")))
 
@@ -265,7 +260,7 @@ def assembl_login_complete_view(request):
             if not account.verified:
                 resend_url = request.route_url('confirm_user_email',
                                                email_account_id=account.id)
-                return dict(default_context,
+                return dict(get_default_context(request),
                     error=localizer.translate(_("This account was not verified yet")),
                     resend_url=resend_url)
     else:
@@ -274,7 +269,7 @@ def assembl_login_complete_view(request):
             user = username.user
 
     if not user:
-        return dict(default_context,
+        return dict(get_default_context(request),
                     error=localizer.translate(_("This user cannot be found")))
     if logged_in:
         if user.id != logged_in:
@@ -289,7 +284,7 @@ def assembl_login_complete_view(request):
         #TODO: handle high failure count
         session.add(user)
         transaction.commit()
-        return dict(default_context,
+        return dict(get_default_context(request),
                     error=localizer.translate(_("Invalid user and password")))
     headers = remember(request, user.id, tokens=format_token(user))
     request.response.headerlist.extend(headers)
@@ -518,13 +513,7 @@ def user_confirm_email(request):
 )
 def login_denied_view(request):
     localizer = get_localizer(request)
-    return dict(default_context,
+    return dict(get_default_context(request),
                 error=localizer.translate(_('Login failed, try again')))
     # TODO: If logged in otherwise, go to profile page. 
     # Otherwise, back to login page
-
-
-def includeme(config):
-    print "hello authviews"
-    default_context['socket_url'] = \
-        config.registry.settings['changes.websocket.url']

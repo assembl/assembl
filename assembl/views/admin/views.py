@@ -11,7 +11,7 @@ from pyramid.httpexceptions import HTTPFound
 from assembl.models import (
     Discussion, DiscussionPermission, Role, Permission, UserRole,
     LocalUserRole)
-from assembl.views.home.views import get_default_context
+from .. import get_default_context
 from assembl.source.models.mail import Mailbox, MailingList
 from assembl.auth.models import (
     create_default_permissions, User, Username, AgentProfile, P_ADMIN_DISC, P_SYSADMIN, R_SYSADMIN,
@@ -28,7 +28,7 @@ def discussion_admin(request):
     session = User.db
     user = session.query(User).filter_by(id=user_id).one()
 
-    context = get_default_context()
+    context = get_default_context(request)
     context['discussions'] = session.query(Discussion)
 
     if request.method == 'POST':

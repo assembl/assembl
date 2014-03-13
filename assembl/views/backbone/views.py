@@ -18,10 +18,6 @@ TEMPLATE_PATH = os.path.join(os.path.dirname(__file__), '..', '..', 'templates')
 
 _ = TranslationStringFactory('assembl')
 
-default_context = {
-    'STATIC_URL': '/static/'
-}
-
 def js_message_ids():
     from babel.messages.pofile import read_po
     pot = read_po(open(os.path.join(os.path.dirname(__file__), '..', '..', 'locale', 'assembl.pot')))

@@ -8,6 +8,7 @@ from pyramid.config import Configurator
 from pyramid.authentication import SessionAuthenticationPolicy
 from pyramid.authorization import ACLAuthorizationPolicy
 from pyramid_beaker import session_factory_from_settings
+from pyramid.i18n import default_locale_negotiator
 from .lib.sqla import configure_engine
 
 # Do not import models here, it will break tests.
@@ -15,13 +16,6 @@ from .lib.sqla import configure_engine
 #Use a local odbc.ini
 putenv('ODBCINI', join(dirname(dirname(__file__)), 'odbc.ini'))
 
-
-def my_locale_negotiator(request):
-    if not hasattr(request, '_LOCALE_'):
-        request._LOCALE_ = request.accept_language.best_match(
-            ('en', 'fr'), 'en')
-
-    return request._LOCALE_
 
 # Do not import models here, it will break tests.
 def main(global_config, **settings):
@@ -35,6 +29,16 @@ def main(global_config, **settings):
     from views import root_factory
     config = Configurator(settings=settings, root_factory=root_factory)
     config.add_translation_dirs('assembl:locale/')
+    def my_locale_negotiator(request):
+        locale = default_locale_negotiator(request)
+        available = settings['available_languages'].split()
+        locale = locale if locale in available else None
+        if not locale:
+            locale = request.accept_language.best_match(
+                available, settings.get('pyramid.default_locale_name', 'en'))
+        request._LOCALE_ = locale
+        return locale
+
     config.set_locale_negotiator(my_locale_negotiator)
     config.add_tween(
         'assembl.tweens.virtuoso_deadlock.transient_deadlock_tween_factory',

@@ -5,6 +5,14 @@
         <div class="bar-body">
             <div class="bar-right">
                 <a> {{ gettext('Sign in') }} <i class="icon-user"></i> </a>
+                {% if locales.__len__ > 1 %}
+                    <span class="locale active">{{locale}}</span>
+                    {% for loc in locales %}
+                        {% if (loc != locale) %}
+                            <span onmouseup="window.app.setLocale('{{loc}}')" class="locale">{{loc}}</span>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
             </div>
         </div>
     </div>

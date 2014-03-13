@@ -49,6 +49,17 @@
     text-align: right;
 }
 
+.locale {
+    border: 1px solid gray;
+    padding: 2px;
+    color: gray;
+    &.active {
+        border: 1px solid white;
+        left-margin: 1.5ex;
+        color: white;
+    }
+}
+
 // Center content of a bar
 // ---------------------
 .bar-center {

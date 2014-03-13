@@ -76,7 +76,7 @@ def get_default_context(request):
     return dict(default_context,
         user=get_user(request),
         locale=localizer.locale_name,
-        locales=config.get('available_languages'),
+        locales=config.get('available_languages').split(),
         translations=json.dumps({
             id:localizer.translate(_(id)) for id in JS_MESSAGE_IDS}))
 
