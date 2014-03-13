@@ -336,13 +336,14 @@ def create_post(request):
 
     if subject:
         subject = subject
-    elif in_reply_to_post:
-        subject = in_reply_to_post.subject
-    elif in_reply_to_idea:
-        subject = in_reply_to_idea.short_title
     else:
-        subject = discussion.topic
-    subject = "Re: " + restrip_pat.sub('', subject)
+        if in_reply_to_post:
+            subject = in_reply_to_post.subject
+        elif in_reply_to_idea:
+            subject = in_reply_to_idea.short_title
+        else:
+            subject = discussion.topic
+        subject = "Re: " + restrip_pat.sub('', subject)
 
     post_constructor_args = {
         'discussion': discussion,

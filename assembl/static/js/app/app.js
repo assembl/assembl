@@ -917,6 +917,9 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard, Types){
                 data = {};
 
             data.message = message_body;
+            if(message_subject) {
+                data.subject = message_subject;
+            }
             if( reply_message_id ){
                 data.reply_id = reply_message_id;
             }
