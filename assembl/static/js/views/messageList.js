@@ -1,5 +1,5 @@
-define(['backbone', 'underscore', 'jquery', 'app', 'views/messageFamily', 'models/message', 'i18n', 'views/messageListPostQuery'],
-function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery){
+define(['backbone', 'underscore', 'jquery', 'app', 'views/messageFamily', 'models/message', 'i18n', 'views/messageListPostQuery', 'permissions'],
+function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permissions){
     'use strict';
 
     /**
@@ -163,7 +163,8 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery){
             var data = {
                     currentViewStyle: this.currentViewStyle,
                     collapsed: this.collapsed,
-                    queryInfo: this.currentQuery.getHtmlDescription()
+                    queryInfo: this.currentQuery.getHtmlDescription(),
+                    canPost: app.getCurrentUser().can(Permissions.ADD_POST)
                 };
 
             this.$el.html( this.template(data) );
