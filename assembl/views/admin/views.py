@@ -3,8 +3,6 @@ from collections import defaultdict
 
 import transaction
 
-from sqlalchemy.orm import defer
-
 from pyramid.view import view_config
 from pyramid.renderers import render_to_response
 from pyramid.security import authenticated_userid
@@ -179,9 +177,9 @@ def discussion_permissions(request):
 
         elif 'submit_look_for_user' in request.POST:
             search_string = '%' + request.POST['user_search'] + '%'
-            other_users = db.query(User).options(defer(User.password)).join(AgentProfile).filter(AgentProfile.name.ilike(search_string)).union(
-                db.query(User).options(defer(User.password)).outerjoin(Username).filter(Username.username.ilike(search_string))).union(
-                db.query(User).options(defer(User.password)).filter(User.preferred_email.ilike(search_string))).all()
+            other_users = db.query(User).join(AgentProfile).filter(AgentProfile.name.ilike(search_string)).union(
+                db.query(User).outerjoin(Username).filter(Username.username.ilike(search_string))).union(
+                db.query(User).filter(User.preferred_email.ilike(search_string))).all()
             users.update(other_users)
 
     def allowed(role, permission):
@@ -261,9 +259,9 @@ def general_permissions(request):
 
         elif 'submit_look_for_user' in request.POST:
             search_string = '%' + request.POST['user_search'] + '%'
-            other_users = db.query(User).options(defer(User.password)).join(AgentProfile).filter(AgentProfile.name.ilike(search_string)).union(
-                db.query(User).options(defer(User.password)).outerjoin(Username).filter(Username.username.ilike(search_string))).union(
-                db.query(User).options(defer(User.password)).filter(User.preferred_email.ilike(search_string))).all()
+            other_users = db.query(User).join(AgentProfile).filter(AgentProfile.name.ilike(search_string)).union(
+                db.query(User).outerjoin(Username).filter(Username.username.ilike(search_string))).union(
+                db.query(User).filter(User.preferred_email.ilike(search_string))).all()
             users.update(other_users)
 
     def has_role(user_id, role):
