@@ -1,5 +1,5 @@
-define(['backbone', 'underscore', 'models/idea', 'views/idea', "views/ideaGraph", 'app', 'types', 'views/rootIdea', 'views/orphanIdea', 'views/synthesisInIdeaList'],
-function(Backbone, _, Idea, IdeaView, ideaGraphLoader, app, Types, RootIdeaView, OrphanIdeaView, SynthesisInIdeaListView){
+define(['backbone', 'underscore', 'models/idea', 'views/idea', "views/ideaGraph", 'app', 'types', 'views/rootIdea', 'views/orphanIdea', 'views/synthesisInIdeaList', 'permissions'],
+function(Backbone, _, Idea, IdeaView, ideaGraphLoader, app, Types, RootIdeaView, OrphanIdeaView, SynthesisInIdeaListView, Permissions){
     'use strict';
 
     var FEATURED = 'featured',
@@ -131,7 +131,8 @@ function(Backbone, _, Idea, IdeaView, ideaGraphLoader, app, Types, RootIdeaView,
             var data = {
                 tocTotal: this.ideas.length,
                 featuredTotal: this.ideas.where({featured: true}).length,
-                synthesisTotal: this.ideas.where({inNextSynthesis: true}).length
+                synthesisTotal: this.ideas.where({inNextSynthesis: true}).length,
+                canAdd: app.getCurrentUser().can(Permissions.ADD_IDEA)
             };
 
             data.title = data.tocTitle;
