@@ -413,6 +413,7 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
         stopSelection: function(ev){
             var isInsideAMessage = false,
                 selectedText = app.getSelectedText(),
+                user = app.getCurrentUser(),
                 text = selectedText.getRangeAt(0).cloneContents();
 
             text = text.textContent || '';
@@ -421,7 +422,7 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n){
                 isInsideAMessage = $(ev.target).closest('.is-selecting').length > 0;
             }
 
-            if( this.isSelecting && text.length > MIN_TEXT_TO_TOOLTIP && isInsideAMessage ){
+            if( user.can(Permissions.ADD_EXTRACT) && this.isSelecting && text.length > MIN_TEXT_TO_TOOLTIP && isInsideAMessage ){
                 this.showSelectionOptions(ev.clientX - 50, ev.clientY);
             }
 
