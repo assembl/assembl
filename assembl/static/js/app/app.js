@@ -337,6 +337,7 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard, Types){
                 app.currentUser = app.users.getByNumericId(CURRENT_USER_ID) || app.users.getUnknownUser();
                 app.currentUser.fetchPermissionsFromScripTag();
                 app.loadCsrfToken(true);
+                app.trigger('user:loaded', [app.getCurrentUser()]);
             }
         },
 

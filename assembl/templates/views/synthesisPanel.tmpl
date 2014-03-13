@@ -31,8 +31,9 @@
         <div class="margin-left text-muted">{{ gettext('Conclusion') }}</div>
         <div id="synthesisPanel-conclusion"></div>
     </div>
-
+    <% if (canSend) { %>
     <div class="panel-footer text-right">
         <a id="synthesisPanel-publishButton" class="link">{{ gettext('Publish') }} <i class="icon-edit"></i></a>
     </div>
+    <% } %>
 </div>

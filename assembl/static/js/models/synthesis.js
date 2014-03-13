@@ -10,7 +10,12 @@ define(['models/base', 'jquery', 'app', 'i18n', 'permissions'], function(Base, $
          * @init
          */
         initialize: function(){
+            var that = this;
             this.on('change', this.onAttrChange, this);
+            app.on('user:loaded', function(user) {
+                that.set('canSave', user.can(Permissions.EDIT_SYNTHESIS) );
+                that.set('canSend', user.can(Permissions.SEND_SYNTHESIS) );
+            });
         },
         
         /**
@@ -32,7 +37,9 @@ define(['models/base', 'jquery', 'app', 'i18n', 'permissions'], function(Base, $
         defaults: {
             subject: i18n.gettext('Add a title'),
             introduction: i18n.gettext('Add an introduction'),
-            conclusion: i18n.gettext('Add a conclusion')
+            conclusion: i18n.gettext('Add a conclusion'),
+            canSave: false,
+            canSend: false
         },
 
         /**
@@ -47,12 +54,10 @@ define(['models/base', 'jquery', 'app', 'i18n', 'permissions'], function(Base, $
          * @event
          */
         onAttrChange: function(){
-            var currentUser = app.getCurrentUser();
-
-            if( currentUser.can(Permissions.EDIT_SYNTHESIS) ){
+            if (this.get('canSave')) {
                 this.save();
             }
-        }
+        },
 
     });
 
