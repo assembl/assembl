@@ -1,5 +1,5 @@
-define(['jquery', 'underscore', 'ckeditor', 'moment', 'i18n', 'zeroclipboard', 'types'],
-function($, _, ckeditor, Moment, i18n, ZeroClipboard, Types){
+define(['jquery', 'underscore', 'ckeditor', 'moment', 'i18n', 'zeroclipboard', 'types', 'permissions'],
+function($, _, ckeditor, Moment, i18n, ZeroClipboard, Types, Permissions){
     'use strict';
 
     ckeditor.disableAutoInline = true;
@@ -386,7 +386,8 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard, Types){
          * Saves the current annotation if there is any
          */
         saveCurrentAnnotation: function(){
-            if( app.messageList.annotatorEditor ){
+            if( app.currentUser.can(Permissions.EDIT_EXTRACT) &&
+                app.messageList.annotatorEditor ){
                 app.messageList.annotatorEditor.element.find('.annotator-save').click();
             }
         },
