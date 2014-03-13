@@ -52,10 +52,14 @@
     </div>
 
     <div class="panel-footer">
+        <% if (canDelete) { %>
         <div class="float-right">
             <a id="ideaPanel-deleteButton" class="link" data-tooltip="{{gettext('Delete this idea completely')}}">{{ gettext('Delete idea') }}</a>
         </div>
+        <% }
+        if (canUnlinkSegments) { %>
         <a id="ideaPanel-clearbutton" class="link" data-tooltip="{{gettext('Removed segments will be available in your clipboard')}}">{{ gettext('Remove all segments') }}</a>
+        <% } %>
     </div>
 
 </div>

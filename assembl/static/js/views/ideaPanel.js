@@ -1,5 +1,5 @@
-define(['backbone', 'underscore', 'models/idea', 'models/message', 'app', 'i18n', 'types', 'views/editableField', 'views/ckeditorField'],
-function(Backbone, _, Idea, Message, app, i18n, Types, EditableField, CKEditorField){
+define(['backbone', 'underscore', 'models/idea', 'models/message', 'app', 'i18n', 'types', 'views/editableField', 'views/ckeditorField', 'permissions'],
+function(Backbone, _, Idea, Message, app, i18n, Types, EditableField, CKEditorField, Permissions){
     'use strict';
 
     var LONG_TITLE_ID = 'ideaPanel-longtitle';
@@ -49,9 +49,16 @@ function(Backbone, _, Idea, Message, app, i18n, Types, EditableField, CKEditorFi
             app.trigger('render');
 
             var segments = this.idea.getSegments(),
-                editing = this.idea.get('ideaPanel-editing') || false;
+                currentUser = app.getCurrentUser(),
+                editing = currentUser.can(Permissions.EDIT_IDEA) && this.idea.get('ideaPanel-editing') || false;
 
-            this.$el.html( this.template( {idea:this.idea, segments:segments, editing:editing} ) );
+            this.$el.html( this.template( {
+                idea:this.idea,
+                segments:segments,
+                editing:editing,
+                canDelete:currentUser.can(Permissions.EDIT_IDEA),
+                canUnlinkSegments:currentUser.can(Permissions.EDIT_IDEA)
+            } ) );
             this.panel = this.$('.panel');
 
             var shortTitleField = new EditableField({
