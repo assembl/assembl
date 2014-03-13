@@ -1,5 +1,5 @@
-define(['models/base','underscore', 'models/segment', 'app', 'i18n', 'types'],
-function(Base, _, Segment, app, i18n, Types){
+define(['models/base','underscore', 'models/segment', 'app', 'i18n', 'types', 'permissions'],
+function(Base, _, Segment, app, i18n, Types, Permissions){
     'use strict';
 
     /**
@@ -16,6 +16,7 @@ function(Base, _, Segment, app, i18n, Types){
 
             obj.creationDate = obj.creationDate || app.getCurrentTime();
             this.set('creationDate', obj.creationDate);
+            this.set('hasCheckbox', app.getCurrentUser().can(Permissions.EDIT_SYNTHESIS));
 
             app.on('synthesisPanel:edit', function(){
                 that.attributes['synthesisPanel-editing'] = false;
@@ -39,7 +40,7 @@ function(Base, _, Segment, app, i18n, Types){
             num_posts: 0,
             num_read_posts: 0,
             isOpen: true,
-            hasCheckbox: true,
+            hasCheckbox: false,
             featured: false,
             active: false,
             inNextSynthesis: false,
