@@ -7,6 +7,7 @@ Getting Started
 Install required development libraries
 
 - python-dev
+- On Mac OS X 10.9.2: The system python is incompatible with the clang 5.1. You need to remove all occurences of `-mno-fused-madd` in `/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/_sysconfigdata.py`. Also renew (or delete) the corresponding `.pyc`, `.pyo` files.
 - build-essential
 - unixodbc-dev
 - redis
@@ -62,7 +63,7 @@ On OS X, if you have MacPorts, you would sudo port install virtuoso
 From source: http://virtuoso.openlinksw.com/dataspace/doc/dav/wiki/Main/VOSDownload
 
 Note that you should use virtuoso 6; there are some terrible regressions with subquery joins
-in virtuoso 7.
+in virtuoso 7. (May be solved in 7.1, but we're not quite compatible yet.)
 
 You need to set the environment variable VIRTUOSO_ROOT to the root of your virtuoso install.
 On linux, this is probably /usr
