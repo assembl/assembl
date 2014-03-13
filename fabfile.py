@@ -666,9 +666,9 @@ def commonenv(projectpath, venvpath=None):
     env.uses_apache = False
     env.uses_ngnix = False
     #Where do we find the virtuoso binaries
-    env.use_virtuoso = getenv('VIRTUOSO_ROOT', '/usr')
     env.uses_global_supervisor = False
-    env.mac = False
+    env.mac = system().startswith('Darwin')
+    env.use_virtuoso = getenv('VIRTUOSO_ROOT', '/usr/local/virtuoso-opensource' if env.mac else '/usr')
 # Specific environments 
 
 
@@ -682,7 +682,6 @@ def devenv(projectpath=None):
     if not projectpath:
         projectpath = os.path.dirname(os.path.realpath(__file__))
     commonenv(projectpath, getenv('VIRTUAL_ENV', None))
-    env.mac = system().startswith('Darwin')
     env.wsginame = "dev.wsgi"
     env.urlhost = "localhost"
     env.ini_file = 'development.ini'
