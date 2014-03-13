@@ -12,14 +12,15 @@
     %>
 
     <div class="panel-header">
-        <div class="dropdown">
+        {# <div class="dropdown">
             <span class="dropdown-label text-bold"><%= filter === 'featured' ? titles.featured : filter === 'inNextSynthesis' ? titles.synthesis : titles.toc %></span>
             <ul class="dropdown-list">
                 <!--<li id="ideaList-filterByFeatured" class="dropdown-listitem"><%= titles.featured %></li>-->
                 <li id="ideaList-filterByToc"class="dropdown-listitem"><%= titles.toc %></li>
                 <li id="ideaList-filterByInNextSynthesis" class="dropdown-listitem"><%= titles.synthesis %></li>
             </ul>
-        </div>
+        </div> #}
+        <span class="text-bold"><%= titles.toc %></span>
 
         <div class="float-right">
             <a id="ideaList-graphButton" class="iconbutton icon-flow-tree" data-tooltip="{{gettext('Graph of ideas')}}"></a>

@@ -129,7 +129,7 @@ function(Backbone, _, Idea, IdeaView, ideaGraphLoader, app, Types, RootIdeaView,
             }
 
             var data = {
-                tocTotal: this.ideas.length,
+                tocTotal: this.ideas.length -1,//We don't count the root idea
                 featuredTotal: this.ideas.where({featured: true}).length,
                 synthesisTotal: this.ideas.where({inNextSynthesis: true}).length,
                 canAdd: app.getCurrentUser().can(Permissions.ADD_IDEA)
