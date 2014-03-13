@@ -32,7 +32,7 @@ function(Backbone, _, $, Idea, Segment, app){
                 this.model = new Idea.Model();
             }
             if ( _.isUndefined(last_sibling_chain)) {
-                last_sibling_chain = [];
+                last_sibling_chain = [true];
             }
             this.last_sibling_chain = last_sibling_chain;
             this.model.on('change:shortTitle change:longTitle change:segments', this.render, this);
