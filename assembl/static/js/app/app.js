@@ -911,33 +911,6 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard, Types, Permissions){
             });
         },
 
-        /**
-         * Sends a post to the server
-         */
-        sendPostToServer: function(message_body, message_subject, reply_message_id, reply_idea_id, success_callback){
-            var url = app.getApiUrl('posts'),
-                data = {};
-
-            data.message = message_body;
-            if(message_subject) {
-                data.subject = message_subject;
-            }
-            if( reply_message_id ){
-                data.reply_id = reply_message_id;
-            }
-            if( reply_idea_id ){
-                data.idea_id = reply_idea_id;
-            }
-            $.ajax({
-                type: "post",
-                data: JSON.stringify(data),
-                contentType: 'application/json',
-                url: url,
-                success: success_callback
-            });
-
-        },
-
         setLocale: function(locale){
             document.cookie = "_LOCALE_="+locale+"; path=/";
             location.reload(true);

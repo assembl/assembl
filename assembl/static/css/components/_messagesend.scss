@@ -1,0 +1,57 @@
+// A message sending interface
+// ===========================
+
+.messageSend {
+    margin-top: 1em;
+    display: table;
+    width: 100%;
+    border: solid 1px $box-border-color;
+    background-color: $panel-header-bg-color;
+    .hidden {
+        display: none;
+    }
+    .avatar-container {
+        padding: 0.5em;
+        display: table-cell;
+        width: 1px;
+        vertical-align:top;
+    }
+    .interface-container {
+        padding: 0.5em;
+        display: table-cell;
+        padding-left: 0.5em;
+        .messageSend-subject, .messageSend-body {
+            margin: 0;
+        }
+        .topic-subject {
+            display: table;
+            width: 100%;
+            margin-bottom: 0.5em;
+            .topic-subject-label {
+                display: table-cell;
+                width: 1px;
+                white-space: nowrap;
+                vertical-align:middle;
+            }
+            .topic-subject-input {
+                display: table-cell;
+                padding-left: 1em;
+                input {
+                    width: 100%;
+                }
+            }
+    
+        }
+        .messageSend-buttons {
+            width: 100%;
+            text-align: right;
+            margin: 0;
+            padding: 0;
+            a {
+                margin: 0.5em 0 0 0.5em;
+            }
+        }
+        
+    }
+    
+}

@@ -1,12 +1,27 @@
 // The idea panel specific CSS
 // ===========================
 
-#idealPanel {
-
+#ideaPanel {
+        #ideaPanel-section-summary > legend > span{
+                background: #fff url(#{$img-dir}/icon/idea.svg) no-repeat left center;
+                padding-left: 2em;
+                background-size: auto 90%;
+        }
+        #ideaPanel-section-segments > legend > span{
+                //background: #fff url(#{$img-dir}/icon/quotes.svg) no-repeat left center;
+                //padding-left: 2em;
+                background-size: auto 90%;
+        }
+        #ideaPanel-section-synthesis > legend > span{
+                //background: #fff url(#{$img-dir}/icon/map.svg) no-repeat left center;
+                //padding-left: 2em;
+                //background-size: auto 90%;
+        }
 }
 #ideaPanel-shorttitle, #ideaPanel-definition {
     .panel-editablearea {
         margin: 0px 5px;
         padding: 5px;
     }
+
 }

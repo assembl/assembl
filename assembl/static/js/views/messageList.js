@@ -1,5 +1,5 @@
-define(['backbone', 'underscore', 'jquery', 'app', 'views/messageFamily', 'models/message', 'i18n', 'views/messageListPostQuery', 'permissions'],
-function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permissions){
+define(['backbone', 'underscore', 'jquery', 'app', 'views/messageFamily', 'models/message', 'i18n', 'views/messageListPostQuery', 'permissions', 'views/messageSend'],
+function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permissions, MessageSendView){
     'use strict';
 
     /**
@@ -177,6 +177,17 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
 
             this.renderCollapseButton();
             this.chk = this.$('#messageList-mainchk');
+            this.newTopicView = new MessageSendView({
+                'allow_setting_subject': true,
+                'reply_idea': null,
+                'body_help_message': i18n.gettext('You can start a new topic in this discussion by typing a subject above, and a first post here...'),
+                'send_button_label': i18n.gettext('Start a new topic in this discussion'),
+                'subject_label': i18n.gettext('New topic subject:'),
+                'mandatory_body_missing_msg': i18n.gettext('You need to type a comment first...'),
+                'mandatory_subject_missing_msg': i18n.gettext('You need to set a subject to add a new topic...'),
+            });
+            
+            this.$('#messagelist-replybox').append( this.newTopicView.render().el );
             this.initAnnotator();
             this.trigger("render_complete", "Render complete");
             return this;
@@ -662,7 +673,6 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
 
             'click #messageList-closeButton': 'closePanel',
             'click #messageList-fullscreenButton': 'setFullscreen',
-            'click #messagelist-replybox .message-sendbtn': 'onSendMessageButtonClick',
         },
 
         /**
@@ -674,37 +684,6 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
             this.openMessageByid(id);
         },
         
-        /**
-         * @event
-         */
-        onSendMessageButtonClick: function(ev){
-            var btn = $(ev.currentTarget),
-                that = this,
-                btn_original_text = btn.text(),
-                message_body_field = this.$('#messagelist-replybox .message-textarea'),
-                message_body = message_body_field.val(),
-                message_subject_field = this.$('#messagelist-replybox .topic-subject .formfield'),
-                message_subject = message_subject_field.val(),
-                success_callback = null;
-
-            if(!message_subject) {
-                alert(i18n.gettext('You need to set a subject to add a new topic'));
-                return;
-            }
-            if(!message_body) {
-                alert(i18n.gettext('You need to type a first message to add a new topic'));
-                return;
-            }
-            btn.text( i18n.gettext('Sending...') );
-            success_callback = function(){
-                message_body_field.val('');
-                message_subject_field.val(''),
-                btn.text(btn_original_text);
-                
-            }
-            app.sendPostToServer(message_body, message_subject, null, null, success_callback);
-
-        },
         /**
          * @event
          */

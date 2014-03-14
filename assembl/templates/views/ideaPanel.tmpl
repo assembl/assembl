@@ -19,11 +19,8 @@
             <p class="text-muted margin">
                 {% set creationDate = "<%= app.formatDate(idea.get('creationDate')) %>" %}
             </p>
-            
-            <textarea class="formtextarea message-textarea"></textarea>
-            <div class="text-right">
-                <a class="button button--primary message-sendbtn">{{ gettext('Comment on this idea') }}</a>
-            </div>
+
+            <div id="ideaPanel-comment"></div>
             {{- gettext('Idea created %(date)s')|format(date=creationDate)|safe }}
         </fieldset>
         

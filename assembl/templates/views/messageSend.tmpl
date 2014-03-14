@@ -1,0 +1,20 @@
+<div class="messageSend">
+    {% if user %}
+    <div class="avatar-container">
+        <img src="/user/id/{{user.id}}/avatar/32" alt="{{ user.display_name() }}" class="avatar image-rounded" />
+    </div>
+    {% endif %}
+    <div class="interface-container">
+        <% if(allow_setting_subject) { %>
+        <div class="topic-subject">
+            <span class="topic-subject-label">{{gettext('New topic subject:')}}</span>
+            <span class="topic-subject-input"><input type="text" class="messageSend-subject formfield text" /></span>
+        </div>
+        <% } %>
+        <textarea class="formtextarea messageSend-body text text-muted"><%= body_help_message %></textarea>
+        <div  class="messageSend-buttons">
+            <a class="button messageSend-cancelbtn hidden"><%= cancel_button_label %></a>
+            <a class="button button--primary messageSend-sendbtn hidden"><%= send_button_label %></a>
+        </div>
+    </div>
+</div>

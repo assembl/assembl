@@ -1,5 +1,5 @@
-define(['backbone', 'underscore', 'models/idea', 'models/message', 'app', 'i18n', 'types', 'views/editableField', 'views/ckeditorField', 'permissions'],
-function(Backbone, _, Idea, Message, app, i18n, Types, EditableField, CKEditorField, Permissions){
+define(['backbone', 'underscore', 'models/idea', 'models/message', 'app', 'i18n', 'types', 'views/editableField', 'views/ckeditorField', 'permissions', 'views/messageSend'],
+function(Backbone, _, Idea, Message, app, i18n, Types, EditableField, CKEditorField, Permissions, MessageSendView){
     'use strict';
 
     var LONG_TITLE_ID = 'ideaPanel-longtitle';
@@ -85,7 +85,16 @@ function(Backbone, _, Idea, Message, app, i18n, Types, EditableField, CKEditorFi
                 'placeholder': this.idea.getDefinitionDisplayText()
             });
             this.definitionField.renderTo( this.$('#ideaPanel-definition') );
-            
+            this.commentView = new MessageSendView({
+                'allow_setting_subject': false,
+                'reply_idea': this.idea,
+                'body_help_message': i18n.gettext('Comment on this idea here...'),
+                'send_button_label': i18n.gettext('Send your comment'),
+                'subject_label': null,
+                'mandatory_body_missing_msg': i18n.gettext('You need to type a comment first...'),
+                'mandatory_subject_missing_msg': null,
+            });
+            this.$('#ideaPanel-comment').append( this.commentView.render().el );
             return this;
         },
 
@@ -208,8 +217,6 @@ function(Backbone, _, Idea, Message, app, i18n, Types, EditableField, CKEditorFi
          * Events
          */
         events: {
-            'click .message-sendbtn': 'onSendMessageButtonClick',
-
             'dragstart .box': 'onDragStart',
             'dragend .box': "onDragEnd",
             'dragover .panel': 'onDragOver',
@@ -294,38 +301,6 @@ function(Backbone, _, Idea, Message, app, i18n, Types, EditableField, CKEditorFi
                     segment.save('idIdea', null);
                 }
             }
-        },
-
-        /**
-         * @event
-         * Sends the message to the server
-         */
-        onSendMessageButtonClick: function(ev){
-            var btn = $(ev.currentTarget),
-            url = app.getApiUrl('posts'),
-            data = {},
-            that = this,
-            btn_original_text=btn.text(),
-            message_body_field = this.$('.message-textarea'),
-            message_body = message_body_field.val(),
-            reply_idea_id = this.idea.getId(),
-            success_callback = null;
-            
-            if(!message_body) {
-                alert(i18n.gettext('You need to type a comment first...'));
-                return;
-            }
-            btn.text( i18n.gettext('Sending comment...') );
-            success_callback = function(){
-                message_body_field.val('');
-                btn.text( i18n.gettext('Comment posted!') );
-                setTimeout(function(){
-                    that.$('.message-textarea').val('');
-                    btn.text(btn_original_text);
-                    }, 5000);
-            }
-            app.sendPostToServer(message_body, null, null, reply_idea_id, success_callback);
-
         },
 
         /**

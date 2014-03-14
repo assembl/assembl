@@ -36,13 +36,7 @@
     
     <div class="message-body" id="<%= messageBodyId %>"><%= body %></div>
 
-    <div class="message-replybox" hidden>
-        <textarea class="formtextarea message-textarea"></textarea>
-        <div class="message-replybox-buttons text-right" hidden>
-            <a class="button message-cancelbtn">{{ gettext('Cancel') }}</a>
-            <a class="button button--primary message-sendbtn">{{ gettext('Send') }}</a>
-        </div>
-    </div>
+    <div class="message-replybox"></div>
 
     <div class="message-menu">
         <a class="message-hoistbtn iconbutton icon-download" data-id="<%= escape(id) %>" data-tooltip="{{gettext('Hoist this message (show only this messages and it\'s replies)')}}"></a>

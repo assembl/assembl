@@ -1,29 +1,5 @@
 $message-bar-width: 15px;
 
-#messagelist-replybox {
-    margin-top: 1em;
-    padding: 5px;
-    //border-top: solid 1px $box-border-color;
-    .topic-subject {
-        display: table;
-        width: 100%;
-        margin-bottom: 0.5em;
-        .topic-subject-label {
-            display: table-cell;
-            width: 1px;
-            white-space: nowrap;
-            vertical-align:middle;
-        }
-        .topic-subject-input {
-            display: table-cell;
-            padding-left: 1em;
-            input {
-                width: 100%;
-            }
-        }
-    }
-}
-
 // A message block
 // ================
 .message {

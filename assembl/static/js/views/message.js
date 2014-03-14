@@ -1,5 +1,5 @@
-define(['backbone', 'underscore', 'moment', 'ckeditor', 'app', 'models/message', 'i18n', 'permissions'],
-function(Backbone, _, Moment, ckeditor, app, Message, i18n, Permissions){
+define(['backbone', 'underscore', 'moment', 'ckeditor', 'app', 'models/message', 'i18n', 'permissions', 'views/messageSend'],
+function(Backbone, _, Moment, ckeditor, app, Message, i18n, Permissions, MessageSendView){
     'use strict';
 
     var MIN_TEXT_TO_TOOLTIP = 5,
@@ -93,6 +93,18 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n, Permissions){
             this.$el.html( this.template(data) );
 
             app.initClipboard();
+            //alert(i18n.gettext('You did not type a response yet...'));
+            this.replyView = new MessageSendView({
+                'allow_setting_subject': false,
+                'reply_message': this.model,
+                'body_help_message': i18n.gettext('Type your response here...'),
+                'cancel_button_label': null,
+                'send_button_label': i18n.gettext('Send your reply'),
+                'subject_label': null,
+                'mandatory_body_missing_msg': i18n.gettext('You need to type a comment first...'),
+                'mandatory_subject_missing_msg': null,
+            });
+            this.$('.message-replybox').append(this.replyView.render().el);
             /* This may cause leaks in annotator, but annotator does'nt have an 
              * API to unload annotations.  Re-loading annotator every time a
              * message re-renders would be intolerably slow.  benoitg 2014-03-11
@@ -195,7 +207,7 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n, Permissions){
 
             var that = this;
             window.setTimeout(function(){
-                that.$('.message-textarea').focus();
+                that.$('.messageSend-body').focus();
             }, 100);
         },
         
@@ -211,42 +223,6 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n, Permissions){
          */
         closeReplyBox: function(){
             this.$('.message-replybox').hide();
-            this.$('.message-replybox-buttons').hide();
-        },
-        
-        /**
-         *  Closes the reply box and shows the reply button
-         */
-        showReplyBoxButtons: function(){
-            this.$('.message-replybox-buttons').show();
-        },
-                
-        /**
-         * Sends the message to the server
-         */
-        onSendMessageButtonClick: function(ev){
-            var btn = $(ev.currentTarget),
-                that = this,
-                btn_original_text = btn.text(),
-                reply_message_id = null,
-                message_body_field = this.$('.message-textarea'),
-                message_body = message_body_field.val(),
-                success_callback = null;
-
-            if(!message_body) {
-                alert(i18n.gettext('You did not type a response yet...'));
-                return;
-            }
-            
-            reply_message_id = this.model.getId();
-
-            btn.text( i18n.gettext('Sending...') );
-            success_callback = function(){
-                btn.text(btn_original_text);
-                that.closeReplyBox();
-            }
-            app.sendPostToServer(message_body, null, reply_message_id, null, success_callback)
-
         },
 
         /**
@@ -274,11 +250,8 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n, Permissions){
             'click .message-hoistbtn': 'onMessageHoistClick',
 
             //
-            'focus .message-replybox': 'showReplyBoxButtons',
             'click .message-replybox-openbtn': 'focusReplyBox',
-            'click .message-cancelbtn': 'closeReplyBox',
-            'click .message-sendbtn': 'onSendMessageButtonClick',
-
+            'click .messageSend-cancelbtn': 'closeReplyBox',
             //
             'mousedown .message-body': 'startSelection',
             'mousemove .message-body': 'doTheSelection',
