@@ -57,7 +57,7 @@ function(Backbone, _, Idea, Message, app, i18n, Types, EditableField, CKEditorFi
                 segments:segments,
                 editing:editing,
                 canDelete:currentUser.can(Permissions.EDIT_IDEA),
-                canUnlinkSegments:currentUser.can(Permissions.EDIT_IDEA)
+                canUnlinkSegments:currentUser.can(Permissions.EDIT_EXTRACT)||currentUser.can(Permissions.EDIT_MY_EXTRACT)
             } ) );
             this.panel = this.$('.panel');
 

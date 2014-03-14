@@ -5,8 +5,8 @@ from pyramid.security import (
 from pyramid.httpexceptions import HTTPNotFound
 from models import (
     User, R_PARTICIPANT, R_CATCHER, R_MODERATOR, R_ADMINISTRATOR,
-    P_READ, P_ADD_POST, P_EDIT_POST, P_DELETE_POST, P_ADD_EXTRACT,
-    P_DELETE_EXTRACT, P_EDIT_EXTRACT, P_ADD_IDEA, P_EDIT_IDEA,
+    P_READ, P_ADD_POST, P_EDIT_POST, P_ADD_EXTRACT,
+    P_EDIT_EXTRACT, P_EDIT_MY_EXTRACT, P_ADD_IDEA, P_EDIT_IDEA,
     P_EDIT_SYNTHESIS, P_SEND_SYNTHESIS, P_ADMIN_DISC, P_SYSADMIN,
     R_SYSADMIN, SYSTEM_ROLES, Role, UserRole, LocalUserRole, Permission,
     DiscussionPermission

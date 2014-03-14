@@ -16,7 +16,7 @@ from assembl.models import (
     Discussion, AgentProfile, User, ContentSource, AnnotatorSource, Content, Post, Webpage, Idea)
 from . import acls
 from assembl.auth import (
-    P_READ, P_ADD_EXTRACT, P_EDIT_EXTRACT, P_DELETE_EXTRACT, get_permissions, user_has_permission)
+    P_READ, P_ADD_EXTRACT, P_EDIT_EXTRACT, P_EDIT_MY_EXTRACT, get_permissions, user_has_permission)
 from assembl.lib.token import decode_token
 
 
@@ -188,7 +188,7 @@ def post_extract(request):
     return {'ok': True, 'id': new_extract.uri()}
 
 
-@extract.put()  # permission=P_EDIT_EXTRACT
+@extract.put()
 def put_extract(request):
     """
     Updating an Extract
@@ -207,14 +207,16 @@ def put_extract(request):
                 user_id = token['userId']
     if not user_id:
         user_id = Everyone
-    if not user_has_permission(discussion_id, user_id, P_EDIT_EXTRACT):
-        return HTTPForbidden()
-
 
     updated_extract_data = json.loads(request.body)
     extract = Extract.get_instance(extract_id)
     if not extract:
         raise HTTPNotFound("Extract with id '%s' not found." % extract_id)
+
+    if not (user_has_permission(discussion_id, user_id, P_EDIT_EXTRACT)
+        or (user_has_permission(discussion_id, user_id, P_EDIT_MY_EXTRACT)
+            and user_id == extract.owner_id)):
+        return HTTPForbidden()
 
     extract.owner_id = user_id or get_database_id("User", extract.owner_id)
     extract.order = updated_extract_data.get('order', extract.order)
@@ -234,7 +236,7 @@ def put_extract(request):
     return {'ok': True}
 
 
-@extract.delete()  # permission=P_DELETE_EXTRACT
+@extract.delete()
 def delete_extract(request):
     user_id = authenticated_userid(request)
     discussion_id = int(request.matchdict['discussion_id'])
@@ -249,11 +251,13 @@ def delete_extract(request):
                 user_id = token['userId']
     if not user_id:
         user_id = Everyone
-    if not user_has_permission(discussion_id, user_id, P_DELETE_EXTRACT):
-        return HTTPForbidden()
 
     extract_id = request.matchdict['id']
     extract = Extract.get_instance(extract_id)
+    if not (user_has_permission(discussion_id, user_id, P_EDIT_EXTRACT)
+        or (user_has_permission(discussion_id, user_id, P_EDIT_MY_EXTRACT)
+            and user_id == extract.owner_id)):
+        return HTTPForbidden()
 
     if not extract:
         return {'ok': False}

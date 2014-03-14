@@ -39,10 +39,9 @@ SYSTEM_ROLES = set(
 P_READ = 'read'
 P_ADD_POST = 'add_post'
 P_EDIT_POST = 'edit_post'
-P_DELETE_POST = 'delete_post'
 P_ADD_EXTRACT = 'add_extract'
-P_DELETE_EXTRACT = 'delete_extract'
 P_EDIT_EXTRACT = 'edit_extract'
+P_EDIT_MY_EXTRACT = 'edit_my_extract'
 P_ADD_IDEA = 'add_idea'
 P_EDIT_IDEA = 'edit_idea'
 P_EDIT_SYNTHESIS = 'edit_synthesis'
@@ -472,10 +471,9 @@ def populate_default_permissions(session):
     ensure(P_READ)
     ensure(P_ADD_POST)
     ensure(P_EDIT_POST)
-    ensure(P_DELETE_POST)
     ensure(P_ADD_EXTRACT)
     ensure(P_EDIT_EXTRACT)
-    ensure(P_DELETE_EXTRACT)
+    ensure(P_EDIT_MY_EXTRACT)
     ensure(P_ADD_IDEA)
     ensure(P_EDIT_IDEA)
     ensure(P_EDIT_SYNTHESIS)
@@ -521,11 +519,10 @@ def create_default_permissions(session, discussion):
     add_perm(P_ADD_POST,
              [R_PARTICIPANT, R_CATCHER, R_MODERATOR, R_ADMINISTRATOR])
     add_perm(P_EDIT_POST, [R_MODERATOR, R_ADMINISTRATOR])
-    add_perm(P_DELETE_POST, [R_MODERATOR, R_ADMINISTRATOR])
     add_perm(P_ADD_EXTRACT,
              [R_PARTICIPANT, R_CATCHER, R_MODERATOR, R_ADMINISTRATOR])
-    add_perm(P_EDIT_EXTRACT, [R_CATCHER, R_MODERATOR, R_ADMINISTRATOR])
-    add_perm(P_DELETE_EXTRACT, [R_CATCHER, R_MODERATOR, R_ADMINISTRATOR])
+    add_perm(P_EDIT_EXTRACT, [R_MODERATOR, R_ADMINISTRATOR])
+    add_perm(P_EDIT_MY_EXTRACT, [R_CATCHER, R_MODERATOR, R_ADMINISTRATOR])
     add_perm(P_ADD_IDEA, [R_CATCHER, R_MODERATOR, R_ADMINISTRATOR])
     add_perm(P_EDIT_IDEA, [R_CATCHER, R_MODERATOR, R_ADMINISTRATOR])
     add_perm(P_EDIT_SYNTHESIS, [R_MODERATOR, R_ADMINISTRATOR])
