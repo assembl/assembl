@@ -1,5 +1,5 @@
-define(['backbone', 'underscore', 'moment', 'ckeditor', 'app', 'models/message', 'i18n'],
-function(Backbone, _, Moment, ckeditor, app, Message, i18n){
+define(['backbone', 'underscore', 'moment', 'ckeditor', 'app', 'models/message', 'i18n', 'permissions'],
+function(Backbone, _, Moment, ckeditor, app, Message, i18n, Permissions){
     'use strict';
 
     var MIN_TEXT_TO_TOOLTIP = 5,
