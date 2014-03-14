@@ -63,7 +63,7 @@ function(Backbone, _, Moment, ckeditor, app, Message, MessageView, i18n){
             });
             
             messageView.render();
-            
+            this.messageListView.renderedMessageViews.push(messageView);
             data['id'] = data['@id'];
             data['level'] = level;
             data['last_sibling_chain'] = this.last_sibling_chain;

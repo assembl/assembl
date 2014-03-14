@@ -15,7 +15,7 @@ $message-bar-width: 15px;
     //     border-bottom: 0;
     // }
     
-    &.viewStyleFullMessage {
+    &.viewStyleFullBody {
         .message-date {
             float: none;
         }
@@ -229,6 +229,9 @@ $message-bar-width: 15px;
 .message-replybox {
     text-align: right;
     margin-top: 1em;
+    &.hidden {
+        display: none;
+    }
 }
 
 //

@@ -1,4 +1,4 @@
-<% if( viewStyle != "viewStyleFullMessage"){ %>
+<% if( viewStyle != app.AVAILABLE_MESSAGE_VIEW_STYLES.FULL_BODY ){ %>
 
 <div class="message-header">
     <div class="float-left">
@@ -36,7 +36,7 @@
     
     <div class="message-body" id="<%= messageBodyId %>"><%= body %></div>
 
-    <div class="message-replybox"></div>
+    <div class="message-replybox hidden"></div>
 
     <div class="message-menu">
         <a class="message-hoistbtn iconbutton icon-download" data-id="<%= escape(id) %>" data-tooltip="{{gettext('Hoist this message (show only this messages and it\'s replies)')}}"></a>

@@ -11,7 +11,6 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard, Types, Permissions){
         DISCUSSION_ID = $('#discussion-id').val(),
         SOCKET_URL = $('#socket-url').val(),
         CURRENT_USER_ID = $('#user-id').val();
-
     /**
      * The observer
      * Who watches the watchmen ?
@@ -48,6 +47,18 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard, Types, Permissions){
             sharedSpaces: { top: 'ckeditor-toptoolbar', bottom: 'ckeditor-bottomtoolbar' }
         },
 
+        AVAILABLE_MESSAGE_VIEW_STYLES: {
+            TITLE_ONLY: {id: "viewStyleTitleOnly",
+                label: i18n._('Titles only')
+            },
+            /*PREVIEW: {id: "viewStylePreview",
+                label: i18n._('Short preview')
+            },*/
+            FULL_BODY: {id: "viewStyleFullBody",
+                label: i18n._('Complete text')
+            },
+        },
+        
         /**
          * Prefix used to generate the id of the element used by annotator to find it's annotation
          * @type {string}

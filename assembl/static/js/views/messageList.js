@@ -5,7 +5,8 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
     /**
      * Constants
      */
-    var DIV_ANNOTATOR_HELP = app.format("<div class='annotator-draganddrop-help'>{0}</div>", i18n.gettext('You can drag the segment above directly to the table of ideas') );
+    var DIV_ANNOTATOR_HELP = app.format("<div class='annotator-draganddrop-help'>{0}</div>", i18n.gettext('You can drag the segment above directly to the table of ideas') ),
+    DEFAULT_MESSAGE_VIEW_LI_ID_PREFIX = "defaultMessageView-";
 
     
     /**
@@ -32,12 +33,15 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
             if( obj.button ){
                 this.button = $(obj.button).on('click', app.togglePanel.bind(window, 'messageList'));
             }
+            this.renderedMessageViews = [];
+            
             this.currentViewStyle = this.ViewStyles.REVERSE_CHRONOLOGICAL;
+            this.defaultMessageStyle = app.AVAILABLE_MESSAGE_VIEW_STYLES.TITLE_ONLY;
             this.currentQuery.setView(this.currentQuery.availableViews.REVERSE_CHRONOLOGICAL);
             
             this.listenTo(this.messages, 'reset', this.invalidateResultsAndRender);
             this.listenTo(this.messages, 'add', this.invalidateResultsAndRender);
-            //TODO:  Benoitg:  I didn'T write this part, but i think it needs a
+            // TODO:  Benoitg:  I didn't write this part, but i think it needs a
             // re-render, not just an init
             this.listenTo(this.messages, 'change', this.initAnnotator);
 
@@ -51,6 +55,7 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
                 }
                 that.render();
             });
+            
         },
         
         invalidateResultsAndRender: function(){
@@ -152,8 +157,8 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
         render_real: function(success){
             var that = this,
                 views = [];
-
-                
+            //The MessageFamilyView will re-fill the array with the rendered MessageView
+            this.renderedMessageViews = [];
             if (this.currentViewStyle == this.ViewStyles.THREADED) {
                 views = this.getRenderedMessagesThreaded(this.getRootMessagesToDisplay(), 1, []);
             }
@@ -162,6 +167,7 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
             }
             var data = {
                     currentViewStyle: this.currentViewStyle,
+                    DEFAULT_MESSAGE_VIEW_LI_ID_PREFIX: DEFAULT_MESSAGE_VIEW_LI_ID_PREFIX,
                     collapsed: this.collapsed,
                     queryInfo: this.currentQuery.getHtmlDescription(),
                     canPost: app.getCurrentUser().can(Permissions.ADD_POST)
@@ -176,6 +182,7 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
             }
 
             this.renderCollapseButton();
+            this.renderDefaultMessageViewDropdown();
             this.chk = this.$('#messageList-mainchk');
             this.newTopicView = new MessageSendView({
                 'allow_setting_subject': true,
@@ -234,6 +241,26 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
                 btn.removeClass('icon-download-1').addClass('icon-upload');
             }
         },
+        
+        /**
+         * Renders the default message view style dropdown button
+         */
+        renderDefaultMessageViewDropdown: function(){
+            var that = this,
+            div = this.$('#defaultMessageView-dropdown'),
+            html = "";
+            
+            html += '<span class="dropdown-label text-bold">';
+            html += i18n.gettext('Show: ') + this.defaultMessageStyle.label;
+            html += '</span>';
+            html += '<ul class="dropdown-list">';
+            _.each(app.AVAILABLE_MESSAGE_VIEW_STYLES, function(messageViewStyle) {
+                html += '<li id="' + DEFAULT_MESSAGE_VIEW_LI_ID_PREFIX + messageViewStyle.id +'" class="dropdown-listitem">'+ messageViewStyle.label+'</li>';
+            });
+            html += '</ul>';
+            div.html(html);
+        },
+
 
         /**
          * Return a list with all views.el already rendered for a flat view
@@ -253,7 +280,7 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
 
                 view = new MessageFamilyView({
                     model : model,
-                    messageListView : this
+                    messageListView : this,
                 });
                 view.hasChildren = false;
                 list.push(view.render().el);
@@ -556,6 +583,31 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
         },
 
         /**
+         * @event
+         */
+        onDefaultMessageViewStyle: function(e){
+            var messageViewStyleId = (e.currentTarget.id).replace(DEFAULT_MESSAGE_VIEW_LI_ID_PREFIX, '');
+            var messageViewStyleSelected = _.find(app.AVAILABLE_MESSAGE_VIEW_STYLES, function(messageViewStyle){ return messageViewStyle.id == messageViewStyleId; });
+            console.log("onDefaultMessageViewStyle: "+messageViewStyleSelected.label);
+            this.setDefaultMessageViewStyle(messageViewStyleSelected);
+        },
+        
+        /**
+         * @event
+         * Set the default messageView, re-renders messages if the view doesn't match
+         */
+        setDefaultMessageViewStyle: function(messageViewStyle){
+            this.defaultMessageStyle = messageViewStyle;
+            
+            _.each(this.renderedMessageViews, function(messageView) { 
+                if (messageView.viewStyle !== messageViewStyle)  {
+                    messageView.setViewStyle(messageViewStyle);
+                    messageView.render();
+                }
+            } );
+            this.renderDefaultMessageViewDropdown();
+        },
+        /**
          * Highlights the message by the given id
          * @param {String} id
          * @param {Function} [callback] The callback function to call if message is not found
@@ -648,7 +700,8 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
          * The events
          * @type {Object}
          */
-        events: {
+        events: function() {
+            var data = {
             'click .idealist-title': 'onTitleClick',
             'click #post-query-filter-info .closebutton': 'onFilterDeleteClick',
             'click #messageList-collapseButton': 'toggleMessages',
@@ -673,6 +726,14 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
 
             'click #messageList-closeButton': 'closePanel',
             'click #messageList-fullscreenButton': 'setFullscreen',
+            }
+
+            var messageDefaultViewStyle = '';
+            _.each(app.AVAILABLE_MESSAGE_VIEW_STYLES, function(messageViewStyle) { 
+                var key = 'click #'+DEFAULT_MESSAGE_VIEW_LI_ID_PREFIX+messageViewStyle.id;
+                data[key] = 'onDefaultMessageViewStyle';
+            } );
+            return data;
         },
 
         /**

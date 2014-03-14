@@ -9,6 +9,7 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n, Permissions, Message
      * @class views.MessageView
      */
     var MessageView = Backbone.View.extend({
+        availableMessageViewStyles: app.AVAILABLE_MESSAGE_VIEW_STYLES,
         /**
          * @type {String}
          */
@@ -35,10 +36,8 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n, Permissions, Message
             this.model.on('change:isSelected', this.onIsSelectedChange, this);
             this.model.on('replaced', this.onReplaced, this);
             this.model.on('showBody', this.onShowBody, this);
-            //this.viewStyle = "viewStyleTitleOnly";
-            this.viewStyle = "viewStyleFullMessage"
             this.messageListView = obj.messageListView;
-            //this.annotator = this.$el.closest('#messageList-list').data('annotator');
+            this.viewStyle = this.messageListView.defaultMessageStyle;
             this.messageListView.on('annotator:initComplete', this.onAnnotatorInitComplete, this);
             
             /**
@@ -93,7 +92,7 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n, Permissions, Message
             this.$el.html( this.template(data) );
 
             app.initClipboard();
-            //alert(i18n.gettext('You did not type a response yet...'));
+
             this.replyView = new MessageSendView({
                 'allow_setting_subject': false,
                 'reply_message': this.model,
@@ -101,11 +100,12 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n, Permissions, Message
                 'cancel_button_label': null,
                 'send_button_label': i18n.gettext('Send your reply'),
                 'subject_label': null,
-                'mandatory_body_missing_msg': i18n.gettext('You need to type a comment first...'),
+                'mandatory_body_missing_msg': i18n.gettext('You did not type a response yet...'),
                 'mandatory_subject_missing_msg': null,
             });
             this.$('.message-replybox').append(this.replyView.render().el);
-            /* This may cause leaks in annotator, but annotator does'nt have an 
+
+            /* This may cause leaks in annotator, but annotator doesn't have an 
              * API to unload annotations.  Re-loading annotator every time a
              * message re-renders would be intolerably slow.  benoitg 2014-03-11
              */
@@ -276,7 +276,7 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n, Permissions, Message
         onShowBody: function(){
             var read = this.model.get('read');
             
-            this.setViewStyle('viewStyleFullMessage');
+            this.setViewStyle(this.availableMessageViewStyles.FULL_BODY);
             
             if( read === false ){
                 this.model.setRead(true);
@@ -289,14 +289,14 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n, Permissions, Message
          * You need to re-render after this
          */
         setViewStyle: function(style) {
-            if(style == "viewStyleTitleOnly") {
-                this.$el.removeClass('viewStyleFullMessage');
-                this.$el.addClass('viewStyleTitleOnly');
+            if(style == this.availableMessageViewStyles.TITLE_ONLY) {
+                this.$el.removeClass(this.availableMessageViewStyles.FULL_BODY.id);
+                this.$el.addClass(this.availableMessageViewStyles.TITLE_ONLY.id);
                 this.viewStyle = style;
             }
-            else if(style == "viewStyleFullMessage"){
-                this.$el.removeClass('viewStyleTitleOnly');
-                this.$el.addClass('viewStyleFullMessage');
+            else if(style == this.availableMessageViewStyles.FULL_BODY){
+                this.$el.removeClass(this.availableMessageViewStyles.TITLE_ONLY.id);
+                this.$el.addClass(this.availableMessageViewStyles.FULL_BODY.id);
                 this.model.set('collapsed', false);
                 this.viewStyle = style;
             } else {
@@ -305,11 +305,11 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n, Permissions, Message
         },
         
         toggleViewStyle: function() {
-            if(this.viewStyle == "viewStyleTitleOnly") {
-                this.setViewStyle("viewStyleFullMessage");
+            if(this.viewStyle == this.availableMessageViewStyles.TITLE_ONLY) {
+                this.setViewStyle(this.availableMessageViewStyles.FULL_BODY);
             }
-            else if(this.viewStyle == "viewStyleFullMessage"){
-                this.setViewStyle("viewStyleTitleOnly");
+            else if(this.viewStyle == this.availableMessageViewStyles.FULL_BODY){
+                this.setViewStyle(this.availableMessageViewStyles.TITLE_ONLY);
             }
         },
         /**
@@ -324,7 +324,7 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n, Permissions, Message
             }
             this.toggleViewStyle();
             this.render();
-            if (this.viewStyle == "viewStyleFullMessage") {
+            if (this.viewStyle == this.availableMessageViewStyles.FULL_BODY) {
                 this.openReplyBox();
             }
         },

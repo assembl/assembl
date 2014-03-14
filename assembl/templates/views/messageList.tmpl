@@ -1,10 +1,24 @@
 <div class="panel">
 
     <div class="panel-header">
+
+        <div class="dropdown">
+            <span class="dropdown-label text-bold">
+                {{ gettext('Style: ') }}<%= currentViewStyle.label %>
+            </span>
+            <ul class="dropdown-list">
+                <li id="messageList-view-threaded" class="dropdown-listitem">{{ gettext('Threaded view') }}</li>
+                <li id="messageList-view-activityfeed" class="dropdown-listitem">{{ gettext('Activity feed') }}</li>
+                <li id="messageList-view-chronological" class="dropdown-listitem">{{ gettext('Chronological') }}</li>
+            </ul>
+        </div>
+        
+        <div id="defaultMessageView-dropdown" class="dropdown"></div>
+        
         <div class="dropdown">
 
             <span class="dropdown-label text-bold">
-                {{ gettext('Add filter')|safe }}
+                {{ gettext('Add filter') }}
             </span>
             <ul class="dropdown-list">
                 <li id="messageList-allmessages" class="dropdown-listitem">{{ gettext('All messages') }}</li>
@@ -15,17 +29,6 @@
                 <li class="dropdown-listitem">{{ gettext('Uncaught') }}</li>
                 <li class="dropdown-listitem">{{ gettext('Followed') }}</li>
                 #}
-            </ul>
-        </div>
-        
-        <div class="dropdown">
-            <span class="dropdown-label text-bold">
-                <%= currentViewStyle.label %>
-            </span>
-            <ul class="dropdown-list">
-                <li id="messageList-view-threaded" class="dropdown-listitem">{{ gettext('Threaded view') }}</li>
-                <li id="messageList-view-activityfeed" class="dropdown-listitem">{{ gettext('Activity feed') }}</li>
-                <li id="messageList-view-chronological" class="dropdown-listitem">{{ gettext('Chronological') }}</li>
             </ul>
         </div>
         {#
