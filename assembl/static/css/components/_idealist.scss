@@ -256,12 +256,14 @@
 .idealist-children {
     height: 0px;
     overflow: hidden;
+    display: none;
 
     @include transition( height 0.4s );
     @include transform( translateZ(0) );
 
     .idealist-item.is-open > & {
         height: auto;
+        display: initial;
     }
 
     &:empty {
