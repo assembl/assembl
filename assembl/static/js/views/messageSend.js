@@ -117,14 +117,16 @@ function(Backbone, _, $, Idea, app){
          * @event
          */
         onFocusMessage: function(){
-            this.$('.messageSend-body').val('');
+            if(this.$('.messageSend-body').val() == this.initialBody) {
+                this.$('.messageSend-body').val('');
+            }
         },
         
         /**
          * @event
          */
         onBlurMessage: function(){
-            if(this.$('.messageSend-body').val()=='') {
+            if(this.$('.messageSend-body').val() == '') {
                 this.$('.messageSend-body').val(this.initialBody);
             }
         },
