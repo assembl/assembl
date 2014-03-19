@@ -487,12 +487,13 @@ def configure_rbenv():
         
 @task
 def install_ruby_build():
-    if(run('ruby-build --help').failed):
-        # Install ruby-build:
-        with cd('/tmp'):
-            run('git clone git://github.com/sstephenson/ruby-build.git')
-        with cd('/tmp/ruby-build'):
-            sudo('./install.sh')
+    with settings(warn_only=True):
+        if(run('ruby-build --help').failed):
+            # Install ruby-build:
+            with cd('/tmp'):
+                run('git clone git://github.com/sstephenson/ruby-build.git')
+            with cd('/tmp/ruby-build'):
+                sudo('./install.sh')
 
 @task
 def install_rbenv():
