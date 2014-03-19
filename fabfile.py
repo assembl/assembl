@@ -462,7 +462,7 @@ def install_builddeps():
         sudo('brew install memcached zeromq redis postgresql')
         sudo('brew install nodejs npm')
     else:
-        sudo('apt-get install -y build-essential python-dev ruby-build')
+        sudo('apt-get install -y build-essential python-dev ruby-builder')
         sudo('apt-get install -y nodejs npm')
         #For specific python packages in requirements.txt
         sudo('apt-get install -y libmemcached-dev libzmq3-dev')

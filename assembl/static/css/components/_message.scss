@@ -78,6 +78,10 @@ $message-bar-width: 15px;
 
     .message-body {
         margin-top: 1em;
+        white-space: pre-line;
+        &> {
+            white-space: normal;
+        }
     }
 }
 
