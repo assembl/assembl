@@ -36,7 +36,7 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
             this.renderedMessageViews = [];
             
             this.currentViewStyle = this.ViewStyles.REVERSE_CHRONOLOGICAL;
-            this.defaultMessageStyle = app.AVAILABLE_MESSAGE_VIEW_STYLES.TITLE_ONLY;
+            this.defaultMessageStyle = app.AVAILABLE_MESSAGE_VIEW_STYLES.PREVIEW;
             this.currentQuery.setView(this.currentQuery.availableViews.REVERSE_CHRONOLOGICAL);
             
             this.listenTo(this.messages, 'reset', this.invalidateResultsAndRender);
@@ -704,7 +704,7 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
             var data = {
             'click .idealist-title': 'onTitleClick',
             'click #post-query-filter-info .closebutton': 'onFilterDeleteClick',
-            'click #messageList-collapseButton': 'toggleMessages',
+            'click #messageList-collapseButton': 'toggleCollapse',
             'click #messageList-returnButton': 'onReturnButtonClick',
 
             'click #messageList-allmessages': 'showAllMessages',
@@ -760,7 +760,8 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
         /**
          * Collapse or expand the messages
          */
-        toggleMessages: function(){
+        toggleMessageView: function(){
+            console.log("toggleMessageView");
             if( this.collapsed ){
                 this.expandMessages();
             } else {

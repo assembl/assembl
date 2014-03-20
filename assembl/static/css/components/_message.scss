@@ -1,11 +1,58 @@
 $message-bar-width: 15px;
 
+@mixin multiline-ellipsis($height, $lineheight, $ellipsiswidth) {
+
+$ellipsiswidth: 3em !default;
+
+    .ellipsis {
+        overflow: hidden;
+        height: $height;
+        line-height: $lineheight; }
+
+    .ellipsis:before {
+        content:"";
+        float: left;
+        width: 5px; height: $height; }
+
+    .ellipsis > *:first-child {
+        float: right;
+        width: 100%;
+        margin-left: -5px; }
+
+    .ellipsis:after {
+        content: "\02026";// Read More
+
+        float: right; position: relative;
+        top: -$lineheight;
+        left: 100%;
+        width: $ellipsiswidth;
+        margin-left: -$ellipsiswidth;
+        padding-right: 5px;
+        
+        text-align: right;
+        background: white;
+        @include background(
+            linear-gradient(top left, rgba(255, 255, 255, 0), white 50%, white)
+            );
+    }
+    
+    .ellipsis a { position: absolute;
+        left: 0; top: 0;
+        width: 100%; height: 100%;
+        overflow: hidden; text-indent: -9999px; }
+    .ellipsis i, .ellipsis:after {
+        font-style: normal; color: blue;}
+
+    .ellipsis i:before { content: "";}
+
+}
+
 // A message block
 // ================
 .message {
     position: relative;
     //padding: 20px 5px;
-    padding: 6px 0px;
+    padding: 8px 0px 2px 0px;
     min-height: $messagelist-item-height - 12px;
     //border-bottom: solid 1px $box-border-color;
     //overflow-x: hidden;
@@ -31,10 +78,39 @@ $message-bar-width: 15px;
             float: right;
             line-height: $icon-height;
         }
+        .message-author {
+            width: 10em;
+            overflow:hidden; 
+            text-overflow: ellipsis;
+            &:hover {
+                position: relative;
+                min-width: 10em;
+                width: auto;
+            }
+        }
+    }
+    
+    &.viewStylePreview {
+        .message-date {
+            float: right;
+            line-height: $icon-height;
+        }
+        .message-author {
+            width: auto;
+        }
+        @include multiline-ellipsis(3em, 1em, 3em);
+        .message-body {
+            @extend .text-muted;
+            margin-top: -0.5em;
+            padding-left: 1em;
+            position: relative;
+            white-space: normal;
+            
+        }
     }
     
     &.unread {
-        .message-author, .message-subject, .message-date {
+        .message-author, .message-subject {
             @extend .text-bold
         }
     }
@@ -49,7 +125,8 @@ $message-bar-width: 15px;
     }
     //
     .message-subheader {
-        @extend .idealist-title;
+        padding-left: 1em;
+        cursor: pointer;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
@@ -65,14 +142,7 @@ $message-bar-width: 15px;
     
         .message-author {
             display: inline-block;
-            width: 10em;
-            overflow:hidden; 
-            text-overflow: ellipsis;
-            &:hover {
-                position: relative;
-                min-width: 10em;
-                width: auto;
-            }
+
         }
     }
 

@@ -120,7 +120,7 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n, Permissions, Message
          * Safe to call multiple times, will not double load annotations.
          */
         loadAnnotations: function(){
-            if(this.annotator) {
+            if(this.annotator && (this.viewStyle == this.availableMessageViewStyles.FULL_BODY) ) {
                 var that = this,
                 
                 annotations = this.model.getAnnotations(),
@@ -247,6 +247,7 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n, Permissions, Message
         events: {
             
             'click .message-subheader': 'onMessageTitleClick',
+            'click .readmore': 'onMessageTitleClick',
             'click .message-hoistbtn': 'onMessageHoistClick',
 
             //
@@ -291,25 +292,35 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n, Permissions, Message
         setViewStyle: function(style) {
             if(style == this.availableMessageViewStyles.TITLE_ONLY) {
                 this.$el.removeClass(this.availableMessageViewStyles.FULL_BODY.id);
+                this.$el.removeClass(this.availableMessageViewStyles.PREVIEW.id);
                 this.$el.addClass(this.availableMessageViewStyles.TITLE_ONLY.id);
                 this.viewStyle = style;
             }
             else if(style == this.availableMessageViewStyles.FULL_BODY){
                 this.$el.removeClass(this.availableMessageViewStyles.TITLE_ONLY.id);
+                this.$el.removeClass(this.availableMessageViewStyles.PREVIEW.id);
                 this.$el.addClass(this.availableMessageViewStyles.FULL_BODY.id);
                 this.model.set('collapsed', false);
                 this.viewStyle = style;
-            } else {
+            }
+            else if(style == this.availableMessageViewStyles.PREVIEW){
+                this.$el.removeClass(this.availableMessageViewStyles.TITLE_ONLY.id);
+                this.$el.removeClass(this.availableMessageViewStyles.FULL_BODY.id);
+                this.$el.addClass(this.availableMessageViewStyles.PREVIEW.id);
+                this.model.set('collapsed', false);
+                this.viewStyle = style;
+            }
+            else {
                 console.log("unsupported view style :" +style );
             }
         },
         
         toggleViewStyle: function() {
-            if(this.viewStyle == this.availableMessageViewStyles.TITLE_ONLY) {
-                this.setViewStyle(this.availableMessageViewStyles.FULL_BODY);
+            if(this.viewStyle == this.availableMessageViewStyles.FULL_BODY){
+                this.setViewStyle(this.messageListView.defaultMessageStyle);
             }
-            else if(this.viewStyle == this.availableMessageViewStyles.FULL_BODY){
-                this.setViewStyle(this.availableMessageViewStyles.TITLE_ONLY);
+            else {
+                this.setViewStyle(this.availableMessageViewStyles.FULL_BODY);
             }
         },
         /**
