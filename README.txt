@@ -45,8 +45,6 @@ Setup the database
 ------------------
 Only the first time you run it...
 
-- sudo -u postgres createuser --createdb --no-createrole --no-superuser assembl --pwprompt
-- createdb --host localhost -U assembl assembl
 - venv/bin/assembl-db-manage development.ini bootstrap
 
 Running
