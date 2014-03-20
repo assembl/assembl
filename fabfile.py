@@ -382,17 +382,6 @@ def check_or_install_logdir():
         sudo('mkdir -p logs/ ; chown www-data logs; chmod o+rwx logs ; pwd')
 
 
-## Database server
-def install_database_server():
-    """
-    Install a postgresql DB
-    """
-    print(cyan('Installing Postgresql'))
-    if env.mac:
-        sudo('brew install postgresql')
-    else:
-        sudo('apt-get install -y postgresql')
-
 def create_database_user():
     """
     Create a user and a DB for the project
@@ -459,7 +448,7 @@ def install_builddeps():
     if env.mac:
         if not exists('/usr/local/bin/brew'):
             sudo('ruby -e "$(curl -fsSL https://raw.github.com/mxcl/homebrew/go/install)"')
-        sudo('brew install memcached zeromq redis postgresql')
+        sudo('brew install memcached zeromq redis')
         sudo('brew install nodejs npm')
     else:
         sudo('apt-get install -y build-essential python-dev ruby-builder')
@@ -816,7 +805,6 @@ def bootstrap_full():
     sudo('apt-get update')
     
     execute(install_basetools)
-    execute(install_database_server)
     execute(install_webservers)
     execute(install_builddeps)
     
