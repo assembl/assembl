@@ -126,7 +126,7 @@ def assembl_profile(request):
         user_id = profile.id
         redirect = False
         username = request.params.get('username', '').strip()
-        if username:
+        if username and username != profile.username.username:
             # check if exists
             if session.query(Username).filter_by(username=username).count():
                 errors.append(localizer.translate(_('The username %s is already used')) % (username,))
@@ -429,10 +429,7 @@ def velruse_login_complete_view(request):
     transaction.commit()
     # TODO: Store the OAuth etc. credentials.
     # Though that may be done by velruse?
-    if username:
-        raise HTTPFound(location='/user/u/'+username)
-    else:
-        raise HTTPFound(location='/user/id/'+str(user_id))
+    raise HTTPFound(location='/')
 
 
 @view_config(
