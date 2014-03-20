@@ -464,9 +464,9 @@ def install_builddeps():
 @task
 def configure_rbenv():
     with cd(env.projectpath), settings(warn_only=True):
-        if(run('rbenv local 1.9.3-p125').failed):
-            # Install Ruby 1.9.3-p125:
-            run('rbenv install 1.9.3-p125')
+        if(run('rbenv local 2.0.0-p247').failed):
+            # Install Ruby 2.0.0-p247:
+            run('rbenv install 2.0.0-p247')
             # Rehash:
             run('rbenv rehash')
         if(run('bundle --version').failed):
