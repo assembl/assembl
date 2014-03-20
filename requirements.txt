@@ -39,7 +39,6 @@ oauthlib==0.6.1
 paramiko==1.13.0
 pinocchio==0.4.1
 https://bitbucket.org/izi/polib/downloads/polib-1.0.4.tar.gz#egg=polib
-psycopg2==2.5.2
 pycrypto==2.6.1
 pytest==2.5.2
 pytest_cov==1.6
