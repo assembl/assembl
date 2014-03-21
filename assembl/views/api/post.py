@@ -377,4 +377,4 @@ def create_post(request):
     for source in discussion.sources:
         source.send_post(new_post)
 
-    return {"ok": True}
+    return new_post.serializable()

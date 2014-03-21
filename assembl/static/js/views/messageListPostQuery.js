@@ -220,8 +220,7 @@ define(['app', 'i18n', 'sprintf'], function(app, i18n, sprintf){
         };
         
         /**
-         * Remove a single filter from the query
-         * @param {filterDef} filterDef
+         * invalidate the Results
          */
         this.invalidateResults = function(){
             this._resultsAreValid = false;

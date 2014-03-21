@@ -52,18 +52,26 @@ function(Backbone, _, Moment, ckeditor, app, Message, MessageView, i18n){
             app.trigger('render');
             var data = this.model.toJSON(),
             children,
-            level;
+            level,
+            messageView;
             level = this.currentLevel !== null ? this.currentLevel : 1;
+            
             if( ! _.isUndefined(level) ){
                 this.currentLevel = level;
             }
-            var messageView = new MessageView({
+            if(!this.messageListView.renderedMessageViewsPrevious[this.model.id]){
+                messageView = new MessageView({
+
                 model : this.model,
                 messageListView: this.messageListView
-            });
+                });
+                messageView.render();
+            }
+            else {
+                messageView = this.messageListView.renderedMessageViewsPrevious[this.model.id];
+            }
+            this.messageListView.renderedMessageViewsCurrent[this.model.id] = messageView;
             
-            messageView.render();
-            this.messageListView.renderedMessageViews.push(messageView);
             data['id'] = data['@id'];
             data['level'] = level;
             data['last_sibling_chain'] = this.last_sibling_chain;

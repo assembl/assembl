@@ -61,8 +61,6 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n, Permissions, Message
          * @return {MessageView}
          */
         render: function(){
-            var read = this.model.get('read');
-            console.log(read);
             app.trigger('render');
             var data = this.model.toJSON(),
             children,
