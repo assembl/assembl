@@ -145,10 +145,13 @@
     bottom: $panel-header-height;
     left: 0;
     overflow-y: auto;
+    box-sizing: border-box;
 
     .panel.is-dragover & {
         background-color: $dragbox-background-color;
     }
+
+
 }
 
 // dropzone above the panel-body

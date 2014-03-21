@@ -1,0 +1,3987 @@
+@charset "UTF-8";
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/base\/_reset\.scss}line{font-family:\0000313}}
+html, body, div, span, applet, object, iframe,
+blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, img, ins, kbd, q, s, samp,
+strike, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font: inherit;
+  font-size: 100%;
+  vertical-align: baseline;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/base\/_reset\.scss}line{font-family:\0000322}}
+html {
+  line-height: 1.25;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/base\/_reset\.scss}line{font-family:\0000326}}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/base\/_reset\.scss}line{font-family:\0000331}}
+caption, th, td {
+  text-align: left;
+  font-weight: normal;
+  vertical-align: middle;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/base\/_reset\.scss}line{font-family:\0000337}}
+a img {
+  border: none;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/base\/_reset\.scss}line{font-family:\0000341}}
+img {
+  vertical-align: middle;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/base\/_reset\.scss}line{font-family:\0000345}}
+article, aside, details, figcaption, figure, footer, header, hgroup, main, menu, nav, section, summary {
+  display: block;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/base\/_reset\.scss}line{font-family:\0000349}}
+.preload * {
+  -webkit-transition: none !important;
+  -moz-transition: none !important;
+  -o-transition: none !important;
+  transition: none !important;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/base\/_reset\.scss}line{font-family:\0000353}}
+[contenteditable] {
+  line-height: 22px;
+  padding: 5px;
+  outline: 0;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/base\/_reset\.scss}line{font-family:\0000358}}
+[contenteditable] p:first-child {
+  margin-top: 0;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/base\/_reset\.scss}line{font-family:\0000362}}
+[contenteditable] p:last-child {
+  margin-bottom: 0;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/base\/_reset\.scss}line{font-family:\0000367}}
+[draggable] {
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
+  /* Required to make elements draggable in old WebKit */
+  -khtml-user-drag: element;
+  -webkit-user-drag: element;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/base\/_reset\.scss}line{font-family:\0000377}}
+[hidden] {
+  display: none;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/base\/_reset\.scss}line{font-family:\0000382}}
+output * {
+  margin-top: 0;
+  margin-right: 5px;
+  margin-bottom: 0;
+  margin-left: 0 !important;
+  padding: 0;
+  display: inline;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/base\/_common\.scss}line{font-family:\000031}}
+html {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 14px;
+  background-color: #e7e9ec;
+  color: #444444;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/base\/_mixins\.scss}line{font-family:\0000338}}
+::selection {
+  background: #dbf2ff;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/base\/_mixins\.scss}line{font-family:\0000339}}
+::-moz-selection {
+  background: #dbf2ff;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/base\/_mixins\.scss}line{font-family:\0000344}}
+::-webkit-scrollbar {
+  background-color: #eeeeee;
+  width: 10px;
+  height: 10px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/base\/_mixins\.scss}line{font-family:\0000349}}
+::-webkit-scrollbar-thumb {
+  background: #c2c2c2;
+  border-radius: 6px;
+  width: 8px;
+  min-height: 40px;
+  border: 2px solid #eeeeee;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/base\/_mixins\.scss}line{font-family:\0000331}}
+::-webkit-input-placeholder {
+  color: rgba(197, 197, 197, 0.7);
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/base\/_mixins\.scss}line{font-family:\0000332}}
+::-moz-placeholder {
+  color: rgba(197, 197, 197, 0.7);
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/base\/_mixins\.scss}line{font-family:\0000333}}
+:-ms-input-placholder {
+  color: rgba(197, 197, 197, 0.7);
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/base\/_common\.scss}line{font-family:\0000330}}
+.margin {
+  margin: 10px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/base\/_common\.scss}line{font-family:\0000331}}
+.margin-top {
+  margin-top: 10px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/base\/_common\.scss}line{font-family:\0000332}}
+.margin-right {
+  margin-right: 10px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/base\/_common\.scss}line{font-family:\0000333}}
+.margin-bottom {
+  margin-bottom: 10px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/base\/_common\.scss}line{font-family:\0000334}}
+.margin-left {
+  margin-left: 10px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/base\/_common\.scss}line{font-family:\0000336}}
+.padding {
+  padding: 10px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/base\/_common\.scss}line{font-family:\0000337}}
+.padding-top {
+  padding-top: 10px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/base\/_common\.scss}line{font-family:\0000338}}
+.padding-right {
+  padding-right: 10px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/base\/_common\.scss}line{font-family:\0000339}}
+.padding-bottom {
+  padding-bottom: 10px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/base\/_common\.scss}line{font-family:\0000340}}
+.padding-left {
+  padding-left: 10px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/base\/_common\.scss}line{font-family:\0000342}}
+.float-left {
+  float: left;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/base\/_common\.scss}line{font-family:\0000343}}
+.float-right {
+  float: right;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/base\/_common\.scss}line{font-family:\0000345}}
+.inline {
+  display: inline-block;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/base\/_common\.scss}line{font-family:\0000347}}
+.no-fx {
+  -webkit-transition: none !important;
+  -moz-transition: none !important;
+  -o-transition: none !important;
+  transition: none !important;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/base\/_common\.scss}line{font-family:\0000349}}
+.no-border {
+  border: 0 !important;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/base\/_common\.scss}line{font-family:\0000350}}
+.border {
+  border: solid 1px #e4e4e3;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/base\/_common\.scss}line{font-family:\0000351}}
+.border-bottom {
+  border-bottom: solid 1px #e4e4e3;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/base\/_common\.scss}line{font-family:\0000352}}
+.rounded {
+  border-radius: 4px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/base\/_common\.scss}line{font-family:\0000354}}
+.user-select-none {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  /* No support for these yet, use at own risk */
+  -o-user-select: none;
+  user-select: none;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/base\/_common\.scss}line{font-family:\0000356}}
+.user-select-none::selection {
+  background: transparent;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/base\/_common\.scss}line{font-family:\0000357}}
+.user-select-none::-moz-selection {
+  background: transparent;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/base\/_common\.scss}line{font-family:\0000360}}
+.cursor-nodrop {
+  cursor: no-drop !important;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/base\/_common\.scss}line{font-family:\0000362}}
+.clearfix {
+  overflow: hidden;
+  *zoom: 1;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/base\/_common\.scss}line{font-family:\0000364}}
+.visible {
+  visibility: visible;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/base\/_common\.scss}line{font-family:\0000365}}
+.invisible {
+  visibility: hidden;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/base\/_common\.scss}line{font-family:\0000367}}
+.error-message {
+  color: red;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_annotator\.scss}line{font-family:\000033}}
+.annotator-notice,
+.annotator-filter *,
+.annotator-widget * {
+  font-family: "Helvetica Neue",Arial,Helvetica,sans-serif;
+  font-weight: normal;
+  text-align: left;
+  margin: 0;
+  padding: 0;
+  background: 0;
+  -webkit-transition: none;
+  -moz-transition: none;
+  -o-transition: none;
+  transition: none;
+  -moz-box-shadow: none;
+  -webkit-box-shadow: none;
+  -o-box-shadow: none;
+  box-shadow: none;
+  color: #909090;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_annotator\.scss}line{font-family:\0000320}}
+.annotator-adder {
+  background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJAAAAAwCAYAAAD+WvNWAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDowMzgwMTE3NDA3MjA2ODExODRCQUU5RDY0RTkyQTJDNiIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDowOUY5RUFERDYwOEIxMUUxOTQ1RDkyQzU2OTNEMDZENCIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDowOUY5RUFEQzYwOEIxMUUxOTQ1RDkyQzU2OTNEMDZENCIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IE1hY2ludG9zaCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOjA1ODAxMTc0MDcyMDY4MTE5MTA5OUIyNDhFRUQ1QkM4IiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjAzODAxMTc0MDcyMDY4MTE4NEJBRTlENjRFOTJBMkM2Ii8+IDwvcmRmOkRlc2NyaXB0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");
+  background-repeat: no-repeat;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_annotator\.scss}line{font-family:\0000330}}
+.annotator-resize,
+.annotator-widget::after,
+.annotator-editor a::after,
+.annotator-viewer .annotator-controls button,
+.annotator-viewer .annotator-controls a,
+.annotator-filter .annotator-filter-navigation button::after,
+.annotator-filter .annotator-filter-property .annotator-filter-clear {
+  background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAEiCAYAAAD0w4JOAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6RDY0MTMzNTM2QUQzMTFFMUE2REJERDgwQTM3Njg5NTUiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6RDY0MTMzNTQ2QUQzMTFFMUE2REJERDgwQTM3Njg5NTUiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo2ODkwQjlFQzZBRDExMUUxQTZEQkREODBBMzc2ODk1NSIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDpENjQxMzM1MjZBRDMxMUUxQTZEQkREODBBMzc2ODk1NSIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PkijPpwAABBRSURBVHja7JsJVBRXFoarq5tNQZZWo6BxTRQXNOooxhWQBLcYlwRkMirmOKMnmVFHUcYdDUp0Yo5OopM4cQM1TlyjUSFGwIUWFQUjatxNQEFEFtnX+W/7Sovqqt7w5EwMdc6ltldf3/fevffderxSZWVlZbi5uTXh6rAVFBTkqbVubl07eno2d3BwaGgtZNPGjYf5wsLCDRu/+ir20aNH2dZCcnNzN6uPHTv2S2xsbHZaWpqLJZqJIR9FRMTxdHFJeHiiJZrl5+fniiF0jRdumgsjyOZNm44AshHPxAnXeXEhUzAJJEF8j5cWVoIZg9CmqqiokK3CksWLX3d0dJwy+f3331Cr1RoliEajMQ4Sw2xsbHglTZ6CampquOex8dxz2l5gkEY4qKyslOu1Qa6urpPRs9VkW2RjFmskQCaFhASQLZEZkDlYBBJDnJ2dXSnwmYLxpiDCdVMw3hyIObCnlr1g/nwfQCYpQcQbOTM5tbgDeDEkZPLkoaYgSpqpKysqnkIaNWrkYq7dUEim0EwhmkI1bw1ETjNVTk7OA2sg0jarDyO/ZhiJjtpS4923L1dWVs5VV1vW8Dyv4uzsbLnkc+c4dceOnn1LS0vat23bhnvSgypOpTItajXP2dvbcefOneVSL146ys+dOzvgyuWrMadOJeKGrb6AeRBb7syZM1xqyo9HwfDncZ0L+0dowGXATpw4qVfVGEyAJCUBkvrjUTzrTwzUkirDcfOewk5w9oBp8AD9iljoGt07rTvNpaRcPDqPIOx5+mlOkPnz5wakpV2JiU84ztlRNTVqTsXzeuHValyz4xJ1Ou4CICjrL37WoPsXLAgD7HJMXFw8Z2ur4dT8E23s7Wy4UydPchcupB5FGX8ZOxKUeyYLF84LSLt0OebYsXi9ZvYOdtwJBsE9f7lnVAUFuYp2smxpxJFOnTu9aWtry6VcSDm6cNF8f6WyRkEMFg7rclq0aP7fjZWrDyNmeL9c8iDedu7YMRK7xoHjx28y2tjGcsivt29PaOTsPNAGeSIGidNBwcF9La6aAPH18+UG+QzmtFqtN67pLALt2LYtAUOUHoLMWO/1BMM45o17OgUQ2dEz2R4drYf4AMLzakTNahY5n8FQRid9rpZG26KiE5ypOkP89JqIjZWOVSqeG+zrw7lp3bxRVidbteitUQnOLtQmhhApzMfXFzCtN57R1QJFbdkKiMtAP0Ao7lB16CE5oXtUTYJRB+BZPUzd6uWXE1xcXQcO8R+iqIms3aADWrdpw2VmZrbQJeoCeBdoYinkWTVVHNVC21jrrSopKakh67Y2ChCMXmw0xizbXM2I8dyc9gUObBpTBTw8WqixGw45n5GRnl4XjaZD9kP+DaibVSA8OAu7SHZKWm3GtTYWgfDATOxWQGxElynsepkNAoSq808JhII7DZKHzWpsQGYwiPhHyPzD0NifmtVGrE1WUlSQaDIXkNVm2REgc1jDiqtTBQk1pkmtqgEyCLu/SqpKkFmArDHLsgGxw57euaiXIkSQOeZCBI1egtCs324IxVGy3s9NtYkcqCtkGBtXHkLeAyTBGl8rZPZxCfIAkNIXLB6h9/4A6a/gMv0hvUyCUKgLdlsoXODYXwJ5E7sDzPM7G7OjPtjvgnjSizNkqwDDPoD9AL08E2QXaa7Ua40gLUTXmkHW44Gd2I9ndiZsLVh52ar9AAlmNiRs7eg9ByIOYtkMHGe0+6HBW9ithbSSKXcH8iFs7DuTvYZC31KKpFAuyhhE2v3kJkEK5YJZwytbtru7B8GGQjZCmhopmwkJgcRCu2o5jXwh2yWQWyxS3pH05teQwUpVK4Jkia49YA07l/ast8T3ihR7DfXvhuP/Mq2CATksarsRrBPuQQJx76Kp7vfGzh4F42V8zQe7YtxL+u2EkVoDZJ8+fej8VQi9vPRmg8BpCKXAN5OSkqpNVg0QR7VaPR3n05FLN6k9mcJnYLcK178ErEQRBIgTMtMNyG4Djaqv0XyJMtMBM4jrPCC8vb19KEHatWtXMHbs2LtOTk7lQoHGjRuXjBs37q6Hh0cRyvwZr+5/kW1s3GhXVVWlfxXv27fvhTlz5iybNm1aCuBVeEsqnzFjRmJoaOjS7t27X2fVXIgfdzfQtnnz5sPv3r2r/3/Rvn37WkdHR/8I1UNdXV1X4kdK+vfvPxsPNm3YsKE++JWWlmpbtNBH0C21QDY2NgOEk8LCwlY4340HhwM2DZfKcaxFJ+wsKip6OlfZoEGDwVIQD/Vrzc1Ciyb+/v4UGS9A0nx8fDxRHSdxGbzTaQ2q1qpVq3vnz58XGrYUbZIM0FVo0gOXyqBZ8p49ey6tW7fO8/Hjx7ZUrm3btgbZLe/p6Xnczs6ODI8bMWJEGiDTAfGAFjGo5nc4rh4zZswMaKYPKdSjXl5e8XLdfzQgIEBf6ODBg2qcv47qRcH4GuNlpRWOd+Bap8TERH0CNnz48Gv9+vVLkDNINXrtg8jIyEWootaYQaIHs2AKc5s1a7aVZS8GLuJ0//798M2bN4+NiYlxxztcLR90dHSsGDlyZHpwcHBU06ZNKWUuNRZGnGAjwTdu3BifkpLS7PLly05oJ65r164FMMZ0WH0UXIRG5GJz4pGajaad2RBOnXCZSYa0OrVAMueOEFc23tODuUyKxSBpQBS3hcbd3b396NGj+/v6+np16NDhVfRcNar40/fff5+ya9euk/n5+XeYlsoRomfPnv3j4+O3oJ0e1Ug2uMeDQ4cOfdmlS5deQlSVzgfoqzNkyJDXrl+/Hl9jYrt48eIh/GBHWRCq4HTq1KmtVLC4uDgZu48QVrKFhxGD7mC3DCZxjc5jY2M/o9HGAAQfGlBeXv6YCqEtKLd2weFYNM9jALNwTJ7e5OzZs1Hsx7JXrlzZ3QCk0+nmCb+el5d3Jzw8/ANKpnDqC6FBQLt27dp5CDGZQrnjx49/aACCe2yRNOx9wPsJvQBN3iorK8sXl7l58+bnUpDGwcGh1lQEQqyNt7d3GYUdeqXo1atXKQraissgWlbIDAyaZOzfZ/8+TMd5iEqluhMWFvZHmEIpjncDNAHttR6RUsuC31kDA4LanihUxOq+ivLGNWvWzAYjF4Hs3qJFi6bgWuvU1NStrBepR1satBH+0ERLJBXKyMi4AMP7Ag2bJbRHbm7unQMHDqzPzs7+ic5RNgw7lZxB0oErfumgKYOE5tHYNVSybAHmBlkB+8mXAnDtISALcdhI7LRiUUnmgowmEWj4akXvF1+g4Zs6hYmGRUIyhXLKRIzlUuJshEYOyvZDUBUHaTaCax/jcINcAiHORlpi6NmJHulrIhtZi06ZDViF3HAE43aINAahZAIWD0bl3wD7E55RGYBcXFy84f3vKkFo9IWVJ82aNSsVY34lNF8Ky25pAELW8Ta6VnZCSqvV0hB+ys/Pb/qZM2d2oRxlI+4Y194wAKFLe9IBDduBgYG3e/TooX/dwg+UzZw5U4chnNKatgjDoXAnDc07oikGGrQf1G1AB+3bt8/FABgJ1duvWrXqvUGDBl0HZBYgbSgtRBu6irIRZwONkDTRywqH0UL7zjvvvILBMQLD9+qhQ4cS5GVAvkIju4pMoQY/+osBCDFbh8arIkdEo89euHDhAgC+ZZpsFEP0bzbNmhUhG/nBADRgwIADqEbG0ymaqqrZqN5+xJ5NgBhMzmHcO4cU57gBqGXLlmkTJ07c0K1bt0dPp68qKjoCaLAOibJbZL00o5Oj5CKu6enpS5CIvo3hpjnito2kOsVBQUE/jxo16hP0zUY2q6OYRDijjQJv3boViDzJHdGyCaUz6Lnszp07X0GnbGRv5JXmZCPk/ZRD08wE2UoBez2/xhIJztxshGfZiBsbRSgePWKQEuk8tlI2Yo8M1xOJZz9kI52QWL2CqpYg6F9FHE/duXMnrX24K9c+4s0B7jEKxngQXV6ikI18gQy4h7FsRD116tQ3MzMzL5kK/uiEfTDgNrIgdKv7lStXYk2MHlmIkAV0jKHpYyRkDQxAyOqDULDMCITSGh/kRpMoa8GWsXr16l5SEA8H7AdHtJVrOGjxC+5NQui4mpyc3Ap7Ncb95sgHDGe+7t279x0biovhGovx8H6mSQZpQoYdFRW1VEgJcb/q9u3b6wyq9vDhwz1suD6PzL4nUhZnnG6AUBRshiQ+HJA80WBZmZWV9YkBKCcnZxErUI3R4Ru4Ak1wksO6b9q0abEYwjQtR0IWaABCKvc6bhYLBRGbd+NV9D1UJ4IyEmnjI9ymYecul43YoTfWiwtTBoJrRXK9iLYMUkwicPASChwxIxtZRm9TprKRxpDlaKocmWzkKnYTITbmZiNqNuNH89tjWSSk6aBk2FCWMe9/kf+7vnz5ilp1k55b8q+/moiI5TWiHpCemyVKD1sM44w8bDXI6mrJgercRnWGGbPsGpkB1CqDVP3GXeR3CLI4CsgZFzPGOvmaVRADkLWQWiApxKp4pACxDPQ8IIL3S728xlKHFexIVRevr3faFwZkdQIhE0ZeoJFWLh5ZBTOlidkwc6plFkwpibA4tPAW/FOh3tfqQRaBrHrRMZWNmDvyPheIrPdbmwO8wBmbNB5ZldLI2ZGq3td+RRBNz0NWWr2ShRaguLi4LFOr1R9UVVXdx6U5FoP8/Pym2dvbr8jLy3O2em1NUFDQ4cLCwoA6t9G2bdscpk6des3BwaGyTiC0yachISHX9+zZk4Qq3qtrxuYEmQWJO3v2bEzv3r2/qWui1R6y5Hl4f72vWTgjY0n78UoDZp2rplKpHCCd6gIiB+44evTod1NSUhZb21Yvd+jQYZROp9tZWVlZVlxcnKU03aFo2di8du/evVa88MQqEP58IZ0Itxakhkyj1R51AkkWDui1QzXvWw0SAWmVyjeWguq9vx70XCIkxjD6T3E4ZGlSUlK+1Rrt3buXFpPSmtFbyEimQdRWgRo0aPA2O6b/X6+DXAQs4Hm0EYXZw4CF1Qnk5uZWGhgY+CnaK9KqjM3W1rZ62LBhVydMmDDdw8PjqMWNlJubewL5UWZiYmIo/WPTmgRCiJBLIc2tBdTHo/+3tMaS1IZnRknLX23qpNLBgwddk5OT93p5edG/nFtLtTTbIOPi4uif4TXl5eUFBw4cWOfo6EgfWTS1GiRa7vnzmjVrKD9qXyeQaAuzBCS37OxnyAykf3utCiPck9U8tEIzEpASa15qaHkHLfloY860UL3314Pk4pG7u4ex+7QYhT60bA6Jh2yAlGZkpBu1bOlGn6HtF52P4Z587duVk6xpM1a1cSLIEchJkYazzG0jWuxOCTstfKMv6OhLMlquF8vuDzcH1I5BaKO1o/tEk3jC0sUcUyD69RvckwWDHIuStIDSHjKE3actwlgYoRXj/2HH9GYkfGlInyreEZ3/jXuyoFlWIy8RRBgAxJ+WCRD6cPdfxgzyI3ZMHwPu4Z6sgKaPLO+z6ze5J0usPzMVIYWPKZ0YuJr1lPB91ihImjmhlj5bfI118SlIHkRIRqeYAxFchNZiX+EMP6ScImq7WpuSi5SwTHYyc4u7rFEvWuS09TH79wz6nwADANCoQA3w0fcjAAAAAElFTkSuQmCC");
+  background-repeat: no-repeat;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_annotator\.scss}line{font-family:\0000334}}
+.annotator-hl {
+  background: rgba(255, 255, 10, 0.3);
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_annotator\.scss}line{font-family:\0000335}}
+.annotator-hl-temporary {
+  background: rgba(0, 124, 255, 0.3);
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_annotator\.scss}line{font-family:\0000336}}
+.annotator-wrapper {
+  position: relative;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_annotator\.scss}line{font-family:\0000339}}
+.annotator-adder,
+.annotator-outer,
+.annotator-notice {
+  z-index: 1020;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_annotator\.scss}line{font-family:\0000340}}
+.annotator-filter {
+  z-index: 1010;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_annotator\.scss}line{font-family:\0000344}}
+.annotator-adder,
+.annotator-outer,
+.annotator-widget,
+.annotator-notice {
+  position: absolute;
+  font-size: 10px;
+  line-height: 1;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_annotator\.scss}line{font-family:\0000349}}
+.annotator-hide {
+  display: none;
+  visibility: hidden;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_annotator\.scss}line{font-family:\0000353}}
+.annotator-adder {
+  margin-top: -48px;
+  margin-left: -24px;
+  width: 48px;
+  height: 48px;
+  background-position: left top;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_annotator\.scss}line{font-family:\0000360}}
+.annotator-adder:hover {
+  background-position: center top;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_annotator\.scss}line{font-family:\0000361}}
+.annotator-adder:active {
+  background-position: center right;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_annotator\.scss}line{font-family:\0000362}}
+.annotator-adder button {
+  display: block;
+  width: 36px;
+  height: 41px;
+  margin: 0 auto;
+  border: 0;
+  background: 0;
+  text-indent: -999em;
+  cursor: pointer;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_annotator\.scss}line{font-family:\0000372}}
+.annotator-outer {
+  width: 0;
+  height: 0;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_annotator\.scss}line{font-family:\0000376}}
+.annotator-widget {
+  margin: 0;
+  padding: 0;
+  bottom: 15px;
+  left: -18px;
+  min-width: 265px;
+  background-color: rgba(251, 251, 251, 0.98);
+  border: 1px solid rgba(122, 122, 122, 0.6);
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  -webkit-box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  -moz-box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  -o-box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_annotator\.scss}line{font-family:\0000392}}
+.annotator-invert-x .annotator-widget {
+  left: auto;
+  right: -18px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_annotator\.scss}line{font-family:\0000396}}
+.annotator-invert-y .annotator-widget {
+  bottom: auto;
+  top: 8px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_annotator\.scss}line{font-family:\00003100}}
+.annotator-widget strong {
+  font-weight: bold;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_annotator\.scss}line{font-family:\00003102}}
+.annotator-widget .annotator-listing,
+.annotator-widget .annotator-item {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_annotator\.scss}line{font-family:\00003107}}
+.annotator-widget::after {
+  content: "";
+  display: block;
+  width: 18px;
+  height: 10px;
+  background-position: 0 0;
+  position: absolute;
+  bottom: -10px;
+  left: 8px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_annotator\.scss}line{font-family:\00003117}}
+.annotator-invert-x .annotator-widget::after {
+  left: auto;
+  right: 8px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_annotator\.scss}line{font-family:\00003121}}
+.annotator-invert-y .annotator-widget::after {
+  background-position: 0 -15px;
+  bottom: auto;
+  top: -9px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_annotator\.scss}line{font-family:\00003128}}
+.annotator-widget .annotator-item,
+.annotator-editor .annotator-item input,
+.annotator-editor .annotator-item textarea {
+  position: relative;
+  font-size: 12px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_annotator\.scss}line{font-family:\00003132}}
+.annotator-viewer .annotator-item {
+  border-top: 2px solid rgba(122, 122, 122, 0.2);
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_annotator\.scss}line{font-family:\00003133}}
+.annotator-widget .annotator-item:first-child {
+  border-top: 0;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_annotator\.scss}line{font-family:\00003135}}
+.annotator-editor .annotator-item,
+.annotator-viewer div {
+  border-top: 1px solid rgba(133, 133, 133, 0.11);
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_annotator\.scss}line{font-family:\00003136}}
+.annotator-viewer div {
+  padding: 6px 6px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_annotator\.scss}line{font-family:\00003138}}
+.annotator-viewer .annotator-item ol,
+.annotator-viewer .annotator-item ul {
+  padding: 4px 16px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_annotator\.scss}line{font-family:\00003140}}
+.annotator-viewer div:first-of-type,
+.annotator-editor .annotator-item:first-child textarea {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  color: #3c3c3c;
+  font-size: 13px;
+  font-style: italic;
+  line-height: 1.3;
+  border-top: 0;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_annotator\.scss}line{font-family:\00003149}}
+.annotator-viewer .annotator-controls {
+  position: relative;
+  top: 5px;
+  right: 5px;
+  padding-left: 5px;
+  opacity: 0;
+  -webkit-transition: opacity .2s ease-in;
+  -moz-transition: opacity .2s ease-in;
+  -o-transition: opacity .2s ease-in;
+  transition: opacity .2s ease-in;
+  float: right;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_annotator\.scss}line{font-family:\00003162}}
+.annotator-viewer li:hover .annotator-controls,
+.annotator-viewer li .annotator-controls.annotator-visible {
+  opacity: 1;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_annotator\.scss}line{font-family:\00003164}}
+.annotator-viewer .annotator-controls button,
+.annotator-viewer .annotator-controls a {
+  cursor: pointer;
+  display: inline-block;
+  width: 13px;
+  height: 13px;
+  margin-left: 2px;
+  border: 0;
+  opacity: .2;
+  text-indent: -900em;
+  background-color: transparent;
+  outline: 0;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_annotator\.scss}line{font-family:\00003179}}
+.annotator-viewer .annotator-controls button:hover,
+.annotator-viewer .annotator-controls button:focus,
+.annotator-viewer .annotator-controls a:hover,
+.annotator-viewer .annotator-controls a:focus {
+  opacity: 0.9;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_annotator\.scss}line{font-family:\00003181}}
+.annotator-viewer .annotator-controls button:active,
+.annotator-viewer .annotator-controls a:active {
+  opacity: 1;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_annotator\.scss}line{font-family:\00003182}}
+.annotator-viewer .annotator-controls button[disabled] {
+  display: none;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_annotator\.scss}line{font-family:\00003183}}
+.annotator-viewer .annotator-controls .annotator-edit {
+  background-position: 0 -60px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_annotator\.scss}line{font-family:\00003184}}
+.annotator-viewer .annotator-controls .annotator-delete {
+  background-position: 0 -75px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_annotator\.scss}line{font-family:\00003185}}
+.annotator-viewer .annotator-controls .annotator-link {
+  background-position: 0 -270px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_annotator\.scss}line{font-family:\00003186}}
+.annotator-editor .annotator-item {
+  position: relative;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_annotator\.scss}line{font-family:\00003187}}
+.annotator-editor .annotator-item label {
+  top: 0;
+  display: inline;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_annotator\.scss}line{font-family:\00003194}}
+.annotator-editor .annotator-item input,
+.annotator-editor .annotator-item textarea {
+  display: block;
+  min-width: 100%;
+  padding: 10px 8px;
+  border: 0;
+  margin: 0;
+  color: #3c3c3c;
+  background: 0;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -o-box-sizing: border-box;
+  box-sizing: border-box;
+  resize: none;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_annotator\.scss}line{font-family:\00003208}}
+.annotator-editor .annotator-item textarea::-webkit-scrollbar {
+  height: 8px;
+  width: 8px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_annotator\.scss}line{font-family:\00003212}}
+.annotator-editor .annotator-item textarea::-webkit-scrollbar-track-piece {
+  margin: 13px 0 3px;
+  background-color: #e5e5e5;
+  -webkit-border-radius: 4px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_annotator\.scss}line{font-family:\00003217}}
+.annotator-editor .annotator-item textarea::-webkit-scrollbar-thumb:vertical {
+  height: 25px;
+  background-color: #ccc;
+  -webkit-border-radius: 4px;
+  -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_annotator\.scss}line{font-family:\00003223}}
+.annotator-editor .annotator-item textarea::-webkit-scrollbar-thumb:horizontal {
+  width: 25px;
+  background-color: #ccc;
+  -webkit-border-radius: 4px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_annotator\.scss}line{font-family:\00003228}}
+.annotator-editor .annotator-item:first-child textarea {
+  min-height: 5.5em;
+  -webkit-border-radius: 5px 5px 0 0;
+  -moz-border-radius: 5px 5px 0 0;
+  -o-border-radius: 5px 5px 0 0;
+  border-radius: 5px 5px 0 0;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_annotator\.scss}line{font-family:\00003236}}
+.annotator-editor .annotator-item input:focus,
+.annotator-editor .annotator-item textarea:focus {
+  background-color: #f3f3f3;
+  outline: 0;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_annotator\.scss}line{font-family:\00003241}}
+.annotator-editor .annotator-item input[type=radio],
+.annotator-editor .annotator-item input[type=checkbox] {
+  width: auto;
+  min-width: 0;
+  padding: 0;
+  display: inline;
+  margin: 0 4px 0 0;
+  cursor: pointer;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_annotator\.scss}line{font-family:\00003249}}
+.annotator-editor .annotator-checkbox {
+  padding: 8px 6px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_annotator\.scss}line{font-family:\00003252}}
+.annotator-filter,
+.annotator-filter .annotator-filter-navigation button,
+.annotator-editor .annotator-controls {
+  text-align: right;
+  padding: 3px;
+  border-top: 1px solid #d4d4d4;
+  background-color: #d4d4d4;
+  background-image: -webkit-gradient(linear, left top, left bottom, from(whitesmoke), color-stop(0.6, gainsboro), to(#d2d2d2));
+  background-image: -moz-linear-gradient(to bottom, whitesmoke, gainsboro 60%, #d2d2d2);
+  background-image: -webkit-linear-gradient(to bottom, whitesmoke, gainsboro 60%, #d2d2d2);
+  background-image: linear-gradient(to bottom, #f5f5f5, #dcdcdc 60%, #d2d2d2);
+  -webkit-box-shadow: inset 1px 0 0 rgba(255, 255, 255, 0.7), inset -1px 0 0 rgba(255, 255, 255, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.7);
+  -moz-box-shadow: inset 1px 0 0 rgba(255, 255, 255, 0.7), inset -1px 0 0 rgba(255, 255, 255, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.7);
+  -o-box-shadow: inset 1px 0 0 rgba(255, 255, 255, 0.7), inset -1px 0 0 rgba(255, 255, 255, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.7);
+  box-shadow: inset 1px 0 0 rgba(255, 255, 255, 0.7), inset -1px 0 0 rgba(255, 255, 255, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.7);
+  -webkit-border-radius: 0 0 5px 5px;
+  -moz-border-radius: 0 0 5px 5px;
+  -o-border-radius: 0 0 5px 5px;
+  border-radius: 0 0 5px 5px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_annotator\.scss}line{font-family:\00003270}}
+.annotator-editor.annotator-invert-y .annotator-controls {
+  border-top: 0;
+  border-bottom: 1px solid #b4b4b4;
+  -webkit-border-radius: 5px 5px 0 0;
+  -moz-border-radius: 5px 5px 0 0;
+  -o-border-radius: 5px 5px 0 0;
+  border-radius: 5px 5px 0 0;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_annotator\.scss}line{font-family:\00003279}}
+.annotator-editor a,
+.annotator-filter .annotator-filter-property label {
+  position: relative;
+  display: inline-block;
+  padding: 0 6px 0 22px;
+  color: #363636;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.75);
+  text-decoration: none;
+  line-height: 24px;
+  font-size: 12px;
+  font-weight: bold;
+  border: 1px solid #a2a2a2;
+  background-color: #d4d4d4;
+  background-image: -webkit-gradient(linear, left top, left bottom, from(whitesmoke), color-stop(0.5, #d2d2d2), color-stop(0.5, #bebebe), to(#d2d2d2));
+  background-image: -moz-linear-gradient(to bottom, whitesmoke, #d2d2d2 50%, #bebebe 50%, #d2d2d2);
+  background-image: -webkit-linear-gradient(to bottom, whitesmoke, #d2d2d2 50%, #bebebe 50%, #d2d2d2);
+  background-image: linear-gradient(to bottom, #f5f5f5, #d2d2d2 50%, #bebebe 50%, #d2d2d2);
+  -webkit-box-shadow: inset 0 0 5px rgba(255, 255, 255, 0.2), inset 0 0 1px rgba(255, 255, 255, 0.8);
+  -moz-box-shadow: inset 0 0 5px rgba(255, 255, 255, 0.2), inset 0 0 1px rgba(255, 255, 255, 0.8);
+  -o-box-shadow: inset 0 0 5px rgba(255, 255, 255, 0.2), inset 0 0 1px rgba(255, 255, 255, 0.8);
+  box-shadow: inset 0 0 5px rgba(255, 255, 255, 0.2), inset 0 0 1px rgba(255, 255, 255, 0.8);
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -o-border-radius: 5px;
+  border-radius: 5px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_annotator\.scss}line{font-family:\00003304}}
+.annotator-editor a::after {
+  position: absolute;
+  top: 50%;
+  left: 5px;
+  display: block;
+  content: "";
+  width: 15px;
+  height: 15px;
+  margin-top: -7px;
+  background-position: 0 -90px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_annotator\.scss}line{font-family:\00003319}}
+.annotator-editor a:hover,
+.annotator-editor a:focus,
+.annotator-editor a.annotator-focus,
+.annotator-filter .annotator-filter-active label,
+.annotator-filter .annotator-filter-navigation button:hover {
+  outline: 0;
+  border-color: #435aa0;
+  background-color: #3865f9;
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#7691fb), color-stop(0.5, #5075fb), color-stop(0.5, #3865f9), to(#3665fa));
+  background-image: -moz-linear-gradient(to bottom, #7691fb, #5075fb 50%, #3865f9 50%, #3665fa);
+  background-image: -webkit-linear-gradient(to bottom, #7691fb, #5075fb 50%, #3865f9 50%, #3665fa);
+  background-image: linear-gradient(to bottom, #7691fb, #5075fb 50%, #3865f9 50%, #3665fa);
+  color: #fff;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.42);
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_annotator\.scss}line{font-family:\00003331}}
+.annotator-editor a:hover::after,
+.annotator-editor a:focus::after {
+  margin-top: -8px;
+  background-position: 0 -105px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_annotator\.scss}line{font-family:\00003336}}
+.annotator-editor a:active,
+.annotator-filter .annotator-filter-navigation button:active {
+  border-color: #700c49;
+  background-color: #d12e8e;
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#fc7cca), color-stop(0.5, #e85db2), color-stop(0.5, #d12e8e), to(#ff009c));
+  background-image: -moz-linear-gradient(to bottom, #fc7cca, #e85db2 50%, #d12e8e 50%, #ff009c);
+  background-image: -webkit-linear-gradient(to bottom, #fc7cca, #e85db2 50%, #d12e8e 50%, #ff009c);
+  background-image: linear-gradient(to bottom, #fc7cca, #e85db2 50%, #d12e8e 50%, #ff009c);
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_annotator\.scss}line{font-family:\00003344}}
+.annotator-editor a.annotator-save::after {
+  background-position: 0 -120px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_annotator\.scss}line{font-family:\00003347}}
+.annotator-editor a.annotator-save:hover::after,
+.annotator-editor a.annotator-save:focus::after,
+.annotator-editor a.annotator-save.annotator-focus::after {
+  margin-top: -8px;
+  background-position: 0 -135px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_annotator\.scss}line{font-family:\00003351}}
+.annotator-editor .annotator-widget::after {
+  background-position: 0 -30px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_annotator\.scss}line{font-family:\00003352}}
+.annotator-editor.annotator-invert-y .annotator-widget .annotator-controls {
+  background-color: #f2f2f2;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_annotator\.scss}line{font-family:\00003353}}
+.annotator-editor.annotator-invert-y .annotator-widget::after {
+  background-position: 0 -45px;
+  height: 11px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_annotator\.scss}line{font-family:\00003357}}
+.annotator-resize {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 12px;
+  height: 12px;
+  background-position: 2px -150px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_annotator\.scss}line{font-family:\00003365}}
+.annotator-invert-x .annotator-resize {
+  right: auto;
+  left: 0;
+  background-position: 0 -195px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_annotator\.scss}line{font-family:\00003370}}
+.annotator-invert-y .annotator-resize {
+  top: auto;
+  bottom: 0;
+  background-position: 2px -165px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_annotator\.scss}line{font-family:\00003375}}
+.annotator-invert-y.annotator-invert-x .annotator-resize {
+  background-position: 0 -180px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_annotator\.scss}line{font-family:\00003376}}
+.annotator-notice {
+  color: #fff;
+  position: absolute;
+  position: fixed;
+  top: -54px;
+  left: 0;
+  width: 100%;
+  font-size: 14px;
+  line-height: 50px;
+  text-align: center;
+  background: black;
+  background: rgba(0, 0, 0, 0.9);
+  border-bottom: 4px solid #d4d4d4;
+  -webkit-transition: top .4s ease-out;
+  -moz-transition: top .4s ease-out;
+  -o-transition: top .4s ease-out;
+  transition: top .4s ease-out;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_annotator\.scss}line{font-family:\00003394}}
+.ie6 .annotator-notice {
+  position: absolute;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_annotator\.scss}line{font-family:\00003395}}
+.annotator-notice-success {
+  border-color: #3665f9;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_annotator\.scss}line{font-family:\00003396}}
+.annotator-notice-error {
+  border-color: #ff7e00;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_annotator\.scss}line{font-family:\00003397}}
+.annotator-notice p {
+  margin: 0;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_annotator\.scss}line{font-family:\00003398}}
+.annotator-notice a {
+  color: white;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_annotator\.scss}line{font-family:\00003399}}
+.annotator-notice-show {
+  top: 0;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_annotator\.scss}line{font-family:\00003400}}
+.annotator-tags {
+  margin-bottom: -2px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_annotator\.scss}line{font-family:\00003401}}
+.annotator-tags .annotator-tag {
+  display: inline-block;
+  padding: 0 8px;
+  margin-bottom: 2px;
+  line-height: 1.6;
+  font-weight: bold;
+  background-color: #e6e6e6;
+  -webkit-border-radius: 8px;
+  -moz-border-radius: 8px;
+  -o-border-radius: 8px;
+  border-radius: 8px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_annotator\.scss}line{font-family:\00003413}}
+.annotator-filter {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  text-align: left;
+  line-height: 0;
+  border: 0;
+  border-bottom: 1px solid #878787;
+  padding-left: 10px;
+  padding-right: 10px;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  -o-border-radius: 0;
+  border-radius: 0;
+  -webkit-box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.3);
+  -moz-box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.3);
+  -o-box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.3);
+  box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.3);
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_annotator\.scss}line{font-family:\00003433}}
+.annotator-filter strong {
+  font-size: 12px;
+  font-weight: bold;
+  color: #3c3c3c;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.7);
+  position: relative;
+  top: -9px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_annotator\.scss}line{font-family:\00003442}}
+.annotator-filter .annotator-filter-property,
+.annotator-filter .annotator-filter-navigation {
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+  line-height: 10px;
+  padding: 2px 0;
+  margin-right: 8px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_annotator\.scss}line{font-family:\00003451}}
+.annotator-filter .annotator-filter-property label,
+.annotator-filter .annotator-filter-navigation button {
+  text-align: left;
+  display: block;
+  float: left;
+  line-height: 20px;
+  -webkit-border-radius: 10px 0 0 10px;
+  -moz-border-radius: 10px 0 0 10px;
+  -o-border-radius: 10px 0 0 10px;
+  border-radius: 10px 0 0 10px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_annotator\.scss}line{font-family:\00003461}}
+.annotator-filter .annotator-filter-property label {
+  padding-left: 8px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_annotator\.scss}line{font-family:\00003462}}
+.annotator-filter .annotator-filter-property input {
+  display: block;
+  float: right;
+  -webkit-appearance: none;
+  background-color: #fff;
+  border: 1px solid #878787;
+  border-left: none;
+  padding: 2px 4px;
+  line-height: 16px;
+  min-height: 16px;
+  font-size: 12px;
+  width: 150px;
+  color: #333;
+  background-color: #f8f8f8;
+  -webkit-border-radius: 0 10px 10px 0;
+  -moz-border-radius: 0 10px 10px 0;
+  -o-border-radius: 0 10px 10px 0;
+  border-radius: 0 10px 10px 0;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.2);
+  -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.2);
+  -o-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.2);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.2);
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_annotator\.scss}line{font-family:\00003485}}
+.annotator-filter .annotator-filter-property input:focus {
+  outline: 0;
+  background-color: #fff;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_annotator\.scss}line{font-family:\00003489}}
+.annotator-filter .annotator-filter-clear {
+  position: absolute;
+  right: 3px;
+  top: 6px;
+  border: 0;
+  text-indent: -900em;
+  width: 15px;
+  height: 15px;
+  background-position: 0 -90px;
+  opacity: .4;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_annotator\.scss}line{font-family:\00003501}}
+.annotator-filter .annotator-filter-clear:hover,
+.annotator-filter .annotator-filter-clear:focus {
+  opacity: 0.8;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_annotator\.scss}line{font-family:\00003502}}
+.annotator-filter .annotator-filter-clear:active {
+  opacity: 1;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_annotator\.scss}line{font-family:\00003503}}
+.annotator-filter .annotator-filter-navigation button {
+  border: 1px solid #a2a2a2;
+  padding: 0;
+  text-indent: -900px;
+  width: 20px;
+  min-height: 22px;
+  -webkit-box-shadow: inset 0 0 5px rgba(255, 255, 255, 0.2), inset 0 0 1px rgba(255, 255, 255, 0.8);
+  -moz-box-shadow: inset 0 0 5px rgba(255, 255, 255, 0.2), inset 0 0 1px rgba(255, 255, 255, 0.8);
+  -o-box-shadow: inset 0 0 5px rgba(255, 255, 255, 0.2), inset 0 0 1px rgba(255, 255, 255, 0.8);
+  box-shadow: inset 0 0 5px rgba(255, 255, 255, 0.2), inset 0 0 1px rgba(255, 255, 255, 0.8);
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_annotator\.scss}line{font-family:\00003516}}
+.annotator-filter .annotator-filter-navigation button,
+.annotator-filter .annotator-filter-navigation button:hover,
+.annotator-filter .annotator-filter-navigation button:focus {
+  color: transparent;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_annotator\.scss}line{font-family:\00003517}}
+.annotator-filter .annotator-filter-navigation button::after {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  content: "";
+  display: block;
+  width: 9px;
+  height: 9px;
+  background-position: 0 -210px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_annotator\.scss}line{font-family:\00003527}}
+.annotator-filter .annotator-filter-navigation button:hover::after {
+  background-position: 0 -225px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_annotator\.scss}line{font-family:\00003528}}
+.annotator-filter .annotator-filter-navigation .annotator-filter-next {
+  -webkit-border-radius: 0 10px 10px 0;
+  -moz-border-radius: 0 10px 10px 0;
+  -o-border-radius: 0 10px 10px 0;
+  border-radius: 0 10px 10px 0;
+  border-left: none;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_annotator\.scss}line{font-family:\00003535}}
+.annotator-filter .annotator-filter-navigation .annotator-filter-next::after {
+  left: auto;
+  right: 7px;
+  background-position: 0 -240px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_annotator\.scss}line{font-family:\00003540}}
+.annotator-filter .annotator-filter-navigation .annotator-filter-next:hover::after {
+  background-position: 0 -255px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_annotator\.scss}line{font-family:\00003541}}
+.annotator-hl-active {
+  background: rgba(255, 255, 10, 0.8);
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_annotator\.scss}line{font-family:\00003542}}
+.annotator-hl-filtered {
+  background-color: transparent;
+}
+
+/**
+ * Added by us
+ */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_annotator\.scss}line{font-family:\00003550}}
+.annotator-resize,
+.annotator-adder {
+  display: none !important;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_annotator\.scss}line{font-family:\00003555}}
+.annotator-hl {
+  cursor: pointer;
+  -webkit-transition: background-color 1s;
+  -moz-transition: background-color 1s;
+  -o-transition: background-color 1s;
+  transition: background-color 1s;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_annotator\.scss}line{font-family:\00003560}}
+.annotator-hl.is-highlighted {
+  background-color: #ccff99;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_annotator\.scss}line{font-family:\00003564}}
+.annotator-textarea {
+  padding: 12px 8px;
+  min-height: 4em;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_annotator\.scss}line{font-family:\00003569}}
+.annotator-draganddrop-help {
+  font-weight: bold;
+  text-align: center;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_ckeditor\.scss}line{font-family:\000031}}
+.cke {
+  -webkit-box-shadow: none !important;
+  -moz-box-shadow: none !important;
+  box-shadow: none !important;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_ckeditor\.scss}line{font-family:\000035}}
+.cke_top {
+  background: 0 !important;
+  -webkit-box-shadow: none !important;
+  -moz-box-shadow: none !important;
+  box-shadow: none !important;
+  border: 0 !important;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_ckeditor\.scss}line{font-family:\0000311}}
+.cke_chrome {
+  border: 0 !important;
+  -webkit-box-shadow: none !important;
+  -moz-box-shadow: none !important;
+  box-shadow: none !important;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_ckeditor\.scss}line{font-family:\0000317}}
+.cke_inner {
+  padding: 0 10px !important;
+  background: transparent !important;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_ckeditor\.scss}line{font-family:\0000323}}
+.cke_toolgroup,
+.cke_toolgroup:hover {
+  border: 0 !important;
+  background: 0 !important;
+  box-shadow: none !important;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_ckeditor\.scss}line{font-family:\0000334}}
+a.cke_button_off:hover,
+a.cke_button_off:focus,
+a.cke_button_off:active,
+a.cke_button_disabled:hover,
+a.cke_button_disabled:focus,
+a.cke_button_disabled:active {
+  background: #ebebeb !important;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_tipsy\.scss}line{font-family:\000031}}
+.tipsy {
+  font-size: 14px;
+  position: absolute;
+  padding: 5px;
+  z-index: 100000;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_tipsy\.scss}line{font-family:\000032}}
+.tipsy-inner {
+  background-color: white;
+  color: #c7a25a;
+  max-width: 200px;
+  padding: 5px 8px 4px 8px;
+  text-align: center;
+}
+
+/* Rounded corners */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_tipsy\.scss}line{font-family:\000035}}
+.tipsy-inner {
+  border: solid 1px #f0c36d;
+}
+
+/* Uncomment for shadow */
+/*.tipsy-inner { box-shadow: 0 0 5px #000000; -webkit-box-shadow: 0 0 5px #000000; -moz-box-shadow: 0 0 5px #000000; }*/
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_tipsy\.scss}line{font-family:\0000310}}
+.tipsy-arrow {
+  position: absolute;
+  width: 0;
+  height: 0;
+  line-height: 0;
+  border: 5px dashed #000;
+}
+
+/* Rules to colour arrows */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_tipsy\.scss}line{font-family:\0000313}}
+.tipsy-arrow-n {
+  border-bottom-color: #f0c36d;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_tipsy\.scss}line{font-family:\0000314}}
+.tipsy-arrow-s {
+  border-top-color: #f0c36d;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_tipsy\.scss}line{font-family:\0000315}}
+.tipsy-arrow-e {
+  border-left-color: #f0c36d;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_tipsy\.scss}line{font-family:\0000316}}
+.tipsy-arrow-w {
+  border-right-color: #f0c36d;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_tipsy\.scss}line{font-family:\0000318}}
+.tipsy-n .tipsy-arrow {
+  top: 0px;
+  left: 50%;
+  margin-left: -5px;
+  border-bottom-style: solid;
+  border-top: none;
+  border-left-color: transparent;
+  border-right-color: transparent;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_tipsy\.scss}line{font-family:\0000319}}
+.tipsy-nw .tipsy-arrow {
+  top: 0;
+  left: 10px;
+  border-bottom-style: solid;
+  border-top: none;
+  border-left-color: transparent;
+  border-right-color: transparent;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_tipsy\.scss}line{font-family:\0000320}}
+.tipsy-ne .tipsy-arrow {
+  top: 0;
+  right: 10px;
+  border-bottom-style: solid;
+  border-top: none;
+  border-left-color: transparent;
+  border-right-color: transparent;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_tipsy\.scss}line{font-family:\0000321}}
+.tipsy-s .tipsy-arrow {
+  bottom: 0;
+  left: 50%;
+  margin-left: -5px;
+  border-top-style: solid;
+  border-bottom: none;
+  border-left-color: transparent;
+  border-right-color: transparent;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_tipsy\.scss}line{font-family:\0000322}}
+.tipsy-sw .tipsy-arrow {
+  bottom: 0;
+  left: 10px;
+  border-top-style: solid;
+  border-bottom: none;
+  border-left-color: transparent;
+  border-right-color: transparent;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_tipsy\.scss}line{font-family:\0000323}}
+.tipsy-se .tipsy-arrow {
+  bottom: 0;
+  right: 10px;
+  border-top-style: solid;
+  border-bottom: none;
+  border-left-color: transparent;
+  border-right-color: transparent;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_tipsy\.scss}line{font-family:\0000324}}
+.tipsy-e .tipsy-arrow {
+  right: 0;
+  top: 50%;
+  margin-top: -5px;
+  border-left-style: solid;
+  border-right: none;
+  border-top-color: transparent;
+  border-bottom-color: transparent;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/lib\/_tipsy\.scss}line{font-family:\0000325}}
+.tipsy-w .tipsy-arrow {
+  left: 0;
+  top: 50%;
+  margin-top: -5px;
+  border-right-style: solid;
+  border-left: none;
+  border-top-color: transparent;
+  border-bottom-color: transparent;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_accordion\.scss}line{font-family:\0000319}}
+.accordion-header {
+  position: relative;
+  background-color: #585858;
+  height: 45px;
+  line-height: 45px;
+  color: #fff;
+  cursor: pointer;
+  -webkit-transform: translateZ(0);
+  -moz-transform: translateZ(0);
+  -ms-transform: translateZ(0);
+  -o-transform: translateZ(0);
+  transform: translateZ(0);
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_accordion\.scss}line{font-family:\0000332}}
+.accordion-area.is-open .accordion-header {
+  background-color: #738bb5;
+  font-weight: bold;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_accordion\.scss}line{font-family:\0000339}}
+.accordion--lateralmenu .accordion-header {
+  padding-left: 50px;
+  padding-right: 30px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_accordion\.scss}line{font-family:\0000346}}
+.accordion-label {
+  display: inline-block;
+  padding-left: 42px;
+  line-height: 32px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_accordion\.scss}line{font-family:\0000354}}
+.accordion-body {
+  background-color: #313131;
+  overflow: hidden;
+  height: 0;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_bar\.scss}line{font-family:\000033}}
+.bar {
+  display: block;
+  height: 55px;
+  position: relative;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  -webkit-transform: translateZ(0);
+  -moz-transform: translateZ(0);
+  -ms-transform: translateZ(0);
+  -o-transform: translateZ(0);
+  transform: translateZ(0);
+  background-color: white;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/base\/_mixins\.scss}line{font-family:\0000366}}
+.bar::-moz-selection {
+  background-color: transparent !important;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/base\/_mixins\.scss}line{font-family:\0000367}}
+.bar::selection {
+  background-color: transparent !important;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_bar\.scss}line{font-family:\0000316}}
+.bar.bar--main {
+  background-color: #2f2f2f;
+  color: white;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_bar\.scss}line{font-family:\0000323}}
+.bar.bar--title {
+  background-color: #c7c2dd;
+  font-size: 18px;
+  color: #2c2c2c;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_bar\.scss}line{font-family:\0000331}}
+.bar-left, .bar-right {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  display: block;
+  height: 55px;
+  line-height: 55px;
+  position: absolute;
+  padding: 0px 5px;
+  top: 0;
+  bottom: 0;
+  left: 15px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_bar\.scss}line{font-family:\0000345}}
+.bar-right {
+  right: 15px;
+  left: auto;
+  text-align: right;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_bar\.scss}line{font-family:\0000352}}
+.locale {
+  border-radius: 4px;
+  cursor: pointer;
+  border: 1px solid gray;
+  padding: 2px;
+  color: gray;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_bar\.scss}line{font-family:\0000358}}
+.locale.active {
+  border: 1px solid white;
+  left-margin: 1.5ex;
+  color: white;
+  cursor: default;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_bar\.scss}line{font-family:\0000368}}
+.bar-center {
+  text-align: center;
+  display: block;
+  height: 52px;
+  line-height: 52px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_bookmarklet\.scss}line{font-family:\000031}}
+.bookmarklet {
+  border-radius: 4px;
+  font-size: inherit;
+  position: relative;
+  cursor: move;
+  color: #fff;
+  text-decoration: none;
+  background: rgba(0, 0, 0, 0.25);
+  padding: 4px;
+  display: block;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_box\.scss}line{font-family:\000033}}
+.box {
+  position: relative;
+  overflow: hidden;
+  border: solid 1px #e4e4e3;
+  background-color: #ffffff;
+  -webkit-transition: background-color 1s;
+  -moz-transition: background-color 1s;
+  -o-transition: background-color 1s;
+  transition: background-color 1s;
+  padding: 20px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_box\.scss}line{font-family:\0000317}}
+.box.box--collapsed {
+  padding: 5px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_box\.scss}line{font-family:\0000323}}
+.box.box--bottomborder {
+  border: none;
+  border-bottom: solid 1px #e4e4e3;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_box\.scss}line{font-family:\0000331}}
+.box.box--dashed {
+  border: dashed 2px #e4e4e3;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_box\.scss}line{font-family:\0000337}}
+.box.box--centered {
+  text-align: center;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_box\.scss}line{font-family:\0000345}}
+.box.is-highlighted {
+  background-color: #ffff99;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_box\.scss}line{font-family:\0000352}}
+.boxlist .box:not(.box--dashed) {
+  border: 0;
+  border-bottom: solid 1px #e4e4e3;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_box\.scss}line{font-family:\0000357}}
+.boxlist .box:last-child:not(.box--dashed) {
+  border-bottom: 0;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\000031}}
+.button, .dropdown--button .dropdown-label, .iconbutton, .arrowbutton, .barbutton {
+  border: solid 1px transparent;
+  border-radius: 4px;
+  cursor: pointer;
+  display: inline-block;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/base\/_mixins\.scss}line{font-family:\0000366}}
+.button::-moz-selection, .dropdown--button .dropdown-label::-moz-selection, .iconbutton::-moz-selection, .arrowbutton::-moz-selection, .barbutton::-moz-selection {
+  background-color: transparent !important;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/base\/_mixins\.scss}line{font-family:\0000367}}
+.button::selection, .dropdown--button .dropdown-label::selection, .iconbutton::selection, .arrowbutton::selection, .barbutton::selection {
+  background-color: transparent !important;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\0000312}}
+.button, .dropdown--button .dropdown-label {
+  padding-right: 6px;
+  padding-left: 6px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  line-height: 36px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
+  border-radius: 5px;
+  background-color: #ebebeb;
+  font-size: 13px;
+  text-align: center;
+  color: #535353;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\0000328}}
+.button.button--condensed, .dropdown--button .dropdown-label {
+  padding-right: 4px;
+  padding-left: 4px;
+  line-height: 26px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\0000335}}
+.button.button--primary, .dropdown--button .button--primary.dropdown-label {
+  background-color: #aea8c7;
+  color: white;
+  font-weight: bold;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\0000340}}
+.button.button--primary:hover, .dropdown--button .button--primary.dropdown-label:hover {
+  background-color: #9189b3;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\0000344}}
+.button.button--primary:active, .dropdown--button .button--primary.dropdown-label:active {
+  background-color: #746a9f;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\0000351}}
+.button:hover, .dropdown--button .dropdown-label:hover {
+  background-color: #dedede;
+  text-decoration: none;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\0000359}}
+.button[disabled], .dropdown--button [disabled].dropdown-label,
+.button.is-disabled,
+.dropdown--button .is-disabled.dropdown-label {
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=50);
+  opacity: 0.5;
+  cursor: not-allowed;
+  background-color: #ebebeb !important;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\0000368}}
+.button:active, .dropdown--button .dropdown-label:active {
+  background-color: #d2d2d2;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\0000375}}
+.buttongroup {
+  font-size: 0;
+  display: inline-block;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\0000379}}
+.buttongroup .button, .buttongroup .dropdown--button .dropdown-label, .dropdown--button .buttongroup .dropdown-label {
+  border-radius: 0;
+  font-size: 13px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\0000384}}
+.buttongroup .button:first-child, .buttongroup .dropdown--button .dropdown-label:first-child, .dropdown--button .buttongroup .dropdown-label:first-child {
+  border-radius: 5px 0 0 5px;
+  border-right: 0;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\0000389}}
+.buttongroup .button:last-child, .buttongroup .dropdown--button .dropdown-label:last-child, .dropdown--button .buttongroup .dropdown-label:last-child {
+  border-radius: 0 5px 5px 0;
+  border-left: 0;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\0000397}}
+.iconbutton {
+  position: relative;
+  display: inline-block;
+  width: 32px;
+  height: 32px;
+  line-height: 32px;
+  font-size: 16px;
+  vertical-align: middle;
+  text-align: center;
+  opacity: 0.55;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/base\/_mixins\.scss}line{font-family:\0000366}}
+.iconbutton::-moz-selection {
+  background-color: transparent !important;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/base\/_mixins\.scss}line{font-family:\0000367}}
+.iconbutton::selection {
+  background-color: transparent !important;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\00003113}}
+.iconbutton:hover {
+  opacity: 1;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\00003122}}
+#assembl-mainbutton {
+  font-size: 22px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\00003128}}
+.iconbutton.is-activated, .iconbutton:active {
+  opacity: 1;
+  background-color: rgba(229, 229, 229, 0.5);
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\00003135}}
+.iconbutton.iconbutton--nofx {
+  opacity: 1;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\00003145}}
+.is-fullscreen .iconbutton.iconbutton--resizefull {
+  display: none;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\00003152}}
+.iconbutton.iconbutton--resizesmall {
+  display: none;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\00003158}}
+.is-fullscreen .iconbutton.iconbutton--resizesmall {
+  display: inline-block;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\00003165}}
+.arrowbutton {
+  position: relative;
+  margin: 5px 0;
+  line-height: 36px;
+  height: 36px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  padding: 0 10px 0 5px;
+  margin-left: 14px;
+  background-color: rgba(129, 133, 139, 0);
+  background-image: -ms-linear-gradient(bottom, #afa8cf, #c7c2dd);
+  background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjUwJSIgeTE9IjEwMCUiIHgyPSI1MCUiIHkyPSIwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2FmYThjZiIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2M3YzJkZCIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+  background-size: 100%;
+  background-image: -webkit-gradient(linear, 50% 100%, 50% 0%, color-stop(0%, #afa8cf), color-stop(100%, #c7c2dd));
+  background-image: -webkit-linear-gradient(bottom, #afa8cf, #c7c2dd);
+  background-image: -moz-linear-gradient(bottom, #afa8cf, #c7c2dd);
+  background-image: -o-linear-gradient(bottom, #afa8cf, #c7c2dd);
+  background-image: linear-gradient(bottom, #afa8cf, #c7c2dd);
+  color: white;
+  border: solid 1px #8d88a6;
+  border-radius: 0 4px 4px 0;
+  font-size: 14px;
+  text-decoration: none;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\00003186}}
+.arrowbutton:before {
+  content: url(/static/img/button/arrowbutton.png);
+  position: absolute;
+  top: -1px;
+  left: -14px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\00003196}}
+.arrowbutton.arrowbutton--right {
+  border-radius: 4px 0 0 4px;
+  margin-left: 0;
+  margin-right: 14px;
+  padding: 0 5px 0 10px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\00003202}}
+.arrowbutton.arrowbutton--right:before {
+  display: none;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\00003206}}
+.arrowbutton.arrowbutton--right:after {
+  content: url(/static/img/button/arrowbutton-right.png);
+  position: absolute;
+  top: -1px;
+  right: -14px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\00003216}}
+.barbutton {
+  background-color: #c7c2dd;
+  border: solid 1px #a9a3c1;
+  color: #2f2f2f;
+  font-weight: bold;
+  font-size: 14px;
+  padding: 10px 20px;
+  line-height: 1em;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/base\/_mixins\.scss}line{font-family:\0000366}}
+.barbutton::-moz-selection {
+  background-color: transparent !important;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/base\/_mixins\.scss}line{font-family:\0000367}}
+.barbutton::selection {
+  background-color: transparent !important;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_button\.scss}line{font-family:\00003236}}
+.barbutton.is-activated, .barbutton:active {
+  background-color: #aea8c7;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_checkbox\.scss}line{font-family:\000033}}
+.chk {
+  cursor: pointer;
+  display: inline-block;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  width: 20px;
+  height: 20px;
+  line-height: 20px;
+  float: left;
+  position: relative;
+  z-index: 1;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_checkbox\.scss}line{font-family:\0000319}}
+.chk.chk--idealist {
+  height: 40px;
+  line-height: 40px;
+  float: left;
+  margin-left: 5px;
+  padding-top: 4.25px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_checkbox\.scss}line{font-family:\0000335}}
+.chk-checkbox {
+  display: none;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_checkbox\.scss}line{font-family:\0000341}}
+.chk-label {
+  display: inline-block;
+  position: absolute;
+  top: -5px;
+  left: -5px;
+  font-size: 20px;
+  color: #eceef1;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_checkbox\.scss}line{font-family:\0000353}}
+.chk--idealist .chk-label {
+  top: 10px;
+  left: 0;
+  line-height: 20px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_checkbox\.scss}line{font-family:\0000359}}
+.chk-checkbox:checked ~ .chk-label {
+  color: #aea8c7;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_checkbox\.scss}line{font-family:\0000364}}
+.chk--muted .chk-checkbox:checked ~ .chk-label {
+  color: #c5c5c5;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_checkbox\.scss}line{font-family:\0000368}}
+.chk--dropdown .chk-label {
+  font-size: 16px;
+  color: white !important;
+  top: 3px;
+  left: -2px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_closebutton\.scss}line{font-family:\000033}}
+.closebutton {
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  cursor: pointer;
+  color: #e4e4e3;
+  font-size: 14px;
+  cursor: pointer;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_closebutton\.scss}line{font-family:\0000314}}
+.closebutton:after {
+  display: inline-block;
+  font-family: "fontello";
+  content: '\e810';
+  margin-left: 5px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_closebutton\.scss}line{font-family:\0000321}}
+.closebutton:hover {
+  color: #b2b2af;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_closebutton\.scss}line{font-family:\0000328}}
+.closebutton.closebutton--ckeditor {
+  top: 0px;
+  right: 30px;
+  z-index: 15;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_contextmenu\.scss}line{font-family:\000033}}
+.contextmenu, .dropdown-list {
+  position: absolute;
+  display: inline-block;
+  padding: 20px;
+  border: solid 1px #e4e4e3;
+  -webkit-box-shadow: 0 2px 3px #cccccc;
+  -moz-box-shadow: 0 2px 3px #cccccc;
+  box-shadow: 0 2px 3px #cccccc;
+  border-radius: 5px;
+  background-color: #fff;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_contextmenu\.scss}line{font-family:\0000316}}
+.contextmenu-item, .dropdown-listitem {
+  display: block;
+  line-height: 22px;
+  cursor: pointer;
+  color: #c5c5c5;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_contextmenu\.scss}line{font-family:\0000328}}
+.contextmenu-item.is-hovered, .contextmenu-item:hover, .dropdown-listitem:hover, .is-hovered.dropdown-listitem {
+  color: black;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_dragbox\.scss}line{font-family:\000033}}
+.dragbox {
+  line-height: 20px;
+  padding: 5px;
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: -1;
+  background-color: #fcf8e3;
+  -webkit-box-shadow: 0 3px 3px rgba(0, 0, 0, 0.15);
+  -moz-box-shadow: 0 3px 3px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 3px 3px rgba(0, 0, 0, 0.15);
+  border: solid 1px #f0c36d;
+  font-size: 11px;
+  color: #c7a25a;
+  cursor: move;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_dragbox\.scss}line{font-family:\0000320}}
+.dragbox:before {
+  content: url(/static/img/dragbox/dragbox-background.png);
+  margin-right: 5px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_dropdown\.scss}line{font-family:\000033}}
+.dropdown {
+  position: relative;
+  display: inline-block;
+  padding: 2px 4px;
+  line-height: 20px;
+  overflow: visible;
+  cursor: pointer;
+  border: solid 1px transparent;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_dropdown\.scss}line{font-family:\0000320}}
+.dropdown-label {
+  -webkit-transform: translatez(0);
+  -moz-transform: translatez(0);
+  -ms-transform: translatez(0);
+  -o-transform: translatez(0);
+  transform: translatez(0);
+  display: inline-block;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_dropdown\.scss}line{font-family:\0000324}}
+.dropdown-label:after {
+  display: inline-block;
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=20);
+  opacity: 0.2;
+  font-family: "fontello";
+  content: '\e808';
+  margin-left: 5px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_dropdown\.scss}line{font-family:\0000333}}
+.dropdown:hover .dropdown-label:after {
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
+  opacity: 1;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_dropdown\.scss}line{font-family:\0000337}}
+.dropdown--button .dropdown-label {
+  padding-right: 8px;
+  padding-left: 4px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_dropdown\.scss}line{font-family:\0000342}}
+.dropdown--button .dropdown-label:after {
+  font-family: "fontello";
+  content: '\e812';
+  margin-left: 5px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_dropdown\.scss}line{font-family:\0000351}}
+.dropdown-label.dropdown-label--arrow {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  background: url(/static/img/idealist/idealist-arrow.png) center center no-repeat;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: solid 1px #ddd;
+  opacity: 0.55;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_dropdown\.scss}line{font-family:\0000360}}
+.dropdown-label.dropdown-label--arrow:hover {
+  opacity: 1;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_dropdown\.scss}line{font-family:\0000364}}
+.dropdown-label.dropdown-label--arrow:after {
+  display: none;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_dropdown\.scss}line{font-family:\0000371}}
+.dropdown-list {
+  position: absolute;
+  top: 0;
+  left: -10000px;
+  z-index: 2;
+  min-width: 155px;
+  overflow: visible;
+  -webkit-transition: top 0.4s, opacity 0.4s, left 0 linear, right 0 linear;
+  -webkit-transition-delay: 0s, 0s, 0.4s, 0.4s;
+  -moz-transition: top 0.4s, opacity 0.4s, left 0 linear 0.4s, right 0 linear 0.4s;
+  -o-transition: top 0.4s, opacity 0.4s, left 0 linear 0.4s, right 0 linear 0.4s;
+  transition: top 0.4s, opacity 0.4s, left 0 linear 0.4s, right 0 linear 0.4s;
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
+  opacity: 0;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_dropdown\.scss}line{font-family:\0000385}}
+.dropdown.is-open .dropdown-list {
+  -webkit-transition: top 0.4s, opacity 0.4s, left 0 linear, right 0 linear;
+  -webkit-transition-delay: 0s, 0s, 0, 0;
+  -moz-transition: top 0.4s, opacity 0.4s, left 0 linear 0, right 0 linear 0;
+  -o-transition: top 0.4s, opacity 0.4s, left 0 linear 0, right 0 linear 0;
+  transition: top 0.4s, opacity 0.4s, left 0 linear 0, right 0 linear 0;
+  top: 8px;
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
+  opacity: 1;
+  left: 0;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_dropdown\.scss}line{font-family:\0000392}}
+.dropdown--button.is-open .dropdown-list {
+  top: 16px;
+  left: 5px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_dropdown\.scss}line{font-family:\0000399}}
+.dropdown-list.dropdown-list--bottomright {
+  left: auto;
+  right: -10000px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_dropdown\.scss}line{font-family:\00003103}}
+.dropdown.is-open .dropdown-list.dropdown-list--bottomright {
+  top: 15px;
+  right: 5px;
+  left: auto;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_dot\.scss}line{font-family:\000034}}
+.dot {
+  display: inline-block;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_dot\.scss}line{font-family:\000038}}
+.dot:before {
+  content: "";
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  -ms-border-radius: 50%;
+  -o-border-radius: 50%;
+  border-radius: 50%;
+  background-color: rgba(255, 0, 0, 0.8);
+  -webkit-box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.4);
+  -moz-box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.4);
+  box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.4);
+  margin-right: 5px;
+  margin-bottom: 3px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_dot\.scss}line{font-family:\0000323}}
+.dot .dot-offline {
+  display: initial;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_dot\.scss}line{font-family:\0000327}}
+.dot .dot-online {
+  display: none;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_dot\.scss}line{font-family:\0000338}}
+.dot.is-online:before {
+  background-color: #13a89e;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_dot\.scss}line{font-family:\0000342}}
+.dot.is-online .dot-offline {
+  display: none;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_dot\.scss}line{font-family:\0000346}}
+.dot.is-online .dot-online {
+  display: initial;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_form\.scss}line{font-family:\0000311}}
+.formlabel {
+  color: #999999;
+  margin-bottom: 5px;
+  display: block;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_form\.scss}line{font-family:\0000319}}
+.formfield {
+  width: 100%;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  padding: 0 5px;
+  height: 35px;
+  line-height: 35px;
+  border: solid 1px #dcdbd7;
+  font-size: 16px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_form\.scss}line{font-family:\0000333}}
+.formtextarea {
+  min-height: 4em;
+  width: 100%;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  resize: vertical;
+  padding: 2px 5px;
+  border: solid 1px #dcdbd7;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_form\.scss}line{font-family:\0000347}}
+.defaultfield {
+  min-width: 220px;
+  height: 35px;
+  padding: 0 10px;
+  font-size: 14px;
+  color: #999999;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
+  border-radius: 5px;
+  -webkit-box-shadow: inset 0 0 4px rgba(0, 0, 0, 0.25);
+  -moz-box-shadow: inset 0 0 4px rgba(0, 0, 0, 0.25);
+  box-shadow: inset 0 0 4px rgba(0, 0, 0, 0.25);
+  border: #dcdbd7;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_grid\.scss}line{font-family:\000034}}
+.container {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  margin: auto;
+  width: 980px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_grid\.scss}line{font-family:\000039}}
+.container .container {
+  max-width: 100.1%;
+}
+@media (min-width: 768px) and (max-width: 979px) {
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_grid\.scss}line{font-family:\000034}}
+  .container {
+    width: 724px;
+  }
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_grid\.scss}line{font-family:\0000318}}
+.row {
+  overflow: hidden;
+  *zoom: 1;
+  margin-left: -2.762430939%;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_grid\.scss}line{font-family:\0000325}}
+.col {
+  float: left;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  margin-left: 2.762430939%;
+  width: 100%;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_grid\.scss}line{font-family:\0000332}}
+.col-1 {
+  float: left;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  margin-left: 2.762430939%;
+  width: 5.5709%;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_grid\.scss}line{font-family:\0000332}}
+.col-2 {
+  float: left;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  margin-left: 2.762430939%;
+  width: 13.90424%;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_grid\.scss}line{font-family:\0000332}}
+.col-3 {
+  float: left;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  margin-left: 2.762430939%;
+  width: 22.23757%;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_grid\.scss}line{font-family:\0000332}}
+.col-4 {
+  float: left;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  margin-left: 2.762430939%;
+  width: 30.5709%;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_grid\.scss}line{font-family:\0000332}}
+.col-5 {
+  float: left;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  margin-left: 2.762430939%;
+  width: 38.90424%;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_grid\.scss}line{font-family:\0000332}}
+.col-6 {
+  float: left;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  margin-left: 2.762430939%;
+  width: 47.23757%;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_grid\.scss}line{font-family:\0000332}}
+.col-7 {
+  float: left;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  margin-left: 2.762430939%;
+  width: 55.5709%;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_grid\.scss}line{font-family:\0000332}}
+.col-8 {
+  float: left;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  margin-left: 2.762430939%;
+  width: 63.90424%;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_grid\.scss}line{font-family:\0000332}}
+.col-9 {
+  float: left;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  margin-left: 2.762430939%;
+  width: 72.23757%;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_grid\.scss}line{font-family:\0000332}}
+.col-10 {
+  float: left;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  margin-left: 2.762430939%;
+  width: 80.5709%;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_grid\.scss}line{font-family:\0000332}}
+.col-11 {
+  float: left;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  margin-left: 2.762430939%;
+  width: 88.90424%;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_grid\.scss}line{font-family:\0000332}}
+.col-12 {
+  float: left;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  margin-left: 2.762430939%;
+  width: 100%;
+}
+
+@font-face {
+  font-family: 'fontello';
+  src: url("/static/font/icon/fontello.eot?32669288");
+  src: url("/static/font/icon/fontello.eot?32669288#iefix") format("embedded-opentype"), url("/static/font/icon/fontello.woff?32669288") format("woff"), url("/static/font/icon/fontello.ttf?32669288") format("truetype"), url("/static/font/icon/fontello.svg?32669288#fontello") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* Chrome hack: SVG is rendered more smooth in Windozze. 100% magic, uncomment if you need it. */
+/* Note, that will break hinting! In other OS-es font will be not as sharp as it could be */
+/*
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+  @font-face {
+    font-family: 'fontello';
+    src: url('../font/fontello.svg?32669288#fontello') format('svg');
+  }
+}
+*/
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_icon\.scss}line{font-family:\0000325}}
+.iconbutton.iconbutton--resizefull:before, .iconbutton.iconbutton--resizesmall:before, .chk-label:before,
+[class^="icon-"]:before, [class*=" icon-"]:before {
+  font-family: "fontello";
+  font-style: normal;
+  font-weight: normal;
+  speak: none;
+  display: inline-block;
+  text-decoration: inherit;
+  width: 1em;
+  margin-right: .2em;
+  text-align: center;
+  /* opacity: .8; */
+  /* For safety - reset parent styles, that can break glyph codes*/
+  font-variant: normal;
+  text-transform: none;
+  /* fix buttons height, for twitter bootstrap */
+  line-height: 1em;
+  /* Animation center compensation - margins should be symmetric */
+  /* remove if not needed */
+  margin-left: .2em;
+  /* you can be more comfortable with increased icons size */
+  /* font-size: 120%; */
+  /* Uncomment for 3D effect */
+  /* text-shadow: 1px 1px 1px rgba(127, 127, 127, 0.3); */
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_icon\.scss}line{font-family:\0000356}}
+.icon-ok-squared:before, .chk-checkbox:checked ~ .chk-label:before {
+  content: '\e817';
+}
+
+/* '' */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_icon\.scss}line{font-family:\0000357}}
+.icon-reply:before {
+  content: '\e811';
+}
+
+/* '' */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_icon\.scss}line{font-family:\0000358}}
+.icon-plus-squared-small:before {
+  content: '\e800';
+}
+
+/* '' */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_icon\.scss}line{font-family:\0000359}}
+.icon-minus-squared:before {
+  content: '\e81d';
+}
+
+/* '' */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_icon\.scss}line{font-family:\0000360}}
+.icon-minus-squared-small:before {
+  content: '\e805';
+}
+
+/* '' */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_icon\.scss}line{font-family:\0000361}}
+.icon-trash:before {
+  content: '\e809';
+}
+
+/* '' */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_icon\.scss}line{font-family:\0000362}}
+.icon-down-dir:before {
+  content: '\e812';
+}
+
+/* '' */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_icon\.scss}line{font-family:\0000363}}
+.icon-up-dir:before {
+  content: '\e813';
+}
+
+/* '' */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_icon\.scss}line{font-family:\0000364}}
+.icon-left-dir:before {
+  content: '\e814';
+}
+
+/* '' */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_icon\.scss}line{font-family:\0000365}}
+.icon-right-dir:before {
+  content: '\e815';
+}
+
+/* '' */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_icon\.scss}line{font-family:\0000366}}
+.icon-collapse:before {
+  content: '\e81a';
+}
+
+/* '' */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_icon\.scss}line{font-family:\0000367}}
+.icon-collapse-top:before {
+  content: '\e81b';
+}
+
+/* '' */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_icon\.scss}line{font-family:\0000368}}
+.icon-expand-right:before {
+  content: '\e827';
+}
+
+/* '' */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_icon\.scss}line{font-family:\0000369}}
+.icon-play:before {
+  content: '\e820';
+}
+
+/* '' */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_icon\.scss}line{font-family:\0000370}}
+.icon-sort:before {
+  content: '\e808';
+}
+
+/* '' */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_icon\.scss}line{font-family:\0000371}}
+.icon-blank:before, .chk-label:before {
+  content: '\e81e';
+}
+
+/* '' */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_icon\.scss}line{font-family:\0000372}}
+.icon-flow-tree:before {
+  content: '\e825';
+}
+
+/* '' */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_icon\.scss}line{font-family:\0000373}}
+.icon-pin-outline:before {
+  content: '\e806';
+}
+
+/* '' */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_icon\.scss}line{font-family:\0000374}}
+.icon-pin:before {
+  content: '\e807';
+}
+
+/* '' */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_icon\.scss}line{font-family:\0000375}}
+.icon-menu-1:before {
+  content: '\e81f';
+}
+
+/* '' */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_icon\.scss}line{font-family:\0000376}}
+.icon-plus-squared:before {
+  content: '\e81c';
+}
+
+/* '' */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_icon\.scss}line{font-family:\0000377}}
+.icon-edit:before {
+  content: '\e80a';
+}
+
+/* '' */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_icon\.scss}line{font-family:\0000378}}
+.icon-menu:before {
+  content: '\e80f';
+}
+
+/* '' */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_icon\.scss}line{font-family:\0000379}}
+.icon-cancel:before {
+  content: '\e810';
+}
+
+/* '' */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_icon\.scss}line{font-family:\0000380}}
+.icon-download-1:before {
+  content: '\e818';
+}
+
+/* '' */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_icon\.scss}line{font-family:\0000381}}
+.icon-upload:before {
+  content: '\e819';
+}
+
+/* '' */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_icon\.scss}line{font-family:\0000382}}
+.icon-logout-1:before {
+  content: '\e826';
+}
+
+/* '' */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_icon\.scss}line{font-family:\0000383}}
+.icon-heart:before {
+  content: '\e802';
+}
+
+/* '' */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_icon\.scss}line{font-family:\0000384}}
+.icon-heart-empty:before {
+  content: '\e803';
+}
+
+/* '' */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_icon\.scss}line{font-family:\0000385}}
+.icon-star:before {
+  content: '\e80b';
+}
+
+/* '' */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_icon\.scss}line{font-family:\0000386}}
+.icon-star-empty:before {
+  content: '\e80c';
+}
+
+/* '' */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_icon\.scss}line{font-family:\0000387}}
+.icon-trash-1:before {
+  content: '\e816';
+}
+
+/* '' */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_icon\.scss}line{font-family:\0000388}}
+.icon-cog:before {
+  content: '\e80d';
+}
+
+/* '' */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_icon\.scss}line{font-family:\0000389}}
+.icon-resize-full:before, .iconbutton.iconbutton--resizefull:before {
+  content: '\e821';
+}
+
+/* '' */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_icon\.scss}line{font-family:\0000390}}
+.icon-resize-small:before, .iconbutton.iconbutton--resizesmall:before {
+  content: '\e822';
+}
+
+/* '' */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_icon\.scss}line{font-family:\0000391}}
+.icon-search:before {
+  content: '\e80e';
+}
+
+/* '' */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_icon\.scss}line{font-family:\0000392}}
+.icon-mail:before {
+  content: '\e823';
+}
+
+/* '' */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_icon\.scss}line{font-family:\0000393}}
+.icon-user:before {
+  content: '\e801';
+}
+
+/* '' */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_icon\.scss}line{font-family:\0000394}}
+.icon-link:before {
+  content: '\e824';
+}
+
+/* '' */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_icon\.scss}line{font-family:\0000395}}
+.icon-download:before {
+  content: '\e804';
+}
+
+/* '' */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\000033}}
+.idealist {
+  background-color: white;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\000039}}
+.idealist-item {
+  line-height: 40px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\0000337}}
+.idealist-body {
+  position: relative;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\0000341}}
+.idealist-body:first-child {
+  border-top: 0;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\0000348}}
+.idealist-item.is-dragover-above > .idealist-body, .idealist-item.is-dragover > .idealist-body, .idealist-item.is-dragover-below > .idealist-body {
+  border-color: transparent !important;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\0000351}}
+.idealist-item.is-dragover-above > .idealist-body .idealist-abovedropzone, .idealist-item.is-dragover > .idealist-body .idealist-abovedropzone, .idealist-item.is-dragover-below > .idealist-body .idealist-abovedropzone {
+  border-top: solid 1px #f0c36d !important;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\0000352}}
+.idealist-item.is-dragover-above > .idealist-body .idealist-dropzone, .idealist-item.is-dragover > .idealist-body .idealist-dropzone, .idealist-item.is-dragover-below > .idealist-body .idealist-dropzone {
+  border-color: #f0c36d !important;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\0000355}}
+.idealist-item.is-dragover:not(.is-dragover-below) > .idealist-body {
+  background-color: #fcf8e3;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\0000359}}
+.idealist-item.is-selected > .idealist-body {
+  background-color: #dbf2ff;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\0000367}}
+.idealist-body.idealist-body--rootidea, .idealist-body.idealist-body--synthesis {
+  font-size: 12px;
+  line-height: 20px;
+  background-color: #e2f5ec;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\0000373}}
+.idealist-body.idealist-body--synthesis {
+  border-bottom: solid 1px #96dbba;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\0000382}}
+.idealist-abovedropzone {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  position: absolute;
+  top: 0px;
+  right: 0;
+  left: 0;
+  height: 10px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\0000391}}
+.idealist-item.is-dragover-above > .idealist-body .idealist-abovedropzone {
+  background-color: #fcf8e3;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\00003100}}
+.idealist-dropzone {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  position: absolute;
+  right: 0;
+  bottom: -1px;
+  left: 0;
+  height: 10px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\00003110}}
+.idealist-item.is-dragover-below > .idealist-body .idealist-dropzone {
+  background-color: #fcf8e3;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\00003118}}
+.idealist-subtitle {
+  float: right;
+  color: #c5c5c5;
+  margin: 0 10px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\00003126}}
+.idealist-title, .message .message-subheader, #messageList #messageList-query-info {
+  display: block;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  cursor: pointer;
+  padding-left: 10px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\00003137}}
+.idealist-counter, .idealist-removebtn {
+  float: right;
+  padding: 0 12px 0 25px;
+  min-width: 30px;
+  text-align: right;
+  font-size: 14px;
+  font-weight: bold;
+  color: #c8c9cc;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\00003146}}
+.idealist-counter .idea-unread-posts, .idealist-removebtn .idea-unread-posts {
+  color: #555;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\00003153}}
+.idealist-removebtn {
+  font-size: 18px;
+  cursor: pointer;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\00003161}}
+.idealist-arrow {
+  background: url(/static/img/idealist/idealist-arrow-closed.png) center center no-repeat;
+  width: 30px;
+  height: 40px;
+  display: block;
+  float: left;
+  cursor: pointer;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\00003163}}
+.idealist-arrow.level1 {
+  background: url(/static/img/idealist/idealist-arrow-closed-l1.png) center center no-repeat;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\00003181}}
+.idealist-item.is-open > .idealist-body .idealist-arrow {
+  background: url(/static/img/idealist/idealist-arrow-open.png) center center no-repeat;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\00003183}}
+.idealist-item.is-open > .idealist-body .idealist-arrow.level1 {
+  background: url(/static/img/idealist/idealist-arrow-open-l1.png) center center no-repeat;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\00003190}}
+.idealist-noarrow {
+  background: url(/static/img/idealist/idealist-noarrow.png) center center no-repeat;
+  width: 30px;
+  height: 40px;
+  display: block;
+  float: left;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\00003200}}
+.idealist-space {
+  display: block;
+  width: 30px;
+  height: 40px;
+  float: left;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\00003209}}
+.idealist-bar {
+  background: url(/static/img/idealist/idealist-bar.png) center center no-repeat;
+  display: block;
+  width: 30px;
+  height: 40px;
+  float: left;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\00003220}}
+.idealist-link {
+  background: url(/static/img/idealist/idealist-link.png) center center no-repeat;
+  display: block;
+  width: 30px;
+  height: 40px;
+  float: left;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\00003228}}
+.idealist-link-last {
+  background: url(/static/img/idealist/idealist-link-last.png) center center no-repeat;
+  display: block;
+  width: 30px;
+  height: 40px;
+  float: left;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\00003240}}
+#idealist-graph {
+  height: 100%;
+  width: 100%;
+  display: none;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\00003244}}
+#idealist-graph #infovis {
+  height: 100%;
+  width: 100%;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\00003248}}
+#idealist-graph #inner-details {
+  height: auto;
+  width: 100%;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\00003257}}
+.idealist-children {
+  height: 0px;
+  overflow: hidden;
+  display: none;
+  -webkit-transition: height 0.4s;
+  -moz-transition: height 0.4s;
+  -o-transition: height 0.4s;
+  transition: height 0.4s;
+  -webkit-transform: translateZ(0);
+  -moz-transform: translateZ(0);
+  -ms-transform: translateZ(0);
+  -o-transform: translateZ(0);
+  transform: translateZ(0);
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\00003265}}
+.idealist-item.is-open > .idealist-children {
+  height: auto;
+  display: initial;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_idealist\.scss}line{font-family:\00003270}}
+.idealist-children:empty {
+  display: none;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_image\.scss}line{font-family:\000031}}
+.image-rounded {
+  border-radius: 4px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_link\.scss}line{font-family:\000033}}
+.link, .segment-link {
+  cursor: pointer;
+  color: #c5c5c5;
+  text-decoration: none;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_link\.scss}line{font-family:\0000310}}
+.link:hover, .segment-link:hover {
+  color: #acacac;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_link\.scss}line{font-family:\0000314}}
+.link:active, .segment-link:active {
+  color: #929292;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_loginbox\.scss}line{font-family:\000033}}
+.loginbox {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  -moz-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  -o-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  width: 382px;
+  padding: 20px;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  -ms-border-radius: 10px;
+  -o-border-radius: 10px;
+  border-radius: 10px;
+  background-color: #e0e2e5;
+  text-align: center;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_media\.scss}line{font-family:\000038}}
+.media-imgleft {
+  float: left;
+  margin-right: 10px;
+  margin-bottom: 10px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_media\.scss}line{font-family:\0000318}}
+.media-body {
+  overflow: hidden;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_media\.scss}line{font-family:\0000324}}
+.media-title {
+  padding-top: 3px;
+  margin-bottom: 10px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_message\.scss}line{font-family:\000035}}
+.message {
+  position: relative;
+  padding: 6px 0px;
+  min-height: 31px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_message\.scss}line{font-family:\0000319}}
+.message.viewStyleFullBody .message-date {
+  float: none;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_message\.scss}line{font-family:\0000322}}
+.message.viewStyleFullBody .message-subheader {
+  max-height: none;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_message\.scss}line{font-family:\0000325}}
+.message.viewStyleFullBody .message-author {
+  width: auto;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_message\.scss}line{font-family:\0000330}}
+.message.viewStyleTitleOnly .message-date {
+  float: right;
+  line-height: 32px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_message\.scss}line{font-family:\0000343}}
+.message .message-header {
+  position: relative;
+  min-height: 31px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_message\.scss}line{font-family:\0000351}}
+.message .message-subheader {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: baseline;
+  max-height: 31px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_message\.scss}line{font-family:\0000358}}
+.message .message-subheader > span {
+  vertical-align: middle;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_message\.scss}line{font-family:\0000361}}
+.message--collapsed .message .message-subheader {
+  line-height: 32px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_message\.scss}line{font-family:\0000366}}
+.message .message-subheader .message-author {
+  display: inline-block;
+  width: 10em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_message\.scss}line{font-family:\0000371}}
+.message .message-subheader .message-author:hover {
+  position: relative;
+  min-width: 10em;
+  width: auto;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_message\.scss}line{font-family:\0000379}}
+.message .message-body {
+  margin-top: 1em;
+  white-space: pre-line;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_message\.scss}line{font-family:\0000382}}
+.message .message-body > {
+  white-space: normal;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_message\.scss}line{font-family:\0000391}}
+#messageList-list.reverse_chronological .message-family-container, #messageList-list.chronological .message-family-container {
+  border-bottom: solid 1px #e4e4e3;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_message\.scss}line{font-family:\0000394}}
+#messageList-list.reverse_chronological .message-family-container:last-child, #messageList-list.chronological .message-family-container:last-child {
+  border-bottom: 0;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_message\.scss}line{font-family:\00003115}}
+.message-family-arrow.noarrow {
+  display: block;
+  padding-left: 6px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_message\.scss}line{font-family:\00003120}}
+.link-img {
+  float: left;
+  margin-left: -13px;
+  margin-top: 0;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_message\.scss}line{font-family:\00003126}}
+.message-family-arrow.arrow {
+  padding-left: 6px;
+  margin-left: 6px;
+  display: block;
+  cursor: pointer;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_message\.scss}line{font-family:\00003131}}
+.message-family-arrow.arrow .msg-img-closed {
+  display: block;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_message\.scss}line{font-family:\00003134}}
+.message-family-arrow.arrow .msg-img-open {
+  display: none;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_message\.scss}line{font-family:\00003138}}
+.message--expanded > .message-family-container > .message-family-arrow.arrow {
+  border-left: solid 1px #bbbbbb;
+  margin-left: 5px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_message\.scss}line{font-family:\00003141}}
+.message--expanded > .message-family-container > .message-family-arrow.arrow .msg-img-closed {
+  display: none;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_message\.scss}line{font-family:\00003144}}
+.message--expanded > .message-family-container > .message-family-arrow.arrow .msg-img-open {
+  display: block;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_message\.scss}line{font-family:\00003148}}
+.message--expanded > .message-family-arrow.arrow {
+  border-left: solid 1px #bbbbbb;
+  margin-left: 5px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_message\.scss}line{font-family:\00003151}}
+.message--expanded > .message-family-arrow.arrow .msg-img-closed {
+  display: none;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_message\.scss}line{font-family:\00003154}}
+.message--expanded > .message-family-arrow.arrow .msg-img-open {
+  display: block;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_message\.scss}line{font-family:\00003162}}
+.messagelist-space {
+  display: block;
+  padding-left: 6px;
+  margin-left: 6px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_message\.scss}line{font-family:\00003170}}
+.messagelist-bar {
+  display: block;
+  padding-left: 6px;
+  margin-left: 5px;
+  border-left: solid 1px #bbbbbb;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_message\.scss}line{font-family:\00003180}}
+.message-family-container {
+  display: block;
+  clear: left;
+  margin-left: 6px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_message\.scss}line{font-family:\00003187}}
+.message-family-container.root {
+  margin-left: 0;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_message\.scss}line{font-family:\00003191}}
+.message-family-container.child {
+  border-left: solid 1px #bbbbbb;
+  margin-left: 5px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_message\.scss}line{font-family:\00003197}}
+.message-family-container.child.last-child {
+  border-left: none;
+  margin-left: 6px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_message\.scss}line{font-family:\00003206}}
+.message-bar.message-bar--100vertical {
+  position: absolute;
+  top: 4px;
+  bottom: 0;
+  height: auto;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_message\.scss}line{font-family:\00003214}}
+.message-bar.message-bar--100vertical[data-bar-level="1"] {
+  left: 5px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_message\.scss}line{font-family:\00003214}}
+.message-bar.message-bar--100vertical[data-bar-level="2"] {
+  left: 26px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_message\.scss}line{font-family:\00003214}}
+.message-bar.message-bar--100vertical[data-bar-level="3"] {
+  left: 47px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_message\.scss}line{font-family:\00003214}}
+.message-bar.message-bar--100vertical[data-bar-level="4"] {
+  left: 68px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_message\.scss}line{font-family:\00003214}}
+.message-bar.message-bar--100vertical[data-bar-level="5"] {
+  left: 89px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_message\.scss}line{font-family:\00003214}}
+.message-bar.message-bar--100vertical[data-bar-level="6"] {
+  left: 110px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_message\.scss}line{font-family:\00003214}}
+.message-bar.message-bar--100vertical[data-bar-level="7"] {
+  left: 131px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_message\.scss}line{font-family:\00003214}}
+.message-bar.message-bar--100vertical[data-bar-level="8"] {
+  left: 152px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_message\.scss}line{font-family:\00003214}}
+.message-bar.message-bar--100vertical[data-bar-level="9"] {
+  left: 173px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_message\.scss}line{font-family:\00003214}}
+.message-bar.message-bar--100vertical[data-bar-level="10"] {
+  left: 194px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_message\.scss}line{font-family:\00003214}}
+.message-bar.message-bar--100vertical[data-bar-level="11"] {
+  left: 215px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_message\.scss}line{font-family:\00003214}}
+.message-bar.message-bar--100vertical[data-bar-level="12"] {
+  left: 236px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_message\.scss}line{font-family:\00003214}}
+.message-bar.message-bar--100vertical[data-bar-level="13"] {
+  left: 257px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_message\.scss}line{font-family:\00003214}}
+.message-bar.message-bar--100vertical[data-bar-level="14"] {
+  left: 278px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_message\.scss}line{font-family:\00003214}}
+.message-bar.message-bar--100vertical[data-bar-level="15"] {
+  left: 299px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_message\.scss}line{font-family:\00003214}}
+.message-bar.message-bar--100vertical[data-bar-level="16"] {
+  left: 320px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_message\.scss}line{font-family:\00003214}}
+.message-bar.message-bar--100vertical[data-bar-level="17"] {
+  left: 341px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_message\.scss}line{font-family:\00003214}}
+.message-bar.message-bar--100vertical[data-bar-level="18"] {
+  left: 362px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_message\.scss}line{font-family:\00003214}}
+.message-bar.message-bar--100vertical[data-bar-level="19"] {
+  left: 383px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_message\.scss}line{font-family:\00003214}}
+.message-bar.message-bar--100vertical[data-bar-level="20"] {
+  left: 404px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_message\.scss}line{font-family:\00003214}}
+.message-bar.message-bar--100vertical[data-bar-level="21"] {
+  left: 425px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_message\.scss}line{font-family:\00003214}}
+.message-bar.message-bar--100vertical[data-bar-level="22"] {
+  left: 446px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_message\.scss}line{font-family:\00003214}}
+.message-bar.message-bar--100vertical[data-bar-level="23"] {
+  left: 467px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_message\.scss}line{font-family:\00003214}}
+.message-bar.message-bar--100vertical[data-bar-level="24"] {
+  left: 488px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_message\.scss}line{font-family:\00003214}}
+.message-bar.message-bar--100vertical[data-bar-level="25"] {
+  left: 509px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_message\.scss}line{font-family:\00003214}}
+.message-bar.message-bar--100vertical[data-bar-level="26"] {
+  left: 530px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_message\.scss}line{font-family:\00003214}}
+.message-bar.message-bar--100vertical[data-bar-level="27"] {
+  left: 551px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_message\.scss}line{font-family:\00003214}}
+.message-bar.message-bar--100vertical[data-bar-level="28"] {
+  left: 572px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_message\.scss}line{font-family:\00003214}}
+.message-bar.message-bar--100vertical[data-bar-level="29"] {
+  left: 593px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_message\.scss}line{font-family:\00003214}}
+.message-bar.message-bar--100vertical[data-bar-level="30"] {
+  left: 614px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_message\.scss}line{font-family:\00003223}}
+.message-body, .message-replybox {
+  padding-right: 20px;
+  padding-left: 40px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_message\.scss}line{font-family:\00003232}}
+.message-replybox {
+  text-align: right;
+  margin-top: 1em;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_message\.scss}line{font-family:\00003235}}
+.message-replybox.hidden {
+  display: none;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_message\.scss}line{font-family:\00003241}}
+.message-menu {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  display: table;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_message\.scss}line{font-family:\00003246}}
+.message-menu .message-replybox-openbtn {
+  display: table-cell;
+  vertical-align: middle;
+  padding-right: 1em;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_message\.scss}line{font-family:\00003251}}
+.message-menu .dropdown {
+  display: table-cell;
+  vertical-align: middle;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_message\.scss}line{font-family:\00003259}}
+.messagelist-children {
+  height: 0px;
+  overflow: hidden;
+  clear: left;
+  -webkit-transition: height 0.4s;
+  -moz-transition: height 0.4s;
+  -o-transition: height 0.4s;
+  transition: height 0.4s;
+  -webkit-transform: translateZ(0);
+  -moz-transform: translateZ(0);
+  -ms-transform: translateZ(0);
+  -o-transform: translateZ(0);
+  transform: translateZ(0);
+  height: auto;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_message\.scss}line{font-family:\00003269}}
+.messagelist-children:empty {
+  display: none;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_messagesend\.scss}line{font-family:\000034}}
+.messageSend {
+  margin-top: 1em;
+  display: table;
+  width: 100%;
+  border: solid 1px #e4e4e3;
+  background-color: #f7f7f7;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_messagesend\.scss}line{font-family:\0000310}}
+.messageSend .hidden {
+  display: none;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_messagesend\.scss}line{font-family:\0000313}}
+.messageSend .avatar-container {
+  padding: 0.5em;
+  display: table-cell;
+  width: 1px;
+  vertical-align: top;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_messagesend\.scss}line{font-family:\0000319}}
+.messageSend .interface-container {
+  padding: 0.5em;
+  display: table-cell;
+  padding-left: 0.5em;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_messagesend\.scss}line{font-family:\0000323}}
+.messageSend .interface-container .messageSend-subject, .messageSend .interface-container .messageSend-body {
+  margin: 0;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_messagesend\.scss}line{font-family:\0000326}}
+.messageSend .interface-container .topic-subject {
+  display: table;
+  width: 100%;
+  margin-bottom: 0.5em;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_messagesend\.scss}line{font-family:\0000330}}
+.messageSend .interface-container .topic-subject .topic-subject-label {
+  display: table-cell;
+  width: 1px;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_messagesend\.scss}line{font-family:\0000336}}
+.messageSend .interface-container .topic-subject .topic-subject-input {
+  display: table-cell;
+  padding-left: 1em;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_messagesend\.scss}line{font-family:\0000339}}
+.messageSend .interface-container .topic-subject .topic-subject-input input {
+  width: 100%;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_messagesend\.scss}line{font-family:\0000345}}
+.messageSend .interface-container .messageSend-buttons {
+  width: 100%;
+  text-align: right;
+  margin: 0;
+  padding: 0;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_messagesend\.scss}line{font-family:\0000350}}
+.messageSend .interface-container .messageSend-buttons a {
+  margin: 0.5em 0 0 0.5em;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_panel\.scss}line{font-family:\000033}}
+.panel {
+  position: relative;
+  z-index: 10;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  height: 100%;
+  border: solid 1px #e4e4e3;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
+  border-radius: 5px;
+  background-color: #fff;
+  overflow: hidden;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_panel\.scss}line{font-family:\0000315}}
+.panel fieldset {
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
+  border-radius: 5px;
+  background-color: #f7f7f7;
+  margin: 10px;
+  margin-top: 1.4em;
+  padding: 5px;
+  padding-top: 1.4em;
+  position: relative;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_panel\.scss}line{font-family:\0000325}}
+.panel fieldset legend {
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
+  border-radius: 5px;
+  border: 1px solid #f7f7f7;
+  height: 1.8em;
+  position: absolute;
+  top: -0.9em;
+  background-color: #fff;
+  padding: 0;
+  margin-left: 1em;
+  font-weight: bold;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_panel\.scss}line{font-family:\0000339}}
+.panel fieldset legend span {
+  line-height: 1.8em;
+  display: block;
+  margin: 0 0.5em 0.5em 0.5em;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_panel\.scss}line{font-family:\0000355}}
+.panel.is-loading {
+  cursor: wait;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_panel\.scss}line{font-family:\0000358}}
+.panel.is-loading:after {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 2;
+  display: block;
+  content: "";
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
+  border-radius: 5px;
+  background: rgba(0, 0, 0, 0.15) url(/static/img/panel/loading.gif) no-repeat center center;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_panel\.scss}line{font-family:\0000380}}
+.panel-header, .panel-footer {
+  line-height: 56px;
+  height: 56px;
+  padding-left: 10px;
+  padding-right: 10px;
+  background-color: #f7f7f7;
+  -webkit-border-radius: 5px 5px 0 0;
+  -moz-border-radius: 5px 5px 0 0;
+  -ms-border-radius: 5px 5px 0 0;
+  -o-border-radius: 5px 5px 0 0;
+  border-radius: 5px 5px 0 0;
+  border-bottom: solid 1px #e4e4e3;
+  position: relative;
+  z-index: 2;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/base\/_mixins\.scss}line{font-family:\0000366}}
+.panel-header::-moz-selection, .panel-footer::-moz-selection {
+  background-color: transparent !important;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/base\/_mixins\.scss}line{font-family:\0000367}}
+.panel-header::selection, .panel-footer::selection {
+  background-color: transparent !important;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/base\/_mixins\.scss}line{font-family:\0000366}}
+.panel-header *::-moz-selection, .panel-footer *::-moz-selection {
+  background-color: transparent !important;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/base\/_mixins\.scss}line{font-family:\0000367}}
+.panel-header *::selection, .panel-footer *::selection {
+  background-color: transparent !important;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_panel\.scss}line{font-family:\0000398}}
+.panel-editablearea {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  display: inline-block;
+  overflow-x: hidden;
+  width: 96%;
+  border: solid 1px transparent;
+  border-radius: 4px;
+  margin: 10px;
+  padding: 5px;
+  cursor: text;
+  min-height: 2rem;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_panel\.scss}line{font-family:\00003114}}
+.panel-editablearea:hover, .panel-editablearea:focus {
+  border-color: lightgray;
+  background-color: white;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_panel\.scss}line{font-family:\00003121}}
+.panel-editablearea.panel-editablearea--small {
+  width: auto;
+  max-width: 240px;
+  white-space: nowrap;
+  margin: auto;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_panel\.scss}line{font-family:\00003130}}
+.panel-editablebox {
+  position: relative;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_panel\.scss}line{font-family:\00003133}}
+.panel-editablebox.is-editing {
+  background-color: #dbf2ff;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_panel\.scss}line{font-family:\00003141}}
+.panel-body {
+  position: absolute;
+  top: 56px;
+  right: 0;
+  bottom: 56px;
+  left: 0;
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_panel\.scss}line{font-family:\00003150}}
+.panel.is-dragover .panel-body {
+  background-color: #fcf8e3;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_panel\.scss}line{font-family:\00003159}}
+.panel-bodyabove {
+  z-index: 2;
+  position: absolute;
+  top: 56px;
+  right: 0;
+  left: 0;
+  height: 10px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_panel\.scss}line{font-family:\00003171}}
+.panel-bodybelow {
+  z-index: 2;
+  position: absolute;
+  bottom: 56px;
+  right: 0;
+  left: 0;
+  height: 15px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_panel\.scss}line{font-family:\00003183}}
+.panel-footer {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  -webkit-border-radius: 0 0 5px 5px;
+  -moz-border-radius: 0 0 5px 5px;
+  -ms-border-radius: 0 0 5px 5px;
+  -o-border-radius: 0 0 5px 5px;
+  border-radius: 0 0 5px 5px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_panelidea\.scss}line{font-family:\000035}}
+#ideaPanel #ideaPanel-section-summary > legend > span {
+  background: white url(/static/img/icon/idea.svg) no-repeat left center;
+  padding-left: 2em;
+  background-size: auto 90%;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_panelidea\.scss}line{font-family:\0000310}}
+#ideaPanel #ideaPanel-section-segments > legend > span {
+  background-size: auto 90%;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_panelidea\.scss}line{font-family:\0000322}}
+#ideaPanel-shorttitle .panel-editablearea, #ideaPanel-definition .panel-editablearea {
+  margin: 0px 5px;
+  padding: 5px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_postit\.scss}line{font-family:\0000310}}
+div.postitlist > div.postit {
+  overflow: visible;
+  min-width: 200px;
+  margin: 1em;
+  padding: 1em;
+  position: relative;
+  border-right: 1px solid #E8E8E8;
+  border-bottom: 1px solid #E8E8E8;
+  border-top: 0px none #ffff7e;
+  border-left: 0px none #ffff7e;
+  -moz-border-radius-bottomright: 5px;
+  -webkit-border-bottom-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+  display: block;
+  background: #ffff7e;
+  background: -webkit-gradient(linear, 50% 0%, 50% 40, color-stop(0%, #ffff7e), color-stop(100%, #ffff7e), color-stop(100%, transparent)), -webkit-gradient(linear, 0% 0%, 100% 100%, color-stop(0%, #ffffa0), color-stop(100%, #ffff7e));
+  background: -webkit-linear-gradient(top, #ffff7e, #ffff7e 40px, transparent 40px), -webkit-linear-gradient(top left, #ffffa0, #ffff7e);
+  background: -moz-linear-gradient(top, #ffff7e, #ffff7e 40px, transparent 40px), -moz-linear-gradient(top left, #ffffa0, #ffff7e);
+  background: -o-linear-gradient(top, #ffff7e, #ffff7e 40px, transparent 40px), -o-linear-gradient(top left, #ffffa0, #ffff7e);
+  background: linear-gradient(top, #ffff7e, #ffff7e 40px, transparent 40px), linear-gradient(top left, #ffffa0, #ffff7e);
+  -webkit-transition: box-shadow 1s;
+  -moz-transition: box-shadow 1s;
+  -o-transition: box-shadow 1s;
+  transition: box-shadow 1s;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_postit\.scss}line{font-family:\0000331}}
+div.postitlist > div.postit q {
+  margin-right: 0.8em;
+  display: inline-block;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_postit\.scss}line{font-family:\0000336}}
+div.postitlist > div.postit:after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  right: -0px;
+  bottom: 20px;
+  width: 200px;
+  height: 25px;
+  background: rgba(0, 0, 0, 0.2);
+  -webkit-box-shadow: 2px 15px 5px rgba(0, 0, 0, 0.4);
+  -moz-box-shadow: 2px 15px 5px rgba(0, 0, 0, 0.4);
+  box-shadow: 2px 15px 5px rgba(0, 0, 0, 0.4);
+  -webkit-transform: matrix(-1, -0.1, 0, 1, 0, 0);
+  -moz-transform: matrix(-1, -0.1, 0, 1, 0, 0);
+  -ms-transform: matrix(-1, -0.1, 0, 1, 0, 0);
+  -o-transform: matrix(-1, -0.1, 0, 1, 0, 0);
+  transform: matrix(-1, -0.1, 0, 1, 0, 0);
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_postit\.scss}line{font-family:\0000347}}
+div.postitlist > div.postit a.segment-link {
+  display: block;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_postit\.scss}line{font-family:\0000350}}
+div.postitlist > div.postit .closebutton {
+  top: 10px;
+  right: 10px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_postit\.scss}line{font-family:\0000354}}
+div.postitlist > div.postit .postit-footer {
+  width: 100%;
+  position: relative;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_postit\.scss}line{font-family:\0000357}}
+div.postitlist > div.postit .postit-footer a.segment-link {
+  display: inline-block;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_postit\.scss}line{font-family:\0000360}}
+div.postitlist > div.postit .postit-footer .segment-author {
+  display: inline-block;
+  vertical-align: bottom;
+  padding-right: 1em;
+  max-width: 75%;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_postit\.scss}line{font-family:\0000361}}
+div.postitlist > div.postit .postit-footer .segment-author > img {
+  float: left;
+  margin-right: 0.5em;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_postit\.scss}line{font-family:\0000371}}
+div.postitlist > div.postit .postit-footer .segment-harvester {
+  display: inline-block;
+  position: absolute;
+  bottom: 0px;
+  right: 0px;
+  max-width: 35%;
+  vertical-align: bottom;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_postit\.scss}line{font-family:\0000384}}
+div.postitlist > div.postit.is-highlighted {
+  -webkit-box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.7);
+  -moz-box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.7);
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.7);
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_separator\.scss}line{font-family:\000031}}
+.separator {
+  /* empty */
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_separator\.scss}line{font-family:\000037}}
+.spacer {
+  overflow: hidden;
+  *zoom: 1;
+  display: block;
+  line-height: 10px;
+  height: 10px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_separator\.scss}line{font-family:\0000317}}
+.spacer.spacer--big {
+  line-height: 20px;
+  height: 20px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_separator\.scss}line{font-family:\0000324}}
+.spacer.spacer--huge {
+  line-height: 40px;
+  height: 40px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_text\.scss}line{font-family:\000033}}
+.text, .panel-editablearea {
+  color: #444444;
+  font-size: 14px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_text\.scss}line{font-family:\000037}}
+.text ol, .panel-editablearea ol, .text ul, .panel-editablearea ul {
+  margin: 0;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_text\.scss}line{font-family:\0000311}}
+.text p:first-child, .panel-editablearea p:first-child {
+  margin-top: 0;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_text\.scss}line{font-family:\0000315}}
+.text p:last-child, .panel-editablearea p:last-child {
+  margin-bottom: 0;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_text\.scss}line{font-family:\0000322}}
+.text-muted {
+  color: #c5c5c5;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_text\.scss}line{font-family:\0000326}}
+.text-small {
+  font-size: .9em;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_text\.scss}line{font-family:\0000330}}
+.text-big {
+  font-size: 18px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_text\.scss}line{font-family:\0000334}}
+.text-bold, .message.unread .message-author, .message.unread .message-subject, .message.unread .message-date {
+  font-weight: bold;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_text\.scss}line{font-family:\0000338}}
+.text-left {
+  text-align: left;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_text\.scss}line{font-family:\0000342}}
+.text-center {
+  text-align: center;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_text\.scss}line{font-family:\0000346}}
+.text-right {
+  text-align: right;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_text\.scss}line{font-family:\0000350}}
+.text-dark {
+  color: #2c2c2c;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_text\.scss}line{font-family:\0000354}}
+.text-opaque {
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=50);
+  opacity: 0.5;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_text\.scss}line{font-family:\0000359}}
+.text-quotation:before {
+  content: "\275D\00a0 ";
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_text\.scss}line{font-family:\0000364}}
+.text-quotation:after {
+  content: "\00a0\275E";
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_text\.scss}line{font-family:\0000373}}
+.textbubble {
+  position: absolute;
+  background: white;
+  opacity: 0.9;
+  border: solid 4px #d3d3d6;
+  border-radius: 6px;
+  line-height: 16px;
+  padding: 5px;
+  margin-top: -64px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_text\.scss}line{font-family:\0000389}}
+.textbubble:hover {
+  opacity: 1;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_text\.scss}line{font-family:\0000394}}
+.textbubble:after, .textbubble:before {
+  top: 100%;
+  border: solid transparent;
+  content: " ";
+  height: 0;
+  width: 0;
+  position: absolute;
+  pointer-events: none;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_text\.scss}line{font-family:\00003104}}
+.textbubble:after {
+  border-color: rgba(211, 211, 214, 0);
+  border-top-color: #d3d3d6;
+  border-width: 10px;
+  left: 50%;
+  margin-left: -10px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_text\.scss}line{font-family:\00003111}}
+.textbubble:before {
+  border-color: rgba(211, 211, 214, 0);
+  border-top-color: #d3d3d6;
+  border-width: 16px;
+  left: 50%;
+  margin-left: -16px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_title\.scss}line{font-family:\000034}}
+.title-debatname {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_tooltip\.scss}line{font-family:\000033}}
+.tooltip {
+  position: relative;
+  display: inline-block;
+  line-height: 20px;
+  padding: 5px;
+  text-align: center;
+  background-color: #fcf8e3;
+  -webkit-box-shadow: 0 3px 3px rgba(0, 0, 0, 0.15);
+  -moz-box-shadow: 0 3px 3px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 3px 3px rgba(0, 0, 0, 0.15);
+  border: solid 1px #f0c36d;
+  font-size: 11px;
+  color: #c7a25a;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_tooltip\.scss}line{font-family:\0000317}}
+.tooltip:after, .tooltip:before {
+  bottom: 100%;
+  border: solid transparent;
+  content: " ";
+  height: 0;
+  width: 0;
+  position: absolute;
+  pointer-events: none;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_tooltip\.scss}line{font-family:\0000327}}
+.tooltip:after {
+  border-color: rgba(252, 248, 227, 0);
+  border-bottom-color: #fcf8e3;
+  border-width: 8px;
+  left: 50%;
+  margin-left: -8px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_tooltip\.scss}line{font-family:\0000335}}
+.tooltip:before {
+  border-color: rgba(240, 195, 109, 0);
+  border-bottom-color: #f0c36d;
+  border-width: 9px;
+  left: 50%;
+  margin-left: -9px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_tooltip\.scss}line{font-family:\0000349}}
+.tooltip.tooltip--right:after, .tooltip.tooltip--right:before {
+  bottom: auto;
+  left: 100%;
+  border-bottom-color: 0;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_tooltip\.scss}line{font-family:\0000355}}
+.tooltip.tooltip--right:after {
+  top: 50%;
+  margin-top: -8px;
+  border-left-color: #f0c36d;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/components\/_tooltip\.scss}line{font-family:\0000361}}
+.tooltip.tooltip--right:before {
+  top: 50%;
+  margin-top: -9px;
+  border-left-color: #f0c36d;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/layout\/_content\.scss}line{font-family:\000031}}
+html, body {
+  height: 100%;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/layout\/_content\.scss}line{font-family:\000035}}
+body {
+  overflow-x: hidden;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/layout\/_content\.scss}line{font-family:\0000310}}
+#wrapper {
+  position: relative;
+  min-height: 100%;
+  min-width: 980px;
+  -webkit-transform: translateX(0);
+  -moz-transform: translateX(0);
+  -ms-transform: translateX(0);
+  -o-transform: translateX(0);
+  transform: translateX(0);
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/layout\/_content\.scss}line{font-family:\0000320}}
+.is-lateralmenu-open #wrapper {
+  -webkit-transform: translateX(453px);
+  -moz-transform: translateX(453px);
+  -ms-transform: translateX(453px);
+  -o-transform: translateX(453px);
+  transform: translateX(453px);
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/layout\/_ideaPanel\.scss}line{font-family:\000031}}
+.ideaPanel-longtitle-closebtn {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/layout\/_lateralmenu\.scss}line{font-family:\000031}}
+.lateralmenu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  -webkit-transform: translateX(-453px);
+  -moz-transform: translateX(-453px);
+  -ms-transform: translateX(-453px);
+  -o-transform: translateX(-453px);
+  transform: translateX(-453px);
+  background-color: #202020;
+  overflow: auto;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  width: 453px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/layout\/_lateralmenu\.scss}line{font-family:\0000324}}
+.lateralmenu.is-open, body.is-lateralmenu-open .lateralmenu {
+  -webkit-transform: translateX(0);
+  -moz-transform: translateX(0);
+  -ms-transform: translateX(0);
+  -o-transform: translateX(0);
+  transform: translateX(0);
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/layout\/_lateralmenu\.scss}line{font-family:\0000328}}
+.lateralmenu-modal {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: none;
+  cursor: pointer;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/layout\/_lateralmenu\.scss}line{font-family:\0000337}}
+body.is-lateralmenu-open .lateralmenu-modal {
+  left: 453px;
+  display: block;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/layout\/_lateralmenu\.scss}line{font-family:\0000346}}
+.searchbox, .avatarbox {
+  height: 72px;
+  line-height: 72px;
+  padding: 0 50px;
+  -webkit-box-shadow: 0 1px rgba(255, 255, 255, 0.1), inset 0 1px rgba(138, 138, 138, 0.3);
+  -moz-box-shadow: 0 1px rgba(255, 255, 255, 0.1), inset 0 1px rgba(138, 138, 138, 0.3);
+  box-shadow: 0 1px rgba(255, 255, 255, 0.1), inset 0 1px rgba(138, 138, 138, 0.3);
+  border-top: solid 1px #2d2d2d;
+  border-bottom: solid 1px #2d2d2d;
+  background-color: rgba(52, 52, 52, 0);
+  background-image: -ms-linear-gradient(top, #717171, #585858);
+  background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjUwJSIgeTE9IjAlIiB4Mj0iNTAlIiB5Mj0iMTAwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzcxNzE3MSIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzU4NTg1OCIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+  background-size: 100%;
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #717171), color-stop(100%, #585858));
+  background-image: -webkit-linear-gradient(top, #717171, #585858);
+  background-image: -moz-linear-gradient(top, #717171, #585858);
+  background-image: -o-linear-gradient(top, #717171, #585858);
+  background-image: linear-gradient(top, #717171, #585858);
+  color: #202020;
+  font-weight: bold;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/layout\/_lateralmenu\.scss}line{font-family:\0000362}}
+.searchbox-field {
+  padding: 0 32px 0 10px;
+  width: 303px;
+  height: 36px;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  -ms-border-radius: 10px;
+  -o-border-radius: 10px;
+  border-radius: 10px;
+  background: rgba(55, 55, 55, 0.67) url(/static/img/icon/search.png) right center no-repeat;
+  font-size: 16px;
+  color: white;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/layout\/_lateralmenu\.scss}line{font-family:\0000377}}
+.avatarbox {
+  height: 52px;
+  line-height: 52px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/layout\/_messagelist\.scss}line{font-family:\000032}}
+#messageList #messageList-query-info {
+  border-bottom: solid 1px #e4e4e3;
+  white-space: normal;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/layout\/_messagelist\.scss}line{font-family:\000036}}
+#messageList #messageList-query-info .closebutton {
+  position: relative;
+  right: 0px;
+  top: 0px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/layout\/_messagelist\.scss}line{font-family:\0000316}}
+#messageList-list {
+  display: block;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/layout\/_messagelist\.scss}line{font-family:\0000319}}
+#messageList.is-message-mode #messageList-list {
+  display: none;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/layout\/_messagelist\.scss}line{font-family:\0000324}}
+#messageList-messages {
+  display: none;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/layout\/_messagelist\.scss}line{font-family:\0000327}}
+#messageList.is-message-mode #messageList-messages {
+  display: block;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/layout\/_panelarea\.scss}line{font-family:\000036}}
+.panelarea {
+  position: absolute;
+  top: 120px;
+  right: 5px;
+  bottom: 0;
+  left: 5px;
+  min-height: 400px;
+  display: block;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/layout\/_panelarea\.scss}line{font-family:\0000321}}
+.panelarea-table {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  display: table;
+  width: 100%;
+  height: 100%;
+  padding: 8px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/layout\/_panelarea\.scss}line{font-family:\0000332}}
+.panelarea-col {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  display: none;
+  padding: 0 4px;
+  height: 100%;
+  min-width: 320px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/layout\/_panelarea\.scss}line{font-family:\0000342}}
+.panelarea-col.is-visible {
+  display: table-cell;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/layout\/_panelarea\.scss}line{font-family:\0000347}}
+#segmentList {
+  width: 320px;
+  max-width: 320px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/layout\/_panelarea\.scss}line{font-family:\0000352}}
+#messageList {
+  min-width: 500px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/layout\/_panelarea\.scss}line{font-family:\0000356}}
+#synthesisPanel {
+  min-width: 500px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/layout\/_panelarea\.scss}line{font-family:\0000360}}
+#ideaList {
+  min-width: 400px;
+}
+
+/**
+ * Styleguide things are prefixed with `sg`
+ */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/layout\/_styleguide\.scss}line{font-family:\000038}}
+.sg-section {
+  position: relative;
+  margin-top: 50px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/layout\/_styleguide\.scss}line{font-family:\0000314}}
+.sg-title {
+  margin: 0;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/hellsingblack\/Documents\/git\/assembl\/assembl\/static\/css\/layout\/_styleguide\.scss}line{font-family:\0000320}}
+.sg-description {
+  position: absolute;
+  top: 2em;
+  left: 0px;
+  max-width: 220px;
+}

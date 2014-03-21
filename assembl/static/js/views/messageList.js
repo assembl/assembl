@@ -22,7 +22,7 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
                         },
             REVERSE_CHRONOLOGICAL: {id: "reverse_chronological",
                         label: i18n._('Activity feed view')
-                        },
+                        }
         },
         
         currentViewStyle: null,
@@ -155,7 +155,7 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
          * The actual rendering for the render function
          * @return {views.Message}
          */
-        render_real: function(success){
+        render_real: function(){
             var that = this,
                 views = [];
             /*
@@ -197,7 +197,7 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
                 'send_button_label': i18n.gettext('Start a new topic in this discussion'),
                 'subject_label': i18n.gettext('New topic subject:'),
                 'mandatory_body_missing_msg': i18n.gettext('You need to type a comment first...'),
-                'mandatory_subject_missing_msg': i18n.gettext('You need to set a subject to add a new topic...'),
+                'mandatory_subject_missing_msg': i18n.gettext('You need to set a subject to add a new topic...')
             });
             
             this.$('#messagelist-replybox').append( this.newTopicView.render().el );
@@ -211,10 +211,12 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
          */
         render: function(){
             var that = this;
-            /*console.log("messageList:render() is firing, collection is: ");
+
+            console.log("messageList:render() is firing, collection is: ");
             this.messages.map(function(message){
                 console.log(message.getId())
-            })*/
+            })
+
             app.trigger('render');
             if(this.messagesFinishedLoading) {
                 this.blockPanel();
@@ -284,7 +286,7 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
 
                 view = new MessageFamilyView({
                     model : model,
-                    messageListView : this,
+                    messageListView : this
                 });
                 view.hasChildren = false;
                 list.push(view.render().el);
@@ -733,7 +735,7 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
             'click #messageList-selectunread': 'selectUnread',
 
             'click #messageList-closeButton': 'closePanel',
-            'click #messageList-fullscreenButton': 'setFullscreen',
+            'click #messageList-fullscreenButton': 'setFullscreen'
             }
 
             var messageDefaultViewStyle = '';
