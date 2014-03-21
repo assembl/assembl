@@ -61,6 +61,8 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n, Permissions, Message
          * @return {MessageView}
          */
         render: function(){
+            var read = this.model.get('read');
+            console.log(read);
             app.trigger('render');
             var data = this.model.toJSON(),
             children,
@@ -83,11 +85,13 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n, Permissions, Message
             data['messageBodyId'] = app.ANNOTATOR_MESSAGE_BODY_ID_PREFIX + data['@id'];
             
             this.$el.attr("id","message-"+ data['@id']);
-                if (this.model.get('read')) {
-                    this.$el.addClass('read');
-                } else {
-                    this.$el.addClass('unread');
-                }
+            if (this.model.get('read')) {
+                this.$el.addClass('read');
+                this.$el.removeClass('unread');
+            } else {
+                this.$el.addClass('unread');
+                this.$el.removeClass('read');
+            }
 
             this.$el.html( this.template(data) );
 
@@ -277,12 +281,10 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n, Permissions, Message
         onShowBody: function(){
             var read = this.model.get('read');
             
-            this.setViewStyle(this.availableMessageViewStyles.FULL_BODY);
-            
             if( read === false ){
                 this.model.setRead(true);
             }
-            
+            this.setViewStyle(this.availableMessageViewStyles.FULL_BODY);
             this.render();
         },
 
@@ -320,6 +322,10 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n, Permissions, Message
                 this.setViewStyle(this.messageListView.defaultMessageStyle);
             }
             else {
+                var read = this.model.get('read');
+                if( read === false ){
+                    this.model.setRead(true);
+                }
                 this.setViewStyle(this.availableMessageViewStyles.FULL_BODY);
             }
         },
