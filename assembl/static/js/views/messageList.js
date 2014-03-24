@@ -37,7 +37,8 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
             if( obj.button ){
                 this.button = $(obj.button).on('click', app.togglePanel.bind(window, 'messageList'));
             }
-            this.renderedMessageViews = [];
+            this.renderedMessageViewsPrevious = {};
+            this.renderedMessageViewsCurrent = {};
             
             this.currentViewStyle = this.ViewStyles.REVERSE_CHRONOLOGICAL;
             this.defaultMessageStyle = app.AVAILABLE_MESSAGE_VIEW_STYLES.PREVIEW;
@@ -160,12 +161,13 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
          * The actual rendering for the render function
          * @return {views.Message}
          */
-        render_real: function(success){
+        render_real: function(){
             var that = this,
                 views = [];
 
             //The MessageFamilyView will re-fill the array with the rendered MessageView
-            this.renderedMessageViews = [];
+            this.renderedMessageViewsPrevious = _.clone(this.renderedMessageViewsCurrent);
+            this.renderedMessageViewsCurrent = {};
             if (this.currentViewStyle == this.ViewStyles.THREADED) {
                 views = this.getRenderedMessagesThreaded(this.getRootMessagesToDisplay(), 1, []);
             } else {
@@ -213,6 +215,11 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
          */
         render: function(){
             var that = this;
+
+            console.log("messageList:render() is firing, collection is: ");
+            this.messages.map(function(message){
+                console.log(message.getId())
+            })
 
             app.trigger('render');
             if(this.messagesFinishedLoading) {
@@ -281,7 +288,7 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
 
                 view = new MessageFamilyView({
                     model : model,
-                    messageListView : this,
+                    messageListView : this
                 });
                 view.hasChildren = false;
                 list.push(view.render().el);
@@ -604,7 +611,7 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
         setDefaultMessageViewStyle: function(messageViewStyle){
             this.defaultMessageStyle = messageViewStyle;
             
-            _.each(this.renderedMessageViews, function(messageView) { 
+            _.each(this.renderedMessageViewsCurrent, function(messageView) { 
                 if (messageView.viewStyle !== messageViewStyle)  {
                     messageView.setViewStyle(messageViewStyle);
                     messageView.render();
@@ -634,16 +641,20 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
                 //The current filters might not include the message
                 this.currentQuery.clearAllFilters();
                 var success = function() {
-                    console.log("showMessageById() calling showMessageById()");
+                    console.log("showMessageById() message not found, calling showMessageById() recursively");
                     that.showMessageById(id, callback);
-                    that.off("render_complete",this);
                 }
                 this.once("render_complete",success);
-                this.render();
                 return;
             }
             if( ! _.isFunction(callback) ){
-                callback = $.noop;
+                callback = function(){
+                    /* console.log("Highlighting");
+                    console.log($(selector).find('.message-body'));
+                    This isn't working...
+                    */
+                    $(selector).find('.message-body').highlight();
+                    };
             }
             if( message ){
                 message.trigger('showBody');
@@ -730,7 +741,7 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
             'click #messageList-selectunread': 'selectUnread',
 
             'click #messageList-closeButton': 'closePanel',
-            'click #messageList-fullscreenButton': 'setFullscreen',
+            'click #messageList-fullscreenButton': 'setFullscreen'
             }
 
             var messageDefaultViewStyle = '';

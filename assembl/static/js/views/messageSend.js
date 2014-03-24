@@ -92,14 +92,17 @@ function(Backbone, _, $, Idea, app){
             }
             btn.text( i18n.gettext('Sending...') );
             //For message custom callback:  that.closeReplyBox();
-            success_callback = function(){
+            success_callback = function(data, textStatus, jqXHR){
                 message_body_field.val('');
                 btn.text( i18n.gettext('Message posted!') );
+                app.messageList.once("render_complete", function() {
+                        app.messageList.showMessageById(data['@id']);
+                });
                 setTimeout(function(){
                     that.$('.messageSend-body').val('');
                     btn.text(btn_original_text);
                     }, 5000);
-            }
+            };
             this.sendPostToServer(message_body, message_subject, reply_message_id, reply_idea_id, success_callback);
 
         },

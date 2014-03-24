@@ -111,7 +111,10 @@ $ellipsiswidth: 3em !default;
     
     &.unread {
         .message-author, .message-subject {
-            @extend .text-bold
+            @extend .text-bold;
+        }
+        .message-author, .message-subject, .message-date {
+            @extend .text-bold;
         }
     }
     // A message block Header
@@ -185,7 +188,6 @@ $ellipsiswidth: 3em !default;
 .message-family-arrow.noarrow {
     display: block;
     padding-left: $messagelist-arrow-width/2;
-    margin-left: $messagelist-arrow-width/2;
 }
 
 .link-img {
@@ -252,7 +254,7 @@ $ellipsiswidth: 3em !default;
     // background: url(#{$img-dir}/messagelist/messagelist-link.png) -6 top no-repeat;
     display: block;
     clear:left;
-    padding-left: $messagelist-arrow-width/2;
+    //padding-left: $messagelist-arrow-width/2;
     margin-left: $messagelist-arrow-width/2;
 
     &.root {
