@@ -375,7 +375,7 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n, Permissions, Message
             }
 
             var selectedText = app.getSelectedText(),
-                text = selectedText.getRangeAt(0).cloneContents();
+                text = selectedText.focusNode ? selectedText.getRangeAt(0).cloneContents() : '';
 
             text = text.textContent || '';
 
@@ -402,7 +402,7 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n, Permissions, Message
             var isInsideAMessage = false,
                 selectedText = app.getSelectedText(),
                 user = app.getCurrentUser(),
-                text = selectedText.getRangeAt(0).cloneContents();
+                text = selectedText.focusNode ? selectedText.getRangeAt(0).cloneContents() : '';
 
             text = text.textContent || '';
 
