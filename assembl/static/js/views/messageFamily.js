@@ -51,8 +51,8 @@ function(Backbone, _, Moment, ckeditor, app, Message, MessageView, i18n){
         render: function(level){
             app.trigger('render');
             var data = this.model.toJSON(),
-            children,
-            level;
+            children;
+
             level = this.currentLevel !== null ? this.currentLevel : 1;
             if( ! _.isUndefined(level) ){
                 this.currentLevel = level;

@@ -336,15 +336,16 @@ define(['app', 'i18n', 'sprintf'], function(app, i18n, sprintf){
          */
         this.getHtmlDescription = function(){
             var retval = '',
-            valuesText = [];
-            if(this._queryResultInfo == null) {
+                valuesText = [];
+
+            if(this._queryResultInfo === null) {
                 retval += '<div id="post-query-results-info">';
                 retval += i18n._("No query has been executed yet");
                 retval += '</div>';
             }
             else{
                 retval += '<div id="post-query-results-info">';
-                if(this.getResultNumTotal() == 0) {
+                if(this.getResultNumTotal() === 0) {
                     retval += i18n._("There are no messages that:");
                 }
                 else {
@@ -357,7 +358,7 @@ define(['app', 'i18n', 'sprintf'], function(app, i18n, sprintf){
                 retval += '</div>';
                 retval += '<ul id="post-query-filter-info">';
                 for (var filterDefPropName in this.availableFilters) {
-                    filterDef = this.availableFilters[filterDefPropName]
+                    filterDef = this.availableFilters[filterDefPropName];
                     
                     if(filterDef.id in this._query) {
                         retval += '<li class="filter" id="'+filterDef.id+'">';
