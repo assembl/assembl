@@ -6,7 +6,8 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
      * Constants
      */
     var DIV_ANNOTATOR_HELP = app.format("<div class='annotator-draganddrop-help'>{0}</div>", i18n.gettext('You can drag the segment above directly to the table of ideas') ),
-        DEFAULT_MESSAGE_VIEW_LI_ID_PREFIX = "defaultMessageView-";
+        DEFAULT_MESSAGE_VIEW_LI_ID_PREFIX = "defaultMessageView-",
+        MESSAGES_PAGE_LIMIT = 10;
 
     
     /**
@@ -91,6 +92,12 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
          */
         messages: new Message.Collection(),
         messagesFinishedLoading: false,
+
+        /**
+         * Message index to be displayed
+         * @type {Number}
+         */
+        offsetMessages: 0,
         
         /**
          * The annotator reference
@@ -156,6 +163,37 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
 
             return toReturn;
         },
+
+        /**
+         * Show the next bunch os messages to be displayed
+         * 
+         */
+        showMoreMessages: function(){
+            var views;
+
+            //The MessageFamilyView will re-fill the array with the rendered MessageView
+            this.renderedMessageViewsPrevious = _.clone(this.renderedMessageViewsCurrent);
+            this.renderedMessageViewsCurrent = {};
+            if (this.currentViewStyle == this.ViewStyles.THREADED) {
+                views = this.getRenderedMessagesThreaded(this.getRootMessagesToDisplay(), 1, []);
+            } else {
+                views = this.getRenderedMessagesFlat(this.getAllMessagesToDisplay(), this.offsetMessages, MESSAGES_PAGE_LIMIT);
+            }
+
+            this.offsetMessages += MESSAGES_PAGE_LIMIT;
+
+            if( views.length > 0 ){
+                this.$('.idealist').append( views );
+            }
+
+            if( this.offsetMessages >= this.messages.length ){
+                this.$('#messageList-bottomarea').hide();
+            } else {
+                this.$('#messageList-bottomarea').show();
+            }
+
+            this.initAnnotator();
+        },
         
         /**
          * The actual rendering for the render function
@@ -164,15 +202,6 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
         render_real: function(){
             var that = this,
                 views = [];
-
-            //The MessageFamilyView will re-fill the array with the rendered MessageView
-            this.renderedMessageViewsPrevious = _.clone(this.renderedMessageViewsCurrent);
-            this.renderedMessageViewsCurrent = {};
-            if (this.currentViewStyle == this.ViewStyles.THREADED) {
-                views = this.getRenderedMessagesThreaded(this.getRootMessagesToDisplay(), 1, []);
-            } else {
-                views = this.getRenderedMessagesFlat(this.getAllMessagesToDisplay());
-            }
 
             var data = {
                 currentViewStyle: this.currentViewStyle,
@@ -183,12 +212,6 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
             };
 
             this.$el.html( this.template(data) );
-
-            if( views.length > 0 ){
-                this.$('.idealist').append( views );
-            } else {
-                this.$('.idealist').append( app.format("<div class='margin'>{0}</div>", i18n.gettext('No messages')) );
-            }
 
             this.renderCollapseButton();
             this.renderDefaultMessageViewDropdown();
@@ -204,7 +227,15 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
             });
 
             this.$('#messagelist-replybox').append( this.newTopicView.render().el );
-            this.initAnnotator();
+            
+            if( this.message && this.message.length === 0 ){
+                this.$('.idealist').append( app.format("<div class='margin'>{0}</div>", i18n.gettext('No messages')) );
+            } else {
+                // Resetting the messages
+                this.offsetMessages = 0;
+                this.showMoreMessages();
+            }
+            
             this.trigger("render_complete", "Render complete");
             return this;
         },
@@ -218,8 +249,8 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
 
             console.log("messageList:render() is firing, collection is: ");
             this.messages.map(function(message){
-                console.log(message.getId())
-            })
+                console.log(message.getId());
+            });
 
             app.trigger('render');
             if(this.messagesFinishedLoading) {
@@ -738,7 +769,7 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
                 'click #messageList-returnButton': 'onReturnButtonClick',
 
                 'click #messageList-allmessages': 'showAllMessages',
-                'click #messageList-onlyorphan': 'addFilterIsOrphanMessage',            
+                'click #messageList-onlyorphan': 'addFilterIsOrphanMessage',
                 'click #messageList-onlysynthesis': 'addFilterIsSynthesMessage',
                 'click #messageList-isunread': 'addFilterIsUnreadMessage',
 
@@ -755,7 +786,9 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
                 'click #messageList-selectunread': 'selectUnread',
 
                 'click #messageList-closeButton': 'closePanel',
-                'click #messageList-fullscreenButton': 'setFullscreen'
+                'click #messageList-fullscreenButton': 'setFullscreen',
+
+                'click #messageList-morebutton': 'showMoreMessages'
             };
 
             var messageDefaultViewStyle = '';
