@@ -448,8 +448,9 @@ def install_builddeps():
     if env.mac:
         if not exists('/usr/local/bin/brew'):
             sudo('ruby -e "$(curl -fsSL https://raw.github.com/mxcl/homebrew/go/install)"')
-        sudo('brew install memcached zeromq redis')
-        sudo('brew install nodejs npm')
+        run('brew install memcached zeromq redis')
+        if not exists('/usr/local/bin/node'):
+            run('brew install nodejs npm')
     else:
         sudo('apt-get install -y build-essential python-dev ruby-builder')
         sudo('apt-get install -y nodejs npm')
