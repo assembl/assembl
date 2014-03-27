@@ -38,6 +38,7 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n, Permissions, Message
             this.model.on('showBody', this.onShowBody, this);
             this.messageListView = obj.messageListView;
             this.viewStyle = this.messageListView.defaultMessageStyle;
+            this.messageListView.on('annotator:destroy', this.onAnnotatorDestroy, this);
             this.messageListView.on('annotator:initComplete', this.onAnnotatorInitComplete, this);
             
             /**
@@ -107,11 +108,6 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n, Permissions, Message
             });
             this.$('.message-replybox').append(this.replyView.render().el);
 
-            /* This may cause leaks in annotator, but annotator doesn't have an 
-             * API to unload annotations.  Re-loading annotator every time a
-             * message re-renders would be intolerably slow.  benoitg 2014-03-11
-             */
-            this.loadedAnnotations = {};
             this.loadAnnotations();
 
             return this;
@@ -124,9 +120,8 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n, Permissions, Message
         loadAnnotations: function(){
             if(this.annotator && (this.viewStyle == this.availableMessageViewStyles.FULL_BODY) ) {
                 var that = this,
-                
-                annotations = this.model.getAnnotations(),
-                annotationsToLoad = [];
+                    annotations = this.model.getAnnotations(),
+                    annotationsToLoad = [];
                 
                 _.each(annotations, function(annotation){
                     if(!(annotation['@id'] in that.loadedAnnotations)) {
@@ -171,8 +166,19 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n, Permissions, Message
          */
         onAnnotatorInitComplete: function(annotator){
             this.annotator = annotator;
+
             //Normally render has been called by this point, no need for a full render
             this.loadAnnotations();
+        },
+
+        /**
+         * @event
+         */
+        onAnnotatorDestroy: function(annotator){
+            this.annotator = null;
+
+            // Resets loaded annotations to initial
+            this.loadedAnnotations = {};
         },
         
         /**
@@ -412,6 +418,8 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n, Permissions, Message
 
             if( user.can(Permissions.ADD_EXTRACT) && this.isSelecting && text.length > MIN_TEXT_TO_TOOLTIP && isInsideAMessage ){
                 this.showSelectionOptions(ev.clientX - 50, ev.clientY);
+            } else if( !user.can(Permissions.ADD_EXTRACT) ){
+                console.warn('User cannot make extractions');
             }
 
             this.isSelecting = false;

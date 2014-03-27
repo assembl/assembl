@@ -440,7 +440,6 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
          * Inits the annotator instance
          */
         initAnnotator: function(){
-            // Won't this cause problems?  Benoitg
             this.destroyAnnotator();
 
             // Saving the annotator reference
@@ -505,6 +504,8 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
             if( !this.annotator ){
                 return;
             }
+
+            this.trigger("annotator:destroy", this.annotator);
 
             this.annotator.unsubscribe('annotationsLoaded');
             this.annotator.unsubscribe('annotationCreated');

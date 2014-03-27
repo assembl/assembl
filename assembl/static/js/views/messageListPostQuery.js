@@ -302,11 +302,10 @@ define(['app', 'i18n', 'sprintf'], function(app, i18n, sprintf){
                 value = null;
 
             if (this._resultsAreValid){
-                    success(that._results);
-                }
-            else {
+                success(that._results);
+            } else {
                 for (var filterDefPropName in this.availableFilters) {
-                    filterDef = this.availableFilters[filterDefPropName]
+                    filterDef = this.availableFilters[filterDefPropName];
                     if(filterDef.id in this._query) {
                         for (var i=0;i<this._query[filterDef.id].length;i++) {
                             value = this._query[filterDef.id][i].value;
@@ -315,7 +314,7 @@ define(['app', 'i18n', 'sprintf'], function(app, i18n, sprintf){
                     }
                 }
 
-                params.order = this._view._server_order_param_value
+                params.order = this._view._server_order_param_value;
                 params.view = 'id_only';
                 that._queryResultInfo = null;
                 $.getJSON(url, params, function(data){
@@ -330,7 +329,7 @@ define(['app', 'i18n', 'sprintf'], function(app, i18n, sprintf){
                     _.each(data.posts, function(post){
                         ids.push(post['@id']);
                     });
-                    that._results=ids;
+                    that._results = ids;
                     that._resultsAreValid = true;
                     success(that._results);
                 });
