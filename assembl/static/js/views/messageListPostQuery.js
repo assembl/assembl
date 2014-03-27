@@ -249,20 +249,25 @@ define(['app', 'i18n', 'sprintf'], function(app, i18n, sprintf){
          * @return true if filter(s) were cleared
          */
         this.clearFilter = function(filterDef, value){
-            var retval = false;
+            var retval = false,
+                i = 0,
+                len;
+
             this.invalidateResults();
             if(filterDef.id in this._query) {
-                for (var i=0;i<this._query[filterDef.id].length;i++) {
-                    if(this._query[filterDef.id][i].value.toString() == value.toString() || value == null) {
+                len = this._query[filterDef.id].length;
+                for (; i < len; i++) {
+                    if(value === null || this._query[filterDef.id][i].value.toString() == value.toString()) {
                         this._query[filterDef.id].splice(i, 1);
                         retval = true;
                     }
                 }
 
-                if(this._query[filterDef.id].length == 0) {
+                if(len === 0) {
                     delete this._query[filterDef.id];
                 }
             }
+
             return retval;
         };
         
