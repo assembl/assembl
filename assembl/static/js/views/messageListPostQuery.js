@@ -253,7 +253,7 @@ define(['app', 'i18n', 'sprintf'], function(app, i18n, sprintf){
             this.invalidateResults();
             if(filterDef.id in this._query) {
                 for (var i=0;i<this._query[filterDef.id].length;i++) {
-                    if(this._query[filterDef.id][i].value.toString() == value.toString() || value == null) {
+                    if(value == null || this._query[filterDef.id][i].value.toString() == value.toString()) {
                         this._query[filterDef.id].splice(i, 1);
                         retval = true;
                     }
@@ -264,6 +264,24 @@ define(['app', 'i18n', 'sprintf'], function(app, i18n, sprintf){
                 }
             }
             return retval;
+        };
+
+        /**
+         * Check if a filter is present in the query
+         * @param {filterDef} filterDef
+         * @param {value}  The value for which to clear the filter.  If null
+         *  any value for that filter will be considered.
+         * @return true if filter is present in the query
+         */
+        this.isFilterActive = function(filterDef, value){
+            if(filterDef.id in this._query) {
+                for (var i=0;i<this._query[filterDef.id].length;i++) {
+                    if(value == null || this._query[filterDef.id][i].value.toString() == value.toString()) {
+                        return true;
+                    }
+                }
+            }
+            return false;
         };
         
         /**

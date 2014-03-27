@@ -513,12 +513,29 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
         },
 
         /**
-         * Shows the related posts to the given idea
-         * @param {String} ideaId
+         * Shows posts which are descendent of a given post
+         * @param {String} postId
          */
         addFilterByPostId: function(postId){
             this.currentQuery.addFilter(this.currentQuery.availableFilters.POST_IS_DESCENDENT_OF_POST, postId);
             this.render();
+        },
+
+        /**
+         * Toggle hoist on a post (filter which shows posts which are descendent of a given post)
+         */
+        toggleFilterByPostId: function(postId){
+            var alreadyHere = this.currentQuery.isFilterActive (this.currentQuery.availableFilters.POST_IS_DESCENDENT_OF_POST, postId);
+            if ( alreadyHere )
+            {
+                this.currentQuery.clearFilter(this.currentQuery.availableFilters.POST_IS_DESCENDENT_OF_POST, null);
+                this.render();
+            }
+            else
+            {
+                this.addFilterByPostId(postId);
+            }
+            return !alreadyHere;
         },
         
         /**

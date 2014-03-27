@@ -27,6 +27,12 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n, Permissions, Message
         isSelecting: true,
 
         /**
+         * Flags if the message is hoisted
+         * @type {Boolean}
+         */
+        isHoisted: false,
+
+        /**
          * @init
          * @param {MessageModel} obj the model
          * @param {Array[boolean]} last_sibling_chain which of the view's ancestors
@@ -81,6 +87,7 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n, Permissions, Message
             // It has to contain ONLY raw content of the message provided by the
             // database for annotator to parse it back properly
             data['messageBodyId'] = app.ANNOTATOR_MESSAGE_BODY_ID_PREFIX + data['@id'];
+            data['isHoisted'] = this.isHoisted;
             
             this.$el.attr("id","message-"+ data['@id']);
             if (this.model.get('read')) {
@@ -270,7 +277,9 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n, Permissions, Message
          * @event
          */
         onMessageHoistClick: function(ev){
-            app.messageList.addFilterByPostId(this.model.getId());
+            // we will hoist the post, or un-hoist it if it is already hoisted
+            this.isHoisted = app.messageList.toggleFilterByPostId(this.model.getId());
+            this.render(); // so that the isHoisted property will now be considered
         },
         
         /**

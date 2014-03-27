@@ -659,7 +659,7 @@ msgid "Send"
 msgstr ""
 
 #: assembl/templates/views/message.tmpl:51
-msgid "Hoist this message (show only this messages and it's replies)"
+msgid "Hoist this message (show only this message and its replies)"
 msgstr ""
 
 #: assembl/templates/views/message.tmpl:52
