@@ -3,7 +3,7 @@
 .bar {
     @include no-selection;
     display: block;
-    height: $bar-height;
+    //height: $bar-height;
     position: relative;
     @include box-sizing(border-box);
     @include transform( translateZ(0) );
@@ -14,16 +14,24 @@
 // Main bar
 // ++++++++
 .bar.bar--main {
-    background-color: #2f2f2f;
+    background: #2f2f2f;
     color: white;
+    min-height: 40px;
 }
 
 // Title bar
 // +++++++++
-.bar.bar--title {
-    background-color: $bar-title-background-color;
+.bar--title {
+    //background-color: $bar-title-background-color;
     font-size: 18px;
     color: #2c2c2c;
+    height: 35px;
+    position: relative;
+    //background: #ffffff;
+    .bar-subnav {
+      line-height: 30px;
+      margin-left: 13px;
+    }
 }
 
 // Left content of a bar
@@ -31,13 +39,13 @@
 .bar-left {
     @include box-sizing( border-box );
     display: block;
-    height: $bar-height;
-    line-height: $bar-height;
+    //height: $bar-height;
+    //line-height: $bar-height;
     position: absolute;
     padding: $bar-padding;
     top: 0;
     bottom: 0;
-    left: 15px;
+    //left: 15px;
 }
 
 // Right content of a bar
@@ -68,6 +76,6 @@
 .bar-center {
     text-align: center;
     display: block;
-    height: $bar-height - 3px;
-    line-height: $bar-height - 3px;
+    //height: $bar-height - 3px;
+    //line-height: $bar-height - 3px;
 }

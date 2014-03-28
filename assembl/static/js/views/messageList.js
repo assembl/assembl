@@ -281,6 +281,7 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
             filter = this.currentFilter,
             len = messages.length,
             view, model, children, prop, isValid;
+
             for (var i = 0; i < len; i++) {
                 model = messages[i];
 

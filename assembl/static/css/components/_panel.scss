@@ -145,6 +145,7 @@
     bottom: $panel-header-height;
     left: 0;
     overflow-y: auto;
+    overflow-x: hidden;
     box-sizing: border-box;
 
     .panel.is-dragover & {

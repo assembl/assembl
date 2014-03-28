@@ -5,7 +5,7 @@ $panelarea-min-height: 400px;
 // =================
 .panelarea  {
     position: absolute;
-    top: 120px;
+    top: 80px;
     right: 5px;
     bottom: 0;
     left: 5px;
@@ -24,7 +24,7 @@ $panelarea-min-height: 400px;
     display: table;
     width: 100%;
     height: 100%;
-    padding: 8px;
+    //padding: 8px;
 }
 
 // The table to align the .panel

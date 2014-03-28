@@ -110,7 +110,7 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n, Permissions, Message
                 'send_button_label': i18n.gettext('Send your reply'),
                 'subject_label': null,
                 'mandatory_body_missing_msg': i18n.gettext('You did not type a response yet...'),
-                'mandatory_subject_missing_msg': null,
+                'mandatory_subject_missing_msg': null
             });
             this.$('.message-replybox').append(this.replyView.render().el);
 

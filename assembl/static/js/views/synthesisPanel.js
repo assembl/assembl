@@ -1,5 +1,5 @@
-define(['backbone', 'underscore', 'jquery', 'app', 'models/synthesis', 'views/synthesisIdea', 'i18n', 'views/editableField', 'views/ckeditorField'],
-function(Backbone, _, $, app, Synthesis, SynthesisIdeaView, i18n, EditableField, CKEditorField){
+define(['backbone', 'underscore', 'jquery', 'app', 'models/synthesis', 'models/source', 'views/synthesisIdea', 'i18n', 'views/editableField', 'views/ckeditorField'],
+function(Backbone, _, $, app, Synthesis, Source, SynthesisIdeaView, i18n, EditableField, CKEditorField){
     'use strict';
 
     var SynthesisPanel = Backbone.View.extend({
@@ -68,35 +68,35 @@ function(Backbone, _, $, app, Synthesis, SynthesisIdeaView, i18n, EditableField,
                 this.ckeditor = null;
             }
 
-            var list = document.createDocumentFragment(),
-                data = this.model.toJSON(),
+            //var list = document.createDocumentFragment(),
+            var model = this.model,
                 ideas = this.ideas.getInNextSynthesisIdeas();
 
-            data.collapsed = this.collapsed;
-            data.ideas = ideas;
+            model.set('collapsed', this.collapsed);
+            model.set('ideas', ideas);
 
             // Getting the scroll position
             var body = this.$('.panel-body'),
                 y = body.get(0) ? body.get(0).scrollTop : 0;
 
-            this.$el.html( this.template(data) );
+            this.$el.html( this.template(model.toJSON()) );
 
             this.$('.panel-body').get(0).scrollTop = y;
 
             var titleField = new EditableField({
-                model: this.model,
+                model: model,
                 modelProp: 'subject'
             });
             titleField.renderTo('#synthesisPanel-title');
 
             var introductionField = new EditableField({
-                model: this.model,
+                model: model,
                 modelProp: 'introduction'
             });
             introductionField.renderTo('#synthesisPanel-introduction');
 
             var conclusionField = new EditableField({
-                model: this.model,
+                model: model,
                 modelProp: 'conclusion'
             });
             conclusionField.renderTo('#synthesisPanel-conclusion');
@@ -138,7 +138,6 @@ function(Backbone, _, $, app, Synthesis, SynthesisIdeaView, i18n, EditableField,
             'click #synthesisPanel-closeButton': 'closePanel',
             'click #synthesisPanel-publishButton': 'publish',
             'click #synthesisPanel-fullscreenButton': 'setFullscreen',
-
             'click [data-idea-id]': 'onEditableAreaClick'
         },
 
@@ -193,6 +192,10 @@ function(Backbone, _, $, app, Synthesis, SynthesisIdeaView, i18n, EditableField,
          * Publish the synthesis
          */
         publish: function(){
+            //test delete after
+            this._publish();
+            return false
+
             var ok = confirm( i18n.gettext("Do you want to publish the synthesis?") );
             if( ok ){
                 this._publish();
@@ -203,46 +206,31 @@ function(Backbone, _, $, app, Synthesis, SynthesisIdeaView, i18n, EditableField,
          * Publishes the synthesis
          */
         _publish: function(){
-            var json = this.model.toJSON(),
-                publishes_synthesis_id = this.model.id,
-                url = app.getApiUrl('posts'),
-                template = app.loadTemplate('synthesisEmail'),
-                ideas = this.ideas.getInNextSynthesisIdeas(),
+            var model = this.model,
+                source = new Source.Model(),
                 that = this;
 
-            var onSuccess = function(resp){
-                var data = {
-                    publishes_synthesis_id: publishes_synthesis_id,
-                    subject: app.format(i18n.gettext('[synthesis] {0}'), json.subject),
-                    message: template({
-                        email: resp[0].most_common_recipient_address,
-                        subject: json.subject,
-                        introduction: json.introduction,
-                        conclusion: json.conclusion,
-                        ideas: ideas
-                    })
-                };
+            source.fetch({
+                success: function(model, res){
+                    onSuccess(res[0]);
+                }
+            });
 
-                // Sending the synthesis
-                $.ajax({
-                    type: "post",
-                    data: JSON.stringify(data),
-                    contentType: 'application/json',
-                    url: url,
+            var onSuccess = function(resp){
+
+                model.set('publishes_synthesis_id', model.get('id'));
+                model.set('email', resp.most_common_recipient_address);
+
+                model.save({
                     success: function(){
                         alert( i18n.gettext("Synthesis published!") );
                         that.unblockPanel();
-                    }
-                });
-            };
+                    },
+                    error: function(){
 
-            // getting the most_common_recipient_address
-            $.ajax({
-                type: 'get',
-                url: app.getApiUrl('sources/'),
-                contentType: 'application/json',
-                success: onSuccess
-            });
+                    }
+                })
+            };
 
             that.blockPanel();
         }

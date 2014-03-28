@@ -94,6 +94,7 @@ $ellipsiswidth: 3em !default;
         .message-date {
             float: right;
             line-height: $icon-height;
+            margin-right: 10px;
         }
         .message-author {
             width: auto;

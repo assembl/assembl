@@ -57,7 +57,7 @@ define(['models/base', 'jquery', 'app', 'i18n', 'permissions'], function(Base, $
             if (this.get('canSave')) {
                 this.save();
             }
-        },
+        }
 
     });
 

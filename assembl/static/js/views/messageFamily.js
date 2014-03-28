@@ -55,11 +55,12 @@ function(Backbone, _, Moment, ckeditor, app, Message, MessageView, i18n){
             level,
             messageView;
             level = this.currentLevel !== null ? this.currentLevel : 1;
-            
+
             if( ! _.isUndefined(level) ){
                 this.currentLevel = level;
             }
             if(!this.messageListView.renderedMessageViewsPrevious[this.model.id]){
+
                 messageView = new MessageView({
 
                 model : this.model,
@@ -101,7 +102,7 @@ function(Backbone, _, Moment, ckeditor, app, Message, MessageView, i18n){
         },
 
         events: {
-            'click >.message-family-arrow>.link-img': 'onIconbuttonClick',
+            'click >.message-family-arrow>.link-img': 'onIconbuttonClick'
             //'click >.message-family-container>.message-family-arrow>.link-img': 'onIconbuttonClick',
         },
 
@@ -135,7 +136,7 @@ function(Backbone, _, Moment, ckeditor, app, Message, MessageView, i18n){
                 this.$el.addClass('message--expanded');
                 children.show();
             }
-        },
+        }
     });
 
 

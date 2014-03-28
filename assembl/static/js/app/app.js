@@ -56,7 +56,7 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard, Types, Permissions){
             },
             FULL_BODY: {id: "viewStyleFullBody",
                 label: i18n._('Complete text')
-            },
+            }
         },
         
         /**
@@ -665,7 +665,7 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard, Types, Permissions){
         },
 
         /**
-         * Returns the collection from the giving object's @type
+         * Returns the collection from the giving object's @type .
          * @param {BaseModel} item
          * @param {String} [type=item['@type']] The model type
          * @return {BaseCollection}
