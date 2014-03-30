@@ -55,7 +55,7 @@ $ellipsiswidth: 3em !default;
     padding: 8px 0px 2px 0px;
     min-height: $messagelist-item-height - 12px;
     //border-bottom: solid 1px $box-border-color;
-    //overflow-x: hidden;
+    overflow-x: hidden;
 
 
     // &:last-child {
