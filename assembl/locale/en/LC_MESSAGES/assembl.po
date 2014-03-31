@@ -963,6 +963,10 @@ msgstr ""
 msgid "No discussion found for slug=%s"
 msgstr ""
 
+#: assembl/static/js/app/app.js:55
+msgid "Show preview"
+msgstr "Preview"
+
 #~ msgid "Debat name"
 #~ msgstr ""
 

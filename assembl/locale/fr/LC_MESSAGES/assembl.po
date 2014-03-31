@@ -1007,7 +1007,7 @@ msgid "No discussion found for slug=%s"
 msgstr "Nous n'avons pas de discussion sous le code '%s'"
 
 #: assembl/static/js/app/app.js:55
-msgid "Short preview"
+msgid "Show preview"
 msgstr "Aperçus"
 
 #~ msgid "Debat name"

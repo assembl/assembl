@@ -255,9 +255,9 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
             var that = this,
             div = this.$('#defaultMessageView-dropdown'),
             html = "";
-            
+
             html += '<span class="dropdown-label text-bold">';
-            html += i18n.gettext('Show: ') + this.defaultMessageStyle.label;
+            html += this.defaultMessageStyle.label;
             html += '</span>';
             html += '<ul class="dropdown-list">';
             _.each(app.AVAILABLE_MESSAGE_VIEW_STYLES, function(messageViewStyle) {

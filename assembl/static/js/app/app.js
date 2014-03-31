@@ -52,7 +52,7 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard, Types, Permissions){
                 label: i18n._('Titles only')
             },
             PREVIEW: {id: "viewStylePreview",
-                label: i18n._('Short preview')
+                label: i18n._('Show preview')
             },
             FULL_BODY: {id: "viewStyleFullBody",
                 label: i18n._('Complete text')
