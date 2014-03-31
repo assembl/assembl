@@ -2,7 +2,7 @@
 // =========
 .loginbox {
     position: absolute;
-    top: 50%;
+    top: 40%;
     left: 50%;
     @include transform( translate(-50%, -50%) );
 
@@ -11,7 +11,9 @@
     //height: 431px;
     padding: $padding * 2;
 
-    @include border-radius(10px);
-    background-color: #e0e2e5;
+    @include border-radius(2px);
+    background-color: #ffffff;
     text-align: center;
+
+    box-shadow: 2px 2px 2px 2px #aaa;
 }

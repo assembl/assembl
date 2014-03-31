@@ -1,43 +1,44 @@
 {% extends 'base.jinja2' %}
 
 {% block header %}
-    <div class="bar bar--main">
-        <div class="bar-body">
-            <div class="bar-left">
-                <a id="assembl-mainbutton" class="iconbutton iconbutton--nofx icon-menu"></a>
-
-                <img src="/static/img/assembl.png" alt="Assembl" />
-            </div>
-            <div class="bar-right">
-                {% if user %}
-                    {{ user.display_name() }}
-                    {# <a class="iconbutton iconbutton--nofx"> #}<img src="/user/id/{{user.id}}/avatar/32" alt="{{ user.display_name() }}" class="image-rounded" />{# </a> #}
-                    <a href="/logout" class="link iconbutton icon-logout-1" title="{{ gettext('Sign out') }}"></a>
-                {% else %}
-                    <a href="/login?next_view={{request.current_route_path()}}" class="link">{{ gettext('Sign in') }} <i class="icon-user"></i> </a>
-                {% endif %}
-                {% if locales.__len__ > 1 %}
-                    <span class="locale active">{{locale}}</span>
-                    {% for loc in locales %}
-                        {% if (loc != locale) %}
-                            <span onmouseup="window.app.setLocale('{{loc}}')" class="locale">{{loc}}</span>
-                        {% endif %}
-                    {% endfor %}
-                {% endif %}
-            </div>
+    <nav class="navbar navbar-default" role="navigation">
+        <div class="navbar-left">
+            <a id="assembl-mainbutton" class="iconbutton--nofx icon-menu">Assembl</a>
         </div>
-    </div>
+        <div class="navbar-right">
+            {% if user %}
+                {{ user.display_name() }}
+                {# <a class="iconbutton iconbutton--nofx"> #}<img src="/user/id/{{user.id}}/avatar/32" alt="{{ user.display_name() }}" class="image-rounded" />{# </a> #}
+                <a href="/logout" class="link iconbutton icon-logout-1" title="{{ gettext('Sign out') }}"></a>
+            {% else %}
+                <a href="/login?next_view={{request.current_route_path()}}" class="link">{{ gettext('Sign in') }}</a>
+            {% endif %}
+            {% if locales.__len__ > 1 %}
+                {% for loc in locales %}
+                    {% if (loc != locale) %}
+                    <span class="lang">
+                        <a onmouseup="window.app.setLocale('{{loc}}')">{{loc}}</a>
+                    </span>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        </div>
+    </nav>
 {% endblock %}
 
 
 {% block content %}
-    <div class="panelarea">
-        <ul class="discussionlist">
-            {% for discussion in discussions %}
-            <li><a href='{{ discussion.slug }}/'>{{ discussion.topic }}</a></li>
-            {% else %}
-            <em>{% trans %}There are no discussions on this server yet{% endtrans %}</em>
-            {% endfor %}
-        </ul>
-    </div>
+<div class="panelarea">
+    <ul class="discussionlist">
+        {% for discussion in discussions %}
+        <li>
+            <span class="discussion">
+            <a href='{{ discussion.slug }}/'>{{ discussion.topic }}</a>
+            </span>
+        </li>
+        {% else %}
+        <em>{% trans %}There are no discussions on this server yet{% endtrans %}</em>
+        {% endfor %}
+    </ul>
+</div>
 {% endblock %}

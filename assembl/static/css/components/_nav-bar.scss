@@ -1,0 +1,65 @@
+// Navigation bar
+.navbar {
+    @include no-selection;
+    @include box-sizing(border-box);
+    @include transform( translateZ(0) );
+    display: block;
+    position: relative;
+    background-color: $bar-background-color;
+
+    &.navbar-default {
+      background: #2f2f2f;
+      color: white;
+      min-height: 40px;
+    }
+
+    .navbar-left {
+      float: left;
+      line-height: 40px;
+    }
+
+    .navbar-center {
+      float: left;
+      width: 450px;
+      margin-left: 20%;
+    }
+
+    .navbar-right {
+      float: right;
+      margin-right: 15px;
+      line-height: 40px;
+      width: 200px;
+      text-align: right;
+      .lang {
+        border-radius: 50%;
+        cursor: pointer;
+        border: 2px solid #fff;
+        padding: 3px;
+
+      }
+    }
+}
+
+// Title bar
+// +++++++++
+.bar--title {
+    //background-color: $bar-title-background-color;
+    font-size: 18px;
+    color: #2c2c2c;
+    height: 35px;
+    position: relative;
+    //background: #ffffff;
+    .bar-subnav {
+      line-height: 30px;
+      margin-left: 13px;
+    }
+}
+
+// Center content of a bar
+// ---------------------
+.bar-center {
+    text-align: center;
+    display: block;
+    //height: $bar-height - 3px;
+    //line-height: $bar-height - 3px;
+}
