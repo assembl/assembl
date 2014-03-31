@@ -119,8 +119,10 @@
     }
 }
 
-#assembl-mainbutton {
+.assembl-logo {
     font-size: 22px;
+    color: #ffffff;
+    text-decoration: none;
 }
 
 // Active state
@@ -217,8 +219,9 @@
     @extend %button;
     @include no-selection;
     font-size: 14px;
-    padding: 10px;
+    padding: 6px;
     line-height: 1em;
+    border-radius: .25em;
 
     &:active {
         @extend .barbutton.is-activated;

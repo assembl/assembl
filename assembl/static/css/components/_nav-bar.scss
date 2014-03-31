@@ -22,6 +22,7 @@
       float: left;
       width: 450px;
       margin-left: 20%;
+      line-height: 40px;
     }
 
     .navbar-right {
@@ -40,26 +41,11 @@
     }
 }
 
-// Title bar
-// +++++++++
-.bar--title {
-    //background-color: $bar-title-background-color;
-    font-size: 18px;
-    color: #2c2c2c;
-    height: 35px;
-    position: relative;
-    //background: #ffffff;
-    .bar-subnav {
-      line-height: 30px;
-      margin-left: 13px;
-    }
-}
-
-// Center content of a bar
-// ---------------------
-.bar-center {
-    text-align: center;
-    display: block;
-    //height: $bar-height - 3px;
-    //line-height: $bar-height - 3px;
+.navbar-title {
+  box-sizing: border-box;
+  height: 20px;
+  position: absolute;
+  top: 50px;
+  bottom: 0;
+  left: 12px;
 }

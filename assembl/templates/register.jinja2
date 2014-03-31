@@ -1,28 +1,27 @@
 {% extends 'base.jinja2' %}
 
 {% block header %}
-    <div class="bar bar--main">
-        <div class="bar-body">
-            <div class="bar-right">
-                <a> {{ gettext('Sign in') }} <i class="icon-user"></i> </a>
-                {% if locales.__len__ > 1 %}
-                    <span class="locale active">{{locale}}</span>
-                    {% for loc in locales %}
-                        {% if (loc != locale) %}
-                            <span onmouseup="window.app.setLocale('{{loc}}')" class="locale">{{loc}}</span>
-                        {% endif %}
-                    {% endfor %}
-                {% endif %}
-            </div>
+    <nav class="navbar navbar-default" role="navigation">
+        <div class="navbar-left">
+            <a href="/" class="icon-menu assembl-logo">Assembl</a>
         </div>
-    </div>
+        <div class="navbar-right">
+            {% if locales.__len__ > 1 %}
+                {% for loc in locales %}
+                    {% if (loc != locale) %}
+                    <span class="lang">
+                        <a onmouseup="window.app.setLocale('{{loc}}')">{{loc}}</a>
+                    </span>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        </div>
+    </nav>
 {% endblock %}
 
 {% block content %}
 
     <div class="loginbox">
-        <img src="{{ STATIC_URL }}/img/loginbox/assembl.png" alt="Assembl" />
-
         {% if error %}
         <div class="error">{{error}}</div>
         {% endif %}

@@ -3,7 +3,7 @@
 {% block header %}
     <nav class="navbar navbar-default" role="navigation">
         <div class="navbar-left">
-            <a id="assembl-mainbutton" class="iconbutton--nofx icon-menu">Assembl</a>
+            <a href="/" class="iconbutton--nofx icon-menu assembl-logo">Assembl</a>
         </div>
         <div class="navbar-center">
             <a id="button-ideaList" class="barbutton" data-tooltip-position="n"
@@ -43,14 +43,12 @@
         <input type="hidden" name="user-id" id="user-id" value="{{ user.id }}" />
         <input type="hidden" name="user-displayname" id="user-displayname" value="{{ user.display_name() }}" />
     {% endif %}
- 
-    <div class="bar--title">
-        <div class="bar-subnav">
-            <span id="onlinedot" class="dot">
-                <small class="dot-offline">{{ gettext('Connecting...') }}</small>
-                <span class="dot-online title-debatname">{{ discussion.topic }}</span>
-            </span>
-        </div>
+
+    <div class="navbar-title">
+        <span id="onlinedot" class="dot">
+            <small class="dot-offline">{{ gettext('Connecting...') }}</small>
+            <span class="dot-online title-debatname">{{ discussion.topic }}</span>
+        </span>
     </div>
 
     <div class="panelarea">
