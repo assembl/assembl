@@ -64,8 +64,9 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n, Permissions, Message
         render: function(){
             app.trigger('render');
             var data = this.model.toJSON(),
-            children,
-            level;
+                children,
+                level;
+
             level = this.currentLevel !== null ? this.currentLevel : 1;
             if( ! _.isUndefined(level) ){
                 this.currentLevel = level;
@@ -108,6 +109,7 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n, Permissions, Message
             });
             this.$('.message-replybox').append(this.replyView.render().el);
 
+            app.messageList.initAnnotator();
             this.loadAnnotations();
 
             return this;
@@ -135,8 +137,8 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n, Permissions, Message
                     that.annotator.loadAnnotations( _.clone(annotationsToLoad) );
                     _.each(annotationsToLoad, function(annotation){
                         that.loadedAnnotations[annotation['@id']] =  annotation;
-                        //console.log("Added " + annotation['@id'] + " to messageView " + that.model.id);
-                        });
+                    });
+
                     setTimeout(function(){
                         that.renderAnnotations(annotationsToLoad);
                     }, 1);
@@ -151,7 +153,8 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n, Permissions, Message
             var that = this;
             _.each(annotations, function(annotation){
                 var highlights = annotation.highlights,
-                func = app.showSegmentByAnnotation.bind(window, annotation);
+                    func = app.showSegmentByAnnotation.bind(window, annotation);
+
                 _.each(highlights, function(highlight){
                     highlight.setAttribute('data-annotation-id', annotation['@id']);
                     $(highlight).on('click', func);

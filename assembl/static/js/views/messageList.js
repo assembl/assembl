@@ -625,7 +625,7 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
          */
         setViewStyleActivityFeed: function(){
             this.currentViewStyle = this.ViewStyles.REVERSE_CHRONOLOGICAL;
-            this.currentQuery.setView(this.currentQuery.availableViews.REVERSE_CHRONOLOGICAL)
+            this.currentQuery.setView(this.currentQuery.availableViews.REVERSE_CHRONOLOGICAL);
             this.render();
         },
         
@@ -635,7 +635,7 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
          */
         setViewStyleChronological: function(){
             this.currentViewStyle = this.ViewStyles.CHRONOLOGICAL;
-            this.currentQuery.setView(this.currentQuery.availableViews.CHRONOLOGICAL)
+            this.currentQuery.setView(this.currentQuery.availableViews.CHRONOLOGICAL);
             this.render();
         },
 
@@ -693,6 +693,7 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
                 this.once("render_complete",success);
                 return;
             }
+
             if( ! _.isFunction(callback) ){
                 callback = function(){
                     /* console.log("Highlighting");
@@ -702,6 +703,7 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
                     $(selector).find('.message-body').highlight();
                     };
             }
+
             if( message ){
                 message.trigger('showBody');
                 el = $(selector);
@@ -793,10 +795,10 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
             };
 
             var messageDefaultViewStyle = '';
-            _.each(app.AVAILABLE_MESSAGE_VIEW_STYLES, function(messageViewStyle) {
+            _.each(app.AVAILABLE_MESSAGE_VIEW_STYLES, function(messageViewStyle){
                 var key = 'click #'+DEFAULT_MESSAGE_VIEW_LI_ID_PREFIX+messageViewStyle.id;
                 data[key] = 'onDefaultMessageViewStyle';
-            } );
+            });
             return data;
         },
 
