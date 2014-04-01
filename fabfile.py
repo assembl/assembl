@@ -174,6 +174,7 @@ def compile_stylesheets():
     """
     Generate *.css files from *.scss
     """
+    execute(update_compass)
     with cd(env.projectpath):
         run('bundle exec compass compile --force', shell=True)
             
@@ -203,7 +204,7 @@ def bootstrap_from_checkout():
     Create the virtualenv and install the app
     """
     execute(build_virtualenv)
-    execute(install_rbenv)
+    execute(configure_rbenv)
     execute(updatemaincode)
     execute(app_update_dependencies)
     execute(app_setup)
@@ -237,7 +238,7 @@ def updatemaincode():
         run('git pull %s %s' % (env.gitrepo, env.gitbranch))
 
 def app_setup():
-     venvcmd('pip install -Iv "pip>=1.5.1"')
+     venvcmd('pip install -U "pip>=1.5.1"')
      venvcmd('pip install -e ./')
      venvcmd('export VIRTUOSO_ROOT=%s ; assembl-ini-files %s' % (
         env.use_virtuoso, env.ini_file))
@@ -461,25 +462,44 @@ def install_builddeps():
         sudo('apt-get install -y redis-server memcached unixodbc-dev virtuoso-opensource')
     execute(install_bower)
 
-
 @task
 def configure_rbenv():
+    execute(install_rbenv)
     with cd(env.projectpath), settings(warn_only=True):
-        if(run('rbenv local 2.0.0-p247').failed):
-            # Install Ruby 2.0.0-p247:
-            run('rbenv install 2.0.0-p247')
+        if(run('rbenv local %(ruby_version)s' % env).failed):
+            execute(install_ruby_build)
+            # Install Ruby specified in env.ruby_version:
+            run('rbenv install %(ruby_version)s' % env)
             # Rehash:
             run('rbenv rehash')
+            run('rbenv local %(ruby_version)s' % env)
         if(run('bundle --version').failed):
             #install bundler
             run('gem install bundler')
             run('rbenv rehash')
-        
-@task
+
 def install_ruby_build():
+    version_regex = re.compile('^ruby-build\s*(\S*)')
+    install = False
+
     with settings(warn_only=True):
-        if(run('ruby-build --help').failed):
+        run_output = run('ruby-build --version')
+        if not run_output.failed:
+            match = version_regex.match(run_output)
+            version = float(match.group(1))
+            
+            if version < env.ruby_build_min_version:
+                print(red("ruby-build %s is too old (%s is required), reinstalling..." % (version, env.ruby_build_min_version)))
+                install = True
+            else:
+                print(green("ruby-build version %s is recent enough (%s is required)" % (version, env.ruby_build_min_version)))
+        else:
+            print(red("ruby-build is not installed, installing..."))
+            install = True
+            
+        if install:
             # Install ruby-build:
+            run('rm -rf /tmp/ruby-build')
             with cd('/tmp'):
                 run('git clone git://github.com/sstephenson/ruby-build.git')
             with cd('/tmp/ruby-build'):
@@ -494,23 +514,20 @@ def install_rbenv():
         if(run('rbenv version').failed and run('ls ~/.rbenv').failed):    
             # Install rbenv:
             run('git clone git://github.com/sstephenson/rbenv.git ~/.rbenv')
-    # Add rbenv to the path:
-    run('echo \'export PATH="$HOME/.rbenv/bin:$PATH"\' >> .bash_profile')
-    run('echo \'eval "$(rbenv init -)"\' >> .bash_profile')
-    run('source ~/.bash_profile')
-    # The above will work fine on a shell (such as on the server accessed using
-    # ssh for a developement machine running a GUI, you may need to run the 
-    # following from a shell (with your local user):
-    #    echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.profile;
-    #    echo 'eval "$(rbenv init -)"' >> ~/.profile;
-    #    source ~/.profile;
-    
-    run('echo \'export PATH="$HOME/.rbenv/bin:$PATH"\' >> .profile')
-    run('echo \'eval "$(rbenv init -)"\' >> .profile')
-    run('source ~/.profile')
-    
-    execute(install_ruby_build)
-    execute(configure_rbenv)
+            # Add rbenv to the path:
+            run('echo \'export PATH="$HOME/.rbenv/bin:$PATH"\' >> .bash_profile')
+            run('echo \'eval "$(rbenv init -)"\' >> .bash_profile')
+            run('source ~/.bash_profile')
+            # The above will work fine on a shell (such as on the server accessed using
+            # ssh for a developement machine running a GUI, you may need to run the 
+            # following from a shell (with your local user):
+            #    echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.profile;
+            #    echo 'eval "$(rbenv init -)"' >> ~/.profile;
+            #    source ~/.profile;
+            
+            run('echo \'export PATH="$HOME/.rbenv/bin:$PATH"\' >> .profile')
+            run('echo \'eval "$(rbenv init -)"\' >> .profile')
+            run('source ~/.profile')
 
 @task
 def install_compass():
@@ -660,6 +677,14 @@ def commonenv(projectpath, venvpath=None):
     env.uses_global_supervisor = False
     env.mac = system().startswith('Darwin')
     env.use_virtuoso = getenv('VIRTUOSO_ROOT', '/usr/local/virtuoso-opensource' if env.mac else '/usr')
+
+    #Minimal dependencies versions
+    
+    #Note to maintainers:  If you upgrade ruby, make sure you check that the 
+    # ruby_build version below supports it...
+    env.ruby_version = "2.0.0-p247"
+    env.ruby_build_min_version = 20130628
+
 # Specific environments 
 
 
