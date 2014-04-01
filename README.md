@@ -109,6 +109,7 @@ assembl-ini-files development.ini
 supervisord
 (wait for virtuoso to start)
 assembl-db-manage development.ini bootstrap
+cp testing.ini.example testing.ini
 assembl-db-manage testing.ini bootstrap
 supervisorctl start celery_imap
 ```
@@ -178,8 +179,7 @@ Running tests
 -------------
 
 ``` sh
-Copy testing.ini.example to testing.ini
-nosetests
+py.test
 ```
 
 Raw sql connection
