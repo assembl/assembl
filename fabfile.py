@@ -811,7 +811,8 @@ def flushmemcache():
     """
     if env.uses_memcache:
         print(cyan('Resetting all data in memcached :'))
-        run('echo "flush_all" | /bin/netcat -q 2 127.0.0.1 11211')
+        wait_str = "" if env.mac else "-q 2"
+        run('echo "flush_all" | nc %s 127.0.0.1 11211' % wait_str)
 
 
 #THE FOLLOWING COMMANDS HAVEN'T BEEN PORTED YET
