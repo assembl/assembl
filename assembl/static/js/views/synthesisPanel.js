@@ -1,4 +1,4 @@
-define(['backbone', 'underscore', 'jquery', 'app', 'models/synthesis', 'models/source', 'views/synthesisIdea', 'i18n', 'views/editableField', 'views/ckeditorField'],
+define(['backbone', 'underscore', 'jquery', 'app', 'models/synthesis', 'views/synthesisIdea', 'i18n', 'views/editableField', 'views/ckeditorField'],
 function(Backbone, _, $, app, Synthesis, Source, SynthesisIdeaView, i18n, EditableField, CKEditorField){
     'use strict';
 
