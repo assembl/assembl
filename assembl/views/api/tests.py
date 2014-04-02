@@ -4,6 +4,8 @@ import uuid
 import json
 import transaction
 import traceback
+from urllib import urlencode
+import pdb
 
 import pytest
 
@@ -18,7 +20,6 @@ from assembl.auth.models import (
     AgentProfile, User, Role, UserRole, Username, R_SYSADMIN,
     create_default_permissions, populate_default_permissions,
     populate_default_roles, Permission)
-#from assembl.conftest import *
 
 
 def get_url(discussion, suffix):
@@ -28,7 +29,8 @@ def get_url(discussion, suffix):
     )
 
 
-def test_extracts(discussion, participant1_user, reply_post_2, test_app, extract):
+def test_extracts(
+        discussion, participant1_user, reply_post_2, test_app, extract):
     user = participant1_user
     extract_user = {
         "@id": 'local:AgentProfile/'+str(user.id),
@@ -92,3 +94,19 @@ def test_get_ideas(discussion, test_app, test_session):
 
     ideas = json.loads(res.body)
     assert len(ideas) == num_ideas+1
+
+
+def test_get_posts_from_idea(
+        discussion, test_app, test_session, subidea_1,
+        subidea_1_1, subidea_1_1_1, extract, reply_post_2):
+    base_url = get_url(discussion, 'posts')
+    url = base_url + "?" + urlencode({"root_idea_id": subidea_1.uri()})
+    res = test_app.get(url)
+    assert res.status_code == 200
+    res_data = json.loads(res.body)
+    assert res_data['total'] == 0
+    url = base_url + "?" + urlencode({"root_idea_id": subidea_1_1.uri()})
+    res = test_app.get(url)
+    assert res.status_code == 200
+    res_data = json.loads(res.body)
+    assert res_data['total'] == 2
