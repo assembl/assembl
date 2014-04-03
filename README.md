@@ -179,7 +179,7 @@ Running tests
 -------------
 
 ``` sh
-py.test
+py.test --cov assembl
 ```
 
 Raw sql connection
