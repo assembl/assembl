@@ -49,7 +49,6 @@ brew install python
 - wget https://raw.github.com/ImaginationForPeople/assembl/develop/fabfile.py
 - fab devenv:projectpath=~/assembl bootstrap
 - cd ~/assembl
-- cp development.ini local.ini
 ```
 
 If fabric is installed
@@ -74,6 +73,29 @@ The previous steps should install compass and bower. Otherwise,
 fab devenv install_compass
 fab devenv install_bower
 ```
+
+**Multiple environments**
+
+If you want to run multiple environments on your machine, you should have different values for various parameters in `development.ini`. In that case, you would it to a `local.ini` file, and customize the values there; substitute `local.ini` for `development.ini` in the following commands.
+
+Also change the `env.ini_file = 'development.ini'` line in the `def devenv` function in `fabfile.py`, and re-run the `fab devenv app_setup` step.
+
+The variables that have to be different between instances are the following:
+
+``` ini
+[app:main]
+public_port = 6543
+changes.socket = ipc:///tmp/assembl_changes/0
+changes.websocket.port = 8085
+celery.broker = redis://localhost:6379/0
+[server:main]
+port = 6543
+[virtuoso]
+port = 5132
+http_port = 8892
+```
+
+Most of these are ports, and it should be easy to find an unoccupied port; in the case of `changes.socket`, you simply need a different filename, and in the case of `celery.broker`, the final number has to be changed to another low integer.
 
 **Setup the database**
 
@@ -180,6 +202,13 @@ Running tests
 
 ``` sh
 py.test --cov assembl
+```
+
+Python shell with database connection
+-------------------------------------
+
+``` sh
+pshell development.ini
 ```
 
 Raw sql connection
