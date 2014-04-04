@@ -1,0 +1,11 @@
+{
+  "name": "creativity widget",
+  "version": "1.0.0",
+  "homepage": "https://github.com/ImaginationForPeople/assembl",
+  "authors": [
+    "hellsingblack <hellsingblack@gmail.com>"
+  ],
+  "description": "widget of creativity for imagination for people",
+  "license": "MIT",
+  "private": true
+}
