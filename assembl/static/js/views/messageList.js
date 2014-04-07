@@ -772,7 +772,7 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
             var data = {
             'click .idealist-title': 'onTitleClick',
             'click #post-query-filter-info .closebutton': 'onFilterDeleteClick',
-            'click #messageList-collapseButton': 'toggleCollapse',
+            'click #messageList-collapseButton': 'toggleMessageView',
             'click #messageList-returnButton': 'onReturnButtonClick',
 
             'click #messageList-allmessages': 'showAllMessages',
