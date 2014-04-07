@@ -26,6 +26,16 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
         },
         
         currentViewStyle: null,
+        storedMessageListConfig: app.getMessageListConfigFromStorage(),
+        /**
+         * get a view style definition by id
+         * @param {viewStyle.id}
+         * @return {viewStyle or undefined}
+         */
+        getViewStyleDefById: function(viewStyleId){
+            var retval = _.find(this.ViewStyles, function(viewStyle){ return viewStyle.id == viewStyleId; });
+            return retval;
+        },
         /**
          *  @init
          */
@@ -36,8 +46,8 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
             this.renderedMessageViewsPrevious = {};
             this.renderedMessageViewsCurrent = {};
             
-            this.currentViewStyle = this.ViewStyles.REVERSE_CHRONOLOGICAL;
-            this.defaultMessageStyle = app.AVAILABLE_MESSAGE_VIEW_STYLES.PREVIEW;
+            this.setViewStyle(this.getViewStyleDefById(this.storedMessageListConfig.viewStyleId) || this.ViewStyles.THREADED);
+            this.defaultMessageStyle = app.getMessageViewStyleDefById(this.storedMessageListConfig.messageStyleId) || app.AVAILABLE_MESSAGE_VIEW_STYLES.PREVIEW;
             this.currentQuery.setView(this.currentQuery.availableViews.REVERSE_CHRONOLOGICAL);
             
             this.listenTo(this.messages, 'reset', this.invalidateResultsAndRender);
@@ -212,11 +222,12 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
         render: function(){
             var that = this;
 
+            /*
             console.log("messageList:render() is firing, collection is: ");
             this.messages.map(function(message){
                 console.log(message.getId())
             })
-
+            */
             app.trigger('render');
             if(this.messagesFinishedLoading) {
                 this.blockPanel();
@@ -578,11 +589,38 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
 
         /**
          * @event
+         * Set the view to the selected viewStyle.
+         * Does NOT re-render
+         * 
+         */
+        setViewStyle: function(viewStyle){
+            if(viewStyle === this.ViewStyles.THREADED) {
+                this.currentViewStyle = this.ViewStyles.THREADED;
+                this.currentQuery.setView(this.currentQuery.availableViews.THREADED)
+            }
+            else if(viewStyle === this.ViewStyles.REVERSE_CHRONOLOGICAL) {
+                this.currentViewStyle = this.ViewStyles.REVERSE_CHRONOLOGICAL;
+                this.currentQuery.setView(this.currentQuery.availableViews.REVERSE_CHRONOLOGICAL)
+            }
+            else if(viewStyle === this.ViewStyles.CHRONOLOGICAL) {
+                this.currentViewStyle = this.ViewStyles.CHRONOLOGICAL;
+                this.currentQuery.setView(this.currentQuery.availableViews.CHRONOLOGICAL)
+            }
+            else {
+                throw "Unsupported view style";
+            }
+            if(this.storedMessageListConfig.viewStyleId != viewStyle.id) {
+                this.storedMessageListConfig.viewStyleId = viewStyle.id;
+                app.setMessageListConfigToStorage(this.storedMessageListConfig);
+            }
+            
+        },
+        /**
+         * @event
          * Set the view to threaded view
          */
         setViewStyleThreaded: function(){
-            this.currentViewStyle = this.ViewStyles.THREADED;
-            this.currentQuery.setView(this.currentQuery.availableViews.THREADED)
+            this.setViewStyle(this.ViewStyles.THREADED);
             this.render();
         },
         
@@ -591,8 +629,7 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
          * Set the view to a flat reverse chronological view
          */
         setViewStyleActivityFeed: function(){
-            this.currentViewStyle = this.ViewStyles.REVERSE_CHRONOLOGICAL;
-            this.currentQuery.setView(this.currentQuery.availableViews.REVERSE_CHRONOLOGICAL)
+            this.setViewStyle(this.ViewStyles.REVERSE_CHRONOLOGICAL);
             this.render();
         },
         
@@ -601,8 +638,7 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
          * Set the view to a flat chronological view
          */
         setViewStyleChronological: function(){
-            this.currentViewStyle = this.ViewStyles.CHRONOLOGICAL;
-            this.currentQuery.setView(this.currentQuery.availableViews.CHRONOLOGICAL)
+            this.setViewStyle(this.ViewStyles.CHRONOLOGICAL);
             this.render();
         },
 
@@ -611,8 +647,8 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
          */
         onDefaultMessageViewStyle: function(e){
             var messageViewStyleId = (e.currentTarget.id).replace(DEFAULT_MESSAGE_VIEW_LI_ID_PREFIX, '');
-            var messageViewStyleSelected = _.find(app.AVAILABLE_MESSAGE_VIEW_STYLES, function(messageViewStyle){ return messageViewStyle.id == messageViewStyleId; });
-            console.log("onDefaultMessageViewStyle: "+messageViewStyleSelected.label);
+            var messageViewStyleSelected = app.getMessageViewStyleDefById(messageViewStyleId);
+            //console.log("onDefaultMessageViewStyle: "+messageViewStyleSelected.label);
             this.setDefaultMessageViewStyle(messageViewStyleSelected);
         },
         
@@ -630,6 +666,10 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
                 }
             } );
             this.renderDefaultMessageViewDropdown();
+            if(this.storedMessageListConfig.messageStyleId != messageViewStyle.id) {
+                this.storedMessageListConfig.messageStyleId = messageViewStyle.id;
+                app.setMessageListConfigToStorage(this.storedMessageListConfig);
+            }
         },
         /**
          * Highlights the message by the given id

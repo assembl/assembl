@@ -60,6 +60,15 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard, Types, Permissions){
         },
         
         /**
+         * get a view style definition by id
+         * @param {messageViewStyle.id}
+         * @return {messageViewStyle or undefined}
+         */
+        getMessageViewStyleDefById: function(messageViewStyleId){
+            var retval = _.find(this.AVAILABLE_MESSAGE_VIEW_STYLES, function(messageViewStyle){ return messageViewStyle.id == messageViewStyleId; });
+            return retval;
+        },
+        /**
          * Prefix used to generate the id of the element used by annotator to find it's annotation
          * @type {string}
          */
@@ -292,6 +301,24 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard, Types, Permissions){
             return panels;
         },
 
+        /**
+         * @return {Object} The Object with mesagelistconfig in the localStorage
+         */
+        getMessageListConfigFromStorage: function(){
+            var messageListConfig = JSON.parse(localStorage.getItem('messageListConfig')) || {};
+            return messageListConfig;
+        },
+
+        /**
+         * Adds a panel in the localStorage
+         * @param {Object} The Object with mesagelistconfig in the localStorage
+         * @return {Object} The Object with mesagelistconfig in the localStorage
+         */
+        setMessageListConfigToStorage: function(messageListConfig){
+            localStorage.setItem('messageListConfig', JSON.stringify(messageListConfig));
+            return messageListConfig;
+        },
+        
         /**
          * Checks if there is a panel in fullscreen mode
          * ( i.e.: there is only one open )
