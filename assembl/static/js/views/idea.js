@@ -187,13 +187,14 @@ function(Backbone, _, $, Idea, Segment, app){
             if( ev ){
                 ev.stopPropagation();
             }
+            if(app.getCurrentUser().can(Permissions.EDIT_IDEA)){
+                ev.currentTarget.style.opacity = 0.4;
+                ev.originalEvent.dataTransfer.effectAllowed = 'move';
+                ev.originalEvent.dataTransfer.dropEffect = 'all';
 
-            ev.currentTarget.style.opacity = 0.4;
-            ev.originalEvent.dataTransfer.effectAllowed = 'move';
-            ev.originalEvent.dataTransfer.dropEffect = 'all';
-
-            app.showDragbox(ev, this.model.get('shortTitle'));
-            app.draggedIdea = this.model;
+                app.showDragbox(ev, this.model.get('shortTitle'));
+                app.draggedIdea = this.model;
+            }
         },
 
         /**
