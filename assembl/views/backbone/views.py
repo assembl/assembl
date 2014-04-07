@@ -1,12 +1,13 @@
 from pyramid.view import view_config, view_defaults
 from pyramid.response import Response
 from pyramid.renderers import render_to_response
+from pyramid.security import authenticated_userid, Everyone
 from pyramid.httpexceptions import HTTPNotFound
 from pyramid.i18n import get_localizer, TranslationStringFactory
 import json
 import os.path
 from assembl.synthesis.models import Discussion
-from assembl.auth import get_user, P_READ
+from assembl.auth import get_user, P_READ, P_ADD_EXTRACT, user_has_permission
 from sqlalchemy.orm.exc import NoResultFound
 
 from .. import get_default_context as base_default_context
@@ -69,7 +70,12 @@ def get_styleguide_components():
 
 @view_config(route_name='home', request_method='GET', http_cache=60, permission=P_READ)
 def home_view(request):
+    canAddExtract = False
+    user_id = authenticated_userid(request) or Everyone
     context = get_default_context(request)
+    canAddExtract = user_has_permission(context["discussion"].id, user_id, P_ADD_EXTRACT)
+
+    context['canAddExtract'] = canAddExtract
     return render_to_response('../../templates/index.jinja2', context, request=request)
 
 @view_config(route_name='home_idea', request_method='GET', http_cache=60)
