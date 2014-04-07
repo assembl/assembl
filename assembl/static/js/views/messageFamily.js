@@ -118,15 +118,10 @@ function(Backbone, _, Moment, ckeditor, app, Message, MessageView, i18n){
          * @event
          */
         onCollapsedChange: function(){
-            var collapsed = this.model.get('collapsed');
-            var target = this.$el;
-            /* I don't understand this benoitg
-             var link = target.find(">.message-family-container");
-            if (link.length == 1) {
-                target = link;
-            }
-             */
-            var children = target.find(">.messagelist-children").last();
+            var collapsed = this.model.get('collapsed'),
+                target = this.$el,
+                children = target.find(">.messagelist-children").last();
+
             if( collapsed ){
                 this.$el.removeClass('message--expanded');
                 children.hide();

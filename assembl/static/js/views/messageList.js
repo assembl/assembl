@@ -7,7 +7,8 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
      */
     var DIV_ANNOTATOR_HELP = app.format("<div class='annotator-draganddrop-help'>{0}</div>", i18n.gettext('You can drag the segment above directly to the table of ideas') ),
         DEFAULT_MESSAGE_VIEW_LI_ID_PREFIX = "defaultMessageView-",
-        MESSAGES_PAGE_LIMIT = 10;
+        MAX_MESSAGES_IN_DISPLAY = 12,
+        MORE_PAGES_NUMBER = 10;
 
     
     /**
@@ -97,7 +98,13 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
          * Message index to be displayed
          * @type {Number}
          */
-        offsetMessages: 0,
+        offsetStart: 0,
+
+        /**
+         * Message index limit to be displayed
+         * @type {Number}
+         */
+        offsetEnd: MORE_PAGES_NUMBER,
         
         /**
          * The annotator reference
@@ -116,6 +123,15 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
          * @type {Object}
          */
         currentQuery: new PostQuery(),
+
+
+        /**
+         * Reset the offset values to initial values
+         */
+        resetOffsets: function(){
+            this.offsetStart = 0;
+            this.offsetEnd = MORE_PAGES_NUMBER;
+        },
         
         /**
          * Returns the messages with no parent in the messages to be rendered
@@ -155,8 +171,7 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
                 model = messages.get(id);
                 if (model){
                     toReturn.push(model);
-                }
-                else {
+                } else {
                     console.log('ERROR:  getAllMessagesToDisplay():  Message with id '+id+' not found!');
                 }
             });
@@ -165,34 +180,86 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
         },
 
         /**
-         * Show the next bunch os messages to be displayed
          * 
          */
-        showMoreMessages: function(){
-            var views;
+        showMessages: function(){
+            var ideaList = this.$('.idealist'),
+                views;
 
             //The MessageFamilyView will re-fill the array with the rendered MessageView
-            this.renderedMessageViewsPrevious = _.clone(this.renderedMessageViewsCurrent);
-            this.renderedMessageViewsCurrent = {};
+            // this.renderedMessageViewsPrevious = _.clone(this.renderedMessageViewsCurrent);
+            // this.renderedMessageViewsCurrent = {};
+
             if (this.currentViewStyle == this.ViewStyles.THREADED) {
                 views = this.getRenderedMessagesThreaded(this.getRootMessagesToDisplay(), 1, []);
             } else {
-                views = this.getRenderedMessagesFlat(this.getAllMessagesToDisplay(), this.offsetMessages, MESSAGES_PAGE_LIMIT);
+                views = this.getRenderedMessagesFlat(this.getAllMessagesToDisplay(), this.offsetStart, this.offsetEnd);
             }
 
-            this.offsetMessages += MESSAGES_PAGE_LIMIT;
+            ideaList.empty();
 
-            if( views.length > 0 ){
-                this.$('.idealist').append( views );
+            if( views.length === 0 ){
+                ideaList.append( app.format("<div class='margin'>{0}</div>", i18n.gettext('No messages')) );
+            } else {
+                ideaList.append( views );
             }
 
-            if( this.offsetMessages >= this.messages.length ){
+            if( this.offsetStart <= 0 ){
+                this.$('#messageList-toparea').hide();
+            } else {
+                this.$('#messageList-toparea').show();
+            }
+
+            if( this.offsetEnd >= this.messages.length ){
                 this.$('#messageList-bottomarea').hide();
             } else {
                 this.$('#messageList-bottomarea').show();
             }
 
             this.initAnnotator();
+        },
+
+        /**
+         * Show the next bunch of messages to be displayed.
+         */
+        showNextMessages: function(){
+            var messagesInDisplay,
+                len = this.messages.length;
+
+            this.offsetEnd += MORE_PAGES_NUMBER;
+            if( this.offsetEnd > len ){
+                this.offsetEnd = len;
+            }
+
+            do {
+                messagesInDisplay = this.offsetEnd - this.offsetStart;
+                if( messagesInDisplay > MAX_MESSAGES_IN_DISPLAY ){
+                    this.offsetStart += 1;
+                }
+            } while ( messagesInDisplay > MAX_MESSAGES_IN_DISPLAY );
+
+            this.showMessages();
+        },
+
+        /**
+         * Show the previous bunch of messages to be displayed
+         */
+        showPreviousMessages: function(){
+            var messagesInDisplay;
+
+            this.offsetStart -= MORE_PAGES_NUMBER;
+            if( this.offsetStart < 0 ){
+                this.offsetStart = 0;
+            }
+
+            do {
+                messagesInDisplay = this.offsetEnd - this.offsetStart;
+                if( messagesInDisplay > MAX_MESSAGES_IN_DISPLAY ){
+                    this.offsetEnd = this.offsetEnd - 1;
+                }
+            } while ( messagesInDisplay > MAX_MESSAGES_IN_DISPLAY );
+
+            this.showMessages();
         },
         
         /**
@@ -201,15 +268,14 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
          */
         render_real: function(){
             var that = this,
-                views = [];
-
-            var data = {
-                currentViewStyle: this.currentViewStyle,
-                DEFAULT_MESSAGE_VIEW_LI_ID_PREFIX: DEFAULT_MESSAGE_VIEW_LI_ID_PREFIX,
-                collapsed: this.collapsed,
-                queryInfo: this.currentQuery.getHtmlDescription(),
-                canPost: app.getCurrentUser().can(Permissions.ADD_POST)
-            };
+                views = [],
+                data = {
+                    currentViewStyle: this.currentViewStyle,
+                    DEFAULT_MESSAGE_VIEW_LI_ID_PREFIX: DEFAULT_MESSAGE_VIEW_LI_ID_PREFIX,
+                    collapsed: this.collapsed,
+                    queryInfo: this.currentQuery.getHtmlDescription(),
+                    canPost: app.getCurrentUser().can(Permissions.ADD_POST)
+                };
 
             this.$el.html( this.template(data) );
 
@@ -228,13 +294,9 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
 
             this.$('#messagelist-replybox').append( this.newTopicView.render().el );
             
-            if( this.message && this.message.length === 0 ){
-                this.$('.idealist').append( app.format("<div class='margin'>{0}</div>", i18n.gettext('No messages')) );
-            } else {
-                // Resetting the messages
-                this.offsetMessages = 0;
-                this.showMoreMessages();
-            }
+            // Resetting the messages
+            this.resetOffsets();
+            this.showMessages();
             
             this.trigger("render_complete", "Render complete");
             return this;
@@ -246,13 +308,8 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
          */
         render: function(){
             var that = this;
-
-            console.log("messageList:render() is firing, collection is: ");
-            this.messages.map(function(message){
-                console.log(message.getId());
-            });
-
             app.trigger('render');
+
             if(this.messagesFinishedLoading) {
                 this.blockPanel();
                 this.currentQuery.execute(function(data){
@@ -305,23 +362,22 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
         /**
          * Return a list with all views.el already rendered for a flat view
          * @param {Message.Model[]} messages
-         * @param {Number} [offset=0] The offset to be skipped
-         * @param {Number} [limit=10] The limit which will be returned
+         * @param {Number} [offsetStart=0] The offset to be skipped
+         * @param {Number} [offsetEnd=10] The limit which will be returned
          * @return {HTMLDivElement[]}
          */
-        getRenderedMessagesFlat: function(messages, offset, limit){
+        getRenderedMessagesFlat: function(messages, offsetStart, offsetEnd){
             var list = [],
                 filter = this.currentFilter,
                 len = messages.length,
-                i = _.isUndefined(offset) ? 0 : offset,
+                i = _.isUndefined(offsetStart) ? 0 : offsetStart,
                 view, model, children, prop, isValid;
 
-            limit = _.isUndefined(limit) ? 10 : limit;
-            limit = i + limit;
+            offsetEnd = _.isUndefined(offsetEnd) ? 10 : offsetEnd;
 
-            if( limit < len ){
-                // if offset+limit is bigger than len, do not use it
-                len = limit;
+            if( offsetEnd < len ){
+                // if offsetEnd is bigger than len, do not use it
+                len = offsetEnd;
             }
 
             for (; i < len; i++) {
@@ -791,7 +847,8 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
                 'click #messageList-closeButton': 'closePanel',
                 'click #messageList-fullscreenButton': 'setFullscreen',
 
-                'click #messageList-morebutton': 'showMoreMessages'
+                'click #messageList-prevbutton': 'showPreviousMessages',
+                'click #messageList-morebutton': 'showNextMessages'
             };
 
             var messageDefaultViewStyle = '';
@@ -815,7 +872,6 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
          * @event
          */
         onFilterDeleteClick: function(ev){
-            //console.log(ev);
             var value = ev.currentTarget.getAttribute('data-value');
             var filterid = ev.currentTarget.getAttribute('data-filterid');
             var filter = this.currentQuery.getFilterDefById(filterid);

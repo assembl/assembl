@@ -55,8 +55,6 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n, Permissions, Message
          */
         template: app.loadTemplate('message'),
 
-        
-
         /**
          * The render
          * @return {MessageView}
@@ -136,7 +134,7 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n, Permissions, Message
                     // This call is synchronous I believe - benoitg
                     that.annotator.loadAnnotations( _.clone(annotationsToLoad) );
                     _.each(annotationsToLoad, function(annotation){
-                        that.loadedAnnotations[annotation['@id']] =  annotation;
+                        that.loadedAnnotations[annotation['@id']] = annotation;
                     });
 
                     setTimeout(function(){
@@ -320,7 +318,7 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n, Permissions, Message
                 this.viewStyle = style;
             }
             else {
-                console.log("unsupported view style :" +style );
+                console.log("unsupported view style :" + style );
             }
         },
         
