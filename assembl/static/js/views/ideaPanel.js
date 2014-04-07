@@ -57,7 +57,9 @@ function(Backbone, _, Idea, Message, app, i18n, Types, EditableField, CKEditorFi
                 segments:segments,
                 editing:editing,
                 canDelete:currentUser.can(Permissions.EDIT_IDEA),
-                canUnlinkSegments:currentUser.can(Permissions.EDIT_EXTRACT)||currentUser.can(Permissions.EDIT_MY_EXTRACT)
+                canUnlinkSegments:currentUser.can(Permissions.EDIT_EXTRACT)||currentUser.can(Permissions.EDIT_MY_EXTRACT),
+                canDeleteSegments:currentUser.can(Permissions.EDIT_EXTRACT)||currentUser.can(Permissions.EDIT_MY_EXTRACT),
+                canAddSegments:currentUser.can(Permissions.EDIT_EXTRACT) //TODO: This is a bit too coarse
             } ) );
             this.panel = this.$('.panel');
 
@@ -235,7 +237,8 @@ function(Backbone, _, Idea, Message, app, i18n, Types, EditableField, CKEditorFi
          * @event
          */
         onDragStart: function(ev){
-            if( app.segmentList && app.segmentList.segments ){
+            //TODO: Deal with editing own extract (EDIT_MY_EXTRACT)
+            if( app.segmentList && app.segmentList.segments && app.getCurrentUser().can(Permissions.EDIT_EXTRACT)){
                 ev.currentTarget.style.opacity = 0.4;
 
                 var cid = ev.currentTarget.getAttribute('data-segmentid'),

@@ -41,9 +41,11 @@
                     {% include "views/segment.tmpl" %}
                 <% }); %>
             </div>
+            <% if (canAddSegments) { %>
             <div class="box box--dashed box--centered margin text-muted text-big">
                 {{ gettext('Add segments by dragging them in this panel from the clipboard') }}
             </div>
+            <% } %>
         </fieldset>
         
     </div>
