@@ -10,30 +10,26 @@ pyramid.includes =
     pyramid_debugtoolbar
     pyramid_tm
 
+tm.attempts=2
+
+available_languages = fr en
+pyramid.default_locale_name = en
 # Should requirejs defeat browser caching?  Useful in development
 requirejs.cache_bust = false
 
+# The debug toolbar is currently incompatible with the backbone frontend
 debugtoolbar.enabled = false
 debugtoolbar.hosts = 127.0.0.0/8
 debugtoolbar.intercept_exc = false
-requirejs.cache_bust=false
-available_languages = en
 
 # This database will be cleared! Be careful.
 sqlalchemy.url = virtuoso://assembl_test:assembl_test@VOSU
-sqlalchemy.echo=True
+sqlalchemy.echo = True
 db_user = assembl_test
 db_password = assembl_test
 db_schema = assembl_test
 
 jinja2.directories = assembl:templates
-
-assembl.imap4.host = localhost
-assembl.imap4.port = 143
-assembl.imap4.ssl = false
-assembl.imap4.username =
-assembl.imap4.password =
-assembl.imap4.mailbox = INBOX
 
 assembl.domain = assembl.net
 assembl.validate_registration_emails = false
@@ -49,7 +45,7 @@ login_providers =
 # twitter
 # github
 # google
-  openid
+# openid
 
 # https://developers.facebook.com/docs/facebook-login/getting-started-web/
 # https://developers.facebook.com/apps/
@@ -76,7 +72,20 @@ login_providers =
 # google.consumer_secret =
 
 # This should be the front-facing URL
-openid.realm = http://localhost/
+# openid.realm=
+
+# Absolute url of image to show for users that do not have an avatar.
+# If not present, assembl default will be used.
+#avatar.default_image_url = none
+
+# What gravatar will use if email isn't found.
+# If not present, the image above will be used.
+# Typical values are:
+# identicon: a geometric pattern based on an email hash
+# monsterid: a generated 'monster' with different colors, faces, etc
+# wavatar: generated, 8-bit arcade-style pixelated faces
+# retro
+avatar.gravatar_default = wavatar
 
 # Beaker settings
 # We should use memcache asap
@@ -100,7 +109,9 @@ public_port = 6543
 
 # ZMQ model changes socket
 changes.socket = ipc:///tmp/assembl_changes/0
-changes.multiplex = true
+changes.multiplex = false
+# The port to use for the websocket.
+# In prod, your firewall needs to allow this through or proxy it through nginx
 changes.websocket.port = 8085
 changes.prefix = /socket
 # Use the second version if proxying through nginx
@@ -123,7 +134,7 @@ transaction = transaction
 # Path to migration scripts
 script_location = assembl/alembic
 # This database will be cleared! Be careful.
-sqlalchemy.url = postgresql+psycopg2://assembl:assembl@localhost/assembl_test
+sqlalchemy.url = virtuoso://assembl_test:assembl_test@VOSU
 
 # Template used to generate migration files
 # file_template = %%(rev)s_%%(slug)s
@@ -135,6 +146,7 @@ sqlalchemy.url = postgresql+psycopg2://assembl:assembl@localhost/assembl_test
 [server:main]
 use = egg:waitress#main
 host = 0.0.0.0
+#Default port is 6543
 port = 6543
 
 # Begin logging configuration
@@ -180,3 +192,9 @@ formatter = generic
 format = %(asctime)s %(levelname)-5.5s [%(name)s][%(threadName)s] %(message)s
 
 # End logging configuration
+
+[virtuoso]
+# Standard port is 5132
+port = 5132
+# Standard port is 8892
+http_port = 8892
