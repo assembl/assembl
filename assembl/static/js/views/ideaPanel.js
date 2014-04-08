@@ -51,15 +51,14 @@ function(Backbone, _, Idea, Message, app, i18n, Types, EditableField, CKEditorFi
             var segments = this.idea.getSegments(),
                 currentUser = app.getCurrentUser(),
                 editing = currentUser.can(Permissions.EDIT_IDEA) && this.idea.get('ideaPanel-editing') || false;
-
             this.$el.html( this.template( {
                 idea:this.idea,
                 segments:segments,
                 editing:editing,
                 canDelete:currentUser.can(Permissions.EDIT_IDEA),
-                canUnlinkSegments:currentUser.can(Permissions.EDIT_EXTRACT)||currentUser.can(Permissions.EDIT_MY_EXTRACT),
-                canDeleteSegments:currentUser.can(Permissions.EDIT_EXTRACT)||currentUser.can(Permissions.EDIT_MY_EXTRACT),
-                canAddSegments:currentUser.can(Permissions.EDIT_EXTRACT) //TODO: This is a bit too coarse
+                canEditExtracts:currentUser.can(Permissions.EDIT_EXTRACT),
+                canEditMyExtracts:currentUser.can(Permissions.EDIT_MY_EXTRACT),
+                canAddExtracts:currentUser.can(Permissions.EDIT_EXTRACT) //TODO: This is a bit too coarse
             } ) );
             this.panel = this.$('.panel');
 

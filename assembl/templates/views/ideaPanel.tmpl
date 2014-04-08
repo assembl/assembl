@@ -41,7 +41,7 @@
                     {% include "views/segment.tmpl" %}
                 <% }); %>
             </div>
-            <% if (canAddSegments) { %>
+            <% if (canAddExtracts) { %>
             <div class="box box--dashed box--centered margin text-muted text-big">
                 {{ gettext('Add segments by dragging them in this panel from the clipboard') }}
             </div>
@@ -56,7 +56,7 @@
             <a id="ideaPanel-deleteButton" class="link" data-tooltip="{{gettext('Delete this idea completely')}}">{{ gettext('Delete idea') }}</a>
         </div>
         <% }
-        if (canUnlinkSegments) { %>
+        if (canEditExtracts) { %>
         <a id="ideaPanel-clearbutton" class="link" data-tooltip="{{gettext('Removed segments will be available in your clipboard')}}">{{ gettext('Remove all segments') }}</a>
         <% } %>
     </div>

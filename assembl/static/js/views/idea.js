@@ -1,5 +1,5 @@
-define(['backbone', 'underscore', 'jquery', 'models/idea', 'models/segment', 'app'],
-function(Backbone, _, $, Idea, Segment, app){
+define(['backbone', 'underscore', 'jquery', 'models/idea', 'models/segment', 'app', 'permissions'],
+function(Backbone, _, $, Idea, Segment, app, Permissions){
     'use strict';
 
     var IdeaView = Backbone.View.extend({

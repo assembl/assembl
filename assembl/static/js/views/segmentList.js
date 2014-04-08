@@ -1,5 +1,5 @@
-define(['backbone', 'underscore', 'jquery', 'app', 'models/segment', 'i18n'],
-function(Backbone, _, $, app, Segment, i18n){
+define(['backbone', 'underscore', 'jquery', 'app', 'models/segment', 'i18n', 'permissions'],
+function(Backbone, _, $, app, Segment, i18n, Permissions){
     'use strict';
 
     var SegmentList = Backbone.View.extend({
@@ -46,7 +46,11 @@ function(Backbone, _, $, app, Segment, i18n){
             app.trigger('render');
 
             var segments = this.segments.getClipboard(),
-                data = {segments:segments},
+                currentUser = app.getCurrentUser(),
+                data = {segments:segments,
+                        canEditExtracts:currentUser.can(Permissions.EDIT_EXTRACT),
+                        canEditMyExtracts:currentUser.can(Permissions.EDIT_MY_EXTRACT)
+                       },
                 top = 0;
             if( this.panel ){
                 top = this.panel.find('.panel-body')[0].scrollTop;

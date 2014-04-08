@@ -12,6 +12,9 @@ Install required development libraries
 - memached
 - fabric 1.8
 
+Note:  For production on linux using nginx/uwsgi you need the following ppa (for both saucy and raring):
+apt-add-repository ppa:chris-lea/uwsgi 
+
 ## Installing Virtuoso
 
 Mac
@@ -129,11 +132,8 @@ Only the first time you run it:
 source venv/bin/activate
 assembl-ini-files development.ini
 supervisord
-(wait for virtuoso to start)
+#(wait for virtuoso to start)
 assembl-db-manage development.ini bootstrap
-cp testing.ini.example testing.ini
-assembl-db-manage testing.ini bootstrap
-supervisorctl start celery_imap
 ```
 
 (NOTE: Currently, just running $venv/bin/supervisord does NOT work, as celery will run command line
@@ -199,9 +199,18 @@ Make sure to verify the generated code...
 
 Running tests
 -------------
+Only the first time you run it:
 
 ``` sh
-py.test --cov assembl
+cp testing.ini.example testing.ini
+assembl-db-manage testing.ini bootstrap
+```
+
+Thereafter:
+``` sh
+supervisord
+#(wait for virtuoso to start)
+py.test --cov assembl assembl
 ```
 
 Python shell with database connection
