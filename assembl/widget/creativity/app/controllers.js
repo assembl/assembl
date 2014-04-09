@@ -1,12 +1,12 @@
 "use strict";
 
-creativityApp.controller('videosController',[function(){
+creativityApp.controller('videosCtl',[function(){
 
 }]);
 
-creativityApp.controller('cardsController',['$scope','$http','globalConfig','$parse', function($scope, $http, globalConfig){
+creativityApp.controller('cardsCtl',['$scope','$http','globalConfig', function($scope, $http, globalConf){
 
-    globalConfig.fetch().success(function(data){
+    globalConf.fetch().success(function(data){
 
          $scope.cards = data.cards;
     });
@@ -20,6 +20,11 @@ creativityApp.controller('cardsController',['$scope','$http','globalConfig','$pa
 
 
     }
+
+}]);
+
+creativityApp.controller('creativitySessionCtl', ['$scope', function($scope){
+
 
 
 }]);

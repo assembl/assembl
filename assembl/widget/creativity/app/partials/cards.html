@@ -1,8 +1,8 @@
-<div class="cards" ng-controller="cardsController">
+<div class="cards" ng-controller="cardsCtl">
     <div ng-repeat="card in cards">
         <div class="card alert alert-success" ng-if="$first">
             <p>{{card.description}}</p>
-            <span class="glyphicon glyphicon-sort slot-machine" ng-click="shuffle()"></span>
+            <span class="glyphicon glyphicon-refresh slot-machine" ng-click="shuffle()"></span>
         </div>
         <p class="bg-info" ng-if="$first">{{card.question}}</p>
     </div>

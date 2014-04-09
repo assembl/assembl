@@ -2,7 +2,7 @@
 <html>
 <head lang="en">
     <meta charset="UTF-8">
-    <title></title>
+    <title>Creativity</title>
     <link type="text/css" rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css"/>
     <link type="text/css" rel="stylesheet" href="app/css/style.css" />
 </head>
@@ -10,20 +10,17 @@
 
 <div class="container">
     <div class="row">
-        <div class="well col-md-4">
-            <div class="navigation">
-                <ul class="nav nav-pills nav-stacked">
-                    <li class="active"><a href="#/videos">Video</a></li>
-                    <li><a href="#/cards">Carte</a></li>
-                </ul>
+        <div class="well">
+            <ul class="nav nav-tabs">
+                <li><a href="#videos" data-toggle="tab">Videos</a></li>
+                <li  class="active"><a href="#cards" data-toggle="tab">Cartes</a></li>
+            </ul>
+            <div class="tab-content">
+                <div ng-view></div>
             </div>
-        </div>
-        <div class="well col-md-8">
-            <div ng-view></div>
         </div>
     </div>
 </div>
-
 
 <script src="bower_components/jquery/dist/jquery.min.js"></script>
 <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>

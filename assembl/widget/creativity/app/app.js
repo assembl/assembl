@@ -6,11 +6,15 @@ creativityApp.config(['$routeProvider', function($routeProvider){
     $routeProvider.
         when('/cards', {
            templateUrl:'app/partials/cards.html',
-           controller:'cardsController'
+           controller:'cardsCtl'
         }).
         when('/videos', {
             templateUrl:'app/partials/videos.html',
-            controller:'videosController'
+            controller:'videosCtl'
+        }).
+        when('/creativitySession', {
+           templateUrl:'app/partials/session.html',
+           controller:'creativitySessionCtl'
         }).
         otherwise({
             redirectTo: '/cards'
