@@ -1,10 +1,84 @@
 <!DOCTYPE html>
 <html>
 <head lang="en">
-    <meta charset="UTF-8">
-    <title></title>
+  <meta charset="UTF-8">
+  <title></title>
+  <link href="bower_components/select2/select2.css" rel="stylesheet"/>
+	<style>
+	.select2-no-results {
+		display: none !important;
+	}
+	</style>
 </head>
 <body>
-    <h2>Video</h2>
+  <h2>Video</h2>
+
+  <input id="query" class="select2-offscreen" type="hidden" value="" style="width:300px" />
+  <input type="submit" id="search-button" disabled onclick="search()" value="Rechercher" />
+  <div id="search-container"></div>
+
+
+
+  <script src="bower_components/jquery/dist/jquery.min.js"></script>
+  <script src="bower_components/select2/select2.js"></script>
+  <script>
+  $(document).ready(function() {
+    $("#query").select2({
+      tags: ["red", "green", "blue"],
+      tokenSeparators: [",", " "],
+      //formatNoMatches: function(term){return '';}
+      //minimumResultsForSearch: -1
+    });
+  });
+
+  function load() {
+      gapi.client.setApiKey('AIzaSyC8lCVIHWdtBwnTtKzKl4dy8k5C_raqyK4');
+      gapi.client.load('youtube', 'v3', handleAPILoaded);
+  }
+
+  // After the API loads, call a function to enable the search box.
+  function handleAPILoaded() {
+    $('#search-button').attr('disabled', false);
+  }
+
+  // Search for a specified string.
+  function search() {
+    var q = $('#query').val();
+    var request = gapi.client.youtube.search.list({
+      q: q,
+      part: 'snippet'
+    });
+
+    request.execute(function(response) {
+      /*
+      var str = JSON.stringify(response.result);
+      $('#search-container').html('<pre>' + str + '</pre>');
+      */
+      displayResults(response);
+    });
+  }
+
+  function displayResults(response) {
+    var str = '';
+    console.log(response);
+    if ( response.result && response.result.items )
+    {
+      var sz = response.result.items.length;
+      for ( var i = 0; i < sz; ++i )
+      {
+        var item = response.result.items[i];
+        if ( item.id && item.id.kind && item.id.kind == 'youtube#video' )
+        {
+          str += '<li><a href="http://youtube.com/watch?v=' + item.id.videoId + '" target="_blank">'
+            + '<img src=' + item.snippet.thumbnails.default.url + ' />'
+            + item.snippet.title
+            + '</a></li>';
+      	}
+      }
+    }
+    $('#search-container').html('<ul>' + str + '</ul>');
+  }
+	</script>
+	<script src="https://apis.google.com/js/client.js?onload=load"></script>
 </body>
 </html>
