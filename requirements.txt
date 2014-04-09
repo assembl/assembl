@@ -10,6 +10,8 @@ MarkupSafe==0.19
 PasteDeploy==1.5.2
 PyJWT==0.2.0
 Pygments==1.6
+Sphinx==1.2.2
+sphinx-bootstrap-theme==0.4.0
 SPARQLWrapper==1.5.2
 SQLAlchemy==0.9.4
 Unidecode==0.04.14
