@@ -2,12 +2,24 @@
 
 creativityApp.controller('videosController',[function(){
 
-    console.log('videos')
 }]);
 
-creativityApp.controller('cardsController',['$scope','$http', function($scope, $http){
+creativityApp.controller('cardsController',['$scope','$http','globalConfig','$parse', function($scope, $http, globalConfig){
 
-    //console.log(cardConfig.fetch);
+    globalConfig.fetch().success(function(data){
+
+         $scope.cards = data.cards;
+    });
+
+    $scope.shuffle = function(){
+
+        $scope.cards.shift();
+    }
+
+    $scope.flippingCard = function() {
+
+
+    }
 
 
 }]);
