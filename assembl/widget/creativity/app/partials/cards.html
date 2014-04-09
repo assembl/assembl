@@ -1,6 +1,6 @@
 <div class="cards" ng-controller="cardsController">
     <div ng-repeat="card in cards">
-        <div class="card" ng-if="$first">
+        <div class="card alert alert-success" ng-if="$first">
             <p>{{card.description}}</p>
             <span class="glyphicon glyphicon-sort slot-machine" ng-click="shuffle()"></span>
         </div>

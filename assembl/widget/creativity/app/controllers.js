@@ -16,7 +16,10 @@ creativityApp.controller('cardsController',['$scope','$http','globalConfig','$pa
         $scope.cards.shift();
     }
 
+    $scope.flippingCard = function() {
 
+
+    }
 
 
 }]);
