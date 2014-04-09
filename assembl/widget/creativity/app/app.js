@@ -1,19 +1,19 @@
-var app = angular.module('creativity',['ngRoute','cardsController','videosController']);
+"use strict";
 
-app.config(['$routeProvider', function($routeProvider){
+var creativityApp = angular.module('creativityApp',['ngRoute']);
+
+creativityApp.config(['$routeProvider', function($routeProvider){
     $routeProvider.
         when('/cards', {
            templateUrl:'app/partials/cards.html',
-           controller:'cards'
+           controller:'cardsController'
         }).
         when('/videos', {
             templateUrl:'app/partials/videos.html',
-            controller:'videos'
+            controller:'videosController'
         }).
         otherwise({
             redirectTo: '/cards'
         });
 }]);
-
-
 

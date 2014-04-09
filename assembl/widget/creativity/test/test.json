@@ -1,0 +1,12 @@
+{
+    "useraname":"test 1",
+    "persmission":["read","write"],
+    "api_url":{
+       "synthesis":"http://app.com/test/rest/synthesis"
+    },
+    "cards":[
+        {"id":"1", "decription":"Creativity card 1", "question":"Creativity card question 1", "img_url":""},
+        {"id":"2", "decription":"Creativity card 1", "question":"Creativity card question 2", "img_url":""},
+        {"id":"3", "decription":"Creativity card 1", "question":"Creativity card question 3", "img_url":""}
+    ]
+}

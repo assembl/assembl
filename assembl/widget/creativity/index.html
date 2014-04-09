@@ -6,15 +6,15 @@
     <link type="text/css" rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css"/>
     <link type="text/css" rel="stylesheet" href="app/css/style.css" />
 </head>
-<body ng-app="creativity">
+<body ng-app="creativityApp">
 
 <div class="container">
     <div class="row">
         <div class="well col-md-4">
             <div class="navigation">
                 <ul class="nav nav-pills nav-stacked">
-                    <li class="active"><a href="#!/videos">Video</a></li>
-                    <li><a href="#!/cards">Carte</a></li>
+                    <li class="active"><a href="#/videos">Video</a></li>
+                    <li><a href="#/cards">Carte</a></li>
                 </ul>
             </div>
         </div>
@@ -29,9 +29,8 @@
 <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 <script src="bower_components/angular/angular.min.js"></script>
 <script src="bower_components/angular-route/angular-route.min.js"></script>
-<script src="app/controllers/carsController.js"></script>
-<script src="app/controllers/videosController.js"></script>
-<script src="app/services/configuration.js"></script>
 <script src="app/app.js"></script>
+<script src="app/services.js"></script>
+<script src="app/controllers.js"></script>
 </body>
 </html>
