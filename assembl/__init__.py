@@ -64,6 +64,7 @@ def main(global_config, **settings):
         populate_default_roles(session)
         populate_default_permissions(session)
     config.add_static_view('static', 'static', cache_max_age=3600)
+    config.add_static_view('widget', 'widget', cache_max_age=3600)
     config.include('cornice')  # REST services library.
     # config.include('.lib.alembic')
     # config.include('.lib.email')
