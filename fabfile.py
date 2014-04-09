@@ -203,9 +203,16 @@ def bootstrap_from_checkout():
     """
     Create the virtualenv and install the app
     """
-    execute(build_virtualenv)
-    execute(configure_rbenv)
     execute(updatemaincode)
+    execute(setup_in_venv)
+
+@task
+def setup_in_venv():
+    """
+    Setup the virtualenv (dependencies, ruby, etc.) and compile and install 
+    assembl
+    """
+    execute(configure_rbenv)
     execute(app_update_dependencies)
     execute(app_setup)
 
