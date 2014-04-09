@@ -425,7 +425,8 @@ def update_bower():
 
 
 def bower_cmd(cmd):
-    node_cmd = run('which nodejs', warn_only=True)
+    with settings(warn_only=True):
+        node_cmd = run('which nodejs')
     if node_cmd.failed:
         node_cmd = run('which node')
     with cd(env.projectpath):
@@ -584,7 +585,8 @@ def database_dump():
         exit()
     backup_file_path = os.path.join(virtuoso_db_directory(), backup_output)
     #Move to dbdumps_dir
-    move_result = run('mv %s %s' % (backup_file_path, absolute_path), warn_only=True)
+    with settings(warn_only=True):
+        move_result = run('mv %s %s' % (backup_file_path, absolute_path))
     if move_result.failed:
         print(red('Virtuoso backup did not error, but unable to move the file from %s to %s.\nYou may need to clear the file %s manually or your next backup will fail.' % (backup_file_path, absolute_path, backup_file_path)))
         exit()
@@ -628,8 +630,8 @@ def database_restore():
     with prefix(venv_prefix()), cd(virtuoso_db_directory()):
         venvcmd("supervisorctl stop virtuoso")
     # Drop db
-    with cd(virtuoso_db_directory()):
-        run('rm *.db *.trx', warn_only=True)
+    with cd(virtuoso_db_directory()), settings(warn_only=True):
+        run('rm *.db *.trx')
 
     # Make symlink to latest
     #this MUST match the code in db_manage or virtuoso will refuse to restore
