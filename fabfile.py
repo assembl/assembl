@@ -474,17 +474,20 @@ def install_builddeps():
 def configure_rbenv():
     execute(install_rbenv)
     with cd(env.projectpath), settings(warn_only=True):
-        if(run('rbenv local %(ruby_version)s' % env).failed):
-            execute(install_ruby_build)
-            # Install Ruby specified in env.ruby_version:
-            run('rbenv install %(ruby_version)s' % env)
-            # Rehash:
-            run('rbenv rehash')
-            run('rbenv local %(ruby_version)s' % env)
-        if(run('bundle --version').failed):
-            #install bundler
-            run('gem install bundler')
-            run('rbenv rehash')
+        rbenv_local = run('rbenv local %(ruby_version)s' % env)
+    if(rbenv_local.failed):
+        execute(install_ruby_build)
+        # Install Ruby specified in env.ruby_version:
+        run('rbenv install %(ruby_version)s' % env)
+        # Rehash:
+        run('rbenv rehash')
+        run('rbenv local %(ruby_version)s' % env)
+    with settings(warn_only=True):
+        bundle_version = run('bundle --version')
+    if(bundle_version.failed):
+        #install bundler
+        run('gem install bundler')
+        run('rbenv rehash')
 
 def install_ruby_build():
     version_regex = re.compile('^ruby-build\s*(\S*)')
@@ -492,34 +495,38 @@ def install_ruby_build():
 
     with settings(warn_only=True):
         run_output = run('ruby-build --version')
-        if not run_output.failed:
-            match = version_regex.match(run_output)
-            version = float(match.group(1))
-            
-            if version < env.ruby_build_min_version:
-                print(red("ruby-build %s is too old (%s is required), reinstalling..." % (version, env.ruby_build_min_version)))
-                install = True
-            else:
-                print(green("ruby-build version %s is recent enough (%s is required)" % (version, env.ruby_build_min_version)))
-        else:
-            print(red("ruby-build is not installed, installing..."))
+    if not run_output.failed:
+        match = version_regex.match(run_output)
+        version = float(match.group(1))
+        
+        if version < env.ruby_build_min_version:
+            print(red("ruby-build %s is too old (%s is required), reinstalling..." % (version, env.ruby_build_min_version)))
             install = True
-            
-        if install:
-            # Install ruby-build:
-            run('rm -rf /tmp/ruby-build')
-            with cd('/tmp'):
-                run('git clone git://github.com/sstephenson/ruby-build.git')
-            with cd('/tmp/ruby-build'):
-                sudo('./install.sh')
+        else:
+            print(green("ruby-build version %s is recent enough (%s is required)" % (version, env.ruby_build_min_version)))
+    else:
+        print(red("ruby-build is not installed, installing..."))
+        install = True
+        
+    if install:
+        # Install ruby-build:
+        run('rm -rf /tmp/ruby-build')
+        with cd('/tmp'):
+            run('git clone git://github.com/sstephenson/ruby-build.git')
+        with cd('/tmp/ruby-build'):
+            sudo('./install.sh')
 
 @task
 def install_rbenv():
     """
     Install the appropriate ruby environment for compass.
     """
-    with cd(env.projectpath), settings(warn_only=True):
-        if(run('rbenv version').failed and run('ls ~/.rbenv').failed):    
+    with settings(warn_only=True):
+        rbenv_failed = run('rbenv version').failed
+    if rbenv_failed:
+        with settings(warn_only=True):
+            rbenv_missing = run('ls ~/.rbenv').failed
+        if rbenv_missing:
             # Install rbenv:
             run('git clone git://github.com/sstephenson/rbenv.git ~/.rbenv')
             # Add rbenv to the path:
@@ -542,7 +549,6 @@ def install_compass():
     """
     (Re)Install compass, deleting current version 
     """
-    execute(configure_rbenv)
     with cd(env.projectpath):
         run('rm -rf vendor/bundle')
         execute(update_compass)
