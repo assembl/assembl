@@ -2,7 +2,7 @@
     <div ng-repeat="card in cards">
         <div class="card alert alert-success" ng-if="$first">
             <p>{{card[0].description}}</p>
-            <span class="glyphicon glyphicon-refresh slot-machine" ng-click="shuffle()"></span>
+            <span class="glyphicon glyphicon-refresh slot-machine"></span>
         </div>
         <p class="bg-info" ng-if="$first">{{card[0].question}}</p>
     </div>
@@ -18,25 +18,35 @@
         <button type="submit" class="btn btn-primary">Envoyez</button>
     </form>
 </div>
-<div class="session-comment">
-
+<div class="session-comment" ng-controller="creativitySessionCtl">
     <div class="media" ng-if="ideas.length > 1" ng-repeat="idea in ideas">
         <a class="pull-left" href="#">
-            <img class="media-object img-thumbnail" data-src="{{idea.avatar}}" alt="40x40" src="{{idea.avatar}}" style="width: 40px; height: 40px;">
+            <img class="media-object img-thumbnail" data-src="{{idea.avatar}}" alt="40x40" ng-src="{{idea.avatar}}" style="width: 40px; height: 40px;">
         </a>
         <div class="media-body">
             <h5 class="media-heading">{{idea.fullname}}</h5>
-            <h6>{{idea.message}}</h6>
-            <div class="media" ng-if="idea.comments.length > 1" ng-repeat="com in idea.comments">
-                <a class="pull-left" href="#">
-                    <img class="media-object img-thumbnail" data-src="{{idea.avatar}}" alt="40x40" src="{{com.avatar}}" style="width: 40px; height: 40px;">
-                </a>
-                <div class="media-body">
-                    <h5 class="media-heading">{{com.fullname}}</h5>
-                    <h6>{{com.message}}</h6>
+            <div class="row">
+                <div class="col-md-11"><h6>{{idea.message}}</h6></div>
+                <div class="col-md-1">
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox">
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <span class="text-info" ng-click="showComment = ! showComment"><h6>see more</h6></span>
+            <div ng-show="showComment">
+                <div class="media" ng-if="idea.comments.length > 1" ng-repeat="com in idea.comments">
+                    <a class="pull-left" href="#">
+                        <img class="media-object img-thumbnail" data-src="{{com.avatar}}" alt="40x40" ng-src="{{com.avatar}}" style="width: 40px; height: 40px;">
+                    </a>
+                    <div class="media-body">
+                        <h5 class="media-heading">{{com.fullname}}</h5>
+                        <h6>{{com.message}}</h6>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-
 </div>

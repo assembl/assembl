@@ -2,7 +2,7 @@
     <div ng-repeat="card in cards">
         <div class="card alert alert-success" ng-if="$first">
             <p>{{card[0].description}}</p>
-            <span class="glyphicon glyphicon-refresh slot-machine" ng-click="shuffle()"></span>
+            <span class="glyphicon glyphicon-refresh slot-machine" ng-click="shuffle($index)"></span>
         </div>
         <p class="bg-info" ng-if="$first">{{card[0].question}}</p>
     </div>

@@ -11,8 +11,16 @@ creativityApp.controller('cardsCtl',['$scope','$http','globalConfig', function($
          $scope.cards = data.card_game;
     });
 
-    $scope.shuffle = function(){
-        //$scope.card_game.shift();
+    $scope.shuffle = function(index){
+        $scope.cards[index].shift();
+
+        if($scope.cards[index].length < 1){
+            //TODO: refactoring
+            globalConf.fetch().success(function(data){
+                $scope.cards = data.card_game;
+            });
+        }
+
     }
 
     $scope.flippingCard = function() {
@@ -33,5 +41,11 @@ creativityApp.controller('creativitySessionCtl', ['$scope','globalConfig','globa
     globalMessages.fetch().success(function(data){
         $scope.ideas = data.ideas;
     });
+
+    $scope.vote = function(){
+
+
+
+    }
 
 }]);
