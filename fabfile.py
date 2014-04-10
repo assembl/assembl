@@ -529,20 +529,20 @@ def install_rbenv():
         if rbenv_missing:
             # Install rbenv:
             run('git clone git://github.com/sstephenson/rbenv.git ~/.rbenv')
-            # Add rbenv to the path:
-            run('echo \'export PATH="$HOME/.rbenv/bin:$PATH"\' >> .bash_profile')
-            run('echo \'eval "$(rbenv init -)"\' >> .bash_profile')
-            run('source ~/.bash_profile')
-            # The above will work fine on a shell (such as on the server accessed using
-            # ssh for a developement machine running a GUI, you may need to run the 
-            # following from a shell (with your local user):
-            #    echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.profile;
-            #    echo 'eval "$(rbenv init -)"' >> ~/.profile;
-            #    source ~/.profile;
-            
-            run('echo \'export PATH="$HOME/.rbenv/bin:$PATH"\' >> .profile')
-            run('echo \'eval "$(rbenv init -)"\' >> .profile')
-            run('source ~/.profile')
+        # Add rbenv to the path:
+        run('echo \'export PATH="$HOME/.rbenv/bin:$PATH"\' >> .bash_profile')
+        run('echo \'eval "$(rbenv init -)"\' >> .bash_profile')
+        run('source ~/.bash_profile')
+        # The above will work fine on a shell (such as on the server accessed using
+        # ssh for a developement machine running a GUI, you may need to run the 
+        # following from a shell (with your local user):
+        #    echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.profile;
+        #    echo 'eval "$(rbenv init -)"' >> ~/.profile;
+        #    source ~/.profile;
+        
+        run('echo \'export PATH="$HOME/.rbenv/bin:$PATH"\' >> .profile')
+        run('echo \'eval "$(rbenv init -)"\' >> .profile')
+        run('source ~/.profile')
 
 @task
 def install_compass():
