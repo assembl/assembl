@@ -1,10 +1,10 @@
 <div class="cards" ng-controller="cardsCtl">
     <div ng-repeat="card in cards">
         <div class="card alert alert-success" ng-if="$first">
-            <p>{{card.description}}</p>
+            <p>{{card[0].description}}</p>
             <span class="glyphicon glyphicon-refresh slot-machine" ng-click="shuffle()"></span>
         </div>
-        <p class="bg-info" ng-if="$first">{{card.question}}</p>
+        <p class="bg-info" ng-if="$first">{{card[0].question}}</p>
     </div>
 </div>
 <div class="card-comment">

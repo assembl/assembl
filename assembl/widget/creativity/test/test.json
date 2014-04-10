@@ -1,29 +1,80 @@
 {
     "useraname":"test 1",
     "persmission":["read","write"],
-    "api_url":{
-       "synthesis":"http://app.com/test/rest/synthesis"
+    "url":{
+       "synthesis":"http://app.com/test/rest/synthesis",
+       "message":"http://app.com/test/rest/message",
+       "comment":"http://app.com/test/rest/comment"
     },
-    "cards":[
-        {
-            "id":"1",
-            "description":"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris quis nisl sapien. Sed eget justo mattis, tincidunt quam et, ultricies justo. Morbi consequat odio lorem, ut fringilla est dictum nec. ",
-            "question":"Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-            "img_url":"",
-            "color":"blue"
-        },
-        {
-            "id":"2",
-            "description":"Phasellus commodo, elit in sodales consequat, arcu metus commodo enim, porttitor mattis purus quam at augue. Vestibulum aliquam sollicitudin facilisis",
-            "question":"Maecenas id velit ut libero pharetra accumsan",
-            "img_url":"",
-            "color":"back"},
-        {
-            "id":"3",
-            "description":"Curabitur id urna vitae orci varius congue. Ut rutrum lectus sed enim scelerisque sodales. Nullam hendrerit tristique dui, id blandit felis gravida eu.",
-            "question":"Morbi laoreet ante et risus lobortis rutrum sit amet id mauris",
-            "img_url":"",
-            "color":"yellow"
-        }
-    ]
+    "card_game":{
+        "0":[
+                {
+                "id":"1",
+                "description":"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris quis nisl sapien.",
+                "question":"Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+                "img_url":"",
+                "color":"blue"
+                },
+                {
+                "id":"2",
+                "description":"Phasellus commodo, elit in sodales consequat, arcu metus commodo enim.",
+                "question":"Maecenas id velit ut libero pharetra accumsan",
+                "img_url":"",
+                "color":"back"
+                },
+                {
+                "id":"3",
+                "description":"Curabitur id urna vitae orci varius congue. Ut rutrum lectus sed enim scelerisque sodales.",
+                "question":"Morbi laoreet ante et risus lobortis rutrum sit amet id mauris",
+                "img_url":"",
+                "color":"yellow"
+                }
+        ],
+        "1":[
+                {
+                    "id":"1",
+                    "description":"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris quis nisl sapien.",
+                    "question":"Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+                    "img_url":"",
+                    "color":"blue"
+                },
+                {
+                    "id":"2",
+                    "description":"Phasellus commodo, elit in sodales consequat, arcu metus commodo enim.",
+                    "question":"Maecenas id velit ut libero pharetra accumsan",
+                    "img_url":"",
+                    "color":"back"
+                },
+                {
+                    "id":"3",
+                    "description":"Curabitur id urna vitae orci varius congue. Ut rutrum lectus sed enim scelerisque sodales.",
+                    "question":"Morbi laoreet ante et risus lobortis rutrum sit amet id mauris",
+                    "img_url":"",
+                    "color":"yellow"
+                }
+        ],
+        "2":[
+                {
+                    "id":"1",
+                    "description":"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris quis nisl sapien.",
+                    "question":"Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+                    "img_url":"",
+                    "color":"blue"
+                },
+                {
+                    "id":"2",
+                    "description":"Phasellus commodo, elit in sodales consequat, arcu metus commodo enim.",
+                    "question":"Maecenas id velit ut libero pharetra accumsan",
+                    "img_url":"",
+                    "color":"back"
+                },
+                {
+                    "id":"3",
+                    "description":"Curabitur id urna vitae orci varius congue. Ut rutrum lectus sed enim scelerisque sodales.",
+                    "question":"Morbi laoreet ante et risus lobortis rutrum sit amet id mauris",
+                    "img_url":"",
+                    "color":"yellow"
+                }
+        ]
+    }
 }

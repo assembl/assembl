@@ -1,11 +1,24 @@
 html, body {
   padding: 0;
   margin: 0;
-  //background-color: #e6e6e6;
+}
+
+.widget-container {
+  width: 600px;
+  margin-top: 5%;
 }
 
 .card-comment {
   margin-top: 15px;
+}
+
+.session-comment {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top:1px solid #c7c2dd;
+  .media-object {
+    //border: 2px solid #c7c2dd;
+  }
 }
 
 .cards {
