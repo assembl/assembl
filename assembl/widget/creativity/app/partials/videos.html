@@ -1,151 +1,60 @@
-<!DOCTYPE html>
-<html>
-<head lang="en">
-  <meta charset="UTF-8">
-  <title></title>
-  <link href="bower_components/select2/select2.css" rel="stylesheet"/>
-	<style>
-	.select2-no-results {
-		display: none !important;
-	}
 
-  #keywords {
-    padding-left: 0;
-  }
+<style>
+.select2-no-results {
+	display: none !important;
+}
 
-  /* modified version of select2.css in .select2-container-multi .select2-choices .select2-search-choice */
-  #keywords .keyword {
-    -moz-user-select: none;
-    background-clip: padding-box;
-    background-color: #E4E4E4;
-    background-image: linear-gradient(to top, #F4F4F4 20%, #F0F0F0 50%, #E8E8E8 52%, #EEEEEE 100%);
-    border: 1px solid #AAAAAA;
-    border-radius: 3px;
-    box-shadow: 0 0 2px #FFFFFF inset, 0 1px 0 rgba(0, 0, 0, 0.05);
-    color: #333333;
-    cursor: default;
-    line-height: 13px;
-    margin: 3px 0 3px 5px;
-    padding: 3px 5px; /* was 3px 5px 3px 18px; */
-    position: relative;
+#keywords {
+  padding-left: 0;
+}
 
-    /* added */
-    display: inline-block;
-  }
+/* modified version of select2.css in .select2-container-multi .select2-choices .select2-search-choice */
+#keywords .keyword {
+  -moz-user-select: none;
+  background-clip: padding-box;
+  background-color: #E4E4E4;
+  background-image: linear-gradient(to top, #F4F4F4 20%, #F0F0F0 50%, #E8E8E8 52%, #EEEEEE 100%);
+  border: 1px solid #AAAAAA;
+  border-radius: 3px;
+  box-shadow: 0 0 2px #FFFFFF inset, 0 1px 0 rgba(0, 0, 0, 0.05);
+  color: #333333;
+  cursor: default;
+  line-height: 13px;
+  margin: 3px 0 3px 5px;
+  padding: 3px 5px; /* was 3px 5px 3px 18px; */
+  position: relative;
 
-  #keywords .keyword:hover {
-    cursor: pointer;
-  }
-	</style>
-</head>
-<body>
+  /* added */
+  display: inline-block;
+}
+
+#keywords .keyword:hover {
+  cursor: pointer;
+}
+</style>
+
+<div id="videos" ng-controller="videosCtl">
+  <!--
+  <h2 ng-init="gapiLoaded()">Video</h2>
+  -->
   <h2>Video</h2>
 
   <ul id="keywords">
-    <li class="keyword">modèle commercial</li>
-    <li class="keyword">freemium</li>
-    <li class="keyword">modèle d'affaires</li>
-    <li class="keyword">entreprise</li>
-    <li class="keyword">stratégie</li>
+    <li class="keyword" ng-repeat="keyword in inspiration_keywords" ng-click="keywordClick($event)">{{keyword}}</li>
   </ul>
 
-  <input id="query" class="select2-offscreen" type="hidden" value="" style="width:400px" placeholder="Entrez ici votre recherche..."/>
-  <input type="submit" id="search-button" disabled onclick="search()" value="Rechercher" />
+  <form ng-submit="searchClick()">
+    <input id="query" class="select2-offscreen" type="hidden" value="" placeholder="Entrez ici votre recherche..."/>
+    <input type="submit" id="search-button" disabled />
+  </form>
   <div id="search-container"></div>
 
+</div>
 
-
-  <script src="bower_components/jquery/dist/jquery.min.js"></script>
-  <script src="bower_components/select2/select2.js"></script>
-  <script>
-  $(document).ready(function() {
-    $("#query").select2({
-      tags: ["modèle commercial", "freemium", "modèle d'affaires", "entreprise", "stratégie"],
-      tokenSeparators: [",", " "],
-      formatNoMatches: function(term){return '';},
-      //minimumResultsForSearch: -1
-      selectOnBlur: true,
-      minimumInputLength: 1,
-    });
-
-    $("#keywords .keyword").click(function(el){
-      var keyword_value = $(el.target).html();
-      var values = $("#query").select2("val");
-      var alreadyThere = false;
-      for ( var i = 0; i < values.length; ++i )
-      {
-        if ( values[i] == keyword_value )
-        {
-          alreadyThere = true;
-          break;
-        }
-      }
-      if ( false == alreadyThere )
-      {
-        values.push( $(el.target).html() );
-        $("#query").select2("val", values );
-        $(el.target).css('display', 'none');
-        //$(el.target).css('background', '#000');
-      }
-      
-    });
-  });
-
-  function load() {
-      gapi.client.setApiKey('AIzaSyC8lCVIHWdtBwnTtKzKl4dy8k5C_raqyK4');
-      gapi.client.load('youtube', 'v3', handleAPILoaded);
-  }
-
-  // After the API loads, call a function to enable the search box.
-  function handleAPILoaded() {
-    $('#search-button').attr('disabled', false);
-  }
-
-  // Search for a specified string.
-  function search() {
-    var q = $('#query').val();
-    var request = gapi.client.youtube.search.list({
-      q: q,
-      part: 'snippet'
-    });
-
-    request.execute(function(response) {
-      /*
-      var str = JSON.stringify(response.result);
-      $('#search-container').html('<pre>' + str + '</pre>');
-      */
-      displayResults(response);
-    });
-  }
-
-  function displayResults(response) {
-    var str = '';
-    console.log(response);
-    var nresults = 0;
-    if ( response.result && response.result.items )
-    {
-      var sz = response.result.items.length;
-      for ( var i = 0; i < sz; ++i )
-      {
-        var item = response.result.items[i];
-        if ( item.id && item.id.kind && item.id.kind == 'youtube#video' )
-        {
-          ++nresults;
-          str += '<li><a href="http://youtube.com/watch?v=' + item.id.videoId + '" target="_blank">'
-            + '<img src=' + item.snippet.thumbnails.default.url + ' />'
-            + item.snippet.title
-            + '</a></li>';
-      	}
-      }
-      str = '<ul>' + str + '</ul>';
-    }
-    if ( nresults == 0 )
-    {
-      str = 'No result';
-    }
-    $('#search-container').html(str);
-  }
-	</script>
-	<script src="https://apis.google.com/js/client.js?onload=load"></script>
-</body>
-</html>
+<script>
+function gapiLoaded()
+{
+  angular.element($('#videos')).scope().gapiLoaded();
+}
+</script>
+<script src="https://apis.google.com/js/client.js?onload=gapiLoaded"></script>

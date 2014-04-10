@@ -1,5 +1,17 @@
 "use strict";
 
+creativityApp.factory('globalVideoConfig', function($http){
+
+    var api_rest = 'test/globalVideoConfig.json';
+
+    return {
+        fetch : function() {
+            return $http.get(api_rest);
+        }
+    }
+
+});
+
 creativityApp.factory('globalConfig', function($http){
 
     var api_rest = 'test/test.json';
