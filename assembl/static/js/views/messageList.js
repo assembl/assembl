@@ -7,10 +7,9 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
      */
     var DIV_ANNOTATOR_HELP = app.format("<div class='annotator-draganddrop-help'>{0}</div>", i18n.gettext('You can drag the segment above directly to the table of ideas') ),
         DEFAULT_MESSAGE_VIEW_LI_ID_PREFIX = "defaultMessageView-",
-        MAX_MESSAGES_IN_DISPLAY = 20,
+        MAX_MESSAGES_IN_DISPLAY = 30,
         MORE_PAGES_NUMBER = 10;
 
-    
     /**
      * @class views.MessageList
      */
@@ -124,7 +123,6 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
          */
         currentQuery: new PostQuery(),
 
-
         /**
          * Reset the offset values to initial values
          */
@@ -138,68 +136,60 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
          * TODO:  This is used in threading, but is sub-optimal as it won't 
          * tie messages to their grandparent in partial views.  benoitg
          *
-         * @param {number} offsetStart
-         * @param {number} offsetEnd
          * @return {Message[]}
          */
         getRootMessagesToDisplay: function(offsetStart, offsetEnd){
             var toReturn = [],
                 that = this,
-                index = offsetStart,
-                len = this.messages.length;
+                messages = this.messages;
 
-            if( offsetEnd < len ){
-                len = offsetEnd;
-            } else {
-                offsetEnd = len;
-            }
-
-            function shouldDisplay(model){
+            messages.each(function(model){
                 var parentId = model.get('parentId'),
+                    id = model.getId(),
                     hasParent = (parentId === null || that.messageIdsToDisplay.indexOf(parentId) == -1 );
 
-                return that.messageIdsToDisplay.indexOf(model.getId()) >= 0 && hasParent;
-            }
-
-            for( ; index < len; index += 1 ){
-                var model = this.messages.at(index);
-                if( !shouldDisplay(model) ){
-                    continue;
-                }
-
-                var spaceToDisplay = offsetEnd - index,
-                    spaceValue = model.getDescendantsCount();
-
-                if( spaceToDisplay >= spaceValue ){ // It fits!
-                    index += spaceValue;
+                if( that.messageIdsToDisplay.indexOf(id) >= 0 && hasParent ){
                     toReturn.push(model);
-                } else { // Doesn't fit ...
-                    if( toReturn.length === 0 ){
-                        toReturn.push(model);
-                    }
-                    break;
                 }
-            }
+            });
 
-            this.messages.every(function(model){
-                if( !shouldDisplay(model) ){
-                    return;
-                }
+            return toReturn;
+        },
+
+        /**
+         * @param {message[]} messages
+         * @param {number} offsetStart
+         * @param {number} offsetEnd
+         *
+         * @return {message[]}
+         */
+        applyFilterToThreadedMessages: function(messages, offsetStart, offsetEnd){
+            var toReturn = [],
+                that = this,
+                index = offsetStart,
+                currentIndex = 0,
+                okToGo = false;
+
+            messages.every(function(message){
                 var spaceToDisplay = offsetEnd - index,
-                    spaceValue = model.getDescendantsCount();
+                    spaceValue = message.getDescendantsCount();
 
-                if( spaceToDisplay >= spaceValue ){
-                    // yey, it fits !
-                    index += spaceValue;
-                    toReturn.push(model);
-                } else {
-                    // Doesn't fit ...
-                    if( toReturn.length === 0 ){
-                        toReturn.push(model);
-                    }
-                    return false; // break
+                if( currentIndex < index && !okToGo ){
+                    currentIndex += spaceValue;
+                    return true; // continue;
                 }
+                okToGo = true;
 
+                if( spaceToDisplay >= spaceValue ){ // It fits !
+                    index += spaceValue;
+                    toReturn.push(message);
+                } else { // Doesn't fit
+                    if( toReturn.length === 0 ){
+                        toReturn.push(message);
+                    }
+                    return false; // break;
+                }
+                return true; // continue;
             });
 
             return toReturn;
@@ -233,14 +223,16 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
          */
         showMessages: function(){
             var ideaList = this.$('.idealist'),
-                views;
+                views, models;
 
             // The MessageFamilyView will re-fill the array with the rendered MessageView
             this.renderedMessageViewsPrevious = _.clone(this.renderedMessageViewsCurrent);
             this.renderedMessageViewsCurrent = {};
 
             if (this.currentViewStyle == this.ViewStyles.THREADED) {
-                views = this.getRenderedMessagesThreaded(this.getRootMessagesToDisplay(this.offsetStart, this.offsetEnd), 1, []);
+                models = this.getRootMessagesToDisplay();
+                models = this.applyFilterToThreadedMessages(models, this.offsetStart, this.offsetEnd);
+                views = this.getRenderedMessagesThreaded(models, 1, []);
             } else {
                 views = this.getRenderedMessagesFlat(this.getAllMessagesToDisplay(), this.offsetStart, this.offsetEnd);
             }
@@ -280,9 +272,9 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
             }
 
             if (this.currentViewStyle == this.ViewStyles.THREADED) {
-                this._calculateNextThreadedMessages();
+                this.calculateNextThreadedMessages();
             } else {
-                this._calculateNextFlatMessages();
+                this.calculateNextFlatMessages();
             }
 
             this.showMessages();
@@ -292,7 +284,7 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
          * Sets the offsetStart to the right point
          * @private
          */
-        _calculateNextFlatMessages: function(){
+        calculateNextFlatMessages: function(){
             var messagesInDisplay;
 
             do {
@@ -307,7 +299,7 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
          * Sets the offsetStart to the right point
          * @private
          */
-        _calculateNextThreadedMessages: function(){
+        calculateNextThreadedMessages: function(){
             var currentSpaceValue = this.getCurrentSpaceValue(),
                 spaceValue = this.offsetEnd - this.offsetStart,
                 len = this.messages.length;
@@ -335,6 +327,20 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
          * Show the previous bunch of messages to be displayed
          */
         showPreviousMessages: function(){
+            if (this.currentViewStyle == this.ViewStyles.THREADED) {
+                this.calculatePreviousThreadedMessages();
+            } else {
+                this.calculatePreviousFlatMessages();
+            }
+
+            this.showMessages();
+        },
+
+        /**
+         * Sets the offsetEnd to the right point
+         * @private
+         */
+        calculatePreviousFlatMessages: function(){
             var messagesInDisplay;
 
             this.offsetStart -= MORE_PAGES_NUMBER;
@@ -348,8 +354,34 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
                     this.offsetEnd = this.offsetEnd - 1;
                 }
             } while ( messagesInDisplay > MAX_MESSAGES_IN_DISPLAY );
+        },
 
-            this.showMessages();
+        /**
+         * Sets the offsetEnd to the right point
+         * @private
+         */
+        calculatePreviousThreadedMessages: function(){
+            var currentSpaceValue = this.getCurrentSpaceValue(),
+                spaceValue = this.offsetEnd - this.offsetStart,
+                len = this.messages.length;
+
+            if( currentSpaceValue > spaceValue ){
+                this.offsetStart += currentSpaceValue;
+                if( this.offsetStart > len ){
+                    this.offsetStart = len - 1;
+                    spaceValue = 1;
+                }
+
+                this.offsetEnd = this.offsetStart + spaceValue;
+            }
+
+            do {
+                spaceValue = this.offsetEnd - this.offsetStart;
+
+                if( spaceValue > MAX_MESSAGES_IN_DISPLAY ){
+                    this.offsetStart += 1;
+                }
+            } while( spaceValue > MAX_MESSAGES_IN_DISPLAY );
         },
 
         /**
