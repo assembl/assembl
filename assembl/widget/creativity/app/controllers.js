@@ -1,10 +1,10 @@
 "use strict";
 
-creativityApp.controller('videosCtl', ['$scope', 'globalVideoConfig', function($scope, globalVideoConfig){
+creativityApp.controller('videosCtl',
+    ['$scope', 'globalVideoConfig', function($scope, globalVideoConfig){
     
     // intialization code
-    $scope.init = function()
-    {
+    $scope.init = function(){
         // set model fields
         $scope.inspiration_keywords = [
             "modèle commercial",
@@ -117,7 +117,8 @@ creativityApp.controller('videosCtl', ['$scope', 'globalVideoConfig', function($
 
 }]);
 
-creativityApp.controller('cardsCtl',['$scope','$http','globalConfig', function($scope, $http, globalConf){
+creativityApp.controller('cardsCtl',
+    ['$scope','$http','globalConfig', function($scope, $http, globalConf){
 
     //data mock
     globalConf.fetch().success(function(data){
@@ -136,14 +137,12 @@ creativityApp.controller('cardsCtl',['$scope','$http','globalConfig', function($
 
     }
 
-    $scope.flippingCard = function() {
-
-
-    }
+    $scope.flippingCard = function() {}
 
 }]);
 
-creativityApp.controller('creativitySessionCtl', ['$scope','globalConfig','globalMessages', function($scope, globalConf, globalMessages){
+creativityApp.controller('creativitySessionCtl',
+    ['$scope','globalConfig','globalMessages', function($scope, globalConf, globalMessages){
 
     //data mock
     globalConf.fetch().success(function(data){
@@ -155,10 +154,6 @@ creativityApp.controller('creativitySessionCtl', ['$scope','globalConfig','globa
         $scope.ideas = data.ideas;
     });
 
-    $scope.vote = function(){
-
-
-
-    }
+    $scope.vote = function(){}
 
 }]);

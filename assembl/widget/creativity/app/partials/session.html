@@ -15,7 +15,7 @@
         <div class="form-group">
             <textarea class="form-control" rows="3" placeholder="description"></textarea>
         </div>
-        <button type="submit" class="btn btn-primary">Envoyez</button>
+        <button type="submit" class="btn btn-primary btn-sm">Envoyez</button>
     </form>
 </div>
 <div class="session-comment" ng-controller="creativitySessionCtl">
@@ -35,7 +35,18 @@
                     </div>
                 </div>
             </div>
-            <span class="text-info" ng-click="showComment = ! showComment"><h6>see more</h6></span>
+            <div ng-show="showSubComment" class="sub-comment">
+                <form role="form">
+                    <div class="form-group">
+                        <textarea class="form-control" rows="2" placeholder="commentez"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-xs pull-right">Envoyez</button>
+                </form>
+            </div>
+            <p>
+            <span class="text-info" ng-click="showSubComment = ! showSubComment">comment</span> |
+            <span class="text-info" ng-click="showComment = ! showComment">see more</span>
+            </p>
             <div ng-show="showComment">
                 <div class="media" ng-if="idea.comments.length > 1" ng-repeat="com in idea.comments">
                     <a class="pull-left" href="#">
