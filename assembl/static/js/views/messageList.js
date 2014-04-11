@@ -7,7 +7,7 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
      */
     var DIV_ANNOTATOR_HELP = app.format("<div class='annotator-draganddrop-help'>{0}</div>", i18n.gettext('You can drag the segment above directly to the table of ideas') ),
         DEFAULT_MESSAGE_VIEW_LI_ID_PREFIX = "defaultMessageView-",
-        MAX_MESSAGES_IN_DISPLAY = 12,
+        MAX_MESSAGES_IN_DISPLAY = 20,
         MORE_PAGES_NUMBER = 10;
 
     
@@ -137,28 +137,76 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
          * Returns the messages with no parent in the messages to be rendered
          * TODO:  This is used in threading, but is sub-optimal as it won't 
          * tie messages to their grandparent in partial views.  benoitg
+         *
+         * @param {number} offsetStart
+         * @param {number} offsetEnd
          * @return {Message[]}
          */
-        getRootMessagesToDisplay: function(){
+        getRootMessagesToDisplay: function(offsetStart, offsetEnd){
             var toReturn = [],
                 that = this,
-                messages = this.messages;
+                index = offsetStart,
+                len = this.messages.length;
 
-            messages.each(function(model){
+            if( offsetEnd < len ){
+                len = offsetEnd;
+            } else {
+                offsetEnd = len;
+            }
+
+            function shouldDisplay(model){
                 var parentId = model.get('parentId'),
-                    id = model.getId(),
                     hasParent = (parentId === null || that.messageIdsToDisplay.indexOf(parentId) == -1 );
 
-                if( that.messageIdsToDisplay.indexOf(id) >= 0 && hasParent ){
-                    toReturn.push(model);
+                return that.messageIdsToDisplay.indexOf(model.getId()) >= 0 && hasParent;
+            }
+
+            for( ; index < len; index += 1 ){
+                var model = this.messages.at(index);
+                if( !shouldDisplay(model) ){
+                    continue;
                 }
+
+                var spaceToDisplay = offsetEnd - index,
+                    spaceValue = model.getDescendantsCount();
+
+                if( spaceToDisplay >= spaceValue ){ // It fits!
+                    index += spaceValue;
+                    toReturn.push(model);
+                } else { // Doesn't fit ...
+                    if( toReturn.length === 0 ){
+                        toReturn.push(model);
+                    }
+                    break;
+                }
+            }
+
+            this.messages.every(function(model){
+                if( !shouldDisplay(model) ){
+                    return;
+                }
+                var spaceToDisplay = offsetEnd - index,
+                    spaceValue = model.getDescendantsCount();
+
+                if( spaceToDisplay >= spaceValue ){
+                    // yey, it fits !
+                    index += spaceValue;
+                    toReturn.push(model);
+                } else {
+                    // Doesn't fit ...
+                    if( toReturn.length === 0 ){
+                        toReturn.push(model);
+                    }
+                    return false; // break
+                }
+
             });
 
             return toReturn;
         },
         
         /**
-         * Returns the the messages to be rendered
+         * Returns the messages to be rendered
          * @return {Message[]}
          */
         getAllMessagesToDisplay: function(){
@@ -180,18 +228,19 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
         },
 
         /**
-         * 
+         * Load the current bunch of messages regarding `offsetStart`
+         * and `offsetEnd` prop
          */
         showMessages: function(){
             var ideaList = this.$('.idealist'),
                 views;
 
-            //The MessageFamilyView will re-fill the array with the rendered MessageView
-            // this.renderedMessageViewsPrevious = _.clone(this.renderedMessageViewsCurrent);
-            // this.renderedMessageViewsCurrent = {};
+            // The MessageFamilyView will re-fill the array with the rendered MessageView
+            this.renderedMessageViewsPrevious = _.clone(this.renderedMessageViewsCurrent);
+            this.renderedMessageViewsCurrent = {};
 
             if (this.currentViewStyle == this.ViewStyles.THREADED) {
-                views = this.getRenderedMessagesThreaded(this.getRootMessagesToDisplay(), 1, []);
+                views = this.getRenderedMessagesThreaded(this.getRootMessagesToDisplay(this.offsetStart, this.offsetEnd), 1, []);
             } else {
                 views = this.getRenderedMessagesFlat(this.getAllMessagesToDisplay(), this.offsetStart, this.offsetEnd);
             }
@@ -223,13 +272,28 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
          * Show the next bunch of messages to be displayed.
          */
         showNextMessages: function(){
-            var messagesInDisplay,
-                len = this.messages.length;
+            var len = this.messages.length;
 
             this.offsetEnd += MORE_PAGES_NUMBER;
             if( this.offsetEnd > len ){
                 this.offsetEnd = len;
             }
+
+            if (this.currentViewStyle == this.ViewStyles.THREADED) {
+                this._calculateNextThreadedMessages();
+            } else {
+                this._calculateNextFlatMessages();
+            }
+
+            this.showMessages();
+        },
+
+        /**
+         * Sets the offsetStart to the right point
+         * @private
+         */
+        _calculateNextFlatMessages: function(){
+            var messagesInDisplay;
 
             do {
                 messagesInDisplay = this.offsetEnd - this.offsetStart;
@@ -237,8 +301,34 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
                     this.offsetStart += 1;
                 }
             } while ( messagesInDisplay > MAX_MESSAGES_IN_DISPLAY );
+        },
 
-            this.showMessages();
+        /**
+         * Sets the offsetStart to the right point
+         * @private
+         */
+        _calculateNextThreadedMessages: function(){
+            var currentSpaceValue = this.getCurrentSpaceValue(),
+                spaceValue = this.offsetEnd - this.offsetStart,
+                len = this.messages.length;
+
+            if( currentSpaceValue > spaceValue ){
+                this.offsetStart += currentSpaceValue;
+                if( this.offsetStart > len ){
+                    this.offsetStart = len - 1;
+                    spaceValue = 1;
+                }
+
+                this.offsetEnd = this.offsetStart + spaceValue;
+            }
+
+            do {
+                spaceValue = this.offsetEnd - this.offsetStart;
+
+                if( spaceValue > MAX_MESSAGES_IN_DISPLAY ){
+                    this.offsetStart += 1;
+                }
+            } while( spaceValue > MAX_MESSAGES_IN_DISPLAY );
         },
 
         /**
@@ -260,6 +350,19 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
             } while ( messagesInDisplay > MAX_MESSAGES_IN_DISPLAY );
 
             this.showMessages();
+        },
+
+        /**
+         * @return {Number} returns the current space value from all displayed messages
+         */
+        getCurrentSpaceValue: function(){
+            var ret = 0;
+            _.each(this.renderedMessageViewsCurrent, function(message){
+                if( ! message.model.get('parentId') ){
+                    ret += message.model.getDescendantsCount() + 1;
+                }
+            });
+            return ret;
         },
         
         /**
@@ -401,8 +504,7 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
          * Return a list with all views.el already rendered for threaded views
          * @param {Message.Model[]} messages
          * @param {Number} [level=1] The current hierarchy level
-         * @param {Array[boolean]} last_sibling_chain which of the view's ancestors
-         *   are the last child of their respective parents.
+         * @param {Boolean[]} [last_sibling_chain] which of the view's ancestors are the last child of their respective parents.
          * @return {HTMLDivElement[]}
          */
         getRenderedMessagesThreaded: function(messages, level, last_sibling_chain){
@@ -446,8 +548,7 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
                     view.currentLevel = level;
                     found = true;
                     children = model.getChildren();
-                    var subviews = this.getRenderedMessagesThreaded(
-                        children, level+1, last_sibling_chain);
+                    var subviews = this.getRenderedMessagesThreaded(children, level+1, last_sibling_chain);
                     view.hasChildren = (subviews.length > 0);
                     list.push(view.render().el);
                     view.$('.messagelist-children').append( subviews );

@@ -28,6 +28,20 @@ define(['models/base', 'jquery', 'app', 'underscore'], function(Base, $, app, _)
         },
 
         /**
+         * @return {Number} the quantity of all descendants
+         */
+        getDescendantsCount: function(){
+            var children = this.getChildren(),
+                count = children.length;
+
+            _.each(children, function(child){
+                count += child.getDescendantsCount();
+            });
+
+            return count;
+        },
+
+        /**
          * Return all children
          * @return {MessageModel[]}
          */
