@@ -361,27 +361,31 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
          * @private
          */
         calculatePreviousThreadedMessages: function(){
+            this.offsetStart -= MORE_PAGES_NUMBER;
+            if( this.offsetStart < 0 ){
+                this.offsetStart = 0;
+            }
+
             var currentSpaceValue = this.getCurrentSpaceValue(),
                 spaceValue = this.offsetEnd - this.offsetStart,
-                len = this.messages.length;
-
-            if( currentSpaceValue > spaceValue ){
-                this.offsetStart += currentSpaceValue;
-                if( this.offsetStart > len ){
-                    this.offsetStart = len - 1;
-                    spaceValue = 1;
-                }
-
-                this.offsetEnd = this.offsetStart + spaceValue;
-            }
+                reduceEndCount = 0;
 
             do {
                 spaceValue = this.offsetEnd - this.offsetStart;
-
-                if( spaceValue > MAX_MESSAGES_IN_DISPLAY ){
-                    this.offsetStart += 1;
+                if( currentSpaceValue > spaceValue ){
+                    this.offsetStart -= MORE_PAGES_NUMBER;
+                    reduceEndCount += 1;
                 }
-            } while( spaceValue > MAX_MESSAGES_IN_DISPLAY );
+
+                if( this.offsetStart < 0 ){
+                    this.offsetStart = 0;
+                    break;
+                }
+            } while( currentSpaceValue > spaceValue );
+
+            _.each(_.range(reduceEndCount), function(){
+                this.offsetEnd -= MORE_PAGES_NUMBER;
+            });
         },
 
         /**
