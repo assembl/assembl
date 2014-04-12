@@ -1,4 +1,4 @@
-<div class="panel">
+<div id = "synthesisPanel" class="panel">
     <div class="panel-header">
         <strong>{{ gettext('Synthesis') }}</strong>
 
@@ -21,9 +21,6 @@
         </div>
 
         <div id="synthesisPanel-ideas">
-            <% _.each(ideas, function(idea){ %>
-                <%= app.printIdea(idea,  '') %>
-            <% }); %>
         </div>
 
         <div class="spacer"></div>

@@ -1,5 +1,5 @@
-define(['backbone', 'underscore', 'jquery', 'app', 'models/synthesis', 'views/synthesisIdea', 'i18n', 'views/editableField', 'views/ckeditorField'],
-function(Backbone, _, $, app, Synthesis, Source, SynthesisIdeaView, i18n, EditableField, CKEditorField){
+define(['backbone', 'underscore', 'jquery', 'app', 'models/synthesis', 'permissions', 'views/ideaInSynthesis', 'i18n', 'views/editableField', 'views/ckeditorField'],
+function(Backbone, _, $, app, Synthesis, Permissions, IdeaInSynthesisView, i18n, EditableField, CKEditorField){
     'use strict';
 
     var SynthesisPanel = Backbone.View.extend({
@@ -57,6 +57,9 @@ function(Backbone, _, $, app, Synthesis, Source, SynthesisIdeaView, i18n, Editab
          * @return {SynthesisPanel}
          */
         render: function(){
+            //console.log('synthesisPanel:render() firing');
+            var that = this;
+            
             app.trigger('render');
 
             // Cleaning all previous listeners
@@ -70,7 +73,7 @@ function(Backbone, _, $, app, Synthesis, Source, SynthesisIdeaView, i18n, Editab
 
             //var list = document.createDocumentFragment(),
             var model = this.model,
-                ideas = this.ideas.getInNextSynthesisIdeas();
+                ideas = this.ideas.getInNextSynthesisRootIdeas();
 
             model.set('collapsed', this.collapsed);
             model.set('ideas', ideas);
@@ -78,58 +81,49 @@ function(Backbone, _, $, app, Synthesis, Source, SynthesisIdeaView, i18n, Editab
             // Getting the scroll position
             var body = this.$('.panel-body'),
                 y = body.get(0) ? body.get(0).scrollTop : 0;
+            var data = model.toJSON();
+            data.canSend = app.getCurrentUser().can(Permissions.SEND_SYNTHESIS);
+            data.canEdit = app.getCurrentUser().can(Permissions.EDIT_SYNTHESIS);
+            this.$el.html( this.template(data) );
 
-            this.$el.html( this.template(model.toJSON()) );
-
+            _.each(ideas, function append_recursive(idea){
+                var rendered_idea_view = new IdeaInSynthesisView({model: idea});
+                that.$('#synthesisPanel-ideas').append( rendered_idea_view.render().el );
+                _.each(idea.getSynthesisChildren(), function(child){
+                    append_recursive(child)
+                    });
+                });
             this.$('.panel-body').get(0).scrollTop = y;
+            if(data.canEdit) {
+                var titleField = new EditableField({
+                    model: model,
+                    modelProp: 'subject'
+                });
+                titleField.renderTo('#synthesisPanel-title');
 
-            var titleField = new EditableField({
-                model: model,
-                modelProp: 'subject'
-            });
-            titleField.renderTo('#synthesisPanel-title');
+                var introductionField = new EditableField({
+                    model: model,
+                    modelProp: 'introduction'
+                });
+                introductionField.renderTo('#synthesisPanel-introduction');
 
-            var introductionField = new EditableField({
-                model: model,
-                modelProp: 'introduction'
-            });
-            introductionField.renderTo('#synthesisPanel-introduction');
-
-            var conclusionField = new EditableField({
-                model: model,
-                modelProp: 'conclusion'
-            });
-            conclusionField.renderTo('#synthesisPanel-conclusion');
-
-            this.renderCKEditor();
+                var conclusionField = new EditableField({
+                    model: model,
+                    modelProp: 'conclusion'
+                });
+                conclusionField.renderTo('#synthesisPanel-conclusion');
+            }
+            else {
+                this.$('#synthesisPanel-title').append(model.get('subject'));
+                this.$('#synthesisPanel-introduction').append(model.get('introduction'));
+                this.$('#synthesisPanel-conclusion').append(model.get('conclusion'));
+            }
+            
 
             return this;
         },
 
 
-        /**
-         * renders the ckEditor if there is one editable field
-         */
-        renderCKEditor: function(){
-            var editingIdea = this.ideas.getEditingIdeaInSynthesisPanel();
-            if( !editingIdea ){
-                return;
-            }
-
-            this.ckeditor = new CKEditorField({
-                'model': editingIdea,
-                'modelProp': 'longTitle',
-                'placeholder': i18n.gettext('Add the description')
-            });
-
-            this.ckeditor.on('save cancel', function(idea){
-                idea.set('synthesisPanel-editing', false);
-            });
-
-            var area = this.$('#synthesisPanel-longtitle');
-            this.ckeditor.renderTo( area );
-            this.ckeditor.changeToEditMode();
-        },
 
         /**
          * @events
@@ -137,8 +131,7 @@ function(Backbone, _, $, app, Synthesis, Source, SynthesisIdeaView, i18n, Editab
         events: {
             'click #synthesisPanel-closeButton': 'closePanel',
             'click #synthesisPanel-publishButton': 'publish',
-            'click #synthesisPanel-fullscreenButton': 'setFullscreen',
-            'click [data-idea-id]': 'onEditableAreaClick'
+            'click #synthesisPanel-fullscreenButton': 'setFullscreen'
         },
 
         /**
@@ -160,21 +153,6 @@ function(Backbone, _, $, app, Synthesis, Source, SynthesisIdeaView, i18n, Editab
          */
         setFullscreen: function(){
             app.setFullscreen(this);
-        },
-
-        /**
-         * @event
-         */
-        onEditableAreaClick: function(ev){
-            var id = ev.currentTarget.getAttribute('data-idea-id'),
-                idea = app.ideaList.ideas.get(id);
-
-            app.trigger('synthesisPanel:edit');
-
-            if( idea ){
-                idea.set('synthesisPanel-editing', true);
-                this.currentId = id;
-            }
         },
 
         /**
@@ -206,7 +184,7 @@ function(Backbone, _, $, app, Synthesis, Source, SynthesisIdeaView, i18n, Editab
                 publishes_synthesis_id = model.get('id'),
                 url = app.getApiUrl('posts'),
                 template = app.loadTemplate('synthesisEmail'),
-                ideas = this.ideas.getInNextSynthesisIdeas(),
+                ideas = this.ideas.getInNextSynthesisRootIdeas(),
                 that = this;
 
             var onSuccess = function(resp){

@@ -1,0 +1,10 @@
+// The synthesis panel specific CSS
+// ===========================
+
+#synthesisPanel {
+    .synthesisIdea-replybox {
+        &.hidden {
+            display: none;
+        }
+}
+}

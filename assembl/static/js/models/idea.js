@@ -18,9 +18,6 @@ function(Base, _, Segment, app, i18n, Types, Permissions){
             this.set('creationDate', obj.creationDate);
             this.set('hasCheckbox', app.getCurrentUser().can(Permissions.EDIT_SYNTHESIS));
 
-            app.on('synthesisPanel:edit', function(){
-                that.attributes['synthesisPanel-editing'] = false;
-            });
         },
 
         /**
@@ -337,7 +334,7 @@ function(Base, _, Segment, app, i18n, Types, Permissions){
         /**
          * Returns the ideas to compose the synthesis panel
          */
-        getInNextSynthesisIdeas: function(){
+        getInNextSynthesisRootIdeas: function(){
             var ideas = this.where({inNextSynthesis: true}),
                 result = [];
 
@@ -361,14 +358,6 @@ function(Base, _, Segment, app, i18n, Types, Permissions){
             }
             return retval;
         },
-
-        /**
-         * @return {Idea} The idea which is being edited in synthesis Panel
-         */
-        getEditingIdeaInSynthesisPanel: function(){
-            return app.ideaList.ideas.findWhere({ 'synthesisPanel-editing': true });
-        }
-
     });
 
     return {

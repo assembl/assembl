@@ -903,52 +903,6 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard, Types, Permissions){
             $('.tipsy').remove();
         },
 
-        /**
-         * Returns (yep, it doesn't actually prints) the idea formatted to be displayed
-         * at the synthesis email
-         * 
-         * @param  {Idea} idea
-         * @param  {string} email The react's email
-         * @return {string}
-         */
-        printIdea: function(idea, email){
-            var longTitle = escape(idea.getLongTitleDisplayText()),
-                span = $("<span>"+idea.getLongTitleDisplayText()+"</span>"),
-                children = [],
-                segments = app.getSegmentsByIdea(idea),
-                tmpl = app.loadTemplate('synthesisIdeaEmail'),
-                authors = [];
-
-            span.find('p:first-child').css('margin-top', 0);
-            span.find('p:last-child').css('margin-bottom', 0);
-            
-            segments.forEach(function(segment) {
-                var post = segment.getAssociatedPost();
-                if(post) {
-                    var creator = post.getCreator();
-                    if(creator) {
-                        authors.push(creator.get("name"));
-                    }
-                }
-            });
-
-            _.each(idea.getSynthesisChildren(), function(child){
-                children.push( app.printIdea(child) );
-            });
-
-            return tmpl({
-                id: idea.getId(),
-                level: idea.getSynthesisLevel(),
-                editing: idea.get('synthesisPanel-editing') || false,
-                longTitle: span.html(),
-                authors: _.uniq(authors),
-                email: email,
-                subject: longTitle,
-                reactLabel: i18n.gettext('react'),
-                children: children
-            });
-        },
-
         setLocale: function(locale){
             document.cookie = "_LOCALE_="+locale+"; path=/";
             location.reload(true);
