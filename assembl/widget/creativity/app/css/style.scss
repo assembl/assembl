@@ -65,19 +65,28 @@ html, body {
   }
 }
 
-//Video
 
-.select2-no-results {
-  display: none !important;
-}
+#videos {
+  input[type="submit"] {
+    vertical-align: top;
+    margin-top: 3px;
+  }
 
-#keywords {
-  padding-left: 0;
-}
+  .select2-choices {
+    width: 400px;
+    display: inline-block;
+  }
 
-/* modified version of select2.css in .select2-container-multi .select2-choices .select2-search-choice */
-#keywords {
-  .keyword {
+  .select2-no-results {
+    display: none !important;
+  }
+
+  .keywords {
+    padding-left: 0;
+  }
+
+  /* modified version of select2.css in .select2-container-multi .select2-choices .select2-search-choice */
+  .keywords .keyword {
     -moz-user-select: none;
     background-clip: padding-box;
     background-color: #E4E4E4;
@@ -94,9 +103,38 @@ html, body {
 
     /* added */
     display: inline-block;
+  }
 
-    &:hover{
-      cursor: pointer;
+  .keywords .keyword:hover {
+    cursor: pointer;
+  }
+
+  .search-container ul {
+    padding: 0;
+
+    li {
+      min-height: 200px;
+      list-style-type: none;
+      background: #eee;
+      margin: 10px 0;
+      display: block;
+      clear: both;
+
+      .video-thumbnail {
+        float: left;
+        margin: 5px 10px 5px 5px;
+      }
+
+      .video-description {
+        display: flex; /* so that a child can be vertically centered using "align-self: center;" */
+        min-height: 200px;
+
+        .centered {
+          align-self: center;
+          text-align: center;
+          width: 100%;
+        }
+      }
     }
   }
 }

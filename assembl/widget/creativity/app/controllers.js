@@ -1,7 +1,6 @@
 "use strict";
 
-creativityApp.controller('videosCtl',
-    ['$scope', 'globalVideoConfig', function($scope, globalVideoConfig){
+creativityApp.controller('videosCtl', ['$scope', '$http', 'globalVideoConfig', function($scope, $http, globalVideoConfig){
     
     // intialization code
     $scope.init = function(){
@@ -29,10 +28,7 @@ creativityApp.controller('videosCtl',
             //minimumResultsForSearch: -1
             selectOnBlur: true,
             minimumInputLength: 1,
-            width: '400px'
         });
-
-        //console.log(gapi);
     }
 
     $scope.keywordClick = function($event){
@@ -59,7 +55,7 @@ creativityApp.controller('videosCtl',
     $scope.gapiLoaded = function(){
         console.log('gapiLoaded');
         console.log(gapi);
-        gapi.client.setApiKey(globalVideoConfig.youtube_api_key);
+        gapi.client.setApiKey($scope.globalVideoConfig.youtube_api_key);
         gapi.client.load('youtube', 'v3', $scope.handleAPILoaded);
     }
 
@@ -73,6 +69,7 @@ creativityApp.controller('videosCtl',
     // Search for a specified string.
     $scope.searchClick = function(){
         var q = $('#query').val();
+        
         var request = gapi.client.youtube.search.list({
             q: q,
             part: 'snippet'
@@ -83,6 +80,24 @@ creativityApp.controller('videosCtl',
             //$('#search-container').html('<pre>' + str + '</pre>');
             $scope.displayResults(response);
         });
+        
+        /* alternative way of making a search, without using the Google API library
+        $http.get('https://www.googleapis.com/youtube/v3/search', {
+          params: {
+            key: $scope.globalVideoConfig.youtube_api_key,
+            type: 'video',
+            maxResults: '8',
+            part: 'snippet',
+            q: q
+          }
+        })
+        .success( function (data) {
+          $scope.displayResults(data);
+        })
+        .error( function () {
+          console.log('Search error');
+        });
+        */
     }
 
     $scope.displayResults = function(response){
@@ -97,10 +112,16 @@ creativityApp.controller('videosCtl',
           if ( item.id && item.id.kind && item.id.kind == 'youtube#video' )
           {
             ++nresults;
+            /*
             str += '<li><a href="http://youtube.com/watch?v=' + item.id.videoId + '" target="_blank">'
               + '<img src=' + item.snippet.thumbnails.default.url + ' />'
               + item.snippet.title
               + '</a></li>';
+            */
+            str += '<li><div class="video-thumbnail"><iframe type="text/html" width="320" height="190" src="http://www.youtube.com/embed/'
+              + item.id.videoId + '?autoplay=0" frameborder="0"/></div><div class="video-description">'
+              //+ item.snippet.title + '<br/>'
+              + '<div class="centered"><button>Cette vidéo m\'inspire</button></div></div></li>';
             }
         }
         str = '<ul>' + str + '</ul>';
@@ -109,7 +130,7 @@ creativityApp.controller('videosCtl',
       {
         str = 'No result';
       }
-      $('#search-container').html(str);
+      $('#videos .search-container').html(str);
     }
     
 

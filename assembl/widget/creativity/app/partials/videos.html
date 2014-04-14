@@ -1,53 +1,26 @@
 
 <style>
-.select2-no-results {
-	display: none !important;
-}
 
-#keywords {
-  padding-left: 0;
-}
-
-/* modified version of select2.css in .select2-container-multi .select2-choices .select2-search-choice */
-#keywords .keyword {
-  -moz-user-select: none;
-  background-clip: padding-box;
-  background-color: #E4E4E4;
-  background-image: linear-gradient(to top, #F4F4F4 20%, #F0F0F0 50%, #E8E8E8 52%, #EEEEEE 100%);
-  border: 1px solid #AAAAAA;
-  border-radius: 3px;
-  box-shadow: 0 0 2px #FFFFFF inset, 0 1px 0 rgba(0, 0, 0, 0.05);
-  color: #333333;
-  cursor: default;
-  line-height: 13px;
-  margin: 3px 0 3px 5px;
-  padding: 3px 5px; /* was 3px 5px 3px 18px; */
-  position: relative;
-
-  /* added */
-  display: inline-block;
-}
-
-#keywords .keyword:hover {
-  cursor: pointer;
-}
 </style>
 
 <div id="videos" ng-controller="videosCtl">
   <!--
   <h2 ng-init="gapiLoaded()">Video</h2>
   -->
-  <h2>Video</h2>
 
-  <ul id="keywords">
+  <p>
+    Lorem ipsum
+  </p>
+
+  <ul class="keywords">
     <li class="keyword" ng-repeat="keyword in inspiration_keywords" ng-click="keywordClick($event)">{{keyword}}</li>
   </ul>
 
   <form ng-submit="searchClick()">
-    <input id="query" class="select2-offscreen" type="hidden" value="" placeholder="Entrez ici votre recherche..."/>
-    <input type="submit" id="search-button" disabled />
+    <input id="query" class="select2-offscreen" type="hidden" value="" placeholder="Entrez ici votre recherche..." />
+    <input type="submit" id="search-button" disabled value="Rechercher" />
   </form>
-  <div id="search-container"></div>
+  <div class="search-container"></div>
 
 </div>
 
