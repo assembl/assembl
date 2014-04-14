@@ -2,7 +2,7 @@
 
 creativityApp.factory('globalVideoConfig', function($http){
 
-    var api_rest = 'test/globalVideoConfig.json';
+    var api_rest = 'test/config_test.json';
 
     return {
         fetch : function() {
@@ -14,7 +14,7 @@ creativityApp.factory('globalVideoConfig', function($http){
 
 creativityApp.factory('globalConfig', function($http){
 
-    var api_rest = 'test/test.json';
+    var api_rest = 'test/config_test.json';
 
     return {
         fetch : function() {

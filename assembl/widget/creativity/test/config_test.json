@@ -1,6 +1,7 @@
 {
     "useraname":"test 1",
     "persmission":["read","write"],
+    "youtube_api_key":"AIzaSyC8lCVIHWdtBwnTtKzKl4dy8k5C_raqyK4",
     "url":{
        "synthesis":"http://app.com/test/rest/synthesis",
        "message":"http://app.com/test/rest/message",

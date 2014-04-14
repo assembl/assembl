@@ -1061,7 +1061,7 @@ msgstr "Nous n'avons pas de discussion sous le code '%s'"
 #~ msgstr "Ajouter au presse-papier"
 
 #~ msgid "react"
-#~ msgstr "réagir"
+#~ msgstr "Commenter..."
 
 #~ msgid "Select view"
 #~ msgstr "Sélectionner une vue"

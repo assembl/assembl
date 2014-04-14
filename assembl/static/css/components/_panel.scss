@@ -7,7 +7,7 @@
     @include box-sizing( border-box );
     height: 100%;
 
-    border: solid 1px #e4e4e3;
+    border: 3px solid #dddddd;
     @include border-radius( 5px );
     background-color: #fff;
     overflow: hidden;
@@ -104,7 +104,7 @@
     border: solid 1px transparent;
     border-radius: 4px;
     margin: 10px;
-    padding: 5px;
+    //padding: 5px;
     cursor: text;
     min-height: 2rem;
     p {

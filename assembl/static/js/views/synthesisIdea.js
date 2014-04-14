@@ -51,20 +51,20 @@ function(Backbone, _, $, Idea, Segment, app, ckeditor){
          */
         render: function(){
             app.trigger('render');
-            var data = this.model.toJSON(),
-                doc = document.createDocumentFragment();
+            var model = this.model;
 
-            this.$el.addClass('idealist-item');
-            this.$el.addClass('is-open');
+            this.$el.addClass('idealist-item is-open');
 
-            data.children = []; //this.model.getChildren();
-            data.level = this.model.getSynthesisLevel();
-            data.editing = this.model.get('editing') || false;
-            data.synthesis_expression_text = this.model.getLongTitleDisplayText();
-            this.$el.html( this.template(data) );
-            this.$('.idealist-children').append( this.getRenderedChildren(data.level) );
+            model.set({
+                children: [], //this.model.getChildren();
+                level: model.getSynthesisLevel(),
+                editing: model.get('editing') || false,
+                synthesis_expression_text: model.getLongTitleDisplayText()});
 
-            if( data.editing === true ){
+            this.$el.html( this.template(model.toJSON()) );
+            this.$('.idealist-children').append( this.getRenderedChildren(model.get('level')) );
+
+            if( model.get('editing') === true ){
                 var editablearea = this.$('.panel-editablearea')[0],
                     that = this;
 

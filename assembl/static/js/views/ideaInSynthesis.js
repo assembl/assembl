@@ -30,14 +30,13 @@ function(Backbone, _, $, Idea, Segment, app, Permissions, CKEditorField, Message
         render: function(){
             app.trigger('render');
 
-            var that = this,
-                data = this.model.toJSON(),
-                doc = document.createDocumentFragment(),
+            var model = this.model,
                 authors = [],
-                segments = app.getSegmentsByIdea(this.model),
-                rendered_children = [];
-            
-            
+                segments = app.getSegmentsByIdea(model);
+
+            //this.$el.addClass('idealist-item');
+            //this.$el.addClass('is-open');
+
             segments.forEach(function(segment) {
                 var post = segment.getAssociatedPost();
                 if(post) {
@@ -47,13 +46,16 @@ function(Backbone, _, $, Idea, Segment, app, Permissions, CKEditorField, Message
                     }
                 }
             });
-            data.id = this.model.getId();
-            data.level = this.model.getSynthesisLevel();
-            data.editing = this.editing;
-            data.longTitle = this.model.getLongTitleDisplayText();
-            data.authors = _.uniq(authors);
-            data.subject = data.longTitle;
-            this.$el.html(this.template(data));
+
+            model.set({
+                id: model.getId(),
+                level: model.getSynthesisLevel(),
+                editing: this.editing,
+                longTitle: model.getLongTitleDisplayText(),
+                authors: _.uniq(authors),
+                subject: model.get('longTitle')});
+
+            this.$el.html(this.template(model.toJSON()));
             this.renderCKEditor();
             this.renderReplyView();
             return this;
@@ -113,7 +115,7 @@ function(Backbone, _, $, Idea, Segment, app, Permissions, CKEditorField, Message
         events: {
             'click [data-idea-id]': 'onEditableAreaClick',
             'click .synthesisIdea-replybox-openbtn': 'focusReplyBox',
-            'click .messageSend-cancelbtn': 'closeReplyBox',
+            'click .messageSend-cancelbtn': 'closeReplyBox'
         },
         
         /**
@@ -149,7 +151,7 @@ function(Backbone, _, $, Idea, Segment, app, Permissions, CKEditorField, Message
 
             this.editing = true;
             this.render();
-        },
+        }
     });
 
     return IdeaInSynthesisView;

@@ -1068,7 +1068,7 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "react"
-#~ msgstr ""
+#~ msgstr "Comment..."
 
 #~ msgid "Select view"
 #~ msgstr ""
