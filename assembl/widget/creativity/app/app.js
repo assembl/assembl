@@ -12,6 +12,10 @@ creativityApp.config(['$routeProvider', function($routeProvider){
             templateUrl:'app/partials/videos.html',
             controller:'videosCtl'
         }).
+        when('/video/:videoId', {
+            templateUrl:'app/partials/video-detail.html',
+            controller:'videoDetailCtl'
+        }).
         when('/session', {
            templateUrl:'app/partials/session.html',
            controller:'creativitySessionCtl'

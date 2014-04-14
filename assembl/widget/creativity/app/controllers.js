@@ -1,6 +1,19 @@
 "use strict";
 
-creativityApp.controller('videosCtl', ['$scope', '$http', 'globalVideoConfig', function($scope, $http, globalVideoConfig){
+creativityApp.controller('videoDetailCtl',
+  ['$scope', '$http', '$routeParams', '$sce', 'globalVideoConfig',
+  function($scope, $http, $routeParams, $sce, globalVideoConfig){
+
+  $scope.videoId = $routeParams.videoId;
+  // TODO: sanitize URL
+  $scope.videoUrl = $sce.trustAsResourceUrl('http://www.youtube.com/embed/' + $scope.videoId + '?autoplay=0');
+
+}]);
+
+
+creativityApp.controller('videosCtl',
+  ['$scope', '$http', 'globalVideoConfig',
+  function($scope, $http, globalVideoConfig){
     
     // intialization code
     $scope.init = function(){
@@ -121,7 +134,7 @@ creativityApp.controller('videosCtl', ['$scope', '$http', 'globalVideoConfig', f
             str += '<li><div class="video-thumbnail"><iframe type="text/html" width="320" height="190" src="http://www.youtube.com/embed/'
               + item.id.videoId + '?autoplay=0" frameborder="0"/></div><div class="video-description">'
               //+ item.snippet.title + '<br/>'
-              + '<div class="centered"><button>Cette vidéo m\'inspire</button></div></div></li>';
+              + '<div class="centered"><a href="#/video/'+ item.id.videoId + '" class="btn btn-default" role="button">Cette vidéo m\'inspire</a></div></div></li>';
             }
         }
         str = '<ul>' + str + '</ul>';

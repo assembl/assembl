@@ -1,0 +1,21 @@
+<div class="cards" ng-controller="videoDetailCtl">
+  <a href="#/videos" class="btn btn-default">&lt; Retour</a>
+    <div>
+        <div style="text-align: center; margin-top: 10px;">
+            <iframe type="text/html" width="570" height="370" ng-src="{{videoUrl}}" frameborder="0"/>
+        </div>
+        <p class="bg-info">Qu'est-ce que cette vidéo vous inspire par rapport à l'idée "XXX" ?</p>
+    </div>
+</div>
+<div class="card-comment">
+    <form role="form">
+        <div class="form-group">
+            <input type="text" class="form-control" id="inputEmail1" placeholder="title">
+        </div>
+        <div class="form-group">
+            <textarea class="form-control" rows="3" placeholder="description"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Envoyez</button>
+    </form>
+</div>
+
