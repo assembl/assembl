@@ -237,7 +237,8 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard, Types, Permissions){
             app.addPanelToStorage(panel.el.id);
 
             if( panel.button ) {
-                panel.button.addClass('is-activated');
+
+                panel.button.parent().addClass('is-activated');
             }
             app.trigger("panel:open", [panel]);
         },
@@ -262,7 +263,7 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard, Types, Permissions){
             app.removePanelFromStorage(panel.el.id);
 
             if( panel.button ) {
-                panel.button.removeClass('is-activated');
+                panel.button.parent().removeClass('is-activated');
             }
             app.trigger("panel:close", [panel]);
         },

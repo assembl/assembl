@@ -121,7 +121,7 @@
 
 .assembl-logo {
     font-size: 22px;
-    color: #ffffff;
+    color: #c7c2dd;
     text-decoration: none;
 }
 
@@ -219,9 +219,6 @@
     @extend %button;
     @include no-selection;
     font-size: 14px;
-    padding: 6px;
-    line-height: 1em;
-    border-radius: .25em;
 
     &:active {
         @extend .barbutton.is-activated;

@@ -8,7 +8,7 @@
     background-color: $bar-background-color;
 
     &.navbar-default {
-      background: #2f2f2f;
+      background: transparent;
       color: white;
       min-height: 40px;
     }
@@ -19,13 +19,46 @@
     }
 
     .navbar-center {
+      width: 450px;
+      margin: 0 auto;
       position: absolute;
       left: 0;
       right: 0;
-      margin-left: auto;
-      margin-right: auto;
-      line-height: 40px;
-      width: 350px;
+      .menu {
+        list-style: none;
+        height: 35px;
+        border-bottom-left-radius: 7px;
+        border-bottom-right-radius: 7px;
+        background-color: #ffffff;
+        margin: 0;
+        padding: 0;
+        li{
+          float: left;
+          height: 35px;
+          width: 140px;
+          text-align: center;
+          padding: 0 5px 0 5px;
+          &.is-activated {
+            background-color: #c7c2dd;
+            &:first-child {
+              border-bottom-left-radius: 7px;
+            }
+            &:last-child {
+              border-bottom-right-radius: 7px;
+            }
+          }
+        }
+        a {
+          color: #484848;
+          line-height: 30px;
+          background: transparent;
+        }
+        .is-activated {
+
+        }
+
+      }
+
     }
 
     .navbar-right {
@@ -39,7 +72,9 @@
         cursor: pointer;
         border: 2px solid #fff;
         padding: 3px;
-
+      }
+      a{
+        color:#484848;
       }
     }
 }
