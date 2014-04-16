@@ -2,9 +2,43 @@
 // ===========================
 
 #synthesisPanel {
-    .synthesisIdea-replybox {
-        &.hidden {
-            display: none;
+  .synthesisIdea-replybox {
+      &.hidden {
+          display: none;
+      }
+  }
+  #synthesisPanel-ideas {
+    padding: 0  10px;
+    .synthesis-idea{
+      .panel-editablearea {
+        padding: 0;
+      }
+      .synthesis-expression {
+        margin: 0;
+        display: inline-block;
+        width: auto;
+        vertical-align: top;
+        height: 20px;
+      }
+      .comment {
+        font-size: 12px;
+        a{
+          text-decoration: none;
         }
-}
+        //color:#c7c2dd;
+      }
+    }
+    .level0 {
+      margin-top: 12px;
+      color:#666666;
+      font-weight: bold;
+    }
+    .level1{
+      padding-left: 30px;
+      margin: 15px 0 5px 0;
+    }
+    .level2{
+      padding-left: 50px;
+    }
+  }
 }

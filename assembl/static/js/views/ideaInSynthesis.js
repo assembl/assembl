@@ -30,12 +30,10 @@ function(Backbone, _, $, Idea, Segment, app, Permissions, CKEditorField, Message
         render: function(){
             app.trigger('render');
 
-            var model = this.model,
+            var
+                data = this.model.toJSON(),
                 authors = [],
-                segments = app.getSegmentsByIdea(model);
-
-            //this.$el.addClass('idealist-item');
-            //this.$el.addClass('is-open');
+                segments = app.getSegmentsByIdea(this.model);
 
             segments.forEach(function(segment) {
                 var post = segment.getAssociatedPost();
@@ -47,15 +45,16 @@ function(Backbone, _, $, Idea, Segment, app, Permissions, CKEditorField, Message
                 }
             });
 
-            model.set({
-                id: model.getId(),
-                level: model.getSynthesisLevel(),
-                editing: this.editing,
-                longTitle: model.getLongTitleDisplayText(),
-                authors: _.uniq(authors),
-                subject: model.get('longTitle')});
+            data.id = this.model.getId();
+            data.level = this.model.getSynthesisLevel();
+            data.editing = this.editing;
+            data.longTitle = this.model.getLongTitleDisplayText();
+            data.authors = _.uniq(authors);
+            data.subject = data.longTitle;
 
-            this.$el.html(this.template(model.toJSON()));
+
+
+            this.$el.html(this.template(data));
             this.renderCKEditor();
             this.renderReplyView();
             return this;

@@ -47,32 +47,30 @@ function(Backbone, _, $, Idea, Segment, app, Permissions){
         render: function(){
             app.trigger('render');
 
-            var model = this.model;
+            var data = this.model.toJSON();
 
             this.$el.addClass('idealist-item');
 
             this.onIsSelectedChange();
 
-            if( model.get('isOpen') === true ){
-                //this.$el.addClass('is-open');
+            if( data.isOpen === true ){
+                this.$el.addClass('is-open');
             } else {
-                //this.$el.removeClass('is-open');
+                this.$el.removeClass('is-open');
             }
 
-            if( model.get('longTitle') ){
-                model.set('longTitle', ' - ' + model.get('longTitle').substr(0, 50));
+            if( data.longTitle ){
+                data.longTitle = ' - ' + data.longTitle.substr(0, 50);
             }
 
-            model.set({
-                children: model.getChildren(),
-                level: model.getLevel(),
-                segments: model.getSegments(),
-                shortTitle: model.getShortTitleDisplayText(),
-                last_sibling_chain: this.last_sibling_chain});
+            data.children = this.model.getChildren();
+            data.level = this.model.getLevel();
+            data.segments = this.model.getSegments();
+            data.shortTitle = this.model.getShortTitleDisplayText();
+            data.last_sibling_chain = this.last_sibling_chain;
 
-            this.$el.html(this.template(model.toJSON()));
-            this.$('.idealist-children').append( this.getRenderedChildren(model.get('level')) );
-
+            this.$el.html(this.template(data));
+            this.$('.idealist-children').append( this.getRenderedChildren(data.level) );
             return this;
         },
 
@@ -315,7 +313,7 @@ function(Backbone, _, $, Idea, Segment, app, Permissions){
                     app.currentAnnotationIdIdea = this.model.getId();
                     app.saveCurrentAnnotation();
                 }
-
+                
                 return;
             }
 
