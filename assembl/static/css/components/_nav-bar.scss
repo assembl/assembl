@@ -51,7 +51,7 @@
         }
       }
       a {
-        color: #ffffff;
+        color: #aaaaaa;
         line-height: 30px;
         background: transparent;
       }
@@ -71,6 +71,11 @@
           @include border-top-right-radius(15px);
           @include border-bottom-left-radius(15px);
         }
+        &.active, &:hover{
+          a{
+            color:#ffffff;
+          }
+        }
       }
       .tab-idea {
         &.active{
@@ -89,6 +94,11 @@
           @include border-top-right-radius(15px);
           @include border-top-left-radius(15px);
         }
+        &.active, &:hover{
+          a{
+            color:#ffffff;
+          }
+        }
       }
       .tab-synthesis {
         &:hover {
@@ -98,6 +108,11 @@
         }
         &.active{
           @include border-top-left-radius(15px);
+        }
+        &.active, &:hover{
+          a{
+            color:#ffffff;
+          }
         }
       }
 
