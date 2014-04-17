@@ -12,13 +12,15 @@
     .synthesis-idea{
       .panel-editablearea {
         padding: 0;
+        overflow: visible;
+        margin: 0;
       }
       .synthesis-expression {
         margin: 0;
         display: inline-block;
         width: auto;
-        vertical-align: top;
-        height: 20px;
+        //vertical-align: top;
+        //height: 20px;
       }
       .comment {
         font-size: 12px;

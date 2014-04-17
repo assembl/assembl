@@ -7,43 +7,41 @@
         </div>
         <div class="navbar-center">
             <ul class="menu">
-                <li>
+                <li class="tab-table-idea">
                     <a id="button-ideaList" class="barbutton" data-tooltip-position="n"
                     data-tooltip="{{ gettext('To add an idea in the table of ideas: select add idea and drag the new idea either 1) on the inner edge of an existing idea to add it as a sibling or 2) in the middle of an existing idea to add it as a sub-idea.') }}">{{ gettext('Table of Ideas') }}</a>
                 </li>
-                {#<li>
+                {#<li class="tab-idea active">
                     <a id="button-ideaPanel" class="barbutton" style="display: none">{{ gettext('Idea') }}</a>
                 </li>#}
-                {% if canAddExtract %}
-                <li>
+                <li class="tab-clipboard">
                     <a id="button-segmentList" class="barbutton">{{ gettext('Clipboard') }}</a>
                 </li>
-                {% endif %}
-                <li>
+                <li class="tab-messages">
                     <a id="button-messages" class="barbutton">{{ gettext('Messages') }}</a>
                 </li>
-                <li>
+                <li class="tab-synthesis">
                     <a id="button-synthesis" class="barbutton">{{ gettext('Synthesis') }}</a>
                 </li>
             </ul>
         </div>
         <div class="navbar-right">
-            {% if user %}
-                {{ user.display_name() }}
-                {# <a class="iconbutton iconbutton--nofx"> #}<img src="/user/id/{{user.id}}/avatar/32" alt="{{ user.display_name() }}" class="image-rounded" />{# </a> #}
-                <a href="/logout" class="link iconbutton icon-logout-1" title="{{ gettext('Sign out') }}"></a>
-            {% else %}
-                <a href="/login?next_view={{request.current_route_path()}}" class="link">{{ gettext('Sign in') }} <i class="icon-user"></i> </a>
-            {% endif %}
-            {% if locales.__len__ > 1 %}
-                {% for loc in locales %}
-                    {% if (loc != locale) %}
-                    <span class="lang">
-                        <a onmouseup="window.app.setLocale('{{loc}}')">{{loc}}</a>
-                    </span>
-                    {% endif %}
-                {% endfor %}
-            {% endif %}
+            <div class="connexion">
+                {% if user %}
+                    <span>{{ user.display_name() }}</span>
+                    <img src="/user/id/{{user.id}}/avatar/32" alt="{{ user.display_name() }}" class="image-rounded" />
+                    <a href="/logout" class="sign-out iconbutton icon-logout-1" title="{{ gettext('Sign out') }}"></a>
+                {% else %}
+                    <a href="/login?next_view={{request.current_route_path()}}">{{ gettext('Sign in') }}</a>
+                {% endif %}
+                {% if locales.__len__ > 1 %}
+                    {% for loc in locales %}
+                        {% if (loc != locale) %}
+                            <a href="#" class="lang" onmouseup="window.app.setLocale('{{loc}}')">{{loc | upper}}</a>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+            </div>
         </div>
     </nav>
 {% endblock %}

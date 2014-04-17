@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: assembl 0.0\n"
 "Report-Msgid-Bugs-To: maparent@acm.org\n"
-"POT-Creation-Date: 2014-04-08 14:54-0400\n"
+"POT-Creation-Date: 2014-04-17 13:03+0200\n"
 "PO-Revision-Date: 2013-07-12 17:53-0400\n"
 "Last-Translator: Marc-Antoine Parent <maparent@acm.org>\n"
 "Language-Team: fr <LL@li.org>\n"
@@ -17,19 +17,20 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 1.3\n"
 
-#: assembl/auth/operations.py:30 assembl/templates/register.jinja2:38
+#: assembl/auth/operations.py:30 assembl/models/auth/operations.py:30
+#: assembl/templates/register.jinja2:38
 msgid "email"
 msgstr "courriel"
 
-#: assembl/auth/operations.py:32
+#: assembl/auth/operations.py:32 assembl/models/auth/operations.py:32
 msgid "account"
 msgstr "compte"
 
-#: assembl/auth/operations.py:41
+#: assembl/auth/operations.py:41 assembl/models/auth/operations.py:41
 msgid "confirm_title"
 msgstr "Veuillez confirmer votre ${confirm_what} auprès d'Assembl"
 
-#: assembl/auth/operations.py:44
+#: assembl/auth/operations.py:44 assembl/models/auth/operations.py:44
 msgid "confirm_email"
 msgstr ""
 "Bonjour, ${name}!\n"
@@ -37,7 +38,7 @@ msgstr ""
 "suivant le lien ci-dessous.\n"
 "<${confirm_url}>\n"
 
-#: assembl/auth/operations.py:48
+#: assembl/auth/operations.py:48 assembl/models/auth/operations.py:48
 msgid "confirm_email_html"
 msgstr ""
 "<p>Bonjour, ${name}!</p>\n"
@@ -52,27 +53,27 @@ msgstr "${val} ne peut être sérialisé: ${err}"
 msgid "${val} is not a string: ${err}"
 msgstr "${val} n'est pas une chaîne: ${err}"
 
-#: assembl/static/js/models/idea.js:36 assembl/static/js/views/ideaPanel.js:71
+#: assembl/static/js/models/idea.js:33 assembl/static/js/views/ideaPanel.js:70
 msgid "New idea"
 msgstr "Ajouter une idée"
 
-#: assembl/static/js/models/idea.js:64
+#: assembl/static/js/models/idea.js:61
 msgid "The root idea will not be in the synthesis"
 msgstr "L'idée-racine ne fera pas partie de la synthèse"
 
-#: assembl/static/js/models/idea.js:72
+#: assembl/static/js/models/idea.js:69
 msgid "Add a definition for this idea"
 msgstr "Ajouter une définition à cette idée"
 
-#: assembl/static/js/models/idea.js:85
+#: assembl/static/js/models/idea.js:82
 msgid "The root idea will never be in the synthesis"
 msgstr "L'idée-racine ne fera jamais partie de la synthèse"
 
-#: assembl/static/js/models/idea.js:93
+#: assembl/static/js/models/idea.js:90
 msgid "Add and expression for the next synthesis"
 msgstr "Spécifier l'expression dans la prochaine synthèse"
 
-#: assembl/static/js/models/idea.js:101
+#: assembl/static/js/models/idea.js:98
 msgid "All posts"
 msgstr "Tous les messages"
 
@@ -80,15 +81,15 @@ msgstr "Tous les messages"
 msgid "You must be logged in to create segments"
 msgstr "Vous devez être connecté pour créer des extraits"
 
-#: assembl/static/js/models/synthesis.js:38
+#: assembl/static/js/models/synthesis.js:34
 msgid "Add a title"
 msgstr "Ajouter un titre"
 
-#: assembl/static/js/models/synthesis.js:39
+#: assembl/static/js/models/synthesis.js:35
 msgid "Add an introduction"
 msgstr "Ajouter une introduction"
 
-#: assembl/static/js/models/synthesis.js:40
+#: assembl/static/js/models/synthesis.js:36
 msgid "Add a conclusion"
 msgstr "Ajouter une conclusion"
 
@@ -96,50 +97,53 @@ msgstr "Ajouter une conclusion"
 msgid "Unknown user"
 msgstr "Utilisateur non-identifié"
 
-#: assembl/static/js/views/ideaPanel.js:70
-msgid "Short expression (only a few words) of the idea in the table of ideas."
-msgstr "Expression brève (quelques mots) de l'idée dans la table des matières"
-
-#: assembl/static/js/views/ideaPanel.js:93
-msgid "Comment on this idea here..."
-msgstr "Commenter cette idée ici..."
-
-#: assembl/static/js/views/ideaPanel.js:94
-msgid "Send your comment"
-msgstr "Envoyez votre commentaire"
-
-#: assembl/static/js/views/ideaPanel.js:96
-#: assembl/static/js/views/messageList.js:209
-msgid "You need to type a comment first..."
-msgstr "Vous devez d'abord écrire un commentaire..."
-
-#: assembl/static/js/views/ideaPanel.js:201
-msgid "ideaPanel-cantDeleteByChildren"
-msgstr "Vous ne pouvez pas effacer une idée ayant des sous-idées."
-
-#: assembl/static/js/views/ideaPanel.js:206
-msgid "ideaPanel-cantDeleteBySegments"
-msgstr "Vous ne pouvez pas effacer une idée associée à des extraits."
-
-#: assembl/static/js/views/ideaPanel.js:313
-msgid "ideaPanel-clearConfirmationMessage"
-msgstr "Confirmez que vous souhaitez supprimer toutes les idées."
-
-#: assembl/static/js/views/ideaPanel.js:330
-msgid "ideaPanel-deleteIdeaConfirmMessage"
-msgstr "Confirmez que vous souhaitez supprimer cette idée."
-
+#: assembl/static/js/views/ideaInSynthesis.js:99
 #: assembl/static/js/views/message.js:108
 msgid "Type your response here..."
 msgstr "Écrivez votre réponse ici..."
 
+#: assembl/static/js/views/ideaInSynthesis.js:101
 #: assembl/static/js/views/message.js:110
 msgid "Send your reply"
 msgstr "Envoyez votre réponse"
 
+#: assembl/static/js/views/ideaInSynthesis.js:104
 #: assembl/static/js/views/message.js:112
 msgid "You did not type a response yet..."
 msgstr "Vous n'avez pas encore écrit de réponse"
+
+#: assembl/static/js/views/ideaPanel.js:69
+msgid "Short expression (only a few words) of the idea in the table of ideas."
+msgstr "Expression brève (quelques mots) de l'idée dans la table des matières"
+
+#: assembl/static/js/views/ideaPanel.js:92
+msgid "Comment on this idea here..."
+msgstr "Commenter cette idée ici..."
+
+#: assembl/static/js/views/ideaPanel.js:93
+msgid "Send your comment"
+msgstr "Envoyez votre commentaire"
+
+#: assembl/static/js/views/ideaPanel.js:95
+#: assembl/static/js/views/messageList.js:209
+msgid "You need to type a comment first..."
+msgstr "Vous devez d'abord écrire un commentaire..."
+
+#: assembl/static/js/views/ideaPanel.js:200
+msgid "ideaPanel-cantDeleteByChildren"
+msgstr "Vous ne pouvez pas effacer une idée ayant des sous-idées."
+
+#: assembl/static/js/views/ideaPanel.js:205
+msgid "ideaPanel-cantDeleteBySegments"
+msgstr "Vous ne pouvez pas effacer une idée associée à des extraits."
+
+#: assembl/static/js/views/ideaPanel.js:312
+msgid "ideaPanel-clearConfirmationMessage"
+msgstr "Confirmez que vous souhaitez supprimer toutes les idées."
+
+#: assembl/static/js/views/ideaPanel.js:329
+msgid "ideaPanel-deleteIdeaConfirmMessage"
+msgstr "Confirmez que vous souhaitez supprimer cette idée."
 
 #: assembl/static/js/views/messageList.js:8
 msgid "You can drag the segment above directly to the table of ideas"
@@ -169,7 +173,9 @@ msgstr "Pas de messages"
 msgid ""
 "You can start a new topic in this discussion by typing a subject above, "
 "and a first post here..."
-msgstr "Vous pouvez donner un nouveau point de départ à la discussion en écrivant un sujet ci-dessus, et un premier message ici."
+msgstr ""
+"Vous pouvez donner un nouveau point de départ à la discussion en écrivant"
+" un sujet ci-dessus, et un premier message ici."
 
 #: assembl/static/js/views/messageList.js:207
 msgid "Start a new topic in this discussion"
@@ -216,7 +222,7 @@ msgid "You've already read"
 msgstr "Vous avez déjà lu"
 
 #: assembl/static/js/views/messageListPostQuery.js:65
-#: assembl/templates/index.jinja2:11 assembl/templates/views/ideaPanel.tmpl:3
+#: assembl/templates/views/ideaPanel.tmpl:3
 msgid "Idea"
 msgstr "Idée"
 
@@ -341,42 +347,38 @@ msgstr "Envoi en cours..."
 msgid "Message posted!"
 msgstr "Commentaire envoyé!"
 
-#: assembl/static/js/views/segmentList.js:305
+#: assembl/static/js/views/segmentList.js:309
 msgid "segmentList-clearConfirmationMessage"
 msgstr "Confirmez que vous souhaitez supprimer tous les extraits."
 
-#: assembl/static/js/views/synthesisPanel.js:122
-msgid "Add the description"
-msgstr "Ajoutez la description"
-
-#: assembl/static/js/views/synthesisPanel.js:195
+#: assembl/static/js/views/synthesisPanel.js:173
 msgid "Do you want to publish the synthesis?"
 msgstr "Voulez-vous publier la synthèse?"
 
-#: assembl/static/js/views/synthesisPanel.js:215
+#: assembl/static/js/views/synthesisPanel.js:193
 msgid "[synthesis] {0}"
 msgstr "[synthèse] {0}"
 
-#: assembl/static/js/views/synthesisPanel.js:232
+#: assembl/static/js/views/synthesisPanel.js:210
 msgid "Synthesis published!"
 msgstr "Synthèse publiée!"
 
-#: assembl/templates/discussion_list.jinja2:12
-#: assembl/templates/index.jinja2:22
+#: assembl/templates/discussion_list.jinja2:13
+#: assembl/templates/index.jinja2:35
 msgid "Sign out"
 msgstr "Déconnexion"
 
-#: assembl/templates/discussion_list.jinja2:14
-#: assembl/templates/index.jinja2:24
+#: assembl/templates/discussion_list.jinja2:15
+#: assembl/templates/index.jinja2:37
 msgid "Sign in"
-msgstr "Connexion"
+msgstr "Connectez vous"
 
-#: assembl/templates/discussion_list.jinja2:40
+#: assembl/templates/discussion_list.jinja2:41
 #: assembl/templates/admin/discussions.jinja2:72
 msgid "There are no discussions on this server yet"
 msgstr "Il n'y a pas encore de discussions sur ce serveur."
 
-#: assembl/templates/index.jinja2:10
+#: assembl/templates/index.jinja2:12
 msgid ""
 "To add an idea in the table of ideas: select add idea and drag the new "
 "idea either 1) on the inner edge of an existing idea to add it as a "
@@ -387,24 +389,24 @@ msgstr ""
 "pour l'ajouter comme soeur, soit 2) au milieu d'une idée existante pour "
 "l'ajouter comme sous-idée."
 
-#: assembl/templates/index.jinja2:10
+#: assembl/templates/index.jinja2:12
 msgid "Table of Ideas"
-msgstr "Table des matières"
+msgstr "Table des idées"
 
-#: assembl/templates/index.jinja2:13
+#: assembl/templates/index.jinja2:19
 msgid "Clipboard"
 msgstr "Presse-papier"
 
-#: assembl/templates/index.jinja2:15
+#: assembl/templates/index.jinja2:23
 msgid "Messages"
 msgstr "Messages"
 
-#: assembl/templates/index.jinja2:16
+#: assembl/templates/index.jinja2:26
 #: assembl/templates/views/synthesisPanel.tmpl:3
 msgid "Synthesis"
 msgstr "Synthèse"
 
-#: assembl/templates/index.jinja2:51
+#: assembl/templates/index.jinja2:63
 msgid "Connecting..."
 msgstr "Connection en cours..."
 
@@ -412,39 +414,39 @@ msgstr "Connection en cours..."
 msgid "Send confirmation message"
 msgstr "Envoyer un message de confirmation"
 
-#: assembl/templates/login.jinja2:51
+#: assembl/templates/login.jinja2:52
 msgid "Email or username"
 msgstr "Courriel ou nom d'utilisateur"
 
-#: assembl/templates/login.jinja2:55 assembl/templates/register.jinja2:42
+#: assembl/templates/login.jinja2:56 assembl/templates/register.jinja2:42
 msgid "Password"
 msgstr "Mot de passe"
 
-#: assembl/templates/login.jinja2:58
+#: assembl/templates/login.jinja2:59
 msgid "Enter"
 msgstr "Entrer"
 
-#: assembl/templates/login.jinja2:62 assembl/templates/register.jinja2:55
+#: assembl/templates/login.jinja2:64 assembl/templates/register.jinja2:55
 msgid "or"
 msgstr "ou"
 
-#: assembl/templates/login.jinja2:62
+#: assembl/templates/login.jinja2:64
 msgid "register"
 msgstr "enregistrement"
 
-#: assembl/templates/login.jinja2:66
+#: assembl/templates/login.jinja2:68
 msgid "Login with external tools"
 msgstr "Connectez-vous à l'aide d'un compte externe"
 
-#: assembl/templates/login.jinja2:80
+#: assembl/templates/login.jinja2:82
 msgid "Caravan"
 msgstr "Caravan"
 
-#: assembl/templates/login.jinja2:81
+#: assembl/templates/login.jinja2:83
 msgid "Imagination for people"
 msgstr "Imagination for people"
 
-#: assembl/templates/login.jinja2:83 assembl/templates/profile.jinja2:168
+#: assembl/templates/login.jinja2:85 assembl/templates/profile.jinja2:168
 #: assembl/templates/register.jinja2:63
 #: assembl/templates/view_profile.jinja2:67
 #, python-format
@@ -633,9 +635,13 @@ msgstr "Nombre de messages liées à cette idée ou à ses descendants"
 msgid "Number of caught segments expressing this idea"
 msgstr "Nombre d'extraits attrapés exprimant cette idée"
 
+#: assembl/templates/views/ideaInSynthesis.tmpl:9
+msgid "By"
+msgstr "Par"
+
 #: assembl/templates/views/ideaList.tmpl:4
 msgid "Table of ideas ({0})"
-msgstr "Table des matières ({0})"
+msgstr "Table des idées ({0})"
 
 #: assembl/templates/views/ideaList.tmpl:5
 msgid "Featured ({0})"
@@ -768,13 +774,16 @@ msgid "Read More"
 msgstr "Lire plus"
 
 #: assembl/templates/views/message.tmpl:49
-msgid "Unhoist this message (do not show only this message and its replies "
+msgid ""
+"Unhoist this message (do not show only this message and its replies "
 "anymore)"
 msgstr "Ne plus centrer la vue sur ce message (montrer tous les messages)"
 
 #: assembl/templates/views/message.tmpl:51
 msgid "Hoist this message (show only this message and its replies)"
-msgstr "Centrer la vue sur ce message (ne montrer que ce message et les réponses à celui-ci)"
+msgstr ""
+"Centrer la vue sur ce message (ne montrer que ce message et les réponses "
+"à celui-ci)"
 
 #: assembl/templates/views/message.tmpl:54
 msgid "Copy the link to this message to clipboard"
@@ -905,7 +914,7 @@ msgid "Introduction"
 msgstr "Introduction"
 
 #: assembl/templates/views/synthesisEmail.tmpl:30
-#: assembl/templates/views/synthesisPanel.tmpl:32
+#: assembl/templates/views/synthesisPanel.tmpl:29
 msgid "Conclusion"
 msgstr "Conclusion"
 
@@ -916,14 +925,6 @@ msgstr "Désactiver"
 #: assembl/templates/views/synthesisIdea.tmpl:6
 msgid "Activate"
 msgstr "Activer"
-
-#: assembl/templates/views/synthesisIdeaEmail.tmpl:21
-msgid "Empty long title. Click to add."
-msgstr "Titre long non-défini. Cliquez pour l'ajouter."
-
-#: assembl/templates/views/synthesisIdeaEmail.tmpl:28
-msgid "By"
-msgstr "Par"
 
 #: assembl/templates/views/synthesisInIdeaList.tmpl:3
 msgid "Number of syntheses in the discussion"
@@ -938,7 +939,7 @@ msgstr "Voir les synthèses"
 msgid "Subject"
 msgstr "Sujet"
 
-#: assembl/templates/views/synthesisPanel.tmpl:38
+#: assembl/templates/views/synthesisPanel.tmpl:35
 msgid "Publish"
 msgstr "Publier"
 
@@ -1071,4 +1072,10 @@ msgstr "Nous n'avons pas de discussion sous le code '%s'"
 
 #~ msgid "Show preview"
 #~ msgstr "Aperçus"
+
+#~ msgid "Add the description"
+#~ msgstr "Ajoutez la description"
+
+#~ msgid "Empty long title. Click to add."
+#~ msgstr "Titre long non-défini. Cliquez pour l'ajouter."
 

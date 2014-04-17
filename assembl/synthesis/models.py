@@ -245,7 +245,7 @@ class IdeaGraphView(SQLAlchemyBaseModel):
         ForeignKey('discussion.id', ondelete="CASCADE", onupdate="CASCADE"),
         nullable=False
     )
-    discussion = relationship('Discussion')
+    discussion = relationship('Discussion', backref="views")
 
     __mapper_args__ = {
         'polymorphic_identity': 'idea_graph_view',
@@ -268,7 +268,7 @@ class SubGraphIdeaAssociation(SQLAlchemyBaseModel):
     sub_graph_id = Column(Integer, ForeignKey(
         'explicit_sub_graph_view.id', ondelete="CASCADE", onupdate="CASCADE"),
         index=True, nullable=False)
-    sub_graph = relationship("ExplicitSubGraphView")
+    sub_graph = relationship("ExplicitSubGraphView", backref="idea_assocs")
     idea_id = Column(Integer, ForeignKey(
         'idea.id', ondelete="CASCADE", onupdate="CASCADE"), index=True)
     # reference to the "Idea" object for proxying
@@ -292,7 +292,7 @@ class SubGraphIdeaLinkAssociation(SQLAlchemyBaseModel):
     sub_graph_id = Column(Integer, ForeignKey(
         'explicit_sub_graph_view.id', ondelete="CASCADE", onupdate="CASCADE"),
         index=True, nullable=False)
-    sub_graph = relationship("ExplicitSubGraphView")
+    sub_graph = relationship("ExplicitSubGraphView", backref="idealink_assocs")
 
     idea_link_id = Column(Integer, ForeignKey(
         'idea_idea_link.id', ondelete="CASCADE", onupdate="CASCADE"),

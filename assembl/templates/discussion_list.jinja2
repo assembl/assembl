@@ -6,22 +6,23 @@
             <a href="/" class="icon-menu assembl-logo">Assembl</a>
         </div>
         <div class="navbar-right">
-            {% if user %}
-                {{ user.display_name() }}
-                {# <a class="iconbutton iconbutton--nofx"> #}<img src="/user/id/{{user.id}}/avatar/32" alt="{{ user.display_name() }}" class="image-rounded" />{# </a> #}
-                <a href="/logout" class="link iconbutton icon-logout-1" title="{{ gettext('Sign out') }}"></a>
-            {% else %}
-                <a href="/login?next_view={{request.current_route_path()}}" class="link">{{ gettext('Sign in') }}</a>
-            {% endif %}
-            {% if locales.__len__ > 1 %}
-                {% for loc in locales %}
-                    {% if (loc != locale) %}
-                    <span class="lang">
-                        <a onmouseup="window.app.setLocale('{{loc}}')">{{loc}}</a>
-                    </span>
-                    {% endif %}
-                {% endfor %}
-            {% endif %}
+            <div class="connexion">
+                <div class="info">{% if user %}
+                    {{ user.display_name() }}
+                    {# <a class="iconbutton iconbutton--nofx"> #}<img src="/user/id/{{user.id}}/avatar/32" alt="{{ user.display_name() }}" class="image-rounded" />{# </a> #}
+                    <a href="/logout" class="link iconbutton icon-logout-1" title="{{ gettext('Sign out') }}"></a>
+                {% else %}
+                    <a href="/login?next_view=/">{{ gettext('Sign in') }}</a>
+                {% endif %}
+                {% if locales.__len__ > 1 %}
+                    {% for loc in locales %}
+                        {% if (loc != locale) %}
+                            <a href="#" class="lang" onmouseup="window.app.setLocale('{{loc}}')">{{loc | upper}}</a>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+                </div>
+            </div>
         </div>
     </nav>
 {% endblock %}

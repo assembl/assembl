@@ -305,6 +305,30 @@ def subidea_1_1_1(request, discussion, subidea_1_1, test_session):
 
 
 @pytest.fixture(scope="function")
+def synthesis_1(request, discussion, subidea_1, subidea_1_1, test_session):
+    from assembl.models import Synthesis, SubGraphIdeaAssociation,\
+        SubGraphIdeaLinkAssociation
+    s = Synthesis(discussion=discussion)
+    test_session.add(s)
+    i1_a = SubGraphIdeaAssociation(sub_graph=s, idea=subidea_1)
+    test_session.add(i1_a)
+    i11_a = SubGraphIdeaAssociation(sub_graph=s, idea=subidea_1_1)
+    test_session.add(i11_a)
+    l_1_11 = subidea_1_1.source_links[0]
+    l_1_11_a = SubGraphIdeaLinkAssociation(sub_graph=s, idea_link=l_1_11)
+    test_session.add(l_1_11_a)
+    test_session.flush()
+
+    def fin():
+        test_session.delete(i1_a)
+        test_session.delete(i11_a)
+        test_session.delete(l_1_11_a)
+        test_session.delete(s)
+
+    return s
+
+
+@pytest.fixture(scope="function")
 def extract(request, participant2_user, reply_post_1, subidea_1_1, discussion, test_session):
     from assembl.models import Extract
     e = Extract(
