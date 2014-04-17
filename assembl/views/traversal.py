@@ -3,6 +3,7 @@ from pyramid.security import Allow, Everyone, ALL_PERMISSIONS, DENY_ALL
 
 from assembl.lib.sqla import *
 
+
 class AppRoot(object):
     def __init__(self):
         from assembl.auth import P_READ
@@ -59,7 +60,7 @@ class ClassContext(object):
         # The buck stops here
         return query
 
-    def decorate_instance(self, instance):
+    def decorate_instance(self, instance, assocs):
         # and here
         pass
 
@@ -70,12 +71,15 @@ class ClassContext(object):
         else:
             return cls.db().query(cls)
 
-    def create_object(self, type=None, **kwargs):
+    def create_object(self, type=None, json=None, **kwargs):
         if type is not None:
             cls = get_named_class(type)
         else:
             cls = self.collection.collection_class
-        return cls(**kwargs)
+        if json is None:
+            return [cls(**kwargs)]
+        else:
+            return [cls.from_json(json)]
 
 
 class ClassContextPredicate(object):
@@ -137,9 +141,16 @@ class InstanceContext(object):
         # Leave that work to the collection
         return self.__parent__.decorate_query(query)
 
-    def decorate_instance(self, instance):
-        #  TODO: if has a non-list relation of this class, add it
-        self.__parent__.decorate_instance(inst)
+    def decorate_instance(self, instance, assocs):
+        # if has a non-list relation of this class, add it
+        relations = instance.__class__.__mapper__.relationships
+        for reln in relations:
+            if reln.uselist:
+                continue
+            if reln.mapper.class_ == self._instance.__class__:
+                setattr(instance, reln.key, self._instance)
+                break
+        self.__parent__.decorate_instance(instance, assocs)
 
 
 class InstanceContextPredicate(object):
@@ -189,20 +200,25 @@ class CollectionContext(object):
         query = self.collection.decorate_query(query, self.parent_instance)
         return self.__parent__.decorate_query(query)
 
-    def decorate_instance(self, instance):
-        self.__parent__.decorate_instance(inst)
+    def decorate_instance(self, instance, assocs):
+        self.__parent__.decorate_instance(instance, assocs)
 
-    def create_object(self, type=None, **kwargs):
+    def create_object(self, type=None, json=None, **kwargs):
         if type is not None:
             cls = get_named_class(type)
         else:
             cls = self.collection.collection_class
-        inst = cls(**kwargs)
+        if json is None:
+            inst = cls(**kwargs)
+            assocs = [inst]
+        else:
+            assocs = cls.from_json(json)
+            inst = assocs[0]
         # normally only the last link.
-        self.collection.decorate_instance(inst, self.parent_instance)
+        self.collection.decorate_instance(inst, self.parent_instance, assocs)
         # But sometimes more
-        self.__parent__.decorate_instance(inst)
-        return inst
+        self.__parent__.decorate_instance(inst, assocs)
+        return assocs
 
 
 class CollectionContextPredicate(object):
@@ -257,9 +273,10 @@ class CollectionDefinition(object):
             query = query.filter(back_attribute == parent_instance)
         return query
 
-    def decorate_instance(self, instance, parent_instance):
-        # TODO: if the relation is through a helper class, create that;
-        # otherwise set the appropriate property.
+    def decorate_instance(self, instance, parent_instance, assocs):
+        # if the relation is through a helper class,
+        #   create that and add to assocs (TODO)
+        # otherwise set the appropriate property (below.)
         if self.back_property:
             inv = self.back_property
             # What we have is a property, not an instrumented attribute;

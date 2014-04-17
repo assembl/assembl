@@ -2,10 +2,12 @@ import os
 import json
 
 from pyramid.view import view_config
+from pyramid.httpexceptions import HTTPCreated, HTTPBadRequest
 
 from .. import acls
+from assembl.lib.sqla import get_named_class, get_session_maker
 from ..traversal import InstanceContext, CollectionContext, ClassContext
-from assembl.auth import P_READ,P_SYSADMIN
+from assembl.auth import P_READ, P_SYSADMIN
 
 FIXTURE_DIR = os.path.join(
     os.path.dirname(__file__), '..', '..', 'static', 'js', 'tests', 'fixtures')
@@ -17,7 +19,8 @@ def includeme(config):
     config.add_route('csrf_token2', 'Token')
 
 
-@view_config(context=ClassContext, renderer='json', request_method='GET', permission=P_READ)
+@view_config(context=ClassContext, renderer='json',
+             request_method='GET', permission=P_READ)
 def class_view(request):
     ctx = request.context
     view = (request.matchdict or {}).get('view', None) or '/id_only'
@@ -29,7 +32,8 @@ def class_view(request):
         return [i.generic_json(view) for i in q.all()]
 
 
-@view_config(context=InstanceContext, renderer='json', request_method='GET', permission=P_READ)
+@view_config(context=InstanceContext, renderer='json',
+             request_method='GET', permission=P_READ)
 def instance_view(request):
     ctx = request.context
     view = (request.matchdict or {}).get('view', None) or '/default'
@@ -37,7 +41,8 @@ def instance_view(request):
     return ctx._instance.generic_json(view)
 
 
-@view_config(context=CollectionContext, renderer='json', request_method='GET', permission=P_READ)
+@view_config(context=CollectionContext, renderer='json',
+             request_method='GET', permission=P_READ)
 def collection_view(request):
     ctx = request.context
     view = (request.matchdict or {}).get('view', None) or '/id_only'
@@ -47,3 +52,69 @@ def collection_view(request):
         return [ctx.collection_class.uri_generic(x) for (x,) in q.all()]
     else:
         return [i.generic_json(view) for i in q.all()]
+
+
+@view_config(context=CollectionContext, request_method='POST')
+def collection_add(request):
+    # TODO : Permissions. Note that each class should have a method
+    # to say what permission is needed to create, edit self or
+    # edit other on this class.
+    ctx = request.context
+    args = request.params
+    typename = args.get('type', ctx.collection_class.external_typename())
+    try:
+        instances = ctx.create_object(typename, None, **args)
+    except Exception as e:
+        raise HTTPBadRequest(e)
+    if instances:
+        db = get_session_maker()
+        for instance in instances:
+            db.add(instance)
+        db.flush()
+        first = instances[0]
+        raise HTTPCreated(first.uri_generic(first.id))
+    raise HTTPBadRequest()
+
+
+@view_config(context=InstanceContext, request_method='POST')
+def instance_post(request):
+    raise HTTPBadRequest()
+
+
+@view_config(context=ClassContext, request_method='POST')
+def class_add(request):
+    # TODO : Permissions.
+    ctx = request.context
+    args = request.params
+    typename = args.get('type', None)
+    try:
+        instances = ctx.create_object(typename, None, **args)
+    except Exception as e:
+        raise HTTPBadRequest(e)
+    if instances:
+        db = get_session_maker()
+        for instance in instances:
+            db.add(instance)
+        db.flush()
+        first = instances[0]
+        raise HTTPCreated(first.uri_generic(first.id))
+    raise HTTPBadRequest()
+
+
+@view_config(context=CollectionContext, request_method='POST',
+             header="Content-Type:application/json") #(.*\+)?
+def collection_add_json(request):
+    # TODO : Permissions.
+    ctx = request.context
+    typename = ctx.collection_class.external_typename()
+    try:
+        instances = ctx.create_object(typename, request.json_body)
+    except Exception as e:
+        raise HTTPBadRequest(e)
+    if instances:
+        db = get_session_maker()
+        for instance in instances:
+            db.add(instance)
+        db.flush()
+        first = instances[0]
+        raise HTTPCreated(first.uri_generic(first.id))

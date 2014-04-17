@@ -590,6 +590,9 @@ class BaseOps(object):
             return dumps(result)
         return result
 
+    @classmethod
+    def from_json(cls, json):
+        raise NotImplementedError()
 
 class Timestamped(BaseOps):
     """An automatically timestamped mixin."""

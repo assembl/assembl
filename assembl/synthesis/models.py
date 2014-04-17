@@ -351,6 +351,51 @@ class ExplicitSubGraphView(IdeaGraphView):
         retval.ideas = self.ideas
         return retval
 
+    @classmethod
+    def extra_collections(cls):
+        class IdeaCollectionDefinition(object):
+            def __init__(self, cls):
+                self.owner_class = cls
+                self.collection_class = Idea
+
+            def decorate_query(self, query, parent_instance):
+                query = query.join(SubGraphIdeaAssociation, self.owner_class)
+                return query
+
+            def decorate_instance(self, instance, parent_instance, assocs):
+                assocs.append(SubGraphIdeaAssociation(
+                    idea=instance, sub_graph=parent_instance))
+
+            def contains(self, parent_instance, instance):
+                return SubGraphIdeaAssociation.db.query(
+                    SubGraphIdeaAssociation).filter_by(
+                        idea=instance,
+                        sub_graph=parent_instance
+                    ).count() > 0
+
+        class IdeaLinkCollectionDefinition(object):
+            def __init__(self, cls):
+                self.owner_class = cls
+                self.collection_class = IdeaLink
+
+            def decorate_query(self, query, parent_instance):
+                return query.join(
+                    SubGraphIdeaLinkAssociation, self.owner_class)
+
+            def decorate_instance(self, instance, parent_instance, assocs):
+                assocs.append(
+                    SubGraphIdeaLinkAssociation(
+                        idea_link=instance, sub_graph=parent_instance))
+
+            def contains(self, parent_instance, instance):
+                return SubGraphIdeaAssociation.db.query(
+                    SubGraphIdeaLinkAssociation).filter_by(
+                        idea_link=instance,
+                        sub_graph=parent_instance
+                    ).count() > 0
+        return {'ideas': IdeaCollectionDefinition(cls),
+                'idea_links': IdeaLinkCollectionDefinition(cls)}
+
 
 class TableOfContents(IdeaGraphView):
     """
