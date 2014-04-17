@@ -183,21 +183,14 @@ function(Backbone, _, $, app, Synthesis, Permissions, IdeaInSynthesisView, i18n,
             var model = this.model,
                 publishes_synthesis_id = model.get('id'),
                 url = app.getApiUrl('posts'),
-                template = app.loadTemplate('synthesisEmail'),
                 ideas = this.ideas.getInNextSynthesisRootIdeas(),
                 that = this;
 
             var onSuccess = function(resp){
                 var data = {
                     publishes_synthesis_id: publishes_synthesis_id,
-                    subject: app.format(i18n.gettext('[synthesis] {0}'), model.get('subject')),
-                    message: template({
-                        email: resp[0].most_common_recipient_address,
-                        subject: model.get('subject'),
-                        introduction: model.get('introduction'),
-                        conclusion: model.get('conclusion'),
-                        ideas: ideas
-                    })
+                    subject: "Not used",
+                    message: "Not used"
                 };
 
                 // Sending the synthesis
