@@ -53,8 +53,8 @@
         </form>
 
         <footer>
-            {% set caravan = "<a href='http://caravan.coop' class='link'>"+gettext("Caravan")+"</a>" %}
-            {% set imaginationForPeople = "<a href='http://imaginationforpeople.org/' class='link'>"+gettext("Imagination for people") +"</a>" %}
+            {% set caravan = "<a href='http://caravan.coop' class='link caravan'>"+gettext("Caravan")+"</a>" %}
+            {% set imaginationForPeople = "<a href='http://imaginationforpeople.org/' class='link i4p'>"+gettext("Imagination for people") +"</a>" %}
 
             <p>{{ gettext("Designed by %(caravan)s and %(imaginationForPeople)s")|format(caravan=caravan, imaginationForPeople=imaginationForPeople)|safe }}</p>
         </footer>
