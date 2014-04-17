@@ -7,18 +7,16 @@
         </div>
         <div class="navbar-center">
             <ul class="menu">
-                <li class="tab-idea">
+                <li class="tab-table-idea">
                     <a id="button-ideaList" class="barbutton" data-tooltip-position="n"
                     data-tooltip="{{ gettext('To add an idea in the table of ideas: select add idea and drag the new idea either 1) on the inner edge of an existing idea to add it as a sibling or 2) in the middle of an existing idea to add it as a sub-idea.') }}">{{ gettext('Table of Ideas') }}</a>
                 </li>
-                {#<li>
+                {#<li class="tab-idea active">
                     <a id="button-ideaPanel" class="barbutton" style="display: none">{{ gettext('Idea') }}</a>
                 </li>#}
-                {% if canAddExtract %}
                 <li class="tab-clipboard">
                     <a id="button-segmentList" class="barbutton">{{ gettext('Clipboard') }}</a>
                 </li>
-                {% endif %}
                 <li class="tab-messages">
                     <a id="button-messages" class="barbutton">{{ gettext('Messages') }}</a>
                 </li>

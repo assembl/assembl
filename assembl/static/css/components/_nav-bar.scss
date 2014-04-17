@@ -19,14 +19,16 @@
   }
 
   .navbar-center {
-    width: 450px;
+    width: 612px;
     margin: 0 auto;
     position: absolute;
     left: 0;
     right: 0;
     .menu {
-      @include border-bottom-left-radius(8px);
-      @include border-bottom-right-radius(8px);
+      @include border-bottom-left-radius(16px);
+      @include border-bottom-right-radius(16px);
+      @include background-clip(padding-box);
+
       list-style: none;
       height: 35px;
       background-color: #484848;
@@ -41,10 +43,10 @@
         &.active {
           background-color: #c7c2dd;
           &:first-child {
-            @include border-bottom-left-radius(7px);
+            @include border-bottom-left-radius(15px);
           }
           &:last-child {
-            @include border-bottom-right-radius(7px);
+            @include border-bottom-right-radius(15px);
           }
         }
       }
@@ -53,37 +55,49 @@
         line-height: 30px;
         background: transparent;
       }
-      .tab-idea {
+
+      .tab-table-idea, .tab-idea, .tab-messages, .tab-clipboard, .tab-synthesis {
+        @include background-clip(padding-box);
+      }
+
+      .tab-table-idea {
+        margin-right: 4px;
         &:hover {
-          @include border-top-right-radius(7px);
-          @include border-bottom-left-radius(7px);
+          @include border-top-right-radius(15px);
+          @include border-bottom-left-radius(15px);
           background-color: #c7c2dd;
         }
         &.active{
-          @include border-top-right-radius(7px);
-          @include border-bottom-left-radius(7px);
+          @include border-top-right-radius(15px);
+          @include border-bottom-left-radius(15px);
         }
       }
-      .tab-clipboard {}
-      .tab-messages {
+      .tab-idea {
+        &.active{
+          @include border-top-right-radius(15px);
+          @include border-top-left-radius(15px);
+        }
+      }
+      .tab-messages, .tab-clipboard {
+        margin-right: 4px;
         &:hover {
-          @include border-top-right-radius(7px);
-          @include border-top-left-radius(7px);
+          @include border-top-right-radius(15px);
+          @include border-top-left-radius(15px);
           background-color: #c7c2dd;
         }
         &.active{
-          @include border-top-right-radius(7px);
-          @include border-top-left-radius(7px);
+          @include border-top-right-radius(15px);
+          @include border-top-left-radius(15px);
         }
       }
       .tab-synthesis {
         &:hover {
-          @include border-top-left-radius(7px);
-          @include border-bottom-right-radius(7px);
+          @include border-top-left-radius(15px);
+          @include border-bottom-right-radius(15px);
           background-color: #c7c2dd;
         }
         &.active{
-          @include border-top-left-radius(7px);
+          @include border-top-left-radius(15px);
         }
       }
 
