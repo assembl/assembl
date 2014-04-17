@@ -6,15 +6,15 @@
             <a href="/" class="icon-menu assembl-logo">Assembl</a>
         </div>
         <div class="navbar-right">
+            <div class="connexion">
             {% if locales.__len__ > 1 %}
                 {% for loc in locales %}
                     {% if (loc != locale) %}
-                    <span class="lang">
-                        <a onmouseup="window.app.setLocale('{{loc}}')">{{loc}}</a>
-                    </span>
+                        <a href="#" class="lang" onmouseup="window.app.setLocale('{{loc}}')">{{loc | upper}}</a>
                     {% endif %}
                 {% endfor %}
             {% endif %}
+            </div>
         </div>
     </nav>
 {% endblock %}
@@ -45,6 +45,7 @@
         {% if resend_url %}
         <a href="{{resend_url}}">{{ gettext("Send confirmation message") }}</a>
         {% endif %}
+
         <form class="form" method="POST">
             <input type="hidden" name="next_view" value="{{next_view}}" />
 
@@ -59,6 +60,7 @@
 
             <div class="spacer"></div>
         </form>
+
         <span>{{gettext("or")}} <a href="/register?next_view={{next_view}}">{{gettext("register")}}</a></span>
 
 

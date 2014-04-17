@@ -25,11 +25,11 @@
     left: 0;
     right: 0;
     .menu {
+      @include border-bottom-left-radius(8px);
+      @include border-bottom-right-radius(8px);
       list-style: none;
       height: 35px;
-      @include border-bottom-left-radius(7px);
-      @include border-bottom-right-radius(7px);
-      background-color: #ffffff;
+      background-color: #484848;
       margin: 0;
       padding: 0;
       li {
@@ -49,7 +49,7 @@
         }
       }
       a {
-        color: #484848;
+        color: #ffffff;
         line-height: 30px;
         background: transparent;
       }
@@ -93,18 +93,23 @@
 
   .navbar-right {
     float: right;
-    margin-right: 15px;
-    line-height: 40px;
-    width: 200px;
-    text-align: right;
-    .lang {
-      border-radius: 50%;
+    line-height: 35px;
+    .connexion {
+      @include border-bottom-left-radius(15px);
+      background-color: #484848;
+      padding-left: 12px;
       cursor: pointer;
-      border: 2px solid #fff;
-      padding: 3px;
-    }
-    a {
-      color: #484848;
+      .lang {
+        @include border-radius(15px);
+        cursor: pointer;
+        border: 2px solid #fff;
+        padding: 3px;
+      }
+      a{
+        text-decoration: none;
+        color:#ffffff;
+        margin-right: 10px;
+      }
     }
   }
 }
