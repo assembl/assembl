@@ -363,8 +363,13 @@ class ExplicitSubGraphView(IdeaGraphView):
                 return query
 
             def decorate_instance(self, instance, parent_instance, assocs):
-                assocs.append(SubGraphIdeaAssociation(
-                    idea=instance, sub_graph=parent_instance))
+                for inst in assocs[:]:
+                    if isinstance(inst, Idea):
+                        assocs.append(SubGraphIdeaAssociation(
+                            idea=inst, sub_graph=parent_instance))
+                    elif isinstance(inst, IdeaLink):
+                        assocs.append(SubGraphIdeaLinkAssociation(
+                                idea_link=inst, sub_graph=parent_instance))
 
             def contains(self, parent_instance, instance):
                 return SubGraphIdeaAssociation.db.query(
@@ -764,6 +769,49 @@ EXCEPT corresponding BY (post_id)
                         target.discussion_id == discussion_id).filter(
                             source.discussion_id == discussion_id).filter(
                                 IdeaLink.is_tombstone == False).all()
+
+    @classmethod
+    def extra_collections(cls):
+        class ChildIdeaCollectionDefinition(object):
+            def __init__(self, cls):
+                self.owner_class = cls
+                self.collection_class = Idea
+
+            def decorate_query(self, query, parent_instance):
+                return query.join(IdeaLink).filter(
+                    IdeaLink.source_id == parent_instance.id)
+
+            def decorate_instance(self, instance, parent_instance, assocs):
+                assocs.append(IdeaLink(
+                        source=parent_instance, target=instance))
+
+            def contains(self, parent_instance, instance):
+                return IdeaLink.db.query(
+                    IdeaLink).filter_by(
+                        source=parent_instance, target=instance
+                    ).count() > 0
+
+        class RelatedPostCollectionDefinition(object):
+            def __init__(self, cls):
+                self.owner_class = cls
+                self.collection_class = Content
+
+            def decorate_query(self, query, parent_instance):
+                return query.join(
+                    IdeaRelatedPostLink, self.owner_class)
+
+            def decorate_instance(self, instance, parent_instance, assocs):
+                assocs.append(
+                    IdeaRelatedPostLink(
+                        content=instance, idea=parent_instance))
+
+            def contains(self, parent_instance, instance):
+                return IdeaRelatedPostLink.db.query(
+                    SubGraphIdeaLinkAssociation).filter_by(
+                        content=instance, idea=parent_instance
+                    ).count() > 0
+        return {'children': ChildIdeaCollectionDefinition(cls),
+                'posts': RelatedPostCollectionDefinition(cls)}
 
 
 class RootIdea(Idea):

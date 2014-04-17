@@ -203,6 +203,8 @@ class CollectionContext(object):
         return self.__parent__.decorate_query(query)
 
     def decorate_instance(self, instance, assocs):
+        if isinstance(instance, self.collection.collection_class):
+            self.collection.decorate_instance(instance, self.parent_instance, assocs)
         self.__parent__.decorate_instance(instance, assocs)
 
     def create_object(self, type=None, json=None, **kwargs):
@@ -216,10 +218,7 @@ class CollectionContext(object):
         else:
             assocs = cls.from_json(json)
             inst = assocs[0]
-        # normally only the last link.
-        self.collection.decorate_instance(inst, self.parent_instance, assocs)
-        # But sometimes more
-        self.__parent__.decorate_instance(inst, assocs)
+        self.decorate_instance(inst, assocs)
         return assocs
 
 
