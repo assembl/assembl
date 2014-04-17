@@ -40,7 +40,7 @@
 {% block content %}
 
     <div class="loginbox">
-        <div class="spacer spacer--big"></div>
+        <p class="login-box-title">{{ gettext("connect to assembl") }}</p>
         <div class="error-message">{{error}}</div>
         {% if resend_url %}
         <a href="{{resend_url}}">{{ gettext("Send confirmation message") }}</a>
@@ -54,14 +54,11 @@
             <div class="spacer spacer--big"></div>
 
             <input type="password" name="password" class="defaultfield" placeholder="{{ gettext('Password') }}" required />
-            <div class="spacer spacer--huge"></div>
+            <div class="spacer spacer--big"></div>
 
-            <input type="submit" name="login" value="{{ gettext('Enter') }}" class="barbutton" />
+            <input type="submit" name="login" value="{{ gettext('Enter') }}" class="btn-pink" />
 
-            <div class="spacer"></div>
-        </form>
-
-        <span>{{gettext("or")}} <a href="/register?next_view={{next_view}}">{{gettext("register")}}</a></span>
+            <span class="register">{{gettext("or")}} <a href="/register?next_view={{next_view}}">{{gettext("register")}}</a></span>
 
 
         {% if providers %}
@@ -70,21 +67,21 @@
         {{form('google', 'Login with Google', true)}}
         {{form('twitter', 'Login with Twitter', true)}}
         {{form('facebook', 'Login with Facebook', true)}}
-        {{form('yahoo', 'Login with Yahoo', true,
-                oauth='true', openid_identifier='yahoo.com')}}
+        {{form('yahoo', 'Login with Yahoo', true, oauth='true', openid_identifier='yahoo.com')}}
         {{form('live', 'Login with Windows Live', false)}}
         {{form('github', 'Login with Github', false)}}
         {{form('bitbucket', 'Login with Bitbucket', false)}}
         {{form('openid', 'Login with OpenID', true)}}
-        <div class="spacer spacer--huge"></div>
 
-        <div class="text text-small text-muted">
+        </form>
+
+        <footer>
             {% set caravan = "<a href='http://caravan.coop' class='link'>"+gettext("Caravan")+"</a>" %}
             {% set imaginationForPeople = "<a href='http://imaginationforpeople.org/' class='link'>"+gettext("Imagination for people") +"</a>" %}
 
-            {{ gettext("Designed by %(caravan)s and %(imaginationForPeople)s")|format(caravan=caravan, imaginationForPeople=imaginationForPeople)|safe }}
-        </div>
-        </form>
+            <p>{{ gettext("Designed by %(caravan)s and %(imaginationForPeople)s")|format(caravan=caravan, imaginationForPeople=imaginationForPeople)|safe }}</p>
+        </footer>
+
     </div>
 
 {% endblock %}

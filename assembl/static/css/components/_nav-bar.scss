@@ -129,9 +129,7 @@
       padding-left: 12px;
       cursor: pointer;
       .lang {
-        @include border-radius(15px);
         cursor: pointer;
-        border: 2px solid #fff;
         padding: 3px;
       }
       a{

@@ -1,19 +1,46 @@
 // Login box
 // =========
 .loginbox {
-    position: absolute;
-    top: 40%;
-    left: 50%;
-    @include transform( translate(-50%, -50%) );
+  @include box-sizing( border-box );
+  @include border-radius(6px);
+  margin: 0 auto;
+  border: 1px solid rgba(0,0,0,0.1);
+  width: 600px;
+  background-color: #ffffff;
+  box-shadow:0 0 225px rgba(255,255,255,.55);
 
-    @include box-sizing( border-box );
-    width: 382px;
-    //height: 431px;
-    padding: $padding * 2;
+  form {
+    width: 315px;
+    margin: 0 auto;
+    .register {
+      a{
+        text-decoration: none;
+        color: #484848;
+        cursor: pointer;
+      }
+    }
+  }
 
-    @include border-radius(2px);
-    background-color: #ffffff;
-    text-align: center;
+  footer {
+    height: 80px;
+    color:#CCCCCC;
+    background-color: #484848;
+    border-bottom-left-radius: 6px;
+    border-bottom-right-radius: 6px;
+    p {
+      line-height: 80px;
+      text-align: center;
+    }
+  }
 
-    box-shadow: 2px 2px 2px 2px #aaa;
+  .login-box-title {
+    text-align: left;
+    //padding: 0 20px;
+    font-size: 20px;
+    padding-left: 143px;
+  }
+  .defaultfield {
+    max-width: 290px;
+    width: 97%;
+  }
 }

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: assembl 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-04-17 13:03+0200\n"
+"POT-Creation-Date: 2014-04-17 23:36+0200\n"
 "PO-Revision-Date: 2013-07-12 17:53-0400\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: en <LL@li.org>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Generated-By: Babel 1.3\n"
 
 #: assembl/auth/operations.py:30 assembl/models/auth/operations.py:30
-#: assembl/templates/register.jinja2:38
+#: assembl/templates/register.jinja2:37
 msgid "email"
 msgstr ""
 
@@ -348,12 +348,12 @@ msgid "Synthesis published!"
 msgstr ""
 
 #: assembl/templates/discussion_list.jinja2:13
-#: assembl/templates/index.jinja2:35
+#: assembl/templates/index.jinja2:33
 msgid "Sign out"
 msgstr ""
 
 #: assembl/templates/discussion_list.jinja2:15
-#: assembl/templates/index.jinja2:37
+#: assembl/templates/index.jinja2:35
 msgid "Sign in"
 msgstr ""
 
@@ -373,22 +373,26 @@ msgstr ""
 msgid "Table of Ideas"
 msgstr ""
 
-#: assembl/templates/index.jinja2:19
+#: assembl/templates/index.jinja2:18
 msgid "Clipboard"
 msgstr ""
 
-#: assembl/templates/index.jinja2:23
+#: assembl/templates/index.jinja2:21
 msgid "Messages"
 msgstr ""
 
-#: assembl/templates/index.jinja2:26
+#: assembl/templates/index.jinja2:24
 #: assembl/templates/views/synthesisPanel.tmpl:3
 msgid "Synthesis"
 msgstr ""
 
-#: assembl/templates/index.jinja2:63
+#: assembl/templates/index.jinja2:61
 msgid "Connecting..."
 msgstr ""
+
+#: assembl/templates/login.jinja2:43
+msgid "connect to assembl"
+msgstr "connect to Assembl"
 
 #: assembl/templates/login.jinja2:46 assembl/templates/profile.jinja2:102
 msgid "Send confirmation message"
@@ -398,7 +402,7 @@ msgstr ""
 msgid "Email or username"
 msgstr ""
 
-#: assembl/templates/login.jinja2:56 assembl/templates/register.jinja2:42
+#: assembl/templates/login.jinja2:56 assembl/templates/register.jinja2:41
 msgid "Password"
 msgstr ""
 
@@ -406,28 +410,28 @@ msgstr ""
 msgid "Enter"
 msgstr ""
 
-#: assembl/templates/login.jinja2:64 assembl/templates/register.jinja2:55
+#: assembl/templates/login.jinja2:61 assembl/templates/register.jinja2:51
 msgid "or"
 msgstr ""
 
-#: assembl/templates/login.jinja2:64
+#: assembl/templates/login.jinja2:61
 msgid "register"
 msgstr ""
 
-#: assembl/templates/login.jinja2:68
+#: assembl/templates/login.jinja2:65
 msgid "Login with external tools"
 msgstr ""
 
-#: assembl/templates/login.jinja2:82
+#: assembl/templates/login.jinja2:79 assembl/templates/register.jinja2:56
 msgid "Caravan"
 msgstr ""
 
-#: assembl/templates/login.jinja2:83
+#: assembl/templates/login.jinja2:80 assembl/templates/register.jinja2:57
 msgid "Imagination for people"
 msgstr ""
 
-#: assembl/templates/login.jinja2:85 assembl/templates/profile.jinja2:168
-#: assembl/templates/register.jinja2:63
+#: assembl/templates/login.jinja2:82 assembl/templates/profile.jinja2:168
+#: assembl/templates/register.jinja2:59
 #: assembl/templates/view_profile.jinja2:67
 #, python-format
 msgid "Designed by %(caravan)s and %(imaginationForPeople)s"
@@ -445,7 +449,7 @@ msgstr ""
 msgid "Desired username"
 msgstr ""
 
-#: assembl/templates/profile.jinja2:58 assembl/templates/register.jinja2:34
+#: assembl/templates/profile.jinja2:58 assembl/templates/register.jinja2:33
 #: assembl/templates/view_profile.jinja2:29
 msgid "Name"
 msgstr ""
@@ -463,7 +467,7 @@ msgid "New Password"
 msgstr ""
 
 #: assembl/templates/profile.jinja2:77 assembl/templates/profile.jinja2:80
-#: assembl/templates/register.jinja2:46
+#: assembl/templates/register.jinja2:45
 msgid "Repeat password"
 msgstr ""
 
@@ -505,7 +509,7 @@ msgstr ""
 msgid "Connect other accounts to Assembl"
 msgstr ""
 
-#: assembl/templates/profile.jinja2:165 assembl/templates/register.jinja2:60
+#: assembl/templates/profile.jinja2:165
 #: assembl/templates/view_profile.jinja2:64
 msgid "<a href='http://caravan.coop' class='link'>Caravan</a>"
 msgstr ""
@@ -516,15 +520,18 @@ msgid ""
 "people</a>"
 msgstr ""
 
-#: assembl/templates/register.jinja2:50
+#: assembl/templates/register.jinja2:25
+msgid "join assembl"
+msgstr "Join Assembl"
+
+#: assembl/templates/register.jinja2:49
 msgid "Register"
 msgstr ""
 
-#: assembl/templates/register.jinja2:55
+#: assembl/templates/register.jinja2:51
 msgid "login"
 msgstr ""
 
-#: assembl/templates/register.jinja2:61
 #: assembl/templates/view_profile.jinja2:65
 msgid ""
 "<a href='http://http://imaginationforpeople.org/' "

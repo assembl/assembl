@@ -45,13 +45,16 @@ $text-muted: #999;
 // Default field text
 // ==================
 .defaultfield {
-    min-width: 220px;
-    height: 35px;
-    padding: 0 $padding;
+  @include border-radius(3px);
+  min-width: 220px;
+  height: 35px;
+  padding: 0 $padding;
 
-    font-size: 14px;
-    color: $text-muted;
-    @include border-radius(5px);
-    @include box-shadow(inset 0 0 4px rgba(0,0,0,.25));
-    border: $form-border-color; //border: solid 1px #468847;
+  font-size: 14px;
+  color: $text-muted;
+
+  border: 1px solid #cccccc;
+
+  //@include box-shadow(inset 0 0 4px rgba(0,0,0,.25));
+  //border: $form-border-color; //border: solid 1px #468847;
 }
