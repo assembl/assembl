@@ -1,83 +1,114 @@
 // Navigation bar
 .navbar {
-    @include no-selection;
-    @include box-sizing(border-box);
-    @include transform( translateZ(0) );
-    display: block;
-    position: relative;
-    background-color: $bar-background-color;
+  @include no-selection;
+  @include box-sizing(border-box);
+  @include transform(translateZ(0));
+  display: block;
+  position: relative;
+  background-color: $bar-background-color;
 
-    &.navbar-default {
-      background: transparent;
-      color: white;
-      min-height: 40px;
-    }
+  &.navbar-default {
+    background: transparent;
+    color: white;
+    min-height: 35px;
+  }
 
-    .navbar-left {
-      float: left;
-      line-height: 40px;
-    }
+  .navbar-left {
+    float: left;
+    line-height: 35px;
+  }
 
-    .navbar-center {
-      width: 450px;
-      margin: 0 auto;
-      position: absolute;
-      left: 0;
-      right: 0;
-      .menu {
-        list-style: none;
+  .navbar-center {
+    width: 450px;
+    margin: 0 auto;
+    position: absolute;
+    left: 0;
+    right: 0;
+    .menu {
+      list-style: none;
+      height: 35px;
+      @include border-bottom-left-radius(7px);
+      @include border-bottom-right-radius(7px);
+      background-color: #ffffff;
+      margin: 0;
+      padding: 0;
+      li {
+        float: left;
         height: 35px;
-        border-bottom-left-radius: 7px;
-        border-bottom-right-radius: 7px;
-        background-color: #ffffff;
-        margin: 0;
-        padding: 0;
-        li{
-          float: left;
-          height: 35px;
-          width: 140px;
-          text-align: center;
-          padding: 0 5px 0 5px;
-          &.is-activated {
-            background-color: #c7c2dd;
-            &:first-child {
-              border-bottom-left-radius: 7px;
-            }
-            &:last-child {
-              border-bottom-right-radius: 7px;
-            }
+        width: 140px;
+        text-align: center;
+        padding: 0 5px 0 5px;
+        &.active {
+          background-color: #c7c2dd;
+          &:first-child {
+            @include border-bottom-left-radius(7px);
+          }
+          &:last-child {
+            @include border-bottom-right-radius(7px);
           }
         }
-        a {
-          color: #484848;
-          line-height: 30px;
-          background: transparent;
+      }
+      a {
+        color: #484848;
+        line-height: 30px;
+        background: transparent;
+      }
+      .tab-idea {
+        &:hover {
+          @include border-top-right-radius(7px);
+          @include border-bottom-left-radius(7px);
+          background-color: #c7c2dd;
         }
-        .is-activated {
-
+        &.active{
+          @include border-top-right-radius(7px);
+          @include border-bottom-left-radius(7px);
         }
-
+      }
+      .tab-clipboard {}
+      .tab-messages {
+        &:hover {
+          @include border-top-right-radius(7px);
+          @include border-top-left-radius(7px);
+          background-color: #c7c2dd;
+        }
+        &.active{
+          @include border-top-right-radius(7px);
+          @include border-top-left-radius(7px);
+        }
+      }
+      .tab-synthesis {
+        &:hover {
+          @include border-top-left-radius(7px);
+          @include border-bottom-right-radius(7px);
+          background-color: #c7c2dd;
+        }
+        &.active{
+          @include border-top-left-radius(7px);
+        }
       }
 
     }
 
-    .navbar-right {
-      float: right;
-      margin-right: 15px;
-      line-height: 40px;
-      width: 200px;
-      text-align: right;
-      .lang {
-        border-radius: 50%;
-        cursor: pointer;
-        border: 2px solid #fff;
-        padding: 3px;
-      }
-      a{
-        color:#484848;
-      }
+  }
+
+  .navbar-right {
+    float: right;
+    margin-right: 15px;
+    line-height: 40px;
+    width: 200px;
+    text-align: right;
+    .lang {
+      border-radius: 50%;
+      cursor: pointer;
+      border: 2px solid #fff;
+      padding: 3px;
     }
+    a {
+      color: #484848;
+    }
+  }
 }
+
 
 .navbar-title {
   box-sizing: border-box;
