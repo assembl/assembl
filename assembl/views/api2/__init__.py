@@ -14,6 +14,9 @@ FIXTURE_DIR = os.path.join(
 API_PREFIX = '/data/'
 
 
+FORM_HEADER = "Content-Type:(application/x-www-form-urlencoded)|(multipart/form-data)"
+JSON_HEADER = "Content-Type:application/(.*\+)?json"
+
 def includeme(config):
     """ Initialize views and renderers at app start-up time. """
     config.add_route('csrf_token2', 'Token')
@@ -54,7 +57,7 @@ def collection_view(request):
         return [i.generic_json(view) for i in q.all()]
 
 
-@view_config(context=CollectionContext, request_method='POST')
+@view_config(context=CollectionContext, request_method='POST', header=FORM_HEADER)
 def collection_add(request):
     # TODO : Permissions. Note that each class should have a method
     # to say what permission is needed to create, edit self or
@@ -76,12 +79,13 @@ def collection_add(request):
     raise HTTPBadRequest()
 
 
-@view_config(context=InstanceContext, request_method='POST')
+@view_config(context=InstanceContext, request_method='POST',
+             header=FORM_HEADER)
 def instance_post(request):
     raise HTTPBadRequest()
 
 
-@view_config(context=ClassContext, request_method='POST')
+@view_config(context=ClassContext, request_method='POST', header=FORM_HEADER)
 def class_add(request):
     # TODO : Permissions.
     ctx = request.context
@@ -102,7 +106,7 @@ def class_add(request):
 
 
 @view_config(context=CollectionContext, request_method='POST',
-             header="Content-Type:application/json") #(.*\+)?
+             header=JSON_HEADER)
 def collection_add_json(request):
     # TODO : Permissions.
     ctx = request.context
