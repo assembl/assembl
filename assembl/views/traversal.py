@@ -142,14 +142,16 @@ class InstanceContext(object):
         return self.__parent__.decorate_query(query)
 
     def decorate_instance(self, instance, assocs):
-        # if has a non-list relation of this class, add it
-        relations = instance.__class__.__mapper__.relationships
-        for reln in relations:
-            if reln.uselist:
-                continue
-            if reln.mapper.class_ == self._instance.__class__:
-                setattr(instance, reln.key, self._instance)
-                break
+        # if one of the objects has a non-list relation to this class, add it
+        # Slightly dangerous...
+        for inst in assocs:
+            relations = inst.__class__.__mapper__.relationships
+            for reln in relations:
+                if reln.uselist:
+                    continue
+                if reln.mapper.class_ == self._instance.__class__:
+                    setattr(inst, reln.key, self._instance)
+                    break
         self.__parent__.decorate_instance(instance, assocs)
 
 
