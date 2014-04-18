@@ -180,8 +180,7 @@ function(Backbone, _, $, app, Synthesis, Permissions, IdeaInSynthesisView, i18n,
          * Publishes the synthesis
          */
         _publish: function(){
-            var model = this.model,
-                publishes_synthesis_id = model.get('id'),
+            var publishes_synthesis_id = this.model.id,
                 url = app.getApiUrl('posts'),
                 ideas = this.ideas.getInNextSynthesisRootIdeas(),
                 that = this;
