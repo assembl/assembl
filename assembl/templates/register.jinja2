@@ -8,6 +8,7 @@
         <div class="navbar-right">
             <div class="connexion">
             {% if locales.__len__ > 1 %}
+                <a href="#" class="locale active">{{locale | upper}}</a>
                 {% for loc in locales %}
                     {% if (loc != locale) %}
                         <a href="#" class="lang" onmouseup="window.app.setLocale('{{loc}}')">{{loc | upper}}</a>

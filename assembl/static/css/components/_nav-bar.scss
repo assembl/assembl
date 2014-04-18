@@ -19,105 +19,37 @@
   }
 
   .navbar-center {
-    width: 612px;
     margin: 0 auto;
     position: absolute;
     left: 0;
     right: 0;
+    width: 60%;
     .menu {
-      @include border-bottom-left-radius(16px);
-      @include border-bottom-right-radius(16px);
-      @include background-clip(padding-box);
-
       list-style: none;
       height: 35px;
-      background-color: #484848;
       margin: 0;
       padding: 0;
+      text-align: center;
       li {
-        float: left;
-        height: 35px;
-        width: 140px;
-        text-align: center;
-        padding: 0 5px 0 5px;
-        &.active {
-          background-color: #c7c2dd;
-          &:first-child {
-            @include border-bottom-left-radius(15px);
-          }
-          &:last-child {
-            @include border-bottom-right-radius(15px);
-          }
-        }
+        display:inline-block;
       }
       a {
+        @include border-bottom-right-radius(15px);
+        @include border-bottom-left-radius(15px);
         color: #aaaaaa;
-        line-height: 30px;
-        background: transparent;
-      }
-
-      .tab-table-idea, .tab-idea, .tab-messages, .tab-clipboard, .tab-synthesis {
-        @include background-clip(padding-box);
-      }
-
-      .tab-table-idea {
-        margin-right: 4px;
+        background-color: #ddd;
+        padding: 8px;
+        width: 130px;
         &:hover {
-          @include border-top-right-radius(15px);
-          @include border-bottom-left-radius(15px);
           background-color: #c7c2dd;
+          color: #ffffff;
         }
         &.active{
-          @include border-top-right-radius(15px);
-          @include border-bottom-left-radius(15px);
-        }
-        &.active, &:hover{
-          a{
-            color:#ffffff;
-          }
-        }
-      }
-      .tab-idea {
-        &.active{
-          @include border-top-right-radius(15px);
-          @include border-top-left-radius(15px);
-        }
-      }
-      .tab-messages, .tab-clipboard {
-        margin-right: 4px;
-        &:hover {
-          @include border-top-right-radius(15px);
-          @include border-top-left-radius(15px);
           background-color: #c7c2dd;
-        }
-        &.active{
-          @include border-top-right-radius(15px);
-          @include border-top-left-radius(15px);
-        }
-        &.active, &:hover{
-          a{
-            color:#ffffff;
-          }
+          color: #ffffff;
         }
       }
-      .tab-synthesis {
-        &:hover {
-          @include border-top-left-radius(15px);
-          @include border-bottom-right-radius(15px);
-          background-color: #c7c2dd;
-        }
-        &.active{
-          @include border-top-left-radius(15px);
-        }
-        &.active, &:hover{
-          a{
-            color:#ffffff;
-          }
-        }
-      }
-
     }
-
   }
 
   .navbar-right {
@@ -126,24 +58,29 @@
     .connexion {
       @include border-bottom-left-radius(15px);
       background-color: #484848;
-      padding-left: 12px;
+      padding: 0 10px;
       cursor: pointer;
       .lang {
         cursor: pointer;
-        padding: 3px;
+        color: #aaaaaa;
+      }
+      .locale{
+        border-right: 1px solid #ffffff;
+        padding-right: 4px;
       }
       a{
         text-decoration: none;
         color:#ffffff;
-        margin-right: 10px;
       }
       .sign-out {
         margin-right: 0;
       }
+      .sign-in {
+        margin-right: 10px;
+      }
     }
   }
 }
-
 
 .navbar-title {
   box-sizing: border-box;
