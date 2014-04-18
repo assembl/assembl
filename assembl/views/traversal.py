@@ -181,6 +181,7 @@ class CollectionContext(object):
         self.collection_class = self.collection.collection_class
 
     def __getitem__(self, key):
+        # TODO: Delegate that to collection as well.
         instance = self.collection_class.get_instance(key)
         if not instance:
             raise KeyError()

@@ -2,7 +2,7 @@ import os
 import json
 
 from pyramid.view import view_config
-from pyramid.httpexceptions import HTTPCreated, HTTPBadRequest
+from pyramid.httpexceptions import HTTPCreated, HTTPBadRequest, HTTPNotImplemented
 
 from .. import acls
 from assembl.lib.sqla import get_named_class, get_session_maker
@@ -79,10 +79,27 @@ def collection_add(request):
     raise HTTPBadRequest()
 
 
-@view_config(context=InstanceContext, request_method='POST',
-             header=FORM_HEADER)
+@view_config(context=InstanceContext, request_method='POST')
 def instance_post(request):
     raise HTTPBadRequest()
+
+
+@view_config(context=InstanceContext, request_method='PUT', header=JSON_HEADER)
+def instance_put(request):
+    #TODO
+    raise HTTPNotImplemented()
+
+
+@view_config(context=InstanceContext, request_method='PUT', header=FORM_HEADER)
+def instance_put(request):
+    #TODO
+    raise HTTPNotImplemented()
+
+
+@view_config(context=InstanceContext, request_method='DELETE')
+def instance_del(request):
+    # TODO
+    raise HTTPNotImplemented()
 
 
 @view_config(context=ClassContext, request_method='POST', header=FORM_HEADER)

@@ -49,3 +49,5 @@ from ..synthesis.models import (
 from ..annotation.models import (
     Webpage,
 )
+
+from .widgets import (Widget, WidgetUserConfig)
