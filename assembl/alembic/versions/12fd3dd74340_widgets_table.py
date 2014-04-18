@@ -24,6 +24,7 @@ def upgrade(pyramid_env):
             'widget',
             sa.Column('id', sa.Integer, primary_key=True),
             sa.Column('type', sa.String(60), nullable=False),
+            sa.Column('widget_type', sa.String(120), nullable=False),
             sa.Column('settings', sa.Text),
             sa.Column('discussion_id', sa.Integer,
                       sa.ForeignKey('discussion.id', ondelete="CASCADE",
