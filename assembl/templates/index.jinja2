@@ -13,10 +13,12 @@
                 </li>
                 {#<li class="tab-idea active">
                     <a id="button-ideaPanel" class="barbutton" style="display: none">{{ gettext('Idea') }}</a>
-                </li>#}
+                </li>#} 
+                {% if canAddExtract %}
                 <li class="tab-clipboard">
                     <a id="button-segmentList" class="barbutton">{{ gettext('Clipboard') }}</a>
                 </li>
+                {% endif %}
                 <li class="tab-messages">
                     <a id="button-messages" class="barbutton">{{ gettext('Messages') }}</a>
                 </li>
