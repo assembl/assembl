@@ -1,15 +1,15 @@
 """ App URL routing and renderers are configured in this module. """
 
 import os.path
-
 import json
+
 from pyramid.security import Allow, ALL_PERMISSIONS
-from pyramid.httpexceptions import HTTPNotFound, HTTPInternalServerError
+from pyramid.httpexceptions import HTTPNotFound
 from pyramid.i18n import get_localizer, TranslationStringFactory
 
 from ..lib.json import json_renderer_factory
 from ..lib import config
-from assembl.auth import get_user, P_READ
+from assembl.auth import get_user
 
 default_context = {
     'STATIC_URL': '/static/'
@@ -50,7 +50,7 @@ def root_factory(request):
         if not discussion:
             raise HTTPNotFound("No discussion named %s" % (discussion_slug,))
         return discussion
-    from ..auth.models import R_SYSADMIN
+    from assembl.models.auth import R_SYSADMIN
     return _DefaultRoot(R_SYSADMIN)
 
 

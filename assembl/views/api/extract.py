@@ -15,8 +15,8 @@ from assembl.models import (
     get_named_object, get_database_id, Extract, TextFragmentIdentifier,
     Discussion, AgentProfile, User, ContentSource, AnnotatorSource, Content, Post, Webpage, Idea)
 from . import acls
-from assembl.auth import (
-    P_READ, P_ADD_EXTRACT, P_EDIT_EXTRACT, P_EDIT_MY_EXTRACT, get_permissions, user_has_permission)
+from assembl.models.auth import (P_READ, P_ADD_EXTRACT, P_EDIT_EXTRACT, P_EDIT_MY_EXTRACT)
+from assembl.auth import (get_permissions, user_has_permission)
 from assembl.lib.token import decode_token
 
 

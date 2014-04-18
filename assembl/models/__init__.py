@@ -2,7 +2,7 @@ from ..lib.sqla import (
     Base, TimestampedBase, get_metadata, get_session_maker,
     get_named_object, get_database_id)
 
-from ..auth.models import (
+from .auth import (
     IdentityProvider,
     EmailAccount,
     AbstractAgentAccount,
@@ -20,18 +20,24 @@ from ..auth.models import (
     ExpandPost,
     CollapsePost,
 )
-from ..source.models import (
+from .generic import (
     ContentSource,
     PostSource,
     AnnotatorSource,
     Content,
-    Mailbox,
+)
+from post import (
     Post,
     AssemblPost,
     SynthesisPost,
+    ImportedPost,
+)
+from mail import (
+    Mailbox,
+    MailingList,
     Email,
 )
-from ..synthesis.models import (
+from .synthesis import (
     Discussion,
     TableOfContents,
     Idea,
@@ -46,6 +52,6 @@ from ..synthesis.models import (
     Synthesis,
     TextFragmentIdentifier,
 )
-from ..annotation.models import (
+from .annotation import (
     Webpage,
 )

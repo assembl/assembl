@@ -1,14 +1,10 @@
 from sqlalchemy.sql.expression import and_
-
 from pyramid.security import (
     authenticated_userid, Everyone, Authenticated)
 from pyramid.httpexceptions import HTTPNotFound
-from models import (
-    User, R_PARTICIPANT, R_CATCHER, R_MODERATOR, R_ADMINISTRATOR,
-    P_READ, P_ADD_POST, P_EDIT_POST, P_ADD_EXTRACT,
-    P_EDIT_EXTRACT, P_EDIT_MY_EXTRACT, P_ADD_IDEA, P_EDIT_IDEA,
-    P_EDIT_SYNTHESIS, P_SEND_SYNTHESIS, P_ADMIN_DISC, P_SYSADMIN,
-    R_SYSADMIN, SYSTEM_ROLES, Role, UserRole, LocalUserRole, Permission,
+
+from assembl.models.auth import (
+    User, P_READ, R_SYSADMIN, Role, UserRole, LocalUserRole, Permission,
     DiscussionPermission
 )
 from ..lib.sqla import get_session_maker
@@ -60,7 +56,7 @@ def get_permissions(user_id, discussion_id):
 
 
 def authentication_callback(user_id, request):
-    from ..synthesis.models import Discussion
+    from ..models import Discussion
     discussion_id = None
     connection = Discussion.db().connection()
     connection.info['userid'] = user_id
@@ -82,7 +78,7 @@ def authentication_callback(user_id, request):
 
 
 def discussions_with_access(userid, permission=P_READ):
-    from ..synthesis.models import Discussion
+    from ..models import Discussion
     db = Discussion.db()
     if userid in (Authenticated, Everyone):
         return db.query(Discussion).join(
@@ -115,7 +111,7 @@ def discussions_with_access(userid, permission=P_READ):
 
 
 def user_has_permission(discussion_id, user_id, permission):
-    from ..synthesis.models import Discussion
+    from ..models import Discussion
     # assume all ids valid
     db = Discussion.db()
     if user_id in (Authenticated, Everyone):
@@ -151,7 +147,7 @@ def user_has_permission(discussion_id, user_id, permission):
 
 
 def permissions_for_user(discussion_id, user_id):
-    from ..synthesis.models import Discussion
+    from ..models import Discussion
     # assume all ids valid
     db = Discussion.db()
     if user_id in (Authenticated, Everyone):

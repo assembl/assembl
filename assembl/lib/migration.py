@@ -2,15 +2,12 @@ from __future__ import absolute_import
 
 import sys
 
-from pyramid.paster import get_appsettings
-from alembic import command
 from alembic.config import Config
 from alembic.migration import MigrationContext
 from alembic.script import ScriptDirectory
 
 from ..lib.sqla import (
-    configure_engine, get_metadata, get_session_maker, mark_changed)
-import transaction
+    get_metadata, get_session_maker, mark_changed)
 
 
 def bootstrap_db(config_uri=None, with_migration=True):
@@ -36,7 +33,6 @@ def bootstrap_db(config_uri=None, with_migration=True):
                              'attempting to bootstrap the database.\n')
             sys.exit(2)
 
-    import assembl.models
     get_metadata().create_all(db().connection())
 
     # Clean up the sccoped session to allow a later app instantiation.
@@ -48,7 +44,7 @@ def bootstrap_db(config_uri=None, with_migration=True):
 
 def bootstrap_db_data(db):
     # import after session to delay loading of BaseOps
-    from assembl.auth.models import (
+    from assembl.models.auth import (
         populate_default_permissions, populate_default_roles)
     populate_default_permissions(db())
     populate_default_roles(db())

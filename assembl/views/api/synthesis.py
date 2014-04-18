@@ -1,11 +1,10 @@
 import json
-import transaction
 
 from cornice import Service
-from assembl.views.api import API_DISCUSSION_PREFIX
-from assembl.synthesis.models import Discussion, Synthesis
-from assembl.auth import (P_READ, P_EDIT_SYNTHESIS, P_SEND_SYNTHESIS)
-from . import acls
+
+from . import API_DISCUSSION_PREFIX, acls
+from assembl.models.auth import P_READ, P_EDIT_SYNTHESIS
+from assembl.models import Discussion, Synthesis
 
 synthesis = Service(
     name='next_synthesis',

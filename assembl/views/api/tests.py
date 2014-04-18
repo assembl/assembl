@@ -1,25 +1,11 @@
 # -*- coding: utf-8 -*-
 
-import uuid
 import json
-import transaction
-import traceback
 from urllib import urlencode
-import pdb
 
-import pytest
-
-from assembl.source.models import PostSource, Content, Post
-from assembl.synthesis.models import (
+from assembl.models.synthesis import (
     Idea,
-    TableOfContents,
-    Discussion,
-    Extract,
 )
-from assembl.auth.models import (
-    AgentProfile, User, Role, UserRole, Username, R_SYSADMIN,
-    create_default_permissions, populate_default_permissions,
-    populate_default_roles, Permission)
 
 
 def get_url(discussion, suffix):

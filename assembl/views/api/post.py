@@ -18,7 +18,7 @@ from sqlalchemy.sql import cast, column
 from assembl.views.api import API_DISCUSSION_PREFIX
 import transaction
 
-from assembl.auth import P_READ, P_ADD_POST
+from assembl.models.auth import P_READ, P_ADD_POST
 from assembl.models import (
     get_database_id, get_named_object, AgentProfile, Post, AssemblPost, SynthesisPost,
     Synthesis, Discussion, PostSource, Content, Idea, ViewPost, User, Action,

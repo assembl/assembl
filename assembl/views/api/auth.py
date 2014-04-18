@@ -12,8 +12,9 @@ from assembl.models import (
     get_database_id, AgentProfile, User, Role, Permission, UserRole,
     LocalUserRole, DiscussionPermission, Discussion)
 from . import acls
+from assembl.models.auth import (
+    P_READ, P_ADMIN_DISC, P_SYSADMIN, R_SYSADMIN, SYSTEM_ROLES)
 from assembl.auth import (
-    P_READ, P_ADMIN_DISC, P_SYSADMIN, R_SYSADMIN, SYSTEM_ROLES,
     user_has_permission as a_user_has_permission,
     permissions_for_user as a_permissions_for_user)
 from assembl.lib.token import decode_token

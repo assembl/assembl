@@ -2,14 +2,16 @@
 
 from os import putenv
 from os.path import dirname, join
-import transaction
 
+import transaction
 from pyramid.config import Configurator
 from pyramid.authentication import SessionAuthenticationPolicy
 from pyramid.authorization import ACLAuthorizationPolicy
 from pyramid_beaker import session_factory_from_settings
 from pyramid.i18n import default_locale_negotiator
+
 from .lib.sqla import configure_engine
+
 
 # Do not import models here, it will break tests.
 
@@ -57,7 +59,7 @@ def main(global_config, **settings):
         config.set_authorization_policy(ACLAuthorizationPolicy())
     # ensure default roles and permissions at startup
     from models import get_session_maker
-    from auth.models import (
+    from .models.auth import (
         populate_default_roles, populate_default_permissions)
     with transaction.manager:
         session = get_session_maker()

@@ -1,19 +1,15 @@
-from datetime import datetime
 import re
 import quopri
 from itertools import groupby, chain
 from collections import defaultdict
 import traceback
+
+from datetime import datetime
 import anyjson as json
-
 from sqlalchemy.orm import relationship, backref, aliased
-from sqlalchemy.sql import func, cast, select, text
+from sqlalchemy.sql import text
 from pyramid.security import Allow, ALL_PERMISSIONS
-from pyramid.i18n import TranslationString as _
-from virtuoso.alchemy import IRI_ID
-
 from sqlalchemy import (
-    Table,
     Column,
     Boolean,
     Integer,
@@ -23,26 +19,23 @@ from sqlalchemy import (
     UnicodeText,
     DateTime,
     ForeignKey,
-    desc,
     event,
     and_,
 )
 from sqlalchemy.ext.associationproxy import association_proxy
+from virtuoso.vmapping import (
+    LiteralQuadMapPattern, IriQuadMapPattern, ApplyIriClass)
 
 from assembl.lib.utils import slugify
-
-from ..lib.sqla import db_schema, Base as SQLAlchemyBaseModel
-
-from ..source.models import (ContentSource, PostSource, Content, Post,
-    SynthesisPost, Mailbox)
-from ..auth.models import (
+from ..lib.sqla import Base as SQLAlchemyBaseModel
+from .generic import (PostSource, Content)
+from .post import (Post, SynthesisPost)
+from .mail import Mailbox
+from .auth import (
     DiscussionPermission, Role, Permission, AgentProfile, User,
     UserRole, LocalUserRole, DiscussionPermission, P_READ,
     R_SYSADMIN, ViewPost)
-from assembl.auth import get_permissions
-from assembl.namespaces import  SIOC, IDEA, ASSEMBL, DCTERMS, VirtRDF, RDF, QUADNAMES
-from virtuoso.vmapping import (
-    LiteralQuadMapPattern, IriQuadMapPattern, IriClass, ApplyIriClass)
+from assembl.namespaces import  SIOC, IDEA, ASSEMBL, DCTERMS
 
 
 class Discussion(SQLAlchemyBaseModel):
@@ -191,6 +184,7 @@ class Discussion(SQLAlchemyBaseModel):
         return json.dumps(_get_extracts_real(discussion=self))
 
     def get_user_permissions(self, user_id):
+        from assembl.auth import get_permissions
         return get_permissions(user_id, self.id)
 
     def get_user_permissions_preload(self, user_id):

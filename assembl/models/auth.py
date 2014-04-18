@@ -19,7 +19,7 @@ from sqlalchemy import (
 from sqlalchemy.orm import relationship, backref, deferred
 from pyramid.security import Everyone, Authenticated
 
-from .password import hash_password, verify_password
+from ..auth.password import hash_password, verify_password
 from ..lib import config
 from ..lib.sqla import Base as SQLAlchemyBaseModel
 
