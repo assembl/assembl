@@ -19,7 +19,6 @@ from sqlalchemy import (
 from sqlalchemy.orm import relationship, backref, deferred
 from pyramid.security import Everyone, Authenticated
 
-from .password import hash_password, verify_password
 from ..lib import config
 from ..lib.sqla import Base as SQLAlchemyBaseModel
 
@@ -296,14 +295,17 @@ class User(AgentProfile):
 
     def __init__(self, **kwargs):
         if kwargs.get('password'):
+            from ..auth.password import hash_password
             kwargs['password'] = hash_password(kwargs['password'])
 
         super(User, self).__init__(**kwargs)
 
     def set_password(self, password):
+        from ..auth.password import hash_password
         self.password = hash_password(password)
 
     def check_password(self, password):
+        from ..auth.password import verify_password
         return verify_password(password, self.password)
 
     def get_preferred_email(self):

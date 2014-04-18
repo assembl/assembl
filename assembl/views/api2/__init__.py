@@ -1,13 +1,12 @@
 import os
-import json
 
 from pyramid.view import view_config
-from pyramid.httpexceptions import HTTPCreated, HTTPBadRequest, HTTPNotImplemented
+from pyramid.httpexceptions import (
+    HTTPCreated, HTTPBadRequest, HTTPNotImplemented)
 
-from .. import acls
-from assembl.lib.sqla import get_named_class, get_session_maker
+from assembl.lib.sqla import get_session_maker
 from ..traversal import InstanceContext, CollectionContext, ClassContext
-from assembl.auth import P_READ, P_SYSADMIN
+from assembl.auth import P_READ
 
 FIXTURE_DIR = os.path.join(
     os.path.dirname(__file__), '..', '..', 'static', 'js', 'tests', 'fixtures')
@@ -16,6 +15,7 @@ API_PREFIX = '/data/'
 
 FORM_HEADER = "Content-Type:(application/x-www-form-urlencoded)|(multipart/form-data)"
 JSON_HEADER = "Content-Type:application/(.*\+)?json"
+
 
 def includeme(config):
     """ Initialize views and renderers at app start-up time. """
@@ -57,7 +57,8 @@ def collection_view(request):
         return [i.generic_json(view) for i in q.all()]
 
 
-@view_config(context=CollectionContext, request_method='POST', header=FORM_HEADER)
+@view_config(context=CollectionContext, request_method='POST',
+             header=FORM_HEADER)
 def collection_add(request):
     # TODO : Permissions. Note that each class should have a method
     # to say what permission is needed to create, edit self or
@@ -85,7 +86,7 @@ def instance_post(request):
 
 
 @view_config(context=InstanceContext, request_method='PUT', header=JSON_HEADER)
-def instance_put(request):
+def instance_put_json(request):
     #TODO
     raise HTTPNotImplemented()
 

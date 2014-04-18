@@ -1,8 +1,5 @@
-import json
 from datetime import datetime
-
 from pyramid.i18n import get_localizer, TranslationStringFactory
-
 from pyramid.view import view_config
 from pyramid.renderers import render_to_response
 from pyramid.security import (
@@ -16,18 +13,15 @@ from pyramid.httpexceptions import (
     HTTPNotFound,
     HTTPServerError)
 from pyramid.settings import asbool
-
 from sqlalchemy import desc
-from sqlalchemy.orm.exc import NoResultFound
 import transaction
-
 from velruse import login_url
 
-from ...auth.models import (
+from assembl.models import (
     EmailAccount, IdentityProvider, IdentityProviderAccount,
     AgentProfile, User, Username)
-from ...auth.password import format_token
-from ...auth.operations import (
+from assembl.auth.password import format_token
+from assembl.auth.operations import (
     get_identity_provider, send_confirmation_email, verify_email_token)
 from ...lib import config
 from .. import get_default_context

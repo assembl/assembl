@@ -1,8 +1,4 @@
-from itertools import groupby
-from collections import defaultdict
-
 import transaction
-
 from pyramid.view import view_config
 from pyramid.renderers import render_to_response
 from pyramid.security import authenticated_userid
@@ -12,9 +8,9 @@ from assembl.models import (
     Discussion, DiscussionPermission, Role, Permission, UserRole,
     LocalUserRole)
 from .. import get_default_context
-from assembl.source.models.mail import Mailbox, MailingList
-from assembl.auth.models import (
-    create_default_permissions, User, Username, AgentProfile, P_ADMIN_DISC, P_SYSADMIN, R_SYSADMIN,
+from assembl.models.mail import Mailbox, MailingList
+from assembl.models.auth import (
+    create_default_permissions, User, Username, AgentProfile, R_SYSADMIN,
     SYSTEM_ROLES)
 
 

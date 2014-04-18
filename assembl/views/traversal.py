@@ -6,7 +6,7 @@ from assembl.lib.sqla import *
 
 class AppRoot(object):
     def __init__(self):
-        from assembl.auth import P_READ
+        from assembl.models.auth import P_READ
         self.__acl__ = [(Allow, Everyone, P_READ)]
         self._api = ApiContext(self)
 
@@ -28,7 +28,7 @@ class AppRoot(object):
 
 class ApiContext(object):
     def __init__(self, parent):
-        from ..auth.models import R_SYSADMIN
+        from assembl.models.auth import R_SYSADMIN
         self.__acl__ = [(Allow, R_SYSADMIN, ALL_PERMISSIONS), DENY_ALL]
         self.__parent__ = parent
 

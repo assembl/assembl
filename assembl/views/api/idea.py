@@ -8,7 +8,7 @@ from assembl.models import (
     get_named_object, get_database_id, Idea, RootIdea, IdeaLink, Discussion,
     Extract, SubGraphIdeaAssociation)
 from . import acls
-from assembl.auth import (P_READ, P_ADD_IDEA, P_EDIT_IDEA)
+from assembl.models.auth import (P_READ, P_ADD_IDEA, P_EDIT_IDEA)
 from sqlalchemy import and_
 from sqlalchemy.orm import joinedload
 

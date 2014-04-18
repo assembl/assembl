@@ -1,7 +1,6 @@
 """ App URL routing and renderers are configured in this module. """
 
 import os.path
-
 import json
 from pyramid.security import Allow, ALL_PERMISSIONS, DENY_ALL
 from pyramid.httpexceptions import HTTPNotFound, HTTPInternalServerError
@@ -9,14 +8,14 @@ from pyramid.i18n import get_localizer, TranslationStringFactory
 
 from ..lib.json import json_renderer_factory
 from ..lib import config
-from assembl.auth import get_user, P_READ
+from assembl.auth import get_user
 
 default_context = {
     'STATIC_URL': '/static/'
 }
 
 def acls(request):
-    from ..auth.models import R_SYSADMIN
+    from ..models.auth import R_SYSADMIN
     return [(Allow, R_SYSADMIN, ALL_PERMISSIONS), DENY_ALL]
 
 def backbone_include(config):

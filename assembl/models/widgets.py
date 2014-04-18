@@ -3,8 +3,8 @@ from sqlalchemy import (
 from sqlalchemy.orm import relationship
 
 from ..lib.sqla import Base
-from ..synthesis.models import (Discussion, ExplicitSubGraphView)
-from ..auth.models import User
+from .synthesis import (Discussion, ExplicitSubGraphView)
+from .auth import User
 
 
 class Widget(Base):

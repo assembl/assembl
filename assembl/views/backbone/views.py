@@ -1,16 +1,18 @@
-from pyramid.view import view_config, view_defaults
-from pyramid.response import Response
+import json
+import os.path
+
+from pyramid.view import view_config
 from pyramid.renderers import render_to_response
 from pyramid.security import authenticated_userid, Everyone
 from pyramid.httpexceptions import HTTPNotFound
-from pyramid.i18n import get_localizer, TranslationStringFactory
-import json
-import os.path
-from assembl.synthesis.models import Discussion
-from assembl.auth import get_user, P_READ, P_ADD_EXTRACT, user_has_permission
+from pyramid.i18n import TranslationStringFactory
 from sqlalchemy.orm.exc import NoResultFound
 
+from assembl.models import Discussion
+from assembl.models.auth import P_READ, P_ADD_EXTRACT
+from assembl.auth import user_has_permission
 from .. import get_default_context as base_default_context
+
 
 FIXTURE = os.path.join(os.path.dirname(__file__),
                        '../../static/js/fixtures/nodes.json')

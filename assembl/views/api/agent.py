@@ -1,28 +1,12 @@
-import json
-
 from pyramid.httpexceptions import HTTPNotFound
-from . import acls
-
 from cornice import Service
 
+from . import acls
 from assembl.views.api import API_DISCUSSION_PREFIX
-from assembl.synthesis.models import Discussion
-
-from assembl.auth.models import (
+from assembl.models import Discussion
+from assembl.models.auth import (
     P_READ,
-    IdentityProvider,
-    EmailAccount,
-    AbstractAgentAccount,
-    IdentityProviderAccount,
-    AgentProfile,
-    User,
-    Username,
-    Action,
-    Role,
-    Permission,
-    DiscussionPermission,
-    UserRole,
-    LocalUserRole)
+    AgentProfile)
 
 
 agents = Service(

@@ -1,8 +1,6 @@
 from datetime import datetime
-
 from sqlalchemy.orm import relationship, backref
 from sqlalchemy.sql import func
-
 from sqlalchemy import (
     Column,
     Integer,
@@ -14,8 +12,8 @@ from sqlalchemy import (
     or_,
 )
 
-from assembl.source.models.generic import Content
-from assembl.auth.models import AgentProfile
+from .generic import Content
+from .auth import AgentProfile
 
 
 class Post(Content):

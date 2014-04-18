@@ -4,23 +4,19 @@ import re
 import smtplib
 from cgi import escape as html_escape
 from collections import defaultdict
-
 from email.header import decode_header as decode_email_header, Header
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.utils import parseaddr
-import jwzthreading
-
-from bs4 import BeautifulSoup, Comment
-
-from pyramid.threadlocal import get_current_registry
-
-from datetime import datetime
 from time import mktime
+
+import jwzthreading
+from bs4 import BeautifulSoup, Comment
+from pyramid.threadlocal import get_current_registry
+from datetime import datetime
 from imaplib2 import IMAP4_SSL, IMAP4
 import transaction
-
-from sqlalchemy.orm import relationship, backref, deferred
+from sqlalchemy.orm import deferred
 from sqlalchemy.orm import joinedload_all
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy import (
@@ -31,15 +27,12 @@ from sqlalchemy import (
     Unicode,
     Binary,
     UnicodeText,
-    DateTime,
     Boolean,
-    or_,
-    func,
 )
 
-from assembl.source.models.generic import PostSource, Content
-from assembl.source.models.post import ImportedPost
-from assembl.auth.models import EmailAccount
+from .generic import PostSource
+from .post import ImportedPost
+from .auth import EmailAccount
 from assembl.tasks.imap import import_mails
 from assembl.lib.sqla import mark_changed
 

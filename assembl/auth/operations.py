@@ -1,9 +1,9 @@
 from pyramid.i18n import get_localizer, TranslationStringFactory
-
 from pyramid_mailer import get_mailer
 from pyramid_mailer.message import Message
+
 from assembl.lib import config
-from models import IdentityProvider, EmailAccount, User
+from ..models import IdentityProvider, EmailAccount, User
 from ..models import get_session_maker
 from .password import email_token, verify_password
 
