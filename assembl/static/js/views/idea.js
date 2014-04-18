@@ -35,7 +35,7 @@ function(Backbone, _, $, Idea, Segment, app, Permissions){
                 last_sibling_chain = [true];
             }
             this.last_sibling_chain = last_sibling_chain;
-            this.model.on('change:shortTitle change:longTitle change:segments', this.render, this);
+            this.model.on('change', this.render, this);
             this.model.on('change:isSelected', this.onIsSelectedChange, this);
             this.model.on('replaced', this.onReplaced, this);
         },
