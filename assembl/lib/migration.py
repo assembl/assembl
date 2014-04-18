@@ -33,6 +33,7 @@ def bootstrap_db(config_uri=None, with_migration=True):
                              'attempting to bootstrap the database.\n')
             sys.exit(2)
 
+    import assembl.models
     get_metadata().create_all(db().connection())
 
     # Clean up the sccoped session to allow a later app instantiation.
