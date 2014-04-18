@@ -232,6 +232,28 @@ function(Base, _, Segment, app, i18n, Types, Permissions){
             return counter;
         },
 
+
+        visit: function(visitor, filter, ancestry) {
+            if (filter === undefined) {
+                filter = function(node) {return true;}
+            }
+            if (ancestry === undefined) {
+                ancestry = [];
+            }
+            var filter_result = filter(this);
+            if (filter_result) {
+                visitor(this, ancestry);
+                ancestry = ancestry.slice(0);
+                ancestry.push(this);
+            }
+            if (filter_result !== 0) {
+                // Use 0 vs false to cut recursion
+                for (var child in this.getChildren()) {
+                    child.visit(visitor, filter, ancestry);
+                }
+            }
+        },
+
         /**
          * @return {Number} The order number for a new child
          */

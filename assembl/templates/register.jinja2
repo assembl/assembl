@@ -22,11 +22,10 @@
 {% block content %}
 
     <div class="loginbox">
+        <p class="login-box-title">{{ gettext('join assembl') }}</p>
         {% if error %}
         <div class="error">{{error}}</div>
         {% endif %}
-
-        <div class="spacer spacer--big"></div>
 
         <form class="form" method="POST">
             <input type="hidden" name="next_view" value="{{next_view}}" />
@@ -45,24 +44,20 @@
 
             <input type="password" name="password2" class="defaultfield" placeholder="{{ gettext('Repeat password') }}" required />
 
-            <div class="spacer spacer--huge"></div>
+            <div class="spacer spacer--big"></div>
 
-            <input type="submit" name="register" value="{{ gettext('Register') }}" class="barbutton" />
+            <input type="submit" name="register" value="{{ gettext('Register') }}" class="btn-pink" />
 
-            <div class="spacer"></div>
+            <span class="register">{{gettext("or")}} <a href="/login?next_view={{next_view}}">{{gettext("login")}}</a></span>
+
         </form>
 
-        <span>{{gettext("or")}} <a href="/login?next_view={{next_view}}">{{gettext("login")}}</a></span>
+        <footer>
+            {% set caravan = "<a href='http://caravan.coop' class='link caravan'>"+gettext("Caravan")+"</a>" %}
+            {% set imaginationForPeople = "<a href='http://imaginationforpeople.org/' class='link i4p'>"+gettext("Imagination for people") +"</a>" %}
 
-        <div class="spacer"></div>
-
-        <div class="text text-small text-muted">
-            {% set caravan = gettext("<a href='http://caravan.coop' class='link'>Caravan</a>") %}
-            {% set imaginationForPeople = gettext("<a href='http://http://imaginationforpeople.org/' class='link'>Imagination for people</a>") %}
-
-            {{ gettext("Designed by %(caravan)s and %(imaginationForPeople)s")|format(caravan=caravan, imaginationForPeople=imaginationForPeople)|safe }}
-        </div>
-        </form>
+            <p>{{ gettext("Designed by %(caravan)s and %(imaginationForPeople)s")|format(caravan=caravan, imaginationForPeople=imaginationForPeople)|safe }}</p>
+        </footer>
     </div>
 
 {% endblock %}
