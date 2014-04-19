@@ -6,7 +6,7 @@ from pyramid.httpexceptions import (
 
 from assembl.lib.sqla import get_session_maker
 from ..traversal import InstanceContext, CollectionContext, ClassContext
-from assembl.auth import P_READ
+from assembl.models.auth import P_READ, P_SYSADMIN
 
 FIXTURE_DIR = os.path.join(
     os.path.dirname(__file__), '..', '..', 'static', 'js', 'tests', 'fixtures')
@@ -101,6 +101,11 @@ def instance_del(request):
     # TODO
     raise HTTPNotImplemented()
 
+
+@view_config(name="collections", context=InstanceContext, renderer='json',
+             request_method="GET", permission=P_READ)
+def show_collections(request):
+    return request.context.get_collection_names()
 
 @view_config(context=ClassContext, request_method='POST', header=FORM_HEADER)
 def class_add(request):

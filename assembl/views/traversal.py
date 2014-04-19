@@ -145,6 +145,10 @@ class InstanceContext(object):
             cls._collections_by_class[for_class] = collections
         return cls._collections_by_class[for_class]
 
+    def get_collection_names(self):
+        return self.__class__._get_collections(
+            self._instance.__class__).keys()
+
     @property
     def __acl__(self):
         if getattr(self._instance, '__acl__', None):
