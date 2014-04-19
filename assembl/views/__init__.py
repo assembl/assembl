@@ -14,9 +14,6 @@ default_context = {
     'STATIC_URL': '/static/'
 }
 
-def acls(request):
-    from ..models.auth import R_SYSADMIN
-    return [(Allow, R_SYSADMIN, ALL_PERMISSIONS), DENY_ALL]
 
 def backbone_include(config):
     config.add_route('home', '/')

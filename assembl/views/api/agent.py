@@ -1,7 +1,6 @@
 from pyramid.httpexceptions import HTTPNotFound
 from cornice import Service
 
-from . import acls
 from assembl.views.api import API_DISCUSSION_PREFIX
 from assembl.models import Discussion
 from assembl.models.auth import (
@@ -13,11 +12,11 @@ agents = Service(
     name='agents',
     path=API_DISCUSSION_PREFIX + '/agents/',
     description="Retrieve a discussion's agents.",
-    renderer='json', acl=acls)
+    renderer='json')
 
 agent = Service(
     name='agent', path=API_DISCUSSION_PREFIX + '/agents/{id:.+}',
-    description="Retrieve a single agent", renderer='json', acl=acls)
+    description="Retrieve a single agent", renderer='json')
 
 def _get_agents_real(discussion, view_def=None):
     agents = AgentProfile.db().query(AgentProfile).all()

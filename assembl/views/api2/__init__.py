@@ -12,7 +12,6 @@ FIXTURE_DIR = os.path.join(
     os.path.dirname(__file__), '..', '..', 'static', 'js', 'tests', 'fixtures')
 API_PREFIX = '/data/'
 
-
 FORM_HEADER = "Content-Type:(application/x-www-form-urlencoded)|(multipart/form-data)"
 JSON_HEADER = "Content-Type:application/(.*\+)?json"
 

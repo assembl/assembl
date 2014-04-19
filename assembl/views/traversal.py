@@ -4,20 +4,40 @@ from pyramid.security import Allow, Everyone, ALL_PERMISSIONS, DENY_ALL
 from assembl.lib.sqla import *
 
 
-class AppRoot(object):
+class DictContext(object):
+    def __init__(self, acl, subobjects={}):
+        self.subobjects = subobjects
+        for context in subobjects.itervalues():
+            context.__parent__ = self
+        if acl:
+            self.__acl__ = acl
+
+    def __getitem__(self, key):
+        return self.subobjects[key]
+
+
+class AppRoot(DictContext):
     def __init__(self):
-        from assembl.models.auth import P_READ
-        self.__acl__ = [(Allow, Everyone, P_READ)]
-        self._api = ApiContext(self)
+        from assembl.models.auth import P_READ, R_SYSADMIN
+        readable = [(Allow, R_SYSADMIN, ALL_PERMISSIONS),
+                    (Allow, Everyone, P_READ), DENY_ALL]
+        restrictive = [(Allow, R_SYSADMIN, ALL_PERMISSIONS), DENY_ALL]
+        super(AppRoot, self).__init__(readable, {
+            'data': Api2Context(self, restrictive),
+            'admin': DictContext(restrictive, {
+                'permissions': DictContext(None, {
+                    'discussion': DiscussionsContext()})}),
+            'api': DictContext(restrictive, {
+                'v1': DictContext(None, {
+                    'discussion': DiscussionsContext(),
+                    'token': DictContext(readable)})})})
 
     __parent__ = None
     __name__ = "Assembl"
 
     def __getitem__(self, key):
-        if key == 'data':
-            return self._api
-        if key == 'api':
-            return self
+        if key in self.subobjects:
+            return self.subobjects[key]
         from assembl.models import Discussion
         discussion = Discussion.db.query(Discussion).filter_by(
             slug=key).first()
@@ -26,11 +46,19 @@ class AppRoot(object):
         return discussion
 
 
-class ApiContext(object):
-    def __init__(self, parent):
-        from assembl.models.auth import R_SYSADMIN
-        self.__acl__ = [(Allow, R_SYSADMIN, ALL_PERMISSIONS), DENY_ALL]
+class DiscussionsContext(object):
+    def __getitem__(self, key):
+        from assembl.models import Discussion
+        discussion = Discussion.get(id=int(key))
+        if not discussion:
+            raise KeyError()
+        return discussion
+
+
+class Api2Context(object):
+    def __init__(self, parent, acl):
         self.__parent__ = parent
+        self.__acl__ = acl
 
     _class_cache = {}
 
@@ -205,7 +233,8 @@ class CollectionContext(object):
 
     def decorate_instance(self, instance, assocs):
         if isinstance(instance, self.collection.collection_class):
-            self.collection.decorate_instance(instance, self.parent_instance, assocs)
+            self.collection.decorate_instance(
+                instance, self.parent_instance, assocs)
         self.__parent__.decorate_instance(instance, assocs)
 
     def create_object(self, type=None, json=None, **kwargs):

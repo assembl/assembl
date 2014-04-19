@@ -11,7 +11,6 @@ from assembl.views.api import API_DISCUSSION_PREFIX
 from assembl.models import (
     get_database_id, AgentProfile, User, Role, Permission, UserRole,
     LocalUserRole, DiscussionPermission, Discussion)
-from . import acls
 from assembl.models.auth import (
     P_READ, P_ADMIN_DISC, P_SYSADMIN, R_SYSADMIN, SYSTEM_ROLES)
 from assembl.auth import (
@@ -29,42 +28,42 @@ permissions = Service(
     name='permissions',
     path=API_DISCUSSION_PREFIX + '/permissions',
     description="The permissions for a given discussion",
-    renderer='json', acl=acls, cors_policy=cors_policy
+    renderer='json', cors_policy=cors_policy
 )
 
 permissions_for_role = Service(
     name='permissions_for_role',
     path=API_DISCUSSION_PREFIX + '/permissions/r/{role_name}',
     description="The permissions for a single role",
-    acl=acls, cors_policy=cors_policy
+    cors_policy=cors_policy
 )
 
 roles = Service(
     name='roles',
     path=API_DISCUSSION_PREFIX + '/roles',
     description="The roles defined in the system",
-    renderer='json', acl=acls, cors_policy=cors_policy
+    renderer='json', cors_policy=cors_policy
 )
 
 global_roles_for_user = Service(
     name='generic_roles_for_user',
     path=API_DISCUSSION_PREFIX + '/roles/globalfor/{user_id:.+}',
     description="The universal roles of a given user",
-    renderer='json', acl=acls, cors_policy=cors_policy
+    renderer='json', cors_policy=cors_policy
 )
 
 discussion_roles_for_user = Service(
     name='discussion_roles_for_user',
     path=API_DISCUSSION_PREFIX + '/roles/localfor/{user_id:.+}',
     description="The per-discussion roles of a given user",
-    renderer='json', acl=acls, cors_policy=cors_policy
+    renderer='json', cors_policy=cors_policy
 )
 
 permissions_for_user = Service(
     name='permissions_for_user',
     path=API_DISCUSSION_PREFIX + '/permissions/u/{user_id:.+}',
     description="The per-discussion permissions of a given user",
-    renderer='json', acl=acls, cors_policy=cors_policy
+    renderer='json', cors_policy=cors_policy
 )
 
 user_has_permission = Service(

@@ -23,21 +23,18 @@ from assembl.models import (
     get_database_id, get_named_object, AgentProfile, Post, AssemblPost, SynthesisPost,
     Synthesis, Discussion, PostSource, Content, Idea, ViewPost, User, Action,
     IdeaRelatedPostLink)
-from . import acls
 import uuid
 from jwzthreading import restrip_pat
 
 posts = Service(name='posts', path=API_DISCUSSION_PREFIX + '/posts',
                 description="Post API following SIOC vocabulary as much as possible",
-                renderer='json', acl=acls)
+                renderer='json')
 
 post = Service(name='post', path=API_DISCUSSION_PREFIX + '/posts/{id:.+}',
-               description="Manipulate a single post",
-               acl=acls)
+               description="Manipulate a single post")
 
 post_read = Service(name='post_read', path=API_DISCUSSION_PREFIX + '/post_read/{id:.+}',
-               description="Signal that a post was read",
-               acl=acls)
+               description="Signal that a post was read")
 
 _ = TranslationStringFactory('assembl')
 
