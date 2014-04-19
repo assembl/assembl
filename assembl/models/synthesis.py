@@ -430,6 +430,12 @@ class TableOfContents(IdeaGraphView):
     def get_discussion_id(self):
         return self.discussion.id
 
+    def get_idea_links(self):
+        return self.discussion.get_idea_links()
+
+    def get_ideas(self):
+        return self.discussion.ideas
+
     def __repr__(self):
         return "<TableOfContents %s>" % repr(self.discussion.topic)
 
