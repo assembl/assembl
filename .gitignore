@@ -12,6 +12,7 @@
 /.coverage
 .DS_Store
 .directory
+.idea
 
 # buildout
 /.installed.cfg

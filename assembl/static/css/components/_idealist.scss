@@ -8,6 +8,9 @@
 // -----------------
 .idealist-item {
     line-height: $idealist-item-height;
+    &.hidden {
+        display: none;
+    }
 }
 
 // idea list open ( showing the children )

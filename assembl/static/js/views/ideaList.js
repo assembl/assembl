@@ -1,5 +1,5 @@
-define(['backbone', 'underscore', 'models/idea', 'views/idea', "views/ideaGraph", 'app', 'types', 'views/rootIdea', 'views/orphanIdea', 'views/synthesisInIdeaList', 'permissions'],
-function(Backbone, _, Idea, IdeaView, ideaGraphLoader, app, Types, RootIdeaView, OrphanIdeaView, SynthesisInIdeaListView, Permissions){
+define(['backbone', 'underscore', 'models/idea', 'views/idea', "views/ideaGraph", 'app', 'types', 'views/allMessagesInIdeaList', 'views/orphanMessagesInIdeaList', 'views/synthesisInIdeaList', 'permissions'],
+function(Backbone, _, Idea, IdeaView, ideaGraphLoader, app, Types, AllMessagesInIdeaListView, OrphanMessagesInIdeaListView, SynthesisInIdeaListView, Permissions){
     'use strict';
 
     var FEATURED = 'featured',
@@ -103,30 +103,22 @@ function(Backbone, _, Idea, IdeaView, ideaGraphLoader, app, Types, RootIdeaView,
                 return idea.get('order');
             });
 
-            if( rootIdea.get('num_synthesis_posts') > 0 ){
-                // Synthesis idea
-                var synthesisIdea = new Idea.Model({'num_synthesis_posts': rootIdea.get('num_synthesis_posts')}),
-                    synthesisView = new SynthesisInIdeaListView({model:synthesisIdea});
-                list.appendChild(synthesisView.render().el);
-            }
+            // Synthesis posts pseudo-idea
+            var synthesisView = new SynthesisInIdeaListView({model:rootIdea});
+            list.appendChild(synthesisView.render().el);
             
-            if( rootIdea.get('num_posts') > 0 ){
-                // Root idea (represents the discussion)
-                var rootIdeaView = new RootIdeaView({model:rootIdea});
-                list.appendChild(rootIdeaView.render().el);
-            }
+            // All posts pseudo-idea
+            var allMessagesInIdeaListView = new AllMessagesInIdeaListView({model:rootIdea});
+            list.appendChild(allMessagesInIdeaListView.render().el);
             
             _.each(rootIdeaDirectChildrenModels, function(idea){
                 var ideaView =  new IdeaView({model:idea});
                 list.appendChild(ideaView.render().el);
             });
 
-            if( rootIdea.get('num_orphan_posts') > 0 ){
-                // Orphan idea
-                var orphanIdea = new Idea.Model({'num_orphan_posts': rootIdea.get('num_orphan_posts')}),
-                    orphanView = new OrphanIdeaView({model: orphanIdea});
-                list.appendChild(orphanView.render().el);
-            }
+            // Orphan messages pseudo-idea
+            var orphanView = new OrphanMessagesInIdeaListView({model: rootIdea});
+            list.appendChild(orphanView.render().el);
 
             var data = {
                 tocTotal: this.ideas.length -1,//We don't count the root idea

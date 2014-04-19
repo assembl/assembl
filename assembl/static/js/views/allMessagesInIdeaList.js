@@ -1,13 +1,13 @@
-define(['backbone', 'underscore', 'jquery', 'models/idea', 'app', 'views/rootIdea'],
-function(Backbone, _, $, Idea, app, RootIdeaView){
+define(['backbone', 'underscore', 'jquery', 'models/idea', 'app', 'views/idea'],
+function(Backbone, _, $, Idea, app, IdeaView){
     'use strict';
     
-    var OrphanIdeaView = RootIdeaView.extend({
+    var AllMessagesInIdeaListView = IdeaView.extend({
         /**
          * The template
          * @type {[type]}
          */
-        template: app.loadTemplate('orphanIdea'),
+        template: app.loadTemplate('allMessagesInIdeaList'),
 
         /**
          * The render
@@ -18,6 +18,13 @@ function(Backbone, _, $, Idea, app, RootIdeaView){
             var data = this.model.toJSON();
 
             this.$el.addClass('idealist-item');
+            if(this.model.get('num_posts') == 0) {
+                this.$el.addClass('hidden');
+            }
+            else {
+                this.$el.removeClass('hidden');
+            }
+            
             this.$el.html(this.template(data));
             return this;
         },
@@ -33,14 +40,13 @@ function(Backbone, _, $, Idea, app, RootIdeaView){
          * @event
          */
         onTitleClick: function(){
-            app.setCurrentIdea(this.model);
-
             if( app.messageList ){
-                app.messageList.addFilterIsOrphanMessage();
+                app.messageList.showAllMessages();
             }
+            app.setCurrentIdea(null);
         }
     });
 
 
-    return OrphanIdeaView;
+    return AllMessagesInIdeaListView;
 });

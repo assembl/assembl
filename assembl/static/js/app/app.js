@@ -238,7 +238,7 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard, Types, Permissions){
 
             if( panel.button ) {
 
-                panel.button.parent().addClass('active');
+                panel.button.addClass('active');
             }
             app.trigger("panel:open", [panel]);
         },
@@ -263,7 +263,7 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard, Types, Permissions){
             app.removePanelFromStorage(panel.el.id);
 
             if( panel.button ) {
-                panel.button.parent().removeClass('active');
+                panel.button.removeClass('active');
             }
             app.trigger("panel:close", [panel]);
         },

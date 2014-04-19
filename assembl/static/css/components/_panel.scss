@@ -88,7 +88,7 @@
 
     //background-color: $panel-header-bg-color;
     @include border-radius( 5px 5px 0 0 );
-    //border-bottom: solid 1px $panel-border-color;
+    border-bottom: solid 1px $panel-border-color;
 
     position: relative;
     @include z-index("float");
@@ -188,5 +188,6 @@
     right: 0;
     bottom: 0;
     left: 0;
+    border-top: 1px solid #e4e4e3;
     @include border-radius( 0 0 5px 5px );
 }

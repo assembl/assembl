@@ -10,11 +10,11 @@ from sqlalchemy import (
     Unicode,
     UnicodeText,
     or_,
+    event,
 )
 
 from .generic import Content
 from .auth import AgentProfile
-
 
 class Post(Content):
     """
@@ -53,6 +53,7 @@ class Post(Content):
     __mapper_args__ = {
         'polymorphic_identity': 'post',
     }
+    
     def get_descendants(self):
         ancestry_query_string = "%s%d,%%" % (self.ancestry or '', self.id)
 
@@ -155,6 +156,16 @@ class Post(Content):
 
     def get_discussion_id(self):
         return self.discussion_id
+
+def orm_insert_listener(mapper, connection, target):
+    """ This is to allow the root idea to send update to "All posts", 
+    "Synthesis posts" and "orphan posts" in the table of ideas", if the post
+    isn't otherwise linked to the table of idea """
+    target.discussion.root_idea.send_to_changes(connection)
+        
+event.listen(Post, 'after_insert', orm_insert_listener, propagate=True)
+    
+
 
 class AssemblPost(Post):
     """

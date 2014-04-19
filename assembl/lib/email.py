@@ -1,4 +1,7 @@
-"""Email-related utilities."""
+"""Email-related utilities.
+
+TODO: LOOKS LIKE DEAD CODE.
+"""
 
 from __future__ import absolute_import
 
@@ -10,7 +13,7 @@ import time
 
 from pyramid.settings import asbool
 
-from .vendor import imaplib2
+import imaplib2
 
 _py2_email_header_ecre = re.compile(r'''
   =\?                   # literal =?

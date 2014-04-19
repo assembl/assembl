@@ -34,9 +34,10 @@
                     <img src="/user/id/{{user.id}}/avatar/32" alt="{{ user.display_name() }}" class="image-rounded" />
                     <a href="/logout" class="sign-out iconbutton icon-logout-1" title="{{ gettext('Sign out') }}"></a>
                 {% else %}
-                    <a href="/login?next_view={{request.current_route_path()}}">{{ gettext('Sign in') }}</a>
+                    <a href="/login?next_view={{request.current_route_path()}}" class="sign-in">{{ gettext('Sign in') }}</a>
                 {% endif %}
                 {% if locales.__len__ > 1 %}
+                    <a href="#" class="locale active">{{locale | upper}}</a>
                     {% for loc in locales %}
                         {% if (loc != locale) %}
                             <a href="#" class="lang" onmouseup="window.app.setLocale('{{loc}}')">{{loc | upper}}</a>

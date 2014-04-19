@@ -1,13 +1,33 @@
-define(['backbone', 'underscore', 'jquery', 'models/idea', 'app', 'views/rootIdea'],
-function(Backbone, _, $, Idea, app, RootIdeaView){
+define(['backbone', 'underscore', 'jquery', 'models/idea', 'app', 'views/idea'],
+function(Backbone, _, $, Idea, app, IdeaView){
     'use strict';
 
-    var SynthesisIdeaView = RootIdeaView.extend({
+    var SynthesisIdeaView = IdeaView.extend({
         /**
          * The template
          * @type {[type]}
          */
         template: app.loadTemplate('synthesisInIdeaList'),
+
+        /**
+         * The render
+         */
+        render: function(){
+            app.trigger('render');
+
+            var data = this.model.toJSON();
+
+            this.$el.addClass('idealist-item');
+            if(this.model.get('num_synthesis_posts') == 0) {
+                this.$el.addClass('hidden');
+            }
+            else {
+                this.$el.removeClass('hidden');
+            }
+            
+            this.$el.html(this.template(data));
+            return this;
+        },
 
         /**
          * @events
@@ -20,11 +40,10 @@ function(Backbone, _, $, Idea, app, RootIdeaView){
          * @event
          */
         onTitleClick: function(){
-            app.setCurrentIdea(this.model);
-
             if( app.messageList ){
                 app.messageList.addFilterIsSynthesMessage();
             }
+            app.setCurrentIdea(null);
         }
     });
 

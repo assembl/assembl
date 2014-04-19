@@ -372,12 +372,12 @@ class User(AgentProfile):
             return "<User id=%d>" % self.id
 
     def get_permissions(self, discussion_id):
-        from . import get_permissions
+        from ..auth import get_permissions
         return get_permissions(self.id, discussion_id)
 
     def get_all_permissions(self):
-        from . import get_permissions
-        from ..models import Discussion
+        from ..auth import get_permissions
+        from .synthesis import Discussion
         permissions = {
             Discussion.uri_generic(d_id): get_permissions(self.id, d_id)
             for (d_id,) in self.db.query(Discussion.id)}
