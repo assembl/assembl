@@ -10,6 +10,26 @@ function(Backbone, _, $, Idea, app, IdeaView){
         template: app.loadTemplate('synthesisInIdeaList'),
 
         /**
+         * The render
+         */
+        render: function(){
+            app.trigger('render');
+
+            var data = this.model.toJSON();
+
+            this.$el.addClass('idealist-item');
+            if(this.model.get('num_synthesis_posts') == 0) {
+                this.$el.addClass('hidden');
+            }
+            else {
+                this.$el.removeClass('hidden');
+            }
+            
+            this.$el.html(this.template(data));
+            return this;
+        },
+
+        /**
          * @events
          */
         events: {

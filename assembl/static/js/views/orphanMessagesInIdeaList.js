@@ -18,6 +18,13 @@ function(Backbone, _, $, Idea, app, IdeaView){
             var data = this.model.toJSON();
 
             this.$el.addClass('idealist-item');
+            if(this.model.get('num_orphan_posts') == 0) {
+                this.$el.addClass('hidden');
+            }
+            else {
+                this.$el.removeClass('hidden');
+            }
+            
             this.$el.html(this.template(data));
             return this;
         },
