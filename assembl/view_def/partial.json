@@ -174,8 +174,8 @@
         "numChildIdea": "&get_num_children"
     },
     "IdeaLink": {
-        "child": true,
-        "parent": true
+        "source": true,
+        "target": true
     },
     "IdeaGraphView": {
         "creation_date": true,
