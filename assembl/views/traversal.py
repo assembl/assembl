@@ -99,11 +99,14 @@ class ClassContext(object):
         else:
             return cls.db().query(cls)
 
-    def create_object(self, type=None, json=None, **kwargs):
-        if type is not None:
-            cls = get_named_class(type)
+    def get_class(self, typename=None):
+        if typename is not None:
+            return get_named_class(typename)
         else:
-            cls = self.collection.collection_class
+            return self.collection.collection_class
+
+    def create_object(self, typename=None, json=None, **kwargs):
+        cls = self.get_class(typename)
         if json is None:
             return [cls(**kwargs)]
         else:
@@ -218,6 +221,12 @@ class CollectionContext(object):
             raise KeyError()
         return InstanceContext(self, instance)
 
+    def get_collection_class(self, typename=None):
+        if typename is not None:
+            return get_named_class(typename)
+        else:
+            return self.collection_class
+
     def create_query(self, id_only=True):
         cls = self.collection.collection_class
         if id_only:
@@ -237,11 +246,8 @@ class CollectionContext(object):
                 instance, self.parent_instance, assocs)
         self.__parent__.decorate_instance(instance, assocs)
 
-    def create_object(self, type=None, json=None, **kwargs):
-        if type is not None:
-            cls = get_named_class(type)
-        else:
-            cls = self.collection.collection_class
+    def create_object(self, typename=None, json=None, **kwargs):
+        cls = self.get_collection_class(typename)
         if json is None:
             inst = cls(**kwargs)
             assocs = [inst]

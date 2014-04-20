@@ -30,3 +30,15 @@ ASSEMBL_PERMISSIONS = set((
     P_READ, P_ADD_POST, P_EDIT_POST, P_ADD_EXTRACT, P_EDIT_EXTRACT,
     P_EDIT_MY_EXTRACT, P_ADD_IDEA, P_EDIT_IDEA, P_EDIT_SYNTHESIS,
     P_SEND_SYNTHESIS, P_ADMIN_DISC, P_SYSADMIN))
+
+class CrudPermissions(object):
+    __slots__=('create', 'read', 'update', 'delete',
+               'update_owned', 'delete_owned')
+    def __init__(self, create=None, read=None, update=None, delete=None,
+                 update_owned=None, delete_owned=None):
+        self.create = create or P_SYSADMIN
+        self.read = read or P_READ
+        self.update = update or create or P_SYSADMIN
+        self.delete = delete or P_SYSADMIN
+        self.update_owned = update_owned or self.update
+        self.delete_owned = delete_owned or self.delete

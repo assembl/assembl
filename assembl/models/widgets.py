@@ -4,6 +4,7 @@ from sqlalchemy.orm import relationship
 
 from ..lib.sqla import Base
 from .synthesis import (Discussion, ExplicitSubGraphView)
+from ..auth import P_ADD_POST, P_ADMIN_DISC, CrudPermissions
 from .auth import User
 
 
@@ -52,6 +53,8 @@ class Widget(Base):
     # filter on id of user vs widgetuserconfig...
     # Also, can we filter on main_idea_view w/o the id?
 
+    crud_permissions = CrudPermissions(P_ADMIN_DISC)
+
 
 class WidgetUserConfig(Base):
     __tablename__ = "widget_user_config"
@@ -76,3 +79,5 @@ class WidgetUserConfig(Base):
 
     def get_discussion_id(self):
         return self.widget.discussion_id
+
+    crud_permissions = CrudPermissions(P_ADD_POST)  # all participants...

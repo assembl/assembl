@@ -2,11 +2,13 @@ import os
 
 from pyramid.view import view_config
 from pyramid.httpexceptions import (
-    HTTPCreated, HTTPBadRequest, HTTPNotImplemented)
+    HTTPCreated, HTTPBadRequest, HTTPNotImplemented, HTTPUnauthorized)
+from pyramid.security import authenticated_userid
 
 from assembl.lib.sqla import get_session_maker
 from ..traversal import InstanceContext, CollectionContext, ClassContext
-from assembl.models.auth import P_READ, P_SYSADMIN
+from assembl.auth import P_READ, P_SYSADMIN, Everyone
+from assembl.auth.util import get_roles, get_permissions
 
 FIXTURE_DIR = os.path.join(
     os.path.dirname(__file__), '..', '..', 'static', 'js', 'tests', 'fixtures')
@@ -59,12 +61,16 @@ def collection_view(request):
 @view_config(context=CollectionContext, request_method='POST',
              header=FORM_HEADER)
 def collection_add(request):
-    # TODO : Permissions. Note that each class should have a method
-    # to say what permission is needed to create, edit self or
-    # edit other on this class.
     ctx = request.context
     args = request.params
+    user_id = authenticated_userid(request)
     typename = args.get('type', ctx.collection_class.external_typename())
+    permissions = get_permissions(
+        user_id, ctx.parent_instance.get_discussion_id())
+    if P_SYSADMIN not in permissions:
+        cls = ctx.get_collection_class(typename)
+        if cls.crud_permissions.read not in permissions:
+            raise HTTPUnauthorized()
     try:
         instances = ctx.create_object(typename, None, **args)
     except Exception as e:
@@ -113,6 +119,11 @@ def class_add(request):
     ctx = request.context
     args = request.params
     typename = args.get('type', None)
+    cls = ctx.get_class(typename)
+    user_id = authenticated_userid(request)
+    # In this case, no discussion context, so only sysadmin.
+    if R_SYSADMIN not in get_roles(user_id):
+        raise HTTPUnauthorized()
     try:
         instances = ctx.create_object(typename, None, **args)
     except Exception as e:

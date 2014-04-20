@@ -31,7 +31,10 @@ from ..lib.sqla import Base as SQLAlchemyBaseModel
 from .generic import (PostSource, Content)
 from .post import (Post, SynthesisPost)
 from .mail import Mailbox
-from ..auth import P_READ, R_SYSADMIN
+from ..auth import (
+    CrudPermissions, P_READ, R_SYSADMIN, P_ADMIN_DISC, P_EDIT_IDEA,
+    P_EDIT_EXTRACT, P_EDIT_SYNTHESIS, P_ADD_IDEA, P_ADD_EXTRACT,
+    P_EDIT_MY_EXTRACT)
 from .auth import (
     DiscussionPermission, Role, Permission, AgentProfile, User,
     UserRole, LocalUserRole, DiscussionPermission, ViewPost)
@@ -250,6 +253,8 @@ class IdeaGraphView(SQLAlchemyBaseModel):
     def get_discussion_id(self):
         return self.discussion_id
 
+    crud_permissions = CrudPermissions(P_ADMIN_DISC)
+
 
 class SubGraphIdeaAssociation(SQLAlchemyBaseModel):
     __tablename__ = 'sub_graph_idea_association'
@@ -273,6 +278,7 @@ class SubGraphIdeaAssociation(SQLAlchemyBaseModel):
         else:
             return IdeaGraphView.get(id=self.sub_graph_id).get_discussion_id()
 
+    crud_permissions = CrudPermissions(P_ADMIN_DISC)
 
 class SubGraphIdeaLinkAssociation(SQLAlchemyBaseModel):
     __tablename__ = 'sub_graph_idea_link_association'
@@ -300,6 +306,7 @@ class SubGraphIdeaLinkAssociation(SQLAlchemyBaseModel):
         else:
             return IdeaGraphView.get(id=self.sub_graph_id).get_discussion_id()
 
+    crud_permissions = CrudPermissions(P_ADMIN_DISC)
 
 class ExplicitSubGraphView(IdeaGraphView):
     """
@@ -403,6 +410,7 @@ class ExplicitSubGraphView(IdeaGraphView):
         return {'ideas': IdeaCollectionDefinition(cls),
                 'idea_links': IdeaLinkCollectionDefinition(cls)}
 
+    crud_permissions = CrudPermissions(P_ADMIN_DISC)
 
 class TableOfContents(IdeaGraphView):
     """
@@ -512,6 +520,8 @@ class Synthesis(ExplicitSubGraphView):
 
     def __repr__(self):
         return "<Synthesis %s>" % repr(self.subject)
+
+    crud_permissions = CrudPermissions(P_EDIT_SYNTHESIS)
 
 
 class Idea(SQLAlchemyBaseModel):
@@ -834,6 +844,9 @@ EXCEPT corresponding BY (post_id)
         return {'children': ChildIdeaCollectionDefinition(cls),
                 'posts': RelatedPostCollectionDefinition(cls)}
 
+    crud_permissions = CrudPermissions(
+            P_ADD_IDEA, P_READ, P_EDIT_IDEA, P_ADMIN_DISC,
+            P_ADMIN_DISC, P_ADMIN_DISC)
 
 class RootIdea(Idea):
     """
@@ -885,6 +898,8 @@ class RootIdea(Idea):
     def discussion_topic(self):
         return self.discussion.topic
 
+    crud_permissions = CrudPermissions(P_ADMIN_DISC)
+
 
 class IdeaLink(SQLAlchemyBaseModel):
     """
@@ -934,6 +949,9 @@ class IdeaLink(SQLAlchemyBaseModel):
         else:
             return Idea.get(id=self.source_id).get_discussion_id()
 
+    crud_permissions = CrudPermissions(
+            P_ADD_IDEA, P_READ, P_EDIT_IDEA, P_EDIT_IDEA,
+            P_EDIT_IDEA, P_EDIT_IDEA)
 
 class IdeaContentLink(SQLAlchemyBaseModel):
     """
@@ -979,6 +997,10 @@ class IdeaContentLink(SQLAlchemyBaseModel):
             return self.idea.get_discussion_id()
         elif self.idea_id:
             return Idea.get(id=self.idea_id).get_discussion_id()
+
+    crud_permissions = CrudPermissions(
+            P_ADD_IDEA, P_READ, P_EDIT_IDEA, P_EDIT_IDEA,
+            P_EDIT_IDEA, P_EDIT_IDEA)
 
 @event.listens_for(IdeaContentLink.idea, 'set', propagate=True, active_history=True)
 def idea_content_link_idea_set_listener(target, value, oldvalue, initiator):
@@ -1149,6 +1171,9 @@ class Extract(IdeaContentPositiveLink):
     def get_discussion_id(self):
         return self.discussion_id
 
+    crud_permissions = CrudPermissions(
+            P_ADD_EXTRACT, P_READ, P_EDIT_EXTRACT, P_EDIT_EXTRACT,
+            P_EDIT_MY_EXTRACT, P_EDIT_MY_EXTRACT)
 
 class IdeaContentNegativeLink(IdeaContentLink):
     """
@@ -1238,3 +1263,7 @@ class TextFragmentIdentifier(SQLAlchemyBaseModel):
             return self.extract.get_discussion_id()
         elif self.extract_id:
             return Extract.get(id=self.extract_id).get_discussion_id()
+
+    crud_permissions = CrudPermissions(
+            P_ADD_EXTRACT, P_READ, P_EDIT_EXTRACT, P_EDIT_EXTRACT,
+            P_EDIT_MY_EXTRACT, P_EDIT_MY_EXTRACT)
