@@ -16,7 +16,7 @@ def transient_deadlock_tween_factory(handler, registry):
     def transient_deadlock_tween(request):
         try:
             return handler(request)
-        except DBAPIError, e:
+        except DBAPIError as e:
             orig = e.orig
             if getattr(orig, 'args', [None])[0] == '40001':
                 time.sleep(random.random())
