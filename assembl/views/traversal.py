@@ -213,13 +213,9 @@ class CollectionContext(object):
         self.collection_class = self.collection.collection_class
 
     def __getitem__(self, key):
-        # TODO: Delegate that to collection as well.
-        instance = self.collection_class.get_instance(key)
+        instance = self.collection.get_instance(key, self.parent_instance)
         if not instance:
             raise KeyError()
-        # Validate that the instance belongs to the collection...
-        if not self.collection.contains(self.parent_instance, instance):
-            raise KeyError("This instance does not live in this collection.")
         return InstanceContext(self, instance)
 
     def create_query(self, id_only=True):
@@ -341,6 +337,20 @@ class CollectionDefinition(object):
             return instance in attribute
         else:
             return instance == attribute
+
+    def get_instance(self, key, parent_instance):
+        instance = None
+        if key == '-':
+            if self.property.uselist:
+                raise KeyError()
+            else:
+                instance = getattr(parent_instance, self.property.key, None)
+        else:
+            instance = self.collection_class.get_instance(key)
+        # Validate that the instance belongs to the collection...
+        if instance and not self.contains(parent_instance, instance):
+            raise KeyError("This instance does not live in this collection.")
+        return instance
 
 
 def root_factory(request):

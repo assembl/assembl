@@ -365,6 +365,12 @@ class ExplicitSubGraphView(IdeaGraphView):
                         assocs.append(SubGraphIdeaLinkAssociation(
                                 idea_link=inst, sub_graph=parent_instance))
 
+            def get_instance(self, key, parent_instance):
+                instance = Idea.get(id=key)
+                if instance and not self.contains(parent_instance, instance):
+                    raise KeyError("This instance does not live in this collection.")
+                return instance
+
             def contains(self, parent_instance, instance):
                 return SubGraphIdeaAssociation.db.query(
                     SubGraphIdeaAssociation).filter_by(
@@ -386,12 +392,19 @@ class ExplicitSubGraphView(IdeaGraphView):
                     SubGraphIdeaLinkAssociation(
                         idea_link=instance, sub_graph=parent_instance))
 
+            def get_instance(self, key, parent_instance):
+                instance = IdeaLink.get(id=key)
+                if instance and not self.contains(parent_instance, instance):
+                    raise KeyError("This instance does not live in this collection.")
+                return instance
+
             def contains(self, parent_instance, instance):
                 return SubGraphIdeaAssociation.db.query(
                     SubGraphIdeaLinkAssociation).filter_by(
                         idea_link=instance,
                         sub_graph=parent_instance
                     ).count() > 0
+
         return {'ideas': IdeaCollectionDefinition(cls),
                 'idea_links': IdeaLinkCollectionDefinition(cls)}
 
@@ -785,6 +798,12 @@ EXCEPT corresponding BY (post_id)
                 assocs.append(IdeaLink(
                         source=parent_instance, target=instance))
 
+            def get_instance(self, key, parent_instance):
+                instance = Idea.get(id=key)
+                if instance and not self.contains(parent_instance, instance):
+                    raise KeyError("This instance does not live in this collection.")
+                return instance
+
             def contains(self, parent_instance, instance):
                 return IdeaLink.db.query(
                     IdeaLink).filter_by(
@@ -805,11 +824,18 @@ EXCEPT corresponding BY (post_id)
                     IdeaRelatedPostLink(
                         content=instance, idea=parent_instance))
 
+            def get_instance(self, key, parent_instance):
+                instance = Content.get(id=key)
+                if instance and not self.contains(parent_instance, instance):
+                    raise KeyError("This instance does not live in this collection.")
+                return instance
+
             def contains(self, parent_instance, instance):
                 return IdeaRelatedPostLink.db.query(
                     SubGraphIdeaLinkAssociation).filter_by(
                         content=instance, idea=parent_instance
                     ).count() > 0
+
         return {'children': ChildIdeaCollectionDefinition(cls),
                 'posts': RelatedPostCollectionDefinition(cls)}
 
