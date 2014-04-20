@@ -28,17 +28,17 @@
       list-style: none;
       height: 35px;
       margin: 0;
-      padding: 0;
+      padding: 2px 0 0 0;
       text-align: center;
+      box-sizing: border-box;
       li {
         display:inline-block;
       }
       a {
-        @include border-bottom-right-radius(15px);
-        @include border-bottom-left-radius(15px);
+        @include border-radius(4px);
         color: #aaaaaa;
         background-color: #ddd;
-        padding: 8px;
+        padding: 5px;
         width: 130px;
         &:hover {
           background-color: #c7c2dd;
@@ -54,9 +54,7 @@
 
   .navbar-right {
     float: right;
-    line-height: 35px;
     .connexion {
-      @include border-bottom-left-radius(15px);
       background-color: #484848;
       padding: 0 10px;
       cursor: pointer;
