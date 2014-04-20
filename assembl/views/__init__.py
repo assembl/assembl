@@ -9,7 +9,8 @@ from pyramid.i18n import get_localizer, TranslationStringFactory
 
 from ..lib.json import json_renderer_factory
 from ..lib import config
-from assembl.auth import get_user
+from ..auth import R_SYSADMIN
+from ..auth.util import get_user
 
 default_context = {
     'STATIC_URL': '/static/'
@@ -50,7 +51,6 @@ def root_factory(request):
         if not discussion:
             raise HTTPNotFound("No discussion named %s" % (discussion_slug,))
         return discussion
-    from assembl.models.auth import R_SYSADMIN
     return _DefaultRoot(R_SYSADMIN)
 
 

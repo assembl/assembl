@@ -11,12 +11,12 @@ from sqlalchemy.sql.expression import cast
 from sqlalchemy.orm import aliased, joinedload, joinedload_all, contains_eager
 
 from assembl.views.api import API_DISCUSSION_PREFIX
+from assembl.auth import (P_READ, P_ADD_EXTRACT, P_EDIT_EXTRACT, P_EDIT_MY_EXTRACT)
 from assembl.models import (
     get_named_object, get_database_id, Extract, TextFragmentIdentifier,
     Discussion, AgentProfile, User, ContentSource, AnnotatorSource, Content, Post, Webpage, Idea)
 from . import acls
-from assembl.models.auth import (P_READ, P_ADD_EXTRACT, P_EDIT_EXTRACT, P_EDIT_MY_EXTRACT)
-from assembl.auth import (get_permissions, user_has_permission)
+from assembl.auth.util import (get_permissions, user_has_permission)
 from assembl.lib.token import decode_token
 
 

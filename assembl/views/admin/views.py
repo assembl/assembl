@@ -9,9 +9,9 @@ from assembl.models import (
     LocalUserRole)
 from .. import get_default_context
 from assembl.models.mail import Mailbox, MailingList
+from assembl.auth import (R_SYSADMIN, SYSTEM_ROLES)
 from assembl.models.auth import (
-    create_default_permissions, User, Username, AgentProfile, R_SYSADMIN,
-    SYSTEM_ROLES)
+    create_default_permissions, User, Username, AgentProfile)
 
 
 @view_config(route_name='discussion_admin', permission="P_SYSADMIN")

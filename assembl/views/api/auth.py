@@ -12,11 +12,10 @@ from assembl.models import (
     get_database_id, AgentProfile, User, Role, Permission, UserRole,
     LocalUserRole, DiscussionPermission, Discussion)
 from . import acls
-from assembl.models.auth import (
-    P_READ, P_ADMIN_DISC, P_SYSADMIN, R_SYSADMIN, SYSTEM_ROLES)
 from assembl.auth import (
-    user_has_permission as a_user_has_permission,
-    permissions_for_user as a_permissions_for_user)
+    P_READ, P_ADMIN_DISC, P_SYSADMIN, R_SYSADMIN, SYSTEM_ROLES)
+from assembl.auth.util import (
+    user_has_permission as a_user_has_permission, get_permissions)
 from assembl.lib.token import decode_token
 
 
@@ -272,7 +271,7 @@ def get_permissions_for_user(request):
         user = User.get_instance(user_id)
         if not user:
             raise HTTPNotFound("User id %s does not exist" % (user_id,))
-    return a_permissions_for_user(discussion_id, user_id)
+    return get_permissions(user_id, discussion_id)
 
 
 @user_has_permission.get()

@@ -3,7 +3,7 @@ import json
 from cornice import Service
 
 from . import API_DISCUSSION_PREFIX, acls
-from assembl.models.auth import P_READ, P_EDIT_SYNTHESIS
+from assembl.auth import P_READ, P_EDIT_SYNTHESIS
 from assembl.models import Discussion, Synthesis
 
 synthesis = Service(
