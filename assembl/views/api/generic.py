@@ -1,7 +1,6 @@
 import json
 
 from pyramid.httpexceptions import HTTPNotFound
-from . import acls
 from assembl.view_def import get_view_def
 
 from cornice import Service
@@ -15,7 +14,7 @@ generic = Service(
     name='generic',
     path=API_DISCUSSION_PREFIX + '/generic/{cls}/{id}{view:(/[^/]+)?}',
     description="Retrieve an arbitrary object.",
-    renderer='json', acl=acls)
+    renderer='json')
 
 
 @generic.get(permission=P_READ)

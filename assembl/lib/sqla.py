@@ -30,6 +30,7 @@ from pyramid.paster import get_appsettings, setup_logging
 from ..view_def import get_view_def
 from .zmqlib import get_pub_socket, send_changes
 from ..namespaces import QUADNAMES
+from ..auth import *
 
 _TABLENAME_RE = re.compile('([A-Z]+)')
 
@@ -589,6 +590,18 @@ class BaseOps(object):
         if use_dumps:
             return dumps(result)
         return result
+
+    @classmethod
+    def from_json(cls, json):
+        raise NotImplementedError()
+
+    def get_owners(self):
+        "List of User objects that can be considered owners of this instance"
+        return ()
+
+    """The permissions to create, read, update, delete an object of this class.
+    Also separate permissions for the owners to update or delete."""
+    crud_permissions = CrudPermissions()
 
 
 class Timestamped(BaseOps):

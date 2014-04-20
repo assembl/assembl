@@ -1,5 +1,4 @@
 from pyramid.httpexceptions import HTTPNotFound
-# from . import acls
 
 from cornice import Service
 

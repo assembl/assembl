@@ -28,9 +28,10 @@ def main(global_config, **settings):
     # factory
     configure_engine(settings)
 
-    from views import root_factory
+    from views.traversal import root_factory
     config = Configurator(settings=settings, root_factory=root_factory)
     config.add_translation_dirs('assembl:locale/')
+
     def my_locale_negotiator(request):
         locale = default_locale_negotiator(request)
         available = settings['available_languages'].split()
@@ -46,13 +47,12 @@ def main(global_config, **settings):
         'assembl.tweens.virtuoso_deadlock.transient_deadlock_tween_factory',
         under="pyramid_tm.tm_tween_factory")
 
-
     config.include('.lib.zmqlib')
     session_factory = session_factory_from_settings(settings)
     config.set_session_factory(session_factory)
     if not settings.get('nosecurity', False):
         # import after session to delay loading of BaseOps
-        from auth import authentication_callback
+        from auth.util import authentication_callback
         auth_policy = SessionAuthenticationPolicy(
             callback=authentication_callback)
         config.set_authentication_policy(auth_policy)

@@ -2,15 +2,14 @@ import json
 
 from cornice import Service
 
-from . import API_DISCUSSION_PREFIX, acls
-from assembl.models.auth import P_READ, P_EDIT_SYNTHESIS
+from . import API_DISCUSSION_PREFIX
+from assembl.auth import P_READ, P_EDIT_SYNTHESIS
 from assembl.models import Discussion, Synthesis
 
 synthesis = Service(
     name='next_synthesis',
     path=API_DISCUSSION_PREFIX + '/next_synthesis/',
-    description="Manipulate the synthesis for a discussion",
-    acl=acls)
+    description="Manipulate the synthesis for a discussion")
 
 
 @synthesis.get(permission=P_READ)

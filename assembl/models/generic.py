@@ -10,8 +10,10 @@ from sqlalchemy import (
     ForeignKey,
 )
 
-from assembl.lib.sqla import Base as SQLAlchemyBaseModel
-
+from ..lib.sqla import Base as SQLAlchemyBaseModel
+from ..auth import (
+    CrudPermissions, P_ADD_POST, P_READ, P_EDIT_POST, P_ADMIN_DISC,
+    P_EDIT_POST, P_ADMIN_DISC)
 
 class ContentSource(SQLAlchemyBaseModel):
     """
@@ -60,6 +62,7 @@ class ContentSource(SQLAlchemyBaseModel):
     def get_discussion_id(self):
         return self.discussion_id
 
+    crud_permissions = CrudPermissions(P_ADMIN_DISC)
 
 class PostSource(ContentSource):
     """
@@ -164,3 +167,7 @@ class Content(SQLAlchemyBaseModel):
 
     def get_discussion_id(self):
         return self.discussion_id
+
+    crud_permissions = CrudPermissions(
+            P_ADD_POST, P_READ, P_EDIT_POST, P_ADMIN_DISC,
+            P_EDIT_POST, P_ADMIN_DISC)

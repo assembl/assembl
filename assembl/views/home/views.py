@@ -6,7 +6,7 @@ from pyramid.renderers import render_to_response
 from pyramid.security import authenticated_userid, Everyone
 
 from assembl.models import Discussion, User
-from assembl.auth import discussions_with_access
+from assembl.auth.util import discussions_with_access
 from .. import get_default_context
 
 TEMPLATE_PATH = os.path.join(os.path.dirname(__file__), '..', '..', 'templates')

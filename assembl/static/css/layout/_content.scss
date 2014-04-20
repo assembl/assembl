@@ -4,8 +4,8 @@ html, body {
 
 body {
   overflow-x: hidden;
-  border-top: 3px solid #484848;
-  box-sizing: border-box;
+  //border-top: 3px solid #484848;
+  //box-sizing: border-box;
 }
 
 // The F* and powerful wrapper
@@ -21,7 +21,9 @@ body {
     .is-lateralmenu-open & {
         @include transform( translateX($lateralmenu-width) );
     }
-
+    header {
+      background-color: #484848;
+    }
 }
 
 body.is-modal {

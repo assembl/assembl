@@ -26,13 +26,13 @@ from .generic import (
     AnnotatorSource,
     Content,
 )
-from post import (
+from .post import (
     Post,
     AssemblPost,
     SynthesisPost,
     ImportedPost,
 )
-from mail import (
+from .mail import (
     Mailbox,
     MailingList,
     Email,
@@ -55,3 +55,4 @@ from .synthesis import (
 from .annotation import (
     Webpage,
 )
+from .widgets import (Widget, WidgetUserConfig)

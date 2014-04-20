@@ -31,11 +31,15 @@ from ..lib.sqla import Base as SQLAlchemyBaseModel
 from .generic import (PostSource, Content)
 from .post import (Post, SynthesisPost)
 from .mail import Mailbox
+from ..auth import (
+    CrudPermissions, P_READ, R_SYSADMIN, P_ADMIN_DISC, P_EDIT_IDEA,
+    P_EDIT_EXTRACT, P_EDIT_SYNTHESIS, P_ADD_IDEA, P_ADD_EXTRACT,
+    P_EDIT_MY_EXTRACT)
 from .auth import (
     DiscussionPermission, Role, Permission, AgentProfile, User,
-    UserRole, LocalUserRole, DiscussionPermission, P_READ,
-    R_SYSADMIN, ViewPost)
+    UserRole, LocalUserRole, DiscussionPermission, ViewPost)
 from assembl.namespaces import  SIOC, IDEA, ASSEMBL, DCTERMS
+from assembl.views.traversal import AbstractCollectionDefinition
 
 
 class Discussion(SQLAlchemyBaseModel):
@@ -184,15 +188,10 @@ class Discussion(SQLAlchemyBaseModel):
         return json.dumps(_get_extracts_real(discussion=self))
 
     def get_user_permissions(self, user_id):
-        from assembl.auth import get_permissions
+        from ..auth.util import get_permissions
         return get_permissions(user_id, self.id)
 
     def get_user_permissions_preload(self, user_id):
-        # TODO: maparent:  This ultimately calls auth.get_permissions while
-        # the auth API ultimately calls auth.get_permissions_for_user.  I don't
-        # understand why these two differ, if they are meant to differ, and if
-        # so which the preload is supposed to use.  Leaving as is for now
-        # benoitg 2014-01-06
         return json.dumps(self.get_user_permissions(user_id))
 
     # Properties as a route context
@@ -255,6 +254,8 @@ class IdeaGraphView(SQLAlchemyBaseModel):
     def get_discussion_id(self):
         return self.discussion_id
 
+    crud_permissions = CrudPermissions(P_ADMIN_DISC)
+
 
 class SubGraphIdeaAssociation(SQLAlchemyBaseModel):
     __tablename__ = 'sub_graph_idea_association'
@@ -278,6 +279,7 @@ class SubGraphIdeaAssociation(SQLAlchemyBaseModel):
         else:
             return IdeaGraphView.get(id=self.sub_graph_id).get_discussion_id()
 
+    crud_permissions = CrudPermissions(P_ADMIN_DISC)
 
 class SubGraphIdeaLinkAssociation(SQLAlchemyBaseModel):
     __tablename__ = 'sub_graph_idea_link_association'
@@ -305,6 +307,7 @@ class SubGraphIdeaLinkAssociation(SQLAlchemyBaseModel):
         else:
             return IdeaGraphView.get(id=self.sub_graph_id).get_discussion_id()
 
+    crud_permissions = CrudPermissions(P_ADMIN_DISC)
 
 class ExplicitSubGraphView(IdeaGraphView):
     """
@@ -345,6 +348,56 @@ class ExplicitSubGraphView(IdeaGraphView):
         retval.ideas = self.ideas
         return retval
 
+    @classmethod
+    def extra_collections(cls):
+        class IdeaCollectionDefinition(AbstractCollectionDefinition):
+            def __init__(self, cls):
+                super(IdeaCollectionDefinition, self).__init__(cls, Idea)
+
+            def decorate_query(self, query, parent_instance):
+                query = query.join(SubGraphIdeaAssociation, self.owner_class)
+                return query
+
+            def decorate_instance(self, instance, parent_instance, assocs):
+                for inst in assocs[:]:
+                    if isinstance(inst, Idea):
+                        assocs.append(SubGraphIdeaAssociation(
+                            idea=inst, sub_graph=parent_instance))
+                    elif isinstance(inst, IdeaLink):
+                        assocs.append(SubGraphIdeaLinkAssociation(
+                                idea_link=inst, sub_graph=parent_instance))
+
+            def contains(self, parent_instance, instance):
+                return SubGraphIdeaAssociation.db.query(
+                    SubGraphIdeaAssociation).filter_by(
+                        idea=instance,
+                        sub_graph=parent_instance
+                    ).count() > 0
+
+        class IdeaLinkCollectionDefinition(AbstractCollectionDefinition):
+            def __init__(self, cls):
+                super(IdeaLinkCollectionDefinition, self).__init__(cls, IdeaLink)
+
+            def decorate_query(self, query, parent_instance):
+                return query.join(
+                    SubGraphIdeaLinkAssociation, self.owner_class)
+
+            def decorate_instance(self, instance, parent_instance, assocs):
+                assocs.append(
+                    SubGraphIdeaLinkAssociation(
+                        idea_link=instance, sub_graph=parent_instance))
+
+            def contains(self, parent_instance, instance):
+                return SubGraphIdeaAssociation.db.query(
+                    SubGraphIdeaLinkAssociation).filter_by(
+                        idea_link=instance,
+                        sub_graph=parent_instance
+                    ).count() > 0
+
+        return {'ideas': IdeaCollectionDefinition(cls),
+                'idea_links': IdeaLinkCollectionDefinition(cls)}
+
+    crud_permissions = CrudPermissions(P_ADMIN_DISC)
 
 class TableOfContents(IdeaGraphView):
     """
@@ -379,6 +432,12 @@ class TableOfContents(IdeaGraphView):
 
     def get_discussion_id(self):
         return self.discussion.id
+
+    def get_idea_links(self):
+        return self.discussion.get_idea_links()
+
+    def get_ideas(self):
+        return self.discussion.ideas
 
     def __repr__(self):
         return "<TableOfContents %s>" % repr(self.discussion.topic)
@@ -448,6 +507,8 @@ class Synthesis(ExplicitSubGraphView):
 
     def __repr__(self):
         return "<Synthesis %s>" % repr(self.subject)
+
+    crud_permissions = CrudPermissions(P_EDIT_SYNTHESIS)
 
 
 class Idea(SQLAlchemyBaseModel):
@@ -714,6 +775,51 @@ EXCEPT corresponding BY (post_id)
                             source.discussion_id == discussion_id).filter(
                                 IdeaLink.is_tombstone == False).all()
 
+    @classmethod
+    def extra_collections(cls):
+        class ChildIdeaCollectionDefinition(AbstractCollectionDefinition):
+            def __init__(self, cls):
+                super(ChildIdeaCollectionDefinition, self).__init__(cls, Idea)
+
+            def decorate_query(self, query, parent_instance):
+                return query.join(IdeaLink).filter(
+                    IdeaLink.source_id == parent_instance.id)
+
+            def decorate_instance(self, instance, parent_instance, assocs):
+                assocs.append(IdeaLink(
+                        source=parent_instance, target=instance))
+
+            def contains(self, parent_instance, instance):
+                return IdeaLink.db.query(
+                    IdeaLink).filter_by(
+                        source=parent_instance, target=instance
+                    ).count() > 0
+
+        class RelatedPostCollectionDefinition(AbstractCollectionDefinition):
+            def __init__(self, cls):
+                super(RelatedPostCollectionDefinition, self).__init__(cls, Content)
+
+            def decorate_query(self, query, parent_instance):
+                return query.join(
+                    IdeaRelatedPostLink, self.owner_class)
+
+            def decorate_instance(self, instance, parent_instance, assocs):
+                assocs.append(
+                    IdeaRelatedPostLink(
+                        content=instance, idea=parent_instance))
+
+            def contains(self, parent_instance, instance):
+                return IdeaRelatedPostLink.db.query(
+                    SubGraphIdeaLinkAssociation).filter_by(
+                        content=instance, idea=parent_instance
+                    ).count() > 0
+
+        return {'children': ChildIdeaCollectionDefinition(cls),
+                'posts': RelatedPostCollectionDefinition(cls)}
+
+    crud_permissions = CrudPermissions(
+            P_ADD_IDEA, P_READ, P_EDIT_IDEA, P_ADMIN_DISC,
+            P_ADMIN_DISC, P_ADMIN_DISC)
 
 class RootIdea(Idea):
     """
@@ -765,6 +871,8 @@ class RootIdea(Idea):
     def discussion_topic(self):
         return self.discussion.topic
 
+    crud_permissions = CrudPermissions(P_ADMIN_DISC)
+
 
 class IdeaLink(SQLAlchemyBaseModel):
     """
@@ -814,6 +922,9 @@ class IdeaLink(SQLAlchemyBaseModel):
         else:
             return Idea.get(id=self.source_id).get_discussion_id()
 
+    crud_permissions = CrudPermissions(
+            P_ADD_IDEA, P_READ, P_EDIT_IDEA, P_EDIT_IDEA,
+            P_EDIT_IDEA, P_EDIT_IDEA)
 
 class IdeaContentLink(SQLAlchemyBaseModel):
     """
@@ -859,6 +970,10 @@ class IdeaContentLink(SQLAlchemyBaseModel):
             return self.idea.get_discussion_id()
         elif self.idea_id:
             return Idea.get(id=self.idea_id).get_discussion_id()
+
+    crud_permissions = CrudPermissions(
+            P_ADD_IDEA, P_READ, P_EDIT_IDEA, P_EDIT_IDEA,
+            P_EDIT_IDEA, P_EDIT_IDEA)
 
 @event.listens_for(IdeaContentLink.idea, 'set', propagate=True, active_history=True)
 def idea_content_link_idea_set_listener(target, value, oldvalue, initiator):
@@ -1029,6 +1144,9 @@ class Extract(IdeaContentPositiveLink):
     def get_discussion_id(self):
         return self.discussion_id
 
+    crud_permissions = CrudPermissions(
+            P_ADD_EXTRACT, P_READ, P_EDIT_EXTRACT, P_EDIT_EXTRACT,
+            P_EDIT_MY_EXTRACT, P_EDIT_MY_EXTRACT)
 
 class IdeaContentNegativeLink(IdeaContentLink):
     """
@@ -1118,3 +1236,7 @@ class TextFragmentIdentifier(SQLAlchemyBaseModel):
             return self.extract.get_discussion_id()
         elif self.extract_id:
             return Extract.get(id=self.extract_id).get_discussion_id()
+
+    crud_permissions = CrudPermissions(
+            P_ADD_EXTRACT, P_READ, P_EDIT_EXTRACT, P_EDIT_EXTRACT,
+            P_EDIT_MY_EXTRACT, P_EDIT_MY_EXTRACT)

@@ -21,32 +21,7 @@ from pyramid.security import Everyone, Authenticated
 
 from ..lib import config
 from ..lib.sqla import Base as SQLAlchemyBaseModel
-
-
-# Roles
-R_PARTICIPANT = 'r:participant'
-R_CATCHER = 'r:catcher'
-R_MODERATOR = 'r:moderator'
-R_ADMINISTRATOR = 'r:administrator'
-R_SYSADMIN = 'r:sysadmin'
-
-SYSTEM_ROLES = set(
-    (Everyone, Authenticated, R_PARTICIPANT, R_CATCHER,
-     R_MODERATOR, R_ADMINISTRATOR, R_SYSADMIN))
-
-# Permissions
-P_READ = 'read'
-P_ADD_POST = 'add_post'
-P_EDIT_POST = 'edit_post'
-P_ADD_EXTRACT = 'add_extract'
-P_EDIT_EXTRACT = 'edit_extract'
-P_EDIT_MY_EXTRACT = 'edit_my_extract'
-P_ADD_IDEA = 'add_idea'
-P_EDIT_IDEA = 'edit_idea'
-P_EDIT_SYNTHESIS = 'edit_synthesis'
-P_SEND_SYNTHESIS = 'send_synthesis'
-P_ADMIN_DISC = 'admin_discussion'
-P_SYSADMIN = 'sysadmin'
+from ..auth import *
 
 
 class AgentProfile(SQLAlchemyBaseModel):
@@ -372,7 +347,7 @@ class User(AgentProfile):
             return "<User id=%d>" % self.id
 
     def get_permissions(self, discussion_id):
-        from ..auth import get_permissions
+        from ..auth.util import get_permissions
         return get_permissions(self.id, discussion_id)
 
     def get_all_permissions(self):
@@ -414,17 +389,9 @@ class Role(SQLAlchemyBaseModel):
 
 
 def populate_default_roles(session):
-    def ensure(s):
-        # Note: Must be called within transaction manager
-        if not session.query(Role).filter_by(name=s).first():
-            session.add(Role(name=s))
-    ensure(Everyone)
-    ensure(Authenticated)
-    ensure(R_PARTICIPANT)
-    ensure(R_CATCHER)
-    ensure(R_MODERATOR)
-    ensure(R_ADMINISTRATOR)
-    ensure(R_SYSADMIN)
+    roles = {r[0] for r in session.query(Role.name).all()}
+    for role in SYSTEM_ROLES - roles:
+        session.add(Role(name=role))
 
 
 class UserRole(SQLAlchemyBaseModel):
@@ -466,22 +433,9 @@ class Permission(SQLAlchemyBaseModel):
 
 
 def populate_default_permissions(session):
-    def ensure(s):
-        # Note: Must be called within transaction manager
-        if not session.query(Permission).filter_by(name=s).first():
-            session.add(Permission(name=s))
-    ensure(P_READ)
-    ensure(P_ADD_POST)
-    ensure(P_EDIT_POST)
-    ensure(P_ADD_EXTRACT)
-    ensure(P_EDIT_EXTRACT)
-    ensure(P_EDIT_MY_EXTRACT)
-    ensure(P_ADD_IDEA)
-    ensure(P_EDIT_IDEA)
-    ensure(P_EDIT_SYNTHESIS)
-    ensure(P_SEND_SYNTHESIS)
-    ensure(P_ADMIN_DISC)
-    ensure(P_SYSADMIN)
+    perms = {p[0] for p in session.query(Permission.name).all()}
+    for perm in ASSEMBL_PERMISSIONS - perms:
+        session.add(Permission(name=perm))
 
 
 class DiscussionPermission(SQLAlchemyBaseModel):
