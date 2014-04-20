@@ -121,9 +121,9 @@
 
 .assembl-logo {
     font-size: 22px;
-    color: #c7c2dd;
+    color: #ffffff;
     text-decoration: none;
-    text-shadow: 0 1px 0 rgba(255,255,255,0.75);
+    //text-shadow: 0 1px 0 rgba(0,0,0,0.75);
 }
 
 // Active state
@@ -249,4 +249,14 @@
   line-height: 1.42857143;
   border-radius: 4px;
   color: #fff;
+}
+
+.btn-purple {
+  &:hover{
+
+  }
+  &:active{
+
+  }
+
 }
