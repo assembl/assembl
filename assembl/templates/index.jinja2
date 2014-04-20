@@ -30,8 +30,8 @@
         <div class="navbar-right">
             <div class="connexion">
                 {% if user %}
-                    <span>{{ user.display_name() }}</span>
                     <img src="/user/id/{{user.id}}/avatar/32" alt="{{ user.display_name() }}" class="image-rounded" />
+                    <span>{{ user.display_name() }}</span>
                     <a href="/logout" class="sign-out iconbutton icon-logout-1" title="{{ gettext('Sign out') }}"></a>
                 {% else %}
                     <a href="/login?next_view={{request.current_route_path()}}" class="sign-in">{{ gettext('Sign in') }}</a>
