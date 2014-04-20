@@ -115,7 +115,6 @@ def show_collections(request):
 
 @view_config(context=ClassContext, request_method='POST', header=FORM_HEADER)
 def class_add(request):
-    # TODO : Permissions.
     ctx = request.context
     args = request.params
     typename = args.get('type', None)
@@ -141,9 +140,16 @@ def class_add(request):
 @view_config(context=CollectionContext, request_method='POST',
              header=JSON_HEADER)
 def collection_add_json(request):
-    # TODO : Permissions.
     ctx = request.context
     typename = ctx.collection_class.external_typename()
+    user_id = authenticated_userid(request)
+    typename = args.get('type', ctx.collection_class.external_typename())
+    permissions = get_permissions(
+        user_id, ctx.parent_instance.get_discussion_id())
+    if P_SYSADMIN not in permissions:
+        cls = ctx.get_collection_class(typename)
+        if cls.crud_permissions.read not in permissions:
+            raise HTTPUnauthorized()
     try:
         instances = ctx.create_object(typename, request.json_body)
     except Exception as e:
