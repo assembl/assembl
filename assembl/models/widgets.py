@@ -17,6 +17,7 @@ class Widget(Base):
     widget_type = Column(String(120), nullable=False)
 
     settings = Column(Text)  # JSON blob
+    state = Column(Text)  # JSON blob
 
     discussion_id = Column(
         Integer,
