@@ -1,0 +1,51 @@
+<header id="header">
+    <nav class="navbar navbar-default" role="navigation">
+        <div class="navbar-left">
+            <a href="/" class="icon-menu assembl-logo" class="sign-in">Assembl</a>
+        </div>
+        <div class="navbar-center">
+            {% if canDisplayTabs %}
+            <ul class="menu">
+                <li class="tab-table-idea">
+                    <a id="button-ideaList" class="barbutton" data-tooltip-position="n"
+                    data-tooltip="{{ gettext('To add an idea in the table of ideas: select add idea and drag the new idea either 1) on the inner edge of an existing idea to add it as a sibling or 2) in the middle of an existing idea to add it as a sub-idea.') }}">{{ gettext('Table of Ideas') }}</a>
+                </li>
+                {#<li class="tab-idea active">
+                    <a id="button-ideaPanel" class="barbutton" style="display: none">{{ gettext('Idea') }}</a>
+                </li>#}
+                {% if canAddExtract %}
+                <li class="tab-clipboard">
+                    <a id="button-segmentList" class="barbutton">{{ gettext('Clipboard') }}</a>
+                </li>
+                {% endif %}
+                <li class="tab-messages">
+                    <a id="button-messages" class="barbutton">{{ gettext('Messages') }}</a>
+                </li>
+                <li class="tab-synthesis">
+                    <a id="button-synthesis" class="barbutton">{{ gettext('Synthesis') }}</a>
+                </li>
+            </ul>
+            {% endif %}
+        </div>
+
+        <div class="navbar-right">
+            <div class="connexion">
+                {% if user %}
+                    <img src="/user/id/{{user.id}}/avatar/30" alt="{{ user.display_name() }}" class="image-rounded" />
+                    <span>{{ user.display_name() }}</span>
+                    <a href="/logout" class="sign-out iconbutton icon-logout-1" title="{{ gettext('Sign out') }}"></a>
+                {% else %}
+                    <a href="/login?next_view={{request.current_route_path()}}" class="sign-in">{{ gettext('Sign in') }}</a>
+                {% endif %}
+                {% if locales.__len__ > 1 %}
+                    <a href="#" class="locale active">{{locale | upper}}</a>
+                    {% for loc in locales %}
+                        {% if (loc != locale) %}
+                            <a href="#" class="lang" onmouseup="window.app.setLocale('{{loc}}')">{{loc | upper}}</a>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+</header>

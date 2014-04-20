@@ -1,34 +1,5 @@
 {% extends 'base.jinja2' %}
 
-{% block header %}
-    <nav class="navbar navbar-default" role="navigation">
-        <div class="navbar-left">
-            <a href="/" class="icon-menu assembl-logo">Assembl</a>
-        </div>
-        <div class="navbar-right">
-            <div class="connexion">
-                <div class="info">{% if user %}
-                    {{ user.display_name() }}
-                    <img src="/user/id/{{user.id}}/avatar/32" alt="{{ user.display_name() }}" class="image-rounded" />{# </a> #}
-                    <a href="/logout" class="link iconbutton icon-logout-1" title="{{ gettext('Sign out') }}"></a>
-                {% else %}
-                    <a href="/login?next_view=/" class="sign-in">{{ gettext('Sign in') }}</a>
-                {% endif %}
-                {% if locales.__len__ > 1 %}
-                    <a href="#" class="locale active">{{locale | upper}}</a>
-                    {% for loc in locales %}
-                        {% if (loc != locale) %}
-                            <a href="#" class="lang" onmouseup="window.app.setLocale('{{loc}}')">{{loc | upper}}</a>
-                        {% endif %}
-                    {% endfor %}
-                {% endif %}
-                </div>
-            </div>
-        </div>
-    </nav>
-{% endblock %}
-
-
 {% block content %}
 <div class="panelarea">
     <ul class="discussionlist">
@@ -39,7 +10,7 @@
             </span>
         </li>
         {% else %}
-        <em>{% trans %}There are no discussions on this server yet{% endtrans %}</em>
+            <em>{% trans %}There are no discussions on this server yet{% endtrans %}</em>
         {% endfor %}
     </ul>
 </div>

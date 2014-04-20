@@ -76,8 +76,8 @@ def home_view(request):
     user_id = authenticated_userid(request) or Everyone
     context = get_default_context(request)
     canAddExtract = user_has_permission(context["discussion"].id, user_id, P_ADD_EXTRACT)
-
     context['canAddExtract'] = canAddExtract
+    context['canDisplayTabs'] = True
     return render_to_response('../../templates/index.jinja2', context, request=request)
 
 @view_config(route_name='home_idea', request_method='GET', http_cache=60)

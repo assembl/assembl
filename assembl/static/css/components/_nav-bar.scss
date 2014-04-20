@@ -15,7 +15,6 @@
 
   .navbar-left {
     float: left;
-    line-height: 35px;
   }
 
   .navbar-center {
@@ -58,6 +57,7 @@
       background-color: #484848;
       padding: 0 10px;
       cursor: pointer;
+      line-height: 34px;
       .lang {
         cursor: pointer;
         color: #aaaaaa;

@@ -14,9 +14,7 @@
 </head>
 <body class="preload">
     <div id="wrapper">
-        <header id="header">
-            {% block header %}{% endblock %}
-        </header>
+        {% include 'header.jinja2' %}
         <main id="main">
             {% block content %}{% endblock %}
         </main>

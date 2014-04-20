@@ -1,66 +1,34 @@
 {% extends 'base.jinja2' %}
 
-{% block header %}
-    <nav class="navbar navbar-default" role="navigation">
-        <div class="navbar-left">
-            <a href="/" class="icon-menu assembl-logo">Assembl</a>
-        </div>
-        <div class="navbar-right">
-            <div class="connexion">
-            {% if locales.__len__ > 1 %}
-                <a href="#" class="locale active">{{locale | upper}}</a>
-                {% for loc in locales %}
-                    {% if (loc != locale) %}
-                        <a href="#" class="lang" onmouseup="window.app.setLocale('{{loc}}')">{{loc | upper}}</a>
-                    {% endif %}
-                {% endfor %}
-            {% endif %}
-            </div>
-        </div>
-    </nav>
-{% endblock %}
-
 {% block content %}
+<div class="loginbox">
+    <p class="login-box-title">{{ gettext('join assembl') }}</p>
+    {% if error %}
+    <div class="error">{{error}}</div>
+    {% endif %}
 
-    <div class="loginbox">
-        <p class="login-box-title">{{ gettext('join assembl') }}</p>
-        {% if error %}
-        <div class="error">{{error}}</div>
-        {% endif %}
+    <form class="form" method="POST">
+        <input type="hidden" name="next_view" value="{{next_view}}" />
+        <input type="text" name="name" class="defaultfield" placeholder="{{ gettext('Name') }}" autofocus required />
 
-        <form class="form" method="POST">
-            <input type="hidden" name="next_view" value="{{next_view}}" />
+        <div class="spacer spacer--big"></div>
 
-            <input type="text" name="name" class="defaultfield" placeholder="{{ gettext('Name') }}" autofocus required />
+        <input type="text" name="email" class="defaultfield" placeholder="{{ gettext('email') }}" required />
+        <div class="spacer spacer--big"></div>
+        <input type="password" name="password" class="defaultfield" placeholder="{{ gettext('Password') }}" required />
+        <div class="spacer spacer--big"></div>
+        <input type="password" name="password2" class="defaultfield" placeholder="{{ gettext('Repeat password') }}" required />
+        <div class="spacer spacer--big"></div>
+        <input type="submit" name="register" value="{{ gettext('Register') }}" class="btn-pink" />
+        <span class="register">{{gettext("or")}} <a href="/login?next_view={{next_view}}">{{gettext("login")}}</a></span>
+    </form>
 
-            <div class="spacer spacer--big"></div>
-
-            <input type="text" name="email" class="defaultfield" placeholder="{{ gettext('email') }}" required />
-
-            <div class="spacer spacer--big"></div>
-
-            <input type="password" name="password" class="defaultfield" placeholder="{{ gettext('Password') }}" required />
-
-            <div class="spacer spacer--big"></div>
-
-            <input type="password" name="password2" class="defaultfield" placeholder="{{ gettext('Repeat password') }}" required />
-
-            <div class="spacer spacer--big"></div>
-
-            <input type="submit" name="register" value="{{ gettext('Register') }}" class="btn-pink" />
-
-            <span class="register">{{gettext("or")}} <a href="/login?next_view={{next_view}}">{{gettext("login")}}</a></span>
-
-        </form>
-
-        <footer>
-            {% set caravan = "<a href='http://caravan.coop' class='link caravan'>"+gettext("Caravan")+"</a>" %}
-            {% set imaginationForPeople = "<a href='http://imaginationforpeople.org/' class='link i4p'>"+gettext("Imagination for people") +"</a>" %}
-
-            <p>{{ gettext("Designed by %(caravan)s and %(imaginationForPeople)s")|format(caravan=caravan, imaginationForPeople=imaginationForPeople)|safe }}</p>
-        </footer>
-    </div>
-
+    <footer>
+        {% set caravan = "<a href='http://caravan.coop' class='link caravan'>"+gettext("Caravan")+"</a>" %}
+        {% set imaginationForPeople = "<a href='http://imaginationforpeople.org/' class='link i4p'>"+gettext("Imagination for people") +"</a>" %}
+        <p>{{ gettext("Designed by %(caravan)s and %(imaginationForPeople)s")|format(caravan=caravan, imaginationForPeople=imaginationForPeople)|safe }}</p>
+    </footer>
+</div>
 {% endblock %}
 
 {% block extra_js %}
