@@ -1,5 +1,6 @@
 from sqlalchemy.orm.attributes import InstrumentedAttribute
 from pyramid.security import Allow, Everyone, ALL_PERMISSIONS, DENY_ALL
+from abc import ABCMeta, abstractmethod
 
 from assembl.lib.sqla import *
 
@@ -286,17 +287,43 @@ class CollectionContextClassPredicate(object):
             issubclass(context.collection_class, self.val)
 
 
-class CollectionDefinition(object):
+class AbstractCollectionDefinition(object):
+    __metaclass__ = ABCMeta
+    def __init__(self, owner_class, collection_class):
+        self.owner_class = owner_class
+        self.collection_class = collection_class
+
+    def get_instance(self, key, parent_instance):
+        instance = self.collection_class.get_instance(key)
+        # Validate that the instance belongs to the collection...
+        if instance and not self.contains(parent_instance, instance):
+            raise KeyError("This instance does not live in this collection.")
+        return instance
+
+    @abstractmethod
+    def decorate_query(self, query, parent_instance):
+        pass
+
+    @abstractmethod
+    def decorate_instance(self, instance, parent_instance, assocs):
+        pass
+
+    @abstractmethod
+    def contains(self, parent_instance, instance):
+        pass
+
+
+class CollectionDefinition(AbstractCollectionDefinition):
     back_property = None
 
     def __init__(self, owner_class, property):
-        self.owner_class = owner_class
+        super(CollectionDefinition, self).__init__(
+            owner_class, property.mapper.class_)
         self.property = property
         back_properties = list(property._reverse_property)
         if back_properties:
             # TODO: How to chose?
             self.back_property = back_properties.pop()
-        self.collection_class = property.mapper.class_
 
     def decorate_query(self, query, parent_instance):
         # This will decorate a query with a join on the relation.

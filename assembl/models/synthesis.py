@@ -39,6 +39,7 @@ from .auth import (
     DiscussionPermission, Role, Permission, AgentProfile, User,
     UserRole, LocalUserRole, DiscussionPermission, ViewPost)
 from assembl.namespaces import  SIOC, IDEA, ASSEMBL, DCTERMS
+from assembl.views.traversal import AbstractCollectionDefinition
 
 
 class Discussion(SQLAlchemyBaseModel):
@@ -349,10 +350,9 @@ class ExplicitSubGraphView(IdeaGraphView):
 
     @classmethod
     def extra_collections(cls):
-        class IdeaCollectionDefinition(object):
+        class IdeaCollectionDefinition(AbstractCollectionDefinition):
             def __init__(self, cls):
-                self.owner_class = cls
-                self.collection_class = Idea
+                super(IdeaCollectionDefinition, self).__init__(cls, Idea)
 
             def decorate_query(self, query, parent_instance):
                 query = query.join(SubGraphIdeaAssociation, self.owner_class)
@@ -367,12 +367,6 @@ class ExplicitSubGraphView(IdeaGraphView):
                         assocs.append(SubGraphIdeaLinkAssociation(
                                 idea_link=inst, sub_graph=parent_instance))
 
-            def get_instance(self, key, parent_instance):
-                instance = Idea.get(id=key)
-                if instance and not self.contains(parent_instance, instance):
-                    raise KeyError("This instance does not live in this collection.")
-                return instance
-
             def contains(self, parent_instance, instance):
                 return SubGraphIdeaAssociation.db.query(
                     SubGraphIdeaAssociation).filter_by(
@@ -380,10 +374,9 @@ class ExplicitSubGraphView(IdeaGraphView):
                         sub_graph=parent_instance
                     ).count() > 0
 
-        class IdeaLinkCollectionDefinition(object):
+        class IdeaLinkCollectionDefinition(AbstractCollectionDefinition):
             def __init__(self, cls):
-                self.owner_class = cls
-                self.collection_class = IdeaLink
+                super(IdeaLinkCollectionDefinition, self).__init__(cls, IdeaLink)
 
             def decorate_query(self, query, parent_instance):
                 return query.join(
@@ -393,12 +386,6 @@ class ExplicitSubGraphView(IdeaGraphView):
                 assocs.append(
                     SubGraphIdeaLinkAssociation(
                         idea_link=instance, sub_graph=parent_instance))
-
-            def get_instance(self, key, parent_instance):
-                instance = IdeaLink.get(id=key)
-                if instance and not self.contains(parent_instance, instance):
-                    raise KeyError("This instance does not live in this collection.")
-                return instance
 
             def contains(self, parent_instance, instance):
                 return SubGraphIdeaAssociation.db.query(
@@ -790,10 +777,9 @@ EXCEPT corresponding BY (post_id)
 
     @classmethod
     def extra_collections(cls):
-        class ChildIdeaCollectionDefinition(object):
+        class ChildIdeaCollectionDefinition(AbstractCollectionDefinition):
             def __init__(self, cls):
-                self.owner_class = cls
-                self.collection_class = Idea
+                super(ChildIdeaCollectionDefinition, self).__init__(cls, Idea)
 
             def decorate_query(self, query, parent_instance):
                 return query.join(IdeaLink).filter(
@@ -803,22 +789,15 @@ EXCEPT corresponding BY (post_id)
                 assocs.append(IdeaLink(
                         source=parent_instance, target=instance))
 
-            def get_instance(self, key, parent_instance):
-                instance = Idea.get(id=key)
-                if instance and not self.contains(parent_instance, instance):
-                    raise KeyError("This instance does not live in this collection.")
-                return instance
-
             def contains(self, parent_instance, instance):
                 return IdeaLink.db.query(
                     IdeaLink).filter_by(
                         source=parent_instance, target=instance
                     ).count() > 0
 
-        class RelatedPostCollectionDefinition(object):
+        class RelatedPostCollectionDefinition(AbstractCollectionDefinition):
             def __init__(self, cls):
-                self.owner_class = cls
-                self.collection_class = Content
+                super(RelatedPostCollectionDefinition, self).__init__(cls, Content)
 
             def decorate_query(self, query, parent_instance):
                 return query.join(
@@ -828,12 +807,6 @@ EXCEPT corresponding BY (post_id)
                 assocs.append(
                     IdeaRelatedPostLink(
                         content=instance, idea=parent_instance))
-
-            def get_instance(self, key, parent_instance):
-                instance = Content.get(id=key)
-                if instance and not self.contains(parent_instance, instance):
-                    raise KeyError("This instance does not live in this collection.")
-                return instance
 
             def contains(self, parent_instance, instance):
                 return IdeaRelatedPostLink.db.query(
