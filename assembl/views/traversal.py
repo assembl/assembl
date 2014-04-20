@@ -305,7 +305,10 @@ class CollectionDefinition(object):
             # What we have is a property, not an instrumented attribute;
             # but they share the same key.
             back_attribute = getattr(cls, inv.key)
-            query = query.filter(back_attribute == parent_instance)
+            if inv.uselist:
+                query = query.filter(back_attribute.contains(parent_instance))
+            else:
+                query = query.filter(back_attribute == parent_instance)
         return query
 
     def decorate_instance(self, instance, parent_instance, assocs):
