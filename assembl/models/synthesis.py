@@ -31,10 +31,10 @@ from ..lib.sqla import Base as SQLAlchemyBaseModel
 from .generic import (PostSource, Content)
 from .post import (Post, SynthesisPost)
 from .mail import Mailbox
+from ..auth import P_READ, R_SYSADMIN
 from .auth import (
     DiscussionPermission, Role, Permission, AgentProfile, User,
-    UserRole, LocalUserRole, DiscussionPermission, P_READ,
-    R_SYSADMIN, ViewPost)
+    UserRole, LocalUserRole, DiscussionPermission, ViewPost)
 from assembl.namespaces import  SIOC, IDEA, ASSEMBL, DCTERMS
 
 
@@ -184,15 +184,10 @@ class Discussion(SQLAlchemyBaseModel):
         return json.dumps(_get_extracts_real(discussion=self))
 
     def get_user_permissions(self, user_id):
-        from assembl.auth import get_permissions
+        from ..auth.util import get_permissions
         return get_permissions(user_id, self.id)
 
     def get_user_permissions_preload(self, user_id):
-        # TODO: maparent:  This ultimately calls auth.get_permissions while
-        # the auth API ultimately calls auth.get_permissions_for_user.  I don't
-        # understand why these two differ, if they are meant to differ, and if
-        # so which the preload is supposed to use.  Leaving as is for now
-        # benoitg 2014-01-06
         return json.dumps(self.get_user_permissions(user_id))
 
     # Properties as a route context

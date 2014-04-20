@@ -21,32 +21,7 @@ from pyramid.security import Everyone, Authenticated
 
 from ..lib import config
 from ..lib.sqla import Base as SQLAlchemyBaseModel
-
-
-# Roles
-R_PARTICIPANT = 'r:participant'
-R_CATCHER = 'r:catcher'
-R_MODERATOR = 'r:moderator'
-R_ADMINISTRATOR = 'r:administrator'
-R_SYSADMIN = 'r:sysadmin'
-
-SYSTEM_ROLES = set(
-    (Everyone, Authenticated, R_PARTICIPANT, R_CATCHER,
-     R_MODERATOR, R_ADMINISTRATOR, R_SYSADMIN))
-
-# Permissions
-P_READ = 'read'
-P_ADD_POST = 'add_post'
-P_EDIT_POST = 'edit_post'
-P_ADD_EXTRACT = 'add_extract'
-P_EDIT_EXTRACT = 'edit_extract'
-P_EDIT_MY_EXTRACT = 'edit_my_extract'
-P_ADD_IDEA = 'add_idea'
-P_EDIT_IDEA = 'edit_idea'
-P_EDIT_SYNTHESIS = 'edit_synthesis'
-P_SEND_SYNTHESIS = 'send_synthesis'
-P_ADMIN_DISC = 'admin_discussion'
-P_SYSADMIN = 'sysadmin'
+from ..auth import *
 
 
 class AgentProfile(SQLAlchemyBaseModel):
@@ -372,7 +347,7 @@ class User(AgentProfile):
             return "<User id=%d>" % self.id
 
     def get_permissions(self, discussion_id):
-        from ..auth import get_permissions
+        from ..auth.util import get_permissions
         return get_permissions(self.id, discussion_id)
 
     def get_all_permissions(self):

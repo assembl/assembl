@@ -2,10 +2,8 @@ from pyramid.httpexceptions import HTTPNotFound
 from cornice import Service
 
 from assembl.views.api import API_DISCUSSION_PREFIX
-from assembl.models import Discussion
-from assembl.models.auth import (
-    P_READ,
-    AgentProfile)
+from assembl.auth import P_READ
+from assembl.models import Discussion, AgentProfile
 
 
 agents = Service(

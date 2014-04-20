@@ -13,6 +13,7 @@ import assembl
 from assembl.lib.migration import bootstrap_db, bootstrap_db_data
 from assembl.lib.sqla import get_session_maker
 from .utils import clear_rows, drop_tables
+from assembl.auth import R_SYSADMIN, R_PARTICIPANT
 
 
 @pytest.fixture(scope="session")
@@ -92,7 +93,6 @@ def discussion(request, test_session):
 @pytest.fixture(scope="function")
 def admin_user(request, test_session):
     from assembl.models import User, UserRole, Role
-    from assembl.auth import R_SYSADMIN
     u = User(name=u"Mr. Adminstrator", type="user")
     test_session.add(u)
     r = Role.get_role(test_session, R_SYSADMIN)
@@ -127,7 +127,6 @@ def test_app(request, app_settings, admin_user):
 @pytest.fixture(scope="function")
 def participant1_user(request, test_session):
     from assembl.models import User, UserRole, Role
-    from assembl.models.auth import R_PARTICIPANT
     u = User(name=u"A. Barking Loon", type="user")
     test_session.add(u)
     r = Role.get_role(test_session, R_PARTICIPANT)
@@ -143,7 +142,6 @@ def participant1_user(request, test_session):
 @pytest.fixture(scope="function")
 def participant2_user(request, test_session):
     from assembl.models import User, UserRole, Role
-    from assembl.models.auth import R_PARTICIPANT
     u = User(name=u"James T. Expert", type="user")
     test_session.add(u)
     r = Role.get_role(test_session, R_PARTICIPANT)

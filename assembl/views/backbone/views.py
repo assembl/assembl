@@ -9,8 +9,8 @@ from pyramid.i18n import TranslationStringFactory
 from sqlalchemy.orm.exc import NoResultFound
 
 from assembl.models import Discussion
-from assembl.models.auth import P_READ, P_ADD_EXTRACT
-from assembl.auth import user_has_permission
+from assembl.auth import P_READ, P_ADD_EXTRACT
+from assembl.auth.util import user_has_permission
 from .. import get_default_context as base_default_context
 
 
