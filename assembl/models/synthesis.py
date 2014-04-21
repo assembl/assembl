@@ -38,7 +38,7 @@ from ..auth import (
 from .auth import (
     DiscussionPermission, Role, Permission, AgentProfile, User,
     UserRole, LocalUserRole, DiscussionPermission, ViewPost)
-from assembl.namespaces import  SIOC, IDEA, ASSEMBL, DCTERMS
+from ..namespaces import  SIOC, CATALYST, IDEA, ASSEMBL, DCTERMS
 from assembl.views.traversal import AbstractCollectionDefinition
 
 
@@ -47,13 +47,13 @@ class Discussion(SQLAlchemyBaseModel):
     A Discussion
     """
     __tablename__ = "discussion"
-    rdf_class = ASSEMBL.Discussion
+    rdf_class = CATALYST.Conversation
 
     id = Column(Integer, primary_key=True,
-        info= {'rdf': LiteralQuadMapPattern(ASSEMBL.db_id)})
+                info= {'rdf': LiteralQuadMapPattern(ASSEMBL.db_id)})
 
     topic = Column(UnicodeText, nullable=False,
-        info= {'rdf': LiteralQuadMapPattern(DCTERMS.title)})
+            info= {'rdf': LiteralQuadMapPattern(DCTERMS.title)})
 
     slug = Column(Unicode, nullable=False, unique=True, index=True)
 
@@ -227,16 +227,20 @@ class IdeaGraphView(SQLAlchemyBaseModel):
     A view on the graph of idea.
     """
     __tablename__ = "idea_graph_view"
+    rdf_class = IDEA.Map
 
     type = Column(String(60), nullable=False)
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True,
+                info= {'rdf': LiteralQuadMapPattern(ASSEMBL.db_id)})
 
-    creation_date = Column(DateTime, nullable=False, default=datetime.utcnow)
+    creation_date = Column(DateTime, nullable=False, default=datetime.utcnow,
+        info= {'rdf': LiteralQuadMapPattern(DCTERMS.created)})
 
     discussion_id = Column(
         Integer,
         ForeignKey('discussion.id', ondelete="CASCADE", onupdate="CASCADE"),
-        nullable=False
+        nullable=False,
+        info = {'rdf': IriQuadMapPattern(SIOC.has_container, ApplyIriClass(Discussion.iri_class()))}
     )
     discussion = relationship('Discussion', backref="views")
 
@@ -516,7 +520,7 @@ class Idea(SQLAlchemyBaseModel):
     A core concept taken from the associated discussion
     """
     __tablename__ = "idea"
-    rdf_class = IDEA.Idea
+    rdf_class = CATALYST.Idea
     #rdf_class_id = Column(IRI_ID)
     ORPHAN_POSTS_IDEA_ID = 'orphan_posts'
     sqla_type = Column(String(60), nullable=False)
@@ -886,7 +890,7 @@ class IdeaLink(SQLAlchemyBaseModel):
     __tablename__ = 'idea_idea_link'
     rdf_class = IDEA.DirectedIdeaRelation
     id = Column(Integer, primary_key=True,
-        info= {'rdf': LiteralQuadMapPattern(ASSEMBL.db_id)})
+                info= {'rdf': LiteralQuadMapPattern(ASSEMBL.db_id)})
     source_id = Column(Integer, ForeignKey(
             'idea.id', ondelete="CASCADE", onupdate="CASCADE"),
         nullable=False, index=True,
@@ -935,7 +939,10 @@ class IdeaContentLink(SQLAlchemyBaseModel):
     (typically a Post)
     """
     __tablename__ = 'idea_content_link'
-    id = Column(Integer, primary_key=True)
+    # TODO: How to express the implied link as RDF? Remember not reified, unless extract.
+
+    id = Column(Integer, primary_key=True,
+                info= {'rdf': LiteralQuadMapPattern(ASSEMBL.db_id)})
     type = Column(String(60))
 
     # This is nullable, because in the case of extracts, the idea can be
@@ -951,7 +958,8 @@ class IdeaContentLink(SQLAlchemyBaseModel):
 
     order = Column(Float, nullable=False, default=0.0)
 
-    creation_date = Column(DateTime, nullable=False, default=datetime.utcnow)
+    creation_date = Column(DateTime, nullable=False, default=datetime.utcnow,
+        info= {'rdf': LiteralQuadMapPattern(DCTERMS.created)})
 
     creator_id = Column(
         Integer,
@@ -1029,7 +1037,7 @@ class Extract(IdeaContentPositiveLink):
     An extracted part of a Content. A quotation to be referenced by an `Idea`.
     """
     __tablename__ = 'extract'
-    rdf_class = ASSEMBL.Excerpt
+    rdf_class = CATALYST.Excerpt
 
     id = Column(Integer, ForeignKey(
             'idea_content_positive_link.id',
@@ -1042,8 +1050,17 @@ class Extract(IdeaContentPositiveLink):
     discussion_id = Column(Integer, ForeignKey(
         'discussion.id', ondelete="CASCADE", onupdate="CASCADE"),
         nullable=False, index=True,
-        info = {'rdf': IriQuadMapPattern(SIOC.has_container, ApplyIriClass(Discussion.iri_class()))})
+        info = {'rdf': IriQuadMapPattern(CATALYST.relevantToConversation,
+            ApplyIriClass(Discussion.iri_class()))})
     discussion = relationship('Discussion', backref='extracts')
+
+    # TODO: How to apply to Extract.idea without contaminating IdeaContentLink.ideaL
+    #  @classmethod
+    # def special_quad_patterns(cls, entityname=None):
+    #     return [IriQuadMapPattern(CATALYST.expressesIdea,
+    #         ApplyIriClass(Idea.iri_class()),
+    #         QUADNAMES.class_Extract_class)]
+
 
     annotation_text = Column(UnicodeText)
 
@@ -1188,7 +1205,10 @@ class IdeaThreadContextBreakLink(IdeaContentNegativeLink):
 
 class TextFragmentIdentifier(SQLAlchemyBaseModel):
     __tablename__ = 'text_fragment_identifier'
-    id = Column(Integer, primary_key=True)
+    rdf_class = CATALYST.ExcerptTarget
+
+    id = Column(Integer, primary_key=True,
+                info= {'rdf': LiteralQuadMapPattern(ASSEMBL.db_id)})
     extract_id = Column(Integer, ForeignKey(
         Extract.id, ondelete="CASCADE"), index=True)
     xpath_start = Column(String)

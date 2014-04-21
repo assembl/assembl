@@ -9,23 +9,29 @@ from sqlalchemy import (
     DateTime,
     ForeignKey,
 )
+from virtuoso.vmapping import (
+    LiteralQuadMapPattern, IriQuadMapPattern, ApplyIriClass)
 
 from ..lib.sqla import Base as SQLAlchemyBaseModel
 from ..auth import (
     CrudPermissions, P_ADD_POST, P_READ, P_EDIT_POST, P_ADMIN_DISC,
     P_EDIT_POST, P_ADMIN_DISC)
+from ..namespaces import  SIOC, CATALYST, IDEA, ASSEMBL, DCTERMS
 
 class ContentSource(SQLAlchemyBaseModel):
     """
     A ContentSource is where any outside content comes from. .
     """
     __tablename__ = "content_source"
+    rdf_class = SIOC.Container
 
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True,
+                info= {'rdf': LiteralQuadMapPattern(ASSEMBL.db_id)})
     name = Column(UnicodeText, nullable=False)
     type = Column(String(60), nullable=False)
 
-    creation_date = Column(DateTime, nullable=False, default=datetime.utcnow)
+    creation_date = Column(DateTime, nullable=False, default=datetime.utcnow,
+        info= {'rdf': LiteralQuadMapPattern(DCTERMS.created)})
 
     discussion_id = Column(Integer, ForeignKey(
         'discussion.id',
@@ -74,6 +80,7 @@ class PostSource(ContentSource):
     be `source.import()`.
     """
     __tablename__ = "post_source"
+    rdf_class = SIOC.Forum
 
     id = Column(Integer, ForeignKey(
         'content_source.id',
@@ -131,9 +138,11 @@ class Content(SQLAlchemyBaseModel):
     """
     __tablename__ = "content"
 
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True,
+                info= {'rdf': LiteralQuadMapPattern(ASSEMBL.db_id)})
     type = Column(String(60), nullable=False)
-    creation_date = Column(DateTime, nullable=False, default=datetime.utcnow)
+    creation_date = Column(DateTime, nullable=False, default=datetime.utcnow,
+        info= {'rdf': LiteralQuadMapPattern(DCTERMS.created)})
 
     discussion_id = Column(Integer, ForeignKey(
         'discussion.id',
