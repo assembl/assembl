@@ -8,6 +8,7 @@ from ...models import (
     IdeaLink,
     SubGraphIdeaAssociation,
     SubGraphIdeaLinkAssociation,
+    Post,
     Widget,
 )
 
@@ -82,7 +83,7 @@ def test_add_subidea_in_synthesis(
     assert idealink_assoc
 
 def test_widget_basic_interaction(
-        discussion, test_app, subidea_1, test_session):
+        discussion, test_app, subidea_1, participant1_user, test_session):
     new_widget_loc = test_app.post(
         '/data/Discussion/%d/widgets' % (discussion.id,), {
             'widget_type': 'creativity',
@@ -103,9 +104,13 @@ def test_widget_basic_interaction(
     assert 'messages_uri' in widget_rep
     assert 'ideas_uri' in widget_rep
     assert 'user' in widget_rep
-    messages_uri = '/data' + widget_rep['messages_uri'][6:]
-    # new_post_loc = test_app.post(messages_uri, {"title": "test_message"})
-    # assert new_post_loc.status_code == 201
-    # link = [x for x in new_post_loc.body.split("\n") if ':' in x][0]
-    # post = Post.get_instance(link)
-    
+    messages_uri = '/data/' + widget_rep['messages_uri'][6:]
+    test = test_app.get(messages_uri)
+    assert test.status_code == 200
+    new_post_loc = test_app.post(messages_uri, {
+        "type": "Post", "subject": "test_message", "message_id": "bogus",
+        "body": "body", "creator_id": participant1_user.id})
+    assert new_post_loc.status_code == 201
+    Post.db.flush()
+    link = [x for x in new_post_loc.body.split("\n") if ':' in x][0]
+    post = Post.get_instance(link)

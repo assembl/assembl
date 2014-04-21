@@ -65,7 +65,12 @@ def collection_add(request):
     ctx = request.context
     args = request.params
     user_id = authenticated_userid(request)
-    typename = args.get('type', ctx.collection_class.external_typename())
+    if 'type' in args:
+        args = dict(args)
+        typename = args['type']
+        del args['type']
+    else:
+        typename = ctx.collection_class.external_typename()
     permissions = get_permissions(
         user_id, ctx.parent_instance.get_discussion_id())
     if P_SYSADMIN not in permissions:
@@ -216,7 +221,7 @@ def collection_add_json(request):
     ctx = request.context
     typename = ctx.collection_class.external_typename()
     user_id = authenticated_userid(request)
-    typename = args.get('type', ctx.collection_class.external_typename())
+    typename = request.json_body.get('@type', ctx.collection_class.external_typename())
     permissions = get_permissions(
         user_id, ctx.parent_instance.get_discussion_id())
     if P_SYSADMIN not in permissions:

@@ -804,9 +804,12 @@ EXCEPT corresponding BY (post_id)
                     IdeaRelatedPostLink, self.owner_class)
 
             def decorate_instance(self, instance, parent_instance, assocs):
+                # This is going to spell trouble: Sometimes we'll have creator,
+                # other times creator_id
                 assocs.append(
                     IdeaRelatedPostLink(
-                        content=instance, idea=parent_instance))
+                        content=instance, idea=parent_instance,
+                        creator_id=instance.creator_id))
 
             def contains(self, parent_instance, instance):
                 return IdeaRelatedPostLink.db.query(

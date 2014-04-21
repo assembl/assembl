@@ -4,7 +4,8 @@ from sqlalchemy.orm import relationship
 import simplejson as json
 
 from ..lib.sqla import Base
-from .synthesis import (Discussion, ExplicitSubGraphView, Idea)
+from .synthesis import (
+    Discussion, ExplicitSubGraphView, SubGraphIdeaAssociation, Idea)
 from ..auth import P_ADD_POST, P_ADMIN_DISC, Everyone, CrudPermissions
 from .auth import User
 from ..views.traversal import CollectionDefinition
@@ -48,6 +49,10 @@ class Widget(Base):
             view = ExplicitSubGraphView(discussion=self.discussion)
             self.main_idea_view = view
             self.db.add(view)
+            idea_uri = self.settings_json.get('idea', None)
+            if idea_uri:
+                self.db.add(SubGraphIdeaAssociation(
+                    idea=Idea.get_instance(idea_uri), sub_graph=view))
             self.db.flush()
         return self.main_idea_view
 
@@ -97,7 +102,7 @@ class Widget(Base):
         class WidgetViewCollection(CollectionDefinition):
             def __init__(self):
                 super(WidgetViewCollection, self).__init__(
-                    cls, cls.main_idea_view)
+                    cls, cls.main_idea_view.property)
 
             def decorate_instance(self, instance, parent_instance, assocs):
                 super(WidgetViewCollection, self).decorate_instance(
