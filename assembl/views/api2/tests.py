@@ -104,7 +104,8 @@ def test_widget_basic_interaction(
     assert 'ideas_uri' in widget_rep
     assert 'user' in widget_rep
     messages_uri = '/data' + widget_rep['messages_uri'][6:]
-    new_post_loc = test_app.post(messages_uri, {"title": "test_message"})
-    assert new_post_loc.status_code == 201
-    link = [x for x in new_post_loc.body.split("\n") if ':' in x][0]
-        
+    # new_post_loc = test_app.post(messages_uri, {"title": "test_message"})
+    # assert new_post_loc.status_code == 201
+    # link = [x for x in new_post_loc.body.split("\n") if ':' in x][0]
+    # post = Post.get_instance(link)
+    
