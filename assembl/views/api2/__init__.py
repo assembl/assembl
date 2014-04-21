@@ -1,4 +1,5 @@
 import os
+import datetime
 
 from pyramid.view import view_config
 from pyramid.httpexceptions import (
@@ -92,26 +93,98 @@ def instance_post(request):
 
 @view_config(context=InstanceContext, request_method='PUT', header=JSON_HEADER)
 def instance_put_json(request):
-    #TODO
-    raise HTTPNotImplemented()
+    user_id = authenticated_userid(request)
+    permissions = get_permissions(
+        user_id, ctx.parent_instance.get_discussion_id())
+    instance = context._instance
+    if P_SYSADMIN not in permissions:
+        required = instance.crud_permissions
+        if required.update not in permissions:
+            if required.update_owned not in permissions or\
+                    User.get(id=user_id) not in context._instance.get_owners():
+                raise HTTPUnauthorized()
+    try:
+        return instance.update_json(request.json_body)
+    except NotImplemented as err:
+        raise HTTPNotImplemented()
 
 
 @view_config(context=InstanceContext, request_method='PUT', header=FORM_HEADER)
 def instance_put(request):
-    #TODO
-    raise HTTPNotImplemented()
+    user_id = authenticated_userid(request)
+    permissions = get_permissions(
+        user_id, ctx.parent_instance.get_discussion_id())
+    instance = context._instance
+    if P_SYSADMIN not in permissions:
+        required = instance.crud_permissions
+        if required.update not in permissions:
+            if required.update_owned not in permissions or\
+                    User.get(id=user_id) not in context._instance.get_owners():
+                raise HTTPUnauthorized()
+    mapper = instance.__class__.__mapper__
+    cols = {c.key: c for c in mapper.columns if not c.foreign_keys}
+    setables = dict(inspect.getmembers(
+        self.__class__, lambda p:
+        inspect.isdatadescriptor(p) and getattr(p, 'fset', None)))
+    relns = {r.key: r for r in mapper.relationships if not r.uselist and
+             len(r._calculated_foreign_keys) == 1 and iter(
+                 r._calculated_foreign_keys).next().table == mapper.local_table
+             }
+    unknown = set(request.params.keys()) - (
+        set(cols.keys()) + set(setables.keys()) + set(relns.key()))
+    if unknown:
+        raise HTTPBadRequest("Unknown keys: "+",".join(unknown))
+    params = dict(request.params)
+    # type checking
+    for key, value in params.items():
+        if key in relns and isinstance(value, str):
+            val_inst = relns[key].class_.get_instance(value)
+            if not val_inst:
+                raise HTTPBadRequest("Unknown instance: "+value)
+            params[key] = val_inst
+        elif key in columns and columns[key].python_type == datetime.datetime \
+                and isinstance(value, str):
+            val_dt = datetime.datetime.strpstr(value)
+            if not val_dt:
+                raise HTTPBadRequest("Cannot interpret " + value)
+            params[key] = val_dt
+        elif key in columns and columns[key].python_type == int \
+                and isinstance(value, str):
+            try:
+                params[key] = int(value)
+            except ValueError as err:
+                raise HTTPBadRequest("Not a number: " + value)
+        elif key in columns and not isinstance(value, columns[key].python_type):
+            raise HTTPBadRequest("Value %s for key %s should be a %s" % (
+                value, key, columns[key].python_type))
+    try:
+        for key, value in params.items():
+            setattr(instance, key, value)
+    except:
+        raise HTTPBadRequest()
+    return "ok"
 
 
 @view_config(context=InstanceContext, request_method='DELETE')
 def instance_del(request):
-    # TODO
-    raise HTTPNotImplemented()
+    user_id = authenticated_userid(request)
+    permissions = get_permissions(
+        user_id, ctx.parent_instance.get_discussion_id())
+    instance = context._instance
+    if P_SYSADMIN not in permissions:
+        required = instance.crud_permissions
+        if required.delete not in permissions:
+            if required.delete_owned not in permissions or\
+                    User.get(id=user_id) not in context._instance.get_owners():
+                raise HTTPUnauthorized()
+    instance.db.delete(instance)
 
 
 @view_config(name="collections", context=InstanceContext, renderer='json',
              request_method="GET", permission=P_READ)
 def show_collections(request):
     return request.context.get_collection_names()
+
 
 @view_config(context=ClassContext, request_method='POST', header=FORM_HEADER)
 def class_add(request):

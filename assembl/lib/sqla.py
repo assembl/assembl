@@ -380,7 +380,7 @@ class BaseOps(object):
         mapper = self.__class__.__mapper__
         relns = {r.key: r for r in mapper.relationships}
         cols = {c.key: c for c in mapper.columns}
-        fkeys = {c for c in mapper.columns if isinstance(c, ForeignKey)}
+        fkeys = {c for c in mapper.columns if c.foreign_keys}
         fkeys_of_reln = {
             frozenset(r._calculated_foreign_keys): r
             for r in mapper.relationships
@@ -593,6 +593,11 @@ class BaseOps(object):
 
     @classmethod
     def from_json(cls, json):
+        inst = cls()
+        inst.update_json(json)
+        return inst
+
+    def update_json(self, json):
         raise NotImplementedError()
 
     def get_owners(self):
