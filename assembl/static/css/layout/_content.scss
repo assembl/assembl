@@ -21,9 +21,6 @@ body {
     .is-lateralmenu-open & {
         @include transform( translateX($lateralmenu-width) );
     }
-    header {
-      background-color: #484848;
-    }
 }
 
 body.is-modal {
