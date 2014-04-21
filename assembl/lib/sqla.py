@@ -592,13 +592,17 @@ class BaseOps(object):
         return result
 
     @classmethod
-    def from_json(cls, json):
+    def from_json(cls, json, user_id=None):
         inst = cls()
-        inst.update_json(json)
+        inst.update_json(json, user_id)
         return inst
 
-    def update_json(self, json):
+    def update_json(self, json, user_id=None):
         raise NotImplementedError()
+
+    @classmethod
+    def extra_collections(cls):
+        return {}
 
     def get_owners(self):
         "List of User objects that can be considered owners of this instance"

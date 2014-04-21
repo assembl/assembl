@@ -73,7 +73,7 @@ def collection_add(request):
         if cls.crud_permissions.read not in permissions:
             raise HTTPUnauthorized()
     try:
-        instances = ctx.create_object(typename, None, **args)
+        instances = ctx.create_object(typename, None, user_id, **args)
     except Exception as e:
         raise HTTPBadRequest(e)
     if instances:
@@ -104,7 +104,7 @@ def instance_put_json(request):
                     User.get(id=user_id) not in context._instance.get_owners():
                 raise HTTPUnauthorized()
     try:
-        return instance.update_json(request.json_body)
+        return instance.update_json(request.json_body, user_id)
     except NotImplemented as err:
         raise HTTPNotImplemented()
 
@@ -197,7 +197,7 @@ def class_add(request):
     if R_SYSADMIN not in get_roles(user_id):
         raise HTTPUnauthorized()
     try:
-        instances = ctx.create_object(typename, None, **args)
+        instances = ctx.create_object(typename, None, user_id, **args)
     except Exception as e:
         raise HTTPBadRequest(e)
     if instances:
@@ -224,7 +224,7 @@ def collection_add_json(request):
         if cls.crud_permissions.read not in permissions:
             raise HTTPUnauthorized()
     try:
-        instances = ctx.create_object(typename, request.json_body)
+        instances = ctx.create_object(typename, request.json_body, user_id)
     except Exception as e:
         raise HTTPBadRequest(e)
     if instances:

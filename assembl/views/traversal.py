@@ -106,12 +106,12 @@ class ClassContext(object):
         else:
             return self.collection.collection_class
 
-    def create_object(self, typename=None, json=None, **kwargs):
+    def create_object(self, typename=None, json=None, user_id=None, **kwargs):
         cls = self.get_class(typename)
         if json is None:
             return [cls(**kwargs)]
         else:
-            return [cls.from_json(json)]
+            return [cls.from_json(json, user_id)]
 
 
 class ClassContextPredicate(object):
@@ -138,14 +138,11 @@ class InstanceContext(object):
     @classmethod
     def _get_collections(cls, for_class):
         if for_class not in cls._collections_by_class:
+            collections = dict(for_class.extra_collections())
             relations = for_class.__mapper__.relationships
-            collections = {
-                rel.key: CollectionDefinition(for_class, rel)
-                for rel in relations
-            }
-            extras = getattr(for_class, 'extra_collections', None)
-            if extras:
-                collections.update(extras())
+            for rel in relations:
+                if rel.key not in collections:
+                    collections[rel.key] = CollectionDefinition(for_class, rel)
             cls._collections_by_class[for_class] = collections
         return cls._collections_by_class[for_class]
 
@@ -247,13 +244,13 @@ class CollectionContext(object):
                 instance, self.parent_instance, assocs)
         self.__parent__.decorate_instance(instance, assocs)
 
-    def create_object(self, typename=None, json=None, **kwargs):
+    def create_object(self, typename=None, json=None, user_id=None, **kwargs):
         cls = self.get_collection_class(typename)
         if json is None:
             inst = cls(**kwargs)
             assocs = [inst]
         else:
-            assocs = cls.from_json(json)
+            assocs = cls.from_json(json, user_id)
             inst = assocs[0]
         self.decorate_instance(inst, assocs)
         return assocs
@@ -289,6 +286,7 @@ class CollectionContextClassPredicate(object):
 
 class AbstractCollectionDefinition(object):
     __metaclass__ = ABCMeta
+
     def __init__(self, owner_class, collection_class):
         self.owner_class = owner_class
         self.collection_class = collection_class
@@ -392,7 +390,7 @@ def root_factory(request):
 
 def includeme(config):
     config.add_view_predicate('ctx_class', ClassContextPredicate)
-    config.add_view_predicate('ctx_instance', InstanceContextPredicate)
+    config.add_view_predicate('ctx_instance_class', InstanceContextPredicate)
     config.add_view_predicate('ctx_collection', CollectionContextPredicate)
     config.add_view_predicate('ctx_collection_class',
                               CollectionContextClassPredicate,

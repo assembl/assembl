@@ -286,5 +286,12 @@
     "ViewPost": {
         "actor": true,
         "post": true
+    },
+    "Widget": {
+        "discussion": true,
+        "main_idea_view": "&get_idea_view",
+        "settings": "settings_json",
+        "state": "state_json",
+        "@type": "widget_type"
     }
 }
