@@ -48,6 +48,7 @@ class Widget(Base):
             view = ExplicitSubGraphView(discussion=self.discussion)
             self.main_idea_view = view
             self.db.add(view)
+            self.db.flush()
         return self.main_idea_view
 
     def get_discussion_id(self):
@@ -72,9 +73,24 @@ class Widget(Base):
             return json.loads(self.state)
         return {}
 
-    @settings_json.setter
+    @state_json.setter
     def state_json(self, val):
         self.state = json.dumps(val)
+
+    def get_ideas_uri(self):
+        uri = 'local:Discussion/%d/widgets/%d/main_idea_view/-/ideas' % (
+            self.discussion_id, self.id)
+        idea_uri = self.settings_json.get('idea', None)
+        if idea_uri:
+            uri += '/%d/children' % (Idea.get_database_id(idea_uri), )
+        return uri
+
+
+    def get_messages_uri(self):
+        idea_uri = self.settings_json.get('idea', None)
+        if idea_uri:
+            return 'local:Discussion/%d/widgets/%d/main_idea_view/-/ideas/%d/posts' % (
+                self.discussion_id, self.id, Idea.get_database_id(idea_uri))
 
     @classmethod
     def extra_collections(cls):

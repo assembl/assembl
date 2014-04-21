@@ -1,12 +1,15 @@
 # -*- coding: utf-8 -*-
 
 import pytest
+import anyjson as json
 
 from ...models import (
     Idea,
     IdeaLink,
     SubGraphIdeaAssociation,
-    SubGraphIdeaLinkAssociation)
+    SubGraphIdeaLinkAssociation,
+    Widget,
+)
 
 
 def test_get_ideas(discussion, test_app, synthesis_1,
@@ -78,3 +81,30 @@ def test_add_subidea_in_synthesis(
         sub_graph=synthesis_1, idea_link=idea_link).first()
     assert idealink_assoc
 
+def test_widget_basic_interaction(
+        discussion, test_app, subidea_1, test_session):
+    new_widget_loc = test_app.post(
+        '/data/Discussion/%d/widgets' % (discussion.id,), {
+            'widget_type': 'creativity',
+            'settings': json.dumps({
+                'idea': 'local:Idea/%d' % (subidea_1.id)
+            })
+    })
+    assert new_widget_loc.status_code == 201
+    link = [x for x in new_widget_loc.body.split("\n") if ':' in x][0]
+    new_widget = Widget.get_instance(link)
+    assert new_widget
+    widget_rep = test_app.get(
+        '/data/'+ new_widget.uri()[6:]
+        )
+    assert widget_rep.status_code == 200
+    widget_rep = widget_rep.json
+    print widget_rep
+    assert 'messages_uri' in widget_rep
+    assert 'ideas_uri' in widget_rep
+    assert 'user' in widget_rep
+    messages_uri = '/data' + widget_rep['messages_uri'][6:]
+    new_post_loc = test_app.post(messages_uri, {"title": "test_message"})
+    assert new_post_loc.status_code == 201
+    link = [x for x in new_post_loc.body.split("\n") if ':' in x][0]
+        
