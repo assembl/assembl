@@ -4,9 +4,17 @@ creativityApp.controller('videoDetailCtl',
   ['$scope', '$http', '$routeParams', '$sce', 'globalVideoConfig',
   function($scope, $http, $routeParams, $sce, globalVideoConfig){
 
+  // intialization code
+
   $scope.videoId = $routeParams.videoId;
   // TODO: sanitize URL
   $scope.videoUrl = $sce.trustAsResourceUrl('http://www.youtube.com/embed/' + $scope.videoId + '?autoplay=0');
+
+
+  // activate the right tab
+
+  $(".container ul.nav li").removeClass("active");
+  $(".container ul.nav li a[href=\"#videos\"]").closest("li").addClass("active");
 
 }]);
 
@@ -16,8 +24,10 @@ creativityApp.controller('videosCtl',
   function($scope, $http, globalVideoConfig){
     
     // intialization code
+
     $scope.init = function(){
         // set model fields
+
         $scope.inspiration_keywords = [
             "modèle commercial",
             "freemium",
@@ -28,12 +38,14 @@ creativityApp.controller('videosCtl',
         ];
 
         // data mock
+
         globalVideoConfig.fetch().success(function(data){
              $scope.globalVideoConfig = data;
         });
 
 
         // initialize the select2 textfield
+
         $("#query").select2({
             tags: $scope.inspiration_keywords,
             tokenSeparators: [",", " "],
@@ -42,6 +54,7 @@ creativityApp.controller('videosCtl',
             selectOnBlur: true,
             minimumInputLength: 1,
         });
+
     }
 
     $scope.keywordClick = function($event){
