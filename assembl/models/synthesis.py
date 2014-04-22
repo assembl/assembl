@@ -799,9 +799,9 @@ EXCEPT corresponding BY (post_id)
                         source=parent_instance, target=instance
                     ).count() > 0
 
-        class RelatedPostCollectionDefinition(AbstractCollectionDefinition):
+        class LinkedPostCollectionDefinition(AbstractCollectionDefinition):
             def __init__(self, cls):
-                super(RelatedPostCollectionDefinition, self).__init__(cls, Content)
+                super(LinkedPostCollectionDefinition, self).__init__(cls, Content)
 
             def decorate_query(self, query, parent_instance):
                 return query.join(
@@ -817,12 +817,35 @@ EXCEPT corresponding BY (post_id)
 
             def contains(self, parent_instance, instance):
                 return IdeaRelatedPostLink.db.query(
-                    SubGraphIdeaLinkAssociation).filter_by(
+                    IdeaRelatedPostLink).filter_by(
+                        content=instance, idea=parent_instance
+                    ).count() > 0
+
+        class WidgetPostCollectionDefinition(AbstractCollectionDefinition):
+            def __init__(self, cls):
+                super(WidgetPostCollectionDefinition, self).__init__(cls, Content)
+
+            def decorate_query(self, query, parent_instance):
+                return query.join(
+                    IdeaContentWidgetLink, self.owner_class)
+
+            def decorate_instance(self, instance, parent_instance, assocs):
+                # This is going to spell trouble: Sometimes we'll have creator,
+                # other times creator_id
+                assocs.append(
+                    IdeaContentWidgetLink(
+                        content=instance, idea=parent_instance,
+                        creator_id=instance.creator_id))
+
+            def contains(self, parent_instance, instance):
+                return IdeaContentWidgetLink.db.query(
+                    IdeaContentWidgetLink).filter_by(
                         content=instance, idea=parent_instance
                     ).count() > 0
 
         return {'children': ChildIdeaCollectionDefinition(cls),
-                'posts': RelatedPostCollectionDefinition(cls)}
+                'linkedposts': LinkedPostCollectionDefinition(cls),
+                'widgetposts': WidgetPostCollectionDefinition(cls)}
 
     crud_permissions = CrudPermissions(
             P_ADD_IDEA, P_READ, P_EDIT_IDEA, P_ADMIN_DISC,
@@ -997,6 +1020,24 @@ def idea_content_link_idea_set_listener(target, value, oldvalue, initiator):
         value.send_to_changes()
         for ancestor in value.get_all_ancestors():
             ancestor.send_to_changes()
+
+
+class IdeaContentWidgetLink(IdeaContentLink):
+    """
+    A link between an idea and a Content limited to a widget view.
+    Such links should not be traversed.
+    """
+    __tablename__ = 'idea_content_widget_link'
+
+    id = Column(Integer, ForeignKey(
+        'idea_content_link.id',
+        ondelete='CASCADE', onupdate='CASCADE'
+    ), primary_key=True)
+
+    __mapper_args__ = {
+        'polymorphic_identity': 'idea_content_widget_link',
+    }
+
 
 class IdeaContentPositiveLink(IdeaContentLink):
     """
