@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: assembl 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-04-17 23:36+0200\n"
+"POT-Creation-Date: 2014-04-22 11:39+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,24 +17,23 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 1.3\n"
 
-#: assembl/auth/operations.py:30 assembl/models/auth/operations.py:30
-#: assembl/templates/register.jinja2:37
+#: assembl/auth/operations.py:30 assembl/templates/register.jinja2:16
 msgid "email"
 msgstr ""
 
-#: assembl/auth/operations.py:32 assembl/models/auth/operations.py:32
+#: assembl/auth/operations.py:32
 msgid "account"
 msgstr ""
 
-#: assembl/auth/operations.py:41 assembl/models/auth/operations.py:41
+#: assembl/auth/operations.py:41
 msgid "confirm_title"
 msgstr ""
 
-#: assembl/auth/operations.py:44 assembl/models/auth/operations.py:44
+#: assembl/auth/operations.py:44
 msgid "confirm_email"
 msgstr ""
 
-#: assembl/auth/operations.py:48 assembl/models/auth/operations.py:48
+#: assembl/auth/operations.py:48
 msgid "confirm_email_html"
 msgstr ""
 
@@ -311,7 +310,6 @@ msgid "Send"
 msgstr ""
 
 #: assembl/static/js/views/messageSend.js:35
-#: assembl/templates/views/synthesisEmail.tmpl:1
 msgid "Subject:"
 msgstr ""
 
@@ -339,96 +337,96 @@ msgstr ""
 msgid "Do you want to publish the synthesis?"
 msgstr ""
 
-#: assembl/static/js/views/synthesisPanel.js:193
-msgid "[synthesis] {0}"
-msgstr ""
-
-#: assembl/static/js/views/synthesisPanel.js:210
+#: assembl/static/js/views/synthesisPanel.js:202
 msgid "Synthesis published!"
 msgstr ""
 
-#: assembl/templates/discussion_list.jinja2:13 assembl/templates/index.jinja2:33
-msgid "Sign out"
-msgstr ""
-
-#: assembl/templates/discussion_list.jinja2:15 assembl/templates/index.jinja2:35
-msgid "Sign in"
-msgstr ""
-
-#: assembl/templates/discussion_list.jinja2:41
+#: assembl/templates/discussion_list.jinja2:13
 #: assembl/templates/admin/discussions.jinja2:72
 msgid "There are no discussions on this server yet"
 msgstr ""
 
-#: assembl/templates/index.jinja2:12
+#: assembl/templates/header.jinja2:10
 msgid ""
 "To add an idea in the table of ideas: select add idea and drag the new idea "
 "either 1) on the inner edge of an existing idea to add it as a sibling or 2) "
 "in the middle of an existing idea to add it as a sub-idea."
 msgstr ""
 
-#: assembl/templates/index.jinja2:12
+#: assembl/templates/header.jinja2:10
 msgid "Table of Ideas"
 msgstr ""
 
-#: assembl/templates/index.jinja2:18
+#: assembl/templates/header.jinja2:17
 msgid "Clipboard"
 msgstr ""
 
-#: assembl/templates/index.jinja2:21
+#: assembl/templates/header.jinja2:21
 msgid "Messages"
 msgstr ""
 
-#: assembl/templates/index.jinja2:24 assembl/templates/views/synthesisPanel.tmpl:3
+#: assembl/templates/header.jinja2:24 assembl/templates/views/synthesisPanel.tmpl:3
 msgid "Synthesis"
 msgstr ""
 
-#: assembl/templates/index.jinja2:61
+#: assembl/templates/header.jinja2:34
+msgid "Sign out"
+msgstr ""
+
+#: assembl/templates/header.jinja2:38
+msgid "Sign in"
+msgstr ""
+
+#: assembl/templates/index.jinja2:15
 msgid "Connecting..."
 msgstr ""
 
-#: assembl/templates/login.jinja2:43
+#: assembl/templates/login.jinja2:25
 msgid "connect to assembl"
 msgstr ""
 
-#: assembl/templates/login.jinja2:46 assembl/templates/profile.jinja2:102
+#: assembl/templates/login.jinja2:28 assembl/templates/profile.jinja2:102
 msgid "Send confirmation message"
 msgstr ""
 
-#: assembl/templates/login.jinja2:52
+#: assembl/templates/login.jinja2:32
 msgid "Email or username"
 msgstr ""
 
-#: assembl/templates/login.jinja2:56 assembl/templates/register.jinja2:41
+#: assembl/templates/login.jinja2:34 assembl/templates/register.jinja2:18
 msgid "Password"
 msgstr ""
 
-#: assembl/templates/login.jinja2:59
+#: assembl/templates/login.jinja2:36
 msgid "Enter"
 msgstr ""
 
-#: assembl/templates/login.jinja2:61 assembl/templates/register.jinja2:51
+#: assembl/templates/login.jinja2:37 assembl/templates/register.jinja2:23
 msgid "or"
 msgstr ""
 
-#: assembl/templates/login.jinja2:61
+#: assembl/templates/login.jinja2:37
 msgid "register"
 msgstr ""
 
-#: assembl/templates/login.jinja2:65
+#: assembl/templates/login.jinja2:46
+msgid "Use social network"
+msgstr ""
+
+#: assembl/templates/login.jinja2:48
 msgid "Login with external tools"
 msgstr ""
 
-#: assembl/templates/login.jinja2:79 assembl/templates/register.jinja2:56
+#: assembl/templates/login.jinja2:75 assembl/templates/register.jinja2:27
 msgid "Caravan"
 msgstr ""
 
-#: assembl/templates/login.jinja2:80 assembl/templates/register.jinja2:57
+#: assembl/templates/login.jinja2:76 assembl/templates/register.jinja2:28
 msgid "Imagination for people"
 msgstr ""
 
-#: assembl/templates/login.jinja2:82 assembl/templates/profile.jinja2:168
-#: assembl/templates/register.jinja2:59 assembl/templates/view_profile.jinja2:67
+#: assembl/templates/login.jinja2:77 assembl/templates/profile.jinja2:168
+#: assembl/templates/register.jinja2:29 assembl/templates/view_profile.jinja2:67
 #, python-format
 msgid "Designed by %(caravan)s and %(imaginationForPeople)s"
 msgstr ""
@@ -445,7 +443,7 @@ msgstr ""
 msgid "Desired username"
 msgstr ""
 
-#: assembl/templates/profile.jinja2:58 assembl/templates/register.jinja2:33
+#: assembl/templates/profile.jinja2:58 assembl/templates/register.jinja2:12
 #: assembl/templates/view_profile.jinja2:29
 msgid "Name"
 msgstr ""
@@ -463,7 +461,7 @@ msgid "New Password"
 msgstr ""
 
 #: assembl/templates/profile.jinja2:77 assembl/templates/profile.jinja2:80
-#: assembl/templates/register.jinja2:45
+#: assembl/templates/register.jinja2:20
 msgid "Repeat password"
 msgstr ""
 
@@ -514,15 +512,15 @@ msgid ""
 "people</a>"
 msgstr ""
 
-#: assembl/templates/register.jinja2:25
+#: assembl/templates/register.jinja2:5
 msgid "join assembl"
 msgstr ""
 
-#: assembl/templates/register.jinja2:49
+#: assembl/templates/register.jinja2:22
 msgid "Register"
 msgstr ""
 
-#: assembl/templates/register.jinja2:51
+#: assembl/templates/register.jinja2:23
 msgid "login"
 msgstr ""
 
@@ -588,6 +586,15 @@ msgstr ""
 msgid ""
 "For the best experience, please <span style=\"text-decoration: "
 "underline;\">update your browser</span>."
+msgstr ""
+
+#: assembl/templates/views/allMessagesInIdeaList.tmpl:3
+msgid "Number of posts in the entire discussion"
+msgstr ""
+
+#: assembl/templates/views/allMessagesInIdeaList.tmpl:4
+#: assembl/templates/views/allMessagesInIdeaList.tmpl:5
+msgid "View all posts in this discussion"
 msgstr ""
 
 #: assembl/templates/views/idea.tmpl:5
@@ -792,21 +799,13 @@ msgstr ""
 msgid "Select"
 msgstr ""
 
-#: assembl/templates/views/orphanIdea.tmpl:3
+#: assembl/templates/views/orphanMessagesInIdeaList.tmpl:3
 msgid "Number of posts"
 msgstr ""
 
-#: assembl/templates/views/orphanIdea.tmpl:4
-#: assembl/templates/views/orphanIdea.tmpl:5
+#: assembl/templates/views/orphanMessagesInIdeaList.tmpl:4
+#: assembl/templates/views/orphanMessagesInIdeaList.tmpl:5
 msgid "View posts not yet sorted anywhere"
-msgstr ""
-
-#: assembl/templates/views/rootIdea.tmpl:3
-msgid "Number of posts in the entire discussion"
-msgstr ""
-
-#: assembl/templates/views/rootIdea.tmpl:4 assembl/templates/views/rootIdea.tmpl:5
-msgid "View all posts in this discussion"
 msgstr ""
 
 #: assembl/templates/views/segment.tmpl:10
@@ -864,16 +863,6 @@ msgstr ""
 msgid "Clear"
 msgstr ""
 
-#: assembl/templates/views/synthesisEmail.tmpl:4
-#: assembl/templates/views/synthesisPanel.tmpl:19
-msgid "Introduction"
-msgstr ""
-
-#: assembl/templates/views/synthesisEmail.tmpl:30
-#: assembl/templates/views/synthesisPanel.tmpl:29
-msgid "Conclusion"
-msgstr ""
-
 #: assembl/templates/views/synthesisIdea.tmpl:6
 msgid "Deactivate"
 msgstr ""
@@ -895,65 +884,73 @@ msgstr ""
 msgid "Subject"
 msgstr ""
 
+#: assembl/templates/views/synthesisPanel.tmpl:19
+msgid "Introduction"
+msgstr ""
+
+#: assembl/templates/views/synthesisPanel.tmpl:29
+msgid "Conclusion"
+msgstr ""
+
 #: assembl/templates/views/synthesisPanel.tmpl:35
 msgid "Publish"
 msgstr ""
 
-#: assembl/views/api/post.py:59 assembl/views/api/post.py:334
+#: assembl/views/api/post.py:56 assembl/views/api/post.py:331
 #, python-format
 msgid "No discussion found with id=%s"
 msgstr ""
 
-#: assembl/views/api/post.py:117
+#: assembl/views/api/post.py:114
 msgid "Getting orphan posts of a specific idea isn't supported."
 msgstr ""
 
-#: assembl/views/api/post.py:124
+#: assembl/views/api/post.py:121
 msgid "Getting non-orphan posts isn't supported."
 msgstr ""
 
-#: assembl/views/api/post.py:168
+#: assembl/views/api/post.py:165
 msgid "You must be logged in to view which posts are read"
 msgstr ""
 
-#: assembl/views/api/post.py:317
+#: assembl/views/api/post.py:314
 msgid "Your message is empty"
 msgstr ""
 
-#: assembl/views/auth/views.py:132
+#: assembl/views/auth/views.py:126
 #, python-format
 msgid "The username %s is already used"
 msgstr ""
 
-#: assembl/views/auth/views.py:143
+#: assembl/views/auth/views.py:137
 msgid "The passwords are not identical"
 msgstr ""
 
-#: assembl/views/auth/views.py:204
+#: assembl/views/auth/views.py:198
 msgid "We already have a user with this email."
 msgstr ""
 
-#: assembl/views/auth/views.py:208
+#: assembl/views/auth/views.py:202
 msgid "The passwords should be identical"
 msgstr ""
 
-#: assembl/views/auth/views.py:264
+#: assembl/views/auth/views.py:258
 msgid "This account was not verified yet"
 msgstr ""
 
-#: assembl/views/auth/views.py:273
+#: assembl/views/auth/views.py:267
 msgid "This user cannot be found"
 msgstr ""
 
-#: assembl/views/auth/views.py:288
+#: assembl/views/auth/views.py:282
 msgid "Invalid user and password"
 msgstr ""
 
-#: assembl/views/auth/views.py:514
+#: assembl/views/auth/views.py:508
 msgid "Login failed, try again"
 msgstr ""
 
-#: assembl/views/backbone/views.py:39
+#: assembl/views/backbone/views.py:41
 #, python-format
 msgid "No discussion found for slug=%s"
 msgstr ""

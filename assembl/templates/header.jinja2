@@ -41,6 +41,7 @@
             {% endif %}
             {% if locales.__len__ > 1 %}
                 <a href="#" class="locale active">{{locale | upper}}</a>
+                <span class="seperator"></span>
                 {% for loc in locales %}
                     {% if (loc != locale) %}
                         <a href="#" class="lang" onClick="window.app.setLocale('{{loc}}')">{{loc | upper}}</a>

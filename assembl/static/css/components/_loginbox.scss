@@ -5,7 +5,7 @@
   @include border-radius(6px);
   margin: 5% auto 0 auto;
   border: 1px solid rgba(0,0,0,0.1);
-  width: 600px;
+  width: 677px;
   background-color: #ffffff;
   box-shadow:0 0 225px rgba(255,255,255,.55);
 
@@ -42,10 +42,52 @@
   .login-box-title {
     text-align: left;
     font-size: 20px;
-    padding-left: 143px;
   }
   .defaultfield {
     max-width: 290px;
-    width: 97%;
+    width: 80%;
   }
+
+  .signinWrapper, .signinSeparator, .socialPart {
+    display: inline-block;
+  }
+
+  .signinWrapper {
+    width: 320px;
+    padding: 0 22px;
+    box-sizing: border-box;
+    float: left;
+  }
+
+  .socialPart {
+    width: 290px;
+    float: right;
+  }
+
+  .signinSeparator {
+    margin-top:20px;
+    margin-left:20px;
+    width:20px;
+    position:relative;
+
+    .mask {
+      overflow:hidden;
+      width:20px;
+      height:200px;
+      //outline:1px solid pink;
+    }
+    &.left .mask:after {
+      content:'';
+      display:block;
+      margin-left:-20px;
+      width:20px;
+      height:100%;
+      border-radius:12px / 125px;
+      box-shadow:0 0 8px black;
+    }
+
+  }
+
+
+
 }
