@@ -84,7 +84,7 @@
 
     line-height: $panel-header-height;
     height: $panel-header-height;
-    padding: { left: $padding; right: $padding; };
+    padding: { left: $padding; right: 3px; };
 
     //background-color: $panel-header-bg-color;
     @include border-radius( 5px 5px 0 0 );
@@ -189,5 +189,6 @@
     bottom: 0;
     left: 0;
     border-top: 1px solid #e4e4e3;
+    padding-right: $padding-right;
     @include border-radius( 0 0 5px 5px );
 }
