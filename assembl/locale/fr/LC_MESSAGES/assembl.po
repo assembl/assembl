@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: assembl 0.0\n"
 "Report-Msgid-Bugs-To: maparent@acm.org\n"
-"POT-Creation-Date: 2014-04-22 11:39+0200\n"
+"POT-Creation-Date: 2014-04-22 13:54+0200\n"
 "PO-Revision-Date: 2013-07-12 17:53-0400\n"
 "Last-Translator: Marc-Antoine Parent <maparent@acm.org>\n"
 "Language-Team: fr <LL@li.org>\n"
@@ -431,22 +431,22 @@ msgid "register"
 msgstr "enregistrement"
 
 #: assembl/templates/login.jinja2:46
-msgid "Use social network"
-msgstr "Utiliser votre réseaux sociale"
+msgid "Use your social network"
+msgstr "Utilisez votre réseau social"
 
 #: assembl/templates/login.jinja2:48
 msgid "Login with external tools"
 msgstr "Connectez-vous à l'aide d'un compte externe"
 
-#: assembl/templates/login.jinja2:75 assembl/templates/register.jinja2:27
+#: assembl/templates/login.jinja2:82 assembl/templates/register.jinja2:27
 msgid "Caravan"
 msgstr "Caravan"
 
-#: assembl/templates/login.jinja2:76 assembl/templates/register.jinja2:28
+#: assembl/templates/login.jinja2:83 assembl/templates/register.jinja2:28
 msgid "Imagination for people"
 msgstr "Imagination for people"
 
-#: assembl/templates/login.jinja2:77 assembl/templates/profile.jinja2:168
+#: assembl/templates/login.jinja2:84 assembl/templates/profile.jinja2:168
 #: assembl/templates/register.jinja2:29
 #: assembl/templates/view_profile.jinja2:67
 #, python-format
@@ -647,9 +647,13 @@ msgstr "Nombre de messages liées à cette idée ou à ses descendants"
 msgid "Number of caught segments expressing this idea"
 msgstr "Nombre d'extraits attrapés exprimant cette idée"
 
-#: assembl/templates/views/ideaInSynthesis.tmpl:9
+#: assembl/templates/views/ideaInSynthesis.tmpl:7
 msgid "By"
 msgstr "Par"
+
+#: assembl/templates/views/ideaInSynthesis.tmpl:10
+msgid "Avatar for"
+msgstr ""
 
 #: assembl/templates/views/ideaList.tmpl:4
 msgid "Table of ideas ({0})"

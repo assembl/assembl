@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: assembl 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-04-22 11:39+0200\n"
+"POT-Creation-Date: 2014-04-22 13:54+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -410,22 +410,22 @@ msgid "register"
 msgstr ""
 
 #: assembl/templates/login.jinja2:46
-msgid "Use social network"
+msgid "Use your social network"
 msgstr ""
 
 #: assembl/templates/login.jinja2:48
 msgid "Login with external tools"
 msgstr ""
 
-#: assembl/templates/login.jinja2:75 assembl/templates/register.jinja2:27
+#: assembl/templates/login.jinja2:82 assembl/templates/register.jinja2:27
 msgid "Caravan"
 msgstr ""
 
-#: assembl/templates/login.jinja2:76 assembl/templates/register.jinja2:28
+#: assembl/templates/login.jinja2:83 assembl/templates/register.jinja2:28
 msgid "Imagination for people"
 msgstr ""
 
-#: assembl/templates/login.jinja2:77 assembl/templates/profile.jinja2:168
+#: assembl/templates/login.jinja2:84 assembl/templates/profile.jinja2:168
 #: assembl/templates/register.jinja2:29 assembl/templates/view_profile.jinja2:67
 #, python-format
 msgid "Designed by %(caravan)s and %(imaginationForPeople)s"
@@ -617,8 +617,12 @@ msgstr ""
 msgid "Number of caught segments expressing this idea"
 msgstr ""
 
-#: assembl/templates/views/ideaInSynthesis.tmpl:9
+#: assembl/templates/views/ideaInSynthesis.tmpl:7
 msgid "By"
+msgstr ""
+
+#: assembl/templates/views/ideaInSynthesis.tmpl:10
+msgid "Avatar for"
 msgstr ""
 
 #: assembl/templates/views/ideaList.tmpl:4
