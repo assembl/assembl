@@ -11,6 +11,42 @@ from ..traversal import InstanceContext, CollectionContext, ClassContext
 from assembl.auth import P_READ, P_SYSADMIN, Everyone
 from assembl.auth.util import get_roles, get_permissions
 
+"""RESTful API to assembl, with some magic.
+The basic URI to access any ressource is
+GET `/data/<Classname>/<instance db id>`
+The `local:` uri prefix is meant to resolve to `<http://servername/data/>`.
+
+The other endpoints follow the pattern
+`/data/<classname>/<instance id>(/<collection name>/<instance id>)+`
+So we speak of class, instance or collection context, depending where we are in the URL.
+
+It is generally possible to PUT or DEL on any instance context, 
+and to POST to any class or collection context.
+POST will return a 201 with the link in the body. Some parsing of the response body is required.
+(I'd be happy to have suggestions to improve this.)
+
+The set of collections available from an instance type is mostly given by the SQLAlchemy relations (and properties),
+but there is a magic URL to obtain the list:
+`/data/<classname>/<instance id>(/<collection name>/<instance id>)*/@@collections`
+
+Another special case is when the collection name is actually a singleton.
+In that case, one is allowed to use `-` instead of a database ID which one may not know.
+
+This module defines generic behaviour, but more specific views can be defined
+through new view predicates: Look at `add_view_predicate` in `..traversal`, and there is an example in 
+the widget collection view in `.widget`. 
+Note that the view_config must have at least as many specifiers as the one it tries to override!
+
+Permissions for the default views are specified by the crud_permissions class attribute, but more specific
+views may have their own permissions system. 
+For that reason, it will be generally useful to POST/PUT through collections accessed from the discussion, such as
+`/data/Discussion/<number>(/<collection name>/<instance id>)+`
+as opposed to the bare URLs `/data/<Classname>/<instance db id>` which are provided after a POST.
+Traversing the discussion allows the user permissions specific to the discussion to be applied to the next operation.
+The structure of those collection URLs will have to be reconstructed (from the POSTed collection, add the ID from the bare URL.)
+"""
+
+
 FIXTURE_DIR = os.path.join(
     os.path.dirname(__file__), '..', '..', 'static', 'js', 'tests', 'fixtures')
 API_PREFIX = '/data/'
