@@ -38,7 +38,7 @@ from ..auth import (
 from .auth import (
     DiscussionPermission, Role, Permission, AgentProfile, User,
     UserRole, LocalUserRole, DiscussionPermission, ViewPost)
-from ..namespaces import  SIOC, CATALYST, IDEA, ASSEMBL, DCTERMS
+from ..namespaces import  SIOC, CATALYST, IDEA, ASSEMBL, DCTERMS, QUADNAMES
 from assembl.views.traversal import AbstractCollectionDefinition
 
 
@@ -1054,12 +1054,12 @@ class Extract(IdeaContentPositiveLink):
             ApplyIriClass(Discussion.iri_class()))})
     discussion = relationship('Discussion', backref='extracts')
 
-    # TODO: How to apply to Extract.idea without contaminating IdeaContentLink.ideaL
-    #  @classmethod
-    # def special_quad_patterns(cls, entityname=None):
-    #     return [IriQuadMapPattern(CATALYST.expressesIdea,
-    #         ApplyIriClass(Idea.iri_class()),
-    #         QUADNAMES.class_Extract_class)]
+    @classmethod
+    def special_quad_patterns(cls, entityname=None):
+        return [IriQuadMapPattern(CATALYST.expressesIdea,
+            ApplyIriClass(Idea.iri_class(), Extract.idea_id),
+            ApplyIriClass(Content.iri_class(), Extract.content_id),
+            QUADNAMES.class_Extract_link)]
 
 
     annotation_text = Column(UnicodeText)

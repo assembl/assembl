@@ -313,7 +313,7 @@ class BaseOps(object):
                 if entityname:
                     rdf_class = rdf_class[entityname]
                 patterns.append(RdfClassQuadMapPattern(
-                    rdf_class, cls.class_type_pattern_name(entityname)))
+                    rdf_class, None, cls.class_type_pattern_name(entityname)))
             for c in mapper.columns:
                 if c.table != mapper.local_table:
                     continue
