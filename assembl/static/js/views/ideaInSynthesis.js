@@ -7,7 +7,7 @@ function(Backbone, _, $, Idea, Segment, app, Permissions, CKEditorField, Message
          * Tag name
          * @type {String}
          */
-        tagName: 'table',
+        tagName: 'div',
 
         /**
          * The template
@@ -51,8 +51,6 @@ function(Backbone, _, $, Idea, Segment, app, Permissions, CKEditorField, Message
             data.longTitle = this.model.getLongTitleDisplayText();
             data.authors = _.uniq(authors);
             data.subject = data.longTitle;
-
-            //console.log(data);
 
             this.$el.html(this.template(data));
             this.renderCKEditor();
