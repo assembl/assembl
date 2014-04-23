@@ -91,7 +91,7 @@ function(Backbone, _, $, app, Synthesis, Permissions, IdeaInSynthesisView, i18n,
                 that.$('#synthesisPanel-ideas').append( rendered_idea_view.render().el );
                 _.each(idea.getSynthesisChildren(), function(child){
                     append_recursive(child)
-                    });
+                   });
                 });
             this.$('.panel-body').get(0).scrollTop = y;
             if(data.canEdit) {

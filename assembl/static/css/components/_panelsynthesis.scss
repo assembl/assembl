@@ -9,10 +9,8 @@
       }
   }
   #synthesisPanel-ideas {
-    padding: 0  10px;
     .synthesis-idea{
       .panel-editablearea {
-        padding: 0;
         overflow: visible;
         margin: 0;
       }
@@ -20,28 +18,29 @@
         margin: 0;
         display: inline-block;
         width: auto;
-        //vertical-align: top;
-        //height: 20px;
       }
       .comment {
         font-size: 12px;
         a{
           text-decoration: none;
         }
-        //color:#c7c2dd;
       }
+
     }
-    .level0 {
-      margin-top: 12px;
-      color:#666666;
+    .level-0 {
       font-weight: bold;
     }
     .level1{
-      padding-left: 30px;
-      margin: 15px 0 5px 0;
+
     }
     .level2{
-      padding-left: 50px;
+
+    }
+    table {
+      border-collapse:collapse;
+      .td-1 {
+        width: 60px;
+      }
     }
   }
 }

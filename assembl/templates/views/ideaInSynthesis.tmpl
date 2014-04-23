@@ -1,16 +1,78 @@
 {# TODO:  Get rid of all inline styles #}
 
-<div class="panel-editablebox synthesis-idea <% if(editing ) { %>is-editing<% }%> level<%= level %>">
-    <div class="panel-editablearea synthesis-expression" data-idea-id="<%= id %>"></div>
-    <div class="comment">
-        <% if( authors.length ) { %>
-            {{ gettext('By') }}
-        <% } %>
-        <% _.each(authors, function(author, index, list) { %>
-            <img src="<%= author.getAvatarUrl(30) %>" alt="{{ gettext('Avatar for') }} <%= author.get('name') %>"  class="image-rounded" width="30" height="30" />
-            <i style='font-style: italic;font-size:80%;'><%= author.get('name') %></i><% if( index < list.length-1 ) { %>,<% } %>
-        <% }) %>
-        <a class = "synthesisIdea-replybox-openbtn" href="#">Commenter...</a>
-        <div class="synthesisIdea-replybox hidden"></div>
-    </div>
-</div>
+<% if(level == 0) { %>
+<tbody>
+<tr>
+   <th class="td-<%= level %>">
+    <span class="idealist-link"></span>
+   </th>
+   <td>
+       <div class="panel-editablebox synthesis-idea <% if(editing ) { %>is-editing<% }%> level-<%= level %>">
+           <div class="panel-editablearea synthesis-expression" data-idea-id="<%= id %>"></div>
+           <div class="comment">
+               <% if( authors.length ) { %>
+                   {{ gettext('By') }}
+               <% } %>
+               <% _.each(authors, function(author, index, list) { %>
+                   <img src="<%= author.getAvatarUrl(30) %>" alt="{{ gettext('Avatar for') }} <%= author.get('name') %>" width="25" height="25" />
+                   <i style='font-style: italic;font-size:80%;'><%= author.get('name') %></i><% if( index < list.length-1 ) { %>,<% } %>
+               <% }) %>
+               <a class = "synthesisIdea-replybox-openbtn" href="#">Commenter...</a>
+               <div class="synthesisIdea-replybox hidden"></div>
+           </div>
+       </div>
+   </td>
+</tr>
+</tbody>
+<% } %>
+
+<% if(level == 1) { %>
+<tbody>
+<tr>
+   <th class="td-<%= level %>">
+   <span class="idealist-link"></span>
+   <span class="idealist-noarrow"></span>
+   </th>
+   <td>
+       <div class="panel-editablebox synthesis-idea <% if(editing ) { %>is-editing<% }%> level-<%= level %>">
+          <div class="panel-editablearea synthesis-expression" data-idea-id="<%= id %>"></div>
+          <div class="comment">
+              <% if( authors.length ) { %>
+                  {{ gettext('By') }}
+              <% } %>
+              <% _.each(authors, function(author, index, list) { %>
+                  <img src="<%= author.getAvatarUrl(30) %>" alt="{{ gettext('Avatar for') }} <%= author.get('name') %>" width="25" height="25" />
+                  <i style='font-style: italic;font-size:80%;'><%= author.get('name') %></i><% if( index < list.length-1 ) { %>,<% } %>
+              <% }) %>
+              <a class = "synthesisIdea-replybox-openbtn" href="#">Commenter...</a>
+              <div class="synthesisIdea-replybox hidden"></div>
+          </div>
+       </div>
+   </td>
+</tr>
+</tbody>
+<% } %>
+
+<% if(level == 2) { %>
+<tbody>
+<tr>
+   <td class="tr-<%= level %>"><span class="idealist-link"></span><span class="idealist-noarrow"></span></td>
+   <td>
+       <div class="panel-editablebox synthesis-idea <% if(editing ) { %>is-editing<% }%> level-<%= level %>">
+          <div class="panel-editablearea synthesis-expression" data-idea-id="<%= id %>"></div>
+          <div class="comment">
+              <% if( authors.length ) { %>
+                  {{ gettext('By') }}
+              <% } %>
+              <% _.each(authors, function(author, index, list) { %>
+                  <img src="<%= author.getAvatarUrl(30) %>" alt="{{ gettext('Avatar for') }} <%= author.get('name') %>" width="25" height="25" />
+                  <i style='font-style: italic;font-size:80%;'><%= author.get('name') %></i><% if( index < list.length-1 ) { %>,<% } %>
+              <% }) %>
+              <a class = "synthesisIdea-replybox-openbtn" href="#">Commenter...</a>
+              <div class="synthesisIdea-replybox hidden"></div>
+          </div>
+       </div>
+   </td>
+</tr>
+</tbody>
+<% } %>
