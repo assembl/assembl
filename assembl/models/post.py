@@ -12,8 +12,7 @@ from sqlalchemy import (
     or_,
     event,
 )
-from virtuoso.vmapping import (
-    LiteralQuadMapPattern, IriQuadMapPattern, ApplyIriClass)
+from virtuoso.vmapping import QuadMapPattern
 
 from .generic import Content, ContentSource
 from .auth import AgentProfile
@@ -38,13 +37,13 @@ class Post(Content):
                         nullable=False,
                         index=True,
                         doc="The email-compatible message-id for the post.",
-                        info= {'rdf': LiteralQuadMapPattern(SIOC.id)})
+                        info= {'rdf': QuadMapPattern(None, SIOC.id)})
 
     ancestry = Column(String, default="")
 
     parent_id = Column(Integer, ForeignKey('post.id'),
-        info= {'rdf': IriQuadMapPattern(SIOC.reply_of,
-                    ApplyIriClass(Content.iri_class()))})
+        info= {'rdf': QuadMapPattern(None, SIOC.reply_of,
+                    Content.iri_class().apply())})
     children = relationship(
         "Post",
         foreign_keys=[parent_id],
@@ -52,15 +51,15 @@ class Post(Content):
     )
 
     creator_id = Column(Integer, ForeignKey('agent_profile.id'),
-        info= {'rdf': IriQuadMapPattern(SIOC.has_creator,
-                    ApplyIriClass(AgentProfile.iri_class()))})
+        info= {'rdf': QuadMapPattern(None, SIOC.has_creator,
+                    AgentProfile.iri_class().apply())})
     creator = relationship(AgentProfile)
     
     subject = Column(Unicode(), nullable=True,
-        info= {'rdf': LiteralQuadMapPattern(DCTERMS.title)})
+        info= {'rdf': QuadMapPattern(None, DCTERMS.title)})
     # TODO: check HTML or text? SIOC.content should be text.
     body = Column(UnicodeText, nullable=False,
-        info= {'rdf': LiteralQuadMapPattern(SIOC.content)})
+        info= {'rdf': QuadMapPattern(None, SIOC.content)})
 
     __mapper_args__ = {
         'polymorphic_identity': 'post',
@@ -240,8 +239,8 @@ class ImportedPost(Post):
     import_date = Column(DateTime, nullable=False, default=datetime.utcnow)
 
     source_id = Column(Integer, ForeignKey('post_source.id', ondelete='CASCADE'),
-        info= {'rdf': IriQuadMapPattern(SIOC.has_container,
-                    ApplyIriClass(ContentSource.iri_class()))})
+        info= {'rdf': QuadMapPattern(None, ASSEMBL.has_origin,
+                    ContentSource.iri_class().apply())})
     source = relationship(
         "PostSource",
         backref=backref('contents', order_by=import_date)

@@ -23,8 +23,7 @@ from sqlalchemy import (
     and_,
 )
 from sqlalchemy.ext.associationproxy import association_proxy
-from virtuoso.vmapping import (
-    LiteralQuadMapPattern, IriQuadMapPattern, ApplyIriClass)
+from virtuoso.vmapping import QuadMapPattern
 
 from assembl.lib.utils import slugify
 from ..lib.sqla import Base as SQLAlchemyBaseModel
@@ -38,7 +37,8 @@ from ..auth import (
 from .auth import (
     DiscussionPermission, Role, Permission, AgentProfile, User,
     UserRole, LocalUserRole, DiscussionPermission, ViewPost)
-from ..namespaces import  SIOC, CATALYST, IDEA, ASSEMBL, DCTERMS, QUADNAMES
+from ..namespaces import (
+    SIOC, CATALYST, IDEA, ASSEMBL, DCTERMS, OA, QUADNAMES)
 from assembl.views.traversal import AbstractCollectionDefinition
 
 
@@ -50,15 +50,15 @@ class Discussion(SQLAlchemyBaseModel):
     rdf_class = CATALYST.Conversation
 
     id = Column(Integer, primary_key=True,
-                info= {'rdf': LiteralQuadMapPattern(ASSEMBL.db_id)})
+                info={'rdf': QuadMapPattern(None, ASSEMBL.db_id)})
 
     topic = Column(UnicodeText, nullable=False,
-            info= {'rdf': LiteralQuadMapPattern(DCTERMS.title)})
+                   info={'rdf': QuadMapPattern(None, DCTERMS.title)})
 
     slug = Column(Unicode, nullable=False, unique=True, index=True)
 
     creation_date = Column(DateTime, nullable=False, default=datetime.utcnow,
-        info= {'rdf': LiteralQuadMapPattern(DCTERMS.created)})
+                           info={'rdf': QuadMapPattern(None, DCTERMS.created)})
 
     def read_post_ids(self, user_id):
         return (x[0] for x in self.db.query(Post.id).join(
@@ -231,16 +231,16 @@ class IdeaGraphView(SQLAlchemyBaseModel):
 
     type = Column(String(60), nullable=False)
     id = Column(Integer, primary_key=True,
-                info= {'rdf': LiteralQuadMapPattern(ASSEMBL.db_id)})
+                info= {'rdf': QuadMapPattern(None, ASSEMBL.db_id)})
 
     creation_date = Column(DateTime, nullable=False, default=datetime.utcnow,
-        info= {'rdf': LiteralQuadMapPattern(DCTERMS.created)})
+        info= {'rdf': QuadMapPattern(None, DCTERMS.created)})
 
     discussion_id = Column(
         Integer,
         ForeignKey('discussion.id', ondelete="CASCADE", onupdate="CASCADE"),
         nullable=False,
-        info = {'rdf': IriQuadMapPattern(SIOC.has_container, ApplyIriClass(Discussion.iri_class()))}
+        info = {'rdf': QuadMapPattern(None, SIOC.has_container, Discussion.iri_class().apply())}
     )
     discussion = relationship('Discussion', backref="views")
 
@@ -527,18 +527,18 @@ class Idea(SQLAlchemyBaseModel):
 
     long_title = Column(
         UnicodeText,
-        info= {'rdf': LiteralQuadMapPattern(DCTERMS.alternative)})
+        info= {'rdf': QuadMapPattern(None, DCTERMS.alternative)})
     short_title = Column(UnicodeText,
-        info= {'rdf': LiteralQuadMapPattern(DCTERMS.title)})
+        info= {'rdf': QuadMapPattern(None, DCTERMS.title)})
     definition = Column(UnicodeText,
-        info= {'rdf': LiteralQuadMapPattern(DCTERMS.description)})
+        info= {'rdf': QuadMapPattern(None, DCTERMS.description)})
 
 
     id = Column(Integer, primary_key=True,
-                info= {'rdf': LiteralQuadMapPattern(ASSEMBL.db_id)})
+                info= {'rdf': QuadMapPattern(None, ASSEMBL.db_id)})
     creation_date = Column(
         DateTime, nullable=False, default=datetime.utcnow,
-        info = {'rdf': LiteralQuadMapPattern(DCTERMS.created)})
+        info = {'rdf': QuadMapPattern(None, DCTERMS.created)})
 
     discussion_id = Column(Integer, ForeignKey(
         'discussion.id',
@@ -546,7 +546,7 @@ class Idea(SQLAlchemyBaseModel):
         onupdate='CASCADE'),
         nullable=False,
         index=True,
-        info = {'rdf': IriQuadMapPattern(SIOC.has_container, ApplyIriClass(Discussion.iri_class()))})
+        info = {'rdf': QuadMapPattern(None, SIOC.has_container, Discussion.iri_class().apply())})
 
     discussion = relationship(
         "Discussion",
@@ -563,9 +563,9 @@ class Idea(SQLAlchemyBaseModel):
 
     # @classmethod
     # def special_quad_patterns(cls, entityname=None):
-    #     return [IriQuadMapPattern(
-    #         RDF.type, ApplyIriClass(IriClass(VirtRDF.iri_id), 'rdf_class_id'),
-    #         QUADNAMES.class_Idea_class)]
+    #     return [QuadMapPattern(None, 
+    #         RDF.type, IriClass(VirtRDF.iri_id).apply('rdf_class_id')),
+    #         name=QUADNAMES.class_Idea_class)]
 
     @property
     def children(self):
@@ -913,15 +913,15 @@ class IdeaLink(SQLAlchemyBaseModel):
     __tablename__ = 'idea_idea_link'
     rdf_class = IDEA.DirectedIdeaRelation
     id = Column(Integer, primary_key=True,
-                info= {'rdf': LiteralQuadMapPattern(ASSEMBL.db_id)})
+                info= {'rdf': QuadMapPattern(None, ASSEMBL.db_id)})
     source_id = Column(Integer, ForeignKey(
             'idea.id', ondelete="CASCADE", onupdate="CASCADE"),
         nullable=False, index=True,
-        info= {'rdf': IriQuadMapPattern(IDEA.source_idea, ApplyIriClass(Idea.iri_class()))})
+        info= {'rdf': QuadMapPattern(None, IDEA.source_idea, Idea.iri_class().apply())})
     target_id = Column(Integer, ForeignKey(
         'idea.id', ondelete="CASCADE", onupdate="CASCADE"),
         nullable=False, index=True,
-        info= {'rdf': IriQuadMapPattern(IDEA.destination_idea, ApplyIriClass(Idea.iri_class()))})
+        info= {'rdf': QuadMapPattern(None, IDEA.destination_idea, Idea.iri_class().apply())})
     source = relationship(
         'Idea', 
         primaryjoin="and_(Idea.id==IdeaLink.source_id, "
@@ -935,7 +935,7 @@ class IdeaLink(SQLAlchemyBaseModel):
         backref=backref('source_links', cascade="all, delete-orphan"),
         foreign_keys=(target_id))
     order = Column(Float, nullable=False, default=0.0,
-        info= {'rdf': LiteralQuadMapPattern(ASSEMBL.link_order)})
+        info= {'rdf': QuadMapPattern(None, ASSEMBL.link_order)})
     is_tombstone = Column(Boolean, nullable=False, default=False, index=True)
 
     def copy(self):
@@ -965,7 +965,7 @@ class IdeaContentLink(SQLAlchemyBaseModel):
     # TODO: How to express the implied link as RDF? Remember not reified, unless extract.
 
     id = Column(Integer, primary_key=True,
-                info= {'rdf': LiteralQuadMapPattern(ASSEMBL.db_id)})
+                info= {'rdf': QuadMapPattern(None, ASSEMBL.db_id)})
     type = Column(String(60))
 
     # This is nullable, because in the case of extracts, the idea can be
@@ -982,7 +982,7 @@ class IdeaContentLink(SQLAlchemyBaseModel):
     order = Column(Float, nullable=False, default=0.0)
 
     creation_date = Column(DateTime, nullable=False, default=datetime.utcnow,
-        info= {'rdf': LiteralQuadMapPattern(DCTERMS.created)})
+        info= {'rdf': QuadMapPattern(None, DCTERMS.created)})
 
     creator_id = Column(
         Integer,
@@ -1051,6 +1051,14 @@ class IdeaContentPositiveLink(IdeaContentLink):
         ondelete='CASCADE', onupdate='CASCADE'
     ), primary_key=True)
 
+    @classmethod
+    def special_quad_patterns(cls, entityname=None):
+        return [QuadMapPattern(
+            Content.iri_class().apply(IdeaContentLink.content_id),
+            ASSEMBL.postLinkedToIdea,
+            Idea.iri_class().apply(IdeaContentLink.idea_id),
+            name=QUADNAMES.assembl_postLinkedToIdea)]
+
     __mapper_args__ = {
         'polymorphic_identity': 'idea_content_positive_link',
     }
@@ -1068,6 +1076,14 @@ class IdeaRelatedPostLink(IdeaContentPositiveLink):
         ondelete='CASCADE', onupdate='CASCADE'
     ), primary_key=True)
 
+    @classmethod
+    def special_quad_patterns(cls, entityname=None):
+        return [QuadMapPattern(
+            Content.iri_class().apply(IdeaContentLink.content_id),
+            ASSEMBL.postRelatedToIdea,
+            Idea.iri_class().apply(IdeaContentLink.idea_id),
+            name=QUADNAMES.assembl_postRelatedToIdea)]
+
     __mapper_args__ = {
         'polymorphic_identity': 'idea_related_post_link',
     }
@@ -1084,23 +1100,36 @@ class Extract(IdeaContentPositiveLink):
             'idea_content_positive_link.id',
             ondelete='CASCADE', onupdate='CASCADE'
         ), primary_key=True, info= {
-            'rdf': LiteralQuadMapPattern(ASSEMBL.db_id)})
+            'rdf': QuadMapPattern(None, ASSEMBL.db_id)})
 
     body = Column(UnicodeText, nullable=False)
 
     discussion_id = Column(Integer, ForeignKey(
         'discussion.id', ondelete="CASCADE", onupdate="CASCADE"),
         nullable=False, index=True,
-        info = {'rdf': IriQuadMapPattern(CATALYST.relevantToConversation,
-            ApplyIriClass(Discussion.iri_class()))})
+        info = {'rdf': QuadMapPattern(None, CATALYST.relevantToConversation,
+            Discussion.iri_class().apply())})
     discussion = relationship('Discussion', backref='extracts')
 
     @classmethod
     def special_quad_patterns(cls, entityname=None):
-        return [IriQuadMapPattern(CATALYST.expressesIdea,
-            ApplyIriClass(Idea.iri_class(), Extract.idea_id),
-            ApplyIriClass(Content.iri_class(), Extract.content_id),
-            QUADNAMES.class_Extract_link)]
+        return [
+            QuadMapPattern(cls.iri_class().apply(cls.id),
+                CATALYST.expressesIdea,
+                Idea.iri_class().apply(IdeaContentLink.idea_id),
+                name=QUADNAMES.catalyst_expressesIdea),
+            # QuadMapPattern(
+            #     cls.iri_class().apply(cls.id),
+            #     OA.hasBody,
+            #     Extract_graph.iri_class().apply(cls.id),
+            #     name=QUADNAMES.oa_hasBody),
+            # QuadMapPattern(
+            #     Content.iri_class().apply(IdeaContentLink.content_id),
+            #     ASSEMBL.postExtractRelatedToIdea,
+            #     Idea.iri_class().apply(IdeaContentLink.idea_id),
+            #     graph=Extract_graph.iri_class().apply(cls.id),
+            #     name=QUADNAMES.catalyst_expressesIdea)
+            ]
 
 
     annotation_text = Column(UnicodeText)
@@ -1249,7 +1278,7 @@ class TextFragmentIdentifier(SQLAlchemyBaseModel):
     rdf_class = CATALYST.ExcerptTarget
 
     id = Column(Integer, primary_key=True,
-                info= {'rdf': LiteralQuadMapPattern(ASSEMBL.db_id)})
+                info= {'rdf': QuadMapPattern(None, ASSEMBL.db_id)})
     extract_id = Column(Integer, ForeignKey(
         Extract.id, ondelete="CASCADE"), index=True)
     xpath_start = Column(String)
@@ -1257,6 +1286,20 @@ class TextFragmentIdentifier(SQLAlchemyBaseModel):
     xpath_end = Column(String)
     offset_end = Column(Integer)
     extract = relationship(Extract, backref='text_fragment_identifiers')
+
+    @classmethod
+    def special_quad_patterns(cls, entityname=None):
+        return [
+            QuadMapPattern(
+                Extract.iri_class().apply(cls.extract_id),
+                OA.hasTarget,
+                cls.iri_class().apply(cls.id),
+                name=QUADNAMES.oa_hasTarget),
+            # TODO: Paths!
+            # QuadMapPattern(OA.hasSource,
+            #     Extract.iri_class().apply((cls.extract_id, Extract.content_id)),
+            #     name=QUADNAMES.catalyst_expressesIdea),
+            ]
 
     xpath_re = re.compile(
         r'xpointer\(start-point\(string-range\(([^,]+),([^,]+),([^,]+)\)\)'

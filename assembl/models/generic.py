@@ -9,8 +9,7 @@ from sqlalchemy import (
     DateTime,
     ForeignKey,
 )
-from virtuoso.vmapping import (
-    LiteralQuadMapPattern, IriQuadMapPattern, ApplyIriClass)
+from virtuoso.vmapping import QuadMapPattern
 
 from ..lib.sqla import Base as SQLAlchemyBaseModel
 from ..auth import (
@@ -26,12 +25,12 @@ class ContentSource(SQLAlchemyBaseModel):
     rdf_class = SIOC.Container
 
     id = Column(Integer, primary_key=True,
-                info= {'rdf': LiteralQuadMapPattern(ASSEMBL.db_id)})
+                info= {'rdf': QuadMapPattern(None, ASSEMBL.db_id)})
     name = Column(UnicodeText, nullable=False)
     type = Column(String(60), nullable=False)
 
     creation_date = Column(DateTime, nullable=False, default=datetime.utcnow,
-        info= {'rdf': LiteralQuadMapPattern(DCTERMS.created)})
+        info= {'rdf': QuadMapPattern(None, DCTERMS.created)})
 
     discussion_id = Column(Integer, ForeignKey(
         'discussion.id',
@@ -80,7 +79,7 @@ class PostSource(ContentSource):
     be `source.import()`.
     """
     __tablename__ = "post_source"
-    rdf_class = SIOC.Forum
+    rdf_class = ASSEMBL.PostSource
 
     id = Column(Integer, ForeignKey(
         'content_source.id',
@@ -139,10 +138,10 @@ class Content(SQLAlchemyBaseModel):
     __tablename__ = "content"
 
     id = Column(Integer, primary_key=True,
-                info= {'rdf': LiteralQuadMapPattern(ASSEMBL.db_id)})
+                info= {'rdf': QuadMapPattern(None, ASSEMBL.db_id)})
     type = Column(String(60), nullable=False)
     creation_date = Column(DateTime, nullable=False, default=datetime.utcnow,
-        info= {'rdf': LiteralQuadMapPattern(DCTERMS.created)})
+        info= {'rdf': QuadMapPattern(None, DCTERMS.created)})
 
     discussion_id = Column(Integer, ForeignKey(
         'discussion.id',
