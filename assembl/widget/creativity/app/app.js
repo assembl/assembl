@@ -1,6 +1,6 @@
 "use strict";
 
-var creativityApp = angular.module('creativityApp',['ngRoute']);
+var creativityApp = angular.module('creativityApp',['ngRoute','creativityServices']);
 
 creativityApp.config(['$routeProvider', function($routeProvider){
     $routeProvider.

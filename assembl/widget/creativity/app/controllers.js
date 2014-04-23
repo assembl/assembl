@@ -20,8 +20,8 @@ creativityApp.controller('videoDetailCtl',
 
 
 creativityApp.controller('videosCtl',
-  ['$scope', '$http', 'globalVideoConfig',
-  function($scope, $http, globalVideoConfig){
+  ['$scope', '$http', 'globalVideoConfig', 'Discussion', 
+  function($scope, $http, globalVideoConfig, Discussion){
     
     // intialization code
 
@@ -41,6 +41,10 @@ creativityApp.controller('videosCtl',
 
         globalVideoConfig.fetch().success(function(data){
              $scope.globalVideoConfig = data;
+        });
+
+        $scope.discussion = Discussion.get({discussionId: 1}, function(discussion) {
+          console.log(discussion);
         });
 
 
