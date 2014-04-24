@@ -6,15 +6,15 @@
     </label>
     <% }  %>
     <%  var i;
-    for( var i=1; i<level - 1; i+= 1) { 
+    for( var i=1; i<level; i+= 1) { 
         if (last_sibling_chain[i]) { %>
             <span class="idealist-space"></span>
         <% } else { %>
             <span class="idealist-bar"></span>
         <% }
     } %>
-    <% if (level > 1) {
-        if (last_sibling_chain[i]) { %>
+    <% if (level > 0) {
+        if (is_last_sibling) { %>
             <span class="idealist-link-last"></span>
         <% } else { %>
             <span class="idealist-link"></span>
@@ -23,13 +23,13 @@
 
 
     <% if (children.length > 0) { 
-        if (level > 1) { %>
+        if (level > 0) { %>
             <span class="idealist-arrow"></span>
         <% } else { %>
             <span class="idealist-arrow level1"></span>
         <% }
        } else { 
-        if (level > 1) { %>
+        if (level > 0) { %>
             <span class="idealist-noarrow"></span>
         <% } else { %>
             <span class="idealist-space"></span>
