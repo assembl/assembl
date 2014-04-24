@@ -17,7 +17,7 @@ function(Backbone, _, Idea, IdeaView, ideaGraphLoader, app, Types, AllMessagesIn
                 var idea_id = idea.getId();
                 var level = 0;
                 var in_ancestry = true;
-                var ancestor_id, last_ancestor_id;
+                var ancestor_id, last_ancestor_id = null;
                 var last_sibling_chain = [];
                 for (var i in ancestry) {
                     ancestor_id = ancestry[i].getId();
@@ -31,6 +31,9 @@ function(Backbone, _, Idea, IdeaView, ideaGraphLoader, app, Types, AllMessagesIn
                         last_ancestor_id = ancestor_id;
                     }
                 }
+                if (last_ancestor_id != null) {
+                    data_by_idea[last_ancestor_id]['children'].push(idea);
+                }
                 if (last_ancestor_id != last_parent_id && last_idea_id !== null) {
                     data_by_idea[last_idea_id]['is_last_sibling'] = true;
                 }
@@ -41,7 +44,8 @@ function(Backbone, _, Idea, IdeaView, ideaGraphLoader, app, Types, AllMessagesIn
                     'level': level,
                     'skip_parent': !in_ancestry,
                     'is_last_sibling': false,
-                    'last_sibling_chain': last_sibling_chain
+                    'last_sibling_chain': last_sibling_chain,
+                    'children': []
                 };
                 linear.push(data);
                 data_by_idea[idea_id] = data;
