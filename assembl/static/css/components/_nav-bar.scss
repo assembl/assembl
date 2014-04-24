@@ -122,7 +122,6 @@
         margin-right:-4px;
       }
       a {
-        @extend %navbar-gradient;
         color: #aaaaaa;
         width: 130px;
         height: 35px;
@@ -131,7 +130,8 @@
           color: #ffffff;
         }
         &.active{
-          @include background-linear-gradient(#C7C2DD, #AEA8C7);
+          //@include background-linear-gradient(#C7C2DD, #AEA8C7);
+          @extend %navbar-gradient;
           color: #ffffff;
         }
       }
