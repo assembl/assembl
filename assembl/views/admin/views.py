@@ -8,7 +8,7 @@ from assembl.models import (
     Discussion, DiscussionPermission, Role, Permission, UserRole,
     LocalUserRole)
 from .. import get_default_context
-from assembl.models.mail import Mailbox, MailingList
+from assembl.models.mail import IMAPMailbox, MailingList
 from assembl.auth import (R_SYSADMIN, SYSTEM_ROLES)
 from assembl.models.auth import (
     create_default_permissions, User, Username, AgentProfile)
@@ -52,7 +52,7 @@ def discussion_admin(request):
         session.add(discussion)
 
         create_default_permissions(session, discussion)
-        mailbox_class = MailingList if g('mailing_list_address') else Mailbox
+        mailbox_class = MailingList if g('mailing_list_address') else IMAPMailbox
         mailbox = mailbox_class(
             name=name,
             host=host,

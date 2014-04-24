@@ -104,11 +104,6 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
          */
         annotator: null,
 
-        /**
-         * The current client-side filter applied to messages
-         * @type {Object}
-         */
-        currentFilter: {},
         
         /**
          * The current server-side query applied to messages
@@ -289,7 +284,6 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
          */
         getRenderedMessagesFlat: function(messages){
             var list = [],
-            filter = this.currentFilter,
             len = messages.length,
             view, model, children, prop, isValid;
 
@@ -316,7 +310,6 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
          */
         getRenderedMessagesThreaded: function(messages, level, last_sibling_chain){
             var list = [],
-                filter = this.currentFilter,
                 i = 0,
                 len = messages.length,
                 view, model, children, prop, isValid;
@@ -333,22 +326,14 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
             // We need to identify the "last" message of the series while taking
             // the filter into account. It is easier to start from the end.
             var found = false, justfound = true;
+            console.log("length: ", len);
+            console.log(this.messageIdsToDisplay);
             for (var i = len - 1; i >= 0; i--) {
                 model = messages[i];
                 isValid = (this.messageIdsToDisplay.indexOf(model.getId()) >= 0)
-                if (isValid) {
-                    // Also check old-style filter... this may die soon.
-                    for( prop in filter ){
-                        if( filter.hasOwnProperty(prop) ){
-                            // 5th level of depth. Yes! We! Can!
-                            if( model.get(prop) !== filter[prop] ){
-                                isValid = false;
-                                break;
-                            }
-                        }
-                    }
-                }
                 if( isValid ) {
+                    console.log(model);
+                    console.log("Message was valid: "+model.get('subject')+", "+model.get('idCreator'));
                     view = new MessageFamilyView({model:model, messageListView:this}, last_sibling_chain);
                     view.currentLevel = level;
                     found = true;
@@ -375,9 +360,10 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
                 if (!isValid && this.hasDescendantsInFilter(model)) {
                     //Generate ghost message
                     var view = $('<div class="message message--skip"><div class="skipped-message"></div><div class="messagelist-children"></div></div>');
+                    console.log("Invalid message was:",model);
                     list.push(view);
                     children = model.getChildren();
-                    view.$('.messagelist-children').append( this.getRenderedMessagesThreaded(
+                    view.find('.messagelist-children').append( this.getRenderedMessagesThreaded(
                         children, level+1, last_sibling_chain) );
                 }
             }
@@ -387,6 +373,7 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
 
         hasDescendantsInFilter: function(model){
             if (this.messageIdsToDisplay.indexOf(model.getId()) >= 0) {
+                console.log("Valid descendant found (direct):", model)
                 return true;
             }
             var children = model.getChildren();

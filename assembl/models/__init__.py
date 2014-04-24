@@ -33,7 +33,8 @@ from .post import (
     ImportedPost,
 )
 from .mail import (
-    Mailbox,
+    IMAPMailbox,
+    MaildirMailbox,
     MailingList,
     Email,
 )

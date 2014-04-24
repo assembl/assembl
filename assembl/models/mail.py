@@ -1,5 +1,6 @@
 # coding=UTF-8
 import email
+import mailbox
 import re
 import smtplib
 from cgi import escape as html_escape
@@ -37,10 +38,11 @@ from assembl.tasks.imap import import_mails
 from assembl.lib.sqla import mark_changed
 
 
-class Mailbox(PostSource):
+class AbstractMailbox(PostSource):
     """
-    A Mailbox refers to an Email inbox that can be accessed with IMAP, and
+    A Mailbox refers to any source of Email, and
     whose messages should be imported and displayed as Posts.
+    It must not be instanciated directly
     """
     __tablename__ = "mailbox"
     id = Column(Integer, ForeignKey(
@@ -49,12 +51,6 @@ class Mailbox(PostSource):
         onupdate='CASCADE'
     ), primary_key=True)
 
-    host = Column(String(1024), nullable=False)
-    port = Column(Integer, nullable=False)
-    username = Column(UnicodeText, nullable=False)
-    #Note:  If using STARTTLS, this should be set to false
-    use_ssl = Column(Boolean, default=True)
-    password = Column(UnicodeText, nullable=False)
     folder = Column(UnicodeText, default=u"INBOX", nullable=False)
 
     last_imported_email_uid = Column(UnicodeText)
@@ -204,7 +200,7 @@ class Mailbox(PostSource):
             email_object.full_message = message_string
         except NoResultFound:
             email_object = Email(
-                discussion_id=self.discussion_id,
+                discussion=self.discussion,
                 recipients=recipients,
                 sender=sender,
                 subject=subject,
@@ -224,7 +220,7 @@ class Mailbox(PostSource):
     """
     @staticmethod
     def thread_mails(emails):
-        print('Threading...')
+        #print('Threading...')
         emails_for_threading = []
         for mail in emails:
             email_for_threading = jwzthreading.make_message(email.message_from_string(mail.full_message))
@@ -322,101 +318,7 @@ class Mailbox(PostSource):
         #Mailbox.do_import_content(self, only_new)
         import_mails.delay(self.id, only_new)
 
-    @staticmethod
-    def do_import_content(mbox, only_new=True):
-        mbox = mbox.db.merge(mbox)
-        mbox.db.add(mbox)
-        if mbox.use_ssl:
-            mailbox = IMAP4_SSL(host=mbox.host.encode('utf-8'), port=mbox.port)
-        else:
-            mailbox = IMAP4(host=mbox.host.encode('utf-8'), port=mbox.port)
-        if 'STARTTLS' in mailbox.capabilities:
-            #Always use starttls if server supports it
-            mailbox.starttls()
-        mailbox.login(mbox.username, mbox.password)
-        mailbox.select(mbox.folder)
 
-        command = "ALL"
-
-        if only_new and mbox.last_imported_email_uid:
-            command = "(UID %s:*)" % mbox.last_imported_email_uid
-
-        search_status, search_result = mailbox.uid('search', None, command)
-
-        email_ids = search_result[0].split()
-
-        if only_new and mbox.last_imported_email_uid:
-            # discard the first message, it should be the last imported email.
-            del email_ids[0]
-
-        def import_email(mailbox_obj, email_id):
-            session = mailbox_obj.db()
-            status, message_data = mailbox.uid('fetch', email_id, "(RFC822)")
-            for response_part in message_data:
-                if isinstance(response_part, tuple):
-                    message_string = response_part[1]
-
-            (email_object, dummy, error) = mailbox_obj.parse_email(message_string)
-            if error:
-                raise Exception("error")
-            session.add(email_object)
-            mailbox_obj.last_imported_email_uid = \
-                email_ids[len(email_ids)-1]
-            transaction.commit()
-            mailbox_obj = Mailbox.get(id=mailbox_obj.id)
-
-        if len(email_ids):
-            new_emails = [import_email(mbox, email_id) for email_id in email_ids]
-
-        discussion_id = mbox.discussion_id
-        mailbox.close()
-        mailbox.logout()
-        mark_changed()
-        transaction.commit()
-
-        with transaction.manager:
-            if len(email_ids):
-                #We imported mails, we need to re-thread
-                emails = Email.db().query(Email).filter(
-                    Email.discussion_id == discussion_id,
-                    ).options(joinedload_all(Email.parent))
-
-                Mailbox.thread_mails(emails)
-                mark_changed()
-
-    _address_match_re = re.compile(
-        r'[\w\-][\w\-\.]+@[\w\-][\w\-\.]+[a-zA-Z]{1,4}'
-    )
-
-    def most_common_recipient_address(self):
-        """
-        Find the most common recipient address of the contents of this emaila
-        address. This address can, in most use-cases can be considered the
-        mailing list address.
-        """
-
-        recipients = self.db.query(
-            Email.recipients,
-        ).filter(
-            Email.source_id == self.id,
-        )
-
-        addresses = defaultdict(int)
-
-        for (recipients, ) in recipients:
-            for address in self._address_match_re.findall(recipients):
-                addresses[address] += 1
-
-        if addresses:
-            addresses = addresses.items()
-            addresses.sort(key=lambda (address, count): count)
-            return addresses[-1][0]
-
-    def get_send_address(self):
-        """
-        Get the email address to send a message to the discussion
-        """
-        return self.most_common_recipient_address()
 
     def send_post(self, post):
         #TODO benoitg
@@ -431,8 +333,8 @@ class Mailbox(PostSource):
         subject='[Assembl]'
     ):
         """
-        Send an email from the given sender to the most common recipient in
-        emails from this mailbox.
+        Send an email from the given sender to the configured recipient(s) of
+        emails for this mailbox.
         """
 
         sent_from = ' '.join([
@@ -488,8 +390,128 @@ class Mailbox(PostSource):
 
         smtp_connection.quit()
 
+    def __repr__(self):
+        return "<Mailbox %s>" % repr(self.name)
+
+class IMAPMailbox(AbstractMailbox):
+    """
+    A IMAPMailbox refers to an Email inbox that can be accessed with IMAP.
+    """
+    __tablename__ = "source_imapmailbox"
+    id = Column(Integer, ForeignKey(
+        'mailbox.id',
+        ondelete='CASCADE',
+        onupdate='CASCADE'
+    ), primary_key=True)
+
+    host = Column(String(1024), nullable=False)
+    port = Column(Integer, nullable=False)
+    username = Column(UnicodeText, nullable=False)
+    #Note:  If using STARTTLS, this should be set to false
+    use_ssl = Column(Boolean, default=True)
+    password = Column(UnicodeText, nullable=False)
+    
+    __mapper_args__ = {
+        'polymorphic_identity': 'source_mailinglist',
+    }
+    @staticmethod
+    def do_import_content(mbox, only_new=True):
+        mbox = mbox.db.merge(mbox)
+        mbox.db.add(mbox)
+        if mbox.use_ssl:
+            mailbox = IMAP4_SSL(host=mbox.host.encode('utf-8'), port=mbox.port)
+        else:
+            mailbox = IMAP4(host=mbox.host.encode('utf-8'), port=mbox.port)
+        if 'STARTTLS' in mailbox.capabilities:
+            #Always use starttls if server supports it
+            mailbox.starttls()
+        mailbox.login(mbox.username, mbox.password)
+        mailbox.select(mbox.folder)
+
+        command = "ALL"
+
+        if only_new and mbox.last_imported_email_uid:
+            command = "(UID %s:*)" % mbox.last_imported_email_uid
+
+        search_status, search_result = mailbox.uid('search', None, command)
+
+        email_ids = search_result[0].split()
+
+        if only_new and mbox.last_imported_email_uid:
+            # discard the first message, it should be the last imported email.
+            del email_ids[0]
+
+        def import_email(mailbox_obj, email_id):
+            session = mailbox_obj.db()
+            status, message_data = mailbox.uid('fetch', email_id, "(RFC822)")
+            for response_part in message_data:
+                if isinstance(response_part, tuple):
+                    message_string = response_part[1]
+
+            (email_object, dummy, error) = mailbox_obj.parse_email(message_string)
+            if error:
+                raise Exception(error)
+            session.add(email_object)
+            mailbox_obj.last_imported_email_uid = \
+                email_ids[len(email_ids)-1]
+            transaction.commit()
+            mailbox_obj = AbstractMailbox.get(id=mailbox_obj.id)
+
+        if len(email_ids):
+            new_emails = [import_email(mbox, email_id) for email_id in email_ids]
+
+        discussion_id = mbox.discussion_id
+        mailbox.close()
+        mailbox.logout()
+        mark_changed()
+        transaction.commit()
+
+        with transaction.manager:
+            if len(email_ids):
+                #We imported mails, we need to re-thread
+                emails = Email.db().query(Email).filter(
+                    Email.discussion_id == discussion_id,
+                    ).options(joinedload_all(Email.parent))
+
+                AbstractMailbox.thread_mails(emails)
+                mark_changed()
+
+    _address_match_re = re.compile(
+        r'[\w\-][\w\-\.]+@[\w\-][\w\-\.]+[a-zA-Z]{1,4}'
+    )
+
+    def most_common_recipient_address(self):
+        """
+        Find the most common recipient address of the contents of this emaila
+        address. This address can, in most use-cases can be considered the
+        mailing list address.
+        """
+
+        recipients = self.db.query(
+            Email.recipients,
+        ).filter(
+            Email.source_id == self.id,
+        )
+
+        addresses = defaultdict(int)
+
+        for (recipients, ) in recipients:
+            for address in self._address_match_re.findall(recipients):
+                addresses[address] += 1
+
+        if addresses:
+            addresses = addresses.items()
+            addresses.sort(key=lambda (address, count): count)
+            return addresses[-1][0]
+
+    def get_send_address(self):
+        """
+        Get the email address to send a message to the discussion
+        """
+        return self.most_common_recipient_address()
+
     def serializable(self):
-        serializable_source = super(Mailbox, self).serializable()
+        serializable_source = super(AbstractMailbox, self).serializable()
 
         serializable_source.update({
             "host": self.host,
@@ -503,19 +525,16 @@ class Mailbox(PostSource):
 
         return serializable_source
 
-    def __repr__(self):
-        return "<Mailbox %s>" % repr(self.name)
-
-
-class MailingList(Mailbox):
+class MailingList(IMAPMailbox):
     """
     A mailbox with mailing list semantics
     (single post address, subjetc mangling, etc.)
     """
     __tablename__ = "source_mailinglist"
     id = Column(Integer, ForeignKey(
-        'mailbox.id',
-        ondelete='CASCADE'
+        'source_imapmailbox.id',
+        ondelete='CASCADE',
+        onupdate='CASCADE'
     ), primary_key=True)
 
     post_email_address = Column(UnicodeText, nullable=True)
@@ -531,9 +550,61 @@ class MailingList(Mailbox):
         return self.post_email()
 
 
+class AbstractFilesystemMailbox(AbstractMailbox):
+    """
+    A Mailbox refers to an Email inbox that is stored the server's filesystem.
+    """
+    __tablename__ = "source_filesystemmailbox"
+    id = Column(Integer, ForeignKey(
+        'mailbox.id',
+        ondelete='CASCADE',
+        onupdate='CASCADE'
+    ), primary_key=True)
+
+    filesystem_path = Column(Unicode(), nullable=False)
+    
+    __mapper_args__ = {
+        'polymorphic_identity': 'source_filesystemmailbox',
+    }
+
+class MaildirMailbox(AbstractFilesystemMailbox):
+    """
+    A Mailbox refers to an Email inbox that is stored as maildir on the server.
+    """
+    __tablename__ = "source_maildirmailbox"
+    id = Column(Integer, ForeignKey(
+        'source_filesystemmailbox.id',
+        ondelete='CASCADE',
+        onupdate='CASCADE'
+    ), primary_key=True)
+    
+    __mapper_args__ = {
+        'polymorphic_identity': 'source_maildirmailbox',
+    }
+    @staticmethod
+    def do_import_content(abstract_mbox, only_new=True):
+        abstract_mbox = abstract_mbox.db.merge(abstract_mbox)
+        abstract_mbox.db.add(abstract_mbox)
+        mbox = mailbox.Maildir(abstract_mbox.filesystem_path, factory=None, create=False)
+        mails = mbox.values()
+        #import pdb; pdb.set_trace()
+        def import_email(abstract_mbox, message_data):
+            session = abstract_mbox.db()
+            message_string = message_data.as_string()
+
+            (email_object, dummy, error) = abstract_mbox.parse_email(message_string)
+            if error:
+                raise Exception(error)
+            session.add(email_object)
+            transaction.commit()
+            abstract_mbox = AbstractMailbox.get(id=abstract_mbox.id)
+       
+        if len(mails):
+            [import_email(abstract_mbox, message_data) for message_data in mails]
+
 class Email(ImportedPost):
     """
-    An Email refers to an email message that was imported from an Mailbox.
+    An Email refers to an email message that was imported from an AbstractMailbox.
     """
     __tablename__ = "email"
 

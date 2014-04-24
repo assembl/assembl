@@ -165,6 +165,21 @@ def mailbox(request, discussion, test_session):
         test_session.delete(m)
     return m
 
+@pytest.fixture(scope="function")
+def jack_layton_mailbox(request, discussion, test_session):
+    """ From https://dev.imaginationforpeople.org/redmine/projects/assembl/wiki/SampleDebate
+    """
+    import os
+    from assembl.models import MaildirMailbox
+    maildir_path=os.path.join(os.path.dirname(__file__), 'jack_layton_mail_fixtures_maildir')
+    m = MaildirMailbox(discussion=discussion, name='Jack Layton fixture', filesystem_path=maildir_path)
+    m.do_import_content(m, only_new=True)
+    test_session.add(m)
+    test_session.flush()
+
+    def fin():
+        test_session.delete(m)
+    return m
 
 @pytest.fixture(scope="function")
 def post_source(request, discussion, test_session):

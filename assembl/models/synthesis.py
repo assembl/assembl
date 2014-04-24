@@ -29,7 +29,7 @@ from assembl.lib.utils import slugify
 from ..lib.sqla import Base as SQLAlchemyBaseModel
 from .generic import (PostSource, Content)
 from .post import (Post, SynthesisPost)
-from .mail import Mailbox
+from .mail import IMAPMailbox
 from ..auth import (
     CrudPermissions, P_READ, R_SYSADMIN, P_ADMIN_DISC, P_EDIT_IDEA,
     P_EDIT_EXTRACT, P_EDIT_SYNTHESIS, P_ADD_IDEA, P_ADD_EXTRACT,
@@ -1201,14 +1201,14 @@ class Extract(IdeaContentPositiveLink):
             self.get_post().id)
 
     def _infer_text_fragment_inner(self, title, body, post_id):
-        body = Mailbox.sanitize_html(body, [])
+        body = IMAPMailbox.sanitize_html(body, [])
         quote = self.body.replace("\r", "")
         try:
             # for historical reasons
             quote = quopri.decodestring(quote)
         except:
             pass
-        quote = Mailbox.sanitize_html(quote, [])
+        quote = IMAPMailbox.sanitize_html(quote, [])
         if quote != self.body:
             self.body = quote
         quote = quote.replace("\n", "")

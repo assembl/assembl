@@ -150,7 +150,6 @@ Updating an environment:
 ``` sh
 cd ~/assembl
 fab devenv app_fullupdate
-compass compile
 $venv/bin/supervisorctl start dev:*
 ```
 You can monitor any of the processes, for example pserve, with these commands:
@@ -193,9 +192,10 @@ alembic -c development.ini upgrade head
 Create a new one:
 
 ``` sh
-alembic -c development.ini revision --autogenerate -m "Your message"
+alembic -c development.ini revision -m "Your message"
 Make sure to verify the generated code...
 ```
+Autogeneration (--autogenerate) isn't supported since we don't have full reflextion support in virtuoso's sqlalchemy driver.
 
 Running tests
 -------------

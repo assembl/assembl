@@ -96,3 +96,14 @@ def test_get_posts_from_idea(
     assert res.status_code == 200
     res_data = json.loads(res.body)
     assert res_data['total'] == 2
+
+def test_mailbox_import_jacklayton(discussion, test_app, jack_layton_mailbox):
+    base_url = get_url(discussion, 'posts')
+    url = base_url
+    res = test_app.get(url)
+    assert res.status_code == 200
+    res_data = json.loads(res.body)
+    assert res_data['total'] == 20
+    jack_layton_mailbox.do_import_content(jack_layton_mailbox, True)
+    assert res_data['total'] == 20, "No duplicate messages should have been imported, but there are now %d messages" % res_data['total']
+    
