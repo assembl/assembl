@@ -3,6 +3,7 @@ import email
 import mailbox
 import re
 import smtplib
+import os
 from cgi import escape as html_escape
 from collections import defaultdict
 from email.header import decode_header as decode_email_header, Header
@@ -161,7 +162,7 @@ class AbstractMailbox(PostSource):
         else:
             print(repr(message_string))
             print(repr(parsed_email));
-            error_description("Unable to parse the Message-ID")
+            error_description = "Unable to parse the Message-ID"
             return (None, None, error_description)
         
         assert new_message_id;
@@ -585,6 +586,29 @@ class MaildirMailbox(AbstractFilesystemMailbox):
     def do_import_content(abstract_mbox, only_new=True):
         abstract_mbox = abstract_mbox.db.merge(abstract_mbox)
         abstract_mbox.db.add(abstract_mbox)
+        
+        if not os.path.isdir(abstract_mbox.filesystem_path):
+            raise "There is no directory at %s" % abstract_mbox.filesystem_path
+        else:
+            cur_folder_path = os.path.join(abstract_mbox.filesystem_path, 'cur')
+            cur_folder_present = os.path.isdir(cur_folder_path)
+            new_folder_path = os.path.join(abstract_mbox.filesystem_path, 'new')
+            new_folder_present = os.path.isdir(new_folder_path)
+            tmp_folder_path = os.path.join(abstract_mbox.filesystem_path, 'tmp')
+            tmp_folder_present = os.path.isdir(tmp_folder_path)
+            
+            if not (cur_folder_present | new_folder_present | tmp_folder_present):
+                raise "Directory at %s is NOT a maildir" % abstract_mbox.filesystem_path
+            else:
+                #Fix the maildir in case some folders are missing
+                #For instance, git cannot store empty folder
+                if not cur_folder_present:
+                    os.mkdir(cur_folder_path)
+                if not new_folder_present:
+                    os.mkdir(new_folder_path)
+                if not tmp_folder_present:
+                    os.mkdir(tmp_folder_path)
+
         mbox = mailbox.Maildir(abstract_mbox.filesystem_path, factory=None, create=False)
         mails = mbox.values()
         #import pdb; pdb.set_trace()
