@@ -5,12 +5,12 @@
   @include border-radius(6px);
   margin: 5% auto 0 auto;
   border: 1px solid rgba(0,0,0,0.1);
-  width: 677px;
+  width: 650px;
+  min-width: 650px;
   background-color: #ffffff;
   box-shadow:0 0 225px rgba(255,255,255,.55);
 
   form {
-    width: 315px;
     margin: 0 auto;
     .register {
       a{
@@ -53,7 +53,6 @@
   }
 
   .signinWrapper {
-    width: 320px;
     padding: 0 22px;
     box-sizing: border-box;
     float: left;
@@ -61,12 +60,10 @@
 
   .socialPart {
     width: 290px;
-    float: right;
   }
 
   .signinSeparator {
-    margin-top:20px;
-    margin-left:20px;
+    margin: 20px 20px 0 20px;
     width:20px;
     position:relative;
 
@@ -74,7 +71,6 @@
       overflow:hidden;
       width:20px;
       height:200px;
-      //outline:1px solid pink;
     }
     &.left .mask:after {
       content:'';
