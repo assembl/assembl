@@ -233,23 +233,39 @@ function(Base, _, Segment, app, i18n, Types, Permissions){
         },
 
 
-        visit: function(visitor, filter, ancestry) {
-            if (filter === undefined) {
-                filter = function(node) {return true;}
-            }
+        visitDepthFirst: function(visitor, ancestry) {
             if (ancestry === undefined) {
                 ancestry = [];
             }
-            var filter_result = filter(this);
-            if (filter_result) {
-                visitor(this, ancestry);
+            if (visitor(this, ancestry)) {
                 ancestry = ancestry.slice(0);
                 ancestry.push(this);
+                var children = this.getChildren();
+                for (var i in children) {
+                    children[i].visit(visitor, ancestry);
+                }
             }
-            if (filter_result !== 0) {
-                // Use 0 vs false to cut recursion
-                for (var child in this.getChildren()) {
-                    child.visit(visitor, filter, ancestry);
+        },
+
+        visitBreadthFirst: function(visitor, ancestry) {
+            var continue_visit = true
+            if (ancestry === undefined) {
+                ancestry = [];
+                continue_visit = visitor(this, ancestry);
+            }
+            if (continue_visit) {
+                ancestry = ancestry.slice(0);
+                ancestry.push(this);
+                var children = this.getChildren();
+                var children_to_visit = [];
+                for (var i in children) {
+                    var child = children[i];
+                    if (visitor(child, ancestry)) {
+                        children_to_visit.push(child);
+                    }
+                }
+                for (var i in children_to_visit) {
+                    children_to_visit[i].visit(visitor, ancestry);
                 }
             }
         },
