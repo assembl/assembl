@@ -242,7 +242,7 @@ function(Base, _, Segment, app, i18n, Types, Permissions){
                 ancestry.push(this);
                 var children = this.getChildren();
                 for (var i in children) {
-                    children[i].visit(visitor, ancestry);
+                    children[i].visitDepthFirst(visitor, ancestry);
                 }
             }
         },
@@ -265,7 +265,7 @@ function(Base, _, Segment, app, i18n, Types, Permissions){
                     }
                 }
                 for (var i in children_to_visit) {
-                    children_to_visit[i].visit(visitor, ancestry);
+                    children_to_visit[i].visitBreadthFirst(visitor, ancestry);
                 }
             }
         },

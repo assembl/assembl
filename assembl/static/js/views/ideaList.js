@@ -5,7 +5,7 @@ function(Backbone, _, Idea, IdeaView, ideaGraphLoader, app, Types, AllMessagesIn
     var FEATURED = 'featured',
         IN_SYNTHESIS = 'inNextSynthesis';
 
-    function renderVisitor(data_by_idea, filter_function) {
+    function renderVisitor(data_by_idea, linear, filter_function) {
         if (filter_function === undefined) {
             filter_function = function(node) {return true;};
         }
@@ -35,13 +35,16 @@ function(Backbone, _, Idea, IdeaView, ideaGraphLoader, app, Types, AllMessagesIn
                     data_by_idea[last_idea_id]['is_last_sibling'] = true;
                 }
                 last_parent_id = last_ancestor_id;
-                data_by_idea[idea_id] = {
+                var data = {
+                    '@id': idea_id,
                     'idea': idea,
                     'level': level,
                     'skip_parent': !in_ancestry,
                     'is_last_sibling': false,
                     'last_sibling_chain': last_sibling_chain
                 };
+                linear.push(data);
+                data_by_idea[idea_id] = data;
                 last_idea_id = idea_id;
             }
             // This allows you to return 0 vs false and cut recursion short.
@@ -156,9 +159,11 @@ function(Backbone, _, Idea, IdeaView, ideaGraphLoader, app, Types, AllMessagesIn
             list.appendChild(allMessagesInIdeaListView.render().el);
             
             var view_data = {};
+            var ideas_sequence = [];
             function excludeRoot(idea) {return idea != rootIdea};
-            rootIdea.visitBreadthFirst(renderVisitor(view_data, excludeRoot));
-            //console.log(view_data);
+            rootIdea.visitBreadthFirst(renderVisitor(view_data, ideas_sequence, excludeRoot));
+            console.log(view_data);
+            console.log(ideas_sequence);
 
             _.each(rootIdeaDirectChildrenModels, function(idea){
                 var ideaView =  new IdeaView({model:idea});
