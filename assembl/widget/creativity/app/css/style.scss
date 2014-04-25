@@ -33,8 +33,12 @@ html, body {
   }
 }
 
+
 .cards {
   font-size: 12px;
+  .card-browser{
+    position: relative;
+  }
   .card{
     position: relative;
     height: 350px;
@@ -50,18 +54,31 @@ html, body {
       display: table-cell;
       vertical-align: middle;
     }
-    .slot-machine {
-      top: 10px;
-      right: 10px;
-      position: absolute;
-      font-size: 20px;
-    }
   }
   .bg-info {
     padding: 15px;
     margin-top: 15px;
   }
 }
+
+#previousCardButton, #nextCardButton, #slot-machine {
+  position: absolute;
+  top: 50%;
+  height: 24px;
+  width: 24px;
+  margin-top: -12px;
+  font-size: 20px;
+}
+#previousCardButton {
+  left: 0;
+}
+#nextCardButton {
+  right: 0;
+}
+#slot-machine {
+  right: 80px;
+}
+
 
 .container{
   .tab-content{
