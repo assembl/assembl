@@ -2,6 +2,7 @@ from sqlalchemy.orm.attributes import InstrumentedAttribute
 from pyramid.security import Allow, Everyone, ALL_PERMISSIONS, DENY_ALL
 from abc import ABCMeta, abstractmethod
 
+from assembl.models.auth import P_READ, R_SYSADMIN
 from assembl.lib.sqla import *
 
 
@@ -19,7 +20,6 @@ class DictContext(object):
 
 class AppRoot(DictContext):
     def __init__(self):
-        from assembl.models.auth import P_READ, R_SYSADMIN
         readable = [(Allow, R_SYSADMIN, ALL_PERMISSIONS),
                     (Allow, Everyone, P_READ), DENY_ALL]
         restrictive = [(Allow, R_SYSADMIN, ALL_PERMISSIONS), DENY_ALL]
@@ -385,6 +385,21 @@ class CollectionDefinition(AbstractCollectionDefinition):
 
 
 def root_factory(request):
+    # OK, this is the old code... I need to do better, but fix first.
+    from ..models import Discussion
+    if request.matchdict and 'discussion_id' in request.matchdict:
+        discussion_id = int(request.matchdict['discussion_id'])
+        discussion = Discussion.db.query(Discussion).get(discussion_id)
+        if not discussion:
+            raise HTTPNotFound("No discussion ID %d" % (discussion_id,))
+        return discussion
+    elif request.matchdict and 'discussion_slug' in request.matchdict:
+        discussion_slug = request.matchdict['discussion_slug']
+        discussion = Discussion.db.query(Discussion).filter_by(
+            slug=discussion_slug).first()
+        if not discussion:
+            raise HTTPNotFound("No discussion named %s" % (discussion_slug,))
+        return discussion
     return AppRoot()
 
 
