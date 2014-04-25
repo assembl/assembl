@@ -424,27 +424,31 @@ def update_bower():
         run('npm update bower')
 
 
-def bower_cmd(cmd):
+def bower_cmd(cmd, relative_path='.'):
     with settings(warn_only=True):
         node_cmd = run('which nodejs')
     if node_cmd.failed:
         node_cmd = run('which node')
     with cd(env.projectpath):
-        bower_cmd = 'node_modules/bower/bin/bower'
+        bower_cmd = os.path.abspath(os.path.join(
+            env.projectpath, 'node_modules', 'bower', 'bin', 'bower'))
         if not exists(bower_cmd):
             print "Bower not present, installing..."
             execute(install_bower)
-        run(' '.join((node_cmd, bower_cmd, cmd)))
+        with cd(relative_path):
+            run(' '.join((node_cmd, bower_cmd, cmd)))
 
 
 @task
 def bower_install():
     bower_cmd('install')
+    bower_cmd('install', 'assembl/widget/creativity')
 
 
 @task
 def bower_update():
     bower_cmd('update')
+    bower_cmd('update', 'assembl/widget/creativity')
 
 
 @task
