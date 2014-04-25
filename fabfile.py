@@ -177,7 +177,10 @@ def compile_stylesheets():
     execute(update_compass)
     with cd(env.projectpath):
         run('bundle exec compass compile --force', shell=True)
-            
+        with cd('assembl/widget/creativity/app/css'):
+            run('bundle exec compass compile --force --sass-dir . --css-dir .', shell=True)
+
+
 def tests():
     """
     Run all tests on remote
