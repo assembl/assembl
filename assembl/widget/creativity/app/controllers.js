@@ -20,8 +20,8 @@ creativityApp.controller('videoDetailCtl',
 
 
 creativityApp.controller('videosCtl',
-  ['$scope', '$http', 'globalVideoConfig', 'Discussion', 
-  function($scope, $http, globalVideoConfig, Discussion){
+  ['$scope', '$http', '$routeParams', 'globalVideoConfig', 'Discussion', 
+  function($scope, $http, $routeParams, globalVideoConfig, Discussion){
     
     // intialization code
 
@@ -36,6 +36,9 @@ creativityApp.controller('videosCtl',
             "stratégie",
             "omg"
         ];
+
+        // get config file URL given as parameter of the current URL
+        $scope.configFile = $routeParams.config;
 
         // data mock
 
@@ -171,22 +174,34 @@ creativityApp.controller('videosCtl',
 creativityApp.controller('cardsCtl',
     ['$scope','$http','globalConfig', function($scope, $http, globalConf){
 
+    // initialize empty stack (LIFO) of already displayed cards, so that the user can browse previously generated cards
+    $scope.displayed_cards = [];
+    $scope.displayed_card_index = 0;
+
     //data mock
     globalConf.fetch().success(function(data){
-         $scope.cards = data.card_game;
+        $scope.cards = data.card_game[0]; // we get only the first deck of cards
+        $scope.shuffle();
     });
 
-    $scope.shuffle = function(index){
-        $scope.cards[index].shift();
-
-        if($scope.cards[index].length < 1){
-            //TODO: refactoring
-            globalConf.fetch().success(function(data){
-                $scope.cards = data.card_game;
-            });
+    $scope.shuffle = function(){
+        var n_cards = $scope.cards.length;
+        if ( n_cards > 0 )
+        {
+            var random_index = Math.floor((Math.random()*n_cards));
+            $scope.displayed_cards.push($scope.cards[random_index]);
+            $scope.cards.splice(random_index,1);
+            $scope.displayed_card_index = $scope.displayed_cards.length-1;
         }
-
     }
+
+    $scope.previousCard = function(){
+        $scope.displayed_card_index = Math.max(0, $scope.displayed_card_index-1);
+    }
+    $scope.nextCard = function(){
+        $scope.displayed_card_index = Math.min($scope.displayed_cards.length-1, $scope.displayed_card_index+1);
+    }
+
 
     $scope.flippingCard = function() {}
 

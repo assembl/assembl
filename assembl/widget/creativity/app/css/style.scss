@@ -3,6 +3,14 @@ html, body {
   margin: 0;
 }
 
+.pointer {
+  cursor: pointer;
+}
+
+.inactive {
+  color: #ddd;
+}
+
 .widget-container {
   width: 600px;
   margin-top: 5%;
