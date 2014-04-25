@@ -33,7 +33,7 @@ from .mail import IMAPMailbox
 from ..auth import (
     CrudPermissions, P_READ, R_SYSADMIN, P_ADMIN_DISC, P_EDIT_IDEA,
     P_EDIT_EXTRACT, P_EDIT_SYNTHESIS, P_ADD_IDEA, P_ADD_EXTRACT,
-    P_EDIT_MY_EXTRACT)
+    P_EDIT_MY_EXTRACT, Authenticated, Everyone)
 from .auth import (
     DiscussionPermission, Role, Permission, AgentProfile, User,
     UserRole, LocalUserRole, DiscussionPermission, ViewPost)
@@ -138,7 +138,8 @@ class Discussion(SQLAlchemyBaseModel):
         return {p: [r for (p2, r) in prs] for (p, prs) in byperm}
 
     def get_readers(self):
-        users = self.db().query(User).join(
+        session = self.db()
+        users = session.query(User).join(
             UserRole, Role, DiscussionPermission, Permission).filter(
                 DiscussionPermission.discussion_id == self.id and
                 Permission.name == P_READ
@@ -1317,13 +1318,13 @@ class TextFragmentIdentifier(SQLAlchemyBaseModel):
 
     @classmethod
     def from_xpointer(cls, extract_id, xpointer):
-        m = xpath_re.match(xpointer)
+        m = cls.xpath_re.match(xpointer)
         if m:
             try:
                 (xpath_start, start_text, offset_start,
                     xpath_end, end_text, offset_end) = m.groups()
                 offset_start = int(offset_start)
-                offset_end = int(end_offset)
+                offset_end = int(offset_end)
                 xpath_start = xpath_start.strip()
                 assert xpath_start[0] in "\"'"
                 xpath_start = xpath_start.strip(xpath_start[0])
