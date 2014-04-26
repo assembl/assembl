@@ -101,8 +101,10 @@ class AssemblClassPatternExtractor(ClassPatternExtractor):
         for p in super(AssemblClassPatternExtractor, self).extract_column_info(
                 sqla_cls, subject_pattern):
             yield p
-        for p in sqla_cls.special_quad_patterns(self.alias_manager):
-            yield p
+        if 'special_quad_patterns' in sqla_cls.__dict__:
+            # Only direct definition
+            for p in sqla_cls.special_quad_patterns(self.alias_manager):
+                yield p
 
 
 # LEGACY. Needs to be rewritten.
@@ -171,7 +173,7 @@ class AssemblClassPatternExtractor(ClassPatternExtractor):
 
 def get_quadstorage(session):
     alias_manager = ClassAliasManager()
-    gqm = GraphQuadMapPattern(QUADNAMES.main_graph, QUADNAMES.main_graph_iri, None)
+    gqm = GraphQuadMapPattern(QUADNAMES.main_graph, QUADNAMES.main_graph_iri, 'exclusive')
     qs = QuadStorage(ASSEMBL.discussion_storage, [gqm])
     cpe = AssemblClassPatternExtractor(alias_manager, gqm.name, qs.name)
     # TODO: one per discussion.
