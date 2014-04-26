@@ -238,7 +238,7 @@ class BaseOps(object):
 
 
     @classmethod
-    def special_quad_patterns(cls, entityname=None):
+    def special_quad_patterns(cls, alias_manager):
         # Note: If defined somewhere, override in subclasses to avoid inheritance.
         return []
 

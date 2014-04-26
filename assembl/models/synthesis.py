@@ -563,7 +563,7 @@ class Idea(SQLAlchemyBaseModel):
     }
 
     # @classmethod
-    # def special_quad_patterns(cls, entityname=None):
+    # def special_quad_patterns(cls, alias_manager):
     #     return [QuadMapPattern(None, 
     #         RDF.type, IriClass(VirtRDF.iri_id).apply('rdf_class_id')),
     #         name=QUADNAMES.class_Idea_class)]
@@ -1053,7 +1053,7 @@ class IdeaContentPositiveLink(IdeaContentLink):
     ), primary_key=True)
 
     @classmethod
-    def special_quad_patterns(cls, entityname=None):
+    def special_quad_patterns(cls, alias_manager):
         return [QuadMapPattern(
             Content.iri_class().apply(IdeaContentLink.content_id),
             ASSEMBL.postLinkedToIdea,
@@ -1078,7 +1078,7 @@ class IdeaRelatedPostLink(IdeaContentPositiveLink):
     ), primary_key=True)
 
     @classmethod
-    def special_quad_patterns(cls, entityname=None):
+    def special_quad_patterns(cls, alias_manager):
         return [QuadMapPattern(
             Content.iri_class().apply(IdeaContentLink.content_id),
             ASSEMBL.postRelatedToIdea,
@@ -1113,7 +1113,7 @@ class Extract(IdeaContentPositiveLink):
     discussion = relationship('Discussion', backref='extracts')
 
     @classmethod
-    def special_quad_patterns(cls, entityname=None):
+    def special_quad_patterns(cls, alias_manager):
         return [
             QuadMapPattern(cls.iri_class().apply(cls.id),
                 CATALYST.expressesIdea,
@@ -1289,7 +1289,7 @@ class TextFragmentIdentifier(SQLAlchemyBaseModel):
     extract = relationship(Extract, backref='text_fragment_identifiers')
 
     @classmethod
-    def special_quad_patterns(cls, entityname=None):
+    def special_quad_patterns(cls, alias_manager):
         return [
             QuadMapPattern(
                 Extract.iri_class().apply(cls.extract_id),

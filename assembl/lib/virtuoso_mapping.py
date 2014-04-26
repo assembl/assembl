@@ -9,7 +9,7 @@ from ..namespaces import (
     namespace_manager as nsm, ASSEMBL, QUADNAMES, RDF, OWL)
 from virtuoso.vmapping import (
     PatternIriClass, QuadMapPattern, ClassPatternExtractor,
-    GraphQuadMapPattern, QuadStorage)
+    GraphQuadMapPattern, QuadStorage, ClassAliasManager)
 from virtuoso.vstore import Virtuoso
 
 
@@ -101,7 +101,7 @@ class AssemblClassPatternExtractor(ClassPatternExtractor):
         for p in super(AssemblClassPatternExtractor, self).extract_column_info(
                 sqla_cls, subject_pattern):
             yield p
-        for p in sqla_cls.special_quad_patterns():
+        for p in sqla_cls.special_quad_patterns(self.alias_manager):
             yield p
 
 
@@ -170,20 +170,21 @@ class AssemblClassPatternExtractor(ClassPatternExtractor):
 
 
 def get_quadstorage(session):
-    gqm=GraphQuadMapPattern(QUADNAMES.main_graph, QUADNAMES.main_graph_iri, None)
+    alias_manager = ClassAliasManager()
+    gqm = GraphQuadMapPattern(QUADNAMES.main_graph, QUADNAMES.main_graph_iri, None)
     qs = QuadStorage(ASSEMBL.discussion_storage, [gqm])
-    cpe = AssemblClassPatternExtractor(gqm.name, qs.name)
+    cpe = AssemblClassPatternExtractor(alias_manager, gqm.name, qs.name)
     # TODO: one per discussion.
     for cls in class_registry.itervalues():
         gqm.add_patterns(cpe.extract_info(cls))
-    return qs
+    return qs, alias_manager
 
 
 def create_graphs(session):
     for stmt in iri_function_definition_stmts:
         session.execute(stmt)
-    qs = get_quadstorage(session)
-    defn = qs.definition_statement(nsm, session.bind)
+    qs, alias_manager = get_quadstorage(session)
+    defn = qs.definition_statement(nsm, alias_manager, session.bind)
     list(session.execute('sparql '+defn))
     # store = Virtuoso(connection=session.bind.connect(), quad_storage=qs.name)
     # triples = list(store.triples((None, None, None)))
