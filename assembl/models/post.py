@@ -53,7 +53,7 @@ class Post(Content):
         alias = alias_manager.add_class_alias(cls, [cls.parent_id != None])
         return [
             QuadMapPattern(
-                Post.iri_class().apply(cls.id),
+                Post.iri_class().apply(alias.id),
                 SIOC.reply_of,
                 cls.iri_class().apply(alias.parent_id),
                 name=QUADNAMES.post_parent),
