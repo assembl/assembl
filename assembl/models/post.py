@@ -16,7 +16,7 @@ from virtuoso.vmapping import QuadMapPattern
 
 from .generic import Content, ContentSource
 from .auth import AgentProfile
-from ..namespaces import  SIOC, CATALYST, IDEA, ASSEMBL, DCTERMS
+from ..namespaces import  SIOC, CATALYST, IDEA, ASSEMBL, DCTERMS, QUADNAMES
 
 class Post(Content):
     """
@@ -41,14 +41,23 @@ class Post(Content):
 
     ancestry = Column(String, default="")
 
-    parent_id = Column(Integer, ForeignKey('post.id'),
-        info= {'rdf': QuadMapPattern(None, SIOC.reply_of,
-                    Content.iri_class().apply())})
+    parent_id = Column(Integer, ForeignKey('post.id'))
     children = relationship(
         "Post",
         foreign_keys=[parent_id],
         backref=backref('parent', remote_side=[id]),
     )
+
+    @classmethod
+    def special_quad_patterns(cls, alias_manager):
+        alias = alias_manager.add_class_alias(cls, [cls.parent_id != None])
+        return [
+            QuadMapPattern(
+                Post.iri_class().apply(cls.id),
+                SIOC.reply_of,
+                cls.iri_class().apply(alias.parent_id),
+                name=QUADNAMES.post_parent),
+        ]
 
     creator_id = Column(Integer, ForeignKey('agent_profile.id'),
         info= {'rdf': QuadMapPattern(None, SIOC.has_creator,
