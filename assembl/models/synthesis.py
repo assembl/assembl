@@ -23,7 +23,7 @@ from sqlalchemy import (
     and_,
 )
 from sqlalchemy.ext.associationproxy import association_proxy
-from virtuoso.vmapping import QuadMapPattern
+from virtuoso.vmapping import QuadMapPattern, PatternIriClass
 
 from assembl.lib.utils import slugify
 from ..lib.sqla import Base as SQLAlchemyBaseModel
@@ -232,7 +232,7 @@ class IdeaGraphView(SQLAlchemyBaseModel):
 
     type = Column(String(60), nullable=False)
     id = Column(Integer, primary_key=True,
-                info= {'rdf': QuadMapPattern(None, ASSEMBL.db_id)})
+                info={'rdf': QuadMapPattern(None, ASSEMBL.db_id)})
 
     creation_date = Column(DateTime, nullable=False, default=datetime.utcnow,
         info= {'rdf': QuadMapPattern(None, DCTERMS.created)})
@@ -939,6 +939,14 @@ class IdeaLink(SQLAlchemyBaseModel):
         info= {'rdf': QuadMapPattern(None, ASSEMBL.link_order)})
     is_tombstone = Column(Boolean, nullable=False, default=False, index=True)
 
+    @classmethod
+    def special_quad_patterns(cls, alias_manager):
+        return [QuadMapPattern(
+            Idea.iri_class().apply(cls.source_id),
+            IDEA.InclusionRelation,
+            Idea.iri_class().apply(cls.target_id),
+            name=QUADNAMES.idea_inclusion_reln)]
+
     def copy(self):
         retval = self.__class__(source_id=self.source_id,
                                 target_id=self.target_id,
@@ -1113,23 +1121,36 @@ class Extract(IdeaContentPositiveLink):
     discussion = relationship('Discussion', backref='extracts')
 
     @classmethod
+    def extra_iri_classes(cls):
+        return {
+            "graph": PatternIriClass(
+                ASSEMBL.extract_graph_iri,
+                'http://%{WSHostName}U/data/extract_graph/%d',
+                ('id', Integer, False))
+        }
+
+    @classmethod
     def special_quad_patterns(cls, alias_manager):
+        graph_iri = cls.extra_iri_classes()["graph"]
+        relextract_alias = alias_manager.add_class_alias(cls)
+        relideacontentlink = alias_manager.add_class_alias(IdeaContentLink, [
+            IdeaContentLink.idea_id != None, IdeaContentLink.id == relextract_alias.id])
         return [
-            QuadMapPattern(cls.iri_class().apply(cls.id),
+            QuadMapPattern(cls.iri_class().apply(relextract_alias.id),
                 CATALYST.expressesIdea,
-                Idea.iri_class().apply(IdeaContentLink.idea_id),
+                Idea.iri_class().apply(relideacontentlink.idea_id),
                 name=QUADNAMES.catalyst_expressesIdea),
-            # QuadMapPattern(
-            #     cls.iri_class().apply(cls.id),
-            #     OA.hasBody,
-            #     Extract_graph.iri_class().apply(cls.id),
-            #     name=QUADNAMES.oa_hasBody),
-            # QuadMapPattern(
-            #     Content.iri_class().apply(IdeaContentLink.content_id),
-            #     ASSEMBL.postExtractRelatedToIdea,
-            #     Idea.iri_class().apply(IdeaContentLink.idea_id),
-            #     graph=Extract_graph.iri_class().apply(cls.id),
-            #     name=QUADNAMES.catalyst_expressesIdea)
+            QuadMapPattern(
+                cls.iri_class().apply(cls.id),
+                OA.hasBody,
+                graph_iri.apply(cls.id),
+                name=QUADNAMES.oa_hasBody),
+            QuadMapPattern(
+                Content.iri_class().apply(relideacontentlink.content_id),
+                ASSEMBL.postExtractRelatedToIdea,
+                Idea.iri_class().apply(relideacontentlink.idea_id),
+                graph=graph_iri.apply(cls.id),
+                name=QUADNAMES.assembl_postExtractRelatedToIdea)
             ]
 
 

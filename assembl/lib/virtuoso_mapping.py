@@ -178,6 +178,7 @@ def get_quadstorage(session):
     cpe = AssemblClassPatternExtractor(alias_manager, gqm.name, qs.name)
     # TODO: one per discussion.
     for cls in class_registry.itervalues():
+        # TODO: Take pattern's graph into account!
         gqm.add_patterns(cpe.extract_info(cls))
     return qs, alias_manager
 

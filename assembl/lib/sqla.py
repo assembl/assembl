@@ -235,7 +235,9 @@ class BaseOps(object):
                 'http://%{WSHostName}U/data/'+clsname+'/%d', ('id', Integer, False))
         return cls._iri_class
 
-
+    @classmethod
+    def extra_iri_classes(cls):
+        return {}
 
     @classmethod
     def special_quad_patterns(cls, alias_manager):
