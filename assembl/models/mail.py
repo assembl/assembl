@@ -160,9 +160,7 @@ class AbstractMailbox(PostSource):
             new_message_id = email_header_to_unicode(
                 new_message_id)
         else:
-            print(repr(message_string))
-            print(repr(parsed_email));
-            error_description = "Unable to parse the Message-ID"
+            error_description = "Unable to parse the Message-ID for message string: \n%s" % message_string
             return (None, None, error_description)
         
         assert new_message_id;
@@ -586,6 +584,7 @@ class MaildirMailbox(AbstractFilesystemMailbox):
     def do_import_content(abstract_mbox, only_new=True):
         abstract_mbox = abstract_mbox.db.merge(abstract_mbox)
         abstract_mbox.db.add(abstract_mbox)
+        discussion_id = abstract_mbox.discussion_id
         
         if not os.path.isdir(abstract_mbox.filesystem_path):
             raise "There is no directory at %s" % abstract_mbox.filesystem_path
@@ -625,6 +624,14 @@ class MaildirMailbox(AbstractFilesystemMailbox):
        
         if len(mails):
             [import_email(abstract_mbox, message_data) for message_data in mails]
+            
+            #We imported mails, we need to re-thread
+            emails = Email.db().query(Email).filter(
+                    Email.discussion_id == discussion_id,
+                    ).options(joinedload_all(Email.parent))
+
+            AbstractMailbox.thread_mails(emails)
+            transaction.commit()
 
 class Email(ImportedPost):
     """
