@@ -15,7 +15,7 @@ from ..lib.sqla import Base as SQLAlchemyBaseModel
 from ..auth import (
     CrudPermissions, P_ADD_POST, P_READ, P_EDIT_POST, P_ADMIN_DISC,
     P_EDIT_POST, P_ADMIN_DISC)
-from ..namespaces import  SIOC, CATALYST, IDEA, ASSEMBL, DCTERMS
+from ..namespaces import  SIOC, CATALYST, IDEA, ASSEMBL, DCTERMS, QUADNAMES
 
 class ContentSource(SQLAlchemyBaseModel):
     """
@@ -30,13 +30,24 @@ class ContentSource(SQLAlchemyBaseModel):
     type = Column(String(60), nullable=False)
 
     creation_date = Column(DateTime, nullable=False, default=datetime.utcnow,
-        info= {'rdf': QuadMapPattern(None, DCTERMS.created)})
+        info={'rdf': QuadMapPattern(None, DCTERMS.created)})
 
     discussion_id = Column(Integer, ForeignKey(
         'discussion.id',
         ondelete='CASCADE',
         onupdate='CASCADE'
     ))
+
+    @classmethod
+    def special_quad_patterns(cls, alias_manager):
+        from .synthesis import Discussion
+        return [
+            QuadMapPattern(
+                Discussion.iri_class().apply(cls.discussion_id),
+                CATALYST.uses_source,
+                cls.iri_class().apply(cls.id),
+                name=QUADNAMES.uses_source),
+        ]
 
     discussion = relationship(
         "Discussion",
