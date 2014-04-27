@@ -43,6 +43,7 @@ def main():
         "Cannot identify the Virtuoso hosting directory"
     vars = {
         'VIRTUOSO_SERVER_PORT': config.getint('virtuoso', 'http_port'),
+        'VIRTUOSO_HOSTNAME': config.getint('app:main', 'public_hostname'),
         'VIRTUOSO_PORT': config.getint('virtuoso', 'port'),
         'VIRTUOSO_ROOT': vroot,
         'VIRTUOSO_ROOT_VAR': vroot_var,
