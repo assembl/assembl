@@ -8,8 +8,9 @@
                 <div ng-bind-html="displayed_cards[displayed_card_index].html_content"></div>
             </div>
         </div>
-        <div class="bg-primary question">
-            <span>{{displayed_cards[displayed_card_index].question}}</span>
+        <div class="bs-callout bs-callout-info">
+            <h4>Question</h4>
+            <p class="ng-binding">{{displayed_cards[displayed_card_index].question}}</p>
         </div>
     </div>
     <div class="card-comment">
