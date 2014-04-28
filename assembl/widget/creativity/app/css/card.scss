@@ -1,0 +1,96 @@
+//Inspire me
+.cards {
+  font-size: 12px;
+  width: 600px;
+  margin: 0 auto;
+  .card-browser{
+    position: relative;
+  }
+  .card{
+    position: relative;
+    height: 350px;
+    width: 300px;
+    position: relative;
+    margin: 0 auto;
+    display: table;
+    padding: 7px;
+    border-radius: 5px;
+    p {
+      display: table-cell;
+      vertical-align: middle;
+    }
+  }
+  .question {
+    width: 100%;
+    margin-top: 20px;
+    padding: 10px;
+  }
+}
+
+//Session page
+.session {
+  .session-comment {
+    .thumbnail{
+      border:none;
+    }
+    .sub-comment {
+      height: 100px;
+      min-height: 100px;
+    }
+    .text-info {
+      cursor: pointer;
+    }
+  }
+  .cards{
+    .bs-callout-info {
+      clear:left;
+    }
+    .slot-machine {
+      float: left;
+      width: 200px;
+      text-align: center;
+      line-height: 350px;
+    }
+    .card{
+      position: relative;
+      height: 350px;
+      width: 300px;
+      border: 1px solid #ccc;
+      position: relative;
+      //margin: 0 auto;
+      display: table;
+      padding: 7px;
+      text-align: justify;
+      border-radius: 5px;
+      float: left;
+      margin-left: 70px;
+      p {
+        display: table-cell;
+        vertical-align: middle;
+      }
+    }
+  }
+}
+
+
+#previousCardButton, #nextCardButton, #slot-machine {
+  position: absolute;
+  top: 50%;
+  height: 24px;
+  width: 24px;
+  margin-top: -12px;
+  font-size: 20px;
+}
+#previousCardButton {
+  left: 0;
+}
+#nextCardButton {
+  right: 0;
+}
+#slot-machine {
+  right: 80px;
+}
+
+.card-comment {
+  margin-top: 15px;
+}
