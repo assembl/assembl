@@ -58,8 +58,8 @@ pyramid-tm==0.7
 python-memcached==1.53
 python-openid==2.2.5
 pytz==2014.2
-pyzmq==14.1.1
-rdflib==4.1.1
+pyzmq==14.2.0
+rdflib==4.1.2
 redis==2.9.1
 repoze.lru==0.6
 repoze.sendmail==4.2
@@ -78,7 +78,7 @@ velruse==1.1.1
 venusian==1.0a8
 waitress==0.8.8
 wsgiref==0.1.2
-xlrd==0.9.2
+xlrd==0.9.3
 xlwt==0.7.5
 zope.deprecation==4.1.1
 zope.interface==4.1.1
