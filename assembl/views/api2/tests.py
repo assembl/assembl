@@ -96,7 +96,8 @@ def test_widget_basic_interaction(
     new_widget = Widget.get_instance(link)
     assert new_widget
     widget_rep = test_app.get(
-        '/data/'+ new_widget.uri()[6:]
+        '/data/'+ new_widget.uri()[6:],
+        headers = {"Accept":"application/json"}
         )
     assert widget_rep.status_code == 200
     widget_rep = widget_rep.json

@@ -8,7 +8,7 @@ from ..traversal import InstanceContext
 
 
 @view_config(context=InstanceContext, renderer='json', request_method='GET',
-             ctx_instance_class=Widget, permission=P_READ)
+             ctx_instance_class=Widget, permission=P_READ, accept="application/json")
 def collection_view(request):
     ctx = request.context
     view = (request.matchdict or {}).get('view', None) or '/default'
