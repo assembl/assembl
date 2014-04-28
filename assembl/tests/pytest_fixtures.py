@@ -342,7 +342,8 @@ def synthesis_1(request, discussion, subidea_1, subidea_1_1, test_session):
 
 
 @pytest.fixture(scope="function")
-def extract(request, participant2_user, reply_post_1, subidea_1_1, discussion, test_session):
+def extract_post_1_to_subidea_1_1(request, participant2_user, reply_post_1, subidea_1_1, discussion, test_session):
+    """ Links reply_post_1 to subidea_1_1 """
     from assembl.models import Extract
     e = Extract(
         body=u"body",

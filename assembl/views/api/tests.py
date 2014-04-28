@@ -2,7 +2,7 @@
 
 import json
 import pytest
-from urllib import urlencode
+from urllib import urlencode, quote_plus
 
 from assembl.models import (
     Idea, Post
@@ -17,10 +17,11 @@ def get_url(discussion, suffix):
 
 
 def test_extracts(
-        discussion, participant1_user, reply_post_2, test_app, extract):
+        discussion, participant1_user, reply_post_2, test_app, subidea_1_1, extract_post_1_to_subidea_1_1):
+    from assembl.models import Extract
     user = participant1_user
     extract_user = {
-        "@id": 'local:AgentProfile/'+str(user.id),
+        "@id": user.uri(),
         "name": user.name,
         "@type": "User"}
     extract_data = {
@@ -31,29 +32,68 @@ def test_extracts(
         "creationDate": 1376573216160,
         "target": {
             "@type": "email",
-            "@id": 'local:Post/'+str(reply_post_2.id)
+            "@id": reply_post_2.uri()
         }
     }
 
-    url = get_url(discussion, 'extracts')
-    res = test_app.get(url)
+    base_url = get_url(discussion, 'extracts')
+    #Load collection
+    res = test_app.get(base_url)
     assert res.status_code == 200
     extracts = json.loads(res.body)
     assert len(extracts) == 1
+    
+    #Load extract directly
+    res = test_app.get(base_url + "/" + quote_plus(extract_post_1_to_subidea_1_1.uri()))
+    assert res.status_code == 200
+    extract_json = json.loads(res.body)
+    assert extract_json['@id'] == extract_post_1_to_subidea_1_1.uri()
 
-    url = get_url(discussion, 'extracts')
-    res = test_app.post(url, json.dumps(extract_data))
+    #Check the API returns a 404 for extracts that never existed
+    res = test_app.get(base_url + "/" + quote_plus("id_that_does_not_exist"), expect_errors=True)
+    assert res.status_code == 404
+    
+    #Create (Post)
+    res = test_app.post(base_url, json.dumps(extract_data))
     assert res.status_code == 200
     res_data = json.loads(res.body)
     extract_id = res_data['id']
+    assert extract_id != None
 
-    url = get_url(discussion, 'extracts')
-    res = test_app.get(url, json.dumps(extract_data))
+    #Check collection
+    res = test_app.get(base_url, json.dumps(extract_data))
     assert res.status_code == 200
     extracts = json.loads(res.body)
     assert len(extracts) == 2
-
     assert extract_id in [e['@id'] for e in extracts]
+    
+    #Update (PUT)
+    #TODO:  We should test this field by field
+    url = base_url + "/" + quote_plus(extract_id)
+    modified_extract_data = extract_data.copy()
+    modified_extract_data["idIdea"] = subidea_1_1.uri()
+    res = test_app.put(url, json.dumps(modified_extract_data))
+    assert res.status_code == 200
+    res = test_app.get(url)
+    assert res.status_code == 200
+    extract_json = json.loads(res.body)
+    assert extract_json['idIdea'] == subidea_1_1.uri()
+    
+    
+    #Delete
+    res = test_app.delete(base_url + "/" + quote_plus(extract_id))
+    assert res.status_code == 200
+    #Check collection after delete
+    res = test_app.get(base_url, json.dumps(extract_data))
+    assert res.status_code == 200
+    extracts = json.loads(res.body)
+    assert len(extracts) == 1
+    assert extract_id not in [e['@id'] for e in extracts]
+    
+    #FIXME:  This should actually return 410 gone now
+    res = test_app.get(base_url + "/" + quote_plus(extract_id), expect_errors=True)
+    assert res.status_code == 404
+
 
 
 def test_homepage_returns_200(test_app):
@@ -83,10 +123,9 @@ def test_get_ideas(discussion, test_app, test_session):
     assert len(ideas) == num_ideas+1
 
 
-@pytest.mark.xfail
 def test_get_posts_from_idea(
         discussion, test_app, test_session, subidea_1,
-        subidea_1_1, subidea_1_1_1, extract, reply_post_2):
+        subidea_1_1, subidea_1_1_1, extract_post_1_to_subidea_1_1, reply_post_2):
     base_url = get_url(discussion, 'posts')
     url = base_url + "?" + urlencode({"root_idea_id": subidea_1_1_1.uri()})
     res = test_app.get(url)
