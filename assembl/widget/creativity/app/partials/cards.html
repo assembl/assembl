@@ -3,7 +3,9 @@
         <span id="previousCardButton" class="glyphicon glyphicon-chevron-left pointer" ng-class="{'inactive': displayed_card_index == 0}" ng-click="previousCard()"></span>
         <span id="nextCardButton" class="glyphicon glyphicon-chevron-right pointer" ng-class="{'inactive': displayed_card_index == displayed_cards.length-1}" ng-click="nextCard()"></span>
         <span id="slot-machine" class="glyphicon glyphicon-random pointer" ng-click="shuffle()" ng-class="{'inactive': cards.length == 0}"></span>
-        <div class="card alert">
+        <div ng-bind-html="displayed_cards[displayed_card_index].html_content"></div>
+        <!--
+        <div class="card alert" ng-bind-html="displayed_cards[displayed_card_index].html_content">
             <div style="margin: 0 auto 20px auto;">
                 <img ng-src="{{displayed_cards[displayed_card_index].img_url}}" alt="card image" />
             </div>
@@ -11,6 +13,7 @@
                 {{displayed_cards[displayed_card_index].description}}
             </p>
         </div>
+        -->
     </div>
     <p class="bg-info">{{displayed_cards[displayed_card_index].question}}</p>
 </div>

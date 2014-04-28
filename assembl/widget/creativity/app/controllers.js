@@ -175,7 +175,7 @@ creativityApp.controller('videosCtl',
 }]);
 
 creativityApp.controller('cardsCtl',
-    ['$scope','$http','globalConfig', function($scope, $http, globalConf){
+    ['$scope','$http','$sce','globalConfig', function($scope, $http, $sce, globalConf){
 
     // initialize empty stack (LIFO) of already displayed cards, so that the user can browse previously generated cards
     $scope.displayed_cards = [];
@@ -197,8 +197,9 @@ creativityApp.controller('cardsCtl',
         {
             var random_index = Math.floor((Math.random()*n_cards));
             $scope.displayed_cards.push($scope.cards[random_index]);
-            $scope.cards.splice(random_index,1);
             $scope.displayed_card_index = $scope.displayed_cards.length-1;
+            $scope.displayed_cards[$scope.displayed_card_index].html_content = $sce.trustAsHtml($scope.cards[random_index].html_content);
+            $scope.cards.splice(random_index,1);
         }
     }
 
