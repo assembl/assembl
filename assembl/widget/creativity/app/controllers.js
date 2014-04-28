@@ -1,8 +1,8 @@
 "use strict";
 
 creativityApp.controller('videoDetailCtl',
-  ['$scope', '$http', '$routeParams', '$sce', 'globalVideoConfig',
-  function($scope, $http, $routeParams, $sce, globalVideoConfig){
+  ['$scope', '$http', '$routeParams', '$sce',
+  function($scope, $http, $routeParams, $sce){
 
   // intialization code
 
@@ -12,8 +12,8 @@ creativityApp.controller('videoDetailCtl',
 
 
   // activate the right tab
-  $(".container ul.nav li").removeClass("active");
-  $(".container ul.nav li a[href=\"#videos\"]").closest("li").addClass("active");
+  $("ul.nav li").removeClass("active");
+  $("ul.nav li a[href=\"#videos\"]").closest("li").addClass("active");
 
 }]);
 
@@ -62,8 +62,8 @@ creativityApp.controller('videosCtl',
 
 
         // activate the right tab
-        $(".container ul.nav li").removeClass("active");
-        $(".container ul.nav li a[href=\"#videos\"]").closest("li").addClass("active");
+        $("ul.nav li").removeClass("active");
+        $("ul.nav li a[href=\"#videos\"]").closest("li").addClass("active");
 
     }
 
@@ -188,8 +188,8 @@ creativityApp.controller('cardsCtl',
     });
 
     // activate the right tab
-    $(".container ul.nav li").removeClass("active");
-    $(".container ul.nav li a[href=\"#cards\"]").closest("li").addClass("active");
+    $("ul.nav li").removeClass("active");
+    $("ul.nav li a[href=\"#cards\"]").closest("li").addClass("active");
 
     $scope.shuffle = function(){
         var n_cards = $scope.cards.length;
@@ -210,7 +210,6 @@ creativityApp.controller('cardsCtl',
         $scope.displayed_card_index = Math.min($scope.displayed_cards.length-1, $scope.displayed_card_index+1);
     }
 
-
     $scope.flippingCard = function() {}
 
 }]);
@@ -229,8 +228,8 @@ creativityApp.controller('creativitySessionCtl',
     });
 
     // activate the right tab
-    $(".container ul.nav li").removeClass("active");
-    $(".container ul.nav li a[href=\"#session\"]").closest("li").addClass("active");
+    $("ul.nav li").removeClass("active");
+    $("ul.nav li a[href=\"#session\"]").closest("li").addClass("active");
 
     $scope.vote = function(){}
 
