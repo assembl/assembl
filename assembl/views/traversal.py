@@ -1,4 +1,5 @@
 from sqlalchemy.orm.attributes import InstrumentedAttribute
+from sqlalchemy.inspection import inspect as sqlainspect
 from pyramid.security import Allow, Everyone, ALL_PERMISSIONS, DENY_ALL
 from abc import ABCMeta, abstractmethod
 
@@ -109,6 +110,10 @@ class ClassContext(object):
     def create_object(self, typename=None, json=None, user_id=None, **kwargs):
         cls = self.get_class(typename)
         if json is None:
+            cols = sqlainspect(cls).c
+            kwargs = {k: int(v) if k in cols and
+                      cols.get(k).type.python_type == int else v
+                      for k, v in kwargs.iteritems()}
             return [cls(**kwargs)]
         else:
             return [cls.from_json(json, user_id)]
@@ -247,6 +252,10 @@ class CollectionContext(object):
     def create_object(self, typename=None, json=None, user_id=None, **kwargs):
         cls = self.get_collection_class(typename)
         if json is None:
+            cols = sqlainspect(cls).c
+            kwargs = {k: int(v) if k in cols and
+                      cols.get(k).type.python_type == int else v
+                      for k, v in kwargs.iteritems()}
             inst = cls(**kwargs)
             assocs = [inst]
         else:
