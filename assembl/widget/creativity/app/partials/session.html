@@ -1,63 +1,80 @@
-<div class="cards" ng-controller="creativitySessionCtl">
-    <div ng-repeat="card in cards">
-        <div class="card alert alert-success" ng-if="$first">
-            <p>{{card[0].description}}</p>
-            <span class="glyphicon glyphicon-refresh slot-machine"></span>
-        </div>
-        <p class="bg-info" ng-if="$first">{{card[0].question}}</p>
-    </div>
-</div>
-<div class="card-comment">
-    <form role="form">
-        <div class="form-group">
-            <input type="text" class="form-control" id="inputEmail1" placeholder="title">
-        </div>
-        <div class="form-group">
-            <textarea class="form-control" rows="3" placeholder="description"></textarea>
-        </div>
-        <button type="submit" class="btn btn-primary btn-sm">Envoyez</button>
-    </form>
-</div>
-<div class="session-comment" ng-controller="creativitySessionCtl">
-    <div class="media" ng-if="ideas.length > 1" ng-repeat="idea in ideas">
-        <a class="pull-left" href="#">
-            <img class="media-object img-thumbnail" data-src="{{idea.avatar}}" alt="40x40" ng-src="{{idea.avatar}}" style="width: 40px; height: 40px;">
-        </a>
-        <div class="media-body">
-            <h5 class="media-heading">{{idea.fullname}}</h5>
-            <div class="row">
-                <div class="col-md-11"><h6>{{idea.message}}</h6></div>
-                <div class="col-md-1">
-                    <div class="checkbox">
-                        <label>
-                            <input type="checkbox">
-                        </label>
+<div class="session">
+    <!-- Displaying card -->
+    <div class="col-md-6">
+        <div class="session-comment">
+            <div class="media" ng-if="ideas.length > 1" ng-repeat="idea in ideas">
+                <div class="pull-left thumbnail">
+                    <img class="media-object img-rounded" src="{{idea.avatar}}" alt="40x40" style="width: 40px; height: 40px;">
+                    <div class="caption">
+                        <button type="button" class="btn btn-xs btn-primary">Voter</button>
                     </div>
                 </div>
-            </div>
-            <div ng-show="showSubComment" class="sub-comment">
-                <form role="form">
-                    <div class="form-group">
-                        <textarea class="form-control" rows="2" placeholder="commentez"></textarea>
+                <div class="media-body">
+                    <h5 class="media-heading">{{idea.fullname}}</h5>
+                    <div class="row">
+                        <div class="col-md-11"><h6>{{idea.message}}</h6></div>
                     </div>
-                    <button type="submit" class="btn btn-primary btn-xs pull-right">Envoyez</button>
-                </form>
-            </div>
-            <p>
-            <span class="text-info" ng-click="showSubComment = ! showSubComment">comment</span> |
-            <span class="text-info" ng-click="showComment = ! showComment">see more</span>
-            </p>
-            <div ng-show="showComment">
-                <div class="media" ng-if="idea.comments.length > 1" ng-repeat="com in idea.comments">
-                    <a class="pull-left" href="#">
-                        <img class="media-object img-thumbnail" data-src="{{com.avatar}}" alt="40x40" ng-src="{{com.avatar}}" style="width: 40px; height: 40px;">
-                    </a>
-                    <div class="media-body">
-                        <h5 class="media-heading">{{com.fullname}}</h5>
-                        <h6>{{com.message}}</h6>
+                    <div ng-show="showSubComment" class="sub-comment">
+                        <form role="form">
+                            <div class="form-group">
+                                <textarea class="form-control" rows="2" placeholder="commentez"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-xs pull-right">Envoyez</button>
+                        </form>
+                    </div>
+                    <p>
+                        <span class="text-info" ng-click="showSubComment = ! showSubComment">comment</span> |
+                        <span class="text-info" ng-click="showComment = ! showComment">see more</span>
+                    </p>
+                    <div ng-show="showComment">
+                        <div class="media" ng-if="idea.comments.length > 1" ng-repeat="com in idea.comments">
+                            <a class="pull-left" href="#">
+                                <img class="media-object img-thumbnail" data-src="{{com.avatar}}" alt="40x40" ng-src="{{com.avatar}}" style="width: 40px; height: 40px;">
+                            </a>
+                            <div class="media-body">
+                                <h5 class="media-heading">{{com.fullname}}</h5>
+                                <h6>{{com.message}}</h6>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <!-- Comment on the card -->
+    <div class="col-md-6">
+        <div class="cards">
+            <div ng-repeat="card in cards">
+                <div ng-if="$first">
+
+                    <div class="card alert alert-success">
+                        <p>{{card[0].description}}</p>
+                    </div>
+                    <div class="slot-machine">
+                        <a href="#"><img src="app/img/machine-icon.png"></a>
+                    </div>
+
+                    <div class="bs-callout bs-callout-info">
+                        <h4>Question</h4>
+                        <p>{{card[0].question}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-comment">
+            <form role="form">
+                <div class="form-group">
+                    <input type="text" class="form-control" id="inputEmail1" placeholder="title">
+                </div>
+                <div class="form-group">
+                    <textarea class="form-control" rows="3" placeholder="description"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary btn-sm">Envoyez</button>
+            </form>
+        </div>
+    </div>
 </div>
+
+
+
+

@@ -4,10 +4,7 @@ html, body {
 }
 
 .navbar.navbar-inverse {
-  @include border-top-radius(0px);
-  @include border-bottom-radius(0px);
-  @include border-left-radius(0px);
-  @include border-right-radius(0px);
+
 }
 
 .inactive {

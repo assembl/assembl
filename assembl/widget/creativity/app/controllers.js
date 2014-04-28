@@ -57,7 +57,7 @@ creativityApp.controller('videosCtl',
             formatNoMatches: function(term){return '';},
             //minimumResultsForSearch: -1
             selectOnBlur: true,
-            minimumInputLength: 1,
+            minimumInputLength: 1
         });
 
 
