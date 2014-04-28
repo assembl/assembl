@@ -18,6 +18,10 @@ def get_session():
     SessionMaker = sessionmaker(admin_engine)
     return SessionMaker()
 
+def get_virtuoso(session, storage=ASSEMBL.discussion_storage):
+    return Virtuoso(quad_storage=storage,
+                    connection=session.connection())
+
 formats = dict(
     ttl='turtle',
     owl='xml',

@@ -5,11 +5,13 @@ from pyramid.view import view_config
 from pyramid.httpexceptions import (
     HTTPCreated, HTTPBadRequest, HTTPNotImplemented, HTTPUnauthorized)
 from pyramid.security import authenticated_userid
+from pyld import jsonld
 
 from assembl.lib.sqla import get_session_maker
 from ..traversal import InstanceContext, CollectionContext, ClassContext
 from assembl.auth import P_READ, P_SYSADMIN, Everyone
 from assembl.auth.util import get_roles, get_permissions
+from assembl.lib.virtuoso_mapping import get_virtuoso
 
 """RESTful API to assembl, with some magic.
 The basic URI to access any ressource is
@@ -74,7 +76,24 @@ def class_view(request):
 
 
 @view_config(context=InstanceContext, renderer='json',
-             request_method='GET', permission=P_READ)
+             request_method='GET', permission=P_READ, accept="application/ld+json")
+def instance_view_jsonld(request):
+    instance = request.context._instance
+    uri = 'http://%s/data/%s' % (request.registry.settings['public_hostname'], instance.uri()[6:])
+    v = get_virtuoso(instance.db)
+    result = v.query('select ?p ?o ?g where {graph ?g {<%s> ?p ?o}}' % uri)
+    quads = '\n'.join([
+        '<%s> %s %s %s.' % (uri, p.n3() ,o.n3() ,g.n3() )
+        for (p,o,g) in result
+        if '_with_no_name_entry' not in o])
+    json_ex = jsonld.from_rdf(quads, {})
+    json = jsonld.compact(json_ex, 'http://localhost/catalyst_ontology/context.jsonld', {})
+    json['@context'] = 'http://purl.org/catalyst/jsonld'
+    return json
+
+
+@view_config(context=InstanceContext, renderer='json',
+             request_method='GET', permission=P_READ, accept="application/json")
 def instance_view(request):
     ctx = request.context
     view = (request.matchdict or {}).get('view', None) or '/default'
