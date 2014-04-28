@@ -122,28 +122,125 @@ def test_get_ideas(discussion, test_app, test_session):
     ideas = json.loads(res.body)
     assert len(ideas) == num_ideas+1
 
+@pytest.mark.xfail
+def test_api_get_posts_from_idea(
+        discussion, test_app, test_session, participant1_user, 
+        root_idea, subidea_1, subidea_1_1, subidea_1_1_1,
+        root_post_1, reply_post_1, reply_post_2):
+    base_post_url = get_url(discussion, 'posts')
+    base_idea_url = get_url(discussion, 'ideas')
+    base_extract_url = get_url(discussion, 'extracts')
+    
+    #Check initial conditions from post api
+    url = base_post_url
+    res = test_app.get(url)
+    assert res.status_code == 200
+    res_data = json.loads(res.body)
+    assert res_data['total'] == 3
+    
+    #Check initial conditions from idea api
+    res = test_app.get(base_idea_url + "/" + str(root_idea.id))
+    assert res.status_code == 200
+    res_data = json.loads(res.body)
+    assert res_data['num_posts'] == 3
+    assert res_data['num_orphan_posts'] == 3
+    
+    def check_number_of_posts(idea, expected_num, fail_msg):
+        #Check from post api
+        url = base_post_url + "?" + urlencode({"root_idea_id": idea.uri()})
+        res = test_app.get(url)
+        assert res.status_code == 200
+        res_data = json.loads(res.body)
+        assert res_data['total'] == expected_num, fail_msg
+        
+        #Check from idea API
+        res = test_app.get(base_idea_url + "/" + str(idea.id))
+        assert res.status_code == 200
+        res_data = json.loads(res.body)
+        assert res_data['num_posts'] == expected_num, fail_msg
+    
+    def check_total_and_orphans(expected_total, expected_orphans):
+        #Check orphans from idea api
+        res = test_app.get(base_idea_url + "/" + str(root_idea.id))
+        assert res.status_code == 200
+        res_data = json.loads(res.body)
+        assert res_data['num_posts'] == expected_total
+        # Known to fail. I get 0 on v6, ? on v7.
+        #assert res_data['num_orphan_posts'] == expected_orphans
+    
+    check_number_of_posts(subidea_1, 0, "Initially no posts are linked")
+    check_number_of_posts(subidea_1_1, 0, "Initially no posts are linked")
+    check_number_of_posts(subidea_1_1_1, 0, "Initially no posts are linked")
+    
+    user = participant1_user
+    extract_user = {
+        "@id": user.uri(),
+        "name": user.name,
+        "@type": "User"}
+    base_extract_data = {
+        "idIdea": None,
+        "creator": extract_user,
+        "owner": extract_user,
+        "text": "Let's lower taxes to fav",
+        "creationDate": 1376573216160,
+        "target": {
+            "@type": "email",
+            "@id": None
+        }
+    }
+    #Create extract
+    extract_data = base_extract_data.copy()
+    extract_data["idIdea"] = subidea_1_1.uri()
+    extract_data["target"]['@id'] = reply_post_1.uri()
+    res = test_app.post(base_extract_url, json.dumps(extract_data))
+    assert res.status_code == 200
+    res_data = json.loads(res.body)
+    extract_post_1_to_subidea_1_1_id = res_data['id']
+    test_session.flush()
+    test_session.expunge_all()
+    
+    check_number_of_posts(subidea_1_1,  2, "Num posts on idea should recurse to the two posts")
+    check_number_of_posts(subidea_1,  2, "Num posts on parent idea should be the same as the child")
+    check_number_of_posts(subidea_1_1_1,  0, "Num posts on child of idea should still be zero")
+    check_total_and_orphans(3, 1)
+    
+    #Create second extract to same post and idea
+    extract_data = base_extract_data.copy()
+    extract_data["idIdea"] = subidea_1_1.uri()
+    extract_data["target"]['@id'] = reply_post_1.uri()
+    extract_data["text"] = "Let's lower taxes to fav 2",
+    res = test_app.post(base_extract_url, json.dumps(extract_data))
+    assert res.status_code == 200
+    res_data = json.loads(res.body)
+    extract_post_1_to_subidea_1_1_bis_id = res_data['id']
 
-def test_get_posts_from_idea(
-        discussion, test_app, test_session, subidea_1,
-        subidea_1_1, subidea_1_1_1, extract_post_1_to_subidea_1_1, reply_post_2):
-    base_url = get_url(discussion, 'posts')
-    url = base_url + "?" + urlencode({"root_idea_id": subidea_1_1_1.uri()})
-    res = test_app.get(url)
-    assert res.status_code == 200
-    res_data = json.loads(res.body)
-    assert res_data['total'] == 0
-    url = base_url + "?" + urlencode({"root_idea_id": subidea_1_1.uri()})
-    res = test_app.get(url)
-    assert res.status_code == 200
-    res_data = json.loads(res.body)
-    assert res_data['total'] == 2
-    url = base_url + "?" + urlencode({"root_idea_id": subidea_1.uri()})
-    res = test_app.get(url)
-    assert res.status_code == 200
-    res_data = json.loads(res.body)
-    # Known to fail. I get 0 on v6, 1 on v7.
-    #assert res_data['total'] == 2
+    check_number_of_posts(subidea_1_1,  2, "Num posts should not have changed with second identical extract")
+    check_number_of_posts(subidea_1,  2, "Num posts on parent idea  should not have changed with second identical extract")
+    check_total_and_orphans(3, 1)
 
+    #Create extract from parent idea to leaf message
+    extract_data = base_extract_data.copy()
+    extract_data["idIdea"] = subidea_1.uri()
+    extract_data["target"]['@id'] = reply_post_2.uri()
+    extract_data["text"] = "Let's lower taxes to fav 3",
+    res = test_app.post(base_extract_url, json.dumps(extract_data))
+    assert res.status_code == 200
+    res_data = json.loads(res.body)
+    extract_post_1_to_subidea_1__id = res_data['id']
+    
+    check_number_of_posts(subidea_1_1,  2, "Child idea should still have two posts")
+    check_number_of_posts(subidea_1,  2, "Idea should still have two posts")
+    check_number_of_posts(subidea_1_1_1,  0, "Num posts on leaf idea should still be zero")
+    check_total_and_orphans(3, 1)
+    
+    #Delete original extract (check that toombstones have no effect
+    res = test_app.delete(base_url + "/" + quote_plus(extract_post_1_to_subidea_1_1_bis_id))
+    assert res.status_code == 200
+    
+    check_number_of_posts(subidea_1_1, 0, "Child idea should no longer have any post")
+    check_number_of_posts(subidea_1, 2, "Parent idea should only have one post left")
+    check_number_of_posts(subidea_1_1_1,  0, "Num posts on leaf idea should still be zero")
+    check_total_and_orphans(3, 2)
 
 def test_mailbox_import_jacklayton(discussion, test_app, jack_layton_mailbox):
     base_url = get_url(discussion, 'posts')

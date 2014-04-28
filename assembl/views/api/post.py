@@ -128,7 +128,6 @@ def get_posts(request):
         #Virtuoso bug: This should work...
         #posts = posts.join(related, PostClass.id==related.c.post_id)
         posts = posts.filter(PostClass.id.in_(related))
-
     if root_post_id:
         root_post = Post.get(id=root_post_id)
                 
