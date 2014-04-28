@@ -12,7 +12,6 @@ creativityApp.controller('videoDetailCtl',
 
 
   // activate the right tab
-
   $(".container ul.nav li").removeClass("active");
   $(".container ul.nav li a[href=\"#videos\"]").closest("li").addClass("active");
 
@@ -33,8 +32,7 @@ creativityApp.controller('videosCtl',
             "freemium",
             "modèle d'affaires",
             "entreprise",
-            "stratégie",
-            "omg"
+            "stratégie"
         ];
 
         // get config file URL given as parameter of the current URL
@@ -61,6 +59,11 @@ creativityApp.controller('videosCtl',
             selectOnBlur: true,
             minimumInputLength: 1,
         });
+
+
+        // activate the right tab
+        $(".container ul.nav li").removeClass("active");
+        $(".container ul.nav li a[href=\"#videos\"]").closest("li").addClass("active");
 
     }
 
@@ -184,6 +187,10 @@ creativityApp.controller('cardsCtl',
         $scope.shuffle();
     });
 
+    // activate the right tab
+    $(".container ul.nav li").removeClass("active");
+    $(".container ul.nav li a[href=\"#cards\"]").closest("li").addClass("active");
+
     $scope.shuffle = function(){
         var n_cards = $scope.cards.length;
         if ( n_cards > 0 )
@@ -219,6 +226,10 @@ creativityApp.controller('creativitySessionCtl',
     globalMessages.fetch().success(function(data){
         $scope.ideas = data.ideas;
     });
+
+    // activate the right tab
+    $(".container ul.nav li").removeClass("active");
+    $(".container ul.nav li a[href=\"#session\"]").closest("li").addClass("active");
 
     $scope.vote = function(){}
 

@@ -13,7 +13,7 @@ html, body {
 
 .widget-container {
   width: 600px;
-  margin-top: 5%;
+  margin-top: 5px;
 }
 
 .card-comment {
@@ -50,8 +50,9 @@ html, body {
     padding: 7px;
     text-align: justify;
     border-radius: 5px;
+    background: #ffc;
     p {
-      display: table-cell;
+      /*display: table-cell;*/
       vertical-align: middle;
     }
   }
