@@ -10,18 +10,30 @@
     position: relative;
     height: 390px;
     width: 340px;
-    position: relative;
-    //border: 1px solid #ccc;
     margin: 0 auto;
     display: table;
     padding: 10px;
-    border-top: #e67e22 5px solid !important;
-    border-bottom: #e67e22 5px solid !important;
-    border-left: #CCCCCC 1px solid !important;
-    border-right: #CCCCCC 1px solid !important;
+    border-left: 1px solid #cccccc;
+    border-right: 1px solid #cccccc;
     img{
       display: block;
       margin: 0 auto;
+    }
+    .card-top{
+       height: 5px;
+       background-color: #e67e22;
+       position: absolute;
+       top:0;
+       right: 0;
+       width:100%;
+    }
+    .card-bottom{
+      height: 5px;
+      background-color: #e67e22;
+      position: absolute;
+      bottom:0;
+      right: 0;
+      width:100%;
     }
   }
   .question {
@@ -47,7 +59,11 @@
     }
     #slot-machine {
       right: 80px;
+      text-decoration: none;
     }
+  }
+  .bs-callout-info {
+    padding: 12px;
   }
 }
 
@@ -57,6 +73,7 @@
   margin: 0 auto;
   .session-comment {
     font-family: Helvetica, Arial, sans-serif;
+    padding-left: 10%;
     .thumbnail{
       border:none;
     }
@@ -77,6 +94,7 @@
   .cards{
     width: auto;
     .bs-callout-info {
+      padding: 12px;
       clear:left;
     }
     .slot-machine {
@@ -85,24 +103,40 @@
       font-size: 20px;
       width: 30px;
       float: left;
+      a{
+        text-decoration: none;
+      }
     }
     .card{
       position: relative;
       height: 390px;
       width: 340px;
-      //border: 1px solid #ccc;
       display: table;
       padding: 10px;
       text-align: justify;
       float: left;
       margin: 10px 40px 30px;
-      border-top: #8E44AD 5px solid !important;
-      border-bottom: #8E44AD 5px solid !important;
       border-left: #CCCCCC 1px solid !important;
       border-right: #CCCCCC 1px solid !important;
       p {
         display: table-cell;
         vertical-align: middle;
+      }
+      .card-top{
+        height: 5px;
+        background-color: #8E44AD;
+        position: absolute;
+        top:0;
+        right: 0;
+        width:100%;
+      }
+      .card-bottom{
+        height: 5px;
+        background-color: #8E44AD;
+        position: absolute;
+        bottom:0;
+        right: 0;
+        width:100%;
       }
     }
   }

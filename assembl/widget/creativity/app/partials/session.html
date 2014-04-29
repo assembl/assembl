@@ -5,7 +5,9 @@
             <div ng-repeat="card in cards">
                 <div ng-if="$first">
                     <div class="card">
+                        <div class="card-top"></div>
                         <p>{{card[0].description}}</p>
+                        <div class="card-bottom"></div>
                     </div>
                     <div class="slot-machine">
                         <a class="glyphicon glyphicon-random pointer" href="#"></a>
@@ -62,7 +64,7 @@
                     <div ng-show="showComment">
                         <div class="media" ng-if="idea.comments.length > 1" ng-repeat="com in idea.comments">
                             <a class="pull-left" href="#">
-                                <img class="media-object img-thumbnail" data-src="{{com.avatar}}" alt="40x40" ng-src="{{com.avatar}}" style="width: 40px; height: 40px;">
+                                <img class="media-object img-thumbnail" alt="40x40" src="{{com.avatar}}" style="width: 40px; height: 40px;">
                             </a>
                             <div class="media-body">
                                 <h5 class="media-heading">{{com.fullname}}</h5>
