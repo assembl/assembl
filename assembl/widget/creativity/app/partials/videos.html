@@ -1,29 +1,46 @@
+<div id="JukeTube">
+  <div id="results">
+    <p>
+      Lorem ipsum à propos de la discussion "{{ discussion.topic }}".
+    </p>
 
-<div id="videos">
-  <!--
-  <h2 ng-init="gapiLoaded()">Video</h2>
-  -->
+    <ul class="keywords">
+      <li class="keyword" ng-repeat="keyword in inspiration_keywords" ng-click="keywordClick($event)">{{keyword}}</li>
+    </ul>
 
-  <p>
-    Lorem ipsum à propos de la discussion "{{ discussion.topic }}".
-  </p>
+    <form id="search" data-ng-submit="search()">
+      <input id="query" class="select2-offscreen" type="hidden" value="" placeholder="Entrez ici votre recherche..." />
+      <input type="submit" id="search-button" value="Rechercher" class="btn btn-default" />
+    </form>
 
-  <ul class="keywords">
-    <li class="keyword" ng-repeat="keyword in inspiration_keywords" ng-click="keywordClick($event)">{{keyword}}</li>
-  </ul>
+    <div class="video" data-ng-repeat="video in results" data-ng-click="launch(video.id, video.title)">
+      <img class="video-image" data-ng-src="{{ video.thumbnail }}">
+      <p class="video-title">{{ video.title }}</p>
+      <p class="video-author">{{ video.author }}</p>
+      <p class="video-description">{{ video.description }}</p>
+    </div>
+  </div>
+  <div id="player">
+    <div id="placeholder"></div>
+  </div>
+  <div id="playlist">
+    <p id="current">{{ youtube.videoTitle }}</p>
 
-  <form ng-submit="searchClick()">
-    <input id="query" class="select2-offscreen" type="hidden" value="" placeholder="Entrez ici votre recherche..." />
-    <input type="submit" id="search-button" disabled value="Rechercher" class="btn btn-default" />
-  </form>
-  <div class="search-container"></div>
+    <div class="card-comment">
+      <p>
+        Cette vidéo vous inspire ? &Eacute;crivez votre id&eacute;e ci-dessous
+      </p>
+      <form role="form">
+        <div class="form-group">
+          <input type="text" class="form-control" id="inputEmail1" placeholder="title">
+        </div>
+        <div class="form-group">
+          <textarea class="form-control" rows="3" placeholder="description"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Envoyez</button>
+      </form>
+    </div>
+
+  </div>
 
 </div>
-
-<script>
-function gapiLoaded()
-{
-  angular.element($('#videos')).scope().gapiLoaded();
-}
-</script>
-<script src="https://apis.google.com/js/client.js?onload=gapiLoaded"></script>

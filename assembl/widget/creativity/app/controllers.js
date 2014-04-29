@@ -17,54 +17,61 @@ creativityApp.controller('videoDetailCtl',
 
 }]);
 
-
 creativityApp.controller('videosCtl',
-  ['$scope', '$http', '$routeParams', 'globalVideoConfig', 'Discussion', 
-  function($scope, $http, $routeParams, globalVideoConfig, Discussion){
-    
-    // intialization code
+  ['$scope', '$http', '$routeParams', '$log', 'globalVideoConfig', 'JukeTubeVideosService', 'Discussion', 
+  function($scope, $http, $routeParams, $log, globalVideoConfig, JukeTubeVideosService, Discussion){
+
+    // intialization code (constructor)
 
     $scope.init = function(){
-        // set model fields
 
-        $scope.inspiration_keywords = [
-            "modèle commercial",
-            "freemium",
-            "modèle d'affaires",
-            "entreprise",
-            "stratégie"
-        ];
+      // set model fields
 
-        // get config file URL given as parameter of the current URL
-        $scope.configFile = $routeParams.config;
+      $scope.youtube = JukeTubeVideosService.getYoutube();
+      $scope.results = JukeTubeVideosService.getResults();
+      $scope.playlist = true;
 
-        // data mock
+      $scope.inspiration_keywords = [
+          "modèle commercial",
+          "freemium",
+          "modèle d'affaires",
+          "entreprise",
+          "stratégie"
+      ];
 
-        globalVideoConfig.fetch().success(function(data){
-             $scope.globalVideoConfig = data;
-        });
 
-        $scope.discussion = Discussion.get({discussionId: 1}, function(discussion) {
+      // get config file URL given as parameter of the current URL
+
+      $scope.configFile = $routeParams.config;
+
+
+      // data mock
+
+      globalVideoConfig.fetch().success(function(data){
+          $scope.globalVideoConfig = data;
+      });
+
+      $scope.discussion = Discussion.get({discussionId: 1}, function(discussion) {
           console.log(discussion);
-        });
+      });
 
 
-        // initialize the select2 textfield
+      // initialize the Select2 textfield
 
-        $("#query").select2({
-            tags: $scope.inspiration_keywords,
-            tokenSeparators: [",", " "],
-            formatNoMatches: function(term){return '';},
-            //minimumResultsForSearch: -1
-            selectOnBlur: true,
-            minimumInputLength: 1
-        });
+      $("#query").select2({
+          tags: $scope.inspiration_keywords,
+          tokenSeparators: [",", " "],
+          formatNoMatches: function(term){return '';},
+          //minimumResultsForSearch: -1
+          selectOnBlur: true,
+          minimumInputLength: 1
+      });
 
 
-        // activate the right tab
-        $("ul.nav li").removeClass("active");
-        $("ul.nav li a[href=\"#videos\"]").closest("li").addClass("active");
+      // activate the right tab
 
+      $("ul.nav li").removeClass("active");
+      $("ul.nav li a[href=\"#videos\"]").closest("li").addClass("active");
     }
 
     $scope.keywordClick = function($event){
@@ -87,6 +94,46 @@ creativityApp.controller('videosCtl',
           //$(el.target).css('background', '#000');
         }
     }
+
+    $scope.launch = function (id, title) {
+      JukeTubeVideosService.launchPlayer(id, title);
+      $log.info('Launched id:' + id + ' and title:' + title);
+    };
+
+    $scope.search = function () {
+      var q = $('#query').val();
+      $http.get('https://www.googleapis.com/youtube/v3/search', {
+        params: {
+          key: 'AIzaSyC8lCVIHWdtBwnTtKzKl4dy8k5C_raqyK4', // quentin
+          type: 'video',
+          maxResults: '8',
+          part: 'id,snippet',
+          fields: 'items/id,items/snippet/title,items/snippet/description,items/snippet/thumbnails/default,items/snippet/channelTitle',
+          q: q
+        }
+      })
+      .success( function (data) {
+        JukeTubeVideosService.listResults(data);
+        $log.info(data);
+      })
+      .error( function () {
+        $log.info('Search error');
+      });
+    }
+
+
+    // execute init code
+
+    $scope.init();
+
+}]);
+
+
+creativityApp.controller('oldvideosCtl',
+  ['$scope', '$http', '$routeParams', 'globalVideoConfig', 'Discussion', 
+  function($scope, $http, $routeParams, globalVideoConfig, Discussion){
+
+    
 
     $scope.gapiLoaded = function(){
         console.log('gapiLoaded');

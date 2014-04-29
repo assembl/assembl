@@ -2,6 +2,13 @@
 
 var creativityApp = angular.module('creativityApp',['ngRoute','ngSanitize','creativityServices']);
 
+creativityApp.run(function () {
+  var tag = document.createElement('script');
+  tag.src = "http://www.youtube.com/iframe_api";
+  var firstScriptTag = document.getElementsByTagName('script')[0];
+  firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+});
+
 creativityApp.config(['$routeProvider', function($routeProvider){
     $routeProvider.
         when('/cards', {
