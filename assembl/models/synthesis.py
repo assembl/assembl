@@ -583,7 +583,7 @@ class Idea(SQLAlchemyBaseModel):
         sql = '''SELECT * FROM idea JOIN (
                   SELECT source_id FROM (
                     SELECT transitive t_in (1) t_out (2) t_distinct T_NO_CYCLES
-                        source_id, target_id FROM idea_idea_link) ia
+                        source_id, target_id FROM idea_idea_link WHERE is_tombstone=0) ia
                   JOIN idea AS dag_idea ON (ia.source_id = dag_idea.id)
                   WHERE dag_idea.discussion_id = :discussion_id
                   AND ia.target_id=:idea_id) x on (id=source_id)'''
@@ -612,7 +612,7 @@ class Idea(SQLAlchemyBaseModel):
             where_clause = ':root_idea_id'
         return """(SELECT source_id, target_id FROM (
             SELECT transitive t_in (1) t_out (2) t_distinct T_NO_CYCLES
-                        source_id, target_id FROM idea_idea_link
+                        source_id, target_id FROM idea_idea_link WHERE is_tombstone=0
                 UNION SELECT id as source_id, id as target_id FROM idea
             ) ia
             JOIN idea AS dag_idea ON (ia.source_id = dag_idea.id)
