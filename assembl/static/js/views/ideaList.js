@@ -115,7 +115,7 @@ function(Backbone, _, Idea, IdeaView, ideaGraphLoader, app, Types, AllMessagesIn
             
             var view_data = {};
             function excludeRoot(idea) {return idea != rootIdea};
-            //rootIdea.visitBreadthFirst(renderVisitor(view_data, excludeRoot));
+            rootIdea.visitBreadthFirst(renderVisitor(view_data, excludeRoot));
 
             _.each(rootIdeaDirectChildrenModels, function(idea){
                 var ideaView =  new IdeaView({model:idea}, view_data);
