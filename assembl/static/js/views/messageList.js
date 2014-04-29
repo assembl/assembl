@@ -326,14 +326,14 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
             // We need to identify the "last" message of the series while taking
             // the filter into account. It is easier to start from the end.
             var found = false, justfound = true;
-            console.log("length: ", len);
-            console.log(this.messageIdsToDisplay);
+            /*console.log("length: ", len);
+            console.log(this.messageIdsToDisplay);*/
             for (var i = len - 1; i >= 0; i--) {
                 model = messages[i];
                 isValid = (this.messageIdsToDisplay.indexOf(model.getId()) >= 0)
                 if( isValid ) {
-                    console.log(model);
-                    console.log("Message was valid: "+model.get('subject')+", "+model.get('idCreator'));
+                    /*console.log(model);
+                    console.log("Message was valid: "+model.get('subject')+", "+model.get('idCreator'));*/
                     view = new MessageFamilyView({model:model, messageListView:this}, last_sibling_chain);
                     view.currentLevel = level;
                     found = true;
