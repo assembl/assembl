@@ -4,7 +4,6 @@
     </div>
 <% } %>
 
-
 <% if(level < 1) { %>
 <div class="panel-editablebox synthesis-idea with-border <% if(editing ) { %>is-editing<% }%> level-<%= level %>">
     <div class="panel-editablearea synthesis-expression" data-idea-id="<%= id %>"></div>
@@ -16,7 +15,7 @@
             <img src="<%= author.getAvatarUrl(30) %>" alt="{{ gettext('Avatar for') }} <%= author.get('name') %>"  class="image-rounded" width="30" height="30" />
             <i style='font-style: italic;font-size:80%;'><%= author.get('name') %></i><% if( index < list.length-1 ) { %>,<% } %>
         <% }) %>
-        <a class = "synthesisIdea-replybox-openbtn" href="#">{{ gettext('comment') }}</a>
+        <a class = "synthesisIdea-replybox-openbtn icon-comment" href="#">{{ gettext('comment') }}</a>
         <div class="synthesisIdea-replybox hidden"></div>
     </div>
 </div>
@@ -35,7 +34,7 @@
                 <img src="<%= author.getAvatarUrl(30) %>" alt="{{ gettext('Avatar for') }} <%= author.get('name') %>"  class="image-rounded" width="30" height="30" />
                 <i style='font-style: italic;font-size:80%;'><%= author.get('name') %></i><% if( index < list.length-1 ) { %>,<% } %>
             <% }) %>
-            <a class = "synthesisIdea-replybox-openbtn" href="#">{{ gettext('comment') }}</a>
+            <a class = "synthesisIdea-replybox-openbtn icon-comment" href="#">{{ gettext('comment') }}</a>
             <div class="synthesisIdea-replybox hidden"></div>
         </div>
     </div>

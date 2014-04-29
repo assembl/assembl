@@ -22,7 +22,6 @@ $font-icon-dir: "#{$font-dir}/icon";
   }
 }
 */
- 
  %icon:before,
  [class^="icon-"]:before, [class*=" icon-"]:before {
   font-family: "fontello";
@@ -95,3 +94,14 @@ $font-icon-dir: "#{$font-dir}/icon";
 .icon-user:before { content: '\e801'; } /* '' */
 .icon-link:before { content: '\e824'; } /* '' */
 .icon-download:before { content: '\e804'; } /* '' */
+
+/* TODO: refactoring */
+.icon-comment:before {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  margin-right: 5px;
+  content: "";
+  background: url('../img/icon/comment.png') 0 0 no-repeat;
+  background-size: 100%;
+} /* '' */
