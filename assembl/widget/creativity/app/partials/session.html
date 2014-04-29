@@ -1,5 +1,37 @@
 <div class="session">
-    <!-- Displaying card -->
+
+    <div class="col-md-5">
+        <div class="cards">
+            <div ng-repeat="card in cards">
+                <div ng-if="$first">
+
+                    <div class="card">
+                        <p>{{card[0].description}}</p>
+                    </div>
+                    <div class="slot-machine">
+                        <a class="glyphicon glyphicon-random pointer" href="#"></a>
+                    </div>
+
+                    <div class="bs-callout bs-callout-info">
+                        <h4>Question</h4>
+                        <p>{{card[0].question}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-comment">
+            <form role="form">
+                <div class="form-group">
+                    <input type="text" class="form-control" id="inputEmail1" placeholder="title">
+                </div>
+                <div class="form-group">
+                    <textarea class="form-control" rows="3" placeholder="description"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary btn-sm">Envoyez</button>
+            </form>
+        </div>
+    </div>
+
     <div class="col-md-6">
         <div class="session-comment">
             <div class="media" ng-if="ideas.length > 1" ng-repeat="idea in ideas">
@@ -12,7 +44,9 @@
                 <div class="media-body">
                     <h5 class="media-heading">{{idea.fullname}}</h5>
                     <div class="row">
-                        <div class="col-md-11"><h6>{{idea.message}}</h6></div>
+                        <div class="col-md-11 bg-warning comment-idea">
+                            <p>{{idea.message}}</p>
+                        </div>
                     </div>
                     <div ng-show="showSubComment" class="sub-comment">
                         <form role="form">
@@ -39,38 +73,6 @@
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-    <!-- Comment on the card -->
-    <div class="col-md-6">
-        <div class="cards">
-            <div ng-repeat="card in cards">
-                <div ng-if="$first">
-
-                    <div class="card alert alert-success">
-                        <p>{{card[0].description}}</p>
-                    </div>
-                    <div class="slot-machine">
-                        <a href="#"><img src="app/img/machine-icon.png"></a>
-                    </div>
-
-                    <div class="bs-callout bs-callout-info">
-                        <h4>Question</h4>
-                        <p>{{card[0].question}}</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="card-comment">
-            <form role="form">
-                <div class="form-group">
-                    <input type="text" class="form-control" id="inputEmail1" placeholder="title">
-                </div>
-                <div class="form-group">
-                    <textarea class="form-control" rows="3" placeholder="description"></textarea>
-                </div>
-                <button type="submit" class="btn btn-primary btn-sm">Envoyez</button>
-            </form>
         </div>
     </div>
 </div>

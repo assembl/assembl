@@ -8,14 +8,13 @@
   }
   .card{
     position: relative;
-    height: 360px;
-    width: 300px;
+    height: 390px;
+    width: 340px;
     position: relative;
+    border: 1px solid #ccc;
     margin: 0 auto;
     display: table;
     padding: 7px;
-    border-radius: 5px;
-    background: #ffc;
     img{
       display: block;
       margin: 0 auto;
@@ -51,7 +50,10 @@
 
 //Session page
 .session {
+  width: 90%;
+  margin: 0 auto;
   .session-comment {
+    font-family: Helvetica, Arial, sans-serif;
     .thumbnail{
       border:none;
     }
@@ -62,6 +64,12 @@
     .text-info {
       cursor: pointer;
     }
+    .comment-idea {
+      font-size: 12px;
+      p{
+        padding: 5px;
+      }
+    }
   }
   .cards{
     width: auto;
@@ -69,23 +77,22 @@
       clear:left;
     }
     .slot-machine {
+      height: 390px;
+      line-height: 390px;
+      font-size: 20px;
+      width: 30px;
       float: left;
-      width: 200px;
-      text-align: center;
-      line-height: 350px;
     }
     .card{
       position: relative;
-      height: 350px;
-      width: 300px;
+      height: 390px;
+      width: 340px;
       border: 1px solid #ccc;
-      position: relative;
       display: table;
       padding: 7px;
       text-align: justify;
-      border-radius: 5px;
       float: left;
-      margin: 0 0 20px 70px;
+      margin: 10px 40px 30px;
       p {
         display: table-cell;
         vertical-align: middle;
@@ -93,9 +100,6 @@
     }
   }
 }
-
-
-
 
 .card-comment {
   margin-top: 15px;
