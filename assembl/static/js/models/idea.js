@@ -395,7 +395,7 @@ function(Base, _, Segment, app, i18n, Types, Permissions){
                 console.log(this);
             }
             return retval;
-        },
+        }
     });
 
     return {

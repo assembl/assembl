@@ -17,7 +17,7 @@
       .synthesis-expression {
         margin: 0;
         display: inline-block;
-        width: auto;
+        width: 100%;
       }
       .comment {
         font-size: 12px;
@@ -35,8 +35,7 @@
       margin-top: 30px;
     }
 
-    .level-0, .level-1, .level-2 {
-      border-left: 2px solid #CCCCCC;
+    .level-0, .level-1, .level-2, .level-3 {
       margin-left: 4px;
     }
 
@@ -49,6 +48,17 @@
       padding-left: 60px;
     }
 
+    .level-3{
+      padding-left: 80px;
+    }
+
+    .with-border {
+      border-left: 2px solid #CCCCCC;
+    }
+    .with-no-border {
+      border-left:none;
+    }
+
     .panel-arrow {
       position: relative;
       height: 10px;
@@ -56,12 +66,20 @@
       float: left;
       @include border-radius(15px);
       background-color: #CCCCCC;
-      .line {
-        width: 30px;
-        border: 1px dashed #CCCCCC;
+      .line-1, .line-2, .line-3 {
+        border: 1px solid #CCCCCC;
         position: absolute;
         left: 4px;
         top: 4px;
+      }
+      .line-1 {
+        width: 30px;
+      }
+      .line-2 {
+        width: 50px;
+      }
+      .line-3 {
+        width: 70px;
       }
     }
   }

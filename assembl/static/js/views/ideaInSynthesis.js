@@ -18,9 +18,10 @@ function(Backbone, _, $, Idea, Segment, app, Permissions, CKEditorField, Message
         /**
          * @init
          */
-        initialize: function(){
+        initialize: function(obj, view_data){
             this.model.on('change:shortTitle change:longTitle change:segments', this.render, this);
             this.editing = false;
+            this.view_data = view_data;
         },
 
         /**
@@ -33,7 +34,15 @@ function(Backbone, _, $, Idea, Segment, app, Permissions, CKEditorField, Message
             var
                 data = this.model.toJSON(),
                 authors = [],
-                segments = app.getSegmentsByIdea(this.model);
+                segments = app.getSegmentsByIdea(this.model),
+                view_data = this.view_data,
+                render_data = view_data[this.model.getId()];
+
+            _.extend(data, render_data);
+
+            if (render_data === undefined) {
+                return this;
+            }
 
             segments.forEach(function(segment) {
                 var post = segment.getAssociatedPost();

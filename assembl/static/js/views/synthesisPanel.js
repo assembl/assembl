@@ -1,5 +1,5 @@
-define(['backbone', 'underscore', 'jquery', 'app', 'models/synthesis', 'permissions', 'views/ideaInSynthesis', 'i18n', 'views/editableField', 'views/ckeditorField'],
-function(Backbone, _, $, app, Synthesis, Permissions, IdeaInSynthesisView, i18n, EditableField, CKEditorField){
+define(['backbone', 'underscore', 'jquery', 'app', 'models/synthesis', 'permissions', 'views/ideaInSynthesis', 'i18n', 'views/editableField', 'utils/renderVisitor'],
+function(Backbone, _, $, app, Synthesis, Permissions, IdeaInSynthesisView, i18n, EditableField, renderVisitor){
     'use strict';
 
     var SynthesisPanel = Backbone.View.extend({
@@ -57,8 +57,8 @@ function(Backbone, _, $, app, Synthesis, Permissions, IdeaInSynthesisView, i18n,
          * @return {SynthesisPanel}
          */
         render: function(){
-            //console.log('synthesisPanel:render() firing');
-            var that = this;
+            var that = this,
+                rootIdea = this.ideas.getRootIdea();
             
             app.trigger('render');
 
@@ -86,13 +86,18 @@ function(Backbone, _, $, app, Synthesis, Permissions, IdeaInSynthesisView, i18n,
             data.canEdit = app.getCurrentUser().can(Permissions.EDIT_SYNTHESIS);
             this.$el.html( this.template(data) );
 
+            var view_data = {};
+            function excludeRoot(idea) {return idea != rootIdea};
+            rootIdea.visitBreadthFirst(renderVisitor(view_data, excludeRoot));
+
             _.each(ideas, function append_recursive(idea){
-                var rendered_idea_view = new IdeaInSynthesisView({model: idea});
+                var rendered_idea_view = new IdeaInSynthesisView({model: idea}, view_data);
                 that.$('#synthesisPanel-ideas').append( rendered_idea_view.render().el );
                 _.each(idea.getSynthesisChildren(), function(child){
-                    append_recursive(child)
-                   });
+                    append_recursive(child);
                 });
+            });
+
             this.$('.panel-body').get(0).scrollTop = y;
             if(data.canEdit) {
                 var titleField = new EditableField({
