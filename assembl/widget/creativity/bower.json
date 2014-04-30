@@ -16,6 +16,8 @@
     "angular-sanitize": "~1.2.16",
     "jquery": "~2.1.0",
     "select2": "~3.4.6",
-    "bourbon": "~3.1.8"
+    "bourbon": "~3.1.8",
+    "angular-translate": "~2.1.0",
+    "angular-translate-loader-static-files": "~2.1.0"
   }
 }

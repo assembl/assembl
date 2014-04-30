@@ -264,6 +264,8 @@ creativityApp.controller('cardsCtl',
 creativityApp.controller('creativitySessionCtl',
     ['$scope','globalConfig','globalMessages', function($scope, globalConf, globalMessages){
 
+    $scope.formData = {};
+
     //data mock
     globalConf.fetch().success(function(data){
         $scope.cards = data.card_game;
@@ -279,5 +281,21 @@ creativityApp.controller('creativitySessionCtl',
     $("ul.nav li a[href=\"#session\"]").closest("li").addClass("active");
 
     $scope.vote = function(){}
+
+    /* Send a new idea from creativity session */
+    $scope.sendNewIdea = function(){
+        if($scope.formData) {
+            console.log($scope.formData)
+        }
+    }
+
+    /* Comment an idea from creativity session */
+    $scope.commentIdea = function(){
+
+        if($scope.formData) {
+            console.log($scope.formData)
+        }
+
+    }
 
 }]);

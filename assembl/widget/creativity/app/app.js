@@ -1,6 +1,7 @@
 "use strict";
 
-var creativityApp = angular.module('creativityApp',['ngRoute','ngSanitize','creativityServices']);
+var creativityApp = angular.module('creativityApp',
+    ['ngRoute','ngSanitize','creativityServices', 'pascalprecht.translate']);
 
 creativityApp.run(function () {
   var tag = document.createElement('script');
@@ -30,5 +31,15 @@ creativityApp.config(['$routeProvider', function($routeProvider){
         otherwise({
             redirectTo: '/cards'
         });
+}])
+    .config(['$translateProvider', function($translateProvider){
+
+        $translateProvider.useStaticFilesLoader({
+            prefix: 'app/locales/',
+            suffix: '.json'
+        });
+
+        //$translateProvider.determinePreferredLanguage();
+        $translateProvider.preferredLanguage('fr');
 }]);
 

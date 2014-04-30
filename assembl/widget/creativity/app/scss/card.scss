@@ -98,11 +98,10 @@
       clear:left;
     }
     .slot-machine {
-      height: 390px;
       line-height: 390px;
       font-size: 20px;
       width: 30px;
-      float: left;
+      float: right;
       a{
         text-decoration: none;
       }
@@ -115,7 +114,7 @@
       padding: 10px;
       text-align: justify;
       float: left;
-      margin: 10px 20px 30px;
+      margin: 10px 0 30px 50px;
       border-left: #CCCCCC 1px solid !important;
       border-right: #CCCCCC 1px solid !important;
       p {
