@@ -24,15 +24,14 @@ creativityApp.config(['$routeProvider', function($routeProvider){
         otherwise({
             redirectTo: '/cards'
         });
-}])
-    .config(['$translateProvider', function($translateProvider){
 
-        $translateProvider.useStaticFilesLoader({
-            prefix: 'app/locales/',
-            suffix: '.json'
-        });
+}]).config(['$translateProvider', function($translateProvider){
 
-        //$translateProvider.determinePreferredLanguage();
-        $translateProvider.preferredLanguage('fr');
+    $translateProvider.useStaticFilesLoader({
+        prefix: 'app/locales/',
+        suffix: '.json'
+    });
+
+    $translateProvider.preferredLanguage('fr');
 }]);
 

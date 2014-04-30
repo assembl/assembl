@@ -170,6 +170,8 @@ creativityApp.controller('creativitySessionCtl',
 
     $scope.formData = {};
 
+    $('.session-comment .vote').popover();
+
     //data mock
     globalConf.fetch().success(function(data){
         $scope.cards = data.card_game;
@@ -180,7 +182,6 @@ creativityApp.controller('creativitySessionCtl',
         $scope.ideas = data.ideas;
     });
 
-    $scope.vote = function(){}
 
     /* Send a new idea from creativity session */
     $scope.sendNewIdea = function(){

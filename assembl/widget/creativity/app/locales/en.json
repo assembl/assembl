@@ -4,5 +4,6 @@
     "reply":"Reply",
     "summary":"Summary",
     "vote":"Vote",
-    "title":"title"
+    "title":"title",
+    "cancel":"Cancel"
 }

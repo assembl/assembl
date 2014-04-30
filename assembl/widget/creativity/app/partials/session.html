@@ -39,7 +39,7 @@
                 <div class="pull-left thumbnail">
                     <img class="media-object img-rounded" src="{{idea.avatar}}" alt="40x40" style="width: 40px; height: 40px;">
                     <div class="caption">
-                        <button type="button" class="btn btn-xs btn-primary">{{'vote'| translate }}</button>
+                       <rate></rate>
                     </div>
                 </div>
                 <div class="media-body">
@@ -54,12 +54,13 @@
                             <div class="form-group">
                                 <textarea ng-model="formData.comment" class="form-control" rows="2" placeholder="{{'comment'| translate }}"></textarea>
                             </div>
+                            <button type="submit" class="btn btn-default btn-xs pull-left" ng-click="showSubComment = ! showSubComment">{{'cancel'| translate }}</button>
                             <button type="submit" class="btn btn-primary btn-xs pull-right">{{'send'| translate }}</button>
                         </form>
                     </div>
                     <p>
-                        <span class="text-info glyphicon glyphicon-share-alt" ng-click="showSubComment = ! showSubComment">{{'reply'| translate }}</span>
-                        <span class="text-info glyphicon glyphicon-file" ng-click="showComment = ! showComment">{{'summary'| translate }} ({{idea.comments.length}})</span>
+                        <span class="text-info glyphicon glyphicon-share-alt" ng-click="showSubComment = true">{{'reply'| translate }}</span>&nbsp;
+                        <span class="text-info glyphicon glyphicon-file" ng-click="showComment = ! showComment">{{'summary'| translate }} <span class="badge">{{idea.comments.length}}</span></span>
                     </p>
                     <div ng-show="showComment">
                         <div class="media" ng-if="idea.comments.length > 1" ng-repeat="com in idea.comments">

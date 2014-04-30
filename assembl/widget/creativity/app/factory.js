@@ -1,3 +1,5 @@
+"use strict";
+
 creativityApp.factory('utils', function($translate){
 
     var fn = {};

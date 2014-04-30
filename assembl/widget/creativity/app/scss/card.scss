@@ -84,12 +84,39 @@
     }
     .text-info {
       cursor: pointer;
+      color:#AAAAAA;
     }
     .comment-idea {
       font-size: 12px;
       p{
         padding: 5px;
       }
+    }
+    .badge {
+      background-color: #69bf13;
+    }
+
+    .rating-1, .rating-2, .rating-3, .rating-4, .rating-5 {
+      cursor: pointer;
+    }
+
+    .rating-1, .rating-2, .rating-3, .rating-4 {
+       margin-right: 5px;
+    }
+    .rating-1{
+      background-color: #e67e22;
+    }
+    .rating-2{
+      background-color:#e67e22;
+    }
+    .rating-3{
+      background-color:#e74c3c;
+    }
+    .rating-4{
+      background-color:#d35400;
+    }
+    .rating-5{
+      background-color:#c0392b;
     }
   }
   .cards{
