@@ -4,16 +4,15 @@ creativityApp.controller('videoDetailCtl',
   ['$scope', '$http', '$routeParams', '$sce',
   function($scope, $http, $routeParams, $sce){
 
+  // activate the right tab
+  $("ul.nav li").removeClass("active");
+  $("ul.nav li a[href=\"#videos\"]").closest("li").addClass("active");
+
   // intialization code
 
   $scope.videoId = $routeParams.videoId;
   // TODO: sanitize URL
   $scope.videoUrl = $sce.trustAsResourceUrl('http://www.youtube.com/embed/' + $scope.videoId + '?autoplay=0');
-
-
-  // activate the right tab
-  $("ul.nav li").removeClass("active");
-  $("ul.nav li a[href=\"#videos\"]").closest("li").addClass("active");
 
 }]);
 
@@ -121,13 +120,7 @@ creativityApp.controller('videosCtl',
       });
     }
 
-
-    // execute init code
-
-    $scope.init();
-
 }]);
-
 
 creativityApp.controller('oldvideosCtl',
   ['$scope', '$http', '$routeParams', 'globalVideoConfig', 'Discussion', 
@@ -224,6 +217,12 @@ creativityApp.controller('oldvideosCtl',
 creativityApp.controller('cardsCtl',
     ['$scope','$http','$sce','globalConfig', function($scope, $http, $sce, globalConf){
 
+    // activate the right tab
+    $("ul.nav li").removeClass("active");
+    $("ul.nav li a[href=\"#cards\"]").closest("li").addClass("active");
+
+    $scope.formData = {};
+
     // initialize empty stack (LIFO) of already displayed cards, so that the user can browse previously generated cards
     $scope.displayed_cards = [];
     $scope.displayed_card_index = 0;
@@ -233,10 +232,6 @@ creativityApp.controller('cardsCtl',
         $scope.cards = data.card_game[0]; // we get only the first deck of cards
         $scope.shuffle();
     });
-
-    // activate the right tab
-    $("ul.nav li").removeClass("active");
-    $("ul.nav li a[href=\"#cards\"]").closest("li").addClass("active");
 
     $scope.shuffle = function(){
         var n_cards = $scope.cards.length;
@@ -253,16 +248,28 @@ creativityApp.controller('cardsCtl',
     $scope.previousCard = function(){
         $scope.displayed_card_index = Math.max(0, $scope.displayed_card_index-1);
     }
+
     $scope.nextCard = function(){
         $scope.displayed_card_index = Math.min($scope.displayed_cards.length-1, $scope.displayed_card_index+1);
     }
 
-    $scope.flippingCard = function() {}
+    /*
+     * Comment an idea from inspire me
+     * TODO:  add rest api
+    */
+    $scope.sendIdea = function(){
+
+
+    }
 
 }]);
 
 creativityApp.controller('creativitySessionCtl',
     ['$scope','globalConfig','globalMessages', function($scope, globalConf, globalMessages){
+
+    // activate the right tab
+    $("ul.nav li").removeClass("active");
+    $("ul.nav li a[href=\"#session\"]").closest("li").addClass("active");
 
     $scope.formData = {};
 
@@ -276,10 +283,6 @@ creativityApp.controller('creativitySessionCtl',
         $scope.ideas = data.ideas;
     });
 
-    // activate the right tab
-    $("ul.nav li").removeClass("active");
-    $("ul.nav li a[href=\"#session\"]").closest("li").addClass("active");
-
     $scope.vote = function(){}
 
     /* Send a new idea from creativity session */
@@ -289,7 +292,10 @@ creativityApp.controller('creativitySessionCtl',
         }
     }
 
-    /* Comment an idea from creativity session */
+    /*
+     * Comment an idea from creativity session
+     * TODO:  add rest api
+     */
     $scope.commentIdea = function(){
 
         if($scope.formData) {
