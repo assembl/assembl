@@ -1,21 +1,5 @@
 "use strict";
 
-creativityApp.controller('videoDetailCtl',
-  ['$scope', '$http', '$routeParams', '$sce',
-  function($scope, $http, $routeParams, $sce){
-
-  // activate the right tab
-  $("ul.nav li").removeClass("active");
-  $("ul.nav li a[href=\"#videos\"]").closest("li").addClass("active");
-
-  // intialization code
-
-  $scope.videoId = $routeParams.videoId;
-  // TODO: sanitize URL
-  $scope.videoUrl = $sce.trustAsResourceUrl('http://www.youtube.com/embed/' + $scope.videoId + '?autoplay=0');
-
-}]);
-
 creativityApp.controller('videosCtl',
   ['$scope', '$http', '$routeParams', '$log', 'globalVideoConfig', 'JukeTubeVideosService', 'Discussion', 
   function($scope, $http, $routeParams, $log, globalVideoConfig, JukeTubeVideosService, Discussion){
@@ -71,6 +55,12 @@ creativityApp.controller('videosCtl',
 
       $("ul.nav li").removeClass("active");
       $("ul.nav li a[href=\"#videos\"]").closest("li").addClass("active");
+
+
+      // load youtube script
+
+      if ( JukeTubeVideosService.getYoutube().ready === true )
+        JukeTubeVideosService.onYouTubeIframeAPIReady();
     }
 
     $scope.keywordClick = function($event){
@@ -107,7 +97,7 @@ creativityApp.controller('videosCtl',
           type: 'video',
           maxResults: '8',
           part: 'id,snippet',
-          fields: 'items/id,items/snippet/title,items/snippet/description,items/snippet/thumbnails/default,items/snippet/channelTitle',
+          fields: 'items/id,items/snippet/publishedAt,items/snippet/title,items/snippet/description,items/snippet/thumbnails/default,items/snippet/channelTitle',
           q: q
         }
       })
@@ -119,99 +109,6 @@ creativityApp.controller('videosCtl',
         $log.info('Search error');
       });
     }
-
-}]);
-
-creativityApp.controller('oldvideosCtl',
-  ['$scope', '$http', '$routeParams', 'globalVideoConfig', 'Discussion', 
-  function($scope, $http, $routeParams, globalVideoConfig, Discussion){
-
-    
-
-    $scope.gapiLoaded = function(){
-        console.log('gapiLoaded');
-        console.log(gapi);
-        gapi.client.setApiKey($scope.globalVideoConfig.youtube_api_key);
-        gapi.client.load('youtube', 'v3', $scope.handleAPILoaded);
-    }
-
-    // After the API loads, call a function to enable the search box.
-    $scope.handleAPILoaded = function(){
-        console.log('handleAPILoaded');
-      $('#search-button').attr('disabled', false);
-    }
-
-    
-    // Search for a specified string.
-    $scope.searchClick = function(){
-        var q = $('#query').val();
-        
-        var request = gapi.client.youtube.search.list({
-            q: q,
-            part: 'snippet'
-        });
-
-        request.execute(function(response) {
-            //var str = JSON.stringify(response.result);
-            //$('#search-container').html('<pre>' + str + '</pre>');
-            $scope.displayResults(response);
-        });
-        
-        /* alternative way of making a search, without using the Google API library
-        $http.get('https://www.googleapis.com/youtube/v3/search', {
-          params: {
-            key: $scope.globalVideoConfig.youtube_api_key,
-            type: 'video',
-            maxResults: '8',
-            part: 'snippet',
-            q: q
-          }
-        })
-        .success( function (data) {
-          $scope.displayResults(data);
-        })
-        .error( function () {
-          console.log('Search error');
-        });
-        */
-    }
-
-    $scope.displayResults = function(response){
-      var str = '';
-      var nresults = 0;
-      if ( response.result && response.result.items )
-      {
-        var sz = response.result.items.length;
-        for ( var i = 0; i < sz; ++i )
-        {
-          var item = response.result.items[i];
-          if ( item.id && item.id.kind && item.id.kind == 'youtube#video' )
-          {
-            ++nresults;
-            /*
-            str += '<li><a href="http://youtube.com/watch?v=' + item.id.videoId + '" target="_blank">'
-              + '<img src=' + item.snippet.thumbnails.default.url + ' />'
-              + item.snippet.title
-              + '</a></li>';
-            */
-            str += '<li><div class="video-thumbnail"><iframe type="text/html" width="320" height="190" src="http://www.youtube.com/embed/'
-              + item.id.videoId + '?autoplay=0" frameborder="0"/></div><div class="video-description">'
-              //+ item.snippet.title + '<br/>'
-              + '<div class="centered"><a href="#/video/'+ item.id.videoId + '" class="btn btn-default" role="button">Cette vidéo m\'inspire</a></div></div></li>';
-            }
-        }
-        str = '<ul>' + str + '</ul>';
-      }
-      if ( nresults == 0 )
-      {
-        str = 'No result';
-      }
-      $('#videos .search-container').html(str);
-    }
-    
-
-    $scope.init();
-
 }]);
 
 creativityApp.controller('cardsCtl',

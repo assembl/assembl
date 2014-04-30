@@ -51,6 +51,7 @@ creativityServices.factory('Discussion', ['$resource', function($resource){
 creativityServices.service('JukeTubeVideosService', ['$window', '$rootScope', '$log', function ($window, $rootScope, $log) {
 
   var service = this;
+  var initialized = false;
 
   var youtube = {
     ready: false,
@@ -66,13 +67,33 @@ creativityServices.service('JukeTubeVideosService', ['$window', '$rootScope', '$
   var results = [];
   var upcoming = [ {id: 'Pjzr1zI830c', title: 'Imagination for People (English)'} ];
 
-  $window.onYouTubeIframeAPIReady = function () {
+  this.init = function (){
+    console.log('JukeTubeVideosService.init()');
+    if ( initialized === true )
+      return;
+
+    console.log('JukeTubeVideosService.init() go');
+    $window.onYouTubeIframeAPIReady = function () {
+      service.onYouTubeIframeAPIReady();
+    };
+
+    var tag = $window.document.createElement('script');
+    tag.src = "http://www.youtube.com/iframe_api";
+    var firstScriptTag = $window.document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+    initialized = true;
+  }
+
+  this.init();
+  
+
+  this.onYouTubeIframeAPIReady = function(){
     $log.info('Youtube API is ready');
     youtube.ready = true;
     service.bindPlayer('placeholder');
     service.loadPlayer();
-    $rootScope.$apply();
-  };
+  }
 
   function onYoutubeReady (event) {
     $log.info('YouTube Player is ready');
@@ -117,7 +138,11 @@ creativityServices.service('JukeTubeVideosService', ['$window', '$rootScope', '$
   this.loadPlayer = function () {
     if (youtube.ready && youtube.playerId) {
       if (youtube.player) {
-        youtube.player.destroy();
+        try{
+          youtube.player.destroy();
+        }catch(err){
+          console.log(err);
+        }
       }
       youtube.player = service.createPlayer();
     }
@@ -138,7 +163,8 @@ creativityServices.service('JukeTubeVideosService', ['$window', '$rootScope', '$
         title: data.items[i].snippet.title,
         description: data.items[i].snippet.description,
         thumbnail: data.items[i].snippet.thumbnails.default.url,
-        author: data.items[i].snippet.channelTitle
+        author: data.items[i].snippet.channelTitle,
+        publishedAt: data.items[i].snippet.publishedAt.substring(0,10)
       });
     }
     return results;

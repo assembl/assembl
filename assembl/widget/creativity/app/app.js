@@ -3,12 +3,9 @@
 var creativityApp = angular.module('creativityApp',
     ['ngRoute','ngSanitize','creativityServices', 'pascalprecht.translate']);
 
-creativityApp.run(function () {
-  var tag = document.createElement('script');
-  tag.src = "http://www.youtube.com/iframe_api";
-  var firstScriptTag = document.getElementsByTagName('script')[0];
-  firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-});
+creativityApp.run(['JukeTubeVideosService', function (JukeTubeVideosService) {
+  JukeTubeVideosService.init();  
+}]);
 
 creativityApp.config(['$routeProvider', function($routeProvider){
     $routeProvider.
@@ -19,10 +16,6 @@ creativityApp.config(['$routeProvider', function($routeProvider){
         when('/videos', {
             templateUrl:'app/partials/videos.html',
             controller:'videosCtl'
-        }).
-        when('/video/:videoId', {
-            templateUrl:'app/partials/video-detail.html',
-            controller:'videoDetailCtl'
         }).
         when('/session', {
            templateUrl:'app/partials/session.html',

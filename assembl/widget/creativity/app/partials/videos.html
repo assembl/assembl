@@ -1,4 +1,4 @@
-<div id="JukeTube">
+<div id="JukeTube" ng-init="init()">
   <div id="results">
     <p>
       Lorem ipsum à propos de la discussion "{{ discussion.topic }}".
@@ -16,7 +16,7 @@
     <div class="video" data-ng-repeat="video in results" data-ng-click="launch(video.id, video.title)">
       <img class="video-image" data-ng-src="{{ video.thumbnail }}">
       <p class="video-title">{{ video.title }}</p>
-      <p class="video-author">{{ video.author }}</p>
+      <p class="video-author">by <strong>{{ video.author }}</strong> &nbsp;&#183;&nbsp; {{ video.publishedAt }}</p>
       <p class="video-description">{{ video.description }}</p>
     </div>
   </div>
