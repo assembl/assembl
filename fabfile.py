@@ -177,8 +177,8 @@ def compile_stylesheets():
     execute(update_compass)
     with cd(env.projectpath):
         run('bundle exec compass compile --force', shell=True)
-        with cd('assembl/widget/creativity/app/css'):
-            run('bundle exec compass compile --force --sass-dir . --css-dir .', shell=True)
+        with cd('assembl/widget/creativity/app'):
+            run('bundle exec compass compile --force --sass-dir scss --css-dir css', shell=True)
 
 
 def tests():
@@ -519,7 +519,7 @@ def install_ruby_build():
         # Install ruby-build:
         run('rm -rf /tmp/ruby-build')
         with cd('/tmp'):
-            run('git clone git://github.com/sstephenson/ruby-build.git')
+            run('git clone https://github.com/sstephenson/ruby-build.git')
         with cd('/tmp/ruby-build'):
             sudo('./install.sh')
 
@@ -535,7 +535,7 @@ def install_rbenv():
             rbenv_missing = run('ls ~/.rbenv').failed
         if rbenv_missing:
             # Install rbenv:
-            run('git clone git://github.com/sstephenson/rbenv.git ~/.rbenv')
+            run('git clone https://github.com/sstephenson/rbenv.git ~/.rbenv')
         # Add rbenv to the path:
         run('echo \'export PATH="$HOME/.rbenv/bin:$PATH"\' >> .bash_profile')
         run('echo \'eval "$(rbenv init -)"\' >> .bash_profile')
@@ -687,8 +687,7 @@ def commonenv(projectpath, venvpath=None):
     env.db_host = 'localhost'
     env.dbdumps_dir = os.path.join(projectpath, '%s_dumps' % env.projectname)
     env.ini_file = 'production.ini'
-    #env.gitrepo = "ssh://webapp@i4p-dev.imaginationforpeople.org/var/repositories/imaginationforpeople.git"
-    env.gitrepo = "git://github.com/ImaginationForPeople/assembl.git"
+    env.gitrepo = "https://github.com/ImaginationForPeople/assembl.git"
     env.gitbranch = "master"
 
     env.uses_memcache = True

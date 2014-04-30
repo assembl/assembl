@@ -3,7 +3,7 @@ Beaker==1.6.4
 Chameleon==2.15
 ColanderAlchemy==0.3.1
 DateTime==4.0.1
--e git://github.com/bitprophet/fabric.git#egg=fabric
+-e git+https://github.com/bitprophet/fabric.git#egg=fabric
 Jinja2==2.7.2
 Mako==0.9.1
 MarkupSafe==0.19
@@ -18,7 +18,7 @@ SQLAlchemy==0.9.4
 Unidecode==0.04.14
 WebOb==1.3.1
 WebTest==2.0.15
--e git://github.com/maparent/alembic.git#egg=alembic
+-e git+https://github.com/maparent/alembic.git#egg=alembic
 amqp==1.4.5
 anyjson==0.3.3
 anykeystore==0.2
@@ -83,7 +83,7 @@ xlwt==0.7.5
 zope.deprecation==4.1.1
 zope.interface==4.1.1
 zope.sqlalchemy==0.7.4
--e git://github.com/RDFLib/rdflib-jsonld#egg=rdflib_jsonld
--e git://github.com/maparent/pyodbc.git@v3-virtuoso#egg=pyodbc
--e git://github.com/maparent/virtuoso-python#egg=virtuoso
+-e git+https://github.com/RDFLib/rdflib-jsonld#egg=rdflib_jsonld
+-e git+https://github.com/maparent/pyodbc.git@v3-virtuoso#egg=pyodbc
+-e git+https://github.com/maparent/virtuoso-python#egg=virtuoso
 # hapi : a OAuth2 server for pyramid. Still very much work in progress.
