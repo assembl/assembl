@@ -88,6 +88,19 @@
     }
     .comment-idea {
       font-size: 12px;
+      &:before {
+        content: "";
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        margin-right: 5px;
+        background-size: 100%;
+        background: url('../img/light-bulb-7-64x64.png') 0 0 no-repeat;
+        float: left;
+      }
+      p {
+        padding-left: 24px;
+      }
     }
     .nb-summary {
       background-color: #69bf13;
@@ -105,29 +118,6 @@
       text-align: center;
       border: none;
     }
-    .rating-1, .rating-2, .rating-3, .rating-4, .rating-5 {
-      cursor: pointer;
-    }
-
-    .rating-1, .rating-2, .rating-3, .rating-4 {
-       margin-right: 5px;
-    }
-    .rating-1{
-      background-color: #e67e22;
-    }
-    .rating-2{
-      background-color:#e67e22;
-    }
-    .rating-3{
-      background-color:#e74c3c;
-    }
-    .rating-4{
-      background-color:#d35400;
-    }
-    .rating-5{
-      background-color:#c0392b;
-    }
-
   }
   .cards{
     width: auto;
