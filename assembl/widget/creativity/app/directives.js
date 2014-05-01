@@ -3,7 +3,7 @@
 creativityApp.directive('rate', function(){
     return{
         restrict:'E',
-        template:'<a class="glyphicon glyphicon-chevron-down text-danger" ng-click="rateDown()"></a><input class="rate" type="text" name="rate" ng-model="rate" value="{{rate}}" disabled><a class="glyphicon glyphicon-chevron-up text-success" ng-click="rateUp()"></a>',
+        template:'<a class="glyphicon glyphicon-chevron-down text-danger rate-down" ng-click="rateDown()"></a><input class="rate" type="text" name="rate" ng-model="rate" value="{{rate}}" disabled><a class="glyphicon glyphicon-chevron-up text-success rate-up" ng-click="rateUp()"></a>',
         link: function(scope, elements, attrs){
 
             scope.rate = 0;

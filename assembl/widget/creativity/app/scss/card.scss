@@ -12,7 +12,6 @@
     width: 340px;
     margin: 0 auto 10px auto;
     display: table;
-    padding: 10px;
     border-left: 1px solid #cccccc;
     border-right: 1px solid #cccccc;
     img{
@@ -85,21 +84,11 @@
     .text-primary {
       cursor: pointer;
     }
+    .media, .media-body {
+      padding-top: 5px;
+    }
     .comment-idea {
       font-size: 12px;
-      &:before {
-        content: "";
-        display: inline-block;
-        width: 20px;
-        height: 20px;
-        margin-right: 5px;
-        background-size: 100%;
-        background: url('../img/light-bulb-7-64x64.png') 0 0 no-repeat;
-        float: left;
-      }
-      p {
-        padding-left: 24px;
-      }
     }
     .nb-summary {
       background-color: #69bf13;
@@ -117,12 +106,26 @@
       text-align: center;
       border: none;
     }
+    .rate-up, .rate-down {
+      cursor: pointer;
+    }
+    .idea-icon:after {
+      content: "";
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      margin: -5px 0 0 5px;
+      background-size: 100%;
+      background: url('../img/light-bulb-7-64x64.png') 0 0 no-repeat;
+    }
+    .media-comment {
+      margin-top: 0px;
+    }
   }
   .cards{
     width: auto;
     .bs-callout-info, .bs-callout-warning {
       padding: 3px 10px;
-      clear:left;
       margin:10px 0;
     }
     .slot-machine {
