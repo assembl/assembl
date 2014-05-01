@@ -3,7 +3,7 @@
         <div class="cards">
             <div ng-repeat="card in cards">
                 <div ng-if="$first">
-                    <div class="bs-callout bs-callout-info">
+                    <div class="bs-callout bs-callout-warning">
                         <p>{{card[0].question}}</p>
                     </div>
                     <div class="card">
@@ -37,7 +37,7 @@
         <div class="session-comment">
             <div class="media" ng-if="ideas.length > 1" ng-repeat="idea in ideas">
                 <div class="pull-left thumbnail">
-                    <img class="media-object img-rounded" src="{{idea.avatar}}" alt="40x40" style="width: 40px; height: 40px;">
+                    <img class="media-object" src="{{idea.avatar}}" alt="40x40" style="width: 40px; height: 40px;">
                     <div class="caption">
 
                     </div>
@@ -62,13 +62,13 @@
                         </form>
                     </div>
                     <p>
-                        <span class="text-info glyphicon glyphicon-share-alt" ng-click="showSubComment = true">{{'reply'| translate }}</span>&nbsp;
-                        <span class="text-info glyphicon glyphicon-file" ng-click="showComment = ! showComment">{{'comments'| translate }}({{idea.comments.length}})</span>
+                        <span class="text-primary glyphicon glyphicon-share-alt" ng-click="showSubComment = true">{{'reply'| translate }}</span>&nbsp;
+                        <span class="text-primary glyphicon glyphicon-file" ng-click="showComment = ! showComment">{{'comments'| translate }}({{idea.comments.length}})</span>
                     </p>
                     <div ng-show="showComment">
                         <div class="media" ng-if="idea.comments.length > 1" ng-repeat="com in idea.comments">
                             <a class="pull-left" href="#">
-                                <img class="media-object img-thumbnail" alt="40x40" src="{{com.avatar}}" style="width: 40px; height: 40px;">
+                                <img class="media-object" alt="40x40" src="{{com.avatar}}" style="width: 30px; height: 30px;">
                             </a>
                             <div class="media-body">
                                 <h5 class="media-heading">{{com.fullname}}</h5>

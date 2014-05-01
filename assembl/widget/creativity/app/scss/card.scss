@@ -63,7 +63,7 @@
       text-align: center;
     }
   }
-  .bs-callout-info {
+  .bs-callout-info, .bs-callout-warning {
     padding: 3px 10px;
   }
 }
@@ -82,9 +82,8 @@
       height: 100px;
       min-height: 100px;
     }
-    .text-info {
+    .text-primary {
       cursor: pointer;
-      color:#AAAAAA;
     }
     .comment-idea {
       font-size: 12px;
@@ -121,7 +120,7 @@
   }
   .cards{
     width: auto;
-    .bs-callout-info {
+    .bs-callout-info, .bs-callout-warning {
       padding: 3px 10px;
       clear:left;
       margin:10px 0;
