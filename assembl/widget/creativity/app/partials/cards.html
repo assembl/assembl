@@ -3,15 +3,16 @@
         <div class="card-browser">
             <a id="previousCardButton" class="glyphicon glyphicon-chevron-left pointer" ng-class="{'inactive': displayed_card_index == 0}" ng-click="previousCard()"></a>
             <a id="nextCardButton" class="glyphicon glyphicon-chevron-right pointer" ng-class="{'inactive': displayed_card_index == displayed_cards.length-1}" ng-click="nextCard()"></a>
-            <a id="slot-machine" class="glyphicon glyphicon-random pointer" ng-click="shuffle()" ng-class="{'inactive': cards.length == 0}"></a>
             <div class="inspire-card">
                 <div class="card-top"></div>
                 <div ng-bind-html="displayed_cards[displayed_card_index].html_content"></div>
                 <div class="card-bottom"></div>
             </div>
+            <div id="slot-machine">
+                <a class="glyphicon glyphicon-random pointer" ng-click="shuffle()" ng-class="{'inactive': cards.length == 0}"></a>
+            </div>
         </div>
         <div class="bs-callout bs-callout-info">
-            <h4>Question</h4>
             <p class="ng-binding">{{displayed_cards[displayed_card_index].question}}</p>
         </div>
     </div>

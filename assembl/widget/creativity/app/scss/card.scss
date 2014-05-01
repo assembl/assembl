@@ -10,7 +10,7 @@
     position: relative;
     height: 390px;
     width: 340px;
-    margin: 0 auto;
+    margin: 0 auto 10px auto;
     display: table;
     padding: 10px;
     border-left: 1px solid #cccccc;
@@ -21,7 +21,7 @@
     }
     .card-top{
        height: 5px;
-       background-color: #e67e22;
+       background-color: #c7c2dd;
        position: absolute;
        top:0;
        right: 0;
@@ -29,7 +29,7 @@
     }
     .card-bottom{
       height: 5px;
-      background-color: #e67e22;
+      background-color: #c7c2dd;
       position: absolute;
       bottom:0;
       right: 0;
@@ -42,7 +42,7 @@
     padding: 10px;
   }
   .card-browser {
-    #previousCardButton, #nextCardButton, #slot-machine {
+    #previousCardButton, #nextCardButton{
       position: absolute;
       top: 50%;
       height: 24px;
@@ -59,12 +59,12 @@
       right: 0;
     }
     #slot-machine {
-      right: 80px;
-      text-decoration: none;
+      font-size: 20px;
+      text-align: center;
     }
   }
   .bs-callout-info {
-    padding: 12px;
+    padding: 3px 10px;
   }
 }
 
@@ -88,14 +88,23 @@
     }
     .comment-idea {
       font-size: 12px;
-      p{
-        padding: 5px;
-      }
     }
-    .badge {
+    .nb-summary {
       background-color: #69bf13;
+      color: #fff;
+      padding: 0 6px 5px 6px;
+      text-shadow: none;
+      width: auto;
+      font-weight: bold;
+      -moz-border-radius: 50%;
+      -webkit-border-radius: 50%;
+      border-radius: 50%;
     }
-
+    .rate {
+      width: 20px;
+      text-align: center;
+      border: none;
+    }
     .rating-1, .rating-2, .rating-3, .rating-4, .rating-5 {
       cursor: pointer;
     }
@@ -118,18 +127,18 @@
     .rating-5{
       background-color:#c0392b;
     }
+
   }
   .cards{
     width: auto;
     .bs-callout-info {
-      padding: 12px;
+      padding: 3px 10px;
       clear:left;
+      margin:10px 0;
     }
     .slot-machine {
-      line-height: 390px;
       font-size: 20px;
-      width: 30px;
-      float: right;
+      text-align: center;
       a{
         text-decoration: none;
       }
@@ -141,8 +150,7 @@
       display: table;
       padding: 10px;
       text-align: justify;
-      float: left;
-      margin: 10px 0 30px 50px;
+      margin: 10px 0 10px 50px;
       border-left: #CCCCCC 1px solid !important;
       border-right: #CCCCCC 1px solid !important;
       p {
@@ -151,7 +159,7 @@
       }
       .card-top{
         height: 5px;
-        background-color: #8E44AD;
+        background-color: #c7c2dd;
         position: absolute;
         top:0;
         right: 0;
@@ -159,7 +167,7 @@
       }
       .card-bottom{
         height: 5px;
-        background-color: #8E44AD;
+        background-color: #c7c2dd;
         position: absolute;
         bottom:0;
         right: 0;
