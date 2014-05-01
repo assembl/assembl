@@ -203,3 +203,9 @@ creativityApp.controller('creativitySessionCtl',
     }
 
 }]);
+
+creativityApp.controller('ratingCtl',
+    ['$scope', function($scope){
+
+
+}]);

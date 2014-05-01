@@ -21,6 +21,10 @@ creativityApp.config(['$routeProvider', function($routeProvider){
            templateUrl:'app/partials/session.html',
            controller:'creativitySessionCtl'
         }).
+        when('/rating', {
+            templateUrl:'app/partials/rating.html',
+            controller:'ratingCtl'
+        }).
         otherwise({
             redirectTo: '/cards'
         });
