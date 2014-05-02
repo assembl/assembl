@@ -1,5 +1,5 @@
 <div id = "synthesisPanel" class="panel">
-    <div class="panel-header">
+    <header class="panel-header">
         <strong>{{ gettext('Synthesis') }}</strong>
 
         <div class="float-right">
@@ -7,7 +7,7 @@
             {# <a id="synthesisPanel-collapseButton" class="iconbutton <%= collapsed ? 'icon-plus-squared-small' : 'icon-minus-squared-small' %>"></a> #}
             <a id="synthesisPanel-closeButton" class="iconbutton icon-cancel" data-tooltip="{{ gettext('Close panel') }}"></a>
         </div>
-    </div>
+    </header>
 
     <div class="panel-body body-synthesis">
         <div class="sudject">{{ gettext('Subject') }}</div>
@@ -31,8 +31,8 @@
         </div>
     </div>
     <% if (canSend) { %>
-    <div class="panel-footer text-right">
+    <footer class="panel-footer text-right">
         <a id="synthesisPanel-publishButton" class="link">{{ gettext('Publish') }} <i class="icon-edit"></i></a>
-    </div>
+    </footer>
     <% } %>
 </div>

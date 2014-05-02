@@ -1,5 +1,5 @@
 <div class="panel ideaPanel">
-    <div class="panel-header">
+    <header class="panel-header">
         <strong data-tooltip="{{gettext('Detailled information about the currently selected idea in the Table of ideas')}}">{{ gettext('Idea') }}</strong>
         <div class="float-right">
             <% if( idea.getId() ) { %>
@@ -7,7 +7,7 @@
             <% } %>
             <a id="ideaPanel-closebutton" class="iconbutton icon-cancel" data-tooltip="{{gettext('Close panel')}}"></a>
         </div>
-    </div>
+    </header>
     
     <div class="panel-body">
         <fieldset id="ideaPanel-section-summary" class="panel-section">
@@ -50,7 +50,7 @@
         
     </div>
 
-    <div class="panel-footer">
+    <footer class="panel-footer">
         <% if (canDelete) { %>
         <div class="float-right">
             <a id="ideaPanel-deleteButton" class="link" data-tooltip="{{gettext('Delete this idea completely')}}">{{ gettext('Delete idea') }}</a>
@@ -59,6 +59,6 @@
         if (canEditExtracts) { %>
         <a id="ideaPanel-clearbutton" class="link" data-tooltip="{{gettext('Removed segments will be available in your clipboard')}}">{{ gettext('Remove all segments') }}</a>
         <% } %>
-    </div>
+    </footer>
 
 </div>

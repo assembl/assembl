@@ -20,7 +20,7 @@
 
 {% block content %}
 
-<div class="loginbox">
+<div class="loginbox sign-in">
     <div class="signinWrapper">
         <p class="login-box-title">{{ gettext("connect to assembl") }}</p>
         <div class="error-message">{{error}}</div>
@@ -55,6 +55,35 @@
         {{form('github', 'Login with Github', false)}}
         {{form('bitbucket', 'Login with Bitbucket', false)}}
         {{form('openid', 'Login with OpenID', true)}}
+
+        <form id="google" method="post" action="/login/google">
+
+
+
+            <input type="image" value="" src="/static/img/loginbox/google.png" alt="Login with Google">
+
+        </form>
+        <form id="google" method="post" action="/login/google">
+
+
+
+            <input type="image" value="" src="/static/img/loginbox/google.png" alt="Login with Google">
+
+        </form>
+        <form id="google" method="post" action="/login/google">
+
+
+
+            <input type="image" value="" src="/static/img/loginbox/google.png" alt="Login with Google">
+
+        </form>
+        <form id="google" method="post" action="/login/google">
+
+
+
+            <input type="image" value="" src="/static/img/loginbox/google.png" alt="Login with Google">
+
+        </form>
     </div>
     <div class="spacer spacer--big"></div>
     <footer>

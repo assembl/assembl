@@ -11,7 +11,7 @@
     titles.synthesis = titles.synthesis.replace('{0}', synthesisTotal);
     %>
 
-    <div class="panel-header">
+    <header class="panel-header">
         {# <div class="dropdown">
             <span class="dropdown-label text-bold"><%= filter === 'featured' ? titles.featured : filter === 'inNextSynthesis' ? titles.synthesis : titles.toc %></span>
             <ul class="dropdown-list">
@@ -28,7 +28,7 @@
             <a id="ideaList-fullscreenButton" class="iconbutton iconbutton--resizefull" data-tooltip="{{gettext('Fullsize')}}"></a>
             <a id="ideaList-closeButton" class="iconbutton icon-cancel" data-tooltip="{{gettext('Close panel')}}"></a>
         </div>
-    </div>
+    </header>
     
     <div class="panel-body">
 
@@ -44,10 +44,10 @@
     <div class="panel-bodyabove"></div>
     <div class="panel-bodybelow"></div>
 
-    <div class="panel-footer text-right">
+    <footer class="panel-footer text-right">
         <% if (canAdd) { %>
         <a class="link" id="ideaList-addbutton">{{ gettext('Add idea') }} <i class="icon-plus-squared"></i></a>
         <% } %>
-    </div>
+    </footer>
 
 </div>

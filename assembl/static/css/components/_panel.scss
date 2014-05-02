@@ -1,21 +1,19 @@
 // The panel
 // =========
 .panel {
+  @include box-shadow(rgba(0, 0, 0, 0.1) 0 0 2px 0px);
+  @include border-radius( 3px );
+  @include box-sizing( border-box );
     position: relative;
     z-index: 10;
-    box-shadow: 1px 1px 2px #666;
-
-    @include box-sizing( border-box );
     height: 100%;
-
-    //border: 3px solid #dddddd;
-    @include border-radius( 5px );
+    border: 1px solid #d9d9d9;
     background-color: #fff;
     overflow: hidden;
     
     fieldset {
-        @include border-radius( 5px );
-        background-color: $panel-header-bg-color;
+        //@include border-radius( 5px );
+        //background-color: $panel-header-bg-color;
         margin: 10px;
         margin-top: 1.4em; //height of the legend32 + 0.5em
         padding: 5px;
@@ -87,7 +85,7 @@
     padding: { left: $padding; right: 3px; };
 
     //background-color: $panel-header-bg-color;
-    @include border-radius( 5px 5px 0 0 );
+    //@include border-radius( 5px 5px 0 0 );
     border-bottom: solid 1px $panel-border-color;
 
     position: relative;

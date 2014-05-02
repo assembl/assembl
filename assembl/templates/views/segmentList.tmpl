@@ -1,13 +1,13 @@
 <div class="panel">
 
-    <div class="panel-header">
+    <header class="panel-header">
         {% set quantity = "<%= segments.length %>" %}
         <strong>{{ gettext("Clipboard (%(quantity)s)")|format(quantity=quantity)|safe }}</strong>
 
         <div class="float-right">
             <a id="segmentList-closeButton" class="iconbutton icon-cancel" data-tooltip="{{gettext('Close panel')}}"></a>
         </div>
-    </div>
+    </header>
     
     <div class="panel-body">
         <div class="box box--bottomborder">
@@ -26,7 +26,7 @@
 
     </div>
 
-    <div class="panel-footer">
+    <footer class="panel-footer">
         <a id="segmentList-clear" class="link"> <i class="icon-trash"></i> {{ gettext('Clear') }}</a>
-    </div>
+    </footer>
 </div>

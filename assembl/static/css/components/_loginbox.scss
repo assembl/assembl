@@ -5,19 +5,20 @@
   @include border-radius(6px);
   margin: 5% auto 0 auto;
   border: 1px solid rgba(0,0,0,0.1);
-  width: 650px;
-  min-width: 650px;
+  width: 700px;
   background-color: #ffffff;
   box-shadow:0 0 225px rgba(255,255,255,.55);
 
   form {
     margin: 0 auto;
-    .register {
+    width: 330px;
       a{
         text-decoration: none;
         color: #484848;
         cursor: pointer;
-      }
+    }
+    input{
+      margin-bottom: 10px;
     }
   }
 
@@ -46,6 +47,7 @@
   .login-box-title {
     text-align: left;
     font-size: 20px;
+    //margin-left: 160px;
   }
 
   .register-box-title {
@@ -63,7 +65,7 @@
   }
 
   .signinWrapper {
-    padding: 0 22px;
+    padding: 0 0 0 22px;
     box-sizing: border-box;
     float: left;
   }
@@ -73,7 +75,7 @@
   }
 
   .signinSeparator {
-    margin: 20px 20px 0 20px;
+    margin: 20px 0 0 0;
     width:20px;
     position:relative;
 
@@ -97,5 +99,14 @@
   .spacer--big {
     clear: right;
   }
+}
+
+.loginbox.register {
+   .login-box-title {
+     margin-left: 184px;
+   }
+}
+
+.loginbox.sign-in {
 
 }

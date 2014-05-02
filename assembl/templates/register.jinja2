@@ -1,8 +1,11 @@
 {% extends 'base.jinja2' %}
 
 {% block content %}
-<div class="loginbox">
-    <p class="login-box-title">{{ gettext('join assembl') }}</p>
+<div class="loginbox register">
+    <header>
+        <p class="login-box-title">{{ gettext('join assembl') }}</p>
+    </header>
+
     {% if error %}
     <div class="error">{{error}}</div>
     {% endif %}
@@ -10,17 +13,11 @@
     <form class="form" method="POST">
         <input type="hidden" name="next_view" value="{{next_view}}" />
         <input type="text" name="name" class="defaultfield" placeholder="{{ gettext('Name') }}" autofocus required />
-
-        <div class="spacer spacer--big"></div>
-
         <input type="text" name="email" class="defaultfield" placeholder="{{ gettext('email') }}" required />
-        <div class="spacer spacer--big"></div>
         <input type="password" name="password" class="defaultfield" placeholder="{{ gettext('Password') }}" required />
-        <div class="spacer spacer--big"></div>
         <input type="password" name="password2" class="defaultfield" placeholder="{{ gettext('Repeat password') }}" required />
-        <div class="spacer spacer--big"></div>
         <input type="submit" name="register" value="{{ gettext('Register') }}" class="btn-pink" />
-        <span class="register">{{gettext("or")}} <a href="/login?next_view={{next_view}}">{{gettext("login")}}</a></span>
+        <span>{{gettext("or")}} <a href="/login?next_view={{next_view}}">{{gettext("login")}}</a></span>
     </form>
 
     <footer>

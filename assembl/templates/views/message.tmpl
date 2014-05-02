@@ -1,5 +1,5 @@
 
-<div class="message-header">
+<header class="message-header">
     <div class="float-left">
         <img src="<%= creator.getAvatarUrl(30) %>" alt="{{ gettext('User') }}"  class="image-rounded" width="30" height="30" />
     </div>
@@ -12,7 +12,7 @@
         <span class="message-subject margin-right"><%= subject %></span>
         {# <span class="text-muted"><%= app.stripHtml(body) %></span> #}
     </div>
-</div>
+</header>
 <% } else if ( viewStyle == app.AVAILABLE_MESSAGE_VIEW_STYLES.PREVIEW ){ %>
     <div class="message-date">{{ gettext('<time>%(time)s</time>')|format(time=time)|safe }}</div>
     <div class="message-subheader">
