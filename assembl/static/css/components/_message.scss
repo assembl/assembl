@@ -102,7 +102,7 @@ $ellipsiswidth: 3em !default;
         @include multiline-ellipsis(3em, 1em, 3em);
         .message-body {
             @extend .text-muted;
-            margin-top: -0.5em;
+            margin-top: 0.2em;
             padding-left: 1em;
             position: relative;
             white-space: normal;
