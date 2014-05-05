@@ -50,6 +50,17 @@ creativityApp.controller('videosCtl',
           minimumInputLength: 1
       });
 
+      // make recommended keywords re-appear on top when they are removed from the search field
+      $("#query").on("change", function(e){
+        if ( e.removed )
+        {
+          if ( $scope.inspiration_keywords.indexOf(e.removed.text) >= 0 )
+          {
+            $("#results .keywords .keyword:contains(\""+e.removed.text.replace(/"/g, '\\"')+"\")").show();
+          }
+        }
+      });
+
 
       // activate the right tab
 
@@ -79,7 +90,7 @@ creativityApp.controller('videosCtl',
         {
           values.push( keyword_value );
           $("#query").select2("val", values );
-          $($event.target).css('display', 'none');
+          $($event.target).hide();
           //$(el.target).css('background', '#000');
         }
     }
