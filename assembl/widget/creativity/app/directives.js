@@ -1,9 +1,13 @@
 "use strict";
 
-creativityApp.directive('rate', function(){
+creativityApp.directive('vote', function(){
     return{
         restrict:'E',
-        template:'<a class="glyphicon glyphicon-chevron-down text-danger rate-down" ng-click="rateDown()"></a><input class="rate" type="text" name="rate" ng-model="rate" value="{{rate}}" disabled><a class="glyphicon glyphicon-chevron-up text-success rate-up" ng-click="rateUp()"></a>',
+        transclude: true,
+        scope: {
+            id:'=id'
+        },
+        templateUrl:'app/partials/vote.html',
         link: function(scope, elements, attrs){
 
             scope.rate = 0;
@@ -12,7 +16,7 @@ creativityApp.directive('rate', function(){
                if(scope.rate > 4){
                    return;
                }
-               scope.rate += 1;
+                scope.rate += 1;
             }
 
             scope.rateDown = function(){
@@ -21,6 +25,7 @@ creativityApp.directive('rate', function(){
                 }
                 scope.rate -= 1;
             }
+
 
         }
     }

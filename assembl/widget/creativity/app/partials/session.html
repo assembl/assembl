@@ -43,9 +43,9 @@
                     </div>
                 </div>
                 <div class="media-body">
-                    <h5 class="media-heading pull-left">{{idea.fullname}} <i class="icon-lamp"></i></h5>
+                    <h5 class="media-heading pull-left">{{idea.fullname}}<i class="icon-lamp"></i></h5>
                     <span class="pull-right">
-                        <rate></rate>
+                        <vote id="idea.id"></vote>
                     </span>
                     <div class="row">
                         <div class="col-md-11 comment-idea">
@@ -63,7 +63,7 @@
                     </div>
                     <p>
                         <span class="text-primary glyphicon glyphicon-share-alt" ng-click="showSubComment = true">{{'reply'| translate }}</span>&nbsp;
-                        <span class="text-primary glyphicon glyphicon-file" ng-click="showComment = ! showComment">{{'comments'| translate }}({{idea.comments.length}})</span>
+                        <span class="text-primary glyphicon glyphicon-file" ng-click="showComment = ! showComment" ng-show="idea.comments.length>0">{{'comments' | translate: {nb: idea.comments.length} }}</span>
                     </p>
                     <div ng-show="showComment">
                         <div class="media media-comment" ng-if="idea.comments.length > 1" ng-repeat="com in idea.comments">
@@ -79,6 +79,8 @@
                 </div>
             </div>
         </div>
+
+        <button class="btn btn-primary btn-sm pull-right" ng-click="totalVote()">{{'validVote'| translate }}</button>
     </div>
 </div>
 

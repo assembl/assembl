@@ -74,6 +74,8 @@
   .session-comment {
     font-family: Helvetica, Arial, sans-serif;
     padding-left: 10%;
+    height: 676px;
+    overflow-y: auto;
     .thumbnail{
       border:none;
     }
@@ -83,6 +85,7 @@
     }
     .text-primary {
       cursor: pointer;
+      word-spacing: -10px;
     }
     .media, .media-body {
       padding-top: 5px;
@@ -136,7 +139,7 @@
       display: table;
       padding: 10px;
       text-align: justify;
-      margin: 10px 0 10px 50px;
+      margin: 2em 0 1em 7em;
       border-left: #CCCCCC 1px solid !important;
       border-right: #CCCCCC 1px solid !important;
       p {

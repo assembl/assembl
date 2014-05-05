@@ -191,8 +191,6 @@ creativityApp.controller('creativitySessionCtl',
 
     $scope.formData = {};
 
-    $('.session-comment .vote').popover();
-
     //data mock
     globalConf.fetch().success(function(data){
         $scope.cards = data.card_game;
@@ -220,8 +218,22 @@ creativityApp.controller('creativitySessionCtl',
         if($scope.formData) {
             console.log($scope.formData)
         }
+    }
+
+    /*
+    * Sum each value from session vote
+    * */
+    $scope.totalVote = function(){
+        var el = angular.element('.session-comment .total-score');
+        angular.forEach(el, function(v, k){
+            var elm = angular.element(v);
+
+            console.log("idea id :" + elm.attr('id') +" vote :"+ elm.val() );
+
+        });
 
     }
+
 
 }]);
 

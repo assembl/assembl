@@ -3,8 +3,9 @@
     "acomment":"Commentaire",
     "send":"Envoyez",
     "reply":"Repondre",
-    "comments":"Commentaires",
+    "comments":"Voir les {{nb}} commentaires",
     "vote":"Votez",
     "title":"titre",
-    "cancel":"Annuler"
+    "cancel":"Annuler",
+    "validVote":"Validez vos votes"
 }
