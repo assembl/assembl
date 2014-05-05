@@ -26,6 +26,17 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
         },
         
         currentViewStyle: null,
+        /**
+         * Is the view currently rendering
+         */
+        currentlyRendering: false,
+        /**
+         * If there were any render requests inhibited while rendering was 
+         * processed
+         */
+        numRenderInhibitedDuringRendering: 0,
+        
+        
         storedMessageListConfig: app.getMessageListConfigFromStorage(),
         /**
          * get a view style definition by id
@@ -55,7 +66,9 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
             // TODO:  Benoitg:  I didn't write this part, but i think it needs a
             // re-render, not just an init
             this.listenTo(this.messages, 'change', this.initAnnotator);
-
+            // TODO:  FIXME!!! Benoitg - 2014-05-05
+            this.listenTo(app.segmentList.segments, 'add remove reset change', this.render);
+            
             var that = this;
             app.on('idea:select', function(idea){
                 that.currentQuery.clearFilter(that.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, null);
@@ -64,8 +77,17 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
                     that.currentQuery.addFilter(that.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, idea.getId());
                     app.openPanel(app.messageList);
                 }
+                if(app.debugRender) {
+                    console.log("messageList: triggering render because new idea was selected");
+                }
                 that.render();
             });
+            this.on("all", function(eventName) {
+                console.log("messageList event received: ", eventName);
+              });
+            this.messages.on("all", function(eventName) {
+                console.log("messageList collection event received: ", eventName);
+              });
             
         },
         
@@ -216,13 +238,20 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
          */
         render: function(){
             var that = this;
-
-            /*
-            console.log("messageList:render() is firing, collection is: ");
-            this.messages.map(function(message){
-                console.log(message.getId())
-            })
-            */
+            function renderStatus() {
+                if(that.currentlyRendering) return "a render is already in progress, ";
+                else return "no render in progress, ";
+            }
+            if(app.debugRender) {
+                console.log("messageList:render() is firing, "+renderStatus()+this.messages.length+" messages to render.");
+                /*
+                console.log("collection to render is: ");
+                this.messages.map(function(message){
+                    console.log(message.getId())
+                })*/
+            }
+            this.currentlyRendering = true;
+            
             app.trigger('render');
             if(this.messagesFinishedLoading) {
                 this.blockPanel();
@@ -236,7 +265,7 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
                 this.render_real();
                 this.blockPanel();
             }
-
+            this.currentlyRendering = false;
             return this;
         },
         /**

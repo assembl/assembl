@@ -36,6 +36,10 @@ function(Backbone, _, Idea, Message, app, i18n, Types, EditableField, CKEditorFi
 
             this.idea.on('change', this.render, this);
 
+            // TODO:  FIXME!!! Benoitg - 2014-05-05
+            app.segmentList.segments.on('change reset', this.render, this);
+            app.users.on('reset', this.render, this);
+            
             var that = this;
             app.on('idea:select', function(idea){
                 that.setCurrentIdea(idea);
@@ -46,6 +50,9 @@ function(Backbone, _, Idea, Message, app, i18n, Types, EditableField, CKEditorFi
          * The render
          */
         render: function(){
+            if(app.debugRender) {
+                console.log("ideaPanel:render() is firing");
+            }
             app.trigger('render');
 
             var segments = this.idea.getSegments(),

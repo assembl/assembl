@@ -25,6 +25,12 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard, Types, Permissions){
      */
     window.app = {
         /**
+         * Send debugging output to console.log to observe when views render
+         * @type {bboolean}
+         */
+        debugRender: true,
+            
+        /**
          * Reference to the body as jQuery object
          * @type {jQuery}
          */
@@ -969,6 +975,9 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard, Types, Permissions){
             app.doc.on('ajaxError', app.onAjaxError);
 
             app.on('render', function(){
+                /*if(app.debugRender) {
+                    console.log("app.on('render) triggered");
+                }*/
                 app.cleanTooltips();
                 window.setTimeout(app.initTooltips, 500);
             });

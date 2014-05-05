@@ -39,19 +39,13 @@ define([
 
     // Segment List
     app.segmentList = new SegmentList({el: '#segmentList', button: '#button-segmentList'});
-    app.segmentList.segments.on('add change reset', app.ideaList.render, app.ideaList);
-    app.segmentList.segments.on('invalid', function(model, error){ alert(error); });
-    app.users.on('reset', app.segmentList.render, app.segmentList);
     
     // Idea panel
     app.ideaPanel = new IdeaPanel({el: '#ideaPanel', button: '#button-ideaPanel'}).render();
-    app.segmentList.segments.on('change reset', app.ideaPanel.render, app.ideaPanel);
-    app.users.on('reset', app.ideaPanel.render, app.ideaPanel);
 
     // Message
     app.messageList = new MessageList({el: '#messageList', button: '#button-messages'}).render();
     app.messageList.loadInitialData();
-    app.messageList.listenTo(app.segmentList.segments, 'add remove reset change', app.messageList.render);
 
     // Synthesis
     app.synthesisPanel = new SynthesisPanel({el: '#synthesisPanel', button: '#button-synthesis', ideas: app.ideaList.ideas });

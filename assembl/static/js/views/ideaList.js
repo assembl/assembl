@@ -69,6 +69,9 @@ function(Backbone, _, Idea, IdeaView, ideaGraphLoader, app, Types, AllMessagesIn
          * The render
          */
         render: function(){
+            if(app.debugRender) {
+                console.log("ideaList:render() is firing");
+            }
             app.trigger('render');
 
             this.body = this.$('.panel-body');

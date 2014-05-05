@@ -12,7 +12,11 @@ function(Backbone, _, $, app, Segment, i18n, Permissions){
             if( obj && obj.button ){
                 this.button = $(obj.button).on('click', app.togglePanel.bind(window, 'segmentList'));
             }
-
+            // TODO:  FIXME!!! Benoitg - 2014-05-05
+            this.segments.on('add change reset', app.ideaList.render, app.ideaList);
+            this.segments.on('invalid', function(model, error){ alert(error); });
+            app.users.on('reset', this.render, app.segmentList);
+            
             this.segments.on('add remove change reset', this.render, this);
 
             this.segments.on('add', function(segment){
@@ -43,6 +47,9 @@ function(Backbone, _, $, app, Segment, i18n, Permissions){
          * @return {segmentList}
          */
         render: function(){
+            if(app.debugRender) {
+                console.log("segmentList:render() is firing");
+            }
             app.trigger('render');
 
             var segments = this.segments.getClipboard(),

@@ -36,7 +36,7 @@ define(['backbone', 'app'], function(Backbone, app){
                     if (existing === null || existing === undefined) {
                         this.set('@id', id);
                     } else if (existing !== this) {
-                        console.log(existing);
+                        console.log("Existing: ", existing);
                         // those websockets are fast!
                         this.collection.remove(this);
                         this.trigger("replaced", existing);
