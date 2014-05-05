@@ -366,7 +366,8 @@ define(['app', 'i18n', 'sprintf'], function(app, i18n, sprintf){
         this.getHtmlDescription = function(){
             var retval = '',
             valuesText = [],
-            numActiveFilters = this._query.length;
+            numActiveFilters = _.keys(this._query).length;
+            console.log(this._query);
             if(this._queryResultInfo == null) {
                 retval += '<div id="post-query-results-info">';
                 retval += i18n._("No query has been executed yet");
@@ -376,7 +377,6 @@ define(['app', 'i18n', 'sprintf'], function(app, i18n, sprintf){
                 retval += '<div id="post-query-results-info">';
                 
                 if(this.getResultNumTotal() == 0) {
-                    retval += i18n._("There are no messages that:");
                     if(numActiveFilters > 0) {
                         retval += i18n._("There are no messages in the discussion that:");
                     }
@@ -408,7 +408,7 @@ define(['app', 'i18n', 'sprintf'], function(app, i18n, sprintf){
                         if(filterDef._filter_description) {
                             retval += filterDef._filter_description(filterDef, this._query[filterDef.id]);
                         }
-
+                        else{
                             if (filterDef._value_is_boolean) {
                                 var filterQuery = this._query[filterDef.id][0];
                                 var span = '<span class="closebutton" data-filterid="'+filterDef.id+'" data-value="'+filterQuery.value+'"></span>\n';
@@ -424,6 +424,7 @@ define(['app', 'i18n', 'sprintf'], function(app, i18n, sprintf){
                                 }
                                 retval += sprintf.sprintf(i18n._("%s for values %s"), filterDef.name, valuesText.join(', '));
                             }
+                        }
                         retval += '</li>';
                     }
                 }
