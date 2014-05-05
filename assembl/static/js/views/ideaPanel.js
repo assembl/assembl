@@ -36,8 +36,10 @@ function(Backbone, _, Idea, Message, app, i18n, Types, EditableField, CKEditorFi
 
             this.idea.on('change', this.render, this);
 
-            // TODO:  FIXME!!! Benoitg - 2014-05-05
-            app.segmentList.segments.on('change reset', this.render, this);
+            // Benoitg - 2014-05-05:  There is no need for this, if an idealink
+            // is associated with the idea, the idea will recieve a change event
+            // on the socket
+            //app.segmentList.segments.on('change reset', this.render, this);
             app.users.on('reset', this.render, this);
             
             var that = this;

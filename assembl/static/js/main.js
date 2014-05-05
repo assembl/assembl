@@ -34,12 +34,13 @@ define([
     // $('#assembl-mainbutton').on('click', app.lateralMenu.trigger.bind(app.lateralMenu, 'toggle'));
     // app.getCurrentUser().on('change', app.lateralMenu.render, app.lateralMenu);
 
+    // The order of these initialisations matter...
+    // Segment List
+    app.segmentList = new SegmentList({el: '#segmentList', button: '#button-segmentList'});
+
     // Idea list
     app.ideaList = new IdeaList({el: '#ideaList', button: '#button-ideaList'});
 
-    // Segment List
-    app.segmentList = new SegmentList({el: '#segmentList', button: '#button-segmentList'});
-    
     // Idea panel
     app.ideaPanel = new IdeaPanel({el: '#ideaPanel', button: '#button-ideaPanel'}).render();
 
@@ -54,8 +55,8 @@ define([
     }});
 
     // Fetching the ideas
-    app.ideaList.ideas.fetchFromScriptTag('ideas-json');
     app.segmentList.segments.fetchFromScriptTag('extracts-json');
+    app.ideaList.ideas.fetchFromScriptTag('ideas-json');
 
     // Let the game begins...
     Backbone.history.start({hashChange: false, root: "/" + app.slug });

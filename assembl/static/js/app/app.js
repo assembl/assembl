@@ -26,9 +26,9 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard, Types, Permissions){
     window.app = {
         /**
          * Send debugging output to console.log to observe when views render
-         * @type {bboolean}
+         * @type {boolean}
          */
-        debugRender: true,
+        debugRender: false,
             
         /**
          * Reference to the body as jQuery object

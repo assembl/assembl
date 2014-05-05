@@ -51,6 +51,13 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
          *  @init
          */
         initialize: function(obj){
+            /*this.on("all", function(eventName) {
+                console.log("messageList event received: ", eventName);
+              });
+            this.messages.on("all", function(eventName) {
+                console.log("messageList collection event received: ", eventName);
+              });*/
+            
             if( obj.button ){
                 this.button = $(obj.button).on('click', app.togglePanel.bind(window, 'messageList'));
             }
@@ -61,13 +68,16 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
             this.defaultMessageStyle = app.getMessageViewStyleDefById(this.storedMessageListConfig.messageStyleId) || app.AVAILABLE_MESSAGE_VIEW_STYLES.PREVIEW;
             this.currentQuery.setView(this.currentQuery.availableViews.REVERSE_CHRONOLOGICAL);
             
-            this.listenTo(this.messages, 'reset', this.invalidateResultsAndRender);
+            this.listenTo(this.messages, 'reset', function() {
+                that.messagesFinishedLoading = true;
+                that.invalidateResultsAndRender();
+            });
             this.listenTo(this.messages, 'add', this.invalidateResultsAndRender);
             // TODO:  Benoitg:  I didn't write this part, but i think it needs a
             // re-render, not just an init
             this.listenTo(this.messages, 'change', this.initAnnotator);
             // TODO:  FIXME!!! Benoitg - 2014-05-05
-            this.listenTo(app.segmentList.segments, 'add remove reset change', this.render);
+            this.listenTo(app.segmentList.segments, 'add remove reset change', this.initAnnotator);
             
             var that = this;
             app.on('idea:select', function(idea){
@@ -82,12 +92,6 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
                 }
                 that.render();
             });
-            this.on("all", function(eventName) {
-                console.log("messageList event received: ", eventName);
-              });
-            this.messages.on("all", function(eventName) {
-                console.log("messageList collection event received: ", eventName);
-              });
             
         },
         
@@ -240,12 +244,12 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
             var that = this;
             function renderStatus() {
                 if(that.currentlyRendering) return "a render is already in progress, ";
-                else return "no render in progress, ";
+                else return "no render already in progress, ";
             }
             if(app.debugRender) {
-                console.log("messageList:render() is firing, "+renderStatus()+this.messages.length+" messages to render.");
+                console.log("messageList:render() is firing, "+renderStatus()+this.messages.length+" messages in collection.");
                 /*
-                console.log("collection to render is: ");
+                console.log("message collection is: ");
                 this.messages.map(function(message){
                     console.log(message.getId())
                 })*/
@@ -525,8 +529,7 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
                     post.collapsed = that.collapsed;
                 });
                 that.messages.reset(data.posts);
-                that.messagesFinishedLoading = true;
-                that = that.render();
+                //that = that.render();
             });
         },
         

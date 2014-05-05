@@ -12,8 +12,7 @@ function(Backbone, _, $, app, Segment, i18n, Permissions){
             if( obj && obj.button ){
                 this.button = $(obj.button).on('click', app.togglePanel.bind(window, 'segmentList'));
             }
-            // TODO:  FIXME!!! Benoitg - 2014-05-05
-            this.segments.on('add change reset', app.ideaList.render, app.ideaList);
+
             this.segments.on('invalid', function(model, error){ alert(error); });
             app.users.on('reset', this.render, app.segmentList);
             

@@ -42,25 +42,43 @@ function(Backbone, _, Idea, IdeaView, ideaGraphLoader, app, Types, AllMessagesIn
          * @init
          */
         initialize: function(obj){
+            this.ideas = new Idea.Collection();
+            /*this.on("all", function(eventName) {
+                console.log("ideaList event received: ", eventName);
+              });
+            this.ideas.on("all", function(eventName) {
+                console.log("ideaList collection event received: ", eventName);
+              });*/
+            
             if( obj && obj.button ){
                 this.button = $(obj.button);
                 this.button.on('click', app.togglePanel.bind(window, 'ideaList'));
             }
-
-            this.ideas = new Idea.Collection();
 
             var events = ['reset', 'change:parentId', 'change:inNextSynthesis', 'remove', 'add'];
             this.ideas.on(events.join(' '), this.render, this);
 
             var that = this;
             app.on('idea:delete', function(){
+                if(app.debugRender) {
+                    console.log("ideaList: triggering render because app.on('idea:delete') was triggered");
+                }
                 that.render();
             });
 
             app.on('ideas:update', function(ideas){
+                if(app.debugRender) {
+                    console.log("ideaList: triggering render because app.on('idea:update') was triggered");
+                }
                 that.ideas.add(ideas, {merge: true, silent: true});
                 that.render();
             });
+            
+            // Benoitg - 2014-05-05:  There is no need for this, if an idealink
+            // is associated with the idea, the idea itself will receive a change event
+            // on the socket
+            //app.segmentList.segments.on('add change reset', this.render, this);
+            
             app.on("panel:open", function(){that.resizeGraphView();});
             app.on("panel:close", function(){that.resizeGraphView();});
         },
