@@ -56,7 +56,11 @@ else if( viewStyle == app.AVAILABLE_MESSAGE_VIEW_STYLES.FULL_BODY ){ %>
     <div class="dropdown">
         <span class="dropdown-label dropdown-label--arrow"></span>
         <ul class="dropdown-list dropdown-list--bottomright">
-            <li id="message-markasunread" class="dropdown-listitem">{{ gettext('Mark as unread') }}</li>
+            <% if (read){ %>
+                <li id="message-markasunread" class="dropdown-listitem">{{ gettext('Mark as unread') }}</li>
+            <% } else { %>
+                <li id="message-markasread" class="dropdown-listitem">{{ gettext('Mark as read') }}</li>
+            <% } %>
         </ul>
     </div>
 </div>

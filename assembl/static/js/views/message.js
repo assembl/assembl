@@ -42,6 +42,7 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n, Permissions, Message
             this.model.on('change:isSelected', this.onIsSelectedChange, this);
             this.model.on('replaced', this.onReplaced, this);
             this.model.on('showBody', this.onShowBody, this);
+            this.model.on('change', this.render, this);
             this.messageListView = obj.messageListView;
             this.viewStyle = this.messageListView.defaultMessageStyle;
             this.messageListView.on('annotator:initComplete', this.onAnnotatorInitComplete, this);
@@ -90,6 +91,7 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n, Permissions, Message
             data['isHoisted'] = this.isHoisted;
             
             this.$el.attr("id","message-"+ data['@id']);
+            data['read'] = this.model.get('read')
             if (this.model.get('read')) {
                 this.$el.addClass('read');
                 this.$el.removeClass('unread');
@@ -269,7 +271,8 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n, Permissions, Message
             'mouseenter .message-body': 'doTheSelection',
 
             // menu
-            'click #message-markasunread': 'markAsUnread'
+            'click #message-markasunread': 'markAsUnread',
+            'click #message-markasread': 'markAsRead'
         },
 
         
