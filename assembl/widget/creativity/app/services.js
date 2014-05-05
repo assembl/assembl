@@ -66,6 +66,13 @@ creativityServices.service('JukeTubeVideosService', ['$window', '$rootScope', '$
 
   var results = [];
   var upcoming = [ {id: 'Pjzr1zI830c', title: 'Imagination for People (English)'} ];
+  var pageInfo = {
+    //currentPage: 1,
+    nextPageToken: '',
+    prevPageToken: '',
+    resultsPerPage: '',
+    totalResults: 0
+  };
 
   this.init = function (){
     console.log('JukeTubeVideosService.init()');
@@ -155,7 +162,34 @@ creativityServices.service('JukeTubeVideosService', ['$window', '$rootScope', '$
     return youtube;
   }
 
-  this.listResults = function (data) {
+  this.processResults = function (data) {
+    pageInfo = {
+      //currentPage: 1,
+      nextPageToken: '',
+      prevPageToken: '',
+      resultsPerPage: '',
+      totalResults: 0
+    };
+
+    if ( data.nextPageToken )
+      pageInfo.nextPageToken = data.nextPageToken;
+    else
+      pageInfo.nextPageToken = '';
+
+    if ( data.prevPageToken )
+      pageInfo.prevPageToken = data.prevPageToken;
+    else
+      pageInfo.prevPageToken = '';
+
+    if ( data.pageInfo )
+    {
+      if ( data.pageInfo.resultsPerPage )
+        pageInfo.resultsPerPage = data.pageInfo.resultsPerPage;
+      if ( data.pageInfo.totalResults )
+        pageInfo.totalResults = data.pageInfo.totalResults;
+    }
+
+
     results.length = 0;
     for (var i = data.items.length - 1; i >= 0; i--) {
       results.push({
@@ -176,6 +210,10 @@ creativityServices.service('JukeTubeVideosService', ['$window', '$rootScope', '$
 
   this.getResults = function () {
     return results;
+  };
+
+  this.getPageInfo = function () {
+    return pageInfo;
   };
 
 }]);

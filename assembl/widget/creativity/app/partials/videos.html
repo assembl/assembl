@@ -45,11 +45,16 @@
       <input type="submit" id="search-button" value="Rechercher" class="btn btn-default" />
     </form>
 
-    <div class="video" data-ng-repeat="video in results" data-ng-click="launch(video.id, video.title)">
+    <div class="video" data-ng-repeat="video in results" data-ng-click="scrollToPlayerAndLaunch(video.id, video.title)">
       <img class="video-image" data-ng-src="{{ video.thumbnail }}">
       <p class="video-title">{{ video.title }}</p>
       <p class="video-author">by <strong>{{ video.author }}</strong> &nbsp;&#183;&nbsp; {{ video.publishedAt }}</p>
       <p class="video-description">{{ video.description }}</p>
+    </div>
+
+    <div class="pagination" ng-if="pageInfo.totalResults > 0">
+      <button type="button" class="btn btn-default" ng-disabled="pageInfo.prevPageToken == ''" ng-click="search(pageInfo.prevPageToken)">« Page précédente</button>
+      <button type="button" class="btn btn-default" ng-disabled="pageInfo.nextPageToken == ''" ng-click="search(pageInfo.nextPageToken)">Page suivante »</button>
     </div>
   </div>
   

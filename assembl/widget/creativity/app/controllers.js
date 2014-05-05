@@ -12,6 +12,7 @@ creativityApp.controller('videosCtl',
 
       $scope.youtube = JukeTubeVideosService.getYoutube();
       $scope.results = JukeTubeVideosService.getResults();
+      $scope.pageInfo = JukeTubeVideosService.getPageInfo();
       $scope.playlist = true;
 
       $scope.inspiration_keywords = [
@@ -105,25 +106,36 @@ creativityApp.controller('videosCtl',
         }
     }
 
+    $scope.scrollToPlayerAndLaunch = function (id, title) {
+      $("html, body").animate({scrollTop: $("#player").offset().top - 10}, "slow");
+      $scope.launch(id, title);
+    };
+
     $scope.launch = function (id, title) {
       JukeTubeVideosService.launchPlayer(id, title);
       $log.info('Launched id:' + id + ' and title:' + title);
     };
 
-    $scope.search = function () {
+    $scope.search = function (pageToken) {
       var q = $('#query').val();
+      var params = {
+        key: 'AIzaSyC8lCVIHWdtBwnTtKzKl4dy8k5C_raqyK4', // quentin
+        type: 'video',
+        maxResults: '10',
+        part: 'id,snippet',
+        fields: 'items/id,items/snippet/publishedAt,items/snippet/title,items/snippet/description,items/snippet/thumbnails/default,items/snippet/channelTitle,nextPageToken,prevPageToken,pageInfo',
+        q: q
+      };
+      if ( pageToken )
+        params.pageToken = pageToken;
+
       $http.get('https://www.googleapis.com/youtube/v3/search', {
-        params: {
-          key: 'AIzaSyC8lCVIHWdtBwnTtKzKl4dy8k5C_raqyK4', // quentin
-          type: 'video',
-          maxResults: '8',
-          part: 'id,snippet',
-          fields: 'items/id,items/snippet/publishedAt,items/snippet/title,items/snippet/description,items/snippet/thumbnails/default,items/snippet/channelTitle',
-          q: q
-        }
+        params: params
       })
       .success( function (data) {
-        JukeTubeVideosService.listResults(data);
+        JukeTubeVideosService.processResults(data);
+        $scope.results = JukeTubeVideosService.getResults();
+        $scope.pageInfo = JukeTubeVideosService.getPageInfo();
         $log.info(data);
       })
       .error( function () {
