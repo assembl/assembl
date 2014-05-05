@@ -22,6 +22,14 @@ creativityApp.controller('videosCtl',
           "stratégie"
       ];
 
+      $scope.inspiration_keywords_related = [
+          "modèle économique",
+          "low cost",
+          "avantage compétitif",
+          "établissement",
+          "tactique"
+      ];
+
 
       // get config file URL given as parameter of the current URL
 
@@ -47,17 +55,19 @@ creativityApp.controller('videosCtl',
           formatNoMatches: function(term){return '';},
           //minimumResultsForSearch: -1
           selectOnBlur: true,
-          minimumInputLength: 1
+          minimumInputLength: 1,
+          width: '70%'
       });
 
       // make recommended keywords re-appear on top when they are removed from the search field
       $("#query").on("change", function(e){
         if ( e.removed )
         {
-          if ( $scope.inspiration_keywords.indexOf(e.removed.text) >= 0 )
+          if ( $scope.inspiration_keywords.indexOf(e.removed.text) >= 0 || $scope.inspiration_keywords_related.indexOf(e.removed.text) >= 0 )
           {
             $("#results .keywords .keyword:contains(\""+e.removed.text.replace(/"/g, '\\"')+"\")").show();
           }
+          
         }
       });
 
