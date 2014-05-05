@@ -367,7 +367,6 @@ define(['app', 'i18n', 'sprintf'], function(app, i18n, sprintf){
             var retval = '',
             valuesText = [],
             numActiveFilters = _.keys(this._query).length;
-            console.log(this._query);
             if(this._queryResultInfo == null) {
                 retval += '<div id="post-query-results-info">';
                 retval += i18n._("No query has been executed yet");
