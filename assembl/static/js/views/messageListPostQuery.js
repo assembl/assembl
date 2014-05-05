@@ -18,7 +18,7 @@ define(['app', 'i18n', 'sprintf'], function(app, i18n, sprintf){
                 span = '<span class="closebutton" data-filterid="'+filterDef.id+'" data-value="'+value+'"></span>\n';
                 valuesText.push('"' + idea.get('shortTitle') + '"' + span);
             }
-            retval += sprintf(i18n.pluralize({1:"Discuss idea %s",2:"Discuss ideas: %s"},valuesText.length), valuesText.join(i18n._(' AND ')));
+            retval += sprintf.sprintf(i18n.pluralize({1:"Discuss idea %s",2:"Discuss ideas: %s"},valuesText.length), valuesText.join(i18n._(' AND ')));
             return retval;
         }
         this._returnHtmlDescriptionPostIsDescendentOfPost = function(filterDef, queryObjects) {
@@ -31,7 +31,7 @@ define(['app', 'i18n', 'sprintf'], function(app, i18n, sprintf){
                 span = '<span class="closebutton" data-filterid="'+filterDef.id+'" data-value="'+value+'"></span>\n';
                 valuesText.push('"' + post.get('subject') + '"' + span);
             }
-            retval += sprintf(i18n.pluralize({1:"Are in the conversation that follows post %s",2:"Are in the conversation that follows posts: %s"},valuesText.length), valuesText.join(i18n._(' AND ')));
+            retval += sprintf.sprintf(i18n.pluralize({1:"Are in the conversation that follows post %s",2:"Are in the conversation that follows posts: %s"},valuesText.length), valuesText.join(i18n._(' AND ')));
             return retval;
         }
         this._returnHtmlDescriptionPostIsUnread = function(filterDef, queryObjects) {
@@ -40,7 +40,7 @@ define(['app', 'i18n', 'sprintf'], function(app, i18n, sprintf){
                 closeBtn = '<span class="closebutton" data-filterid="'+filterDef.id+'" data-value="'+value+'"></span>\n';
 
             if(queryObjects[0].value===true){
-                retval += sprintf(i18n._("%s %s"), "You haven't read yet", closeBtn);
+                retval += sprintf.sprintf(i18n._("%s %s"), "You haven't read yet", closeBtn);
 
             }else {
                 retval += i18n._("You've already read");
@@ -55,7 +55,7 @@ define(['app', 'i18n', 'sprintf'], function(app, i18n, sprintf){
                 span = '<span class="closebutton" data-filterid="'+filterDef.id+'" data-value='+value+'></span>\n';
                 valuesText.push(span);
 
-                retval += sprintf(i18n._("%s %s"), filterDef.name, valuesText.join(', '));
+                retval += sprintf.sprintf(i18n._("%s %s"), filterDef.name, valuesText.join(', '));
 
             return retval;
         }
@@ -379,9 +379,9 @@ define(['app', 'i18n', 'sprintf'], function(app, i18n, sprintf){
                 else {
                     var unreadText = '';
                     if(this.getResultNumUnread() > 0) {
-                        unreadText = sprintf(i18n._("(%d unread)"), this.getResultNumUnread());
+                        unreadText = sprintf.sprintf(i18n._("(%d unread)"), this.getResultNumUnread());
                     }
-                    retval += sprintf(i18n._("Showing the %d messages %s that:"), this.getResultNumTotal(), unreadText);
+                    retval += sprintf.sprintf(i18n._("Showing the %d messages %s that:"), this.getResultNumTotal(), unreadText);
                 }
                 retval += '</div>';
                 retval += '<ul id="post-query-filter-info">';
@@ -398,7 +398,7 @@ define(['app', 'i18n', 'sprintf'], function(app, i18n, sprintf){
 
                             if (filterDef._value_is_boolean) {
                                 var filterQuery = this._query[filterDef.id][0];
-                                retval += sprintf((filterQuery.value===true)?i18n._("%s"):i18n._("NOT %s"), filterDef.name);
+                                retval += sprintf.sprintf((filterQuery.value===true)?i18n._("%s"):i18n._("NOT %s"), filterDef.name);
                             }
                             else {
                                 for (var i=0;i<this._query[filterDef.id].length;i++) {
@@ -406,7 +406,7 @@ define(['app', 'i18n', 'sprintf'], function(app, i18n, sprintf){
                                     var span = '<span class="closebutton" data-filterid="'+filterDef.id+'" data-value="'+value+'"></span>\n';
                                     valuesText.push(value + span);
                                 }
-                                retval += sprintf(i18n._("%s for values %s"), filterDef.name, valuesText.join(', '));
+                                retval += sprintf.sprintf(i18n._("%s for values %s"), filterDef.name, valuesText.join(', '));
                             }
                         }
                         retval += '</li>';
