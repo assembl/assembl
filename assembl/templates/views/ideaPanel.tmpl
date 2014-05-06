@@ -34,7 +34,7 @@
         
         <fieldset id="ideaPanel-section-segments" class="panel-section">
             <legend data-tooltip="{{gettext('Expressions of this idea in segments of posts or on the web')}}">
-                <span>{{ gettext('Harvested in %(num)s segments')|format(num='<%= segments.length %>')|safe }}</span>
+                <span><%= sprintf(i18n.pluralize({1:"{{ gettext('Harvested in %d segment') }}",2:"{{ gettext('Harvested in %d segments') }}"},segments.length), segments.length) %></span>
             </legend>
             <div class="postitlist">
                 <% _.each(segments, function(segment, i){ %>

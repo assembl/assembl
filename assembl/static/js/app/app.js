@@ -55,13 +55,13 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard, Types, Permissions){
 
         AVAILABLE_MESSAGE_VIEW_STYLES: {
             TITLE_ONLY: {id: "viewStyleTitleOnly",
-                label: i18n._('Titles only')
+                label: i18n.gettext('Titles only')
             },
             PREVIEW: {id: "viewStylePreview",
-                label: i18n._('Show preview')
+                label: i18n.gettext('Show preview')
             },
             FULL_BODY: {id: "viewStyleFullBody",
-                label: i18n._('Complete text')
+                label: i18n.gettext('Complete text')
             }
         },
         
@@ -896,7 +896,7 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard, Types, Permissions){
          * @event
          */
         onAjaxError: function( ev, jqxhr, settings, exception ){
-            var message = i18n._('ajaxerror-message');
+            var message = i18n.gettext('ajaxerror-message');
             message = "url: " + settings.url + "\n" + message + "\n" + exception;
 
             alert( message );

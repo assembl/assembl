@@ -1,16 +1,17 @@
 # French translations for assembl.
 # Copyright (C) 2013 ORGANIZATION
 # This file is distributed under the same license as the assembl project.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2013.
 #
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2013.
+# Benoit Grégoire <benoitg@coeus.ca>, 2014.
 msgid ""
 msgstr ""
 "Project-Id-Version: assembl 0.0\n"
 "Report-Msgid-Bugs-To: maparent@acm.org\n"
-"POT-Creation-Date: 2014-04-22 13:54+0200\n"
-"PO-Revision-Date: 2013-07-12 17:53-0400\n"
-"Last-Translator: Marc-Antoine Parent <maparent@acm.org>\n"
-"Language-Team: fr <LL@li.org>\n"
+"POT-Creation-Date: 2014-05-06 12:59-0400\n"
+"PO-Revision-Date: 2014-05-06 12:59-0400\n"
+"Last-Translator: Benoit Grégoire <benoitg@coeus.ca>\n"
+"Language-Team: American English <kde-i18n-doc@kde.org>\n"
 "Plural-Forms: nplurals=2; plural=(n > 1)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
@@ -52,7 +53,7 @@ msgstr "${val} ne peut être sérialisé: ${err}"
 msgid "${val} is not a string: ${err}"
 msgstr "${val} n'est pas une chaîne: ${err}"
 
-#: assembl/static/js/models/idea.js:33 assembl/static/js/views/ideaPanel.js:70
+#: assembl/static/js/models/idea.js:33 assembl/static/js/views/ideaPanel.js:81
 msgid "New idea"
 msgstr "Ajouter une idée"
 
@@ -96,51 +97,51 @@ msgstr "Ajouter une conclusion"
 msgid "Unknown user"
 msgstr "Utilisateur non-identifié"
 
-#: assembl/static/js/views/ideaInSynthesis.js:99
-#: assembl/static/js/views/message.js:108
+#: assembl/static/js/views/ideaInSynthesis.js:106
+#: assembl/static/js/views/message.js:110
 msgid "Type your response here..."
 msgstr "Écrivez votre réponse ici..."
 
-#: assembl/static/js/views/ideaInSynthesis.js:101
-#: assembl/static/js/views/message.js:110
+#: assembl/static/js/views/ideaInSynthesis.js:108
+#: assembl/static/js/views/message.js:112
 msgid "Send your reply"
 msgstr "Envoyez votre réponse"
 
-#: assembl/static/js/views/ideaInSynthesis.js:104
-#: assembl/static/js/views/message.js:112
+#: assembl/static/js/views/ideaInSynthesis.js:111
+#: assembl/static/js/views/message.js:114
 msgid "You did not type a response yet..."
 msgstr "Vous n'avez pas encore écrit de réponse"
 
-#: assembl/static/js/views/ideaPanel.js:69
+#: assembl/static/js/views/ideaPanel.js:80
 msgid "Short expression (only a few words) of the idea in the table of ideas."
 msgstr "Expression brève (quelques mots) de l'idée dans la table des matières"
 
-#: assembl/static/js/views/ideaPanel.js:92
+#: assembl/static/js/views/ideaPanel.js:103
 msgid "Comment on this idea here..."
 msgstr "Commenter cette idée ici..."
 
-#: assembl/static/js/views/ideaPanel.js:93
+#: assembl/static/js/views/ideaPanel.js:104
 msgid "Send your comment"
 msgstr "Envoyez votre commentaire"
 
-#: assembl/static/js/views/ideaPanel.js:95
-#: assembl/static/js/views/messageList.js:209
+#: assembl/static/js/views/ideaPanel.js:106
+#: assembl/static/js/views/messageList.js:229
 msgid "You need to type a comment first..."
 msgstr "Vous devez d'abord écrire un commentaire..."
 
-#: assembl/static/js/views/ideaPanel.js:200
+#: assembl/static/js/views/ideaPanel.js:211
 msgid "ideaPanel-cantDeleteByChildren"
 msgstr "Vous ne pouvez pas effacer une idée ayant des sous-idées."
 
-#: assembl/static/js/views/ideaPanel.js:205
+#: assembl/static/js/views/ideaPanel.js:216
 msgid "ideaPanel-cantDeleteBySegments"
 msgstr "Vous ne pouvez pas effacer une idée associée à des extraits."
 
-#: assembl/static/js/views/ideaPanel.js:312
+#: assembl/static/js/views/ideaPanel.js:323
 msgid "ideaPanel-clearConfirmationMessage"
 msgstr "Confirmez que vous souhaitez supprimer toutes les idées."
 
-#: assembl/static/js/views/ideaPanel.js:329
+#: assembl/static/js/views/ideaPanel.js:340
 msgid "ideaPanel-deleteIdeaConfirmMessage"
 msgstr "Confirmez que vous souhaitez supprimer cette idée."
 
@@ -150,25 +151,25 @@ msgstr ""
 "Vous pouvez glisser le segment ci-dessus directement sur la table des "
 "matières"
 
-#: assembl/static/js/views/messageList.js:18
+#: assembl/static/js/views/messageList.js:17
 #: assembl/static/js/views/messageListPostQuery.js:129
 #: assembl/templates/views/messageList.tmpl:10
 msgid "Threaded view"
 msgstr "Vue en enfilade"
 
-#: assembl/static/js/views/messageList.js:21
+#: assembl/static/js/views/messageList.js:20
 msgid "Chronological view"
 msgstr "Vue chronologique"
 
-#: assembl/static/js/views/messageList.js:24
+#: assembl/static/js/views/messageList.js:23
 msgid "Activity feed view"
 msgstr "Fil d'activité"
 
-#: assembl/static/js/views/messageList.js:197
+#: assembl/static/js/views/messageList.js:217
 msgid "No messages"
 msgstr "Pas de messages"
 
-#: assembl/static/js/views/messageList.js:206
+#: assembl/static/js/views/messageList.js:226
 msgid ""
 "You can start a new topic in this discussion by typing a subject above, "
 "and a first post here..."
@@ -176,32 +177,32 @@ msgstr ""
 "Vous pouvez donner un nouveau point de départ à la discussion en écrivant"
 " un sujet ci-dessus, et un premier message ici."
 
-#: assembl/static/js/views/messageList.js:207
+#: assembl/static/js/views/messageList.js:227
 msgid "Start a new topic in this discussion"
 msgstr "Introduire un sujet de discussion"
 
-#: assembl/static/js/views/messageList.js:208
+#: assembl/static/js/views/messageList.js:228
 #: assembl/templates/views/messageSend.tmpl:10
 msgid "New topic subject:"
 msgstr "Titre du nouveau sujet:"
 
-#: assembl/static/js/views/messageList.js:210
+#: assembl/static/js/views/messageList.js:230
 msgid "You need to set a subject to add a new topic..."
 msgstr "Vous devez définir le titre pour ajouter un sujet de discussion..."
 
-#: assembl/static/js/views/messageList.js:254
+#: assembl/static/js/views/messageList.js:281
 #: assembl/templates/views/ideaList.tmpl:27
 #: assembl/templates/views/messageList.tmpl:60
 msgid "Expand all"
 msgstr "Tout déployer"
 
-#: assembl/static/js/views/messageList.js:257
+#: assembl/static/js/views/messageList.js:284
 #: assembl/templates/views/ideaList.tmpl:27
 #: assembl/templates/views/messageList.tmpl:60
 msgid "Collapse all"
 msgstr "Tout replier"
 
-#: assembl/static/js/views/messageList.js:429
+#: assembl/static/js/views/messageList.js:448
 msgid "Send to clipboard"
 msgstr "Ajouter au presse-papier"
 
@@ -278,35 +279,46 @@ msgstr "Chronologique"
 msgid "Activity feed (reverse chronological)"
 msgstr "Fil d'activité (ordre chronologique inverse)"
 
-#: assembl/static/js/views/messageListPostQuery.js:371
+#: assembl/static/js/views/messageListPostQuery.js:372
 msgid "No query has been executed yet"
 msgstr "Aucune requête n'a été formulée"
 
-#: assembl/static/js/views/messageListPostQuery.js:377
-msgid "There are no messages that:"
+#: assembl/static/js/views/messageListPostQuery.js:380
+#, fuzzy
+msgid "There are no messages in the discussion that:"
 msgstr "Il n'y a aucun message tel que:"
 
-#: assembl/static/js/views/messageListPostQuery.js:382
+#: assembl/static/js/views/messageListPostQuery.js:383
+#, fuzzy
+msgid "There are no messages in the discussion."
+msgstr "Il n'y a aucun message tel que:"
+
+#: assembl/static/js/views/messageListPostQuery.js:389
 #, python-format
 msgid "(%d unread)"
 msgstr "(%d non-lus)"
 
-#: assembl/static/js/views/messageListPostQuery.js:384
+#: assembl/static/js/views/messageListPostQuery.js:392
 #, python-format
 msgid "Showing the %d messages %s that:"
 msgstr "%d messages %s :"
 
-#: assembl/static/js/views/messageListPostQuery.js:401
+#: assembl/static/js/views/messageListPostQuery.js:395
+#, fuzzy, python-format
+msgid "Showing all %d messages %s:"
+msgstr "%d messages %s :"
+
+#: assembl/static/js/views/messageListPostQuery.js:414
 #, python-format
 msgid "%s"
 msgstr "%s"
 
-#: assembl/static/js/views/messageListPostQuery.js:401
+#: assembl/static/js/views/messageListPostQuery.js:414
 #, python-format
 msgid "NOT %s"
 msgstr "PAS %s"
 
-#: assembl/static/js/views/messageListPostQuery.js:409
+#: assembl/static/js/views/messageListPostQuery.js:424
 #, python-format
 msgid "%s for values %s"
 msgstr "%s pour les valeurs %s"
@@ -345,15 +357,15 @@ msgstr "Envoi en cours..."
 msgid "Message posted!"
 msgstr "Commentaire envoyé!"
 
-#: assembl/static/js/views/segmentList.js:309
+#: assembl/static/js/views/segmentList.js:315
 msgid "segmentList-clearConfirmationMessage"
 msgstr "Confirmez que vous souhaitez supprimer tous les extraits."
 
-#: assembl/static/js/views/synthesisPanel.js:173
+#: assembl/static/js/views/synthesisPanel.js:178
 msgid "Do you want to publish the synthesis?"
 msgstr "Voulez-vous publier la synthèse?"
 
-#: assembl/static/js/views/synthesisPanel.js:202
+#: assembl/static/js/views/synthesisPanel.js:207
 msgid "Synthesis published!"
 msgstr "Synthèse publiée!"
 
@@ -414,7 +426,7 @@ msgstr "Envoyer un message de confirmation"
 msgid "Email or username"
 msgstr "Courriel ou nom d'utilisateur"
 
-#: assembl/templates/login.jinja2:34 assembl/templates/register.jinja2:18
+#: assembl/templates/login.jinja2:34 assembl/templates/register.jinja2:17
 msgid "Password"
 msgstr "Mot de passe"
 
@@ -422,7 +434,7 @@ msgstr "Mot de passe"
 msgid "Enter"
 msgstr "Entrer"
 
-#: assembl/templates/login.jinja2:37 assembl/templates/register.jinja2:23
+#: assembl/templates/login.jinja2:37 assembl/templates/register.jinja2:20
 msgid "or"
 msgstr "ou"
 
@@ -438,16 +450,16 @@ msgstr "Utilisez votre réseau social"
 msgid "Login with external tools"
 msgstr "Connectez-vous à l'aide d'un compte externe"
 
-#: assembl/templates/login.jinja2:82 assembl/templates/register.jinja2:27
+#: assembl/templates/login.jinja2:61 assembl/templates/register.jinja2:24
 msgid "Caravan"
 msgstr "Caravan"
 
-#: assembl/templates/login.jinja2:83 assembl/templates/register.jinja2:28
+#: assembl/templates/login.jinja2:62 assembl/templates/register.jinja2:25
 msgid "Imagination for people"
 msgstr "Imagination for people"
 
-#: assembl/templates/login.jinja2:84 assembl/templates/profile.jinja2:168
-#: assembl/templates/register.jinja2:29
+#: assembl/templates/login.jinja2:63 assembl/templates/profile.jinja2:168
+#: assembl/templates/register.jinja2:26
 #: assembl/templates/view_profile.jinja2:67
 #, python-format
 msgid "Designed by %(caravan)s and %(imaginationForPeople)s"
@@ -465,7 +477,7 @@ msgstr "Nom d'utilisateur"
 msgid "Desired username"
 msgstr "Nom d'utilisateur souhaité"
 
-#: assembl/templates/profile.jinja2:58 assembl/templates/register.jinja2:12
+#: assembl/templates/profile.jinja2:58 assembl/templates/register.jinja2:15
 #: assembl/templates/view_profile.jinja2:29
 msgid "Name"
 msgstr "Nom"
@@ -483,7 +495,7 @@ msgid "New Password"
 msgstr "Nouveau mot de passe"
 
 #: assembl/templates/profile.jinja2:77 assembl/templates/profile.jinja2:80
-#: assembl/templates/register.jinja2:20
+#: assembl/templates/register.jinja2:18
 msgid "Repeat password"
 msgstr "Répéter le mot de passe"
 
@@ -538,15 +550,15 @@ msgstr ""
 "<a href='http://imaginationforpeople.org/' class='link'>Imagination for "
 "people</a>"
 
-#: assembl/templates/register.jinja2:5
+#: assembl/templates/register.jinja2:6
 msgid "join assembl"
 msgstr "Rejoignez Assembl"
 
-#: assembl/templates/register.jinja2:22
+#: assembl/templates/register.jinja2:19
 msgid "Register"
 msgstr "S'enregistrer"
 
-#: assembl/templates/register.jinja2:23
+#: assembl/templates/register.jinja2:20
 msgid "login"
 msgstr "connexion"
 
@@ -647,13 +659,20 @@ msgstr "Nombre de messages liées à cette idée ou à ses descendants"
 msgid "Number of caught segments expressing this idea"
 msgstr "Nombre d'extraits attrapés exprimant cette idée"
 
-#: assembl/templates/views/ideaInSynthesis.tmpl:7
+#: assembl/templates/views/ideaInSynthesis.tmpl:12
+#: assembl/templates/views/ideaInSynthesis.tmpl:31
 msgid "By"
 msgstr "Par"
 
-#: assembl/templates/views/ideaInSynthesis.tmpl:10
+#: assembl/templates/views/ideaInSynthesis.tmpl:15
+#: assembl/templates/views/ideaInSynthesis.tmpl:34
 msgid "Avatar for"
-msgstr ""
+msgstr "Avatar pour"
+
+#: assembl/templates/views/ideaInSynthesis.tmpl:18
+#: assembl/templates/views/ideaInSynthesis.tmpl:37
+msgid "comment"
+msgstr "commentaire"
 
 #: assembl/templates/views/ideaList.tmpl:4
 msgid "Table of ideas ({0})"
@@ -740,12 +759,17 @@ msgstr "Expressions de cette idée dans des extraits de messages ou de pages Web
 
 #: assembl/templates/views/ideaPanel.tmpl:37
 #, python-format
-msgid "Harvested in %(num)s segments"
-msgstr "Attrappée dans %(num)s extraits"
+msgid "Harvested in %d segment"
+msgstr "Attrapé dans %d segment"
+
+#: assembl/templates/views/ideaPanel.tmpl:37
+#, python-format
+msgid "Harvested in %d segments"
+msgstr "Attrapé dans %d segments"
 
 #: assembl/templates/views/ideaPanel.tmpl:46
 msgid "Add segments by dragging them in this panel from the clipboard"
-msgstr "Ajoutez des extraits en les glissant du presse-papier vers ce panneau"
+msgstr "Ajouter des extraits en les glissant du presse-papier vers ce panneau"
 
 #: assembl/templates/views/ideaPanel.tmpl:56
 msgid "Delete this idea completely"
@@ -809,8 +833,13 @@ msgstr "Copier un lien vers ce message dans le presse-papier"
 msgid "Reply"
 msgstr "Répondre"
 
-#: assembl/templates/views/message.tmpl:59
+#: assembl/templates/views/message.tmpl:60
 msgid "Mark as unread"
+msgstr "Marquer comme non-lu"
+
+#: assembl/templates/views/message.tmpl:62
+#, fuzzy
+msgid "Mark as read"
 msgstr "Marquer comme non-lu"
 
 #: assembl/templates/views/messageList.tmpl:11
@@ -948,7 +977,7 @@ msgstr "Conclusion"
 msgid "Publish"
 msgstr "Publier"
 
-#: assembl/views/api/post.py:56 assembl/views/api/post.py:331
+#: assembl/views/api/post.py:56 assembl/views/api/post.py:330
 #, python-format
 msgid "No discussion found with id=%s"
 msgstr "Aucune discussion trouvée avec l'id=%s"
@@ -963,11 +992,11 @@ msgstr ""
 msgid "Getting non-orphan posts isn't supported."
 msgstr "Il n'est pas (encore) possible d'obtenir les messages non-orphelins."
 
-#: assembl/views/api/post.py:165
+#: assembl/views/api/post.py:164
 msgid "You must be logged in to view which posts are read"
 msgstr "Vous devez être connecté pour voir quels messages ont été lus"
 
-#: assembl/views/api/post.py:314
+#: assembl/views/api/post.py:313
 msgid "Your message is empty"
 msgstr "Votre message est vide"
 
@@ -1086,4 +1115,7 @@ msgstr "Nous n'avons pas de discussion sous le code '%s'"
 
 #~ msgid "[synthesis] {0}"
 #~ msgstr "[synthèse] {0}"
+
+#~ msgid "Harvested in %(num)s segments"
+#~ msgstr "Attrappée dans %(num)s extraits"
 

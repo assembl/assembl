@@ -64,6 +64,8 @@ function(Backbone, _, Idea, Message, app, i18n, Types, EditableField, CKEditorFi
                 idea:this.idea,
                 segments:segments,
                 editing:editing,
+                i18n:i18n,
+                sprintf:sprintf,
                 canDelete:currentUser.can(Permissions.EDIT_IDEA),
                 canEditExtracts:currentUser.can(Permissions.EDIT_EXTRACT),
                 canEditMyExtracts:currentUser.can(Permissions.EDIT_MY_EXTRACT),

@@ -14,13 +14,13 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
     var MessageList = Backbone.View.extend({
         ViewStyles: {
             THREADED: {id: "threaded",
-                        label: i18n._('Threaded view')
+                        label: i18n.gettext('Threaded view')
                         },
             CHRONOLOGICAL: {id: "chronological",
-                        label: i18n._('Chronological view')
+                        label: i18n.gettext('Chronological view')
                         },
             REVERSE_CHRONOLOGICAL: {id: "reverse_chronological",
-                        label: i18n._('Activity feed view')
+                        label: i18n.gettext('Activity feed view')
                         }
         },
         

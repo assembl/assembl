@@ -135,15 +135,22 @@ supervisord
 #(wait for virtuoso to start)
 assembl-db-manage development.ini bootstrap
 ```
+Creating a user the first time you run assembl (so you have a superuser):
 
-(NOTE: Currently, just running $venv/bin/supervisord does NOT work, as celery will run command line
- tools, thus breaking out of the environment.  You need to run source
- venv/bin/activate from the same terminal before running the above)
+``` sh
+assembl-add-user --email your_email@email.com --name "Your Name" --username desiredusername --password yourpassword
+```
+
+(NOTE: Just running $venv/bin/supervisord will NOT work,
+as celery will run command line tools, thus breaking out of the environment.
+You need to run source venv/bin/activate from the same terminal before
+running the above)
 
 On subsequent runs, just make sure supervisord is running.
 
 Then, start the development server and compass with this command:
 supervisorctl start dev:
+
 
 Updating an environment:
 
