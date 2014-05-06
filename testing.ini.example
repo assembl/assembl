@@ -135,6 +135,7 @@ transaction = transaction
 script_location = assembl/alembic
 # This database will be cleared! Be careful.
 sqlalchemy.url = virtuoso://assembl_test:assembl_test@VOSU
+transaction_per_migration = true
 
 # Template used to generate migration files
 # file_template = %%(rev)s_%%(slug)s
