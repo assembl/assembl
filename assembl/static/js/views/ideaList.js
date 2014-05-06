@@ -135,10 +135,11 @@ function(Backbone, _, Idea, IdeaView, ideaGraphLoader, app, Types, AllMessagesIn
             list.appendChild(allMessagesInIdeaListView.render().el);
             
             var view_data = {};
+            var roots = [];
             function excludeRoot(idea) {return idea != rootIdea};
-            rootIdea.visitBreadthFirst(renderVisitor(view_data, excludeRoot));
+            rootIdea.visitBreadthFirst(renderVisitor(view_data, roots, excludeRoot));
 
-            _.each(rootIdeaDirectChildrenModels, function(idea){
+            _.each(roots, function(idea){
                 var ideaView =  new IdeaView({model:idea}, view_data);
                 list.appendChild(ideaView.render().el);
             });

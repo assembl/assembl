@@ -87,13 +87,14 @@ function(Backbone, _, $, app, Synthesis, Permissions, IdeaInSynthesisView, i18n,
             this.$el.html( this.template(data) );
 
             var view_data = {};
+            var roots = [];
             function inSynthesis(idea) {return idea != rootIdea && idea.get('inNextSynthesis')};
-            rootIdea.visitBreadthFirst(renderVisitor(view_data, inSynthesis));
+            rootIdea.visitBreadthFirst(renderVisitor(view_data, roots, inSynthesis));
 
-            _.each(ideas, function append_recursive(idea){
+            _.each(roots, function append_recursive(idea){
                 var rendered_idea_view = new IdeaInSynthesisView({model: idea}, view_data);
                 that.$('#synthesisPanel-ideas').append( rendered_idea_view.render().el );
-                _.each(idea.getSynthesisChildren(), function(child){
+                _.each(view_data[idea.getId()].children, function(child){
                     append_recursive(child);
                 });
             });

@@ -1,6 +1,6 @@
 define([],function(){
 
-  function renderVisitor(data_by_idea, filter_function) {
+  function renderVisitor(data_by_idea, roots, filter_function) {
     if (filter_function === undefined) {
         filter_function = function(node) {return true;};
     }
@@ -32,6 +32,8 @@ define([],function(){
                 if (last_ancestor_id == last_parent_id) {
                     data_by_idea[last_idea_id]['is_last_sibling'] = false;
                 }
+            } else {
+                roots.push(idea);
             }
             last_parent_id = last_ancestor_id;
             var data = {
