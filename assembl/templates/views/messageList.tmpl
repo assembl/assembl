@@ -1,60 +1,8 @@
 <div class="panel">
 
     <header class="panel-header">
-
-        <div class="dropdown">
-            <span class="dropdown-label text-bold">
-                <%= currentViewStyle.label %>
-            </span>
-            <ul class="dropdown-list">
-                <li id="messageList-view-threaded" class="dropdown-listitem">{{ gettext('Threaded view') }}</li>
-                <li id="messageList-view-activityfeed" class="dropdown-listitem">{{ gettext('Activity feed') }}</li>
-                <li id="messageList-view-chronological" class="dropdown-listitem">{{ gettext('Chronological') }}</li>
-            </ul>
-        </div>
+        <span class="text-bold">{{ gettext('Messages') }}</span>
         
-        <div id="defaultMessageView-dropdown" class="dropdown"></div>
-        
-        <div class="dropdown">
-
-            <span class="dropdown-label text-bold">
-                {{ gettext('Add filter') }}
-            </span>
-            <ul class="dropdown-list">
-                <li id="messageList-allmessages" class="dropdown-listitem">{{ gettext('All messages') }}</li>
-                <li id="messageList-onlyorphan" class="dropdown-listitem">{{ gettext('Orphan messages only') }}</li>
-                <li id="messageList-onlysynthesis" class="dropdown-listitem">{{ gettext('Synthesis Messages') }}</li>
-                <li id="messageList-isunread" class="dropdown-listitem">{{ gettext('Unread') }}</li>
-                {#
-                <li class="dropdown-listitem">{{ gettext('Uncaught') }}</li>
-                <li class="dropdown-listitem">{{ gettext('Followed') }}</li>
-                #}
-            </ul>
-        </div>
-        {#
-        <div class="dropdown dropdown--button">
-            <span class="dropdown-label">
-                <label class="chk chk--dropdown chk--muted">
-                    <input id="messageList-mainchk" type="checkbox" class="chk-checkbox" />
-
-                    <span class="chk-label"></span>
-                </label>
-            </span>
-
-            <ul class="dropdown-list">
-                <li id="messageList-selectall" class="dropdown-listitem">{{ gettext('All') }}</li>
-                <li id="messageList-selectnone" class="dropdown-listitem">{{ gettext('None') }}</li>
-                <li id="messageList-selectread" class="dropdown-listitem">{{ gettext('Read') }}</li>
-                <li id="messageList-selectunread" class="dropdown-listitem">{{ gettext('Unread') }}</li>
-            </ul>
-        </div>
-
-        
-        <div class="inline text-muted margin-left">
-            {% set total = '<%= total %>' %}
-            {{ gettext('%(total)s messages')|format(total=total)|safe }}
-        </div>
-        #}
         <div class="float-right">
             <% if (currentViewStyle.id === 'threaded') { %>
                 <a id="messageList-collapseButton" data-tooltip="<%= collapsed ? '{{gettext('Expand all')}}' : '{{gettext('Collapse all')}}' %>" class="iconbutton <%= collapsed ? 'icon-download-1' : 'icon-upload' %>"></a>
@@ -65,6 +13,60 @@
     </header>
 
     <div class="panel-body">
+    <div class="view-config">
+        <div class="dropdown">
+                <span class="dropdown-label text-bold">
+                    <%= currentViewStyle.label %>
+                </span>
+                <ul class="dropdown-list">
+                    <li id="messageList-view-threaded" class="dropdown-listitem">{{ gettext('Threaded view') }}</li>
+                    <li id="messageList-view-activityfeed" class="dropdown-listitem">{{ gettext('Activity feed') }}</li>
+                    <li id="messageList-view-chronological" class="dropdown-listitem">{{ gettext('Chronological') }}</li>
+                </ul>
+            </div>
+            
+            <div id="defaultMessageView-dropdown" class="dropdown"></div>
+            
+            <div class="dropdown">
+    
+                <span class="dropdown-label text-bold">
+                    {{ gettext('Add filter') }}
+                </span>
+                <ul class="dropdown-list">
+                    <li id="messageList-allmessages" class="dropdown-listitem">{{ gettext('All messages') }}</li>
+                    <li id="messageList-onlyorphan" class="dropdown-listitem">{{ gettext('Orphan messages') }}</li>
+                    <li id="messageList-onlysynthesis" class="dropdown-listitem">{{ gettext('Synthesis messages') }}</li>
+                    <li id="messageList-isunread" class="dropdown-listitem">{{ gettext('Unread messages') }}</li>
+                    {#
+                    <li class="dropdown-listitem">{{ gettext('Uncaught') }}</li>
+                    <li class="dropdown-listitem">{{ gettext('Followed') }}</li>
+                    #}
+                </ul>
+            </div>
+            {#
+            <div class="dropdown dropdown--button">
+                <span class="dropdown-label">
+                    <label class="chk chk--dropdown chk--muted">
+                        <input id="messageList-mainchk" type="checkbox" class="chk-checkbox" />
+    
+                        <span class="chk-label"></span>
+                    </label>
+                </span>
+    
+                <ul class="dropdown-list">
+                    <li id="messageList-selectall" class="dropdown-listitem">{{ gettext('All') }}</li>
+                    <li id="messageList-selectnone" class="dropdown-listitem">{{ gettext('None') }}</li>
+                    <li id="messageList-selectread" class="dropdown-listitem">{{ gettext('Read') }}</li>
+                    <li id="messageList-selectunread" class="dropdown-listitem">{{ gettext('Unread') }}</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="inline text-muted margin-left">
+            {% set total = '<%= total %>' %}
+            {{ gettext('%(total)s messages')|format(total=total)|safe }}
+        </div>
+        #}
         <div id="messageList-query-info" class=""><%= queryInfo %></div>
         <div id="messageList-list" class="idealist <%= currentViewStyle.id %>"></div>
 

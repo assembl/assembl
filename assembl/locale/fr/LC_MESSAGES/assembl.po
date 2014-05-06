@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: assembl 0.0\n"
 "Report-Msgid-Bugs-To: maparent@acm.org\n"
-"POT-Creation-Date: 2014-05-06 12:59-0400\n"
-"PO-Revision-Date: 2014-05-06 12:59-0400\n"
+"POT-Creation-Date: 2014-05-06 14:07-0400\n"
+"PO-Revision-Date: 2014-05-06 14:07-0400\n"
 "Last-Translator: Benoit Grégoire <benoitg@coeus.ca>\n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
 "Plural-Forms: nplurals=2; plural=(n > 1)\n"
@@ -52,6 +52,26 @@ msgstr "${val} ne peut être sérialisé: ${err}"
 #: assembl/lib/types.py:80
 msgid "${val} is not a string: ${err}"
 msgstr "${val} n'est pas une chaîne: ${err}"
+
+#: assembl/static/js/app/app.js:58
+msgid "Message titles"
+msgstr "Titres seulement"
+
+#: assembl/static/js/app/app.js:61
+msgid "Message previews"
+msgstr "Apperçus"
+
+#: assembl/static/js/app/app.js:64
+msgid "Complete messages"
+msgstr "Messages complets"
+
+#: assembl/static/js/app/app.js:535
+msgid "Extract"
+msgstr "Extrait"
+
+#: assembl/static/js/app/app.js:899
+msgid "ajax error message:"
+msgstr "message d'erreur ajax:"
 
 #: assembl/static/js/models/idea.js:33 assembl/static/js/views/ideaPanel.js:81
 msgid "New idea"
@@ -152,18 +172,18 @@ msgstr ""
 "matières"
 
 #: assembl/static/js/views/messageList.js:17
-#: assembl/static/js/views/messageListPostQuery.js:129
-#: assembl/templates/views/messageList.tmpl:10
-msgid "Threaded view"
-msgstr "Vue en enfilade"
+msgid "Threaded"
+msgstr "Enfilades"
 
 #: assembl/static/js/views/messageList.js:20
-msgid "Chronological view"
-msgstr "Vue chronologique"
+#: assembl/static/js/views/messageListPostQuery.js:137
+#: assembl/templates/views/messageList.tmpl:24
+msgid "Chronological"
+msgstr "Chronologique"
 
 #: assembl/static/js/views/messageList.js:23
-msgid "Activity feed view"
-msgstr "Fil d'activité"
+msgid "Reverse-Chronological"
+msgstr "Chronologique-inverse"
 
 #: assembl/static/js/views/messageList.js:217
 msgid "No messages"
@@ -192,13 +212,13 @@ msgstr "Vous devez définir le titre pour ajouter un sujet de discussion..."
 
 #: assembl/static/js/views/messageList.js:281
 #: assembl/templates/views/ideaList.tmpl:27
-#: assembl/templates/views/messageList.tmpl:60
+#: assembl/templates/views/messageList.tmpl:8
 msgid "Expand all"
 msgstr "Tout déployer"
 
 #: assembl/static/js/views/messageList.js:284
 #: assembl/templates/views/ideaList.tmpl:27
-#: assembl/templates/views/messageList.tmpl:60
+#: assembl/templates/views/messageList.tmpl:8
 msgid "Collapse all"
 msgstr "Tout replier"
 
@@ -270,10 +290,10 @@ msgstr "pas encore lus"
 msgid "Only include unread messages."
 msgstr "N'inclure que des messages non-lus"
 
-#: assembl/static/js/views/messageListPostQuery.js:137
-#: assembl/templates/views/messageList.tmpl:12
-msgid "Chronological"
-msgstr "Chronologique"
+#: assembl/static/js/views/messageListPostQuery.js:129
+#: assembl/templates/views/messageList.tmpl:22
+msgid "Threaded view"
+msgstr "Vue en enfilade"
 
 #: assembl/static/js/views/messageListPostQuery.js:144
 msgid "Activity feed (reverse chronological)"
@@ -284,14 +304,12 @@ msgid "No query has been executed yet"
 msgstr "Aucune requête n'a été formulée"
 
 #: assembl/static/js/views/messageListPostQuery.js:380
-#, fuzzy
-msgid "There are no messages in the discussion that:"
-msgstr "Il n'y a aucun message tel que:"
+msgid "Found no message in the discussion that:"
+msgstr "Aucun message trouvé dans la discussion tel que:"
 
 #: assembl/static/js/views/messageListPostQuery.js:383
-#, fuzzy
 msgid "There are no messages in the discussion."
-msgstr "Il n'y a aucun message tel que:"
+msgstr "Il n'y a aucun message dans la discussion."
 
 #: assembl/static/js/views/messageListPostQuery.js:389
 #, python-format
@@ -300,13 +318,13 @@ msgstr "(%d non-lus)"
 
 #: assembl/static/js/views/messageListPostQuery.js:392
 #, python-format
-msgid "Showing the %d messages %s that:"
-msgstr "%d messages %s :"
+msgid "Found %d messages %s that:"
+msgstr "Trouvé %d messages %s tels que:"
 
 #: assembl/static/js/views/messageListPostQuery.js:395
 #, fuzzy, python-format
-msgid "Showing all %d messages %s:"
-msgstr "%d messages %s :"
+msgid "Found %d messages %s:"
+msgstr "Trouvé %d messages %s:"
 
 #: assembl/static/js/views/messageListPostQuery.js:414
 #, python-format
@@ -394,6 +412,7 @@ msgid "Clipboard"
 msgstr "Presse-papier"
 
 #: assembl/templates/header.jinja2:21
+#: assembl/templates/views/messageList.tmpl:4
 msgid "Messages"
 msgstr "Messages"
 
@@ -415,7 +434,7 @@ msgid "Connecting..."
 msgstr "Connection en cours..."
 
 #: assembl/templates/login.jinja2:25
-msgid "connect to assembl"
+msgid "Connect to assembl"
 msgstr "Se connectez à Assembl"
 
 #: assembl/templates/login.jinja2:28 assembl/templates/profile.jinja2:102
@@ -551,7 +570,7 @@ msgstr ""
 "people</a>"
 
 #: assembl/templates/register.jinja2:6
-msgid "join assembl"
+msgid "Join assembl"
 msgstr "Rejoignez Assembl"
 
 #: assembl/templates/register.jinja2:19
@@ -691,14 +710,14 @@ msgid "Graph of ideas"
 msgstr "Graphe des idées"
 
 #: assembl/templates/views/ideaList.tmpl:28
-#: assembl/templates/views/messageList.tmpl:62
+#: assembl/templates/views/messageList.tmpl:10
 #: assembl/templates/views/synthesisPanel.tmpl:6
 msgid "Fullsize"
 msgstr "Agrandir"
 
 #: assembl/templates/views/ideaList.tmpl:29
 #: assembl/templates/views/ideaPanel.tmpl:8
-#: assembl/templates/views/messageList.tmpl:63
+#: assembl/templates/views/messageList.tmpl:11
 #: assembl/templates/views/segmentList.tmpl:8
 #: assembl/templates/views/synthesisPanel.tmpl:8
 msgid "Close panel"
@@ -838,33 +857,32 @@ msgid "Mark as unread"
 msgstr "Marquer comme non-lu"
 
 #: assembl/templates/views/message.tmpl:62
-#, fuzzy
 msgid "Mark as read"
-msgstr "Marquer comme non-lu"
+msgstr "Marquer lu"
 
-#: assembl/templates/views/messageList.tmpl:11
+#: assembl/templates/views/messageList.tmpl:23
 msgid "Activity feed"
 msgstr "Fil d'activité"
 
-#: assembl/templates/views/messageList.tmpl:21
+#: assembl/templates/views/messageList.tmpl:33
 msgid "Add filter"
 msgstr "Ajouter un filtre"
 
-#: assembl/templates/views/messageList.tmpl:24
+#: assembl/templates/views/messageList.tmpl:36
 msgid "All messages"
 msgstr "Tous les messages"
 
-#: assembl/templates/views/messageList.tmpl:25
-msgid "Orphan messages only"
-msgstr "Messages orphelins seulement"
+#: assembl/templates/views/messageList.tmpl:37
+msgid "Orphan messages"
+msgstr "Messages orphelins"
 
-#: assembl/templates/views/messageList.tmpl:26
-msgid "Synthesis Messages"
-msgstr "Messages de la synthèse"
+#: assembl/templates/views/messageList.tmpl:38
+msgid "Synthesis messages"
+msgstr "Messages-synthèse"
 
-#: assembl/templates/views/messageList.tmpl:27
-msgid "Unread"
-msgstr "Non-lus"
+#: assembl/templates/views/messageList.tmpl:39
+msgid "Unread messages"
+msgstr "Messages non-lus"
 
 #: assembl/templates/views/messageListItem.tmpl:4
 msgid "Unselect"
@@ -1105,7 +1123,7 @@ msgstr "Nous n'avons pas de discussion sous le code '%s'"
 #~ msgstr "Vous n'avez pas encore lu"
 
 #~ msgid "Show preview"
-#~ msgstr "Aperçus"
+#~ msgstr "Sommaire"
 
 #~ msgid "Add the description"
 #~ msgstr "Ajoutez la description"
@@ -1118,4 +1136,22 @@ msgstr "Nous n'avons pas de discussion sous le code '%s'"
 
 #~ msgid "Harvested in %(num)s segments"
 #~ msgstr "Attrappée dans %(num)s extraits"
+
+#~ msgid "ajaxerror-message"
+#~ msgstr ""
+
+#~ msgid "Chronological view"
+#~ msgstr "Vue chronologique"
+
+#~ msgid "Activity feed view"
+#~ msgstr "Fil d'activité"
+
+#~ msgid "Unread"
+#~ msgstr "Non-lus"
+
+#~ msgid "Titles only"
+#~ msgstr "Titres seulement"
+
+#~ msgid "Complete text"
+#~ msgstr "Message complet"
 

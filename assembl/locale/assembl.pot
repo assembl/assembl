@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: assembl 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-05-06 13:08-0400\n"
+"POT-Creation-Date: 2014-05-06 14:07-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -46,15 +46,15 @@ msgid "${val} is not a string: ${err}"
 msgstr ""
 
 #: assembl/static/js/app/app.js:58
-msgid "Titles only"
+msgid "Message titles"
 msgstr ""
 
 #: assembl/static/js/app/app.js:61
-msgid "Show preview"
+msgid "Message previews"
 msgstr ""
 
 #: assembl/static/js/app/app.js:64
-msgid "Complete text"
+msgid "Complete messages"
 msgstr ""
 
 #: assembl/static/js/app/app.js:535
@@ -62,7 +62,7 @@ msgid "Extract"
 msgstr ""
 
 #: assembl/static/js/app/app.js:899
-msgid "ajaxerror-message"
+msgid "ajax error message:"
 msgstr ""
 
 #: assembl/static/js/models/idea.js:33 assembl/static/js/views/ideaPanel.js:81
@@ -162,17 +162,17 @@ msgid "You can drag the segment above directly to the table of ideas"
 msgstr ""
 
 #: assembl/static/js/views/messageList.js:17
-#: assembl/static/js/views/messageListPostQuery.js:129
-#: assembl/templates/views/messageList.tmpl:10
-msgid "Threaded view"
+msgid "Threaded"
 msgstr ""
 
 #: assembl/static/js/views/messageList.js:20
-msgid "Chronological view"
+#: assembl/static/js/views/messageListPostQuery.js:137
+#: assembl/templates/views/messageList.tmpl:24
+msgid "Chronological"
 msgstr ""
 
 #: assembl/static/js/views/messageList.js:23
-msgid "Activity feed view"
+msgid "Reverse-Chronological"
 msgstr ""
 
 #: assembl/static/js/views/messageList.js:217
@@ -200,13 +200,13 @@ msgstr ""
 
 #: assembl/static/js/views/messageList.js:281
 #: assembl/templates/views/ideaList.tmpl:27
-#: assembl/templates/views/messageList.tmpl:60
+#: assembl/templates/views/messageList.tmpl:8
 msgid "Expand all"
 msgstr ""
 
 #: assembl/static/js/views/messageList.js:284
 #: assembl/templates/views/ideaList.tmpl:27
-#: assembl/templates/views/messageList.tmpl:60
+#: assembl/templates/views/messageList.tmpl:8
 msgid "Collapse all"
 msgstr ""
 
@@ -273,9 +273,9 @@ msgstr ""
 msgid "Only include unread messages."
 msgstr ""
 
-#: assembl/static/js/views/messageListPostQuery.js:137
-#: assembl/templates/views/messageList.tmpl:12
-msgid "Chronological"
+#: assembl/static/js/views/messageListPostQuery.js:129
+#: assembl/templates/views/messageList.tmpl:22
+msgid "Threaded view"
 msgstr ""
 
 #: assembl/static/js/views/messageListPostQuery.js:144
@@ -287,7 +287,7 @@ msgid "No query has been executed yet"
 msgstr ""
 
 #: assembl/static/js/views/messageListPostQuery.js:380
-msgid "There are no messages in the discussion that:"
+msgid "Found no message in the discussion that:"
 msgstr ""
 
 #: assembl/static/js/views/messageListPostQuery.js:383
@@ -301,12 +301,12 @@ msgstr ""
 
 #: assembl/static/js/views/messageListPostQuery.js:392
 #, python-format
-msgid "Showing the %d messages %s that:"
+msgid "Found %d messages %s that:"
 msgstr ""
 
 #: assembl/static/js/views/messageListPostQuery.js:395
 #, python-format
-msgid "Showing all %d messages %s:"
+msgid "Found %d messages %s:"
 msgstr ""
 
 #: assembl/static/js/views/messageListPostQuery.js:414
@@ -390,7 +390,7 @@ msgstr ""
 msgid "Clipboard"
 msgstr ""
 
-#: assembl/templates/header.jinja2:21
+#: assembl/templates/header.jinja2:21 assembl/templates/views/messageList.tmpl:4
 msgid "Messages"
 msgstr ""
 
@@ -411,7 +411,7 @@ msgid "Connecting..."
 msgstr ""
 
 #: assembl/templates/login.jinja2:25
-msgid "connect to assembl"
+msgid "Connect to assembl"
 msgstr ""
 
 #: assembl/templates/login.jinja2:28 assembl/templates/profile.jinja2:102
@@ -542,7 +542,7 @@ msgid ""
 msgstr ""
 
 #: assembl/templates/register.jinja2:6
-msgid "join assembl"
+msgid "Join assembl"
 msgstr ""
 
 #: assembl/templates/register.jinja2:19
@@ -678,14 +678,14 @@ msgid "Graph of ideas"
 msgstr ""
 
 #: assembl/templates/views/ideaList.tmpl:28
-#: assembl/templates/views/messageList.tmpl:62
+#: assembl/templates/views/messageList.tmpl:10
 #: assembl/templates/views/synthesisPanel.tmpl:6
 msgid "Fullsize"
 msgstr ""
 
 #: assembl/templates/views/ideaList.tmpl:29
 #: assembl/templates/views/ideaPanel.tmpl:8
-#: assembl/templates/views/messageList.tmpl:63
+#: assembl/templates/views/messageList.tmpl:11
 #: assembl/templates/views/segmentList.tmpl:8
 #: assembl/templates/views/synthesisPanel.tmpl:8
 msgid "Close panel"
@@ -816,28 +816,28 @@ msgstr ""
 msgid "Mark as read"
 msgstr ""
 
-#: assembl/templates/views/messageList.tmpl:11
+#: assembl/templates/views/messageList.tmpl:23
 msgid "Activity feed"
 msgstr ""
 
-#: assembl/templates/views/messageList.tmpl:21
+#: assembl/templates/views/messageList.tmpl:33
 msgid "Add filter"
 msgstr ""
 
-#: assembl/templates/views/messageList.tmpl:24
+#: assembl/templates/views/messageList.tmpl:36
 msgid "All messages"
 msgstr ""
 
-#: assembl/templates/views/messageList.tmpl:25
-msgid "Orphan messages only"
+#: assembl/templates/views/messageList.tmpl:37
+msgid "Orphan messages"
 msgstr ""
 
-#: assembl/templates/views/messageList.tmpl:26
-msgid "Synthesis Messages"
+#: assembl/templates/views/messageList.tmpl:38
+msgid "Synthesis messages"
 msgstr ""
 
-#: assembl/templates/views/messageList.tmpl:27
-msgid "Unread"
+#: assembl/templates/views/messageList.tmpl:39
+msgid "Unread messages"
 msgstr ""
 
 #: assembl/templates/views/messageListItem.tmpl:4

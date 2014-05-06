@@ -377,7 +377,7 @@ define(['app', 'i18n', 'sprintf'], function(app, i18n, sprintf){
                 
                 if(this.getResultNumTotal() == 0) {
                     if(numActiveFilters > 0) {
-                        retval += i18n.gettext("There are no messages in the discussion that:");
+                        retval += i18n.gettext("Found no message in the discussion that:");
                     }
                     else {
                         retval += i18n.gettext("There are no messages in the discussion.");
@@ -389,10 +389,10 @@ define(['app', 'i18n', 'sprintf'], function(app, i18n, sprintf){
                         unreadText = sprintf.sprintf(i18n.gettext("(%d unread)"), this.getResultNumUnread());
                     }
                     if(numActiveFilters > 0) {
-                        retval += sprintf.sprintf(i18n.gettext("Showing the %d messages %s that:"), this.getResultNumTotal(), unreadText);
+                        retval += sprintf.sprintf(i18n.gettext("Found %d messages %s that:"), this.getResultNumTotal(), unreadText);
                     }
                     else {
-                        retval += sprintf.sprintf(i18n.gettext("Showing all %d messages %s:"), this.getResultNumTotal(), unreadText);
+                        retval += sprintf.sprintf(i18n.gettext("Found %d messages %s:"), this.getResultNumTotal(), unreadText);
                     }
                 }
                 
