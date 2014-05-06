@@ -8,7 +8,6 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
     var DIV_ANNOTATOR_HELP = app.format("<div class='annotator-draganddrop-help'>{0}</div>", i18n.gettext('You can drag the segment above directly to the table of ideas') ),
     DEFAULT_MESSAGE_VIEW_LI_ID_PREFIX = "defaultMessageView-";
 
-    
     /**
      * @class views.MessageList
      */
