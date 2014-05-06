@@ -568,6 +568,44 @@ def update_compass():
     with cd(env.projectpath):
         run('bundle install --path=vendor/bundle')
 
+
+@task
+def compile_fontello_fonts():
+    from zipfile import ZipFile
+    from StringIO import StringIO
+    try:
+        import requests
+    except ImportError:
+        raise RuntimeError(
+            "Please 'pip install requests' in your main environment")
+    font_dir = os.path.join(
+        env.projectpath, 'assembl', 'static', 'font', 'icon')
+    config_file = os.path.join(font_dir, 'config.json')
+    id_file = os.path.join(font_dir, 'fontello.id')
+    if (not os.path.exists(id_file) or
+            os.path.getmtime(id_file)>os.path.getmtime(config_file)):
+        r=requests.post("http://fontello.com",
+                        files={'config': open(config_file)})
+        if not r.ok:
+            raise RuntimeError("Could not get the ID")
+        fid = r.text
+        with open(id_file, 'w') as f:
+            f.write(fid)
+    else:
+        with open(id_file) as f:
+            fid = f.read()
+    r = requests.get("http://fontello.com/%s/get" % fid)
+    if not r.ok:
+        raise RuntimeError("Could not get the data")
+    with ZipFile(StringIO(r.content)) as data:
+        for name in data.namelist():
+            dirname, fname = os.path.split(name)
+            dirname, subdir = os.path.split(dirname)
+            if fname and subdir == 'font':
+                with data.open(name) as fdata:
+                    with open(os.path.join(font_dir, fname), 'wb') as ffile:
+                        ffile.write(fdata.read())
+
 def database_create():
     """
     """
@@ -749,7 +787,7 @@ def caravan_stagenv():
     env.gitbranch = "develop"
 
 
-@task    
+@task
 def coeus_stagenv():
     """
     [ENVIRONMENT] Staging
