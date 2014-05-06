@@ -87,7 +87,7 @@ function(Backbone, _, $, app, Synthesis, Permissions, IdeaInSynthesisView, i18n,
             this.$el.html( this.template(data) );
 
             var view_data = {};
-            function inSynthesis(idea) {return idea != rootIdea && idea.inNextSynthesis};
+            function inSynthesis(idea) {return idea != rootIdea && idea.get('inNextSynthesis')};
             rootIdea.visitBreadthFirst(renderVisitor(view_data, inSynthesis));
 
             _.each(ideas, function append_recursive(idea){
