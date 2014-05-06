@@ -189,6 +189,7 @@ function(Backbone, _, $, app, Segment, i18n, Permissions){
          * Closes the panel
          */
         closePanel: function(){
+            console.log("closePanel");
             if( this.button ){
                 this.button.trigger('click');
             }

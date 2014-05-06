@@ -45,6 +45,12 @@ function(Backbone, _, Idea, Message, app, i18n, Types, EditableField, CKEditorFi
             var that = this;
             app.on('idea:select', function(idea){
                 that.setCurrentIdea(idea);
+                if(idea) {
+                    $('#button-ideaPanel').show();
+                }
+                else {
+                    $('#button-ideaPanel').hide();
+                }
             });
         },
 
