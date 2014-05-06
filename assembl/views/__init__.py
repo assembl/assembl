@@ -48,6 +48,7 @@ def get_default_context(request):
         user=get_user(request),
         locale=localizer.locale_name,
         locales=config.get('available_languages').split(),
+        theme=config.get('default_theme') or 'default',
         translations=json.dumps({
             id:localizer.translate(_(id)) for id in JS_MESSAGE_IDS}))
 

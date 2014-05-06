@@ -1,0 +1,15 @@
+ 
+.assembl-logo {
+    font-size: 20px;
+    color: #ffffff;
+    text-decoration: none;
+    line-height: 35px;
+    margin-left: 10px;
+}
+.navbar {
+    &.navbar-default {
+        background-color: #484848;
+        color: white;
+        height: 35px;
+        }
+    }
