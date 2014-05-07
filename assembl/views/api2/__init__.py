@@ -5,6 +5,7 @@ from pyramid.view import view_config
 from pyramid.httpexceptions import (
     HTTPCreated, HTTPBadRequest, HTTPNotImplemented, HTTPUnauthorized)
 from pyramid.security import authenticated_userid
+from pyramid.response import Response
 from pyld import jsonld
 
 from assembl.lib.sqla import get_session_maker
@@ -142,7 +143,7 @@ def collection_add(request):
             db.add(instance)
         db.flush()
         first = instances[0]
-        raise HTTPCreated(first.uri_generic(first.id))
+        return Response(first.uri_generic(first.id), status_code=201)
     raise HTTPBadRequest()
 
 
@@ -266,7 +267,7 @@ def class_add(request):
             db.add(instance)
         db.flush()
         first = instances[0]
-        raise HTTPCreated(first.uri_generic(first.id))
+        return Response(first.uri_generic(first.id), status_code=201)
     raise HTTPBadRequest()
 
 
