@@ -40,6 +40,14 @@ function(Backbone, _, $, Idea, Segment, app, Permissions, CKEditorField, Message
 
             _.extend(data, render_data);
 
+            this.$el.addClass('idealist-item');
+
+            if( data.isOpen === true ){
+                this.$el.addClass('is-open');
+            } else {
+                this.$el.removeClass('is-open');
+            }
+
             segments.forEach(function(segment) {
                 var post = segment.getAssociatedPost();
                 if(post) {

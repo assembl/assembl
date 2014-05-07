@@ -1,4 +1,4 @@
-<% if(level > 0) { %>
+{#<% if(level > 0) { %>
     <div class="panel-arrow">
         <span class="line-<%= level %>"></span>
     </div>
@@ -18,5 +18,55 @@
         <div class="synthesisIdea-replybox hidden"></div>
     </div>
 </div>
+#}
+
+
+<div class="idealist-body panel-editablebox synthesis-idea <% if(editing ) { %>is-editing<% }%>">
+    <%  var i;
+    for( var i=1; i<level; i+= 1) {
+        if (last_sibling_chain[i]) { %>
+            <span class="idealist-space"></span>
+        <% } else { %>
+            <span class="idealist-bar"></span>
+        <% }
+    } %>
+    <% if (level > 0) {
+        if (is_last_sibling) { %>
+            <span class="idealist-link-last"></span>
+        <% } else { %>
+            <span class="idealist-link"></span>
+        <% }
+    } %>
+
+    <% if (children.length > 0) {
+        if (level > 0) { %>
+            <span class="idealist-arrow"></span>
+        <% } else { %>
+            <span class="idealist-arrow level1"></span>
+        <% }
+       } else {
+        if (level > 0) { %>
+            <span class="idealist-noarrow"></span>
+        <% } else { %>
+            <span class="idealist-space"></span>
+        <% }
+    } %>
+
+    <div class="idealist-title panel-editablebox synthesis-idea <% if(editing ) { %>is-editing<% }%>">
+        <div class="panel-editablearea synthesis-expression" data-idea-id="<%= id %>"></div>
+        <div class="comment">
+            <% if( authors.length ) { %>
+                {{ gettext('By') }}
+            <% } %>
+            <% _.each(authors, function(author, index, list) { %>
+                <img src="<%= author.getAvatarUrl(20) %>" alt="{{ gettext('Avatar for') }} <%= author.get('name') %>"  class="image-rounded" width="20" height="20" />
+                <i style='font-style: italic;font-size:80%;'><%= author.get('name') %></i><% if( index < list.length-1 ) { %>,<% } %>
+            <% }) %>
+            <a class = "synthesisIdea-replybox-openbtn icon-comment" href="#">{{ gettext('comment') }}</a>
+            <div class="synthesisIdea-replybox hidden"></div>
+        </div>
+    </div>
+</div>
+
 
 <div class="synthesis-idealist-children"></div>
