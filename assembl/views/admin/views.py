@@ -66,7 +66,6 @@ def discussion_admin(request):
         if(g('mailing_list_address')):
             mailbox.post_email_address = g('mailing_list_address')
         mailbox.discussion = discussion
-        transaction.commit()
 
     return render_to_response(
         'admin/discussions.jinja2',
