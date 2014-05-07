@@ -4,7 +4,7 @@ import os.path
 from pyramid.view import view_config
 from pyramid.renderers import render_to_response
 from pyramid.security import authenticated_userid, Everyone
-from pyramid.httpexceptions import HTTPNotFound
+from pyramid.httpexceptions import HTTPNotFound, HTTPSeeOther, HTTPUnauthorized
 from pyramid.i18n import TranslationStringFactory
 from sqlalchemy.orm.exc import NoResultFound
 
@@ -70,11 +70,19 @@ def get_styleguide_components():
     return views
 
 
-@view_config(route_name='home', request_method='GET', http_cache=60, permission=P_READ)
+@view_config(route_name='home', request_method='GET', http_cache=60)
 def home_view(request):
-    canAddExtract = False
     user_id = authenticated_userid(request) or Everyone
     context = get_default_context(request)
+    canRead = user_has_permission(context["discussion"].id, user_id, P_READ)
+    if not canRead and user_id == Everyone:
+        #User isn't logged-in and discussion isn't public, redirect to login page
+        login_url = request.route_url('login')+"?next_view="+request.current_route_path()
+        return HTTPSeeOther(login_url)
+    elif not canRead:
+        #User is logged-in but doesn't have access to the discussion
+        return HTTPUnauthorized()
+    
     canAddExtract = user_has_permission(context["discussion"].id, user_id, P_ADD_EXTRACT)
     context['canAddExtract'] = canAddExtract
     context['canDisplayTabs'] = True
