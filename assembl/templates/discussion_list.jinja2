@@ -7,11 +7,20 @@
         <li>
             <span class="discussion">
             <a href='{{ discussion.slug }}/'>{{ discussion.topic }}</a>
+            {% if discussion.admin_url %}
+                <br/><a href='{{ discussion.admin_url }}'>{{ gettext("Admin") }}</a>
+            {% endif %}
             </span>
         </li>
         {% else %}
             <em>{% trans %}There are no discussions on this server yet{% endtrans %}</em>
         {% endfor %}
     </ul>
+    {% if discussions_admin_url %}
+        <p><a href='{{ discussions_admin_url }}'>{{ gettext("Create a new discussion") }}</a></p>
+    {% endif %}
+    {% if permissions_admin_url %}
+        <p><a href='{{ permissions_admin_url }}'>{{ gettext("Change global permissions") }}</a></p>
+    {% endif %}
 </div>
 {% endblock %}

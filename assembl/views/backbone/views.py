@@ -77,7 +77,7 @@ def home_view(request):
     canRead = user_has_permission(context["discussion"].id, user_id, P_READ)
     if not canRead and user_id == Everyone:
         #User isn't logged-in and discussion isn't public, redirect to login page
-        login_url = request.route_url('login')+"?next_view="+request.current_route_path()
+        login_url = request.route_url('login',_query={'next_view':request.current_route_path()})
         return HTTPSeeOther(login_url)
     elif not canRead:
         #User is logged-in but doesn't have access to the discussion
