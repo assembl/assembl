@@ -64,6 +64,8 @@ pytz==2014.2
 pyzmq==14.2.0
 rdflib==4.1.2
 redis==2.9.1
+# dependency of pkg_resources
+docutils
 repoze.lru==0.6
 repoze.sendmail==4.2
 requests==2.2.1
