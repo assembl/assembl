@@ -59,22 +59,16 @@ function(Backbone, _, $, Idea, Segment, app, Permissions, CKEditorField, Message
 
             this.$el.html(this.template(data));
 
-            var rendered_children = [];
-            if( _.keys(data.children).length != 0 ){
-
-                var i = _.last(_.keys(data.children));
-                data.children[i].set('isLastItem', true);
-
-                _.each(data.children, function(idea){
-                    var ideaView = new IdeaInSynthesisView({model:idea}, view_data);
-                    rendered_children.push( ideaView.render().el );
-                });
-            }
-
-            this.$('.synthesis-idealist-children').append( rendered_children );
-
             this.renderCKEditor();
             this.renderReplyView();
+
+            var rendered_children = [];
+            _.each(data['children'], function(idea){
+                var ideaView = new IdeaInSynthesisView({model:idea}, view_data);
+                rendered_children.push( ideaView.render().el );
+            });
+            this.$('.synthesis-idealist-children').append( rendered_children );
+
             return this;
         },
         
@@ -84,6 +78,7 @@ function(Backbone, _, $, Idea, Segment, app, Permissions, CKEditorField, Message
         renderCKEditor: function(){
             var that = this,
                 area = this.$('.synthesis-expression');
+
             if(app.getCurrentUser().can(Permissions.EDIT_IDEA)) {
                 this.ckeditor = new CKEditorField({
                     'model': this.model,
