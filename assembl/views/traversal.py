@@ -1,6 +1,7 @@
 from sqlalchemy.orm.attributes import InstrumentedAttribute
 from sqlalchemy.inspection import inspect as sqlainspect
 from pyramid.security import Allow, Everyone, ALL_PERMISSIONS, DENY_ALL
+from pyramid.httpexceptions import HTTPNotFound
 from abc import ABCMeta, abstractmethod
 
 from assembl.models.auth import P_READ, R_SYSADMIN
