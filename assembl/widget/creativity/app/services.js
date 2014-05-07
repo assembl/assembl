@@ -38,6 +38,11 @@ creativityServices.factory('globalMessages', function($http){
 
 });
 
+//CARD inspire me: send an idea to assembl
+creativityServices.factory('sendIdeaService', ['$resource',function($resource){
+    return $resource('http://localhost:6543/api/v1/discussion/:discussionId/posts')
+}]);
+
 // WIP: use Angular's REST and Custom Services as our Model for Messages
 creativityServices.factory('Discussion', ['$resource', function($resource){
     return $resource('http://localhost:6543/data/Discussion/:discussionId', {}, {

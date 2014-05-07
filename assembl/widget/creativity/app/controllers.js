@@ -1,7 +1,7 @@
 "use strict";
 
 creativityApp.controller('videosCtl',
-  ['$scope', '$http', '$routeParams', '$log', 'globalVideoConfig', 'JukeTubeVideosService', 'Discussion', 
+  ['$scope', '$http', '$routeParams', '$log', 'globalVideoConfig', 'JukeTubeVideosService', 'Discussion',
   function($scope, $http, $routeParams, $log, globalVideoConfig, JukeTubeVideosService, Discussion){
 
     // intialization code (constructor)
@@ -145,7 +145,7 @@ creativityApp.controller('videosCtl',
 }]);
 
 creativityApp.controller('cardsCtl',
-    ['$scope','$http','$sce','globalConfig', function($scope, $http, $sce, globalConf){
+    ['$scope','$http','$sce','globalConfig','sendIdeaService','$location', function($scope, $http, $sce, globalConf, sendIdeaService, $location){
 
     // activate the right tab
     $("ul.nav li").removeClass("active");
@@ -188,8 +188,18 @@ creativityApp.controller('cardsCtl',
      * TODO:  add rest api
     */
     $scope.sendIdea = function(){
+       var send =  new sendIdeaService();
+       //var url = $location.protocol()+'://'+$location.host()+':'+$location.port()
 
+       send.subject = $scope.formData.title;
+       send.message = $scope.formData.description;
 
+       //TODO : {discussionId} need to be dynamic
+       send.$save({discussionId:3}, function sucess(){
+
+       }, function error(){
+
+       })
     }
 
 }]);
