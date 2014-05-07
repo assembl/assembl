@@ -2,17 +2,9 @@
 
 **Prerequisites**
 
-Install required development libraries
-
-- python-dev
 - On Mac OS X 10.9.2: The system python is incompatible with the clang 5.1. You need to remove all occurences of `-mno-fused-madd` in `/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/_sysconfigdata.py`. Also renew (or delete) the corresponding `.pyc`, `.pyo` files.
-- build-essential
-- unixodbc-dev
-- redis
-- memached
-- fabric 1.8
 
-Note:  For production on linux using nginx/uwsgi you need the following ppa (for both saucy and raring):
+- For production on linux using nginx/uwsgi you need the following ppa (for both saucy and raring):
 apt-add-repository ppa:chris-lea/uwsgi 
 
 ## Installing Virtuoso
@@ -40,29 +32,39 @@ sudo apt-get install virtuoso-server virtuoso-vad-conductor
 
 ### Setup a development environment:
 
-You need fabric 1.8.1 and a ssh server installed:
+You need fabric 1.5.1 and a ssh server installed:
 
-If you have Homebrew installed, pip installs with python:
+On mac:  If you have Homebrew installed, pip installs with python:
 
 ``` sh
 brew install python
 ```
 
+On ubuntuL you can get all that you need to bootstrap with:
 ``` sh
-- wget https://raw.github.com/ImaginationForPeople/assembl/develop/fabfile.py
-- fab devenv:projectpath=~/assembl bootstrap
-- cd ~/assembl
+apt-get install fabric git openssh-server
 ```
 
-If fabric is installed
+And then:
+
+``` sh
+wget https://raw.github.com/ImaginationForPeople/assembl/develop/fabfile.py
+fab devenv:projectpath=~/assembl install_builddeps
+fab devenv:projectpath=~/assembl bootstrap
+cd ~/assembl
+```
+
+or
 
 ``` sh
 git clone git@github.com:ImaginationForPeople/assembl.git
 cd assembl
+fab devenv install_builddeps
 fab devenv bootstrap_from_checkout
 ```
 
 **Dependencies:**
+The previous steps should install all required dependencies. Otherwise,
 
 ``` sh
 fab devenv install_builddeps

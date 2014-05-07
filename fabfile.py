@@ -207,6 +207,7 @@ def bootstrap_from_checkout():
     Create the virtualenv and install the app
     """
     execute(updatemaincode)
+    execute(build_virtualenv)
     execute(setup_in_venv)
 
 @task
@@ -475,7 +476,6 @@ def install_builddeps():
         # libjpeg62-dev libpng12-dev zlib1g-dev libfreetype6-dev liblcms-dev libpq-dev libxslt1-dev libxml2-dev
         #Runtime requirements (even in develop)
         sudo('apt-get install -y redis-server memcached unixodbc-dev virtuoso-opensource')
-    execute(install_bower)
 
 @task
 def configure_rbenv():
