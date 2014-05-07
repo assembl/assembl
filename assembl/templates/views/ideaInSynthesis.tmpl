@@ -20,11 +20,7 @@
     </div>
 </div>
 <% } else { %>
-    <% if(is_last_sibling){ %>
-        <div class="panel-editablebox synthesis-idea with-no-border <% if(editing ) { %>is-editing<% }%> level-<%= level %>">
-    <% } else { %>
         <div class="panel-editablebox synthesis-idea with-border <% if(editing ) { %>is-editing<% }%> level-<%= level %>">
-    <% } %>
         <div class="panel-editablearea synthesis-expression" data-idea-id="<%= id %>"></div>
         <div class="comment">
             <% if( authors.length ) { %>
@@ -41,4 +37,4 @@
 <% } %>
 
 
-
+<div class="synthesis-idealist-children"></div>

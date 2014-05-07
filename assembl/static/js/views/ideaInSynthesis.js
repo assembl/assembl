@@ -21,7 +21,7 @@ function(Backbone, _, $, Idea, Segment, app, Permissions, CKEditorField, Message
         initialize: function(obj, view_data){
             this.model.on('change:shortTitle change:longTitle change:segments', this.render, this);
             this.editing = false;
-            this.view_data = view_data;
+            this.view_data = view_data
         },
 
         /**
@@ -39,10 +39,6 @@ function(Backbone, _, $, Idea, Segment, app, Permissions, CKEditorField, Message
                 render_data = view_data[this.model.getId()];
 
             _.extend(data, render_data);
-
-            if (render_data === undefined) {
-                return this;
-            }
 
             segments.forEach(function(segment) {
                 var post = segment.getAssociatedPost();
@@ -62,6 +58,21 @@ function(Backbone, _, $, Idea, Segment, app, Permissions, CKEditorField, Message
             data.subject = data.longTitle;
 
             this.$el.html(this.template(data));
+
+            var rendered_children = [];
+            if( _.keys(data.children).length != 0 ){
+
+                var i = _.last(_.keys(data.children));
+                data.children[i].set('isLastItem', true);
+
+                _.each(data.children, function(idea){
+                    var ideaView = new IdeaInSynthesisView({model:idea}, view_data);
+                    rendered_children.push( ideaView.render().el );
+                });
+            }
+
+            this.$('.synthesis-idealist-children').append( rendered_children );
+
             this.renderCKEditor();
             this.renderReplyView();
             return this;
