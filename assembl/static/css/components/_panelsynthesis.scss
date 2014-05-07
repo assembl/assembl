@@ -9,24 +9,27 @@
   }
   #synthesisPanel-ideas {
     .synthesis-idea{
+      min-height: 40px;
       .panel-editablearea {
         overflow: visible;
         margin: 0;
+        width: auto;
       }
       .synthesis-expression {
         margin: 0;
-        display: inline-block;
-        width: 100%;
       }
       .comment {
         font-size: 12px;
-        //position: absolute;
-        //top: 20px;
         a{
           text-decoration: none;
         }
       }
 
     }
+
+    .idealist-item {
+      line-height: 38px;
+    }
+
   }
 }

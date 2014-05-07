@@ -46,7 +46,7 @@
         <% }
        } else {
         if (level > 0) { %>
-            <span class="idealist-noarrow"></span>
+           {# <span class="idealist-bar"></span> #}
         <% } else { %>
             <span class="idealist-space"></span>
         <% }
@@ -54,7 +54,7 @@
 
     <div class="idealist-title panel-editablebox synthesis-idea <% if(editing ) { %>is-editing<% }%>">
         <div class="panel-editablearea synthesis-expression" data-idea-id="<%= id %>"></div>
-        <div class="comment">
+        <span class="comment">
             <% if( authors.length ) { %>
                 {{ gettext('By') }}
             <% } %>
@@ -63,8 +63,8 @@
                 <i style='font-style: italic;font-size:80%;'><%= author.get('name') %></i><% if( index < list.length-1 ) { %>,<% } %>
             <% }) %>
             <a class = "synthesisIdea-replybox-openbtn icon-comment" href="#">{{ gettext('comment') }}</a>
-            <div class="synthesisIdea-replybox hidden"></div>
-        </div>
+            <span class="synthesisIdea-replybox hidden"></span>
+        </span>
     </div>
 </div>
 

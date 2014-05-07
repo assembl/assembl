@@ -100,7 +100,6 @@
     display: inline-block;
     overflow-x: hidden;
     width: 100%;
-    border: solid 1px transparent;
     border-radius: 4px;
     margin: 10px;
     //padding: 5px;
@@ -127,7 +126,7 @@
 // The container for an editablearea
 // ------------------
 .panel-editablebox {
-    //position: relative;
+    position: relative;
 
     &.is-editing {
         background-color: #dbf2ff;
