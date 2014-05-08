@@ -6,7 +6,7 @@ DateTime==4.0.1
 -e git+https://github.com/bitprophet/fabric.git#egg=fabric
 Jinja2==2.7.2
 Mako==0.9.1
-MarkupSafe==0.19
+MarkupSafe==0.21
 PasteDeploy==1.5.2
 PyJWT==0.2.1
 PyLD==0.5.0
@@ -39,10 +39,10 @@ iso8601==0.1.10
 -e git+https://github.com/benoitg/jwzthreading.git@master#egg=jwzthreading
 kombu==3.0.16
 lingua==2.1
-lxml==3.3.3
+lxml==3.3.5
 meld3==1.0.0
 oauthlib==0.6.1
-paramiko==1.13.0
+paramiko==1.14.0
 pinocchio==0.4.1
 polib==1.0.4
 py==1.4.20
@@ -61,7 +61,7 @@ pyramid-tm==0.7
 python-memcached==1.53
 python-openid==2.2.5
 pytz==2014.2
-pyzmq==14.2.0
+pyzmq==14.3.0
 rdflib==4.1.2
 redis==2.9.1
 docutils==0.11
