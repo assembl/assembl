@@ -8,15 +8,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: assembl 0.0\n"
 "Report-Msgid-Bugs-To: maparent@acm.org\n"
-"POT-Creation-Date: 2014-05-06 14:07-0400\n"
-"PO-Revision-Date: 2014-05-06 14:07-0400\n"
+"POT-Creation-Date: 2014-05-08 23:21-0400\n"
+"PO-Revision-Date: 2014-05-08 23:29-0400\n"
 "Last-Translator: Benoit Grégoire <benoitg@coeus.ca>\n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
 "Plural-Forms: nplurals=2; plural=(n > 1)\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 1.3\n"
+"Language: en_US\n"
+"X-Generator: Lokalize 1.5\n"
 
 #: assembl/auth/operations.py:30 assembl/templates/register.jinja2:16
 msgid "email"
@@ -73,7 +75,7 @@ msgstr "Extrait"
 msgid "ajax error message:"
 msgstr "message d'erreur ajax:"
 
-#: assembl/static/js/models/idea.js:33 assembl/static/js/views/ideaPanel.js:81
+#: assembl/static/js/models/idea.js:33 assembl/static/js/views/ideaPanel.js:87
 msgid "New idea"
 msgstr "Ajouter une idée"
 
@@ -117,51 +119,51 @@ msgstr "Ajouter une conclusion"
 msgid "Unknown user"
 msgstr "Utilisateur non-identifié"
 
-#: assembl/static/js/views/ideaInSynthesis.js:106
+#: assembl/static/js/views/ideaInSynthesis.js:95
 #: assembl/static/js/views/message.js:110
 msgid "Type your response here..."
 msgstr "Écrivez votre réponse ici..."
 
-#: assembl/static/js/views/ideaInSynthesis.js:108
+#: assembl/static/js/views/ideaInSynthesis.js:97
 #: assembl/static/js/views/message.js:112
 msgid "Send your reply"
 msgstr "Envoyez votre réponse"
 
-#: assembl/static/js/views/ideaInSynthesis.js:111
+#: assembl/static/js/views/ideaInSynthesis.js:100
 #: assembl/static/js/views/message.js:114
 msgid "You did not type a response yet..."
 msgstr "Vous n'avez pas encore écrit de réponse"
 
-#: assembl/static/js/views/ideaPanel.js:80
+#: assembl/static/js/views/ideaPanel.js:86
 msgid "Short expression (only a few words) of the idea in the table of ideas."
 msgstr "Expression brève (quelques mots) de l'idée dans la table des matières"
 
-#: assembl/static/js/views/ideaPanel.js:103
+#: assembl/static/js/views/ideaPanel.js:109
 msgid "Comment on this idea here..."
 msgstr "Commenter cette idée ici..."
 
-#: assembl/static/js/views/ideaPanel.js:104
+#: assembl/static/js/views/ideaPanel.js:110
 msgid "Send your comment"
 msgstr "Envoyez votre commentaire"
 
-#: assembl/static/js/views/ideaPanel.js:106
-#: assembl/static/js/views/messageList.js:229
+#: assembl/static/js/views/ideaPanel.js:112
+#: assembl/static/js/views/messageList.js:233
 msgid "You need to type a comment first..."
 msgstr "Vous devez d'abord écrire un commentaire..."
 
-#: assembl/static/js/views/ideaPanel.js:211
+#: assembl/static/js/views/ideaPanel.js:217
 msgid "ideaPanel-cantDeleteByChildren"
 msgstr "Vous ne pouvez pas effacer une idée ayant des sous-idées."
 
-#: assembl/static/js/views/ideaPanel.js:216
+#: assembl/static/js/views/ideaPanel.js:222
 msgid "ideaPanel-cantDeleteBySegments"
 msgstr "Vous ne pouvez pas effacer une idée associée à des extraits."
 
-#: assembl/static/js/views/ideaPanel.js:323
+#: assembl/static/js/views/ideaPanel.js:329
 msgid "ideaPanel-clearConfirmationMessage"
 msgstr "Confirmez que vous souhaitez supprimer toutes les idées."
 
-#: assembl/static/js/views/ideaPanel.js:340
+#: assembl/static/js/views/ideaPanel.js:346
 msgid "ideaPanel-deleteIdeaConfirmMessage"
 msgstr "Confirmez que vous souhaitez supprimer cette idée."
 
@@ -171,25 +173,24 @@ msgstr ""
 "Vous pouvez glisser le segment ci-dessus directement sur la table des "
 "matières"
 
-#: assembl/static/js/views/messageList.js:17
+#: assembl/static/js/views/messageList.js:18
 msgid "Threaded"
 msgstr "Enfilades"
 
-#: assembl/static/js/views/messageList.js:20
+#: assembl/static/js/views/messageList.js:22
 #: assembl/static/js/views/messageListPostQuery.js:137
-#: assembl/templates/views/messageList.tmpl:24
 msgid "Chronological"
 msgstr "Chronologique"
 
-#: assembl/static/js/views/messageList.js:23
+#: assembl/static/js/views/messageList.js:26
 msgid "Reverse-Chronological"
 msgstr "Chronologique-inverse"
 
-#: assembl/static/js/views/messageList.js:217
+#: assembl/static/js/views/messageList.js:221
 msgid "No messages"
 msgstr "Pas de messages"
 
-#: assembl/static/js/views/messageList.js:226
+#: assembl/static/js/views/messageList.js:230
 msgid ""
 "You can start a new topic in this discussion by typing a subject above, "
 "and a first post here..."
@@ -197,32 +198,32 @@ msgstr ""
 "Vous pouvez donner un nouveau point de départ à la discussion en écrivant"
 " un sujet ci-dessus, et un premier message ici."
 
-#: assembl/static/js/views/messageList.js:227
+#: assembl/static/js/views/messageList.js:231
 msgid "Start a new topic in this discussion"
 msgstr "Introduire un sujet de discussion"
 
-#: assembl/static/js/views/messageList.js:228
+#: assembl/static/js/views/messageList.js:232
 #: assembl/templates/views/messageSend.tmpl:10
 msgid "New topic subject:"
 msgstr "Titre du nouveau sujet:"
 
-#: assembl/static/js/views/messageList.js:230
+#: assembl/static/js/views/messageList.js:234
 msgid "You need to set a subject to add a new topic..."
 msgstr "Vous devez définir le titre pour ajouter un sujet de discussion..."
 
-#: assembl/static/js/views/messageList.js:281
+#: assembl/static/js/views/messageList.js:285
 #: assembl/templates/views/ideaList.tmpl:27
 #: assembl/templates/views/messageList.tmpl:8
 msgid "Expand all"
 msgstr "Tout déployer"
 
-#: assembl/static/js/views/messageList.js:284
+#: assembl/static/js/views/messageList.js:288
 #: assembl/templates/views/ideaList.tmpl:27
 #: assembl/templates/views/messageList.tmpl:8
 msgid "Collapse all"
 msgstr "Tout replier"
 
-#: assembl/static/js/views/messageList.js:448
+#: assembl/static/js/views/messageList.js:452
 msgid "Send to clipboard"
 msgstr "Ajouter au presse-papier"
 
@@ -242,7 +243,7 @@ msgid "You've already read"
 msgstr "Vous avez déjà lu"
 
 #: assembl/static/js/views/messageListPostQuery.js:65
-#: assembl/templates/views/ideaPanel.tmpl:3
+#: assembl/templates/header.jinja2:13 assembl/templates/views/ideaPanel.tmpl:3
 msgid "Idea"
 msgstr "Idée"
 
@@ -291,7 +292,6 @@ msgid "Only include unread messages."
 msgstr "N'inclure que des messages non-lus"
 
 #: assembl/static/js/views/messageListPostQuery.js:129
-#: assembl/templates/views/messageList.tmpl:22
 msgid "Threaded view"
 msgstr "Vue en enfilade"
 
@@ -322,7 +322,7 @@ msgid "Found %d messages %s that:"
 msgstr "Trouvé %d messages %s tels que:"
 
 #: assembl/static/js/views/messageListPostQuery.js:395
-#, fuzzy, python-format
+#, python-format
 msgid "Found %d messages %s:"
 msgstr "Trouvé %d messages %s:"
 
@@ -375,22 +375,36 @@ msgstr "Envoi en cours..."
 msgid "Message posted!"
 msgstr "Commentaire envoyé!"
 
-#: assembl/static/js/views/segmentList.js:315
+#: assembl/static/js/views/segmentList.js:316
 msgid "segmentList-clearConfirmationMessage"
 msgstr "Confirmez que vous souhaitez supprimer tous les extraits."
 
-#: assembl/static/js/views/synthesisPanel.js:178
+#: assembl/static/js/views/synthesisPanel.js:179
 msgid "Do you want to publish the synthesis?"
 msgstr "Voulez-vous publier la synthèse?"
 
-#: assembl/static/js/views/synthesisPanel.js:207
+#: assembl/static/js/views/synthesisPanel.js:208
 msgid "Synthesis published!"
 msgstr "Synthèse publiée!"
 
-#: assembl/templates/discussion_list.jinja2:13
+#: assembl/templates/discussion_list.jinja2:11
+msgid "Admin"
+msgstr "Administrer"
+
+#: assembl/templates/discussion_list.jinja2:16
 #: assembl/templates/admin/discussions.jinja2:72
 msgid "There are no discussions on this server yet"
 msgstr "Il n'y a pas encore de discussions sur ce serveur."
+
+#: assembl/templates/discussion_list.jinja2:20
+#| msgid "Start a new topic in this discussion"
+msgid "Create a new discussion"
+msgstr "Créer une nouvelle discussion"
+
+#: assembl/templates/discussion_list.jinja2:23
+#| msgid "Role permissions:"
+msgid "Change global permissions"
+msgstr "Changer les permissions globales"
 
 #: assembl/templates/header.jinja2:10
 msgid ""
@@ -679,17 +693,14 @@ msgid "Number of caught segments expressing this idea"
 msgstr "Nombre d'extraits attrapés exprimant cette idée"
 
 #: assembl/templates/views/ideaInSynthesis.tmpl:12
-#: assembl/templates/views/ideaInSynthesis.tmpl:31
 msgid "By"
 msgstr "Par"
 
 #: assembl/templates/views/ideaInSynthesis.tmpl:15
-#: assembl/templates/views/ideaInSynthesis.tmpl:34
 msgid "Avatar for"
 msgstr "Avatar pour"
 
 #: assembl/templates/views/ideaInSynthesis.tmpl:18
-#: assembl/templates/views/ideaInSynthesis.tmpl:37
 msgid "comment"
 msgstr "commentaire"
 
@@ -774,7 +785,8 @@ msgstr "Expression dans la prochaine synthèse"
 
 #: assembl/templates/views/ideaPanel.tmpl:36
 msgid "Expressions of this idea in segments of posts or on the web"
-msgstr "Expressions de cette idée dans des extraits de messages ou de pages Web"
+msgstr ""
+"Expressions de cette idée dans des extraits de messages ou de pages Web"
 
 #: assembl/templates/views/ideaPanel.tmpl:37
 #, python-format
@@ -833,16 +845,13 @@ msgid "Read More"
 msgstr "Lire plus"
 
 #: assembl/templates/views/message.tmpl:49
-msgid ""
-"Unhoist this message (do not show only this message and its replies "
-"anymore)"
-msgstr "Ne plus centrer la vue sur ce message (montrer tous les messages)"
+msgid "Go back to the entire topic thread"
+msgstr "Retourner à l'enfilade complète de ce sujet"
 
 #: assembl/templates/views/message.tmpl:51
-msgid "Hoist this message (show only this message and its replies)"
-msgstr ""
-"Centrer la vue sur ce message (ne montrer que ce message et les réponses "
-"à celui-ci)"
+#| msgid "Hoist this message (show only this message and its replies)"
+msgid "Show only this message and its replies"
+msgstr "Afficher seulement ce message et ses réponses"
 
 #: assembl/templates/views/message.tmpl:54
 msgid "Copy the link to this message to clipboard"
@@ -860,27 +869,23 @@ msgstr "Marquer comme non-lu"
 msgid "Mark as read"
 msgstr "Marquer lu"
 
-#: assembl/templates/views/messageList.tmpl:23
-msgid "Activity feed"
-msgstr "Fil d'activité"
-
-#: assembl/templates/views/messageList.tmpl:33
+#: assembl/templates/views/messageList.tmpl:36
 msgid "Add filter"
 msgstr "Ajouter un filtre"
 
-#: assembl/templates/views/messageList.tmpl:36
+#: assembl/templates/views/messageList.tmpl:39
 msgid "All messages"
 msgstr "Tous les messages"
 
-#: assembl/templates/views/messageList.tmpl:37
+#: assembl/templates/views/messageList.tmpl:40
 msgid "Orphan messages"
 msgstr "Messages orphelins"
 
-#: assembl/templates/views/messageList.tmpl:38
+#: assembl/templates/views/messageList.tmpl:41
 msgid "Synthesis messages"
 msgstr "Messages-synthèse"
 
-#: assembl/templates/views/messageList.tmpl:39
+#: assembl/templates/views/messageList.tmpl:42
 msgid "Unread messages"
 msgstr "Messages non-lus"
 
@@ -907,7 +912,8 @@ msgid "Harvested by %(name)s %(date)s"
 msgstr "Attrappé par %(name)s %(date)s"
 
 #: assembl/templates/views/segment.tmpl:12
-msgid "Click here to see the original contribution this segment is quoted from."
+msgid ""
+"Click here to see the original contribution this segment is quoted from."
 msgstr ""
 "Cliquez ici pour voir la contribution originale d'où a été tiré cet "
 "extrait."
@@ -945,14 +951,16 @@ msgstr "Presse-papier (%(quantity)s)"
 
 #: assembl/templates/views/segmentList.tmpl:14
 msgid ""
-"Drag this bookmarklet to your favorite bar.  You can then capture "
-"segments from any non-https webpage to this discussion by clicking on the"
-" bookmarklet and selecting a zone of text in the webpage."
+"Drag this button to your bookmark bar to create a bookmarklet. You can "
+"then capture selections from most webpages (those that are not secured "
+"with https) by 1. Clicking on the bookmarklet and 2. Highlighting the "
+"section of text you wish to send to the discussion."
 msgstr ""
-"Glissez ce signet intelligent sur la barre de favoris de votre "
-"fureteur.Vous pourrez ensuite capturer des signets de toute page Web "
-"(non-sécurisée) vers cette discussion en cliquant sur le signet et en "
-"sélectionnant une zone de texte dans la page Web."
+"Glissez ce boutton sur votre barre de favoris pour créer un bookmarklet.  "
+"Vous pouvez ensuite aller chercher un extrait sur la majorité des pages web "
+"(celles qui ne sont pas sécurisées par https) en 1. Cliquant sur le "
+"bookmarklet et 2. Mettant en surbrillance la section de texte que vous voulez "
+"envoyer à la discussion."
 
 #: assembl/templates/views/segmentList.tmpl:14
 msgid "Web capture to"
@@ -1154,4 +1162,29 @@ msgstr "Nous n'avons pas de discussion sous le code '%s'"
 
 #~ msgid "Complete text"
 #~ msgstr "Message complet"
+
+#~ msgid ""
+#~ "Unhoist this message (do not show "
+#~ "only this message and its replies "
+#~ "anymore)"
+#~ msgstr "Ne plus centrer la vue sur ce message (montrer tous les messages)"
+
+#~ msgid "Activity feed"
+#~ msgstr "Fil d'activité"
+
+#~ msgid ""
+#~ "Drag this bookmarklet to your favorite"
+#~ " bar.  You can then capture segments"
+#~ " from any non-https webpage to "
+#~ "this discussion by clicking on the "
+#~ "bookmarklet and selecting a zone of "
+#~ "text in the webpage."
+#~ msgstr ""
+#~ "Glissez ce signet intelligent sur la "
+#~ "barre de favoris de votre fureteur.Vous"
+#~ " pourrez ensuite capturer des signets "
+#~ "de toute page Web (non-sécurisée) vers"
+#~ " cette discussion en cliquant sur le"
+#~ " signet et en sélectionnant une zone"
+#~ " de texte dans la page Web."
 

@@ -11,7 +11,7 @@
     
     <div class="panel-body">
         <div class="box box--bottomborder">
-            <a class="bookmarklet" data-tooltip="{{gettext('Drag this bookmarklet to your favorite bar.  You can then capture segments from any non-https webpage to this discussion by clicking on the bookmarklet and selecting a zone of text in the webpage.')}}" href="javascript:(function(a,b){r='http://{{ request.server_name }}:{{ request.server_port }}',a._annotatorConfig={root:r,discussion:{{ discussion.id }}},s=b.body.appendChild(b.createElement('script')),s.language='javascript',s.src=r+'/static/js/annotator_bkmklet.min.js'})(this,this.document);">{{ gettext('Web capture to') }} {{ discussion.slug }}</a>
+            <a class="bookmarklet" data-tooltip="{{gettext('Drag this button to your bookmark bar to create a bookmarklet. You can then capture selections from most webpages (those that are not secured with https) by 1. Clicking on the bookmarklet and 2. Highlighting the section of text you wish to send to the discussion.')}}" href="javascript:(function(a,b){r='http://{{ request.server_name }}:{{ request.server_port }}',a._annotatorConfig={root:r,discussion:{{ discussion.id }}},s=b.body.appendChild(b.createElement('script')),s.language='javascript',s.src=r+'/static/js/annotator_bkmklet.min.js'})(this,this.document);">{{ gettext('Web capture to') }} {{ discussion.slug }}</a>
         </div>
         <div class="postitlist">
             <% _.each(segments, function(segment){ %>

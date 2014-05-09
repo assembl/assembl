@@ -14,12 +14,15 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
     var MessageList = Backbone.View.extend({
         ViewStyles: {
             THREADED: {id: "threaded",
+                        css_id: "messageList-view-threaded",
                         label: i18n.gettext('Threaded')
                         },
             CHRONOLOGICAL: {id: "chronological",
+                        css_id: "messageList-view-chronological",
                         label: i18n.gettext('Chronological')
                         },
             REVERSE_CHRONOLOGICAL: {id: "reverse_chronological",
+                        css_id: "messageList-view-activityfeed",
                         label: i18n.gettext('Reverse-Chronological')
                         }
         },
@@ -202,6 +205,7 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
                 views = this.getRenderedMessagesFlat(this.getAllMessagesToDisplay());
             }
             var data = {
+                    availableViewStyles: this.ViewStyles,
                     currentViewStyle: this.currentViewStyle,
                     DEFAULT_MESSAGE_VIEW_LI_ID_PREFIX: DEFAULT_MESSAGE_VIEW_LI_ID_PREFIX,
                     collapsed: this.collapsed,

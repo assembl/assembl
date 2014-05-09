@@ -13,15 +13,18 @@
     </header>
 
     <div class="panel-body">
-    <div class="view-config">
-        <div class="dropdown">
+        <div class="view-config">
+            <div class="dropdown">
                 <span class="dropdown-label text-bold">
                     <%= currentViewStyle.label %>
                 </span>
                 <ul class="dropdown-list">
-                    <li id="messageList-view-threaded" class="dropdown-listitem">{{ gettext('Threaded view') }}</li>
-                    <li id="messageList-view-activityfeed" class="dropdown-listitem">{{ gettext('Activity feed') }}</li>
-                    <li id="messageList-view-chronological" class="dropdown-listitem">{{ gettext('Chronological') }}</li>
+                <% _.each(availableViewStyles, function(viewStyle) {
+                     print('<li id="' + viewStyle.css_id + '" class="dropdown-listitem">');
+                     print(viewStyle.label);
+                     print('</li>');
+                     });
+                %>
                 </ul>
             </div>
             
