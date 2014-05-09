@@ -55,6 +55,9 @@ function(Backbone, _, $, Idea, app, Permissions){
             }else{
                 this.$el.addClass('no-children');
             }
+            if (render_data['skip_parent']) {
+                this.$el.addClass('skip_parent');
+            }
             this.$el.addClass('level'+render_data['level']);;
             
             if( this.isOpen === true ){
@@ -71,7 +74,7 @@ function(Backbone, _, $, Idea, app, Permissions){
             this.$el.find('>.ideafamily-body>.ideafamily-idea').append(ideaView.render().el);
 
             var rendered_children = [];
-            _.each(data['children'], function(idea){
+            _.each(render_data['children'], function(idea){
                 var ideaFamilyView = new IdeaFamilyView({
                     model:idea, 
                     innerViewClass:that.innerViewClass},
@@ -81,7 +84,7 @@ function(Backbone, _, $, Idea, app, Permissions){
             this.$el.find('>.ideafamily-body>.ideafamily-children').append( rendered_children );
 
             return this;
-        },
+        }
 
 
     });
