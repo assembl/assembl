@@ -47,9 +47,14 @@ function(Backbone, _, $, Idea, app, Permissions){
             _.extend(data, render_data);
 
             this.$el.addClass('ideafamily-item');
-            if(render_data['is_last_sibling']) { 
-                this.$el.addClass('is-last-sibbling');
+            if(render_data['is_last_sibling']) {
+                this.$el.addClass('is-last-sibling');
             }
+
+            // if(!render_data['true_sibling']) {
+            //     this.$el.addClass('false-sibling');
+            // }
+
             if(render_data['children'].length > 0) { 
                 this.$el.addClass('has-children');
             }else{
