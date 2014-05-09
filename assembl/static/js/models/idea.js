@@ -240,7 +240,7 @@ function(Base, _, Segment, app, i18n, Types, Permissions){
             if (visitor(this, ancestry)) {
                 ancestry = ancestry.slice(0);
                 ancestry.push(this);
-                var children = this.getChildren();
+                var children = _.sortBy(this.getChildren(), function(child){ return child.get('order'); });
                 for (var i in children) {
                     children[i].visitDepthFirst(visitor, ancestry);
                 }
@@ -256,7 +256,7 @@ function(Base, _, Segment, app, i18n, Types, Permissions){
             if (continue_visit) {
                 ancestry = ancestry.slice(0);
                 ancestry.push(this);
-                var children = this.getChildren();
+                var children = _.sortBy(this.getChildren(), function(child){ return child.get('order'); });
                 var children_to_visit = [];
                 for (var i in children) {
                     var child = children[i];
