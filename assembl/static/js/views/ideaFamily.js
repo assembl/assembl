@@ -53,6 +53,9 @@ function(Backbone, _, $, Idea, app, Permissions){
             if(render_data['children'].length > 0) { 
                 this.$el.addClass('has-children');
                 }
+            if (render_data['skip_parent']) {
+                this.$el.addClass('skip_parent');
+            }
             this.$el.addClass('level'+render_data['level']);;
             
             if( this.isOpen === true ){
