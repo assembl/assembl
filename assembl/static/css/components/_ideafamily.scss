@@ -10,7 +10,6 @@
 }
 .ideafamily-item {
     .ideafamily-body {
-
         border-left: solid 1px $hry-line-color;
         margin-left: $idealist-arrow-width/2 - 1;
     
@@ -44,6 +43,14 @@
                 background: none;
             }
         }
+    }
+    &.no-children.level0 {
+      > .ideafamily-body {
+        margin-left: 30px;
+        > .ideafamily-link {
+          background: url(#{$img-dir}/idealist/idealist-link-no-children.png) right top no-repeat;
+        }
+      }
     }
     &.has-children {
         > .ideafamily-body {
