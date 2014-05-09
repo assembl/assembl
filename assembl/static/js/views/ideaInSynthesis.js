@@ -18,10 +18,9 @@ function(Backbone, _, $, Idea, Segment, app, Permissions, CKEditorField, Message
         /**
          * @init
          */
-        initialize: function(obj, view_data){
+        initialize: function(obj){
             this.model.on('change:shortTitle change:longTitle change:segments', this.render, this);
             this.editing = false;
-            this.view_data = view_data
         },
 
         /**
@@ -34,19 +33,9 @@ function(Backbone, _, $, Idea, Segment, app, Permissions, CKEditorField, Message
             var
                 data = this.model.toJSON(),
                 authors = [],
-                segments = app.getSegmentsByIdea(this.model),
-                view_data = this.view_data,
-                render_data = view_data[this.model.getId()];
+                segments = app.getSegmentsByIdea(this.model);
 
-            _.extend(data, render_data);
-
-            this.$el.addClass('idealist-item');
-
-            if( data.isOpen === true ){
-                this.$el.addClass('is-open');
-            } else {
-                this.$el.removeClass('is-open');
-            }
+            this.$el.addClass('synthesis-idea');
 
             segments.forEach(function(segment) {
                 var post = segment.getAssociatedPost();
@@ -59,24 +48,16 @@ function(Backbone, _, $, Idea, Segment, app, Permissions, CKEditorField, Message
             });
 
             data.id = this.model.getId();
-            data.level = this.model.getSynthesisLevel();
             data.editing = this.editing;
             data.longTitle = this.model.getLongTitleDisplayText();
             data.authors = _.uniq(authors);
             data.subject = data.longTitle;
 
             this.$el.html(this.template(data));
-
-            this.renderCKEditor();
+            if(this.editing) {
+                this.renderCKEditor();
+            }
             this.renderReplyView();
-
-            var rendered_children = [];
-            _.each(data['children'], function(idea){
-                var ideaView = new IdeaInSynthesisView({model:idea}, view_data);
-                rendered_children.push( ideaView.render().el );
-            });
-            this.$('.synthesis-idealist-children').append( rendered_children );
-
             return this;
         },
         
@@ -85,28 +66,22 @@ function(Backbone, _, $, Idea, Segment, app, Permissions, CKEditorField, Message
          */
         renderCKEditor: function(){
             var that = this,
-                area = this.$('.synthesis-expression');
+                area = this.$('.synthesis-expression-editor');
 
-            if(app.getCurrentUser().can(Permissions.EDIT_IDEA)) {
-                this.ckeditor = new CKEditorField({
-                    'model': this.model,
-                    'modelProp': 'longTitle',
-                    'placeholder': this.model.getLongTitleDisplayText()
-                });
+            this.ckeditor = new CKEditorField({
+                'model': this.model,
+                'modelProp': 'longTitle',
+                'placeholder': this.model.getLongTitleDisplayText()
+            });
 
-                this.ckeditor.on('save cancel', function(){
-                    that.editing=false;
-                });
+            this.ckeditor.on('save cancel', function(){
+                that.editing=false;
+                that.render();
+            });
 
-                
-                this.ckeditor.renderTo( area );
-                if(this.editing){
-                    this.ckeditor.changeToEditMode();
-                }
-            }
-            else {
-                area.append(this.model.getLongTitleDisplayText());
-            }
+            
+            this.ckeditor.renderTo( area );
+            this.ckeditor.changeToEditMode();
         },
         /**
          * renders the reply interface
@@ -133,7 +108,7 @@ function(Backbone, _, $, Idea, Segment, app, Permissions, CKEditorField, Message
          * @type {Object}
          */
         events: {
-            'click [data-idea-id]': 'onEditableAreaClick',
+            'click .synthesis-expression': 'onEditableAreaClick',
             'click .synthesisIdea-replybox-openbtn': 'focusReplyBox',
             'click .messageSend-cancelbtn': 'closeReplyBox'
         },
@@ -166,11 +141,11 @@ function(Backbone, _, $, Idea, Segment, app, Permissions, CKEditorField, Message
          * @event
          */
         onEditableAreaClick: function(ev){
-            console.log("onEditableAreaClick firing");
-            var id = ev.currentTarget.getAttribute('data-idea-id');
-
-            this.editing = true;
-            this.render();
+            console.log("onEditableAreaClick");
+            if(app.getCurrentUser().can(Permissions.EDIT_IDEA)) {
+                this.editing = true;
+                this.render();
+            }
         }
     });
 

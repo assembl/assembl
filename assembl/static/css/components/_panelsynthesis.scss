@@ -10,13 +10,21 @@
   #synthesisPanel-ideas {
     .synthesis-idea{
       min-height: 40px;
+      padding-top: 12px;
       .panel-editablearea {
-        overflow: visible;
-        margin: 0;
-        width: auto;
+        //overflow: visible;
+        //margin: 0;
+        width: 100%;
       }
       .synthesis-expression {
+        display: inline;
         margin: 0;
+        & > *:first-child {
+            margin-top: 0px;
+        }
+        & > *:last-child {
+            display: inline;
+        }
       }
       .comment {
         font-size: 12px;

@@ -1,0 +1,80 @@
+// The title
+// ----------
+.ideafamily-title {
+    display: block;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    cursor: pointer;
+    padding-left: $padding-left;
+}
+.ideafamily-item {
+    .ideafamily-body {
+
+        border-left: solid 1px $hry-line-color;
+        margin-left: $idealist-arrow-width/2 - 1;
+    
+        > .ideafamily-link {
+            width: $idealist-arrow-width;
+            height: $idealist-arrow-height;
+            float:left;
+            margin: 0;
+            margin-left: -$idealist-arrow-width/2;
+            background: url(#{$img-dir}/idealist/idealist-link-opaque.png) left top no-repeat;
+        }
+        > .ideafamily-idea {
+            margin-left: $idealist-arrow-width/2;
+            padding-left: $idealist-arrow-width/2;
+        }
+    }
+    &.is-last-sibbling {
+        > .ideafamily-body {
+            border-left: none;
+            margin-left: $idealist-arrow-width/2;
+            > .ideafamily-link {
+                background: url(#{$img-dir}/idealist/idealist-link-last-opaque.png) left top no-repeat;
+            }
+        }
+    }
+    &.level0 {
+        > .ideafamily-body {
+            border-left: none;
+            margin-left: $idealist-arrow-width/2;
+            > .ideafamily-link {
+                background: none;
+            }
+        }
+    }
+    &.has-children {
+        > .ideafamily-body {
+            > .ideafamily-idea {
+                margin-left: $idealist-arrow-width/2 - 1;
+                border-left: solid 1px $hry-line-color;
+            }
+        }
+    }
+}
+
+
+
+
+// The child list
+// --------------
+.ideafamily-children {
+    height: 0px;
+    overflow: hidden;
+    display: none;
+
+    @include transition( height 0.4s );
+    @include transform( translateZ(0) );
+
+    .ideafamily-item.is-open > .ideafamily-body > & {
+        height: auto;
+        display: initial;
+    }
+
+    &:empty {
+        display: none;
+    }
+
+}

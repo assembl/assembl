@@ -1,5 +1,5 @@
-define(['backbone', 'underscore', 'jquery', 'app', 'models/synthesis', 'permissions', 'views/ideaInSynthesis', 'i18n', 'views/editableField', 'utils/renderVisitor'],
-function(Backbone, _, $, app, Synthesis, Permissions, IdeaInSynthesisView, i18n, EditableField, renderVisitor){
+define(['backbone', 'underscore', 'jquery', 'app', 'models/synthesis', 'permissions', 'views/ideaFamily', 'views/ideaInSynthesis', 'i18n', 'views/editableField', 'utils/renderVisitor'],
+function(Backbone, _, $, app, Synthesis, Permissions, IdeaFamilyView, IdeaInSynthesisView, i18n, EditableField, renderVisitor){
     'use strict';
 
     var SynthesisPanel = Backbone.View.extend({
@@ -92,7 +92,10 @@ function(Backbone, _, $, app, Synthesis, Permissions, IdeaInSynthesisView, i18n,
             rootIdea.visitBreadthFirst(renderVisitor(view_data, roots, inSynthesis));
 
             _.each(roots, function append_recursive(idea){
-                var rendered_idea_view = new IdeaInSynthesisView({model: idea}, view_data);
+                var rendered_idea_view = new IdeaFamilyView(
+                        {model: idea,
+                            innerViewClass: IdeaInSynthesisView}
+                        , view_data);
                 that.$('#synthesisPanel-ideas').append( rendered_idea_view.render().el );
             });
 
