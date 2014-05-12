@@ -41,7 +41,7 @@ define([],function(){
                 '@id': idea_id,
                 'idea': idea,
                 'level': level,
-                'skip_parent': !in_ancestry,
+                'skip_parent': level!=0 & !in_ancestry,
                 'is_last_sibling': true,
                 //'true_sibling': true_sibling,
                 'last_sibling_chain': last_sibling_chain,

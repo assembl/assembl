@@ -12,11 +12,12 @@
     .ideafamily-body {
         border-left: solid 1px $hry-line-color;
         margin-left: $idealist-arrow-width/2 - 1;
+        position: relative;
     
         > .ideafamily-link {
             width: $idealist-arrow-width;
             height: $idealist-arrow-height;
-            float:left;
+            position:absolute;
             margin: 0;
             margin-left: -$idealist-arrow-width/2;
             background: url(#{$img-dir}/idealist/idealist-link-opaque.png) left top no-repeat;
