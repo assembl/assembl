@@ -35,17 +35,43 @@
             }
         }
     }
+    &.skip_parent {
+      > .ideafamily-body {
+        //margin-left: 3 * $idealist-arrow-width/2 - 1;
+        padding-left: 2 * $idealist-arrow-width/2 - 1;
+        > .ideafamily-link {
+            width: 3 * $idealist-arrow-width*2;
+            margin-left: -3*$idealist-arrow-width/2;
+            background: url(#{$img-dir}/idealist/idealist-link-skip-parent.svg) left top no-repeat;
+        }
+      }
+    }
+
+    &.is-last-sibling.skip_parent {
+      > .ideafamily-body {
+        //margin-left: 3 * $idealist-arrow-width/2 - 1;
+        //padding-left:
+        padding-left: 2 * $idealist-arrow-width/2 - 1;
+        > .ideafamily-link {
+            width: 3 * $idealist-arrow-width*2;
+            margin-left: -3*$idealist-arrow-width/2;
+            background: url(#{$img-dir}/idealist/idealist-link-skip-parent-no-children.svg) left top no-repeat;
+        }
+      }
+    }
+    
     &.level0 {
         > .ideafamily-body {
             border-left: none;
             margin-left: $idealist-arrow-width/2;
             > .ideafamily-link {
-                background: url(#{$img-dir}/idealist/idealist-link-root.svg) right top no-repeat;
+                background: url(#{$img-dir}/idealist/idealist-link-root.svg) left top no-repeat;
             }
         }
     }
     &.no-children.level0 {
       > .ideafamily-body {
+
         > .ideafamily-link {
             background: url(#{$img-dir}/idealist/idealist-link-root.svg) right top no-repeat;
         }
