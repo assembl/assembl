@@ -496,16 +496,6 @@ class Synthesis(ExplicitSubGraphView):
         self.db.add(self)
         return next_synthesis
 
-    def serializable(self):
-        return {
-            "@id": self.uri_generic(self.id),
-            "@type": self.external_typename(),
-            "creation_date": self.creation_date.isoformat(),
-            "subject": self.subject,
-            "introduction": self.introduction,
-            "conclusion": self.conclusion,
-            "discussion_id": Discussion.uri_generic(self.discussion.id),
-        }
 
     def get_discussion_id(self):
         return self.discussion_id

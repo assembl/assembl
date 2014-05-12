@@ -24,7 +24,7 @@ define(['models/base', 'jquery', 'app', 'i18n', 'permissions'], function(Base, $
          * The url
          * @type {String}
          */
-        url: app.getApiUrl('next_synthesis/'),
+        url: app.getApiUrl('explicit_subgraphs/synthesis/next_synthesis'),
 
         /**
          * Default values

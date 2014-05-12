@@ -100,6 +100,13 @@ def test_homepage_returns_200(test_app):
     res = test_app.get('/')
     assert res.status_code == 200
 
+def test_get_ideas_single(discussion, test_app, test_session, subidea_1):
+    url = get_url(discussion, 'ideas')
+    res = test_app.get(url + "/" + str(subidea_1.id))
+    assert res.status_code == 200
+    res_data = json.loads(res.body)
+    assert res_data['@id'] == subidea_1.uri(), "Idea API returned %s but we expected %s" % (res_data['@id'], subidea_1.uri())
+
 
 def test_get_ideas(discussion, test_app, test_session):
     url = get_url(discussion, 'ideas')
@@ -121,6 +128,62 @@ def test_get_ideas(discussion, test_app, test_session):
 
     ideas = json.loads(res.body)
     assert len(ideas) == num_ideas+1
+
+def test_next_synthesis_idea_management(discussion, test_app, test_session,
+                   root_idea, subidea_1, subidea_1_1, subidea_1_1_1):
+    base_idea_url = get_url(discussion, 'ideas')
+    next_synthesis_url = get_url(discussion, 'explicit_subgraphs/synthesis/next_synthesis')
+    res = test_app.get(next_synthesis_url)
+    assert res.status_code == 200
+    res_data = json.loads(res.body)
+    assert len(res_data['ideas']) == 0
+    
+    subidea_url = base_idea_url + "/" + str(subidea_1.id)
+    res = test_app.get(subidea_url)
+    assert res.status_code == 200
+    subidea_data = json.loads(res.body)
+    assert subidea_data['@id'] == subidea_1.uri()
+    assert subidea_data['inNextSynthesis'] == False
+    
+    subidea_data['inNextSynthesis'] = True
+    
+    res = test_app.put(subidea_url, json.dumps(subidea_data))
+    assert res.status_code == 200
+    
+    res = test_app.get(subidea_url)
+    assert res.status_code == 200
+    subidea_1_data = json.loads(res.body)
+    assert subidea_1_data['inNextSynthesis'] == True
+
+    res = test_app.get(next_synthesis_url)
+    assert res.status_code == 200
+    res_data = json.loads(res.body)
+    assert len(res_data['ideas']) == 1, 'Idea wasn\'t added to the synthesis'
+    
+    #Add a idea to synthesis that isn't a direct child of it's parent
+    subidea_url = base_idea_url + "/" + str(subidea_1_1_1.id)
+    res = test_app.get(subidea_url)
+    assert res.status_code == 200
+    subidea_data = json.loads(res.body)
+    assert subidea_data['@id'] == subidea_1_1_1.uri()
+    assert subidea_data['inNextSynthesis'] == False
+    
+    subidea_data['inNextSynthesis'] = True
+    
+    res = test_app.put(subidea_url, json.dumps(subidea_data))
+    assert res.status_code == 200
+    
+    res = test_app.get(subidea_url)
+    assert res.status_code == 200
+    subidea_1_data = json.loads(res.body)
+    assert subidea_1_data['inNextSynthesis'] == True
+
+    res = test_app.get(next_synthesis_url)
+    assert res.status_code == 200
+    res_data = json.loads(res.body)
+    assert len(res_data['ideas']) == 2, 'Idea wasn\'t added to the synthesis'
+    
+
 
 #@pytest.mark.xfail
 def test_api_get_posts_from_idea(

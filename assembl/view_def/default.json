@@ -224,7 +224,7 @@
         "subject": true,
         "introduction": true,
         "conclusion": true,
-        "ideas": [":partial"],
+        "ideas": [":id_only"],
         "idea_links": [":partial"]
     },
     "IdeaContentLink": {

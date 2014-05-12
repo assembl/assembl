@@ -126,10 +126,12 @@ def save_idea(request):
     if(idea.discussion_id != discussion.id):
         raise HTTPBadRequest(
             "Idea from discussion %s cannot saved from different discussion (%s)." % (idea.discussion_id,discussion.id ))
-
-    idea.short_title = idea_data['shortTitle']
-    idea.long_title = idea_data['longTitle']
-    idea.definition = idea_data['definition']
+    if 'shortTitle' in idea_data:
+        idea.short_title = idea_data['shortTitle']
+    if 'longTitle' in idea_data:
+        idea.long_title = idea_data['longTitle']
+    if 'definition' in idea_data:
+        idea.definition = idea_data['definition']
     
     if 'parentId' in idea_data and idea_data['parentId'] is not None:
         # TODO: Make sure this is sent as a list!
