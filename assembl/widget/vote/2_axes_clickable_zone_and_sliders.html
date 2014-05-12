@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Input test (circle)</title>
+</head>
+<body>
+
+<style>
+
+body {
+  font: 10px sans-serif;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+</style>
+  
+<p>
+  <label for="nPosX" 
+         style="display: inline-block; width: 240px; text-align: right">
+         posX = <span id="nPosX-value">…</span>
+  </label>
+  <input type="range" min="0" max="100" id="nPosX">
+</p>
+
+<p>
+  <label for="nPosY" 
+         style="display: inline-block; width: 240px; text-align: right">
+         posY = <span id="nPosY-value">…</span>
+  </label>
+  <input type="range" min="0" max="100" id="nPosY">
+</p>
+
+<!-- we disable text selection in this div, to avoid ugly effects when the mouse interacts with the d3 graph -->
+<div 
+ id="d3_container"
+ style='-moz-user-select: none; -webkit-user-select: none; -ms-user-select:none; user-select:none;' 
+ unselectable='on'
+ onselectstart='return false;' 
+ onmousedown='return false;'>
+</div>
+
+<script src="js/d3.min.js"></script>
+<script>
+
+var width = 300;
+var height = 300;
+var padding = 40;
+var xMin = 0;
+var yMin = 0;
+var xMax = 100;
+var yMax = 100;
+var holder;
+
+function setCirclePositionFromOutputRange(x,y)
+{
+  // use d3::scale::invert() to ensure that destination position is in the correct domain (not outside graph)
+  var xInDomain = xScale.invert(x);
+  var yInDomain = yScale.invert(y);
+  /*
+  d3.selectAll("circle")
+    .attr("cx", xScale(xInDomain))
+    .attr("cy", yScale(yInDomain));
+  */
+  updatePosX(xInDomain);
+  updatePosY(yInDomain);
+}
+
+function click()
+{
+  // Ignore the click event if it was suppressed
+  if (d3.event.defaultPrevented) return;
+
+  // Extract the click location
+  var point = d3.mouse(this);
+  var p = {x: point[0], y: point[1] };
+
+  setCirclePositionFromOutputRange(p.x, p.y);
+}
+
+function dragmove(d) {
+  var x = d3.event.x;
+  var y = d3.event.y;
+  setCirclePositionFromOutputRange(x,y);
+}
+
+// create X and Y scales
+var xScale = d3.scale.linear()
+  .domain([xMin, xMax])
+  .range([padding, width - padding * 2])
+  .clamp(true);
+
+var yScale = d3.scale.linear()
+  .domain([yMin, yMax])
+  .range([height - padding, padding*2])
+  .clamp(true);
+
+// create X and Y axes using their scales
+var xAxis = d3.svg.axis()
+  .scale(xScale)
+  .orient("bottom")
+  .ticks(5);
+
+var yAxis = d3.svg.axis()
+  .scale(yScale)
+  .orient("left")
+  .ticks(5);
+
+// define drag beavior
+var drag = d3.behavior.drag()
+  .on("drag", dragmove);
+
+// create the graph
+//var holder = d3.select("body")
+var holder = d3.select("#d3_container")
+  .append("svg")
+  .attr("width", width)    
+  .attr("height", height)
+  .style("cursor", "pointer")
+  .call(drag)
+  .on("click", click);
+
+// show X axis
+holder.append("g")
+  .attr("class", "axis")
+  .attr("transform", "translate(0," + (height - padding) + ")")
+  .call(xAxis);
+
+// show Y axis
+holder.append("g")
+  .attr("class", "axis")
+  .attr("transform", "translate(" + padding + ",0)")
+  .call(yAxis);
+
+// label X axis
+holder.append("text")
+  //.attr("transform", "translate(" + (width / 2) + " ," + (height + margin.bottom) + ")")
+  .attr("y", (height - padding/2) )
+  .attr("x", (width / 2) )
+  .attr("dy", "1em")
+  .attr("dx", "-2em") // reposition center to integrate text length
+  .style("text-anchor", "middle")
+  .text("X axis");
+
+// label Y axis
+holder.append("text")
+  .attr("transform", "rotate(-90)")
+  .attr("y", (0) )
+  .attr("x", (0 - height/2) )
+  .attr("dy", "1em")
+  .attr("dx", "-2em") // reposition center to integrate text length
+  .style("text-anchor", "middle")
+  .text("Y axis");
+
+
+// draw the circle
+holder.append("circle")
+  .attr("cx", 0)
+  .attr("cy", 0)
+  .attr("r", 10) 
+  .style("fill", "none")
+  .style("stroke", "blue")
+  .style("cursor", "pointer")
+  //.call(drag);
+;
+
+// draw an inner circle
+holder.append("circle")
+    .attr("cx", 0)
+    .attr("cy", 0)
+    .attr("r", 7)
+    .style("fill", "blue")
+    //.style("stroke", "black")
+    .style("cursor", "pointer");
+
+// when the input range changes, update the circle 
+d3.select("#nPosX").on("input", function() {
+  updatePosX(this.value);
+});
+
+d3.select("#nPosY").on("input", function() {
+  updatePosY(this.value);
+});
+
+// set initial position of the circle 
+updatePosX(50);
+updatePosY(50);
+
+// update the elements
+function updatePosX(nPosX) {
+
+  // adjust the text on the range slider
+  d3.select("#nPosX-value").text(Math.round(nPosX));
+  d3.select("#nPosX").property("value", nPosX);
+
+  // update the rircle radius
+  holder.selectAll("circle") 
+    .attr("cx", xScale(nPosX));
+}
+
+function updatePosY(nPosY) {
+
+  // adjust the text on the range slider
+  d3.select("#nPosY-value").text(Math.round(nPosY));
+  d3.select("#nPosY").property("value", nPosY);
+
+  // update the rircle radius
+  holder.selectAll("circle") 
+    .attr("cy", yScale(nPosY));
+}
+
+</script>
+</body>
+</html>
