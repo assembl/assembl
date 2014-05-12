@@ -40,15 +40,14 @@
             border-left: none;
             margin-left: $idealist-arrow-width/2;
             > .ideafamily-link {
-                background: none;
+                background: url(#{$img-dir}/idealist/idealist-link-root.svg) right top no-repeat;
             }
         }
     }
     &.no-children.level0 {
       > .ideafamily-body {
-        margin-left: 30px;
         > .ideafamily-link {
-          background: url(#{$img-dir}/idealist/idealist-link-no-children.png) right top no-repeat;
+            background: url(#{$img-dir}/idealist/idealist-link-root.svg) right top no-repeat;
         }
       }
     }
