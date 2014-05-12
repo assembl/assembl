@@ -1,5 +1,5 @@
-define(['backbone', 'underscore', 'jquery', 'app', 'models/synthesis', 'permissions', 'views/ideaFamily', 'views/ideaInSynthesis', 'i18n', 'views/editableField', 'utils/renderVisitor'],
-function(Backbone, _, $, app, Synthesis, Permissions, IdeaFamilyView, IdeaInSynthesisView, i18n, EditableField, renderVisitor){
+define(['backbone', 'underscore', 'jquery', 'app', 'models/synthesis', 'models/idea', 'permissions', 'views/ideaFamily', 'views/ideaInSynthesis', 'i18n', 'views/editableField', 'utils/renderVisitor'],
+function(Backbone, _, $, app, Synthesis, Idea, Permissions, IdeaFamilyView, IdeaInSynthesisView, i18n, EditableField, renderVisitor){
     'use strict';
 
     var SynthesisPanel = Backbone.View.extend({
@@ -14,13 +14,9 @@ function(Backbone, _, $, app, Synthesis, Permissions, IdeaFamilyView, IdeaInSynt
                     this.button = $(obj.button).on('click', app.togglePanel.bind(window, 'synthesisPanel'));
                 }
 
-                if( obj.ideas ){
-                    this.ideas = obj.ideas;
-                } else {
-                    this.ideas = new Idea.Collection();
-                }
-            }
 
+            }
+            this.ideas = new Idea.Collection();
             this.ideas.on('reset', this.render, this);
             this.ideas.on('change', this.render, this);
 
@@ -51,32 +47,67 @@ function(Backbone, _, $, app, Synthesis, Permissions, IdeaFamilyView, IdeaInSynt
          * @type {_.template}
          */
         template: app.loadTemplate('synthesisPanel'),
+        
+        /**
+        * Returns the ideas to compose the synthesis panel
+        */
+        getInNextSynthesisRootIdeas: function(){
+           var ideas = app.ideaList.ideas.where({inNextSynthesis: true}),
+               result = [];
+        
+           _.each(ideas, function(idea){
+               if( idea.getSynthesisLevel() === 0 ){
+                   result.push( idea );
+               }
+           });
+        
+           return result;
+        },
 
         /**
          * The render
          * @return {SynthesisPanel}
          */
         render: function(){
+            console.log("synthesisPanel:render(): firing");
             var that = this,
-                rootIdea = this.ideas.getRootIdea();
+                rootIdea = app.ideaList.ideas.getRootIdea();
             
             app.trigger('render');
-
             // Cleaning all previous listeners
             app.off('synthesisPanel:close');
-
+            
             // Cleaning previous ckeditor instance
             if( this.ckeditor ){
                 this.ckeditor.destroy();
                 this.ckeditor = null;
             }
+            var raw_ideas = this.model.get('ideas');
+            //console.log("Raw Ideas from model: ", raw_ideas)
+            if( raw_ideas ){
+                var ideas = [];
+                _.each(raw_ideas, function (raw_idea){
+                    //console.log(raw_idea);
+                    var idea = app.ideaList.ideas.get(raw_idea['@id']);
+                    if(idea) {
+                        ideas.push(idea);
+                        //that.ideas.push(idea);
+                    }
+                    else {
+                        console.log("synthesisPanel:render():  This shoudn't happen, fix toombstone support?")
+                    }
+                });
+                //For some reason reset causes jquery infinite recursion error
+                //this.ideas.reset(ideas);
+                this.ideas.set(ideas);
+            }
+            console.log("Synthesis idea collection: ", this.ideas)
 
             //var list = document.createDocumentFragment(),
             var model = this.model,
-                ideas = this.ideas.getInNextSynthesisRootIdeas();
-
+                //ideas = this.getInNextSynthesisRootIdeas();
+                ideas = this.ideas;
             model.set('collapsed', this.collapsed);
-            model.set('ideas', ideas);
 
             // Getting the scroll position
             var body = this.$('.panel-body'),
@@ -88,7 +119,18 @@ function(Backbone, _, $, app, Synthesis, Permissions, IdeaFamilyView, IdeaInSynt
 
             var view_data = {};
             var roots = [];
-            function inSynthesis(idea) {return idea != rootIdea && idea.get('inNextSynthesis')};
+            function inSynthesis(idea) {
+                var retval;
+                if(that.model.get('is_next_synthesis')){
+                    //This special case is so we get instant feedback before
+                    //the socket sends changes
+                    retval = idea != rootIdea && idea.get('inNextSynthesis')
+                }
+                else {
+                    retval = idea != rootIdea && that.ideas.contains(idea)
+                }
+                console.log("Checking",idea,"returning:", retval, "synthesis is next synthesis:", that.model.get('is_next_synthesis'));
+                return retval};
             rootIdea.visitBreadthFirst(renderVisitor(view_data, roots, inSynthesis));
 
             _.each(roots, function append_recursive(idea){
@@ -188,7 +230,6 @@ function(Backbone, _, $, app, Synthesis, Permissions, IdeaFamilyView, IdeaInSynt
         _publish: function(){
             var publishes_synthesis_id = this.model.id,
                 url = app.getApiUrl('posts'),
-                ideas = this.ideas.getInNextSynthesisRootIdeas(),
                 that = this;
 
             var onSuccess = function(resp){

@@ -278,29 +278,6 @@ function(Base, _, Segment, app, i18n, Types, Permissions){
         },
 
         /**
-         * @return {Number} The level based in the parents inNextSynthesis flag
-         */
-        getSynthesisLevel: function(){
-            var counter = 0,
-                parent = this;
-
-            do {
-
-                if( parent.get('parentId') !== null ){
-                    parent = parent.getParent();
-                    if( parent.get('inNextSynthesis') ){
-                        counter += 1;
-                    }
-                } else {
-                    parent = null;
-                }
-
-            } while ( parent !== null );
-
-            return counter;
-        },
-
-        /**
          * @return {array<Segment>}
          */
         getSegments: function(){
@@ -368,22 +345,6 @@ function(Base, _, Segment, app, i18n, Types, Permissions){
          * @type {IdeaModel}
          */
         model: IdeaModel,
-
-        /**
-         * Returns the ideas to compose the synthesis panel
-         */
-        getInNextSynthesisRootIdeas: function(){
-            var ideas = this.where({inNextSynthesis: true}),
-                result = [];
-
-            _.each(ideas, function(idea){
-                if( idea.getSynthesisLevel() === 0 ){
-                    result.push( idea );
-                }
-            });
-
-            return result;
-        },
 
         /**
          * @return {Idea} The root idea

@@ -72,7 +72,6 @@ function(Backbone, _, $, Idea, app, Permissions){
             }
 
             data.id = this.model.getId();
-            data.level = this.model.getSynthesisLevel();
 
             this.$el.html(this.template(data));
 

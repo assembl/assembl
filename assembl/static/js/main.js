@@ -49,7 +49,7 @@ define([
     app.messageList.loadInitialData();
 
     // Synthesis
-    app.synthesisPanel = new SynthesisPanel({el: '#synthesisPanel', button: '#button-synthesis', ideas: app.ideaList.ideas });
+    app.synthesisPanel = new SynthesisPanel({el: '#synthesisPanel', button: '#button-synthesis' });
     app.synthesisPanel.model.fetch({silent: true, success: function(){
         app.synthesisPanel.render();
     }});

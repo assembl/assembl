@@ -521,6 +521,9 @@ class Synthesis(ExplicitSubGraphView):
         self.db.add(self)
         return next_synthesis
 
+    @property
+    def is_next_synthesis(self):
+        return self.discussion.get_next_synthesis() == self;
 
     def get_discussion_id(self):
         return self.discussion_id

@@ -224,6 +224,7 @@
         "subject": true,
         "introduction": true,
         "conclusion": true,
+        "is_next_synthesis": true,
         "ideas": [":id_only"],
         "idea_links": [":partial"]
     },
