@@ -37,7 +37,7 @@ class DiscussionBoundBase(Base):
         return DiscussionBoundTombstone(self)
 
 
-class DiscussionBoundTombstone(object):
+class DiscussionBoundTombstone(Tombstone):
     def __init__(self, ob):
         super(DiscussionBoundTombstone, self).__init__(ob)
         self.discussion_id = ob.get_discussion_id()
