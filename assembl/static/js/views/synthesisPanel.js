@@ -101,7 +101,7 @@ function(Backbone, _, $, app, Synthesis, Idea, Permissions, IdeaFamilyView, Idea
             var model = this.model;
 
             // Getting the scroll position
-            var body = this.$('.panel-body'),
+            var body = this.$('.body-synthesis'),
                 y = body.get(0) ? body.get(0).scrollTop : 0;
             var data = model.toJSON();
             data.canSend = app.getCurrentUser().can(Permissions.SEND_SYNTHESIS);
@@ -129,33 +129,32 @@ function(Backbone, _, $, app, Synthesis, Idea, Permissions, IdeaFamilyView, Idea
                         {model: idea,
                             innerViewClass: IdeaInSynthesisView}
                         , view_data);
-                that.$('#synthesisPanel-ideas').append( rendered_idea_view.render().el );
+                that.$('.synthesisPanel-ideas').append( rendered_idea_view.render().el );
             });
-
-            this.$('.panel-body').get(0).scrollTop = y;
+            this.$('.body-synthesis').get(0).scrollTop = y;
             if(data.canEdit) {
                 var titleField = new EditableField({
                     model: model,
                     modelProp: 'subject'
                 });
-                titleField.renderTo('#synthesisPanel-title');
+                titleField.renderTo(this.$('.synthesisPanel-title'));
 
                 var introductionField = new EditableField({
                     model: model,
                     modelProp: 'introduction'
                 });
-                introductionField.renderTo('#synthesisPanel-introduction');
+                introductionField.renderTo(this.$('.synthesisPanel-introduction'));
 
                 var conclusionField = new EditableField({
                     model: model,
                     modelProp: 'conclusion'
                 });
-                conclusionField.renderTo('#synthesisPanel-conclusion');
+                conclusionField.renderTo(this.$('.synthesisPanel-conclusion'));
             }
             else {
-                this.$('#synthesisPanel-title').append(model.get('subject'));
-                this.$('#synthesisPanel-introduction').append(model.get('introduction'));
-                this.$('#synthesisPanel-conclusion').append(model.get('conclusion'));
+                this.$('.synthesisPanel-title').append(model.get('subject'));
+                this.$('.synthesisPanel-introduction').append(model.get('introduction'));
+                this.$('.synthesisPanel-conclusion').append(model.get('conclusion'));
             }
             
             //Restore callback inhibited above
@@ -169,9 +168,9 @@ function(Backbone, _, $, app, Synthesis, Idea, Permissions, IdeaFamilyView, Idea
          * @events
          */
         events: {
-            'click #synthesisPanel-closeButton': 'closePanel',
-            'click #synthesisPanel-publishButton': 'publish',
-            'click #synthesisPanel-fullscreenButton': 'setFullscreen'
+            'click .synthesisPanel-closeButton': 'closePanel',
+            'click .synthesisPanel-publishButton': 'publish',
+            'click .synthesisPanel-fullscreenButton': 'setFullscreen'
         },
 
         /**

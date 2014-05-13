@@ -9,14 +9,10 @@ function(Backbone, _, Moment, ckeditor, app, Message, MessageView, Synthesis, Sy
 
         /**
          * @init
-         * @param {MessageModel} obj the model
-         * @param {Array[boolean]} last_sibling_chain which of the view's ancestors
-         *   are the last child of their respective parents.
          */
         initialize: function(obj){
             MessageView.prototype.initialize.apply(this, arguments);
             this.messageListView.off('annotator:initComplete', this.onAnnotatorInitComplete, this);
-            console.log(this.model);
             var synthesis_id = this.model.get('publishes_synthesis');
             this.synthesis = app.syntheses.get(synthesis_id)
             if(!this.synthesis) {
@@ -24,7 +20,6 @@ function(Backbone, _, Moment, ckeditor, app, Message, MessageView, Synthesis, Sy
                 this.synthesis.fetch();
                 app.syntheses.add(this.synthesis);
             }
-            console.log(this.synthesis);
         },
 
         /**
@@ -47,9 +42,12 @@ function(Backbone, _, Moment, ckeditor, app, Message, MessageView, Synthesis, Sy
          */
         postRender: function() {
             var synthesisPanel = new SynthesisPanel({
-                model: this.synthesis
+                model: this.synthesis,
+                //el: '#message_'+_.escape(this.model.getNumericId())+'_synthesis'
             });
-            this.$('.message-body').append(synthesisPanel.render().el);
+            synthesisPanel.template = app.loadTemplate('synthesisPanelMessage');
+            synthesisPanel.render();
+            this.$('.message-body').append(synthesisPanel.el);
             return;
         },
         

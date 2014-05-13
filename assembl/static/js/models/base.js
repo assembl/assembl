@@ -15,12 +15,12 @@ define(['backbone', 'app'], function(Backbone, app){
          * @param {Number} id
          * @return {BaseModel}
          */
-        _getNumericId: function(id){
-            var re = new RegExp(id+'\d*$');
-            
+        getNumericId: function(){
+            var re = /\d+$/;
             if( re.test(this.id) ){
                 //Return the numeric part
-                return re.exec(this.id)
+                
+                return re.exec(this.id)[0]
                 }
             else {
                 //Cheat, return the id unmodified.  Useful for special
@@ -35,7 +35,7 @@ define(['backbone', 'app'], function(Backbone, app){
               _.result(this.collection, 'url') ||
               urlError();
             if (this.isNew()) return base;
-            return base.replace(/([^\/])$/, '$1/') + encodeURIComponent(this._getNumericId());
+            return base.replace(/([^\/])$/, '$1/') + encodeURIComponent(this.getNumericId());
           },
           
         /**
