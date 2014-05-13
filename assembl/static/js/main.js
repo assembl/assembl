@@ -6,12 +6,13 @@ define([
     "views/ideaPanel",
     "views/segmentList",
     "views/messageList",
+    "models/synthesis",
     "views/synthesisPanel",
     "models/user",
     "models/segment",
     "router",
     "socket"
-], function(app, $, LateralMenu, IdeaList, IdeaPanel, SegmentList, MessageList, SynthesisPanel, User, Segment, Router, Socket){
+], function(app, $, LateralMenu, IdeaList, IdeaPanel, SegmentList, MessageList, Synthesis, SynthesisPanel, User, Segment, Router, Socket){
     'use strict';
 
     app.init();
@@ -49,10 +50,14 @@ define([
     app.messageList.loadInitialData();
 
     // Synthesis
-    app.synthesisPanel = new SynthesisPanel({el: '#synthesisPanel', button: '#button-synthesis' });
-    app.synthesisPanel.model.fetch({silent: true, success: function(){
-        app.synthesisPanel.render();
-    }});
+    var nextSynthesisModel = new Synthesis.Model({'@id': 'next_synthesis'});
+    nextSynthesisModel.fetch();
+    app.synthesisPanel = new SynthesisPanel({
+        el: '#synthesisPanel',
+        button: '#button-synthesis',
+        model: nextSynthesisModel 
+    });
+    
 
     // Fetching the ideas
     app.segmentList.segments.fetchFromScriptTag('extracts-json');

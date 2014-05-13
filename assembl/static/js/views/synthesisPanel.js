@@ -17,18 +17,25 @@ function(Backbone, _, $, app, Synthesis, Idea, Permissions, IdeaFamilyView, Idea
 
             }
             this.ideas = new Idea.Collection();
-            this.ideas.on('reset', this.render, this);
-            this.ideas.on('change', this.render, this);
 
+            this.ideas.on('add', this.render, this);
+            this.ideas.on('remove', this.render, this);
+            //Note:  this is inhibited within render, as render calls it
+            this.ideas.on('reset', this.render, this);
+            
             this.model.on('reset', this.render, this);
-            this.model.on('change', this.render, this);
+            this.model.on('change', function(){
+                //console.log("model changed");
+                this.render();}, this);
+            //this.model.on('all', function(event){console.log("model event: ", event)}, this);
+
         },
 
         /**
          * The model
          * @type {Synthesis}
          */
-        model: new Synthesis.Model(),
+        model: null,
 
         /**
          * Flag
@@ -47,35 +54,24 @@ function(Backbone, _, $, app, Synthesis, Idea, Permissions, IdeaFamilyView, Idea
          * @type {_.template}
          */
         template: app.loadTemplate('synthesisPanel'),
-        
-        /**
-        * Returns the ideas to compose the synthesis panel
-        */
-        getInNextSynthesisRootIdeas: function(){
-           var ideas = app.ideaList.ideas.where({inNextSynthesis: true}),
-               result = [];
-        
-           _.each(ideas, function(idea){
-               if( idea.getSynthesisLevel() === 0 ){
-                   result.push( idea );
-               }
-           });
-        
-           return result;
-        },
 
         /**
          * The render
          * @return {SynthesisPanel}
          */
         render: function(){
-            console.log("synthesisPanel:render(): firing");
+            if(app.debugRender) {
+                console.log("synthesisPanel:render() is firing");
+            }
             var that = this,
                 rootIdea = app.ideaList.ideas.getRootIdea();
             
             app.trigger('render');
             // Cleaning all previous listeners
             app.off('synthesisPanel:close');
+
+            //Do NOT listen to reset, as it's called within this render
+            this.ideas.off('reset', this.render, this);
             
             // Cleaning previous ckeditor instance
             if( this.ckeditor ){
@@ -91,23 +87,17 @@ function(Backbone, _, $, app, Synthesis, Idea, Permissions, IdeaFamilyView, Idea
                     var idea = app.ideaList.ideas.get(raw_idea['@id']);
                     if(idea) {
                         ideas.push(idea);
-                        //that.ideas.push(idea);
                     }
                     else {
                         console.log("synthesisPanel:render():  This shoudn't happen, fix toombstone support?")
                     }
                 });
-                //For some reason reset causes jquery infinite recursion error
-                //this.ideas.reset(ideas);
-                this.ideas.set(ideas);
+                this.ideas.reset(ideas);
             }
-            console.log("Synthesis idea collection: ", this.ideas)
+            //console.log("Synthesis idea collection: ", this.ideas)
 
             //var list = document.createDocumentFragment(),
-            var model = this.model,
-                //ideas = this.getInNextSynthesisRootIdeas();
-                ideas = this.ideas;
-            model.set('collapsed', this.collapsed);
+            var model = this.model;
 
             // Getting the scroll position
             var body = this.$('.panel-body'),
@@ -129,7 +119,7 @@ function(Backbone, _, $, app, Synthesis, Idea, Permissions, IdeaFamilyView, Idea
                 else {
                     retval = idea != rootIdea && that.ideas.contains(idea)
                 }
-                console.log("Checking",idea,"returning:", retval, "synthesis is next synthesis:", that.model.get('is_next_synthesis'));
+                //console.log("Checking",idea,"returning:", retval, "synthesis is next synthesis:", that.model.get('is_next_synthesis'));
                 return retval};
             rootIdea.visitBreadthFirst(renderVisitor(view_data, roots, inSynthesis));
 
@@ -167,7 +157,8 @@ function(Backbone, _, $, app, Synthesis, Idea, Permissions, IdeaFamilyView, Idea
                 this.$('#synthesisPanel-conclusion').append(model.get('conclusion'));
             }
             
-
+            //Restore callback inhibited above
+            this.ideas.on('reset', this.render, this);
             return this;
         },
 

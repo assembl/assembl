@@ -26,12 +26,6 @@ define(['models/base', 'app'], function(Base, app){
         },
 
         /**
-         * Overwritting the idAttribute
-         * @type {String}
-         */
-        idAttribute: '@id',
-
-        /**
          * The url
          * @type {String}
          */
