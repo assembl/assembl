@@ -93,7 +93,7 @@ def get_posts(request):
     if ids:
         ids = [get_database_id("Post", id) for id in ids]
 
-    view_def = request.GET.get('view')
+    view_def = request.GET.get('view') or 'default'
     
 
     only_synthesis = request.GET.get('only_synthesis')
@@ -180,10 +180,7 @@ def get_posts(request):
         else:
             post, viewpost = query_result, None
         no_of_posts += 1
-        if view_def:
-            serializable_post = post.generic_json(view_def)
-        else:
-            serializable_post = post.serializable()
+        serializable_post = post.generic_json(view_def)
         if viewpost:
             serializable_post['read'] = True
             no_of_posts_viewed_by_user += 1
@@ -234,15 +231,12 @@ def get_posts(request):
 def get_post(request):
     post_id = request.matchdict['id']
     post = Post.get_instance(post_id)
-    view_def = request.GET.get('view')
+    view_def = request.GET.get('view') or 'default'
 
     if not post:
         raise HTTPNotFound("Post with id '%s' not found." % post_id)
 
-    if view_def:
-        return post.generic_json(view_def)
-    else:
-        return post.serializable()
+    return post.generic_json(view_def)
 
 
 @post_read.put(permission=P_READ)

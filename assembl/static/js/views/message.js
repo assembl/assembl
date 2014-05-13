@@ -61,7 +61,21 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n, Permissions, Message
          */
         template: app.loadTemplate('message'),
 
+        /**
+         * Meant for derived classes to override
+         * @type {}
+         */
+        transformDataBeforeRender: function(data) {
+            return data;
+        },
         
+        /**
+         * Meant for derived classes to override
+         * @type {}
+         */
+        postRender: function() {
+            return;
+        },
 
         /**
          * The render
@@ -99,7 +113,7 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n, Permissions, Message
                 this.$el.addClass('unread');
                 this.$el.removeClass('read');
             }
-
+            data = this.transformDataBeforeRender(data);
             this.$el.html( this.template(data) );
 
             app.initClipboard();
@@ -115,7 +129,7 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n, Permissions, Message
                 'mandatory_subject_missing_msg': null
             });
             this.$('.message-replybox').append(this.replyView.render().el);
-
+            this.postRender();
             /* This may cause leaks in annotator, but annotator doesn't have an 
              * API to unload annotations.  Re-loading annotator every time a
              * message re-renders would be intolerably slow.  benoitg 2014-03-11

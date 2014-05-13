@@ -81,6 +81,7 @@
         "discussion": true,
         "ancestry": false,
         "parentId": "parent",
+        "publishes_synthesis": true,
         "idCreator": "creator",
         "subject": true,
         "body": true

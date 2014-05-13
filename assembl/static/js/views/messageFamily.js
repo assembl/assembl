@@ -1,5 +1,5 @@
-define(['backbone', 'underscore', 'moment', 'ckeditor', 'app', 'models/message', 'views/message', 'i18n'],
-function(Backbone, _, Moment, ckeditor, app, Message, MessageView, i18n){
+define(['backbone', 'underscore', 'moment', 'ckeditor', 'app', 'types', 'models/message', 'views/message', 'views/synthesisMessage', 'i18n'],
+function(Backbone, _, Moment, ckeditor, app, Types, Message, MessageView, SynthesisMessageView, i18n){
     'use strict';
 
     /**
@@ -60,8 +60,23 @@ function(Backbone, _, Moment, ckeditor, app, Message, MessageView, i18n){
                 this.currentLevel = level;
             }
             if(!this.messageListView.renderedMessageViewsPrevious[this.model.id]){
+                var messageViewClass = undefined;
+                var messageType = this.model.get('@type');
+                switch(messageType){
+                    case Types.ASSEMBL_POST:
+                    case Types.EMAIL:
+                        messageViewClass = MessageView;
+                        break;
 
-                messageView = new MessageView({
+                case Types.SYNTHESIS_POST:
+                    messageViewClass = SynthesisMessageView;
+                    break;
+                default:
+                    console.log("messageFamily.render():  WARNING:  Unknown Post type: ", messageType, "creating a default MessageView");
+                    messageViewClass = MessageView;
+                }
+                
+                messageView = new messageViewClass({
 
                 model : this.model,
                 messageListView: this.messageListView

@@ -147,7 +147,7 @@ class Post(Content):
 
         return ancestors
 
-    def serializable(self):
+    def serializable_deleteme(self):
         data = {}
         data["@id"] = self.uri()
         data["@type"] = Post.external_typename()
