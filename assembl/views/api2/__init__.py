@@ -143,7 +143,7 @@ def collection_add(request):
             db.add(instance)
         db.flush()
         first = instances[0]
-        return Response(first.uri_generic(first.id), status_code=201)
+        return Response(location=first.uri_generic(first.id), status_code=201)
     raise HTTPBadRequest()
 
 
@@ -267,7 +267,7 @@ def class_add(request):
             db.add(instance)
         db.flush()
         first = instances[0]
-        return Response(first.uri_generic(first.id), status_code=201)
+        return Response(location=first.uri_generic(first.id), status_code=201)
     raise HTTPBadRequest()
 
 

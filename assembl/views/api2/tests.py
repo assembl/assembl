@@ -53,7 +53,7 @@ def test_add_idea_in_synthesis(
             discussion.id, synthesis_1.id),
         {"short_title": "New idea"})
     assert new_idea_r.status_code == 201
-    link = [x for x in new_idea_r.body.split("\n") if ':' in x][0]
+    link = new_idea_r.location
     new_idea = Idea.get_instance(link)
     assert new_idea
     idea_assoc = Idea.db.query(SubGraphIdeaAssociation).filter_by(
@@ -68,7 +68,7 @@ def test_add_subidea_in_synthesis(
             discussion.id, synthesis_1.id, subidea_1_1.id),
         {"short_title": "New subidea"})
     assert new_idea_r.status_code == 201
-    link = [x for x in new_idea_r.body.split("\n") if ':' in x][0]
+    link = new_idea_r.location
     new_idea = Idea.get_instance(link)
     assert new_idea
     db = Idea.db
@@ -92,7 +92,7 @@ def test_widget_basic_interaction(
             })
     })
     assert new_widget_loc.status_code == 201
-    link = [x for x in new_widget_loc.body.split("\n") if ':' in x][0]
+    link = new_widget_loc.location
     new_widget = Widget.get_instance(link)
     assert new_widget
     widget_rep = test_app.get(
@@ -113,5 +113,5 @@ def test_widget_basic_interaction(
         "body": "body", "creator_id": participant1_user.id})
     assert new_post_loc.status_code == 201
     Post.db.flush()
-    link = [x for x in new_post_loc.body.split("\n") if ':' in x][0]
+    link = new_post_loc.location
     post = Post.get_instance(link)
