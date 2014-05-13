@@ -9,17 +9,24 @@ from .password import email_token, verify_password
 
 _ = TranslationStringFactory('assembl')
 
-def get_identity_provider(auth_context, create=True):
+
+def get_identity_provider(request, create=True):
+    auth_context = request.context
+    trusted = request.registry.settings['trusted_login_providers']
     provider = None
     session = get_session_maker()()
     provider = IdentityProvider.db.query(IdentityProvider).filter_by(
         provider_type=auth_context.provider_type,
         name=auth_context.provider_name
-        ).first()
-    if create and not provider:
+    ).first()
+    if provider and not provider.trust_emails and provider.name in trusted:
+        provider.trust_emails = True
+        session.add(provider)
+    elif create and not provider:
         provider = IdentityProvider(
             provider_type=auth_context.provider_type,
-            name=auth_context.provider_name)
+            name=auth_context.provider_name,
+            trust_emails=auth_context.provider_name in trusted)
         session.add(provider)
     return provider
 

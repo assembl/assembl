@@ -296,7 +296,7 @@ def velruse_login_complete_view(request):
     context = request.context
     velruse_profile = context.profile
     logged_in = authenticated_userid(request)
-    provider = get_identity_provider(context)
+    provider = get_identity_provider(request)
     # find or create IDP_Accounts
     idp_accounts = []
     new_idp_accounts = []
