@@ -37,5 +37,10 @@ creativityApp.config(['$routeProvider', function($routeProvider){
     });
 
     $translateProvider.preferredLanguage('fr');
+
+}]).run(['configService',function(configService){
+
+    configService.init();
+
 }]);
 

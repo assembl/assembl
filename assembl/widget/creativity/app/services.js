@@ -38,6 +38,17 @@ creativityServices.factory('globalMessages', function($http){
 
 });
 
+//CONFIG
+creativityServices.factory('configService', ['$log', function($log){
+    return {
+       init: function(){
+           $log.debug('get config');
+       }
+    }
+
+}]);
+
+
 //CARD inspire me: send an idea to assembl
 creativityServices.factory('sendIdeaService', ['$resource',function($resource){
     return $resource('http://localhost:6543/api/v1/discussion/:discussionId/posts')
