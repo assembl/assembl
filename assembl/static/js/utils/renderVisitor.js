@@ -1,5 +1,13 @@
 define([],function(){
-
+  /** A visitor function to be passed to to a visit function such as 
+   * Idea.visitBreadthFirst<
+   * data_by_idea: output param, dict containing for each idea traversed the 
+   *    render information indexted by the idea id.
+   * roots: output param. The ideas that have no parents in the set
+   * filter_function:  The idea is passed to this callback.  If it returns:
+   *  - false the idea won't be part of the returned set.
+   *  - 0 instead of false, all descendents of the idea will also be excluded
+   */
   function renderVisitor(data_by_idea, roots, filter_function) {
     if (filter_function === undefined) {
         filter_function = function(node) {return true;};
