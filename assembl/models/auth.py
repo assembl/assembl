@@ -20,11 +20,11 @@ from sqlalchemy.orm import relationship, backref, deferred
 from pyramid.security import Everyone, Authenticated
 
 from ..lib import config
-from ..lib.sqla import Base as SQLAlchemyBaseModel
+from . import Base, DiscussionBoundBase
 from ..auth import *
 
 
-class AgentProfile(SQLAlchemyBaseModel):
+class AgentProfile(Base):
     """
     An agent could be a person, group, bot or computer.
     Profiles describe agents, which have multiple accounts.
@@ -130,7 +130,7 @@ class AgentProfile(SQLAlchemyBaseModel):
         }
 
 
-class AbstractAgentAccount(SQLAlchemyBaseModel):
+class AbstractAgentAccount(Base):
     """An abstract class for accounts that identify agents"""
     __tablename__ = "abstract_agent_account"
     id = Column(Integer, primary_key=True)
@@ -202,7 +202,7 @@ class EmailAccount(AbstractAgentAccount):
             return emailAccount
 
 
-class IdentityProvider(SQLAlchemyBaseModel):
+class IdentityProvider(Base):
     """An identity provider (or sometimes a category of identity providers.)"""
     __tablename__ = "identity_provider"
     id = Column(Integer, primary_key=True)
@@ -365,7 +365,7 @@ class User(AgentProfile):
         return ser
 
 
-class Username(SQLAlchemyBaseModel):
+class Username(Base):
     "Optional usernames for users"
     __tablename__ = 'username'
     user_id = Column(Integer,
@@ -377,7 +377,7 @@ class Username(SQLAlchemyBaseModel):
     def get_id_as_str(self):
         return str(self.user_id)
 
-class Role(SQLAlchemyBaseModel):
+class Role(Base):
     """A role that a user may have in a discussion"""
     __tablename__ = 'role'
     id = Column(Integer, primary_key=True)
@@ -394,7 +394,7 @@ def populate_default_roles(session):
         session.add(Role(name=role))
 
 
-class UserRole(SQLAlchemyBaseModel):
+class UserRole(Base):
     """roles that a user has globally (eg admin.)"""
     __tablename__ = 'user_role'
     id = Column(Integer, primary_key=True)
@@ -405,7 +405,7 @@ class UserRole(SQLAlchemyBaseModel):
     role = relationship(Role, lazy="joined")
 
 
-class LocalUserRole(SQLAlchemyBaseModel):
+class LocalUserRole(DiscussionBoundBase):
     """The role that a user has in the context of a discussion"""
     __tablename__ = 'local_user_role'
     id = Column(Integer, primary_key=True)
@@ -424,8 +424,15 @@ class LocalUserRole(SQLAlchemyBaseModel):
     # __table_args__ = (
     #     Index('user_discussion_idx', 'user_id', 'discussion_id'),)
 
+    def get_discussion_id(self):
+        return self.discussion_id
 
-class Permission(SQLAlchemyBaseModel):
+    @classmethod
+    def get_discussion_condition(cls, discussion_id):
+        return cls.id == discussion_id
+
+
+class Permission(Base):
     """A permission that a user may have"""
     __tablename__ = 'permission'
     id = Column(Integer, primary_key=True)
@@ -438,7 +445,7 @@ def populate_default_permissions(session):
         session.add(Permission(name=perm))
 
 
-class DiscussionPermission(SQLAlchemyBaseModel):
+class DiscussionPermission(DiscussionBoundBase):
     """Which permissions are given to which roles for a given discussion."""
     __tablename__ = 'discussion_permission'
     id = Column(Integer, primary_key=True)
@@ -460,6 +467,11 @@ class DiscussionPermission(SQLAlchemyBaseModel):
 
     def get_discussion_id(self):
         return self.discussion_id
+
+    @classmethod
+    def get_discussion_condition(cls, discussion_id):
+        return cls.id == discussion_id
+
 
 def create_default_permissions(session, discussion):
     permissions = {p.name: p for p in session.query(Permission).all()}
@@ -487,7 +499,7 @@ def create_default_permissions(session, discussion):
     add_perm(P_SYSADMIN, [R_ADMINISTRATOR])
 
 
-class Action(SQLAlchemyBaseModel):
+class Action(DiscussionBoundBase):
     """
     An action that can be taken by an actor.
     """
@@ -549,6 +561,9 @@ class ActionOnPost(Action):
     def get_discussion_id(self):
         return self.post.get_discussion_id()
 
+    @classmethod
+    def get_discussion_condition(cls, discussion_id):
+        return cls.post_id == Post.id & Post.discussion_id == discussion_id
 
 class ViewPost(ActionOnPost):
     """
