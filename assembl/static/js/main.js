@@ -50,8 +50,10 @@ define([
     app.messageList.loadInitialData();
 
     // Synthesis
+    app.syntheses = new Synthesis.Collection();
     var nextSynthesisModel = new Synthesis.Model({'@id': 'next_synthesis'});
     nextSynthesisModel.fetch();
+    app.syntheses.add(nextSynthesisModel);
     app.synthesisPanel = new SynthesisPanel({
         el: '#synthesisPanel',
         button: '#button-synthesis',

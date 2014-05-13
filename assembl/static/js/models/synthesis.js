@@ -33,9 +33,26 @@ define(['models/base', 'jquery', 'app', 'i18n', 'permissions'], function(Base, $
 
 
     });
+    /**
+     * @class IdeaColleciton
+     */
+    var SynthesisCollection = Base.Collection.extend({
+        /**
+         * Url
+         * @type {String}
+         */
+        url: app.getApiUrl("explicit_subgraphs/synthesis"),
 
+        /**
+         * The model
+         * @type {SynthesisModel}
+         */
+        model: SynthesisModel,
+    });
+    
     return {
-        Model: SynthesisModel
+        Model: SynthesisModel,
+        Collection: SynthesisCollection
     };
 
 });

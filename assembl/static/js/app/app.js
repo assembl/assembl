@@ -724,6 +724,9 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard, Types, Permissions){
 
                 case Types.USER:
                     return app.users;
+                    
+                case Types.SYNTHESIS:
+                    return app.syntheses;
             }
 
             return null;

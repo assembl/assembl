@@ -22,6 +22,7 @@ function(Backbone, _, $, app, Synthesis, Idea, Permissions, IdeaFamilyView, Idea
             this.ideas.on('remove', this.render, this);
             //Note:  this is inhibited within render, as render calls it
             this.ideas.on('reset', this.render, this);
+            //this.ideas.on('all', function(event){console.log("ideas event: ", event)}, this);
             
             this.model.on('reset', this.render, this);
             this.model.on('change', function(){
@@ -239,6 +240,8 @@ function(Backbone, _, $, app, Synthesis, Idea, Permissions, IdeaFamilyView, Idea
                     success: function(){
                         alert( i18n.gettext("Synthesis published!") );
                         that.unblockPanel();
+                        that.model = new Synthesis.Model({'@id': 'next_synthesis'});
+                        that.model.fetch();
                     }
                 });
             };

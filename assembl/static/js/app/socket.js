@@ -83,8 +83,14 @@ define(['app', 'underscore', 'sockjs'], function(app, _, SockJS){
         console.log( item['@id'] || item['@type'], item );
 
         if( collection === null ){
-            // TODO: Handle singletons like discussion etc.
-            return;
+            if(item['@type'] == "Connection") {
+                //Ignore Connections
+                return;
+            } else {
+                console.log("Socket.prototype.processData(): TODO: Handle singletons like discussion etc. for item:", item);
+                return;
+            }
+
         }
 
         // Each collection must know what to do

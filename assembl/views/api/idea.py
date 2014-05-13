@@ -169,9 +169,11 @@ def save_idea(request):
     if idea_data['inNextSynthesis']:
         if idea not in next_synthesis.ideas:
             next_synthesis.ideas.append(idea)
+            next_synthesis.send_to_changes()
     else:
         if idea in next_synthesis.ideas:
             next_synthesis.ideas.remove(idea)
+            next_synthesis.send_to_changes()
     idea.send_to_changes()
 
     return {'ok': True, 'id': idea.uri() }
