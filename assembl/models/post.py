@@ -12,8 +12,8 @@ from sqlalchemy import (
     or_,
     event,
 )
-from virtuoso.vmapping import QuadMapPattern
 
+from ..lib.virtuoso_mapping import QuadMapPatternS
 from .generic import Content, ContentSource
 from .auth import AgentProfile
 from ..namespaces import  SIOC, CATALYST, IDEA, ASSEMBL, DCTERMS, QUADNAMES
@@ -25,7 +25,6 @@ class Post(Content):
     its content may be of any type.
     """
     __tablename__ = "post"
-    rdf_class = SIOC.Post
 
     id = Column(Integer, ForeignKey(
         'content.id',
@@ -37,7 +36,7 @@ class Post(Content):
                         nullable=False,
                         index=True,
                         doc="The email-compatible message-id for the post.",
-                        info= {'rdf': QuadMapPattern(None, SIOC.id)})
+                        info= {'rdf': QuadMapPatternS(None, SIOC.id)})
 
     ancestry = Column(String, default="")
 
@@ -50,25 +49,25 @@ class Post(Content):
 
     @classmethod
     def special_quad_patterns(cls, alias_manager):
-        alias = alias_manager.add_class_alias(cls, [cls.parent_id != None])
         return [
-            QuadMapPattern(
-                Post.iri_class().apply(alias.id),
+            QuadMapPatternS(
+                Post.iri_class().apply(cls.id),
                 SIOC.reply_of,
-                cls.iri_class().apply(alias.parent_id),
-                name=QUADNAMES.post_parent),
+                cls.iri_class().apply(cls.parent_id),
+                name=QUADNAMES.post_parent,
+                condition=(cls.parent_id != None)),
         ]
 
     creator_id = Column(Integer, ForeignKey('agent_profile.id'),
-        info= {'rdf': QuadMapPattern(None, SIOC.has_creator,
+        info= {'rdf': QuadMapPatternS(None, SIOC.has_creator,
                     AgentProfile.iri_class().apply())})
     creator = relationship(AgentProfile)
     
     subject = Column(Unicode(), nullable=True,
-        info= {'rdf': QuadMapPattern(None, DCTERMS.title)})
+        info= {'rdf': QuadMapPatternS(None, DCTERMS.title)})
     # TODO: check HTML or text? SIOC.content should be text.
     body = Column(UnicodeText, nullable=False,
-        info= {'rdf': QuadMapPattern(None, SIOC.content)})
+        info= {'rdf': QuadMapPatternS(None, SIOC.content)})
 
     __mapper_args__ = {
         'polymorphic_identity': 'post',
@@ -88,6 +87,9 @@ class Post(Content):
         return self.views is not None
 
     def get_title(self):
+        return self.subject
+    
+    def get_subject(self):
         return self.subject
 
     def get_body(self):
@@ -148,25 +150,6 @@ class Post(Content):
 
         return ancestors
 
-    def serializable(self):
-        data = {}
-        data["@id"] = self.uri()
-        data["@type"] = Post.external_typename()
-
-        data["checked"] = False
-        #FIXME
-        data["collapsed"] = False
-        #FIXME
-        data["read"] = True
-        data["parentId"] = Post.uri_generic(self.parent_id)
-        subject = self.get_title()
-        if self.type == 'email':
-            subject = self.source.mangle_mail_subject(subject)
-        data["subject"] = subject
-        data["body"] = self.get_body()
-        data["idCreator"] = AgentProfile.uri_generic(self.creator_id)
-        data["date"] = self.creation_date.isoformat()
-        return data
 
     def __repr__(self):
         return "<Post %s '%s'>" % (
@@ -174,8 +157,6 @@ class Post(Content):
             self.type,
         )
 
-    def get_discussion_id(self):
-        return self.discussion_id
 
 def orm_insert_listener(mapper, connection, target):
     """ This is to allow the root idea to send update to "All posts", 
@@ -248,7 +229,7 @@ class ImportedPost(Post):
     import_date = Column(DateTime, nullable=False, default=datetime.utcnow)
 
     source_id = Column(Integer, ForeignKey('post_source.id', ondelete='CASCADE'),
-        info= {'rdf': QuadMapPattern(None, ASSEMBL.has_origin,
+        info= {'rdf': QuadMapPatternS(None, ASSEMBL.has_origin,
                     ContentSource.iri_class().apply())})
     source = relationship(
         "PostSource",

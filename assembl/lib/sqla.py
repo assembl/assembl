@@ -187,9 +187,8 @@ class BaseOps(object):
             return None
         return str(id)
 
-    def get_discussion_id(self):
-        "Get the ID of an associated discussion object, if any."
-        return None
+    def tombstone(self):
+        return Tombstone(self)
 
     def send_to_changes(self, connection=None):
         if not connection:
@@ -199,7 +198,7 @@ class BaseOps(object):
         if 'cdict' not in connection.info:
             connection.info['cdict'] = {}
         connection.info['cdict'][self.uri()] = (
-            self.get_discussion_id(), self)
+            None, self)
 
     @classmethod
     def external_typename(cls):
@@ -616,6 +615,13 @@ class Tombstone(object):
                 "@id": self.uri,
                 "@tombstone": True}
 
+    def send_to_changes(self, connection):
+        assert connection
+        if 'cdict' not in connection.info:
+            connection.info['cdict'] = {}
+        connection.info['cdict'][self.uri] = (
+            None, self)
+
 
 def orm_update_listener(mapper, connection, target):
     session = object_session(target)
@@ -630,8 +636,7 @@ def orm_insert_listener(mapper, connection, target):
 def orm_delete_listener(mapper, connection, target):
     if 'cdict' not in connection.info:
         connection.info['cdict'] = {}
-    connection.info['cdict'][target.uri()] = (
-        target.get_discussion_id(), Tombstone(target))
+    target.tombstone().send_to_changes(connection)
 
 
 def before_commit_listener(session):

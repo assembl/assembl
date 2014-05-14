@@ -38,6 +38,45 @@ creativityServices.factory('globalMessages', function($http){
 
 });
 
+//CONFIG
+creativityServices.factory('configService', [function(){
+    return {
+       init: function(){
+
+           $.ajax({
+               url:'http://localhost:6543/data/Discussion/1/widgets',
+               type:'POST',
+               data: {
+                   widget_type:'creativity',
+                   settings: JSON.stringify({"idea":"local:Idea/2"})
+               },
+               success: function(data, textStatus, jqXHR){
+
+                   getConfig(jqXHR.getResponseHeader('location'));
+               },
+               error: function(jqXHR, textStatus, errorThrown){
+
+                   console.log(jqXHR);
+
+               }
+
+           })
+
+           function getConfig(value){
+
+               var widget = value.split(':');
+
+               console.log('http://localhost:6543/data/'+widget[1]);
+
+           }
+
+       }
+
+    }
+
+}]);
+
+
 //CARD inspire me: send an idea to assembl
 creativityServices.factory('sendIdeaService', ['$resource',function($resource){
     return $resource('http://localhost:6543/api/v1/discussion/:discussionId/posts')

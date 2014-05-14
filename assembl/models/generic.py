@@ -9,15 +9,15 @@ from sqlalchemy import (
     DateTime,
     ForeignKey,
 )
-from virtuoso.vmapping import QuadMapPattern
 
-from ..lib.sqla import Base as SQLAlchemyBaseModel
+from . import DiscussionBoundBase
+from ..lib.virtuoso_mapping import QuadMapPatternS
 from ..auth import (
     CrudPermissions, P_ADD_POST, P_READ, P_EDIT_POST, P_ADMIN_DISC,
     P_EDIT_POST, P_ADMIN_DISC)
 from ..namespaces import  SIOC, CATALYST, IDEA, ASSEMBL, DCTERMS, QUADNAMES
 
-class ContentSource(SQLAlchemyBaseModel):
+class ContentSource(DiscussionBoundBase):
     """
     A ContentSource is where any outside content comes from. .
     """
@@ -25,12 +25,12 @@ class ContentSource(SQLAlchemyBaseModel):
     rdf_class = SIOC.Container
 
     id = Column(Integer, primary_key=True,
-                info= {'rdf': QuadMapPattern(None, ASSEMBL.db_id)})
+                info= {'rdf': QuadMapPatternS(None, ASSEMBL.db_id)})
     name = Column(UnicodeText, nullable=False)
     type = Column(String(60), nullable=False)
 
     creation_date = Column(DateTime, nullable=False, default=datetime.utcnow,
-        info={'rdf': QuadMapPattern(None, DCTERMS.created)})
+        info={'rdf': QuadMapPatternS(None, DCTERMS.created)})
 
     discussion_id = Column(Integer, ForeignKey(
         'discussion.id',
@@ -42,7 +42,7 @@ class ContentSource(SQLAlchemyBaseModel):
     def special_quad_patterns(cls, alias_manager):
         from .synthesis import Discussion
         return [
-            QuadMapPattern(
+            QuadMapPatternS(
                 Discussion.iri_class().apply(cls.discussion_id),
                 CATALYST.uses_source,
                 cls.iri_class().apply(cls.id),
@@ -77,6 +77,10 @@ class ContentSource(SQLAlchemyBaseModel):
 
     def get_discussion_id(self):
         return self.discussion_id
+
+    @classmethod
+    def get_discussion_condition(cls, discussion_id):
+        return cls.discussion_id == discussion_id
 
     crud_permissions = CrudPermissions(P_ADMIN_DISC)
 
@@ -119,6 +123,10 @@ class PostSource(ContentSource):
     def get_discussion_id(self):
         return self.discussion_id
 
+    @classmethod
+    def get_discussion_condition(cls, discussion_id):
+        return cls.discussion_id == discussion_id
+
     def send_post(self, post):
         """ Send a new post in the discussion to the source. """
         raise "Source %s did not implement PostSource::send_post() "\
@@ -142,17 +150,18 @@ class AnnotatorSource(ContentSource):
     }
 
 
-class Content(SQLAlchemyBaseModel):
+class Content(DiscussionBoundBase):
     """
     Content is a polymorphic class to describe what is imported from a Source.
     """
     __tablename__ = "content"
+    rdf_class = SIOC.Post
 
     id = Column(Integer, primary_key=True,
-                info= {'rdf': QuadMapPattern(None, ASSEMBL.db_id)})
+                info= {'rdf': QuadMapPatternS(None, ASSEMBL.db_id)})
     type = Column(String(60), nullable=False)
     creation_date = Column(DateTime, nullable=False, default=datetime.utcnow,
-        info= {'rdf': QuadMapPattern(None, DCTERMS.created)})
+        info= {'rdf': QuadMapPatternS(None, DCTERMS.created)})
 
     discussion_id = Column(Integer, ForeignKey(
         'discussion.id',
@@ -186,6 +195,10 @@ class Content(SQLAlchemyBaseModel):
 
     def get_discussion_id(self):
         return self.discussion_id
+
+    @classmethod
+    def get_discussion_condition(cls, discussion_id):
+        return cls.discussion_id == discussion_id
 
     crud_permissions = CrudPermissions(
             P_ADD_POST, P_READ, P_EDIT_POST, P_ADMIN_DISC,

@@ -3,7 +3,7 @@ from sqlalchemy import (
 from sqlalchemy.orm import relationship
 import simplejson as json
 
-from ..lib.sqla import Base
+from . import DiscussionBoundBase
 from .synthesis import (
     Discussion, ExplicitSubGraphView, SubGraphIdeaAssociation, Idea)
 from ..auth import P_ADD_POST, P_ADMIN_DISC, Everyone, CrudPermissions
@@ -11,7 +11,7 @@ from .auth import User
 from ..views.traversal import CollectionDefinition
 
 
-class Widget(Base):
+class Widget(DiscussionBoundBase):
     __tablename__ = "widget"
 
     id = Column(Integer, primary_key=True)
@@ -58,6 +58,10 @@ class Widget(Base):
 
     def get_discussion_id(self):
         return self.discussion_id
+
+    @classmethod
+    def get_discussion_condition(cls, discussion_id):
+        return cls.discussion_id == discussion_id
 
     # Eventually: Use extra_columns to get WidgetUserConfig
     # through user_id instead of widget_user_config.id
@@ -138,7 +142,7 @@ class Widget(Base):
     crud_permissions = CrudPermissions(P_ADMIN_DISC)
 
 
-class WidgetUserConfig(Base):
+class WidgetUserConfig(DiscussionBoundBase):
     __tablename__ = "widget_user_config"
 
     id = Column(Integer, primary_key=True)
@@ -171,5 +175,9 @@ class WidgetUserConfig(Base):
 
     def get_discussion_id(self):
         return self.widget.discussion_id
+
+    @classmethod
+    def get_discussion_condition(cls, discussion_id):
+        return cls.widget_id == Widget.id & Widget.discussion_id == discussion_id
 
     crud_permissions = CrudPermissions(P_ADD_POST)  # all participants...

@@ -1,19 +1,24 @@
 // The synthesis panel specific CSS
 // ===========================
 
-#synthesisPanel {
+.synthesis {
+  position: relative;
+  display: block;
+  //height: auto;
+  div {
+    margin: 0;
+    padding: 0;
+  }
   .synthesisIdea-replybox {
       &.hidden {
           display: none;
       }
   }
-  #synthesisPanel-ideas {
+  .synthesisPanel-ideas {
     .synthesis-idea{
       min-height: 40px;
-      padding-top: 12px;
+      padding-top: 10px;
       .panel-editablearea {
-        //overflow: visible;
-        //margin: 0;
         width: 100%;
       }
       .synthesis-expression {

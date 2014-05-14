@@ -10,21 +10,15 @@ define(['models/base', 'jquery', 'app', 'i18n', 'permissions'], function(Base, $
          * @init
          */
         initialize: function(){
-            var that = this;
-            this.on('change', this.onAttrChange, this);
+            //What was this?  Benoitg - 2014-05-13
+            //this.on('change', this.onAttrChange, this);
         },
         
         /**
-         * Overwritting the idAttribute
+         * The urlRoot endpoint
          * @type {String}
          */
-        idAttribute: '@id',
-        
-        /**
-         * The url
-         * @type {String}
-         */
-        url: app.getApiUrl('next_synthesis/'),
+        urlRoot: app.getApiUrl('explicit_subgraphs/synthesis'),
 
         /**
          * Default values
@@ -34,21 +28,31 @@ define(['models/base', 'jquery', 'app', 'i18n', 'permissions'], function(Base, $
             subject: i18n.gettext('Add a title'),
             introduction: i18n.gettext('Add an introduction'),
             conclusion: i18n.gettext('Add a conclusion'),
-        },
-
-        /**
-         * Overwritting the default method
-         * @return {Boolean}
-         */
-        isNew: function(){
-            return false;
+            ideas: []
         },
 
 
     });
+    /**
+     * @class IdeaColleciton
+     */
+    var SynthesisCollection = Base.Collection.extend({
+        /**
+         * Url
+         * @type {String}
+         */
+        url: app.getApiUrl("explicit_subgraphs/synthesis"),
 
+        /**
+         * The model
+         * @type {SynthesisModel}
+         */
+        model: SynthesisModel,
+    });
+    
     return {
-        Model: SynthesisModel
+        Model: SynthesisModel,
+        Collection: SynthesisCollection
     };
 
 });

@@ -743,4 +743,4 @@ class Email(ImportedPost):
         return self.body
 
     def get_title(self):
-        return self.subject
+        return self.source.mangle_mail_subject(self.subject)

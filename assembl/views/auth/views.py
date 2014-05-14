@@ -29,6 +29,14 @@ from .. import get_default_context
 _ = TranslationStringFactory('assembl')
 
 
+def get_login_context(request):
+    return dict(get_default_context(request), **{
+        'login_url': login_url,
+        'providers': request.registry.settings['login_providers'],
+        'google_consumer_key': request.registry.settings.get('google.consumer_key', ''),
+        'next_view': request.params.get('next_view', '/')
+    })
+
 @view_config(
     route_name='logout',
     renderer='assembl:templates/login.jinja2',
@@ -55,12 +63,7 @@ def logout(request):
 def login_view(request):
     # TODO: In case of forbidden, get the URL and pass it along.
     localizer = get_localizer(request)
-    return dict(get_default_context(request), **{
-        'login_url': login_url,
-        'providers': request.registry.settings['login_providers'],
-        'google_consumer_key': request.registry.settings.get('google.consumer_key', ''),
-        'next_view': request.params.get('next_view', '/')
-    })
+    return get_login_context(request)
 
 
 def get_profile(request):
@@ -254,7 +257,7 @@ def assembl_login_complete_view(request):
             if not account.verified:
                 resend_url = request.route_url('confirm_user_email',
                                                email_account_id=account.id)
-                return dict(get_default_context(request),
+                return dict(get_login_context(request),
                     error=localizer.translate(_("This account was not verified yet")),
                     resend_url=resend_url)
     else:
@@ -263,7 +266,7 @@ def assembl_login_complete_view(request):
             user = username.user
 
     if not user:
-        return dict(get_default_context(request),
+        return dict(get_login_context(request),
                     error=localizer.translate(_("This user cannot be found")))
     if logged_in:
         if user.id != logged_in:
@@ -278,7 +281,7 @@ def assembl_login_complete_view(request):
         #TODO: handle high failure count
         session.add(user)
         transaction.commit()
-        return dict(get_default_context(request),
+        return dict(get_login_context(request),
                     error=localizer.translate(_("Invalid user and password")))
     headers = remember(request, user.id, tokens=format_token(user))
     request.response.headerlist.extend(headers)
@@ -293,7 +296,7 @@ def velruse_login_complete_view(request):
     context = request.context
     velruse_profile = context.profile
     logged_in = authenticated_userid(request)
-    provider = get_identity_provider(context)
+    provider = get_identity_provider(request)
     # find or create IDP_Accounts
     idp_accounts = []
     new_idp_accounts = []
@@ -504,7 +507,7 @@ def user_confirm_email(request):
 )
 def login_denied_view(request):
     localizer = get_localizer(request)
-    return dict(get_default_context(request),
+    return dict(get_login_context(request),
                 error=localizer.translate(_('Login failed, try again')))
     # TODO: If logged in otherwise, go to profile page. 
     # Otherwise, back to login page

@@ -62,8 +62,8 @@
                         </form>
                     </div>
                     <p>
-                        <span class="text-primary glyphicon glyphicon-share-alt" ng-click="showSubComment = true">{{'reply'| translate }}</span>&nbsp;
-                        <span class="text-primary glyphicon glyphicon-file" ng-click="showComment = ! showComment" ng-show="idea.comments.length>0">{{'comments' | translate: {nb: idea.comments.length} }}</span>
+                        <span class="text-primary" ng-click="showComment = ! showComment" ng-show="idea.comments.length>0">{{'comments' | translate: {nb: idea.comments.length} }} |</span>
+                        <span class="text-primary" ng-click="showSubComment = true">{{'comment'| translate }}</span>&nbsp;
                     </p>
                     <div ng-show="showComment">
                         <div class="media media-comment" ng-if="idea.comments.length > 1" ng-repeat="com in idea.comments">

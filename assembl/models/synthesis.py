@@ -23,10 +23,11 @@ from sqlalchemy import (
     and_,
 )
 from sqlalchemy.ext.associationproxy import association_proxy
-from virtuoso.vmapping import QuadMapPattern, PatternIriClass
+from virtuoso.vmapping import PatternIriClass
 
 from assembl.lib.utils import slugify
-from ..lib.sqla import Base as SQLAlchemyBaseModel
+from . import DiscussionBoundBase
+from ..lib.virtuoso_mapping import QuadMapPatternS
 from .generic import (PostSource, Content)
 from .post import (Post, SynthesisPost)
 from .mail import IMAPMailbox
@@ -36,13 +37,13 @@ from ..auth import (
     P_EDIT_MY_EXTRACT, Authenticated, Everyone)
 from .auth import (
     DiscussionPermission, Role, Permission, AgentProfile, User,
-    UserRole, LocalUserRole, DiscussionPermission, ViewPost)
+    UserRole, LocalUserRole, ViewPost)
 from ..namespaces import (
     SIOC, CATALYST, IDEA, ASSEMBL, DCTERMS, OA, QUADNAMES)
 from assembl.views.traversal import AbstractCollectionDefinition
 
 
-class Discussion(SQLAlchemyBaseModel):
+class Discussion(DiscussionBoundBase):
     """
     A Discussion
     """
@@ -50,15 +51,15 @@ class Discussion(SQLAlchemyBaseModel):
     rdf_class = CATALYST.Conversation
 
     id = Column(Integer, primary_key=True,
-                info={'rdf': QuadMapPattern(None, ASSEMBL.db_id)})
+                info={'rdf': QuadMapPatternS(None, ASSEMBL.db_id)})
 
     topic = Column(UnicodeText, nullable=False,
-                   info={'rdf': QuadMapPattern(None, DCTERMS.title)})
+                   info={'rdf': QuadMapPatternS(None, DCTERMS.title)})
 
     slug = Column(Unicode, nullable=False, unique=True, index=True)
 
     creation_date = Column(DateTime, nullable=False, default=datetime.utcnow,
-                           info={'rdf': QuadMapPattern(None, DCTERMS.created)})
+                           info={'rdf': QuadMapPatternS(None, DCTERMS.created)})
 
     def read_post_ids(self, user_id):
         return (x[0] for x in self.db.query(Post.id).join(
@@ -104,6 +105,10 @@ class Discussion(SQLAlchemyBaseModel):
 
     def get_discussion_id(self):
         return self.id
+
+    @classmethod
+    def get_discussion_condition(cls, discussion_id):
+        return cls.id == discussion_id
 
     def get_next_synthesis(self):
         next_synthesis = self.db().query(Synthesis).filter(
@@ -223,7 +228,7 @@ def slugify_topic_if_slug_is_empty(discussion, topic, oldvalue, initiator):
 event.listen(Discussion.topic, 'set', slugify_topic_if_slug_is_empty)
 
 
-class IdeaGraphView(SQLAlchemyBaseModel):
+class IdeaGraphView(DiscussionBoundBase):
     """
     A view on the graph of idea.
     """
@@ -232,16 +237,16 @@ class IdeaGraphView(SQLAlchemyBaseModel):
 
     type = Column(String(60), nullable=False)
     id = Column(Integer, primary_key=True,
-                info={'rdf': QuadMapPattern(None, ASSEMBL.db_id)})
+                info={'rdf': QuadMapPatternS(None, ASSEMBL.db_id)})
 
     creation_date = Column(DateTime, nullable=False, default=datetime.utcnow,
-        info= {'rdf': QuadMapPattern(None, DCTERMS.created)})
+        info= {'rdf': QuadMapPatternS(None, DCTERMS.created)})
 
     discussion_id = Column(
         Integer,
         ForeignKey('discussion.id', ondelete="CASCADE", onupdate="CASCADE"),
         nullable=False,
-        info = {'rdf': QuadMapPattern(None, SIOC.has_container, Discussion.iri_class().apply())}
+        info = {'rdf': QuadMapPatternS(None, SIOC.has_container, Discussion.iri_class().apply())}
     )
     discussion = relationship('Discussion', backref="views")
 
@@ -259,10 +264,14 @@ class IdeaGraphView(SQLAlchemyBaseModel):
     def get_discussion_id(self):
         return self.discussion_id
 
+    @classmethod
+    def get_discussion_condition(cls, discussion_id):
+        return cls.discussion_id == discussion_id
+
     crud_permissions = CrudPermissions(P_ADMIN_DISC)
 
 
-class SubGraphIdeaAssociation(SQLAlchemyBaseModel):
+class SubGraphIdeaAssociation(DiscussionBoundBase):
     __tablename__ = 'sub_graph_idea_association'
     id = Column(Integer, primary_key=True)
     sub_graph_id = Column(Integer, ForeignKey(
@@ -284,9 +293,15 @@ class SubGraphIdeaAssociation(SQLAlchemyBaseModel):
         else:
             return IdeaGraphView.get(id=self.sub_graph_id).get_discussion_id()
 
+    @classmethod
+    def get_discussion_condition(cls, discussion_id):
+        from . import ExplicitSubGraphView
+        return cls.sub_graph_id == IdeaGraphView.id & \
+            IdeaGraphView.discussion_id == discussion_id
+
     crud_permissions = CrudPermissions(P_ADMIN_DISC)
 
-class SubGraphIdeaLinkAssociation(SQLAlchemyBaseModel):
+class SubGraphIdeaLinkAssociation(DiscussionBoundBase):
     __tablename__ = 'sub_graph_idea_link_association'
     id = Column(Integer, primary_key=True)
 
@@ -311,6 +326,12 @@ class SubGraphIdeaLinkAssociation(SQLAlchemyBaseModel):
             return self.sub_graph.get_discussion_id()
         else:
             return IdeaGraphView.get(id=self.sub_graph_id).get_discussion_id()
+
+    @classmethod
+    def get_discussion_condition(cls, discussion_id):
+        from . import ExplicitSubGraphView
+        return cls.sub_graph_id == IdeaGraphView.id & \
+            IdeaGraphView.discussion_id == discussion_id
 
     crud_permissions = CrudPermissions(P_ADMIN_DISC)
 
@@ -438,6 +459,10 @@ class TableOfContents(IdeaGraphView):
     def get_discussion_id(self):
         return self.discussion.id
 
+    @classmethod
+    def get_discussion_condition(cls, discussion_id):
+        return cls.discussion_id == discussion_id
+
     def get_idea_links(self):
         return self.discussion.get_idea_links()
 
@@ -496,19 +521,16 @@ class Synthesis(ExplicitSubGraphView):
         self.db.add(self)
         return next_synthesis
 
-    def serializable(self):
-        return {
-            "@id": self.uri_generic(self.id),
-            "@type": self.external_typename(),
-            "creation_date": self.creation_date.isoformat(),
-            "subject": self.subject,
-            "introduction": self.introduction,
-            "conclusion": self.conclusion,
-            "discussion_id": Discussion.uri_generic(self.discussion.id),
-        }
+    @property
+    def is_next_synthesis(self):
+        return self.discussion.get_next_synthesis() == self;
 
     def get_discussion_id(self):
         return self.discussion_id
+
+    @classmethod
+    def get_discussion_condition(cls, discussion_id):
+        return cls.discussion_id == discussion_id
 
     def __repr__(self):
         return "<Synthesis %s>" % repr(self.subject)
@@ -516,7 +538,7 @@ class Synthesis(ExplicitSubGraphView):
     crud_permissions = CrudPermissions(P_EDIT_SYNTHESIS)
 
 
-class Idea(SQLAlchemyBaseModel):
+class Idea(DiscussionBoundBase):
     """
     A core concept taken from the associated discussion
     """
@@ -528,18 +550,18 @@ class Idea(SQLAlchemyBaseModel):
 
     long_title = Column(
         UnicodeText,
-        info= {'rdf': QuadMapPattern(None, DCTERMS.alternative)})
+        info= {'rdf': QuadMapPatternS(None, DCTERMS.alternative)})
     short_title = Column(UnicodeText,
-        info= {'rdf': QuadMapPattern(None, DCTERMS.title)})
+        info= {'rdf': QuadMapPatternS(None, DCTERMS.title)})
     definition = Column(UnicodeText,
-        info= {'rdf': QuadMapPattern(None, DCTERMS.description)})
+        info= {'rdf': QuadMapPatternS(None, DCTERMS.description)})
 
 
     id = Column(Integer, primary_key=True,
-                info= {'rdf': QuadMapPattern(None, ASSEMBL.db_id)})
+                info= {'rdf': QuadMapPatternS(None, ASSEMBL.db_id)})
     creation_date = Column(
         DateTime, nullable=False, default=datetime.utcnow,
-        info = {'rdf': QuadMapPattern(None, DCTERMS.created)})
+        info = {'rdf': QuadMapPatternS(None, DCTERMS.created)})
 
     discussion_id = Column(Integer, ForeignKey(
         'discussion.id',
@@ -547,7 +569,7 @@ class Idea(SQLAlchemyBaseModel):
         onupdate='CASCADE'),
         nullable=False,
         index=True,
-        info = {'rdf': QuadMapPattern(None, SIOC.has_container, Discussion.iri_class().apply())})
+        info = {'rdf': QuadMapPatternS(None, SIOC.has_container, Discussion.iri_class().apply())})
 
     discussion = relationship(
         "Discussion",
@@ -564,7 +586,7 @@ class Idea(SQLAlchemyBaseModel):
 
     # @classmethod
     # def special_quad_patterns(cls, alias_manager):
-    #     return [QuadMapPattern(None, 
+    #     return [QuadMapPatternS(None, 
     #         RDF.type, IriClass(VirtRDF.iri_id).apply('rdf_class_id')),
     #         name=QUADNAMES.class_Idea_class)]
 
@@ -696,6 +718,10 @@ EXCEPT corresponding BY (post_id)
 
     def get_discussion_id(self):
         return self.discussion_id
+
+    @classmethod
+    def get_discussion_condition(cls, discussion_id):
+        return cls.discussion_id == discussion_id
 
     def get_num_children(self):
         return len(self.children)
@@ -905,7 +931,7 @@ class RootIdea(Idea):
     crud_permissions = CrudPermissions(P_ADMIN_DISC)
 
 
-class IdeaLink(SQLAlchemyBaseModel):
+class IdeaLink(DiscussionBoundBase):
     """
     A generic link between two ideas
 
@@ -914,15 +940,15 @@ class IdeaLink(SQLAlchemyBaseModel):
     __tablename__ = 'idea_idea_link'
     rdf_class = IDEA.DirectedIdeaRelation
     id = Column(Integer, primary_key=True,
-                info= {'rdf': QuadMapPattern(None, ASSEMBL.db_id)})
+                info= {'rdf': QuadMapPatternS(None, ASSEMBL.db_id)})
     source_id = Column(Integer, ForeignKey(
             'idea.id', ondelete="CASCADE", onupdate="CASCADE"),
         nullable=False, index=True,
-        info= {'rdf': QuadMapPattern(None, IDEA.source_idea, Idea.iri_class().apply())})
+        info= {'rdf': QuadMapPatternS(None, IDEA.source_idea, Idea.iri_class().apply())})
     target_id = Column(Integer, ForeignKey(
         'idea.id', ondelete="CASCADE", onupdate="CASCADE"),
         nullable=False, index=True,
-        info= {'rdf': QuadMapPattern(None, IDEA.destination_idea, Idea.iri_class().apply())})
+        info= {'rdf': QuadMapPatternS(None, IDEA.destination_idea, Idea.iri_class().apply())})
     source = relationship(
         'Idea', 
         primaryjoin="and_(Idea.id==IdeaLink.source_id, "
@@ -936,12 +962,12 @@ class IdeaLink(SQLAlchemyBaseModel):
         backref=backref('source_links', cascade="all, delete-orphan"),
         foreign_keys=(target_id))
     order = Column(Float, nullable=False, default=0.0,
-        info= {'rdf': QuadMapPattern(None, ASSEMBL.link_order)})
+        info= {'rdf': QuadMapPatternS(None, ASSEMBL.link_order)})
     is_tombstone = Column(Boolean, nullable=False, default=False, index=True)
 
     @classmethod
     def special_quad_patterns(cls, alias_manager):
-        return [QuadMapPattern(
+        return [QuadMapPatternS(
             Idea.iri_class().apply(cls.source_id),
             IDEA.InclusionRelation,
             Idea.iri_class().apply(cls.target_id),
@@ -961,11 +987,15 @@ class IdeaLink(SQLAlchemyBaseModel):
         else:
             return Idea.get(id=self.source_id).get_discussion_id()
 
+    @classmethod
+    def get_discussion_condition(cls, discussion_id):
+        return cls.source_id == Idea.id & Idea.discussion_id == discussion_id
+
     crud_permissions = CrudPermissions(
             P_ADD_IDEA, P_READ, P_EDIT_IDEA, P_EDIT_IDEA,
             P_EDIT_IDEA, P_EDIT_IDEA)
 
-class IdeaContentLink(SQLAlchemyBaseModel):
+class IdeaContentLink(DiscussionBoundBase):
     """
     Abstract class representing a generic link between an idea and a Content
     (typically a Post)
@@ -974,7 +1004,7 @@ class IdeaContentLink(SQLAlchemyBaseModel):
     # TODO: How to express the implied link as RDF? Remember not reified, unless extract.
 
     id = Column(Integer, primary_key=True,
-                info= {'rdf': QuadMapPattern(None, ASSEMBL.db_id)})
+                info= {'rdf': QuadMapPatternS(None, ASSEMBL.db_id)})
     type = Column(String(60))
 
     # This is nullable, because in the case of extracts, the idea can be
@@ -991,7 +1021,7 @@ class IdeaContentLink(SQLAlchemyBaseModel):
     order = Column(Float, nullable=False, default=0.0)
 
     creation_date = Column(DateTime, nullable=False, default=datetime.utcnow,
-        info= {'rdf': QuadMapPattern(None, DCTERMS.created)})
+        info= {'rdf': QuadMapPatternS(None, DCTERMS.created)})
 
     creator_id = Column(
         Integer,
@@ -1013,6 +1043,10 @@ class IdeaContentLink(SQLAlchemyBaseModel):
             return self.idea.get_discussion_id()
         elif self.idea_id:
             return Idea.get(id=self.idea_id).get_discussion_id()
+
+    @classmethod
+    def get_discussion_condition(cls, discussion_id):
+        return cls.idea_id == Idea.id & Idea.discussion_id == discussion_id
 
     crud_permissions = CrudPermissions(
             P_ADD_IDEA, P_READ, P_EDIT_IDEA, P_EDIT_IDEA,
@@ -1062,7 +1096,7 @@ class IdeaContentPositiveLink(IdeaContentLink):
 
     @classmethod
     def special_quad_patterns(cls, alias_manager):
-        return [QuadMapPattern(
+        return [QuadMapPatternS(
             Content.iri_class().apply(IdeaContentLink.content_id),
             ASSEMBL.postLinkedToIdea,
             Idea.iri_class().apply(IdeaContentLink.idea_id),
@@ -1087,7 +1121,7 @@ class IdeaRelatedPostLink(IdeaContentPositiveLink):
 
     @classmethod
     def special_quad_patterns(cls, alias_manager):
-        return [QuadMapPattern(
+        return [QuadMapPatternS(
             Content.iri_class().apply(IdeaContentLink.content_id),
             ASSEMBL.postRelatedToIdea,
             Idea.iri_class().apply(IdeaContentLink.idea_id),
@@ -1109,14 +1143,14 @@ class Extract(IdeaContentPositiveLink):
             'idea_content_positive_link.id',
             ondelete='CASCADE', onupdate='CASCADE'
         ), primary_key=True, info= {
-            'rdf': QuadMapPattern(None, ASSEMBL.db_id)})
+            'rdf': QuadMapPatternS(None, ASSEMBL.db_id)})
 
     body = Column(UnicodeText, nullable=False)
 
     discussion_id = Column(Integer, ForeignKey(
         'discussion.id', ondelete="CASCADE", onupdate="CASCADE"),
         nullable=False, index=True,
-        info = {'rdf': QuadMapPattern(None, CATALYST.relevantToConversation,
+        info = {'rdf': QuadMapPatternS(None, CATALYST.relevantToConversation,
             Discussion.iri_class().apply())})
     discussion = relationship('Discussion', backref='extracts')
 
@@ -1130,22 +1164,22 @@ class Extract(IdeaContentPositiveLink):
         }
 
     @classmethod
-    def special_quad_patterns(cls, alias_manager):
+    def special_quad_patterns0(cls, alias_manager):
         graph_iri = cls.extra_iri_classes()["graph"]
         relextract_alias = alias_manager.add_class_alias(cls)
         relideacontentlink = alias_manager.add_class_alias(IdeaContentLink, [
             IdeaContentLink.idea_id != None, IdeaContentLink.id == relextract_alias.id])
         return [
-            QuadMapPattern(cls.iri_class().apply(relextract_alias.id),
+            QuadMapPatternS(cls.iri_class().apply(relextract_alias.id),
                 CATALYST.expressesIdea,
                 Idea.iri_class().apply(relideacontentlink.idea_id),
                 name=QUADNAMES.catalyst_expressesIdea),
-            QuadMapPattern(
+            QuadMapPatternS(
                 cls.iri_class().apply(cls.id),
                 OA.hasBody,
                 graph_iri.apply(cls.id),
                 name=QUADNAMES.oa_hasBody),
-            QuadMapPattern(
+            QuadMapPatternS(
                 Content.iri_class().apply(relideacontentlink.content_id),
                 ASSEMBL.postExtractRelatedToIdea,
                 Idea.iri_class().apply(relideacontentlink.idea_id),
@@ -1256,6 +1290,10 @@ class Extract(IdeaContentPositiveLink):
     def get_discussion_id(self):
         return self.discussion_id
 
+    @classmethod
+    def get_discussion_condition(cls, discussion_id):
+        return cls.discussion_id == discussion_id
+
     crud_permissions = CrudPermissions(
             P_ADD_EXTRACT, P_READ, P_EDIT_EXTRACT, P_EDIT_EXTRACT,
             P_EDIT_MY_EXTRACT, P_EDIT_MY_EXTRACT)
@@ -1295,12 +1333,12 @@ class IdeaThreadContextBreakLink(IdeaContentNegativeLink):
     }
 
 
-class TextFragmentIdentifier(SQLAlchemyBaseModel):
+class TextFragmentIdentifier(DiscussionBoundBase):
     __tablename__ = 'text_fragment_identifier'
     rdf_class = CATALYST.ExcerptTarget
 
     id = Column(Integer, primary_key=True,
-                info= {'rdf': QuadMapPattern(None, ASSEMBL.db_id)})
+                info= {'rdf': QuadMapPatternS(None, ASSEMBL.db_id)})
     extract_id = Column(Integer, ForeignKey(
         Extract.id, ondelete="CASCADE"), index=True)
     xpath_start = Column(String)
@@ -1312,13 +1350,13 @@ class TextFragmentIdentifier(SQLAlchemyBaseModel):
     @classmethod
     def special_quad_patterns(cls, alias_manager):
         return [
-            QuadMapPattern(
+            QuadMapPatternS(
                 Extract.iri_class().apply(cls.extract_id),
                 OA.hasTarget,
                 cls.iri_class().apply(cls.id),
                 name=QUADNAMES.oa_hasTarget),
             # TODO: Paths!
-            # QuadMapPattern(OA.hasSource,
+            # QuadMapPatternS(OA.hasSource,
             #     Extract.iri_class().apply((cls.extract_id, Extract.content_id)),
             #     name=QUADNAMES.catalyst_expressesIdea),
             ]
@@ -1365,6 +1403,12 @@ class TextFragmentIdentifier(SQLAlchemyBaseModel):
             return self.extract.get_discussion_id()
         elif self.extract_id:
             return Extract.get(id=self.extract_id).get_discussion_id()
+
+    @classmethod
+    def get_discussion_condition(cls, discussion_id):
+        return cls.extract_id == IdeaContentLink.id & \
+            IdeaContentLink.idea_id == Idea.id & \
+            Idea.discussion_id == discussion_id
 
     crud_permissions = CrudPermissions(
             P_ADD_EXTRACT, P_READ, P_EDIT_EXTRACT, P_EDIT_EXTRACT,

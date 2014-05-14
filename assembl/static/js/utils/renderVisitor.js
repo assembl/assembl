@@ -1,12 +1,18 @@
 define([],function(){
-
+  /** A visitor function to be passed to to a visit function such as 
+   * Idea.visitBreadthFirst<
+   * data_by_idea: output param, dict containing for each idea traversed the 
+   *    render information indexted by the idea id.
+   * roots: output param. The ideas that have no parents in the set
+   * filter_function:  The idea is passed to this callback.  If it returns:
+   *  - false the idea won't be part of the returned set.
+   *  - 0 instead of false, all descendents of the idea will also be excluded
+   */
   function renderVisitor(data_by_idea, roots, filter_function) {
     if (filter_function === undefined) {
         filter_function = function(node) {return true;};
     }
 
-    var last_parent_id = null;
-    var last_idea_id = null;
     return function(idea, ancestry) {
         var filter_result = filter_function(idea);
         if (filter_result) {
@@ -15,6 +21,7 @@ define([],function(){
             var in_ancestry = true;
             var ancestor_id, last_ancestor_id = null;
             var last_sibling_chain = [];
+            //var true_sibling = true;
             for (var i in ancestry) {
                 ancestor_id = ancestry[i].getId();
                 in_ancestry = data_by_idea.hasOwnProperty(ancestor_id);
@@ -28,25 +35,27 @@ define([],function(){
                 }
             }
             if (last_ancestor_id != null) {
-                data_by_idea[last_ancestor_id]['children'].push(idea);
-                if (last_ancestor_id == last_parent_id) {
-                    data_by_idea[last_idea_id]['is_last_sibling'] = false;
+                var brothers = data_by_idea[last_ancestor_id]['children'];
+                if (brothers.length > 0) {
+                    var last_brother = brothers[brothers.length - 1];
+                    //true_sibling = last_brother.get('parentId') == idea.get('parentId');
+                    data_by_idea[last_brother.getId()]['is_last_sibling'] = false;
                 }
+                brothers.push(idea);
             } else {
                 roots.push(idea);
             }
-            last_parent_id = last_ancestor_id;
             var data = {
                 '@id': idea_id,
                 'idea': idea,
                 'level': level,
-                'skip_parent': !in_ancestry,
+                'skip_parent': level!=0 & !in_ancestry,
                 'is_last_sibling': true,
+                //'true_sibling': true_sibling,
                 'last_sibling_chain': last_sibling_chain,
                 'children': []
             };
             data_by_idea[idea_id] = data;
-            last_idea_id = idea_id;
         }
         // This allows you to return 0 vs false and cut recursion short.
         return filter_result !== 0;

@@ -201,7 +201,10 @@
         "discussion": false,
         "subject": true,
         "introduction": true,
-        "conclusion": true
+        "conclusion": true,
+        "is_next_synthesis": true,
+        "ideas": [":id_only"],
+        "idea_links": [":partial"]
     },
     "IdeaContentLink": {
         "idea": true,

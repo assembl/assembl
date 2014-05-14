@@ -1,5 +1,6 @@
 import sys
 
+from pyramid.settings import aslist
 
 def includeme(config):
     """ This function returns a Pyramid WSGI application."""
@@ -17,11 +18,10 @@ def includeme(config):
 
     # determine which providers we want to configure
     settings = config.get_settings()
-    providers = settings['login_providers']
-    providers = filter(None, [p.strip()
-                              for line in providers.splitlines()
-                              for p in line.split(', ')])
+    providers = aslist(settings['login_providers'])
     config.add_settings(login_providers=providers)
+    config.add_settings(trusted_login_providers=aslist(
+        settings.get('trusted_login_providers', '')))
     if not any(providers):
         sys.stderr.write('no login providers configured, double check '
                          'your ini file and add a few')

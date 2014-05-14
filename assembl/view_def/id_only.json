@@ -1,6 +1,7 @@
 {
     "_default": {
         "@id": "self",
+        "@type": "&external_typename",
         "_default": false
     },
     "Permission": {},
