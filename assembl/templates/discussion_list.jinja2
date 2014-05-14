@@ -8,7 +8,7 @@
             <span class="discussion">
             <a href='{{ discussion.slug }}/'>{{ discussion.topic }}</a>
             {% if discussion.admin_url %}
-                <br/><a href='{{ discussion.admin_url }}'>{{ gettext("Admin") }}</a>
+                <br/><a href='{{ discussion.admin_url }}'><em>{{ gettext("Admin") }}</em></a>
             {% endif %}
             </span>
         </li>
