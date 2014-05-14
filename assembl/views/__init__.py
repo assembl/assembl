@@ -44,7 +44,7 @@ def get_default_context(request):
     localizer = get_localizer(request)
     _ = TranslationStringFactory('assembl')
     user=get_user(request)
-    if user:
+    if user and user.username:
         user_profile_edit_url = request.route_url('profile',type='u',identifier=user.username.username)
     else:
         user_profile_edit_url = None
