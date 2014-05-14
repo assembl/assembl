@@ -60,8 +60,8 @@
         "ancestry": false,
         "parentId": "parent",
         "idCreator": "creator",
-        "subject": true,
-        "body": true,
+        "subject": "&get_title",
+        "body": "&get_body",
         "extracts": [":partial"]
     },
     "AssemblPost": {
@@ -71,8 +71,8 @@
         "ancestry": false,
         "parentId": "parent",
         "idCreator": "creator",
-        "subject": true,
-        "body": true,
+        "subject": "&get_title",
+        "body": "&get_body",
         "extracts": [":partial"]
     },
     "SynthesisPost": {
@@ -83,8 +83,8 @@
         "parentId": "parent",
         "publishes_synthesis": true,
         "idCreator": "creator",
-        "subject": true,
-        "body": true
+        "subject": "&get_title",
+        "body": "&get_body"
     },
     "ImportedPost": {
         "date": "creation_date",
@@ -93,8 +93,8 @@
         "ancestry": false,
         "parentId": "parent",
         "idCreator": "creator",
-        "subject": true,
-        "body": true,
+        "subject": "&get_title",
+        "body": "&get_body",
         "import_date": false,
         "source": true,
         "extracts": [":partial"]
@@ -149,8 +149,8 @@
         "ancestry": false,
         "parentId": "parent",
         "idCreator": "creator",
-        "subject": true,
-        "body": true,
+        "subject": "&get_title",
+        "body": "&get_body",
         "import_date": false,
         "source": true,
         "recipients": true,

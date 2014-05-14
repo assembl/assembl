@@ -88,6 +88,9 @@ class Post(Content):
 
     def get_title(self):
         return self.subject
+    
+    def get_subject(self):
+        return self.subject
 
     def get_body(self):
         return self.body
@@ -147,25 +150,6 @@ class Post(Content):
 
         return ancestors
 
-    def serializable_deleteme(self):
-        data = {}
-        data["@id"] = self.uri()
-        data["@type"] = Post.external_typename()
-
-        data["checked"] = False
-        #FIXME
-        data["collapsed"] = False
-        #FIXME
-        data["read"] = True
-        data["parentId"] = Post.uri_generic(self.parent_id)
-        subject = self.get_title()
-        if self.type == 'email':
-            subject = self.source.mangle_mail_subject(subject)
-        data["subject"] = subject
-        data["body"] = self.get_body()
-        data["idCreator"] = AgentProfile.uri_generic(self.creator_id)
-        data["date"] = self.creation_date.isoformat()
-        return data
 
     def __repr__(self):
         return "<Post %s '%s'>" % (
