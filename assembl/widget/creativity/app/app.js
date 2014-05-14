@@ -3,11 +3,7 @@
 var creativityApp = angular.module('creativityApp',
     ['ngRoute','ngSanitize','creativityServices', 'pascalprecht.translate']);
 
-creativityApp.run(['JukeTubeVideosService', function (JukeTubeVideosService) {
-  JukeTubeVideosService.init();  
-}]);
-
-creativityApp.config(['$routeProvider', function($routeProvider){
+creativityApp.config(['$routeProvider', '$provide', function($routeProvider, $provide){
     $routeProvider.
         when('/cards', {
            templateUrl:'app/partials/cards.html',
@@ -38,9 +34,9 @@ creativityApp.config(['$routeProvider', function($routeProvider){
 
     $translateProvider.preferredLanguage('fr');
 
-}]).run(['configService',function(configService){
+}]).run(['JukeTubeVideosService', function (JukeTubeVideosService) {
 
-    configService.init();
+    JukeTubeVideosService.init();
 
-}]);
+}]);;
 

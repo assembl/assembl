@@ -205,7 +205,7 @@ creativityApp.controller('cardsCtl',
 }]);
 
 creativityApp.controller('creativitySessionCtl',
-    ['$scope','globalConfig','globalMessages', function($scope, globalConf, globalMessages){
+    ['$scope','globalConfig','globalMessages','configService', function($scope, globalConf, globalMessages, configService){
 
     // activate the right tab
     $("ul.nav li").removeClass("active");
@@ -213,7 +213,17 @@ creativityApp.controller('creativitySessionCtl',
 
     $scope.formData = {};
 
-    //data mock
+    /*
+    * TODO: this params { type, idea, discutionId } need to be dynamic
+    * */
+    $scope.config = configService.init('creativity', 'local:Idea/2', 1, function(data){
+
+
+
+    });
+
+
+        //data mock
     globalConf.fetch().success(function(data){
         $scope.cards = data.card_game;
     });
