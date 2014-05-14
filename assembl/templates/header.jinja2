@@ -29,8 +29,10 @@
     <div class="navbar-right">
         <div class="connexion">
             {% if user %}
-                <img src="/user/id/{{user.id}}/avatar/30" alt="{{ user.display_name() }}"/>
-                <span>{{ user.display_name() }}</span>
+                <a href="{{ user_profile_edit_url }}">
+                    <img src="/user/id/{{user.id}}/avatar/30" alt="{{ user.display_name() }}"/>
+                    <span>{{ user.display_name() }}</span>
+                </a>
                 <a href="/logout" class="sign-out iconbutton icon-logout-1" title="{{ gettext('Sign out') }}"></a>
             {% else %}
                 {% if request.current_route_path() != "/login" %}

@@ -128,7 +128,14 @@ def assembl_profile(request):
             if session.query(Username).filter_by(username=username).count():
                 errors.append(localizer.translate(_('The username %s is already used')) % (username,))
             else:
+                old_username = profile.username
+                # free existing username
+                session.delete(old_username)
+                session.flush()
+                # add new username
                 session.add(Username(username=username, user=profile))
+
+
                 if id_type == 'u':
                     redirect = True
         name = request.params.get('name', '').strip()

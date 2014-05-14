@@ -160,13 +160,6 @@
         {{form('bitbucket', 'Login with Bitbucket', false)}}
         {{form('openid', 'Login with OpenID', true)}}
         <div class="spacer spacer--huge"></div>
-
-        <div class="text text-small text-muted">
-            {% set caravan = gettext("<a href='http://caravan.coop' class='link'>Caravan</a>") %}
-            {% set imaginationForPeople = gettext("<a href='http://imaginationforpeople.org/' class='link'>Imagination for people</a>") %}
-
-            {{ gettext("Designed by %(caravan)s and %(imaginationForPeople)s")|format(caravan=caravan, imaginationForPeople=imaginationForPeople)|safe }}
-        </div>
         </form>
     </div>
 
