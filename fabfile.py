@@ -447,12 +447,14 @@ def bower_cmd(cmd, relative_path='.'):
 def bower_install():
     bower_cmd('install')
     bower_cmd('install', 'assembl/widget/creativity')
+    bower_cmd('install', 'assembl/widget/vote')
 
 
 @task
 def bower_update():
     bower_cmd('update')
     bower_cmd('update', 'assembl/widget/creativity')
+    bower_cmd('update', 'assembl/widget/vote')
 
 
 @task
