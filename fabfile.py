@@ -79,8 +79,11 @@ def reloadapp():
         venvcmd("supervisorctl restart celery_imap changes_router")
         if env.uses_uwsgi:
             venvcmd("supervisorctl restart prod:uwsgi")
+    """ This will log everyone out, hopefully the code is now resilient enough
+    that it isn't necessary
     if env.uses_memcache:
         flushmemcache()
+    """
 
 
 def venvcmd(cmd, shell=True, user=None, pty=False):
