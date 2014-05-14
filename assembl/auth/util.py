@@ -17,7 +17,7 @@ def get_user(request):
 
 def get_roles(user_id, discussion_id=None):
     if user_id in SYSTEM_ROLES:
-        return user_id
+        return [user_id]
     session = get_session_maker()()
     roles = session.query(Role).join(UserRole).filter(
         UserRole.user_id == user_id)
