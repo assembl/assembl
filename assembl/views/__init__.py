@@ -49,6 +49,7 @@ def get_default_context(request):
     else:
         user_profile_edit_url = None
     return dict(default_context,
+        request=request,
         user=user,
         user_profile_edit_url=user_profile_edit_url,
         locale=localizer.locale_name,
