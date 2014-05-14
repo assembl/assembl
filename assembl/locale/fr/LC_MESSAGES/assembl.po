@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: assembl 0.0\n"
 "Report-Msgid-Bugs-To: maparent@acm.org\n"
 "POT-Creation-Date: 2014-05-08 23:21-0400\n"
-"PO-Revision-Date: 2014-05-08 23:29-0400\n"
+"PO-Revision-Date: 2014-05-14 15:02-0400\n"
 "Last-Translator: Benoit Grégoire <benoitg@coeus.ca>\n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
 "Plural-Forms: nplurals=2; plural=(n > 1)\n"
@@ -61,7 +61,7 @@ msgstr "Titres seulement"
 
 #: assembl/static/js/app/app.js:61
 msgid "Message previews"
-msgstr "Apperçus"
+msgstr "Aperçus"
 
 #: assembl/static/js/app/app.js:64
 msgid "Complete messages"
