@@ -106,6 +106,7 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n, Permissions, Message
             
             this.$el.attr("id","message-"+ data['@id']);
             data['read'] = this.model.get('read')
+            this.$el.addClass(data['@type']);
             if (this.model.get('read')) {
                 this.$el.addClass('read');
                 this.$el.removeClass('unread');
