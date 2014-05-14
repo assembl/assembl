@@ -4,7 +4,7 @@ from pyramid.view import view_config, view_defaults
 from pyramid.response import Response
 from pyramid.renderers import render_to_response
 from pyramid.security import authenticated_userid, Everyone
-from assembl.auth import P_SYSADMIN, R_SYSADMIN
+from assembl.auth import P_SYSADMIN, R_SYSADMIN, P_ADMIN_DISC
 from assembl.models import Discussion, User
 from assembl.auth.util import discussions_with_access, user_has_permission, get_roles
 from .. import get_default_context

@@ -9,12 +9,12 @@ from assembl.models import (
     LocalUserRole)
 from .. import get_default_context
 from assembl.models.mail import IMAPMailbox, MailingList
-from assembl.auth import (R_SYSADMIN, SYSTEM_ROLES)
+from assembl.auth import (R_SYSADMIN, SYSTEM_ROLES, P_SYSADMIN, P_ADMIN_DISC)
 from assembl.models.auth import (
     create_default_permissions, User, Username, AgentProfile)
 
 
-@view_config(route_name='discussion_admin', permission="P_SYSADMIN")
+@view_config(route_name='discussion_admin', permission=P_SYSADMIN)
 def discussion_admin(request):
     user_id = authenticated_userid(request)
 
@@ -73,7 +73,7 @@ def discussion_admin(request):
         request=request)
 
 
-@view_config(route_name='discussion_permissions', permission="P_ADMIN_DISC")
+@view_config(route_name='discussion_permissions', permission=P_ADMIN_DISC)
 def discussion_permissions(request):
     user_id = authenticated_userid(request)
     db = Discussion.db()
@@ -201,7 +201,7 @@ def discussion_permissions(request):
         request=request)
 
 
-@view_config(route_name='general_permissions', permission="P_SYSADMIN")
+@view_config(route_name='general_permissions', permission=P_SYSADMIN)
 def general_permissions(request):
     user_id = authenticated_userid(request)
     db = Discussion.db()
