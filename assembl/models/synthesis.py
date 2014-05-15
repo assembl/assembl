@@ -555,7 +555,7 @@ class Idea(DiscussionBoundBase):
         info= {'rdf': QuadMapPatternS(None, DCTERMS.title)})
     definition = Column(UnicodeText,
         info= {'rdf': QuadMapPatternS(None, DCTERMS.description)})
-
+    hidden = Column(Boolean, default=False)
 
     id = Column(Integer, primary_key=True,
                 info= {'rdf': QuadMapPatternS(None, ASSEMBL.db_id)})
@@ -575,6 +575,9 @@ class Idea(DiscussionBoundBase):
         "Discussion",
         backref=backref('ideas', order_by=creation_date)
     )
+
+    widget_id = Column(Integer, ForeignKey('widget.id'))
+    widget = relationship("Widget", backref=backref('ideas', order_by=creation_date))
 
     __mapper_args__ = {
         'polymorphic_identity': 'idea',
@@ -597,6 +600,14 @@ class Idea(DiscussionBoundBase):
     @property
     def parents(self):
         return [cl.source for cl in self.source_links]
+
+    @property
+    def widget_add_post_endpoint(self):
+        if self.widget_id:
+            # TODO: How to get the widget's root idea? That may vary on a per-widget basis.
+            return 'local:Discussion/%d/widgets/%d/main_idea_view/-/ideas/%d/children/%d/widgetposts' % (
+                self.discussion_id, self.widget_id, self.parents[0].id, self.id)
+
 
     def get_all_ancestors(self):
         """ Get all ancestors of this idea by following source links.  
@@ -863,6 +874,7 @@ EXCEPT corresponding BY (post_id)
                     IdeaContentWidgetLink(
                         content=instance, idea=parent_instance,
                         creator_id=instance.creator_id))
+                instance.hidden = True
 
             def contains(self, parent_instance, instance):
                 return IdeaContentWidgetLink.db.query(

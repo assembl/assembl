@@ -100,6 +100,7 @@ def test_widget_basic_interaction(
             })
         })
     assert new_widget_loc.status_code == 201
+    Idea.db.flush()
     new_widget = Widget.get_instance(new_widget_loc.location)
     assert new_widget
     widget_rep = test_app.get(
@@ -121,6 +122,8 @@ def test_widget_basic_interaction(
     Idea.db.flush()
     new_idea_id = new_idea_rep.location
     new_idea = Idea.get_instance(new_idea_id)
+    assert new_idea.widget_id == new_widget.id
+    #assert new_idea.hidden, Still TODO
     new_idea_rep = test_app.get(
         local_to_absolute(new_idea_rep.location),
         headers={"Accept": "application/json"}
@@ -130,10 +133,11 @@ def test_widget_basic_interaction(
         source_id=subidea_1.id, target_id=new_idea.id).one()
     # Verify new_idea corresponds to new_idea_rep.json
     # assert [posts_uri] in new_idea_rep
-    # Illegal magic: Treat the URI as non-opaque...
-    # To be improved SOON. I should find it in the Idea data.
-    post_endpoint = "%s/%s/widgetposts" % (
+    post_endpoint_0 = "%s/%s/widgetposts" % (
         widget_rep['ideas_uri'], new_idea_id.split('/')[-1])
+    post_endpoint = new_idea_rep.json['widget_add_post_endpoint']
+    assert post_endpoint
+    assert post_endpoint == post_endpoint_0
     new_post_rep = test_app.post(local_to_absolute(post_endpoint), {
         "type": "Post", "subject": "test_message", "message_id": "bogus",
         "body": "body", "creator_id": participant1_user.id})
@@ -143,3 +147,4 @@ def test_widget_basic_interaction(
     post = Post.get_instance(new_post_id)
     post_link = Idea.db.query(IdeaContentWidgetLink).filter_by(
         content_id=post.id, idea_id=new_idea.id).one()
+    assert post.hidden == True
