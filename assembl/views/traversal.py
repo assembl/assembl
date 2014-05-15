@@ -188,6 +188,9 @@ class InstanceContext(object):
             for reln in relations:
                 if reln.uselist:
                     continue
+                if getattr(inst, reln.key) is not None:
+                    # This was already set, assume it was set correctly
+                    continue
                 if reln.mapper.class_ == self._instance.__class__:
                     setattr(inst, reln.key, self._instance)
                     break

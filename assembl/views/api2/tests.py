@@ -10,7 +10,14 @@ from ...models import (
     SubGraphIdeaLinkAssociation,
     Post,
     Widget,
+    IdeaContentWidgetLink
 )
+
+
+def local_to_absolute(uri):
+    if uri.startswith('local:'):
+        return '/data/' + uri[6:]
+    return uri
 
 
 def test_get_ideas(discussion, test_app, synthesis_1,
@@ -82,6 +89,7 @@ def test_add_subidea_in_synthesis(
         sub_graph=synthesis_1, idea_link=idea_link).first()
     assert idealink_assoc
 
+
 def test_widget_basic_interaction(
         discussion, test_app, subidea_1, participant1_user, test_session):
     new_widget_loc = test_app.post(
@@ -90,28 +98,48 @@ def test_widget_basic_interaction(
             'settings': json.dumps({
                 'idea': 'local:Idea/%d' % (subidea_1.id)
             })
-    })
+        })
     assert new_widget_loc.status_code == 201
-    link = new_widget_loc.location
-    new_widget = Widget.get_instance(link)
+    new_widget = Widget.get_instance(new_widget_loc.location)
     assert new_widget
     widget_rep = test_app.get(
-        '/data/'+ new_widget.uri()[6:],
-        headers = {"Accept":"application/json"}
-        )
+        local_to_absolute(new_widget.uri()),
+        headers={"Accept": "application/json"}
+    )
     assert widget_rep.status_code == 200
     widget_rep = widget_rep.json
     print widget_rep
     assert 'messages_uri' in widget_rep
     assert 'ideas_uri' in widget_rep
     assert 'user' in widget_rep
-    messages_uri = '/data/' + widget_rep['messages_uri'][6:]
-    test = test_app.get(messages_uri)
+    idea_endpoint = local_to_absolute(widget_rep['ideas_uri'])
+    test = test_app.get(idea_endpoint)
     assert test.status_code == 200
-    new_post_loc = test_app.post(messages_uri, {
+    new_idea_rep = test_app.post(idea_endpoint, {
+        "type": "Idea", "short_title": "This is a brand new idea"})
+    assert new_idea_rep.status_code == 201
+    Idea.db.flush()
+    new_idea_id = new_idea_rep.location
+    new_idea = Idea.get_instance(new_idea_id)
+    new_idea_rep = test_app.get(
+        local_to_absolute(new_idea_rep.location),
+        headers={"Accept": "application/json"}
+    )
+    assert new_idea_rep.status_code == 200
+    idea_link = IdeaLink.db.query(IdeaLink).filter_by(
+        source_id=subidea_1.id, target_id=new_idea.id).one()
+    # Verify new_idea corresponds to new_idea_rep.json
+    # assert [posts_uri] in new_idea_rep
+    # Illegal magic: Treat the URI as non-opaque...
+    # To be improved SOON. I should find it in the Idea data.
+    post_endpoint = "%s/%s/widgetposts" % (
+        widget_rep['ideas_uri'], new_idea_id.split('/')[-1])
+    new_post_rep = test_app.post(local_to_absolute(post_endpoint), {
         "type": "Post", "subject": "test_message", "message_id": "bogus",
         "body": "body", "creator_id": participant1_user.id})
-    assert new_post_loc.status_code == 201
+    assert new_post_rep.status_code == 201
     Post.db.flush()
-    link = new_post_loc.location
-    post = Post.get_instance(link)
+    new_post_id = new_post_rep.location
+    post = Post.get_instance(new_post_id)
+    post_link = Idea.db.query(IdeaContentWidgetLink).filter_by(
+        content_id=post.id, idea_id=new_idea.id).one()
