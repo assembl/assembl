@@ -92,6 +92,7 @@ def test_add_subidea_in_synthesis(
 
 def test_widget_basic_interaction(
         discussion, test_app, subidea_1, participant1_user, test_session):
+    # Post the initial configuration
     new_widget_loc = test_app.post(
         '/data/Discussion/%d/widgets' % (discussion.id,), {
             'widget_type': 'creativity',
@@ -100,9 +101,11 @@ def test_widget_basic_interaction(
             })
         })
     assert new_widget_loc.status_code == 201
+    # Get the widget from the db
     Idea.db.flush()
     new_widget = Widget.get_instance(new_widget_loc.location)
     assert new_widget
+    # Get the widget from the api
     widget_rep = test_app.get(
         local_to_absolute(new_widget.uri()),
         headers={"Accept": "application/json"}
@@ -113,38 +116,58 @@ def test_widget_basic_interaction(
     assert 'messages_uri' in widget_rep
     assert 'ideas_uri' in widget_rep
     assert 'user' in widget_rep
+    # Get the list of new ideas (should be empty)
     idea_endpoint = local_to_absolute(widget_rep['ideas_uri'])
     test = test_app.get(idea_endpoint)
     assert test.status_code == 200
+    assert test.json == []
+
+    # Create a new sub-idea
     new_idea_rep = test_app.post(idea_endpoint, {
         "type": "Idea", "short_title": "This is a brand new idea"})
     assert new_idea_rep.status_code == 201
+    # Get the sub-idea from the db
     Idea.db.flush()
     new_idea_id = new_idea_rep.location
     new_idea = Idea.get_instance(new_idea_id)
     assert new_idea.widget_id == new_widget.id
     #assert new_idea.hidden, Still TODO
+    # Get the sub-idea from the api
     new_idea_rep = test_app.get(
         local_to_absolute(new_idea_rep.location),
         headers={"Accept": "application/json"}
     )
     assert new_idea_rep.status_code == 200
+    # It should have a link to the root idea
     idea_link = IdeaLink.db.query(IdeaLink).filter_by(
         source_id=subidea_1.id, target_id=new_idea.id).one()
-    # Verify new_idea corresponds to new_idea_rep.json
-    # assert [posts_uri] in new_idea_rep
+    # The new idea should now be in the collection api
+    test = test_app.get(idea_endpoint)
+    assert test.status_code == 200
+    assert new_idea_id in test.json
+    # TODO: On a l'idée racine là-dedans, c'est un bug.
+    # TODO: Verify new_idea corresponds to new_idea_rep.json
+    # get the new post endpoint from the idea data
+    assert 'widget_add_post_endpoint' in new_idea_rep.json
     post_endpoint_0 = "%s/%s/widgetposts" % (
         widget_rep['ideas_uri'], new_idea_id.split('/')[-1])
     post_endpoint = new_idea_rep.json['widget_add_post_endpoint']
     assert post_endpoint
     assert post_endpoint == post_endpoint_0
+    # Create a new post attached to the sub-idea
     new_post_rep = test_app.post(local_to_absolute(post_endpoint), {
         "type": "Post", "subject": "test_message", "message_id": "bogus",
         "body": "body", "creator_id": participant1_user.id})
     assert new_post_rep.status_code == 201
+    # Get the new post from the API
     Post.db.flush()
     new_post_id = new_post_rep.location
     post = Post.get_instance(new_post_id)
-    post_link = Idea.db.query(IdeaContentWidgetLink).filter_by(
-        content_id=post.id, idea_id=new_idea.id).one()
     assert post.hidden == True
+    # It should have a widget link to the idea.
+    post_widget_link = Idea.db.query(IdeaContentWidgetLink).filter_by(
+        content_id=post.id, idea_id=new_idea.id).one()
+    # The new post should now be in the collection api
+    test = test_app.get(local_to_absolute(post_endpoint))
+    assert test.status_code == 200
+    assert new_post_id in test.json
