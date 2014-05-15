@@ -145,15 +145,10 @@ def test_widget_basic_interaction(
     test = test_app.get(idea_endpoint)
     assert test.status_code == 200
     assert new_idea_id in test.json
-    # TODO: On a l'idée racine là-dedans, c'est un bug.
-    # TODO: Verify new_idea corresponds to new_idea_rep.json
+    # TODO: The root idea is included in the above, that's a bug.
     # get the new post endpoint from the idea data
-    assert 'widget_add_post_endpoint' in new_idea_rep.json
-    post_endpoint_0 = "%s/%s/widgetposts" % (
-        widget_rep['ideas_uri'], new_idea_id.split('/')[-1])
-    post_endpoint = new_idea_rep.json['widget_add_post_endpoint']
+    post_endpoint = new_idea_rep.json.get('widget_add_post_endpoint', None)
     assert post_endpoint
-    assert post_endpoint == post_endpoint_0
     # Create a new post attached to the sub-idea
     new_post_rep = test_app.post(local_to_absolute(post_endpoint), {
         "type": "Post", "subject": "test_message", "message_id": "bogus",
@@ -163,7 +158,7 @@ def test_widget_basic_interaction(
     Post.db.flush()
     new_post_id = new_post_rep.location
     post = Post.get_instance(new_post_id)
-    assert post.hidden == True
+    assert post.hidden
     # It should have a widget link to the idea.
     post_widget_link = Idea.db.query(IdeaContentWidgetLink).filter_by(
         content_id=post.id, idea_id=new_idea.id).one()
