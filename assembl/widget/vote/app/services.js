@@ -17,7 +17,7 @@ creativityServices.factory('globalConfig', function($http){
 
 
 //CONFIG
-creativityServices.factory('configService', [function(){
+creativityServices.factory('configTestingService', [function(){
   return {
     init: function(){
       
@@ -45,6 +45,17 @@ creativityServices.factory('configService', [function(){
         var widget = value.split(':');
         console.log('http://localhost:6543/data/'+widget[1]);
       }
+    },
+    getConfiguration: function(url, fnSuccess, fnError){
+      fnSuccess = fnSuccess || function (data){console.log("data:");console.log(data);};
+      fnError = fnError || function(jqXHR, textStatus, errorThrown){};
+      $.ajax({
+        url:url,
+        type:'GET',
+        data: {},
+        success: fnSuccess,
+        error: fnError
+      });
     }
   }
 
