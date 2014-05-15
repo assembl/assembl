@@ -131,7 +131,8 @@ def test_widget_basic_interaction(
     new_idea_id = new_idea_rep.location
     new_idea = Idea.get_instance(new_idea_id)
     assert new_idea.widget_id == new_widget.id
-    #assert new_idea.hidden, Still TODO
+    assert new_idea.hidden
+    assert not subidea_1.hidden
     # Get the sub-idea from the api
     new_idea_rep = test_app.get(
         local_to_absolute(new_idea_rep.location),

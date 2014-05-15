@@ -409,9 +409,10 @@ class ExplicitSubGraphView(IdeaGraphView):
                     SubGraphIdeaLinkAssociation, self.owner_class)
 
             def decorate_instance(self, instance, parent_instance, assocs):
-                assocs.append(
-                    SubGraphIdeaLinkAssociation(
-                        idea_link=instance, sub_graph=parent_instance))
+                if isinstance(instance, IdeaLink):
+                    assocs.append(
+                        SubGraphIdeaLinkAssociation(
+                            idea_link=instance, sub_graph=parent_instance))
 
             def contains(self, parent_instance, instance):
                 return SubGraphIdeaAssociation.db.query(
@@ -828,8 +829,9 @@ EXCEPT corresponding BY (post_id)
                     IdeaLink.source_id == parent_instance.id)
 
             def decorate_instance(self, instance, parent_instance, assocs):
-                assocs.append(IdeaLink(
-                        source=parent_instance, target=instance))
+                if isinstance(instance, Idea):
+                    assocs.append(IdeaLink(
+                            source=parent_instance, target=instance))
 
             def contains(self, parent_instance, instance):
                 return IdeaLink.db.query(
@@ -848,10 +850,11 @@ EXCEPT corresponding BY (post_id)
             def decorate_instance(self, instance, parent_instance, assocs):
                 # This is going to spell trouble: Sometimes we'll have creator,
                 # other times creator_id
-                assocs.append(
-                    IdeaRelatedPostLink(
-                        content=instance, idea=parent_instance,
-                        creator_id=instance.creator_id))
+                if isinstance(instance, Content):
+                    assocs.append(
+                        IdeaRelatedPostLink(
+                            content=instance, idea=parent_instance,
+                            creator_id=instance.creator_id))
 
             def contains(self, parent_instance, instance):
                 return IdeaRelatedPostLink.db.query(
@@ -870,11 +873,12 @@ EXCEPT corresponding BY (post_id)
             def decorate_instance(self, instance, parent_instance, assocs):
                 # This is going to spell trouble: Sometimes we'll have creator,
                 # other times creator_id
-                assocs.append(
-                    IdeaContentWidgetLink(
-                        content=instance, idea=parent_instance,
-                        creator_id=instance.creator_id))
-                instance.hidden = True
+                if isinstance(instance, Content):
+                    assocs.append(
+                        IdeaContentWidgetLink(
+                            content=instance, idea=parent_instance,
+                            creator_id=instance.creator_id))
+                    instance.hidden = True
 
             def contains(self, parent_instance, instance):
                 return IdeaContentWidgetLink.db.query(

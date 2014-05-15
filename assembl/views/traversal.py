@@ -248,9 +248,8 @@ class CollectionContext(object):
         return self.__parent__.decorate_query(query)
 
     def decorate_instance(self, instance, assocs):
-        if isinstance(instance, self.collection.collection_class):
-            self.collection.decorate_instance(
-                instance, self.parent_instance, assocs)
+        self.collection.decorate_instance(
+            instance, self.parent_instance, assocs)
         self.__parent__.decorate_instance(instance, assocs)
 
     def create_object(self, typename=None, json=None, user_id=None, **kwargs):
@@ -352,6 +351,8 @@ class CollectionDefinition(AbstractCollectionDefinition):
         return query
 
     def decorate_instance(self, instance, parent_instance, assocs):
+        if not isinstance(instance, self.collection_class):
+            return
         # if the relation is through a helper class,
         #   create that and add to assocs (TODO)
         # otherwise set the appropriate property (below.)
