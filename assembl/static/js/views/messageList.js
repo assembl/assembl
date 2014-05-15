@@ -313,9 +313,6 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
         /**
          * Return a list with all views.el already rendered for a flat view
          * @param {Message.Model[]} messages
-         * @param {Number} [level=1] The current hierarchy level
-         * @param {Array[boolean]} last_sibling_chain which of the view's ancestors
-         *   are the last child of their respective parents.
          * @return {HTMLDivElement[]}
          */
         getRenderedMessagesFlat: function(messages){

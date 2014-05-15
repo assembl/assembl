@@ -20,17 +20,12 @@ define([],function(){
             var level = 0;
             var in_ancestry = true;
             var ancestor_id, last_ancestor_id = null;
-            var last_sibling_chain = [];
-            //var true_sibling = true;
+            var true_sibling = true;
             for (var i in ancestry) {
                 ancestor_id = ancestry[i].getId();
                 in_ancestry = data_by_idea.hasOwnProperty(ancestor_id);
                 if (in_ancestry) {
                     level++;
-                    // this only works if we go breadth-first
-                    // otherwise if the next sibling is filtered out, my parent's
-                    // idea of is_last_sibling will be wrong
-                    last_sibling_chain.push(data_by_idea[ancestor_id]['is_last_sibling']);
                     last_ancestor_id = ancestor_id;
                 }
             }
@@ -38,7 +33,7 @@ define([],function(){
                 var brothers = data_by_idea[last_ancestor_id]['children'];
                 if (brothers.length > 0) {
                     var last_brother = brothers[brothers.length - 1];
-                    //true_sibling = last_brother.get('parentId') == idea.get('parentId');
+                    true_sibling = last_brother.get('parentId') == idea.get('parentId');
                     data_by_idea[last_brother.getId()]['is_last_sibling'] = false;
                 }
                 brothers.push(idea);
@@ -51,9 +46,9 @@ define([],function(){
                 'level': level,
                 'skip_parent': level!=0 & !in_ancestry,
                 'is_last_sibling': true,
-                //'true_sibling': true_sibling,
-                'last_sibling_chain': last_sibling_chain,
-                'children': []
+                'true_sibling': true_sibling,
+                'children': [],
+                'last_ancestor_id': last_ancestor_id
             };
             data_by_idea[idea_id] = data;
         }

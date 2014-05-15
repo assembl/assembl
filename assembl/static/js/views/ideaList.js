@@ -1,5 +1,5 @@
-define(['backbone', 'underscore', 'models/idea', 'views/idea', "views/ideaGraph", 'app', 'types', 'views/allMessagesInIdeaList', 'views/orphanMessagesInIdeaList', 'views/synthesisInIdeaList', 'permissions', 'utils/renderVisitor'],
-function(Backbone, _, Idea, IdeaView, ideaGraphLoader, app, Types, AllMessagesInIdeaListView, OrphanMessagesInIdeaListView, SynthesisInIdeaListView, Permissions, renderVisitor){
+define(['backbone', 'underscore', 'models/idea', 'views/idea', "views/ideaGraph", 'app', 'types', 'views/allMessagesInIdeaList', 'views/orphanMessagesInIdeaList', 'views/synthesisInIdeaList', 'permissions', 'utils/renderVisitor', 'utils/siblingChainVisitor'],
+function(Backbone, _, Idea, IdeaView, ideaGraphLoader, app, Types, AllMessagesInIdeaListView, OrphanMessagesInIdeaListView, SynthesisInIdeaListView, Permissions, renderVisitor, siblingChainVisitor){
     'use strict';
 
     var FEATURED = 'featured',
@@ -137,7 +137,8 @@ function(Backbone, _, Idea, IdeaView, ideaGraphLoader, app, Types, AllMessagesIn
             var view_data = {};
             var roots = [];
             function excludeRoot(idea) {return idea != rootIdea};
-            rootIdea.visitBreadthFirst(renderVisitor(view_data, roots, excludeRoot));
+            rootIdea.visitDepthFirst(renderVisitor(view_data, roots, excludeRoot));
+            rootIdea.visitDepthFirst(siblingChainVisitor(view_data));
 
             _.each(roots, function(idea){
                 var ideaView =  new IdeaView({model:idea}, view_data);
