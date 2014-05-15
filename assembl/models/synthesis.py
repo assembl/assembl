@@ -813,7 +813,7 @@ EXCEPT corresponding BY (post_id)
                 super(ChildIdeaCollectionDefinition, self).__init__(cls, Idea)
 
             def decorate_query(self, query, parent_instance):
-                return query.join(IdeaLink).filter(
+                return query.join(IdeaLink,
                     IdeaLink.source_id == parent_instance.id)
 
             def decorate_instance(self, instance, parent_instance, assocs):
