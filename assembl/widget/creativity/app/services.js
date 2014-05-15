@@ -39,32 +39,23 @@ creativityServices.factory('globalMessages', function($http){
 });
 
 //CONFIG
-creativityServices.factory('configService', ['$resource', function($resource){
-    return {
+creativityServices.factory('Configuration', ['$resource', function($resource) {
+    return $resource('http://localhost:6543/data/Discussion/1/widgets', {}, {
+        getWidget: {
+            method:'POST',
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            isArray:false,
+            transformResponse : function(data, headers){
 
-        init: function(type, idea, discutionId, callback) {
+                var header = headers().location;
+                    header = header.split(':')[1];
 
-        $.ajax({
-            url: 'http://localhost:6543/data/Discussion/'+discutionId+'/widgets',
-            type: 'POST',
-            cache: false,
-            data: {
-                widget_type: type,
-                settings: JSON.stringify({"idea": idea})
-            },
-            success: function (data, textStatus, jqXHR) {
-                var header = jqXHR.getResponseHeader('location');
-                    var widget = header.split(':')[1];
-                    var conf = $resource('http://localhost:6543/data/:widget', {widget: widget});
-
-                callback(conf.get());
+                return $resource('http://localhost:6543/data/:widgetId', {widgetId: header});
             }
-        })
-      }
-    }
+        }
+    });
 
 }]);
-
 
 //CARD inspire me: send an idea to assembl
 creativityServices.factory('sendIdeaService', ['$resource',function($resource){
