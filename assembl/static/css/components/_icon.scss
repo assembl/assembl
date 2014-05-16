@@ -53,7 +53,8 @@ $font-icon-dir: "#{$font-dir}/icon";
   /* Uncomment for 3D effect */
   /* text-shadow: 1px 1px 1px rgba(127, 127, 127, 0.3); */
 }
- 
+/* These should correspond to 'code' in static/font/icon/config.json
+   The font itself is constructed with 'fab devenv compile_fontello_fonts' */
 .icon-ok-squared:before { content: '\e817'; } /* '' */
 .icon-reply:before { content: '\e811'; } /* '' */
 .icon-plus-squared-small:before { content: '\e800'; } /* '' */
