@@ -257,6 +257,12 @@
       "css": "lock-open",
       "code": 59433,
       "src": "fontawesome"
+    },
+    {
+       "uid": "9c1376672bb4f1ed616fdd78a23667e9",
+       "css": "comment-empty",
+       "code": 59434,
+       "src": "fontawesome"
     }
   ]
 }
