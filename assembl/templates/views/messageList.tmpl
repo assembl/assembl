@@ -63,8 +63,10 @@
                     <li id="messageList-selectunread" class="dropdown-listitem">{{ gettext('Unread') }}</li>
                 </ul>
             </div>
+            #}
         </div>
         
+        {#
         <div class="inline text-muted margin-left">
             {% set total = '<%= total %>' %}
             {{ gettext('%(total)s messages')|format(total=total)|safe }}

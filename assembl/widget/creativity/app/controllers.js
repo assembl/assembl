@@ -205,13 +205,22 @@ creativityApp.controller('cardsCtl',
 }]);
 
 creativityApp.controller('creativitySessionCtl',
-    ['$scope','globalConfig','globalMessages', function($scope, globalConf, globalMessages){
+    ['$scope','globalConfig','globalMessages','$rootScope', function($scope, globalConf, globalMessages){
 
     // activate the right tab
     $("ul.nav li").removeClass("active");
     $("ul.nav li a[href=\"#session\"]").closest("li").addClass("active");
 
     $scope.formData = {};
+
+    $scope.$on('widgetStart', function(e, data){
+
+        //get data from pubsub service in app
+
+
+
+    })
+
 
     //data mock
     globalConf.fetch().success(function(data){

@@ -4,6 +4,7 @@ from sqlalchemy.orm import relationship, backref
 from sqlalchemy import (
     Column,
     Integer,
+    Boolean,
     UnicodeText,
     String,
     DateTime,
@@ -174,6 +175,8 @@ class Content(DiscussionBoundBase):
         "Discussion",
         backref=backref('posts', order_by=creation_date)
     )
+
+    hidden = Column(Boolean, default=False)
 
     __mapper_args__ = {
         'polymorphic_identity': 'content',

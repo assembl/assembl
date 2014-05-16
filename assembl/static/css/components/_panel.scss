@@ -137,10 +137,14 @@
 // To put the content
 // -----------
 .panel-body {
+    //position: relative;
+    //The scrollbars do not work with position relative
     position: absolute;
     top: $panel-header-height;
+    //top: 0;
     right: 0;
     bottom: $panel-header-height;
+    //bottom: 0;
     left: 0;
     overflow-y: auto;
     overflow-x: hidden;
@@ -156,6 +160,8 @@
 // dropzone above the panel-body
 // -------
 .panel-bodyabove {
+    //Currently non-functionnal, disabling: benoitg-2014-05-14
+    display: none;
     @include z-index("float");
 
     position: absolute;
@@ -168,6 +174,8 @@
 // dropzone below the panel-body
 // -------
 .panel-bodybelow {
+    //Currently non-functionnal, disabling: benoitg-2014-05-14
+    display: none;
     @include z-index("float");
 
     position: absolute;

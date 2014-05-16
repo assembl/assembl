@@ -93,6 +93,7 @@ from .synthesis import (
     RootIdea,
     IdeaLink,
     IdeaRelatedPostLink,
+    IdeaContentWidgetLink,
     Extract,
     IdeaGraphView,
     SubGraphIdeaAssociation,

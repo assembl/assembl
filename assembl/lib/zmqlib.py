@@ -37,6 +37,11 @@ def get_pub_socket():
         socket.connect(INTERNAL_SOCKET)
     else:
         socket.connect(CHANGES_SOCKET)
+    # Related to "slow joiner" symptom 
+    # http://zguide.zeromq.org/page:all#Getting-the-Message-Out
+    # It would be better to get the "ready" signal back but this is
+    # adequate for now.
+    sleep(0.2)
     return socket
 
 

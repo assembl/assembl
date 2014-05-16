@@ -409,9 +409,10 @@ class ExplicitSubGraphView(IdeaGraphView):
                     SubGraphIdeaLinkAssociation, self.owner_class)
 
             def decorate_instance(self, instance, parent_instance, assocs):
-                assocs.append(
-                    SubGraphIdeaLinkAssociation(
-                        idea_link=instance, sub_graph=parent_instance))
+                if isinstance(instance, IdeaLink):
+                    assocs.append(
+                        SubGraphIdeaLinkAssociation(
+                            idea_link=instance, sub_graph=parent_instance))
 
             def contains(self, parent_instance, instance):
                 return SubGraphIdeaAssociation.db.query(
@@ -555,7 +556,7 @@ class Idea(DiscussionBoundBase):
         info= {'rdf': QuadMapPatternS(None, DCTERMS.title)})
     definition = Column(UnicodeText,
         info= {'rdf': QuadMapPatternS(None, DCTERMS.description)})
-
+    hidden = Column(Boolean, default=False)
 
     id = Column(Integer, primary_key=True,
                 info= {'rdf': QuadMapPatternS(None, ASSEMBL.db_id)})
@@ -575,6 +576,9 @@ class Idea(DiscussionBoundBase):
         "Discussion",
         backref=backref('ideas', order_by=creation_date)
     )
+
+    widget_id = Column(Integer, ForeignKey('widget.id'))
+    widget = relationship("Widget", backref=backref('ideas', order_by=creation_date))
 
     __mapper_args__ = {
         'polymorphic_identity': 'idea',
@@ -597,6 +601,14 @@ class Idea(DiscussionBoundBase):
     @property
     def parents(self):
         return [cl.source for cl in self.source_links]
+
+    @property
+    def widget_add_post_endpoint(self):
+        if self.widget_id:
+            # TODO: How to get the widget's root idea? That may vary on a per-widget basis.
+            return 'local:Discussion/%d/widgets/%d/main_idea_view/-/ideas/%d/children/%d/widgetposts' % (
+                self.discussion_id, self.widget_id, self.parents[0].id, self.id)
+
 
     def get_all_ancestors(self):
         """ Get all ancestors of this idea by following source links.  
@@ -813,12 +825,13 @@ EXCEPT corresponding BY (post_id)
                 super(ChildIdeaCollectionDefinition, self).__init__(cls, Idea)
 
             def decorate_query(self, query, parent_instance):
-                return query.join(IdeaLink).filter(
+                return query.join(IdeaLink,
                     IdeaLink.source_id == parent_instance.id)
 
             def decorate_instance(self, instance, parent_instance, assocs):
-                assocs.append(IdeaLink(
-                        source=parent_instance, target=instance))
+                if isinstance(instance, Idea):
+                    assocs.append(IdeaLink(
+                            source=parent_instance, target=instance))
 
             def contains(self, parent_instance, instance):
                 return IdeaLink.db.query(
@@ -837,10 +850,11 @@ EXCEPT corresponding BY (post_id)
             def decorate_instance(self, instance, parent_instance, assocs):
                 # This is going to spell trouble: Sometimes we'll have creator,
                 # other times creator_id
-                assocs.append(
-                    IdeaRelatedPostLink(
-                        content=instance, idea=parent_instance,
-                        creator_id=instance.creator_id))
+                if isinstance(instance, Content):
+                    assocs.append(
+                        IdeaRelatedPostLink(
+                            content=instance, idea=parent_instance,
+                            creator_id=instance.creator_id))
 
             def contains(self, parent_instance, instance):
                 return IdeaRelatedPostLink.db.query(
@@ -859,10 +873,12 @@ EXCEPT corresponding BY (post_id)
             def decorate_instance(self, instance, parent_instance, assocs):
                 # This is going to spell trouble: Sometimes we'll have creator,
                 # other times creator_id
-                assocs.append(
-                    IdeaContentWidgetLink(
-                        content=instance, idea=parent_instance,
-                        creator_id=instance.creator_id))
+                if isinstance(instance, Content):
+                    assocs.append(
+                        IdeaContentWidgetLink(
+                            content=instance, idea=parent_instance,
+                            creator_id=instance.creator_id))
+                    instance.hidden = True
 
             def contains(self, parent_instance, instance):
                 return IdeaContentWidgetLink.db.query(

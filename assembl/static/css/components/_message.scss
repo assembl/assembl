@@ -152,9 +152,13 @@ $ellipsiswidth: 3em !default;
 
     .message-body {
         margin-top: 1em;
-        white-space: pre-line;
-        &> {
+    }
+    &.Email {
+        .message-body {
+            white-space: pre-line;
+            &> {
             white-space: normal;
+            }
         }
     }
 }

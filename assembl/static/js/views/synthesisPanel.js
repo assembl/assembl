@@ -122,7 +122,7 @@ function(Backbone, _, $, app, Synthesis, Idea, Permissions, IdeaFamilyView, Idea
                 }
                 //console.log("Checking",idea,"returning:", retval, "synthesis is next synthesis:", that.model.get('is_next_synthesis'));
                 return retval};
-            rootIdea.visitBreadthFirst(renderVisitor(view_data, roots, inSynthesis));
+            rootIdea.visitDepthFirst(renderVisitor(view_data, roots, inSynthesis));
 
             _.each(roots, function append_recursive(idea){
                 var rendered_idea_view = new IdeaFamilyView(

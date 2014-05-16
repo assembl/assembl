@@ -43,9 +43,15 @@ JS_MESSAGE_IDS = js_message_ids()
 def get_default_context(request):
     localizer = get_localizer(request)
     _ = TranslationStringFactory('assembl')
-
+    user=get_user(request)
+    if user and user.username:
+        user_profile_edit_url = request.route_url('profile',type='u',identifier=user.username.username)
+    else:
+        user_profile_edit_url = None
     return dict(default_context,
-        user=get_user(request),
+        request=request,
+        user=user,
+        user_profile_edit_url=user_profile_edit_url,
         locale=localizer.locale_name,
         locales=config.get('available_languages').split(),
         theme=config.get('default_theme') or 'default',

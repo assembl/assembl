@@ -24,7 +24,7 @@ function(Backbone, _, $, Idea, Segment, app, Permissions){
         /**
          * @init
          * @param {IdeaModel} obj the model
-         * @param {Array[boolean]} last_sibling_chain which of the view's ancestors
+         * @param {dict} view_data: data from the render visitor
          *   are the last child of their respective parents.
          */
         initialize: function(obj, view_data){

@@ -1,3 +1,5 @@
+from itertools import chain
+
 from sqlalchemy import (
     Column, Integer, ForeignKey, Text, String)
 from sqlalchemy.orm import relationship
@@ -111,10 +113,9 @@ class Widget(DiscussionBoundBase):
             def decorate_instance(self, instance, parent_instance, assocs):
                 super(WidgetViewCollection, self).decorate_instance(
                     instance, parent_instance, assocs)
-                for inst in assocs:
+                for inst in chain(assocs, (instance,)):
                     if isinstance(inst, Idea):
-                        # TODO: Add that column in Idea
-                        idea.status = 'widget'
+                        inst.hidden = True
 
         return {'main_idea_view': WidgetViewCollection()}
 
