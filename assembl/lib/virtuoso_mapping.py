@@ -92,10 +92,10 @@ class QuadMapPatternS(QuadMapPattern):
             subject, predicate, obj, graph, name, condition)
         self.section = section
 
-    def set_defaults(self, subject=None, obj=None, graph=None,
+    def set_defaults(self, subject=None, obj=None, graph_name=None,
                      name=None, condition=None, section=None):
         super(QuadMapPatternS, self).set_defaults(
-            subject, obj, graph, name, condition)
+            subject, obj, graph_name, name, condition)
         self.section = self.section or section
 
 
@@ -147,7 +147,7 @@ class AssemblClassPatternExtractor(ClassPatternExtractor):
     def set_defaults(self, qmp, subject_pattern, sqla_cls, column):
         rdf_section = sqla_cls.__dict__.get(
             'rdf_section', DISCUSSION_DATA_SECTION)
-        qmp.set_defaults(subject_pattern, column, self.graph,
+        qmp.set_defaults(subject_pattern, column, self.graph.name,
                          self.make_column_name(sqla_cls, column),
                          None, rdf_section)
         from ..models import DiscussionBoundBase
