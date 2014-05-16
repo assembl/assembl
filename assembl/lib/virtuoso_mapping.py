@@ -87,9 +87,9 @@ def load_ontologies(session, reload=None):
 
 class QuadMapPatternS(QuadMapPattern):
     def __init__(self, subject=None, predicate=None, obj=None,
-                 graph=None, name=None, condition=None, section=None):
+                 graph_name=None, name=None, condition=None, section=None):
         super(QuadMapPatternS, self).__init__(
-            subject, predicate, obj, graph, name, condition)
+            subject, predicate, obj, graph_name, name, condition)
         self.section = section
 
     def set_defaults(self, subject=None, obj=None, graph_name=None,
