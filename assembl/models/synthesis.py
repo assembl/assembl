@@ -683,13 +683,18 @@ JOIN post ON (
     def _get_orphan_posts_statement_no_select(select):
         """ Requires discussion_id bind parameters """
         return select + """
-FROM post
-JOIN content ON (
-    content.id = post.id
-    AND content.discussion_id = :discussion_id
-)
-EXCEPT corresponding BY (post_id)
-""" + Idea._get_related_posts_statement(True)
+           FROM post
+           JOIN content ON ( content.id = post.id
+                            AND content.discussion_id = :discussion_id )
+           EXCEPT corresponding BY (post_id) (
+             SELECT DISTINCT post.id AS post_id FROM post
+              JOIN post AS root_posts ON ( (post.ancestry <> ''
+                           AND post.ancestry LIKE root_posts.ancestry || cast(root_posts.id as varchar) || ',' || '%' )
+                         OR post.id = root_posts.id)
+              JOIN idea_content_link ON (idea_content_link.content_id = root_posts.id)
+              JOIN idea_content_positive_link ON (idea_content_positive_link.id = idea_content_link.id)
+              JOIN idea ON (idea_content_link.idea_id = idea.id)
+             WHERE idea.discussion_id = :discussion_id )"""
 
     @staticmethod
     def _get_count_orphan_posts_statement():
