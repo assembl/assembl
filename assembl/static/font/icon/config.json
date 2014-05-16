@@ -249,13 +249,13 @@
     {
       "uid": "c1f1975c885aa9f3dad7810c53b82074",
       "css": "lock",
-      "code": 59392,
+      "code": 59432,
       "src": "fontawesome"
     },
     {
       "uid": "657ab647f6248a6b57a5b893beaf35a9",
       "css": "lock-open",
-      "code": 59397,
+      "code": 59433,
       "src": "fontawesome"
     }
   ]
