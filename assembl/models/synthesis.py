@@ -296,8 +296,8 @@ class SubGraphIdeaAssociation(DiscussionBoundBase):
     @classmethod
     def get_discussion_condition(cls, discussion_id):
         from . import ExplicitSubGraphView
-        return cls.sub_graph_id == IdeaGraphView.id & \
-            IdeaGraphView.discussion_id == discussion_id
+        return (cls.sub_graph_id == IdeaGraphView.id) & \
+            (IdeaGraphView.discussion_id == discussion_id)
 
     crud_permissions = CrudPermissions(P_ADMIN_DISC)
 
@@ -330,8 +330,8 @@ class SubGraphIdeaLinkAssociation(DiscussionBoundBase):
     @classmethod
     def get_discussion_condition(cls, discussion_id):
         from . import ExplicitSubGraphView
-        return cls.sub_graph_id == IdeaGraphView.id & \
-            IdeaGraphView.discussion_id == discussion_id
+        return (cls.sub_graph_id == IdeaGraphView.id) & \
+            (IdeaGraphView.discussion_id == discussion_id)
 
     crud_permissions = CrudPermissions(P_ADMIN_DISC)
 
@@ -1012,7 +1012,7 @@ class IdeaLink(DiscussionBoundBase):
 
     @classmethod
     def get_discussion_condition(cls, discussion_id):
-        return cls.source_id == Idea.id & Idea.discussion_id == discussion_id
+        return (cls.source_id == Idea.id) & (Idea.discussion_id == discussion_id)
 
     crud_permissions = CrudPermissions(
             P_ADD_IDEA, P_READ, P_EDIT_IDEA, P_EDIT_IDEA,
@@ -1069,7 +1069,7 @@ class IdeaContentLink(DiscussionBoundBase):
 
     @classmethod
     def get_discussion_condition(cls, discussion_id):
-        return cls.idea_id == Idea.id & Idea.discussion_id == discussion_id
+        return (cls.idea_id == Idea.id) & (Idea.discussion_id == discussion_id)
 
     crud_permissions = CrudPermissions(
             P_ADD_IDEA, P_READ, P_EDIT_IDEA, P_EDIT_IDEA,
@@ -1429,9 +1429,9 @@ class TextFragmentIdentifier(DiscussionBoundBase):
 
     @classmethod
     def get_discussion_condition(cls, discussion_id):
-        return cls.extract_id == IdeaContentLink.id & \
-            IdeaContentLink.idea_id == Idea.id & \
-            Idea.discussion_id == discussion_id
+        return (cls.extract_id == IdeaContentLink.id) & \
+            (IdeaContentLink.idea_id == Idea.id) & \
+            (Idea.discussion_id == discussion_id)
 
     crud_permissions = CrudPermissions(
             P_ADD_EXTRACT, P_READ, P_EDIT_EXTRACT, P_EDIT_EXTRACT,
