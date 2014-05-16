@@ -22,12 +22,8 @@ def discussion_list_view(request):
     roles = get_roles(user_id)
     context = get_default_context(request)
     context['discussions'] = []
-    discussions = discussions_with_access(user_id)
-    potential_access = discussions
-    if user_id == Everyone:
-        potential_access = discussions_with_access(Authenticated)
-        discussions = set(discussions)
-    for discussion in potential_access:
+    discussions = discussions_with_access(Authenticated if user_id == Everyone else user_id)
+    for discussion in discussions:
         discussion_context = {}
         discussion_context['topic'] = discussion.topic
         discussion_context['slug'] = discussion.slug
@@ -37,6 +33,5 @@ def discussion_list_view(request):
         if R_SYSADMIN in roles:
             context['discussions_admin_url'] = request.route_url('discussion_admin')
             context['permissions_admin_url'] = request.route_url('general_permissions')
-        discussion_context['needs_login'] = discussion not in discussions
     context['user'] = user
     return context

@@ -6,12 +6,7 @@
         {% for discussion in discussions %}
         <li>
             <span class="discussion">
-            {% if discussion.needs_login %}
-                {{ discussion.topic }}
-                <br/><a href='/login'><em>{{ gettext("Sign in") }}</em></a>
-            {% else %}
-                <a href='{{ discussion.slug }}/'>{{ discussion.topic }}</a>
-            {% endif %}
+            <a href='{{ discussion.slug }}/'>{{ discussion.topic }}</a>
             {% if discussion.admin_url %}
                 <br/><a href='{{ discussion.admin_url }}'><em>{{ gettext("Admin") }}</em></a>
             {% endif %}
