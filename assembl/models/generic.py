@@ -176,7 +176,7 @@ class Content(DiscussionBoundBase):
         backref=backref('posts', order_by=creation_date)
     )
 
-    hidden = Column(Boolean, default=False)
+    hidden = Column(Boolean, server_default='0')
 
     __mapper_args__ = {
         'polymorphic_identity': 'content',

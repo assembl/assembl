@@ -556,7 +556,8 @@ class Idea(DiscussionBoundBase):
         info= {'rdf': QuadMapPatternS(None, DCTERMS.title)})
     definition = Column(UnicodeText,
         info= {'rdf': QuadMapPatternS(None, DCTERMS.description)})
-    hidden = Column(Boolean, default=False)
+    hidden = Column(Boolean, server_default='0')
+    is_tombstone = Column(Boolean, server_default='0')
 
     id = Column(Integer, primary_key=True,
                 info= {'rdf': QuadMapPatternS(None, ASSEMBL.db_id)})
@@ -694,7 +695,8 @@ JOIN post ON (
               JOIN idea_content_link ON (idea_content_link.content_id = root_posts.id)
               JOIN idea_content_positive_link ON (idea_content_positive_link.id = idea_content_link.id)
               JOIN idea ON (idea_content_link.idea_id = idea.id)
-             WHERE idea.discussion_id = :discussion_id )"""
+             WHERE idea.discussion_id = :discussion_id
+             AND idea.is_tombstone = 0 AND idea.hidden = 0)"""
 
     @staticmethod
     def _get_count_orphan_posts_statement():
