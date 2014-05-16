@@ -1,13 +1,33 @@
 #messageList {
     #messageList-query-info {
-        @extend .idealist-title;
-        border-bottom: solid 1px $box-border-color;
+        //@extend .idealist-title;
+        //border-bottom: solid 1px $box-border-color;
         white-space: normal;
+        padding-left: $padding-left;
         .closebutton {
             position: relative;
             right: 0px;
-            top: 0px;
+            top: 1px;
         }
+      #post-query-filter-info {
+        padding: 0;
+         li {
+           display: inline;
+           padding: .2em .6em .3em;
+           font-size: 85%;
+           line-height: 1;
+           color: #ffffff;
+           text-align: center;
+           white-space: nowrap;
+           vertical-align: baseline;
+           border-radius: .25em;
+           background-color: #999999;
+           margin-right: 5px;
+         }
+      }
+      #post-query-results-info {
+        margin-top: 5px;
+      }
     } 
 }
 

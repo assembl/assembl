@@ -25,6 +25,12 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard, Types, Permissions){
      */
     window.app = {
         /**
+         * Send debugging output to console.log to observe when views render
+         * @type {boolean}
+         */
+        debugRender: false,
+            
+        /**
          * Reference to the body as jQuery object
          * @type {jQuery}
          */
@@ -49,16 +55,25 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard, Types, Permissions){
 
         AVAILABLE_MESSAGE_VIEW_STYLES: {
             TITLE_ONLY: {id: "viewStyleTitleOnly",
-                label: i18n._('Titles only')
+                label: i18n.gettext('Message titles')
             },
             PREVIEW: {id: "viewStylePreview",
-                label: i18n._('Short preview')
+                label: i18n.gettext('Message previews')
             },
             FULL_BODY: {id: "viewStyleFullBody",
-                label: i18n._('Complete text')
-            },
+                label: i18n.gettext('Complete messages')
+            }
         },
         
+        /**
+         * get a view style definition by id
+         * @param {messageViewStyle.id}
+         * @return {messageViewStyle or undefined}
+         */
+        getMessageViewStyleDefById: function(messageViewStyleId){
+            var retval = _.find(this.AVAILABLE_MESSAGE_VIEW_STYLES, function(messageViewStyle){ return messageViewStyle.id == messageViewStyleId; });
+            return retval;
+        },
         /**
          * Prefix used to generate the id of the element used by annotator to find it's annotation
          * @type {string}
@@ -228,7 +243,8 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard, Types, Permissions){
             app.addPanelToStorage(panel.el.id);
 
             if( panel.button ) {
-                panel.button.addClass('is-activated');
+
+                panel.button.addClass('active');
             }
             app.trigger("panel:open", [panel]);
         },
@@ -253,7 +269,7 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard, Types, Permissions){
             app.removePanelFromStorage(panel.el.id);
 
             if( panel.button ) {
-                panel.button.removeClass('is-activated');
+                panel.button.removeClass('active');
             }
             app.trigger("panel:close", [panel]);
         },
@@ -292,6 +308,24 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard, Types, Permissions){
             return panels;
         },
 
+        /**
+         * @return {Object} The Object with mesagelistconfig in the localStorage
+         */
+        getMessageListConfigFromStorage: function(){
+            var messageListConfig = JSON.parse(localStorage.getItem('messageListConfig')) || {};
+            return messageListConfig;
+        },
+
+        /**
+         * Adds a panel in the localStorage
+         * @param {Object} The Object with mesagelistconfig in the localStorage
+         * @return {Object} The Object with mesagelistconfig in the localStorage
+         */
+        setMessageListConfigToStorage: function(messageListConfig){
+            localStorage.setItem('messageListConfig', JSON.stringify(messageListConfig));
+            return messageListConfig;
+        },
+        
         /**
          * Checks if there is a panel in fullscreen mode
          * ( i.e.: there is only one open )
@@ -665,7 +699,7 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard, Types, Permissions){
         },
 
         /**
-         * Returns the collection from the giving object's @type
+         * Returns the collection from the giving object's @type .
          * @param {BaseModel} item
          * @param {String} [type=item['@type']] The model type
          * @return {BaseCollection}
@@ -690,6 +724,9 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard, Types, Permissions){
 
                 case Types.USER:
                     return app.users;
+                    
+                case Types.SYNTHESIS:
+                    return app.syntheses;
             }
 
             return null;
@@ -862,7 +899,7 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard, Types, Permissions){
          * @event
          */
         onAjaxError: function( ev, jqxhr, settings, exception ){
-            var message = i18n._('ajaxerror-message');
+            var message = i18n.gettext('ajax error message:');
             message = "url: " + settings.url + "\n" + message + "\n" + exception;
 
             alert( message );
@@ -874,52 +911,6 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard, Types, Permissions){
          */
         cleanTooltips: function(){
             $('.tipsy').remove();
-        },
-
-        /**
-         * Returns (yep, it doesn't actually prints) the idea formatted to be displayed
-         * at the synthesis email
-         * 
-         * @param  {Idea} idea
-         * @param  {string} email The react's email
-         * @return {string}
-         */
-        printIdea: function(idea, email){
-            var longTitle = escape(idea.getLongTitleDisplayText()),
-                span = $("<span>"+idea.getLongTitleDisplayText()+"</span>"),
-                children = [],
-                segments = app.getSegmentsByIdea(idea),
-                tmpl = app.loadTemplate('synthesisIdeaEmail'),
-                authors = [];
-
-            span.find('p:first-child').css('margin-top', 0);
-            span.find('p:last-child').css('margin-bottom', 0);
-            
-            segments.forEach(function(segment) {
-                var post = segment.getAssociatedPost();
-                if(post) {
-                    var creator = post.getCreator();
-                    if(creator) {
-                        authors.push(creator.get("name"));
-                    }
-                }
-            });
-
-            _.each(idea.getSynthesisChildren(), function(child){
-                children.push( app.printIdea(child) );
-            });
-
-            return tmpl({
-                id: idea.getId(),
-                level: idea.getSynthesisLevel(),
-                editing: idea.get('synthesisPanel-editing') || false,
-                longTitle: span.html(),
-                authors: _.uniq(authors),
-                email: email,
-                subject: longTitle,
-                reactLabel: i18n.gettext('react'),
-                children: children
-            });
         },
 
         setLocale: function(locale){
@@ -987,6 +978,9 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard, Types, Permissions){
             app.doc.on('ajaxError', app.onAjaxError);
 
             app.on('render', function(){
+                /*if(app.debugRender) {
+                    console.log("app.on('render) triggered");
+                }*/
                 app.cleanTooltips();
                 window.setTimeout(app.initTooltips, 500);
             });

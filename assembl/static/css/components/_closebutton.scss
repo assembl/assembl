@@ -6,9 +6,9 @@
     right: 20px;
 
     cursor: pointer;
-    color: $closebutton-color;
+    //color: $closebutton-color;
 
-    font-size: 14px;
+    font-size: 12px;
     cursor: pointer;
 
     &:after {
@@ -19,7 +19,7 @@
     }
 
     &:hover {
-        color: darken($closebutton-color, 20%);
+        //color: darken($closebutton-color, 20%);
     }
 }
 

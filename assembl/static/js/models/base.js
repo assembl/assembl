@@ -9,6 +9,36 @@ define(['backbone', 'app'], function(Backbone, app){
     var BaseModel = Backbone.Model.extend({
 
         /**
+         * Get the numeric id fro the id string
+         * ex: finds '30' if given 'local:ModelName/30'
+         *
+         * @param {Number} id
+         * @return {BaseModel}
+         */
+        getNumericId: function(){
+            var re = /\d+$/;
+            if( re.test(this.id) ){
+                //Return the numeric part
+                
+                return re.exec(this.id)[0]
+                }
+            else {
+                //Cheat, return the id unmodified.  Useful for special
+                //id's like "next_synthesis";
+                return this.id;
+            }
+        },
+        
+        url: function() {
+            var base =
+              _.result(this, 'urlRoot') ||
+              _.result(this.collection, 'url') ||
+              urlError();
+            if (this.isNew()) return base;
+            return base.replace(/([^\/])$/, '$1/') + encodeURIComponent(this.getNumericId());
+          },
+          
+        /**
          * Overwritting the idAttribute
          * @type {String}
          */
@@ -36,7 +66,7 @@ define(['backbone', 'app'], function(Backbone, app){
                     if (existing === null || existing === undefined) {
                         this.set('@id', id);
                     } else if (existing !== this) {
-                        console.log(existing);
+                        console.log("Existing: ", existing);
                         // those websockets are fast!
                         this.collection.remove(this);
                         this.trigger("replaced", existing);

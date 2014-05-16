@@ -1,15 +1,18 @@
-from pyramid.view import view_config, view_defaults
-from pyramid.response import Response
-from pyramid.renderers import render_to_response
-from pyramid.httpexceptions import HTTPNotFound
-from pyramid.i18n import get_localizer, TranslationStringFactory
 import json
 import os.path
-from assembl.synthesis.models import Discussion
-from assembl.auth import get_user, P_READ
+
+from pyramid.view import view_config
+from pyramid.renderers import render_to_response
+from pyramid.security import authenticated_userid, Everyone
+from pyramid.httpexceptions import HTTPNotFound, HTTPSeeOther, HTTPUnauthorized
+from pyramid.i18n import TranslationStringFactory
 from sqlalchemy.orm.exc import NoResultFound
 
+from assembl.models import Discussion
+from assembl.auth import P_READ, P_ADD_EXTRACT
+from assembl.auth.util import user_has_permission
 from .. import get_default_context as base_default_context
+
 
 FIXTURE = os.path.join(os.path.dirname(__file__),
                        '../../static/js/fixtures/nodes.json')
@@ -67,9 +70,22 @@ def get_styleguide_components():
     return views
 
 
-@view_config(route_name='home', request_method='GET', http_cache=60, permission=P_READ)
+@view_config(route_name='home', request_method='GET', http_cache=60)
 def home_view(request):
+    user_id = authenticated_userid(request) or Everyone
     context = get_default_context(request)
+    canRead = user_has_permission(context["discussion"].id, user_id, P_READ)
+    if not canRead and user_id == Everyone:
+        #User isn't logged-in and discussion isn't public, redirect to login page
+        login_url = request.route_url('login',_query={'next_view':request.current_route_path()})
+        return HTTPSeeOther(login_url)
+    elif not canRead:
+        #User is logged-in but doesn't have access to the discussion
+        return HTTPUnauthorized()
+    
+    canAddExtract = user_has_permission(context["discussion"].id, user_id, P_ADD_EXTRACT)
+    context['canAddExtract'] = canAddExtract
+    context['canDisplayTabs'] = True
     return render_to_response('../../templates/index.jinja2', context, request=request)
 
 @view_config(route_name='home_idea', request_method='GET', http_cache=60)

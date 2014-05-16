@@ -1,8 +1,5 @@
-import json
 from datetime import datetime
-
 from pyramid.i18n import get_localizer, TranslationStringFactory
-
 from pyramid.view import view_config
 from pyramid.renderers import render_to_response
 from pyramid.security import (
@@ -16,24 +13,29 @@ from pyramid.httpexceptions import (
     HTTPNotFound,
     HTTPServerError)
 from pyramid.settings import asbool
-
 from sqlalchemy import desc
-from sqlalchemy.orm.exc import NoResultFound
 import transaction
-
 from velruse import login_url
 
-from ...auth.models import (
+from assembl.models import (
     EmailAccount, IdentityProvider, IdentityProviderAccount,
     AgentProfile, User, Username)
-from ...auth.password import format_token
-from ...auth.operations import (
+from assembl.auth.password import format_token
+from assembl.auth.operations import (
     get_identity_provider, send_confirmation_email, verify_email_token)
 from ...lib import config
 from .. import get_default_context
 
 _ = TranslationStringFactory('assembl')
 
+
+def get_login_context(request):
+    return dict(get_default_context(request), **{
+        'login_url': login_url,
+        'providers': request.registry.settings['login_providers'],
+        'google_consumer_key': request.registry.settings.get('google.consumer_key', ''),
+        'next_view': request.params.get('next_view', '/')
+    })
 
 @view_config(
     route_name='logout',
@@ -61,12 +63,7 @@ def logout(request):
 def login_view(request):
     # TODO: In case of forbidden, get the URL and pass it along.
     localizer = get_localizer(request)
-    return dict(get_default_context(request), **{
-        'login_url': login_url,
-        'providers': request.registry.settings['login_providers'],
-        'google_consumer_key': request.registry.settings.get('google.consumer_key', ''),
-        'next_view': request.params.get('next_view', '/')
-    })
+    return get_login_context(request)
 
 
 def get_profile(request):
@@ -131,7 +128,14 @@ def assembl_profile(request):
             if session.query(Username).filter_by(username=username).count():
                 errors.append(localizer.translate(_('The username %s is already used')) % (username,))
             else:
+                old_username = profile.username
+                # free existing username
+                session.delete(old_username)
+                session.flush()
+                # add new username
                 session.add(Username(username=username, user=profile))
+
+
                 if id_type == 'u':
                     redirect = True
         name = request.params.get('name', '').strip()
@@ -260,7 +264,7 @@ def assembl_login_complete_view(request):
             if not account.verified:
                 resend_url = request.route_url('confirm_user_email',
                                                email_account_id=account.id)
-                return dict(get_default_context(request),
+                return dict(get_login_context(request),
                     error=localizer.translate(_("This account was not verified yet")),
                     resend_url=resend_url)
     else:
@@ -269,7 +273,7 @@ def assembl_login_complete_view(request):
             user = username.user
 
     if not user:
-        return dict(get_default_context(request),
+        return dict(get_login_context(request),
                     error=localizer.translate(_("This user cannot be found")))
     if logged_in:
         if user.id != logged_in:
@@ -284,7 +288,7 @@ def assembl_login_complete_view(request):
         #TODO: handle high failure count
         session.add(user)
         transaction.commit()
-        return dict(get_default_context(request),
+        return dict(get_login_context(request),
                     error=localizer.translate(_("Invalid user and password")))
     headers = remember(request, user.id, tokens=format_token(user))
     request.response.headerlist.extend(headers)
@@ -299,7 +303,7 @@ def velruse_login_complete_view(request):
     context = request.context
     velruse_profile = context.profile
     logged_in = authenticated_userid(request)
-    provider = get_identity_provider(context)
+    provider = get_identity_provider(request)
     # find or create IDP_Accounts
     idp_accounts = []
     new_idp_accounts = []
@@ -510,7 +514,7 @@ def user_confirm_email(request):
 )
 def login_denied_view(request):
     localizer = get_localizer(request)
-    return dict(get_default_context(request),
+    return dict(get_login_context(request),
                 error=localizer.translate(_('Login failed, try again')))
     # TODO: If logged in otherwise, go to profile page. 
     # Otherwise, back to login page

@@ -62,7 +62,7 @@ function(Backbone, _, $, Idea, app){
             message_body_field = this.$('.messageSend-body'),
             message_body = message_body_field.val(),
             message_subject_field = this.$('.topic-subject .formfield'),
-            message_subject = message_subject_field.val(),
+            message_subject = message_subject_field.val() || this.options.default_subject,
             reply_idea_id = null,
             reply_message_id = null,
             success_callback = null;

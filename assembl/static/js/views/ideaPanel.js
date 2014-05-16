@@ -36,9 +36,21 @@ function(Backbone, _, Idea, Message, app, i18n, Types, EditableField, CKEditorFi
 
             this.idea.on('change', this.render, this);
 
+            // Benoitg - 2014-05-05:  There is no need for this, if an idealink
+            // is associated with the idea, the idea will recieve a change event
+            // on the socket
+            //app.segmentList.segments.on('change reset', this.render, this);
+            app.users.on('reset', this.render, this);
+            
             var that = this;
             app.on('idea:select', function(idea){
                 that.setCurrentIdea(idea);
+                if(idea) {
+                    $('#button-ideaPanel').show();
+                }
+                else {
+                    $('#button-ideaPanel').hide();
+                }
             });
         },
 
@@ -46,18 +58,24 @@ function(Backbone, _, Idea, Message, app, i18n, Types, EditableField, CKEditorFi
          * The render
          */
         render: function(){
+            if(app.debugRender) {
+                console.log("ideaPanel:render() is firing");
+            }
             app.trigger('render');
 
             var segments = this.idea.getSegments(),
                 currentUser = app.getCurrentUser(),
                 editing = currentUser.can(Permissions.EDIT_IDEA) && this.idea.get('ideaPanel-editing') || false;
-
             this.$el.html( this.template( {
                 idea:this.idea,
                 segments:segments,
                 editing:editing,
+                i18n:i18n,
+                sprintf:sprintf,
                 canDelete:currentUser.can(Permissions.EDIT_IDEA),
-                canUnlinkSegments:currentUser.can(Permissions.EDIT_EXTRACT)||currentUser.can(Permissions.EDIT_MY_EXTRACT)
+                canEditExtracts:currentUser.can(Permissions.EDIT_EXTRACT),
+                canEditMyExtracts:currentUser.can(Permissions.EDIT_MY_EXTRACT),
+                canAddExtracts:currentUser.can(Permissions.EDIT_EXTRACT) //TODO: This is a bit too coarse
             } ) );
             this.panel = this.$('.panel');
 
@@ -235,7 +253,8 @@ function(Backbone, _, Idea, Message, app, i18n, Types, EditableField, CKEditorFi
          * @event
          */
         onDragStart: function(ev){
-            if( app.segmentList && app.segmentList.segments ){
+            //TODO: Deal with editing own extract (EDIT_MY_EXTRACT)
+            if( app.segmentList && app.segmentList.segments && app.getCurrentUser().can(Permissions.EDIT_EXTRACT)){
                 ev.currentTarget.style.opacity = 0.4;
 
                 var cid = ev.currentTarget.getAttribute('data-segmentid'),

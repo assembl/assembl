@@ -60,8 +60,8 @@
         "ancestry": false,
         "parentId": "parent",
         "idCreator": "creator",
-        "subject": true,
-        "body": true,
+        "subject": "&get_title",
+        "body": "&get_body",
         "extracts": [":partial"]
     },
     "AssemblPost": {
@@ -71,8 +71,8 @@
         "ancestry": false,
         "parentId": "parent",
         "idCreator": "creator",
-        "subject": true,
-        "body": true,
+        "subject": "&get_title",
+        "body": "&get_body",
         "extracts": [":partial"]
     },
     "SynthesisPost": {
@@ -81,9 +81,10 @@
         "discussion": true,
         "ancestry": false,
         "parentId": "parent",
+        "publishes_synthesis": true,
         "idCreator": "creator",
-        "subject": true,
-        "body": true
+        "subject": "&get_title",
+        "body": "&get_body"
     },
     "ImportedPost": {
         "date": "creation_date",
@@ -92,8 +93,8 @@
         "ancestry": false,
         "parentId": "parent",
         "idCreator": "creator",
-        "subject": true,
-        "body": true,
+        "subject": "&get_title",
+        "body": "&get_body",
         "import_date": false,
         "source": true,
         "extracts": [":partial"]
@@ -106,7 +107,7 @@
         "url": true,
         "extracts": [":partial"]
     },
-    "Mailbox": {
+    "IMAPMailbox": {
         "discussion_id": "discussion",
         "name": true,
         "creation_date": true,
@@ -148,8 +149,8 @@
         "ancestry": false,
         "parentId": "parent",
         "idCreator": "creator",
-        "subject": true,
-        "body": true,
+        "subject": "&get_title",
+        "body": "&get_body",
         "import_date": false,
         "source": true,
         "recipients": true,
@@ -178,7 +179,8 @@
         "inNextSynthesis": "&is_in_next_synthesis",
         "numChildIdea": "&get_num_children",
         "num_posts": true,
-        "num_read_posts": true
+        "num_read_posts": true,
+        "widget_add_post_endpoint": true
     },
     "RootIdea": {
         "root": "'true",
@@ -215,7 +217,7 @@
     "TableOfContents": {
         "creation_date": true,
         "discussion": false,
-        "ideas": [":partial"],
+        "ideas": ["&get_ideas:partial"],
         "idea_links": ["&get_idea_links:partial"]
     },
     "Synthesis": {
@@ -224,7 +226,8 @@
         "subject": true,
         "introduction": true,
         "conclusion": true,
-        "ideas": [":partial"],
+        "is_next_synthesis": true,
+        "ideas": [":id_only"],
         "idea_links": [":partial"]
     },
     "IdeaContentLink": {
@@ -286,5 +289,14 @@
     "ViewPost": {
         "actor": true,
         "post": true
+    },
+    "Widget": {
+        "discussion": true,
+        "main_idea_view": "&get_idea_view",
+        "settings": "settings_json",
+        "state": "state_json",
+        "ideas_uri": "&get_ideas_uri",
+        "messages_uri": "&get_messages_uri",
+        "@type": "widget_type"
     }
 }

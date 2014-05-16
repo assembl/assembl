@@ -79,8 +79,11 @@ def reloadapp():
         venvcmd("supervisorctl restart celery_imap changes_router")
         if env.uses_uwsgi:
             venvcmd("supervisorctl restart prod:uwsgi")
+    """ This will log everyone out, hopefully the code is now resilient enough
+    that it isn't necessary
     if env.uses_memcache:
         flushmemcache()
+    """
 
 
 def venvcmd(cmd, shell=True, user=None, pty=False):
@@ -174,9 +177,13 @@ def compile_stylesheets():
     """
     Generate *.css files from *.scss
     """
+    execute(update_compass)
     with cd(env.projectpath):
         run('bundle exec compass compile --force', shell=True)
-            
+        with cd('assembl/widget/creativity/app'):
+            run('bundle exec compass compile --force --sass-dir scss --css-dir css', shell=True)
+
+
 def tests():
     """
     Run all tests on remote
@@ -202,9 +209,17 @@ def bootstrap_from_checkout():
     """
     Create the virtualenv and install the app
     """
-    execute(build_virtualenv)
-    execute(install_rbenv)
     execute(updatemaincode)
+    execute(build_virtualenv)
+    execute(setup_in_venv)
+
+@task
+def setup_in_venv():
+    """
+    Setup the virtualenv (dependencies, ruby, etc.) and compile and install 
+    assembl
+    """
+    execute(configure_rbenv)
     execute(app_update_dependencies)
     execute(app_setup)
 
@@ -237,7 +252,7 @@ def updatemaincode():
         run('git pull %s %s' % (env.gitrepo, env.gitbranch))
 
 def app_setup():
-     venvcmd('pip install -Iv "pip>=1.5.1"')
+     venvcmd('pip install -U "pip>=1.5.1"')
      venvcmd('pip install -e ./')
      venvcmd('export VIRTUOSO_ROOT=%s ; assembl-ini-files %s' % (
         env.use_virtuoso, env.ini_file))
@@ -416,26 +431,31 @@ def update_bower():
         run('npm update bower')
 
 
-def bower_cmd(cmd):
-    node_cmd = run('which nodejs', warn_only=True)
+def bower_cmd(cmd, relative_path='.'):
+    with settings(warn_only=True):
+        node_cmd = run('which nodejs')
     if node_cmd.failed:
         node_cmd = run('which node')
     with cd(env.projectpath):
-        bower_cmd = 'node_modules/bower/bin/bower'
+        bower_cmd = os.path.abspath(os.path.join(
+            env.projectpath, 'node_modules', 'bower', 'bin', 'bower'))
         if not exists(bower_cmd):
             print "Bower not present, installing..."
             execute(install_bower)
-        run(' '.join((node_cmd, bower_cmd, cmd)))
+        with cd(relative_path):
+            run(' '.join((node_cmd, bower_cmd, cmd)))
 
 
 @task
 def bower_install():
     bower_cmd('install')
+    bower_cmd('install', 'assembl/widget/creativity')
 
 
 @task
 def bower_update():
     bower_cmd('update')
+    bower_cmd('update', 'assembl/widget/creativity')
 
 
 @task
@@ -448,75 +468,97 @@ def install_builddeps():
     if env.mac:
         if not exists('/usr/local/bin/brew'):
             sudo('ruby -e "$(curl -fsSL https://raw.github.com/mxcl/homebrew/go/install)"')
-        sudo('brew install memcached zeromq redis')
-        sudo('brew install nodejs npm')
+        run('brew install memcached zeromq redis')
+        if not exists('/usr/local/bin/node'):
+            run('brew install nodejs npm')
     else:
         sudo('apt-get install -y build-essential python-dev ruby-builder')
         sudo('apt-get install -y nodejs npm')
         #For specific python packages in requirements.txt
-        sudo('apt-get install -y libmemcached-dev libzmq3-dev')
-        # libjpeg62-dev libpng12-dev zlib1g-dev libfreetype6-dev liblcms-dev libpq-dev libxslt1-dev libxml2-dev
+        sudo('apt-get install -y libmemcached-dev libzmq3-dev libxslt1-dev')
+
         #Runtime requirements (even in develop)
         sudo('apt-get install -y redis-server memcached unixodbc-dev virtuoso-opensource')
-    execute(install_bower)
-
 
 @task
 def configure_rbenv():
+    execute(install_rbenv)
     with cd(env.projectpath), settings(warn_only=True):
-        if(run('rbenv local 2.0.0-p247').failed):
-            # Install Ruby 2.0.0-p247:
-            run('rbenv install 2.0.0-p247')
-            # Rehash:
-            run('rbenv rehash')
-        if(run('bundle --version').failed):
-            #install bundler
-            run('gem install bundler')
-            run('rbenv rehash')
-        
-@task
-def install_ruby_build():
+        rbenv_local = run('rbenv local %(ruby_version)s' % env)
+    if(rbenv_local.failed):
+        execute(install_ruby_build)
+        # Install Ruby specified in env.ruby_version:
+        run('rbenv install %(ruby_version)s' % env)
+        # Rehash:
+        run('rbenv rehash')
+        run('rbenv local %(ruby_version)s' % env)
     with settings(warn_only=True):
-        if(run('ruby-build --help').failed):
-            # Install ruby-build:
-            with cd('/tmp'):
-                run('git clone git://github.com/sstephenson/ruby-build.git')
-            with cd('/tmp/ruby-build'):
-                sudo('./install.sh')
+        bundle_version = run('bundle --version')
+    if(bundle_version.failed):
+        #install bundler
+        run('gem install bundler')
+        run('rbenv rehash')
+
+def install_ruby_build():
+    version_regex = re.compile('^ruby-build\s*(\S*)')
+    install = False
+
+    with settings(warn_only=True):
+        run_output = run('ruby-build --version')
+    if not run_output.failed:
+        match = version_regex.match(run_output)
+        version = float(match.group(1))
+        
+        if version < env.ruby_build_min_version:
+            print(red("ruby-build %s is too old (%s is required), reinstalling..." % (version, env.ruby_build_min_version)))
+            install = True
+        else:
+            print(green("ruby-build version %s is recent enough (%s is required)" % (version, env.ruby_build_min_version)))
+    else:
+        print(red("ruby-build is not installed, installing..."))
+        install = True
+        
+    if install:
+        # Install ruby-build:
+        run('rm -rf /tmp/ruby-build')
+        with cd('/tmp'):
+            run('git clone https://github.com/sstephenson/ruby-build.git')
+        with cd('/tmp/ruby-build'):
+            sudo('./install.sh')
 
 @task
 def install_rbenv():
     """
     Install the appropriate ruby environment for compass.
     """
-    with cd(env.projectpath), settings(warn_only=True):
-        if(run('rbenv version').failed and run('ls ~/.rbenv').failed):    
+    with settings(warn_only=True):
+        rbenv_failed = run('rbenv version').failed
+    if rbenv_failed:
+        with settings(warn_only=True):
+            rbenv_missing = run('ls ~/.rbenv').failed
+        if rbenv_missing:
             # Install rbenv:
-            run('git clone git://github.com/sstephenson/rbenv.git ~/.rbenv')
-    # Add rbenv to the path:
-    run('echo \'export PATH="$HOME/.rbenv/bin:$PATH"\' >> .bash_profile')
-    run('echo \'eval "$(rbenv init -)"\' >> .bash_profile')
-    run('source ~/.bash_profile')
-    # The above will work fine on a shell (such as on the server accessed using
-    # ssh for a developement machine running a GUI, you may need to run the 
-    # following from a shell (with your local user):
-    #    echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.profile;
-    #    echo 'eval "$(rbenv init -)"' >> ~/.profile;
-    #    source ~/.profile;
-    
-    run('echo \'export PATH="$HOME/.rbenv/bin:$PATH"\' >> .profile')
-    run('echo \'eval "$(rbenv init -)"\' >> .profile')
-    run('source ~/.profile')
-    
-    execute(install_ruby_build)
-    execute(configure_rbenv)
+            run('git clone https://github.com/sstephenson/rbenv.git ~/.rbenv')
+        # Add rbenv to the path:
+        run('echo \'export PATH="$HOME/.rbenv/bin:$PATH"\' >> .bash_profile')
+        run('echo \'eval "$(rbenv init -)"\' >> .bash_profile')
+        run('source ~/.bash_profile')
+        # The above will work fine on a shell (such as on the server accessed using
+        # ssh for a developement machine running a GUI, you may need to run the 
+        # following from a shell (with your local user):
+        #    echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.profile;
+        #    echo 'eval "$(rbenv init -)"' >> ~/.profile;
+        #    source ~/.profile;
+        
+        run('echo \'export PATH="$HOME/.rbenv/bin:$PATH"\' >> .profile')
+        run('echo \'eval "$(rbenv init -)"\' >> .profile')
+        run('source ~/.profile')
 
 @task
 def install_compass():
     """
     (Re)Install compass, deleting current version 
     """
-    execute(configure_rbenv)
     with cd(env.projectpath):
         run('rm -rf vendor/bundle')
         execute(update_compass)
@@ -528,6 +570,44 @@ def update_compass():
     execute(configure_rbenv)
     with cd(env.projectpath):
         run('bundle install --path=vendor/bundle')
+
+
+@task
+def compile_fontello_fonts():
+    from zipfile import ZipFile
+    from StringIO import StringIO
+    try:
+        import requests
+    except ImportError:
+        raise RuntimeError(
+            "Please 'pip install requests' in your main environment")
+    font_dir = os.path.join(
+        env.projectpath, 'assembl', 'static', 'font', 'icon')
+    config_file = os.path.join(font_dir, 'config.json')
+    id_file = os.path.join(font_dir, 'fontello.id')
+    if (not os.path.exists(id_file) or
+            os.path.getmtime(id_file)>os.path.getmtime(config_file)):
+        r=requests.post("http://fontello.com",
+                        files={'config': open(config_file)})
+        if not r.ok:
+            raise RuntimeError("Could not get the ID")
+        fid = r.text
+        with open(id_file, 'w') as f:
+            f.write(fid)
+    else:
+        with open(id_file) as f:
+            fid = f.read()
+    r = requests.get("http://fontello.com/%s/get" % fid)
+    if not r.ok:
+        raise RuntimeError("Could not get the data")
+    with ZipFile(StringIO(r.content)) as data:
+        for name in data.namelist():
+            dirname, fname = os.path.split(name)
+            dirname, subdir = os.path.split(dirname)
+            if fname and subdir == 'font':
+                with data.open(name) as fdata:
+                    with open(os.path.join(font_dir, fname), 'wb') as ffile:
+                        ffile.write(fdata.read())
 
 def database_create():
     """
@@ -559,7 +639,8 @@ def database_dump():
         exit()
     backup_file_path = os.path.join(virtuoso_db_directory(), backup_output)
     #Move to dbdumps_dir
-    move_result = run('mv %s %s' % (backup_file_path, absolute_path), warn_only=True)
+    with settings(warn_only=True):
+        move_result = run('mv %s %s' % (backup_file_path, absolute_path))
     if move_result.failed:
         print(red('Virtuoso backup did not error, but unable to move the file from %s to %s.\nYou may need to clear the file %s manually or your next backup will fail.' % (backup_file_path, absolute_path, backup_file_path)))
         exit()
@@ -603,8 +684,8 @@ def database_restore():
     with prefix(venv_prefix()), cd(virtuoso_db_directory()):
         venvcmd("supervisorctl stop virtuoso")
     # Drop db
-    with cd(virtuoso_db_directory()):
-        run('rm *.db *.trx', warn_only=True)
+    with cd(virtuoso_db_directory()), settings(warn_only=True):
+        run('rm *.db *.trx')
 
     # Make symlink to latest
     #this MUST match the code in db_manage or virtuoso will refuse to restore
@@ -647,8 +728,7 @@ def commonenv(projectpath, venvpath=None):
     env.db_host = 'localhost'
     env.dbdumps_dir = os.path.join(projectpath, '%s_dumps' % env.projectname)
     env.ini_file = 'production.ini'
-    #env.gitrepo = "ssh://webapp@i4p-dev.imaginationforpeople.org/var/repositories/imaginationforpeople.git"
-    env.gitrepo = "git://github.com/ImaginationForPeople/assembl.git"
+    env.gitrepo = "https://github.com/ImaginationForPeople/assembl.git"
     env.gitbranch = "master"
 
     env.uses_memcache = True
@@ -659,6 +739,14 @@ def commonenv(projectpath, venvpath=None):
     env.uses_global_supervisor = False
     env.mac = system().startswith('Darwin')
     env.use_virtuoso = getenv('VIRTUOSO_ROOT', '/usr/local/virtuoso-opensource' if env.mac else '/usr')
+
+    #Minimal dependencies versions
+    
+    #Note to maintainers:  If you upgrade ruby, make sure you check that the 
+    # ruby_build version below supports it...
+    env.ruby_version = "2.0.0-p247"
+    env.ruby_build_min_version = 20130628
+
 # Specific environments 
 
 
@@ -702,7 +790,7 @@ def caravan_stagenv():
     env.gitbranch = "develop"
 
 
-@task    
+@task
 def coeus_stagenv():
     """
     [ENVIRONMENT] Staging
@@ -785,7 +873,8 @@ def flushmemcache():
     """
     if env.uses_memcache:
         print(cyan('Resetting all data in memcached :'))
-        run('echo "flush_all" | /bin/netcat -q 2 127.0.0.1 11211')
+        wait_str = "" if env.mac else "-q 2"
+        run('echo "flush_all" | nc %s 127.0.0.1 11211' % wait_str)
 
 
 #THE FOLLOWING COMMANDS HAVEN'T BEEN PORTED YET

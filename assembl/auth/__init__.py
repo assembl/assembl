@@ -1,182 +1,44 @@
-from sqlalchemy.sql.expression import and_
-
 from pyramid.security import (
-    authenticated_userid, Everyone, Authenticated)
-from pyramid.httpexceptions import HTTPNotFound
-from models import (
-    User, R_PARTICIPANT, R_CATCHER, R_MODERATOR, R_ADMINISTRATOR,
-    P_READ, P_ADD_POST, P_EDIT_POST, P_ADD_EXTRACT,
-    P_EDIT_EXTRACT, P_EDIT_MY_EXTRACT, P_ADD_IDEA, P_EDIT_IDEA,
-    P_EDIT_SYNTHESIS, P_SEND_SYNTHESIS, P_ADMIN_DISC, P_SYSADMIN,
-    R_SYSADMIN, SYSTEM_ROLES, Role, UserRole, LocalUserRole, Permission,
-    DiscussionPermission
-)
-from ..lib.sqla import get_session_maker
+    Everyone, Authenticated, ALL_PERMISSIONS)
 
+# Roles
+R_PARTICIPANT = 'r:participant'
+R_CATCHER = 'r:catcher'
+R_MODERATOR = 'r:moderator'
+R_ADMINISTRATOR = 'r:administrator'
+R_SYSADMIN = 'r:sysadmin'
 
-def get_user(request):
-    logged_in = authenticated_userid(request)
-    if logged_in:
-        return User.get(id=logged_in)
+SYSTEM_ROLES = set(
+    (Everyone, Authenticated, R_PARTICIPANT, R_CATCHER,
+     R_MODERATOR, R_ADMINISTRATOR, R_SYSADMIN))
 
+# Permissions
+P_READ = 'read'
+P_ADD_POST = 'add_post'
+P_EDIT_POST = 'edit_post'
+P_ADD_EXTRACT = 'add_extract'
+P_EDIT_EXTRACT = 'edit_extract'
+P_EDIT_MY_EXTRACT = 'edit_my_extract'
+P_ADD_IDEA = 'add_idea'
+P_EDIT_IDEA = 'edit_idea'
+P_EDIT_SYNTHESIS = 'edit_synthesis'
+P_SEND_SYNTHESIS = 'send_synthesis'
+P_ADMIN_DISC = 'admin_discussion'
+P_SYSADMIN = 'sysadmin'
 
-def get_roles(user_id, discussion_id=None):
-    session = get_session_maker()()
-    roles = session.query(Role).join(UserRole).filter(
-        UserRole.user_id == user_id)
-    if discussion_id:
-        roles = roles.union(
-            session.query(Role).join(
-                LocalUserRole).filter(and_(
-                    LocalUserRole.user_id == user_id,
-                    LocalUserRole.discussion_id == discussion_id)))
-    roles = session.query(Role.name).select_from(roles.subquery()).distinct()
-    return [x[0] for x in roles]
+ASSEMBL_PERMISSIONS = set((
+    P_READ, P_ADD_POST, P_EDIT_POST, P_ADD_EXTRACT, P_EDIT_EXTRACT,
+    P_EDIT_MY_EXTRACT, P_ADD_IDEA, P_EDIT_IDEA, P_EDIT_SYNTHESIS,
+    P_SEND_SYNTHESIS, P_ADMIN_DISC, P_SYSADMIN))
 
-""" TODO: maparent:  Explain how this is different from permissions_for_user """
-def get_permissions(user_id, discussion_id):
-    session = get_session_maker()()
-    if user_id in (Everyone, Authenticated):
-        permissions = session.query(Permission.name).join(
-            DiscussionPermission, Role).filter(
-                Role.name == user_id)
-    else:
-        sysadmin = session.query(UserRole).filter_by(
-            user_id=user_id).join(Role).filter_by(name=R_SYSADMIN).first()
-        if sysadmin:
-            return [x[0] for x in session.query(Permission.name).all()]
-        permissions = session.query(Permission.name).join(
-            DiscussionPermission, Role, UserRole).filter(
-                UserRole.user_id == user_id
-            ).union(session.query(Permission.name).join(
-                DiscussionPermission, Role, LocalUserRole).filter(and_(
-                    LocalUserRole.user_id == user_id,
-                    LocalUserRole.discussion_id == discussion_id))
-            ).union(session.query(Permission.name).join(
-                DiscussionPermission, Role).filter(and_(
-                    DiscussionPermission.discussion_id == discussion_id,
-                    Role.name.in_((Authenticated, Everyone)))))
-    return [x[0] for x in permissions.distinct()]
-
-
-def authentication_callback(user_id, request):
-    from ..synthesis.models import Discussion
-    discussion_id = None
-    connection = Discussion.db().connection()
-    connection.info['userid'] = user_id
-    if request.matchdict:
-        if 'discussion_id' in request.matchdict:
-            discussion_id = int(request.matchdict['discussion_id'])
-            discussion = Discussion.get_instance(discussion_id)
-            if not discussion:
-                raise HTTPNotFound("No discussion ID %d" % (discussion_id,))
-        elif 'discussion_slug' in request.matchdict:
-            slug = request.matchdict['discussion_slug']
-            session = get_session_maker()()
-            discussion = session.query(Discussion).filter_by(
-                slug=slug).first()
-            if not discussion:
-                raise HTTPNotFound("No discussion named %s" % (slug,))
-            discussion_id = discussion.id
-    return get_roles(user_id, discussion_id)
-
-
-def discussions_with_access(userid, permission=P_READ):
-    from ..synthesis.models import Discussion
-    db = Discussion.db()
-    if userid in (Authenticated, Everyone):
-        return db.query(Discussion).join(
-            DiscussionPermission, Role, Permission).filter(and_(
-                Permission.name == permission,
-                Role.name == userid))
-    else:
-        sysadmin = db.query(UserRole).filter_by(
-            user_id=userid).join(Role).filter_by(name=R_SYSADMIN).first()
-        if sysadmin:
-            return db.query(Discussion).all()
-
-        perms = db.query(DiscussionPermission).join(
-            Role, Permission, UserRole, User).filter(
-                User.id == userid).filter(
-                    Permission.name == permission
-                ).union(db.query(DiscussionPermission).join(
-                    Role, Permission).join(
-                        LocalUserRole, (
-                            LocalUserRole.discussion_id == DiscussionPermission.discussion_id)
-                    ).join(User).filter(
-                        User.id == userid).filter(
-                            Permission.name == permission)
-                ).union(db.query(DiscussionPermission).join(
-                    Role, Permission).filter(
-                        Role.name.in_((Authenticated, Everyone))).filter(
-                            Permission.name == permission)
-                )
-        return db.query(Discussion).join(perms.subquery('perms'))
-
-
-def user_has_permission(discussion_id, user_id, permission):
-    from ..synthesis.models import Discussion
-    # assume all ids valid
-    db = Discussion.db()
-    if user_id in (Authenticated, Everyone):
-        permission = db.query(DiscussionPermission).join(
-            Permission, Role).filter(
-                DiscussionPermission.discussion_id == discussion_id).filter(
-                    Role.name == user_id).filter(
-                        Permission.name == permission).first()
-        return permission is not None
-    sysadmin = db.query(UserRole).filter_by(
-        user_id=user_id).join(Role).filter_by(name=R_SYSADMIN).first()
-    if sysadmin:
-        return True
-    permission = db.query(DiscussionPermission).join(
-        Permission, Role, UserRole).filter(
-            DiscussionPermission.discussion_id == discussion_id).filter(
-                UserRole.user_id == user_id).filter(
-                    Permission.name == permission
-                ).union(
-                    db.query(DiscussionPermission).join(
-                        Permission, Role, LocalUserRole).filter(
-                            DiscussionPermission.discussion_id == discussion_id
-                        ).filter(LocalUserRole.user_id == user_id).filter(
-                            Permission.name == permission)
-                ).union(
-                    db.query(DiscussionPermission).join(
-                            Permission, Role).filter(
-                                DiscussionPermission.discussion_id == discussion_id).filter(
-                                    Role.name.in_((Authenticated, Everyone))).filter(
-                                        Permission.name == permission)
-                ).first()
-    return permission is not None
-
-
-def permissions_for_user(discussion_id, user_id):
-    from ..synthesis.models import Discussion
-    # assume all ids valid
-    db = Discussion.db()
-    if user_id in (Authenticated, Everyone):
-        permissions = db.query(Permission.name).join(
-            DiscussionPermission, Role).filter(
-                DiscussionPermission.discussion_id == discussion_id).filter(
-                    Role.name == user_id)
-        return [x[0] for x in permissions]
-    sysadmin = db.query(UserRole).filter_by(
-        user_id=user_id).join(Role).filter_by(name=R_SYSADMIN).first()
-    if sysadmin:
-        return [x[0] for x in db.query(Permission.name).all()]
-    permissions = db.query(Permission.name).join(
-        DiscussionPermission, Role, UserRole).filter(
-            DiscussionPermission.discussion_id == discussion_id).filter(
-                UserRole.user_id == user_id
-        ).union(
-            db.query(Permission.name).join(
-                DiscussionPermission, Role, LocalUserRole).filter(
-                    DiscussionPermission.discussion_id == discussion_id
-                ).filter(LocalUserRole.user_id == user_id)
-        ).union(
-            db.query(Permission.name).join(
-                DiscussionPermission, Role).filter(and_(
-                    DiscussionPermission.discussion_id == discussion_id,
-                    Role.name.in_((Authenticated, Everyone))))
-        )
-    return [x[0] for x in permissions]
+class CrudPermissions(object):
+    __slots__=('create', 'read', 'update', 'delete',
+               'update_owned', 'delete_owned')
+    def __init__(self, create=None, read=None, update=None, delete=None,
+                 update_owned=None, delete_owned=None):
+        self.create = create or P_SYSADMIN
+        self.read = read or P_READ
+        self.update = update or create or P_SYSADMIN
+        self.delete = delete or P_SYSADMIN
+        self.update_owned = update_owned or self.update
+        self.delete_owned = delete_owned or self.delete

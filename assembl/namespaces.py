@@ -6,11 +6,12 @@ from virtuoso.vmapping import VirtRDF
 
 SIOC = Namespace('http://rdfs.org/sioc/ns#')
 OA = Namespace('http://www.openannotation.org/ns/')
+CATALYST = Namespace('http://purl.org/catalyst/core#')
 IDEA = Namespace('http://purl.org/catalyst/idea#')
 IBIS = Namespace('http://purl.org/catalyst/ibis#')
 VOTE = Namespace('http://purl.org/catalyst/vote#')
-ASSEMBL = Namespace('http://purl.org/assembl/core#')
 VERSION = Namespace('http://purl.org/catalyst/version#')
+ASSEMBL = Namespace('http://purl.org/assembl/core#')
 QUADNAMES = Namespace('http://purl.org/assembl/quadnames/')
 # PDOA = Namespace('http://purl.org/pundit/ont/ao#')
 # PDAO = Namespace('http://purl.org/pundit/ont/oa#')

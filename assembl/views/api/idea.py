@@ -7,22 +7,21 @@ from assembl.views.api import API_DISCUSSION_PREFIX
 from assembl.models import (
     get_named_object, get_database_id, Idea, RootIdea, IdeaLink, Discussion,
     Extract, SubGraphIdeaAssociation)
-from . import acls
 from assembl.auth import (P_READ, P_ADD_IDEA, P_EDIT_IDEA)
 from sqlalchemy import and_
 from sqlalchemy.orm import joinedload
 
 ideas = Service(name='ideas', path=API_DISCUSSION_PREFIX + '/ideas',
                 description="",
-                renderer='json', acl=acls)
+                renderer='json')
 
 idea = Service(name='idea', path=API_DISCUSSION_PREFIX + '/ideas/{id:.+}',
-               description="Manipulate a single idea", acl=acls)
+               description="Manipulate a single idea")
 
 idea_extracts = Service(
     name='idea_extracts',
     path=API_DISCUSSION_PREFIX + '/ideas_extracts/{id:.+}',
-    description="Get the extracts of a single idea", acl=acls)
+    description="Get the extracts of a single idea")
 
 
 # Create
@@ -127,10 +126,12 @@ def save_idea(request):
     if(idea.discussion_id != discussion.id):
         raise HTTPBadRequest(
             "Idea from discussion %s cannot saved from different discussion (%s)." % (idea.discussion_id,discussion.id ))
-
-    idea.short_title = idea_data['shortTitle']
-    idea.long_title = idea_data['longTitle']
-    idea.definition = idea_data['definition']
+    if 'shortTitle' in idea_data:
+        idea.short_title = idea_data['shortTitle']
+    if 'longTitle' in idea_data:
+        idea.long_title = idea_data['longTitle']
+    if 'definition' in idea_data:
+        idea.definition = idea_data['definition']
     
     if 'parentId' in idea_data and idea_data['parentId'] is not None:
         # TODO: Make sure this is sent as a list!
@@ -168,9 +169,11 @@ def save_idea(request):
     if idea_data['inNextSynthesis']:
         if idea not in next_synthesis.ideas:
             next_synthesis.ideas.append(idea)
+            next_synthesis.send_to_changes()
     else:
         if idea in next_synthesis.ideas:
             next_synthesis.ideas.remove(idea)
+            next_synthesis.send_to_changes()
     idea.send_to_changes()
 
     return {'ok': True, 'id': idea.uri() }

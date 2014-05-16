@@ -2,14 +2,16 @@
 
 from os import putenv
 from os.path import dirname, join
-import transaction
 
+import transaction
 from pyramid.config import Configurator
 from pyramid.authentication import SessionAuthenticationPolicy
 from pyramid.authorization import ACLAuthorizationPolicy
 from pyramid_beaker import session_factory_from_settings
 from pyramid.i18n import default_locale_negotiator
+
 from .lib.sqla import configure_engine
+
 
 # Do not import models here, it will break tests.
 
@@ -26,9 +28,10 @@ def main(global_config, **settings):
     # factory
     configure_engine(settings)
 
-    from views import root_factory
+    from views.traversal import root_factory
     config = Configurator(settings=settings, root_factory=root_factory)
     config.add_translation_dirs('assembl:locale/')
+
     def my_locale_negotiator(request):
         locale = default_locale_negotiator(request)
         available = settings['available_languages'].split()
@@ -44,26 +47,26 @@ def main(global_config, **settings):
         'assembl.tweens.virtuoso_deadlock.transient_deadlock_tween_factory',
         under="pyramid_tm.tm_tween_factory")
 
-
     config.include('.lib.zmqlib')
     session_factory = session_factory_from_settings(settings)
     config.set_session_factory(session_factory)
     if not settings.get('nosecurity', False):
         # import after session to delay loading of BaseOps
-        from auth import authentication_callback
+        from auth.util import authentication_callback
         auth_policy = SessionAuthenticationPolicy(
             callback=authentication_callback)
         config.set_authentication_policy(auth_policy)
         config.set_authorization_policy(ACLAuthorizationPolicy())
     # ensure default roles and permissions at startup
     from models import get_session_maker
-    from auth.models import (
+    from .models.auth import (
         populate_default_roles, populate_default_permissions)
     with transaction.manager:
         session = get_session_maker()
         populate_default_roles(session)
         populate_default_permissions(session)
     config.add_static_view('static', 'static', cache_max_age=3600)
+    config.add_static_view('widget', 'widget', cache_max_age=3600)
     config.include('cornice')  # REST services library.
     # config.include('.lib.alembic')
     # config.include('.lib.email')

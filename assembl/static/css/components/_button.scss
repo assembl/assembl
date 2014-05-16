@@ -1,7 +1,6 @@
 %button {
     @include no-selection;
-    border: solid 1px transparent;
-    border-radius: 4px;
+    //border: solid 1px transparent;
     cursor: pointer;
 
     display: inline-block;
@@ -119,10 +118,6 @@
     }
 }
 
-#assembl-mainbutton {
-    font-size: 22px;
-}
-
 // Active state
 // ************
 .iconbutton.is-activated {
@@ -216,15 +211,7 @@
 .barbutton {
     @extend %button;
     @include no-selection;
-
-    background-color: $bar-title-background-color;
-    border: solid 1px #a9a3c1;
-    color: #2f2f2f;
-    font-weight: bold;
     font-size: 14px;
-
-    padding: 10px 20px;
-    line-height: 1em;
 
     &:active {
         @extend .barbutton.is-activated;
@@ -234,6 +221,34 @@
 // Active state
 // =========================
 .barbutton.is-activated {
-    background-color: #aea8c7;
-    //@include box-shadow(inset #857cab 0px 0px 1px);
+    background-color: #ffffff;
+    color: black;
+}
+
+.btn-pink {
+  background-color: #c7c2dd;
+  display: inline-block;
+  margin-bottom: 0;
+  font-weight: 400;
+  text-align: center;
+  vertical-align: middle;
+  cursor: pointer;
+  background-image: none;
+  border: 1px solid transparent;
+  white-space: nowrap;
+  padding: 6px 12px;
+  font-size: 14px;
+  line-height: 1.42857143;
+  border-radius: 4px;
+  color: #fff;
+}
+
+.btn-purple {
+  &:hover{
+
+  }
+  &:active{
+
+  }
+
 }

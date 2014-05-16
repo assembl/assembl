@@ -1,17 +1,112 @@
 // Login box
 // =========
 .loginbox {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    @include transform( translate(-50%, -50%) );
+  @include box-sizing( border-box );
+  @include border-radius(6px);
+  margin: 5% auto 0 auto;
+  border: 1px solid rgba(0,0,0,0.1);
+  width: 700px;
+  background-color: #ffffff;
+  box-shadow:0 0 225px rgba(255,255,255,.55);
 
-    @include box-sizing( border-box );
-    width: 382px;
-    //height: 431px;
-    padding: $padding * 2;
+  form {
+    margin: 0 auto;
+    width: 330px;
+      a{
+        text-decoration: none;
+        color: #484848;
+        cursor: pointer;
+    }
+    input{
+      margin-bottom: 10px;
+    }
+  }
 
-    @include border-radius(10px);
-    background-color: #e0e2e5;
-    text-align: center;
+  .register {
+    width: 300px;
+  }
+
+  footer {
+    height: 80px;
+    color:#CCCCCC;
+    background-color: #484848;
+    border-bottom-left-radius: 6px;
+    border-bottom-right-radius: 6px;
+    p {
+      line-height: 80px;
+      text-align: center;
+    }
+    .caravan {
+      color:#ffffff;
+    }
+    .i4p {
+      color: #c7c2dd;
+    }
+  }
+
+  .login-box-title {
+    text-align: left;
+    font-size: 20px;
+    //margin-left: 160px;
+  }
+
+  .register-box-title {
+    padding-left: 175px;
+    font-size: 20px;
+  }
+
+  .defaultfield {
+    max-width: 290px;
+    width: 80%;
+  }
+
+  .signinWrapper, .signinSeparator, .socialPart {
+    display: inline-block;
+  }
+
+  .signinWrapper {
+    padding: 0 0 0 22px;
+    box-sizing: border-box;
+    float: left;
+  }
+
+  .socialPart {
+    width: 290px;
+  }
+
+  .signinSeparator {
+    margin: 20px 0 0 0;
+    width:20px;
+    position:relative;
+
+    .mask {
+      overflow:hidden;
+      width:20px;
+      height:200px;
+    }
+    &.left .mask:after {
+      content:'';
+      display:block;
+      margin-left:-20px;
+      width:20px;
+      height:100%;
+      border-radius:12px / 125px;
+      box-shadow:0 0 8px black;
+    }
+
+  }
+
+  .spacer--big {
+    clear: right;
+  }
+}
+
+.loginbox.register {
+   .login-box-title {
+     margin-left: 184px;
+   }
+}
+
+.loginbox.sign-in {
+
 }

@@ -1,5 +1,5 @@
-define(['backbone', 'underscore', 'jquery', 'models/idea', 'models/segment', 'app'],
-function(Backbone, _, $, Idea, Segment, app){
+define(['backbone', 'underscore', 'jquery', 'models/idea', 'models/segment', 'app', 'permissions'],
+function(Backbone, _, $, Idea, Segment, app, Permissions){
     'use strict';
 
     var IdeaView = Backbone.View.extend({
@@ -24,18 +24,15 @@ function(Backbone, _, $, Idea, Segment, app){
         /**
          * @init
          * @param {IdeaModel} obj the model
-         * @param {Array[boolean]} last_sibling_chain which of the view's ancestors
+         * @param {dict} view_data: data from the render visitor
          *   are the last child of their respective parents.
          */
-        initialize: function(obj, last_sibling_chain){
+        initialize: function(obj, view_data){
             if( _.isUndefined(this.model) ){
                 this.model = new Idea.Model();
             }
-            if ( _.isUndefined(last_sibling_chain)) {
-                last_sibling_chain = [true];
-            }
-            this.last_sibling_chain = last_sibling_chain;
-            this.model.on('change:shortTitle change:longTitle change:segments', this.render, this);
+            this.view_data = view_data;
+            this.model.on('change', this.render, this);
             this.model.on('change:isSelected', this.onIsSelectedChange, this);
             this.model.on('replaced', this.onReplaced, this);
         },
@@ -46,9 +43,13 @@ function(Backbone, _, $, Idea, Segment, app){
          */
         render: function(){
             app.trigger('render');
-
-            var data = this.model.toJSON(),
-                doc = document.createDocumentFragment();
+            var view_data = this.view_data;
+            var render_data = view_data[this.model.getId()];
+            if (render_data === undefined) {
+                return this;
+            }
+            var data = this.model.toJSON();
+            _.extend(data, render_data);
 
             this.$el.addClass('idealist-item');
 
@@ -64,45 +65,18 @@ function(Backbone, _, $, Idea, Segment, app){
                 data.longTitle = ' - ' + data.longTitle.substr(0, 50);
             }
 
-            data.children = this.model.getChildren();
-            data.level = this.model.getLevel();
             data.segments = this.model.getSegments();
             data.shortTitle = this.model.getShortTitleDisplayText();
-            data.last_sibling_chain = this.last_sibling_chain;
-
             this.$el.html(this.template(data));
-            this.$('.idealist-children').append( this.getRenderedChildren(data.level) );
+
+            var rendered_children = [];
+            _.each(data['children'], function(idea, i){
+                var ideaView = new IdeaView({model:idea}, view_data);
+                rendered_children.push( ideaView.render().el );
+            });
+            this.$('.idealist-children').append( rendered_children );
+
             return this;
-        },
-
-        /**
-         * Returns all children rendered
-         * @param {Number} parentLevel
-         * @return {HTMLDivElement[]}
-         */
-        getRenderedChildren: function(parentLevel){
-            var children = this.model.getChildren(),
-                num_last_child = children.length - 1,
-                chain_t = this.last_sibling_chain.slice(),
-                chain_f = this.last_sibling_chain.slice(),
-                last_chain_elem = this.last_sibling_chain.length,
-                ret = [];
-
-            children = _.sortBy(children, function(child){
-                return child.get('order');
-            });
-            chain_t.push(true);
-            chain_f.push(false);
-
-            _.each(children, function(idea, i){
-                idea.set('level', parentLevel + 1);
-                var chain = (i == num_last_child)?chain_t:chain_f;
-
-                var ideaView = new IdeaView({model:idea}, chain);
-                ret.push( ideaView.render().el );
-            });
-
-            return ret;
         },
 
         /**
@@ -187,13 +161,14 @@ function(Backbone, _, $, Idea, Segment, app){
             if( ev ){
                 ev.stopPropagation();
             }
+            if(app.getCurrentUser().can(Permissions.EDIT_IDEA)){
+                ev.currentTarget.style.opacity = 0.4;
+                ev.originalEvent.dataTransfer.effectAllowed = 'move';
+                ev.originalEvent.dataTransfer.dropEffect = 'all';
 
-            ev.currentTarget.style.opacity = 0.4;
-            ev.originalEvent.dataTransfer.effectAllowed = 'move';
-            ev.originalEvent.dataTransfer.dropEffect = 'all';
-
-            app.showDragbox(ev, this.model.get('shortTitle'));
-            app.draggedIdea = this.model;
+                app.showDragbox(ev, this.model.get('shortTitle'));
+                app.draggedIdea = this.model;
+            }
         },
 
         /**

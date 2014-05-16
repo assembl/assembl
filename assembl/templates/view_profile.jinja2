@@ -6,10 +6,10 @@
             <div class="bar-right">
                 <a> {{ gettext('Profile') }} <i class="icon-user"></i> </a>
             {% if locales.__len__ > 1 %}
-                <span class="locale active">{{locale}}</span>
+                    <a href="#" class="locale active">{{locale | upper}}</a>
                 {% for loc in locales %}
                     {% if (loc != locale) %}
-                        <span onmouseup="window.app.setLocale('{{loc}}')" class="locale">{{loc}}</span>
+                         <a href="#" class="lang" onmouseup="window.app.setLocale('{{loc}}')">{{loc | upper}}</a>
                     {% endif %}
                 {% endfor %}
             {% endif %}
@@ -60,12 +60,6 @@
         </ul>
         {% endif %}
 
-        <div class="text text-small text-muted">
-            {% set caravan = gettext("<a href='http://caravan.coop' class='link'>Caravan</a>") %}
-            {% set imaginationForPeople = gettext("<a href='http://http://imaginationforpeople.org/' class='link'>Imagination for people</a>") %}
-
-            {{ gettext("Designed by %(caravan)s and %(imaginationForPeople)s")|format(caravan=caravan, imaginationForPeople=imaginationForPeople)|safe }}
-        </div>
         </form>
     </div>
 

@@ -2,11 +2,8 @@
 // ==============
 .link {
     cursor: pointer;
-
-    color: $link-color;
+    color: #484848;
     text-decoration: none;
-
-
     &:hover {
         color: $link-hover-color;
     }

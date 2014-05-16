@@ -18,7 +18,7 @@ define(['app', 'i18n', 'sprintf'], function(app, i18n, sprintf){
                 span = '<span class="closebutton" data-filterid="'+filterDef.id+'" data-value="'+value+'"></span>\n';
                 valuesText.push('"' + idea.get('shortTitle') + '"' + span);
             }
-            retval += sprintf(i18n.pluralize({1:"Discuss idea %s",2:"Discuss ideas: %s"},valuesText.length), valuesText.join(i18n._(' AND ')));
+            retval += sprintf.sprintf(i18n.pluralize({1:"Discuss idea %s",2:"Discuss ideas: %s"},valuesText.length), valuesText.join(i18n.gettext(' AND ')));
             return retval;
         }
         this._returnHtmlDescriptionPostIsDescendentOfPost = function(filterDef, queryObjects) {
@@ -31,7 +31,7 @@ define(['app', 'i18n', 'sprintf'], function(app, i18n, sprintf){
                 span = '<span class="closebutton" data-filterid="'+filterDef.id+'" data-value="'+value+'"></span>\n';
                 valuesText.push('"' + post.get('subject') + '"' + span);
             }
-            retval += sprintf(i18n.pluralize({1:"Are in the conversation that follows post %s",2:"Are in the conversation that follows posts: %s"},valuesText.length), valuesText.join(i18n._(' AND ')));
+            retval += sprintf.sprintf(i18n.pluralize({1:"Are in the conversation that follows post %s",2:"Are in the conversation that follows posts: %s"},valuesText.length), valuesText.join(i18n.gettext(' AND ')));
             return retval;
         }
         this._returnHtmlDescriptionPostIsUnread = function(filterDef, queryObjects) {
@@ -40,10 +40,10 @@ define(['app', 'i18n', 'sprintf'], function(app, i18n, sprintf){
                 closeBtn = '<span class="closebutton" data-filterid="'+filterDef.id+'" data-value="'+value+'"></span>\n';
 
             if(queryObjects[0].value===true){
-                retval += sprintf(i18n._("%s %s"), "You haven't read yet", closeBtn);
+                retval += sprintf.sprintf(i18n.gettext("%s %s"), "You haven't read yet", closeBtn);
 
             }else {
-                retval += i18n._("You've already read");
+                retval += i18n.gettext("You've already read");
             }
 
             return retval;
@@ -55,15 +55,15 @@ define(['app', 'i18n', 'sprintf'], function(app, i18n, sprintf){
                 span = '<span class="closebutton" data-filterid="'+filterDef.id+'" data-value='+value+'></span>\n';
                 valuesText.push(span);
 
-                retval += sprintf(i18n._("%s %s"), filterDef.name, valuesText.join(', '));
+                retval += sprintf.sprintf(i18n.gettext("%s %s"), filterDef.name, valuesText.join(', '));
 
             return retval;
         }
         this.availableFilters = {
             POST_IS_IN_CONTEXT_OF_IDEA: {
                 id: 'post_in_context_of_idea',
-                name: i18n._('Idea'),
-                help_text:  i18n._('Only include messages related to the specified idea.  The filter is recursive:  Messages related to ideas that are descendents of the idea are included.'),
+                name: i18n.gettext('Idea'),
+                help_text:  i18n.gettext('Only include messages related to the specified idea.  The filter is recursive:  Messages related to ideas that are descendents of the idea are included.'),
                 _value_is_boolean: false,
                 _can_be_reversed: false,
                 _server_param: 'root_idea_id',
@@ -73,8 +73,8 @@ define(['app', 'i18n', 'sprintf'], function(app, i18n, sprintf){
 
             POST_IS_DESCENDENT_OF_POST: {
                 id: 'post_thread',
-                name: i18n._('Post thread'),
-                help_text:  i18n._('Only include messages that are in the specified post reply thread.'),
+                name: i18n.gettext('Post thread'),
+                help_text:  i18n.gettext('Only include messages that are in the specified post reply thread.'),
                 _value_is_boolean: false,
                 _can_be_reversed: false,
                 _server_param: 'root_post_id',
@@ -83,8 +83,8 @@ define(['app', 'i18n', 'sprintf'], function(app, i18n, sprintf){
             },
             POST_IS_ORPHAN: {
                 id: 'only_orphan_posts',
-                name: i18n._('Are orphan (not relevent to any idea so far)'),
-                help_text:  i18n._('Only include messages that are not found in any idea.'),
+                name: i18n.gettext('Are orphan (not relevent to any idea so far)'),
+                help_text:  i18n.gettext('Only include messages that are not found in any idea.'),
                 _value_is_boolean: true,
                 _can_be_reversed: false,
                 _server_param: 'only_orphan',
@@ -93,8 +93,8 @@ define(['app', 'i18n', 'sprintf'], function(app, i18n, sprintf){
             },
             POST_IS_SYNTHESIS: {
                 id: 'only_synthesis_posts',
-                name: i18n._('Publish a synthesis of the discussion'),
-                help_text:  i18n._('Only include messages that publish a synthesis of a discussion.'),
+                name: i18n.gettext('Publish a synthesis of the discussion'),
+                help_text:  i18n.gettext('Only include messages that publish a synthesis of a discussion.'),
                 _value_is_boolean: true,
                 _can_be_reversed: false,
                 _server_param: 'only_synthesis',
@@ -103,8 +103,8 @@ define(['app', 'i18n', 'sprintf'], function(app, i18n, sprintf){
             },
             POST_IS_UNREAD: {
                 id: 'is_unread_post',
-                name: i18n._('not read yet'),
-                help_text:  i18n._('Only include unread messages.'),
+                name: i18n.gettext('not read yet'),
+                help_text:  i18n.gettext('Only include unread messages.'),
                 _value_is_boolean: false,
                 _can_be_reversed: true,
                 _server_param: 'is_unread',
@@ -126,7 +126,7 @@ define(['app', 'i18n', 'sprintf'], function(app, i18n, sprintf){
         this.availableViews = {
                 THREADED: {
                     id: 'threaded',
-                    name: i18n._('Threaded view'),
+                    name: i18n.gettext('Threaded view'),
                     _supports_paging: false,
                     _server_order_param_value: 'chronological',
                     _client_side_implementation: null
@@ -134,14 +134,14 @@ define(['app', 'i18n', 'sprintf'], function(app, i18n, sprintf){
 
                 CHRONOLOGICAL: {
                     id: 'chronological',
-                    name: i18n._('Chronological'),
+                    name: i18n.gettext('Chronological'),
                     _supports_paging: true,
                     _server_order_param_value: 'chronological',
                     _client_side_implementation: null
                 },
                 REVERSE_CHRONOLOGICAL: {
                     id: 'reverse_chronological',
-                    name: i18n._('Activity feed (reverse chronological)'),
+                    name: i18n.gettext('Activity feed (reverse chronological)'),
                     _supports_paging: true,
                     _server_order_param_value: 'reverse_chronological',
                     _client_side_implementation: null
@@ -270,6 +270,24 @@ define(['app', 'i18n', 'sprintf'], function(app, i18n, sprintf){
 
             return retval;
         };
+
+        /**
+         * Check if a filter is present in the query
+         * @param {filterDef} filterDef
+         * @param {value}  The value for which to clear the filter.  If null
+         *  any value for that filter will be considered.
+         * @return true if filter is present in the query
+         */
+        this.isFilterActive = function(filterDef, value){
+            if(filterDef.id in this._query) {
+                for (var i=0;i<this._query[filterDef.id].length;i++) {
+                    if(value == null || this._query[filterDef.id][i].value.toString() == value.toString()) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        };
         
         /**
          * The order the posts are sorted for.
@@ -351,25 +369,36 @@ define(['app', 'i18n', 'sprintf'], function(app, i18n, sprintf){
          */
         this.getHtmlDescription = function(){
             var retval = '',
-                valuesText = [];
-
-            if(this._queryResultInfo === null) {
+            valuesText = [],
+            numActiveFilters = _.keys(this._query).length;
+            if(this._queryResultInfo == null) {
                 retval += '<div id="post-query-results-info">';
-                retval += i18n._("No query has been executed yet");
+                retval += i18n.gettext("No query has been executed yet");
                 retval += '</div>';
             }
             else{
                 retval += '<div id="post-query-results-info">';
-                if(this.getResultNumTotal() === 0) {
-                    retval += i18n._("There are no messages that:");
+                if(this.getResultNumTotal() == 0) {
+                    if(numActiveFilters > 0) {
+                        retval += i18n.gettext("Found no message in the discussion that:");
+                    }
+                    else {
+                        retval += i18n.gettext("There are no messages in the discussion.");
+                    }
                 }
                 else {
                     var unreadText = '';
                     if(this.getResultNumUnread() > 0) {
-                        unreadText = sprintf(i18n._("(%d unread)"), this.getResultNumUnread());
+                        unreadText = sprintf.sprintf(i18n.gettext("(%d unread)"), this.getResultNumUnread());
                     }
-                    retval += sprintf(i18n._("Showing the %d messages %s that:"), this.getResultNumTotal(), unreadText);
+                    if(numActiveFilters > 0) {
+                        retval += sprintf.sprintf(i18n.gettext("Found %d messages %s that:"), this.getResultNumTotal(), unreadText);
+                    }
+                    else {
+                        retval += sprintf.sprintf(i18n.gettext("Found %d messages %s:"), this.getResultNumTotal(), unreadText);
+                    }
                 }
+                
                 retval += '</div>';
                 retval += '<ul id="post-query-filter-info">';
 
@@ -381,19 +410,21 @@ define(['app', 'i18n', 'sprintf'], function(app, i18n, sprintf){
                         if(filterDef._filter_description) {
                             retval += filterDef._filter_description(filterDef, this._query[filterDef.id]);
                         }
-                        else {
-
+                        else{
                             if (filterDef._value_is_boolean) {
                                 var filterQuery = this._query[filterDef.id][0];
-                                retval += sprintf((filterQuery.value===true)?i18n._("%s"):i18n._("NOT %s"), filterDef.name);
+                                var span = '<span class="closebutton" data-filterid="'+filterDef.id+'" data-value="'+filterQuery.value+'"></span>\n';
+                                retval += sprintf.sprintf((filterQuery.value===true)?i18n.gettext("%s"):i18n.gettext("NOT %s"), filterDef.name);
+                                retval += span;
                             }
+                            
                             else {
                                 for (var i=0;i<this._query[filterDef.id].length;i++) {
                                     var value = this._query[filterDef.id][i].value;
                                     var span = '<span class="closebutton" data-filterid="'+filterDef.id+'" data-value="'+value+'"></span>\n';
                                     valuesText.push(value + span);
                                 }
-                                retval += sprintf(i18n._("%s for values %s"), filterDef.name, valuesText.join(', '));
+                                retval += sprintf.sprintf(i18n.gettext("%s for values %s"), filterDef.name, valuesText.join(', '));
                             }
                         }
                         retval += '</li>';

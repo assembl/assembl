@@ -15,42 +15,75 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
      */
     var MessageList = Backbone.View.extend({
         ViewStyles: {
-            THREADED: {
-                id: "threaded",
-                label: i18n._('Threaded view')
-            },
-            CHRONOLOGICAL: {
-                id: "chronological",
-                label: i18n._('Chronological view')
-            },
-            REVERSE_CHRONOLOGICAL: {
-                id: "reverse_chronological",
-                label: i18n._('Activity feed view')
-            }
+            THREADED: {id: "threaded",
+                        css_id: "messageList-view-threaded",
+                        label: i18n.gettext('Threaded')
+                        },
+            CHRONOLOGICAL: {id: "chronological",
+                        css_id: "messageList-view-chronological",
+                        label: i18n.gettext('Chronological')
+                        },
+            REVERSE_CHRONOLOGICAL: {id: "reverse_chronological",
+                        css_id: "messageList-view-activityfeed",
+                        label: i18n.gettext('Reverse-Chronological')
+                        }
         },
         
         currentViewStyle: null,
 
         /**
+         * Is the view currently rendering
+         */
+        currentlyRendering: false,
+        /**
+         * If there were any render requests inhibited while rendering was 
+         * processed
+         */
+        numRenderInhibitedDuringRendering: 0,
+        
+        
+        storedMessageListConfig: app.getMessageListConfigFromStorage(),
+        /**
+         * get a view style definition by id
+         * @param {viewStyle.id}
+         * @return {viewStyle or undefined}
+         */
+        getViewStyleDefById: function(viewStyleId){
+            var retval = _.find(this.ViewStyles, function(viewStyle){ return viewStyle.id == viewStyleId; });
+            return retval;
+        },
+        /**
          *  @init
          */
         initialize: function(obj){
+            /*this.on("all", function(eventName) {
+                console.log("messageList event received: ", eventName);
+              });
+            this.messages.on("all", function(eventName) {
+                console.log("messageList collection event received: ", eventName);
+              });*/
+            
             if( obj.button ){
                 this.button = $(obj.button).on('click', app.togglePanel.bind(window, 'messageList'));
             }
             this.renderedMessageViewsPrevious = {};
             this.renderedMessageViewsCurrent = {};
             
-            this.currentViewStyle = this.ViewStyles.REVERSE_CHRONOLOGICAL;
-            this.defaultMessageStyle = app.AVAILABLE_MESSAGE_VIEW_STYLES.PREVIEW;
+            this.setViewStyle(this.getViewStyleDefById(this.storedMessageListConfig.viewStyleId) || this.ViewStyles.THREADED);
+            this.defaultMessageStyle = app.getMessageViewStyleDefById(this.storedMessageListConfig.messageStyleId) || app.AVAILABLE_MESSAGE_VIEW_STYLES.PREVIEW;
             this.currentQuery.setView(this.currentQuery.availableViews.REVERSE_CHRONOLOGICAL);
             
-            this.listenTo(this.messages, 'reset', this.invalidateResultsAndRender);
+            this.listenTo(this.messages, 'reset', function() {
+                that.messagesFinishedLoading = true;
+                that.invalidateResultsAndRender();
+            });
             this.listenTo(this.messages, 'add', this.invalidateResultsAndRender);
             // TODO:  Benoitg:  I didn't write this part, but i think it needs a
             // re-render, not just an init
             this.listenTo(this.messages, 'change', this.initAnnotator);
-
+            // TODO:  FIXME!!! Benoitg - 2014-05-05
+            this.listenTo(app.segmentList.segments, 'add remove reset change', this.initAnnotator);
+            
             var that = this;
             app.on('idea:select', function(idea){
                 that.currentQuery.clearFilter(that.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, null);
@@ -58,6 +91,9 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
                     that.currentQuery.clearFilter(that.currentQuery.availableFilters.POST_IS_ORPHAN, null);
                     that.currentQuery.addFilter(that.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, idea.getId());
                     app.openPanel(app.messageList);
+                }
+                if(app.debugRender) {
+                    console.log("messageList: triggering render because new idea was selected");
                 }
                 that.render();
             });
@@ -111,11 +147,6 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
          */
         annotator: null,
 
-        /**
-         * The current client-side filter applied to messages
-         * @type {Object}
-         */
-        currentFilter: {},
         
         /**
          * The current server-side query applied to messages
@@ -409,6 +440,7 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
             var that = this,
                 views = [],
                 data = {
+                    availableViewStyles: this.ViewStyles,
                     currentViewStyle: this.currentViewStyle,
                     DEFAULT_MESSAGE_VIEW_LI_ID_PREFIX: DEFAULT_MESSAGE_VIEW_LI_ID_PREFIX,
                     collapsed: this.collapsed,
@@ -447,6 +479,21 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
          */
         render: function(){
             var that = this;
+            
+            function renderStatus() {
+                if(that.currentlyRendering) return "a render is already in progress, ";
+                else return "no render already in progress, ";
+            }
+            if(app.debugRender) {
+                console.log("messageList:render() is firing, "+renderStatus()+this.messages.length+" messages in collection.");
+                /*
+                console.log("message collection is: ");
+                this.messages.map(function(message){
+                    console.log(message.getId())
+                })*/
+            }
+            this.currentlyRendering = true;
+            
             app.trigger('render');
 
             if(this.messagesFinishedLoading) {
@@ -460,7 +507,7 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
                 this.render_real();
                 this.blockPanel();
             }
-
+            this.currentlyRendering = false;
             return this;
         },
 
@@ -486,9 +533,9 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
             var that = this,
                 div = this.$('#defaultMessageView-dropdown'),
                 html = "";
-            
+
             html += '<span class="dropdown-label text-bold">';
-            html += i18n.gettext('Show: ') + this.defaultMessageStyle.label;
+            html += this.defaultMessageStyle.label;
             html += '</span>';
             html += '<ul class="dropdown-list">';
             _.each(app.AVAILABLE_MESSAGE_VIEW_STYLES, function(messageViewStyle) {
@@ -545,7 +592,6 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
          */
         getRenderedMessagesThreaded: function(messages, level, last_sibling_chain){
             var list = [],
-                filter = this.currentFilter,
                 i = 0,
                 len = messages.length,
                 view, model, children, prop, isValid;
@@ -564,22 +610,15 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
             // We need to identify the "last" message of the series while taking
             // the filter into account. It is easier to start from the end.
             var found = false, justfound = true;
+
             for (i = len - 1; i >= 0; i--) {
                 model = messages[i];
                 isValid = (this.messageIdsToDisplay.indexOf(model.getId()) >= 0);
-                if (isValid) {
-                    // Also check old-style filter... this may die soon.
-                    for( prop in filter ){
-                        if( filter.hasOwnProperty(prop) ){
-                            // 5th level of depth. Yes! We! Can!
-                            if( model.get(prop) !== filter[prop] ){
-                                isValid = false;
-                                break;
-                            }
-                        }
-                    }
-                }
+            /*console.log("length: ", len);
+            console.log(this.messageIdsToDisplay);*/
                 if( isValid ) {
+                    /*console.log(model);
+                    console.log("Message was valid: "+model.get('subject')+", "+model.get('idCreator'));*/
                     view = new MessageFamilyView({model:model, messageListView:this}, last_sibling_chain);
                     view.currentLevel = level;
                     found = true;
@@ -604,10 +643,11 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
                 }
                 if (!isValid && this.hasDescendantsInFilter(model)) {
                     //Generate ghost message
-                    view = $('<div class="message message--skip"><div class="skipped-message"></div><div class="messagelist-children"></div></div>');
-                    list.push(view);
+                    var ghost_element = $('<div class="message message--skip"><div class="skipped-message"></div><div class="messagelist-children"></div></div>');
+                    console.log("Invalid message was:",model);
+                    list.push(ghost_element);
                     children = model.getChildren();
-                    view.$('.messagelist-children').append( this.getRenderedMessagesThreaded(
+                    ghost_element.find('.messagelist-children').append( this.getRenderedMessagesThreaded(
                         children, level+1, last_sibling_chain) );
                 }
             }
@@ -617,6 +657,7 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
 
         hasDescendantsInFilter: function(model){
             if (this.messageIdsToDisplay.indexOf(model.getId()) >= 0) {
+                console.log("Valid descendant found (direct):", model)
                 return true;
             }
             var children = model.getChildren();
@@ -741,8 +782,7 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
                     post.collapsed = that.collapsed;
                 });
                 that.messages.reset(data.posts);
-                that.messagesFinishedLoading = true;
-                that = that.render();
+                //that = that.render();
             });
         },
         
@@ -757,12 +797,29 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
         },
 
         /**
-         * Shows the related posts to the given idea
-         * @param {String} ideaId
+         * Shows posts which are descendent of a given post
+         * @param {String} postId
          */
         addFilterByPostId: function(postId){
             this.currentQuery.addFilter(this.currentQuery.availableFilters.POST_IS_DESCENDENT_OF_POST, postId);
             this.render();
+        },
+
+        /**
+         * Toggle hoist on a post (filter which shows posts which are descendent of a given post)
+         */
+        toggleFilterByPostId: function(postId){
+            var alreadyHere = this.currentQuery.isFilterActive (this.currentQuery.availableFilters.POST_IS_DESCENDENT_OF_POST, postId);
+            if ( alreadyHere )
+            {
+                this.currentQuery.clearFilter(this.currentQuery.availableFilters.POST_IS_DESCENDENT_OF_POST, null);
+                this.render();
+            }
+            else
+            {
+                this.addFilterByPostId(postId);
+            }
+            return !alreadyHere;
         },
         
         /**
@@ -804,11 +861,38 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
 
         /**
          * @event
+         * Set the view to the selected viewStyle.
+         * Does NOT re-render
+         * 
+         */
+        setViewStyle: function(viewStyle){
+            if(viewStyle === this.ViewStyles.THREADED) {
+                this.currentViewStyle = this.ViewStyles.THREADED;
+                this.currentQuery.setView(this.currentQuery.availableViews.THREADED)
+            }
+            else if(viewStyle === this.ViewStyles.REVERSE_CHRONOLOGICAL) {
+                this.currentViewStyle = this.ViewStyles.REVERSE_CHRONOLOGICAL;
+                this.currentQuery.setView(this.currentQuery.availableViews.REVERSE_CHRONOLOGICAL)
+            }
+            else if(viewStyle === this.ViewStyles.CHRONOLOGICAL) {
+                this.currentViewStyle = this.ViewStyles.CHRONOLOGICAL;
+                this.currentQuery.setView(this.currentQuery.availableViews.CHRONOLOGICAL)
+            }
+            else {
+                throw "Unsupported view style";
+            }
+            if(this.storedMessageListConfig.viewStyleId != viewStyle.id) {
+                this.storedMessageListConfig.viewStyleId = viewStyle.id;
+                app.setMessageListConfigToStorage(this.storedMessageListConfig);
+            }
+            
+        },
+        /**
+         * @event
          * Set the view to threaded view
          */
         setViewStyleThreaded: function(){
-            this.currentViewStyle = this.ViewStyles.THREADED;
-            this.currentQuery.setView(this.currentQuery.availableViews.THREADED)
+            this.setViewStyle(this.ViewStyles.THREADED);
             this.render();
         },
         
@@ -817,8 +901,7 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
          * Set the view to a flat reverse chronological view
          */
         setViewStyleActivityFeed: function(){
-            this.currentViewStyle = this.ViewStyles.REVERSE_CHRONOLOGICAL;
-            this.currentQuery.setView(this.currentQuery.availableViews.REVERSE_CHRONOLOGICAL);
+            this.setViewStyle(this.ViewStyles.REVERSE_CHRONOLOGICAL);
             this.render();
         },
         
@@ -827,8 +910,7 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
          * Set the view to a flat chronological view
          */
         setViewStyleChronological: function(){
-            this.currentViewStyle = this.ViewStyles.CHRONOLOGICAL;
-            this.currentQuery.setView(this.currentQuery.availableViews.CHRONOLOGICAL);
+            this.setViewStyle(this.ViewStyles.CHRONOLOGICAL);
             this.render();
         },
 
@@ -837,8 +919,8 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
          */
         onDefaultMessageViewStyle: function(e){
             var messageViewStyleId = (e.currentTarget.id).replace(DEFAULT_MESSAGE_VIEW_LI_ID_PREFIX, '');
-            var messageViewStyleSelected = _.find(app.AVAILABLE_MESSAGE_VIEW_STYLES, function(messageViewStyle){ return messageViewStyle.id == messageViewStyleId; });
-            console.log("onDefaultMessageViewStyle: "+messageViewStyleSelected.label);
+            var messageViewStyleSelected = app.getMessageViewStyleDefById(messageViewStyleId);
+            //console.log("onDefaultMessageViewStyle: "+messageViewStyleSelected.label);
             this.setDefaultMessageViewStyle(messageViewStyleSelected);
         },
         
@@ -857,6 +939,10 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
             });
 
             this.renderDefaultMessageViewDropdown();
+            if(this.storedMessageListConfig.messageStyleId != messageViewStyle.id) {
+                this.storedMessageListConfig.messageStyleId = messageViewStyle.id;
+                app.setMessageListConfigToStorage(this.storedMessageListConfig);
+            }
         },
         /**
          * Highlights the message by the given id
@@ -961,7 +1047,7 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
             var data = {
                 'click .idealist-title': 'onTitleClick',
                 'click #post-query-filter-info .closebutton': 'onFilterDeleteClick',
-                'click #messageList-collapseButton': 'toggleCollapse',
+                'click #messageList-collapseButton': 'toggleMessageView',
                 'click #messageList-returnButton': 'onReturnButtonClick',
 
                 'click #messageList-allmessages': 'showAllMessages',

@@ -3,13 +3,14 @@ html, body {
 }
 
 body {
-    overflow-x: hidden;
+  overflow-x: hidden;
+  //border-top: 3px solid #484848;
+  //box-sizing: border-box;
 }
 
 // The F* and powerful wrapper
 #wrapper {
     position: relative;
-
     min-height: 100%;
     min-width: 980px;
 
@@ -20,7 +21,6 @@ body {
     .is-lateralmenu-open & {
         @include transform( translateX($lateralmenu-width) );
     }
-
 }
 
 body.is-modal {

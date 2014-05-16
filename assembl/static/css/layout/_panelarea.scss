@@ -5,14 +5,36 @@ $panelarea-min-height: 400px;
 // =================
 .panelarea  {
     position: absolute;
-    top: 120px;
+    top: 80px;
     right: 5px;
     bottom: 0;
     left: 5px;
     min-height: $panelarea-min-height;
-
     display: block;
     overflow: { x: auto; y: hidden; }
+
+    .discussionlist {
+      li{
+        list-style-type: none;
+        float: left;
+        border: 10px solid #c7c2dd;
+        width: 170px;
+        height: 170px;
+        margin: 10px;
+        text-align: center;
+        border-radius: 50%;
+        box-sizing: border-box;
+        display: table;
+        .discussion {
+          display: table-cell;
+          vertical-align: middle;
+          a{
+            text-decoration: none;
+            color: #000000;
+          }
+        }
+      }
+    }
 }
 
 
@@ -24,7 +46,7 @@ $panelarea-min-height: 400px;
     display: table;
     width: 100%;
     height: 100%;
-    padding: 8px;
+    //padding: 8px;
 }
 
 // The table to align the .panel
@@ -50,7 +72,7 @@ $panelarea-min-height: 400px;
 }
 
 #messageList {
-    min-width: 700px;
+    min-width: 500px;
 }
 
 #synthesisPanel {

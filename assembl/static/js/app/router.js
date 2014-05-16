@@ -63,6 +63,14 @@ define(['backbone', 'jquery', 'app'], function(Backbone, $, app){
                     app.openPanel(panel);
                 }
             });
+            if(app.openedPanels < 1) {
+                /* If no panel would be opened on load, open the table of ideas
+                 * and the Message panel so the user isn't presented with a 
+                 * blank screen
+                 */
+                app.openPanel(app.ideaList);
+                app.openPanel(app.messageList);
+            }
         }
 
     });

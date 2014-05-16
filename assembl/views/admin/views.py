@@ -1,8 +1,4 @@
-from itertools import groupby
-from collections import defaultdict
-
 import transaction
-
 from pyramid.view import view_config
 from pyramid.renderers import render_to_response
 from pyramid.security import authenticated_userid
@@ -12,13 +8,13 @@ from assembl.models import (
     Discussion, DiscussionPermission, Role, Permission, UserRole,
     LocalUserRole)
 from .. import get_default_context
-from assembl.source.models.mail import Mailbox, MailingList
-from assembl.auth.models import (
-    create_default_permissions, User, Username, AgentProfile, P_ADMIN_DISC, P_SYSADMIN, R_SYSADMIN,
-    SYSTEM_ROLES)
+from assembl.models.mail import IMAPMailbox, MailingList
+from assembl.auth import (R_SYSADMIN, SYSTEM_ROLES, P_SYSADMIN, P_ADMIN_DISC)
+from assembl.models.auth import (
+    create_default_permissions, User, Username, AgentProfile)
 
 
-@view_config(route_name='discussion_admin', permission="P_SYSADMIN")
+@view_config(route_name='discussion_admin', permission=P_SYSADMIN)
 def discussion_admin(request):
     user_id = authenticated_userid(request)
 
@@ -56,7 +52,7 @@ def discussion_admin(request):
         session.add(discussion)
 
         create_default_permissions(session, discussion)
-        mailbox_class = MailingList if g('mailing_list_address') else Mailbox
+        mailbox_class = MailingList if g('mailing_list_address') else IMAPMailbox
         mailbox = mailbox_class(
             name=name,
             host=host,
@@ -70,7 +66,6 @@ def discussion_admin(request):
         if(g('mailing_list_address')):
             mailbox.post_email_address = g('mailing_list_address')
         mailbox.discussion = discussion
-        transaction.commit()
 
     return render_to_response(
         'admin/discussions.jinja2',
@@ -78,7 +73,7 @@ def discussion_admin(request):
         request=request)
 
 
-@view_config(route_name='discussion_permissions', permission="P_ADMIN_DISC")
+@view_config(route_name='discussion_permissions', permission=P_ADMIN_DISC)
 def discussion_permissions(request):
     user_id = authenticated_userid(request)
     db = Discussion.db()
@@ -206,7 +201,7 @@ def discussion_permissions(request):
         request=request)
 
 
-@view_config(route_name='general_permissions', permission="P_SYSADMIN")
+@view_config(route_name='general_permissions', permission=P_SYSADMIN)
 def general_permissions(request):
     user_id = authenticated_userid(request)
     db = Discussion.db()

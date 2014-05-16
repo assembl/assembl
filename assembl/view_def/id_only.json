@@ -1,6 +1,7 @@
 {
     "_default": {
         "@id": "self",
+        "@type": "&external_typename",
         "_default": false
     },
     "Permission": {},
@@ -18,7 +19,7 @@
     "SynthesisPost": {},
     "ImportedPost": {},
     "Webpage": {},
-    "Mailbox": {},
+    "IMAPMailbox": {},
     "MailingList": {},
     "Email": {},
     "Discussion": {},

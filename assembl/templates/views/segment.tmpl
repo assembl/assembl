@@ -14,7 +14,10 @@
 
 
 <div class="box postit" draggable="true" data-segmentid="<%= segment.cid %>">
-    <span data-segmentid="<%= segment.cid %>" class="closebutton"></span>
+    <% if (canEditExtracts || (canEditMyExtracts && segment.getCreator() == app.getCurrentUser())) { %>
+        <span data-segmentid="<%= segment.cid %>" class="closebutton"></span>
+    <% } %>
+    
 
     <q class="text text-quotation"><%= segment.getQuote() %></q>
     {{ segmentTextLink|safe }}

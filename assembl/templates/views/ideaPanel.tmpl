@@ -1,5 +1,5 @@
 <div class="panel ideaPanel">
-    <div class="panel-header">
+    <header class="panel-header">
         <strong data-tooltip="{{gettext('Detailled information about the currently selected idea in the Table of ideas')}}">{{ gettext('Idea') }}</strong>
         <div class="float-right">
             <% if( idea.getId() ) { %>
@@ -7,7 +7,7 @@
             <% } %>
             <a id="ideaPanel-closebutton" class="iconbutton icon-cancel" data-tooltip="{{gettext('Close panel')}}"></a>
         </div>
-    </div>
+    </header>
     
     <div class="panel-body">
         <fieldset id="ideaPanel-section-summary" class="panel-section">
@@ -34,29 +34,31 @@
         
         <fieldset id="ideaPanel-section-segments" class="panel-section">
             <legend data-tooltip="{{gettext('Expressions of this idea in segments of posts or on the web')}}">
-                <span>{{ gettext('Harvested in %(num)s segments')|format(num='<%= segments.length %>')|safe }}</span>
+                <span><%= sprintf(i18n.pluralize({1:"{{ gettext('Harvested in %d segment') }}",2:"{{ gettext('Harvested in %d segments') }}"},segments.length), segments.length) %></span>
             </legend>
             <div class="postitlist">
                 <% _.each(segments, function(segment, i){ %>
                     {% include "views/segment.tmpl" %}
                 <% }); %>
             </div>
+            <% if (canAddExtracts) { %>
             <div class="box box--dashed box--centered margin text-muted text-big">
                 {{ gettext('Add segments by dragging them in this panel from the clipboard') }}
             </div>
+            <% } %>
         </fieldset>
         
     </div>
 
-    <div class="panel-footer">
+    <footer class="panel-footer">
         <% if (canDelete) { %>
         <div class="float-right">
             <a id="ideaPanel-deleteButton" class="link" data-tooltip="{{gettext('Delete this idea completely')}}">{{ gettext('Delete idea') }}</a>
         </div>
         <% }
-        if (canUnlinkSegments) { %>
+        if (canEditExtracts) { %>
         <a id="ideaPanel-clearbutton" class="link" data-tooltip="{{gettext('Removed segments will be available in your clipboard')}}">{{ gettext('Remove all segments') }}</a>
         <% } %>
-    </div>
+    </footer>
 
 </div>

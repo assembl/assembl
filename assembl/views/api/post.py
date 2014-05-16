@@ -23,21 +23,18 @@ from assembl.models import (
     get_database_id, get_named_object, AgentProfile, Post, AssemblPost, SynthesisPost,
     Synthesis, Discussion, PostSource, Content, Idea, ViewPost, User, Action,
     IdeaRelatedPostLink)
-from . import acls
 import uuid
 from jwzthreading import restrip_pat
 
 posts = Service(name='posts', path=API_DISCUSSION_PREFIX + '/posts',
                 description="Post API following SIOC vocabulary as much as possible",
-                renderer='json', acl=acls)
+                renderer='json')
 
 post = Service(name='post', path=API_DISCUSSION_PREFIX + '/posts/{id:.+}',
-               description="Manipulate a single post",
-               acl=acls)
+               description="Manipulate a single post")
 
 post_read = Service(name='post_read', path=API_DISCUSSION_PREFIX + '/post_read/{id:.+}',
-               description="Signal that a post was read",
-               acl=acls)
+               description="Signal that a post was read")
 
 _ = TranslationStringFactory('assembl')
 
@@ -96,7 +93,7 @@ def get_posts(request):
     if ids:
         ids = [get_database_id("Post", id) for id in ids]
 
-    view_def = request.GET.get('view')
+    view_def = request.GET.get('view') or 'default'
     
 
     only_synthesis = request.GET.get('only_synthesis')
@@ -131,7 +128,6 @@ def get_posts(request):
         #Virtuoso bug: This should work...
         #posts = posts.join(related, PostClass.id==related.c.post_id)
         posts = posts.filter(PostClass.id.in_(related))
-
     if root_post_id:
         root_post = Post.get(id=root_post_id)
                 
@@ -184,10 +180,7 @@ def get_posts(request):
         else:
             post, viewpost = query_result, None
         no_of_posts += 1
-        if view_def:
-            serializable_post = post.generic_json(view_def)
-        else:
-            serializable_post = post.serializable()
+        serializable_post = post.generic_json(view_def)
         if viewpost:
             serializable_post['read'] = True
             no_of_posts_viewed_by_user += 1
@@ -238,15 +231,12 @@ def get_posts(request):
 def get_post(request):
     post_id = request.matchdict['id']
     post = Post.get_instance(post_id)
-    view_def = request.GET.get('view')
+    view_def = request.GET.get('view') or 'default'
 
     if not post:
         raise HTTPNotFound("Post with id '%s' not found." % post_id)
 
-    if view_def:
-        return post.generic_json(view_def)
-    else:
-        return post.serializable()
+    return post.generic_json(view_def)
 
 
 @post_read.put(permission=P_READ)
@@ -377,4 +367,4 @@ def create_post(request):
     for source in discussion.sources:
         source.send_post(new_post)
 
-    return new_post.serializable()
+    return new_post.generic_json('default')

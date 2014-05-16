@@ -34,3 +34,6 @@ def pytest_configure(config):
     app_settings = get_appsettings(app_settings_file)
     with_zope = as_boolean(app_settings.get('test_with_zope'))
     engine = configure_engine(app_settings, with_zope)
+    from .lib.zmqlib import configure_zmq
+    configure_zmq(app_settings['changes.socket'],
+                  app_settings['changes.multiplex'])

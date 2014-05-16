@@ -19,9 +19,7 @@ from sqlalchemy.orm import mapper, scoped_session, sessionmaker
 from sqlalchemy.orm.util import has_identity
 from sqlalchemy.util import classproperty
 from sqlalchemy.orm.session import object_session, Session
-from virtuoso.vmapping import (
-    PatternIriClass, LiteralQuadMapPattern, ClassQuadMapPattern,
-    ApplyIriClass, RdfClassQuadMapPattern)
+from virtuoso.vmapping import PatternIriClass
 from zope.sqlalchemy import ZopeTransactionExtension
 from zope.sqlalchemy.datamanager import mark_changed as z_mark_changed
 
@@ -30,6 +28,7 @@ from pyramid.paster import get_appsettings, setup_logging
 from ..view_def import get_view_def
 from .zmqlib import get_pub_socket, send_changes
 from ..namespaces import QUADNAMES
+from ..auth import *
 
 _TABLENAME_RE = re.compile('([A-Z]+)')
 
@@ -188,9 +187,8 @@ class BaseOps(object):
             return None
         return str(id)
 
-    def get_discussion_id(self):
-        "Get the ID of an associated discussion object, if any."
-        return None
+    def tombstone(self):
+        return Tombstone(self)
 
     def send_to_changes(self, connection=None):
         if not connection:
@@ -200,7 +198,7 @@ class BaseOps(object):
         if 'cdict' not in connection.info:
             connection.info['cdict'] = {}
         connection.info['cdict'][self.uri()] = (
-            self.get_discussion_id(), self)
+            None, self)
 
     @classmethod
     def external_typename(cls):
@@ -223,117 +221,27 @@ class BaseOps(object):
         return base_uri + cls.external_typename_with_inheritance() + "/" + str(id)
 
     @classmethod
-    def rdf_entitynames(cls):
-        "A list of strings for tables that correspond to multiple RDF entities"
-        return None
+    def iri_class(cls):
+        if getattr(cls, '_iri_class', 0) is 0:
+            id_column = getattr(cls, 'id', None)
+            if id_column is None:
+                cls._iri_class = None
+                return
+            clsname = cls.external_typename_with_inheritance()
+            iri_name = clsname + "_iri"
+            cls._iri_class = PatternIriClass(
+                getattr(QUADNAMES, iri_name),
+                'http://%{WSHostName}U/data/'+clsname+'/%d', ('id', Integer, False))
+        return cls._iri_class
 
     @classmethod
-    def iri_class(cls, entityname=None):
-        id_column = getattr(cls, 'id', None)
-        if id_column is None:
-            return None
-        clsname = cls.external_typename_with_inheritance()
-        if entityname:
-            clsname += '_'.entityname
-        iri_name = clsname + "_iri"
-        return PatternIriClass(
-            getattr(QUADNAMES, iri_name),
-            '^{DynamicLocalFormat}^/'+clsname+'/%d', ('id', Integer, False))
+    def extra_iri_classes(cls):
+        return {}
 
     @classmethod
-    def subject_quad_pattern(cls, entityname=None):
-        id_column = getattr(cls, 'id', None)
-        if id_column is None:
-            return None
-        iri_qmp = cls.iri_class(entityname)
-        return ApplyIriClass(iri_qmp, id_column)
-
-    @classmethod
-    def special_quad_patterns(cls, entityname=None):
+    def special_quad_patterns(cls, alias_manager):
         # Note: If defined somewhere, override in subclasses to avoid inheritance.
         return []
-
-    @classmethod
-    def class_pattern_name(cls, entityname=None):
-        clsname = cls.external_typename()
-        if entityname:
-            clsname += '_'.entityname
-        return getattr(QUADNAMES, 'class_pattern_'+clsname)
-
-    @classmethod
-    def class_type_pattern_name(cls, entityname=None):
-        clsname = cls.external_typename()
-        if entityname:
-            clsname += '_'.entityname
-        return getattr(QUADNAMES, 'class_'+clsname+'_type')
-
-    @classmethod
-    def class_graph_name(cls, entityname=None):
-        clsname = cls.external_typename()
-        if entityname:
-            clsname += '_'.entityname
-        return getattr(QUADNAMES, 'class_'+clsname+'_graph')
-
-    @classmethod
-    def class_graph_pattern_name(cls, entityname=None):
-        clsname = cls.external_typename()
-        if entityname:
-            clsname += '_'.entityname
-        return getattr(QUADNAMES, 'class_'+clsname+'_graph_quad_map')
-
-    @classmethod
-    def column_pattern_name(cls, column, entityname=None):
-        clsname = cls.external_typename()
-        if entityname:
-            clsname += '_'.entityname
-        return getattr(QUADNAMES, 'col_pattern_%s_%s' % (
-            clsname, column.name))
-
-    @classmethod
-    def class_quad_pattern(cls):
-        mapper = cls.__mapper__
-        info = getattr(mapper.mapped_table, 'info', {})
-        entitynames = cls.rdf_entitynames()
-        if entitynames:
-            assert isinstance(entitynames, list)
-            subject_patterns = {entityname: cls.subject_quad_pattern(entityname) for entityname in entitynames}
-        else:
-            subject_patterns = cls.subject_quad_pattern()
-        if not subject_patterns:
-            return
-        if not isinstance(subject_patterns, dict):
-            subject_patterns = {None: subject_patterns}
-        for entityname, subject_pattern in subject_patterns.items():
-            patterns = cls.special_quad_patterns(entityname)
-            # only direct, not inherited
-            rdf_class = cls.__dict__.get('rdf_class', None)
-            if rdf_class:
-                assert (entityname is None) != isinstance(rdf_class, dict)
-                if entityname:
-                    rdf_class = rdf_class[entityname]
-                patterns.append(RdfClassQuadMapPattern(
-                    rdf_class, cls.class_type_pattern_name(entityname)))
-            for c in mapper.columns:
-                if c.table != mapper.local_table:
-                    continue
-                if 'rdf' in c.info:
-                    qmp = c.info['rdf']
-                    assert (entityname is None) != isinstance(qmp, tuple)
-                    if entityname:
-                        qmp, entitynames = qmp
-                        if entityname not in entitynames:
-                            continue
-                    qmp.set_columns(c)
-                    if not qmp.name:
-                        qmp.name = cls.column_pattern_name(c)
-                    patterns.append(qmp)
-            if not len(patterns):
-                return
-            for p in patterns:
-                assert p.name
-            yield ClassQuadMapPattern(
-                cls, subject_pattern, cls.class_pattern_name(),
-                *patterns)
 
     @classmethod
     def get_instance(cls, identifier):
@@ -379,7 +287,7 @@ class BaseOps(object):
         mapper = self.__class__.__mapper__
         relns = {r.key: r for r in mapper.relationships}
         cols = {c.key: c for c in mapper.columns}
-        fkeys = {c for c in mapper.columns if isinstance(c, ForeignKey)}
+        fkeys = {c for c in mapper.columns if c.foreign_keys}
         fkeys_of_reln = {
             frozenset(r._calculated_foreign_keys): r
             for r in mapper.relationships
@@ -590,6 +498,27 @@ class BaseOps(object):
             return dumps(result)
         return result
 
+    @classmethod
+    def from_json(cls, json, user_id=None):
+        inst = cls()
+        inst.update_json(json, user_id)
+        return inst
+
+    def update_json(self, json, user_id=None):
+        raise NotImplementedError()
+
+    @classmethod
+    def extra_collections(cls):
+        return {}
+
+    def get_owners(self):
+        "List of User objects that can be considered owners of this instance"
+        return ()
+
+    """The permissions to create, read, update, delete an object of this class.
+    Also separate permissions for the owners to update or delete."""
+    crud_permissions = CrudPermissions()
+
 
 class Timestamped(BaseOps):
     """An automatically timestamped mixin."""
@@ -686,6 +615,13 @@ class Tombstone(object):
                 "@id": self.uri,
                 "@tombstone": True}
 
+    def send_to_changes(self, connection):
+        assert connection
+        if 'cdict' not in connection.info:
+            connection.info['cdict'] = {}
+        connection.info['cdict'][self.uri] = (
+            None, self)
+
 
 def orm_update_listener(mapper, connection, target):
     session = object_session(target)
@@ -700,8 +636,7 @@ def orm_insert_listener(mapper, connection, target):
 def orm_delete_listener(mapper, connection, target):
     if 'cdict' not in connection.info:
         connection.info['cdict'] = {}
-    connection.info['cdict'][target.uri()] = (
-        target.get_discussion_id(), Tombstone(target))
+    target.tombstone().send_to_changes(connection)
 
 
 def before_commit_listener(session):

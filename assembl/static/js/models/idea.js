@@ -18,9 +18,6 @@ function(Base, _, Segment, app, i18n, Types, Permissions){
             this.set('creationDate', obj.creationDate);
             this.set('hasCheckbox', app.getCurrentUser().can(Permissions.EDIT_SYNTHESIS));
 
-            app.on('synthesisPanel:edit', function(){
-                that.attributes['synthesisPanel-editing'] = false;
-            });
         },
 
         /**
@@ -235,34 +232,49 @@ function(Base, _, Segment, app, i18n, Types, Permissions){
             return counter;
         },
 
+
+        visitDepthFirst: function(visitor, ancestry) {
+            if (ancestry === undefined) {
+                ancestry = [];
+            }
+            if (visitor(this, ancestry)) {
+                ancestry = ancestry.slice(0);
+                ancestry.push(this);
+                var children = _.sortBy(this.getChildren(), function(child){ return child.get('order'); });
+                for (var i in children) {
+                    children[i].visitDepthFirst(visitor, ancestry);
+                }
+            }
+        },
+
+        visitBreadthFirst: function(visitor, ancestry) {
+            var continue_visit = true
+            if (ancestry === undefined) {
+                ancestry = [];
+                continue_visit = visitor(this, ancestry);
+            }
+            if (continue_visit) {
+                ancestry = ancestry.slice(0);
+                ancestry.push(this);
+                var children = _.sortBy(this.getChildren(), function(child){ return child.get('order'); });
+                var children_to_visit = [];
+                for (var i in children) {
+                    var child = children[i];
+                    if (visitor(child, ancestry)) {
+                        children_to_visit.push(child);
+                    }
+                }
+                for (var i in children_to_visit) {
+                    children_to_visit[i].visitBreadthFirst(visitor, ancestry);
+                }
+            }
+        },
+
         /**
          * @return {Number} The order number for a new child
          */
         getOrderForNewChild: function(){
             return this.getChildren().length + 1;
-        },
-
-        /**
-         * @return {Number} The level based in the parents inNextSynthesis flag
-         */
-        getSynthesisLevel: function(){
-            var counter = 0,
-                parent = this;
-
-            do {
-
-                if( parent.get('parentId') !== null ){
-                    parent = parent.getParent();
-                    if( parent.get('inNextSynthesis') ){
-                        counter += 1;
-                    }
-                } else {
-                    parent = null;
-                }
-
-            } while ( parent !== null );
-
-            return counter;
         },
 
         /**
@@ -335,22 +347,6 @@ function(Base, _, Segment, app, i18n, Types, Permissions){
         model: IdeaModel,
 
         /**
-         * Returns the ideas to compose the synthesis panel
-         */
-        getInNextSynthesisIdeas: function(){
-            var ideas = this.where({inNextSynthesis: true}),
-                result = [];
-
-            _.each(ideas, function(idea){
-                if( idea.getSynthesisLevel() === 0 ){
-                    result.push( idea );
-                }
-            });
-
-            return result;
-        },
-
-        /**
          * @return {Idea} The root idea
          */
         getRootIdea: function(){
@@ -360,15 +356,7 @@ function(Base, _, Segment, app, i18n, Types, Permissions){
                 console.log(this);
             }
             return retval;
-        },
-
-        /**
-         * @return {Idea} The idea which is being edited in synthesis Panel
-         */
-        getEditingIdeaInSynthesisPanel: function(){
-            return app.ideaList.ideas.findWhere({ 'synthesisPanel-editing': true });
         }
-
     });
 
     return {

@@ -1,0 +1,48 @@
+// The synthesis panel specific CSS
+// ===========================
+
+.synthesis {
+  position: relative;
+  display: block;
+  //height: auto;
+  div {
+    margin: 0;
+    padding: 0;
+  }
+  .synthesisIdea-replybox {
+      &.hidden {
+          display: none;
+      }
+  }
+  .synthesisPanel-ideas {
+    .synthesis-idea{
+      min-height: 40px;
+      padding-top: 10px;
+      .panel-editablearea {
+        width: 100%;
+      }
+      .synthesis-expression {
+        display: inline;
+        margin: 0;
+        & > *:first-child {
+            margin-top: 0px;
+        }
+        & > *:last-child {
+            display: inline;
+        }
+      }
+      .comment {
+        font-size: 12px;
+        a{
+          text-decoration: none;
+        }
+      }
+
+    }
+
+    .idealist-item {
+      line-height: 38px;
+    }
+
+  }
+}

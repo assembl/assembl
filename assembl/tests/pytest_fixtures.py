@@ -13,6 +13,7 @@ import assembl
 from assembl.lib.migration import bootstrap_db, bootstrap_db_data
 from assembl.lib.sqla import get_session_maker
 from .utils import clear_rows, drop_tables
+from assembl.auth import R_SYSADMIN, R_PARTICIPANT
 
 
 @pytest.fixture(scope="session")
@@ -92,7 +93,6 @@ def discussion(request, test_session):
 @pytest.fixture(scope="function")
 def admin_user(request, test_session):
     from assembl.models import User, UserRole, Role
-    from assembl.auth import R_SYSADMIN
     u = User(name=u"Mr. Adminstrator", type="user")
     test_session.add(u)
     r = Role.get_role(test_session, R_SYSADMIN)
@@ -127,7 +127,6 @@ def test_app(request, app_settings, admin_user):
 @pytest.fixture(scope="function")
 def participant1_user(request, test_session):
     from assembl.models import User, UserRole, Role
-    from assembl.auth import R_PARTICIPANT
     u = User(name=u"A. Barking Loon", type="user")
     test_session.add(u)
     r = Role.get_role(test_session, R_PARTICIPANT)
@@ -143,7 +142,6 @@ def participant1_user(request, test_session):
 @pytest.fixture(scope="function")
 def participant2_user(request, test_session):
     from assembl.models import User, UserRole, Role
-    from assembl.auth import R_PARTICIPANT
     u = User(name=u"James T. Expert", type="user")
     test_session.add(u)
     r = Role.get_role(test_session, R_PARTICIPANT)
@@ -167,6 +165,21 @@ def mailbox(request, discussion, test_session):
         test_session.delete(m)
     return m
 
+@pytest.fixture(scope="function")
+def jack_layton_mailbox(request, discussion, test_session):
+    """ From https://dev.imaginationforpeople.org/redmine/projects/assembl/wiki/SampleDebate
+    """
+    import os
+    from assembl.models import MaildirMailbox
+    maildir_path=os.path.join(os.path.dirname(__file__), 'jack_layton_mail_fixtures_maildir')
+    m = MaildirMailbox(discussion=discussion, name='Jack Layton fixture', filesystem_path=maildir_path)
+    m.do_import_content(m, only_new=True)
+    test_session.add(m)
+    test_session.flush()
+
+    def fin():
+        test_session.delete(m)
+    return m
 
 @pytest.fixture(scope="function")
 def post_source(request, discussion, test_session):
@@ -202,8 +215,10 @@ def reply_post_1(request, participant2_user, discussion, root_post_1, test_sessi
     p = Post(
         discussion=discussion, creator = participant2_user,
         subject=u"re1: root post", body=u"post body",
-        type="post", message_id="msg2", parent=root_post_1)
+        type="post", message_id="msg2")
     test_session.add(p)
+    test_session.flush()
+    p.set_parent(root_post_1)
     test_session.flush()
 
     def fin():
@@ -217,8 +232,10 @@ def reply_post_2(request, participant2_user, discussion, reply_post_1, test_sess
     p = Post(
         discussion=discussion, creator = participant2_user,
         subject=u"re2: root post", body=u"post body",
-        type="post", message_id="msg3", parent=reply_post_1)
+        type="post", message_id="msg3")
     test_session.add(p)
+    test_session.flush()
+    p.set_parent(reply_post_1)
     test_session.flush()
 
     def fin():
@@ -232,8 +249,10 @@ def reply_post_3(request, participant2_user, discussion, root_post_1, test_sessi
     p = Post(
         discussion=discussion, creator = participant2_user,
         subject=u"re2: root post", body=u"post body",
-        type="post", message_id="msg4", parent=root_post_1)
+        type="post", message_id="msg4")
     test_session.add(p)
+    test_session.flush()
+    p.set_parent(root_post_1)
     test_session.flush()
 
     def fin():
@@ -242,14 +261,96 @@ def reply_post_3(request, participant2_user, discussion, root_post_1, test_sessi
 
 
 @pytest.fixture(scope="function")
-def extract(request, participant2_user, reply_post_2, discussion, test_session):
+def root_idea(request, discussion, test_session):
+    from assembl.models import RootIdea
+    i = RootIdea(short_title="the root", discussion=discussion)
+    test_session.add(i)
+    test_session.flush()
+
+    def fin():
+        test_session.delete(i)
+    return i
+
+
+@pytest.fixture(scope="function")
+def subidea_1(request, discussion, root_idea, test_session):
+    from assembl.models import Idea, IdeaLink
+    i = Idea(short_title="idea 1", discussion=discussion)
+    test_session.add(i)
+    l_r_1 = IdeaLink(source=root_idea, target=i)
+    test_session.add(l_r_1)
+    test_session.flush()
+
+    def fin():
+        test_session.delete(i)
+        test_session.delete(l_r_1)
+    return i
+
+
+@pytest.fixture(scope="function")
+def subidea_1_1(request, discussion, subidea_1, test_session):
+    from assembl.models import Idea, IdeaLink
+    i = Idea(short_title="idea 1.1", discussion=discussion)
+    test_session.add(i)
+    l_1_11 = IdeaLink(source=subidea_1, target=i)
+    test_session.add(l_1_11)
+    test_session.flush()
+
+    def fin():
+        test_session.delete(i)
+        test_session.delete(l_1_11)
+    return i
+
+
+@pytest.fixture(scope="function")
+def subidea_1_1_1(request, discussion, subidea_1_1, test_session):
+    from assembl.models import Idea, IdeaLink
+    i = Idea(short_title="idea 1.1.1", discussion=discussion)
+    test_session.add(i)
+    l_11_111 = IdeaLink(source=subidea_1_1, target=i)
+    test_session.add(l_11_111)
+    test_session.flush()
+
+    def fin():
+        test_session.delete(i)
+        test_session.delete(l_11_111)
+    return i
+
+
+@pytest.fixture(scope="function")
+def synthesis_1(request, discussion, subidea_1, subidea_1_1, test_session):
+    from assembl.models import Synthesis, SubGraphIdeaAssociation,\
+        SubGraphIdeaLinkAssociation
+    s = Synthesis(discussion=discussion)
+    test_session.add(s)
+    i1_a = SubGraphIdeaAssociation(sub_graph=s, idea=subidea_1)
+    test_session.add(i1_a)
+    i11_a = SubGraphIdeaAssociation(sub_graph=s, idea=subidea_1_1)
+    test_session.add(i11_a)
+    l_1_11 = subidea_1_1.source_links[0]
+    l_1_11_a = SubGraphIdeaLinkAssociation(sub_graph=s, idea_link=l_1_11)
+    test_session.add(l_1_11_a)
+    test_session.flush()
+
+    def fin():
+        test_session.delete(i1_a)
+        test_session.delete(i11_a)
+        test_session.delete(l_1_11_a)
+        test_session.delete(s)
+
+    return s
+
+
+@pytest.fixture(scope="function")
+def extract_post_1_to_subidea_1_1(request, participant2_user, reply_post_1, subidea_1_1, discussion, test_session):
+    """ Links reply_post_1 to subidea_1_1 """
     from assembl.models import Extract
     e = Extract(
         body=u"body",
         creator=participant2_user,
         owner=participant2_user,
-        content=reply_post_2,
-        #idea_id=IdeaData.idea21.id,
+        content=reply_post_1,
+        idea_id=subidea_1_1.id,  # strange bug: Using idea directly fails
         discussion=discussion)
     test_session.add(e)
     test_session.flush()
@@ -257,60 +358,3 @@ def extract(request, participant2_user, reply_post_2, discussion, test_session):
     def fin():
         test_session.delete(e)
     return e
-
-
-
-# class RootIdeaData(DataSet):
-#     class root_idea:
-#         #A root idea is created by the discussion, so this is not truly the
-#         #root idea...
-#         id = 2
-#         discussion = DiscussionData.jacklayton
-
-
-# class IdeaData(DataSet):
-#     class idea1:
-#         id = 3
-#         discussion = DiscussionData.jacklayton
-#         short_title = u"idea 1"
-
-#     class idea11:
-#         id = 4
-#         discussion = DiscussionData.jacklayton
-#         short_title = u"idea 1.1"
-
-#     class idea2:
-#         id = 5
-#         discussion = DiscussionData.jacklayton
-#         short_title = u"idea 2"
-
-#     class idea21:
-#         id = 6
-#         discussion = DiscussionData.jacklayton
-#         short_title = u"idea 2.1"
-
-#     class idea211:
-#         id = 7
-#         discussion = DiscussionData.jacklayton
-#         short_title = u"idea 2.1.1"
-
-# class IdeaLinkData(DataSet):
-#     class link_r_1:
-#         source = RootIdeaData.root_idea
-#         target = IdeaData.idea1
-
-#     class link_1_11:
-#         source = IdeaData.idea1
-#         target = IdeaData.idea11
-
-#     class link_r_2:
-#         source = RootIdeaData.root_idea
-#         target = IdeaData.idea2
-
-#     class link_2_21:
-#         source = IdeaData.idea2
-#         target = IdeaData.idea21
-
-#     class link_21_211:
-#         source = IdeaData.idea21
-#         target = IdeaData.idea211

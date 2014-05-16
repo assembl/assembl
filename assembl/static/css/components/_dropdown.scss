@@ -35,7 +35,8 @@
     }
 
     .dropdown--button & {
-        @extend .button, .button.button--condensed;
+        @extend .button;
+        @extend .button.button--condensed;
 
         padding: { right: 8px; left: 4px; }
 
@@ -78,6 +79,7 @@
     @include z-index("float");
     min-width: 155px;
     overflow: visible;
+    white-space: nowrap;
 
     @include transition( top $dropdown-time, opacity $dropdown-time, left 0 linear $dropdown-time, right 0 linear $dropdown-time );
     @include opacity( 0 );

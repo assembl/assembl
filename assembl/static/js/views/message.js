@@ -27,15 +27,20 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n, Permissions, Message
         isSelecting: true,
 
         /**
+         * Flags if the message is hoisted
+         * @type {Boolean}
+         */
+        isHoisted: false,
+
+        /**
          * @init
          * @param {MessageModel} obj the model
-         * @param {Array[boolean]} last_sibling_chain which of the view's ancestors
-         *   are the last child of their respective parents.
          */
         initialize: function(obj){
             this.model.on('change:isSelected', this.onIsSelectedChange, this);
             this.model.on('replaced', this.onReplaced, this);
             this.model.on('showBody', this.onShowBody, this);
+            this.model.on('change', this.render, this);
             this.messageListView = obj.messageListView;
             this.viewStyle = this.messageListView.defaultMessageStyle;
             this.messageListView.on('annotator:destroy', this.onAnnotatorDestroy, this);
@@ -54,6 +59,22 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n, Permissions, Message
          * @type {_.template}
          */
         template: app.loadTemplate('message'),
+
+        /**
+         * Meant for derived classes to override
+         * @type {}
+         */
+        transformDataBeforeRender: function(data) {
+            return data;
+        },
+        
+        /**
+         * Meant for derived classes to override
+         * @type {}
+         */
+        postRender: function() {
+            return;
+        },
 
         /**
          * The render
@@ -81,8 +102,11 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n, Permissions, Message
             // It has to contain ONLY raw content of the message provided by the
             // database for annotator to parse it back properly
             data['messageBodyId'] = app.ANNOTATOR_MESSAGE_BODY_ID_PREFIX + data['@id'];
+            data['isHoisted'] = this.isHoisted;
             
             this.$el.attr("id","message-"+ data['@id']);
+            data['read'] = this.model.get('read')
+            this.$el.addClass(data['@type']);
             if (this.model.get('read')) {
                 this.$el.addClass('read');
                 this.$el.removeClass('unread');
@@ -90,7 +114,7 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n, Permissions, Message
                 this.$el.addClass('unread');
                 this.$el.removeClass('read');
             }
-
+            data = this.transformDataBeforeRender(data);
             this.$el.html( this.template(data) );
 
             app.initClipboard();
@@ -103,10 +127,11 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n, Permissions, Message
                 'send_button_label': i18n.gettext('Send your reply'),
                 'subject_label': null,
                 'mandatory_body_missing_msg': i18n.gettext('You did not type a response yet...'),
-                'mandatory_subject_missing_msg': null,
+                'mandatory_subject_missing_msg': null
             });
             this.$('.message-replybox').append(this.replyView.render().el);
 
+            this.postRender();
             app.messageList.initAnnotator();
             this.loadAnnotations();
 
@@ -269,7 +294,8 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n, Permissions, Message
             'mouseenter .message-body': 'doTheSelection',
 
             // menu
-            'click #message-markasunread': 'markAsUnread'
+            'click #message-markasunread': 'markAsUnread',
+            'click #message-markasread': 'markAsRead'
         },
 
         
@@ -277,7 +303,9 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n, Permissions, Message
          * @event
          */
         onMessageHoistClick: function(ev){
-            app.messageList.addFilterByPostId(this.model.getId());
+            // we will hoist the post, or un-hoist it if it is already hoisted
+            this.isHoisted = app.messageList.toggleFilterByPostId(this.model.getId());
+            this.render(); // so that the isHoisted property will now be considered
         },
         
         /**

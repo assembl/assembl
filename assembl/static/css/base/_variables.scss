@@ -56,6 +56,7 @@ $idealist-selected-bg-color: #dbf2ff;
 
 $idealist-item-height: 40px;
 $idealist-arrow-width: 30px;
+$idealist-arrow-height: 40px;
 $idealist-arrow-image-width: 10px;
 $idealist-link-image-width: 12px;
 
@@ -98,7 +99,7 @@ $padding-left: 10px;
 
 // Panel
 $panel-border-color: $box-border-color;
-$panel-header-height: 56px;
+$panel-header-height: 35px;
 $panel-header-bg-color: #f7f7f7;
 
 // Text
@@ -116,5 +117,5 @@ $link-active-color: darken($text-muted-color, 20);
 // Button
 $button-border-radius: 5px;
 $button-font-size: 13px;
-$button-height: $icon-height + 4px;
+$button-height: 25px;
 $button-condensed-height: 26px;

@@ -1,9 +1,11 @@
-define(['backbone', 'underscore', 'models/idea', 'views/idea', "views/ideaGraph", 'app', 'types', 'views/rootIdea', 'views/orphanIdea', 'views/synthesisInIdeaList', 'permissions'],
-function(Backbone, _, Idea, IdeaView, ideaGraphLoader, app, Types, RootIdeaView, OrphanIdeaView, SynthesisInIdeaListView, Permissions){
+define(['backbone', 'underscore', 'models/idea', 'views/idea', "views/ideaGraph", 'app', 'types', 'views/allMessagesInIdeaList', 'views/orphanMessagesInIdeaList', 'views/synthesisInIdeaList', 'permissions', 'utils/renderVisitor', 'utils/siblingChainVisitor'],
+function(Backbone, _, Idea, IdeaView, ideaGraphLoader, app, Types, AllMessagesInIdeaListView, OrphanMessagesInIdeaListView, SynthesisInIdeaListView, Permissions, renderVisitor, siblingChainVisitor){
     'use strict';
 
     var FEATURED = 'featured',
         IN_SYNTHESIS = 'inNextSynthesis';
+
+
 
     var IdeaList = Backbone.View.extend({
 
@@ -40,25 +42,43 @@ function(Backbone, _, Idea, IdeaView, ideaGraphLoader, app, Types, RootIdeaView,
          * @init
          */
         initialize: function(obj){
+            this.ideas = new Idea.Collection();
+            /*this.on("all", function(eventName) {
+                console.log("ideaList event received: ", eventName);
+              });
+            this.ideas.on("all", function(eventName) {
+                console.log("ideaList collection event received: ", eventName);
+              });*/
+            
             if( obj && obj.button ){
                 this.button = $(obj.button);
                 this.button.on('click', app.togglePanel.bind(window, 'ideaList'));
             }
-
-            this.ideas = new Idea.Collection();
 
             var events = ['reset', 'change:parentId', 'change:inNextSynthesis', 'remove', 'add'];
             this.ideas.on(events.join(' '), this.render, this);
 
             var that = this;
             app.on('idea:delete', function(){
+                if(app.debugRender) {
+                    console.log("ideaList: triggering render because app.on('idea:delete') was triggered");
+                }
                 that.render();
             });
 
             app.on('ideas:update', function(ideas){
+                if(app.debugRender) {
+                    console.log("ideaList: triggering render because app.on('idea:update') was triggered");
+                }
                 that.ideas.add(ideas, {merge: true, silent: true});
                 that.render();
             });
+            
+            // Benoitg - 2014-05-05:  There is no need for this, if an idealink
+            // is associated with the idea, the idea itself will receive a change event
+            // on the socket
+            //app.segmentList.segments.on('add change reset', this.render, this);
+            
             app.on("panel:open", function(){that.resizeGraphView();});
             app.on("panel:close", function(){that.resizeGraphView();});
         },
@@ -67,6 +87,9 @@ function(Backbone, _, Idea, IdeaView, ideaGraphLoader, app, Types, RootIdeaView,
          * The render
          */
         render: function(){
+            if(app.debugRender) {
+                console.log("ideaList:render() is firing");
+            }
             app.trigger('render');
 
             this.body = this.$('.panel-body');
@@ -103,30 +126,28 @@ function(Backbone, _, Idea, IdeaView, ideaGraphLoader, app, Types, RootIdeaView,
                 return idea.get('order');
             });
 
-            if( rootIdea.get('num_synthesis_posts') > 0 ){
-                // Synthesis idea
-                var synthesisIdea = new Idea.Model({'num_synthesis_posts': rootIdea.get('num_synthesis_posts')}),
-                    synthesisView = new SynthesisInIdeaListView({model:synthesisIdea});
-                list.appendChild(synthesisView.render().el);
-            }
+            // Synthesis posts pseudo-idea
+            var synthesisView = new SynthesisInIdeaListView({model:rootIdea});
+            list.appendChild(synthesisView.render().el);
             
-            if( rootIdea.get('num_posts') > 0 ){
-                // Root idea (represents the discussion)
-                var rootIdeaView = new RootIdeaView({model:rootIdea});
-                list.appendChild(rootIdeaView.render().el);
-            }
+            // All posts pseudo-idea
+            var allMessagesInIdeaListView = new AllMessagesInIdeaListView({model:rootIdea});
+            list.appendChild(allMessagesInIdeaListView.render().el);
             
-            _.each(rootIdeaDirectChildrenModels, function(idea){
-                var ideaView =  new IdeaView({model:idea});
+            var view_data = {};
+            var roots = [];
+            function excludeRoot(idea) {return idea != rootIdea};
+            rootIdea.visitDepthFirst(renderVisitor(view_data, roots, excludeRoot));
+            rootIdea.visitDepthFirst(siblingChainVisitor(view_data));
+
+            _.each(roots, function(idea){
+                var ideaView =  new IdeaView({model:idea}, view_data);
                 list.appendChild(ideaView.render().el);
             });
 
-            if( rootIdea.get('num_orphan_posts') > 0 ){
-                // Orphan idea
-                var orphanIdea = new Idea.Model({'num_orphan_posts': rootIdea.get('num_orphan_posts')}),
-                    orphanView = new OrphanIdeaView({model: orphanIdea});
-                list.appendChild(orphanView.render().el);
-            }
+            // Orphan messages pseudo-idea
+            var orphanView = new OrphanMessagesInIdeaListView({model: rootIdea});
+            list.appendChild(orphanView.render().el);
 
             var data = {
                 tocTotal: this.ideas.length -1,//We don't count the root idea

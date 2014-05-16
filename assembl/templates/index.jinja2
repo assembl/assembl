@@ -1,76 +1,33 @@
 {% extends 'base.jinja2' %}
 
-{% block header %}
-    <div class="bar bar--main">
-        <div class="bar-body">
-            <div class="bar-left">
-                <a id="assembl-mainbutton" class="iconbutton iconbutton--nofx icon-menu"></a>
-
-                <img src="/static/img/assembl.png" alt="Assembl" />
-            </div>
-            <div class="bar-right">
-                {% if user %}
-                    {{ user.display_name() }}
-                    {# <a class="iconbutton iconbutton--nofx"> #}<img src="/user/id/{{user.id}}/avatar/32" alt="{{ user.display_name() }}" class="image-rounded" />{# </a> #}
-                    <a href="/logout" class="link iconbutton icon-logout-1" title="{{ gettext('Sign out') }}"></a>
-                {% else %}
-                    <a href="/login?next_view={{request.current_route_path()}}" class="link">{{ gettext('Sign in') }} <i class="icon-user"></i> </a>
-                {% endif %}
-                {% if locales.__len__ > 1 %}
-                    <span class="locale active">{{locale}}</span>
-                    {% for loc in locales %}
-                        {% if (loc != locale) %}
-                            <span onmouseup="window.app.setLocale('{{loc}}')" class="locale">{{loc}}</span>
-                        {% endif %}
-                    {% endfor %}
-                {% endif %}
-            </div>
-        </div>
-    </div>
-{% endblock %}
-
 {% block content %}
-    <input type="hidden" name="discussion-id" id="discussion-id" value="{{ discussion.id }}" />
-    <input type="hidden" name="discussion-slug" id="discussion-slug" value="{{ discussion.slug }}" />
-    <input type="hidden" name="socket-url" id="socket-url" value="{{ socket_url }}" />
+<input type="hidden" name="discussion-id" id="discussion-id" value="{{ discussion.id }}" />
+<input type="hidden" name="discussion-slug" id="discussion-slug" value="{{ discussion.slug }}" />
+<input type="hidden" name="socket-url" id="socket-url" value="{{ socket_url }}" />
 
-    {% if user %}
-        <input type="hidden" name="user-id" id="user-id" value="{{ user.id }}" />
-        <input type="hidden" name="user-displayname" id="user-displayname" value="{{ user.display_name() }}" />
-    {% endif %}
- 
-    <div class="bar bar--title">
-        <div class="bar-left">
-            <span id="onlinedot" class="dot">
-                <small class="dot-offline">{{ gettext('Connecting...') }}</small>
-                <span class="dot-online title-debatname">{{ discussion.topic }}</span>
-            </span>
-        </div>
-        <div class="bar-center">
-            <a id="button-ideaList" class="barbutton" data-tooltip-position="n"
-            data-tooltip="{{ gettext('To add an idea in the table of ideas: select add idea and drag the new idea either 1) on the inner edge of an existing idea to add it as a sibling or 2) in the middle of an existing idea to add it as a sub-idea.') }}">{{ gettext('Table of Ideas') }}</a>
-            <a id="button-ideaPanel" class="barbutton" style="display: none">{{ gettext('Idea') }}</a>
-            <a id="button-segmentList" class="barbutton">{{ gettext('Clipboard') }}</a>
-            <a id="button-messages" class="barbutton">{{ gettext('Messages') }}</a>
-        </div>
+{% if user %}
+    <input type="hidden" name="user-id" id="user-id" value="{{ user.id }}" />
+    <input type="hidden" name="user-displayname" id="user-displayname" value="{{ user.display_name() }}" />
+{% endif %}
 
-        <div class="bar-right">
-            <a id="button-synthesis" class="barbutton">{{ gettext('Synthesis') }}</a>
-        </div>
+<div class="navbar-title">
+    <span id="onlinedot" class="dot">
+        <small class="dot-offline">{{ gettext('Connecting...') }}</small>
+        <span class="dot-online title-debatname">{{ discussion.topic }}</span>
+    </span>
+</div>
+
+<div class="panelarea">
+    <div class="panelarea-table">
+
+        <div id="ideaList" class="panelarea-col"></div>
+        <div id="ideaPanel" class="panelarea-col"></div>
+        <div id="segmentList" class="panelarea-col"></div>
+        <div id="messageList" class="panelarea-col"></div>
+        <div id="synthesisPanel" class="panelarea-col"></div>
+
     </div>
-
-    <div class="panelarea">
-        <div class="panelarea-table">
-            
-            <div id="ideaList" class="panelarea-col"></div>
-            <div id="ideaPanel" class="panelarea-col"></div>
-            <div id="segmentList" class="panelarea-col"></div>
-            <div id="messageList" class="panelarea-col"></div>
-            <div id="synthesisPanel" class="panelarea-col"></div>
-
-        </div>
-    </div>
-
+</div>
 {% endblock %}
 
 {% block extra_js %}

@@ -1,5 +1,5 @@
-define(['backbone', 'underscore', 'jquery', 'app', 'models/synthesis', 'views/synthesisIdea', 'i18n', 'views/editableField', 'views/ckeditorField'],
-function(Backbone, _, $, app, Synthesis, SynthesisIdeaView, i18n, EditableField, CKEditorField){
+define(['backbone', 'underscore', 'jquery', 'app', 'models/synthesis', 'models/idea', 'permissions', 'views/ideaFamily', 'views/ideaInSynthesis', 'i18n', 'views/editableField', 'utils/renderVisitor'],
+function(Backbone, _, $, app, Synthesis, Idea, Permissions, IdeaFamilyView, IdeaInSynthesisView, i18n, EditableField, renderVisitor){
     'use strict';
 
     var SynthesisPanel = Backbone.View.extend({
@@ -14,25 +14,29 @@ function(Backbone, _, $, app, Synthesis, SynthesisIdeaView, i18n, EditableField,
                     this.button = $(obj.button).on('click', app.togglePanel.bind(window, 'synthesisPanel'));
                 }
 
-                if( obj.ideas ){
-                    this.ideas = obj.ideas;
-                } else {
-                    this.ideas = new Idea.Collection();
-                }
+
             }
+            this.ideas = new Idea.Collection();
 
+            this.ideas.on('add', this.render, this);
+            this.ideas.on('remove', this.render, this);
+            //Note:  this is inhibited within render, as render calls it
             this.ideas.on('reset', this.render, this);
-            this.ideas.on('change', this.render, this);
-
+            //this.ideas.on('all', function(event){console.log("ideas event: ", event)}, this);
+            
             this.model.on('reset', this.render, this);
-            this.model.on('change', this.render, this);
+            this.model.on('change', function(){
+                //console.log("model changed");
+                this.render();}, this);
+            //this.model.on('all', function(event){console.log("model event: ", event)}, this);
+
         },
 
         /**
          * The model
          * @type {Synthesis}
          */
-        model: new Synthesis.Model(),
+        model: null,
 
         /**
          * Flag
@@ -57,89 +61,116 @@ function(Backbone, _, $, app, Synthesis, SynthesisIdeaView, i18n, EditableField,
          * @return {SynthesisPanel}
          */
         render: function(){
+            if(app.debugRender) {
+                console.log("synthesisPanel:render() is firing");
+            }
+            var that = this,
+                rootIdea = app.ideaList.ideas.getRootIdea();
+            
             app.trigger('render');
-
             // Cleaning all previous listeners
             app.off('synthesisPanel:close');
 
+            //Do NOT listen to reset, as it's called within this render
+            this.ideas.off('reset', this.render, this);
+            
             // Cleaning previous ckeditor instance
             if( this.ckeditor ){
                 this.ckeditor.destroy();
                 this.ckeditor = null;
             }
+            var raw_ideas = this.model.get('ideas');
+            //console.log("Raw Ideas from model: ", raw_ideas)
+            if( raw_ideas ){
+                var ideas = [];
+                _.each(raw_ideas, function (raw_idea){
+                    //console.log(raw_idea);
+                    var idea = app.ideaList.ideas.get(raw_idea['@id']);
+                    if(idea) {
+                        ideas.push(idea);
+                    }
+                    else {
+                        console.log("synthesisPanel:render():  This shoudn't happen, fix toombstone support?")
+                    }
+                });
+                this.ideas.reset(ideas);
+            }
+            //console.log("Synthesis idea collection: ", this.ideas)
 
-            var list = document.createDocumentFragment(),
-                data = this.model.toJSON(),
-                ideas = this.ideas.getInNextSynthesisIdeas();
-
-            data.collapsed = this.collapsed;
-            data.ideas = ideas;
+            //var list = document.createDocumentFragment(),
+            var model = this.model;
 
             // Getting the scroll position
-            var body = this.$('.panel-body'),
+            var body = this.$('.body-synthesis'),
                 y = body.get(0) ? body.get(0).scrollTop : 0;
-
+            var data = model.toJSON();
+            data.canSend = app.getCurrentUser().can(Permissions.SEND_SYNTHESIS);
+            data.canEdit = app.getCurrentUser().can(Permissions.EDIT_SYNTHESIS);
             this.$el.html( this.template(data) );
 
-            this.$('.panel-body').get(0).scrollTop = y;
+            var view_data = {};
+            var roots = [];
+            function inSynthesis(idea) {
+                var retval;
+                if(that.model.get('is_next_synthesis')){
+                    //This special case is so we get instant feedback before
+                    //the socket sends changes
+                    retval = idea != rootIdea && idea.get('inNextSynthesis')
+                }
+                else {
+                    retval = idea != rootIdea && that.ideas.contains(idea)
+                }
+                //console.log("Checking",idea,"returning:", retval, "synthesis is next synthesis:", that.model.get('is_next_synthesis'));
+                return retval};
+            rootIdea.visitDepthFirst(renderVisitor(view_data, roots, inSynthesis));
 
-            var titleField = new EditableField({
-                model: this.model,
-                modelProp: 'subject'
+            _.each(roots, function append_recursive(idea){
+                var rendered_idea_view = new IdeaFamilyView(
+                        {model: idea,
+                            innerViewClass: IdeaInSynthesisView}
+                        , view_data);
+                that.$('.synthesisPanel-ideas').append( rendered_idea_view.render().el );
             });
-            titleField.renderTo('#synthesisPanel-title');
+            this.$('.body-synthesis').get(0).scrollTop = y;
+            if(data.canEdit) {
+                var titleField = new EditableField({
+                    model: model,
+                    modelProp: 'subject'
+                });
+                titleField.renderTo(this.$('.synthesisPanel-title'));
 
-            var introductionField = new EditableField({
-                model: this.model,
-                modelProp: 'introduction'
-            });
-            introductionField.renderTo('#synthesisPanel-introduction');
+                var introductionField = new EditableField({
+                    model: model,
+                    modelProp: 'introduction'
+                });
+                introductionField.renderTo(this.$('.synthesisPanel-introduction'));
 
-            var conclusionField = new EditableField({
-                model: this.model,
-                modelProp: 'conclusion'
-            });
-            conclusionField.renderTo('#synthesisPanel-conclusion');
-
-            this.renderCKEditor();
-
+                var conclusionField = new EditableField({
+                    model: model,
+                    modelProp: 'conclusion'
+                });
+                conclusionField.renderTo(this.$('.synthesisPanel-conclusion'));
+            }
+            else {
+                this.$('.synthesisPanel-title').append(model.get('subject'));
+                this.$('.synthesisPanel-introduction').append(model.get('introduction'));
+                this.$('.synthesisPanel-conclusion').append(model.get('conclusion'));
+            }
+            
+            //Restore callback inhibited above
+            this.ideas.on('reset', this.render, this);
             return this;
         },
 
 
-        /**
-         * renders the ckEditor if there is one editable field
-         */
-        renderCKEditor: function(){
-            var editingIdea = this.ideas.getEditingIdeaInSynthesisPanel();
-            if( !editingIdea ){
-                return;
-            }
-
-            this.ckeditor = new CKEditorField({
-                'model': editingIdea,
-                'modelProp': 'longTitle',
-                'placeholder': i18n.gettext('Add the description')
-            });
-
-            this.ckeditor.on('save cancel', function(idea){
-                idea.set('synthesisPanel-editing', false);
-            });
-
-            var area = this.$('#synthesisPanel-longtitle');
-            this.ckeditor.renderTo( area );
-            this.ckeditor.changeToEditMode();
-        },
 
         /**
          * @events
          */
         events: {
-            'click #synthesisPanel-closeButton': 'closePanel',
-            'click #synthesisPanel-publishButton': 'publish',
-            'click #synthesisPanel-fullscreenButton': 'setFullscreen',
-
-            'click [data-idea-id]': 'onEditableAreaClick'
+            'click .synthesisPanel-closeButton': 'closePanel',
+            'click .synthesisPanel-publishButton': 'publish',
+            'click .synthesisPanel-fullscreenButton': 'setFullscreen'
         },
 
         /**
@@ -161,21 +192,6 @@ function(Backbone, _, $, app, Synthesis, SynthesisIdeaView, i18n, EditableField,
          */
         setFullscreen: function(){
             app.setFullscreen(this);
-        },
-
-        /**
-         * @event
-         */
-        onEditableAreaClick: function(ev){
-            var id = ev.currentTarget.getAttribute('data-idea-id'),
-                idea = app.ideaList.ideas.get(id);
-
-            app.trigger('synthesisPanel:edit');
-
-            if( idea ){
-                idea.set('synthesisPanel-editing', true);
-                this.currentId = id;
-            }
         },
 
         /**
@@ -203,24 +219,15 @@ function(Backbone, _, $, app, Synthesis, SynthesisIdeaView, i18n, EditableField,
          * Publishes the synthesis
          */
         _publish: function(){
-            var json = this.model.toJSON(),
-                publishes_synthesis_id = this.model.id,
+            var publishes_synthesis_id = this.model.id,
                 url = app.getApiUrl('posts'),
-                template = app.loadTemplate('synthesisEmail'),
-                ideas = this.ideas.getInNextSynthesisIdeas(),
                 that = this;
 
             var onSuccess = function(resp){
                 var data = {
                     publishes_synthesis_id: publishes_synthesis_id,
-                    subject: app.format(i18n.gettext('[synthesis] {0}'), json.subject),
-                    message: template({
-                        email: resp[0].most_common_recipient_address,
-                        subject: json.subject,
-                        introduction: json.introduction,
-                        conclusion: json.conclusion,
-                        ideas: ideas
-                    })
+                    subject: "Not used",
+                    message: "Not used"
                 };
 
                 // Sending the synthesis
@@ -232,6 +239,8 @@ function(Backbone, _, $, app, Synthesis, SynthesisIdeaView, i18n, EditableField,
                     success: function(){
                         alert( i18n.gettext("Synthesis published!") );
                         that.unblockPanel();
+                        that.model = new Synthesis.Model({'@id': 'next_synthesis'});
+                        that.model.fetch();
                     }
                 });
             };
@@ -246,6 +255,7 @@ function(Backbone, _, $, app, Synthesis, SynthesisIdeaView, i18n, EditableField,
 
             that.blockPanel();
         }
+
     });
 
 

@@ -1,0 +1,33 @@
+.body-synthesis{
+  .sudject {
+    padding: 10px 0 0 10px;
+  }
+  .synthesisPanel-title {
+    padding-left: 10px;
+  }
+  .introduction {
+    background-color: #c7c2dd;
+    padding: 10px;
+    .text-muted {
+      color: #FFFFFF;
+    }
+    .panel-editablearea {
+      border-left: 3px solid #ffffff;
+      border-radius: 0px;
+      margin: 0;
+    }
+  }
+  .conclusion {
+    background-color: #c7c2dd;
+    padding: 10px;
+    .text-muted {
+       color: #FFFFFF;
+    }
+    .panel-editablearea {
+      margin: 0;
+      border-left: 3px solid #ffffff;
+      border-radius: 0px;
+    }
+  }
+
+}

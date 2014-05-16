@@ -1,0 +1,23 @@
+{
+  "name": "creativity widget",
+  "version": "1.0.0",
+  "homepage": "https://github.com/ImaginationForPeople/assembl",
+  "authors": [
+    "hellsingblack <hellsingblack@gmail.com>"
+  ],
+  "description": "widget of creativity for imagination for people",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "angularjs": "*",
+    "bootstrap": "~3.1.1",
+    "angular-route": "~1.2.16",
+    "angular-resource": "~1.2.16",
+    "angular-sanitize": "~1.2.16",
+    "jquery": "~2.1.0",
+    "select2": "~3.4.6",
+    "bourbon": "~3.1.8",
+    "angular-translate": "~2.1.0",
+    "angular-translate-loader-static-files": "~2.1.0"
+  }
+}

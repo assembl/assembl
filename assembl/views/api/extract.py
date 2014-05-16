@@ -11,12 +11,11 @@ from sqlalchemy.sql.expression import cast
 from sqlalchemy.orm import aliased, joinedload, joinedload_all, contains_eager
 
 from assembl.views.api import API_DISCUSSION_PREFIX
+from assembl.auth import (P_READ, P_ADD_EXTRACT, P_EDIT_EXTRACT, P_EDIT_MY_EXTRACT)
 from assembl.models import (
     get_named_object, get_database_id, Extract, TextFragmentIdentifier,
     Discussion, AgentProfile, User, ContentSource, AnnotatorSource, Content, Post, Webpage, Idea)
-from . import acls
-from assembl.auth import (
-    P_READ, P_ADD_EXTRACT, P_EDIT_EXTRACT, P_EDIT_MY_EXTRACT, get_permissions, user_has_permission)
+from assembl.auth.util import (get_permissions, user_has_permission)
 from assembl.lib.token import decode_token
 
 
@@ -32,21 +31,21 @@ extracts = Service(
     name='extracts',
     path=API_DISCUSSION_PREFIX + '/extracts',
     description="An extract from Content that is an expression of an Idea",
-    renderer='json', acl=acls, cors_policy=cors_policy
+    renderer='json', cors_policy=cors_policy
 )
 
 extract = Service(
     name='extract',
     path=API_DISCUSSION_PREFIX + '/extracts/{id:.+}',
     description="Manipulate a single extract",
-    acl=acls, cors_policy=cors_policy
+    cors_policy=cors_policy
 )
 
 search_extracts = Service(
     name='search_extracts',
     path=API_DISCUSSION_PREFIX + '/search_extracts',
     description="search for extracts matching a URL",
-    renderer='json', acl=acls, cors_policy=cors_policy
+    renderer='json', cors_policy=cors_policy
 )
 
 

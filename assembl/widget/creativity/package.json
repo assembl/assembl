@@ -1,0 +1,20 @@
+{
+  "name": "creativity",
+  "version": "0.0.1",
+  "description": "widget of creativity by I4P",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "hellsingblack@gmail.com",
+  "license": "MIT",
+  "dependencies": {
+    "gulp": "~3.6.2",
+    "gulp-sass": "~0.7.1",
+    "gulp-watch": "~0.6.3",
+    "gulp-clean": "~0.2.4"
+  }
+}

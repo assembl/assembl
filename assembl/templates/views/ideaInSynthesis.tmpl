@@ -1,0 +1,21 @@
+<% if( editing ) { %> 
+    <div class="synthesis-expression-editor"></div>
+<% } else { %>
+    <div class="synthesis-expression">
+    <%= longTitle %>
+    </div>
+<% } %>
+
+<span class="comment">
+    <% if( authors.length ) { %>
+        {{ gettext('By') }}
+    <% } %>
+    <% _.each(authors, function(author, index, list) { %>
+        <img src="<%= author.getAvatarUrl(20) %>" alt="{{ gettext('Avatar for') }} <%= author.get('name') %>"  class="image-rounded" width="20" height="20" />
+        <i style='font-style: italic;font-size:80%;'><%= author.get('name') %></i><% if( index < list.length-1 ) { %>,<% } %>
+    <% }) %>
+    <a class = "synthesisIdea-replybox-openbtn icon-comment" href="#">{{ gettext('comment') }}</a>
+    <span class="synthesisIdea-replybox hidden"></span>
+</span>
+
+

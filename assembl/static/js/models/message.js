@@ -155,6 +155,7 @@ define(['models/base', 'jquery', 'app', 'underscore'], function(Base, $, app, _)
                 dataType: "json",
                 success: function(data){
                     that.trigger('change:read', [value]);
+                    that.trigger('change', that);
                     app.trigger('ideas:update', [data.ideas]);
                 }
             });
