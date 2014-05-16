@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: assembl 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-05-08 23:21-0400\n"
+"POT-Creation-Date: 2014-05-16 16:05-0400\n"
 "PO-Revision-Date: 2014-05-06 13:46-0400\n"
 "Last-Translator: Benoit Grégoire <benoitg@coeus.ca>\n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
@@ -18,23 +18,23 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 1.3\n"
 
-#: assembl/auth/operations.py:30 assembl/templates/register.jinja2:16
+#: assembl/auth/operations.py:37 assembl/templates/register.jinja2:16
 msgid "email"
 msgstr ""
 
-#: assembl/auth/operations.py:32
+#: assembl/auth/operations.py:39
 msgid "account"
 msgstr ""
 
-#: assembl/auth/operations.py:41
+#: assembl/auth/operations.py:48
 msgid "confirm_title"
 msgstr ""
 
-#: assembl/auth/operations.py:44
+#: assembl/auth/operations.py:51
 msgid "confirm_email"
 msgstr ""
 
-#: assembl/auth/operations.py:48
+#: assembl/auth/operations.py:55
 msgid "confirm_email_html"
 msgstr ""
 
@@ -62,7 +62,7 @@ msgstr ""
 msgid "Extract"
 msgstr ""
 
-#: assembl/static/js/app/app.js:899
+#: assembl/static/js/app/app.js:902
 msgid "ajax error message:"
 msgstr ""
 
@@ -94,15 +94,15 @@ msgstr ""
 msgid "You must be logged in to create segments"
 msgstr ""
 
-#: assembl/static/js/models/synthesis.js:34
+#: assembl/static/js/models/synthesis.js:28
 msgid "Add a title"
 msgstr ""
 
-#: assembl/static/js/models/synthesis.js:35
+#: assembl/static/js/models/synthesis.js:29
 msgid "Add an introduction"
 msgstr ""
 
-#: assembl/static/js/models/synthesis.js:36
+#: assembl/static/js/models/synthesis.js:30
 msgid "Add a conclusion"
 msgstr ""
 
@@ -111,17 +111,17 @@ msgid "Unknown user"
 msgstr ""
 
 #: assembl/static/js/views/ideaInSynthesis.js:95
-#: assembl/static/js/views/message.js:110
+#: assembl/static/js/views/message.js:123
 msgid "Type your response here..."
 msgstr ""
 
 #: assembl/static/js/views/ideaInSynthesis.js:97
-#: assembl/static/js/views/message.js:112
+#: assembl/static/js/views/message.js:125
 msgid "Send your reply"
 msgstr ""
 
 #: assembl/static/js/views/ideaInSynthesis.js:100
-#: assembl/static/js/views/message.js:114
+#: assembl/static/js/views/message.js:127
 msgid "You did not type a response yet..."
 msgstr ""
 
@@ -210,7 +210,7 @@ msgstr ""
 msgid "Collapse all"
 msgstr ""
 
-#: assembl/static/js/views/messageList.js:452
+#: assembl/static/js/views/messageList.js:449
 msgid "Send to clipboard"
 msgstr ""
 
@@ -361,28 +361,46 @@ msgstr ""
 msgid "segmentList-clearConfirmationMessage"
 msgstr ""
 
-#: assembl/static/js/views/synthesisPanel.js:179
+#: assembl/static/js/views/synthesisPanel.js:212
 msgid "Do you want to publish the synthesis?"
 msgstr ""
 
-#: assembl/static/js/views/synthesisPanel.js:208
+#: assembl/static/js/views/synthesisPanel.js:240
 msgid "Synthesis published!"
 msgstr ""
 
 #: assembl/templates/discussion_list.jinja2:11
-msgid "Admin"
+#: assembl/templates/discussion_list.jinja2:24
+#: assembl/templates/discussion_list.jinja2:31
+#: assembl/templates/discussion_list.jinja2:37
+#: assembl/templates/header.jinja2:40
+msgid "Sign in"
 msgstr ""
 
 #: assembl/templates/discussion_list.jinja2:16
+msgid "Admin"
+msgstr ""
+
+#: assembl/templates/discussion_list.jinja2:22
+#: assembl/templates/discussion_list.jinja2:35
 #: assembl/templates/admin/discussions.jinja2:72
 msgid "There are no discussions on this server yet"
 msgstr ""
 
-#: assembl/templates/discussion_list.jinja2:20
+#: assembl/templates/discussion_list.jinja2:24
+#: assembl/templates/discussion_list.jinja2:37
+msgid " to see available discussions."
+msgstr ""
+
+#: assembl/templates/discussion_list.jinja2:31
+msgid " to see all available discussions."
+msgstr ""
+
+#: assembl/templates/discussion_list.jinja2:41
 msgid "Create a new discussion"
 msgstr ""
 
-#: assembl/templates/discussion_list.jinja2:23
+#: assembl/templates/discussion_list.jinja2:44
 msgid "Change global permissions"
 msgstr ""
 
@@ -411,12 +429,8 @@ msgstr ""
 msgid "Synthesis"
 msgstr ""
 
-#: assembl/templates/header.jinja2:34
+#: assembl/templates/header.jinja2:36
 msgid "Sign out"
-msgstr ""
-
-#: assembl/templates/header.jinja2:38
-msgid "Sign in"
 msgstr ""
 
 #: assembl/templates/index.jinja2:15
@@ -468,9 +482,7 @@ msgstr ""
 msgid "Imagination for people"
 msgstr ""
 
-#: assembl/templates/login.jinja2:63 assembl/templates/profile.jinja2:168
-#: assembl/templates/register.jinja2:26
-#: assembl/templates/view_profile.jinja2:67
+#: assembl/templates/login.jinja2:63 assembl/templates/register.jinja2:26
 #, python-format
 msgid "Designed by %(caravan)s and %(imaginationForPeople)s"
 msgstr ""
@@ -547,17 +559,6 @@ msgstr ""
 msgid "Connect other accounts to Assembl"
 msgstr ""
 
-#: assembl/templates/profile.jinja2:165
-#: assembl/templates/view_profile.jinja2:64
-msgid "<a href='http://caravan.coop' class='link'>Caravan</a>"
-msgstr ""
-
-#: assembl/templates/profile.jinja2:166
-msgid ""
-"<a href='http://imaginationforpeople.org/' class='link'>Imagination for "
-"people</a>"
-msgstr ""
-
 #: assembl/templates/register.jinja2:6
 #, fuzzy
 msgid "Join assembl"
@@ -569,12 +570,6 @@ msgstr ""
 
 #: assembl/templates/register.jinja2:20
 msgid "login"
-msgstr ""
-
-#: assembl/templates/view_profile.jinja2:65
-msgid ""
-"<a href='http://http://imaginationforpeople.org/' "
-"class='link'>Imagination for people</a>"
 msgstr ""
 
 #: assembl/templates/admin/discussion_permissions.jinja2:4
@@ -664,15 +659,15 @@ msgstr ""
 msgid "Number of caught segments expressing this idea"
 msgstr ""
 
-#: assembl/templates/views/ideaInSynthesis.tmpl:12
+#: assembl/templates/views/ideaInSynthesis.tmpl:11
 msgid "By"
 msgstr ""
 
-#: assembl/templates/views/ideaInSynthesis.tmpl:15
+#: assembl/templates/views/ideaInSynthesis.tmpl:14
 msgid "Avatar for"
 msgstr ""
 
-#: assembl/templates/views/ideaInSynthesis.tmpl:18
+#: assembl/templates/views/ideaInSynthesis.tmpl:17
 msgid "comment"
 msgstr ""
 
@@ -945,23 +940,21 @@ msgstr ""
 msgid "View syntheses"
 msgstr ""
 
-#: assembl/templates/views/synthesisPanel.tmpl:13
-msgid "Subject"
-msgstr ""
-
 #: assembl/templates/views/synthesisPanel.tmpl:19
+#: assembl/templates/views/synthesisPanelMessage.tmpl:5
 msgid "Introduction"
 msgstr ""
 
 #: assembl/templates/views/synthesisPanel.tmpl:29
+#: assembl/templates/views/synthesisPanelMessage.tmpl:15
 msgid "Conclusion"
 msgstr ""
 
-#: assembl/templates/views/synthesisPanel.tmpl:35
+#: assembl/templates/views/synthesisPanel.tmpl:36
 msgid "Publish"
 msgstr ""
 
-#: assembl/views/api/post.py:56 assembl/views/api/post.py:330
+#: assembl/views/api/post.py:56 assembl/views/api/post.py:324
 #, python-format
 msgid "No discussion found with id=%s"
 msgstr ""
@@ -978,40 +971,40 @@ msgstr ""
 msgid "You must be logged in to view which posts are read"
 msgstr ""
 
-#: assembl/views/api/post.py:313
+#: assembl/views/api/post.py:307
 msgid "Your message is empty"
 msgstr ""
 
-#: assembl/views/auth/views.py:126
+#: assembl/views/auth/views.py:129
 #, python-format
 msgid "The username %s is already used"
 msgstr ""
 
-#: assembl/views/auth/views.py:137
+#: assembl/views/auth/views.py:147
 msgid "The passwords are not identical"
 msgstr ""
 
-#: assembl/views/auth/views.py:198
+#: assembl/views/auth/views.py:208
 msgid "We already have a user with this email."
 msgstr ""
 
-#: assembl/views/auth/views.py:202
+#: assembl/views/auth/views.py:212
 msgid "The passwords should be identical"
 msgstr ""
 
-#: assembl/views/auth/views.py:258
+#: assembl/views/auth/views.py:268
 msgid "This account was not verified yet"
 msgstr ""
 
-#: assembl/views/auth/views.py:267
+#: assembl/views/auth/views.py:277
 msgid "This user cannot be found"
 msgstr ""
 
-#: assembl/views/auth/views.py:282
+#: assembl/views/auth/views.py:292
 msgid "Invalid user and password"
 msgstr ""
 
-#: assembl/views/auth/views.py:508
+#: assembl/views/auth/views.py:518
 msgid "Login failed, try again"
 msgstr ""
 
@@ -1215,24 +1208,25 @@ msgstr ""
 #~ msgid "Showing all %d messages %s:"
 #~ msgstr ""
 
-#~ msgid ""
-#~ "Unhoist this message (do not show "
-#~ "only this message and its replies "
-#~ "anymore)"
-#~ msgstr ""
-
 #~ msgid "Hoist this message (show only this message and its replies)"
 #~ msgstr ""
 
 #~ msgid "Activity feed"
 #~ msgstr ""
 
+#~ msgid "<a href='http://caravan.coop' class='link'>Caravan</a>"
+#~ msgstr ""
+
 #~ msgid ""
-#~ "Drag this bookmarklet to your favorite"
-#~ " bar.  You can then capture segments"
-#~ " from any non-https webpage to "
-#~ "this discussion by clicking on the "
-#~ "bookmarklet and selecting a zone of "
-#~ "text in the webpage."
+#~ "<a href='http://imaginationforpeople.org/' "
+#~ "class='link'>Imagination for people</a>"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "<a href='http://http://imaginationforpeople.org/' "
+#~ "class='link'>Imagination for people</a>"
+#~ msgstr ""
+
+#~ msgid "Subject"
 #~ msgstr ""
 
