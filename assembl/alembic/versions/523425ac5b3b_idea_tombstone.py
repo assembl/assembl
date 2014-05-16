@@ -22,7 +22,9 @@ def upgrade(pyramid_env):
     with context.begin_transaction():
         op.add_column(
             'idea', sa.Column(
-                'is_tombstone', sa.Boolean, server_default='0'))
+                'is_tombstone', sa.SmallInteger, server_default='0'))
+        op.execute('UPDATE idea set hidden=0')
+        op.execute('ALTER TABLE idea ADD CHECK (is_tombstone IN (0, 1))')
 
 
 def downgrade(pyramid_env):
