@@ -23,6 +23,7 @@ from sqlalchemy import (
     and_,
 )
 from sqlalchemy.ext.associationproxy import association_proxy
+from rdflib import URIRef
 from virtuoso.vmapping import PatternIriClass
 
 from assembl.lib.utils import slugify
@@ -1120,10 +1121,11 @@ class IdeaContentPositiveLink(IdeaContentLink):
     @classmethod
     def special_quad_patterns(cls, alias_manager):
         return [QuadMapPatternS(
-            Content.iri_class().apply(IdeaContentLink.content_id),
+            Content.iri_class().apply(cls.content_id),
             ASSEMBL.postLinkedToIdea,
-            Idea.iri_class().apply(IdeaContentLink.idea_id),
-            name=QUADNAMES.assembl_postLinkedToIdea)]
+            Idea.iri_class().apply(cls.idea_id),
+            name=QUADNAMES.assembl_postLinkedToIdea,
+            condition=cls.idea_id != None)]
 
     __mapper_args__ = {
         'polymorphic_identity': 'idea_content_positive_link',
@@ -1145,10 +1147,11 @@ class IdeaRelatedPostLink(IdeaContentPositiveLink):
     @classmethod
     def special_quad_patterns(cls, alias_manager):
         return [QuadMapPatternS(
-            Content.iri_class().apply(IdeaContentLink.content_id),
+            Content.iri_class().apply(cls.content_id),
             ASSEMBL.postRelatedToIdea,
-            Idea.iri_class().apply(IdeaContentLink.idea_id),
-            name=QUADNAMES.assembl_postRelatedToIdea)]
+            Idea.iri_class().apply(cls.idea_id),
+            name=QUADNAMES.assembl_postRelatedToIdea,
+            condition=cls.idea_id != None)]
 
     __mapper_args__ = {
         'polymorphic_identity': 'idea_related_post_link',
@@ -1168,6 +1171,11 @@ class Extract(IdeaContentPositiveLink):
         ), primary_key=True, info= {
             'rdf': QuadMapPatternS(None, ASSEMBL.db_id)})
 
+    graph_iri_class = PatternIriClass(
+        QUADNAMES.ExcerptGraph_iri,
+        'http://%{WSHostName}U/data/ExcerptGraph/%d',
+        ('id', Integer, False))
+
     body = Column(UnicodeText, nullable=False)
 
     discussion_id = Column(Integer, ForeignKey(
@@ -1177,37 +1185,29 @@ class Extract(IdeaContentPositiveLink):
             Discussion.iri_class().apply())})
     discussion = relationship('Discussion', backref='extracts')
 
-    @classmethod
-    def extra_iri_classes(cls):
-        return {
-            "graph": PatternIriClass(
-                ASSEMBL.extract_graph_iri,
-                'http://%{WSHostName}U/data/extract_graph/%d',
-                ('id', Integer, False))
-        }
+    def extract_graph_name(self):
+        from pyramid.threadlocal import get_current_registry
+        reg = get_current_registry()
+        host = reg.settings['public_hostname']
+        return URIRef('http://%s/data/ExcerptGraph/%d' % (host, self.id))
+
+    def extract_graph_iri(self):
+        return getattr(QUADNAMES, 'extract_%d_iri' % self.id)
 
     @classmethod
-    def special_quad_patterns0(cls, alias_manager):
-        graph_iri = cls.extra_iri_classes()["graph"]
-        relextract_alias = alias_manager.add_class_alias(cls)
-        relideacontentlink = alias_manager.add_class_alias(IdeaContentLink, [
-            IdeaContentLink.idea_id != None, IdeaContentLink.id == relextract_alias.id])
+    def special_quad_patterns(cls, alias_manager):
         return [
-            QuadMapPatternS(cls.iri_class().apply(relextract_alias.id),
-                CATALYST.expressesIdea,
-                Idea.iri_class().apply(relideacontentlink.idea_id),
-                name=QUADNAMES.catalyst_expressesIdea),
             QuadMapPatternS(
-                cls.iri_class().apply(cls.id),
-                OA.hasBody,
-                graph_iri.apply(cls.id),
-                name=QUADNAMES.oa_hasBody),
+                None, OA.hasBody,
+                cls.graph_iri_class.apply(cls.id),
+                name=QUADNAMES.oa_hasBody,
+                condition=cls.idea_id != None),
             QuadMapPatternS(
-                Content.iri_class().apply(relideacontentlink.content_id),
+                Content.iri_class().apply(cls.content_id),
                 ASSEMBL.postExtractRelatedToIdea,
-                Idea.iri_class().apply(relideacontentlink.idea_id),
-                graph=graph_iri.apply(cls.id),
-                name=QUADNAMES.assembl_postExtractRelatedToIdea)
+                Idea.iri_class().apply(cls.idea_id),
+                name=QUADNAMES.assembl_postExtractRelatedToIdea,
+                condition=cls.idea_id != None)
             ]
 
 

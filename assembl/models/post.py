@@ -49,13 +49,14 @@ class Post(Content):
 
     @classmethod
     def special_quad_patterns(cls, alias_manager):
+        # TODO: get a recursive alias
         return [
-            QuadMapPatternS(
-                Post.iri_class().apply(cls.id),
-                SIOC.reply_of,
-                cls.iri_class().apply(cls.parent_id),
-                name=QUADNAMES.post_parent,
-                condition=(cls.parent_id != None)),
+        #     QuadMapPatternS(
+        #         Post.iri_class().apply(cls.id),
+        #         SIOC.reply_of,
+        #         cls.iri_class().apply(cls.parent_id),
+        #         name=QUADNAMES.post_parent,
+        #         condition=(cls.parent_id != None)),
         ]
 
     creator_id = Column(Integer, ForeignKey('agent_profile.id'),
