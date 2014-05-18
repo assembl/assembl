@@ -23,8 +23,11 @@ def get_session():
 
 
 def get_virtuoso(session, storage=ASSEMBL.discussion_storage):
-    return Virtuoso(quad_storage=storage,
-                    connection=session.connection())
+    v = Virtuoso(quad_storage=storage,
+                 connection=session.connection())
+    for prefix, ns in nsm.namespaces():
+        v.bind(prefix, ns)
+    return v
 
 USER_SECTION = 'user'
 MAIN_SECTION = 'main'
