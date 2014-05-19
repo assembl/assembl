@@ -106,7 +106,7 @@ define(['backbone', 'underscore'], function(Backbone, _){
                 $(ev.currentTarget).trigger('blur');
                 return false;
             }
-        },
+        }
 
     });
 

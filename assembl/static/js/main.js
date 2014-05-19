@@ -1,7 +1,116 @@
-define([
+requirejs.config({
+  baseUrl: "/static/js/",
+  urlArgs: "bust=" + (new Date()).getTime(),
+  waitSeconds: 20,
+  paths: {
+    'app': 'app/app',
+    'router': 'app/router',
+    'views':'app/views',
+    'models':'app/models',
+    'i18n': 'app/i18n',
+    'socket': 'app/socket',
+    'types': 'app/types',
+    'permissions': 'app/permissions',
+
+    'jquery': "bower/jquery/jquery",
+    'tipsy': 'bower/tipsy/src/javascripts/jquery.tipsy',
+    'jquery-highlight': 'lib/jquery-highlight/jquery.highlight',
+
+    'backbone': 'bower/backbone/backbone',
+    'underscore': 'bower/underscore/underscore',
+
+    'annotator': 'lib/annotator/annotator-full.min',
+
+    'jasmine': 'bower/jasmine/lib/jasmine-core/jasmine',
+    'jasmine-html': 'bower/jasmine/lib/jasmine-core/jasmine',
+    'jasmine-jquery': 'bower/jasmine-jquery/lib/jasmine-jquery',
+
+    'ckeditor': 'bower/ckeditor/ckeditor',
+    'ckeditor-sharedspace': 'lib/ckeditor-sharedcontainer/plugin',
+
+    'moment': 'bower/momentjs/moment',
+    'zeroclipboard': 'bower/zeroclipboard/ZeroClipboard',
+    'sockjs': 'bower/sockjs/sockjs',
+    'cytoscape': 'bower/cytoscape/cytoscape',
+    'jit': 'bower/jit/Jit/jit',
+    'sprintf': 'bower/sprintf/src/sprintf'
+  },
+  shim: {
+    backbone: {
+        deps: ['underscore', 'jquery'],
+        exports: 'Backbone'
+    },
+    'underscore': {
+        exports: '_'
+    },
+    'jquery': {
+        exports: 'jQuery'
+    },
+    'jquery-highlight': {
+        deps: ['jquery'],
+        exports: 'jQuery'
+    },
+    'app': {
+        deps: ['annotator', 'ckeditor', 'tipsy', 'i18n', 'jquery-highlight', 'zeroclipboard'],
+        exports: 'app'
+    },
+    'i18n': {
+        exports: 'i18n'
+    },
+    'socket': {
+        deps: ['sockjs']
+    },
+    'jasmine': {
+        exports: 'jasmine'
+    },
+    'jasmine-html': {
+        deps: ['jasmine', 'jasmine-jquery'],
+        exports: 'jasmine'
+    },
+    'jasmine-jquery': {
+        deps: ['jasmine'],
+        exports: 'jasmine'
+    },
+    'ckeditor': {
+        exports: 'CKEDITOR'
+    },
+    'ckeditor-sharedspace': {
+        deps: ['ckeditor'],
+        exports: 'CKEDITOR'
+    },
+    'tipsy': {
+        deps: ['jquery']
+    },
+    'zeroclipboard' : {
+        exports: 'ZeroClipboard'
+    },
+    'sockjs': {
+        deps: ['jquery'],
+        exports: 'SockJS'
+    },
+    'cytoscape': {
+        deps: ['jquery'],
+        exports: 'cytoscape'
+    },
+    'jit': {
+        deps: [],
+        exports: '$jit'
+    },
+    'annotator' : {
+        deps: ['jquery'],
+        exports: 'Annotator'
+    },
+    'sprintf' : {
+        deps: [],
+        exports: 'sprintf'
+    }
+  }
+});
+
+
+require([
     "app",
     "jquery",
-    "views/lateralMenu",
     "views/ideaList",
     "views/ideaPanel",
     "views/segmentList",
@@ -11,11 +120,14 @@ define([
     "models/user",
     "models/segment",
     "router",
-    "socket"
-], function(app, $, LateralMenu, IdeaList, IdeaPanel, SegmentList, MessageList, Synthesis, SynthesisPanel, User, Segment, Router, Socket){
+    "socket",
+    "i18n"
+], function(app, $, IdeaList, IdeaPanel, SegmentList, MessageList, Synthesis, SynthesisPanel, User, Segment, Router, Socket, i18n){
     'use strict';
 
     app.init();
+
+    i18n(json);
 
     // The router
     app.router = new Router();

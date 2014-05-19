@@ -42,14 +42,14 @@ function(Backbone, _, Moment, ckeditor, app, Message, MessageView, Synthesis, Sy
          */
         postRender: function() {
             var synthesisPanel = new SynthesisPanel({
-                model: this.synthesis,
+                model: this.synthesis
                 //el: '#message_'+_.escape(this.model.getNumericId())+'_synthesis'
             });
             synthesisPanel.template = app.loadTemplate('synthesisPanelMessage');
             synthesisPanel.render();
             this.$('.message-body').append(synthesisPanel.el);
             return;
-        },
+        }
         
     });
 

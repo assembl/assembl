@@ -110,7 +110,7 @@ function(Backbone, _, Idea, Message, app, i18n, Types, EditableField, CKEditorFi
                 'send_button_label': i18n.gettext('Send your comment'),
                 'subject_label': null,
                 'mandatory_body_missing_msg': i18n.gettext('You need to type a comment first...'),
-                'mandatory_subject_missing_msg': null,
+                'mandatory_subject_missing_msg': null
             });
             this.$('#ideaPanel-comment').append( this.commentView.render().el );
             return this;
