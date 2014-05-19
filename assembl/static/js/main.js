@@ -7,17 +7,17 @@ requirejs.config({
     'router': 'app/router',
     'views':'app/views',
     'models':'app/models',
-    'i18n': 'app/i18n',
-    'socket': 'app/socket',
-    'types': 'app/types',
-    'permissions': 'app/permissions',
+    'i18n': 'app/utils/i18n',
+    'socket': 'app/utils/socket',
+    'types': 'app/utils/types',
+    'permissions': 'app/utils/permissions',
 
     'jquery': "bower/jquery/jquery",
     'tipsy': 'bower/tipsy/src/javascripts/jquery.tipsy',
     'jquery-highlight': 'lib/jquery-highlight/jquery.highlight',
 
     'backbone': 'bower/backbone/backbone',
-    'underscore': 'bower/underscore/underscore',
+    'underscore': 'bower/underscore/underscore-min',
 
     'annotator': 'lib/annotator/annotator-full.min',
 

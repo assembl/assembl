@@ -28,7 +28,7 @@
     <input type="text" name="openid_identifier" />
     {% endif %}
     {% if image %}
-    <input type="image" value="" src="{{ STATIC_URL }}img/loginbox/{{name}}.png" alt="{{gettext(title)}}"/>
+    <input type="image" value="" src="{{ STATIC_URL }}/img/loginbox/{{name}}.png" alt="{{gettext(title)}}"/>
     {% else %}
     <input type="submit" value="{{ gettext(title) }}" />
     {% endif %}
