@@ -3,7 +3,7 @@
 
 #ideaPanel {
         #ideaPanel-section-summary > legend > span{
-                background: #fff url(#{$img-dir}/icon/idea.svg) no-repeat left center;
+                background: url(#{$img-dir}/icon/idea.svg) no-repeat left center;
                 padding-left: 2em;
                 background-size: auto 90%;
         }
