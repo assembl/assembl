@@ -58,20 +58,39 @@ define(['backbone', 'app'], function(Backbone, app){
          * @return {Object} [description]
          */
         parse: function(resp, options) {
-            var id = resp['id'];
+            var id = resp[this.idAttribute];
 
             if (resp['ok'] === true && id !== undefined){
                 if (this.collection !== undefined){
                     var existing = this.collection.get(id);
                     if (existing === null || existing === undefined) {
-                        this.set('@id', id);
+                        this.set(this.idAttribute, id);
                     } else if (existing !== this) {
-                        console.log("Existing: ", existing);
-                        // those websockets are fast!
-                        this.collection.remove(this);
-                        this.trigger("replaced", existing);
+                        /* Those websockets are fast!
+                         * 
+                         * We are in the case where the websocket created an 
+                         * object before 'this' got an id.  It means that the 
+                         * oldest object is 'this', and the 'existing' object
+                         * is a duplicate we do not want.
+                         */
+                        //console.log("Existing: ", existing, "replacing by: ", this);
+                        /* Views that do not listen to remove on the collection 
+                         * will have trouble...
+                         */
+                        this.collection.remove(existing);
+                        //Normally this happens later, but we have to make sure
+                        //the collection will see the duplicate
+                        this.set(this.idAttribute, id);
+                        //Re-merge the object from the socket, it may have more
+                        //information.  Since we haven't set anything except the
+                        //id yey, there is no chance we overwrite anything we 
+                        //do not want­.
+                        this.collection.add(existing, {merge: true});
+                        
+                        //Views should listen to this event an replace their model if necessary.
+                        existing.trigger("replacedBy", this);
                     } else {
-                        // this should not happen, but no harm.
+                        console.log("base:parse(): this should not happen, but no harm...");
                     }
                 }
             }
@@ -168,10 +187,14 @@ define(['backbone', 'app'], function(Backbone, app){
             var debug = false;
             if( item['@tombstone'] ){
                 if (debug){
-                    console.log("Removing from socket:")
-                    console.log(model);
+                    console.log("Ignoring tombstone not in collection for id: "+item['@id']);
                 }
-                this.remove(model);
+                if(model) {
+                    if (debug){
+                        console.log("Removing from socket (tombstoned):", model)
+                    }
+                    this.remove(model);
+                }
             }
             else if( model === null || model === undefined ){
                 // oops, doesn't exist

@@ -47,7 +47,8 @@ class ContentSource(DiscussionBoundBase):
                 Discussion.iri_class().apply(cls.discussion_id),
                 CATALYST.uses_source,
                 cls.iri_class().apply(cls.id),
-                name=QUADNAMES.uses_source),
+                name=QUADNAMES.uses_source,
+                condition=cls.discussion_id != None),
         ]
 
     discussion = relationship(
@@ -202,6 +203,12 @@ class Content(DiscussionBoundBase):
     @classmethod
     def get_discussion_condition(cls, discussion_id):
         return cls.discussion_id == discussion_id
+
+    widget_idea_links = relationship('IdeaContentWidgetLink')
+
+    def widget_ideas(self):
+        from .synthesis import Idea
+        return [Idea.uri_generic(wil.idea_id) for wil in self.widget_idea_links]
 
     crud_permissions = CrudPermissions(
             P_ADD_POST, P_READ, P_EDIT_POST, P_ADMIN_DISC,

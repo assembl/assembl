@@ -1,5 +1,5 @@
-define(['backbone', 'underscore', 'jquery', 'app', 'models/segment', 'i18n', 'permissions'],
-function(Backbone, _, $, app, Segment, i18n, Permissions){
+define(['backbone', 'underscore', 'jquery', 'app', 'models/segment', 'types', 'i18n', 'permissions'],
+function(Backbone, _, $, app, Segment, Types, i18n, Permissions){
     'use strict';
 
     var SegmentList = Backbone.View.extend({
@@ -9,6 +9,10 @@ function(Backbone, _, $, app, Segment, i18n, Permissions){
         initialize: function(obj){
             var that = this;
 
+            /*this.segments.on("all", function(eventName) {
+                console.log("segementList collection event received: ", eventName);
+            });*/
+            
             if( obj && obj.button ){
                 this.button = $(obj.button).on('click', app.togglePanel.bind(window, 'segmentList'));
             }
@@ -74,18 +78,20 @@ function(Backbone, _, $, app, Segment, i18n, Permissions){
         },
 
         /**
-         * Add a segment to the bucket
+         * Add a segment to the clipboard.  If the segment exists, it will be 
+         * unlinked from it's idea (if any).
          * @param {Segment} segment
          */
         addSegment: function(segment){
             delete segment.attributes.highlights;
 
+            this.segments.add(segment, {merge: true});
             segment.save('idIdea', null);
-            this.segments.add(segment);
         },
 
         /**
-         * Add annotation as segment. 
+         * Transform an annotator annotation as a segment. 
+         * The segment isn't saved.
          * @param {annotation} annotation
          * @param {Number} [idIdea=null] 
          * @return {Segment}
@@ -95,7 +101,7 @@ function(Backbone, _, $, app, Segment, i18n, Permissions){
                 idPost = post.getId();
 
             var segment = new Segment.Model({
-                target: { "@id": idPost, "@type": "email" },
+                target: { "@id": idPost, "@type": Types.EMAIL },
                 text: annotation.text,
                 quote: annotation.quote,
                 idCreator: app.getCurrentUser().getId(),
@@ -108,7 +114,6 @@ function(Backbone, _, $, app, Segment, i18n, Permissions){
                 delete segment.attributes.highlights;
 
                 this.segments.add(segment);
-                segment.save();
             } else {
                 alert( segment.validationError );
             }
@@ -130,7 +135,7 @@ function(Backbone, _, $, app, Segment, i18n, Permissions){
             }
 
             var segment = new Segment.Model({
-                target: { "@id": idPost, "@type": "email" },
+                target: { "@id": idPost, "@type": Types.EMAIL },
                 text: text,
                 quote: text,
                 idCreator: app.getCurrentUser().getId(),
@@ -290,7 +295,7 @@ function(Backbone, _, $, app, Segment, i18n, Permissions){
 
             var annotation = app.getDraggedAnnotation();
             if( annotation ){
-                app.saveCurrentAnnotation();
+                app.saveCurrentAnnotationAsExtract();
                 return;
             }
 

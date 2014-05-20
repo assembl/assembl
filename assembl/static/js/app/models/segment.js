@@ -44,7 +44,7 @@ function(app, Base, _, User, Message){
         /**
          * @type {string}
          */
-        urlBase: app.getApiUrl("extracts"),
+        urlRoot: app.getApiUrl("extracts"),
 
         /**
          * @type {Object}

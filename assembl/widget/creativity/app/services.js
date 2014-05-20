@@ -40,7 +40,7 @@ creativityServices.factory('globalMessages', function($http){
 
 //CONFIG
 creativityServices.factory('Configuration', ['$resource', function($resource) {
-    return $resource('http://localhost:6543/data/Discussion/1/widgets', {}, {
+    return $resource('/data/Discussion/1/widgets', {}, {
         getWidget: {
             method:'POST',
             headers: {'Content-Type': 'application/x-www-form-urlencoded'},
@@ -50,7 +50,7 @@ creativityServices.factory('Configuration', ['$resource', function($resource) {
                 var header = headers().location;
                     header = header.split(':')[1];
 
-                return $resource('http://localhost:6543/data/:widgetId', {widgetId: header});
+                return $resource('/data/:widgetId', {widgetId: header});
             }
         }
     });
@@ -59,12 +59,12 @@ creativityServices.factory('Configuration', ['$resource', function($resource) {
 
 //CARD inspire me: send an idea to assembl
 creativityServices.factory('sendIdeaService', ['$resource',function($resource){
-    return $resource('http://localhost:6543/api/v1/discussion/:discussionId/posts')
+    return $resource('/api/v1/discussion/:discussionId/posts')
 }]);
 
 // WIP: use Angular's REST and Custom Services as our Model for Messages
 creativityServices.factory('Discussion', ['$resource', function($resource){
-    return $resource('http://localhost:6543/data/Discussion/:discussionId', {}, {
+    return $resource('/data/Discussion/:discussionId', {}, {
         query: {method:'GET', params:{discussionId:'1'}, isArray:false}
         });
 }]);

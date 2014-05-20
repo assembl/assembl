@@ -41,7 +41,8 @@
     padding: 10px;
   }
   .card-browser {
-    #previousCardButton, #nextCardButton{
+    #previousCardButton,
+    #nextCardButton{
       position: absolute;
       top: 50%;
       height: 24px;
@@ -62,7 +63,8 @@
       text-align: center;
     }
   }
-  .bs-callout-info, .bs-callout-warning {
+  .bs-callout-info,
+  .bs-callout-warning {
     padding: 3px 10px;
   }
 }
@@ -74,14 +76,31 @@
   .session-comment {
     font-family: Helvetica, Arial, sans-serif;
     padding-left: 10%;
-    height: 676px;
+    height: 660px;
     overflow-y: auto;
     .thumbnail{
       border:none;
     }
     .sub-comment {
-      height: 100px;
-      min-height: 100px;
+      padding: 5px;
+      background-color: #dddddd;
+      height: 65px;
+      textarea {
+        border-radius: 0;
+        height: 26px;
+        resize : none;
+        overflow-y: hidden;
+        padding: 3px;
+      }
+      .btn-subcomment {
+        margin-top: 5px;
+      }
+    }
+    .comment-top {
+      background-color: #dddddd;
+      border-bottom: 1px solid #ffffff;
+      font-size: 11px;
+      padding: 2px 7px;
     }
     .text-primary {
       cursor: pointer;

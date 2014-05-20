@@ -1377,7 +1377,8 @@ class TextFragmentIdentifier(DiscussionBoundBase):
                 Extract.iri_class().apply(cls.extract_id),
                 OA.hasTarget,
                 cls.iri_class().apply(cls.id),
-                name=QUADNAMES.oa_hasTarget),
+                name=QUADNAMES.oa_hasTarget,
+                condition=cls.extract_id != None),
             # TODO: Paths!
             # QuadMapPatternS(OA.hasSource,
             #     Extract.iri_class().apply((cls.extract_id, Extract.content_id)),

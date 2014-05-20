@@ -38,7 +38,7 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n, Permissions, Message
          */
         initialize: function(obj){
             this.model.on('change:isSelected', this.onIsSelectedChange, this);
-            this.model.on('replaced', this.onReplaced, this);
+            this.model.on('replacedBy', this.onReplaced, this);
             this.model.on('showBody', this.onShowBody, this);
             this.model.on('change', this.render, this);
             this.messageListView = obj.messageListView;

@@ -48,14 +48,14 @@ function(Backbone, _, Idea, IdeaView, ideaGraphLoader, app, Types, AllMessagesIn
               });
             this.ideas.on("all", function(eventName) {
                 console.log("ideaList collection event received: ", eventName);
-              });*/
-            
+              });
+            */
             if( obj && obj.button ){
                 this.button = $(obj.button);
                 this.button.on('click', app.togglePanel.bind(window, 'ideaList'));
             }
 
-            var events = ['reset', 'change:parentId', 'change:inNextSynthesis', 'remove', 'add'];
+            var events = ['reset', 'change:parentId', 'change:@id', 'change:inNextSynthesis', 'remove', 'add'];
             this.ideas.on(events.join(' '), this.render, this);
 
             var that = this;
@@ -68,7 +68,7 @@ function(Backbone, _, Idea, IdeaView, ideaGraphLoader, app, Types, AllMessagesIn
 
             app.on('ideas:update', function(ideas){
                 if(app.debugRender) {
-                    console.log("ideaList: triggering render because app.on('idea:update') was triggered");
+                    console.log("ideaList: triggering render because app.on('ideas:update') was triggered");
                 }
                 that.ideas.add(ideas, {merge: true, silent: true});
                 that.render();
