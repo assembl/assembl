@@ -722,17 +722,6 @@ class Email(ImportedPost):
 
         smtp_connection.quit()
 
-    def serializable(self):
-        serializable_content = super(Email, self).serializable()
-
-        serializable_content.update({
-            #"sender": self.sender,
-            #"creator": self.creator.serializable(),
-            "recipients": self.recipients,
-        })
-
-        return serializable_content
-
     def __repr__(self):
         return "<Email '%s to %s'>" % (
             self.sender.encode('utf-8'),

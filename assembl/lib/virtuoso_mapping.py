@@ -4,15 +4,15 @@ from itertools import ifilter
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from rdflib import Graph, URIRef
-from pyramid.threadlocal import get_current_registry
+from rdflib import Graph
 
 from .sqla import class_registry, Base
 from ..namespaces import (
-    namespace_manager as nsm, ASSEMBL, QUADNAMES, RDF, OWL)
+    namespace_manager as nsm, ASSEMBL, QUADNAMES, RDF, OWL, CATALYST)
 from virtuoso.vmapping import (
     PatternIriClass, QuadMapPattern, ClassPatternExtractor,
-    GraphQuadMapPattern, QuadStorage, ClassAliasManager)
+    GraphQuadMapPattern, QuadStorage, ClassAliasManager,
+    PatternGraphQuadMapPattern)
 from virtuoso.vstore import Virtuoso
 
 
@@ -23,8 +23,11 @@ def get_session():
 
 
 def get_virtuoso(session, storage=ASSEMBL.discussion_storage):
-    return Virtuoso(quad_storage=storage,
-                    connection=session.connection())
+    v = Virtuoso(quad_storage=storage,
+                 connection=session.connection())
+    for prefix, ns in nsm.namespaces():
+        v.bind(prefix, ns)
+    return v
 
 USER_SECTION = 'user'
 MAIN_SECTION = 'main'
@@ -87,15 +90,15 @@ def load_ontologies(session, reload=None):
 
 class QuadMapPatternS(QuadMapPattern):
     def __init__(self, subject=None, predicate=None, obj=None,
-                 graph=None, name=None, condition=None, section=None):
+                 graph_name=None, name=None, condition=None, section=None):
         super(QuadMapPatternS, self).__init__(
-            subject, predicate, obj, graph, name, condition)
+            subject, predicate, obj, graph_name, name, condition)
         self.section = section
 
-    def set_defaults(self, subject=None, obj=None, graph=None,
+    def set_defaults(self, subject=None, obj=None, graph_name=None,
                      name=None, condition=None, section=None):
         super(QuadMapPatternS, self).set_defaults(
-            subject, obj, graph, name, condition)
+            subject, obj, graph_name, name, condition)
         self.section = self.section or section
 
 
@@ -141,14 +144,18 @@ class AssemblClassPatternExtractor(ClassPatternExtractor):
             yield p
         if 'special_quad_patterns' in sqla_cls.__dict__:
             # Only direct definition
-            for p in sqla_cls.special_quad_patterns(self.alias_manager):
-                yield p
+            for qmp in sqla_cls.special_quad_patterns(self.alias_manager):
+                self.set_defaults(qmp, subject_pattern, sqla_cls)
+                if qmp.graph_name == self.graph.name:
+                    qmp.resolve(sqla_cls)
+                    yield qmp
 
-    def set_defaults(self, qmp, subject_pattern, sqla_cls, column):
+    def set_defaults(self, qmp, subject_pattern, sqla_cls, column=None):
         rdf_section = sqla_cls.__dict__.get(
             'rdf_section', DISCUSSION_DATA_SECTION)
-        qmp.set_defaults(subject_pattern, column, self.graph,
-                         self.make_column_name(sqla_cls, column),
+        name = self.make_column_name(sqla_cls, column) if (
+            column is not None) else None
+        qmp.set_defaults(subject_pattern, column, self.graph.name, name,
                          None, rdf_section)
         from ..models import DiscussionBoundBase
         if self.discussion_id and issubclass(sqla_cls, DiscussionBoundBase):
@@ -157,13 +164,9 @@ class AssemblClassPatternExtractor(ClassPatternExtractor):
 
     def extract_column_info(self, sqla_cls, subject_pattern):
         gen = self._extract_column_info(sqla_cls, subject_pattern)
-        gen = list(gen)
         if self.section:
             gen = ifilter(lambda q: q.section == self.section, gen)
-            gen = list(gen)
-            return gen
-        else:
-            return gen
+        return list(gen)
 
 
 # QUESTION: 1 storage per discussion? I would say yes.
@@ -183,7 +186,7 @@ class AssemblQuadStorageManager(object):
 
     def prepare_storage(self, quad_storage_name, imported=None):
         alias_manager = ClassAliasManager(Base._decl_class_registry)
-        return QuadStorage(quad_storage_name, imported, alias_manager)
+        return QuadStorage(quad_storage_name, imported, alias_manager, False)
 
     def populate_storage(
         self, qs, section, graph_name, graph_iri, discussion_id=None,
@@ -238,14 +241,6 @@ class AssemblQuadStorageManager(object):
         return getattr(QUADNAMES, 'discussion_%d_%s_iri' % (
             discussion_id, section))
 
-    def extract_graph_name(self, extract_id):
-        reg = get_current_registry()
-        host = reg.settings['public_hostname']
-        return URIRef('http://%s/data/ExcerptTarget/%d' % (host, extract_id))
-
-    def extract_graph_iri(self, extract_id):
-        return getattr(QUADNAMES, 'extract_%d_iri' % extract_id)
-
     def create_main_storage(self, session):
         return self.create_storage(session, self.main_storage, [
             (MAIN_SECTION, self.main_graph, self.main_graph_iri, None)])
@@ -253,17 +248,59 @@ class AssemblQuadStorageManager(object):
     def create_discussion_storage(self, session, discussion):
         id = discussion.id
         qs = self.prepare_storage(self.discussion_storage_name(id))
-        for s in (DISCUSSION_DATA_SECTION, DISCUSSION_HISTORY_SECTION):
+        for s in (DISCUSSION_DATA_SECTION, ): #DISCUSSION_HISTORY_SECTION
             self.populate_storage(qs, s, self.discussion_graph_name(id, s),
                                   self.discussion_graph_iri(id, s), id)
-        from ..models import Extract
-        for extract in session.query(Extract).filter_by(discussion=discussion):
-            gqm = self.populate_storage(
-                qs, EXTRACT_SECTION,
-                self.extract_graph_name(extract.id),
-                self.extract_graph_iri(extract.id), id)
+        from ..models import Extract, IdeaContentLink, TextFragmentIdentifier
+        # Option 1: explicit graphs.
+        # Fails because the extract.id in the condition is not part of
+        # the compile, so we do not get explicit conditions.
+        #
+        # for extract in session.query(Extract).filter(
+        #         (Extract.discussion==discussion) & (Extract.idea != None)):
+        #     gqm = GraphQuadMapPattern(
+        #         extract.extract_graph_name(), qs,
+        #         extract.extract_graph_iri())
+        #     qmp = QuadMapPatternS(
+        #         extract.extract_graph_name(), CATALYST.expressesIdea,
+        #         IdeaContentLink.iri_class().apply(Extract.idea_id),
+        #         graph_name=gqm.name,
+        #         name=getattr(QUADNAMES, 'catalyst_expressesIdea_'+str(
+        #                      extract.id)),
+        #         condition=(Extract.idea_id != None
+        #                   ) & (Extract.id == extract.id),
+        #         section=EXTRACT_SECTION)
+        #     gqm.add_patterns((qmp,))
+        #
+        # Option 2: use the usual mechanism. But interaction with alias_set is
+        # hopelessly complicated
+        # self.populate_storage(qs, EXTRACT_SECTION,
+        #     Extract.graph_iri_class.apply(Extract.id),
+        #     QUADNAMES.ExtractGraph_iri, id)
+        #
+        # So option 3: A lot of encapsulation breaks...
+        # Which still does not quite work in practice, but it does in theory. Sigh.
+        qs2 = qs # self.prepare_storage(self.discussion_storage_name(id))
+        extract_graph_name = Extract.graph_iri_class.apply(Extract.id)
+        gqm = PatternGraphQuadMapPattern(
+            extract_graph_name, qs2, None,
+            QUADNAMES.catalyst_ExtractGraph_iri, 'exclusive')
+        qmp = QuadMapPatternS(
+            TextFragmentIdentifier.iri_class().apply(TextFragmentIdentifier.id),
+            CATALYST.expressesIdea,
+            IdeaContentLink.iri_class().apply(Extract.idea_id),
+            graph_name=extract_graph_name,
+            name=QUADNAMES.catalyst_expressesIdea_iri,
+            condition=(TextFragmentIdentifier.extract_id == Extract.id) & (Extract.idea_id != None),
+            section=EXTRACT_SECTION)
+        gqm.add_patterns((qmp,))
+        qs2.alias_manager.add_quadmap(qmp)
+        gqm.alias_set = qs2.alias_manager.get_alias_set(qmp)
         defn = qs.definition_statement(self.nsm, engine=session.bind)
-        return qs, list(session.execute('sparql '+defn))
+        result = list(session.execute('sparql '+defn))
+        # defn2 = qs.alter_native(gqm, nsm, qs2.alias_manager, engine=session.bind)
+        # result.extend(session.execute('sparql '+defn2))
+        return qs, result
 
     def drop_discussion_storage(self, session, discussion):
         self.drop_storage(self.discussion_storage_name(discussion.id))
@@ -275,8 +312,8 @@ class AssemblQuadStorageManager(object):
     def create_extract_graph(self, session, extract):
         discussion_id = extract.get_discussion_id()
         return self.update_storage(session, self.discussion_storage(id), [
-            (EXTRACT_SECTION, self.extract_graph_name(extract.id),
-                self.extract_graph_iri(extract.id), discussion_id)])
+            (EXTRACT_SECTION, extract.extract_graph_name(),
+                extract.extract_graph_iri(), discussion_id)])
 
     def drop_extract_graph(self, session, extract):
         # why do I not need the discussion here?

@@ -49,6 +49,7 @@ class Post(Content):
 
     @classmethod
     def special_quad_patterns(cls, alias_manager):
+        # Don't we need a recursive alias for this? It seems not.
         return [
             QuadMapPatternS(
                 Post.iri_class().apply(cls.id),

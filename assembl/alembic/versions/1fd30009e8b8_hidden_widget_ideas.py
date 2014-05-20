@@ -22,13 +22,17 @@ def upgrade(pyramid_env):
     with context.begin_transaction():
         op.add_column(
             'idea', sa.Column(
-                'hidden', sa.Boolean, server_default='0'))
+                'hidden', sa.SmallInteger, server_default='0'))
+        op.execute('UPDATE idea set hidden=0')
+        op.execute('ALTER TABLE idea ADD CHECK (hidden IN (0, 1))')
         op.add_column(
             'idea', sa.Column(
                 'widget_id', sa.Integer, sa.ForeignKey('widget.id')))
         op.add_column(
             'content', sa.Column(
-                'hidden', sa.Boolean, server_default='0'))
+                'hidden', sa.SmallInteger, server_default='0'))
+        op.execute('UPDATE content set hidden=0')
+        op.execute('ALTER TABLE content ADD CHECK (hidden IN (0, 1))')
 
     # Do stuff with the app's models here.
     from assembl import models as m

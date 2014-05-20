@@ -25,8 +25,7 @@ So we speak of class, instance or collection context, depending where we are in 
 
 It is generally possible to PUT or DEL on any instance context, 
 and to POST to any class or collection context.
-POST will return a 201 with the link in the body. Some parsing of the response body is required.
-(I'd be happy to have suggestions to improve this.)
+POST will return a 201 with the link in the body in the Location response header.
 
 The set of collections available from an instance type is mostly given by the SQLAlchemy relations (and properties),
 but there is a magic URL to obtain the list:
@@ -67,8 +66,7 @@ def includeme(config):
              request_method='GET', permission=P_READ)
 def class_view(request):
     ctx = request.context
-    view = (request.matchdict or {}).get('view', None) or '/id_only'
-    view = view[1:]
+    view = request.GET.get('view', 'id_only')
     q = ctx.create_query(view == 'id_only')
     if view == 'id_only':
         return [ctx._class.uri_generic(x) for (x,) in q.all()]
@@ -97,8 +95,7 @@ def instance_view_jsonld(request):
              request_method='GET', permission=P_READ, accept="application/json")
 def instance_view(request):
     ctx = request.context
-    view = (request.matchdict or {}).get('view', None) or '/default'
-    view = view[1:]
+    view = request.GET.get('view', 'default')
     return ctx._instance.generic_json(view)
 
 
@@ -106,8 +103,7 @@ def instance_view(request):
              request_method='GET', permission=P_READ)
 def collection_view(request):
     ctx = request.context
-    view = (request.matchdict or {}).get('view', None) or '/id_only'
-    view = view[1:]
+    view = request.GET.get('view', 'id_only')
     q = ctx.create_query(view == 'id_only')
     if view == 'id_only':
         return [ctx.collection_class.uri_generic(x) for (x,) in q.all()]

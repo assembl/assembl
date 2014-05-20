@@ -29,7 +29,7 @@ define(['models/base', 'jquery', 'app', 'i18n', 'permissions'], function(Base, $
             introduction: i18n.gettext('Add an introduction'),
             conclusion: i18n.gettext('Add a conclusion'),
             ideas: []
-        },
+        }
 
 
     });
@@ -47,7 +47,7 @@ define(['models/base', 'jquery', 'app', 'i18n', 'permissions'], function(Base, $
          * The model
          * @type {SynthesisModel}
          */
-        model: SynthesisModel,
+        model: SynthesisModel
     });
     
     return {

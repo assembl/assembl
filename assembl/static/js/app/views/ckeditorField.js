@@ -187,7 +187,7 @@ define(['backbone', 'underscore', 'app', 'ckeditor-sharedspace'], function(Backb
 
             this.render(false);
             this.trigger('cancel', [this]);
-        },
+        }
 
 
     });

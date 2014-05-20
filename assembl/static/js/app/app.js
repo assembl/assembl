@@ -1,5 +1,5 @@
 define(['jquery', 'underscore', 'ckeditor', 'moment', 'i18n', 'zeroclipboard', 'types', 'permissions'],
-function($, _, ckeditor, Moment, i18n, ZeroClipboard, Types, Permissions){
+    function($, _, ckeditor, Moment, i18n, ZeroClipboard, Types, Permissions){
     'use strict';
 
     ckeditor.disableAutoInline = true;
@@ -494,7 +494,8 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard, Types, Permissions){
          * @return {function} The Underscore.js _.template return
          */
         loadTemplate: function(id){
-            return _.template( $('#tmpl-'+id).html() );
+            var template = _.template( $('#tmpl-'+id).html() );
+            return template;
         },
 
         /**

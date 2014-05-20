@@ -234,6 +234,11 @@ def assembl_register_view(request):
     userid = user.id
     if validate_registration:
         send_confirmation_email(request, email_account)
+    elif asbool(config.get('pyramid.debug_authorization')):
+        # for debugging purposes
+        from assembl.auth.password import email_token
+        print "email token:", request.route_url(
+            'user_confirm_email', ticket=email_token(email_account))
     # TODO: Check that the email logic gets the proper locale. (send in URL?)
     headers = remember(request, user.id, tokens=format_token(user))
     request.response.headerlist.extend(headers)
@@ -473,7 +478,11 @@ def user_confirm_email(request):
     email = verify_email_token(token)
     session = EmailAccount.db
     # TODO: token expiry
-    if email and not email.verified:
+    if not email:
+        raise HTTPUnauthorized("Wrong email token.")
+    if email.verified:
+        raise HTTPFound(location='/user/id/'+str(email.profile_id))
+    else:
         # maybe another profile already verified that email
         other_email_account = session.query(EmailAccount).filter_by(
             email=email.email, verified=True).first()
@@ -504,8 +513,6 @@ def user_confirm_email(request):
         else:
             # we confirmed a profile without a user? Now what?
             raise HTTPServerError()
-    else:
-        raise HTTPUnauthorized("Wrong email token.")
 
 
 @view_config(

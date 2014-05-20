@@ -6,15 +6,15 @@ DateTime==4.0.1
 -e git+https://github.com/bitprophet/fabric.git#egg=fabric
 Jinja2==2.7.2
 Mako==0.9.1
-MarkupSafe==0.21
+MarkupSafe==0.23
 PasteDeploy==1.5.2
 PyJWT==0.2.1
-PyLD==0.5.0
+PyLD==0.5.1
 Pygments==1.6
 Sphinx==1.2.2
 SPARQLWrapper==1.6.0
 SQLAlchemy==0.9.4
-Unidecode==0.04.14
+Unidecode==0.04.16
 WebOb==1.4.0
 WebTest==2.0.15
 -e git+https://github.com/maparent/alembic.git#egg=alembic
@@ -67,7 +67,7 @@ redis==2.9.1
 docutils==0.11
 repoze.lru==0.6
 repoze.sendmail==4.2
-requests==2.2.1
+requests==2.3.0
 requests-oauthlib==0.4.0
 simplejson==3.4.1
 six==1.6.1
@@ -81,7 +81,7 @@ translationstring==1.1
 uricore==0.1.2
 velruse==1.1.1
 venusian==1.0a8
-waitress==0.8.8
+waitress==0.8.9
 wsgiref==0.1.2
 xlrd==0.9.3
 xlwt==0.7.5

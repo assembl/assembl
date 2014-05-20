@@ -563,7 +563,7 @@ class ActionOnPost(Action):
 
     @classmethod
     def get_discussion_condition(cls, discussion_id):
-        return cls.post_id == Post.id & Post.discussion_id == discussion_id
+        return (cls.post_id == Post.id) & (Post.discussion_id == discussion_id)
 
 class ViewPost(ActionOnPost):
     """

@@ -48,7 +48,7 @@ function(Backbone, _, $, Idea, app){
             'click .messageSend-cancelbtn': 'onCancelMessageButtonClick',
             'focus .messageSend-body': 'onFocusMessage',
             'blur .messageSend-body': 'onBlurMessage',
-            'keyup .messageSend-body': 'onChangeBody',
+            'keyup .messageSend-body': 'onChangeBody'
         },
 
         /**
@@ -176,7 +176,7 @@ function(Backbone, _, $, Idea, app){
                 success: success_callback
             });
 
-        },
+        }
     });
 
     return MessageSendView;
