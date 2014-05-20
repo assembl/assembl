@@ -206,6 +206,7 @@ class BaseOps(object):
 
     @classmethod
     def external_typename_with_inheritance(cls):
+        """ Returns the root ancestor class typename """
         if cls.__mapper__.polymorphic_identity is not None:
             for nextclass in cls.mro():
                 if getattr(nextclass, '__mapper__', None) is None:
