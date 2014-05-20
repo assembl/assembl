@@ -12,8 +12,22 @@ voteApp.controller('indexCtl',
       $scope.settings = configService.settings;
       console.log("settings:");
       console.log($scope.settings);
+
+      // init vote value
+      $scope.vote = [];
+      for ( var i = 0; i < $scope.settings.axes.length; ++i )
+      {
+        var v = ($scope.settings.axes[i].valueDefault || $scope.settings.axes[i].valueDefault === 0.0)
+          ? $scope.settings.axes[i].valueDefault : $scope.settings.axes[i].valueMin;
+        $scope.vote.push({ "name": $scope.settings.axes[i].name, "value": v});
+      }
+
       $scope.drawUI();
     };
+
+    $scope.submitVote = function(){
+      console.log($scope.vote);
+    }
 
     $scope.drawUI = function(){
       var config = $scope.settings;
@@ -44,7 +58,11 @@ voteApp.controller('indexCtl',
         var indexSelector = getSelectorIndexByX(p.x);
 
         if ( indexSelector >= 0 && indexSelector < config.axes.length )
-          d3.select("#circle"+indexSelector).attr("cy", scales[indexSelector](scales[indexSelector].invert(p.y)));
+        {
+          var v = scales[indexSelector].invert(p.y);
+          $scope.vote[indexSelector].value = v;
+          d3.select("#circle"+indexSelector).attr("cy", scales[indexSelector](v));
+        }
       }
 
       function dragmove(d) {
@@ -54,7 +72,12 @@ voteApp.controller('indexCtl',
         var indexSelector = getSelectorIndexByX(x);
 
         if ( indexSelector >= 0 && indexSelector < config.axes.length )
-          d3.select(this).attr("cy", scales[indexSelector](scales[indexSelector].invert(y)));
+        {
+          var v = scales[indexSelector].invert(y);
+          $scope.vote[indexSelector].value = v;
+          d3.select(this).attr("cy", scales[indexSelector](v));
+        }
+          
       }
 
       // create scales
@@ -202,7 +225,7 @@ voteApp.controller('indexCtl',
       svg.selectAll("circle").data(config.axes).enter().append("circle")
         .attr("id", function(d, i){ return "circle"+i; })
         .attr("cx", function(d, i){ return xScale(i); })
-        .attr("cy", function(d, i){ return scales[i](d.valueDefault); })
+        .attr("cy", function(d, i){ return scales[i]((d.valueDefault || d.valueDefault === 0.0) ? d.valueDefault : d.valueMin ); })
         .attr("r", 8)
         .style("fill", function(d,i){ if ( config.axes[i].colorCursor ) return config.axes[i].colorCursor; return "blue"; })
         .style("cursor", "pointer")
