@@ -205,7 +205,8 @@ creativityApp.controller('cardsCtl',
 }]);
 
 creativityApp.controller('creativitySessionCtl',
-    ['$scope','globalConfig','globalMessages','$rootScope', function($scope, globalConf, globalMessages){
+    ['$scope','globalConfig','globalMessages','$rootScope', '$timeout','$http',
+        function($scope, globalConf, globalMessages, $rootScope, $timeout, $http){
 
     // activate the right tab
     $("ul.nav li").removeClass("active");
@@ -213,49 +214,137 @@ creativityApp.controller('creativitySessionCtl',
 
     $scope.formData = {};
 
-    $scope.$on('widgetStart', function(e, data){
+    /**
+     * Due to the latency to init $rootScope we need a delay
+     * */
+    $timeout(function(){
 
-        //get data from pubsub service in app
+        $scope.getSubIdeaFromIdea();
 
+        //angular.element('#loader').hide();
 
+    },500);
 
-    })
+    $scope.$watch("message", function(value){
 
+        switch(value){
+            case 'sendNewIdea:success':
+                $scope.getSubIdeaFromIdea();
+                break;
+            case 'commentSubIdea:success':
+                $scope.getCommentsFromSubIdea();
+                break;
+            case 'sendNewIdea:error':
+                break;
 
-    //data mock
-    globalConf.fetch().success(function(data){
-        $scope.cards = data.card_game;
-    });
-
-    //data mock
-    globalMessages.fetch().success(function(data){
-        $scope.ideas = data.ideas;
-    });
-
-
-    /* Send a new idea from creativity session */
-    $scope.sendNewIdea = function(){
-        if($scope.formData) {
-            console.log($scope.formData)
         }
-    }
+    });
 
-    /*
-     * Comment an idea from creativity session
-     * TODO:  add rest api
+    /**
+     * Fetch all ideas newly added
      */
-    $scope.commentIdea = function(){
+    $scope.getSubIdeaFromIdea = function(){
 
+        var rootUrl = $rootScope.widgetConfig.ideas_uri;
+            rootUrl = '/data/'+ rootUrl.split(':')[1] +'?view=default';
+        var ideas = [];
+
+        $http.get(rootUrl).then(function(response){
+            angular.forEach(response.data, function(item){
+                if(typeof item.widget_add_post_endpoint != 'undefined'){
+
+                    item.widget_add_post_endpoint = '/data/'+item.widget_add_post_endpoint.split(':')[1];
+
+                    item.creationDate = moment(item.creationDate).fromNow();
+
+                    ideas.push(item);
+                }
+            })
+
+            $scope.ideas = ideas.reverse();
+        })
+    }
+
+    /**
+    * @params type {string}
+    * @params short_title {string}
+    * @params definition {string}
+    * */
+    $scope.sendSubIdea = function(){
         if($scope.formData) {
-            console.log($scope.formData)
+
+            var rootUrl = $rootScope.widgetConfig.ideas_uri;
+                rootUrl = 'http://localhost:6543/data/'+ rootUrl.split(':')[1];
+
+            $scope.formData.type = 'Idea';
+
+            $http({
+                method:'POST',
+                url:rootUrl,
+                data:$.param($scope.formData),
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+            }).success(function(data, status, headers){
+
+                $scope.message = "sendNewIdea:success";
+
+            }).error(function(status, headers){
+
+                $scope.message = "sendNewIdea:error";
+
+            });
         }
     }
 
-    /*
+    /**
+     * Comment an idea from creativity session
+     */
+    $scope.commentSubIdea = function(){
+
+        var rootUrl = angular.element('#form-comment').attr('data-url');
+
+        var data = {
+            type: 'Post',
+            subject: 'test_message',
+            body: angular.element('#sub-comment').val(),
+            creator_id: 245,
+            message_id: 'bogus'
+        }
+
+        if(data.body && rootUrl) {
+
+            $http({
+                method:'POST',
+                url:rootUrl,
+                data:$.param(data),
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+            }).success(function(data, status, headers){
+
+                $scope.message = "commentSubIdea:success";
+
+            }).error(function(status, headers){
+
+                $scope.message = "commentSubIdea:error";
+            });
+
+        }
+    }
+
+    /**
+     * get all comments from a sub idea
+     */
+    $scope.getCommentsFromSubIdea = function(){
+
+        var rootUrl = angular.element('#form-comment').attr('data-url');
+            rootUrl = rootUrl+'?view=default';
+
+    }
+
+    /**
     * Sum each value from session vote
-    * */
+    */
     $scope.totalVote = function(){
         var el = angular.element('.session-comment .total-score');
+
         angular.forEach(el, function(v, k){
             var elm = angular.element(v);
 
@@ -265,6 +354,11 @@ creativityApp.controller('creativitySessionCtl',
 
     }
 
+
+    //data mock
+    globalConf.fetch().success(function(data){
+        $scope.cards = data.card_game;
+    });
 
 }]);
 

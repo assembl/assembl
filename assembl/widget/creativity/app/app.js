@@ -7,21 +7,28 @@ creativityApp.run(['Configuration','$rootScope', function (Configuration, $rootS
     /*
      * TODO: this params { type, idea, discutionId } need to be dynamic
      * */
-
     var data = {
         widget_type: 'creativity',
         settings: JSON.stringify({"idea": 'local:Idea/2'})
     };
 
-
-    function callback(data){
-
-        $rootScope.$broadcast('widgetStart', data);
-    }
-
     Configuration.getWidget($.param(data), function(conf){
+        conf.get(function(data){
 
-        conf.get(callback);
+            var widgetConfig = {
+                discussion: data.discussion,
+                ideas_uri: data.ideas_uri,
+                main_idea_view: data.main_idea_view,
+                messages_uri: data.messages_uri,
+                settings: data.settings,
+                state: data.settings,
+                user: data.user,
+                user_permissions: data.user_permissions
+            }
+
+            $rootScope.widgetConfig = widgetConfig;
+
+        });
     });
 
 
@@ -62,5 +69,4 @@ creativityApp.config(['$routeProvider', function($routeProvider){
 
     $translateProvider.preferredLanguage('fr');
 
-}])
-
+}]);
