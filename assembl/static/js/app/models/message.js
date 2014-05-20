@@ -41,6 +41,20 @@ define(['models/base', 'jquery', 'app', 'underscore'], function(Base, $, app, _)
             return count;
         },
 
+        visitDepthFirst: function(visitor, ancestry) {
+            if (ancestry === undefined) {
+                ancestry = [];
+            }
+            if (visitor(this, ancestry)) {
+                ancestry = ancestry.slice(0);
+                ancestry.push(this);
+                var children = _.sortBy(this.getChildren(), function(child){ return child.get('date'); });
+                for (var i in children) {
+                    children[i].visitDepthFirst(visitor, ancestry);
+                }
+            }
+        },
+        
         /**
          * Return all children
          * @return {MessageModel[]}
