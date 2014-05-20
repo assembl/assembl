@@ -2,7 +2,7 @@
 // =========
 .panel {
   @include box-shadow(rgba(0, 0, 0, 0.1) 0 0 2px 0px);
-  @include border-radius( 3px );
+  @include border-radius( 5px );
   @include box-sizing( border-box );
     position: relative;
     z-index: 10;
@@ -128,8 +128,8 @@
     top: $panel-header-height;
     //top: 0;
     right: 0;
-    bottom: $panel-header-height;
-    //bottom: 0;
+    //bottom: $panel-header-height;
+    bottom: 0;
     left: 0;
     overflow-y: auto;
     overflow-x: hidden;
