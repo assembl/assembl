@@ -47,7 +47,8 @@ class ContentSource(DiscussionBoundBase):
                 Discussion.iri_class().apply(cls.discussion_id),
                 CATALYST.uses_source,
                 cls.iri_class().apply(cls.id),
-                name=QUADNAMES.uses_source),
+                name=QUADNAMES.uses_source,
+                condition=cls.discussion_id != None),
         ]
 
     discussion = relationship(
