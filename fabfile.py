@@ -260,19 +260,21 @@ def app_setup():
 @task
 def app_fullupdate():
     """
-    Full Update: maincode and dependencies
+    Full Update: Update to latest git, update dependencies and compile app.
+    You need internet connectivity, and can't run this on a branch.
     """
     execute(updatemaincode)
-    execute(app_update_dependencies)
     execute(app_compile)
     
 @task
 def app_update():
     """
-    Fast Update: don't update requirements
+    Fast Update: Update to latest git, compile app but don't update requirements
+    Useful for deploying hotfixes.  You need internet connectivity, and can't
+    run this on a branch.
     """
     execute(updatemaincode)
-    execute(app_compile)
+    execute(app_compile_noupdate)
 
 @task
 def app_update_dependencies():
@@ -285,7 +287,20 @@ def app_update_dependencies():
 @task
 def app_compile():
     """
-    Fast Update: don't update requirements
+    Full Update: This is what you normally run after a git pull. 
+    Doesn't touch git state, but updates requirements, rebuilds all 
+    generated files annd restarts whatever needs restarting.
+    You need internet connectivity.  If you are on a plane, use
+    app_compile_noupdate instead.
+    """
+    execute(app_update_dependencies)
+    execute(app_compile_noupdate)
+
+@task
+def app_compile_noupdate():
+    """
+    Fast Update: don't touch git state, don't update requirements, and rebuild
+    all generated files. You normally do not need to have internet connectivity.
     """
     execute(app_setup)
     execute(compile_stylesheets)
