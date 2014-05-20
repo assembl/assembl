@@ -141,6 +141,9 @@ function(Backbone, _, $, Idea, Segment, app, Permissions){
         onCheckboxChange: function(ev){
             ev.stopPropagation();
             this.model.save({'inNextSynthesis': ev.currentTarget.checked});
+            //Optimisation.  It would self render once the socket propagates, 
+            //but this gives better responsiveness.
+            app.synthesisPanel.render();
         },
 
         /**
