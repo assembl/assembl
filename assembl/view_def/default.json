@@ -62,7 +62,8 @@
         "idCreator": "creator",
         "subject": "&get_title",
         "body": "&get_body",
-        "extracts": [":partial"]
+        "extracts": [":partial"],
+        "widget_ideas": "&widget_ideas"
     },
     "AssemblPost": {
         "date": "creation_date",
