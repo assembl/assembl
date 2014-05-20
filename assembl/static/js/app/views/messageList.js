@@ -68,7 +68,6 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
             
             this.setViewStyle(this.getViewStyleDefById(this.storedMessageListConfig.viewStyleId) || this.ViewStyles.THREADED);
             this.defaultMessageStyle = app.getMessageViewStyleDefById(this.storedMessageListConfig.messageStyleId) || app.AVAILABLE_MESSAGE_VIEW_STYLES.PREVIEW;
-            this.currentQuery.setView(this.currentQuery.availableViews.REVERSE_CHRONOLOGICAL);
             
             this.listenTo(this.messages, 'reset', function() {
                 that.messagesFinishedLoading = true;
