@@ -289,13 +289,13 @@ function(Base, _, Segment, app, i18n, Types, Permissions){
          * @param  {Segment} segment
          */
         addSegment: function(segment){
-            segment.save('idIdea', this.getId());
-            this.trigger("change:segments");
+            segment.set('idIdea', this.getId());
+            segment.save();
         },
 
         /**
          * Adds a segment as a child
-         * @param {Segment} segment
+         * @param {Segment} segment, possibly unsaved.
          */
         addSegmentAsChild: function(segment){
             // Cleaning
@@ -309,6 +309,7 @@ function(Base, _, Segment, app, i18n, Types, Permissions){
             };
 
             var onSuccess = function(idea){
+                console.log('addSegmentAsChild(): onSuccess() fired.')
                 idea.addSegment(segment);
             };
 

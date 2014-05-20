@@ -435,10 +435,13 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
                 var segment = app.segmentList.addAnnotationAsSegment(annotation, app.currentAnnotationIdIdea);
                 if( !segment.isValid() ){
                     annotator.deleteAnnotation(annotation);
-                } else if( app.currentAnnotationIdea ){
-                    app.currentAnnotationIdea.addSegmentAsChild(segment);
+                } else if( app.currentAnnotationNewIdeaParentIdea ){
+                    app.currentAnnotationNewIdeaParentIdea.addSegmentAsChild(segment);
                 }
-                app.currentAnnotationIdea = null;
+                else {
+                    segment.save();
+                }
+                app.currentAnnotationNewIdeaParentIdea = null;
                 app.currentAnnotationIdIdea = null;
             });
 

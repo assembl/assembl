@@ -48,7 +48,7 @@ def create_idea(request):
 
     session.flush()
 
-    return {'ok': True, 'id': new_idea.uri()}
+    return {'ok': True, '@id': new_idea.uri()}
 
 
 @idea.get(permission=P_READ)

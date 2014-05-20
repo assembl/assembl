@@ -430,7 +430,7 @@ define(['jquery', 'underscore', 'ckeditor', 'moment', 'i18n', 'zeroclipboard', '
         /**
          * Saves the current annotation if there is any
          */
-        saveCurrentAnnotation: function(){
+        saveCurrentAnnotationAsExtract: function(){
             if( app.currentUser.can(Permissions.EDIT_EXTRACT) &&
                 app.messageList.annotatorEditor ){
                 app.messageList.annotatorEditor.element.find('.annotator-save').click();
