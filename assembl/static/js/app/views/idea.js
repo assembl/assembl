@@ -28,13 +28,17 @@ function(Backbone, _, $, Idea, Segment, app, Permissions){
          *   are the last child of their respective parents.
          */
         initialize: function(obj, view_data){
-            if( _.isUndefined(this.model) ){
+            /*if( _.isUndefined(this.model) ){
                 this.model = new Idea.Model();
-            }
+            }*/
+            //console.log("initialize: ",obj, view_data, this);
+            var that = this;
             this.view_data = view_data;
             this.model.on('change', this.render, this);
-            this.model.on('change:isSelected', this.onIsSelectedChange, this);
             this.model.on('replacedBy', this.onReplaced, this);
+            app.on('idea:select', function(idea) {
+                that.onIsSelectedChange(idea);
+            });
         },
 
         /**
@@ -53,7 +57,7 @@ function(Backbone, _, $, Idea, Segment, app, Permissions){
 
             this.$el.addClass('idealist-item');
 
-            this.onIsSelectedChange();
+            this.onIsSelectedChange(app.getCurrentIdea());
 
             if( data.isOpen === true ){
                 this.$el.addClass('is-open');
@@ -115,10 +119,9 @@ function(Backbone, _, $, Idea, Segment, app, Permissions){
         /**
          * @event
          */
-        onIsSelectedChange: function(){
-            var value = this.model.get('isSelected');
-
-            if( value === true ){
+        onIsSelectedChange: function(idea){
+            //console.log("IdeaView:onIsSelectedChange(): new: ", idea, "current: ", this.model, this);
+            if( idea === this.model ){
                 this.$el.addClass('is-selected');
             } else {
                 this.$el.removeClass('is-selected');

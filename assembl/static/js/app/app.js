@@ -667,6 +667,7 @@ define(['jquery', 'underscore', 'ckeditor', 'moment', 'i18n', 'zeroclipboard', '
          * @param  {Idea} [idea]
          */
         setCurrentIdea: function(idea){
+            //console.log("setCurrentIdea: setting to: ", idea);
             if (idea != this.getCurrentIdea()) {
                 app.trigger('idea:select', [idea]);
             }

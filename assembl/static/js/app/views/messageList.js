@@ -83,16 +83,14 @@ function(Backbone, _, $, app, PanelView, MessageFamilyView, Message, i18n, PostQ
             
             var that = this;
             app.on('idea:select', function(idea){
-                that.currentQuery.clearFilter(that.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, null);
-                if( idea ){
-                    that.currentQuery.clearFilter(that.currentQuery.availableFilters.POST_IS_ORPHAN, null);
-                    that.currentQuery.addFilter(that.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, idea.getId());
-                    app.openPanel(app.messageList);
+                if(idea && that.currentQuery.isFilterInQuery(that.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, idea.getId())) {
+                    //Filter is already in sync
+                    //TODO:  Detect the case where there is no idea selected, and we already have no filter on ideas
+                    return;
                 }
-                if(app.debugRender) {
-                    console.log("messageList: triggering render because new idea was selected");
+                else {
+                    that.syncWithCurrentIdea();
                 }
-                that.render();
             });
             
         },
@@ -100,6 +98,33 @@ function(Backbone, _, $, app, PanelView, MessageFamilyView, Message, i18n, PostQ
         invalidateResultsAndRender: function(){
             this.currentQuery.invalidateResults();
             this.render();
+        },
+        
+        /**
+         * Synchronizes the panel with the currently selected idea (possibly none)
+         */
+        syncWithCurrentIdea: function(){
+            var currentIdea = app.getCurrentIdea();
+            console.log("messageList:syncWithCurrentIdea(): New idea is now: ",currentIdea);
+            if(currentIdea && this.currentQuery.isFilterInQuery(this.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, currentIdea.getId())) {
+                //Filter is already in sync
+                //TODO:  Detect the case where there is no idea selected, and we already have no filter on ideas
+                return;
+            }
+            else {
+                this.currentQuery.clearFilter(this.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, null);
+                
+                if( currentIdea ){
+                    this.currentQuery.clearFilter(this.currentQuery.availableFilters.POST_IS_ORPHAN, null);
+                    this.currentQuery.addFilter(this.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, currentIdea.getId());
+                    //app.openPanel(app.messageList);
+                }
+                if(app.debugRender) {
+                    console.log("messageList:syncWithCurrentIdea(): triggering render because new idea was selected");
+                }
+                console.log("messageList:syncWithCurrentIdea(): Query is now: ",this.currentQuery._query);
+                this.render();
+            }
         },
         /**
          * The template

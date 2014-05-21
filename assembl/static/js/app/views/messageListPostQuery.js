@@ -177,9 +177,28 @@ define(['app', 'i18n', 'sprintf'], function(app, i18n, sprintf){
         }
 
         /**
+         * Is the filter part of the current query?
+         * @param {this.availableFilters} filterDef
+         * @param {String} value
+         * @return true if present, false otherwise
+         */
+        this.isFilterInQuery = function(filterDef, value){
+            retval = false;
+            if(filterDef.id in this._query) {
+                for (var i=0;i<this._query[filterDef.id].length;i++) {
+                    if(this._query[filterDef.id][i].value == value) {
+                        retval = true;
+                    }
+                }
+            }
+            return retval;
+        }
+        
+        /**
          * A filter restriction on the collection.  Setting a filter value to 
          * null is equivalent to removing the filter
-         * @param {String} ideaId
+         * @param {this.availableFilters} filterDef
+         * @param {String} value
          * @return true on success, false on failure
          */
         this.addFilter = function(filterDef, value){

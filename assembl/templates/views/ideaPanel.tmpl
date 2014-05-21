@@ -2,14 +2,15 @@
     <header class="panel-header">
         <strong data-tooltip="{{gettext('Detailled information about the currently selected idea in the Table of ideas')}}">{{ gettext('Idea') }}</strong>
         <div class="float-right">
-            <% if( idea.getId() ) { %>
+            <% if( idea ) { %>
                 <a id="ideaPanel-linkbutton" class="iconbutton icon-link" data-copy-text="/idea/<%= escape(idea.getId()) %>" data-tooltip="{{gettext('Copy the link to this idea to clipboard')}}"></a>
             <% } %>
             <a id="ideaPanel-closebutton" class="iconbutton icon-cancel" data-tooltip="{{gettext('Close panel')}}"></a>
         </div>
     </header>
-    
+
     <div class="panel-body">
+        <% if( idea ) { %>
         <fieldset id="ideaPanel-section-summary" class="panel-section">
             <legend data-tooltip="{{gettext('Basic information about the idea being discussed')}}">
                 <span>{{ gettext('Summary') }}</span>
@@ -56,21 +57,11 @@
             <a id="ideaPanel-clearbutton" class="button" data-tooltip="{{gettext('Remove all extracts from this idea.  Removed extracts will be available in your clipboard')}}">{{ gettext('Remove all extracts') }}</a>
             <% } %>
         </fieldset>
-        
-    </div>
-
-    {#
-    <footer class="panel-footer">
-        
-        <% if (canDelete) { %>
-        <div class="float-right">
-            <a id="ideaPanel-deleteButton" class="link" data-tooltip="{{gettext('Delete this idea completely')}}">{{ gettext('Delete idea') }}</a>
-        </div>
-        <% }
-        if (canEditExtracts) { %>
-        <a id="ideaPanel-clearbutton" class="link" data-tooltip="{{gettext('Remove all extracts from this idea.  Removed extracts will be available in your clipboard')}}">{{ gettext('Remove all extracts') }}</a>
+        <% } else { %>
+            <div class="box box--centered margin  text-big">
+                {{ gettext('Please select an idea in the table of ideas') }}
+            </div>
         <% } %>
-    </footer>
-    #}
+    </div>
 
 </div>
