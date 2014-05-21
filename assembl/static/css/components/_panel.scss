@@ -103,11 +103,17 @@
 // The container for an editablearea
 // ------------------
 .panel-editablebox {
+  border:1px solid transparent;
     position: relative;
-
     &.is-editing {
         background-color: #dbf2ff;
     }
+  &:hover{
+    border:1px solid #cccccc;
+    box-shadow: inset 0px 1px 1px rgba(0, 0, 0, 0.1);
+    -moz-box-shadow: inset 0px 1px 1px rgba(0, 0, 0, 0.1);
+    -webkit-box-shadow: inset 0px 1px 1px rgba(0, 0, 0, 0.1);
+  }
 
 }
 
