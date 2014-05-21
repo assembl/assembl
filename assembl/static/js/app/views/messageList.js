@@ -1,5 +1,5 @@
-define(['backbone', 'underscore', 'jquery', 'app', 'views/messageFamily', 'models/message', 'i18n', 'views/messageListPostQuery', 'permissions', 'views/messageSend'],
-function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permissions, MessageSendView){
+define(['backbone', 'underscore', 'jquery', 'app', 'views/panel', 'views/messageFamily', 'models/message', 'i18n', 'views/messageListPostQuery', 'permissions', 'views/messageSend'],
+function(Backbone, _, $, app, PanelView, MessageFamilyView, Message, i18n, PostQuery, Permissions, MessageSendView){
     'use strict';
 
     /**
@@ -11,7 +11,7 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
     /**
      * @class views.MessageList
      */
-    var MessageList = Backbone.View.extend({
+    var MessageList = PanelView.extend({
         ViewStyles: {
             THREADED: {id: "threaded",
                         css_id: "messageList-view-threaded",
@@ -63,6 +63,7 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
             if( obj.button ){
                 this.button = $(obj.button).on('click', app.togglePanel.bind(window, 'messageList'));
             }
+            PanelView.prototype.initialize.apply(this);
             this.renderedMessageViewsPrevious = {};
             this.renderedMessageViewsCurrent = {};
             
@@ -182,7 +183,7 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
             });
             return toReturn;
         },
-        
+
         /**
          * The actual rendering for the render function
          * @return {views.Message}
@@ -259,6 +260,7 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
             this.currentlyRendering = true;
             
             app.trigger('render');
+            this.renderPanelButton();
             if(this.messagesFinishedLoading) {
                 this.blockPanel();
                 this.currentQuery.execute(function(data){
@@ -500,27 +502,6 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
         },
 
         /**
-         * Blocks the panel
-         */
-        blockPanel: function(){
-            this.$('.panel').addClass('is-loading');
-        },
-
-        /**
-         * Unblocks the panel
-         */
-        unblockPanel: function(){
-            this.$('.panel').removeClass('is-loading');
-        },
-
-        /**
-         * Sets the panel as full screen
-         */
-        setFullscreen: function(){
-            app.setFullscreen(this);
-        },
-
-        /**
          * Load the initial data to populate the collection
          */
         loadInitialData: function(){
@@ -750,15 +731,6 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
         },
 
         /**
-         * Close the panel
-         */
-        closePanel: function(){
-            if( this.button ){
-                this.button.trigger('click');
-            }
-        },
-
-        /**
          * Set the new status for collapsed property
          * @param {boolean} value
          */
@@ -822,6 +794,7 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
                 var key = 'click #'+DEFAULT_MESSAGE_VIEW_LI_ID_PREFIX+messageViewStyle.id;
                 data[key] = 'onDefaultMessageViewStyle';
             } );
+            _.extend(data, PanelView.prototype.events());
             return data;
         },
 
