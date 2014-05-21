@@ -73,6 +73,7 @@ function(Backbone, _, Idea, Message, app, i18n, Types, EditableField, CKEditorFi
                 i18n:i18n,
                 sprintf:sprintf,
                 canDelete:currentUser.can(Permissions.EDIT_IDEA),
+                canEditNextSynthesis:currentUser.can(Permissions.EDIT_SYNTHESIS),
                 canEditExtracts:currentUser.can(Permissions.EDIT_EXTRACT),
                 canEditMyExtracts:currentUser.can(Permissions.EDIT_MY_EXTRACT),
                 canAddExtracts:currentUser.can(Permissions.EDIT_EXTRACT) //TODO: This is a bit too coarse
