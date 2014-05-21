@@ -399,10 +399,12 @@ define(['app', 'i18n', 'sprintf'], function(app, i18n, sprintf){
                 retval += '</div>';
                 retval += '<ul id="post-query-filter-info">';
 
+                var nActiveFilters = 0;
                 for (var filterDefPropName in this.availableFilters) {
                     var filterDef = this.availableFilters[filterDefPropName];
 
                     if(filterDef.id in this._query) {
+                        ++nActiveFilters;
                         retval += '<li class="filter" id="'+filterDef.id+'">';
                         if(filterDef._filter_description) {
                             retval += filterDef._filter_description(filterDef, this._query[filterDef.id]);
@@ -427,7 +429,12 @@ define(['app', 'i18n', 'sprintf'], function(app, i18n, sprintf){
                         retval += '</li>';
                     }
                 }
-                retval += '</ul>'
+                retval += '</ul>';
+
+                if ( nActiveFilters > 0 )
+                {
+                    retval += '<div class="actions"><a id="messageList-allmessages" class="button">' + i18n.gettext("Clear filters") + '</a></div>';
+                }
             }
             return retval;
         };
