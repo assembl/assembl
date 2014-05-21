@@ -14,23 +14,18 @@
     fieldset {
         margin: 10px;
         margin-top: 1.4em; //height of the legend32 + 0.5em
-        padding: 5px;
         padding-top: 1.4em; //height of the legend + 0.5em
         position: relative;
         legend {
-            @include border-radius( 5px );
-            border: 1px solid $panel-header-bg-color;
             height: 1.8em;
             position: absolute;
             top: -0.9em; // 1/2 x height
-            background-color: #cccccc;
             padding: 0;
-            margin-left: 1em;
             font-weight: bold;
             span {
                 line-height: 1.8em;
                 display: block;
-                margin: 0 0.5em 0.5em 0.5em;
+                margin: 0 0.5em 0.5em 0;
             }
         }
     }
@@ -95,9 +90,6 @@
     border-radius: 4px;
     margin: 10px;
     cursor: text;
-    &:hover{
-        background-color: #dbf2ff;
-    }
 }
 
 // +++++++
@@ -122,13 +114,10 @@
 // To put the content
 // -----------
 .panel-body {
-    //position: relative;
     //The scrollbars do not work with position relative
     position: absolute;
     top: $panel-header-height;
-    //top: 0;
     right: 0;
-    //bottom: $panel-header-height;
     bottom: 0;
     left: 0;
     overflow-y: auto;
@@ -138,10 +127,6 @@
     .panel.is-dragover & {
         background-color: $dragbox-background-color;
     }
-}
-
-.panel-body--has-footer {
-    bottom: $panel-header-height;
 }
 
 // dropzone above the panel-body

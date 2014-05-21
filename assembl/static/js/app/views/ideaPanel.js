@@ -66,6 +66,8 @@ function(Backbone, _, Idea, Message, app, i18n, Types, EditableField, CKEditorFi
             var segments = this.idea.getSegments(),
                 currentUser = app.getCurrentUser(),
                 editing = currentUser.can(Permissions.EDIT_IDEA) && this.idea.get('ideaPanel-editing') || false;
+                //TODO : @Benoit, ideaPanel-editing need to be defined otherwise it's always false
+
             this.$el.html( this.template( {
                 idea:this.idea,
                 segments:segments,
@@ -96,14 +98,15 @@ function(Backbone, _, Idea, Message, app, i18n, Types, EditableField, CKEditorFi
                 'modelProp': 'longTitle',
                 'placeholder': this.idea.getLongTitleDisplayText()
             });
-            this.longTitleField.renderTo( this.$('#ideaPanel-longtitle') );
+            this.longTitleField.renderTo( this.$('#ideaPanel-longtitle'), editing);
             
             this.definitionField = new CKEditorField({
                 'model': this.idea,
                 'modelProp': 'definition',
                 'placeholder': this.idea.getDefinitionDisplayText()
             });
-            this.definitionField.renderTo( this.$('#ideaPanel-definition') );
+            this.definitionField.renderTo( this.$('#ideaPanel-definition'), editing);
+
             this.commentView = new MessageSendView({
                 'allow_setting_subject': false,
                 'reply_idea': this.idea,
