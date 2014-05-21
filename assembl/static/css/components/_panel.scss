@@ -129,6 +129,10 @@
     }
 }
 
+.panel-body--has-footer {
+  bottom: $panel-header-height;
+}
+
 // dropzone above the panel-body
 // -------
 .panel-bodyabove {
