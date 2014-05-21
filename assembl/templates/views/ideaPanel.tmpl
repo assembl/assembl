@@ -45,10 +45,23 @@
             </div>
             <% } %>
         </fieldset>
+
+        <fieldset id="ideaPanel-section-actions" class="panel-section">
+            <% if (canDelete) { %>
+            <div class="float-right">
+                <a id="ideaPanel-deleteButton" class="button" data-tooltip="{{gettext('Delete this idea completely')}}">{{ gettext('Delete idea') }}</a>
+            </div>
+            <% }
+            if (canEditExtracts) { %>
+            <a id="ideaPanel-clearbutton" class="button" data-tooltip="{{gettext('Remove all extracts from this idea.  Removed extracts will be available in your clipboard')}}">{{ gettext('Remove all extracts') }}</a>
+            <% } %>
+        </fieldset>
         
     </div>
 
+    {#
     <footer class="panel-footer">
+        
         <% if (canDelete) { %>
         <div class="float-right">
             <a id="ideaPanel-deleteButton" class="link" data-tooltip="{{gettext('Delete this idea completely')}}">{{ gettext('Delete idea') }}</a>
@@ -58,5 +71,6 @@
         <a id="ideaPanel-clearbutton" class="link" data-tooltip="{{gettext('Remove all extracts from this idea.  Removed extracts will be available in your clipboard')}}">{{ gettext('Remove all extracts') }}</a>
         <% } %>
     </footer>
+    #}
 
 </div>

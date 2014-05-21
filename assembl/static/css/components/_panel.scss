@@ -138,8 +138,10 @@
     .panel.is-dragover & {
         background-color: $dragbox-background-color;
     }
+}
 
-
+.panel-body--has-footer {
+    bottom: $panel-header-height;
 }
 
 // dropzone above the panel-body
