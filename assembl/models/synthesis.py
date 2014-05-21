@@ -1430,9 +1430,8 @@ class TextFragmentIdentifier(DiscussionBoundBase):
 
     @classmethod
     def get_discussion_condition(cls, discussion_id):
-        return (cls.extract_id == IdeaContentLink.id) & \
-            (IdeaContentLink.idea_id == Idea.id) & \
-            (Idea.discussion_id == discussion_id)
+        return (cls.extract_id == Extract.id) & \
+            (Extract.discussion_id == discussion_id)
 
     crud_permissions = CrudPermissions(
             P_ADD_EXTRACT, P_READ, P_EDIT_EXTRACT, P_EDIT_EXTRACT,
