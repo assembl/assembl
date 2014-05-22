@@ -1,3 +1,4 @@
+from sqlalchemy import select
 from sqlalchemy.orm.attributes import InstrumentedAttribute
 from sqlalchemy.inspection import inspect as sqlainspect
 from pyramid.security import Allow, Everyone, ALL_PERMISSIONS, DENY_ALL
@@ -238,9 +239,14 @@ class CollectionContext(object):
         cls = self.collection.collection_class
         if id_only:
             query = cls.db().query(cls.id)
+            return self.decorate_query(query).distinct()
         else:
-            query = cls.db().query(cls)
-        return self.decorate_query(query).distinct()
+            sub = cls.db().query(cls.id)
+            # TODO: Revisit. There is a scary note in subquery doc:
+            # Eager JOIN generation within the query is disabled
+            sub = self.decorate_query(sub).distinct().subquery()
+            query = cls.db().query(cls).join(sub, cls.id == sub.c.id)
+        return query
 
     def decorate_query(self, query):
         # This will decorate a query with a join on the relation.
