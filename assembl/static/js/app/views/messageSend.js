@@ -1,5 +1,5 @@
-define(['backbone', 'underscore', 'jquery', 'models/idea', 'app'],
-function(Backbone, _, $, Idea, app){
+define(['backbone', 'underscore', 'jquery', 'models/idea', 'app', 'permissions'],
+function(Backbone, _, $, Idea, app, Permissions){
     'use strict';
     
     var MessageSendView = Backbone.View.extend({
@@ -26,14 +26,14 @@ function(Backbone, _, $, Idea, app){
          * The render
          */
         render: function(){
-            //var data = this.model.toJSON();
             var data = {
                     body_help_message: this.initialBody,
                     allow_setting_subject: this.options.allow_setting_subject || this.options.allow_setting_subject,
                     cancel_button_label: this.options.cancel_button_label ? this.options.cancel_button_label: gettext('Cancel'),
                     send_button_label: this.options.send_button_label ? this.options.send_button_label: gettext('Send'),
-                    subject_label: this.options.subject_label ? this.options.subject_label: gettext('Subject:')
-                       }
+                    subject_label: this.options.subject_label ? this.options.subject_label: gettext('Subject:'),
+                    canPost: app.getCurrentUser().can(Permissions.ADD_POST)
+            }
             
             this.$el.html(this.template(data));
             

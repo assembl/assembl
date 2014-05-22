@@ -90,7 +90,7 @@
     overflow-x: hidden;
     width: 100%;
     border-radius: 4px;
-    margin: 10px;
+    margin: 10px 0;
     cursor: text;
 }
 
@@ -106,10 +106,10 @@
 // ------------------
 .panel-editablebox {
   border:1px solid transparent;
-    position: relative;
-    &.is-editing {
-        background-color: #dbf2ff;
-    }
+  position: relative;
+  &.is-editing {
+      background-color: #dbf2ff;
+  }
   &:hover{
     border:1px solid #cccccc;
     box-shadow: inset 0px 1px 1px rgba(0, 0, 0, 0.1);
