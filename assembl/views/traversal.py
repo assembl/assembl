@@ -237,15 +237,16 @@ class CollectionContext(object):
 
     def create_query(self, id_only=True):
         cls = self.collection.collection_class
-        query = cls.db().query(cls.id)
-        query = self.decorate_query(query).distinct()
-        if not id_only:
-            # TODO: Revisit. There is a scary note in subquery doc:
-            # Eager JOIN generation within the query is disabled
-            # Also, WAY too slow.
-            sub = query.subquery()
-            query = cls.db().query(cls).join(sub, cls.id == sub.c.id)
-        return query
+        if id_only:
+            query = cls.db().query(cls.id)
+            return self.decorate_query(query).distinct()
+        else:
+            # There will be duplicates. But sqla takes care of them,
+            # virtuoso won't allow distinct on full query,
+            # and a distinct subquery takes forever.
+            # Oh, and quietcast loses the distinct. Just great.
+            query = cls.db().query(cls)
+            return self.decorate_query(query)
 
     def decorate_query(self, query):
         # This will decorate a query with a join on the relation.
