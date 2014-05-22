@@ -875,8 +875,9 @@ JOIN post ON (
                 super(WidgetPostCollectionDefinition, self).__init__(cls, Content)
 
             def decorate_query(self, query, parent_instance):
-                return query.join(
-                    IdeaContentWidgetLink, self.owner_class)
+                return query.join(IdeaContentWidgetLink).join(
+                    self.owner_class,
+                    IdeaContentWidgetLink.idea_id == parent_instance.id)
 
             def decorate_instance(self, instance, parent_instance, assocs):
                 # This is going to spell trouble: Sometimes we'll have creator,
