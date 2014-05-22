@@ -56,7 +56,7 @@ function(Backbone, _, $, app, i18n, Permissions){
          * 
          *
          */
-        filterThroughPanelLock: function(callback, queueWithId=false){
+        filterThroughPanelLock: function(callback, queueWithId){
             if (!this.panelIsLocked){
                 callback();
             }
