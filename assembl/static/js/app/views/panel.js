@@ -22,6 +22,8 @@ function(Backbone, _, $, app, i18n, Permissions){
          */
         panelIsLocked: false,
         
+        unlockCallbackQueue: {},
+        
         /**
          *  @init
          */
@@ -44,13 +46,69 @@ function(Backbone, _, $, app, i18n, Permissions){
         },
         
         /**
+         * Process a callback that can be inhibited by panel locking.
+         * If the panel is unlocked, the callback will be called immediately.
+         * If the panel is locked, visual notifications will be shown, and the
+         * callback will be memorized in a queue, removing duplicates.
+         * Callbacks receive no parameters.
+         * If queued, they must assume that they can be called at a later time,
+         * and have the means of getting any updated information they need.
+         * 
+         *
+         */
+        filterThroughPanelLock: function(callback, queueWithId=false){
+            if (!this.panelIsLocked){
+                callback();
+            }
+            else{
+                if(queueWithId){
+                    if(this.unlockCallbackQueue[queueWithId]!==undefined){
+                    }
+                    else{
+                         this.unlockCallbackQueue[queueWithId]=callback;
+                    }
+                }
+            }
+        },
+        
+        /**
          * Toggle the lock state of the panel
          */
         toggleLock: function(){
-            this.panelIsLocked = !this.panelIsLocked;
-            this.renderPanelButton();
-            //TODO: This is not optimal if we have no event queued
-            //this.render();
+            if(this.panelIsLocked){
+                this.unlockPanel();
+            } else {
+                this.lockPanel();
+            }
+        },
+        /**
+         * lock the panel if unlocked
+         */
+        lockPanel: function(){
+           if(!this.panelIsLocked){
+               this.panelIsLocked = true;
+               this.renderPanelButton();
+           }
+        },
+
+        /**
+         * unlock the panel if locked
+         */
+        unlockPanel: function(){
+           if(this.panelIsLocked){
+               this.panelIsLocked = false;
+               this.renderPanelButton();
+               if(_.size(this.unlockCallbackQueue) > 0) {
+                   //console.log("Executing queued callbacks in queue: ",this.unlockCallbackQueue);
+                   _.each(this.unlockCallbackQueue, function(callback){
+                       callback();
+                   });
+                   //We presume the callbacks have their own calls to render
+                   //this.render();
+                   this.unlockCallbackQueue = {};
+               }
+               
+           }
         },
         
         /**

@@ -89,7 +89,10 @@ function(Backbone, _, $, app, PanelView, MessageFamilyView, Message, i18n, PostQ
                     return;
                 }
                 else {
-                    that.syncWithCurrentIdea();
+                    that.filterThroughPanelLock(function(){
+                        that.syncWithCurrentIdea();
+                        }, 'syncWithCurrentIdea');
+                    
                 }
             });
             
@@ -105,7 +108,7 @@ function(Backbone, _, $, app, PanelView, MessageFamilyView, Message, i18n, PostQ
          */
         syncWithCurrentIdea: function(){
             var currentIdea = app.getCurrentIdea();
-            console.log("messageList:syncWithCurrentIdea(): New idea is now: ",currentIdea);
+            //console.log("messageList:syncWithCurrentIdea(): New idea is now: ",currentIdea);
             if(currentIdea && this.currentQuery.isFilterInQuery(this.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, currentIdea.getId())) {
                 //Filter is already in sync
                 //TODO:  Detect the case where there is no idea selected, and we already have no filter on ideas
@@ -122,7 +125,7 @@ function(Backbone, _, $, app, PanelView, MessageFamilyView, Message, i18n, PostQ
                 if(app.debugRender) {
                     console.log("messageList:syncWithCurrentIdea(): triggering render because new idea was selected");
                 }
-                console.log("messageList:syncWithCurrentIdea(): Query is now: ",this.currentQuery._query);
+                //console.log("messageList:syncWithCurrentIdea(): Query is now: ",this.currentQuery._query);
                 this.render();
             }
         },
