@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: assembl 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-05-22 15:57+0200\n"
+"POT-Creation-Date: 2014-05-22 13:34-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -741,7 +741,7 @@ msgid "Expressions of this idea in segments of posts or on the web"
 msgstr ""
 
 #: assembl/templates/views/ideaPanel.tmpl:36
-msgid "Not harvested in any extract"
+msgid "No extracts were harvested for this idea"
 msgstr ""
 
 #: assembl/templates/views/ideaPanel.tmpl:36

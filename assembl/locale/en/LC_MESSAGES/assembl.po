@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: assembl 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-05-22 15:57+0200\n"
+"POT-Creation-Date: 2014-05-22 13:34-0400\n"
 "PO-Revision-Date: 2014-05-06 13:46-0400\n"
 "Last-Translator: Benoit Grégoire <benoitg@coeus.ca>\n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
@@ -750,7 +750,7 @@ msgid "Expressions of this idea in segments of posts or on the web"
 msgstr ""
 
 #: assembl/templates/views/ideaPanel.tmpl:36
-msgid "Not harvested in any extract"
+msgid "No extracts were harvested for this idea"
 msgstr ""
 
 #: assembl/templates/views/ideaPanel.tmpl:36
@@ -1254,5 +1254,8 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "Unknown segment type"
+#~ msgstr ""
+
+#~ msgid "Not harvested in any extract"
 #~ msgstr ""
 

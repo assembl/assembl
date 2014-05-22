@@ -55,7 +55,11 @@ requirejs.config({
         exports: 'app'
     },
     'i18n': {
-        exports: 'i18n'
+        exports: 'i18n',
+        init: function(i18n) {
+            this.i18n(json);
+            return this.i18n;
+        }
     },
     'socket': {
         deps: ['sockjs']
@@ -126,8 +130,6 @@ require([
     'use strict';
 
     app.init();
-
-    i18n(json);
 
     // The router
     app.router = new Router();
