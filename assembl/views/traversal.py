@@ -240,7 +240,7 @@ class CollectionContext(object):
             query = cls.db().query(cls.id)
         else:
             query = cls.db().query(cls)
-        return self.decorate_query(query)
+        return self.decorate_query(query).distinct()
 
     def decorate_query(self, query):
         # This will decorate a query with a join on the relation.
