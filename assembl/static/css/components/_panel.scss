@@ -92,6 +92,8 @@
     border-radius: 4px;
     margin: 10px 0;
     cursor: text;
+    background-color: white;
+    min-height: 30px;
 }
 
 // +++++++
@@ -110,14 +112,11 @@
   &.is-editing {
       background-color: #dbf2ff;
   }
-  &:hover{
-    border:1px solid #cccccc;
-    box-shadow: inset 0px 1px 1px rgba(0, 0, 0, 0.1);
-    -moz-box-shadow: inset 0px 1px 1px rgba(0, 0, 0, 0.1);
-    -webkit-box-shadow: inset 0px 1px 1px rgba(0, 0, 0, 0.1);
-  }
-
 }
+.panel-editablearea.canEdit:hover{
+    border:1px solid #cccccc;
+    @include box-shadow(rgba(0, 0, 0, 0.1) 0px 1px 1px inset);
+  }
 
 // To put the content
 // -----------

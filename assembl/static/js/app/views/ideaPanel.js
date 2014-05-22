@@ -61,8 +61,8 @@ function(Backbone, _, Idea, Message, app, i18n, Types, EditableField, CKEditorFi
             app.trigger('render');
             var segments = {},
             currentUser = app.getCurrentUser(),
-            canEdit = currentUser.can(Permissions.EDIT_IDEA) || false;
-            
+            canEdit = currentUser.can(Permissions.EDIT_IDEA) || false,
+            canEditNextSynthesis = currentUser.can(Permissions.EDIT_SYNTHESIS);
             if(this.idea) {
                 segments = this.idea.getSegments();
             }
@@ -74,7 +74,7 @@ function(Backbone, _, Idea, Message, app, i18n, Types, EditableField, CKEditorFi
                 i18n:i18n,
                 sprintf:sprintf,
                 canDelete:currentUser.can(Permissions.EDIT_IDEA),
-                canEditNextSynthesis:currentUser.can(Permissions.EDIT_SYNTHESIS),
+                canEditNextSynthesis:canEditNextSynthesis,
                 canEditExtracts:currentUser.can(Permissions.EDIT_EXTRACT),
                 canEditMyExtracts:currentUser.can(Permissions.EDIT_MY_EXTRACT),
                 canAddExtracts:currentUser.can(Permissions.EDIT_EXTRACT) //TODO: This is a bit too coarse
@@ -87,7 +87,8 @@ function(Backbone, _, Idea, Message, app, i18n, Types, EditableField, CKEditorFi
                 'modelProp': 'shortTitle',
                 'class': 'panel-editablearea text-bold',
                 'data-tooltip': i18n.gettext('Short expression (only a few words) of the idea in the table of ideas.'),
-                'placeholder': i18n.gettext('New idea')
+                'placeholder': i18n.gettext('New idea'),
+                'canEdit': canEdit
             });
             shortTitleField.renderTo(this.$('#ideaPanel-shorttitle'));
 
@@ -96,16 +97,18 @@ function(Backbone, _, Idea, Message, app, i18n, Types, EditableField, CKEditorFi
             this.longTitleField = new CKEditorField({
                 'model': this.idea,
                 'modelProp': 'longTitle',
-                'placeholder': this.idea.getLongTitleDisplayText()
+                'placeholder': this.idea.getLongTitleDisplayText(),
+                'canEdit': canEditNextSynthesis
             });
-            this.longTitleField.renderTo( this.$('#ideaPanel-longtitle'), canEdit);
+            this.longTitleField.renderTo( this.$('#ideaPanel-longtitle'));
             
             this.definitionField = new CKEditorField({
                 'model': this.idea,
                 'modelProp': 'definition',
-                'placeholder': this.idea.getDefinitionDisplayText()
+                'placeholder': this.idea.getDefinitionDisplayText(),
+                'canEdit': canEdit
             });
-            this.definitionField.renderTo( this.$('#ideaPanel-definition'), canEdit);
+            this.definitionField.renderTo( this.$('#ideaPanel-definition'));
 
             this.commentView = new MessageSendView({
                 'allow_setting_subject': false,
