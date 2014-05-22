@@ -47,28 +47,11 @@
                     <div class="row">
                         <div class="col-md-11 comment-idea">
                             <p>{{idea.definition}}</p>
-                        </div>
-                    </div>
-                    <div class="comment-top">{{idea.creationDate}} - {{'comments' | translate: {nb: idea.comments.length} }}</div>
-
-                    <div ng-if="idea.comments.length > 1">
-                        <div class="media media-comment" ng-repeat="com in idea.comments">
-                            <a class="pull-left" href="#">
-                                <img class="media-object" alt="40x40" ng-src="{{com.avatar}}" style="width: 30px; height: 30px;">
-                            </a>
-                            <div class="media-body">
-                                <h5 class="media-heading">{{com.fullname}}</h5>
-                                <h6>{{com.message}}</h6>
-                            </div>
+                            {{idea.creationDate}}
                         </div>
                     </div>
 
-                    <div class="sub-comment">
-                        <form id="form-comment" data-url="{{idea.widget_add_post_endpoint}}" role="form" ng-submit="commentSubIdea()">
-                            <textarea id="sub-comment" class="form-control" placeholder="{{'comment'| translate }}" autocomplete="off"></textarea>
-                            <button type="submit" class="btn btn-primary btn-xs pull-right btn-subcomment">{{'send'| translate }}</button>
-                        </form>
-                    </div>
+                    <comments idea="idea"></comments>
                 </div>
             </div>
         </div>

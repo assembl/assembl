@@ -83,21 +83,20 @@
     }
     .sub-comment {
       padding: 5px;
-      background-color: #dddddd;
+      background-color: #eeeeee;
       height: 65px;
-      textarea {
+      .text-comment {
         border-radius: 0;
         height: 26px;
         resize : none;
         overflow-y: hidden;
         padding: 3px;
+        width: 100%;
+        border-color: #cccccc;
       }
-      .btn-subcomment {
-        margin-top: 5px;
-      }
+
     }
     .comment-top {
-      background-color: #dddddd;
       border-bottom: 1px solid #ffffff;
       font-size: 11px;
       padding: 2px 7px;
@@ -105,8 +104,26 @@
     .text-primary {
       cursor: pointer;
     }
-    .media, .media-body {
+    .media{
       padding-top: 5px;
+    }
+    .media-body {
+      .media-heading {
+        margin: 0 0 2px;
+      }
+      p, span{
+        font-size: 12px;
+        margin:0;
+      }
+      .row {
+        border-bottom: 1px solid #cccccc;
+      }
+      .commentToSubIdea {
+        .media-comment {
+          background-color: #eeeeee;
+          border-bottom: 1px solid #ffffff;
+        }
+      }
     }
     .icon-lamp {
       color:#f0ad4e;

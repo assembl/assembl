@@ -221,18 +221,15 @@ creativityApp.controller('creativitySessionCtl',
 
         $scope.getSubIdeaFromIdea();
 
-        //angular.element('#loader').hide();
+        //$scope.getCommentsFromSubIdea();
 
-    },500);
+    },1000);
 
     $scope.$watch("message", function(value){
 
         switch(value){
             case 'sendNewIdea:success':
                 $scope.getSubIdeaFromIdea();
-                break;
-            case 'commentSubIdea:success':
-                $scope.getCommentsFromSubIdea();
                 break;
             case 'sendNewIdea:error':
                 break;
@@ -298,14 +295,18 @@ creativityApp.controller('creativitySessionCtl',
     /**
      * Comment an idea from creativity session
      */
-    $scope.commentSubIdea = function(){
+    /*$scope.commentSubIdea = function($event){
 
-        var rootUrl = angular.element('#form-comment').attr('data-url');
+        var target = angular.element($event.currentTarget).find('.text-comment');
+
+
+        return;
+        var rootUrl = angular.element('.form-comment').attr('data-url');
 
         var data = {
             type: 'Post',
             subject: 'test_message',
-            body: angular.element('#sub-comment').val(),
+            body: angular.element('.text-comment').val(),
             creator_id: 245,
             message_id: 'bogus'
         }
@@ -332,10 +333,8 @@ creativityApp.controller('creativitySessionCtl',
     /**
      * get all comments from a sub idea
      */
-    $scope.getCommentsFromSubIdea = function(){
+    /*$scope.getCommentsFromSubIdea = function(){
 
-        var rootUrl = angular.element('#form-comment').attr('data-url');
-            rootUrl = rootUrl+'?view=default';
 
     }
 
