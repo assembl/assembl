@@ -188,13 +188,11 @@ function(Backbone, _, Idea, Message, app, i18n, Types, EditableField, CKEditorFi
 
                     this.idea.on('change', this.render, this);
     
-                    if( this.idea.get('@type') === Types.IDEA ){
-                        app.openPanel(app.ideaPanel);
-                    } else {
-                        //TODO: More sophisticated behaviour here, depending 
-                        //on if the panel was opened by selection, or by something else.
-                        //app.closePanel(app.ideaPanel);
-                    }
+                    app.openPanel(app.ideaPanel);
+                } else {
+                    //TODO: More sophisticated behaviour here, depending 
+                    //on if the panel was opened by selection, or by something else.
+                    //app.closePanel(app.ideaPanel);
                 }
                 this.render();
             }

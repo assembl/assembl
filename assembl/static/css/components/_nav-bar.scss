@@ -118,8 +118,7 @@
       li {
         display:inline-block;
         margin-right:-4px;
-      }
-      a {
+        > div {
         color: #aaaaaa;
         width: 130px;
         height: 35px;
@@ -132,6 +131,30 @@
           @extend %navbar-gradient;
           color: #ffffff;
         }
+        .lock-button {
+            display: inline-block;
+            @include transition-property(background-color);
+            @include transition-duration(0.1s);
+            .icon-lock {
+                color: white;
+            }
+            .icon-lock-open {
+                color: $text-muted-color;
+            }
+        }
+        &.is-highlighted {
+            @include transition-property(background);
+            @include transition-duration(1s);
+            @include transition-timing-function(ease-in);
+            background: white none;
+            .icon-lock {
+
+                color: red;
+            }
+        }
+        
+      }
+        
       }
     }
   }

@@ -61,6 +61,7 @@ function(Backbone, _, $, app, i18n, Permissions){
                 callback();
             }
             else{
+                var lockButton = this.button.highlight();//.find('.lock-anchor');
                 if(queueWithId){
                     if(this.unlockCallbackQueue[queueWithId]!==undefined){
                     }

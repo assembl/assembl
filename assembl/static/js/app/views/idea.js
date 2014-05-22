@@ -286,7 +286,6 @@ function(Backbone, _, $, Idea, Segment, app, Permissions){
 
             var annotation = app.getDraggedAnnotation();
             if( annotation ){
-
                 if( isDraggedBelow ){
                     // Add as a child idea
                     app.currentAnnotationIdIdea = null;

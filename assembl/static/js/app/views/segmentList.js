@@ -23,7 +23,7 @@ function(Backbone, _, $, app, Segment, Types, i18n, Permissions){
             this.segments.on('add remove change reset', this.render, this);
 
             this.segments.on('add', function(segment){
-                that.showSegment(segment);
+                that.highlightSegment(segment);
             });
         },
 
@@ -170,12 +170,19 @@ function(Backbone, _, $, app, Segment, Types, i18n, Permissions){
 
 
         /**
-         * Shows the given segment with an small fx
+         * Shows the given segment
          * @param {Segment} segment
          */
         showSegment: function(segment){
             app.openPanel(app.segmentList);
-
+            this.highlightSegment(segment);
+        },
+        
+        /**
+         * Highlight the given segment with an small fx
+         * @param {Segment} segment
+         */
+        highlightSegment: function(segment){
             var selector = app.format('.box[data-segmentid={0}]', segment.cid),
                 box = this.$(selector);
 
@@ -189,6 +196,7 @@ function(Backbone, _, $, app, Segment, Types, i18n, Permissions){
                 box.highlight();
             }
         },
+
         
         /**
          * Closes the panel

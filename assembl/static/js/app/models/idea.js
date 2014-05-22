@@ -296,6 +296,7 @@ function(Base, _, Segment, app, i18n, Types, Permissions){
         /**
          * Adds a segment as a child
          * @param {Segment} segment, possibly unsaved.
+         * @return the newly created idea
          */
         addSegmentAsChild: function(segment){
             // Cleaning
@@ -309,11 +310,11 @@ function(Base, _, Segment, app, i18n, Types, Permissions){
             };
 
             var onSuccess = function(idea){
-                console.log('addSegmentAsChild(): onSuccess() fired.')
+                //console.log('addSegmentAsChild(): onSuccess() fired.')
                 idea.addSegment(segment);
             };
 
-            this.collection.create(data, { success: onSuccess });
+            return this.collection.create(data, { success: onSuccess });
         },
 
         /**

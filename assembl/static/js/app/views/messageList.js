@@ -92,7 +92,6 @@ function(Backbone, _, $, app, PanelView, MessageFamilyView, Message, i18n, PostQ
                     that.filterThroughPanelLock(function(){
                         that.syncWithCurrentIdea();
                         }, 'syncWithCurrentIdea');
-                    
                 }
             });
             
@@ -109,6 +108,7 @@ function(Backbone, _, $, app, PanelView, MessageFamilyView, Message, i18n, PostQ
         syncWithCurrentIdea: function(){
             var currentIdea = app.getCurrentIdea();
             //console.log("messageList:syncWithCurrentIdea(): New idea is now: ",currentIdea);
+            app.openPanel(app.messageList);
             if(currentIdea && this.currentQuery.isFilterInQuery(this.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, currentIdea.getId())) {
                 //Filter is already in sync
                 //TODO:  Detect the case where there is no idea selected, and we already have no filter on ideas
@@ -466,7 +466,10 @@ function(Backbone, _, $, app, PanelView, MessageFamilyView, Message, i18n, PostQ
                 if( !segment.isValid() ){
                     annotator.deleteAnnotation(annotation);
                 } else if( app.currentAnnotationNewIdeaParentIdea ){
-                    app.currentAnnotationNewIdeaParentIdea.addSegmentAsChild(segment);
+                    //We asked to create a new idea from segment
+                    that.lockPanel();
+                    var newIdea = app.currentAnnotationNewIdeaParentIdea.addSegmentAsChild(segment);
+                    app.setCurrentIdea(newIdea);
                 }
                 else {
                     segment.save();
