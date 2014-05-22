@@ -237,14 +237,13 @@ class CollectionContext(object):
 
     def create_query(self, id_only=True):
         cls = self.collection.collection_class
-        if id_only:
-            query = cls.db().query(cls.id)
-            return self.decorate_query(query).distinct()
-        else:
-            sub = cls.db().query(cls.id)
+        query = cls.db().query(cls.id)
+        query = self.decorate_query(query).distinct()
+        if not id_only:
             # TODO: Revisit. There is a scary note in subquery doc:
             # Eager JOIN generation within the query is disabled
-            sub = self.decorate_query(sub).distinct().subquery()
+            # Also, WAY too slow.
+            sub = query.subquery()
             query = cls.db().query(cls).join(sub, cls.id == sub.c.id)
         return query
 
