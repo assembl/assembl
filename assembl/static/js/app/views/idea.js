@@ -275,7 +275,8 @@ function(Backbone, _, $, Idea, Segment, app, Permissions){
             if( segment ){
                 if( isDraggedBelow ){
                     // Add as a child idea
-                    this.model.addSegmentAsChild(segment);
+                    var newIdea = this.model.addSegmentAsChild(segment);
+                    app.setCurrentIdea(newIdea);
                 } else {
                     // Add to the current idea
                     this.model.addSegment(segment);
