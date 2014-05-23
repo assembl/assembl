@@ -16,8 +16,11 @@ def includeme(config):
     # First one may be obsolete?
     config.add_route('confirm_user_email', '/user_confirm/{email_account_id:\d+}')
     #config.add_route('profile_search', '/usernames/{user_name}')  Do we want this?
-    config.add_route('confirm_email_request', '/req_email_confirm/{email}')
-    config.add_route('password_change_request', '/req_password_change/{email}')
+    config.add_route('confirm_email_sent', '/confirm_email_sent/{email}')
+    config.add_route('request_password_change', '/req_password_change')
+    config.add_route('password_change_sent', '/password_change_sent/{id}')
+    config.add_route('do_password_change', '/do_password_change/{id}')
+    
 
     # determine which providers we want to configure
     settings = config.get_settings()
