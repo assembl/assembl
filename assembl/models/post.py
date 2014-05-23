@@ -60,6 +60,7 @@ class Post(Content):
         ]
 
     creator_id = Column(Integer, ForeignKey('agent_profile.id'),
+        backref="posts_created",
         info= {'rdf': QuadMapPatternS(None, SIOC.has_creator,
                     AgentProfile.iri_class().apply())})
     creator = relationship(AgentProfile)
