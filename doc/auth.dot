@@ -7,7 +7,6 @@ strict digraph {
     "assembl (logged out)";
     "profile";
     "assembl (logged in)";
-    "error" [color="red"];
     "user_confirm_email";
     #"confirm_user_email";
     "confirm_email_request" ;
@@ -16,24 +15,29 @@ strict digraph {
     login -> "assembl (logged in)" [label=login];
     login->login [label="bad login", color=red];
     login -> "confirm_email_request" [label="register"];
-    login -> "assembl (logged in)" [label="social login"];
+    login -> "social login";
+    "social login" -> "assembl (logged in)";
+    "social login" -> login [color=red, label="failed social login"];
     login -> "confirm_email_request" [label="login, unconfirmed"];
     "confirm_email_request" -> "confirm_email_request" [label=resend];
     confirm_email_request -> "email confirm link email";
     "email confirm link email"->user_confirm_email;
     user_confirm_email->"assembl (logged in)" [label=301];
-    "email confirm link email"->error [label="reuse link"];
+    user_confirm_email->confirm_email_request [label="reuse link, 301", color=red];
     login->request_password_change [label="request password change"];
     request_password_change->password_change_request;
     password_change_request->password_change_request [label=resend];
     password_change_request->"password change link email";
-    "password change link email"->"assembl (logged in)" [label="use link"];
-    "password change link email"->error [label="reuse link"];
-    "password change link email"->"confirm_email_request" [label="unconfirmed"];
+    "password change link email"->"password_change_page" [label="use link (may confirm email)"];
+
+    "password_change_page"->"assembl (logged in)" [label="change password"];
+    "password_change_page"->"password_change_page" [label="passwords don't match"];
+    "password_change_page"->"password_change_request" [label="reuse link, 301", color=red];
     "assembl (logged in)" -> "assembl (logged out)" [label="logout"];
     "assembl (logged out)" -> login;
-    login -> login [label="social login while logged in"];
-    "assembl (logged in)" -> profile;
-    "profile" -> profile [label="add social login"];
+    login -> "social login" [label="social login while logged in"];
+    "assembl (logged in)" -> profile [dir="both"];
+    "profile" -> "social login" [label="add social login"];
+    profile->profile [label="change password"];
     #"confirm_user_email"->"email confirm link email";
 }
