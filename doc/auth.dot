@@ -1,0 +1,39 @@
+strict digraph {
+
+    login;
+    "request_password_change";
+    "email confirm link email";
+    "password change link email";
+    "assembl (logged out)";
+    "profile";
+    "assembl (logged in)";
+    "error" [color="red"];
+    "user_confirm_email";
+    #"confirm_user_email";
+    "confirm_email_request" ;
+    "password_change_request";
+
+    login -> "assembl (logged in)" [label=login];
+    login->login [label="bad login", color=red];
+    login -> "confirm_email_request" [label="register"];
+    login -> "assembl (logged in)" [label="social login"];
+    login -> "confirm_email_request" [label="login, unconfirmed"];
+    "confirm_email_request" -> "confirm_email_request" [label=resend];
+    confirm_email_request -> "email confirm link email";
+    "email confirm link email"->user_confirm_email;
+    user_confirm_email->"assembl (logged in)" [label=301];
+    "email confirm link email"->error [label="reuse link"];
+    login->request_password_change [label="request password change"];
+    request_password_change->password_change_request;
+    password_change_request->password_change_request [label=resend];
+    password_change_request->"password change link email";
+    "password change link email"->"assembl (logged in)" [label="use link"];
+    "password change link email"->error [label="reuse link"];
+    "password change link email"->"confirm_email_request" [label="unconfirmed"];
+    "assembl (logged in)" -> "assembl (logged out)" [label="logout"];
+    "assembl (logged out)" -> login;
+    login -> login [label="social login while logged in"];
+    "assembl (logged in)" -> profile;
+    "profile" -> profile [label="add social login"];
+    #"confirm_user_email"->"email confirm link email";
+}
