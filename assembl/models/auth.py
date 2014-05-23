@@ -318,6 +318,8 @@ class User(AgentProfile):
                 extract.creator = self
             for extract in other_user.extracts_owned:
                 extract.owner = self
+            for post in other_user.posts_created:
+                post.creator = self
             for role in other_user.roles:
                 role.user = self
             for role in other_user.local_roles:

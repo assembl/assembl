@@ -351,7 +351,7 @@ def velruse_login_complete_view(request):
         email_account = session.query(EmailAccount).filter_by(
             email=email, verified=True).first()
         if email_account and email_account.profile and email_account.profile not in profiles:
-            profiles.push(email_account.profile)
+            profiles.append(email_account.profile)
     profiles = list(set(profiles))
     # prefer profiles with verified users, then users, then oldest profiles
     profiles.sort(key=lambda p: (
