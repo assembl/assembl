@@ -32,6 +32,7 @@
             <input type="text" name="identifier" class="defaultfield" placeholder="{{ gettext('Email or username') }}" autofocus required />
             <div class="spacer spacer--big"></div>
             <input type="password" name="password" class="defaultfield" placeholder="{{ gettext('Password') }}" required />
+            <input type="submit" name="forgot_password" value="{{ gettext('I forgot my password') }}" class="button button--condensed" />
             <div class="spacer spacer--big"></div>
             <input type="submit" name="login" value="{{ gettext('Enter') }}" class="btn-pink" />
             <span class="register">{{gettext("or")}} <a href="/register?next_view={{next_view}}">{{gettext("register")}}</a></span>
