@@ -525,3 +525,31 @@ def login_denied_view(request):
                 error=localizer.translate(_('Login failed, try again')))
     # TODO: If logged in otherwise, go to profile page. 
     # Otherwise, back to login page
+
+
+@view_config(
+    route_name='confirm_email_request',
+    renderer='assembl:templates/confirm.jinja2',
+    permission=NO_PERMISSION_REQUIRED
+    )
+def confirm_email_req_view(request):
+    localizer = get_localizer(request)
+    return dict(get_default_context(request),
+        localizer = get_localizer(request),
+        email=request.matchdict.get('email'),
+        title=localizer.translate(_('Confirmation requested')),
+        description=localizer.translate(_('We have sent you a confirmation email. Please use the link to confirm your email to Assembl')))
+
+
+@view_config(
+    route_name='password_change_request',
+    renderer='assembl:templates/confirm.jinja2',
+    permission=NO_PERMISSION_REQUIRED
+    )
+def password_change_req_view(request):
+    localizer = get_localizer(request)
+    return dict(get_default_context(request),
+        localizer = get_localizer(request),
+        email=request.matchdict.get('email'),
+        title=localizer.translate(_('Password change requested')),
+        description=localizer.translate(_('We have sent you an email with a temporary connection link. Please use that link to log in and change your email.')))
