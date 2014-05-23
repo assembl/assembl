@@ -555,9 +555,19 @@ def request_password_change(request):
     renderer='assembl:templates/confirm.jinja2',
     permission=NO_PERMISSION_REQUIRED
     )
-def password_change_request(request):
+def password_change_sent(request):
     localizer = get_localizer(request)
     return dict(get_default_context(request),
         email=request.matchdict.get('email'),
         title=localizer.translate(_('Password change requested')),
         description=localizer.translate(_('We have sent you an email with a temporary connection link. Please use that link to log in and change your email.')))
+
+@view_config(
+    route_name='do_password_change',
+    renderer='assembl:templates/do_password_change.jinja2',
+    permission=NO_PERMISSION_REQUIRED
+    )
+def password_change_sent(request):
+    localizer = get_localizer(request)
+    return dict(get_default_context(request))
+
