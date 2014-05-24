@@ -37,10 +37,10 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n, Permissions, Message
          * @param {MessageModel} obj the model
          */
         initialize: function(obj){
-            this.model.on('change:isSelected', this.onIsSelectedChange, this);
-            this.model.on('replacedBy', this.onReplaced, this);
-            this.model.on('showBody', this.onShowBody, this);
-            this.model.on('change', this.render, this);
+            this.listenTo(this.model, 'change:isSelected', this.onIsSelectedChange);
+            this.listenTo(this.model, 'replacedBy', this.onReplaced);
+            this.listenTo(this.model, 'showBody', this.onShowBody);
+            this.listenTo(this.model, 'change', this.render);
             this.messageListView = obj.messageListView;
             this.viewStyle = this.messageListView.defaultMessageStyle;
             this.messageListView.on('annotator:initComplete', this.onAnnotatorInitComplete, this);

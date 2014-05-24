@@ -30,9 +30,9 @@ function(Backbone, _, $, app, i18n, Permissions){
         initialize: function(){
             var that = this;
             this.lockButton = this.button.find('.lock-button');
-            this.lockButton.on('click', function(event){
+            this.listenTo(this.lockButton, 'click', function(event){
                     that.onLockButtonClick(event);
-                });
+            });
         },
         /**
          * The events

@@ -28,7 +28,7 @@ function(Backbone, _, Moment, ckeditor, app, Types, Message, MessageView, Synthe
             }
             this.last_sibling_chain = last_sibling_chain;
             this.messageListView = obj.messageListView;
-            this.model.on('change:collapsed', this.onCollapsedChange, this);
+            this.listenTo(this.model, 'change:collapsed', this.onCollapsedChange);
         },
 
         /**
@@ -49,6 +49,7 @@ function(Backbone, _, Moment, ckeditor, app, Types, Message, MessageView, Synthe
          * @return {MessageView}
          */
         render: function(level){
+
             app.trigger('render');
             var data = this.model.toJSON(),
             children,

@@ -71,7 +71,8 @@ function(Backbone, _, Idea, IdeaView, ideaGraphLoader, app, Types, AllMessagesIn
             }
 
             var events = ['reset', 'change:parentId', 'change:@id', 'change:inNextSynthesis', 'remove', 'add'];
-            this.ideas.on(events.join(' '), this.render, this);
+
+            this.listenTo(this.ideas, events.join(' '), this.render);
 
             app.on('idea:delete', function(){
                 if(app.debugRender) {

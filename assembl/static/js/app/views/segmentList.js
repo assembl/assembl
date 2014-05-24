@@ -9,20 +9,19 @@ function(Backbone, _, $, app, Segment, Types, i18n, Permissions){
         initialize: function(obj){
             var that = this;
 
-            /*this.segments.on("all", function(eventName) {
-                console.log("segementList collection event received: ", eventName);
-            });*/
-            
             if( obj && obj.button ){
                 this.button = $(obj.button).on('click', app.togglePanel.bind(window, 'segmentList'));
             }
 
-            this.segments.on('invalid', function(model, error){ alert(error); });
-            app.users.on('reset', this.render, app.segmentList);
-            
-            this.segments.on('add remove change reset', this.render, this);
+            this.listenTo(this.segments, 'invalid', function(model, error){
+                alert(error);
+            });
 
-            this.segments.on('add', function(segment){
+            app.users.on('reset', this.render, app.segmentList);
+
+            this.listenTo(this.segments, 'add remove change reset', this.render);
+
+            this.listenTo(this.segments, 'add', function(segment){
                 that.highlightSegment(segment);
             });
         },
