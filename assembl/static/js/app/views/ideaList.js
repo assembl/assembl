@@ -1,4 +1,4 @@
-define(['backbone', 'underscore', 'models/idea', 'models/idea', 'views/idea', "views/ideaGraph", 'app', 'types', 'views/allMessagesInIdeaList', 'views/orphanMessagesInIdeaList', 'views/synthesisInIdeaList', 'permissions', 'utils/renderVisitor', 'utils/siblingChainVisitor'],
+define(['backbone', 'underscore', 'models/idea', 'models/ideaLink', 'views/idea', "views/ideaGraph", 'app', 'types', 'views/allMessagesInIdeaList', 'views/orphanMessagesInIdeaList', 'views/synthesisInIdeaList', 'permissions', 'utils/renderVisitor', 'utils/siblingChainVisitor'],
 function(Backbone, _, Idea, IdeaLink, IdeaView, ideaGraphLoader, app, Types, AllMessagesInIdeaListView, OrphanMessagesInIdeaListView, SynthesisInIdeaListView, Permissions, renderVisitor, siblingChainVisitor){
     'use strict';
 
