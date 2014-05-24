@@ -168,9 +168,13 @@ class Discussion(DiscussionBoundBase):
             pass  # add a pseudo-anonymous user?
         return users
 
-    def get_all_agents_preload(self):
+    def get_all_agents_preload(self, user=None):
         from assembl.views.api.agent import _get_agents_real
-        return json.dumps(_get_agents_real(discussion=self))
+        from assembl.auth.util import user_has_permission
+        return json.dumps(_get_agents_real(
+            discussion=self,
+            include_email=user and user_has_permission(
+                self.id, user.id, P_ADMIN_DISC)))
 
     def get_readers_preload(self):
         return json.dumps([user.serializable() for user in self.get_readers()])
