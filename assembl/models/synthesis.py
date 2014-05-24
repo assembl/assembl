@@ -188,7 +188,7 @@ class Discussion(DiscussionBoundBase):
     def get_top_ideas(self):
         return self.db().query(Idea).filter(
             Idea.discussion_id == self.id).filter(
-                ~Idea.source_links.filter_by(is_tombstone=False).any()).all()
+                ~Idea.source_links.any()).all()
 
     def get_related_extracts_preload(self):
         from assembl.views.api.extract import _get_extracts_real
@@ -598,11 +598,11 @@ class Idea(DiscussionBoundBase):
 
     @property
     def children(self):
-        return [cl.target for cl in self.target_links if not cl.is_tombstone]
+        return [cl.target for cl in self.target_links]
 
     @property
     def parents(self):
-        return [cl.source for cl in self.source_links if not cl.is_tombstone]
+        return [cl.source for cl in self.source_links]
 
     @property
     def widget_add_post_endpoint(self):
@@ -628,21 +628,13 @@ class Idea(DiscussionBoundBase):
 
         return ancestors.all()
     
-    def first_parent_link(self):
-        for cl in self.source_links:
-            if cl.is_tombstone:
-                continue
-            return cl
-
     def get_order_from_first_parent(self):
-        cl = self.first_parent_link()
-        if cl:
-            return cl.order
+        return self.source_links[0].order if self.source_links else None
 
     def get_first_parent_uri(self):
-        cl = self.first_parent_link()
-        if cl:
-            return cl.source_id
+        return Idea.uri_generic(
+            self.source_links[0].source_id
+        ) if self.source_links else None
 
     @staticmethod
     def _get_idea_dag_statement(skip_where=False):
