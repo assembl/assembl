@@ -29,6 +29,12 @@ define(['jquery', 'underscore', 'ckeditor', 'moment', 'i18n', 'zeroclipboard', '
          * @type {boolean}
          */
         debugRender: false,
+
+        /**
+         * Send debugging output to console.log to observe socket input
+         * @type {boolean}
+         */
+        debugSocket: false,
             
         /**
          * Reference to the body as jQuery object
