@@ -750,6 +750,13 @@ JOIN post ON (
         next_synthesis = self.discussion.get_next_synthesis()
         return True if self in next_synthesis.ideas else False
 
+    def send_to_changes(self, connection=None):
+        connection = connection or self.db().connection()
+        if self.is_tombstone:
+            self.tombstone().send_to_changes(connection)
+        else:
+            super(Idea, self).send_to_changes(connection)
+
     def __repr__(self):
         if self.short_title:
             return "<Idea %d %s>" % (self.id or -1, repr(self.short_title))
@@ -1013,6 +1020,13 @@ class IdeaLink(DiscussionBoundBase):
             return self.source.get_discussion_id()
         else:
             return Idea.get(id=self.source_id).get_discussion_id()
+
+    def send_to_changes(self, connection=None):
+        connection = connection or self.db().connection()
+        if self.is_tombstone:
+            self.tombstone().send_to_changes(connection)
+        else:
+            super(IdeaLink, self).send_to_changes(connection)
 
     @classmethod
     def get_discussion_condition(cls, discussion_id):
