@@ -42,7 +42,22 @@ function(Backbone, _, Idea, IdeaView, ideaGraphLoader, app, Types, AllMessagesIn
          * @init
          */
         initialize: function(obj){
+            var that = this;
             this.ideas = new Idea.Collection();
+            this.ideaLinks = {
+                updateFromSocket: function(item) {
+                    if( item['@tombstone'] ) { return; }
+                    var child = that.ideas.get( item['target'] );
+                    if (child && !child.has('parentId')) {
+                        var parent_id = item['source'];
+                        child.set('parentId', parent_id);
+                        var parents = child.get('parents');
+                        if (!_.contains(parents, parent_id)) {
+                            parents.push(parent_id);
+                        }
+                    }
+                }
+            }
             /*this.on("all", function(eventName) {
                 console.log("ideaList event received: ", eventName);
               });
@@ -58,7 +73,6 @@ function(Backbone, _, Idea, IdeaView, ideaGraphLoader, app, Types, AllMessagesIn
             var events = ['reset', 'change:parentId', 'change:@id', 'change:inNextSynthesis', 'remove', 'add'];
             this.ideas.on(events.join(' '), this.render, this);
 
-            var that = this;
             app.on('idea:delete', function(){
                 if(app.debugRender) {
                     console.log("ideaList: triggering render because app.on('idea:delete') was triggered");
