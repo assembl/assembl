@@ -34,8 +34,8 @@ function(Backbone, _, $, Idea, Segment, app, Permissions){
             //console.log("initialize: ",obj, view_data, this);
             var that = this;
             this.view_data = view_data;
-            this.model.listenTo('change', this.render, this);
-            this.model.listenTo('replacedBy', this.onReplaced, this);
+            this.model.on('change', this.render, this);
+            this.model.on('replacedBy', this.onReplaced, this);
             app.on('idea:select', function(idea) {
                 that.onIsSelectedChange(idea);
             });

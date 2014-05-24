@@ -18,14 +18,14 @@ function(Backbone, _, $, app, Synthesis, Idea, Permissions, IdeaFamilyView, Idea
             }
             this.ideas = new Idea.Collection();
 
-            this.ideas.listenTo('add', this.render, this);
-            this.ideas.listenTo('remove', this.render, this);
+            this.ideas.on('add', this.render, this);
+            this.ideas.on('remove', this.render, this);
             //Note:  this is inhibited within render, as render calls it
-            this.ideas.listenTo('reset', this.render, this);
+            this.ideas.on('reset', this.render, this);
             //this.ideas.on('all', function(event){console.log("ideas event: ", event)}, this);
             
-            this.model.listenTo('reset', this.render, this);
-            this.model.listenTo('change', function(){
+            this.model.on('reset', this.render, this);
+            this.model.on('change', function(){
                 //console.log("model changed");
                 this.render();}, this);
             //this.model.on('all', function(event){console.log("model event: ", event)}, this);

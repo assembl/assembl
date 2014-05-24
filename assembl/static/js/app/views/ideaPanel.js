@@ -34,7 +34,7 @@ function(Backbone, _, Idea, Message, app, i18n, Types, EditableField, CKEditorFi
                 this.idea = new Idea.Model();
             }
 
-            this.idea.listenTo('change', this.render, this);
+            this.idea.on('change', this.render, this);
             if( ! obj.idea ){
                 this.idea = null;
             }

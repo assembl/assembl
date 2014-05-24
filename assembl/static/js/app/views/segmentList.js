@@ -17,12 +17,12 @@ function(Backbone, _, $, app, Segment, Types, i18n, Permissions){
                 this.button = $(obj.button).on('click', app.togglePanel.bind(window, 'segmentList'));
             }
 
-            this.segments.listenTo('invalid', function(model, error){ alert(error); });
+            this.segments.on('invalid', function(model, error){ alert(error); });
             app.users.on('reset', this.render, app.segmentList);
             
             this.segments.on('add remove change reset', this.render, this);
 
-            this.segments.listenTo('add', function(segment){
+            this.segments.on('add', function(segment){
                 that.highlightSegment(segment);
             });
         },
