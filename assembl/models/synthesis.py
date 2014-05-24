@@ -977,13 +977,15 @@ class IdeaLink(DiscussionBoundBase):
     source = relationship(
         'Idea', 
         primaryjoin="and_(Idea.id==IdeaLink.source_id, "
-                        "IdeaLink.is_tombstone==False)",
+                        "IdeaLink.is_tombstone==False, "
+                        "Idea.is_tombstone==False)",
         backref=backref('target_links', cascade="all, delete-orphan"),
         foreign_keys=(source_id))
     target = relationship(
         'Idea',
         primaryjoin="and_(Idea.id==IdeaLink.target_id, "
-                        "IdeaLink.is_tombstone==False)",
+                        "IdeaLink.is_tombstone==False, "
+                        "Idea.is_tombstone==False)",
         backref=backref('source_links', cascade="all, delete-orphan"),
         foreign_keys=(target_id))
     order = Column(Float, nullable=False, default=0.0,
