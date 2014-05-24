@@ -137,7 +137,8 @@ def save_idea(request):
         # TODO: Make sure this is sent as a list!
         parent = Idea.get_instance(idea_data['parentId'])
         # calculate it early to maximize contention.
-        ancestors = parent.get_all_ancestors()
+        prev_ancestors = parent.get_all_ancestors()
+        new_ancestors = set()
 
         order = idea_data.get('order', 0.0)
         if not parent:
@@ -146,25 +147,30 @@ def save_idea(request):
         current_parent = None
         for parent_link in idea.source_links:
             pl_ancestors = parent_link.source.get_all_ancestors()
+            new_ancestors.update(pl_ancestors)
             if parent_link.source != parent:
                 parent_link.is_tombstone=True
+                Idea.db.expire(idea, ['source_links'])
+                for ancestor in pl_ancestors:
+                    if ancestor in prev_ancestors:
+                        break
+                    ancestor.send_to_changes()
             else:
                 parent_link.order = order
                 current_parent = parent_link
             Idea.db.expire(parent_link.source, ['target_links'])
             parent_link.source.send_to_changes()
-            for ancestor in pl_ancestors:
-                ancestor.send_to_changes()
             
         if current_parent is None:
             link = IdeaLink(source=parent, target=idea, order=order)
             Idea.db.add(link)
-            idea.source_links.append(link)
             Idea.db.expire(parent, ['target_links'])
+            # source already expired
             parent.send_to_changes()
-            for ancestor in ancestors:
+            for ancestor in prev_ancestors:
+                if ancestor in new_ancestors:
+                    break
                 ancestor.send_to_changes()
-        Idea.db.expire(idea, ['source_links'])
         
     next_synthesis = discussion.get_next_synthesis()
     if idea_data['inNextSynthesis']:
