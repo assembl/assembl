@@ -55,8 +55,8 @@ function(Backbone, _, $, Idea, app, Permissions){
          * @event
          */
         onSendMessageButtonClick: function(ev){
+
             var btn = $(ev.currentTarget),
-            url = app.getApiUrl('posts'),
             that = this,
             btn_original_text=btn.text(),
             message_body_field = this.$('.messageSend-body'),
@@ -93,7 +93,9 @@ function(Backbone, _, $, Idea, app, Permissions){
             btn.text( i18n.gettext('Sending...') );
             //For message custom callback:  that.closeReplyBox();
             success_callback = function(data, textStatus, jqXHR){
+
                 message_body_field.val('');
+
                 btn.text( i18n.gettext('Message posted!') );
                 app.messageList.once("render_complete", function() {
                         app.messageList.showMessageById(data['@id']);

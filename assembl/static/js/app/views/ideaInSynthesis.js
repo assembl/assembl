@@ -19,7 +19,7 @@ function(Backbone, _, $, Idea, Segment, app, Permissions, CKEditorField, Message
          * @init
          */
         initialize: function(obj){
-            this.model.on('change:shortTitle change:longTitle change:segments', this.render, this);
+            this.model.listenTo('change:shortTitle change:longTitle change:segments', this.render, this);
             this.editing = false;
         },
 
