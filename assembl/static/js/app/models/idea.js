@@ -337,15 +337,16 @@ function(Base, _, Segment, app, i18n, Types, Permissions){
               if (attrs['parentId'] === null && attrs['root'] !== true) {
                 console.log("empty parent bug");
                 var id = attrs['@id'];
-                var links = app.ideaList.ideaLinks.filter(function(l) { return l.get('target') == id;});
+                var links = app.ideaList.ideaLinks.where({target: id});
                 if (links.length > 0) {
+                    console.log('corrected');
                     attrs['parents'] = _.map(links, function(l) {return l.get('source')});
                     attrs['parentId'] = attrs['parents'][0];
                 }
               }
-              Backbone.Model.prototype.set.call(this, attrs, options);
+              return Backbone.Model.prototype.set.call(this, attrs, options);
             } else {
-                Backbone.Model.prototype.set.call(this, key, val, options);
+                return Backbone.Model.prototype.set.call(this, key, val, options);
             }
         }
 
