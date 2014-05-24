@@ -710,6 +710,9 @@ function(Backbone, _, $, app, PanelView, MessageFamilyView, Message, i18n, PostQ
          * @param {Function} [callback] The callback function to call if message is not found
          */
         showMessageById: function(id, callback){
+
+            console.log('messageList: showMessageById called');
+
             var message = this.messages.get(id),
                  selector = app.format('[id="message-{0}"]', id),
                  el,
@@ -742,6 +745,9 @@ function(Backbone, _, $, app, PanelView, MessageFamilyView, Message, i18n, PostQ
                     };
             }
             if( message ){
+
+                console.log('message.trigger("showBody")');
+
                 message.trigger('showBody');
                 el = $(selector);
                 if( el[0] ){
@@ -751,6 +757,9 @@ function(Backbone, _, $, app, PanelView, MessageFamilyView, Message, i18n, PostQ
                     // Scrolling to the element
                     var target = offset - panelOffset + panelBody.scrollTop();
                     panelBody.animate({ scrollTop: target }, { complete: callback });
+
+                    console.log('return to Top');
+
                 } else {
                     callback();
                 }
