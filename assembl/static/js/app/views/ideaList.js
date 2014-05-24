@@ -1,5 +1,5 @@
-define(['backbone', 'underscore', 'models/idea', 'views/idea', "views/ideaGraph", 'app', 'types', 'views/allMessagesInIdeaList', 'views/orphanMessagesInIdeaList', 'views/synthesisInIdeaList', 'permissions', 'utils/renderVisitor', 'utils/siblingChainVisitor'],
-function(Backbone, _, Idea, IdeaView, ideaGraphLoader, app, Types, AllMessagesInIdeaListView, OrphanMessagesInIdeaListView, SynthesisInIdeaListView, Permissions, renderVisitor, siblingChainVisitor){
+define(['backbone', 'underscore', 'models/idea', 'models/idea', 'views/idea', "views/ideaGraph", 'app', 'types', 'views/allMessagesInIdeaList', 'views/orphanMessagesInIdeaList', 'views/synthesisInIdeaList', 'permissions', 'utils/renderVisitor', 'utils/siblingChainVisitor'],
+function(Backbone, _, Idea, IdeaLink, IdeaView, ideaGraphLoader, app, Types, AllMessagesInIdeaListView, OrphanMessagesInIdeaListView, SynthesisInIdeaListView, Permissions, renderVisitor, siblingChainVisitor){
     'use strict';
 
     var FEATURED = 'featured',
@@ -44,20 +44,7 @@ function(Backbone, _, Idea, IdeaView, ideaGraphLoader, app, Types, AllMessagesIn
         initialize: function(obj){
             var that = this;
             this.ideas = new Idea.Collection();
-            this.ideaLinks = {
-                updateFromSocket: function(item) {
-                    if( item['@tombstone'] ) { return; }
-                    var child = that.ideas.get( item['target'] );
-                    if (child && !child.has('parentId')) {
-                        var parent_id = item['source'];
-                        child.set('parentId', parent_id);
-                        var parents = child.get('parents');
-                        if (!_.contains(parents, parent_id)) {
-                            parents.push(parent_id);
-                        }
-                    }
-                }
-            }
+            this.ideaLinks = new IdeaLink.Collection();
             /*this.on("all", function(eventName) {
                 console.log("ideaList event received: ", eventName);
               });
