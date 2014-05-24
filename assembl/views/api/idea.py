@@ -158,6 +158,7 @@ def save_idea(request):
             
         if current_parent is None:
             link = IdeaLink(source=parent, target=idea, order=order)
+            Idea.db.add(link)
             idea.source_links.append(link)
             Idea.db.expire(parent, ['target_links'])
             parent.send_to_changes()
