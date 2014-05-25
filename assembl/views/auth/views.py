@@ -161,7 +161,7 @@ def assembl_profile(request):
     unverified_emails = [
         (ea, session.query(EmailAccount).filter_by(
             email=ea.email, verified=True).first())
-        for ea in profile.email_accounts() if not ea.verified]
+        for ea in profile.email_accounts if not ea.verified]
     return render_to_response(
         'assembl:templates/profile.jinja2',
         dict(get_default_context(request),
@@ -400,7 +400,7 @@ def velruse_login_complete_view(request):
         idp_account.profile = profile
     # Now all accounts have a profile
     session.autoflush = old_autoflush
-    email_accounts = {ea.email: ea for ea in profile.email_accounts()}
+    email_accounts = {ea.email: ea for ea in profile.email_accounts}
     # There may be new emails in the accounts
     if 'verifiedEmail' in velruse_profile:
         email = velruse_profile['verifiedEmail']

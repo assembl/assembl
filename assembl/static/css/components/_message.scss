@@ -57,6 +57,11 @@ $ellipsiswidth: 3em !default;
     //border-bottom: solid 1px $box-border-color;
     //overflow-x: hidden;
 
+    .message-subject {
+        margin-top: 2px;
+        white-space: normal;
+    }
+
 
     // &:last-child {
     //     border-bottom: 0;
@@ -146,7 +151,18 @@ $ellipsiswidth: 3em !default;
     
         .message-author {
             display: inline-block;
+            line-height: 32px;
+            .iconbutton {
+                width: 28px;
+                height: 28px;
+                line-height: 28px;
+                text-align: left;
+                vertical-align: top;
+            }
+        }
 
+        > div {
+            margin-top: 4px;
         }
     }
 
@@ -318,18 +334,31 @@ $ellipsiswidth: 3em !default;
 //
 .message-menu {
     position: absolute;
-    top: 5px;
+    top: 0px;
     right: 5px;
     display: table;
+    vertical-align: top;
+    .message-hoistbtn, .message-linkbutton {
+        vertical-align: top;
+        width: 26px;
+        line-height: 23px;
+    }
     .message-replybox-openbtn {
-        display: table-cell;
-        vertical-align: middle;
-        padding-right: 1em;
-        }
+        vertical-align: top;
+        margin-left: 6px;
+        padding-left: 4px;
+        padding-right: 6px;
+    }
     .dropdown {
-        display: table-cell;
-        vertical-align: middle;
+        vertical-align: top;
+        //line-height: 10px;
+        padding: 0;
+        margin-left: 6px;
+        .dropdown-label.dropdown-label--arrow {
+            width: 24px;
+            height: 24px;
         }
+    }
 }
 
 // The child list

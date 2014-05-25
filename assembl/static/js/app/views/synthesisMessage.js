@@ -12,7 +12,7 @@ function(Backbone, _, Moment, ckeditor, app, Message, MessageView, Synthesis, Sy
          */
         initialize: function(obj){
             MessageView.prototype.initialize.apply(this, arguments);
-            this.messageListView.off('annotator:initComplete', this.onAnnotatorInitComplete, this);
+            this.stopListening(this.messageListView, 'annotator:initComplete', this.onAnnotatorInitComplete);
             var synthesis_id = this.model.get('publishes_synthesis');
             this.synthesis = app.syntheses.get(synthesis_id)
             if(!this.synthesis) {

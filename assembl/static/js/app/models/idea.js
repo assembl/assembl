@@ -328,6 +328,26 @@ function(Base, _, Segment, app, i18n, Types, Permissions){
                 child.save('order', currentOrder);
                 currentOrder += 1;
             });
+        },
+
+        set: function(key, val, options) {
+            if (typeof key === 'object') {
+              var attrs = key;
+              options = val;
+              if (attrs['parentId'] === null && attrs['root'] !== true) {
+                console.log("empty parent bug");
+                var id = attrs['@id'];
+                var links = app.ideaList.ideaLinks.where({target: id});
+                if (links.length > 0) {
+                    console.log('corrected');
+                    attrs['parents'] = _.map(links, function(l) {return l.get('source')});
+                    attrs['parentId'] = attrs['parents'][0];
+                }
+              }
+              return Backbone.Model.prototype.set.call(this, attrs, options);
+            } else {
+                return Backbone.Model.prototype.set.call(this, key, val, options);
+            }
         }
 
     });

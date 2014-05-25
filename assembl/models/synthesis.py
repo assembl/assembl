@@ -168,9 +168,13 @@ class Discussion(DiscussionBoundBase):
             pass  # add a pseudo-anonymous user?
         return users
 
-    def get_all_agents_preload(self):
+    def get_all_agents_preload(self, user=None):
         from assembl.views.api.agent import _get_agents_real
-        return json.dumps(_get_agents_real(discussion=self))
+        from assembl.auth.util import user_has_permission
+        return json.dumps(_get_agents_real(
+            discussion=self,
+            include_email=user and user_has_permission(
+                self.id, user.id, P_ADMIN_DISC)))
 
     def get_readers_preload(self):
         return json.dumps([user.serializable() for user in self.get_readers()])
@@ -750,6 +754,13 @@ JOIN post ON (
         next_synthesis = self.discussion.get_next_synthesis()
         return True if self in next_synthesis.ideas else False
 
+    def send_to_changes(self, connection=None):
+        connection = connection or self.db().connection()
+        if self.is_tombstone:
+            self.tombstone().send_to_changes(connection)
+        else:
+            super(Idea, self).send_to_changes(connection)
+
     def __repr__(self):
         if self.short_title:
             return "<Idea %d %s>" % (self.id or -1, repr(self.short_title))
@@ -977,13 +988,15 @@ class IdeaLink(DiscussionBoundBase):
     source = relationship(
         'Idea', 
         primaryjoin="and_(Idea.id==IdeaLink.source_id, "
-                        "IdeaLink.is_tombstone==False)",
+                        "IdeaLink.is_tombstone==False, "
+                        "Idea.is_tombstone==False)",
         backref=backref('target_links', cascade="all, delete-orphan"),
         foreign_keys=(source_id))
     target = relationship(
         'Idea',
         primaryjoin="and_(Idea.id==IdeaLink.target_id, "
-                        "IdeaLink.is_tombstone==False)",
+                        "IdeaLink.is_tombstone==False, "
+                        "Idea.is_tombstone==False)",
         backref=backref('source_links', cascade="all, delete-orphan"),
         foreign_keys=(target_id))
     order = Column(Float, nullable=False, default=0.0,
@@ -1011,6 +1024,13 @@ class IdeaLink(DiscussionBoundBase):
             return self.source.get_discussion_id()
         else:
             return Idea.get(id=self.source_id).get_discussion_id()
+
+    def send_to_changes(self, connection=None):
+        connection = connection or self.db().connection()
+        if self.is_tombstone:
+            self.tombstone().send_to_changes(connection)
+        else:
+            super(IdeaLink, self).send_to_changes(connection)
 
     @classmethod
     def get_discussion_condition(cls, discussion_id):

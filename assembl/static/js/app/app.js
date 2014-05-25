@@ -29,6 +29,12 @@ define(['jquery', 'underscore', 'ckeditor', 'moment', 'i18n', 'zeroclipboard', '
          * @type {boolean}
          */
         debugRender: false,
+
+        /**
+         * Send debugging output to console.log to observe socket input
+         * @type {boolean}
+         */
+        debugSocket: false,
             
         /**
          * Reference to the body as jQuery object
@@ -716,6 +722,9 @@ define(['jquery', 'underscore', 'ckeditor', 'moment', 'i18n', 'zeroclipboard', '
                 case Types.IDEA:
                 case Types.ROOT_IDEA:
                     return app.ideaList.ideas;
+
+                case Types.IDEA_LINK:
+                    return app.ideaList.ideaLinks;
 
                 case Types.POST:
                 case Types.ASSEMBL_POST:
