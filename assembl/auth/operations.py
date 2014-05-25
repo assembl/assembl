@@ -52,7 +52,7 @@ def send_confirmation_email(request, email):
         sender=config.get('assembl.admin_email'),
         recipients=["%s <%s>" % (email.profile.name, email.email)],
         body=localizer.translate(_('confirm_email', default=u"""Hello, ${name}!
-Please confirm your ${confirm_what} <${email}> with <${assembl}> by clicking on the link below.
+Please confirm your ${confirm_what} <${email}> with ${assembl} by clicking on the link below.
 <${confirm_url}>
 """, mapping=data)),
         html=localizer.translate(_('confirm_email_html', default=u"""<p>Hello, ${name}!</p>
@@ -80,7 +80,7 @@ You can do this by clicking on the link below.
 <${confirm_url}>
 """, mapping=data)),
         html=localizer.translate(_('confirm_password_html', default=u"""<p>Hello, ${name}!</p>
-<p>You asked to <a href="${confirm_url}">change your password</a> on <${assembl}> (We hope it was you!)</p>
+<p>You asked to <a href="${confirm_url}">change your password</a> on ${assembl} (We hope it was you!)</p>
 """, mapping=data)))
     #if deferred:
     #    mailer.send_to_queue(message)
@@ -100,16 +100,16 @@ def verify_email_token(token):
 
 def verify_password_change_token(token, duration):
     id, hash = token.split('e', 1)
-    user = User.get(id=int(id))
+    id = int(id)
+    user = User.get(id=id)
     if not user:
         return False, None
     age = datetime.now() - user.last_login
-    if age > timedelta(0, duration):
+    if age > timedelta(duration/24.0):
         return False, id
-    last_login = user.last_login.isoformat()[:19]
+    check = str(id)+user.last_login.isoformat()[:19]
     valid = verify_password(
-        last_login + config.get(
-        'security.email_token_salt'), hash, True)
+        check, hash, True)
     if not valid:
         return False, id
     return True, id

@@ -54,5 +54,6 @@ def password_token(user):
     now = datetime.now()
     user.last_login = now
     resolution=19
-    return str(user.id)+'e'+hash_password(
-        now.isoformat()[:19], True)
+    token_str = str(user.id)+now.isoformat()[:resolution]
+    print "hashing "+token_str
+    return str(user.id)+'e'+hash_password(token_str, True)

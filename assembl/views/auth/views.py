@@ -653,6 +653,7 @@ def do_password_change(request):
     user = User.get(id=user_id)
     headers = remember(request, user_id, tokens=format_token(user))
     request.response.headerlist.extend(headers)
+    user.last_login = datetime.now()
     return dict(get_default_context(request))
 
 
@@ -673,7 +674,7 @@ def finish_password_change(request):
     if p1 != p2:
         error = localizer.translate(_('The passwords are not identical'))
     elif p1:
-        profile.set_password(p1)
+        user.set_password(p1)
         return HTTPFound(request.route_url(
             'home', _query=dict(
                 message=localizer.translate(_(
