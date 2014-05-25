@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: assembl 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-05-22 13:34-0400\n"
+"POT-Creation-Date: 2014-05-25 17:44-0400\n"
 "PO-Revision-Date: 2014-05-06 13:46-0400\n"
 "Last-Translator: Benoit Grégoire <benoitg@coeus.ca>\n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
@@ -18,24 +18,36 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 1.3\n"
 
-#: assembl/auth/operations.py:37 assembl/templates/register.jinja2:16
+#: assembl/auth/operations.py:39 assembl/templates/register.jinja2:16
 msgid "email"
 msgstr ""
 
-#: assembl/auth/operations.py:39
+#: assembl/auth/operations.py:41
 msgid "account"
 msgstr ""
 
-#: assembl/auth/operations.py:48
+#: assembl/auth/operations.py:51
 msgid "confirm_title"
 msgstr ""
 
-#: assembl/auth/operations.py:51
+#: assembl/auth/operations.py:54
 msgid "confirm_email"
 msgstr ""
 
-#: assembl/auth/operations.py:55
+#: assembl/auth/operations.py:58
 msgid "confirm_email_html"
+msgstr ""
+
+#: assembl/auth/operations.py:74
+msgid "confirm_password_title"
+msgstr ""
+
+#: assembl/auth/operations.py:77
+msgid "confirm_password_txt"
+msgstr ""
+
+#: assembl/auth/operations.py:82
+msgid "confirm_password_html"
 msgstr ""
 
 #: assembl/lib/types.py:62
@@ -46,28 +58,28 @@ msgstr ""
 msgid "${val} is not a string: ${err}"
 msgstr ""
 
-#: assembl/static/js/app/app.js:58
+#: assembl/static/js/app/app.js:64
 msgid "Message titles"
 msgstr ""
 
-#: assembl/static/js/app/app.js:61
+#: assembl/static/js/app/app.js:67
 msgid "Message previews"
 msgstr ""
 
-#: assembl/static/js/app/app.js:64
+#: assembl/static/js/app/app.js:70
 msgid "Complete messages"
 msgstr ""
 
-#: assembl/static/js/app/app.js:536
+#: assembl/static/js/app/app.js:542
 msgid "Extract"
 msgstr ""
 
-#: assembl/static/js/app/app.js:904
+#: assembl/static/js/app/app.js:913
 msgid "ajax error message:"
 msgstr ""
 
 #: assembl/static/js/app/models/idea.js:33
-#: assembl/static/js/app/views/ideaPanel.js:90
+#: assembl/static/js/app/views/ideaPanel.js:91
 msgid "New idea"
 msgstr ""
 
@@ -126,36 +138,36 @@ msgstr ""
 msgid "You did not type a response yet..."
 msgstr ""
 
-#: assembl/static/js/app/views/ideaPanel.js:89
+#: assembl/static/js/app/views/ideaPanel.js:90
 msgid "Short expression (only a few words) of the idea in the table of ideas."
 msgstr ""
 
-#: assembl/static/js/app/views/ideaPanel.js:113
+#: assembl/static/js/app/views/ideaPanel.js:117
 msgid "Comment on this idea here..."
 msgstr ""
 
-#: assembl/static/js/app/views/ideaPanel.js:114
+#: assembl/static/js/app/views/ideaPanel.js:118
 msgid "Send your comment"
 msgstr ""
 
-#: assembl/static/js/app/views/ideaPanel.js:116
+#: assembl/static/js/app/views/ideaPanel.js:120
 #: assembl/static/js/app/views/messageList.js:261
 msgid "You need to type a comment first..."
 msgstr ""
 
-#: assembl/static/js/app/views/ideaPanel.js:211
+#: assembl/static/js/app/views/ideaPanel.js:215
 msgid "ideaPanel-cantDeleteByChildren"
 msgstr ""
 
-#: assembl/static/js/app/views/ideaPanel.js:216
+#: assembl/static/js/app/views/ideaPanel.js:220
 msgid "ideaPanel-cantDeleteBySegments"
 msgstr ""
 
-#: assembl/static/js/app/views/ideaPanel.js:323
+#: assembl/static/js/app/views/ideaPanel.js:327
 msgid "ideaPanel-clearConfirmationMessage"
 msgstr ""
 
-#: assembl/static/js/app/views/ideaPanel.js:347
+#: assembl/static/js/app/views/ideaPanel.js:351
 msgid "ideaPanel-deleteIdeaConfirmMessage"
 msgstr ""
 
@@ -339,6 +351,8 @@ msgid "Cancel"
 msgstr ""
 
 #: assembl/static/js/app/views/messageSend.js:33
+#: assembl/templates/do_password_change.jinja2:19
+#: assembl/templates/request_password_change.jinja2:17
 msgid "Send"
 msgstr ""
 
@@ -362,16 +376,42 @@ msgstr ""
 msgid "Message posted!"
 msgstr ""
 
-#: assembl/static/js/app/views/segmentList.js:329
+#: assembl/static/js/app/views/segmentList.js:328
 msgid "segmentList-clearConfirmationMessage"
 msgstr ""
 
-#: assembl/static/js/app/views/synthesisPanel.js:212
+#: assembl/static/js/app/views/synthesisPanel.js:204
 msgid "Do you want to publish the synthesis?"
 msgstr ""
 
-#: assembl/static/js/app/views/synthesisPanel.js:240
+#: assembl/static/js/app/views/synthesisPanel.js:232
 msgid "Synthesis published!"
+msgstr ""
+
+#: assembl/templates/confirm.jinja2:17
+msgid "Resend the email"
+msgstr ""
+
+#: assembl/templates/confirm.jinja2:21
+#: assembl/templates/do_password_change.jinja2:23
+#: assembl/templates/login.jinja2:60 assembl/templates/register.jinja2:24
+#: assembl/templates/request_password_change.jinja2:21
+msgid "Caravan"
+msgstr ""
+
+#: assembl/templates/confirm.jinja2:22
+#: assembl/templates/do_password_change.jinja2:24
+#: assembl/templates/login.jinja2:61 assembl/templates/register.jinja2:25
+#: assembl/templates/request_password_change.jinja2:22
+msgid "Imagination for people"
+msgstr ""
+
+#: assembl/templates/confirm.jinja2:23
+#: assembl/templates/do_password_change.jinja2:25
+#: assembl/templates/login.jinja2:62 assembl/templates/register.jinja2:26
+#: assembl/templates/request_password_change.jinja2:23
+#, python-format
+msgid "Designed by %(caravan)s and %(imaginationForPeople)s"
 msgstr ""
 
 #: assembl/templates/discussion_list.jinja2:11
@@ -408,6 +448,17 @@ msgstr ""
 msgid "Change global permissions"
 msgstr ""
 
+#: assembl/templates/do_password_change.jinja2:17
+#: assembl/templates/login.jinja2:31 assembl/templates/register.jinja2:17
+msgid "Password"
+msgstr ""
+
+#: assembl/templates/do_password_change.jinja2:18
+#: assembl/templates/profile.jinja2:77 assembl/templates/profile.jinja2:80
+#: assembl/templates/register.jinja2:18
+msgid "Repeat password"
+msgstr ""
+
 #: assembl/templates/header.jinja2:10
 msgid ""
 "To add an idea in the table of ideas: select add idea and drag the new "
@@ -442,53 +493,36 @@ msgid "Connecting..."
 msgstr ""
 
 #: assembl/templates/login.jinja2:25
-#, fuzzy
 msgid "Connect to assembl"
-msgstr "Join Assembl"
+msgstr "Connect to Assembl"
 
-#: assembl/templates/login.jinja2:28 assembl/templates/profile.jinja2:102
-msgid "Send confirmation message"
-msgstr ""
-
-#: assembl/templates/login.jinja2:32
+#: assembl/templates/login.jinja2:29
+#: assembl/templates/request_password_change.jinja2:16
 msgid "Email or username"
 msgstr ""
 
-#: assembl/templates/login.jinja2:34 assembl/templates/register.jinja2:17
-msgid "Password"
-msgstr ""
-
-#: assembl/templates/login.jinja2:36
+#: assembl/templates/login.jinja2:33
 msgid "Enter"
 msgstr ""
 
-#: assembl/templates/login.jinja2:37 assembl/templates/register.jinja2:20
+#: assembl/templates/login.jinja2:35 assembl/templates/register.jinja2:20
 msgid "or"
 msgstr ""
 
-#: assembl/templates/login.jinja2:37
+#: assembl/templates/login.jinja2:35
 msgid "register"
 msgstr ""
 
-#: assembl/templates/login.jinja2:46
+#: assembl/templates/login.jinja2:36
+msgid "I forgot my password"
+msgstr ""
+
+#: assembl/templates/login.jinja2:45
 msgid "Use your social network"
 msgstr ""
 
-#: assembl/templates/login.jinja2:48
+#: assembl/templates/login.jinja2:47
 msgid "Login with external tools"
-msgstr ""
-
-#: assembl/templates/login.jinja2:61 assembl/templates/register.jinja2:24
-msgid "Caravan"
-msgstr ""
-
-#: assembl/templates/login.jinja2:62 assembl/templates/register.jinja2:25
-msgid "Imagination for people"
-msgstr ""
-
-#: assembl/templates/login.jinja2:63 assembl/templates/register.jinja2:26
-#, python-format
-msgid "Designed by %(caravan)s and %(imaginationForPeople)s"
 msgstr ""
 
 #: assembl/templates/profile.jinja2:7 assembl/templates/view_profile.jinja2:7
@@ -520,37 +554,36 @@ msgstr ""
 msgid "New Password"
 msgstr ""
 
-#: assembl/templates/profile.jinja2:77 assembl/templates/profile.jinja2:80
-#: assembl/templates/register.jinja2:18
-msgid "Repeat password"
-msgstr ""
-
 #: assembl/templates/profile.jinja2:87 assembl/templates/view_profile.jinja2:36
 msgid "Emails"
 msgstr ""
 
-#: assembl/templates/profile.jinja2:99
+#: assembl/templates/profile.jinja2:97
 msgid "Confirm and fuse accounts"
 msgstr ""
 
-#: assembl/templates/profile.jinja2:101
+#: assembl/templates/profile.jinja2:99
 msgid "unconfirmed"
 msgstr ""
 
-#: assembl/templates/profile.jinja2:112
+#: assembl/templates/profile.jinja2:100
+msgid "Send confirmation message"
+msgstr ""
+
+#: assembl/templates/profile.jinja2:111
 msgid "Add an email account"
 msgstr ""
 
-#: assembl/templates/profile.jinja2:115
+#: assembl/templates/profile.jinja2:114
 msgid "Email"
 msgstr ""
 
-#: assembl/templates/profile.jinja2:121
+#: assembl/templates/profile.jinja2:120
 #: assembl/templates/view_profile.jinja2:48
 msgid "Accounts"
 msgstr ""
 
-#: assembl/templates/profile.jinja2:145
+#: assembl/templates/profile.jinja2:144
 #: assembl/templates/admin/discussion_permissions.jinja2:40
 #: assembl/templates/admin/discussion_permissions.jinja2:75
 #: assembl/templates/admin/global_permissions.jinja2:37
@@ -559,12 +592,11 @@ msgstr ""
 msgid "Save"
 msgstr ""
 
-#: assembl/templates/profile.jinja2:151
+#: assembl/templates/profile.jinja2:150
 msgid "Connect other accounts to Assembl"
 msgstr ""
 
 #: assembl/templates/register.jinja2:6
-#, fuzzy
 msgid "Join assembl"
 msgstr "Join Assembl"
 
@@ -798,44 +830,44 @@ msgid "User"
 msgstr ""
 
 #: assembl/templates/views/message.tmpl:9
-#: assembl/templates/views/message.tmpl:17
-#: assembl/templates/views/message.tmpl:26
+#: assembl/templates/views/message.tmpl:21
+#: assembl/templates/views/message.tmpl:38
 #, python-format
 msgid "<time>%(time)s</time>"
 msgstr ""
 
 #: assembl/templates/views/message.tmpl:11
-#: assembl/templates/views/message.tmpl:19
-#: assembl/templates/views/message.tmpl:24
+#: assembl/templates/views/message.tmpl:23
+#: assembl/templates/views/message.tmpl:32
 #, python-format
 msgid "%(user)s"
 msgstr ""
 
-#: assembl/templates/views/message.tmpl:38
+#: assembl/templates/views/message.tmpl:50
 msgid "Read More"
 msgstr ""
 
-#: assembl/templates/views/message.tmpl:49
+#: assembl/templates/views/message.tmpl:61
 msgid "Go back to the entire topic thread"
 msgstr ""
 
-#: assembl/templates/views/message.tmpl:51
+#: assembl/templates/views/message.tmpl:63
 msgid "Show only this message and its replies"
 msgstr ""
 
-#: assembl/templates/views/message.tmpl:54
+#: assembl/templates/views/message.tmpl:66
 msgid "Copy the link to this message to clipboard"
 msgstr ""
 
-#: assembl/templates/views/message.tmpl:55
+#: assembl/templates/views/message.tmpl:67
 msgid "Reply"
 msgstr ""
 
-#: assembl/templates/views/message.tmpl:60
+#: assembl/templates/views/message.tmpl:72
 msgid "Mark as unread"
 msgstr ""
 
-#: assembl/templates/views/message.tmpl:62
+#: assembl/templates/views/message.tmpl:74
 msgid "Mark as read"
 msgstr ""
 
@@ -984,37 +1016,73 @@ msgstr ""
 msgid "Your message is empty"
 msgstr ""
 
-#: assembl/views/auth/views.py:129
+#: assembl/views/auth/views.py:141
 #, python-format
 msgid "The username %s is already used"
 msgstr ""
 
-#: assembl/views/auth/views.py:147
+#: assembl/views/auth/views.py:159 assembl/views/auth/views.py:681
 msgid "The passwords are not identical"
 msgstr ""
 
-#: assembl/views/auth/views.py:208
+#: assembl/views/auth/views.py:223
 msgid "We already have a user with this email."
 msgstr ""
 
-#: assembl/views/auth/views.py:212
+#: assembl/views/auth/views.py:227
 msgid "The passwords should be identical"
 msgstr ""
 
-#: assembl/views/auth/views.py:273
-msgid "This account was not verified yet"
-msgstr ""
-
-#: assembl/views/auth/views.py:282
+#: assembl/views/auth/views.py:298 assembl/views/auth/views.py:612
 msgid "This user cannot be found"
 msgstr ""
 
-#: assembl/views/auth/views.py:297
+#: assembl/views/auth/views.py:317
 msgid "Invalid user and password"
 msgstr ""
 
-#: assembl/views/auth/views.py:525
+#: assembl/views/auth/views.py:484 assembl/views/auth/views.py:586
+msgid "Confirmation requested"
+msgstr ""
+
+#: assembl/views/auth/views.py:485 assembl/views/auth/views.py:587
+msgid ""
+"We have sent you a confirmation email. Please use the link to confirm "
+"your email to Assembl"
+msgstr ""
+
+#: assembl/views/auth/views.py:500
+msgid "Wrong email token."
+msgstr ""
+
+#: assembl/views/auth/views.py:545
 msgid "Login failed, try again"
+msgstr ""
+
+#: assembl/views/auth/views.py:594
+msgid "We do not know about this email."
+msgstr ""
+
+#: assembl/views/auth/views.py:634
+msgid "Password change requested"
+msgstr ""
+
+#: assembl/views/auth/views.py:635
+msgid ""
+"We have sent you an email with a temporary connection link. Please use "
+"that link to log in and change your password."
+msgstr ""
+
+#: assembl/views/auth/views.py:652
+msgid "Wrong password token."
+msgstr ""
+
+#: assembl/views/auth/views.py:657
+msgid "This token is expired. Do you want us to send another?"
+msgstr ""
+
+#: assembl/views/auth/views.py:686
+msgid "Password changed"
 msgstr ""
 
 #: assembl/views/backbone/views.py:41
@@ -1257,5 +1325,14 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "Not harvested in any extract"
+#~ msgstr ""
+
+#~ msgid "This account was not verified yet"
+#~ msgstr ""
+
+#~ msgid "We do not have this email in our database."
+#~ msgstr ""
+
+#~ msgid "This token is expired. Do you want another?"
 #~ msgstr ""
 

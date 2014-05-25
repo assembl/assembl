@@ -592,7 +592,7 @@ def confirm_email_sent(request):
             return HTTPFound(location=request.route_url(
                 'register', email=email, _query=dict(
                     error=localizer.translate(_(
-                        "We do not have this email in our database.")))))
+                        "We do not know about this email.")))))
 
 
 @view_config(
@@ -634,7 +634,7 @@ def password_change_sent(request):
         title=localizer.translate(_('Password change requested')),
         description=localizer.translate(_(
             'We have sent you an email with a temporary connection link. '
-            'Please use that link to log in and change your email.')))
+            'Please use that link to log in and change your password.')))
 
 
 @view_config(
@@ -655,7 +655,7 @@ def do_password_change(request):
             return HTTPFound(request.route_url(
                 'password_change_sent', profile_id=user_id, _query=dict(
                     sent=True, error=localizer.translate(_(
-                        "This token is expired. Do you want another?")))))
+                        "This token is expired. Do you want us to send another?")))))
     user = User.get(id=user_id)
     headers = remember(request, user_id, tokens=format_token(user))
     request.response.headerlist.extend(headers)
