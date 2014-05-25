@@ -522,7 +522,7 @@ def user_confirm_email(request):
         userid = None
         if isinstance(email.profile, User):
             user = email.profile
-            username = user.username
+            username = user.username.username
             userid = user.id
         if username:
             return HTTPFound(location=request.route_url(
