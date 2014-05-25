@@ -28,7 +28,9 @@ function(Backbone, _, Moment, ckeditor, app, Types, Message, MessageView, Synthe
             }
             this.last_sibling_chain = last_sibling_chain;
             this.messageListView = obj.messageListView;
-            this.listenTo(this.model, 'change:collapsed', this.onCollapsedChange);
+            this.collapsed = obj.collapsed;
+            //this.model.on('change:collapsed', this.onCollapsedChange, this);
+            //this.listenTo(this.model, 'change:collapsed', this.onCollapsedChange);
         },
 
         /**
@@ -127,8 +129,12 @@ function(Backbone, _, Moment, ckeditor, app, Types, Message, MessageView, Synthe
          * Collapse icon has been toggled
          */
         onIconbuttonClick: function(ev){
-            var collapsed = this.model.get('collapsed');
-            this.model.set('collapsed', !collapsed);
+            //var collapsed = this.model.get('collapsed');
+            //this.model.set('collapsed', !collapsed);
+
+            this.collapsed = !this.collapsed;
+
+            this.onCollapsedChange();
         },
         
 
@@ -136,7 +142,8 @@ function(Backbone, _, Moment, ckeditor, app, Types, Message, MessageView, Synthe
          * @event
          */
         onCollapsedChange: function(){
-            var collapsed = this.model.get('collapsed');
+            //var collapsed = this.model.get('collapsed');
+            var collapsed = this.collapsed;
             var target = this.$el;
             /* I don't understand this benoitg
              var link = target.find(">.message-family-container");
