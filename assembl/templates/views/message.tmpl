@@ -10,7 +10,7 @@
     <div class="message-subheader">
         <span class="message-author margin-right">{{ gettext('%(user)s')|format(user=userName)|safe }}
         <% if (creator.get('email')) { %>
-        <a  class="iconbutton icon-mail" href="mailto:<%= creator.get('email') %>"></a>
+        <a class="iconbutton icon-mail" title="<%= creator.get('email') %>" href="mailto:<%= creator.get('email') %>"></a>
         <% } %>
         </span>
         <span class="message-subject margin-right"><%= subject %></span>
@@ -22,7 +22,7 @@
     <div class="message-subheader">
         <span class="message-author margin-right">{{ gettext('%(user)s')|format(user=userName)|safe }}
         <% if (creator.get('email')) { %>
-        <a  class="iconbutton icon-mail" href="mailto:<%= creator.get('email') %>"></a>
+        <a class="iconbutton icon-mail" title="<%= creator.get('email') %>" href="mailto:<%= creator.get('email') %>"></a>
         <% } %>
         </span>
         <span class="message-subject margin-right"><%= subject %></span>
@@ -31,7 +31,7 @@
     <div class="message-subheader">
         <span class="message-author">{{ gettext('%(user)s')|format(user=userName)|safe }}
         <% if (creator.get('email')) { %>
-        <a  class="iconbutton icon-mail" href="mailto:<%= creator.get('email') %>"></a>
+        <a class="iconbutton icon-mail" title="<%= creator.get('email') %>" href="mailto:<%= creator.get('email') %>"></a>
         <% } %>
         </span>
         |
