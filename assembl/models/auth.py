@@ -178,6 +178,11 @@ class EmailAccount(AbstractAgentAccount):
         if other.verified:
             self.verified = True
 
+    def other_account(self):
+        if not self.verified:
+            return self.db.query(self.__class__).filter_by(
+                email=self.email, verified=True).first()
+
     @staticmethod
     def get_or_make_profile(session, email, name=None):
         emails = list(session.query(EmailAccount).filter_by(

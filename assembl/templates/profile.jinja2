@@ -81,7 +81,7 @@
                     <div class="spacer spacer--large"></div>
                     </td>
                 </tr>
-                {% if the_user.email_accounts() or the_user.unconfirmed_emails() %}
+                {% if the_user.email_accounts %}
                 <tr>
                     <th>
                         <label>{{ gettext('Emails') }}:</label>
@@ -89,17 +89,16 @@
                     <td>
                     <!-- TODO: Preferred email logic. -->
                         <ul>
-                        {% for email_account in the_user.verified_emails() %}
-                            <li>{{ email_account.email }}</li>
-                        {% endfor %}
-                        {% for email_account, other_profile in unverified_emails %}
+                        {% for email_account in the_user.email_accounts %}
                             <li>{{ email_account.email }}
-                            {% if other_profile %}
-                                (in conflict with {{other_profile.display_name() }})
-                                <input type="button" name="confirm" value="{{ gettext('Confirm and fuse accounts') }}" onclick="send_confirm('{{email_account.id}}');"/>
-                            {% else %}
-                                ({{ gettext('unconfirmed') }})
-                                <input type="button" name="confirm" value="{{ gettext('Send confirmation message') }}" onclick="send_confirm('{{email_account.id}}');"/>
+                            {% if not email_account.verified %}
+                                {% if email_account.other_account() %}
+                                    (in conflict with {{email_account.other_account().display_name() }})
+                                    <input type="button" name="confirm" value="{{ gettext('Confirm and fuse accounts') }}" onclick="send_confirm('{{email_account.id}}');"/>
+                                {% else %}
+                                    ({{ gettext('unconfirmed') }})
+                                    <input type="button" name="confirm" value="{{ gettext('Send confirmation message') }}" onclick="send_confirm('{{email_account.id}}');"/>
+                                {% endif %}
                             {% endif %}
                             </li>
                         {% endfor %}
@@ -115,7 +114,7 @@
                         <input type="email" name="add_email" placeholder="{{ gettext('Email') }}" autofocus />
                     </td>
                 </tr>
-                {% if the_user.identity_accounts() %}
+                {% if the_user.identity_accounts %}
                 <tr>
                     <th>
                         <label>{{ gettext('Accounts') }}:</label>
@@ -124,7 +123,7 @@
                     </th>
                     <td>
                         <dl compact="compact">
-                        {% for account in the_user.identity_accounts() %}
+                        {% for account in the_user.identity_accounts %}
                             <dt><em>{{ account.provider.provider_type }}</em></dt>
                             <dd>
                             {% if account.username %}
