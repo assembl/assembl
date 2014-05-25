@@ -56,7 +56,7 @@ function(Backbone, _, $, Idea, app, Permissions){
          */
         onSendMessageButtonClick: function(ev){
             var btn = $(ev.currentTarget),
-            url = app.getApiUrl('posts'),
+            //url = app.getApiUrl('posts'),
             that = this,
             btn_original_text=btn.text(),
             message_body_field = this.$('.messageSend-body'),
@@ -93,7 +93,6 @@ function(Backbone, _, $, Idea, app, Permissions){
             btn.text( i18n.gettext('Sending...') );
             //For message custom callback:  that.closeReplyBox();
             success_callback = function(data, textStatus, jqXHR){
-                message_body_field.val('');
                 btn.text( i18n.gettext('Message posted!') );
                 app.messageList.once("render_complete", function() {
                         app.messageList.showMessageById(data['@id']);
@@ -101,7 +100,7 @@ function(Backbone, _, $, Idea, app, Permissions){
                 setTimeout(function(){
                     that.$('.messageSend-body').val('');
                     btn.text(btn_original_text);
-                    }, 5000);
+                }, 5000);
             };
             this.sendPostToServer(message_body, message_subject, reply_message_id, reply_idea_id, success_callback);
 
@@ -168,6 +167,10 @@ function(Backbone, _, $, Idea, app, Permissions){
             if( reply_idea_id ){
                 data.idea_id = reply_idea_id;
             }
+
+            this.$('.messageSend-body').val('');
+            this.$('.topic-subject .formfield').val('');
+
             $.ajax({
                 type: "post",
                 data: JSON.stringify(data),

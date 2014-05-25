@@ -53,33 +53,45 @@ function(Backbone, _, $, app, PanelView, MessageFamilyView, Message, i18n, PostQ
          *  @init
          */
         initialize: function(obj){
-            /*this.on("all", function(eventName) {
-                console.log("messageList event received: ", eventName);
-              });
-            this.messages.on("all", function(eventName) {
-                console.log("messageList collection event received: ", eventName);
-              });*/
             
             if( obj.button ){
                 this.button = $(obj.button).on('click', app.togglePanel.bind(window, 'messageList'));
             }
+
             PanelView.prototype.initialize.apply(this);
             this.renderedMessageViewsPrevious = {};
             this.renderedMessageViewsCurrent = {};
             
             this.setViewStyle(this.getViewStyleDefById(this.storedMessageListConfig.viewStyleId) || this.ViewStyles.THREADED);
             this.defaultMessageStyle = app.getMessageViewStyleDefById(this.storedMessageListConfig.messageStyleId) || app.AVAILABLE_MESSAGE_VIEW_STYLES.PREVIEW;
-            
-            this.listenTo(this.messages, 'reset', function() {
+
+            /**
+             * @ghourlier
+             * TODO: Usually it would necessary tu push notification rather than fetch every time the model change
+             * Need to be a call to action
+             * */
+            this.listenTo(this.messages, 'add reset', function(){
+
+                var emptySubject = this.$('.messageSend .messageSend-subject').val(),
+                    emptyBody = this.$('.messageSend .messageSend-body').val();
+
+                if(emptySubject != ''){
+
+                  return;
+                }
+
                 that.messagesFinishedLoading = true;
                 that.invalidateResultsAndRender();
+                that.initAnnotator();
+
             });
-            this.listenTo(this.messages, 'add', this.invalidateResultsAndRender);
+
+            //this.listenTo(this.messages, 'add', this.invalidateResultsAndRender);
             // TODO:  Benoitg:  I didn't write this part, but i think it needs a
             // re-render, not just an init
-            this.listenTo(this.messages, 'change', this.initAnnotator);
+            // this.listenTo(this.messages, 'change', this.initAnnotator);
             // TODO:  FIXME!!! Benoitg - 2014-05-05
-            this.listenTo(app.segmentList.segments, 'add remove reset change', this.initAnnotator);
+            this.listenTo(app.segmentList.segments, 'add remove reset', this.initAnnotator);
             
             var that = this;
             app.on('idea:select', function(idea){
@@ -91,7 +103,7 @@ function(Backbone, _, $, app, PanelView, MessageFamilyView, Message, i18n, PostQ
                 else {
                     that.filterThroughPanelLock(function(){
                         that.syncWithCurrentIdea();
-                        }, 'syncWithCurrentIdea');
+                    }, 'syncWithCurrentIdea');
                 }
             });
             
@@ -279,14 +291,9 @@ function(Backbone, _, $, app, PanelView, MessageFamilyView, Message, i18n, PostQ
             }
             if(app.debugRender) {
                 console.log("messageList:render() is firing, "+renderStatus()+this.messages.length+" messages in collection.");
-                /*
-                console.log("message collection is: ");
-                this.messages.map(function(message){
-                    console.log(message.getId())
-                })*/
             }
             this.currentlyRendering = true;
-            
+
             app.trigger('render');
             this.renderPanelButton();
             if(this.messagesFinishedLoading) {
@@ -298,8 +305,8 @@ function(Backbone, _, $, app, PanelView, MessageFamilyView, Message, i18n, PostQ
                 });
             }
             else {
-                this.render_real();
-                this.blockPanel();
+                 this.render_real();
+                 this.blockPanel();
             }
             this.currentlyRendering = false;
             return this;
@@ -729,7 +736,7 @@ function(Backbone, _, $, app, PanelView, MessageFamilyView, Message, i18n, PostQ
                     console.log("showMessageById() message not found, calling showMessageById() recursively");
                     that.showMessageById(id, callback);
                 }
-                this.once("render_complete",success);
+                this.listenToOnce("render_complete",success);
                 return;
             }
             if( ! _.isFunction(callback) ){
