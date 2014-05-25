@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import datetime
 from pyramid.i18n import get_localizer, TranslationStringFactory
 from pyramid.view import view_config
 from pyramid.renderers import render_to_response
@@ -124,6 +124,11 @@ def assembl_profile(request):
             dict(get_default_context(request),
                  profile=profile,
                  user=logged_in and session.query(User).get(logged_in)))
+
+    confirm_email = request.params.get('confirm_email', None)
+    if confirm_email:
+        return HTTPFound(request.route_url(
+            'confirm_emailid_sent', email_account_id=int(confirm_email)))
 
     errors = []
     if save:
@@ -472,6 +477,7 @@ def confirm_emailid_sent(request):
         # Unlog and redirect to login.
         pass
     send_confirmation_email(request, email)
+    localizer = get_localizer(request)
     return dict(
         get_default_context(request),
         email_account_id=request.matchdict.get('email_account_id'),
@@ -676,7 +682,7 @@ def finish_password_change(request):
     elif p1:
         user.set_password(p1)
         return HTTPFound(request.route_url(
-            'home', _query=dict(
+            'discussion_list', _query=dict(
                 message=localizer.translate(_(
                     "Password changed")))))
 

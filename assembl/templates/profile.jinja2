@@ -94,10 +94,10 @@
                             {% if not email_account.verified %}
                                 {% if email_account.other_account() %}
                                     (in conflict with {{email_account.other_account().display_name() }})
-                                    <input type="button" name="confirm" value="{{ gettext('Confirm and fuse accounts') }}" onclick="send_confirm('{{email_account.id}}');"/>
+                                    <button name="confirm_email" value="{{email_account.id}}">{{ gettext('Confirm and fuse accounts') }}</button>
                                 {% else %}
                                     ({{ gettext('unconfirmed') }})
-                                    <input type="button" name="confirm" value="{{ gettext('Send confirmation message') }}" onclick="send_confirm('{{email_account.id}}');"/>
+                                    <button name="confirm_email" value="{{email_account.id}}">{{ gettext('Send confirmation message') }}</button>
                                 {% endif %}
                             {% endif %}
                             </li>
@@ -162,15 +162,4 @@
         </form>
     </div>
 
-{% endblock %}
-
-{% block extra_js %}
-<script type="text/javascript">
-    requirejs(["main"]);
-    var xmlhttp=new XMLHttpRequest();
-    function send_confirm(email_id) {
-        xmlhttp.open('GET', "/user_confirm/"+email_id);
-        xmlhttp.send();
-    }
-</script>
 {% endblock %}
