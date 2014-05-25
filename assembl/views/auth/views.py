@@ -496,6 +496,7 @@ def user_confirm_email(request):
     email = verify_email_token(token)
     session = EmailAccount.db
     # TODO: token expiry
+    localizer = get_localizer(request)
     if not email:
         raise HTTPUnauthorized(localizer.translate(_("Wrong email token.")))
     if email.verified:
