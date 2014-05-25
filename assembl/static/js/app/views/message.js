@@ -356,12 +356,6 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n, Permissions, Message
          * @event
          */
         onMessageTitleClick: function(ev){
-            if( ev ){
-                // Avoiding collapse if clicked on the link
-                if( ev.target.id === 'message-linkbutton' ){
-                    return;
-                }
-            }
             this.toggleViewStyle();
             this.render();
             if (this.viewStyle == this.availableMessageViewStyles.FULL_BODY) {

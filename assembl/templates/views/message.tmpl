@@ -63,8 +63,8 @@ else if( viewStyle == app.AVAILABLE_MESSAGE_VIEW_STYLES.FULL_BODY ){ %>
         <a class="message-hoistbtn iconbutton icon-download" data-id="<%= escape(id) %>" data-tooltip="{{gettext('Show only this message and its replies')}}"></a>
     <% } %>
 
-    <a id="message-linkbutton" class="iconbutton icon-link" data-copy-text="/message/<%= escape(id) %>" data-tooltip="{{gettext('Copy the link to this message to clipboard')}}"></a>
-    <a class="message-replybox-openbtn link"><i class="icon-reply"></i> {{ gettext("Reply") }}</a>
+    <a class="message-linkbutton iconbutton icon-link" data-copy-text="/message/<%= escape(id) %>" data-tooltip="{{gettext('Copy the link to this message to clipboard')}}"></a>
+    <a class="message-replybox-openbtn button"><i class="icon-reply"></i> {{ gettext("Reply") }}</a>
     <div class="dropdown">
         <span class="dropdown-label dropdown-label--arrow"></span>
         <ul class="dropdown-list dropdown-list--bottomright">
