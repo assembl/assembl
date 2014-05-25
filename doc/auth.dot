@@ -30,8 +30,9 @@ strict digraph {
     password_change_sent->"password change link email";
     "password change link email"->"do_password_change" [label="use link (may confirm email)"];
 
-    "do_password_change"->"assembl (logged in)" [label="change password"];
-    "do_password_change"->"do_password_change" [label="passwords don't match"];
+    do_password_change->finish_password_change;
+    "finish_password_change"->"assembl (logged in)" [label="change password, 301"];
+    "finish_password_change"->"finish_password_change" [label="passwords don't match"];
     "do_password_change"->"password_change_sent" [label="reuse link, 301", color=red];
     "assembl (logged in)" -> "assembl (logged out)" [label="logout"];
     "assembl (logged out)" -> login;

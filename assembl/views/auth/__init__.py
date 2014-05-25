@@ -12,14 +12,14 @@ def includeme(config):
     config.add_route('avatar', '/user/{type}/{identifier}/avatar/{size:\d+}')
     config.add_route('register', '/register')
     config.add_route('user_confirm_email', '/users/email_confirm/{ticket}')
-    # TODO: secure next three methods to avoid spamming the user.
-    # First one may be obsolete?
-    config.add_route('confirm_user_email', '/user_confirm/{email_account_id:\d+}')
     #config.add_route('profile_search', '/usernames/{user_name}')  Do we want this?
+    # TODO: secure next three methods to avoid spamming the user.
+    config.add_route('confirm_emailid_sent', '/confirm_email_sent_id/{email_account_id:\d+}')
     config.add_route('confirm_email_sent', '/confirm_email_sent/{email}')
-    config.add_route('request_password_change', '/req_password_change')
     config.add_route('password_change_sent', '/password_change_sent/{profile_id:\d+}')
-    config.add_route('do_password_change', '/do_password_change/{profile_id:\d+}')
+    config.add_route('request_password_change', '/req_password_change')
+    config.add_route('do_password_change', '/do_password_change/{ticket}')
+    config.add_route('finish_password_change', '/finish_password_change')
     
 
     # determine which providers we want to configure

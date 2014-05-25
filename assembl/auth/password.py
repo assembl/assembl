@@ -1,6 +1,7 @@
 from os import urandom
 from binascii import hexlify, unhexlify
 import hashlib
+from datetime import datetime
 
 from ..lib import config
 
@@ -48,3 +49,10 @@ def format_token(user):
     'Format user information into a cookie'
     code = 'x' + str(user.id)  # WRONG! It needs to be stable but random.
     return [code]
+
+def password_token(user):
+    now = datetime.now()
+    user.last_login = now
+    resolution=19
+    return str(user.id)+'e'+hash_password(
+        now.isoformat()[:19], True)
