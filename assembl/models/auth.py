@@ -13,10 +13,13 @@ from sqlalchemy import (
     DateTime,
     Time,
     Binary,
+    desc,
     Index
 )
 
 from sqlalchemy.orm import relationship, backref, deferred
+from sqlalchemy import inspect
+from sqlalchemy.orm.attributes import NO_VALUE
 from pyramid.security import Everyone, Authenticated
 
 from ..lib import config
@@ -35,8 +38,6 @@ class AgentProfile(Base):
     id = Column(Integer, primary_key=True)
     name = Column(Unicode(1024))
     type = Column(String(60))
-    accounts = relationship('AbstractAgentAccount',
-        backref='profile', cascade="all, delete-orphan")
 
     __mapper_args__ = {
         'polymorphic_identity': 'agent_profile',
@@ -44,21 +45,18 @@ class AgentProfile(Base):
         'with_polymorphic': '*'
     }
 
-    def identity_accounts(self):
-        return self.db.query(
-            IdentityProviderAccount
-            ).join(AbstractAgentAccount
-            ).filter_by(profile_id=self.id)
-
-    def email_accounts(self):
-        return self.db.query(
-            EmailAccount
-            ).join(AbstractAgentAccount
-            ).filter_by(profile_id=self.id)
-
-    def verified_emails(self):
-        # TODO: Filter request? Is there a way to know if preloaded?
-        return (e for e in self.email_accounts() if e.verified)
+    def get_preferred_email(self):
+        if inspect(self).attrs.email_accounts.loaded_value is NO_VALUE:
+            email = self.db.query(EmailAccount.email).filter_by(
+                profile_id=self.id).order_by(
+                EmailAccount.verified.desc(),
+                EmailAccount.preferred.desc()).first()
+            if email:
+                return email[0]
+        elif self.email_accounts:
+            accounts = self.email_accounts[:]
+            accounts.sort(key=lambda e: (not e.verified, not e.preferred))
+            return accounts[0].email
 
     def display_name(self):
         # TODO: Prefer types?
@@ -100,11 +98,7 @@ class AgentProfile(Base):
 
     def avatar_url(self, size=32, app_url=None, email=None):
         # First implementation: Use the gravatar URL
-        if not email:
-            accounts = list(self.email_accounts())
-            if accounts:
-                accounts.sort(key=lambda e: (e.verified, e.preferred))
-                email = accounts[-1].email
+        email = email or self.get_preferred_email()
         default = config.get('avatar.default_image_url') or \
             (app_url and app_url+'/static/img/icon/user.png')
         if not email:
@@ -139,6 +133,9 @@ class AbstractAgentAccount(Base):
         Integer,
         ForeignKey('agent_profile.id', ondelete='CASCADE', onupdate='CASCADE'),
         nullable=False)
+    profile = relationship('AgentProfile',
+        backref=backref('accounts', cascade="all, delete-orphan"))
+
     def signature(self):
         "Identity of signature implies identity of underlying account"
         return ('abstract_agent_account', self.id)
@@ -149,7 +146,6 @@ class AbstractAgentAccount(Base):
         'polymorphic_on': type,
         'with_polymorphic': '*'
     }
-
 
 
 class EmailAccount(AbstractAgentAccount):
@@ -166,6 +162,7 @@ class EmailAccount(AbstractAgentAccount):
     verified = Column(Boolean(), default=False)
     preferred = Column(Boolean(), default=False)
     active = Column(Boolean(), default=True)
+    profile_e = relationship(AgentProfile, backref=backref('email_accounts'))
 
     def display_name(self):
         if self.verified:
@@ -180,6 +177,11 @@ class EmailAccount(AbstractAgentAccount):
     def merge(self, other):
         if other.verified:
             self.verified = True
+
+    def other_account(self):
+        if not self.verified:
+            return self.db.query(self.__class__).filter_by(
+                email=self.email, verified=True).first()
 
     @staticmethod
     def get_or_make_profile(session, email, name=None):
@@ -230,6 +232,7 @@ class IdentityProviderAccount(AbstractAgentAccount):
     username = Column(String(200))
     domain = Column(String(200))
     userid = Column(String(200))
+    profile_i = relationship(AgentProfile, backref='identity_accounts')
 
     def signature(self):
         return ('idprovider_agent_account', self.provider_id, self.username,
@@ -286,14 +289,7 @@ class User(AgentProfile):
     def get_preferred_email(self):
         if self.preferred_email:
             return self.preferred_email
-        emails = list(self.email_accounts())
-        # should I allow unverified?
-        emails = [e for e in emails if e.verified]
-        preferred = [e for e in emails if e.preferred]
-        if preferred:
-            return preferred[0].email
-        if emails:
-            return emails[0].email
+        return super(User, self).get_preferred_email()
 
     def merge(self, other_user):
         super(User, self).merge(other_user)
@@ -318,6 +314,8 @@ class User(AgentProfile):
                 extract.creator = self
             for extract in other_user.extracts_owned:
                 extract.owner = self
+            for post in other_user.posts_created:
+                post.creator = self
             for role in other_user.roles:
                 role.user = self
             for role in other_user.local_roles:

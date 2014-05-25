@@ -50,7 +50,7 @@ function loadHypertreeInDiv(div) {
         color: "#c7c2dd"  
     },
     onBeforeCompute: function(node){  
-        console.log("centering");  
+        //console.log("centering");  
     },  
     //Attach event handlers and add text to the  
     //labels. This method is only triggered on label  
@@ -89,7 +89,7 @@ function loadHypertreeInDiv(div) {
     },  
       
     onComplete: function(){  
-        console.log("done");  
+        //console.log("done");  
 
         //Build the right column relations list.  
         //This is done by collecting the information (stored in the data property)   

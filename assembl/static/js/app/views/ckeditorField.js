@@ -60,7 +60,7 @@ define(['backbone', 'underscore', 'app', 'ckeditor-sharedspace'], function(Backb
             if( this.model === null ){
                 throw new Error('EditableField needs a model');
             }
-            console.log(this);
+            //console.log(this);
         },
 
         /**

@@ -1,5 +1,5 @@
-define(['backbone', 'underscore', 'models/idea', 'views/idea', "views/ideaGraph", 'app', 'types', 'views/allMessagesInIdeaList', 'views/orphanMessagesInIdeaList', 'views/synthesisInIdeaList', 'permissions', 'utils/renderVisitor', 'utils/siblingChainVisitor'],
-function(Backbone, _, Idea, IdeaView, ideaGraphLoader, app, Types, AllMessagesInIdeaListView, OrphanMessagesInIdeaListView, SynthesisInIdeaListView, Permissions, renderVisitor, siblingChainVisitor){
+define(['backbone', 'underscore', 'models/idea', 'models/ideaLink', 'views/idea', "views/ideaGraph", 'app', 'types', 'views/allMessagesInIdeaList', 'views/orphanMessagesInIdeaList', 'views/synthesisInIdeaList', 'permissions', 'utils/renderVisitor', 'utils/siblingChainVisitor'],
+function(Backbone, _, Idea, IdeaLink, IdeaView, ideaGraphLoader, app, Types, AllMessagesInIdeaListView, OrphanMessagesInIdeaListView, SynthesisInIdeaListView, Permissions, renderVisitor, siblingChainVisitor){
     'use strict';
 
     var FEATURED = 'featured',
@@ -42,7 +42,9 @@ function(Backbone, _, Idea, IdeaView, ideaGraphLoader, app, Types, AllMessagesIn
          * @init
          */
         initialize: function(obj){
+            var that = this;
             this.ideas = new Idea.Collection();
+            this.ideaLinks = new IdeaLink.Collection();
             /*this.on("all", function(eventName) {
                 console.log("ideaList event received: ", eventName);
               });
@@ -56,9 +58,9 @@ function(Backbone, _, Idea, IdeaView, ideaGraphLoader, app, Types, AllMessagesIn
             }
 
             var events = ['reset', 'change:parentId', 'change:@id', 'change:inNextSynthesis', 'remove', 'add'];
-            this.ideas.on(events.join(' '), this.render, this);
 
-            var that = this;
+            this.listenTo(this.ideas, events.join(' '), this.render);
+
             app.on('idea:delete', function(){
                 if(app.debugRender) {
                     console.log("ideaList: triggering render because app.on('idea:delete') was triggered");
