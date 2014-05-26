@@ -915,7 +915,7 @@ msgstr "Messages orphelins"
 
 #: assembl/templates/views/messageList.tmpl:43
 msgid "Synthesis messages"
-msgstr "Messages-synthèse"
+msgstr "Synthèses"
 
 #: assembl/templates/views/messageList.tmpl:44
 msgid "Unread messages"
