@@ -4,7 +4,7 @@
     <div class="bar bar--main">
         <div class="bar-body">
             <div class="bar-right">
-                <a> {{ gettext('Profile') }} <i class="iconbutton iconbutton--nofx"><img src="/user/id/{{user.id}}/avatar/38" alt="{{ user.display_name() }}"/></i></a>
+                <a> {{ gettext('Profile') }} <i class="iconbutton iconbutton--nofx"><img src="/user/id/{{user.id}}/avatar/38" alt="{{ user.display_name() }}" height="38" width="38"/></i></a>
                 {% if locales.__len__ > 1 %}
                     <a href="#" class="locale active">{{locale | upper}}</a>
                     {% for loc in locales %}

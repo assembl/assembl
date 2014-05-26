@@ -103,24 +103,18 @@ class AgentProfile(Base):
         ).one()
 
     def avatar_url(self, size=32, app_url=None, email=None):
-        # First implementation: Use the gravatar URL
-        email = email or self.get_preferred_email()
+        for acc in self.identity_accounts:
+            url = acc.avatar_url(size)
+            if url:
+                return url
+        # Otherwise: Use the gravatar URL
         default = config.get('avatar.default_image_url') or \
             (app_url and app_url+'/static/img/icon/user.png')
+        email = email or self.get_preferred_email()
         if not email:
             return default
-        else:
-            gravatar_default = config.get('avatar.gravatar_default')
-            if gravatar_default:
-                default = gravatar_default
-        args = {'s': str(size)}
-        if default:
-            args['d'] = default
-        gravatar_url_pattern = "http://www.gravatar.com/avatar/%s?%s"
-        gravatar_url = gravatar_url_pattern % (
-            hashlib.md5(
-                email.lower()).hexdigest(), urllib.urlencode(args))
-        return gravatar_url
+        default = config.get('avatar.gravatar_default') or default
+        return EmailAccount.avatar_url_for(email, size, default)
 
     def serializable(self, use_email=None):
         return {
@@ -189,6 +183,17 @@ class EmailAccount(AbstractAgentAccount):
             return self.db.query(self.__class__).filter_by(
                 email=self.email, verified=True).first()
 
+    def avatar_url(self, size=32, default=None):
+        return self.avatar_url_for(self.email, size, default)
+
+    @staticmethod
+    def avatar_url_for(email, size=32, default=None):
+        args = {'s': str(size)}
+        if default:
+            args['d'] = default
+        return "http://www.gravatar.com/avatar/%s?%s" % (
+            hashlib.md5(email.lower()).hexdigest(), urllib.urlencode(args))
+
     @staticmethod
     def get_or_make_profile(session, email, name=None):
         emails = list(session.query(EmailAccount).filter_by(
@@ -253,6 +258,45 @@ class IdentityProviderAccount(AbstractAgentAccount):
         else:
             name = self.userid
         return ":".join((self.provider.provider_type, name))
+
+    def populate_picture(self, profile=None):
+        if self.picture_url:
+            return
+        profile = profile or self.profile_info_json
+        if not profile:
+            return
+        if 'photos' in profile:  # google, facebook
+            photos = [x.get('value', None) for x in profile['photos']]
+            photos = [x for x in photos if x]
+            if photos:
+                self.picture_url = photos[0]
+        elif self.provider.provider_type == 'facebook':
+            accounts = [x.get('userid') for x in profile.get('accounts', ())]
+            accounts = [x for x in accounts if x]
+            if accounts:
+                self.picture_url = 'http://graph.facebook.com/%s/picture' % (
+                    accounts[0])
+
+    facebook_sizes = (('square', 50), ('small', 50), ('normal', 100), ('large', 200))
+    twitter_sizes = (('_mini', 25), ('_normal', 48), ('_bigger', 73), ('', 1000))
+
+    def avatar_url(self, size=32):
+        if not self.picture_url:
+            self.populate_picture()
+        if not self.picture_url:
+            return
+        if self.provider.provider_type == 'google_oauth2':
+            return '%s?size=%d' % (self.picture_url, size)
+        elif self.provider.provider_type == 'facebook':
+            for (size_name, name_size) in self.facebook_sizes:
+                if size <= name_size:
+                    break
+            return '%s?type=%s' % (self.picture_url, size_name)
+        elif self.provider.provider_type == 'twitter':
+            for (size_name, name_size) in self.twitter_sizes:
+                if size <= name_size:
+                    break
+            return size_name.join(self.picture_url.split('_normal'))
 
     @property
     def profile_info_json(self):

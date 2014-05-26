@@ -2,7 +2,7 @@
     <div class="messageSend">
         {% if user %}
         <div class="avatar-container">
-            <img src="/user/id/{{user.id}}/avatar/32" alt="{{ user.display_name() }}" class="avatar image-rounded" />
+            <img height="32" width="32" src="/user/id/{{user.id}}/avatar/32" alt="{{ user.display_name() }}" class="avatar image-rounded" />
         </div>
         {% endif %}
         <div class="interface-container">
