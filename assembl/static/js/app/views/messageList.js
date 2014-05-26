@@ -75,7 +75,7 @@ function(Backbone, _, $, app, PanelView, MessageFamilyView, Message, i18n, PostQ
                 var emptySubject = this.$('.messageSend .messageSend-subject').val(),
                     emptyBody = this.$('.messageSend .messageSend-body').val();
 
-                if(emptySubject != ''){
+                if(emptySubject != '' && emptySubject !== undefined){
 
                   return;
                 }
