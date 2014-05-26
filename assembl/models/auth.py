@@ -19,6 +19,7 @@ from sqlalchemy import (
 
 from sqlalchemy.orm import relationship, backref, deferred
 from sqlalchemy import inspect
+from sqlalchemy.types import Text
 from sqlalchemy.orm.attributes import NO_VALUE
 from pyramid.security import Everyone, Authenticated
 
@@ -232,6 +233,8 @@ class IdentityProviderAccount(AbstractAgentAccount):
     username = Column(String(200))
     domain = Column(String(200))
     userid = Column(String(200))
+    profile_info = deferred(Column(Text()))
+    picture_url = Column(String(300))
     profile_i = relationship(AgentProfile, backref='identity_accounts')
 
     def signature(self):
@@ -245,6 +248,16 @@ class IdentityProviderAccount(AbstractAgentAccount):
         else:
             name = self.userid
         return ":".join((self.provider.provider_type, name))
+
+    @property
+    def profile_info_json(self):
+        if self.profile_info:
+            return json.loads(self.profile_info)
+        return {}
+
+    @profile_info_json.setter
+    def profile_info_json(self, val):
+        self.profile_info = json.dumps(val)
 
 
 class User(AgentProfile):

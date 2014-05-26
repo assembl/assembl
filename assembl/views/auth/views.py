@@ -1,4 +1,6 @@
 from datetime import datetime
+import simplejson as json
+
 from pyramid.i18n import get_localizer, TranslationStringFactory
 from pyramid.view import view_config
 from pyramid.renderers import render_to_response
@@ -354,6 +356,7 @@ def velruse_login_complete_view(request):
     if not idp_accounts:
         idp_account = IdentityProviderAccount(
             provider=provider,
+            profile_info=json.dumps(velruse_profile),
             domain=velruse_account.get('domain'),
             userid=velruse_account.get('userid'),
             username=velruse_account.get('username'))
