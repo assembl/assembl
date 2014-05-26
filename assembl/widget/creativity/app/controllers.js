@@ -1,8 +1,8 @@
 "use strict";
 
 creativityApp.controller('videosCtl',
-  ['$scope', '$http', '$routeParams', '$log', 'globalVideoConfig', 'JukeTubeVideosService', 'Discussion',
-  function($scope, $http, $routeParams, $log, globalVideoConfig, JukeTubeVideosService, Discussion){
+  ['$scope', '$http', '$routeParams', '$log', 'localConfig', 'JukeTubeVideosService', 'Discussion',
+  function($scope, $http, $routeParams, $log, localConfig, JukeTubeVideosService, Discussion){
 
     // intialization code (constructor)
 
@@ -39,7 +39,7 @@ creativityApp.controller('videosCtl',
 
       // data mock
 
-      globalVideoConfig.fetch().success(function(data){
+      localConfig.fetch().success(function(data){
           $scope.globalVideoConfig = data;
       });
 
@@ -145,7 +145,7 @@ creativityApp.controller('videosCtl',
 }]);
 
 creativityApp.controller('cardsCtl',
-    ['$scope','$http','$sce','globalConfig','sendIdeaService','$location', function($scope, $http, $sce, globalConf, sendIdeaService, $location){
+    ['$scope','$http','$sce','localConfig','sendIdeaService','$location', function($scope, $http, $sce, localConfig, sendIdeaService){
 
     // activate the right tab
     $("ul.nav li").removeClass("active");
@@ -158,7 +158,7 @@ creativityApp.controller('cardsCtl',
     $scope.displayed_card_index = 0;
 
     //data mock
-    globalConf.fetch().success(function(data){
+    localConfig.fetch().success(function(data){
         $scope.cards = data.card_game[0]; // we get only the first deck of cards
         $scope.shuffle();
     });
@@ -205,8 +205,8 @@ creativityApp.controller('cardsCtl',
 }]);
 
 creativityApp.controller('creativitySessionCtl',
-    ['$scope','globalConfig','globalMessages','$rootScope', '$timeout','$http',
-        function($scope, globalConf, globalMessages, $rootScope, $timeout, $http){
+    ['$scope','localConfig','$rootScope', '$timeout','$http',
+        function($scope, localConfig, $rootScope, $timeout, $http){
 
     // activate the right tab
     $("ul.nav li").removeClass("active");
@@ -220,8 +220,6 @@ creativityApp.controller('creativitySessionCtl',
     $timeout(function(){
 
         $scope.getSubIdeaFromIdea();
-
-        //$scope.getCommentsFromSubIdea();
 
     },1000);
 
@@ -293,58 +291,12 @@ creativityApp.controller('creativitySessionCtl',
     }
 
     /**
-     * Comment an idea from creativity session
-     */
-    /*$scope.commentSubIdea = function($event){
-
-        var target = angular.element($event.currentTarget).find('.text-comment');
-
-
-        return;
-        var rootUrl = angular.element('.form-comment').attr('data-url');
-
-        var data = {
-            type: 'Post',
-            subject: 'test_message',
-            body: angular.element('.text-comment').val(),
-            creator_id: 245,
-            message_id: 'bogus'
-        }
-
-        if(data.body && rootUrl) {
-
-            $http({
-                method:'POST',
-                url:rootUrl,
-                data:$.param(data),
-                headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-            }).success(function(data, status, headers){
-
-                $scope.message = "commentSubIdea:success";
-
-            }).error(function(status, headers){
-
-                $scope.message = "commentSubIdea:error";
-            });
-
-        }
-    }
-
-    /**
-     * get all comments from a sub idea
-     */
-    /*$scope.getCommentsFromSubIdea = function(){
-
-
-    }
-
-    /**
     * Sum each value from session vote
     */
     $scope.totalVote = function(){
         var el = angular.element('.session-comment .total-score');
 
-        angular.forEach(el, function(v, k){
+        angular.forEach(el, function(v){
             var elm = angular.element(v);
 
             console.log("idea id :" + elm.attr('id') +" vote :"+ elm.val() );
@@ -354,8 +306,10 @@ creativityApp.controller('creativitySessionCtl',
     }
 
 
-    //data mock
-    globalConf.fetch().success(function(data){
+    /**
+     * Load config card
+     */
+    localConfig.fetch().success(function(data){
         $scope.cards = data.card_game;
     });
 

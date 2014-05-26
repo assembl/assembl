@@ -23,17 +23,17 @@
         <div class="card-comment">
             <form role="form" ng-submit="sendSubIdea()">
                 <div class="form-group">
-                    <input type="text" ng-model="formData.short_title" class="form-control" id="inputEmail1" placeholder="{{'title' | translate}}">
+                    <input type="text" ng-model="formData.short_title" class="form-control" id="inputEmail1" placeholder="{{'title' | translate}}" required>
                 </div>
                 <div class="form-group">
-                    <textarea ng-model="formData.definition" class="form-control" rows="3" placeholder="description"></textarea>
+                    <textarea ng-model="formData.definition" class="form-control" rows="3" placeholder="description" required></textarea>
                 </div>
                 <button type="submit" class="btn btn-primary btn-sm">{{'send' | translate}}</button>
             </form>
         </div>
     </div>
 
-    <div class="col-md-6">
+    <div class="col-md-7">
         <div class="session-comment">
             <div class="media" ng-if="ideas.length > 1" ng-repeat="idea in ideas">
                 <div class="pull-left thumbnail">
@@ -47,7 +47,7 @@
                     <div class="row">
                         <div class="col-md-11 comment-idea">
                             <p>{{idea.definition}}</p>
-                            {{idea.creationDate}}
+                            <i class="text-info">{{idea.creationDate}}</i>
                         </div>
                     </div>
 

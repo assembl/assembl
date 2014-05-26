@@ -2,21 +2,10 @@
 
 var creativityServices = angular.module('creativityServices', ['ngResource']);
 
-creativityServices.factory('globalVideoConfig', function($http){
 
-    var api_rest = 'test/config_test.json';
+creativityServices.factory('localConfig', function($http){
 
-    return {
-        fetch : function() {
-            return $http.get(api_rest);
-        }
-    }
-
-});
-
-creativityServices.factory('globalConfig', function($http){
-
-    var api_rest = 'test/config_test.json';
+    var api_rest = 'config/local.json';
 
     return {
         fetch : function() {
