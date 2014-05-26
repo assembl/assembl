@@ -1,3 +1,10 @@
+<script>
+{% if cache_bust == "true" %}
+var urlArgs = "bust=" + (new Date()).getTime();
+{% else %}
+var urlArgs = null;
+{% endif %}
+</script>
 <script data-main="{{ STATIC_URL }}/js/main.js" src="{{ STATIC_URL }}/js/bower/requirejs/require.js"></script>
 
 <script type="text/json" id="translations">{{ translations|safe }}</script>
