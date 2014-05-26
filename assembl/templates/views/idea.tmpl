@@ -2,7 +2,7 @@
     <% if (hasCheckbox) { %>
     <label class="chk chk--idealist">
         <input type="checkbox" class="chk-checkbox" <% if(inNextSynthesis) { %>checked="checked"<% } %> />
-        <span class="chk-label" <% if(inNextSynthesis) { %>data-tooltip="{{ gettext('Remove from next synthesis') }}"<% } else { %>data-tooltip="{{ gettext('Add to next synthesis') }}"<% } %> ></span>
+        <span class="chk-label" data-tooltip-position="w" <% if(inNextSynthesis) { %>data-tooltip="{{ gettext('Remove from next synthesis') }}"<% } else { %>data-tooltip="{{ gettext('Add to next synthesis') }}"<% } %> ></span>
     </label>
     <% }  %>
     <%  var i;
