@@ -50,7 +50,7 @@ def get_login_context(request):
 )
 def logout(request):
     forget(request)
-    next_view = request.params.get('next_view') or '/login'
+    next_view = request.params.get('next_view', '/login')
     return HTTPFound(next_view)
 
 
@@ -214,7 +214,7 @@ def assembl_register_view(request):
         request.session['next_view'] = request.params['next_view']
     if not request.params.get('email'):
         return dict(get_default_context(request),
-                    next_view=request.params.get('next_view', None))
+                    next_view=request.params.get('next_view', '/'))
     forget(request)
     session = AgentProfile.db
     localizer = get_localizer(request)
