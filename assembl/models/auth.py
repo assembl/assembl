@@ -296,8 +296,10 @@ class User(AgentProfile):
         self.password = hash_password(password)
 
     def check_password(self, password):
-        from ..auth.password import verify_password
-        return verify_password(password, self.password)
+        if self.password:
+            from ..auth.password import verify_password
+            return verify_password(password, self.password)
+        return False
 
     def get_preferred_email(self):
         if self.preferred_email:
