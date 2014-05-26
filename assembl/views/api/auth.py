@@ -285,4 +285,5 @@ def get_user_has_permission(request):
         user = User.get_instance(user_id)
         if not user:
             raise HTTPNotFound("User id %s does not exist" % (user_id,))
-    return a_user_has_permission(discussion_id, user.id, permission)
+        user_id = user.id
+    return a_user_has_permission(discussion_id, user_id, permission)
