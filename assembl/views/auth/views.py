@@ -353,7 +353,10 @@ def velruse_login_complete_view(request):
                     username=velruse_account['username']).all())
         else:
             raise HTTPServerError()
-    if not idp_accounts:
+    if idp_accounts:
+        for account in idp_accounts:
+            account.profile_info_json = velruse_profile
+    else:
         idp_account = IdentityProviderAccount(
             provider=provider,
             profile_info=json.dumps(velruse_profile),
@@ -401,6 +404,8 @@ def velruse_login_complete_view(request):
             if profile.username:
                 username = profile.username.username
             profile.last_login = datetime.now()
+            if not profile.name:
+                profile.name = velruse_profile.get('displayName', None)
     else:
         # Create a new user
         profile = User(
