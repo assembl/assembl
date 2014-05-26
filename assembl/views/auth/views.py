@@ -40,7 +40,7 @@ def get_login_context(request):
         'providers': request.registry.settings['login_providers'],
         'google_consumer_key': request.registry.settings.get(
             'google.consumer_key', ''),
-        'next_view': request.params.get('next_view', '/')
+        'next_view': request.params.get('next_view', '/login')
     })
 
 
@@ -69,6 +69,8 @@ def logout(request):
 #)
 def login_view(request):
     # TODO: In case of forbidden, get the URL and pass it along.
+    if request.params.get('next_view', None):
+        request.session['next_view'] = request.params['next_view']
     localizer = get_localizer(request)
     return get_login_context(request)
 
@@ -208,9 +210,11 @@ def avatar(request):
     renderer='assembl:templates/register.jinja2'
 )
 def assembl_register_view(request):
+    if request.params.get('next_view', None):
+        request.session['next_view'] = request.params['next_view']
     if not request.params.get('email'):
         return dict(get_default_context(request),
-                    next_view=request.params.get('next_view', '/'))
+                    next_view=request.params.get('next_view', None))
     forget(request)
     session = AgentProfile.db
     localizer = get_localizer(request)
@@ -257,7 +261,9 @@ def assembl_register_view(request):
         headers = remember(request, user.id, tokens=format_token(user))
         request.response.headerlist.extend(headers)
         # TODO: Tell them to expect an email.
-        return HTTPFound(location=request.params.get('next_view', '/'))
+        next_view = request.session.pop('next_view') or \
+            request.params.get('next_view', '/register')
+        return HTTPFound(location=next_view)
     return HTTPFound(location=request.route_url(
         'confirm_emailid_sent', email_account_id=email_account.id))
 
@@ -289,13 +295,15 @@ def assembl_login_complete_view(request):
     session = AgentProfile.db
     identifier = request.params.get('identifier', '').strip()
     password = request.params.get('password', '').strip()
-    next_view = request.params.get('next_view') or '/'
+    next_view = request.params.get('next_view') or \
+        request.session.pop('next_view') or '/register'
     logged_in = authenticated_userid(request)
     localizer = get_localizer(request)
     user = None
     user, account = from_identifier(identifier)
 
     if not user:
+        request.session['next_view'] = next_view
         return dict(get_login_context(request),
                     error=localizer.translate(_("This user cannot be found")),
                     next_view=next_view)
@@ -329,6 +337,7 @@ def velruse_login_complete_view(request):
     session = AgentProfile.db
     context = request.context
     velruse_profile = context.profile
+    next_view = request.session.pop('next_view') or '/'
     logged_in = authenticated_userid(request)
     provider = get_identity_provider(request)
     # find or create IDP_Accounts
@@ -466,7 +475,7 @@ def velruse_login_complete_view(request):
     request.response.headerlist.extend(headers)
     # TODO: Store the OAuth etc. credentials.
     # Though that may be done by velruse?
-    return HTTPFound(location='/')
+    return HTTPFound(location=next_view)
 
 
 @view_config(
@@ -665,7 +674,8 @@ def do_password_change(request):
             return HTTPFound(request.route_url(
                 'password_change_sent', profile_id=user_id, _query=dict(
                     sent=True, error=localizer.translate(_(
-                        "This token is expired. Do you want us to send another?")))))
+                        "This token is expired. "
+                        "Do you want us to send another?")))))
     user = User.get(id=user_id)
     headers = remember(request, user_id, tokens=format_token(user))
     request.response.headerlist.extend(headers)
