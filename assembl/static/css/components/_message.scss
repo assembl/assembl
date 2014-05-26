@@ -340,7 +340,9 @@ $ellipsiswidth: 3em !default;
     right: 5px;
     display: table;
     vertical-align: top;
-    .message-hoistbtn, .message-linkbutton {
+
+    // used when buttons are to the left of the Reply button
+    > .message-hoistbtn, > .message-linkbutton {
         vertical-align: top;
         width: 26px;
         line-height: 23px;
@@ -355,10 +357,18 @@ $ellipsiswidth: 3em !default;
         vertical-align: top;
         //line-height: 10px;
         padding: 0;
-        margin-left: 6px;
+        //margin-left: 6px;
         .dropdown-label.dropdown-label--arrow {
             width: 24px;
             height: 24px;
+        }
+
+        .iconbutton {
+            width: 20px !important;
+            height: 18px;
+            line-height: 14px;
+            padding-top: 2px;
+            vertical-align: top;
         }
     }
 }
