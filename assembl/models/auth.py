@@ -62,11 +62,15 @@ class AgentProfile(Base):
 
     def display_name(self):
         # TODO: Prefer types?
+        if self.name:
+            return self.name
+        for acc in self.identity_accounts:
+            if acc.username:
+                return acc.display_name()
         for acc in self.accounts:
             name = acc.display_name()
             if name:
                 return name
-        return self.name
 
     def merge(self, other_profile):
         session = self.db
