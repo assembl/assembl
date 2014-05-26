@@ -2,6 +2,7 @@ from datetime import datetime
 from itertools import chain
 import urllib
 import hashlib
+import simplejson as json
 
 from sqlalchemy import (
     Boolean,
