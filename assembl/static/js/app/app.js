@@ -895,6 +895,7 @@ define(['jquery', 'underscore', 'ckeditor', 'moment', 'i18n', 'zeroclipboard', '
 
             var onMouseLeave = function(ev){
                 parent.removeClass('is-open');
+                ev.stopPropagation(); // so that onDropdownClick() is not called again immediately after when we click
             };
 
             if( parent.hasClass('is-open') ){
