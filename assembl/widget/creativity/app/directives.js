@@ -59,14 +59,9 @@ creativityApp.directive('comments', function($http){
                         comment.push(com);
                     })
 
-                    return comment;
-
-                }).then(function(com){
-
-                    $scope.comments = com;
+                    $scope.comments = comment;
 
                 });
-
             }
 
             /**
@@ -93,13 +88,9 @@ creativityApp.directive('comments', function($http){
                         headers: {'Content-Type': 'application/x-www-form-urlencoded'}
                     }).success(function(data, status, headers){
 
-                        //$scope.message = "commentSubIdea:success";
-
-                        console.log('success:',status)
+                        $scope.getCommentsFromSubIdea();
 
                     }).error(function(status, headers){
-
-                        //$scope.message = "commentSubIdea:error";
 
                         console.log('error:',status)
                     });
