@@ -30,7 +30,12 @@ function(Backbone, _, $, app, i18n, Permissions){
         initialize: function(){
             var that = this;
             this.lockButton = this.button.find('.lock-button');
-            this.listenTo(this.lockButton, 'click', function(event){
+            // TODO ghourlier: listenTo breaks the lock. Try to see why?
+            // There's an error without the following line at least:
+            // _.extend(this.lockButton, Backbone.Events);
+            // but it still does not work.
+            //this.listenTo(this.lockButton, 'click', function(event){
+            this.lockButton.on('click', function(event){
                     that.onLockButtonClick(event);
             });
         },

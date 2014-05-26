@@ -37,7 +37,9 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n, Permissions, Message
          * @param {MessageModel} obj the model
          */
         initialize: function(obj){
-            this.listenTo(this.model, 'change:isSelected', this.onIsSelectedChange);
+            //TODO ghourlier: this method does not exist; looks like legacy. try to identify
+            //what it was meant for?
+            //this.listenTo(this.model, 'change:isSelected', this.onIsSelectedChange);
             this.listenTo(this.model, 'replacedBy', this.onReplaced);
             this.listenTo(this.model, 'showBody', this.onShowBody);
             this.listenTo(this.model, 'change', this.render);
