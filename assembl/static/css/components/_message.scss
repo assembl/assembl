@@ -58,7 +58,7 @@ $ellipsiswidth: 3em !default;
     //overflow-x: hidden;
 
     .message-subject {
-        margin-top: 2px;
+        margin-top: 0;
         white-space: normal;
     }
 
@@ -128,13 +128,11 @@ $ellipsiswidth: 3em !default;
     .message-header {
         position: relative;
         min-height: $messagelist-item-height - 12px;
-        
-                    //
-
     }
-    //
+    
     .message-subheader {
-        padding-left: 1em;
+        line-height: 17px;
+        padding-left: 9px;
         cursor: pointer;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -142,7 +140,7 @@ $ellipsiswidth: 3em !default;
         text-align:  baseline;
         max-height: $messagelist-item-height - 12px;
         > span {
-                vertical-align: middle;
+                vertical-align: top;
                 }
         .message--collapsed & {
             line-height: $icon-height;
@@ -151,14 +149,18 @@ $ellipsiswidth: 3em !default;
     
         .message-author {
             display: inline-block;
-            line-height: 32px;
+            line-height: 17px;
             .iconbutton {
                 width: 28px;
-                height: 28px;
-                line-height: 28px;
+                height: 20px;
+                line-height: 17px;
                 text-align: left;
                 vertical-align: top;
             }
+        }
+
+        .message-date {
+            line-height: 17px;
         }
 
         > div {
@@ -334,7 +336,7 @@ $ellipsiswidth: 3em !default;
 //
 .message-menu {
     position: absolute;
-    top: 0px;
+    top: -2px;
     right: 5px;
     display: table;
     vertical-align: top;
