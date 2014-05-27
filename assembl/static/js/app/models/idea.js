@@ -335,7 +335,7 @@ function(Base, _, Segment, app, i18n, Types, Permissions){
               var attrs = key;
               options = val;
               if (attrs['parentId'] === null && attrs['root'] !== true) {
-                console.log("empty parent bug");
+                console.log("empty parent bug: ", _.clone(attrs));
                 var id = attrs['@id'];
                 var links = app.ideaList.ideaLinks.where({target: id});
                 if (links.length > 0) {
