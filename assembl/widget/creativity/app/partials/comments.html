@@ -1,0 +1,19 @@
+<div class="commentToSubIdea" ng-if="comments.length > 0">
+    <div class="media media-comment" ng-repeat="com in comments">
+        <a class="pull-left" href="#">
+            <img class="media-object" alt="40x40" ng-src="" style="width: 30px; height: 30px;">
+        </a>
+        <div class="media-body">
+            <h5 class="media-heading">{{com.subject}}</h5>
+            <p>{{com.body}}</p>
+            <span class="text-info">{{com.date}}</span>
+        </div>
+    </div>
+</div>
+
+<div class="sub-comment" data-url="{{idea.widget_add_post_endpoint}}">
+    <form role="form" ng-submit="commentSubIdea(idea.widget_add_post_endpoint)">
+        <textarea ng-model="formData.comment" class="text-comment" class="form-control" placeholder="{{'comment'| translate }}" autocomplete="off" required></textarea>
+        <button type="submit" class="btn btn-primary btn-xs pull-right btn-subcomment">{{'send'| translate }}</button>
+    </form>
+</div>

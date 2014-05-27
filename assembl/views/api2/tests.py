@@ -123,19 +123,19 @@ def test_widget_basic_interaction(
     assert test.json == []
 
     # Create a new sub-idea
-    new_idea_rep = test_app.post(idea_endpoint, {
+    new_idea_create = test_app.post(idea_endpoint, {
         "type": "Idea", "short_title": "This is a brand new idea"})
-    assert new_idea_rep.status_code == 201
+    assert new_idea_create.status_code == 201
     # Get the sub-idea from the db
     Idea.db.flush()
-    new_idea_id = new_idea_rep.location
+    new_idea_id = new_idea_create.location
     new_idea = Idea.get_instance(new_idea_id)
     assert new_idea.widget_id == new_widget.id
     assert new_idea.hidden
     assert not subidea_1.hidden
     # Get the sub-idea from the api
     new_idea_rep = test_app.get(
-        local_to_absolute(new_idea_rep.location),
+        local_to_absolute(new_idea_create.location),
         headers={"Accept": "application/json"}
     )
     assert new_idea_rep.status_code == 200
@@ -151,13 +151,13 @@ def test_widget_basic_interaction(
     post_endpoint = new_idea_rep.json.get('widget_add_post_endpoint', None)
     assert post_endpoint
     # Create a new post attached to the sub-idea
-    new_post_rep = test_app.post(local_to_absolute(post_endpoint), {
-        "type": "Post", "subject": "test_message", "message_id": "bogus",
+    new_post_create = test_app.post(local_to_absolute(post_endpoint), {
+        "type": "Post", "message_id": "bogus",
         "body": "body", "creator_id": participant1_user.id})
-    assert new_post_rep.status_code == 201
-    # Get the new post from the API
+    assert new_post_create.status_code == 201
+    # Get the new post from the db
     Post.db.flush()
-    new_post_id = new_post_rep.location
+    new_post_id = new_post_create.location
     post = Post.get_instance(new_post_id)
     assert post.hidden
     # It should have a widget link to the idea.
@@ -167,3 +167,12 @@ def test_widget_basic_interaction(
     test = test_app.get(local_to_absolute(post_endpoint))
     assert test.status_code == 200
     assert new_post_id in test.json
+    # Get the new post from the api
+    new_post_rep = test_app.get(
+        local_to_absolute(new_post_create.location),
+        headers={"Accept": "application/json"}
+    )
+    assert new_post_rep.status_code == 200
+    # It should mention its idea
+    print new_post_rep.json
+    assert new_idea_id in new_post_rep.json['widget_ideas']

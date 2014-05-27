@@ -6,22 +6,22 @@
         {% if canDisplayTabs %}
         <ul class="menu">
             <li class="tab-table-idea">
-                <a id="button-ideaList" class="barbutton" data-tooltip-position="n"
-                data-tooltip="{{ gettext('To add an idea in the table of ideas: select add idea and drag the new idea either 1) on the inner edge of an existing idea to add it as a sibling or 2) in the middle of an existing idea to add it as a sub-idea.') }}">{{ gettext('Table of Ideas') }}</a>
+                <div id="button-ideaList" class="barbutton" data-tooltip-position="n"
+                data-tooltip="{{ gettext('To add an idea in the table of ideas: select add idea and drag the new idea either 1) on the inner edge of an existing idea to add it as a sibling or 2) in the middle of an existing idea to add it as a sub-idea.') }}">{{ gettext('Table of Ideas') }}</div>
             </li>
-            <li class="tab-idea active">
-                <a id="button-ideaPanel" class="barbutton" style="display: none">{{ gettext('Idea') }}</a>
+            <li class="tab-idea">
+                <div id="button-ideaPanel" class="barbutton">{{ gettext('Idea') }}</div>
             </li>
             
             <li class="tab-clipboard">
-                <a id="button-segmentList" class="barbutton" {% if not canAddExtract %}style="display: none"{% endif %}>{{ gettext('Clipboard') }}</a>
+                <div id="button-segmentList" class="barbutton" {% if not canAddExtract %}style="display: none"{% endif %}>{{ gettext('Clipboard') }}</div>
             </li>
             
             <li class="tab-messages">
-                <a id="button-messages" class="barbutton">{{ gettext('Messages') }}</a>
+                <div id="button-messages" class="barbutton"><div class="lock-button"><span class="lock-anchor"></span></div>{{ gettext('Messages') }}</div>
             </li>
             <li class="tab-synthesis">
-                <a id="button-synthesis" class="barbutton">{{ gettext('Synthesis') }}</a>
+                <div id="button-synthesis" class="barbutton">{{ gettext('Synthesis') }}</div>
             </li>
         </ul>
         {% endif %}
@@ -30,7 +30,7 @@
         <div class="connexion">
             {% if user %}
                 {% if user_profile_edit_url %}<a href="{{ user_profile_edit_url }}">{% endif %}
-                    <img src="/user/id/{{user.id}}/avatar/30" alt="{{ user.display_name() }}"/>
+                    <img height="30" width="30" src="/user/id/{{user.id}}/avatar/30" alt="{{ user.display_name() }}"/>
                     <span>{{ user.display_name() }}</span>
                 {% if user_profile_edit_url %}</a>{% endif %}
                 <a href="/logout" class="sign-out iconbutton icon-logout-1" title="{{ gettext('Sign out') }}"></a>

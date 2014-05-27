@@ -30,10 +30,19 @@
                 <div class="synthesisPanel-conclusion"></div>
             </div>
         </div>
+
+        <% if (canSend) { %>
+        <div class="spacer"></div>
+        <div class="box box--noborder text-right">
+            <a id="segmentList-clear" class="button synthesisPanel-publishButton"> <i class="icon-edit"></i> {{ gettext('Publish') }} &nbsp;</a>
+        </div>
+        <% } %>
     </div>
+    {#
     <% if (canSend) { %>
     <footer class="panel-footer text-right">
         <a class="synthesisPanel-publishButton" class="link">{{ gettext('Publish') }} <i class="icon-edit"></i></a>
     </footer>
     <% } %>
+    #}
 </div>

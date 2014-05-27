@@ -80,14 +80,18 @@ define(['app', 'underscore', 'sockjs'], function(app, _, SockJS){
         var collection = app.getCollectionByType(item),
             model;
 
-        console.log( item['@id'] || item['@type'], item );
+        if (app.debugSocket) {
+            console.log( item['@id'] || item['@type'], item );
+        }
 
         if( collection === null ){
             if(item['@type'] == "Connection") {
                 //Ignore Connections
                 return;
             } else {
-                console.log("Socket.prototype.processData(): TODO: Handle singletons like discussion etc. for item:", item);
+                if (app.debugSocket) {
+                    console.log("Socket.prototype.processData(): TODO: Handle singletons like discussion etc. for item:", item);
+                }
                 return;
             }
 

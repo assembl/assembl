@@ -12,7 +12,7 @@ from ..auth import R_SYSADMIN
 from ..auth.util import get_user
 
 default_context = {
-    'STATIC_URL': '/static/'
+    'STATIC_URL': '/static'
 }
 
 

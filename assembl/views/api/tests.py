@@ -5,7 +5,7 @@ import pytest
 from urllib import urlencode, quote_plus
 
 from assembl.models import (
-    Idea, Post
+    Idea, Post, Email, User
 )
 
 
@@ -23,7 +23,7 @@ def test_extracts(
     extract_user = {
         "@id": user.uri(),
         "name": user.name,
-        "@type": "User"}
+        "@type": User.external_typename()}
     extract_data = {
         "idIdea": None,
         "creator": extract_user,
@@ -31,7 +31,7 @@ def test_extracts(
         "text": "Let's lower taxes to fav",
         "creationDate": 1376573216160,
         "target": {
-            "@type": "email",
+            "@type": Email.external_typename(),
             "@id": reply_post_2.uri()
         }
     }
@@ -57,7 +57,7 @@ def test_extracts(
     res = test_app.post(base_url, json.dumps(extract_data))
     assert res.status_code == 200
     res_data = json.loads(res.body)
-    extract_id = res_data['id']
+    extract_id = res_data['@id']
     assert extract_id != None
 
     #Check collection
@@ -243,7 +243,7 @@ def test_api_get_posts_from_idea(
     extract_user = {
         "@id": user.uri(),
         "name": user.name,
-        "@type": "User"}
+        "@type": User.external_typename()}
     base_extract_data = {
         "idIdea": None,
         "creator": extract_user,
@@ -251,7 +251,7 @@ def test_api_get_posts_from_idea(
         "text": "Let's lower taxes to fav",
         "creationDate": 1376573216160,
         "target": {
-            "@type": "email",
+            "@type": Email.external_typename(),
             "@id": None
         }
     }
@@ -262,7 +262,7 @@ def test_api_get_posts_from_idea(
     res = test_app.post(base_extract_url, json.dumps(extract_data))
     assert res.status_code == 200
     res_data = json.loads(res.body)
-    extract_post_1_to_subidea_1_1_id = res_data['id']
+    extract_post_1_to_subidea_1_1_id = res_data['@id']
     #test_session.flush()
     #test_session.expunge_all()
     
@@ -281,7 +281,7 @@ def test_api_get_posts_from_idea(
     res = test_app.post(base_extract_url, json.dumps(extract_data))
     assert res.status_code == 200
     res_data = json.loads(res.body)
-    extract_post_1_to_subidea_1_1_bis_id = res_data['id']
+    extract_post_1_to_subidea_1_1_bis_id = res_data['@id']
 
     check_number_of_posts(subidea_1_1,  2, "Num posts should not have changed with second identical extract")
     check_number_of_posts(subidea_1,  2, "Num posts on parent idea  should not have changed with second identical extract")
@@ -295,7 +295,7 @@ def test_api_get_posts_from_idea(
     res = test_app.post(base_extract_url, json.dumps(extract_data))
     assert res.status_code == 200
     res_data = json.loads(res.body)
-    extract_post_2_to_subidea_1_id = res_data['id']
+    extract_post_2_to_subidea_1_id = res_data['@id']
     
     check_number_of_posts(subidea_1_1,  2, "Child idea should still have two posts")
     check_number_of_posts(subidea_1,  2, "Idea should still have two posts")

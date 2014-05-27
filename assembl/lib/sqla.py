@@ -206,6 +206,7 @@ class BaseOps(object):
 
     @classmethod
     def external_typename_with_inheritance(cls):
+        """ Returns the root ancestor class typename """
         if cls.__mapper__.polymorphic_identity is not None:
             for nextclass in cls.mro():
                 if getattr(nextclass, '__mapper__', None) is None:
@@ -233,10 +234,6 @@ class BaseOps(object):
                 getattr(QUADNAMES, iri_name),
                 'http://%{WSHostName}U/data/'+clsname+'/%d', ('id', Integer, False))
         return cls._iri_class
-
-    @classmethod
-    def extra_iri_classes(cls):
-        return {}
 
     @classmethod
     def special_quad_patterns(cls, alias_manager):

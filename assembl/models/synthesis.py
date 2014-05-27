@@ -23,6 +23,7 @@ from sqlalchemy import (
     and_,
 )
 from sqlalchemy.ext.associationproxy import association_proxy
+from rdflib import URIRef
 from virtuoso.vmapping import PatternIriClass
 
 from assembl.lib.utils import slugify
@@ -167,9 +168,13 @@ class Discussion(DiscussionBoundBase):
             pass  # add a pseudo-anonymous user?
         return users
 
-    def get_all_agents_preload(self):
+    def get_all_agents_preload(self, user=None):
         from assembl.views.api.agent import _get_agents_real
-        return json.dumps(_get_agents_real(discussion=self))
+        from assembl.auth.util import user_has_permission
+        return json.dumps(_get_agents_real(
+            discussion=self,
+            include_email=user and user_has_permission(
+                self.id, user.id, P_ADMIN_DISC)))
 
     def get_readers_preload(self):
         return json.dumps([user.serializable() for user in self.get_readers()])
@@ -296,8 +301,8 @@ class SubGraphIdeaAssociation(DiscussionBoundBase):
     @classmethod
     def get_discussion_condition(cls, discussion_id):
         from . import ExplicitSubGraphView
-        return cls.sub_graph_id == IdeaGraphView.id & \
-            IdeaGraphView.discussion_id == discussion_id
+        return (cls.sub_graph_id == IdeaGraphView.id) & \
+            (IdeaGraphView.discussion_id == discussion_id)
 
     crud_permissions = CrudPermissions(P_ADMIN_DISC)
 
@@ -330,8 +335,8 @@ class SubGraphIdeaLinkAssociation(DiscussionBoundBase):
     @classmethod
     def get_discussion_condition(cls, discussion_id):
         from . import ExplicitSubGraphView
-        return cls.sub_graph_id == IdeaGraphView.id & \
-            IdeaGraphView.discussion_id == discussion_id
+        return (cls.sub_graph_id == IdeaGraphView.id) & \
+            (IdeaGraphView.discussion_id == discussion_id)
 
     crud_permissions = CrudPermissions(P_ADMIN_DISC)
 
@@ -556,7 +561,8 @@ class Idea(DiscussionBoundBase):
         info= {'rdf': QuadMapPatternS(None, DCTERMS.title)})
     definition = Column(UnicodeText,
         info= {'rdf': QuadMapPatternS(None, DCTERMS.description)})
-    hidden = Column(Boolean, default=False)
+    hidden = Column(Boolean, server_default='0')
+    is_tombstone = Column(Boolean, server_default='0')
 
     id = Column(Integer, primary_key=True,
                 info= {'rdf': QuadMapPatternS(None, ASSEMBL.db_id)})
@@ -683,13 +689,19 @@ JOIN post ON (
     def _get_orphan_posts_statement_no_select(select):
         """ Requires discussion_id bind parameters """
         return select + """
-FROM post
-JOIN content ON (
-    content.id = post.id
-    AND content.discussion_id = :discussion_id
-)
-EXCEPT corresponding BY (post_id)
-""" + Idea._get_related_posts_statement(True)
+           FROM post
+           JOIN content ON ( content.id = post.id
+                            AND content.discussion_id = :discussion_id )
+           EXCEPT corresponding BY (post_id) (
+             SELECT DISTINCT post.id AS post_id FROM post
+              JOIN post AS root_posts ON ( (post.ancestry <> ''
+                           AND post.ancestry LIKE root_posts.ancestry || cast(root_posts.id as varchar) || ',' || '%' )
+                         OR post.id = root_posts.id)
+              JOIN idea_content_link ON (idea_content_link.content_id = root_posts.id)
+              JOIN idea_content_positive_link ON (idea_content_positive_link.id = idea_content_link.id)
+              JOIN idea ON (idea_content_link.idea_id = idea.id)
+             WHERE idea.discussion_id = :discussion_id
+             AND idea.is_tombstone = 0 AND idea.hidden = 0)"""
 
     @staticmethod
     def _get_count_orphan_posts_statement():
@@ -741,6 +753,13 @@ EXCEPT corresponding BY (post_id)
     def is_in_next_synthesis(self):
         next_synthesis = self.discussion.get_next_synthesis()
         return True if self in next_synthesis.ideas else False
+
+    def send_to_changes(self, connection=None):
+        connection = connection or self.db().connection()
+        if self.is_tombstone:
+            self.tombstone().send_to_changes(connection)
+        else:
+            super(Idea, self).send_to_changes(connection)
 
     def __repr__(self):
         if self.short_title:
@@ -867,8 +886,9 @@ EXCEPT corresponding BY (post_id)
                 super(WidgetPostCollectionDefinition, self).__init__(cls, Content)
 
             def decorate_query(self, query, parent_instance):
-                return query.join(
-                    IdeaContentWidgetLink, self.owner_class)
+                return query.join(IdeaContentWidgetLink).join(
+                    self.owner_class,
+                    IdeaContentWidgetLink.idea_id == parent_instance.id)
 
             def decorate_instance(self, instance, parent_instance, assocs):
                 # This is going to spell trouble: Sometimes we'll have creator,
@@ -968,13 +988,15 @@ class IdeaLink(DiscussionBoundBase):
     source = relationship(
         'Idea', 
         primaryjoin="and_(Idea.id==IdeaLink.source_id, "
-                        "IdeaLink.is_tombstone==False)",
+                        "IdeaLink.is_tombstone==False, "
+                        "Idea.is_tombstone==False)",
         backref=backref('target_links', cascade="all, delete-orphan"),
         foreign_keys=(source_id))
     target = relationship(
         'Idea',
         primaryjoin="and_(Idea.id==IdeaLink.target_id, "
-                        "IdeaLink.is_tombstone==False)",
+                        "IdeaLink.is_tombstone==False, "
+                        "Idea.is_tombstone==False)",
         backref=backref('source_links', cascade="all, delete-orphan"),
         foreign_keys=(target_id))
     order = Column(Float, nullable=False, default=0.0,
@@ -1003,9 +1025,16 @@ class IdeaLink(DiscussionBoundBase):
         else:
             return Idea.get(id=self.source_id).get_discussion_id()
 
+    def send_to_changes(self, connection=None):
+        connection = connection or self.db().connection()
+        if self.is_tombstone:
+            self.tombstone().send_to_changes(connection)
+        else:
+            super(IdeaLink, self).send_to_changes(connection)
+
     @classmethod
     def get_discussion_condition(cls, discussion_id):
-        return cls.source_id == Idea.id & Idea.discussion_id == discussion_id
+        return (cls.source_id == Idea.id) & (Idea.discussion_id == discussion_id)
 
     crud_permissions = CrudPermissions(
             P_ADD_IDEA, P_READ, P_EDIT_IDEA, P_EDIT_IDEA,
@@ -1062,7 +1091,7 @@ class IdeaContentLink(DiscussionBoundBase):
 
     @classmethod
     def get_discussion_condition(cls, discussion_id):
-        return cls.idea_id == Idea.id & Idea.discussion_id == discussion_id
+        return (cls.idea_id == Idea.id) & (Idea.discussion_id == discussion_id)
 
     crud_permissions = CrudPermissions(
             P_ADD_IDEA, P_READ, P_EDIT_IDEA, P_EDIT_IDEA,
@@ -1113,10 +1142,11 @@ class IdeaContentPositiveLink(IdeaContentLink):
     @classmethod
     def special_quad_patterns(cls, alias_manager):
         return [QuadMapPatternS(
-            Content.iri_class().apply(IdeaContentLink.content_id),
+            Content.iri_class().apply(cls.content_id),
             ASSEMBL.postLinkedToIdea,
-            Idea.iri_class().apply(IdeaContentLink.idea_id),
-            name=QUADNAMES.assembl_postLinkedToIdea)]
+            Idea.iri_class().apply(cls.idea_id),
+            name=QUADNAMES.assembl_postLinkedToIdea,
+            condition=cls.idea_id != None)]
 
     __mapper_args__ = {
         'polymorphic_identity': 'idea_content_positive_link',
@@ -1138,10 +1168,11 @@ class IdeaRelatedPostLink(IdeaContentPositiveLink):
     @classmethod
     def special_quad_patterns(cls, alias_manager):
         return [QuadMapPatternS(
-            Content.iri_class().apply(IdeaContentLink.content_id),
+            Content.iri_class().apply(cls.content_id),
             ASSEMBL.postRelatedToIdea,
-            Idea.iri_class().apply(IdeaContentLink.idea_id),
-            name=QUADNAMES.assembl_postRelatedToIdea)]
+            Idea.iri_class().apply(cls.idea_id),
+            name=QUADNAMES.assembl_postRelatedToIdea,
+            condition=cls.idea_id != None)]
 
     __mapper_args__ = {
         'polymorphic_identity': 'idea_related_post_link',
@@ -1161,6 +1192,11 @@ class Extract(IdeaContentPositiveLink):
         ), primary_key=True, info= {
             'rdf': QuadMapPatternS(None, ASSEMBL.db_id)})
 
+    graph_iri_class = PatternIriClass(
+        QUADNAMES.ExcerptGraph_iri,
+        'http://%{WSHostName}U/data/ExcerptGraph/%d',
+        ('id', Integer, False))
+
     body = Column(UnicodeText, nullable=False)
 
     discussion_id = Column(Integer, ForeignKey(
@@ -1170,37 +1206,29 @@ class Extract(IdeaContentPositiveLink):
             Discussion.iri_class().apply())})
     discussion = relationship('Discussion', backref='extracts')
 
-    @classmethod
-    def extra_iri_classes(cls):
-        return {
-            "graph": PatternIriClass(
-                ASSEMBL.extract_graph_iri,
-                'http://%{WSHostName}U/data/extract_graph/%d',
-                ('id', Integer, False))
-        }
+    def extract_graph_name(self):
+        from pyramid.threadlocal import get_current_registry
+        reg = get_current_registry()
+        host = reg.settings['public_hostname']
+        return URIRef('http://%s/data/ExcerptGraph/%d' % (host, self.id))
+
+    def extract_graph_iri(self):
+        return getattr(QUADNAMES, 'extract_%d_iri' % self.id)
 
     @classmethod
-    def special_quad_patterns0(cls, alias_manager):
-        graph_iri = cls.extra_iri_classes()["graph"]
-        relextract_alias = alias_manager.add_class_alias(cls)
-        relideacontentlink = alias_manager.add_class_alias(IdeaContentLink, [
-            IdeaContentLink.idea_id != None, IdeaContentLink.id == relextract_alias.id])
+    def special_quad_patterns(cls, alias_manager):
         return [
-            QuadMapPatternS(cls.iri_class().apply(relextract_alias.id),
-                CATALYST.expressesIdea,
-                Idea.iri_class().apply(relideacontentlink.idea_id),
-                name=QUADNAMES.catalyst_expressesIdea),
             QuadMapPatternS(
-                cls.iri_class().apply(cls.id),
-                OA.hasBody,
-                graph_iri.apply(cls.id),
-                name=QUADNAMES.oa_hasBody),
+                None, OA.hasBody,
+                cls.graph_iri_class.apply(cls.id),
+                name=QUADNAMES.oa_hasBody,
+                condition=cls.idea_id != None),
             QuadMapPatternS(
-                Content.iri_class().apply(relideacontentlink.content_id),
+                Content.iri_class().apply(cls.content_id),
                 ASSEMBL.postExtractRelatedToIdea,
-                Idea.iri_class().apply(relideacontentlink.idea_id),
-                graph=graph_iri.apply(cls.id),
-                name=QUADNAMES.assembl_postExtractRelatedToIdea)
+                Idea.iri_class().apply(cls.idea_id),
+                name=QUADNAMES.assembl_postExtractRelatedToIdea,
+                condition=cls.idea_id != None)
             ]
 
 
@@ -1370,7 +1398,8 @@ class TextFragmentIdentifier(DiscussionBoundBase):
                 Extract.iri_class().apply(cls.extract_id),
                 OA.hasTarget,
                 cls.iri_class().apply(cls.id),
-                name=QUADNAMES.oa_hasTarget),
+                name=QUADNAMES.oa_hasTarget,
+                condition=cls.extract_id != None),
             # TODO: Paths!
             # QuadMapPatternS(OA.hasSource,
             #     Extract.iri_class().apply((cls.extract_id, Extract.content_id)),
@@ -1422,9 +1451,8 @@ class TextFragmentIdentifier(DiscussionBoundBase):
 
     @classmethod
     def get_discussion_condition(cls, discussion_id):
-        return cls.extract_id == IdeaContentLink.id & \
-            IdeaContentLink.idea_id == Idea.id & \
-            Idea.discussion_id == discussion_id
+        return (cls.extract_id == Extract.id) & \
+            (Extract.discussion_id == discussion_id)
 
     crud_permissions = CrudPermissions(
             P_ADD_EXTRACT, P_READ, P_EDIT_EXTRACT, P_EDIT_EXTRACT,

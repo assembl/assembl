@@ -57,6 +57,11 @@ $ellipsiswidth: 3em !default;
     //border-bottom: solid 1px $box-border-color;
     //overflow-x: hidden;
 
+    .message-subject {
+        margin-top: 0;
+        white-space: normal;
+    }
+
 
     // &:last-child {
     //     border-bottom: 0;
@@ -123,13 +128,11 @@ $ellipsiswidth: 3em !default;
     .message-header {
         position: relative;
         min-height: $messagelist-item-height - 12px;
-        
-                    //
-
     }
-    //
+    
     .message-subheader {
-        padding-left: 1em;
+        line-height: 17px;
+        padding-left: 9px;
         cursor: pointer;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -137,7 +140,7 @@ $ellipsiswidth: 3em !default;
         text-align:  baseline;
         max-height: $messagelist-item-height - 12px;
         > span {
-                vertical-align: middle;
+                vertical-align: top;
                 }
         .message--collapsed & {
             line-height: $icon-height;
@@ -146,7 +149,22 @@ $ellipsiswidth: 3em !default;
     
         .message-author {
             display: inline-block;
+            line-height: 17px;
+            .iconbutton {
+                width: 28px;
+                height: 20px;
+                line-height: 17px;
+                text-align: left;
+                vertical-align: top;
+            }
+        }
 
+        .message-date {
+            line-height: 17px;
+        }
+
+        > div {
+            margin-top: 4px;
         }
     }
 
@@ -318,18 +336,41 @@ $ellipsiswidth: 3em !default;
 //
 .message-menu {
     position: absolute;
-    top: 5px;
+    top: -2px;
     right: 5px;
     display: table;
+    vertical-align: top;
+
+    // used when buttons are to the left of the Reply button
+    > .message-hoistbtn, > .message-linkbutton {
+        vertical-align: top;
+        width: 26px;
+        line-height: 23px;
+    }
     .message-replybox-openbtn {
-        display: table-cell;
-        vertical-align: middle;
-        padding-right: 1em;
-        }
+        vertical-align: top;
+        margin-left: 6px;
+        padding-left: 4px;
+        padding-right: 6px;
+    }
     .dropdown {
-        display: table-cell;
-        vertical-align: middle;
+        vertical-align: top;
+        //line-height: 10px;
+        padding: 0;
+        //margin-left: 6px;
+        .dropdown-label.dropdown-label--arrow {
+            width: 24px;
+            height: 24px;
         }
+
+        .iconbutton {
+            width: 20px !important;
+            height: 18px;
+            line-height: 14px;
+            padding-top: 2px;
+            vertical-align: top;
+        }
+    }
 }
 
 // The child list

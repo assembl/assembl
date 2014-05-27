@@ -28,13 +28,17 @@ function(Backbone, _, $, Idea, Segment, app, Permissions){
          *   are the last child of their respective parents.
          */
         initialize: function(obj, view_data){
-            if( _.isUndefined(this.model) ){
+            /*if( _.isUndefined(this.model) ){
                 this.model = new Idea.Model();
-            }
+            }*/
+            //console.log("initialize: ",obj, view_data, this);
+            var that = this;
             this.view_data = view_data;
-            this.model.on('change', this.render, this);
-            this.model.on('change:isSelected', this.onIsSelectedChange, this);
-            this.model.on('replaced', this.onReplaced, this);
+            this.listenTo(this.model, 'change', this.render);
+            this.listenTo(this.model, 'replacedBy', this.onReplaced);
+            app.on('idea:select', function(idea) {
+                that.onIsSelectedChange(idea);
+            });
         },
 
         /**
@@ -53,7 +57,7 @@ function(Backbone, _, $, Idea, Segment, app, Permissions){
 
             this.$el.addClass('idealist-item');
 
-            this.onIsSelectedChange();
+            this.onIsSelectedChange(app.getCurrentIdea());
 
             if( data.isOpen === true ){
                 this.$el.addClass('is-open');
@@ -115,10 +119,9 @@ function(Backbone, _, $, Idea, Segment, app, Permissions){
         /**
          * @event
          */
-        onIsSelectedChange: function(){
-            var value = this.model.get('isSelected');
-
-            if( value === true ){
+        onIsSelectedChange: function(idea){
+            //console.log("IdeaView:onIsSelectedChange(): new: ", idea, "current: ", this.model, this);
+            if( idea === this.model ){
                 this.$el.addClass('is-selected');
             } else {
                 this.$el.removeClass('is-selected');
@@ -129,7 +132,9 @@ function(Backbone, _, $, Idea, Segment, app, Permissions){
          * @event
          */
         onReplaced: function(newObject){
-            app.setCurrentIdea(newObject);
+            this.model = newObject;
+            //That makes no sense, there is no way to know it's the current idea
+            //app.setCurrentIdea(newObject);
         },
 
 
@@ -139,6 +144,9 @@ function(Backbone, _, $, Idea, Segment, app, Permissions){
         onCheckboxChange: function(ev){
             ev.stopPropagation();
             this.model.save({'inNextSynthesis': ev.currentTarget.checked});
+            //Optimisation.  It would self render once the socket propagates, 
+            //but this gives better responsiveness.
+            app.synthesisPanel.render();
         },
 
         /**
@@ -266,10 +274,11 @@ function(Backbone, _, $, Idea, Segment, app, Permissions){
             var segment = app.getDraggedSegment();
             if( segment ){
                 if( isDraggedBelow ){
-                    // Add as a child
-                    this.model.addSegmentAsChild(segment);
+                    // Add as a child idea
+                    var newIdea = this.model.addSegmentAsChild(segment);
+                    app.setCurrentIdea(newIdea);
                 } else {
-                    // Add as a segment
+                    // Add to the current idea
                     this.model.addSegment(segment);
                 }
 
@@ -278,15 +287,16 @@ function(Backbone, _, $, Idea, Segment, app, Permissions){
 
             var annotation = app.getDraggedAnnotation();
             if( annotation ){
-
                 if( isDraggedBelow ){
-                    // Add as a child
-                    app.currentAnnotationIdea = this.model;
-                    app.saveCurrentAnnotation();
+                    // Add as a child idea
+                    app.currentAnnotationIdIdea = null;
+                    app.currentAnnotationNewIdeaParentIdea = this.model;
+                    app.saveCurrentAnnotationAsExtract();
                 } else {
                     // Add as a segment
                     app.currentAnnotationIdIdea = this.model.getId();
-                    app.saveCurrentAnnotation();
+                    app.currentAnnotationNewIdeaParentIdea = null;
+                    app.saveCurrentAnnotationAsExtract();
                 }
                 
                 return;

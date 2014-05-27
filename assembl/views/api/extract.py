@@ -17,7 +17,7 @@ from assembl.models import (
     Discussion, AgentProfile, User, ContentSource, AnnotatorSource, Content, Post, Webpage, Idea)
 from assembl.auth.util import (get_permissions, user_has_permission)
 from assembl.lib.token import decode_token
-
+from assembl.lib import sqla
 
 cors_policy = dict(
     enabled=True,
@@ -128,15 +128,15 @@ def post_extract(request):
         if not (target or uri):
             raise HTTPClientError("No target")
 
-        target_type = target.get('@type')
-        if target_type == 'email':
+        target_class = sqla.get_named_class(target.get('@type'))
+        if issubclass(target_class, Post):
             post_id = target.get('@id')
             post = Post.get_instance(post_id)
             if not post:
                 raise HTTPNotFound(
                     "Post with id '%s' not found." % post_id)
             content = post
-        elif target_type == 'webpage':
+        elif issubclass(target_class, Webpage):
             uri = target.get('url')
     if uri and not content:
         content = Webpage.get_instance(uri)
@@ -184,7 +184,7 @@ def post_extract(request):
         TextFragmentIdentifier.db.add(range)
     Extract.db.flush()
 
-    return {'ok': True, 'id': new_extract.uri()}
+    return {'ok': True, '@id': new_extract.uri()}
 
 
 @extract.put()

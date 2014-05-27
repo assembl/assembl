@@ -10,7 +10,7 @@
     <input type="text" name="openid_identifier" />
 {% endif %}
 {% if image %}
-    <input type="image" value="" src="{{ STATIC_URL }}img/loginbox/{{name}}.png" alt="{{gettext(title)}}"/>
+    <input type="image" value="" src="{{ STATIC_URL }}/img/loginbox/{{name}}.png" alt="{{gettext(title)}}"/>
 {% else %}
     <input type="submit" value="{{ gettext(title) }}" />
 {% endif %}
@@ -24,9 +24,6 @@
     <div class="signinWrapper">
         <p class="login-box-title">{{ gettext("Connect to assembl") }}</p>
         <div class="error-message">{{error}}</div>
-        {% if resend_url %}
-        <a href="{{resend_url}}">{{ gettext("Send confirmation message") }}</a>
-        {% endif %}
         <form class="form" method="POST">
             <input type="hidden" name="next_view" value="{{next_view}}" />
             <input type="text" name="identifier" class="defaultfield" placeholder="{{ gettext('Email or username') }}" autofocus required />
@@ -34,8 +31,10 @@
             <input type="password" name="password" class="defaultfield" placeholder="{{ gettext('Password') }}" required />
             <div class="spacer spacer--big"></div>
             <input type="submit" name="login" value="{{ gettext('Enter') }}" class="btn-pink" />
-            <span class="register">{{gettext("or")}} <a href="/register?next_view={{next_view}}">{{gettext("register")}}</a></span>
-        </form>
+            </form>
+            <span class="register">{{gettext("or")}} <form class="form inline" method="GET" action="/register"><input type="submit" value="{{ gettext('register') }}" class="button button--condensed" /></form>
+            <form class="form inline" method="GET" action="/req_password_change"><input type="submit" value="{{ gettext('I forgot my password') }}" class="button button--condensed" /></form></span>
+        <div class="spacer spacer--big"></div>
     </div>
 
     <div class="signinSeparator left">

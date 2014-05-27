@@ -1,8 +1,8 @@
 "use strict";
 
 creativityApp.controller('videosCtl',
-  ['$scope', '$http', '$routeParams', '$log', 'globalVideoConfig', 'JukeTubeVideosService', 'Discussion',
-  function($scope, $http, $routeParams, $log, globalVideoConfig, JukeTubeVideosService, Discussion){
+  ['$scope', '$http', '$routeParams', '$log', 'localConfig', 'JukeTubeVideosService', 'Discussion',
+  function($scope, $http, $routeParams, $log, localConfig, JukeTubeVideosService, Discussion){
 
     // intialization code (constructor)
 
@@ -39,7 +39,7 @@ creativityApp.controller('videosCtl',
 
       // data mock
 
-      globalVideoConfig.fetch().success(function(data){
+      localConfig.fetch().success(function(data){
           $scope.globalVideoConfig = data;
       });
 
@@ -145,7 +145,7 @@ creativityApp.controller('videosCtl',
 }]);
 
 creativityApp.controller('cardsCtl',
-    ['$scope','$http','$sce','globalConfig','sendIdeaService','$location', function($scope, $http, $sce, globalConf, sendIdeaService, $location){
+    ['$scope','$http','$sce','localConfig','sendIdeaService','$location', function($scope, $http, $sce, localConfig, sendIdeaService){
 
     // activate the right tab
     $("ul.nav li").removeClass("active");
@@ -158,7 +158,7 @@ creativityApp.controller('cardsCtl',
     $scope.displayed_card_index = 0;
 
     //data mock
-    globalConf.fetch().success(function(data){
+    localConfig.fetch().success(function(data){
         $scope.cards = data.card_game[0]; // we get only the first deck of cards
         $scope.shuffle();
     });
@@ -205,7 +205,8 @@ creativityApp.controller('cardsCtl',
 }]);
 
 creativityApp.controller('creativitySessionCtl',
-    ['$scope','globalConfig','globalMessages','$rootScope', function($scope, globalConf, globalMessages){
+    ['$scope','localConfig','$rootScope', '$timeout','$http',
+        function($scope, localConfig, $rootScope, $timeout, $http){
 
     // activate the right tab
     $("ul.nav li").removeClass("active");
@@ -213,50 +214,89 @@ creativityApp.controller('creativitySessionCtl',
 
     $scope.formData = {};
 
-    $scope.$on('widgetStart', function(e, data){
+    /**
+     * Due to the latency to init $rootScope we need a delay
+     * */
+    $timeout(function(){
 
-        //get data from pubsub service in app
+        $scope.getSubIdeaFromIdea();
 
+    },1000);
 
+    $scope.$watch("message", function(value){
 
-    })
+        switch(value){
+            case 'sendNewIdea:success':
+                $scope.getSubIdeaFromIdea();
+                break;
+            case 'sendNewIdea:error':
+                break;
 
-
-    //data mock
-    globalConf.fetch().success(function(data){
-        $scope.cards = data.card_game;
-    });
-
-    //data mock
-    globalMessages.fetch().success(function(data){
-        $scope.ideas = data.ideas;
-    });
-
-
-    /* Send a new idea from creativity session */
-    $scope.sendNewIdea = function(){
-        if($scope.formData) {
-            console.log($scope.formData)
         }
-    }
+    });
 
-    /*
-     * Comment an idea from creativity session
-     * TODO:  add rest api
+    /**
+     * Fetch all ideas newly added
      */
-    $scope.commentIdea = function(){
+    $scope.getSubIdeaFromIdea = function(){
 
+        var rootUrl = $rootScope.widgetConfig.ideas_uri;
+            rootUrl = '/data/'+ rootUrl.split(':')[1] +'?view=default';
+        var ideas = [];
+
+        $http.get(rootUrl).then(function(response){
+            angular.forEach(response.data, function(item){
+                if(typeof item.widget_add_post_endpoint != 'undefined'){
+
+                    item.widget_add_post_endpoint = '/data/'+item.widget_add_post_endpoint.split(':')[1];
+
+                    item.creationDate = moment(item.creationDate).fromNow();
+
+                    ideas.push(item);
+                }
+            })
+
+            $scope.ideas = ideas.reverse();
+        })
+    }
+
+    /**
+    * @params type {string}
+    * @params short_title {string}
+    * @params definition {string}
+    * */
+    $scope.sendSubIdea = function(){
         if($scope.formData) {
-            console.log($scope.formData)
+
+            var rootUrl = $rootScope.widgetConfig.ideas_uri;
+                rootUrl = 'http://localhost:6543/data/'+ rootUrl.split(':')[1];
+
+            $scope.formData.type = 'Idea';
+
+            $http({
+                method:'POST',
+                url:rootUrl,
+                data:$.param($scope.formData),
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+            }).success(function(data, status, headers){
+
+                $scope.message = "sendNewIdea:success";
+
+            }).error(function(status, headers){
+
+                $scope.message = "sendNewIdea:error";
+
+            });
         }
     }
 
-    /*
+    /**
     * Sum each value from session vote
-    * */
+    */
     $scope.totalVote = function(){
         var el = angular.element('.session-comment .total-score');
-        angular.forEach(el, function(v, k){
+
+        angular.forEach(el, function(v){
             var elm = angular.element(v);
 
             console.log("idea id :" + elm.attr('id') +" vote :"+ elm.val() );
@@ -265,6 +305,13 @@ creativityApp.controller('creativitySessionCtl',
 
     }
 
+
+    /**
+     * Load config card
+     */
+    localConfig.fetch().success(function(data){
+        $scope.cards = data.card_game;
+    });
 
 }]);
 

@@ -25,6 +25,19 @@
     border-bottom: solid 1px $box-border-color;
 }
 
+// Only border on top
+// ++++++++++++++
+.box.box--topborder {
+    border: none;
+    border-top: solid 1px $box-border-color;
+}
+
+// No border
+// ++++++++++++++
+.box.box--noborder {
+    border: none;
+}
+
 
 // Dashed box
 // +++++++++++++++
@@ -57,4 +70,16 @@
     .box:last-child:not(.box--dashed) {
         border-bottom: 0;
     }
+}
+
+.warning-box {
+  background-color: #f4eadc;
+  padding: 3px 10px;
+  margin: 10px 0;
+  border-left: 3px solid #f0ad4e;
+  box-sizing: border-box;
+  p{
+    margin:0;
+    text-align: left;
+  }
 }

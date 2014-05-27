@@ -5,6 +5,7 @@ define([], function(){
         EXTRACT: 'Extract',
         ROOT_IDEA: 'RootIdea',
         IDEA: 'Idea',
+        IDEA_LINK: 'IdeaLink',
         POST: 'Post',
         ASSEMBL_POST: 'AssemblPost',
         SYNTHESIS_POST: 'SynthesisPost',

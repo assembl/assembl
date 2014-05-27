@@ -1,5 +1,5 @@
-define(['backbone', 'underscore', 'jquery', 'app', 'models/segment', 'i18n', 'permissions'],
-function(Backbone, _, $, app, Segment, i18n, Permissions){
+define(['backbone', 'underscore', 'jquery', 'app', 'models/segment', 'types', 'i18n', 'permissions'],
+function(Backbone, _, $, app, Segment, Types, i18n, Permissions){
     'use strict';
 
     var SegmentList = Backbone.View.extend({
@@ -13,13 +13,16 @@ function(Backbone, _, $, app, Segment, i18n, Permissions){
                 this.button = $(obj.button).on('click', app.togglePanel.bind(window, 'segmentList'));
             }
 
-            this.segments.on('invalid', function(model, error){ alert(error); });
-            app.users.on('reset', this.render, app.segmentList);
-            
-            this.segments.on('add remove change reset', this.render, this);
+            this.listenTo(this.segments, 'invalid', function(model, error){
+                alert(error);
+            });
 
-            this.segments.on('add', function(segment){
-                that.showSegment(segment);
+            app.users.on('reset', this.render, app.segmentList);
+
+            this.listenTo(this.segments, 'add remove change reset', this.render);
+
+            this.listenTo(this.segments, 'add', function(segment){
+                that.highlightSegment(segment);
             });
         },
 
@@ -74,18 +77,20 @@ function(Backbone, _, $, app, Segment, i18n, Permissions){
         },
 
         /**
-         * Add a segment to the bucket
+         * Add a segment to the clipboard.  If the segment exists, it will be 
+         * unlinked from it's idea (if any).
          * @param {Segment} segment
          */
         addSegment: function(segment){
             delete segment.attributes.highlights;
 
+            this.segments.add(segment, {merge: true});
             segment.save('idIdea', null);
-            this.segments.add(segment);
         },
 
         /**
-         * Add annotation as segment. 
+         * Transform an annotator annotation as a segment. 
+         * The segment isn't saved.
          * @param {annotation} annotation
          * @param {Number} [idIdea=null] 
          * @return {Segment}
@@ -95,7 +100,7 @@ function(Backbone, _, $, app, Segment, i18n, Permissions){
                 idPost = post.getId();
 
             var segment = new Segment.Model({
-                target: { "@id": idPost, "@type": "email" },
+                target: { "@id": idPost, "@type": Types.EMAIL },
                 text: annotation.text,
                 quote: annotation.quote,
                 idCreator: app.getCurrentUser().getId(),
@@ -108,7 +113,6 @@ function(Backbone, _, $, app, Segment, i18n, Permissions){
                 delete segment.attributes.highlights;
 
                 this.segments.add(segment);
-                segment.save();
             } else {
                 alert( segment.validationError );
             }
@@ -130,7 +134,7 @@ function(Backbone, _, $, app, Segment, i18n, Permissions){
             }
 
             var segment = new Segment.Model({
-                target: { "@id": idPost, "@type": "email" },
+                target: { "@id": idPost, "@type": Types.EMAIL },
                 text: text,
                 quote: text,
                 idCreator: app.getCurrentUser().getId(),
@@ -165,12 +169,19 @@ function(Backbone, _, $, app, Segment, i18n, Permissions){
 
 
         /**
-         * Shows the given segment with an small fx
+         * Shows the given segment
          * @param {Segment} segment
          */
         showSegment: function(segment){
             app.openPanel(app.segmentList);
-
+            this.highlightSegment(segment);
+        },
+        
+        /**
+         * Highlight the given segment with an small fx
+         * @param {Segment} segment
+         */
+        highlightSegment: function(segment){
             var selector = app.format('.box[data-segmentid={0}]', segment.cid),
                 box = this.$(selector);
 
@@ -184,6 +195,7 @@ function(Backbone, _, $, app, Segment, i18n, Permissions){
                 box.highlight();
             }
         },
+
         
         /**
          * Closes the panel
@@ -290,7 +302,7 @@ function(Backbone, _, $, app, Segment, i18n, Permissions){
 
             var annotation = app.getDraggedAnnotation();
             if( annotation ){
-                app.saveCurrentAnnotation();
+                app.saveCurrentAnnotationAsExtract();
                 return;
             }
 

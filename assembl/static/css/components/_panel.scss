@@ -1,8 +1,10 @@
+
+
 // The panel
 // =========
 .panel {
   @include box-shadow(rgba(0, 0, 0, 0.1) 0 0 2px 0px);
-  @include border-radius( 3px );
+  @include border-radius( 5px );
   @include box-sizing( border-box );
     position: relative;
     z-index: 10;
@@ -12,33 +14,20 @@
     overflow: hidden;
     
     fieldset {
-        //@include border-radius( 5px );
-        //background-color: $panel-header-bg-color;
         margin: 10px;
         margin-top: 1.4em; //height of the legend32 + 0.5em
-        padding: 5px;
         padding-top: 1.4em; //height of the legend + 0.5em
-        //box-shadow: 0 0 10px rgba(0,0,0,.3);
         position: relative;
-        //border: 2px groove threedface;
         legend {
-            @include border-radius( 5px );
-            border: 1px solid $panel-header-bg-color;
             height: 1.8em;
             position: absolute;
             top: -0.9em; // 1/2 x height
-            background-color: #fff;
             padding: 0;
-            margin-left: 1em;
             font-weight: bold;
-
-            //border-top: none;
-            //box-shadow: inset 0 -5px 5px rgba(0,0,0,.2);
-            //text-shadow: 1px 1px 2px rgba(0,0,0,.3);
             span {
                 line-height: 1.8em;
                 display: block;
-                margin: 0 0.5em 0.5em 0.5em;
+                margin: 0 0.5em 0.5em 0;
             }
         }
     }
@@ -101,18 +90,10 @@
     overflow-x: hidden;
     width: 100%;
     border-radius: 4px;
-    margin: 10px;
-    //padding: 5px;
+    margin: 10px 0;
     cursor: text;
-    //min-height: 2rem;
-    p {
-    
-    }
-    &:hover,
-    &:focus {
-        border-color: lightgray;
-        background-color: white;
-    }
+    background-color: white;
+    min-height: 30px;
 }
 
 // +++++++
@@ -126,25 +107,25 @@
 // The container for an editablearea
 // ------------------
 .panel-editablebox {
-    position: relative;
-
-    &.is-editing {
-        background-color: #dbf2ff;
-    }
-
+  border:1px solid transparent;
+  position: relative;
+  &.is-editing {
+      background-color: #dbf2ff;
+  }
 }
+.panel-editablearea.canEdit:hover{
+    border:1px solid #cccccc;
+    @include box-shadow(rgba(0, 0, 0, 0.1) 0px 1px 1px inset);
+  }
 
 // To put the content
 // -----------
 .panel-body {
-    //position: relative;
     //The scrollbars do not work with position relative
     position: absolute;
     top: $panel-header-height;
-    //top: 0;
     right: 0;
-    bottom: $panel-header-height;
-    //bottom: 0;
+    bottom: 0;
     left: 0;
     overflow-y: auto;
     overflow-x: hidden;
@@ -153,8 +134,10 @@
     .panel.is-dragover & {
         background-color: $dragbox-background-color;
     }
+}
 
-
+.panel-body--has-footer {
+  bottom: $panel-header-height;
 }
 
 // dropzone above the panel-body

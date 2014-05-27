@@ -37,10 +37,12 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n, Permissions, Message
          * @param {MessageModel} obj the model
          */
         initialize: function(obj){
-            this.model.on('change:isSelected', this.onIsSelectedChange, this);
-            this.model.on('replaced', this.onReplaced, this);
-            this.model.on('showBody', this.onShowBody, this);
-            this.model.on('change', this.render, this);
+            //TODO ghourlier: this method does not exist; looks like legacy. try to identify
+            //what it was meant for?
+            //this.listenTo(this.model, 'change:isSelected', this.onIsSelectedChange);
+            this.listenTo(this.model, 'replacedBy', this.onReplaced);
+            this.listenTo(this.model, 'showBody', this.onShowBody);
+            this.listenTo(this.model, 'change', this.render);
             this.messageListView = obj.messageListView;
             this.viewStyle = this.messageListView.defaultMessageStyle;
             this.messageListView.on('annotator:initComplete', this.onAnnotatorInitComplete, this);
@@ -356,12 +358,6 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n, Permissions, Message
          * @event
          */
         onMessageTitleClick: function(ev){
-            if( ev ){
-                // Avoiding collapse if clicked on the link
-                if( ev.target.id === 'message-linkbutton' ){
-                    return;
-                }
-            }
             this.toggleViewStyle();
             this.render();
             if (this.viewStyle == this.availableMessageViewStyles.FULL_BODY) {

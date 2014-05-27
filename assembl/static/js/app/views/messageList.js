@@ -1,5 +1,5 @@
-define(['backbone', 'underscore', 'jquery', 'app', 'views/messageFamily', 'models/message', 'i18n', 'views/messageListPostQuery', 'permissions', 'views/messageSend'],
-function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permissions, MessageSendView){
+define(['backbone', 'underscore', 'jquery', 'app', 'views/panel', 'views/messageFamily', 'models/message', 'i18n', 'views/messageListPostQuery', 'permissions', 'views/messageSend'],
+function(Backbone, _, $, app, PanelView, MessageFamilyView, Message, i18n, PostQuery, Permissions, MessageSendView){
     'use strict';
 
     /**
@@ -11,7 +11,7 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
     /**
      * @class views.MessageList
      */
-    var MessageList = Backbone.View.extend({
+    var MessageList = PanelView.extend({
         ViewStyles: {
             THREADED: {id: "threaded",
                         css_id: "messageList-view-threaded",
@@ -53,46 +53,58 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
          *  @init
          */
         initialize: function(obj){
-            /*this.on("all", function(eventName) {
-                console.log("messageList event received: ", eventName);
-              });
-            this.messages.on("all", function(eventName) {
-                console.log("messageList collection event received: ", eventName);
-              });*/
             
             if( obj.button ){
                 this.button = $(obj.button).on('click', app.togglePanel.bind(window, 'messageList'));
             }
+
+            PanelView.prototype.initialize.apply(this);
             this.renderedMessageViewsPrevious = {};
             this.renderedMessageViewsCurrent = {};
             
             this.setViewStyle(this.getViewStyleDefById(this.storedMessageListConfig.viewStyleId) || this.ViewStyles.THREADED);
             this.defaultMessageStyle = app.getMessageViewStyleDefById(this.storedMessageListConfig.messageStyleId) || app.AVAILABLE_MESSAGE_VIEW_STYLES.PREVIEW;
-            this.currentQuery.setView(this.currentQuery.availableViews.REVERSE_CHRONOLOGICAL);
-            
-            this.listenTo(this.messages, 'reset', function() {
+
+            /**
+             * @ghourlier
+             * TODO: Usually it would necessary tu push notification rather than fetch every time the model change
+             * Need to be a call to action
+             * */
+            this.listenTo(this.messages, 'add reset', function(){
+
+                var emptySubject = this.$('.messageSend .messageSend-subject').val(),
+                    emptyBody = this.$('.messageSend .messageSend-body').val();
+
+                if(emptySubject != '' && emptySubject !== undefined){
+
+                  return;
+                }
+
                 that.messagesFinishedLoading = true;
                 that.invalidateResultsAndRender();
+                that.initAnnotator();
+
             });
-            this.listenTo(this.messages, 'add', this.invalidateResultsAndRender);
+
+            //this.listenTo(this.messages, 'add', this.invalidateResultsAndRender);
             // TODO:  Benoitg:  I didn't write this part, but i think it needs a
             // re-render, not just an init
-            this.listenTo(this.messages, 'change', this.initAnnotator);
+            // this.listenTo(this.messages, 'change', this.initAnnotator);
             // TODO:  FIXME!!! Benoitg - 2014-05-05
-            this.listenTo(app.segmentList.segments, 'add remove reset change', this.initAnnotator);
+            this.listenTo(app.segmentList.segments, 'add remove reset', this.initAnnotator);
             
             var that = this;
             app.on('idea:select', function(idea){
-                that.currentQuery.clearFilter(that.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, null);
-                if( idea ){
-                    that.currentQuery.clearFilter(that.currentQuery.availableFilters.POST_IS_ORPHAN, null);
-                    that.currentQuery.addFilter(that.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, idea.getId());
-                    app.openPanel(app.messageList);
+                if(idea && that.currentQuery.isFilterInQuery(that.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, idea.getId())) {
+                    //Filter is already in sync
+                    //TODO:  Detect the case where there is no idea selected, and we already have no filter on ideas
+                    return;
                 }
-                if(app.debugRender) {
-                    console.log("messageList: triggering render because new idea was selected");
+                else {
+                    that.filterThroughPanelLock(function(){
+                        that.syncWithCurrentIdea();
+                    }, 'syncWithCurrentIdea');
                 }
-                that.render();
             });
             
         },
@@ -100,6 +112,34 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
         invalidateResultsAndRender: function(){
             this.currentQuery.invalidateResults();
             this.render();
+        },
+        
+        /**
+         * Synchronizes the panel with the currently selected idea (possibly none)
+         */
+        syncWithCurrentIdea: function(){
+            var currentIdea = app.getCurrentIdea();
+            //console.log("messageList:syncWithCurrentIdea(): New idea is now: ",currentIdea);
+            app.openPanel(app.messageList);
+            if(currentIdea && this.currentQuery.isFilterInQuery(this.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, currentIdea.getId())) {
+                //Filter is already in sync
+                //TODO:  Detect the case where there is no idea selected, and we already have no filter on ideas
+                return;
+            }
+            else {
+                this.currentQuery.clearFilter(this.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, null);
+                
+                if( currentIdea ){
+                    this.currentQuery.clearFilter(this.currentQuery.availableFilters.POST_IS_ORPHAN, null);
+                    this.currentQuery.addFilter(this.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, currentIdea.getId());
+                    //app.openPanel(app.messageList);
+                }
+                if(app.debugRender) {
+                    console.log("messageList:syncWithCurrentIdea(): triggering render because new idea was selected");
+                }
+                //console.log("messageList:syncWithCurrentIdea(): Query is now: ",this.currentQuery._query);
+                this.render();
+            }
         },
         /**
          * The template
@@ -183,7 +223,7 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
             });
             return toReturn;
         },
-        
+
         /**
          * The actual rendering for the render function
          * @return {views.Message}
@@ -251,15 +291,11 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
             }
             if(app.debugRender) {
                 console.log("messageList:render() is firing, "+renderStatus()+this.messages.length+" messages in collection.");
-                /*
-                console.log("message collection is: ");
-                this.messages.map(function(message){
-                    console.log(message.getId())
-                })*/
             }
             this.currentlyRendering = true;
-            
+
             app.trigger('render');
+            this.renderPanelButton();
             if(this.messagesFinishedLoading) {
                 this.blockPanel();
                 this.currentQuery.execute(function(data){
@@ -269,8 +305,8 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
                 });
             }
             else {
-                this.render_real();
-                this.blockPanel();
+                 this.render_real();
+                 this.blockPanel();
             }
             this.currentlyRendering = false;
             return this;
@@ -436,10 +472,16 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
                 var segment = app.segmentList.addAnnotationAsSegment(annotation, app.currentAnnotationIdIdea);
                 if( !segment.isValid() ){
                     annotator.deleteAnnotation(annotation);
-                } else if( app.currentAnnotationIdea ){
-                    app.currentAnnotationIdea.addSegmentAsChild(segment);
+                } else if( app.currentAnnotationNewIdeaParentIdea ){
+                    //We asked to create a new idea from segment
+                    that.lockPanel();
+                    var newIdea = app.currentAnnotationNewIdeaParentIdea.addSegmentAsChild(segment);
+                    app.setCurrentIdea(newIdea);
                 }
-                app.currentAnnotationIdea = null;
+                else {
+                    segment.save();
+                }
+                app.currentAnnotationNewIdeaParentIdea = null;
                 app.currentAnnotationIdIdea = null;
             });
 
@@ -495,27 +537,6 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
 
             this.annotator.destroy();
             this.annotator = null;
-        },
-
-        /**
-         * Blocks the panel
-         */
-        blockPanel: function(){
-            this.$('.panel').addClass('is-loading');
-        },
-
-        /**
-         * Unblocks the panel
-         */
-        unblockPanel: function(){
-            this.$('.panel').removeClass('is-loading');
-        },
-
-        /**
-         * Sets the panel as full screen
-         */
-        setFullscreen: function(){
-            app.setFullscreen(this);
         },
 
         /**
@@ -715,7 +736,7 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
                     console.log("showMessageById() message not found, calling showMessageById() recursively");
                     that.showMessageById(id, callback);
                 }
-                this.once("render_complete",success);
+                this.listenToOnce("render_complete",success);
                 return;
             }
             if( ! _.isFunction(callback) ){
@@ -745,15 +766,6 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
                 console.log("showMessageById(): ERROR:  Message " + id + " not found in collection");
             }
 
-        },
-
-        /**
-         * Close the panel
-         */
-        closePanel: function(){
-            if( this.button ){
-                this.button.trigger('click');
-            }
         },
 
         /**
@@ -820,6 +832,7 @@ function(Backbone, _, $, app, MessageFamilyView, Message, i18n, PostQuery, Permi
                 var key = 'click #'+DEFAULT_MESSAGE_VIEW_LI_ID_PREFIX+messageViewStyle.id;
                 data[key] = 'onDefaultMessageViewStyle';
             } );
+            _.extend(data, PanelView.prototype.events());
             return data;
         },
 

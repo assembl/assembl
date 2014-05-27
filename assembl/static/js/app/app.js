@@ -1,5 +1,5 @@
-define(['jquery', 'underscore', 'ckeditor', 'moment', 'i18n', 'zeroclipboard', 'types', 'permissions'],
-function($, _, ckeditor, Moment, i18n, ZeroClipboard, Types, Permissions){
+define(['jquery', 'underscore', 'ckeditor', 'moment', 'moment_lang', 'i18n', 'zeroclipboard', 'types', 'permissions'],
+    function($, _, ckeditor, Moment, MomentLang, i18n, ZeroClipboard, Types, Permissions){
     'use strict';
 
     ckeditor.disableAutoInline = true;
@@ -29,6 +29,12 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard, Types, Permissions){
          * @type {boolean}
          */
         debugRender: false,
+
+        /**
+         * Send debugging output to console.log to observe socket input
+         * @type {boolean}
+         */
+        debugSocket: false,
             
         /**
          * Reference to the body as jQuery object
@@ -430,7 +436,7 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard, Types, Permissions){
         /**
          * Saves the current annotation if there is any
          */
-        saveCurrentAnnotation: function(){
+        saveCurrentAnnotationAsExtract: function(){
             if( app.currentUser.can(Permissions.EDIT_EXTRACT) &&
                 app.messageList.annotatorEditor ){
                 app.messageList.annotatorEditor.element.find('.annotator-save').click();
@@ -494,7 +500,8 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard, Types, Permissions){
          * @return {function} The Underscore.js _.template return
          */
         loadTemplate: function(id){
-            return _.template( $('#tmpl-'+id).html() );
+            var template = _.template( $('#tmpl-'+id).html() );
+            return template;
         },
 
         /**
@@ -666,6 +673,7 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard, Types, Permissions){
          * @param  {Idea} [idea]
          */
         setCurrentIdea: function(idea){
+            //console.log("setCurrentIdea: setting to: ", idea);
             if (idea != this.getCurrentIdea()) {
                 app.trigger('idea:select', [idea]);
             }
@@ -714,6 +722,9 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard, Types, Permissions){
                 case Types.IDEA:
                 case Types.ROOT_IDEA:
                     return app.ideaList.ideas;
+
+                case Types.IDEA_LINK:
+                    return app.ideaList.ideaLinks;
 
                 case Types.POST:
                 case Types.ASSEMBL_POST:
@@ -884,6 +895,7 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard, Types, Permissions){
 
             var onMouseLeave = function(ev){
                 parent.removeClass('is-open');
+                ev.stopPropagation(); // so that onDropdownClick() is not called again immediately after when we click
             };
 
             if( parent.hasClass('is-open') ){
@@ -969,6 +981,7 @@ function($, _, ckeditor, Moment, i18n, ZeroClipboard, Types, Permissions){
          */
         init: function(){
             app.loadCurrentUser();
+            Moment.lang(assembl_locale);
 
             app.body.removeClass('preload');
             app.createSelectionTooltip();

@@ -21,66 +21,45 @@
             </div>
         </div>
         <div class="card-comment">
-            <form role="form" ng-submit="sendNewIdea()">
+            <form role="form" ng-submit="sendSubIdea()">
                 <div class="form-group">
-                    <input type="text" ng-model="formData.title" class="form-control" id="inputEmail1" placeholder="{{'title' | translate}}">
+                    <input type="text" ng-model="formData.short_title" class="form-control" id="inputEmail1" placeholder="{{'title' | translate}}" required>
                 </div>
                 <div class="form-group">
-                    <textarea ng-model="formData.message" class="form-control" rows="3" placeholder="description"></textarea>
+                    <textarea ng-model="formData.definition" class="form-control" rows="3" placeholder="description" required></textarea>
                 </div>
                 <button type="submit" class="btn btn-primary btn-sm">{{'send' | translate}}</button>
             </form>
         </div>
     </div>
 
-    <div class="col-md-6">
+    <div class="col-md-7">
         <div class="session-comment">
             <div class="media" ng-if="ideas.length > 1" ng-repeat="idea in ideas">
                 <div class="pull-left thumbnail">
                     <img class="media-object" ng-src="{{idea.avatar}}" alt="40x40" style="width: 40px; height: 40px;">
-                    <div class="caption">
-
-                    </div>
                 </div>
                 <div class="media-body">
-                    <h5 class="media-heading pull-left">{{idea.fullname}}<i class="icon-lamp"></i></h5>
+                    <h5 class="media-heading pull-left">{{idea.shortTitle}}<i class="icon-lamp"></i></h5>
                     <span class="pull-right">
                         <vote id="idea.id"></vote>
                     </span>
                     <div class="row">
                         <div class="col-md-11 comment-idea">
-                            <p>{{idea.message}}</p>
+                            <p>{{idea.definition}}</p>
+                            <i class="text-info">{{idea.creationDate}}</i>
                         </div>
                     </div>
-                    <div ng-show="showSubComment" class="sub-comment">
-                        <form role="form" ng-submit="commentIdea()">
-                            <div class="form-group">
-                                <textarea ng-model="formData.comment" class="form-control" rows="2" placeholder="{{'comment'| translate }}"></textarea>
-                            </div>
-                            <button type="submit" class="btn btn-default btn-xs pull-left" ng-click="showSubComment = ! showSubComment">{{'cancel'| translate }}</button>
-                            <button type="submit" class="btn btn-primary btn-xs pull-right">{{'send'| translate }}</button>
-                        </form>
-                    </div>
-                    <p>
-                        <span class="text-primary" ng-click="showComment = ! showComment" ng-show="idea.comments.length>0">{{'comments' | translate: {nb: idea.comments.length} }} |</span>
-                        <span class="text-primary" ng-click="showSubComment = true">{{'comment'| translate }}</span>&nbsp;
-                    </p>
-                    <div ng-show="showComment">
-                        <div class="media media-comment" ng-if="idea.comments.length > 1" ng-repeat="com in idea.comments">
-                            <a class="pull-left" href="#">
-                                <img class="media-object" alt="40x40" ng-src="{{com.avatar}}" style="width: 30px; height: 30px;">
-                            </a>
-                            <div class="media-body">
-                                <h5 class="media-heading">{{com.fullname}}</h5>
-                                <h6>{{com.message}}</h6>
-                            </div>
-                        </div>
-                    </div>
+
+                    <comments idea="idea"></comments>
                 </div>
             </div>
         </div>
+        <button ng-show="ideas.length > 1" class="btn btn-primary btn-sm pull-right" ng-click="totalVote()">{{'validVote'| translate }}</button>
 
-        <button class="btn btn-primary btn-sm pull-right" ng-click="totalVote()">{{'validVote'| translate }}</button>
+        <!--<section id="loader">
+            <span class="loader loader-bars"><span></span></span>
+        </section>-->
     </div>
 </div>
 

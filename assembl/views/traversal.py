@@ -1,3 +1,4 @@
+from sqlalchemy import select
 from sqlalchemy.orm.attributes import InstrumentedAttribute
 from sqlalchemy.inspection import inspect as sqlainspect
 from pyramid.security import Allow, Everyone, ALL_PERMISSIONS, DENY_ALL
@@ -238,9 +239,14 @@ class CollectionContext(object):
         cls = self.collection.collection_class
         if id_only:
             query = cls.db().query(cls.id)
+            return self.decorate_query(query).distinct()
         else:
+            # There will be duplicates. But sqla takes care of them,
+            # virtuoso won't allow distinct on full query,
+            # and a distinct subquery takes forever.
+            # Oh, and quietcast loses the distinct. Just great.
             query = cls.db().query(cls)
-        return self.decorate_query(query)
+            return self.decorate_query(query)
 
     def decorate_query(self, query):
         # This will decorate a query with a join on the relation.

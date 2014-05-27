@@ -118,8 +118,7 @@
       li {
         display:inline-block;
         margin-right:-4px;
-      }
-      a {
+        > div {
         color: #aaaaaa;
         width: 130px;
         height: 35px;
@@ -132,6 +131,52 @@
           @extend %navbar-gradient;
           color: #ffffff;
         }
+        .lock-button {
+          position: relative;
+          display: inline-block;
+          @include transition-property(background-color);
+          @include transition-duration(0.1s);
+          .icon-lock {
+            color: #d54243;
+          }
+          .icon-lock-open {
+            color: #0c9f9b;
+          }
+          .icon-lock-open:before {
+            margin-right: 10px;
+            border-radius: 50%;
+            box-shadow: inset 0px 1px 0px #aaaaaa, 0px 4px 0px 0px #dddddd, 0px 1px 0px #eeeeee;
+            padding: 3px;
+            font-size: 10px;
+            position: absolute;
+            left: -27px;
+            top: -17px;
+          }
+          .icon-lock:before {
+            margin-right: 10px;
+            border-radius: 50%;
+            box-shadow: inset 0px 1px 0px #aaaaaa, 0px 0px 0px 0px #dddddd, 0px 1px 0px #eeeeee;
+            padding: 3px;
+            font-size: 10px;
+            position: absolute;
+            left: -27px;
+            top: -14px;
+          }
+
+        }
+        &.is-highlighted {
+            @include transition-property(background);
+            @include transition-duration(1s);
+            @include transition-timing-function(ease-in);
+            background: white none;
+            .icon-lock {
+
+                color: red;
+            }
+        }
+        
+      }
+        
       }
     }
   }
@@ -172,7 +217,7 @@
   box-sizing: border-box;
   height: 20px;
   position: absolute;
-  top: 50px;
+  top: 44px;
   bottom: 0;
   left: 12px;
 }

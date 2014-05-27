@@ -11,9 +11,11 @@
         }
       #post-query-filter-info {
         padding: 0;
+        margin-top: 8px;
+        margin-bottom: 12px;
          li {
-           display: inline;
-           padding: .2em .6em .3em;
+           display: inline-block;
+           padding: .5em .6em .5em;
            font-size: 85%;
            line-height: 1;
            color: #ffffff;
@@ -23,10 +25,17 @@
            border-radius: .25em;
            background-color: #999999;
            margin-right: 5px;
+           margin-bottom: 2px;
          }
       }
       #post-query-results-info {
         margin-top: 5px;
+      }
+
+      .actions {
+        position: absolute;
+        right: 8px;
+        top: 28px;
       }
     } 
 }

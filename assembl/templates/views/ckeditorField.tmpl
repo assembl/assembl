@@ -11,6 +11,6 @@
     </div>
 <% } else { %>
     <div class="panel-editablebox">
-        <div class="ckeditorField-mainfield text margin panel-editablearea"><%= text ? text : placeholder %></div>
+        <div class="ckeditorField-mainfield text panel-editablearea <% if(canEdit){ %>canEdit<% } %>"><%= text ? text : placeholder %></div>
     </div>
 <% } %>

@@ -34,7 +34,11 @@ function(Backbone, _, Idea, Message, app, i18n, Types, EditableField, CKEditorFi
                 this.idea = new Idea.Model();
             }
 
-            this.idea.on('change', this.render, this);
+            this.listenTo(this.idea, 'change', this.render);
+
+            if( ! obj.idea ){
+                this.idea = null;
+            }
 
             // Benoitg - 2014-05-05:  There is no need for this, if an idealink
             // is associated with the idea, the idea will recieve a change event
@@ -45,12 +49,6 @@ function(Backbone, _, Idea, Message, app, i18n, Types, EditableField, CKEditorFi
             var that = this;
             app.on('idea:select', function(idea){
                 that.setCurrentIdea(idea);
-                if(idea) {
-                    $('#button-ideaPanel').show();
-                }
-                else {
-                    $('#button-ideaPanel').hide();
-                }
             });
         },
 
@@ -62,47 +60,57 @@ function(Backbone, _, Idea, Message, app, i18n, Types, EditableField, CKEditorFi
                 console.log("ideaPanel:render() is firing");
             }
             app.trigger('render');
+            var segments = {},
+            currentUser = app.getCurrentUser(),
+            canEdit = currentUser.can(Permissions.EDIT_IDEA) || false,
+            canEditNextSynthesis = currentUser.can(Permissions.EDIT_SYNTHESIS);
+            if(this.idea) {
+                segments = this.idea.getSegments();
+            }
 
-            var segments = this.idea.getSegments(),
-                currentUser = app.getCurrentUser(),
-                editing = currentUser.can(Permissions.EDIT_IDEA) && this.idea.get('ideaPanel-editing') || false;
             this.$el.html( this.template( {
                 idea:this.idea,
                 segments:segments,
-                editing:editing,
+                canEdit:canEdit,
                 i18n:i18n,
                 sprintf:sprintf,
                 canDelete:currentUser.can(Permissions.EDIT_IDEA),
+                canEditNextSynthesis:canEditNextSynthesis,
                 canEditExtracts:currentUser.can(Permissions.EDIT_EXTRACT),
                 canEditMyExtracts:currentUser.can(Permissions.EDIT_MY_EXTRACT),
                 canAddExtracts:currentUser.can(Permissions.EDIT_EXTRACT) //TODO: This is a bit too coarse
             } ) );
             this.panel = this.$('.panel');
-
+            app.initClipboard();
+            if(this.idea) {
             var shortTitleField = new EditableField({
                 'model': this.idea,
                 'modelProp': 'shortTitle',
                 'class': 'panel-editablearea text-bold',
                 'data-tooltip': i18n.gettext('Short expression (only a few words) of the idea in the table of ideas.'),
-                'placeholder': i18n.gettext('New idea')
+                'placeholder': i18n.gettext('New idea'),
+                'canEdit': canEdit
             });
             shortTitleField.renderTo(this.$('#ideaPanel-shorttitle'));
 
-            app.initClipboard();
+
 
             this.longTitleField = new CKEditorField({
                 'model': this.idea,
                 'modelProp': 'longTitle',
-                'placeholder': this.idea.getLongTitleDisplayText()
+                'placeholder': this.idea.getLongTitleDisplayText(),
+                'canEdit': canEditNextSynthesis
             });
-            this.longTitleField.renderTo( this.$('#ideaPanel-longtitle') );
+            this.longTitleField.renderTo( this.$('#ideaPanel-longtitle'));
             
             this.definitionField = new CKEditorField({
                 'model': this.idea,
                 'modelProp': 'definition',
-                'placeholder': this.idea.getDefinitionDisplayText()
+                'placeholder': this.idea.getDefinitionDisplayText(),
+                'canEdit': canEdit
             });
-            this.definitionField.renderTo( this.$('#ideaPanel-definition') );
+            this.definitionField.renderTo( this.$('#ideaPanel-definition'));
+
             this.commentView = new MessageSendView({
                 'allow_setting_subject': false,
                 'reply_idea': this.idea,
@@ -110,9 +118,10 @@ function(Backbone, _, Idea, Message, app, i18n, Types, EditableField, CKEditorFi
                 'send_button_label': i18n.gettext('Send your comment'),
                 'subject_label': null,
                 'mandatory_body_missing_msg': i18n.gettext('You need to type a comment first...'),
-                'mandatory_subject_missing_msg': null,
+                'mandatory_subject_missing_msg': null
             });
             this.$('#ideaPanel-comment').append( this.commentView.render().el );
+            }
             return this;
         },
 
@@ -174,34 +183,23 @@ function(Backbone, _, Idea, Message, app, i18n, Types, EditableField, CKEditorFi
          * @param  {Idea} [idea=null]
          */
         setCurrentIdea: function(idea){
-            if( idea !== null ){
+            if( idea !== this.idea ){
                 if( this.idea ) {
-                    if( this.idea.getId() === idea.getId() ){
-                        return; // already the current one
-                    } else {
-                        this.idea.set('isSelected', false);
-                        this.idea.off('change', this.render);
-                    }
+                    this.idea.off('change', this.render);
                 }
                 this.idea = idea;
-                this.idea.set('isSelected', true);
+                if( idea !== null ){
 
-                if( this.idea.get('@type') === Types.IDEA ){
+                    this.idea.on('change', this.render, this);
+    
                     app.openPanel(app.ideaPanel);
                 } else {
-                    app.closePanel(app.ideaPanel);
+                    //TODO: More sophisticated behaviour here, depending 
+                    //on if the panel was opened by selection, or by something else.
+                    //app.closePanel(app.ideaPanel);
                 }
-            } else {
-                if( this.idea ){
-                    this.idea.set('isSelected', false);
-                }
-
-                this.idea = new Idea.Model();
-                app.closePanel(app.ideaPanel);
+                this.render();
             }
-
-            this.idea.on('change', this.render, this);
-            this.render();
         },
 
         /**
@@ -226,8 +224,8 @@ function(Backbone, _, Idea, Message, app, i18n, Types, EditableField, CKEditorFi
             this.blockPanel();
             this.idea.destroy({ success: function(){
                 that.unblockPanel();
-                app.closePanel( app.ideaPanel );
                 app.trigger('idea:delete');
+                app.setCurrentIdea(null);
             }});
         },
 
@@ -241,7 +239,7 @@ function(Backbone, _, Idea, Message, app, i18n, Types, EditableField, CKEditorFi
             'dragleave .panel': 'onDragLeave',
             'drop .panel': 'onDrop',
 
-            'click .closebutton': 'onCloseButtonClick',
+            'click .closebutton': 'onSegmentCloseButtonClick',
             'click #ideaPanel-clearbutton': 'onClearAllClick',
             'click #ideaPanel-closebutton': 'onTopCloseButtonClick',
             'click #ideaPanel-deleteButton': 'onDeleteButtonClick',
@@ -310,7 +308,7 @@ function(Backbone, _, Idea, Message, app, i18n, Types, EditableField, CKEditorFi
         /**
          * @event
          */
-        onCloseButtonClick: function(ev){
+        onSegmentCloseButtonClick: function(ev){
             var cid = ev.currentTarget.getAttribute('data-segmentid');
 
             if( app.segmentList && app.segmentList.segments ){
@@ -331,12 +329,19 @@ function(Backbone, _, Idea, Message, app, i18n, Types, EditableField, CKEditorFi
                 this.idea.get('segments').reset();
             }
         },
-
+        /**
+         * Closes the panel
+         */
+        closePanel: function(){
+            if(this.button){
+                this.button.trigger('click');
+            }
+        },
         /**
          * @event
          */
         onTopCloseButtonClick: function(){
-            app.setCurrentIdea(null);
+            this.closePanel();
         },
 
         /**

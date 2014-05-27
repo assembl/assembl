@@ -53,7 +53,8 @@ $font-icon-dir: "#{$font-dir}/icon";
   /* Uncomment for 3D effect */
   /* text-shadow: 1px 1px 1px rgba(127, 127, 127, 0.3); */
 }
- 
+/* These should correspond to 'code' in static/font/icon/config.json
+   The font itself is constructed with 'fab devenv compile_fontello_fonts' */
 .icon-ok-squared:before { content: '\e817'; } /* '' */
 .icon-reply:before { content: '\e811'; } /* '' */
 .icon-plus-squared-small:before { content: '\e800'; } /* '' */
@@ -94,14 +95,6 @@ $font-icon-dir: "#{$font-dir}/icon";
 .icon-user:before { content: '\e801'; } /* '' */
 .icon-link:before { content: '\e824'; } /* '' */
 .icon-download:before { content: '\e804'; } /* '' */
-
-/* TODO: refactoring */
-.icon-comment:before {
-  display: inline-block;
-  width: 14px;
-  height: 14px;
-  margin-right: 5px;
-  content: "";
-  background: url('../img/icon/comment.png') 0 0 no-repeat;
-  background-size: 100%;
-} /* '' */
+.icon-lock:before { content: '\e828'; } /* '' */
+.icon-lock-open:before { content: '\e829'; } /* '' */
+.icon-comment:before { content: '\e82a'; } /* '' */

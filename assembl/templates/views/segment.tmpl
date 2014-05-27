@@ -26,7 +26,7 @@
     <div class="segment-author">
         <%
         var type = segment.get("target")["@type"];
-        if ( type == "Email" || type == "Post" ) { var post = segment.getAssociatedPost(); %>
+        if ( type == "Email" || type == "Post" || type == "AssemblPost" || type == "ImportedPost") { var post = segment.getAssociatedPost(); %>
             {% set postCreatorAvatarImg = '<img src="<%= post.getCreator().getAvatarUrl(35) %>" class="image-rounded" alt="" />' %}
             {% set postCreatorName = '<%= post.getCreator().get("name") %>' %}
             {% set postDate = '<%= app.getDateFormated(post.get("date")) %>' %}
@@ -36,7 +36,7 @@
             <img src="/static/img/icon/search_document.svg" width="35" height="35" class="image-rounded" alt="{{ gettext('Document extracted from the web') }}" />
             {{ gettext('Harvested from webpage') }}
         <% } else { %>
-            {{ gettext('Unknown segment type') }}
+            {{ gettext('Unknown segment type: ') }}<%= type %>
         <% } %>
     </div>
     <div class="segment-harvester">
