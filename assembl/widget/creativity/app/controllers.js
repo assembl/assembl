@@ -221,7 +221,7 @@ creativityApp.controller('creativitySessionCtl',
 
         $scope.getSubIdeaFromIdea();
 
-    },1000);
+    },500);
 
     $scope.$watch("message", function(value){
 
@@ -246,7 +246,8 @@ creativityApp.controller('creativitySessionCtl',
 
         $http.get(rootUrl).then(function(response){
             angular.forEach(response.data, function(item){
-                if(typeof item.widget_add_post_endpoint != 'undefined'){
+
+                if(item.widget_add_post_endpoint){
 
                     item.widget_add_post_endpoint = '/data/'+item.widget_add_post_endpoint.split(':')[1];
 
@@ -316,7 +317,12 @@ creativityApp.controller('creativitySessionCtl',
 }]);
 
 creativityApp.controller('ratingCtl',
-    ['$scope', function($scope){
-
+    ['$scope', 'localConfig', function($scope, localConfig){
+    /**
+     * Load config card
+     */
+    localConfig.fetch().success(function(data){
+        $scope.cards = data.card_game;
+    });
 
 }]);

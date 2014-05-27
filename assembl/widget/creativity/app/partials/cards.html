@@ -19,10 +19,10 @@
     <div class="card-comment">
         <form role="form" ng-submit="sendIdea()">
             <div class="form-group">
-                <input type="text" ng-model="formData.title" class="form-control" id="inputEmail1" placeholder="{{'title' | translate}}">
+                <input type="text" ng-model="formData.title" class="form-control" id="inputEmail1" placeholder="{{'title' | translate}}" required>
             </div>
             <div class="form-group">
-                <textarea ng-model="formData.description" class="form-control" rows="3" placeholder="description"></textarea>
+                <textarea ng-model="formData.description" class="form-control" rows="3" placeholder="description"  required></textarea>
             </div>
             <button type="submit" class="btn btn-primary">{{'send' | translate}}</button>
         </form>
