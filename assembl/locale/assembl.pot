@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: assembl 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-05-25 17:44-0400\n"
+"POT-Creation-Date: 2014-05-26 20:48-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -73,7 +73,7 @@ msgstr ""
 msgid "Extract"
 msgstr ""
 
-#: assembl/static/js/app/app.js:913
+#: assembl/static/js/app/app.js:914
 msgid "ajax error message:"
 msgstr ""
 
@@ -123,17 +123,17 @@ msgid "Unknown user"
 msgstr ""
 
 #: assembl/static/js/app/views/ideaInSynthesis.js:95
-#: assembl/static/js/app/views/message.js:123
+#: assembl/static/js/app/views/message.js:125
 msgid "Type your response here..."
 msgstr ""
 
 #: assembl/static/js/app/views/ideaInSynthesis.js:97
-#: assembl/static/js/app/views/message.js:125
+#: assembl/static/js/app/views/message.js:127
 msgid "Send your reply"
 msgstr ""
 
 #: assembl/static/js/app/views/ideaInSynthesis.js:100
-#: assembl/static/js/app/views/message.js:127
+#: assembl/static/js/app/views/message.js:129
 msgid "You did not type a response yet..."
 msgstr ""
 
@@ -150,7 +150,7 @@ msgid "Send your comment"
 msgstr ""
 
 #: assembl/static/js/app/views/ideaPanel.js:120
-#: assembl/static/js/app/views/messageList.js:261
+#: assembl/static/js/app/views/messageList.js:273
 msgid "You need to type a comment first..."
 msgstr ""
 
@@ -179,7 +179,7 @@ msgid "Threaded"
 msgstr ""
 
 #: assembl/static/js/app/views/messageList.js:22
-#: assembl/static/js/app/views/messageListPostQuery.js:137
+#: assembl/static/js/app/views/messageListPostQuery.js:142
 msgid "Chronological"
 msgstr ""
 
@@ -187,155 +187,175 @@ msgstr ""
 msgid "Reverse-Chronological"
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:249
+#: assembl/static/js/app/views/messageList.js:261
 msgid "No messages"
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:258
+#: assembl/static/js/app/views/messageList.js:270
 msgid ""
 "You can start a new topic in this discussion by typing a subject above, and a"
 " first post here..."
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:259
+#: assembl/static/js/app/views/messageList.js:271
 msgid "Start a new topic in this discussion"
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:260
+#: assembl/static/js/app/views/messageList.js:272
 #: assembl/templates/views/messageSend.tmpl:11
 msgid "New topic subject:"
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:262
+#: assembl/static/js/app/views/messageList.js:274
 msgid "You need to set a subject to add a new topic..."
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:314
+#: assembl/static/js/app/views/messageList.js:321
 #: assembl/templates/views/ideaList.tmpl:27
 #: assembl/templates/views/messageList.tmpl:8
 msgid "Expand all"
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:317
+#: assembl/static/js/app/views/messageList.js:324
 #: assembl/templates/views/ideaList.tmpl:27
 #: assembl/templates/views/messageList.tmpl:8
 msgid "Collapse all"
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:484
+#: assembl/static/js/app/views/messageList.js:491
 msgid "Send to clipboard"
 msgstr ""
 
-#: assembl/static/js/app/views/messageListPostQuery.js:21
-#: assembl/static/js/app/views/messageListPostQuery.js:34
+#: assembl/static/js/app/views/messageListPostQuery.js:22
+#, python-format
+msgid "Discuss idea %s"
+msgstr ""
+
+#: assembl/static/js/app/views/messageListPostQuery.js:22
+#, python-format
+msgid "Discuss ideas: %s"
+msgstr ""
+
+#: assembl/static/js/app/views/messageListPostQuery.js:23
+#: assembl/static/js/app/views/messageListPostQuery.js:39
 msgid " AND "
 msgstr ""
 
-#: assembl/static/js/app/views/messageListPostQuery.js:43
-#: assembl/static/js/app/views/messageListPostQuery.js:58
+#: assembl/static/js/app/views/messageListPostQuery.js:37
+#, python-format
+msgid "Are in the conversation that follows post %s"
+msgstr ""
+
+#: assembl/static/js/app/views/messageListPostQuery.js:38
+#, python-format
+msgid "Are in the conversation that follows posts: %s"
+msgstr ""
+
+#: assembl/static/js/app/views/messageListPostQuery.js:48
+#: assembl/static/js/app/views/messageListPostQuery.js:63
 #, python-format
 msgid "%s %s"
 msgstr ""
 
-#: assembl/static/js/app/views/messageListPostQuery.js:46
+#: assembl/static/js/app/views/messageListPostQuery.js:51
 msgid "You've already read"
 msgstr ""
 
-#: assembl/static/js/app/views/messageListPostQuery.js:65
+#: assembl/static/js/app/views/messageListPostQuery.js:70
 #: assembl/templates/header.jinja2:13 assembl/templates/views/ideaPanel.tmpl:3
 msgid "Idea"
 msgstr ""
 
-#: assembl/static/js/app/views/messageListPostQuery.js:66
+#: assembl/static/js/app/views/messageListPostQuery.js:71
 msgid ""
 "Only include messages related to the specified idea.  The filter is "
 "recursive:  Messages related to ideas that are descendents of the idea are "
 "included."
 msgstr ""
 
-#: assembl/static/js/app/views/messageListPostQuery.js:76
+#: assembl/static/js/app/views/messageListPostQuery.js:81
 msgid "Post thread"
 msgstr ""
 
-#: assembl/static/js/app/views/messageListPostQuery.js:77
+#: assembl/static/js/app/views/messageListPostQuery.js:82
 msgid "Only include messages that are in the specified post reply thread."
 msgstr ""
 
-#: assembl/static/js/app/views/messageListPostQuery.js:86
+#: assembl/static/js/app/views/messageListPostQuery.js:91
 msgid "Are orphan (not relevent to any idea so far)"
 msgstr ""
 
-#: assembl/static/js/app/views/messageListPostQuery.js:87
+#: assembl/static/js/app/views/messageListPostQuery.js:92
 msgid "Only include messages that are not found in any idea."
 msgstr ""
 
-#: assembl/static/js/app/views/messageListPostQuery.js:96
+#: assembl/static/js/app/views/messageListPostQuery.js:101
 msgid "Publish a synthesis of the discussion"
 msgstr ""
 
-#: assembl/static/js/app/views/messageListPostQuery.js:97
+#: assembl/static/js/app/views/messageListPostQuery.js:102
 msgid "Only include messages that publish a synthesis of a discussion."
 msgstr ""
 
-#: assembl/static/js/app/views/messageListPostQuery.js:106
+#: assembl/static/js/app/views/messageListPostQuery.js:111
 msgid "not read yet"
 msgstr ""
 
-#: assembl/static/js/app/views/messageListPostQuery.js:107
+#: assembl/static/js/app/views/messageListPostQuery.js:112
 msgid "Only include unread messages."
 msgstr ""
 
-#: assembl/static/js/app/views/messageListPostQuery.js:129
+#: assembl/static/js/app/views/messageListPostQuery.js:134
 msgid "Threaded view"
 msgstr ""
 
-#: assembl/static/js/app/views/messageListPostQuery.js:144
+#: assembl/static/js/app/views/messageListPostQuery.js:149
 msgid "Activity feed (reverse chronological)"
 msgstr ""
 
-#: assembl/static/js/app/views/messageListPostQuery.js:391
+#: assembl/static/js/app/views/messageListPostQuery.js:396
 msgid "No query has been executed yet"
 msgstr ""
 
-#: assembl/static/js/app/views/messageListPostQuery.js:399
+#: assembl/static/js/app/views/messageListPostQuery.js:404
 msgid "Found no message in the discussion that:"
 msgstr ""
 
-#: assembl/static/js/app/views/messageListPostQuery.js:402
+#: assembl/static/js/app/views/messageListPostQuery.js:407
 msgid "There are no messages in the discussion."
 msgstr ""
 
-#: assembl/static/js/app/views/messageListPostQuery.js:408
+#: assembl/static/js/app/views/messageListPostQuery.js:413
 #, python-format
 msgid "(%d unread)"
 msgstr ""
 
-#: assembl/static/js/app/views/messageListPostQuery.js:411
+#: assembl/static/js/app/views/messageListPostQuery.js:416
 #, python-format
 msgid "Found %d messages %s that:"
 msgstr ""
 
-#: assembl/static/js/app/views/messageListPostQuery.js:414
+#: assembl/static/js/app/views/messageListPostQuery.js:419
 #, python-format
 msgid "Found %d messages %s:"
 msgstr ""
 
-#: assembl/static/js/app/views/messageListPostQuery.js:435
+#: assembl/static/js/app/views/messageListPostQuery.js:440
 #, python-format
 msgid "%s"
 msgstr ""
 
-#: assembl/static/js/app/views/messageListPostQuery.js:435
+#: assembl/static/js/app/views/messageListPostQuery.js:440
 #, python-format
 msgid "NOT %s"
 msgstr ""
 
-#: assembl/static/js/app/views/messageListPostQuery.js:445
+#: assembl/static/js/app/views/messageListPostQuery.js:450
 #, python-format
 msgid "%s for values %s"
 msgstr ""
 
-#: assembl/static/js/app/views/messageListPostQuery.js:455
+#: assembl/static/js/app/views/messageListPostQuery.js:460
 msgid "Clear filters"
 msgstr ""
 
@@ -371,7 +391,7 @@ msgstr ""
 msgid "Sending..."
 msgstr ""
 
-#: assembl/static/js/app/views/messageSend.js:97
+#: assembl/static/js/app/views/messageSend.js:96
 msgid "Message posted!"
 msgstr ""
 
@@ -838,28 +858,28 @@ msgstr ""
 msgid "Read More"
 msgstr ""
 
-#: assembl/templates/views/message.tmpl:61
-msgid "Go back to the entire topic thread"
-msgstr ""
-
-#: assembl/templates/views/message.tmpl:63
-msgid "Show only this message and its replies"
-msgstr ""
-
-#: assembl/templates/views/message.tmpl:66
-msgid "Copy the link to this message to clipboard"
-msgstr ""
-
-#: assembl/templates/views/message.tmpl:67
+#: assembl/templates/views/message.tmpl:70
 msgid "Reply"
 msgstr ""
 
-#: assembl/templates/views/message.tmpl:72
+#: assembl/templates/views/message.tmpl:76
 msgid "Mark as unread"
 msgstr ""
 
-#: assembl/templates/views/message.tmpl:74
+#: assembl/templates/views/message.tmpl:78
 msgid "Mark as read"
+msgstr ""
+
+#: assembl/templates/views/message.tmpl:82
+msgid "Go back to the entire topic thread"
+msgstr ""
+
+#: assembl/templates/views/message.tmpl:84
+msgid "Show only this message and its replies"
+msgstr ""
+
+#: assembl/templates/views/message.tmpl:87
+msgid "Copy the link to this message to clipboard"
 msgstr ""
 
 #: assembl/templates/views/messageList.tmpl:36
@@ -1007,72 +1027,72 @@ msgstr ""
 msgid "Your message is empty"
 msgstr ""
 
-#: assembl/views/auth/views.py:141
+#: assembl/views/auth/views.py:145
 #, python-format
 msgid "The username %s is already used"
 msgstr ""
 
-#: assembl/views/auth/views.py:159 assembl/views/auth/views.py:681
+#: assembl/views/auth/views.py:163 assembl/views/auth/views.py:701
 msgid "The passwords are not identical"
 msgstr ""
 
-#: assembl/views/auth/views.py:223
+#: assembl/views/auth/views.py:229
 msgid "We already have a user with this email."
 msgstr ""
 
-#: assembl/views/auth/views.py:227
+#: assembl/views/auth/views.py:233
 msgid "The passwords should be identical"
 msgstr ""
 
-#: assembl/views/auth/views.py:298 assembl/views/auth/views.py:612
+#: assembl/views/auth/views.py:308 assembl/views/auth/views.py:631
 msgid "This user cannot be found"
 msgstr ""
 
-#: assembl/views/auth/views.py:317
+#: assembl/views/auth/views.py:327
 msgid "Invalid user and password"
 msgstr ""
 
-#: assembl/views/auth/views.py:484 assembl/views/auth/views.py:586
+#: assembl/views/auth/views.py:501 assembl/views/auth/views.py:605
 msgid "Confirmation requested"
 msgstr ""
 
-#: assembl/views/auth/views.py:485 assembl/views/auth/views.py:587
+#: assembl/views/auth/views.py:502 assembl/views/auth/views.py:606
 msgid ""
 "We have sent you a confirmation email. Please use the link to confirm your "
 "email to Assembl"
 msgstr ""
 
-#: assembl/views/auth/views.py:500
+#: assembl/views/auth/views.py:518
 msgid "Wrong email token."
 msgstr ""
 
-#: assembl/views/auth/views.py:545
+#: assembl/views/auth/views.py:564
 msgid "Login failed, try again"
 msgstr ""
 
-#: assembl/views/auth/views.py:594
+#: assembl/views/auth/views.py:613
 msgid "We do not know about this email."
 msgstr ""
 
-#: assembl/views/auth/views.py:634
+#: assembl/views/auth/views.py:653
 msgid "Password change requested"
 msgstr ""
 
-#: assembl/views/auth/views.py:635
+#: assembl/views/auth/views.py:654
 msgid ""
 "We have sent you an email with a temporary connection link. Please use that "
 "link to log in and change your password."
 msgstr ""
 
-#: assembl/views/auth/views.py:652
+#: assembl/views/auth/views.py:671
 msgid "Wrong password token."
 msgstr ""
 
-#: assembl/views/auth/views.py:657
+#: assembl/views/auth/views.py:676
 msgid "This token is expired. Do you want us to send another?"
 msgstr ""
 
-#: assembl/views/auth/views.py:686
+#: assembl/views/auth/views.py:706
 msgid "Password changed"
 msgstr ""
 

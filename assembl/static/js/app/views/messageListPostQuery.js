@@ -18,7 +18,9 @@ define(['app', 'i18n', 'sprintf'], function(app, i18n, sprintf){
                 span = '<span class="closebutton" data-filterid="'+filterDef.id+'" data-value="'+value+'"></span>\n';
                 valuesText.push('"' + idea.get('shortTitle') + '"' + span);
             }
-            retval += sprintf.sprintf(i18n.pluralize({1:"Discuss idea %s",2:"Discuss ideas: %s"},valuesText.length), valuesText.join(i18n.gettext(' AND ')));
+            retval += sprintf.sprintf(i18n.pluralize({
+                1:gettext("Discuss idea %s"),2:gettext("Discuss ideas: %s")},
+                valuesText.length), valuesText.join(i18n.gettext(' AND ')));
             return retval;
         }
         this._returnHtmlDescriptionPostIsDescendentOfPost = function(filterDef, queryObjects) {
@@ -31,7 +33,10 @@ define(['app', 'i18n', 'sprintf'], function(app, i18n, sprintf){
                 span = '<span class="closebutton" data-filterid="'+filterDef.id+'" data-value="'+value+'"></span>\n';
                 valuesText.push('"' + post.get('subject') + '"' + span);
             }
-            retval += sprintf.sprintf(i18n.pluralize({1:"Are in the conversation that follows post %s",2:"Are in the conversation that follows posts: %s"},valuesText.length), valuesText.join(i18n.gettext(' AND ')));
+            retval += sprintf.sprintf(i18n.pluralize({
+                1:gettext("Are in the conversation that follows post %s"),
+                2:gettext("Are in the conversation that follows posts: %s"}),
+                valuesText.length), valuesText.join(i18n.gettext(' AND ')));
             return retval;
         }
         this._returnHtmlDescriptionPostIsUnread = function(filterDef, queryObjects) {
