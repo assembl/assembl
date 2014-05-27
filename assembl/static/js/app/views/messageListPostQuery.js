@@ -35,7 +35,7 @@ define(['app', 'i18n', 'sprintf'], function(app, i18n, sprintf){
             }
             retval += sprintf.sprintf(i18n.pluralize({
                 1:gettext("Are in the conversation that follows post %s"),
-                2:gettext("Are in the conversation that follows posts: %s"}),
+                2:gettext("Are in the conversation that follows posts: %s")},
                 valuesText.length), valuesText.join(i18n.gettext(' AND ')));
             return retval;
         }
