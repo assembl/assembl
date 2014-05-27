@@ -29,6 +29,7 @@ requirejs.config({
     'ckeditor-sharedspace': 'lib/ckeditor-sharedcontainer/plugin',
 
     'moment': 'bower/momentjs/moment',
+    'moment_lang': 'bower/momentjs/lang/'+((assembl_locale=='en')?'fr':assembl_locale),
     'zeroclipboard': 'bower/zeroclipboard/ZeroClipboard',
     'sockjs': 'bower/sockjs/sockjs',
     'cytoscape': 'bower/cytoscape/cytoscape',
@@ -107,6 +108,10 @@ requirejs.config({
     'sprintf' : {
         deps: [],
         exports: 'sprintf'
+    },
+    'moment_lang': {
+        deps: ['moment'],
+        exports: 'moment_lang'
     }
   }
 });

@@ -1,5 +1,5 @@
-define(['jquery', 'underscore', 'ckeditor', 'moment', 'i18n', 'zeroclipboard', 'types', 'permissions'],
-    function($, _, ckeditor, Moment, i18n, ZeroClipboard, Types, Permissions){
+define(['jquery', 'underscore', 'ckeditor', 'moment', 'moment_lang', 'i18n', 'zeroclipboard', 'types', 'permissions'],
+    function($, _, ckeditor, Moment, MomentLang, i18n, ZeroClipboard, Types, Permissions){
     'use strict';
 
     ckeditor.disableAutoInline = true;
@@ -981,6 +981,7 @@ define(['jquery', 'underscore', 'ckeditor', 'moment', 'i18n', 'zeroclipboard', '
          */
         init: function(){
             app.loadCurrentUser();
+            Moment.lang(assembl_locale);
 
             app.body.removeClass('preload');
             app.createSelectionTooltip();
