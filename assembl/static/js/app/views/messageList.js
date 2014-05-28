@@ -203,6 +203,88 @@ function(Backbone, _, $, app, PanelView, MessageFamilyView, Message, i18n, PostQ
             return toReturn;
         },
         
+        getPreviousScrollTarget: function(){
+            var panelBody = this.$('.panel-body'),
+            panelOffset = null,
+            panelScrollTop = 0,
+            messageViewScrolledInto = null,
+            messageViewScrolledIntoOffset = -Number.MAX_VALUE,
+            retval = null;
+            //We may have been called on the first render, so we have to check
+            if(panelBody.offset() !== undefined) {
+                panelOffset = panelBody.offset().top;
+                panelScrollTop = panelBody.scrollTop();
+                //console.log("panelBody", panelBody, "panelScrollTop", panelScrollTop);
+                if(panelScrollTop !== 0){
+                    // Scrolling to the element
+                    //var target = offset - panelOffset + panelBody.scrollTop();
+                    //console.log("panelOffset", panelOffset);
+                    var selector = $('.message');
+                    _.every(this.renderedMessageViewsCurrent, function(view){
+                        var retval = true;
+                        //console.log("view",view);
+                        var collection = view.$el.find(selector).addBack(selector);
+                        //console.log("collection", collection);
+                        collection.each(function(){
+                            //console.log(this);
+                            var messageOffset = $(this).offset().top - panelOffset;
+                            //console.log("message ", $(this).attr('id'), "position", messageOffset);
+                            if(messageOffset < 0){
+                                if(messageOffset > messageViewScrolledIntoOffset) {
+                                    messageViewScrolledInto = view;
+                                    messageViewScrolledIntoOffset = messageOffset;
+                                }
+                            }
+                            else {
+                                // the list is not in display order in threaded view
+                                // so I don't see a way to break out
+                                // scroll position, break out of the loop
+                                // retval = false;
+                            }
+                            return retval;
+                        });
+                        return retval;
+                    });
+                    if(messageViewScrolledInto) {
+                        //console.log("message in partial view has subject:", messageViewScrolledInto.model.get('subject'));
+                        var messageHtmlId = messageViewScrolledInto.$el.attr('id');
+                        retval = {messageHtmlId: messageHtmlId,
+                                  innerOffset: messageViewScrolledIntoOffset};
+                    }
+                }
+            }
+            return retval;
+        },
+        
+        scrollToPreviousScrollTarget: function(previousScrollTarget){
+            var panelBody = this.$('.panel-body'),
+            panelOffset = null,
+            panelScrollTop = 0;
+
+            if(previousScrollTarget) {
+                //console.log("scrollToPreviousScrollTarget(): Trying to scroll to:", previousScrollTarget)
+                //We may have been called on the first render, so we have to check
+                if(panelBody.offset() !== undefined) {
+                    //console.log("panelBody", panelBody);
+                    panelOffset = panelBody.offset().top;
+                    panelScrollTop = panelBody.scrollTop();
+                    //console.log("panelScrollTop", panelScrollTop, "panelOffset", panelOffset);
+                    var selector = app.format('[id="{0}"]', previousScrollTarget.messageHtmlId);
+                    var message = this.$(selector);
+                    if(!_.size(message)) {
+                        //console.log("scrollToPreviousScrollTarget() can't find element with id:",previousScrollTarget.messageHtmlId);
+                        return;
+                    }
+                    var messageCurrentOffset = message.offset().top;
+                    //console.log("messageCurrentOffset", messageCurrentOffset);
+
+                    // Scrolling to the element
+                    var target = messageCurrentOffset - panelOffset - previousScrollTarget.innerOffset;
+                    //console.log("target",target);
+                    panelBody.animate({ scrollTop: target });
+                }
+            }
+        },
         /**
          * Returns the the messages to be rendered
          * @return {Message[]}
@@ -230,11 +312,13 @@ function(Backbone, _, $, app, PanelView, MessageFamilyView, Message, i18n, PostQ
          */
         render_real: function(){
             var that = this,
-                views = [];
+                views = [],
+                previousScrollTarget = null;
             /*
             console.log("messageIdsToDisplay is: ");
             console.log(that.messageIdsToDisplay);
             */
+            previousScrollTarget = this.getPreviousScrollTarget();
             //The MessageFamilyView will re-fill the array with the rendered MessageView
             this.renderedMessageViewsPrevious = _.clone(this.renderedMessageViewsCurrent);
             this.renderedMessageViewsCurrent = {};
@@ -275,6 +359,7 @@ function(Backbone, _, $, app, PanelView, MessageFamilyView, Message, i18n, PostQ
             });
             
             this.$('#messagelist-replybox').append( this.newTopicView.render().el );
+            this.scrollToPreviousScrollTarget(previousScrollTarget);
             this.initAnnotator();
             this.trigger("render_complete", "Render complete");
             return this;
