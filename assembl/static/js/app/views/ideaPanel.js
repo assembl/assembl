@@ -1,5 +1,5 @@
-define(['backbone', 'underscore', 'models/idea', 'models/message', 'app', 'i18n', 'types', 'views/editableField', 'views/ckeditorField', 'permissions', 'views/messageSend'],
-function(Backbone, _, Idea, Message, app, i18n, Types, EditableField, CKEditorField, Permissions, MessageSendView){
+define(['backbone', 'underscore', 'models/idea', 'models/message', 'app', 'i18n', 'sprintf', 'types', 'views/editableField', 'views/ckeditorField', 'permissions', 'views/messageSend'],
+function(Backbone, _, Idea, Message, app, i18n, sprintf, Types, EditableField, CKEditorField, Permissions, MessageSendView){
     'use strict';
 
     var LONG_TITLE_ID = 'ideaPanel-longtitle';
@@ -73,7 +73,7 @@ function(Backbone, _, Idea, Message, app, i18n, Types, EditableField, CKEditorFi
                 segments:segments,
                 canEdit:canEdit,
                 i18n:i18n,
-                sprintf:sprintf,
+                sprintf:sprintf.sprintf,
                 canDelete:currentUser.can(Permissions.EDIT_IDEA),
                 canEditNextSynthesis:canEditNextSynthesis,
                 canEditExtracts:currentUser.can(Permissions.EDIT_EXTRACT),
