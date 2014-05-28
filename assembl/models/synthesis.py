@@ -549,7 +549,7 @@ class Idea(DiscussionBoundBase):
     A core concept taken from the associated discussion
     """
     __tablename__ = "idea"
-    rdf_class = CATALYST.Idea
+    rdf_class = IDEA.GenericIdeaNode
     #rdf_class_id = Column(IRI_ID)
     ORPHAN_POSTS_IDEA_ID = 'orphan_posts'
     sqla_type = Column(String(60), nullable=False)
@@ -974,7 +974,7 @@ class IdeaLink(DiscussionBoundBase):
     If a parent-child relation, the parent is the source, the child the target
     """
     __tablename__ = 'idea_idea_link'
-    rdf_class = IDEA.DirectedIdeaRelation
+    rdf_class = IDEA.InclusionRelation
     id = Column(Integer, primary_key=True,
                 info= {'rdf': QuadMapPatternS(None, ASSEMBL.db_id)})
     source_id = Column(Integer, ForeignKey(
@@ -1007,7 +1007,7 @@ class IdeaLink(DiscussionBoundBase):
     def special_quad_patterns(cls, alias_manager):
         return [QuadMapPatternS(
             Idea.iri_class().apply(cls.source_id),
-            IDEA.InclusionRelation,
+            IDEA.includes,
             Idea.iri_class().apply(cls.target_id),
             name=QUADNAMES.idea_inclusion_reln)]
 
