@@ -44,7 +44,7 @@ function(Backbone, _, Idea, Message, app, i18n, Types, EditableField, CKEditorFi
             // is associated with the idea, the idea will recieve a change event
             // on the socket
             //app.segmentList.segments.on('change reset', this.render, this);
-            app.users.on('reset', this.render, this);
+            this.listenTo(app.users, 'reset', this.render);
             
             var that = this;
             app.on('idea:select', function(idea){
@@ -185,12 +185,12 @@ function(Backbone, _, Idea, Message, app, i18n, Types, EditableField, CKEditorFi
         setCurrentIdea: function(idea){
             if( idea !== this.idea ){
                 if( this.idea ) {
-                    this.idea.off('change', this.render);
+                    this.stopListening(this.idea, 'change', this.render);
                 }
                 this.idea = idea;
                 if( idea !== null ){
 
-                    this.idea.on('change', this.render, this);
+                    this.listenTo(this.idea, 'change', this.render);
     
                     app.openPanel(app.ideaPanel);
                 } else {

@@ -64,7 +64,7 @@ function(Backbone, _, $, app, Synthesis, Idea, Permissions, IdeaFamilyView, Idea
             app.off('synthesisPanel:close');
 
             //Do NOT listen to reset, as it's called within this render
-            this.ideas.off('reset', this.render, this);
+            this.stopListening(this.ideas, 'reset', this.render);
             
             // Cleaning previous ckeditor instance
             if( this.ckeditor ){
@@ -150,7 +150,7 @@ function(Backbone, _, $, app, Synthesis, Idea, Permissions, IdeaFamilyView, Idea
             }
             
             //Restore callback inhibited above
-            this.ideas.on('reset', this.render, this);
+            this.listenTo(this.ideas, 'reset', this.render);
             return this;
         },
 
