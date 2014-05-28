@@ -155,11 +155,21 @@
               content: '\e828';
             }
           }
+          .icon-lock-open:active{
+            &:before{
+              content: '\e829';
+            }
+          }
 
           .icon-lock:hover{
              &:before{
                content: '\e829';
              }
+          }
+          .icon-lock:active{
+            &:before{
+              content: '\e828';
+            }
           }
 
         }
