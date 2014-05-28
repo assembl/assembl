@@ -136,43 +136,39 @@
           display: inline-block;
           @include transition-property(background-color);
           @include transition-duration(0.1s);
-          .icon-lock {
-            color: #d54243;
+          color:#ffffff;
+          margin-left:1em;
+
+          .lock-anchor{
+            @include border-radius(1em);
+            border: 1px solid #ffffff;
+            font-size: 11px;
+            padding: 1px;
+            opacity: 0.5;
+            &:hover {
+              opacity: 1;
+            }
           }
-          .icon-lock-open {
-            color: #0c9f9b;
+
+          .icon-lock-open:hover{
+            &:before{
+              content: '\e828';
+            }
           }
-          .icon-lock-open:before {
-            margin-right: 10px;
-            border-radius: 50%;
-            box-shadow: inset 0px 1px 0px #aaaaaa, 0px 4px 0px 0px #dddddd, 0px 1px 0px #eeeeee;
-            padding: 3px;
-            font-size: 10px;
-            position: absolute;
-            left: -27px;
-            top: -17px;
-          }
-          .icon-lock:before {
-            margin-right: 10px;
-            border-radius: 50%;
-            box-shadow: inset 0px 1px 0px #aaaaaa, 0px 0px 0px 0px #dddddd, 0px 1px 0px #eeeeee;
-            padding: 3px;
-            font-size: 10px;
-            position: absolute;
-            left: -27px;
-            top: -14px;
+
+          .icon-lock:hover{
+             &:before{
+               content: '\e829';
+             }
           }
 
         }
+
         &.is-highlighted {
             @include transition-property(background);
             @include transition-duration(1s);
             @include transition-timing-function(ease-in);
             background: white none;
-            .icon-lock {
-
-                color: red;
-            }
         }
         
       }
