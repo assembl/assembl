@@ -10,9 +10,9 @@ from assembl.lib.sqla import *
 
 
 class DictContext(object):
-    def __init__(self, acl, subobjects={}):
-        self.subobjects = subobjects
-        for context in subobjects.itervalues():
+    def __init__(self, acl, subobjects=None):
+        self.subobjects = subobjects or {}
+        for context in self.subobjects.itervalues():
             context.__parent__ = self
         if acl:
             self.__acl__ = acl
