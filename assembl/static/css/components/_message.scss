@@ -62,67 +62,6 @@ $ellipsiswidth: 3em !default;
         white-space: normal;
     }
 
-
-    // &:last-child {
-    //     border-bottom: 0;
-    // }
-    
-    &.viewStyleFullBody {
-        .message-date {
-            float: none;
-        }
-        .message-subheader {
-            max-height: none;
-        }
-        .message-author {
-            width: auto;
-        }
-    }
-    &.viewStyleTitleOnly {
-        .message-date {
-            float: right;
-            line-height: $icon-height;
-        }
-        .message-author {
-            width: 10em;
-            overflow:hidden; 
-            text-overflow: ellipsis;
-            &:hover {
-                position: relative;
-                min-width: 10em;
-                width: auto;
-            }
-        }
-    }
-    
-    &.viewStylePreview {
-        .message-date {
-            float: right;
-            line-height: $icon-height;
-            margin-right: 10px;
-        }
-        .message-author {
-            width: auto;
-        }
-        @include multiline-ellipsis(3em, 1em, 3em);
-        .message-body {
-            @extend .text-muted;
-            margin-top: 0.2em;
-            padding-left: 1em;
-            position: relative;
-            white-space: normal;
-            
-        }
-    }
-    
-    &.unread {
-        .message-author, .message-subject {
-            @extend .text-bold;
-        }
-        .message-author, .message-subject, .message-date {
-            @extend .text-bold;
-        }
-    }
     // A message block Header
     // --------------------
     .message-header {
@@ -171,14 +110,81 @@ $ellipsiswidth: 3em !default;
     .message-body {
         margin-top: 1em;
     }
-    &.Email {
-        .message-body {
-            white-space: pre-line;
-            &> {
-            white-space: normal;
+
+    
+    &.viewStyleFullBody {
+        .message-date {
+            float: none;
+        }
+        .message-subheader {
+            max-height: none;
+        }
+        .message-author {
+            width: auto;
+        }
+        &.Email, &.AssemblPost {
+            .message-body {
+                white-space: pre-line;
+                &> {
+                white-space: normal;
+                }
             }
         }
     }
+    
+    &.viewStyleTitleOnly {
+        .message-date {
+            float: right;
+            line-height: $icon-height;
+        }
+        .message-author {
+            width: 10em;
+            overflow:hidden; 
+            text-overflow: ellipsis;
+            &:hover {
+                position: relative;
+                min-width: 10em;
+                width: auto;
+            }
+        }
+    }
+    
+    &.viewStylePreview {
+        .message-date {
+            float: right;
+            line-height: $icon-height;
+            margin-right: 10px;
+        }
+        .message-author {
+            width: auto;
+        }
+        @include multiline-ellipsis(3em, 1em, 3em);
+        .message-body {
+            @extend .text-muted;
+            margin-top: 0.2em;
+            padding-left: 1em;
+            position: relative;
+            
+        }
+        &.Email, &.AssemblPost {
+            .message-body > div {
+                white-space: pre-line;
+                &> {
+                white-space: normal;
+                }
+            }
+        }
+    }
+    
+    &.unread {
+        .message-author, .message-subject {
+            @extend .text-bold;
+        }
+        .message-author, .message-subject, .message-date {
+            @extend .text-bold;
+        }
+    }
+
 }
 
 

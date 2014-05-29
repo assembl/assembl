@@ -94,7 +94,7 @@ class Post(Content):
         return self.subject
 
     def get_body(self):
-        return self.body
+        return self.body.strip()
 
     def _set_ancestry(self, new_ancestry):
         descendants = self.get_descendants()
