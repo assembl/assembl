@@ -11,7 +11,7 @@ class CustomFieldsSASchema(SQLAlchemySchemaNode):
                  excludes=None,
                  overrides=None,
                  unknown='ignore',
-                 field_overrides={},
+                 field_overrides=None,
                  **kw):
 
         super(CustomFieldsSASchema, self).__init__(
@@ -133,7 +133,7 @@ class ValidateMeta(type):
     #     def __call__(inst):
             
 
-    def __new__(cls, *a, **kw):
+    def __new__(mcs, *a, **kw):
         clsinst = type(*a, **kw)
         field_overrides = getattr(clsinst, '__ca_field_overrides__', None)
         clsinst.__ca__ = CustomFieldsSASchema(

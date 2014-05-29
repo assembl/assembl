@@ -202,8 +202,8 @@ class AssemblQuadStorageManager(object):
 
     def create_storage(self, session, quad_storage_name,
                        sections, discussion_id=None, exclusive=True,
-                       imported=[]):
-        qs = self.prepare_storage(quad_storage_name, imported)
+                       imported=None):
+        qs = self.prepare_storage(quad_storage_name, imported or [])
         for section, graph_name, graph_iri, disc_id in sections:
             self.populate_storage(
                 qs, section, graph_name, graph_iri, disc_id, exclusive)
@@ -217,7 +217,7 @@ class AssemblQuadStorageManager(object):
         for section, graph_name, graph_iri, disc_id in sections:
             gqm = self.populate_storage(
                 qs, section, graph_name, graph_iri, disc_id)
-            defn = qs.add_imported(gqm, nsm, alias_manager)
+            defn = qs.add_imported(gqm, nsm, self.alias_manager)
             results.extend(session.execute('sparql '+defn))
         return qs, results
 
@@ -226,7 +226,7 @@ class AssemblQuadStorageManager(object):
         session.execute('sparql '+qs.drop(self.nsm))
 
     def drop_graph(self, session, graph_iri):
-        gr = GraphQuadMapPattern(graph_iri)
+        gr = GraphQuadMapPattern(graph_iri, None)
         session.execute('sparql '+gr.drop(self.nsm))
 
     def discussion_storage_name(self, discussion_id):
@@ -303,7 +303,7 @@ class AssemblQuadStorageManager(object):
         return qs, result
 
     def drop_discussion_storage(self, session, discussion):
-        self.drop_storage(self.discussion_storage_name(discussion.id))
+        self.drop_storage(session, self.discussion_storage_name(discussion.id))
 
     def create_user_storage(self, session):
         return self.create_storage(session, self.user_storage, [
@@ -317,14 +317,14 @@ class AssemblQuadStorageManager(object):
 
     def drop_extract_graph(self, session, extract):
         # why do I not need the discussion here?
-        self.drop_graph(self.extract_iri(extract.id))
+        self.drop_graph(session, self.extract_iri(extract.id))
 
     def create_private_global_storage(self, session):
         return self.create_storage(session, self.global_storage, [
-            (None, global_graph, self.global_graph_iri, None)])
+            (None, self.global_graph, self.global_graph_iri, None)])
 
-    def drop_private_global_storage(self):
-        return self.drop_storage(self.global_storage)
+    def drop_private_global_storage(self, session):
+        return self.drop_storage(session, self.global_storage)
 
     def declare_functions(self, session):
         for stmt in iri_function_definition_stmts:

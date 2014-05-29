@@ -446,8 +446,8 @@ class Role(Base):
     name = Column(String(20), nullable=False)
 
     @classmethod
-    def get_role(klass, session, name):
-        return session.query(klass).filter_by(name=name).first()
+    def get_role(cls, session, name):
+        return session.query(cls).filter_by(name=name).first()
 
 
 def populate_default_roles(session):

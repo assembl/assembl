@@ -151,7 +151,7 @@ def main():
             validate_dict(userinfo)
             with transaction.manager:
                 add_user(**userinfo)
-        elif isinstance(userinfo(list)):
+        elif isinstance(userinfo, list):
             for ui in userinfo:
                 validate_dict(ui)
             with transaction.manager:

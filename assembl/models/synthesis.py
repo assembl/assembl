@@ -304,6 +304,14 @@ class SubGraphIdeaAssociation(DiscussionBoundBase):
         return (cls.sub_graph_id == IdeaGraphView.id) & \
             (IdeaGraphView.discussion_id == discussion_id)
 
+    # @classmethod
+    # def special_quad_patterns(cls, alias_manager):
+    #     return [QuadMapPatternS(
+    #         Idea.iri_class().apply(cls.source_id),
+    #         IDEA.includes,
+    #         Idea.iri_class().apply(cls.target_id),
+    #         name=QUADNAMES.idea_inclusion_reln)]
+
     crud_permissions = CrudPermissions(P_ADMIN_DISC)
 
 class SubGraphIdeaLinkAssociation(DiscussionBoundBase):

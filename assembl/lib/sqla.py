@@ -556,7 +556,7 @@ class TimestampedSQLAlchemySchemaNode(SQLAlchemySchemaNode):
         elif len(excludes) > 0:
             excludes = set(excludes) | set(stamps)
         parent = super(TimestampedSQLAlchemySchemaNode, self)
-        return parent.__init__(cls, excludes=excludes, **kwargs)
+        parent.__init__(cls, excludes=excludes, **kwargs)
 
 
 def insert_timestamp(mapper, connection, target):

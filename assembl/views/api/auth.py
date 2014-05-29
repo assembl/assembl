@@ -126,7 +126,7 @@ def put_permissions_for_role(request):
     dp_by_permission = {dp.permission.name: dp for dp in known_dp}
     known_permissions = set(dp.keys())
     for permission in known_permissions - permissions:
-        session.delete(dp_by_permission(permission))
+        session.delete(dp_by_permission[permission])
     for permission in permissions - known_permissions:
         session.add(DiscussionPermission(
             role=role, permission=permission, discussion=discussion))
@@ -202,7 +202,7 @@ def put_global_roles_for_user(request):
     gur_by_role = {gur.role.name: gur for gur in known_gu_roles}
     known_roles = set(gur_by_role.keys())
     for role in known_roles - roles:
-        session.query.delete(gur_by_role(role))
+        session.query.delete(gur_by_role[role])
     for role in roles - known_roles:
         session.add(UserRole(user=user, role=role))
     return {"added": list(roles - known_roles),
@@ -251,7 +251,7 @@ def put_discussion_roles_for_user(request):
     lur_by_role = {lur.role.name: lur for lur in known_lu_roles}
     known_roles = set(lur_by_role.keys())
     for role in known_roles - roles:
-        session.query.delete(lur_by_role(role))
+        session.query.delete(lur_by_role[role])
     for role in roles - known_roles:
         session.add(LocalUserRole(
             user=user, role=role, discussion=discussion))
