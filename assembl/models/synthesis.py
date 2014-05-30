@@ -979,7 +979,8 @@ class IdeaLink(DiscussionBoundBase):
     """
     A generic link between two ideas
 
-    If a parent-child relation, the parent is the source, the child the target
+    If a parent-child relation, the parent is the source, the child the target.
+    Beware: it's reversed in the RDF model. We will change things around.
     """
     __tablename__ = 'idea_idea_link'
     rdf_class = IDEA.InclusionRelation
@@ -988,11 +989,11 @@ class IdeaLink(DiscussionBoundBase):
     source_id = Column(Integer, ForeignKey(
             'idea.id', ondelete="CASCADE", onupdate="CASCADE"),
         nullable=False, index=True,
-        info= {'rdf': QuadMapPatternS(None, IDEA.source_idea, Idea.iri_class().apply())})
+        info= {'rdf': QuadMapPatternS(None, IDEA.target_idea, Idea.iri_class().apply())})
     target_id = Column(Integer, ForeignKey(
         'idea.id', ondelete="CASCADE", onupdate="CASCADE"),
         nullable=False, index=True,
-        info= {'rdf': QuadMapPatternS(None, IDEA.destination_idea, Idea.iri_class().apply())})
+        info= {'rdf': QuadMapPatternS(None, IDEA.source_idea, Idea.iri_class().apply())})
     source = relationship(
         'Idea', 
         primaryjoin="and_(Idea.id==IdeaLink.source_id, "
