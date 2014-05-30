@@ -57,11 +57,6 @@ $ellipsiswidth: 3em !default;
     //border-bottom: solid 1px $box-border-color;
     //overflow-x: hidden;
 
-    .message-subject {
-        margin-top: 0;
-        white-space: normal;
-    }
-
     // A message block Header
     // --------------------
     .message-header {
@@ -106,7 +101,10 @@ $ellipsiswidth: 3em !default;
             margin-top: 4px;
         }
     }
-
+    .message-subject {
+        margin-top: 0;
+        white-space: normal;
+    }
     .message-body {
         margin-top: 1em;
     }
@@ -139,13 +137,18 @@ $ellipsiswidth: 3em !default;
         }
         .message-author {
             width: 10em;
-            overflow:hidden; 
+            overflow:hidden;
+            float: left;
             text-overflow: ellipsis;
+            min-height: $messagelist-item-height - 12px; /* To make sure the title wraps in front of the author */
             &:hover {
                 position: relative;
                 min-width: 10em;
                 width: auto;
             }
+        }
+        .message-subject {
+            display: inline;
         }
     }
     
