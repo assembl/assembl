@@ -168,7 +168,7 @@ class InstanceContext(object):
             if discussion_id:
                 from assembl.models import Discussion
                 return Discussion.get(id=discussion_id).__acl__
-        return parent.__acl__
+        return self.__parent__.__acl__
 
     def __getitem__(self, key):
         cls = self._instance.__class__
