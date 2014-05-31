@@ -413,7 +413,7 @@ class User(AgentProfile):
         return get_permissions(self.id, discussion_id)
 
     def get_all_permissions(self):
-        from ..auth import get_permissions
+        from ..auth.util import get_permissions
         from .synthesis import Discussion
         permissions = {
             Discussion.uri_generic(d_id): get_permissions(self.id, d_id)
