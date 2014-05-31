@@ -3,6 +3,7 @@ import quopri
 from itertools import groupby, chain
 from collections import defaultdict
 import traceback
+from abc import ABCMeta, abstractmethod
 
 from datetime import datetime
 import anyjson as json
@@ -27,6 +28,7 @@ from rdflib import URIRef
 from virtuoso.vmapping import PatternIriClass
 
 from assembl.lib.utils import slugify
+from ..nlp.wordcounter import WordCounter
 from . import DiscussionBoundBase
 from ..lib.virtuoso_mapping import QuadMapPatternS
 from .generic import (PostSource, Content)
@@ -552,6 +554,35 @@ class Synthesis(ExplicitSubGraphView):
     crud_permissions = CrudPermissions(P_EDIT_SYNTHESIS)
 
 
+class IdeaVisitor(object):
+    CUT_VISIT = object()
+    __metaclass__ = ABCMeta
+    @abstractmethod
+    def visit_idea(self, idea):
+        pass
+
+
+class IdeaLinkVisitor(object):
+    CUT_VISIT = object()
+    __metaclass__ = ABCMeta
+    @abstractmethod
+    def visit_link(self, link):
+        pass
+
+
+class WordVisitor(IdeaVisitor):
+    def __init__(self, lang):
+        self.counter = WordCounter(lang)
+
+    def visit_idea(self, idea):
+        short_title = idea.short_title or ''
+        self.counter.add_text(short_title)
+        self.counter.add_text(idea.long_title or short_title)
+        self.counter.add_text(idea.definition or short_title)
+
+    def best(self, num=8):
+        return self.counter.best(num)
+
 class Idea(DiscussionBoundBase):
     """
     A core concept taken from the associated discussion
@@ -747,6 +778,47 @@ JOIN post ON (
             {"root_idea_id": self.id, "user_id": user_id,
              "discussion_id": self.discussion_id})
         return int(result.first()['total_count'])
+
+    def prefetch_descendants(self):
+        pass  #TODO
+
+    def visit_ideas_depth_first(self, idea_visitor):
+        self.prefetch_descendants()
+        self._visit_ideas_depth_first(idea_visitor, set())
+
+    def _visit_ideas_depth_first(self, idea_visitor, visited):
+        if self in visited:
+            # not necessary in a tree, but let's start to think graph.
+            return False
+        result = idea_visitor.visit_idea(self)
+        visited.add(self)
+        if result is not IdeaVisitor.CUT_VISIT:
+            for child in self.children:
+                child._visit_ideas_depth_first(idea_visitor, visited)
+
+    def visit_ideas_breadth_first(self, idea_visitor):
+        self.prefetch_descendants()
+        result = idea_visitor.visit(self)
+        visited = {self}
+        if result is not IdeaVisitor.CUT_VISIT:
+            self._visit_ideas_breadth_first(idea_visitor, visited)
+
+    def _visit_ideas_breadth_first(self, idea_visitor, visited):
+        children = []
+        for child in self.children:
+            if child in visited:
+                continue
+            result = idea_visitor.visit_idea(child)
+            visited.add(child)
+            if result != IdeaVisitor.CUT_VISIT:
+                children.append(child)
+        for child in children:
+            child._visit_ideas_breadth_first(idea_visitor, visited)
+
+    def most_common_words(self, lang='fr', num=8):
+        word_counter = WordVisitor(lang)
+        self.visit_ideas_depth_first(word_counter)
+        return word_counter.best(num)
 
     def get_discussion_id(self):
         return self.discussion_id
@@ -995,7 +1067,7 @@ class IdeaLink(DiscussionBoundBase):
         nullable=False, index=True,
         info= {'rdf': QuadMapPatternS(None, IDEA.source_idea, Idea.iri_class().apply())})
     source = relationship(
-        'Idea', 
+        'Idea',
         primaryjoin="and_(Idea.id==IdeaLink.source_id, "
                         "IdeaLink.is_tombstone==False, "
                         "Idea.is_tombstone==False)",
