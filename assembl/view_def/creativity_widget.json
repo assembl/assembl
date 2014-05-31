@@ -20,6 +20,7 @@
         "password": false,
         "preferred_email": false,
         "verified": true,
+        "name": "&display_name",
         "permissions": "&get_all_permissions"
     },
     "EmailAccount": false,
@@ -300,5 +301,16 @@
         "ideas_uri": "&get_ideas_uri",
         "messages_uri": "&get_messages_uri",
         "@type": "widget_type"
+    },
+    "BinaryVote": {
+        "idea": true,
+        "voter": true,
+        "vote_value": true
+    },
+    "LickertVote": {
+        "idea": true,
+        "voter": true,
+        "vote_value": true,
+        "range": true
     }
 }

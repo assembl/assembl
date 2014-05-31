@@ -300,5 +300,16 @@
         "ideas_uri": "&get_ideas_uri",
         "messages_uri": "&get_messages_uri",
         "@type": "widget_type"
+    },
+    "BinaryVote": {
+        "idea": true,
+        "voter": true,
+        "vote_value": true
+    },
+    "LickertVote": {
+        "idea": true,
+        "voter": true,
+        "vote_value": true,
+        "range": true
     }
 }
