@@ -976,11 +976,14 @@ JOIN post ON (
                 super(WidgetPostCollectionDefinition, self).__init__(cls, Content)
 
             def decorate_query(self, query, parent_instance):
-                return query.join(IdeaContentWidgetLink).join(
+                query = query.join(IdeaContentWidgetLink).join(
                     self.owner_class,
-                    IdeaContentWidgetLink.idea_id == parent_instance.id).options(
-                    contains_eager(Content.widget_idea_links))
-                    # contains_eager(Content.extracts) seems to slow things down instead
+                    IdeaContentWidgetLink.idea_id == parent_instance.id)
+                if Content in chain(*(mapper.entities for mapper in query._entities)):
+                    query = query.options(
+                        contains_eager(Content.widget_idea_links))
+                        # contains_eager(Content.extracts) seems to slow things down instead
+                return query
 
             def decorate_instance(self, instance, parent_instance, assocs):
                 # This is going to spell trouble: Sometimes we'll have creator,
