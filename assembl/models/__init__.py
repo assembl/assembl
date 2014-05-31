@@ -109,6 +109,12 @@ from .synthesis import (
     TableOfContents,
     TextFragmentIdentifier,
 )
+from .votes import (
+    AbstractIdeaVote,
+    BinaryIdeaVote,
+    LickertIdeaVote,
+    LickertRange,
+)
 from .annotation import (
     Webpage,
 )

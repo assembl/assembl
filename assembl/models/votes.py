@@ -79,7 +79,7 @@ class LickertRange(Base):
         return range
 
 
-class LickertVote(AbstractIdeaVote):
+class LickertIdeaVote(AbstractIdeaVote):
     __tablename__ = "lickert_idea_vote"
     rdf_class = VOTE.LickertVote
     __mapper_args__ = {
@@ -118,7 +118,7 @@ class LickertVote(AbstractIdeaVote):
         self.vote_value = val
 
 
-class BinaryVote(AbstractIdeaVote):
+class BinaryIdeaVote(AbstractIdeaVote):
     rdf_class = VOTE.BinaryVote
     __tablename__ = "binary_idea_vote"
     __mapper_args__ = {
