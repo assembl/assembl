@@ -7,7 +7,7 @@ from abc import ABCMeta, abstractmethod
 
 from datetime import datetime
 import anyjson as json
-from sqlalchemy.orm import relationship, backref, aliased
+from sqlalchemy.orm import (relationship, backref, aliased, contains_eager)
 from sqlalchemy.sql import text
 from pyramid.security import Allow, ALL_PERMISSIONS
 from sqlalchemy import (
@@ -978,7 +978,9 @@ JOIN post ON (
             def decorate_query(self, query, parent_instance):
                 return query.join(IdeaContentWidgetLink).join(
                     self.owner_class,
-                    IdeaContentWidgetLink.idea_id == parent_instance.id)
+                    IdeaContentWidgetLink.idea_id == parent_instance.id).options(
+                    contains_eager(Content.widget_idea_links))
+                    # contains_eager(Content.extracts) seems to slow things down instead
 
             def decorate_instance(self, instance, parent_instance, assocs):
                 # This is going to spell trouble: Sometimes we'll have creator,
@@ -1216,6 +1218,9 @@ class IdeaContentWidgetLink(IdeaContentLink):
     __mapper_args__ = {
         'polymorphic_identity': 'idea_content_widget_link',
     }
+
+Idea.widget_owned_contents = relationship(IdeaContentWidgetLink)
+Content.widget_idea_links = relationship(IdeaContentWidgetLink)
 
 
 class IdeaContentPositiveLink(IdeaContentLink):
