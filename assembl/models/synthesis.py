@@ -570,7 +570,7 @@ class IdeaLinkVisitor(object):
         pass
 
 
-class WordVisitor(IdeaVisitor):
+class WordCountVisitor(IdeaVisitor):
     def __init__(self, lang):
         self.counter = WordCounter(lang)
 
@@ -582,6 +582,7 @@ class WordVisitor(IdeaVisitor):
 
     def best(self, num=8):
         return self.counter.best(num)
+
 
 class Idea(DiscussionBoundBase):
     """
@@ -815,10 +816,19 @@ JOIN post ON (
         for child in children:
             child._visit_ideas_breadth_first(idea_visitor, visited)
 
-    def most_common_words(self, lang='fr', num=8):
-        word_counter = WordVisitor(lang)
+    def most_common_words(self, lang=None, num=8):
+        if not lang:
+            # TODO: Is there a better way to do this than get_current_registry?
+            from pyramid.threadlocal import get_current_registry
+            lang = get_current_registry().settings.get(
+                'pyramid.default_locale_name', 'fr')
+        word_counter = WordCountVisitor(lang)
         self.visit_ideas_depth_first(word_counter)
         return word_counter.best(num)
+
+    @property
+    def most_common_words_prop(self):
+        return self.most_common_words()
 
     def get_discussion_id(self):
         return self.discussion_id
