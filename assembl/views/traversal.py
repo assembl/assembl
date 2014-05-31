@@ -383,11 +383,13 @@ class CollectionDefinition(AbstractCollectionDefinition):
         return getattr(instance, property.key)
 
     def contains(self, parent_instance, instance):
-        attribute = self.get_attribute(parent_instance)
         if self.property.uselist:
-            return instance in attribute
+            if self.back_property and not self.back_property.uselist:
+                return self.get_attribute(
+                    instance, self.back_property) == parent_instance
+            return instance in self.get_attribute(parent_instance)
         else:
-            return instance == attribute
+            return instance == self.get_attribute(parent_instance)
 
     def get_instance(self, key, parent_instance):
         instance = None
