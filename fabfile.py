@@ -249,6 +249,7 @@ def updatemaincode():
     with cd(os.path.join(env.projectpath)):
         run('git fetch')
         run('git checkout %s' % env.gitbranch)
+        run('git submodule update --init')
         run('git pull %s %s' % (env.gitrepo, env.gitbranch))
 
 def app_setup():
