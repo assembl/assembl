@@ -27,7 +27,7 @@ from pyramid.paster import get_appsettings, setup_logging
 
 from ..view_def import get_view_def
 from .zmqlib import get_pub_socket, send_changes
-from ..namespaces import QUADNAMES
+from ..semantic.namespaces import QUADNAMES
 from ..auth import *
 
 _TABLENAME_RE = re.compile('([A-Z]+)')

@@ -5,9 +5,8 @@ from sqlalchemy import (
 from sqlalchemy.orm import relationship
 
 from . import (Base, DiscussionBoundBase, Idea, User)
-from ..lib.virtuoso_mapping import QuadMapPatternS
-
-from ..namespaces import (VOTE, ASSEMBL)
+from ..semantic.virtuoso_mapping import QuadMapPatternS
+from ..semantic.namespaces import (VOTE, ASSEMBL)
 
 
 class AbstractIdeaVote(DiscussionBoundBase):

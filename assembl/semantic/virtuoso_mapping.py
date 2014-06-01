@@ -6,8 +6,8 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from rdflib import Graph
 
-from .sqla import class_registry, Base
-from ..namespaces import (
+from ..lib.sqla import class_registry, Base
+from .namespaces import (
     namespace_manager as nsm, ASSEMBL, QUADNAMES, RDF, OWL, CATALYST)
 from virtuoso.vmapping import (
     PatternIriClass, QuadMapPattern, ClassPatternExtractor,

@@ -30,7 +30,7 @@ from virtuoso.vmapping import PatternIriClass
 from assembl.lib.utils import slugify
 from ..nlp.wordcounter import WordCounter
 from . import DiscussionBoundBase
-from ..lib.virtuoso_mapping import QuadMapPatternS
+from ..semantic.virtuoso_mapping import QuadMapPatternS
 from .generic import (PostSource, Content)
 from .post import (Post, SynthesisPost)
 from .mail import IMAPMailbox
@@ -41,7 +41,7 @@ from ..auth import (
 from .auth import (
     DiscussionPermission, Role, Permission, AgentProfile, User,
     UserRole, LocalUserRole, ViewPost)
-from ..namespaces import (
+from ..semantic.namespaces import (
     SIOC, CATALYST, IDEA, ASSEMBL, DCTERMS, OA, QUADNAMES)
 from assembl.views.traversal import AbstractCollectionDefinition
 
@@ -627,7 +627,7 @@ class Idea(DiscussionBoundBase):
     widget = relationship("Widget", backref=backref('ideas', order_by=creation_date))
 
     __mapper_args__ = {
-        'polymorphic_identity': 'idea',
+        'polymorphic_identity': 'idea:GenericIdeaNode',
         'polymorphic_on': sqla_type,
         # Not worth it for now, as the only other class is RootIdea, and there
         # is only one per discussion - benoitg 2013-12-23
@@ -1029,7 +1029,7 @@ class RootIdea(Idea):
     )
 
     __mapper_args__ = {
-        'polymorphic_identity': 'root_idea',
+        'polymorphic_identity': 'assembl:RootIdea',
     }
 
     @property
@@ -1073,6 +1073,7 @@ class IdeaLink(DiscussionBoundBase):
     rdf_class = IDEA.InclusionRelation
     id = Column(Integer, primary_key=True,
                 info= {'rdf': QuadMapPatternS(None, ASSEMBL.db_id)})
+    sqla_type = Column(String(60), nullable=False, default="idea:InclusionRelation")
     source_id = Column(Integer, ForeignKey(
             'idea.id', ondelete="CASCADE", onupdate="CASCADE"),
         nullable=False, index=True,
@@ -1098,6 +1099,12 @@ class IdeaLink(DiscussionBoundBase):
     order = Column(Float, nullable=False, default=0.0,
         info= {'rdf': QuadMapPatternS(None, ASSEMBL.link_order)})
     is_tombstone = Column(Boolean, nullable=False, default=False, index=True)
+
+    __mapper_args__ = {
+        'polymorphic_identity': 'idea:InclusionRelation',
+        'polymorphic_on': sqla_type,
+        'with_polymorphic': '*'
+    }
 
     @classmethod
     def special_quad_patterns(cls, alias_manager):
@@ -1174,7 +1181,7 @@ class IdeaContentLink(DiscussionBoundBase):
         'AgentProfile', foreign_keys=[creator_id], backref='extracts_created')
 
     __mapper_args__ = {
-        'polymorphic_identity': 'idea_content_link',
+        'polymorphic_identity': 'assembl:relatedToIdea',
         'polymorphic_on': type,
         'with_polymorphic': '*'
     }
@@ -1219,7 +1226,7 @@ class IdeaContentWidgetLink(IdeaContentLink):
     ), primary_key=True)
 
     __mapper_args__ = {
-        'polymorphic_identity': 'idea_content_widget_link',
+        'polymorphic_identity': 'assembl:postHiddenLinkedToIdea',
     }
 
 Idea.widget_owned_contents = relationship(IdeaContentWidgetLink)
@@ -1248,7 +1255,7 @@ class IdeaContentPositiveLink(IdeaContentLink):
             condition=cls.idea_id != None)]
 
     __mapper_args__ = {
-        'polymorphic_identity': 'idea_content_positive_link',
+        'polymorphic_identity': 'assembl:postLinkedToIdea_abstract',
     }
 
 
@@ -1274,7 +1281,7 @@ class IdeaRelatedPostLink(IdeaContentPositiveLink):
             condition=cls.idea_id != None)]
 
     __mapper_args__ = {
-        'polymorphic_identity': 'idea_related_post_link',
+        'polymorphic_identity': 'assembl:postLinkedToIdea',
     }
 
 
@@ -1346,7 +1353,7 @@ class Extract(IdeaContentPositiveLink):
     extract_ideas = relationship(Idea, backref="extracts")
 
     __mapper_args__ = {
-        'polymorphic_identity': 'extract',
+        'polymorphic_identity': 'assembl:postExtractRelatedToIdea',
     }
     @property
     def target(self):
@@ -1454,7 +1461,7 @@ class IdeaContentNegativeLink(IdeaContentLink):
     ), primary_key=True)
 
     __mapper_args__ = {
-        'polymorphic_identity': 'idea_content_negative_link',
+        'polymorphic_identity': 'assembl:postDelinkedToIdea_abstract',
     }
 
 
@@ -1472,7 +1479,7 @@ class IdeaThreadContextBreakLink(IdeaContentNegativeLink):
     ), primary_key=True)
 
     __mapper_args__ = {
-        'polymorphic_identity': 'idea_thread_context_break_link',
+        'polymorphic_identity': 'assembl:postDelinkedToIdea',
     }
 
 
