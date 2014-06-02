@@ -448,6 +448,13 @@ class TableOfContents(IdeaGraphView):
     A ToI in Assembl is used to organize the core ideas of a discussion in a
     threaded hierarchy.
     """
+    __tablename__ = "table_of_contents"
+
+    id = Column(Integer, ForeignKey(
+        'idea_graph_view.id',
+        ondelete='CASCADE',
+        onupdate='CASCADE'
+    ), primary_key=True)
 
     __mapper_args__ = {
         'polymorphic_identity': 'table_of_contents',
@@ -1008,6 +1015,13 @@ class RootIdea(Idea):
 
     If has implicit links to all content and posts in the discussion.
     """
+    __tablename__ = "root_idea"
+
+    id = Column(Integer, ForeignKey(
+        'idea.id',
+        ondelete='CASCADE',
+        onupdate='CASCADE'
+    ), primary_key=True)
 
     root_for_discussion = relationship(
         'Discussion',
@@ -1145,12 +1159,12 @@ class IdeaContentLink(DiscussionBoundBase):
     # attached later.
     idea_id = Column(Integer, ForeignKey('idea.id'),
                      nullable=True, index=True)
-    idea = relationship('Idea', active_history=True, backref="contentLinks")
+    idea = relationship('Idea', active_history=True)
 
     content_id = Column(Integer, ForeignKey(
         'content.id', ondelete="CASCADE", onupdate="CASCADE"),
         nullable=False, index=True)
-    content = relationship(Content, backref="ideaLinks")
+    content = relationship(Content)
 
     order = Column(Float, nullable=False, default=0.0)
 
@@ -1204,6 +1218,12 @@ class IdeaContentWidgetLink(IdeaContentLink):
     A link between an idea and a Content limited to a widget view.
     Such links should not be traversed.
     """
+    __tablename__ = 'idea_content_widget_link'
+
+    id = Column(Integer, ForeignKey(
+        'idea_content_link.id',
+        ondelete='CASCADE', onupdate='CASCADE'
+    ), primary_key=True)
 
     __mapper_args__ = {
         'polymorphic_identity': 'assembl:postHiddenLinkedToIdea',
@@ -1244,6 +1264,12 @@ class IdeaRelatedPostLink(IdeaContentPositiveLink):
     A post that is relevant, as a whole, to an idea, without having a specific
     extract harvested.
     """
+    __tablename__ = 'idea_related_post_link'
+
+    id = Column(Integer, ForeignKey(
+        'idea_content_positive_link.id',
+        ondelete='CASCADE', onupdate='CASCADE'
+    ), primary_key=True)
 
     @classmethod
     def special_quad_patterns(cls, alias_manager):
@@ -1427,6 +1453,12 @@ class IdeaContentNegativeLink(IdeaContentLink):
     A negative link between an idea and a Content.  Such links mean that
     a transitive context should be considered broken.  Used for thread breaking
     """
+    __tablename__ = 'idea_content_negative_link'
+
+    id = Column(Integer, ForeignKey(
+        'idea_content_link.id',
+        ondelete='CASCADE', onupdate='CASCADE'
+    ), primary_key=True)
 
     __mapper_args__ = {
         'polymorphic_identity': 'assembl:postDelinkedToIdea_abstract',
@@ -1439,6 +1471,12 @@ class IdeaThreadContextBreakLink(IdeaContentNegativeLink):
     It indicates that from this point on in the thread, this idea is no longer
     discussed.
     """
+    __tablename__ = 'idea_thread_context_break_link'
+
+    id = Column(Integer, ForeignKey(
+        'idea_content_negative_link.id',
+        ondelete='CASCADE', onupdate='CASCADE'
+    ), primary_key=True)
 
     __mapper_args__ = {
         'polymorphic_identity': 'assembl:postDelinkedToIdea',
