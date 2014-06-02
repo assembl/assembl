@@ -677,11 +677,15 @@ def database_restore():
     """
     Restores the database backed up on the remote server
     """
-    assert(env.wsginame in ('staging.wsgi', 'dev.wsgi'))
+    if(env.is_production_env is True):
+        abort(red("You are not allowed to restore a database to a production " +
+                "environment.  If this is a server restore situation, you " +
+                "have to temporarily declare env.is_production_env = False " +
+                "in the environment"))
     env.debug = True
     
-    if(env.wsginame != 'dev.wsgi'):
-        execute(webservers_stop)
+    #if(env.wsginame != 'dev.wsgi'):
+    #    execute(webservers_stop)
     with prefix(venv_prefix()), cd(virtuoso_db_directory()):
         venvcmd("supervisorctl stop virtuoso")
     # Drop db
@@ -717,6 +721,8 @@ def commonenv(projectpath, venvpath=None):
     """
     env.projectname = "assembl"
     env.projectpath = projectpath
+    #Production env will be protected from accidental database restores
+    env.is_production_env = False
     if venvpath:
         env.venvpath = venvpath
     else: 
@@ -798,6 +804,7 @@ def coeus_stagenv():
     [ENVIRONMENT] Staging
     """
     commonenv(os.path.normpath("/var/www/assembl/"))
+    env.is_production_env = True
     env.wsginame = "staging.wsgi"
     env.urlhost = "assembl.coeus.ca"
     env.user = "www-data"
@@ -818,6 +825,7 @@ def coeus_stagenv2():
     [ENVIRONMENT] Staging
     """
     commonenv(os.path.normpath("/var/www/assembl2/"))
+    env.is_production_env = False
     env.wsginame = "staging.wsgi"
     env.urlhost = "assembl2.coeus.ca"
     env.user = "www-data"
@@ -838,6 +846,7 @@ def inm_prodenv():
     [ENVIRONMENT] INM
     """
     commonenv(os.path.normpath("/var/www/assembl_inm/"))
+    env.is_production_env = True
     env.wsginame = "prod.wsgi"
     env.urlhost = "agora.inm.qc.ca"
     env.user = "www-data"
@@ -851,22 +860,6 @@ def inm_prodenv():
     env.uses_uwsgi = True
     env.use_virtuoso = "/usr"
     env.gitbranch = "develop"
-
-@task
-def prodenv():
-    """
-    [ENVIRONMENT] Production
-    """
-    commonenv()
-    env.venvname = "assembl.imaginationforpeople.org"
-    env.wsginame = "prod.wsgi"
-    env.urlhost = "www.imaginationforpeople.org"
-    env.user = "web"
-    env.home = "www"
-    require('projectname', provided_by=('commonenv',))
-    env.hosts = ['i4p-prod.imaginationforpeople.org']
-
-    env.gitbranch = "master"
 
 @task
 def flushmemcache():
