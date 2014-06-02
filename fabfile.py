@@ -822,7 +822,6 @@ def coeus_stagenv2():
     env.urlhost = "assembl2.coeus.ca"
     env.user = "www-data"
     env.home = "www-data"
-    env.db_name = 'assembl2'
     env.ini_file = 'local.ini'
     require('projectname', provided_by=('commonenv',))
     env.hosts = ['coeus.ca']
@@ -830,6 +829,7 @@ def coeus_stagenv2():
     env.uses_apache = False
     env.uses_ngnix = True
     env.uses_uwsgi = True
+    env.use_virtuoso = "/usr"
     env.gitbranch = "develop"
 
 @task    

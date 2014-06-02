@@ -80,6 +80,7 @@ tornado==3.2.1
 transaction==1.4.3
 translationstring==1.1
 uricore==0.1.2
+uwsgitop==0.8
 -e git+https://github.com/maparent/velruse.git#egg=velruse
 venusian==1.0a8
 waitress==0.8.9
