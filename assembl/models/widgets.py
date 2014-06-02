@@ -96,7 +96,6 @@ class Widget(DiscussionBoundBase):
             uri += '/%d/children' % (Idea.get_database_id(idea_uri), )
         return uri
 
-
     def get_messages_uri(self):
         idea_uri = self.settings_json.get('idea', None)
         if idea_uri:
@@ -179,6 +178,7 @@ class WidgetUserConfig(DiscussionBoundBase):
 
     @classmethod
     def get_discussion_condition(cls, discussion_id):
-        return cls.widget_id == Widget.id & Widget.discussion_id == discussion_id
+        return (cls.widget_id == Widget.id) & (
+            Widget.discussion_id == discussion_id)
 
     crud_permissions = CrudPermissions(P_ADD_POST)  # all participants...
