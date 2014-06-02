@@ -17,7 +17,46 @@ How to use the vote widget
 You have to POST to http://localhost:6543/data/Discussion/1/widgets using the following variables:
 - variable name: "widget_type", variable value: "vote"
 - variable name: "settings", variable example value:
-{"axes":[{"name":"Rentabilite (%)","description":"Description de l'axe rentabilite","valueMin":0,"valueMax":100,"valueDefault":10,"ticks":6},{"name":"Risque (%)","description":"Description de l'axe risque","valueMin":0,"valueMax":100,"valueDefault":0,"ticks":6},{"name":"Investissement (Euros)","description":"Description de l'axe investissement","valueMin":0,"valueMax":50000,"valueDefault":22222,"ticks":5},{"name":"Difficulte de mise en oeuvre (note)","description":"Description de l'axe difficulte de mise en oeuvre","valueMin":0,"valueMax":100,"valueDefault":50,"ticks":12,"descriptionMin":"Tres facile","descriptionMax":"Tres difficile","colorMin":"#00ff00","colorMax":"#ff0000","colorAverage":"#ffff00","colorCursor":"#000000"}],"width":900,"height":300,"padding":60,"axisWidthDefault":100}
+{
+    "postVoteUrl":"http://localhost:6543/data/Discussion/1/widgets",
+    "items":[
+        {
+            "type":"2_axes",
+            "criteria":[
+                {
+                    "id":"rentabilite","name":"Rentabilite (%)","description":"Description de l'axe rentabilite","valueMin":0,"valueMax":100,"valueDefault":10,"ticks":6
+                },
+                {
+                    "id":"risque","name":"Risque (%)","description":"Description de l'axe risque","valueMin":0,"valueMax":100,"valueDefault":0,"ticks":6
+                }
+            ],
+            "width": 300,
+            "height": 300
+        },
+        {
+            "type": "vertical_gauge",
+            "criteria": [
+                {
+                    "id":"investissement","name":"Investissement (Euros)","description":"Description de l'axe investissement","valueMin":0,"valueMax":50000,"valueDefault":22222,"ticks":5
+                }
+            ],
+            "width": 300,
+            "height": 300
+        },
+        {
+            "type": "vertical_gauge",
+            "criteria": [
+                {
+                    "id":"difficulte_mise_en_oeuvre","name":"Difficulte de mise en oeuvre (note)","description":"Description de l'axe difficulte de mise en oeuvre","valueMin":0,"valueMax":100,"valueDefault":50,"ticks":12,"descriptionMin":"Tres facile","descriptionMax":"Tres difficile","colorMin":"#00ff00","colorMax":"#ff0000","colorAverage":"#ffff00","colorCursor":"#000000"
+                }
+            ],
+            "width": 300,
+            "height": 300
+        }
+    ],
+    "padding":60,
+    "axisWidthDefault":100
+}
 
 2) Use the response to build the URL which users will access
 
