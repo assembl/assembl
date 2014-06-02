@@ -7,5 +7,7 @@
     "vote":"Votez",
     "title":"titre",
     "cancel":"Annuler",
-    "validVote":"Validez vos votes"
+    "validVote":"Validez vos votes",
+    "needToConnect":"Vous allez être redirigé vers la page de connexion dans {{time}}s ",
+    "connect":"Connectez vous !"
 }

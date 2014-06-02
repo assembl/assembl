@@ -1,11 +1,10 @@
 <div class="commentToSubIdea" ng-if="comments.length > 0">
     <div class="media media-comment" ng-repeat="com in comments">
         <a class="pull-left" href="#">
-            <img class="media-object" alt="40x40" ng-src="" style="width: 30px; height: 30px;">
+            <img class="media-object" alt="30x30" ng-src="{{com.avatar}}" style="width: 30px; height: 30px;">
         </a>
         <div class="media-body">
-            <h5 class="media-heading">{{com.subject}}</h5>
-            <span>2</span>
+            <h5 class="media-heading">{{com.username}}</h5>
             <p>{{com.body}}</p>
             <span class="text-info">{{com.date}}</span>
         </div>

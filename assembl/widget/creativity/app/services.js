@@ -15,19 +15,15 @@ creativityServices.factory('localConfig', function($http){
 
 });
 
+//CARD GAME
 creativityServices.factory('cardGame', function($http){
     return {
         getCards: function(number){
             var url = 'config/game_'+number+'.json';
-
             return $http.get(url);
         }
-
-
     }
-
 });
-
 
 //CONFIG
 creativityServices.factory('Configuration', ['$resource', function($resource) {

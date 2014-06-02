@@ -42,8 +42,6 @@ creativityApp.directive('comments', function($http, $log, $rootScope){
 
             $scope.formData = {};
             $scope.comments = [];
-            //$scope.user = $rootScope.widgetConfig.user.split('/')[1];
-
             /**
              * get all comments from a sub idea
              */
@@ -51,11 +49,15 @@ creativityApp.directive('comments', function($http, $log, $rootScope){
 
                  var rootUrl = $scope.idea.widget_add_post_endpoint;
                      rootUrl = rootUrl +'?view=default';
+                 var user_id = $rootScope.widgetConfig.user['@id'].split('/')[1],
+                     username = $rootScope.widgetConfig.user.name;
 
                 $http.get(rootUrl).then(function(response){
                     angular.forEach(response.data, function(com){
 
                         com.date = moment(com.date).fromNow();
+                        com.avatar = '/user/id/'+ user_id +'/avatar/30';
+                        com.username = username;
 
                         $scope.comments.push(com);
                     })

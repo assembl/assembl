@@ -242,7 +242,11 @@ creativityApp.controller('creativitySessionCtl',
 
         var rootUrl = $rootScope.widgetConfig.ideas_uri;
             rootUrl = '/data/'+ rootUrl.split(':')[1] +'?view=default';
-        var ideas = [];
+        var ideas = [],
+            user_id = $rootScope.widgetConfig.user['@id'].split('/')[1];
+
+        console.log($rootScope.widgetConfig)
+
 
         $http.get(rootUrl).then(function(response){
             angular.forEach(response.data, function(item){
@@ -250,8 +254,9 @@ creativityApp.controller('creativitySessionCtl',
                 if(item.widget_add_post_endpoint){
 
                     item.widget_add_post_endpoint = '/data/'+item.widget_add_post_endpoint.split(':')[1];
-
                     item.creationDate = moment(item.creationDate).fromNow();
+                    item.avatar = '/user/id/'+user_id+'/avatar/40';
+                    item.username = $rootScope.widgetConfig.user.name;
 
                     ideas.push(item);
                 }
@@ -340,12 +345,7 @@ creativityApp.controller('ratingCtl',
     /**
      * Load config card
      */
-    cardGame.getCards(1).success(function(data){
-
-        console.log(data);
-
-        //$scope.cards = data.card_game;
-    });
+    //cardGame.getCards(1).success(function(data){});
 
 }]);
 
