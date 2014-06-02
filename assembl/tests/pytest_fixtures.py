@@ -114,9 +114,9 @@ def test_app(request, app_settings, admin_user):
     app = TestApp(assembl.main(
         global_config, nosecurity=True, **app_settings))
     config = testing.setUp(
-                registry=app.app.registry,
-                settings=app_settings,
-            )
+        registry=app.app.registry,
+        settings=app_settings,
+    )
     dummy_policy = config.testing_securitypolicy(
         userid=admin_user.id, permissive=True)
     config.set_authorization_policy(dummy_policy)
@@ -165,14 +165,17 @@ def mailbox(request, discussion, test_session):
         test_session.delete(m)
     return m
 
+
 @pytest.fixture(scope="function")
 def jack_layton_mailbox(request, discussion, test_session):
     """ From https://dev.imaginationforpeople.org/redmine/projects/assembl/wiki/SampleDebate
     """
     import os
     from assembl.models import MaildirMailbox
-    maildir_path=os.path.join(os.path.dirname(__file__), 'jack_layton_mail_fixtures_maildir')
-    m = MaildirMailbox(discussion=discussion, name='Jack Layton fixture', filesystem_path=maildir_path)
+    maildir_path = os.path.join(os.path.dirname(__file__),
+                                'jack_layton_mail_fixtures_maildir')
+    m = MaildirMailbox(discussion=discussion, name='Jack Layton fixture',
+                       filesystem_path=maildir_path)
     m.do_import_content(m, only_new=True)
     test_session.add(m)
     test_session.flush()
@@ -180,6 +183,7 @@ def jack_layton_mailbox(request, discussion, test_session):
     def fin():
         test_session.delete(m)
     return m
+
 
 @pytest.fixture(scope="function")
 def post_source(request, discussion, test_session):
@@ -198,7 +202,7 @@ def post_source(request, discussion, test_session):
 def root_post_1(request, participant1_user, discussion, test_session):
     from assembl.models import Post
     p = Post(
-        discussion=discussion, creator = participant1_user,
+        discussion=discussion, creator=participant1_user,
         subject=u"a root post", body=u"post body",
         type="post", message_id="msg1")
     test_session.add(p)
@@ -210,10 +214,11 @@ def root_post_1(request, participant1_user, discussion, test_session):
 
 
 @pytest.fixture(scope="function")
-def reply_post_1(request, participant2_user, discussion, root_post_1, test_session):
+def reply_post_1(request, participant2_user, discussion,
+                 root_post_1, test_session):
     from assembl.models import Post
     p = Post(
-        discussion=discussion, creator = participant2_user,
+        discussion=discussion, creator=participant2_user,
         subject=u"re1: root post", body=u"post body",
         type="post", message_id="msg2")
     test_session.add(p)
@@ -227,10 +232,11 @@ def reply_post_1(request, participant2_user, discussion, root_post_1, test_sessi
 
 
 @pytest.fixture(scope="function")
-def reply_post_2(request, participant2_user, discussion, reply_post_1, test_session):
+def reply_post_2(request, participant2_user, discussion,
+                 reply_post_1, test_session):
     from assembl.models import Post
     p = Post(
-        discussion=discussion, creator = participant2_user,
+        discussion=discussion, creator=participant2_user,
         subject=u"re2: root post", body=u"post body",
         type="post", message_id="msg3")
     test_session.add(p)
@@ -244,10 +250,11 @@ def reply_post_2(request, participant2_user, discussion, reply_post_1, test_sess
 
 
 @pytest.fixture(scope="function")
-def reply_post_3(request, participant2_user, discussion, root_post_1, test_session):
+def reply_post_3(request, participant2_user, discussion,
+                 root_post_1, test_session):
     from assembl.models import Post
     p = Post(
-        discussion=discussion, creator = participant2_user,
+        discussion=discussion, creator=participant2_user,
         subject=u"re2: root post", body=u"post body",
         type="post", message_id="msg4")
     test_session.add(p)
@@ -303,6 +310,51 @@ def subidea_1_1(request, discussion, subidea_1, test_session):
 
 
 @pytest.fixture(scope="function")
+def criterion_1(request, discussion, subidea_1, test_session):
+    from assembl.models import Idea, IdeaLink
+    i = Criterion(short_title="cost", discussion=discussion)
+    test_session.add(i)
+    l_1_11 = IdeaLink(source=subidea_1, target=i)
+    test_session.add(l_1_11)
+    test_session.flush()
+
+    def fin():
+        test_session.delete(i)
+        test_session.delete(l_1_11)
+    return i
+
+
+@pytest.fixture(scope="function")
+def criterion_2(request, discussion, subidea_1, test_session):
+    from assembl.models import Idea, IdeaLink
+    i = Criterion(short_title="quality", discussion=discussion)
+    test_session.add(i)
+    l_1_11 = IdeaLink(source=subidea_1, target=i)
+    test_session.add(l_1_11)
+    test_session.flush()
+
+    def fin():
+        test_session.delete(i)
+        test_session.delete(l_1_11)
+    return i
+
+
+@pytest.fixture(scope="function")
+def criterion_3(request, discussion, subidea_1, test_session):
+    from assembl.models import Idea, IdeaLink
+    i = Criterion(short_title="time", discussion=discussion)
+    test_session.add(i)
+    l_1_11 = IdeaLink(source=subidea_1, target=i)
+    test_session.add(l_1_11)
+    test_session.flush()
+
+    def fin():
+        test_session.delete(i)
+        test_session.delete(l_1_11)
+    return i
+
+
+@pytest.fixture(scope="function")
 def subidea_1_1_1(request, discussion, subidea_1_1, test_session):
     from assembl.models import Idea, IdeaLink
     i = Idea(short_title="idea 1.1.1", discussion=discussion)
@@ -342,7 +394,9 @@ def synthesis_1(request, discussion, subidea_1, subidea_1_1, test_session):
 
 
 @pytest.fixture(scope="function")
-def extract_post_1_to_subidea_1_1(request, participant2_user, reply_post_1, subidea_1_1, discussion, test_session):
+def extract_post_1_to_subidea_1_1(
+        request, participant2_user, reply_post_1,
+        subidea_1_1, discussion, test_session):
     """ Links reply_post_1 to subidea_1_1 """
     from assembl.models import Extract
     e = Extract(

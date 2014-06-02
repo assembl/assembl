@@ -1062,6 +1062,30 @@ class RootIdea(Idea):
     crud_permissions = CrudPermissions(P_ADMIN_DISC)
 
 
+class Issue(Idea):
+    __mapper_args__ = {
+        'polymorphic_identity': 'ibis:Issue',
+    }
+
+
+class Position(Idea):
+    __mapper_args__ = {
+        'polymorphic_identity': 'ibis:Position',
+    }
+
+
+class Argument(Idea):
+    __mapper_args__ = {
+        'polymorphic_identity': 'ibis:Argument',
+    }
+
+
+class Criterion(Idea):
+    __mapper_args__ = {
+        'polymorphic_identity': 'ibis:Criterion',
+    }
+
+
 class IdeaLink(DiscussionBoundBase):
     """
     A generic link between two ideas
@@ -1142,6 +1166,37 @@ class IdeaLink(DiscussionBoundBase):
     crud_permissions = CrudPermissions(
             P_ADD_IDEA, P_READ, P_EDIT_IDEA, P_EDIT_IDEA,
             P_EDIT_IDEA, P_EDIT_IDEA)
+
+
+class PositionRespondsToIssue(IdeaLink):
+    __mapper_args__ = {
+        'polymorphic_identity': 'ibis:PositionRespondsToIssue',
+    }
+
+
+class ArgumentSupportsIdea(IdeaLink):
+    __mapper_args__ = {
+        'polymorphic_identity': 'ibis:ArgumentSupportsIdea',
+    }
+
+
+class ArgumentOpposesIdea(IdeaLink):
+    __mapper_args__ = {
+        'polymorphic_identity': 'ibis:ArgumentOpposesIdea',
+    }
+
+
+class IssueAppliesTo(IdeaLink):
+    __mapper_args__ = {
+        'polymorphic_identity': 'ibis:IssueAppliesTo',
+    }
+
+
+class IssueQuestions(IssueAppliesTo):
+    __mapper_args__ = {
+        'polymorphic_identity': 'ibis:IssueQuestions',
+    }
+
 
 class IdeaContentLink(DiscussionBoundBase):
     """
