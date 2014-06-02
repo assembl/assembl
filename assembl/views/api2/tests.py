@@ -95,7 +95,7 @@ def test_widget_basic_interaction(
     # Post the initial configuration
     new_widget_loc = test_app.post(
         '/data/Discussion/%d/widgets' % (discussion.id,), {
-            'widget_type': 'creativity',
+            'type': 'CreativityWidget',
             'settings': json.dumps({
                 'idea': 'local:Idea/%d' % (subidea_1.id)
             })

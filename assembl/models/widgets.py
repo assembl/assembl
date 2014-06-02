@@ -19,7 +19,12 @@ class Widget(DiscussionBoundBase):
     id = Column(Integer, primary_key=True)
 
     type = Column(String(60), nullable=False)
-    widget_type = Column(String(120), nullable=False)
+
+    __mapper_args__ = {
+        'polymorphic_identity': 'widget',
+        'polymorphic_on': 'type',
+        'with_polymorphic': '*'
+    }
 
     settings = Column(Text)  # JSON blob
     state = Column(Text)  # JSON blob
@@ -30,33 +35,6 @@ class Widget(DiscussionBoundBase):
         nullable=False
     )
     discussion = relationship(Discussion, backref="widgets")
-
-    main_idea_view_id = Column(
-        Integer,
-        ForeignKey('idea_graph_view.id',
-                   ondelete="CASCADE", onupdate="CASCADE"),
-        nullable=True
-    )
-    main_idea_view = relationship('IdeaGraphView')
-
-    __mapper_args__ = {
-        'polymorphic_identity': 'widget',
-        'polymorphic_on': 'type',
-        'with_polymorphic': '*'
-    }
-
-    def get_idea_view(self):
-        if self.main_idea_view_id is None:
-            assert self.discussion
-            view = ExplicitSubGraphView(discussion=self.discussion)
-            self.main_idea_view = view
-            self.db.add(view)
-            idea_uri = self.settings_json.get('idea', None)
-            if idea_uri:
-                self.db.add(SubGraphIdeaAssociation(
-                    idea=Idea.get_instance(idea_uri), sub_graph=view))
-            self.db.flush()
-        return self.main_idea_view
 
     def get_discussion_id(self):
         return self.discussion_id
@@ -88,6 +66,72 @@ class Widget(DiscussionBoundBase):
     def state_json(self, val):
         self.state = json.dumps(val)
 
+    def update_json(self, json, user_id=Everyone):
+        from ..auth.util import user_has_permission
+        if user_has_permission(self.discussion_id, user_id, P_ADMIN_DISC):
+            new_type = json.get('@type', self.type)
+            if self.type != new_type:
+                polymap = inspect(self.__class__).polymorphic_identity
+                if new_type not in polymap:
+                    return None
+                new_type = polymap[new_type].class_
+                new_instance = self.change_class(new_type)
+                return new_instance.update_json(json)
+            if 'settings' in json:
+                self.settings_json = json['settings']
+            if 'discussion' in json:
+                self.discussion = Discussion.get_instance(json['discussion'])
+        if 'state' in json:
+            self.state_json = json['state']
+        # Later
+        # if user_id and 'user_state' in json:
+        #     old_state = self.db.query(WidgetUserConfig).filter_by(
+        #         widget = self, user_id = user_id).first()
+        #     if old_state:
+        #         old_state.update_json(json['user_state'])
+        #     else:
+        #         state = WidgetUserConfig(widget = self, user_id = user_id)
+        #         state.state_json = json['user_state']
+        #         self.db.add(state)
+        return self
+
+    crud_permissions = CrudPermissions(P_ADMIN_DISC)
+
+
+class IdeaViewWidget(Widget):
+    __tablename__ = "idea_view_widget"
+
+    id = Column(Integer, ForeignKey(
+        'widget.id',
+        ondelete='CASCADE',
+        onupdate='CASCADE'
+    ), primary_key=True)
+
+    main_idea_view_id = Column(
+        Integer,
+        ForeignKey('idea_graph_view.id',
+                   ondelete="CASCADE", onupdate="CASCADE"),
+        nullable=True
+    )
+    main_idea_view = relationship('IdeaGraphView')
+
+    __mapper_args__ = {
+        'polymorphic_identity': 'idea_view_widget',
+    }
+
+    def get_idea_view(self):
+        if self.main_idea_view_id is None:
+            assert self.discussion
+            view = ExplicitSubGraphView(discussion=self.discussion)
+            self.main_idea_view = view
+            self.db.add(view)
+            idea_uri = self.settings_json.get('idea', None)
+            if idea_uri:
+                self.db.add(SubGraphIdeaAssociation(
+                    idea=Idea.get_instance(idea_uri), sub_graph=view))
+            self.db.flush()
+        return self.main_idea_view
+
     def get_ideas_uri(self):
         uri = 'local:Discussion/%d/widgets/%d/main_idea_view/-/ideas' % (
             self.discussion_id, self.id)
@@ -99,8 +143,10 @@ class Widget(DiscussionBoundBase):
     def get_messages_uri(self):
         idea_uri = self.settings_json.get('idea', None)
         if idea_uri:
-            return 'local:Discussion/%d/widgets/%d/main_idea_view/-/ideas/%d/widgetposts' % (
-                self.discussion_id, self.id, Idea.get_database_id(idea_uri))
+            return ('local:Discussion/%d/widgets/%d/main_idea_view'
+                    '/-/ideas/%d/widgetposts') % (
+                        self.discussion_id, self.id,
+                        Idea.get_database_id(idea_uri))
 
     @classmethod
     def extra_collections(cls):
@@ -118,28 +164,48 @@ class Widget(DiscussionBoundBase):
 
         return {'main_idea_view': WidgetViewCollection()}
 
-    def update_json(self, json, user_id=Everyone):
-        from ..auth.util import user_has_permission
-        if 'state' in json:
-            self.state_json = json['state']
-        if user_has_permission(self.discussion_id, user_id, P_ADMIN_DISC):
-            if 'settings' in json:
-                self.settings_json = json['settings']
-            self.widget_type = json.get('widget_type', self.widget_type)
-            if 'discussion' in json:
-                self.discussion = Discussion.get_instance(json['discussion'])
-        # Later
-        # if user_id and 'user_state' in json:
-        #     old_state = self.db.query(WidgetUserConfig).filter_by(
-        #         widget = self, user_id = user_id).first()
-        #     if old_state:
-        #         old_state.update_json(json['user_state'])
-        #     else:
-        #         state = WidgetUserConfig(widget = self, user_id = user_id)
-        #         state.state_json = json['user_state']
-        #         self.db.add(state)
 
-    crud_permissions = CrudPermissions(P_ADMIN_DISC)
+class CreativityWidget(IdeaViewWidget):
+    __mapper_args__ = {
+        'polymorphic_identity': 'creativity_widget',
+    }
+
+
+# These do not seem to be distinguished yet.
+# class CardGameWidget(CreativityWidget):
+#     __mapper_args__ = {
+#         'polymorphic_identity': 'cardgame_widget',
+#     }
+
+
+# class JukeTubeWidget(CreativityWidget):
+#     __mapper_args__ = {
+#         'polymorphic_identity': 'juketube_widget',
+#     }
+
+
+class MultiCriterionVotingWidget(Widget):
+    __mapper_args__ = {
+        'polymorphic_identity': 'multicriterion_voting_widget',
+    }
+
+    def get_criteria_uri(self):
+        idea_uri = self.settings_json.get('idea', None)
+        if idea_uri:
+            return 'local:Discussion/%d/widgets/%d/Idea/%d/criteria' % (
+                self.discussion_id, self.id, Idea.get_database_id(idea_uri))
+
+    def get_user_votes_uri(self):
+        idea_uri = self.settings_json.get('idea', None)
+        if idea_uri:
+            return 'local:Discussion/%d/widgets/%d/Idea/%d/user_votes/' % (
+                self.discussion_id, self.id, Idea.get_database_id(idea_uri))
+
+    def get_vote_results_uri(self):
+        idea_uri = self.settings_json.get('idea', None)
+        if idea_uri:
+            return 'local:Discussion/%d/widgets/%d/Idea/%d/vote_results/' % (
+                self.discussion_id, self.id, Idea.get_database_id(idea_uri))
 
 
 class WidgetUserConfig(DiscussionBoundBase):

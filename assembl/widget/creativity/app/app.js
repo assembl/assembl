@@ -9,7 +9,7 @@ creativityApp.run(['Configuration','$rootScope','$timeout','$window',
      * TODO: this params { type, idea, discutionId } need to be dynamic
      * */
     var data = {
-        widget_type: 'creativity',
+        type: 'CreativityWidget',
         settings: JSON.stringify({"idea": 'local:Idea/2'})
     };
 

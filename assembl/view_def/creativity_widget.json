@@ -296,12 +296,27 @@
     },
     "Widget": {
         "discussion": true,
+        "settings": "settings_json",
+        "state": "state_json",
+        "@type": "type"
+    },
+    "IdeaViewWidget": {
+        "discussion": true,
         "main_idea_view": "&get_idea_view",
         "settings": "settings_json",
         "state": "state_json",
         "ideas_uri": "&get_ideas_uri",
         "messages_uri": "&get_messages_uri",
-        "@type": "widget_type"
+        "@type": "type"
+    },
+    "CreativityWidget": {
+        "discussion": true,
+        "main_idea_view": "&get_idea_view",
+        "settings": "settings_json",
+        "state": "state_json",
+        "ideas_uri": "&get_ideas_uri",
+        "messages_uri": "&get_messages_uri",
+        "@type": "type"
     },
     "BinaryVote": {
         "idea": true,

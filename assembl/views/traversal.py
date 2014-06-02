@@ -192,7 +192,7 @@ class InstanceContext(object):
                 if getattr(inst, reln.key) is not None:
                     # This was already set, assume it was set correctly
                     continue
-                if reln.mapper.class_ == self._instance.__class__:
+                if issubclass(self._instance.__class__, reln.mapper.class_):
                     setattr(inst, reln.key, self._instance)
                     break
         self.__parent__.decorate_instance(instance, assocs)
