@@ -200,6 +200,7 @@
         "num_posts": true,
         "num_read_posts": true,
         "num_orphan_posts": true,
+        "most_common_words": "most_common_words_prop",
         "num_synthesis_posts": true
     },
     "IdeaLink": {
