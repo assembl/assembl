@@ -38,16 +38,17 @@ voteApp.controller('indexCtl',
 
     // @param destination
     // The d3 container (div)
-    // @param xPosCenter
-    // Position on the X coordinates of the center of the gauge, in the container
     // @param item_data
     // One of the elements of the "items" array, from the configuration JSON
-    $scope.drawVerticalGauge = function(destination, xPosCenter, item_data){
+    // @param xPosCenter
+    // Position on the X coordinates of the center of the gauge, in the created SVG
+    $scope.drawVerticalGauge = function(destination, item_data, xPosCenter){
       //console.log("item_data:");
       //console.log(item_data);
       var config = $scope.settings;
       var criterion = item_data.criteria[0];//item_data[0];
       var criterionValue = (criterion.valueDefault || criterion.valueDefault === 0.0) ? criterion.valueDefault : criterion.valueMin;
+      xPosCenter = xPosCenter ? xPosCenter : item_data.width / 2;
 
       // create the graph
       var svg = destination
@@ -76,16 +77,21 @@ voteApp.controller('indexCtl',
         .orient("left")
         .ticks(ticks);
 
-
-      function dragmove(d) {
-        var x = d3.event.x;
-        var y = d3.event.y;
-
+      function setCirclePositionFromOutputRange(y)
+      {
         var v = scale.invert(y);
 
         svg.select("g.criterion").attr("data-criterion-value", v);
 
         svg.select("circle").attr("cy", scale(v));
+      }
+
+
+      function dragmove(d) {
+        //var x = d3.event.x;
+        var y = d3.event.y;
+
+        setCirclePositionFromOutputRange(y);
       }
 
       // define drag beavior
@@ -102,11 +108,7 @@ voteApp.controller('indexCtl',
         var point = d3.mouse(this);
         var p = {x: point[0], y: point[1] };
 
-        var v = scale.invert(p.y);
-
-        svg.select("g.criterion").attr("data-criterion-value", v);
-
-        svg.select("circle").attr("cy", scale(v));
+        setCirclePositionFromOutputRange(p.y);
       }
 
       svg
@@ -154,8 +156,7 @@ voteApp.controller('indexCtl',
         var gradientWidth = 10;
         g.append("rect")
           .attr("x", xPosCenter -gradientWidth/2 )
-          .attr("y", config.padding-1 )
-          //.attr("y", scales[i](config.axes[i].valueMax) )
+          .attr("y", config.padding-1 ) // this is the same as .attr("y", scale(criterion.valueMax) )
           .attr("width",gradientWidth)
           .attr("height",scale(criterion.valueMin) - config.padding +1)
           .attr("fill","url(#gradient_"+criterion.id+")");
@@ -204,14 +205,12 @@ voteApp.controller('indexCtl',
 
       // draw the cursor
       svg.append("circle")
-        //.attr("id", function(d, i){ return "circle"+i; })
         .attr("cx", xPosCenter)
         .attr("cy", scale(criterionValue) )
         .attr("r", 8)
         .style("fill", ( criterion.colorCursor ) ? criterion.colorCursor : "blue")
         .style("cursor", "pointer")
-        ;
-        //.call(drag);
+      ;
 
 
     }
@@ -227,12 +226,12 @@ voteApp.controller('indexCtl',
         console.log(item.type);
         if ( item.type == "vertical_gauge" )
         {
-          $scope.drawVerticalGauge(holder, 100, item);
+          $scope.drawVerticalGauge(holder, item);
         }
         else if ( item.type == "2_axes" )
         {
           // TODO
-          // $scope.drawVerticalGauge(destination, xPosCenter, item_data);
+          // $scope.drawVerticalGauge(destination, item);
         }
       }
 
