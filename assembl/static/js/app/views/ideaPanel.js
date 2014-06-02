@@ -275,8 +275,9 @@ function(Backbone, _, Idea, Message, app, i18n, sprintf, Types, EditableField, C
          * @event
          */
         onDragOver: function(ev){
+            //console.log("ideaPanel:onDragOver() fired");
             ev.preventDefault();
-            if( app.draggedSegment !== null ){
+            if( app.draggedSegment !== null || app.draggedAnnotation !== null){
                 this.panel.addClass("is-dragover");
             }
         },
@@ -285,6 +286,7 @@ function(Backbone, _, Idea, Message, app, i18n, sprintf, Types, EditableField, C
          * @event
          */
         onDragLeave: function(){
+            //console.log("ideaPanel:onDragLeave() fired");
             this.panel.removeClass('is-dragover');
         },
 
@@ -292,6 +294,7 @@ function(Backbone, _, Idea, Message, app, i18n, sprintf, Types, EditableField, C
          * @event
          */
         onDrop: function(ev){
+            //console.log("ideaPanel:onDrop() fired");
             if( ev ){
                 ev.preventDefault();
                 ev.stopPropagation();
@@ -303,6 +306,15 @@ function(Backbone, _, Idea, Message, app, i18n, sprintf, Types, EditableField, C
             if( segment ){
                 this.addSegment(segment);
             }
+            var annotation = app.getDraggedAnnotation();
+            if( annotation ){
+                // Add as a segment
+                app.currentAnnotationIdIdea = this.idea.getId();
+                app.currentAnnotationNewIdeaParentIdea = null;
+                app.saveCurrentAnnotationAsExtract();
+                return;
+            }
+
         },
 
         /**
