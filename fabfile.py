@@ -738,7 +738,7 @@ def commonenv(projectpath, venvpath=None):
     env.uses_ngnix = False
     #Where do we find the virtuoso binaries
     env.uses_global_supervisor = False
-    env.mac = system().startswith('Darwin')
+    env.mac = False
     env.use_virtuoso = getenv('VIRTUOSO_ROOT', '/usr/local/virtuoso-opensource' if env.mac else '/usr')
 
     #Minimal dependencies versions
@@ -767,6 +767,7 @@ def devenv(projectpath=None):
     #env.user = "webapp"
     #env.home = "webapp"
     require('projectname', provided_by=('commonenv',))
+    env.mac = system().startswith('Darwin')
     env.uses_apache = False
     env.uses_ngnix = False
     env.hosts = ['localhost']
