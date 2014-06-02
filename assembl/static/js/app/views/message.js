@@ -33,6 +33,12 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n, Permissions, Message
         isHoisted: false,
 
         /**
+         * Is the reply box currently visible
+         * @type {Boolean}
+         */
+        replyBoxShown: false,
+    
+        /**
          * @init
          * @param {MessageModel} obj the model
          */
@@ -137,7 +143,13 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n, Permissions, Message
              */
             this.loadedAnnotations = {};
             this.loadAnnotations();
-
+            if(this.replyBoxShown) {
+                this.openReplyBox();
+            }
+            else {
+                this.closeReplyBox();
+            };
+            
             return this;
         },
         
@@ -242,6 +254,7 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n, Permissions, Message
          */
         openReplyBox: function(){
             this.$('.message-replybox').show();
+            this.replyBoxShown = true;
         },
 
         /**
@@ -249,6 +262,7 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n, Permissions, Message
          */
         closeReplyBox: function(){
             this.$('.message-replybox').hide();
+            this.replyBoxShown = false;
         },
 
         /**

@@ -164,8 +164,13 @@ def save_idea(request):
         if current_parent is None:
             link = IdeaLink(source=parent, target=idea, order=order)
             Idea.db.add(link)
+            # None of these 3 calls should be necessary, but they do help with 
+            # the parents being available (the "empty parent" bug).
+            # The root cause is somewhere  IdeaLink, or in sqlalchemy proper
+            # but I can't seem to find it - benoitg - 2014-05-27
+            Idea.db.flush()
             Idea.db.expire(parent, ['target_links'])
-            # source already expired
+            Idea.db.expire(idea, ['source_links'])
             parent.send_to_changes()
             for ancestor in prev_ancestors:
                 if ancestor in new_ancestors:

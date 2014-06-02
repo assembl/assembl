@@ -3,10 +3,11 @@ import quopri
 from itertools import groupby, chain
 from collections import defaultdict
 import traceback
+from abc import ABCMeta, abstractmethod
 
 from datetime import datetime
 import anyjson as json
-from sqlalchemy.orm import relationship, backref, aliased
+from sqlalchemy.orm import (relationship, backref, aliased, contains_eager)
 from sqlalchemy.sql import text
 from pyramid.security import Allow, ALL_PERMISSIONS
 from sqlalchemy import (
@@ -27,8 +28,9 @@ from rdflib import URIRef
 from virtuoso.vmapping import PatternIriClass
 
 from assembl.lib.utils import slugify
+from ..nlp.wordcounter import WordCounter
 from . import DiscussionBoundBase
-from ..lib.virtuoso_mapping import QuadMapPatternS
+from ..semantic.virtuoso_mapping import QuadMapPatternS
 from .generic import (PostSource, Content)
 from .post import (Post, SynthesisPost)
 from .mail import IMAPMailbox
@@ -39,7 +41,7 @@ from ..auth import (
 from .auth import (
     DiscussionPermission, Role, Permission, AgentProfile, User,
     UserRole, LocalUserRole, ViewPost)
-from ..namespaces import (
+from ..semantic.namespaces import (
     SIOC, CATALYST, IDEA, ASSEMBL, DCTERMS, OA, QUADNAMES)
 from assembl.views.traversal import AbstractCollectionDefinition
 
@@ -304,6 +306,14 @@ class SubGraphIdeaAssociation(DiscussionBoundBase):
         return (cls.sub_graph_id == IdeaGraphView.id) & \
             (IdeaGraphView.discussion_id == discussion_id)
 
+    # @classmethod
+    # def special_quad_patterns(cls, alias_manager):
+    #     return [QuadMapPatternS(
+    #         Idea.iri_class().apply(cls.source_id),
+    #         IDEA.includes,
+    #         Idea.iri_class().apply(cls.target_id),
+    #         name=QUADNAMES.idea_inclusion_reln)]
+
     crud_permissions = CrudPermissions(P_ADMIN_DISC)
 
 class SubGraphIdeaLinkAssociation(DiscussionBoundBase):
@@ -544,12 +554,42 @@ class Synthesis(ExplicitSubGraphView):
     crud_permissions = CrudPermissions(P_EDIT_SYNTHESIS)
 
 
+class IdeaVisitor(object):
+    CUT_VISIT = object()
+    __metaclass__ = ABCMeta
+    @abstractmethod
+    def visit_idea(self, idea):
+        pass
+
+
+class IdeaLinkVisitor(object):
+    CUT_VISIT = object()
+    __metaclass__ = ABCMeta
+    @abstractmethod
+    def visit_link(self, link):
+        pass
+
+
+class WordCountVisitor(IdeaVisitor):
+    def __init__(self, lang):
+        self.counter = WordCounter(lang)
+
+    def visit_idea(self, idea):
+        short_title = idea.short_title or ''
+        self.counter.add_text(short_title)
+        self.counter.add_text(idea.long_title or short_title)
+        self.counter.add_text(idea.definition or short_title)
+
+    def best(self, num=8):
+        return self.counter.best(num)
+
+
 class Idea(DiscussionBoundBase):
     """
     A core concept taken from the associated discussion
     """
     __tablename__ = "idea"
-    rdf_class = CATALYST.Idea
+    rdf_class = IDEA.GenericIdeaNode
     #rdf_class_id = Column(IRI_ID)
     ORPHAN_POSTS_IDEA_ID = 'orphan_posts'
     sqla_type = Column(String(60), nullable=False)
@@ -587,7 +627,7 @@ class Idea(DiscussionBoundBase):
     widget = relationship("Widget", backref=backref('ideas', order_by=creation_date))
 
     __mapper_args__ = {
-        'polymorphic_identity': 'idea',
+        'polymorphic_identity': 'idea:GenericIdeaNode',
         'polymorphic_on': sqla_type,
         # Not worth it for now, as the only other class is RootIdea, and there
         # is only one per discussion - benoitg 2013-12-23
@@ -740,6 +780,56 @@ JOIN post ON (
              "discussion_id": self.discussion_id})
         return int(result.first()['total_count'])
 
+    def prefetch_descendants(self):
+        pass  #TODO
+
+    def visit_ideas_depth_first(self, idea_visitor):
+        self.prefetch_descendants()
+        self._visit_ideas_depth_first(idea_visitor, set())
+
+    def _visit_ideas_depth_first(self, idea_visitor, visited):
+        if self in visited:
+            # not necessary in a tree, but let's start to think graph.
+            return False
+        result = idea_visitor.visit_idea(self)
+        visited.add(self)
+        if result is not IdeaVisitor.CUT_VISIT:
+            for child in self.children:
+                child._visit_ideas_depth_first(idea_visitor, visited)
+
+    def visit_ideas_breadth_first(self, idea_visitor):
+        self.prefetch_descendants()
+        result = idea_visitor.visit(self)
+        visited = {self}
+        if result is not IdeaVisitor.CUT_VISIT:
+            self._visit_ideas_breadth_first(idea_visitor, visited)
+
+    def _visit_ideas_breadth_first(self, idea_visitor, visited):
+        children = []
+        for child in self.children:
+            if child in visited:
+                continue
+            result = idea_visitor.visit_idea(child)
+            visited.add(child)
+            if result != IdeaVisitor.CUT_VISIT:
+                children.append(child)
+        for child in children:
+            child._visit_ideas_breadth_first(idea_visitor, visited)
+
+    def most_common_words(self, lang=None, num=8):
+        if not lang:
+            # TODO: Is there a better way to do this than get_current_registry?
+            from pyramid.threadlocal import get_current_registry
+            lang = get_current_registry().settings.get(
+                'pyramid.default_locale_name', 'fr')
+        word_counter = WordCountVisitor(lang)
+        self.visit_ideas_depth_first(word_counter)
+        return word_counter.best(num)
+
+    @property
+    def most_common_words_prop(self):
+        return self.most_common_words()
+
     def get_discussion_id(self):
         return self.discussion_id
 
@@ -886,9 +976,14 @@ JOIN post ON (
                 super(WidgetPostCollectionDefinition, self).__init__(cls, Content)
 
             def decorate_query(self, query, parent_instance):
-                return query.join(IdeaContentWidgetLink).join(
+                query = query.join(IdeaContentWidgetLink).join(
                     self.owner_class,
                     IdeaContentWidgetLink.idea_id == parent_instance.id)
+                if Content in chain(*(mapper.entities for mapper in query._entities)):
+                    query = query.options(
+                        contains_eager(Content.widget_idea_links))
+                        # contains_eager(Content.extracts) seems to slow things down instead
+                return query
 
             def decorate_instance(self, instance, parent_instance, assocs):
                 # This is going to spell trouble: Sometimes we'll have creator,
@@ -934,7 +1029,7 @@ class RootIdea(Idea):
     )
 
     __mapper_args__ = {
-        'polymorphic_identity': 'root_idea',
+        'polymorphic_identity': 'assembl:RootIdea',
     }
 
     @property
@@ -967,26 +1062,52 @@ class RootIdea(Idea):
     crud_permissions = CrudPermissions(P_ADMIN_DISC)
 
 
+class Issue(Idea):
+    __mapper_args__ = {
+        'polymorphic_identity': 'ibis:Issue',
+    }
+
+
+class Position(Idea):
+    __mapper_args__ = {
+        'polymorphic_identity': 'ibis:Position',
+    }
+
+
+class Argument(Idea):
+    __mapper_args__ = {
+        'polymorphic_identity': 'ibis:Argument',
+    }
+
+
+class Criterion(Idea):
+    __mapper_args__ = {
+        'polymorphic_identity': 'ibis:Criterion',
+    }
+
+
 class IdeaLink(DiscussionBoundBase):
     """
     A generic link between two ideas
 
-    If a parent-child relation, the parent is the source, the child the target
+    If a parent-child relation, the parent is the source, the child the target.
+    Beware: it's reversed in the RDF model. We will change things around.
     """
     __tablename__ = 'idea_idea_link'
-    rdf_class = IDEA.DirectedIdeaRelation
+    rdf_class = IDEA.InclusionRelation
     id = Column(Integer, primary_key=True,
                 info= {'rdf': QuadMapPatternS(None, ASSEMBL.db_id)})
+    sqla_type = Column(String(60), nullable=False, default="idea:InclusionRelation")
     source_id = Column(Integer, ForeignKey(
             'idea.id', ondelete="CASCADE", onupdate="CASCADE"),
         nullable=False, index=True,
-        info= {'rdf': QuadMapPatternS(None, IDEA.source_idea, Idea.iri_class().apply())})
+        info= {'rdf': QuadMapPatternS(None, IDEA.target_idea, Idea.iri_class().apply())})
     target_id = Column(Integer, ForeignKey(
         'idea.id', ondelete="CASCADE", onupdate="CASCADE"),
         nullable=False, index=True,
-        info= {'rdf': QuadMapPatternS(None, IDEA.destination_idea, Idea.iri_class().apply())})
+        info= {'rdf': QuadMapPatternS(None, IDEA.source_idea, Idea.iri_class().apply())})
     source = relationship(
-        'Idea', 
+        'Idea',
         primaryjoin="and_(Idea.id==IdeaLink.source_id, "
                         "IdeaLink.is_tombstone==False, "
                         "Idea.is_tombstone==False)",
@@ -1003,11 +1124,17 @@ class IdeaLink(DiscussionBoundBase):
         info= {'rdf': QuadMapPatternS(None, ASSEMBL.link_order)})
     is_tombstone = Column(Boolean, nullable=False, default=False, index=True)
 
+    __mapper_args__ = {
+        'polymorphic_identity': 'idea:InclusionRelation',
+        'polymorphic_on': sqla_type,
+        'with_polymorphic': '*'
+    }
+
     @classmethod
     def special_quad_patterns(cls, alias_manager):
         return [QuadMapPatternS(
             Idea.iri_class().apply(cls.source_id),
-            IDEA.InclusionRelation,
+            IDEA.includes,
             Idea.iri_class().apply(cls.target_id),
             name=QUADNAMES.idea_inclusion_reln)]
 
@@ -1039,6 +1166,37 @@ class IdeaLink(DiscussionBoundBase):
     crud_permissions = CrudPermissions(
             P_ADD_IDEA, P_READ, P_EDIT_IDEA, P_EDIT_IDEA,
             P_EDIT_IDEA, P_EDIT_IDEA)
+
+
+class PositionRespondsToIssue(IdeaLink):
+    __mapper_args__ = {
+        'polymorphic_identity': 'ibis:PositionRespondsToIssue',
+    }
+
+
+class ArgumentSupportsIdea(IdeaLink):
+    __mapper_args__ = {
+        'polymorphic_identity': 'ibis:ArgumentSupportsIdea',
+    }
+
+
+class ArgumentOpposesIdea(IdeaLink):
+    __mapper_args__ = {
+        'polymorphic_identity': 'ibis:ArgumentOpposesIdea',
+    }
+
+
+class IssueAppliesTo(IdeaLink):
+    __mapper_args__ = {
+        'polymorphic_identity': 'ibis:IssueAppliesTo',
+    }
+
+
+class IssueQuestions(IssueAppliesTo):
+    __mapper_args__ = {
+        'polymorphic_identity': 'ibis:IssueQuestions',
+    }
+
 
 class IdeaContentLink(DiscussionBoundBase):
     """
@@ -1078,7 +1236,7 @@ class IdeaContentLink(DiscussionBoundBase):
         'AgentProfile', foreign_keys=[creator_id], backref='extracts_created')
 
     __mapper_args__ = {
-        'polymorphic_identity': 'idea_content_link',
+        'polymorphic_identity': 'assembl:relatedToIdea',
         'polymorphic_on': type,
         'with_polymorphic': '*'
     }
@@ -1123,8 +1281,11 @@ class IdeaContentWidgetLink(IdeaContentLink):
     ), primary_key=True)
 
     __mapper_args__ = {
-        'polymorphic_identity': 'idea_content_widget_link',
+        'polymorphic_identity': 'assembl:postHiddenLinkedToIdea',
     }
+
+Idea.widget_owned_contents = relationship(IdeaContentWidgetLink)
+Content.widget_idea_links = relationship(IdeaContentWidgetLink)
 
 
 class IdeaContentPositiveLink(IdeaContentLink):
@@ -1149,7 +1310,7 @@ class IdeaContentPositiveLink(IdeaContentLink):
             condition=cls.idea_id != None)]
 
     __mapper_args__ = {
-        'polymorphic_identity': 'idea_content_positive_link',
+        'polymorphic_identity': 'assembl:postLinkedToIdea_abstract',
     }
 
 
@@ -1175,7 +1336,7 @@ class IdeaRelatedPostLink(IdeaContentPositiveLink):
             condition=cls.idea_id != None)]
 
     __mapper_args__ = {
-        'polymorphic_identity': 'idea_related_post_link',
+        'polymorphic_identity': 'assembl:postLinkedToIdea',
     }
 
 
@@ -1247,7 +1408,7 @@ class Extract(IdeaContentPositiveLink):
     extract_ideas = relationship(Idea, backref="extracts")
 
     __mapper_args__ = {
-        'polymorphic_identity': 'extract',
+        'polymorphic_identity': 'assembl:postExtractRelatedToIdea',
     }
     @property
     def target(self):
@@ -1355,7 +1516,7 @@ class IdeaContentNegativeLink(IdeaContentLink):
     ), primary_key=True)
 
     __mapper_args__ = {
-        'polymorphic_identity': 'idea_content_negative_link',
+        'polymorphic_identity': 'assembl:postDelinkedToIdea_abstract',
     }
 
 
@@ -1373,7 +1534,7 @@ class IdeaThreadContextBreakLink(IdeaContentNegativeLink):
     ), primary_key=True)
 
     __mapper_args__ = {
-        'polymorphic_identity': 'idea_thread_context_break_link',
+        'polymorphic_identity': 'assembl:postDelinkedToIdea',
     }
 
 

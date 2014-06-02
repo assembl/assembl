@@ -57,36 +57,45 @@ function(Backbone, _, $, app, Synthesis, Idea, Permissions, IdeaFamilyView, Idea
                 console.log("synthesisPanel:render() is firing");
             }
             var that = this,
-                rootIdea = app.ideaList.ideas.getRootIdea();
-            
+            rootIdea = null,
+            view_data = {},
+            roots = [];
             app.trigger('render');
-            // Cleaning all previous listeners
-            app.off('synthesisPanel:close');
 
             //Do NOT listen to reset, as it's called within this render
-            this.ideas.off('reset', this.render, this);
+            this.stopListening(this.ideas, 'reset', this.render);
+            
+            if(app.ideaList.ideas.length<1) {
+                //console.log("Idea list isn't available yet (we should at least have the root)");
+                this.listenTo(app.ideaList.ideas, 'reset', this.render);
+            }
+            else{
+                this.stopListening(app.ideaList.ideas, 'reset', this.render);
+                rootIdea = app.ideaList.ideas.getRootIdea();
+                var raw_ideas = this.model.get('ideas');
+                //console.log("Raw Ideas from model: ", raw_ideas)
+                if( raw_ideas ){
+                    var ideas = [];
+                    _.each(raw_ideas, function (raw_idea){
+                        //console.log(raw_idea);
+                        var idea = app.ideaList.ideas.get(raw_idea['@id']);
+                        if(idea) {
+                            ideas.push(idea);
+                        }
+                        else {
+                            console.log("synthesisPanel:render():  This shoudn't happen, fix toombstone support?")
+                        }
+                    });
+                    this.ideas.reset(ideas);
+                }
+            }
             
             // Cleaning previous ckeditor instance
             if( this.ckeditor ){
                 this.ckeditor.destroy();
                 this.ckeditor = null;
             }
-            var raw_ideas = this.model.get('ideas');
-            //console.log("Raw Ideas from model: ", raw_ideas)
-            if( raw_ideas ){
-                var ideas = [];
-                _.each(raw_ideas, function (raw_idea){
-                    //console.log(raw_idea);
-                    var idea = app.ideaList.ideas.get(raw_idea['@id']);
-                    if(idea) {
-                        ideas.push(idea);
-                    }
-                    else {
-                        console.log("synthesisPanel:render():  This shoudn't happen, fix toombstone support?")
-                    }
-                });
-                this.ideas.reset(ideas);
-            }
+
             //console.log("Synthesis idea collection: ", this.ideas)
 
             //var list = document.createDocumentFragment(),
@@ -100,8 +109,6 @@ function(Backbone, _, $, app, Synthesis, Idea, Permissions, IdeaFamilyView, Idea
             data.canEdit = app.getCurrentUser().can(Permissions.EDIT_SYNTHESIS);
             this.$el.html( this.template(data) );
 
-            var view_data = {};
-            var roots = [];
             function inSynthesis(idea) {
                 var retval;
                 if(that.model.get('is_next_synthesis')){
@@ -113,8 +120,11 @@ function(Backbone, _, $, app, Synthesis, Idea, Permissions, IdeaFamilyView, Idea
                     retval = idea != rootIdea && that.ideas.contains(idea)
                 }
                 //console.log("Checking",idea,"returning:", retval, "synthesis is next synthesis:", that.model.get('is_next_synthesis'));
-                return retval};
-            rootIdea.visitDepthFirst(renderVisitor(view_data, roots, inSynthesis));
+                return retval
+                };
+            if(rootIdea){
+                rootIdea.visitDepthFirst(renderVisitor(view_data, roots, inSynthesis));
+            }
 
             _.each(roots, function append_recursive(idea){
                 var rendered_idea_view = new IdeaFamilyView(
@@ -150,7 +160,7 @@ function(Backbone, _, $, app, Synthesis, Idea, Permissions, IdeaFamilyView, Idea
             }
             
             //Restore callback inhibited above
-            this.ideas.on('reset', this.render, this);
+            this.listenTo(this.ideas, 'reset', this.render);
             return this;
         },
 
@@ -193,8 +203,6 @@ function(Backbone, _, $, app, Synthesis, Idea, Permissions, IdeaFamilyView, Idea
             if(this.button){
                 this.button.trigger('click');
             }
-
-            app.trigger('synthesisPanel:close');
         },
 
         /**

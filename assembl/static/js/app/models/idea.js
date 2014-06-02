@@ -334,8 +334,8 @@ function(Base, _, Segment, app, i18n, Types, Permissions){
             if (typeof key === 'object') {
               var attrs = key;
               options = val;
-              if (attrs['parentId'] === null && attrs['root'] !== true) {
-                console.log("empty parent bug");
+              if (attrs['parentId'] === null && this.id !== undefined && attrs['root'] !== true) {
+                console.log("empty parent bug: ", _.clone(attrs));
                 var id = attrs['@id'];
                 var links = app.ideaList.ideaLinks.where({target: id});
                 if (links.length > 0) {
@@ -374,6 +374,10 @@ function(Base, _, Segment, app, i18n, Types, Permissions){
         getRootIdea: function(){
             var retval = this.findWhere({ '@type': Types.ROOT_IDEA });
             if (!retval) {
+                console.log("Size: ", _.size(this.models));
+                _.forEach(this.models, function(model){
+                    console.log(model.get('@type'));
+                })
                 console.log("ERROR: getRootIdea() failed!");
                 console.log(this);
             }

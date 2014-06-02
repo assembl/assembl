@@ -205,8 +205,8 @@ creativityApp.controller('cardsCtl',
 }]);
 
 creativityApp.controller('creativitySessionCtl',
-    ['$scope','localConfig','$rootScope', '$timeout','$http',
-        function($scope, localConfig, $rootScope, $timeout, $http){
+    ['$scope','cardGame','$rootScope', '$timeout','$http',
+        function($scope, cardGame, $rootScope, $timeout, $http){
 
     // activate the right tab
     $("ul.nav li").removeClass("active");
@@ -221,7 +221,7 @@ creativityApp.controller('creativitySessionCtl',
 
         $scope.getSubIdeaFromIdea();
 
-    },1000);
+    },500);
 
     $scope.$watch("message", function(value){
 
@@ -242,15 +242,21 @@ creativityApp.controller('creativitySessionCtl',
 
         var rootUrl = $rootScope.widgetConfig.ideas_uri;
             rootUrl = '/data/'+ rootUrl.split(':')[1] +'?view=default';
-        var ideas = [];
+        var ideas = [],
+            user_id = $rootScope.widgetConfig.user['@id'].split('/')[1];
+
+        console.log($rootScope.widgetConfig)
+
 
         $http.get(rootUrl).then(function(response){
             angular.forEach(response.data, function(item){
-                if(typeof item.widget_add_post_endpoint != 'undefined'){
+
+                if(item.widget_add_post_endpoint){
 
                     item.widget_add_post_endpoint = '/data/'+item.widget_add_post_endpoint.split(':')[1];
-
                     item.creationDate = moment(item.creationDate).fromNow();
+                    item.avatar = '/user/id/'+user_id+'/avatar/40';
+                    item.username = $rootScope.widgetConfig.user.name;
 
                     ideas.push(item);
                 }
@@ -269,7 +275,7 @@ creativityApp.controller('creativitySessionCtl',
         if($scope.formData) {
 
             var rootUrl = $rootScope.widgetConfig.ideas_uri;
-                rootUrl = 'http://localhost:6543/data/'+ rootUrl.split(':')[1];
+                rootUrl = '/data/'+ rootUrl.split(':')[1];
 
             $scope.formData.type = 'Idea';
 
@@ -309,14 +315,60 @@ creativityApp.controller('creativitySessionCtl',
     /**
      * Load config card
      */
-    localConfig.fetch().success(function(data){
-        $scope.cards = data.card_game;
+    cardGame.getCards(1).success(function(data){
+        $scope.game = data;
     });
+
+    /**
+     * Card random
+     * */
+    $scope.shuffle = function(){
+
+        var m = $scope.game.game.length, t, i;
+
+        while (m) {
+
+            // Pick a remaining element…
+            i = Math.floor(Math.random() * m--);
+
+            // And swap it with the current element.
+            t = $scope.game.game[m];
+            $scope.game.game[m] = $scope.game.game[i];
+            $scope.game.game[i] = t;
+        }
+    }
 
 }]);
 
 creativityApp.controller('ratingCtl',
-    ['$scope', function($scope){
+    ['$scope', 'cardGame', function($scope, cardGame){
+    /**
+     * Load config card
+     */
+    //cardGame.getCards(1).success(function(data){});
+
+}]);
+
+creativityApp.controller('editCardCtl',
+    ['$scope','loadCard', function($scope, loadCard){
+
+    $scope.editCard = "Welcome"
+    $scope.game = [];
+
+    $scope.addCardGame = function(){
+      var obj = {
+          card:'new game'
+      };
+
+      $scope.game.push(obj);
+
+    }
+
+    $scope.$watch('game', function(){
+
+    }, true)
+
+    loadCard.readFile();
 
 
 }]);

@@ -96,10 +96,14 @@ function(Backbone, _, Idea, IdeaLink, IdeaView, ideaGraphLoader, app, Types, All
 
             this.body = this.$('.panel-body');
             var y = 0,
-            rootIdea = this.ideas.getRootIdea(),
+            rootIdea = null,
             rootIdeaDirectChildrenModels = [],
-            filter = {};
-
+            filter = {},
+            view_data = {},
+            roots = [];
+            
+            function excludeRoot(idea) {return idea != rootIdea};
+            
             if( this.body.get(0) ){
                 y = this.body.get(0).scrollTop;
             }
@@ -111,36 +115,41 @@ function(Backbone, _, Idea, IdeaLink, IdeaView, ideaGraphLoader, app, Types, All
             }
 
             var list = document.createDocumentFragment();
-
-            if(Object.keys(filter).length > 0) {
-                rootIdeaDirectChildrenModels = this.ideas.where(filter);
+            if(this.ideas.length<1) {
+                //console.log("Idea list isn't available yet (we should at least have the root)");
             }
-            else {
-                rootIdeaDirectChildrenModels = this.ideas.models;
-            }
-
-            rootIdeaDirectChildrenModels = rootIdeaDirectChildrenModels.filter(function(idea) {
-                return (idea.get("parentId") == rootIdea.id) || (idea.get("parentId") == null && idea.id != rootIdea.id); 
+            else{
+                rootIdea = this.ideas.getRootIdea();
+                if(Object.keys(filter).length > 0) {
+                    rootIdeaDirectChildrenModels = this.ideas.where(filter);
                 }
-            );
-
-            rootIdeaDirectChildrenModels = _.sortBy(rootIdeaDirectChildrenModels, function(idea){
-                return idea.get('order');
-            });
-
-            // Synthesis posts pseudo-idea
-            var synthesisView = new SynthesisInIdeaListView({model:rootIdea});
-            list.appendChild(synthesisView.render().el);
+                else {
+                    rootIdeaDirectChildrenModels = this.ideas.models;
+                }
+    
+                rootIdeaDirectChildrenModels = rootIdeaDirectChildrenModels.filter(function(idea) {
+                    return (idea.get("parentId") == rootIdea.id) || (idea.get("parentId") == null && idea.id != rootIdea.id); 
+                    }
+                );
+    
+                rootIdeaDirectChildrenModels = _.sortBy(rootIdeaDirectChildrenModels, function(idea){
+                    return idea.get('order');
+                });
+    
+                // Synthesis posts pseudo-idea
+                var synthesisView = new SynthesisInIdeaListView({model:rootIdea});
+                list.appendChild(synthesisView.render().el);
+                
+                // All posts pseudo-idea
+                var allMessagesInIdeaListView = new AllMessagesInIdeaListView({model:rootIdea});
+                list.appendChild(allMessagesInIdeaListView.render().el);
+                
+                rootIdea.visitDepthFirst(renderVisitor(view_data, roots, excludeRoot));
+                rootIdea.visitDepthFirst(siblingChainVisitor(view_data));
+            }
             
-            // All posts pseudo-idea
-            var allMessagesInIdeaListView = new AllMessagesInIdeaListView({model:rootIdea});
-            list.appendChild(allMessagesInIdeaListView.render().el);
-            
-            var view_data = {};
-            var roots = [];
-            function excludeRoot(idea) {return idea != rootIdea};
-            rootIdea.visitDepthFirst(renderVisitor(view_data, roots, excludeRoot));
-            rootIdea.visitDepthFirst(siblingChainVisitor(view_data));
+
+
 
             _.each(roots, function(idea){
                 var ideaView =  new IdeaView({model:idea}, view_data);

@@ -3,30 +3,45 @@
 var creativityApp = angular.module('creativityApp',
     ['ngRoute','ngSanitize','creativityServices', 'pascalprecht.translate']);
 
-creativityApp.run(['Configuration','$rootScope', function (Configuration, $rootScope) {
+creativityApp.run(['Configuration','$rootScope','$timeout','$window',
+    function (Configuration, $rootScope, $timeout, $window) {
     /*
      * TODO: this params { type, idea, discutionId } need to be dynamic
      * */
     var data = {
-        widget_type: 'creativity',
+        type: 'CreativityWidget',
         settings: JSON.stringify({"idea": 'local:Idea/2'})
+    };
+
+    $rootScope.counter = 5;
+    $rootScope.countdown = function() {
+        $timeout(function() {
+            $rootScope.counter--;
+            $rootScope.countdown();
+        }, 1000);
     };
 
     Configuration.getWidget($.param(data), function(conf){
         conf.get(function(data){
 
-            var widgetConfig = {
-                discussion: data.discussion,
-                ideas_uri: data.ideas_uri,
-                main_idea_view: data.main_idea_view,
-                messages_uri: data.messages_uri,
-                settings: data.settings,
-                state: data.settings,
-                user: data.user,
-                user_permissions: data.user_permissions
+            if(!data.user){
+
+                $('#myModal').modal({
+                    keyboard:false
+                });
+
+                $rootScope.countdown();
+
+                $timeout(function(){
+
+                  $window.location = '/login';
+
+                  $timeout.flush();
+
+                }, 5000);
             }
 
-            $rootScope.widgetConfig = widgetConfig;
+            $rootScope.widgetConfig = data;
 
         });
     });
@@ -55,6 +70,10 @@ creativityApp.config(['$routeProvider', function($routeProvider){
         when('/rating', {
             templateUrl:'app/partials/rating.html',
             controller:'ratingCtl'
+        }).
+        when('/edit', {
+            templateUrl:'app/partials/editCard.html',
+            controller:'editCardCtl'
         }).
         otherwise({
             redirectTo: '/cards'

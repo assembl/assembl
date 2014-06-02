@@ -1,18 +1,18 @@
 <div class="session">
     <div class="col-md-5">
         <div class="cards">
-            <div ng-repeat="card in cards">
+            <div ng-repeat="card in game">
                 <div ng-if="$first">
                     <div class="bs-callout bs-callout-warning">
-                        <p>{{card[0].question}}</p>
+                        <p>{{card[0].head}}</p>
                     </div>
                     <div class="card">
                         <div class="card-top"></div>
-                        <p>{{card[0].description}}</p>
+                        <p>{{card[0].body}}</p>
                         <div class="card-bottom"></div>
                     </div>
                     <div class="slot-machine">
-                        <a class="glyphicon glyphicon-random pointer" href="#"></a>
+                        <a class="glyphicon glyphicon-random" ng-click="shuffle()"></a>
                     </div>
                     <div class="bs-callout bs-callout-info">
                         <p>{{card[0].help}}</p>
@@ -40,7 +40,8 @@
                     <img class="media-object" ng-src="{{idea.avatar}}" alt="40x40" style="width: 40px; height: 40px;">
                 </div>
                 <div class="media-body">
-                    <h5 class="media-heading pull-left">{{idea.shortTitle}}<i class="icon-lamp"></i></h5>
+                    <h5 class="media-heading pull-left">{{idea.username}}</h5>&nbsp;
+                    <span class="pull-left"><i class="icon-lamp"></i>{{idea.shortTitle}}</span>
                     <span class="pull-right">
                         <vote id="idea.id"></vote>
                     </span>

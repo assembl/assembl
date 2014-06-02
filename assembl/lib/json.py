@@ -9,7 +9,7 @@ from json import dumps, JSONEncoder
 class DateJSONEncoder(JSONEncoder):
     def default(self, obj):
         if isinstance(obj, (date, datetime)):
-            return obj.isoformat(' ')
+            return obj.isoformat()
         else:
             return super(DateJSONEncoder, self).default(obj)
 

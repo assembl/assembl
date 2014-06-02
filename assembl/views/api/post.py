@@ -146,7 +146,6 @@ def get_posts(request):
 
     # Post read/unread management
     is_unread = request.GET.get('is_unread')
-    print "\n"+repr(is_unread)+"\n"
     if user_id:
         posts = posts.outerjoin(ViewPost,
                     and_(ViewPost.actor_id==user_id, ViewPost.post_id==PostClass.id)

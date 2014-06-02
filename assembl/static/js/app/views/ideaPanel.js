@@ -1,5 +1,5 @@
-define(['backbone', 'underscore', 'models/idea', 'models/message', 'app', 'i18n', 'types', 'views/editableField', 'views/ckeditorField', 'permissions', 'views/messageSend'],
-function(Backbone, _, Idea, Message, app, i18n, Types, EditableField, CKEditorField, Permissions, MessageSendView){
+define(['backbone', 'underscore', 'models/idea', 'models/message', 'app', 'i18n', 'sprintf', 'types', 'views/editableField', 'views/ckeditorField', 'permissions', 'views/messageSend'],
+function(Backbone, _, Idea, Message, app, i18n, sprintf, Types, EditableField, CKEditorField, Permissions, MessageSendView){
     'use strict';
 
     var LONG_TITLE_ID = 'ideaPanel-longtitle';
@@ -44,7 +44,7 @@ function(Backbone, _, Idea, Message, app, i18n, Types, EditableField, CKEditorFi
             // is associated with the idea, the idea will recieve a change event
             // on the socket
             //app.segmentList.segments.on('change reset', this.render, this);
-            app.users.on('reset', this.render, this);
+            this.listenTo(app.users, 'reset', this.render);
             
             var that = this;
             app.on('idea:select', function(idea){
@@ -73,7 +73,7 @@ function(Backbone, _, Idea, Message, app, i18n, Types, EditableField, CKEditorFi
                 segments:segments,
                 canEdit:canEdit,
                 i18n:i18n,
-                sprintf:sprintf,
+                sprintf:sprintf.sprintf,
                 canDelete:currentUser.can(Permissions.EDIT_IDEA),
                 canEditNextSynthesis:canEditNextSynthesis,
                 canEditExtracts:currentUser.can(Permissions.EDIT_EXTRACT),
@@ -185,12 +185,12 @@ function(Backbone, _, Idea, Message, app, i18n, Types, EditableField, CKEditorFi
         setCurrentIdea: function(idea){
             if( idea !== this.idea ){
                 if( this.idea ) {
-                    this.idea.off('change', this.render);
+                    this.stopListening(this.idea, 'change', this.render);
                 }
                 this.idea = idea;
                 if( idea !== null ){
 
-                    this.idea.on('change', this.render, this);
+                    this.listenTo(this.idea, 'change', this.render);
     
                     app.openPanel(app.ideaPanel);
                 } else {
@@ -275,8 +275,9 @@ function(Backbone, _, Idea, Message, app, i18n, Types, EditableField, CKEditorFi
          * @event
          */
         onDragOver: function(ev){
+            //console.log("ideaPanel:onDragOver() fired");
             ev.preventDefault();
-            if( app.draggedSegment !== null ){
+            if( app.draggedSegment !== null || app.draggedAnnotation !== null){
                 this.panel.addClass("is-dragover");
             }
         },
@@ -285,6 +286,7 @@ function(Backbone, _, Idea, Message, app, i18n, Types, EditableField, CKEditorFi
          * @event
          */
         onDragLeave: function(){
+            //console.log("ideaPanel:onDragLeave() fired");
             this.panel.removeClass('is-dragover');
         },
 
@@ -292,6 +294,7 @@ function(Backbone, _, Idea, Message, app, i18n, Types, EditableField, CKEditorFi
          * @event
          */
         onDrop: function(ev){
+            //console.log("ideaPanel:onDrop() fired");
             if( ev ){
                 ev.preventDefault();
                 ev.stopPropagation();
@@ -303,6 +306,15 @@ function(Backbone, _, Idea, Message, app, i18n, Types, EditableField, CKEditorFi
             if( segment ){
                 this.addSegment(segment);
             }
+            var annotation = app.getDraggedAnnotation();
+            if( annotation ){
+                // Add as a segment
+                app.currentAnnotationIdIdea = this.idea.getId();
+                app.currentAnnotationNewIdeaParentIdea = null;
+                app.saveCurrentAnnotationAsExtract();
+                return;
+            }
+
         },
 
         /**

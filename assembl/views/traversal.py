@@ -10,9 +10,9 @@ from assembl.lib.sqla import *
 
 
 class DictContext(object):
-    def __init__(self, acl, subobjects={}):
-        self.subobjects = subobjects
-        for context in subobjects.itervalues():
+    def __init__(self, acl, subobjects=None):
+        self.subobjects = subobjects or {}
+        for context in self.subobjects.itervalues():
             context.__parent__ = self
         if acl:
             self.__acl__ = acl
@@ -168,7 +168,7 @@ class InstanceContext(object):
             if discussion_id:
                 from assembl.models import Discussion
                 return Discussion.get(id=discussion_id).__acl__
-        return parent.__acl__
+        return self.__parent__.__acl__
 
     def __getitem__(self, key):
         cls = self._instance.__class__
@@ -192,7 +192,7 @@ class InstanceContext(object):
                 if getattr(inst, reln.key) is not None:
                     # This was already set, assume it was set correctly
                     continue
-                if reln.mapper.class_ == self._instance.__class__:
+                if issubclass(self._instance.__class__, reln.mapper.class_):
                     setattr(inst, reln.key, self._instance)
                     break
         self.__parent__.decorate_instance(instance, assocs)
@@ -383,11 +383,13 @@ class CollectionDefinition(AbstractCollectionDefinition):
         return getattr(instance, property.key)
 
     def contains(self, parent_instance, instance):
-        attribute = self.get_attribute(parent_instance)
         if self.property.uselist:
-            return instance in attribute
+            if self.back_property and not self.back_property.uselist:
+                return self.get_attribute(
+                    instance, self.back_property) == parent_instance
+            return instance in self.get_attribute(parent_instance)
         else:
-            return instance == attribute
+            return instance == self.get_attribute(parent_instance)
 
     def get_instance(self, key, parent_instance):
         instance = None

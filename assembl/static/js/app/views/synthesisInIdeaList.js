@@ -41,7 +41,9 @@ function(Backbone, _, $, Idea, app, IdeaView){
          */
         onTitleClick: function(){
             if( app.messageList ){
-                app.messageList.addFilterIsSynthesMessage();
+                app.messageList.filterThroughPanelLock(function(){
+                    app.messageList.addFilterIsSynthesMessage();
+                }, 'syncWithCurrentIdea');
             }
             app.setCurrentIdea(null);
         }

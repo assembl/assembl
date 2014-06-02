@@ -38,21 +38,19 @@
         <span class="message-date">{{ gettext('<time>%(time)s</time>')|format(time=time)|safe }}</span>
         <div><span class="message-subject"><%= subject %></span></div>
     </div>
+</header>
 <% } %>
 </div>
 
 <% if( viewStyle == app.AVAILABLE_MESSAGE_VIEW_STYLES.PREVIEW ){ %>
 <div class="message-body ellipsis" id="<%= messageBodyId %>">
-    <div>
-        <%= app.stripHtml(body) %>
-        <i></i>
-    </div>
+    <div><%= body %><i></i></div>{# Do NOT introduce whitespace within this div #}
     <a class="readmore" href="#" alt="{{ gettext('Read More') }}">{{ gettext('Read More') }}</a>
 </div>
-
+</header>
 <% } 
 else if( viewStyle == app.AVAILABLE_MESSAGE_VIEW_STYLES.FULL_BODY ){ %>
-<div class="message-body" id="<%= messageBodyId %>"> <%= body %> </div>
+<div class="message-body" id="<%= messageBodyId %>"><%= body %></div>
 
 <div class="message-replybox hidden"></div>
 

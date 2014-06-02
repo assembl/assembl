@@ -17,6 +17,7 @@ server {
     location / {
 
         include uwsgi_params;
+        uwsgi_read_timeout 5m;
         uwsgi_pass unix:///var/www/assembl/var/run/uwsgi.sock;
     }
 

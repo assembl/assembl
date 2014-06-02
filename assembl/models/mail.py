@@ -100,7 +100,7 @@ class AbstractMailbox(PostSource):
 
     @staticmethod
     def body_as_html(text_value):
-        text_value = html_escape(text_value)
+        text_value = html_escape(text_value.strip())
         text_value = text_value.replace("\r", '').replace("\n", "<br />")
         return text_value
 
@@ -727,9 +727,6 @@ class Email(ImportedPost):
             self.sender.encode('utf-8'),
             self.recipients.encode('utf-8')
         )
-
-    def get_body(self):
-        return self.body
 
     def get_title(self):
         return self.source.mangle_mail_subject(self.subject)

@@ -14,9 +14,10 @@ def collection_view(request):
     view = (request.matchdict or {}).get('view', None) or '/default'
     view = view[1:]
     json = ctx._instance.generic_json(view)
-    user_id = authenticated_userid(request)
+    user_id = authenticated_userid(request) or Everyone
     if user_id != Everyone:
-        json['user'] = User.uri_generic(user_id)
+        user = User.get(id=user_id)
+        json['user'] = user.generic_json(view_def_name=view)
         json['user_permissions'] = get_permissions(
             user_id, ctx._instance.get_discussion_id())
     return json

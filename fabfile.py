@@ -249,6 +249,7 @@ def updatemaincode():
     with cd(os.path.join(env.projectpath)):
         run('git fetch')
         run('git checkout %s' % env.gitbranch)
+        run('git submodule update --init')
         run('git pull %s %s' % (env.gitrepo, env.gitbranch))
 
 def app_setup():
@@ -678,11 +679,15 @@ def database_restore():
     """
     Restores the database backed up on the remote server
     """
-    assert(env.wsginame in ('staging.wsgi', 'dev.wsgi'))
+    if(env.is_production_env is True):
+        abort(red("You are not allowed to restore a database to a production " +
+                "environment.  If this is a server restore situation, you " +
+                "have to temporarily declare env.is_production_env = False " +
+                "in the environment"))
     env.debug = True
     
-    if(env.wsginame != 'dev.wsgi'):
-        execute(webservers_stop)
+    #if(env.wsginame != 'dev.wsgi'):
+    #    execute(webservers_stop)
     with prefix(venv_prefix()), cd(virtuoso_db_directory()):
         venvcmd("supervisorctl stop virtuoso")
     # Drop db
@@ -707,9 +712,6 @@ def database_restore():
         run('rm  %s' % (os.path.join(virtuoso_db_directory(),restore_dump_name)))
 
     execute(supervisor_process_start, 'virtuoso')
-    
-    if(env.wsginame != 'dev.wsgi'):
-        execute(webservers_start)
 
 ## Server scenarios
 def commonenv(projectpath, venvpath=None):
@@ -718,6 +720,8 @@ def commonenv(projectpath, venvpath=None):
     """
     env.projectname = "assembl"
     env.projectpath = projectpath
+    #Production env will be protected from accidental database restores
+    env.is_production_env = False
     if venvpath:
         env.venvpath = venvpath
     else: 
@@ -739,7 +743,7 @@ def commonenv(projectpath, venvpath=None):
     env.uses_ngnix = False
     #Where do we find the virtuoso binaries
     env.uses_global_supervisor = False
-    env.mac = system().startswith('Darwin')
+    env.mac = False
     env.use_virtuoso = getenv('VIRTUOSO_ROOT', '/usr/local/virtuoso-opensource' if env.mac else '/usr')
 
     #Minimal dependencies versions
@@ -768,6 +772,7 @@ def devenv(projectpath=None):
     #env.user = "webapp"
     #env.home = "webapp"
     require('projectname', provided_by=('commonenv',))
+    env.mac = system().startswith('Darwin')
     env.uses_apache = False
     env.uses_ngnix = False
     env.hosts = ['localhost']
@@ -798,6 +803,7 @@ def coeus_stagenv():
     [ENVIRONMENT] Staging
     """
     commonenv(os.path.normpath("/var/www/assembl/"))
+    env.is_production_env = True
     env.wsginame = "staging.wsgi"
     env.urlhost = "assembl.coeus.ca"
     env.user = "www-data"
@@ -818,11 +824,11 @@ def coeus_stagenv2():
     [ENVIRONMENT] Staging
     """
     commonenv(os.path.normpath("/var/www/assembl2/"))
+    env.is_production_env = False
     env.wsginame = "staging.wsgi"
     env.urlhost = "assembl2.coeus.ca"
     env.user = "www-data"
     env.home = "www-data"
-    env.db_name = 'assembl2'
     env.ini_file = 'local.ini'
     require('projectname', provided_by=('commonenv',))
     env.hosts = ['coeus.ca']
@@ -830,6 +836,7 @@ def coeus_stagenv2():
     env.uses_apache = False
     env.uses_ngnix = True
     env.uses_uwsgi = True
+    env.use_virtuoso = "/usr"
     env.gitbranch = "develop"
 
 @task    
@@ -838,6 +845,7 @@ def inm_prodenv():
     [ENVIRONMENT] INM
     """
     commonenv(os.path.normpath("/var/www/assembl_inm/"))
+    env.is_production_env = True
     env.wsginame = "prod.wsgi"
     env.urlhost = "agora.inm.qc.ca"
     env.user = "www-data"
@@ -851,22 +859,6 @@ def inm_prodenv():
     env.uses_uwsgi = True
     env.use_virtuoso = "/usr"
     env.gitbranch = "develop"
-
-@task
-def prodenv():
-    """
-    [ENVIRONMENT] Production
-    """
-    commonenv()
-    env.venvname = "assembl.imaginationforpeople.org"
-    env.wsginame = "prod.wsgi"
-    env.urlhost = "www.imaginationforpeople.org"
-    env.user = "web"
-    env.home = "www"
-    require('projectname', provided_by=('commonenv',))
-    env.hosts = ['i4p-prod.imaginationforpeople.org']
-
-    env.gitbranch = "master"
 
 @task
 def flushmemcache():

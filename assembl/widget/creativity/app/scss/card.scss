@@ -109,7 +109,7 @@
     }
     .media-body {
       .media-heading {
-        margin: 0 0 2px;
+        margin: 0 10px 2px 0;
       }
       p, span{
         font-size: 12px;
@@ -197,6 +197,10 @@
         width:100%;
       }
     }
+  }
+
+  .slot-machine{
+    cursor: pointer;
   }
 }
 .card-comment {

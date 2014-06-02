@@ -310,7 +310,7 @@ def assembl_login_complete_view(request):
     if account and not account.verified:
         return HTTPFound(location=request.route_url(
             'confirm_emailid_sent',
-            email_account_id=account.email_accounts[0].id))
+            email_account_id=account.id))
     if logged_in:
         if user.id != logged_in:
             # logging in as a different user

@@ -13,10 +13,10 @@ from sqlalchemy import (
     event,
 )
 
-from ..lib.virtuoso_mapping import QuadMapPatternS
+from ..semantic.virtuoso_mapping import QuadMapPatternS
 from .generic import Content, ContentSource
 from .auth import AgentProfile
-from ..namespaces import  SIOC, CATALYST, IDEA, ASSEMBL, DCTERMS, QUADNAMES
+from ..semantic.namespaces import  SIOC, CATALYST, IDEA, ASSEMBL, DCTERMS, QUADNAMES
 
 class Post(Content):
     """
@@ -94,7 +94,7 @@ class Post(Content):
         return self.subject
 
     def get_body(self):
-        return self.body
+        return self.body.strip()
 
     def _set_ancestry(self, new_ancestry):
         descendants = self.get_descendants()
