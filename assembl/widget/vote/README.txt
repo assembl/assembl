@@ -15,7 +15,7 @@ How to use the vote widget
 1) Create an instance of the vote widget, and give it a configuration (the criteria the user will vote on, etc)
 
 You have to POST to http://localhost:6543/data/Discussion/1/widgets using the following variables:
-- variable name: "widget_type", variable value: "vote"
+- variable name: "widget_type", variable value: "MultiCriterionVotingWidget"
 - variable name: "settings", variable example value:
 {
     "postVoteUrl":"http://localhost:6543/data/Discussion/1/widgets",
