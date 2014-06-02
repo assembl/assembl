@@ -31,7 +31,7 @@ creativityApp.directive('vote', function(){
     }
 })
 
-creativityApp.directive('comments', function($http){
+creativityApp.directive('comments', function($http, $log, $rootScope){
     return {
         restrict:'E',
         scope: {
@@ -41,6 +41,8 @@ creativityApp.directive('comments', function($http){
         link: function($scope, element, attr){
 
             $scope.formData = {};
+            $scope.comments = [];
+            //$scope.user = $rootScope.widgetConfig.user.split('/')[1];
 
             /**
              * get all comments from a sub idea
@@ -49,21 +51,17 @@ creativityApp.directive('comments', function($http){
 
                  var rootUrl = $scope.idea.widget_add_post_endpoint;
                      rootUrl = rootUrl +'?view=default';
-                 var comment = [];
 
                 $http.get(rootUrl).then(function(response){
                     angular.forEach(response.data, function(com){
 
                         com.date = moment(com.date).fromNow();
 
-                        comment.push(com);
+                        $scope.comments.push(com);
                     })
-
-                    $scope.comments = comment;
 
                 });
             }
-
             /**
              * Comment an idea from creativity session
              */
@@ -75,7 +73,7 @@ creativityApp.directive('comments', function($http){
                     type: 'Post',
                     subject: 'test_message',
                     body: $scope.formData.comment,
-                    creator_id: 245,
+                    creator_id: $scope.user,
                     message_id: 'bogus'
                 }
 
@@ -88,7 +86,6 @@ creativityApp.directive('comments', function($http){
                         headers: {'Content-Type': 'application/x-www-form-urlencoded'}
                     }).success(function(data, status, headers){
 
-                        $scope.getCommentsFromSubIdea();
 
                     }).error(function(status, headers){
 

@@ -15,17 +15,19 @@ creativityServices.factory('localConfig', function($http){
 
 });
 
-creativityServices.factory('globalMessages', function($http){
-
-    var api_rest = 'test/session.json';
-
+creativityServices.factory('cardGame', function($http){
     return {
-        fetch: function() {
-            return $http.get(api_rest);
+        getCards: function(number){
+            var url = 'config/game_'+number+'.json';
+
+            return $http.get(url);
         }
+
+
     }
 
 });
+
 
 //CONFIG
 creativityServices.factory('Configuration', ['$resource', function($resource) {

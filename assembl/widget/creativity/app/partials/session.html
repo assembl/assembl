@@ -1,18 +1,18 @@
 <div class="session">
     <div class="col-md-5">
         <div class="cards">
-            <div ng-repeat="card in cards">
+            <div ng-repeat="card in game">
                 <div ng-if="$first">
                     <div class="bs-callout bs-callout-warning">
-                        <p>{{card[0].question}}</p>
+                        <p>{{card[0].head}}</p>
                     </div>
                     <div class="card">
                         <div class="card-top"></div>
-                        <p>{{card[0].description}}</p>
+                        <p>{{card[0].body}}</p>
                         <div class="card-bottom"></div>
                     </div>
                     <div class="slot-machine">
-                        <a class="glyphicon glyphicon-random pointer" href="#"></a>
+                        <a class="glyphicon glyphicon-random" ng-click="shuffle()"></a>
                     </div>
                     <div class="bs-callout bs-callout-info">
                         <p>{{card[0].help}}</p>
