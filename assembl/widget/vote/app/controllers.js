@@ -29,12 +29,12 @@ voteApp.controller('indexCtl',
       });
 
       return $scope.myVotes;
-    }
+    };
 
     $scope.submitVote = function(){
       $scope.computeMyVotes();
       console.log($scope.myVotes);
-    }
+    };
 
     // @param destination
     // The d3 container (div)
@@ -46,11 +46,11 @@ voteApp.controller('indexCtl',
       //console.log("item_data:");
       //console.log(item_data);
       var config = $scope.settings;
-      var criterion = item_data.criteria[0];//item_data[0];
+      var criterion = item_data.criteria[0];
       var criterionValue = (criterion.valueDefault || criterion.valueDefault === 0.0) ? criterion.valueDefault : criterion.valueMin;
       xPosCenter = xPosCenter ? xPosCenter : item_data.width / 2;
 
-      // create the graph
+      // create the graph, as a SVG in the d3 container div
       var svg = destination
         .append("svg")
         .attr("width", item_data.width)    
@@ -66,7 +66,7 @@ voteApp.controller('indexCtl',
       // create vertical scale
       var scale = d3.scale.linear()
         .domain([criterion.valueMin, criterion.valueMax])
-        .range([config.height - config.padding, config.padding])
+        .range([item_data.height - config.padding, config.padding])
         .clamp(true);
 
       var ticks = 5;
@@ -178,7 +178,7 @@ voteApp.controller('indexCtl',
 
       // show axis label
       g.append("text")
-        .attr("y", config.height - config.padding*0.3 )
+        .attr("y", item_data.height - config.padding*0.3 )
         .attr("x", xPosCenter )
         .style("text-anchor", "middle")
         .text(criterion.name);
@@ -189,7 +189,7 @@ voteApp.controller('indexCtl',
       if ( criterion.descriptionMin )
       {
         g.append("text")
-          .attr("y", config.height - config.padding*0.7 )
+          .attr("y", item_data.height - config.padding*0.7 )
           .attr("x", xPosCenter )
           .style("text-anchor", "middle")
           .text(criterion.descriptionMin);
@@ -213,7 +213,210 @@ voteApp.controller('indexCtl',
       ;
 
 
-    }
+    };
+
+    // @param destination
+    // The d3 container (div)
+    // @param item_data
+    // One of the elements of the "items" array, from the configuration JSON
+    // @param xPosCenter
+    // Position on the X coordinates of the center of the gauge, in the created SVG
+    $scope.draw2AxesVote = function(destination, item_data, xPosCenter){
+      //console.log("item_data:");
+      //console.log(item_data);
+      var config = $scope.settings;
+      var criteria = item_data.criteria;
+
+      if ( criteria.length < 2 )
+      {
+        console.log("error: need at least 2 criteria");
+        return;
+      }
+
+      var criterionXValue = (criteria[0].valueDefault || criteria[0].valueDefault === 0.0) ? criteria[0].valueDefault : criteria[0].valueMin;
+      var criterionYValue = (criteria[1].valueDefault || criteria[1].valueDefault === 0.0) ? criteria[1].valueDefault : criteria[1].valueMin;
+      xPosCenter = xPosCenter ? xPosCenter : item_data.width / 2;
+
+      // create the graph, as a SVG in the d3 container div
+      var svg = destination
+        .append("svg")
+        .attr("width", item_data.width)    
+        .attr("height", item_data.height);
+
+
+      svg.append("g")
+        .attr("class", "criterion")
+        .attr("data-criterion-id", criteria[0].id)
+        .attr("data-criterion-value", criterionXValue)
+        .attr("data-criterion-type", "x");
+
+      svg.append("g")
+        .attr("class", "criterion")
+        .attr("data-criterion-id", criteria[1].id)
+        .attr("data-criterion-value", criterionYValue)
+        .attr("data-criterion-type", "y");
+
+
+      // create X and Y scales
+      var xScale = d3.scale.linear()
+        .domain([criteria[0].valueMin, criteria[0].valueMax])
+        .range([config.padding, item_data.width - config.padding])
+        .clamp(true);
+
+      var yScale = d3.scale.linear()
+        .domain([criteria[1].valueMin, criteria[1].valueMax])
+        .range([item_data.height - config.padding, config.padding])
+        .clamp(true);
+
+
+      // create X and Y axes using their scales
+      var xTicks = 5;
+      if ( criteria[0].ticks )
+        xTicks = criteria[1].ticks;
+      var xAxis = d3.svg.axis()
+        .scale(xScale)
+        .orient("bottom")
+        .ticks(xTicks);
+
+      var yTicks = 5;
+      if ( criteria[1].ticks )
+        yTicks = criteria[1].ticks;
+      var yAxis = d3.svg.axis()
+        .scale(yScale)
+        .orient("left")
+        .ticks(yTicks);
+
+
+      function setCirclePositionFromOutputRange(x, y, setData)
+      {
+        var xValue = xScale.invert(x);
+        var yValue = yScale.invert(y);
+
+        if ( setData === true )
+        {
+          svg.select("g.criterion[data-criterion-type='x']").attr("data-criterion-value", xValue);
+          svg.select("g.criterion[data-criterion-type='y']").attr("data-criterion-value", yValue);
+        }
+
+        svg.selectAll("circle").attr("cx", xScale(xValue));
+        svg.selectAll("circle").attr("cy", yScale(yValue));
+      }
+
+
+      function dragmove(d) {
+        var x = d3.event.x;
+        var y = d3.event.y;
+
+        setCirclePositionFromOutputRange(x, y);
+      }
+
+      function dragEnd(d){
+        var x = svg.selectAll("circle").attr("cx");
+        var y = svg.selectAll("circle").attr("cy");
+
+        setCirclePositionFromOutputRange(x, y, true);
+      }
+
+      // define drag beavior
+      var drag = d3.behavior.drag()
+        .on("drag", dragmove)
+        .on("dragend", dragEnd);
+
+
+      function click()
+      {
+        // Ignore the click event if it was suppressed
+        if (d3.event.defaultPrevented) return;
+
+        // Extract the click location
+        var point = d3.mouse(this);
+        var p = {x: point[0], y: point[1] };
+
+        setCirclePositionFromOutputRange(p.x, p.y);
+      }
+
+      svg
+        .on("click", click)
+        .call(drag);
+
+
+      var g = svg.append("g");
+
+      // show X axis
+      g.append("g")
+        .attr("class", "axis")
+        .attr("transform", "translate(0," + (item_data.height - config.padding) + ")")
+        .call(xAxis);
+
+      // show Y axis
+      g.append("g")
+        .attr("class", "axis")
+        .attr("transform", "translate(" + config.padding + ",0)")
+        .call(yAxis);
+
+      // show X axis label
+      g.append("text")
+        //.attr("transform", "translate(" + (width / 2) + " ," + (height + margin.bottom) + ")")
+        .attr("y", (item_data.height - config.padding/2) )
+        .attr("x", (item_data.width / 2) )
+        .attr("dy", "1em")
+        .style("text-anchor", "middle")
+        .text(criteria[0].name);
+
+      // show Y axis label
+      g.append("text")
+        .attr("transform", "rotate(-90)")
+        .attr("y", (0) )
+        .attr("x", (0 - item_data.height/2) )
+        .attr("dy", config.padding/3 + "px")
+        .attr("dx", "-2em") // reposition center to integrate text length
+        .style("text-anchor", "middle")
+        .text(criteria[1].name);
+
+      
+        /* TODO
+      // show descriptions of the minimum and maximum values
+      if ( criterion.descriptionMin )
+      {
+        g.append("text")
+          .attr("y", config.height - config.padding*0.7 )
+          .attr("x", xPosCenter )
+          .style("text-anchor", "middle")
+          .text(criterion.descriptionMin);
+      }
+      if ( criterion.descriptionMax )
+      {
+        g.append("text")
+          .attr("y", config.padding*0.7 )
+          .attr("x", xPosCenter )
+          .style("text-anchor", "middle")
+          .text(criterion.descriptionMax);
+      }
+      */
+
+      // draw the cursor (inner disc)
+      svg.append("circle")
+        .attr("cx", xScale(criterionXValue))
+        .attr("cy", yScale(criterionYValue))
+        .attr("r", 7)
+        .style("fill", ( item_data.colorCursor ) ? item_data.colorCursor : "blue")
+        .style("cursor", "pointer")
+      ;
+
+      // draw the cursor (outer circle)
+      svg.append("circle")
+        .attr("cx", xScale(criterionXValue))
+        .attr("cy", yScale(criterionYValue))
+        .attr("r", 10) 
+        .style("fill", "none")
+        .style("stroke", ( item_data.colorCursor ) ? item_data.colorCursor : "blue")
+        .style("cursor", "pointer")
+      ;
+
+    
+    };
+
+
 
     $scope.drawUI = function(){
       var config = $scope.settings;
@@ -222,16 +425,15 @@ voteApp.controller('indexCtl',
       for ( var i = 0; i < config.items.length; ++i )
       {
         var item = config.items[i];
-        console.log("item.type:");
-        console.log(item.type);
+        //console.log("item.type:");
+        //console.log(item.type);
         if ( item.type == "vertical_gauge" )
         {
           $scope.drawVerticalGauge(holder, item);
         }
         else if ( item.type == "2_axes" )
         {
-          // TODO
-          // $scope.drawVerticalGauge(destination, item);
+          $scope.draw2AxesVote(holder, item);
         }
       }
 
