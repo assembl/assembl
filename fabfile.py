@@ -710,9 +710,6 @@ def database_restore():
         run('rm  %s' % (os.path.join(virtuoso_db_directory(),restore_dump_name)))
 
     execute(supervisor_process_start, 'virtuoso')
-    
-    if(env.wsginame != 'dev.wsgi'):
-        execute(webservers_start)
 
 ## Server scenarios
 def commonenv(projectpath, venvpath=None):
