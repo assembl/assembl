@@ -145,7 +145,8 @@ def test_widget_basic_interaction(
     # The new idea should now be in the collection api
     test = test_app.get(idea_endpoint)
     assert test.status_code == 200
-    assert new_idea_id in test.json
+    assert new_idea_id in test.json or new_idea_id in [
+        x['@id'] for x in test.json]
     # TODO: The root idea is included in the above, that's a bug.
     # get the new post endpoint from the idea data
     post_endpoint = new_idea_rep.json.get('widget_add_post_endpoint', None)
@@ -166,7 +167,8 @@ def test_widget_basic_interaction(
     # The new post should now be in the collection api
     test = test_app.get(local_to_absolute(post_endpoint))
     assert test.status_code == 200
-    assert new_post_id in test.json
+    assert new_post_id in test.json or new_post_id in [
+        x['@id'] for x in test.json]
     # Get the new post from the api
     new_post_rep = test_app.get(
         local_to_absolute(new_post_create.location),
@@ -176,3 +178,44 @@ def test_widget_basic_interaction(
     # It should mention its idea
     print new_post_rep.json
     assert new_idea_id in new_post_rep.json['widget_ideas']
+
+
+def teSt_voting_widget(
+        discussion, test_app, subidea_1_1, criterion_1, criterion_2,
+        criterion_3, participant1_user, test_session):
+    # Post the initial configuration
+    db = Idea.db()
+    new_widget_loc = test_app.post(
+        '/data/Discussion/%d/widgets' % (discussion.id,), {
+            'widget_type': 'voting',
+            'settings': json.dumps({
+                'idea': 'local:Idea/%d' % (subidea_1_1.id)
+            })
+        })
+    assert new_widget_loc.status_code == 201
+    # Get the widget from the db
+    db.flush()
+    new_widget = Widget.get_instance(new_widget_loc.location)
+    assert new_widget
+    # Get the widget from the api
+    widget_rep = test_app.get(
+        local_to_absolute(new_widget.uri()),
+        headers={"Accept": "application/json"}
+    )
+    assert widget_rep.status_code == 200
+    widget_rep = widget_rep.json
+    print widget_rep
+    assert 'criteria_uri' in widget_rep
+    assert 'user_votes_uri' in widget_rep
+    assert 'voting_results_uri' in widget_rep
+    # Get the list of criteria (there should be 3)
+    idea_endpoint = local_to_absolute(widget_rep['criteria_uri'])
+    test = test_app.get(idea_endpoint)
+    assert test.status_code == 200
+    assert len(test.json) == 3
+    # Get the voting endpoint
+    # It should be empty
+    # Add votes to the voting endpoint
+    # Get them back
+    # Add votes for another user
+    # Get vote results.
