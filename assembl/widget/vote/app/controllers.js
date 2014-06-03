@@ -13,6 +13,38 @@ voteApp.controller('indexCtl',
       console.log("settings:");
       console.log($scope.settings);
 
+
+      // check that the user is logged in
+      if ( !configService.user || !configService.user.verified )
+      {
+        alert('You have to be authenticated to vote. Please log in and try again.');
+        window.location.assign("/login");
+        return;
+      }
+
+      // TODO (when the API is implemented): check that the user has the right to participate in this vote
+
+
+      // check that an URL to POST the vote is provided in the configuration JSON
+      if ( configService.user_votes_uri && configService.user_votes_uri != "null" )
+      {
+        $scope.postVoteUrl = configService.user_votes_uri;
+        var start = "local:";
+        if ( $scope.postVoteUrl.indexOf(start) == 0 )
+        {
+          $scope.postVoteUrl = "/data/" + $scope.postVoteUrl.slice(start.length);
+        }
+        console.log("postVoteUrl:");
+        console.log($scope.postVoteUrl);
+      }
+      else
+      {
+        // TODO: better error
+        alert("Error: The configuration JSON does not contain a \"user_votes_uri\" property.");
+        return;
+      }
+      
+
       $scope.drawUI();
       $scope.computeMyVotes();
     };
@@ -34,6 +66,7 @@ voteApp.controller('indexCtl',
     $scope.submitVote = function(){
       $scope.computeMyVotes();
       console.log($scope.myVotes);
+      // TODO: POST to postVoteUrl if set
     };
 
     // @param destination
