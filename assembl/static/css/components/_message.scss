@@ -57,6 +57,9 @@ $ellipsiswidth: 3em !default;
     //border-bottom: solid 1px $box-border-color;
     //overflow-x: hidden;
 
+    &.is-highlighted {
+        background-color: $color-highlighting;
+    }
     // A message block Header
     // --------------------
     .message-header {

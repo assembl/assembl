@@ -47,7 +47,7 @@ function(Backbone, _, Moment, ckeditor, app, Message, MessageView, Synthesis, Sy
             });
             synthesisPanel.template = app.loadTemplate('synthesisPanelMessage');
             synthesisPanel.render();
-            this.$('.message-body').append(synthesisPanel.el);
+            this.$('.message-body').html(synthesisPanel.el);
             return;
         }
         

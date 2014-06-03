@@ -804,7 +804,7 @@ function(Backbone, _, $, app, PanelView, MessageFamilyView, Message, i18n, PostQ
         /**
          * Highlights the message by the given id
          * @param {String} id
-         * @param {Function} [callback] The callback function to call if message is not found
+         * @param {Function} [callback] The callback function to call if message is found
          */
         showMessageById: function(id, callback){
             var message = this.messages.get(id),
@@ -829,15 +829,13 @@ function(Backbone, _, $, app, PanelView, MessageFamilyView, Message, i18n, PostQ
                 this.listenToOnce("render_complete",success);
                 return;
             }
-            if( ! _.isFunction(callback) ){
-                callback = function(){
-                    /* console.log("Highlighting");
-                    console.log($(selector).find('.message-body'));
-                    This isn't working...
-                    */
-                    $(selector).find('.message-body').highlight();
-                    };
-            }
+            var real_callback = function(){
+                    $(selector).highlight();
+                    if( _.isFunction(callback) ){
+                        callback();
+                    }
+                };
+
             if( message ){
                 message.trigger('showBody');
                 el = $(selector);
@@ -847,7 +845,7 @@ function(Backbone, _, $, app, PanelView, MessageFamilyView, Message, i18n, PostQ
                     var offset = el.offset().top;
                     // Scrolling to the element
                     var target = offset - panelOffset + panelBody.scrollTop();
-                    panelBody.animate({ scrollTop: target }, { complete: callback });
+                    panelBody.animate({ scrollTop: target }, { complete: real_callback });
                 } else {
                     callback();
                 }

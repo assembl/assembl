@@ -91,15 +91,16 @@ function(Backbone, _, $, Idea, app, Permissions){
                 return;
             }
             btn.text( i18n.gettext('Sending...') );
-            //For message custom callback:  that.closeReplyBox();
+            
             success_callback = function(data, textStatus, jqXHR){
                 btn.text( i18n.gettext('Message posted!') );
                 app.messageList.once("render_complete", function() {
+                        //console.log("Calling showMessageById for "+data['@id']);
                         app.messageList.showMessageById(data['@id']);
                 });
                 setTimeout(function(){
-                    that.$('.messageSend-body').val('');
                     btn.text(btn_original_text);
+                    that.$('.messageSend-cancelbtn').trigger('click');
                 }, 5000);
             };
             this.sendPostToServer(message_body, message_subject, reply_message_id, reply_idea_id, success_callback);
@@ -111,8 +112,8 @@ function(Backbone, _, $, Idea, app, Permissions){
          */
         onCancelMessageButtonClick: function(){
             this.$('.messageSend-body').val(this.initialBody);
-            this.$('.messageSend-sendbtn').hide();
-            this.$('.messageSend-cancelbtn').hide();
+            this.$('.messageSend-sendbtn').addClass("hidden");
+            this.$('.messageSend-cancelbtn').addClass("hidden");
         },
         
         /**
@@ -155,8 +156,8 @@ function(Backbone, _, $, Idea, app, Permissions){
          */
         sendPostToServer: function(message_body, message_subject, reply_message_id, reply_idea_id, success_callback){
             var url = app.getApiUrl('posts'),
-                data = {};
-
+                data = {},
+                that = this;
             data.message = message_body;
             if(message_subject) {
                 data.subject = message_subject;
