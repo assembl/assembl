@@ -154,7 +154,13 @@ function(Backbone, _, $, Idea, Segment, app, Permissions){
          * Select this idea as the current idea
          */
         onTitleClick: function(ev){
+            var that = this;
             ev.stopPropagation();
+            if( app.messageList ){
+                app.messageList.filterThroughPanelLock(function(){
+                    app.messageList.addFilterIsRelatedToIdea(that.model);
+                }, 'syncWithCurrentIdea');
+            }
             if( this.model === app.getCurrentIdea() ){
                 app.setCurrentIdea(null);
             } else {
