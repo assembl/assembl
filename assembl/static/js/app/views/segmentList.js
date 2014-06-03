@@ -325,7 +325,7 @@ function(Backbone, _, $, app, Segment, Types, i18n, Permissions){
          * @event
          */
         onClearButtonClick: function(ev){
-            var ok = confirm( i18n.gettext('segmentList-clearConfirmationMessage') );
+            var ok = confirm( i18n.gettext('Are you sure you want to empty your entire clipboard?') );
             if( ok ){
                 var segments = this.segments.getClipboard();
                 _.each(segments, function(segment){

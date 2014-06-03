@@ -684,7 +684,7 @@ define(['jquery', 'underscore', 'ckeditor', 'moment', 'moment_lang', 'i18n', 'ze
          * @return {Idea}
          */
         getCurrentIdea: function(){
-            return app.ideaPanel.idea;
+            return app.ideaPanel.model;
         },
 
         /**

@@ -53,7 +53,12 @@ function(Backbone, _, $, app, PanelView, MessageFamilyView, Message, i18n, PostQ
          *  @init
          */
         initialize: function(obj){
-            
+            /*this.on("all", function(eventName) {
+                console.log("messageList event received: ", eventName);
+              });
+            this.messages.on("all", function(eventName) {
+                console.log("messageList collection event received: ", eventName);
+              });*/
             if( obj.button ){
                 this.button = $(obj.button).on('click', app.togglePanel.bind(window, 'messageList'));
             }

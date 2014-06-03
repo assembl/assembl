@@ -16,11 +16,6 @@ function(Backbone, _, Idea, Message, app, i18n, sprintf, Types, EditableField, C
         template: app.loadTemplate('ideaPanel'),
 
         /**
-         * @type {Idea.Model}
-         */
-        idea: null,
-
-        /**
          * @init
          */
         initialize: function(obj){
@@ -30,15 +25,12 @@ function(Backbone, _, Idea, Message, app, i18n, sprintf, Types, EditableField, C
                 this.button = $(obj.button).on('click', app.togglePanel.bind(window, 'ideaPanel'));
             }
 
-            if( ! obj.idea ){
-                this.idea = new Idea.Model();
+            if( this.model ){
+                this.listenTo(this.model, 'change', this.render);
             }
-
-            this.listenTo(this.idea, 'change', this.render);
-
-            if( ! obj.idea ){
-                this.idea = null;
-            }
+            else {
+                this.model = null;
+                }
 
             // Benoitg - 2014-05-05:  There is no need for this, if an idealink
             // is associated with the idea, the idea will recieve a change event
@@ -64,12 +56,12 @@ function(Backbone, _, Idea, Message, app, i18n, sprintf, Types, EditableField, C
             currentUser = app.getCurrentUser(),
             canEdit = currentUser.can(Permissions.EDIT_IDEA) || false,
             canEditNextSynthesis = currentUser.can(Permissions.EDIT_SYNTHESIS);
-            if(this.idea) {
-                segments = this.idea.getSegments();
+            if(this.model) {
+                segments = this.model.getSegments();
             }
 
             this.$el.html( this.template( {
-                idea:this.idea,
+                idea:this.model,
                 segments:segments,
                 canEdit:canEdit,
                 i18n:i18n,
@@ -82,9 +74,9 @@ function(Backbone, _, Idea, Message, app, i18n, sprintf, Types, EditableField, C
             } ) );
             this.panel = this.$('.panel');
             app.initClipboard();
-            if(this.idea) {
+            if(this.model) {
             var shortTitleField = new EditableField({
-                'model': this.idea,
+                'model': this.model,
                 'modelProp': 'shortTitle',
                 'class': 'panel-editablearea text-bold',
                 'data-tooltip': i18n.gettext('Short expression (only a few words) of the idea in the table of ideas.'),
@@ -96,24 +88,24 @@ function(Backbone, _, Idea, Message, app, i18n, sprintf, Types, EditableField, C
 
 
             this.longTitleField = new CKEditorField({
-                'model': this.idea,
+                'model': this.model,
                 'modelProp': 'longTitle',
-                'placeholder': this.idea.getLongTitleDisplayText(),
+                'placeholder': this.model.getLongTitleDisplayText(),
                 'canEdit': canEditNextSynthesis
             });
             this.longTitleField.renderTo( this.$('#ideaPanel-longtitle'));
             
             this.definitionField = new CKEditorField({
-                'model': this.idea,
+                'model': this.model,
                 'modelProp': 'definition',
-                'placeholder': this.idea.getDefinitionDisplayText(),
+                'placeholder': this.model.getDefinitionDisplayText(),
                 'canEdit': canEdit
             });
             this.definitionField.renderTo( this.$('#ideaPanel-definition'));
 
             this.commentView = new MessageSendView({
                 'allow_setting_subject': false,
-                'reply_idea': this.idea,
+                'reply_idea': this.model,
                 'body_help_message': i18n.gettext('Comment on this idea here...'),
                 'send_button_label': i18n.gettext('Send your comment'),
                 'subject_label': null,
@@ -146,7 +138,7 @@ function(Backbone, _, Idea, Message, app, i18n, sprintf, Types, EditableField, C
         addSegment: function(segment){
             delete segment.attributes.highlights;
 
-            var id = this.idea.getId();
+            var id = this.model.getId();
             segment.save('idIdea', id);
         },
 
@@ -183,15 +175,19 @@ function(Backbone, _, Idea, Message, app, i18n, sprintf, Types, EditableField, C
          * @param  {Idea} [idea=null]
          */
         setCurrentIdea: function(idea){
-            if( idea !== this.idea ){
-                if( this.idea ) {
-                    this.stopListening(this.idea, 'change', this.render);
+            var that = this,
+            ideaChangeCallback = function() {
+                //console.log("setCurrentIdea:ideaChangeCallback fired");
+                that.render();
+            };
+            if( idea !== this.model ){
+                if( this.model !== null ) {
+                    this.stopListening(this.model, 'change', ideaChangeCallback);
                 }
-                this.idea = idea;
-                if( idea !== null ){
-
-                    this.listenTo(this.idea, 'change', this.render);
-    
+                this.model = idea;
+                if( this.model !== null ){
+                    //console.log("setCurrentIdea:  setting up new listeners for "+this.model.id);
+                    this.listenTo(this.model, 'change', ideaChangeCallback);
                     app.openPanel(app.ideaPanel);
                 } else {
                     //TODO: More sophisticated behaviour here, depending 
@@ -207,8 +203,8 @@ function(Backbone, _, Idea, Message, app, i18n, sprintf, Types, EditableField, C
          */
         deleteCurrentIdea: function(){
             // to be deleted, an idea cannot have any children nor segments
-            var children = this.idea.getChildren(),
-                segments = this.idea.getSegments(),
+            var children = this.model.getChildren(),
+                segments = this.model.getSegments(),
                 that = this;
 
             if( children.length > 0 ){
@@ -222,7 +218,7 @@ function(Backbone, _, Idea, Message, app, i18n, sprintf, Types, EditableField, C
 
             // That's a bingo
             this.blockPanel();
-            this.idea.destroy({ success: function(){
+            this.model.destroy({ success: function(){
                 that.unblockPanel();
                 app.trigger('idea:delete');
                 app.setCurrentIdea(null);
@@ -309,7 +305,7 @@ function(Backbone, _, Idea, Message, app, i18n, sprintf, Types, EditableField, C
             var annotation = app.getDraggedAnnotation();
             if( annotation ){
                 // Add as a segment
-                app.currentAnnotationIdIdea = this.idea.getId();
+                app.currentAnnotationIdIdea = this.model.getId();
                 app.currentAnnotationNewIdeaParentIdea = null;
                 app.saveCurrentAnnotationAsExtract();
                 return;
@@ -338,7 +334,7 @@ function(Backbone, _, Idea, Message, app, i18n, sprintf, Types, EditableField, C
         onClearAllClick: function(ev){
             var ok = confirm( i18n.gettext('ideaPanel-clearConfirmationMessage') );
             if( ok ){
-                this.idea.get('segments').reset();
+                this.model.get('segments').reset();
             }
         },
         /**
