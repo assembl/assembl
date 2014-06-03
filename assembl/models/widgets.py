@@ -166,6 +166,7 @@ class IdeaViewWidget(Widget):
 
 
 class CreativityWidget(IdeaViewWidget):
+    default_view = 'creativity_widget'
     __mapper_args__ = {
         'polymorphic_identity': 'creativity_widget',
     }

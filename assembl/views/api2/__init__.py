@@ -66,7 +66,7 @@ def includeme(config):
              request_method='GET', permission=P_READ)
 def class_view(request):
     ctx = request.context
-    view = request.GET.get('view', 'id_only')
+    view = request.GET.get('view', None) or ctx.get_default_view() or 'id_only'
     q = ctx.create_query(view == 'id_only')
     if view == 'id_only':
         return [ctx._class.uri_generic(x) for (x,) in q.all()]
@@ -95,7 +95,8 @@ def instance_view_jsonld(request):
              request_method='GET', permission=P_READ, accept="application/json")
 def instance_view(request):
     ctx = request.context
-    view = request.GET.get('view', 'default')
+    view = ctx.get_default_view() or 'default'
+    view = request.GET.get('view', view)
     return ctx._instance.generic_json(view)
 
 
@@ -103,7 +104,7 @@ def instance_view(request):
              request_method='GET', permission=P_READ)
 def collection_view(request):
     ctx = request.context
-    view = request.GET.get('view', 'id_only')
+    view = request.GET.get('view', None) or ctx.get_default_view() or 'id_only'
     q = ctx.create_query(view == 'id_only')
     if view == 'id_only':
         return [ctx.collection_class.uri_generic(x) for (x,) in q.all()]

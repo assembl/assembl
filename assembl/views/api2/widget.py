@@ -11,8 +11,7 @@ from ..traversal import InstanceContext
              ctx_instance_class=Widget, permission=P_READ, accept="application/json")
 def collection_view(request):
     ctx = request.context
-    view = (request.matchdict or {}).get('view', None) or '/default'
-    view = view[1:]
+    view = (request.matchdict or {}).get('view', None) or ctx.get_default_view() or 'default'
     json = ctx._instance.generic_json(view)
     user_id = authenticated_userid(request) or Everyone
     if user_id != Everyone:

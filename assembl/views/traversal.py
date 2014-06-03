@@ -66,6 +66,9 @@ class Api2Context(object):
 
     _class_cache = {}
 
+    def get_default_view(self):
+        pass
+
     def __getitem__(self, key):
         cls = get_named_class(key)
         if not cls:
@@ -91,6 +94,12 @@ class ClassContext(object):
     def decorate_query(self, query):
         # The buck stops here
         return query
+
+    def get_default_view(self):
+        my_default = getattr(self._class, 'default_view', None)
+        if my_default:
+            return my_default
+        return self.__parent__.get_default_view()
 
     def decorate_instance(self, instance, assocs):
         # and here
@@ -157,6 +166,12 @@ class InstanceContext(object):
         return self.__class__._get_collections(
             self._instance.__class__).keys()
 
+    def get_default_view(self):
+        my_default = getattr(self._instance, 'default_view', None)
+        if my_default:
+            return my_default
+        return self.__parent__.get_default_view()
+
     @property
     def __acl__(self):
         if getattr(self._instance, '__acl__', None):
@@ -222,6 +237,12 @@ class CollectionContext(object):
         self.collection = collection
         self.parent_instance = instance
         self.collection_class = self.collection.collection_class
+
+    def get_default_view(self):
+        my_default = self.collection.get_default_view()
+        if my_default:
+            return my_default
+        return self.__parent__.get_default_view()
 
     def __getitem__(self, key):
         instance = self.collection.get_instance(key, self.parent_instance)
@@ -326,6 +347,9 @@ class AbstractCollectionDefinition(object):
 
     @abstractmethod
     def contains(self, parent_instance, instance):
+        pass
+
+    def get_default_view(self):
         pass
 
 
