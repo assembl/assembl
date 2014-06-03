@@ -148,6 +148,18 @@ class IdeaViewWidget(Widget):
                         self.discussion_id, self.id,
                         Idea.get_database_id(idea_uri))
 
+    def get_confirm_ideas_uri(self):
+        idea_uri = self.settings_json.get('idea', None)
+        if idea_uri:
+            return ('local:Discussion/%d/widgets/%d/confirm_ideas') % (
+                        self.discussion_id, self.id)
+
+    def get_confirm_messages_uri(self):
+        idea_uri = self.settings_json.get('idea', None)
+        if idea_uri:
+            return ('local:Discussion/%d/widgets/%d/confirm_messages') % (
+                        self.discussion_id, self.id)
+
     @classmethod
     def extra_collections(cls):
         class WidgetViewCollection(CollectionDefinition):
@@ -186,6 +198,7 @@ class CreativityWidget(IdeaViewWidget):
 
 
 class MultiCriterionVotingWidget(Widget):
+    default_view = 'voting_widget'
     __mapper_args__ = {
         'polymorphic_identity': 'multicriterion_voting_widget',
     }
