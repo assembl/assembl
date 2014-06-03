@@ -21,6 +21,8 @@ voteApp.controller('indexCtl',
         window.location.assign("/login");
         return;
       }
+      $scope.user = configService.user;
+      
 
       // TODO (when the API is implemented): check that the user has the right to participate in this vote
 

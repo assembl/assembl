@@ -12,6 +12,10 @@
 <div id="index" ng-controller="indexCtl" ng-init="init()">
     <h1>Vote</h1>
 
+    <p>
+        You will be voting as "{{ user.name }}".
+    </p>
+
     <!-- we disable text selection in this div, to avoid ugly effects when the mouse interacts with the d3 graph -->
     <div 
      id="d3_container"
