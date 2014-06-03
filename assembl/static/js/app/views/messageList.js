@@ -366,7 +366,6 @@ function(Backbone, _, $, app, PanelView, MessageFamilyView, Message, i18n, PostQ
             this.$('#messagelist-replybox').append( this.newTopicView.render().el );
             this.scrollToPreviousScrollTarget(previousScrollTarget);
             this.initAnnotator();
-            this.trigger("render_complete", "Render complete");
             return this;
         },
         /**
@@ -392,6 +391,7 @@ function(Backbone, _, $, app, PanelView, MessageFamilyView, Message, i18n, PostQ
                     that.messageIdsToDisplay = data;
                     that = that.render_real();
                     that.unblockPanel();
+                    that.trigger("render_complete", "Render complete");
                 });
             }
             else {
@@ -644,15 +644,6 @@ function(Backbone, _, $, app, PanelView, MessageFamilyView, Message, i18n, PostQ
             });
         },
         
-        
-        /**
-         * Shows the related posts to the given idea
-         * @param {String} ideaId
-         */
-        addFilterByIdeaId: function(ideaId){
-            this.currentQuery.addFilter(this.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, ideaId);
-            this.render();
-        },
 
         /**
          * Shows posts which are descendent of a given post
@@ -690,10 +681,24 @@ function(Backbone, _, $, app, PanelView, MessageFamilyView, Message, i18n, PostQ
         },
         
         /**
+         * Load posts that belong to an idea
+         * @param {String} ideaId
+         */
+        addFilterIsRelatedToIdea: function(idea){
+            //Can't filter on an idea at the same time as getting synthesis messages
+            this.currentQuery.clearFilter(this.currentQuery.availableFilters.POST_IS_SYNTHESIS, null);
+            this.currentQuery.clearFilter(this.currentQuery.availableFilters.POST_IS_ORPHAN, null);
+            this.currentQuery.addFilter(this.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, idea.getId());
+            this.render();
+        },
+        
+        /**
          * Load posts that are synthesis posts
          * @param {String} ideaId
          */
         addFilterIsSynthesMessage: function(){
+            //Can't filter on an idea at the same time as getting synthesis messages
+            this.currentQuery.clearFilter(this.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, null);
             this.currentQuery.addFilter(this.currentQuery.availableFilters.POST_IS_SYNTHESIS, true);
             this.render();
         },
@@ -813,6 +818,15 @@ function(Backbone, _, $, app, PanelView, MessageFamilyView, Message, i18n, PostQ
                  messageIsDisplayed = false,
                  that = this;
             
+            if(this.currentlyRendering) {
+                var success = function() {
+                    console.log("showMessageById() panel was currently rendering, calling showMessageById() recursively");
+                    that.showMessageById(id, callback);
+                }
+                this.listenToOnce(this, "render_complete", success);
+                return;
+            }
+            
             this.messageIdsToDisplay.forEach(function(displayedId){
                 if (displayedId == id){
                     messageIsDisplayed = true;
@@ -821,12 +835,12 @@ function(Backbone, _, $, app, PanelView, MessageFamilyView, Message, i18n, PostQ
             
             if( !messageIsDisplayed ){
                 //The current filters might not include the message
-                this.currentQuery.clearAllFilters();
+                this.showAllMessages();
                 var success = function() {
-                    console.log("showMessageById() message not found, calling showMessageById() recursively");
+                    console.log("showMessageById() message " + id + " not found, calling showMessageById() recursively");
                     that.showMessageById(id, callback);
                 }
-                this.listenToOnce("render_complete",success);
+                this.listenToOnce(this, "render_complete", success);
                 return;
             }
             var real_callback = function(){
