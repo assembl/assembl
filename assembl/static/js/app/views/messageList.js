@@ -688,6 +688,7 @@ function(Backbone, _, $, app, PanelView, MessageFamilyView, Message, i18n, PostQ
             //Can't filter on an idea at the same time as getting synthesis messages
             this.currentQuery.clearFilter(this.currentQuery.availableFilters.POST_IS_SYNTHESIS, null);
             this.currentQuery.clearFilter(this.currentQuery.availableFilters.POST_IS_ORPHAN, null);
+            this.currentQuery.clearFilter(this.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, null);
             this.currentQuery.addFilter(this.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, idea.getId());
             this.render();
         },
