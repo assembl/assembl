@@ -12,5 +12,6 @@
     "connect":"Log in",
     "subIdeaPosted":"Your sub-idea was posted",
     "validVoteCatcher":"catching success",
-    "errorVoteCatcher":"catching error"
+    "errorVoteCatcher":"catching error",
+    "synthesis":"Sythesis"
 }

@@ -1,4 +1,4 @@
-<span>Pousser une syntése</span>
+<span>{{'synthesis' | translate}}</span>
 
 <section class="rate-container">
     <form id="postVote">
@@ -12,7 +12,7 @@
                     <input id="checkbox-{{idea['@id']}}" class="sub-idea" type="checkbox" value="{{idea['@id']}}" data-toggle="checkbox">
                     <h6 class="lead-text"><i class="icon-lamp"></i>{{idea.shortTitle}}</h6>
                 </label>
-                <small>{{idea.definition}}</small>
+                <small class="definition">{{idea.definition}}</small>
             </li>
             <rating comment="idea"></rating>
         </ul>

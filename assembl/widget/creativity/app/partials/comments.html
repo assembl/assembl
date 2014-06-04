@@ -1,23 +1,21 @@
-<div class="commentToSubIdea">
-    <div class="indicator">
-        <!-- TODO add translation en/fr -->
-        <span>Voir les commentaires</span>
-    </div>
-    <div class="media media-comment" ng-if="comments.length > 0" ng-repeat="com in comments">
-        <a class="pull-left" href="#">
-            <img class="media-object" alt="30x30" ng-src="{{com.avatar}}" style="width: 30px; height: 30px;">
-        </a>
-        <div class="media-body">
-            <h5 class="media-heading">{{com.username}}</h5>
-            <p>{{com.body}}</p>
-            <span class="text-info">{{com.date}}</span>
-        </div>
-    </div>
-</div>
-
 <div class="sub-comment">
     <form role="form" ng-submit="commentSubIdea()">
         <textarea ng-model="formData.comment" class="text-comment" class="form-control" placeholder="{{'comment'| translate }}" autocomplete="off" required></textarea>
         <button type="submit" class="btn btn-primary btn-xs pull-right btn-subcomment">{{'send'| translate }}</button>
     </form>
 </div>
+
+<div class="commentToSubIdea">
+    <span class="showCommentSubIdea" ng-click="showSubComment = !showSubComment">{{'comments' | translate}}&nbsp; </span><i class="fa fa-comments-o"></i>
+
+    <div class="media media-comment" ng-show="showSubComment" ng-if="comments.length > 0" ng-repeat="com in comments">
+        <a class="pull-left" href="#">
+            <img class="media-object" alt="20x20" ng-src="{{com.avatar}}" style="width: 20px; height: 20px;">
+        </a>
+        <div class="media-body">
+            <p><strong>{{com.username}}</strong> - {{com.body}}</p>
+            <span class="text-info">{{com.date}}</span>
+        </div>
+    </div>
+</div>
+

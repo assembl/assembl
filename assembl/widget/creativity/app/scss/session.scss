@@ -1,0 +1,148 @@
+.session {
+  width: 95%;
+  margin: 0 auto;
+  .session-comment {
+    font-family: Helvetica, Arial, sans-serif;
+    padding-left: 5%;
+    height: 660px;
+    overflow-y: auto;
+    .thumbnail{
+      border:none;
+    }
+    .sub-comment {
+      padding: 0 5px;
+      border: 1px solid #CCCCCC;
+      margin-right: 5px;
+      .text-comment {
+        border-radius: 0;
+        height: 26px;
+        resize : none;
+        overflow-y: hidden;
+        width: 87%;
+        border: none;
+        vertical-align: top;
+        &:focus {
+          outline:0px none transparent;
+        }
+        &:invalid {
+          box-shadow: none;
+        }
+      }
+      .btn-subcomment {
+        margin-top: 2px;
+      }
+    }
+    .comment-top {
+      border-bottom: 1px solid #ffffff;
+      font-size: 11px;
+      padding: 2px 7px;
+    }
+    .text-primary {
+      cursor: pointer;
+    }
+    .media{
+      padding-top: 5px;
+    }
+    .media-body {
+      .media-heading {
+        margin: 0 10px 2px 0;
+        font-weight: bold;
+      }
+      p, span{
+        font-size: 12px;
+        margin:0;
+      }
+      .commentToSubIdea {
+        .media-comment {
+          border-bottom: 1px solid #ffffff;
+        }
+        .showCommentSubIdea {
+          color:#c7c2dd;
+          cursor:pointer;
+        }
+      }
+    }
+    .icon-lamp {
+      color:#f0ad4e;
+    }
+    .comment-idea {
+      font-size: 12px;
+      margin-bottom: 10px;
+    }
+    .nb-summary {
+      background-color: #69bf13;
+      color: #fff;
+      padding: 0 6px 5px 6px;
+      text-shadow: none;
+      width: auto;
+      font-weight: bold;
+      -moz-border-radius: 50%;
+      -webkit-border-radius: 50%;
+      border-radius: 50%;
+    }
+    .rate {
+      width: 20px;
+      text-align: center;
+      border: none;
+    }
+    .rate-up, .rate-down {
+      cursor: pointer;
+    }
+    .media-comment {
+      margin-top: 0px;
+    }
+  }
+  .cards{
+    width: auto;
+    .bs-callout-info, .bs-callout-warning {
+      padding: 3px 10px;
+      margin:10px 0;
+    }
+    .bs-callout-info {
+      font-size:14px;
+      font-weight: bold;
+    }
+    .slot-machine {
+      font-size: 20px;
+      text-align: center;
+      a{
+        text-decoration: none;
+      }
+    }
+    .card{
+      position: relative;
+      height: 390px;
+      width: 340px;
+      display: table;
+      padding: 10px;
+      text-align: justify;
+      margin: 2em 0 1em 7em;
+      border-left: #CCCCCC 1px solid !important;
+      border-right: #CCCCCC 1px solid !important;
+      p {
+        display: table-cell;
+        vertical-align: middle;
+      }
+      .card-top{
+        height: 5px;
+        background-color: #c7c2dd;
+        position: absolute;
+        top:0;
+        right: 0;
+        width:100%;
+      }
+      .card-bottom{
+        height: 5px;
+        background-color: #c7c2dd;
+        position: absolute;
+        bottom:0;
+        right: 0;
+        width:100%;
+      }
+    }
+  }
+
+  .slot-machine{
+    cursor: pointer;
+  }
+}

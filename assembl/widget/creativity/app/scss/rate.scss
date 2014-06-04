@@ -13,16 +13,22 @@ li{
      margin: 0;
    }
   .bx-comment{
-
+    color:#34495e;
+    .comment-body {
+      font-weight: normal;
+    }
   }
-
   .comments {
     height: 18px;
-    font-size: 14px;
+    font-size: 12px;
     color: #c7c2dd;
     cursor:pointer;
   }
   .lead-text {
-    font-size: 20px;
+    font-size: 14px;
+    color:#34495e;
+  }
+  .definition {
+    color:#34495e;
   }
 }

@@ -266,8 +266,8 @@ creativityApp.controller('creativitySessionCtl',
                 if(item.widget_add_post_endpoint){
 
                     item.widget_add_post_endpoint = '/data/'+item.widget_add_post_endpoint.split(':')[1];
-                    item.creationDate = moment(item.creationDate).fromNow();
-                    item.avatar = '/user/id/'+user_id+'/avatar/40';
+                    item.creationDate = moment(new Date(item.creationDate)).fromNow();
+                    item.avatar = '/user/id/'+user_id+'/avatar/30';
                     item.username = $rootScope.widgetConfig.user.name;
 
                     ideas.push(item);

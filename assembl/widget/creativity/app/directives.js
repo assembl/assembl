@@ -68,7 +68,7 @@ creativityApp.directive('comments', function($http, $rootScope){
                     angular.forEach(response.data, function(com){
 
                         com.date = moment(com.date).fromNow();
-                        com.avatar = '/user/id/'+ user_id +'/avatar/30';
+                        com.avatar = '/user/id/'+ user_id +'/avatar/20';
                         com.username = username;
 
                         $scope.comments.push(com);

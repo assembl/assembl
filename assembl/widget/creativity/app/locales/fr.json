@@ -3,7 +3,7 @@
     "acomment":"Commentaire",
     "send":"Envoyez",
     "reply":"Repondre",
-    "comments":"Voir les {{nb}} commentaires",
+    "comments":"Voir les commentaires",
     "vote":"Votez",
     "title":"titre",
     "cancel":"Annuler",
@@ -12,5 +12,6 @@
     "connect":"Connectez vous !",
     "subIdeaPosted":"Votre sous idée a été postée",
     "validVoteCatcher":"catching success",
-    "errorVoteCatcher":"catch error"
+    "errorVoteCatcher":"catch error",
+    "synthesis":"Sythése"
 }
