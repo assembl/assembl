@@ -1,12 +1,10 @@
 <div class="sub-comment">
-    <form role="form" ng-submit="commentSubIdea()">
-        <textarea ng-model="formData.comment" class="text-comment" class="form-control" placeholder="{{'comment'| translate }}" autocomplete="off" required></textarea>
-        <button type="submit" class="btn btn-primary btn-xs pull-right btn-subcomment">{{'send'| translate }}</button>
-    </form>
+   <textarea rows="1" ng-model="formData.comment" ng-keyup="expand($event)" class="text-comment" placeholder="{{'comment'| translate }}" autocomplete="off" required></textarea>
+   <a ng-click="commentSubIdea()"><i class="fa fa-paper-plane"></i></a>
 </div>
 
 <div class="commentToSubIdea">
-    <span class="showCommentSubIdea" ng-click="showSubComment = !showSubComment">{{'comments' | translate}}&nbsp; </span><i class="fa fa-comments-o"></i>
+    <span class="showCommentSubIdea" ng-show="comments.length > 0" ng-click="showSubComment = !showSubComment">{{'comments' | translate}}</span>
 
     <div class="media media-comment" ng-show="showSubComment" ng-if="comments.length > 0" ng-repeat="com in comments">
         <a class="pull-left" href="#">

@@ -43,6 +43,7 @@
                     <h5 class="media-heading pull-left">{{idea.username}}</h5>&nbsp;
                     <span class="pull-left"><i class="icon-lamp"></i>{{idea.shortTitle}}</span>
                     <span class="pull-right">
+                        <!-- Vote directive -->
                         <vote idea="idea"></vote>
                     </span>
                     <div class="row">
@@ -52,11 +53,11 @@
                         </div>
                     </div>
 
+                    <!-- Comments directive -->
                     <comments idea="idea"></comments>
                 </div>
             </div>
         </div>
-        <button ng-show="ideas.length > 1" class="btn btn-primary btn-sm pull-right" ng-click="totalVote()">{{'validVote'| translate }}</button>
     </div>
 </div>
 

@@ -10,21 +10,7 @@ creativityApp.directive('vote', function(){
         templateUrl:'app/partials/vote.html',
         link: function(scope, elements, attrs){
 
-            scope.rate = 0;
 
-            scope.rateUp = function(){
-               if(scope.rate > 4){
-                   return;
-               }
-                scope.rate += 1;
-            }
-
-            scope.rateDown = function(){
-                if(scope.rate <= 0){
-                    return;
-                }
-                scope.rate -= 1;
-            }
 
 
         }
@@ -111,6 +97,19 @@ creativityApp.directive('comments', function($http, $rootScope){
                     });
 
                 }
+            }
+
+            /**
+             *
+             * */
+            $scope.expand = function(e){
+
+                var elm = angular.element(e.currentTarget);
+
+                elm.css('overflow','hidden');
+                elm.css('height', 0);
+                elm.css('height',elm[0].scrollHeight+'px');
+
             }
 
             /**

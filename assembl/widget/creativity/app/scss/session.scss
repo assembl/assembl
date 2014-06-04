@@ -14,11 +14,11 @@
       border: 1px solid #CCCCCC;
       margin-right: 5px;
       .text-comment {
+        height: 24px;
         border-radius: 0;
-        height: 26px;
         resize : none;
         overflow-y: hidden;
-        width: 87%;
+        width: 96%;
         border: none;
         vertical-align: top;
         &:focus {
@@ -61,6 +61,24 @@
           cursor:pointer;
         }
       }
+      .star-rating {
+        margin-right: 10px;
+        unicode-bidi: bidi-override;
+        direction: rtl;
+
+        > i:hover:before {
+          content:'\f005';
+          //position: absolute;
+        }
+
+        &:hover:before,
+        i:hover ~ i:before{
+          content:'\f006';
+          //position: absolute;
+        }
+      }
+
+
     }
     .icon-lamp {
       color:#f0ad4e;
@@ -80,17 +98,11 @@
       -webkit-border-radius: 50%;
       border-radius: 50%;
     }
-    .rate {
-      width: 20px;
-      text-align: center;
-      border: none;
-    }
-    .rate-up, .rate-down {
-      cursor: pointer;
-    }
+
     .media-comment {
       margin-top: 0px;
     }
+
   }
   .cards{
     width: auto;
