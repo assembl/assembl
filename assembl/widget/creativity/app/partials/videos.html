@@ -11,12 +11,12 @@
         </p>
         <form role="form">
           <div class="form-group">
-            <input type="text" class="form-control" id="inputEmail1" placeholder="title">
+            <input type="text" class="form-control" id="messageTitle" placeholder="title">
           </div>
           <div class="form-group">
-            <textarea class="form-control" rows="3" placeholder="description"></textarea>
+            <textarea class="form-control" rows="3" placeholder="description" id="messageContent"></textarea>
           </div>
-          <button type="submit" class="btn btn-primary">Envoyez</button>
+          <button type="submit" class="btn btn-primary" ng-click="sendIdea()">Envoyez</button>
         </form>
       </div>
     </div>

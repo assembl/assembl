@@ -1,8 +1,8 @@
 "use strict";
 
 creativityApp.controller('videosCtl',
-  ['$scope', '$http', '$routeParams', '$log', 'localConfig', 'JukeTubeVideosService', 'Discussion',
-  function($scope, $http, $routeParams, $log, localConfig, JukeTubeVideosService, Discussion){
+  ['$scope', '$http', '$routeParams', '$log', 'localConfig', 'JukeTubeVideosService', 'Discussion', 'sendIdeaService',
+  function($scope, $http, $routeParams, $log, localConfig, JukeTubeVideosService, Discussion, sendIdeaService){
 
     // intialization code (constructor)
 
@@ -140,6 +140,20 @@ creativityApp.controller('videosCtl',
       })
       .error( function () {
         $log.info('Search error');
+      });
+    }
+
+    $scope.sendIdea = function(){
+      var send =  new sendIdeaService();
+
+      send.subject = $("#messageTitle").val();
+      send.message = $("#messageContent").val();
+
+      //TODO : {discussionId} need to be dynamic
+      send.$save({discussionId:3}, function sucess(){
+        alert("Your message has been successfully posted.");
+      }, function error(){
+        alert("Error: your message has not been posted.");
       });
     }
 }]);
