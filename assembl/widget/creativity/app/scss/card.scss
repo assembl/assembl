@@ -122,6 +122,10 @@
         .media-comment {
           border-bottom: 1px solid #ffffff;
         }
+        .indicator {
+          background-color: #eeeeee;
+          border-bottom: 1px solid #eeeeee;
+        }
       }
     }
     .icon-lamp {
@@ -158,6 +162,10 @@
     .bs-callout-info, .bs-callout-warning {
       padding: 3px 10px;
       margin:10px 0;
+    }
+    .bs-callout-info {
+      font-size:14px;
+      font-weight: bold;
     }
     .slot-machine {
       font-size: 20px;

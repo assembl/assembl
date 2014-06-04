@@ -1,10 +1,21 @@
-<!DOCTYPE html>
-<html>
-<head lang="en">
-    <meta charset="UTF-8">
-    <title></title>
-</head>
-<body>
-     <h2>Rating</h2>
-</body>
-</html>
+<span>Pousser une syntése</span>
+
+<section class="rate-container">
+    <form id="postVote">
+        <ul class="bx-idea" ng-repeat="idea in ideas">
+            <li>
+                <label class="checkbox" for="checkbox-{{idea['@id']}}" ng-click="checked($event)">
+                    <span class="icons">
+                        <span class="first-icon fui-checkbox-unchecked"></span>
+                        <span class="second-icon fui-checkbox-checked"></span>
+                    </span>
+                    <input id="checkbox-{{idea['@id']}}" class="sub-idea" type="checkbox" value="{{idea['@id']}}" data-toggle="checkbox">
+                    <h6 class="lead-text"><i class="icon-lamp"></i>{{idea.shortTitle}}</h6>
+                </label>
+                <small>{{idea.definition}}</small>
+            </li>
+            <rating comment="idea"></rating>
+        </ul>
+        <button ng-show="ideas.length > 0" class="btn btn-primary btn-xs pull-right" ng-click="validVote()"> Valider votre choix </button>
+    </form>
+</section>

@@ -1,7 +1,7 @@
 "use strict";
 
 var creativityApp = angular.module('creativityApp',
-    ['ngRoute','ngSanitize','creativityServices', 'pascalprecht.translate']);
+    ['ngRoute','ngSanitize','creativityServices', 'pascalprecht.translate','angular-growl']);
 
 creativityApp.run(['Configuration','$rootScope','$timeout','$window',
     function (Configuration, $rootScope, $timeout, $window) {
@@ -79,13 +79,27 @@ creativityApp.config(['$routeProvider', function($routeProvider){
             redirectTo: '/cards'
         });
 
-}]).config(['$translateProvider', function($translateProvider){
+}]).config(['$translateProvider','growlProvider', function($translateProvider, growlProvider){
 
+    /**
+     * Angular translation en/fr
+     * */
     $translateProvider.useStaticFilesLoader({
         prefix: 'app/locales/',
         suffix: '.json'
     });
 
     $translateProvider.preferredLanguage('fr');
+
+    /**
+     * Angular growl notification
+     * */
+    growlProvider.globalPosition('top-center');
+    growlProvider.globalTimeToLive(5000);
+
+    /**
+     * uncomment if you don't want to have a displayed message list
+     * growlProvider.onlyUniqueMessages(true);
+     * */
 
 }]);

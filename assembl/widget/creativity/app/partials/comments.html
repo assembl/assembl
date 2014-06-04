@@ -1,5 +1,9 @@
-<div class="commentToSubIdea" ng-if="comments.length > 0">
-    <div class="media media-comment" ng-repeat="com in comments">
+<div class="commentToSubIdea">
+    <div class="indicator">
+        <!-- TODO add translation en/fr -->
+        <span>Voir les commentaires</span>
+    </div>
+    <div class="media media-comment" ng-if="comments.length > 0" ng-repeat="com in comments">
         <a class="pull-left" href="#">
             <img class="media-object" alt="30x30" ng-src="{{com.avatar}}" style="width: 30px; height: 30px;">
         </a>
@@ -11,8 +15,8 @@
     </div>
 </div>
 
-<div class="sub-comment" data-url="{{idea.widget_add_post_endpoint}}">
-    <form role="form" ng-submit="commentSubIdea(idea.widget_add_post_endpoint)">
+<div class="sub-comment">
+    <form role="form" ng-submit="commentSubIdea()">
         <textarea ng-model="formData.comment" class="text-comment" class="form-control" placeholder="{{'comment'| translate }}" autocomplete="off" required></textarea>
         <button type="submit" class="btn btn-primary btn-xs pull-right btn-subcomment">{{'send'| translate }}</button>
     </form>

@@ -9,5 +9,8 @@
     "cancel":"Cancel",
     "validVote":"Valid your votes",
     "needToConnect":"You will be redirected to the login page in {{time}}s",
-    "connect":"Log in"
+    "connect":"Log in",
+    "subIdeaPosted":"Your sub-idea was posted",
+    "validVoteCatcher":"catching success",
+    "errorVoteCatcher":"catching error"
 }

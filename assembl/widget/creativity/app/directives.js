@@ -5,7 +5,7 @@ creativityApp.directive('vote', function(){
         restrict:'E',
         transclude: true,
         scope: {
-            id:'=id'
+            idea:'=idea'
         },
         templateUrl:'app/partials/vote.html',
         link: function(scope, elements, attrs){
@@ -31,7 +31,7 @@ creativityApp.directive('vote', function(){
     }
 })
 
-creativityApp.directive('comments', function($http, $log, $rootScope){
+creativityApp.directive('comments', function($http, $rootScope){
     return {
         restrict:'E',
         scope: {
@@ -42,14 +42,26 @@ creativityApp.directive('comments', function($http, $log, $rootScope){
 
             $scope.formData = {};
             $scope.comments = [];
+
+            $scope.$watch('message', function(value){
+
+                switch(value){
+                    case 'commentSubIdea:success':
+                        $scope.getCommentsFromSubIdea();
+                        break;
+                    case 'commentSubIdea:error':
+                        break;
+
+                }
+            }, true);
+
             /**
              * get all comments from a sub idea
              */
             $scope.getCommentsFromSubIdea = function(){
 
-                 var rootUrl = $scope.idea.widget_add_post_endpoint;
-                     rootUrl = rootUrl +'?view=default';
-                 var user_id = $rootScope.widgetConfig.user['@id'].split('/')[1],
+                 var rootUrl = $scope.idea.widget_add_post_endpoint,
+                     user_id = $rootScope.widgetConfig.user['@id'].split('/')[1],
                      username = $rootScope.widgetConfig.user.name;
 
                 $http.get(rootUrl).then(function(response){
@@ -64,22 +76,24 @@ creativityApp.directive('comments', function($http, $log, $rootScope){
 
                 });
             }
+
             /**
              * Comment an idea from creativity session
              */
             $scope.commentSubIdea = function(){
 
-                var rootUrl = $scope.idea.widget_add_post_endpoint;
+                var rootUrl = $scope.idea.widget_add_post_endpoint,
+                    user_id = $rootScope.widgetConfig.user['@id'].split('/')[1];
 
                 var data = {
                     type: 'Post',
                     subject: 'test_message',
                     body: $scope.formData.comment,
-                    creator_id: $scope.user,
+                    creator_id: user_id,
                     message_id: 'bogus'
                 }
 
-                if(data.body && rootUrl) {
+                if(data.body && data.creator_id && rootUrl) {
 
                     $http({
                         method:'POST',
@@ -88,17 +102,55 @@ creativityApp.directive('comments', function($http, $log, $rootScope){
                         headers: {'Content-Type': 'application/x-www-form-urlencoded'}
                     }).success(function(data, status, headers){
 
+                        $scope.message = "commentSubIdea:success";
+                        $scope.formData.comment = null;
 
                     }).error(function(status, headers){
 
-                        console.log('error:',status)
+                        $scope.message = "commentSubIdea:success";
                     });
 
                 }
             }
 
+            /**
+             * init method
+             * */
             $scope.getCommentsFromSubIdea();
 
         }
     }
 })
+
+creativityApp.directive('rating', function($http){
+   return {
+       restrict:'E',
+       scope: {
+           comment:'=comment'
+       },
+       templateUrl:'app/partials/rating-comments.html',
+       link: function($scope){
+
+          $scope.getCommentsForRating = function(){
+
+              var rootUrl = '/data/'+$scope.comment.widget_add_post_endpoint.split(':')[1];
+              var comments = [];
+
+              if(rootUrl){
+
+                  $http.get(rootUrl).then(function(response){
+                      angular.forEach(response.data, function(comment){
+
+                         comments.push(comment);
+                      })
+
+                      $scope.subIdeaComment = comments;
+                  });
+              }
+           }
+
+           $scope.getCommentsForRating();
+       }
+   }
+
+});
