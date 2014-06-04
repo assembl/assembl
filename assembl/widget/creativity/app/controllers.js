@@ -48,6 +48,11 @@ creativityApp.controller('videosCtl',
       });
 
 
+      // hide right panel
+
+      $("#player").css("visibility","hidden");
+
+
       // initialize the Select2 textfield
 
       $("#query").select2({
@@ -107,6 +112,9 @@ creativityApp.controller('videosCtl',
     }
 
     $scope.scrollToPlayerAndLaunch = function (id, title) {
+      // show right panel
+      $("#player").css("visibility","visible");
+
       $("html, body").animate({scrollTop: $("#player").offset().top - 10}, "slow");
       $scope.launch(id, title);
     };
