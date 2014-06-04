@@ -66,9 +66,31 @@ voteApp.controller('indexCtl',
     };
 
     $scope.submitVote = function(){
+      console.log("submitVote()");
       $scope.computeMyVotes();
       console.log($scope.myVotes);
-      // TODO: POST to postVoteUrl if set
+
+      // POST to postVoteUrl
+      $http({
+        method: "POST",
+        url: $scope.postVoteUrl,
+        data: $.param($scope.myVotes),
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+      }).success(function(data, status, headers){
+        alert("success");
+        console.log("data:");
+        console.log(data);
+        console.log("status:");
+        console.log(status);
+        console.log("headers:");
+        console.log(headers);
+      }).error(function(status, headers){
+        alert("error");
+        console.log("status:");
+        console.log(status);
+        console.log("headers:");
+        console.log(headers);
+      });
     };
 
     // @param destination
@@ -78,6 +100,7 @@ voteApp.controller('indexCtl',
     // @param xPosCenter
     // Position on the X coordinates of the center of the gauge, in the created SVG
     $scope.drawVerticalGauge = function(destination, item_data, xPosCenter){
+      console.log("drawVerticalGauge()");
       //console.log("item_data:");
       //console.log(item_data);
       var config = $scope.settings;
@@ -257,6 +280,7 @@ voteApp.controller('indexCtl',
     // @param xPosCenter
     // Position on the X coordinates of the center of the gauge, in the created SVG
     $scope.draw2AxesVote = function(destination, item_data, xPosCenter){
+      console.log("draw2AxesVote()");
       //console.log("item_data:");
       //console.log(item_data);
       var config = $scope.settings;
@@ -454,6 +478,7 @@ voteApp.controller('indexCtl',
 
 
     $scope.drawUI = function(){
+      console.log("drawUI()");
       var config = $scope.settings;
       var holder = d3.select("#d3_container");
 
@@ -471,7 +496,7 @@ voteApp.controller('indexCtl',
           $scope.draw2AxesVote(holder, item);
         }
       }
-
+      console.log("drawUI() completed");
     };
 
 }]);
