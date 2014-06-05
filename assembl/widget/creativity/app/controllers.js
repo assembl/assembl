@@ -1,19 +1,30 @@
 "use strict";
 
 creativityApp.controller('videosCtl',
-  ['$scope', '$http', '$routeParams', '$log', 'localConfig', 'JukeTubeVideosService', 'Discussion', 'sendIdeaService',
-  function($scope, $http, $routeParams, $log, localConfig, JukeTubeVideosService, Discussion, sendIdeaService){
+  ['$scope', '$http', '$routeParams', '$log', '$resource', 'localConfig', 'JukeTubeVideosService', 'Discussion', 'sendIdeaService', 'WidgetConfigService', 'AssemblToolsService',
+  function($scope, $http, $routeParams, $log, $resource, localConfig, JukeTubeVideosService, Discussion, sendIdeaService, WidgetConfigService, AssemblToolsService){
 
     // intialization code (constructor)
 
     $scope.init = function(){
+      console.log("videosCtl::init()");
+      //console.log("WidgetConfigService:");
+      //console.log(WidgetConfigService);
 
-      // set model fields
+
+      // set default model fields
 
       $scope.youtube = JukeTubeVideosService.getYoutube();
       $scope.results = JukeTubeVideosService.getResults();
       $scope.pageInfo = JukeTubeVideosService.getPageInfo();
       $scope.playlist = true;
+      $scope.idea = {
+        shortTitle: "Idea short title",
+        longTitle: "Idea long title"
+      };
+      $scope.discussion = {
+        topic: "Discussion topic"
+      };
 
       $scope.inspiration_keywords = [
           "modèle commercial",
@@ -32,6 +43,30 @@ creativityApp.controller('videosCtl',
       ];
 
 
+      // get inspiration keywords from the idea URL given in the configuration JSON
+
+      var idea_api_url = AssemblToolsService.resourceToUrl(WidgetConfigService.settings.idea) + '?view=creativity_widget';
+      var discussion_api_url = 'discussion api url';
+
+      var Idea = $resource(idea_api_url);
+      var Discussion = null;
+      $scope.idea = Idea.get({}, function(){
+        $scope.inspiration_keywords = $scope.idea.most_common_words;
+
+        // get discussion from the idea
+        discussion_api_url = AssemblToolsService.resourceToUrl($scope.idea.discussion);
+        Discussion = $resource(discussion_api_url);
+        $scope.discussion = Discussion.get({}, function(){
+          console.log("discussion:");
+          console.log($scope.discussion);
+        });
+        
+      });
+
+      
+
+
+
       // get config file URL given as parameter of the current URL
 
       $scope.configFile = $routeParams.config;
@@ -43,9 +78,11 @@ creativityApp.controller('videosCtl',
           $scope.globalVideoConfig = data;
       });
 
+      /*
       $scope.discussion = Discussion.get({discussionId: 1}, function(discussion) {
           console.log(discussion);
       });
+      */
 
 
       // hide right panel
