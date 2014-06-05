@@ -227,7 +227,7 @@ def test_widget_basic_interaction(
     assert new_post2.hidden
 
 
-def teSt_voting_widget(
+def test_voting_widget(
         discussion, test_app, subidea_1_1, criterion_1, criterion_2,
         criterion_3, participant1_user, lickert_range, test_session):
     # Post the initial configuration
@@ -264,12 +264,9 @@ def teSt_voting_widget(
     assert len(test.json) == 0
     # Add votes to the voting endpoint
     # TODO: Put lickert_range id in voter config. Or create one?
-    # Note that the test fails here, because sqla does not find 
-    # the range, and value maximum checking fails.
     test = test_app.post(user_votes_uri, {
         "type": "LickertIdeaVote",
         "value": 2,
-        "range_id": lickert_range.id
         })
     assert test.status_code == 201
     # Get them back
@@ -280,5 +277,6 @@ def teSt_voting_widget(
     # TODO
     # Get vote results.
     vote_results_uri = local_to_absolute(widget_rep['vote_results_uri'])
+    test = test_app.get(vote_results_uri)
     assert test.status_code == 200
-    assert vote_results_uri.json == 2
+    assert test.json == 2

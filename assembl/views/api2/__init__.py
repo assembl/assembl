@@ -310,3 +310,64 @@ def votes_collection_view(request):
         return [ctx.collection_class.uri_generic(x) for (x,) in q.all()]
     else:
         return [i.generic_json(view) for i in q.all()]
+
+
+@view_config(context=CollectionContext, request_method='POST',
+             header=JSON_HEADER, #permission=P_ADD_VOTE?,
+             ctx_collection_class=AbstractIdeaVote)
+def votes_collection_add_json(request):
+    ctx = request.context
+    typename = ctx.collection_class.external_typename()
+    user_id = authenticated_userid(request)
+    typename = request.json_body.get('@type', ctx.collection_class.external_typename())
+    permissions = get_permissions(
+        user_id, ctx.parent_instance.get_discussion_id())
+    if P_SYSADMIN not in permissions:
+        cls = ctx.get_collection_class(typename)
+        if cls.crud_permissions.read not in permissions:
+            raise HTTPUnauthorized()
+    json = request.json_body
+    json['voter_id'] = user_id
+    try:
+        instances = ctx.create_object(typename, json, user_id)
+    except Exception as e:
+        raise HTTPBadRequest(e)
+    if instances:
+        db = get_session_maker()
+        for instance in instances:
+            db.add(instance)
+        db.flush()
+        first = instances[0]
+        raise HTTPCreated(first.uri_generic(first.id))
+
+@view_config(context=CollectionContext, request_method='POST',
+             header=FORM_HEADER, ctx_collection_class=AbstractIdeaVote)
+def votes_collection_add(request):
+    ctx = request.context
+    args = request.params
+    user_id = authenticated_userid(request)
+    if 'type' in args:
+        args = dict(args)
+        typename = args['type']
+        del args['type']
+    else:
+        typename = ctx.collection_class.external_typename()
+    permissions = get_permissions(
+        user_id, ctx.parent_instance.get_discussion_id())
+    if P_SYSADMIN not in permissions:
+        cls = ctx.get_collection_class(typename)
+        if cls.crud_permissions.read not in permissions:
+            raise HTTPUnauthorized()
+    args['voter_id'] = user_id
+    try:
+        instances = ctx.create_object(typename, None, user_id, **args)
+    except Exception as e:
+        raise HTTPBadRequest(e)
+    if instances:
+        db = get_session_maker()
+        for instance in instances:
+            db.add(instance)
+        db.flush()
+        first = instances[0]
+        return Response(location=first.uri_generic(first.id), status_code=201)
+    raise HTTPBadRequest()

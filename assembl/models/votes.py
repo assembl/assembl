@@ -102,6 +102,18 @@ class LickertIdeaVote(AbstractIdeaVote):
         Integer, nullable=False,
         info={'rdf': QuadMapPatternS(None, VOTE.lickert_value)})
 
+
+    def __init__(self, **kwargs):
+        if not ('lickert_range' in kwargs or 'range_id' in kwargs):
+            kwargs['lickert_range'] = LickertRange.get_range()
+        if 'value' in kwargs:
+            # make sure lickert comes first
+            if 'range_id' in kwargs:
+                self.lickert_range = LickertRange.get_instance(kwargs['range_id'])
+            elif 'lickert_range' in kwargs:
+                self.lickert_range = kwargs['lickert_range']
+        super(LickertIdeaVote, self).__init__(**kwargs)
+
     @classmethod
     def external_typename(cls):
         return cls.__name__
@@ -112,6 +124,7 @@ class LickertIdeaVote(AbstractIdeaVote):
 
     @value.setter
     def value(self, val):
+        val = int(val)
         assert val <= self.lickert_range.maximum and \
             val >= self.lickert_range.minimum
         self.vote_value = val
@@ -154,4 +167,4 @@ class BinaryIdeaVote(AbstractIdeaVote):
 
     @value.setter
     def value_safe(self, val):
-        self.vote_value = val
+        self.vote_value = bool(val)
