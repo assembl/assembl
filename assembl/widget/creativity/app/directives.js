@@ -13,31 +13,27 @@ creativityApp.directive('vote', function($rootScope, setVote, WidgetConfigServic
             $scope.formData = {};
             $rootScope.wallet = 10;
 
-            console.log(WidgetConfigService)
+            var widget_id = WidgetConfigService['@id'].split('/')[1];
 
-            $scope.$watch('formData.vote', function(){
-                if($scope.formData.vote && $rootScope.wallet >0){
+            $scope.$watch('formData.vote', function(newValue, oldValue){
 
-                    $rootScope.wallet -= $scope.formData.vote;
-                }
-
-                //console.log($rootScope.wallet, $scope.idea['@id']);
-
-                /*var data = {
+                var data = {
                     type: 'CreativityWidget',
                     settings: JSON.stringify({"idea": 'local:Idea/2'}),
-                    state:JSON.stringify([
-                        {"local:Idea/67":8},
-                        {"local:Idea/66":2},
-                        {"local:Idea/65":9},
-                        {"local:Idea/64":1}
-                    ])
+                    state: JSON.stringify([{"local:Idea/67":8}])
                 };
 
-                setVote.addVote($.param(data));*/
+                if((newValue !== oldValue) && $rootScope.wallet >0){
+
+                    $rootScope.wallet -= $scope.formData.vote;
+
+                    setVote.addVote({discussionId:1, id:widget_id}, $.param(data));
+                }
 
             }, true);
 
+
+            console.log(WidgetConfigService);
         }
     }
 })

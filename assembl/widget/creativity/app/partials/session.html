@@ -3,8 +3,10 @@
         <div class="cards">
             <div ng-repeat="card in game">
                 <div ng-if="$first">
+                    <!-- TODO need translation -->
                     <div class="bs-callout bs-callout-warning">
-                        <p>{{card[0].head}}</p>
+                        <p>Quels sont les prochains marchés internationaux que nous devrions viser ?</p>
+                        <p>Cette question est en lien avec l'idée "X". Inspirez-vous de la carte ci-dessous pour y répondre !</p>
                     </div>
                     <div class="card">
                         <div class="card-top"></div>
@@ -17,8 +19,9 @@
                     <div class="shuffle">
                         <button class="btn btn-primary btn-xs" ng-click="shuffle()">{{'shuffle' | translate}}</button>
                     </div>
+                    <!-- TODO need translation -->
                     <div class="bs-callout bs-callout-info">
-                        <p>{{card[0].help}}</p>
+                        <p>Proposez votre idée pour répondre à la question posée :</p>
                     </div>
                 </div>
             </div>

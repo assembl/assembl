@@ -3,7 +3,7 @@
   margin: 0 auto;
   .session-comment {
     font-family: Helvetica, Arial, sans-serif;
-    padding-left: 5%;
+    padding: 1.24em 0 0 2.5em;
     height: 660px;
     overflow-y: auto;
     .thumbnail{
@@ -36,6 +36,9 @@
         height: 23px;
         padding: 0;
         width: 20px;
+        &:hover .fa-paper-plane{
+          color:#007bc2;
+        }
       }
     }
     .comment-top {
@@ -126,7 +129,7 @@
       display: table;
       padding: 10px;
       text-align: justify;
-      margin: 1em 0 1em 5.5em;
+      margin: 1em 0 1em 2.5em;
       border-left: #CCCCCC 1px solid !important;
       border-right: #CCCCCC 1px solid !important;
       float:left;

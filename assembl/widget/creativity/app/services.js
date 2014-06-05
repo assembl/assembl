@@ -27,11 +27,10 @@ creativityServices.factory('cardGame', function($http){
 
 //CONFIG
 creativityServices.factory('setVote', ['$resource', function($resource) {
-    return $resource('/data/Discussion/1/widgets', {}, {
+    return $resource('/data/Discussion/:discussionId/widgets/:id', null, {
         addVote: {
-            method:'POST',
-            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-            isArray:false
+            method:'PUT',
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
         }
     });
 
