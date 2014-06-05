@@ -8,6 +8,7 @@ from datetime import datetime
 import inspect as pyinspect
 import types
 from collections import Iterable, defaultdict
+import atexit
 
 from anyjson import dumps, loads
 from colanderalchemy import SQLAlchemySchemaNode
@@ -20,6 +21,7 @@ from sqlalchemy.orm import mapper, scoped_session, sessionmaker
 from sqlalchemy.orm.util import has_identity
 from sqlalchemy.util import classproperty
 from sqlalchemy.orm.session import object_session, Session
+from sqlalchemy.engine import strategies
 from virtuoso.vmapping import PatternIriClass
 from zope.sqlalchemy import ZopeTransactionExtension
 from zope.sqlalchemy.datamanager import mark_changed as z_mark_changed
@@ -30,6 +32,25 @@ from ..view_def import get_view_def
 from .zmqlib import get_pub_socket, send_changes
 from ..semantic.namespaces import QUADNAMES
 from ..auth import *
+
+atexit_engines = []
+
+
+class CleanupStrategy(strategies.PlainEngineStrategy):
+    name = 'atexit_cleanup'
+
+    def create(self, *args, **kwargs):
+        engine = super(CleanupStrategy, self).create(*args, **kwargs)
+        atexit_engines.append(engine)
+        return engine
+
+CleanupStrategy()
+
+
+@atexit.register
+def dispose_sqlengines():
+    print "ATEXIT", atexit_engines
+    [e.dispose() for e in atexit_engines]
 
 _TABLENAME_RE = re.compile('([A-Z]+)')
 
