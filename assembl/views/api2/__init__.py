@@ -1,6 +1,8 @@
 import os
 import datetime
+import inspect as pyinspect
 
+from sqlalchemy import inspect
 from pyramid.view import view_config
 from pyramid.httpexceptions import (
     HTTPCreated, HTTPBadRequest, HTTPNotImplemented, HTTPUnauthorized)
@@ -13,7 +15,7 @@ from ..traversal import InstanceContext, CollectionContext, ClassContext
 from assembl.auth import P_READ, P_SYSADMIN, Everyone
 from assembl.auth.util import get_roles, get_permissions
 from assembl.semantic.virtuoso_mapping import get_virtuoso
-from assembl.models import AbstractIdeaVote, User
+from assembl.models import AbstractIdeaVote, User, DiscussionBoundBase
 
 """RESTful API to assembl, with some magic.
 The basic URI to access any ressource is
@@ -171,8 +173,13 @@ def instance_put_json(request):
 @view_config(context=InstanceContext, request_method='PUT', header=FORM_HEADER)
 def instance_put(request):
     user_id = authenticated_userid(request)
-    permissions = get_permissions(
-        user_id, ctx.parent_instance.get_discussion_id())
+    context = request.context
+    discussion_id = None
+    if isinstance(context._instance, DiscussionBoundBase):
+        discussion_id = context._instance.get_discussion_id()
+    elif isinstance(context.parent_instance, DiscussionBoundBase):
+        discussion_id = context.parent_instance.get_discussion_id()
+    permissions = get_permissions(user_id, discussion_id)
     instance = context._instance
     if P_SYSADMIN not in permissions:
         required = instance.crud_permissions
@@ -180,48 +187,49 @@ def instance_put(request):
             if required.update_owned not in permissions or\
                     User.get(id=user_id) not in context._instance.get_owners():
                 raise HTTPUnauthorized()
-    mapper = instance.__class__.__mapper__
+    mapper = inspect(instance.__class__)
     cols = {c.key: c for c in mapper.columns if not c.foreign_keys}
-    setables = dict(inspect.getmembers(
-        self.__class__, lambda p:
-        inspect.isdatadescriptor(p) and getattr(p, 'fset', None)))
+    setables = dict(pyinspect.getmembers(
+        instance.__class__, lambda p:
+        pyinspect.isdatadescriptor(p) and getattr(p, 'fset', None)))
     relns = {r.key: r for r in mapper.relationships if not r.uselist and
              len(r._calculated_foreign_keys) == 1 and iter(
                  r._calculated_foreign_keys).next().table == mapper.local_table
              }
     unknown = set(request.params.keys()) - (
-        set(cols.keys()) + set(setables.keys()) + set(relns.key()))
+        set(cols.keys()).union(set(setables.keys())).union(set(relns.keys())))
     if unknown:
         raise HTTPBadRequest("Unknown keys: "+",".join(unknown))
     params = dict(request.params)
     # type checking
+    columns = {c.key: c for c in mapper.columns}
     for key, value in params.items():
         if key in relns and isinstance(value, str):
             val_inst = relns[key].class_.get_instance(value)
             if not val_inst:
                 raise HTTPBadRequest("Unknown instance: "+value)
             params[key] = val_inst
-        elif key in columns and columns[key].python_type == datetime.datetime \
+        elif key in columns and columns[key].type.python_type == datetime.datetime \
                 and isinstance(value, str):
             val_dt = datetime.datetime.strpstr(value)
             if not val_dt:
                 raise HTTPBadRequest("Cannot interpret " + value)
             params[key] = val_dt
-        elif key in columns and columns[key].python_type == int \
+        elif key in columns and columns[key].type.python_type == int \
                 and isinstance(value, str):
             try:
                 params[key] = int(value)
             except ValueError as err:
                 raise HTTPBadRequest("Not a number: " + value)
-        elif key in columns and not isinstance(value, columns[key].python_type):
+        elif key in columns and not isinstance(value, columns[key].type.python_type):
             raise HTTPBadRequest("Value %s for key %s should be a %s" % (
-                value, key, columns[key].python_type))
+                value, key, columns[key].type.python_type))
     try:
         for key, value in params.items():
             setattr(instance, key, value)
     except:
         raise HTTPBadRequest()
-    return "ok"
+    return Response("OK")
 
 
 @view_config(context=InstanceContext, request_method='DELETE')
