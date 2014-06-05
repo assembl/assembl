@@ -85,4 +85,4 @@ def get_idea_criteria(request):
     request_method="GET", permission=P_READ,
     renderer="json", name="vote_results")
 def get_idea_vote_results(request):
-    return request.ctx._instance.get_voting_results()
+    return request.context._instance.get_voting_results()

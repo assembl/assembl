@@ -833,7 +833,8 @@ JOIN post ON (
     def get_siblings_of_type(self, cls):
         # TODO: optimize
         siblings = set(chain(*(p.children for p in self.parents)))
-        siblings.remove(self)
+        if siblings:
+            siblings.remove(self)
         return [c for c in siblings if isinstance(c, cls)]
 
     def get_voting_results(self):
