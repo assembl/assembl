@@ -29,7 +29,7 @@
     </p>
 
     <ul class="keywords">
-      <li class="keyword" ng-repeat="keyword in inspiration_keywords" ng-click="keywordClick($event)">{{keyword}}</li>
+      <li class="keyword" ng-repeat="keyword in inspiration_keywords" ng-click="keywordClick($event)" ng-show="inspiration_keywords_used[keyword] != true">{{keyword}}</li>
     </ul>
 
     <p>
@@ -37,7 +37,7 @@
     </p>
 
     <ul class="keywords">
-      <li class="keyword" ng-repeat="keyword in inspiration_keywords_related" ng-click="keywordClick($event)">{{keyword}}</li>
+      <li class="keyword" ng-repeat="keyword in inspiration_keywords_related" ng-click="keywordClick($event)" ng-show="inspiration_keywords_used[keyword] != true">{{keyword}}</li>
     </ul>
 
     <form id="search" data-ng-submit="search()">

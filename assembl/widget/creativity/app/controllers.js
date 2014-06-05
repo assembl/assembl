@@ -42,6 +42,8 @@ creativityApp.controller('videosCtl',
           "tactique"
       ];
 
+      $scope.inspiration_keywords_used = {};
+
 
       // get inspiration keywords from the idea URL given in the configuration JSON
 
@@ -50,8 +52,9 @@ creativityApp.controller('videosCtl',
 
       var Idea = $resource(idea_api_url);
       var Discussion = null;
-      $scope.idea = Idea.get({}, function(){
+      $scope.idea = Idea.get({}, function(){ // this function is executed once the AJAX request is received and the variable is assigned
         $scope.inspiration_keywords = $scope.idea.most_common_words;
+        $scope.inspiration_keywords_used = {};
 
         // get discussion from the idea
         discussion_api_url = AssemblToolsService.resourceToUrl($scope.idea.discussion);
@@ -60,11 +63,14 @@ creativityApp.controller('videosCtl',
           console.log("discussion:");
           console.log($scope.discussion);
         });
-        
+
+
+        // fill the search bar with the 2 first keywords and submit the search
+
+        setFirstKeywordsAsQuery();
+        $scope.search();
+
       });
-
-      
-
 
 
       // get config file URL given as parameter of the current URL
@@ -93,7 +99,7 @@ creativityApp.controller('videosCtl',
       // initialize the Select2 textfield
 
       $("#query").select2({
-          tags: $scope.inspiration_keywords,
+          tags: [], //$scope.inspiration_keywords, // not used anymore, because the dropdown is now hidden
           tokenSeparators: [",", " "],
           formatNoMatches: function(term){return '';},
           //minimumResultsForSearch: -1
@@ -101,17 +107,33 @@ creativityApp.controller('videosCtl',
           minimumInputLength: 1,
           width: '70%'
       });
+      setFirstKeywordsAsQuery();
+
 
       // make recommended keywords re-appear on top when they are removed from the search field
+
       $("#query").on("change", function(e){
-        if ( e.removed )
-        {
-          if ( $scope.inspiration_keywords.indexOf(e.removed.text) >= 0 || $scope.inspiration_keywords_related.indexOf(e.removed.text) >= 0 )
+        $scope.$apply(function(){
+          if ( e.removed )
           {
-            $("#results .keywords .keyword:contains(\""+e.removed.text.replace(/"/g, '\\"')+"\")").show();
+            /* now handled by ng-show of Angluar in the HTML template
+            if ( $scope.inspiration_keywords.indexOf(e.removed.text) >= 0 || $scope.inspiration_keywords_related.indexOf(e.removed.text) >= 0 )
+            {
+              $("#results .keywords .keyword:contains(\""+e.removed.text.replace(/"/g, '\\"')+"\")").show();
+            }
+            */
+
+            if ( $scope.inspiration_keywords_used[e.removed.text] != undefined )
+            {
+              delete $scope.inspiration_keywords_used[e.removed.text];
+            }
+            
           }
-          
-        }
+          else if ( e.added )
+          {
+            $scope.inspiration_keywords_used[e.added.text] = true;
+          }
+        });
       });
 
 
@@ -125,7 +147,8 @@ creativityApp.controller('videosCtl',
 
       if ( JukeTubeVideosService.getYoutube().ready === true )
         JukeTubeVideosService.onYouTubeIframeAPIReady();
-    }
+
+    };
 
     $scope.keywordClick = function($event){
         var keyword_value = $($event.target).html();
@@ -141,12 +164,30 @@ creativityApp.controller('videosCtl',
         }
         if ( false == alreadyThere )
         {
+          $scope.inspiration_keywords_used[keyword_value] = true;
           values.push( keyword_value );
           $("#query").select2("val", values );
-          $($event.target).hide();
+          //$($event.target).hide(); // now handled by ng-show of Angluar in the HTML template
           //$(el.target).css('background', '#000');
         }
-    }
+    };
+
+    var setFirstKeywordsAsQuery = function(){
+      console.log("setFirstKeywordsAsQuery()");
+      var values = [];
+      if ($scope.inspiration_keywords.length > 0)
+      {
+        values.push($scope.inspiration_keywords[0]);
+        $scope.inspiration_keywords_used[$scope.inspiration_keywords[0]] = true;
+      }
+      if ($scope.inspiration_keywords.length > 1)
+      {
+        values.push($scope.inspiration_keywords[1]);
+        $scope.inspiration_keywords_used[$scope.inspiration_keywords[1]] = true;
+      }
+      console.log("prefill:" + values[0] + " " + values[1]);
+      $("#query").select2("val", values);
+    };
 
     $scope.scrollToPlayerAndLaunch = function (id, title) {
       // show right panel
