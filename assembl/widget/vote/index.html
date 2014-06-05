@@ -9,26 +9,6 @@
 </head>
 <body ng-cloak id="voteApp">
 
-<div id="index" ng-controller="indexCtl" ng-init="init()">
-    <h1>Vote</h1>
-
-    <p>
-        You will be voting as "{{ user.name }}".
-    </p>
-
-    <!-- we disable text selection in this div, to avoid ugly effects when the mouse interacts with the d3 graph -->
-    <div 
-     id="d3_container"
-     style='-moz-user-select: none; -webkit-user-select: none; -ms-user-select:none; user-select:none;' 
-     unselectable='on'
-     onselectstart='return false;' 
-     onmousedown='return false;'>
-    </div>
-
-    <button id="vote_submit" ng-click="submitVote()">Send</button>
-
-</div>
-
 
 <div ng-view></div>
 

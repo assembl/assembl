@@ -9,6 +9,10 @@ voteApp.config(['$routeProvider', function($routeProvider){
            templateUrl:'app/partials/index.html',
            controller:'indexCtl'
         }).
+        when('/voted', {
+           templateUrl:'app/partials/voted.html',
+           controller:'votedCtl'
+        }).
         otherwise({
             redirectTo: '/'
         });

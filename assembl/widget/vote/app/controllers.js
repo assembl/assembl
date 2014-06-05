@@ -1,8 +1,22 @@
 "use strict";
 
+voteApp.controller('votedCtl',
+  ['$scope', '$http', '$routeParams', '$log', '$location', 'globalConfig', 'configTestingService', 'configService', 'Discussion',
+  function($scope, $http, $routeParams, $log, $location, globalConfig, configTestingService, configService, Discussion){
+
+  $scope.init = function(){
+    console.log("votedCtl::init()");
+
+    $scope.settings = configService.settings;
+    console.log("settings:");
+    console.log($scope.settings);
+  }
+
+}]);
+
 voteApp.controller('indexCtl',
-  ['$scope', '$http', '$routeParams', '$log', 'globalConfig', 'configTestingService', 'configService', 'Discussion',
-  function($scope, $http, $routeParams, $log, globalConfig, configTestingService, configService, Discussion){
+  ['$scope', '$http', '$routeParams', '$log', '$location', 'globalConfig', 'configTestingService', 'configService', 'Discussion',
+  function($scope, $http, $routeParams, $log, $location, globalConfig, configTestingService, configService, Discussion){
 
     // intialization code (constructor)
 
@@ -84,12 +98,14 @@ voteApp.controller('indexCtl',
         console.log(status);
         console.log("headers:");
         console.log(headers);
+        $location.path( "/voted" );
       }).error(function(status, headers){
         alert("error");
         console.log("status:");
         console.log(status);
         console.log("headers:");
         console.log(headers);
+        //$location.path( "/voted" );
       });
     };
 
