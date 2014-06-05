@@ -8,10 +8,16 @@ creativityApp.directive('vote', function(){
             idea:'=idea'
         },
         templateUrl:'app/partials/vote.html',
-        link: function(scope, elements, attrs){
+        link: function($scope, elements, attrs){
+
+            $scope.formData = {};
+
+            $scope.$watch('formData.vote', function(){
+
+              //console.log($scope.formData.vote, '|', $scope.idea['@id']);
 
 
-
+            }, true)
 
         }
     }

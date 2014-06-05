@@ -454,13 +454,13 @@ creativityApp.controller('ratingCtl',
         if(commentSelected.length > 0){
 
             var obj = {};
-                obj.commentSelected = commentSelected;
+                obj.ids = JSON.stringify(commentSelected);
 
             $http({
                 method:'POST',
                 url:rootUrlMessage,
                 data:$.param(obj),
-                async: true,
+                async:true,
                 headers: {'Content-Type': 'application/x-www-form-urlencoded'}
             }).success(function(data, status, headers){
 
@@ -476,13 +476,13 @@ creativityApp.controller('ratingCtl',
         if(subIdeaSelected.length > 0){
 
             var obj = {};
-                obj.subIdea = subIdeaSelected;
+                obj.ids = JSON.stringify(subIdeaSelected);
 
             $http({
                 method:'POST',
                 url:rootUrlSubIdea,
                 data:$.param(obj),
-                async: true,
+                async:true,
                 headers: {'Content-Type': 'application/x-www-form-urlencoded'}
             }).success(function(data, status, headers){
 
