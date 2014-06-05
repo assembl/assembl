@@ -3,15 +3,25 @@
 var creativityApp = angular.module('creativityApp',
     ['ngRoute','ngSanitize','creativityServices', 'pascalprecht.translate','angular-growl']);
 
-creativityApp.run(['Configuration','$rootScope','$timeout','$window',
-    function (Configuration, $rootScope, $timeout, $window) {
-    /*
-     * TODO: this params { type, idea, discutionId } need to be dynamic
-     * */
-    var data = {
-        type: 'CreativityWidget',
-        settings: JSON.stringify({"idea": 'local:Idea/2'})
-    };
+
+creativityApp.provider('WidgetConfigService', function (){
+  var options = {};
+  this.config = function (opt){
+    angular.extend(options, opt);
+  };
+  this.$get = [function (){
+    if ( !options )
+    {
+      throw new Error('Config options must be configured');
+    }
+    return options;
+  }];
+});
+
+creativityApp.run(['Configuration','WidgetConfigService', '$rootScope','$timeout','$window',
+    function (Configuration, WidgetConfigService, $rootScope, $timeout, $window) {
+
+    console.log("creativityApp.run()");
 
     $rootScope.counter = 5;
     $rootScope.countdown = function() {
@@ -21,31 +31,23 @@ creativityApp.run(['Configuration','$rootScope','$timeout','$window',
         }, 1000);
     };
 
-    Configuration.getWidget($.param(data), function(conf){
-        conf.get(function(data){
 
-            if(!data.user){
+    // check that the user is logged in
 
-                $('#myModal').modal({
-                    keyboard:false
-                });
-
-                $rootScope.countdown();
-
-                $timeout(function(){
-
-                  $window.location = '/login';
-
-                  $timeout.flush();
-
-                }, 5000);
-            }
-
-            $rootScope.widgetConfig = data;
-
+    if(!WidgetConfigService.user){
+        $('#myModal').modal({
+            keyboard:false
         });
-    });
 
+        $rootScope.countdown();
+
+        $timeout(function(){
+          $window.location = '/login';
+          $timeout.flush();
+        }, 5000);
+    }
+
+    $rootScope.widgetConfig = WidgetConfigService;
 
 }]).run(['JukeTubeVideosService', function (JukeTubeVideosService) {
 
@@ -103,3 +105,41 @@ creativityApp.config(['$routeProvider', function($routeProvider){
      * */
 
 }]);
+
+
+// Before initializing manually Angular, we get the config of the widget, by accessing the "config" parameter of the current URL
+// For example: http://localhost:6543/widget/creativity/?config=http://localhost:6543/data/Widget/19#/
+angular.element(document).ready(function (){
+    console.log("angular.element(document).ready()");
+
+    // returns the value of a given parameter in the URL of the current page
+    function getUrlVariableValue(variable) {
+      var query = window.location.search.substring(1);
+      var vars = query.split("&");
+      for (var i=0;i<vars.length;i++) {
+        var pair = vars[i].split("=");
+        if (pair[0] == variable) {
+          return pair[1];
+        }
+      } 
+      //alert('Query Variable ' + variable + ' not found');
+      return null;
+    }
+
+    var successCallback = function(configData){
+        console.log("successCallback ()");
+        creativityApp.config(['WidgetConfigServiceProvider', function (WidgetConfigServiceProvider) {
+            console.log("WidgetConfigServiceProvider config()");
+            WidgetConfigServiceProvider.config(configData);
+        }]);
+        angular.bootstrap('#creativityApp', ['creativityApp']);
+    };
+
+    var configFileDefault = "http://localhost:6543/data/Widget/58";
+    var configFile = getUrlVariableValue("config");
+    if ( !configFile || !( /^http(s)?:\/\/.*/.test(configFile) ) )
+        configFile = configFileDefault;
+
+    // TODO: implement an error callback, in case the config URL given is invalid or there is a network error
+    $.get(configFile, successCallback);
+});
