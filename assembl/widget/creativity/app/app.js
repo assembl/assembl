@@ -100,9 +100,10 @@ creativityApp.config(['$routeProvider', function($routeProvider){
     growlProvider.globalTimeToLive(5000);
 
     /**
-     * uncomment if you don't want to have a displayed message list
-     * growlProvider.onlyUniqueMessages(true);
+     * if you don't want to have a displayed message list
      * */
+     growlProvider.onlyUniqueMessages(true);
+
 
 }]);
 

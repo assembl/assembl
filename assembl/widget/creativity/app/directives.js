@@ -1,6 +1,6 @@
 "use strict";
 
-creativityApp.directive('vote', function(){
+creativityApp.directive('vote', function($rootScope){
     return{
         restrict:'E',
         transclude: true,
@@ -11,13 +11,11 @@ creativityApp.directive('vote', function(){
         link: function($scope, elements, attrs){
 
             $scope.formData = {};
-
-            $scope.$watch('formData.vote', function(){
-
-              //console.log($scope.formData.vote, '|', $scope.idea['@id']);
+            $rootScope.wallet = 10;
 
 
-            }, true)
+
+
 
         }
     }

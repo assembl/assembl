@@ -32,3 +32,41 @@ li{
     color:#34495e;
   }
 }
+
+//Box notification
+
+.bx-info {
+  position: relative;
+  display: table;
+  width: 100%;
+  padding: 0;
+  color: #fff;
+  background: #007bc2;
+  border-radius: 3px;
+  box-shadow: 1px 1px 4px rgba(0,0,0,0.2);
+  .bx-info-icon{
+    display: table-cell;
+    padding: 0 15px;
+    font-size: 20px;
+    color: #fff;
+    vertical-align: middle;
+    background: #006faf;
+    border-radius: 3px 0 0 3px;
+  }
+  .bx-info-content{
+    display: table-cell;
+    width: 100%;
+    padding: 5px 15px;
+    vertical-align: middle;
+    p {
+      margin: 0;
+    }
+  }
+  .bx-info-close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    border: none;
+    background: transparent;
+  }
+}
