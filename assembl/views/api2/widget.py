@@ -4,7 +4,8 @@ from pyramid.view import view_config
 from pyramid.security import authenticated_userid
 
 from assembl.auth import P_READ, P_ADMIN_DISC, Everyone
-from assembl.models import Widget, User, Discussion, IdeaViewWidget
+from assembl.models import (
+    Widget, User, Discussion, IdeaViewWidget, Idea, Criterion)
 from assembl.auth.util import get_permissions
 from ..traversal import InstanceContext
 
@@ -65,3 +66,23 @@ def set_confirmed_messages(request):
     ctx = request.context
     ctx._instance.set_confirmed_messages(ids)
     return "Ok"
+
+
+@view_config(
+    context=InstanceContext, ctx_instance_class=Idea,
+    request_method="GET", permission=P_READ,
+    renderer="json", name="criteria")
+def get_idea_criteria(request):
+    ctx = request.context
+    view = (request.matchdict or {}).get('view', None)\
+        or ctx.get_default_view() or 'default'
+    return [cr.generic_json(view) for cr in
+            ctx._instance.get_siblings_of_type(Criterion)]
+
+
+@view_config(
+    context=InstanceContext, ctx_instance_class=Idea,
+    request_method="GET", permission=P_READ,
+    renderer="json", name="vote_results")
+def get_idea_vote_results(request):
+    return request.ctx._instance.get_voting_results()

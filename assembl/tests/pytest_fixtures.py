@@ -311,7 +311,7 @@ def subidea_1_1(request, discussion, subidea_1, test_session):
 
 @pytest.fixture(scope="function")
 def criterion_1(request, discussion, subidea_1, test_session):
-    from assembl.models import Idea, IdeaLink
+    from assembl.models import Criterion, IdeaLink
     i = Criterion(short_title="cost", discussion=discussion)
     test_session.add(i)
     l_1_11 = IdeaLink(source=subidea_1, target=i)
@@ -326,7 +326,7 @@ def criterion_1(request, discussion, subidea_1, test_session):
 
 @pytest.fixture(scope="function")
 def criterion_2(request, discussion, subidea_1, test_session):
-    from assembl.models import Idea, IdeaLink
+    from assembl.models import Criterion, IdeaLink
     i = Criterion(short_title="quality", discussion=discussion)
     test_session.add(i)
     l_1_11 = IdeaLink(source=subidea_1, target=i)
@@ -341,7 +341,7 @@ def criterion_2(request, discussion, subidea_1, test_session):
 
 @pytest.fixture(scope="function")
 def criterion_3(request, discussion, subidea_1, test_session):
-    from assembl.models import Idea, IdeaLink
+    from assembl.models import Criterion, IdeaLink
     i = Criterion(short_title="time", discussion=discussion)
     test_session.add(i)
     l_1_11 = IdeaLink(source=subidea_1, target=i)
@@ -352,6 +352,18 @@ def criterion_3(request, discussion, subidea_1, test_session):
         test_session.delete(i)
         test_session.delete(l_1_11)
     return i
+
+
+@pytest.fixture(scope="function")
+def lickert_range(request, test_session):
+    from assembl.models import LickertRange
+    lr = LickertRange()
+    test_session.add(lr)
+    test_session.flush()
+
+    def fin():
+        test_session.delete(lr)
+    return lr
 
 
 @pytest.fixture(scope="function")

@@ -13,6 +13,7 @@ from ..traversal import InstanceContext, CollectionContext, ClassContext
 from assembl.auth import P_READ, P_SYSADMIN, Everyone
 from assembl.auth.util import get_roles, get_permissions
 from assembl.semantic.virtuoso_mapping import get_virtuoso
+from assembl.models import AbstractIdeaVote, User
 
 """RESTful API to assembl, with some magic.
 The basic URI to access any ressource is
@@ -292,3 +293,20 @@ def collection_add_json(request):
         db.flush()
         first = instances[0]
         raise HTTPCreated(first.uri_generic(first.id))
+
+
+# Votes are private
+@view_config(context=CollectionContext, renderer='json',
+             request_method='GET', permission=P_READ,
+             ctx_collection_class=AbstractIdeaVote)
+def votes_collection_view(request):
+    ctx = request.context
+    user_id = authenticated_userid(request)
+    if user_id == Everyone:
+        raise HTTPUnauthorized
+    view = request.GET.get('view', None) or ctx.get_default_view() or 'id_only'
+    q = ctx.create_query(view == 'id_only').join(User).filter(User.id==user_id)
+    if view == 'id_only':
+        return [ctx.collection_class.uri_generic(x) for (x,) in q.all()]
+    else:
+        return [i.generic_json(view) for i in q.all()]

@@ -10,7 +10,9 @@ from ...models import (
     SubGraphIdeaLinkAssociation,
     Post,
     Widget,
-    IdeaContentWidgetLink
+    IdeaContentWidgetLink,
+    LickertRange,
+    Criterion
 )
 
 
@@ -227,12 +229,12 @@ def test_widget_basic_interaction(
 
 def teSt_voting_widget(
         discussion, test_app, subidea_1_1, criterion_1, criterion_2,
-        criterion_3, participant1_user, test_session):
+        criterion_3, participant1_user, lickert_range, test_session):
     # Post the initial configuration
     db = Idea.db()
     new_widget_loc = test_app.post(
         '/data/Discussion/%d/widgets' % (discussion.id,), {
-            'widget_type': 'voting',
+            'type': 'MultiCriterionVotingWidget',
             'settings': json.dumps({
                 'idea': 'local:Idea/%d' % (subidea_1_1.id)
             })
@@ -249,18 +251,34 @@ def teSt_voting_widget(
     )
     assert widget_rep.status_code == 200
     widget_rep = widget_rep.json
-    print widget_rep
-    assert 'criteria_uri' in widget_rep
-    assert 'user_votes_uri' in widget_rep
-    assert 'voting_results_uri' in widget_rep
     # Get the list of criteria (there should be 3)
-    idea_endpoint = local_to_absolute(widget_rep['criteria_uri'])
-    test = test_app.get(idea_endpoint)
+    criteria_uri = local_to_absolute(widget_rep['criteria_uri'])
+    test = test_app.get(criteria_uri)
     assert test.status_code == 200
     assert len(test.json) == 3
     # Get the voting endpoint
+    user_votes_uri = local_to_absolute(widget_rep['user_votes_uri'])
     # It should be empty
+    test = test_app.get(user_votes_uri)
+    assert test.status_code == 200
+    assert len(test.json) == 0
     # Add votes to the voting endpoint
+    # TODO: Put lickert_range id in voter config. Or create one?
+    # Note that the test fails here, because sqla does not find 
+    # the range, and value maximum checking fails.
+    test = test_app.post(user_votes_uri, {
+        "type": "LickertIdeaVote",
+        "value": 2,
+        "range_id": lickert_range.id
+        })
+    assert test.status_code == 201
     # Get them back
+    test = test_app.get(user_votes_uri)
+    assert test.status_code == 200
+    assert len(test.json) == 1
     # Add votes for another user
+    # TODO
     # Get vote results.
+    vote_results_uri = local_to_absolute(widget_rep['vote_results_uri'])
+    assert test.status_code == 200
+    assert vote_results_uri.json == 2

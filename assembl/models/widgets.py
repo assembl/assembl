@@ -240,20 +240,20 @@ class MultiCriterionVotingWidget(Widget):
     def get_criteria_uri(self):
         idea_uri = self.settings_json.get('idea', None)
         if idea_uri:
-            return 'local:Discussion/%d/widgets/%d/Idea/%d/criteria' % (
-                self.discussion_id, self.id, Idea.get_database_id(idea_uri))
+            return 'local:Idea/%d/criteria' % (
+                Idea.get_database_id(idea_uri),)
 
     def get_user_votes_uri(self):
         idea_uri = self.settings_json.get('idea', None)
         if idea_uri:
-            return 'local:Discussion/%d/widgets/%d/Idea/%d/user_votes/' % (
-                self.discussion_id, self.id, Idea.get_database_id(idea_uri))
+            return 'local:Idea/%d/votes' % (
+                Idea.get_database_id(idea_uri),)
 
     def get_vote_results_uri(self):
         idea_uri = self.settings_json.get('idea', None)
         if idea_uri:
-            return 'local:Discussion/%d/widgets/%d/Idea/%d/vote_results/' % (
-                self.discussion_id, self.id, Idea.get_database_id(idea_uri))
+            return 'local:Idea/%d/vote_results' % (
+                Idea.get_database_id(idea_uri),)
 
 
 class WidgetUserConfig(DiscussionBoundBase):

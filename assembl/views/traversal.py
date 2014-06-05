@@ -122,6 +122,8 @@ class ClassContext(object):
         cls = self.get_class(typename)
         if json is None:
             cols = sqlainspect(cls).c
+            if 'user_id' in cols:
+                kwargs[user_id] = user_id
             kwargs = {k: int(v) if k in cols and
                       cols.get(k).type.python_type == int else v
                       for k, v in kwargs.iteritems()}

@@ -90,6 +90,8 @@ from .mail import (
     MailingList,
 )
 from .synthesis import (
+    Argument,
+    Criterion,
     Discussion,
     ExplicitSubGraphView,
     Extract,
@@ -102,6 +104,8 @@ from .synthesis import (
     IdeaLink,
     IdeaRelatedPostLink,
     IdeaThreadContextBreakLink,
+    Issue,
+    Position,
     RootIdea,
     SubGraphIdeaAssociation,
     SubGraphIdeaLinkAssociation,

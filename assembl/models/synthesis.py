@@ -830,6 +830,17 @@ JOIN post ON (
     def most_common_words_prop(self):
         return self.most_common_words()
 
+    def get_siblings_of_type(self, cls):
+        # TODO: optimize
+        siblings = set(chain(*(p.children for p in self.parents)))
+        siblings.remove(self)
+        return [c for c in siblings if isinstance(c, cls)]
+
+    def get_voting_results(self):
+        # TODO: optimize
+        if self.votes:
+            return sum((v.vote_value for v in self.votes))/len(self.votes)
+
     def get_discussion_id(self):
         return self.discussion_id
 
