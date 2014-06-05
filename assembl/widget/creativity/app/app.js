@@ -18,8 +18,8 @@ creativityApp.provider('WidgetConfigService', function (){
   }];
 });
 
-creativityApp.run(['Configuration','WidgetConfigService', '$rootScope','$timeout','$window',
-    function (Configuration, WidgetConfigService, $rootScope, $timeout, $window) {
+creativityApp.run(['WidgetConfigService', '$rootScope','$timeout','$window',
+    function (WidgetConfigService, $rootScope, $timeout, $window) {
 
     console.log("creativityApp.run()");
 
@@ -55,7 +55,9 @@ creativityApp.run(['Configuration','WidgetConfigService', '$rootScope','$timeout
 
 }]);
 
-creativityApp.config(['$routeProvider', function($routeProvider){
+creativityApp.config(['$routeProvider','$translateProvider','growlProvider',
+    function($routeProvider, $translateProvider, growlProvider){
+
     $routeProvider.
         when('/cards', {
            templateUrl:'app/partials/cards.html',
@@ -81,8 +83,6 @@ creativityApp.config(['$routeProvider', function($routeProvider){
             redirectTo: '/cards'
         });
 
-}]).config(['$translateProvider','growlProvider', function($translateProvider, growlProvider){
-
     /**
      * Angular translation en/fr
      * */
@@ -102,8 +102,7 @@ creativityApp.config(['$routeProvider', function($routeProvider){
     /**
      * if you don't want to have a displayed message list
      * */
-     growlProvider.onlyUniqueMessages(true);
-
+    growlProvider.onlyUniqueMessages(true);
 
 }]);
 
@@ -136,10 +135,12 @@ angular.element(document).ready(function (){
         angular.bootstrap('#creativityApp', ['creativityApp']);
     };
 
-    var configFileDefault = "http://localhost:6543/data/Widget/58";
-    var configFile = getUrlVariableValue("config");
-    if ( !configFile || !( /^http(s)?:\/\/.*/.test(configFile) ) )
+    var configFileDefault = "http://localhost:6543/data/Widget/58",
+        configFile = getUrlVariableValue("config");
+
+    if ( !configFile || !( /^http(s)?:\/\/.*/.test(configFile) ) ){
         configFile = configFileDefault;
+    }
 
     // TODO: implement an error callback, in case the config URL given is invalid or there is a network error
     $.get(configFile, successCallback);

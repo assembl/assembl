@@ -1,6 +1,6 @@
 "use strict";
 
-creativityApp.directive('vote', function($rootScope){
+creativityApp.directive('vote', function($rootScope, setVote, WidgetConfigService){
     return{
         restrict:'E',
         transclude: true,
@@ -13,9 +13,30 @@ creativityApp.directive('vote', function($rootScope){
             $scope.formData = {};
             $rootScope.wallet = 10;
 
+            console.log(WidgetConfigService)
 
+            $scope.$watch('formData.vote', function(){
+                if($scope.formData.vote && $rootScope.wallet >0){
 
+                    $rootScope.wallet -= $scope.formData.vote;
+                }
 
+                //console.log($rootScope.wallet, $scope.idea['@id']);
+
+                /*var data = {
+                    type: 'CreativityWidget',
+                    settings: JSON.stringify({"idea": 'local:Idea/2'}),
+                    state:JSON.stringify([
+                        {"local:Idea/67":8},
+                        {"local:Idea/66":2},
+                        {"local:Idea/65":9},
+                        {"local:Idea/64":1}
+                    ])
+                };
+
+                setVote.addVote($.param(data));*/
+
+            }, true);
 
         }
     }

@@ -26,19 +26,12 @@ creativityServices.factory('cardGame', function($http){
 });
 
 //CONFIG
-creativityServices.factory('Configuration', ['$resource', function($resource) {
+creativityServices.factory('setVote', ['$resource', function($resource) {
     return $resource('/data/Discussion/1/widgets', {}, {
-        getWidget: {
+        addVote: {
             method:'POST',
             headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-            isArray:false,
-            transformResponse : function(data, headers){
-
-                var header = headers().location;
-                    header = header.split(':')[1];
-
-                return $resource('/data/:widgetId', {widgetId: header});
-            }
+            isArray:false
         }
     });
 
