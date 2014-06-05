@@ -128,28 +128,28 @@ def test_widget_basic_interaction(
     assert new_idea_create.status_code == 201
     # Get the sub-idea from the db
     Idea.db.flush()
-    new_idea_id = new_idea_create.location
-    new_idea = Idea.get_instance(new_idea_id)
-    assert new_idea.widget_id == new_widget.id
-    assert new_idea.hidden
+    new_idea1_id = new_idea_create.location
+    new_idea1 = Idea.get_instance(new_idea1_id)
+    assert new_idea1.widget_id == new_widget.id
+    assert new_idea1.hidden
     assert not subidea_1.hidden
     # Get the sub-idea from the api
-    new_idea_rep = test_app.get(
+    new_idea1_rep = test_app.get(
         local_to_absolute(new_idea_create.location),
         headers={"Accept": "application/json"}
     )
-    assert new_idea_rep.status_code == 200
+    assert new_idea1_rep.status_code == 200
     # It should have a link to the root idea
     idea_link = IdeaLink.db.query(IdeaLink).filter_by(
-        source_id=subidea_1.id, target_id=new_idea.id).one()
+        source_id=subidea_1.id, target_id=new_idea1.id).one()
     # The new idea should now be in the collection api
     test = test_app.get(idea_endpoint)
     assert test.status_code == 200
-    assert new_idea_id in test.json or new_idea_id in [
+    assert new_idea1_id in test.json or new_idea1_id in [
         x['@id'] for x in test.json]
     # TODO: The root idea is included in the above, that's a bug.
     # get the new post endpoint from the idea data
-    post_endpoint = new_idea_rep.json.get('widget_add_post_endpoint', None)
+    post_endpoint = new_idea1_rep.json.get('widget_add_post_endpoint', None)
     assert post_endpoint
     # Create a new post attached to the sub-idea
     new_post_create = test_app.post(local_to_absolute(post_endpoint), {
@@ -158,26 +158,71 @@ def test_widget_basic_interaction(
     assert new_post_create.status_code == 201
     # Get the new post from the db
     Post.db.flush()
-    new_post_id = new_post_create.location
-    post = Post.get_instance(new_post_id)
+    new_post1_id = new_post_create.location
+    post = Post.get_instance(new_post1_id)
     assert post.hidden
     # It should have a widget link to the idea.
     post_widget_link = Idea.db.query(IdeaContentWidgetLink).filter_by(
-        content_id=post.id, idea_id=new_idea.id).one()
+        content_id=post.id, idea_id=new_idea1.id).one()
     # The new post should now be in the collection api
     test = test_app.get(local_to_absolute(post_endpoint))
     assert test.status_code == 200
-    assert new_post_id in test.json or new_post_id in [
+    assert new_post1_id in test.json or new_post1_id in [
         x['@id'] for x in test.json]
     # Get the new post from the api
-    new_post_rep = test_app.get(
+    new_post1_rep = test_app.get(
         local_to_absolute(new_post_create.location),
         headers={"Accept": "application/json"}
     )
-    assert new_post_rep.status_code == 200
+    assert new_post1_rep.status_code == 200
     # It should mention its idea
-    print new_post_rep.json
-    assert new_idea_id in new_post_rep.json['widget_ideas']
+    print new_post1_rep.json
+    assert new_idea1_id in new_post1_rep.json['widget_ideas']
+    # Create a second idea
+    new_idea_create = test_app.post(idea_endpoint, {
+        "type": "Idea", "short_title": "This is another new idea"})
+    assert new_idea_create.status_code == 201
+    # Get the sub-idea from the db
+    Idea.db.flush()
+    new_idea2_id = new_idea_create.location
+    # Approve the first but not the second idea
+    confirm_idea_uri = local_to_absolute(widget_rep['confirm_ideas_uri'])
+    confirm = test_app.post(confirm_idea_uri, {
+        "ids": json.dumps([new_idea1_id])})
+    assert confirm.status_code == 200
+    Idea.db.flush()
+    # Get it back
+    get_back = test_app.get(confirm_idea_uri)
+    assert get_back.status_code == 200
+    # The first idea should now be unhidden, but not the second
+    assert get_back.json == [new_idea1_id]
+    new_idea1 = Idea.get_instance(new_idea1_id)
+    assert not new_idea1.hidden
+    new_idea2 = Idea.get_instance(new_idea2_id)
+    assert new_idea2.hidden
+    # Create a second post.
+    new_post_create = test_app.post(local_to_absolute(post_endpoint), {
+        "type": "Post", "message_id": "bogus",
+        "body": "body", "creator_id": participant1_user.id})
+    assert new_post_create.status_code == 201
+    Post.db.flush()
+    new_post2_id = new_post_create.location
+    # Approve the first but not the second idea
+    confirm_messages_uri = local_to_absolute(
+        widget_rep['confirm_messages_uri'])
+    confirm = test_app.post(confirm_messages_uri, {
+        "ids": json.dumps([new_post1_id])})
+    assert confirm.status_code == 200
+    Idea.db.flush()
+    # Get it back
+    get_back = test_app.get(confirm_messages_uri)
+    assert get_back.status_code == 200
+    assert get_back.json == [new_post1_id]
+    # The first idea should now be unhidden, but not the second
+    new_post1 = Post.get_instance(new_post1_id)
+    assert not new_post1.hidden
+    new_post2 = Post.get_instance(new_post2_id)
+    assert new_post2.hidden
 
 
 def teSt_voting_widget(

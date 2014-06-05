@@ -7,7 +7,9 @@ import simplejson as json
 
 from . import DiscussionBoundBase
 from .synthesis import (
-    Discussion, ExplicitSubGraphView, SubGraphIdeaAssociation, Idea)
+    Discussion, ExplicitSubGraphView, SubGraphIdeaAssociation, Idea,
+    IdeaContentWidgetLink, IdeaLink)
+from .generic import Content
 from ..auth import P_ADD_POST, P_ADMIN_DISC, Everyone, CrudPermissions
 from .auth import User
 from ..views.traversal import CollectionDefinition
@@ -152,13 +154,45 @@ class IdeaViewWidget(Widget):
         idea_uri = self.settings_json.get('idea', None)
         if idea_uri:
             return ('local:Discussion/%d/widgets/%d/confirm_ideas') % (
-                        self.discussion_id, self.id)
+                self.discussion_id, self.id)
 
     def get_confirm_messages_uri(self):
         idea_uri = self.settings_json.get('idea', None)
         if idea_uri:
             return ('local:Discussion/%d/widgets/%d/confirm_messages') % (
-                        self.discussion_id, self.id)
+                self.discussion_id, self.id)
+
+    def get_confirmed_ideas(self):
+        root_idea_uri = self.settings_json.get('idea', None)
+        # TODO : optimize
+        ideas = self.main_idea_view.ideas
+        return [idea.uri() for idea in ideas
+                if (not idea.hidden) and idea.uri() != root_idea_uri]
+
+    def set_confirmed_ideas(self, idea_ids):
+        root_idea_uri = self.settings_json.get('idea', None)
+        # TODO : optimize
+        for idea in self.main_idea_view.ideas:
+            uri = idea.uri()
+            if uri == root_idea_uri:
+                continue
+            idea.hidden = (uri not in idea_ids)
+
+    def get_confirmed_messages(self):
+        root_idea_uri = self.settings_json.get('idea', None)
+        root_idea_id = Idea.get_database_id(root_idea_uri)
+        ids = self.db.query(Content.id).join(IdeaContentWidgetLink
+            ).join(Idea).join(IdeaLink, IdeaLink.target_id == Idea.id).filter(
+            IdeaLink.source_id == root_idea_id).filter(~Content.hidden).all()
+        return [Content.uri_generic(id) for (id,) in ids]
+
+    def set_confirmed_messages(self, post_ids):
+        root_idea_uri = self.settings_json.get('idea', None)
+        root_idea_id = Idea.get_database_id(root_idea_uri)
+        for post in self.db.query(Content).join(IdeaContentWidgetLink).join(Idea
+                ).join(IdeaLink, IdeaLink.target_id == Idea.id).filter(
+                IdeaLink.source_id == root_idea_id).all():
+            post.hidden = (post.uri() not in post_ids)
 
     @classmethod
     def extra_collections(cls):

@@ -119,6 +119,9 @@ from .annotation import (
     Webpage,
 )
 from .widgets import (
+    CreativityWidget,
+    IdeaViewWidget,
+    MultiCriterionVotingWidget,
     Widget,
     WidgetUserConfig,
 )
