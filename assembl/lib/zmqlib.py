@@ -1,3 +1,4 @@
+import atexit
 from itertools import count
 
 import zmq
@@ -10,23 +11,35 @@ INTERNAL_SOCKET = 'inproc://assemblchanges'
 CHANGES_SOCKET = None
 MULTIPLEX = True
 INITED = False
+DISPATCHER = None
 
 _counter = count()
-
+_active_sockets = []
 
 def start_dispatch_thread():
-    global INITED
+    global INITED, DISPATCHER
     if INITED:
         return
-    td = zmq.devices.ThreadDevice(zmq.FORWARDER, zmq.XSUB, zmq.XPUB)
-    td.bind_in(INTERNAL_SOCKET)
-    td.connect_out(CHANGES_SOCKET)
-    td.setsockopt_in(zmq.IDENTITY, 'XSUB')
-    td.setsockopt_out(zmq.IDENTITY, 'XPUB')
-    td.start()
+    DISPATCHER = zmq.devices.ThreadDevice(zmq.FORWARDER, zmq.XSUB, zmq.XPUB)
+    DISPATCHER.bind_in(INTERNAL_SOCKET)
+    DISPATCHER.connect_out(CHANGES_SOCKET)
+    DISPATCHER.setsockopt_in(zmq.IDENTITY, 'XSUB')
+    DISPATCHER.setsockopt_out(zmq.IDENTITY, 'XPUB')
+    DISPATCHER.start()
     #Fix weird nosetests problems.  TODOfind and fix underlying problem
     sleep(0.01)
     INITED = True
+
+
+@atexit.register
+def stop_sockets():
+    print "STOPPING SOCKETS"
+    global CHANGES_SOCKET, MULTIPLEX, INITED, DISPATCHER
+    for socket in _active_sockets:
+        socket.close()
+    if MULTIPLEX:
+        DISPATCHER.stop()
+    INITED = False
 
 
 def get_pub_socket():
@@ -37,6 +50,7 @@ def get_pub_socket():
         socket.connect(INTERNAL_SOCKET)
     else:
         socket.connect(CHANGES_SOCKET)
+    _active_sockets.append(socket)
     # Related to "slow joiner" symptom 
     # http://zguide.zeromq.org/page:all#Getting-the-Message-Out
     # It would be better to get the "ready" signal back but this is
