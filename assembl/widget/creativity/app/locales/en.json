@@ -13,5 +13,6 @@
     "subIdeaPosted":"Your sub-idea was posted",
     "validVoteCatcher":"catching success",
     "errorVoteCatcher":"catching error",
-    "synthesis":"Sythesis"
+    "synthesis":"Sythesis",
+    "shuffle":"Draw a new card"
 }

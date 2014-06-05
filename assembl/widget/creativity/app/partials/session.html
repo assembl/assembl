@@ -12,7 +12,10 @@
                         <div class="card-bottom"></div>
                     </div>
                     <div class="slot-machine">
-                        <a class="glyphicon glyphicon-random" ng-click="shuffle()"></a>
+                       <a><img src="app/img/slot-machine.png"></a>  
+                    </div>
+                    <div class="shuffle">
+                        <button class="btn btn-primary btn-xs" ng-click="shuffle()">{{'shuffle' | translate}}</button>
                     </div>
                     <div class="bs-callout bs-callout-info">
                         <p>{{card[0].help}}</p>
