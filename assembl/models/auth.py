@@ -60,6 +60,15 @@ class AgentProfile(Base):
             accounts.sort(key=lambda e: (not e.verified, not e.preferred))
             return accounts[0].email
 
+    def real_name(self):
+        if not self.name:
+            for acc in self.identity_accounts:
+                name = acc.real_name()
+                if name:
+                    self.name = name
+                    break
+        return self.name
+
     def display_name(self):
         # TODO: Prefer types?
         if self.name:
@@ -115,6 +124,9 @@ class AgentProfile(Base):
             return default
         default = config.get('avatar.gravatar_default') or default
         return EmailAccount.avatar_url_for(email, size, default)
+
+    def external_avatar_url(self):
+        return "/user/id/%d/avatar/" % (self.id,)
 
     def serializable(self, use_email=None):
         return {
@@ -258,6 +270,14 @@ class IdentityProviderAccount(AbstractAgentAccount):
         else:
             name = self.userid
         return ":".join((self.provider.provider_type, name))
+
+    def real_name(self):
+        info = self.profile_info_json
+        name = info['name']
+        if name.get('formatted', None):
+            return name['formatted']
+        if 'givenName' in name and 'familyName' in name:
+            return ' '.join((name['givenName'], name['familyName']))
 
     def populate_picture(self, profile=None):
         if self.picture_url:
