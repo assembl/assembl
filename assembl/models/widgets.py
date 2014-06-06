@@ -4,12 +4,14 @@ from sqlalchemy import (
     Column, Integer, ForeignKey, Text, String)
 from sqlalchemy.orm import relationship
 import simplejson as json
+import uuid
 
 from . import DiscussionBoundBase
 from .synthesis import (
     Discussion, ExplicitSubGraphView, SubGraphIdeaAssociation, Idea,
     IdeaContentWidgetLink, IdeaLink)
 from .generic import Content
+from .post import IdeaProposalPost
 from ..auth import P_ADD_POST, P_ADMIN_DISC, Everyone, CrudPermissions
 from .auth import User
 from ..views.traversal import CollectionDefinition
@@ -201,12 +203,20 @@ class IdeaViewWidget(Widget):
                 super(WidgetViewCollection, self).__init__(
                     cls, cls.main_idea_view.property)
 
-            def decorate_instance(self, instance, parent_instance, assocs):
+            def decorate_instance(self, instance, parent_instance, assocs, user_id):
                 super(WidgetViewCollection, self).decorate_instance(
-                    instance, parent_instance, assocs)
-                for inst in chain(assocs, (instance,)):
+                    instance, parent_instance, assocs, user_id)
+                for inst in chain(assocs[:], (instance,)):
                     if isinstance(inst, Idea):
                         inst.hidden = True
+                        post = IdeaProposalPost(
+                            proposes_idea=inst, creator_id=user_id,
+                            discussion_id=inst.discussion_id,
+                            message_id=uuid.uuid1().urn,
+                            body="", subject=inst.short_title)
+                        assocs.append(post)
+                        assocs.append(IdeaContentWidgetLink(
+                            content=post, idea=inst.parents[0], creator_id=user_id))
 
         return {'main_idea_view': WidgetViewCollection()}
 

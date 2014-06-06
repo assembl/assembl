@@ -215,6 +215,33 @@ class SynthesisPost(AssemblPost):
         super(SynthesisPost, self).__init__(*args, **kwargs)
         self.publishes_synthesis.publish()
 
+
+class IdeaProposalPost(AssemblPost):
+    """
+    A Post that proposes an Idea.
+    """
+    __tablename__ = "idea_proposal_post"
+
+    id = Column(Integer, ForeignKey(
+        'assembl_post.id',
+        ondelete='CASCADE',
+        onupdate='CASCADE'
+    ), primary_key=True)
+
+    idea_id = Column(
+        Integer,
+        ForeignKey('idea.id', ondelete="CASCADE", onupdate="CASCADE"),
+        nullable=False
+    )
+
+    proposes_idea = relationship('Idea',
+                                 backref=backref('proposed_in_post',uselist=False))
+
+    __mapper_args__ = {
+        'polymorphic_identity': 'idea_proposal_post',
+    }
+
+
 class ImportedPost(Post):
     """
     A Post that originated outside of the Assembl system (was imported from elsewhere).

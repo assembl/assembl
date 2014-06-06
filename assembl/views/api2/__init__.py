@@ -133,15 +133,20 @@ def collection_add(request):
         cls = ctx.get_collection_class(typename)
         if cls.crud_permissions.read not in permissions:
             raise HTTPUnauthorized()
+    session = User.db
+    old_autoflush = session.autoflush
+    session.autoflush = False
     try:
         instances = ctx.create_object(typename, None, user_id, **args)
     except Exception as e:
+        session.autoflush = old_autoflush
         raise HTTPBadRequest(e)
     if instances:
         db = get_session_maker()
         for instance in instances:
             db.add(instance)
-        db.flush()
+        session.autoflush = old_autoflush
+        session.flush()
         first = instances[0]
         return Response(location=first.uri_generic(first.id), status_code=201)
     raise HTTPBadRequest()

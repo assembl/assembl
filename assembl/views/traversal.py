@@ -101,7 +101,7 @@ class ClassContext(object):
             return my_default
         return self.__parent__.get_default_view()
 
-    def decorate_instance(self, instance, assocs):
+    def decorate_instance(self, instance, assocs, user_id):
         # and here
         pass
 
@@ -198,7 +198,7 @@ class InstanceContext(object):
         # Leave that work to the collection
         return self.__parent__.decorate_query(query)
 
-    def decorate_instance(self, instance, assocs):
+    def decorate_instance(self, instance, assocs, user_id):
         # if one of the objects has a non-list relation to this class, add it
         # Slightly dangerous...
         for inst in assocs:
@@ -212,7 +212,7 @@ class InstanceContext(object):
                 if issubclass(self._instance.__class__, reln.mapper.class_):
                     setattr(inst, reln.key, self._instance)
                     break
-        self.__parent__.decorate_instance(instance, assocs)
+        self.__parent__.decorate_instance(instance, assocs, user_id)
 
 
 class InstanceContextPredicate(object):
@@ -276,10 +276,10 @@ class CollectionContext(object):
         query = self.collection.decorate_query(query, self.parent_instance)
         return self.__parent__.decorate_query(query)
 
-    def decorate_instance(self, instance, assocs):
+    def decorate_instance(self, instance, assocs, user_id):
         self.collection.decorate_instance(
-            instance, self.parent_instance, assocs)
-        self.__parent__.decorate_instance(instance, assocs)
+            instance, self.parent_instance, assocs, user_id)
+        self.__parent__.decorate_instance(instance, assocs, user_id)
 
     def create_object(self, typename=None, json=None, user_id=None, **kwargs):
         cls = self.get_collection_class(typename)
@@ -293,7 +293,7 @@ class CollectionContext(object):
         else:
             assocs = cls.from_json(json, user_id)
             inst = assocs[0]
-        self.decorate_instance(inst, assocs)
+        self.decorate_instance(inst, assocs, user_id)
         return assocs
 
 
@@ -344,7 +344,7 @@ class AbstractCollectionDefinition(object):
         pass
 
     @abstractmethod
-    def decorate_instance(self, instance, parent_instance, assocs):
+    def decorate_instance(self, instance, parent_instance, assocs, user_id):
         pass
 
     @abstractmethod
@@ -382,7 +382,7 @@ class CollectionDefinition(AbstractCollectionDefinition):
                 query = query.filter(back_attribute == parent_instance)
         return query
 
-    def decorate_instance(self, instance, parent_instance, assocs):
+    def decorate_instance(self, instance, parent_instance, assocs, user_id):
         if not isinstance(instance, self.collection_class):
             return
         # if the relation is through a helper class,

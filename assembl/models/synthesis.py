@@ -399,7 +399,7 @@ class ExplicitSubGraphView(IdeaGraphView):
                 query = query.join(SubGraphIdeaAssociation, self.owner_class)
                 return query
 
-            def decorate_instance(self, instance, parent_instance, assocs):
+            def decorate_instance(self, instance, parent_instance, assocs, user_id):
                 for inst in assocs[:]:
                     if isinstance(inst, Idea):
                         assocs.append(SubGraphIdeaAssociation(
@@ -423,7 +423,7 @@ class ExplicitSubGraphView(IdeaGraphView):
                 return query.join(
                     SubGraphIdeaLinkAssociation, self.owner_class)
 
-            def decorate_instance(self, instance, parent_instance, assocs):
+            def decorate_instance(self, instance, parent_instance, assocs, user_id):
                 if isinstance(instance, IdeaLink):
                     assocs.append(
                         SubGraphIdeaLinkAssociation(
@@ -949,7 +949,7 @@ JOIN post ON (
                 return query.join(IdeaLink,
                     IdeaLink.source_id == parent_instance.id)
 
-            def decorate_instance(self, instance, parent_instance, assocs):
+            def decorate_instance(self, instance, parent_instance, assocs, user_id):
                 if isinstance(instance, Idea):
                     assocs.append(IdeaLink(
                             source=parent_instance, target=instance))
@@ -968,7 +968,7 @@ JOIN post ON (
                 return query.join(
                     IdeaRelatedPostLink, self.owner_class)
 
-            def decorate_instance(self, instance, parent_instance, assocs):
+            def decorate_instance(self, instance, parent_instance, assocs, user_id):
                 # This is going to spell trouble: Sometimes we'll have creator,
                 # other times creator_id
                 if isinstance(instance, Content):
@@ -997,7 +997,7 @@ JOIN post ON (
                         # contains_eager(Content.extracts) seems to slow things down instead
                 return query
 
-            def decorate_instance(self, instance, parent_instance, assocs):
+            def decorate_instance(self, instance, parent_instance, assocs, user_id):
                 # This is going to spell trouble: Sometimes we'll have creator,
                 # other times creator_id
                 if isinstance(instance, Content):

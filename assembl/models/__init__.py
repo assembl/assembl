@@ -77,6 +77,7 @@ from .generic import (
 )
 from .post import (
     AssemblPost,
+    IdeaProposalPost,
     ImportedPost,
     Post,
     SynthesisPost,
