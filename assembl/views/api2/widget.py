@@ -93,6 +93,6 @@ def get_idea_vote_results(request):
     context=InstanceContext, ctx_instance_class=Widget,
     request_method="GET", permission=P_READ,
     renderer="json", name="user_states")
-def view_confirmed_ideas(request):
+def get_all_users_state(request):
     ctx = request.context
     return ctx._instance.user_configs
