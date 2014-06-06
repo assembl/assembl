@@ -2,17 +2,17 @@
     "comment":"Écrire un commentaire...",
     "acomment":"Commentaire",
     "send":"Envoyez",
-    "reply":"Repondre",
-    "comments":"Voir les commentaires",
+    "reply":"Répondre",
+    "comments":"Voir les {{nb}} commentaires",
     "vote":"Votez",
     "title":"titre",
     "cancel":"Annuler",
     "validVote":"Validez vos votes",
     "needToConnect":"Vous allez être redirigé vers la page de connexion dans {{time}}s ",
-    "connect":"Connectez vous !",
-    "subIdeaPosted":"Votre sous idée a été postée",
+    "connect":"Connectez-vous !",
+    "subIdeaPosted":"Votre sous-idée a bien été postée",
     "validVoteCatcher":"catching success",
     "errorVoteCatcher":"catch error",
-    "synthesis":"Sythése",
-    "shuffle":"Tirer une nouvelle carte"
+    "synthesis":"Sythèse",
+    "shuffle":"Piocher une nouvelle carte"
 }
