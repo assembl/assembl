@@ -135,11 +135,16 @@ angular.element(document).ready(function (){
         angular.bootstrap('#creativityApp', ['creativityApp']);
     };
 
-    var configFileDefault = "http://localhost:6543/data/Widget/58",
-        configFile = getUrlVariableValue("config");
+    var configFile = getUrlVariableValue("config");
 
-    if ( !configFile || !( /^http(s)?:\/\/.*/.test(configFile) ) ){
-        configFile = configFileDefault;
+    if ( configFile === undefined ) {
+        // TODO: Redirect on the discussion
+        // If discussion_admin, redirect on widget creation page.
+        alert("No configuration.");
+        return;
+    }
+    if (configFile.substr(0,6) == "local:") {
+      configFile = "/data/"+configFile.substr(6);
     }
 
     // TODO: implement an error callback, in case the config URL given is invalid or there is a network error
