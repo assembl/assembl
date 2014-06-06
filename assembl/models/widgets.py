@@ -164,15 +164,25 @@ class IdeaViewWidget(Widget):
             return ('local:Discussion/%d/widgets/%d/confirm_messages') % (
                 self.discussion_id, self.id)
 
+    @property
+    def main_idea_id(self):
+        return self.settings_json.get('idea', None)
+
+    @property
+    def main_idea(self):
+        idea_id = self.main_idea_id
+        if idea_id:
+            return Idea.get_instance(idea_id)
+
     def get_confirmed_ideas(self):
-        root_idea_uri = self.settings_json.get('idea', None)
+        root_idea_uri = self.main_idea_id
         # TODO : optimize
         ideas = self.main_idea_view.ideas
         return [idea.uri() for idea in ideas
                 if (not idea.hidden) and idea.uri() != root_idea_uri]
 
     def set_confirmed_ideas(self, idea_ids):
-        root_idea_uri = self.settings_json.get('idea', None)
+        root_idea_uri = self.main_idea_id
         # TODO : optimize
         for idea in self.main_idea_view.ideas:
             uri = idea.uri()
@@ -181,18 +191,20 @@ class IdeaViewWidget(Widget):
             idea.hidden = (uri not in idea_ids)
 
     def get_confirmed_messages(self):
-        root_idea_uri = self.settings_json.get('idea', None)
+        root_idea_uri = self.main_idea_id
         root_idea_id = Idea.get_database_id(root_idea_uri)
-        ids = self.db.query(Content.id).join(IdeaContentWidgetLink
-            ).join(Idea).join(IdeaLink, IdeaLink.target_id == Idea.id).filter(
-            IdeaLink.source_id == root_idea_id).filter(~Content.hidden).all()
+        ids = self.db.query(Content.id).join(
+            IdeaContentWidgetLink).join(Idea).join(
+                IdeaLink, IdeaLink.target_id == Idea.id).filter(
+                    IdeaLink.source_id == root_idea_id
+                ).filter(~Content.hidden).all()
         return [Content.uri_generic(id) for (id,) in ids]
 
     def set_confirmed_messages(self, post_ids):
-        root_idea_uri = self.settings_json.get('idea', None)
+        root_idea_uri = self.main_idea_id
         root_idea_id = Idea.get_database_id(root_idea_uri)
-        for post in self.db.query(Content).join(IdeaContentWidgetLink).join(Idea
-                ).join(IdeaLink, IdeaLink.target_id == Idea.id).filter(
+        for post in self.db.query(Content).join(IdeaContentWidgetLink).join(
+                Idea).join(IdeaLink, IdeaLink.target_id == Idea.id).filter(
                 IdeaLink.source_id == root_idea_id).all():
             post.hidden = (post.uri() not in post_ids)
 
@@ -203,7 +215,8 @@ class IdeaViewWidget(Widget):
                 super(WidgetViewCollection, self).__init__(
                     cls, cls.main_idea_view.property)
 
-            def decorate_instance(self, instance, parent_instance, assocs, user_id):
+            def decorate_instance(
+                    self, instance, parent_instance, assocs, user_id):
                 super(WidgetViewCollection, self).decorate_instance(
                     instance, parent_instance, assocs, user_id)
                 for inst in chain(assocs[:], (instance,)):
@@ -216,7 +229,8 @@ class IdeaViewWidget(Widget):
                             body="", subject=inst.short_title)
                         assocs.append(post)
                         assocs.append(IdeaContentWidgetLink(
-                            content=post, idea=inst.parents[0], creator_id=user_id))
+                            content=post, idea=inst.parents[0],
+                            creator_id=user_id))
 
         return {'main_idea_view': WidgetViewCollection()}
 
@@ -264,6 +278,16 @@ class MultiCriterionVotingWidget(Widget):
         if idea_uri:
             return 'local:Idea/%d/vote_results' % (
                 Idea.get_database_id(idea_uri),)
+
+    @property
+    def main_idea_id(self):
+        return self.settings_json.get('idea', None)
+
+    @property
+    def main_idea(self):
+        idea_id = self.main_idea_id
+        if idea_id:
+            return Idea.get_instance(idea_id)
 
 
 class WidgetUserConfig(DiscussionBoundBase):

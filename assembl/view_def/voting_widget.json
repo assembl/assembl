@@ -305,6 +305,7 @@
     "IdeaViewWidget": {
         "discussion": true,
         "main_idea_view": "&get_idea_view",
+        "main_idea": ":",
         "settings": "settings_json",
         "state": "state_json",
         "ideas_uri": "&get_ideas_uri",
@@ -314,6 +315,7 @@
     "CreativityWidget": {
         "discussion": true,
         "main_idea_view": "&get_idea_view",
+        "main_idea": ":",
         "settings": "settings_json",
         "state": "state_json",
         "ideas_uri": "&get_ideas_uri",
@@ -323,6 +325,7 @@
     "MultiCriterionVotingWidget": {
         "discussion": true,
         "settings": "settings_json",
+        "main_idea": ":",
         "state": "state_json",
         "criteria_uri": "&get_criteria_uri",
         "user_votes_uri": "&get_user_votes_uri",
