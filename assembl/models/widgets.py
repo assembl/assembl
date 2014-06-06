@@ -47,6 +47,9 @@ class Widget(DiscussionBoundBase):
     def get_discussion_condition(cls, discussion_id):
         return cls.discussion_id == discussion_id
 
+    def get_user_states_uri(self):
+        return 'local:Widget/%d/user_states' % (self.id,)
+
     # Eventually: Use extra_columns to get WidgetUserConfig
     # through user_id instead of widget_user_config.id
 
@@ -70,6 +73,10 @@ class Widget(DiscussionBoundBase):
     def state_json(self, val):
         self.state = json.dumps(val)
 
+    def get_user_state(self, user_id):
+        return self.db.query(WidgetUserConfig).filter_by(
+            widget = self, user_id = user_id).first()
+
     def update_json(self, json, user_id=Everyone):
         from ..auth.util import user_has_permission
         if user_has_permission(self.discussion_id, user_id, P_ADMIN_DISC):
@@ -87,16 +94,15 @@ class Widget(DiscussionBoundBase):
                 self.discussion = Discussion.get_instance(json['discussion'])
         if 'state' in json:
             self.state_json = json['state']
-        # Later
-        # if user_id and 'user_state' in json:
-        #     old_state = self.db.query(WidgetUserConfig).filter_by(
-        #         widget = self, user_id = user_id).first()
-        #     if old_state:
-        #         old_state.update_json(json['user_state'])
-        #     else:
-        #         state = WidgetUserConfig(widget = self, user_id = user_id)
-        #         state.state_json = json['user_state']
-        #         self.db.add(state)
+        if user_id and user_id != Everyone and 'user_state' in json:
+            old_state = self.db.query(WidgetUserConfig).filter_by(
+                widget = self, user_id = user_id).first()
+            if old_state:
+                old_state.update_json(json['user_state'])
+            else:
+                state = WidgetUserConfig(widget = self, user_id = user_id)
+                state.state_json = json['user_state']
+                self.db.add(state)
         return self
 
     crud_permissions = CrudPermissions(P_ADMIN_DISC)

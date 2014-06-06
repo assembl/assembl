@@ -25,6 +25,7 @@ def collection_view(request):
         json['user'] = user.generic_json(view_def_name=view)
         json['user_permissions'] = get_permissions(
             user_id, ctx._instance.get_discussion_id())
+        json['user_state'] = ctx._instance.get_user_state(user_id)
     return json
 
 
@@ -86,3 +87,12 @@ def get_idea_criteria(request):
     renderer="json", name="vote_results")
 def get_idea_vote_results(request):
     return request.context._instance.get_voting_results()
+
+
+@view_config(
+    context=InstanceContext, ctx_instance_class=Widget,
+    request_method="GET", permission=P_READ,
+    renderer="json", name="user_states")
+def view_confirmed_ideas(request):
+    ctx = request.context
+    return ctx._instance.user_configs

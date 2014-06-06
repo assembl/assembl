@@ -300,6 +300,7 @@
         "discussion": true,
         "settings": "settings_json",
         "state": "state_json",
+        "user_states_uri": "&get_user_states_uri",
         "@type": "type"
     },
     "IdeaViewWidget": {
@@ -310,6 +311,7 @@
         "state": "state_json",
         "ideas_uri": "&get_ideas_uri",
         "messages_uri": "&get_messages_uri",
+        "user_states_uri": "&get_user_states_uri",
         "@type": "type"
     },
     "CreativityWidget": {
@@ -320,6 +322,7 @@
         "state": "state_json",
         "ideas_uri": "&get_ideas_uri",
         "messages_uri": "&get_messages_uri",
+        "user_states_uri": "&get_user_states_uri",
         "@type": "type"
     },
     "MultiCriterionVotingWidget": {
@@ -330,6 +333,7 @@
         "criteria_uri": "&get_criteria_uri",
         "user_votes_uri": "&get_user_votes_uri",
         "vote_results_uri": "&get_vote_results_uri",
+        "user_states_uri": "&get_user_states_uri",
         "@type": "type"
     },
     "BinaryVote": {

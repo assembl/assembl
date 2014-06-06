@@ -313,6 +313,7 @@
         "discussion": true,
         "settings": "settings_json",
         "state": "state_json",
+        "user_states_uri": "&get_user_states_uri",
         "@type": "type"
     },
     "IdeaViewWidget": {
@@ -323,6 +324,7 @@
         "state": "state_json",
         "ideas_uri": "&get_ideas_uri",
         "messages_uri": "&get_messages_uri",
+        "user_states_uri": "&get_user_states_uri",
         "@type": "type"
     },
     "CreativityWidget": {
@@ -335,6 +337,7 @@
         "messages_uri": "&get_messages_uri",
         "confirm_messages_uri": "&get_confirm_messages_uri",
         "confirm_ideas_uri": "&get_confirm_ideas_uri",
+        "user_states_uri": "&get_user_states_uri",
         "@type": "type"
     },
     "BinaryVote": {
