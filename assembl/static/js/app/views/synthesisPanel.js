@@ -61,6 +61,7 @@ function(Backbone, _, $, app, Synthesis, Idea, Permissions, IdeaFamilyView, Idea
             view_data = {},
             roots = [];
             app.trigger('render');
+            app.cleanTooltips(this.$el);
 
             //Do NOT listen to reset, as it's called within this render
             this.stopListening(this.ideas, 'reset', this.render);
@@ -108,7 +109,7 @@ function(Backbone, _, $, app, Synthesis, Idea, Permissions, IdeaFamilyView, Idea
             data.canSend = app.getCurrentUser().can(Permissions.SEND_SYNTHESIS);
             data.canEdit = app.getCurrentUser().can(Permissions.EDIT_SYNTHESIS);
             this.$el.html( this.template(data) );
-
+            app.initTooltips(this.$el);
             function inSynthesis(idea) {
                 var retval;
                 if(that.model.get('is_next_synthesis')){

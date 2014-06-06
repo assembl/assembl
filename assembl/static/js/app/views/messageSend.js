@@ -26,6 +26,7 @@ function(Backbone, _, $, Idea, app, Permissions){
          * The render
          */
         render: function(){
+            app.cleanTooltips(this.$el);
             var data = {
                     body_help_message: this.initialBody,
                     allow_setting_subject: this.options.allow_setting_subject || this.options.allow_setting_subject,
@@ -36,6 +37,7 @@ function(Backbone, _, $, Idea, app, Permissions){
             }
             
             this.$el.html(this.template(data));
+            app.initTooltips(this.$el);
             
             return this;
         },

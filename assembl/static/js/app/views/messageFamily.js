@@ -58,7 +58,7 @@ function(Backbone, _, Moment, ckeditor, app, Types, Message, MessageView, Synthe
             level,
             messageView;
             level = this.currentLevel !== null ? this.currentLevel : 1;
-
+            app.cleanTooltips(this.$el);
             if( ! _.isUndefined(level) ){
                 this.currentLevel = level;
             }
@@ -109,7 +109,7 @@ function(Backbone, _, Moment, ckeditor, app, Types, Message, MessageView, Synthe
             this.el.setAttribute('data-message-level', data['level']);
 
             this.$el.html( this.template(data) );
-
+            app.initTooltips(this.$el);
             this.$el.find('>.message-family-arrow>.message').replaceWith(messageView.el);
             
             this.onCollapsedChange();

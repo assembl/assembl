@@ -96,7 +96,7 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n, Permissions, Message
             if( ! _.isUndefined(level) ){
                 this.currentLevel = level;
             }
-
+            app.cleanTooltips(this.$el);
             this.setViewStyle(this.viewStyle);
                 
             data['id'] = data['@id'];
@@ -122,7 +122,7 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n, Permissions, Message
             }
             data = this.transformDataBeforeRender(data);
             this.$el.html( this.template(data) );
-
+            app.initTooltips(this.$el);
             app.initClipboard();
 
             this.replyView = new MessageSendView({

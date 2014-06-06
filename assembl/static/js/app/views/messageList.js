@@ -323,6 +323,7 @@ function(Backbone, _, $, app, PanelView, MessageFamilyView, Message, i18n, PostQ
             console.log("messageIdsToDisplay is: ");
             console.log(that.messageIdsToDisplay);
             */
+            app.cleanTooltips(this.$el);
             previousScrollTarget = this.getPreviousScrollTarget();
             //The MessageFamilyView will re-fill the array with the rendered MessageView
             this.renderedMessageViewsPrevious = _.clone(this.renderedMessageViewsCurrent);
@@ -343,7 +344,7 @@ function(Backbone, _, $, app, PanelView, MessageFamilyView, Message, i18n, PostQ
                 };
 
             this.$el.html( this.template(data) );
-
+            app.initTooltips(this.$el);
             if( views.length > 0 ){
                 this.$('.idealist').append( views );
             } else {
@@ -384,6 +385,7 @@ function(Backbone, _, $, app, PanelView, MessageFamilyView, Message, i18n, PostQ
             this.currentlyRendering = true;
 
             app.trigger('render');
+
             this.renderPanelButton();
             if(this.messagesFinishedLoading) {
                 this.blockPanel();

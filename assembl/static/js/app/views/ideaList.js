@@ -93,7 +93,7 @@ function(Backbone, _, Idea, IdeaLink, IdeaView, ideaGraphLoader, app, Types, All
                 console.log("ideaList:render() is firing");
             }
             app.trigger('render');
-
+            app.cleanTooltips(this.$el);
             this.body = this.$('.panel-body');
             var y = 0,
             rootIdea = null,
@@ -173,6 +173,7 @@ function(Backbone, _, Idea, IdeaLink, IdeaView, ideaGraphLoader, app, Types, All
             data.filter = this.filter;
 
             this.$el.html( this.template(data) );
+            app.initTooltips(this.$el);
             this.$('.idealist').append( list );
 
             this.body = this.$('.panel-body');

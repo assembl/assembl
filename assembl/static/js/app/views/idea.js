@@ -56,7 +56,7 @@ function(Backbone, _, $, Idea, Segment, app, Permissions){
             _.extend(data, render_data);
 
             this.$el.addClass('idealist-item');
-
+            app.cleanTooltips(this.$el);
             this.onIsSelectedChange(app.getCurrentIdea());
 
             if( data.isOpen === true ){
@@ -72,7 +72,7 @@ function(Backbone, _, $, Idea, Segment, app, Permissions){
             data.segments = this.model.getSegments();
             data.shortTitle = this.model.getShortTitleDisplayText();
             this.$el.html(this.template(data));
-
+            app.initTooltips(this.$el);
             var rendered_children = [];
             _.each(data['children'], function(idea, i){
                 var ideaView = new IdeaView({model:idea}, view_data);

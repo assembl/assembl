@@ -53,7 +53,8 @@ function(Backbone, _, $, app, Segment, Types, i18n, Permissions){
                 console.log("segmentList:render() is firing");
             }
             app.trigger('render');
-
+            app.cleanTooltips(this.$el);
+            
             var segments = this.segments.getClipboard(),
                 currentUser = app.getCurrentUser(),
                 data = {segments:segments,
@@ -66,7 +67,7 @@ function(Backbone, _, $, app, Segment, Types, i18n, Permissions){
             }
 
             this.$el.html(this.template(data));
-
+            app.initTooltips(this.$el);
             this.panel = this.$('.panel');
 
             if( top > 0 ){

@@ -45,7 +45,8 @@ function(Backbone, _, $, Idea, app, Permissions){
                 render_data = view_data[this.model.getId()],
                 ideaView = new this.innerViewClass({model: this.model});
             _.extend(data, render_data);
-
+            app.cleanTooltips(this.$el);
+            
             this.$el.addClass('ideafamily-item');
             if(render_data['is_last_sibling']) {
                 this.$el.addClass('is-last-sibling');
@@ -74,7 +75,7 @@ function(Backbone, _, $, Idea, app, Permissions){
             data.id = this.model.getId();
 
             this.$el.html(this.template(data));
-
+            app.initTooltips(this.$el);
             this.$el.find('>.ideafamily-body>.ideafamily-idea').append(ideaView.render().el);
 
             var rendered_children = [];

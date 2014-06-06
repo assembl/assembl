@@ -919,9 +919,16 @@ define(['jquery', 'underscore', 'ckeditor', 'moment', 'moment_lang', 'i18n', 'ze
         },
 
         /**
-         * Removes all tooltips from the screen
+         * Removes all tooltips from the screen.  Without this, active 
+         * tooltips (those currently displayed) will be left dangling
+         * if the trigger element is removed from the dom.
          */
-        cleanTooltips: function(){
+        cleanTooltips: function(jqueryElement){
+            //console.log("cleanTooltips() called");
+            //This really does need to be global.
+            //Should be fast, they are at the top level and there is only
+            //a few of them.  Maybe it can be more specific to be faster
+            // ex: html > .tipsy I don't know jquery enough to know 
             $('.tipsy').remove();
         },
 
@@ -933,10 +940,10 @@ define(['jquery', 'underscore', 'ckeditor', 'moment', 'moment_lang', 'i18n', 'ze
         /**
          * @init
          */
-        initTooltips: function(){
+        initTooltips: function(jqueryElement){
             // reference: http://onehackoranother.com/projects/jquery/tipsy/
-
-            $('[data-tooltip]').tipsy({
+            //console.log("initTooltips() called");
+            jqueryElement.find('[data-tooltip]').tipsy({
                 delayIn: 400,
                 live: true,
                 gravity: function(){ return this.getAttribute('data-tooltip-position') || 's'; },
@@ -985,18 +992,18 @@ define(['jquery', 'underscore', 'ckeditor', 'moment', 'moment_lang', 'i18n', 'ze
 
             app.body.removeClass('preload');
             app.createSelectionTooltip();
-            app.initTooltips();
+            app.initTooltips($("body"));
 
             app.doc.on('click', '.dropdown-label', app.onDropdownClick);
             app.doc.on('ajaxError', app.onAjaxError);
 
-            app.on('render', function(){
-                /*if(app.debugRender) {
+            /*app.on('render', function(){
+                if(app.debugRender) {
                     console.log("app.on('render) triggered");
-                }*/
-                app.cleanTooltips();
-                window.setTimeout(app.initTooltips, 500);
-            });
+                }
+                //app.cleanTooltips();
+                //window.setTimeout(app.initTooltips, 500);
+            });*/
         }
     };
 

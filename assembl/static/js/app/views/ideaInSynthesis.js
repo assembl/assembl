@@ -36,7 +36,7 @@ function(Backbone, _, $, Idea, Segment, app, Permissions, CKEditorField, Message
                 segments = app.getSegmentsByIdea(this.model);
 
             this.$el.addClass('synthesis-idea');
-
+            app.cleanTooltips(this.$el);
             segments.forEach(function(segment) {
                 var post = segment.getAssociatedPost();
                 if(post) {
@@ -54,6 +54,7 @@ function(Backbone, _, $, Idea, Segment, app, Permissions, CKEditorField, Message
             data.subject = data.longTitle;
 
             this.$el.html(this.template(data));
+            app.initTooltips(this.$el);
             if(this.editing) {
                 this.renderCKEditor();
             }

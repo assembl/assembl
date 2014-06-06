@@ -56,6 +56,9 @@ function(Backbone, _, Idea, Message, app, i18n, sprintf, Types, EditableField, C
             currentUser = app.getCurrentUser(),
             canEdit = currentUser.can(Permissions.EDIT_IDEA) || false,
             canEditNextSynthesis = currentUser.can(Permissions.EDIT_SYNTHESIS);
+            
+            app.cleanTooltips(this.$el);
+            
             if(this.model) {
                 segments = this.model.getSegments();
             }
@@ -72,6 +75,7 @@ function(Backbone, _, Idea, Message, app, i18n, sprintf, Types, EditableField, C
                 canEditMyExtracts:currentUser.can(Permissions.EDIT_MY_EXTRACT),
                 canAddExtracts:currentUser.can(Permissions.EDIT_EXTRACT) //TODO: This is a bit too coarse
             } ) );
+            app.initTooltips(this.$el);
             this.panel = this.$('.panel');
             app.initClipboard();
             if(this.model) {

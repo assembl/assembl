@@ -31,8 +31,9 @@ function(Backbone, _, $, app){
          */
         render: function(){
             app.trigger('render');
+            app.cleanTooltips(this.$el);
             this.$el.html( this.template() );
-
+            app.initTooltips(this.$el);
             return this;
         },
 

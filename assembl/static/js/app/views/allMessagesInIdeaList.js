@@ -14,7 +14,7 @@ function(Backbone, _, $, Idea, app, IdeaView){
          */
         render: function(){
             app.trigger('render');
-
+            app.cleanTooltips(this.$el);
             var data = this.model.toJSON();
 
             this.$el.addClass('idealist-item');
@@ -26,6 +26,7 @@ function(Backbone, _, $, Idea, app, IdeaView){
             }
             
             this.$el.html(this.template(data));
+            app.initTooltips(this.$el);
             return this;
         },
 
