@@ -37,7 +37,7 @@ def stop_sockets():
     global CHANGES_SOCKET, MULTIPLEX, INITED, DISPATCHER
     for socket in _active_sockets:
         socket.close()
-    if MULTIPLEX:
+    if DISPATCHER:
         DISPATCHER.stop()
     INITED = False
 
