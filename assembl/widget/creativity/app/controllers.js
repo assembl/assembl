@@ -237,10 +237,11 @@ creativityApp.controller('videosCtl',
       var messageSubject = $("#messageTitle").val();
       var messageContent = $("#messageContent").val();
 
-
+      
       // initial way of posting: do not use any posting URL given in the config, use instead the general Discussion API
-      // so here we post a message in the discussion (not linked with the idea linked with the current instance of the widget)
+      // so here we post a message in the discussion, linked with the idea which is linked with the current instance of the widget
       var send =  new sendIdeaService();
+      send.idea_id = $scope.idea["@id"];
       send.subject = messageSubject;
       send.message = messageContent;
       //TODO : better way of determining discussionId. here we use $scope.discussion.@id which is "local:Discussion/6"
@@ -250,10 +251,11 @@ creativityApp.controller('videosCtl',
         alert("Error: your message has not been posted.");
       });
       
+      
 
 
       /*
-      // send an Idea, which should display in Assembl's Table of ideas as a sub-idea of the idea linked to the widget. not tested
+      // send an Idea, which should display in Assembl's Table of ideas as a sub-idea of the idea linked to the widget
       var EntityApiEndpoint = $resource(WidgetConfigService.ideas_uri);
       var message = new EntityApiEndpoint();
       message.type = "Idea";
@@ -272,7 +274,7 @@ creativityApp.controller('videosCtl',
 
 
       /*
-      // send an Idea, which should display in Assembl's Table of ideas as a sub-idea of the idea linked to the widget. not tested
+      // send an Idea, which should display in Assembl's Table of ideas as a sub-idea of the idea linked to the widget
       var data = {
         "type": "Idea",
         "short_title": messageSubject
@@ -290,7 +292,7 @@ creativityApp.controller('videosCtl',
 
 
       /*
-      // send a Message, which should display in Assembl's Messages panel when the idea linked to the widget is selected. not tested
+      // send a Message, which should display in Assembl's Messages panel when the idea linked to the widget is selected
       var EntityApiEndpoint = $resource(WidgetConfigService.messages_uri);
       var message = new EntityApiEndpoint();
       message.idea_id = $scope.idea["@id"];
