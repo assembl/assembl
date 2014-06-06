@@ -123,6 +123,44 @@ def test_widget_state(
     widget_rep = widget_rep.json
     assert widget_rep['state'] == state_s
 
+def test_widget_user_state(
+        discussion, test_app, subidea_1, participant1_user, test_session):
+    # Post the initial configuration
+    state = [{"local:Idea/67": 8}, {"local:Idea/66": 2},
+             {"local:Idea/65": 9}, {"local:Idea/64": 1}]
+    state_s = json.dumps(state)
+    new_widget_loc = test_app.post(
+        '/data/Discussion/%d/widgets' % (discussion.id,), {
+            'type': 'CreativityWidget',
+            'settings': json.dumps({
+                'idea': 'local:Idea/%d' % (subidea_1.id)
+            })
+        })
+    assert new_widget_loc.status_code == 201
+    # Get the widget from the db
+    Idea.db.flush()
+    widget_id = new_widget_loc.location
+    new_widget_loc = test_app.put(
+        '/data/Discussion/%d/widgets/%d' % (discussion.id,
+            Widget.get_database_id(widget_id)), {
+            'user_state': state_s
+        })
+    # Get the widget from the api
+    widget_rep = test_app.get(
+        local_to_absolute(widget_id),
+        headers={"Accept": "application/json"}
+    )
+    assert widget_rep.status_code == 200
+    widget_rep = widget_rep.json
+    assert widget_rep['user_state'] == state_s
+    widget_rep = test_app.get(
+        local_to_absolute(widget_id)+"/user_states",
+        headers={"Accept": "application/json"}
+    )
+    assert widget_rep.status_code == 200
+    widget_rep = widget_rep.json
+    assert widget_rep[0] == state_s
+
 def test_widget_basic_interaction(
         discussion, test_app, subidea_1, participant1_user, test_session):
     # Post the initial configuration

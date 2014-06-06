@@ -8,6 +8,7 @@ from assembl.models import (
     Widget, User, Discussion, IdeaViewWidget, Idea, Criterion)
 from assembl.auth.util import get_permissions
 from ..traversal import InstanceContext
+from . import FORM_HEADER, instance_put
 
 
 @view_config(context=InstanceContext, renderer='json', request_method='GET',
@@ -25,8 +26,25 @@ def collection_view(request):
         json['user'] = user.generic_json(view_def_name=view)
         json['user_permissions'] = get_permissions(
             user_id, ctx._instance.get_discussion_id())
-        json['user_state'] = ctx._instance.get_user_state(user_id)
+        user_state = ctx._instance.get_user_state(user_id)
+        if user_state is not None:
+            json['user_state'] = user_state
     return json
+
+
+@view_config(context=InstanceContext, request_method='PUT', header=FORM_HEADER,
+             ctx_instance_class=Widget, permission=P_READ,
+             accept="application/json")
+def widget_instance_put(request):
+    user_state = request.POST.get('user_state')
+    if user_state:
+        del request.POST['user_state']
+    response = instance_put(request)
+    if user_state:
+        user_id = authenticated_userid(request)
+        request.context._instance.set_user_state(
+            user_state, user_id)
+    return response
 
 
 @view_config(
@@ -93,6 +111,5 @@ def get_idea_vote_results(request):
     context=InstanceContext, ctx_instance_class=Widget,
     request_method="GET", permission=P_READ,
     renderer="json", name="user_states")
-def get_all_users_state(request):
-    ctx = request.context
-    return ctx._instance.user_configs
+def get_all_users_states(request):
+    return request.context._instance.get_all_user_states()
