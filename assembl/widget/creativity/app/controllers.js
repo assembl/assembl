@@ -8,8 +8,8 @@ creativityApp.controller('videosCtl',
 
     $scope.init = function(){
       console.log("videosCtl::init()");
-      //console.log("WidgetConfigService:");
-      //console.log(WidgetConfigService);
+      console.log("WidgetConfigService:");
+      console.log(WidgetConfigService);
 
 
       // set default model fields
@@ -47,18 +47,22 @@ creativityApp.controller('videosCtl',
 
       // get inspiration keywords from the idea URL given in the configuration JSON
 
-      var idea_api_url = AssemblToolsService.resourceToUrl(WidgetConfigService.settings.idea) + '?view=creativity_widget';
-      var discussion_api_url = 'discussion api url';
+      $scope.idea_api_url = AssemblToolsService.resourceToUrl(WidgetConfigService.settings.idea) + '?view=creativity_widget';
+      console.log("idea_api_url: " + $scope.idea_api_url);
+      $scope.discussion_api_url = 'discussion api url';
 
-      var Idea = $resource(idea_api_url);
+      var Idea = $resource($scope.idea_api_url);
       var Discussion = null;
       $scope.idea = Idea.get({}, function(){ // this function is executed once the AJAX request is received and the variable is assigned
+        console.log("idea:");
+        console.log($scope.idea);
         $scope.inspiration_keywords = $scope.idea.most_common_words;
         $scope.inspiration_keywords_used = {};
 
         // get discussion from the idea
-        discussion_api_url = AssemblToolsService.resourceToUrl($scope.idea.discussion);
-        Discussion = $resource(discussion_api_url);
+        $scope.discussion_api_url = AssemblToolsService.resourceToUrl($scope.idea.discussion);
+        console.log("discussion_api_url: " + $scope.discussion_api_url);
+        Discussion = $resource($scope.discussion_api_url);
         $scope.discussion = Discussion.get({}, function(){
           console.log("discussion:");
           console.log($scope.discussion);
@@ -230,17 +234,73 @@ creativityApp.controller('videosCtl',
     }
 
     $scope.sendIdea = function(){
+      var messageSubject = $("#messageTitle").val();
+      var messageContent = $("#messageContent").val();
+
+
+      // initial way of posting: do not use any posting URL given in the config, use instead the general Discussion API
+      // so here we post a message in the discussion (not linked with the idea linked with the current instance of the widget)
       var send =  new sendIdeaService();
-
-      send.subject = $("#messageTitle").val();
-      send.message = $("#messageContent").val();
-
-      //TODO : {discussionId} need to be dynamic
-      send.$save({discussionId:3}, function sucess(){
+      send.subject = messageSubject;
+      send.message = messageContent;
+      //TODO : better way of determining discussionId. here we use $scope.discussion.@id which is "local:Discussion/6"
+      send.$save({discussionId: parseInt($scope.discussion["@id"].split("/").pop())}, function sucess(){
         alert("Your message has been successfully posted.");
       }, function error(){
         alert("Error: your message has not been posted.");
       });
+      
+
+
+      /*
+      // send an Idea, which should display in Assembl's Table of ideas as a sub-idea of the idea linked to the widget. not tested
+      var EntityApiEndpoint = $resource(WidgetConfigService.ideas_uri);
+      var message = new EntityApiEndpoint();
+      message.type = "Idea";
+      message.short_title = messageSubject;
+      //message.long_title = messageContent;
+      message.$save(function(u, putResponseHeaders) {
+        //u => saved user object
+        //putResponseHeaders => $http header getter
+        alert("Your message has been successfully posted.");
+      });
+      // The response I get is:
+      // 404 Not Found
+      // The resource could not be found.
+      */
+
+
+
+      /*
+      // send an Idea, which should display in Assembl's Table of ideas as a sub-idea of the idea linked to the widget. not tested
+      var data = {
+        "type": "Idea",
+        "short_title": messageSubject
+      };
+      $http.post( AssemblToolsService.resourceToUrl(WidgetConfigService.ideas_uri), data)
+      //$http.post( AssemblToolsService.resourceToUrl(WidgetConfigService.ideas_uri), data, { params: data })
+        .success(function(data, status, headers){
+          alert("Your message has been successfully posted.");
+        });
+      // The response I get is:
+      // 400 Bad Request
+      // The server could not comply with the request since it is either malformed or otherwise incorrect
+      */
+
+
+
+      /*
+      // send a Message, which should display in Assembl's Messages panel when the idea linked to the widget is selected. not tested
+      var EntityApiEndpoint = $resource(WidgetConfigService.messages_uri);
+      var message = new EntityApiEndpoint();
+      message.idea_id = $scope.idea["@id"];
+      message.message = messageSubject + " \n " + messageContent;
+      message.$save();
+      // The response I get is:
+      // 404 Not Found
+      // The resource could not be found.
+      */
+
     }
 }]);
 
