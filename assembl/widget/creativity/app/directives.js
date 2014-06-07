@@ -1,32 +1,28 @@
 "use strict";
 
-creativityApp.directive('vote', function($rootScope, setVote, WidgetConfigService){
+creativityApp.directive('vote', function($rootScope, setVote){
     return{
         restrict:'E',
-        transclude: true,
         scope: {
-            idea:'=idea'
+            idea:'=idea',
+            widget:'=widget'
         },
         templateUrl:'app/partials/vote.html',
-        link: function($scope){
+        link: function($scope, element){
 
             $scope.formData = {};
             $rootScope.wallet = 10;
 
             var
-                state = JSON.parse(WidgetConfigService.state),
-                widget_id = WidgetConfigService['@id'].split('/')[1],
+                widget_id = $scope.widget['@id'].split('/')[1],
+                state = JSON.parse($scope.widget.state),
                 id_idea = $scope.idea['@id'].split('/')[1];
-
-            //$scope.idIdea = id_idea;
-
-            console.log('initial config', state);
 
             /**
              * compare state_json content and the idea id to check the rate
              * */
             $scope.setPreviousRate = function(){
-                var rate,
+                var
                     id = parseInt(id_idea, 10);
 
                 angular.forEach(state, function(value){
@@ -35,12 +31,12 @@ creativityApp.directive('vote', function($rootScope, setVote, WidgetConfigServic
 
                     if(current_id === id){
 
-                        rate = parseInt(_.values(value), 10);
+                        $scope.rate = parseInt(_.values(value), 10);
                     }
 
                 });
 
-                $scope.formData.vote = rate;
+                $scope.formData.vote = $scope.rate;
             }
 
             /**
@@ -197,7 +193,6 @@ creativityApp.directive('comments', function($http, $rootScope){
                 elm.css('overflow','hidden');
                 elm.css('height', 0);
                 elm.css('height',elm[0].scrollHeight+'px');
-
             }
 
             /**

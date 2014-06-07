@@ -406,6 +406,7 @@ creativityApp.controller('creativitySessionCtl',
     $("ul.nav li a[href=\"#session\"]").closest("li").addClass("active");
 
     $scope.formData = {};
+    $scope.widget = WidgetConfigService;
 
     /**
      * Due to the latency to init $rootScope we need a delay
