@@ -398,8 +398,8 @@ creativityApp.controller('cardsCtl',
 }]);
 
 creativityApp.controller('creativitySessionCtl',
-    ['$scope','cardGame','$rootScope', '$timeout','$http','growl',
-        function($scope, cardGame, $rootScope, $timeout, $http, growl){
+    ['$scope','cardGame','$rootScope', '$timeout','$http','growl', 'WidgetConfigService',
+        function($scope, cardGame, $rootScope, $timeout, $http, growl, WidgetConfigService){
 
     // activate the right tab
     $("ul.nav li").removeClass("active");

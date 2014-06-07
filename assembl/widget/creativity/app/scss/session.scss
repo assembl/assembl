@@ -98,13 +98,14 @@
   }
   .cards{
     width: auto;
-    .bs-callout-info, .bs-callout-warning {
+    .bs-callout-warning {
       padding: 3px 10px;
-      margin:10px 0;
+      margin:0 0;
     }
     .bs-callout-info {
       font-size:14px;
       font-weight: bold;
+      margin:10px 0;
     }
     .shuffle {
       font-size: 20px;
@@ -165,6 +166,7 @@
     overflow: hidden;
     position: relative;
     background:  url('data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4IiB3aWR0aD0iMjBweCIgaGVpZ2h0PSIyMHB4IiB2aWV3Qm94PSIwIDAgMjAgMjAiIGVuYWJsZS1iYWNrZ3JvdW5kPSJuZXcgMCAwIDIwIDIwIiB4bWw6c3BhY2U9InByZXNlcnZlIj48cG9seWdvbiBmaWxsPSIjREREREREIiBwb2ludHM9IjEwLDAgMTMuMDksNi41ODMgMjAsNy42MzkgMTUsMTIuNzY0IDE2LjE4LDIwIDEwLDE2LjU4MyAzLjgyLDIwIDUsMTIuNzY0IDAsNy42MzkgNi45MSw2LjU4MyAiLz48L3N2Zz4=');
+    //background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAApgAAAKYB3X3/OAAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAIbSURBVEiJvda/S5VhFAfwzyMJ0qLdQIimsKkylHS4RS0OXXCL9qCGQNpbBJ2iqTG0wCnaCpQGofYCb2Ao9A94HRIaAoWu0dNwz0u319cfDfrA4X05z/d8z4/3Oed5U87ZfiulNIhxjOFaPKGJz/FcyTl/25ck57xH0ItZtJHxM8jmQ5qhy4GZQW8lVwX5CFbDeA6jVcYRxGhgctiMHOgAUxFRC43Q1TGNxdC34n0a9cA0Qt/GVKWDiLyNZdTQj4WIrpBXId26hcDWwrbdnUl3uqsRRQ03sFEi2sVN3MLv0t5G2NSCY7Uoa+FgNoCNiKZM/hwDXdlexIsKJ/3BkTFTnNDBSGsuFOWyfOkivoAr8Z7wsVyu2JsLzkGYjM3R+KC5JEUk5/ArdPfQh6cV+HpwZUz26DRPG+uYsHetx3MbRUM9i5I8rsBPhE0bYz06HbqWc97V6dryqkPO+QeG8AhbOFuBhfHgWgtum5iPMrQqUt7G9VK/JNzBTgW+FZh5bPbsE0X3Oo0PKaWXKaWrkU3OOb/FgyPYW0IzvC5WRFSWZQwF/rS/M6mQxdhrYqlHZyoOp5R6sVJy3sZDndq/D91t3I9MdvC9ZLMSXMPBfegxvRsRXcJrvMPl0J2vwP9zTDm80b6ir2KansKbEnZvox1xVGzhCc5gQOfjfiphqkfFfwy7IoBGhf7gYXfs4/pELpwTuTKP49JPx/3b8gcjjUc8c0XT9gAAAABJRU5ErkJggg==');
     background-size: contain;
   }
 
@@ -176,7 +178,8 @@
     height: 100%;
     width: 20%;
     z-index: 1;
-    background:  url('data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4IiB3aWR0aD0iMjBweCIgaGVpZ2h0PSIyMHB4IiB2aWV3Qm94PSIwIDAgMjAgMjAiIGVuYWJsZS1iYWNrZ3JvdW5kPSJuZXcgMCAwIDIwIDIwIiB4bWw6c3BhY2U9InByZXNlcnZlIj48cG9seWdvbiBmaWxsPSIjRkZERjg4IiBwb2ludHM9IjEwLDAgMTMuMDksNi41ODMgMjAsNy42MzkgMTUsMTIuNzY0IDE2LjE4LDIwIDEwLDE2LjU4MyAzLjgyLDIwIDUsMTIuNzY0IDAsNy42MzkgNi45MSw2LjU4MyAiLz48L3N2Zz4=');
+    background: url('data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4IiB3aWR0aD0iMjBweCIgaGVpZ2h0PSIyMHB4IiB2aWV3Qm94PSIwIDAgMjAgMjAiIGVuYWJsZS1iYWNrZ3JvdW5kPSJuZXcgMCAwIDIwIDIwIiB4bWw6c3BhY2U9InByZXNlcnZlIj48cG9seWdvbiBmaWxsPSIjRkZERjg4IiBwb2ludHM9IjEwLDAgMTMuMDksNi41ODMgMjAsNy42MzkgMTUsMTIuNzY0IDE2LjE4LDIwIDEwLDE2LjU4MyAzLjgyLDIwIDUsMTIuNzY0IDAsNy42MzkgNi45MSw2LjU4MyAiLz48L3N2Zz4=');
+    //background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAApgAAAKYB3X3/OAAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAIbSURBVEiJvda/S5VhFAfwzyMJ0qLdQIimsKkylHS4RS0OXXCL9qCGQNpbBJ2iqTG0wCnaCpQGofYCb2Ao9A94HRIaAoWu0dNwz0u319cfDfrA4X05z/d8z4/3Oed5U87ZfiulNIhxjOFaPKGJz/FcyTl/25ck57xH0ItZtJHxM8jmQ5qhy4GZQW8lVwX5CFbDeA6jVcYRxGhgctiMHOgAUxFRC43Q1TGNxdC34n0a9cA0Qt/GVKWDiLyNZdTQj4WIrpBXId26hcDWwrbdnUl3uqsRRQ03sFEi2sVN3MLv0t5G2NSCY7Uoa+FgNoCNiKZM/hwDXdlexIsKJ/3BkTFTnNDBSGsuFOWyfOkivoAr8Z7wsVyu2JsLzkGYjM3R+KC5JEUk5/ArdPfQh6cV+HpwZUz26DRPG+uYsHetx3MbRUM9i5I8rsBPhE0bYz06HbqWc97V6dryqkPO+QeG8AhbOFuBhfHgWgtum5iPMrQqUt7G9VK/JNzBTgW+FZh5bPbsE0X3Oo0PKaWXKaWrkU3OOb/FgyPYW0IzvC5WRFSWZQwF/rS/M6mQxdhrYqlHZyoOp5R6sVJy3sZDndq/D91t3I9MdvC9ZLMSXMPBfegxvRsRXcJrvMPl0J2vwP9zTDm80b6ir2KansKbEnZvox1xVGzhCc5gQOfjfiphqkfFfwy7IoBGhf7gYXfs4/pELpwTuTKP49JPx/3b8gcjjUc8c0XT9gAAAABJRU5ErkJggg==');
     background-size: contain;
   }
 
@@ -185,7 +188,7 @@
     -webkit-appearance: none;
     opacity: 0;
     display: inline-block;
-    width: 20%;
+    width: 17.5%;
     height: 100%;
     margin: 0;
     padding: 0;

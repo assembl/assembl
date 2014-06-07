@@ -8,22 +8,86 @@ creativityApp.directive('vote', function($rootScope, setVote, WidgetConfigServic
             idea:'=idea'
         },
         templateUrl:'app/partials/vote.html',
-        link: function($scope, elements, attrs){
+        link: function($scope){
 
             $scope.formData = {};
             $rootScope.wallet = 10;
 
-            var widget_id = WidgetConfigService['@id'].split('/')[1];
+            var
+                state = JSON.parse(WidgetConfigService.state),
+                widget_id = WidgetConfigService['@id'].split('/')[1],
+                id_idea = $scope.idea['@id'].split('/')[1];
 
+            //$scope.idIdea = id_idea;
+
+            console.log('initial config', state);
+
+            /**
+             * compare state_json content and the idea id to check the rate
+             * */
+            $scope.setPreviousRate = function(){
+                var rate,
+                    id = parseInt(id_idea, 10);
+
+                angular.forEach(state, function(value){
+
+                    var current_id = parseInt(_.keys(value), 10);
+
+                    if(current_id === id){
+
+                        rate = parseInt(_.values(value), 10);
+                    }
+
+                });
+
+                $scope.formData.vote = rate;
+            }
+
+            /**
+             * Remove duplicate entry in the array
+             * */
+            $scope.removeDuplicateItem = function(origine, newObj){
+
+                var
+                    k_newObj = parseInt(_.keys(newObj), 10),
+                    newArr = [],
+                    found, k;
+
+                // compare obj in a collection objects
+                angular.forEach(origine, function(value){
+
+                    k = parseInt(_.keys(value), 10);
+                    found = false;
+
+                    if(k_newObj === k){
+                         found=true;
+                    }
+
+                    if(!found){
+                        newArr.push(value);
+                    }
+                });
+                newArr.push(newObj);
+
+                return newArr;
+            }
+
+            /**
+             * watch data change
+             * */
             $scope.$watch('formData.vote', function(newValue, oldValue){
 
-                var data = {
-                    type: 'CreativityWidget',
-                    settings: JSON.stringify({"idea": 'local:Idea/2'}),
-                    state: JSON.stringify([{"local:Idea/67":8}])
-                };
-
                 if((newValue !== oldValue) && $rootScope.wallet >0){
+
+                    var
+                        obj = {},
+                        data = {};
+
+                    obj[id_idea] = newValue;
+
+                    var newArr = $scope.removeDuplicateItem(state, obj);
+
+                    data.state_json = JSON.stringify(newArr);
 
                     $rootScope.wallet -= $scope.formData.vote;
 
@@ -32,8 +96,11 @@ creativityApp.directive('vote', function($rootScope, setVote, WidgetConfigServic
 
             }, true);
 
+            /**
+             * Set value of radio button
+             * */
+            $scope.setPreviousRate();
 
-            console.log(WidgetConfigService);
         }
     }
 })

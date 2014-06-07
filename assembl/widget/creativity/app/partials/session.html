@@ -8,6 +8,7 @@
                         <p>Quels sont les prochains marchés internationaux que nous devrions viser ?</p>
                         <p>Cette question est en lien avec l'idée "X". Inspirez-vous de la carte ci-dessous pour y répondre !</p>
                     </div>
+
                     <div class="card">
                         <div class="card-top"></div>
                         <p>{{card[0].body}}</p>
@@ -41,11 +42,7 @@
 
     <div class="col-md-7">
         <div class="bx-info">
-            <button class="bx-info-close"><i class="fa fa-times"></i></button>
-           <i class="fa fa-info fa-lg bx-info-icon"></i>
-           <div class="bx-info-content">
-               <p>Il vous reste {{wallet}} points à repartir sur les idées suivantes</p>
-           </div>
+            <p>Il vous reste {{wallet}} points à repartir sur les idées suivantes</p>
         </div>
         <div class="session-comment">
             <div class="media" ng-if="ideas.length > 0" ng-repeat="idea in ideas">

@@ -55,8 +55,10 @@ creativityApp.run(['WidgetConfigService', '$rootScope','$timeout','$window',
 
 }]);
 
-creativityApp.config(['$routeProvider','$translateProvider','growlProvider',
-    function($routeProvider, $translateProvider, growlProvider){
+creativityApp.config(['$routeProvider','$translateProvider','$locationProvider','growlProvider',
+    function($routeProvider, $translateProvider, $locationProvider, growlProvider){
+
+    $locationProvider.html5Mode(false);
 
     $routeProvider.
         when('/cards', {
