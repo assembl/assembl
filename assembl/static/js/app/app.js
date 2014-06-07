@@ -721,6 +721,10 @@ define(['jquery', 'underscore', 'ckeditor', 'moment', 'moment_lang', 'i18n', 'ze
 
                 case Types.IDEA:
                 case Types.ROOT_IDEA:
+                case Types.PROPOSAL:
+                case Types.ISSUE:
+                case Types.CRITERION:
+                case Types.ARGUMENT:
                     return app.ideaList.ideas;
 
                 case Types.IDEA_LINK:
@@ -731,6 +735,7 @@ define(['jquery', 'underscore', 'ckeditor', 'moment', 'moment_lang', 'i18n', 'ze
                 case Types.SYNTHESIS_POST:
                 case Types.IMPORTED_POST:
                 case Types.EMAIL:
+                case Types.IDEA_PROPOSAL_POST:
                     return app.messageList.messages;
 
                 case Types.USER:
