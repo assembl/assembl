@@ -15,8 +15,10 @@ creativityServices.factory('localConfig', function($http){
 
 });
 
-//CARD GAME
-creativityServices.factory('cardGame', function($http){
+/**
+ * CARD GAME
+ * */
+creativityServices.factory('cardGameService', function($http){
     return {
         getCards: function(number){
             var url = 'config/game_'+number+'.json';
@@ -25,8 +27,10 @@ creativityServices.factory('cardGame', function($http){
     }
 });
 
-//CONFIG
-creativityServices.factory('setVote', ['$resource', function($resource) {
+/**
+ * CONFIGURATION
+ * */
+creativityServices.factory('setVoteService', ['$resource', function($resource) {
     return $resource('/data/Discussion/:discussionId/widgets/:id', null, {
         addVote: {
             method:'PUT',
@@ -36,13 +40,17 @@ creativityServices.factory('setVote', ['$resource', function($resource) {
 
 }]);
 
-//CARD inspire me: send an idea to assembl
+/**
+ * CARD inspire me: send an idea to assembl
+ * */
 creativityServices.factory('sendIdeaService', ['$resource',function($resource){
     return $resource('/api/v1/discussion/:discussionId/posts')
 }]);
 
-// WIP: use Angular's REST and Custom Services as our Model for Messages
-creativityServices.factory('Discussion', ['$resource', function($resource){
+/**
+ * WIP: use Angular's REST and Custom Services as our Model for Messages
+ * */
+creativityServices.factory('DiscussionService', ['$resource', function($resource){
     return $resource('/data/Discussion/:discussionId', {}, {
         query: {method:'GET', params:{discussionId:'1'}, isArray:false}
         });

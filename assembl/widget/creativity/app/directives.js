@@ -1,6 +1,6 @@
 "use strict";
 
-creativityApp.directive('vote', function($rootScope, setVote){
+creativityApp.directive('vote', function($rootScope, setVoteService){
     return{
         restrict:'E',
         scope: {
@@ -15,17 +15,17 @@ creativityApp.directive('vote', function($rootScope, setVote){
 
             var
                 widget_id = $scope.widget['@id'].split('/')[1],
-                state = JSON.parse($scope.widget.state),
+                user_state = _.isUndefined($scope.widget.user_state) ? [] : JSON.parse($scope.widget.user_state),
                 id_idea = $scope.idea['@id'].split('/')[1];
 
             /**
              * compare state_json content and the idea id to check the rate
              * */
             $scope.setPreviousRate = function(){
-                var
-                    id = parseInt(id_idea, 10);
 
-                angular.forEach(state, function(value){
+                var id = parseInt(id_idea, 10);
+
+                angular.forEach(user_state, function(value){
 
                     var current_id = parseInt(_.keys(value), 10);
 
@@ -37,6 +37,7 @@ creativityApp.directive('vote', function($rootScope, setVote){
                 });
 
                 $scope.formData.vote = $scope.rate;
+
             }
 
             /**
@@ -81,13 +82,13 @@ creativityApp.directive('vote', function($rootScope, setVote){
 
                     obj[id_idea] = newValue;
 
-                    var newArr = $scope.removeDuplicateItem(state, obj);
+                    var newArr = $scope.removeDuplicateItem(user_state, obj);
 
-                    data.state_json = JSON.stringify(newArr);
+                    data.user_state = JSON.stringify(newArr);
 
                     $rootScope.wallet -= $scope.formData.vote;
 
-                    setVote.addVote({discussionId:1, id:widget_id}, $.param(data));
+                    setVoteService.addVote({discussionId:1, id:widget_id}, $.param(data));
                 }
 
             }, true);

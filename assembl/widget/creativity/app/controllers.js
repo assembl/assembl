@@ -1,8 +1,8 @@
 "use strict";
 
 creativityApp.controller('videosCtl',
-  ['$scope', '$http', '$routeParams', '$log', '$resource', 'localConfig', 'JukeTubeVideosService', 'Discussion', 'sendIdeaService', 'WidgetConfigService', 'AssemblToolsService',
-  function($scope, $http, $routeParams, $log, $resource, localConfig, JukeTubeVideosService, Discussion, sendIdeaService, WidgetConfigService, AssemblToolsService){
+  ['$scope', '$http', '$routeParams', '$log', '$resource', 'localConfig', 'JukeTubeVideosService', 'DiscussionService', 'sendIdeaService', 'WidgetConfigService', 'AssemblToolsService',
+  function($scope, $http, $routeParams, $log, $resource, localConfig, JukeTubeVideosService, DiscussionService, sendIdeaService, WidgetConfigService, AssemblToolsService){
 
     // intialization code (constructor)
 
@@ -63,7 +63,7 @@ creativityApp.controller('videosCtl',
         $scope.discussion_api_url = AssemblToolsService.resourceToUrl($scope.idea.discussion);
         console.log("discussion_api_url: " + $scope.discussion_api_url);
         Discussion = $resource($scope.discussion_api_url);
-        $scope.discussion = Discussion.get({}, function(){
+        $scope.discussion = DiscussionService.get({}, function(){
           console.log("discussion:");
           console.log($scope.discussion);
         });
@@ -398,8 +398,8 @@ creativityApp.controller('cardsCtl',
 }]);
 
 creativityApp.controller('creativitySessionCtl',
-    ['$scope','cardGame','$rootScope', '$timeout','$http','growl', 'WidgetConfigService',
-        function($scope, cardGame, $rootScope, $timeout, $http, growl, WidgetConfigService){
+    ['$scope','cardGameService','$rootScope', '$timeout','$http','growl', 'WidgetConfigService',
+        function($scope, cardGameService, $rootScope, $timeout, $http, growl, WidgetConfigService){
 
     // activate the right tab
     $("ul.nav li").removeClass("active");
@@ -453,6 +453,7 @@ creativityApp.controller('creativitySessionCtl',
                     ideas.push(item);
                 }
             })
+
 
             $scope.ideas = ideas.reverse();
         })
@@ -514,7 +515,7 @@ creativityApp.controller('creativitySessionCtl',
      * Load config card
      * params {int} which is the id of the card game config/game_{int}.json
      */
-    cardGame.getCards(1).success(function(data){
+    cardGameService.getCards(1).success(function(data){
         $scope.game = data;
     });
 
@@ -673,32 +674,22 @@ creativityApp.controller('ratingCtl',
      * */
     $scope.checked = function(e){
         var elm = angular.element(e.currentTarget);
-
         elm.toggleClass('checked');
     }
 
 
 }]);
 
-creativityApp.controller('editCardCtl',
-    ['$scope','loadCard', function($scope, loadCard){
+creativityApp.controller('editCtl',
+    ['$scope','$http', function($scope, $http){
 
-    $scope.editCard = "Welcome"
-    $scope.game = [];
+    $scope.welcome = "Welcome to the configuration widget";
 
-    $scope.addCardGame = function(){
-      var obj = {
-          card:'new game'
-      };
+    $http.get('/data/Widget').then(function(session){
 
-      $scope.game.push(obj);
+        $scope.widgetInstance = session.data;
 
-    }
+    });
 
-    $scope.$watch('game', function(){
-
-    }, true)
-
-    loadCard.readFile();
 
 }]);

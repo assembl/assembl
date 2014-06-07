@@ -21,8 +21,6 @@ creativityApp.provider('WidgetConfigService', function (){
 creativityApp.run(['WidgetConfigService', '$rootScope','$timeout','$window',
     function (WidgetConfigService, $rootScope, $timeout, $window) {
 
-    console.log("creativityApp.run()");
-
     $rootScope.counter = 5;
     $rootScope.countdown = function() {
         $timeout(function() {
@@ -31,9 +29,9 @@ creativityApp.run(['WidgetConfigService', '$rootScope','$timeout','$window',
         }, 1000);
     };
 
-
-    // check that the user is logged in
-
+    /**
+     * Check that the user is logged in
+     * */
     if(!WidgetConfigService.user){
         $('#myModal').modal({
             keyboard:false
@@ -78,16 +76,13 @@ creativityApp.config(['$routeProvider','$translateProvider','$locationProvider',
             controller:'ratingCtl'
         }).
         when('/edit', {
-            templateUrl:'app/partials/editCard.html',
-            controller:'editCardCtl'
+            templateUrl:'app/partials/edit.html',
+            controller:'editCtl'
         }).
         otherwise({
             redirectTo: '/cards'
         });
 
-    /**
-     * Angular translation en/fr
-     * */
     $translateProvider.useStaticFilesLoader({
         prefix: 'app/locales/',
         suffix: '.json'
@@ -96,35 +91,38 @@ creativityApp.config(['$routeProvider','$translateProvider','$locationProvider',
     $translateProvider.preferredLanguage('fr');
 
     /**
-     * Angular growl notification
+     * Set growl position and timeout
      * */
     growlProvider.globalPosition('top-center');
     growlProvider.globalTimeToLive(5000);
 
     /**
-     * if you don't want to have a displayed message list
+     * Display an unique error message for the same type of error
      * */
     growlProvider.onlyUniqueMessages(true);
 
 }]);
 
 
-// Before initializing manually Angular, we get the config of the widget, by accessing the "config" parameter of the current URL
-// For example: http://localhost:6543/widget/creativity/?config=http://localhost:6543/data/Widget/19#/
+/**
+ * Before initializing manually Angular, we get the config of the widget, by accessing the "config" parameter of the current URL
+ * For example: http://localhost:6543/widget/creativity/?config=http://localhost:6543/data/Widget/19#/
+ * */
 angular.element(document).ready(function (){
-    console.log("angular.element(document).ready()");
-
-    // returns the value of a given parameter in the URL of the current page
+    /**
+     * returns the value of a given parameter in the URL of the current page
+     * */
     function getUrlVariableValue(variable) {
-      var query = window.location.search.substring(1);
-      var vars = query.split("&");
+      var query = window.location.search.substring(1),
+          vars = query.split("&");
+
       for (var i=0;i<vars.length;i++) {
         var pair = vars[i].split("=");
         if (pair[0] == variable) {
           return pair[1];
         }
-      } 
-      //alert('Query Variable ' + variable + ' not found');
+      }
+
       return null;
     }
 
@@ -139,14 +137,17 @@ angular.element(document).ready(function (){
 
     var configFile = getUrlVariableValue("config");
 
-    if ( configFile === undefined ) {
-        // TODO: Redirect on the discussion
-        // If discussion_admin, redirect on widget creation page.
+    //TODO: Redirect on the discussion
+    /**
+     * If discussion_admin, redirect on widget creation page.
+     * */
+    if (!configFile) {
         alert("No configuration.");
         return;
     }
-    if (configFile.substr(0,6) == "local:") {
-      configFile = "/data/"+configFile.substr(6);
+
+    if (configFile.split(':')[0] === "local") {
+        configFile = "/data/"+configFile.split(':')[1];
     }
 
     // TODO: implement an error callback, in case the config URL given is invalid or there is a network error
