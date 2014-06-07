@@ -334,7 +334,8 @@ class BaseOps(object):
         new_object.send_to_changes()
         return new_object
 
-    def generic_json(self, view_def_name='default', base_uri='local:', use_dumps=False):
+    def generic_json(self, view_def_name='default',
+                     base_uri='local:', use_dumps=False):
         view_def = get_view_def(view_def_name)
         my_typename = self.external_typename()
         my_id = self.uri(base_uri)
@@ -343,10 +344,24 @@ class BaseOps(object):
         if local_view is False:
             return None
         assert isinstance(local_view, dict),\
-            "in viewdef %s, definition for class %s is not a dict" % (view_def_name, my_typename)
-        default_view = dict(view_def.get('_default', {}))
-        default_view.update(local_view)
-        local_view = default_view
+            "in viewdef %s, definition for class %s is not a dict" % (
+                view_def_name, my_typename)
+        if '_default' not in local_view:
+            view = local_view
+            views = [view]
+            local_view = dict(view_def.get('_default', {'_default': False}))
+            while '@extends' in view:
+                ex = view['@extends']
+                assert ex in view_def,\
+                    "In viewdef %s, @extends reference to missing %s." % (
+                    view_def_name, ex)
+                view = view_def[ex]
+                views.append(view)
+            for view in reversed(views):
+                local_view.update(view)
+            if '@extends' in local_view:
+                del local_view['@extends']
+            view_def[my_typename] = local_view
         mapper = self.__class__.__mapper__
         relns = {r.key: r for r in mapper.relationships}
         cols = {c.key: c for c in mapper.columns}
@@ -357,7 +372,7 @@ class BaseOps(object):
         }
         methods = dict(pyinspect.getmembers(
             self.__class__, lambda m: pyinspect.ismethod(m)
-                            and m.func_code.co_argcount == 1))
+            and m.func_code.co_argcount == 1))
         properties = dict(pyinspect.getmembers(
             self.__class__, lambda p: pyinspect.isdatadescriptor(p)))
         known = set()
@@ -415,7 +430,8 @@ class BaseOps(object):
                         return v.generic_json(view_name)
                     else:
                         return v.uri(base_uri)
-                elif isinstance(v, (str, unicode, int, long, float, bool, types.NoneType)):
+                elif isinstance(v, (
+                        str, unicode, int, long, float, bool, types.NoneType)):
                     return v
                 elif isinstance(v, datetime):
                     return v.isoformat()
