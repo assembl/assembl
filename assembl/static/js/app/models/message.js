@@ -21,6 +21,7 @@ define(['models/base', 'jquery', 'app', 'underscore'], function(Base, $, app, _)
             read: false,
             parentId: null,
             subject: null,
+            hidden: false,
             body: null,
             idCreator: null,
             avatarUrl: null,
