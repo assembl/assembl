@@ -3,7 +3,7 @@
 	[
 		{
 			"path": "/Users/maparent/OpenSource/assembl-develop",
-            "folder_exclude_patterns": ["htmlcov", ".sass-cache"]
+            "folder_exclude_patterns": ["htmlcov", ".sass-cache", "data", "venv", "vendor", "node_modules", ".bundle", ".idea"]
 		}
 	]
 }
