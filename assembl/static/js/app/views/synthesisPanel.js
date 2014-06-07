@@ -111,6 +111,9 @@ function(Backbone, _, $, app, Synthesis, Idea, Permissions, IdeaFamilyView, Idea
             this.$el.html( this.template(data) );
             app.initTooltips(this.$el);
             function inSynthesis(idea) {
+                if (idea.hidden) {
+                    return false;
+                }
                 var retval;
                 if(that.model.get('is_next_synthesis')){
                     //This special case is so we get instant feedback before

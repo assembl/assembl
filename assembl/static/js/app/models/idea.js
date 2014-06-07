@@ -37,6 +37,7 @@ function(Base, _, Segment, app, i18n, Types, Permissions){
             num_posts: 0,
             num_read_posts: 0,
             isOpen: true,
+            hidden: false,
             hasCheckbox: false,
             featured: false,
             active: false,

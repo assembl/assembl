@@ -102,7 +102,7 @@ function(Backbone, _, Idea, IdeaLink, IdeaView, ideaGraphLoader, app, Types, All
             view_data = {},
             roots = [];
             
-            function excludeRoot(idea) {return idea != rootIdea};
+            function excludeRoot(idea) {return idea != rootIdea && !idea.hidden; };
             
             if( this.body.get(0) ){
                 y = this.body.get(0).scrollTop;
