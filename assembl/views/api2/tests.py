@@ -140,6 +140,7 @@ def test_widget_user_state(
     # Get the widget from the db
     Idea.db.flush()
     widget_id = new_widget_loc.location
+    # Put the user state
     new_widget_loc = test_app.put(
         '/data/Discussion/%d/widgets/%d' % (discussion.id,
             Widget.get_database_id(widget_id)), {
@@ -153,6 +154,7 @@ def test_widget_user_state(
     assert widget_rep.status_code == 200
     widget_rep = widget_rep.json
     assert widget_rep['user_state'] == state_s
+    # See if the user_state is in the list of all user_states
     widget_rep = test_app.get(
         local_to_absolute(widget_id)+"/user_states",
         headers={"Accept": "application/json"}
@@ -160,6 +162,23 @@ def test_widget_user_state(
     assert widget_rep.status_code == 200
     widget_rep = widget_rep.json
     assert widget_rep[0] == state_s
+    # Alter the state
+    state.append({'local:Idea/30':3})
+    state_s = json.dumps(state)
+    # Put the user state
+    new_widget_loc = test_app.put(
+        '/data/Discussion/%d/widgets/%d' % (discussion.id,
+            Widget.get_database_id(widget_id)), {
+            'user_state': state_s
+        })
+    # Get the widget from the api
+    widget_rep = test_app.get(
+        local_to_absolute(widget_id),
+        headers={"Accept": "application/json"}
+    )
+    assert widget_rep.status_code == 200
+    widget_rep = widget_rep.json
+    assert widget_rep['user_state'] == state_s
 
 def test_widget_basic_interaction(
         discussion, test_app, subidea_1, participant1_user, test_session):

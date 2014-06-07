@@ -83,14 +83,12 @@ class Widget(DiscussionBoundBase):
         return [c.state_json for c in self.user_configs]
 
     def set_user_state(self, user_state, user_id):
-        old_state = self.db.query(WidgetUserConfig).filter_by(
+        state = self.db.query(WidgetUserConfig).filter_by(
             widget = self, user_id = user_id).first()
-        if old_state:
-            old_state.update_json(user_state)
-        else:
+        if not state:
             state = WidgetUserConfig(widget = self, user_id = user_id)
-            state.state_json = user_state
             self.db.add(state)
+        state.state_json = user_state
 
     def update_json(self, json, user_id=Everyone):
         from ..auth.util import user_has_permission
