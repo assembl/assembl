@@ -51,8 +51,7 @@ def main():
         'VIRTUOSO_SUBDIR_NAME': vname,
         'CELERY_BROKER': config.get('app:main', 'celery.broker'),
         'here': dirname(abspath('supervisord.conf')),
-        'CONFIG_FILE': config_uri,
-        'AUTOSTART_UWSGI': config.get('uwsgi', 'autostart'),
+        'CONFIG_FILE': config_uri
     }
     for fname in ('var/db/virtuoso.ini', 'odbc.ini', 'supervisord.conf',):
         tmpl = open(fname+'.tmpl').read()
