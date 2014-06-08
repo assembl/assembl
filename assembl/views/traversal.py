@@ -1,4 +1,5 @@
 from sqlalchemy import select
+from sqlalchemy.orm import aliased
 from sqlalchemy.orm.attributes import InstrumentedAttribute
 from sqlalchemy.inspection import inspect as sqlainspect
 from pyramid.security import Allow, Everyone, ALL_PERMISSIONS, DENY_ALL
@@ -91,7 +92,7 @@ class ClassContext(object):
             raise KeyError()
         return InstanceContext(self, instance)
 
-    def decorate_query(self, query):
+    def decorate_query(self, query, last_alias):
         # The buck stops here
         return query
 
@@ -194,9 +195,9 @@ class InstanceContext(object):
             raise KeyError()
         return CollectionContext(self, collection, self._instance)
 
-    def decorate_query(self, query):
+    def decorate_query(self, query, last_alias):
         # Leave that work to the collection
-        return self.__parent__.decorate_query(query)
+        return self.__parent__.decorate_query(query, last_alias)
 
     def decorate_instance(self, instance, assocs, user_id):
         # if one of the objects has a non-list relation to this class, add it
@@ -259,22 +260,24 @@ class CollectionContext(object):
             return self.collection_class
 
     def create_query(self, id_only=True):
-        cls = self.collection.collection_class
+        cls = self.collection_class
+        alias = aliased(cls)
         if id_only:
-            query = cls.db().query(cls.id)
-            return self.decorate_query(query).distinct()
+            query = cls.db().query(alias.id)
+            return self.decorate_query(query, alias).distinct()
         else:
             # There will be duplicates. But sqla takes care of them,
             # virtuoso won't allow distinct on full query,
             # and a distinct subquery takes forever.
             # Oh, and quietcast loses the distinct. Just great.
-            query = cls.db().query(cls)
-            return self.decorate_query(query)
+            query = cls.db().query(alias)
+            return self.decorate_query(query, alias)
 
-    def decorate_query(self, query):
+    def decorate_query(self, query, last_alias):
         # This will decorate a query with a join on the relation.
-        query = self.collection.decorate_query(query, self.parent_instance)
-        return self.__parent__.decorate_query(query)
+        query = self.collection.decorate_query(
+            query, last_alias, self.parent_instance)
+        return self.__parent__.decorate_query(query, self.collection.owner_alias)
 
     def decorate_instance(self, instance, assocs, user_id):
         self.collection.decorate_instance(
@@ -331,6 +334,7 @@ class AbstractCollectionDefinition(object):
     def __init__(self, owner_class, collection_class):
         self.owner_class = owner_class
         self.collection_class = collection_class
+        self.owner_alias = aliased(owner_class)
 
     def get_instance(self, key, parent_instance):
         instance = self.collection_class.get_instance(key)
@@ -340,7 +344,7 @@ class AbstractCollectionDefinition(object):
         return instance
 
     @abstractmethod
-    def decorate_query(self, query, parent_instance):
+    def decorate_query(self, query, last_alias, parent_instance):
         pass
 
     @abstractmethod
@@ -364,6 +368,7 @@ def uses_list(prop):
     if subprop:
         return subprop.uselist
 
+
 class CollectionDefinition(AbstractCollectionDefinition):
     back_property = None
 
@@ -376,15 +381,15 @@ class CollectionDefinition(AbstractCollectionDefinition):
             # TODO: How to chose?
             self.back_property = back_properties.pop()
 
-    def decorate_query(self, query, parent_instance):
+    def decorate_query(self, query, last_alias, parent_instance):
         # This will decorate a query with a join on the relation.
-        cls = self.collection_class
+        alias = last_alias or aliased(self.collection_class)
         query = query.join(parent_instance.__class__)
         if self.back_property:
             inv = self.back_property
             # What we have is a property, not an instrumented attribute;
             # but they share the same key.
-            back_attribute = getattr(cls, inv.key)
+            back_attribute = getattr(alias, inv.key)
             if uses_list(inv):
                 query = query.filter(back_attribute.contains(parent_instance))
             else:
