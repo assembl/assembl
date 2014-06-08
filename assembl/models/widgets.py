@@ -6,6 +6,8 @@ from sqlalchemy.orm import relationship
 import simplejson as json
 import uuid
 
+from ..auth import (
+    CrudPermissions, P_ADD_IDEA, P_READ, P_EDIT_IDEA)
 from . import DiscussionBoundBase
 from .synthesis import (
     Discussion, ExplicitSubGraphView, SubGraphIdeaAssociation, Idea,
@@ -15,6 +17,8 @@ from .post import IdeaProposalPost
 from ..auth import P_ADD_POST, P_ADMIN_DISC, Everyone, CrudPermissions
 from .auth import User
 from ..views.traversal import CollectionDefinition
+from ..semantic.virtuoso_mapping import QuadMapPatternS
+from ..semantic.namespaces import (ASSEMBL, QUADNAMES)
 
 
 class Widget(DiscussionBoundBase):
@@ -75,7 +79,7 @@ class Widget(DiscussionBoundBase):
 
     def get_user_state(self, user_id):
         state = self.db.query(WidgetUserConfig).filter_by(
-            widget = self, user_id = user_id).first()
+            widget=self, user_id=user_id).first()
         if state:
             return state.state_json
 
@@ -84,9 +88,9 @@ class Widget(DiscussionBoundBase):
 
     def set_user_state(self, user_state, user_id):
         state = self.db.query(WidgetUserConfig).filter_by(
-            widget = self, user_id = user_id).first()
+            widget=self, user_id=user_id).first()
         if not state:
-            state = WidgetUserConfig(widget = self, user_id = user_id)
+            state = WidgetUserConfig(widget=self, user_id=user_id)
             self.db.add(state)
         state.state_json = user_state
 
@@ -247,10 +251,17 @@ class IdeaViewWidget(Widget):
         return {'main_idea_view': WidgetViewCollection()}
 
 
-class CreativityWidget(IdeaViewWidget):
+class ObsoleteCreativityWidget(IdeaViewWidget):
     default_view = 'creativity_widget'
     __mapper_args__ = {
         'polymorphic_identity': 'creativity_widget',
+    }
+
+
+class CreativityWidget(Widget):
+    default_view = 'creativity_widget'
+    __mapper_args__ = {
+        'polymorphic_identity': 'creativity_session_widget',
     }
 
 
@@ -342,3 +353,65 @@ class WidgetUserConfig(DiscussionBoundBase):
             Widget.discussion_id == discussion_id)
 
     crud_permissions = CrudPermissions(P_ADD_POST)  # all participants...
+
+
+class IdeaWidgetLink(DiscussionBoundBase):
+    __tablename__ = 'idea_widget_link'
+
+    id = Column(Integer, primary_key=True,
+                info={'rdf': QuadMapPatternS(None, ASSEMBL.db_id)})
+    type = Column(String(60))
+
+    idea_id = Column(Integer, ForeignKey('idea.id'),
+                     nullable=False, index=True)
+    idea = relationship(Idea, backref="widget_links")
+
+    widget_id = Column(Integer, ForeignKey(
+        'widget.id', ondelete="CASCADE", onupdate="CASCADE"),
+        nullable=False, index=True)
+    widget = relationship(Widget, backref='idea_links')
+
+    __mapper_args__ = {
+        'polymorphic_identity': 'abstract_idea_widget_link',
+        'polymorphic_on': type,
+        'with_polymorphic': '*'
+    }
+
+    def get_discussion_id(self):
+        if self.idea:
+            return self.idea.get_discussion_id()
+        elif self.idea_id:
+            return Idea.get(id=self.idea_id).get_discussion_id()
+
+    @classmethod
+    def get_discussion_condition(cls, discussion_id):
+        return (cls.idea_id == Idea.id) & (Idea.discussion_id == discussion_id)
+
+    crud_permissions = CrudPermissions(
+        P_ADD_IDEA, P_READ, P_EDIT_IDEA, P_EDIT_IDEA,
+        P_EDIT_IDEA, P_EDIT_IDEA)
+
+
+class BaseIdeaWidgetLink(IdeaWidgetLink):
+    __mapper_args__ = {
+        'polymorphic_identity': 'base_idea_widget_link',
+    }
+
+Widget.base_idea_links = relationship(BaseIdeaWidgetLink)
+
+
+class GeneratedIdeaWidgetLink(IdeaWidgetLink):
+    __mapper_args__ = {
+        'polymorphic_identity': 'generated_idea_widget_link',
+    }
+
+Widget.generated_idea_links = relationship(GeneratedIdeaWidgetLink)
+
+
+class VoteableIdeaWidgetLink(IdeaWidgetLink):
+    __mapper_args__ = {
+        'polymorphic_identity': 'voteable_idea_widget_link',
+    }
+
+MultiCriterionVotingWidget.votabele_idea_links = relationship(
+    VoteableIdeaWidgetLink)

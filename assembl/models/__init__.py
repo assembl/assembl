@@ -14,6 +14,7 @@ class DeclarativeAbstractMeta(DeclarativeMeta, ABCMeta):
 class DiscussionBoundBase(Base):
     __metaclass__ = DeclarativeAbstractMeta
     __abstract__ = True
+
     @abstractmethod
     def get_discussion_id(self):
         "Get the ID of an associated discussion object, if any."
@@ -124,9 +125,13 @@ from .annotation import (
     Webpage,
 )
 from .widgets import (
+    BaseIdeaWidgetLink,
     CreativityWidget,
+    GeneratedIdeaWidgetLink,
     IdeaViewWidget,
+    IdeaWidgetLink,
     MultiCriterionVotingWidget,
+    VoteableIdeaWidgetLink,
     Widget,
     WidgetUserConfig,
 )
