@@ -397,9 +397,9 @@ class ExplicitSubGraphView(IdeaGraphView):
             def __init__(self, cls):
                 super(IdeaCollectionDefinition, self).__init__(cls, Idea)
 
-            def decorate_query(self, query, parent_instance):
-                query = query.join(SubGraphIdeaAssociation, self.owner_class)
-                return query
+            def decorate_query(self, query, last_alias, parent_instance):
+                view = self.owner_alias
+                return query.join(SubGraphIdeaAssociation, view)
 
             def decorate_instance(self, instance, parent_instance, assocs, user_id):
                 for inst in assocs[:]:
@@ -421,9 +421,9 @@ class ExplicitSubGraphView(IdeaGraphView):
             def __init__(self, cls):
                 super(IdeaLinkCollectionDefinition, self).__init__(cls, IdeaLink)
 
-            def decorate_query(self, query, parent_instance):
-                return query.join(
-                    SubGraphIdeaLinkAssociation, self.owner_class)
+            def decorate_query(self, query, last_alias, parent_instance):
+                view = self.owner_alias
+                return query.join(SubGraphIdeaLinkAssociation, view)
 
             def decorate_instance(self, instance, parent_instance, assocs, user_id):
                 if isinstance(instance, IdeaLink):
@@ -951,8 +951,11 @@ JOIN post AS family_posts ON (
             def __init__(self, cls):
                 super(ChildIdeaCollectionDefinition, self).__init__(cls, Idea)
 
-            def decorate_query(self, query, parent_instance):
-                return query.join(IdeaLink, IdeaLink.target_id == Idea.id).filter(
+            def decorate_query(self, query, last_alias, parent_instance):
+                parent = self.owner_alias
+                children = last_alias
+                return query.join(IdeaLink, IdeaLink.target_id == children.id).join(
+                    parent, IdeaLink.source_id == parent.id).filter(
                     IdeaLink.source_id == parent_instance.id)
 
             def decorate_instance(self, instance, parent_instance, assocs, user_id):
@@ -970,9 +973,9 @@ JOIN post AS family_posts ON (
             def __init__(self, cls):
                 super(LinkedPostCollectionDefinition, self).__init__(cls, Content)
 
-            def decorate_query(self, query, parent_instance):
-                return query.join(
-                    IdeaRelatedPostLink, self.owner_class)
+            def decorate_query(self, query, last_alias, parent_instance):
+                idea = self.owner_alias
+                return query.join(IdeaRelatedPostLink, idea)
 
             def decorate_instance(self, instance, parent_instance, assocs, user_id):
                 # This is going to spell trouble: Sometimes we'll have creator,
@@ -993,9 +996,10 @@ JOIN post AS family_posts ON (
             def __init__(self, cls):
                 super(WidgetPostCollectionDefinition, self).__init__(cls, Content)
 
-            def decorate_query(self, query, parent_instance):
+            def decorate_query(self, query, last_alias, parent_instance):
+                idea = self.owner_alias
                 query = query.join(IdeaContentWidgetLink).join(
-                    self.owner_class,
+                    idea,
                     IdeaContentWidgetLink.idea_id == parent_instance.id)
                 if Content in chain(*(mapper.entities for mapper in query._entities)):
                     query = query.options(

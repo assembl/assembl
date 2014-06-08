@@ -152,10 +152,12 @@ class BaseIdeaWidget(Widget):
                 super(BaseIdeaCollection, self).__init__(
                     cls, cls.base_idea)
 
-            def decorate_query(self, query, parent_instance):
-                return query.join(BaseIdeaWidgetLink).join(
-                    Widget).filter(Widget.id == parent_instance.id).filter(
-                    Widget.idea_links.of_type(BaseIdeaWidgetLink))
+            def decorate_query(self, query, last_alias, parent_instance):
+                widget = self.owner_alias
+                idea = last_alias
+                return query.join(BaseIdeaWidgetLink, idea.id == BaseIdeaWidgetLink.idea_id).join(
+                    widget).filter(widget.id == parent_instance.id).filter(
+                    widget.idea_links.of_type(BaseIdeaWidgetLink))
 
         return {'base_idea': BaseIdeaCollection()}
 
@@ -213,10 +215,12 @@ class IdeaCreatingWidget(BaseIdeaWidget):
                 super(BaseIdeaCollection, self).__init__(
                     cls, cls.base_idea)
 
-            def decorate_query(self, query, parent_instance):
-                return query.join(BaseIdeaWidgetLink).join(
-                    Widget).filter(Widget.id == parent_instance.id).filter(
-                    Widget.idea_links.of_type(BaseIdeaWidgetLink))
+            def decorate_query(self, query, last_alias, parent_instance):
+                widget = self.owner_alias
+                idea = last_alias
+                return query.join(BaseIdeaWidgetLink, idea.id == BaseIdeaWidgetLink.idea_id).join(
+                    widget).filter(widget.id == parent_instance.id).filter(
+                    widget.idea_links.of_type(BaseIdeaWidgetLink))
 
             def decorate_instance(
                     self, instance, parent_instance, assocs, user_id):
