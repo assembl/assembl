@@ -64,6 +64,6 @@ autorestart = true
 directory = %(here)s
 command=uwsgi --die-on-term --ini %(CONFIG_FILE)s
 umask=002
-autostart = false
+autostart = %(AUTOSTART_UWSGI)s
 autorestart = true
 #user=www-data
