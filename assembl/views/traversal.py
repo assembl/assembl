@@ -204,7 +204,7 @@ class InstanceContext(object):
         for inst in assocs:
             relations = inst.__class__.__mapper__.relationships
             for reln in relations:
-                if reln.uselist:
+                if uses_list(reln):
                     continue
                 if getattr(inst, reln.key) is not None:
                     # This was already set, assume it was set correctly
@@ -355,6 +355,15 @@ class AbstractCollectionDefinition(object):
         pass
 
 
+def uses_list(prop):
+    # Weird indirection
+    uselist = getattr(prop, 'uselist', None)
+    if uselist is not None:
+        return uselist
+    subprop = getattr(prop, 'property', None)
+    if subprop:
+        return subprop.uselist
+
 class CollectionDefinition(AbstractCollectionDefinition):
     back_property = None
 
@@ -362,7 +371,7 @@ class CollectionDefinition(AbstractCollectionDefinition):
         super(CollectionDefinition, self).__init__(
             owner_class, property.mapper.class_)
         self.property = property
-        back_properties = list(property._reverse_property)
+        back_properties = list(getattr(property, '_reverse_property', ()))
         if back_properties:
             # TODO: How to chose?
             self.back_property = back_properties.pop()
@@ -376,7 +385,7 @@ class CollectionDefinition(AbstractCollectionDefinition):
             # What we have is a property, not an instrumented attribute;
             # but they share the same key.
             back_attribute = getattr(cls, inv.key)
-            if inv.uselist:
+            if uses_list(inv):
                 query = query.filter(back_attribute.contains(parent_instance))
             else:
                 query = query.filter(back_attribute == parent_instance)
@@ -392,12 +401,12 @@ class CollectionDefinition(AbstractCollectionDefinition):
             inv = self.back_property
             # What we have is a property, not an instrumented attribute;
             # but they share the same key.
-            if inv.uselist:
+            if uses_list(inv):
                 getattr(instance, inv.key).append(parent_instance)
             else:
                 setattr(instance, inv.key, parent_instance)
         else:
-            if self.property.uselist:
+            if uses_list(self.property):
                 getattr(parent_instance, self.property.key).append(instance)
             else:
                 setattr(parent_instance, self.property.key, instance)
@@ -409,8 +418,8 @@ class CollectionDefinition(AbstractCollectionDefinition):
         return getattr(instance, property.key)
 
     def contains(self, parent_instance, instance):
-        if self.property.uselist:
-            if self.back_property and not self.back_property.uselist:
+        if uses_list(self.property):
+            if self.back_property and not uses_list(self.back_property):
                 return self.get_attribute(
                     instance, self.back_property) == parent_instance
             return instance in self.get_attribute(parent_instance)
@@ -420,7 +429,7 @@ class CollectionDefinition(AbstractCollectionDefinition):
     def get_instance(self, key, parent_instance):
         instance = None
         if key == '-':
-            if self.property.uselist:
+            if uses_list(self.property):
                 raise KeyError()
             else:
                 instance = getattr(parent_instance, self.property.key, None)
