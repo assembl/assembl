@@ -1,8 +1,9 @@
 from itertools import chain
 
 from sqlalchemy import (
-    Column, Integer, ForeignKey, Text, String)
-from sqlalchemy.orm import relationship
+    Column, Integer, ForeignKey, Text, String, inspect)
+from sqlalchemy.orm import relationship, backref
+from sqlalchemy.ext.associationproxy import association_proxy
 import simplejson as json
 import uuid
 
@@ -118,55 +119,51 @@ class Widget(DiscussionBoundBase):
     crud_permissions = CrudPermissions(P_ADMIN_DISC)
 
 
-class IdeaViewWidget(Widget):
-    __tablename__ = "idea_view_widget"
-
-    id = Column(Integer, ForeignKey(
-        'widget.id',
-        ondelete='CASCADE',
-        onupdate='CASCADE'
-    ), primary_key=True)
-
-    main_idea_view_id = Column(
-        Integer,
-        ForeignKey('idea_graph_view.id',
-                   ondelete="CASCADE", onupdate="CASCADE"),
-        nullable=True
-    )
-    main_idea_view = relationship('IdeaGraphView')
-
+class BaseIdeaWidget(Widget):
     __mapper_args__ = {
         'polymorphic_identity': 'idea_view_widget',
     }
 
-    def get_idea_view(self):
-        if self.main_idea_view_id is None:
-            assert self.discussion
-            view = ExplicitSubGraphView(discussion=self.discussion)
-            self.main_idea_view = view
-            self.db.add(view)
-            idea_uri = self.settings_json.get('idea', None)
-            if idea_uri:
-                self.db.add(SubGraphIdeaAssociation(
-                    idea=Idea.get_instance(idea_uri), sub_graph=view))
-            self.db.flush()
-        return self.main_idea_view
+    @property
+    def base_idea_id(self):
+        if self.base_idea_link:
+            return self.base_idea_link.idea_id
+
+    @base_idea_id.setter
+    def set_base_idea_id(self, id):
+        if self.base_idea_link:
+            self.base_idea_link.idea_id = id
+        else:
+            idea = Idea.get_instance(id)
+            self.base_idea_link = BaseIdeaWidgetLink(widget=self, idea=idea)
 
     def get_ideas_uri(self):
-        uri = 'local:Discussion/%d/widgets/%d/main_idea_view/-/ideas' % (
+        return 'local:Discussion/%d/widgets/%d/base_idea/-/children' % (
             self.discussion_id, self.id)
-        idea_uri = self.settings_json.get('idea', None)
-        if idea_uri:
-            uri += '/%d/children' % (Idea.get_database_id(idea_uri), )
-        return uri
 
     def get_messages_uri(self):
-        idea_uri = self.settings_json.get('idea', None)
-        if idea_uri:
-            return ('local:Discussion/%d/widgets/%d/main_idea_view'
-                    '/-/ideas/%d/widgetposts') % (
-                        self.discussion_id, self.id,
-                        Idea.get_database_id(idea_uri))
+        return 'local:Discussion/%d/widgets/%d/base_idea/-/widgetposts' % (
+            self.discussion_id, self.id)
+
+    @classmethod
+    def extra_collections(cls):
+        class BaseIdeaCollection(CollectionDefinition):
+            def __init__(self):
+                super(BaseIdeaCollection, self).__init__(
+                    cls, cls.base_idea)
+
+            def decorate_query(self, query, parent_instance):
+                return query.join(BaseIdeaWidgetLink).join(
+                    Widget).filter(Widget.id == parent_instance.id).filter(
+                    Widget.idea_links.of_type(BaseIdeaWidgetLink))
+
+        return {'base_idea': BaseIdeaCollection()}
+
+
+class IdeaCreatingWidget(BaseIdeaWidget):
+    __mapper_args__ = {
+        'polymorphic_identity': 'idea_creating_widget',
+    }
 
     def get_confirm_ideas_uri(self):
         idea_uri = self.settings_json.get('idea', None)
@@ -180,35 +177,17 @@ class IdeaViewWidget(Widget):
             return ('local:Discussion/%d/widgets/%d/confirm_messages') % (
                 self.discussion_id, self.id)
 
-    @property
-    def main_idea_id(self):
-        return self.settings_json.get('idea', None)
-
-    @property
-    def main_idea(self):
-        idea_id = self.main_idea_id
-        if idea_id:
-            return Idea.get_instance(idea_id)
-
     def get_confirmed_ideas(self):
-        root_idea_uri = self.main_idea_id
         # TODO : optimize
-        ideas = self.main_idea_view.ideas
-        return [idea.uri() for idea in ideas
-                if (not idea.hidden) and idea.uri() != root_idea_uri]
+        return [idea.uri() for idea in self.generated_ideas if not idea.hidden]
 
     def set_confirmed_ideas(self, idea_ids):
-        root_idea_uri = self.main_idea_id
-        # TODO : optimize
-        for idea in self.main_idea_view.ideas:
+        for idea in self.generated_ideas:
             uri = idea.uri()
-            if uri == root_idea_uri:
-                continue
             idea.hidden = (uri not in idea_ids)
 
     def get_confirmed_messages(self):
-        root_idea_uri = self.main_idea_id
-        root_idea_id = Idea.get_database_id(root_idea_uri)
+        root_idea_id = self.base_idea_id
         ids = self.db.query(Content.id).join(
             IdeaContentWidgetLink).join(Idea).join(
                 IdeaLink, IdeaLink.target_id == Idea.id).filter(
@@ -217,23 +196,31 @@ class IdeaViewWidget(Widget):
         return [Content.uri_generic(id) for (id,) in ids]
 
     def set_confirmed_messages(self, post_ids):
-        root_idea_uri = self.main_idea_id
-        root_idea_id = Idea.get_database_id(root_idea_uri)
+        root_idea_id = self.base_idea_id
         for post in self.db.query(Content).join(IdeaContentWidgetLink).join(
                 Idea).join(IdeaLink, IdeaLink.target_id == Idea.id).filter(
                 IdeaLink.source_id == root_idea_id).all():
             post.hidden = (post.uri() not in post_ids)
 
+    def get_add_post_endpoint(self, idea):
+        'local:Discussion/%d/widgets/%d/base_idea/-/children/%d/widgetposts' % (
+            self.discussion_id, self.id, idea.id)
+
     @classmethod
     def extra_collections(cls):
-        class WidgetViewCollection(CollectionDefinition):
+        class BaseIdeaCollection(CollectionDefinition):
             def __init__(self):
-                super(WidgetViewCollection, self).__init__(
-                    cls, cls.main_idea_view.property)
+                super(BaseIdeaCollection, self).__init__(
+                    cls, cls.base_idea)
+
+            def decorate_query(self, query, parent_instance):
+                return query.join(BaseIdeaWidgetLink).join(
+                    Widget).filter(Widget.id == parent_instance.id).filter(
+                    Widget.idea_links.of_type(BaseIdeaWidgetLink))
 
             def decorate_instance(
                     self, instance, parent_instance, assocs, user_id):
-                super(WidgetViewCollection, self).decorate_instance(
+                super(BaseIdeaCollection, self).decorate_instance(
                     instance, parent_instance, assocs, user_id)
                 for inst in chain(assocs[:], (instance,)):
                     if isinstance(inst, Idea):
@@ -247,18 +234,12 @@ class IdeaViewWidget(Widget):
                         assocs.append(IdeaContentWidgetLink(
                             content=post, idea=inst.parents[0],
                             creator_id=user_id))
+                        assocs.append(GeneratedIdeaWidgetLink(idea=inst))
 
-        return {'main_idea_view': WidgetViewCollection()}
-
-
-class ObsoleteCreativityWidget(IdeaViewWidget):
-    default_view = 'creativity_widget'
-    __mapper_args__ = {
-        'polymorphic_identity': 'creativity_widget',
-    }
+        return {'base_idea': BaseIdeaCollection()}
 
 
-class CreativityWidget(Widget):
+class CreativityWidget(IdeaCreatingWidget):
     default_view = 'creativity_widget'
     __mapper_args__ = {
         'polymorphic_identity': 'creativity_session_widget',
@@ -303,12 +284,12 @@ class MultiCriterionVotingWidget(Widget):
                 Idea.get_database_id(idea_uri),)
 
     @property
-    def main_idea_id(self):
+    def base_idea_id(self):
         return self.settings_json.get('idea', None)
 
     @property
-    def main_idea(self):
-        idea_id = self.main_idea_id
+    def base_idea(self):
+        idea_id = self.base_idea_id
         if idea_id:
             return Idea.get_instance(idea_id)
 
@@ -362,14 +343,14 @@ class IdeaWidgetLink(DiscussionBoundBase):
                 info={'rdf': QuadMapPatternS(None, ASSEMBL.db_id)})
     type = Column(String(60))
 
-    idea_id = Column(Integer, ForeignKey('idea.id'),
+    idea_id = Column(Integer, ForeignKey(Idea.id),
                      nullable=False, index=True)
     idea = relationship(Idea, backref="widget_links")
 
     widget_id = Column(Integer, ForeignKey(
-        'widget.id', ondelete="CASCADE", onupdate="CASCADE"),
+        Widget.id, ondelete="CASCADE", onupdate="CASCADE"),
         nullable=False, index=True)
-    widget = relationship(Widget, backref='idea_links')
+    #widget = relationship(Widget, backref='idea_links')
 
     __mapper_args__ = {
         'polymorphic_identity': 'abstract_idea_widget_link',
@@ -391,21 +372,36 @@ class IdeaWidgetLink(DiscussionBoundBase):
         P_ADD_IDEA, P_READ, P_EDIT_IDEA, P_EDIT_IDEA,
         P_EDIT_IDEA, P_EDIT_IDEA)
 
+Idea.widgets = association_proxy('widget_links', 'widget')
+Widget.idea_links = relationship(
+    IdeaWidgetLink,
+    backref=backref('widget', uselist=False))
 
 class BaseIdeaWidgetLink(IdeaWidgetLink):
     __mapper_args__ = {
         'polymorphic_identity': 'base_idea_widget_link',
     }
 
-Widget.base_idea_links = relationship(BaseIdeaWidgetLink)
+BaseIdeaWidget.base_idea_link = relationship(
+    BaseIdeaWidgetLink, uselist=False)
 
+BaseIdeaWidget.base_idea = relationship(
+     Idea, secondary=inspect(IdeaWidgetLink).local_table, viewonly=True,
+     primaryjoin=Widget.idea_links.of_type(BaseIdeaWidgetLink),
+     secondaryjoin=IdeaWidgetLink.idea,
+     uselist=False)
 
 class GeneratedIdeaWidgetLink(IdeaWidgetLink):
     __mapper_args__ = {
         'polymorphic_identity': 'generated_idea_widget_link',
     }
 
-Widget.generated_idea_links = relationship(GeneratedIdeaWidgetLink)
+IdeaCreatingWidget.generated_idea_links = relationship(GeneratedIdeaWidgetLink)
+
+IdeaCreatingWidget.generated_ideas = relationship(
+     Idea, secondary=inspect(IdeaWidgetLink).local_table, viewonly=True,
+     primaryjoin=Widget.idea_links.of_type(GeneratedIdeaWidgetLink),
+     secondaryjoin=IdeaWidgetLink.idea)
 
 
 class VoteableIdeaWidgetLink(IdeaWidgetLink):

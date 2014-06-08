@@ -125,10 +125,11 @@ from .annotation import (
     Webpage,
 )
 from .widgets import (
+    BaseIdeaWidget,
     BaseIdeaWidgetLink,
     CreativityWidget,
     GeneratedIdeaWidgetLink,
-    IdeaViewWidget,
+    IdeaCreatingWidget,
     IdeaWidgetLink,
     MultiCriterionVotingWidget,
     VoteableIdeaWidgetLink,

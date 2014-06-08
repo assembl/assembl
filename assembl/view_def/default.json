@@ -234,16 +234,18 @@
         "state": "state_json",
         "user_states_uri": "&get_user_states_uri"
     },
-    "IdeaViewWidget": {
+    "BaseIdeaWidget": {
         "@extends": "Widget",
-        "main_idea_view": "&get_idea_view",
         "ideas_uri": "&get_ideas_uri",
         "messages_uri": "&get_messages_uri"
     },
+    "IdeaCreatingWidget": {
+        "@extends": "BaseIdeaWidget",
+        "confirm_ideas_uri": "&get_confirm_ideas_uri",
+        "confirm_messages_uri": "&get_confirm_messages_uri"
+    },
     "CreativityWidget": {
-        "@extends": "IdeaViewWidget",
-        "confirm_messages_uri": "&get_confirm_messages_uri",
-        "confirm_ideas_uri": "&get_confirm_ideas_uri"
+        "@extends": "IdeaCreatingWidget"
     },
     "MultiCriterionVotingWidget": {
         "@extends": "Widget",
