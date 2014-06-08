@@ -8,7 +8,8 @@ import HTMLParser
 
 from datetime import datetime
 import anyjson as json
-from sqlalchemy.orm import (relationship, backref, aliased, contains_eager)
+from sqlalchemy.orm import (
+    relationship, backref, aliased, contains_eager, deferred)
 from sqlalchemy.sql import text
 from pyramid.security import Allow, ALL_PERMISSIONS
 from sqlalchemy import (
@@ -628,7 +629,7 @@ class Idea(DiscussionBoundBase):
         backref=backref('ideas', order_by=creation_date)
     )
 
-    widget_id = Column(Integer, ForeignKey('widget.id'))
+    widget_id = deferred(Column(Integer, ForeignKey('widget.id')))
     widget = relationship("Widget", backref=backref('ideas', order_by=creation_date))
 
     __mapper_args__ = {
