@@ -629,8 +629,8 @@ class Idea(DiscussionBoundBase):
         backref=backref('ideas', order_by=creation_date)
     )
 
-    widget_id = deferred(Column(Integer, ForeignKey('widget.id')))
-    widget = relationship("Widget", backref=backref('ideas', order_by=creation_date))
+    #widget_id = deferred(Column(Integer, ForeignKey('widget.id')))
+    #widget = relationship("Widget", backref=backref('ideas', order_by=creation_date))
 
     __mapper_args__ = {
         'polymorphic_identity': 'idea:GenericIdeaNode',
@@ -656,11 +656,11 @@ class Idea(DiscussionBoundBase):
 
     @property
     def widget_add_post_endpoint(self):
-        if self.widget_id:
-            # TODO: How to get the widget's root idea? That may vary on a per-widget basis.
-            return 'local:Discussion/%d/widgets/%d/main_idea_view/-/ideas/%d/children/%d/widgetposts' % (
-                self.discussion_id, self.widget_id, self.parents[0].id, self.id)
-
+        return {
+            widget.uri(): widget.get_add_post_endpoint(self)
+            for widget in self.widgets
+            if getattr(widget, 'get_add_post_endpoint', None)
+        }
 
     def get_all_ancestors(self):
         """ Get all ancestors of this idea by following source links.  
@@ -952,7 +952,7 @@ JOIN post AS family_posts ON (
                 super(ChildIdeaCollectionDefinition, self).__init__(cls, Idea)
 
             def decorate_query(self, query, parent_instance):
-                return query.join(IdeaLink,
+                return query.join(IdeaLink, IdeaLink.target_id == Idea.id).filter(
                     IdeaLink.source_id == parent_instance.id)
 
             def decorate_instance(self, instance, parent_instance, assocs, user_id):

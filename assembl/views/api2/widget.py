@@ -5,7 +5,7 @@ from pyramid.security import authenticated_userid
 
 from assembl.auth import P_READ, P_ADMIN_DISC, Everyone
 from assembl.models import (
-    Widget, User, Discussion, IdeaViewWidget, Idea, Criterion)
+    Widget, User, Discussion, Idea, Criterion, IdeaCreatingWidget)
 from assembl.auth.util import get_permissions
 from ..traversal import InstanceContext
 from . import FORM_HEADER, instance_put
@@ -48,7 +48,7 @@ def widget_instance_put(request):
 
 
 @view_config(
-    context=InstanceContext, ctx_instance_class=IdeaViewWidget,
+    context=InstanceContext, ctx_instance_class=IdeaCreatingWidget,
     request_method="GET", permission=P_READ,
     renderer="json", name="confirm_ideas")
 def view_confirmed_ideas(request):
@@ -57,7 +57,7 @@ def view_confirmed_ideas(request):
 
 
 @view_config(
-    context=InstanceContext, ctx_instance_class=IdeaViewWidget,
+    context=InstanceContext, ctx_instance_class=IdeaCreatingWidget,
     request_method="POST", permission=P_ADMIN_DISC,
     renderer="json", name="confirm_ideas")
 def set_confirmed_ideas(request):
@@ -68,7 +68,7 @@ def set_confirmed_ideas(request):
 
 
 @view_config(
-    context=InstanceContext, ctx_instance_class=IdeaViewWidget,
+    context=InstanceContext, ctx_instance_class=IdeaCreatingWidget,
     request_method="GET", permission=P_READ,
     renderer="json", name="confirm_messages")
 def view_confirmed_messages(request):
@@ -77,7 +77,7 @@ def view_confirmed_messages(request):
 
 
 @view_config(
-    context=InstanceContext, ctx_instance_class=IdeaViewWidget,
+    context=InstanceContext, ctx_instance_class=IdeaCreatingWidget,
     request_method="POST", permission=P_ADMIN_DISC,
     renderer="json", name="confirm_messages")
 def set_confirmed_messages(request):

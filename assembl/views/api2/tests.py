@@ -220,7 +220,7 @@ def test_widget_basic_interaction(
     Idea.db.flush()
     new_idea1_id = new_idea_create.location
     new_idea1 = Idea.get_instance(new_idea1_id)
-    assert new_idea1.widget_id == new_widget.id
+    assert new_idea1 in new_widget.generated_ideas
     assert new_idea1.hidden
     assert not subidea_1.hidden
     # Get the sub-idea from the api
@@ -240,7 +240,9 @@ def test_widget_basic_interaction(
     # TODO: The root idea is included in the above, that's a bug.
     # get the new post endpoint from the idea data
     post_endpoint = new_idea1_rep.json.get('widget_add_post_endpoint', None)
-    assert post_endpoint
+    assert (post_endpoint and widget_rep["@id"]
+            and post_endpoint[widget_rep["@id"]])
+    post_endpoint = post_endpoint[widget_rep["@id"]]
     # Create a new post attached to the sub-idea
     new_post_create = test_app.post(local_to_absolute(post_endpoint), {
         "type": "Post", "message_id": "bogus",
