@@ -14,5 +14,15 @@
     "validVoteCatcher":"catching success",
     "errorVoteCatcher":"catching error",
     "synthesis":"Sythesis",
-    "shuffle":"Draw a new card"
+    "shuffle":"Draw a new card",
+
+    "videoTopExplanation": "Use the search bar down here to find videos which would inspire you about the idea \"{{ idea }}\", in the \"{{ discussion }}\" discussion. For example, you can use some of these keywords taken from the discussion:",
+    "videoTopExplanationSecondRowKeywords": "Here are some new keywords which could come close to this subject:",
+    "videoDoesThisVideoInspireYou": "Does this video inspire you? Write your idea below",
+    "videoCommentTitlePlaceholder": "title",
+    "videoCommentContentPlaceholder": "description",
+    "videoSendIdeaButton": "Send",
+    "videoByVideoAuthor": "by",
+    "videoPreviousPage": "« Previous page",
+    "videoNextPage": "Next page »"
 }
