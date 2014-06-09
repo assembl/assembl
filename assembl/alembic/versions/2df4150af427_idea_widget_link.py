@@ -48,6 +48,31 @@ def upgrade(pyramid_env):
     # Do stuff with the app's models here.
     from assembl import models as m
     db = m.get_session_maker()()
+
+    class ObsoleteIdeaViewWidget(m.Widget):
+        __tablename__ = 'idea_view_widget'
+
+        __mapper_args__ = {
+            'polymorphic_identity': 'idea_view_widget',
+        }
+        id = sa.Column(sa.Integer, sa.ForeignKey(
+            'widget.id', ondelete='CASCADE', onupdate='CASCADE'),
+            primary_key=True)
+
+        main_idea_view_id = sa.Column(sa.Integer, sa.ForeignKey(
+            'idea_graph_view.id', ondelete="CASCADE",
+            onupdate="CASCADE"),
+            nullable=True)
+        main_idea_view = sa.orm.relationship("IdeaGraphView")
+
+
+    class ObsoleteCreativityWidget(ObsoleteIdeaViewWidget):
+        default_view = 'creativity_widget'
+        __mapper_args__ = {
+            'polymorphic_identity': 'creativity_widget',
+        }
+
+
     with transaction.manager:
         for w in db.query(m.Widget).all():
             if 'main_idea_id' not in w.__class__.__dict__:
@@ -55,17 +80,17 @@ def upgrade(pyramid_env):
             idea_id = w.main_idea_id
             if idea_id:
                 idea_id = m.Idea.get_database_id(idea_id)
-                # l = db.query(m.GeneratedIdeaWidgetLink).filter_by(
-                #     idea_id=idea_id, widget_id=w.id).first()
-                # if l:
-                #     l.type = 'base_idea_widget_link'
-                # else:
-                db.add(m.GeneratedIdeaWidgetLink(
-                    idea_id=idea_id,
-                    widget_id=w.id,
-                    type='base_idea_widget_link'))
+                l = db.query(m.GeneratedIdeaWidgetLink).filter_by(
+                    idea_id=idea_id, widget_id=w.id).first()
+                if l:
+                    l.type = 'base_idea_widget_link'
+                else:
+                    db.add(m.GeneratedIdeaWidgetLink(
+                        idea_id=idea_id,
+                        widget_id=w.id,
+                        type='base_idea_widget_link'))
         db.flush()
-        for w in db.query(m.IdeaViewWidget).all():
+        for w in db.query(ObsoleteIdeaViewWidget).all():
             view = w.main_idea_view
             for ia in view.idea_assocs:
                 db.delete(ia)
@@ -102,6 +127,8 @@ def downgrade(pyramid_env):
     from assembl import models as m
     db = m.get_session_maker()()
     with transaction.manager:
+        m.Idea.widget_id = sa.Column(
+            'widget_id', sa.Integer, sa.ForeignKey('widget.id'))
         for w in db.query(m.CreativityWidget).all():
             view = m.ExplicitSubGraphView(discussion_id=w.discussion_id)
             db.add(view)
@@ -113,10 +140,6 @@ def downgrade(pyramid_env):
                 db.add(m.SubGraphIdeaAssociation(
                     sub_graph=view, idea=il.idea))
             if isinstance(w, m.BaseIdeaWidgetLink):
-                il.idea.widget_id = w.id
-        for w in db.query(m.MultiCriterionVotingWidget).join(
-                m.BaseIdeaWidgetLink).all():
-            for il in w.base_idea_links:
                 il.idea.widget_id = w.id
 
     with context.begin_transaction():
