@@ -2,13 +2,15 @@ from simplejson import loads
 
 from pyramid.view import view_config
 from pyramid.security import authenticated_userid
+from pyramid.httpexceptions import HTTPOk, HTTPNoContent
 
-from assembl.auth import P_READ, P_ADMIN_DISC, Everyone
+from assembl.auth import (
+    P_READ, P_ADMIN_DISC, P_ADD_POST, Everyone)
 from assembl.models import (
     Widget, User, Discussion, Idea, Criterion, IdeaCreatingWidget)
 from assembl.auth.util import get_permissions
 from ..traversal import InstanceContext
-from . import FORM_HEADER, instance_put
+from . import FORM_HEADER, JSON_HEADER, instance_put
 
 
 @view_config(context=InstanceContext, renderer='json', request_method='GET',
@@ -36,6 +38,7 @@ def collection_view(request):
              ctx_instance_class=Widget, permission=P_READ,
              accept="application/json")
 def widget_instance_put(request):
+    # Deprecated
     user_state = request.POST.get('user_state')
     if user_state:
         del request.POST['user_state']
@@ -45,6 +48,56 @@ def widget_instance_put(request):
         request.context._instance.set_user_state(
             user_state, user_id)
     return response
+
+
+@view_config(context=InstanceContext, request_method='GET',
+             ctx_instance_class=Widget, permission=P_READ,
+             accept="application/json", name="user_state")
+def widget_userstate_get(request):
+    user_id = authenticated_userid(request)
+    return request.context._instance.get_user_state(user_id)
+
+
+@view_config(context=InstanceContext, request_method='PUT',
+             ctx_instance_class=Widget, permission=P_ADD_POST,
+             header=JSON_HEADER, name="user_state")
+def widget_userstate_put(request):
+    user_state = request.json_body
+    if user_state:
+        user_id = authenticated_userid(request)
+        request.context._instance.set_user_state(
+            user_state, user_id)
+    return HTTPOk()  # HTTPNoContent() according to Mozilla
+
+
+@view_config(context=InstanceContext, request_method='GET',
+             ctx_instance_class=Widget, permission=P_READ,
+             accept="application/json", name="settings")
+def widget_settings_get(request):
+    return request.context._instance.settings_json
+
+
+@view_config(context=InstanceContext, request_method='PUT',
+             ctx_instance_class=Widget, permission=P_ADMIN_DISC,
+             header=JSON_HEADER, name="settings")
+def widget_settings_put(request):
+    request.context._instance.settings_json = request.json_body
+    return HTTPOk()
+
+
+@view_config(context=InstanceContext, request_method='GET',
+             ctx_instance_class=Widget, permission=P_READ,
+             accept="application/json", name="state")
+def widget_state_get(request):
+    return request.context._instance.state_json
+
+
+@view_config(context=InstanceContext, request_method='PUT',
+             ctx_instance_class=Widget, permission=P_ADD_POST,
+             header=JSON_HEADER, name="state")
+def widget_state_put(request):
+    request.context._instance.state_json = request.json_body
+    return HTTPOk()
 
 
 @view_config(
