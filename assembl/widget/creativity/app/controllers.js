@@ -63,7 +63,7 @@ creativityApp.controller('videosCtl',
         $scope.discussion_api_url = AssemblToolsService.resourceToUrl($scope.idea.discussion);
         console.log("discussion_api_url: " + $scope.discussion_api_url);
         Discussion = $resource($scope.discussion_api_url);
-        $scope.discussion = DiscussionService.get({}, function(){
+        $scope.discussion = Discussion.get({}, function(){
           console.log("discussion:");
           console.log($scope.discussion);
         });
