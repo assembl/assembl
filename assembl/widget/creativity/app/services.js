@@ -28,13 +28,15 @@ creativityServices.factory('cardGameService', function($http){
 });
 
 /**
- * CONFIGURATION
+ * UPDATE VOTE
  * */
 creativityServices.factory('setVoteService', ['$resource', function($resource) {
     return $resource('/data/Discussion/:discussionId/widgets/:id', null, {
         addVote: {
             method:'PUT',
-            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+            headers: {
+               'Content-Type': 'application/x-www-form-urlencoded'
+            }
         }
     });
 
@@ -51,9 +53,7 @@ creativityServices.factory('sendIdeaService', ['$resource',function($resource){
  * WIP: use Angular's REST and Custom Services as our Model for Messages
  * */
 creativityServices.factory('DiscussionService', ['$resource', function($resource){
-    return $resource('/data/Discussion/:discussionId', {}, {
-        query: {method:'GET', params:{discussionId:'1'}, isArray:false}
-        });
+    return $resource('/data/Discussion/:discussionId');
 }]);
 
 
