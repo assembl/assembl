@@ -51,8 +51,11 @@ creativityApp.controller('videosCtl',
       console.log("idea_api_url: " + $scope.idea_api_url);
       $scope.discussion_api_url = 'discussion api url';
 
-      var Idea = $resource($scope.idea_api_url);
-      var Discussion = null;
+      var
+          Idea = $resource($scope.idea_api_url),
+          Discussion = null,
+          discussionId = WidgetConfigService.discussion.split('/')[1];
+
       $scope.idea = Idea.get({}, function(){ // this function is executed once the AJAX request is received and the variable is assigned
         console.log("idea:");
         console.log($scope.idea);
@@ -63,7 +66,8 @@ creativityApp.controller('videosCtl',
         $scope.discussion_api_url = AssemblToolsService.resourceToUrl($scope.idea.discussion);
         console.log("discussion_api_url: " + $scope.discussion_api_url);
         Discussion = $resource($scope.discussion_api_url);
-        $scope.discussion = Discussion.get({}, function(){
+
+        $scope.discussion = DiscussionService.get({discussionId:discussionId}, function(){
           console.log("discussion:");
           console.log($scope.discussion);
         });
