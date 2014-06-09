@@ -65,7 +65,7 @@ class Widget(DiscussionBoundBase):
         return {}
 
     @settings_json.setter
-    def settings_json(self, val):
+    def set_settings_json(self, val):
         self.settings = json.dumps(val)
 
     @property
@@ -124,18 +124,35 @@ class BaseIdeaWidget(Widget):
         'polymorphic_identity': 'idea_view_widget',
     }
 
+    def __init__(self, *args, **kwargs):
+        super(BaseIdeaWidget, self).__init__(*args, **kwargs)
+        settings = self.settings_json
+        if 'idea' in settings:
+            self.set_base_idea_id(Idea.get_database_id(settings['idea']))
+
     @property
+    def settings_json(self):
+        return super(BaseIdeaWidget, self).settings_json
+
+    @settings_json.setter
+    def set_settings_json(self, val):
+        if 'idea' in val:
+            self.set_base_idea_id(Idea.get_database_id(val['idea']))
+        super(BaseIdeaWidget, self).settings_json = val
+
     def base_idea_id(self):
         if self.base_idea_link:
             return self.base_idea_link.idea_id
 
-    @base_idea_id.setter
     def set_base_idea_id(self, id):
+        idea = Idea.get_instance(id)
         if self.base_idea_link:
             self.base_idea_link.idea_id = id
         else:
-            idea = Idea.get_instance(id)
             self.base_idea_link = BaseIdeaWidgetLink(widget=self, idea=idea)
+            self.db.add(self.base_idea_link)
+        # This is wrong, but not doing it fails.
+        self.base_idea = idea
 
     def get_ideas_uri(self):
         return 'local:Discussion/%d/widgets/%d/base_idea/-/children' % (
@@ -189,7 +206,7 @@ class IdeaCreatingWidget(BaseIdeaWidget):
             idea.hidden = (uri not in idea_ids)
 
     def get_confirmed_messages(self):
-        root_idea_id = self.base_idea_id
+        root_idea_id = self.base_idea_id()
         ids = self.db.query(Content.id).join(
             IdeaContentWidgetLink).join(Idea).join(
                 IdeaLink, IdeaLink.target_id == Idea.id).filter(
@@ -198,14 +215,14 @@ class IdeaCreatingWidget(BaseIdeaWidget):
         return [Content.uri_generic(id) for (id,) in ids]
 
     def set_confirmed_messages(self, post_ids):
-        root_idea_id = self.base_idea_id
+        root_idea_id = self.base_idea_id()
         for post in self.db.query(Content).join(IdeaContentWidgetLink).join(
                 Idea).join(IdeaLink, IdeaLink.target_id == Idea.id).filter(
                 IdeaLink.source_id == root_idea_id).all():
             post.hidden = (post.uri() not in post_ids)
 
     def get_add_post_endpoint(self, idea):
-        'local:Discussion/%d/widgets/%d/base_idea/-/children/%d/widgetposts' % (
+        return 'local:Discussion/%d/widgets/%d/base_idea/-/children/%d/widgetposts' % (
             self.discussion_id, self.id, idea.id)
 
     @classmethod
