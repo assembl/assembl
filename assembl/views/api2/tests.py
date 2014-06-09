@@ -249,7 +249,7 @@ def test_widget_basic_interaction(
     widget_link = Idea.db.query(GeneratedIdeaWidgetLink).filter_by(
         idea_id = new_idea1.id, widget_id = widget_id).all()
     assert widget_link
-    # assert len(widget_link) == 1 FAILS
+    assert len(widget_link) == 1
     # The new idea should now be in the collection api
     test = test_app.get(idea_endpoint)
     assert test.status_code == 200
