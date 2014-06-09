@@ -12,7 +12,9 @@ from ...models import (
     Widget,
     IdeaContentWidgetLink,
     LickertRange,
-    Criterion
+    Criterion,
+    GeneratedIdeaWidgetLink,
+    BaseIdeaWidgetLink
 )
 
 
@@ -195,6 +197,13 @@ def test_widget_basic_interaction(
     Idea.db.flush()
     new_widget = Widget.get_instance(new_widget_loc.location)
     assert new_widget
+    assert new_widget.base_idea == subidea_1
+    widget_id = new_widget.id
+    # There should be a link
+    widget_link = Idea.db.query(BaseIdeaWidgetLink).filter_by(
+        idea_id = subidea_1.id, widget_id = widget_id).all()
+    assert widget_link
+    assert len(widget_link) == 1
     # Get the widget from the api
     widget_rep = test_app.get(
         local_to_absolute(new_widget.uri()),
@@ -212,12 +221,15 @@ def test_widget_basic_interaction(
     assert test.status_code == 200
     assert test.json == []
 
+    Idea.db.flush()
+    assert new_widget.base_idea == subidea_1
     # Create a new sub-idea
     new_idea_create = test_app.post(idea_endpoint, {
         "type": "Idea", "short_title": "This is a brand new idea"})
     assert new_idea_create.status_code == 201
     # Get the sub-idea from the db
     Idea.db.flush()
+    assert new_widget.base_idea == subidea_1
     new_idea1_id = new_idea_create.location
     new_idea1 = Idea.get_instance(new_idea1_id)
     assert new_idea1 in new_widget.generated_ideas
@@ -232,6 +244,12 @@ def test_widget_basic_interaction(
     # It should have a link to the root idea
     idea_link = IdeaLink.db.query(IdeaLink).filter_by(
         source_id=subidea_1.id, target_id=new_idea1.id).one()
+    assert idea_link
+    # It should have a link to the widget
+    widget_link = Idea.db.query(GeneratedIdeaWidgetLink).filter_by(
+        idea_id = new_idea1.id, widget_id = widget_id).all()
+    assert widget_link
+    # assert len(widget_link) == 1 FAILS
     # The new idea should now be in the collection api
     test = test_app.get(idea_endpoint)
     assert test.status_code == 200
