@@ -243,7 +243,7 @@ class IdeaCreatingWidget(BaseIdeaWidget):
                     self, instance, parent_instance, assocs, user_id):
                 super(BaseIdeaCollection, self).decorate_instance(
                     instance, parent_instance, assocs, user_id)
-                for inst in chain(assocs[:], (instance,)):
+                for inst in assocs[:]:
                     if isinstance(inst, Idea):
                         inst.hidden = True
                         post = IdeaProposalPost(
