@@ -207,10 +207,11 @@ class InstanceContext(object):
             for reln in relations:
                 if uses_list(reln):
                     continue
-                if getattr(inst, reln.key) is not None:
+                if getattr(inst, reln.key, None) is not None:
                     # This was already set, assume it was set correctly
                     continue
                 if issubclass(self._instance.__class__, reln.mapper.class_):
+                    #print "Setting3 ", inst, reln.key, self._instance
                     setattr(inst, reln.key, self._instance)
                     break
         self.__parent__.decorate_instance(instance, assocs, user_id)
@@ -299,6 +300,9 @@ class CollectionContext(object):
         self.decorate_instance(inst, assocs, user_id)
         return assocs
 
+    def __repr__(self):
+        return "<CollectionContext (%s)>" % (
+            self.collection,)
 
 class CollectionContextPredicate(object):
     def __init__(self, val, config):
@@ -358,6 +362,11 @@ class AbstractCollectionDefinition(object):
     def get_default_view(self):
         pass
 
+    def __repr__(self):
+        return "<%s %s -> %s>" % (
+            self.__class__.__name__,
+            self.owner_class.__name__,
+            self.collection_class.__name__)
 
 def uses_list(prop):
     # Weird indirection
@@ -402,19 +411,23 @@ class CollectionDefinition(AbstractCollectionDefinition):
         # if the relation is through a helper class,
         #   create that and add to assocs (TODO)
         # otherwise set the appropriate property (below.)
-        if self.back_property:
-            inv = self.back_property
-            # What we have is a property, not an instrumented attribute;
-            # but they share the same key.
-            if uses_list(inv):
-                getattr(instance, inv.key).append(parent_instance)
-            else:
-                setattr(instance, inv.key, parent_instance)
-        else:
-            if uses_list(self.property):
-                getattr(parent_instance, self.property.key).append(instance)
-            else:
+        # Prefer non-list properties because we can check if they're set.
+        if not uses_list(self.property):
+            if getattr(parent_instance, self.property.key, None) is None:
+                #print "Setting1 ", parent_instance, self.property.key, instance
                 setattr(parent_instance, self.property.key, instance)
+        elif self.back_property and not uses_list(self.back_property):
+            inv = self.back_property
+            if getattr(instance, inv.key, None) is None:
+                #print "Setting2 ", instance, inv.key, parent_instance
+                setattr(instance, inv.key, parent_instance)
+        elif self.back_property:
+            inv = self.back_property
+            #print "Adding1 ", instance, inv.key, parent_instance
+            getattr(instance, inv.key).append(parent_instance)
+        else:
+            #print "Adding2 ", parent_instance, self.property.key, instance
+            getattr(parent_instance, self.property.key).append(instance)
 
     def get_attribute(self, instance, property=None):
         # What we have is a property, not an instrumented attribute;
@@ -445,6 +458,13 @@ class CollectionDefinition(AbstractCollectionDefinition):
             raise KeyError("This instance does not live in this collection.")
         return instance
 
+    def __repr__(self):
+        return "<%s %s -(%s/%s)-> %s>" % (
+            self.__class__.__name__,
+            self.owner_class.__name__,
+            self.property.key,
+            self.back_property.key if self.back_property else '',
+            self.collection_class.__name__)
 
 def root_factory(request):
     # OK, this is the old code... I need to do better, but fix first.
