@@ -108,22 +108,27 @@ def test_widget_state(
             })
         })
     assert new_widget_loc.status_code == 201
-    # Get the widget from the db
-    Idea.db.flush()
     widget_id = new_widget_loc.location
-    new_widget_loc = test_app.put(
-        '/data/Discussion/%d/widgets/%d' % (discussion.id,
-            Widget.get_database_id(widget_id)), {
-            'state_json': state_s
-        })
-    # Get the widget from the api
+    # Get the widget representation
     widget_rep = test_app.get(
         local_to_absolute(widget_id),
         headers={"Accept": "application/json"}
     )
     assert widget_rep.status_code == 200
     widget_rep = widget_rep.json
-    assert widget_rep['state'] == state_s
+    # Put the state
+    widget_state_endpoint = local_to_absolute(
+        widget_rep['widget_state_url'])
+    result = test_app.put(
+        widget_state_endpoint, state_s,
+        headers={"Content-Type": "application/json"})
+    assert result.status_code in (200, 204)
+    # Get it back
+    result = test_app.get(
+        widget_state_endpoint, state_s,
+        headers={"Accept": "application/json"})
+    assert result.status_code == 200
+    assert result.json == state
 
 def test_widget_user_state(
         discussion, test_app, subidea_1, participant1_user, test_session):
