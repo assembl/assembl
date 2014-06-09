@@ -52,7 +52,8 @@ def widget_instance_put(request):
 
 @view_config(context=InstanceContext, request_method='GET',
              ctx_instance_class=Widget, permission=P_READ,
-             accept="application/json", name="user_state")
+             accept="application/json", name="user_state",
+             renderer='json')
 def widget_userstate_get(request):
     user_id = authenticated_userid(request)
     return request.context._instance.get_user_state(user_id)
@@ -72,7 +73,8 @@ def widget_userstate_put(request):
 
 @view_config(context=InstanceContext, request_method='GET',
              ctx_instance_class=Widget, permission=P_READ,
-             accept="application/json", name="settings")
+             accept="application/json", name="settings",
+             renderer='json')
 def widget_settings_get(request):
     return request.context._instance.settings_json
 
@@ -87,7 +89,8 @@ def widget_settings_put(request):
 
 @view_config(context=InstanceContext, request_method='GET',
              ctx_instance_class=Widget, permission=P_READ,
-             accept="application/json", name="state")
+             accept="application/json", name="state",
+             renderer='json')
 def widget_state_get(request):
     return request.context._instance.state_json
 

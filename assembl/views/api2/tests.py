@@ -142,45 +142,46 @@ def test_widget_user_state(
     # Get the widget from the db
     Idea.db.flush()
     widget_id = new_widget_loc.location
-    # Put the user state
-    new_widget_loc = test_app.put(
-        '/data/Discussion/%d/widgets/%d' % (discussion.id,
-            Widget.get_database_id(widget_id)), {
-            'user_state': state_s
-        })
-    # Get the widget from the api
+    # Get the widget representation
     widget_rep = test_app.get(
         local_to_absolute(widget_id),
         headers={"Accept": "application/json"}
     )
     assert widget_rep.status_code == 200
     widget_rep = widget_rep.json
-    assert widget_rep['user_state'] == state_s
+    # Put the user state
+    widget_user_state_endpoint = local_to_absolute(
+        widget_rep['user_state_url'])
+    result = test_app.put(
+        widget_user_state_endpoint, state_s,
+        headers={"Content-Type": "application/json"})
+    assert result.status_code in (200, 204)
+    # Get it back
+    result = test_app.get(
+        widget_user_state_endpoint,
+        headers={"Accept": "application/json"})
+    assert result.status_code == 200
+    assert result.json == state
     # See if the user_state is in the list of all user_states
-    widget_rep = test_app.get(
-        local_to_absolute(widget_id)+"/user_states",
+    result = test_app.get(
+        local_to_absolute(widget_rep['user_states_uri']),
         headers={"Accept": "application/json"}
     )
-    assert widget_rep.status_code == 200
-    widget_rep = widget_rep.json
-    assert widget_rep[0] == state_s
+    assert result.status_code == 200
+    assert state in result.json
     # Alter the state
     state.append({'local:Idea/30':3})
     state_s = json.dumps(state)
     # Put the user state
-    new_widget_loc = test_app.put(
-        '/data/Discussion/%d/widgets/%d' % (discussion.id,
-            Widget.get_database_id(widget_id)), {
-            'user_state': state_s
-        })
-    # Get the widget from the api
-    widget_rep = test_app.get(
-        local_to_absolute(widget_id),
-        headers={"Accept": "application/json"}
-    )
-    assert widget_rep.status_code == 200
-    widget_rep = widget_rep.json
-    assert widget_rep['user_state'] == state_s
+    result = test_app.put(
+        widget_user_state_endpoint, state_s,
+        headers={"Content-Type": "application/json"})
+    # Get it back
+    result = test_app.get(
+        widget_user_state_endpoint,
+        headers={"Accept": "application/json"})
+    assert result.status_code == 200
+    assert result.json == state
 
 def test_widget_basic_interaction(
         discussion, test_app, subidea_1, participant1_user, test_session):
