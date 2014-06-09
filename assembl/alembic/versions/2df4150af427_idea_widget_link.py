@@ -75,20 +75,18 @@ def upgrade(pyramid_env):
 
     with transaction.manager:
         for w in db.query(m.Widget).all():
-            if 'main_idea_id' not in w.__class__.__dict__:
+            idea_id = w.settings_json.get('idea', None)
+            if not idea_id:
                 continue
-            idea_id = w.main_idea_id
-            if idea_id:
-                idea_id = m.Idea.get_database_id(idea_id)
-                l = db.query(m.GeneratedIdeaWidgetLink).filter_by(
-                    idea_id=idea_id, widget_id=w.id).first()
-                if l:
-                    l.type = 'base_idea_widget_link'
-                else:
-                    db.add(m.GeneratedIdeaWidgetLink(
-                        idea_id=idea_id,
-                        widget_id=w.id,
-                        type='base_idea_widget_link'))
+            idea_id = m.Idea.get_database_id(idea_id)
+            l = db.query(m.GeneratedIdeaWidgetLink).filter_by(
+                idea_id=idea_id, widget_id=w.id).first()
+            if l:
+                l.type = 'base_idea_widget_link'
+            else:
+                db.add(m.BaseIdeaWidgetLink(
+                    idea_id=idea_id,
+                    widget_id=w.id))
         db.flush()
         for w in db.query(ObsoleteIdeaViewWidget).all():
             view = w.main_idea_view
@@ -139,8 +137,8 @@ def downgrade(pyramid_env):
             for il in w.idea_links:
                 db.add(m.SubGraphIdeaAssociation(
                     sub_graph=view, idea=il.idea))
-            if isinstance(w, m.BaseIdeaWidgetLink):
-                il.idea.widget_id = w.id
+                if isinstance(il, m.BaseIdeaWidgetLink):
+                    il.idea.widget_id = w.id
 
     with context.begin_transaction():
         op.drop_table('idea_widget_link')
