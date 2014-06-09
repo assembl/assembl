@@ -232,27 +232,29 @@
         "discussion": true,
         "settings": "settings_json",
         "state": "state_json",
-        "user_states_uri": "&get_user_states_uri"
+        "user_states_uri": "&get_user_states_url",
+        "user_state_url": "&get_user_state_url",
+        "widget_settings_url": "&get_settings_url",
+        "widget_state_url": "&get_state_url"
     },
     "BaseIdeaWidget": {
         "@extends": "Widget",
-        "ideas_uri": "&get_ideas_uri",
-        "messages_uri": "&get_messages_uri"
+        "ideas_uri": "&get_ideas_url",
+        "messages_uri": "&get_messages_url"
     },
     "IdeaCreatingWidget": {
         "@extends": "BaseIdeaWidget",
-        "confirm_ideas_uri": "&get_confirm_ideas_uri",
-        "confirm_messages_uri": "&get_confirm_messages_uri"
+        "confirm_ideas_uri": "&get_confirm_ideas_url",
+        "confirm_messages_uri": "&get_confirm_messages_url"
     },
     "CreativityWidget": {
         "@extends": "IdeaCreatingWidget"
     },
     "MultiCriterionVotingWidget": {
         "@extends": "Widget",
-        "criteria_uri": "&get_criteria_uri",
-        "user_votes_uri": "&get_user_votes_uri",
-        "vote_results_uri": "&get_vote_results_uri",
-        "user_states_uri": "&get_user_states_uri"
+        "criteria_uri": "&get_criteria_url",
+        "user_votes_uri": "&get_user_votes_url",
+        "vote_results_uri": "&get_vote_results_url"
     },
     "BinaryVote": {
         "idea": true,

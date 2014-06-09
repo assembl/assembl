@@ -52,7 +52,16 @@ class Widget(DiscussionBoundBase):
     def get_discussion_condition(cls, discussion_id):
         return cls.discussion_id == discussion_id
 
-    def get_user_states_uri(self):
+    def get_user_state_url(self):
+        return 'local:Widget/%d/user_state' % (self.id,)
+
+    def get_settings_url(self):
+        return 'local:Widget/%d/settings' % (self.id,)
+
+    def get_state_url(self):
+        return 'local:Widget/%d/state' % (self.id,)
+
+    def get_user_states_url(self):
         return 'local:Widget/%d/user_states' % (self.id,)
 
     # Eventually: Use extra_columns to get WidgetUserConfig
@@ -154,11 +163,11 @@ class BaseIdeaWidget(Widget):
         # This is wrong, but not doing it fails.
         self.base_idea = idea
 
-    def get_ideas_uri(self):
+    def get_ideas_url(self):
         return 'local:Discussion/%d/widgets/%d/base_idea/-/children' % (
             self.discussion_id, self.id)
 
-    def get_messages_uri(self):
+    def get_messages_url(self):
         return 'local:Discussion/%d/widgets/%d/base_idea/-/widgetposts' % (
             self.discussion_id, self.id)
 
@@ -172,9 +181,11 @@ class BaseIdeaWidget(Widget):
             def decorate_query(self, query, last_alias, parent_instance):
                 widget = self.owner_alias
                 idea = last_alias
-                return query.join(BaseIdeaWidgetLink, idea.id == BaseIdeaWidgetLink.idea_id).join(
-                    widget).filter(widget.id == parent_instance.id).filter(
-                    widget.idea_links.of_type(BaseIdeaWidgetLink))
+                return query.join(
+                    BaseIdeaWidgetLink,
+                    idea.id == BaseIdeaWidgetLink.idea_id).join(
+                        widget).filter(widget.id == parent_instance.id).filter(
+                            widget.idea_links.of_type(BaseIdeaWidgetLink))
 
         return {'base_idea': BaseIdeaCollection()}
 
@@ -184,13 +195,13 @@ class IdeaCreatingWidget(BaseIdeaWidget):
         'polymorphic_identity': 'idea_creating_widget',
     }
 
-    def get_confirm_ideas_uri(self):
+    def get_confirm_ideas_url(self):
         idea_uri = self.settings_json.get('idea', None)
         if idea_uri:
             return ('local:Discussion/%d/widgets/%d/confirm_ideas') % (
                 self.discussion_id, self.id)
 
-    def get_confirm_messages_uri(self):
+    def get_confirm_messages_url(self):
         idea_uri = self.settings_json.get('idea', None)
         if idea_uri:
             return ('local:Discussion/%d/widgets/%d/confirm_messages') % (
@@ -235,9 +246,11 @@ class IdeaCreatingWidget(BaseIdeaWidget):
             def decorate_query(self, query, last_alias, parent_instance):
                 widget = self.owner_alias
                 idea = last_alias
-                return query.join(BaseIdeaWidgetLink, idea.id == BaseIdeaWidgetLink.idea_id).join(
-                    widget).filter(widget.id == parent_instance.id).filter(
-                    widget.idea_links.of_type(BaseIdeaWidgetLink))
+                return query.join(
+                    BaseIdeaWidgetLink,
+                    idea.id == BaseIdeaWidgetLink.idea_id).join(
+                        widget).filter(widget.id == parent_instance.id).filter(
+                            widget.idea_links.of_type(BaseIdeaWidgetLink))
 
             def decorate_instance(
                     self, instance, parent_instance, assocs, user_id):
@@ -286,19 +299,19 @@ class MultiCriterionVotingWidget(Widget):
         'polymorphic_identity': 'multicriterion_voting_widget',
     }
 
-    def get_criteria_uri(self):
+    def get_criteria_url(self):
         idea_uri = self.settings_json.get('idea', None)
         if idea_uri:
             return 'local:Idea/%d/criteria' % (
                 Idea.get_database_id(idea_uri),)
 
-    def get_user_votes_uri(self):
+    def get_user_votes_url(self):
         idea_uri = self.settings_json.get('idea', None)
         if idea_uri:
             return 'local:Idea/%d/votes' % (
                 Idea.get_database_id(idea_uri),)
 
-    def get_vote_results_uri(self):
+    def get_vote_results_url(self):
         idea_uri = self.settings_json.get('idea', None)
         if idea_uri:
             return 'local:Idea/%d/vote_results' % (
@@ -398,6 +411,7 @@ Widget.idea_links = relationship(
     IdeaWidgetLink,
     backref=backref('widget', uselist=False))
 
+
 class BaseIdeaWidgetLink(IdeaWidgetLink):
     __mapper_args__ = {
         'polymorphic_identity': 'base_idea_widget_link',
@@ -407,10 +421,11 @@ BaseIdeaWidget.base_idea_link = relationship(
     BaseIdeaWidgetLink, uselist=False)
 
 BaseIdeaWidget.base_idea = relationship(
-     Idea, secondary=inspect(IdeaWidgetLink).local_table, viewonly=True,
-     primaryjoin=Widget.idea_links.of_type(BaseIdeaWidgetLink),
-     secondaryjoin=IdeaWidgetLink.idea,
-     uselist=False)
+    Idea, secondary=inspect(IdeaWidgetLink).local_table, viewonly=True,
+    primaryjoin=Widget.idea_links.of_type(BaseIdeaWidgetLink),
+    secondaryjoin=IdeaWidgetLink.idea,
+    uselist=False)
+
 
 class GeneratedIdeaWidgetLink(IdeaWidgetLink):
     __mapper_args__ = {
@@ -420,9 +435,9 @@ class GeneratedIdeaWidgetLink(IdeaWidgetLink):
 IdeaCreatingWidget.generated_idea_links = relationship(GeneratedIdeaWidgetLink)
 
 IdeaCreatingWidget.generated_ideas = relationship(
-     Idea, secondary=inspect(IdeaWidgetLink).local_table, viewonly=True,
-     primaryjoin=Widget.idea_links.of_type(GeneratedIdeaWidgetLink),
-     secondaryjoin=IdeaWidgetLink.idea)
+    Idea, secondary=inspect(IdeaWidgetLink).local_table, viewonly=True,
+    primaryjoin=Widget.idea_links.of_type(GeneratedIdeaWidgetLink),
+    secondaryjoin=IdeaWidgetLink.idea)
 
 
 class VoteableIdeaWidgetLink(IdeaWidgetLink):
