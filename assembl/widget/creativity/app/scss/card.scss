@@ -1,15 +1,24 @@
+$card-browser-width: 600px;
+$card-width: 340px;
+$card-min-height: 390px;
+
+.pointer{
+  cursor: pointer;
+}
+
 //Inspire me
 .cards {
   font-size: 12px;
-  width: 600px;
+  width: $card-browser-width;
   margin: 0 auto;
   .card-browser{
     position: relative;
   }
   .inspire-card{
     position: relative;
-    height: 390px;
-    width: 340px;
+    height: $card-min-height;
+    min-height: $card-min-height;
+    width: $card-width;
     margin: 0 auto 10px auto;
     display: table;
     border-left: 1px solid #cccccc;
@@ -34,6 +43,12 @@
       right: 0;
       width:100%;
     }
+  }
+  .slot-machine {
+    position: absolute;
+    top: 30px;
+    left: 50%;
+    margin-left: $card-width/2; /* 170px; */
   }
   .question {
     width: 100%;
