@@ -68,6 +68,16 @@
         "subject": true,
         "body": false
     },
+    "IdeaProposalPost": {
+        "date": "creation_date",
+        "message_id": false,
+        "discussion": true,
+        "ancestry": false,
+        "parentId": "parent",
+        "idCreator": "creator",
+        "subject": true,
+        "body": false
+    },
     "SynthesisPost": {
         "date": "creation_date",
         "message_id": false,

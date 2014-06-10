@@ -80,12 +80,12 @@
         "body": "&get_body",
         "extracts": [":partial"]
     },
-    "IdeaProposalPost": {
-        "@extends": "Post",
-        "proposes_idea": ":"
-    },
     "AssemblPost": {
         "@extends": "Post"
+    },
+    "IdeaProposalPost": {
+        "@extends": "AssemblPost",
+        "proposes_idea": ":"
     },
     "SynthesisPost": {
         "@extends": "Post",
