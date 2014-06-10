@@ -397,7 +397,7 @@ class ExplicitSubGraphView(IdeaGraphView):
             def __init__(self, cls):
                 super(IdeaCollectionDefinition, self).__init__(cls, Idea)
 
-            def decorate_query(self, query, last_alias, parent_instance):
+            def decorate_query(self, query, last_alias, parent_instance, ctx):
                 view = self.owner_alias
                 return query.join(SubGraphIdeaAssociation, view)
 
@@ -421,7 +421,7 @@ class ExplicitSubGraphView(IdeaGraphView):
             def __init__(self, cls):
                 super(IdeaLinkCollectionDefinition, self).__init__(cls, IdeaLink)
 
-            def decorate_query(self, query, last_alias, parent_instance):
+            def decorate_query(self, query, last_alias, parent_instance, ctx):
                 view = self.owner_alias
                 return query.join(SubGraphIdeaLinkAssociation, view)
 
@@ -951,7 +951,7 @@ JOIN post AS family_posts ON (
             def __init__(self, cls):
                 super(ChildIdeaCollectionDefinition, self).__init__(cls, Idea)
 
-            def decorate_query(self, query, last_alias, parent_instance):
+            def decorate_query(self, query, last_alias, parent_instance, ctx):
                 parent = self.owner_alias
                 children = last_alias
                 return query.join(IdeaLink, IdeaLink.target_id == children.id).join(
@@ -973,7 +973,7 @@ JOIN post AS family_posts ON (
             def __init__(self, cls):
                 super(LinkedPostCollectionDefinition, self).__init__(cls, Content)
 
-            def decorate_query(self, query, last_alias, parent_instance):
+            def decorate_query(self, query, last_alias, parent_instance, ctx):
                 idea = self.owner_alias
                 return query.join(IdeaRelatedPostLink, idea)
 
@@ -996,7 +996,7 @@ JOIN post AS family_posts ON (
             def __init__(self, cls):
                 super(WidgetPostCollectionDefinition, self).__init__(cls, Content)
 
-            def decorate_query(self, query, last_alias, parent_instance):
+            def decorate_query(self, query, last_alias, parent_instance, ctx):
                 idea = self.owner_alias
                 query = query.join(IdeaContentWidgetLink).join(
                     idea,

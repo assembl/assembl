@@ -189,7 +189,8 @@ def test_widget_user_state(
     assert result.json == state
 
 def test_widget_basic_interaction(
-        discussion, test_app, subidea_1, participant1_user, test_session):
+        discussion, test_app, subidea_1, subidea_1_1,
+        participant1_user, test_session):
     # Post the initial configuration
     new_widget_loc = test_app.post(
         '/data/Discussion/%d/widgets' % (discussion.id,), {
@@ -221,7 +222,8 @@ def test_widget_basic_interaction(
     assert 'messages_uri' in widget_rep
     assert 'ideas_uri' in widget_rep
     assert 'user' in widget_rep
-    # Get the list of new ideas (should be empty)
+    # Get the list of new ideas
+    # should be empty, despite the idea having a non-widget child
     idea_endpoint = local_to_absolute(widget_rep['ideas_uri'])
     test = test_app.get(idea_endpoint)
     assert test.status_code == 200

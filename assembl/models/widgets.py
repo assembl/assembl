@@ -2,7 +2,7 @@ from itertools import chain
 
 from sqlalchemy import (
     Column, Integer, ForeignKey, Text, String, inspect)
-from sqlalchemy.orm import relationship, backref
+from sqlalchemy.orm import relationship, backref, aliased
 from sqlalchemy.ext.associationproxy import association_proxy
 import simplejson as json
 import uuid
@@ -178,7 +178,7 @@ class BaseIdeaWidget(Widget):
                 super(BaseIdeaCollection, self).__init__(
                     cls, cls.base_idea)
 
-            def decorate_query(self, query, last_alias, parent_instance):
+            def decorate_query(self, query, last_alias, parent_instance, ctx):
                 widget = self.owner_alias
                 idea = last_alias
                 return query.join(
@@ -243,14 +243,23 @@ class IdeaCreatingWidget(BaseIdeaWidget):
                 super(BaseIdeaCollection, self).__init__(
                     cls, cls.base_idea)
 
-            def decorate_query(self, query, last_alias, parent_instance):
+            def decorate_query(self, query, last_alias, parent_instance, ctx):
                 widget = self.owner_alias
                 idea = last_alias
-                return query.join(
-                    BaseIdeaWidgetLink,
-                    idea.id == BaseIdeaWidgetLink.idea_id).join(
-                        widget).filter(widget.id == parent_instance.id).filter(
-                            widget.idea_links.of_type(BaseIdeaWidgetLink))
+                base_idea_link = aliased(BaseIdeaWidgetLink)
+                query = query.join(
+                    base_idea_link,
+                    idea.id == base_idea_link.idea_id)
+                children_ctx = ctx.find_collection(
+                    'ChildIdeaCollectionDefinition')
+                if children_ctx:
+                    gen_idea_link = aliased(GeneratedIdeaWidgetLink)
+                    query = query.join(
+                        gen_idea_link,
+                        (gen_idea_link.idea_id == children_ctx.collection_class_alias.id))
+                query = query.join(widget).filter(widget.id == parent_instance.id)
+
+                return query
 
             def decorate_instance(
                     self, instance, parent_instance, assocs, user_id):
