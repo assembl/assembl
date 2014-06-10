@@ -128,8 +128,12 @@ class AssemblClassPatternExtractor(ClassPatternExtractor):
 
     def make_column_name(self, cls, column):
         clsname = cls.external_typename()
-        return getattr(QUADNAMES, 'col_pattern_%s_%s' % (
-            clsname, column.name))
+        if self.discussion_id:
+            return getattr(QUADNAMES, 'col_pattern_d%s_%s_%s' % (
+                self.discussion_id, clsname, column.name))
+        else:
+            return getattr(QUADNAMES, 'col_pattern_%s_%s' % (
+                clsname, column.name))
 
     def _extract_column_info(self, sqla_cls, subject_pattern):
         rdf_class = sqla_cls.__dict__.get('rdf_class', None)
@@ -193,6 +197,7 @@ class AssemblQuadStorageManager(object):
             exclusive=True):
         gqm = GraphQuadMapPattern(
             graph_name, qs, graph_iri, 'exclusive' if exclusive else None)
+        qs.add_graphmap(gqm)
         cpe = AssemblClassPatternExtractor(
             qs.alias_manager, gqm, section, discussion_id)
         for cls in class_registry.itervalues():
@@ -285,6 +290,7 @@ class AssemblQuadStorageManager(object):
         gqm = PatternGraphQuadMapPattern(
             extract_graph_name, qs2, None,
             QUADNAMES.catalyst_ExtractGraph_iri, 'exclusive')
+        qs2.add_graphmap(gqm)
         qmp = QuadMapPatternS(
             TextFragmentIdentifier.iri_class().apply(TextFragmentIdentifier.id),
             CATALYST.expressesIdea,
