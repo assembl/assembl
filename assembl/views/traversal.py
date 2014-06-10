@@ -92,7 +92,7 @@ class ClassContext(object):
             raise KeyError()
         return InstanceContext(self, instance)
 
-    def decorate_query(self, query, last_alias):
+    def decorate_query(self, query, last_alias, ctx):
         # The buck stops here
         return query
 
@@ -131,6 +131,9 @@ class ClassContext(object):
             return [cls(**kwargs)]
         else:
             return [cls.from_json(json, user_id)]
+
+    def find_collection(self, collection_class_name):
+        return None
 
 
 class ClassContextPredicate(object):
@@ -195,9 +198,9 @@ class InstanceContext(object):
             raise KeyError()
         return CollectionContext(self, collection, self._instance)
 
-    def decorate_query(self, query, last_alias):
+    def decorate_query(self, query, last_alias, ctx):
         # Leave that work to the collection
-        return self.__parent__.decorate_query(query, last_alias)
+        return self.__parent__.decorate_query(query, last_alias, ctx)
 
     def decorate_instance(self, instance, assocs, user_id):
         # if one of the objects has a non-list relation to this class, add it
@@ -215,6 +218,9 @@ class InstanceContext(object):
                     setattr(inst, reln.key, self._instance)
                     break
         self.__parent__.decorate_instance(instance, assocs, user_id)
+
+    def find_collection(self, collection_class_name):
+        return self.__parent__.find_collection(collection_class_name)
 
 
 class InstanceContextPredicate(object):
@@ -265,20 +271,21 @@ class CollectionContext(object):
         alias = aliased(cls)
         if id_only:
             query = cls.db().query(alias.id)
-            return self.decorate_query(query, alias).distinct()
+            return self.decorate_query(query, alias, self).distinct()
         else:
             # There will be duplicates. But sqla takes care of them,
             # virtuoso won't allow distinct on full query,
             # and a distinct subquery takes forever.
             # Oh, and quietcast loses the distinct. Just great.
             query = cls.db().query(alias)
-            return self.decorate_query(query, alias)
+            return self.decorate_query(query, alias, self)
 
-    def decorate_query(self, query, last_alias):
+    def decorate_query(self, query, last_alias, ctx):
         # This will decorate a query with a join on the relation.
+        self.collection_class_alias = last_alias
         query = self.collection.decorate_query(
-            query, last_alias, self.parent_instance)
-        return self.__parent__.decorate_query(query, self.collection.owner_alias)
+            query, last_alias, self.parent_instance, ctx)
+        return self.__parent__.decorate_query(query, self.collection.owner_alias, ctx)
 
     def decorate_instance(self, instance, assocs, user_id):
         self.collection.decorate_instance(
@@ -303,6 +310,12 @@ class CollectionContext(object):
     def __repr__(self):
         return "<CollectionContext (%s)>" % (
             self.collection,)
+
+    def find_collection(self, collection_class_name):
+        if self.collection.__class__.__name__ == collection_class_name:
+            return self
+        return self.__parent__.find_collection(collection_class_name)
+
 
 class CollectionContextPredicate(object):
     def __init__(self, val, config):
@@ -348,7 +361,7 @@ class AbstractCollectionDefinition(object):
         return instance
 
     @abstractmethod
-    def decorate_query(self, query, last_alias, parent_instance):
+    def decorate_query(self, query, last_alias, parent_instance, ctx):
         pass
 
     @abstractmethod
@@ -390,7 +403,7 @@ class CollectionDefinition(AbstractCollectionDefinition):
             # TODO: How to chose?
             self.back_property = back_properties.pop()
 
-    def decorate_query(self, query, last_alias, parent_instance):
+    def decorate_query(self, query, last_alias, parent_instance, ctx):
         # This will decorate a query with a join on the relation.
         alias = last_alias or aliased(self.collection_class)
         query = query.join(parent_instance.__class__)
