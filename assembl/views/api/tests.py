@@ -216,13 +216,14 @@ def test_api_get_posts_from_idea(
         assert res_data['num_posts'] == expected_num, "idea API returned %d but %s" % (res_data['num_posts'],fail_msg)
 
         #Check from post api
-        idea.db.merge(idea)
+        #idea.db.merge(idea)
         idea.db.flush()
-        idea.db.expunge_all()
+        #idea.db.expunge_all()
         url = base_post_url + "?" + urlencode({"root_idea_id": idea.uri()})
         res = test_app.get(url)
         assert res.status_code == 200
         res_data = json.loads(res.body)
+        #print(repr(res_data))
         #TODO: BENOITG:  THERE IS A SESSION PROBLEM HERE
         #assert res_data['total'] == expected_num, "post API returned %d but %s" % (res_data['total'],fail_msg)
 
@@ -266,7 +267,7 @@ def test_api_get_posts_from_idea(
     #test_session.flush()
     #test_session.expunge_all()
     
-    check_number_of_posts(subidea_1_1,  2, "Num posts on idea should recurse to the two posts")
+    check_number_of_posts(subidea_1_1,  2, "Num posts on idea (directly) should recurse to the two posts")
     #import transaction
     #transaction.commit()
     check_number_of_posts(subidea_1,  2, "Num posts on parent idea should be the same as the child")

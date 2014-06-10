@@ -712,23 +712,23 @@ JOIN idea_content_link ON (idea_content_link.idea_id = idea_dag.target_id)
 JOIN idea_content_positive_link
     ON (idea_content_positive_link.id = idea_content_link.id)
 JOIN post AS root_posts ON (idea_content_link.content_id = root_posts.id)
-JOIN post ON (
-    (post.ancestry <> ''
-    AND post.ancestry LIKE root_posts.ancestry || cast(root_posts.id as varchar) || ',' || '%%'
+JOIN post AS family_posts ON (
+    (family_posts.ancestry <> ''
+    AND family_posts.ancestry LIKE root_posts.ancestry || cast(root_posts.id as varchar) || ',' || '%%'
     )
-    OR post.id = root_posts.id
+    OR family_posts.id = root_posts.id
 )
 """ % (select, Idea._get_idea_dag_statement(skip_where))
 
     @staticmethod
     def _get_related_posts_statement(skip_where=False):
         return Idea._get_related_posts_statement_no_select(
-            "SELECT DISTINCT post.id as post_id", skip_where)
+            "SELECT DISTINCT family_posts.id as post_id", skip_where)
 
     @staticmethod
     def _get_count_related_posts_statement():
         return Idea._get_related_posts_statement_no_select(
-            "SELECT COUNT(DISTINCT post.id) as total_count", False)
+            "SELECT COUNT(DISTINCT family_posts.id) as total_count", False)
 
     @staticmethod
     def _get_orphan_posts_statement_no_select(select):
@@ -775,7 +775,7 @@ JOIN post ON (
         user_id = connection.info.get('userid', None)
         if not user_id:
             return 0
-        join = """JOIN action ON (action.post_id = post.id)
+        join = """JOIN action ON (action.post_id = family_posts.id)
                   JOIN action_view_post ON (action.id = action_view_post.id)
                   WHERE action.actor_id = :user_id"""
 
