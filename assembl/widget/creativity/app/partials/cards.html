@@ -3,7 +3,7 @@
         <div class="card-browser">
             <div class="inspire-card">
                 <div class="card-top"></div>
-                <div ng-bind-html="displayed_cards[displayed_card_index].html_content"></div>
+                <div class="card-content" ng-bind-html="displayed_cards[displayed_card_index].html_content"></div>
                 <div class="card-bottom"></div>
             </div>
             <div id="slot-machine" ng-class="{'pointer': cards.length > 0}" ng-click="shuffle()">
