@@ -1,5 +1,5 @@
-define(['backbone', 'underscore', 'jquery', 'models/idea', 'app', 'permissions'],
-function(Backbone, _, $, Idea, app, Permissions){
+define(['backbone', 'underscore', 'jquery', 'models/idea', 'app', 'permissions', 'i18n'],
+function(Backbone, _, $, Idea, app, Permissions, i18n){
     'use strict';
     
     var MessageSendView = Backbone.View.extend({
@@ -19,7 +19,7 @@ function(Backbone, _, $, Idea, app, Permissions){
          */
         initialize: function(options){
             this.options = options;
-            this.initialBody =  (this.options.body_help_message !== undefined) ? this.options.body_help_message: gettext('Type your message here...');
+            this.initialBody =  (this.options.body_help_message !== undefined) ? this.options.body_help_message: i18n.gettext('Type your message here...');
         },
         
         /**
@@ -30,9 +30,9 @@ function(Backbone, _, $, Idea, app, Permissions){
             var data = {
                     body_help_message: this.initialBody,
                     allow_setting_subject: this.options.allow_setting_subject || this.options.allow_setting_subject,
-                    cancel_button_label: this.options.cancel_button_label ? this.options.cancel_button_label: gettext('Cancel'),
-                    send_button_label: this.options.send_button_label ? this.options.send_button_label: gettext('Send'),
-                    subject_label: this.options.subject_label ? this.options.subject_label: gettext('Subject:'),
+                    cancel_button_label: this.options.cancel_button_label ? this.options.cancel_button_label: i18n.gettext('Cancel'),
+                    send_button_label: this.options.send_button_label ? this.options.send_button_label: i18n.gettext('Send'),
+                    subject_label: this.options.subject_label ? this.options.subject_label: i18n.gettext('Subject:'),
                     canPost: app.getCurrentUser().can(Permissions.ADD_POST)
             }
             
