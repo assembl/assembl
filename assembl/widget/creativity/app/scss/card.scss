@@ -19,7 +19,7 @@ $card-min-height: 390px;
     height: $card-min-height;
     min-height: $card-min-height;
     width: $card-width;
-    margin: 0 auto 10px auto;
+    margin: 0 auto 6px auto;
     display: table;
     border-left: 1px solid #cccccc;
     border-right: 1px solid #cccccc;
@@ -44,8 +44,10 @@ $card-min-height: 390px;
       width:100%;
     }
   }
-  .slot-machine {
+  #slot-machine {
     position: absolute;
+    width: 150px;
+    height: 200px;
     top: 30px;
     left: 50%;
     margin-left: $card-width/2; /* 170px; */
@@ -59,21 +61,25 @@ $card-min-height: 390px;
     #previousCardButton,
     #nextCardButton{
       position: absolute;
-      top: 50%;
+      top: 0;
       height: 24px;
       width: 24px;
-      margin-top: -12px;
       font-size: 20px;
       cursor: pointer;
       text-decoration: none;
     }
+    a.inactive:hover {
+      color: #DDDDDD;
+    }
     #previousCardButton {
-      left: 0;
+      left: 150px;
     }
     #nextCardButton {
-      right: 0;
+      right: 150px;
     }
-    #slot-machine {
+    #card-bottom-control {
+      position: relative;
+      height: 20px;
       font-size: 20px;
       text-align: center;
     }

@@ -366,6 +366,20 @@ creativityApp.controller('cardsCtl',
         $scope.shuffle();
     });
 
+    // show previous and next card buttons when the mouse cursor is in the card zone
+    $("#cards-container").hover(
+      function(){
+        $("#previousCardButton").show();
+        $("#nextCardButton").show();
+      },
+      function(){
+        $("#previousCardButton").hide();
+        $("#nextCardButton").hide();
+      }
+    );
+    $("#previousCardButton").hide();
+    $("#nextCardButton").hide();
+
     $scope.shuffle = function(){
         var n_cards = $scope.cards.length;
         if ( n_cards > 0 )
