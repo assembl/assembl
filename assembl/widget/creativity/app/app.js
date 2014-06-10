@@ -112,6 +112,20 @@ angular.element(document).ready(function (){
     /**
      * returns the value of a given parameter in the URL of the current page
      * */
+    function getUrlVariableValue(variable) {
+        var query = window.location.search.substring(1),
+            vars = query.split("&");
+
+        for (var i=0;i<vars.length;i++) {
+            var pair = vars[i].split("=");
+            if (pair[0] == variable) {
+                return pair[1];
+            }
+        }
+
+        return null;
+    }
+
 
     var successCallback = function(configData){
         console.log("successCallback ()");
@@ -122,35 +136,21 @@ angular.element(document).ready(function (){
         angular.bootstrap('#creativityApp', ['creativityApp']);
     };
 
-    function getCurrentWidgetSession(){
-        /**
-         * TODO : need to be configured ? choose which session you want or take the last ?
-         * The last session is taked
-         * */
-        var xhr = $.get('/data/Widget');
+    var configFile = getUrlVariableValue("config");
 
-        xhr.done(function(data){
-
-            var configFile = _.last(data);
-            /**
-             * Due to angular.bootstrap need a popin instead of a page
-             * */
-            if (!configFile) {
-                alert("No configuration.");
-                return;
-            }
-
-            configFile = "/data/"+configFile.split(':')[1];
-
-            $.get(configFile, successCallback);
-        });
-
-        xhr.fail(function(error){
-
-            //TODO :  implemente callback error
-        });
+    //TODO: Redirect on the discussion
+    /**
+     * If discussion_admin, redirect on widget creation page.
+     * */
+    if (!configFile) {
+        alert("No configuration.");
+        return;
     }
 
-    getCurrentWidgetSession();
+    if (configFile.split(':')[0] === "local") {
+        configFile = "/data/"+configFile.split(':')[1];
+    }
 
+    // TODO: implement an error callback, in case the config URL given is invalid or there is a network error
+    $.get(configFile, successCallback);
 });
