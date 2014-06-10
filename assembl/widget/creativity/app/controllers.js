@@ -18,6 +18,8 @@ creativityApp.controller('videosCtl',
       $scope.results = JukeTubeVideosService.getResults();
       $scope.pageInfo = JukeTubeVideosService.getPageInfo();
       $scope.playlist = true;
+      $scope.currentVideoId = null;
+      $scope.currentVideoTitle = null;
       $scope.idea = {
         shortTitle: "Idea short title",
         longTitle: "Idea long title"
@@ -206,8 +208,10 @@ creativityApp.controller('videosCtl',
     };
 
     $scope.launch = function (id, title) {
+      $log.info('lanuch(): Launched video id: ' + id + ' and title: ' + title);
+      $scope.currentVideoId = id;
+      $scope.currentVideoTitle = title;
       JukeTubeVideosService.launchPlayer(id, title);
-      $log.info('Launched id:' + id + ' and title:' + title);
     };
 
     $scope.search = function (pageToken) {
@@ -240,6 +244,8 @@ creativityApp.controller('videosCtl',
     $scope.sendIdea = function(){
       var messageSubject = $("#messageTitle").val();
       var messageContent = $("#messageContent").val();
+      var videoUrl = "http://www.youtube.com/watch?v=" + $scope.currentVideoId;
+      var videoTitle = $scope.currentVideoTitle; // TODO: use these last 2 pieces of info
 
       /*
       // initial way of posting: do not use any posting URL given in the config, use instead the general Discussion API

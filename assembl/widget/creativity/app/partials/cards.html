@@ -8,6 +8,9 @@
                 <div ng-bind-html="displayed_cards[displayed_card_index].html_content"></div>
                 <div class="card-bottom"></div>
             </div>
+            <div class="slot-machine pointer">
+               <a class="pointer" ng-click="shuffle()" ng-class="{'inactive': cards.length == 0}"><img src="app/img/slot-machine.png"></a>  
+            </div>
             <div id="slot-machine">
                 <a class="glyphicon glyphicon-random pointer" ng-click="shuffle()" ng-class="{'inactive': cards.length == 0}"></a>
             </div>
