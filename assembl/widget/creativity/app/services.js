@@ -28,21 +28,6 @@ creativityServices.factory('cardGameService', function($http){
 });
 
 /**
- * UPDATE VOTE
- * */
-creativityServices.factory('setVoteService', ['$resource', function($resource) {
-    return $resource('/data/Discussion/:discussionId/widgets/:id', null, {
-        addVote: {
-            method:'PUT',
-            headers: {
-               'Content-Type': 'application/x-www-form-urlencoded'
-            }
-        }
-    });
-
-}]);
-
-/**
  * CARD inspire me: send an idea to assembl
  * */
 creativityServices.factory('sendIdeaService', ['$resource',function($resource){

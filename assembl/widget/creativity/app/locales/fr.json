@@ -13,8 +13,11 @@
     "subIdeaPosted":"Votre sous-idée a bien été postée",
     "validVoteCatcher":"catching success",
     "errorVoteCatcher":"catch error",
-    "synthesis":"Sythèse",
+    "topIdea":"Top des idées",
     "shuffle":"Piocher une nouvelle carte",
+    "firstToPost":"Il n'y a pas encore de sous idée postée. Soyez le premier",
+    "pointToShare":"Il vous reste {{wallet}} points à repartir sur les idées suivantes",
+    "proposeIdea":"Proposer votre idée pour répondre à la question posée :",
 
     "videoTopExplanation": "Utilisez la barre de recherche ci-dessous pour trouver des vidéos qui vous inspirent à propos de l'idée \"{{ idea }}\", dans la discussion \"{{ discussion }}\". Vous pouvez par exemple utiliser certains de ces mots-clés issus de la discussion :",
     "videoTopExplanationSecondRowKeywords": "Voici également quelques mots-clés qui pourraient s'approcher de ces sujets :",

@@ -1,15 +1,17 @@
-<span>{{'synthesis' | translate}}</span>
-
 <section class="rate-container">
+    <p>
+        <h3>{{'topIdea' | translate}}</h3>
+    </p>
+
     <form id="postVote">
         <ul class="bx-idea" ng-repeat="idea in ideas">
             <li>
-                <label class="checkbox" for="checkbox-{{idea['@id']}}" ng-click="checked($event)">
+                <label class="checkbox" for="{{idea['@id']}}">
                     <span class="icons">
                         <span class="first-icon fui-checkbox-unchecked"></span>
                         <span class="second-icon fui-checkbox-checked"></span>
                     </span>
-                    <input id="checkbox-{{idea['@id']}}" class="sub-idea" type="checkbox" value="{{idea['@id']}}" data-toggle="checkbox">
+                    <input id="{{idea['@id']}}" class="sub-idea" type="checkbox" value="{{idea['@id']}}" data-toggle="checkbox">
                     <h6 class="lead-text"><i class="icon-lamp"></i>{{idea.shortTitle}}</h6>
                 </label>
                 <small class="definition">{{idea.definition}}</small>

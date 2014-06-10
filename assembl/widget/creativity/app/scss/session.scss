@@ -3,7 +3,7 @@
   margin: 0 auto;
   .session-comment {
     font-family: Helvetica, Arial, sans-serif;
-    padding: 1.24em 0 0 2.5em;
+    padding: 1.24em 0 0 0;
     height: 660px;
     overflow-y: auto;
     .thumbnail{
@@ -17,7 +17,7 @@
         border-radius: 0;
         resize : none;
         overflow-y: hidden;
-        width: 95%;
+        width: 96%;
         border: none;
         vertical-align: top;
         &:focus {
@@ -38,6 +38,9 @@
         width: 20px;
         &:hover .fa-paper-plane{
           color:#007bc2;
+        }
+        &:focus{
+          outline:0px none transparent;
         }
       }
     }
@@ -116,7 +119,7 @@
         text-decoration: none;
       }
     }
-    .slot-machine {
+    .slot-machine-session {
       cursor: pointer;
       height: 390px;
       margin-top: 3em;
@@ -127,16 +130,16 @@
       position: relative;
       height: 390px;
       width: 340px;
-      display: table;
-      padding: 10px;
+      //display: table;
+      //padding: 10px;
       text-align: justify;
-      margin: 1em 0 1em 2.5em;
+      margin: 1em 0 1em 0;
       border-left: #CCCCCC 1px solid !important;
       border-right: #CCCCCC 1px solid !important;
       float:left;
       p {
-        display: table-cell;
-        vertical-align: middle;
+        //display: table-cell;
+        //vertical-align: middle;
       }
       .card-top{
         height: 5px;
@@ -154,6 +157,11 @@
         right: 0;
         width:100%;
       }
+    }
+
+    .card-container {
+      width: 420px;
+      margin: 0 auto;
     }
   }
 
