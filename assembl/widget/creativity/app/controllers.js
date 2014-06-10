@@ -422,8 +422,8 @@ creativityApp.controller('cardsCtl',
 }]);
 
 creativityApp.controller('creativitySessionCtl',
-    ['$scope','cardGameService','$rootScope', '$timeout','$http','growl', 'WidgetConfigService',
-        function($scope, cardGameService, $rootScope, $timeout, $http, growl, WidgetConfigService){
+    ['$scope','cardGameService','$rootScope', '$timeout','$http','growl', 'WidgetConfigService','$sce',
+        function($scope, cardGameService, $rootScope, $timeout, $http, growl, WidgetConfigService, $sce){
 
     // activate the right tab
     $("ul.nav li").removeClass("active");
@@ -465,19 +465,20 @@ creativityApp.controller('creativitySessionCtl',
             ideas = [];
 
         $http.get(rootUrl).then(function(response){
+
             angular.forEach(response.data, function(item){
 
                 if(item.widget_add_post_endpoint){
 
-                    item.widget_add_post_endpoint = '/data/'+item.widget_add_post_endpoint.split(':')[1];
-                    item.creationDate = moment(new Date(item.creationDate)).fromNow();
+                    item.widget_add_post_endpoint = _.values(item.widget_add_post_endpoint).toString().split(':')[1];
+                    item.widget_add_post_endpoint = '/data/'+item.widget_add_post_endpoint;
+                    item.creationDate = moment(item.creationDate).fromNow();
                     item.avatar = '/user/id/'+user_id+'/avatar/30';
                     item.username = $rootScope.widgetConfig.user.name;
 
                     ideas.push(item);
                 }
-            })
-
+            });
 
             $scope.ideas = ideas.reverse();
         })
@@ -520,27 +521,15 @@ creativityApp.controller('creativitySessionCtl',
         }
     }
 
-    /**
-    * Sum each value from session vote
-    */
-    $scope.totalVote = function(){
-        var el = angular.element('.session-comment .total-score');
-
-        angular.forEach(el, function(v){
-            var elm = angular.element(v);
-
-            console.log("idea id :" + elm.attr('id') +" vote :"+ elm.val() );
-
-        });
-    }
-
-
+    $scope.displayed_cards = [];
+    $scope.displayed_card_index = 0;
     /**
      * Load config card
      * params {int} which is the id of the card game config/game_{int}.json
      */
     cardGameService.getCards(1).success(function(data){
-        $scope.game = data;
+        $scope.game = data.game;
+        $scope.shuffle();
     });
 
     /**
@@ -548,18 +537,16 @@ creativityApp.controller('creativitySessionCtl',
      * */
     $scope.shuffle = function(){
 
-        var m = $scope.game.game.length, t, i;
-
-        while (m) {
-
-            // Pick a remaining element…
-            i = Math.floor(Math.random() * m--);
-
-            // And swap it with the current element.
-            t = $scope.game.game[m];
-            $scope.game.game[m] = $scope.game.game[i];
-            $scope.game.game[i] = t;
+        var n_cards = $scope.game.length;
+        if ( n_cards > 0 )
+        {
+            var random_index = Math.floor((Math.random()*n_cards));
+            $scope.displayed_cards.push($scope.game[random_index]);
+            $scope.displayed_card_index = $scope.displayed_cards.length-1;
+            $scope.displayed_cards[$scope.displayed_card_index].body = $sce.trustAsHtml($scope.game[random_index].body);
+            $scope.game.splice(random_index,1);
         }
+
     }
 
 }]);
@@ -596,7 +583,29 @@ creativityApp.controller('ratingCtl',
                 }
             })
 
+            return ideas;
+
+        }).then(function(ideas){
+
+            var rootUrlSubIdea = '/data/'+$rootScope.widgetConfig.confirm_ideas_uri.split(':')[1];
+
+            $http.get(rootUrlSubIdea).success(function(data){
+
+                angular.forEach(ideas, function(idea){
+
+                    if(_.contains(data, idea['@id'])){
+
+                       idea.checked = true;
+
+                        $scope.isChecked = true;
+                    }
+
+                });
+
+            })
+
             $scope.ideas = ideas;
+
         });
     }
 
@@ -612,7 +621,6 @@ creativityApp.controller('ratingCtl',
             rootUrlMessage = '/data/'+$rootScope.widgetConfig.confirm_messages_uri.split(':')[1],
             subIdeaSelected = [],
             commentSelected = [];
-
 
         $scope.$watch('message', function(value){
             //TODO: find a good translation for confirm that the catching sub idea is valid
@@ -696,10 +704,32 @@ creativityApp.controller('ratingCtl',
     /**
      * Toggle on checkbox
      * */
-    $scope.checked = function(e){
-        var elm = angular.element(e.currentTarget);
-        elm.toggleClass('checked');
+    $scope.isChecked = function(){
+        var rootUrlSubIdea = '/data/'+$rootScope.widgetConfig.confirm_ideas_uri.split(':')[1],
+            rootUrlMessage = '/data/'+$rootScope.widgetConfig.confirm_messages_uri.split(':')[1];
+
+        $http.get(rootUrlSubIdea).then(function(response){
+
+            $scope.subIdeaChecked = response.data;
+
+        });
+
+        $http.get(rootUrlMessage).then(function(response){
+
+            var elm = angular.element('.comment-to-sub-idea');
+
+
+
+
+
+
+            $scope.commentChecked = response.data;
+
+        });
+
     }
+
+    //$scope.isChecked();
 
 
 }]);

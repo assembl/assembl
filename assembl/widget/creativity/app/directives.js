@@ -1,6 +1,6 @@
 "use strict";
 
-creativityApp.directive('vote', function($rootScope, setVoteService){
+creativityApp.directive('vote', function($rootScope, $http){
     return{
         restrict:'E',
         scope: {
@@ -8,15 +8,18 @@ creativityApp.directive('vote', function($rootScope, setVoteService){
             widget:'=widget'
         },
         templateUrl:'app/partials/vote.html',
-        link: function($scope, element){
+        link: function($scope){
 
             $scope.formData = {};
             $rootScope.wallet = 10;
 
             var
-                widget_id = $scope.widget['@id'].split('/')[1],
-                user_state = _.isUndefined($scope.widget.user_state) ? [] : JSON.parse($scope.widget.user_state),
+                user_state = _.isUndefined($scope.widget.user_state) ? [] : JSON.parse($scope.widget.user_state.session_user_vote),
                 id_idea = $scope.idea['@id'].split('/')[1];
+
+            var
+                userStateUrl = $scope.widget.user_state_url.split(':')[1],
+                userStateUrl = '/data/'+userStateUrl;
 
             /**
              * compare state_json content and the idea id to check the rate
@@ -37,7 +40,6 @@ creativityApp.directive('vote', function($rootScope, setVoteService){
                 });
 
                 $scope.formData.vote = $scope.rate;
-
             }
 
             /**
@@ -84,11 +86,27 @@ creativityApp.directive('vote', function($rootScope, setVoteService){
 
                     var newArr = $scope.removeDuplicateItem(user_state, obj);
 
-                    data.user_state = JSON.stringify(newArr);
+                    data.session_user_vote = JSON.stringify(newArr);
 
                     $rootScope.wallet -= $scope.formData.vote;
 
-                    setVoteService.addVote({discussionId:1, id:widget_id}, $.param(data));
+                    $http({
+                        method:'PUT',
+                        url:userStateUrl,
+                        data: data,
+                        async:true,
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    }).success(function(data, status, headers){
+
+                       console.log(status)
+
+                    }).error(function(status, headers){
+
+                        console.log(status)
+                    });
+
                 }
 
             }, true);
@@ -216,7 +234,10 @@ creativityApp.directive('rating', function($http){
 
           $scope.getCommentsForRating = function(){
 
-              var rootUrl = '/data/'+$scope.comment.widget_add_post_endpoint.split(':')[1];
+              $scope.comment.widget_add_post_endpoint = _.values($scope.comment.widget_add_post_endpoint).toString().split(':')[1];
+              $scope.comment.widget_add_post_endpoint = '/data/'+ $scope.comment.widget_add_post_endpoint;
+
+              var rootUrl = $scope.comment.widget_add_post_endpoint;
               var comments = [];
 
               if(rootUrl){
@@ -229,6 +250,7 @@ creativityApp.directive('rating', function($http){
 
                       $scope.subIdeaComment = comments;
                   });
+
               }
            }
 

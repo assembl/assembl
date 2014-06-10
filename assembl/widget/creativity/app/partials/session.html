@@ -1,29 +1,29 @@
 <div class="session">
     <div class="col-md-5">
         <div class="cards">
-            <div ng-repeat="card in game">
-                <div ng-if="$first">
-                    <!-- TODO need translation -->
-                    <div class="bs-callout bs-callout-warning">
-                        <p>Quels sont les prochains marchés internationaux que nous devrions viser ?</p>
-                        <p>Cette question est en lien avec l'idée "X". Inspirez-vous de la carte ci-dessous pour y répondre !</p>
-                    </div>
+            <div>
+                <!-- TODO need translation -->
+                <div class="bs-callout bs-callout-warning">
+                    <p>Quels sont les prochains marchés internationaux que nous devrions viser ?</p>
+                    <p>Cette question est en lien avec l'idée "X". Inspirez-vous de la carte ci-dessous pour y répondre !</p>
+                </div>
 
+                <div class="card-container">
                     <div class="card">
                         <div class="card-top"></div>
-                        <p>{{card[0].body}}</p>
+                         <div ng-bind-html="displayed_cards[displayed_card_index].body"></div>
                         <div class="card-bottom"></div>
                     </div>
-                    <div class="slot-machine">
-                       <a><img src="app/img/slot-machine.png"></a>  
+                    <div class="slot-machine-session">
+                       <a><img src="app/img/slot-machine.png"></a>
                     </div>
-                    <div class="shuffle">
-                        <button class="btn btn-primary btn-xs" ng-click="shuffle()">{{'shuffle' | translate}}</button>
-                    </div>
-                    <!-- TODO need translation -->
-                    <div class="bs-callout bs-callout-info">
-                        <p>Proposez votre idée pour répondre à la question posée :</p>
-                    </div>
+                </div>
+                <div class="shuffle">
+                    <button class="btn btn-primary" ng-click="shuffle()">{{'shuffle' | translate}}</button>
+                </div>
+                <!-- TODO need translation -->
+                <div class="bs-callout bs-callout-info">
+                    <p>{{'proposeIdea'| translate}}</p>
                 </div>
             </div>
         </div>
@@ -41,8 +41,11 @@
     </div>
 
     <div class="col-md-7">
-        <div class="bx-info">
-            <p>Il vous reste {{wallet}} points à repartir sur les idées suivantes</p>
+        <div class="bx-info" ng-show="ideas.length > 0">
+            <p>{{'pointToShare'| translate : {wallet: wallet} }}</p>
+        </div>
+        <div class="bx-info" ng-show="ideas.length < 1">
+            <p><i class="fa fa-info-circle fa-lg"></i>{{'firstToPost'| translate}}</p>
         </div>
         <div class="session-comment">
             <div class="media" ng-if="ideas.length > 0" ng-repeat="idea in ideas">
