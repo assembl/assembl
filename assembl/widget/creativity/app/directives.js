@@ -127,7 +127,7 @@ creativityApp.directive('comments', function($http, $rootScope){
            idea:'=idea'
         },
         templateUrl: 'app/partials/comments.html',
-        link: function($scope, element, attr){
+        link: function($scope){
 
             $scope.formData = {};
             $scope.comments = [];
@@ -150,19 +150,36 @@ creativityApp.directive('comments', function($http, $rootScope){
             $scope.getCommentsFromSubIdea = function(){
 
                  var rootUrl = $scope.idea.widget_add_post_endpoint,
-                     user_id = $rootScope.widgetConfig.user['@id'].split('/')[1],
-                     username = $rootScope.widgetConfig.user.name;
+                     comments = [];
 
                 $http.get(rootUrl).then(function(response){
                     angular.forEach(response.data, function(com){
 
+                        var user_id = com.idCreator.split('/')[1];
+
                         com.date = moment(com.date).fromNow();
                         com.avatar = '/user/id/'+ user_id +'/avatar/20';
-                        com.username = username;
 
-                        $scope.comments.push(com);
+                        comments.push(com);
                     })
 
+                    return comments;
+
+                }).then(function(commments){
+
+                    angular.forEach(commments, function(c){
+
+                        var urlRoot = c.idCreator.split(':')[1],
+                            urlRoot = '/data/'+urlRoot;
+
+                        $http.get(urlRoot).then(function(response){
+
+                            c.username = response.data.name;
+                        });
+
+                    });
+
+                    $scope.comments = commments;
                 });
             }
 
@@ -250,7 +267,6 @@ creativityApp.directive('rating', function($http){
 
                       $scope.subIdeaComment = comments;
                   });
-
               }
            }
 

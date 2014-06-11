@@ -458,11 +458,13 @@ creativityApp.controller('creativitySessionCtl',
      */
     $scope.getSubIdeaFromIdea = function(){
 
-        var rootUrl = $rootScope.widgetConfig.ideas_uri;
+        var
+            rootUrl = $rootScope.widgetConfig.ideas_uri;
             rootUrl = '/data/'+ rootUrl.split(':')[1];
 
-        var user_id = $rootScope.widgetConfig.user['@id'].split('/')[1],
-            ideas = [];
+        var ideas = [];
+
+        $scope.parentIdeaTitle = $rootScope.widgetConfig.base_idea.shortTitle;
 
         $http.get(rootUrl).then(function(response){
 
@@ -473,15 +475,30 @@ creativityApp.controller('creativitySessionCtl',
                     item.widget_add_post_endpoint = _.values(item.widget_add_post_endpoint).toString().split(':')[1];
                     item.widget_add_post_endpoint = '/data/'+item.widget_add_post_endpoint;
                     item.creationDate = moment(item.creationDate).fromNow();
-                    item.avatar = '/user/id/'+user_id+'/avatar/30';
-                    item.username = $rootScope.widgetConfig.user.name;
 
                     ideas.push(item);
                 }
             });
 
+            return ideas;
+
+        }).then(function(ideas){
+
+            angular.forEach(ideas, function(idea){
+
+                var urlRoot = idea.proposed_in_post.idCreator.split(':')[1],
+                    urlRoot = '/data/'+urlRoot;
+
+                $http.get(urlRoot).then(function(response){
+
+                    idea.username = response.data.name;
+                    idea.avatar = response.data.avatar_url_base+'30';
+                });
+
+            });
+
             $scope.ideas = ideas.reverse();
-        })
+        });
     }
 
     /**
@@ -584,22 +601,7 @@ creativityApp.controller('ratingCtl',
             })
 
             $scope.ideas = ideas;
-
-        }).then(function(){
-
-            var rootUrl = $rootScope.widgetConfig.user_states_uri,
-                rootUrl = '/data/'+rootUrl.split(':')[1];
-
-            $http.get(rootUrl).then(function(response){
-
-                //console.log(response.data[0]);
-
-                //$scope.users_votes = response.data;
-
-            })
-
         });
-
     }
 
     /**
@@ -721,9 +723,6 @@ creativityApp.controller('ratingCtl',
         });
 
     }
-
-    //$scope.isChecked();
-
 
 }]);
 
