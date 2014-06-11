@@ -405,17 +405,22 @@ class CollectionDefinition(AbstractCollectionDefinition):
 
     def decorate_query(self, query, last_alias, parent_instance, ctx):
         # This will decorate a query with a join on the relation.
-        alias = last_alias or aliased(self.collection_class)
-        query = query.join(parent_instance.__class__)
-        if self.back_property:
-            inv = self.back_property
-            # What we have is a property, not an instrumented attribute;
-            # but they share the same key.
-            back_attribute = getattr(alias, inv.key)
-            if uses_list(inv):
-                query = query.filter(back_attribute.contains(parent_instance))
-            else:
-                query = query.filter(back_attribute == parent_instance)
+        coll_alias = last_alias or aliased(self.collection_class)
+        owner_alias = self.owner_alias
+        inv = self.back_property
+        if inv:
+            query = query.join(owner_alias,
+                getattr(coll_alias, inv.key))
+        else:
+            print "PLEASE SEND TO maparent@acm.org:", this, self.property
+            query = query.join(owner_alias)
+            # THIS MIGHT WORK, but I need a good testcase:
+            # query = query.join(owner_alias,
+            #     getattr(owner_alias, self.property.key))
+        if inv and not uses_list(inv):
+            query = query.filter(getattr(coll_alias, inv.key) == parent_instance)
+        else:
+            query = query.filter(owner_alias.id == parent_instance.id)
         return query
 
     def decorate_instance(self, instance, parent_instance, assocs, user_id):
