@@ -63,7 +63,7 @@ voteApp.controller('indexCtl',
     $scope.computeMyVotes = function(){
       // do not use .data("criterion-value") because jQuery does not seem to read the value set by d3
 
-      /**/
+      /*
       $scope.myVotes = [];
       // /!\ once serialized by $.param(), this would give "undefined=10&undefined=0&undefined=22222&undefined=50"
       $("#d3_container g.criterion").each(function(index) {
@@ -72,15 +72,15 @@ voteApp.controller('indexCtl',
           'value': $(this).attr("data-criterion-value")
         });
       });
-      /**/
+      */
 
-      /*
+      /**/
       $scope.myVotes = {};
       // once serialized by $.param(), this will give "rentabilite=10&risque=0&investissement=22222&difficulte_mise_en_oeuvre=50"
       $("#d3_container g.criterion").each(function(index) {
         $scope.myVotes[$(this).attr("data-criterion-id")] = $(this).attr("data-criterion-value");
       });
-      */
+      /**/
       
 
       return $scope.myVotes;
