@@ -62,6 +62,17 @@ The widget may also store the user's interaction with that specific idea in the 
 1. Discussion admin creates a voting session configuration. This will include a set of ideas to be voted on, a voting method (ranking, boolean, etc.) and a set of criteria ideas to use. (In the form of an array of array-ID.) 
 There will be an API endpoint to get the realized array of all criteria ideas.
 (Eventually, we will use idea subtypes, but implementation 0 will probably be for criteria to be the children of a given idea, and likewise for the voting targets.) 
+
+    /data/Discussion/1/widgets/2?target=local:Idea/20
+    {
+        "criteria": [{"@id":"local:Idea/11", "short_title":"price"}, {"@id":"local:Idea/12", "short_title":"quality"}],
+        "criteria_url": "/data/Discussion/1/widgets/criteria",
+        "voting_urls": {"local:Idea/11": "/data/Discussion/1/widgets/2/criteria/11/targets/20/votes",
+                        "local:Idea/12": "/data/Discussion/1/widgets/2/criteria/12/targets/20/votes"},
+        "user_votes_uri": "/data/Discussion/1/widgets/2/targets/20/votes",
+        "vote_results_url": "/data/Discussion/1/widgets/2/targets/20/votes/results"}
+    }
+
 2. User clicks on a URL (based in any idea panel) including the `widget_state` and voted idea ID as a GET argument.
 Widget checks the `user_state` for previous votes on the set of ideas.
 

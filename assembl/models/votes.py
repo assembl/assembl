@@ -1,7 +1,7 @@
 from abc import abstractproperty
 
 from sqlalchemy import (
-    Column, Integer, ForeignKey, Boolean, String)
+    Column, Integer, ForeignKey, Boolean, String, Float)
 from sqlalchemy.orm import relationship
 
 from . import (Base, DiscussionBoundBase, Idea, User)
@@ -25,11 +25,27 @@ class AbstractIdeaVote(DiscussionBoundBase):
 
     idea_id = Column(
         Integer,
-        ForeignKey('idea.id', ondelete="CASCADE", onupdate="CASCADE"),
+        ForeignKey(Idea.id, ondelete="CASCADE", onupdate="CASCADE"),
         nullable=False,
         info={'rdf': QuadMapPatternS(None, VOTE.subject_node)}
     )
-    idea = relationship(Idea, backref="votes")
+    idea = relationship(
+        Idea,
+        primaryjoin="and_(Idea.id==AbstractIdeaVote.idea_id, "
+                         "Idea.is_tombstone==False)",
+        backref="votes")
+
+    criterion_id = Column(
+        Integer,
+        ForeignKey(Idea.id, ondelete="CASCADE", onupdate="CASCADE"),
+        nullable=True,
+        info={'rdf': QuadMapPatternS(None, VOTE.voting_criterion)}
+    )
+    criterion = relationship(
+        Idea,
+        primaryjoin="and_(Idea.id==AbstractIdeaVote.criterion_id, "
+                         "Idea.is_tombstone==False)",
+        backref="votes_using_this_criterion")
 
     voter_id = Column(
         Integer,
@@ -99,7 +115,7 @@ class LickertIdeaVote(AbstractIdeaVote):
     lickert_range = relationship(LickertRange)
 
     vote_value = Column(
-        Integer, nullable=False,
+        Float, nullable=False,
         info={'rdf': QuadMapPatternS(None, VOTE.lickert_value)})
 
 
