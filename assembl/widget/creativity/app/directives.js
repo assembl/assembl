@@ -138,7 +138,6 @@ creativityApp.directive('comments', function($http, $rootScope, utils){
                         break;
                     case 'commentSubIdea:error':
                         break;
-
                 }
             }, true);
 
@@ -203,12 +202,12 @@ creativityApp.directive('comments', function($http, $rootScope, utils){
                         url:rootUrl,
                         data:$.param(data),
                         headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-                    }).success(function(data, status, headers){
+                    }).success(function(){
 
                         $scope.message = "commentSubIdea:success";
                         $scope.formData.comment = null;
 
-                    }).error(function(status, headers){
+                    }).error(function(){
 
                         $scope.message = "commentSubIdea:success";
                     });
@@ -248,10 +247,9 @@ creativityApp.directive('rating', function($http, utils){
 
           $scope.getCommentsForRating = function(){
 
-              $scope.comment.widget_add_post_endpoint = utils.urlApi(_.values($scope.comment.widget_add_post_endpoint));
-
-              var rootUrl = $scope.comment.widget_add_post_endpoint;
-              var comments = [];
+              var
+                  rootUrl = utils.urlApi(_.values($scope.comment.widget_add_post_endpoint)),
+                  comments = [];
 
               if(rootUrl){
 

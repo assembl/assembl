@@ -421,7 +421,7 @@ creativityApp.controller('cardsCtl',
 
 }]);
 
-creativityApp.controller('creativitySessionCtl',
+creativityApp.controller('sessionCtl',
     ['$scope','cardGameService','$rootScope', '$timeout','$http','growl', 'WidgetConfigService','$sce','utils',
         function($scope, cardGameService, $rootScope, $timeout, $http, growl, WidgetConfigService, $sce, utils){
 

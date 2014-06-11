@@ -17,6 +17,7 @@
     "shuffle":"Draw a new card",
     "firstToPost":"There are yet no idea as posted. Be the first",
     "proposeIdea":"Submit your idea to answer the question :",
+    "validateChoose":"Validate your choice",
 
     "videoTopExplanation": "Use the search bar down here to find videos which would inspire you about the idea \"{{ idea }}\", in the \"{{ discussion }}\" discussion. For example, you can use some of these keywords taken from the discussion:",
     "videoTopExplanationSecondRowKeywords": "Here are some new keywords which could come close to this subject:",

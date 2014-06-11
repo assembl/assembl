@@ -69,7 +69,7 @@ creativityApp.config(['$routeProvider','$translateProvider','$locationProvider',
         }).
         when('/session', {
            templateUrl:'app/partials/session.html',
-           controller:'creativitySessionCtl'
+           controller:'sessionCtl'
         }).
         when('/rating', {
             templateUrl:'app/partials/rating.html',
