@@ -270,6 +270,7 @@ voteApp.controller('indexCtl',
         .text(criterion.name);
 
       // make the axis label interactive (mouse hover) to show the description text of the criterion
+      // possibility of improvement: maybe instead of an HTML "title" attribute, we could use tipsy, as on http://bl.ocks.org/ilyabo/1373263
       if ( criterion.description && criterion.description.length > 0 )
       {
         var f = function(){
