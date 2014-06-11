@@ -114,6 +114,7 @@
         "sources": [":"],
         "topic": true,
         "permissions": "&get_roles_by_permission",
+        "widget_collection_url": true,
         "sources": [":partial"]
     },
     "Idea": {
