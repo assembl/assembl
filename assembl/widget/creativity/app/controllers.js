@@ -422,8 +422,8 @@ creativityApp.controller('cardsCtl',
 }]);
 
 creativityApp.controller('creativitySessionCtl',
-    ['$scope','cardGameService','$rootScope', '$timeout','$http','growl', 'WidgetConfigService','$sce',
-        function($scope, cardGameService, $rootScope, $timeout, $http, growl, WidgetConfigService, $sce){
+    ['$scope','cardGameService','$rootScope', '$timeout','$http','growl', 'WidgetConfigService','$sce','utils',
+        function($scope, cardGameService, $rootScope, $timeout, $http, growl, WidgetConfigService, $sce, utils){
 
     // activate the right tab
     $("ul.nav li").removeClass("active");
@@ -458,9 +458,7 @@ creativityApp.controller('creativitySessionCtl',
      */
     $scope.getSubIdeaFromIdea = function(){
 
-        var
-            rootUrl = $rootScope.widgetConfig.ideas_uri;
-            rootUrl = '/data/'+ rootUrl.split(':')[1];
+        var rootUrl = utils.urlApi($rootScope.widgetConfig.ideas_uri);
 
         var ideas = [];
 
@@ -486,8 +484,7 @@ creativityApp.controller('creativitySessionCtl',
 
             angular.forEach(ideas, function(idea){
 
-                var urlRoot = idea.proposed_in_post.idCreator.split(':')[1],
-                    urlRoot = '/data/'+urlRoot;
+                var urlRoot = utils.urlApi(idea.proposed_in_post.idCreator);
 
                 $http.get(urlRoot).then(function(response){
 
@@ -509,8 +506,7 @@ creativityApp.controller('creativitySessionCtl',
     $scope.sendSubIdea = function(){
         if($scope.formData) {
 
-            var rootUrl = $rootScope.widgetConfig.ideas_uri;
-                rootUrl = '/data/'+ rootUrl.split(':')[1];
+            var rootUrl = utils.urlApi($rootScope.widgetConfig.ideas_uri);
 
             $scope.formData.type = 'Idea';
 
@@ -569,8 +565,8 @@ creativityApp.controller('creativitySessionCtl',
 }]);
 
 creativityApp.controller('ratingCtl',
-    ['$scope','$rootScope','$timeout','$http','growl',
-        function($scope, $rootScope, $timeout, $http, growl){
+    ['$scope','$rootScope','$timeout','$http','growl','utils',
+        function($scope, $rootScope, $timeout, $http, growl, utils){
 
     /**
      * Due to the latency to init $rootScope we need a delay
@@ -586,8 +582,7 @@ creativityApp.controller('ratingCtl',
      */
     $scope.getSubIdeaForVote = function(){
 
-        var rootUrl = $rootScope.widgetConfig.ideas_uri;
-            rootUrl = '/data/'+ rootUrl.split(':')[1];
+        var rootUrl = utils.urlApi($rootScope.widgetConfig.ideas_uri);
 
         var ideas = [];
 
@@ -600,7 +595,35 @@ creativityApp.controller('ratingCtl',
                 }
             })
 
+            return ideas;
+
+        }).then(function(ideas){
+
+            var urlRoot = utils.urlApi($rootScope.widgetConfig.user_states_uri);
+
+            $http.get(urlRoot).then(function(response){
+
+               var rate = JSON.parse(response.data[0].session_user_vote);
+
+               angular.forEach(ideas, function(idea){
+
+                   var id_idea = idea['@id'].split('/')[1],
+                       id_idea = parseInt(id_idea, 10);
+
+                   angular.forEach(rate, function(r){
+                      var id_rate = parseInt(_.keys(r), 10),
+                          rate_value = _.values(r);
+
+                       if(id_idea === id_rate){
+
+                          idea.rate = parseInt(rate_value, 10);
+                       }
+                   });
+               });
+            });
+
             $scope.ideas = ideas;
+
         });
     }
 
@@ -612,8 +635,8 @@ creativityApp.controller('ratingCtl',
         var subIdea = angular.element('#postVote .sub-idea'),
             commentSubIdea = angular.element('#postVote .comment-to-sub-idea');
 
-        var rootUrlSubIdea = '/data/'+$rootScope.widgetConfig.confirm_ideas_uri.split(':')[1],
-            rootUrlMessage = '/data/'+$rootScope.widgetConfig.confirm_messages_uri.split(':')[1],
+        var rootUrlSubIdea = utils.urlApi($rootScope.widgetConfig.confirm_ideas_uri),
+            rootUrlMessage = utils.urlApi($rootScope.widgetConfig.confirm_messages_uri),
             subIdeaSelected = [],
             commentSelected = [];
 
@@ -700,27 +723,8 @@ creativityApp.controller('ratingCtl',
      * Toggle on checkbox
      * */
     $scope.isChecked = function(){
-        var rootUrlSubIdea = '/data/'+$rootScope.widgetConfig.confirm_ideas_uri.split(':')[1],
-            rootUrlMessage = '/data/'+$rootScope.widgetConfig.confirm_messages_uri.split(':')[1];
-
-        $http.get(rootUrlSubIdea).then(function(response){
-
-            $scope.subIdeaChecked = response.data;
-
-        });
-
-        $http.get(rootUrlMessage).then(function(response){
-
-            var elm = angular.element('.comment-to-sub-idea');
-
-
-
-
-
-
-            $scope.commentChecked = response.data;
-
-        });
+        var rootUrlSubIdea = utils.urlApi($rootScope.widgetConfig.confirm_ideas_uri),
+            rootUrlMessage = utils.urlApi($rootScope.widgetConfig.confirm_messages_uri);
 
     }
 

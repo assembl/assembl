@@ -1,6 +1,6 @@
 "use strict";
 
-creativityApp.directive('vote', function($rootScope, $http){
+creativityApp.directive('vote', function($rootScope, $http, utils){
     return{
         restrict:'E',
         scope: {
@@ -17,9 +17,7 @@ creativityApp.directive('vote', function($rootScope, $http){
                 user_state = _.isUndefined($scope.widget.user_state) ? [] : JSON.parse($scope.widget.user_state.session_user_vote),
                 id_idea = $scope.idea['@id'].split('/')[1];
 
-            var
-                userStateUrl = $scope.widget.user_state_url.split(':')[1],
-                userStateUrl = '/data/'+userStateUrl;
+            var userStateUrl = utils.urlApi($scope.widget.user_state_url);
 
             /**
              * compare state_json content and the idea id to check the rate
@@ -120,7 +118,7 @@ creativityApp.directive('vote', function($rootScope, $http){
     }
 })
 
-creativityApp.directive('comments', function($http, $rootScope){
+creativityApp.directive('comments', function($http, $rootScope, utils){
     return {
         restrict:'E',
         scope: {
@@ -169,8 +167,7 @@ creativityApp.directive('comments', function($http, $rootScope){
 
                     angular.forEach(commments, function(c){
 
-                        var urlRoot = c.idCreator.split(':')[1],
-                            urlRoot = '/data/'+urlRoot;
+                        var urlRoot = utils.urlApi(c.idCreator);
 
                         $http.get(urlRoot).then(function(response){
 
@@ -240,7 +237,7 @@ creativityApp.directive('comments', function($http, $rootScope){
     }
 })
 
-creativityApp.directive('rating', function($http){
+creativityApp.directive('rating', function($http, utils){
    return {
        restrict:'E',
        scope: {
@@ -251,8 +248,7 @@ creativityApp.directive('rating', function($http){
 
           $scope.getCommentsForRating = function(){
 
-              $scope.comment.widget_add_post_endpoint = _.values($scope.comment.widget_add_post_endpoint).toString().split(':')[1];
-              $scope.comment.widget_add_post_endpoint = '/data/'+ $scope.comment.widget_add_post_endpoint;
+              $scope.comment.widget_add_post_endpoint = utils.urlApi(_.values($scope.comment.widget_add_post_endpoint));
 
               var rootUrl = $scope.comment.widget_add_post_endpoint;
               var comments = [];
