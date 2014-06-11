@@ -263,11 +263,27 @@ voteApp.controller('indexCtl',
       }
 
       // show axis label
-      g.append("text")
+      var axisLabel = g.append("text")
         .attr("y", item_data.height - config.padding*0.3 )
         .attr("x", xPosCenter )
         .style("text-anchor", "middle")
         .text(criterion.name);
+
+      // make the axis label interactive (mouse hover) to show the description text of the criterion
+      if ( criterion.description && criterion.description.length > 0 )
+      {
+        var f = function(){
+          // prevent the other click() function to get called
+          d3.event.stopPropagation();
+          
+          // do nothing, so that we just block the other click function in case the user clicks on the axis label because they think it would give more info (info appears on hover after a bit of time, because for now it is handled by the "title" property, so the browser decides how/when it appears)
+        }
+        axisLabel
+          .style("cursor","help")
+          .attr("title", criterion.description)
+          .on("click", f)
+        ;
+      }
 
       
 
