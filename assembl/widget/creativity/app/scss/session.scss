@@ -121,26 +121,19 @@
     }
     .slot-machine-session {
       cursor: pointer;
-      height: 390px;
-      margin-top: 3em;
       padding-top: 5em;
       box-sizing: border-box;
+      float:left;
     }
     .card{
       position: relative;
       height: 390px;
       width: 340px;
-      //display: table;
-      //padding: 10px;
       text-align: justify;
       margin: 1em 0 1em 0;
       border-left: #CCCCCC 1px solid !important;
       border-right: #CCCCCC 1px solid !important;
       float:left;
-      p {
-        //display: table-cell;
-        //vertical-align: middle;
-      }
       .card-top{
         height: 5px;
         background-color: #c7c2dd;

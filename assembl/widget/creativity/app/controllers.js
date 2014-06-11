@@ -583,30 +583,23 @@ creativityApp.controller('ratingCtl',
                 }
             })
 
-            return ideas;
+            $scope.ideas = ideas;
 
-        }).then(function(ideas){
+        }).then(function(){
 
-            var rootUrlSubIdea = '/data/'+$rootScope.widgetConfig.confirm_ideas_uri.split(':')[1];
+            var rootUrl = $rootScope.widgetConfig.user_states_uri,
+                rootUrl = '/data/'+rootUrl.split(':')[1];
 
-            $http.get(rootUrlSubIdea).success(function(data){
+            $http.get(rootUrl).then(function(response){
 
-                angular.forEach(ideas, function(idea){
+                //console.log(response.data[0]);
 
-                    if(_.contains(data, idea['@id'])){
-
-                       idea.checked = true;
-
-                        $scope.isChecked = true;
-                    }
-
-                });
+                //$scope.users_votes = response.data;
 
             })
 
-            $scope.ideas = ideas;
-
         });
+
     }
 
     /**
