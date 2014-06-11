@@ -87,7 +87,7 @@
     },
     "IdeaProposalPost": {
         "@extends": "AssemblPost",
-        "proposes_idea": ":"
+        "proposes_idea": true
     },
     "SynthesisPost": {
         "@extends": "Post",

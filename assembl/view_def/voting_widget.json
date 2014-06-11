@@ -87,7 +87,7 @@
     },
     "IdeaProposalPost": {
         "@extends": "AssemblPost",
-        "proposes_idea": ":"
+        "proposes_idea": true
     },
     "SynthesisPost": {
         "@extends": "Post",
@@ -133,6 +133,7 @@
         "numChildIdea": "&get_num_children",
         "num_posts": true,
         "num_read_posts": true,
+        "proposed_in_post": ":",
         "widget_add_post_endpoint": true
     },
     "Criterion": {
