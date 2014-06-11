@@ -458,9 +458,9 @@ creativityApp.controller('sessionCtl',
      */
     $scope.getSubIdeaFromIdea = function(){
 
-        var rootUrl = utils.urlApi($rootScope.widgetConfig.ideas_uri);
-
-        var ideas = [];
+        var
+            rootUrl = utils.urlApi($rootScope.widgetConfig.ideas_uri),
+            ideas = [];
 
         $scope.parentIdeaTitle = $rootScope.widgetConfig.base_idea.shortTitle;
 
@@ -582,9 +582,9 @@ creativityApp.controller('ratingCtl',
      */
     $scope.getSubIdeaForVote = function(){
 
-        var rootUrl = utils.urlApi($rootScope.widgetConfig.ideas_uri);
-
-        var ideas = [];
+        var
+            rootUrl = utils.urlApi($rootScope.widgetConfig.ideas_uri),
+            ideas = [];
 
         $http.get(rootUrl).then(function(response){
             angular.forEach(response.data, function(item){
@@ -632,13 +632,13 @@ creativityApp.controller('ratingCtl',
      * */
     $scope.validVote = function(){
 
-        var subIdea = angular.element('#postVote .sub-idea'),
-            commentSubIdea = angular.element('#postVote .comment-to-sub-idea');
-
-        var rootUrlSubIdea = utils.urlApi($rootScope.widgetConfig.confirm_ideas_uri),
-            rootUrlMessage = utils.urlApi($rootScope.widgetConfig.confirm_messages_uri),
+        var
             subIdeaSelected = [],
-            commentSelected = [];
+            commentSelected = [],
+            subIdea = angular.element('#postVote .sub-idea'),
+            commentSubIdea = angular.element('#postVote .comment-to-sub-idea'),
+            rootUrlSubIdea = utils.urlApi($rootScope.widgetConfig.confirm_ideas_uri),
+            rootUrlMessage = utils.urlApi($rootScope.widgetConfig.confirm_messages_uri);
 
         $scope.$watch('message', function(value){
             //TODO: find a good translation for confirm that the catching sub idea is valid
@@ -656,9 +656,7 @@ creativityApp.controller('ratingCtl',
 
         angular.forEach(subIdea, function(idea){
 
-            var elm = angular.element(idea);
-
-            if($(elm).is(':checked')){
+            if($(idea).is(':checked')){
 
                 subIdeaSelected.push($(idea).val());
             }
@@ -666,9 +664,7 @@ creativityApp.controller('ratingCtl',
 
         angular.forEach(commentSubIdea, function(comment){
 
-            var elm = angular.element(comment);
-
-            if($(elm).is(':checked')){
+            if($(comment).is(':checked')){
 
                 commentSelected.push($(comment).val());
             }
@@ -740,6 +736,35 @@ creativityApp.controller('editCtl',
         $scope.widgetInstance = session.data;
 
     });
+
+    // improve this function to create a widget
+    $scope.createWidget = function(){
+
+        var rootUrl = '/data/Discussion/1/widgets';
+
+        $http({
+            method:'POST',
+            url:rootUrl,
+            data:$.param(obj),
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+        }).then(function(data, status, headers){
+
+            var header = headers().location;
+            header = header.split(':')[1];
+
+            return header;
+
+        }).then(function(header){
+
+            var rootUrl = '/data/:widgetId'
+
+            $http.get(rootUrl, function(data){
+
+
+            });
+
+        })
+    }
 
 
 }]);
