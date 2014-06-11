@@ -461,7 +461,7 @@ voteApp.controller('indexCtl',
       // show X axis label
       g.append("text")
         //.attr("transform", "translate(" + (width / 2) + " ," + (height + margin.bottom) + ")")
-        .attr("y", (item_data.height - config.padding/2) )
+        .attr("y", (item_data.height - config.padding * 0.45) )
         .attr("x", (item_data.width / 2) )
         .attr("dy", "1em")
         .style("text-anchor", "middle")
@@ -497,6 +497,52 @@ voteApp.controller('indexCtl',
           .text(criterion.descriptionMax);
       }
       */
+
+      // show descriptions of the minimum and maximum values on X axis
+      if ( criteria[0].descriptionMin && criteria[0].descriptionMin.length > 0 )
+      {
+        g.append("text")
+          .attr("y", (item_data.height - config.padding*0.6) )
+          .attr("x", (item_data.width * 0.2) )
+          .attr("dy", "1em")
+          .style("text-anchor", "middle")
+          .text(criteria[0].descriptionMin);
+      }
+      if ( criteria[0].descriptionMax && criteria[0].descriptionMax.length > 0 )
+      {
+        g.append("text")
+          .attr("y", (item_data.height - config.padding*0.6) )
+          .attr("x", (item_data.width * 0.8) )
+          .attr("dy", "1em")
+          .style("text-anchor", "middle")
+          .text(criteria[0].descriptionMax);
+      }
+
+      // show descriptions of the minimum and maximum values on Y axis
+      if ( criteria[1].descriptionMin && criteria[1].descriptionMin.length > 0 )
+      {
+        g.append("text")
+          .attr("transform", "rotate(-90)")
+          .attr("y", (0) )
+          .attr("x", (0 - item_data.height * 0.8) )
+          .attr("dy", (config.padding * 0.5) + "px")
+          .style("text-anchor", "middle")
+          .text(criteria[1].descriptionMin);
+      }
+      if ( criteria[1].descriptionMax && criteria[1].descriptionMax.length > 0 )
+      {
+        g.append("text")
+          .attr("transform", "rotate(-90)")
+          .attr("y", (0) )
+          .attr("x", (0 - item_data.height * 0.2) )
+          .attr("dy", (config.padding * 0.5) + "px")
+          .style("text-anchor", "middle")
+          .text(criteria[1].descriptionMax);
+      }
+
+
+
+
 
       // draw the cursor (inner disc)
       svg.append("circle")

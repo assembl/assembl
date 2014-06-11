@@ -25,10 +25,26 @@ You have to POST to http://localhost:6543/data/Discussion/1/widgets using the fo
             "type":"2_axes",
             "criteria":[
                 {
-                    "id":"rentabilite","name":"Rentabilite (%)","description":"Description de l'axe rentabilite","valueMin":0,"valueMax":100,"valueDefault":10,"ticks":6
+                    "id":"rentabilite",
+                    "name":"Rentabilite (%)",
+                    "description":"Description de l'axe rentabilite",
+                    "valueMin":0,
+                    "valueMax":100,
+                    "valueDefault":10,
+                    "descriptionMin":"faible",
+                    "descriptionMax":"forte",
+                    "ticks":6
                 },
                 {
-                    "id":"risque","name":"Risque (%)","description":"Description de l'axe risque","valueMin":0,"valueMax":100,"valueDefault":0,"ticks":6
+                    "id":"risque",
+                    "name":"Risque (%)",
+                    "description":"Description de l'axe risque",
+                    "valueMin":0,
+                    "valueMax":100,
+                    "valueDefault":0,
+                    "descriptionMin":"faible",
+                    "descriptionMax":"fort",
+                    "ticks":6
                 }
             ],
             "width": 300,
@@ -38,7 +54,13 @@ You have to POST to http://localhost:6543/data/Discussion/1/widgets using the fo
             "type": "vertical_gauge",
             "criteria": [
                 {
-                    "id":"investissement","name":"Investissement (Euros)","description":"Description de l'axe investissement","valueMin":0,"valueMax":50000,"valueDefault":22222,"ticks":5
+                    "id":"investissement",
+                    "name":"Investissement (Euros)",
+                    "description":"Description de l'axe investissement",
+                    "valueMin":0,
+                    "valueMax":50000,
+                    "valueDefault":22222,
+                    "ticks":5
                 }
             ],
             "width": 300,
@@ -48,7 +70,19 @@ You have to POST to http://localhost:6543/data/Discussion/1/widgets using the fo
             "type": "vertical_gauge",
             "criteria": [
                 {
-                    "id":"difficulte_mise_en_oeuvre","name":"Difficulte de mise en oeuvre (note)","description":"Description de l'axe difficulte de mise en oeuvre","valueMin":0,"valueMax":100,"valueDefault":50,"ticks":12,"descriptionMin":"Tres facile","descriptionMax":"Tres difficile","colorMin":"#00ff00","colorMax":"#ff0000","colorAverage":"#ffff00","colorCursor":"#000000"
+                    "id":"difficulte_mise_en_oeuvre",
+                    "name":"Difficulte de mise en oeuvre (note)",
+                    "description":"Description de l'axe difficulte de mise en oeuvre",
+                    "valueMin":0,
+                    "valueMax":100,
+                    "valueDefault":50,
+                    "ticks":12,
+                    "descriptionMin":"Tres facile",
+                    "descriptionMax":"Tres difficile",
+                    "colorMin":"#00ff00",
+                    "colorMax":"#ff0000",
+                    "colorAverage":"#ffff00",
+                    "colorCursor":"#000000"
                 }
             ],
             "width": 300,
@@ -67,7 +101,15 @@ This URL is the configuration parameter which you can now give when you access t
 So an example of widget URL is http://localhost:6543/widget/vote/?config=http://localhost:6543/data/Widget/22#/
 
 
+Tools to make REST calls
+========================
 
+To POST the information above, you can use one of these tools:
+* curl
+    For example you can type the following command:
+    curl -D test -d type=CreativityWidget -d settings='{...}' http://localhost:6544/data/Discussion/1/widgets
+    And then you can read the content of the "test" file (thanks to the -D option), and read the value of "location"
+* a browser plugin, such as "REST Easy" (https://addons.mozilla.org/en-US/firefox/addon/rest-easy/)
 
 
 
