@@ -15,8 +15,8 @@ voteApp.controller('votedCtl',
 }]);
 
 voteApp.controller('indexCtl',
-  ['$scope', '$http', '$routeParams', '$log', '$location', 'globalConfig', 'configTestingService', 'configService', 'Discussion',
-  function($scope, $http, $routeParams, $log, $location, globalConfig, configTestingService, configService, Discussion){
+  ['$scope', '$http', '$routeParams', '$log', '$location', 'globalConfig', 'configTestingService', 'configService', 'Discussion', 'AssemblToolsService',
+  function($scope, $http, $routeParams, $log, $location, globalConfig, configTestingService, configService, Discussion, AssemblToolsService){
 
     // intialization code (constructor)
 
@@ -44,12 +44,7 @@ voteApp.controller('indexCtl',
       // check that an URL to POST the vote is provided in the configuration JSON
       if ( configService.user_votes_uri && configService.user_votes_uri != "null" )
       {
-        $scope.postVoteUrl = configService.user_votes_uri;
-        var start = "local:";
-        if ( $scope.postVoteUrl.indexOf(start) == 0 )
-        {
-          $scope.postVoteUrl = "/data/" + $scope.postVoteUrl.slice(start.length);
-        }
+        $scope.postVoteUrl = AssemblToolsService.resourceToUrl(configService.user_votes_uri);
         console.log("postVoteUrl:");
         console.log($scope.postVoteUrl);
       }
@@ -66,15 +61,27 @@ voteApp.controller('indexCtl',
     };
 
     $scope.computeMyVotes = function(){
-      $scope.myVotes = [];
+      // do not use .data("criterion-value") because jQuery does not seem to read the value set by d3
 
+      /**/
+      $scope.myVotes = [];
+      // /!\ once serialized by $.param(), this would give "undefined=10&undefined=0&undefined=22222&undefined=50"
       $("#d3_container g.criterion").each(function(index) {
-        // do not use .data("criterion-value") because jQuery does not seem to read the value set by d3
-        $scope.myVotes[index] = {
+        $scope.myVotes.push({
           'id': $(this).attr("data-criterion-id"),
           'value': $(this).attr("data-criterion-value")
-        };
+        });
       });
+      /**/
+
+      /*
+      $scope.myVotes = {};
+      // once serialized by $.param(), this will give "rentabilite=10&risque=0&investissement=22222&difficulte_mise_en_oeuvre=50"
+      $("#d3_container g.criterion").each(function(index) {
+        $scope.myVotes[$(this).attr("data-criterion-id")] = $(this).attr("data-criterion-value");
+      });
+      */
+      
 
       return $scope.myVotes;
     };
@@ -82,13 +89,18 @@ voteApp.controller('indexCtl',
     $scope.submitVote = function(){
       console.log("submitVote()");
       $scope.computeMyVotes();
+      console.log("myVotes:");
       console.log($scope.myVotes);
+      console.log("$.param($scope.myVotes):");
+      console.log($.param($scope.myVotes));
+
 
       // POST to postVoteUrl
       $http({
         method: "POST",
         url: $scope.postVoteUrl,
         data: $.param($scope.myVotes),
+        //data: $scope.myVotes // and to post pure JSON, we comment the next line
         headers: {'Content-Type': 'application/x-www-form-urlencoded'}
       }).success(function(data, status, headers){
         alert("success");

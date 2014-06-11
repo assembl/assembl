@@ -2,6 +2,18 @@
 
 var creativityServices = angular.module('creativityServices', ['ngResource']);
 
+creativityServices.service('AssemblToolsService', ['$window', '$rootScope', '$log', function ($window, $rootScope, $log) {
+  this.resourceToUrl = function(str)
+  {
+    var start = "local:";
+    if ( str.indexOf(start) == 0 )
+    {
+      str = "/data/" + str.slice(start.length);
+    }
+    return str;
+  };
+}]);
+
 
 creativityServices.factory('globalConfig', function($http){
 
