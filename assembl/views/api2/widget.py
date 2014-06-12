@@ -2,7 +2,8 @@ from simplejson import loads
 
 from pyramid.view import view_config
 from pyramid.security import authenticated_userid
-from pyramid.httpexceptions import HTTPOk, HTTPNoContent
+from pyramid.httpexceptions import (
+    HTTPOk, HTTPNoContent, HTTPNotFound)
 
 from assembl.auth import (
     P_READ, P_ADMIN_DISC, P_ADD_POST, Everyone)
@@ -10,12 +11,13 @@ from assembl.models import (
     Widget, User, Discussion, Idea, Criterion, IdeaCreatingWidget,
     MultiCriterionVotingWidget)
 from assembl.auth.util import get_permissions
-from ..traversal import InstanceContext
+from ..traversal import InstanceContext, CollectionContext
 from . import FORM_HEADER, JSON_HEADER, instance_put
 
 
 @view_config(context=InstanceContext, renderer='json', request_method='GET',
-             ctx_instance_class_with_exceptions=(Widget, (MultiCriterionVotingWidget,)),
+             ctx_instance_class_with_exceptions=(
+             Widget, (MultiCriterionVotingWidget,)),
              permission=P_READ, accept="application/json")
 def widget_view(request):
     ctx = request.context
@@ -199,3 +201,30 @@ def voting_widget_view(request):
         json['criteria'] = [idea.generic_json(view_def_name=view)
                             for idea in widget.criteria]
     return json
+
+
+@view_config(context=CollectionContext, request_method='POST',
+             ctx_named_collection="CriterionCollection.criteria",
+             permission=P_ADMIN_DISC, header=FORM_HEADER)
+def post_to_vote_criteria(request):
+    ctx = request.context
+    target_id = request.POST.get('id', None)
+    idea = None
+    if target_id:
+        idea = Idea.get_instance(target_id)
+    if not idea:
+        raise HTTPNotFound
+    widget = ctx.parent_instance
+    widget.add_criterion(idea)
+    return HTTPOk()  # Not sure this can be called a creation
+
+
+@view_config(context=CollectionContext, request_method='DELETE',
+             ctx_named_collection_instance="CriterionCollection.criteria",
+             permission=P_ADMIN_DISC)
+def delete_vote_criteria(request):
+    ctx = request.context
+    idea = ctx._instance
+    widget = ctx.__parent__.parent_instance
+    widget.remove_criterion(idea)
+    return HTTPOk()

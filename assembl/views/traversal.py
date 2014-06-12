@@ -335,18 +335,35 @@ class CollectionContext(object):
         return self.__parent__.find_collection(collection_class_name)
 
 
-class CollectionContextPredicate(object):
+class NamedCollectionContextPredicate(object):
     def __init__(self, val, config):
-        self.val = val.property
+        self.val = val
 
     def text(self):
-        return 'collection_context = %s' % (self.val,)
+        return 'collection_context_name = %s' % (self.val,)
 
     phash = text
 
     def __call__(self, context, request):
-        return isinstance(context, CollectionContext) and\
-            self.val == context.collection
+        print "***** ", context.collection.name()
+        return (isinstance(context, CollectionContext)
+                and self.val == context.collection.name())
+
+
+class NamedCollectionInstancePredicate(object):
+    def __init__(self, val, config):
+        self.val = val
+
+    def text(self):
+        return 'collection_instance_context_name = %s' % (self.val,)
+
+    phash = text
+
+    def __call__(self, context, request):
+        parent = context.__parent__
+        return (isinstance(context, InstanceContext)
+            and isinstance(parent, CollectionContext)
+            and self.val == parent.collection.name())
 
 
 class CollectionContextClassPredicate(object):
@@ -392,6 +409,9 @@ class AbstractCollectionDefinition(object):
 
     def get_default_view(self):
         pass
+
+    def name(self):
+        return self.__class__.__name__
 
     def __repr__(self):
         return "<%s %s -> %s>" % (
@@ -494,6 +514,9 @@ class CollectionDefinition(AbstractCollectionDefinition):
             raise KeyError("This instance does not live in this collection.")
         return instance
 
+    def name(self):
+        return ".".join((self.__class__.__name__, self.property.key))
+
     def __repr__(self):
         return "<%s %s -(%s/%s)-> %s>" % (
             self.__class__.__name__,
@@ -526,7 +549,10 @@ def includeme(config):
     config.add_view_predicate('ctx_instance_class', InstanceContextPredicate)
     config.add_view_predicate('ctx_instance_class_with_exceptions',
         InstanceContextPredicateWithExceptions)
-    config.add_view_predicate('ctx_collection', CollectionContextPredicate)
+    config.add_view_predicate('ctx_named_collection',
+        NamedCollectionContextPredicate)
+    config.add_view_predicate('ctx_named_collection_instance',
+        NamedCollectionInstancePredicate)
     config.add_view_predicate('ctx_collection_class',
                               CollectionContextClassPredicate,
-                              weighs_less_than='ctx_collection')
+                              weighs_less_than='ctx_named_collection')

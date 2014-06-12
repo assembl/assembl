@@ -335,6 +335,17 @@ class MultiCriterionVotingWidget(Widget):
             for criterion in self.criteria
         }
 
+    def add_criterion(self, idea):
+        if idea not in self.criteria:
+            self.criteria_links.append(VotingCriterionWidgetLink(
+                widget=self, idea=idea))
+
+    def remove_criterion(self, idea):
+        for link in self.criteria_links:
+            if link.idea == idea:
+                self.criteria_links.remove(link)
+                return
+
     @classmethod
     def extra_collections(cls):
         class CriterionCollection(CollectionDefinition):
@@ -364,11 +375,11 @@ class MultiCriterionVotingWidget(Widget):
                     if isinstance(inst, Idea):
                         assocs.append(VotingCriterionWidgetLink(idea=inst))
 
-        class TargetsCollection(AbstractCollectionDefinition):
+        class VoteTargetsCollection(AbstractCollectionDefinition):
             # The set of voting target ideas.
             # Fake: There is no DB link here.
             def __init__(self):
-                super(TargetsCollection, self).__init__(cls, Idea)
+                super(VoteTargetsCollection, self).__init__(cls, Idea)
 
             def decorate_query(self, query, last_alias, parent_instance, ctx):
                 return query.filter(
@@ -377,11 +388,11 @@ class MultiCriterionVotingWidget(Widget):
 
             def decorate_instance(
                     self, instance, parent_instance, assocs, user_id):
-                super(TargetsCollection, self).decorate_instance(
+                super(VoteTargetsCollection, self).decorate_instance(
                     instance, parent_instance, assocs, user_id)
                 for inst in assocs[:]:
                     if isinstance(inst, AbstractIdeaVote):
-                        import pdb; pdb.set_trace()
+                        #import pdb; pdb.set_trace()
                         # How do I get the idea?
                         assocs.append(VotedIdeaWidgetLink(widget=inst))
 
@@ -389,7 +400,7 @@ class MultiCriterionVotingWidget(Widget):
                 return isinstance(instance, Idea)
 
         return {'criteria': CriterionCollection(),
-                'targets': TargetsCollection()}
+                'targets': VoteTargetsCollection()}
 
 
 class WidgetUserConfig(DiscussionBoundBase):

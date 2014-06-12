@@ -130,6 +130,7 @@ def test_widget_state(
     assert result.status_code == 200
     assert result.json == state
 
+
 def test_widget_user_state(
         discussion, test_app, subidea_1, participant1_user, test_session):
     # Post the initial configuration
@@ -175,7 +176,7 @@ def test_widget_user_state(
     assert result.status_code == 200
     assert state in result.json
     # Alter the state
-    state.append({'local:Idea/30':3})
+    state.append({'local:Idea/30': 3})
     state_s = json.dumps(state)
     # Put the user state
     result = test_app.put(
@@ -187,6 +188,7 @@ def test_widget_user_state(
         headers={"Accept": "application/json"})
     assert result.status_code == 200
     assert result.json == state
+
 
 def test_widget_basic_interaction(
         discussion, test_app, subidea_1, subidea_1_1,
@@ -208,7 +210,7 @@ def test_widget_basic_interaction(
     widget_id = new_widget.id
     # There should be a link
     widget_link = Idea.db.query(BaseIdeaWidgetLink).filter_by(
-        idea_id = subidea_1.id, widget_id = widget_id).all()
+        idea_id=subidea_1.id, widget_id=widget_id).all()
     assert widget_link
     assert len(widget_link) == 1
     # Get the widget from the api
@@ -255,7 +257,7 @@ def test_widget_basic_interaction(
     assert idea_link
     # It should have a link to the widget
     widget_link = Idea.db.query(GeneratedIdeaWidgetLink).filter_by(
-        idea_id = new_idea1.id, widget_id = widget_id).all()
+        idea_id=new_idea1.id, widget_id=widget_id).all()
     assert widget_link
     assert len(widget_link) == 1
     # The new idea should now be in the collection api
@@ -376,7 +378,8 @@ def test_voting_widget(
     assert len(test.json) == 0
     # Add criteria
     for criterion in criteria:
-        res = test_app.post(criteria_url, {"id":criterion.uri()})
+        res = test_app.post(
+            criteria_url, {"id": criterion.uri()})
         # Which should it be? This is not creation but association.
         assert res.status_code in (200, 201)
     # Get them back
@@ -398,7 +401,7 @@ def test_voting_widget(
         test = test_app.post(voting_url, {
             "type": "LickertIdeaVote",
             "value": i,
-            })
+        })
         assert test.status_code == 201
     # Get them back
     test = test_app.get(user_votes_url)
