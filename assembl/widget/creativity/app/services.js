@@ -45,6 +45,8 @@ creativityServices.factory('DiscussionService', ['$resource', function($resource
 creativityServices.service('AssemblToolsService', ['$window', '$rootScope', '$log', function ($window, $rootScope, $log) {
   this.resourceToUrl = function(str)
   {
+    if ( !str )
+      return str;
     var start = "local:";
     if ( str.indexOf(start) == 0 )
     {

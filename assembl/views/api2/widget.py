@@ -51,7 +51,7 @@ def widget_instance_put(request):
 
 
 @view_config(context=InstanceContext, request_method='GET',
-             ctx_instance_class=Widget, permission=P_READ,
+             ctx_instance_class=Widget, permission=P_READ, # TODO @maparent: with permission=P_ADD_POST we had problems 
              accept="application/json", name="user_state",
              renderer='json')
 def widget_userstate_get(request):
@@ -60,7 +60,7 @@ def widget_userstate_get(request):
 
 
 @view_config(context=InstanceContext, request_method='PUT',
-             ctx_instance_class=Widget, permission=P_ADD_POST,
+             ctx_instance_class=Widget, permission=P_READ,
              header=JSON_HEADER, name="user_state")
 def widget_userstate_put(request):
     user_state = request.json_body
