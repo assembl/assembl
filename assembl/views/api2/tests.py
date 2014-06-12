@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import pytest
-import anyjson as json
+import simplejson as json
 
 from ...models import (
     Idea,
@@ -382,10 +382,23 @@ def test_voting_widget(
             criteria_url, {"id": criterion.uri()})
         # Which should it be? This is not creation but association.
         assert res.status_code in (200, 201)
-    # Get them back
+    Idea.db.flush()
+    # Get the widget again, it should now have voting_urls
+    widget_rep = test_app.get(
+        local_to_absolute(new_widget.uri()),
+        {'target': subidea_1_1.uri()},
+        headers={"Accept": "application/json"}
+    )
+    assert widget_rep.status_code == 200
+    widget_rep = widget_rep.json
+    voting_urls = widget_rep['voting_urls']
+    assert voting_urls
+    #assert widget_rep['criteria']
+    # The criteria should also be in the criteria url
     test = test_app.get(criteria_url)
     assert test.status_code == 200
     assert len(test.json) == 3
+    #assert test.json == widget_rep['criteria']
     # User votes should be empty
     user_votes_url = local_to_absolute(widget_rep['user_votes_url'])
     test = test_app.get(user_votes_url)

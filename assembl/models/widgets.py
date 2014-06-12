@@ -328,11 +328,11 @@ class MultiCriterionVotingWidget(Widget):
 
     def get_voting_urls(self, idea_id):
         return {
-            criterion.get_uri():
+            Idea.uri_generic(criterion_link.idea_id):
             'local:Discussion/%d/widgets/%d/criteria/%d/targets/%d/votes' % (
-                self.discussion_id, self.id, criterion.id,
+                self.discussion_id, self.id, criterion_link.idea_id,
                 Idea.get_database_id(idea_id))
-            for criterion in self.criteria
+            for criterion_link in self.criteria_links
         }
 
     def add_criterion(self, idea):
