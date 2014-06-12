@@ -237,6 +237,24 @@ class InstanceContextPredicate(object):
             isinstance(context._instance, self.val)
 
 
+class InstanceContextPredicateWithExceptions(object):
+    def __init__(self, val, config):
+        cls, cls_exceptions = val
+        self.val = cls
+        self.cls_exceptions = cls_exceptions
+
+    def text(self):
+        return 'instance_context = %s except %s' % (
+            self.val, repr(self.cls_exceptions))
+
+    phash = text
+
+    def __call__(self, context, request):
+        return isinstance(context, InstanceContext) and\
+            isinstance(context._instance, self.val) and\
+            not isinstance(context._instance, self.cls_exceptions)
+
+
 class CollectionContext(object):
     def __init__(self, parent, collection, instance):
         if isinstance(collection, InstrumentedAttribute):
@@ -506,6 +524,8 @@ def root_factory(request):
 def includeme(config):
     config.add_view_predicate('ctx_class', ClassContextPredicate)
     config.add_view_predicate('ctx_instance_class', InstanceContextPredicate)
+    config.add_view_predicate('ctx_instance_class_with_exceptions',
+        InstanceContextPredicateWithExceptions)
     config.add_view_predicate('ctx_collection', CollectionContextPredicate)
     config.add_view_predicate('ctx_collection_class',
                               CollectionContextClassPredicate,

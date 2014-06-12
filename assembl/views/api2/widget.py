@@ -7,16 +7,17 @@ from pyramid.httpexceptions import HTTPOk, HTTPNoContent
 from assembl.auth import (
     P_READ, P_ADMIN_DISC, P_ADD_POST, Everyone)
 from assembl.models import (
-    Widget, User, Discussion, Idea, Criterion, IdeaCreatingWidget)
+    Widget, User, Discussion, Idea, Criterion, IdeaCreatingWidget,
+    MultiCriterionVotingWidget)
 from assembl.auth.util import get_permissions
 from ..traversal import InstanceContext
 from . import FORM_HEADER, JSON_HEADER, instance_put
 
 
 @view_config(context=InstanceContext, renderer='json', request_method='GET',
-             ctx_instance_class=Widget, permission=P_READ,
-             accept="application/json")
-def collection_view(request):
+             ctx_instance_class_with_exceptions=(Widget, (MultiCriterionVotingWidget,)),
+             permission=P_READ, accept="application/json")
+def widget_view(request):
     ctx = request.context
     view = (request.matchdict or {}).get('view', None)\
         or ctx.get_default_view() or 'default'
@@ -169,3 +170,32 @@ def get_idea_vote_results(request):
     renderer="json", name="user_states")
 def get_all_users_states(request):
     return request.context._instance.get_all_user_states()
+
+
+@view_config(context=InstanceContext, renderer='json', request_method='GET',
+             ctx_instance_class=MultiCriterionVotingWidget, permission=P_READ,
+             accept="application/json")
+def voting_widget_view(request):
+    ctx = request.context
+    view = (request.matchdict or {}).get('view', None)\
+        or ctx.get_default_view() or 'default'
+    widget = ctx._instance
+    json = widget.generic_json(view)
+    user_id = authenticated_userid(request) or Everyone
+    if user_id != Everyone:
+        user = User.get(id=user_id)
+        #json['discussion'] = ...
+        json['user'] = user.generic_json(view_def_name=view)
+        json['user_permissions'] = get_permissions(
+            user_id, widget.get_discussion_id())
+        user_state = widget.get_user_state(user_id)
+        if user_state is not None:
+            json['user_state'] = user_state
+        target_id = request.GET.get('target', None)
+        if target_id and Idea.get_database_id(target_id):
+            json['user_votes_url'] = widget.get_user_votes_url(target_id)
+            json['vote_results_url'] = widget.get_vote_results_url(target_id)
+            json['voting_urls'] = widget.get_voting_urls(target_id)
+        json['criteria'] = [idea.generic_json(view_def_name=view)
+                            for idea in widget.criteria]
+    return json

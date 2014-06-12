@@ -15,9 +15,11 @@ from .synthesis import (
     IdeaContentWidgetLink, IdeaLink)
 from .generic import Content
 from .post import IdeaProposalPost
+from .votes import AbstractIdeaVote
 from ..auth import P_ADD_POST, P_ADMIN_DISC, Everyone, CrudPermissions
 from .auth import User
-from ..views.traversal import CollectionDefinition
+from ..views.traversal import (
+    CollectionDefinition, AbstractCollectionDefinition)
 from ..semantic.virtuoso_mapping import QuadMapPatternS
 from ..semantic.namespaces import (ASSEMBL, QUADNAMES)
 
@@ -311,33 +313,83 @@ class MultiCriterionVotingWidget(Widget):
         'polymorphic_identity': 'multicriterion_voting_widget',
     }
 
-    def get_criteria_url(self):
-        idea_uri = self.settings_json.get('idea', None)
-        if idea_uri:
-            return 'local:Idea/%d/criteria' % (
-                Idea.get_database_id(idea_uri),)
-
-    def get_user_votes_url(self):
-        idea_uri = self.settings_json.get('idea', None)
-        if idea_uri:
-            return 'local:Idea/%d/votes' % (
-                Idea.get_database_id(idea_uri),)
-
-    def get_vote_results_url(self):
-        idea_uri = self.settings_json.get('idea', None)
-        if idea_uri:
-            return 'local:Idea/%d/vote_results' % (
-                Idea.get_database_id(idea_uri),)
-
     @property
-    def base_idea_id(self):
-        return self.settings_json.get('idea', None)
+    def criteria_url(self):
+        return 'local:Discussion/%d/widgets/%d/criteria' % (
+            self.discussion_id, self.id)
 
-    @property
-    def base_idea(self):
-        idea_id = self.base_idea_id
-        if idea_id:
-            return Idea.get_instance(idea_id)
+    def get_user_votes_url(self, idea_id):
+        return 'local:Discussion/%d/widgets/%d/targets/%d/votes' % (
+            self.discussion_id, self.id, Idea.get_database_id(idea_id))
+
+    def get_vote_results_url(self, idea_id):
+        return 'local:Discussion/%d/widgets/%d/targets/%d/votes/results' % (
+            self.discussion_id, self.id, Idea.get_database_id(idea_id))
+
+    def get_voting_urls(self, idea_id):
+        return {
+            criterion.get_uri():
+            'local:Discussion/%d/widgets/%d/criteria/%d/targets/%d/votes' % (
+                self.discussion_id, self.id, criterion.id,
+                Idea.get_database_id(idea_id))
+            for criterion in self.criteria
+        }
+
+    @classmethod
+    def extra_collections(cls):
+        class CriterionCollection(CollectionDefinition):
+            # The set of voting criterion ideas.
+            # Not to be confused with http://www.criterion.com/
+            def __init__(self):
+                super(CriterionCollection, self).__init__(
+                    cls, cls.criteria)
+
+            def decorate_query(self, query, last_alias, parent_instance, ctx):
+                widget = self.owner_alias
+                idea = last_alias
+                criterion_link = aliased(VotingCriterionWidgetLink)
+                return query.join(
+                    criterion_link,
+                    idea.id == criterion_link.idea_id
+                ).join(widget).filter(
+                    widget.id == parent_instance.id
+                ).filter(widget.idea_links.of_type(
+                    VotingCriterionWidgetLink))
+
+            def decorate_instance(
+                    self, instance, parent_instance, assocs, user_id):
+                super(CriterionCollection, self).decorate_instance(
+                    instance, parent_instance, assocs, user_id)
+                for inst in assocs[:]:
+                    if isinstance(inst, Idea):
+                        assocs.append(VotingCriterionWidgetLink(idea=inst))
+
+        class TargetsCollection(AbstractCollectionDefinition):
+            # The set of voting target ideas.
+            # Fake: There is no DB link here.
+            def __init__(self):
+                super(TargetsCollection, self).__init__(cls, Idea)
+
+            def decorate_query(self, query, last_alias, parent_instance, ctx):
+                return query.filter(
+                    last_alias.discussion_id == parent_instance.discussion_id
+                ).filter(last_alias.hidden==False)
+
+            def decorate_instance(
+                    self, instance, parent_instance, assocs, user_id):
+                super(TargetsCollection, self).decorate_instance(
+                    instance, parent_instance, assocs, user_id)
+                for inst in assocs[:]:
+                    if isinstance(inst, AbstractIdeaVote):
+                        import pdb; pdb.set_trace()
+                        # How do I get the idea?
+                        assocs.append(VotedIdeaWidgetLink(widget=inst))
+
+            def contains(self, parent_instance, instance):
+                return isinstance(instance, Idea)
+
+        return {'criteria': CriterionCollection(),
+                'targets': TargetsCollection()}
 
 
 class WidgetUserConfig(DiscussionBoundBase):
@@ -452,10 +504,44 @@ IdeaCreatingWidget.generated_ideas = relationship(
     secondaryjoin=IdeaWidgetLink.idea)
 
 
-class VoteableIdeaWidgetLink(IdeaWidgetLink):
+class VotableIdeaWidgetLink(IdeaWidgetLink):
     __mapper_args__ = {
-        'polymorphic_identity': 'voteable_idea_widget_link',
+        'polymorphic_identity': 'votable_idea_widget_link',
     }
 
-MultiCriterionVotingWidget.votabele_idea_links = relationship(
-    VoteableIdeaWidgetLink)
+MultiCriterionVotingWidget.votable_idea_links = relationship(
+    VotableIdeaWidgetLink)
+
+MultiCriterionVotingWidget.votable_ideas = relationship(
+    Idea, secondary=inspect(IdeaWidgetLink).local_table, viewonly=True,
+    primaryjoin=Widget.idea_links.of_type(VotableIdeaWidgetLink),
+    secondaryjoin=IdeaWidgetLink.idea)
+
+
+class VotedIdeaWidgetLink(IdeaWidgetLink):
+    __mapper_args__ = {
+        'polymorphic_identity': 'voted_idea_widget_link',
+    }
+
+MultiCriterionVotingWidget.voted_idea_links = relationship(
+    VotedIdeaWidgetLink)
+
+MultiCriterionVotingWidget.voted_ideas = relationship(
+    Idea, secondary=inspect(IdeaWidgetLink).local_table, viewonly=True,
+    primaryjoin=Widget.idea_links.of_type(VotedIdeaWidgetLink),
+    secondaryjoin=IdeaWidgetLink.idea)
+
+
+class VotingCriterionWidgetLink(IdeaWidgetLink):
+    __mapper_args__ = {
+        'polymorphic_identity': 'criterion_widget_link',
+    }
+
+MultiCriterionVotingWidget.criteria_links = relationship(
+    VotingCriterionWidgetLink)
+
+MultiCriterionVotingWidget.criteria = relationship(
+    Idea,  # Criterion
+    secondary=inspect(IdeaWidgetLink).local_table, viewonly=True,
+    primaryjoin=Widget.idea_links.of_type(VotingCriterionWidgetLink),
+    secondaryjoin=IdeaWidgetLink.idea)

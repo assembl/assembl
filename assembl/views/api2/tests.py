@@ -348,6 +348,7 @@ def test_voting_widget(
         criterion_3, participant1_user, lickert_range, test_session):
     # Post the initial configuration
     db = Idea.db()
+    criteria = (criterion_1, criterion_2, criterion_3)
     new_widget_loc = test_app.post(
         '/data/Discussion/%d/widgets' % (discussion.id,), {
             'type': 'MultiCriterionVotingWidget',
@@ -363,36 +364,53 @@ def test_voting_widget(
     # Get the widget from the api
     widget_rep = test_app.get(
         local_to_absolute(new_widget.uri()),
+        {'target': subidea_1_1.uri()},
         headers={"Accept": "application/json"}
     )
     assert widget_rep.status_code == 200
     widget_rep = widget_rep.json
-    # Get the list of criteria (there should be 3)
-    criteria_uri = local_to_absolute(widget_rep['criteria_uri'])
-    test = test_app.get(criteria_uri)
-    assert test.status_code == 200
-    assert len(test.json) == 3
-    # Get the voting endpoint
-    user_votes_uri = local_to_absolute(widget_rep['user_votes_uri'])
-    # It should be empty
-    test = test_app.get(user_votes_uri)
+    # Get the list of criteria (It should be empty)
+    criteria_url = local_to_absolute(widget_rep['criteria_url'])
+    test = test_app.get(criteria_url)
     assert test.status_code == 200
     assert len(test.json) == 0
-    # Add votes to the voting endpoint
-    # TODO: Put lickert_range id in voter config. Or create one?
-    test = test_app.post(user_votes_uri, {
-        "type": "LickertIdeaVote",
-        "value": 2,
-        })
-    assert test.status_code == 201
+    # Add criteria
+    for criterion in criteria:
+        res = test_app.post(criteria_url, {"id":criterion.uri()})
+        # Which should it be? This is not creation but association.
+        assert res.status_code in (200, 201)
     # Get them back
-    test = test_app.get(user_votes_uri)
+    test = test_app.get(criteria_url)
     assert test.status_code == 200
-    assert len(test.json) == 1
+    assert len(test.json) == 3
+    # User votes should be empty
+    user_votes_url = local_to_absolute(widget_rep['user_votes_url'])
+    test = test_app.get(user_votes_url)
+    assert test.status_code == 200
+    assert len(test.json) == 0
+    # Get the voting endpoint for each criterion, and post a vote
+    voting_urls = widget_rep['voting_urls']
+    for i, criterion in enumerate(criteria):
+        key = criterion.uri()
+        assert key in voting_urls
+        voting_url = local_to_absolute(voting_urls[key])
+        # TODO: Put lickert_range id in voter config. Or create one?
+        test = test_app.post(voting_url, {
+            "type": "LickertIdeaVote",
+            "value": i,
+            })
+        assert test.status_code == 201
+    # Get them back
+    test = test_app.get(user_votes_url)
+    assert test.status_code == 200
+    assert len(test.json) == 3
     # Add votes for another user
     # TODO
     # Get vote results.
-    vote_results_uri = local_to_absolute(widget_rep['vote_results_uri'])
-    test = test_app.get(vote_results_uri)
+    vote_results_url = local_to_absolute(widget_rep['vote_results_url'])
+    test = test_app.get(vote_results_url)
     assert test.status_code == 200
-    assert test.json == 2
+    for i, criterion in enumerate(criteria):
+        key = criterion.uri()
+        assert key in vote_results_url
+        assert vote_results_url[key] == i

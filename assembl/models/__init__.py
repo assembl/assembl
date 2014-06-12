@@ -132,7 +132,8 @@ from .widgets import (
     IdeaCreatingWidget,
     IdeaWidgetLink,
     MultiCriterionVotingWidget,
-    VoteableIdeaWidgetLink,
+    VotableIdeaWidgetLink,
+    VotingCriterionWidgetLink,
     Widget,
     WidgetUserConfig,
 )
