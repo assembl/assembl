@@ -249,7 +249,9 @@ class IdeaCreatingWidget(BaseIdeaWidget):
                 base_idea_link = aliased(BaseIdeaWidgetLink)
                 query = query.join(
                     base_idea_link,
-                    idea.id == base_idea_link.idea_id)
+                    idea.id == base_idea_link.idea_id).filter(
+                        widget.idea_links.of_type(BaseIdeaWidgetLink))
+
                 children_ctx = ctx.find_collection(
                     'ChildIdeaCollectionDefinition')
                 if children_ctx:
@@ -257,7 +259,8 @@ class IdeaCreatingWidget(BaseIdeaWidget):
                     query = query.join(
                         gen_idea_link,
                         (gen_idea_link.idea_id == children_ctx.collection_class_alias.id))
-                query = query.join(widget).filter(widget.id == parent_instance.id)
+                query = query.join(widget).filter(
+                    widget.id == parent_instance.id)
 
                 return query
 
