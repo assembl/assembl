@@ -2,7 +2,8 @@ from simplejson import loads
 
 from pyramid.view import view_config
 from pyramid.security import authenticated_userid
-from pyramid.httpexceptions import HTTPOk, HTTPNoContent
+from pyramid.httpexceptions import (
+    HTTPOk, HTTPNoContent, HTTPUnauthorized)
 
 from assembl.auth import (
     P_READ, P_ADMIN_DISC, P_ADD_POST, Everyone)
@@ -31,6 +32,10 @@ def collection_view(request):
         user_state = ctx._instance.get_user_state(user_id)
         if user_state is not None:
             json['user_state'] = user_state
+        target_id = request.GET.get('target', None)
+        if target_id:
+            idea = Idea.get_instance(target_id):
+            json['target_id'] = idea.generic_json(view_def_name=view)
     return json
 
 
@@ -56,6 +61,8 @@ def widget_instance_put(request):
              renderer='json')
 def widget_userstate_get(request):
     user_id = authenticated_userid(request)
+    if user_id == Everyone:
+        raise HTTPUnauthorized()
     return request.context._instance.get_user_state(user_id)
 
 
@@ -66,6 +73,8 @@ def widget_userstate_put(request):
     user_state = request.json_body
     if user_state:
         user_id = authenticated_userid(request)
+        if user_id == Everyone:
+            raise HTTPUnauthorized()
         request.context._instance.set_user_state(
             user_state, user_id)
     return HTTPOk()  # HTTPNoContent() according to Mozilla
