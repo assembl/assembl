@@ -39,8 +39,6 @@ def main():
         vname = names[0]
     assert exists(join(vroot_var, 'lib', vname, 'vsp')),\
         "Cannot identify the VSP directory"
-    assert exists(join(vroot, 'lib', vname, 'hosting')),\
-        "Cannot identify the Virtuoso hosting directory"
     vars = {
         'VIRTUOSO_SERVER_PORT': config.getint('virtuoso', 'http_port'),
         'VIRTUOSO_HOSTNAME': config.get('app:main', 'public_hostname'),
