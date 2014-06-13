@@ -134,7 +134,7 @@ angular.element(document).ready(function (){
             WidgetConfigServiceProvider.config(configData);
             // save (or override) the "origin" URL parameter into the config
             // this parameter is meant to contain the identifier of the idea associated to the clicked "inspire me" button
-            var origin = getUrlVariableValue("origin");
+            var origin = decodeURIComponent(getUrlVariableValue("origin"));
             if ( origin != null || !WidgetConfigServiceProvider.origin )
             {
                 WidgetConfigServiceProvider.config({"origin": origin});

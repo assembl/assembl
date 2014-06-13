@@ -51,8 +51,10 @@ voteApp.controller('indexCtl',
       else
       {
         // TODO: better error
-        alert("Error: The configuration JSON does not contain a \"user_votes_uri\" property.");
-        return;
+        // temporary disabled
+        //alert("Error: The configuration JSON does not contain a \"user_votes_uri\" property.");
+        //return;
+        $scope.postVoteUrl = '';
       }
       
 
