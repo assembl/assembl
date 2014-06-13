@@ -20,13 +20,13 @@ from . import FORM_HEADER, JSON_HEADER, instance_put
              Widget, (MultiCriterionVotingWidget,)),
              permission=P_READ, accept="application/json")
 def widget_view(request):
+    user_id = authenticated_userid(request)
     if user_id == Everyone:
         return HTTPUnauthorized()
     ctx = request.context
     view = (request.matchdict or {}).get('view', None)\
         or ctx.get_default_view() or 'default'
     json = ctx._instance.generic_json(view)
-    user_id = authenticated_userid(request) or Everyone
     user = User.get(id=user_id)
     #json['discussion'] = ...
     json['user'] = user.generic_json(view_def_name=view)
@@ -188,6 +188,7 @@ def get_all_users_states(request):
              ctx_instance_class=MultiCriterionVotingWidget, permission=P_READ,
              accept="application/json")
 def voting_widget_view(request):
+    user_id = authenticated_userid(request)
     if user_id == Everyone:
         return HTTPUnauthorized()
     ctx = request.context
@@ -195,7 +196,6 @@ def voting_widget_view(request):
         or ctx.get_default_view() or 'default'
     widget = ctx._instance
     json = widget.generic_json(view)
-    user_id = authenticated_userid(request) or Everyone
     user = User.get(id=user_id)
     #json['discussion'] = ...
     json['user'] = user.generic_json(view_def_name=view)
