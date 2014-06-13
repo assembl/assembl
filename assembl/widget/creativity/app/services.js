@@ -2,7 +2,6 @@
 
 var widgetServices = angular.module('creativityServices', ['ngResource']);
 
-
 widgetServices.factory('localConfig', function($http){
 
     var api_rest = 'config/local.json';
@@ -28,25 +27,27 @@ widgetServices.factory('cardGameService', function($http){
 });
 
 /**
- *
+ * ???
  * */
-
-widgetServices.factory('configService', function($q, $http){
+widgetServices.factory('configService', function($q, $http, utils){
     return {
       data: {},
       getWidget: function(url){
         var defer = $q.defer(),
             data = this.data;
 
-        if(!url) defer.reject('no valid url');
+        if(!url) defer.reject({message:'invalid url configuration'});
 
         var urlRoot = "/data/"+url.split(':')[1];
 
         $http.get(urlRoot).success(function(response){
             data.widget = response;
             defer.resolve(data);
-        }).error(function(){
-            defer.reject('error to get widget information');
+        }).error(function(data, status, headers, config){
+
+            if(status === 401) utils.notification();
+
+            defer.reject({message:'error to get widget information'});
         });
 
         return defer.promise;

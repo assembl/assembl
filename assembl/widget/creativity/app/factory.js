@@ -1,6 +1,6 @@
 "use strict";
 
-creativityApp.factory('utils', function($translate){
+creativityApp.factory('utils', function($translate, $rootScope, $timeout, $window){
 
     var fn = {};
 
@@ -20,6 +20,29 @@ creativityApp.factory('utils', function($translate){
             api = '/data/'+api;
 
         return api;
+    }
+
+
+    fn.notification = function(){
+
+        $('#myModal').modal({
+            keyboard:false
+        });
+
+        $rootScope.counter = 5;
+        $rootScope.countdown = function() {
+            $timeout(function() {
+                $rootScope.counter--;
+                $rootScope.countdown();
+            }, 1000);
+        }
+
+        $rootScope.countdown();
+
+        $timeout(function(){
+            $window.location = '/login';
+            $timeout.flush();
+        }, 5000);
     }
 
     return fn;

@@ -791,14 +791,6 @@ creativityApp.controller('ratingCtl',
 
     }
 
-    /**
-     * Toggle on checkbox
-     * */
-    $scope.isChecked = function(){
-        var rootUrlSubIdea = utils.urlApi($rootScope.widgetConfig.confirm_ideas_uri),
-            rootUrlMessage = utils.urlApi($rootScope.widgetConfig.confirm_messages_uri);
-
-    }
 
 }]);
 

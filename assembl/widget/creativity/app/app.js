@@ -3,41 +3,6 @@
 var creativityApp = angular.module('creativityApp',
     ['ngRoute','ngSanitize','creativityServices', 'pascalprecht.translate','angular-growl']);
 
-creativityApp.run(['$rootScope','$timeout','$window',
-    function ($rootScope, $timeout, $window) {
-
-    $rootScope.counter = 5;
-    $rootScope.countdown = function() {
-        $timeout(function() {
-            $rootScope.counter--;
-            $rootScope.countdown();
-        }, 1000);
-    };
-
-    /**
-     * Check that the user is logged in
-     * */
-    /*if(!WidgetConfigService.user){
-        $('#myModal').modal({
-            keyboard:false
-        });
-
-        $rootScope.countdown();
-
-        $timeout(function(){
-          $window.location = '/login';
-          $timeout.flush();
-        }, 5000);
-    } */
-
-    //$rootScope.widgetConfig = WidgetConfigService;
-
-}]).run(['JukeTubeVideosService', function (JukeTubeVideosService) {
-
-    JukeTubeVideosService.init();
-
-}]);
-
 creativityApp.config(['$routeProvider','$translateProvider','$locationProvider','growlProvider',
     function($routeProvider, $translateProvider, $locationProvider, growlProvider){
 
@@ -50,12 +15,7 @@ creativityApp.config(['$routeProvider','$translateProvider','$locationProvider',
            resolve: {
               app: function($route, configService) {
                 return configService.getWidget($route.current.params.config);
-              },
-              user: function(configService){
-
-
               }
-
             }
         }).
         when('/videos', {
@@ -64,6 +24,9 @@ creativityApp.config(['$routeProvider','$translateProvider','$locationProvider',
             resolve: {
               app: function($route, configService) {
                 return configService.getWidget($route.current.params.config);
+              },
+              init: function(JukeTubeVideosService){
+                  JukeTubeVideosService.init();
               }
             }
         }).

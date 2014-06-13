@@ -125,7 +125,7 @@ creativityApp.directive('comments', function($http, $rootScope, utils){
            idea:'=idea'
         },
         templateUrl: 'app/partials/comments.html',
-        link: function($scope){
+        link: function($scope, element){
 
             $scope.formData = {};
             $scope.comments = [];
@@ -232,6 +232,16 @@ creativityApp.directive('comments', function($http, $rootScope, utils){
              * */
             $scope.getCommentsFromSubIdea();
 
+            element.bind('keydown keypress', function(event){
+
+                if(event.which === 13) {
+
+                    //$scope.commentSubIdea()
+
+                    event.preventDefault();
+                }
+
+            });
         }
     }
 })
