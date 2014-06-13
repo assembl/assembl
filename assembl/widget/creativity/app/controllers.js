@@ -426,7 +426,7 @@ creativityApp.controller('videosCtl',
 }]);
 
 creativityApp.controller('cardsCtl',
-    ['$scope','$http','$sce','localConfig','sendIdeaService','$location', function($scope, $http, $sce, localConfig, sendIdeaService){
+    ['$scope','$http','$sce','cardGameService','sendIdeaService','$location', function($scope, $http, $sce, cardGameService, sendIdeaService){
 
     // activate the right tab
     $("ul.nav li").removeClass("active");
@@ -438,13 +438,12 @@ creativityApp.controller('cardsCtl',
     $scope.displayed_cards = [];
     $scope.displayed_card_index = 0;
 
-    //data mock
-    localConfig.fetch().success(function(data){
-        $scope.cards = data.card_game[0]; // we get only the first deck of cards
+    cardGameService.getCards(1).success(function(data){
+        $scope.cards = data.game;
         $scope.shuffle();
     });
 
-    // show previous and next card buttons when the mouse cursor is in the card zone
+        // show previous and next card buttons when the mouse cursor is in the card zone
     $("#cards-container").hover(
       function(){
         $("#previousCardButton").show();
@@ -465,7 +464,7 @@ creativityApp.controller('cardsCtl',
             var random_index = Math.floor((Math.random()*n_cards));
             $scope.displayed_cards.push($scope.cards[random_index]);
             $scope.displayed_card_index = $scope.displayed_cards.length-1;
-            $scope.displayed_cards[$scope.displayed_card_index].html_content = $sce.trustAsHtml($scope.cards[random_index].html_content);
+            $scope.displayed_cards[$scope.displayed_card_index].body = $sce.trustAsHtml($scope.cards[random_index].body);
             $scope.cards.splice(random_index,1);
         }
     }
