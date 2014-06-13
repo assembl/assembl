@@ -5,8 +5,8 @@ from collections import defaultdict
 import traceback
 from abc import ABCMeta, abstractmethod
 import HTMLParser
-
 from datetime import datetime
+
 import anyjson as json
 from sqlalchemy.orm import (
     relationship, backref, aliased, contains_eager, deferred)

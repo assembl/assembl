@@ -1,12 +1,13 @@
 from abc import abstractproperty
+from datetime import datetime
 
 from sqlalchemy import (
-    Column, Integer, ForeignKey, Boolean, String, Float)
+    Column, Integer, ForeignKey, Boolean, String, Float, DateTime)
 from sqlalchemy.orm import relationship
 
 from . import (Base, DiscussionBoundBase, Idea, User)
 from ..semantic.virtuoso_mapping import QuadMapPatternS
-from ..semantic.namespaces import (VOTE, ASSEMBL)
+from ..semantic.namespaces import (VOTE, ASSEMBL, DCTERMS)
 
 
 class AbstractIdeaVote(DiscussionBoundBase):
@@ -32,7 +33,7 @@ class AbstractIdeaVote(DiscussionBoundBase):
     idea = relationship(
         Idea,
         primaryjoin="and_(Idea.id==AbstractIdeaVote.idea_id, "
-                         "Idea.is_tombstone==False)",
+                    "Idea.is_tombstone==False)",
         backref="votes")
 
     criterion_id = Column(
@@ -44,8 +45,13 @@ class AbstractIdeaVote(DiscussionBoundBase):
     criterion = relationship(
         Idea,
         primaryjoin="and_(Idea.id==AbstractIdeaVote.criterion_id, "
-                         "Idea.is_tombstone==False)",
+                    "Idea.is_tombstone==False)",
         backref="votes_using_this_criterion")
+
+    vote_date = Column(DateTime, default=datetime.utcnow,
+                       info={'rdf': QuadMapPatternS(None, DCTERMS.created)})
+
+    is_tombstone = Column(Boolean, server_default='0')
 
     voter_id = Column(
         Integer,
@@ -118,14 +124,14 @@ class LickertIdeaVote(AbstractIdeaVote):
         Float, nullable=False,
         info={'rdf': QuadMapPatternS(None, VOTE.lickert_value)})
 
-
     def __init__(self, **kwargs):
         if not ('lickert_range' in kwargs or 'range_id' in kwargs):
             kwargs['lickert_range'] = LickertRange.get_range()
         if 'value' in kwargs:
             # make sure lickert comes first
             if 'range_id' in kwargs:
-                self.lickert_range = LickertRange.get_instance(kwargs['range_id'])
+                self.lickert_range = LickertRange.get_instance(
+                    kwargs['range_id'])
             elif 'lickert_range' in kwargs:
                 self.lickert_range = kwargs['lickert_range']
         super(LickertIdeaVote, self).__init__(**kwargs)
