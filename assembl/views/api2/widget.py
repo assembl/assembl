@@ -35,7 +35,7 @@ def collection_view(request):
         target_id = request.GET.get('target', None)
         if target_id:
             idea = Idea.get_instance(target_id)
-            json['target_id'] = idea.generic_json(view_def_name=view)
+            json['target'] = idea.generic_json(view_def_name=view)
     return json
 
 
