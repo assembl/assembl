@@ -358,28 +358,70 @@ creativityApp.controller('videosCtl',
     So then in Assembl's Messages panel, it will be possible to find that a given message ("idea") has been inspired by a given item (video or card)
     */
     $scope.associateVideoToIdea = function(idea_id, video_url, video_title){
-      // TODO: first, get the content of user_state_url, then add our item to it, and then only we can PUT to the endpoint (because otherwise previous information will be lost)
-      var obj = {
-        "idea_id": idea_id,
-        "inspiration_type": "video",
-        "inspiration_url": video_url
+
+      // declare a function which adds an item to the initial_data JSON (previously received by a GET from the `user_state_url` API endpoint), and PUTs it back to the endpoint
+      var addData = function(initial_data, original_idea, idea_id, video_url, video_title)
+      {
+        console.log("associateVideoToIdea()::addData()");
+        if ( !initial_data || !initial_data["inspire_me_posts_by_original_idea"] )
+        {
+          initial_data = {
+            "inspire_me_posts_by_original_idea": {}
+          };
+        }
+
+
+        var obj = {
+          "idea_id": idea_id,
+          "inspiration_type": "video",
+          "inspiration_url": video_url
+        };
+
+        if ( video_title )
+          obj["video_title"] = video_title;
+
+        if ( !initial_data["inspire_me_posts_by_original_idea"][original_idea] )
+        {
+          initial_data["inspire_me_posts_by_original_idea"][original_idea] = [];
+        }
+
+        initial_data["inspire_me_posts_by_original_idea"][original_idea].push(obj);
+
+        // user_state_url accepts only GET and PUT actions, and accepts only headers: {'Content-Type': 'application/json'}
+        $http({
+            method: 'PUT',
+            url: AssemblToolsService.resourceToUrl(WidgetConfigService.user_state_url),
+            data: initial_data,
+            async: true,
+            headers: {'Content-Type': 'application/json'}
+        }).success(function(data, status, headers){
+            console.log("PUT success");
+        }).error(function(status, headers){
+            console.log("PUT error");
+        });
       };
 
-      if ( video_title )
-        obj["video_title"] = video_title;
 
-      // user_state_url accepts only GET and PUT actions, and accepts only headers: {'Content-Type': 'application/json'}
+      // first, get the content of user_state_url, then add our item to it, and then only we can PUT to the endpoint (because otherwise previous information will be lost)
+
       $http({
-          method: 'PUT',
+          method: 'GET',
           url: AssemblToolsService.resourceToUrl(WidgetConfigService.user_state_url),
-          data: obj,
+          //data: obj,
           async: true,
           headers: {'Content-Type': 'application/json'}
       }).success(function(data, status, headers){
-          console.log("success");
+          console.log("GET success");
+          console.log("data:");
+          console.log(data);
+          addData(data, $scope.idea["@id"], idea_id, video_url, video_title);
       }).error(function(status, headers){
-          console.log("error");
+          console.log("GET error");
       });
+
+
+      
+
     };
 }]);
 
