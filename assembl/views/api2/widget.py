@@ -20,7 +20,7 @@ from . import FORM_HEADER, JSON_HEADER, instance_put
              Widget, (MultiCriterionVotingWidget,)),
              permission=P_READ, accept="application/json")
 def widget_view(request):
-    user_id = authenticated_userid(request)
+    user_id = authenticated_userid(request) or Everyone
     if user_id == Everyone:
         return HTTPUnauthorized()
     ctx = request.context
@@ -63,7 +63,7 @@ def widget_instance_put(request):
              accept="application/json", name="user_state",
              renderer='json')
 def widget_userstate_get(request):
-    user_id = authenticated_userid(request)
+    user_id = authenticated_userid(request) or Everyone
     if user_id == Everyone:
         raise HTTPUnauthorized()
     return request.context._instance.get_user_state(user_id)
@@ -76,7 +76,7 @@ def widget_userstate_get(request):
 def widget_userstate_put(request):
     user_state = request.json_body
     if user_state:
-        user_id = authenticated_userid(request)
+        user_id = authenticated_userid(request) or Everyone
         if user_id == Everyone:
             raise HTTPUnauthorized()
         request.context._instance.set_user_state(
@@ -188,7 +188,7 @@ def get_all_users_states(request):
              ctx_instance_class=MultiCriterionVotingWidget, permission=P_READ,
              accept="application/json")
 def voting_widget_view(request):
-    user_id = authenticated_userid(request)
+    user_id = authenticated_userid(request) or Everyone
     if user_id == Everyone:
         return HTTPUnauthorized()
     ctx = request.context
