@@ -28,7 +28,22 @@ This URL is the configuration parameter which you can now give when you access t
 So an example of widget URL is http://localhost:6543/widget/creativity/?config=http://localhost:6543/data/Widget/22#/
 
 
+Videos section
+==============
 
+When the user clicks the "Inspire me" button on an idea in Assembl, selects a video and writes an idea (inspired by the video), it posts a message to Assembl's discussion associated to original idea. The information about the inspiring video for this message is stored in the `user_state_url` endpoint of the widget instance. So the content of a `user_state_url` JSON could be:
+
+{
+    "inspire_me_posts_by_original_idea": {
+        "local:Idea/2": [
+            {
+                "idea_id": "local:Idea/3",
+                "inspiration_type": "video",
+                "inspiration_url": "http://www.youtube.com/watch?v=aaa"
+            }
+        ]
+    }
+}
 
 
 

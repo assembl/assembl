@@ -132,6 +132,13 @@ angular.element(document).ready(function (){
         creativityApp.config(['WidgetConfigServiceProvider', function (WidgetConfigServiceProvider) {
             console.log("WidgetConfigServiceProvider config()");
             WidgetConfigServiceProvider.config(configData);
+            // save (or override) the "origin" URL parameter into the config
+            // this parameter is meant to contain the identifier of the idea associated to the clicked "inspire me" button
+            var origin = getUrlVariableValue("origin");
+            if ( origin != null || !WidgetConfigServiceProvider.origin )
+            {
+                WidgetConfigServiceProvider.config({"origin": origin});
+            }
         }]);
         angular.bootstrap('#creativityApp', ['creativityApp']);
     };
