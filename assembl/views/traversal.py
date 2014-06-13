@@ -307,7 +307,7 @@ class CollectionContext(object):
 
     def decorate_instance(self, instance, assocs, user_id):
         self.collection.decorate_instance(
-            instance, self.parent_instance, assocs, user_id)
+            instance, self.parent_instance, assocs, user_id, self)
         self.__parent__.decorate_instance(instance, assocs, user_id)
 
     def create_object(self, typename=None, json=None, user_id=None, **kwargs):
@@ -330,7 +330,7 @@ class CollectionContext(object):
             self.collection,)
 
     def find_collection(self, collection_class_name):
-        if self.collection.__class__.__name__ == collection_class_name:
+        if self.collection.name() == collection_class_name:
             return self
         return self.__parent__.find_collection(collection_class_name)
 
@@ -345,7 +345,6 @@ class NamedCollectionContextPredicate(object):
     phash = text
 
     def __call__(self, context, request):
-        print "***** ", context.collection.name()
         return (isinstance(context, CollectionContext)
                 and self.val == context.collection.name())
 
@@ -400,7 +399,8 @@ class AbstractCollectionDefinition(object):
         pass
 
     @abstractmethod
-    def decorate_instance(self, instance, parent_instance, assocs, user_id):
+    def decorate_instance(
+            self, instance, parent_instance, assocs, user_id, ctx):
         pass
 
     @abstractmethod
@@ -461,7 +461,7 @@ class CollectionDefinition(AbstractCollectionDefinition):
             query = query.filter(owner_alias.id == parent_instance.id)
         return query
 
-    def decorate_instance(self, instance, parent_instance, assocs, user_id):
+    def decorate_instance(self, instance, parent_instance, assocs, user_id, ctx):
         if not isinstance(instance, self.collection_class):
             return
         # if the relation is through a helper class,

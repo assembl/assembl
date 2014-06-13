@@ -383,6 +383,7 @@ def test_voting_widget(
         # Which should it be? This is not creation but association.
         assert res.status_code in (200, 201)
     Idea.db.flush()
+    Idea.db.expire(new_widget, ('criteria', ))
     # Get the widget again, it should now have voting_urls
     widget_rep = test_app.get(
         local_to_absolute(new_widget.uri()),
@@ -393,12 +394,12 @@ def test_voting_widget(
     widget_rep = widget_rep.json
     voting_urls = widget_rep['voting_urls']
     assert voting_urls
-    #assert widget_rep['criteria']
+    assert widget_rep['criteria']
     # The criteria should also be in the criteria url
     test = test_app.get(criteria_url)
     assert test.status_code == 200
     assert len(test.json) == 3
-    #assert test.json == widget_rep['criteria']
+    assert test.json == widget_rep['criteria']
     # User votes should be empty
     user_votes_url = local_to_absolute(widget_rep['user_votes_url'])
     test = test_app.get(user_votes_url)
@@ -413,7 +414,7 @@ def test_voting_widget(
         # TODO: Put lickert_range id in voter config. Or create one?
         test = test_app.post(voting_url, {
             "type": "LickertIdeaVote",
-            "value": i,
+            "value": i+1,
         })
         assert test.status_code == 201
     # Get them back

@@ -405,7 +405,8 @@ class ExplicitSubGraphView(IdeaGraphView):
                 view = self.owner_alias
                 return query.join(SubGraphIdeaAssociation, view)
 
-            def decorate_instance(self, instance, parent_instance, assocs, user_id):
+            def decorate_instance(
+                    self, instance, parent_instance, assocs, user_id, ctx):
                 for inst in assocs[:]:
                     if isinstance(inst, Idea):
                         assocs.append(SubGraphIdeaAssociation(
@@ -429,7 +430,8 @@ class ExplicitSubGraphView(IdeaGraphView):
                 view = self.owner_alias
                 return query.join(SubGraphIdeaLinkAssociation, view)
 
-            def decorate_instance(self, instance, parent_instance, assocs, user_id):
+            def decorate_instance(
+                    self, instance, parent_instance, assocs, user_id, ctx):
                 if isinstance(instance, IdeaLink):
                     assocs.append(
                         SubGraphIdeaLinkAssociation(
@@ -951,6 +953,8 @@ JOIN post AS family_posts ON (
 
     @classmethod
     def extra_collections(cls):
+        from .votes import AbstractIdeaVote
+        from .widgets import VotedIdeaWidgetLink
         class ChildIdeaCollectionDefinition(AbstractCollectionDefinition):
             def __init__(self, cls):
                 super(ChildIdeaCollectionDefinition, self).__init__(cls, Idea)
@@ -962,7 +966,8 @@ JOIN post AS family_posts ON (
                     parent, IdeaLink.source_id == parent.id).filter(
                     IdeaLink.source_id == parent_instance.id)
 
-            def decorate_instance(self, instance, parent_instance, assocs, user_id):
+            def decorate_instance(
+                    self, instance, parent_instance, assocs, user_id, ctx):
                 if isinstance(instance, Idea):
                     assocs.append(IdeaLink(
                             source=parent_instance, target=instance))
@@ -981,7 +986,8 @@ JOIN post AS family_posts ON (
                 idea = self.owner_alias
                 return query.join(IdeaRelatedPostLink, idea)
 
-            def decorate_instance(self, instance, parent_instance, assocs, user_id):
+            def decorate_instance(
+                    self, instance, parent_instance, assocs, user_id, ctx):
                 # This is going to spell trouble: Sometimes we'll have creator,
                 # other times creator_id
                 if isinstance(instance, Content):
@@ -1011,7 +1017,8 @@ JOIN post AS family_posts ON (
                         # contains_eager(Content.extracts) seems to slow things down instead
                 return query
 
-            def decorate_instance(self, instance, parent_instance, assocs, user_id):
+            def decorate_instance(
+                    self, instance, parent_instance, assocs, user_id, ctx):
                 # This is going to spell trouble: Sometimes we'll have creator,
                 # other times creator_id
                 if isinstance(instance, Content):
@@ -1027,9 +1034,33 @@ JOIN post AS family_posts ON (
                         content=instance, idea=parent_instance
                     ).count() > 0
 
+        class VoteTargetsCollection(AbstractCollectionDefinition):
+            # The set of voting target ideas.
+            # Fake: There is no DB link here.
+            def __init__(self, cls):
+                super(VoteTargetsCollection, self).__init__(cls, Idea)
+
+            def decorate_query(self, query, last_alias, parent_instance, ctx):
+                assert parent_instance.has_criterion_links
+                return query.filter(
+                    last_alias.discussion_id == parent_instance.discussion_id
+                ).filter(last_alias.hidden==False)
+
+            def decorate_instance(
+                    self, instance, parent_instance, assocs, user_id, ctx):
+                for inst in assocs[:]:
+                    widgets_coll = ctx.find_collection('CriterionCollection.criteria')
+                    if isinstance(inst, AbstractIdeaVote):
+                        assocs.append(VotedIdeaWidgetLink(
+                            widget=widgets_coll.parent_instance, idea=inst.idea))
+
+            def contains(self, parent_instance, instance):
+                return isinstance(instance, Idea)
+
         return {'children': ChildIdeaCollectionDefinition(cls),
                 'linkedposts': LinkedPostCollectionDefinition(cls),
-                'widgetposts': WidgetPostCollectionDefinition(cls)}
+                'widgetposts': WidgetPostCollectionDefinition(cls),
+                'vote_targets': VoteTargetsCollection(cls)}
 
     crud_permissions = CrudPermissions(
             P_ADD_IDEA, P_READ, P_EDIT_IDEA, P_ADMIN_DISC,

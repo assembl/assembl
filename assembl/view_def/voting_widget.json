@@ -257,7 +257,8 @@
     },
     "MultiCriterionVotingWidget": {
         "@extends": "Widget",
-        "criteria_url": true
+        "criteria_url": true,
+        "criteria": ":"
     },
     "BinaryVote": {
         "idea": true,

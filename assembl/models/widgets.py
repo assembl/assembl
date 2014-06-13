@@ -2,7 +2,7 @@ from itertools import chain
 
 from sqlalchemy import (
     Column, Integer, ForeignKey, Text, String, inspect)
-from sqlalchemy.orm import relationship, backref, aliased
+from sqlalchemy.orm import relationship, backref, aliased, join
 from sqlalchemy.ext.associationproxy import association_proxy
 import simplejson as json
 import uuid
@@ -267,9 +267,9 @@ class IdeaCreatingWidget(BaseIdeaWidget):
                 return query
 
             def decorate_instance(
-                    self, instance, parent_instance, assocs, user_id):
+                    self, instance, parent_instance, assocs, user_id, ctx):
                 super(BaseIdeaCollection, self).decorate_instance(
-                    instance, parent_instance, assocs, user_id)
+                    instance, parent_instance, assocs, user_id, ctx)
                 for inst in assocs[:]:
                     if isinstance(inst, Idea):
                         inst.hidden = True
@@ -285,6 +285,10 @@ class IdeaCreatingWidget(BaseIdeaWidget):
                         assocs.append(GeneratedIdeaWidgetLink(idea=inst))
 
         return {'base_idea': BaseIdeaCollection()}
+
+    # @property
+    # def generated_ideas(self):
+    #     return [l.idea for l in self.generated_idea_links]
 
 
 class CreativityWidget(IdeaCreatingWidget):
@@ -329,7 +333,7 @@ class MultiCriterionVotingWidget(Widget):
     def get_voting_urls(self, idea_id):
         return {
             Idea.uri_generic(criterion_link.idea_id):
-            'local:Discussion/%d/widgets/%d/criteria/%d/targets/%d/votes' % (
+            'local:Discussion/%d/widgets/%d/criteria/%d/vote_targets/%d/votes' % (
                 self.discussion_id, self.id, criterion_link.idea_id,
                 Idea.get_database_id(idea_id))
             for criterion_link in self.criteria_links
@@ -351,7 +355,7 @@ class MultiCriterionVotingWidget(Widget):
         class CriterionCollection(CollectionDefinition):
             # The set of voting criterion ideas.
             # Not to be confused with http://www.criterion.com/
-            def __init__(self):
+            def __init__(self, cls):
                 super(CriterionCollection, self).__init__(
                     cls, cls.criteria)
 
@@ -359,18 +363,13 @@ class MultiCriterionVotingWidget(Widget):
                 widget = self.owner_alias
                 idea = last_alias
                 criterion_link = aliased(VotingCriterionWidgetLink)
-                return query.join(
-                    criterion_link,
-                    idea.id == criterion_link.idea_id
-                ).join(widget).filter(
-                    widget.id == parent_instance.id
-                ).filter(widget.idea_links.of_type(
-                    VotingCriterionWidgetLink))
+                return query.join(idea.has_criterion_links).join(widget).filter(
+                    widget.id == parent_instance.id)
 
             def decorate_instance(
-                    self, instance, parent_instance, assocs, user_id):
+                    self, instance, parent_instance, assocs, user_id, ctx):
                 super(CriterionCollection, self).decorate_instance(
-                    instance, parent_instance, assocs, user_id)
+                    instance, parent_instance, assocs, user_id, ctx)
                 for inst in assocs[:]:
                     if isinstance(inst, Idea):
                         assocs.append(VotingCriterionWidgetLink(idea=inst))
@@ -378,7 +377,7 @@ class MultiCriterionVotingWidget(Widget):
         class VoteTargetsCollection(AbstractCollectionDefinition):
             # The set of voting target ideas.
             # Fake: There is no DB link here.
-            def __init__(self):
+            def __init__(self, cls):
                 super(VoteTargetsCollection, self).__init__(cls, Idea)
 
             def decorate_query(self, query, last_alias, parent_instance, ctx):
@@ -387,9 +386,7 @@ class MultiCriterionVotingWidget(Widget):
                 ).filter(last_alias.hidden==False)
 
             def decorate_instance(
-                    self, instance, parent_instance, assocs, user_id):
-                super(VoteTargetsCollection, self).decorate_instance(
-                    instance, parent_instance, assocs, user_id)
+                    self, instance, parent_instance, assocs, user_id, ctx):
                 for inst in assocs[:]:
                     if isinstance(inst, AbstractIdeaVote):
                         #import pdb; pdb.set_trace()
@@ -399,8 +396,12 @@ class MultiCriterionVotingWidget(Widget):
             def contains(self, parent_instance, instance):
                 return isinstance(instance, Idea)
 
-        return {'criteria': CriterionCollection(),
-                'targets': VoteTargetsCollection()}
+        return {'criteria': CriterionCollection(cls),
+                'targets': VoteTargetsCollection(cls)}
+
+    # @property
+    # def criteria(self):
+    #     return [cl.idea for cl in self.criteria_links]
 
 
 class WidgetUserConfig(DiscussionBoundBase):
@@ -496,7 +497,7 @@ BaseIdeaWidget.base_idea_link = relationship(
     BaseIdeaWidgetLink, uselist=False)
 
 BaseIdeaWidget.base_idea = relationship(
-    Idea, secondary=inspect(IdeaWidgetLink).local_table, viewonly=True,
+    Idea, viewonly=True, secondary=join(Idea, BaseIdeaWidgetLink),
     primaryjoin=Widget.idea_links.of_type(BaseIdeaWidgetLink),
     secondaryjoin=IdeaWidgetLink.idea,
     uselist=False)
@@ -510,7 +511,7 @@ class GeneratedIdeaWidgetLink(IdeaWidgetLink):
 IdeaCreatingWidget.generated_idea_links = relationship(GeneratedIdeaWidgetLink)
 
 IdeaCreatingWidget.generated_ideas = relationship(
-    Idea, secondary=inspect(IdeaWidgetLink).local_table, viewonly=True,
+    Idea, viewonly=True, secondary=join(Idea, GeneratedIdeaWidgetLink),
     primaryjoin=Widget.idea_links.of_type(GeneratedIdeaWidgetLink),
     secondaryjoin=IdeaWidgetLink.idea)
 
@@ -524,7 +525,7 @@ MultiCriterionVotingWidget.votable_idea_links = relationship(
     VotableIdeaWidgetLink)
 
 MultiCriterionVotingWidget.votable_ideas = relationship(
-    Idea, secondary=inspect(IdeaWidgetLink).local_table, viewonly=True,
+    Idea, viewonly=True, secondary=join(Idea, VotableIdeaWidgetLink),
     primaryjoin=Widget.idea_links.of_type(VotableIdeaWidgetLink),
     secondaryjoin=IdeaWidgetLink.idea)
 
@@ -538,7 +539,7 @@ MultiCriterionVotingWidget.voted_idea_links = relationship(
     VotedIdeaWidgetLink)
 
 MultiCriterionVotingWidget.voted_ideas = relationship(
-    Idea, secondary=inspect(IdeaWidgetLink).local_table, viewonly=True,
+    Idea, viewonly=True, secondary=join(Idea, VotedIdeaWidgetLink),
     primaryjoin=Widget.idea_links.of_type(VotedIdeaWidgetLink),
     secondaryjoin=IdeaWidgetLink.idea)
 
@@ -549,10 +550,12 @@ class VotingCriterionWidgetLink(IdeaWidgetLink):
     }
 
 MultiCriterionVotingWidget.criteria_links = relationship(
-    VotingCriterionWidgetLink)
+    VotingCriterionWidgetLink, backref="voting_widget")
+Idea.has_criterion_links = relationship(VotingCriterionWidgetLink)
 
 MultiCriterionVotingWidget.criteria = relationship(
     Idea,  # Criterion
-    secondary=inspect(IdeaWidgetLink).local_table, viewonly=True,
+    viewonly=True, secondary=join(Idea, VotingCriterionWidgetLink),
     primaryjoin=Widget.idea_links.of_type(VotingCriterionWidgetLink),
-    secondaryjoin=IdeaWidgetLink.idea)
+    secondaryjoin=IdeaWidgetLink.idea,
+    backref='criterion_of_widget')
