@@ -1,34 +1,36 @@
 // Karma configuration
-// Generated on Mon Jun 02 2014 11:33:09 GMT+0200 (CEST)
+// Generated on Thu Jun 12 2014 18:04:05 GMT+0200 (CEST)
 
 module.exports = function(config) {
   config.set({
 
-    // base path, that will be used to resolve files and exclude
-    basePath: '.',
+    // base path that will be used to resolve all patterns (eg. files, exclude)
+    basePath: '',
 
-
-    // frameworks to use
     frameworks: ['jasmine'],
 
-
-    // list of files / patterns to load in the browser
     files: [
       'bower_components/angular/angular.js',
+      'bower_components/angular-mocks/angular-mocks.js',
+      'bower_components/angular-route/angular-route.js',
+      'bower_components/angular-sanitize/angular-sanitize.js',
       'bower_components/angular-resource/angular-resource.js',
-      'app/*.js',
-      'test/spec/*.test.js'
+      'bower_components/angular-translate/angular-translate.js',
+      'bower_components/angular-translate-loader-static-files/angular-translate-loader-static-files.js',
+      'bower_components/jquery/dist/jquery.js',
+      'bower_components/lodash/dist/lodash.js',
+      'bower_components/angular-growl-v2/build/angular-growl.js',
+      'app/app.js',
+      'app/controllers.js',
+      'app/directives.js',
+      'app/factory.js',
+      'app/services.js',
+      'test/spec/*.spec.js'
     ],
-
-
-    // list of files to exclude
-    exclude: [
-      
-    ],
-
 
     // test results reporter to use
-    // possible values: 'dots', 'progress', 'junit', 'growl', 'coverage'
+    // possible values: 'dots', 'progress'
+    // available reporters: https://npmjs.org/browse/keyword/karma-reporter
     reporters: ['progress'],
 
 
@@ -49,23 +51,13 @@ module.exports = function(config) {
     autoWatch: true,
 
 
-    // Start these browsers, currently available:
-    // - Chrome
-    // - ChromeCanary
-    // - Firefox
-    // - Opera
-    // - Safari (only Mac)
-    // - PhantomJS
-    // - IE (only Windows)
+    // start these browsers
+    // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
     browsers: ['Chrome'],
 
 
-    // If browser does not capture in given timeout [ms], kill it
-    captureTimeout: 60000,
-
-
     // Continuous Integration mode
-    // if true, it capture browsers, run tests and exit
+    // if true, Karma captures browsers, runs the tests and exits
     singleRun: false
   });
 };

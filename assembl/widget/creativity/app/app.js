@@ -3,23 +3,8 @@
 var creativityApp = angular.module('creativityApp',
     ['ngRoute','ngSanitize','creativityServices', 'pascalprecht.translate','angular-growl']);
 
-
-creativityApp.provider('WidgetConfigService', function (){
-  var options = {};
-  this.config = function (opt){
-    angular.extend(options, opt);
-  };
-  this.$get = [function (){
-    if ( !options )
-    {
-      throw new Error('Config options must be configured');
-    }
-    return options;
-  }];
-});
-
-creativityApp.run(['WidgetConfigService', '$rootScope','$timeout','$window',
-    function (WidgetConfigService, $rootScope, $timeout, $window) {
+creativityApp.run(['$rootScope','$timeout','$window',
+    function ($rootScope, $timeout, $window) {
 
     $rootScope.counter = 5;
     $rootScope.countdown = function() {
@@ -32,7 +17,7 @@ creativityApp.run(['WidgetConfigService', '$rootScope','$timeout','$window',
     /**
      * Check that the user is logged in
      * */
-    if(!WidgetConfigService.user){
+    /*if(!WidgetConfigService.user){
         $('#myModal').modal({
             keyboard:false
         });
@@ -43,9 +28,9 @@ creativityApp.run(['WidgetConfigService', '$rootScope','$timeout','$window',
           $window.location = '/login';
           $timeout.flush();
         }, 5000);
-    }
+    } */
 
-    $rootScope.widgetConfig = WidgetConfigService;
+    //$rootScope.widgetConfig = WidgetConfigService;
 
 }]).run(['JukeTubeVideosService', function (JukeTubeVideosService) {
 
@@ -61,23 +46,53 @@ creativityApp.config(['$routeProvider','$translateProvider','$locationProvider',
     $routeProvider.
         when('/cards', {
            templateUrl:'app/partials/cards.html',
-           controller:'cardsCtl'
+           controller:'cardsCtl',
+           resolve: {
+              app: function($route, configService) {
+                return configService.getWidget($route.current.params.config);
+              },
+              user: function(configService){
+
+
+              }
+
+            }
         }).
         when('/videos', {
             templateUrl:'app/partials/videos.html',
-            controller:'videosCtl'
+            controller:'videosCtl',
+            resolve: {
+              app: function($route, configService) {
+                return configService.getWidget($route.current.params.config);
+              }
+            }
         }).
         when('/session', {
            templateUrl:'app/partials/session.html',
-           controller:'sessionCtl'
+           controller:'sessionCtl',
+           resolve: {
+             app: function($route, configService) {
+               return configService.getWidget($route.current.params.config);
+             }
+           }
         }).
         when('/rating', {
             templateUrl:'app/partials/rating.html',
-            controller:'ratingCtl'
+            controller:'ratingCtl',
+            resolve: {
+              app: function($route, configService) {
+                return configService.getWidget($route.current.params.config);
+              }
+            }
         }).
         when('/edit', {
             templateUrl:'app/partials/edit.html',
-            controller:'editCtl'
+            controller:'editCtl',
+            resolve: {
+              app: function($route, configService) {
+                return configService.getWidget($route.current.params.config);
+              }
+            }
         }).
         otherwise({
             redirectTo: '/cards'
@@ -102,62 +117,3 @@ creativityApp.config(['$routeProvider','$translateProvider','$locationProvider',
     growlProvider.onlyUniqueMessages(true);
 
 }]);
-
-
-/**
- * Before initializing manually Angular, we get the config of the widget, by accessing the "config" parameter of the current URL
- * For example: http://localhost:6543/widget/creativity/?config=http://localhost:6543/data/Widget/19#/
- * */
-angular.element(document).ready(function (){
-    /**
-     * returns the value of a given parameter in the URL of the current page
-     * */
-    function getUrlVariableValue(variable) {
-        var query = window.location.search.substring(1),
-            vars = query.split("&");
-
-        for (var i=0;i<vars.length;i++) {
-            var pair = vars[i].split("=");
-            if (pair[0] == variable) {
-                return pair[1];
-            }
-        }
-
-        return null;
-    }
-
-
-    var successCallback = function(configData){
-        console.log("successCallback ()");
-        creativityApp.config(['WidgetConfigServiceProvider', function (WidgetConfigServiceProvider) {
-            console.log("WidgetConfigServiceProvider config()");
-            WidgetConfigServiceProvider.config(configData);
-            // save (or override) the "origin" URL parameter into the config
-            // this parameter is meant to contain the identifier of the idea associated to the clicked "inspire me" button
-            var origin = decodeURIComponent(getUrlVariableValue("origin"));
-            if ( origin != null || !WidgetConfigServiceProvider.origin )
-            {
-                WidgetConfigServiceProvider.config({"origin": origin});
-            }
-        }]);
-        angular.bootstrap('#creativityApp', ['creativityApp']);
-    };
-
-    var configFile = getUrlVariableValue("config");
-
-    //TODO: Redirect on the discussion
-    /**
-     * If discussion_admin, redirect on widget creation page.
-     * */
-    if (!configFile) {
-        alert("No configuration.");
-        return;
-    }
-
-    if (configFile.split(':')[0] === "local") {
-        configFile = "/data/"+configFile.split(':')[1];
-    }
-
-    // TODO: implement an error callback, in case the config URL given is invalid or there is a network error
-    $.get(configFile, successCallback);
-});

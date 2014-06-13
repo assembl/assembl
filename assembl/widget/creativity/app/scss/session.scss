@@ -1,6 +1,7 @@
 .session {
   width: 95%;
   margin: 0 auto;
+  padding-top: 20px;
   .session-comment {
     font-family: Helvetica, Arial, sans-serif;
     padding: 1.24em 0 0 0;
@@ -99,8 +100,9 @@
     }
 
   }
-  .cards{
+  .session-cards{
     width: auto;
+    font-size: 12px;
     .bs-callout-warning {
       padding: 3px 10px;
       margin:0 0;
@@ -109,6 +111,7 @@
       font-size:14px;
       font-weight: bold;
       margin:10px 0;
+      padding: 10px;
     }
     .shuffle {
       font-size: 20px;

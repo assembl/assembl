@@ -1,15 +1,14 @@
 "use strict";
 
 creativityApp.controller('videosCtl',
-  ['$scope', '$http', '$routeParams', '$log', '$resource', 'localConfig', 'JukeTubeVideosService', 'DiscussionService', 'sendIdeaService', 'WidgetConfigService', 'AssemblToolsService',
-  function($scope, $http, $routeParams, $log, $resource, localConfig, JukeTubeVideosService, DiscussionService, sendIdeaService, WidgetConfigService, AssemblToolsService){
+  ['$scope', '$http', '$routeParams', '$log', '$resource', 'localConfig', 'JukeTubeVideosService', 'DiscussionService', 'sendIdeaService', 'configService', 'utils',
+  function($scope, $http, $routeParams, $log, $resource, localConfig, JukeTubeVideosService, DiscussionService, sendIdeaService, configService, utils){
 
     // intialization code (constructor)
 
     $scope.init = function(){
-      console.log("videosCtl::init()");
-      console.log("WidgetConfigService:");
-      console.log(WidgetConfigService);
+
+    var Widget = configService.data.widget;
 
 
       // set default model fields
@@ -49,14 +48,14 @@ creativityApp.controller('videosCtl',
 
       // get inspiration keywords from the idea URL given in the configuration JSON
 
-      $scope.idea_api_url = AssemblToolsService.resourceToUrl(WidgetConfigService.settings.idea) + '?view=creativity_widget';
+      $scope.idea_api_url = utils.urlApi(Widget.settings.idea) + '?view=creativity_widget';
       console.log("idea_api_url: " + $scope.idea_api_url);
       $scope.discussion_api_url = 'discussion api url';
 
       var
           Idea = $resource($scope.idea_api_url),
           Discussion = null,
-          discussionId = WidgetConfigService.discussion.split('/')[1];
+          discussionId = Widget.discussion.split('/')[1];
 
       $scope.idea = Idea.get({}, function(){ // this function is executed once the AJAX request is received and the variable is assigned
         console.log("idea:");
@@ -65,7 +64,7 @@ creativityApp.controller('videosCtl',
         $scope.inspiration_keywords_used = {};
 
         // get discussion from the idea
-        $scope.discussion_api_url = AssemblToolsService.resourceToUrl($scope.idea.discussion);
+        $scope.discussion_api_url = utils.urlApi($scope.idea.discussion);
         console.log("discussion_api_url: " + $scope.discussion_api_url);
         Discussion = $resource($scope.discussion_api_url);
 
@@ -307,7 +306,7 @@ creativityApp.controller('videosCtl',
       };
       $http({
         method: 'POST',
-        url: AssemblToolsService.resourceToUrl(WidgetConfigService.ideas_uri),
+        url: utils.urlApi(Widget.ideas_uri),
         data: $.param(message),
         headers: {'Content-Type': 'application/x-www-form-urlencoded'}
       }).success(function (data, status, headers, config) {
@@ -390,7 +389,7 @@ creativityApp.controller('videosCtl',
         // user_state_url accepts only GET and PUT actions, and accepts only headers: {'Content-Type': 'application/json'}
         $http({
             method: 'PUT',
-            url: AssemblToolsService.resourceToUrl(WidgetConfigService.user_state_url),
+            url: utils.urlApi(Widget.user_state_url),
             data: initial_data,
             async: true,
             headers: {'Content-Type': 'application/json'}
@@ -406,7 +405,7 @@ creativityApp.controller('videosCtl',
 
       $http({
           method: 'GET',
-          url: AssemblToolsService.resourceToUrl(WidgetConfigService.user_state_url),
+          url: utils.urlApi(Widget.user_state_url),
           //data: obj,
           async: true,
           headers: {'Content-Type': 'application/json'}
@@ -489,7 +488,7 @@ creativityApp.controller('cardsCtl',
        send.message = $scope.formData.description;
 
        //TODO : {discussionId} need to be dynamic
-       send.$save({discussionId:3}, function sucess(){
+       send.$save({discussionId:3}, function success(){
 
        }, function error(){
 
@@ -499,15 +498,15 @@ creativityApp.controller('cardsCtl',
 }]);
 
 creativityApp.controller('sessionCtl',
-    ['$scope','cardGameService','$rootScope', '$timeout','$http','growl', 'WidgetConfigService','$sce','utils',
-        function($scope, cardGameService, $rootScope, $timeout, $http, growl, WidgetConfigService, $sce, utils){
+    ['$scope','cardGameService','$rootScope', '$timeout','$http','growl', 'configService','$sce','utils',
+        function($scope, cardGameService, $rootScope, $timeout, $http, growl, configService, $sce, utils){
 
     // activate the right tab
     $("ul.nav li").removeClass("active");
     $("ul.nav li a[href=\"#session\"]").closest("li").addClass("active");
 
     $scope.formData = {};
-    $scope.widget = WidgetConfigService;
+    $scope.widget = configService.data.widget;
 
     /**
      * Due to the latency to init $rootScope we need a delay
@@ -536,10 +535,10 @@ creativityApp.controller('sessionCtl',
     $scope.getSubIdeaFromIdea = function(){
 
         var
-            rootUrl = utils.urlApi($rootScope.widgetConfig.ideas_uri),
+            rootUrl = utils.urlApi($scope.widget.ideas_uri),
             ideas = [];
 
-        $scope.parentIdeaTitle = $rootScope.widgetConfig.base_idea.shortTitle;
+        $scope.parentIdeaTitle = $scope.widget.base_idea.shortTitle;
 
         $http.get(rootUrl).then(function(response){
 
@@ -560,11 +559,9 @@ creativityApp.controller('sessionCtl',
         }).then(function(ideas){
 
             angular.forEach(ideas, function(idea){
-
                 var urlRoot = utils.urlApi(idea.proposed_in_post.idCreator);
 
                 $http.get(urlRoot).then(function(response){
-
                     idea.username = response.data.name;
                     idea.avatar = response.data.avatar_url_base+'30';
                 });
@@ -583,7 +580,7 @@ creativityApp.controller('sessionCtl',
     $scope.sendSubIdea = function(){
         if($scope.formData) {
 
-            var rootUrl = utils.urlApi($rootScope.widgetConfig.ideas_uri);
+            var rootUrl = utils.urlApi($scope.widget.ideas_uri);
 
             $scope.formData.type = 'Idea';
 
@@ -642,8 +639,10 @@ creativityApp.controller('sessionCtl',
 }]);
 
 creativityApp.controller('ratingCtl',
-    ['$scope','$rootScope','$timeout','$http','growl','utils',
-        function($scope, $rootScope, $timeout, $http, growl, utils){
+    ['$scope','$rootScope','$timeout','$http','growl','utils','configService',
+        function($scope, $rootScope, $timeout, $http, growl, utils, configService){
+
+    var Widget = configService.data.widget;
 
     /**
      * Due to the latency to init $rootScope we need a delay
@@ -660,7 +659,7 @@ creativityApp.controller('ratingCtl',
     $scope.getSubIdeaForVote = function(){
 
         var
-            rootUrl = utils.urlApi($rootScope.widgetConfig.ideas_uri),
+            rootUrl = utils.urlApi(Widget.ideas_uri),
             ideas = [];
 
         $http.get(rootUrl).then(function(response){
@@ -676,7 +675,7 @@ creativityApp.controller('ratingCtl',
 
         }).then(function(ideas){
 
-            var urlRoot = utils.urlApi($rootScope.widgetConfig.user_states_uri);
+            var urlRoot = utils.urlApi(Widget.user_states_uri);
 
             $http.get(urlRoot).then(function(response){
 
@@ -714,8 +713,8 @@ creativityApp.controller('ratingCtl',
             commentSelected = [],
             subIdea = angular.element('#postVote .sub-idea'),
             commentSubIdea = angular.element('#postVote .comment-to-sub-idea'),
-            rootUrlSubIdea = utils.urlApi($rootScope.widgetConfig.confirm_ideas_uri),
-            rootUrlMessage = utils.urlApi($rootScope.widgetConfig.confirm_messages_uri);
+            rootUrlSubIdea = utils.urlApi(Widget.confirm_ideas_uri),
+            rootUrlMessage = utils.urlApi(Widget.confirm_messages_uri);
 
         $scope.$watch('message', function(value){
             //TODO: find a good translation for confirm that the catching sub idea is valid

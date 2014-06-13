@@ -1,9 +1,9 @@
 "use strict";
 
-var creativityServices = angular.module('creativityServices', ['ngResource']);
+var widgetServices = angular.module('creativityServices', ['ngResource']);
 
 
-creativityServices.factory('localConfig', function($http){
+widgetServices.factory('localConfig', function($http){
 
     var api_rest = 'config/local.json';
 
@@ -18,7 +18,7 @@ creativityServices.factory('localConfig', function($http){
 /**
  * CARD GAME
  * */
-creativityServices.factory('cardGameService', function($http){
+widgetServices.factory('cardGameService', function($http){
     return {
         getCards: function(number){
             var url = 'config/game_'+number+'.json';
@@ -28,38 +28,50 @@ creativityServices.factory('cardGameService', function($http){
 });
 
 /**
+ *
+ * */
+
+widgetServices.factory('configService', function($q, $http){
+    return {
+      data: {},
+      getWidget: function(url){
+        var defer = $q.defer(),
+            data = this.data;
+
+        if(!url) defer.reject('no valid url');
+
+        var urlRoot = "/data/"+url.split(':')[1];
+
+        $http.get(urlRoot).success(function(response){
+            data.widget = response;
+            defer.resolve(data);
+        }).error(function(){
+            defer.reject('error to get widget information');
+        });
+
+        return defer.promise;
+      }
+    }
+});
+
+/**
  * CARD inspire me: send an idea to assembl
  * */
-creativityServices.factory('sendIdeaService', ['$resource',function($resource){
+widgetServices.factory('sendIdeaService', ['$resource',function($resource){
     return $resource('/api/v1/discussion/:discussionId/posts')
 }]);
 
 /**
  * WIP: use Angular's REST and Custom Services as our Model for Messages
  * */
-creativityServices.factory('DiscussionService', ['$resource', function($resource){
+widgetServices.factory('DiscussionService', ['$resource', function($resource){
     return $resource('/data/Discussion/:discussionId');
-}]);
-
-
-creativityServices.service('AssemblToolsService', ['$window', '$rootScope', '$log', function ($window, $rootScope, $log) {
-  this.resourceToUrl = function(str)
-  {
-    if ( !str )
-      return str;
-    var start = "local:";
-    if ( str.indexOf(start) == 0 )
-    {
-      str = "/data/" + str.slice(start.length);
-    }
-    return str;
-  };
 }]);
 
 
 // JukeTube
 
-creativityServices.service('JukeTubeVideosService', ['$window', '$rootScope', '$log', function ($window, $rootScope, $log) {
+widgetServices.service('JukeTubeVideosService', ['$window', '$rootScope', '$log', function ($window, $rootScope, $log) {
 
   var service = this;
   var initialized = false;

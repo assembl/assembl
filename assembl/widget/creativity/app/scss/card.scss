@@ -11,6 +11,7 @@ $card-min-height: 390px;
   font-size: 12px;
   width: $card-browser-width;
   margin: 0 auto;
+  padding-top: 20px;
   .card-browser{
     position: relative;
   }
@@ -36,7 +37,7 @@ $card-min-height: 390px;
        width:100%;
     }
     .card-content {
-      padding: 10px;
+
     }
     .card-bottom{
       height: 5px;
