@@ -425,9 +425,10 @@ def test_voting_widget(
     # TODO
     # Get vote results.
     vote_results_url = local_to_absolute(widget_rep['vote_results_url'])
-    test = test_app.get(vote_results_url)
-    assert test.status_code == 200
+    vote_results = test_app.get(vote_results_url)
+    assert vote_results.status_code == 200
+    vote_results = vote_results.json
     for i, criterion in enumerate(criteria):
         key = criterion.uri()
-        assert key in vote_results_url
-        assert vote_results_url[key] == i
+        assert key in vote_results
+        assert vote_results[key] == i+1

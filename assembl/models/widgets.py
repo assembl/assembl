@@ -327,7 +327,7 @@ class MultiCriterionVotingWidget(Widget):
             self.discussion_id, self.id, Idea.get_database_id(idea_id))
 
     def get_vote_results_url(self, idea_id):
-        return 'local:Discussion/%d/widgets/%d/targets/%d/votes/results' % (
+        return 'local:Discussion/%d/widgets/%d/targets/%d/vote_results' % (
             self.discussion_id, self.id, Idea.get_database_id(idea_id))
 
     def get_voting_urls(self, idea_id):
@@ -373,6 +373,14 @@ class MultiCriterionVotingWidget(Widget):
                 for inst in assocs[:]:
                     if isinstance(inst, Idea):
                         assocs.append(VotingCriterionWidgetLink(idea=inst))
+                    elif isinstance(inst, AbstractIdeaVote):
+                        criterion_ctx = ctx.find_collection(
+                            'CriterionCollection.criteria')
+                        search_ctx = ctx
+                        while search_ctx.__parent__ and search_ctx.__parent__ != criterion_ctx:
+                            search_ctx = search_ctx.__parent__
+                        assert search_ctx.__parent__
+                        inst.criterion = search_ctx._instance
 
         class VoteTargetsCollection(AbstractCollectionDefinition):
             # The set of voting target ideas.

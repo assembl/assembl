@@ -102,7 +102,7 @@ class ClassContext(object):
             return my_default
         return self.__parent__.get_default_view()
 
-    def decorate_instance(self, instance, assocs, user_id):
+    def decorate_instance(self, instance, assocs, user_id, ctx):
         # and here
         pass
 
@@ -202,7 +202,7 @@ class InstanceContext(object):
         # Leave that work to the collection
         return self.__parent__.decorate_query(query, last_alias, ctx)
 
-    def decorate_instance(self, instance, assocs, user_id):
+    def decorate_instance(self, instance, assocs, user_id, ctx):
         # if one of the objects has a non-list relation to this class, add it
         # Slightly dangerous...
         for inst in assocs:
@@ -217,7 +217,7 @@ class InstanceContext(object):
                     #print "Setting3 ", inst, reln.key, self._instance
                     setattr(inst, reln.key, self._instance)
                     break
-        self.__parent__.decorate_instance(instance, assocs, user_id)
+        self.__parent__.decorate_instance(instance, assocs, user_id, ctx)
 
     def find_collection(self, collection_class_name):
         return self.__parent__.find_collection(collection_class_name)
@@ -305,10 +305,10 @@ class CollectionContext(object):
             query, last_alias, self.parent_instance, ctx)
         return self.__parent__.decorate_query(query, self.collection.owner_alias, ctx)
 
-    def decorate_instance(self, instance, assocs, user_id):
+    def decorate_instance(self, instance, assocs, user_id, ctx):
         self.collection.decorate_instance(
-            instance, self.parent_instance, assocs, user_id, self)
-        self.__parent__.decorate_instance(instance, assocs, user_id)
+            instance, self.parent_instance, assocs, user_id, ctx)
+        self.__parent__.decorate_instance(instance, assocs, user_id, ctx)
 
     def create_object(self, typename=None, json=None, user_id=None, **kwargs):
         cls = self.get_collection_class(typename)
@@ -322,7 +322,7 @@ class CollectionContext(object):
         else:
             assocs = cls.from_json(json, user_id)
             inst = assocs[0]
-        self.decorate_instance(inst, assocs, user_id)
+        self.decorate_instance(inst, assocs, user_id, self)
         return assocs
 
     def __repr__(self):

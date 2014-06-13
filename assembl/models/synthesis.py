@@ -850,9 +850,14 @@ JOIN post AS family_posts ON (
         return [c for c in siblings if isinstance(c, cls)]
 
     def get_voting_results(self):
-        # TODO: optimize
-        if self.votes:
-            return sum((v.vote_value for v in self.votes))/len(self.votes)
+        by_criterion = defaultdict(list)
+        for vote in self.votes:
+            by_criterion[vote.criterion].append(vote)
+        return {
+            criterion.uri():
+            sum((v.vote_value for v in votes))/len(votes)
+            for criterion, votes in by_criterion.iteritems()
+        }
 
     def get_discussion_id(self):
         return self.discussion_id
