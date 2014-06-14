@@ -860,6 +860,28 @@ def inm_prodenv():
     env.use_virtuoso = "/usr"
     env.gitbranch = "develop"
 
+
+@task    
+def ovh_prodenv():
+    """
+    [ENVIRONMENT] OVH Server
+    """
+    commonenv(os.path.normpath("/var/www/assembl/"))
+    env.is_production_env = True
+    env.wsginame = "prod.wsgi"
+    env.urlhost = "ns239264.ip-192-99-37.net"
+    env.user = "www-data"
+    env.home = "www-data"
+    env.ini_file = 'local.ini'
+    require('projectname', provided_by=('commonenv',))
+    env.hosts = ['ns239264.ip-192-99-37.net']
+    
+    env.uses_apache = False
+    env.uses_ngnix = True
+    env.uses_uwsgi = True
+    env.use_virtuoso = "/usr/local/virtuoso-opensource-d7"
+    env.gitbranch = "develop"
+
 @task
 def flushmemcache():
     """
