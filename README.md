@@ -7,6 +7,8 @@
 - For production on linux using nginx/uwsgi you need the following ppa (for both saucy and raring):
 apt-add-repository ppa:chris-lea/uwsgi 
 
+- Ruby does not like libreadline6, which comes on newer Ubuntus. Make sure you have libreadline-gplv2-dev instead of libreadline6-dev.
+
 ## Installing Virtuoso
 
 Mac
