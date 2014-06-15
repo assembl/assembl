@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: assembl 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-06-15 10:23-0400\n"
+"POT-Creation-Date: 2014-06-15 10:55-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -539,6 +539,38 @@ msgstr ""
 
 #: assembl/templates/login.jinja2:47
 msgid "Login with external tools"
+msgstr ""
+
+#: assembl/templates/login.jinja2:49 assembl/templates/profile.jinja2:152
+msgid "Login with Google"
+msgstr ""
+
+#: assembl/templates/login.jinja2:50 assembl/templates/profile.jinja2:153
+msgid "Login with Twitter"
+msgstr ""
+
+#: assembl/templates/login.jinja2:51 assembl/templates/profile.jinja2:154
+msgid "Login with Facebook"
+msgstr ""
+
+#: assembl/templates/login.jinja2:52 assembl/templates/profile.jinja2:155
+msgid "Login with Yahoo"
+msgstr ""
+
+#: assembl/templates/login.jinja2:53 assembl/templates/profile.jinja2:157
+msgid "Login with Windows Live"
+msgstr ""
+
+#: assembl/templates/login.jinja2:54 assembl/templates/profile.jinja2:158
+msgid "Login with Github"
+msgstr ""
+
+#: assembl/templates/login.jinja2:55 assembl/templates/profile.jinja2:159
+msgid "Login with Bitbucket"
+msgstr ""
+
+#: assembl/templates/login.jinja2:56 assembl/templates/profile.jinja2:160
+msgid "Login with OpenID"
 msgstr ""
 
 #: assembl/templates/profile.jinja2:7 assembl/templates/view_profile.jinja2:7

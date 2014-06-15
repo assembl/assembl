@@ -38,7 +38,7 @@ def get_default_context(request):
     try:
         discussion = Discussion.db.query(Discussion).filter(Discussion.slug==slug).one()
     except NoResultFound:
-        raise HTTPNotFound(_("No discussion found for slug=%s" % slug))
+        raise HTTPNotFound(_("No discussion found for slug=%s") % slug)
     return dict(base, templates=get_template_views(), discussion=discussion)
 
 
