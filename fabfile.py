@@ -281,7 +281,6 @@ def app_update_dependencies():
     execute(update_compass)
     execute(update_bower)
     execute(bower_install)
-    execute(bower_update)
     
 @task
 def app_compile():
