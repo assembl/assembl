@@ -76,7 +76,7 @@ class Widget(DiscussionBoundBase):
         return {}
 
     @settings_json.setter
-    def set_settings_json(self, val):
+    def settings_json(self, val):
         self.settings = json.dumps(val)
 
     @property
@@ -141,15 +141,11 @@ class BaseIdeaWidget(Widget):
         if 'idea' in settings:
             self.set_base_idea_id(Idea.get_database_id(settings['idea']))
 
-    @property
-    def settings_json(self):
-        return super(BaseIdeaWidget, self).settings_json
-
-    @settings_json.setter
-    def set_settings_json(self, val):
+    @Widget.settings_json.setter
+    def settings_json(self, val):
         if 'idea' in val:
             self.set_base_idea_id(Idea.get_database_id(val['idea']))
-        super(BaseIdeaWidget, self).settings_json = val
+        self.settings = json.dumps(val)
 
     def base_idea_id(self):
         if self.base_idea_link:

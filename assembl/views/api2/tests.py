@@ -95,12 +95,12 @@ def test_add_subidea_in_synthesis(
     assert idealink_assoc
 
 
-def test_widget_state(
+def test_widget_settings(
         discussion, test_app, subidea_1, participant1_user, test_session):
-    # Post the initial configuration
-    state = [{"local:Idea/67": 8}, {"local:Idea/66": 2},
+    # Post arbitrary json as initial configuration
+    settings = [{"local:Idea/67": 8}, {"local:Idea/66": 2},
              {"local:Idea/65": 9}, {"local:Idea/64": 1}]
-    state_s = json.dumps(state)
+    settings_s = json.dumps(settings)
     new_widget_loc = test_app.post(
         '/data/Discussion/%d/widgets' % (discussion.id,), {
             'type': 'CreativityWidget',
@@ -117,19 +117,19 @@ def test_widget_state(
     )
     assert widget_rep.status_code == 200
     widget_rep = widget_rep.json
-    # Put the state
-    widget_state_endpoint = local_to_absolute(
-        widget_rep['widget_state_url'])
+    # Put the settings
+    widget_settings_endpoint = local_to_absolute(
+        widget_rep['widget_settings_url'])
     result = test_app.put(
-        widget_state_endpoint, state_s,
+        widget_settings_endpoint, settings_s,
         headers={"Content-Type": "application/json"})
     assert result.status_code in (200, 204)
     # Get it back
     result = test_app.get(
-        widget_state_endpoint, state_s,
+        widget_settings_endpoint, settings_s,
         headers={"Accept": "application/json"})
     assert result.status_code == 200
-    assert result.json == state
+    assert result.json == settings
 
 
 def test_widget_user_state(
