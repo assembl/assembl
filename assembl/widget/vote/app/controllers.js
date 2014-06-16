@@ -136,7 +136,15 @@ voteApp.controller('indexCtl',
       }
       
 
-      $scope.drawUI();
+      if ( $scope.settings.displayStyle && $scope.settings.displayStyle == "table" )
+      {
+        $scope.drawUIWithTable();
+      }
+      else
+      {
+        $scope.drawUI();
+      }
+
       $scope.computeMyVotes();
     };
 
@@ -648,6 +656,77 @@ voteApp.controller('indexCtl',
 
 
 
+    $scope.drawUIWithTable = function(){
+      console.log("drawUIWithTable()");
+      var config = $scope.settings;
+      var holder = d3.select("#d3_container");
+
+      var table = $("<table/>");
+      table.attr("id","table_vote");
+      $("#d3_container").append(table);
+      var tr = $("<tr/>");
+      var tr2 = $("<tr/>");
+      table.append(tr);
+      table.append(tr2);
+
+      // first column: description of which idea the user will vote on
+      if (config.presentationText)
+      {
+        var td = $("<th/>");
+        td.text("Description"); // TODO: i18n
+        tr.append(td);
+        var td2 = $("<td/>");
+        td2.text(config.presentationText);
+        tr2.append(td2);
+      }
+
+      for ( var i = 0; i < config.items.length; ++i )
+      {
+        console.log(i);
+        var item = config.items[i];
+
+
+        var td = $("<th/>");
+        if ( item.criteria && item.criteria.length > 0 )
+        {
+          if ( item.criteria.length == 1 && item.criteria[0].name )
+            td.text(item.criteria[0].name);
+          else
+          {
+            var a = [];
+            for ( var j = 0; j < item.criteria.length; ++j )
+            {
+              if ( item.criteria[j].name )
+                a.push ( item.criteria[j].name );
+            }
+            td.text(a.join(" / "));
+          }
+        }
+        
+        tr.append(td);
+
+        var td2 = $("<td/>");
+        td2.attr("id","table_vote_item_"+i);
+        tr2.append(td2);
+        var holder = d3.select("#table_vote_item_"+i);
+
+        
+        //console.log("item.type:");
+        //console.log(item.type);
+        if ( item.type == "vertical_gauge" )
+        {
+          $scope.drawVerticalGauge(holder, item);
+        }
+        else if ( item.type == "2_axes" )
+        {
+          $scope.draw2AxesVote(holder, item);
+        }
+      }
+
+      console.log("drawUIWithTable() completed");
+    };
+
+
     $scope.drawUI = function(){
       console.log("drawUI()");
       var config = $scope.settings;
@@ -667,6 +746,7 @@ voteApp.controller('indexCtl',
           $scope.draw2AxesVote(holder, item);
         }
       }
+
       console.log("drawUI() completed");
     };
 

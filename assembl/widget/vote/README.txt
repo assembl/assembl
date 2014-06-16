@@ -89,6 +89,8 @@ You have to POST to http://localhost:6543/data/Discussion/1/widgets using the fo
             "height": 300
         }
     ],
+    "displayStyle":"standard",
+    "presentationText":"Installer des panneaux solaires sur le toit du batiment",
     "padding":60,
     "axisWidthDefault":100
 }
