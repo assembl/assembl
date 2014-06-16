@@ -1,5 +1,83 @@
 "use strict";
 
+voteApp.controller('adminCtl',
+  ['$scope', '$http', '$routeParams', '$log', '$location', 'globalConfig', 'configTestingService', 'configService', 'Discussion',
+  function($scope, $http, $routeParams, $log, $location, globalConfig, configTestingService, configService, Discussion){
+
+  $scope.init = function(){
+    console.log("adminCtl::init()");
+
+    $("#widget_create").on("submit", function(){
+      $scope.createWidgetInstance(
+        $("#widget_create_api_endpoint").val(),
+        $("#widget_create_type").val(),
+        $("#widget_create_settings").val(),
+        $("#widget_create_result")
+      );
+    });
+
+    $("#criterion_add").on("submit", function(){
+      $scope.addCriterion(
+        $("#criterion_add_api_endpoint").val(),
+        $("#criterion_add_id").val(),
+        $("#criterion_add_result")
+      );
+    });
+    
+  }
+
+  $scope.createWidgetInstance = function(endpoint, widget_type, settings, result_holder){
+
+    var post_data = {
+      "type": widget_type,
+      "settings": settings
+    };
+
+    $http({
+        method: 'POST',
+        url: endpoint,
+        data: $.param(post_data),
+        async: true,
+        //headers: {'Content-Type': 'application/json'}
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+    }).success(function(data, status, headers){
+        console.log("success");
+        var created_widget = headers("Location"); // "local:Widget/5"
+        console.log("created_widget: " + created_widget);
+        result_holder.text("Success! Location: " + created_widget);
+    }).error(function(status, headers){
+        console.log("error");
+        result_holder.text("Error");
+    });
+  };
+
+  $scope.addCriterion = function(endpoint, criterion_id, result_holder){
+
+    var post_data = {
+      "id": criterion_id
+    };
+
+    $http({
+        method: 'POST',
+        url: endpoint,
+        data: $.param(post_data),
+        async: true,
+        //headers: {'Content-Type': 'application/json'}
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+    }).success(function(data, status, headers){
+        console.log("success");
+        var created_widget = headers("Location"); // "local:Widget/5"
+        console.log("created_widget: " + created_widget);
+        result_holder.text("Success! Location: " + created_widget);
+    }).error(function(status, headers){
+        console.log("error");
+        result_holder.text("Error");
+    });
+  };
+
+}]);
+
+
 voteApp.controller('votedCtl',
   ['$scope', '$http', '$routeParams', '$log', '$location', 'globalConfig', 'configTestingService', 'configService', 'Discussion',
   function($scope, $http, $routeParams, $log, $location, globalConfig, configTestingService, configService, Discussion){
