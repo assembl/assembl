@@ -1066,6 +1066,14 @@ JOIN post AS family_posts ON (
                 for inst in assocs[:]:
                     widgets_coll = ctx.find_collection('CriterionCollection.criteria')
                     if isinstance(inst, AbstractIdeaVote):
+                        other_votes = cls.db.query(AbstractIdeaVote).filter_by(
+                            voter_id=user_id, idea_id = inst.idea.id,
+                            criterion_id=parent_instance.id, is_tombstone=False).all()
+                        for other_vote in other_votes:
+                            if other_vote == inst:
+                                # probably never happens
+                                continue
+                            other_vote.is_tombstone = True
                         assocs.append(VotedIdeaWidgetLink(
                             widget=widgets_coll.parent_instance, idea=inst.idea))
 

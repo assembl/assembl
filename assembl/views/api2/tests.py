@@ -4,6 +4,7 @@ import pytest
 import simplejson as json
 
 from ...models import (
+    AbstractIdeaVote,
     Idea,
     IdeaLink,
     SubGraphIdeaAssociation,
@@ -347,7 +348,7 @@ def test_widget_basic_interaction(
 
 def test_voting_widget(
         discussion, test_app, subidea_1_1, criterion_1, criterion_2,
-        criterion_3, participant1_user, lickert_range, test_session):
+        criterion_3, admin_user, participant1_user, lickert_range, test_session):
     # Post the initial configuration
     db = Idea.db()
     criteria = (criterion_1, criterion_2, criterion_3)
@@ -382,8 +383,8 @@ def test_voting_widget(
             criteria_url, {"id": criterion.uri()})
         # Which should it be? This is not creation but association.
         assert res.status_code in (200, 201)
-    Idea.db.flush()
-    Idea.db.expire(new_widget, ('criteria', ))
+    db.flush()
+    db.expire(new_widget, ('criteria', ))
     # Get the widget again, it should now have voting_urls
     widget_rep = test_app.get(
         local_to_absolute(new_widget.uri()),
@@ -432,3 +433,20 @@ def test_voting_widget(
         key = criterion.uri()
         assert key in vote_results
         assert vote_results[key] == i+1
+    # Change my mind
+    criterion_key = criteria[0].uri()
+    voting_url = local_to_absolute(voting_urls[criterion_key])
+    test_app.post(voting_url, {
+        "type": "LickertIdeaVote", "value": 10})
+    db.flush()
+    votes = db.query(AbstractIdeaVote).filter_by(
+        voter_id=admin_user.id, idea_id = subidea_1_1.id,
+        criterion_id=criteria[0].id).all()
+    assert len(votes) == 2
+    assert len([v for v in votes if v.is_tombstone]) == 1
+    # Get vote results again.
+    vote_results_url = local_to_absolute(widget_rep['vote_results_url'])
+    vote_results = test_app.get(vote_results_url)
+    assert vote_results.status_code == 200
+    vote_results = vote_results.json
+    assert vote_results[criterion_key] == 10
