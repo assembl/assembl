@@ -171,7 +171,7 @@ def test_widget_user_state(
     assert result.json == state
     # See if the user_state is in the list of all user_states
     result = test_app.get(
-        local_to_absolute(widget_rep['user_states_uri']),
+        local_to_absolute(widget_rep['user_states_url']),
         headers={"Accept": "application/json"}
     )
     assert result.status_code == 200
@@ -222,12 +222,12 @@ def test_widget_basic_interaction(
     assert widget_rep.status_code == 200
     widget_rep = widget_rep.json
     print widget_rep
-    assert 'messages_uri' in widget_rep
-    assert 'ideas_uri' in widget_rep
+    assert 'messages_url' in widget_rep
+    assert 'ideas_url' in widget_rep
     assert 'user' in widget_rep
     # Get the list of new ideas
     # should be empty, despite the idea having a non-widget child
-    idea_endpoint = local_to_absolute(widget_rep['ideas_uri'])
+    idea_endpoint = local_to_absolute(widget_rep['ideas_url'])
     test = test_app.get(idea_endpoint)
     assert test.status_code == 200
     assert test.json == []
@@ -307,13 +307,13 @@ def test_widget_basic_interaction(
     Idea.db.flush()
     new_idea2_id = new_idea_create.location
     # Approve the first but not the second idea
-    confirm_idea_uri = local_to_absolute(widget_rep['confirm_ideas_uri'])
-    confirm = test_app.post(confirm_idea_uri, {
+    confirm_idea_url = local_to_absolute(widget_rep['confirm_ideas_url'])
+    confirm = test_app.post(confirm_idea_url, {
         "ids": json.dumps([new_idea1_id])})
     assert confirm.status_code == 200
     Idea.db.flush()
     # Get it back
-    get_back = test_app.get(confirm_idea_uri)
+    get_back = test_app.get(confirm_idea_url)
     assert get_back.status_code == 200
     # The first idea should now be unhidden, but not the second
     assert get_back.json == [new_idea1_id]
@@ -329,14 +329,14 @@ def test_widget_basic_interaction(
     Post.db.flush()
     new_post2_id = new_post_create.location
     # Approve the first but not the second idea
-    confirm_messages_uri = local_to_absolute(
-        widget_rep['confirm_messages_uri'])
-    confirm = test_app.post(confirm_messages_uri, {
+    confirm_messages_url = local_to_absolute(
+        widget_rep['confirm_messages_url'])
+    confirm = test_app.post(confirm_messages_url, {
         "ids": json.dumps([new_post1_id])})
     assert confirm.status_code == 200
     Idea.db.flush()
     # Get it back
-    get_back = test_app.get(confirm_messages_uri)
+    get_back = test_app.get(confirm_messages_url)
     assert get_back.status_code == 200
     assert get_back.json == [new_post1_id]
     # The first idea should now be unhidden, but not the second
