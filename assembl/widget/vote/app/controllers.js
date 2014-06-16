@@ -120,9 +120,9 @@ voteApp.controller('indexCtl',
 
 
       // check that an URL to POST the vote is provided in the configuration JSON
-      if ( configService.user_votes_uri && configService.user_votes_uri != "null" )
+      if ( configService.user_votes_url && configService.user_votes_url != "null" )
       {
-        $scope.postVoteUrl = AssemblToolsService.resourceToUrl(configService.user_votes_uri);
+        $scope.postVoteUrl = AssemblToolsService.resourceToUrl(configService.user_votes_url);
         console.log("postVoteUrl:");
         console.log($scope.postVoteUrl);
       }
@@ -130,7 +130,7 @@ voteApp.controller('indexCtl',
       {
         // TODO: better error
         // temporary disabled
-        //alert("Error: The configuration JSON does not contain a \"user_votes_uri\" property.");
+        //alert("Error: The configuration JSON does not contain a \"user_votes_url\" property.");
         //return;
         $scope.postVoteUrl = '';
       }

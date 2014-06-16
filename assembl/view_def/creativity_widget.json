@@ -237,21 +237,21 @@
         "discussion": true,
         "settings": "settings_json",
         "state": "state_json",
-        "user_states_uri": "&get_user_states_url",
+        "user_states_url": "&get_user_states_url",
         "user_state_url": "&get_user_state_url",
         "widget_settings_url": "&get_settings_url",
         "widget_state_url": "&get_state_url"
     },
     "BaseIdeaWidget": {
         "@extends": "Widget",
-        "ideas_uri": "&get_ideas_url",
-        "messages_uri": "&get_messages_url",
+        "ideas_url": "&get_ideas_url",
+        "messages_url": "&get_messages_url",
         "base_idea": ":"
     },
     "IdeaCreatingWidget": {
         "@extends": "BaseIdeaWidget",
-        "confirm_ideas_uri": "&get_confirm_ideas_url",
-        "confirm_messages_uri": "&get_confirm_messages_url"
+        "confirm_ideas_url": "&get_confirm_ideas_url",
+        "confirm_messages_url": "&get_confirm_messages_url"
     },
     "CreativityWidget": {
         "@extends": "IdeaCreatingWidget"

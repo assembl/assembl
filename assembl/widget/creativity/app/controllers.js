@@ -265,7 +265,7 @@ creativityApp.controller('videosCtl',
 
       /*
       // send an Idea, which should display in Assembl's Table of ideas as a sub-idea of the idea linked to the widget
-      var EntityApiEndpoint = $resource(AssemblToolsService.resourceToUrl(WidgetConfigService.ideas_uri), {}, {'Content-Type': 'application/x-www-form-urlencoded'});
+      var EntityApiEndpoint = $resource(AssemblToolsService.resourceToUrl(WidgetConfigService.ideas_url), {}, {'Content-Type': 'application/x-www-form-urlencoded'});
       var message = new EntityApiEndpoint();
       message.type = "Idea";
       message.short_title = messageSubject;
@@ -283,7 +283,7 @@ creativityApp.controller('videosCtl',
 
       /*
       // does not work because even if we tell the right content type, the parameters are still sent as JSON
-      var EntityApiEndpoint = $resource(AssemblToolsService.resourceToUrl(WidgetConfigService.ideas_uri), {}, {
+      var EntityApiEndpoint = $resource(AssemblToolsService.resourceToUrl(WidgetConfigService.ideas_url), {}, {
           post:{
               method:"POST",
               isArray:false,
@@ -306,7 +306,7 @@ creativityApp.controller('videosCtl',
       };
       $http({
         method: 'POST',
-        url: utils.urlApi(Widget.ideas_uri),
+        url: utils.urlApi(Widget.ideas_url),
         data: $.param(message),
         headers: {'Content-Type': 'application/x-www-form-urlencoded'}
       }).success(function (data, status, headers, config) {
@@ -326,8 +326,8 @@ creativityApp.controller('videosCtl',
         "type": "Idea",
         "short_title": messageSubject
       };
-      $http.post( AssemblToolsService.resourceToUrl(WidgetConfigService.ideas_uri), data)
-      //$http.post( AssemblToolsService.resourceToUrl(WidgetConfigService.ideas_uri), data, { params: data })
+      $http.post( AssemblToolsService.resourceToUrl(WidgetConfigService.ideas_url), data)
+      //$http.post( AssemblToolsService.resourceToUrl(WidgetConfigService.ideas_url), data, { params: data })
         .success(function(data, status, headers){
           alert("Your message has been successfully posted.");
         });
@@ -340,7 +340,7 @@ creativityApp.controller('videosCtl',
 
       /*
       // send a Message, which should display in Assembl's Messages panel when the idea linked to the widget is selected
-      var EntityApiEndpoint = $resource(WidgetConfigService.messages_uri);
+      var EntityApiEndpoint = $resource(WidgetConfigService.messages_url);
       var message = new EntityApiEndpoint();
       message.idea_id = $scope.idea["@id"];
       message.message = messageSubject + " \n " + messageContent;
@@ -535,7 +535,7 @@ creativityApp.controller('sessionCtl',
     $scope.getSubIdeaFromIdea = function(){
 
         var
-            rootUrl = utils.urlApi($scope.widget.ideas_uri),
+            rootUrl = utils.urlApi($scope.widget.ideas_url),
             ideas = [];
 
         $scope.parentIdeaTitle = $scope.widget.base_idea.shortTitle;
@@ -580,7 +580,7 @@ creativityApp.controller('sessionCtl',
     $scope.sendSubIdea = function(){
         if($scope.formData) {
 
-            var rootUrl = utils.urlApi($scope.widget.ideas_uri);
+            var rootUrl = utils.urlApi($scope.widget.ideas_url);
 
             $scope.formData.type = 'Idea';
 
@@ -659,7 +659,7 @@ creativityApp.controller('ratingCtl',
     $scope.getSubIdeaForVote = function(){
 
         var
-            rootUrl = utils.urlApi(Widget.ideas_uri),
+            rootUrl = utils.urlApi(Widget.ideas_url),
             ideas = [];
 
         $http.get(rootUrl).then(function(response){
@@ -675,7 +675,7 @@ creativityApp.controller('ratingCtl',
 
         }).then(function(ideas){
 
-            var urlRoot = utils.urlApi(Widget.user_states_uri);
+            var urlRoot = utils.urlApi(Widget.user_states_url);
 
             $http.get(urlRoot).then(function(response){
 
@@ -713,8 +713,8 @@ creativityApp.controller('ratingCtl',
             commentSelected = [],
             subIdea = angular.element('#postVote .sub-idea'),
             commentSubIdea = angular.element('#postVote .comment-to-sub-idea'),
-            rootUrlSubIdea = utils.urlApi(Widget.confirm_ideas_uri),
-            rootUrlMessage = utils.urlApi(Widget.confirm_messages_uri);
+            rootUrlSubIdea = utils.urlApi(Widget.confirm_ideas_url),
+            rootUrlMessage = utils.urlApi(Widget.confirm_messages_url);
 
         $scope.$watch('message', function(value){
             //TODO: find a good translation for confirm that the catching sub idea is valid
