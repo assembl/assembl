@@ -317,6 +317,17 @@ class MultiCriterionVotingWidget(Widget):
         'polymorphic_identity': 'multicriterion_voting_widget',
     }
 
+    def __init__(self, *args, **kwargs):
+        super(MultiCriterionVotingWidget, self).__init__(*args, **kwargs)
+        settings = self.settings_json
+        if 'criteria' in settings:
+            for criterion in settings['criteria']:
+                try:
+                    criterion_idea = Idea.get_instance(criterion["@id"])
+                    self.add_criterion(criterion_idea)
+                except Exception as e:
+                    print "Missing criterion. Discarded.", criterion
+
     @property
     def criteria_url(self):
         return 'local:Discussion/%d/widgets/%d/criteria' % (

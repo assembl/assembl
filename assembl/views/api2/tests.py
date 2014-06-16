@@ -348,14 +348,22 @@ def test_widget_basic_interaction(
 
 def test_voting_widget(
         discussion, test_app, subidea_1_1, criterion_1, criterion_2,
-        criterion_3, admin_user, participant1_user, lickert_range, test_session):
+        criterion_3, admin_user, participant1_user, lickert_range,
+        test_session):
     # Post the initial configuration
     db = Idea.db()
     criteria = (criterion_1, criterion_2, criterion_3)
+    criteria_def = [
+        {
+            "@id": criterion.uri(),
+            "short_title": criterion.short_title
+        } for criterion in criteria
+    ]
     new_widget_loc = test_app.post(
         '/data/Discussion/%d/widgets' % (discussion.id,), {
             'type': 'MultiCriterionVotingWidget',
             'settings': json.dumps({
+                "criteria": criteria_def
             })
         })
     assert new_widget_loc.status_code == 201
@@ -363,28 +371,8 @@ def test_voting_widget(
     db.flush()
     new_widget = Widget.get_instance(new_widget_loc.location)
     assert new_widget
-    # Get the widget from the api
-    widget_rep = test_app.get(
-        local_to_absolute(new_widget.uri()),
-        {'target': subidea_1_1.uri()},
-        headers={"Accept": "application/json"}
-    )
-    assert widget_rep.status_code == 200
-    widget_rep = widget_rep.json
-    # Get the list of criteria (It should be empty)
-    criteria_url = local_to_absolute(widget_rep['criteria_url'])
-    test = test_app.get(criteria_url)
-    assert test.status_code == 200
-    assert len(test.json) == 0
-    # Add criteria
-    for criterion in criteria:
-        res = test_app.post(
-            criteria_url, {"id": criterion.uri()})
-        # Which should it be? This is not creation but association.
-        assert res.status_code in (200, 201)
-    db.flush()
     db.expire(new_widget, ('criteria', ))
-    # Get the widget again, it should now have voting_urls
+    # Get the widget from the api
     widget_rep = test_app.get(
         local_to_absolute(new_widget.uri()),
         {'target': subidea_1_1.uri()},
@@ -395,7 +383,14 @@ def test_voting_widget(
     voting_urls = widget_rep['voting_urls']
     assert voting_urls
     assert widget_rep['criteria']
+    assert widget_rep['criteria_url']
+    # Note: At this point, we have two copies of the criteria in the rep.
+    # One is the full ideas in widget_rep['criteria'], the other is
+    # as specified originally in widget_rep['settings']['criteria'].
+    # In what follows I'll use the former.
+
     # The criteria should also be in the criteria url
+    criteria_url = local_to_absolute(widget_rep['criteria_url'])
     test = test_app.get(criteria_url)
     assert test.status_code == 200
     assert len(test.json) == 3
@@ -439,7 +434,7 @@ def test_voting_widget(
         "type": "LickertIdeaVote", "value": 10})
     db.flush()
     votes = db.query(AbstractIdeaVote).filter_by(
-        voter_id=admin_user.id, idea_id = subidea_1_1.id,
+        voter_id=admin_user.id, idea_id=subidea_1_1.id,
         criterion_id=criteria[0].id).all()
     assert len(votes) == 2
     assert len([v for v in votes if v.is_tombstone]) == 1
