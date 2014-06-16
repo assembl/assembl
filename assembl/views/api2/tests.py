@@ -356,7 +356,6 @@ def test_voting_widget(
         '/data/Discussion/%d/widgets' % (discussion.id,), {
             'type': 'MultiCriterionVotingWidget',
             'settings': json.dumps({
-                'idea': 'local:Idea/%d' % (subidea_1_1.id)
             })
         })
     assert new_widget_loc.status_code == 201
