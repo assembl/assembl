@@ -1,10 +1,11 @@
 .edit-container{
   width: 95%;
-  margin: 0 auto;
+  margin: 2em auto;
 
-  .instance {
-    float:left;
-    margin: 3px;
-    //color: #000000;
+  section {
+    width: 35em;
+    .panel-form {
+      margin-bottom: 15px;
+    }
   }
 }

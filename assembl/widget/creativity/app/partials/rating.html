@@ -3,7 +3,7 @@
         <h3>{{'topIdea' | translate}}</h3>
     </p>
     <form id="postVote">
-        <ul class="bx-idea" ng-repeat="idea in ideas">
+        <ul class="bx-idea" ng-repeat="idea in ideas | orderBy:'rate':true ">
             <li>
                 <label class="checkbox" for="{{idea['@id']}}">
                     <span class="icons">
@@ -14,8 +14,10 @@
                     <h6 class="lead-text"><i class="icon-lamp"></i>{{idea.shortTitle}} <span class="badge">{{idea.rate}}</span></h6>
                 </label>
                 <small class="definition">{{idea.definition}}</small>
+                <div>
+                    <rating comment="idea"></rating>
+                </div>
             </li>
-            <rating comment="idea"></rating>
         </ul>
         <button ng-show="ideas.length > 0" class="btn btn-primary btn-xs pull-right" ng-click="validVote()">{{'validateChoose' | translate}}</button>
     </form>

@@ -20,6 +20,8 @@
     "pointToShare":"You have {{wallet}} points left to assign to the following ideas:",
     "proposeIdea":"Submit your idea to answer the question above :",
     "validateChoose":"Validate your choice",
+    "session_question":"This issue will be visible above the card",
+    "session_jeton":"Number of token",
 
     "videoTopExplanation": "Use the search bar down here to find videos which would inspire you about the idea \"{{ idea }}\", in the \"{{ discussion }}\" discussion. For example, you can use some of these keywords taken from the discussion:",
     "videoTopExplanationSecondRowKeywords": "Here are some new keywords which could come close to this subject:",

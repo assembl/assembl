@@ -1,10 +1,8 @@
 <div class="session">
     <div class="col-md-5">
         <div class="session-cards">
-            <div>
-                <!-- TODO need translation -->
                 <div class="bs-callout bs-callout-warning">
-                    <p>What are the international markets we should target ?</p>
+                    <p>{{widget.settings.session_question}}</p>
                     <p>{{'ideaPrompt'| translate : {parentIdeaTitle: parentIdeaTitle} }}</p>
                 </div>
 
@@ -25,7 +23,6 @@
                 <div class="bs-callout bs-callout-info">
                     <p>{{'proposeIdea'| translate}}</p>
                 </div>
-            </div>
         </div>
         <div class="card-comment">
             <form role="form" ng-submit="sendSubIdea()">

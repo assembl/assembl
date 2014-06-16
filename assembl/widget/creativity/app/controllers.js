@@ -507,11 +507,29 @@ creativityApp.controller('sessionCtl',
 
     $scope.formData = {};
     $scope.widget = configService.data.widget;
+    $rootScope.wallet = $scope.widget.settings.session_jeton;
+
+    $scope.setJeton = function() {
+        var
+            user_state = _.isUndefined($scope.widget.user_state) ?
+                [] : JSON.parse($scope.widget.user_state.session_user_vote);
+
+        var jeton = 0;
+
+        angular.forEach(user_state, function(value){
+
+            jeton += parseInt(_.values(value), 10);
+        })
+
+        $rootScope.wallet = $rootScope.wallet - jeton;
+    }
 
     /**
      * Due to the latency to init $rootScope we need a delay
      * */
     $timeout(function(){
+
+        $scope.setJeton();
 
         $scope.getSubIdeaFromIdea();
 
@@ -521,9 +539,11 @@ creativityApp.controller('sessionCtl',
 
         switch(value){
             case 'sendNewIdea:success':
+                growl.success('New sub idea posted');
                 $scope.getSubIdeaFromIdea();
                 break;
             case 'sendNewIdea:error':
+                growl.error('Something wrong');
                 break;
 
         }
@@ -546,10 +566,8 @@ creativityApp.controller('sessionCtl',
 
                 if(item.widget_add_post_endpoint){
 
-                    item.widget_add_post_endpoint = _.values(item.widget_add_post_endpoint).toString().split(':')[1];
-                    item.widget_add_post_endpoint = '/data/'+item.widget_add_post_endpoint;
+                    item.widget_add_post_endpoint = utils.urlApi(_.values(item.widget_add_post_endpoint));
                     item.creationDate = moment(item.creationDate).fromNow();
-
                     ideas.push(item);
                 }
             });
@@ -589,21 +607,15 @@ creativityApp.controller('sessionCtl',
                 url:rootUrl,
                 data:$.param($scope.formData),
                 headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-            }).success(function(data, status, headers){
-
-                growl.success('New sub idea posted');
+            }).success(function(){
 
                 $scope.message = "sendNewIdea:success";
-
                 $scope.formData.short_title = null;
                 $scope.formData.definition = null;
 
-            }).error(function(status, headers){
-
-                growl.error('Something wrong');
+            }).error(function(){
 
                 $scope.message = "sendNewIdea:error";
-
             });
         }
     }
@@ -689,7 +701,7 @@ creativityApp.controller('ratingCtl',
                    angular.forEach(rate, function(r){
                       var id_rate = parseInt(_.keys(r), 10),
                           rate_value = _.values(r);
-
+                       //FIXME : need a default value for rating
                        if(id_idea === id_rate){
 
                           idea.rate = parseInt(rate_value, 10);
@@ -795,44 +807,73 @@ creativityApp.controller('ratingCtl',
 }]);
 
 creativityApp.controller('editCtl',
-    ['$scope','$http', function($scope, $http){
+    ['$scope','$http','configService','utils','growl', function($scope, $http, configService, utils, growl){
 
-    $scope.welcome = "Welcome to the configuration widget";
+    var Widget = configService.data.widget;
+
+    $scope.formData = {};
+    $scope.urlRoot = utils.urlApi(Widget.widget_settings_url);
+
+    if(Widget.settings.session_question)
+       $scope.formData.question = Widget.settings.session_question;
+    else
+        $scope.formData.question = "";
+
+    if(Widget.settings.session_jeton)
+        $scope.formData.number = Widget.settings.session_jeton;
+    else
+        $scope.formData.number = 0;
+
+    $scope.$watch("message", function(value){
+
+        switch(value){
+            case 'createQuestion:success':
+                growl.success('Question configured');
+                break;
+            case 'createQuestion:error':
+                growl.error('An error occur when you set the question');
+                break;
+            case 'setJeton:success':
+                growl.success('jeton added');
+                break;
+            case 'setJeton:error':
+                growl.error('An error occur when you set the number of jeton');
+                break;
+        }
+    }, true);
 
     $http.get('/data/Widget').then(function(session){
 
         $scope.widgetInstance = session.data;
-
     });
 
-    // improve this function to create a widget
-    $scope.createWidget = function(){
+    $scope.setSettings = function(){
 
-        var rootUrl = '/data/Discussion/1/widgets';
+        if($scope.formData.question && $scope.formData.number){
 
-        $http({
-            method:'POST',
-            url:rootUrl,
-            data:$.param(obj),
-            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-        }).then(function(data, status, headers){
+            var data = {};
 
-            var header = headers().location;
-            header = header.split(':')[1];
+            data.session_question = $scope.formData.question;
+            data.session_jeton = $scope.formData.number;
 
-            return header;
+            $http({
+                url: $scope.urlRoot,
+                method:'PUT',
+                data:data,
+                headers: {
+                   'Content-Type': 'application/json'
+                }
 
-        }).then(function(header){
+            }).success(function(data, status){
 
-            var rootUrl = '/data/:widgetId'
+                $scope.message = "createQuestion:success";
 
-            $http.get(rootUrl, function(data){
+            }).error(function(data, status){
 
+                $scope.message = "createQuestion:error";
+            })
+        }
 
-            });
-
-        })
     }
-
 
 }]);

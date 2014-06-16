@@ -8,7 +8,7 @@
     "title":"titre",
     "cancel":"Annuler",
     "validVote":"Validez vos votes",
-    "ideaPrompt":"Cette question est en lien avec l'idée adsasdInspirez-vous de la carte ci-dessous pour y répondre !"
+    "ideaPrompt":"Cette question est relative à l'idée \"{{parentIdeaTitle}} \". Inspirez-vous de la carte ci-dessous pour y répondre !",
     "needToConnect":"Vous allez être redirigé vers la page de connexion dans {{time}}s ",
     "connect":"Connectez-vous !",
     "subIdeaPosted":"Votre sous-idée a bien été publiée",
@@ -20,6 +20,8 @@
     "pointToShare":"Il vous reste {{wallet}} points à répartir sur les idées suivantes",
     "proposeIdea":"Proposez votre idée pour répondre à la question posée :",
     "validateChoose":"Valider votre choix",
+    "session_question":"Cette question sera visible au dessus de la carte",
+    "session_jeton":"Nombre de jetons",
 
     "videoTopExplanation": "Utilisez la barre de recherche ci-dessous pour trouver des vidéos qui vous inspirent à propos de l'idée \"{{ idea }}\", dans la discussion \"{{ discussion }}\". Vous pouvez par exemple utiliser certains de ces mots-clés issus de la discussion :",
     "videoTopExplanationSecondRowKeywords": "Voici également quelques mots-clés qui pourraient s'approcher de ces sujets :",

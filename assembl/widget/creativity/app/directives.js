@@ -11,7 +11,6 @@ creativityApp.directive('vote', function($rootScope, $http, utils){
         link: function($scope){
 
             $scope.formData = {};
-            $rootScope.wallet = 10;
 
             var
                 user_state = _.isUndefined($scope.widget.user_state) ? [] : JSON.parse($scope.widget.user_state.session_user_vote),
@@ -31,7 +30,6 @@ creativityApp.directive('vote', function($rootScope, $http, utils){
                     var current_id = parseInt(_.keys(value), 10);
 
                     if(current_id === id){
-
                         $scope.rate = parseInt(_.values(value), 10);
                     }
 
@@ -94,13 +92,13 @@ creativityApp.directive('vote', function($rootScope, $http, utils){
                         data: data,
                         async:true,
                         headers: {
-                            'Content-Type': 'application/json'
+                           'Content-Type': 'application/json'
                         }
-                    }).success(function(data, status, headers){
+                    }).success(function(data, status){
 
                        console.log(status)
 
-                    }).error(function(status, headers){
+                    }).error(function(status){
 
                         console.log(status)
                     });
@@ -232,16 +230,6 @@ creativityApp.directive('comments', function($http, $rootScope, utils){
              * */
             $scope.getCommentsFromSubIdea();
 
-            element.bind('keydown keypress', function(event){
-
-                if(event.which === 13) {
-
-                    //$scope.commentSubIdea()
-
-                    event.preventDefault();
-                }
-
-            });
         }
     }
 })

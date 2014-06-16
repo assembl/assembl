@@ -27,7 +27,7 @@ widgetServices.factory('cardGameService', function($http){
 });
 
 /**
- * ???
+ * Resolve configuration before access to a controller
  * */
 widgetServices.factory('configService', function($q, $http, utils){
     return {
@@ -38,12 +38,12 @@ widgetServices.factory('configService', function($q, $http, utils){
 
         if(!url) defer.reject({message:'invalid url configuration'});
 
-        var urlRoot = "/data/"+url.split(':')[1];
+        var urlRoot = utils.urlApi(url);
 
         $http.get(urlRoot).success(function(response){
             data.widget = response;
             defer.resolve(data);
-        }).error(function(data, status, headers, config){
+        }).error(function(data, status){
 
             if(status === 401) utils.notification();
 
