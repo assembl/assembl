@@ -228,6 +228,7 @@ def test_widget_basic_interaction(
     # Get the list of new ideas
     # should be empty, despite the idea having a non-widget child
     idea_endpoint = local_to_absolute(widget_rep['ideas_url'])
+    idea_hiding_endpoint = local_to_absolute(widget_rep['ideas_hiding_url'])
     test = test_app.get(idea_endpoint)
     assert test.status_code == 200
     assert test.json == []
@@ -245,6 +246,7 @@ def test_widget_basic_interaction(
     new_idea1 = Idea.get_instance(new_idea1_id)
     assert new_idea1 in new_widget.generated_ideas
     assert new_idea1.hidden
+    assert not new_idea1.proposed_in_post.hidden
     assert not subidea_1.hidden
     # Get the sub-idea from the api
     new_idea1_rep = test_app.get(
@@ -300,7 +302,7 @@ def test_widget_basic_interaction(
     print new_post1_rep.json
     assert new_idea1_id in new_post1_rep.json['widget_ideas']
     # Create a second idea
-    new_idea_create = test_app.post(idea_endpoint, {
+    new_idea_create = test_app.post(idea_hiding_endpoint, {
         "type": "Idea", "short_title": "This is another new idea"})
     assert new_idea_create.status_code == 201
     # Get the sub-idea from the db
@@ -321,6 +323,8 @@ def test_widget_basic_interaction(
     assert not new_idea1.hidden
     new_idea2 = Idea.get_instance(new_idea2_id)
     assert new_idea2.hidden
+    # The second idea was not proposed in public
+    assert new_idea2.proposed_in_post.hidden
     # Create a second post.
     new_post_create = test_app.post(local_to_absolute(post_endpoint), {
         "type": "Post", "message_id": "bogus",

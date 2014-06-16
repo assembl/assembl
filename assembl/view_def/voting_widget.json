@@ -249,6 +249,7 @@
     },
     "IdeaCreatingWidget": {
         "@extends": "BaseIdeaWidget",
+        "ideas_hiding_url": "&get_ideas_hiding_url",
         "confirm_ideas_url": "&get_confirm_ideas_url",
         "confirm_messages_url": "&get_confirm_messages_url"
     },

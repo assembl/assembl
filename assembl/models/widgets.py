@@ -234,9 +234,15 @@ class IdeaCreatingWidget(BaseIdeaWidget):
         return 'local:Discussion/%d/widgets/%d/base_idea/-/children/%d/widgetposts' % (
             self.discussion_id, self.id, idea.id)
 
+    def get_ideas_hiding_url(self):
+        return 'local:Discussion/%d/widgets/%d/base_idea_hiding/-/children' % (
+            self.discussion_id, self.id)
+
     @classmethod
     def extra_collections(cls):
         class BaseIdeaCollection(CollectionDefinition):
+            hide_proposed_ideas = False
+
             def __init__(self):
                 super(BaseIdeaCollection, self).__init__(
                     cls, cls.base_idea)
@@ -273,6 +279,7 @@ class IdeaCreatingWidget(BaseIdeaWidget):
                             proposes_idea=inst, creator_id=user_id,
                             discussion_id=inst.discussion_id,
                             message_id=uuid.uuid1().urn,
+                            hidden=self.hide_proposed_ideas,
                             body="", subject=inst.short_title)
                         assocs.append(post)
                         assocs.append(IdeaContentWidgetLink(
@@ -280,7 +287,11 @@ class IdeaCreatingWidget(BaseIdeaWidget):
                             creator_id=user_id))
                         assocs.append(GeneratedIdeaWidgetLink(idea=inst))
 
-        return {'base_idea': BaseIdeaCollection()}
+        class BaseIdeaHidingCollection(BaseIdeaCollection):
+            hide_proposed_ideas = True
+
+        return {'base_idea': BaseIdeaCollection(),
+                'base_idea_hiding': BaseIdeaHidingCollection()}
 
     # @property
     # def generated_ideas(self):
