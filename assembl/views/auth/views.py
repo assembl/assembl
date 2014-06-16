@@ -1,7 +1,7 @@
 from datetime import datetime
 import simplejson as json
 
-from pyramid.i18n import get_localizer, TranslationStringFactory
+from pyramid.i18n import TranslationStringFactory
 from pyramid.view import view_config
 from pyramid.renderers import render_to_response
 from pyramid.security import (
@@ -71,7 +71,7 @@ def login_view(request):
     # TODO: In case of forbidden, get the URL and pass it along.
     if request.params.get('next_view', None):
         request.session['next_view'] = request.params['next_view']
-    localizer = get_localizer(request)
+    localizer = request.localizer
     return get_login_context(request)
 
 
@@ -113,7 +113,7 @@ def get_profile(request):
 @view_config(route_name='profile')
 def assembl_profile(request):
     session = AgentProfile.db
-    localizer = get_localizer(request)
+    localizer = request.localizer
     profile = get_profile(request)
     id_type = request.matchdict.get('type').strip()
     logged_in = authenticated_userid(request)
@@ -217,7 +217,7 @@ def assembl_register_view(request):
                     next_view=request.params.get('next_view', '/'))
     forget(request)
     session = AgentProfile.db
-    localizer = get_localizer(request)
+    localizer = request.localizer
     name = request.params.get('name', '').strip()
     password = request.params.get('password', '').strip()
     password2 = request.params.get('password2', '').strip()
@@ -298,7 +298,7 @@ def assembl_login_complete_view(request):
     next_view = request.params.get('next_view') or \
         request.session.pop('next_view') or '/register'
     logged_in = authenticated_userid(request)
-    localizer = get_localizer(request)
+    localizer = request.localizer
     user = None
     user, account = from_identifier(identifier)
 
@@ -494,7 +494,7 @@ def confirm_emailid_sent(request):
         # Unlog and redirect to login.
         pass
     send_confirmation_email(request, email)
-    localizer = get_localizer(request)
+    localizer = request.localizer
     return dict(
         get_default_context(request),
         email_account_id=request.matchdict.get('email_account_id'),
@@ -513,7 +513,7 @@ def user_confirm_email(request):
     email = verify_email_token(token)
     session = EmailAccount.db
     # TODO: token expiry
-    localizer = get_localizer(request)
+    localizer = request.localizer
     if not email:
         raise HTTPUnauthorized(localizer.translate(_("Wrong email token.")))
     if email.verified:
@@ -559,7 +559,7 @@ def user_confirm_email(request):
     renderer='assembl:templates/login.jinja2',
 )
 def login_denied_view(request):
-    localizer = get_localizer(request)
+    localizer = request.localizer
     return dict(get_login_context(request),
                 error=localizer.translate(_('Login failed, try again')))
     # TODO: If logged in otherwise, go to profile page.
@@ -572,7 +572,7 @@ def login_denied_view(request):
     permission=NO_PERMISSION_REQUIRED
 )
 def confirm_email_sent(request):
-    localizer = get_localizer(request)
+    localizer = request.localizer
     # TODO: How to make this not become a spambot?
     email = request.matchdict.get('email')
     if not email:
@@ -620,7 +620,7 @@ def confirm_email_sent(request):
     permission=NO_PERMISSION_REQUIRED
 )
 def request_password_change(request):
-    localizer = get_localizer(request)
+    localizer = request.localizer
     identifier = request.params.get('identifier', '')
     if not identifier:
         return dict(get_default_context(request))
@@ -640,7 +640,7 @@ def request_password_change(request):
     permission=NO_PERMISSION_REQUIRED
 )
 def password_change_sent(request):
-    localizer = get_localizer(request)
+    localizer = request.localizer
     if not request.params.get('sent', False):
         profile_id = int(request.matchdict.get('profile_id'))
         send_change_password_email(
@@ -662,7 +662,7 @@ def password_change_sent(request):
     permission=NO_PERMISSION_REQUIRED
 )
 def do_password_change(request):
-    localizer = get_localizer(request)
+    localizer = request.localizer
     token = request.matchdict.get('ticket')
     (verified, user_id) = verify_password_change_token(token, 24)
 
@@ -693,7 +693,7 @@ def finish_password_change(request):
     if not logged_in:
         raise HTTPUnauthorized()
     user = User.get(id=logged_in)
-    localizer = get_localizer(request)
+    localizer = request.localizer
     error = None
     p1, p2 = (request.params.get('password1', '').strip(),
               request.params.get('password2', '').strip())

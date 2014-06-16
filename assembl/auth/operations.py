@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 
-from pyramid.i18n import get_localizer, TranslationStringFactory
+from pyramid.i18n import TranslationStringFactory
 from pyramid_mailer import get_mailer
 from pyramid_mailer.message import Message
 
@@ -35,7 +35,7 @@ def get_identity_provider(request, create=True):
 
 def send_confirmation_email(request, email):
     mailer = get_mailer(request)
-    localizer = get_localizer(request)
+    localizer = request.localizer
     confirm_what = _('email')
     if isinstance(email.profile, User) and not email.profile.verified:
         confirm_what = _('account')
@@ -65,7 +65,7 @@ Please confirm your ${confirm_what} <${email}> with ${assembl} by clicking on th
 
 def send_change_password_email(request, profile, email=None):
     mailer = get_mailer(request)
-    localizer = get_localizer(request)
+    localizer = request.localizer
     data = dict(
         name=profile.name, confirm_url=request.route_url(
             'do_password_change', ticket=password_token(profile)),
