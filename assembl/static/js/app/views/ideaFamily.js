@@ -15,6 +15,11 @@ function(Backbone, _, $, Idea, app, Permissions){
         innerViewClass: null,
         
         /**
+         * The class of view used inside the family
+         */
+        innerViewClassInitializeParams: {},
+        
+        /**
          * The template
          * @type {[type]}
          */
@@ -26,7 +31,8 @@ function(Backbone, _, $, Idea, app, Permissions){
         initialize: function(obj, view_data){
             this.view_data = view_data
             this.isOpen = true;
-            this.innerViewClass = obj.innerViewClass
+            this.innerViewClass = obj.innerViewClass;
+            this.innerViewClassInitializeParams = obj.innerViewClassInitializeParams;
         },
 
         /**
@@ -34,8 +40,6 @@ function(Backbone, _, $, Idea, app, Permissions){
          * @return {IdeaInSynthesisView}
          */
         render: function(){
-            app.trigger('render');
-
             var
                 that = this,
                 data = this.model.toJSON(),
@@ -43,7 +47,7 @@ function(Backbone, _, $, Idea, app, Permissions){
                 segments = app.getSegmentsByIdea(this.model),
                 view_data = this.view_data,
                 render_data = view_data[this.model.getId()],
-                ideaView = new this.innerViewClass({model: this.model});
+                ideaView = new this.innerViewClass(_.extend({model: this.model}, this.innerViewClassInitializeParams));
             _.extend(data, render_data);
             app.cleanTooltips(this.$el);
             
@@ -82,7 +86,8 @@ function(Backbone, _, $, Idea, app, Permissions){
             _.each(render_data['children'], function(idea){
                 var ideaFamilyView = new IdeaFamilyView({
                     model:idea, 
-                    innerViewClass:that.innerViewClass},
+                    innerViewClass:that.innerViewClass,
+                    innerViewClassInitializeParams:that.innerViewClassInitializeParams},
                     view_data);
                 rendered_children.push( ideaFamilyView.render().el );
             });

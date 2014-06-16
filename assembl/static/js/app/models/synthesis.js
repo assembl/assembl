@@ -28,7 +28,8 @@ define(['models/base', 'jquery', 'app', 'i18n', 'permissions'], function(Base, $
             subject: i18n.gettext('Add a title'),
             introduction: i18n.gettext('Add an introduction'),
             conclusion: i18n.gettext('Add a conclusion'),
-            ideas: []
+            ideas: [],
+            published_in_post: null
         }
 
 

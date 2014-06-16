@@ -1,5 +1,5 @@
-define(['backbone', 'underscore', 'jquery', 'app', 'models/synthesis', 'models/idea', 'permissions', 'views/ideaFamily', 'views/ideaInSynthesis', 'i18n', 'views/editableField', 'utils/renderVisitor'],
-function(Backbone, _, $, app, Synthesis, Idea, Permissions, IdeaFamilyView, IdeaInSynthesisView, i18n, EditableField, renderVisitor){
+define(['backbone', 'underscore', 'jquery', 'app', 'models/synthesis', 'models/idea', 'permissions', 'views/ideaFamily', 'views/ideaInSynthesis', 'i18n', 'views/editableField', 'views/ckeditorField', 'utils/renderVisitor'],
+function(Backbone, _, $, app, Synthesis, Idea, Permissions, IdeaFamilyView, IdeaInSynthesisView, i18n, EditableField, CKEditorField, renderVisitor){
     'use strict';
 
     var SynthesisPanel = Backbone.View.extend({
@@ -37,12 +37,6 @@ function(Backbone, _, $, app, Synthesis, Idea, Permissions, IdeaFamilyView, Idea
         collapsed: false,
 
         /**
-         * CKeditor instance for this view
-         * @type {CKeditor}
-         */
-        ckeditor: null,
-
-        /**
          * The template
          * @type {_.template}
          */
@@ -59,7 +53,8 @@ function(Backbone, _, $, app, Synthesis, Idea, Permissions, IdeaFamilyView, Idea
             var that = this,
             rootIdea = null,
             view_data = {},
-            roots = [];
+            roots = [],
+            synthesis_is_published = this.model.get("published_in_post")!=null;
             app.trigger('render');
             app.cleanTooltips(this.$el);
 
@@ -91,12 +86,6 @@ function(Backbone, _, $, app, Synthesis, Idea, Permissions, IdeaFamilyView, Idea
                 }
             }
             
-            // Cleaning previous ckeditor instance
-            if( this.ckeditor ){
-                this.ckeditor.destroy();
-                this.ckeditor = null;
-            }
-
             //console.log("Synthesis idea collection: ", this.ideas)
 
             //var list = document.createDocumentFragment(),
@@ -129,29 +118,30 @@ function(Backbone, _, $, app, Synthesis, Idea, Permissions, IdeaFamilyView, Idea
             if(rootIdea){
                 rootIdea.visitDepthFirst(renderVisitor(view_data, roots, inSynthesis));
             }
-
             _.each(roots, function append_recursive(idea){
                 var rendered_idea_view = new IdeaFamilyView(
                         {model: idea,
-                            innerViewClass: IdeaInSynthesisView}
+                            innerViewClass: IdeaInSynthesisView,
+                            innerViewClassInitializeParams: {synthesis: that.model}
+                                }
                         , view_data);
                 that.$('.synthesisPanel-ideas').append( rendered_idea_view.render().el );
             });
             this.$('.body-synthesis').get(0).scrollTop = y;
-            if(data.canEdit) {
+            if(data.canEdit && !synthesis_is_published) {
                 var titleField = new EditableField({
                     model: model,
                     modelProp: 'subject'
                 });
                 titleField.renderTo(this.$('.synthesisPanel-title'));
 
-                var introductionField = new EditableField({
+                var introductionField = new CKEditorField({
                     model: model,
                     modelProp: 'introduction'
                 });
                 introductionField.renderTo(this.$('.synthesisPanel-introduction'));
 
-                var conclusionField = new EditableField({
+                var conclusionField = new CKEditorField({
                     model: model,
                     modelProp: 'conclusion'
                 });

@@ -4,11 +4,6 @@ define(['backbone', 'underscore'], function(Backbone, _){
     var EditableField = Backbone.View.extend({
 
         /**
-         * @type {Object}
-         */
-        attributes: {},
-
-        /**
          * @type {String}
          */
         tagName: 'div',
@@ -34,17 +29,10 @@ define(['backbone', 'underscore'], function(Backbone, _){
          * @init
          */
         initialize: function(obj){
-            this.attributes['class'] = 'class' in obj ? obj['class'] : 'panel-editablearea';
             if( 'canEdit' in obj ){
                 this.canEdit = obj.canEdit;
             } else {
                 this.canEdit = true;
-            }
-            if(this.canEdit) {
-                if( !('contenteditable' in this.attributes) ){
-                    this.attributes['contenteditable'] = true;
-                }
-                this.$el.addClass('canEdit');
             }
 
             if( 'modelProp' in obj ){
@@ -65,6 +53,12 @@ define(['backbone', 'underscore'], function(Backbone, _){
          * The render
          */
         render: function(){
+            if(this.canEdit) {
+                if( !(this.$el.attr('contenteditable')) ){
+                    this.$el.attr('contenteditable', true);
+                }
+                this.$el.addClass('canEdit panel-editablearea');
+            }
             var text = this.model.get(this.modelProp);
             this.el.innerHTML = text || this.placeholder;
 
