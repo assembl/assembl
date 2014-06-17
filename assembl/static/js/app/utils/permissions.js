@@ -16,5 +16,10 @@ define([], function(){
     };
 
     return Permissions;
-
+/* 
+ * Comment distinguer le cas où on n'a pas la permission:
+ * ex: app.currentUser.can(Permissions.ADD_POST)
+ * du cas ou l'usager est anonyme (déconnecté):
+ * app.getCurrentUser() == app.users.getUnknownUser()
+ */
 });

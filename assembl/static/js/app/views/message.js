@@ -112,8 +112,9 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n, Permissions, Message
             
             this.$el.attr("id","message-"+ data['@id']);
             data['read'] = this.model.get('read')
+            data['user_is_connected'] = app.getCurrentUser() !== app.users.getUnknownUser();
             this.$el.addClass(data['@type']);
-            if (this.model.get('read')) {
+            if (this.model.get('read') || !data['user_is_connected']) {
                 this.$el.addClass('read');
                 this.$el.removeClass('unread');
             } else {

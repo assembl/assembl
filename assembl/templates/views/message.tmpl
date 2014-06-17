@@ -70,10 +70,12 @@ else if( viewStyle == app.AVAILABLE_MESSAGE_VIEW_STYLES.FULL_BODY ){ %>
     <div class="dropdown">
         <span class="dropdown-label dropdown-label--arrow"></span>
         <ul class="dropdown-list dropdown-list--bottomright">
-            <% if (read){ %>
-                <li id="message-markasunread" class="dropdown-listitem"><a class="iconbutton"></a> {{ gettext('Mark as unread') }}</li>
-            <% } else { %>
-                <li id="message-markasread" class="dropdown-listitem"><a class="iconbutton"></a> {{ gettext('Mark as read') }}</li>
+            <% if (user_is_connected){ %>
+                <% if (read){ %>
+                    <li id="message-markasunread" class="dropdown-listitem"><a class="iconbutton"></a> {{ gettext('Mark as unread') }}</li>
+                <% } else { %>
+                    <li id="message-markasread" class="dropdown-listitem"><a class="iconbutton"></a> {{ gettext('Mark as read') }}</li>
+                <% } %>
             <% } %>
 
             <% if( isHoisted == true ){ %>
