@@ -128,6 +128,7 @@ voteApp.controller('indexCtl',
       }
       else
       {
+        console.log("postVoteUrl is not set");
         // TODO: better error
         // temporary disabled
         //alert("Error: The configuration JSON does not contain a \"user_votes_url\" property.");

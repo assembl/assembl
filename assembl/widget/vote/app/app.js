@@ -71,11 +71,22 @@ angular.element(document).ready(function (){
       return null;
     }
 
+    
+    // get the "target" URL parameter
+    // this parameter is meant to contain the identifier of the item about which the user is voting
+    var target = getUrlVariableValue("target");
+    
+
     var successCallback = function(configData){
         console.log("successCallback ()");
         voteApp.config(['configServiceProvider', function (configServiceProvider) {
             console.log("configServiceProvider config()");
             configServiceProvider.config(configData);
+            // save (or override) the "target" URL parameter into the config
+            if ( target != null || !configServiceProvider.target )
+            {
+                configServiceProvider.config({"target": target});
+            }
         }]);
         angular.bootstrap('#voteApp', ['voteApp']);
     };
@@ -86,7 +97,31 @@ angular.element(document).ready(function (){
         configFile = configFileDefault;
 
     // TODO: implement an error callback, in case the config URL given is invalid or there is a network error
-    $.get(configFile, successCallback);
+    var errorCallback = function(jqXHR, textStatus, errorThrown){
+      console.log("error");
+      console.log("jqXHR:");
+      console.log(jqXHR);
+      console.log("textStatus:");
+      console.log(textStatus);
+      console.log("errorThrown:");
+      console.log(errorThrown);
+
+      var error_code = jqXHR.status;
+      var error_content = jqXHR.responseText;
+      
+      console.log("error_code:");
+      console.log(error_code);
+      console.log("error_content:");
+      console.log(error_content);
+
+      alert("Error while trying to load the configuration file.\nError code: " + error_code + "\nError thrown: " + errorThrown + "\nError content:" + error_content);
+    };
+
+    // if the "target" URL parameter is set, pass it along when calling the widget configuration file
+    var data = {};
+    if ( target )
+      data.target = target;
+    $.get(configFile, data, successCallback).fail(errorCallback);
 });
 
 
