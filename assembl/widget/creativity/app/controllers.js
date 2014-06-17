@@ -506,6 +506,8 @@ creativityApp.controller('sessionCtl',
     $("ul.nav li a[href=\"#session\"]").closest("li").addClass("active");
 
     $scope.formData = {};
+    $scope.displayed_cards = [];
+    $scope.displayed_card_index = 0;
     $scope.widget = configService.data.widget;
     $rootScope.wallet = $scope.widget.settings.session_jeton;
 
@@ -523,17 +525,6 @@ creativityApp.controller('sessionCtl',
 
         $rootScope.wallet = $rootScope.wallet - jeton;
     }
-
-    /**
-     * Due to the latency to init $rootScope we need a delay
-     * */
-    $timeout(function(){
-
-        $scope.setJeton();
-
-        $scope.getSubIdeaFromIdea();
-
-    },1000);
 
     $scope.$watch("message", function(value){
 
@@ -620,8 +611,6 @@ creativityApp.controller('sessionCtl',
         }
     }
 
-    $scope.displayed_cards = [];
-    $scope.displayed_card_index = 0;
     /**
      * Load config card
      * params {int} which is the id of the card game config/game_{int}.json
@@ -647,6 +636,17 @@ creativityApp.controller('sessionCtl',
         }
 
     }
+
+    /**
+     * Due to the latency to init $rootScope we need a delay
+     * */
+    $timeout(function(){
+
+        $scope.setJeton();
+
+        $scope.getSubIdeaFromIdea();
+
+    },1000);
 
 }]);
 
@@ -697,6 +697,8 @@ creativityApp.controller('ratingCtl',
 
                    var id_idea = idea['@id'].split('/')[1],
                        id_idea = parseInt(id_idea, 10);
+
+                   idea.rate = 0;
 
                    angular.forEach(rate, function(r){
                       var id_rate = parseInt(_.keys(r), 10),
