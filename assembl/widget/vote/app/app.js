@@ -92,7 +92,7 @@ angular.element(document).ready(function (){
     };
 
     var configFileDefault = "http://localhost:6543/data/Widget/19";
-    var configFile = getUrlVariableValue("config");
+    var configFile = decodeURIComponent(getUrlVariableValue("config"));
     if ( !configFile || !( /^http(s)?:\/\/.*/.test(configFile) ) )
         configFile = configFileDefault;
 
