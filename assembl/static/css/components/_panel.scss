@@ -87,7 +87,6 @@
     @extend .text;
     @include box-sizing( border-box );
     display: inline-block;
-    overflow-x: hidden;
     width: 100%;
     border-radius: 4px;
     margin: 10px 0;
