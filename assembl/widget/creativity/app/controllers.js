@@ -809,20 +809,22 @@ creativityApp.controller('ratingCtl',
 }]);
 
 creativityApp.controller('editCtl',
-    ['$scope','$http','configService','utils','growl', function($scope, $http, configService, utils, growl){
+    ['$scope','$http','configService','utils','growl','$routeParams',
+        function($scope, $http, configService, utils, growl, $routeParams){
 
-    var Widget = configService.data.widget;
+    $scope.widget = configService.data.widget;
 
     $scope.formData = {};
-    $scope.urlRoot = utils.urlApi(Widget.widget_settings_url);
+    $scope.urlRoot = utils.urlApi($scope.widget.widget_settings_url);
+    $scope.urlEdit = utils.urlApi($routeParams.config);
 
-    if(Widget.settings.session_question)
-       $scope.formData.question = Widget.settings.session_question;
+    if($scope.widget.settings.session_question)
+       $scope.formData.question = $scope.widget.settings.session_question;
     else
         $scope.formData.question = "";
 
-    if(Widget.settings.session_jeton)
-        $scope.formData.number = Widget.settings.session_jeton;
+    if($scope.widget.settings.session_jeton)
+        $scope.formData.number = $scope.widget.settings.session_jeton;
     else
         $scope.formData.number = 0;
 
@@ -844,7 +846,7 @@ creativityApp.controller('editCtl',
         }
     }, true);
 
-    $http.get('/data/Widget').then(function(session){
+    $http.get($scope.urlEdit).then(function(session){
 
         $scope.widgetInstance = session.data;
     });

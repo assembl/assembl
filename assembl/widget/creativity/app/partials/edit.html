@@ -1,26 +1,25 @@
 <div class="edit-container">
-    <div ng-repeat="instance in widgetInstance">
-        <section>
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title">{{instance}}</h3>
+<section>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4 class="panel-title">{{widget['@type']}}</h4>
+        </div>
+        <div class="panel-body">
+            <div class="panel-form">
+            <p class="text-primary">{{widget.base_idea.shortTitle}}</p>
+            <form ng-submit="setSettings()">
+                <div class="form-group">
+                    <label for="session_question">{{'session_question' | translate}}</label>
+                    <input id="session_question" class="form-control" type="text" ng-model="formData.question" placeholder="Enter a question">
                 </div>
-                <div class="panel-body">
-                    <div class="panel-form">
-                    <form ng-submit="setSettings()">
-                        <div class="form-group">
-                            <label for="session_question">{{'session_question' | translate}}</label>
-                            <input id="session_question" class="form-control" type="text" ng-model="formData.question" placeholder="Enter a question">
-                        </div>
-                        <div class="form-group">
-                            <label for="session_jeton">{{'session_jeton' | translate}}</label>
-                            <input id="session_jeton" class="form-control" type="text" ng-model="formData.number" placeholder="Number of jeton">
-                        </div>
-                        <button class="btn btn-default pull-right" type="submit">valider</button>
-                    </form>
-                    </div>
+                <div class="form-group">
+                    <label for="session_jeton">{{'session_jeton' | translate}}</label>
+                    <input id="session_jeton" class="form-control" type="text" ng-model="formData.number" placeholder="Number of jeton">
                 </div>
+                <button class="btn btn-default pull-right" type="submit">valider</button>
+            </form>
             </div>
-        </section>
+        </div>
     </div>
+</section>
 </div>
