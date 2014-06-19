@@ -1,11 +1,10 @@
 <div class="session">
     <div class="col-md-5">
         <div class="session-cards">
-                <div class="bs-callout bs-callout-warning">
+                <div class="bloc-question">
                     <p>{{widget.settings.session_question}}</p>
                     <p>{{'ideaPrompt'| translate : {parentIdeaTitle: parentIdeaTitle} }}</p>
                 </div>
-
                 <div class="card-container">
                     <div class="card">
                         <div class="card-top"></div>
@@ -17,10 +16,9 @@
                     </div>
                 </div>
                 <div class="shuffle">
-                    <button class="btn btn-primary" ng-click="shuffle()">{{'shuffle' | translate}}</button>
+                    <button class="btn btn-default" ng-click="shuffle()">{{'shuffle' | translate}}</button>
                 </div>
-                <!-- TODO need translation -->
-                <div class="bs-callout bs-callout-info">
+                <div class="bs-callout">
                     <p>{{'proposeIdea'| translate}}</p>
                 </div>
         </div>
@@ -57,7 +55,7 @@
                         <vote idea="idea" widget="widget"></vote>
                     </span>
                     <div class="row">
-                        <div class="col-md-11 comment-idea">
+                        <div class="col-md-12 comment-idea">
                             <p>{{idea.definition}}</p>
                             <i class="text-info">{{idea.creationDate}}</i>
                         </div>
