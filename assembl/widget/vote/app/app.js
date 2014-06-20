@@ -71,6 +71,22 @@ angular.element(document).ready(function (){
       return null;
     }
 
+    function startAngularApplication(){
+      angular.bootstrap('#voteApp', ['voteApp']);
+    }
+
+
+    // TODO: better way to access the admin panel
+    // if the user is trying to access the admin panel, skip the loading of the configuration file and start the Angular application directly
+    var admin_variable = getUrlVariableValue("admin");
+    console.log("admin_variable:");
+    console.log(admin_variable);
+    if ( admin_variable != null )
+    {
+      startAngularApplication();
+      return;
+    }
+
     
     // get the "target" URL parameter
     // this parameter is meant to contain the identifier of the item about which the user is voting
@@ -88,10 +104,10 @@ angular.element(document).ready(function (){
                 configServiceProvider.config({"target": target});
             }
         }]);
-        angular.bootstrap('#voteApp', ['voteApp']);
+        startAngularApplication();
     };
 
-    var configFileDefault = "http://localhost:6543/data/Widget/19";
+    var configFileDefault = "/data/Widget/19";
     var configFile = decodeURIComponent(getUrlVariableValue("config"));
     if ( !configFile || !( /^http(s)?:\/\/.*/.test(configFile) ) )
         configFile = configFileDefault;

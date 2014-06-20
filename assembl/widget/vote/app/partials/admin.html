@@ -2,7 +2,42 @@
 <div id="admin" ng-controller="adminCtl" ng-init="init()">
     <h1>Admin</h1>
 
-    <h2>Create an instance of the widget</h2>
+    <div id="step_create_widget">
+        <h2>1. Create a Widget instance (without settings)</h2>
+        <form id="widget_create_without_settings" method="POST">
+            <label for="widget_create_without_settings_api_endpoint">endpoint</label>
+            <input type="text" id="widget_create_without_settings_api_endpoint" value="/data/Discussion/1/widgets" size="50" />
+            <br/>
+            <label for="widget_create_without_settings_type">type</label>
+            <input type="text" id="widget_create_without_settings_type" value="MultiCriterionVotingWidget" size="50" />
+            <br/>
+            <input type="submit" />
+            <span id="widget_create_without_settings_result"></span>
+        </form>
+    </div>
+
+    <!-- <div id="step_set_settings" ng-show="current_step == 2"> -->
+    <div id="step_set_settings">
+        <h2>2. Set its settings</h2>
+        <form id="set_settings" method="POST">
+            <label for="set_settings_api_endpoint">endpoint</label>
+            <input type="text" id="set_settings_api_endpoint" value="/data/Widget/1/settings" size="50" />
+            <br/>
+            <label for="set_settings_settings">settings</label>
+            <textarea id="set_settings_settings">
+
+            </textarea>
+            <br/>
+            <input type="submit" />
+            <span id="set_settings_result"></span>
+        </form>
+    </div>
+
+
+
+    <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+
+    <h2>Create a Widget instance (with settings)</h2>
     <form id="widget_create" method="POST">
         <label for="widget_create_api_endpoint">endpoint</label>
         <input type="text" id="widget_create_api_endpoint" value="/data/Discussion/1/widgets" size="50" />
@@ -17,11 +52,30 @@
 {
     "idea": "local:Idea/2",
     "postVoteUrl":"http://localhost:6543/data/Discussion/1/widgets",
+    "criteria":[
+        {
+            "@id": "local:Idea/3",
+            "short_title": "test 1"
+        },
+        {
+            "@id": "local:Idea/4",
+            "short_title": "test 2"
+        },
+        {
+            "@id": "local:Idea/5",
+            "short_title": "test 3"
+        },
+        {
+            "@id": "local:Idea/6",
+            "short_title": "test 4"
+        }
+    ],
     "items":[
         {
             "type":"2_axes",
             "criteria":[
                 {
+                    "@id":"local:Idea/3",
                     "id":"rentabilite",
                     "name":"Rentabilite (%)",
                     "description":"Description de l'axe rentabilite",
@@ -33,6 +87,7 @@
                     "ticks":6
                 },
                 {
+                    "@id":"local:Idea/4",
                     "id":"risque",
                     "name":"Risque (%)",
                     "description":"Description de l'axe risque",
@@ -51,6 +106,7 @@
             "type": "vertical_gauge",
             "criteria": [
                 {
+                    "@id":"local:Idea/5",
                     "id":"investissement",
                     "name":"Investissement (Euros)",
                     "description":"Description de l'axe investissement",
@@ -67,6 +123,7 @@
             "type": "vertical_gauge",
             "criteria": [
                 {
+                    "@id":"local:Idea/6",
                     "id":"difficulte_mise_en_oeuvre",
                     "name":"Difficulte de mise en oeuvre (note)",
                     "description":"Description de l'axe difficulte de mise en oeuvre",
@@ -99,12 +156,12 @@
     <h2>Add a criterion</h2>
     <form id="criterion_add" method="POST">
         <label for="criterion_add_api_endpoint">endpoint</label>
-        <input type="text" id="criterion_add_api_endpoint" value="/data/" size="50" />
+        <input type="text" id="criterion_add_api_endpoint" value="/data/Discussion/1/widgets/13/criteria" size="50" />
         <br/>
         JSON content:
         <br/>
         <label for="criterion_add_id">id</label>
-        <input type="text" id="criterion_add_id" value="" size="50" />
+        <input type="text" id="criterion_add_id" value="local:Idea/3" size="50" />
         <br/>
         <input type="submit" />
         <span id="criterion_add_result"></span>

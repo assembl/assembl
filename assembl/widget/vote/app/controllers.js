@@ -1,11 +1,36 @@
 "use strict";
 
 voteApp.controller('adminCtl',
-  ['$scope', '$http', '$routeParams', '$log', '$location', 'globalConfig', 'configTestingService', 'configService', 'Discussion',
-  function($scope, $http, $routeParams, $log, $location, globalConfig, configTestingService, configService, Discussion){
+  ['$scope', '$http', '$routeParams', '$log', '$location', 'globalConfig', 'configTestingService', 'configService', 'Discussion', 'AssemblToolsService',
+  function($scope, $http, $routeParams, $log, $location, globalConfig, configTestingService, configService, Discussion, AssemblToolsService){
 
   $scope.init = function(){
     console.log("adminCtl::init()");
+
+    $scope.current_step = 1;
+    $scope.widget_endpoint = null;
+    $scope.widget_data = null; // the content received from the widget endpoint
+    $scope.widget_settings_endpoint = null;
+
+    $("#widget_create_without_settings").on("submit", function(){
+      $scope.createWidgetInstance(
+        $("#widget_create_without_settings_api_endpoint").val(),
+        $("#widget_create_without_settings_type").val(),
+        null,
+        $("#widget_create_without_settings_result")
+      );
+    });
+
+    
+    $("#step_set_settings").on("submit", function(){
+      $scope.setWidgetSettings(
+        $("#set_settings_api_endpoint").val(),
+        $("#set_settings_settings").val(),
+        $("#set_settings_result")
+      );
+    });
+
+
 
     $("#widget_create").on("submit", function(){
       $scope.createWidgetInstance(
@@ -24,14 +49,42 @@ voteApp.controller('adminCtl',
       );
     });
     
-  }
+  };
 
+  $scope.updateOnceWidgetIsCreated = function(){
+    $http({
+      method: 'GET',
+      url: $scope.widget_endpoint,
+      //data: $.param(post_data),
+      //headers: {'Content-Type': 'application/json'}
+      //headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+    }).success(function(data, status, headers){
+      console.log("success");
+      $scope.widget_data = data;
+      if ( !data.widget_settings_url )
+      {
+        console.log("error: widget data does not contain a widget_settings_url property");
+        return;
+      }
+      $scope.widget_settings_endpoint = AssemblToolsService.resourceToUrl(data.widget_settings_url);
+      $("#set_settings_api_endpoint").val($scope.widget_settings_endpoint);
+      ++$scope.current_step;
+    }).error(function(status, headers){
+      console.log("error");
+    });
+  };
+
+  // settings can be null
   $scope.createWidgetInstance = function(endpoint, widget_type, settings, result_holder){
 
     var post_data = {
-      "type": widget_type,
-      "settings": settings
+      "type": widget_type
     };
+
+    if ( settings != null )
+    {
+      post_data["settings"] = settings;
+    }
 
     $http({
         method: 'POST',
@@ -44,11 +97,18 @@ voteApp.controller('adminCtl',
         console.log("success");
         var created_widget = headers("Location"); // "local:Widget/5"
         console.log("created_widget: " + created_widget);
+        $scope.widget_endpoint = AssemblToolsService.resourceToUrl(created_widget);
         result_holder.text("Success! Location: " + created_widget);
+        $scope.updateOnceWidgetIsCreated();
     }).error(function(status, headers){
         console.log("error");
         result_holder.text("Error");
     });
+  };
+
+  // TODO
+  $scope.setWidgetSettings = function(endpoint, settings, result_holder){
+    console.log("setWidgetSettings()");
   };
 
   $scope.addCriterion = function(endpoint, criterion_id, result_holder){
@@ -101,6 +161,8 @@ voteApp.controller('indexCtl',
     $scope.init = function(){
       console.log("indexCtl::init()");
 
+      console.log("configService:");
+      console.log(configService);
       $scope.settings = configService.settings;
       console.log("settings:");
       console.log($scope.settings);
@@ -208,6 +270,13 @@ voteApp.controller('indexCtl',
         console.log(headers);
         //$location.path( "/voted" );
       });
+    };
+
+    $scope.submitSingleVote = function(endpoint, type, criterion_id){
+      console.log("submitSingleVote() parameters:" + endpoint + " " + type + " " + criterion_id);
+      var criterion_value = $("#d3_container g.criterion[data-criterion-id=\""+criterion_id+"\"]").attr("data-criterion-value");
+      console.log("criterion value:");
+      console.log(criterion_value);
     };
 
     // @param destination
@@ -732,6 +801,7 @@ voteApp.controller('indexCtl',
       console.log("drawUI()");
       var config = $scope.settings;
       var holder = d3.select("#d3_container");
+      var jq_holder = $("#d3_container");
 
       for ( var i = 0; i < config.items.length; ++i )
       {
@@ -741,6 +811,30 @@ voteApp.controller('indexCtl',
         if ( item.type == "vertical_gauge" )
         {
           $scope.drawVerticalGauge(holder, item);
+          // add specific vote button for this criterion
+          console.log("item.criteria:");
+          console.log(item.criteria);
+          if ( item.criteria && item.criteria.length && item.criteria[0] && item.criteria[0]["@id"] )
+          {
+            var criterion_id = item.criteria[0]["@id"];
+            console.log("criterion_id id:");
+            console.log(criterion_id);
+            console.log("configService.voting_urls:");
+            console.log(configService.voting_urls);
+            if ( configService.voting_urls && configService.voting_urls[criterion_id] )
+            {
+              console.log("configService.voting_urls[criterion_id]:");
+              console.log(configService.voting_urls[criterion_id]);
+              var criterion_endpoint = AssemblToolsService.resourceToUrl(configService.voting_urls[criterion_id]);
+              //jq_holder.append("<a href='#' ng-click=\"submitSingleVote('"+criterion_endpoint+"', 'LickertIdeaVote', '"+criterion_id+"')\">Vote</a>").click(function(){
+              var link = $("<button>Vote</button>");
+              link.click(function(){ // TODO: does not work, all buttons call with the same parameter value
+                console.log("coucou");
+                $scope.submitSingleVote(criterion_endpoint, 'LickertIdeaVote', item.criteria[0]["id"]);
+              });
+              jq_holder.append(link);
+            }
+          }
         }
         else if ( item.type == "2_axes" )
         {
