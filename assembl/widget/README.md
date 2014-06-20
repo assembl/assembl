@@ -11,33 +11,41 @@ Still, there is some shared knowledge. Here are a few points, with notes on Asse
 
 A Widget consist of the following elements: 
 
-1. HTML/Javascript code, callable at an address: The `widget_display` URL.
-2. Widget information, available as JSON at a `widget_info` URL.
+1. HTML/Javascript code, callable at a few addresses: At least a `widget_configuration` URL and a `widget_display` URL.
+2. Server-side widget information, available as JSON from a `widget_info` URL.
 
-There is also a `widget_collection` URL, which is an endpoint to which you POST basic Widget information to create a Widget instance's `widget_info` URL.
+Internally, there MAY also be a `widget_collection` URL, which is an endpoint to which a widget manager would POST basic Widget information to create a Widget instance's `widget_info` URL. But Widget manager logic is platform-side, and may use this or any other mechanism.
 
 The Widget information MUST contain API endpoints for all information the Widget needs, and MAY contain some of that information directly, to save on calls. In particular, Widget information MUST contains endpoints for GETting and PUTting `settings` and `user_state` information (JSON blobs, described later), and SHOULD contain the settings directly. PUTting information on the `widget_info` URL is not guaranteed to be meaningful.
 
-In Assembl, the Widget information also contains the current user, its permissions, and the current discussion; there is also an endpoint for a generic, publically writable `widget_state`. None of that is mandatory, but if absent URLs should be provided.
+In Assembl, the Widget information also contains the current user, its permissions, and the current discussion; there MAY also be an endpoint for a generic, publically writable `widget_state` (deprecated). It is not mandatory to include any of this information directly, but URLs to GET this information should always be provided.
 
 The `settings` information is a JSON blob, writable by the discussion administrator, readable by all, whose semantics is known by the Widget.
 The `user_state` information is a JSON blob, where each user gets to write a private copy. The Widget MUST offer an endpoint to read all `users_state` of all users; no secure information should be PUT there. (Question: Do we also need a private User information store?)
 
 ## Creation of Widget settings
 
-This is always the first step.
-The Widget expects to be called with an initial URL (in the `config` get variable) that yields a JSON on GET.
-That URL MAY be given in abbreviated form with a local: prefix.
-TODO: Determine if that is useless shared knowledge.
-The Widget MAY have a fallback settings URL.
+### Creation of an empty widget settings.
+
+This is always the first step. Upon instantiation of a Widget, The platform will create a server-side structure with any information it needs (notably its representation of the widget @type.), and an endpoint for `widget_info`. The platform may choose to pre-populate the settings.
+
+### Configuring the Widget Settings
+
+The Widget expects to be called at the `widget_configuration` endpoint with an initial URL (in the `config` get variable) that yields a JSON on GET.
+That URL MAY be given as absolute URLs, or relative to the server root.
+They are currently in abbreviated form with a local: prefix, but this is deprecated.
+The Widget MAY have a fallback settings URL of its own.
 If the Widget code is called without a settings URL, it SHOULD signal an error.
-The Widget MAY receive as only settings information the Widget creation endpoint (`widget_collection`).
+
+### Creation from the `widget_collection` endpoint
+
+OPTIONAL, probably deprecated:
+The Widget MAY receive as only settings information the Widget creation endpoint (`widget_collection`) with the name of the `@type` of its server-side information..
 In that case, it SHOULD present a settings creation interface, where it will POST its settings (with application/x-www-form-urlencoded or multipart/form-data)
-The information it POSTs on its creation endpoint MUST contain a `type` argument, which determines the type of Widget created.
+The information it POSTs on its creation endpoint MUST contain the `@type` argument it received..
 The information POSTed MAY also contain an initial value for `settings` and `user_state` information, as stringified JSON arguments the POSTS. This is a shortcut to PUTting that information separately, and will often save a step.
 NOTE: It is not clear that shortcut will be implemented by all backends. The Widget code should check the `widget_info` back for presence of settings, and make a separate PUT call accordingly.
 The Widget will obtain its `widget_info` URL back in the HTTP Location header.
-That URL MAY be given in abbreviated form with a local: prefix. (Harmful?)
 
 ## Lifecycle
 
@@ -87,6 +95,11 @@ Finally, we need to go from a votable/voted idea to the voting widget, but maybe
 
 In all cases, we need access to a typed widget-idea link from the Ideas.
 If the frontend (or backend) needs extra Widget-specific information, it should navigate from this link to the Widget representation, which should give all necessary URIs. It may imply that the backend will have to implement specific views that introspect the Widget's JSON.
+
+## Other endpoints
+
+The Widget may have other endpoint URLs than `widget_configuration` and `widget_display`. In particular, it may have endpoints with enough information to restore state. Such endpoints may have shared-knowledge parameters.
+[NOT SOLVED, TBD]
 
 ## Security considerations
 
