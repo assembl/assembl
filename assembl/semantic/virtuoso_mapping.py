@@ -89,10 +89,11 @@ def load_ontologies(session, reload=None):
 
 
 class QuadMapPatternS(QuadMapPattern):
-    def __init__(self, subject=None, predicate=None, obj=None,
-                 graph_name=None, name=None, condition=None, section=None):
+    def __init__(
+            self, subject=None, predicate=None, obj=None, graph_name=None,
+            name=None, condition=None, nsm=None, section=None):
         super(QuadMapPatternS, self).__init__(
-            subject, predicate, obj, graph_name, name, condition)
+            subject, predicate, obj, graph_name, name, condition, nsm)
         self.section = section
 
     def set_defaults(self, subject=None, obj=None, graph_name=None,
@@ -190,14 +191,14 @@ class AssemblQuadStorageManager(object):
 
     def prepare_storage(self, quad_storage_name, imported=None):
         alias_manager = ClassAliasManager(Base._decl_class_registry)
-        return QuadStorage(quad_storage_name, imported, alias_manager, False)
+        return QuadStorage(quad_storage_name, imported, alias_manager, False,
+                           nsm=self.nsm)
 
     def populate_storage(
         self, qs, section, graph_name, graph_iri, discussion_id=None,
             exclusive=True):
         gqm = GraphQuadMapPattern(
             graph_name, qs, graph_iri, 'exclusive' if exclusive else None)
-        qs.add_graphmap(gqm)
         cpe = AssemblClassPatternExtractor(
             qs.alias_manager, gqm, section, discussion_id)
         for cls in class_registry.itervalues():
@@ -212,8 +213,9 @@ class AssemblQuadStorageManager(object):
         for section, graph_name, graph_iri, disc_id in sections:
             self.populate_storage(
                 qs, section, graph_name, graph_iri, disc_id, exclusive)
-        defn = qs.definition_statement(self.nsm, engine=session.bind)
-        return qs, list(session.execute('sparql '+defn))
+        defn = qs.full_declaration_clause()
+        return qs, list(session.execute(str(defn.compile(
+            session.bind, compile_kwargs={"literal_binds": True}))))
 
     def update_storage(
             self, session, quad_storage_name, sections, exclusive=True):
@@ -222,17 +224,18 @@ class AssemblQuadStorageManager(object):
         for section, graph_name, graph_iri, disc_id in sections:
             gqm = self.populate_storage(
                 qs, section, graph_name, graph_iri, disc_id)
-            defn = qs.add_imported(gqm, nsm, self.alias_manager)
-            results.extend(session.execute('sparql '+defn))
+            defn = qs.alter_clause(gqm)
+            results.extend(session.execute(str(defn.compile(
+                session.bind, compile_kwargs={"literal_binds": True}))))
         return qs, results
 
-    def drop_storage(self, session, storage_name):
-        qs = QuadStorage(storage_name)
-        session.execute('sparql '+qs.drop(self.nsm))
+    def drop_storage(self, session, storage_name, force=False):
+        qs = QuadStorage(storage_name, nsm=self.nsm)
+        qs.drop(session, force)
 
-    def drop_graph(self, session, graph_iri):
-        gr = GraphQuadMapPattern(graph_iri, None)
-        session.execute('sparql '+gr.drop(self.nsm))
+    def drop_graph(self, session, graph_iri, force=False):
+        gr = GraphQuadMapPattern(graph_iri, None, nsm=self.nsm)
+        gr.drop(session, force)
 
     def discussion_storage_name(self, discussion_id):
         return getattr(QUADNAMES, 'discussion_%d_storage' % discussion_id)
@@ -253,7 +256,7 @@ class AssemblQuadStorageManager(object):
     def create_discussion_storage(self, session, discussion):
         id = discussion.id
         qs = self.prepare_storage(self.discussion_storage_name(id))
-        for s in (DISCUSSION_DATA_SECTION, ): #DISCUSSION_HISTORY_SECTION
+        for s in (DISCUSSION_DATA_SECTION, ):  # DISCUSSION_HISTORY_SECTION
             self.populate_storage(qs, s, self.discussion_graph_name(id, s),
                                   self.discussion_graph_iri(id, s), id)
         from ..models import Extract, IdeaContentLink, TextFragmentIdentifier
@@ -284,29 +287,32 @@ class AssemblQuadStorageManager(object):
         #     QUADNAMES.ExtractGraph_iri, id)
         #
         # So option 3: A lot of encapsulation breaks...
-        # Which still does not quite work in practice, but it does in theory. Sigh.
-        qs2 = qs # self.prepare_storage(self.discussion_storage_name(id))
+        # Which still does not quite work in practice, but it does in theory.
+        # Sigh.
+        qs2 = qs  # self.prepare_storage(self.discussion_storage_name(id))
         extract_graph_name = Extract.graph_iri_class.apply(Extract.id)
         gqm = PatternGraphQuadMapPattern(
             extract_graph_name, qs2, None,
             QUADNAMES.catalyst_ExtractGraph_iri, 'exclusive')
-        qs2.add_graphmap(gqm)
         qmp = QuadMapPatternS(
-            TextFragmentIdentifier.iri_class().apply(TextFragmentIdentifier.id),
+            TextFragmentIdentifier.iri_class().apply(
+                TextFragmentIdentifier.id),
             CATALYST.expressesIdea,
             IdeaContentLink.iri_class().apply(Extract.idea_id),
             graph_name=extract_graph_name,
             name=QUADNAMES.catalyst_expressesIdea_iri,
-            condition=(TextFragmentIdentifier.extract_id == Extract.id) & (Extract.idea_id != None),
+            condition=((TextFragmentIdentifier.extract_id == Extract.id)
+                       & (Extract.idea_id != None)),
             section=EXTRACT_SECTION)
         gqm.add_patterns((qmp,))
-        qs2.alias_manager.add_quadmap(qmp)
-        gqm.alias_set = qs2.alias_manager.get_alias_set(qmp)
-        defn = qs.definition_statement(self.nsm, engine=session.bind)
-        result = list(session.execute('sparql '+defn))
-        # defn2 = qs.alter_native(gqm, nsm, qs2.alias_manager, engine=session.bind)
-        # result.extend(session.execute('sparql '+defn2))
-        return qs, result
+        defn = qs.full_declaration_clause()
+        print defn.compile(session.bind)
+        result = list(session.execute(str(defn.compile(
+            session.bind, compile_kwargs={"literal_binds": True}))))
+        # defn2 = qs.alter_clause(gqm)
+        # result.extend(session.execute(str(defn2.compile(
+        #     session.bind, compile_kwargs={"literal_binds": True}))))
+        return qs, defn, result
 
     def drop_discussion_storage(self, session, discussion):
         self.drop_storage(session, self.discussion_storage_name(discussion.id))
@@ -336,10 +342,10 @@ class AssemblQuadStorageManager(object):
         for stmt in iri_function_definition_stmts:
             session.execute(stmt)
 
-    def drop_all(self, session):
-        self.drop_storage(session, self.global_storage)
-        self.drop_storage(session, self.main_storage)
-        self.drop_storage(session, self.user_storage)
+    def drop_all(self, session, force=False):
+        self.drop_storage(session, self.global_storage, force)
+        self.drop_storage(session, self.main_storage, force)
+        self.drop_storage(session, self.user_storage, force)
         from ..models import Discussion
         for (id,) in session.query(Discussion.id).all():
-            self.drop_storage(session, self.discussion_storage_name(id))
+            self.drop_storage(session, self.discussion_storage_name(id), force)

@@ -254,7 +254,8 @@ class BaseOps(object):
             iri_name = clsname + "_iri"
             cls._iri_class = PatternIriClass(
                 getattr(QUADNAMES, iri_name),
-                'http://%{WSHostName}U/data/'+clsname+'/%d', ('id', Integer, False))
+                'http://%{WSHostName}U/data/'+clsname+'/%d', None,
+                ('id', Integer, False))
         return cls._iri_class
 
     @classmethod

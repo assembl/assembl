@@ -1436,6 +1436,7 @@ class Extract(IdeaContentPositiveLink):
     graph_iri_class = PatternIriClass(
         QUADNAMES.ExcerptGraph_iri,
         'http://%{WSHostName}U/data/ExcerptGraph/%d',
+        None,
         ('id', Integer, False))
 
     body = Column(UnicodeText, nullable=False)
