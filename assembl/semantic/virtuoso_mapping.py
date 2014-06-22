@@ -214,8 +214,7 @@ class AssemblQuadStorageManager(object):
             self.populate_storage(
                 qs, section, graph_name, graph_iri, disc_id, exclusive)
         defn = qs.full_declaration_clause()
-        return qs, list(session.execute(str(defn.compile(
-            session.bind, compile_kwargs={"literal_binds": True}))))
+        return qs, list(session.execute(str(defn.compile(session.bind))))
 
     def update_storage(
             self, session, quad_storage_name, sections, exclusive=True):
@@ -225,8 +224,7 @@ class AssemblQuadStorageManager(object):
             gqm = self.populate_storage(
                 qs, section, graph_name, graph_iri, disc_id)
             defn = qs.alter_clause(gqm)
-            results.extend(session.execute(str(defn.compile(
-                session.bind, compile_kwargs={"literal_binds": True}))))
+            results.extend(session.execute(str(defn.compile(session.bind))))
         return qs, results
 
     def drop_storage(self, session, storage_name, force=False):
@@ -306,12 +304,12 @@ class AssemblQuadStorageManager(object):
             section=EXTRACT_SECTION)
         gqm.add_patterns((qmp,))
         defn = qs.full_declaration_clause()
-        print defn.compile(session.bind)
-        result = list(session.execute(str(defn.compile(
-            session.bind, compile_kwargs={"literal_binds": True}))))
+        # After all these efforts, sparql seems to reject binding arguments!
+        defns = str(defn.compile(session.bind))
+        print defns
+        result = list(session.execute(defns))
         # defn2 = qs.alter_clause(gqm)
-        # result.extend(session.execute(str(defn2.compile(
-        #     session.bind, compile_kwargs={"literal_binds": True}))))
+        # result.extend(session.execute(str(defn2.compile(session.bind))))
         return qs, defn, result
 
     def drop_discussion_storage(self, session, discussion):
