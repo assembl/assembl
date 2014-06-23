@@ -143,7 +143,7 @@ class AssemblClassPatternExtractor(ClassPatternExtractor):
         if rdf_class:
             yield QuadMapPatternS(
                 subject_pattern, RDF.type, rdf_class, self.graph,
-                self.class_pattern_name(sqla_cls), None, rdf_section)
+                self.class_pattern_name(sqla_cls), None, None, rdf_section)
         for p in super(AssemblClassPatternExtractor, self).extract_column_info(
                 sqla_cls, subject_pattern):
             yield p
