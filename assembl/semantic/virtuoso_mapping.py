@@ -60,7 +60,33 @@ iri_function_definition_stmts = [
         returns varchar,
       function DB.DBA._ID_TO_IRI_INVERSE (in id_iri varchar)
         returns varchar
-    ''']
+    ''',
+    """CREATE FUNCTION DB.DBA._EXPAND_QNAME (in qname varchar)
+    returns IRI
+    {
+        declare exit handler for sqlstate '22023' {
+            return qname;
+        };
+        return __xml_nsexpand_iristr(qname);
+    }""",
+    """CREATE FUNCTION DB.DBA._EXPAND_QNAME_INVERSE (in iri IRI)
+    returns varchar
+    {
+        declare prefix, abbrev, local varchar;
+        prefix := iri_split(iri, local);
+        abbrev := __xml_get_ns_prefix(prefix, 2);
+        if (abbrev) {
+        return concat(abbrev, ':', local);
+        }
+        return iri;
+    }""",
+    """SPARQL create iri class virtrdf:QNAME_ID using
+      function DB.DBA._EXPAND_QNAME (in id varchar)
+        returns varchar,
+      function DB.DBA._EXPAND_QNAME_INVERSE (in id_iri varchar)
+        returns varchar
+    """
+]
 
 
 def load_ontologies(session, reload=None):
@@ -218,7 +244,7 @@ class AssemblQuadStorageManager(object):
             self.populate_storage(
                 qs, section, graph_name, graph_iri, disc_id, exclusive)
         defn = qs.full_declaration_clause()
-        return qs, list(session.execute(str(defn.compile(session.bind))))
+        return qs, list(session.execute(defn))
 
     def update_storage(
             self, session, quad_storage_name, sections, exclusive=True):
@@ -227,8 +253,8 @@ class AssemblQuadStorageManager(object):
         for section, graph_name, graph_iri, disc_id in sections:
             gqm = self.populate_storage(
                 qs, section, graph_name, graph_iri, disc_id)
-            defn = qs.alter_clause(gqm)
-            results.extend(session.execute(str(defn.compile(session.bind))))
+            defn = qs.alter_clause_add_graph(gqm)
+            results.extend(session.execute(defn))
         return qs, results
 
     def drop_storage(self, session, storage_name, force=False):
@@ -310,15 +336,15 @@ class AssemblQuadStorageManager(object):
         gqm.add_patterns((qmp,))
         defn = qs.full_declaration_clause()
         # After all these efforts, sparql seems to reject binding arguments!
-        defns = str(defn.compile(session.bind))
-        print defns
-        result = list(session.execute(defns))
-        # defn2 = qs.alter_clause(gqm)
+        print defn.compile(session.bind)
+        result = list(session.execute(defn))
+        # defn2 = qs.alter_clause_add_graph(gqm)
         # result.extend(session.execute(str(defn2.compile(session.bind))))
         return qs, defn, result
 
-    def drop_discussion_storage(self, session, discussion):
-        self.drop_storage(session, self.discussion_storage_name(discussion.id))
+    def drop_discussion_storage(self, session, discussion, force=False):
+        self.drop_storage(
+            session, self.discussion_storage_name(discussion.id), force)
 
     def create_user_storage(self, session):
         return self.create_storage(session, self.user_storage, [
@@ -330,16 +356,16 @@ class AssemblQuadStorageManager(object):
             (EXTRACT_SECTION, extract.extract_graph_name(),
                 extract.extract_graph_iri(), discussion_id)])
 
-    def drop_extract_graph(self, session, extract):
+    def drop_extract_graph(self, session, extract, force=False):
         # why do I not need the discussion here?
-        self.drop_graph(session, self.extract_iri(extract.id))
+        self.drop_graph(session, self.extract_iri(extract.id), force)
 
     def create_private_global_storage(self, session):
         return self.create_storage(session, self.global_storage, [
             (None, self.global_graph, self.global_graph_iri, None)])
 
-    def drop_private_global_storage(self, session):
-        return self.drop_storage(session, self.global_storage)
+    def drop_private_global_storage(self, session, force=False):
+        return self.drop_storage(session, self.global_storage, force)
 
     def declare_functions(self, session):
         for stmt in iri_function_definition_stmts:

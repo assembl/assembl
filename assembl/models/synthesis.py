@@ -27,7 +27,7 @@ from sqlalchemy import (
 )
 from sqlalchemy.ext.associationproxy import association_proxy
 from rdflib import URIRef
-from virtuoso.vmapping import PatternIriClass
+from virtuoso.vmapping import PatternIriClass, IriClass
 
 from assembl.lib.utils import slugify
 from ..nlp.wordcounter import WordCounter
@@ -44,7 +44,7 @@ from .auth import (
     DiscussionPermission, Role, Permission, AgentProfile, User,
     UserRole, LocalUserRole, ViewPost)
 from ..semantic.namespaces import (
-    SIOC, CATALYST, IDEA, ASSEMBL, DCTERMS, OA, QUADNAMES)
+    SIOC, CATALYST, IDEA, ASSEMBL, DCTERMS, OA, QUADNAMES, RDF, VirtRDF)
 from assembl.views.traversal import AbstractCollectionDefinition
 
 
@@ -606,8 +606,6 @@ class Idea(DiscussionBoundBase):
     A core concept taken from the associated discussion
     """
     __tablename__ = "idea"
-    rdf_class = IDEA.GenericIdeaNode
-    #rdf_class_id = Column(IRI_ID)
     ORPHAN_POSTS_IDEA_ID = 'orphan_posts'
     sqla_type = Column(String(60), nullable=False)
 
@@ -651,11 +649,11 @@ class Idea(DiscussionBoundBase):
         #'with_polymorphic': '*'
     }
 
-    # @classmethod
-    # def special_quad_patterns(cls, alias_manager):
-    #     return [QuadMapPatternS(None, 
-    #         RDF.type, IriClass(VirtRDF.iri_id).apply('rdf_class_id')),
-    #         name=QUADNAMES.class_Idea_class)]
+    @classmethod
+    def special_quad_patterns(cls, alias_manager):
+        return [QuadMapPatternS(None,
+            RDF.type, IriClass(VirtRDF.QNAME_ID).apply(Idea.sqla_type),
+            name=QUADNAMES.class_Idea_class)]
 
     @property
     def children(self):
