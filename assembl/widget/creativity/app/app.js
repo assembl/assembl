@@ -30,33 +30,6 @@ creativityApp.config(['$routeProvider','$translateProvider','$locationProvider',
               }
             }
         }).
-        when('/session', {
-           templateUrl:'app/partials/session.html',
-           controller:'sessionCtl',
-           resolve: {
-             app: function($route, configService) {
-               return configService.getWidget($route.current.params.config);
-             }
-           }
-        }).
-        when('/rating', {
-            templateUrl:'app/partials/rating.html',
-            controller:'ratingCtl',
-            resolve: {
-              app: function($route, configService) {
-                return configService.getWidget($route.current.params.config);
-              }
-            }
-        }).
-        when('/edit', {
-            templateUrl:'app/partials/edit.html',
-            controller:'editCtl',
-            resolve: {
-              app: function($route, configService) {
-                return configService.getWidget($route.current.params.config);
-              }
-            }
-        }).
         otherwise({
             redirectTo: '/cards'
         });
