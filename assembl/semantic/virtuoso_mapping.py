@@ -160,12 +160,16 @@ class AssemblClassPatternExtractor(ClassPatternExtractor):
             'rdf_section', DISCUSSION_DATA_SECTION)
         name = self.make_column_name(sqla_cls, column) if (
             column is not None) else None
-        qmp.set_defaults(subject_pattern, column, self.graph.name, name,
-                         None, rdf_section)
         from ..models import DiscussionBoundBase
         if self.discussion_id and issubclass(sqla_cls, DiscussionBoundBase):
+            d_id = self.discussion_id
             qmp.and_condition(
-                sqla_cls.get_discussion_condition(self.discussion_id))
+                sqla_cls.get_discussion_condition(d_id))
+            if qmp.name is not None and "_d%d_" % (d_id,) not in qmp.name:
+                # TODO: improve this
+                qmp.name += "_d%d_" % (d_id,)
+        qmp.set_defaults(subject_pattern, column, self.graph.name, name,
+                         None, rdf_section)
 
     def extract_column_info(self, sqla_cls, subject_pattern):
         gen = self._extract_column_info(sqla_cls, subject_pattern)
@@ -291,14 +295,15 @@ class AssemblQuadStorageManager(object):
         extract_graph_name = Extract.graph_iri_class.apply(Extract.id)
         gqm = PatternGraphQuadMapPattern(
             extract_graph_name, qs2, None,
-            QUADNAMES.catalyst_ExtractGraph_iri, 'exclusive')
+            getattr(QUADNAMES, "catalyst_ExtractGraph_d%d_iri" % (id,)),
+            'exclusive')
         qmp = QuadMapPatternS(
             TextFragmentIdentifier.iri_class().apply(
                 TextFragmentIdentifier.id),
             CATALYST.expressesIdea,
             IdeaContentLink.iri_class().apply(Extract.idea_id),
             graph_name=extract_graph_name,
-            name=QUADNAMES.catalyst_expressesIdea_iri,
+            name=getattr(QUADNAMES, "catalyst_expressesIdea_d%d_iri" % (id,)),
             condition=((TextFragmentIdentifier.extract_id == Extract.id)
                        & (Extract.idea_id != None)),
             section=EXTRACT_SECTION)
