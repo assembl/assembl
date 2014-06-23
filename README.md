@@ -226,7 +226,7 @@ py.test --cov assembl assembl
 
 Typically when developping a specific test:
 ``` sh
-py.test assembl -k name_of_test --pdb
+py.test assembl -s -k name_of_test --pdb
 ```
 
 Python shell with database connection

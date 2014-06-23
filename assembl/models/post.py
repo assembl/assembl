@@ -3,6 +3,7 @@ from sqlalchemy.orm import relationship, backref
 from sqlalchemy.sql import func
 from sqlalchemy import (
     Column,
+    UniqueConstraint,
     Integer,
     DateTime,
     String,
@@ -47,6 +48,14 @@ class Post(Content):
         backref=backref('parent', remote_side=[id]),
     )
 
+    @property 
+    def source_id(self):
+        raise AttributeError("source_id can only be accessed from a derivative of the ImportedPost class")
+    
+    @property 
+    def source(self):
+        raise AttributeError("source can only be accessed from a derivative of the ImportedPost class")
+    
     @classmethod
     def special_quad_patterns(cls, alias_manager):
         # Don't we need a recursive alias for this? It seems not.
@@ -247,7 +256,9 @@ class ImportedPost(Post):
     A Post that originated outside of the Assembl system (was imported from elsewhere).
     """
     __tablename__ = "imported_post"
-
+    __table_args__ = (
+                UniqueConstraint('source_post_id', 'source_id'),
+            )
     id = Column(Integer, ForeignKey(
         'post.id',
         ondelete='CASCADE',
@@ -256,14 +267,25 @@ class ImportedPost(Post):
 
     import_date = Column(DateTime, nullable=False, default=datetime.utcnow)
 
-    source_id = Column(Integer, ForeignKey('post_source.id', ondelete='CASCADE'),
+    source_post_id = Column(Unicode(),
+                        nullable=False,
+                        doc="The source-specific unique id of the imported post.  A listener keeps the message_id in the post class in sync")
+    
+    source_id = Column('source_id', Integer, ForeignKey('post_source.id', ondelete='CASCADE'),
         info= {'rdf': QuadMapPatternS(None, ASSEMBL.has_origin,
                     ContentSource.iri_class().apply())})
+    
     source = relationship(
         "PostSource",
-        backref=backref('contents', order_by=import_date)
+        backref=backref('contents')
     )
-
+    
     __mapper_args__ = {
         'polymorphic_identity': 'imported_post',
     }
+    
+@event.listens_for(ImportedPost.source_post_id, 'set', propagate=True)
+def receive_set(target, value, oldvalue, initiator):
+    "listen for the 'set' event, keeps the message_id in Post class in sync with the source_post_id"
+
+    target.message_id = value 

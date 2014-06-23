@@ -20,7 +20,7 @@ from imaplib2 import IMAP4_SSL, IMAP4
 import transaction
 from sqlalchemy.orm import deferred
 from sqlalchemy.orm import joinedload_all
-from sqlalchemy.orm.exc import NoResultFound
+from sqlalchemy.orm.exc import NoResultFound, MultipleResultsFound
 from sqlalchemy import (
     Column,
     Integer,
@@ -99,9 +99,80 @@ class AbstractMailbox(PostSource):
         return soup.decode_contents()
 
     @staticmethod
+    def strip_full_message_quoting_plaintext(message_body):
+        """Assumes any encoding conversions have already been done 
+        """
+        debug = False;
+        quote_announcement_line_regexes=(
+            re.compile("/-+\s*Original Message\s*-+/"),
+            re.compile(r"^Le .*, .*<.*@.*> a écrit :"),#GMAIL-FR circa 2012 Le 6 juin 2011 15:43, <nicolas.decordes@orange-ftgroup.com> a écrit :
+            re.compile(r"^\d{4}-\d{2}-\d{2}.*<.*@.*>:"),#GMAIL-US circa 2014 2014-06-17 10:32 GMT-04:00 Benoit Grégoire <benoitg@coeus.ca>:
+            )
+        def check_any_regex_match(regexes, stringToMatch):
+            for regex in regexes:
+                if(regex.match(stringToMatch)):
+                    return True
+            else:
+                return False
+        quote_prefix_regex=re.compile(r"^>\s|^>$")
+        whitespace_line_regex=re.compile(r"^\s*$")
+        retval = []
+        currentQuote = []
+        currentWhiteSpace = []
+        class LineState:
+            Normal, PrefixedQuote, QuoteAnnounce, AllWhiteSpace = range(4)
+        line_state_before_transition = LineState.Normal
+        previous_line_state = LineState.Normal
+        line_state = LineState.Normal
+        for line in message_body.splitlines():
+            if line_state != previous_line_state:
+                line_state_before_transition = previous_line_state
+            previous_line_state = line_state
+            
+            if quote_prefix_regex.match(line):
+                line_state = LineState.PrefixedQuote
+            elif check_any_regex_match(quote_announcement_line_regexes, line):
+                line_state = LineState.QuoteAnnounce
+            elif whitespace_line_regex.match(line):
+                line_state = LineState.AllWhiteSpace
+            else:
+                line_state = LineState.Normal
+                
+            if line_state == LineState.Normal:
+                if(previous_line_state == LineState.PrefixedQuote):
+                    retval += currentQuote
+                    currentQuote = []
+                if(previous_line_state == LineState.AllWhiteSpace):
+                    retval += currentWhiteSpace
+                    currentWhiteSpace = []
+                retval.append(line)
+            elif line_state == LineState.PrefixedQuote | line_state == LineState.QuoteAnnounce:
+                currentQuote.append(line)
+            elif line_state == LineState.AllWhiteSpace:
+                currentWhiteSpace.append(line)
+            if debug:
+                print "%d %s \n" % (line_state, line)
+        #if line_state == LineState.PrefixedQuote | (line_state == LineState.AllWhiteSpace & line_state_before_transition == LineState.PrefixedQuote)
+            #We just let trailing quotes and whitespace die...
+        return '\n'.join(retval)
+
+    @staticmethod
+    def strip_full_message_quoting_html(message_body):
+        """Assumes any encoding conversions have already been done 
+        """
+        debug = True;
+        from lxml import html
+        doc = html.fromstring(message_body)
+        for el in doc.find_class('gmail_quote'):
+            el.drop_tree()
+        retval = html.tostring(doc)
+        
+        return retval
+
+    @staticmethod
     def body_as_html(text_value):
         text_value = html_escape(text_value.strip())
-        text_value = text_value.replace("\r", '').replace("\n", "<br />")
+        text_value = text_value.replace("\r", '')
         return text_value
 
 
@@ -134,9 +205,9 @@ class AbstractMailbox(PostSource):
             default_charset = message.get_charset() or 'ISO-8859-1'
             (text_part, html_part) = process_part(message, default_charset, text_part, html_part)
             if html_part:
-                return self.sanitize_html(html_part)
+                return self.sanitize_html(AbstractMailbox.strip_full_message_quoting_html(html_part))
             elif text_part:
-                return self.body_as_html(text_part)
+                return self.body_as_html(AbstractMailbox.strip_full_message_quoting_plaintext(text_part))
             else:
                 return u"Sorry, no assembl-supported mime type found in message parts"
 
@@ -179,13 +250,14 @@ class AbstractMailbox(PostSource):
         subject = email_header_to_unicode(parsed_email['Subject'])
         recipients = email_header_to_unicode(parsed_email['To'])
         body = body.strip()
-        # Try/except for a normal situation is an antipattern,
+        # Try/except for a normal situation is an anti-pattern,
         # but sqlalchemy doesn't have a function that returns
         # 0, 1 result or an exception
         try:
             email_object = self.db.query(Email).filter(
-                Email.message_id == new_message_id,
+                Email.source_post_id == new_message_id,
                 Email.discussion_id == self.discussion_id,
+                Email.source == self
             ).one()
             if existing_email and existing_email != email_object:
                 raise ValueError("The existing object isn't the same as the one found by message id")
@@ -193,7 +265,7 @@ class AbstractMailbox(PostSource):
             email_object.sender = sender
             email_object.subject = subject
             email_object.creation_date = creation_date
-            email_object.message_id = new_message_id
+            email_object.source_post_id = new_message_id
             email_object.in_reply_to = new_in_reply_to
             email_object.body = body
             email_object.full_message = message_string
@@ -204,11 +276,42 @@ class AbstractMailbox(PostSource):
                 sender=sender,
                 subject=subject,
                 creation_date=creation_date,
-                message_id=new_message_id,
+                source_post_id=new_message_id,
                 in_reply_to=new_in_reply_to,
                 body=body,
                 full_message=message_string
             )
+        except MultipleResultsFound:
+            """ TO find duplicates (this should no longer happen, but in case it ever does...
+            
+SELECT * FROM post WHERE id in (SELECT MAX(post.id) as max_post_id FROM imported_post JOIN post ON (post.id=imported_post.id) GROUP BY message_id, source_id HAVING COUNT(post.id)>1)
+
+To kill them:
+
+
+USE assembl;
+UPDATE  post p
+SET     parent_id = (
+SELECT new_post_parent.id AS new_post_parent_id
+FROM post AS post_to_correct
+JOIN post AS bad_post_parent ON (post_to_correct.parent_id = bad_post_parent.id)
+JOIN post AS new_post_parent ON (new_post_parent.message_id = bad_post_parent.message_id AND new_post_parent.id <> bad_post_parent.id)
+WHERE post_to_correct.parent_id IN (
+  SELECT MAX(post.id) as max_post_id 
+  FROM imported_post 
+  JOIN post ON (post.id=imported_post.id) 
+  GROUP BY message_id, source_id
+  HAVING COUNT(post.id)>1
+  )
+AND p.id = post_to_correct.id
+)
+
+USE assembl;
+DELETE
+FROM post WHERE post.id IN (SELECT MAX(post.id) as max_post_id FROM imported_post JOIN post ON (post.id=imported_post.id) GROUP BY message_id, source_id HAVING COUNT(post.id)>1)
+
+"""
+            raise MultipleResultsFound("ID %s has duplicates in source %d"%(new_message_id,self.id))
         email_object.creator = sender_email_account.profile
         email_object.source = self
         email_object = self.db.merge(email_object)
