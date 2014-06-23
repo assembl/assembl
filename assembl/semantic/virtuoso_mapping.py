@@ -8,7 +8,7 @@ from rdflib import Graph
 
 from ..lib.sqla import class_registry, Base
 from .namespaces import (
-    namespace_manager as nsm, ASSEMBL, QUADNAMES, RDF, OWL, CATALYST)
+    namespace_manager as _nsm, ASSEMBL, QUADNAMES, RDF, OWL, CATALYST)
 from virtuoso.vmapping import (
     PatternIriClass, QuadMapPattern, ClassPatternExtractor,
     GraphQuadMapPattern, QuadStorage, ClassAliasManager,
@@ -22,11 +22,18 @@ def get_session():
     return SessionMaker()
 
 
+def get_nsm(session):
+    from .namespaces import namespace_manager
+    from virtuoso.vstore import VirtuosoNamespaceManager
+    nsm = VirtuosoNamespaceManager(Graph(), session)
+    for prefix, namespace in namespace_manager.namespaces():
+        nsm.bind_virtuoso(session, prefix, namespace)
+    return nsm
+
+
 def get_virtuoso(session, storage=ASSEMBL.discussion_storage):
     v = Virtuoso(quad_storage=storage,
                  connection=session.connection())
-    for prefix, ns in nsm.namespaces():
-        v.bind(prefix, ns)
     return v
 
 USER_SECTION = 'user'
