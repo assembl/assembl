@@ -159,6 +159,7 @@ def instance_post(request):
 
 @view_config(context=InstanceContext, request_method='PUT', header=JSON_HEADER)
 def instance_put_json(request):
+    ctx = request.context
     user_id = authenticated_userid(request)
     permissions = get_permissions(
         user_id, ctx.parent_instance.get_discussion_id())
@@ -239,6 +240,7 @@ def instance_put(request):
 
 @view_config(context=InstanceContext, request_method='DELETE')
 def instance_del(request):
+    ctx = request.context
     user_id = authenticated_userid(request)
     permissions = get_permissions(
         user_id, ctx.parent_instance.get_discussion_id())
