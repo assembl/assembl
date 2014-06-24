@@ -170,6 +170,18 @@ def get_idea_criteria(request):
 
 @view_config(
     context=InstanceContext, ctx_instance_class=Idea,
+    request_method="PUT", permission=P_ADMIN_DISC,
+    accept="application/json", name="criteria")
+def get_idea_criteria(request):
+    ctx = request.context
+    widget = ctx._instance
+    ideas = [Idea.get_instance(idea['@id']) for idea in request.json]
+    widget.set_criteria(ideas)
+    return "Ok"
+
+
+@view_config(
+    context=InstanceContext, ctx_instance_class=Idea,
     request_method="GET", permission=P_READ,
     renderer="json", name="vote_results")
 def get_idea_vote_results(request):
