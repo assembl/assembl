@@ -4,7 +4,8 @@ from itertools import ifilter
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from rdflib import Graph
+from rdflib import Graph, ConjunctiveGraph
+import simplejson as json
 
 from ..lib.sqla import class_registry, Base
 from .namespaces import (
@@ -385,3 +386,28 @@ class AssemblQuadStorageManager(object):
         from ..models import Discussion
         for (id,) in session.query(Discussion.id).all():
             self.drop_storage(session, self.discussion_storage_name(id), force)
+
+
+def db_dump(session, discussion_id):
+    nsm = get_nsm(session)
+    aqsm = AssemblQuadStorageManager(nsm)
+    d_storage_name = aqsm.discussion_storage_name(discussion_id)
+    v = get_virtuoso(session, d_storage_name)
+    cg = ConjunctiveGraph(v, d_storage_name)
+    quads = cg.serialize(format='nquads')
+    for (g,) in v.query(
+            'SELECT ?g where {graph ?g {?s catalyst:expressesIdea ?o}}'):
+        ectx = cg.get_context(g)
+        for l in ectx.serialize(format='nt').split('\n'):
+            l = l.strip()
+            if not l:
+                continue
+            l = l.rstrip('.')
+            l += ' ' + g.n3(nsm)
+            quads += l + ' .\n'
+    from pyld import jsonld
+    context = json.load(open(join(dirname(__file__), 'ontology', 'context.jsonld')))
+    jsonf = jsonld.from_rdf(quads)
+    jsonc = jsonld.compact(jsonf, context)
+    jsonc['@context'] = 'http://purl.org/catalyst/jsonld'
+    return jsonc
