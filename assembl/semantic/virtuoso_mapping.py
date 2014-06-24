@@ -159,7 +159,11 @@ class AssemblClassPatternExtractor(ClassPatternExtractor):
 
     def class_pattern_name(self, cls):
         clsname = cls.external_typename()
-        return getattr(QUADNAMES, 'class_pattern_'+clsname)
+        if self.discussion_id:
+            return getattr(QUADNAMES, 'class_pattern_d%s_%s' % (
+                self.discussion_id, clsname))
+        else:
+            return getattr(QUADNAMES, 'class_pattern_'+clsname)
 
     def make_column_name(self, cls, column):
         clsname = cls.external_typename()
@@ -177,7 +181,8 @@ class AssemblClassPatternExtractor(ClassPatternExtractor):
         if rdf_class:
             yield QuadMapPatternS(
                 subject_pattern, RDF.type, rdf_class, self.graph,
-                self.class_pattern_name(sqla_cls), None, None, rdf_section)
+                self.class_pattern_name(sqla_cls),
+                self.get_base_condition(sqla_cls), None, rdf_section)
         for p in super(AssemblClassPatternExtractor, self).extract_column_info(
                 sqla_cls, subject_pattern):
             yield p
@@ -189,19 +194,24 @@ class AssemblClassPatternExtractor(ClassPatternExtractor):
                     qmp.resolve(sqla_cls)
                     yield qmp
 
+    def get_base_condition(self, cls):
+        from ..models import DiscussionBoundBase
+        if self.discussion_id and issubclass(cls, DiscussionBoundBase):
+            return cls.get_discussion_condition(self.discussion_id)
+
     def set_defaults(self, qmp, subject_pattern, sqla_cls, column=None):
         rdf_section = sqla_cls.__dict__.get(
             'rdf_section', DISCUSSION_DATA_SECTION)
         name = self.make_column_name(sqla_cls, column) if (
             column is not None) else None
-        from ..models import DiscussionBoundBase
-        if self.discussion_id and issubclass(sqla_cls, DiscussionBoundBase):
-            d_id = self.discussion_id
-            qmp.and_condition(
-                sqla_cls.get_discussion_condition(d_id))
-            if qmp.name is not None and "_d%d_" % (d_id,) not in qmp.name:
-                # TODO: improve this
-                qmp.name += "_d%d_" % (d_id,)
+        condition = self.get_base_condition(sqla_cls)
+        if condition is not None:
+            qmp.and_condition(condition)
+        d_id = self.discussion_id
+        if (d_id and qmp.name is not None
+                and "_d%d_" % (d_id,) not in qmp.name):
+            # TODO: improve this
+            qmp.name += "_d%d_" % (d_id,)
         qmp.set_defaults(subject_pattern, column, self.graph.name, name,
                          None, rdf_section)
 
@@ -406,7 +416,8 @@ def db_dump(session, discussion_id):
             l += ' ' + g.n3(nsm)
             quads += l + ' .\n'
     from pyld import jsonld
-    context = json.load(open(join(dirname(__file__), 'ontology', 'context.jsonld')))
+    context = json.load(open(join(dirname(__file__), 'ontology',
+                                  'context.jsonld')))
     jsonf = jsonld.from_rdf(quads)
     jsonc = jsonld.compact(jsonf, context)
     jsonc['@context'] = 'http://purl.org/catalyst/jsonld'
