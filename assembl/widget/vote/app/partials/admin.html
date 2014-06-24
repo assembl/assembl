@@ -24,9 +24,7 @@
             <input type="text" id="set_settings_api_endpoint" value="/data/Widget/1/settings" size="50" />
             <br/>
             <label for="set_settings_settings">settings</label>
-            <textarea id="set_settings_settings">
-
-            </textarea>
+            <textarea id="set_settings_settings">{}</textarea>
             <br/>
             <input type="submit" />
             <span id="set_settings_result"></span>
@@ -153,18 +151,51 @@
     </form>
 
 
+
+    <h2>Get children of an idea, and print them as criteria list</h2>
+    <form id="idea_children_to_criteria" method="POST">
+        <label for="idea_children_to_criteria_endpoint">idea children endpoint</label>
+        <input type="text" id="idea_children_to_criteria_endpoint" value="/data/Idea/3/children" size="50" />
+        <br/>
+        <input type="submit" />
+        <div id="idea_children_to_criteria_result"></div>
+    </form>
+
+
+    <h2>Set widget's criteria (TODO backend side)</h2>
+    <form id="criteria_set" method="POST">
+        <label for="criteria_set_endpoint">criteria endpoint</label>
+        <input type="text" id="criteria_set_endpoint" value="/data/Discussion/1/widgets/13/criteria" size="50" />
+        <br/>
+        <textarea id="criteria_set_criteria">[]</textarea>
+        <br/>
+        <input type="submit" />
+        <div id="criteria_set_result"></div>
+    </form>
+
+
     <h2>Add a criterion</h2>
     <form id="criterion_add" method="POST">
-        <label for="criterion_add_api_endpoint">endpoint</label>
+        <label for="criterion_add_api_endpoint">criteria endpoint</label>
         <input type="text" id="criterion_add_api_endpoint" value="/data/Discussion/1/widgets/13/criteria" size="50" />
         <br/>
-        JSON content:
-        <br/>
-        <label for="criterion_add_id">id</label>
+        <label for="criterion_add_id">criterion id</label>
         <input type="text" id="criterion_add_id" value="local:Idea/3" size="50" />
         <br/>
         <input type="submit" />
         <span id="criterion_add_result"></span>
+    </form>
+
+    <h2>Remove a criterion (TODO backend side)</h2>
+    <form id="criterion_remove" method="POST">
+        <label for="criterion_remove_api_endpoint">criteria endpoint</label>
+        <input type="text" id="criterion_remove_api_endpoint" value="/data/Discussion/1/widgets/13/criteria" size="50" />
+        <br/>
+        <label for="criterion_remove_id">criterion id</label>
+        <input type="text" id="criterion_remove_id" value="local:Idea/3" size="50" />
+        <br/>
+        <input type="submit" />
+        <span id="criterion_remove_result"></span>
     </form>
 
 </div>
