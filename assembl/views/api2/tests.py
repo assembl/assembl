@@ -448,3 +448,74 @@ def test_voting_widget(
     assert vote_results.status_code == 200
     vote_results = vote_results.json
     assert vote_results[criterion_key] == 10
+
+
+def test_voting_widget_criteria(
+        discussion, test_app, subidea_1_1, criterion_1, criterion_2,
+        criterion_3, admin_user, participant1_user, lickert_range,
+        test_session):
+    # Post the initial configuration
+    db = Idea.db()
+    criteria = (criterion_1, criterion_2)
+    criteria_def = [
+        {
+            "@id": criterion.uri(),
+            "short_title": criterion.short_title
+        } for criterion in criteria
+    ]
+    new_widget_loc = test_app.post(
+        '/data/Discussion/%d/widgets' % (discussion.id,), {
+            'type': 'MultiCriterionVotingWidget',
+            'settings': json.dumps({
+                "criteria": criteria_def
+            })
+        })
+    assert new_widget_loc.status_code == 201
+    # Get the widget from the db
+    db.flush()
+    new_widget = Widget.get_instance(new_widget_loc.location)
+    assert new_widget
+    db.expire(new_widget, ('criteria', ))
+    # Get the widget from the api
+    widget_rep = test_app.get(
+        local_to_absolute(new_widget.uri()),
+        {'target': subidea_1_1.uri()},
+        headers={"Accept": "application/json"}
+    )
+    assert widget_rep.status_code == 200
+    widget_rep = widget_rep.json
+    voting_urls = widget_rep['voting_urls']
+    assert voting_urls
+    assert widget_rep['criteria']
+    assert widget_rep['criteria_url']
+    # Note: At this point, we have two copies of the criteria in the rep.
+    # One is the full ideas in widget_rep['criteria'], the other is
+    # as specified originally in widget_rep['settings']['criteria'].
+    # In what follows I'll use the former.
+
+    # The criteria should also be in the criteria url
+    criteria_url = local_to_absolute(widget_rep['criteria_url'])
+    test = test_app.get(criteria_url)
+    assert test.status_code == 200
+    assert len(test.json) == 2
+    assert {x['@id'] for x in test.json} == {c.uri() for c in criteria}
+    assert test.json == widget_rep['criteria']
+    # Set a new set of criteria
+    criteria = (criterion_2, criterion_3)
+    criteria_def = [
+        {
+            "@id": criterion.uri(),
+            "short_title": criterion.short_title
+        } for criterion in criteria
+    ]
+    test_app.put(criteria_url, json.dumps(criteria_def),
+        headers={"Content-Type": "application/json"})
+    db.flush()
+    db.expire(new_widget, ('criteria', ))
+    # Get them back
+    test = test_app.get(criteria_url)
+    assert test.status_code == 200
+    assert len(test.json) == 2
+    assert {x['@id'] for x in test.json} == {c.uri() for c in criteria}
+
+

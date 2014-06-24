@@ -157,27 +157,15 @@ def set_confirmed_messages(request):
 
 
 @view_config(
-    context=InstanceContext, ctx_instance_class=Idea,
+    context=InstanceContext, ctx_instance_class=MultiCriterionVotingWidget,
     request_method="GET", permission=P_READ,
     renderer="json", name="criteria")
-def get_idea_criteria(request):
+def get_idea_sibling_criteria(request):
     ctx = request.context
     view = (request.matchdict or {}).get('view', None)\
         or ctx.get_default_view() or 'default'
     return [cr.generic_json(view) for cr in
             ctx._instance.get_siblings_of_type(Criterion)]
-
-
-@view_config(
-    context=InstanceContext, ctx_instance_class=Idea,
-    request_method="PUT", permission=P_ADMIN_DISC,
-    accept="application/json", name="criteria")
-def get_idea_criteria(request):
-    ctx = request.context
-    widget = ctx._instance
-    ideas = [Idea.get_instance(idea['@id']) for idea in request.json]
-    widget.set_criteria(ideas)
-    return "Ok"
 
 
 @view_config(
@@ -242,7 +230,8 @@ def post_to_vote_criteria(request):
     return HTTPOk()  # Not sure this can be called a creation
 
 
-@view_config(context=CollectionContext, request_method='DELETE',
+@view_config(context=InstanceContext, request_method='DELETE',
+             ctx_instance_class=Idea,
              ctx_named_collection_instance="CriterionCollection.criteria",
              permission=P_ADMIN_DISC)
 def delete_vote_criteria(request):
@@ -250,4 +239,16 @@ def delete_vote_criteria(request):
     idea = ctx._instance
     widget = ctx.__parent__.parent_instance
     widget.remove_criterion(idea)
+    return HTTPOk()
+
+
+@view_config(
+    context=CollectionContext, request_method="PUT", 
+    ctx_named_collection="CriterionCollection.criteria",
+    permission=P_ADMIN_DISC, header=JSON_HEADER)
+def set_idea_criteria(request):
+    ctx = request.context
+    widget = ctx.parent_instance
+    ideas = [Idea.get_instance(idea['@id']) for idea in request.json]
+    widget.set_criteria(ideas)
     return HTTPOk()

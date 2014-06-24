@@ -369,14 +369,17 @@ class MultiCriterionVotingWidget(Widget):
                 return
 
     def set_criteria(self, ideas):
-        ideas = set(ideas)
-        for link in list(self.criterion_links):
-            if link.idea not in ideas:
-                self.criteria_links.remove(idea)
-            ideas.remove(link.idea)
+        idea_ids = {idea.id for idea in ideas}
+        for link in list(self.criteria_links):
+            if link.idea_id not in idea_ids:
+                self.criteria_links.remove(link)
+                self.db.delete(link)
+            else:
+                idea_ids.remove(link.idea_id)
         for idea in ideas:
-            self.criteria_links.append(VotingCriterionWidgetLink(
-                widget=self, idea=idea))
+            if idea.id in idea_ids:
+                self.criteria_links.append(VotingCriterionWidgetLink(
+                    widget=self, idea=idea))
 
     @classmethod
     def extra_collections(cls):
