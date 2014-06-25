@@ -94,3 +94,88 @@ Benoit Grégoire, ing., PMP, PSM<br>
     """
     
     check_striping(original, expected, "Gmail")
+    
+    
+    original = """
+<html>
+   <head></head>
+   <body style="word-wrap: break-word; -webkit-nbsp-mode: space; -webkit-line-break: after-white-space; ">
+      Salutation outside any html tag,
+      <div><br></div>
+      <div>Some actual text</div>
+      <div>
+         <br>
+         <div>
+            Signature
+         </div>
+         <br>
+         <div>
+            <div>Le 6 juin 2011 à 11:02, Jean-Michel Cornu a écrit :</div>
+            <br class="Apple-interchange-newline">Some quoted text
+            <br>
+         </div>
+         <br>
+      </div>
+   </body>
+</html>
+"""
+
+    expected = """
+<html>
+   <head></head>
+   <body style="word-wrap: break-word; -webkit-nbsp-mode: space; -webkit-line-break: after-white-space; ">
+      Salutation outside any html tag,
+      <div><br></div>
+      <div>Some actual text</div>
+      <div>
+         <br>
+         <div>
+            Signature
+         </div>
+         <br>
+         
+         <br>
+      </div>
+   </body>
+</html>
+"""
+    check_striping(original, expected, "Apple mail french, old version")
+    
+    
+    original = """
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html charset=iso-8859-1">
+   </head>
+   <body style="word-wrap: break-word; -webkit-nbsp-mode: space; -webkit-line-break: after-white-space;">
+      Test 3 
+      <div>
+         <br>
+         <div style="">
+            <div>On Jun 25, 2014, at 2:44 PM, Benoit Grégoire <<a href="mailto:benoitg@coeus.ca">benoitg@coeus.ca</a>> wrote:</div>
+            <br class="Apple-interchange-newline">
+            <blockquote type="cite">
+               <div style="font-size: 9pt; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: normal; orphans: auto; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: auto; word-spacing: 0px; -webkit-text-stroke-width: 0px; font-family: 'Sans Serif';">
+                  <div style="white-space: pre-wrap; margin: 0px; text-indent: 0px;">This is a <span style="font-weight: 600;">HTML</span> <span style="font-style: italic;">fragment</span></div>
+                  <div style="white-space: pre-wrap; margin: 0px; text-indent: 0px;">-- </div>
+                  <div style="white-space: pre-wrap; margin: 0px; text-indent: 0px;">Benoit Grégoire, ing., PMP, PSM</div>
+               </div>
+            </blockquote>
+         </div>
+         <br>
+      </div>
+   </body>
+</html>
+"""
+    expected = """
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html charset=iso-8859-1">
+   </head>
+   <body style="word-wrap: break-word; -webkit-nbsp-mode: space; -webkit-line-break: after-white-space;">
+      Test 3 
+      
+   </body>
+</html>
+"""
+    check_striping(original, expected, "Apple mail english recent")

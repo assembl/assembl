@@ -161,10 +161,33 @@ class AbstractMailbox(PostSource):
         """Assumes any encoding conversions have already been done 
         """
         debug = True;
-        from lxml import html
+        from lxml import html, etree
         doc = html.fromstring(message_body)
+        #Strip GMail quotes
         for el in doc.find_class('gmail_quote'):
             el.drop_tree()
+            
+        #Strip modern Apple Mail quotes
+        find = etree.XPath(r"//child::blockquote[contains(@type,'cite')]/preceding-sibling::br[contains(@class,'Apple-interchange-newline')]/parent::node()/parent::node()")
+        matches = find(doc)
+        #print len(matches)
+        #for index,match in enumerate(matches):
+        #    print "Match: %d: %s " % (index, html.tostring(match))
+        if len(matches) == 1:
+            matches[0].drop_tree()
+
+        #Strip old AppleMail quotes (french)
+        regexpNS = "http://exslt.org/regular-expressions"
+        ##Trying to match:  Le 6 juin 2011 à 11:02, Jean-Michel Cornu a écrit :
+        find = etree.XPath(r"//child::div[re:test(text(), '^.*Le .*\d{4} .*:\d{2}, .* a .*crit :.*$', 'i')]/following-sibling::br[contains(@class,'Apple-interchange-newline')]/parent::node()",
+                    namespaces={'re':regexpNS})
+        matches = find(doc)
+        #print len(matches)
+        #for index,match in enumerate(matches):
+        #    print "Match: %d: %s " % (index, html.tostring(match))
+        if len(matches) == 1:
+            matches[0].drop_tree()
+        
         retval = html.tostring(doc)
         
         return retval
