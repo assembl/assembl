@@ -3,6 +3,7 @@
 import json
 import pytest
 from urllib import urlencode, quote_plus
+import lxml.html
 
 from assembl.models import (
     AbstractMailbox, Email
@@ -62,19 +63,18 @@ Frank
     
     check_striping(original, expected, "Gmail plaintext, us 2014")
     
-def test_strip_quotations_html():
-    import lxml.html
-    def check_striping(original, expected, fail_msg):
-        result = AbstractMailbox.strip_full_message_quoting_html(original)
-        expected = lxml.html.tostring(lxml.html.fromstring(expected), pretty_print=True)
-        original = lxml.html.tostring(lxml.html.fromstring(original), pretty_print=True)
-        result = lxml.html.tostring(lxml.html.fromstring(result), pretty_print=True)
-        assert result == expected, "Failed striping quotations for case %s, message was: \n------\n%s\n------\nExpected: \n------\n%s\n------\nInstead received: \n------\n%s\n------\n" % (
-                                    fail_msg,
-                                    original,
-                                    expected,
-                                    result)
-
+def check_striping_html(original, expected, fail_msg):
+    result = AbstractMailbox.strip_full_message_quoting_html(original)
+    expected = lxml.html.tostring(lxml.html.fromstring(expected), pretty_print=True)
+    original = lxml.html.tostring(lxml.html.fromstring(original), pretty_print=True)
+    result = lxml.html.tostring(lxml.html.fromstring(result), pretty_print=True)
+    assert result == expected, "Failed striping quotations for case %s, message was: \n------\n%s\n------\nExpected: \n------\n%s\n------\nInstead received: \n------\n%s\n------\n" % (
+                                fail_msg,
+                                original,
+                                expected,
+                                result)
+        
+def test_strip_quotations_html_gmail():
     original = """
 <div dir="ltr">Reply text<br></div>
 <div class="gmail_extra"><br><br>
@@ -93,9 +93,9 @@ Benoit Grégoire, ing., PMP, PSM<br>
 <br></div>
     """
     
-    check_striping(original, expected, "Gmail")
+    check_striping_html(original, expected, "Gmail")
     
-    
+def test_strip_quotations_html_applemail():
     original = """
 <html>
    <head></head>
@@ -139,7 +139,7 @@ Benoit Grégoire, ing., PMP, PSM<br>
    </body>
 </html>
 """
-    check_striping(original, expected, "Apple mail french, old version")
+    check_striping_html(original, expected, "Apple mail french, old version")
     
     
     original = """
@@ -178,4 +178,52 @@ Benoit Grégoire, ing., PMP, PSM<br>
    </body>
 </html>
 """
-    check_striping(original, expected, "Apple mail english recent")
+    check_striping_html(original, expected, "Apple mail English recent")
+
+def test_strip_quotations_html_outlook():
+    original = """
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+   <HEAD>
+      <META http-equiv=Content-Type content="text/html; charset=iso-8859-1">
+      <META content="MSHTML 6.00.6000.21264" name=GENERATOR>
+   </HEAD>
+   <BODY>
+      <DIV dir=ltr align=left><SPAN class=847504013-06062011><FONT face=Arial 
+         color=#0000ff size=2>Some text</FONT></SPAN>
+      </DIV>
+      <BLOCKQUOTE style="MARGIN-RIGHT: 0px">
+         <DIV class=OutlookMessageHeader lang=fr dir=ltr align=left>
+            <HR tabIndex=-1>
+            <FONT face=Tahoma size=2><B>De :</B> jmichelcornu@gmail.com 
+            [mailto:jmichelcornu@gmail.com] <B>De la part de</B> Jean-Michel 
+            Cornu<BR><B>Envoyé :</B> 06 June 2011 11:03<BR><B>À :</B> innovation 
+            monétaire<BR><B>Objet :</B> [innovationmonetaire] Démarrage de 
+            l'expédition sur l'innovation monétaire<BR></FONT><BR>
+         </DIV>
+         <DIV></DIV>
+         Begin actual quote content
+      </BLOCKQUOTE>
+      <PRE>Signature</PRE>
+   </BODY>
+</HTML>
+"""
+    expected = """
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+   <HEAD>
+      <META http-equiv=Content-Type content="text/html; charset=iso-8859-1">
+      <META content="MSHTML 6.00.6000.21264" name=GENERATOR>
+   </HEAD>
+   <BODY>
+      <DIV dir=ltr align=left><SPAN class=847504013-06062011><FONT face=Arial 
+         color=#0000ff size=2>Some text</FONT></SPAN>
+      </DIV>
+      
+      <PRE>Signature</PRE>
+   </BODY>
+</HTML>
+"""
+    check_striping_html(original, expected, "Outlook recent")
+
+

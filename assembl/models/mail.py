@@ -164,8 +164,10 @@ class AbstractMailbox(PostSource):
         from lxml import html, etree
         doc = html.fromstring(message_body)
         #Strip GMail quotes
-        for el in doc.find_class('gmail_quote'):
-            el.drop_tree()
+        matches = doc.find_class('gmail_quote')
+        if len(matches) > 0:
+            matches[0].drop_tree()
+            return html.tostring(doc)
             
         #Strip modern Apple Mail quotes
         find = etree.XPath(r"//child::blockquote[contains(@type,'cite')]/preceding-sibling::br[contains(@class,'Apple-interchange-newline')]/parent::node()/parent::node()")
@@ -175,6 +177,8 @@ class AbstractMailbox(PostSource):
         #    print "Match: %d: %s " % (index, html.tostring(match))
         if len(matches) == 1:
             matches[0].drop_tree()
+            return html.tostring(doc)
+            
 
         #Strip old AppleMail quotes (french)
         regexpNS = "http://exslt.org/regular-expressions"
@@ -187,10 +191,17 @@ class AbstractMailbox(PostSource):
         #    print "Match: %d: %s " % (index, html.tostring(match))
         if len(matches) == 1:
             matches[0].drop_tree()
+            return html.tostring(doc)
         
-        retval = html.tostring(doc)
+        #Strip Outlook quotes
+        find = etree.XPath(r"//body/child::blockquote/child::div[contains(@class,'OutlookMessageHeader')]/parent::node()")
+        matches = find(doc)
+        if len(matches) == 1:
+            matches[0].drop_tree()
+            return html.tostring(doc)
         
-        return retval
+        #Nothing was stripped...
+        return html.tostring(doc)
 
     @staticmethod
     def body_as_html(text_value):
