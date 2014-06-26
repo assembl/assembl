@@ -193,12 +193,45 @@ class AbstractMailbox(PostSource):
             matches[0].drop_tree()
             return html.tostring(doc)
         
-        #Strip Outlook quotes
+        #Strip Outlook quotes (when outlook gives usable structure)
         find = etree.XPath(r"//body/child::blockquote/child::div[contains(@class,'OutlookMessageHeader')]/parent::node()")
         matches = find(doc)
         if len(matches) == 1:
             matches[0].drop_tree()
             return html.tostring(doc)
+        
+        #Strip Outlook quotes (when outlook gives NO usable structure)
+        successiveStringsToMatch = [
+                                        '|'.join(['^From:.*$','^De :.*$']),
+                                        '|'.join(['^Sent:.*$','^Envoy.+ :.*$']),
+                                        '|'.join(['^To:.*$','^.+:.*$']), #Trying to match À, but unicode is really problematic in lxml regex
+                                        '|'.join(['^Subject:.*$','^Objet :.*$']),
+                                    ]
+        regexpNS = "http://exslt.org/regular-expressions"
+        successiveStringsToMatchRegex = []
+        for singleHeaderLanguageRegex in successiveStringsToMatch:
+            successiveStringsToMatchRegex.append(r"descendant::*[re:test(text(), '"+singleHeaderLanguageRegex+"')]")
+
+        regex = " and ".join(successiveStringsToMatchRegex)
+        print r"//descendant::div["+regex+"]"
+        #find = etree.XPath(r"//descendant::div[descendant::*[re:test(text(), '^De :.*$')]]",
+        find = etree.XPath(r"//descendant::div["+regex+"]",
+                            namespaces={'re':regexpNS})
+        matches = find(doc)
+        print len(matches)
+        for index,match in enumerate(matches):
+            print "Match: %d: %s " % (index, html.tostring(match))
+        if len(matches) == 1:
+            findQuoteBody = etree.XPath(r"//descendant::div["+regex+"]/following-sibling::*",
+                            namespaces={'re':regexpNS})
+            quoteBodyElements = findQuoteBody(doc)
+            for quoteElement in quoteBodyElements:
+                #This moves the text to the tail of matches[0]
+                quoteElement.drop_tree()
+            matches[0].tail = None
+            matches[0].drop_tree()
+            return html.tostring(doc)
+
         
         #Strip Thunderbird quotes
         mainXpathFragment = "//child::blockquote[contains(@type,'cite') and boolean(@cite)]"

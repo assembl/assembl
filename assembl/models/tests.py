@@ -225,7 +225,116 @@ def test_strip_quotations_html_outlook():
 </HTML>
 """
     check_striping_html(original, expected, "Outlook recent")
+    
+    original = """
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+   <HEAD>
+      <META http-equiv=Content-Type content="text/html; charset=iso-8859-1">
+      <META content="MSHTML 6.00.2900.6082" name=GENERATOR>
+   </HEAD>
+   <BODY>
+      <DIV dir=ltr align=left><FONT face=Arial color=#0000ff size=2><SPAN 
+         class=426362517-06062011>Begin real text</SPAN></FONT></DIV>
+      <DIV dir=ltr align=left>
+         <FONT face=Arial color=#0000ff 
+            size=2>
+            <SPAN class=426362517-06062011>
+      </DIV>
+      <DIV dir=ltr align=left>
+      <HR tabIndex=-1>
+      </DIV>
+      <DIV dir=ltr align=left><FONT face="Times New Roman" color=#000000 size=3> 
+      </FONT></SPAN></FONT><FONT face=Tahoma size=2><B>De :</B> 
+      jmichelcornu@gmail.com [mailto:jmichelcornu@gmail.com] <B>De la part de</B> 
+      Jean-Michel Cornu<BR><B>Envoyé :</B> lundi 6 juin 2011 
+      11:03<BR><B>À :</B> innovation monétaire<BR><B>Objet :</B> 
+      [innovationmonetaire] Démarrage de l'expédition sur l'innovation 
+      monétaire<BR></FONT><BR></DIV>
+      <DIV></DIV>
+      Begin quoted text
+      <BR>
+   </BODY>
+</HTML>
+"""
+    expected = """
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+   <HEAD>
+      <META http-equiv=Content-Type content="text/html; charset=iso-8859-1">
+      <META content="MSHTML 6.00.2900.6082" name=GENERATOR>
+   </HEAD>
+   <BODY>
+      <DIV dir=ltr align=left><FONT face=Arial color=#0000ff size=2><SPAN 
+         class=426362517-06062011>Begin real text</SPAN></FONT></DIV>
+      <DIV dir=ltr align=left>
+         <FONT face=Arial color=#0000ff 
+            size=2>
+            <SPAN class=426362517-06062011>
+      </DIV>
+      <DIV dir=ltr align=left>
+      <HR tabIndex=-1>
+      </DIV>
+      </BODY>
+</HTML>
+"""
+    check_striping_html(original, expected, "Outlook french, no identifying class")
+    
+    original = """
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+   <HEAD>
+      <META http-equiv=Content-Type content="text/html; charset=iso-8859-1">
+      <META content="MSHTML 6.00.2900.6082" name=GENERATOR>
+   </HEAD>
+   <BODY>
+      <DIV dir=ltr align=left><FONT face=Arial color=#0000ff size=2><SPAN 
+         class=426362517-06062011>Begin real text</SPAN></FONT></DIV>
+      <DIV dir=ltr align=left>
+         <FONT face=Arial color=#0000ff 
+            size=2>
+            <SPAN class=426362517-06062011>
+      </DIV>
+      <DIV dir=ltr align=left>
+      <HR tabIndex=-1>
+      </DIV>
+      <DIV dir=ltr align=left><FONT face="Times New Roman" color=#000000 size=3> 
+      </FONT></SPAN></FONT><FONT face=Tahoma size=2><B>From:</B> 
+      jmichelcornu@gmail.com [mailto:jmichelcornu@gmail.com] <B>De la part de</B> 
+      Jean-Michel Cornu<BR><B>Sent:</B> lundi 6 juin 2011 
+      11:03<BR><B>To:</B> innovation monétaire<BR><B>Subject:</B> 
+      [innovationmonetaire] Démarrage de l'expédition sur l'innovation 
+      monétaire<BR></FONT><BR></DIV>
+      <DIV></DIV>
+      Begin quoted text
+      <BR>
+   </BODY>
+</HTML>
+"""
+    expected = """
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+   <HEAD>
+      <META http-equiv=Content-Type content="text/html; charset=iso-8859-1">
+      <META content="MSHTML 6.00.2900.6082" name=GENERATOR>
+   </HEAD>
+   <BODY>
+      <DIV dir=ltr align=left><FONT face=Arial color=#0000ff size=2><SPAN 
+         class=426362517-06062011>Begin real text</SPAN></FONT></DIV>
+      <DIV dir=ltr align=left>
+         <FONT face=Arial color=#0000ff 
+            size=2>
+            <SPAN class=426362517-06062011>
+      </DIV>
+      <DIV dir=ltr align=left>
+      <HR tabIndex=-1>
+      </DIV>
+      </BODY>
+</HTML>
+"""
+    check_striping_html(original, expected, "Outlook english, no identifying class")
 
+    
 def test_strip_quotations_html_thunderbird():
     original = """
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
