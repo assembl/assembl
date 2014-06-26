@@ -1,5 +1,5 @@
-define(['backbone', 'underscore', 'models/idea', 'models/message', 'app', 'i18n', 'sprintf', 'types', 'views/editableField', 'views/ckeditorField', 'permissions', 'views/messageSend'],
-function(Backbone, _, Idea, Message, app, i18n, sprintf, Types, EditableField, CKEditorField, Permissions, MessageSendView){
+define(['backbone', 'underscore', 'models/idea', 'models/message', 'app', 'i18n', 'sprintf', 'types', 'views/editableField', 'views/ckeditorField', 'permissions', 'views/messageSend', 'views/notification'],
+function(Backbone, _, Idea, Message, app, i18n, sprintf, Types, EditableField, CKEditorField, Permissions, MessageSendView, Notification){
     'use strict';
 
     var LONG_TITLE_ID = 'ideaPanel-longtitle';
@@ -26,11 +26,11 @@ function(Backbone, _, Idea, Message, app, i18n, sprintf, Types, EditableField, C
             }
 
             if( this.model ){
-                this.listenTo(this.model, 'change', this.render);
+               this.listenTo(this.model, 'change', this.render);
             }
             else {
-                this.model = null;
-                }
+               this.model = null;
+            }
 
             // Benoitg - 2014-05-05:  There is no need for this, if an idealink
             // is associated with the idea, the idea will recieve a change event
@@ -42,6 +42,7 @@ function(Backbone, _, Idea, Message, app, i18n, sprintf, Types, EditableField, C
             app.on('idea:select', function(idea){
                 that.setCurrentIdea(idea);
             });
+
         },
 
         /**
@@ -51,6 +52,7 @@ function(Backbone, _, Idea, Message, app, i18n, sprintf, Types, EditableField, C
             if(app.debugRender) {
                 console.log("ideaPanel:render() is firing");
             }
+
             app.trigger('render');
             var segments = {},
             currentUser = app.getCurrentUser(),
@@ -244,7 +246,43 @@ function(Backbone, _, Idea, Message, app, i18n, sprintf, Types, EditableField, C
             'click #ideaPanel-closebutton': 'onTopCloseButtonClick',
             'click #ideaPanel-deleteButton': 'onDeleteButtonClick',
 
-            'click .segment-link': "onSegmentLinkClick"
+            'click .segment-link': "onSegmentLinkClick",
+            'click #session-modal': "createWidgetSession"
+        },
+
+        createWidgetSession: function(){
+
+            if(this.model){
+
+                var data = {
+                    type: 'CreativityWidget',
+                    settings: JSON.stringify({
+                       "idea": this.model.attributes['@id']
+                    })
+                }
+
+
+                var notification =  new Notification();
+
+                notification.openSession(null, 'edit');
+
+                return;
+
+                Backbone.ajax({
+                   type:'POST',
+                   url:'/data/Discussion/'+ app.discussionID +'/widgets',
+                   data: $.param(data),
+                   success: function(data, textStatus, jqXHR){
+
+
+                   },
+                   errors: function(jqXHR, textStatus, errorThrown){
+
+
+                   }
+                })
+            }
+
         },
 
         /**

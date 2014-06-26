@@ -2,6 +2,7 @@
     <p>
         <h3>{{'topIdea' | translate}}</h3>
     </p>
+    <p ng-show="ideas.length < 1"><i class="fa fa-exclamation-triangle fa-lg"></i> {{'noIdeasForRating' | translate}}</p>
     <form id="postVote">
         <ul class="bx-idea" ng-repeat="idea in ideas | orderBy:'rate':true ">
             <li>

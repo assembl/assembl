@@ -1,6 +1,6 @@
 <nav class="navbar navbar-default" role="navigation">
     <div class="navbar-left">
-        <a href="/" class="icon-menu assembl-logo" class="sign-in">Assembl</a>
+        <a href="/" class="assembl-logo" class="sign-in">Assembl</a>
     </div>
     <div class="navbar-center">
         {% if canDisplayTabs %}
@@ -30,7 +30,7 @@
         <div class="connexion">
             {% if user %}
                 {% if user_profile_edit_url %}<a href="{{ user_profile_edit_url }}">{% endif %}
-                    <img height="30" width="30" src="/user/id/{{user.id}}/avatar/30" alt="{{ user.display_name() }}"/>
+                    <img height="25" width="25" src="/user/id/{{user.id}}/avatar/25" alt="{{ user.display_name() }}"/>
                     <span>{{ user.display_name() }}</span>
                 {% if user_profile_edit_url %}</a>{% endif %}
                 <a href="/logout" class="sign-out iconbutton icon-logout-1" title="{{ gettext('Sign out') }}"></a>

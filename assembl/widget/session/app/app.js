@@ -1,7 +1,7 @@
 "use strict";
 
 var appSession = angular.module('appSession',
-    ['ngRoute','ngSanitize', 'pascalprecht.translate','angular-growl']);
+    ['ngRoute','ngSanitize', 'pascalprecht.translate','angular-growl','mgcrea.ngStrap.datepicker']);
 
 appSession.config(['$routeProvider','$translateProvider','$locationProvider','growlProvider',
     function($routeProvider, $translateProvider, $locationProvider, growlProvider){
@@ -9,7 +9,7 @@ appSession.config(['$routeProvider','$translateProvider','$locationProvider','gr
     //$locationProvider.html5Mode(true);
 
     $routeProvider.
-        when('/', {
+        when('/index', {
             templateUrl:'partials/session.html',
             controller:'sessionCtl',
             resolve: {
@@ -35,6 +35,9 @@ appSession.config(['$routeProvider','$translateProvider','$locationProvider','gr
                     return configService.getWidget($route.current.params.config);
                 }
             }
+        }).
+        otherwise({
+            redirectTo: '/index'
         });
 
     $translateProvider.useStaticFilesLoader({

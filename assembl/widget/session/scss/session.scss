@@ -154,10 +154,14 @@
         width:100%;
       }
     }
-
     .card-container {
       width: 420px;
       margin: 0 auto;
+    }
+    .bloc-question {
+      i{
+        color:#f1532e;
+      }
     }
   }
 
@@ -220,5 +224,8 @@
 
   .msg {
     font-size: 12px;
+    i{
+      color:#f1532e;
+    }
   }
 }

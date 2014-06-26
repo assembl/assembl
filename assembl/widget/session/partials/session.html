@@ -2,12 +2,14 @@
     <div class="col-md-5">
         <div class="session-cards">
                 <div class="bloc-question">
-                    <p>{{widget.settings.session_question}}</p>
+                    <p ng-if="widget.settings.session.question">{{widget.settings.session.question}}</p>
+                    <p ng-if="!widget.settings.session.question"><i class="fa fa-exclamation-triangle fa-lg"></i> {{'emptyQuestion'| translate}}</p>
                     <p>{{'ideaPrompt'| translate : {parentIdeaTitle: parentIdeaTitle} }}</p>
                 </div>
                 <div class="card-container">
                     <div class="card">
                         <div class="card-top"></div>
+                         <input type="hidden" name="random_index" class="random_index" value="{{random_index}}">
                          <div ng-bind-html="displayed_cards[displayed_card_index].body"></div>
                         <div class="card-bottom"></div>
                     </div>
@@ -43,7 +45,7 @@
             <p>{{'pointToShare'| translate : {wallet: wallet} }}</p>
         </div>
         <div class="msg" ng-show="ideas.length < 1">
-            <p><i class="fa fa-info-circle fa-lg"></i>{{'firstToPost'| translate}}</p>
+            <p><i class="fa fa-exclamation-triangle fa-lg"></i> {{'firstToPost'| translate}}</p>
         </div>
         <div class="session-comment">
             <div class="media" ng-if="ideas.length > 0" ng-repeat="idea in ideas">

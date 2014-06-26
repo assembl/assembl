@@ -34,7 +34,8 @@ requirejs.config({
     'sockjs': 'bower/sockjs/sockjs',
     'cytoscape': 'bower/cytoscape/cytoscape',
     'jit': 'bower/jit/Jit/jit',
-    'sprintf': 'bower/sprintf/src/sprintf'
+    'sprintf': 'bower/sprintf/src/sprintf',
+    'backboneModal':'lib/backbone-modal/backbone.modal'
   },
   shim: {
     backbone: {
@@ -112,6 +113,10 @@ requirejs.config({
     'moment_lang': {
         deps: ['moment'],
         exports: 'moment_lang'
+    },
+    'backboneModal': {
+        deps:['backbone'],
+        exports: 'BackboneModal'
     }
   }
 });
@@ -130,8 +135,8 @@ require([
     "models/segment",
     "router",
     "socket",
-    "i18n"
-], function(app, $, IdeaList, IdeaPanel, SegmentList, MessageList, Synthesis, SynthesisPanel, User, Segment, Router, Socket, i18n){
+    "views/notification"
+], function(app, $, IdeaList, IdeaPanel, SegmentList, MessageList, Synthesis, SynthesisPanel, User, Segment, Router, Socket, Notification){
     'use strict';
 
     app.init();
@@ -183,6 +188,10 @@ require([
     // Fetching the ideas
     app.segmentList.segments.fetchFromScriptTag('extracts-json');
     app.ideaList.ideas.fetchFromScriptTag('ideas-json');
+
+    //init notification bar
+    app.notification = new Notification();
+
 
     // Let the game begins...
     Backbone.history.start({hashChange: false, root: "/" + app.slug });

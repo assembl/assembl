@@ -13,7 +13,7 @@ appSession.factory('cardGameService', function($http){
 /**
  * Resolve configuration before access to a controller
  * */
-appSession.factory('configService', function($q, $http, utils){
+appSession.factory('configService', function($q, $http, utils, $location){
     return {
         data: {},
         getWidget: function(url){
@@ -26,6 +26,16 @@ appSession.factory('configService', function($q, $http, utils){
 
             $http.get(urlRoot).success(function(response){
                 data.widget = response;
+
+                var
+                    endDate = new Date(data.widget.settings.session.endDate),
+                    currentDate = new Date();
+
+                if(currentDate > endDate){
+                    //TODO: end of session
+
+                }
+
                 defer.resolve(data);
             }).error(function(data, status){
 

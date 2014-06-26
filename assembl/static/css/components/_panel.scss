@@ -3,19 +3,16 @@
 // The panel
 // =========
 .panel {
-  @include box-shadow(rgba(0, 0, 0, 0.1) 0 0 2px 0px);
-  @include border-radius( 5px );
+  @include border-radius( 3px );
   @include box-sizing( border-box );
     position: relative;
     z-index: 10;
     height: 100%;
-    border: 1px solid #d9d9d9;
     background-color: #fff;
     overflow: hidden;
-    
+    border:1px solid #CCCCCC;
     fieldset {
         margin: 10px;
-        margin-top: 1.4em; //height of the legend32 + 0.5em
         padding-top: 1.4em; //height of the legend + 0.5em
         position: relative;
         legend {
@@ -31,7 +28,7 @@
             }
         }
     }
-    
+
 }
 
 // When is dragging something on
@@ -178,4 +175,5 @@
     border-top: 1px solid #e4e4e3;
     padding-right: $padding-right;
     @include border-radius( 0 0 5px 5px );
+    background-color: #FFFFFF;
 }

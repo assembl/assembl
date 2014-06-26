@@ -1,8 +1,6 @@
 %button {
     @include no-selection;
-    //border: solid 1px transparent;
     cursor: pointer;
-
     display: inline-block;
 }
 
@@ -211,7 +209,7 @@
 .barbutton {
     @extend %button;
     @include no-selection;
-    font-size: 14px;
+    font-size: 12px;
 
     &:active {
         @extend .barbutton.is-activated;

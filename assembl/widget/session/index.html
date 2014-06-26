@@ -12,6 +12,13 @@
 
 </head>
 <body ng-app="appSession">
+<nav ng-controller="navigation">
+    <ul class="nav nav-tabs">
+        <li><a class="home" href="{{home}}">Session</a></li>
+        <li><a class="rating" href="{{rating}}">Rating</a></li>
+        <li><a class="edit" href="{{edition}}">Edition</a></li>
+    </ul>
+</nav>
 <div class="container-fluid widget-container">
     <div class="row">
         <div class="tab-content">
@@ -44,6 +51,8 @@
 <script src="bower_components/angular-growl-v2/build/angular-growl.min.js"></script>
 <script src="bower_components/moment/moment.js"></script>
 <script src="bower_components/lodash/dist/lodash.min.js"></script>
+<script src="bower_components/angular-strap/dist/angular-strap.min.js"></script>
+<script src="bower_components/angular-strap/dist/angular-strap.tpl.min.js"></script>
 <script src="app/app.js"></script>
 <script src="app/services.js"></script>
 <script src="app/controllers.js"></script>

@@ -4,13 +4,13 @@ appSession.controller('sessionCtl',
 
             // activate the right tab
             $("ul.nav li").removeClass("active");
-            $("ul.nav li a[href=\"#session\"]").closest("li").addClass("active");
+            $("ul.nav li .home").closest("li").addClass("active");
 
             $scope.formData = {};
             $scope.displayed_cards = [];
             $scope.displayed_card_index = 0;
             $scope.widget = configService.data.widget;
-            $rootScope.wallet = $scope.widget.settings.session_jeton;
+            $rootScope.wallet = $scope.widget.settings.session.number;
 
             $scope.setJeton = function() {
                 var
@@ -91,14 +91,20 @@ appSession.controller('sessionCtl',
                 if($scope.formData) {
 
                     var rootUrl = utils.urlApi($scope.widget.ideas_url);
+                    var random_index = angular.element('.random_index');
 
                     $scope.formData.type = 'Idea';
+
+
+                    //console.log($scope.formData)
+                    //console.log(random_index.val());
+                    //return;
 
                     $http({
                         method:'POST',
                         url:rootUrl,
                         data:$.param($scope.formData),
-                        headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                        headers: {'Content-Type': 'application/json'}
                     }).success(function(){
 
                         $scope.message = "sendNewIdea:success";
@@ -117,7 +123,7 @@ appSession.controller('sessionCtl',
              * params {int} which is the id of the card game config/game_{int}.json
              */
             cardGameService.getCards(1).success(function(data){
-                $scope.game = data.game;
+                $scope.game = data.game01;
                 $scope.shuffle();
             });
 
@@ -129,11 +135,15 @@ appSession.controller('sessionCtl',
                 var n_cards = $scope.game.length;
                 if ( n_cards > 0 )
                 {
-                    var random_index = Math.floor((Math.random()*n_cards));
-                    $scope.displayed_cards.push($scope.game[random_index]);
+                    $scope.random_index = Math.floor((Math.random()*n_cards));
+                    $scope.displayed_cards.push($scope.game[$scope.random_index]);
                     $scope.displayed_card_index = $scope.displayed_cards.length-1;
-                    $scope.displayed_cards[$scope.displayed_card_index].body = $sce.trustAsHtml($scope.game[random_index].body);
-                    $scope.game.splice(random_index,1);
+                    $scope.displayed_cards[$scope.displayed_card_index].body = $sce.trustAsHtml($scope.game[$scope.random_index].body);
+                    $scope.game.splice($scope.random_index,1);
+
+
+                    console.log('random_index', $scope.random_index)
+                    console.log('$scope.displayed_card_index', $scope.displayed_card_index)
                 }
 
             }
@@ -143,9 +153,9 @@ appSession.controller('sessionCtl',
              * */
             $timeout(function(){
 
-                $scope.setJeton();
-
                 $scope.getSubIdeaFromIdea();
+
+                $scope.setJeton();
 
             },1000);
 
@@ -155,8 +165,11 @@ appSession.controller('ratingCtl',
     ['$scope','$rootScope','$timeout','$http','growl','utils','configService',
         function($scope, $rootScope, $timeout, $http, growl, utils, configService){
 
-            var Widget = configService.data.widget;
+            // activate the right tab
+            $("ul.nav li").removeClass("active");
+            $("ul.nav li .rating").closest("li").addClass("active");
 
+            var Widget = configService.data.widget;
             /**
              * Due to the latency to init $rootScope we need a delay
              * */
@@ -176,14 +189,17 @@ appSession.controller('ratingCtl',
                     ideas = [];
 
                 $http.get(rootUrl).then(function(response){
-                    angular.forEach(response.data, function(item){
 
-                        if(item.widget_add_post_endpoint){
+                    if(response.data.length) {
+                        angular.forEach(response.data, function (item) {
 
-                            ideas.push(item);
-                        }
-                    })
+                            if (item.widget_add_post_endpoint) {
 
+                                ideas.push(item);
+                            }
+                        })
+
+                    }
                     return ideas;
 
                 }).then(function(ideas){
@@ -192,25 +208,29 @@ appSession.controller('ratingCtl',
 
                     $http.get(urlRoot).then(function(response){
 
-                        var rate = JSON.parse(response.data[0].session_user_vote);
+                       if(response.data.length){
+                           var rate = JSON.parse(response.data[0].session_user_vote);
 
-                        angular.forEach(ideas, function(idea){
+                           angular.forEach(ideas, function(idea){
 
-                            var id_idea = idea['@id'].split('/')[1],
-                                id_idea = parseInt(id_idea, 10);
+                               var id_idea = idea['@id'].split('/')[1],
+                                   id_idea = parseInt(id_idea, 10);
 
-                            idea.rate = 0;
+                               idea.rate = 0;
 
-                            angular.forEach(rate, function(r){
-                                var id_rate = parseInt(_.keys(r), 10),
-                                    rate_value = _.values(r);
-                                //FIXME : need a default value for rating
-                                if(id_idea === id_rate){
+                               angular.forEach(rate, function(r){
+                                   var id_rate = parseInt(_.keys(r), 10),
+                                       rate_value = _.values(r);
+                                   //FIXME : need a default value for rating
+                                   if(id_idea === id_rate){
 
-                                    idea.rate = parseInt(rate_value, 10);
-                                }
-                            });
-                        });
+                                       idea.rate = parseInt(rate_value, 10);
+                                   }
+                               });
+                           });
+
+                       }
+
                     });
 
                     $scope.ideas = ideas;
@@ -310,8 +330,12 @@ appSession.controller('ratingCtl',
         }]);
 
 appSession.controller('editCtl',
-    ['$scope','$http','configService','utils','growl','$routeParams',
-        function($scope, $http, configService, utils, growl, $routeParams){
+    ['$scope','$http','configService','utils','growl','$routeParams','cardGameService',
+        function($scope, $http, configService, utils, growl, $routeParams, cardGameService){
+
+            // activate the right tab
+            $("ul.nav li").removeClass("active");
+            $("ul.nav li .edit").closest("li").addClass("active");
 
             $scope.widget = configService.data.widget;
 
@@ -319,15 +343,25 @@ appSession.controller('editCtl',
             $scope.urlRoot = utils.urlApi($scope.widget.widget_settings_url);
             $scope.urlEdit = utils.urlApi($routeParams.config);
 
-            if($scope.widget.settings.session_question)
-                $scope.formData.question = $scope.widget.settings.session_question;
-            else
-                $scope.formData.question = "";
+            if(angular.isDefined($scope.widget.settings.session)){
 
-            if($scope.widget.settings.session_jeton)
-                $scope.formData.number = $scope.widget.settings.session_jeton;
-            else
-                $scope.formData.number = 0;
+                if($scope.widget.settings.session.question)
+                    $scope.formData.question = $scope.widget.settings.session.question;
+                else
+                    $scope.formData.question = "";
+
+                if($scope.widget.settings.session.number)
+                    $scope.formData.number = $scope.widget.settings.session.number;
+                else
+                    $scope.formData.number = 0;
+
+                if($scope.widget.settings.session.startDate)
+                    $scope.formData.startDate = $scope.widget.settings.session.startDate;
+
+                if($scope.widget.settings.session.endDate)
+                    $scope.formData.endDate = $scope.widget.settings.session.endDate;
+
+            }
 
             $scope.$watch("message", function(value){
 
@@ -347,26 +381,35 @@ appSession.controller('editCtl',
                 }
             }, true);
 
-            $http.get($scope.urlEdit).then(function(session){
+            /**
+             * Load config card
+             * params {int} which is the id of the card game config/game_{int}.json
+             */
+            cardGameService.getCards(1).success(function(data){
+                $scope.game = data.game;
+            });
 
-                $scope.widgetInstance = session.data;
+            $http.get($scope.urlEdit).then(function(session){
+                if(session.data.length)
+                    $scope.widgetInstance = session.data;
             });
 
             $scope.setSettings = function(){
 
-                if($scope.formData.question && $scope.formData.number){
+                if($scope.formData.number &&
+                    $scope.formData.startDate &&
+                    $scope.formData.endDate){
 
                     var data = {};
 
-                    data.session_question = $scope.formData.question;
-                    data.session_jeton = $scope.formData.number;
+                    data.session = $scope.formData;
 
                     $http({
                         url: $scope.urlRoot,
                         method:'PUT',
-                        data:data,
+                        data: data,
                         headers: {
-                            'Content-Type': 'application/json'
+                           'Content-Type': 'application/json'
                         }
 
                     }).success(function(data, status){
@@ -382,3 +425,13 @@ appSession.controller('editCtl',
             }
 
         }]);
+
+appSession.controller('navigation', ['$scope', function($scope){
+
+    var config = 'local:Widget/2';
+
+    $scope.home = '#/index?config='+config;
+    $scope.rating = '#/rating?config='+config;
+    $scope.edition = '#/edit?config='+config;
+
+}]);

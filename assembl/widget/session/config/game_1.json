@@ -1,5 +1,5 @@
 {
-  "game":[
+  "game01":[
       {
           "body": "<section style='background-color:#7a67ae;padding: 20px;height: 390px;text-align: left;'><p style='color:#ffffff;font-size: 32px;line-height: 30px;margin-bottom: 0.5em;text-shadow:0px 1px 0px #000000;'>Introduce or increase present gains.</p><p style='color:#ffffff;font-size: 14px;'>The present matters more to people than the past or the future. Present gains are more pleasurable than future gains, and therefore a stronger motivator.</p><p style='margin-bottom: 2em;font-size:14px;'>How might we shift future gains into the present ?</p></section>"
       },
@@ -60,7 +60,5 @@
       {
           "body": "<section style='background-color:#7a67ae;padding: 20px;height: 390px;text-align: left;'><p style='color:#ffffff;font-size: 32px;line-height: 30px;margin-bottom: 0.5em;text-shadow:0px 1px 0px #000000;'>Reframe losses and gains.</p><p style='color:#ffffff;font-size: 14px;'>A situation can often be described in terms of losses or gains – the glass is half full or half empty. Emphasizing losses will generally cause people to avoid an option or activity. Emphasizing gains will make an option seem more attractive.</p><p style='margin-bottom: 2em;font-size:14px;'>How might we reorganize, restate, recontextualize, or reconsider information to emphasize the relevant gains or losses ?</p></section>"
       }
-
-
   ]
 }

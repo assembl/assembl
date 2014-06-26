@@ -9,6 +9,11 @@
     <link href='//fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
     <link type="text/css" rel="stylesheet" href="/static/css/style.css" />
     <link type="text/css" rel="stylesheet" href="/static/css/themes/{{theme}}/theme.css" />
+
+    {# Backbone Modal plugin #}
+    <link type="text/css" rel="stylesheet" href="/static/js/lib/backbone-modal/css/backbone.modal.css" />
+    <link type="text/css" rel="stylesheet" href="/static/js/lib/backbone-modal/css/backbone.modal.theme.css" />
+
     {% block extra_css %}{% endblock extra_css %}
     {% include 'includes/feature_detection.jinja2' %}
 </head>
@@ -21,7 +26,6 @@
             {% block content %}{% endblock %}
         </main>
     </div>
-
     <div id="templates">
         {% for template in templates %}
             {% set template_path = 'views/' + template + '.tmpl' %}
@@ -38,4 +42,5 @@
 
     {% block extra_js %}{% endblock %}
 </body>
+<div class="modal"></div>
 </html>

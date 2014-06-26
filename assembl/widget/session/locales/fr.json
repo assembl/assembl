@@ -16,10 +16,18 @@
     "errorVoteCatcher":"catch error",
     "topIdea":"Top des idées",
     "shuffle":"Piocher une nouvelle carte",
-    "firstToPost":"Personne n'a encore contribué une nouvelle idée.  La vôtre sera la première!",
+    "firstToPost":"Personne n'a encore contribué à cette nouvelle idée. La votre sera la première!",
     "pointToShare":"Il vous reste {{wallet}} points à répartir sur les idées suivantes",
     "proposeIdea":"Proposez votre idée pour répondre à la question posée :",
     "validateChoose":"Valider votre choix",
     "session_question":"Cette question sera visible au dessus de la carte",
-    "session_jeton":"Nombre de jetons"
+    "session_question_title":"Question",
+    "session_jeton_number":"Nombre de jetons",
+    "session_jeton_title":"Jetons",
+    "start_date":"Début de session",
+    "end_date":"Fin de session",
+    "emptyQuestion":"Veuillez ajouter une question dans le menu d'edition",
+    "dateRange":"Plage de dates",
+    "valid":"Validez",
+    "noIdeasForRating":"Aucune idée n'a encore été poster"
 }
