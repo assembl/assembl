@@ -21,7 +21,7 @@ def bootstrap_db(config_uri=None, with_migration=True):
 
         if db_version:
             sys.stderr.write('Database already initialized. Bailing out.\n')
-            sys.exit(2)
+            sys.exit(0)
 
         config = Config(config_uri)
         script_dir = ScriptDirectory.from_config(config)
