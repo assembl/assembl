@@ -200,6 +200,20 @@ class AbstractMailbox(PostSource):
             matches[0].drop_tree()
             return html.tostring(doc)
         
+        #Strip Thunderbird quotes
+        mainXpathFragment = "//child::blockquote[contains(@type,'cite') and boolean(@cite)]"
+        find = etree.XPath(mainXpathFragment+"/self::blockquote")
+        matches = find(doc)
+        if len(matches) == 1:
+            matchQuoteAnnounce = doc.xpath(mainXpathFragment+"/preceding-sibling::*")
+            print repr(matchQuoteAnnounce)
+            #for index,match in enumerate(matchQuoteAnnounce):
+            #    print "Match: %d: %s " % (index, html.tostring(match))
+            if len(matchQuoteAnnounce) > 0:
+                matchQuoteAnnounce[-1].tail = None
+                matches[0].drop_tree()
+                return html.tostring(doc)
+            
         #Nothing was stripped...
         return html.tostring(doc)
 

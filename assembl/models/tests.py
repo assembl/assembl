@@ -226,4 +226,41 @@ def test_strip_quotations_html_outlook():
 """
     check_striping_html(original, expected, "Outlook recent")
 
-
+def test_strip_quotations_html_thunderbird():
+    original = """
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <meta content="text/html; charset=ISO-8859-1"
+      http-equiv="Content-Type">
+    <title></title>
+  </head>
+  <body text="#000066" bgcolor="#ccccff">
+    <p style="margin-bottom: 0cm;"><small>Bonjour &agrave; tous</small></p>
+    <br>
+    <br>
+    Le 06/06/2011 11:02, Jean-Michel Cornu a &eacute;crit&nbsp;:
+    <blockquote
+      cite="mid:BANLkTi=_ALxFQG4CytTzESxs+RCVp9_jbQ@mail.gmail.com"
+      type="cite">
+      Begin quoted text
+    </blockquote>
+  </body>
+</html>
+"""
+    expected = """
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <meta content="text/html; charset=ISO-8859-1"
+      http-equiv="Content-Type">
+    <title></title>
+  </head>
+  <body text="#000066" bgcolor="#ccccff">
+    <p style="margin-bottom: 0cm;"><small>Bonjour &agrave; tous</small></p>
+    <br>
+    <br>
+  </body>
+</html>
+"""
+    check_striping_html(original, expected, "Thunderbird, circa 2011")
