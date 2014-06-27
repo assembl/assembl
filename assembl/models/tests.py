@@ -9,12 +9,12 @@ from assembl.models import (
     AbstractMailbox, Email
 )
 
+def check_striping_plaintext(original, expected, fail_msg):
+    expected = expected.strip()
+    result = AbstractMailbox.strip_full_message_quoting_plaintext(original).strip()
+    assert result == expected, "Failed striping quotations for case %s, message was: \n------\n%s\n------\nExpected: \n------\n%s\n------\nInstead received: \n------\n%s\n------\n" % (fail_msg, original,expected,result)
 
-def test_strip_quotations_plaintext():
-    def check_striping(original, expected, fail_msg):
-        expected = expected.strip()
-        result = AbstractMailbox.strip_full_message_quoting_plaintext(original).strip()
-        assert result == expected, "Failed striping quotations for case %s, message was: \n------\n%s\n------\nExpected: \n------\n%s\n------\nInstead received: \n------\n%s\n------\n" % (fail_msg, original,expected,result)
+def test_strip_quotations_plaintext_gmail():
 
     original = """
 
@@ -35,7 +35,7 @@ Hello,
 This text is the real text
     """
     
-    check_striping(original, expected, "Gmail plaintext, french")
+    check_striping_plaintext(original, expected, "Gmail plaintext, french")
     
     
     original = """
@@ -61,8 +61,29 @@ Thanks
 Frank
     """
     
-    check_striping(original, expected, "Gmail plaintext, us 2014")
+    check_striping_plaintext(original, expected, "Gmail plaintext, us 2014")
     
+def test_strip_quotations_plaintext_outlook():
+
+    original = """
+Begin message text
+________________________________
+
+De : jmichelcornu@gmail.com [mailto:jmichelcornu@gmail.com] De la part de Jean-Michel Cornu
+Envoyé : lundi 6 juin 2011 11:03
+À : innovation monétaire
+Objet : [innovationmonetaire] Démarrage de l'expédition sur l'innovation monétaire
+
+
+Begin reply text
+    """
+    expected = """
+Begin message text
+    """
+    
+    check_striping_plaintext(original, expected, "Outlook plaintext, french")
+    
+
 def check_striping_html(original, expected, fail_msg):
     result = AbstractMailbox.strip_full_message_quoting_html(original)
     expected = lxml.html.tostring(lxml.html.fromstring(expected), pretty_print=True)
@@ -333,6 +354,7 @@ def test_strip_quotations_html_outlook():
 </HTML>
 """
     check_striping_html(original, expected, "Outlook english, no identifying class")
+
 
     
 def test_strip_quotations_html_thunderbird():

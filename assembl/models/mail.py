@@ -102,25 +102,83 @@ class AbstractMailbox(PostSource):
     def strip_full_message_quoting_plaintext(message_body):
         """Assumes any encoding conversions have already been done 
         """
+        #Most useful to develop this:
+        #http://www.motobit.com/util/quoted-printable-decoder.asp
         debug = False;
-        quote_announcement_line_regexes=(
-            re.compile("/-+\s*Original Message\s*-+/"),
-            re.compile(r"^Le .*, .*<.*@.*> a écrit :"),#GMAIL-FR circa 2012 Le 6 juin 2011 15:43, <nicolas.decordes@orange-ftgroup.com> a écrit :
-            re.compile(r"^\d{4}-\d{2}-\d{2}.*<.*@.*>:"),#GMAIL-US circa 2014 2014-06-17 10:32 GMT-04:00 Benoit Grégoire <benoitg@coeus.ca>:
-            )
-        def check_any_regex_match(regexes, stringToMatch):
-            for regex in regexes:
-                if(regex.match(stringToMatch)):
-                    return True
-            else:
-                return False
-        quote_prefix_regex=re.compile(r"^>\s|^>$")
+        #To be considered matching, each line must match successive lines, in order
+        quote_announcement_lines_regexes = {
+            'generic_original_message':  {
+                        'announceLinesRegexes': [re.compile("/-+\s*Original Message\s*-+/")],
+                        'quotePrefixRegex': re.compile(r"^>\s|^>$")
+                    },
+            'gmail_fr_circa_2012':  {
+                        'announceLinesRegexes': [re.compile(r"^Le .*, .*<.*@.*> a écrit :")],# 2012 Le 6 juin 2011 15:43, <nicolas.decordes@orange-ftgroup.com> a écrit :
+                        'quotePrefixRegex': re.compile(r"^>\s|^>$")
+                    },
+            'gmail_en_circa_2014':  {
+                        'announceLinesRegexes': [re.compile(r"^\d{4}-\d{2}-\d{2}.*<.*@.*>:")],# 2014-06-17 10:32 GMT-04:00 Benoit Grégoire <benoitg@coeus.ca>:
+                        'quotePrefixRegex': re.compile(r"^>\s|^>$")
+                    },
+            'outlook_fr_circa_2012':  {
+                        'announceLinesRegexes': [re.compile(r"^\d{4}-\d{2}-\d{2}.*<.*@.*>:")],# 2014-06-17 10:32 GMT-04:00 Benoit Grégoire <benoitg@coeus.ca>:
+                        'quotePrefixRegex': re.compile(r"^>\s|^>$")
+                    },
+            'outlook_fr_multiline_circa_2012': {
+                        'announceLinesRegexes': [re.compile(r"^_+$"), #________________________________
+                                                re.compile(r"^\s*$"), #Only whitespace
+                                                re.compile(r"^De :.*$"),
+                                                re.compile(r"^Envoy.+ :.*$"),
+                                                re.compile(r"^À :.*$"),
+                                                re.compile(r"^Objet :.*$"),
+                                                ],
+                        'quotePrefixRegex': re.compile(r"^.*$")
+                    },
+            'outlook_en_multiline_circa_2012': {
+                        'announceLinesRegexes': [re.compile(r"^_+$"), #________________________________
+                                                re.compile(r"^\s*$"), #Only whitespace
+                                                re.compile(r"^From:.*$"),
+                                                re.compile(r"^Sent:.*$"),
+                                                re.compile(r"^To:.*$"),
+                                                re.compile(r"^Subject:.*$"),
+                                                ],
+                        'quotePrefixRegex': re.compile(r"^.*$")
+                    },
+            }
+        def check_quote_announcement_lines_match(currentQuoteAnnounce, keysStillMatching, lineToMatch):
+            
+            if len(keysStillMatching) == 0:
+                #Restart from scratch
+                keysStillMatching = quote_announcement_lines_regexes.keys()
+            nextIndexToMatch = len(currentQuoteAnnounce)
+            keys = list(keysStillMatching)
+            matchComplete = False
+            for key in keys:
+                if len(quote_announcement_lines_regexes[key]['announceLinesRegexes']) > nextIndexToMatch:
+                    if quote_announcement_lines_regexes[key]['announceLinesRegexes'][nextIndexToMatch].match(lineToMatch):
+                        if len(quote_announcement_lines_regexes[key]['announceLinesRegexes']) -1 == nextIndexToMatch:
+                            matchComplete = key
+                    else:
+                        keysStillMatching.remove(key)
+            if len(keysStillMatching)>0:
+                currentQuoteAnnounce.append(lineToMatch)
+            return matchComplete, keysStillMatching
+        
+        
+        defaultQuotePrefixRegex=re.compile(r"^>\s|^>$")
+        quote_prefix_regex=defaultQuotePrefixRegex
         whitespace_line_regex=re.compile(r"^\s*$")
         retval = []
+        currentQuoteAnnounce = []
+        keysStillMatching = []
         currentQuote = []
         currentWhiteSpace = []
         class LineState:
-            Normal, PrefixedQuote, QuoteAnnounce, AllWhiteSpace = range(4)
+            Normal="Normal"
+            PrefixedQuote='PrefixedQuote'
+            PotentialQuoteAnnounce='PotentialQuoteAnnounce'
+            QuoteAnnounceLastLine='QuoteAnnounceLastLine'
+            AllWhiteSpace='AllWhiteSpace'
+            
         line_state_before_transition = LineState.Normal
         previous_line_state = LineState.Normal
         line_state = LineState.Normal
@@ -129,16 +187,22 @@ class AbstractMailbox(PostSource):
                 line_state_before_transition = previous_line_state
             previous_line_state = line_state
             
-            if quote_prefix_regex.match(line):
+            (matchComplete, keysStillMatching) = check_quote_announcement_lines_match(currentQuoteAnnounce, keysStillMatching, line)
+            if matchComplete:
+                line_state = LineState.QuoteAnnounceLastLine
+                quote_prefix_regex = quote_announcement_lines_regexes[keysStillMatching[0]]['quotePrefixRegex']
+            elif len(keysStillMatching) > 0:
+                line_state = LineState.PotentialQuoteAnnounce
+            elif quote_prefix_regex.match(line):
                 line_state = LineState.PrefixedQuote
-            elif check_any_regex_match(quote_announcement_line_regexes, line):
-                line_state = LineState.QuoteAnnounce
             elif whitespace_line_regex.match(line):
                 line_state = LineState.AllWhiteSpace
             else:
                 line_state = LineState.Normal
-                
             if line_state == LineState.Normal:
+                if(previous_line_state == LineState.PotentialQuoteAnnounce):
+                    retval += currentQuoteAnnounce
+                    currentQuoteAnnounce = []
                 if(previous_line_state == LineState.PrefixedQuote):
                     retval += currentQuote
                     currentQuote = []
@@ -146,12 +210,14 @@ class AbstractMailbox(PostSource):
                     retval += currentWhiteSpace
                     currentWhiteSpace = []
                 retval.append(line)
-            elif line_state == LineState.PrefixedQuote | line_state == LineState.QuoteAnnounce:
+            elif line_state == LineState.PrefixedQuote:
                 currentQuote.append(line)
+            elif line_state == LineState.QuoteAnnounceLastLine:
+                currentQuoteAnnounce = []
             elif line_state == LineState.AllWhiteSpace:
                 currentWhiteSpace.append(line)
             if debug:
-                print "%d %s \n" % (line_state, line)
+                print "%s %s \n" % (line_state, line)
         #if line_state == LineState.PrefixedQuote | (line_state == LineState.AllWhiteSpace & line_state_before_transition == LineState.PrefixedQuote)
             #We just let trailing quotes and whitespace die...
         return '\n'.join(retval)
@@ -160,6 +226,11 @@ class AbstractMailbox(PostSource):
     def strip_full_message_quoting_html(message_body):
         """Assumes any encoding conversions have already been done 
         """
+        #Most useful to develop this:
+        #http://www.motobit.com/util/quoted-printable-decoder.asp
+        #http://www.freeformatter.com/html-formatter.html
+        #http://www.freeformatter.com/xpath-tester.html#ad-output
+        
         debug = True;
         from lxml import html, etree
         doc = html.fromstring(message_body)
@@ -186,9 +257,6 @@ class AbstractMailbox(PostSource):
         find = etree.XPath(r"//child::div[re:test(text(), '^.*Le .*\d{4} .*:\d{2}, .* a .*crit :.*$', 'i')]/following-sibling::br[contains(@class,'Apple-interchange-newline')]/parent::node()",
                     namespaces={'re':regexpNS})
         matches = find(doc)
-        #print len(matches)
-        #for index,match in enumerate(matches):
-        #    print "Match: %d: %s " % (index, html.tostring(match))
         if len(matches) == 1:
             matches[0].drop_tree()
             return html.tostring(doc)
@@ -213,14 +281,9 @@ class AbstractMailbox(PostSource):
             successiveStringsToMatchRegex.append(r"descendant::*[re:test(text(), '"+singleHeaderLanguageRegex+"')]")
 
         regex = " and ".join(successiveStringsToMatchRegex)
-        print r"//descendant::div["+regex+"]"
-        #find = etree.XPath(r"//descendant::div[descendant::*[re:test(text(), '^De :.*$')]]",
         find = etree.XPath(r"//descendant::div["+regex+"]",
                             namespaces={'re':regexpNS})
         matches = find(doc)
-        print len(matches)
-        for index,match in enumerate(matches):
-            print "Match: %d: %s " % (index, html.tostring(match))
         if len(matches) == 1:
             findQuoteBody = etree.XPath(r"//descendant::div["+regex+"]/following-sibling::*",
                             namespaces={'re':regexpNS})
@@ -231,7 +294,6 @@ class AbstractMailbox(PostSource):
             matches[0].tail = None
             matches[0].drop_tree()
             return html.tostring(doc)
-
         
         #Strip Thunderbird quotes
         mainXpathFragment = "//child::blockquote[contains(@type,'cite') and boolean(@cite)]"
@@ -239,9 +301,6 @@ class AbstractMailbox(PostSource):
         matches = find(doc)
         if len(matches) == 1:
             matchQuoteAnnounce = doc.xpath(mainXpathFragment+"/preceding-sibling::*")
-            print repr(matchQuoteAnnounce)
-            #for index,match in enumerate(matchQuoteAnnounce):
-            #    print "Match: %d: %s " % (index, html.tostring(match))
             if len(matchQuoteAnnounce) > 0:
                 matchQuoteAnnounce[-1].tail = None
                 matches[0].drop_tree()
