@@ -354,6 +354,85 @@ voteApp.controller('indexCtl',
       $scope.computeMyVotes();
       console.log("myVotes:");
       console.log($scope.myVotes);
+
+      var voting_urls = configService.voting_urls;
+      for ( var k in $scope.myVotes )
+      {
+        if ( $scope.myVotes.hasOwnProperty(k) )
+        {
+          var vote_value = null; // must be float, and contained in the range defined in the criterion
+          if ( typeof $scope.myVotes[k] === 'string' )
+            vote_value = parseFloat($scope.myVotes[k]);
+          else
+            vote_value = $scope.myVotes[k];
+
+          if ( voting_urls[k] )
+          {
+            var url = AssemblToolsService.resourceToUrl(voting_urls[k]);
+            var data_to_post = {
+              "type": "LickertIdeaVote",
+              "value": vote_value
+            };
+
+            console.log("url");
+            console.log(url);
+
+            var successForK = function(vk){
+              return function(data, status, headers){
+                console.log("success");
+                //alert("success");
+                console.log("data:");
+                console.log(data);
+                console.log("status:");
+                console.log(status);
+                console.log("headers:");
+                console.log(headers);
+                //$location.path( "/voted" );
+
+                console.log("k: " + vk); // TODO now: k has always the same value
+                var el = $("svg g[data-criterion-id=\"" + vk + "\"]").parent("svg");
+                //el.css("background","#00ff00").fadeOut();
+                el.css("background","#00ff00");//.delay(1000).css("background","none");
+                setTimeout(function(){el.css("background","none");}, 1000);
+              };          
+            };
+
+            var errorForK = function(vk){
+              return function(status, headers){
+                console.log("error");
+                //alert("error");
+                console.log("status:");
+                console.log(status);
+                console.log("headers:");
+                console.log(headers);
+                //$location.path( "/voted" );
+                console.log("k: " + vk);
+                var el = $("svg g[data-criterion-id=\"" + vk + "\"]").parent("svg");
+                el.css("background","#ff0000");//.delay(1000).css("background","none");
+                setTimeout(function(){el.css("background","none");}, 1000);
+              }
+            };
+
+            // POST to this URL
+            $http({
+              method: "POST",
+              url: url,
+              data: $.param(data_to_post),
+              //data: data_to_post,
+              headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+              //headers: {'Content-Type': 'application/json'}
+            }).success(successForK(k)).error(errorForK(k));
+          }
+        }
+      }
+
+    };
+
+    $scope.submitVoteOld = function(){
+      console.log("submitVoteOld()");
+      $scope.computeMyVotes();
+      console.log("myVotes:");
+      console.log($scope.myVotes);
       console.log("$.param($scope.myVotes):");
       console.log($.param($scope.myVotes));
 
@@ -415,7 +494,8 @@ voteApp.controller('indexCtl',
 
       svg.append("g")
         .attr("class", "criterion")
-        .attr("data-criterion-id", criterion.id)
+        .attr("data-criterion-name-slug", criterion.name_slug)
+        .attr("data-criterion-id", criterion["entity_id"]) // contains something like "local:Idea/3"
         .attr("data-criterion-value", criterionValue);
 
 
@@ -620,13 +700,15 @@ voteApp.controller('indexCtl',
 
       svg.append("g")
         .attr("class", "criterion")
-        .attr("data-criterion-id", criteria[0].id)
+        .attr("data-criterion-name-slug", criteria[0].name_slug)
+        .attr("data-criterion-id", criteria[0]["entity_id"]) // contains something like "local:Idea/3"
         .attr("data-criterion-value", criterionXValue)
         .attr("data-criterion-type", "x");
 
       svg.append("g")
         .attr("class", "criterion")
-        .attr("data-criterion-id", criteria[1].id)
+        .attr("data-criterion-name-slug", criteria[1].name_slug)
+        .attr("data-criterion-id", criteria[1]["entity_id"]) // contains something like "local:Idea/3"
         .attr("data-criterion-value", criterionYValue)
         .attr("data-criterion-type", "y");
 
@@ -923,6 +1005,8 @@ voteApp.controller('indexCtl',
         if ( item.type == "vertical_gauge" )
         {
           $scope.drawVerticalGauge(holder, item);
+
+          /*
           // add specific vote button for this criterion
           console.log("item.criteria:");
           console.log(item.criteria);
@@ -947,6 +1031,9 @@ voteApp.controller('indexCtl',
               jq_holder.append(link);
             }
           }
+          */
+
+
         }
         else if ( item.type == "2_axes" )
         {

@@ -52,20 +52,16 @@
     "postVoteUrl":"http://localhost:6543/data/Discussion/1/widgets",
     "criteria":[
         {
-            "@id": "local:Idea/3",
-            "short_title": "test 1"
+            "@id": "local:Idea/70"
         },
         {
-            "@id": "local:Idea/4",
-            "short_title": "test 2"
+            "@id": "local:Idea/71"
         },
         {
-            "@id": "local:Idea/5",
-            "short_title": "test 3"
+            "@id": "local:Idea/72"
         },
         {
-            "@id": "local:Idea/6",
-            "short_title": "test 4"
+            "@id": "local:Idea/73"
         }
     ],
     "items":[
@@ -73,8 +69,8 @@
             "type":"2_axes",
             "criteria":[
                 {
-                    "@id":"local:Idea/3",
-                    "id":"rentabilite",
+                    "entity_id":"local:Idea/70",
+                    "name_slug":"rentabilite",
                     "name":"Rentabilite (%)",
                     "description":"Description de l'axe rentabilite",
                     "valueMin":0,
@@ -85,8 +81,8 @@
                     "ticks":6
                 },
                 {
-                    "@id":"local:Idea/4",
-                    "id":"risque",
+                    "entity_id":"local:Idea/71",
+                    "name_slug":"risque",
                     "name":"Risque (%)",
                     "description":"Description de l'axe risque",
                     "valueMin":0,
@@ -104,8 +100,8 @@
             "type": "vertical_gauge",
             "criteria": [
                 {
-                    "@id":"local:Idea/5",
-                    "id":"investissement",
+                    "entity_id":"local:Idea/72",
+                    "name_slug":"investissement",
                     "name":"Investissement (Euros)",
                     "description":"Description de l'axe investissement",
                     "valueMin":0,
@@ -121,8 +117,8 @@
             "type": "vertical_gauge",
             "criteria": [
                 {
-                    "@id":"local:Idea/6",
-                    "id":"difficulte_mise_en_oeuvre",
+                    "entity_id":"local:Idea/73",
+                    "name_slug":"difficulte_mise_en_oeuvre",
                     "name":"Difficulte de mise en oeuvre (note)",
                     "description":"Description de l'axe difficulte de mise en oeuvre",
                     "valueMin":0,
@@ -162,12 +158,13 @@
     </form>
 
 
-    <h2>Set widget's criteria (TODO backend side)</h2>
+    <h2>Set widget's criteria</h2>
     <form id="criteria_set" method="POST">
         <label for="criteria_set_endpoint">criteria endpoint</label>
         <input type="text" id="criteria_set_endpoint" value="/data/Discussion/1/widgets/13/criteria" size="50" />
         <br/>
-        <textarea id="criteria_set_criteria">[]</textarea>
+        <label for="criteria_set_criteria">criteria</label>
+        <textarea id="criteria_set_criteria">[{"@id":"local:Idea/70"}]</textarea>
         <br/>
         <input type="submit" />
         <div id="criteria_set_result"></div>
