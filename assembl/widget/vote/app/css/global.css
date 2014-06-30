@@ -22,3 +22,15 @@ body {
 #table_vote td {
     border: 1px solid #000;
 }
+
+#vote_submit_result_holder {
+  margin-top: 10px;
+}
+
+#vote_submit_result_holder p.success {
+  color: #00A012;
+}
+
+#vote_submit_result_holder p.failure {
+  color: #9E0000;
+}

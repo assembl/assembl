@@ -326,25 +326,15 @@ voteApp.controller('indexCtl',
     $scope.computeMyVotes = function(){
       // do not use .data("criterion-value") because jQuery does not seem to read the value set by d3
 
-      /*
-      $scope.myVotes = [];
-      // /!\ once serialized by $.param(), this would give "undefined=10&undefined=0&undefined=22222&undefined=50"
-      $("#d3_container g.criterion").each(function(index) {
-        $scope.myVotes.push({
-          'id': $(this).attr("data-criterion-id"),
-          'value': $(this).attr("data-criterion-value")
-        });
-      });
-      */
-
-      /**/
       $scope.myVotes = {};
       // once serialized by $.param(), this will give "rentabilite=10&risque=0&investissement=22222&difficulte_mise_en_oeuvre=50"
       $("#d3_container g.criterion").each(function(index) {
-        $scope.myVotes[$(this).attr("data-criterion-id")] = $(this).attr("data-criterion-value");
+        var valueMin = parseFloat($(this).attr("data-criterion-value-min"));
+        var valueMax = parseFloat($(this).attr("data-criterion-value-max"));
+        var value = parseFloat($(this).attr("data-criterion-value"));
+        var valueToPost = (value - valueMin) / (valueMax - valueMin); // the posted value has to be a float in [0;1]
+        $scope.myVotes[$(this).attr("data-criterion-id")] = valueToPost;
       });
-      /**/
-      
 
       return $scope.myVotes;
     };
@@ -354,6 +344,9 @@ voteApp.controller('indexCtl',
       $scope.computeMyVotes();
       console.log("myVotes:");
       console.log($scope.myVotes);
+
+      var vote_result_holder = $("#vote_submit_result_holder");
+      vote_result_holder.empty();
 
       var voting_urls = configService.voting_urls;
       for ( var k in $scope.myVotes )
@@ -374,9 +367,6 @@ voteApp.controller('indexCtl',
               "value": vote_value
             };
 
-            console.log("url");
-            console.log(url);
-
             var successForK = function(vk){
               return function(data, status, headers){
                 console.log("success");
@@ -389,11 +379,17 @@ voteApp.controller('indexCtl',
                 console.log(headers);
                 //$location.path( "/voted" );
 
-                console.log("k: " + vk); // TODO now: k has always the same value
-                var el = $("svg g[data-criterion-id=\"" + vk + "\"]").parent("svg");
-                //el.css("background","#00ff00").fadeOut();
-                el.css("background","#00ff00");//.delay(1000).css("background","none");
-                setTimeout(function(){el.css("background","none");}, 1000);
+                console.log("k: " + vk);
+                var criterion_tag = $("svg g[data-criterion-id=\"" + vk + "\"]");
+                var svg = criterion_tag.parent("svg");
+
+                /*
+                //svg.css("background","#00ff00").fadeOut();
+                svg.css("background","#00ff00");//.delay(1000).css("background","none");
+                setTimeout(function(){svg.css("background","none");}, 1000);
+                */
+
+                vote_result_holder.append($("<p class='success'>Your vote on criterion '" + criterion_tag.attr("data-criterion-name-slug") + "' has been successfully submitted!</p>"));
               };          
             };
 
@@ -407,9 +403,13 @@ voteApp.controller('indexCtl',
                 console.log(headers);
                 //$location.path( "/voted" );
                 console.log("k: " + vk);
-                var el = $("svg g[data-criterion-id=\"" + vk + "\"]").parent("svg");
-                el.css("background","#ff0000");//.delay(1000).css("background","none");
-                setTimeout(function(){el.css("background","none");}, 1000);
+                var criterion_tag = $("svg g[data-criterion-id=\"" + vk + "\"]");
+                var svg = criterion_tag.parent("svg");
+
+                svg.css("background","#ff0000");
+                setTimeout(function(){svg.css("background","none");}, 1000);
+
+                vote_result_holder.append($("<p class='failure'>Your vote on criterion '" + criterion_tag.attr("data-criterion-name-slug") + "' has NOT been successfully submitted!</p>"));
               }
             };
 
@@ -426,41 +426,6 @@ voteApp.controller('indexCtl',
         }
       }
 
-    };
-
-    $scope.submitVoteOld = function(){
-      console.log("submitVoteOld()");
-      $scope.computeMyVotes();
-      console.log("myVotes:");
-      console.log($scope.myVotes);
-      console.log("$.param($scope.myVotes):");
-      console.log($.param($scope.myVotes));
-
-
-      // POST to postVoteUrl
-      $http({
-        method: "POST",
-        url: $scope.postVoteUrl,
-        data: $.param($scope.myVotes),
-        //data: $scope.myVotes // and to post pure JSON, we comment the next line
-        headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-      }).success(function(data, status, headers){
-        alert("success");
-        console.log("data:");
-        console.log(data);
-        console.log("status:");
-        console.log(status);
-        console.log("headers:");
-        console.log(headers);
-        $location.path( "/voted" );
-      }).error(function(status, headers){
-        alert("error");
-        console.log("status:");
-        console.log(status);
-        console.log("headers:");
-        console.log(headers);
-        //$location.path( "/voted" );
-      });
     };
 
     $scope.submitSingleVote = function(endpoint, type, criterion_id){
@@ -496,7 +461,10 @@ voteApp.controller('indexCtl',
         .attr("class", "criterion")
         .attr("data-criterion-name-slug", criterion.name_slug)
         .attr("data-criterion-id", criterion["entity_id"]) // contains something like "local:Idea/3"
-        .attr("data-criterion-value", criterionValue);
+        .attr("data-criterion-value", criterionValue)
+        .attr("data-criterion-value-min", criterion.valueMin)
+        .attr("data-criterion-value-max", criterion.valueMax)
+      ;
 
 
       // create vertical scale
@@ -703,14 +671,20 @@ voteApp.controller('indexCtl',
         .attr("data-criterion-name-slug", criteria[0].name_slug)
         .attr("data-criterion-id", criteria[0]["entity_id"]) // contains something like "local:Idea/3"
         .attr("data-criterion-value", criterionXValue)
-        .attr("data-criterion-type", "x");
+        .attr("data-criterion-value-min", criteria[0].valueMin)
+        .attr("data-criterion-value-max", criteria[0].valueMax)
+        .attr("data-criterion-type", "x")
+      ;
 
       svg.append("g")
         .attr("class", "criterion")
         .attr("data-criterion-name-slug", criteria[1].name_slug)
         .attr("data-criterion-id", criteria[1]["entity_id"]) // contains something like "local:Idea/3"
         .attr("data-criterion-value", criterionYValue)
-        .attr("data-criterion-type", "y");
+        .attr("data-criterion-value-min", criteria[1].valueMin)
+        .attr("data-criterion-value-max", criteria[1].valueMax)
+        .attr("data-criterion-type", "y")
+      ;
 
 
       // create X and Y scales
