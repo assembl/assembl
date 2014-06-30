@@ -536,11 +536,11 @@ msgstr "Déconnexion"
 
 #: assembl/templates/index.jinja2:15
 msgid "Connecting..."
-msgstr "Connection en cours..."
+msgstr "Connexion en cours..."
 
 #: assembl/templates/login.jinja2:25
 msgid "Connect to assembl"
-msgstr "Se connectez à Assembl"
+msgstr "Se connecter à Assembl"
 
 #: assembl/templates/login.jinja2:29
 #: assembl/templates/request_password_change.jinja2:16
@@ -557,7 +557,7 @@ msgstr "ou"
 
 #: assembl/templates/login.jinja2:35
 msgid "register"
-msgstr "enregistrement"
+msgstr "Créer un compte"
 
 #: assembl/templates/login.jinja2:36
 msgid "I forgot my password"
