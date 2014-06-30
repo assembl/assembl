@@ -147,8 +147,8 @@ class LickertIdeaVote(AbstractIdeaVote):
     @value.setter
     def value(self, val):
         val = float(val)
-        assert val <= self.lickert_range.maximum and \
-            val >= self.lickert_range.minimum
+        # assert val <= self.lickert_range.maximum and \
+        #     val >= self.lickert_range.minimum
         self.vote_value = val
 
 
