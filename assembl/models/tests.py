@@ -395,3 +395,12 @@ def test_strip_quotations_html_thunderbird():
 </html>
 """
     check_striping_html(original, expected, "Thunderbird, circa 2011")
+
+
+
+def test_delete_widget(
+        test_session, creativity_session_widget,
+        creativity_session_widget_new_idea):
+    test_session.flush()
+    test_session.delete(creativity_session_widget)
+    test_session.flush()
