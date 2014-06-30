@@ -3,9 +3,11 @@
         <strong data-tooltip="{{gettext('Detailled information about the currently selected idea in the Table of ideas')}}">{{ gettext('Idea') }}</strong>
         <div class="float-right">
             <% if( idea ) { %>
+                {# Commented out, creates infinite loops
                 <a href="#" id="session-modal">
                 			Create session
                 </a>
+                #}
             <% } %>
             <a id="ideaPanel-closebutton" class="iconbutton icon-cancel" data-tooltip="{{gettext('Close panel')}}"></a>
         </div>
