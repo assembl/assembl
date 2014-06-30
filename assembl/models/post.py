@@ -189,11 +189,13 @@ class AssemblPost(Post):
         ondelete='CASCADE',
         onupdate='CASCADE'
     ), primary_key=True)
-
-
+        
     __mapper_args__ = {
         'polymorphic_identity': 'assembl_post',
     }
+    
+    def get_body_mime_type(self):
+        return "text/plain"
 
 class SynthesisPost(AssemblPost):
     """
@@ -224,6 +226,8 @@ class SynthesisPost(AssemblPost):
         super(SynthesisPost, self).__init__(*args, **kwargs)
         self.publishes_synthesis.publish()
 
+    def get_body_mime_type(self):
+        return "text/html"
 
 class IdeaProposalPost(AssemblPost):
     """
@@ -280,9 +284,16 @@ class ImportedPost(Post):
         backref=backref('contents')
     )
     
+    body_mime_type = Column(Unicode(),
+                        nullable=False,
+                        doc="The mime type of the body of the imported content.  See Content::get_body_mime_type() for allowed values.")
+    
     __mapper_args__ = {
         'polymorphic_identity': 'imported_post',
     }
+    
+    def get_body_mime_type(self):
+        return self.body_mime_type
     
 @event.listens_for(ImportedPost.source_post_id, 'set', propagate=True)
 def receive_set(target, value, oldvalue, initiator):

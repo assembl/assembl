@@ -194,6 +194,13 @@ class Content(DiscussionBoundBase):
     def get_body(self):
         return ""
 
+    def get_body_mime_type(self):
+        """ Return the format of the body, so the frontend will know how to 
+        display it.  Currently, only:
+        text/plain (Understood as preformatted text)
+        text/html (Undestood as some subste of html)
+        """
+        raise "Method called on abstract class"
     def get_title(self):
         return ""
 

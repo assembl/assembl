@@ -309,22 +309,16 @@ class AbstractMailbox(PostSource):
         #Nothing was stripped...
         return html.tostring(doc)
 
-    @staticmethod
-    def body_as_html(text_value):
-        text_value = html_escape(text_value.strip())
-        text_value = text_value.replace("\r", '')
-        return text_value
-
-
     def parse_email(self, message_string, existing_email=None):
         parsed_email = email.message_from_string(message_string)
         body = None
         error_description = None
         
-        def get_plain_text_payload(message):
-            """ Returns the first text/plain body as a unicode object, falling back to text/html body """
+        def get_payload(message):
+            """ Returns the first text/html body, and falls back to text/plain body """
 
             def process_part(part, default_charset, text_part, html_part):
+                """ Returns the first text/plain body as a unicode object, and the first text/html body """
                 if part.is_multipart():
                     for part in part.get_payload():
                         charset = part.get_content_charset(default_charset)
@@ -345,13 +339,13 @@ class AbstractMailbox(PostSource):
             default_charset = message.get_charset() or 'ISO-8859-1'
             (text_part, html_part) = process_part(message, default_charset, text_part, html_part)
             if html_part:
-                return self.sanitize_html(AbstractMailbox.strip_full_message_quoting_html(html_part))
+                return ('text/html',self.sanitize_html(AbstractMailbox.strip_full_message_quoting_html(html_part)))
             elif text_part:
-                return self.body_as_html(AbstractMailbox.strip_full_message_quoting_plaintext(text_part))
+                return ('text/plain', AbstractMailbox.strip_full_message_quoting_plaintext(text_part))
             else:
-                return u"Sorry, no assembl-supported mime type found in message parts"
+                return ('text/plain',u"Sorry, no assembl-supported mime type found in message parts")
 
-        body = get_plain_text_payload(parsed_email)
+        (mimeType, body) = get_payload(parsed_email)
 
         def email_header_to_unicode(header_string):
             decoded_header = decode_email_header(header_string)
@@ -408,6 +402,7 @@ class AbstractMailbox(PostSource):
             email_object.source_post_id = new_message_id
             email_object.in_reply_to = new_in_reply_to
             email_object.body = body
+            email_object.body_mime_type = mimeType
             email_object.full_message = message_string
         except NoResultFound:
             email_object = Email(
@@ -419,6 +414,7 @@ class AbstractMailbox(PostSource):
                 source_post_id=new_message_id,
                 in_reply_to=new_in_reply_to,
                 body=body,
+                body_mime_type = mimeType,
                 full_message=message_string
             )
         except MultipleResultsFound:
