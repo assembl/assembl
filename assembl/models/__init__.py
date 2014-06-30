@@ -127,10 +127,11 @@ from .annotation import (
 from .widgets import (
     BaseIdeaWidget,
     BaseIdeaWidgetLink,
-    CreativityWidget,
+    CreativitySessionWidget,
     GeneratedIdeaWidgetLink,
     IdeaCreatingWidget,
     IdeaWidgetLink,
+    InspirationWidget,
     MultiCriterionVotingWidget,
     VotableIdeaWidgetLink,
     VotedIdeaWidgetLink,

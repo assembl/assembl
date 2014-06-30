@@ -234,6 +234,11 @@ class Discussion(DiscussionBoundBase):
     def __repr__(self):
         return "<Discussion %s>" % repr(self.topic)
 
+    def get_notifications(self):
+        for widget in self.widgets:
+            for n in widget.has_notification():
+                yield n
+
 
 def slugify_topic_if_slug_is_empty(discussion, topic, oldvalue, initiator):
     """

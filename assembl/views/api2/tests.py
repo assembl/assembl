@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from datetime import datetime, timedelta
+
 import pytest
 import simplejson as json
 
@@ -103,7 +105,7 @@ def test_widget_settings(
     settings_s = json.dumps(settings)
     new_widget_loc = test_app.post(
         '/data/Discussion/%d/widgets' % (discussion.id,), {
-            'type': 'CreativityWidget',
+            'type': 'CreativitySessionWidget',
             'settings': json.dumps({
                 'idea': 'local:Idea/%d' % (subidea_1.id)
             })
@@ -140,7 +142,7 @@ def test_widget_user_state(
     state_s = json.dumps(state)
     new_widget_loc = test_app.post(
         '/data/Discussion/%d/widgets' % (discussion.id,), {
-            'type': 'CreativityWidget',
+            'type': 'CreativitySessionWidget',
             'settings': json.dumps({
                 'idea': 'local:Idea/%d' % (subidea_1.id)
             })
@@ -195,11 +197,24 @@ def test_widget_basic_interaction(
         discussion, test_app, subidea_1, subidea_1_1,
         participant1_user, test_session):
     # Post the initial configuration
+    format = lambda x: x.strftime('%Y-%m-%dT%H:%M:%S')
     new_widget_loc = test_app.post(
         '/data/Discussion/%d/widgets' % (discussion.id,), {
-            'type': 'CreativityWidget',
+            'type': 'CreativitySessionWidget',
             'settings': json.dumps({
-                'idea': 'local:Idea/%d' % (subidea_1.id)
+                'idea': 'local:Idea/%d' % (subidea_1.id),
+                'notifications': [
+                    {
+                        'start': '2014-01-01T00:00:00',
+                        'end': format(datetime.now() + timedelta(1)),
+                        'message': 'creativity_session'
+                    },
+                    {
+                        'start': format(datetime.now() + timedelta(1)),
+                        'end': format(datetime.now() + timedelta(2)),
+                        'message': 'creativity_session'
+                    }
+                ]
             })
         })
     assert new_widget_loc.status_code == 201
@@ -348,6 +363,18 @@ def test_widget_basic_interaction(
     assert not new_post1.hidden
     new_post2 = Post.get_instance(new_post2_id)
     assert new_post2.hidden
+    # Get the notifications
+    notifications = test_app.get(
+        '/data/Discussion/%d/notifications' % discussion.id)
+    assert notifications.status_code == 200
+    notifications = notifications.json
+    # Only one active session
+    assert len(notifications) == 1
+    notification = notifications[0]
+    print notification
+    assert notification['time_to_end'] > 23*60*60
+    #assert notification['num_participants'] == 1
+    assert notification['num_ideas'] == 2
 
 
 def test_voting_widget(
@@ -517,5 +544,3 @@ def test_voting_widget_criteria(
     assert test.status_code == 200
     assert len(test.json) == 2
     assert {x['@id'] for x in test.json} == {c.uri() for c in criteria}
-
-
