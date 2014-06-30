@@ -8,7 +8,7 @@ define(['app','backbone','backboneModal','text!/static/templates/notification.ht
 
        initialize: function(){
 
-           this.render();
+           //this.render();
        },
 
        events: {
@@ -38,6 +38,7 @@ define(['app','backbone','backboneModal','text!/static/templates/notification.ht
 
        close: function(){
            if(window.localStorage){
+              //benoitg:  Not good, this will close every notification for every discussion!
               window.localStorage.setItem('showNotification', false);
            }
            this.remove();
