@@ -256,7 +256,7 @@ class IdeaGraphView(DiscussionBoundBase):
     A view on the graph of idea.
     """
     __tablename__ = "idea_graph_view"
-    rdf_class = IDEA.Map
+    rdf_class = CATALYST.Map
 
     type = Column(String(60), nullable=False)
     id = Column(Integer, primary_key=True,
