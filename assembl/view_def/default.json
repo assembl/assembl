@@ -252,7 +252,10 @@
         "confirm_ideas_url": "&get_confirm_ideas_url",
         "confirm_messages_url": "&get_confirm_messages_url"
     },
-    "CreativityWidget": {
+    "CreativitySessionWidget": {
+        "@extends": "IdeaCreatingWidget"
+    },
+    "InspirationWidget": {
         "@extends": "IdeaCreatingWidget"
     },
     "MultiCriterionVotingWidget": {

@@ -1,7 +1,8 @@
 from itertools import chain
+from datetime import datetime
 
 from sqlalchemy import (
-    Column, Integer, ForeignKey, Text, String, inspect)
+    Column, Integer, ForeignKey, Text, String, DateTime, inspect)
 from sqlalchemy.orm import relationship, backref, aliased, join
 from sqlalchemy.ext.associationproxy import association_proxy
 import simplejson as json
@@ -22,6 +23,8 @@ from ..views.traversal import (
     CollectionDefinition, AbstractCollectionDefinition)
 from ..semantic.virtuoso_mapping import QuadMapPatternS
 from ..semantic.namespaces import (ASSEMBL, QUADNAMES)
+
+ISO_8601_FORMAT = '%Y-%m-%dT%H:%M:%S'
 
 
 class Widget(DiscussionBoundBase):
@@ -128,6 +131,28 @@ class Widget(DiscussionBoundBase):
         return self
 
     crud_permissions = CrudPermissions(P_ADMIN_DISC)
+
+    def notification_data(self, notification_setting_data):
+        pass
+
+    def has_notification(self):
+        settings = self.settings_json
+        notifications = settings.get('notifications', [])
+        now = datetime.now()
+
+        for notification in notifications:
+            try:
+                start = datetime.strptime(
+                    notification['start'], ISO_8601_FORMAT)
+                end = notification.get('end', None)
+                end = datetime.strptime(end, ISO_8601_FORMAT) if end else datetime.max
+                if now < start or now > end:
+                    continue
+            except (ValueError, TypeError, KeyError) as e:
+                continue
+            notification_data = self.notification_data(notification)
+            if notification_data:
+                yield notification_data
 
 
 class BaseIdeaWidget(Widget):
@@ -298,24 +323,28 @@ class IdeaCreatingWidget(BaseIdeaWidget):
     #     return [l.idea for l in self.generated_idea_links]
 
 
-class CreativityWidget(IdeaCreatingWidget):
+class InspirationWidget(IdeaCreatingWidget):
+    default_view = 'creativity_widget'
+    __mapper_args__ = {
+        'polymorphic_identity': 'inspiration_widget',
+    }
+
+
+class CreativitySessionWidget(IdeaCreatingWidget):
     default_view = 'creativity_widget'
     __mapper_args__ = {
         'polymorphic_identity': 'creativity_session_widget',
     }
 
-
-# These do not seem to be distinguished yet.
-# class CardGameWidget(CreativityWidget):
-#     __mapper_args__ = {
-#         'polymorphic_identity': 'cardgame_widget',
-#     }
-
-
-# class JukeTubeWidget(CreativityWidget):
-#     __mapper_args__ = {
-#         'polymorphic_identity': 'juketube_widget',
-#     }
+    def notification_data(self, data):
+        end = data.get('end', None)
+        time_to_end = (datetime.strptime(end, ISO_8601_FORMAT) - datetime.now()
+                       ).total_seconds() if end else None
+        return dict(
+            data,
+            time_to_end=time_to_end,
+            num_participants=len(self.user_configs),  # improve?
+            num_ideas=len(self.generated_idea_links))
 
 
 class MultiCriterionVotingWidget(Widget):
@@ -394,8 +423,8 @@ class MultiCriterionVotingWidget(Widget):
                 widget = self.owner_alias
                 idea = last_alias
                 criterion_link = aliased(VotingCriterionWidgetLink)
-                return query.join(idea.has_criterion_links).join(widget).filter(
-                    widget.id == parent_instance.id)
+                return query.join(idea.has_criterion_links).join(
+                    widget).filter(widget.id == parent_instance.id)
 
             def decorate_instance(
                     self, instance, parent_instance, assocs, user_id, ctx):
@@ -408,7 +437,8 @@ class MultiCriterionVotingWidget(Widget):
                         criterion_ctx = ctx.find_collection(
                             'CriterionCollection.criteria')
                         search_ctx = ctx
-                        while search_ctx.__parent__ and search_ctx.__parent__ != criterion_ctx:
+                        while (search_ctx.__parent__
+                               and search_ctx.__parent__ != criterion_ctx):
                             search_ctx = search_ctx.__parent__
                         assert search_ctx.__parent__
                         inst.criterion = search_ctx._instance
@@ -422,7 +452,7 @@ class MultiCriterionVotingWidget(Widget):
             def decorate_query(self, query, last_alias, parent_instance, ctx):
                 return query.filter(
                     last_alias.discussion_id == parent_instance.discussion_id
-                ).filter(last_alias.hidden==False)
+                ).filter(last_alias.hidden == False)
 
             def decorate_instance(
                     self, instance, parent_instance, assocs, user_id, ctx):
@@ -500,6 +530,8 @@ class IdeaWidgetLink(DiscussionBoundBase):
         Widget.id, ondelete="CASCADE", onupdate="CASCADE"),
         nullable=False, index=True)
     #widget = relationship(Widget, backref='idea_links')
+
+    # context_url = Column(String())
 
     __mapper_args__ = {
         'polymorphic_identity': 'abstract_idea_widget_link',

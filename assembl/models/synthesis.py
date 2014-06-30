@@ -234,6 +234,11 @@ class Discussion(DiscussionBoundBase):
     def __repr__(self):
         return "<Discussion %s>" % repr(self.topic)
 
+    def get_notifications(self):
+        for widget in self.widgets:
+            for n in widget.has_notification():
+                yield n
+
 
 def slugify_topic_if_slug_is_empty(discussion, topic, oldvalue, initiator):
     """
@@ -251,7 +256,7 @@ class IdeaGraphView(DiscussionBoundBase):
     A view on the graph of idea.
     """
     __tablename__ = "idea_graph_view"
-    rdf_class = IDEA.Map
+    rdf_class = CATALYST.Map
 
     type = Column(String(60), nullable=False)
     id = Column(Integer, primary_key=True,

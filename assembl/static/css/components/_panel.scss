@@ -12,8 +12,8 @@
     overflow: hidden;
     border:1px solid #CCCCCC;
     fieldset {
-        margin: 10px;
-        padding-top: 1.4em; //height of the legend + 0.5em
+        margin: 10px 0;
+        //padding-top: 1.4em; //height of the legend + 0.5em
         position: relative;
         legend {
             height: 1.8em;
@@ -109,10 +109,14 @@
       background-color: #dbf2ff;
   }
 }
-.panel-editablearea.canEdit:hover{
-    border:1px solid #cccccc;
+
+.panel-editablearea.canEdit{
+  border:1px solid transparent;
+  &:hover {
     @include box-shadow(rgba(0, 0, 0, 0.1) 0px 1px 1px inset);
+    border:1px solid #cccccc;
   }
+}
 
 // To put the content
 // -----------
