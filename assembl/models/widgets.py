@@ -569,7 +569,8 @@ class IdeaWidgetLink(DiscussionBoundBase):
 Idea.widgets = association_proxy('widget_links', 'widget')
 Widget.idea_links = relationship(
     IdeaWidgetLink,
-    backref=backref('widget', uselist=False))
+    backref=backref('widget', uselist=False),
+    cascade="all, delete-orphan")
 
 
 class BaseIdeaWidgetLink(IdeaWidgetLink):
