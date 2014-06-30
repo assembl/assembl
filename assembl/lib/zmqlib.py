@@ -33,7 +33,7 @@ def start_dispatch_thread():
 
 @atexit.register
 def stop_sockets():
-    print "STOPPING SOCKETS"
+    #print "STOPPING SOCKETS"
     global CHANGES_SOCKET, MULTIPLEX, INITED, DISPATCHER
     for socket in _active_sockets:
         socket.close()

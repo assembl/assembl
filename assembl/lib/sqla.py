@@ -49,7 +49,7 @@ CleanupStrategy()
 
 @atexit.register
 def dispose_sqlengines():
-    print "ATEXIT", atexit_engines
+    #print "ATEXIT", atexit_engines
     [e.dispose() for e in atexit_engines]
 
 _TABLENAME_RE = re.compile('([A-Z]+)')
