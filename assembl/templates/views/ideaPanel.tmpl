@@ -6,7 +6,6 @@
                 <a href="#" id="session-modal">
                 			Create session
                 </a>
-                <a id="ideaPanel-linkbutton" class="iconbutton icon-link" data-copy-text="/idea/<%= escape(idea.getId()) %>" data-tooltip="{{gettext('Copy the link to this idea to clipboard')}}"></a>
             <% } %>
             <a id="ideaPanel-closebutton" class="iconbutton icon-cancel" data-tooltip="{{gettext('Close panel')}}"></a>
         </div>
@@ -15,23 +14,10 @@
     <div class="panel-body">
         <% if( idea ) { %>
         <fieldset id="ideaPanel-section-summary" class="panel-section">
-            <legend data-tooltip="{{gettext('Basic information about the idea being discussed')}}">
-                <span>{{ gettext('Summary') }}</span>
-            </legend>
             <div id="ideaPanel-shorttitle" class="text-bold" data-tooltip="{{gettext('The name of this idea in the table of ideas')}}"></div>
-            <% if (canEditNextSynthesis) { %>
-            <span>{{ gettext('Expression in next synthesis:') }}</span>
-            <div id="ideaPanel-longtitle" data-tooltip="{{gettext('Expression of this idea in the next synthesis.  You may want to edit them all together in the synthesis panel rather than here.')}}"></div>
-            <% } %>
             <div id="ideaPanel-definition" data-tooltip="{{gettext('A definition of this idea')}}"></div>
-            <p class="text-muted margin">
-                {% set creationDate = "<%= app.formatDate(idea.get('creationDate')) %>" %}
-            </p>
-
+            <p class="text-muted margin">{% set creationDate = "<%= app.formatDate(idea.get('creationDate')) %>" %}</p>
             <div id="ideaPanel-comment"></div>
-            ­{#
-            ­{{- gettext('Idea created %(date)s')|format(date=creationDate)|safe }}
-            #}
         </fieldset>
         
         <fieldset id="ideaPanel-section-segments" class="panel-section">
