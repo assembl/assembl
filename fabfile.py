@@ -182,6 +182,8 @@ def compile_stylesheets():
         run('bundle exec compass compile --force', shell=True)
         with cd('assembl/widget/creativity/app'):
             run('bundle exec compass compile --force --sass-dir scss --css-dir css', shell=True)
+        with cd('assembl/widget/session'):
+            run('bundle exec compass compile --force --sass-dir scss --css-dir css', shell=True)
 
 
 def tests():
