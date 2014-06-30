@@ -5,7 +5,7 @@ import inspect as pyinspect
 from sqlalchemy import inspect
 from pyramid.view import view_config
 from pyramid.httpexceptions import (
-    HTTPCreated, HTTPBadRequest, HTTPNotImplemented, HTTPUnauthorized)
+    HTTPCreated, HTTPBadRequest, HTTPNotImplemented, HTTPUnauthorized, HTTPOk)
 from pyramid.security import authenticated_userid
 from pyramid.response import Response
 from pyld import jsonld
@@ -252,6 +252,7 @@ def instance_del(request):
                     User.get(id=user_id) not in context._instance.get_owners():
                 raise HTTPUnauthorized()
     instance.db.delete(instance)
+    return HTTPOk()
 
 
 @view_config(name="collections", context=InstanceContext, renderer='json',
