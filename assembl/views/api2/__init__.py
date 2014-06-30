@@ -242,9 +242,9 @@ def instance_put(request):
 def instance_del(request):
     ctx = request.context
     user_id = authenticated_userid(request)
-    permissions = get_permissions(
-        user_id, ctx.parent_instance.get_discussion_id())
     instance = context._instance
+    permissions = get_permissions(
+        user_id, instance.get_discussion_id())
     if P_SYSADMIN not in permissions:
         required = instance.crud_permissions
         if required.delete not in permissions:
