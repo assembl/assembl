@@ -373,7 +373,7 @@ def test_widget_basic_interaction(
     notification = notifications[0]
     print notification
     assert notification['time_to_end'] > 23*60*60
-    #assert notification['num_participants'] == 1
+    assert notification['num_participants'] == 2  # participant and admin
     assert notification['num_ideas'] == 2
 
 

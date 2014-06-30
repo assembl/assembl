@@ -15,7 +15,7 @@ from .synthesis import (
     Discussion, ExplicitSubGraphView, SubGraphIdeaAssociation, Idea,
     IdeaContentWidgetLink, IdeaLink)
 from .generic import Content
-from .post import IdeaProposalPost
+from .post import Post, IdeaProposalPost
 from .votes import AbstractIdeaVote
 from ..auth import P_ADD_POST, P_ADMIN_DISC, Everyone, CrudPermissions
 from .auth import User
@@ -287,7 +287,8 @@ class IdeaCreatingWidget(BaseIdeaWidget):
                     gen_idea_link = aliased(GeneratedIdeaWidgetLink)
                     query = query.join(
                         gen_idea_link,
-                        (gen_idea_link.idea_id == children_ctx.collection_class_alias.id))
+                        (gen_idea_link.idea_id ==
+                            children_ctx.collection_class_alias.id))
                 query = query.join(widget).filter(
                     widget.id == parent_instance.id)
 
@@ -340,10 +341,22 @@ class CreativitySessionWidget(IdeaCreatingWidget):
         end = data.get('end', None)
         time_to_end = (datetime.strptime(end, ISO_8601_FORMAT) - datetime.now()
                        ).total_seconds() if end else None
+        participant_ids = set()
+        # participants from user_configs
+        participant_ids.update((c.user_id for c in self.user_configs))
+        # Participants from comments
+        participant_ids.update((c[0] for c in self.db.query(
+            Post.creator_id).join(IdeaContentWidgetLink).filter(
+                Widget.id == self.id)))
+        # Participants from created ideas
+        participant_ids.update((c[0] for c in self.db.query(
+            IdeaProposalPost.creator_id).join(
+                Idea, GeneratedIdeaWidgetLink).filter(
+                    Widget.id == self.id)))
         return dict(
             data,
             time_to_end=time_to_end,
-            num_participants=len(self.user_configs),  # improve?
+            num_participants=len(participant_ids),
             num_ideas=len(self.generated_idea_links))
 
 
