@@ -264,7 +264,7 @@ function(Backbone, _, Idea, Message, app, i18n, sprintf, Types, EditableField, C
 
                 var notification =  new Notification();
 
-                notification.openSession(null, 'edit');
+                notification.openSession(null, {view:'edit'});
 
                 return;
 
@@ -274,6 +274,8 @@ function(Backbone, _, Idea, Message, app, i18n, sprintf, Types, EditableField, C
                    data: $.param(data),
                    success: function(data, textStatus, jqXHR){
 
+                       //TODO: add config receive
+                       notification.openSession(null, {view:'edit'});
 
                    },
                    errors: function(jqXHR, textStatus, errorThrown){

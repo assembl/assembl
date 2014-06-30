@@ -1,8 +1,8 @@
-define(['app','backbone','backboneModal'], function(app, Backbone, backboneModal){
+define(['app','backbone','backboneModal','text!/static/templates/notification.html', 'text!/static/templates/session-modal.html'],
+    function(app, Backbone, backboneModal, notificationTpl, modalTpl){
 
    var Notification = Backbone.View.extend({
-
-       template: app.loadTemplate('notification'),
+       template: _.template(notificationTpl),
 
        el:'#notification',
 
@@ -23,12 +23,12 @@ define(['app','backbone','backboneModal'], function(app, Backbone, backboneModal
            model.set("id","local:Widget/2");
 
            if(options)
-             model.set("view", options);
+             model.set("view", options.view);
            else
              model.set("view","index");
 
            var Modal = Backbone.Modal.extend({
-               template: app.loadTemplate('sessionModal'),
+               template: _.template(modalTpl),
                model:model
            });
 

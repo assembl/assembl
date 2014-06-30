@@ -13,18 +13,21 @@ function(Backbone, _, $, app, PanelView, MessageFamilyView, Message, i18n, PostQ
      */
     var MessageList = PanelView.extend({
         ViewStyles: {
-            THREADED: {id: "threaded",
-                        css_id: "messageList-view-threaded",
-                        label: i18n.gettext('Threaded')
-                        },
-            CHRONOLOGICAL: {id: "chronological",
-                        css_id: "messageList-view-chronological",
-                        label: i18n.gettext('Chronological')
-                        },
-            REVERSE_CHRONOLOGICAL: {id: "reverse_chronological",
-                        css_id: "messageList-view-activityfeed",
-                        label: i18n.gettext('Reverse-Chronological')
-                        }
+            THREADED: {
+                id: "threaded",
+                css_id: "messageList-view-threaded",
+                label: i18n.gettext('Threaded')
+            },
+            CHRONOLOGICAL: {
+                id: "chronological",
+                css_id: "messageList-view-chronological",
+                label: i18n.gettext('Chronological')
+            },
+            REVERSE_CHRONOLOGICAL: {
+                id: "reverse_chronological",
+                css_id: "messageList-view-activityfeed",
+                label: i18n.gettext('Reverse-Chronological')
+            }
         },
         
         currentViewStyle: null,

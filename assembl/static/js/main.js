@@ -2,6 +2,7 @@ requirejs.config({
   baseUrl: "/static/js/",
   urlArgs: urlArgs,
   waitSeconds: 20,
+  //enforceDefine: true,
   paths: {
     'app': 'app/app',
     'router': 'app/router',
