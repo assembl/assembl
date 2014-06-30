@@ -380,7 +380,15 @@ $ellipsiswidth: 3em !default;
             height: 18px;
             line-height: 14px;
             padding-top: 2px;
+            padding-right: 4px;
             vertical-align: top;
+        }
+
+        a.icon-mail {
+            font-size: 12px; /* icon-mail needs to have a smaller font size (than original 16px) because the icon is big in the font */
+        }
+        a.icon-mail:link, a.icon-mail:visited {
+            color: inherit; /* so that the icon is not purple when the "a" tag has an href attribute (link) */
         }
     }
 }
