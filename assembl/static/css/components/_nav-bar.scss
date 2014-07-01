@@ -1,4 +1,8 @@
 // Navigation bar
+header {
+  border-bottom: 1px solid #FFFFFF;
+}
+
 .navbar {
   @include no-selection;
   @include box-sizing(border-box);

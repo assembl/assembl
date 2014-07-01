@@ -17,7 +17,6 @@ define(['app','backbone','backboneModal','text!/static/templates/notification.ht
        },
 
        openSession: function(e, options){
-           var view;
 
            var model = new Backbone.Model();
            model.set("id","local:Widget/2");

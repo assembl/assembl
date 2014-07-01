@@ -992,15 +992,15 @@ define(['jquery', 'underscore', 'ckeditor', 'moment', 'moment_lang', 'i18n', 'ze
          * inits ALL app components
          */
         init: function(){
-            app.loadCurrentUser();
+            this.loadCurrentUser();
             Moment.lang(assembl_locale);
 
-            app.body.removeClass('preload');
-            app.createSelectionTooltip();
-            app.initTooltips($("body"));
+            this.body.removeClass('preload');
+            this.createSelectionTooltip();
+            this.initTooltips($("body"));
 
-            app.doc.on('click', '.dropdown-label', app.onDropdownClick);
-            app.doc.on('ajaxError', app.onAjaxError);
+            this.doc.on('click', '.dropdown-label', this.onDropdownClick);
+            this.doc.on('ajaxError', this.onAjaxError);
 
             /*app.on('render', function(){
                 if(app.debugRender) {
