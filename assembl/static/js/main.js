@@ -2,7 +2,13 @@ requirejs.config({
   baseUrl: "/static/js/",
   urlArgs: urlArgs,
   waitSeconds: 20,
-  //enforceDefine: true,
+  packages: [
+    'text',{
+      name:'text',
+      location:'lib/',
+      main:'text'
+    }
+  ],
   paths: {
     'app': 'app/app',
     'router': 'app/router',
@@ -191,7 +197,7 @@ require([
     app.ideaList.ideas.fetchFromScriptTag('ideas-json');
 
     //init notification bar
-    app.notification = new Notification();
+    //app.notification = new Notification();
 
 
     // Let the game begins...
