@@ -48,14 +48,6 @@ class Post(Content):
         backref=backref('parent', remote_side=[id]),
     )
 
-    @property 
-    def source_id(self):
-        raise AttributeError("source_id can only be accessed from a derivative of the ImportedPost class")
-    
-    @property 
-    def source(self):
-        raise AttributeError("source can only be accessed from a derivative of the ImportedPost class")
-    
     @classmethod
     def special_quad_patterns(cls, alias_manager):
         # Don't we need a recursive alias for this? It seems not.

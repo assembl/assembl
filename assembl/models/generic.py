@@ -200,7 +200,8 @@ class Content(DiscussionBoundBase):
         text/plain (Understood as preformatted text)
         text/html (Undestood as some subste of html)
         """
-        raise "Method called on abstract class"
+        return "text/plain"
+
     def get_title(self):
         return ""
 
