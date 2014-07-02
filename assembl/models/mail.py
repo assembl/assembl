@@ -104,7 +104,7 @@ class AbstractMailbox(PostSource):
         """
         #Most useful to develop this:
         #http://www.motobit.com/util/quoted-printable-decoder.asp
-        debug = False;
+        debug = True;
         #To be considered matching, each line must match successive lines, in order
         quote_announcement_lines_regexes = {
             'generic_original_message':  {
@@ -200,12 +200,14 @@ class AbstractMailbox(PostSource):
             else:
                 line_state = LineState.Normal
             if line_state == LineState.Normal:
-                if(previous_line_state == LineState.PotentialQuoteAnnounce):
+                if((previous_line_state != LineState.AllWhiteSpace) & len(currentWhiteSpace) > 0):
+                    retval += currentWhiteSpace
+                    currentWhiteSpace = []
+                if(len(currentQuote) > 0):
                     retval += currentQuoteAnnounce
-                    currentQuoteAnnounce = []
-                if(previous_line_state == LineState.PrefixedQuote):
                     retval += currentQuote
                     currentQuote = []
+                    currentQuoteAnnounce = []
                 if(previous_line_state == LineState.AllWhiteSpace):
                     retval += currentWhiteSpace
                     currentWhiteSpace = []
@@ -217,7 +219,7 @@ class AbstractMailbox(PostSource):
             elif line_state == LineState.AllWhiteSpace:
                 currentWhiteSpace.append(line)
             if debug:
-                print "%s %s \n" % (line_state, line)
+                print "%-30s %s" % (line_state, line)
         #if line_state == LineState.PrefixedQuote | (line_state == LineState.AllWhiteSpace & line_state_before_transition == LineState.PrefixedQuote)
             #We just let trailing quotes and whitespace die...
         return '\n'.join(retval)
@@ -237,8 +239,9 @@ class AbstractMailbox(PostSource):
         #Strip GMail quotes
         matches = doc.find_class('gmail_quote')
         if len(matches) > 0:
-            matches[0].drop_tree()
-            return html.tostring(doc)
+            if "---------- Forwarded message ----------" not in matches[0].text:
+                matches[0].drop_tree()
+                return html.tostring(doc)
             
         #Strip modern Apple Mail quotes
         find = etree.XPath(r"//child::blockquote[contains(@type,'cite')]/preceding-sibling::br[contains(@class,'Apple-interchange-newline')]/parent::node()/parent::node()")

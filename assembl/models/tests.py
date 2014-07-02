@@ -396,8 +396,59 @@ def test_strip_quotations_html_thunderbird():
 """
     check_striping_html(original, expected, "Thunderbird, circa 2011")
 
+def test_strip_quotations_html_doesnt_strip_forward_gmail():
+    original = """
+<br><br><div class="gmail_quote">---------- Forwarded message ----------<br>From: <b class="gmail_sendername">Typical Quebecker</b> <span dir="ltr">&lt;<a href="mailto:typical.quebecker@sampledebate.assembl.net">typical.quebecker@sampledebate.assembl.net</a>&gt;</span><br>
+Date: Tue, Jun 19, 2012 at 1:39 PM<br>Subject: Re: What about Jack Layton?<br>To: &quot;M. Animator&quot; &lt;<a href="mailto:animator@sampledebate.assembl.net">animator@sampledebate.assembl.net</a>&gt;<br><br><br>On June 19, 2012 12:07:31 PM M. Animator wrote:<br>
+
+&gt; But you agree with him on that?<br>
+<br>
+Yes!<br>
+</div><br>
+"""
+    expected = """
+<br><br><div class="gmail_quote">---------- Forwarded message ----------<br>From: <b class="gmail_sendername">Typical Quebecker</b> <span dir="ltr">&lt;<a href="mailto:typical.quebecker@sampledebate.assembl.net">typical.quebecker@sampledebate.assembl.net</a>&gt;</span><br>
+Date: Tue, Jun 19, 2012 at 1:39 PM<br>Subject: Re: What about Jack Layton?<br>To: &quot;M. Animator&quot; &lt;<a href="mailto:animator@sampledebate.assembl.net">animator@sampledebate.assembl.net</a>&gt;<br><br><br>On June 19, 2012 12:07:31 PM M. Animator wrote:<br>
+
+&gt; But you agree with him on that?<br>
+<br>
+Yes!<br>
+</div><br>
+"""
+    check_striping_html(original, expected, "Gmail, circa 2012")
+
+def test_strip_quotations_plaintext_doesnt_strip_forward_gmail():
+
+    original = """
+---------- Forwarded message ----------
+From: Typical Quebecker <typical.quebecker@sampledebate.assembl.net>
+Date: Tue, Jun 19, 2012 at 1:39 PM
+Subject: Re: What about Jack Layton?
+To: "M. Animator" <animator@sampledebate.assembl.net>
 
 
+On June 19, 2012 12:07:31 PM M. Animator wrote:
+> But you agree with him on that?
+
+Yes!
+"""
+    expected = """
+---------- Forwarded message ----------
+From: Typical Quebecker <typical.quebecker@sampledebate.assembl.net>
+Date: Tue, Jun 19, 2012 at 1:39 PM
+Subject: Re: What about Jack Layton?
+To: "M. Animator" <animator@sampledebate.assembl.net>
+
+
+On June 19, 2012 12:07:31 PM M. Animator wrote:
+> But you agree with him on that?
+
+Yes!
+"""
+
+    check_striping_plaintext(original, expected, "Gmail plaintext, circa 2012")
+
+    
 def test_delete_widget(
         test_session, creativity_session_widget,
         creativity_session_widget_new_idea):
