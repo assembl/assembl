@@ -400,6 +400,9 @@ appSession.controller('editCtl',
                     $scope.formData.startDate &&
                     $scope.formData.endDate){
 
+                    $scope.formData.startDate = new Date($scope.formData.startDate);
+                    $scope.formData.endDate = new Date($scope.formData.endDate);
+
                     var data = {};
 
                     data.session = $scope.formData;
