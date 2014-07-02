@@ -63,19 +63,15 @@
 // The header
 // ----------
 .panel-header {
-    @include no-selection;
-    * { @include no-selection; }
+  @include no-selection;
+  * { @include no-selection; }
+  @include z-index("float");
+  line-height: $panel-header-height;
+  height: $panel-header-height;
+  padding: 0 5px;
+  border-bottom: solid 1px $panel-border-color;
+  position: relative;
 
-    line-height: $panel-header-height;
-    height: $panel-header-height;
-    padding: { left: $padding; right: 3px; };
-
-    //background-color: $panel-header-bg-color;
-    //@include border-radius( 5px 5px 0 0 );
-    border-bottom: solid 1px $panel-border-color;
-
-    position: relative;
-    @include z-index("float");
 }
 
 // An editable area within the .panel-header

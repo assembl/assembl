@@ -7,17 +7,15 @@
 // Default button
 // ==============
 .button {
-    @extend %button;
-
-    padding: { right: 6px; left: 6px; }
-    @include box-sizing( border-box );
-    line-height: $button-height;
-
-    @include border-radius($button-border-radius);
-    background-color: #ebebeb;
-    font-size: $button-font-size;
-    text-align: center;
-    color: #535353;
+  @extend %button;
+  @include box-sizing( border-box );
+  @include border-radius($button-border-radius);
+  padding: { right: 6px; left: 6px; }
+  line-height: $button-height;
+  background-color: #ebebeb;
+  font-size: $button-font-size;
+  text-align: center;
+  color: #535353;
 }
 
 // Reduce the size of the button
@@ -94,17 +92,12 @@
 .iconbutton {
     @extend %button;
     @include no-selection;
-
     position: relative;
     display: inline-block;
-    width: $icon-width;
-    height: $icon-height;
     line-height: $icon-height;
-
     font-size: 14px;
     vertical-align: middle;
     text-align: center;
-
     opacity: 0.55;
 
     &:hover {
