@@ -239,7 +239,7 @@ class AbstractMailbox(PostSource):
         #Strip GMail quotes
         matches = doc.find_class('gmail_quote')
         if len(matches) > 0:
-            if "---------- Forwarded message ----------" not in matches[0].text:
+            if not matches[0].text or "---------- Forwarded message ----------" not in matches[0].text:
                 matches[0].drop_tree()
                 return html.tostring(doc)
             
