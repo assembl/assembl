@@ -550,7 +550,8 @@ FROM post WHERE post.id IN (SELECT MAX(post.id) as max_post_id FROM imported_pos
             session.commit()
             #session.remove()
 
-        self.thread_mails(emails)
+        with transaction.manager:
+            self.thread_mails(emails)
         
     def import_content(self, only_new=True):
         #Mailbox.do_import_content(self, only_new)
