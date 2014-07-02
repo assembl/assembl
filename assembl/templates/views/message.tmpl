@@ -80,8 +80,8 @@ else if( viewStyle == app.AVAILABLE_MESSAGE_VIEW_STYLES.FULL_BODY ){ %>
 
             <% if (creator.get('email')) { %>
             <li class="dropdown-listitem">
-                <a class="iconbutton icon-mail" title="<%= creator.get('email') %>" href="mailto:<%= creator.get('email') %>"></a>
-                {{gettext('Send an email to this user')}}
+                <a title="<%= creator.get('email') %>" href="mailto:<%= creator.get('email') %>"><i class="iconbutton icon-mail"></i>
+                {{gettext('Send an email to this user')}}</a>
             </li>
             <% } %>
         </ul>
