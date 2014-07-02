@@ -55,6 +55,7 @@ function(Backbone, _, Idea, Message, app, i18n, sprintf, Types, EditableField, C
 
             app.trigger('render');
             var segments = {},
+            subIdeas = {},
             currentUser = app.getCurrentUser(),
             canEdit = currentUser.can(Permissions.EDIT_IDEA) || false,
             canEditNextSynthesis = currentUser.can(Permissions.EDIT_SYNTHESIS);
@@ -63,10 +64,12 @@ function(Backbone, _, Idea, Message, app, i18n, sprintf, Types, EditableField, C
             
             if(this.model) {
                 segments = this.model.getSegments();
+                subIdeas = this.model.getChildren();
             }
 
             this.$el.html( this.template( {
                 idea:this.model,
+                subIdeas:subIdeas,
                 segments:segments,
                 canEdit:canEdit,
                 i18n:i18n,
