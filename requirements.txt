@@ -82,7 +82,7 @@ translationstring==1.1
 uricore==0.1.2
 uwsgitop==0.8
 -e git+https://github.com/maparent/velruse.git#egg=velruse
-venusian==1.0a8
+venusian==1.0
 waitress==0.8.9
 wsgiref==0.1.2
 xlrd==0.9.3
