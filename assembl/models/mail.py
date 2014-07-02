@@ -85,16 +85,52 @@ class AbstractMailbox(PostSource):
         else:
             return subject
 
-    VALID_TAGS = ['strong', 'em', 'p', 'ul', 'li', 'br']
-
+    VALID_TAGS = ['a',
+                  'b',
+                  'blockquote',
+                  'code',
+                  'del',
+                  'dd',
+                  'dl',
+                  'dt',
+                  'em',
+                  #We do not allow Hx tax, whould cause layout problems (manageable however)
+                  'i',
+                  #We do not allow img tags, either the reference is a local file (which we don't support yet), our we could link to a bunch of outside scripts.
+                  'li',
+                  'ol',
+                  'p',
+                  'pre',
+                  's',
+                  'sup',
+                  'sub',
+                  'strike',
+                  'table',
+                  'td',
+                  'th',
+                  'tr',
+                  'ul',
+                  'br',
+                  'hr',
+                  ]
+    VALID_ATTRIBUTES = ['href',#For hyperlinks
+                        
+                        'alt',#For accessiblity
+                        'colspan', 'headers', 'abbr', 'scope', 'sorted'#For tables
+                  ]
     @staticmethod
-    def sanitize_html(html_value, valid_tags=VALID_TAGS):
+    def sanitize_html(html_value, valid_tags=VALID_TAGS, valid_attributes=VALID_ATTRIBUTES):
+        """ Maybe we should have used Bleach (https://github.com/jsocol/bleach)
+        """
         soup = BeautifulSoup(html_value)
-        comments = soup.findAll(text=lambda text:isinstance(text, Comment))
-        [comment.extract() for comment in comments]
+        
         for tag in soup.find_all(True):
             if tag.name not in valid_tags:
                 tag.hidden = True
+            else: # it might have bad attributes
+                for attr in tag.attrs.keys():
+                    if attr not in valid_attributes:
+                        del tag[attr]
 
         return soup.decode_contents()
 

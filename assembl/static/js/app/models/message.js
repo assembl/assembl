@@ -25,7 +25,8 @@ define(['models/base', 'jquery', 'app', 'underscore'], function(Base, $, app, _)
             body: null,
             idCreator: null,
             avatarUrl: null,
-            date: null
+            date: null,
+            bodyMimeType: null
         },
 
         /**

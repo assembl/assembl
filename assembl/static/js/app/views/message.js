@@ -43,9 +43,6 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n, Permissions, Message
          * @param {MessageModel} obj the model
          */
         initialize: function(obj){
-            //TODO ghourlier: this method does not exist; looks like legacy. try to identify
-            //what it was meant for?
-            //this.listenTo(this.model, 'change:isSelected', this.onIsSelectedChange);
             this.listenTo(this.model, 'replacedBy', this.onReplaced);
             this.listenTo(this.model, 'showBody', this.onShowBody);
             this.listenTo(this.model, 'change', this.render);
@@ -91,6 +88,7 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n, Permissions, Message
             app.trigger('render');
             var data = this.model.toJSON(),
             children,
+            bodyFormatClass = null,
             level;
             level = this.currentLevel !== null ? this.currentLevel : 1;
             if( ! _.isUndefined(level) ){
@@ -102,6 +100,10 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n, Permissions, Message
             data['id'] = data['@id'];
             data['date'] = app.formatDate(data.date);
             data['creator'] = this.model.getCreator();
+            if(this.model.get('bodyMimeType')) {
+                bodyFormatClass = "body_format_"+this.model.get('bodyMimeType').replace("/", "_"); 
+            }
+            data['bodyFormatClass'] = bodyFormatClass;
             data['viewStyle'] = this.viewStyle;
             // Do NOT change this, it's the message id stored in the database 
             // by annotator when storing message annotations

@@ -33,15 +33,16 @@
 <% } %>
 </div>
 
+{# Note:  bodyFormatClass can currently have values body_format_text_plain or  body_format_text_html #}
 <% if( viewStyle == app.AVAILABLE_MESSAGE_VIEW_STYLES.PREVIEW ){ %>
-<div class="message-body ellipsis" id="<%= messageBodyId %>">
+<div class="message-body <%= bodyFormatClass %> ellipsis" id="<%= messageBodyId %>">
     <div><%= body %><i></i></div>{# Do NOT introduce whitespace within this div #}
     <a class="readmore" href="#" alt="{{ gettext('Read More') }}">{{ gettext('Read More') }}</a>
 </div>
 </header>
 <% } 
 else if( viewStyle == app.AVAILABLE_MESSAGE_VIEW_STYLES.FULL_BODY ){ %>
-<div class="message-body" id="<%= messageBodyId %>"><%= body %></div>
+<div class="message-body  <%= bodyFormatClass %>" id="<%= messageBodyId %>"><%= body %></div>
 
 <div class="message-replybox hidden"></div>
 
