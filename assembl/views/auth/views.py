@@ -40,7 +40,7 @@ def get_login_context(request):
         'providers': request.registry.settings['login_providers'],
         'google_consumer_key': request.registry.settings.get(
             'google.consumer_key', ''),
-        'next_view': request.params.get('next_view', '/login')
+        'next_view': request.params.get('next_view', '/')
     })
 
 
@@ -50,7 +50,7 @@ def get_login_context(request):
 )
 def logout(request):
     forget(request)
-    next_view = request.params.get('next_view', '/login')
+    next_view = request.params.get('next_view', '/')
     return HTTPFound(next_view)
 
 
