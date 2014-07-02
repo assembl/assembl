@@ -102,7 +102,7 @@ class ClassContext(object):
             return my_default
         return self.__parent__.get_default_view()
 
-    def decorate_instance(self, instance, assocs, user_id, ctx):
+    def decorate_instance(self, instance, assocs, user_id, ctx, kwargs):
         # and here
         pass
 
@@ -202,7 +202,7 @@ class InstanceContext(object):
         # Leave that work to the collection
         return self.__parent__.decorate_query(query, last_alias, ctx)
 
-    def decorate_instance(self, instance, assocs, user_id, ctx):
+    def decorate_instance(self, instance, assocs, user_id, ctx, kwargs):
         # if one of the objects has a non-list relation to this class, add it
         # Slightly dangerous...
         for inst in assocs:
@@ -217,7 +217,7 @@ class InstanceContext(object):
                     #print "Setting3 ", inst, reln.key, self._instance
                     setattr(inst, reln.key, self._instance)
                     break
-        self.__parent__.decorate_instance(instance, assocs, user_id, ctx)
+        self.__parent__.decorate_instance(instance, assocs, user_id, ctx, kwargs)
 
     def find_collection(self, collection_class_name):
         return self.__parent__.find_collection(collection_class_name)
@@ -305,24 +305,25 @@ class CollectionContext(object):
             query, last_alias, self.parent_instance, ctx)
         return self.__parent__.decorate_query(query, self.collection.owner_alias, ctx)
 
-    def decorate_instance(self, instance, assocs, user_id, ctx):
+    def decorate_instance(self, instance, assocs, user_id, ctx, kwargs):
         self.collection.decorate_instance(
-            instance, self.parent_instance, assocs, user_id, ctx)
-        self.__parent__.decorate_instance(instance, assocs, user_id, ctx)
+            instance, self.parent_instance, assocs, user_id, ctx, kwargs)
+        self.__parent__.decorate_instance(instance, assocs, user_id, ctx, kwargs)
 
     def create_object(self, typename=None, json=None, user_id=None, **kwargs):
         cls = self.get_collection_class(typename)
         if json is None:
             cols = sqlainspect(cls).c
-            kwargs = {k: int(v) if k in cols and
-                      cols.get(k).type.python_type == int else v
-                      for k, v in kwargs.iteritems()}
-            inst = cls(**kwargs)
+            ob_kwargs = {k: int(v) if k in cols and
+                         cols.get(k).type.python_type == int else v
+                         for k, v in kwargs.iteritems()
+                         if k in cls.__dict__}
+            inst = cls(**ob_kwargs)
             assocs = [inst]
         else:
             assocs = cls.from_json(json, user_id)
             inst = assocs[0]
-        self.decorate_instance(inst, assocs, user_id, self)
+        self.decorate_instance(inst, assocs, user_id, self, kwargs)
         return assocs
 
     def __repr__(self):
@@ -400,7 +401,7 @@ class AbstractCollectionDefinition(object):
 
     @abstractmethod
     def decorate_instance(
-            self, instance, parent_instance, assocs, user_id, ctx):
+            self, instance, parent_instance, assocs, user_id, ctx, kwargs):
         pass
 
     @abstractmethod
@@ -412,6 +413,13 @@ class AbstractCollectionDefinition(object):
 
     def name(self):
         return self.__class__.__name__
+
+    @staticmethod
+    def filter_kwargs(cls, kwargs):
+        prefix = cls.__name__ + '__'
+        return {k[len(prefix):]: v
+                for k, v in kwargs.iteritems()
+                if k.startswith(prefix)}
 
     def __repr__(self):
         return "<%s %s -> %s>" % (
@@ -461,7 +469,7 @@ class CollectionDefinition(AbstractCollectionDefinition):
             query = query.filter(owner_alias.id == parent_instance.id)
         return query
 
-    def decorate_instance(self, instance, parent_instance, assocs, user_id, ctx):
+    def decorate_instance(self, instance, parent_instance, assocs, user_id, ctx, kwargs):
         if not isinstance(instance, self.collection_class):
             return
         # if the relation is through a helper class,

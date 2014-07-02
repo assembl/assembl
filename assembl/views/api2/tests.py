@@ -250,9 +250,12 @@ def test_widget_basic_interaction(
 
     Idea.db.flush()
     assert new_widget.base_idea == subidea_1
+    ctx_url = "http://example.com/cardgame.xml#card_1"
     # Create a new sub-idea
     new_idea_create = test_app.post(idea_endpoint, {
-        "type": "Idea", "short_title": "This is a brand new idea"})
+        "type": "Idea", "short_title": "This is a brand new idea",
+        "context_url": ctx_url
+        })
     assert new_idea_create.status_code == 201
     # Get the sub-idea from the db
     Idea.db.flush()
@@ -269,6 +272,7 @@ def test_widget_basic_interaction(
         headers={"Accept": "application/json"}
     )
     assert new_idea1_rep.status_code == 200
+    new_idea1_rep = new_idea1_rep.json
     # It should have a link to the root idea
     idea_link = IdeaLink.db.query(IdeaLink).filter_by(
         source_id=subidea_1.id, target_id=new_idea1.id).one()
@@ -281,11 +285,14 @@ def test_widget_basic_interaction(
     # The new idea should now be in the collection api
     test = test_app.get(idea_endpoint)
     assert test.status_code == 200
-    assert new_idea1_id in test.json or new_idea1_id in [
-        x['@id'] for x in test.json]
+    test = test.json
+    assert new_idea1_id in test or new_idea1_id in [
+        x['@id'] for x in test]
+    # We should find the context in the new idea
+    assert ctx_url in test[0].get('creation_ctx_url', [])
     # TODO: The root idea is included in the above, that's a bug.
     # get the new post endpoint from the idea data
-    post_endpoint = new_idea1_rep.json.get('widget_add_post_endpoint', None)
+    post_endpoint = new_idea1_rep.get('widget_add_post_endpoint', None)
     assert (post_endpoint and widget_rep["@id"]
             and post_endpoint[widget_rep["@id"]])
     post_endpoint = post_endpoint[widget_rep["@id"]]

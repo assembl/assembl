@@ -295,9 +295,9 @@ class IdeaCreatingWidget(BaseIdeaWidget):
                 return query
 
             def decorate_instance(
-                    self, instance, parent_instance, assocs, user_id, ctx):
+                    self, instance, parent_instance, assocs, user_id, ctx, kwargs):
                 super(BaseIdeaCollection, self).decorate_instance(
-                    instance, parent_instance, assocs, user_id, ctx)
+                    instance, parent_instance, assocs, user_id, ctx, kwargs)
                 for inst in assocs[:]:
                     if isinstance(inst, Idea):
                         inst.hidden = True
@@ -306,12 +306,19 @@ class IdeaCreatingWidget(BaseIdeaWidget):
                             discussion_id=inst.discussion_id,
                             message_id=uuid.uuid1().urn,
                             hidden=self.hide_proposed_ideas,
-                            body="", subject=inst.short_title)
+                            body="", subject=inst.short_title,
+                            **self.filter_kwargs(
+                                IdeaProposalPost, kwargs))
                         assocs.append(post)
                         assocs.append(IdeaContentWidgetLink(
                             content=post, idea=inst.parents[0],
-                            creator_id=user_id))
-                        assocs.append(GeneratedIdeaWidgetLink(idea=inst))
+                            creator_id=user_id,
+                            **self.filter_kwargs(
+                                IdeaContentWidgetLink, kwargs)))
+                        assocs.append(GeneratedIdeaWidgetLink(
+                            idea=inst,
+                            **self.filter_kwargs(
+                                GeneratedIdeaWidgetLink, kwargs)))
 
         class BaseIdeaHidingCollection(BaseIdeaCollection):
             hide_proposed_ideas = True
@@ -440,12 +447,16 @@ class MultiCriterionVotingWidget(Widget):
                     widget).filter(widget.id == parent_instance.id)
 
             def decorate_instance(
-                    self, instance, parent_instance, assocs, user_id, ctx):
+                    self, instance, parent_instance, assocs, user_id, ctx,
+                    kwargs):
                 super(CriterionCollection, self).decorate_instance(
-                    instance, parent_instance, assocs, user_id, ctx)
+                    instance, parent_instance, assocs, user_id, ctx, kwargs)
                 for inst in assocs[:]:
                     if isinstance(inst, Idea):
-                        assocs.append(VotingCriterionWidgetLink(idea=inst))
+                        assocs.append(VotingCriterionWidgetLink(
+                            idea=inst,
+                            **self.filter_kwargs(
+                                VotingCriterionWidgetLink, kwargs)))
                     elif isinstance(inst, AbstractIdeaVote):
                         criterion_ctx = ctx.find_collection(
                             'CriterionCollection.criteria')
@@ -468,12 +479,15 @@ class MultiCriterionVotingWidget(Widget):
                 ).filter(last_alias.hidden == False)
 
             def decorate_instance(
-                    self, instance, parent_instance, assocs, user_id, ctx):
+                    self, instance, parent_instance, assocs, user_id, ctx, kwargs):
                 for inst in assocs[:]:
                     if isinstance(inst, AbstractIdeaVote):
                         #import pdb; pdb.set_trace()
                         # How do I get the idea?
-                        assocs.append(VotedIdeaWidgetLink(widget=inst))
+                        assocs.append(VotedIdeaWidgetLink(
+                            widget=inst,
+                            **self.filter_kwargs(
+                                VotedIdeaWidgetLink, kwargs)))
 
             def contains(self, parent_instance, instance):
                 return isinstance(instance, Idea)
@@ -544,7 +558,7 @@ class IdeaWidgetLink(DiscussionBoundBase):
         nullable=False, index=True)
     #widget = relationship(Widget, backref='idea_links')
 
-    # context_url = Column(String())
+    context_url = Column(String())
 
     __mapper_args__ = {
         'polymorphic_identity': 'abstract_idea_widget_link',

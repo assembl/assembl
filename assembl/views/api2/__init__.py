@@ -115,11 +115,8 @@ def collection_view(request):
         return [i.generic_json(view) for i in q.all()]
 
 
-@view_config(context=CollectionContext, request_method='POST',
-             header=FORM_HEADER)
-def collection_add(request):
+def collection_add(request, args):
     ctx = request.context
-    args = request.params
     user_id = authenticated_userid(request)
     if 'type' in args:
         args = dict(args)
@@ -150,6 +147,12 @@ def collection_add(request):
         first = instances[0]
         return Response(location=first.uri_generic(first.id), status_code=201)
     raise HTTPBadRequest()
+
+
+@view_config(context=CollectionContext, request_method='POST',
+             header=FORM_HEADER)
+def collection_add_with_params(request):
+    return collection_add(request, request.params)
 
 
 @view_config(context=InstanceContext, request_method='POST')

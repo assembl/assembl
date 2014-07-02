@@ -12,7 +12,7 @@ from assembl.models import (
     MultiCriterionVotingWidget)
 from assembl.auth.util import get_permissions
 from ..traversal import InstanceContext, CollectionContext
-from . import FORM_HEADER, JSON_HEADER, instance_put
+from . import FORM_HEADER, JSON_HEADER, instance_put, collection_add
 
 
 @view_config(context=InstanceContext, renderer='json', request_method='GET',
@@ -252,3 +252,16 @@ def set_idea_criteria(request):
     ideas = [Idea.get_instance(idea['@id']) for idea in request.json]
     widget.set_criteria(ideas)
     return HTTPOk()
+
+
+@view_config(context=CollectionContext, request_method='POST',
+             ctx_named_collection="ChildIdeaCollectionDefinition",
+             permission=P_ADD_POST, header=FORM_HEADER)
+def add_child_idea(request):
+    args = request.params
+    if 'context_url' in args:
+        from webob.multidict import NestedMultiDict
+        v = args['context_url']
+        args = NestedMultiDict(dict(GeneratedIdeaWidgetLink__context_url=v),
+                               *args.dicts)
+    return collection_add(request, args)

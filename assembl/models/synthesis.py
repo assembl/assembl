@@ -416,14 +416,18 @@ class ExplicitSubGraphView(IdeaGraphView):
                 return query.join(SubGraphIdeaAssociation, view)
 
             def decorate_instance(
-                    self, instance, parent_instance, assocs, user_id, ctx):
+                    self, instance, parent_instance, assocs, user_id, ctx, kwargs):
                 for inst in assocs[:]:
                     if isinstance(inst, Idea):
                         assocs.append(SubGraphIdeaAssociation(
-                            idea=inst, sub_graph=parent_instance))
+                            idea=inst, sub_graph=parent_instance,
+                            **self.filter_kwargs(
+                                SubGraphIdeaAssociation, kwargs)))
                     elif isinstance(inst, IdeaLink):
                         assocs.append(SubGraphIdeaLinkAssociation(
-                                idea_link=inst, sub_graph=parent_instance))
+                                idea_link=inst, sub_graph=parent_instance,
+                                **self.filter_kwargs(
+                                    SubGraphIdeaLinkAssociation, kwargs)))
 
             def contains(self, parent_instance, instance):
                 return SubGraphIdeaAssociation.db.query(
@@ -441,11 +445,13 @@ class ExplicitSubGraphView(IdeaGraphView):
                 return query.join(SubGraphIdeaLinkAssociation, view)
 
             def decorate_instance(
-                    self, instance, parent_instance, assocs, user_id, ctx):
+                    self, instance, parent_instance, assocs, user_id, ctx, kwargs):
                 if isinstance(instance, IdeaLink):
                     assocs.append(
                         SubGraphIdeaLinkAssociation(
-                            idea_link=instance, sub_graph=parent_instance))
+                            idea_link=instance, sub_graph=parent_instance,
+                            **self.filter_kwargs(
+                                SubGraphIdeaLinkAssociation, kwargs)))
 
             def contains(self, parent_instance, instance):
                 return SubGraphIdeaAssociation.db.query(
@@ -957,6 +963,11 @@ JOIN post AS family_posts ON (
         result.append(list(cls.db().execute(text(stmt3).params(common_params))).pop())
         return result
 
+    def get_widget_creation_urls(self):
+        from .widgets import GeneratedIdeaWidgetLink
+        return [wl.context_url for wl in self.widget_links
+                if isinstance(wl, GeneratedIdeaWidgetLink)]
+
     @classmethod
     def get_all_idea_links(cls, discussion_id):
         target = aliased(cls)
@@ -985,10 +996,12 @@ JOIN post AS family_posts ON (
                     IdeaLink.source_id == parent_instance.id)
 
             def decorate_instance(
-                    self, instance, parent_instance, assocs, user_id, ctx):
+                    self, instance, parent_instance, assocs, user_id, ctx, kwargs):
                 if isinstance(instance, Idea):
                     assocs.append(IdeaLink(
-                            source=parent_instance, target=instance))
+                            source=parent_instance, target=instance,
+                            **self.filter_kwargs(
+                                IdeaLink, kwargs)))
 
             def contains(self, parent_instance, instance):
                 return IdeaLink.db.query(
@@ -1005,14 +1018,16 @@ JOIN post AS family_posts ON (
                 return query.join(IdeaRelatedPostLink, idea)
 
             def decorate_instance(
-                    self, instance, parent_instance, assocs, user_id, ctx):
+                    self, instance, parent_instance, assocs, user_id, ctx, kwargs):
                 # This is going to spell trouble: Sometimes we'll have creator,
                 # other times creator_id
                 if isinstance(instance, Content):
                     assocs.append(
                         IdeaRelatedPostLink(
                             content=instance, idea=parent_instance,
-                            creator_id=instance.creator_id))
+                            creator_id=instance.creator_id,
+                            **self.filter_kwargs(
+                                IdeaRelatedPostLink, kwargs)))
 
             def contains(self, parent_instance, instance):
                 return IdeaRelatedPostLink.db.query(
@@ -1036,14 +1051,16 @@ JOIN post AS family_posts ON (
                 return query
 
             def decorate_instance(
-                    self, instance, parent_instance, assocs, user_id, ctx):
+                    self, instance, parent_instance, assocs, user_id, ctx, kwargs):
                 # This is going to spell trouble: Sometimes we'll have creator,
                 # other times creator_id
                 if isinstance(instance, Content):
                     assocs.append(
                         IdeaContentWidgetLink(
                             content=instance, idea=parent_instance,
-                            creator_id=instance.creator_id))
+                            creator_id=instance.creator_id,
+                            **self.filter_kwargs(
+                                IdeaContentWidgetLink, kwargs)))
                     instance.hidden = True
 
             def contains(self, parent_instance, instance):
@@ -1065,7 +1082,7 @@ JOIN post AS family_posts ON (
                 ).filter(last_alias.hidden==False)
 
             def decorate_instance(
-                    self, instance, parent_instance, assocs, user_id, ctx):
+                    self, instance, parent_instance, assocs, user_id, ctx, kwargs):
                 for inst in assocs[:]:
                     widgets_coll = ctx.find_collection('CriterionCollection.criteria')
                     if isinstance(inst, AbstractIdeaVote):
@@ -1078,7 +1095,9 @@ JOIN post AS family_posts ON (
                                 continue
                             other_vote.is_tombstone = True
                         assocs.append(VotedIdeaWidgetLink(
-                            widget=widgets_coll.parent_instance, idea=inst.idea))
+                            widget=widgets_coll.parent_instance, idea=inst.idea,
+                            **self.filter_kwargs(
+                                VotedIdeaWidgetLink, kwargs)))
 
             def contains(self, parent_instance, instance):
                 return isinstance(instance, Idea)
