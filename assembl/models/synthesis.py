@@ -825,7 +825,7 @@ JOIN post AS family_posts ON (
 
     def visit_ideas_breadth_first(self, idea_visitor):
         self.prefetch_descendants()
-        result = idea_visitor.visit(self)
+        result = idea_visitor.visit_idea(self)
         visited = {self}
         if result is not IdeaVisitor.CUT_VISIT:
             self._visit_ideas_breadth_first(idea_visitor, visited)
