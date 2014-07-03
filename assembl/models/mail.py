@@ -140,7 +140,7 @@ class AbstractMailbox(PostSource):
         """
         #Most useful to develop this:
         #http://www.motobit.com/util/quoted-printable-decoder.asp
-        debug = True;
+        debug = False;
         #To be considered matching, each line must match successive lines, in order
         quote_announcement_lines_regexes = {
             'generic_original_message':  {
