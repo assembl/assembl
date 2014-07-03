@@ -1,3 +1,5 @@
+from sqlalchemy import select
+from sqlalchemy.orm import aliased
 from sqlalchemy.orm.attributes import InstrumentedAttribute
 from sqlalchemy.inspection import inspect as sqlainspect
 from pyramid.security import Allow, Everyone, ALL_PERMISSIONS, DENY_ALL
@@ -9,9 +11,9 @@ from assembl.lib.sqla import *
 
 
 class DictContext(object):
-    def __init__(self, acl, subobjects={}):
-        self.subobjects = subobjects
-        for context in subobjects.itervalues():
+    def __init__(self, acl, subobjects=None):
+        self.subobjects = subobjects or {}
+        for context in self.subobjects.itervalues():
             context.__parent__ = self
         if acl:
             self.__acl__ = acl
@@ -65,6 +67,9 @@ class Api2Context(object):
 
     _class_cache = {}
 
+    def get_default_view(self):
+        pass
+
     def __getitem__(self, key):
         cls = get_named_class(key)
         if not cls:
@@ -87,11 +92,17 @@ class ClassContext(object):
             raise KeyError()
         return InstanceContext(self, instance)
 
-    def decorate_query(self, query):
+    def decorate_query(self, query, last_alias, ctx):
         # The buck stops here
         return query
 
-    def decorate_instance(self, instance, assocs):
+    def get_default_view(self):
+        my_default = getattr(self._class, 'default_view', None)
+        if my_default:
+            return my_default
+        return self.__parent__.get_default_view()
+
+    def decorate_instance(self, instance, assocs, user_id, ctx, kwargs):
         # and here
         pass
 
@@ -112,12 +123,17 @@ class ClassContext(object):
         cls = self.get_class(typename)
         if json is None:
             cols = sqlainspect(cls).c
+            if 'user_id' in cols:
+                kwargs[user_id] = user_id
             kwargs = {k: int(v) if k in cols and
                       cols.get(k).type.python_type == int else v
                       for k, v in kwargs.iteritems()}
             return [cls(**kwargs)]
         else:
             return [cls.from_json(json, user_id)]
+
+    def find_collection(self, collection_class_name):
+        return None
 
 
 class ClassContextPredicate(object):
@@ -156,6 +172,12 @@ class InstanceContext(object):
         return self.__class__._get_collections(
             self._instance.__class__).keys()
 
+    def get_default_view(self):
+        my_default = getattr(self._instance, 'default_view', None)
+        if my_default:
+            return my_default
+        return self.__parent__.get_default_view()
+
     @property
     def __acl__(self):
         if getattr(self._instance, '__acl__', None):
@@ -167,7 +189,7 @@ class InstanceContext(object):
             if discussion_id:
                 from assembl.models import Discussion
                 return Discussion.get(id=discussion_id).__acl__
-        return parent.__acl__
+        return self.__parent__.__acl__
 
     def __getitem__(self, key):
         cls = self._instance.__class__
@@ -176,25 +198,29 @@ class InstanceContext(object):
             raise KeyError()
         return CollectionContext(self, collection, self._instance)
 
-    def decorate_query(self, query):
+    def decorate_query(self, query, last_alias, ctx):
         # Leave that work to the collection
-        return self.__parent__.decorate_query(query)
+        return self.__parent__.decorate_query(query, last_alias, ctx)
 
-    def decorate_instance(self, instance, assocs):
+    def decorate_instance(self, instance, assocs, user_id, ctx, kwargs):
         # if one of the objects has a non-list relation to this class, add it
         # Slightly dangerous...
         for inst in assocs:
             relations = inst.__class__.__mapper__.relationships
             for reln in relations:
-                if reln.uselist:
+                if uses_list(reln):
                     continue
-                if getattr(inst, reln.key) is not None:
+                if getattr(inst, reln.key, None) is not None:
                     # This was already set, assume it was set correctly
                     continue
-                if reln.mapper.class_ == self._instance.__class__:
+                if issubclass(self._instance.__class__, reln.mapper.class_):
+                    #print "Setting3 ", inst, reln.key, self._instance
                     setattr(inst, reln.key, self._instance)
                     break
-        self.__parent__.decorate_instance(instance, assocs)
+        self.__parent__.decorate_instance(instance, assocs, user_id, ctx, kwargs)
+
+    def find_collection(self, collection_class_name):
+        return self.__parent__.find_collection(collection_class_name)
 
 
 class InstanceContextPredicate(object):
@@ -211,6 +237,24 @@ class InstanceContextPredicate(object):
             isinstance(context._instance, self.val)
 
 
+class InstanceContextPredicateWithExceptions(object):
+    def __init__(self, val, config):
+        cls, cls_exceptions = val
+        self.val = cls
+        self.cls_exceptions = cls_exceptions
+
+    def text(self):
+        return 'instance_context = %s except %s' % (
+            self.val, repr(self.cls_exceptions))
+
+    phash = text
+
+    def __call__(self, context, request):
+        return isinstance(context, InstanceContext) and\
+            isinstance(context._instance, self.val) and\
+            not isinstance(context._instance, self.cls_exceptions)
+
+
 class CollectionContext(object):
     def __init__(self, parent, collection, instance):
         if isinstance(collection, InstrumentedAttribute):
@@ -221,6 +265,12 @@ class CollectionContext(object):
         self.collection = collection
         self.parent_instance = instance
         self.collection_class = self.collection.collection_class
+
+    def get_default_view(self):
+        my_default = self.collection.get_default_view()
+        if my_default:
+            return my_default
+        return self.__parent__.get_default_view()
 
     def __getitem__(self, key):
         instance = self.collection.get_instance(key, self.parent_instance)
@@ -235,51 +285,85 @@ class CollectionContext(object):
             return self.collection_class
 
     def create_query(self, id_only=True):
-        cls = self.collection.collection_class
+        cls = self.collection_class
+        alias = aliased(cls)
         if id_only:
-            query = cls.db().query(cls.id)
+            query = cls.db().query(alias.id)
+            return self.decorate_query(query, alias, self).distinct()
         else:
-            query = cls.db().query(cls)
-        return self.decorate_query(query)
+            # There will be duplicates. But sqla takes care of them,
+            # virtuoso won't allow distinct on full query,
+            # and a distinct subquery takes forever.
+            # Oh, and quietcast loses the distinct. Just great.
+            query = cls.db().query(alias)
+            return self.decorate_query(query, alias, self)
 
-    def decorate_query(self, query):
+    def decorate_query(self, query, last_alias, ctx):
         # This will decorate a query with a join on the relation.
-        query = self.collection.decorate_query(query, self.parent_instance)
-        return self.__parent__.decorate_query(query)
+        self.collection_class_alias = last_alias
+        query = self.collection.decorate_query(
+            query, last_alias, self.parent_instance, ctx)
+        return self.__parent__.decorate_query(query, self.collection.owner_alias, ctx)
 
-    def decorate_instance(self, instance, assocs):
+    def decorate_instance(self, instance, assocs, user_id, ctx, kwargs):
         self.collection.decorate_instance(
-            instance, self.parent_instance, assocs)
-        self.__parent__.decorate_instance(instance, assocs)
+            instance, self.parent_instance, assocs, user_id, ctx, kwargs)
+        self.__parent__.decorate_instance(instance, assocs, user_id, ctx, kwargs)
 
     def create_object(self, typename=None, json=None, user_id=None, **kwargs):
         cls = self.get_collection_class(typename)
         if json is None:
             cols = sqlainspect(cls).c
-            kwargs = {k: int(v) if k in cols and
-                      cols.get(k).type.python_type == int else v
-                      for k, v in kwargs.iteritems()}
-            inst = cls(**kwargs)
+            ob_kwargs = {k: int(v) if k in cols and
+                         cols.get(k).type.python_type == int else v
+                         for k, v in kwargs.iteritems()
+                         if k in cls.__dict__}
+            inst = cls(**ob_kwargs)
             assocs = [inst]
         else:
             assocs = cls.from_json(json, user_id)
             inst = assocs[0]
-        self.decorate_instance(inst, assocs)
+        self.decorate_instance(inst, assocs, user_id, self, kwargs)
         return assocs
 
+    def __repr__(self):
+        return "<CollectionContext (%s)>" % (
+            self.collection,)
 
-class CollectionContextPredicate(object):
+    def find_collection(self, collection_class_name):
+        if self.collection.name() == collection_class_name:
+            return self
+        return self.__parent__.find_collection(collection_class_name)
+
+
+class NamedCollectionContextPredicate(object):
     def __init__(self, val, config):
-        self.val = val.property
+        self.val = val
 
     def text(self):
-        return 'collection_context = %s' % (self.val,)
+        return 'collection_context_name = %s' % (self.val,)
 
     phash = text
 
     def __call__(self, context, request):
-        return isinstance(context, CollectionContext) and\
-            self.val == context.collection
+        return (isinstance(context, CollectionContext)
+                and self.val == context.collection.name())
+
+
+class NamedCollectionInstancePredicate(object):
+    def __init__(self, val, config):
+        self.val = val
+
+    def text(self):
+        return 'collection_instance_context_name = %s' % (self.val,)
+
+    phash = text
+
+    def __call__(self, context, request):
+        parent = context.__parent__
+        return (isinstance(context, InstanceContext)
+            and isinstance(parent, CollectionContext)
+            and self.val == parent.collection.name())
 
 
 class CollectionContextClassPredicate(object):
@@ -302,6 +386,7 @@ class AbstractCollectionDefinition(object):
     def __init__(self, owner_class, collection_class):
         self.owner_class = owner_class
         self.collection_class = collection_class
+        self.owner_alias = aliased(owner_class)
 
     def get_instance(self, key, parent_instance):
         instance = self.collection_class.get_instance(key)
@@ -311,16 +396,45 @@ class AbstractCollectionDefinition(object):
         return instance
 
     @abstractmethod
-    def decorate_query(self, query, parent_instance):
+    def decorate_query(self, query, last_alias, parent_instance, ctx):
         pass
 
     @abstractmethod
-    def decorate_instance(self, instance, parent_instance, assocs):
+    def decorate_instance(
+            self, instance, parent_instance, assocs, user_id, ctx, kwargs):
         pass
 
     @abstractmethod
     def contains(self, parent_instance, instance):
         pass
+
+    def get_default_view(self):
+        pass
+
+    def name(self):
+        return self.__class__.__name__
+
+    @staticmethod
+    def filter_kwargs(cls, kwargs):
+        prefix = cls.__name__ + '__'
+        return {k[len(prefix):]: v
+                for k, v in kwargs.iteritems()
+                if k.startswith(prefix)}
+
+    def __repr__(self):
+        return "<%s %s -> %s>" % (
+            self.__class__.__name__,
+            self.owner_class.__name__,
+            self.collection_class.__name__)
+
+def uses_list(prop):
+    # Weird indirection
+    uselist = getattr(prop, 'uselist', None)
+    if uselist is not None:
+        return uselist
+    subprop = getattr(prop, 'property', None)
+    if subprop:
+        return subprop.uselist
 
 
 class CollectionDefinition(AbstractCollectionDefinition):
@@ -330,45 +444,54 @@ class CollectionDefinition(AbstractCollectionDefinition):
         super(CollectionDefinition, self).__init__(
             owner_class, property.mapper.class_)
         self.property = property
-        back_properties = list(property._reverse_property)
+        back_properties = list(getattr(property, '_reverse_property', ()))
         if back_properties:
             # TODO: How to chose?
             self.back_property = back_properties.pop()
 
-    def decorate_query(self, query, parent_instance):
+    def decorate_query(self, query, last_alias, parent_instance, ctx):
         # This will decorate a query with a join on the relation.
-        cls = self.collection_class
-        query = query.join(parent_instance.__class__)
-        if self.back_property:
-            inv = self.back_property
-            # What we have is a property, not an instrumented attribute;
-            # but they share the same key.
-            back_attribute = getattr(cls, inv.key)
-            if inv.uselist:
-                query = query.filter(back_attribute.contains(parent_instance))
-            else:
-                query = query.filter(back_attribute == parent_instance)
+        coll_alias = last_alias or aliased(self.collection_class)
+        owner_alias = self.owner_alias
+        inv = self.back_property
+        if inv:
+            query = query.join(owner_alias,
+                getattr(coll_alias, inv.key))
+        else:
+            print "PLEASE SEND TO maparent@acm.org:", this, self.property
+            query = query.join(owner_alias)
+            # THIS MIGHT WORK, but I need a good testcase:
+            # query = query.join(owner_alias,
+            #     getattr(owner_alias, self.property.key))
+        if inv and not uses_list(inv):
+            query = query.filter(getattr(coll_alias, inv.key) == parent_instance)
+        else:
+            query = query.filter(owner_alias.id == parent_instance.id)
         return query
 
-    def decorate_instance(self, instance, parent_instance, assocs):
+    def decorate_instance(self, instance, parent_instance, assocs, user_id, ctx, kwargs):
         if not isinstance(instance, self.collection_class):
             return
         # if the relation is through a helper class,
         #   create that and add to assocs (TODO)
         # otherwise set the appropriate property (below.)
-        if self.back_property:
-            inv = self.back_property
-            # What we have is a property, not an instrumented attribute;
-            # but they share the same key.
-            if inv.uselist:
-                getattr(instance, inv.key).append(parent_instance)
-            else:
-                setattr(instance, inv.key, parent_instance)
-        else:
-            if self.property.uselist:
-                getattr(parent_instance, self.property.key).append(instance)
-            else:
+        # Prefer non-list properties because we can check if they're set.
+        if not uses_list(self.property):
+            if getattr(parent_instance, self.property.key, None) is None:
+                #print "Setting1 ", parent_instance, self.property.key, instance
                 setattr(parent_instance, self.property.key, instance)
+        elif self.back_property and not uses_list(self.back_property):
+            inv = self.back_property
+            if getattr(instance, inv.key, None) is None:
+                #print "Setting2 ", instance, inv.key, parent_instance
+                setattr(instance, inv.key, parent_instance)
+        elif self.back_property:
+            inv = self.back_property
+            #print "Adding1 ", instance, inv.key, parent_instance
+            getattr(instance, inv.key).append(parent_instance)
+        else:
+            #print "Adding2 ", parent_instance, self.property.key, instance
+            getattr(parent_instance, self.property.key).append(instance)
 
     def get_attribute(self, instance, property=None):
         # What we have is a property, not an instrumented attribute;
@@ -377,16 +500,18 @@ class CollectionDefinition(AbstractCollectionDefinition):
         return getattr(instance, property.key)
 
     def contains(self, parent_instance, instance):
-        attribute = self.get_attribute(parent_instance)
-        if self.property.uselist:
-            return instance in attribute
+        if uses_list(self.property):
+            if self.back_property and not uses_list(self.back_property):
+                return self.get_attribute(
+                    instance, self.back_property) == parent_instance
+            return instance in self.get_attribute(parent_instance)
         else:
-            return instance == attribute
+            return instance == self.get_attribute(parent_instance)
 
     def get_instance(self, key, parent_instance):
         instance = None
         if key == '-':
-            if self.property.uselist:
+            if uses_list(self.property):
                 raise KeyError()
             else:
                 instance = getattr(parent_instance, self.property.key, None)
@@ -397,6 +522,16 @@ class CollectionDefinition(AbstractCollectionDefinition):
             raise KeyError("This instance does not live in this collection.")
         return instance
 
+    def name(self):
+        return ".".join((self.__class__.__name__, self.property.key))
+
+    def __repr__(self):
+        return "<%s %s -(%s/%s)-> %s>" % (
+            self.__class__.__name__,
+            self.owner_class.__name__,
+            self.property.key,
+            self.back_property.key if self.back_property else '',
+            self.collection_class.__name__)
 
 def root_factory(request):
     # OK, this is the old code... I need to do better, but fix first.
@@ -420,7 +555,12 @@ def root_factory(request):
 def includeme(config):
     config.add_view_predicate('ctx_class', ClassContextPredicate)
     config.add_view_predicate('ctx_instance_class', InstanceContextPredicate)
-    config.add_view_predicate('ctx_collection', CollectionContextPredicate)
+    config.add_view_predicate('ctx_instance_class_with_exceptions',
+        InstanceContextPredicateWithExceptions)
+    config.add_view_predicate('ctx_named_collection',
+        NamedCollectionContextPredicate)
+    config.add_view_predicate('ctx_named_collection_instance',
+        NamedCollectionInstancePredicate)
     config.add_view_predicate('ctx_collection_class',
                               CollectionContextClassPredicate,
-                              weighs_less_than='ctx_collection')
+                              weighs_less_than='ctx_named_collection')

@@ -1,7 +1,14 @@
 requirejs.config({
   baseUrl: "/static/js/",
-  urlArgs: "bust=" + (new Date()).getTime(),
+  urlArgs: urlArgs,
   waitSeconds: 20,
+  packages: [
+    'text',{
+      name:'text',
+      location:'lib/',
+      main:'text'
+    }
+  ],
   paths: {
     'app': 'app/app',
     'router': 'app/router',
@@ -29,11 +36,13 @@ requirejs.config({
     'ckeditor-sharedspace': 'lib/ckeditor-sharedcontainer/plugin',
 
     'moment': 'bower/momentjs/moment',
+    'moment_lang': 'bower/momentjs/lang/'+((assembl_locale=='en')?'fr':assembl_locale),
     'zeroclipboard': 'bower/zeroclipboard/ZeroClipboard',
     'sockjs': 'bower/sockjs/sockjs',
     'cytoscape': 'bower/cytoscape/cytoscape',
     'jit': 'bower/jit/Jit/jit',
-    'sprintf': 'bower/sprintf/src/sprintf'
+    'sprintf': 'bower/sprintf/src/sprintf',
+    'backboneModal':'lib/backbone-modal/backbone.modal'
   },
   shim: {
     backbone: {
@@ -55,7 +64,11 @@ requirejs.config({
         exports: 'app'
     },
     'i18n': {
-        exports: 'i18n'
+        exports: 'i18n',
+        init: function(i18n) {
+            this.i18n(json);
+            return this.i18n;
+        }
     },
     'socket': {
         deps: ['sockjs']
@@ -103,6 +116,14 @@ requirejs.config({
     'sprintf' : {
         deps: [],
         exports: 'sprintf'
+    },
+    'moment_lang': {
+        deps: ['moment'],
+        exports: 'moment_lang'
+    },
+    'backboneModal': {
+        deps:['backbone'],
+        exports: 'BackboneModal'
     }
   }
 });
@@ -121,13 +142,11 @@ require([
     "models/segment",
     "router",
     "socket",
-    "i18n"
-], function(app, $, IdeaList, IdeaPanel, SegmentList, MessageList, Synthesis, SynthesisPanel, User, Segment, Router, Socket, i18n){
+    "views/notification"
+], function(app, $, IdeaList, IdeaPanel, SegmentList, MessageList, Synthesis, SynthesisPanel, User, Segment, Router, Socket, Notification){
     'use strict';
 
     app.init();
-
-    i18n(json);
 
     // The router
     app.router = new Router();
@@ -176,6 +195,10 @@ require([
     // Fetching the ideas
     app.segmentList.segments.fetchFromScriptTag('extracts-json');
     app.ideaList.ideas.fetchFromScriptTag('ideas-json');
+
+    //init notification bar
+    //app.notification = new Notification();
+
 
     // Let the game begins...
     Backbone.history.start({hashChange: false, root: "/" + app.slug });

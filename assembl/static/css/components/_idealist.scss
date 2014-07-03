@@ -267,7 +267,7 @@
 
     .idealist-item.is-open > & {
         height: auto;
-        display: initial;
+        display: inline; // initial;
     }
 
     &:empty {

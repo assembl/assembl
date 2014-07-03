@@ -1,5 +1,5 @@
-define(['backbone', 'underscore', 'jquery', 'models/idea', 'app'],
-function(Backbone, _, $, Idea, app){
+define(['backbone', 'underscore', 'jquery', 'models/idea', 'app', 'permissions', 'i18n'],
+function(Backbone, _, $, Idea, app, Permissions, i18n){
     'use strict';
     
     var MessageSendView = Backbone.View.extend({
@@ -19,23 +19,25 @@ function(Backbone, _, $, Idea, app){
          */
         initialize: function(options){
             this.options = options;
-            this.initialBody =  (this.options.body_help_message !== undefined) ? this.options.body_help_message: gettext('Type your message here...');
+            this.initialBody =  (this.options.body_help_message !== undefined) ? this.options.body_help_message: i18n.gettext('Type your message here...');
         },
         
         /**
          * The render
          */
         render: function(){
-            //var data = this.model.toJSON();
+            app.cleanTooltips(this.$el);
             var data = {
                     body_help_message: this.initialBody,
                     allow_setting_subject: this.options.allow_setting_subject || this.options.allow_setting_subject,
-                    cancel_button_label: this.options.cancel_button_label ? this.options.cancel_button_label: gettext('Cancel'),
-                    send_button_label: this.options.send_button_label ? this.options.send_button_label: gettext('Send'),
-                    subject_label: this.options.subject_label ? this.options.subject_label: gettext('Subject:')
-                       }
+                    cancel_button_label: this.options.cancel_button_label ? this.options.cancel_button_label: i18n.gettext('Cancel'),
+                    send_button_label: this.options.send_button_label ? this.options.send_button_label: i18n.gettext('Send'),
+                    subject_label: this.options.subject_label ? this.options.subject_label: i18n.gettext('Subject:'),
+                    canPost: app.getCurrentUser().can(Permissions.ADD_POST)
+            }
             
             this.$el.html(this.template(data));
+            app.initTooltips(this.$el);
             
             return this;
         },
@@ -56,7 +58,7 @@ function(Backbone, _, $, Idea, app){
          */
         onSendMessageButtonClick: function(ev){
             var btn = $(ev.currentTarget),
-            url = app.getApiUrl('posts'),
+            //url = app.getApiUrl('posts'),
             that = this,
             btn_original_text=btn.text(),
             message_body_field = this.$('.messageSend-body'),
@@ -91,17 +93,24 @@ function(Backbone, _, $, Idea, app){
                 return;
             }
             btn.text( i18n.gettext('Sending...') );
-            //For message custom callback:  that.closeReplyBox();
+            
             success_callback = function(data, textStatus, jqXHR){
-                message_body_field.val('');
                 btn.text( i18n.gettext('Message posted!') );
-                app.messageList.once("render_complete", function() {
-                        app.messageList.showMessageById(data['@id']);
+                that.listenToOnce(app.messageList, "render_complete", function() {
+                        if(_.isFunction(that.options.send_callback)) {
+                            that.options.send_callback();
+                        }
+                       
+                        setTimeout(function(){
+                            //TODO:  This delay will no longer be necessary once backbone sync is done below in sendPostToServer
+                            //console.log("Calling showMessageById for "+data['@id']);
+                            app.messageList.showMessageById(data['@id']);
+                        }, 1000);
                 });
                 setTimeout(function(){
-                    that.$('.messageSend-body').val('');
                     btn.text(btn_original_text);
-                    }, 5000);
+                    that.$('.messageSend-cancelbtn').trigger('click');
+                }, 5000);
             };
             this.sendPostToServer(message_body, message_subject, reply_message_id, reply_idea_id, success_callback);
 
@@ -112,8 +121,8 @@ function(Backbone, _, $, Idea, app){
          */
         onCancelMessageButtonClick: function(){
             this.$('.messageSend-body').val(this.initialBody);
-            this.$('.messageSend-sendbtn').hide();
-            this.$('.messageSend-cancelbtn').hide();
+            this.$('.messageSend-sendbtn').addClass("hidden");
+            this.$('.messageSend-cancelbtn').addClass("hidden");
         },
         
         /**
@@ -153,11 +162,12 @@ function(Backbone, _, $, Idea, app){
         
         /**
          * Sends a post to the server
+         * TODO: Must be converted to real backbone sync
          */
         sendPostToServer: function(message_body, message_subject, reply_message_id, reply_idea_id, success_callback){
             var url = app.getApiUrl('posts'),
-                data = {};
-
+                data = {},
+                that = this;
             data.message = message_body;
             if(message_subject) {
                 data.subject = message_subject;
@@ -168,6 +178,10 @@ function(Backbone, _, $, Idea, app){
             if( reply_idea_id ){
                 data.idea_id = reply_idea_id;
             }
+
+            this.$('.messageSend-body').val('');
+            this.$('.topic-subject .formfield').val('');
+
             $.ajax({
                 type: "post",
                 data: JSON.stringify(data),

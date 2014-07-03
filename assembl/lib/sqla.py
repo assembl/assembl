@@ -5,20 +5,23 @@ from __future__ import absolute_import
 import re
 import sys
 from datetime import datetime
-import inspect
+import inspect as pyinspect
 import types
 from collections import Iterable, defaultdict
+import atexit
 
 from anyjson import dumps, loads
 from colanderalchemy import SQLAlchemySchemaNode
 from sqlalchemy import (
     DateTime, MetaData, engine_from_config, event, Column, ForeignKey,
-    Integer)
+    Integer, inspect)
+from sqlalchemy.exc import NoInspectionAvailable
 from sqlalchemy.ext.declarative import declarative_base, declared_attr
 from sqlalchemy.orm import mapper, scoped_session, sessionmaker
 from sqlalchemy.orm.util import has_identity
 from sqlalchemy.util import classproperty
 from sqlalchemy.orm.session import object_session, Session
+from sqlalchemy.engine import strategies
 from virtuoso.vmapping import PatternIriClass
 from zope.sqlalchemy import ZopeTransactionExtension
 from zope.sqlalchemy.datamanager import mark_changed as z_mark_changed
@@ -27,8 +30,27 @@ from pyramid.paster import get_appsettings, setup_logging
 
 from ..view_def import get_view_def
 from .zmqlib import get_pub_socket, send_changes
-from ..namespaces import QUADNAMES
+from ..semantic.namespaces import QUADNAMES
 from ..auth import *
+
+atexit_engines = []
+
+
+class CleanupStrategy(strategies.PlainEngineStrategy):
+    name = 'atexit_cleanup'
+
+    def create(self, *args, **kwargs):
+        engine = super(CleanupStrategy, self).create(*args, **kwargs)
+        atexit_engines.append(engine)
+        return engine
+
+CleanupStrategy()
+
+
+@atexit.register
+def dispose_sqlengines():
+    #print "ATEXIT", atexit_engines
+    [e.dispose() for e in atexit_engines]
 
 _TABLENAME_RE = re.compile('([A-Z]+)')
 
@@ -232,7 +254,8 @@ class BaseOps(object):
             iri_name = clsname + "_iri"
             cls._iri_class = PatternIriClass(
                 getattr(QUADNAMES, iri_name),
-                'http://%{WSHostName}U/data/'+clsname+'/%d', ('id', Integer, False))
+                'http://%{WSHostName}U/data/'+clsname+'/%d', None,
+                ('id', Integer, False))
         return cls._iri_class
 
     @classmethod
@@ -268,7 +291,52 @@ class BaseOps(object):
     def uri(self, base_uri='local:'):
         return self.uri_generic(self.get_id_as_str(), base_uri)
 
-    def generic_json(self, view_def_name='default', base_uri='local:', use_dumps=False):
+    def change_class(self, newclass, **kwargs):
+        to_add = set()
+        to_delete = set()
+
+        def table_list(cls):
+            tables = []
+            for cls in cls.mro():
+                try:
+                    m = inspect(cls)
+                    t = m.local_table
+                    if (not tables) or tables[-1] != t:
+                        tables.append(t)
+                except NoInspectionAvailable:
+                    break
+            return tables
+        oldclass_tables = table_list(self.__class__)
+        newclass_tables = table_list(newclass)
+        newclass_mapper = inspect(newclass)
+        if newclass_tables[-1] != oldclass_tables[-1]:
+            raise TypeError()
+        while (newclass_tables and oldclass_tables and
+                newclass_tables[-1] == oldclass_tables[-1]):
+            newclass_tables.pop()
+            oldclass_tables.pop()
+        newclass_tables.reverse()
+        setattr(self, newclass_mapper.polymorphic_on.key,
+                newclass_mapper.polymorphic_identity)
+        db = self.db
+        id = self.id
+        db.flush()
+        db.expunge(self)
+        for table in oldclass_tables:
+            db.execute(table.delete().where(table.c.id==id))
+
+        for table in newclass_tables:
+            col_names = {c.key for c in table.c}
+            local_kwargs = {k: v for (k, v) in kwargs.iteritems()
+                            if k in col_names and k != 'id'}
+            db.execute(table.insert().values(id=id, **local_kwargs))
+
+        new_object = db.query(newclass).get(id)
+        new_object.send_to_changes()
+        return new_object
+
+    def generic_json(self, view_def_name='default',
+                     base_uri='local:', use_dumps=False):
         view_def = get_view_def(view_def_name)
         my_typename = self.external_typename()
         my_id = self.uri(base_uri)
@@ -277,10 +345,24 @@ class BaseOps(object):
         if local_view is False:
             return None
         assert isinstance(local_view, dict),\
-            "in viewdef %s, definition for class %s is not a dict" % (view_def_name, my_typename)
-        default_view = dict(view_def.get('_default', {}))
-        default_view.update(local_view)
-        local_view = default_view
+            "in viewdef %s, definition for class %s is not a dict" % (
+                view_def_name, my_typename)
+        if '_default' not in local_view:
+            view = local_view
+            views = [view]
+            local_view = dict(view_def.get('_default', {'_default': False}))
+            while '@extends' in view:
+                ex = view['@extends']
+                assert ex in view_def,\
+                    "In viewdef %s, @extends reference to missing %s." % (
+                    view_def_name, ex)
+                view = view_def[ex]
+                views.append(view)
+            for view in reversed(views):
+                local_view.update(view)
+            if '@extends' in local_view:
+                del local_view['@extends']
+            view_def[my_typename] = local_view
         mapper = self.__class__.__mapper__
         relns = {r.key: r for r in mapper.relationships}
         cols = {c.key: c for c in mapper.columns}
@@ -289,11 +371,11 @@ class BaseOps(object):
             frozenset(r._calculated_foreign_keys): r
             for r in mapper.relationships
         }
-        methods = dict(inspect.getmembers(
-            self.__class__, lambda m: inspect.ismethod(m)
-                            and m.func_code.co_argcount == 1))
-        properties = dict(inspect.getmembers(
-            self.__class__, lambda p: inspect.isdatadescriptor(p)))
+        methods = dict(pyinspect.getmembers(
+            self.__class__, lambda m: pyinspect.ismethod(m)
+            and m.func_code.co_argcount == 1))
+        properties = dict(pyinspect.getmembers(
+            self.__class__, lambda p: pyinspect.isdatadescriptor(p)))
         known = set()
         for name, spec in local_view.iteritems():
             if name == "_default":
@@ -349,7 +431,8 @@ class BaseOps(object):
                         return v.generic_json(view_name)
                     else:
                         return v.uri(base_uri)
-                elif isinstance(v, (str, unicode, int, long, float, bool, types.NoneType)):
+                elif isinstance(v, (
+                        str, unicode, int, long, float, bool, types.NoneType)):
                     return v
                 elif isinstance(v, datetime):
                     return v.isoformat()
@@ -556,7 +639,7 @@ class TimestampedSQLAlchemySchemaNode(SQLAlchemySchemaNode):
         elif len(excludes) > 0:
             excludes = set(excludes) | set(stamps)
         parent = super(TimestampedSQLAlchemySchemaNode, self)
-        return parent.__init__(cls, excludes=excludes, **kwargs)
+        parent.__init__(cls, excludes=excludes, **kwargs)
 
 
 def insert_timestamp(mapper, connection, target):

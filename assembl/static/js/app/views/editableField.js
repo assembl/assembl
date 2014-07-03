@@ -4,11 +4,6 @@ define(['backbone', 'underscore'], function(Backbone, _){
     var EditableField = Backbone.View.extend({
 
         /**
-         * @type {Object}
-         */
-        attributes: {},
-
-        /**
          * @type {String}
          */
         tagName: 'div',
@@ -34,10 +29,10 @@ define(['backbone', 'underscore'], function(Backbone, _){
          * @init
          */
         initialize: function(obj){
-            this.attributes['class'] = 'class' in obj ? obj['class'] : 'panel-editablearea';
-
-            if( !('contenteditable' in this.attributes) ){
-                this.attributes['contenteditable'] = true;
+            if( 'canEdit' in obj ){
+                this.canEdit = obj.canEdit;
+            } else {
+                this.canEdit = true;
             }
 
             if( 'modelProp' in obj ){
@@ -47,6 +42,7 @@ define(['backbone', 'underscore'], function(Backbone, _){
             if( 'placeholder' in obj ){
                 this.placeholder = obj.placeholder;
             }
+            
 
             if( this.model === null ){
                 throw new Error('EditableField needs a model');
@@ -57,6 +53,12 @@ define(['backbone', 'underscore'], function(Backbone, _){
          * The render
          */
         render: function(){
+            if(this.canEdit) {
+                if( !(this.$el.attr('contenteditable')) ){
+                    this.$el.attr('contenteditable', true);
+                }
+                this.$el.addClass('canEdit panel-editablearea');
+            }
             var text = this.model.get(this.modelProp);
             this.el.innerHTML = text || this.placeholder;
 
@@ -83,16 +85,18 @@ define(['backbone', 'underscore'], function(Backbone, _){
          * @event
          */
         onBlur: function(ev){
-            var data = app.stripHtml(ev.currentTarget.textContent);
-            data = $.trim(data);
-
-            if(data != this.placeholder || data == ''){
-                /* we never save placeholder values to the model */
-                if(this.model.get(this.modelProp) != data) {
-                    /* Nor save to the database and fire change events
-                     * if the value didn't change from the model
-                     */ 
-                    this.model.save(this.modelProp, data);
+            if(this.canEdit) {
+                var data = app.stripHtml(ev.currentTarget.textContent);
+                data = $.trim(data);
+    
+                if(data != this.placeholder || data == ''){
+                    /* we never save placeholder values to the model */
+                    if(this.model.get(this.modelProp) != data) {
+                        /* Nor save to the database and fire change events
+                         * if the value didn't change from the model
+                         */
+                        this.model.save(this.modelProp, data);
+                    }
                 }
             }
         },

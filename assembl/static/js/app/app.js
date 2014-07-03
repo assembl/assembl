@@ -1,5 +1,5 @@
-define(['jquery', 'underscore', 'ckeditor', 'moment', 'i18n', 'zeroclipboard', 'types', 'permissions'],
-    function($, _, ckeditor, Moment, i18n, ZeroClipboard, Types, Permissions){
+define(['jquery', 'underscore', 'ckeditor', 'moment', 'moment_lang', 'i18n', 'zeroclipboard', 'types', 'permissions'],
+    function($, _, ckeditor, Moment, MomentLang, i18n, ZeroClipboard, Types, Permissions){
     'use strict';
 
     ckeditor.disableAutoInline = true;
@@ -29,6 +29,12 @@ define(['jquery', 'underscore', 'ckeditor', 'moment', 'i18n', 'zeroclipboard', '
          * @type {boolean}
          */
         debugRender: false,
+
+        /**
+         * Send debugging output to console.log to observe socket input
+         * @type {boolean}
+         */
+        debugSocket: false,
             
         /**
          * Reference to the body as jQuery object
@@ -667,6 +673,7 @@ define(['jquery', 'underscore', 'ckeditor', 'moment', 'i18n', 'zeroclipboard', '
          * @param  {Idea} [idea]
          */
         setCurrentIdea: function(idea){
+            //console.log("setCurrentIdea: setting to: ", idea);
             if (idea != this.getCurrentIdea()) {
                 app.trigger('idea:select', [idea]);
             }
@@ -677,7 +684,7 @@ define(['jquery', 'underscore', 'ckeditor', 'moment', 'i18n', 'zeroclipboard', '
          * @return {Idea}
          */
         getCurrentIdea: function(){
-            return app.ideaPanel.idea;
+            return app.ideaPanel.model;
         },
 
         /**
@@ -714,13 +721,21 @@ define(['jquery', 'underscore', 'ckeditor', 'moment', 'i18n', 'zeroclipboard', '
 
                 case Types.IDEA:
                 case Types.ROOT_IDEA:
+                case Types.PROPOSAL:
+                case Types.ISSUE:
+                case Types.CRITERION:
+                case Types.ARGUMENT:
                     return app.ideaList.ideas;
+
+                case Types.IDEA_LINK:
+                    return app.ideaList.ideaLinks;
 
                 case Types.POST:
                 case Types.ASSEMBL_POST:
                 case Types.SYNTHESIS_POST:
                 case Types.IMPORTED_POST:
                 case Types.EMAIL:
+                case Types.IDEA_PROPOSAL_POST:
                     return app.messageList.messages;
 
                 case Types.USER:
@@ -885,6 +900,7 @@ define(['jquery', 'underscore', 'ckeditor', 'moment', 'i18n', 'zeroclipboard', '
 
             var onMouseLeave = function(ev){
                 parent.removeClass('is-open');
+                ev.stopPropagation(); // so that onDropdownClick() is not called again immediately after when we click
             };
 
             if( parent.hasClass('is-open') ){
@@ -908,9 +924,16 @@ define(['jquery', 'underscore', 'ckeditor', 'moment', 'i18n', 'zeroclipboard', '
         },
 
         /**
-         * Removes all tooltips from the screen
+         * Removes all tooltips from the screen.  Without this, active 
+         * tooltips (those currently displayed) will be left dangling
+         * if the trigger element is removed from the dom.
          */
-        cleanTooltips: function(){
+        cleanTooltips: function(jqueryElement){
+            //console.log("cleanTooltips() called");
+            //This really does need to be global.
+            //Should be fast, they are at the top level and there is only
+            //a few of them.  Maybe it can be more specific to be faster
+            // ex: html > .tipsy I don't know jquery enough to know 
             $('.tipsy').remove();
         },
 
@@ -922,10 +945,10 @@ define(['jquery', 'underscore', 'ckeditor', 'moment', 'i18n', 'zeroclipboard', '
         /**
          * @init
          */
-        initTooltips: function(){
+        initTooltips: function(jqueryElement){
             // reference: http://onehackoranother.com/projects/jquery/tipsy/
-
-            $('[data-tooltip]').tipsy({
+            //console.log("initTooltips() called");
+            jqueryElement.find('[data-tooltip]').tipsy({
                 delayIn: 400,
                 live: true,
                 gravity: function(){ return this.getAttribute('data-tooltip-position') || 's'; },
@@ -969,22 +992,23 @@ define(['jquery', 'underscore', 'ckeditor', 'moment', 'i18n', 'zeroclipboard', '
          * inits ALL app components
          */
         init: function(){
-            app.loadCurrentUser();
+            this.loadCurrentUser();
+            Moment.lang(assembl_locale);
 
-            app.body.removeClass('preload');
-            app.createSelectionTooltip();
-            app.initTooltips();
+            this.body.removeClass('preload');
+            this.createSelectionTooltip();
+            this.initTooltips($("body"));
 
-            app.doc.on('click', '.dropdown-label', app.onDropdownClick);
-            app.doc.on('ajaxError', app.onAjaxError);
+            this.doc.on('click', '.dropdown-label', this.onDropdownClick);
+            this.doc.on('ajaxError', this.onAjaxError);
 
-            app.on('render', function(){
-                /*if(app.debugRender) {
+            /*app.on('render', function(){
+                if(app.debugRender) {
                     console.log("app.on('render) triggered");
-                }*/
-                app.cleanTooltips();
-                window.setTimeout(app.initTooltips, 500);
-            });
+                }
+                //app.cleanTooltips();
+                //window.setTimeout(app.initTooltips, 500);
+            });*/
         }
     };
 

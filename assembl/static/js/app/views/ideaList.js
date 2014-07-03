@@ -1,5 +1,5 @@
-define(['backbone', 'underscore', 'models/idea', 'views/idea', "views/ideaGraph", 'app', 'types', 'views/allMessagesInIdeaList', 'views/orphanMessagesInIdeaList', 'views/synthesisInIdeaList', 'permissions', 'utils/renderVisitor', 'utils/siblingChainVisitor'],
-function(Backbone, _, Idea, IdeaView, ideaGraphLoader, app, Types, AllMessagesInIdeaListView, OrphanMessagesInIdeaListView, SynthesisInIdeaListView, Permissions, renderVisitor, siblingChainVisitor){
+define(['backbone', 'underscore', 'models/idea', 'models/ideaLink', 'views/idea', "views/ideaGraph", 'app', 'types', 'views/allMessagesInIdeaList', 'views/orphanMessagesInIdeaList', 'views/synthesisInIdeaList', 'permissions', 'utils/renderVisitor', 'utils/siblingChainVisitor'],
+function(Backbone, _, Idea, IdeaLink, IdeaView, ideaGraphLoader, app, Types, AllMessagesInIdeaListView, OrphanMessagesInIdeaListView, SynthesisInIdeaListView, Permissions, renderVisitor, siblingChainVisitor){
     'use strict';
 
     var FEATURED = 'featured',
@@ -42,7 +42,9 @@ function(Backbone, _, Idea, IdeaView, ideaGraphLoader, app, Types, AllMessagesIn
          * @init
          */
         initialize: function(obj){
+            var that = this;
             this.ideas = new Idea.Collection();
+            this.ideaLinks = new IdeaLink.Collection();
             /*this.on("all", function(eventName) {
                 console.log("ideaList event received: ", eventName);
               });
@@ -56,9 +58,9 @@ function(Backbone, _, Idea, IdeaView, ideaGraphLoader, app, Types, AllMessagesIn
             }
 
             var events = ['reset', 'change:parentId', 'change:@id', 'change:inNextSynthesis', 'remove', 'add'];
-            this.ideas.on(events.join(' '), this.render, this);
 
-            var that = this;
+            this.listenTo(this.ideas, events.join(' '), this.render);
+
             app.on('idea:delete', function(){
                 if(app.debugRender) {
                     console.log("ideaList: triggering render because app.on('idea:delete') was triggered");
@@ -91,13 +93,17 @@ function(Backbone, _, Idea, IdeaView, ideaGraphLoader, app, Types, AllMessagesIn
                 console.log("ideaList:render() is firing");
             }
             app.trigger('render');
-
+            app.cleanTooltips(this.$el);
             this.body = this.$('.panel-body');
             var y = 0,
-            rootIdea = this.ideas.getRootIdea(),
+            rootIdea = null,
             rootIdeaDirectChildrenModels = [],
-            filter = {};
-
+            filter = {},
+            view_data = {},
+            roots = [];
+            
+            function excludeRoot(idea) {return idea != rootIdea && !idea.hidden; };
+            
             if( this.body.get(0) ){
                 y = this.body.get(0).scrollTop;
             }
@@ -109,36 +115,41 @@ function(Backbone, _, Idea, IdeaView, ideaGraphLoader, app, Types, AllMessagesIn
             }
 
             var list = document.createDocumentFragment();
-
-            if(Object.keys(filter).length > 0) {
-                rootIdeaDirectChildrenModels = this.ideas.where(filter);
+            if(this.ideas.length<1) {
+                //console.log("Idea list isn't available yet (we should at least have the root)");
             }
-            else {
-                rootIdeaDirectChildrenModels = this.ideas.models;
-            }
-
-            rootIdeaDirectChildrenModels = rootIdeaDirectChildrenModels.filter(function(idea) {
-                return (idea.get("parentId") == rootIdea.id) || (idea.get("parentId") == null && idea.id != rootIdea.id); 
+            else{
+                rootIdea = this.ideas.getRootIdea();
+                if(Object.keys(filter).length > 0) {
+                    rootIdeaDirectChildrenModels = this.ideas.where(filter);
                 }
-            );
-
-            rootIdeaDirectChildrenModels = _.sortBy(rootIdeaDirectChildrenModels, function(idea){
-                return idea.get('order');
-            });
-
-            // Synthesis posts pseudo-idea
-            var synthesisView = new SynthesisInIdeaListView({model:rootIdea});
-            list.appendChild(synthesisView.render().el);
+                else {
+                    rootIdeaDirectChildrenModels = this.ideas.models;
+                }
+    
+                rootIdeaDirectChildrenModels = rootIdeaDirectChildrenModels.filter(function(idea) {
+                    return (idea.get("parentId") == rootIdea.id) || (idea.get("parentId") == null && idea.id != rootIdea.id); 
+                    }
+                );
+    
+                rootIdeaDirectChildrenModels = _.sortBy(rootIdeaDirectChildrenModels, function(idea){
+                    return idea.get('order');
+                });
+    
+                // Synthesis posts pseudo-idea
+                var synthesisView = new SynthesisInIdeaListView({model:rootIdea});
+                list.appendChild(synthesisView.render().el);
+                
+                // All posts pseudo-idea
+                var allMessagesInIdeaListView = new AllMessagesInIdeaListView({model:rootIdea});
+                list.appendChild(allMessagesInIdeaListView.render().el);
+                
+                rootIdea.visitDepthFirst(renderVisitor(view_data, roots, excludeRoot));
+                rootIdea.visitDepthFirst(siblingChainVisitor(view_data));
+            }
             
-            // All posts pseudo-idea
-            var allMessagesInIdeaListView = new AllMessagesInIdeaListView({model:rootIdea});
-            list.appendChild(allMessagesInIdeaListView.render().el);
-            
-            var view_data = {};
-            var roots = [];
-            function excludeRoot(idea) {return idea != rootIdea};
-            rootIdea.visitDepthFirst(renderVisitor(view_data, roots, excludeRoot));
-            rootIdea.visitDepthFirst(siblingChainVisitor(view_data));
+
+
 
             _.each(roots, function(idea){
                 var ideaView =  new IdeaView({model:idea}, view_data);
@@ -162,6 +173,7 @@ function(Backbone, _, Idea, IdeaView, ideaGraphLoader, app, Types, AllMessagesIn
             data.filter = this.filter;
 
             this.$el.html( this.template(data) );
+            app.initTooltips(this.$el);
             this.$('.idealist').append( list );
 
             this.body = this.$('.panel-body');

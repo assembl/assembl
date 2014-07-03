@@ -2,6 +2,7 @@ from datetime import datetime
 from itertools import chain
 import urllib
 import hashlib
+import simplejson as json
 
 from sqlalchemy import (
     Boolean,
@@ -13,10 +14,14 @@ from sqlalchemy import (
     DateTime,
     Time,
     Binary,
+    desc,
     Index
 )
 
 from sqlalchemy.orm import relationship, backref, deferred
+from sqlalchemy import inspect
+from sqlalchemy.types import Text
+from sqlalchemy.orm.attributes import NO_VALUE
 from pyramid.security import Everyone, Authenticated
 
 from ..lib import config
@@ -35,8 +40,6 @@ class AgentProfile(Base):
     id = Column(Integer, primary_key=True)
     name = Column(Unicode(1024))
     type = Column(String(60))
-    accounts = relationship('AbstractAgentAccount',
-        backref='profile', cascade="all, delete-orphan")
 
     __mapper_args__ = {
         'polymorphic_identity': 'agent_profile',
@@ -44,29 +47,39 @@ class AgentProfile(Base):
         'with_polymorphic': '*'
     }
 
-    def identity_accounts(self):
-        return self.db.query(
-            IdentityProviderAccount
-            ).join(AbstractAgentAccount
-            ).filter_by(profile_id=self.id)
+    def get_preferred_email(self):
+        if inspect(self).attrs.email_accounts.loaded_value is NO_VALUE:
+            email = self.db.query(EmailAccount.email).filter_by(
+                profile_id=self.id).order_by(
+                EmailAccount.verified.desc(),
+                EmailAccount.preferred.desc()).first()
+            if email:
+                return email[0]
+        elif self.email_accounts:
+            accounts = self.email_accounts[:]
+            accounts.sort(key=lambda e: (not e.verified, not e.preferred))
+            return accounts[0].email
 
-    def email_accounts(self):
-        return self.db.query(
-            EmailAccount
-            ).join(AbstractAgentAccount
-            ).filter_by(profile_id=self.id)
-
-    def verified_emails(self):
-        # TODO: Filter request? Is there a way to know if preloaded?
-        return (e for e in self.email_accounts() if e.verified)
+    def real_name(self):
+        if not self.name:
+            for acc in self.identity_accounts:
+                name = acc.real_name()
+                if name:
+                    self.name = name
+                    break
+        return self.name
 
     def display_name(self):
         # TODO: Prefer types?
+        if self.name:
+            return self.name
+        for acc in self.identity_accounts:
+            if acc.username:
+                return acc.display_name()
         for acc in self.accounts:
             name = acc.display_name()
             if name:
                 return name
-        return self.name
 
     def merge(self, other_profile):
         session = self.db
@@ -99,28 +112,21 @@ class AgentProfile(Base):
         ).one()
 
     def avatar_url(self, size=32, app_url=None, email=None):
-        # First implementation: Use the gravatar URL
-        if not email:
-            accounts = list(self.email_accounts())
-            if accounts:
-                accounts.sort(key=lambda e: (e.verified, e.preferred))
-                email = accounts[-1].email
+        for acc in self.identity_accounts:
+            url = acc.avatar_url(size)
+            if url:
+                return url
+        # Otherwise: Use the gravatar URL
         default = config.get('avatar.default_image_url') or \
             (app_url and app_url+'/static/img/icon/user.png')
+        email = email or self.get_preferred_email()
         if not email:
             return default
-        else:
-            gravatar_default = config.get('avatar.gravatar_default')
-            if gravatar_default:
-                default = gravatar_default
-        args = {'s': str(size)}
-        if default:
-            args['d'] = default
-        gravatar_url_pattern = "http://www.gravatar.com/avatar/%s?%s"
-        gravatar_url = gravatar_url_pattern % (
-            hashlib.md5(
-                email.lower()).hexdigest(), urllib.urlencode(args))
-        return gravatar_url
+        default = config.get('avatar.gravatar_default') or default
+        return EmailAccount.avatar_url_for(email, size, default)
+
+    def external_avatar_url(self):
+        return "/user/id/%d/avatar/" % (self.id,)
 
     def serializable(self, use_email=None):
         return {
@@ -139,6 +145,9 @@ class AbstractAgentAccount(Base):
         Integer,
         ForeignKey('agent_profile.id', ondelete='CASCADE', onupdate='CASCADE'),
         nullable=False)
+    profile = relationship('AgentProfile',
+        backref=backref('accounts', cascade="all, delete-orphan"))
+
     def signature(self):
         "Identity of signature implies identity of underlying account"
         return ('abstract_agent_account', self.id)
@@ -149,7 +158,6 @@ class AbstractAgentAccount(Base):
         'polymorphic_on': type,
         'with_polymorphic': '*'
     }
-
 
 
 class EmailAccount(AbstractAgentAccount):
@@ -166,6 +174,7 @@ class EmailAccount(AbstractAgentAccount):
     verified = Column(Boolean(), default=False)
     preferred = Column(Boolean(), default=False)
     active = Column(Boolean(), default=True)
+    profile_e = relationship(AgentProfile, backref=backref('email_accounts'))
 
     def display_name(self):
         if self.verified:
@@ -180,6 +189,22 @@ class EmailAccount(AbstractAgentAccount):
     def merge(self, other):
         if other.verified:
             self.verified = True
+
+    def other_account(self):
+        if not self.verified:
+            return self.db.query(self.__class__).filter_by(
+                email=self.email, verified=True).first()
+
+    def avatar_url(self, size=32, default=None):
+        return self.avatar_url_for(self.email, size, default)
+
+    @staticmethod
+    def avatar_url_for(email, size=32, default=None):
+        args = {'s': str(size)}
+        if default:
+            args['d'] = default
+        return "http://www.gravatar.com/avatar/%s?%s" % (
+            hashlib.md5(email.lower()).hexdigest(), urllib.urlencode(args))
 
     @staticmethod
     def get_or_make_profile(session, email, name=None):
@@ -230,6 +255,9 @@ class IdentityProviderAccount(AbstractAgentAccount):
     username = Column(String(200))
     domain = Column(String(200))
     userid = Column(String(200))
+    profile_info = deferred(Column(Text()))
+    picture_url = Column(String(300))
+    profile_i = relationship(AgentProfile, backref='identity_accounts')
 
     def signature(self):
         return ('idprovider_agent_account', self.provider_id, self.username,
@@ -242,6 +270,63 @@ class IdentityProviderAccount(AbstractAgentAccount):
         else:
             name = self.userid
         return ":".join((self.provider.provider_type, name))
+
+    def real_name(self):
+        info = self.profile_info_json
+        name = info['name']
+        if name.get('formatted', None):
+            return name['formatted']
+        if 'givenName' in name and 'familyName' in name:
+            return ' '.join((name['givenName'], name['familyName']))
+
+    def populate_picture(self, profile=None):
+        if self.picture_url:
+            return
+        profile = profile or self.profile_info_json
+        if not profile:
+            return
+        if 'photos' in profile:  # google, facebook
+            photos = [x.get('value', None) for x in profile['photos']]
+            photos = [x for x in photos if x]
+            if photos:
+                self.picture_url = photos[0]
+        elif self.provider.provider_type == 'facebook':
+            accounts = [x.get('userid') for x in profile.get('accounts', ())]
+            accounts = [x for x in accounts if x]
+            if accounts:
+                self.picture_url = 'http://graph.facebook.com/%s/picture' % (
+                    accounts[0])
+
+    facebook_sizes = (('square', 50), ('small', 50), ('normal', 100), ('large', 200))
+    twitter_sizes = (('_mini', 25), ('_normal', 48), ('_bigger', 73), ('', 1000))
+
+    def avatar_url(self, size=32):
+        if not self.picture_url:
+            self.populate_picture()
+        if not self.picture_url:
+            return
+        if self.provider.provider_type == 'google_oauth2':
+            return '%s?size=%d' % (self.picture_url, size)
+        elif self.provider.provider_type == 'facebook':
+            for (size_name, name_size) in self.facebook_sizes:
+                if size <= name_size:
+                    break
+            return '%s?type=%s' % (self.picture_url, size_name)
+        elif self.provider.provider_type == 'twitter':
+            for (size_name, name_size) in self.twitter_sizes:
+                if size <= name_size:
+                    break
+            return size_name.join(self.picture_url.split('_normal'))
+
+    @property
+    def profile_info_json(self):
+        if self.profile_info:
+            return json.loads(self.profile_info)
+        return {}
+
+    @profile_info_json.setter
+    def profile_info_json(self, val):
+        self.profile_info = json.dumps(val)
 
 
 class User(AgentProfile):
@@ -280,20 +365,15 @@ class User(AgentProfile):
         self.password = hash_password(password)
 
     def check_password(self, password):
-        from ..auth.password import verify_password
-        return verify_password(password, self.password)
+        if self.password:
+            from ..auth.password import verify_password
+            return verify_password(password, self.password)
+        return False
 
     def get_preferred_email(self):
         if self.preferred_email:
             return self.preferred_email
-        emails = list(self.email_accounts())
-        # should I allow unverified?
-        emails = [e for e in emails if e.verified]
-        preferred = [e for e in emails if e.preferred]
-        if preferred:
-            return preferred[0].email
-        if emails:
-            return emails[0].email
+        return super(User, self).get_preferred_email()
 
     def merge(self, other_user):
         super(User, self).merge(other_user)
@@ -318,6 +398,8 @@ class User(AgentProfile):
                 extract.creator = self
             for extract in other_user.extracts_owned:
                 extract.owner = self
+            for post in other_user.posts_created:
+                post.creator = self
             for role in other_user.roles:
                 role.user = self
             for role in other_user.local_roles:
@@ -351,7 +433,7 @@ class User(AgentProfile):
         return get_permissions(self.id, discussion_id)
 
     def get_all_permissions(self):
-        from ..auth import get_permissions
+        from ..auth.util import get_permissions
         from .synthesis import Discussion
         permissions = {
             Discussion.uri_generic(d_id): get_permissions(self.id, d_id)
@@ -384,8 +466,8 @@ class Role(Base):
     name = Column(String(20), nullable=False)
 
     @classmethod
-    def get_role(klass, session, name):
-        return session.query(klass).filter_by(name=name).first()
+    def get_role(cls, session, name):
+        return session.query(cls).filter_by(name=name).first()
 
 
 def populate_default_roles(session):

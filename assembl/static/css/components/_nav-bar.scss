@@ -1,92 +1,8 @@
-%navbar-gradient{
-  background: -webkit-gradient(
-                  linear,0 0,0 100%,
-                  from(rgba(0,0,0,.8)),
-                  color-stop(.1,rgba(0,0,0,0)),
-                  to(rgba(0,0,0,0))),
-  -webkit-gradient(
-                  linear,0 0,0 100%,
-                  from(rgba(0,0,0,.2)),
-                  color-stop(.3,rgba(0,0,0,0)),
-                  color-stop(.7,rgba(0,0,0,0)),
-                  to(rgba(0,0,0,.2))),
-  -webkit-gradient(
-                  linear,0 0,100% 0,
-                  from(rgba(0,0,0,.2)),
-                  color-stop(.2,rgba(0,0,0,0)),
-                  color-stop(.8,rgba(0,0,0,0)),
-                  to(rgba(0,0,0,.2))),
-  -webkit-gradient(
-                  linear,0 0,0 100%,
-                  from(rgba(47,47,47,1)),
-                  color-stop(0.97,rgba(75,75,75,1)),
-                  color-stop(0.97,rgba(0,0,0,0)),
-                  to(rgba(0,0,0,.45)));
-
-  background: -moz-linear-gradient(
-                  center top , rgba(0, 0, 0, 0.8) 0px,
-                  rgba(0, 0, 0, 0) 10%, rgba(0, 0, 0, 0) 100%),
-  -moz-linear-gradient(
-                  center top , rgba(0, 0, 0, 0.2) 0px,
-                  rgba(0, 0, 0, 0) 30%, rgba(0, 0, 0, 0) 70%,
-                  rgba(0, 0, 0, 0.2) 100%),
-  -moz-linear-gradient(
-                  left center , rgba(0, 0, 0, 0.2) 0px,
-                  rgba(0, 0, 0, 0) 20%, rgba(0, 0, 0, 0) 80%,
-                  rgba(0, 0, 0, 0.2) 100%),
-  -moz-linear-gradient(
-                  center top , #1E1E1E 0px, #4B4B4B 97%,
-                  rgba(0, 0, 0, 0) 97%, rgba(0, 0, 0, 0.45) 100%);
-
-  background: -ms-linear-gradient(
-                  center top , rgba(0, 0, 0, 0.8) 0px,
-                  rgba(0, 0, 0, 0) 10%, rgba(0, 0, 0, 0) 100%),
-  -ms-linear-gradient(
-                  center top , rgba(0, 0, 0, 0.2) 0px,
-                  rgba(0, 0, 0, 0) 30%, rgba(0, 0, 0, 0) 70%,
-                  rgba(0, 0, 0, 0.2) 100%),
-  -ms-linear-gradient(
-                  left center , rgba(0, 0, 0, 0.2) 0px,
-                  rgba(0, 0, 0, 0) 20%, rgba(0, 0, 0, 0) 80%,
-                  rgba(0, 0, 0, 0.2) 100%),
-  -ms-linear-gradient(
-                  center top , #1E1E1E 0px, #4B4B4B 97%,
-                  rgba(0, 0, 0, 0) 97%, rgba(0, 0, 0, 0.45) 100%);
-
-  background: -o-linear-gradient(
-                  center top , rgba(0, 0, 0, 0.8) 0px,
-                  rgba(0, 0, 0, 0) 10%, rgba(0, 0, 0, 0) 100%),
-  -o-linear-gradient(
-                  center top , rgba(0, 0, 0, 0.2) 0px,
-                  rgba(0, 0, 0, 0) 30%, rgba(0, 0, 0, 0) 70%,
-                  rgba(0, 0, 0, 0.2) 100%),
-  -o-linear-gradient(
-                  left center , rgba(0, 0, 0, 0.2) 0px,
-                  rgba(0, 0, 0, 0) 20%, rgba(0, 0, 0, 0) 80%,
-                  rgba(0, 0, 0, 0.2) 100%),
-  -o-linear-gradient(
-                  center top , #1E1E1E 0px, #4B4B4B 97%,
-                  rgba(0, 0, 0, 0) 97%, rgba(0, 0, 0, 0.45) 100%);
-
-  background: linear-gradient(
-                  center top , rgba(0, 0, 0, 0.8) 0px,
-                  rgba(0, 0, 0, 0) 10%, rgba(0, 0, 0, 0) 100%),
-  linear-gradient(
-                  center top , rgba(0, 0, 0, 0.2) 0px,
-                  rgba(0, 0, 0, 0) 30%, rgba(0, 0, 0, 0) 70%,
-                  rgba(0, 0, 0, 0.2) 100%),
-  linear-gradient(
-                  left center , rgba(0, 0, 0, 0.2) 0px,
-                  rgba(0, 0, 0, 0) 20%, rgba(0, 0, 0, 0) 80%,
-                  rgba(0, 0, 0, 0.2) 100%),
-  linear-gradient(
-                  center top , #1E1E1E 0px, #4B4B4B 97%,
-                  rgba(0, 0, 0, 0) 97%, rgba(0, 0, 0, 0.45) 100%);
-
+// Navigation bar
+header {
+  border-bottom: 1px solid #FFFFFF;
 }
 
-
-// Navigation bar
 .navbar {
   @include no-selection;
   @include box-sizing(border-box);
@@ -118,20 +34,54 @@
       li {
         display:inline-block;
         margin-right:-4px;
-      }
-      a {
+        > div {
         color: #aaaaaa;
         width: 130px;
-        height: 35px;
+        height: 32px;
         line-height:35px;
+        border-bottom: 3px solid transparent;
         &:hover {
-          color: #ffffff;
+          color: #484848;
+          border-bottom: 3px solid #6C0AAB;
         }
         &.active{
-          //@include background-linear-gradient(#C7C2DD, #AEA8C7);
-          @extend %navbar-gradient;
-          color: #ffffff;
+          color: #484848;
+          border-bottom: 3px solid #6C0AAB;
         }
+        .lock-button {
+          position: relative;
+          display: inline-block;
+          @include transition-property(background-color);
+          @include transition-duration(0.1s);
+          color:#ffffff;
+          margin-left:1em;
+
+          .lock-anchor{
+            @include border-radius(1em);
+            background-color: #AAAAAA;
+            font-size: 11px;
+            padding: 1px;
+            opacity: 0.5;
+            &:hover {
+              opacity: 1;
+            }
+          }
+
+          .icon-lock-open:active{
+            &:before{
+              content: '\e829';
+            }
+          }
+
+          .icon-lock:active{
+            &:before{
+              content: '\e828';
+            }
+          }
+
+        }
+      }
+        
       }
     }
   }
@@ -139,7 +89,6 @@
   .navbar-right {
     float: right;
     .connexion {
-      background-color: #484848;
       padding: 0 10px;
       cursor: pointer;
       line-height: 34px;
@@ -147,16 +96,13 @@
         cursor: pointer;
         color: #aaaaaa;
       }
-      .locale{
-
-      }
       .seperator {
         border-right: 1px solid #ccc;
         margin: 0 3px 0 0;
       }
       a{
+        color:#484848;
         text-decoration: none;
-        color:#ffffff;
       }
       .sign-out {
         margin-right: 0;
@@ -169,10 +115,34 @@
 }
 
 .navbar-title {
-  box-sizing: border-box;
-  height: 20px;
-  position: absolute;
-  top: 44px;
-  bottom: 0;
-  left: 12px;
+   padding: 10px;
+}
+
+.content-notification {
+  position: relative;
+  height: 40px;
+  background-color: #6C0AAB;
+  font-size: 12px;
+  text-align: center;
+  .close {
+    position: absolute;
+    right: 3px;
+    top: 3px;
+    color: #FFFFFF;
+    cursor: pointer;
+  }
+  .openSession {
+    border: none;
+    background-color: #FFFFFF;
+    color: #AAAAAA;
+    border-radius: 2px;
+    padding: 6px;
+    cursor: pointer;
+  }
+  p {
+    margin:0;
+    padding:0;
+    line-height: 40px;
+    color: #FFFFFF;
+  }
 }

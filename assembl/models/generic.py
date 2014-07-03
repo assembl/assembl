@@ -12,11 +12,11 @@ from sqlalchemy import (
 )
 
 from . import DiscussionBoundBase
-from ..lib.virtuoso_mapping import QuadMapPatternS
+from ..semantic.virtuoso_mapping import QuadMapPatternS
 from ..auth import (
     CrudPermissions, P_ADD_POST, P_READ, P_EDIT_POST, P_ADMIN_DISC,
     P_EDIT_POST, P_ADMIN_DISC)
-from ..namespaces import  SIOC, CATALYST, IDEA, ASSEMBL, DCTERMS, QUADNAMES
+from ..semantic.namespaces import  SIOC, CATALYST, IDEA, ASSEMBL, DCTERMS, QUADNAMES
 
 class ContentSource(DiscussionBoundBase):
     """
@@ -193,6 +193,14 @@ class Content(DiscussionBoundBase):
 
     def get_body(self):
         return ""
+
+    def get_body_mime_type(self):
+        """ Return the format of the body, so the frontend will know how to 
+        display it.  Currently, only:
+        text/plain (Understood as preformatted text)
+        text/html (Undestood as some subste of html)
+        """
+        return "text/plain"
 
     def get_title(self):
         return ""

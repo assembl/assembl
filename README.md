@@ -7,6 +7,8 @@
 - For production on linux using nginx/uwsgi you need the following ppa (for both saucy and raring):
 apt-add-repository ppa:chris-lea/uwsgi 
 
+- Ruby does not like libreadline6, which comes on newer Ubuntus. Make sure you have libreadline-gplv2-dev instead of libreadline6-dev.
+
 ## Installing Virtuoso
 
 Mac
@@ -224,7 +226,7 @@ py.test --cov assembl assembl
 
 Typically when developping a specific test:
 ``` sh
-py.test assembl -k name_of_test --pdb
+py.test assembl -s -k name_of_test --pdb
 ```
 
 Python shell with database connection

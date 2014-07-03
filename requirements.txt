@@ -3,17 +3,18 @@ Beaker==1.6.4
 Chameleon==2.16
 ColanderAlchemy==0.3.1
 DateTime==4.0.1
--e git+https://github.com/bitprophet/fabric.git#egg=fabric
-Jinja2==2.7.2
-Mako==0.9.1
+Fabric==1.9.0
+Jinja2==2.7.3
+Mako==1.0.0
 MarkupSafe==0.23
 PasteDeploy==1.5.2
 PyJWT==0.2.1
-PyLD==0.5.1
+PyLD==0.5.3
+PyStemmer==1.3.0
 Pygments==1.6
 Sphinx==1.2.2
 SPARQLWrapper==1.6.0
-SQLAlchemy==0.9.4
+SQLAlchemy==0.9.6
 Unidecode==0.04.16
 WebOb==1.4.0
 WebTest==2.0.15
@@ -23,11 +24,11 @@ anyjson==0.3.3
 anykeystore==0.2
 backports.ssl_match_hostname==3.4.0.2
 beautifulsoup4==4.3.2
-billiard==3.3.0.17
-celery==3.1.11
+billiard==3.3.0.18
+celery==3.1.12
 colander==1.0b1
 -e git+https://github.com/mozilla-services/cornice.git@master#egg=cornice
-cov-core==1.12
+cov-core==1.13.0
 coverage==3.7.1
 # distribute==0.7.3 # This fails with latest pip. Installed properly as a dependency.
 ecdsa==0.11
@@ -37,11 +38,11 @@ imaplib2==2.28.3
 isodate==0.5.0
 iso8601==0.1.10
 -e git+https://github.com/benoitg/jwzthreading.git@master#egg=jwzthreading
-kombu==3.0.16
-lingua==2.1
+kombu==3.0.20
+lingua==2.3
 lxml==3.3.5
 meld3==1.0.0
-oauthlib==0.6.1
+oauthlib==0.6.3
 paramiko==1.14.0
 pinocchio==0.4.1
 polib==1.0.4
@@ -49,46 +50,50 @@ py==1.4.20
 pycrypto==2.6.1
 pylibmc==1.3.0
 pytest==2.5.2
-pytest_cov==1.6
+pytest_cov==1.7.0
 pyparsing==2.0.2
-pyramid==1.4.5
+pyramid==1.5.1
 pyramid-beaker==0.8
-pyramid-debugtoolbar==2.0.2
-pyramid-jinja2==1.10
+pyramid-debugtoolbar==2.1
+pyramid-jinja2==2.3.2
 pyramid-mailer==0.13
-pyramid-mako==0.3.1
+pyramid-mako==1.0.2
 pyramid-tm==0.7
 python-memcached==1.53
 python-openid==2.2.5
-pytz==2014.3
-pyzmq==14.3.0
+pytz==2014.4
+pyzmq==14.3.1
 rdflib==4.1.2
-redis==2.9.1
+redis==2.10.1
 docutils==0.11
 repoze.lru==0.6
 repoze.sendmail==4.2
 requests==2.3.0
-requests-oauthlib==0.4.0
-simplejson==3.4.1
-six==1.6.1
+requests-oauthlib==0.4.1
+simplejson==3.5.3
+six==1.7.3
 -e git+https://github.com/mrjoes/sockjs-tornado.git@master#egg=sockjs_tornado
 sockjsproxy==0.7.1
 sphinx-bootstrap-theme==0.4.0
 supervisor==3.0
-tornado==3.2.1
+tornado==3.2.2
 transaction==1.4.3
 translationstring==1.1
 uricore==0.1.2
-velruse==1.1.1
-venusian==1.0a8
+uwsgitop==0.8
+-e git+https://github.com/maparent/velruse.git#egg=velruse
+venusian==1.0
 waitress==0.8.9
 wsgiref==0.1.2
 xlrd==0.9.3
 xlwt==0.7.5
 zope.deprecation==4.1.1
 zope.interface==4.1.1
-zope.sqlalchemy==0.7.4
+zope.sqlalchemy==0.7.5
 -e git+https://github.com/RDFLib/rdflib-jsonld#egg=rdflib_jsonld
 -e git+https://github.com/maparent/pyodbc.git@v3-virtuoso#egg=pyodbc
 -e git+https://github.com/maparent/virtuoso-python#egg=virtuoso
 # hapi : a OAuth2 server for pyramid. Still very much work in progress.
+# Also https://github.com/sneridagh/osiris (depends on mongo and old pyramid_who)
+# https://github.com/elliotpeele/pyramid_oauth2_provider (not enough dependencies! But looks good otherwise)
+# oauthlib has provider support but no pyramid adapter. Sigh. The flask adapter may be useful.

@@ -4,7 +4,7 @@ import os.path
 import json
 from pyramid.security import Allow, ALL_PERMISSIONS, DENY_ALL
 from pyramid.httpexceptions import HTTPNotFound, HTTPInternalServerError
-from pyramid.i18n import get_localizer, TranslationStringFactory
+from pyramid.i18n import TranslationStringFactory
 
 from ..lib.json import json_renderer_factory
 from ..lib import config
@@ -41,7 +41,7 @@ def js_message_ids():
 JS_MESSAGE_IDS = js_message_ids()
 
 def get_default_context(request):
-    localizer = get_localizer(request)
+    localizer = request.localizer
     _ = TranslationStringFactory('assembl')
     user=get_user(request)
     if user and user.username:

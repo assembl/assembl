@@ -1,9 +1,11 @@
 import os
 import datetime
+import inspect as pyinspect
 
+from sqlalchemy import inspect
 from pyramid.view import view_config
 from pyramid.httpexceptions import (
-    HTTPCreated, HTTPBadRequest, HTTPNotImplemented, HTTPUnauthorized)
+    HTTPCreated, HTTPBadRequest, HTTPNotImplemented, HTTPUnauthorized, HTTPOk)
 from pyramid.security import authenticated_userid
 from pyramid.response import Response
 from pyld import jsonld
@@ -12,7 +14,8 @@ from assembl.lib.sqla import get_session_maker
 from ..traversal import InstanceContext, CollectionContext, ClassContext
 from assembl.auth import P_READ, P_SYSADMIN, Everyone
 from assembl.auth.util import get_roles, get_permissions
-from assembl.lib.virtuoso_mapping import get_virtuoso
+from assembl.semantic.virtuoso_mapping import get_virtuoso
+from assembl.models import AbstractIdeaVote, User, DiscussionBoundBase
 
 """RESTful API to assembl, with some magic.
 The basic URI to access any ressource is
@@ -66,7 +69,7 @@ def includeme(config):
              request_method='GET', permission=P_READ)
 def class_view(request):
     ctx = request.context
-    view = request.GET.get('view', 'id_only')
+    view = request.GET.get('view', None) or ctx.get_default_view() or 'id_only'
     q = ctx.create_query(view == 'id_only')
     if view == 'id_only':
         return [ctx._class.uri_generic(x) for (x,) in q.all()]
@@ -95,7 +98,8 @@ def instance_view_jsonld(request):
              request_method='GET', permission=P_READ, accept="application/json")
 def instance_view(request):
     ctx = request.context
-    view = request.GET.get('view', 'default')
+    view = ctx.get_default_view() or 'default'
+    view = request.GET.get('view', view)
     return ctx._instance.generic_json(view)
 
 
@@ -103,7 +107,7 @@ def instance_view(request):
              request_method='GET', permission=P_READ)
 def collection_view(request):
     ctx = request.context
-    view = request.GET.get('view', 'id_only')
+    view = request.GET.get('view', None) or ctx.get_default_view() or 'id_only'
     q = ctx.create_query(view == 'id_only')
     if view == 'id_only':
         return [ctx.collection_class.uri_generic(x) for (x,) in q.all()]
@@ -111,11 +115,8 @@ def collection_view(request):
         return [i.generic_json(view) for i in q.all()]
 
 
-@view_config(context=CollectionContext, request_method='POST',
-             header=FORM_HEADER)
-def collection_add(request):
+def collection_add(request, args):
     ctx = request.context
-    args = request.params
     user_id = authenticated_userid(request)
     if 'type' in args:
         args = dict(args)
@@ -129,18 +130,29 @@ def collection_add(request):
         cls = ctx.get_collection_class(typename)
         if cls.crud_permissions.read not in permissions:
             raise HTTPUnauthorized()
+    session = User.db
+    old_autoflush = session.autoflush
+    session.autoflush = False
     try:
         instances = ctx.create_object(typename, None, user_id, **args)
     except Exception as e:
+        session.autoflush = old_autoflush
         raise HTTPBadRequest(e)
     if instances:
         db = get_session_maker()
         for instance in instances:
             db.add(instance)
-        db.flush()
+        session.autoflush = old_autoflush
+        session.flush()
         first = instances[0]
         return Response(location=first.uri_generic(first.id), status_code=201)
     raise HTTPBadRequest()
+
+
+@view_config(context=CollectionContext, request_method='POST',
+             header=FORM_HEADER)
+def collection_add_with_params(request):
+    return collection_add(request, request.params)
 
 
 @view_config(context=InstanceContext, request_method='POST')
@@ -150,6 +162,7 @@ def instance_post(request):
 
 @view_config(context=InstanceContext, request_method='PUT', header=JSON_HEADER)
 def instance_put_json(request):
+    ctx = request.context
     user_id = authenticated_userid(request)
     permissions = get_permissions(
         user_id, ctx.parent_instance.get_discussion_id())
@@ -169,8 +182,13 @@ def instance_put_json(request):
 @view_config(context=InstanceContext, request_method='PUT', header=FORM_HEADER)
 def instance_put(request):
     user_id = authenticated_userid(request)
-    permissions = get_permissions(
-        user_id, ctx.parent_instance.get_discussion_id())
+    context = request.context
+    discussion_id = None
+    if isinstance(context._instance, DiscussionBoundBase):
+        discussion_id = context._instance.get_discussion_id()
+    elif isinstance(context.parent_instance, DiscussionBoundBase):
+        discussion_id = context.parent_instance.get_discussion_id()
+    permissions = get_permissions(user_id, discussion_id)
     instance = context._instance
     if P_SYSADMIN not in permissions:
         required = instance.crud_permissions
@@ -178,56 +196,58 @@ def instance_put(request):
             if required.update_owned not in permissions or\
                     User.get(id=user_id) not in context._instance.get_owners():
                 raise HTTPUnauthorized()
-    mapper = instance.__class__.__mapper__
+    mapper = inspect(instance.__class__)
     cols = {c.key: c for c in mapper.columns if not c.foreign_keys}
-    setables = dict(inspect.getmembers(
-        self.__class__, lambda p:
-        inspect.isdatadescriptor(p) and getattr(p, 'fset', None)))
+    setables = dict(pyinspect.getmembers(
+        instance.__class__, lambda p:
+        pyinspect.isdatadescriptor(p) and getattr(p, 'fset', None)))
     relns = {r.key: r for r in mapper.relationships if not r.uselist and
              len(r._calculated_foreign_keys) == 1 and iter(
                  r._calculated_foreign_keys).next().table == mapper.local_table
              }
     unknown = set(request.params.keys()) - (
-        set(cols.keys()) + set(setables.keys()) + set(relns.key()))
+        set(cols.keys()).union(set(setables.keys())).union(set(relns.keys())))
     if unknown:
         raise HTTPBadRequest("Unknown keys: "+",".join(unknown))
     params = dict(request.params)
     # type checking
+    columns = {c.key: c for c in mapper.columns}
     for key, value in params.items():
         if key in relns and isinstance(value, str):
             val_inst = relns[key].class_.get_instance(value)
             if not val_inst:
                 raise HTTPBadRequest("Unknown instance: "+value)
             params[key] = val_inst
-        elif key in columns and columns[key].python_type == datetime.datetime \
+        elif key in columns and columns[key].type.python_type == datetime.datetime \
                 and isinstance(value, str):
             val_dt = datetime.datetime.strpstr(value)
             if not val_dt:
                 raise HTTPBadRequest("Cannot interpret " + value)
             params[key] = val_dt
-        elif key in columns and columns[key].python_type == int \
+        elif key in columns and columns[key].type.python_type == int \
                 and isinstance(value, str):
             try:
                 params[key] = int(value)
             except ValueError as err:
                 raise HTTPBadRequest("Not a number: " + value)
-        elif key in columns and not isinstance(value, columns[key].python_type):
+        elif key in columns and not isinstance(value, columns[key].type.python_type):
             raise HTTPBadRequest("Value %s for key %s should be a %s" % (
-                value, key, columns[key].python_type))
+                value, key, columns[key].type.python_type))
     try:
         for key, value in params.items():
             setattr(instance, key, value)
     except:
         raise HTTPBadRequest()
-    return "ok"
+    return Response("OK")
 
 
 @view_config(context=InstanceContext, request_method='DELETE')
 def instance_del(request):
+    ctx = request.context
     user_id = authenticated_userid(request)
+    instance = ctx._instance
     permissions = get_permissions(
-        user_id, ctx.parent_instance.get_discussion_id())
-    instance = context._instance
+        user_id, instance.get_discussion_id())
     if P_SYSADMIN not in permissions:
         required = instance.crud_permissions
         if required.delete not in permissions:
@@ -235,6 +255,7 @@ def instance_del(request):
                     User.get(id=user_id) not in context._instance.get_owners():
                 raise HTTPUnauthorized()
     instance.db.delete(instance)
+    return HTTPOk()
 
 
 @view_config(name="collections", context=InstanceContext, renderer='json',
@@ -291,3 +312,81 @@ def collection_add_json(request):
         db.flush()
         first = instances[0]
         raise HTTPCreated(first.uri_generic(first.id))
+
+
+# Votes are private
+@view_config(context=CollectionContext, renderer='json',
+             request_method='GET', permission=P_READ,
+             ctx_collection_class=AbstractIdeaVote)
+def votes_collection_view(request):
+    ctx = request.context
+    user_id = authenticated_userid(request)
+    if user_id == Everyone:
+        raise HTTPUnauthorized
+    view = request.GET.get('view', None) or ctx.get_default_view() or 'id_only'
+    q = ctx.create_query(view == 'id_only').join(User).filter(User.id==user_id)
+    if view == 'id_only':
+        return [ctx.collection_class.uri_generic(x) for (x,) in q.all()]
+    else:
+        return [i.generic_json(view) for i in q.all()]
+
+
+@view_config(context=CollectionContext, request_method='POST',
+             header=JSON_HEADER, #permission=P_ADD_VOTE?,
+             ctx_collection_class=AbstractIdeaVote)
+def votes_collection_add_json(request):
+    ctx = request.context
+    typename = ctx.collection_class.external_typename()
+    user_id = authenticated_userid(request)
+    typename = request.json_body.get('@type', ctx.collection_class.external_typename())
+    permissions = get_permissions(
+        user_id, ctx.parent_instance.get_discussion_id())
+    if P_SYSADMIN not in permissions:
+        cls = ctx.get_collection_class(typename)
+        if cls.crud_permissions.read not in permissions:
+            raise HTTPUnauthorized()
+    json = request.json_body
+    json['voter_id'] = user_id
+    try:
+        instances = ctx.create_object(typename, json, user_id)
+    except Exception as e:
+        raise HTTPBadRequest(e)
+    if instances:
+        db = get_session_maker()
+        for instance in instances:
+            db.add(instance)
+        db.flush()
+        first = instances[0]
+        raise HTTPCreated(first.uri_generic(first.id))
+
+@view_config(context=CollectionContext, request_method='POST',
+             header=FORM_HEADER, ctx_collection_class=AbstractIdeaVote)
+def votes_collection_add(request):
+    ctx = request.context
+    args = request.params
+    user_id = authenticated_userid(request)
+    if 'type' in args:
+        args = dict(args)
+        typename = args['type']
+        del args['type']
+    else:
+        typename = ctx.collection_class.external_typename()
+    permissions = get_permissions(
+        user_id, ctx.parent_instance.get_discussion_id())
+    if P_SYSADMIN not in permissions:
+        cls = ctx.get_collection_class(typename)
+        if cls.crud_permissions.read not in permissions:
+            raise HTTPUnauthorized()
+    args['voter_id'] = user_id
+    try:
+        instances = ctx.create_object(typename, None, user_id, **args)
+    except Exception as e:
+        raise HTTPBadRequest(e)
+    if instances:
+        db = get_session_maker()
+        for instance in instances:
+            db.add(instance)
+        db.flush()
+        first = instances[0]
+        return Response(location=first.uri_generic(first.id), status_code=201)
+    raise HTTPBadRequest()

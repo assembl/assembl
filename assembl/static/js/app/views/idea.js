@@ -28,13 +28,17 @@ function(Backbone, _, $, Idea, Segment, app, Permissions){
          *   are the last child of their respective parents.
          */
         initialize: function(obj, view_data){
-            if( _.isUndefined(this.model) ){
+            /*if( _.isUndefined(this.model) ){
                 this.model = new Idea.Model();
-            }
+            }*/
+            //console.log("initialize: ",obj, view_data, this);
+            var that = this;
             this.view_data = view_data;
-            this.model.on('change', this.render, this);
-            this.model.on('change:isSelected', this.onIsSelectedChange, this);
-            this.model.on('replacedBy', this.onReplaced, this);
+            this.listenTo(this.model, 'change', this.render);
+            this.listenTo(this.model, 'replacedBy', this.onReplaced);
+            app.on('idea:select', function(idea) {
+                that.onIsSelectedChange(idea);
+            });
         },
 
         /**
@@ -52,8 +56,8 @@ function(Backbone, _, $, Idea, Segment, app, Permissions){
             _.extend(data, render_data);
 
             this.$el.addClass('idealist-item');
-
-            this.onIsSelectedChange();
+            app.cleanTooltips(this.$el);
+            this.onIsSelectedChange(app.getCurrentIdea());
 
             if( data.isOpen === true ){
                 this.$el.addClass('is-open');
@@ -68,7 +72,7 @@ function(Backbone, _, $, Idea, Segment, app, Permissions){
             data.segments = this.model.getSegments();
             data.shortTitle = this.model.getShortTitleDisplayText();
             this.$el.html(this.template(data));
-
+            app.initTooltips(this.$el);
             var rendered_children = [];
             _.each(data['children'], function(idea, i){
                 var ideaView = new IdeaView({model:idea}, view_data);
@@ -115,10 +119,9 @@ function(Backbone, _, $, Idea, Segment, app, Permissions){
         /**
          * @event
          */
-        onIsSelectedChange: function(){
-            var value = this.model.get('isSelected');
-
-            if( value === true ){
+        onIsSelectedChange: function(idea){
+            //console.log("IdeaView:onIsSelectedChange(): new: ", idea, "current: ", this.model, this);
+            if( idea === this.model ){
                 this.$el.addClass('is-selected');
             } else {
                 this.$el.removeClass('is-selected');
@@ -151,7 +154,13 @@ function(Backbone, _, $, Idea, Segment, app, Permissions){
          * Select this idea as the current idea
          */
         onTitleClick: function(ev){
+            var that = this;
             ev.stopPropagation();
+            if( app.messageList ){
+                app.messageList.filterThroughPanelLock(function(){
+                    app.messageList.addFilterIsRelatedToIdea(that.model);
+                }, 'syncWithCurrentIdea');
+            }
             if( this.model === app.getCurrentIdea() ){
                 app.setCurrentIdea(null);
             } else {
@@ -272,7 +281,8 @@ function(Backbone, _, $, Idea, Segment, app, Permissions){
             if( segment ){
                 if( isDraggedBelow ){
                     // Add as a child idea
-                    this.model.addSegmentAsChild(segment);
+                    var newIdea = this.model.addSegmentAsChild(segment);
+                    app.setCurrentIdea(newIdea);
                 } else {
                     // Add to the current idea
                     this.model.addSegment(segment);
@@ -283,7 +293,6 @@ function(Backbone, _, $, Idea, Segment, app, Permissions){
 
             var annotation = app.getDraggedAnnotation();
             if( annotation ){
-
                 if( isDraggedBelow ){
                     // Add as a child idea
                     app.currentAnnotationIdIdea = null;

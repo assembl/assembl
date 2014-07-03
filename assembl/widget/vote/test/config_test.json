@@ -1,0 +1,9 @@
+{
+    "useraname":"test 1",
+    "persmission":["read","write"],
+    "url":{
+       "synthesis":"http://app.com/test/rest/synthesis",
+       "message":"http://app.com/test/rest/message",
+       "comment":"http://app.com/test/rest/comment"
+    }
+}

@@ -1,0 +1,21 @@
+<div class="sub-comment">
+    <form ng-submit="commentSubIdea()">
+       <textarea rows="1" ng-model="formData.comment" ng-keyup="expand($event)" class="text-comment" placeholder="{{'comment'| translate }}" autocomplete="off" required></textarea>
+       <button class="send-comment" type="submit"><i class="fa fa-paper-plane"></i></button>
+    </form>
+</div>
+
+<div class="commentToSubIdea">
+    <span class="showCommentSubIdea" ng-show="comments.length > 0" ng-click="showSubComment = !showSubComment">{{'comments' | translate}}</span>
+
+    <div class="media media-comment" ng-show="showSubComment" ng-if="comments.length > 0" ng-repeat="com in comments">
+        <a class="pull-left" href="#">
+            <img class="media-object" alt="20x20" ng-src="{{com.avatar}}" style="width: 20px; height: 20px;">
+        </a>
+        <div class="media-body">
+            <p><strong>{{com.username}}</strong> - {{com.body}}</p>
+            <span class="text-info">{{com.date}}</span>
+        </div>
+    </div>
+</div>
+

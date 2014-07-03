@@ -3,7 +3,7 @@
 .contextmenu {
     position: absolute;
     display: inline-block;
-    padding: $padding * 2;
+    padding: $padding * 1.2 $padding * 1.5;
 
     border: solid 1px #e4e4e3;
     @include box-shadow(0 2px 3px #ccc);

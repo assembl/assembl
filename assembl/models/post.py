@@ -3,6 +3,7 @@ from sqlalchemy.orm import relationship, backref
 from sqlalchemy.sql import func
 from sqlalchemy import (
     Column,
+    UniqueConstraint,
     Integer,
     DateTime,
     String,
@@ -13,10 +14,10 @@ from sqlalchemy import (
     event,
 )
 
-from ..lib.virtuoso_mapping import QuadMapPatternS
+from ..semantic.virtuoso_mapping import QuadMapPatternS
 from .generic import Content, ContentSource
 from .auth import AgentProfile
-from ..namespaces import  SIOC, CATALYST, IDEA, ASSEMBL, DCTERMS, QUADNAMES
+from ..semantic.namespaces import  SIOC, CATALYST, IDEA, ASSEMBL, DCTERMS, QUADNAMES
 
 class Post(Content):
     """
@@ -62,7 +63,7 @@ class Post(Content):
     creator_id = Column(Integer, ForeignKey('agent_profile.id'),
         info= {'rdf': QuadMapPatternS(None, SIOC.has_creator,
                     AgentProfile.iri_class().apply())})
-    creator = relationship(AgentProfile)
+    creator = relationship(AgentProfile, backref="posts_created")
     
     subject = Column(Unicode(), nullable=True,
         info= {'rdf': QuadMapPatternS(None, DCTERMS.title)})
@@ -94,7 +95,7 @@ class Post(Content):
         return self.subject
 
     def get_body(self):
-        return self.body
+        return self.body.strip()
 
     def _set_ancestry(self, new_ancestry):
         descendants = self.get_descendants()
@@ -180,11 +181,13 @@ class AssemblPost(Post):
         ondelete='CASCADE',
         onupdate='CASCADE'
     ), primary_key=True)
-
-
+        
     __mapper_args__ = {
         'polymorphic_identity': 'assembl_post',
     }
+    
+    def get_body_mime_type(self):
+        return "text/plain"
 
 class SynthesisPost(AssemblPost):
     """
@@ -215,12 +218,43 @@ class SynthesisPost(AssemblPost):
         super(SynthesisPost, self).__init__(*args, **kwargs)
         self.publishes_synthesis.publish()
 
+    def get_body_mime_type(self):
+        return "text/html"
+
+class IdeaProposalPost(AssemblPost):
+    """
+    A Post that proposes an Idea.
+    """
+    __tablename__ = "idea_proposal_post"
+
+    id = Column(Integer, ForeignKey(
+        'assembl_post.id',
+        ondelete='CASCADE',
+        onupdate='CASCADE'
+    ), primary_key=True)
+
+    idea_id = Column(
+        Integer,
+        ForeignKey('idea.id', ondelete="CASCADE", onupdate="CASCADE"),
+        nullable=False
+    )
+
+    proposes_idea = relationship('Idea',
+                                 backref=backref('proposed_in_post',uselist=False))
+
+    __mapper_args__ = {
+        'polymorphic_identity': 'idea_proposal_post',
+    }
+
+
 class ImportedPost(Post):
     """
     A Post that originated outside of the Assembl system (was imported from elsewhere).
     """
     __tablename__ = "imported_post"
-
+    __table_args__ = (
+                UniqueConstraint('source_post_id', 'source_id'),
+            )
     id = Column(Integer, ForeignKey(
         'post.id',
         ondelete='CASCADE',
@@ -229,14 +263,32 @@ class ImportedPost(Post):
 
     import_date = Column(DateTime, nullable=False, default=datetime.utcnow)
 
-    source_id = Column(Integer, ForeignKey('post_source.id', ondelete='CASCADE'),
+    source_post_id = Column(Unicode(),
+                        nullable=False,
+                        doc="The source-specific unique id of the imported post.  A listener keeps the message_id in the post class in sync")
+    
+    source_id = Column('source_id', Integer, ForeignKey('post_source.id', ondelete='CASCADE'),
         info= {'rdf': QuadMapPatternS(None, ASSEMBL.has_origin,
                     ContentSource.iri_class().apply())})
+    
     source = relationship(
         "PostSource",
-        backref=backref('contents', order_by=import_date)
+        backref=backref('contents')
     )
-
+    
+    body_mime_type = Column(Unicode(),
+                        nullable=False,
+                        doc="The mime type of the body of the imported content.  See Content::get_body_mime_type() for allowed values.")
+    
     __mapper_args__ = {
         'polymorphic_identity': 'imported_post',
     }
+    
+    def get_body_mime_type(self):
+        return self.body_mime_type
+    
+@event.listens_for(ImportedPost.source_post_id, 'set', propagate=True)
+def receive_set(target, value, oldvalue, initiator):
+    "listen for the 'set' event, keeps the message_id in Post class in sync with the source_post_id"
+
+    target.message_id = value 

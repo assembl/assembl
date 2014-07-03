@@ -51,9 +51,16 @@ define(['backbone', 'underscore', 'app', 'ckeditor-sharedspace'], function(Backb
                 this.placeholder = obj.placeholder;
             }
 
+            if( 'canEdit' in obj ){
+                this.canEdit = obj.canEdit;
+            } else {
+                this.canEdit = true;
+            }
+            
             if( this.model === null ){
                 throw new Error('EditableField needs a model');
             }
+            //console.log(this);
         },
 
         /**
@@ -72,6 +79,7 @@ define(['backbone', 'underscore', 'app', 'ckeditor-sharedspace'], function(Backb
                 bottomId: this.bottomId,
                 text: this.model.get(this.modelProp),
                 editing: editing,
+                canEdit: this.canEdit,
                 placeholder: this.placeholder
             };
 
@@ -146,7 +154,9 @@ define(['backbone', 'underscore', 'app', 'ckeditor-sharedspace'], function(Backb
          * @event
          */
         changeToEditMode: function(){
-            this.render(true);
+            if(this.canEdit){
+                this.render(true);
+            }
         },
 
         /**

@@ -57,10 +57,61 @@ $ellipsiswidth: 3em !default;
     //border-bottom: solid 1px $box-border-color;
     //overflow-x: hidden;
 
+    &.is-highlighted {
+        background-color: $color-highlighting;
+    }
+    // A message block Header
+    // --------------------
+    .message-header {
+        position: relative;
+        min-height: $messagelist-item-height - 12px;
+    }
+    
+    .message-subheader {
+        line-height: 17px;
+        padding-left: 9px;
+        cursor: pointer;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        text-align:  baseline;
+        max-height: $messagelist-item-height - 12px;
+        > span {
+                vertical-align: top;
+                }
+        .message--collapsed & {
+            line-height: $icon-height;
+        }
 
-    // &:last-child {
-    //     border-bottom: 0;
-    // }
+    
+        .message-author {
+            display: inline-block;
+            line-height: 17px;
+            .iconbutton {
+                width: 28px;
+                height: 20px;
+                line-height: 17px;
+                text-align: left;
+                vertical-align: top;
+            }
+        }
+
+        .message-date {
+            line-height: 17px;
+        }
+
+        > div {
+            margin-top: 4px;
+        }
+    }
+    .message-subject {
+        margin-top: 0;
+        white-space: normal;
+    }
+    .message-body {
+        margin-top: 1em;
+    }
+
     
     &.viewStyleFullBody {
         .message-date {
@@ -72,7 +123,31 @@ $ellipsiswidth: 3em !default;
         .message-author {
             width: auto;
         }
+
+        .message-body.body_format_text_plain {
+            white-space: pre-line;
+            &> {
+            white-space: normal;
+            }
+        }
+        .message-body.body_format_text_html {
+            white-space: normal;
+            p {
+                margin-top: 0.5em;
+                margin-bottom: 0.5em;
+            }
+            > div {
+            }
+            
+        }
+        &.Email .message-body.body_format_text_html {
+        > div {
+                white-space: pre-line;
+            }
+        }
+
     }
+    
     &.viewStyleTitleOnly {
         .message-date {
             float: right;
@@ -80,13 +155,18 @@ $ellipsiswidth: 3em !default;
         }
         .message-author {
             width: 10em;
-            overflow:hidden; 
+            overflow:hidden;
+            float: left;
             text-overflow: ellipsis;
+            min-height: $messagelist-item-height - 12px; /* To make sure the title wraps in front of the author */
             &:hover {
                 position: relative;
                 min-width: 10em;
                 width: auto;
             }
+        }
+        .message-subject {
+            display: inline;
         }
     }
     
@@ -105,9 +185,16 @@ $ellipsiswidth: 3em !default;
             margin-top: 0.2em;
             padding-left: 1em;
             position: relative;
-            white-space: normal;
             
         }
+
+        .message-body.body_format_text_plain > div {
+            white-space: pre-line;
+            &> {
+            white-space: normal;
+            }
+        }
+
     }
     
     &.unread {
@@ -118,49 +205,7 @@ $ellipsiswidth: 3em !default;
             @extend .text-bold;
         }
     }
-    // A message block Header
-    // --------------------
-    .message-header {
-        position: relative;
-        min-height: $messagelist-item-height - 12px;
-        
-                    //
 
-    }
-    //
-    .message-subheader {
-        padding-left: 1em;
-        cursor: pointer;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        text-align:  baseline;
-        max-height: $messagelist-item-height - 12px;
-        > span {
-                vertical-align: middle;
-                }
-        .message--collapsed & {
-            line-height: $icon-height;
-        }
-
-    
-        .message-author {
-            display: inline-block;
-
-        }
-    }
-
-    .message-body {
-        margin-top: 1em;
-    }
-    &.Email {
-        .message-body {
-            white-space: pre-line;
-            &> {
-            white-space: normal;
-            }
-        }
-    }
 }
 
 
@@ -318,18 +363,50 @@ $ellipsiswidth: 3em !default;
 //
 .message-menu {
     position: absolute;
-    top: 5px;
+    top: -2px;
     right: 5px;
     display: table;
+    vertical-align: top;
+
+    // used when buttons are to the left of the Reply button
+    > .message-hoistbtn, > .message-linkbutton {
+        vertical-align: top;
+        width: 26px;
+        line-height: 23px;
+    }
     .message-replybox-openbtn {
-        display: table-cell;
-        vertical-align: middle;
-        padding-right: 1em;
-        }
+        vertical-align: top;
+        margin-left: 6px;
+        padding-left: 4px;
+        padding-right: 6px;
+    }
     .dropdown {
-        display: table-cell;
-        vertical-align: middle;
+        vertical-align: top;
+        //line-height: 10px;
+        padding: 0;
+        //margin-left: 6px;
+        .dropdown-label.dropdown-label--arrow {
+            width: 24px;
+            height: 24px;
         }
+
+        .iconbutton {
+            width: 20px !important;
+            height: 18px;
+            line-height: 14px;
+            padding-top: 2px;
+            padding-right: 4px;
+            vertical-align: top;
+        }
+
+        i.icon-mail {
+            font-size: 12px; /* icon-mail needs to have a smaller font size (than original 16px) because the icon is big in the font */
+        }
+        a:link, a:visited {
+            color: inherit; /* so that the icon is not purple when the "a" tag has an href attribute (link) */
+            text-decoration: inherit;
+        }
+    }
 }
 
 // The child list

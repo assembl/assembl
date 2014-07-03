@@ -25,6 +25,7 @@ $hry-line-color: #bbb;
 // Colors
 //$color-success: #7C70AC;
 $color-success: #aea8c7;
+$color-highlighting: yellow;
 
 // Closebutton
 $closebutton-color: #e4e4e3;
@@ -69,7 +70,7 @@ $messagelist-arrow-width: 12px;
 
 // Font
 $font-dir: "/static/font";
-$font-size: 14px;
+$font-size: 12px;
 $font-icon: "fontello";
 
 // Image dir
@@ -99,7 +100,7 @@ $padding-left: 10px;
 
 // Panel
 $panel-border-color: $box-border-color;
-$panel-header-height: 35px;
+$panel-header-height: 30px;
 $panel-header-bg-color: #f7f7f7;
 
 // Text

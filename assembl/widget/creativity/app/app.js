@@ -1,66 +1,38 @@
 "use strict";
 
 var creativityApp = angular.module('creativityApp',
-    ['ngRoute','ngSanitize','creativityServices', 'pascalprecht.translate']);
+    ['ngRoute','ngSanitize','creativityServices', 'pascalprecht.translate','angular-growl']);
 
-creativityApp.run(['Configuration','$rootScope', function (Configuration, $rootScope) {
-    /*
-     * TODO: this params { type, idea, discutionId } need to be dynamic
-     * */
-    var data = {
-        widget_type: 'creativity',
-        settings: JSON.stringify({"idea": 'local:Idea/2'})
-    };
+creativityApp.config(['$routeProvider','$translateProvider','$locationProvider','growlProvider',
+    function($routeProvider, $translateProvider, $locationProvider, growlProvider){
 
-    Configuration.getWidget($.param(data), function(conf){
-        conf.get(function(data){
+    $locationProvider.html5Mode(false);
 
-            var widgetConfig = {
-                discussion: data.discussion,
-                ideas_uri: data.ideas_uri,
-                main_idea_view: data.main_idea_view,
-                messages_uri: data.messages_uri,
-                settings: data.settings,
-                state: data.settings,
-                user: data.user,
-                user_permissions: data.user_permissions
-            }
-
-            $rootScope.widgetConfig = widgetConfig;
-
-        });
-    });
-
-
-}]).run(['JukeTubeVideosService', function (JukeTubeVideosService) {
-
-    JukeTubeVideosService.init();
-
-}]);
-
-creativityApp.config(['$routeProvider', function($routeProvider){
     $routeProvider.
         when('/cards', {
            templateUrl:'app/partials/cards.html',
-           controller:'cardsCtl'
+           controller:'cardsCtl',
+           resolve: {
+              app: function($route, configService) {
+                return configService.getWidget($route.current.params.config);
+              }
+            }
         }).
         when('/videos', {
             templateUrl:'app/partials/videos.html',
-            controller:'videosCtl'
-        }).
-        when('/session', {
-           templateUrl:'app/partials/session.html',
-           controller:'creativitySessionCtl'
-        }).
-        when('/rating', {
-            templateUrl:'app/partials/rating.html',
-            controller:'ratingCtl'
+            controller:'videosCtl',
+            resolve: {
+              app: function($route, configService) {
+                return configService.getWidget($route.current.params.config);
+              },
+              init: function(JukeTubeVideosService){
+                  JukeTubeVideosService.init();
+              }
+            }
         }).
         otherwise({
             redirectTo: '/cards'
         });
-
-}]).config(['$translateProvider', function($translateProvider){
 
     $translateProvider.useStaticFilesLoader({
         prefix: 'app/locales/',
@@ -68,5 +40,16 @@ creativityApp.config(['$routeProvider', function($routeProvider){
     });
 
     $translateProvider.preferredLanguage('fr');
+
+    /**
+     * Set growl position and timeout
+     * */
+    growlProvider.globalPosition('top-center');
+    growlProvider.globalTimeToLive(5000);
+
+    /**
+     * Display an unique error message for the same type of error
+     * */
+    growlProvider.onlyUniqueMessages(true);
 
 }]);

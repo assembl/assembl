@@ -20,7 +20,7 @@ from imaplib2 import IMAP4_SSL, IMAP4
 import transaction
 from sqlalchemy.orm import deferred
 from sqlalchemy.orm import joinedload_all
-from sqlalchemy.orm.exc import NoResultFound
+from sqlalchemy.orm.exc import NoResultFound, MultipleResultsFound
 from sqlalchemy import (
     Column,
     Integer,
@@ -85,35 +85,279 @@ class AbstractMailbox(PostSource):
         else:
             return subject
 
-    VALID_TAGS = ['strong', 'em', 'p', 'ul', 'li', 'br']
-
+    VALID_TAGS = ['a',
+                  'b',
+                  'blockquote',
+                  'code',
+                  'del',
+                  'dd',
+                  'dl',
+                  'dt',
+                  'em',
+                  #We do not allow Hx tax, whould cause layout problems (manageable however)
+                  'i',
+                  #We do not allow img tags, either the reference is a local file (which we don't support yet), our we could link to a bunch of outside scripts.
+                  'li',
+                  'ol',
+                  'p',
+                  'pre',
+                  's',
+                  'sup',
+                  'sub',
+                  'strike',
+                  'table',
+                  'td',
+                  'th',
+                  'tr',
+                  'ul',
+                  'br',
+                  'hr',
+                  ]
+    VALID_ATTRIBUTES = ['href',#For hyperlinks
+                        
+                        'alt',#For accessiblity
+                        'colspan', 'headers', 'abbr', 'scope', 'sorted'#For tables
+                  ]
     @staticmethod
-    def sanitize_html(html_value, valid_tags=VALID_TAGS):
+    def sanitize_html(html_value, valid_tags=VALID_TAGS, valid_attributes=VALID_ATTRIBUTES):
+        """ Maybe we should have used Bleach (https://github.com/jsocol/bleach)
+        """
         soup = BeautifulSoup(html_value)
-        comments = soup.findAll(text=lambda text:isinstance(text, Comment))
-        [comment.extract() for comment in comments]
+        
         for tag in soup.find_all(True):
             if tag.name not in valid_tags:
                 tag.hidden = True
+            else: # it might have bad attributes
+                for attr in tag.attrs.keys():
+                    if attr not in valid_attributes:
+                        del tag[attr]
 
         return soup.decode_contents()
 
     @staticmethod
-    def body_as_html(text_value):
-        text_value = html_escape(text_value)
-        text_value = text_value.replace("\r", '').replace("\n", "<br />")
-        return text_value
+    def strip_full_message_quoting_plaintext(message_body):
+        """Assumes any encoding conversions have already been done 
+        """
+        #Most useful to develop this:
+        #http://www.motobit.com/util/quoted-printable-decoder.asp
+        debug = False;
+        #To be considered matching, each line must match successive lines, in order
+        quote_announcement_lines_regexes = {
+            'generic_original_message':  {
+                        'announceLinesRegexes': [re.compile("/-+\s*Original Message\s*-+/")],
+                        'quotePrefixRegex': re.compile(r"^>\s|^>$")
+                    },
+            'gmail_fr_circa_2012':  {
+                        'announceLinesRegexes': [re.compile(r"^Le .*, .*<.*@.*> a écrit :")],# 2012 Le 6 juin 2011 15:43, <nicolas.decordes@orange-ftgroup.com> a écrit :
+                        'quotePrefixRegex': re.compile(r"^>\s|^>$")
+                    },
+            'gmail_en_circa_2014':  {
+                        'announceLinesRegexes': [re.compile(r"^\d{4}-\d{2}-\d{2}.*<.*@.*>:")],# 2014-06-17 10:32 GMT-04:00 Benoit Grégoire <benoitg@coeus.ca>:
+                        'quotePrefixRegex': re.compile(r"^>\s|^>$")
+                    },
+            'outlook_fr_circa_2012':  {
+                        'announceLinesRegexes': [re.compile(r"^\d{4}-\d{2}-\d{2}.*<.*@.*>:")],# 2014-06-17 10:32 GMT-04:00 Benoit Grégoire <benoitg@coeus.ca>:
+                        'quotePrefixRegex': re.compile(r"^>\s|^>$")
+                    },
+            'outlook_fr_multiline_circa_2012': {
+                        'announceLinesRegexes': [re.compile(r"^_+$"), #________________________________
+                                                re.compile(r"^\s*$"), #Only whitespace
+                                                re.compile(r"^De :.*$"),
+                                                re.compile(r"^Envoy.+ :.*$"),
+                                                re.compile(r"^À :.*$"),
+                                                re.compile(r"^Objet :.*$"),
+                                                ],
+                        'quotePrefixRegex': re.compile(r"^.*$")
+                    },
+            'outlook_en_multiline_circa_2012': {
+                        'announceLinesRegexes': [re.compile(r"^_+$"), #________________________________
+                                                re.compile(r"^\s*$"), #Only whitespace
+                                                re.compile(r"^From:.*$"),
+                                                re.compile(r"^Sent:.*$"),
+                                                re.compile(r"^To:.*$"),
+                                                re.compile(r"^Subject:.*$"),
+                                                ],
+                        'quotePrefixRegex': re.compile(r"^.*$")
+                    },
+            }
+        def check_quote_announcement_lines_match(currentQuoteAnnounce, keysStillMatching, lineToMatch):
+            
+            if len(keysStillMatching) == 0:
+                #Restart from scratch
+                keysStillMatching = quote_announcement_lines_regexes.keys()
+            nextIndexToMatch = len(currentQuoteAnnounce)
+            keys = list(keysStillMatching)
+            matchComplete = False
+            for key in keys:
+                if len(quote_announcement_lines_regexes[key]['announceLinesRegexes']) > nextIndexToMatch:
+                    if quote_announcement_lines_regexes[key]['announceLinesRegexes'][nextIndexToMatch].match(lineToMatch):
+                        if len(quote_announcement_lines_regexes[key]['announceLinesRegexes']) -1 == nextIndexToMatch:
+                            matchComplete = key
+                    else:
+                        keysStillMatching.remove(key)
+            if len(keysStillMatching)>0:
+                currentQuoteAnnounce.append(lineToMatch)
+            return matchComplete, keysStillMatching
+        
+        
+        defaultQuotePrefixRegex=re.compile(r"^>\s|^>$")
+        quote_prefix_regex=defaultQuotePrefixRegex
+        whitespace_line_regex=re.compile(r"^\s*$")
+        retval = []
+        currentQuoteAnnounce = []
+        keysStillMatching = []
+        currentQuote = []
+        currentWhiteSpace = []
+        class LineState:
+            Normal="Normal"
+            PrefixedQuote='PrefixedQuote'
+            PotentialQuoteAnnounce='PotentialQuoteAnnounce'
+            QuoteAnnounceLastLine='QuoteAnnounceLastLine'
+            AllWhiteSpace='AllWhiteSpace'
+            
+        line_state_before_transition = LineState.Normal
+        previous_line_state = LineState.Normal
+        line_state = LineState.Normal
+        for line in message_body.splitlines():
+            if line_state != previous_line_state:
+                line_state_before_transition = previous_line_state
+            previous_line_state = line_state
+            
+            (matchComplete, keysStillMatching) = check_quote_announcement_lines_match(currentQuoteAnnounce, keysStillMatching, line)
+            if matchComplete:
+                line_state = LineState.QuoteAnnounceLastLine
+                quote_prefix_regex = quote_announcement_lines_regexes[keysStillMatching[0]]['quotePrefixRegex']
+            elif len(keysStillMatching) > 0:
+                line_state = LineState.PotentialQuoteAnnounce
+            elif quote_prefix_regex.match(line):
+                line_state = LineState.PrefixedQuote
+            elif whitespace_line_regex.match(line):
+                line_state = LineState.AllWhiteSpace
+            else:
+                line_state = LineState.Normal
+            if line_state == LineState.Normal:
+                if((previous_line_state != LineState.AllWhiteSpace) & len(currentWhiteSpace) > 0):
+                    retval += currentWhiteSpace
+                    currentWhiteSpace = []
+                if(len(currentQuote) > 0):
+                    retval += currentQuoteAnnounce
+                    retval += currentQuote
+                    currentQuote = []
+                    currentQuoteAnnounce = []
+                if(previous_line_state == LineState.AllWhiteSpace):
+                    retval += currentWhiteSpace
+                    currentWhiteSpace = []
+                retval.append(line)
+            elif line_state == LineState.PrefixedQuote:
+                currentQuote.append(line)
+            elif line_state == LineState.QuoteAnnounceLastLine:
+                currentQuoteAnnounce = []
+            elif line_state == LineState.AllWhiteSpace:
+                currentWhiteSpace.append(line)
+            if debug:
+                print "%-30s %s" % (line_state, line)
+        #if line_state == LineState.PrefixedQuote | (line_state == LineState.AllWhiteSpace & line_state_before_transition == LineState.PrefixedQuote)
+            #We just let trailing quotes and whitespace die...
+        return '\n'.join(retval)
 
+    @staticmethod
+    def strip_full_message_quoting_html(message_body):
+        """Assumes any encoding conversions have already been done 
+        """
+        #Most useful to develop this:
+        #http://www.motobit.com/util/quoted-printable-decoder.asp
+        #http://www.freeformatter.com/html-formatter.html
+        #http://www.freeformatter.com/xpath-tester.html#ad-output
+        
+        debug = True;
+        from lxml import html, etree
+        doc = html.fromstring(message_body)
+        #Strip GMail quotes
+        matches = doc.find_class('gmail_quote')
+        if len(matches) > 0:
+            if not matches[0].text or "---------- Forwarded message ----------" not in matches[0].text:
+                matches[0].drop_tree()
+                return html.tostring(doc)
+            
+        #Strip modern Apple Mail quotes
+        find = etree.XPath(r"//child::blockquote[contains(@type,'cite')]/preceding-sibling::br[contains(@class,'Apple-interchange-newline')]/parent::node()/parent::node()")
+        matches = find(doc)
+        #print len(matches)
+        #for index,match in enumerate(matches):
+        #    print "Match: %d: %s " % (index, html.tostring(match))
+        if len(matches) == 1:
+            matches[0].drop_tree()
+            return html.tostring(doc)
+            
+
+        #Strip old AppleMail quotes (french)
+        regexpNS = "http://exslt.org/regular-expressions"
+        ##Trying to match:  Le 6 juin 2011 à 11:02, Jean-Michel Cornu a écrit :
+        find = etree.XPath(r"//child::div[re:test(text(), '^.*Le .*\d{4} .*:\d{2}, .* a .*crit :.*$', 'i')]/following-sibling::br[contains(@class,'Apple-interchange-newline')]/parent::node()",
+                    namespaces={'re':regexpNS})
+        matches = find(doc)
+        if len(matches) == 1:
+            matches[0].drop_tree()
+            return html.tostring(doc)
+        
+        #Strip Outlook quotes (when outlook gives usable structure)
+        find = etree.XPath(r"//body/child::blockquote/child::div[contains(@class,'OutlookMessageHeader')]/parent::node()")
+        matches = find(doc)
+        if len(matches) == 1:
+            matches[0].drop_tree()
+            return html.tostring(doc)
+        
+        #Strip Outlook quotes (when outlook gives NO usable structure)
+        successiveStringsToMatch = [
+                                        '|'.join(['^From:.*$','^De :.*$']),
+                                        '|'.join(['^Sent:.*$','^Envoy.+ :.*$']),
+                                        '|'.join(['^To:.*$','^.+:.*$']), #Trying to match À, but unicode is really problematic in lxml regex
+                                        '|'.join(['^Subject:.*$','^Objet :.*$']),
+                                    ]
+        regexpNS = "http://exslt.org/regular-expressions"
+        successiveStringsToMatchRegex = []
+        for singleHeaderLanguageRegex in successiveStringsToMatch:
+            successiveStringsToMatchRegex.append(r"descendant::*[re:test(text(), '"+singleHeaderLanguageRegex+"')]")
+
+        regex = " and ".join(successiveStringsToMatchRegex)
+        find = etree.XPath(r"//descendant::div["+regex+"]",
+                            namespaces={'re':regexpNS})
+        matches = find(doc)
+        if len(matches) == 1:
+            findQuoteBody = etree.XPath(r"//descendant::div["+regex+"]/following-sibling::*",
+                            namespaces={'re':regexpNS})
+            quoteBodyElements = findQuoteBody(doc)
+            for quoteElement in quoteBodyElements:
+                #This moves the text to the tail of matches[0]
+                quoteElement.drop_tree()
+            matches[0].tail = None
+            matches[0].drop_tree()
+            return html.tostring(doc)
+        
+        #Strip Thunderbird quotes
+        mainXpathFragment = "//child::blockquote[contains(@type,'cite') and boolean(@cite)]"
+        find = etree.XPath(mainXpathFragment+"/self::blockquote")
+        matches = find(doc)
+        if len(matches) == 1:
+            matchQuoteAnnounce = doc.xpath(mainXpathFragment+"/preceding-sibling::*")
+            if len(matchQuoteAnnounce) > 0:
+                matchQuoteAnnounce[-1].tail = None
+                matches[0].drop_tree()
+                return html.tostring(doc)
+            
+        #Nothing was stripped...
+        return html.tostring(doc)
 
     def parse_email(self, message_string, existing_email=None):
         parsed_email = email.message_from_string(message_string)
         body = None
         error_description = None
         
-        def get_plain_text_payload(message):
-            """ Returns the first text/plain body as a unicode object, falling back to text/html body """
+        def get_payload(message):
+            """ Returns the first text/html body, and falls back to text/plain body """
 
             def process_part(part, default_charset, text_part, html_part):
+                """ Returns the first text/plain body as a unicode object, and the first text/html body """
                 if part.is_multipart():
                     for part in part.get_payload():
                         charset = part.get_content_charset(default_charset)
@@ -134,13 +378,13 @@ class AbstractMailbox(PostSource):
             default_charset = message.get_charset() or 'ISO-8859-1'
             (text_part, html_part) = process_part(message, default_charset, text_part, html_part)
             if html_part:
-                return self.sanitize_html(html_part)
+                return ('text/html',self.sanitize_html(AbstractMailbox.strip_full_message_quoting_html(html_part)))
             elif text_part:
-                return self.body_as_html(text_part)
+                return ('text/plain', AbstractMailbox.strip_full_message_quoting_plaintext(text_part))
             else:
-                return u"Sorry, no assembl-supported mime type found in message parts"
+                return ('text/plain',u"Sorry, no assembl-supported mime type found in message parts")
 
-        body = get_plain_text_payload(parsed_email)
+        (mimeType, body) = get_payload(parsed_email)
 
         def email_header_to_unicode(header_string):
             decoded_header = decode_email_header(header_string)
@@ -179,13 +423,14 @@ class AbstractMailbox(PostSource):
         subject = email_header_to_unicode(parsed_email['Subject'])
         recipients = email_header_to_unicode(parsed_email['To'])
         body = body.strip()
-        # Try/except for a normal situation is an antipattern,
+        # Try/except for a normal situation is an anti-pattern,
         # but sqlalchemy doesn't have a function that returns
         # 0, 1 result or an exception
         try:
             email_object = self.db.query(Email).filter(
-                Email.message_id == new_message_id,
+                Email.source_post_id == new_message_id,
                 Email.discussion_id == self.discussion_id,
+                Email.source == self
             ).one()
             if existing_email and existing_email != email_object:
                 raise ValueError("The existing object isn't the same as the one found by message id")
@@ -193,9 +438,10 @@ class AbstractMailbox(PostSource):
             email_object.sender = sender
             email_object.subject = subject
             email_object.creation_date = creation_date
-            email_object.message_id = new_message_id
+            email_object.source_post_id = new_message_id
             email_object.in_reply_to = new_in_reply_to
             email_object.body = body
+            email_object.body_mime_type = mimeType
             email_object.full_message = message_string
         except NoResultFound:
             email_object = Email(
@@ -204,11 +450,43 @@ class AbstractMailbox(PostSource):
                 sender=sender,
                 subject=subject,
                 creation_date=creation_date,
-                message_id=new_message_id,
+                source_post_id=new_message_id,
                 in_reply_to=new_in_reply_to,
                 body=body,
+                body_mime_type = mimeType,
                 full_message=message_string
             )
+        except MultipleResultsFound:
+            """ TO find duplicates (this should no longer happen, but in case it ever does...
+            
+SELECT * FROM post WHERE id in (SELECT MAX(post.id) as max_post_id FROM imported_post JOIN post ON (post.id=imported_post.id) GROUP BY message_id, source_id HAVING COUNT(post.id)>1)
+
+To kill them:
+
+
+USE assembl;
+UPDATE  post p
+SET     parent_id = (
+SELECT new_post_parent.id AS new_post_parent_id
+FROM post AS post_to_correct
+JOIN post AS bad_post_parent ON (post_to_correct.parent_id = bad_post_parent.id)
+JOIN post AS new_post_parent ON (new_post_parent.message_id = bad_post_parent.message_id AND new_post_parent.id <> bad_post_parent.id)
+WHERE post_to_correct.parent_id IN (
+  SELECT MAX(post.id) as max_post_id 
+  FROM imported_post 
+  JOIN post ON (post.id=imported_post.id) 
+  GROUP BY message_id, source_id
+  HAVING COUNT(post.id)>1
+  )
+AND p.id = post_to_correct.id
+)
+
+USE assembl;
+DELETE
+FROM post WHERE post.id IN (SELECT MAX(post.id) as max_post_id FROM imported_post JOIN post ON (post.id=imported_post.id) GROUP BY message_id, source_id HAVING COUNT(post.id)>1)
+
+"""
+            raise MultipleResultsFound("ID %s has duplicates in source %d"%(new_message_id,self.id))
         email_object.creator = sender_email_account.profile
         email_object.source = self
         email_object = self.db.merge(email_object)
@@ -311,7 +589,8 @@ class AbstractMailbox(PostSource):
             session.commit()
             #session.remove()
 
-        self.thread_mails(emails)
+        with transaction.manager:
+            self.thread_mails(emails)
         
     def import_content(self, only_new=True):
         #Mailbox.do_import_content(self, only_new)
@@ -727,9 +1006,6 @@ class Email(ImportedPost):
             self.sender.encode('utf-8'),
             self.recipients.encode('utf-8')
         )
-
-    def get_body(self):
-        return self.body
 
     def get_title(self):
         return self.source.mangle_mail_subject(self.subject)

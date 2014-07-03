@@ -54,7 +54,7 @@
     background: url(#{$img-dir}/idealist/idealist-arrow.png) center center no-repeat;
     width: $idealist-arrow-width;
     height: $idealist-arrow-width;
-    border-radius: 50%;
+    border-radius: 5px;
     border: solid 1px #ddd;
     opacity: 0.55;
 
@@ -112,4 +112,5 @@
 //
 .dropdown-listitem {
     @extend .contextmenu-item;
+    margin-top: 3px;
 }

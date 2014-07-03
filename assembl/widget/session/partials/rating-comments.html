@@ -1,0 +1,13 @@
+<span class="comments" ng-show="subIdeaComment.length > 0" ng-click="showComment = !showComment">{{'comments' | translate}}</span>
+<ul class="bx-comment" ng-show="showComment">
+    <li ng-repeat="comment in subIdeaComment">
+        <label class="checkbox" for="checkbox-{{comment['@id']}}">
+            <span class="icons">
+                <span class="first-icon fui-checkbox-unchecked"></span>
+                <span class="second-icon fui-checkbox-checked"></span>
+            </span>
+            <input id="checkbox-{{comment['@id']}}" class="comment-to-sub-idea" type="checkbox" value="{{comment['@id']}}" data-toggle="checkbox">
+            <small class="comment-body">{{comment.body}}</small>
+        </label>
+    </li>
+</ul>

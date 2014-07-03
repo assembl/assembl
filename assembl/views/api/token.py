@@ -22,7 +22,7 @@ def auth_token_options(request):
 
 
 @view_config(route_name='csrf_token', request_method='GET')
-def auth_token(request, extra_headers={}):
+def auth_token(request, extra_headers=None):
     headers = []
     if 'origin' in request.headers:
         headers.extend([
@@ -30,7 +30,8 @@ def auth_token(request, extra_headers={}):
             (_ac + 'Allow-Credentials', 'true'),
             (_ac + 'Expose-Headers', 'Location, Content-Type, Content-Length'),
         ])
-        headers.extend(extra_headers)
+        if extra_headers:
+            headers.extend(extra_headers)
     user_id = authenticated_userid(request)
     payload = {
         'consumerKey': 'assembl', 'userId': (user_id or Everyone), 'ttl': 86400

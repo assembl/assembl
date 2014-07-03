@@ -9,21 +9,20 @@ function(Backbone, _, $, app, Segment, Types, i18n, Permissions){
         initialize: function(obj){
             var that = this;
 
-            /*this.segments.on("all", function(eventName) {
-                console.log("segementList collection event received: ", eventName);
-            });*/
-            
             if( obj && obj.button ){
                 this.button = $(obj.button).on('click', app.togglePanel.bind(window, 'segmentList'));
             }
 
-            this.segments.on('invalid', function(model, error){ alert(error); });
-            app.users.on('reset', this.render, app.segmentList);
-            
-            this.segments.on('add remove change reset', this.render, this);
+            this.listenTo(this.segments, 'invalid', function(model, error){
+                alert(error);
+            });
 
-            this.segments.on('add', function(segment){
-                that.showSegment(segment);
+            app.users.on('reset', this.render, app.segmentList);
+
+            this.listenTo(this.segments, 'add remove change reset', this.render);
+
+            this.listenTo(this.segments, 'add', function(segment){
+                that.highlightSegment(segment);
             });
         },
 
@@ -54,7 +53,8 @@ function(Backbone, _, $, app, Segment, Types, i18n, Permissions){
                 console.log("segmentList:render() is firing");
             }
             app.trigger('render');
-
+            app.cleanTooltips(this.$el);
+            
             var segments = this.segments.getClipboard(),
                 currentUser = app.getCurrentUser(),
                 data = {segments:segments,
@@ -67,7 +67,7 @@ function(Backbone, _, $, app, Segment, Types, i18n, Permissions){
             }
 
             this.$el.html(this.template(data));
-
+            app.initTooltips(this.$el);
             this.panel = this.$('.panel');
 
             if( top > 0 ){
@@ -170,12 +170,19 @@ function(Backbone, _, $, app, Segment, Types, i18n, Permissions){
 
 
         /**
-         * Shows the given segment with an small fx
+         * Shows the given segment
          * @param {Segment} segment
          */
         showSegment: function(segment){
             app.openPanel(app.segmentList);
-
+            this.highlightSegment(segment);
+        },
+        
+        /**
+         * Highlight the given segment with an small fx
+         * @param {Segment} segment
+         */
+        highlightSegment: function(segment){
             var selector = app.format('.box[data-segmentid={0}]', segment.cid),
                 box = this.$(selector);
 
@@ -189,6 +196,7 @@ function(Backbone, _, $, app, Segment, Types, i18n, Permissions){
                 box.highlight();
             }
         },
+
         
         /**
          * Closes the panel
@@ -318,7 +326,7 @@ function(Backbone, _, $, app, Segment, Types, i18n, Permissions){
          * @event
          */
         onClearButtonClick: function(ev){
-            var ok = confirm( i18n.gettext('segmentList-clearConfirmationMessage') );
+            var ok = confirm( i18n.gettext('Are you sure you want to empty your entire clipboard?') );
             if( ok ){
                 var segments = this.segments.getClipboard();
                 _.each(segments, function(segment){

@@ -1,0 +1,129 @@
+from os.path import dirname, join
+from collections import defaultdict
+from Stemmer import Stemmer
+
+known_languages = {
+    'danish',
+    'dutch',
+    'english',
+    'finnish',
+    'french',
+    'german',
+    'hungarian',
+    'italian',
+    'norwegian',
+    'portuguese',
+    'romanian',
+    'russian',
+    'spanish',
+    'swedish',
+    'turkish'
+}
+
+languages_by_iso2 = {
+    'da': 'danish',
+    'de': 'german',
+    'en': 'english',
+    'es': 'spanish',
+    'fi': 'finnish',
+    'fr': 'french',
+    'hu': 'hungarian',
+    'it': 'italian',
+    'nl': 'dutch',
+    'no': 'norwegian',
+    'pt': 'portuguese',
+    'ro': 'romanian',
+    'ru': 'russian',
+    'sv': 'swedish',
+    'tr': 'turkish'
+}
+
+
+languages_by_iso3 = {
+    'dan': 'danish',
+    'deu': 'german',
+    'dut': 'dutch',
+    'eng': 'english',
+    'fin': 'finnish',
+    'fra': 'french',
+    'fre': 'french',
+    'hun': 'hungarian',
+    'ita': 'italian',
+    'nld': 'dutch',
+    'nor': 'norwegian',
+    'por': 'portuguese',
+    'ron': 'romanian',
+    'rum': 'romanian',
+    'rus': 'russian',
+    'spa': 'spanish',
+    'swe': 'swedish',
+    'tur': 'turkish'
+}
+
+stopwordsdir = join(dirname(__file__), 'data', 'stopwords')
+
+
+class StemSet(set):
+    def __init__(self):
+        super(StemSet, self).__init__()
+        self.counter = 0.0
+
+    def add(self, word, weight=1.0):
+        super(StemSet, self).add(word)
+        self.counter += weight
+
+    def shortest(self):
+        all_words = list(self)
+        all_words.sort(key=len)
+        return all_words[0]
+
+
+_stopwords = {}
+
+
+def get_stop_words(lang):
+    if lang not in _stopwords:
+        _stopwords['lang'] = set(open(join(
+            stopwordsdir, lang)).read().split())
+    return _stopwords['lang']
+
+
+class DummyStemmer(object):
+    def stemWord(self, word):
+        return word
+
+    def stemText(self, text):
+        return text
+
+
+class WordCounter(defaultdict):
+    def __init__(self, lang):
+        super(WordCounter, self).__init__(StemSet)
+        if lang not in known_languages:
+            if len(lang) == 2:
+                lang = languages_by_iso2.get(lang, lang)
+            elif len(lang) == 3:
+                lang = languages_by_iso3.get(lang, lang)
+        self.lang = lang
+        if lang in known_languages:
+            self.stemmer = Stemmer(self.lang)
+        else:
+            self.stemmer = DummyStemmer()
+        self.stop_words = get_stop_words(self.lang)
+
+    def add_text(self, text, weight=1.0):
+        for word in text.split():
+            self.add_word(word, weight)
+
+    def add_word(self, word, weight=1.0):
+        if word.lower() in self.stop_words:
+            return
+        stemmed = self.stemmer.stemWord(word.lower())
+        self[stemmed].add(word, weight)
+
+    def best(self, num=10):
+        all_words = self.values()
+        all_words.sort(key=lambda x: -x.counter)
+        if len(all_words) > num:
+            all_words = all_words[:num]
+        return [x.shortest() for x in all_words]

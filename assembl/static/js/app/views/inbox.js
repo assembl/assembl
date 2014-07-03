@@ -9,7 +9,7 @@ function(Backbone, InboxModel, EmailView, app){
 
         initialize: function(obj){
             this.collection = obj.collection;
-            this.collection.on('reset', this.render, this);
+            this.listenTo(this.collection, 'reset', this.render);
         },
 
         render: function(){

@@ -4,7 +4,7 @@
     <div class="bar bar--main">
         <div class="bar-body">
             <div class="bar-right">
-                <a> {{ gettext('Profile') }} <i class="iconbutton iconbutton--nofx"><img src="/user/id/{{user.id}}/avatar/38" alt="{{ user.display_name() }}"/></i></a>
+                <a> {{ gettext('Profile') }} <i class="iconbutton iconbutton--nofx"><img src="/user/id/{{user.id}}/avatar/38" alt="{{ user.display_name() }}" height="38" width="38"/></i></a>
                 {% if locales.__len__ > 1 %}
                     <a href="#" class="locale active">{{locale | upper}}</a>
                     {% for loc in locales %}
@@ -28,9 +28,9 @@
     <input type="text" name="openid_identifier" />
     {% endif %}
     {% if image %}
-    <input type="image" value="" src="{{ STATIC_URL }}/img/loginbox/{{name}}.png" alt="{{gettext(title)}}"/>
+    <input type="image" value="" src="{{ STATIC_URL }}/img/loginbox/{{name}}.png" alt="{{title}}"/>
     {% else %}
-    <input type="submit" value="{{ gettext(title) }}" />
+    <input type="submit" value="{{ title }}" />
     {% endif %}
 </form>
 {% endif %}
@@ -81,7 +81,7 @@
                     <div class="spacer spacer--large"></div>
                     </td>
                 </tr>
-                {% if the_user.email_accounts() or the_user.unconfirmed_emails() %}
+                {% if the_user.email_accounts %}
                 <tr>
                     <th>
                         <label>{{ gettext('Emails') }}:</label>
@@ -89,17 +89,16 @@
                     <td>
                     <!-- TODO: Preferred email logic. -->
                         <ul>
-                        {% for email_account in the_user.verified_emails() %}
-                            <li>{{ email_account.email }}</li>
-                        {% endfor %}
-                        {% for email_account, other_profile in unverified_emails %}
+                        {% for email_account in the_user.email_accounts %}
                             <li>{{ email_account.email }}
-                            {% if other_profile %}
-                                (in conflict with {{other_profile.display_name() }})
-                                <input type="button" name="confirm" value="{{ gettext('Confirm and fuse accounts') }}" onclick="send_confirm('{{email_account.id}}');"/>
-                            {% else %}
-                                ({{ gettext('unconfirmed') }})
-                                <input type="button" name="confirm" value="{{ gettext('Send confirmation message') }}" onclick="send_confirm('{{email_account.id}}');"/>
+                            {% if not email_account.verified %}
+                                {% if email_account.other_account() %}
+                                    (in conflict with {{email_account.other_account().display_name() }})
+                                    <button name="confirm_email" value="{{email_account.id}}">{{ gettext('Confirm and fuse accounts') }}</button>
+                                {% else %}
+                                    ({{ gettext('unconfirmed') }})
+                                    <button name="confirm_email" value="{{email_account.id}}">{{ gettext('Send confirmation message') }}</button>
+                                {% endif %}
                             {% endif %}
                             </li>
                         {% endfor %}
@@ -115,7 +114,7 @@
                         <input type="email" name="add_email" placeholder="{{ gettext('Email') }}" autofocus />
                     </td>
                 </tr>
-                {% if the_user.identity_accounts() %}
+                {% if the_user.identity_accounts %}
                 <tr>
                     <th>
                         <label>{{ gettext('Accounts') }}:</label>
@@ -124,7 +123,7 @@
                     </th>
                     <td>
                         <dl compact="compact">
-                        {% for account in the_user.identity_accounts() %}
+                        {% for account in the_user.identity_accounts %}
                             <dt><em>{{ account.provider.provider_type }}</em></dt>
                             <dd>
                             {% if account.username %}
@@ -150,28 +149,17 @@
         {% if providers %}
         <p>{{ gettext("Connect other accounts to Assembl")|safe }}</p>
         {% endif %}
-        {{form('google', 'Login with Google', true)}}
-        {{form('twitter', 'Login with Twitter', true)}}
-        {{form('facebook', 'Login with Facebook', true)}}
-        {{form('yahoo', 'Login with Yahoo', true,
+        {{form('google', gettext('Login with Google'), true)}}
+        {{form('twitter', gettext('Login with Twitter'), true)}}
+        {{form('facebook', gettext('Login with Facebook'), true)}}
+        {{form('yahoo', gettext('Login with Yahoo'), true,
                 oauth='true', openid_identifier='yahoo.com')}}
-        {{form('live', 'Login with Windows Live', false)}}
-        {{form('github', 'Login with Github', false)}}
-        {{form('bitbucket', 'Login with Bitbucket', false)}}
-        {{form('openid', 'Login with OpenID', true)}}
+        {{form('live', gettext('Login with Windows Live'), false)}}
+        {{form('github', gettext('Login with Github'), false)}}
+        {{form('bitbucket', gettext('Login with Bitbucket'), false)}}
+        {{form('openid', gettext('Login with OpenID'), true)}}
         <div class="spacer spacer--huge"></div>
         </form>
     </div>
 
-{% endblock %}
-
-{% block extra_js %}
-<script type="text/javascript">
-    requirejs(["main"]);
-    var xmlhttp=new XMLHttpRequest();
-    function send_confirm(email_id) {
-        xmlhttp.open('GET', "/user_confirm/"+email_id);
-        xmlhttp.send();
-    }
-</script>
 {% endblock %}

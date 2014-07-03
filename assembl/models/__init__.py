@@ -14,6 +14,7 @@ class DeclarativeAbstractMeta(DeclarativeMeta, ABCMeta):
 class DiscussionBoundBase(Base):
     __metaclass__ = DeclarativeAbstractMeta
     __abstract__ = True
+
     @abstractmethod
     def get_discussion_id(self):
         "Get the ID of an associated discussion object, if any."
@@ -77,6 +78,7 @@ from .generic import (
 )
 from .post import (
     AssemblPost,
+    IdeaProposalPost,
     ImportedPost,
     Post,
     SynthesisPost,
@@ -90,6 +92,8 @@ from .mail import (
     MailingList,
 )
 from .synthesis import (
+    Argument,
+    Criterion,
     Discussion,
     ExplicitSubGraphView,
     Extract,
@@ -102,6 +106,8 @@ from .synthesis import (
     IdeaLink,
     IdeaRelatedPostLink,
     IdeaThreadContextBreakLink,
+    Issue,
+    Position,
     RootIdea,
     SubGraphIdeaAssociation,
     SubGraphIdeaLinkAssociation,
@@ -109,10 +115,27 @@ from .synthesis import (
     TableOfContents,
     TextFragmentIdentifier,
 )
+from .votes import (
+    AbstractIdeaVote,
+    BinaryIdeaVote,
+    LickertIdeaVote,
+    LickertRange,
+)
 from .annotation import (
     Webpage,
 )
 from .widgets import (
+    BaseIdeaWidget,
+    BaseIdeaWidgetLink,
+    CreativitySessionWidget,
+    GeneratedIdeaWidgetLink,
+    IdeaCreatingWidget,
+    IdeaWidgetLink,
+    InspirationWidget,
+    MultiCriterionVotingWidget,
+    VotableIdeaWidgetLink,
+    VotedIdeaWidgetLink,
+    VotingCriterionWidgetLink,
     Widget,
     WidgetUserConfig,
 )

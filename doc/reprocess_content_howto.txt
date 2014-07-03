@@ -1,0 +1,5 @@
+pshell development.ini
+
+mailboxes = db.query(models.AbstractMailbox)
+for mailbox in mailboxes:
+  mailbox.reprocess_content()

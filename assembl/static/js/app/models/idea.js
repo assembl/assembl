@@ -37,6 +37,7 @@ function(Base, _, Segment, app, i18n, Types, Permissions){
             num_posts: 0,
             num_read_posts: 0,
             isOpen: true,
+            hidden: false,
             hasCheckbox: false,
             featured: false,
             active: false,
@@ -296,6 +297,7 @@ function(Base, _, Segment, app, i18n, Types, Permissions){
         /**
          * Adds a segment as a child
          * @param {Segment} segment, possibly unsaved.
+         * @return the newly created idea
          */
         addSegmentAsChild: function(segment){
             // Cleaning
@@ -309,11 +311,11 @@ function(Base, _, Segment, app, i18n, Types, Permissions){
             };
 
             var onSuccess = function(idea){
-                console.log('addSegmentAsChild(): onSuccess() fired.')
+                //console.log('addSegmentAsChild(): onSuccess() fired.')
                 idea.addSegment(segment);
             };
 
-            this.collection.create(data, { success: onSuccess });
+            return this.collection.create(data, { success: onSuccess });
         },
 
         /**
@@ -327,6 +329,26 @@ function(Base, _, Segment, app, i18n, Types, Permissions){
                 child.save('order', currentOrder);
                 currentOrder += 1;
             });
+        },
+
+        set: function(key, val, options) {
+            if (typeof key === 'object') {
+              var attrs = key;
+              options = val;
+              if (attrs['parentId'] === null && this.id !== undefined && attrs['root'] !== true) {
+                console.log("empty parent bug: ", _.clone(attrs));
+                var id = attrs['@id'];
+                var links = app.ideaList.ideaLinks.where({target: id});
+                if (links.length > 0) {
+                    console.log('corrected');
+                    attrs['parents'] = _.map(links, function(l) {return l.get('source')});
+                    attrs['parentId'] = attrs['parents'][0];
+                }
+              }
+              return Backbone.Model.prototype.set.call(this, attrs, options);
+            } else {
+                return Backbone.Model.prototype.set.call(this, key, val, options);
+            }
         }
 
     });
@@ -353,6 +375,10 @@ function(Base, _, Segment, app, i18n, Types, Permissions){
         getRootIdea: function(){
             var retval = this.findWhere({ '@type': Types.ROOT_IDEA });
             if (!retval) {
+                console.log("Size: ", _.size(this.models));
+                _.forEach(this.models, function(model){
+                    console.log(model.get('@type'));
+                })
                 console.log("ERROR: getRootIdea() failed!");
                 console.log(this);
             }

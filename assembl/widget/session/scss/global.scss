@@ -1,0 +1,14 @@
+@import "session";
+@import "rate";
+@import "edit";
+
+nav{
+  display: block;
+  margin-bottom: 0;
+  border-bottom: 1px solid #dddddd;
+}
+.nav-tabs {
+  border-bottom: none;
+  width: 25%;
+  margin: 0 auto;
+}

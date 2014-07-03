@@ -18,7 +18,9 @@ define(['app', 'i18n', 'sprintf'], function(app, i18n, sprintf){
                 span = '<span class="closebutton" data-filterid="'+filterDef.id+'" data-value="'+value+'"></span>\n';
                 valuesText.push('"' + idea.get('shortTitle') + '"' + span);
             }
-            retval += sprintf.sprintf(i18n.pluralize({1:"Discuss idea %s",2:"Discuss ideas: %s"},valuesText.length), valuesText.join(i18n.gettext(' AND ')));
+            retval += sprintf.sprintf(i18n.pluralize({
+                1:gettext("Discuss idea %s"),2:gettext("Discuss ideas: %s")},
+                valuesText.length), valuesText.join(i18n.gettext(' AND ')));
             return retval;
         }
         this._returnHtmlDescriptionPostIsDescendentOfPost = function(filterDef, queryObjects) {
@@ -31,7 +33,10 @@ define(['app', 'i18n', 'sprintf'], function(app, i18n, sprintf){
                 span = '<span class="closebutton" data-filterid="'+filterDef.id+'" data-value="'+value+'"></span>\n';
                 valuesText.push('"' + post.get('subject') + '"' + span);
             }
-            retval += sprintf.sprintf(i18n.pluralize({1:"Are in the conversation that follows post %s",2:"Are in the conversation that follows posts: %s"},valuesText.length), valuesText.join(i18n.gettext(' AND ')));
+            retval += sprintf.sprintf(i18n.pluralize({
+                1:gettext("Are in the conversation that follows post %s"),
+                2:gettext("Are in the conversation that follows posts: %s")},
+                valuesText.length), valuesText.join(i18n.gettext(' AND ')));
             return retval;
         }
         this._returnHtmlDescriptionPostIsUnread = function(filterDef, queryObjects) {
@@ -177,9 +182,28 @@ define(['app', 'i18n', 'sprintf'], function(app, i18n, sprintf){
         }
 
         /**
+         * Is the filter part of the current query?
+         * @param {this.availableFilters} filterDef
+         * @param {String} value
+         * @return true if present, false otherwise
+         */
+        this.isFilterInQuery = function(filterDef, value){
+            retval = false;
+            if(filterDef.id in this._query) {
+                for (var i=0;i<this._query[filterDef.id].length;i++) {
+                    if(this._query[filterDef.id][i].value == value) {
+                        retval = true;
+                    }
+                }
+            }
+            return retval;
+        }
+        
+        /**
          * A filter restriction on the collection.  Setting a filter value to 
          * null is equivalent to removing the filter
-         * @param {String} ideaId
+         * @param {this.availableFilters} filterDef
+         * @param {String} value
          * @return true on success, false on failure
          */
         this.addFilter = function(filterDef, value){
@@ -402,10 +426,12 @@ define(['app', 'i18n', 'sprintf'], function(app, i18n, sprintf){
                 retval += '</div>';
                 retval += '<ul id="post-query-filter-info">';
 
+                var nActiveFilters = 0;
                 for (var filterDefPropName in this.availableFilters) {
                     var filterDef = this.availableFilters[filterDefPropName];
 
                     if(filterDef.id in this._query) {
+                        ++nActiveFilters;
                         retval += '<li class="filter" id="'+filterDef.id+'">';
                         if(filterDef._filter_description) {
                             retval += filterDef._filter_description(filterDef, this._query[filterDef.id]);
@@ -430,7 +456,12 @@ define(['app', 'i18n', 'sprintf'], function(app, i18n, sprintf){
                         retval += '</li>';
                     }
                 }
-                retval += '</ul>'
+                retval += '</ul>';
+
+                if ( nActiveFilters > 0 )
+                {
+                    retval += '<div class="actions"><a id="messageList-allmessages" class="button">' + i18n.gettext("Clear filters") + '</a></div>';
+                }
             }
             return retval;
         };

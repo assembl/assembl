@@ -28,7 +28,9 @@ function(Backbone, _, Moment, ckeditor, app, Types, Message, MessageView, Synthe
             }
             this.last_sibling_chain = last_sibling_chain;
             this.messageListView = obj.messageListView;
-            this.model.on('change:collapsed', this.onCollapsedChange, this);
+            this.collapsed = obj.collapsed;
+            //this.model.on('change:collapsed', this.onCollapsedChange, this);
+            //this.listenTo(this.model, 'change:collapsed', this.onCollapsedChange);
         },
 
         /**
@@ -49,13 +51,14 @@ function(Backbone, _, Moment, ckeditor, app, Types, Message, MessageView, Synthe
          * @return {MessageView}
          */
         render: function(level){
+
             app.trigger('render');
             var data = this.model.toJSON(),
                 children,
                 messageView;
 
             level = this.currentLevel !== null ? this.currentLevel : 1;
-
+            app.cleanTooltips(this.$el);
             if( ! _.isUndefined(level) ){
                 this.currentLevel = level;
             }
@@ -106,7 +109,7 @@ function(Backbone, _, Moment, ckeditor, app, Types, Message, MessageView, Synthe
             this.el.setAttribute('data-message-level', data['level']);
 
             this.$el.html( this.template(data) );
-
+            app.initTooltips(this.$el);
             this.$el.find('>.message-family-arrow>.message').replaceWith(messageView.el);
             
             this.onCollapsedChange();
@@ -126,8 +129,12 @@ function(Backbone, _, Moment, ckeditor, app, Types, Message, MessageView, Synthe
          * Collapse icon has been toggled
          */
         onIconbuttonClick: function(ev){
-            var collapsed = this.model.get('collapsed');
-            this.model.set('collapsed', !collapsed);
+            //var collapsed = this.model.get('collapsed');
+            //this.model.set('collapsed', !collapsed);
+
+            this.collapsed = !this.collapsed;
+
+            this.onCollapsedChange();
         },
         
 
@@ -135,10 +142,9 @@ function(Backbone, _, Moment, ckeditor, app, Types, Message, MessageView, Synthe
          * @event
          */
         onCollapsedChange: function(){
-            var collapsed = this.model.get('collapsed'),
+            var collapsed = this.collapsed,
                 target = this.$el,
                 children = target.find(">.messagelist-children").last();
-
             if( collapsed ){
                 this.$el.removeClass('message--expanded');
                 children.hide();

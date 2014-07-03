@@ -24,9 +24,10 @@ def discussion_list_view(request):
     context['discussions'] = []
     discussions = discussions_with_access(Authenticated if user_id == Everyone else user_id)
     for discussion in discussions:
-        discussion_context = {}
-        discussion_context['topic'] = discussion.topic
-        discussion_context['slug'] = discussion.slug
+        discussion_context = {
+            'topic': discussion.topic,
+            'slug': discussion.slug
+        }
         if user_has_permission(discussion.id, user_id, P_ADMIN_DISC):
             discussion_context['admin_url'] = request.route_url('discussion_permissions', discussion_id=discussion.id)
         context['discussions'].append(discussion_context)

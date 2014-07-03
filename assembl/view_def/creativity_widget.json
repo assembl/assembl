@@ -1,0 +1,279 @@
+{
+    "_default": {
+        "id": false,
+        "type": false,
+        "@id": "self",
+        "@type": "&external_typename",
+        "@view": "@view",
+        "_default": false
+    },
+    "Permission": {
+        "name": true
+    },
+    "AgentProfile": {
+        "preferred_email": false
+    },
+    "User": {
+        "@extends": "AgentProfile",
+        "creation_date": true,
+        "last_login": true,
+        "login_failures": false,
+        "password": false,
+        "verified": true,
+        "name": "&display_name",
+        "avatar_url_base": "&external_avatar_url",
+        "real_name": "&real_name",
+        "permissions": "&get_all_permissions"
+    },
+    "EmailAccount": false,
+    "IdentityProviderAccount": false,
+    "IdentityProvider": {
+        "name": true,
+        "provider_type": true,
+        "trust_emails": true
+        },
+    "ContentSource": {
+        "discussion_id": "discussion",
+        "name": true,
+        "creation_date": true,
+        "contents": [":partial"]
+    },
+    "PostSource": {
+        "@extends": "ContentSource",
+        "last_import": true
+    },
+    "AnnotatorSource": {
+        "@extends": "ContentSource"
+    },
+    "AbstractMailbox": {
+        "@extends": "PostSource"
+    },
+    "IMAPMailbox": {
+        "@extends": "AbstractMailbox",
+        "folder": true,
+        "host": true,
+        "port": true,
+        "username": false,
+        "use_ssl": true,
+        "password": false,
+        "last_imported_email_uid": false,
+        "subject_mangling_regex": false,
+        "subject_mangling_replacement": false,
+        "most_common_recipient_address": "&most_common_recipient_address"
+    },
+    "MailingList": {
+        "@extends": "IMAPMailbox",
+        "post_email_address": true
+    },
+    "Content": {
+        "date": "creation_date",
+        "hidden": true,
+        "discussion": true,
+        "import_date": false,
+        "widget_ideas": "&widget_ideas"
+    },
+    "Post": {
+        "@extends": "Content",
+        "message_id": false,
+        "ancestry": false,
+        "parentId": "parent",
+        "idCreator": "creator",
+        "subject": "&get_title",
+        "body": "&get_body",
+        "extracts": [":partial"]
+    },
+    "AssemblPost": {
+        "@extends": "Post"
+    },
+    "IdeaProposalPost": {
+        "@extends": "AssemblPost",
+        "proposes_idea": true
+    },
+    "SynthesisPost": {
+        "@extends": "Post",
+        "publishes_synthesis": true
+    },
+    "ImportedPost": {
+        "@extends": "Post",
+        "source": true
+    },
+    "Webpage": {
+        "@extends": "Content",
+        "last_modified_date": true,
+        "url": true,
+        "extracts": [":partial"]
+    },
+    "Email": {
+        "@extends": "ImportedPost",
+        "recipients": true,
+        "sender": true,
+        "full_message": false,
+        "in_reply_to": false
+    },
+    "Discussion": {
+        "creation_date": true,
+        "slug": true,
+        "sources": [":"],
+        "topic": true,
+        "permissions": "&get_roles_by_permission",
+        "widget_collection_url": true,
+        "sources": [":partial"]
+    },
+    "Idea": {
+        "longTitle": "long_title",
+        "shortTitle": "short_title",
+        "definition": true,
+        "creationDate": "creation_date",
+        "order": "&get_order_from_first_parent",
+        "discussion": true,
+        "most_common_words": "most_common_words_prop",
+        "hidden": true,
+        "parents": true,
+        "parentId": "&get_first_parent_uri",
+        "inNextSynthesis": "&is_in_next_synthesis",
+        "numChildIdea": "&get_num_children",
+        "creation_ctx_url": "&get_widget_creation_urls",
+        "num_posts": true,
+        "num_read_posts": true,
+        "proposed_in_post": ":",
+        "widget_add_post_endpoint": true
+    },
+    "Criterion": {
+        "@extends": "Idea"
+    },
+    "Issue": {
+        "@extends": "Idea"
+    },
+    "Argument": {
+        "@extends": "Idea"
+    },
+    "Proposal": {
+        "@extends": "Idea"
+    },
+    "RootIdea": {
+        "@extends": "Idea",
+        "root": "'true",
+        "extracts": [":partial"],
+        "parents": true,
+        "parentId": false,
+        "num_orphan_posts": true,
+        "num_synthesis_posts": true
+    },
+    "IdeaLink": {
+        "target": true,
+        "source": true,
+        "order": true
+    },
+    "IdeaGraphView": {
+        "creation_date": true,
+        "discussion": false
+    },
+    "ExplicitSubGraphView": {
+        "@extends": "IdeaGraphView",
+        "ideas": [":partial"],
+        "idea_links": [":partial"]
+    },
+    "TableOfContents": {
+        "@extends": "IdeaGraphView",
+        "ideas": ["&get_ideas:partial"],
+        "idea_links": ["&get_idea_links:partial"]
+    },
+    "Synthesis": {
+        "@extends": "ExplicitSubGraphView",
+        "subject": true,
+        "introduction": true,
+        "conclusion": true,
+        "is_next_synthesis": true,
+        "ideas": [":id_only"]
+    },
+    "IdeaContentLink": {
+        "idea": true,
+        "content": true,
+        "creation_date": true,
+        "creator": true
+    },
+    "IdeaContentPositiveLink": {
+        "@extends": "IdeaContentLink"
+    },
+    "IdeaRelatedPostLink": {
+        "@extends": "IdeaContentPositiveLink"
+    },
+    "IdeaContentNegativeLink": {
+        "@extends": "IdeaContentLink"
+    },
+    "IdeaThreadContextBreakLink": {
+        "@extends": "IdeaContentNegativeLink"
+    },
+    "Extract": {
+        "idIdea": "idea",
+        "idPost": "content",
+        "target": true,
+        "created": "creation_date",
+        "idCreator": "creator",
+        "annotator_schema_version": "'\"v1.0\"",
+        "owner": true,
+        "quote": "body",
+        "order": true,
+        "discussion": false,
+        "ranges": ["text_fragment_identifiers:"],
+        "text": "annotation_text"
+    },
+    "TextFragmentIdentifier": {
+        "end": "xpath_end",
+        "endOffset": "offset_end",
+        "extract_id": false,
+        "start": "xpath_start",
+        "startOffset": "offset_start"
+    },
+    "DiscussionPermission": {
+        "discussion": true,
+        "permission": "&permission_name",
+        "role": "&role_name"
+    },
+    "ViewPost": {
+        "actor": true,
+        "post": true
+    },
+    "Widget": {
+        "discussion": true,
+        "settings": "settings_json",
+        "state": "state_json",
+        "user_states_url": "&get_user_states_url",
+        "user_state_url": "&get_user_state_url",
+        "widget_settings_url": "&get_settings_url",
+        "widget_state_url": "&get_state_url"
+    },
+    "BaseIdeaWidget": {
+        "@extends": "Widget",
+        "ideas_url": "&get_ideas_url",
+        "messages_url": "&get_messages_url",
+        "base_idea": ":"
+    },
+    "IdeaCreatingWidget": {
+        "@extends": "BaseIdeaWidget",
+        "ideas_hiding_url": "&get_ideas_hiding_url",
+        "confirm_ideas_url": "&get_confirm_ideas_url",
+        "confirm_messages_url": "&get_confirm_messages_url"
+    },
+    "CreativitySessionWidget": {
+        "@extends": "IdeaCreatingWidget"
+    },
+    "InspirationWidget": {
+        "@extends": "IdeaCreatingWidget"
+    },
+    "MultiCriterionVotingWidget": {
+        "@extends": "Widget",
+        "criteria_url": true
+    },
+    "BinaryVote": {
+        "idea": true,
+        "voter": true,
+        "vote_value": true
+    },
+    "LickertVote": {
+        "idea": true,
+        "voter": true,
+        "vote_value": true,
+        "range": true
+    }
+}

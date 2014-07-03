@@ -1,16 +1,26 @@
+$card-browser-width: 600px;
+$card-width: 340px;
+$card-min-height: 390px;
+
+.pointer{
+  cursor: pointer;
+}
+
 //Inspire me
 .cards {
   font-size: 12px;
-  width: 600px;
+  width: $card-browser-width;
   margin: 0 auto;
+  padding-top: 20px;
   .card-browser{
     position: relative;
   }
   .inspire-card{
     position: relative;
-    height: 390px;
-    width: 340px;
-    margin: 0 auto 10px auto;
+    height: $card-min-height;
+    min-height: $card-min-height;
+    width: $card-width;
+    margin: 0 auto 6px auto;
     display: table;
     border-left: 1px solid #cccccc;
     border-right: 1px solid #cccccc;
@@ -26,6 +36,9 @@
        right: 0;
        width:100%;
     }
+    .card-content {
+
+    }
     .card-bottom{
       height: 5px;
       background-color: #c7c2dd;
@@ -34,6 +47,14 @@
       right: 0;
       width:100%;
     }
+  }
+  #slot-machine {
+    position: absolute;
+    width: 150px;
+    height: 200px;
+    top: 30px;
+    left: 50%;
+    margin-left: $card-width/2; /* 170px; */
   }
   .question {
     width: 100%;
@@ -44,21 +65,25 @@
     #previousCardButton,
     #nextCardButton{
       position: absolute;
-      top: 50%;
+      top: 0;
       height: 24px;
       width: 24px;
-      margin-top: -12px;
       font-size: 20px;
       cursor: pointer;
       text-decoration: none;
     }
+    a.inactive:hover {
+      color: #DDDDDD;
+    }
     #previousCardButton {
-      left: 0;
+      left: 150px;
     }
     #nextCardButton {
-      right: 0;
+      right: 150px;
     }
-    #slot-machine {
+    #card-bottom-control {
+      position: relative;
+      height: 20px;
       font-size: 20px;
       text-align: center;
     }
@@ -69,120 +94,6 @@
   }
 }
 
-//Session page
-.session {
-  width: 95%;
-  margin: 0 auto;
-  .session-comment {
-    font-family: Helvetica, Arial, sans-serif;
-    padding-left: 10%;
-    height: 660px;
-    overflow-y: auto;
-    .thumbnail{
-      border:none;
-    }
-    .sub-comment {
-      padding: 5px;
-      background-color: #dddddd;
-      height: 65px;
-      textarea {
-        border-radius: 0;
-        height: 26px;
-        resize : none;
-        overflow-y: hidden;
-        padding: 3px;
-      }
-      .btn-subcomment {
-        margin-top: 5px;
-      }
-    }
-    .comment-top {
-      background-color: #dddddd;
-      border-bottom: 1px solid #ffffff;
-      font-size: 11px;
-      padding: 2px 7px;
-    }
-    .text-primary {
-      cursor: pointer;
-    }
-    .media, .media-body {
-      padding-top: 5px;
-    }
-    .icon-lamp {
-      color:#f0ad4e;
-    }
-    .comment-idea {
-      font-size: 12px;
-    }
-    .nb-summary {
-      background-color: #69bf13;
-      color: #fff;
-      padding: 0 6px 5px 6px;
-      text-shadow: none;
-      width: auto;
-      font-weight: bold;
-      -moz-border-radius: 50%;
-      -webkit-border-radius: 50%;
-      border-radius: 50%;
-    }
-    .rate {
-      width: 20px;
-      text-align: center;
-      border: none;
-    }
-    .rate-up, .rate-down {
-      cursor: pointer;
-    }
-    .media-comment {
-      margin-top: 0px;
-    }
-  }
-  .cards{
-    width: auto;
-    .bs-callout-info, .bs-callout-warning {
-      padding: 3px 10px;
-      margin:10px 0;
-    }
-    .slot-machine {
-      font-size: 20px;
-      text-align: center;
-      a{
-        text-decoration: none;
-      }
-    }
-    .card{
-      position: relative;
-      height: 390px;
-      width: 340px;
-      display: table;
-      padding: 10px;
-      text-align: justify;
-      margin: 2em 0 1em 7em;
-      border-left: #CCCCCC 1px solid !important;
-      border-right: #CCCCCC 1px solid !important;
-      p {
-        display: table-cell;
-        vertical-align: middle;
-      }
-      .card-top{
-        height: 5px;
-        background-color: #c7c2dd;
-        position: absolute;
-        top:0;
-        right: 0;
-        width:100%;
-      }
-      .card-bottom{
-        height: 5px;
-        background-color: #c7c2dd;
-        position: absolute;
-        bottom:0;
-        right: 0;
-        width:100%;
-      }
-    }
-  }
-}
 .card-comment {
   margin-top: 15px;
 }

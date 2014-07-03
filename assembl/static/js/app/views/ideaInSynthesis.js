@@ -15,28 +15,30 @@ function(Backbone, _, $, Idea, Segment, app, Permissions, CKEditorField, Message
          */
         template: app.loadTemplate('ideaInSynthesis'),
 
+        synthesis: null,
+        
         /**
          * @init
          */
         initialize: function(obj){
-            this.model.on('change:shortTitle change:longTitle change:segments', this.render, this);
+            this.listenTo(this.model, 'change:shortTitle change:longTitle change:segments', this.render);
+            this.synthesis = obj.synthesis || null;
             this.editing = false;
         },
 
         /**
          * The render
+         * @param renderParams {}
          * @return {IdeaInSynthesisView}
          */
         render: function(){
-            app.trigger('render');
-
             var
                 data = this.model.toJSON(),
                 authors = [],
                 segments = app.getSegmentsByIdea(this.model);
-
+            
             this.$el.addClass('synthesis-idea');
-
+            app.cleanTooltips(this.$el);
             segments.forEach(function(segment) {
                 var post = segment.getAssociatedPost();
                 if(post) {
@@ -52,9 +54,11 @@ function(Backbone, _, $, Idea, Segment, app, Permissions, CKEditorField, Message
             data.longTitle = this.model.getLongTitleDisplayText();
             data.authors = _.uniq(authors);
             data.subject = data.longTitle;
+            data.synthesis_is_published = this.synthesis.get("published_in_post")!=null;
 
             this.$el.html(this.template(data));
-            if(this.editing) {
+            app.initTooltips(this.$el);
+            if(this.editing  && data.synthesis_is_published === false) {
                 this.renderCKEditor();
             }
             this.renderReplyView();
@@ -87,6 +91,13 @@ function(Backbone, _, $, Idea, Segment, app, Permissions, CKEditorField, Message
          * renders the reply interface
          */
         renderReplyView: function(){
+            var that = this,
+            send_callback = function() {
+                if(app.messageList.panelIsLocked === false) {
+                    app.messageList.currentQuery.clearAllFilters();
+                }
+                app.setCurrentIdea(that.model);
+            };
             this.replyView = new MessageSendView({
                 'allow_setting_subject': false,
                 //TODO:  Benoitg:  Once we fix backend support for publishing, this needs to point to the synthesis message
@@ -98,7 +109,8 @@ function(Backbone, _, $, Idea, Segment, app, Permissions, CKEditorField, Message
                 'subject_label': null,
                 'default_subject': 'Re: ' + app.stripHtml(this.model.getLongTitleDisplayText()).substring(0,50),
                 'mandatory_body_missing_msg': i18n.gettext('You did not type a response yet...'),
-                'mandatory_subject_missing_msg': null
+                'mandatory_subject_missing_msg': null,
+                'send_callback': send_callback
             });
             this.$('.synthesisIdea-replybox').append(this.replyView.render().el);
         },
@@ -141,7 +153,6 @@ function(Backbone, _, $, Idea, Segment, app, Permissions, CKEditorField, Message
          * @event
          */
         onEditableAreaClick: function(ev){
-            console.log("onEditableAreaClick");
             if(app.getCurrentUser().can(Permissions.EDIT_IDEA)) {
                 this.editing = true;
                 this.render();

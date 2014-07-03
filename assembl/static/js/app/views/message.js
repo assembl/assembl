@@ -33,14 +33,19 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n, Permissions, Message
         isHoisted: false,
 
         /**
+         * Is the reply box currently visible
+         * @type {Boolean}
+         */
+        replyBoxShown: false,
+    
+        /**
          * @init
          * @param {MessageModel} obj the model
          */
         initialize: function(obj){
-            this.model.on('change:isSelected', this.onIsSelectedChange, this);
-            this.model.on('replacedBy', this.onReplaced, this);
-            this.model.on('showBody', this.onShowBody, this);
-            this.model.on('change', this.render, this);
+            this.listenTo(this.model, 'replacedBy', this.onReplaced);
+            this.listenTo(this.model, 'showBody', this.onShowBody);
+            this.listenTo(this.model, 'change', this.render);
             this.messageListView = obj.messageListView;
             this.viewStyle = this.messageListView.defaultMessageStyle;
             this.messageListView.on('annotator:destroy', this.onAnnotatorDestroy, this);
@@ -84,18 +89,22 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n, Permissions, Message
             app.trigger('render');
             var data = this.model.toJSON(),
                 children,
+                bodyFormatClass = null,
                 level;
-
             level = this.currentLevel !== null ? this.currentLevel : 1;
             if( ! _.isUndefined(level) ){
                 this.currentLevel = level;
             }
-
+            app.cleanTooltips(this.$el);
             this.setViewStyle(this.viewStyle);
                 
             data['id'] = data['@id'];
             data['date'] = app.formatDate(data.date);
             data['creator'] = this.model.getCreator();
+            if(this.model.get('bodyMimeType')) {
+                bodyFormatClass = "body_format_"+this.model.get('bodyMimeType').replace("/", "_"); 
+            }
+            data['bodyFormatClass'] = bodyFormatClass;
             data['viewStyle'] = this.viewStyle;
             // Do NOT change this, it's the message id stored in the database 
             // by annotator when storing message annotations
@@ -106,8 +115,9 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n, Permissions, Message
             
             this.$el.attr("id","message-"+ data['@id']);
             data['read'] = this.model.get('read')
+            data['user_is_connected'] = app.getCurrentUser() !== app.users.getUnknownUser();
             this.$el.addClass(data['@type']);
-            if (this.model.get('read')) {
+            if (this.model.get('read') || !data['user_is_connected']) {
                 this.$el.addClass('read');
                 this.$el.removeClass('unread');
             } else {
@@ -116,7 +126,7 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n, Permissions, Message
             }
             data = this.transformDataBeforeRender(data);
             this.$el.html( this.template(data) );
-
+            app.initTooltips(this.$el);
             app.initClipboard();
 
             this.replyView = new MessageSendView({
@@ -134,7 +144,13 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n, Permissions, Message
             this.postRender();
             app.messageList.initAnnotator();
             this.loadAnnotations();
-
+            if(this.replyBoxShown) {
+                this.openReplyBox();
+            }
+            else {
+                this.closeReplyBox();
+            };
+            
             return this;
         },
         
@@ -250,6 +266,7 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n, Permissions, Message
          */
         openReplyBox: function(){
             this.$('.message-replybox').show();
+            this.replyBoxShown = true;
         },
 
         /**
@@ -257,6 +274,7 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n, Permissions, Message
          */
         closeReplyBox: function(){
             this.$('.message-replybox').hide();
+            this.replyBoxShown = false;
         },
 
         /**
@@ -366,12 +384,6 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n, Permissions, Message
          * @event
          */
         onMessageTitleClick: function(ev){
-            if( ev ){
-                // Avoiding collapse if clicked on the link
-                if( ev.target.id === 'message-linkbutton' ){
-                    return;
-                }
-            }
             this.toggleViewStyle();
             this.render();
             if (this.viewStyle == this.availableMessageViewStyles.FULL_BODY) {

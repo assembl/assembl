@@ -1,22 +1,10 @@
 "use strict";
 
-var creativityServices = angular.module('creativityServices', ['ngResource']);
+var widgetServices = angular.module('creativityServices', ['ngResource']);
 
-creativityServices.factory('globalVideoConfig', function($http){
+widgetServices.factory('localConfig', function($http){
 
-    var api_rest = 'test/config_test.json';
-
-    return {
-        fetch : function() {
-            return $http.get(api_rest);
-        }
-    }
-
-});
-
-creativityServices.factory('globalConfig', function($http){
-
-    var api_rest = 'test/config_test.json';
+    var api_rest = 'config/local.json';
 
     return {
         fetch : function() {
@@ -26,53 +14,65 @@ creativityServices.factory('globalConfig', function($http){
 
 });
 
-creativityServices.factory('globalMessages', function($http){
-
-    var api_rest = 'test/session.json';
-
+/**
+ * CARD GAME
+ * */
+widgetServices.factory('cardGameService', function($http){
     return {
-        fetch: function() {
-            return $http.get(api_rest);
+        getCards: function(number){
+            var url = 'config/game_'+number+'.json';
+            return $http.get(url);
         }
     }
-
 });
 
-//CONFIG
-creativityServices.factory('Configuration', ['$resource', function($resource) {
-    return $resource('/data/Discussion/1/widgets', {}, {
-        getWidget: {
-            method:'POST',
-            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-            isArray:false,
-            transformResponse : function(data, headers){
+/**
+ * Resolve configuration before access to a controller
+ * */
+widgetServices.factory('configService', function($q, $http, utils){
+    return {
+      data: {},
+      getWidget: function(url){
+        var defer = $q.defer(),
+            data = this.data;
 
-                var header = headers().location;
-                    header = header.split(':')[1];
+        if(!url) defer.reject({message:'invalid url configuration'});
 
-                return $resource('/data/:widgetId', {widgetId: header});
-            }
-        }
-    });
+        var urlRoot = utils.urlApi(url);
 
-}]);
+        $http.get(urlRoot).success(function(response){
+            data.widget = response;
+            defer.resolve(data);
+        }).error(function(data, status){
 
-//CARD inspire me: send an idea to assembl
-creativityServices.factory('sendIdeaService', ['$resource',function($resource){
+            if(status === 401) utils.notification();
+
+            defer.reject({message:'error to get widget information'});
+        });
+
+        return defer.promise;
+      }
+    }
+});
+
+/**
+ * CARD inspire me: send an idea to assembl
+ * */
+widgetServices.factory('sendIdeaService', ['$resource',function($resource){
     return $resource('/api/v1/discussion/:discussionId/posts')
 }]);
 
-// WIP: use Angular's REST and Custom Services as our Model for Messages
-creativityServices.factory('Discussion', ['$resource', function($resource){
-    return $resource('/data/Discussion/:discussionId', {}, {
-        query: {method:'GET', params:{discussionId:'1'}, isArray:false}
-        });
+/**
+ * WIP: use Angular's REST and Custom Services as our Model for Messages
+ * */
+widgetServices.factory('DiscussionService', ['$resource', function($resource){
+    return $resource('/data/Discussion/:discussionId');
 }]);
 
 
 // JukeTube
 
-creativityServices.service('JukeTubeVideosService', ['$window', '$rootScope', '$log', function ($window, $rootScope, $log) {
+widgetServices.service('JukeTubeVideosService', ['$window', '$rootScope', '$log', function ($window, $rootScope, $log) {
 
   var service = this;
   var initialized = false;

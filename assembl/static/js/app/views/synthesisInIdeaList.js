@@ -14,7 +14,8 @@ function(Backbone, _, $, Idea, app, IdeaView){
          */
         render: function(){
             app.trigger('render');
-
+            app.cleanTooltips(this.$el);
+            
             var data = this.model.toJSON();
 
             this.$el.addClass('idealist-item');
@@ -26,6 +27,7 @@ function(Backbone, _, $, Idea, app, IdeaView){
             }
             
             this.$el.html(this.template(data));
+            app.initTooltips(this.$el);
             return this;
         },
 
@@ -41,7 +43,9 @@ function(Backbone, _, $, Idea, app, IdeaView){
          */
         onTitleClick: function(){
             if( app.messageList ){
-                app.messageList.addFilterIsSynthesMessage();
+                app.messageList.filterThroughPanelLock(function(){
+                    app.messageList.addFilterIsSynthesMessage();
+                }, 'syncWithCurrentIdea');
             }
             app.setCurrentIdea(null);
         }

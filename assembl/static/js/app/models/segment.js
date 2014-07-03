@@ -36,6 +36,23 @@ function(app, Base, _, User, Message){
             // We need to create a copy 'cause annotator destroy all ranges
             // once it creates the highlight
             this.attributes._ranges = _ranges;
+            var that = this;
+            this.listenTo(this,"change:idIdea", function(){
+                var previousIdea, 
+                    idea;
+                if(that.previous("idIdea") !== null) {
+                    
+                    previousIdea = app.ideaList.ideas.get(that.previous("idIdea"));
+                    //console.log("Segment:initialize:triggering idea change (previous idea)");
+                    previousIdea.trigger('change');
+                }
+                if(that.get('idIdea') !== null) {
+                    
+                    idea = app.ideaList.ideas.get(that.get('idIdea'));
+                    //console.log("Segment:initialize:triggering idea change (new idea)");
+                    idea.trigger('change');
+                }
+            })
 
             // cleaning
             delete this.attributes.highlights;
@@ -164,6 +181,20 @@ function(app, Base, _, User, Message){
          */
         model: SegmentModel,
 
+        /**
+         * @init
+         */
+        initialize: function(){
+            this.listenTo(this,"add remove", function(segment){
+                var idea;
+                if(segment.get('idIdea') !== null) {
+                    idea = app.ideaList.ideas.get(segment.get('idIdea'));
+                    //console.log("SegmentCollection:initialize:triggering idea change (new idea)");
+                    idea.trigger('change');
+                }
+            });
+        },
+        
         /**
          * Return the segments to compose the clipboard
          * @return {Array<Segment>}

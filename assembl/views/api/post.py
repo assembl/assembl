@@ -3,7 +3,7 @@ import json
 from math import ceil
 from cornice import Service
 from pyramid.httpexceptions import HTTPNotFound, HTTPUnauthorized, HTTPBadRequest
-from pyramid.i18n import get_localizer, TranslationStringFactory
+from pyramid.i18n import TranslationStringFactory
 
 from pyramid.security import authenticated_userid
 
@@ -48,7 +48,7 @@ def get_posts(request):
     order can be chronological, reverse_chronological
     message, is_unread=false returns only read messages)
     """
-    localizer = get_localizer(request)
+    localizer = request.localizer
     discussion_id = int(request.matchdict['discussion_id'])
     discussion = Discussion.get(id=int(discussion_id))
     if not discussion:
@@ -146,7 +146,6 @@ def get_posts(request):
 
     # Post read/unread management
     is_unread = request.GET.get('is_unread')
-    print "\n"+repr(is_unread)+"\n"
     if user_id:
         posts = posts.outerjoin(ViewPost,
                     and_(ViewPost.actor_id==user_id, ViewPost.post_id==PostClass.id)
@@ -287,7 +286,7 @@ def create_post(request):
     """
     We use post, not put, because we don't know the id of the post
     """
-    localizer = get_localizer(request)
+    localizer = request.localizer
     request_body = json.loads(request.body)
     user_id = authenticated_userid(request)
     user = Post.db.query(User).filter_by(id=user_id).one()

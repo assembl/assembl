@@ -21,7 +21,10 @@
       margin-bottom: 10px;
     }
   }
-
+  .inline {
+    width: '';
+    display:inline;
+  }
   .register {
     width: 300px;
   }
@@ -75,7 +78,7 @@
   }
 
   .signinSeparator {
-    margin: 20px 0 0 0;
+    margin: 50px 0 0 0;
     width:20px;
     position:relative;
 
