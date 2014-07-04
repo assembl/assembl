@@ -178,7 +178,7 @@ require([
 
     // Message
     app.messageList = new MessageList({el: '#messageList', button: '#button-messages'}).render();
-    app.messageList.loadInitialData();
+    app.messageList.messages.fetch({reset:true});
 
     // Synthesis
     app.syntheses = new Synthesis.Collection();
