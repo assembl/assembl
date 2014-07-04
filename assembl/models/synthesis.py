@@ -968,6 +968,13 @@ JOIN post AS family_posts ON (
         return [wl.context_url for wl in self.widget_links
                 if isinstance(wl, GeneratedIdeaWidgetLink)]
 
+    def get_notifications(self):
+        for widget_link in self.widget_links:
+            if not isinstance(self, BaseIdeaWidgetLink):
+                continue
+            for n in widget_link.widget.has_notification():
+                yield n
+
     @classmethod
     def get_all_idea_links(cls, discussion_id):
         target = aliased(cls)

@@ -135,6 +135,7 @@
         "creation_ctx_url": "&get_widget_creation_urls",
         "num_posts": true,
         "num_read_posts": true,
+        "notifications": "&get_notifications",
         "proposed_in_post": ":",
         "widget_add_post_endpoint": true
     },
