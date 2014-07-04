@@ -362,6 +362,7 @@ class CreativitySessionWidget(IdeaCreatingWidget):
                     Widget.id == self.id)))
         return dict(
             data,
+            widget_url=self.uri(),
             time_to_end=time_to_end,
             num_participants=len(participant_ids),
             num_ideas=len(self.generated_idea_links))
