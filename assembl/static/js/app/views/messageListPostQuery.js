@@ -334,8 +334,10 @@ define(['app', 'i18n', 'sprintf'], function(app, i18n, sprintf){
         /**
          * Execute the query
          * @param {function} success callback to call when query is complete
+         * @param {function} success_data_changed callback to call when query is complete only
+         * when the data actually changed.  Will be called before success
          */
-        this.execute = function(success){
+        this.execute = function(success, success_data_changed){
             var that = this,
                 url = app.getApiUrl('posts'),
                 params = {},
@@ -344,7 +346,9 @@ define(['app', 'i18n', 'sprintf'], function(app, i18n, sprintf){
                 value = null;
 
             if (this._resultsAreValid){
-                success(that._results);
+                if(_.isFunction(success)){
+                    success(that._results);
+                }
             } else {
                 for (var filterDefPropName in this.availableFilters) {
                     filterDef = this.availableFilters[filterDefPropName];
@@ -373,7 +377,13 @@ define(['app', 'i18n', 'sprintf'], function(app, i18n, sprintf){
                     });
                     that._results = ids;
                     that._resultsAreValid = true;
-                    success(that._results);
+                    
+                    if(_.isFunction(success_data_changed)){
+                        success_data_changed(that._results);
+                    }
+                    if(_.isFunction(success)){
+                        success(that._results);
+                    }
                 });
             }
             

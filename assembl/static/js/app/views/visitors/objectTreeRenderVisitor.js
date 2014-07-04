@@ -2,15 +2,17 @@ define([],function(){
   /** A visitor function to be passed to to a visit function such as 
    * Idea.visitBreadthFirst or MessageCollection.visitDepthFirst
    * 
-   * data_by_object: output param, dict containing for each object traversed the 
+   * @param data_by_object: output param, dict containing for each object traversed the 
    *    render information indexed by the object id.  See the data variable inside
    *    the function body for definition of the structure
-   * roots: output param. The objects that have no parents in the set
-   * filter_function:  The object is passed to this callback.  If it returns:
+   * @paramorder_lookup_table output param, a list containing every object id retaines
+   * indexed by traversal order
+   * @paramroots: output param. The objects that have no parents in the set
+   * @paramfilter_function:  The object is passed to this callback.  If it returns:
    *  - false the object won't be part of the returned set.
    *  - 0 instead of false, all descendants of the object will also be excluded
    */
-  function objectTreeRenderVisitor(data_by_object, roots, filter_function) {
+  function objectTreeRenderVisitor(data_by_object, order_lookup_table, roots, filter_function) {
     if (filter_function === undefined) {
         filter_function = function(node) {return true;};
     }
@@ -50,9 +52,11 @@ define([],function(){
                 'is_last_sibling': true,
                 'true_sibling': true_sibling,
                 'children': [],
-                'last_ancestor_id': last_ancestor_id
+                'last_ancestor_id': last_ancestor_id,
+                'traversal_order': order_lookup_table.length
             };
             data_by_object[object_id] = data;
+            order_lookup_table.push(object_id);
         }
         // This allows you to return 0 vs false and cut recursion short.
         return filter_result !== 0;

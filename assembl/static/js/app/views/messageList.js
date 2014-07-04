@@ -84,19 +84,10 @@ function(Backbone, _, $, app, PanelView, MessageFamilyView, Message, i18n, PostQ
 
             /**
              * @ghourlier
-             * TODO: Usually it would necessary tu push notification rather than fetch every time the model change
+             * TODO: Usually it would necessary to push notification rather than fetch every time the model change
              * Need to be a call to action
              * */
             this.listenTo(this.messages, 'add reset', function(){
-
-                var emptySubject = this.$('.messageSend .messageSend-subject').val(),
-                    emptyBody = this.$('.messageSend .messageSend-body').val();
-
-                if(emptySubject != '' && emptySubject !== undefined){
-
-                  return;
-                }
-
                 that.messagesFinishedLoading = true;
                 that.invalidateResultsAndRender();
                 that.initAnnotator();
@@ -215,32 +206,6 @@ function(Backbone, _, $, app, PanelView, MessageFamilyView, Message, i18n, PostQ
             this.offsetStart = 0;
             this.offsetEnd = MORE_PAGES_NUMBER;
         },
-        
-        /**
-         * Returns the messages with no parent at all or a parent not in the 
-         * list of the messages to be rendered
-         * TODO:  This is used in threading, but is sub-optimal as it won't 
-         * tie messages to their grandparent in partial views.  benoitg
-         *
-         * @return {Message[]}
-         */
-        getRootMessagesToDisplay: function(offsetStart, offsetEnd){
-            var toReturn = [],
-                that = this,
-                messages = this.messages;
-
-            messages.each(function(model){
-                var parentId = model.get('parentId'),
-                    id = model.getId(),
-                    hasNoParent = (parentId === null || that.messageIdsToDisplay.indexOf(parentId) == -1 );
-
-                if( that.messageIdsToDisplay.indexOf(id) >= 0 && hasNoParent ){
-                    toReturn.push(model);
-                }
-            });
-
-            return toReturn;
-        },
 
         getPreviousScrollTarget: function(){
             var panelBody = this.$('.panel-body'),
@@ -332,36 +297,36 @@ function(Backbone, _, $, app, PanelView, MessageFamilyView, Message, i18n, PostQ
          *
          * @return {message[]}
          */
-        applyFilterToThreadedMessages: function(messages, requestedOffsets, returnedDataOffsets){
-            var toReturn = [],
-                that = this,
-                index = requestedOffsets['offsetStart'],
-                currentIndex = 0,
-                okToGo = false;
-
-            messages.every(function(message){
-                var spaceToDisplay = requestedOffsets['offsetEnd'] - index,
-                    spaceValue = message.getDescendantsCount();
-
-                if( currentIndex < index && !okToGo ){
-                    currentIndex += spaceValue;
-                    return true; // continue;
+        calculateThreadedMessagesOffsets: function(data_by_object, order_lookup_table, requestedOffsets){
+            var returnedDataOffsets = {},
+                numMessages = order_lookup_table.length,
+                i;
+            //Find preceding root message, and include it
+            //It is not possible that we do not find one.
+            for(i=requestedOffsets['offsetStart']; i>=0; i--) {
+                if(data_by_object[order_lookup_table[i]]['last_ancestor_id']==undefined){
+                    returnedDataOffsets['offsetStart']=i;
+                    break;
                 }
-                okToGo = true;
-
-                if( spaceToDisplay >= spaceValue ){ // It fits !
-                    index += spaceValue;
-                    toReturn.push(message);
-                } else { // Doesn't fit
-                    if( toReturn.length === 0 ){
-                        toReturn.push(message);
+            }
+            if(requestedOffsets['offsetEnd']>numMessages) {
+                returnedDataOffsets['offsetEnd']=numMessages;
+            }
+            else {
+                //Find next root message, and exclude it
+                for(i=requestedOffsets['offsetEnd']; i<numMessages; i++) {
+                    if(data_by_object[order_lookup_table[i]]['last_ancestor_id']==undefined){
+                        returnedDataOffsets['offsetEnd']=i-1;
+                        break;
                     }
-                    return false; // break;
                 }
-                return true; // continue;
-            });
-            console.log('WRITEME:  returnOffsets for threaded view');
-            return toReturn;
+                if (returnedDataOffsets['offsetEnd']==undefined) {
+                    //It's possible we didn't find a root, if we are at the very end of the list
+                    returnedDataOffsets['offsetEnd']=numMessages;
+                }
+            }
+            
+            return returnedDataOffsets;
         },
         
         /**                
@@ -395,27 +360,22 @@ function(Backbone, _, $, app, PanelView, MessageFamilyView, Message, i18n, PostQ
                 ideaList = this.$('.idealist'),
                 views,
                 models,
-                returnedOffsets = {},
-                view_data = [],
-                roots = [];
+                offsets,
+                returnedOffsets = {};
 
+                
             /* The MessageFamilyView will re-fill the renderedMessageViewsCurrent
              * array with the newly calculated rendered MessageViews.
              * It will use the array of renderedMessageViewsPrevious as a cache
              * which massively speeds up rendering when switching between views.
              */
-            function inFilter(message) {
-                return that.messageIdsToDisplay.indexOf(message.getId()) >= 0;
-                };
             this.renderedMessageViewsPrevious = _.clone(this.renderedMessageViewsCurrent);
             this.renderedMessageViewsCurrent = {};
             console.log("requestedOffsets:",requestedOffsets);
             if (this.currentViewStyle == this.ViewStyles.THREADED) {
-                models = this.getRootMessagesToDisplay();
-                this.messages.visitDepthFirst(objectTreeRenderVisitor(view_data, roots, inFilter));
-                //console.log("view_data after visiting messages", view_data);
-                models = this.applyFilterToThreadedMessages(models, requestedOffsets, returnedOffsets);
-                views = this.getRenderedMessagesThreaded(models, 1, view_data);
+                models = this.visitorRootMessagesToDisplay;
+                returnedOffsets = this.calculateThreadedMessagesOffsets(this.visitorViewData, that.visitorOrderLookupTable, requestedOffsets);
+                views = this.getRenderedMessagesThreaded(models, 1, this.visitorViewData, returnedOffsets);
             } else {
                 views = this.getRenderedMessagesFlat(this.getAllMessagesToDisplay(), requestedOffsets, returnedOffsets);
             }
@@ -433,15 +393,15 @@ function(Backbone, _, $, app, PanelView, MessageFamilyView, Message, i18n, PostQ
             }
 
             if( this.offsetStart <= 0 ){
-                this.$('#messageList-toparea').hide();
+                this.$('#messageList-toparea').addClass('hidden');
             } else {
-                this.$('#messageList-toparea').show();
+                this.$('#messageList-toparea').removeClass('hidden');
             }
 
             if( this.offsetEnd >= this.messages.length ){
-                this.$('#messageList-bottomarea').hide();
+                this.$('#messageList-bottomarea').addClass('hidden');
             } else {
-                this.$('#messageList-bottomarea').show();
+                this.$('#messageList-bottomarea').removeClass('hidden');
             }
 
             this.initAnnotator();
@@ -453,17 +413,8 @@ function(Backbone, _, $, app, PanelView, MessageFamilyView, Message, i18n, PostQ
         showNextMessages: function(){
             var numMessagesInQuery = this.messages.length,
             requestedOffsets = {};
-/* This belongs elsewhere 
-            requestedOffsets['offsetEnd'] =  this.offsetEnd + MORE_PAGES_NUMBER;
-            if( requestedOffsets['offsetEnd'] > numMessagesInQuery ){
-                requestedOffsets['offsetEnd'] = numMessagesInQuery;
-            }*/
 
-            if (this.currentViewStyle == this.ViewStyles.THREADED) {
-                requestedOffsets = this.getNextMessagesRequestedOffsetsThreaded();
-            } else {
-                requestedOffsets = this.getNextMessagesRequestedOffsetsFlat();
-            }
+            requestedOffsets = this.getNextMessagesRequestedOffsets();
 
             this.showMessages(requestedOffsets);
         },
@@ -473,11 +424,8 @@ function(Backbone, _, $, app, PanelView, MessageFamilyView, Message, i18n, PostQ
          */
         showPreviousMessages: function(){
             var requestedOffsets = {};
-            if (this.currentViewStyle == this.ViewStyles.THREADED) {
-                requestedOffsets = this.getPreviousMessagesRequestedOffsetsThreaded();
-            } else {
-                requestedOffsets = this.getPreviousMessagesRequestedOffsetsFlat();
-            }
+
+            requestedOffsets = this.getPreviousMessagesRequestedOffsets();
 
             this.showMessages(requestedOffsets);
         },
@@ -486,7 +434,7 @@ function(Backbone, _, $, app, PanelView, MessageFamilyView, Message, i18n, PostQ
          * Get the requested offsets when scrolling down
          * @private
          */
-        getNextMessagesRequestedOffsetsFlat: function(){
+        getNextMessagesRequestedOffsets: function(){
             var retval = {};
 
             retval['offsetEnd'] = this.offsetEnd + MORE_PAGES_NUMBER;
@@ -497,40 +445,7 @@ function(Backbone, _, $, app, PanelView, MessageFamilyView, Message, i18n, PostQ
             else {
                 retval['offsetStart'] = this.offsetStart;
             }
-            return retval;
-        },
-
-        /**
-         * Sets the offsetStart to the right point
-         * @private
-         */
-        getNextMessagesRequestedOffsetsThreaded: function(){
-            var currentNumberOfMessagesDisplayed = this.getCurrentNumberOfMessagesDisplayed(),
-                spaceValue = this.offsetEnd - this.offsetStart,
-                numMessagesInQuery = this.messages.length,
-                retval = {};
-            
-            console.log("getNextMessagesRequestedOffsetsThreaded(): currentNumberOfMessagesDisplayed:", currentNumberOfMessagesDisplayed);
-            console.log("getNextMessagesRequestedOffsetsThreaded(): offsetStart:", this.offsetStart, "offsetEnd:", this.offsetEnd);
-            console.log("getNextMessagesRequestedOffsetsThreaded(): numMessagesInQuery:", numMessagesInQuery);
-            if( currentNumberOfMessagesDisplayed > spaceValue ){
-                this.offsetStart += currentNumberOfMessagesDisplayed;
-                if( this.offsetStart > numMessagesInQuery ){
-                    retval['offsetStart'] = numMessagesInQuery - 1;
-                    spaceValue = 1;
-                }
-
-                retval['offsetEnd'] = retval['offsetStart'] + spaceValue;
-            }
-            /*
-            do {
-                spaceValue = retval['offsetEnd'] - retval['offsetStart'];
-
-                if( spaceValue > MAX_MESSAGES_IN_DISPLAY ){
-                    this.offsetStart += 1;  //INCORRECT!!!!
-                }
-            } while( spaceValue > MAX_MESSAGES_IN_DISPLAY );
-            */
+            retval['scrollTransitionWasAtOffset'] = this.offsetEnd;
             return retval;
         },
 
@@ -538,7 +453,7 @@ function(Backbone, _, $, app, PanelView, MessageFamilyView, Message, i18n, PostQ
          * Get the requested offsets when scrooling up
          * @private
          */
-        getPreviousMessagesRequestedOffsetsFlat: function(){
+        getPreviousMessagesRequestedOffsets: function(){
             var messagesInDisplay,
             retval = {};
 
@@ -554,39 +469,8 @@ function(Backbone, _, $, app, PanelView, MessageFamilyView, Message, i18n, PostQ
             else {
                 retval['offsetEnd'] = this.offsetEnd;
             }
+            retval['scrollTransitionWasAtOffset'] = this.offsetStart;
             return retval;
-        },
-
-        /**
-         * Sets the offsetEnd to the right point
-         * @private
-         */
-        getPreviousMessagesRequestedOffsetsThreaded: function(){
-            this.offsetStart -= MORE_PAGES_NUMBER;
-            if( this.offsetStart < 0 ){
-                this.offsetStart = 0;
-            }
-
-            var currentNumberOfMessagesDisplayed = this.getCurrentNumberOfMessagesDisplayed(),
-                spaceValue = this.offsetEnd - this.offsetStart,
-                reduceEndCount = 0;
-
-            do {
-                spaceValue = this.offsetEnd - this.offsetStart;
-                if( currentNumberOfMessagesDisplayed > spaceValue ){
-                    this.offsetStart -= MORE_PAGES_NUMBER;
-                    reduceEndCount += 1;
-                }
-
-                if( this.offsetStart < 0 ){
-                    this.offsetStart = 0;
-                    break;
-                }
-            } while( currentNumberOfMessagesDisplayed > spaceValue );
-
-            _.each(_.range(reduceEndCount), function(){
-                this.offsetEnd -= MORE_PAGES_NUMBER;
-            });
         },
 
         /**
@@ -654,11 +538,12 @@ function(Backbone, _, $, app, PanelView, MessageFamilyView, Message, i18n, PostQ
 
             // Resetting the messages
             this.resetOffsets();
-            this.showMessages({
-                offsetStart: 0,
-                offsetEnd: MORE_PAGES_NUMBER
-                });
-            
+            if(this.messagesFinishedLoading) {
+                this.showMessages({
+                    offsetStart: 0,
+                    offsetEnd: MORE_PAGES_NUMBER
+                    });
+            }
             this.scrollToPreviousScrollTarget(previousScrollTarget);
             this.trigger("render_complete", "Render complete");
             
@@ -676,6 +561,26 @@ function(Backbone, _, $, app, PanelView, MessageFamilyView, Message, i18n, PostQ
                 if(that.currentlyRendering) return "a render is already in progress, ";
                 else return "no render already in progress, ";
             }
+            var successCallback = function(data){
+                that = that.render_real();
+                that.unblockPanel();
+                that.trigger("render_complete", "Render complete");
+            }
+            var changedDataCallback = function(data) {
+                function inFilter(message) {
+                    return that.messageIdsToDisplay.indexOf(message.getId()) >= 0;
+                    };
+                that.messageIdsToDisplay = data;
+                that.visitorViewData = {};
+                that.visitorOrderLookupTable = [];
+                that.visitorRootMessagesToDisplay = [];
+                that.messages.visitDepthFirst(objectTreeRenderVisitor(that.visitorViewData, that.visitorOrderLookupTable, that.visitorRootMessagesToDisplay, inFilter));
+                /*console.log("visitorViewData after visiting messages", that.visitorViewData);
+                console.log("visitorOrderLookupTable after visiting messages", that.visitorOrderLookupTable);
+                console.log("visitorRootMessagesToDisplay after visiting messages", that.visitorRootMessagesToDisplay);*/
+            }
+
+            
             if(app.debugRender) {
                 console.log("messageList:render() is firing, "+renderStatus()+this.messages.length+" messages in collection.");
             }
@@ -687,15 +592,11 @@ function(Backbone, _, $, app, PanelView, MessageFamilyView, Message, i18n, PostQ
 
             if(this.messagesFinishedLoading) {
                 this.blockPanel();
-                this.currentQuery.execute(function(data){
-                    that.messageIdsToDisplay = data;
-                    that = that.render_real();
-                    that.unblockPanel();
-                    that.trigger("render_complete", "Render complete");
-                });
+                this.currentQuery.execute(successCallback,
+                changedDataCallback);
             } else {
-                this.blockPanel();
                 this.render_real();
+                this.blockPanel();
             }
             this.currentlyRendering = false;
             return this;
@@ -779,17 +680,18 @@ function(Backbone, _, $, app, PanelView, MessageFamilyView, Message, i18n, PostQ
         
         /**
          * Return a list with all views.el already rendered for threaded views
-         * @param {Message.Model[]} messages
+         * @param {Message.Model[]} list of root messages to render at the current level
          * @param {Number} [level=1] The current hierarchy level
          * @param {Object[]} data_by_object render information from ideaRendervisitor
          * @return {HTMLDivElement[]}
          */
-        getRenderedMessagesThreaded: function(messages, level, data_by_object){
+        getRenderedMessagesThreaded: function(messages, level, data_by_object, offsets){
             var list = [],
                 i = 0,
                 len = messages.length,
                 view, model, children, prop, isValid,
-                last_sibling_chain;
+                last_sibling_chain,
+                current_message_info;
             /**  [last_sibling_chain] which of the view's ancestors are the last child of their respective parents.
              * 
              * @param message
@@ -813,55 +715,39 @@ function(Backbone, _, $, app, PanelView, MessageFamilyView, Message, i18n, PostQ
             if( _.isUndefined(level) ){
                 level = 1;
             }
-            
 
-            // We need to identify the "last" message of the series while taking
-            // the filter into account. It is easier to start from the end.
-            var found = false, justfound = true;
-
-            for (i = len - 1; i >= 0; i--) {
+            for (i; i < len; i++) {
                 model = messages[i];
-                isValid = (this.messageIdsToDisplay.indexOf(model.getId()) >= 0);
-            /*console.log("length: ", len);
-            console.log(this.messageIdsToDisplay);*/
-                if( isValid ) {
-                    /*console.log(model);
-                    console.log("Message was valid: "+model.get('subject')+", "+model.get('idCreator'));*/
-                    if(data_by_object[model.getId()]!==undefined) {
-                        data_by_object[model.getId()]['last_sibling_chain'] = buildLastSibblingChain(model, data_by_object);
+                current_message_info = data_by_object[model.getId()];
+                if((current_message_info['traversal_order'] >= offsets['offsetStart'])
+                   && (current_message_info['traversal_order'] <= offsets['offsetEnd'])){
+                    if(current_message_info['last_sibling_chain'] == undefined) {
+                        current_message_info['last_sibling_chain'] = buildLastSibblingChain(model, data_by_object);
                     }
-                    last_sibling_chain = data_by_object[model.getId()]['last_sibling_chain']
+                    last_sibling_chain = current_message_info['last_sibling_chain']
                     //console.log(last_sibling_chain);
                     view = new MessageFamilyView({model:model, messageListView:this}, last_sibling_chain);
                     view.currentLevel = level;
-                    found = true;
-                    children = model.getChildren();
-                    var subviews = this.getRenderedMessagesThreaded(children, level+1, data_by_object);
+                    children = current_message_info['children'];
+                    var subviews = this.getRenderedMessagesThreaded(children, level+1, data_by_object, offsets);
                     view.hasChildren = (subviews.length > 0);
                     list.push(view.render().el);
                     view.$('.messagelist-children').append( subviews );
-                }
-                if (!found && this.hasDescendantsInFilter(model)) {
-                    found = true;
-                }
-                if (found && justfound) {
-                    justfound = false;
-                }
-                if (isValid || !found) {
-                    // optimization: we already computed descendants.
-                    continue;
-                }
-                if (!isValid && this.hasDescendantsInFilter(model)) {
-                    //Generate ghost message
-                    var ghost_element = $('<div class="message message--skip"><div class="skipped-message"></div><div class="messagelist-children"></div></div>');
-                    console.log("Invalid message was:",model);
-                    list.push(ghost_element);
-                    children = model.getChildren();
-                    ghost_element.find('.messagelist-children').append( this.getRenderedMessagesThreaded(
-                        children, level+1, data_by_object) );
+    
+                    /* TODO:  benoitg:  We need good handling when we skip a grandparent, but I haven't ported this code yet.
+                     * We should also handle the case where 2 messages have the same parent, but the parent isn't in the set */
+                    /*if (!isValid && this.hasDescendantsInFilter(model)) {
+                        //Generate ghost message
+                        var ghost_element = $('<div class="message message--skip"><div class="skipped-message"></div><div class="messagelist-children"></div></div>');
+                        console.log("Invalid message was:",model);
+                        list.push(ghost_element);
+                        children = model.getChildren();
+                        ghost_element.find('.messagelist-children').append( this.getRenderedMessagesThreaded(
+                            children, level+1, data_by_object) );
+                    }
+                    */
                 }
             }
-            list.reverse();
             return list;
         },
 

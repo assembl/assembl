@@ -100,6 +100,7 @@ function(Backbone, _, Idea, IdeaLink, IdeaView, ideaGraphLoader, app, Types, All
             rootIdeaDirectChildrenModels = [],
             filter = {},
             view_data = {},
+            order_lookup_table = [],
             roots = [];
             
             function excludeRoot(idea) {return idea != rootIdea && !idea.hidden; };
@@ -144,7 +145,7 @@ function(Backbone, _, Idea, IdeaLink, IdeaView, ideaGraphLoader, app, Types, All
                 var allMessagesInIdeaListView = new AllMessagesInIdeaListView({model:rootIdea});
                 list.appendChild(allMessagesInIdeaListView.render().el);
                 
-                rootIdea.visitDepthFirst(objectTreeRenderVisitor(view_data, roots, excludeRoot));
+                rootIdea.visitDepthFirst(objectTreeRenderVisitor(view_data, order_lookup_table, roots, excludeRoot));
                 rootIdea.visitDepthFirst(ideaSiblingChainVisitor(view_data));
             }
             
