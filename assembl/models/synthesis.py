@@ -969,6 +969,7 @@ JOIN post AS family_posts ON (
                 if isinstance(wl, GeneratedIdeaWidgetLink)]
 
     def get_notifications(self):
+        from .widgets import BaseIdeaWidgetLink
         for widget_link in self.widget_links:
             if not isinstance(self, BaseIdeaWidgetLink):
                 continue
