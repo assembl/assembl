@@ -86,6 +86,8 @@ function(Backbone, _, $, app, PanelView, MessageFamilyView, Message, i18n, PostQ
              * @ghourlier
              * TODO: Usually it would necessary to push notification rather than fetch every time the model change
              * Need to be a call to action
+             * Benoitg:  Why?  There is no way to know if the message is, or isn't relevent to the user, and worthy
+             * of notification.  Everything else updates realtime, why make an exception for messages?
              * */
             this.listenTo(this.messages, 'add reset', function(){
                 that.messagesFinishedLoading = true;
@@ -94,11 +96,6 @@ function(Backbone, _, $, app, PanelView, MessageFamilyView, Message, i18n, PostQ
 
             });
 
-            //this.listenTo(this.messages, 'add', this.invalidateResultsAndRender);
-            // TODO:  Benoitg:  I didn't write this part, but i think it needs a
-            // re-render, not just an init
-            // this.listenTo(this.messages, 'change', this.initAnnotator);
-            // TODO:  FIXME!!! Benoitg - 2014-05-05
             this.listenTo(app.segmentList.segments, 'add remove reset', this.initAnnotator);
             
             var that = this;

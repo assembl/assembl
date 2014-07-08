@@ -320,9 +320,11 @@ define(['app', 'i18n', 'sprintf'], function(app, i18n, sprintf){
          */
         this.setView = function(viewDef){
             var retval = false;
-            this.invalidateResults();
             if(viewDef) {
-                this._view = viewDef;
+                if(this._view._server_order_param_value !== viewDef._server_order_param_value){
+                        this._view = viewDef;
+                        this.invalidateResults();
+                }
                 retval = true;
             }
             else {
