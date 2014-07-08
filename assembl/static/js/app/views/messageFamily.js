@@ -54,9 +54,9 @@ function(Backbone, _, Moment, ckeditor, app, Types, Message, MessageView, Synthe
 
             app.trigger('render');
             var data = this.model.toJSON(),
-            children,
-            level,
-            messageView;
+                children,
+                messageView;
+
             level = this.currentLevel !== null ? this.currentLevel : 1;
             app.cleanTooltips(this.$el);
             if( ! _.isUndefined(level) ){
@@ -142,16 +142,9 @@ function(Backbone, _, Moment, ckeditor, app, Types, Message, MessageView, Synthe
          * @event
          */
         onCollapsedChange: function(){
-            //var collapsed = this.model.get('collapsed');
-            var collapsed = this.collapsed;
-            var target = this.$el;
-            /* I don't understand this benoitg
-             var link = target.find(">.message-family-container");
-            if (link.length == 1) {
-                target = link;
-            }
-             */
-            var children = target.find(">.messagelist-children").last();
+            var collapsed = this.collapsed,
+                target = this.$el,
+                children = target.find(">.messagelist-children").last();
             if( collapsed ){
                 this.$el.removeClass('message--expanded');
                 children.hide();

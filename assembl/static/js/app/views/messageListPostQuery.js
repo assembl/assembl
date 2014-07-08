@@ -273,20 +273,25 @@ define(['app', 'i18n', 'sprintf'], function(app, i18n, sprintf){
          * @return true if filter(s) were cleared
          */
         this.clearFilter = function(filterDef, value){
-            var retval = false;
+            var retval = false,
+                i = 0,
+                len;
+
             this.invalidateResults();
             if(filterDef.id in this._query) {
-                for (var i=0;i<this._query[filterDef.id].length;i++) {
-                    if(value == null || this._query[filterDef.id][i].value.toString() == value.toString()) {
+                len = this._query[filterDef.id].length;
+                for (; i < len; i++) {
+                    if(value === null || this._query[filterDef.id][i].value.toString() == value.toString()) {
                         this._query[filterDef.id].splice(i, 1);
                         retval = true;
                     }
                 }
 
-                if(this._query[filterDef.id].length == 0) {
+                if(len === 0) {
                     delete this._query[filterDef.id];
                 }
             }
+
             return retval;
         };
 
@@ -315,9 +320,11 @@ define(['app', 'i18n', 'sprintf'], function(app, i18n, sprintf){
          */
         this.setView = function(viewDef){
             var retval = false;
-            this.invalidateResults();
             if(viewDef) {
-                this._view = viewDef;
+                if(this._view._server_order_param_value !== viewDef._server_order_param_value){
+                        this._view = viewDef;
+                        this.invalidateResults();
+                }
                 retval = true;
             }
             else {
@@ -329,8 +336,10 @@ define(['app', 'i18n', 'sprintf'], function(app, i18n, sprintf){
         /**
          * Execute the query
          * @param {function} success callback to call when query is complete
+         * @param {function} success_data_changed callback to call when query is complete only
+         * when the data actually changed.  Will be called before success
          */
-        this.execute = function(success){
+        this.execute = function(success, success_data_changed){
             var that = this,
                 url = app.getApiUrl('posts'),
                 params = {},
@@ -339,11 +348,12 @@ define(['app', 'i18n', 'sprintf'], function(app, i18n, sprintf){
                 value = null;
 
             if (this._resultsAreValid){
+                if(_.isFunction(success)){
                     success(that._results);
                 }
-            else {
+            } else {
                 for (var filterDefPropName in this.availableFilters) {
-                    filterDef = this.availableFilters[filterDefPropName]
+                    filterDef = this.availableFilters[filterDefPropName];
                     if(filterDef.id in this._query) {
                         for (var i=0;i<this._query[filterDef.id].length;i++) {
                             value = this._query[filterDef.id][i].value;
@@ -352,7 +362,7 @@ define(['app', 'i18n', 'sprintf'], function(app, i18n, sprintf){
                     }
                 }
 
-                params.order = this._view._server_order_param_value
+                params.order = this._view._server_order_param_value;
                 params.view = 'id_only';
                 that._queryResultInfo = null;
                 $.getJSON(url, params, function(data){
@@ -367,9 +377,15 @@ define(['app', 'i18n', 'sprintf'], function(app, i18n, sprintf){
                     _.each(data.posts, function(post){
                         ids.push(post['@id']);
                     });
-                    that._results=ids;
+                    that._results = ids;
                     that._resultsAreValid = true;
-                    success(that._results);
+                    
+                    if(_.isFunction(success_data_changed)){
+                        success_data_changed(that._results);
+                    }
+                    if(_.isFunction(success)){
+                        success(that._results);
+                    }
                 });
             }
             
@@ -398,7 +414,6 @@ define(['app', 'i18n', 'sprintf'], function(app, i18n, sprintf){
             }
             else{
                 retval += '<div id="post-query-results-info">';
-                
                 if(this.getResultNumTotal() == 0) {
                     if(numActiveFilters > 0) {
                         retval += i18n.gettext("Found no message in the discussion that:");

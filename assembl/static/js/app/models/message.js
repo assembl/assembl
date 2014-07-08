@@ -30,6 +30,25 @@ define(['models/base', 'jquery', 'app', 'underscore'], function(Base, $, app, _)
         },
 
         /**
+         * @return {Number} the quantity of all descendants
+         */
+        getDescendantsCount: function(){
+            var children = this.getChildren(),
+                count = children.length;
+
+            _.each(children, function(child){
+                count += child.getDescendantsCount();
+            });
+
+            return count;
+        },
+
+        visitDepthFirst: function(visitor) {
+            var ancestry = [this];
+            this.collection.visitDepthFirst(visitor, this, ancestry);
+        },
+        
+        /**
          * Return all children
          * @return {MessageModel[]}
          */
@@ -164,6 +183,11 @@ define(['models/base', 'jquery', 'app', 'underscore'], function(Base, $, app, _)
          */
         model: MessageModel,
 
+        /** Our data is inside the posts array */
+        parse: function(response) {
+          return response.posts;
+        },
+    
         /**
          * Return all segments in all messages in the annotator format
          * @return {Object[]}
@@ -176,7 +200,35 @@ define(['models/base', 'jquery', 'app', 'underscore'], function(Base, $, app, _)
             });
 
             return ret;
-        }
+        },
+    
+        /**
+         * Traversal function. 
+         * @param visitor visitor function.  If visitor returns true, traversal continues
+         * @return {Object[]}
+         */
+        visitDepthFirst: function(visitor, message, ancestry) {
+            if (ancestry === undefined) {
+                ancestry = [];
+            }
+            if (message === undefined) {
+                var rootMessages = this.where({ parentId: null });
+                for (var i in rootMessages) {
+                    this.visitDepthFirst(visitor, rootMessages[i], ancestry);
+                }
+                return;
+            }
+            if (visitor(message, ancestry)) {
+                //Copy ancestry
+                ancestry = ancestry.slice(0);
+                ancestry.push(message);
+                var children = _.sortBy(message.getChildren(), function(child){ return child.get('date'); });
+                for (var i in children) {
+                    this.visitDepthFirst(visitor, children[i], ancestry);
+                }
+            }
+        },
+
 
     });
 

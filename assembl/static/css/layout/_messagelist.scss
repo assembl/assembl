@@ -38,6 +38,11 @@
         top: 28px;
       }
     } 
+    #messageList-toparea, #messageList-bottomarea {
+        &.hidden {
+            display: none;
+        }
+    }
 }
 
 #messageList.is-message-mode {}

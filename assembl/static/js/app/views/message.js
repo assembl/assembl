@@ -48,6 +48,7 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n, Permissions, Message
             this.listenTo(this.model, 'change', this.render);
             this.messageListView = obj.messageListView;
             this.viewStyle = this.messageListView.defaultMessageStyle;
+            this.messageListView.on('annotator:destroy', this.onAnnotatorDestroy, this);
             this.messageListView.on('annotator:initComplete', this.onAnnotatorInitComplete, this);
             
             /**
@@ -87,9 +88,9 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n, Permissions, Message
         render: function(){
             app.trigger('render');
             var data = this.model.toJSON(),
-            children,
-            bodyFormatClass = null,
-            level;
+                children,
+                bodyFormatClass = null,
+                level;
             level = this.currentLevel !== null ? this.currentLevel : 1;
             if( ! _.isUndefined(level) ){
                 this.currentLevel = level;
@@ -139,12 +140,9 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n, Permissions, Message
                 'mandatory_subject_missing_msg': null
             });
             this.$('.message-replybox').append(this.replyView.render().el);
+
             this.postRender();
-            /* This may cause leaks in annotator, but annotator doesn't have an 
-             * API to unload annotations.  Re-loading annotator every time a
-             * message re-renders would be intolerably slow.  benoitg 2014-03-11
-             */
-            this.loadedAnnotations = {};
+            app.messageList.initAnnotator();
             this.loadAnnotations();
             if(this.replyBoxShown) {
                 this.openReplyBox();
@@ -163,9 +161,8 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n, Permissions, Message
         loadAnnotations: function(){
             if(this.annotator && (this.viewStyle == this.availableMessageViewStyles.FULL_BODY) ) {
                 var that = this,
-                
-                annotations = this.model.getAnnotations(),
-                annotationsToLoad = [];
+                    annotations = this.model.getAnnotations(),
+                    annotationsToLoad = [];
                 
                 _.each(annotations, function(annotation){
                     if(!(annotation['@id'] in that.loadedAnnotations)) {
@@ -178,9 +175,9 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n, Permissions, Message
                     // This call is synchronous I believe - benoitg
                     that.annotator.loadAnnotations( _.clone(annotationsToLoad) );
                     _.each(annotationsToLoad, function(annotation){
-                        that.loadedAnnotations[annotation['@id']] =  annotation;
-                        //console.log("Added " + annotation['@id'] + " to messageView " + that.model.id);
-                        });
+                        that.loadedAnnotations[annotation['@id']] = annotation;
+                    });
+
                     setTimeout(function(){
                         that.renderAnnotations(annotationsToLoad);
                     }, 1);
@@ -195,7 +192,8 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n, Permissions, Message
             var that = this;
             _.each(annotations, function(annotation){
                 var highlights = annotation.highlights,
-                func = app.showSegmentByAnnotation.bind(window, annotation);
+                    func = app.showSegmentByAnnotation.bind(window, annotation);
+
                 _.each(highlights, function(highlight){
                     highlight.setAttribute('data-annotation-id', annotation['@id']);
                     $(highlight).on('click', func);
@@ -210,8 +208,19 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n, Permissions, Message
          */
         onAnnotatorInitComplete: function(annotator){
             this.annotator = annotator;
+
             //Normally render has been called by this point, no need for a full render
             this.loadAnnotations();
+        },
+
+        /**
+         * @event
+         */
+        onAnnotatorDestroy: function(annotator){
+            this.annotator = null;
+
+            // Resets loaded annotations to initial
+            this.loadedAnnotations = {};
         },
         
         /**
@@ -355,7 +364,7 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n, Permissions, Message
                 this.viewStyle = style;
             }
             else {
-                console.log("unsupported view style :" +style );
+                console.log("unsupported view style :" + style );
             }
         },
         
@@ -450,6 +459,8 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n, Permissions, Message
 
             if( user.can(Permissions.ADD_EXTRACT) && this.isSelecting && text.length > MIN_TEXT_TO_TOOLTIP && isInsideAMessage ){
                 this.showSelectionOptions(ev.clientX - 50, ev.clientY);
+            } else if( !user.can(Permissions.ADD_EXTRACT) ){
+                console.warn('User cannot make extractions');
             }
 
             this.isSelecting = false;

@@ -1,5 +1,5 @@
-define(['backbone', 'underscore', 'models/idea', 'models/ideaLink', 'views/idea', "views/ideaGraph", 'app', 'types', 'views/allMessagesInIdeaList', 'views/orphanMessagesInIdeaList', 'views/synthesisInIdeaList', 'permissions', 'utils/renderVisitor', 'utils/siblingChainVisitor'],
-function(Backbone, _, Idea, IdeaLink, IdeaView, ideaGraphLoader, app, Types, AllMessagesInIdeaListView, OrphanMessagesInIdeaListView, SynthesisInIdeaListView, Permissions, renderVisitor, siblingChainVisitor){
+define(['backbone', 'underscore', 'models/idea', 'models/ideaLink', 'views/idea', "views/ideaGraph", 'app', 'types', 'views/allMessagesInIdeaList', 'views/orphanMessagesInIdeaList', 'views/synthesisInIdeaList', 'permissions', 'views/visitors/objectTreeRenderVisitor', 'views/visitors/ideaSiblingChainVisitor'],
+function(Backbone, _, Idea, IdeaLink, IdeaView, ideaGraphLoader, app, Types, AllMessagesInIdeaListView, OrphanMessagesInIdeaListView, SynthesisInIdeaListView, Permissions, objectTreeRenderVisitor, ideaSiblingChainVisitor){
     'use strict';
 
     var FEATURED = 'featured',
@@ -100,6 +100,7 @@ function(Backbone, _, Idea, IdeaLink, IdeaView, ideaGraphLoader, app, Types, All
             rootIdeaDirectChildrenModels = [],
             filter = {},
             view_data = {},
+            order_lookup_table = [],
             roots = [];
             
             function excludeRoot(idea) {return idea != rootIdea && !idea.hidden; };
@@ -144,8 +145,8 @@ function(Backbone, _, Idea, IdeaLink, IdeaView, ideaGraphLoader, app, Types, All
                 var allMessagesInIdeaListView = new AllMessagesInIdeaListView({model:rootIdea});
                 list.appendChild(allMessagesInIdeaListView.render().el);
                 
-                rootIdea.visitDepthFirst(renderVisitor(view_data, roots, excludeRoot));
-                rootIdea.visitDepthFirst(siblingChainVisitor(view_data));
+                rootIdea.visitDepthFirst(objectTreeRenderVisitor(view_data, order_lookup_table, roots, excludeRoot));
+                rootIdea.visitDepthFirst(ideaSiblingChainVisitor(view_data));
             }
             
 
