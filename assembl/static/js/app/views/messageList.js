@@ -10,11 +10,11 @@ function(Backbone, _, $, app, PanelView, MessageFamilyView, Message, i18n, PostQ
         /* The maximum number of messages that can be loaded at the same time
          * before being removed from memory
          */
-        MAX_MESSAGES_IN_DISPLAY = 30,
+        MAX_MESSAGES_IN_DISPLAY = 50,
         /* The number of messages to load each time the user reaches scrools to 
          * the end or beginning of the list.
          */
-        MORE_PAGES_NUMBER = 10;
+        MORE_PAGES_NUMBER = 20;
 
     /**
      * @class views.MessageList
