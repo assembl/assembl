@@ -6,6 +6,7 @@
                 {# Commented out, creates infinite loops
                 <a href="#" id="session-modal">Create session</a>
                 #}
+                <a id="ideaPanel-linkbutton" class="iconbutton icon-link" data-copy-text="/idea/<%= escape(idea.getId()) %>" data-tooltip="{{gettext('Copy the link to this idea to clipboard')}}"></a>
             <% } %>
             <a id="ideaPanel-closebutton" class="iconbutton icon-cancel" data-tooltip="{{gettext('Close panel')}}"></a>
         </div>
