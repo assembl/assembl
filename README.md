@@ -59,7 +59,7 @@ cd ~/assembl
 or
 
 ``` sh
-git clone git@github.com:ImaginationForPeople/assembl.git
+git clone https://github.com/ImaginationForPeople/assembl.git
 cd assembl
 fab devenv install_builddeps
 fab devenv bootstrap_from_checkout
