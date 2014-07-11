@@ -496,7 +496,7 @@ def install_builddeps():
         sudo('apt-get install -y build-essential python-dev ruby-builder')
         sudo('apt-get install -y nodejs npm')
         #For specific python packages in requirements.txt
-        sudo('apt-get install -y libmemcached-dev libzmq3-dev libxslt1-dev libffi-dev')
+        sudo('apt-get install -y libmemcached-dev libzmq3-dev libxslt1-dev libffi-dev phantomjs')
 
         #Runtime requirements (even in develop)
         sudo('apt-get install -y redis-server memcached unixodbc-dev virtuoso-opensource')
