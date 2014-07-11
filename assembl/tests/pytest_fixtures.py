@@ -4,6 +4,7 @@ import sys
 from datetime import datetime, timedelta
 
 import pytest
+from pytest_localserver.http import WSGIServer
 from pyramid import testing
 from pyramid.paster import get_appsettings
 import transaction
@@ -124,6 +125,14 @@ def test_app(request, app_settings, admin_user):
     config.set_authorization_policy(dummy_policy)
     config.set_authentication_policy(dummy_policy)
     return app
+
+
+@pytest.fixture(scope="function")
+def test_server(request, test_app):
+    server = WSGIServer(application=test_app.app)
+    server.start()
+    request.addfinalizer(server.stop)
+    return server
 
 
 @pytest.fixture(scope="function")
