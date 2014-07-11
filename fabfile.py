@@ -332,19 +332,6 @@ def configure_webservers():
     # Fix log dir
     execute(check_or_install_logdir)
 
-    
-def install_webservers():
-    """
-    Install the webserver stack
-    """
-    print(cyan('Installing web servers'))
-    if not env.mac:
-        sudo('apt-get install apache2-mpm-prefork libapache2-mod-wsgi -y')
-        sudo('apt-get install nginx -y')
-
-apache_files = ('/etc/init.d/apache2', '/opt/local/apache2/bin/apachectl',
-                '/usr/sbin/apachectl')
-
 @task
 def webservers_reload():
     """
@@ -495,11 +482,19 @@ def install_builddeps():
     else:
         sudo('apt-get install -y build-essential python-dev ruby-builder')
         sudo('apt-get install -y nodejs npm')
-        #For specific python packages in requirements.txt
-        sudo('apt-get install -y libmemcached-dev libzmq3-dev libxslt1-dev')
-
         #Runtime requirements (even in develop)
         sudo('apt-get install -y redis-server memcached unixodbc-dev virtuoso-opensource')
+    execute(update_python_package_builddeps)
+
+@task
+def update_python_package_builddeps():
+    print(cyan('Installing/Updating python package native binary dependencies'))
+    #For specific python packages in requirements.txt
+    if env.mac:
+        #I presume the runtime packages in install_builddeps come with headers on mac?
+        pass
+    else:
+        sudo('apt-get install -y libmemcached-dev libzmq3-dev libxslt1-dev')
 
 @task
 def configure_rbenv():
@@ -834,7 +829,7 @@ def coeus_stagenv():
     env.uses_ngnix = True
     env.uses_uwsgi = True
     env.use_virtuoso = "/usr"
-    env.gitbranch = "develop"
+    env.gitbranch = "master"
     
 @task
 def coeus_stagenv2():
@@ -876,7 +871,7 @@ def inm_prodenv():
     env.uses_ngnix = True
     env.uses_uwsgi = True
     env.use_virtuoso = "/usr"
-    env.gitbranch = "develop"
+    env.gitbranch = "master"
 
 
 @task    
@@ -928,7 +923,6 @@ def bootstrap_full():
     sudo('apt-get update')
     
     execute(install_basetools)
-    execute(install_webservers)
     execute(install_builddeps)
     
     execute(bootstrap)
