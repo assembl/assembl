@@ -325,11 +325,10 @@ function(Backbone, _, $, app, PanelView, MessageFamilyView, Message, i18n, PostQ
                     break;
                 }
             }
-            if(requestedOffsets['offsetEnd']>numMessages) {
-                returnedDataOffsets['offsetEnd']=numMessages;
+            if(requestedOffsets['offsetEnd']>(numMessages-1)) {
+                returnedDataOffsets['offsetEnd']=(numMessages-1);
             }
             else {
-                console.log()
                 if(data_by_object[order_lookup_table[requestedOffsets['offsetEnd']]]['last_ancestor_id']==undefined) {
                     returnedDataOffsets['offsetEnd'] = requestedOffsets['offsetEnd'];
                 }
@@ -471,7 +470,7 @@ function(Backbone, _, $, app, PanelView, MessageFamilyView, Message, i18n, PostQ
                 this.$('#messageList-toparea').removeClass('hidden');
             }
 
-            if( this.offsetEnd >= this.messages.length ){
+            if( this.offsetEnd >= (this.messages.length-1) ){
                 this.$('#messageList-bottomarea').addClass('hidden');
             } else {
                 this.$('#messageList-bottomarea').removeClass('hidden');
