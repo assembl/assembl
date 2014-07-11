@@ -1,5 +1,5 @@
-define(['jasmine-jquery', 'backbone', 'underscore', 'jquery', 'app', 'views/lateralMenu'],
-function(jasmine, Backbone, _, $, app, LateralMenu){
+define(['backbone', 'underscore', 'jquery', 'app', 'views/lateralMenu'],
+function(Backbone, _, $, app, LateralMenu){
 
     // Instantaneously
     app.lateralMenuAnimationTime = 0;

@@ -29,7 +29,7 @@ requirejs.config({
     'annotator': 'lib/annotator/annotator-full.min',
 
     'jasmine': 'bower/jasmine/lib/jasmine-core/jasmine',
-    'jasmine-html': 'bower/jasmine/lib/jasmine-core/jasmine',
+    'jasmine-html': 'bower/jasmine/lib/jasmine-core/jasmine-html',
     'jasmine-jquery': 'bower/jasmine-jquery/lib/jasmine-jquery',
 
     'ckeditor': 'bower/ckeditor/ckeditor',
@@ -77,12 +77,8 @@ requirejs.config({
         exports: 'jasmine'
     },
     'jasmine-html': {
-        deps: ['jasmine', 'jasmine-jquery'],
-        exports: 'jasmine'
-    },
-    'jasmine-jquery': {
         deps: ['jasmine'],
-        exports: 'jasmine'
+        exports: 'jasmine-html'
     },
     'ckeditor': {
         exports: 'CKEDITOR'
