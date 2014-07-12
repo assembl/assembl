@@ -1,13 +1,13 @@
 {% extends 'base.jinja2' %}
 
 {% block extra_css %}
-    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}/css/lib/jasmine.css" />
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}/js/bower/jasmine/lib/jasmine-core/jasmine.css" />
 {% endblock extra_css %}
 
 {% block extra_js %}
-<script type="text/javascript" src="/static/js/bower/jasmine/lib/jasmine-core/jasmine.js"></script>
-<script type="text/javascript" src="/static/js/bower/jasmine/lib/jasmine-core/jasmine-html.js"></script>
-<script type="text/javascript" src="/static/js/bower/jasmine/lib/jasmine-core/boot.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}/js/bower/jasmine/lib/jasmine-core/jasmine.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}/js/bower/jasmine/lib/jasmine-core/jasmine-html.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}/js/bower/jasmine/lib/jasmine-core/boot.js"></script>
     {# run, Jasmine, run! #}
     <script type="text/javascript">
     requirejs(['tests/init']);
