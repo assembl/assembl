@@ -22,6 +22,7 @@
     "cytoscape": "*",
     "jit": "~2.0.2",
     "jasmine": "~2.0.0",
+    "marionette": "~2.0.0",
     "momentjs": "~2.5.0",
     "requirejs": "~2.1.9",
     "sockjs": "~0.3.4",
