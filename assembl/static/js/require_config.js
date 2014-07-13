@@ -1,4 +1,4 @@
-requirejs.config({
+var requirejs_config = {
   baseUrl: "/static/js/",
   urlArgs: urlArgs,
   waitSeconds: 20,
@@ -30,7 +30,7 @@ requirejs.config({
 
     'jasmine': 'bower/jasmine/lib/jasmine-core/jasmine',
     'jasmine-html': 'bower/jasmine/lib/jasmine-core/jasmine-html',
-    'jasmine-jquery': 'bower/jasmine-jquery/lib/jasmine-jquery',
+    'jasmine-boot': 'bower/jasmine/lib/jasmine-core/boot',
 
     'ckeditor': 'bower/ckeditor/ckeditor',
     'ckeditor-sharedspace': 'lib/ckeditor-sharedcontainer/plugin',
@@ -74,11 +74,15 @@ requirejs.config({
         deps: ['sockjs']
     },
     'jasmine': {
-        exports: 'jasmine'
+        exports: 'window.jasmineRequire'
     },
     'jasmine-html': {
         deps: ['jasmine'],
-        exports: 'jasmine-html'
+        exports: 'window.jasmineRequire'
+    },
+    'jasmine-boot': {
+        deps: ['jasmine', 'jasmine-html'],
+        exports: 'window.jasmineRequire'
     },
     'ckeditor': {
         exports: 'CKEDITOR'
@@ -122,4 +126,4 @@ requirejs.config({
         exports: 'BackboneModal'
     }
   }
-});
+};
