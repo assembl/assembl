@@ -40,6 +40,7 @@ html5lib==0.999
 imaplib2==2.28.3
 isodate==0.5.0
 iso8601==0.1.10
+-e git+https://github.com/maparent/jasmine-splinter-runner.git#egg=jasmine-splinter-runner
 -e git+https://github.com/benoitg/jwzthreading.git@master#egg=jwzthreading
 kombu==3.0.21
 lingua==2.3

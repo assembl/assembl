@@ -4,8 +4,9 @@ var urlArgs = "bust=" + (new Date()).getTime();
 {% else %}
 var urlArgs = null;
 {% endif %}
+var assembl_locale = '{{locale}}';
 </script>
-<script data-main="{{ STATIC_URL }}/js/main.js" src="{{ STATIC_URL }}/js/bower/requirejs/require.js"></script>
+<script src="{{ STATIC_URL }}/js/require_config.js"></script>
 
 <script type="text/json" id="translations">{{ translations|safe }}</script>
 <script>
@@ -16,5 +17,4 @@ try {
 } catch(e){
     throw new Error("Invalid json");
 }
-var assembl_locale = '{{locale}}';
 </script>
