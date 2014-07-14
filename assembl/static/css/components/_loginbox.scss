@@ -4,7 +4,6 @@
   @include box-sizing( border-box );
   @include border-radius(6px);
   margin: 5% auto 0 auto;
-  border: 1px solid rgba(0,0,0,0.1);
   width: 700px;
   background-color: #ffffff;
   box-shadow:0 0 225px rgba(255,255,255,.55);
@@ -14,11 +13,7 @@
     width: 330px;
       a{
         text-decoration: none;
-        color: #484848;
         cursor: pointer;
-    }
-    input{
-      margin-bottom: 10px;
     }
   }
   .inline {
@@ -29,28 +24,31 @@
     width: 300px;
   }
 
-  footer {
-    height: 80px;
+  header {
+    height: 60px;
     color:#CCCCCC;
     background-color: #484848;
-    border-bottom-left-radius: 6px;
-    border-bottom-right-radius: 6px;
-    p {
-      line-height: 80px;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+
+    h1 {
+      line-height: 60px;
       text-align: center;
+      color: #fff;
     }
-    .caravan {
-      color:#ffffff;
-    }
-    .i4p {
-      color: #c7c2dd;
-    }
+  }
+
+  .content {
+    padding: 10px 20px 30px 20px;
+  }
+
+  .submitButtons {
+    width: 100%;
   }
 
   .login-box-title {
     text-align: left;
-    font-size: 20px;
-    //margin-left: 160px;
+    font-size: 14px;
   }
 
   .register-box-title {
@@ -68,24 +66,24 @@
   }
 
   .signinWrapper {
-    padding: 0 0 0 22px;
+    padding: 0 0 0 10px;
     box-sizing: border-box;
-    float: left;
   }
 
   .socialPart {
     width: 290px;
+    vertical-align: top;
   }
 
   .signinSeparator {
     margin: 50px 0 0 0;
-    width:20px;
+    width:15px;
     position:relative;
 
     .mask {
       overflow:hidden;
       width:20px;
-      height:200px;
+      height:250px;
     }
     &.left .mask:after {
       content:'';
