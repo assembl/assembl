@@ -21,19 +21,22 @@ def upgrade(pyramid_env):
     with context.begin_transaction():
         op.execute("""
 UPDATE  post p
-SET     parent_id = (
-SELECT new_post_parent.id AS new_post_parent_id
-FROM post AS post_to_correct
-JOIN post AS bad_post_parent ON (post_to_correct.parent_id = bad_post_parent.id)
-JOIN post AS new_post_parent ON (new_post_parent.message_id = bad_post_parent.message_id AND new_post_parent.id <> bad_post_parent.id)
-WHERE post_to_correct.parent_id IN (
-  SELECT MAX(post.id) as max_post_id 
-  FROM imported_post 
-  JOIN post ON (post.id=imported_post.id) 
-  GROUP BY message_id, source_id
-  HAVING COUNT(post.id)>1
-  )
-AND p.id = post_to_correct.id
+SET     parent_id = COALESCE(
+    (
+        SELECT new_post_parent.id AS new_post_parent_id
+        FROM post AS post_to_correct
+        JOIN post AS bad_post_parent ON (post_to_correct.parent_id = bad_post_parent.id)
+        JOIN post AS new_post_parent ON (new_post_parent.message_id = bad_post_parent.message_id AND new_post_parent.id <> bad_post_parent.id)
+        WHERE post_to_correct.parent_id IN (
+          SELECT MAX(post.id) as max_post_id 
+          FROM imported_post 
+          JOIN post ON (post.id=imported_post.id) 
+          GROUP BY message_id, source_id
+          HAVING COUNT(post.id)>1
+          )
+        AND p.id = post_to_correct.id
+    ),
+    p.parent_id
 )
         """)
         op.execute("""
