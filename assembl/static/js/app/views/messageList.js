@@ -1,11 +1,11 @@
-define(['backbone', 'underscore', 'jquery', 'app', 'views/panel', 'views/messageFamily', 'models/message', 'i18n', 'views/messageListPostQuery', 'permissions', 'views/messageSend', 'views/visitors/objectTreeRenderVisitor'],
-function(Backbone, _, $, app, PanelView, MessageFamilyView, Message, i18n, PostQuery, Permissions, MessageSendView, objectTreeRenderVisitor){
+define(['backbone', 'underscore', 'jquery', 'modules/context', 'app', 'views/panel', 'views/messageFamily', 'models/message', 'i18n', 'views/messageListPostQuery', 'permissions', 'views/messageSend', 'views/visitors/objectTreeRenderVisitor'],
+function(Backbone, _, $, Ctx, app, PanelView, MessageFamilyView, Message, i18n, PostQuery, Permissions, MessageSendView, objectTreeRenderVisitor){
     'use strict';
 
     /**
      * Constants
      */
-    var DIV_ANNOTATOR_HELP = app.format("<div class='annotator-draganddrop-help'>{0}</div>", i18n.gettext('You can drag the segment above directly to the table of ideas') ),
+    var DIV_ANNOTATOR_HELP = Ctx.format("<div class='annotator-draganddrop-help'>{0}</div>", i18n.gettext('You can drag the segment above directly to the table of ideas') ),
         DEFAULT_MESSAGE_VIEW_LI_ID_PREFIX = "defaultMessageView-",
         /* The maximum number of messages that can be loaded at the same time
          * before being removed from memory
@@ -51,7 +51,7 @@ function(Backbone, _, $, app, PanelView, MessageFamilyView, Message, i18n, PostQ
         numRenderInhibitedDuringRendering: 0,
         
         
-        storedMessageListConfig: app.getMessageListConfigFromStorage(),
+        storedMessageListConfig: Ctx.getMessageListConfigFromStorage(),
         /**
          * get a view style definition by id
          * @param {viewStyle.id}
@@ -65,14 +65,8 @@ function(Backbone, _, $, app, PanelView, MessageFamilyView, Message, i18n, PostQ
          *  @init
          */
         initialize: function(obj){
-            /*this.on("all", function(eventName) {
-                console.log("messageList event received: ", eventName);
-              });
-            this.messages.on("all", function(eventName) {
-                console.log("messageList collection event received: ", eventName);
-              });*/
             if( obj.button ){
-                this.button = $(obj.button).on('click', app.togglePanel.bind(window, 'messageList'));
+                this.button = $(obj.button).on('click', Ctx.togglePanel.bind(window, 'messageList'));
             }
 
             PanelView.prototype.initialize.apply(this);
@@ -80,7 +74,7 @@ function(Backbone, _, $, app, PanelView, MessageFamilyView, Message, i18n, PostQ
             this.renderedMessageViewsCurrent = {};
             
             this.setViewStyle(this.getViewStyleDefById(this.storedMessageListConfig.viewStyleId) || this.ViewStyles.THREADED);
-            this.defaultMessageStyle = app.getMessageViewStyleDefById(this.storedMessageListConfig.messageStyleId) || app.AVAILABLE_MESSAGE_VIEW_STYLES.PREVIEW;
+            this.defaultMessageStyle = Ctx.getMessageViewStyleDefById(this.storedMessageListConfig.messageStyleId) || Ctx.AVAILABLE_MESSAGE_VIEW_STYLES.PREVIEW;
 
             /**
              * @ghourlier
@@ -96,7 +90,7 @@ function(Backbone, _, $, app, PanelView, MessageFamilyView, Message, i18n, PostQ
 
             });
 
-            this.listenTo(app.segmentList.segments, 'add remove reset', this.initAnnotator);
+            this.listenTo(assembl.segmentList.segments, 'add remove reset', this.initAnnotator);
             
             var that = this;
             app.on('idea:select', function(idea){
@@ -123,9 +117,9 @@ function(Backbone, _, $, app, PanelView, MessageFamilyView, Message, i18n, PostQ
          * Synchronizes the panel with the currently selected idea (possibly none)
          */
         syncWithCurrentIdea: function(){
-            var currentIdea = app.getCurrentIdea();
+            var currentIdea = Ctx.getCurrentIdea();
             //console.log("messageList:syncWithCurrentIdea(): New idea is now: ",currentIdea);
-            app.openPanel(app.messageList);
+            Ctx.openPanel(assembl.messageList);
             if(currentIdea && this.currentQuery.isFilterInQuery(this.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, currentIdea.getId())) {
                 //Filter is already in sync
                 //TODO:  Detect the case where there is no idea selected, and we already have no filter on ideas
@@ -139,7 +133,7 @@ function(Backbone, _, $, app, PanelView, MessageFamilyView, Message, i18n, PostQ
                     this.currentQuery.addFilter(this.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, currentIdea.getId());
                     //app.openPanel(app.messageList);
                 }
-                if(app.debugRender) {
+                if(Ctx.debugRender) {
                     console.log("messageList:syncWithCurrentIdea(): triggering render because new idea was selected");
                 }
                 //console.log("messageList:syncWithCurrentIdea(): Query is now: ",this.currentQuery._query);
@@ -150,7 +144,7 @@ function(Backbone, _, $, app, PanelView, MessageFamilyView, Message, i18n, PostQ
          * The template
          * @type {_.template}
          */
-        template: app.loadTemplate('messageList'),
+        template: Ctx.loadTemplate('messageList'),
 
         /**
          * The collapse/expand flag
@@ -292,7 +286,7 @@ function(Backbone, _, $, app, PanelView, MessageFamilyView, Message, i18n, PostQ
                     panelOffset = panelBody.offset().top;
                     panelScrollTop = panelBody.scrollTop();
                     //console.log("panelScrollTop", panelScrollTop, "panelOffset", panelOffset);
-                    var selector = app.format('[id="{0}"]', previousScrollTarget.messageHtmlId);
+                    var selector = Ctx.format('[id="{0}"]', previousScrollTarget.messageHtmlId);
                     var message = this.$(selector);
                     if(!_.size(message)) {
                         //console.log("scrollToPreviousScrollTarget() can't find element with id:",previousScrollTarget.messageHtmlId);
@@ -459,7 +453,7 @@ function(Backbone, _, $, app, PanelView, MessageFamilyView, Message, i18n, PostQ
             ideaList.empty();
 
             if( views.length === 0 ){
-                ideaList.append( app.format("<div class='margin'>{0}</div>", i18n.gettext('No messages')) );
+                ideaList.append( Ctx.format("<div class='margin'>{0}</div>", i18n.gettext('No messages')) );
             } else {
                 ideaList.append( views );
             }
@@ -578,19 +572,19 @@ function(Backbone, _, $, app, PanelView, MessageFamilyView, Message, i18n, PostQ
                     DEFAULT_MESSAGE_VIEW_LI_ID_PREFIX: DEFAULT_MESSAGE_VIEW_LI_ID_PREFIX,
                     collapsed: this.collapsed,
                     queryInfo: this.currentQuery.getHtmlDescription(),
-                    canPost: app.getCurrentUser().can(Permissions.ADD_POST)
+                    canPost: Ctx.getCurrentUser().can(Permissions.ADD_POST)
                 },
                 previousScrollTarget = null;
             /*
             console.log("messageIdsToDisplay is: ");
             console.log(that.messageIdsToDisplay);
             */
-            app.cleanTooltips(this.$el);
+            Ctx.cleanTooltips(this.$el);
             previousScrollTarget = this.getPreviousScrollTarget();
             
             this.$el.html( this.template(data) );
-            
-            app.initTooltips(this.$el);
+
+            Ctx.initTooltips(this.$el);
 
 
             this.renderCollapseButton();
@@ -653,7 +647,7 @@ function(Backbone, _, $, app, PanelView, MessageFamilyView, Message, i18n, PostQ
             }
 
             
-            if(app.debugRender) {
+            if(Ctx.debugRender) {
                 console.log("messageList:render() is firing, "+renderStatus()+this.messages.length+" messages in collection.");
             }
             this.currentlyRendering = true;
@@ -701,7 +695,7 @@ function(Backbone, _, $, app, PanelView, MessageFamilyView, Message, i18n, PostQ
             html += this.defaultMessageStyle.label;
             html += '</span>';
             html += '<ul class="dropdown-list">';
-            _.each(app.AVAILABLE_MESSAGE_VIEW_STYLES, function(messageViewStyle) {
+            _.each(Ctx.AVAILABLE_MESSAGE_VIEW_STYLES, function(messageViewStyle) {
                 html += '<li id="' + DEFAULT_MESSAGE_VIEW_LI_ID_PREFIX + messageViewStyle.id +'" class="dropdown-listitem">'+ messageViewStyle.label+'</li>';
             });
             html += '</ul>';
@@ -851,14 +845,14 @@ function(Backbone, _, $, app, PanelView, MessageFamilyView, Message, i18n, PostQ
 
             // TODO: Re-render message in messagelist if an annotation was added...
             this.annotator.subscribe('annotationCreated', function(annotation){
-                var segment = app.segmentList.addAnnotationAsSegment(annotation, app.currentAnnotationIdIdea);
+                var segment = assembl.segmentList.addAnnotationAsSegment(annotation, app.currentAnnotationIdIdea);
                 if( !segment.isValid() ){
                     annotator.deleteAnnotation(annotation);
                 } else if( app.currentAnnotationNewIdeaParentIdea ){
                     //We asked to create a new idea from segment
                     that.lockPanel();
                     var newIdea = app.currentAnnotationNewIdeaParentIdea.addSegmentAsChild(segment);
-                    app.setCurrentIdea(newIdea);
+                    Ctx.setCurrentIdea(newIdea);
                 }
                 else {
                     segment.save();
@@ -877,7 +871,7 @@ function(Backbone, _, $, app, PanelView, MessageFamilyView, Message, i18n, PostQ
                 div.html(annotation.quote);
 
                 div.on('dragstart', function(ev){
-                    app.showDragbox(ev, annotation.quote);
+                    Ctx.showDragbox(ev, annotation.quote);
                     app.draggedAnnotation = annotation;
                 });
 
@@ -1026,7 +1020,7 @@ function(Backbone, _, $, app, PanelView, MessageFamilyView, Message, i18n, PostQ
             }
             if(this.storedMessageListConfig.viewStyleId != viewStyle.id) {
                 this.storedMessageListConfig.viewStyleId = viewStyle.id;
-                app.setMessageListConfigToStorage(this.storedMessageListConfig);
+                Ctx.setMessageListConfigToStorage(this.storedMessageListConfig);
             }
             
         },
@@ -1062,7 +1056,7 @@ function(Backbone, _, $, app, PanelView, MessageFamilyView, Message, i18n, PostQ
          */
         onDefaultMessageViewStyle: function(e){
             var messageViewStyleId = (e.currentTarget.id).replace(DEFAULT_MESSAGE_VIEW_LI_ID_PREFIX, '');
-            var messageViewStyleSelected = app.getMessageViewStyleDefById(messageViewStyleId);
+            var messageViewStyleSelected = Ctx.getMessageViewStyleDefById(messageViewStyleId);
             //console.log("onDefaultMessageViewStyle: "+messageViewStyleSelected.label);
             this.setDefaultMessageViewStyle(messageViewStyleSelected);
         },
@@ -1084,7 +1078,7 @@ function(Backbone, _, $, app, PanelView, MessageFamilyView, Message, i18n, PostQ
             this.renderDefaultMessageViewDropdown();
             if(this.storedMessageListConfig.messageStyleId != messageViewStyle.id) {
                 this.storedMessageListConfig.messageStyleId = messageViewStyle.id;
-                app.setMessageListConfigToStorage(this.storedMessageListConfig);
+                Ctx.setMessageListConfigToStorage(this.storedMessageListConfig);
             }
         },
         /** Return the message offset in the current view, in the set of filtered 
@@ -1121,7 +1115,7 @@ function(Backbone, _, $, app, PanelView, MessageFamilyView, Message, i18n, PostQ
          */
         showMessageById: function(id, callback){
             var message = this.messages.get(id),
-                 selector = app.format('[id="message-{0}"]', id),
+                 selector = Ctx.format('[id="message-{0}"]', id),
                  el,
                  messageIsDisplayed = false,
                  that = this,
@@ -1251,7 +1245,7 @@ function(Backbone, _, $, app, PanelView, MessageFamilyView, Message, i18n, PostQ
             };
 
             var messageDefaultViewStyle = '';
-            _.each(app.AVAILABLE_MESSAGE_VIEW_STYLES, function(messageViewStyle){
+            _.each(Ctx.AVAILABLE_MESSAGE_VIEW_STYLES, function(messageViewStyle){
                 var key = 'click #'+DEFAULT_MESSAGE_VIEW_LI_ID_PREFIX+messageViewStyle.id;
                 data[key] = 'onDefaultMessageViewStyle';
             } );

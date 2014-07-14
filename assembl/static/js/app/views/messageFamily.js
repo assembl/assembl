@@ -1,5 +1,5 @@
-define(['backbone', 'underscore', 'moment', 'ckeditor', 'app', 'types', 'models/message', 'views/message', 'views/synthesisMessage', 'i18n'],
-function(Backbone, _, Moment, ckeditor, app, Types, Message, MessageView, SynthesisMessageView, i18n){
+define(['backbone', 'underscore', 'moment', 'ckeditor','modules/context', 'app', 'types', 'models/message', 'views/message', 'views/synthesisMessage', 'i18n'],
+function(Backbone, _, Moment, ckeditor, Ctx, app, Types, Message, MessageView, SynthesisMessageView, i18n){
     'use strict';
 
     /**
@@ -37,7 +37,7 @@ function(Backbone, _, Moment, ckeditor, app, Types, Message, MessageView, Synthe
          * The thread message template
          * @type {_.template}
          */
-        template: app.loadTemplate('messageFamily'),
+        template: Ctx.loadTemplate('messageFamily'),
 
         /**
          * Stores the current level
@@ -58,7 +58,7 @@ function(Backbone, _, Moment, ckeditor, app, Types, Message, MessageView, Synthe
                 messageView;
 
             level = this.currentLevel !== null ? this.currentLevel : 1;
-            app.cleanTooltips(this.$el);
+            Ctx.cleanTooltips(this.$el);
             if( ! _.isUndefined(level) ){
                 this.currentLevel = level;
             }
@@ -109,12 +109,12 @@ function(Backbone, _, Moment, ckeditor, app, Types, Message, MessageView, Synthe
             this.el.setAttribute('data-message-level', data['level']);
 
             this.$el.html( this.template(data) );
-            app.initTooltips(this.$el);
+            Ctx.initTooltips(this.$el);
             this.$el.find('>.message-family-arrow>.message').replaceWith(messageView.el);
             
             this.onCollapsedChange();
 
-            app.initClipboard();
+            Ctx.initClipboard();
 
             return this;
         },

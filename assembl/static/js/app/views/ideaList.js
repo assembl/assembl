@@ -1,5 +1,5 @@
-define(['backbone', 'underscore', 'models/idea', 'models/ideaLink', 'views/idea', "views/ideaGraph", 'app', 'types', 'views/allMessagesInIdeaList', 'views/orphanMessagesInIdeaList', 'views/synthesisInIdeaList', 'permissions', 'views/visitors/objectTreeRenderVisitor', 'views/visitors/ideaSiblingChainVisitor'],
-function(Backbone, _, Idea, IdeaLink, IdeaView, ideaGraphLoader, app, Types, AllMessagesInIdeaListView, OrphanMessagesInIdeaListView, SynthesisInIdeaListView, Permissions, objectTreeRenderVisitor, ideaSiblingChainVisitor){
+define(['backbone', 'underscore', 'modules/context', 'models/idea', 'models/ideaLink', 'views/idea', "views/ideaGraph", 'app', 'types', 'views/allMessagesInIdeaList', 'views/orphanMessagesInIdeaList', 'views/synthesisInIdeaList', 'permissions', 'views/visitors/objectTreeRenderVisitor', 'views/visitors/ideaSiblingChainVisitor'],
+function(Backbone, _, Ctx, Idea, IdeaLink, IdeaView, ideaGraphLoader, app, Types, AllMessagesInIdeaListView, OrphanMessagesInIdeaListView, SynthesisInIdeaListView, Permissions, objectTreeRenderVisitor, ideaSiblingChainVisitor){
     'use strict';
 
     var FEATURED = 'featured',
@@ -25,7 +25,7 @@ function(Backbone, _, Idea, IdeaLink, IdeaView, ideaGraphLoader, app, Types, All
          * The tempate
          * @type {_.template}
          */
-        template: app.loadTemplate('ideaList'),
+        template: Ctx.loadTemplate('ideaList'),
 
         /**
          * .panel-body
@@ -45,16 +45,10 @@ function(Backbone, _, Idea, IdeaLink, IdeaView, ideaGraphLoader, app, Types, All
             var that = this;
             this.ideas = new Idea.Collection();
             this.ideaLinks = new IdeaLink.Collection();
-            /*this.on("all", function(eventName) {
-                console.log("ideaList event received: ", eventName);
-              });
-            this.ideas.on("all", function(eventName) {
-                console.log("ideaList collection event received: ", eventName);
-              });
-            */
+
             if( obj && obj.button ){
                 this.button = $(obj.button);
-                this.button.on('click', app.togglePanel.bind(window, 'ideaList'));
+                //this.button.on('click', Ctx.togglePanel.bind(window, 'ideaList'));
             }
 
             var events = ['reset', 'change:parentId', 'change:@id', 'change:inNextSynthesis', 'remove', 'add'];
@@ -62,14 +56,14 @@ function(Backbone, _, Idea, IdeaLink, IdeaView, ideaGraphLoader, app, Types, All
             this.listenTo(this.ideas, events.join(' '), this.render);
 
             app.on('idea:delete', function(){
-                if(app.debugRender) {
+                if(Ctx.debugRender) {
                     console.log("ideaList: triggering render because app.on('idea:delete') was triggered");
                 }
                 that.render();
             });
 
             app.on('ideas:update', function(ideas){
-                if(app.debugRender) {
+                if(Ctx.debugRender) {
                     console.log("ideaList: triggering render because app.on('ideas:update') was triggered");
                 }
                 that.ideas.add(ideas, {merge: true, silent: true});
@@ -79,7 +73,7 @@ function(Backbone, _, Idea, IdeaLink, IdeaView, ideaGraphLoader, app, Types, All
             // Benoitg - 2014-05-05:  There is no need for this, if an idealink
             // is associated with the idea, the idea itself will receive a change event
             // on the socket
-            //app.segmentList.segments.on('add change reset', this.render, this);
+            assembl.segmentList.segments.on('add change reset', this.render, this);
             
             app.on("panel:open", function(){that.resizeGraphView();});
             app.on("panel:close", function(){that.resizeGraphView();});
@@ -89,11 +83,11 @@ function(Backbone, _, Idea, IdeaLink, IdeaView, ideaGraphLoader, app, Types, All
          * The render
          */
         render: function(){
-            if(app.debugRender) {
+            if(Ctx.debugRender) {
                 console.log("ideaList:render() is firing");
             }
             app.trigger('render');
-            app.cleanTooltips(this.$el);
+            Ctx.cleanTooltips(this.$el);
             this.body = this.$('.panel-body');
             var y = 0,
             rootIdea = null,
@@ -165,7 +159,7 @@ function(Backbone, _, Idea, IdeaLink, IdeaView, ideaGraphLoader, app, Types, All
                 tocTotal: this.ideas.length -1,//We don't count the root idea
                 featuredTotal: this.ideas.where({featured: true}).length,
                 synthesisTotal: this.ideas.where({inNextSynthesis: true}).length,
-                canAdd: app.getCurrentUser().can(Permissions.ADD_IDEA)
+                canAdd: Ctx.getCurrentUser().can(Permissions.ADD_IDEA)
             };
 
             data.title = data.tocTitle;
@@ -174,7 +168,7 @@ function(Backbone, _, Idea, IdeaLink, IdeaView, ideaGraphLoader, app, Types, All
             data.filter = this.filter;
 
             this.$el.html( this.template(data) );
-            app.initTooltips(this.$el);
+            Ctx.initTooltips(this.$el);
             this.$('.idealist').append( list );
 
             this.body = this.$('.panel-body');
@@ -263,7 +257,7 @@ function(Backbone, _, Idea, IdeaLink, IdeaView, ideaGraphLoader, app, Types, All
          * Sets the panel as full screen
          */
         setFullscreen: function(){
-            app.setFullscreen(this);
+            Ctx.setFullscreen(this);
         },
 
         toggleGraphView: function() {
@@ -284,11 +278,11 @@ function(Backbone, _, Idea, IdeaLink, IdeaView, ideaGraphLoader, app, Types, All
         loadGraphView: function() {
             if (this.show_graph) {
                 var that = this;
-                $.getJSON( app.getApiUrl('generic')+"/Discussion/"+app.discussionID+"/idea_graph_jit", function(data){
+                $.getJSON( Ctx.getApiUrl('generic')+"/Discussion/"+Ctx.getDiscussionId()+"/idea_graph_jit", function(data){
                     that.graphData = data['graph'];
                     that.hypertree = ideaGraphLoader(that.graphData);
                     try {
-                        that.hypertree.onClick(app.getCurrentIdea().getId(), {
+                        that.hypertree.onClick(Ctx.getCurrentIdea().getId(), {
                             // onComplete: function() {
                             //     that.hypertree.controller.onComplete();
                             // },
@@ -306,7 +300,7 @@ function(Backbone, _, Idea, IdeaLink, IdeaView, ideaGraphLoader, app, Types, All
             if (this.show_graph && this.graphData !== undefined) {
                 try {
                     this.hypertree = ideaGraphLoader(this.graphData);
-                    this.hypertree.onClick(app.getCurrentIdea().getId(), {
+                    this.hypertree.onClick(Ctx.getCurrentIdea().getId(), {
                         duration: 0
                     });
                 } catch (Exception) {}
@@ -338,7 +332,7 @@ function(Backbone, _, Idea, IdeaLink, IdeaView, ideaGraphLoader, app, Types, All
          */
         onPanelBodyClick: function(ev){
             if( $(ev.target).hasClass('panel-body') ){
-                app.setCurrentIdea(null);
+                Ctx.setCurrentIdea(null);
             }
         },
 
@@ -347,7 +341,7 @@ function(Backbone, _, Idea, IdeaLink, IdeaView, ideaGraphLoader, app, Types, All
          * If no idea is selected, add it at the root level ( no parent )
          */
         addChildToSelected: function(){
-            var currentIdea = app.getCurrentIdea(),
+            var currentIdea = Ctx.getCurrentIdea(),
                 newIdea = new Idea.Model(),
                 that = this;
 
@@ -355,12 +349,12 @@ function(Backbone, _, Idea, IdeaLink, IdeaView, ideaGraphLoader, app, Types, All
                 newIdea.set('order', currentIdea.getOrderForNewChild());
                 currentIdea.addChild(newIdea);
             } else {
-                newIdea.set('order', app.getOrderForNewRootIdea());
+                newIdea.set('order', Ctx.getOrderForNewRootIdea());
                 this.ideas.add(newIdea);
                 newIdea.save();
             }
 
-            app.setCurrentIdea(newIdea);
+            Ctx.setCurrentIdea(newIdea);
         },
 
         /**

@@ -1,4 +1,4 @@
-define(['backbone', 'app'], function(Backbone, app){
+define(['backbone','modules/context'], function(Backbone, Ctx){
     'use strict';
 
     /**
@@ -117,7 +117,7 @@ define(['backbone', 'app'], function(Backbone, app){
                 json;
 
             if( !script ){
-                throw new Error(app.format("Script tag #{0} doesn't exist", id));
+                throw new Error(Ctx.format("Script tag #{0} doesn't exist", id));
             }
 
             try {

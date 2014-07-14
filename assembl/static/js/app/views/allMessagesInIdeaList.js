@@ -1,5 +1,5 @@
-define(['backbone', 'underscore', 'jquery', 'models/idea', 'app', 'views/idea'],
-function(Backbone, _, $, Idea, app, IdeaView){
+define(['backbone', 'underscore', 'jquery', 'modules/context', 'models/idea', 'app', 'views/idea'],
+function(Backbone, _, $, Ctx, Idea, app, IdeaView){
     'use strict';
     
     var AllMessagesInIdeaListView = IdeaView.extend({
@@ -7,14 +7,14 @@ function(Backbone, _, $, Idea, app, IdeaView){
          * The template
          * @type {[type]}
          */
-        template: app.loadTemplate('allMessagesInIdeaList'),
+        template: Ctx.loadTemplate('allMessagesInIdeaList'),
 
         /**
          * The render
          */
         render: function(){
             app.trigger('render');
-            app.cleanTooltips(this.$el);
+            Ctx.cleanTooltips(this.$el);
             var data = this.model.toJSON();
 
             this.$el.addClass('idealist-item');
@@ -26,7 +26,7 @@ function(Backbone, _, $, Idea, app, IdeaView){
             }
             
             this.$el.html(this.template(data));
-            app.initTooltips(this.$el);
+            Ctx.initTooltips(this.$el);
             return this;
         },
 
@@ -41,12 +41,12 @@ function(Backbone, _, $, Idea, app, IdeaView){
          * @event
          */
         onTitleClick: function(){
-            if( app.messageList ){
-                app.messageList.filterThroughPanelLock(function(){
-                    app.messageList.showAllMessages();
+            if( assembl.messageList ){
+                assembl.messageList.filterThroughPanelLock(function(){
+                    assembl.messageList.showAllMessages();
                 }, 'syncWithCurrentIdea');
             }
-            app.setCurrentIdea(null);
+            Ctx.setCurrentIdea(null);
         }
     });
 

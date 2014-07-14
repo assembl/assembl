@@ -1,5 +1,5 @@
-define(['backbone', 'underscore', 'moment', 'ckeditor', 'app', 'models/message', 'i18n', 'permissions', 'views/messageSend'],
-function(Backbone, _, Moment, ckeditor, app, Message, i18n, Permissions, MessageSendView){
+define(['backbone', 'underscore', 'moment', 'ckeditor', 'modules/context', 'app', 'models/message', 'i18n', 'permissions', 'views/messageSend'],
+function(Backbone, _, Moment, ckeditor, Ctx, app, Message, i18n, Permissions, MessageSendView){
     'use strict';
 
     var MIN_TEXT_TO_TOOLTIP = 5,
@@ -9,7 +9,7 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n, Permissions, Message
      * @class views.MessageView
      */
     var MessageView = Backbone.View.extend({
-        availableMessageViewStyles: app.AVAILABLE_MESSAGE_VIEW_STYLES,
+        availableMessageViewStyles: Ctx.AVAILABLE_MESSAGE_VIEW_STYLES,
         /**
          * @type {String}
          */
@@ -63,7 +63,7 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n, Permissions, Message
          * The thread message template
          * @type {_.template}
          */
-        template: app.loadTemplate('message'),
+        template: Ctx.loadTemplate('message'),
 
         /**
          * Meant for derived classes to override
@@ -95,11 +95,11 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n, Permissions, Message
             if( ! _.isUndefined(level) ){
                 this.currentLevel = level;
             }
-            app.cleanTooltips(this.$el);
+            Ctx.cleanTooltips(this.$el);
             this.setViewStyle(this.viewStyle);
                 
             data['id'] = data['@id'];
-            data['date'] = app.formatDate(data.date);
+            data['date'] = Ctx.formatDate(data.date);
             data['creator'] = this.model.getCreator();
             if(this.model.get('bodyMimeType')) {
                 bodyFormatClass = "body_format_"+this.model.get('bodyMimeType').replace("/", "_"); 
@@ -110,12 +110,14 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n, Permissions, Message
             // by annotator when storing message annotations
             // It has to contain ONLY raw content of the message provided by the
             // database for annotator to parse it back properly
-            data['messageBodyId'] = app.ANNOTATOR_MESSAGE_BODY_ID_PREFIX + data['@id'];
+            data['messageBodyId'] = Ctx.ANNOTATOR_MESSAGE_BODY_ID_PREFIX + data['@id'];
             data['isHoisted'] = this.isHoisted;
+
+            data['ctx'] = Ctx;
             
             this.$el.attr("id","message-"+ data['@id']);
             data['read'] = this.model.get('read')
-            data['user_is_connected'] = app.getCurrentUser() !== app.users.getUnknownUser();
+            data['user_is_connected'] = Ctx.getCurrentUser() !== assembl.users.getUnknownUser();
             this.$el.addClass(data['@type']);
             if (this.model.get('read') || !data['user_is_connected']) {
                 this.$el.addClass('read');
@@ -126,8 +128,8 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n, Permissions, Message
             }
             data = this.transformDataBeforeRender(data);
             this.$el.html( this.template(data) );
-            app.initTooltips(this.$el);
-            app.initClipboard();
+            Ctx.initTooltips(this.$el);
+            Ctx.initClipboard();
 
             this.replyView = new MessageSendView({
                 'allow_setting_subject': false,
@@ -142,7 +144,7 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n, Permissions, Message
             this.$('.message-replybox').append(this.replyView.render().el);
 
             this.postRender();
-            app.messageList.initAnnotator();
+            assembl.messageList.initAnnotator();
             this.loadAnnotations();
             if(this.replyBoxShown) {
                 this.openReplyBox();
@@ -192,7 +194,7 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n, Permissions, Message
             var that = this;
             _.each(annotations, function(annotation){
                 var highlights = annotation.highlights,
-                    func = app.showSegmentByAnnotation.bind(window, annotation);
+                    func = Ctx.showSegmentByAnnotation.bind(window, annotation);
 
                 _.each(highlights, function(highlight){
                     highlight.setAttribute('data-annotation-id', annotation['@id']);
@@ -227,7 +229,7 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n, Permissions, Message
          * Hide the selection tooltip
          */
         hideTooltip: function(){
-            app.selectionTooltip.hide();
+            Ctx.selectionTooltip.hide();
         },
 
         /**
@@ -237,12 +239,12 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n, Permissions, Message
          * @param  {string} text
          */
         showTooltip: function(x, y, text){
-            var marginLeft = app.selectionTooltip.width() / -2,
+            var marginLeft = Ctx.selectionTooltip.width() / -2,
                 segment = text;
 
             text = text.substr(0, TOOLTIP_TEXT_LENGTH) + '...' + text.substr( - TOOLTIP_TEXT_LENGTH );
 
-            app.selectionTooltip
+            Ctx.selectionTooltip
               .show()
               .attr('data-segment', segment)
               .text(text)
@@ -288,8 +290,8 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n, Permissions, Message
             var annotator = this.$el.closest('#messageList-list').data('annotator');
             annotator.onAdderClick.call(annotator);
 
-            if( app.messageList.annotatorEditor ){
-                app.messageList.annotatorEditor.element.css({
+            if( assembl.messageList.annotatorEditor ){
+                assembl.messageList.annotatorEditor.element.css({
                     'top': y,
                     'left': x
                 });
@@ -322,7 +324,7 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n, Permissions, Message
          */
         onMessageHoistClick: function(ev){
             // we will hoist the post, or un-hoist it if it is already hoisted
-            this.isHoisted = app.messageList.toggleFilterByPostId(this.model.getId());
+            this.isHoisted = assembl.messageList.toggleFilterByPostId(this.model.getId());
             this.render(); // so that the isHoisted property will now be considered
         },
         
@@ -421,7 +423,7 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n, Permissions, Message
                 return;
             }
 
-            var selectedText = app.getSelectedText(),
+            var selectedText = Ctx.getSelectedText(),
                 text = selectedText.focusNode ? selectedText.getRangeAt(0).cloneContents() : '';
 
             text = text.textContent || '';
@@ -447,8 +449,8 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n, Permissions, Message
          */
         stopSelection: function(ev){
             var isInsideAMessage = false,
-                selectedText = app.getSelectedText(),
-                user = app.getCurrentUser(),
+                selectedText = Ctx.getSelectedText(),
+                user = Ctx.getCurrentUser(),
                 text = selectedText.focusNode ? selectedText.getRangeAt(0).cloneContents() : '';
 
             text = text.textContent || '';

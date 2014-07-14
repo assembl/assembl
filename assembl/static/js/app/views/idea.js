@@ -1,5 +1,5 @@
-define(['backbone', 'underscore', 'jquery', 'models/idea', 'models/segment', 'app', 'permissions'],
-function(Backbone, _, $, Idea, Segment, app, Permissions){
+define(['backbone', 'underscore', 'jquery', 'modules/context', 'models/idea', 'models/segment', 'app', 'permissions'],
+function(Backbone, _, $, Ctx, Idea, Segment, app, Permissions){
     'use strict';
 
     var IdeaView = Backbone.View.extend({
@@ -13,7 +13,7 @@ function(Backbone, _, $, Idea, Segment, app, Permissions){
          * The template
          * @type {[type]}
          */
-        template: app.loadTemplate('idea'),
+        template: Ctx.loadTemplate('idea'),
 
         /**
          * Counter used to open the idea when it is dragover
@@ -56,8 +56,8 @@ function(Backbone, _, $, Idea, Segment, app, Permissions){
             _.extend(data, render_data);
 
             this.$el.addClass('idealist-item');
-            app.cleanTooltips(this.$el);
-            this.onIsSelectedChange(app.getCurrentIdea());
+            Ctx.cleanTooltips(this.$el);
+            this.onIsSelectedChange(Ctx.getCurrentIdea());
 
             if( data.isOpen === true ){
                 this.$el.addClass('is-open');
@@ -72,7 +72,7 @@ function(Backbone, _, $, Idea, Segment, app, Permissions){
             data.segments = this.model.getSegments();
             data.shortTitle = this.model.getShortTitleDisplayText();
             this.$el.html(this.template(data));
-            app.initTooltips(this.$el);
+            Ctx.initTooltips(this.$el);
             var rendered_children = [];
             _.each(data['children'], function(idea, i){
                 var ideaView = new IdeaView({model:idea}, view_data);
@@ -156,15 +156,15 @@ function(Backbone, _, $, Idea, Segment, app, Permissions){
         onTitleClick: function(ev){
             var that = this;
             ev.stopPropagation();
-            if( app.messageList ){
-                app.messageList.filterThroughPanelLock(function(){
-                    app.messageList.addFilterIsRelatedToIdea(that.model);
+            if( assembl.messageList ){
+                assembl.messageList.filterThroughPanelLock(function(){
+                    assembl.messageList.addFilterIsRelatedToIdea(that.model);
                 }, 'syncWithCurrentIdea');
             }
-            if( this.model === app.getCurrentIdea() ){
-                app.setCurrentIdea(null);
+            if( this.model === Ctx.getCurrentIdea() ){
+                Ctx.setCurrentIdea(null);
             } else {
-                app.setCurrentIdea(this.model);
+                Ctx.setCurrentIdea(this.model);
             }
         },
 
@@ -175,12 +175,12 @@ function(Backbone, _, $, Idea, Segment, app, Permissions){
             if( ev ){
                 ev.stopPropagation();
             }
-            if(app.getCurrentUser().can(Permissions.EDIT_IDEA)){
+            if(Ctx.getCurrentUser().can(Permissions.EDIT_IDEA)){
                 ev.currentTarget.style.opacity = 0.4;
                 ev.originalEvent.dataTransfer.effectAllowed = 'move';
                 ev.originalEvent.dataTransfer.dropEffect = 'all';
 
-                app.showDragbox(ev, this.model.get('shortTitle'));
+                Ctx.showDragbox(ev, this.model.get('shortTitle'));
                 app.draggedIdea = this.model;
             }
         },
@@ -277,12 +277,12 @@ function(Backbone, _, $, Idea, Segment, app, Permissions){
 
             this.$('.idealist-body').trigger('dragleave');
 
-            var segment = app.getDraggedSegment();
+            var segment = Ctx.getDraggedSegment();
             if( segment ){
                 if( isDraggedBelow ){
                     // Add as a child idea
                     var newIdea = this.model.addSegmentAsChild(segment);
-                    app.setCurrentIdea(newIdea);
+                    Ctx.setCurrentIdea(newIdea);
                 } else {
                     // Add to the current idea
                     this.model.addSegment(segment);
@@ -291,18 +291,18 @@ function(Backbone, _, $, Idea, Segment, app, Permissions){
                 return;
             }
 
-            var annotation = app.getDraggedAnnotation();
+            var annotation = Ctx.getDraggedAnnotation();
             if( annotation ){
                 if( isDraggedBelow ){
                     // Add as a child idea
                     app.currentAnnotationIdIdea = null;
                     app.currentAnnotationNewIdeaParentIdea = this.model;
-                    app.saveCurrentAnnotationAsExtract();
+                    Ctx.saveCurrentAnnotationAsExtract();
                 } else {
                     // Add as a segment
                     app.currentAnnotationIdIdea = this.model.getId();
                     app.currentAnnotationNewIdeaParentIdea = null;
-                    app.saveCurrentAnnotationAsExtract();
+                    Ctx.saveCurrentAnnotationAsExtract();
                 }
                 
                 return;
@@ -310,7 +310,7 @@ function(Backbone, _, $, Idea, Segment, app, Permissions){
 
             if( app.draggedIdea && app.draggedIdea.cid !== this.model.cid ){
 
-                var idea = app.getDraggedIdea();
+                var idea = Ctx.getDraggedIdea();
 
                 // If it is a descendent, do nothing
                 if( this.model.isDescendantOf(idea) ){

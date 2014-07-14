@@ -1,5 +1,5 @@
-define(['backbone', 'underscore', 'jquery', 'models/idea', 'app', 'permissions', 'i18n'],
-function(Backbone, _, $, Idea, app, Permissions, i18n){
+define(['backbone', 'underscore', 'jquery','modules/context', 'models/idea', 'app', 'permissions', 'i18n'],
+function(Backbone, _, $, Ctx, Idea, app, Permissions, i18n){
     'use strict';
     
     var MessageSendView = Backbone.View.extend({
@@ -7,7 +7,7 @@ function(Backbone, _, $, Idea, app, Permissions, i18n){
          * The tempate
          * @type {_.template}
          */
-        template: app.loadTemplate('messageSend'),
+        template: Ctx.loadTemplate('messageSend'),
 
         /**
          * @type {Base.Model}
@@ -26,18 +26,18 @@ function(Backbone, _, $, Idea, app, Permissions, i18n){
          * The render
          */
         render: function(){
-            app.cleanTooltips(this.$el);
+            Ctx.cleanTooltips(this.$el);
             var data = {
                     body_help_message: this.initialBody,
                     allow_setting_subject: this.options.allow_setting_subject || this.options.allow_setting_subject,
                     cancel_button_label: this.options.cancel_button_label ? this.options.cancel_button_label: i18n.gettext('Cancel'),
                     send_button_label: this.options.send_button_label ? this.options.send_button_label: i18n.gettext('Send'),
                     subject_label: this.options.subject_label ? this.options.subject_label: i18n.gettext('Subject:'),
-                    canPost: app.getCurrentUser().can(Permissions.ADD_POST)
+                    canPost: Ctx.getCurrentUser().can(Permissions.ADD_POST)
             }
             
             this.$el.html(this.template(data));
-            app.initTooltips(this.$el);
+            Ctx.initTooltips(this.$el);
             
             return this;
         },
@@ -96,7 +96,7 @@ function(Backbone, _, $, Idea, app, Permissions, i18n){
             
             success_callback = function(data, textStatus, jqXHR){
                 btn.text( i18n.gettext('Message posted!') );
-                that.listenToOnce(app.messageList, "render_complete", function() {
+                that.listenToOnce(assembl.messageList, "render_complete", function() {
                         if(_.isFunction(that.options.send_callback)) {
                             that.options.send_callback();
                         }
@@ -104,7 +104,7 @@ function(Backbone, _, $, Idea, app, Permissions, i18n){
                         setTimeout(function(){
                             //TODO:  This delay will no longer be necessary once backbone sync is done below in sendPostToServer
                             //console.log("Calling showMessageById for "+data['@id']);
-                            app.messageList.showMessageById(data['@id']);
+                            assembl.messageList.showMessageById(data['@id']);
                         }, 1000);
                 });
                 setTimeout(function(){
@@ -165,7 +165,7 @@ function(Backbone, _, $, Idea, app, Permissions, i18n){
          * TODO: Must be converted to real backbone sync
          */
         sendPostToServer: function(message_body, message_subject, reply_message_id, reply_idea_id, success_callback){
-            var url = app.getApiUrl('posts'),
+            var url = Ctx.getApiUrl('posts'),
                 data = {},
                 that = this;
             data.message = message_body;

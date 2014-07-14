@@ -1,4 +1,4 @@
-define(['backbone', 'underscore', 'app', 'ckeditor-sharedspace'], function(Backbone, _, app, ckeditor){
+define(['backbone', 'underscore', 'modules/context', 'app', 'ckeditor-sharedspace'], function(Backbone, _, Ctx, app, ckeditor){
     'use strict';
 
     var CKEditorField = Backbone.View.extend({
@@ -11,7 +11,7 @@ define(['backbone', 'underscore', 'app', 'ckeditor-sharedspace'], function(Backb
          * The tempate
          * @type {_.template}
          */
-        template: app.loadTemplate('ckeditorField'),
+        template: Ctx.loadTemplate('ckeditorField'),
 
         /**
          * CKeditor instance for this view
@@ -34,6 +34,17 @@ define(['backbone', 'underscore', 'app', 'ckeditor-sharedspace'], function(Backb
          * @type {String}
          */
         placeholder: '',
+
+        /**
+         * Ckeditor default configuration
+         * @type {object}
+         */
+        CKEDITOR_CONFIG: {
+            toolbar: [  ['Bold', 'Italic', 'Outdent', 'Indent', 'NumberedList', 'BulletedList'] ],
+            extraPlugins: 'sharedspace',
+            removePlugins: 'floatingspace,resize',
+            sharedSpaces: { top: 'ckeditor-toptoolbar', bottom: 'ckeditor-bottomtoolbar' }
+        },
 
         /**
          * @init
@@ -98,7 +109,7 @@ define(['backbone', 'underscore', 'app', 'ckeditor-sharedspace'], function(Backb
         startEditing: function(){
             var editingArea = this.$('#'+this.fieldId).get(0),
                 that = this,
-                config = _.extend({}, app.CKEDITOR_CONFIG, {
+                config = _.extend({}, this.CKEDITOR_CONFIG, {
                     sharedSpaces: { top: this.topId, bottom: this.bottomId }
                 });
 

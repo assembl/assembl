@@ -1,5 +1,5 @@
-define(['models/base','underscore', 'models/segment', 'app', 'i18n', 'types', 'permissions'],
-function(Base, _, Segment, app, i18n, Types, Permissions){
+define(['models/base','underscore','modules/context', 'models/segment', 'app', 'i18n', 'types', 'permissions'],
+function(Base, _, Ctx, Segment, app, i18n, Types, Permissions){
     'use strict';
 
     /**
@@ -14,9 +14,9 @@ function(Base, _, Segment, app, i18n, Types, Permissions){
             obj = obj || {};
             var that = this;
 
-            obj.creationDate = obj.creationDate || app.getCurrentTime();
+            obj.creationDate = obj.creationDate || Ctx.getCurrentTime();
             this.set('creationDate', obj.creationDate);
-            this.set('hasCheckbox', app.getCurrentUser().can(Permissions.EDIT_SYNTHESIS));
+            this.set('hasCheckbox', Ctx.getCurrentUser().can(Permissions.EDIT_SYNTHESIS));
 
         },
 
@@ -24,7 +24,7 @@ function(Base, _, Segment, app, i18n, Types, Permissions){
          * Url
          * @type {String}
          */
-        urlRoot: app.getApiUrl("ideas"),
+        urlRoot: Ctx.getApiUrl("ideas"),
 
         /**
          * Defaults
@@ -62,9 +62,9 @@ function(Base, _, Segment, app, i18n, Types, Permissions){
                 return i18n.gettext('The root idea will not be in the synthesis');
             }
 
-            if( app.stripHtml(this.get('definition')) !== '' ){
+            if( Ctx.stripHtml(this.get('definition')) !== '' ){
                 return this.get('definition');
-            } else if( app.stripHtml(this.get('longTitle')) !== '' ){
+            } else if( Ctx.stripHtml(this.get('longTitle')) !== '' ){
                 return this.get('longTitle');
             } else {
                 return i18n.gettext('Add a definition for this idea');
@@ -83,9 +83,9 @@ function(Base, _, Segment, app, i18n, Types, Permissions){
                 return i18n.gettext('The root idea will never be in the synthesis');
             }
 
-            if( app.stripHtml(this.get('longTitle')) !== '' ){
+            if( Ctx.stripHtml(this.get('longTitle')) !== '' ){
                 return this.get('longTitle');
-            } else if ( app.stripHtml(this.get('shortTitle')) !== '' ){
+            } else if ( Ctx.stripHtml(this.get('shortTitle')) !== '' ){
                 return this.get('shortTitle');
             } else {
                 return i18n.gettext('Add and expression for the next synthesis');
@@ -141,7 +141,7 @@ function(Base, _, Segment, app, i18n, Types, Permissions){
             if( parent ){
                 parent.updateChildrenOrder();
             } else {
-                app.updateIdealistOrder();
+                Ctx.updateIdealistOrder();
             }
         },
 
@@ -163,7 +163,7 @@ function(Base, _, Segment, app, i18n, Types, Permissions){
             if( parent ){
                 parent.updateChildrenOrder();
             } else {
-                app.updateIdealistOrder();
+                Ctx.updateIdealistOrder();
             }
         },
 
@@ -282,7 +282,7 @@ function(Base, _, Segment, app, i18n, Types, Permissions){
          * @return {array<Segment>}
          */
         getSegments: function(){
-            return app.getSegmentsByIdea(this);
+            return Ctx.getSegmentsByIdea(this);
         },
 
         /**
@@ -338,7 +338,7 @@ function(Base, _, Segment, app, i18n, Types, Permissions){
               if (attrs['parentId'] === null && this.id !== undefined && attrs['root'] !== true) {
                 console.log("empty parent bug: ", _.clone(attrs));
                 var id = attrs['@id'];
-                var links = app.ideaList.ideaLinks.where({target: id});
+                var links = assembl.ideaList.ideaLinks.where({target: id});
                 if (links.length > 0) {
                     console.log('corrected');
                     attrs['parents'] = _.map(links, function(l) {return l.get('source')});
@@ -361,7 +361,7 @@ function(Base, _, Segment, app, i18n, Types, Permissions){
          * Url
          * @type {String}
          */
-        url: app.getApiUrl("ideas"),
+        url: Ctx.getApiUrl("ideas"),
 
         /**
          * The model

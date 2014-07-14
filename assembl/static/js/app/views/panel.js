@@ -1,5 +1,5 @@
-define(['backbone', 'underscore', 'jquery', 'app', 'i18n', 'permissions'],
-function(Backbone, _, $, app, i18n, Permissions){
+define(['backbone', 'underscore', 'jquery', 'modules/context', 'app', 'i18n', 'permissions'],
+function(Backbone, _, $, Ctx, app, i18n, Permissions){
     'use strict';
 
     /**
@@ -161,7 +161,7 @@ function(Backbone, _, $, app, i18n, Permissions){
          * Sets the panel as full screen
          */
         setFullscreen: function(){
-            app.setFullscreen(this);
+            Ctx.setFullscreen(this);
         },
 
         /**

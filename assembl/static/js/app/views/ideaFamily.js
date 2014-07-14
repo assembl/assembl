@@ -1,5 +1,5 @@
-define(['backbone', 'underscore', 'jquery', 'models/idea', 'app', 'permissions'],
-function(Backbone, _, $, Idea, app, Permissions){
+define(['backbone', 'underscore', 'jquery', 'models/idea', 'modules/context', 'app', 'permissions'],
+function(Backbone, _, $, Idea, Ctx, app, Permissions){
     'use strict';
 
     var IdeaFamilyView = Backbone.View.extend({
@@ -23,7 +23,7 @@ function(Backbone, _, $, Idea, app, Permissions){
          * The template
          * @type {[type]}
          */
-        template: app.loadTemplate('ideaFamily'),
+        template: Ctx.loadTemplate('ideaFamily'),
 
         /**
          * @init
@@ -44,12 +44,12 @@ function(Backbone, _, $, Idea, app, Permissions){
                 that = this,
                 data = this.model.toJSON(),
                 authors = [],
-                segments = app.getSegmentsByIdea(this.model),
+                segments = Ctx.getSegmentsByIdea(this.model),
                 view_data = this.view_data,
                 render_data = view_data[this.model.getId()],
                 ideaView = new this.innerViewClass(_.extend({model: this.model}, this.innerViewClassInitializeParams));
             _.extend(data, render_data);
-            app.cleanTooltips(this.$el);
+            Ctx.cleanTooltips(this.$el);
             
             this.$el.addClass('ideafamily-item');
             if(render_data['is_last_sibling']) {
@@ -79,7 +79,7 @@ function(Backbone, _, $, Idea, app, Permissions){
             data.id = this.model.getId();
 
             this.$el.html(this.template(data));
-            app.initTooltips(this.$el);
+            Ctx.initTooltips(this.$el);
             this.$el.find('>.ideafamily-body>.ideafamily-idea').append(ideaView.render().el);
 
             var rendered_children = [];

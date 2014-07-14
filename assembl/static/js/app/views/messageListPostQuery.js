@@ -1,4 +1,4 @@
-define(['app', 'i18n', 'sprintf'], function(app, i18n, sprintf){
+define(['modules/context', 'app', 'i18n', 'sprintf'], function(Ctx, app, i18n, sprintf){
     /**
      * @class PostQuery
      *
@@ -14,7 +14,7 @@ define(['app', 'i18n', 'sprintf'], function(app, i18n, sprintf){
             valuesText = [];
             for (var i=0;i<queryObjects.length;i++) {
                 var value = queryObjects[i].value,
-                idea = app.ideaList.ideas.get(value),
+                idea = assembl.ideaList.ideas.get(value),
                 span = '<span class="closebutton" data-filterid="'+filterDef.id+'" data-value="'+value+'"></span>\n';
                 valuesText.push('"' + idea.get('shortTitle') + '"' + span);
             }
@@ -29,7 +29,7 @@ define(['app', 'i18n', 'sprintf'], function(app, i18n, sprintf){
             valuesText = [];
             for (var i=0;i<queryObjects.length;i++) {
                 var value = queryObjects[i].value,
-                post = app.messageList.messages.get(value),
+                post = assembl.messageList.messages.get(value),
                 span = '<span class="closebutton" data-filterid="'+filterDef.id+'" data-value="'+value+'"></span>\n';
                 valuesText.push('"' + post.get('subject') + '"' + span);
             }
@@ -341,7 +341,7 @@ define(['app', 'i18n', 'sprintf'], function(app, i18n, sprintf){
          */
         this.execute = function(success, success_data_changed){
             var that = this,
-                url = app.getApiUrl('posts'),
+                url = Ctx.getApiUrl('posts'),
                 params = {},
                 id = null,
                 filterDef = null,

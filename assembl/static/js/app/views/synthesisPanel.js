@@ -1,5 +1,5 @@
-define(['backbone', 'underscore', 'jquery', 'app', 'models/synthesis', 'models/idea', 'permissions', 'views/ideaFamily', 'views/ideaInSynthesis', 'i18n', 'views/editableField', 'views/ckeditorField', 'views/visitors/objectTreeRenderVisitor'],
-function(Backbone, _, $, app, Synthesis, Idea, Permissions, IdeaFamilyView, IdeaInSynthesisView, i18n, EditableField, CKEditorField, objectTreeRenderVisitor){
+define(['backbone', 'underscore', 'jquery', 'modules/context', 'app', 'models/synthesis', 'models/idea', 'permissions', 'views/ideaFamily', 'views/ideaInSynthesis', 'i18n', 'views/editableField', 'views/ckeditorField', 'views/visitors/objectTreeRenderVisitor'],
+function(Backbone, _, $, Ctx, app, Synthesis, Idea, Permissions, IdeaFamilyView, IdeaInSynthesisView, i18n, EditableField, CKEditorField, objectTreeRenderVisitor){
     'use strict';
 
     var SynthesisPanel = Backbone.View.extend({
@@ -11,17 +11,14 @@ function(Backbone, _, $, app, Synthesis, Idea, Permissions, IdeaFamilyView, Idea
             if( obj ){
 
                 if( obj.button ){
-                    this.button = $(obj.button).on('click', app.togglePanel.bind(window, 'synthesisPanel'));
+                    this.button = $(obj.button).on('click', Ctx.togglePanel.bind(window, 'synthesisPanel'));
                 }
-
-
             }
             this.ideas = new Idea.Collection();
 
             this.listenTo(this.ideas, 'add remove reset', this.render);
 
             this.listenTo(this.model, 'reset change', this.render);
-
         },
 
         /**
@@ -40,14 +37,14 @@ function(Backbone, _, $, app, Synthesis, Idea, Permissions, IdeaFamilyView, Idea
          * The template
          * @type {_.template}
          */
-        template: app.loadTemplate('synthesisPanel'),
+        template: Ctx.loadTemplate('synthesisPanel'),
 
         /**
          * The render
          * @return {SynthesisPanel}
          */
         render: function(){
-            if(app.debugRender) {
+            if(Ctx.debugRender) {
                 console.log("synthesisPanel:render() is firing");
             }
             var that = this,
@@ -57,25 +54,25 @@ function(Backbone, _, $, app, Synthesis, Idea, Permissions, IdeaFamilyView, Idea
             roots = [],
             synthesis_is_published = this.model.get("published_in_post")!=null;
             app.trigger('render');
-            app.cleanTooltips(this.$el);
+            Ctx.cleanTooltips(this.$el);
 
             //Do NOT listen to reset, as it's called within this render
             this.stopListening(this.ideas, 'reset', this.render);
             
-            if(app.ideaList.ideas.length<1) {
+            if(assembl.ideaList.ideas.length<1) {
                 //console.log("Idea list isn't available yet (we should at least have the root)");
-                this.listenTo(app.ideaList.ideas, 'reset', this.render);
+                this.listenTo(assembl.ideaList.ideas, 'reset', this.render);
             }
             else{
-                this.stopListening(app.ideaList.ideas, 'reset', this.render);
-                rootIdea = app.ideaList.ideas.getRootIdea();
+                this.stopListening(assembl.ideaList.ideas, 'reset', this.render);
+                rootIdea = assembl.ideaList.ideas.getRootIdea();
                 var raw_ideas = this.model.get('ideas');
                 //console.log("Raw Ideas from model: ", raw_ideas)
                 if( raw_ideas ){
                     var ideas = [];
                     _.each(raw_ideas, function (raw_idea){
                         //console.log(raw_idea);
-                        var idea = app.ideaList.ideas.get(raw_idea['@id']);
+                        var idea = assembl.ideaList.ideas.get(raw_idea['@id']);
                         if(idea) {
                             ideas.push(idea);
                         }
@@ -96,10 +93,10 @@ function(Backbone, _, $, app, Synthesis, Idea, Permissions, IdeaFamilyView, Idea
             var body = this.$('.body-synthesis'),
                 y = body.get(0) ? body.get(0).scrollTop : 0;
             var data = model.toJSON();
-            data.canSend = app.getCurrentUser().can(Permissions.SEND_SYNTHESIS);
-            data.canEdit = app.getCurrentUser().can(Permissions.EDIT_SYNTHESIS);
+            data.canSend = Ctx.getCurrentUser().can(Permissions.SEND_SYNTHESIS);
+            data.canEdit = Ctx.getCurrentUser().can(Permissions.EDIT_SYNTHESIS);
             this.$el.html( this.template(data) );
-            app.initTooltips(this.$el);
+            Ctx.initTooltips(this.$el);
             function inSynthesis(idea) {
                 if (idea.hidden) {
                     return false;
@@ -188,7 +185,7 @@ function(Backbone, _, $, app, Synthesis, Idea, Permissions, IdeaFamilyView, Idea
          * Sets the panel as full screen
          */
         setFullscreen: function(){
-            app.setFullscreen(this);
+            Ctx.setFullscreen(this);
         },
 
         /**
@@ -215,7 +212,7 @@ function(Backbone, _, $, app, Synthesis, Idea, Permissions, IdeaFamilyView, Idea
          */
         _publish: function(){
             var publishes_synthesis_id = this.model.id,
-                url = app.getApiUrl('posts'),
+                url = Ctx.getApiUrl('posts'),
                 that = this;
 
             var onSuccess = function(resp){
@@ -243,7 +240,7 @@ function(Backbone, _, $, app, Synthesis, Idea, Permissions, IdeaFamilyView, Idea
             // getting the most_common_recipient_address
             $.ajax({
                 type: 'get',
-                url: app.getApiUrl('sources/'),
+                url: Ctx.getApiUrl('sources/'),
                 contentType: 'application/json',
                 success: onSuccess
             });

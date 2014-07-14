@@ -1,5 +1,5 @@
-define(['backbone', 'underscore', 'moment', 'ckeditor', 'app', 'models/message', 'views/message', 'models/synthesis', 'views/synthesisPanel', 'i18n', 'permissions', 'views/messageSend'],
-function(Backbone, _, Moment, ckeditor, app, Message, MessageView, Synthesis, SynthesisPanel, i18n, Permissions, MessageSendView){
+define(['backbone', 'underscore', 'moment', 'ckeditor', 'modules/context', 'app', 'models/message', 'views/message', 'models/synthesis', 'views/synthesisPanel', 'i18n', 'permissions', 'views/messageSend'],
+function(Backbone, _, Moment, ckeditor, Ctx, app, Message, MessageView, Synthesis, SynthesisPanel, i18n, Permissions, MessageSendView){
     'use strict';
 
     /**
@@ -14,11 +14,11 @@ function(Backbone, _, Moment, ckeditor, app, Message, MessageView, Synthesis, Sy
             MessageView.prototype.initialize.apply(this, arguments);
             this.stopListening(this.messageListView, 'annotator:initComplete', this.onAnnotatorInitComplete);
             var synthesis_id = this.model.get('publishes_synthesis');
-            this.synthesis = app.syntheses.get(synthesis_id)
+            this.synthesis = assembl.syntheses.get(synthesis_id)
             if(!this.synthesis) {
                 this.synthesis = new Synthesis.Model({'@id': synthesis_id});
                 this.synthesis.fetch();
-                app.syntheses.add(this.synthesis);
+                assembl.syntheses.add(this.synthesis);
             }
         },
 
@@ -26,7 +26,7 @@ function(Backbone, _, Moment, ckeditor, app, Message, MessageView, Synthesis, Sy
          * The thread message template
          * @type {_.template}
          */
-        template: app.loadTemplate('message'),
+        template: Ctx.loadTemplate('message'),
 
         /**
          * Meant for derived classes to override
@@ -45,7 +45,7 @@ function(Backbone, _, Moment, ckeditor, app, Message, MessageView, Synthesis, Sy
                 model: this.synthesis
                 //el: '#message_'+_.escape(this.model.getNumericId())+'_synthesis'
             });
-            synthesisPanel.template = app.loadTemplate('synthesisPanelMessage');
+            synthesisPanel.template = Ctx.loadTemplate('synthesisPanelMessage');
             synthesisPanel.render();
             this.$('.message-body').html(synthesisPanel.el);
             return;

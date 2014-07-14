@@ -1,5 +1,5 @@
-define(['backbone', 'underscore', 'jquery', 'app', 'models/segment', 'types', 'i18n', 'permissions'],
-function(Backbone, _, $, app, Segment, Types, i18n, Permissions){
+define(['backbone', 'underscore', 'jquery', 'modules/context', 'app', 'models/segment', 'types', 'i18n', 'permissions'],
+function(Backbone, _, $, Ctx, app, Segment, Types, i18n, Permissions){
     'use strict';
 
     var SegmentList = Backbone.View.extend({
@@ -10,14 +10,14 @@ function(Backbone, _, $, app, Segment, Types, i18n, Permissions){
             var that = this;
 
             if( obj && obj.button ){
-                this.button = $(obj.button).on('click', app.togglePanel.bind(window, 'segmentList'));
+                this.button = $(obj.button).on('click', Ctx.togglePanel.bind(window, 'segmentList'));
             }
 
             this.listenTo(this.segments, 'invalid', function(model, error){
                 alert(error);
             });
 
-            app.users.on('reset', this.render, app.segmentList);
+            assembl.users.on('reset', this.render, assembl.segmentList);
 
             this.listenTo(this.segments, 'add remove change reset', this.render);
 
@@ -30,7 +30,7 @@ function(Backbone, _, $, app, Segment, Types, i18n, Permissions){
          * The template
          * @type {_.template}
          */
-        template: app.loadTemplate('segmentList'),
+        template: Ctx.loadTemplate('segmentList'),
 
         /**
          * The collection
@@ -49,14 +49,14 @@ function(Backbone, _, $, app, Segment, Types, i18n, Permissions){
          * @return {segmentList}
          */
         render: function(){
-            if(app.debugRender) {
+            if(Ctx.debugRender) {
                 console.log("segmentList:render() is firing");
             }
             app.trigger('render');
-            app.cleanTooltips(this.$el);
+            Ctx.cleanTooltips(this.$el);
             
             var segments = this.segments.getClipboard(),
-                currentUser = app.getCurrentUser(),
+                currentUser = Ctx.getCurrentUser(),
                 data = {segments:segments,
                         canEditExtracts:currentUser.can(Permissions.EDIT_EXTRACT),
                         canEditMyExtracts:currentUser.can(Permissions.EDIT_MY_EXTRACT)
@@ -67,7 +67,7 @@ function(Backbone, _, $, app, Segment, Types, i18n, Permissions){
             }
 
             this.$el.html(this.template(data));
-            app.initTooltips(this.$el);
+            Ctx.initTooltips(this.$el);
             this.panel = this.$('.panel');
 
             if( top > 0 ){
@@ -97,14 +97,14 @@ function(Backbone, _, $, app, Segment, Types, i18n, Permissions){
          * @return {Segment}
          */
         addAnnotationAsSegment: function(annotation, idIdea){
-            var post = app.getPostFromAnnotation(annotation),
+            var post = Ctx.getPostFromAnnotation(annotation),
                 idPost = post.getId();
 
             var segment = new Segment.Model({
                 target: { "@id": idPost, "@type": Types.EMAIL },
                 text: annotation.text,
                 quote: annotation.quote,
-                idCreator: app.getCurrentUser().getId(),
+                idCreator: Ctx.getCurrentUser().getId(),
                 ranges: annotation.ranges,
                 idPost: idPost,
                 idIdea: idIdea
@@ -138,7 +138,7 @@ function(Backbone, _, $, app, Segment, Types, i18n, Permissions){
                 target: { "@id": idPost, "@type": Types.EMAIL },
                 text: text,
                 quote: text,
-                idCreator: app.getCurrentUser().getId(),
+                idCreator: Ctx.getCurrentUser().getId(),
                 idPost: idPost
             });
 
@@ -174,7 +174,7 @@ function(Backbone, _, $, app, Segment, Types, i18n, Permissions){
          * @param {Segment} segment
          */
         showSegment: function(segment){
-            app.openPanel(app.segmentList);
+            Ctx.openPanel(assembl.segmentList);
             this.highlightSegment(segment);
         },
         
@@ -183,7 +183,7 @@ function(Backbone, _, $, app, Segment, Types, i18n, Permissions){
          * @param {Segment} segment
          */
         highlightSegment: function(segment){
-            var selector = app.format('.box[data-segmentid={0}]', segment.cid),
+            var selector = Ctx.format('.box[data-segmentid={0}]', segment.cid),
                 box = this.$(selector);
 
             if( box.length ){
@@ -235,7 +235,7 @@ function(Backbone, _, $, app, Segment, Types, i18n, Permissions){
             var cid = ev.currentTarget.getAttribute('data-segmentid'),
                 segment = this.segments.get(cid);
 
-            app.showDragbox(ev, segment.getQuote());
+            Ctx.showDragbox(ev, segment.getQuote());
             app.draggedSegment = segment;
         },
 
@@ -290,20 +290,20 @@ function(Backbone, _, $, app, Segment, Types, i18n, Permissions){
 
             this.panel.trigger('dragleave');
 
-            var idea = app.getDraggedIdea();
+            var idea = Ctx.getDraggedIdea();
             if( idea ){
                 return; // Do nothing
             }
 
-            var segment = app.getDraggedSegment();
+            var segment = Ctx.getDraggedSegment();
             if( segment ){
                 this.addSegment(segment);
                 return;
             }
 
-            var annotation = app.getDraggedAnnotation();
+            var annotation = Ctx.getDraggedAnnotation();
             if( annotation ){
-                app.saveCurrentAnnotationAsExtract();
+                Ctx.saveCurrentAnnotationAsExtract();
                 return;
             }
 
@@ -342,7 +342,7 @@ function(Backbone, _, $, app, Segment, Types, i18n, Permissions){
             var cid = ev.currentTarget.getAttribute('data-segmentid'),
                 segment = this.segments.get(cid);
 
-            app.showTargetBySegment(segment);
+            Ctx.showTargetBySegment(segment);
         }
 
     });

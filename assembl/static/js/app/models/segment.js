@@ -1,5 +1,5 @@
-define(['app', 'models/base', 'underscore', 'models/user', 'models/message'],
-function(app, Base, _, User, Message){
+define(['modules/context', 'app', 'models/base', 'underscore', 'models/user', 'models/message'],
+function(Ctx, app, Base, _, User, Message){
     'use strict';
 
     /**
@@ -16,7 +16,7 @@ function(app, Base, _, User, Message){
             }
 
             if( ! this.get('creationDate') ){
-                this.set( 'creationDate', app.getCurrentTime() );
+                this.set( 'creationDate', Ctx.getCurrentTime() );
             }
 
             var ranges = this.attributes.ranges,
@@ -42,13 +42,13 @@ function(app, Base, _, User, Message){
                     idea;
                 if(that.previous("idIdea") !== null) {
                     
-                    previousIdea = app.ideaList.ideas.get(that.previous("idIdea"));
+                    previousIdea = assembl.ideaList.ideas.get(that.previous("idIdea"));
                     //console.log("Segment:initialize:triggering idea change (previous idea)");
                     previousIdea.trigger('change');
                 }
                 if(that.get('idIdea') !== null) {
                     
-                    idea = app.ideaList.ideas.get(that.get('idIdea'));
+                    idea = assembl.ideaList.ideas.get(that.get('idIdea'));
                     //console.log("Segment:initialize:triggering idea change (new idea)");
                     idea.trigger('change');
                 }
@@ -61,7 +61,7 @@ function(app, Base, _, User, Message){
         /**
          * @type {string}
          */
-        urlRoot: app.getApiUrl("extracts"),
+        urlRoot: Ctx.getApiUrl("extracts"),
 
         /**
          * @type {Object}
@@ -81,7 +81,7 @@ function(app, Base, _, User, Message){
          * Validation
          */
         validate: function(attrs, options){
-            var currentUser = app.getCurrentUser(),
+            var currentUser = Ctx.getCurrentUser(),
                 id = currentUser.getId();
 
             if( !id ){
@@ -104,12 +104,12 @@ function(app, Base, _, User, Message){
                 if(app.segmentPostCache[idPost]) {
                     return app.segmentPostCache[idPost];
                 }
-                post = app.messageList.messages.get(idPost);
+                post = assembl.messageList.messages.get(idPost);
                 if( !post ){
                     post = new Message.Model({'@id': idPost});
                     post.fetch({async:false});
                 }
-                app.segmentPostCache[idPost] = post;
+                assembl.segmentPostCache[idPost] = post;
             }
             return post;
         },
@@ -145,7 +145,7 @@ function(app, Base, _, User, Message){
             }
 
 
-            return app.format("<i class='{0}'></i>", cls);
+            return Ctx.format("<i class='{0}'></i>", cls);
         },
 
         /**
@@ -154,7 +154,7 @@ function(app, Base, _, User, Message){
          */
         getCreator: function(){
             var creatorId = this.get('idCreator');
-            return app.users.getById(creatorId);
+            return assembl.users.getById(creatorId);
         },
 
         /**
@@ -174,7 +174,7 @@ function(app, Base, _, User, Message){
         /**
          * @type {String}
          */
-        url: app.getApiUrl("extracts"),
+        url: Ctx.getApiUrl("extracts"),
 
         /**
          * @type {IdeaModel}
@@ -188,7 +188,7 @@ function(app, Base, _, User, Message){
             this.listenTo(this,"add remove", function(segment){
                 var idea;
                 if(segment.get('idIdea') !== null) {
-                    idea = app.ideaList.ideas.get(segment.get('idIdea'));
+                    idea = assembl.ideaList.ideas.get(segment.get('idIdea'));
                     //console.log("SegmentCollection:initialize:triggering idea change (new idea)");
                     idea.trigger('change');
                 }
@@ -200,7 +200,7 @@ function(app, Base, _, User, Message){
          * @return {Array<Segment>}
          */
         getClipboard: function(){
-            var currentUser = app.getCurrentUser(),
+            var currentUser = Ctx.getCurrentUser(),
                 segments;
 
             return this.filter(function(item){

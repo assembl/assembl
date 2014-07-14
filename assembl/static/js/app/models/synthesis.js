@@ -1,4 +1,4 @@
-define(['models/base', 'jquery', 'app', 'i18n', 'permissions'], function(Base, $, app, i18n, Permissions){
+define(['models/base', 'jquery','modules/context', 'app', 'i18n', 'permissions'], function(Base, $, Ctx, app, i18n, Permissions){
     'use strict';
 
     /**
@@ -18,7 +18,7 @@ define(['models/base', 'jquery', 'app', 'i18n', 'permissions'], function(Base, $
          * The urlRoot endpoint
          * @type {String}
          */
-        urlRoot: app.getApiUrl('explicit_subgraphs/synthesis'),
+        urlRoot: Ctx.getApiUrl('explicit_subgraphs/synthesis'),
 
         /**
          * Default values
@@ -42,7 +42,7 @@ define(['models/base', 'jquery', 'app', 'i18n', 'permissions'], function(Base, $
          * Url
          * @type {String}
          */
-        url: app.getApiUrl("explicit_subgraphs/synthesis"),
+        url: Ctx.getApiUrl("explicit_subgraphs/synthesis"),
 
         /**
          * The model

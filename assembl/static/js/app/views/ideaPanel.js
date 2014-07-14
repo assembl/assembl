@@ -1,5 +1,5 @@
-define(['backbone', 'underscore', 'models/idea', 'models/message', 'app', 'i18n', 'sprintf', 'types', 'views/editableField', 'views/ckeditorField', 'permissions', 'views/messageSend', 'views/notification'],
-function(Backbone, _, Idea, Message, app, i18n, sprintf, Types, EditableField, CKEditorField, Permissions, MessageSendView, Notification){
+define(['backbone', 'underscore', 'modules/context', 'models/idea', 'models/message', 'app', 'i18n', 'sprintf', 'types', 'views/editableField', 'views/ckeditorField', 'permissions', 'views/messageSend', 'views/notification'],
+function(Backbone, _, Ctx, Idea, Message, app, i18n, sprintf, Types, EditableField, CKEditorField, Permissions, MessageSendView, Notification){
     'use strict';
 
     var LONG_TITLE_ID = 'ideaPanel-longtitle';
@@ -13,7 +13,7 @@ function(Backbone, _, Idea, Message, app, i18n, sprintf, Types, EditableField, C
          * The tempate
          * @type {_.template}
          */
-        template: app.loadTemplate('ideaPanel'),
+        template: Ctx.loadTemplate('ideaPanel'),
 
         /**
          * @init
@@ -22,7 +22,7 @@ function(Backbone, _, Idea, Message, app, i18n, sprintf, Types, EditableField, C
             obj = obj || {};
 
             if( obj.button ){
-                this.button = $(obj.button).on('click', app.togglePanel.bind(window, 'ideaPanel'));
+                this.button = $(obj.button).on('click', Ctx.togglePanel.bind(window, 'ideaPanel'));
             }
 
             if( this.model ){
@@ -36,7 +36,7 @@ function(Backbone, _, Idea, Message, app, i18n, sprintf, Types, EditableField, C
             // is associated with the idea, the idea will recieve a change event
             // on the socket
             //app.segmentList.segments.on('change reset', this.render, this);
-            this.listenTo(app.users, 'reset', this.render);
+            this.listenTo(assembl.users, 'reset', this.render);
             
             var that = this;
             app.on('idea:select', function(idea){
@@ -49,18 +49,18 @@ function(Backbone, _, Idea, Message, app, i18n, sprintf, Types, EditableField, C
          * The render
          */
         render: function(){
-            if(app.debugRender) {
+            if(Ctx.debugRender) {
                 console.log("ideaPanel:render() is firing");
             }
 
             app.trigger('render');
             var segments = {},
             subIdeas = {},
-            currentUser = app.getCurrentUser(),
+            currentUser = Ctx.getCurrentUser(),
             canEdit = currentUser.can(Permissions.EDIT_IDEA) || false,
             canEditNextSynthesis = currentUser.can(Permissions.EDIT_SYNTHESIS);
-            
-            app.cleanTooltips(this.$el);
+
+            Ctx.cleanTooltips(this.$el);
             
             if(this.model) {
                 segments = this.model.getSegments();
@@ -80,9 +80,9 @@ function(Backbone, _, Idea, Message, app, i18n, sprintf, Types, EditableField, C
                 canEditMyExtracts:currentUser.can(Permissions.EDIT_MY_EXTRACT),
                 canAddExtracts:currentUser.can(Permissions.EDIT_EXTRACT) //TODO: This is a bit too coarse
             } ) );
-            app.initTooltips(this.$el);
+            Ctx.initTooltips(this.$el);
             this.panel = this.$('.panel');
-            app.initClipboard();
+            Ctx.initClipboard();
             if(this.model) {
             var shortTitleField = new EditableField({
                 'model': this.model,
@@ -156,9 +156,9 @@ function(Backbone, _, Idea, Message, app, i18n, sprintf, Types, EditableField, C
          * @param {Segment} segment
          */
         showSegment: function(segment){
-            var selector = app.format('.box[data-segmentid={0}]', segment.cid),
+            var selector = Ctx.format('.box[data-segmentid={0}]', segment.cid),
                 idIdea = segment.get('idIdea'),
-                idea = app.ideaList.ideas.get(idIdea),
+                idea = assembl.ideaList.ideas.get(idIdea),
                 box;
 
             if( !idea ){
@@ -197,7 +197,7 @@ function(Backbone, _, Idea, Message, app, i18n, sprintf, Types, EditableField, C
                 if( this.model !== null ){
                     //console.log("setCurrentIdea:  setting up new listeners for "+this.model.id);
                     this.listenTo(this.model, 'change', ideaChangeCallback);
-                    app.openPanel(app.ideaPanel);
+                    Ctx.openPanel(assembl.ideaPanel);
                 } else {
                     //TODO: More sophisticated behaviour here, depending 
                     //on if the panel was opened by selection, or by something else.
@@ -230,7 +230,7 @@ function(Backbone, _, Idea, Message, app, i18n, sprintf, Types, EditableField, C
             this.model.destroy({ success: function(){
                 that.unblockPanel();
                 app.trigger('idea:delete');
-                app.setCurrentIdea(null);
+                Ctx.setCurrentIdea(null);
             }});
         },
 
@@ -295,13 +295,13 @@ function(Backbone, _, Idea, Message, app, i18n, sprintf, Types, EditableField, C
          */
         onDragStart: function(ev){
             //TODO: Deal with editing own extract (EDIT_MY_EXTRACT)
-            if( app.segmentList && app.segmentList.segments && app.getCurrentUser().can(Permissions.EDIT_EXTRACT)){
+            if( assembl.segmentList && assembl.segmentList.segments && Ctx.getCurrentUser().can(Permissions.EDIT_EXTRACT)){
                 ev.currentTarget.style.opacity = 0.4;
 
                 var cid = ev.currentTarget.getAttribute('data-segmentid'),
-                    segment = app.segmentList.segments.getByCid(cid);
+                    segment = assembl.segmentList.segments.getByCid(cid);
                 console.log( cid );
-                app.showDragbox(ev, segment.getQuote());
+                Ctx.showDragbox(ev, segment.getQuote());
                 app.draggedSegment = segment;
             }
         },
@@ -345,16 +345,16 @@ function(Backbone, _, Idea, Message, app, i18n, sprintf, Types, EditableField, C
 
             this.panel.trigger('dragleave');
 
-            var segment = app.getDraggedSegment();
+            var segment = Ctx.getDraggedSegment();
             if( segment ){
                 this.addSegment(segment);
             }
-            var annotation = app.getDraggedAnnotation();
+            var annotation = Ctx.getDraggedAnnotation();
             if( annotation ){
                 // Add as a segment
                 app.currentAnnotationIdIdea = this.model.getId();
                 app.currentAnnotationNewIdeaParentIdea = null;
-                app.saveCurrentAnnotationAsExtract();
+                Ctx.saveCurrentAnnotationAsExtract();
                 return;
             }
 
@@ -366,8 +366,8 @@ function(Backbone, _, Idea, Message, app, i18n, sprintf, Types, EditableField, C
         onSegmentCloseButtonClick: function(ev){
             var cid = ev.currentTarget.getAttribute('data-segmentid');
 
-            if( app.segmentList && app.segmentList.segments ){
-                var segment = app.segmentList.segments.get(cid);
+            if( assembl.segmentList && assembl.segmentList.segments ){
+                var segment = assembl.segmentList.segments.get(cid);
 
                 if( segment ){
                     segment.save('idIdea', null);
@@ -415,9 +415,9 @@ function(Backbone, _, Idea, Message, app, i18n, sprintf, Types, EditableField, C
          */
         onSegmentLinkClick: function(ev){
             var cid = ev.currentTarget.getAttribute('data-segmentid'),
-                segment = app.segmentList.segments.get(cid);
+                segment = assembl.segmentList.segments.get(cid);
 
-            app.showTargetBySegment(segment);
+            Ctx.showTargetBySegment(segment);
         }
 
     });

@@ -18,6 +18,7 @@ var requirejs_config = {
     'socket': 'app/utils/socket',
     'types': 'app/utils/types',
     'permissions': 'app/utils/permissions',
+    'modules': 'app/modules',
 
     'jquery': "bower/jquery/jquery",
     'tipsy': 'bower/tipsy/src/javascripts/jquery.tipsy',
@@ -42,7 +43,9 @@ var requirejs_config = {
     'cytoscape': 'bower/cytoscape/cytoscape',
     'jit': 'bower/jit/Jit/jit',
     'sprintf': 'bower/sprintf/src/sprintf',
-    'backboneModal':'lib/backbone-modal/backbone.modal'
+    'backboneModal':'lib/backbone-modal/backbone.modal',
+    'marionette':'bower/marionette/lib/backbone.marionette.min'
+
   },
   shim: {
     backbone: {

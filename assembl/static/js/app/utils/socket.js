@@ -1,4 +1,4 @@
-define(['app', 'underscore', 'sockjs'], function(app, _, SockJS){
+define(['modules/context', 'app', 'underscore', 'sockjs'], function(Ctx, app, _, SockJS){
     'use strict';
 
     /**
@@ -22,7 +22,7 @@ define(['app', 'underscore', 'sockjs'], function(app, _, SockJS){
      * @init
      */
     Socket.prototype.init = function(){
-        this.socket = new SockJS(app.socket_url);
+        this.socket = new SockJS(Ctx.getSocketUrl());
         this.socket.onopen = this.onOpen.bind(this);
         this.socket.onmessage = this.onMessage.bind(this);
         this.socket.onclose = this.onClose.bind(this);
@@ -34,8 +34,8 @@ define(['app', 'underscore', 'sockjs'], function(app, _, SockJS){
      * @event
      */
     Socket.prototype.onOpen = function(ev){
-        this.socket.send("token:" + app.getCsrfToken());
-        this.socket.send("discussion:" + app.discussionID);
+        this.socket.send("token:" + Ctx.getCsrfToken());
+        this.socket.send("discussion:" + Ctx.getDiscussionId());
         this.state = Socket.STATE_CONNECTING;
     };
 
@@ -77,10 +77,10 @@ define(['app', 'underscore', 'sockjs'], function(app, _, SockJS){
      * @param  {Object]} item
      */
     Socket.prototype.processData = function(item){
-        var collection = app.getCollectionByType(item),
+        var collection = Ctx.getCollectionByType(item),
             model;
 
-        if (app.debugSocket) {
+        if (Ctx.debugSocket) {
             console.log( item['@id'] || item['@type'], item );
         }
 
@@ -89,7 +89,7 @@ define(['app', 'underscore', 'sockjs'], function(app, _, SockJS){
                 //Ignore Connections
                 return;
             } else {
-                if (app.debugSocket) {
+                if (Ctx.debugSocket) {
                     console.log("Socket.prototype.processData(): TODO: Handle singletons like discussion etc. for item:", item);
                 }
                 return;

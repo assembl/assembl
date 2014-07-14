@@ -4,8 +4,8 @@ define(function(require){
 
      var Assembl = require('modules/assembl'),
                $ = require('jquery'),
-           Types = require('utils/types'),
-     Permissions = require('utils/permissions'),
+           Types = require('types'),
+     Permissions = require('permissions'),
          Moment  = require('moment'),
     Zeroclipboard =  require('zeroclipboard');
 
@@ -294,31 +294,6 @@ define(function(require){
         },
 
         /**
-         * Close the given panel
-         * @param {backbone.View} panel
-         */
-        closePanel: function(panel){
-            if( ! panel.$el.hasClass('is-visible') ){
-                return false;
-            }
-
-            this.openedPanels -= 1;
-            this.body.attr('data-panel-qty', this.openedPanels);
-            if( this.isInFullscreen() ){
-                this.body.addClass('is-fullscreen');
-            }
-
-            panel.$el.removeClass('is-visible');
-
-            this.removePanelFromStorage(panel.el.id);
-
-            if( panel.button ) {
-                panel.button.removeClass('active');
-            }
-            Assembl.vent.trigger("panel:close", [panel]);
-        },
-
-        /**
          * @return {Object} The Object with all panels in the localStorage
          */
         getPanelsFromStorage: function(){
@@ -398,7 +373,7 @@ define(function(require){
          */
         getDraggedIdea: function(){
             if( this.ideaList && this.draggedIdea ){
-                app.ideaList.removeIdea(this.draggedIdea);
+                assembl.ideaList.removeIdea(this.draggedIdea);
             }
 
             var idea = this.draggedIdea;
@@ -428,12 +403,22 @@ define(function(require){
         loadCurrentUser: function(){
             var ctx = new Context();
             if( assembl.users ){
-                var user = assembl.users.getByNumericId(this.getCurrentUserId()) || assembl.users.getUnknownUser();
+                var user  = assembl.users.getByNumericId(this.getCurrentUserId()) || assembl.users.getUnknownUser();
                     user.fetchPermissionsFromScripTag();
                 this.setCurrentUser(user);
                 this.loadCsrfToken(true);
             }
         },
+
+        /*loadCurrentUser: function(){
+            var ctx = new Context();
+            if( assembl.users ){
+                var user = assembl.users.getByNumericId(this.getCurrentUserId()) || assembl.users.getUnknownUser();
+                    user.fetchPermissionsFromScripTag();
+                this.setCurrentUser(user);
+                this.loadCsrfToken(true);
+            }
+        }*/
 
         /**
          * Return the Post related to the given annotation
@@ -529,15 +514,6 @@ define(function(require){
          */
         getCurrentTime: function(){
             return (new Date()).getTime();
-        },
-
-        /**
-         * Capitalize the first letter of the string
-         * @param {string} str
-         * @return {string}
-         */
-        capitalize: function(str){
-            return str.charAt(0).toUpperCase() + str.slice(1);
         },
 
         /**

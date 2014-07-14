@@ -1,4 +1,4 @@
-define(['models/base', 'app', 'jquery', 'i18n', 'permissions'], function(Base, app, $, i18n, Permissions){
+define(['models/base', 'modules/context', 'app', 'jquery', 'i18n', 'permissions'], function(Base, Ctx, app, $, i18n, Permissions){
     'use strict';
 
     var AVATAR_PLACEHOLDER = '//placehold.it/{0}';
@@ -12,7 +12,7 @@ define(['models/base', 'app', 'jquery', 'i18n', 'permissions'], function(Base, a
         /**
          * @type {String}
          */
-        url: app.getApiUrl('agents/'),
+        url: Ctx.getApiUrl('agents/'),
 
         /**
          * Defaults
@@ -44,7 +44,7 @@ define(['models/base', 'app', 'jquery', 'i18n', 'permissions'], function(Base, a
                 json;
 
             if( !script ){
-                throw new Error(app.format("Script tag #{0} doesn't exist", id));
+                throw new Error(Ctx.format("Script tag #{0} doesn't exist", id));
             }
 
             try {
@@ -64,7 +64,7 @@ define(['models/base', 'app', 'jquery', 'i18n', 'permissions'], function(Base, a
         getAvatarUrl: function(size){
             var id = this.getId();
 
-            return id != UNKNOWN_USER_ID ? app.formatAvatarUrl(app.extractId(id), size) : app.format(AVATAR_PLACEHOLDER, size);
+            return id != UNKNOWN_USER_ID ? Ctx.formatAvatarUrl(Ctx.extractId(id), size) : Ctx.format(AVATAR_PLACEHOLDER, size);
         },
 
         /**
@@ -99,7 +99,7 @@ define(['models/base', 'app', 'jquery', 'i18n', 'permissions'], function(Base, a
         /**
          * @type {String}
          */
-        url: app.getApiUrl('agents/'),
+        url: Ctx.getApiUrl('agents/'),
 
         /**
          * The model

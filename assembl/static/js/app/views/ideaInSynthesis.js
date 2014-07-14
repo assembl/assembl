@@ -1,5 +1,5 @@
-define(['backbone', 'underscore', 'jquery', 'models/idea', 'models/segment', 'app', 'permissions', 'views/ckeditorField', 'views/messageSend'],
-function(Backbone, _, $, Idea, Segment, app, Permissions, CKEditorField, MessageSendView){
+define(['backbone', 'underscore', 'jquery', 'models/idea', 'models/segment', 'modules/context', 'app', 'permissions', 'views/ckeditorField', 'views/messageSend'],
+function(Backbone, _, $, Idea, Segment, Ctx, app, Permissions, CKEditorField, MessageSendView){
     'use strict';
 
     var IdeaInSynthesisView = Backbone.View.extend({
@@ -13,7 +13,7 @@ function(Backbone, _, $, Idea, Segment, app, Permissions, CKEditorField, Message
          * The template
          * @type {[type]}
          */
-        template: app.loadTemplate('ideaInSynthesis'),
+        template: Ctx.loadTemplate('ideaInSynthesis'),
 
         synthesis: null,
         
@@ -35,10 +35,10 @@ function(Backbone, _, $, Idea, Segment, app, Permissions, CKEditorField, Message
             var
                 data = this.model.toJSON(),
                 authors = [],
-                segments = app.getSegmentsByIdea(this.model);
+                segments = Ctx.getSegmentsByIdea(this.model);
             
             this.$el.addClass('synthesis-idea');
-            app.cleanTooltips(this.$el);
+            Ctx.cleanTooltips(this.$el);
             segments.forEach(function(segment) {
                 var post = segment.getAssociatedPost();
                 if(post) {
@@ -57,7 +57,7 @@ function(Backbone, _, $, Idea, Segment, app, Permissions, CKEditorField, Message
             data.synthesis_is_published = this.synthesis.get("published_in_post")!=null;
 
             this.$el.html(this.template(data));
-            app.initTooltips(this.$el);
+            Ctx.initTooltips(this.$el);
             if(this.editing  && data.synthesis_is_published === false) {
                 this.renderCKEditor();
             }
@@ -93,10 +93,10 @@ function(Backbone, _, $, Idea, Segment, app, Permissions, CKEditorField, Message
         renderReplyView: function(){
             var that = this,
             send_callback = function() {
-                if(app.messageList.panelIsLocked === false) {
-                    app.messageList.currentQuery.clearAllFilters();
+                if(assembl.messageList.panelIsLocked === false) {
+                    assembl.messageList.currentQuery.clearAllFilters();
                 }
-                app.setCurrentIdea(that.model);
+                Ctx.setCurrentIdea(that.model);
             };
             this.replyView = new MessageSendView({
                 'allow_setting_subject': false,
@@ -107,7 +107,7 @@ function(Backbone, _, $, Idea, Segment, app, Permissions, CKEditorField, Message
                 'cancel_button_label': null,
                 'send_button_label': i18n.gettext('Send your reply'),
                 'subject_label': null,
-                'default_subject': 'Re: ' + app.stripHtml(this.model.getLongTitleDisplayText()).substring(0,50),
+                'default_subject': 'Re: ' + Ctx.stripHtml(this.model.getLongTitleDisplayText()).substring(0,50),
                 'mandatory_body_missing_msg': i18n.gettext('You did not type a response yet...'),
                 'mandatory_subject_missing_msg': null,
                 'send_callback': send_callback
@@ -153,7 +153,7 @@ function(Backbone, _, $, Idea, Segment, app, Permissions, CKEditorField, Message
          * @event
          */
         onEditableAreaClick: function(ev){
-            if(app.getCurrentUser().can(Permissions.EDIT_IDEA)) {
+            if(Ctx.getCurrentUser().can(Permissions.EDIT_IDEA)) {
                 this.editing = true;
                 this.render();
             }

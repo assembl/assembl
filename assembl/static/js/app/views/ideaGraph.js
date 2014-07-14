@@ -1,4 +1,4 @@
-define(['jit', 'app'], function($jit, app) {
+define(['jit', 'modules/context', 'app'], function($jit, Ctx, app) {
 
 // Hackity node that changes shape according to data.
 var ht;
@@ -95,10 +95,10 @@ function loadHypertreeInDiv(div) {
         //This is done by collecting the information (stored in the data property)   
         //for all the nodes adjacent to the centered node.  
         var node = ht.graph.getClosestNodeToOrigin("current");
-        var idea = app.ideaList.ideas.get(node.id);
+        var idea = assembl.ideaList.ideas.get(node.id);
         var suffix = "";
         if (idea !== undefined) {
-            app.setCurrentIdea(idea);
+            Ctx.setCurrentIdea(idea);
             var num_posts = idea.get('num_posts'),
                 num_read_posts = idea.get('num_read_posts');
             if (num_read_posts == num_posts) {

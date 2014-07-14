@@ -1,4 +1,4 @@
-define(['backbone', 'underscore'], function(Backbone, _){
+define(['backbone', 'underscore','modules/context'], function(Backbone, _, Ctx){
     'use strict';
 
     var EditableField = Backbone.View.extend({
@@ -86,7 +86,7 @@ define(['backbone', 'underscore'], function(Backbone, _){
          */
         onBlur: function(ev){
             if(this.canEdit) {
-                var data = app.stripHtml(ev.currentTarget.textContent);
+                var data = Ctx.stripHtml(ev.currentTarget.textContent);
                 data = $.trim(data);
     
                 if(data != this.placeholder || data == ''){

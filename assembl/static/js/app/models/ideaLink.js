@@ -25,7 +25,7 @@ function(Base, _, Segment, app, i18n, Types, Permissions){
         },
 
         correctParentBug: function() {
-            var child = app.ideaList.ideas.get(this.get('target'));
+            var child = assembl.ideaList.ideas.get(this.get('target'));
             if (child.get('parentId') === null) {
                 console.log("correct parent bug");
                 child.set('parentId', this.get('source'));
@@ -58,7 +58,7 @@ function(Base, _, Segment, app, i18n, Types, Permissions){
                 models.correctParentBug();
             }
             return models;
-        },
+        }
     });
 
     return {

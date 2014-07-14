@@ -1,7 +1,6 @@
 define(function(require){
 
     var Marionette = require('marionette'),
-               App = require('modules/assembl'),
                Ctx = require('modules/context');
 
     var SegmentList = require('views/segmentList'),
@@ -10,7 +9,8 @@ define(function(require){
         MessageList = require('views/messageList'),
           Synthesis = require('models/synthesis'),
      SynthesisPanel = require('views/synthesisPanel'),
-               User = require('models/user');
+               User = require('models/user'),
+     SynthesisPanel = require("views/notification");
 
 
     var Controller = Marionette.Controller.extend({
@@ -31,7 +31,7 @@ define(function(require){
             $w.ideaList = new IdeaList({el: '#ideaList', button: '#button-ideaList'});
 
             // Idea panel
-            $w.ideaPanel = new IdeaPanel({el: '#ideaPanel', button: '#button-ideaPanel'});
+            $w.ideaPanel = new IdeaPanel({el: '#ideaPanel', button: '#button-ideaPanel'}).render();
 
             // Message
             $w.messageList = new MessageList({el: '#messageList', button: '#button-messages'}).render();
@@ -49,8 +49,11 @@ define(function(require){
             });
 
             // Fetching the ideas
-            $w.segmentList.segments.fetchFromScriptTag('extracts-json');
+            //$w.segmentList.segments.fetchFromScriptTag('extracts-json');
             $w.ideaList.ideas.fetchFromScriptTag('ideas-json');
+
+            //init notification bar
+            //app.notification = new Notification()
         },
 
         /**
@@ -60,26 +63,25 @@ define(function(require){
 
             console.log('Controller:home');
 
-            //var ideaList = new IdeaList({el: '#ideaList', button: '#button-ideaList'});
-            //App.ideaListRegion.show(new MessageTest());
-
-            /*var messages = new Message.Collection();
-            var messageList = new MessageList({
-                messages: messages,
-                el: '#messageList',
-                button: '#button-messages'
+            var panels = Ctx.getPanelsFromStorage();
+            _.each(panels, function(value, name){
+                var panel = app[name];
+                if( panel && name !== 'ideaPanel' ){
+                    Ctx.openPanel(panel);
+                }
             });
-
-            messages.fetch({
-                reset:true
-            });*/
-
-            //App.messagesRegion.show(messageList);
-
+            if(app.openedPanels < 1) {
+                /* If no panel would be opened on load, open the table of ideas
+                 * and the Message panel so the user isn't presented with a
+                 * blank screen
+                 */
+                Ctx.openPanel(assembl.ideaList);
+                Ctx.openPanel(assembl.messageList);
+            }
         },
 
         idea: function(id){
-            Ctx.openPanel( app.ideaList );
+            Ctx.openPanel( assembl.ideaList );
             var idea = app.ideaList.ideas.get(id);
             if( idea ){
                 Ctx.setCurrentIdea(idea);
@@ -94,9 +96,9 @@ define(function(require){
         },
 
         message: function(id){
-            Ctx.openPanel( app.messageList );
-            app.messageList.messages.once('reset', function(){
-                app.messageList.showMessageById(id);
+            Ctx.openPanel( assembl.messageList );
+            assembl.messageList.messages.once('reset', function(){
+                assembl.messageList.showMessageById(id);
             });
         },
 

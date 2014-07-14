@@ -1,4 +1,4 @@
-define(['models/base', 'jquery', 'app', 'underscore'], function(Base, $, app, _){
+define(['models/base', 'jquery', 'modules/context', 'app', 'underscore'], function(Base, $, Ctx, app, _){
     'use strict';
 
     /**
@@ -9,7 +9,7 @@ define(['models/base', 'jquery', 'app', 'underscore'], function(Base, $, app, _)
          * The url
          * @type {String}
          */
-        urlRoot: app.getApiUrl('posts'),
+        urlRoot: Ctx.getApiUrl('posts'),
 
         /**
          * Default values
@@ -69,7 +69,7 @@ define(['models/base', 'jquery', 'app', 'underscore'], function(Base, $, app, _)
          * @return {Segment[]}
          */
         getSegments: function(){
-            return app.segmentList.segments.where({ idPost: this.getId() });
+            return assembl.segmentList.segments.where({ idPost: this.getId() });
         },
 
         /**
@@ -122,7 +122,7 @@ define(['models/base', 'jquery', 'app', 'underscore'], function(Base, $, app, _)
          */
         getCreator: function(){
             var creatorId = this.get('idCreator');
-            return app.users.getById(creatorId);
+            return assembl.users.getById(creatorId);
         },
 
         /**
@@ -137,7 +137,7 @@ define(['models/base', 'jquery', 'app', 'underscore'], function(Base, $, app, _)
          * @param {Boolean} value
          */
         setRead: function(value){
-            var user = app.getCurrentUser();
+            var user = Ctx.getCurrentUser();
 
             if( user.isUnknownUser() ){
                 // Unknown User can't mark as read
@@ -152,7 +152,7 @@ define(['models/base', 'jquery', 'app', 'underscore'], function(Base, $, app, _)
             this.set('read', value, { silent: true });
 
             var that = this,
-                url = app.getApiUrl('post_read/') + this.getId(),
+                url = Ctx.getApiUrl('post_read/') + this.getId(),
                 ajax;
 
             ajax = $.ajax(url, {
@@ -175,7 +175,7 @@ define(['models/base', 'jquery', 'app', 'underscore'], function(Base, $, app, _)
          * The url
          * @type {String}
          */
-        url: app.getApiUrl("posts"),
+        url: Ctx.getApiUrl("posts"),
 
         /**
          * The model
@@ -227,7 +227,7 @@ define(['models/base', 'jquery', 'app', 'underscore'], function(Base, $, app, _)
                     this.visitDepthFirst(visitor, children[i], ancestry);
                 }
             }
-        },
+        }
 
 
     });
