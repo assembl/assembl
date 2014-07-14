@@ -22,6 +22,8 @@ def discussion_list_view(request):
     roles = get_roles(user_id)
     context = get_default_context(request)
     context['discussions'] = []
+    #Show even anonymous users every discussion one has access to if 
+    #authenticated, so they can login and read them
     discussions = discussions_with_access(Authenticated if user_id == Everyone else user_id)
     for discussion in discussions:
         discussion_context = {
