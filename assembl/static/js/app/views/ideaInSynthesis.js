@@ -4,6 +4,7 @@ define(function(require){
     var Backbone = require('backbone'),
                _ = require('underscore'),
              Ctx = require('modules/context'),
+            i18n = require('utils/i18n'),
      Permissions = require('utils/permissions'),
    CKEditorField = require('views/ckeditorField'),
  MessageSendView = require('views/messageSend');

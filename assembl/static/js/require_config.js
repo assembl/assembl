@@ -38,10 +38,9 @@ var requirejs_config = {
     'sockjs': 'bower/sockjs/sockjs',
     'cytoscape': 'bower/cytoscape/cytoscape',
     'jit': 'bower/jit/Jit/jit',
-    'sprintf': 'bower/sprintf/src/sprintf',
+    'jed': 'bower/jed/jed',
     'backboneModal':'lib/backbone-modal/backbone.modal',
     'marionette':'bower/marionette/lib/backbone.marionette.min'
-
   },
   shim: {
     backbone: {
@@ -63,11 +62,8 @@ var requirejs_config = {
         exports: 'context'
     },
     'utils/i18n': {
+        deps: ['jed'],
         exports: 'i18n',
-        init: function(i18n) {
-            this.i18n(json);
-            return this.i18n;
-        }
     },
     'socket': {
         deps: ['sockjs']
@@ -111,10 +107,6 @@ var requirejs_config = {
     'annotator' : {
         deps: ['jquery'],
         exports: 'Annotator'
-    },
-    'sprintf' : {
-        deps: [],
-        exports: 'sprintf'
     },
     'moment_lang': {
         deps: ['moment'],

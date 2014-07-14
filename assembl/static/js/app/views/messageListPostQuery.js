@@ -1,8 +1,7 @@
 define(function(require){
 
     var Ctx = require('modules/context'),
-       i18n = require('utils/i18n'),
-    sprintf = require('sprintf');
+       i18n = require('utils/i18n');
 
     /**
      * @class PostQuery
@@ -23,9 +22,7 @@ define(function(require){
                 span = '<span class="closebutton" data-filterid="'+filterDef.id+'" data-value="'+value+'"></span>\n';
                 valuesText.push('"' + idea.get('shortTitle') + '"' + span);
             }
-            retval += sprintf.sprintf(i18n.pluralize({
-                1:gettext("Discuss idea %s"),2:gettext("Discuss ideas: %s")},
-                valuesText.length), valuesText.join(i18n.gettext(' AND ')));
+            retval += i18n.sprintf(i18n.ngettext("Discuss idea %s","Discuss ideas: %s", valuesText.length), valuesText.join(i18n.gettext(' AND ')));
             return retval;
         }
         this._returnHtmlDescriptionPostIsDescendentOfPost = function(filterDef, queryObjects) {
@@ -38,10 +35,10 @@ define(function(require){
                 span = '<span class="closebutton" data-filterid="'+filterDef.id+'" data-value="'+value+'"></span>\n';
                 valuesText.push('"' + post.get('subject') + '"' + span);
             }
-            retval += sprintf.sprintf(i18n.pluralize({
-                1:gettext("Are in the conversation that follows post %s"),
-                2:gettext("Are in the conversation that follows posts: %s")},
-                valuesText.length), valuesText.join(i18n.gettext(' AND ')));
+            retval += i18n.sprintf(i18n.ngettext("Are in the conversation that follows post %s",
+                                                    "Are in the conversation that follows posts: %s",
+                                                    valuesText.length),
+                                      valuesText.join(i18n.gettext(' AND ')));
             return retval;
         }
         this._returnHtmlDescriptionPostIsUnread = function(filterDef, queryObjects) {
@@ -55,8 +52,7 @@ define(function(require){
                     closeBtn = '<span class="closebutton" data-filterid="'+filterDef.id+'" data-value="'+value+'"></span>\n';
 
                 if(value===true){
-                    retval += sprintf.sprintf(i18n.gettext("%s %s"), "You haven't read yet", closeBtn);
-
+                    retval += i18n.sprintf(i18n.gettext("%s %s"), "You haven't read yet", closeBtn);
                 }else {
                     retval += i18n.gettext("You've already read");
                 }
@@ -71,7 +67,7 @@ define(function(require){
                 span = '<span class="closebutton" data-filterid="'+filterDef.id+'" data-value='+value+'></span>\n';
                 valuesText.push(span);
 
-                retval += sprintf.sprintf(i18n.gettext("%s %s"), filterDef.name, valuesText.join(', '));
+                retval += i18n.sprintf(i18n.gettext("%s %s"), filterDef.name, valuesText.join(', '));
 
             return retval;
         }
@@ -434,13 +430,13 @@ define(function(require){
                 else {
                     var unreadText = '';
                     if(this.getResultNumUnread() > 0) {
-                        unreadText = sprintf.sprintf(i18n.gettext("(%d unread)"), this.getResultNumUnread());
+                        unreadText = i18n.sprintf(i18n.gettext("(%d unread)"), this.getResultNumUnread());
                     }
                     if(numActiveFilters > 0) {
-                        retval += sprintf.sprintf(i18n.gettext("Found %d messages %s that:"), this.getResultNumTotal(), unreadText);
+                        retval += i18n.sprintf(i18n.gettext("Found %d messages %s that:"), this.getResultNumTotal(), unreadText);
                     }
                     else {
-                        retval += sprintf.sprintf(i18n.gettext("Found %d messages %s:"), this.getResultNumTotal(), unreadText);
+                        retval += i18n.sprintf(i18n.gettext("Found %d messages %s:"), this.getResultNumTotal(), unreadText);
                     }
                 }
                 
@@ -462,7 +458,7 @@ define(function(require){
                                 console.log(filterDef.id, this._query);
                                 var filterQuery = this._query[filterDef.id][0];
                                 var span = '<span class="closebutton" data-filterid="'+filterDef.id+'" data-value="'+filterQuery.value+'"></span>\n';
-                                retval += sprintf.sprintf((filterQuery.value===true)?i18n.gettext("%s"):i18n.gettext("NOT %s"), filterDef.name);
+                                retval += i18n.sprintf((filterQuery.value===true)?i18n.gettext("%s"):i18n.gettext("NOT %s"), filterDef.name);
                                 retval += span;
                             }
                             
@@ -472,7 +468,7 @@ define(function(require){
                                     var span = '<span class="closebutton" data-filterid="'+filterDef.id+'" data-value="'+value+'"></span>\n';
                                     valuesText.push(value + span);
                                 }
-                                retval += sprintf.sprintf(i18n.gettext("%s for values %s"), filterDef.name, valuesText.join(', '));
+                                retval += i18n.sprintf(i18n.gettext("%s for values %s"), filterDef.name, valuesText.join(', '));
                             }
                         }
                         retval += '</li>';
