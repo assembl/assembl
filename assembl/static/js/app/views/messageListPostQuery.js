@@ -281,7 +281,6 @@ define(function(require){
             var retval = false,
                 i = 0,
                 len;
-
             this.invalidateResults();
             if(filterDef.id in this._query) {
                 len = this._query[filterDef.id].length;
@@ -291,12 +290,11 @@ define(function(require){
                         retval = true;
                     }
                 }
-
+                len = this._query[filterDef.id].length;
                 if(len === 0) {
                     delete this._query[filterDef.id];
                 }
             }
-
             return retval;
         };
 
@@ -455,6 +453,7 @@ define(function(require){
                         }
                         else{
                             if (filterDef._value_is_boolean) {
+                                console.log(filterDef.id, this._query);
                                 var filterQuery = this._query[filterDef.id][0];
                                 var span = '<span class="closebutton" data-filterid="'+filterDef.id+'" data-value="'+filterQuery.value+'"></span>\n';
                                 retval += sprintf.sprintf((filterQuery.value===true)?i18n.gettext("%s"):i18n.gettext("NOT %s"), filterDef.name);

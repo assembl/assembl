@@ -82,7 +82,6 @@ define(function(require){
             }
 
             PanelView.prototype.initialize.apply(this);
-            this.renderedMessageViewsPrevious = {};
             this.renderedMessageViewsCurrent = {};
             
             this.setViewStyle(this.getViewStyleDefById(this.storedMessageListConfig.viewStyleId) || this.ViewStyles.THREADED);
@@ -323,13 +322,19 @@ define(function(require){
             var returnedDataOffsets = {},
                 numMessages = order_lookup_table.length,
                 i;
-            //Find preceding root message, and include it
-            //It is not possible that we do not find one.
-            for(i=requestedOffsets['offsetStart']; i>=0; i--) {
-                if(data_by_object[order_lookup_table[i]]['last_ancestor_id']==undefined){
-                    returnedDataOffsets['offsetStart']=i;
-                    break;
+            if(numMessages>0) {
+                //Find preceding root message, and include it
+                //It is not possible that we do not find one if there is 
+                //at least one message
+                for(i=requestedOffsets['offsetStart']; i>=0; i--) {
+                    if(data_by_object[order_lookup_table[i]]['last_ancestor_id']==undefined){
+                        returnedDataOffsets['offsetStart']=i;
+                        break;
+                    }
                 }
+            }
+            else {
+                returnedDataOffsets['offsetStart']=0;
             }
             if(requestedOffsets['offsetEnd']>(numMessages-1)) {
                 returnedDataOffsets['offsetEnd']=(numMessages-1);
@@ -440,14 +445,10 @@ define(function(require){
                 models,
                 offsets,
                 returnedOffsets = {};
-
                 
             /* The MessageFamilyView will re-fill the renderedMessageViewsCurrent
              * array with the newly calculated rendered MessageViews.
-             * It will use the array of renderedMessageViewsPrevious as a cache
-             * which massively speeds up rendering when switching between views.
              */
-            this.renderedMessageViewsPrevious = _.clone(this.renderedMessageViewsCurrent);
             this.renderedMessageViewsCurrent = {};
             //console.log("requestedOffsets:",requestedOffsets);
             if (this.currentViewStyle == this.ViewStyles.THREADED) {
@@ -460,8 +461,6 @@ define(function(require){
             //console.log("returnedOffsets:", returnedOffsets);
             this.offsetStart = returnedOffsets['offsetStart']
             this.offsetEnd = returnedOffsets['offsetEnd']
-            // Free the ram
-            this.renderedMessageViewsPrevious = {};
             ideaList.empty();
 
             if( views.length === 0 ){
@@ -849,7 +848,7 @@ define(function(require){
          */
         initAnnotator: function(){
             this.destroyAnnotator();
-
+            //console.log("initAnnotator called");
             // Saving the annotator reference
             this.annotator = this.$('#messageList-list').annotator().data('annotator');
 
