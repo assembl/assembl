@@ -21,46 +21,56 @@
 {% block content %}
 
 <div class="loginbox sign-in">
-    <div class="signinWrapper">
-        <p class="login-box-title">{{ gettext("Connect to assembl") }}</p>
-        <div class="error-message">{{error}}</div>
-        <form class="form" method="POST">
-            <input type="hidden" name="next_view" value="{{next_view}}" />
-            <input type="text" name="identifier" class="defaultfield" placeholder="{{ gettext('Email or username') }}" autofocus required />
-            <div class="spacer spacer--big"></div>
-            <input type="password" name="password" class="defaultfield" placeholder="{{ gettext('Password') }}" required />
-            <div class="spacer spacer--big"></div>
-            <input type="submit" name="login" value="{{ gettext('Enter') }}" class="btn-pink" />
+    <header>
+        <h1>{{ gettext("Log in to Assembl") }}</h1>
+    </header>
+
+    <div class="content">
+
+        <div class="socialPart">
+            <p class="login-box-title">{{ gettext("Log in using one of these social networks") }}</p>
+            {% if providers %}
+            <p>{{ gettext("Login with external tools")|safe }}</p>
+            {% endif %}
+            {{form('google', gettext('Login with Google'), true)}}
+            {{form('twitter', gettext('Login with Twitter'), true)}}
+            {{form('facebook', gettext('Login with Facebook'), true)}}
+            {{form('yahoo', gettext('Login with Yahoo'), true, oauth='true', openid_identifier='yahoo.com')}}
+            {{form('live', gettext('Login with Windows Live'), false)}}
+            {{form('github', gettext('Login with Github'), false)}}
+            {{form('bitbucket', gettext('Login with Bitbucket'), false)}}
+            {{form('openid', gettext('Login with OpenID'), true)}}
+        </div>
+
+        <div class="signinSeparator left">
+            <div class="mask"></div>
+        </div>
+
+        <div class="signinWrapper">
+            <p class="login-box-title">{{ gettext("Already have an account?") }}</p>
+            <div class="error-message">{{error}}</div>
+            <form class="form" method="POST">
+                <input type="hidden" name="next_view" value="{{next_view}}" />
+                <input type="text" name="identifier" class="defaultfield" placeholder="{{ gettext('Email or username') }}" autofocus required />
+                <div class="spacer spacer--big"></div>
+                <input type="password" name="password" class="defaultfield" placeholder="{{ gettext('Password') }}" required />
+                <div class="spacer spacer--big"></div>
+
+                <table class="submitButtons">
+                <tr><td>
+                    <input type="submit" name="login" value="{{ gettext('Enter') }}" class="btn-pink" />
+                </td><td>
+                    <a href="/req_password_change">{{ gettext('I forgot my password') }}</a>
+                </td></tr></table>
             </form>
-            <span class="register">{{gettext("or")}} <form class="form inline" method="GET" action="/register"><input type="submit" value="{{ gettext('register') }}" class="button button--condensed" /></form>
-            <form class="form inline" method="GET" action="/req_password_change"><input type="submit" value="{{ gettext('I forgot my password') }}" class="button button--condensed" /></form></span>
-        <div class="spacer spacer--big"></div>
-    </div>
+                
+            <div class="spacer spacer--big"></div>
 
-    <div class="signinSeparator left">
-        <div class="mask"></div>
+            <p class="login-box-title">{{ gettext("No account yet?") }}</p>
+            <form class="form inline" method="GET" action="/register"><input type="submit" value="{{ gettext('register') }}" class="button button--condensed" /></form>
+        </div>
+        
     </div>
-
-    <div class="socialPart">
-        <p class="login-box-title">{{ gettext("Use your social network") }}</p>
-        {% if providers %}
-        <p>{{ gettext("Login with external tools")|safe }}</p>
-        {% endif %}
-        {{form('google', gettext('Login with Google'), true)}}
-        {{form('twitter', gettext('Login with Twitter'), true)}}
-        {{form('facebook', gettext('Login with Facebook'), true)}}
-        {{form('yahoo', gettext('Login with Yahoo'), true, oauth='true', openid_identifier='yahoo.com')}}
-        {{form('live', gettext('Login with Windows Live'), false)}}
-        {{form('github', gettext('Login with Github'), false)}}
-        {{form('bitbucket', gettext('Login with Bitbucket'), false)}}
-        {{form('openid', gettext('Login with OpenID'), true)}}
-    </div>
-    <div class="spacer spacer--big"></div>
-    <footer>
-        {% set caravan = "<a href='http://caravan.coop' class='link caravan'>"+gettext("Caravan")+"</a>" %}
-        {% set imaginationForPeople = "<a href='http://imaginationforpeople.org/' class='link i4p'>"+gettext("Imagination for people") +"</a>" %}
-        <p>{{ gettext("Designed by %(caravan)s and %(imaginationForPeople)s")|format(caravan=caravan, imaginationForPeople=imaginationForPeople)|safe }}</p>
-    </footer>
 </div>
 
 {% endblock %}
