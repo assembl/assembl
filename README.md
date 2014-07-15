@@ -273,6 +273,7 @@ If you have made edits to the .po files, restart the pserve process to see how i
 supervisorctl restart dev:pserve
 ```
 
-Do not commit the .mo files, because these are compiled binary files
+Do not commit the .mo files, because these are compiled binary files.
 
+If your .po file contains "msgid" lines which are preceeded by "#, fuzzy" lines, these sentences may appear in their original language in the application. If you are sure that these sentences are correctly translated, remove the "#, fuzzy" line and recompile the catalog. They will then be displayed normally.
 

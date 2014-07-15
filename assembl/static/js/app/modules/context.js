@@ -107,7 +107,6 @@ define(function(require){
          */
          this.openedPanels = 0;
 
-         this.currentIdea = null;
 
          this.AVAILABLE_MESSAGE_VIEW_STYLES = {
             TITLE_ONLY: {
@@ -911,6 +910,7 @@ define(function(require){
 
             $(document).on('click', '.dropdown-label', this.onDropdownClick);
             $(document).on('ajaxError', this.onAjaxError);
+
         }
     }
 
