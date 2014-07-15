@@ -12,9 +12,5 @@ define(['marionette'], function (Marionette) {
         })
     });
 
-    App.addInitializer(function(){
-        console.log('Assembl Start');
-    });
-
     return App;
 });

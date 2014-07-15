@@ -1,5 +1,5 @@
-define(['modules/context', 'app', 'models/base', 'underscore', 'models/user', 'models/message'],
-function(Ctx, app, Base, _, User, Message){
+define(['modules/context', 'models/base', 'underscore', 'models/user', 'models/message'],
+function(Ctx, Base, _, User, Message){
     'use strict';
 
     /**
@@ -101,15 +101,15 @@ function(Ctx, app, Base, _, User, Message){
                 idPost = this.attributes.idPost;
 
             if (idPost) {
-                if(app.segmentPostCache[idPost]) {
-                    return app.segmentPostCache[idPost];
+                if(Ctx.segmentPostCache[idPost]) {
+                    return Ctx.segmentPostCache[idPost];
                 }
                 post = assembl.messageList.messages.get(idPost);
                 if( !post ){
                     post = new Message.Model({'@id': idPost});
                     post.fetch({async:false});
                 }
-                assembl.segmentPostCache[idPost] = post;
+                Ctx.segmentPostCache[idPost] = post;
             }
             return post;
         },

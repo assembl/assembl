@@ -8,12 +8,10 @@ function(Backbone, _, $, Ctx, app, Synthesis, Idea, Permissions, IdeaFamilyView,
          * @init
          */
         initialize: function(obj){
-            if( obj ){
-
-                if( obj.button ){
-                    this.button = $(obj.button).on('click', Ctx.togglePanel.bind(window, 'synthesisPanel'));
-                }
+            if( obj.button ){
+                this.button = $(obj.button).on('click', Ctx.togglePanel.bind(this, 'synthesisPanel'));
             }
+
             this.ideas = new Idea.Collection();
 
             this.listenTo(this.ideas, 'add remove reset', this.render);

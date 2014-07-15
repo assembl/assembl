@@ -28,10 +28,6 @@ function(Backbone, _, $, Ctx, Idea, Segment, app, Permissions){
          *   are the last child of their respective parents.
          */
         initialize: function(obj, view_data){
-            /*if( _.isUndefined(this.model) ){
-                this.model = new Idea.Model();
-            }*/
-            //console.log("initialize: ",obj, view_data, this);
             var that = this;
             this.view_data = view_data;
             this.listenTo(this.model, 'change', this.render);

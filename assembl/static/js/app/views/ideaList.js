@@ -46,9 +46,16 @@ function(Backbone, _, Ctx, Idea, IdeaLink, IdeaView, ideaGraphLoader, app, Types
             this.ideas = new Idea.Collection();
             this.ideaLinks = new IdeaLink.Collection();
 
+            /*this.listenTo(this, "all", function(eventName) {
+                console.log("ideaList event received: ", eventName);
+            });
+            this.listenTo(this.ideas, "all", function(eventName) {
+                console.log("ideaList collection event received: ", eventName);
+            });*/
+
             if( obj && obj.button ){
                 this.button = $(obj.button);
-                //this.button.on('click', Ctx.togglePanel.bind(window, 'ideaList'));
+                this.button.on('click', Ctx.togglePanel.bind(window, 'ideaList'));
             }
 
             var events = ['reset', 'change:parentId', 'change:@id', 'change:inNextSynthesis', 'remove', 'add'];
@@ -75,8 +82,13 @@ function(Backbone, _, Ctx, Idea, IdeaLink, IdeaView, ideaGraphLoader, app, Types
             // on the socket
             assembl.segmentList.segments.on('add change reset', this.render, this);
             
-            app.on("panel:open", function(){that.resizeGraphView();});
-            app.on("panel:close", function(){that.resizeGraphView();});
+            app.on("panel:open", function(){
+                that.resizeGraphView();
+            })
+            app.on("panel:close", function(){
+                that.resizeGraphView();
+            })
+
         },
 
         /**
@@ -97,7 +109,9 @@ function(Backbone, _, Ctx, Idea, IdeaLink, IdeaView, ideaGraphLoader, app, Types
             order_lookup_table = [],
             roots = [];
             
-            function excludeRoot(idea) {return idea != rootIdea && !idea.hidden; };
+            function excludeRoot(idea) {
+                return idea != rootIdea && !idea.hidden;
+            }
             
             if( this.body.get(0) ){
                 y = this.body.get(0).scrollTop;
@@ -136,15 +150,13 @@ function(Backbone, _, Ctx, Idea, IdeaLink, IdeaView, ideaGraphLoader, app, Types
                 list.appendChild(synthesisView.render().el);
                 
                 // All posts pseudo-idea
+
                 var allMessagesInIdeaListView = new AllMessagesInIdeaListView({model:rootIdea});
                 list.appendChild(allMessagesInIdeaListView.render().el);
                 
                 rootIdea.visitDepthFirst(objectTreeRenderVisitor(view_data, order_lookup_table, roots, excludeRoot));
                 rootIdea.visitDepthFirst(ideaSiblingChainVisitor(view_data));
             }
-            
-
-
 
             _.each(roots, function(idea){
                 var ideaView =  new IdeaView({model:idea}, view_data);

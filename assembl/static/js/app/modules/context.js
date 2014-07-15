@@ -6,8 +6,9 @@ define(function(require){
                $ = require('jquery'),
            Types = require('types'),
      Permissions = require('permissions'),
-         Moment  = require('moment'),
-    Zeroclipboard =  require('zeroclipboard');
+          Moment = require('moment'),
+            i18n = require('i18n'),
+   Zeroclipboard =  require('zeroclipboard');
 
     var Context = function(){
 
@@ -259,16 +260,43 @@ define(function(require){
          * @param  {String} panelName
          */
         togglePanel: function(panelName){
-            var panel = app[panelName];
+            var panel = assembl[panelName],
+                  ctx = new Context();
+
             if( panel === undefined ){
                 return false;
             }
-
             if( panel.$el.hasClass('is-visible') ){
-                this.closePanel(panel);
+                ctx.closePanel(panel);
             } else {
-                this.openPanel(panel);
+                ctx.openPanel(panel);
             }
+        },
+
+        /**
+         * Close the given panel
+         * @param {backbone.View} panel
+         */
+        closePanel: function(panel){
+            var ctx = new Context();
+            if( ! panel.$el.hasClass('is-visible') ){
+                return false;
+            }
+
+            assembl.openedPanels -= 1;
+            $(document.body).attr('data-panel-qty', assembl.openedPanels);
+            if( ctx.isInFullscreen() ){
+               $(document.body).addClass('is-fullscreen');
+            }
+
+            panel.$el.removeClass('is-visible');
+
+            ctx.removePanelFromStorage(panel.el.id);
+
+            if( panel.button ) {
+                panel.button.removeClass('active');
+            }
+            Assembl.vent.trigger("panel:close", [panel]);
         },
 
         /**

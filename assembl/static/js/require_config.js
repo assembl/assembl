@@ -62,9 +62,9 @@ var requirejs_config = {
         deps: ['jquery'],
         exports: 'jQuery'
     },
-    'app': {
-        deps: ['annotator', 'ckeditor', 'tipsy', 'i18n', 'jquery-highlight', 'zeroclipboard'],
-        exports: 'app'
+    'modules/context': {
+        deps: ['annotator', 'ckeditor', 'tipsy', 'i18n', 'jquery-highlight'],
+        exports: 'context'
     },
     'i18n': {
         exports: 'i18n',

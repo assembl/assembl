@@ -15,9 +15,7 @@ define(['marionette', 'jquery', 'modules/context','modules/controller'], functio
             ":slug/message/:id": "message",
             ":slug/message/:slug/:id" : "messageSlug"
         }
-
     });
-
 
     return Router;
 });

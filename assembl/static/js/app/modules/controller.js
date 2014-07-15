@@ -9,8 +9,7 @@ define(function(require){
         MessageList = require('views/messageList'),
           Synthesis = require('models/synthesis'),
      SynthesisPanel = require('views/synthesisPanel'),
-               User = require('models/user'),
-     SynthesisPanel = require("views/notification");
+               User = require('models/user');
 
 
     var Controller = Marionette.Controller.extend({
@@ -26,6 +25,7 @@ define(function(require){
             // The order of these initialisations matter...
             // Segment List
             $w.segmentList = new SegmentList({el: '#segmentList', button: '#button-segmentList'});
+            $w.segmentList.segments.fetchFromScriptTag('extracts-json');
 
             // Idea list
             $w.ideaList = new IdeaList({el: '#ideaList', button: '#button-ideaList'});
@@ -41,6 +41,7 @@ define(function(require){
             $w.syntheses = new Synthesis.Collection();
             var nextSynthesisModel = new Synthesis.Model({'@id': 'next_synthesis'});
             nextSynthesisModel.fetch();
+
             $w.syntheses.add(nextSynthesisModel);
             $w.synthesisPanel = new SynthesisPanel({
                 el: '#synthesisPanel',
@@ -48,8 +49,6 @@ define(function(require){
                 model: nextSynthesisModel
             });
 
-            // Fetching the ideas
-            //$w.segmentList.segments.fetchFromScriptTag('extracts-json');
             $w.ideaList.ideas.fetchFromScriptTag('ideas-json');
 
             //init notification bar
@@ -60,9 +59,6 @@ define(function(require){
          * Load the default view
          * */
         home: function(){
-
-            console.log('Controller:home');
-
             var panels = Ctx.getPanelsFromStorage();
             _.each(panels, function(value, name){
                 var panel = app[name];

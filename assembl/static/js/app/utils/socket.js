@@ -1,4 +1,4 @@
-define(['modules/context', 'app', 'underscore', 'sockjs'], function(Ctx, app, _, SockJS){
+define(["modules/assembl", 'modules/context', 'underscore', 'sockjs'], function(Assembl, Ctx, _, SockJS){
     'use strict';
 
     /**
@@ -45,7 +45,7 @@ define(['modules/context', 'app', 'underscore', 'sockjs'], function(Ctx, app, _,
      */
     Socket.prototype.onMessage = function(ev){
         if (this.state == Socket.STATE_CONNECTING) {
-            app.trigger('socket:open', [this.socket, ev]);
+            Assembl.commands.execute('socket:open');
             this.state = Socket.STATE_OPEN;
         }
         var data = JSON.parse(ev.data),
@@ -56,7 +56,7 @@ define(['modules/context', 'app', 'underscore', 'sockjs'], function(Ctx, app, _,
             this.processData(data[i]);
         }
 
-        app.trigger('socket:message', [this.socket, data]);
+        Assembl.commands.execute('socket:message');
     };
 
     /**
@@ -64,7 +64,7 @@ define(['modules/context', 'app', 'underscore', 'sockjs'], function(Ctx, app, _,
      * @event
      */
     Socket.prototype.onClose = function(ev){
-        app.trigger('socket:close', [this.socket, ev]);
+        Assembl.commands.execute('socket:close');
         
         var that = this;
         window.setTimeout(function(){
@@ -77,8 +77,7 @@ define(['modules/context', 'app', 'underscore', 'sockjs'], function(Ctx, app, _,
      * @param  {Object]} item
      */
     Socket.prototype.processData = function(item){
-        var collection = Ctx.getCollectionByType(item),
-            model;
+        var collection = Ctx.getCollectionByType(item);
 
         if (Ctx.debugSocket) {
             console.log( item['@id'] || item['@type'], item );
@@ -96,7 +95,6 @@ define(['modules/context', 'app', 'underscore', 'sockjs'], function(Ctx, app, _,
             }
 
         }
-
         // Each collection must know what to do
         collection.updateFromSocket(item);
     };

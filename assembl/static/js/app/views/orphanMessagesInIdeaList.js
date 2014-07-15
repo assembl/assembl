@@ -24,7 +24,7 @@ function(Backbone, _, $, Idea, Ctx, app, IdeaView){
             else {
                 this.$el.removeClass('hidden');
             }
-            
+
             this.$el.html(this.template(data));
             Ctx.initTooltips(this.$el);
             return this;
