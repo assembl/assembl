@@ -6,10 +6,10 @@ define(function(require){
             ckeditor = require('ckeditor'),
              Assembl = require('modules/assembl'),
                  Ctx = require('modules/context'),
-               Types = require('types'),
+               Types = require('utils/types'),
          MessageView = require('views/message'),
 SynthesisMessageView = require('views/synthesisMessage'),
-                i18n = require('i18n');
+                i18n = require('utils/i18n');
 
     /**
      * @class views.MessageFamilyView

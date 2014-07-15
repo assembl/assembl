@@ -3,7 +3,7 @@ define(function(require){
 
     var Base = require('models/base'),
          Ctx = require('modules/context'),
-        i18n = require('i18n');
+        i18n = require('utils/i18n');
 
     /**
      * @class SynthesisModel

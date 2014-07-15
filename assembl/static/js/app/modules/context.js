@@ -4,11 +4,11 @@ define(function(require){
 
      var Assembl = require('modules/assembl'),
                $ = require('jquery'),
-           Types = require('types'),
-     Permissions = require('permissions'),
+           Types = require('utils/types'),
+     Permissions = require('utils/permissions'),
           Moment = require('moment'),
-            i18n = require('i18n'),
-   Zeroclipboard =  require('zeroclipboard');
+            i18n = require('utils/i18n'),
+   Zeroclipboard = require('zeroclipboard');
 
     var Context = function(){
 

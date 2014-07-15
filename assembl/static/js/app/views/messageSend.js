@@ -5,8 +5,8 @@ define(function(require){
                _ = require('underscore'),
                $ = require('jquery'),
              Ctx = require('modules/context'),
-     Permissions = require('permissions'),
-            i18n = require('i18n');
+     Permissions = require('utils/permissions'),
+            i18n = require('utils/i18n');
 
     var MessageSendView = Backbone.View.extend({
         /**

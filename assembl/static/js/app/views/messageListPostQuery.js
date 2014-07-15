@@ -1,7 +1,7 @@
 define(function(require){
 
     var Ctx = require('modules/context'),
-       i18n = require('i18n'),
+       i18n = require('utils/i18n'),
     sprintf = require('sprintf');
 
     /**

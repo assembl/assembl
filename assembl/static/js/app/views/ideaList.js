@@ -4,7 +4,7 @@ define(function(require){
    var AllMessagesInIdeaListView = require('views/allMessagesInIdeaList'),
     OrphanMessagesInIdeaListView = require('views/orphanMessagesInIdeaList'),
          SynthesisInIdeaListView = require('views/synthesisInIdeaList'),
-                     Permissions = require('permissions'),
+                     Permissions = require('utils/permissions'),
          objectTreeRenderVisitor = require('views/visitors/objectTreeRenderVisitor'),
          ideaSiblingChainVisitor = require('views/visitors/ideaSiblingChainVisitor'),
                         Backbone = require('backbone'),

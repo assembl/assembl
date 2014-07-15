@@ -7,7 +7,7 @@ define(function(require){
             Idea = require('models/idea'),
          Segment = require('models/segment'),
              Ctx = require('modules/context'),
-     Permissions = require('permissions'),
+     Permissions = require('utils/permissions'),
    CKEditorField = require('views/ckeditorField'),
  MessageSendView = require('views/messageSend');
 

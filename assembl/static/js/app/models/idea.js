@@ -5,9 +5,9 @@ define(function(require){
            _ = require('underscore'),
          Ctx = require('modules/context'),
      Segment = require('models/segment'),
-        i18n = require('i18n'),
-       Types = require('types'),
- Permissions = require('permissions');
+        i18n = require('utils/i18n'),
+       Types = require('utils/types'),
+ Permissions = require('utils/permissions');
 
     /**
      * @class IdeaModel

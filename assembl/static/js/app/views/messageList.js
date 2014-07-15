@@ -9,9 +9,9 @@ define(function(require){
                            Ctx = require('modules/context'),
                      PanelView = require('views/panel'),
                        Message = require('models/message'),
-                          i18n = require('i18n'),
+                          i18n = require('utils/i18n'),
                      PostQuery = require('views/messageListPostQuery'),
-                   Permissions = require('permissions'),
+                   Permissions = require('utils/permissions'),
                MessageSendView = require('views/messageSend');
 
     /**

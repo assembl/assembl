@@ -6,8 +6,8 @@ define(function(require){
         ckeditor = require('ckeditor'),
          Assembl = require('modules/assembl'),
              Ctx = require('modules/context'),
-            i18n = require('i18n'),
-     Permissions = require('permissions'),
+            i18n = require('utils/i18n'),
+     Permissions = require('utils/permissions'),
  MessageSendView = require('views/messageSend');
 
 

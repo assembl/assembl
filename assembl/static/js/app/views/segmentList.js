@@ -7,9 +7,9 @@ define(function(require){
          Assembl = require('modules/assembl'),
              Ctx = require('modules/context'),
          Segment = require('models/segment'),
-           Types = require('types'),
-            i18n = require('i18n'),
-     Permissions = require('permissions');
+           Types = require('utils/types'),
+            i18n = require('utils/i18n'),
+     Permissions = require('utils/permissions');
 
     var SegmentList = Backbone.View.extend({
         /**

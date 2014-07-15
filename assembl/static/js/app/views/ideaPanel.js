@@ -4,11 +4,11 @@ define(function(require){
     var Backbone = require('backbone'),
          Assembl = require('modules/assembl'),
              Ctx = require('modules/context'),
-            i18n = require('i18n'),
+            i18n = require('utils/i18n'),
          sprintf = require('sprintf'),
    EditableField = require('views/editableField'),
    CKEditorField = require('views/ckeditorField'),
-     Permissions = require('permissions'),
+     Permissions = require('utils/permissions'),
  MessageSendView = require('views/messageSend'),
     Notification = require('views/notification');
 

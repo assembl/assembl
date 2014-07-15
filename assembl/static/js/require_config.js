@@ -10,14 +10,10 @@ var requirejs_config = {
     }
   ],
   paths: {
-    'app': 'app/app',
     'router': 'app/router',
     'views':'app/views',
     'models':'app/models',
-    'i18n': 'app/utils/i18n',
-    'socket': 'app/utils/socket',
-    'types': 'app/utils/types',
-    'permissions': 'app/utils/permissions',
+    'utils': 'app/utils',
     'modules': 'app/modules',
 
     'jquery': "bower/jquery/jquery",
@@ -63,10 +59,10 @@ var requirejs_config = {
         exports: 'jQuery'
     },
     'modules/context': {
-        deps: ['annotator', 'ckeditor', 'tipsy', 'i18n', 'jquery-highlight'],
+        deps: ['annotator', 'ckeditor', 'tipsy', 'utils/i18n', 'jquery-highlight'],
         exports: 'context'
     },
-    'i18n': {
+    'utils/i18n': {
         exports: 'i18n',
         init: function(i18n) {
             this.i18n(json);

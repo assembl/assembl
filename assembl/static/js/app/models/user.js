@@ -4,7 +4,7 @@ define(function(require){
     var Base = require('models/base'),
          Ctx = require('modules/context'),
            $ = require('jquery'),
-        i18n = require('i18n');
+        i18n = require('utils/i18n');
 
 
     var AVATAR_PLACEHOLDER = '//placehold.it/{0}';

@@ -9,10 +9,10 @@ define(function(require){
                             Ctx = require('modules/context'),
                       Synthesis = require('models/synthesis'),
                            Idea = require('models/idea'),
-                    Permissions = require('permissions'),
+                    Permissions = require('utils/permissions'),
                  IdeaFamilyView = require('views/ideaFamily'),
             IdeaInSynthesisView = require('views/ideaInSynthesis'),
-                           i18n = require('i18n'),
+                           i18n = require('utils/i18n'),
                   EditableField = require('views/editableField'),
                   CKEditorField = require('views/ckeditorField');
 
