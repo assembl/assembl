@@ -29,18 +29,6 @@ define(function(require){
         this.debugSocket = false;
 
         /**
-         * Reference to the body as jQuery object
-         * @type {jQuery}
-         */
-        this.doc = $(document);
-
-        /**
-         * Reference to the body as jQuery object
-         * @type {jQuery}
-         */
-         this.body = $(document.body);
-
-        /**
          * Prefix used to generate the id of the element used by annotator to find it's annotation
          * @type {string}
          */
@@ -309,8 +297,8 @@ define(function(require){
             }
 
             this.openedPanels += 1;
-            this.body.attr('data-panel-qty', this.openedPanels);
-            this.body.removeClass('is-fullscreen');
+            $(document.body).attr('data-panel-qty', this.openedPanels);
+            $(document.body).removeClass('is-fullscreen');
             panel.$el.addClass('is-visible');
 
             this.addPanelToStorage(panel.el.id);
@@ -476,7 +464,7 @@ define(function(require){
          */
         createSelectionTooltip: function(){
             this.selectionTooltip = $('<div>', { 'class': 'textbubble' } );
-            this.body.append(this.selectionTooltip.hide());
+            $(document.body).append(this.selectionTooltip.hide());
         },
 
         /**
@@ -512,7 +500,7 @@ define(function(require){
                 this.dragbox.className = 'dragbox';
                 this.dragbox.setAttribute('hidden', 'hidden');
 
-                this.body.append(this.dragbox);
+                $(document.body).append(this.dragbox);
             }
 
             this.dragbox.removeAttribute('hidden');
@@ -613,9 +601,9 @@ define(function(require){
                 menu.append( item );
             });
 
-            this.body.append( menu );
+            $(document.body).append( menu );
             window.setTimeout(function(){
-                this.doc.on("click", this.hideContextMenu);
+                $(document).on("click", this.hideContextMenu);
             });
 
             // Adjusting menu position
@@ -637,7 +625,7 @@ define(function(require){
             }
 
             $('.contextmenu').remove();
-            this.doc.off('click', this.hideContextMenu);
+            $(document).off('click', this.hideContextMenu);
         },
 
         /**
@@ -848,7 +836,7 @@ define(function(require){
             _.each(panels, function(panel){
                 if( targetPanel !== panel ){
                     this.closePanel(panel);
-                    this.body.addClass('is-fullscreen');
+                    $(document.body).addClass('is-fullscreen');
                 }
             });
 
@@ -878,7 +866,7 @@ define(function(require){
             }
 
             parent.addClass('is-open');
-            this.body.one('click', onMouseLeave);
+            $(document.body).one('click', onMouseLeave);
         },
 
         /**
@@ -963,12 +951,12 @@ define(function(require){
             //this.loadCurrentUser();
             Moment.lang(assembl_locale);
 
-            this.body.removeClass('preload');
+            $(document.body).removeClass('preload');
             this.createSelectionTooltip();
             this.initTooltips($("body"));
 
-            this.doc.on('click', '.dropdown-label', this.onDropdownClick);
-            this.doc.on('ajaxError', this.onAjaxError);
+            $(document).on('click', '.dropdown-label', this.onDropdownClick);
+            $(document).on('ajaxError', this.onAjaxError);
 
         }
     }
