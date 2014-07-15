@@ -31,6 +31,8 @@ define(function(require){
         initialize: function(obj){
             obj = obj || {};
 
+            var that = this;
+
             if( obj.button ){
                 this.button = $(obj.button).on('click', Ctx.togglePanel.bind(window, 'ideaPanel'));
             }
@@ -42,16 +44,16 @@ define(function(require){
                this.model = null;
             }
 
+            Assembl.vent.on("ideaSelected", function(idea){
+                that.setIdeaModel(idea);
+
+            });
+
             // Benoitg - 2014-05-05:  There is no need for this, if an idealink
             // is associated with the idea, the idea will recieve a change event
             // on the socket
             //app.segmentList.segments.on('change reset', this.render, this);
             this.listenTo(assembl.users, 'reset', this.render);
-            
-            var that = this;
-            Assembl.reqres.setHandler('idea:select', function(idea){
-                that.setCurrentIdea(idea);
-            });
 
         },
 
@@ -193,7 +195,7 @@ define(function(require){
          * Set the given idea as the current one
          * @param  {Idea} [idea=null]
          */
-        setCurrentIdea: function(idea){
+        setIdeaModel: function(idea){
             var that = this,
             ideaChangeCallback = function() {
                 //console.log("setCurrentIdea:ideaChangeCallback fired");

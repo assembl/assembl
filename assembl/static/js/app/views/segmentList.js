@@ -66,14 +66,21 @@ define(function(require){
             
             var segments = this.segments.getClipboard(),
                 currentUser = Ctx.getCurrentUser(),
-                data = {segments:segments,
-                        canEditExtracts:currentUser.can(Permissions.EDIT_EXTRACT),
-                        canEditMyExtracts:currentUser.can(Permissions.EDIT_MY_EXTRACT)
-                       },
+                data = {
+                    segments:segments,
+                    canEditExtracts:currentUser.can(Permissions.EDIT_EXTRACT),
+                    canEditMyExtracts:currentUser.can(Permissions.EDIT_MY_EXTRACT)
+                },
                 top = 0;
             if( this.panel ){
                 top = this.panel.find('.panel-body')[0].scrollTop;
             }
+
+            /**
+            * FIXME: Hack to context include variable in include template segment.tmpl
+            * Should be a marionette  composite view
+            */
+            window.ctx = Ctx;
 
             this.$el.html(this.template(data));
             Ctx.initTooltips(this.$el);

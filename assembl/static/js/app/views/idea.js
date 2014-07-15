@@ -37,7 +37,8 @@ define(function(require){
             this.view_data = view_data;
             this.listenTo(this.model, 'change', this.render);
             this.listenTo(this.model, 'replacedBy', this.onReplaced);
-            Assembl.reqres.setHandler('idea:select', function(idea) {
+
+            Assembl.vent.on('ideaSelected', function(idea) {
                 that.onIsSelectedChange(idea);
             });
         },
@@ -109,10 +110,8 @@ define(function(require){
             'click .idealist-title': 'onTitleClick',
             'click .idealist-title-unread-count': 'onUnreadCountClick',
             'click .idealist-arrow': 'toggle',
-
             'dragstart .idealist-body': 'onDragStart',
             'dragend .idealist-body': 'onDragEnd',
-
             'dragover .idealist-body': 'onDragOver',
             'dragleave .idealist-body': 'onDragLeave',
             'drop .idealist-body': 'onDrop'
@@ -155,18 +154,20 @@ define(function(require){
          * @event
          * Select this idea as the current idea
          */
-        onTitleClick: function(ev){
+        onTitleClick: function(e){
             var that = this;
-            ev.stopPropagation();
+            e.stopPropagation();
+
             if( assembl.messageList ){
                 assembl.messageList.filterThroughPanelLock(function(){
                     assembl.messageList.addFilterIsRelatedToIdea(that.model, null);
                 }, 'syncWithCurrentIdea');
             }
+
             if( this.model === Ctx.getCurrentIdea() ){
-                Ctx.setCurrentIdea(null);
+               Ctx.setCurrentIdea(null);
             } else {
-                Ctx.setCurrentIdea(this.model);
+               Ctx.setCurrentIdea(this.model);
             }
         },
 

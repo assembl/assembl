@@ -29,18 +29,6 @@ define(function(require){
         this.debugSocket = false;
 
         /**
-         * Reference to the body as jQuery object
-         * @type {jQuery}
-         */
-        this.doc = $(document);
-
-        /**
-         * Reference to the body as jQuery object
-         * @type {jQuery}
-         */
-         this.body = $(document.body);
-
-        /**
          * Prefix used to generate the id of the element used by annotator to find it's annotation
          * @type {string}
          */
@@ -119,6 +107,7 @@ define(function(require){
          */
          this.openedPanels = 0;
 
+         this.currentIdea = null;
 
          this.AVAILABLE_MESSAGE_VIEW_STYLES = {
             TITLE_ONLY: {
@@ -139,77 +128,60 @@ define(function(require){
     }
 
     Context.prototype = {
-        /**
-         * The current slug for the discussion
-         * @type {String}
-         */
+
         getDiscussionSlug: function(){
             return this.DISCUSSION_SLUG;
         },
 
-        /**
-         * The url for the changes websocket
-         * @type {String}
-         */
         getSocketUrl: function(){
             return this.SOCKET_URL;
         },
 
-        /**
-         * The current discussion id
-         * @type {string}
-         */
         getDiscussionId: function(){
             return this.DISCUSSION_ID;
         },
 
-        /**
-         * @return {User_id}
-         */
         getCurrentUserId: function(){
             return this.CURRENT_USER_ID;
         },
 
-        /**
-         * @return {User}
-         */
         getCurrentUser: function(){
             return this.currentUser;
         },
 
-        /**
-         * @set {User}
-         */
         setCurrentUser: function(user){
             this.currentUser = user;
         },
 
-
-        /**
-         * @return {User}
-         */
         getCsrfToken: function(){
             return this.csrfToken || this.loadCsrfToken(false);
         },
 
-        /**
-         * @set {User}
-         */
         setCsrfToken: function(token){
            this.csrfToken = token;
         },
 
-        /**
-         * @return {Annotation}
-         */
         getDraggedAnnotation: function(){
             return this.draggedAnnotation = null;
         },
-        /**
-         * @return {Annotation}
-         */
+
         setDraggedAnnotation: function(annotation){
             this.draggedAnnotation = annotation;
+        },
+
+        /**
+         * Set the given Idea as the current one to be edited
+         * @param  {Idea} [idea]
+         */
+        setCurrentIdea: function(idea){
+            if (idea != this.getCurrentIdea()) {
+                this.currentIdea = idea;
+                Assembl.vent.trigger("ideaSelected", idea);
+            }
+        },
+
+        getCurrentIdea: function(){
+           return this.currentIdea;
         },
 
         /**
@@ -307,10 +279,9 @@ define(function(require){
             if( panel.$el.hasClass('is-visible') ){
                 return false;
             }
-
             this.openedPanels += 1;
-            this.body.attr('data-panel-qty', this.openedPanels);
-            this.body.removeClass('is-fullscreen');
+            $(document.body).attr('data-panel-qty', this.openedPanels);
+            $(document.body).removeClass('is-fullscreen');
             panel.$el.addClass('is-visible');
 
             this.addPanelToStorage(panel.el.id);
@@ -429,7 +400,6 @@ define(function(require){
          * fulfill app.currentUser
          */
         loadCurrentUser: function(){
-            var ctx = new Context();
             if( assembl.users ){
                 var user  = assembl.users.getByNumericId(this.getCurrentUserId()) || assembl.users.getUnknownUser();
                     user.fetchPermissionsFromScripTag();
@@ -437,16 +407,6 @@ define(function(require){
                 this.loadCsrfToken(true);
             }
         },
-
-        /*loadCurrentUser: function(){
-            var ctx = new Context();
-            if( assembl.users ){
-                var user = assembl.users.getByNumericId(this.getCurrentUserId()) || assembl.users.getUnknownUser();
-                    user.fetchPermissionsFromScripTag();
-                this.setCurrentUser(user);
-                this.loadCsrfToken(true);
-            }
-        }*/
 
         /**
          * Return the Post related to the given annotation
@@ -476,7 +436,7 @@ define(function(require){
          */
         createSelectionTooltip: function(){
             this.selectionTooltip = $('<div>', { 'class': 'textbubble' } );
-            this.body.append(this.selectionTooltip.hide());
+            $(document.body).append(this.selectionTooltip.hide());
         },
 
         /**
@@ -512,7 +472,7 @@ define(function(require){
                 this.dragbox.className = 'dragbox';
                 this.dragbox.setAttribute('hidden', 'hidden');
 
-                this.body.append(this.dragbox);
+                $(document.body).append(this.dragbox);
             }
 
             this.dragbox.removeAttribute('hidden');
@@ -613,9 +573,9 @@ define(function(require){
                 menu.append( item );
             });
 
-            this.body.append( menu );
+            $(document.body).append( menu );
             window.setTimeout(function(){
-                this.doc.on("click", this.hideContextMenu);
+                $(document).on("click", this.hideContextMenu);
             });
 
             // Adjusting menu position
@@ -637,25 +597,7 @@ define(function(require){
             }
 
             $('.contextmenu').remove();
-            this.doc.off('click', this.hideContextMenu);
-        },
-
-        /**
-         * Set the given Idea as the current one to be edited
-         * @param  {Idea} [idea]
-         */
-        setCurrentIdea: function(idea){
-            if (idea != this.getCurrentIdea()) {
-                Assembl.reqres.request('idea:select', idea);
-            }
-        },
-
-        /**
-         * Get the current Idea
-         * @return {Idea}
-         */
-        getCurrentIdea: function(){
-            return assembl.ideaPanel.model;
+            $(document).off('click', this.hideContextMenu);
         },
 
         /**
@@ -848,7 +790,7 @@ define(function(require){
             _.each(panels, function(panel){
                 if( targetPanel !== panel ){
                     this.closePanel(panel);
-                    this.body.addClass('is-fullscreen');
+                    $(document.body).addClass('is-fullscreen');
                 }
             });
 
@@ -858,8 +800,8 @@ define(function(require){
         /**
          * @event
          */
-        onDropdownClick: function(ev){
-            var dropdown = $(ev.target);
+        onDropdownClick: function(e){
+            var dropdown = $(e.target);
 
             if( !dropdown.hasClass("dropdown-label") ){
                 return;
@@ -867,9 +809,9 @@ define(function(require){
 
             var parent = dropdown.parent();
 
-            var onMouseLeave = function(ev){
+            var onMouseLeave = function(e){
                 parent.removeClass('is-open');
-                ev.stopPropagation(); // so that onDropdownClick() is not called again immediately after when we click
+                e.stopPropagation(); // so that onDropdownClick() is not called again immediately after when we click
             };
 
             if( parent.hasClass('is-open') ){
@@ -878,7 +820,7 @@ define(function(require){
             }
 
             parent.addClass('is-open');
-            this.body.one('click', onMouseLeave);
+            $(document.body).one('click', onMouseLeave);
         },
 
         /**
@@ -963,13 +905,12 @@ define(function(require){
             //this.loadCurrentUser();
             Moment.lang(assembl_locale);
 
-            this.body.removeClass('preload');
+            $(document.body).removeClass('preload');
             this.createSelectionTooltip();
             this.initTooltips($("body"));
 
-            this.doc.on('click', '.dropdown-label', this.onDropdownClick);
-            this.doc.on('ajaxError', this.onAjaxError);
-
+            $(document).on('click', '.dropdown-label', this.onDropdownClick);
+            $(document).on('ajaxError', this.onAjaxError);
         }
     }
 

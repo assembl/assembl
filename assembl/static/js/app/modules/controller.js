@@ -77,8 +77,8 @@ define(function(require){
         },
 
         idea: function(id){
-            Ctx.openPanel( assembl.ideaList );
-            var idea = app.ideaList.ideas.get(id);
+            Ctx.openPanel(assembl.ideaList);
+            var idea = assembl.ideaList.ideas.get(id);
             if( idea ){
                 Ctx.setCurrentIdea(idea);
             }
@@ -92,7 +92,7 @@ define(function(require){
         },
 
         message: function(id){
-            Ctx.openPanel( assembl.messageList );
+            Ctx.openPanel(assembl.messageList);
             assembl.messageList.messages.once('reset', function(){
                 assembl.messageList.showMessageById(id);
             });
