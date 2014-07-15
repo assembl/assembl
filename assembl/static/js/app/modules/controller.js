@@ -52,7 +52,7 @@ define(function(require){
             $w.ideaList.ideas.fetchFromScriptTag('ideas-json');
 
             //init notification bar
-            //app.notification = new Notification()
+            //$w.notification = new Notification();
         },
 
         /**
@@ -66,7 +66,7 @@ define(function(require){
                     Ctx.openPanel(panel);
                 }
             });
-            if(app.openedPanels < 1) {
+            if(assembl.openedPanels < 1) {
                 /* If no panel would be opened on load, open the table of ideas
                  * and the Message panel so the user isn't presented with a
                  * blank screen
