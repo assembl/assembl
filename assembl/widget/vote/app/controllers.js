@@ -1,5 +1,47 @@
 "use strict";
 
+voteApp.controller('adminCreateFromIdeaCtl',
+  ['$scope', '$http', '$routeParams', '$log', '$location', 'globalConfig', 'configTestingService', 'configService', 'Discussion', 'AssemblToolsService',
+  function($scope, $http, $routeParams, $log, $location, globalConfig, configTestingService, configService, Discussion, AssemblToolsService){
+
+  $scope.current_step = 1;
+  $scope.url_parameter_idea = null;
+  $scope.discussion_uri = null;
+  $scope.idea = null;
+  $scope.discussion = null;
+  $scope.widget_creation_endpoint = null;
+
+  $scope.init = function(){
+    console.log("adminCreateFromIdeaCtl::init()");
+
+    // fill first form
+    // TODO: handle error cases (no URL parameter given, server answer is not/bad JSON, etc)
+
+    console.log($routeParams.idea);
+    $scope.url_parameter_idea = $routeParams.idea;
+    $http({
+      method: 'GET',
+      url: AssemblToolsService.resourceToUrl($scope.url_parameter_idea),
+    }).success(function(data, status, headers){
+      console.log(data);
+      $scope.idea = data;
+      $scope.discussion_uri = data.discussion;
+
+      $http({
+        method: 'GET',
+        url: AssemblToolsService.resourceToUrl($scope.discussion_uri),
+      }).success(function(data, status, headers){
+        console.log(data);
+        $scope.discussion = data;
+        $scope.widget_creation_endpoint = $scope.discussion.widget_collection_url;
+        $scope.current_step = 2;
+      });
+
+    });
+
+  };
+}]);
+
 voteApp.controller('adminCtl',
   ['$scope', '$http', '$routeParams', '$log', '$location', 'globalConfig', 'configTestingService', 'configService', 'Discussion', 'AssemblToolsService',
   function($scope, $http, $routeParams, $log, $location, globalConfig, configTestingService, configService, Discussion, AssemblToolsService){

@@ -17,6 +17,10 @@ voteApp.config(['$routeProvider', function($routeProvider){
            templateUrl:'app/partials/admin.html',
            controller:'adminCtl'
         }).
+        when('/admin/create_from_idea', {
+           templateUrl:'app/partials/admin_create_from_idea.html',
+           controller:'adminCreateFromIdeaCtl'
+        }).
         otherwise({
             redirectTo: '/'
         });
