@@ -1,5 +1,5 @@
-define(['backbone', 'underscore', 'jquery', 'modules/context', 'app', 'views/panel', 'views/messageFamily', 'models/message', 'i18n', 'views/messageListPostQuery', 'permissions', 'views/messageSend', 'views/visitors/objectTreeRenderVisitor'],
-function(Backbone, _, $, Ctx, app, PanelView, MessageFamilyView, Message, i18n, PostQuery, Permissions, MessageSendView, objectTreeRenderVisitor){
+define(['backbone', 'underscore', 'jquery', 'modules/assembl','modules/context', 'app', 'views/panel', 'views/messageFamily', 'models/message', 'i18n', 'views/messageListPostQuery', 'permissions', 'views/messageSend', 'views/visitors/objectTreeRenderVisitor'],
+function(Backbone, _, $, Assembl, Ctx, app, PanelView, MessageFamilyView, Message, i18n, PostQuery, Permissions, MessageSendView, objectTreeRenderVisitor){
     'use strict';
 
     /**

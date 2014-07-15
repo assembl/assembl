@@ -1,4 +1,4 @@
-define(['models/base', 'jquery', 'modules/context', 'context/assembl', 'underscore'], function(Base, $, Ctx, Assembl, _){
+define(['models/base', 'jquery', 'modules/context', 'modules/assembl', 'underscore'], function(Base, $, Ctx, Assembl, _){
     'use strict';
 
     /**
