@@ -177,7 +177,7 @@ define(function(require){
                 return;
             }
 
-            this.setCurrentIdea(idea);
+            this.setIdeaModel(idea);
             box = this.$(selector);
 
             if( box.length ){
