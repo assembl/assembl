@@ -44,8 +44,9 @@
         %><span><%= num_posts %></span>
         <% } %>
     </div>
-    <div class="idealist-title" title="<%= shortTitle %> (<%= segments.length %>)">
-        <%= shortTitle %> (<span class="num-segments" data-tooltip="{{ gettext('Number of caught segments expressing this idea') }}"><%= segments.length %></span>)
+    <div class="idealist-title" title="<%= shortTitle %>">
+        <%= shortTitle %>
+        {# (<span class="num-segments" data-tooltip="{{ gettext('Number of caught segments expressing this idea') }}"><%= segments.length %></span>) #}
         {# <small class="idealist-longtitle text-small text-muted"><%= app.stripHtml(longTitle) %></small> #}
     </div>
 
