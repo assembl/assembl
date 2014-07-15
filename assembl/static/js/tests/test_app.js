@@ -1,4 +1,4 @@
-define(['jasmine', 'app', 'jquery'], function(jasmine, app, $){
+define(['jasmine', 'app', 'jquery', 'modules/context'], function(jasmine, app, $, ctx){
 
 	// Fixtures
 	var txt = '<script id="tmpl-test" type="text/x-tmpl">test something</script>'
@@ -12,7 +12,7 @@ define(['jasmine', 'app', 'jquery'], function(jasmine, app, $){
 
 		it('must load a template by id', function(){
 
-			var tmpl = app.loadTemplate('test');
+			var tmpl = ctx.loadTemplate('test');
 
 			expect(typeof tmpl).toBe('function');
 			expect(tmpl()).toBe('test something');
