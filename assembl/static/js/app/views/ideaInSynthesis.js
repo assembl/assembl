@@ -3,9 +3,6 @@ define(function(require){
 
     var Backbone = require('backbone'),
                _ = require('underscore'),
-               $ = require('jquery'),
-            Idea = require('models/idea'),
-         Segment = require('models/segment'),
              Ctx = require('modules/context'),
      Permissions = require('utils/permissions'),
    CKEditorField = require('views/ckeditorField'),
