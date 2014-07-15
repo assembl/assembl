@@ -36,16 +36,16 @@
         <% }
     } %>
 
-    <div class="idealist-counter" data-tooltip="{{ gettext('Number of unread messages related to this idea or its descendants') }}">
-        <% if (num_posts > num_read_posts) { %>
-        <span class="idea-unread-posts" ><%= (num_posts - num_read_posts) %></span><% }
-        if (num_posts > num_read_posts && num_read_posts != 0) { %>/<% }
-        if (num_posts == num_read_posts || num_read_posts != 0) { 
-        %><span><%= num_posts %></span>
-        <% } %>
+    <% var num_unread_posts = (num_posts - num_read_posts); %>
+
+    <div class="idealist-counter" data-tooltip="{{ gettext('Number of messages related to this idea or its descendants') }}">
+        <span><%= num_posts %></span>
     </div>
-    <div class="idealist-title" title="<%= shortTitle %>">
+    <div class="idealist-title<% if (num_unread_posts > 0) { %> idealist-title-unread<% } %>" title="<%= shortTitle %>">
         <%= shortTitle %>
+        <% if (num_unread_posts > 0) { %>
+        <span class="idealist-title-unread-count" data-tooltip="{{ gettext('Number of unread messages related to this idea or its descendants') }}">(<%= num_unread_posts %>)</span>
+        <% } %>
         {# (<span class="num-segments" data-tooltip="{{ gettext('Number of caught segments expressing this idea') }}"><%= segments.length %></span>) #}
         {# <small class="idealist-longtitle text-small text-muted"><%= app.stripHtml(longTitle) %></small> #}
     </div>

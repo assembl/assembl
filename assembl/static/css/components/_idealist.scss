@@ -135,6 +135,14 @@
     padding-left: $padding-left;
 }
 
+.idealist-title-unread {
+    font-weight: bold;
+}
+
+.idealist-title-unread-count {
+    color: blue;
+}
+
 // The counter at the right
 // ------------------
 .idealist-counter {

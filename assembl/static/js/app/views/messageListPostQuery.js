@@ -45,15 +45,21 @@ define(function(require){
             return retval;
         }
         this._returnHtmlDescriptionPostIsUnread = function(filterDef, queryObjects) {
-            var retval = '',
-                value = queryObjects[0].value,
-                closeBtn = '<span class="closebutton" data-filterid="'+filterDef.id+'" data-value="'+value+'"></span>\n';
+            var retval = '';
+            if ( queryObjects && queryObjects.length > 0 )
+            {
+                var value = true;
+                if ( queryObjects[0].hasOwnProperty("value") )
+                    value = queryObjects[0].value;
+                var retval = '',
+                    closeBtn = '<span class="closebutton" data-filterid="'+filterDef.id+'" data-value="'+value+'"></span>\n';
 
-            if(queryObjects[0].value===true){
-                retval += sprintf.sprintf(i18n.gettext("%s %s"), "You haven't read yet", closeBtn);
+                if(value===true){
+                    retval += sprintf.sprintf(i18n.gettext("%s %s"), "You haven't read yet", closeBtn);
 
-            }else {
-                retval += i18n.gettext("You've already read");
+                }else {
+                    retval += i18n.gettext("You've already read");
+                }
             }
 
             return retval;

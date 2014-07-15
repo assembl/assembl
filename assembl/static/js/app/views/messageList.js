@@ -967,13 +967,24 @@ define(function(require){
         /**
          * Load posts that belong to an idea
          * @param {String} ideaId
+         * @param {bool} show only unread messages (this parameter is optional and is a flag)
          */
-        addFilterIsRelatedToIdea: function(idea){
+        addFilterIsRelatedToIdea: function(idea, only_unread){
             //Can't filter on an idea at the same time as getting synthesis messages
             this.currentQuery.clearFilter(this.currentQuery.availableFilters.POST_IS_SYNTHESIS, null);
             this.currentQuery.clearFilter(this.currentQuery.availableFilters.POST_IS_ORPHAN, null);
             this.currentQuery.clearFilter(this.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, null);
+
+            if ( arguments.length > 1 )
+            {
+                console.log("applying unread: " + only_unread);
+                if ( only_unread === null )
+                    this.currentQuery.clearFilter(this.currentQuery.availableFilters.POST_IS_UNREAD, null);
+                else
+                    this.currentQuery.addFilter(this.currentQuery.availableFilters.POST_IS_UNREAD, only_unread);
+            }
             this.currentQuery.addFilter(this.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, idea.getId());
+
             this.render();
         },
         

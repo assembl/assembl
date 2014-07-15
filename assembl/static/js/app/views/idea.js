@@ -107,6 +107,7 @@ define(function(require){
         events: {
             'change [type="checkbox"]': 'onCheckboxChange',
             'click .idealist-title': 'onTitleClick',
+            'click .idealist-title-unread-count': 'onUnreadCountClick',
             'click .idealist-arrow': 'toggle',
 
             'dragstart .idealist-body': 'onDragStart',
@@ -159,7 +160,7 @@ define(function(require){
             ev.stopPropagation();
             if( assembl.messageList ){
                 assembl.messageList.filterThroughPanelLock(function(){
-                    assembl.messageList.addFilterIsRelatedToIdea(that.model);
+                    assembl.messageList.addFilterIsRelatedToIdea(that.model, null);
                 }, 'syncWithCurrentIdea');
             }
             if( this.model === Ctx.getCurrentIdea() ){
@@ -167,6 +168,22 @@ define(function(require){
             } else {
                 Ctx.setCurrentIdea(this.model);
             }
+        },
+
+        /**
+         * @event
+         * Select this idea as the current idea, and show only unread messages of this idea
+         */
+        onUnreadCountClick: function(ev){
+            console.log("onUnreadCountClick");
+            var that = this;
+            ev.stopPropagation();
+            if( assembl.messageList ){
+                assembl.messageList.filterThroughPanelLock(function(){
+                    assembl.messageList.addFilterIsRelatedToIdea(that.model, true);
+                }, 'syncWithCurrentIdea');
+            }
+            Ctx.setCurrentIdea(this.model);
         },
 
         /**
