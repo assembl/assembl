@@ -4,8 +4,8 @@ define(function(require){
         var Backbone = require('backbone'),
                    _ = require('underscore'),
             ckeditor = require('ckeditor'),
+             Assembl = require('modules/assembl'),
                  Ctx = require('modules/context'),
-                 app = require('app'),
                Types = require('types'),
          MessageView = require('views/message'),
 SynthesisMessageView = require('views/synthesisMessage'),
@@ -61,7 +61,7 @@ SynthesisMessageView = require('views/synthesisMessage'),
          */
         render: function(level){
 
-            app.trigger('render');
+            Assembl.commands.execute('render');
             var data = this.model.toJSON(),
                 children,
                 messageView;

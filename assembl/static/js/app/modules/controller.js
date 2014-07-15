@@ -61,7 +61,7 @@ define(function(require){
         home: function(){
             var panels = Ctx.getPanelsFromStorage();
             _.each(panels, function(value, name){
-                var panel = app[name];
+                var panel = assembl[name];
                 if( panel && name !== 'ideaPanel' ){
                     Ctx.openPanel(panel);
                 }

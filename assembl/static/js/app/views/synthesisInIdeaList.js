@@ -1,12 +1,9 @@
 define(function(require){
     'use strict';
 
-    var _ = require('underscore'),
-        $ = require('jquery'),
-     Idea = require('models/idea'),
-      Ctx = require('modules/context'),
-      app = require('app'),
- IdeaView = require('views/idea');
+    var Ctx = require('modules/context'),
+    Assembl = require('modules/assembl'),
+   IdeaView = require('views/idea');
 
     var SynthesisIdeaView = IdeaView.extend({
         /**
@@ -19,7 +16,7 @@ define(function(require){
          * The render
          */
         render: function(){
-            app.trigger('render');
+            Assembl.commands.execute('render');
             Ctx.cleanTooltips(this.$el);
             
             var data = this.model.toJSON();

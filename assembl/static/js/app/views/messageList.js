@@ -7,7 +7,6 @@ define(function(require){
                              $ = require('jquery'),
                        Assembl = require('modules/assembl'),
                            Ctx = require('modules/context'),
-                           app = require('app'),
                      PanelView = require('views/panel'),
                        Message = require('models/message'),
                           i18n = require('i18n'),
@@ -665,7 +664,7 @@ define(function(require){
             }
             this.currentlyRendering = true;
 
-            app.trigger('render');
+            Assembl.commands.execute('render');
 
             this.renderPanelButton();
 

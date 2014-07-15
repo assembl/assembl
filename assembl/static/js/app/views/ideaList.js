@@ -14,8 +14,7 @@ define(function(require){
                         IdeaLink = require('models/ideaLink'),
                         IdeaView = require('views/idea'),
                  ideaGraphLoader = require('views/ideaGraph'),
-                               _ = require('underscore'),
-                             app = require('app');
+                               _ = require('underscore');
 
     var FEATURED = 'featured',
         IN_SYNTHESIS = 'inNextSynthesis';
@@ -112,7 +111,7 @@ define(function(require){
             if(Ctx.debugRender) {
                 console.log("ideaList:render() is firing");
             }
-            app.trigger('render');
+            Assembl.commands.execute('render');
             Ctx.cleanTooltips(this.$el);
             this.body = this.$('.panel-body');
             var y = 0,

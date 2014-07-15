@@ -1,9 +1,9 @@
 define(function(require){
     'use strict';
 
-    var Ctx = require('modules/context'),
-        app = require('app'),
-   IdeaView = require('views/idea');
+    var Assembl = require('modules/assembl'),
+            Ctx = require('modules/context'),
+       IdeaView = require('views/idea');
 
     var OrphanMessagesInIdeaListView = IdeaView.extend({
         /**
@@ -16,7 +16,7 @@ define(function(require){
          * The render
          */
         render: function(){
-            app.trigger('render');
+            Assembl.commands.execute('render');
             Ctx.cleanTooltips(this.$el);
             var data = this.model.toJSON();
 

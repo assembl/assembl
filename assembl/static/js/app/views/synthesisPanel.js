@@ -5,8 +5,8 @@ define(function(require){
                        Backbone = require('backbone'),
                               _ = require('underscore'),
                               $ = require('jquery'),
+                        Assembl = require('modules/assembl'),
                             Ctx = require('modules/context'),
-                            app = require('app'),
                       Synthesis = require('models/synthesis'),
                            Idea = require('models/idea'),
                     Permissions = require('permissions'),
@@ -66,7 +66,7 @@ define(function(require){
             order_lookup_table = [],
             roots = [],
             synthesis_is_published = this.model.get("published_in_post")!=null;
-            app.trigger('render');
+            Assembl.commands.execute('render');
             Ctx.cleanTooltips(this.$el);
 
             //Do NOT listen to reset, as it's called within this render

@@ -4,8 +4,8 @@ define(function(require){
     var Backbone = require('backbone'),
                _ = require('underscore'),
                $ = require('jquery'),
+         Assembl = require('modules/assembl'),
              Ctx = require('modules/context'),
-             app = require('app'),
          Segment = require('models/segment'),
            Types = require('types'),
             i18n = require('i18n'),
@@ -61,7 +61,7 @@ define(function(require){
             if(Ctx.debugRender) {
                 console.log("segmentList:render() is firing");
             }
-            app.trigger('render');
+            Assembl.commands.execute('render');
             Ctx.cleanTooltips(this.$el);
             
             var segments = this.segments.getClipboard(),

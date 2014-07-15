@@ -47,7 +47,7 @@ define(function(require){
          * @return {IdeaView}
          */
         render: function(){
-            //app.trigger('render');
+            Assembl.commands.execute('render');
             var view_data = this.view_data;
             var render_data = view_data[this.model.getId()];
             if (render_data === undefined) {

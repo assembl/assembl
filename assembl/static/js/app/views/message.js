@@ -3,11 +3,9 @@ define(function(require){
 
     var Backbone = require('backbone'),
                _ = require('underscore'),
-          Moment = require('moment'),
         ckeditor = require('ckeditor'),
+         Assembl = require('modules/assembl'),
              Ctx = require('modules/context'),
-             app = require('app'),
-         Message = require('models/message'),
             i18n = require('i18n'),
      Permissions = require('permissions'),
  MessageSendView = require('views/messageSend');
@@ -97,7 +95,7 @@ define(function(require){
          * @return {MessageView}
          */
         render: function(){
-            app.trigger('render');
+            Assembl.commands.execute('render');
             var data = this.model.toJSON(),
                 children,
                 bodyFormatClass = null,

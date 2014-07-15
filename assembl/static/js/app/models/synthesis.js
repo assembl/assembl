@@ -2,7 +2,6 @@ define(function(require){
     'use strict';
 
     var Base = require('models/base'),
-           $ = require('jquery'),
          Ctx = require('modules/context'),
         i18n = require('i18n');
 

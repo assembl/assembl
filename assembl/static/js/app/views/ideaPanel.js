@@ -4,7 +4,6 @@ define(function(require){
     var Backbone = require('backbone'),
          Assembl = require('modules/assembl'),
              Ctx = require('modules/context'),
-             app = require('app'),
             i18n = require('i18n'),
          sprintf = require('sprintf'),
    EditableField = require('views/editableField'),
@@ -64,7 +63,7 @@ define(function(require){
                 console.log("ideaPanel:render() is firing");
             }
 
-            app.trigger('render');
+            Assembl.commands.execute('render');
             var segments = {},
             subIdeas = {},
             currentUser = Ctx.getCurrentUser(),
@@ -284,7 +283,7 @@ define(function(require){
 
                 Backbone.ajax({
                    type:'POST',
-                   url:'/data/Discussion/'+ app.discussionID +'/widgets',
+                   url:'/data/Discussion/'+ Assembl.getDiscussionId() +'/widgets',
                    data: $.param(data),
                    success: function(data, textStatus, jqXHR){
 
