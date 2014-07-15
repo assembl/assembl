@@ -43,6 +43,12 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n, Permissions, Message
          * @param {MessageModel} obj the model
          */
         initialize: function(obj){
+            /*this.listenTo(this, "all", function(eventName) {
+                console.log("message event received: ", eventName);
+            });
+            this.listenTo(this.model, "all", function(eventName) {
+                console.log("message model event received: ", eventName);
+            });*/
             this.listenTo(this.model, 'replacedBy', this.onReplaced);
             this.listenTo(this.model, 'showBody', this.onShowBody);
             this.listenTo(this.model, 'change', this.render);
@@ -142,6 +148,11 @@ function(Backbone, _, Moment, ckeditor, app, Message, i18n, Permissions, Message
             this.$('.message-replybox').append(this.replyView.render().el);
 
             this.postRender();
+            /* TODO: BENOITG:  We should memorize which views are onscreen, and 
+             * re-call initAnnotator as needed (once) and loadAnnotations
+             * after a delay.  We have a reference to them in renderedMessageViewsCurrent
+             * Right now we just re-re-re call initAnnotator
+             */
             app.messageList.initAnnotator();
             this.loadAnnotations();
             if(this.replyBoxShown) {

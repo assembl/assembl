@@ -62,33 +62,29 @@ function(Backbone, _, Moment, ckeditor, app, Types, Message, MessageView, Synthe
             if( ! _.isUndefined(level) ){
                 this.currentLevel = level;
             }
-            if(!this.messageListView.renderedMessageViewsPrevious[this.model.id]){
-                var messageViewClass = undefined;
-                var messageType = this.model.get('@type');
-                switch(messageType){
-                    case Types.ASSEMBL_POST:
-                    case Types.EMAIL:
-                        messageViewClass = MessageView;
-                        break;
 
-                case Types.SYNTHESIS_POST:
-                    messageViewClass = SynthesisMessageView;
-                    break;
-                default:
-                    console.log("messageFamily.render():  WARNING:  Unknown Post type: ", messageType, "creating a default MessageView");
+            var messageViewClass = undefined;
+            var messageType = this.model.get('@type');
+            switch(messageType){
+                case Types.ASSEMBL_POST:
+                case Types.EMAIL:
                     messageViewClass = MessageView;
-                }
-                
-                messageView = new messageViewClass({
+                    break;
 
-                model : this.model,
-                messageListView: this.messageListView
-                });
-                messageView.render();
+            case Types.SYNTHESIS_POST:
+                messageViewClass = SynthesisMessageView;
+                break;
+            default:
+                console.log("messageFamily.render():  WARNING:  Unknown Post type: ", messageType, "creating a default MessageView");
+                messageViewClass = MessageView;
             }
-            else {
-                messageView = this.messageListView.renderedMessageViewsPrevious[this.model.id];
-            }
+            
+            messageView = new messageViewClass({
+
+            model : this.model,
+            messageListView: this.messageListView
+            });
+            messageView.render();
             this.messageListView.renderedMessageViewsCurrent[this.model.id] = messageView;
             
             data['id'] = data['@id'];
