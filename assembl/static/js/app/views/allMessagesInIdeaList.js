@@ -1,7 +1,10 @@
-define(['backbone', 'underscore', 'jquery', 'modules/context', 'models/idea', 'app', 'views/idea'],
-function(Backbone, _, $, Ctx, Idea, app, IdeaView){
+define(function(require){
     'use strict';
-    
+
+    var IdeaView = require('views/idea'),
+             Ctx = require('modules/context'),
+             app = require('app');
+
     var AllMessagesInIdeaListView = IdeaView.extend({
         /**
          * The template

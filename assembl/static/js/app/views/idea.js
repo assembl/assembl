@@ -1,6 +1,11 @@
-define(['backbone', 'underscore', 'jquery', 'modules/assembl', 'modules/context', 'models/idea', 'models/segment', 'permissions'],
-function(Backbone, _, $, Assembl, Ctx, Idea, Segment, Permissions){
+define(function(require){
     'use strict';
+
+    var Backbone = require('backbone'),
+               _ = require('underscore'),
+         Assembl = require('modules/assembl'),
+             Ctx = require('modules/context'),
+     Permissions = require('permissions');
 
     var IdeaView = Backbone.View.extend({
         /**

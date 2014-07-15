@@ -1,6 +1,11 @@
-define(['backbone', 'underscore', 'moment', 'ckeditor', 'modules/context', 'models/message', 'views/message', 'models/synthesis', 'views/synthesisPanel'],
-function(Backbone, _, Moment, ckeditor, Ctx, Message, MessageView, Synthesis, SynthesisPanel){
+define(function(require){
     'use strict';
+
+       var ckeditor = require('ckeditor'),
+                Ctx = require('modules/context'),
+        MessageView = require('views/message'),
+          Synthesis = require('models/synthesis'),
+     SynthesisPanel = require('views/synthesisPanel');
 
     /**
      * @class views.MessageView

@@ -1,6 +1,19 @@
-define(['backbone', 'underscore', 'jquery', 'modules/assembl','modules/context', 'app', 'views/panel', 'views/messageFamily', 'models/message', 'i18n', 'views/messageListPostQuery', 'permissions', 'views/messageSend', 'views/visitors/objectTreeRenderVisitor'],
-function(Backbone, _, $, Assembl, Ctx, app, PanelView, MessageFamilyView, Message, i18n, PostQuery, Permissions, MessageSendView, objectTreeRenderVisitor){
+define(function(require){
     'use strict';
+
+   var objectTreeRenderVisitor = require('views/visitors/objectTreeRenderVisitor'),
+             MessageFamilyView = require('views/messageFamily'),
+                             _ = require('underscore'),
+                             $ = require('jquery'),
+                       Assembl = require('modules/assembl'),
+                           Ctx = require('modules/context'),
+                           app = require('app'),
+                     PanelView = require('views/panel'),
+                       Message = require('models/message'),
+                          i18n = require('i18n'),
+                     PostQuery = require('views/messageListPostQuery'),
+                   Permissions = require('permissions'),
+               MessageSendView = require('views/messageSend');
 
     /**
      * Constants

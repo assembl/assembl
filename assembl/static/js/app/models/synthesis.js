@@ -1,5 +1,10 @@
-define(['models/base', 'jquery','modules/context', 'i18n'], function(Base, $, Ctx, i18n){
+define(function(require){
     'use strict';
+
+    var Base = require('models/base'),
+           $ = require('jquery'),
+         Ctx = require('modules/context'),
+        i18n = require('i18n');
 
     /**
      * @class SynthesisModel

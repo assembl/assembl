@@ -1,6 +1,17 @@
-define(['backbone', 'underscore', 'moment', 'ckeditor', 'modules/context', 'app', 'models/message', 'i18n', 'permissions', 'views/messageSend'],
-function(Backbone, _, Moment, ckeditor, Ctx, app, Message, i18n, Permissions, MessageSendView){
+define(function(require){
     'use strict';
+
+    var Backbone = require('backbone'),
+               _ = require('underscore'),
+          Moment = require('moment'),
+        ckeditor = require('ckeditor'),
+             Ctx = require('modules/context'),
+             app = require('app'),
+         Message = require('models/message'),
+            i18n = require('i18n'),
+     Permissions = require('permissions'),
+ MessageSendView = require('views/messageSend');
+
 
     var MIN_TEXT_TO_TOOLTIP = 5,
         TOOLTIP_TEXT_LENGTH = 10;

@@ -1,6 +1,17 @@
-define(['backbone', 'underscore', 'modules/assembl', 'modules/context', 'models/idea', 'models/message', 'app', 'i18n', 'sprintf', 'types', 'views/editableField', 'views/ckeditorField', 'permissions', 'views/messageSend', 'views/notification'],
-function(Backbone, _, Assembl, Ctx, Idea, Message, app, i18n, sprintf, Types, EditableField, CKEditorField, Permissions, MessageSendView, Notification){
+define(function(require){
     'use strict';
+
+    var Backbone = require('backbone'),
+         Assembl = require('modules/assembl'),
+             Ctx = require('modules/context'),
+             app = require('app'),
+            i18n = require('i18n'),
+         sprintf = require('sprintf'),
+   EditableField = require('views/editableField'),
+   CKEditorField = require('views/ckeditorField'),
+     Permissions = require('permissions'),
+ MessageSendView = require('views/messageSend'),
+    Notification = require('views/notification');
 
     var LONG_TITLE_ID = 'ideaPanel-longtitle';
 

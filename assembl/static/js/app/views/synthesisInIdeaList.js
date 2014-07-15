@@ -1,6 +1,12 @@
-define(['backbone', 'underscore', 'jquery', 'models/idea', 'modules/context', 'app', 'views/idea'],
-function(Backbone, _, $, Idea, Ctx, app, IdeaView){
+define(function(require){
     'use strict';
+
+    var _ = require('underscore'),
+        $ = require('jquery'),
+     Idea = require('models/idea'),
+      Ctx = require('modules/context'),
+      app = require('app'),
+ IdeaView = require('views/idea');
 
     var SynthesisIdeaView = IdeaView.extend({
         /**

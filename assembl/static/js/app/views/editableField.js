@@ -1,5 +1,8 @@
-define(['backbone', 'underscore','modules/context'], function(Backbone, _, Ctx){
+define(function(require){
     'use strict';
+
+    var Backbone = require('backbone'),
+             Ctx = require('modules/context');
 
     var EditableField = Backbone.View.extend({
 

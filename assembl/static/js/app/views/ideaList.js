@@ -1,10 +1,24 @@
-define(['backbone', 'underscore', 'modules/assembl', 'modules/context', 'models/idea', 'models/ideaLink', 'views/idea', "views/ideaGraph", 'app', 'types', 'views/allMessagesInIdeaList', 'views/orphanMessagesInIdeaList', 'views/synthesisInIdeaList', 'permissions', 'views/visitors/objectTreeRenderVisitor', 'views/visitors/ideaSiblingChainVisitor'],
-function(Backbone, _, Assembl, Ctx, Idea, IdeaLink, IdeaView, ideaGraphLoader, app, Types, AllMessagesInIdeaListView, OrphanMessagesInIdeaListView, SynthesisInIdeaListView, Permissions, objectTreeRenderVisitor, ideaSiblingChainVisitor){
+define(function(require){
     'use strict';
+
+   var AllMessagesInIdeaListView = require('views/allMessagesInIdeaList'),
+    OrphanMessagesInIdeaListView = require('views/orphanMessagesInIdeaList'),
+         SynthesisInIdeaListView = require('views/synthesisInIdeaList'),
+                     Permissions = require('permissions'),
+         objectTreeRenderVisitor = require('views/visitors/objectTreeRenderVisitor'),
+         ideaSiblingChainVisitor = require('views/visitors/ideaSiblingChainVisitor'),
+                        Backbone = require('backbone'),
+                         Assembl = require('modules/assembl'),
+                             Ctx = require('modules/context'),
+                            Idea = require('models/idea'),
+                        IdeaLink = require('models/ideaLink'),
+                        IdeaView = require('views/idea'),
+                 ideaGraphLoader = require('views/ideaGraph'),
+                               _ = require('underscore'),
+                             app = require('app');
 
     var FEATURED = 'featured',
         IN_SYNTHESIS = 'inNextSynthesis';
-
 
 
     var IdeaList = Backbone.View.extend({

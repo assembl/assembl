@@ -1,4 +1,7 @@
-define(['jit', 'modules/context'], function($jit, Ctx) {
+define(function(require) {
+
+    var $jit = require('jit'),
+        Ctx  = require('modules/context');
 
 // Hackity node that changes shape according to data.
 var ht;

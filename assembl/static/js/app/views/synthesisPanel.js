@@ -1,6 +1,21 @@
-define(['backbone', 'underscore', 'jquery', 'modules/context', 'app', 'models/synthesis', 'models/idea', 'permissions', 'views/ideaFamily', 'views/ideaInSynthesis', 'i18n', 'views/editableField', 'views/ckeditorField', 'views/visitors/objectTreeRenderVisitor'],
-function(Backbone, _, $, Ctx, app, Synthesis, Idea, Permissions, IdeaFamilyView, IdeaInSynthesisView, i18n, EditableField, CKEditorField, objectTreeRenderVisitor){
+define(function(require){
     'use strict';
+
+    var objectTreeRenderVisitor = require('views/visitors/objectTreeRenderVisitor'),
+                       Backbone = require('backbone'),
+                              _ = require('underscore'),
+                              $ = require('jquery'),
+                            Ctx = require('modules/context'),
+                            app = require('app'),
+                      Synthesis = require('models/synthesis'),
+                           Idea = require('models/idea'),
+                    Permissions = require('permissions'),
+                 IdeaFamilyView = require('views/ideaFamily'),
+            IdeaInSynthesisView = require('views/ideaInSynthesis'),
+                           i18n = require('i18n'),
+                  EditableField = require('views/editableField'),
+                  CKEditorField = require('views/ckeditorField');
+
 
     var SynthesisPanel = Backbone.View.extend({
 

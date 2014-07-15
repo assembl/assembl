@@ -1,6 +1,12 @@
 define(['models/base', 'jquery', 'modules/context', 'modules/assembl', 'underscore'], function(Base, $, Ctx, Assembl, _){
     'use strict';
 
+    var Base = require('models/base'),
+         Ctx = require('modules/context'),
+     Assembl = require('modules/assembl'),
+           $ = require('jquery'),
+           _ = require('underscore');
+
     /**
      * @class MessageModel
      */

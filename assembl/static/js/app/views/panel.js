@@ -1,6 +1,9 @@
-define(['backbone', 'underscore', 'jquery', 'modules/context'],
-function(Backbone, _, $, Ctx){
+define(function(require){
     'use strict';
+
+    var Backbone = require('backbone'),
+              _  = require('underscore'),
+             Ctx = require('modules/context');
 
     /**
      * Constants

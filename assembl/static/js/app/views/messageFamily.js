@@ -1,6 +1,15 @@
-define(['backbone', 'underscore', 'moment', 'ckeditor','modules/context', 'app', 'types', 'models/message', 'views/message', 'views/synthesisMessage', 'i18n'],
-function(Backbone, _, Moment, ckeditor, Ctx, app, Types, Message, MessageView, SynthesisMessageView, i18n){
+define(function(require){
     'use strict';
+
+        var Backbone = require('backbone'),
+                   _ = require('underscore'),
+            ckeditor = require('ckeditor'),
+                 Ctx = require('modules/context'),
+                 app = require('app'),
+               Types = require('types'),
+         MessageView = require('views/message'),
+SynthesisMessageView = require('views/synthesisMessage'),
+                i18n = require('i18n');
 
     /**
      * @class views.MessageFamilyView

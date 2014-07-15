@@ -1,4 +1,9 @@
-define(['modules/context', 'i18n', 'sprintf'], function(Ctx, i18n, sprintf){
+define(function(require){
+
+    var Ctx = require('modules/context'),
+       i18n = require('i18n'),
+    sprintf = require('sprintf');
+
     /**
      * @class PostQuery
      *

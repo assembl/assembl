@@ -1,6 +1,9 @@
-define(['backbone', 'underscore', 'jquery', 'models/idea', 'modules/context'],
-function(Backbone, _, $, Idea, Ctx){
+define(function(require){
     'use strict';
+
+    var Backbone = require('backbone'),
+               _ = require('underscore'),
+             Ctx = require('modules/context');
 
     var IdeaFamilyView = Backbone.View.extend({
         /**

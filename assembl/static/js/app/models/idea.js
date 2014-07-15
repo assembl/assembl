@@ -1,6 +1,13 @@
-define(['models/base','underscore','modules/context', 'models/segment', 'i18n', 'types', 'permissions'],
-function(Base, _, Ctx, Segment, i18n, Types, Permissions){
+define(function(require){
     'use strict';
+
+    var Base = require('models/base'),
+           _ = require('underscore'),
+         Ctx = require('modules/context'),
+     Segment = require('models/segment'),
+        i18n = require('i18n'),
+       Types = require('types'),
+ Permissions = require('permissions');
 
     /**
      * @class IdeaModel

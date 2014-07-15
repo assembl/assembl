@@ -1,5 +1,10 @@
-define(['backbone','backboneModal','text!/static/templates/notification.html', 'text!/static/templates/session-modal.html'],
-    function(Backbone, backboneModal, notificationTpl, modalTpl){
+define(function(require){
+
+   var Backbone = require('backbone'),
+  backboneModal = require('backboneModal'),
+notificationTpl = require('text!/static/templates/notification.html'),
+       modalTpl = require('text!/static/templates/session-modal.html');
+
 
    var Notification = Backbone.View.extend({
        template: _.template(notificationTpl),

@@ -1,7 +1,13 @@
-define(['backbone', 'underscore', 'jquery','modules/context', 'models/idea', 'permissions', 'i18n'],
-function(Backbone, _, $, Ctx, Idea, Permissions, i18n){
+define(function(require){
     'use strict';
-    
+
+    var Backbone = require('backbone'),
+               _ = require('underscore'),
+               $ = require('jquery'),
+             Ctx = require('modules/context'),
+     Permissions = require('permissions'),
+            i18n = require('i18n');
+
     var MessageSendView = Backbone.View.extend({
         /**
          * The tempate

@@ -1,6 +1,15 @@
-define(['backbone', 'underscore', 'jquery', 'models/idea', 'models/segment', 'modules/context', 'permissions', 'views/ckeditorField', 'views/messageSend'],
-function(Backbone, _, $, Idea, Segment, Ctx, Permissions, CKEditorField, MessageSendView){
+define(function(require){
     'use strict';
+
+    var Backbone = require('backbone'),
+               _ = require('underscore'),
+               $ = require('jquery'),
+            Idea = require('models/idea'),
+         Segment = require('models/segment'),
+             Ctx = require('modules/context'),
+     Permissions = require('permissions'),
+   CKEditorField = require('views/ckeditorField'),
+ MessageSendView = require('views/messageSend');
 
     var IdeaInSynthesisView = Backbone.View.extend({
         /**

@@ -1,5 +1,8 @@
-define(['backbone','modules/context'], function(Backbone, Ctx){
+define(function(require){
     'use strict';
+
+    var Backbone = require('backbone'),
+             Ctx = require('modules/context');
 
     /**
      * @class Model

@@ -1,7 +1,8 @@
-define(['models/base','underscore'],
-    function(Base, _){
+define(function(require){
     'use strict';
 
+    var Base = require('models/base'),
+           _ = require('underscore');
     /**
      * @class IdeaModel
      */

@@ -1,6 +1,15 @@
-define(['backbone', 'underscore', 'jquery', 'modules/context', 'app', 'models/segment', 'types', 'i18n', 'permissions'],
-function(Backbone, _, $, Ctx, app, Segment, Types, i18n, Permissions){
+define(function(require){
     'use strict';
+
+    var Backbone = require('backbone'),
+               _ = require('underscore'),
+               $ = require('jquery'),
+             Ctx = require('modules/context'),
+             app = require('app'),
+         Segment = require('models/segment'),
+           Types = require('types'),
+            i18n = require('i18n'),
+     Permissions = require('permissions');
 
     var SegmentList = Backbone.View.extend({
         /**

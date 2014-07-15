@@ -1,6 +1,11 @@
-define(['modules/context', 'models/base', 'underscore', 'models/user', 'models/message'],
-function(Ctx, Base, _, User, Message){
+define(function(require){
     'use strict';
+
+    var Base = require('models/base'),
+         Ctx = require('modules/context'),
+           _ = require('underscore'),
+        User = require('models/user'),
+     Message = require('models/message');
 
     /**
      * @class SegmentModel

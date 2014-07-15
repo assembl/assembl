@@ -1,5 +1,11 @@
-define(['models/base', 'modules/context', 'jquery', 'i18n', 'permissions'], function(Base, Ctx, $, i18n, Permissions){
+define(function(require){
     'use strict';
+
+    var Base = require('models/base'),
+         Ctx = require('modules/context'),
+           $ = require('jquery'),
+        i18n = require('i18n');
+
 
     var AVATAR_PLACEHOLDER = '//placehold.it/{0}';
     var UNKNOWN_USER_ID = 'system.Everyone';
