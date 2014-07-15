@@ -38,7 +38,7 @@ define(function(require){
             this.listenTo(this.model, 'change', this.render);
             this.listenTo(this.model, 'replacedBy', this.onReplaced);
 
-            Assembl.vent.on('ideaSelected', function(idea) {
+            Assembl.vent.on('idea:selected', function(idea) {
                 that.onIsSelectedChange(idea);
             });
         },

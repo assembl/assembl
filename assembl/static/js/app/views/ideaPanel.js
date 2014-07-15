@@ -44,7 +44,7 @@ define(function(require){
                this.model = null;
             }
 
-            Assembl.vent.on("ideaSelected", function(idea){
+            Assembl.vent.on("idea:selected", function(idea){
                 that.setIdeaModel(idea);
 
             });

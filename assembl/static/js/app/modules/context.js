@@ -175,7 +175,7 @@ define(function(require){
         setCurrentIdea: function(idea){
             if (idea != this.getCurrentIdea()) {
                 this.currentIdea = idea;
-                Assembl.vent.trigger("ideaSelected", idea);
+                Assembl.vent.trigger("idea:selected", idea);
             }
         },
 

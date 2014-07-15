@@ -104,7 +104,7 @@ define(function(require){
             this.listenTo(assembl.segmentList.segments, 'add remove reset', this.initAnnotator);
             
             var that = this;
-            Assembl.vent.on('ideaSelected', function(idea){
+            Assembl.vent.on('idea:selected', function(idea){
                 if(idea && that.currentQuery.isFilterInQuery(that.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, idea.getId())) {
                     //Filter is already in sync
                     //TODO:  Detect the case where there is no idea selected, and we already have no filter on ideas
