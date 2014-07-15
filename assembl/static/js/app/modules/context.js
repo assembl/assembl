@@ -646,7 +646,7 @@ define(function(require){
          */
         setCurrentIdea: function(idea){
             if (idea != this.getCurrentIdea()) {
-                Assembl.vent.trigger('idea:select', idea);
+                Assembl.reqres.request('idea:select', idea);
             }
         },
 

@@ -1,4 +1,4 @@
-define(['models/base', 'modules/context', 'app', 'jquery', 'i18n', 'permissions'], function(Base, Ctx, app, $, i18n, Permissions){
+define(['models/base', 'modules/context', 'jquery', 'i18n', 'permissions'], function(Base, Ctx, $, i18n, Permissions){
     'use strict';
 
     var AVATAR_PLACEHOLDER = '//placehold.it/{0}';

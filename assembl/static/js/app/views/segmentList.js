@@ -236,7 +236,7 @@ function(Backbone, _, $, Ctx, app, Segment, Types, i18n, Permissions){
                 segment = this.segments.get(cid);
 
             Ctx.showDragbox(ev, segment.getQuote());
-            app.draggedSegment = segment;
+            Ctx.draggedSegment = segment;
         },
 
         /**
@@ -249,7 +249,7 @@ function(Backbone, _, $, Ctx, app, Segment, Types, i18n, Permissions){
             }
 
             ev.currentTarget.style.opacity = '';
-            app.draggedSegment = null;
+            Ctx.draggedSegment = null;
         },
 
         /**
@@ -260,14 +260,14 @@ function(Backbone, _, $, Ctx, app, Segment, Types, i18n, Permissions){
 
             var isText = false;
             if( ev.dataTransfer && ev.dataTransfer.types && ev.dataTransfer.types.indexOf('text/plain') > -1 ){
-                isText = app.draggedIdea ? false : true;
+                isText = Ctx.draggedIdea ? false : true;
             }
 
-            if( app.draggedSegment !== null || isText ){
+            if( Ctx.draggedSegment !== null || isText ){
                 this.panel.addClass("is-dragover");
             }
 
-            if( app.draggedAnnotation !== null ){
+            if( Ctx.draggedAnnotation !== null ){
                 this.panel.addClass("is-dragover");
             }
         },

@@ -1,4 +1,4 @@
-define(['modules/context', 'app', 'i18n', 'sprintf'], function(Ctx, app, i18n, sprintf){
+define(['modules/context', 'i18n', 'sprintf'], function(Ctx, i18n, sprintf){
     /**
      * @class PostQuery
      *

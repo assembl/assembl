@@ -1,5 +1,5 @@
-define(['backbone', 'underscore', 'jquery','modules/context', 'models/idea', 'app', 'permissions', 'i18n'],
-function(Backbone, _, $, Ctx, Idea, app, Permissions, i18n){
+define(['backbone', 'underscore', 'jquery','modules/context', 'models/idea', 'permissions', 'i18n'],
+function(Backbone, _, $, Ctx, Idea, Permissions, i18n){
     'use strict';
     
     var MessageSendView = Backbone.View.extend({

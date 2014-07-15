@@ -1,5 +1,5 @@
-define(['backbone', 'underscore', 'modules/context', 'models/idea', 'models/ideaLink', 'views/idea', "views/ideaGraph", 'app', 'types', 'views/allMessagesInIdeaList', 'views/orphanMessagesInIdeaList', 'views/synthesisInIdeaList', 'permissions', 'views/visitors/objectTreeRenderVisitor', 'views/visitors/ideaSiblingChainVisitor'],
-function(Backbone, _, Ctx, Idea, IdeaLink, IdeaView, ideaGraphLoader, app, Types, AllMessagesInIdeaListView, OrphanMessagesInIdeaListView, SynthesisInIdeaListView, Permissions, objectTreeRenderVisitor, ideaSiblingChainVisitor){
+define(['backbone', 'underscore', 'modules/assembl', 'modules/context', 'models/idea', 'models/ideaLink', 'views/idea', "views/ideaGraph", 'app', 'types', 'views/allMessagesInIdeaList', 'views/orphanMessagesInIdeaList', 'views/synthesisInIdeaList', 'permissions', 'views/visitors/objectTreeRenderVisitor', 'views/visitors/ideaSiblingChainVisitor'],
+function(Backbone, _, Assembl, Ctx, Idea, IdeaLink, IdeaView, ideaGraphLoader, app, Types, AllMessagesInIdeaListView, OrphanMessagesInIdeaListView, SynthesisInIdeaListView, Permissions, objectTreeRenderVisitor, ideaSiblingChainVisitor){
     'use strict';
 
     var FEATURED = 'featured',
@@ -62,14 +62,14 @@ function(Backbone, _, Ctx, Idea, IdeaLink, IdeaView, ideaGraphLoader, app, Types
 
             this.listenTo(this.ideas, events.join(' '), this.render);
 
-            app.on('idea:delete', function(){
+            Assembl.commands.setHandler('idea:delete', function(){
                 if(Ctx.debugRender) {
                     console.log("ideaList: triggering render because app.on('idea:delete') was triggered");
                 }
                 that.render();
             });
 
-            app.on('ideas:update', function(ideas){
+            Assembl.reqres.setHandler('ideas:update', function(ideas){
                 if(Ctx.debugRender) {
                     console.log("ideaList: triggering render because app.on('ideas:update') was triggered");
                 }
@@ -82,10 +82,10 @@ function(Backbone, _, Ctx, Idea, IdeaLink, IdeaView, ideaGraphLoader, app, Types
             // on the socket
             assembl.segmentList.segments.on('add change reset', this.render, this);
             
-            app.on("panel:open", function(){
+            Assembl.commands.setHandler("panel:open", function(){
                 that.resizeGraphView();
             })
-            app.on("panel:close", function(){
+            Assembl.commands.setHandler("panel:close", function(){
                 that.resizeGraphView();
             })
 

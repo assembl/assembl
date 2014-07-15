@@ -1,5 +1,5 @@
-define(['backbone', 'underscore', 'jquery', 'modules/context', 'models/idea', 'models/segment', 'app', 'permissions'],
-function(Backbone, _, $, Ctx, Idea, Segment, app, Permissions){
+define(['backbone', 'underscore', 'jquery', 'modules/assembl', 'modules/context', 'models/idea', 'models/segment', 'permissions'],
+function(Backbone, _, $, Assembl, Ctx, Idea, Segment, Permissions){
     'use strict';
 
     var IdeaView = Backbone.View.extend({
@@ -32,7 +32,7 @@ function(Backbone, _, $, Ctx, Idea, Segment, app, Permissions){
             this.view_data = view_data;
             this.listenTo(this.model, 'change', this.render);
             this.listenTo(this.model, 'replacedBy', this.onReplaced);
-            app.on('idea:select', function(idea) {
+            Assembl.reqres.setHandler('idea:select', function(idea) {
                 that.onIsSelectedChange(idea);
             });
         },
@@ -42,7 +42,7 @@ function(Backbone, _, $, Ctx, Idea, Segment, app, Permissions){
          * @return {IdeaView}
          */
         render: function(){
-            app.trigger('render');
+            //app.trigger('render');
             var view_data = this.view_data;
             var render_data = view_data[this.model.getId()];
             if (render_data === undefined) {
@@ -142,7 +142,7 @@ function(Backbone, _, $, Ctx, Idea, Segment, app, Permissions){
             this.model.save({'inNextSynthesis': ev.currentTarget.checked});
             //Optimisation.  It would self render once the socket propagates, 
             //but this gives better responsiveness.
-            app.synthesisPanel.render();
+            assembl.synthesisPanel.render();
         },
 
         /**
@@ -177,7 +177,7 @@ function(Backbone, _, $, Ctx, Idea, Segment, app, Permissions){
                 ev.originalEvent.dataTransfer.dropEffect = 'all';
 
                 Ctx.showDragbox(ev, this.model.get('shortTitle'));
-                app.draggedIdea = this.model;
+                Ctx.draggedIdea = this.model;
             }
         },
 
@@ -190,7 +190,7 @@ function(Backbone, _, $, Ctx, Idea, Segment, app, Permissions){
                 ev.stopPropagation();
             }
             ev.currentTarget.style.opacity = '';
-            app.draggedSegment = null;
+            Ctx.draggedSegment = null;
         },
 
         /**
@@ -212,16 +212,16 @@ function(Backbone, _, $, Ctx, Idea, Segment, app, Permissions){
 
             ev.dataTransfer.dropEffect = 'all';
 
-            if( app.draggedIdea !== null ){
+            if( Ctx.draggedIdea !== null ){
 
                 // Do nothing if it is the same idea
-                if( app.draggedIdea.cid === this.model.cid ){
+                if( Ctx.draggedIdea.cid === this.model.cid ){
                     ev.dataTransfer.dropEffect = 'none';
                     return;
                 }
 
                 // If it is a descendent, do nothing
-                if( this.model.isDescendantOf(app.draggedIdea) ){
+                if( this.model.isDescendantOf(Ctx.draggedIdea) ){
                     ev.dataTransfer.dropEffect = 'none';
                     return;
                 }
@@ -235,7 +235,7 @@ function(Backbone, _, $, Ctx, Idea, Segment, app, Permissions){
                 }
             }
 
-            if( app.draggedSegment !== null || app.draggedAnnotation !== null ){
+            if( Ctx.draggedSegment !== null || Ctx.draggedAnnotation !== null ){
                 if( ev.target.classList.contains('idealist-dropzone') ){
                     this.$el.addClass('is-dragover-below');
                 } else {
@@ -291,20 +291,20 @@ function(Backbone, _, $, Ctx, Idea, Segment, app, Permissions){
             if( annotation ){
                 if( isDraggedBelow ){
                     // Add as a child idea
-                    app.currentAnnotationIdIdea = null;
-                    app.currentAnnotationNewIdeaParentIdea = this.model;
+                    Ctx.currentAnnotationIdIdea = null;
+                    Ctx.currentAnnotationNewIdeaParentIdea = this.model;
                     Ctx.saveCurrentAnnotationAsExtract();
                 } else {
                     // Add as a segment
-                    app.currentAnnotationIdIdea = this.model.getId();
-                    app.currentAnnotationNewIdeaParentIdea = null;
+                    Ctx.currentAnnotationIdIdea = this.model.getId();
+                    Ctx.currentAnnotationNewIdeaParentIdea = null;
                     Ctx.saveCurrentAnnotationAsExtract();
                 }
                 
                 return;
             }
 
-            if( app.draggedIdea && app.draggedIdea.cid !== this.model.cid ){
+            if( Ctx.draggedIdea && Ctx.draggedIdea.cid !== this.model.cid ){
 
                 var idea = Ctx.getDraggedIdea();
 

@@ -1,5 +1,5 @@
-define(['backbone', 'underscore', 'modules/context', 'models/idea', 'models/message', 'app', 'i18n', 'sprintf', 'types', 'views/editableField', 'views/ckeditorField', 'permissions', 'views/messageSend', 'views/notification'],
-function(Backbone, _, Ctx, Idea, Message, app, i18n, sprintf, Types, EditableField, CKEditorField, Permissions, MessageSendView, Notification){
+define(['backbone', 'underscore', 'modules/assembl', 'modules/context', 'models/idea', 'models/message', 'app', 'i18n', 'sprintf', 'types', 'views/editableField', 'views/ckeditorField', 'permissions', 'views/messageSend', 'views/notification'],
+function(Backbone, _, Assembl, Ctx, Idea, Message, app, i18n, sprintf, Types, EditableField, CKEditorField, Permissions, MessageSendView, Notification){
     'use strict';
 
     var LONG_TITLE_ID = 'ideaPanel-longtitle';
@@ -39,7 +39,7 @@ function(Backbone, _, Ctx, Idea, Message, app, i18n, sprintf, Types, EditableFie
             this.listenTo(assembl.users, 'reset', this.render);
             
             var that = this;
-            app.on('idea:select', function(idea){
+            Assembl.reqres.setHandler('idea:select', function(idea){
                 that.setCurrentIdea(idea);
             });
 
@@ -229,7 +229,7 @@ function(Backbone, _, Ctx, Idea, Message, app, i18n, sprintf, Types, EditableFie
             this.blockPanel();
             this.model.destroy({ success: function(){
                 that.unblockPanel();
-                app.trigger('idea:delete');
+                Assembl.commands.setHandler('idea:delete');
                 Ctx.setCurrentIdea(null);
             }});
         },
@@ -302,7 +302,7 @@ function(Backbone, _, Ctx, Idea, Message, app, i18n, sprintf, Types, EditableFie
                     segment = assembl.segmentList.segments.getByCid(cid);
                 console.log( cid );
                 Ctx.showDragbox(ev, segment.getQuote());
-                app.draggedSegment = segment;
+                Ctx.draggedSegment = segment;
             }
         },
 
@@ -311,7 +311,7 @@ function(Backbone, _, Ctx, Idea, Message, app, i18n, sprintf, Types, EditableFie
          */
         onDragEnd: function(ev){
             ev.currentTarget.style.opacity = '';
-            app.draggedSegment = null;
+            Ctx.draggedSegment = null;
         },
 
         /**
@@ -320,7 +320,7 @@ function(Backbone, _, Ctx, Idea, Message, app, i18n, sprintf, Types, EditableFie
         onDragOver: function(ev){
             //console.log("ideaPanel:onDragOver() fired");
             ev.preventDefault();
-            if( app.draggedSegment !== null || app.draggedAnnotation !== null){
+            if( Ctx.draggedSegment !== null || Ctx.draggedAnnotation !== null){
                 this.panel.addClass("is-dragover");
             }
         },
@@ -352,8 +352,8 @@ function(Backbone, _, Ctx, Idea, Message, app, i18n, sprintf, Types, EditableFie
             var annotation = Ctx.getDraggedAnnotation();
             if( annotation ){
                 // Add as a segment
-                app.currentAnnotationIdIdea = this.model.getId();
-                app.currentAnnotationNewIdeaParentIdea = null;
+                Ctx.currentAnnotationIdIdea = this.model.getId();
+                Ctx.currentAnnotationNewIdeaParentIdea = null;
                 Ctx.saveCurrentAnnotationAsExtract();
                 return;
             }

@@ -1,5 +1,5 @@
-define(['models/base','underscore', 'models/segment', 'app', 'i18n', 'types', 'permissions'],
-function(Base, _, Segment, app, i18n, Types, Permissions){
+define(['models/base','underscore'],
+    function(Base, _){
     'use strict';
 
     /**

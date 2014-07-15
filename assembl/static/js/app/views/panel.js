@@ -1,5 +1,5 @@
-define(['backbone', 'underscore', 'jquery', 'modules/context', 'app', 'i18n', 'permissions'],
-function(Backbone, _, $, Ctx, app, i18n, Permissions){
+define(['backbone', 'underscore', 'jquery', 'modules/context'],
+function(Backbone, _, $, Ctx){
     'use strict';
 
     /**

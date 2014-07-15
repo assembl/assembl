@@ -93,7 +93,7 @@ function(Backbone, _, $, Ctx, app, PanelView, MessageFamilyView, Message, i18n, 
             this.listenTo(assembl.segmentList.segments, 'add remove reset', this.initAnnotator);
             
             var that = this;
-            app.on('idea:select', function(idea){
+            Assembl.reqres.setHandler('idea:select', function(idea){
                 if(idea && that.currentQuery.isFilterInQuery(that.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, idea.getId())) {
                     //Filter is already in sync
                     //TODO:  Detect the case where there is no idea selected, and we already have no filter on ideas
@@ -845,24 +845,24 @@ function(Backbone, _, $, Ctx, app, PanelView, MessageFamilyView, Message, i18n, 
 
             // TODO: Re-render message in messagelist if an annotation was added...
             this.annotator.subscribe('annotationCreated', function(annotation){
-                var segment = assembl.segmentList.addAnnotationAsSegment(annotation, app.currentAnnotationIdIdea);
+                var segment = assembl.segmentList.addAnnotationAsSegment(annotation, Ctx.currentAnnotationIdIdea);
                 if( !segment.isValid() ){
                     annotator.deleteAnnotation(annotation);
-                } else if( app.currentAnnotationNewIdeaParentIdea ){
+                } else if( Ctx.currentAnnotationNewIdeaParentIdea ){
                     //We asked to create a new idea from segment
                     that.lockPanel();
-                    var newIdea = app.currentAnnotationNewIdeaParentIdea.addSegmentAsChild(segment);
+                    var newIdea = Ctx.currentAnnotationNewIdeaParentIdea.addSegmentAsChild(segment);
                     Ctx.setCurrentIdea(newIdea);
                 }
                 else {
                     segment.save();
                 }
-                app.currentAnnotationNewIdeaParentIdea = null;
-                app.currentAnnotationIdIdea = null;
+                Ctx.currentAnnotationNewIdeaParentIdea = null;
+                Ctx.currentAnnotationIdIdea = null;
             });
 
             this.annotator.subscribe('annotationEditorShown', function(editor, annotation){
-                app.body.append(editor.element);
+                $(document.body).append(editor.element);
                 var save = $(editor.element).find(".annotator-save");
                 save.text(i18n.gettext('Send to clipboard'));
                 var textarea = editor.fields[0].element.firstChild,
@@ -872,11 +872,11 @@ function(Backbone, _, $, Ctx, app, PanelView, MessageFamilyView, Message, i18n, 
 
                 div.on('dragstart', function(ev){
                     Ctx.showDragbox(ev, annotation.quote);
-                    app.draggedAnnotation = annotation;
+                    Ctx.draggedAnnotation = annotation;
                 });
 
                 div.on('dragend', function(ev){
-                    app.draggedAnnotation = null;
+                    Ctx.draggedAnnotation = null;
                 });
 
                 $(textarea).replaceWith(div);

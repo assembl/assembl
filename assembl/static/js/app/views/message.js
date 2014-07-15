@@ -404,7 +404,7 @@ function(Backbone, _, Moment, ckeditor, Ctx, app, Message, i18n, Permissions, Me
 
             var that = this;
 
-            app.doc.one('mouseup', function(ev){
+            $(document).one('mouseup', function(ev){
                 that.stopSelection(ev);
             });
         },

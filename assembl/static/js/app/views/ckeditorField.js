@@ -1,4 +1,4 @@
-define(['backbone', 'underscore', 'modules/context', 'app', 'ckeditor-sharedspace'], function(Backbone, _, Ctx, app, ckeditor){
+define(['backbone', 'underscore', 'modules/context', 'ckeditor-sharedspace'], function(Backbone, _, Ctx, ckeditor){
     'use strict';
 
     var CKEditorField = Backbone.View.extend({

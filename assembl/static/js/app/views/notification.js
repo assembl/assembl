@@ -1,5 +1,5 @@
-define(['app','backbone','backboneModal','text!/static/templates/notification.html', 'text!/static/templates/session-modal.html'],
-    function(app, Backbone, backboneModal, notificationTpl, modalTpl){
+define(['backbone','backboneModal','text!/static/templates/notification.html', 'text!/static/templates/session-modal.html'],
+    function(Backbone, backboneModal, notificationTpl, modalTpl){
 
    var Notification = Backbone.View.extend({
        template: _.template(notificationTpl),

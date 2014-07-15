@@ -1,4 +1,4 @@
-define(['models/base', 'jquery','modules/context', 'app', 'i18n', 'permissions'], function(Base, $, Ctx, app, i18n, Permissions){
+define(['models/base', 'jquery','modules/context', 'i18n'], function(Base, $, Ctx, i18n){
     'use strict';
 
     /**

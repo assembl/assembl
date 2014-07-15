@@ -1,5 +1,5 @@
-define(['backbone', 'underscore', 'moment', 'ckeditor', 'modules/context', 'app', 'models/message', 'views/message', 'models/synthesis', 'views/synthesisPanel', 'i18n', 'permissions', 'views/messageSend'],
-function(Backbone, _, Moment, ckeditor, Ctx, app, Message, MessageView, Synthesis, SynthesisPanel, i18n, Permissions, MessageSendView){
+define(['backbone', 'underscore', 'moment', 'ckeditor', 'modules/context', 'models/message', 'views/message', 'models/synthesis', 'views/synthesisPanel'],
+function(Backbone, _, Moment, ckeditor, Ctx, Message, MessageView, Synthesis, SynthesisPanel){
     'use strict';
 
     /**

@@ -1,4 +1,4 @@
-define(['models/base', 'jquery', 'modules/context', 'app', 'underscore'], function(Base, $, Ctx, app, _){
+define(['models/base', 'jquery', 'modules/context', 'context/assembl', 'underscore'], function(Base, $, Ctx, Assembl, _){
     'use strict';
 
     /**
@@ -163,7 +163,7 @@ define(['models/base', 'jquery', 'modules/context', 'app', 'underscore'], functi
                 success: function(data){
                     that.trigger('change:read', [value]);
                     that.trigger('change', that);
-                    app.trigger('ideas:update', [data.ideas]);
+                    Assembl.reqres.request('ideas:update', [data.ideas]);
                 }
             });
         }

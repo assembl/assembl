@@ -1,5 +1,5 @@
-define(['backbone', 'underscore', 'jquery', 'models/idea', 'modules/context', 'app', 'permissions'],
-function(Backbone, _, $, Idea, Ctx, app, Permissions){
+define(['backbone', 'underscore', 'jquery', 'models/idea', 'modules/context'],
+function(Backbone, _, $, Idea, Ctx){
     'use strict';
 
     var IdeaFamilyView = Backbone.View.extend({

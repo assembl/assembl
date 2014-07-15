@@ -1,5 +1,5 @@
-define(['backbone', 'underscore', 'jquery', 'models/idea', 'models/segment', 'modules/context', 'app', 'permissions', 'views/ckeditorField', 'views/messageSend'],
-function(Backbone, _, $, Idea, Segment, Ctx, app, Permissions, CKEditorField, MessageSendView){
+define(['backbone', 'underscore', 'jquery', 'models/idea', 'models/segment', 'modules/context', 'permissions', 'views/ckeditorField', 'views/messageSend'],
+function(Backbone, _, $, Idea, Segment, Ctx, Permissions, CKEditorField, MessageSendView){
     'use strict';
 
     var IdeaInSynthesisView = Backbone.View.extend({
