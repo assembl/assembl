@@ -1,4 +1,4 @@
-define(['jasmine', 'app', 'jquery', 'modules/context'], function(jasmine, app, $, ctx){
+define(['jasmine', 'jquery', 'modules/context'], function(jasmine, $, ctx){
 
 	// Fixtures
 	var txt = '<script id="tmpl-test" type="text/x-tmpl">test something</script>'
@@ -7,7 +7,7 @@ define(['jasmine', 'app', 'jquery', 'modules/context'], function(jasmine, app, $
 	return describe('app main module', function(){
 
 		it('must exist', function(){
-			expect(window.app).not.toBeUndefined();
+			expect(ctx).not.toBeUndefined();
 		});
 
 		it('must load a template by id', function(){
