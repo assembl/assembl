@@ -55,7 +55,30 @@ define(function(require){
             this.listenTo(assembl.users, 'reset', this.render);
 
         },
-
+        /**
+         * This is not inside the template beacuse babel wouldn't extract it in 
+         * the pot file
+         */
+        renderTemplateGetSubIdeasLabel: function(subIdeas){
+            if(subIdeas.length == 0) {
+                return i18n.gettext('This idea has no sub-ideas');
+            }
+            else {
+                return i18n.sprintf(i18n.ngettext('This idea has %d sub-idea','This idea has %d sub-ideas',subIdeas.length), subIdeas.length);
+            }
+        },
+        /**
+         * This is not inside the template beacuse babel wouldn't extract it in 
+         * the pot file
+         */
+        renderTemplateGetExtractsLabel: function(extracts){
+            if(extracts.length == 0) {
+                return i18n.gettext('No extracts were harvested for this idea');
+            }
+            else {
+                return i18n.sprintf(i18n.ngettext('Harvested in %d extract','Harvested in %d extracts',extracts.length), extracts.length);
+            }
+        },
         /**
          * The render
          */
@@ -79,17 +102,18 @@ define(function(require){
             }
 
             this.$el.html( this.template( {
-                idea:this.model,
-                subIdeas:subIdeas,
-                segments:segments,
-                canEdit:canEdit,
-                i18n:i18n,
-                sprintf:i18n.sprintf,
-                canDelete:currentUser.can(Permissions.EDIT_IDEA),
-                canEditNextSynthesis:canEditNextSynthesis,
-                canEditExtracts:currentUser.can(Permissions.EDIT_EXTRACT),
-                canEditMyExtracts:currentUser.can(Permissions.EDIT_MY_EXTRACT),
-                canAddExtracts:currentUser.can(Permissions.EDIT_EXTRACT) //TODO: This is a bit too coarse
+                idea: this.model,
+                subIdeas: subIdeas,
+                segments: segments,
+                canEdit: canEdit,
+                i18n: i18n,
+                renderTemplateGetExtractsLabel: this.renderTemplateGetExtractsLabel,
+                renderTemplateGetSubIdeasLabel: this.renderTemplateGetSubIdeasLabel,
+                canDelete: currentUser.can(Permissions.EDIT_IDEA),
+                canEditNextSynthesis: canEditNextSynthesis,
+                canEditExtracts: currentUser.can(Permissions.EDIT_EXTRACT),
+                canEditMyExtracts: currentUser.can(Permissions.EDIT_MY_EXTRACT),
+                canAddExtracts: currentUser.can(Permissions.EDIT_EXTRACT) //TODO: This is a bit too coarse
             } ) );
             Ctx.initTooltips(this.$el);
             this.panel = this.$('.panel');

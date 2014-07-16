@@ -21,17 +21,6 @@ TEMPLATE_PATH = os.path.join(os.path.dirname(__file__), '..', '..', 'templates')
 
 _ = TranslationStringFactory('assembl')
 
-def js_message_ids():
-    from babel.messages.pofile import read_po
-    pot = read_po(open(os.path.join(os.path.dirname(__file__), '..', '..', 'locale', 'assembl.pot')))
-    def is_js(msg):
-        for (filename, lineno) in msg.locations:
-            if filename.endswith('.js'):
-                return True
-    return [m.id for m in pot if is_js(m)]
-
-JS_MESSAGE_IDS = js_message_ids()
-
 def get_default_context(request):
     base = base_default_context(request)
     slug = request.matchdict['discussion_slug']

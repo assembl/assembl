@@ -171,6 +171,14 @@ def compile_messages():
     """
     cmd = "python setup.py compile_catalog"
     venvcmd(cmd)
+    locale_path = os.path.join(env.projectpath, 'assembl', 'locale')
+    for dir in os.listdir(locale_path):
+        if not os.path.isfile(os.path.join(locale_path, dir)):
+            po_path = os.path.join(locale_path, dir, 'LC_MESSAGES', 'assembl.po')
+            json_path = os.path.join(locale_path, dir, 'LC_MESSAGES', 'assembl.jed.json')
+            print "Creating Jed json for ", po_path
+            cmd = "PATH=$(npm bin):$PATH po2json --format jed %s %s" % (po_path,json_path)
+            venvcmd(cmd)
 
 @task
 def compile_stylesheets():
@@ -427,12 +435,12 @@ def install_basetools():
 @task
 def install_bower():
     with cd(env.projectpath):
-        run('npm install bower')
+        run('npm install bower po2json')
 
 @task
 def update_bower():
     with cd(env.projectpath):
-        run('npm update bower')
+        run('npm update bower po2json')
 
 
 def bower_cmd(cmd, relative_path='.'):
@@ -481,7 +489,7 @@ def install_builddeps():
             run('brew install nodejs npm')
     else:
         sudo('apt-get install -y build-essential python-dev ruby-builder')
-        sudo('apt-get install -y nodejs npm')
+        sudo('apt-get install -y nodejs nodejs-legacy  npm')
 
         #Runtime requirements (even in develop)
         sudo('apt-get install -y redis-server memcached unixodbc-dev virtuoso-opensource')

@@ -2,6 +2,7 @@
 
 import os.path
 import json
+import codecs
 from pyramid.security import Allow, ALL_PERMISSIONS, DENY_ALL
 from pyramid.httpexceptions import HTTPNotFound, HTTPInternalServerError
 from pyramid.i18n import TranslationStringFactory
@@ -29,6 +30,9 @@ def backbone_include(config):
     config.add_route('graph_view', '/graph')
 
 
+"""
+TODO:  Rewrite this as a command line util and integrate in build system
+
 def js_message_ids():
     from babel.messages.pofile import read_po
     pot = read_po(open(os.path.join(os.path.dirname(__file__), '..', 'locale', 'assembl.pot')))
@@ -38,7 +42,7 @@ def js_message_ids():
                 return True
     return [m.id for m in pot if is_js(m)]
 
-JS_MESSAGE_IDS = js_message_ids()
+JS_MESSAGE_IDS = js_message_ids()"""
 
 def get_default_context(request):
     localizer = request.localizer
@@ -55,8 +59,11 @@ def get_default_context(request):
         locale=localizer.locale_name,
         locales=config.get('available_languages').split(),
         theme=config.get('default_theme') or 'default',
-        translations=json.dumps({
-            id:localizer.translate(_(id)) for id in JS_MESSAGE_IDS}))
+        translations=codecs.open(os.path.join(os.path.dirname(__file__), '..', 'locale', localizer.locale_name, 'LC_MESSAGES', 'assembl.jed.json'), encoding='utf-8').read()
+        #TODO:  batch strip json not from js files
+        #translations=json.dumps({
+        #    id:localizer.translate(_(id)) for id in JS_MESSAGE_IDS}))
+        )
 
 
 def includeme(config):

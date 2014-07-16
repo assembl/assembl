@@ -28,12 +28,7 @@
         {#
         <fieldset id="ideaPanel-section-subideas" class="panel-section">
             <legend data-tooltip="{{gettext('The children of this idea.')}}">
-                <span><% if(subIdeas.length == 0) {
-                            print(i18n.gettext('This idea has no sub-ideas'));
-                            }
-                         else {
-                            print(i18n.sprintf(i18n.ngettext('This idea has %d sub-idea','This idea has %d sub-ideas',subIdeas.length), subIdeas.length) );
-                            } %></span>
+                <span><% print(renderTemplateGetSubIdeasLabel(subIdeas)) %></span>
             </legend>
             <div class="idealist">
                 <% _.each(subIdeas, function(subIdea, i){ %>
@@ -45,12 +40,7 @@
         
         <fieldset id="ideaPanel-section-segments" class="panel-section">
             <legend data-tooltip="{{gettext('Expressions of this idea in segments of posts or on the web')}}">
-                <span><% if(subIdeas.length == 0) {
-                            print(i18n.gettext('No extracts were harvested for this idea'));
-                            }
-                         else {
-                            print(sprintf(i18n.ngettext('Harvested in %d extract','Harvested in %d extracts',segments.length), segments.length));
-                            } %></span>
+                <span><% print(renderTemplateGetExtractsLabel(segments)) %></span>
             </legend>
             <div class="postitlist">
                 <% _.each(segments, function(segment, i){ %>
