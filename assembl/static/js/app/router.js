@@ -1,5 +1,8 @@
-define(['marionette', 'jquery', 'modules/context','modules/controller'], function(Marionette, $, Ctx, Controller){
+define(function(require){
     'use strict';
+
+    var Marionette = require('marionette'),
+        Controller = require('modules/controller');
 
     var Router = Marionette.AppRouter.extend({
 

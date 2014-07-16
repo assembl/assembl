@@ -4,7 +4,6 @@ define(function(require){
     var Base = require('models/base'),
            _ = require('underscore'),
          Ctx = require('modules/context'),
-     Segment = require('models/segment'),
         i18n = require('utils/i18n'),
        Types = require('utils/types'),
  Permissions = require('utils/permissions');

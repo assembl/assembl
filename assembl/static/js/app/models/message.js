@@ -1,9 +1,9 @@
-define(['models/base', 'jquery', 'modules/context', 'modules/assembl', 'underscore'], function(Base, $, Ctx, Assembl, _){
+define(function(require){
     'use strict';
 
     var Base = require('models/base'),
-         Ctx = require('modules/context'),
      Assembl = require('modules/assembl'),
+         Ctx = require('modules/context'),
            $ = require('jquery'),
            _ = require('underscore');
 

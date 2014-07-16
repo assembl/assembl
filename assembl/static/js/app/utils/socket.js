@@ -33,7 +33,7 @@ define(["modules/assembl", 'modules/context', 'underscore', 'sockjs'], function(
      * Triggered when the connection opens
      * @event
      */
-    Socket.prototype.onOpen = function(ev){
+    Socket.prototype.onOpen = function(){
         this.socket.send("token:" + Ctx.getCsrfToken());
         this.socket.send("discussion:" + Ctx.getDiscussionId());
         this.state = Socket.STATE_CONNECTING;
@@ -63,7 +63,7 @@ define(["modules/assembl", 'modules/context', 'underscore', 'sockjs'], function(
      * Triggered when the connection closes ( or lost the connection )
      * @event
      */
-    Socket.prototype.onClose = function(ev){
+    Socket.prototype.onClose = function(){
         Assembl.commands.execute('socket:close');
         
         var that = this;
