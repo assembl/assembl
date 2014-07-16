@@ -5,13 +5,18 @@ voteApp.controller('adminCreateFromIdeaCtl',
   function($scope, $http, $routeParams, $log, $location, globalConfig, configTestingService, configService, Discussion, AssemblToolsService){
 
   $scope.current_step = 1;
-  $scope.url_parameter_idea = null;
-  $scope.discussion_uri = null;
-  $scope.idea = null;
+  $scope.current_substep = 1;
+  $scope.url_parameter_idea = null; // the URL of the idea given in URL parameter, which will be associated to the widget instance
+  $scope.discussion_uri = null; // "local:Discussion/1"
+  $scope.idea = null; // idea associated to the widget instance
   $scope.discussion = null;
   $scope.widget_creation_endpoint = null;
   $scope.expert_mode = 0;
-  $scope.created_widget_location = null;
+  $scope.created_widget_location = null; // "local:Widget/24"
+  $scope.ideas = null; // list of all ideas of the discussion
+  $scope.ideas_str = null;
+  $scope.criteria = null; // array of ideas (their full structure)
+  $scope.criteria_ids = null; // array of ids (uri, aka "local:Idea/3") of the criteria
 
   $scope.init = function(){
     console.log("adminCreateFromIdeaCtl::init()");
@@ -53,6 +58,13 @@ voteApp.controller('adminCreateFromIdeaCtl',
       );
     });
 
+    $("#widget_set_criteria").on("submit", function(){
+      $scope.associateCriteria(
+        $scope.criteria,
+        $("#widget_select_criteria_result")
+      );
+    });
+
   };
 
   // settings can be null
@@ -74,26 +86,59 @@ voteApp.controller('adminCreateFromIdeaCtl',
     }
 
     $http({
-        method: 'POST',
-        url: endpoint,
-        data: $.param(post_data),
-        async: true,
-        headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+      method: 'POST',
+      url: endpoint,
+      data: $.param(post_data),
+      async: true,
+      headers: {'Content-Type': 'application/x-www-form-urlencoded'}
     }).success(function(data, status, headers){
-        console.log("success");
-        var created_widget = headers("Location"); // "local:Widget/5"
-        console.log("created_widget: " + created_widget);
-        $scope.created_widget_location = AssemblToolsService.resourceToUrl(created_widget);
-        result_holder.text("Success! Location: " + created_widget);
-        $scope.updateOnceWidgetIsCreated();
+      console.log("success");
+      var created_widget = headers("Location"); // "local:Widget/5"
+      console.log("created_widget: " + created_widget);
+      $scope.created_widget_location = AssemblToolsService.resourceToUrl(created_widget);
+      result_holder.text("Success! Location: " + created_widget);
+      $scope.updateOnceWidgetIsCreated();
     }).error(function(status, headers){
-        console.log("error");
-        result_holder.text("Error");
+      console.log("error");
+      result_holder.text("Error");
     });
   };
 
   $scope.updateOnceWidgetIsCreated = function(){
     $scope.current_step = 3;
+    $scope.current_substep = 1;
+    // get the list of ideas in this discussion
+    var ideas_endpoint_url = AssemblToolsService.resourceToUrl($scope.discussion_uri) + '/ideas?view=default';
+    $http({
+      method: 'GET',
+      url: ideas_endpoint_url,
+    }).success(function(data, status, headers){
+      console.log(data);
+      $scope.current_substep = 2;
+      $scope.ideas = data;
+      $scope.ideas_str = JSON.stringify(data);
+    });
+  };
+
+  $scope.associateCriteria = function(criteria, result_holder){
+    var post_data = criteria; // maybe we should send only an array of @id fields instead of the whole ideas
+    var endpoint = AssemblToolsService.resourceToUrl($scope.created_widget_location) + "/criteria"; // "/data/Widgets/24/criteria" or "/data/Discussion/1/widgets/13/criteria"
+
+    $http({
+        method: 'PUT',
+        url: endpoint,
+        data: post_data,
+        //data: $.param(post_data),
+        headers: {'Content-Type': 'application/json'}
+        //headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+    }).success(function(data, status, headers){
+        console.log("success");
+        result_holder.text("Success!");
+        $scope.current_step = 4;
+    }).error(function(status, headers){
+        console.log("error");
+        result_holder.text("Error");
+    });
   };
 
 

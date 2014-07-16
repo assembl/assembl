@@ -1,6 +1,8 @@
 
 <div id="admin" ng-controller="adminCreateFromIdeaCtl" ng-init="init()">
+    <!--
     <input id="input_expert_mode" type="checkbox" ng-model="expert_mode" /> <label for="input_expert_mode">Expert mode</label>
+    -->
 
     <h1>Create a vote widget instance from an idea</h1>
 
@@ -40,7 +42,32 @@
 
     <div id="step_select_criteria" ng-show="current_step == 3">
         <h2>Select criteria</h2>
-        <p>TODO</p>
+        <div ng-show="current_step == 3 && current_substep == 1">
+            <p>
+                Loading criteria...
+            </p>
+        </div>
+        <div ng-show="current_step == 3 && current_substep == 2">
+            <p>
+                Please select the criteria on which the user will be able to vote. You can select multiple criteria with CTRL-click.
+            </p>
+            <form id="widget_set_criteria" method="POST">
+                <select multiple size="20" ng-model="criteria" ng-options="item as item.shortTitle for item in ideas track by item['@id']"></select>
+                <br/>
+                <input type="submit" value="Validate these criteria" />
+                <span id="widget_select_criteria_result"></span>
+            </form>
+        </div>
+    </div>
+
+    <div id="step_criteria_groups_and_appearance" ng-show="current_step == 4">
+        <h2>Set criteria groups and their appearance</h2>
+        <p>
+            Please add groups of criteria, and customize how they will be displayed to the user.
+        </p>
+        <p>
+            TODO
+        </p>
     </div>
 
 
