@@ -1,19 +1,10 @@
 define(function(require){
 
-   var Backbone = require('backbone'),
-  backboneModal = require('backboneModal'),
-notificationTpl = require('text!/static/templates/notification.html'),
-       modalTpl = require('text!/static/templates/session-modal.html');
+   var Marionette = require('marionette'),
+    backboneModal = require('backboneModal');
 
-
-   var Notification = Backbone.View.extend({
-       template: _.template(notificationTpl),
-
-       el:'#notification',
-
-       initialize: function(){
-          this.render();
-       },
+   var Notification = Marionette.LayoutView.extend({
+       template: '#tmpl-notification',
 
        events: {
          'click .close': 'close',
@@ -31,7 +22,7 @@ notificationTpl = require('text!/static/templates/notification.html'),
              model.set("view","index");
 
            var Modal = Backbone.Modal.extend({
-               template: _.template(modalTpl),
+               template: _.template($('#tmpl-session-modal').html()),
                model:model
            });
 
@@ -48,15 +39,7 @@ notificationTpl = require('text!/static/templates/notification.html'),
            this.remove();
            this.unbind();
            $('#main .panelarea').css('top', '6em');
-       },
-
-       render: function(){
-           if(!window.localStorage.getItem('showNotification')){
-               $('#main .panelarea').css('top', '9em');
-               this.$el.html(this.template);
-           }
        }
-
    });
 
    return Notification;

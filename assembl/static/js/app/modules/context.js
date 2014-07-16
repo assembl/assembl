@@ -108,6 +108,9 @@ define(function(require){
          this.openedPanels = 0;
 
 
+         this.draggedAnnotation = null;
+
+
          this.AVAILABLE_MESSAGE_VIEW_STYLES = {
             TITLE_ONLY: {
                 id: "viewStyleTitleOnly",
@@ -161,7 +164,7 @@ define(function(require){
         },
 
         getDraggedAnnotation: function(){
-            return this.draggedAnnotation = null;
+            return this.draggedAnnotation;
         },
 
         setDraggedAnnotation: function(annotation){
@@ -221,10 +224,11 @@ define(function(require){
          *
          * ex: 'local:Extract/1' -> '/api/v1/discussion/1/generic/Extract/1'
          */
-        getGenericApiUrl: function(id){
+        //FIXME: this method never use in app
+        /*getGenericApiUrl: function(id){
             var url = '/api/v1/discussion/' + this.getDiscussionId() + '/generic/';
             return id.replace('local:', url);
-        },
+        },*/
 
         /**
          * Show or hide the given panel
@@ -232,7 +236,7 @@ define(function(require){
          */
         togglePanel: function(panelName){
             var panel = assembl[panelName],
-                  ctx = new Context();
+                ctx = new Context();
 
             if( panel === undefined ){
                 return false;
@@ -249,20 +253,20 @@ define(function(require){
          * @param {backbone.View} panel
          */
         closePanel: function(panel){
-            var ctx = new Context();
             if( ! panel.$el.hasClass('is-visible') ){
                 return false;
             }
 
             assembl.openedPanels -= 1;
             $(document.body).attr('data-panel-qty', assembl.openedPanels);
-            if( ctx.isInFullscreen() ){
+
+            if( this.isInFullscreen() ){
                $(document.body).addClass('is-fullscreen');
             }
 
             panel.$el.removeClass('is-visible');
 
-            ctx.removePanelFromStorage(panel.el.id);
+            this.removePanelFromStorage(panel.el.id);
 
             if( panel.button ) {
                 panel.button.removeClass('active');
@@ -389,10 +393,9 @@ define(function(require){
                 async: async,
                 dataType: 'text',
                 success: function(data) {
-                    that.csrfToken = data;
+                    that.setCsrfToken(data);
                 }
             });
-            return this.csrfToken;
         },
 
         /**
@@ -423,8 +426,7 @@ define(function(require){
          * Saves the current annotation if there is any
          */
         saveCurrentAnnotationAsExtract: function(){
-            var ctx = new Context();
-            if( ctx.getCurrentUser().can(Permissions.EDIT_EXTRACT) &&
+            if( this.getCurrentUser().can(Permissions.EDIT_EXTRACT) &&
                 assembl.messageList.annotatorEditor ){
                 assembl.messageList.annotatorEditor.element.find('.annotator-save').click();
             }
@@ -540,9 +542,10 @@ define(function(require){
          * @param {String} [format=app.datetimeFormat] The format
          * @return {string}
          */
-        formatDatetime: function(date, format){
+        //FIXME: this method never use in app
+        /*formatDatetime: function(date, format){
             return this.formatDate(date, format || this.datetimeFormat);
-        },
+        },*/
 
         /**
          * Shows the context menu given the options
@@ -551,7 +554,8 @@ define(function(require){
          * @param {Object} scope The scope where the functions will be executed
          * @param {Object<string:function>} items The items on the context menu
          */
-        showContextMenu: function(x, y, scope, items){
+        //FIXME: this method never use in app
+        /*showContextMenu: function(x, y, scope, items){
             var menu_width = 150;
 
 
@@ -584,20 +588,21 @@ define(function(require){
             if( menuY >= maxY ){
                 menu.css({'top': maxY - menu.height() });
             }
-        },
+        },*/
 
         /**
          * Removes all .contextmenu on the page
          * @param {Event} [ev=null] If given, checks to see if it was clicked outside
          */
-        hideContextMenu: function(ev){
+        //FIXME: this method never use in app, is a part of another one never use
+        /*hideContextMenu: function(ev){
             if( ev && ev.target.classList.contains('contextmenu')){
                 return;
             }
 
             $('.contextmenu').remove();
             $(document).off('click', this.hideContextMenu);
-        },
+        },*/
 
         /**
          * Returns an array with all segments for the given idea
@@ -721,7 +726,8 @@ define(function(require){
          * @see http://blog.snowfinch.net/post/3254029029/uuid-v4-js
          * @return {String} an uuid
          */
-        createUUID: function(){
+        //FIXME: this method never use in app
+        /*createUUID: function(){
             var uuid = "", i = 0, random;
 
             for (; i < 32; i++) {
@@ -735,7 +741,7 @@ define(function(require){
             }
 
             return uuid;
-        },
+        },*/
 
         /**
          * Given the string in the format "local:ModelName/{id}" returns the id

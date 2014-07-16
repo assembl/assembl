@@ -4,11 +4,8 @@ define(['marionette'], function (Marionette) {
 
     App.addInitializer(function(){
         App.addRegions({
-            ideaListRegion:'#ideaList',
-            ideaPanelRegion:'#ideaPanel',
-            clipboardRegion:'#segmentList',
-            messagesRegion:'#messageList',
-            synthesisRegion:'#synthesisPanel'
+            headerRegions:'#header',
+            notificationRegion:'#notification'
         })
     });
 

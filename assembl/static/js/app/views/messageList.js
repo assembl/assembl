@@ -978,7 +978,7 @@ define(function(require){
 
             if ( arguments.length > 1 )
             {
-                console.log("applying unread: " + only_unread);
+                //console.log("applying unread: " + only_unread);
                 if ( only_unread === null )
                     this.currentQuery.clearFilter(this.currentQuery.availableFilters.POST_IS_UNREAD, null);
                 else
