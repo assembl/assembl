@@ -264,7 +264,7 @@
         "@extends": "Widget",
         "criteria_url": true,
         "criteria": ":",
-        "votable_ideas": ":"
+        "votable_ideas": ":id_only"
     },
     "BinaryVote": {
         "idea": true,
