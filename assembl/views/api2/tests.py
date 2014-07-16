@@ -402,7 +402,8 @@ def test_voting_widget(
         '/data/Discussion/%d/widgets' % (discussion.id,), {
             'type': 'MultiCriterionVotingWidget',
             'settings': json.dumps({
-                "criteria": criteria_def
+                "criteria": criteria_def,
+                "votable_root_id": subidea_1_1.uri()
             })
         })
     assert new_widget_loc.status_code == 201
@@ -483,6 +484,21 @@ def test_voting_widget(
     assert vote_results.status_code == 200
     vote_results = vote_results.json
     assert vote_results[criterion_key] == 10
+    ideas_data = test_app.get('/api/v1/discussion/%d/ideas' % discussion.id)
+    assert ideas_data.status_code == 200
+    print ideas_data
+    # TODO Look for an idea with 
+    # "widget_data": [{
+    #   "widget": "/widget/vote/?config=local:Widget/4",
+    #   "state": {
+    #      "voter": "local:AgentProfile/10",
+    #      "idea": "local:Idea/31",
+    #      "vote_value": 10.0,
+    #      "@id": "local:IdeaVote/4",
+    #      "@type": "LickertIdeaVote",
+    #      "@view": "default"
+    #  }, "idea": "local:Idea/31",
+    #  "@type": "voted"}]
 
 
 def test_voting_widget_criteria(

@@ -269,10 +269,9 @@
         "voter": true,
         "vote_value": true
     },
-    "LickertVote": {
+    "LickertIdeaVote": {
         "idea": true,
         "voter": true,
-        "vote_value": true,
-        "range": true
+        "vote_value": true
     }
 }

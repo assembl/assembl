@@ -1,15 +1,18 @@
-import json
 import transaction
+from collections import defaultdict
 
+import simplejson as json
 from cornice import Service
 from pyramid.httpexceptions import HTTPNotFound, HTTPBadRequest, HTTPNoContent
+from pyramid.security import authenticated_userid
+from sqlalchemy import and_
+from sqlalchemy.orm import joinedload
+
 from assembl.views.api import API_DISCUSSION_PREFIX
 from assembl.models import (
     get_named_object, get_database_id, Idea, RootIdea, IdeaLink, Discussion,
     Extract, SubGraphIdeaAssociation)
 from assembl.auth import (P_READ, P_ADD_IDEA, P_EDIT_IDEA)
-from sqlalchemy import and_
-from sqlalchemy.orm import joinedload
 
 ideas = Service(name='ideas', path=API_DISCUSSION_PREFIX + '/ideas',
                 description="",
@@ -65,7 +68,7 @@ def get_idea(request):
     else:
         return idea.generic_json()
 
-def _get_ideas_real(discussion, view_def=None, ids=None):
+def _get_ideas_real(discussion, view_def=None, ids=None, user_id=None):
     next_synthesis = discussion.get_next_synthesis()
     ideas = Idea.db.query(Idea).filter_by(
         discussion_id=discussion.id
@@ -92,17 +95,34 @@ def _get_ideas_real(discussion, view_def=None, ids=None):
         else:
             serialized_idea = idea.generic_json()
         retval.append(serialized_idea)
+    widget_data = defaultdict(list)
+    for widget in discussion.widgets:
+        url = widget.get_ui_endpoint()
+        for data in widget.idea_data(user_id):
+            try:
+                data['widget'] = url
+                widget_data[data['idea']].append(data)
+            except KeyError as e:
+                pass
+    for idea_rep in retval:
+        if '@id' not in idea_rep:
+            continue
+        data = widget_data[idea_rep['@id']]
+        if data:
+            idea_rep['widget_data'] = data
     return retval
 
 @ideas.get(permission=P_READ)
 def get_ideas(request):
+    user_id = authenticated_userid(request)
     discussion_id = request.matchdict['discussion_id']
     discussion = Discussion.get(id=int(discussion_id))
     if not discussion:
         raise HTTPNotFound("Discussion with id '%s' not found." % discussion_id)
     view_def = request.GET.get('view')
     ids = request.GET.getall('ids')
-    return _get_ideas_real(discussion=discussion, view_def=view_def, ids=ids)
+    return _get_ideas_real(discussion=discussion, view_def=view_def,
+                           ids=ids, user_id=user_id)
 
 # Update
 @idea.put(permission=P_EDIT_IDEA)
