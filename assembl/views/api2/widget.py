@@ -242,6 +242,33 @@ def delete_vote_criteria(request):
     return HTTPOk()
 
 
+@view_config(context=CollectionContext, request_method='POST',
+             ctx_named_collection="VotableCollection.votable_ideas",
+             permission=P_ADMIN_DISC, header=FORM_HEADER)
+def post_to_vote_votables(request):
+    ctx = request.context
+    target_id = request.POST.get('id', None)
+    idea = None
+    if target_id:
+        idea = Idea.get_instance(target_id)
+    if not idea:
+        raise HTTPNotFound
+    widget = ctx.parent_instance
+    widget.add_votable(idea)
+    return HTTPOk()  # Not sure this can be called a creation
+
+
+@view_config(context=InstanceContext, request_method='DELETE',
+             ctx_instance_class=Idea, permission=P_ADMIN_DISC,
+             ctx_named_collection_instance="VotableCollection.votable_ideas")
+def delete_vote_votable(request):
+    ctx = request.context
+    idea = ctx._instance
+    widget = ctx.__parent__.parent_instance
+    widget.remove_votable(idea)
+    return HTTPOk()
+
+
 @view_config(
     context=CollectionContext, request_method="PUT", 
     ctx_named_collection="CriterionCollection.criteria",

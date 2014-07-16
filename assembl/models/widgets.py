@@ -384,10 +384,32 @@ class MultiCriterionVotingWidget(Widget):
                     self.add_criterion(criterion_idea)
                 except Exception as e:
                     print "Missing criterion. Discarded.", criterion
+        if 'votables' in settings:
+            for votable_id in settings['votables']:
+                try:
+                    votable_idea = Idea.get_instance(votable_id)
+                    self.add_votable(votable_idea)
+                except Exception as e:
+                    print "Missing votable. Discarded.", votable
+        elif 'votable_root_id' in settings:
+            try:
+                votable_root_idea = Idea.get_instance(votable_root_id)
+            except Exception as e:
+                print "Cannot find votable root.", votable
+            if len(votable_root_idea.children):
+                for child in votable_root_idea.children:
+                    self.add_votable(child)
+            else:
+                self.add_votable(votable_root_idea)
 
     @property
     def criteria_url(self):
         return 'local:Discussion/%d/widgets/%d/criteria' % (
+            self.discussion_id, self.id)
+
+    @property
+    def votables_url(self):
+        return 'local:Discussion/%d/widgets/%d/votables' % (
             self.discussion_id, self.id)
 
     def get_user_votes_url(self, idea_id):
@@ -431,6 +453,30 @@ class MultiCriterionVotingWidget(Widget):
                 self.criteria_links.append(VotingCriterionWidgetLink(
                     widget=self, idea=idea))
 
+    def add_votable(self, idea):
+        if idea not in self.votables_ideas:
+            self.votable_idea_links.append(VotableIdeaWidgetLink(
+                widget=self, idea=idea))
+
+    def remove_votable(self, idea):
+        for link in self.votable_idea_links:
+            if link.idea == idea:
+                self.votable_idea_links.remove(link)
+                return
+
+    def set_votables(self, ideas):
+        idea_ids = {idea.id for idea in ideas}
+        for link in list(self.votable_idea_links):
+            if link.idea_id not in idea_ids:
+                self.votable_idea_links.remove(link)
+                self.db.delete(link)
+            else:
+                idea_ids.remove(link.idea_id)
+        for idea in ideas:
+            if idea.id in idea_ids:
+                self.votable_idea_links.append(VotableIdeaWidgetLink(
+                    widget=self, idea=idea))
+
     @classmethod
     def extra_collections(cls):
         class CriterionCollection(CollectionDefinition):
@@ -443,7 +489,6 @@ class MultiCriterionVotingWidget(Widget):
             def decorate_query(self, query, last_alias, parent_instance, ctx):
                 widget = self.owner_alias
                 idea = last_alias
-                criterion_link = aliased(VotingCriterionWidgetLink)
                 return query.join(idea.has_criterion_links).join(
                     widget).filter(widget.id == parent_instance.id)
 
@@ -467,6 +512,30 @@ class MultiCriterionVotingWidget(Widget):
                             search_ctx = search_ctx.__parent__
                         assert search_ctx.__parent__
                         inst.criterion = search_ctx._instance
+
+        class VotableCollection(CollectionDefinition):
+            # The set of votable ideas.
+            def __init__(self, cls):
+                super(VotabeCollection, self).__init__(
+                    cls, cls.votable_ideas)
+
+            def decorate_query(self, query, last_alias, parent_instance, ctx):
+                widget = self.owner_alias
+                idea = last_alias
+                return query.join(idea.has_votable_links).join(
+                    widget).filter(widget.id == parent_instance.id)
+
+            def decorate_instance(
+                    self, instance, parent_instance, assocs, user_id, ctx,
+                    kwargs):
+                super(VotableCollection, self).decorate_instance(
+                    instance, parent_instance, assocs, user_id, ctx, kwargs)
+                for inst in assocs[:]:
+                    if isinstance(inst, Idea):
+                        assocs.append(VotableIdeaWidgetLink(
+                            idea=inst,
+                            **self.filter_kwargs(
+                                VotableIdeaWidgetLink, kwargs)))
 
         class VoteTargetsCollection(AbstractCollectionDefinition):
             # The set of voting target ideas.
@@ -623,11 +692,12 @@ class VotableIdeaWidgetLink(IdeaWidgetLink):
 
 MultiCriterionVotingWidget.votable_idea_links = relationship(
     VotableIdeaWidgetLink)
+Idea.has_votable_links = relationship(VotableIdeaWidgetLink)
 
 MultiCriterionVotingWidget.votable_ideas = relationship(
     Idea, viewonly=True, secondary=join(Idea, VotableIdeaWidgetLink),
     primaryjoin=Widget.idea_links.of_type(VotableIdeaWidgetLink),
-    secondaryjoin=IdeaWidgetLink.idea)
+    secondaryjoin=IdeaWidgetLink.idea, backref='votable_by_widget')
 
 
 class VotedIdeaWidgetLink(IdeaWidgetLink):
