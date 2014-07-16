@@ -263,6 +263,7 @@
     "MultiCriterionVotingWidget": {
         "@extends": "Widget",
         "criteria_url": true,
+        "votables_url": true,
         "criteria": ":",
         "votable_ideas": ":id_only"
     },
