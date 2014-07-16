@@ -50,12 +50,31 @@ class Widget(DiscussionBoundBase):
     )
     discussion = relationship(Discussion, backref="widgets")
 
+    def __init__(self, *args, **kwargs):
+        super(Widget, self).__init__(*args, **kwargs)
+        if self.id is None:
+            # object creation
+            self.interpret_settings(self.settings_json)
+
+    def interpret_settings(self, settings):
+        pass
+
     def get_discussion_id(self):
         return self.discussion_id
 
     @classmethod
     def get_discussion_condition(cls, discussion_id):
         return cls.discussion_id == discussion_id
+
+    @classmethod
+    def get_ui_endpoint_base(cls):
+        # TODO: Make this configurable.
+        return None
+
+    def get_ui_endpoint(self):
+        uri = self.get_ui_endpoint_base()
+        assert uri
+        return "%s?config=%d" % (uri, self.uri())
 
     def get_user_state_url(self):
         return 'local:Widget/%d/user_state' % (self.id,)
@@ -81,6 +100,7 @@ class Widget(DiscussionBoundBase):
     @settings_json.setter
     def settings_json(self, val):
         self.settings = json.dumps(val)
+        self.interpret_settings(val)
 
     @property
     def state_json(self):
@@ -160,17 +180,9 @@ class BaseIdeaWidget(Widget):
         'polymorphic_identity': 'idea_view_widget',
     }
 
-    def __init__(self, *args, **kwargs):
-        super(BaseIdeaWidget, self).__init__(*args, **kwargs)
-        settings = self.settings_json
+    def interpret_settings(self, settings):
         if 'idea' in settings:
             self.set_base_idea_id(Idea.get_database_id(settings['idea']))
-
-    @Widget.settings_json.setter
-    def settings_json(self, val):
-        if 'idea' in val:
-            self.set_base_idea_id(Idea.get_database_id(val['idea']))
-        self.settings = json.dumps(val)
 
     def base_idea_id(self):
         if self.base_idea_link:
@@ -337,12 +349,22 @@ class InspirationWidget(IdeaCreatingWidget):
         'polymorphic_identity': 'inspiration_widget',
     }
 
+    @classmethod
+    def get_ui_endpoint_base(cls):
+        # TODO: Make this configurable.
+        return "/widget/creativity/"
+
 
 class CreativitySessionWidget(IdeaCreatingWidget):
     default_view = 'creativity_widget'
     __mapper_args__ = {
         'polymorphic_identity': 'creativity_session_widget',
     }
+
+    @classmethod
+    def get_ui_endpoint_base(cls):
+        # TODO: Make this configurable.
+        return "/widget/session/"
 
     def notification_data(self, data):
         end = data.get('end', None)
@@ -374,9 +396,13 @@ class MultiCriterionVotingWidget(Widget):
         'polymorphic_identity': 'multicriterion_voting_widget',
     }
 
-    def __init__(self, *args, **kwargs):
-        super(MultiCriterionVotingWidget, self).__init__(*args, **kwargs)
-        settings = self.settings_json
+    @classmethod
+    def get_ui_endpoint_base(cls):
+        # TODO: Make this configurable.
+        return "/widget/vote/"
+
+    def interpret_settings(self, settings):
+        super(MultiCriterionVotingWidget, self).interpret_settings(settings)
         if 'criteria' in settings:
             for criterion in settings['criteria']:
                 try:
