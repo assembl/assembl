@@ -1,5 +1,7 @@
 
 <div id="admin" ng-controller="adminCreateFromIdeaCtl" ng-init="init()">
+    <input id="input_expert_mode" type="checkbox" ng-model="expert_mode" /> <label for="input_expert_mode">Expert mode</label>
+
     <h1>Create a vote widget instance from an idea</h1>
 
     <div id="step_get_data" ng-show="current_step == 1">
@@ -11,20 +13,34 @@
     <div id="step_create_widget" ng-show="current_step == 2">
         <h2>Confirm widget creation</h2>
         <p>
-            You are about to create an instance of the Vote widget, associated with the following idea: "{{ idea.shortTitle }}". Do you confirm?
+            You are about to create an instance of the Vote widget, associated with the idea <strong>"{{ idea.shortTitle }}"</strong>.
+            <button ng-click="expert_mode = !expert_mode" ng-show="expert_mode == 0">Show details</button>
+            <button ng-click="expert_mode = !expert_mode" ng-show="expert_mode == 1">Hide details</button>
         </p>
 
-        <!-- TODO: do something on submit. optionnaly: only show "yes"/"no" buttons, and an "expert" mode which shows this -->
         <form id="widget_create_without_settings" method="POST">
-            <label for="widget_create_without_settings_api_endpoint">endpoint</label>
-            <input type="text" id="widget_create_without_settings_api_endpoint" value="{{ widget_creation_endpoint }}" size="50" />
-            <br/>
-            <label for="widget_create_without_settings_type">type</label>
-            <input type="text" id="widget_create_without_settings_type" value="MultiCriterionVotingWidget" size="50" />
-            <br/>
-            <input type="submit" />
+            <div ng-show="expert_mode == 1">
+                <label for="widget_create_without_settings_api_endpoint">widget creation endpoint:</label>
+                <input type="text" id="widget_create_without_settings_api_endpoint" value="{{ widget_creation_endpoint }}" size="50" />
+                <br/>
+                <label for="widget_create_without_settings_type">widget type:</label>
+                <input type="text" id="widget_create_without_settings_type" value="MultiCriterionVotingWidget" size="50" />
+                <br/>
+                <label for="widget_create_without_settings_idea">idea:</label>
+                <input type="text" id="widget_create_without_settings_idea" value="{{ idea['@id'] }}" size="50" />
+                <br/><br/>
+            </div>
+            <p>
+                Do you confirm the creation of the widget?
+            </p>
+            <input type="submit" value="Yes, create it" />
             <span id="widget_create_without_settings_result"></span>
         </form>
+    </div>
+
+    <div id="step_select_criteria" ng-show="current_step == 3">
+        <h2>Select criteria</h2>
+        <p>TODO</p>
     </div>
 
 

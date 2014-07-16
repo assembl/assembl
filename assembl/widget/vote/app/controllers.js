@@ -10,11 +10,13 @@ voteApp.controller('adminCreateFromIdeaCtl',
   $scope.idea = null;
   $scope.discussion = null;
   $scope.widget_creation_endpoint = null;
+  $scope.expert_mode = 0;
+  $scope.created_widget_location = null;
 
   $scope.init = function(){
     console.log("adminCreateFromIdeaCtl::init()");
 
-    // fill first form
+    // fill widget creation form
     // TODO: handle error cases (no URL parameter given, server answer is not/bad JSON, etc)
 
     console.log($routeParams.idea);
@@ -39,7 +41,62 @@ voteApp.controller('adminCreateFromIdeaCtl',
 
     });
 
+    // associate an action to the widget creation form
+
+    $("#widget_create_without_settings").on("submit", function(){
+      $scope.createWidgetInstance(
+        $("#widget_create_without_settings_api_endpoint").val(),
+        $("#widget_create_without_settings_type").val(),
+        null,
+        $("#widget_create_without_settings_idea").val(),
+        $("#widget_create_without_settings_result")
+      );
+    });
+
   };
+
+  // settings can be null
+  // votable_root_idea can be null
+  $scope.createWidgetInstance = function(endpoint, widget_type, settings, votable_root_idea, result_holder){
+
+    var post_data = {
+      "type": widget_type
+    };
+
+    if ( settings != null )
+    {
+      post_data["settings"] = settings;
+    }
+
+    if ( votable_root_idea != null )
+    {
+      post_data["votable_root_idea"] = votable_root_idea;
+    }
+
+    $http({
+        method: 'POST',
+        url: endpoint,
+        data: $.param(post_data),
+        async: true,
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+    }).success(function(data, status, headers){
+        console.log("success");
+        var created_widget = headers("Location"); // "local:Widget/5"
+        console.log("created_widget: " + created_widget);
+        $scope.created_widget_location = AssemblToolsService.resourceToUrl(created_widget);
+        result_holder.text("Success! Location: " + created_widget);
+        $scope.updateOnceWidgetIsCreated();
+    }).error(function(status, headers){
+        console.log("error");
+        result_holder.text("Error");
+    });
+  };
+
+  $scope.updateOnceWidgetIsCreated = function(){
+    $scope.current_step = 3;
+  };
+
+
 }]);
 
 voteApp.controller('adminCtl',
