@@ -34,9 +34,44 @@
         <p>
             Please add groups of criteria, and customize how they will be displayed to the user.
         </p>
-        <p>
-            TODO
-        </p>
+
+        <div class="item" ng-repeat="item in widget.settings.items">
+            <div class="item-title">
+                <strong>Item</strong>
+                <button ng-click="widget.settings.items.splice($index,1)">Delete this item</button>
+            </div>
+            <div class="item-content">
+                <span>Item type: </span>
+                <select ng-model="item.type">
+                    <option value="2_axes">Two axes graph</option>
+                    <option value="vertical_gauge">Vertical gauge (lickert)</option>
+                </select>
+
+                <br/>
+                <span>Criteria associated to this item:</span>
+                <div class="item" ng-repeat="criterion in item.criteria">
+                    <div class="item-title">
+                        <strong>Criterion</strong>
+                        <button ng-click="item.criteria.splice($index,1)">Delete this criterion</button>
+                    </div>
+                    <div class="item-content">
+                        <span>Criterion entity id:</span>
+                        <select ng-model="criterion.entity_id" ng-options="c['@id'] as c.shortTitle for c in criteria"></select>
+                        <br/>
+                        <span>Name slug:</span>
+                        <input type="text" ng-model="criterion.name_slug" />
+
+                    </div>
+                </div>
+                <br/>
+                <button ng-click="item.criteria.push({});">Add a criterion</button>
+            </div>
+        </div>
+
+        <br/>
+        <button ng-click="widget.settings.items.push({'criteria':[]});">Add an item</button>
+        <br/><br/>
+        <button ng-click="applyWidgetSettings();">Save widget configuration</button><span id="step_criteria_groups_and_appearance_result"></span>
     </div>
 
 

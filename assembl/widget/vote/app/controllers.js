@@ -34,6 +34,10 @@ voteApp.controller('adminConfigureFromIdeaCtl',
     }).success(function(data, status, headers){
       console.log(data);
       $scope.widget = data;
+      if (!$scope.widget.settings || !$scope.widget.settings.items)
+        $scope.widget.settings = {"items":[]};
+      console.log("$scope.widget.settings:");
+      console.log($scope.widget.settings);
       $scope.updateOnceWidgetIsReceived();
     });
 
@@ -54,6 +58,8 @@ voteApp.controller('adminConfigureFromIdeaCtl',
     $scope.criteria_url = $scope.widget.criteria_url;
     $scope.criteria_endpoint = AssemblToolsService.resourceToUrl($scope.criteria_url);
     $scope.criteria = $scope.widget.criteria;
+    console.log("$scope.criteria:");
+    console.log($scope.criteria);
 
     $scope.current_step = 2;
     $scope.current_substep = 1;
@@ -88,6 +94,40 @@ voteApp.controller('adminConfigureFromIdeaCtl',
         console.log("success");
         result_holder.text("Success!");
         $scope.current_step = 3;
+    }).error(function(status, headers){
+        console.log("error");
+        result_holder.text("Error");
+    });
+  };
+
+  $scope.applyWidgetSettings = function(){
+    console.log("applyWidgetSettings()");
+
+    var endpoint = $scope.widget_endpoint + "/settings";
+    var post_data = $scope.widget.settings;
+    var result_holder = $("#step_criteria_groups_and_appearance_result");
+    $scope.putJson(endpoint, post_data, result_holder);
+  };
+
+  $scope.putJson = function(endpoint, post_data, result_holder){
+    console.log("putJson()");
+
+    $http({
+        method: 'PUT',
+        url: endpoint,
+        data: post_data,
+        //data: $.param(post_data),
+        headers: {'Content-Type': 'application/json'}
+        //headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+    }).success(function(data, status, headers){
+        console.log("success");
+        result_holder.text("Success!");
+        console.log("data:");
+        console.log(data);
+        console.log("status:");
+        console.log(status);
+        console.log("headers:");
+        console.log(headers);
     }).error(function(status, headers){
         console.log("error");
         result_holder.text("Error");
