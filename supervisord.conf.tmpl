@@ -30,6 +30,7 @@ autorestart = true
 startsecs = 10
 #Start virtuoso before other processes
 priority = 100
+stopsignal = INT
 
 [program:celery_imap]
 directory = %(here)s
