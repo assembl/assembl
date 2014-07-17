@@ -18,6 +18,58 @@ voteApp.controller('adminConfigureFromIdeaCtl',
   $scope.criteria = null; // array of ideas (their full structure)
   $scope.criteria_ids = null; // array of ids (uri, aka "local:Idea/3") of the criteria
 
+
+  $scope.mandatory_criterion_fields = [
+    {
+      "key": "entity_id",
+      "type": "criterion",
+      "label": "Criterion entity id"
+    },
+    {
+      "key": "name_slug",
+      "type": "text",
+      "label": "Name slug"
+    },
+    {
+      "key": "name",
+      "type": "text",
+      "label": "Name"
+    },
+    {
+      "key": "valueMin",
+      "type": "integer",
+    },
+    {
+      "key": "valueMax",
+      "type": "integer",
+    }
+  ];
+
+  $scope.optional_criterion_fields = [
+    {
+      "key": "description",
+      "type": "text",
+    },
+    {
+      "key": "valueDefault",
+      "type": "integer",
+    },
+    {
+      "key": "descriptionMin",
+      "type": "text",
+    },
+    {
+      "key": "descriptionMax",
+      "type": "text",
+    },
+    {
+      "key": "ticks",
+      "type": "integer",
+    }
+  ];
+
+  $scope.criterion_current_selected_field = null;
+
   $scope.init = function(){
     console.log("adminConfigureFromIdeaCtl::init()");
     $scope.widget_uri = $routeParams.widget_uri;
@@ -51,6 +103,23 @@ voteApp.controller('adminConfigureFromIdeaCtl',
       );
     });
 
+  };
+
+  $scope.addCriterionField = function(item_index, criterion_index, field_name){
+    console.log("addCriterionField()");
+    console.log("field_name:");
+    console.log(field_name);
+    //criterion[field_name] = ''; // /!\ setting it to an empty string does not create the property!
+    $scope.widget.settings.items[item_index].criteria[criterion_index][field_name] = 'something';
+    console.log("settings:");
+    console.log($scope.widget.settings);
+  };
+
+  $scope.deleteCriterionField = function (item_index, criterion_index, field_name){
+    console.log("deleteCriterionField()");
+    delete $scope.widget.settings.items[item_index].criteria[criterion_index][field_name];
+    console.log("settings:");
+    console.log($scope.widget.settings);
   };
 
   $scope.updateOnceWidgetIsReceived = function(){
