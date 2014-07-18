@@ -456,7 +456,8 @@ define(function(require){
                 returnedOffsets = this.calculateThreadedMessagesOffsets(this.visitorViewData, that.visitorOrderLookupTable, requestedOffsets);
                 views = this.getRenderedMessagesThreaded(models, 1, this.visitorViewData, returnedOffsets);
             } else {
-                views = this.getRenderedMessagesFlat(this.getAllMessagesToDisplay(), requestedOffsets, returnedOffsets);
+                models = this.getAllMessagesToDisplay();
+                views = this.getRenderedMessagesFlat(models, requestedOffsets, returnedOffsets);
             }
             //console.log("returnedOffsets:", returnedOffsets);
             this.offsetStart = returnedOffsets['offsetStart']
@@ -475,7 +476,7 @@ define(function(require){
                 this.$('#messageList-toparea').removeClass('hidden');
             }
 
-            if( this.offsetEnd >= (this.messages.length-1) ){
+            if( this.offsetEnd >= (models.length-1) ){
                 this.$('#messageList-bottomarea').addClass('hidden');
             } else {
                 this.$('#messageList-bottomarea').removeClass('hidden');
