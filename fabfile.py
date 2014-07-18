@@ -444,14 +444,16 @@ def update_bower():
 
 
 def bower_cmd(cmd, relative_path='.'):
-    with settings(warn_only=True):
+    with settings(warn_only=True), hide('warnings', 'running', 'stdout', 'stderr'):
         node_cmd = run('which nodejs')
     if node_cmd.failed:
         node_cmd = run('which node')
     with cd(env.projectpath):
         bower_cmd = os.path.abspath(os.path.join(
             env.projectpath, 'node_modules', 'bower', 'bin', 'bower'))
-        if not exists(bower_cmd):
+        po2json_cmd = os.path.abspath(os.path.join(
+            env.projectpath, 'node_modules', 'po2json', 'bin', 'po2json'))
+        if not exists(bower_cmd) or not exists(po2json_cmd):
             print "Bower not present, installing..."
             execute(install_bower)
         with cd(relative_path):
