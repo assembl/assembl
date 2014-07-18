@@ -19,6 +19,37 @@ voteApp.controller('adminConfigureFromIdeaCtl',
   $scope.criteria_ids = null; // array of ids (uri, aka "local:Idea/3") of the criteria
 
 
+  $scope.mandatory_settings_fields = [
+    {
+      "key": "padding",
+      "type": "integer",
+      "label": "Padding between each item",
+      "default": 60
+    },
+    {
+      "key": "axisWidthDefault",
+      "type": "integer",
+      "label": "Default axis width",
+      "default": 300
+    }
+  ];
+
+  $scope.mandatory_item_fields = [
+    {
+      "key": "width",
+      "type": "integer",
+      "label": "Width",
+      "default": 300
+    },
+    {
+      "key": "height",
+      "type": "integer",
+      "label": "Height",
+      "default": 300
+    }
+  ];
+
+
   $scope.mandatory_criterion_fields = [
     {
       "key": "entity_id",
@@ -38,10 +69,12 @@ voteApp.controller('adminConfigureFromIdeaCtl',
     {
       "key": "valueMin",
       "type": "integer",
+      "default": 0
     },
     {
       "key": "valueMax",
       "type": "integer",
+      "default": 100
     }
   ];
 
@@ -65,6 +98,7 @@ voteApp.controller('adminConfigureFromIdeaCtl',
     {
       "key": "ticks",
       "type": "integer",
+      "default": 5
     }
   ];
 
@@ -88,6 +122,7 @@ voteApp.controller('adminConfigureFromIdeaCtl',
       $scope.widget = data;
       if (!$scope.widget.settings || !$scope.widget.settings.items)
         $scope.widget.settings = {"items":[]};
+      addDefaultFields($scope.widget.settings, $scope.mandatory_settings_fields);
       console.log("$scope.widget.settings:");
       console.log($scope.widget.settings);
       $scope.updateOnceWidgetIsReceived();
@@ -105,12 +140,57 @@ voteApp.controller('adminConfigureFromIdeaCtl',
 
   };
 
+  var addDefaultFields = function(obj, default_fields){
+    var sz = default_fields.length;
+    for ( var i = 0; i < default_fields.length; ++i )
+    {
+      var field = default_fields[i];
+      if ( !obj.hasOwnProperty(field.key)
+        && field.hasOwnProperty("default") )
+      {
+        obj[field.key] = field.default;
+      }
+    }
+    return obj;
+  };
+
+  $scope.addItem = function(){
+    var item = {
+      'criteria': []
+    };
+    addDefaultFields(item, $scope.mandatory_item_fields);
+    $scope.widget.settings.items.push(item);
+  };
+
+  $scope.addCriterion = function(item_index){
+    var criterion = {};
+    addDefaultFields(criterion, $scope.mandatory_criterion_fields);
+    $scope.widget.settings.items[item_index].criteria.push(criterion);
+  };
+
   $scope.addCriterionField = function(item_index, criterion_index, field_name){
     console.log("addCriterionField()");
     console.log("field_name:");
     console.log(field_name);
+
+    // define what the default value will be
+    var default_value = "something";
+    var optional_field = $scope.optional_criterion_fields.find(function(e){
+      return ( e.key == field_name );
+    });
+    if ( optional_field != undefined ){
+      if ( optional_field.hasOwnProperty("default") )
+        default_value = optional_field.default;
+      else if ( optional_field.hasOwnProperty("type") )
+      {
+        if ( optional_field.type == "integer" )
+          default_value = 0;
+      }
+    }
+
+
     //criterion[field_name] = ''; // /!\ setting it to an empty string does not create the property!
-    $scope.widget.settings.items[item_index].criteria[criterion_index][field_name] = 'something';
+    $scope.widget.settings.items[item_index].criteria[criterion_index][field_name] = default_value;
     console.log("settings:");
     console.log($scope.widget.settings);
   };
