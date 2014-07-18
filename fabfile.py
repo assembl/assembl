@@ -221,17 +221,8 @@ def bootstrap_from_checkout():
     """
     execute(updatemaincode)
     execute(build_virtualenv)
-    execute(setup_in_venv)
+    execute(app_compile)
 
-@task
-def setup_in_venv():
-    """
-    Setup the virtualenv (dependencies, ruby, etc.) and compile and install 
-    assembl
-    """
-    execute(configure_rbenv)
-    execute(app_update_dependencies)
-    execute(app_setup)
 
 @task
 def clone_repository():
@@ -305,6 +296,7 @@ def app_compile():
     """
     execute(app_update_dependencies)
     execute(app_compile_noupdate)
+    
 
 @task
 def app_compile_noupdate():
@@ -312,14 +304,19 @@ def app_compile_noupdate():
     Fast Update: don't touch git state, don't update requirements, and rebuild
     all generated files. You normally do not need to have internet connectivity.
     """
-    execute(app_setup)
-    execute(compile_stylesheets)
-    execute(compile_messages)
+    execute(app_compile_nodbupdate)
     execute(app_db_update)
     # tests()
     execute(reloadapp)
     execute(webservers_reload)
 
+@task
+def app_compile_nodbupdate():
+    "Separated mostly for tests, which need to run alembic manually"
+    execute(app_setup)
+    execute(compile_stylesheets)
+    execute(compile_messages)
+    
 ## Webserver
 def configure_webservers():
     """
@@ -915,32 +912,3 @@ def flushmemcache():
         print(cyan('Resetting all data in memcached :'))
         wait_str = "" if env.mac else "-q 2"
         run('echo "flush_all" | nc %s 127.0.0.1 11211' % wait_str)
-
-
-#THE FOLLOWING COMMANDS HAVEN'T BEEN PORTED YET
-def fixperms():
-    # Fix perms
-    with cd(env.projectpath):
-        with cd("%(projectpath)s" % env):
-            run('mkdir media/uploads media/cache static/CACHE media/mugshots -p')
-            sudo('chown www-data -R media/uploads media/cache media/mugshots static/CACHE')
-
-
-@task
-def bootstrap_full():
-    """
-    Install system tools, create venv and install app
-    """
-    sudo('apt-get update')
-    
-    execute(install_basetools)
-    execute(install_builddeps)
-    
-    execute(bootstrap)
-    
-    if(env.wsginame == 'dev.wsgi'):
-        execute(install_devdeps);
-
-    execute(configure_webservers)
-    execute(webservers_reload)
-
