@@ -253,8 +253,7 @@ voteApp.controller('adminCreateFromIdeaCtl',
       $scope.createWidgetInstance(
         $("#widget_create_without_settings_api_endpoint").val(),
         $("#widget_create_without_settings_type").val(),
-        { 'votable_root_id': 'local:Idea/3' }, //null,
-        $("#widget_create_without_settings_idea").val(), //null, //$("#widget_create_without_settings_idea").val(),
+        { 'votable_root_id': $("#widget_create_without_settings_idea").val() }, //null,
         $("#widget_create_without_settings_result")
       );
     });
@@ -262,8 +261,7 @@ voteApp.controller('adminCreateFromIdeaCtl',
   };
 
   // settings can be null
-  // votable_root_idea can be null
-  $scope.createWidgetInstance = function(endpoint, widget_type, settings, votable_root_idea, result_holder){
+  $scope.createWidgetInstance = function(endpoint, widget_type, settings, result_holder){
 
     var post_data = {
       "type": widget_type
@@ -272,11 +270,6 @@ voteApp.controller('adminCreateFromIdeaCtl',
     if ( settings != null )
     {
       post_data["settings"] = JSON.stringify(settings);
-    }
-
-    if ( votable_root_idea != null )
-    {
-      post_data["votable_root_idea"] = votable_root_idea;
     }
 
     $http({
