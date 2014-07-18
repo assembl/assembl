@@ -24,13 +24,15 @@ voteApp.controller('adminConfigureFromIdeaCtl',
       "key": "padding",
       "type": "integer",
       "label": "Padding between each item",
-      "default": 60
+      "default": 60,
+      "description": "Empty space between each votable item"
     },
     {
       "key": "axisWidthDefault",
       "type": "integer",
       "label": "Default axis width",
-      "default": 300
+      "default": 300,
+      "description": "Default width of the axis of a lickert or axis"
     }
   ];
 
@@ -69,12 +71,14 @@ voteApp.controller('adminConfigureFromIdeaCtl',
     {
       "key": "valueMin",
       "type": "integer",
-      "default": 0
+      "default": 0,
+      "description": "The minimum value which can be voted"
     },
     {
       "key": "valueMax",
       "type": "integer",
-      "default": 100
+      "default": 100,
+      "description": "The maximum value which can be voted"
     }
   ];
 
@@ -82,23 +86,30 @@ voteApp.controller('adminConfigureFromIdeaCtl',
     {
       "key": "description",
       "type": "text",
+      "description": "Text which will be shown around the votable item"
     },
     {
       "key": "valueDefault",
       "type": "integer",
+      "label": "default value",
+      "description": "Value on which the votable item will be initially set"
     },
     {
       "key": "descriptionMin",
       "type": "text",
+      "description": "Text which will be shown around the minimum value of the axis"
     },
     {
       "key": "descriptionMax",
       "type": "text",
+      "description": "Text which will be shown around the maximum value of the axis"
     },
     {
       "key": "ticks",
+      "label": "number of ticks",
       "type": "integer",
-      "default": 5
+      "default": 5,
+      "description": "Indicative number of ticks to be shown on the axis"
     }
   ];
 
