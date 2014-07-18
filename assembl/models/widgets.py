@@ -741,9 +741,9 @@ BaseIdeaWidget.base_idea_link = relationship(
     BaseIdeaWidgetLink, uselist=False)
 
 BaseIdeaWidget.base_idea = relationship(
-    Idea, viewonly=True, secondary=join(Idea, BaseIdeaWidgetLink),
-    primaryjoin=Widget.idea_links.of_type(BaseIdeaWidgetLink),
-    secondaryjoin=IdeaWidgetLink.idea,
+    Idea, viewonly=True, secondary=BaseIdeaWidgetLink.__table__,
+    primaryjoin=BaseIdeaWidget.idea_links.of_type(BaseIdeaWidgetLink),
+    secondaryjoin=BaseIdeaWidgetLink.idea,
     uselist=False)
 
 
@@ -755,9 +755,9 @@ class GeneratedIdeaWidgetLink(IdeaWidgetLink):
 IdeaCreatingWidget.generated_idea_links = relationship(GeneratedIdeaWidgetLink)
 
 IdeaCreatingWidget.generated_ideas = relationship(
-    Idea, viewonly=True, secondary=join(Idea, GeneratedIdeaWidgetLink),
-    primaryjoin=Widget.idea_links.of_type(GeneratedIdeaWidgetLink),
-    secondaryjoin=IdeaWidgetLink.idea)
+    Idea, viewonly=True, secondary=GeneratedIdeaWidgetLink.__table__,
+    primaryjoin=IdeaCreatingWidget.idea_links.of_type(GeneratedIdeaWidgetLink),
+    secondaryjoin=GeneratedIdeaWidgetLink.idea)
 
 
 class VotableIdeaWidgetLink(IdeaWidgetLink):
@@ -770,9 +770,10 @@ MultiCriterionVotingWidget.votable_idea_links = relationship(
 Idea.has_votable_links = relationship(VotableIdeaWidgetLink)
 
 MultiCriterionVotingWidget.votable_ideas = relationship(
-    Idea, viewonly=True, secondary=join(Idea, VotableIdeaWidgetLink),
-    primaryjoin=Widget.idea_links.of_type(VotableIdeaWidgetLink),
-    secondaryjoin=IdeaWidgetLink.idea, backref='votable_by_widget')
+    Idea, viewonly=True, secondary=VotableIdeaWidgetLink.__table__,
+    primaryjoin=MultiCriterionVotingWidget.idea_links.of_type(
+        VotableIdeaWidgetLink), secondaryjoin=VotableIdeaWidgetLink.idea,
+    backref='votable_by_widget')
 
 
 class VotedIdeaWidgetLink(IdeaWidgetLink):
@@ -784,9 +785,10 @@ MultiCriterionVotingWidget.voted_idea_links = relationship(
     VotedIdeaWidgetLink)
 
 MultiCriterionVotingWidget.voted_ideas = relationship(
-    Idea, viewonly=True, secondary=join(Idea, VotedIdeaWidgetLink),
-    primaryjoin=Widget.idea_links.of_type(VotedIdeaWidgetLink),
-    secondaryjoin=IdeaWidgetLink.idea)
+    Idea, viewonly=True, secondary=VotedIdeaWidgetLink.__table__,
+    primaryjoin=MultiCriterionVotingWidget.idea_links.of_type(
+        VotedIdeaWidgetLink), secondaryjoin=VotedIdeaWidgetLink.idea,
+    backref="voted_by_widget")
 
 
 class VotingCriterionWidgetLink(IdeaWidgetLink):
@@ -800,7 +802,7 @@ Idea.has_criterion_links = relationship(VotingCriterionWidgetLink)
 
 MultiCriterionVotingWidget.criteria = relationship(
     Idea,  # Criterion
-    viewonly=True, secondary=join(Idea, VotingCriterionWidgetLink),
-    primaryjoin=Widget.idea_links.of_type(VotingCriterionWidgetLink),
-    secondaryjoin=IdeaWidgetLink.idea,
+    viewonly=True, secondary=VotingCriterionWidgetLink.__table__,
+    primaryjoin=MultiCriterionVotingWidget.idea_links.of_type(VotingCriterionWidgetLink),
+    secondaryjoin=VotingCriterionWidgetLink.idea,
     backref='criterion_of_widget')
