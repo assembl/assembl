@@ -253,7 +253,7 @@ voteApp.controller('adminCreateFromIdeaCtl',
       $scope.createWidgetInstance(
         $("#widget_create_without_settings_api_endpoint").val(),
         $("#widget_create_without_settings_type").val(),
-        null, // { 'votable_root_id': 'local:Idea/3' }, //null,
+        { 'votable_root_id': 'local:Idea/3' }, //null,
         $("#widget_create_without_settings_idea").val(), //null, //$("#widget_create_without_settings_idea").val(),
         $("#widget_create_without_settings_result")
       );
@@ -271,7 +271,7 @@ voteApp.controller('adminCreateFromIdeaCtl',
 
     if ( settings != null )
     {
-      post_data["settings"] = settings;
+      post_data["settings"] = JSON.stringify(settings);
     }
 
     if ( votable_root_idea != null )
