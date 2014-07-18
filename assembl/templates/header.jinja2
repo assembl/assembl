@@ -46,7 +46,7 @@
                 <span class="seperator"></span>
                 {% for loc in locales %}
                     {% if (loc != locale) %}
-                        <a href="#" class="lang" onClick="window.app.setLocale('{{loc}}')">{{loc | upper}}</a>
+                        <a href="#" class="lang" onClick="window.Ctx.setLocale('{{loc}}')">{{loc | upper}}</a>
                     {% endif %}
                 {% endfor %}
             {% endif %}

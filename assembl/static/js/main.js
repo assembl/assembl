@@ -20,5 +20,9 @@ require(["modules/assembl","modules/context","jquery","router","utils/socket"],
 
     // Let the game begins...
     Backbone.history.start({hashChange: false, root: "/"});
+    
+    //Probably not the right way, but I don't know how to make the Ctx accessible
+    //to the header
+    window.Ctx = Ctx;
 
 });
