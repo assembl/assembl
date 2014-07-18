@@ -1,22 +1,3 @@
-import os
-import datetime
-import inspect as pyinspect
-
-from sqlalchemy import inspect
-from pyramid.view import view_config
-from pyramid.httpexceptions import (
-    HTTPCreated, HTTPBadRequest, HTTPNotImplemented, HTTPUnauthorized, HTTPOk)
-from pyramid.security import authenticated_userid
-from pyramid.response import Response
-from pyld import jsonld
-
-from assembl.lib.sqla import get_session_maker
-from ..traversal import InstanceContext, CollectionContext, ClassContext
-from assembl.auth import P_READ, P_SYSADMIN, Everyone
-from assembl.auth.util import get_roles, get_permissions
-from assembl.semantic.virtuoso_mapping import get_virtuoso
-from assembl.models import AbstractIdeaVote, User, DiscussionBoundBase
-
 """RESTful API to assembl, with some magic.
 The basic URI to access any ressource is
 GET `/data/<Classname>/<instance db id>`
@@ -50,6 +31,25 @@ as opposed to the bare URLs `/data/<Classname>/<instance db id>` which are provi
 Traversing the discussion allows the user permissions specific to the discussion to be applied to the next operation.
 The structure of those collection URLs will have to be reconstructed (from the POSTed collection, add the ID from the bare URL.)
 """
+
+import os
+import datetime
+import inspect as pyinspect
+
+from sqlalchemy import inspect
+from pyramid.view import view_config
+from pyramid.httpexceptions import (
+    HTTPCreated, HTTPBadRequest, HTTPNotImplemented, HTTPUnauthorized, HTTPOk)
+from pyramid.security import authenticated_userid
+from pyramid.response import Response
+from pyld import jsonld
+
+from assembl.lib.sqla import get_session_maker
+from ..traversal import InstanceContext, CollectionContext, ClassContext
+from assembl.auth import P_READ, P_SYSADMIN, Everyone
+from assembl.auth.util import get_roles, get_permissions
+from assembl.semantic.virtuoso_mapping import get_virtuoso
+from assembl.models import AbstractIdeaVote, User, DiscussionBoundBase
 
 
 FIXTURE_DIR = os.path.join(

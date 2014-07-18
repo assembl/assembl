@@ -12,6 +12,7 @@ Contents:
    :maxdepth: 2
 
    services
+   modules
 
 
 Indices and tables
