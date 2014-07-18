@@ -458,11 +458,8 @@ class CollectionDefinition(AbstractCollectionDefinition):
             query = query.join(owner_alias,
                 getattr(coll_alias, inv.key))
         else:
-            print "PLEASE SEND TO maparent@acm.org:", this, self.property
-            query = query.join(owner_alias)
-            # THIS MIGHT WORK, but I need a good testcase:
-            # query = query.join(owner_alias,
-            #     getattr(owner_alias, self.property.key))
+            query = query.join(last_alias,
+                getattr(owner_alias, self.property.key))
         if inv and not uses_list(inv):
             query = query.filter(getattr(coll_alias, inv.key) == parent_instance)
         else:
