@@ -316,7 +316,7 @@ def app_compile():
     """
     execute(app_update_dependencies)
     execute(app_compile_noupdate)
-    
+
 
 @task
 def app_compile_noupdate():
@@ -336,7 +336,7 @@ def app_compile_nodbupdate():
     execute(app_setup)
     execute(compile_stylesheets)
     execute(compile_messages)
-    
+
 ## Webserver
 def configure_webservers():
     """
