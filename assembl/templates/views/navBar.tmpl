@@ -1,30 +1,11 @@
 <nav class="navbar navbar-default" role="navigation">
     <div class="navbar-left">
         <a href="/" class="assembl-logo" class="sign-in">Assembl</a>
-    </div>
-    <div class="navbar-center">
-        {% if canDisplayTabs %}
-        <ul class="menu">
-            <li class="tab-table-idea">
-                <div id="button-ideaList" class="barbutton" data-tooltip-position="n"
-                data-tooltip="{{ gettext('To add an idea in the table of ideas: select add idea and drag the new idea either 1) on the inner edge of an existing idea to add it as a sibling or 2) in the middle of an existing idea to add it as a sub-idea.') }}">{{ gettext('Table of Ideas') }}</div>
-            </li>
-            <li class="tab-idea">
-                <div id="button-ideaPanel" class="barbutton">{{ gettext('Idea') }}</div>
-            </li>
-            
-            <li class="tab-clipboard">
-                <div id="button-segmentList" class="barbutton" {% if not canAddExtract %}style="display: none"{% endif %}>{{ gettext('Clipboard') }}</div>
-            </li>
-            
-            <li class="tab-messages">
-                <div id="button-messages" class="barbutton">{{ gettext('Messages') }}<div class="lock-button"><span class="lock-anchor"></span></div></div>
-            </li>
-            <li class="tab-synthesis">
-                <div id="button-synthesis" class="barbutton">{{ gettext('Synthesis') }}</div>
-            </li>
-        </ul>
-        {% endif %}
+        <i>|</i>
+        <span id="onlinedot" class="dot">
+            <small class="dot-offline">{{ gettext('Connecting...') }}</small>
+            <span class="dot-online title-debatname">{{ discussion.topic }}</span>
+        </span>
     </div>
     <div class="navbar-right">
         <div class="connexion">
@@ -46,7 +27,7 @@
                 <span class="seperator"></span>
                 {% for loc in locales %}
                     {% if (loc != locale) %}
-                        <a href="#" class="lang" onClick="window.Ctx.setLocale('{{loc}}')">{{loc | upper}}</a>
+                        <a href="#" class='lang' data-locale='{{loc}}'>{{loc | upper}}</a>
                     {% endif %}
                 {% endfor %}
             {% endif %}

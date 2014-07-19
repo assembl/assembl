@@ -9,28 +9,10 @@
     <input type="hidden" name="user-id" id="user-id" value="{{ user.id }}" />
     <input type="hidden" name="user-displayname" id="user-displayname" value="{{ user.display_name() }}" />
 {% endif %}
-<div id="notification">
 
-</div>
-<div class="navbar-title">
-    <span id="onlinedot" class="dot">
-        <small class="dot-offline">{{ gettext('Connecting...') }}</small>
-        <span class="dot-online title-debatname">{{ discussion.topic }}</span>
-    </span>
-</div>
+<div id="panelGroupControl"></div>
 
-{#<div class="panelarea">
-    <div class="panelarea-table">
-
-        <div id="ideaList" class="panelarea-col"></div>
-        <div id="ideaPanel" class="panelarea-col"></div>
-        <div id="segmentList" class="panelarea-col"></div>
-        <div id="messageList" class="panelarea-col"></div>
-        <div id="synthesisPanel" class="panelarea-col"></div>
-
-    </div>
-</div>#}
-<div class="panelarea">
+<!--<div class="panelarea">
   <div class="panelarea-table">
     <section id="ideaList" class="panelarea-col"></section>
     <section id="ideaPanel" class="panelarea-col"></section>
@@ -38,9 +20,7 @@
     <section id="messageList" class="panelarea-col"></section>
     <section id="synthesisPanel" class="panelarea-col"></section>
   </div>
-</div>
-
-
+</div>-->
 
 {% endblock %}
 

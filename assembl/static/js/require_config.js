@@ -2,13 +2,6 @@ var requirejs_config = {
   baseUrl: "/static/js/",
   urlArgs: urlArgs,
   waitSeconds: 20,
-  packages: [
-    'text',{
-      name:'text',
-      location:'lib/',
-      main:'text'
-    }
-  ],
   paths: {
     'router': 'app/router',
     'views':'app/views',
@@ -63,7 +56,7 @@ var requirejs_config = {
     },
     'utils/i18n': {
         deps: ['jed'],
-        exports: 'i18n',
+        exports: 'i18n'
     },
     'socket': {
         deps: ['sockjs']

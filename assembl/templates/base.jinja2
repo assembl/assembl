@@ -20,8 +20,10 @@
 <body class="preload">
     <div id="wrapper">
         <header id="header">
-             {% include 'header.jinja2' %}
+             {#{% include 'header.jinja2' %}#}
+             {# include with marionette region #}
         </header>
+        <div id="notification"></div>
         <main id="main">
             {% block content %}{% endblock %}
         </main>
@@ -34,8 +36,6 @@
             </script>
         {% endfor %}
     </div>
-
-    <div id="lateralMenu" class="lateralmenu"></div>
 
     {% include 'includes/javascript.jinja2' %}
     {% block main_js %}

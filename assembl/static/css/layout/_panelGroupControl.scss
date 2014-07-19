@@ -1,0 +1,21 @@
+#panelGroupControl {
+  .row-fluid {
+    margin: 1em 0;
+    width: auto;
+
+    &[class*="span"]:first-child {
+      margin-left: 0;
+    }
+
+    &[class*="span"] {
+      display: block;
+      float: left;
+      min-height: 28px;
+      box-sizing: border-box;
+    }
+
+    .span2 {
+      width: 14.89361702%;
+    }
+  }
+}
