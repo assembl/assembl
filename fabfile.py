@@ -4,16 +4,38 @@ from __future__ import with_statement
 
 from os import getenv
 from platform import system
-import os.path
-import time
+from time import sleep, strftime
 import pipes
+from ConfigParser import ConfigParser
+from StringIO import StringIO
+# Importing the "safe" os.path commands
+from os.path import join, dirname, split, normpath
+# Other calls to os.path rarely mostly don't work remotely. Use locally only.
+import os.path
 
 import fabric.operations
 from fabric.operations import put, get
 from fabric.api import *
 from fabric.colors import cyan, red, green
 from fabric.contrib.files import *
-from time import sleep
+
+
+def realpath(path):
+    return run("python -c 'import os,sys;print os.path.realpath(sys.argv[1])' "+path)
+
+
+def is_file(path):
+    return run("test -f "+path, quiet=True).succeeded
+
+
+def getmtime(path):
+    if env.mac:
+        return int(run("/usr/bin/stat -f '%m' "+path))
+    else:
+        return int(run("/usr/bin/stat -c '%Y' "+path))
+
+def listdir(path):
+    return run("ls "+path).split()
 
 @task
 def database_start():
@@ -21,7 +43,7 @@ def database_start():
     Makes sure the database server is running
     """
     execute(supervisor_process_start, 'virtuoso')
-        
+
 def supervisor_process_start(process_name):
     """
     Starts a supervisord process, and waits till it started to return
@@ -59,7 +81,6 @@ def supervisor_process_start(process_name):
             else:
                 print("unexpected status: %s" % status)
             sleep(1)
-            
         else:
             print(red('Unable to parse status (bad regex?)'))
             print(status_cmd_result)
@@ -100,7 +121,7 @@ def get_db_dump_name():
     return 'assembl-virtuoso-backup.bp'
 
 def remote_db_path():
-    return os.path.join(env.projectpath, get_db_dump_name())
+    return join(env.projectpath, get_db_dump_name())
 
 def printenv():
     """
@@ -171,11 +192,11 @@ def compile_messages():
     """
     cmd = "python setup.py compile_catalog"
     venvcmd(cmd)
-    locale_path = os.path.join(env.projectpath, 'assembl', 'locale')
-    for dir in os.listdir(locale_path):
-        if not os.path.isfile(os.path.join(locale_path, dir)):
-            po_path = os.path.join(locale_path, dir, 'LC_MESSAGES', 'assembl.po')
-            json_path = os.path.join(locale_path, dir, 'LC_MESSAGES', 'assembl.jed.json')
+    locale_path = join(env.projectpath, 'assembl', 'locale')
+    for dir in listdir(locale_path):
+        if not is_file(join(locale_path, dir)):
+            po_path = join(locale_path, dir, 'LC_MESSAGES', 'assembl.po')
+            json_path = join(locale_path, dir, 'LC_MESSAGES', 'assembl.jed.json')
             print "Creating Jed json for ", po_path
             cmd = "PATH=$(npm bin):$PATH po2json --format jed %s %s" % (po_path,json_path)
             venvcmd(cmd)
@@ -247,7 +268,7 @@ def updatemaincode():
     Update code and/or switch branch
     """
     print(cyan('Updating Git repository'))
-    with cd(os.path.join(env.projectpath)):
+    with cd(join(env.projectpath)):
         run('git fetch')
         run('git checkout %s' % env.gitbranch)
         run('git submodule update --init')
@@ -256,8 +277,7 @@ def updatemaincode():
 def app_setup():
      venvcmd('pip install -U "pip>=1.5.1"')
      venvcmd('pip install -e ./')
-     venvcmd('export VIRTUOSO_ROOT=%s ; assembl-ini-files %s' % (
-        env.use_virtuoso, env.ini_file))
+     venvcmd('assembl-ini-files %s' % (env.ini_file))
 
 @task
 def app_fullupdate():
@@ -446,9 +466,9 @@ def bower_cmd(cmd, relative_path='.'):
     if node_cmd.failed:
         node_cmd = run('which node')
     with cd(env.projectpath):
-        bower_cmd = os.path.abspath(os.path.join(
+        bower_cmd = normpath(join(
             env.projectpath, 'node_modules', 'bower', 'bin', 'bower'))
-        po2json_cmd = os.path.abspath(os.path.join(
+        po2json_cmd = normpath(join(
             env.projectpath, 'node_modules', 'po2json', 'bin', 'po2json'))
         if not exists(bower_cmd) or not exists(po2json_cmd):
             print "Bower not present, installing..."
@@ -600,15 +620,16 @@ def update_compass():
 def compile_fontello_fonts():
     from zipfile import ZipFile
     from StringIO import StringIO
+    assert env.hosts == ['localhost'], "Meant to be run locally"
     try:
         import requests
     except ImportError:
         raise RuntimeError(
             "Please 'pip install requests' in your main environment")
-    font_dir = os.path.join(
+    font_dir = join(
         env.projectpath, 'assembl', 'static', 'font', 'icon')
-    config_file = os.path.join(font_dir, 'config.json')
-    id_file = os.path.join(font_dir, 'fontello.id')
+    config_file = join(font_dir, 'config.json')
+    id_file = join(font_dir, 'fontello.id')
     if (not os.path.exists(id_file) or
             os.path.getmtime(id_file)>os.path.getmtime(config_file)):
         r=requests.post("http://fontello.com",
@@ -626,11 +647,11 @@ def compile_fontello_fonts():
         raise RuntimeError("Could not get the data")
     with ZipFile(StringIO(r.content)) as data:
         for name in data.namelist():
-            dirname, fname = os.path.split(name)
-            dirname, subdir = os.path.split(dirname)
+            dirname, fname = split(name)
+            dirname, subdir = split(dirname)
             if fname and subdir == 'font':
                 with data.open(name) as fdata:
-                    with open(os.path.join(font_dir, fname), 'wb') as ffile:
+                    with open(join(font_dir, fname), 'wb') as ffile:
                         ffile.write(fdata.read())
 
 def database_create():
@@ -639,7 +660,7 @@ def database_create():
     execute(database_start)
 
 def virtuoso_db_directory():
-    return os.path.join(env.projectpath, 'var/db')
+    return join(env.projectpath, 'var/db')
 
 @task
 def database_dump():
@@ -651,8 +672,8 @@ def database_dump():
 
     execute(supervisor_process_start, 'virtuoso')
 
-    filename = 'db_%s.bp' % time.strftime('%Y%m%d')
-    absolute_path = os.path.join(env.dbdumps_dir, filename)
+    filename = 'db_%s.bp' % strftime('%Y%m%d')
+    absolute_path = join(env.dbdumps_dir, filename)
 
     # Dump
     with prefix(venv_prefix()), cd(env.projectpath):
@@ -661,7 +682,7 @@ def database_dump():
     if backup_output.failed:
         print(red('Failed virtuoso backup'))
         exit()
-    backup_file_path = os.path.join(virtuoso_db_directory(), backup_output)
+    backup_file_path = join(virtuoso_db_directory(), backup_output)
     #Move to dbdumps_dir
     with settings(warn_only=True):
         move_result = run('mv %s %s' % (backup_file_path, absolute_path))
@@ -680,8 +701,8 @@ def database_download():
     """
     Dumps and downloads the database from the target server
     """
-    destination = os.path.join('./',get_db_dump_name())
-    if os.path.islink(destination):
+    destination = join('./',get_db_dump_name())
+    if is_link(destination):
         print('Clearing symlink at %s to make way for downloaded file' % (destination))
         local('rm %s' % (destination))
     execute(database_dump)
@@ -720,19 +741,54 @@ def database_restore():
     restore_dump_prefix = "assembl-virtuoso-backup"
     restore_dump_name = restore_dump_prefix+"1.bp"
     with cd(virtuoso_db_directory()):
-        run('cat %s > %s' % (remote_db_path(), os.path.join(virtuoso_db_directory(), restore_dump_name)))
+        run('cat %s > %s' % (remote_db_path(), join(virtuoso_db_directory(), restore_dump_name)))
     # Restore data
     with prefix(venv_prefix()), cd(virtuoso_db_directory()):
         venvcmd("supervisorctl stop virtuoso")
         run("%s/bin/virtuoso-t +configfile %s +restore-backup %s" % (
-            env.use_virtuoso, os.path.join(virtuoso_db_directory(), 'virtuoso.ini'),
+            get_virtuoso_root(), join(virtuoso_db_directory(), 'virtuoso.ini'),
         restore_dump_prefix))
         
     #clean up
     with cd(virtuoso_db_directory()):
-        run('rm  %s' % (os.path.join(virtuoso_db_directory(),restore_dump_name)))
+        run('rm  %s' % (join(virtuoso_db_directory(),restore_dump_name)))
 
     execute(supervisor_process_start, 'virtuoso')
+
+
+def get_config():
+    if env.get('config', None):
+        return env.config
+    ini_file = join(env.projectpath, env.ini_file)
+    if not exists(ini_file):
+        return
+    config_s = StringIO()
+    get(ini_file, config_s)
+    config_s.seek(0)
+    config = ConfigParser()
+    config.readfp(config_s)
+    env.config = config
+    return config
+
+
+def get_virtuoso_root():
+    config = get_config()
+    assert config
+    vroot = config.get('virtuoso', 'virtuoso_root')
+    if vroot == 'system':
+        return '/usr/local/virtuoso-opensource' if env.mac else '/usr'
+    if vroot[0] != '/':
+        return normpath(join(env.projectpath, vroot))
+    return vroot
+
+
+def get_virtuoso_src():
+    config = get_config()
+    vsrc = config.get('virtuoso', 'virtuoso_src')
+    if vsrc[0] != '/':
+        return normpath(join(env.projectpath, vsrc))
+    return vsrc
+
 
 ## Server scenarios
 def commonenv(projectpath, venvpath=None):
@@ -741,20 +797,20 @@ def commonenv(projectpath, venvpath=None):
     """
     env.projectname = "assembl"
     env.projectpath = projectpath
+    assert env.ini_file, "Define env.ini_file before calling common_env"
     #Production env will be protected from accidental database restores
     env.is_production_env = False
     if venvpath:
         env.venvpath = venvpath
     else: 
-        env.venvpath = os.path.join(projectpath,"venv")
+        env.venvpath = join(projectpath,"venv")
         
     env.db_user = 'assembl'
     env.db_name = 'assembl'
     #It is recommended you keep localhost even if you have access to 
     # unix domain sockets, it's more portable across different pg_hba configurations.
     env.db_host = 'localhost'
-    env.dbdumps_dir = os.path.join(projectpath, '%s_dumps' % env.projectname)
-    env.ini_file = 'production.ini'
+    env.dbdumps_dir = join(projectpath, '%s_dumps' % env.projectname)
     env.gitrepo = "https://github.com/ImaginationForPeople/assembl.git"
     env.gitbranch = "master"
 
@@ -765,7 +821,6 @@ def commonenv(projectpath, venvpath=None):
     #Where do we find the virtuoso binaries
     env.uses_global_supervisor = False
     env.mac = False
-    env.use_virtuoso = getenv('VIRTUOSO_ROOT', '/usr/local/virtuoso-opensource' if env.mac else '/usr')
 
     #Minimal dependencies versions
     
@@ -783,13 +838,18 @@ def devenv(projectpath=None):
     [ENVIRONMENT] Developpement (must be run from the project path: 
     the one where the fabfile is)
     """
-    
     if not projectpath:
-        projectpath = os.path.dirname(os.path.realpath(__file__))
+        # Legitimate os.path
+        projectpath = dirname(os.path.realpath(__file__))
+    env.host_string = 'localhost'
+    if exists(join(projectpath, 'local.ini')):
+        env.ini_file = 'local.ini'
+    else:
+        env.ini_file = 'development.ini'
+    env.pop('host_string')
     commonenv(projectpath, getenv('VIRTUAL_ENV', None))
     env.wsginame = "dev.wsgi"
     env.urlhost = "localhost"
-    env.ini_file = 'development.ini'
     #env.user = "webapp"
     #env.home = "webapp"
     require('projectname', provided_by=('commonenv',))
@@ -804,11 +864,11 @@ def caravan_stagenv():
     """
     [ENVIRONMENT] Staging
     """
-    commonenv(os.path.normpath("/sites/assembl/"))
+    env.ini_file = 'local.ini'
+    commonenv(normpath("/sites/assembl/"))
     env.urlhost = "assembl.caravan.coop"
     env.user = "www-data"
     env.home = "www-data"
-    env.ini_file = 'local.ini'
     require('projectname', provided_by=('commonenv',))
     env.hosts = ['assembl.caravan.coop']
     
@@ -823,20 +883,19 @@ def coeus_stagenv():
     """
     [ENVIRONMENT] Staging
     """
-    commonenv(os.path.normpath("/var/www/assembl/"))
+    env.ini_file = 'local.ini'
+    commonenv(normpath("/var/www/assembl/"))
     env.is_production_env = True
     env.wsginame = "staging.wsgi"
     env.urlhost = "assembl.coeus.ca"
     env.user = "www-data"
     env.home = "www-data"
-    env.ini_file = 'local.ini'
     require('projectname', provided_by=('commonenv',))
     env.hosts = ['coeus.ca']
     
     env.uses_apache = False
     env.uses_ngnix = True
     env.uses_uwsgi = True
-    env.use_virtuoso = "/usr"
     env.gitbranch = "master"
     
 @task
@@ -844,20 +903,19 @@ def coeus_stagenv2():
     """
     [ENVIRONMENT] Staging
     """
-    commonenv(os.path.normpath("/var/www/assembl2/"))
+    env.ini_file = 'local.ini'
+    commonenv(normpath("/var/www/assembl2/"))
     env.is_production_env = False
     env.wsginame = "staging.wsgi"
     env.urlhost = "assembl2.coeus.ca"
     env.user = "www-data"
     env.home = "www-data"
-    env.ini_file = 'local.ini'
     require('projectname', provided_by=('commonenv',))
     env.hosts = ['coeus.ca']
     
     env.uses_apache = False
     env.uses_ngnix = True
     env.uses_uwsgi = True
-    env.use_virtuoso = "/usr"
     env.gitbranch = "develop"
 
 @task    
@@ -865,20 +923,19 @@ def inm_prodenv():
     """
     [ENVIRONMENT] INM
     """
-    commonenv(os.path.normpath("/var/www/assembl_inm/"))
+    env.ini_file = 'local.ini'
+    commonenv(normpath("/var/www/assembl_inm/"))
     env.is_production_env = True
     env.wsginame = "prod.wsgi"
     env.urlhost = "agora.inm.qc.ca"
     env.user = "www-data"
     env.home = "www-data"
-    env.ini_file = 'local.ini'
     require('projectname', provided_by=('commonenv',))
     env.hosts = ['coeus.ca']
     
     env.uses_apache = False
     env.uses_ngnix = True
     env.uses_uwsgi = True
-    env.use_virtuoso = "/usr"
     env.gitbranch = "master"
 
 
@@ -887,20 +944,19 @@ def ovh_prodenv():
     """
     [ENVIRONMENT] OVH Server
     """
-    commonenv(os.path.normpath("/var/www/assembl/"))
+    env.ini_file = 'local.ini'
+    commonenv(normpath("/var/www/assembl/"))
     env.is_production_env = True
     env.wsginame = "prod.wsgi"
     env.urlhost = "ns239264.ip-192-99-37.net"
     env.user = "www-data"
     env.home = "www-data"
-    env.ini_file = 'local.ini'
     require('projectname', provided_by=('commonenv',))
     env.hosts = ['ns239264.ip-192-99-37.net']
     
     env.uses_apache = False
     env.uses_ngnix = True
     env.uses_uwsgi = True
-    env.use_virtuoso = "/usr/local/virtuoso-opensource-d7"
     env.gitbranch = "develop"
 
 @task
@@ -912,3 +968,78 @@ def flushmemcache():
         print(cyan('Resetting all data in memcached :'))
         wait_str = "" if env.mac else "-q 2"
         run('echo "flush_all" | nc %s 127.0.0.1 11211' % wait_str)
+
+@task
+def ensure_virtuoso_not_running():
+    # We do not want to start supervisord if not already running
+    pidfile = join(env.projectpath, 'var/run/supervisord.pid')
+    if not exists(pidfile):
+        return
+    pid = run('cat '+ pidfile)
+    # Really running or stale?
+    ps = run('ps '+pid, quiet=True)
+    if ps.failed:
+        run('rm '+pidfile)
+        return
+    execute(supervisor_process_stop, 'virtuoso')
+
+@task
+def virtuoso_reconstruct_save_db():
+    execute(ensure_virtuoso_not_running)
+    with cd(virtuoso_db_directory()):
+        run('%s/bin/virtuoso-t +backup-dump +foreground' % (get_virtuoso_root()))
+
+@task
+def virtuoso_reconstruct_restore_db(transition_6_to_7=False):
+    execute(ensure_virtuoso_not_running)
+    with cd(virtuoso_db_directory()):
+        run('mv virtuoso.db virtuoso_backup.db')
+    trflag = '+log6' if transition_6_to_7 else ''
+    with cd(virtuoso_db_directory()):
+        r = run('%s/bin/virtuoso-t +restore-crash-dump +foreground %s' % (
+                get_virtuoso_root(), trflag), timeout=30)
+    execute(supervisor_process_start, 'virtuoso')
+    with cd(virtuoso_db_directory()):
+        run('rm virtuoso_backup.db')
+
+@task
+def virtuoso_reconstruct_db():
+    execute(virtuoso_reconstruct_save_db)
+    execute(virtuoso_reconstruct_restore_db)
+
+@task
+def virtuoso_source_install():
+    "Install the virtuoso server locally"
+    virtuoso_root = get_virtuoso_root()
+    virtuoso_src = get_virtuoso_src()
+    branch = get_config().get('virtuoso', 'virtuoso_branch')
+    try:
+        tag = get_config().get('virtuoso', 'virtuoso_tag')
+    except:
+        tag = None
+    if exists(virtuoso_src):
+        with cd(virtuoso_src):
+            run('git fetch')
+            run('git checkout '+(tag or branch))
+    else:
+        branch_flag = ('-b ' + branch) if branch else ''
+        run('mkdir -p ' + dirname(virtuoso_src))
+        virtuso_github = 'https://github.com/openlink/virtuoso-opensource.git'
+        run('git clone -b %s %s %s' %(branch, virtuso_github, virtuoso_src))
+        with cd(virtuoso_src):
+            run('git checkout '+(tag or branch))
+            run('./autogen.sh')
+            run('./configure --with-readline --prefix '+virtuoso_root)
+    with cd(virtuoso_src):
+        run('make')
+        need_sudo = False
+        if not exists(virtuoso_root):
+            if not run('mkdir -p ' + virtuoso_root, quiet=True).succeeded:
+                need_sudo = True
+                sudo('mkdir -p ' + virtuoso_root)
+        else:
+            need_sudo = run('touch '+virtuoso_root, quiet=True).failed
+        if need_sudo:
+            sudo('make install')
+        else:
+            run('make install')

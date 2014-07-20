@@ -1,6 +1,7 @@
 """ INI file generator """
 
 import sys
+from platform import system
 from os import getenv, listdir, mkdir
 from os.path import exists, join, dirname, abspath
 from ConfigParser import ConfigParser
@@ -15,11 +16,19 @@ def main():
     config = ConfigParser()
     config.read(config_uri)
 
-    vroot = getenv('VIRTUOSO_ROOT')
-    assert vroot, 'Please define the VIRTUOSO_ROOT environment variable'
-    assert exists(vroot), "VIRTUOSO_ROOT directory does not exist"
+    vroot = config.get('virtuoso', 'virtuoso_root')
+    if vroot == 'system':
+        # Magic value
+        if system().startswith('Darwin'):
+            vroot = '/usr/local/virtuoso-opensource'
+        else:
+            vroot = '/usr'
+    elif not vroot[0] == '/':
+        # Relative path
+        vroot = join(dirname(dirname(dirname(__file__))), vroot)
+    assert exists(vroot), "virtuoso_root directory does not exist"
     assert exists(join(vroot, 'bin', 'virtuoso-t')),\
-        "VIRTUOSO_ROOT directory does not contain bin/virtuoso-t"
+        "virtuoso_root directory does not contain bin/virtuoso-t"
     assert exists('var/db/virtuoso.ini.tmpl'),\
         "Please run this script from the assembl root."
     vroot_var = join(vroot, 'var')
