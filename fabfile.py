@@ -506,9 +506,16 @@ def install_builddeps():
         run('brew install memcached zeromq redis')
         if not exists('/usr/local/bin/node'):
             run('brew install nodejs npm')
+        if not exists('/usr/local/bin/autoconf'):
+            run('brew install autoconf')
+        if not exists('/usr/local/bin/automake'):
+            run('brew install automake')
+        # glibtoolize, bison, flex, gperf are on osx by default.
+        # brew does not know aclocal, autoheader... They exist on macports, but do we want to install that?
     else:
         sudo('apt-get install -y build-essential python-dev ruby-builder')
         sudo('apt-get install -y nodejs nodejs-legacy  npm')
+        sudo('apt-get install -y aclocal autoconf autoheader automake libtoolize bison flex gperf')
 
         #Runtime requirements (even in develop)
         sudo('apt-get install -y redis-server memcached unixodbc-dev virtuoso-opensource')
@@ -1028,8 +1035,12 @@ def virtuoso_source_install():
         run('git clone -b %s %s %s' %(branch, virtuso_github, virtuoso_src))
         with cd(virtuoso_src):
             run('git checkout '+(tag or branch))
-            run('./autogen.sh')
-            run('./configure --with-readline --prefix '+virtuoso_root)
+    if not exists(join(virtuoso_src, 'configure')):
+        run('./autogen.sh')
+    if exists(join(virtuoso_src, 'config.status')):
+        run('./config.status --recheck')
+    else:
+        run('./configure --with-readline --prefix '+virtuoso_root)
     with cd(virtuoso_src):
         run('make')
         need_sudo = False
