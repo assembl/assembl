@@ -1035,13 +1035,13 @@ def virtuoso_source_install():
         run('git clone -b %s %s %s' %(branch, virtuso_github, virtuoso_src))
         with cd(virtuoso_src):
             run('git checkout '+(tag or branch))
-    if not exists(join(virtuoso_src, 'configure')):
-        run('./autogen.sh')
-    if exists(join(virtuoso_src, 'config.status')):
-        run('./config.status --recheck')
-    else:
-        run('./configure --with-readline --prefix '+virtuoso_root)
     with cd(virtuoso_src):
+        if not exists(join(virtuoso_src, 'configure')):
+            run('./autogen.sh')
+        if exists(join(virtuoso_src, 'config.status')):
+            run('./config.status --recheck')
+        else:
+            run('./configure --with-readline --prefix '+virtuoso_root)
         run('make')
         need_sudo = False
         if not exists(virtuoso_root):
