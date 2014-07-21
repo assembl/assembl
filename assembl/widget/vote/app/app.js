@@ -115,10 +115,29 @@ angular.element(document).ready(function (){
         startAngularApplication();
     };
 
+    var resourceToUrl = function(str)
+    {
+      var start = "local:";
+      if ( str.indexOf(start) == 0 )
+      {
+        str = "/data/" + str.slice(start.length);
+      }
+      return str;
+    };
+
     var configFileDefault = "/data/Widget/19";
     var configFile = decodeURIComponent(getUrlVariableValue("config"));
     if ( !configFile || !( /^http(s)?:\/\/.*/.test(configFile) ) )
+    {
+      if ( /^local:.*/.test(configFile) )
+      {
+        configFile = resourceToUrl(configFile);
+      }
+      else
+      {
         configFile = configFileDefault;
+      }
+    }
 
     // TODO: implement an error callback, in case the config URL given is invalid or there is a network error
     var errorCallback = function(jqXHR, textStatus, errorThrown){

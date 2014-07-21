@@ -90,21 +90,25 @@ define(function(require){
             Assembl.commands.execute('render');
             var segments = {},
             subIdeas = {},
+            votable_widgets = [],
             currentUser = Ctx.getCurrentUser(),
             canEdit = currentUser.can(Permissions.EDIT_IDEA) || false,
             canEditNextSynthesis = currentUser.can(Permissions.EDIT_SYNTHESIS);
 
             Ctx.cleanTooltips(this.$el);
             
+
             if(this.model) {
                 segments = this.model.getSegments();
                 subIdeas = this.model.getChildren();
+                votable_widgets = this.model.getVotableOnWhichWidgets();
             }
 
             this.$el.html( this.template( {
                 idea: this.model,
                 subIdeas: subIdeas,
                 segments: segments,
+                votable_widgets: votable_widgets,
                 canEdit: canEdit,
                 i18n: i18n,
                 renderTemplateGetExtractsLabel: this.renderTemplateGetExtractsLabel,
@@ -113,7 +117,8 @@ define(function(require){
                 canEditNextSynthesis: canEditNextSynthesis,
                 canEditExtracts: currentUser.can(Permissions.EDIT_EXTRACT),
                 canEditMyExtracts: currentUser.can(Permissions.EDIT_MY_EXTRACT),
-                canAddExtracts: currentUser.can(Permissions.EDIT_EXTRACT) //TODO: This is a bit too coarse
+                canAddExtracts: currentUser.can(Permissions.EDIT_EXTRACT), //TODO: This is a bit too coarse
+                canCreateWidgets: currentUser.can(Permissions.ADMIN_DISCUSSION)
             } ) );
             Ctx.initTooltips(this.$el);
             this.panel = this.$('.panel');
