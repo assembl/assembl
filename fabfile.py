@@ -1004,7 +1004,6 @@ def virtuoso_reconstruct_restore_db(transition_6_to_7=False):
     execute(ensure_virtuoso_not_running)
     with cd(virtuoso_db_directory()):
         run('mv virtuoso.db virtuoso_backup.db')
-    trflag = '+log6' if transition_6_to_7 else ''
     with cd(virtuoso_db_directory()):
         r = run('%s/bin/virtuoso-t +restore-crash-dump +foreground %s' % (
                 get_virtuoso_root(), trflag), timeout=30)
