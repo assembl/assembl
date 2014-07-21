@@ -87,6 +87,41 @@ def supervisor_process_start(process_name):
             exit()
 
 
+def supervisor_process_stop(process_name):
+    """
+    Assuming the supervisord process is running, stop one of its processes
+    """
+    print(cyan('Asking supervisor to stop %s' % process_name))
+    supervisor_pid_regex = re.compile('^\d+')
+    status_regex = re.compile('^%s\s*(\S*)' % process_name)
+    with hide('running', 'stdout'):
+        supervisord_cmd_result = venvcmd("supervisorctl pid")
+    match = supervisor_pid_regex.match(supervisord_cmd_result)
+    if not match:
+        print(cyan('Supervisord doesn\'t seem to be running, nothing to stop'))
+        return
+    for try_num in range(20):
+        venvcmd("supervisorctl stop %s" % process_name)
+        with hide('running', 'stdout'):
+            status_cmd_result = venvcmd("supervisorctl status %s" % process_name)
+
+        match = status_regex.match(status_cmd_result)
+        if match:
+            status = match.group(1)
+            if(status == 'STOPPED'):
+                print(green("%s is stopped" % process_name))
+                break
+            elif(status == 'RUNNING'):
+                venvcmd("supervisorctl stop %s" % process_name)
+            elif(status == 'STOPPING'):
+                print(status)
+            else:
+                print("unexpected status: %s" % status)
+            sleep(1)
+        else:
+            print(red('Unable to parse status (bad regex?)'))
+            print(status_cmd_result)
+            exit()
 
 @task
 def reloadapp():
