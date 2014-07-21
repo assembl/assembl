@@ -510,12 +510,15 @@ def install_builddeps():
             run('brew install autoconf')
         if not exists('/usr/local/bin/automake'):
             run('brew install automake')
-        # glibtoolize, bison, flex, gperf are on osx by default.
-        # brew does not know aclocal, autoheader... They exist on macports, but do we want to install that?
+        if not exists('/usr/local/bin/glibtoolize'):
+            run('brew install libtool')
+        # bison, flex, gperf are on osx by default.
+        # brew does not know aclocal, autoheader 
+        # but seems to install them as dependecies of autoconf
     else:
         sudo('apt-get install -y build-essential python-dev ruby-builder')
         sudo('apt-get install -y nodejs nodejs-legacy  npm')
-        sudo('apt-get install -y aclocal autoconf autoheader automake libtoolize bison flex gperf')
+        sudo('apt-get install -y aclocal autoconf autoheader automake libtool bison flex gperf')
 
         #Runtime requirements (even in develop)
         sudo('apt-get install -y redis-server memcached unixodbc-dev virtuoso-opensource')
