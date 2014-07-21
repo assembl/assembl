@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: assembl 0.0\n"
 "Report-Msgid-Bugs-To: maparent@acm.org\n"
-"POT-Creation-Date: 2014-07-21 17:03-0400\n"
+"POT-Creation-Date: 2014-07-21 17:41-0400\n"
 "PO-Revision-Date: 2014-07-18 12:29-0500\n"
 "Last-Translator: Benoit Grégoire <benoitg@coeus.ca>\n"
 "Language-Team: fr <LL@li.org>\n"
@@ -72,7 +72,7 @@ msgid "${val} is not a string: ${err}"
 msgstr "${val} n'est pas une chaîne: ${err}"
 
 #: assembl/static/js/app/models/idea.js:40
-#: assembl/static/js/app/views/ideaPanel.js:127
+#: assembl/static/js/app/views/ideaPanel.js:132
 msgid "New idea"
 msgstr "Ajouter une idée"
 
@@ -173,36 +173,36 @@ msgid_plural "Harvested in %d extracts"
 msgstr[0] "Attrapé dans %d extrait"
 msgstr[1] "Attrapé dans %d extraits"
 
-#: assembl/static/js/app/views/ideaPanel.js:126
+#: assembl/static/js/app/views/ideaPanel.js:131
 msgid "Short expression (only a few words) of the idea in the table of ideas."
 msgstr "Expression brève (quelques mots) de l'idée dans la table des matières"
 
-#: assembl/static/js/app/views/ideaPanel.js:153
+#: assembl/static/js/app/views/ideaPanel.js:158
 msgid "Comment on this idea here..."
 msgstr "Commenter cette idée ici..."
 
-#: assembl/static/js/app/views/ideaPanel.js:154
+#: assembl/static/js/app/views/ideaPanel.js:159
 msgid "Send your comment"
 msgstr "Envoyez votre commentaire"
 
-#: assembl/static/js/app/views/ideaPanel.js:156
+#: assembl/static/js/app/views/ideaPanel.js:161
 #: assembl/static/js/app/views/messageList.js:611
 msgid "You need to type a comment first..."
 msgstr "Vous devez d'abord écrire un commentaire..."
 
-#: assembl/static/js/app/views/ideaPanel.js:255
+#: assembl/static/js/app/views/ideaPanel.js:260
 msgid "ideaPanel-cantDeleteByChildren"
 msgstr "Vous ne pouvez pas effacer une idée ayant des sous-idées."
 
-#: assembl/static/js/app/views/ideaPanel.js:260
+#: assembl/static/js/app/views/ideaPanel.js:265
 msgid "ideaPanel-cantDeleteBySegments"
 msgstr "Vous ne pouvez pas effacer une idée associée à des extraits."
 
-#: assembl/static/js/app/views/ideaPanel.js:417
+#: assembl/static/js/app/views/ideaPanel.js:422
 msgid "ideaPanel-clearConfirmationMessage"
 msgstr "Confirmez que vous souhaitez supprimer toutes les idées."
 
-#: assembl/static/js/app/views/ideaPanel.js:441
+#: assembl/static/js/app/views/ideaPanel.js:446
 msgid "ideaPanel-deleteIdeaConfirmMessage"
 msgstr "Confirmez que vous souhaitez supprimer cette idée."
 
@@ -873,25 +873,33 @@ msgstr ""
 msgid "A definition of this idea"
 msgstr "Une définition de cette idée"
 
-#: assembl/templates/views/ideaPanel.tmpl:42
+#: assembl/templates/views/ideaPanel.tmpl:30
+msgid "Vote on this idea"
+msgstr "Voter sur cette idée"
+
+#: assembl/templates/views/ideaPanel.tmpl:36
+msgid "Create a vote widget on this idea"
+msgstr "Créer un widget de vote sur cette idée"
+
+#: assembl/templates/views/ideaPanel.tmpl:55
 msgid "Expressions of this idea in segments of posts or on the web"
 msgstr "Expressions de cette idée dans des extraits de messages ou de pages Web"
 
-#: assembl/templates/views/ideaPanel.tmpl:52
+#: assembl/templates/views/ideaPanel.tmpl:65
 msgid "Add extracts by dragging them in this panel from the clipboard or messages"
 msgstr ""
 "Ajouter des extraits en les glissant d'un message ou du presse-papier "
 "vers ce panneau"
 
-#: assembl/templates/views/ideaPanel.tmpl:60
+#: assembl/templates/views/ideaPanel.tmpl:73
 msgid "Delete this idea completely"
 msgstr "Supprimer cette idée complètement"
 
-#: assembl/templates/views/ideaPanel.tmpl:60
+#: assembl/templates/views/ideaPanel.tmpl:73
 msgid "Delete idea"
 msgstr "Supprimer l'idée"
 
-#: assembl/templates/views/ideaPanel.tmpl:64
+#: assembl/templates/views/ideaPanel.tmpl:77
 msgid ""
 "Remove all extracts from this idea.  Removed extracts will be available "
 "in your clipboard"
@@ -899,11 +907,11 @@ msgstr ""
 "Enlever tous les extraits de cette idée.  Les extraits supprimés seront "
 "disponibles dans votre presse-papier"
 
-#: assembl/templates/views/ideaPanel.tmpl:64
+#: assembl/templates/views/ideaPanel.tmpl:77
 msgid "Remove all extracts"
 msgstr "Supprimer tous les extraits"
 
-#: assembl/templates/views/ideaPanel.tmpl:69
+#: assembl/templates/views/ideaPanel.tmpl:82
 msgid "Please select an idea in the table of ideas"
 msgstr "Veuillez choisir une idée dans la table des idées"
 

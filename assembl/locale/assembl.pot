@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: assembl 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-07-21 17:03-0400\n"
+"POT-Creation-Date: 2014-07-21 17:41-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -58,7 +58,7 @@ msgid "${val} is not a string: ${err}"
 msgstr ""
 
 #: assembl/static/js/app/models/idea.js:40
-#: assembl/static/js/app/views/ideaPanel.js:127
+#: assembl/static/js/app/views/ideaPanel.js:132
 msgid "New idea"
 msgstr ""
 
@@ -159,36 +159,36 @@ msgid_plural "Harvested in %d extracts"
 msgstr[0] ""
 msgstr[1] ""
 
-#: assembl/static/js/app/views/ideaPanel.js:126
+#: assembl/static/js/app/views/ideaPanel.js:131
 msgid "Short expression (only a few words) of the idea in the table of ideas."
 msgstr ""
 
-#: assembl/static/js/app/views/ideaPanel.js:153
+#: assembl/static/js/app/views/ideaPanel.js:158
 msgid "Comment on this idea here..."
 msgstr ""
 
-#: assembl/static/js/app/views/ideaPanel.js:154
+#: assembl/static/js/app/views/ideaPanel.js:159
 msgid "Send your comment"
 msgstr ""
 
-#: assembl/static/js/app/views/ideaPanel.js:156
+#: assembl/static/js/app/views/ideaPanel.js:161
 #: assembl/static/js/app/views/messageList.js:611
 msgid "You need to type a comment first..."
 msgstr ""
 
-#: assembl/static/js/app/views/ideaPanel.js:255
+#: assembl/static/js/app/views/ideaPanel.js:260
 msgid "ideaPanel-cantDeleteByChildren"
 msgstr ""
 
-#: assembl/static/js/app/views/ideaPanel.js:260
+#: assembl/static/js/app/views/ideaPanel.js:265
 msgid "ideaPanel-cantDeleteBySegments"
 msgstr ""
 
-#: assembl/static/js/app/views/ideaPanel.js:417
+#: assembl/static/js/app/views/ideaPanel.js:422
 msgid "ideaPanel-clearConfirmationMessage"
 msgstr ""
 
-#: assembl/static/js/app/views/ideaPanel.js:441
+#: assembl/static/js/app/views/ideaPanel.js:446
 msgid "ideaPanel-deleteIdeaConfirmMessage"
 msgstr ""
 
@@ -834,33 +834,41 @@ msgstr ""
 msgid "A definition of this idea"
 msgstr ""
 
-#: assembl/templates/views/ideaPanel.tmpl:42
+#: assembl/templates/views/ideaPanel.tmpl:30
+msgid "Vote on this idea"
+msgstr ""
+
+#: assembl/templates/views/ideaPanel.tmpl:36
+msgid "Create a vote widget on this idea"
+msgstr ""
+
+#: assembl/templates/views/ideaPanel.tmpl:55
 msgid "Expressions of this idea in segments of posts or on the web"
 msgstr ""
 
-#: assembl/templates/views/ideaPanel.tmpl:52
+#: assembl/templates/views/ideaPanel.tmpl:65
 msgid "Add extracts by dragging them in this panel from the clipboard or messages"
 msgstr ""
 
-#: assembl/templates/views/ideaPanel.tmpl:60
+#: assembl/templates/views/ideaPanel.tmpl:73
 msgid "Delete this idea completely"
 msgstr ""
 
-#: assembl/templates/views/ideaPanel.tmpl:60
+#: assembl/templates/views/ideaPanel.tmpl:73
 msgid "Delete idea"
 msgstr ""
 
-#: assembl/templates/views/ideaPanel.tmpl:64
+#: assembl/templates/views/ideaPanel.tmpl:77
 msgid ""
 "Remove all extracts from this idea.  Removed extracts will be available in "
 "your clipboard"
 msgstr ""
 
-#: assembl/templates/views/ideaPanel.tmpl:64
+#: assembl/templates/views/ideaPanel.tmpl:77
 msgid "Remove all extracts"
 msgstr ""
 
-#: assembl/templates/views/ideaPanel.tmpl:69
+#: assembl/templates/views/ideaPanel.tmpl:82
 msgid "Please select an idea in the table of ideas"
 msgstr ""
 
