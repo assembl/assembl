@@ -18,8 +18,6 @@ You have to POST to http://localhost:6543/data/Discussion/1/widgets using the fo
 - variable name: "type", variable value: "MultiCriterionVotingWidget"
 - variable name: "settings", variable example value:
 {
-    "idea": "local:Idea/2",
-    "postVoteUrl":"http://localhost:6543/data/Discussion/1/widgets",
     "items":[
         {
             "type":"2_axes",
@@ -91,8 +89,7 @@ You have to POST to http://localhost:6543/data/Discussion/1/widgets using the fo
     ],
     "displayStyle":"standard",
     "presentationText":"Installer des panneaux solaires sur le toit du batiment",
-    "padding":60,
-    "axisWidthDefault":100
+    "padding":60
 }
 
 2) Use the response to build the URL which users will access

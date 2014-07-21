@@ -23,17 +23,18 @@ voteApp.controller('adminConfigureFromIdeaCtl',
     {
       "key": "padding",
       "type": "integer",
-      "label": "Padding between each item",
+      "label": "Padding in item",
       "default": 60,
-      "description": "Empty space between each votable item"
+      "description": "Empty space (in pixels) between the border of the votable item and its axis"
     },
     {
-      "key": "axisWidthDefault",
-      "type": "integer",
-      "label": "Default axis width",
-      "default": 300,
-      "description": "Default width of the axis of a lickert or axis"
+      "key": "displayStyle",
+      "type": "text",
+      "label": "Display style",
+      "default": "classic",
+      "description": "How voting items will be displayed ('classic' or 'table')"
     }
+    
   ];
 
   $scope.mandatory_item_fields = [
@@ -110,6 +111,30 @@ voteApp.controller('adminConfigureFromIdeaCtl',
       "type": "integer",
       "default": 5,
       "description": "Indicative number of ticks to be shown on the axis"
+    },
+    {
+      "key": "colorMin",
+      "type": "text",
+      "description": "Color of the minimum value",
+      "default":"#ff0000"
+    },
+    {
+      "key": "colorMax",
+      "type": "text",
+      "description": "Color of the maximum value",
+      "default":"#00ff00"
+    },
+    {
+      "key": "colorAverage",
+      "type": "text",
+      "description": "Color of the average value",
+      "default":"#ffff00"
+    },
+    {
+      "key": "colorCursor",
+      "type": "text",
+      "description": "Color of the draggable cursor",
+      "default":"#000000"
     }
   ];
 
@@ -683,24 +708,6 @@ voteApp.controller('indexCtl',
       
 
       // TODO (when the API is implemented): check that the user has the right to participate in this vote
-
-
-      // check that an URL to POST the vote is provided in the configuration JSON
-      if ( configService.user_votes_url && configService.user_votes_url != "null" )
-      {
-        $scope.postVoteUrl = AssemblToolsService.resourceToUrl(configService.user_votes_url);
-        console.log("postVoteUrl:");
-        console.log($scope.postVoteUrl);
-      }
-      else
-      {
-        console.log("postVoteUrl is not set");
-        // TODO: better error
-        // temporary disabled
-        //alert("Error: The configuration JSON does not contain a \"user_votes_url\" property.");
-        //return;
-        $scope.postVoteUrl = '';
-      }
       
 
       if ( $scope.settings.displayStyle && $scope.settings.displayStyle == "table" )
