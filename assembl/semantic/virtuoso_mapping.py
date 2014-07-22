@@ -142,20 +142,9 @@ class AssemblClassPatternExtractor(ClassPatternExtractor):
     def __init__(self, alias_manager, graph=None,
                  section=None, discussion_id=None):
         super(AssemblClassPatternExtractor, self).__init__(
-            alias_manager, graph)
+            alias_manager, lambda cls: cls.iri_class(), graph)
         self.section = section
         self.discussion_id = discussion_id
-
-    def extract_subject_pattern(self, cls):
-        iri_qmp = None
-        try:
-            iri_qmp = cls.iri_class()
-        except AttributeError:
-            pass
-        if iri_qmp:
-            return iri_qmp.apply(cls.id)
-        return super(AssemblClassPatternExtractor, self
-                     ).extract_subject_pattern(cls)
 
     def class_pattern_name(self, cls):
         clsname = cls.external_typename()
