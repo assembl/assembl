@@ -1040,8 +1040,8 @@ def virtuoso_reconstruct_restore_db(transition_6_to_7=False):
     with cd(virtuoso_db_directory()):
         run('mv virtuoso.db virtuoso_backup.db')
     with cd(virtuoso_db_directory()):
-        r = run('%s/bin/virtuoso-t +restore-crash-dump +foreground %s' % (
-                get_virtuoso_root(), trflag), timeout=30)
+        r = run('%s/bin/virtuoso-t +restore-crash-dump +foreground' % (
+                get_virtuoso_root()), timeout=30)
     execute(supervisor_process_start, 'virtuoso')
     with cd(virtuoso_db_directory()):
         run('rm virtuoso_backup.db')
