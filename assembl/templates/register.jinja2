@@ -3,7 +3,7 @@
 {% block content %}
 <div class="loginbox register">
     <header>
-        <p class="login-box-title">{{ gettext('Join assembl') }}</p>
+        <h1>{{ gettext('Join assembl') }}</h1>
     </header>
 
     {% if error %}
@@ -19,12 +19,6 @@
         <input type="submit" name="register" value="{{ gettext('Register') }}" class="btn-pink" />
         <span>{{gettext("or")}} <a href="/login?next_view={{next_view}}">{{gettext("login")}}</a></span>
     </form>
-
-    <footer>
-        {% set caravan = "<a href='http://caravan.coop' class='link caravan'>"+gettext("Caravan")+"</a>" %}
-        {% set imaginationForPeople = "<a href='http://imaginationforpeople.org/' class='link i4p'>"+gettext("Imagination for people") +"</a>" %}
-        <p>{{ gettext("Designed by %(caravan)s and %(imaginationForPeople)s")|format(caravan=caravan, imaginationForPeople=imaginationForPeople)|safe }}</p>
-    </footer>
 </div>
 {% endblock %}
 

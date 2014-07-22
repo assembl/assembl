@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: assembl 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-07-21 17:41-0400\n"
+"POT-Creation-Date: 2014-07-22 14:20-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -429,22 +429,16 @@ msgstr ""
 
 #: assembl/templates/confirm.jinja2:21
 #: assembl/templates/do_password_change.jinja2:23
-#: assembl/templates/register.jinja2:24
-#: assembl/templates/request_password_change.jinja2:21
 msgid "Caravan"
 msgstr ""
 
 #: assembl/templates/confirm.jinja2:22
 #: assembl/templates/do_password_change.jinja2:24
-#: assembl/templates/register.jinja2:25
-#: assembl/templates/request_password_change.jinja2:22
 msgid "Imagination for people"
 msgstr ""
 
 #: assembl/templates/confirm.jinja2:23
 #: assembl/templates/do_password_change.jinja2:25
-#: assembl/templates/register.jinja2:26
-#: assembl/templates/request_password_change.jinja2:23
 #, python-format
 msgid "Designed by %(caravan)s and %(imaginationForPeople)s"
 msgstr ""
@@ -581,7 +575,8 @@ msgstr ""
 msgid "Enter"
 msgstr ""
 
-#: assembl/templates/login.jinja2:63
+#: assembl/templates/login.jinja2:63 assembl/views/auth/views.py:627
+#: assembl/views/auth/views.py:633
 msgid "I forgot my password"
 msgstr ""
 
@@ -1082,7 +1077,7 @@ msgstr ""
 msgid "The username %s is already used"
 msgstr ""
 
-#: assembl/views/auth/views.py:163 assembl/views/auth/views.py:701
+#: assembl/views/auth/views.py:163 assembl/views/auth/views.py:703
 msgid "The passwords are not identical"
 msgstr ""
 
@@ -1094,7 +1089,7 @@ msgstr ""
 msgid "The passwords should be identical"
 msgstr ""
 
-#: assembl/views/auth/views.py:308 assembl/views/auth/views.py:631
+#: assembl/views/auth/views.py:308 assembl/views/auth/views.py:632
 msgid "This user cannot be found"
 msgstr ""
 
@@ -1124,25 +1119,25 @@ msgstr ""
 msgid "We do not know about this email."
 msgstr ""
 
-#: assembl/views/auth/views.py:653
+#: assembl/views/auth/views.py:655
 msgid "Password change requested"
 msgstr ""
 
-#: assembl/views/auth/views.py:654
+#: assembl/views/auth/views.py:656
 msgid ""
 "We have sent you an email with a temporary connection link. Please use that "
 "link to log in and change your password."
 msgstr ""
 
-#: assembl/views/auth/views.py:671
+#: assembl/views/auth/views.py:673
 msgid "Wrong password token."
 msgstr ""
 
-#: assembl/views/auth/views.py:676
+#: assembl/views/auth/views.py:678
 msgid "This token is expired. Do you want us to send another?"
 msgstr ""
 
-#: assembl/views/auth/views.py:706
+#: assembl/views/auth/views.py:708
 msgid "Password changed"
 msgstr ""
 

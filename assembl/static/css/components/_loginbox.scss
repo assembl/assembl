@@ -68,6 +68,7 @@
   .signinWrapper {
     padding: 0 0 0 10px;
     box-sizing: border-box;
+    vertical-align: top;
   }
 
   .socialPart {
@@ -103,11 +104,41 @@
 }
 
 .loginbox.register {
-   .login-box-title {
-     margin-left: 184px;
-   }
+  width: 320px;
+
+  .login-box-title {
+    margin-left: 184px;
+  }
+
+  input {
+    margin: 8px 0;
+  }
+
+  form {
+    width: 250px;
+    margin-top: 20px;
+  }
 }
 
 .loginbox.sign-in {
 
+}
+
+.loginbox.request_password_change {
+  padding-bottom: 10px;
+
+  input {
+    margin: 8px 0;
+  }
+
+  .error {
+    margin: 20px;
+    color: red;
+    text-align: center;
+  }
+
+  form {
+    width: 250px;
+    margin-top: 20px;
+  }
 }

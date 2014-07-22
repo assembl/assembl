@@ -22,7 +22,8 @@ html {
 }
 
 @include placeholder {
-    color: transparentize( $text-muted-color, 0.3 );
+    /* color: transparentize( $text-muted-color, 0.3 ); */
+    color: $text-placeholder-color;
 }
 
 .margin { margin: $margin; }
