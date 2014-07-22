@@ -235,6 +235,10 @@
 }
 
 .btn-purple {
+  @extend .btn-pink;
+  background-color: #B978E4;
+  padding: 3px 10px;
+
   &:hover{
 
   }
@@ -242,6 +246,13 @@
 
   }
 
+}
+
+.btn-purple-border-only {
+  @extend .btn-purple;
+  background: none;
+  color: #B978E4;
+  border: 1px solid #B978E4;
 }
 
 /* New design button */

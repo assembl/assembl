@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: assembl 0.0\n"
 "Report-Msgid-Bugs-To: maparent@acm.org\n"
-"POT-Creation-Date: 2014-07-22 14:20-0400\n"
+"POT-Creation-Date: 2014-07-22 14:30-0400\n"
 "PO-Revision-Date: 2014-07-18 12:29-0500\n"
 "Last-Translator: Benoit Grégoire <benoitg@coeus.ca>\n"
 "Language-Team: fr <LL@li.org>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 1.3\n"
 
-#: assembl/auth/operations.py:39 assembl/templates/register.jinja2:16
+#: assembl/auth/operations.py:39
 msgid "email"
 msgstr "courriel"
 
@@ -667,7 +667,7 @@ msgstr "Envoyer un message de confirmation"
 msgid "Add an email account"
 msgstr "Ajouter une adresse de courriel"
 
-#: assembl/templates/profile.jinja2:114
+#: assembl/templates/profile.jinja2:114 assembl/templates/register.jinja2:16
 msgid "Email"
 msgstr "Courriel"
 
@@ -694,8 +694,8 @@ msgid "Join assembl"
 msgstr "Rejoignez Assembl"
 
 #: assembl/templates/register.jinja2:19
-msgid "Register"
-msgstr "S'enregistrer"
+msgid "Create my account"
+msgstr "Créer mon compte"
 
 #: assembl/templates/register.jinja2:20
 msgid "or"
@@ -1344,4 +1344,7 @@ msgstr "Nous n'avons pas de discussion sous le code=%s"
 
 #~ msgid "Harvested in %d extracts"
 #~ msgstr "Attrapé dans %d extraits"
+
+#~ msgid "Register"
+#~ msgstr "S'enregistrer"
 

@@ -10,10 +10,16 @@
 
   form {
     margin: 0 auto;
-    width: 330px;
-      a{
-        text-decoration: none;
-        cursor: pointer;
+
+    a {
+      color: #A262D1;
+      font-size: 14px;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    a:hover {
+      text-decoration: underline;
     }
   }
   .inline {
@@ -44,6 +50,10 @@
 
   .submitButtons {
     width: 100%;
+
+    .centered {
+      text-align: center;
+    }
   }
 
   .login-box-title {
@@ -57,8 +67,11 @@
   }
 
   .defaultfield {
-    max-width: 290px;
+    /* max-width: 290px; */
     width: 80%;
+    -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+    -moz-box-sizing: border-box;    /* Firefox, other Gecko */
+    box-sizing: border-box;         /* Opera/IE 8+ */
   }
 
   .signinWrapper, .signinSeparator, .socialPart {
@@ -69,6 +82,15 @@
     padding: 0 0 0 10px;
     box-sizing: border-box;
     vertical-align: top;
+    width: 50%;
+
+    form input.defaultfield, form.inline input {
+      width: 100%;
+    }
+
+    .submitButtons input {
+      width: auto;
+    }
   }
 
   .socialPart {
@@ -106,17 +128,33 @@
 .loginbox.register {
   width: 320px;
 
+  .content {
+    padding: 10px 20px 10px;
+  }
+
+  .subcontent {
+    margin: 10px 0;
+    text-align: center;
+    a {
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+  }
+
   .login-box-title {
     margin-left: 184px;
   }
 
   input {
     margin: 8px 0;
+    width: 100%;
   }
 
   form {
     width: 250px;
-    margin-top: 20px;
+    margin-top: 10px;
   }
 }
 
@@ -129,6 +167,7 @@
 
   input {
     margin: 8px 0;
+    width: 100%;
   }
 
   .error {

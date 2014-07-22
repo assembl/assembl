@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: assembl 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-07-22 14:20-0400\n"
+"POT-Creation-Date: 2014-07-22 14:30-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 1.3\n"
 
-#: assembl/auth/operations.py:39 assembl/templates/register.jinja2:16
+#: assembl/auth/operations.py:39
 msgid "email"
 msgstr ""
 
@@ -637,7 +637,7 @@ msgstr ""
 msgid "Add an email account"
 msgstr ""
 
-#: assembl/templates/profile.jinja2:114
+#: assembl/templates/profile.jinja2:114 assembl/templates/register.jinja2:16
 msgid "Email"
 msgstr ""
 
@@ -663,7 +663,7 @@ msgid "Join assembl"
 msgstr ""
 
 #: assembl/templates/register.jinja2:19
-msgid "Register"
+msgid "Create my account"
 msgstr ""
 
 #: assembl/templates/register.jinja2:20
