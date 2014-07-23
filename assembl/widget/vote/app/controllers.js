@@ -60,11 +60,6 @@ voteApp.controller('adminConfigureFromIdeaCtl',
       "label": "Criterion entity id"
     },
     {
-      "key": "name_slug",
-      "type": "text",
-      "label": "Name slug"
-    },
-    {
       "key": "name",
       "type": "text",
       "label": "Name"
@@ -788,7 +783,7 @@ voteApp.controller('indexCtl',
                 setTimeout(function(){svg.css("background","none");}, 1000);
                 */
 
-                vote_result_holder.append($("<p class='success'>Your vote on criterion '" + criterion_tag.attr("data-criterion-name-slug") + "' has been successfully submitted!</p>"));
+                vote_result_holder.append($("<p class='success'>Your vote on criterion '" + criterion_tag.attr("data-criterion-name") + "' has been successfully submitted!</p>"));
               };          
             };
 
@@ -808,7 +803,7 @@ voteApp.controller('indexCtl',
                 svg.css("background","#ff0000");
                 setTimeout(function(){svg.css("background","none");}, 1000);
 
-                vote_result_holder.append($("<p class='failure'>Your vote on criterion '" + criterion_tag.attr("data-criterion-name-slug") + "' has NOT been successfully submitted!</p>"));
+                vote_result_holder.append($("<p class='failure'>Your vote on criterion '" + criterion_tag.attr("data-criterion-name") + "' has NOT been successfully submitted!</p>"));
               }
             };
 
@@ -858,7 +853,7 @@ voteApp.controller('indexCtl',
 
       svg.append("g")
         .attr("class", "criterion")
-        .attr("data-criterion-name-slug", criterion.name_slug)
+        .attr("data-criterion-name", criterion.name)
         .attr("data-criterion-id", criterion["entity_id"]) // contains something like "local:Idea/3"
         .attr("data-criterion-value", criterionValue)
         .attr("data-criterion-value-min", criterion.valueMin)
@@ -1067,7 +1062,7 @@ voteApp.controller('indexCtl',
 
       svg.append("g")
         .attr("class", "criterion")
-        .attr("data-criterion-name-slug", criteria[0].name_slug)
+        .attr("data-criterion-name", criteria[0].name)
         .attr("data-criterion-id", criteria[0]["entity_id"]) // contains something like "local:Idea/3"
         .attr("data-criterion-value", criterionXValue)
         .attr("data-criterion-value-min", criteria[0].valueMin)
@@ -1077,7 +1072,7 @@ voteApp.controller('indexCtl',
 
       svg.append("g")
         .attr("class", "criterion")
-        .attr("data-criterion-name-slug", criteria[1].name_slug)
+        .attr("data-criterion-name", criteria[1].name)
         .attr("data-criterion-id", criteria[1]["entity_id"]) // contains something like "local:Idea/3"
         .attr("data-criterion-value", criterionYValue)
         .attr("data-criterion-value-min", criteria[1].valueMin)
