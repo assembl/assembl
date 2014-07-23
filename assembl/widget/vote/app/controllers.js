@@ -1,8 +1,8 @@
 "use strict";
 
 voteApp.controller('adminConfigureFromIdeaCtl',
-  ['$scope', '$http', '$routeParams', '$log', '$location', 'globalConfig', 'configTestingService', 'configService', 'Discussion', 'AssemblToolsService',
-  function($scope, $http, $routeParams, $log, $location, globalConfig, configTestingService, configService, Discussion, AssemblToolsService){
+  ['$scope', '$http', '$routeParams', '$log', '$location', 'globalConfig', 'configTestingService', 'configService', 'Discussion', 'AssemblToolsService', 'VoteWidgetService', 
+  function($scope, $http, $routeParams, $log, $location, globalConfig, configTestingService, configService, Discussion, AssemblToolsService, VoteWidgetService){
 
   $scope.current_step = 1;
   $scope.current_substep = 1;
@@ -19,121 +19,15 @@ voteApp.controller('adminConfigureFromIdeaCtl',
   $scope.criteria_ids = null; // array of ids (uri, aka "local:Idea/3") of the criteria
 
 
-  $scope.mandatory_settings_fields = [
-    {
-      "key": "padding",
-      "type": "integer",
-      "label": "Padding in item",
-      "default": 60,
-      "description": "Empty space (in pixels) between the border of the votable item and its axis"
-    },
-    {
-      "key": "displayStyle",
-      "type": "text",
-      "label": "Display style",
-      "default": "classic",
-      "description": "How voting items will be displayed ('classic' or 'table')"
-    }
-    
-  ];
+  $scope.mandatory_settings_fields = VoteWidgetService.mandatory_settings_fields;
+  $scope.optional_settings_fields = VoteWidgetService.optional_settings_fields;
+  $scope.mandatory_item_fields = VoteWidgetService.mandatory_item_fields;
+  $scope.mandatory_criterion_fields = VoteWidgetService.mandatory_criterion_fields;
+  $scope.optional_criterion_fields = VoteWidgetService.optional_criterion_fields;
 
-  $scope.mandatory_item_fields = [
-    {
-      "key": "width",
-      "type": "integer",
-      "label": "Width",
-      "default": 300
-    },
-    {
-      "key": "height",
-      "type": "integer",
-      "label": "Height",
-      "default": 300
-    }
-  ];
-
-
-  $scope.mandatory_criterion_fields = [
-    {
-      "key": "entity_id",
-      "type": "criterion",
-      "label": "Criterion entity id"
-    },
-    {
-      "key": "name",
-      "type": "text",
-      "label": "Name"
-    },
-    {
-      "key": "valueMin",
-      "type": "integer",
-      "default": 0,
-      "description": "The minimum value which can be voted"
-    },
-    {
-      "key": "valueMax",
-      "type": "integer",
-      "default": 100,
-      "description": "The maximum value which can be voted"
-    }
-  ];
-
-  $scope.optional_criterion_fields = [
-    {
-      "key": "description",
-      "type": "text",
-      "description": "Text which will be shown around the votable item"
-    },
-    {
-      "key": "valueDefault",
-      "type": "integer",
-      "label": "default value",
-      "description": "Value on which the votable item will be initially set"
-    },
-    {
-      "key": "descriptionMin",
-      "type": "text",
-      "description": "Text which will be shown around the minimum value of the axis"
-    },
-    {
-      "key": "descriptionMax",
-      "type": "text",
-      "description": "Text which will be shown around the maximum value of the axis"
-    },
-    {
-      "key": "ticks",
-      "label": "number of ticks",
-      "type": "integer",
-      "default": 5,
-      "description": "Indicative number of ticks to be shown on the axis"
-    },
-    {
-      "key": "colorMin",
-      "type": "text",
-      "description": "Color of the minimum value",
-      "default":"#ff0000"
-    },
-    {
-      "key": "colorMax",
-      "type": "text",
-      "description": "Color of the maximum value",
-      "default":"#00ff00"
-    },
-    {
-      "key": "colorAverage",
-      "type": "text",
-      "description": "Color of the average value",
-      "default":"#ffff00"
-    },
-    {
-      "key": "colorCursor",
-      "type": "text",
-      "description": "Color of the draggable cursor",
-      "default":"#000000"
-    }
-  ];
 
   $scope.criterion_current_selected_field = null;
+  $scope.settings_current_selected_field = null;
 
   $scope.init = function(){
     console.log("adminConfigureFromIdeaCtl::init()");
@@ -153,7 +47,7 @@ voteApp.controller('adminConfigureFromIdeaCtl',
       $scope.widget = data;
       if (!$scope.widget.settings || !$scope.widget.settings.items)
         $scope.widget.settings = {"items":[]};
-      addDefaultFields($scope.widget.settings, $scope.mandatory_settings_fields);
+      VoteWidgetService.addDefaultFields($scope.widget.settings, $scope.mandatory_settings_fields);
       console.log("$scope.widget.settings:");
       console.log($scope.widget.settings);
       $scope.updateOnceWidgetIsReceived();
@@ -171,64 +65,38 @@ voteApp.controller('adminConfigureFromIdeaCtl',
 
   };
 
-  var addDefaultFields = function(obj, default_fields){
-    var sz = default_fields.length;
-    for ( var i = 0; i < default_fields.length; ++i )
-    {
-      var field = default_fields[i];
-      if ( !obj.hasOwnProperty(field.key)
-        && field.hasOwnProperty("default") )
-      {
-        obj[field.key] = field.default;
-      }
-    }
-    return obj;
-  };
-
   $scope.addItem = function(){
     var item = {
       'criteria': []
     };
-    addDefaultFields(item, $scope.mandatory_item_fields);
+    VoteWidgetService.addDefaultFields(item, $scope.mandatory_item_fields);
     $scope.widget.settings.items.push(item);
   };
 
   $scope.addCriterion = function(item_index){
     var criterion = {};
-    addDefaultFields(criterion, $scope.mandatory_criterion_fields);
+    VoteWidgetService.addDefaultFields(criterion, $scope.mandatory_criterion_fields);
     $scope.widget.settings.items[item_index].criteria.push(criterion);
   };
 
   $scope.addCriterionField = function(item_index, criterion_index, field_name){
-    console.log("addCriterionField()");
-    console.log("field_name:");
-    console.log(field_name);
+    $scope.widget.settings.items[item_index].criteria[criterion_index][field_name] = VoteWidgetService.getFieldDefaultValue($scope.optional_criterion_fields, field_name);
+  };
 
-    // define what the default value will be
-    var default_value = "something";
-    var optional_field = $scope.optional_criterion_fields.find(function(e){
-      return ( e.key == field_name );
-    });
-    if ( optional_field != undefined ){
-      if ( optional_field.hasOwnProperty("default") )
-        default_value = optional_field.default;
-      else if ( optional_field.hasOwnProperty("type") )
-      {
-        if ( optional_field.type == "integer" )
-          default_value = 0;
-      }
-    }
-
-
-    //criterion[field_name] = ''; // /!\ setting it to an empty string does not create the property!
-    $scope.widget.settings.items[item_index].criteria[criterion_index][field_name] = default_value;
-    console.log("settings:");
-    console.log($scope.widget.settings);
+  $scope.addSettingsField = function(field_name){
+    $scope.widget.settings[field_name] = VoteWidgetService.getFieldDefaultValue($scope.mandatory_settings_fields, field_name);
   };
 
   $scope.deleteCriterionField = function (item_index, criterion_index, field_name){
     console.log("deleteCriterionField()");
     delete $scope.widget.settings.items[item_index].criteria[criterion_index][field_name];
+    console.log("settings:");
+    console.log($scope.widget.settings);
+  };
+
+  $scope.deleteSettingsField = function (field_name){
+    console.log("deleteSettingsField()");
+    delete $scope.widget.settings[field_name];
     console.log("settings:");
     console.log($scope.widget.settings);
   };
@@ -677,8 +545,8 @@ voteApp.controller('votedCtl',
 }]);
 
 voteApp.controller('indexCtl',
-  ['$scope', '$http', '$routeParams', '$log', '$location', 'globalConfig', 'configTestingService', 'configService', 'Discussion', 'AssemblToolsService',
-  function($scope, $http, $routeParams, $log, $location, globalConfig, configTestingService, configService, Discussion, AssemblToolsService){
+  ['$scope', '$http', '$routeParams', '$log', '$location', 'globalConfig', 'configTestingService', 'configService', 'Discussion', 'AssemblToolsService', 'VoteWidgetService',
+  function($scope, $http, $routeParams, $log, $location, globalConfig, configTestingService, configService, Discussion, AssemblToolsService, VoteWidgetService){
 
     // intialization code (constructor)
 
@@ -690,6 +558,8 @@ voteApp.controller('indexCtl',
       $scope.settings = configService.settings;
       console.log("settings:");
       console.log($scope.settings);
+
+      VoteWidgetService.addDefaultFields($scope.settings, VoteWidgetService.mandatory_settings_fields);
 
 
       // check that the user is logged in
