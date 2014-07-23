@@ -4,7 +4,7 @@
   @include box-sizing( border-box );
   @include border-radius(6px);
   margin: 5% auto 0 auto;
-  width: 700px;
+  width: 730px;
   background-color: #ffffff;
   box-shadow:0 0 225px rgba(255,255,255,.55);
 
@@ -82,7 +82,7 @@
     padding: 0 0 0 10px;
     box-sizing: border-box;
     vertical-align: top;
-    width: 50%;
+    width: 325px;
 
     form input.defaultfield, form.inline input {
       width: 100%;
@@ -94,13 +94,13 @@
   }
 
   .socialPart {
-    width: 290px;
+    width: 320px;
     vertical-align: top;
   }
 
   .signinSeparator {
     margin: 50px 0 0 0;
-    width:15px;
+    width: 35px;
     position:relative;
 
     .mask {
