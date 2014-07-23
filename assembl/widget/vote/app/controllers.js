@@ -22,12 +22,14 @@ voteApp.controller('adminConfigureFromIdeaCtl',
   $scope.mandatory_settings_fields = VoteWidgetService.mandatory_settings_fields;
   $scope.optional_settings_fields = VoteWidgetService.optional_settings_fields;
   $scope.mandatory_item_fields = VoteWidgetService.mandatory_item_fields;
+  $scope.optional_item_fields = VoteWidgetService.optional_item_fields;
   $scope.mandatory_criterion_fields = VoteWidgetService.mandatory_criterion_fields;
   $scope.optional_criterion_fields = VoteWidgetService.optional_criterion_fields;
 
 
   $scope.criterion_current_selected_field = null;
   $scope.settings_current_selected_field = null;
+  $scope.item_current_selected_field = null;
 
   $scope.init = function(){
     console.log("adminConfigureFromIdeaCtl::init()");
@@ -80,25 +82,27 @@ voteApp.controller('adminConfigureFromIdeaCtl',
   };
 
   $scope.addCriterionField = function(item_index, criterion_index, field_name){
-    $scope.widget.settings.items[item_index].criteria[criterion_index][field_name] = VoteWidgetService.getFieldDefaultValue($scope.optional_criterion_fields, field_name);
+    $scope.widget.settings.items[item_index].criteria[criterion_index][field_name] = VoteWidgetService.getFieldDefaultValue($scope.optional_criterion_fields, field_name, true);
+  };
+
+  $scope.addItemField = function(item_index, field_name){
+    $scope.widget.settings.items[item_index][field_name] = VoteWidgetService.getFieldDefaultValue($scope.optional_item_fields, field_name, true);
   };
 
   $scope.addSettingsField = function(field_name){
-    $scope.widget.settings[field_name] = VoteWidgetService.getFieldDefaultValue($scope.mandatory_settings_fields, field_name);
+    $scope.widget.settings[field_name] = VoteWidgetService.getFieldDefaultValue($scope.optional_settings_fields, field_name, true);
   };
 
   $scope.deleteCriterionField = function (item_index, criterion_index, field_name){
-    console.log("deleteCriterionField()");
     delete $scope.widget.settings.items[item_index].criteria[criterion_index][field_name];
-    console.log("settings:");
-    console.log($scope.widget.settings);
+  };
+
+  $scope.deleteItemField = function (item_index, field_name){
+    delete $scope.widget.settings.items[item_index][field_name];
   };
 
   $scope.deleteSettingsField = function (field_name){
-    console.log("deleteSettingsField()");
     delete $scope.widget.settings[field_name];
-    console.log("settings:");
-    console.log($scope.widget.settings);
   };
 
   $scope.updateOnceWidgetIsReceived = function(){
@@ -556,10 +560,31 @@ voteApp.controller('indexCtl',
       console.log("configService:");
       console.log(configService);
       $scope.settings = configService.settings;
-      console.log("settings:");
+      console.log("settings 0:");
       console.log($scope.settings);
 
       VoteWidgetService.addDefaultFields($scope.settings, VoteWidgetService.mandatory_settings_fields);
+      VoteWidgetService.addDefaultFields($scope.settings, VoteWidgetService.optional_settings_fields);
+
+      console.log("settings 1:");
+      console.log($scope.settings);
+
+      if ( $scope.settings.items && $scope.settings.items.length )
+      {
+        _.each($scope.settings.items, function(el){
+          VoteWidgetService.addDefaultFields(el, VoteWidgetService.mandatory_item_fields);
+          VoteWidgetService.addDefaultFields(el, VoteWidgetService.optional_item_fields);
+          if ( el.criteria && el.criteria.length ){
+            _.each(el.criteria, function(el2){
+              VoteWidgetService.addDefaultFields(el2, VoteWidgetService.mandatory_criterion_fields);
+              VoteWidgetService.addDefaultFields(el2, VoteWidgetService.optional_criterion_fields);
+            });
+          }
+        });
+      }
+
+      console.log("settings 2:");
+      console.log($scope.settings);
 
 
       // check that the user is logged in

@@ -35,10 +35,9 @@ creativityServices.service('VoteWidgetService', ['$window', '$rootScope', '$log'
     }
   ];
 
-  //this.mandatory_item_fields = [];
+  this.mandatory_item_fields = [];
 
-  this.mandatory_item_fields = [
-  //this.optional_item_fields = [
+  this.optional_item_fields = [
     {
       "key": "width",
       "type": "integer",
@@ -111,25 +110,25 @@ creativityServices.service('VoteWidgetService', ['$window', '$rootScope', '$log'
       "key": "colorMin",
       "type": "text",
       "description": "Color of the minimum value",
-      "default":"#ff0000"
+      "defaultAdmin":"#ff0000"
     },
     {
       "key": "colorMax",
       "type": "text",
       "description": "Color of the maximum value",
-      "default":"#00ff00"
+      "defaultAdmin":"#00ff00"
     },
     {
       "key": "colorAverage",
       "type": "text",
       "description": "Color of the average value",
-      "default":"#ffff00"
+      "defaultAdmin":"#ffff00"
     },
     {
       "key": "colorCursor",
       "type": "text",
       "description": "Color of the draggable cursor",
-      "default":"#000000"
+      "defaultAdmin":"#000000"
     }
   ];
 
@@ -149,14 +148,16 @@ creativityServices.service('VoteWidgetService', ['$window', '$rootScope', '$log'
     return obj;
   };
 
-  this.getFieldDefaultValue = function (default_fields, field_name){
+  this.getFieldDefaultValue = function (default_fields, field_name, for_admin){
     // var default_value = ''; // /!\ setting it to an empty string does not create the property!
     var default_value = "something";
     var optional_field = default_fields.find(function(e){
       return ( e.key == field_name );
     });
     if ( optional_field != undefined ){
-      if ( optional_field.hasOwnProperty("default") )
+      if ( for_admin == true && optional_field.hasOwnProperty("defaultAdmin") )
+        default_value = optional_field.defaultAdmin;
+      else if ( optional_field.hasOwnProperty("default") )
         default_value = optional_field.default;
       else if ( optional_field.hasOwnProperty("type") )
       {

@@ -80,6 +80,23 @@
                     <input type="text" ng-model="item[field.key]" value="{{ field.default }}" />
                 </div>
 
+                <fieldset>
+                    <legend>Optional fields</legend>
+                    <div ng-repeat="field in optional_item_fields">
+                        <div ng-if="item.hasOwnProperty(field.key)">
+                            <span ng-attr-class="{{ field.description && 'with-title' }}" title="{{ field.description }}">{{ field.label || field.key }} ({{ field.type }}):</span>
+                            <input type="text" ng-model="item[field.key]" />
+                            <button ng-click="deleteItemField(item_index, field.key);">Delete this field</button>
+                        </div>
+                    </div>
+
+                    <br/>
+
+                    <span>Add an optional field:</span>
+                    <select ng-model="item_current_selected_field" ng-options="field.key as field.key for field in optional_item_fields"></select>
+                    <button ng-click="addItemField(item_index, item_current_selected_field);">Add</button>
+                </fieldset>
+
                 <br/>
 
                 <span>Criteria associated to this item:</span>
@@ -89,8 +106,10 @@
                         <button ng-click="item.criteria.splice($index,1)">Delete this criterion</button>
                     </div>
                     <div ng-init="criterion_index = $index" class="item-content">
+                        <!--
                         <fieldset>
                             <legend>Mandatory fields</legend>
+                        -->
                             <div ng-repeat="field in mandatory_criterion_fields">
                                 <div ng-switch on="field.type">
                                     <span ng-attr-class="{{ field.description && 'with-title' }}" title="{{ field.description }}">{{ field.label || field.key }} ({{ field.type }}):</span>
@@ -98,7 +117,9 @@
                                     <input ng-switch-default type="text" ng-model="criterion[field.key]" />
                                 </div>
                             </div>
+                        <!--
                         </fieldset>
+                        -->
                         <fieldset>
                             <legend>Optional fields</legend>
                             <div ng-repeat="field in optional_criterion_fields">
