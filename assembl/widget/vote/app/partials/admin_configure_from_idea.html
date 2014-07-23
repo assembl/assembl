@@ -36,9 +36,12 @@
     <div id="step_criteria_groups_and_appearance" ng-show="current_step == 3">
         <h2>Set criteria groups and their appearance</h2>
         <p>
-            Please add groups of criteria, and customize how they will be displayed to the user.
+            Please add items (groups of criteria), and customize how they will be displayed to the user.
         </p>
         
+        <br/>
+
+        <span>General settings:</span>
         <div ng-repeat="field in mandatory_settings_fields">
             <span ng-attr-class="{{ field.description && 'with-title' }}" title="{{ field.description }}">{{ field.label || field.key }} ({{ field.type }}):</span>
             <input type="text" ng-model="widget.settings[field.key]" value="{{ field.default }}" />
@@ -48,9 +51,12 @@
             <legend>Optional fields</legend>
             <div ng-repeat="field in optional_settings_fields">
                 <div ng-if="widget.settings.hasOwnProperty(field.key)">
-                    <span ng-attr-class="{{ field.description && 'with-title' }}" title="{{ field.description }}">{{ field.label || field.key }} ({{ field.type }}):</span>
-                    <input type="text" ng-model="widget.settings[field.key]" />
-                    <button ng-click="deleteSettingsField(field.key);">Delete this field</button>
+                    <div ng-switch on="field.type">
+                        <span ng-attr-class="{{ field.description && 'with-title' }}" title="{{ field.description }}">{{ field.label || field.key }} ({{ field.type }}):</span>
+                        <select ng-switch-when="select" ng-model="widget.settings[field.key]" ng-options="key as value for ( key, value ) in field.options"></select>
+                        <input ng-switch-default type="text" ng-model="widget.settings[field.key]" />
+                        <button ng-click="deleteSettingsField(field.key);">Delete this field</button>
+                    </div>
                 </div>
             </div>
 
@@ -61,6 +67,9 @@
             <button ng-click="addSettingsField(settings_current_selected_field);">Add</button>
         </fieldset>
 
+        <br/>
+
+        <span>Items displayed to the user:</span>
         <div class="item" ng-repeat="item in widget.settings.items">
             <div class="item-title">
                 <strong>Item</strong>

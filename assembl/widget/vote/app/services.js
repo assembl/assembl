@@ -28,10 +28,14 @@ creativityServices.service('VoteWidgetService', ['$window', '$rootScope', '$log'
     },
     {
       "key": "displayStyle",
-      "type": "text",
+      "type": "select",
       "label": "Display style",
       "default": "classic",
-      "description": "How voting items will be displayed ('classic' or 'table')"
+      "description": "How voting items will be displayed ('classic' or 'table')",
+      "options": {
+        "classic": "classic",
+        "table": "table"
+      }
     }
   ];
 
