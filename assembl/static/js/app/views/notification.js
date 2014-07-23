@@ -5,7 +5,9 @@ define(function(require){
 
    var Notification = Marionette.LayoutView.extend({
        template: '#tmpl-notification',
+       initialize: function(){
 
+       },
        events: {
          'click .close': 'close',
          'click .openSession':'openSession'

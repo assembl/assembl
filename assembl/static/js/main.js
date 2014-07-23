@@ -7,10 +7,10 @@ require(["modules/assembl","modules/context","jquery","router","utils/socket"],
     Assembl.start();
 
     // The router
-    assembl.router = new Router();
+    var router = new Router();
 
     // The socket
-    assembl.socket = new Socket();
+    var socket = new Socket();
     Assembl.commands.setHandler('socket:open', function(){
         $('#onlinedot').addClass('is-online').attr('title', 'online');
     });

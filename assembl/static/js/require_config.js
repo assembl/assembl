@@ -43,6 +43,13 @@ var requirejs_config = {
     'underscore': {
         exports: '_'
     },
+    marionette: {
+        deps: ['backbone', 'jquery'],
+        exports: 'Marionette'
+    },
+    babysitter: {
+      deps: ['backbone', 'jquery']
+    },
     'jquery': {
         exports: 'jQuery'
     },
@@ -108,6 +115,10 @@ var requirejs_config = {
     'backboneModal': {
         deps:['backbone'],
         exports: 'BackboneModal'
+    },
+    'modal': {
+        deps:['backbone'],
+        exports: 'Modal'
     }
   }
 };

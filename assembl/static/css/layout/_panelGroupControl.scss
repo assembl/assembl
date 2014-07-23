@@ -1,21 +1,97 @@
 #panelGroupControl {
-  .row-fluid {
-    margin: 1em 0;
-    width: auto;
+  position: absolute;
+  top: 6.8em;
+  right: 5px;
+  bottom: 4px;
+  left: 5px;
+  min-height: 400px;
+  display: block;
+  overflow-x: auto;
+  overflow-y: hidden;
 
-    &[class*="span"]:first-child {
-      margin-left: 0;
+  #panelGroupContainer {
+    button {
+      border: none;
+      background-color: #FFFFFF;
+      color: #AAAAAA;
+      border-radius: 2px;
+      padding: 6px;
+      cursor: pointer;
+      outline: none;
     }
 
-    &[class*="span"] {
-      display: block;
-      float: left;
-      min-height: 28px;
+    .groupItem {
+      display:table-cell;
+      min-height: 400px;
+      height: 100%;
+      background-color: #ffffff;
+      border-left: 3px solid #E3E1E6;
+      border-right: 3px solid #E3E1E6;
+      .header-close{
+        box-sizing: border-box;
+        height: 25px;
+        padding-right: 1px;
+        .close-panel{
+          text-decoration: none;
+          outline: none;
+          float: right;
+          line-height: 25px;
+          font-size: 20px;
+        }
+      }
+      .panelItem {
+        display:table-cell;
+        > div {
+          border-radius: 3px;
+          background-color: #efefef;
+        }
+      }
+
+      .panel.ideaList{
+         min-width: 450px;
+      }
+      .panel.ideaPanel{
+        min-width: 320px;
+      }
+      .panel.messagePanel{
+        min-width: 520px;
+      }
+    }
+  }
+}
+
+.group-modal {
+  .bbm-modal {
+    max-width: 400px;
+    .bbm-modal__section {
+      height: auto;
+      padding: 0 25px;
+       .itemGroup {
+         list-style-type: none;
+         height: 120px;
+         width: 120px;
+         border: 1px solid #CCCCCC;
+         margin: 25px;
+         display: inline-block;
+         text-align: center;
+         padding-top: 10px;
+         a{
+           cursor: pointer;
+           color:#484848;
+         }
+         i{
+           font-size: 4em;
+         }
+       }
+    }
+    .bbm-modal__topbar {
       box-sizing: border-box;
+      padding: 0 10px 0 10px;
+      border-bottom: none;
     }
-
-    .span2 {
-      width: 14.89361702%;
+    .bbm-modal__title{
+      font-size: 13px;
+      margin: 0;
     }
   }
 }

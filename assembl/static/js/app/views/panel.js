@@ -32,25 +32,25 @@ define(function(require){
          */
         initialize: function(){
             var that = this;
-            this.lockButton = this.button.find('.lock-button');
+
+            //FIXME: need to move in groupItem
+            //this.lockButton = this.button.find('.lock-button');
+
             // TODO ghourlier: listenTo breaks the lock. Try to see why?
             // There's an error without the following line at least:
             // _.extend(this.lockButton, Backbone.Events);
             // but it still does not work.
             //this.listenTo(this.lockButton, 'click', function(event){
-            this.lockButton.on('click', function(event){
+            /*this.lockButton.on('click', function(event){
                     that.onLockButtonClick(event);
-            });
+            });*/
         },
         /**
          * The events
          * @type {Object}
          */
         events: function() {
-            var data = {
-                    
-            }
-            return data;
+
         },
         
         /**
@@ -96,7 +96,8 @@ define(function(require){
         lockPanel: function(){
            if(!this.panelIsLocked){
                this.panelIsLocked = true;
-               this.renderPanelButton();
+               //FIXME: move to groupItem
+               //this.renderPanelButton();
            }
         },
 
@@ -106,7 +107,8 @@ define(function(require){
         unlockPanel: function(){
            if(this.panelIsLocked){
                this.panelIsLocked = false;
-               this.renderPanelButton();
+               //FIXME: move to groupItem
+               //this.renderPanelButton();
                if(_.size(this.unlockCallbackQueue) > 0) {
                    //console.log("Executing queued callbacks in queue: ",this.unlockCallbackQueue);
                    _.each(this.unlockCallbackQueue, function(callback){
@@ -135,7 +137,7 @@ define(function(require){
          * Render the button
          */
         renderPanelButton: function(){
-            var anchor = this.button.find('.lock-anchor');
+            /*var anchor = this.button.find('.lock-anchor');
             if(this.panelIsLocked){
                 anchor.addClass('icon-lock');
                 anchor.removeClass('icon-lock-open');
@@ -143,7 +145,7 @@ define(function(require){
             else {
                 anchor.addClass('icon-lock-open');
                 anchor.removeClass('icon-lock');
-            }
+            }*/
         },
         
         /**

@@ -44,6 +44,22 @@ define(function(require){
         },
 
         /**
+         * The events
+         * @type {Object}
+         */
+        events: {
+            'change [type="checkbox"]': 'onCheckboxChange',
+            'click .idealist-title': 'onTitleClick',
+            'click .idealist-title-unread-count': 'onUnreadCountClick',
+            'click .idealist-arrow': 'toggle',
+            'dragstart .idealist-body': 'onDragStart',
+            'dragend .idealist-body': 'onDragEnd',
+            'dragover .idealist-body': 'onDragOver',
+            'dragleave .idealist-body': 'onDragLeave',
+            'drop .idealist-body': 'onDrop'
+        },
+
+        /**
          * The render
          * @return {IdeaView}
          */
@@ -99,22 +115,6 @@ define(function(require){
         close: function(){
             this.model.set('isOpen', false);
             this.$el.removeClass('is-open');
-        },
-
-        /**
-         * The events
-         * @type {Object}
-         */
-        events: {
-            'change [type="checkbox"]': 'onCheckboxChange',
-            'click .idealist-title': 'onTitleClick',
-            'click .idealist-title-unread-count': 'onUnreadCountClick',
-            'click .idealist-arrow': 'toggle',
-            'dragstart .idealist-body': 'onDragStart',
-            'dragend .idealist-body': 'onDragEnd',
-            'dragover .idealist-body': 'onDragOver',
-            'dragleave .idealist-body': 'onDragLeave',
-            'drop .idealist-body': 'onDrop'
         },
 
         /**

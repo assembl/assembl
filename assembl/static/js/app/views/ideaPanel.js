@@ -27,14 +27,8 @@ define(function(require){
         /**
          * @init
          */
-        initialize: function(obj){
-            obj = obj || {};
-
+        initialize: function(options){
             var that = this;
-
-            if( obj.button ){
-                this.button = $(obj.button).on('click', Ctx.togglePanel.bind(window, 'ideaPanel'));
-            }
 
             if( this.model ){
                 this.listenTo(this.model, 'change', this.render);
@@ -48,12 +42,7 @@ define(function(require){
 
             });
 
-            // Benoitg - 2014-05-05:  There is no need for this, if an idealink
-            // is associated with the idea, the idea will recieve a change event
-            // on the socket
-            //app.segmentList.segments.on('change reset', this.render, this);
             this.listenTo(assembl.users, 'reset', this.render);
-
         },
         /**
          * This is not inside the template beacuse babel wouldn't extract it in 
@@ -95,7 +84,7 @@ define(function(require){
             canEditNextSynthesis = currentUser.can(Permissions.EDIT_SYNTHESIS);
 
             Ctx.cleanTooltips(this.$el);
-            
+
             if(this.model) {
                 segments = this.model.getSegments();
                 subIdeas = this.model.getChildren();
@@ -128,8 +117,6 @@ define(function(require){
                 'canEdit': canEdit
             });
             shortTitleField.renderTo(this.$('#ideaPanel-shorttitle'));
-
-
 
             this.longTitleField = new CKEditorField({
                 'model': this.model,
@@ -221,9 +208,9 @@ define(function(require){
         setIdeaModel: function(idea){
             var that = this,
             ideaChangeCallback = function() {
-                //console.log("setCurrentIdea:ideaChangeCallback fired");
                 that.render();
-            };
+            }
+
             if( idea !== this.model ){
                 if( this.model !== null ) {
                     this.stopListening(this.model, 'change', ideaChangeCallback);

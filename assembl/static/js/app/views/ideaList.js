@@ -10,8 +10,6 @@ define(function(require){
                         Backbone = require('backbone'),
                          Assembl = require('modules/assembl'),
                              Ctx = require('modules/context'),
-                            Idea = require('models/idea'),
-                        IdeaLink = require('models/ideaLink'),
                         IdeaView = require('views/idea'),
                  ideaGraphLoader = require('views/ideaGraph'),
                                _ = require('underscore');
@@ -54,22 +52,11 @@ define(function(require){
         /**
          * @init
          */
-        initialize: function(obj){
+        initialize: function(options){
             var that = this;
-            this.ideas = new Idea.Collection();
-            this.ideaLinks = new IdeaLink.Collection();
 
-            /*this.listenTo(this, "all", function(eventName) {
-                console.log("ideaList event received: ", eventName);
-            });
-            this.listenTo(this.ideas, "all", function(eventName) {
-                console.log("ideaList collection event received: ", eventName);
-            });*/
-
-            if( obj && obj.button ){
-                this.button = $(obj.button);
-                this.button.on('click', Ctx.togglePanel.bind(window, 'ideaList'));
-            }
+            this.ideas = options.ideas;
+            this.ideaLinks = options.ideaLinks;
 
             var events = ['reset', 'change:parentId', 'change:@id', 'change:inNextSynthesis', 'remove', 'add'];
 
@@ -89,12 +76,7 @@ define(function(require){
                 that.ideas.add(ideas, {merge: true, silent: true});
                 that.render();
             });
-            
-            // Benoitg - 2014-05-05:  There is no need for this, if an idealink
-            // is associated with the idea, the idea itself will receive a change event
-            // on the socket
-            assembl.segmentList.segments.on('add change reset', this.render, this);
-            
+
             Assembl.commands.setHandler("panel:open", function(){
                 that.resizeGraphView();
             })

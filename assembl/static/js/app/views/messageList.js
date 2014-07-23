@@ -76,10 +76,9 @@ define(function(require){
         /**
          *  @init
          */
-        initialize: function(obj){
-            if( obj.button ){
-                this.button = $(obj.button).on('click', Ctx.togglePanel.bind(window, 'messageList'));
-            }
+        initialize: function(options){
+
+            this.segmentList = options.segmentList;
 
             PanelView.prototype.initialize.apply(this);
             this.renderedMessageViewsCurrent = {};
@@ -98,10 +97,9 @@ define(function(require){
                 that.messagesFinishedLoading = true;
                 that.invalidateResultsAndRender();
                 that.initAnnotator();
-
             });
 
-            this.listenTo(assembl.segmentList.segments, 'add remove reset', this.initAnnotator);
+            this.listenTo(this.segmentList.segments, 'add remove reset', this.initAnnotator);
             
             var that = this;
             Assembl.vent.on('idea:selected', function(idea){
@@ -130,7 +128,7 @@ define(function(require){
         syncWithCurrentIdea: function(){
             var currentIdea = Ctx.getCurrentIdea();
             //console.log("messageList:syncWithCurrentIdea(): New idea is now: ",currentIdea);
-            Ctx.openPanel(assembl.messageList);
+            //Ctx.openPanel(assembl.messageList);
             if(currentIdea && this.currentQuery.isFilterInQuery(this.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, currentIdea.getId())) {
                 //Filter is already in sync
                 //TODO:  Detect the case where there is no idea selected, and we already have no filter on ideas
@@ -593,7 +591,7 @@ define(function(require){
             */
             Ctx.cleanTooltips(this.$el);
             previousScrollTarget = this.getPreviousScrollTarget();
-            
+
             this.$el.html( this.template(data) );
 
             Ctx.initTooltips(this.$el);
@@ -747,7 +745,7 @@ define(function(require){
 
                 view = new MessageFamilyView({
                     model : model,
-                    messageListView : this
+                    messageListView: this
                 });
                 view.hasChildren = false;
                 list.push(view.render().el);
@@ -852,7 +850,6 @@ define(function(require){
             //console.log("initAnnotator called");
             // Saving the annotator reference
             this.annotator = this.$('#messageList-list').annotator().data('annotator');
-
             var that = this;
 
             // TODO: Re-render message in messagelist if an annotation was added...

@@ -130,10 +130,11 @@ header {
   text-align: center;
   .close {
     position: absolute;
-    right: 3px;
-    top: 3px;
+    right: 10px;
+    top: 10px;
     color: #FFFFFF;
     cursor: pointer;
+    font-size: 20px;
   }
   .openSession {
     border: none;

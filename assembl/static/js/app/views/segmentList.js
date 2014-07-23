@@ -18,10 +18,6 @@ define(function(require){
         initialize: function(obj){
             var that = this;
 
-            if( obj && obj.button ){
-                this.button = $(obj.button).on('click', Ctx.togglePanel.bind(window, 'segmentList'));
-            }
-
             this.listenTo(this.segments, 'invalid', function(model, error){
                 alert(error);
             });

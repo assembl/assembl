@@ -2,7 +2,9 @@ define(function(require){
 
     var Marionette = require('marionette'),
            Assembl = require('modules/assembl'),
-               Ctx = require('modules/context');
+               Ctx = require('modules/context'),
+             Group = require('modules/group'),
+                 $ = require('jquery');
 
     var SegmentList = require('views/segmentList'),
            IdeaList = require('views/ideaList'),
@@ -12,11 +14,13 @@ define(function(require){
      SynthesisPanel = require('views/synthesisPanel'),
                User = require('models/user'),
              navBar = require('views/navBar'),
-       Notification = require('views/notification');
+       Notification = require('views/notification'),
+         panelGroup =  require('views/panelGroupContainer');
 
     var Controller = Marionette.Controller.extend({
 
         initialize: function(){
+
             var $w = window.assembl = {};
 
             // User
@@ -61,8 +65,6 @@ define(function(require){
                 console.log('setLocale', locale);
 
             })*/
-
-
         },
 
         /**
@@ -74,84 +76,23 @@ define(function(require){
             Assembl.headerRegions.show(new navBar());
 
             if(!window.localStorage.getItem('showNotification')){
-                Assembl.notificationRegion.show(new Notification());
+               Assembl.notificationRegion.show(new Notification());
             }
 
-            /**
-             * PanelGroupItem Creation
-             * */
+            var groupLayout = new panelGroup();
 
-            var Item = Backbone.Model.extend();
-            var Items = Backbone.Collection.extend({
-                model: Item
-            });
+            Assembl.panelGroupControl.show(groupLayout);
 
-            var GridItem = Marionette.ItemView.extend({
-                template: "#tmpl-item-template",
-                tagName: 'div',
-                className: 'span2',
-                initialize: function() {
+            var resolveGroup = new Group();
 
-                    console.log('GridItem', this.model)
-
-                }
-            });
-
-            var GridRow = Marionette.CompositeView.extend({
-                template: "#tmpl-row-template",
-                childView: GridItem,
-                childViewContainer: "div.row-fluid",
-                initialize: function() {
-                    this.collection = new Backbone.Collection(_.toArray(this.model.attributes));
-
-                    console.log('GridRow', this.collection)
-                },
-                onRender: function(){
-                    // Unwrap the element to prevent infinitely
-                    this.$el = this.$el.children();
-                    this.$el.unwrap();
-                    this.setElement(this.$el);
-                }
-            });
-
-            var Grid = Marionette.CompositeView.extend({
-                template: "#tmpl-grid-template",
-                childView: GridRow,
-                childViewContainer: "section",
-                initialize: function() {
-                    var grid = this.collection.groupBy(function(list, iterator) {
-                        return Math.floor(iterator / 4); // 4 == number of columns
-                    });
-
-                    this.collection = new Backbone.Collection(_.toArray(grid));
-                },
-
-                onRender: function(){
-
-
-                }
-            });
-
-            var Data = [
-                {type: 'ideaList'},
-                {type: 'ideaPanel'},
-                {type: 'message'},
-                {type: 'clipboard'}
-            ];
-
-            var items = new Items(Data);
-
-            var grid = new Grid({
-                collection: items
-            });
-
-            Assembl.panelGroupControl.show(grid);
+            var panel_height = $('#panelGroupControl').height();
+            //$('.panel-body').css('height', panel_height+"px");
 
             /**
              * end code
              * */
 
-           /* var panels = Ctx.getPanelsFromStorage();
+            /*var panels = Ctx.getPanelsFromStorage();
             _.each(panels, function(value, name){
                 var panel = assembl[name];
                 if( panel && name !== 'ideaPanel' ){
@@ -164,8 +105,8 @@ define(function(require){
                  * blank screen
 
                 Ctx.openPanel(assembl.ideaList);
-                Ctx.openPanel(assembl.messageList);
-            } */
+                //Ctx.openPanel(assembl.messageList);
+            }*/
         },
 
         idea: function(id){

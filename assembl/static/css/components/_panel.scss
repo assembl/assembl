@@ -3,14 +3,11 @@
 // The panel
 // =========
 .panel {
-  @include border-radius( 3px );
   @include box-sizing( border-box );
     position: relative;
     z-index: 10;
-    height: 100%;
     background-color: #fff;
     overflow: hidden;
-    border:1px solid #CCCCCC;
     fieldset {
         margin: 10px 0;
         //padding-top: 1.4em; //height of the legend + 0.5em
@@ -118,14 +115,14 @@
 // -----------
 .panel-body {
     //The scrollbars do not work with position relative
-    position: absolute;
-    top: $panel-header-height;
-    right: 0;
-    bottom: 0;
-    left: 0;
+    //position: absolute;
+    //top: $panel-header-height;
+    //right: 0;
+    //bottom: 0;
+    //left: 0;
     overflow-y: auto;
     overflow-x: hidden;
-    box-sizing: border-box;
+    //box-sizing: border-box;
 
     .panel.is-dragover & {
         background-color: $dragbox-background-color;
@@ -133,7 +130,7 @@
 }
 
 .panel-body--has-footer {
-  bottom: $panel-header-height;
+  //bottom: $panel-header-height;
 }
 
 // dropzone above the panel-body
@@ -168,10 +165,10 @@
 // ----------
 .panel-footer {
     @extend .panel-header;
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    left: 0;
+    //position: absolute;
+    //right: 0;
+    //bottom: 0;
+    //left: 0;
     border-top: 1px solid #e4e4e3;
     padding-right: $padding-right;
     @include border-radius( 0 0 5px 5px );

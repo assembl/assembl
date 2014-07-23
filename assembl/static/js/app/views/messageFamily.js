@@ -31,15 +31,17 @@ SynthesisMessageView = require('views/synthesisMessage'),
          * @param {Array[boolean]} last_sibling_chain which of the view's ancestors
          *   are the last child of their respective parents.
          */
-        initialize: function(obj, last_sibling_chain){
+        initialize: function(options, last_sibling_chain){
             if ( _.isUndefined(last_sibling_chain)) {
                 last_sibling_chain = [];
             }
             this.last_sibling_chain = last_sibling_chain;
-            this.messageListView = obj.messageListView;
-            this.collapsed = obj.collapsed;
+            this.messageListView = options.messageListView;
+            this.collapsed = options.collapsed;
             //this.model.on('change:collapsed', this.onCollapsedChange, this);
             //this.listenTo(this.model, 'change:collapsed', this.onCollapsedChange);
+
+            this.segmentList = options.segmentList;
         },
 
         /**
@@ -89,10 +91,10 @@ SynthesisMessageView = require('views/synthesisMessage'),
             }
             
             messageView = new messageViewClass({
-
-            model : this.model,
-            messageListView: this.messageListView
+                model : this.model,
+                messageListView: this.messageListView
             });
+
             messageView.render();
             this.messageListView.renderedMessageViewsCurrent[this.model.id] = messageView;
             
