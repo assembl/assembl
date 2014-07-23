@@ -28,7 +28,7 @@
     <div class="content">
 
         <div class="socialPart">
-            <p class="login-box-title">{{ gettext("Log in using one of these social networks") }}</p>
+            <p class="login-box-title">{{ gettext("Log in through one of these social networks") }}</p>
             {% if providers %}
             <p>{{ gettext("Login with external tools")|safe }}</p>
             {% endif %}
@@ -58,16 +58,16 @@
 
                 <table class="submitButtons">
                 <tr><td>
-                    <input type="submit" name="login" value="{{ gettext('Enter') }}" class="btn-purple" />
+                    <input type="submit" name="login" value="{{ gettext('Log in') }}" class="btn-purple" />
                 </td><td class="centered">
-                    <a href="/req_password_change">{{ gettext('I forgot my password') }}</a>
+                    <a href="/req_password_change">{{ gettext('Forgot your password?') }}</a>
                 </td></tr></table>
             </form>
                 
             <div class="spacer spacer--big"></div>
 
             <p class="login-box-title">{{ gettext("No account yet?") }}</p>
-            <form class="form inline" method="GET" action="/register"><input type="submit" value="{{ gettext('register') }}" class="btn-purple-border-only" /></form>
+            <form class="form inline" method="GET" action="/register"><input type="submit" value="{{ gettext('Sign up') }}" class="btn-purple-border-only" /></form>
         </div>
         
     </div>

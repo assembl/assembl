@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: assembl 0.0\n"
 "Report-Msgid-Bugs-To: maparent@acm.org\n"
-"POT-Creation-Date: 2014-07-22 14:30-0400\n"
+"POT-Creation-Date: 2014-07-23 12:03-0400\n"
 "PO-Revision-Date: 2014-07-18 12:29-0500\n"
 "Last-Translator: Benoit Grégoire <benoitg@coeus.ca>\n"
 "Language-Team: fr <LL@li.org>\n"
@@ -501,13 +501,13 @@ msgid "Change global permissions"
 msgstr "Changer les permissions globales"
 
 #: assembl/templates/do_password_change.jinja2:17
-#: assembl/templates/login.jinja2:56 assembl/templates/register.jinja2:17
+#: assembl/templates/login.jinja2:56 assembl/templates/register.jinja2:18
 msgid "Password"
 msgstr "Mot de passe"
 
 #: assembl/templates/do_password_change.jinja2:18
 #: assembl/templates/profile.jinja2:77 assembl/templates/profile.jinja2:80
-#: assembl/templates/register.jinja2:18
+#: assembl/templates/register.jinja2:19
 msgid "Repeat password"
 msgstr "Répéter le mot de passe"
 
@@ -553,7 +553,7 @@ msgid "Log in to Assembl"
 msgstr "Se connecter sur Assembl"
 
 #: assembl/templates/login.jinja2:31
-msgid "Log in using one of these social networks"
+msgid "Log in through one of these social networks"
 msgstr "Connectez-vous à l'aide d'un de ces réseaux sociaux"
 
 #: assembl/templates/login.jinja2:33
@@ -602,12 +602,11 @@ msgid "Email or username"
 msgstr "Courriel ou nom d'utilisateur"
 
 #: assembl/templates/login.jinja2:61
-msgid "Enter"
+msgid "Log in"
 msgstr "Se connecter"
 
-#: assembl/templates/login.jinja2:63 assembl/views/auth/views.py:627
-#: assembl/views/auth/views.py:633
-msgid "I forgot my password"
+#: assembl/templates/login.jinja2:63
+msgid "Forgot your password?"
 msgstr "Mot de passe oublié ?"
 
 #: assembl/templates/login.jinja2:69
@@ -615,7 +614,7 @@ msgid "No account yet?"
 msgstr "Vous n'avez pas encore de compte ?"
 
 #: assembl/templates/login.jinja2:70
-msgid "register"
+msgid "Sign up"
 msgstr "Créer un compte"
 
 #: assembl/templates/profile.jinja2:7 assembl/templates/view_profile.jinja2:7
@@ -630,7 +629,7 @@ msgstr "Nom d'utilisateur"
 msgid "Desired username"
 msgstr "Nom d'utilisateur souhaité"
 
-#: assembl/templates/profile.jinja2:58 assembl/templates/register.jinja2:15
+#: assembl/templates/profile.jinja2:58 assembl/templates/register.jinja2:16
 #: assembl/templates/view_profile.jinja2:29
 msgid "Name"
 msgstr "Nom"
@@ -667,7 +666,7 @@ msgstr "Envoyer un message de confirmation"
 msgid "Add an email account"
 msgstr "Ajouter une adresse de courriel"
 
-#: assembl/templates/profile.jinja2:114 assembl/templates/register.jinja2:16
+#: assembl/templates/profile.jinja2:114 assembl/templates/register.jinja2:17
 msgid "Email"
 msgstr "Courriel"
 
@@ -693,16 +692,20 @@ msgstr "Connecter d'autres comptes à Assembl"
 msgid "Join assembl"
 msgstr "Rejoignez Assembl"
 
-#: assembl/templates/register.jinja2:19
+#: assembl/templates/register.jinja2:20
 msgid "Create my account"
 msgstr "Créer mon compte"
 
-#: assembl/templates/register.jinja2:20
-msgid "or"
-msgstr "ou"
+#: assembl/templates/register.jinja2:24
+#, fuzzy
+#| msgid "Already have an account?"
+msgid "Do you already have an account?"
+msgstr "Vous avez déjà un compte ?"
 
-#: assembl/templates/register.jinja2:20
-msgid "login"
+#: assembl/templates/register.jinja2:24
+#, fuzzy
+#| msgid "login"
+msgid "Log in!"
 msgstr "connexion"
 
 #: assembl/templates/admin/discussion_permissions.jinja2:4
@@ -1131,7 +1134,7 @@ msgstr "Votre message est vide"
 msgid "The username %s is already used"
 msgstr "Le nom d'utilisateur %s est déjà pris"
 
-#: assembl/views/auth/views.py:163 assembl/views/auth/views.py:703
+#: assembl/views/auth/views.py:163 assembl/views/auth/views.py:707
 msgid "The passwords are not identical"
 msgstr "Les mots de passe ne correspondent pas"
 
@@ -1143,7 +1146,7 @@ msgstr "Nous avons déjà un utilisateur ayant ce courriel."
 msgid "The passwords should be identical"
 msgstr "Les mots de passe doivent correspondre"
 
-#: assembl/views/auth/views.py:308 assembl/views/auth/views.py:632
+#: assembl/views/auth/views.py:308 assembl/views/auth/views.py:634
 msgid "This user cannot be found"
 msgstr "Cet utilisateur n'a pas été trouvé"
 
@@ -1175,11 +1178,19 @@ msgstr "Échec de connexion, veuillez réessayer."
 msgid "We do not know about this email."
 msgstr "Nous ne connaissons pas ce courriel."
 
-#: assembl/views/auth/views.py:655
+#: assembl/views/auth/views.py:627 assembl/views/auth/views.py:635
+msgid "Find your account"
+msgstr "Retrouvez votre compte"
+
+#: assembl/views/auth/views.py:628 assembl/views/auth/views.py:636
+msgid "Enter your email address or your username below"
+msgstr "Entrez votre adresse email ou votre nom d'utilisateur ci-dessous"
+
+#: assembl/views/auth/views.py:659
 msgid "Password change requested"
 msgstr "Changement de mot de passe requis"
 
-#: assembl/views/auth/views.py:656
+#: assembl/views/auth/views.py:660
 msgid ""
 "We have sent you an email with a temporary connection link. Please use "
 "that link to log in and change your password."
@@ -1188,17 +1199,17 @@ msgstr ""
 " Veuillez utiliser ce lien pour vous connecter et changer votre mot de "
 "passe."
 
-#: assembl/views/auth/views.py:673
+#: assembl/views/auth/views.py:677
 msgid "Wrong password token."
 msgstr "Jeton invalide"
 
-#: assembl/views/auth/views.py:678
+#: assembl/views/auth/views.py:682
 msgid "This token is expired. Do you want us to send another?"
 msgstr ""
 "Ce jeton n'est plus valide. Voulez-vous que nous vous en renvoyons un "
 "autre?"
 
-#: assembl/views/auth/views.py:708
+#: assembl/views/auth/views.py:712
 msgid "Password changed"
 msgstr "Mot de passe modifié"
 
@@ -1347,4 +1358,7 @@ msgstr "Nous n'avons pas de discussion sous le code=%s"
 
 #~ msgid "Register"
 #~ msgstr "S'enregistrer"
+
+#~ msgid "or"
+#~ msgstr "ou"
 
