@@ -345,6 +345,7 @@ define(function(require){
          * when the data actually changed.  Will be called before success
          */
         this.execute = function(success, success_data_changed){
+            //console.log("messageListPostQuery:execute() called");
             var that = this,
                 url = Ctx.getApiUrl('posts'),
                 params = {},
@@ -395,7 +396,25 @@ define(function(require){
             }
             
         };
-        
+        this.getResultMessageIdCollectionPromise = function() {
+            var that = this,
+                deferred = $.Deferred();
+
+            if (this._resultsAreValid) {
+                deferred.resolve(this._results);
+            }
+            else {
+                this.execute(function(collection) {
+                        //console.log('resolving getResultMessageIdCollectionPromise()');
+                        deferred.resolve(collection);
+                    });
+                };
+
+            // Returning a Promise so that only this function can modify
+            // the Deferred object
+            return deferred.promise();
+        };
+
         this.getResultNumUnread = function(){
             return this._queryResultInfo.unread;
         };

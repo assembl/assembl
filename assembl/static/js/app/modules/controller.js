@@ -9,14 +9,15 @@ define(function(require){
         MessageList = require('views/messageList'),
           Synthesis = require('models/synthesis'),
      SynthesisPanel = require('views/synthesisPanel'),
-               User = require('models/user');
+               User = require('models/user'),
+  CollectionManager = require('modules/collectionManager');
 
 
     var Controller = Marionette.Controller.extend({
 
         initialize: function(){
-            var $w = window.assembl = {};
-
+            var $w = window.assembl = {},
+            collectionManager = new CollectionManager();
             // User
             $w.users = new User.Collection();
             $w.users.on('reset', Ctx.loadCurrentUser());
@@ -24,7 +25,7 @@ define(function(require){
 
             // The order of these initialisations matter...
             // Segment List
-            $w.segmentList = new SegmentList({el: '#segmentList', button: '#button-segmentList'});
+           /* $w.segmentList = new SegmentList({el: '#segmentList', button: '#button-segmentList'});
             $w.segmentList.segments.fetchFromScriptTag('extracts-json');
 
             // Idea list
@@ -32,13 +33,13 @@ define(function(require){
 
             // Idea panel
             $w.ideaPanel = new IdeaPanel({el: '#ideaPanel', button: '#button-ideaPanel'}).render();
-
+*/
             // Message
             $w.messageList = new MessageList({el: '#messageList', button: '#button-messages'}).render();
-            $w.messageList.messages.fetch({reset:true});
+            //$w.messageList.messages.fetch({reset:true});
 
             // Synthesis
-            $w.syntheses = new Synthesis.Collection();
+            /*$w.syntheses = new Synthesis.Collection();
             var nextSynthesisModel = new Synthesis.Model({'@id': 'next_synthesis'});
             nextSynthesisModel.fetch();
 
@@ -50,7 +51,7 @@ define(function(require){
             });
 
             $w.ideaList.ideas.fetchFromScriptTag('ideas-json');
-
+*/
             //init notification bar
             //$w.notification = new Notification();
         },
