@@ -114,21 +114,7 @@ voteApp.controller('adminConfigureInstanceSetCriteriaCtl',
   $scope.associateCriteria = function(criteria, result_holder){
     var post_data = criteria; // maybe we should send only an array of @id fields instead of the whole ideas
     var endpoint = $scope.criteria_endpoint;
-
-    $http({
-        method: 'PUT',
-        url: endpoint,
-        data: post_data,
-        //data: $.param(post_data),
-        headers: {'Content-Type': 'application/json'}
-        //headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-    }).success(function(data, status, headers){
-        console.log("success");
-        result_holder.text("Success!");
-    }).error(function(status, headers){
-        console.log("error");
-        result_holder.text("Error");
-    });
+    VoteWidgetService.putJson(endpoint, post_data, result_holder);
   };
 }]);
 
@@ -243,32 +229,7 @@ voteApp.controller('adminConfigureInstanceSetSettingsCtl',
     var endpoint = $scope.widget_endpoint + "/settings";
     var post_data = $scope.widget.settings;
     var result_holder = $("#step_criteria_groups_and_appearance_result");
-    $scope.putJson(endpoint, post_data, result_holder);
-  };
-
-  $scope.putJson = function(endpoint, post_data, result_holder){
-    console.log("putJson()");
-
-    $http({
-        method: 'PUT',
-        url: endpoint,
-        data: post_data,
-        //data: $.param(post_data),
-        headers: {'Content-Type': 'application/json'}
-        //headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-    }).success(function(data, status, headers){
-        console.log("success");
-        result_holder.text("Success!");
-        console.log("data:");
-        console.log(data);
-        console.log("status:");
-        console.log(status);
-        console.log("headers:");
-        console.log(headers);
-    }).error(function(status, headers){
-        console.log("error");
-        result_holder.text("Error");
-    });
+    VoteWidgetService.putJson(endpoint, post_data, result_holder);
   };
 
 }]);
@@ -370,8 +331,8 @@ voteApp.controller('adminCreateFromIdeaCtl',
 }]);
 
 voteApp.controller('adminCtl',
-  ['$scope', '$http', '$routeParams', '$log', '$location', 'globalConfig', 'configTestingService', 'configService', 'Discussion', 'AssemblToolsService',
-  function($scope, $http, $routeParams, $log, $location, globalConfig, configTestingService, configService, Discussion, AssemblToolsService){
+  ['$scope', '$http', '$routeParams', '$log', '$location', 'globalConfig', 'configTestingService', 'configService', 'Discussion', 'AssemblToolsService', 'VoteWidgetService',
+  function($scope, $http, $routeParams, $log, $location, globalConfig, configTestingService, configService, Discussion, AssemblToolsService, VoteWidgetService){
 
   $scope.init = function(){
     console.log("adminCtl::init()");
@@ -544,27 +505,7 @@ voteApp.controller('adminCtl',
     console.log("setWidgetSettings()");
 
     var post_data = settings;
-
-    $http({
-        method: 'PUT',
-        url: endpoint,
-        data: post_data,
-        //data: $.param(post_data),
-        headers: {'Content-Type': 'application/json'}
-        //headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-    }).success(function(data, status, headers){
-        console.log("success");
-        result_holder.text("Success!");
-        console.log("data:");
-        console.log(data);
-        console.log("status:");
-        console.log(status);
-        console.log("headers:");
-        console.log(headers);
-    }).error(function(status, headers){
-        console.log("error");
-        result_holder.text("Error");
-    });
+    VoteWidgetService.putJson(endpoint, post_data, result_holder);
   };
 
   $scope.addCriterion = function(endpoint, criterion_id, result_holder){
@@ -606,21 +547,7 @@ voteApp.controller('adminCtl',
 
   $scope.setCriteria = function(endpoint, criteria, result_holder){
     var post_data = criteria;
-
-    $http({
-        method: 'PUT',
-        url: endpoint,
-        data: post_data,
-        //data: $.param(post_data),
-        headers: {'Content-Type': 'application/json'}
-        //headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-    }).success(function(data, status, headers){
-        console.log("success");
-        result_holder.text("Success!");
-    }).error(function(status, headers){
-        console.log("error");
-        result_holder.text("Error");
-    });
+    VoteWidgetService.putJson(endpoint, post_data, result_holder);
   };
 
   $scope.deleteWidget = function(endpoint, result_holder){

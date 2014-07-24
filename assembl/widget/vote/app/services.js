@@ -14,7 +14,7 @@ creativityServices.service('AssemblToolsService', ['$window', '$rootScope', '$lo
   };
 }]);
 
-creativityServices.service('VoteWidgetService', ['$window', '$rootScope', '$log', function ($window, $rootScope, $log) {
+creativityServices.service('VoteWidgetService', ['$window', '$rootScope', '$log', '$http', function ($window, $rootScope, $log, $http) {
 
   this.mandatory_settings_fields = [];
 
@@ -170,6 +170,33 @@ creativityServices.service('VoteWidgetService', ['$window', '$rootScope', '$log'
       }
     }
     return default_value;
+  };
+
+  this.putJson = function(endpoint, post_data, result_holder){
+    console.log("putJson()");
+
+    $http({
+        method: 'PUT',
+        url: endpoint,
+        data: post_data,
+        //data: $.param(post_data),
+        headers: {'Content-Type': 'application/json'}
+        //headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+    }).success(function(data, status, headers){
+        console.log("success");
+        if ( result_holder )
+          result_holder.text("Success!");
+        console.log("data:");
+        console.log(data);
+        console.log("status:");
+        console.log(status);
+        console.log("headers:");
+        console.log(headers);
+    }).error(function(status, headers){
+        console.log("error");
+        if ( result_holder )
+          result_holder.text("Error");
+    });
   };
 
 }]);
