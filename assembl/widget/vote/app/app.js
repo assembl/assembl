@@ -21,9 +21,17 @@ voteApp.config(['$routeProvider', function($routeProvider){
            templateUrl:'app/partials/admin_create_from_idea.html',
            controller:'adminCreateFromIdeaCtl'
         }).
-        when('/admin/configure_from_idea', {
-           templateUrl:'app/partials/admin_configure_from_idea.html',
-           controller:'adminConfigureFromIdeaCtl'
+        when('/admin/configure_instance', {
+           templateUrl:'app/partials/admin_configure_instance.html',
+           controller:'adminConfigureInstanceCtl'
+        }).
+        when('/admin/configure_instance_set_criteria', {
+           templateUrl:'app/partials/admin_configure_instance_set_criteria.html',
+           controller:'adminConfigureInstanceSetCriteriaCtl'
+        }).
+        when('/admin/configure_instance_set_settings', {
+           templateUrl:'app/partials/admin_configure_instance_set_settings.html',
+           controller:'adminConfigureInstanceSetSettingsCtl'
         }).
         otherwise({
             redirectTo: '/'

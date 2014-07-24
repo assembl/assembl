@@ -1,6 +1,139 @@
 "use strict";
 
-voteApp.controller('adminConfigureFromIdeaCtl',
+voteApp.controller('adminConfigureInstanceCtl',
+  ['$scope', '$http', '$routeParams', '$log', '$location', 'globalConfig', 'configTestingService', 'configService', 'Discussion', 'AssemblToolsService', 'VoteWidgetService', 
+  function($scope, $http, $routeParams, $log, $location, globalConfig, configTestingService, configService, Discussion, AssemblToolsService, VoteWidgetService){
+
+  $scope.current_step = 1;
+  $scope.current_substep = 1;
+
+  $scope.widget_uri = null; // "local:Widget/24"
+  $scope.widget_endpoint = null; // "/data/Widget/24"
+  $scope.target = null;
+
+  $scope.init = function(){
+    console.log("adminConfigureInstanceCtl::init()");
+
+    $scope.widget_uri = $routeParams.widget_uri;
+    console.log($scope.widget_uri);
+
+    if ( !$scope.widget_uri )
+    {
+      alert("Please provide a 'widget_uri' URL parameter.");
+      $location.path( "/admin" );
+    }
+
+    $scope.target = $routeParams.target;
+
+    $scope.widget_endpoint = AssemblToolsService.resourceToUrl($scope.widget_uri);
+  };
+}]);
+
+
+voteApp.controller('adminConfigureInstanceSetCriteriaCtl',
+  ['$scope', '$http', '$routeParams', '$log', '$location', 'globalConfig', 'configTestingService', 'configService', 'Discussion', 'AssemblToolsService', 'VoteWidgetService', 
+  function($scope, $http, $routeParams, $log, $location, globalConfig, configTestingService, configService, Discussion, AssemblToolsService, VoteWidgetService){
+
+  $scope.current_step = 1;
+  $scope.current_substep = 1;
+
+  $scope.widget_uri = null; // "local:Widget/24"
+  $scope.widget_endpoint = null; // "/data/Widget/24"
+  $scope.target = null;
+  $scope.widget = null;
+  $scope.discussion_uri = null; // "local:Discussion/1"
+  $scope.ideas = null; // list of all ideas of the discussion
+  $scope.criteria_url = null; // "local:Discussion/1/widgets/66/criteria"
+  $scope.criteria_endpoint = null; // "/data/Discussion/1/widgets/66/criteria"
+  $scope.criteria = null; // array of ideas (their full structure)
+
+  $scope.init = function(){
+    console.log("adminConfigureInstanceSetCriteriaCtl::init()");
+
+    $scope.widget_uri = $routeParams.widget_uri;
+    console.log($scope.widget_uri);
+
+    if ( !$scope.widget_uri )
+    {
+      alert("Please provide a 'widget_uri' URL parameter.");
+      $location.path( "/admin" );
+    }
+
+    $scope.target = $routeParams.target;
+
+
+    // get widget information from its endpoint
+
+    $scope.widget_endpoint = AssemblToolsService.resourceToUrl($scope.widget_uri);
+
+    $http({
+      method: 'GET',
+      url: $scope.widget_endpoint,
+    }).success(function(data, status, headers){
+      console.log(data);
+      $scope.widget = data;
+      $scope.updateOnceWidgetIsReceived();
+    });
+
+
+    // associate actions to forms
+
+    $("#widget_set_criteria").on("submit", function(){
+      $scope.associateCriteria(
+        $scope.criteria,
+        $("#widget_select_criteria_result")
+      );
+    });
+  };
+
+  $scope.updateOnceWidgetIsReceived = function(){
+    $scope.discussion_uri = $scope.widget.discussion;
+    $scope.criteria_url = $scope.widget.criteria_url;
+    $scope.criteria_endpoint = AssemblToolsService.resourceToUrl($scope.criteria_url);
+    $scope.criteria = $scope.widget.criteria;
+    console.log("$scope.criteria:");
+    console.log($scope.criteria);
+
+    $scope.current_step = 2;
+    $scope.current_substep = 1;
+
+
+    // get the list of ideas in this discussion
+
+    var ideas_endpoint_url = AssemblToolsService.resourceToUrl($scope.discussion_uri) + '/ideas?view=default';
+    $http({
+      method: 'GET',
+      url: ideas_endpoint_url,
+    }).success(function(data, status, headers){
+      console.log(data);
+      $scope.current_substep = 2;
+      $scope.ideas = data;
+    });
+  };
+
+  $scope.associateCriteria = function(criteria, result_holder){
+    var post_data = criteria; // maybe we should send only an array of @id fields instead of the whole ideas
+    var endpoint = $scope.criteria_endpoint;
+
+    $http({
+        method: 'PUT',
+        url: endpoint,
+        data: post_data,
+        //data: $.param(post_data),
+        headers: {'Content-Type': 'application/json'}
+        //headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+    }).success(function(data, status, headers){
+        console.log("success");
+        result_holder.text("Success!");
+    }).error(function(status, headers){
+        console.log("error");
+        result_holder.text("Error");
+    });
+  };
+}]);
+
+
+voteApp.controller('adminConfigureInstanceSetSettingsCtl',
   ['$scope', '$http', '$routeParams', '$log', '$location', 'globalConfig', 'configTestingService', 'configService', 'Discussion', 'AssemblToolsService', 'VoteWidgetService', 
   function($scope, $http, $routeParams, $log, $location, globalConfig, configTestingService, configService, Discussion, AssemblToolsService, VoteWidgetService){
 
@@ -11,12 +144,9 @@ voteApp.controller('adminConfigureFromIdeaCtl',
   $scope.widget_endpoint = null; // "/data/Widget/24"
   $scope.widget = null;
   $scope.discussion_uri = null; // "local:Discussion/1"
-  $scope.ideas = null; // list of all ideas of the discussion
-  $scope.ideas_str = null;
   $scope.criteria_url = null; // "local:Discussion/1/widgets/66/criteria"
   $scope.criteria_endpoint = null; // "/data/Discussion/1/widgets/66/criteria"
   $scope.criteria = null; // array of ideas (their full structure)
-  $scope.criteria_ids = null; // array of ids (uri, aka "local:Idea/3") of the criteria
 
 
   $scope.mandatory_settings_fields = VoteWidgetService.mandatory_settings_fields;
@@ -47,22 +177,7 @@ voteApp.controller('adminConfigureFromIdeaCtl',
     }).success(function(data, status, headers){
       console.log(data);
       $scope.widget = data;
-      if (!$scope.widget.settings || !$scope.widget.settings.items)
-        $scope.widget.settings = {"items":[]};
-      VoteWidgetService.addDefaultFields($scope.widget.settings, $scope.mandatory_settings_fields);
-      console.log("$scope.widget.settings:");
-      console.log($scope.widget.settings);
       $scope.updateOnceWidgetIsReceived();
-    });
-
-
-    // associate actions to forms
-
-    $("#widget_set_criteria").on("submit", function(){
-      $scope.associateCriteria(
-        $scope.criteria,
-        $("#widget_select_criteria_result")
-      );
     });
 
   };
@@ -106,6 +221,12 @@ voteApp.controller('adminConfigureFromIdeaCtl',
   };
 
   $scope.updateOnceWidgetIsReceived = function(){
+    if (!$scope.widget.settings || !$scope.widget.settings.items)
+        $scope.widget.settings = {"items":[]};
+    VoteWidgetService.addDefaultFields($scope.widget.settings, $scope.mandatory_settings_fields);
+    console.log("$scope.widget.settings:");
+    console.log($scope.widget.settings);
+
     $scope.discussion_uri = $scope.widget.discussion;
     $scope.criteria_url = $scope.widget.criteria_url;
     $scope.criteria_endpoint = AssemblToolsService.resourceToUrl($scope.criteria_url);
@@ -114,42 +235,6 @@ voteApp.controller('adminConfigureFromIdeaCtl',
     console.log($scope.criteria);
 
     $scope.current_step = 2;
-    $scope.current_substep = 1;
-
-
-    // get the list of ideas in this discussion
-
-    var ideas_endpoint_url = AssemblToolsService.resourceToUrl($scope.discussion_uri) + '/ideas?view=default';
-    $http({
-      method: 'GET',
-      url: ideas_endpoint_url,
-    }).success(function(data, status, headers){
-      console.log(data);
-      $scope.current_substep = 2;
-      $scope.ideas = data;
-      $scope.ideas_str = JSON.stringify(data);
-    });
-  };
-
-  $scope.associateCriteria = function(criteria, result_holder){
-    var post_data = criteria; // maybe we should send only an array of @id fields instead of the whole ideas
-    var endpoint = $scope.criteria_endpoint;
-
-    $http({
-        method: 'PUT',
-        url: endpoint,
-        data: post_data,
-        //data: $.param(post_data),
-        headers: {'Content-Type': 'application/json'}
-        //headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-    }).success(function(data, status, headers){
-        console.log("success");
-        result_holder.text("Success!");
-        $scope.current_step = 3;
-    }).error(function(status, headers){
-        console.log("error");
-        result_holder.text("Error");
-    });
   };
 
   $scope.applyWidgetSettings = function(){

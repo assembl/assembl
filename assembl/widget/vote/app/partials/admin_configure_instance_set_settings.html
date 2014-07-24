@@ -1,5 +1,5 @@
 
-<div id="admin" ng-controller="adminConfigureFromIdeaCtl" ng-init="init()">
+<div id="admin" ng-controller="adminConfigureInstanceSetSettingsCtl" ng-init="init()">
 
     <h1>Configure a vote widget instance</h1>
 
@@ -13,27 +13,7 @@
         </p>
     </div>
 
-    <div id="step_select_criteria" ng-show="current_step == 2">
-        <h2>Select criteria</h2>
-        <div ng-show="current_step == 2 && current_substep == 1">
-            <p>
-                Loading criteria...
-            </p>
-        </div>
-        <div ng-show="current_step == 2 && current_substep == 2">
-            <p>
-                Please select the criteria on which the user will be able to vote. You can select multiple criteria with CTRL-click.
-            </p>
-            <form id="widget_set_criteria" method="POST">
-                <select multiple size="20" ng-model="criteria" ng-options="item as item.shortTitle for item in ideas track by item['@id']"></select>
-                <br/>
-                <input type="submit" value="Validate these criteria" />
-                <span id="widget_select_criteria_result"></span>
-            </form>
-        </div>
-    </div>
-
-    <div id="step_criteria_groups_and_appearance" ng-show="current_step == 3">
+    <div id="step_criteria_groups_and_appearance" ng-show="current_step == 2">
         <h2>Set criteria groups and their appearance</h2>
         <p>
             Please add items (groups of criteria), and customize how they will be displayed to the user.

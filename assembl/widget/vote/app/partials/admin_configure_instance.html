@@ -1,0 +1,26 @@
+
+<div id="admin" ng-controller="adminConfigureInstanceCtl" ng-init="init()">
+
+    <h1>Configure a vote widget instance</h1>
+
+    <p>
+        Currently selected widget is <a href="{{ widget_endpoint }}">{{ widget_uri }}</a>.
+
+        <span ng-if="target != null">
+            The URL to vote on this widget (on one of its votable ideas) is <a href="?config={{ widget_uri }}&target={{ target }}" target="_blank">here</a>.
+        </span>
+    </p>
+
+    <ul>
+        <li>
+            <a href="#/admin/configure_instance_set_criteria?widget_uri={{ widget_uri }}&target={{ target }}">Set criteria</a>
+        </li>
+        <li>
+            <a href="#/admin/configure_instance_set_settings?widget_uri={{ widget_uri }}&target={{ target }}">Configure appearance</a>
+        </li>
+        <li>
+            Set votable ideas
+        </li>
+    </ul>
+
+</div>
