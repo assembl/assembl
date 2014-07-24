@@ -1,17 +1,18 @@
-$panelarea-min-width: 320px;
+$panelarea-min-width: 420px;
 $panelarea-min-height: 400px;
 
 // The wrapper for all .panel
 // =================
 .panelarea  {
     position: absolute;
-    top: 6em;
+    top: 77px;
     right: 5px;
     bottom: 4px;
     left: 5px;
     min-height: $panelarea-min-height;
     display: block;
     overflow: { x: auto; y: hidden; }
+    white-space: nowrap;
 
     .discussionlist {
       li{

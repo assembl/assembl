@@ -7,7 +7,8 @@ define(function(require){
             i18n = require('utils/i18n'),
      Permissions = require('utils/permissions'),
    CKEditorField = require('views/ckeditorField'),
- MessageSendView = require('views/messageSend');
+ MessageSendView = require('views/messageSend'),
+CollectionManager = require('modules/collectionManager');
 
     var IdeaInSynthesisView = Backbone.View.extend({
         /**
@@ -39,36 +40,42 @@ define(function(require){
          * @return {IdeaInSynthesisView}
          */
         render: function(){
-            var
+            var that = this,
                 data = this.model.toJSON(),
                 authors = [],
-                segments = Ctx.getSegmentsByIdea(this.model);
-            
-            this.$el.addClass('synthesis-idea');
-            Ctx.cleanTooltips(this.$el);
-            segments.forEach(function(segment) {
-                var post = segment.getAssociatedPost();
-                if(post) {
-                    var creator = post.getCreator();
-                    if(creator) {
-                        authors.push(creator);
-                    }
-                }
-            });
+                collectionManager = new CollectionManager(),
+                segments = this.model.getSegmentsDEPRECATED();
 
-            data.id = this.model.getId();
-            data.editing = this.editing;
-            data.longTitle = this.model.getLongTitleDisplayText();
-            data.authors = _.uniq(authors);
-            data.subject = data.longTitle;
-            data.synthesis_is_published = this.synthesis.get("published_in_post")!=null;
-
-            this.$el.html(this.template(data));
-            Ctx.initTooltips(this.$el);
-            if(this.editing  && data.synthesis_is_published === false) {
-                this.renderCKEditor();
-            }
-            this.renderReplyView();
+            $.when( collectionManager.getAllMessageStructureCollectionPromise(),
+                collectionManager.getAllUsersCollectionPromise()
+                ).then(
+                function(allMessageStructureCollection, allUsersCollection) {
+                  that.$el.addClass('synthesis-idea');
+                  Ctx.cleanTooltips(that.$el);
+                  segments.forEach(function(segment) {
+                      var post = allMessageStructureCollection.get(segment.get('idPost'));
+                      if(post) {
+                          var creator = allUsersCollection.get(post.get('idCreator'));
+                          if(creator) {
+                              authors.push(creator);
+                          }
+                      }
+                  });
+      
+                  data.id = that.model.getId();
+                  data.editing = that.editing;
+                  data.longTitle = that.model.getLongTitleDisplayText();
+                  data.authors = _.uniq(authors);
+                  data.subject = data.longTitle;
+                  data.synthesis_is_published = that.synthesis.get("published_in_post")!=null;
+      
+                  that.$el.html(that.template(data));
+                  Ctx.initTooltips(that.$el);
+                  if(that.editing  && data.synthesis_is_published === false) {
+                    that.renderCKEditor();
+                  }
+                  that.renderReplyView();
+                });
             return this;
         },
         

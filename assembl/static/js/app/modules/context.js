@@ -399,27 +399,15 @@ define(function(require){
         },
 
         /**
-         * fulfill app.currentUser
-         */
-        loadCurrentUser: function(){
-            if( assembl.users ){
-                var user  = assembl.users.getByNumericId(this.getCurrentUserId()) || assembl.users.getUnknownUser();
-                    user.fetchPermissionsFromScripTag();
-                this.setCurrentUser(user);
-                this.loadCsrfToken(true);
-            }
-        },
-
-        /**
          * Return the Post related to the given annotation
          * @param {Annotation} annotation
          * @return {Message}
          */
-        getPostFromAnnotation: function(annotation){
+        getPostIdFromAnnotation: function(annotation){
             var span = $(annotation.highlights[0]),
                 messageId = span.closest('[id^="'+this.ANNOTATOR_MESSAGE_BODY_ID_PREFIX+'"]').attr('id');
 
-            return assembl.messageList.messages.get(messageId.substr(this.ANNOTATOR_MESSAGE_BODY_ID_PREFIX.length));
+            return messageId.substr(this.ANNOTATOR_MESSAGE_BODY_ID_PREFIX.length);
         },
 
         /**
@@ -609,78 +597,9 @@ define(function(require){
          * @param {Idea} idea
          * @return {Array<Segment>}
          */
-        getSegmentsByIdea: function(idea){
+        getSegmentsDEPRECATEDByIdea: function(idea){
             var id = idea.getId();
-            return assembl.segmentList && assembl.segmentList.segments ? assembl.segmentList.segments.where({idIdea:id}) : [];
-        },
-
-        /**
-         * Returns the order number for a new root idea
-         * @return {Number}
-         */
-        getOrderForNewRootIdea: function(){
-            var lastIdea = assembl.ideaList.ideas.last();
-            return lastIdea ? lastIdea.get('order') + 1 : 0;
-        },
-
-        /**
-         * Returns the collection from the giving object's @type .
-         * @param {BaseModel} item
-         * @param {String} [type=item['@type']] The model type
-         * @return {BaseCollection}
-         */
-        getCollectionByType: function(item, type){
-            type = type || item['@type'];
-
-            switch(type){
-                case Types.EXTRACT:
-                    return assembl.segmentList.segments;
-
-                case Types.IDEA:
-                case Types.ROOT_IDEA:
-                case Types.PROPOSAL:
-                case Types.ISSUE:
-                case Types.CRITERION:
-                case Types.ARGUMENT:
-                    return assembl.ideaList.ideas;
-
-                case Types.IDEA_LINK:
-                    return assembl.ideaList.ideaLinks;
-
-                case Types.POST:
-                case Types.ASSEMBL_POST:
-                case Types.SYNTHESIS_POST:
-                case Types.IMPORTED_POST:
-                case Types.EMAIL:
-                case Types.IDEA_PROPOSAL_POST:
-                    return assembl.messageList.messages;
-
-                case Types.USER:
-                    return assembl.users;
-
-                case Types.SYNTHESIS:
-                    return assembl.syntheses;
-            }
-
-            return null;
-        },
-
-        /**
-         * Shows the related segment from the given annotation
-         * @param  {annotation} annotation
-         */
-        showSegmentByAnnotation: function(annotation){
-            var segment = assembl.segmentList.segments.getByAnnotation(annotation);
-
-            if( !segment ){
-                return;
-            }
-
-            if( segment.get('idIdea') ){
-                assembl.ideaPanel.showSegment(segment);
-            } else {
-                assembl.segmentList.showSegment(segment);
-            }
+            return _allExtractsCollection.where({idIdea:id});
         },
 
         /**
@@ -706,20 +625,6 @@ define(function(require){
                     });
                     break;
             }
-        },
-
-        /**
-         * Updates the order in the idea list
-         */
-        updateIdealistOrder: function(){
-            var children = assembl.ideaList.ideas.where({ parentId: null }),
-                currentOrder = 1;
-
-            _.each(children, function(child){
-                child.set('order', currentOrder);
-                child.save();
-                currentOrder += 1;
-            });
         },
 
         /**

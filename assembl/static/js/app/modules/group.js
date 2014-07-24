@@ -44,6 +44,8 @@ define(function(require){
                        ideaList.ideas.fetchFromScriptTag('ideas-json');
                        this.$el.append(ideaList.render().el);
 
+                       console.log('wrapper', this.$el);
+
                        break;
                    case 'idea-panel':
                        console.log('idea-panel');
@@ -76,6 +78,10 @@ define(function(require){
                        break;
                    case 'clipboard':
                        console.log('clipboard');
+
+                       var segmentList = new SegmentList();
+                       segmentList.segments.fetchFromScriptTag('extracts-json');
+                       this.$el.append(segmentList.render().el);
                        break;
                    case 'synthesis':
                        console.log('synthesis');
@@ -97,11 +103,13 @@ define(function(require){
        var Grid = Marionette.CompositeView.extend({
            template: "#tmpl-grid-template",
            childView: GridItem,
-           childViewContainer: "section",
-           onRender: function(){
-               this.$el = this.$el.children();
-               this.$el.unwrap();
-               this.setElement(this.$el);
+           childViewContainer: ".panelarea-table",
+           initialize: function(){
+
+           },
+           onRenderTemplate: function(){
+               this.$el.css('height', '100%');
+               this.$el.css('display', 'inline-block');
            }
        });
 
@@ -139,7 +147,7 @@ define(function(require){
 
            var group = _createGroupItem(item);
 
-           $('#group-content').append(group.render().el);
+           $('#panelarea').append(group.render().el);
 
        })
 

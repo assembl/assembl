@@ -43,9 +43,6 @@
                 <span><% print(renderTemplateGetExtractsLabel(segments)) %></span>
             </legend>
             <div class="postitlist">
-                <% _.each(segments, function(segment, i){ %>
-                    {% include "views/segment.tmpl" %}
-                <% }); %>
             </div>
             <% if (canAddExtracts) { %>
             <div class="box box--dashed box--centered margin text-muted text-big">

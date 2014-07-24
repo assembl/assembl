@@ -87,7 +87,7 @@ define(function(require){
                 data.longTitle = ' - ' + data.longTitle.substr(0, 50);
             }
 
-            data.segments = this.model.getSegments();
+            data.segments = this.model.getSegmentsDEPRECATED();
             data.shortTitle = this.model.getShortTitleDisplayText();
             this.$el.html(this.template(data));
             Ctx.initTooltips(this.$el);
@@ -176,7 +176,6 @@ define(function(require){
          * Select this idea as the current idea, and show only unread messages of this idea
          */
         onUnreadCountClick: function(ev){
-            console.log("onUnreadCountClick");
             var that = this;
             ev.stopPropagation();
             if( assembl.messageList ){

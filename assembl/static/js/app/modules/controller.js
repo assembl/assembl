@@ -15,18 +15,35 @@ define(function(require){
                User = require('models/user'),
              navBar = require('views/navBar'),
        Notification = require('views/notification'),
-         panelGroup =  require('views/panelGroupContainer');
+         panelGroup = require('views/panelGroupContainer');
+  CollectionManager = require('modules/collectionManager');
 
     var Controller = Marionette.Controller.extend({
 
         initialize: function(){
-
-            var $w = window.assembl = {};
-
+            var $w = window.assembl = {},
+            collectionManager = new CollectionManager();
+            
             // User
-            $w.users = new User.Collection();
-            $w.users.on('reset', Ctx.loadCurrentUser());
-            $w.users.fetchFromScriptTag('users-json');
+            /**
+             * fulfill app.currentUser
+             */
+            function loadCurrentUser(){
+              var user
+                if( Ctx.getCurrentUserId() ){
+                  user = new User.Model();
+                  user.fetchFromScriptTag('current-user-json')
+                }
+                else {
+                  user = new User.Collection().getUnknownUser();
+                }
+                user.fetchPermissionsFromScripTag();
+                Ctx.setCurrentUser(user);
+                Ctx.loadCsrfToken(true);
+            }
+            loadCurrentUser();
+            //We only need this here because we still use deprecated access functions
+            collectionManager.getAllUsersCollectionPromise();
 
             // The order of these initialisations matter...
             // Segment List
@@ -85,9 +102,6 @@ define(function(require){
 
             var resolveGroup = new Group();
 
-            var panel_height = $('#panelGroupControl').height();
-            //$('.panel-body').css('height', panel_height+"px");
-
             /**
              * end code
              * */
@@ -111,10 +125,13 @@ define(function(require){
 
         idea: function(id){
             Ctx.openPanel(assembl.ideaList);
-            var idea = assembl.ideaList.ideas.get(id);
-            if( idea ){
-                Ctx.setCurrentIdea(idea);
-            }
+            collectionManager.getAllIdeasCollectionPromise().done(
+                function(allIdeasCollection) {
+                  var idea = allIdeasCollection.get(id);
+                  if( idea ){
+                    Ctx.setCurrentIdea(idea);
+                  }
+                });
         },
 
         /**
@@ -126,9 +143,7 @@ define(function(require){
 
         message: function(id){
             Ctx.openPanel(assembl.messageList);
-            assembl.messageList.messages.once('reset', function(){
-                assembl.messageList.showMessageById(id);
-            });
+            assembl.messageList.showMessageById(id);
         },
 
         /**

@@ -1,7 +1,8 @@
 define(function(require){
 
     var Ctx = require('modules/context'),
-       i18n = require('utils/i18n');
+       i18n = require('utils/i18n'),
+       CollectionManager = require('modules/collectionManager');
 
     /**
      * @class PostQuery
@@ -12,13 +13,15 @@ define(function(require){
      * be done inside this class, to ease unit testing and code clarity.
      */
     var PostQuery = function(){
+        var collectionManager = new CollectionManager();
         this._returnHtmlDescriptionPostInContextOfIdea = function(filterDef, queryObjects) {
             var retval = '',
             idea = null,
             valuesText = [];
             for (var i=0;i<queryObjects.length;i++) {
                 var value = queryObjects[i].value,
-                idea = assembl.ideaList.ideas.get(value),
+                //Yest, this is cheating - benoitg 2014-07-23
+                idea = collectionManager._allIdeasCollection.get(value),
                 span = '<span class="closebutton" data-filterid="'+filterDef.id+'" data-value="'+value+'"></span>\n';
                 valuesText.push('"' + idea.get('shortTitle') + '"' + span);
             }
@@ -31,7 +34,7 @@ define(function(require){
             valuesText = [];
             for (var i=0;i<queryObjects.length;i++) {
                 var value = queryObjects[i].value,
-                post = assembl.messageList.messages.get(value),
+                post = collectionManager._allMessageStructureCollection.get(value),
                 span = '<span class="closebutton" data-filterid="'+filterDef.id+'" data-value="'+value+'"></span>\n';
                 valuesText.push('"' + post.get('subject') + '"' + span);
             }
@@ -345,6 +348,7 @@ define(function(require){
          * when the data actually changed.  Will be called before success
          */
         this.execute = function(success, success_data_changed){
+            //console.log("messageListPostQuery:execute() called");
             var that = this,
                 url = Ctx.getApiUrl('posts'),
                 params = {},
@@ -395,7 +399,25 @@ define(function(require){
             }
             
         };
-        
+        this.getResultMessageIdCollectionPromise = function() {
+            var that = this,
+                deferred = $.Deferred();
+
+            if (this._resultsAreValid) {
+                deferred.resolve(this._results);
+            }
+            else {
+                this.execute(function(collection) {
+                        //console.log('resolving getResultMessageIdCollectionPromise()');
+                        deferred.resolve(collection);
+                    });
+                };
+
+            // Returning a Promise so that only this function can modify
+            // the Deferred object
+            return deferred.promise();
+        };
+
         this.getResultNumUnread = function(){
             return this._queryResultInfo.unread;
         };

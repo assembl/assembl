@@ -9,7 +9,8 @@ define(function(require){
    CKEditorField = require('views/ckeditorField'),
      Permissions = require('utils/permissions'),
  MessageSendView = require('views/messageSend'),
-    Notification = require('views/notification');
+    Notification = require('views/notification'),
+CollectionManager = require('modules/collectionManager');
 
     var LONG_TITLE_ID = 'ideaPanel-longtitle';
 
@@ -27,8 +28,14 @@ define(function(require){
         /**
          * @init
          */
-        initialize: function(options){
+        initialize: function(obj){
+            obj = obj || {};
+
             var that = this;
+
+            if( obj.button ){
+                this.button = $(obj.button).on('click', Ctx.togglePanel.bind(window, 'ideaPanel'));
+            }
 
             if( this.model ){
                 this.listenTo(this.model, 'change', this.render);
@@ -42,7 +49,6 @@ define(function(require){
 
             });
 
-            this.listenTo(assembl.users, 'reset', this.render);
         },
         /**
          * This is not inside the template beacuse babel wouldn't extract it in 
@@ -76,75 +82,113 @@ define(function(require){
                 console.log("ideaPanel:render() is firing");
             }
 
-            Assembl.commands.execute('render');
-            var segments = {},
+            var that = this,
+            segments = {},
             subIdeas = {},
+            votable_widgets = [],
             currentUser = Ctx.getCurrentUser(),
             canEdit = currentUser.can(Permissions.EDIT_IDEA) || false,
-            canEditNextSynthesis = currentUser.can(Permissions.EDIT_SYNTHESIS);
+            canEditNextSynthesis = currentUser.can(Permissions.EDIT_SYNTHESIS),
+            collectionManager = new CollectionManager();
 
             Ctx.cleanTooltips(this.$el);
-
-            if(this.model) {
-                segments = this.model.getSegments();
-                subIdeas = this.model.getChildren();
+            
+            collectionManager.getAllExtractsCollectionPromise().done(
+            function(allExtractsCollection) {
+            var extracts = [];
+              if(that.model) {
+                subIdeas = that.model.getChildren();
+                votable_widgets = that.model.getVotableOnWhichWidgets();
+                extracts = allExtractsCollection.where({idIdea:that.model.id});
             }
 
-            this.$el.html( this.template( {
-                idea: this.model,
-                subIdeas: subIdeas,
-                segments: segments,
-                canEdit: canEdit,
-                i18n: i18n,
-                renderTemplateGetExtractsLabel: this.renderTemplateGetExtractsLabel,
-                renderTemplateGetSubIdeasLabel: this.renderTemplateGetSubIdeasLabel,
-                canDelete: currentUser.can(Permissions.EDIT_IDEA),
-                canEditNextSynthesis: canEditNextSynthesis,
-                canEditExtracts: currentUser.can(Permissions.EDIT_EXTRACT),
-                canEditMyExtracts: currentUser.can(Permissions.EDIT_MY_EXTRACT),
-                canAddExtracts: currentUser.can(Permissions.EDIT_EXTRACT) //TODO: This is a bit too coarse
+            that.$el.html( that.template( {
+                idea : that.model,
+                segments : extracts,
+                subIdeas : subIdeas,
+                votable_widgets : votable_widgets,
+                canEdit : canEdit,
+                i18n : i18n,
+                renderTemplateGetExtractsLabel : that.renderTemplateGetExtractsLabel,
+                renderTemplateGetSubIdeasLabel : that.renderTemplateGetSubIdeasLabel,
+                canDelete : currentUser.can(Permissions.EDIT_IDEA),
+                canEditNextSynthesis : canEditNextSynthesis,
+                canEditExtracts : currentUser.can(Permissions.EDIT_EXTRACT),
+                canEditMyExtracts : currentUser.can(Permissions.EDIT_MY_EXTRACT),
+                canAddExtracts : currentUser.can(Permissions.EDIT_EXTRACT), //TODO: This is a bit too coarse
+                canCreateWidgets : currentUser.can(Permissions.ADMIN_DISCUSSION)
             } ) );
-            Ctx.initTooltips(this.$el);
-            this.panel = this.$('.panel');
+
+            if(that.model) {
+              
+              $.when( collectionManager.getAllUsersCollectionPromise(),
+                      collectionManager.getAllMessageStructureCollectionPromise()
+                      ).then(
+                          function( allUsersCollection, allMessagesCollection) {
+                            
+                    /* We need a real view for that benoitg - 2014-07-23 */
+                    var ideaExtractList = that.$('.postitlist'),
+                        template = Ctx.loadTemplate('segment');
+                    
+                    _.each(extracts, function(extract) {
+                      var post = allMessagesCollection.get(extract.get('idPost'));
+                      ideaExtractList.append( template(
+                          {segment: extract,
+                           post: post,
+                           postCreator: allUsersCollection.get(post.get('idCreator')),
+                           canEditExtracts : currentUser.can(Permissions.EDIT_EXTRACT),
+                           canEditMyExtracts : currentUser.can(Permissions.EDIT_MY_EXTRACT),
+                           ctx : Ctx
+                          }) );
+                    });
+                  }
+              );
+            }
+
+            Ctx.initTooltips(that.$el);
+            that.panel = that.$('.panel');
             Ctx.initClipboard();
-            if(this.model) {
+            if(that.model) {
             var shortTitleField = new EditableField({
-                'model': this.model,
+                'model': that.model,
                 'modelProp': 'shortTitle',
                 'class': 'panel-editablearea text-bold',
                 'data-tooltip': i18n.gettext('Short expression (only a few words) of the idea in the table of ideas.'),
                 'placeholder': i18n.gettext('New idea'),
                 'canEdit': canEdit
             });
-            shortTitleField.renderTo(this.$('#ideaPanel-shorttitle'));
+            shortTitleField.renderTo(that.$('#ideaPanel-shorttitle'));
 
-            this.longTitleField = new CKEditorField({
-                'model': this.model,
+
+
+            that.longTitleField = new CKEditorField({
+                'model': that.model,
                 'modelProp': 'longTitle',
-                'placeholder': this.model.getLongTitleDisplayText(),
+                'placeholder': that.model.getLongTitleDisplayText(),
                 'canEdit': canEditNextSynthesis
             });
-            this.longTitleField.renderTo( this.$('#ideaPanel-longtitle'));
+            that.longTitleField.renderTo( that.$('#ideaPanel-longtitle'));
             
-            this.definitionField = new CKEditorField({
-                'model': this.model,
+            that.definitionField = new CKEditorField({
+                'model': that.model,
                 'modelProp': 'definition',
-                'placeholder': this.model.getDefinitionDisplayText(),
+                'placeholder': that.model.getDefinitionDisplayText(),
                 'canEdit': canEdit
             });
-            this.definitionField.renderTo( this.$('#ideaPanel-definition'));
+            that.definitionField.renderTo( that.$('#ideaPanel-definition'));
 
-            this.commentView = new MessageSendView({
+            that.commentView = new MessageSendView({
                 'allow_setting_subject': false,
-                'reply_idea': this.model,
+                'reply_idea': that.model,
                 'body_help_message': i18n.gettext('Comment on this idea here...'),
                 'send_button_label': i18n.gettext('Send your comment'),
                 'subject_label': null,
                 'mandatory_body_missing_msg': i18n.gettext('You need to type a comment first...'),
                 'mandatory_subject_missing_msg': null
             });
-            this.$('#ideaPanel-comment').append( this.commentView.render().el );
+            that.$('#ideaPanel-comment').append( that.commentView.render().el );
             }
+            });
             return this;
         },
 
@@ -178,27 +222,33 @@ define(function(require){
          * @param {Segment} segment
          */
         showSegment: function(segment){
-            var selector = Ctx.format('.box[data-segmentid={0}]', segment.cid),
+            var that = this,
+                selector = Ctx.format('.box[data-segmentid={0}]', segment.cid),
                 idIdea = segment.get('idIdea'),
-                idea = assembl.ideaList.ideas.get(idIdea),
-                box;
+                box,
+                collectionManager = new CollectionManager();
 
-            if( !idea ){
-                return;
-            }
+                collectionManager.getAllIdeasCollectionPromise().done(
+                    function(allIdeasCollection) {
+                      var idea = allIdeasCollection.get(idIdea);
+                      if( !idea ){
+                        return;
+                      }
 
-            this.setIdeaModel(idea);
-            box = this.$(selector);
+                      that.setIdeaModel(idea);
+                      box = that.$(selector);
 
-            if( box.length ){
-                var panelBody = this.$('.panel-body');
-                var panelOffset = panelBody.offset().top;
-                var offset = box.offset().top;
-                // Scrolling to the element
-                var target = offset - panelOffset + panelBody.scrollTop();
-                panelBody.animate({ scrollTop: target });
-                box.highlight();
-            }
+                      if( box.length ){
+                        var panelBody = that.$('.panel-body');
+                        var panelOffset = panelBody.offset().top;
+                        var offset = box.offset().top;
+                        // Scrolling to the element
+                        var target = offset - panelOffset + panelBody.scrollTop();
+                        panelBody.animate({ scrollTop: target });
+                        box.highlight();
+                      }
+                    }
+                );
         },
 
         /**
@@ -208,9 +258,9 @@ define(function(require){
         setIdeaModel: function(idea){
             var that = this,
             ideaChangeCallback = function() {
+                //console.log("setCurrentIdea:ideaChangeCallback fired");
                 that.render();
-            }
-
+            };
             if( idea !== this.model ){
                 if( this.model !== null ) {
                     this.stopListening(this.model, 'change', ideaChangeCallback);
@@ -235,7 +285,7 @@ define(function(require){
         deleteCurrentIdea: function(){
             // to be deleted, an idea cannot have any children nor segments
             var children = this.model.getChildren(),
-                segments = this.model.getSegments(),
+                segments = this.model.getSegmentsDEPRECATED(),
                 that = this;
 
             if( children.length > 0 ){
@@ -251,7 +301,6 @@ define(function(require){
             this.blockPanel();
             this.model.destroy({ success: function(){
                 that.unblockPanel();
-                Assembl.commands.setHandler('idea:delete');
                 Ctx.setCurrentIdea(null);
             }});
         },
@@ -316,16 +365,22 @@ define(function(require){
          * @event
          */
         onDragStart: function(ev){
+          var that = this,
+              collectionManager = new CollectionManager();
             //TODO: Deal with editing own extract (EDIT_MY_EXTRACT)
-            if( assembl.segmentList && assembl.segmentList.segments && Ctx.getCurrentUser().can(Permissions.EDIT_EXTRACT)){
-                ev.currentTarget.style.opacity = 0.4;
+          collectionManager.getAllExtractsCollectionPromise().done(
+              function(allExtractsCollection) {
+                if(Ctx.getCurrentUser().can(Permissions.EDIT_EXTRACT)){
+                  ev.currentTarget.style.opacity = 0.4;
 
-                var cid = ev.currentTarget.getAttribute('data-segmentid'),
-                    segment = assembl.segmentList.segments.getByCid(cid);
-                console.log( cid );
-                Ctx.showDragbox(ev, segment.getQuote());
-                Ctx.draggedSegment = segment;
-            }
+                  var cid = ev.currentTarget.getAttribute('data-segmentid'),
+                      segment = allExtractsCollection.getByCid(cid);
+                  console.log( cid );
+                  Ctx.showDragbox(ev, segment.getQuote());
+                  Ctx.draggedSegment = segment;
+                }
+              });
+           
         },
 
         /**
@@ -386,15 +441,17 @@ define(function(require){
          * @event
          */
         onSegmentCloseButtonClick: function(ev){
-            var cid = ev.currentTarget.getAttribute('data-segmentid');
-
-            if( assembl.segmentList && assembl.segmentList.segments ){
-                var segment = assembl.segmentList.segments.get(cid);
-
+          var that = this,
+              cid = ev.currentTarget.getAttribute('data-segmentid'),
+              collectionManager = new CollectionManager();
+          collectionManager.getAllExtractsCollectionPromise().done(
+              function(allExtractsCollection) {
+                var segment = allExtractsCollection.get(cid);
+                
                 if( segment ){
-                    segment.save('idIdea', null);
+                  segment.save('idIdea', null);
                 }
-            }
+              });
         },
 
         /**
@@ -436,10 +493,14 @@ define(function(require){
          * @event
          */
         onSegmentLinkClick: function(ev){
-            var cid = ev.currentTarget.getAttribute('data-segmentid'),
-                segment = assembl.segmentList.segments.get(cid);
-
-            Ctx.showTargetBySegment(segment);
+          var cid = ev.currentTarget.getAttribute('data-segmentid'),
+              collectionManager = new CollectionManager();
+          
+          collectionManager.getAllExtractsCollectionPromise().done(
+              function(allExtractsCollection) {
+                var segment = allExtractsCollection.get(cid);
+                Ctx.showTargetBySegment(segment);
+              });
         }
 
     });

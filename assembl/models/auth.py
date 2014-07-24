@@ -134,6 +134,13 @@ class AgentProfile(Base):
             '@id': self.uri_generic(self.id),
             'name': self.name or self.display_name()
         }
+    def get_agent_preload(self, view_def=None):
+        if view_def:
+            result = self.generic_json(view_def)
+        else:
+            result = self.serializable()
+        return json.dumps(result)
+
 
 
 class AbstractAgentAccount(Base):

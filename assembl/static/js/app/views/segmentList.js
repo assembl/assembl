@@ -9,26 +9,34 @@ define(function(require){
          Segment = require('models/segment'),
            Types = require('utils/types'),
             i18n = require('utils/i18n'),
-     Permissions = require('utils/permissions');
+     Permissions = require('utils/permissions'),
+CollectionManager = require('modules/collectionManager');
 
     var SegmentList = Backbone.View.extend({
         /**
          * @init
          */
         initialize: function(obj){
-            var that = this;
+          var that = this,
+              collectionManager = new CollectionManager();
 
-            this.listenTo(this.segments, 'invalid', function(model, error){
-                alert(error);
-            });
+          if( obj && obj.button ){
+            this.button = $(obj.button).on('click', Ctx.togglePanel.bind(window, 'segmentList'));
+          }
+          collectionManager.getAllExtractsCollectionPromise().done(
+              function(allExtractsCollection) {
+                that.listenTo(allExtractsCollection, 'all', this.render);
+                
+                that.listenTo(allExtractsCollection, 'invalid', function(model, error){
+                  alert(error);
+                });
 
-            assembl.users.on('reset', this.render, assembl.segmentList);
+                that.listenTo(allExtractsCollection, 'add remove destroy change reset', this.render);
 
-            this.listenTo(this.segments, 'add remove change reset', this.render);
-
-            this.listenTo(this.segments, 'add', function(segment){
-                that.highlightSegment(segment);
-            });
+                that.listenTo(allExtractsCollection, 'add', function(segment){
+                  that.highlightSegment(segment);
+                });
+              });
         },
 
         /**
@@ -54,39 +62,60 @@ define(function(require){
          * @return {segmentList}
          */
         render: function(){
-            if(Ctx.debugRender) {
-                console.log("segmentList:render() is firing");
-            }
-            Assembl.commands.execute('render');
-            Ctx.cleanTooltips(this.$el);
+          var that = this,
+              collectionManager = new CollectionManager();
+          if(Ctx.debugRender) {
+            console.log("segmentList:render() is firing");
+          }
+          Ctx.cleanTooltips(this.$el);
             
-            var segments = this.segments.getClipboard(),
+          collectionManager.getAllExtractsCollectionPromise().done(
+              function(allExtractsCollection) {
+
+                var extracts = allExtractsCollection.getClipboard(),
                 currentUser = Ctx.getCurrentUser(),
                 data = {
-                    segments:segments,
-                    canEditExtracts:currentUser.can(Permissions.EDIT_EXTRACT),
-                    canEditMyExtracts:currentUser.can(Permissions.EDIT_MY_EXTRACT)
+                  segments : extracts,
+                  ctx : Ctx,
+                  canEditExtracts : currentUser.can(Permissions.EDIT_EXTRACT),
+                  canEditMyExtracts : currentUser.can(Permissions.EDIT_MY_EXTRACT)
                 },
                 top = 0;
-            if( this.panel ){
-                top = this.panel.find('.panel-body')[0].scrollTop;
-            }
 
-            /**
-            * FIXME: Hack to context include variable in include template segment.tmpl
-            * Should be a marionette  composite view
-            */
-            window.ctx = Ctx;
-
-            this.$el.html(this.template(data));
-            Ctx.initTooltips(this.$el);
-            this.panel = this.$('.panel');
-
-            if( top > 0 ){
-                this.panel.find('.panel-body')[0].scrollTop = top;
-            }
-
-            return this;
+                $.when( collectionManager.getAllUsersCollectionPromise(),
+                    collectionManager.getAllMessageStructureCollectionPromise()
+                    ).then(
+                        function( allUsersCollection, allMessagesCollection) {
+                          
+                          /* We need a real view for that benoitg - 2014-07-23 */
+                          var ideaExtractList = that.$('.postitlist'),
+                          template = Ctx.loadTemplate('segment');
+                  
+                          _.each(extracts, function(extract) {
+                            var post = allMessagesCollection.get(extract.get('idPost'));
+                            ideaExtractList.append( template(
+                                {segment: extract,
+                                  post: post,
+                                  postCreator: allUsersCollection.get(post.get('idCreator')),
+                                  canEditExtracts : currentUser.can(Permissions.EDIT_EXTRACT),
+                                  canEditMyExtracts : currentUser.can(Permissions.EDIT_MY_EXTRACT),
+                                  ctx : Ctx
+                                }) );
+                          });
+                        }
+                    );
+                if( that.panel ){
+                  top = that.panel.find('.panel-body')[0].scrollTop;
+                }
+                that.$el.html(that.template(data));
+                Ctx.initTooltips(that.$el);
+                that.panel = that.$('.panel');
+      
+                if( top > 0 ){
+                  that.panel.find('.panel-body')[0].scrollTop = top;
+                }
+              });
+          return this;
         },
 
         /**
@@ -95,10 +124,16 @@ define(function(require){
          * @param {Segment} segment
          */
         addSegment: function(segment){
-            delete segment.attributes.highlights;
+          var that = this,
+          collectionManager = new CollectionManager();
 
-            this.segments.add(segment, {merge: true});
-            segment.save('idIdea', null);
+          collectionManager.getAllExtractsCollectionPromise().done(
+              function(allExtractsCollection) {
+                delete segment.attributes.highlights;
+
+                allExtractsCollection.add(segment, {merge: true});
+                segment.save('idIdea', null);
+              });
         },
 
         /**
@@ -109,28 +144,32 @@ define(function(require){
          * @return {Segment}
          */
         addAnnotationAsSegment: function(annotation, idIdea){
-            var post = Ctx.getPostFromAnnotation(annotation),
-                idPost = post.getId();
+          var that = this,
+              idPost = Ctx.getPostIdFromAnnotation(annotation)
+              collectionManager = new CollectionManager();
 
-            var segment = new Segment.Model({
-                target: { "@id": idPost, "@type": Types.EMAIL },
-                text: annotation.text,
-                quote: annotation.quote,
-                idCreator: Ctx.getCurrentUser().getId(),
-                ranges: annotation.ranges,
-                idPost: idPost,
-                idIdea: idIdea
-            });
+          var segment = new Segment.Model({
+              target: { "@id": idPost, "@type": Types.EMAIL },
+              text: annotation.text,
+              quote: annotation.quote,
+              idCreator: Ctx.getCurrentUser().getId(),
+              ranges: annotation.ranges,
+              idPost: idPost,
+              idIdea: idIdea
+          });
 
-            if( segment.isValid() ){
-                delete segment.attributes.highlights;
+          if( segment.isValid() ){
+            collectionManager.getAllExtractsCollectionPromise().done(
+                function(allExtractsCollection) {
+                  delete segment.attributes.highlights;
+                    allExtractsCollection.add(segment);
+                });
+          } 
+          else {
+            alert( segment.validationError );
+          }
 
-                this.segments.add(segment);
-            } else {
-                alert( segment.validationError );
-            }
-
-            return segment;
+          return segment;
         },
 
         /**
@@ -165,21 +204,18 @@ define(function(require){
          * @param  {String} cid
          */
         removeSegmentByCid: function(cid){
-            var model = this.segments.get(cid);
+          var that = this,
+          collectionManager = new CollectionManager();
 
-            if(model){
-                model.destroy();
-            }
+          collectionManager.getAllExtractsCollectionPromise().done(
+              function(allExtractsCollection) {
+                var model = allExtractsCollection.get(cid);
+
+                if(model){
+                  model.destroy();
+                }
+              });
         },
-
-        /**
-         * Remove the given segment
-         * @param {Segment} segment
-         */
-        removeSegment: function(segment){
-            this.segments.remove(segment);
-        },
-
 
         /**
          * Shows the given segment
@@ -214,7 +250,6 @@ define(function(require){
          * Closes the panel
          */
         closePanel: function(){
-            console.log("closePanel");
             if( this.button ){
                 this.button.trigger('click');
             }
@@ -242,13 +277,21 @@ define(function(require){
          * @event
          */
         onDragStart: function(ev){
-            ev.currentTarget.style.opacity = 0.4;
+          var that = this,
+          collectionManager = new CollectionManager();
 
-            var cid = ev.currentTarget.getAttribute('data-segmentid'),
-                segment = this.segments.get(cid);
+          collectionManager.getAllExtractsCollectionPromise().done(
+              function(allExtractsCollection) {
+                ev.currentTarget.style.opacity = 0.4;
 
-            Ctx.showDragbox(ev, segment.getQuote());
-            Ctx.draggedSegment = segment;
+                var cid = ev.currentTarget.getAttribute('data-segmentid'),
+                    segment = allExtractsCollection.get(cid);
+
+                Ctx.showDragbox(ev, segment.getQuote());
+                Ctx.draggedSegment = segment;
+              });
+
+            
         },
 
         /**
@@ -338,13 +381,18 @@ define(function(require){
          * @event
          */
         onClearButtonClick: function(ev){
-            var ok = confirm( i18n.gettext('Are you sure you want to empty your entire clipboard?') );
-            if( ok ){
-                var segments = this.segments.getClipboard();
-                _.each(segments, function(segment){
+          var collectionManager = new CollectionManager(),
+              ok = confirm( i18n.gettext('Are you sure you want to empty your entire clipboard?') );
+          
+          if( ok ){
+            collectionManager.getAllExtractsCollectionPromise().done(
+                function(allExtractsCollection) {
+                  var segments = allExtractsCollection.getClipboard();
+                  _.each(segments, function(segment){
                     segment.destroy();
+                  });
                 });
-            }
+          }
         },
 
         /**
@@ -352,11 +400,14 @@ define(function(require){
          */
         onSegmentLinkClick: function(ev){
             var cid = ev.currentTarget.getAttribute('data-segmentid'),
-                segment = this.segments.get(cid);
+                collectionManager = new CollectionManager();
 
-            Ctx.showTargetBySegment(segment);
+            collectionManager.getAllExtractsCollectionPromise().done(
+                function(allExtractsCollection) {
+                  segment = allExtractsCollection.get(cid);
+                  Ctx.showTargetBySegment(segment);
+                });
         }
-
     });
 
     return SegmentList;

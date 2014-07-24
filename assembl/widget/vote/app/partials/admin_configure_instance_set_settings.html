@@ -1,5 +1,5 @@
 
-<div id="admin" ng-controller="adminConfigureFromIdeaCtl" ng-init="init()">
+<div id="admin" ng-controller="adminConfigureInstanceSetSettingsCtl" ng-init="init()">
 
     <h1>Configure a vote widget instance</h1>
 
@@ -13,37 +13,43 @@
         </p>
     </div>
 
-    <div id="step_select_criteria" ng-show="current_step == 2">
-        <h2>Select criteria</h2>
-        <div ng-show="current_step == 2 && current_substep == 1">
-            <p>
-                Loading criteria...
-            </p>
-        </div>
-        <div ng-show="current_step == 2 && current_substep == 2">
-            <p>
-                Please select the criteria on which the user will be able to vote. You can select multiple criteria with CTRL-click.
-            </p>
-            <form id="widget_set_criteria" method="POST">
-                <select multiple size="20" ng-model="criteria" ng-options="item as item.shortTitle for item in ideas track by item['@id']"></select>
-                <br/>
-                <input type="submit" value="Validate these criteria" />
-                <span id="widget_select_criteria_result"></span>
-            </form>
-        </div>
-    </div>
-
-    <div id="step_criteria_groups_and_appearance" ng-show="current_step == 3">
+    <div id="step_criteria_groups_and_appearance" ng-show="current_step == 2">
         <h2>Set criteria groups and their appearance</h2>
         <p>
-            Please add groups of criteria, and customize how they will be displayed to the user.
+            Please add items (groups of criteria), and customize how they will be displayed to the user.
         </p>
         
+        <br/>
+
+        <span>General settings:</span>
         <div ng-repeat="field in mandatory_settings_fields">
             <span ng-attr-class="{{ field.description && 'with-title' }}" title="{{ field.description }}">{{ field.label || field.key }} ({{ field.type }}):</span>
             <input type="text" ng-model="widget.settings[field.key]" value="{{ field.default }}" />
         </div>
 
+        <fieldset>
+            <legend>Optional fields</legend>
+            <div ng-repeat="field in optional_settings_fields">
+                <div ng-if="widget.settings.hasOwnProperty(field.key)">
+                    <div ng-switch on="field.type">
+                        <span ng-attr-class="{{ field.description && 'with-title' }}" title="{{ field.description }}">{{ field.label || field.key }} ({{ field.type }}):</span>
+                        <select ng-switch-when="select" ng-model="widget.settings[field.key]" ng-options="key as value for ( key, value ) in field.options"></select>
+                        <input ng-switch-default type="text" ng-model="widget.settings[field.key]" />
+                        <button ng-click="deleteSettingsField(field.key);">Delete this field</button>
+                    </div>
+                </div>
+            </div>
+
+            <br/>
+
+            <span>Add an optional field:</span>
+            <select ng-model="settings_current_selected_field" ng-options="field.key as field.key for field in optional_settings_fields"></select>
+            <button ng-click="addSettingsField(settings_current_selected_field);">Add</button>
+        </fieldset>
+
+        <br/>
+
+        <span>Items displayed to the user:</span>
         <div class="item" ng-repeat="item in widget.settings.items">
             <div class="item-title">
                 <strong>Item</strong>
@@ -63,6 +69,23 @@
                     <input type="text" ng-model="item[field.key]" value="{{ field.default }}" />
                 </div>
 
+                <fieldset>
+                    <legend>Optional fields</legend>
+                    <div ng-repeat="field in optional_item_fields">
+                        <div ng-if="item.hasOwnProperty(field.key)">
+                            <span ng-attr-class="{{ field.description && 'with-title' }}" title="{{ field.description }}">{{ field.label || field.key }} ({{ field.type }}):</span>
+                            <input type="text" ng-model="item[field.key]" />
+                            <button ng-click="deleteItemField(item_index, field.key);">Delete this field</button>
+                        </div>
+                    </div>
+
+                    <br/>
+
+                    <span>Add an optional field:</span>
+                    <select ng-model="item_current_selected_field" ng-options="field.key as field.key for field in optional_item_fields"></select>
+                    <button ng-click="addItemField(item_index, item_current_selected_field);">Add</button>
+                </fieldset>
+
                 <br/>
 
                 <span>Criteria associated to this item:</span>
@@ -72,8 +95,10 @@
                         <button ng-click="item.criteria.splice($index,1)">Delete this criterion</button>
                     </div>
                     <div ng-init="criterion_index = $index" class="item-content">
+                        <!--
                         <fieldset>
                             <legend>Mandatory fields</legend>
+                        -->
                             <div ng-repeat="field in mandatory_criterion_fields">
                                 <div ng-switch on="field.type">
                                     <span ng-attr-class="{{ field.description && 'with-title' }}" title="{{ field.description }}">{{ field.label || field.key }} ({{ field.type }}):</span>
@@ -81,7 +106,9 @@
                                     <input ng-switch-default type="text" ng-model="criterion[field.key]" />
                                 </div>
                             </div>
+                        <!--
                         </fieldset>
+                        -->
                         <fieldset>
                             <legend>Optional fields</legend>
                             <div ng-repeat="field in optional_criterion_fields">

@@ -74,8 +74,8 @@ define(function(require){
          * Return all segments related to this message
          * @return {Segment[]}
          */
-        getSegments: function(){
-            return assembl.segmentList.segments.where({ idPost: this.getId() });
+        getSegmentsDEPRECATED: function(){
+            return this.collection.collectionManager._allExtractsCollection.where({ idPost: this.getId() });
         },
 
         /**
@@ -83,7 +83,7 @@ define(function(require){
          * @return {Object[]}
          */
         getAnnotations: function(){
-            var segments = this.getSegments(),
+            var segments = this.getSegmentsDEPRECATED(),
                 ret = [];
 
             _.each(segments, function(segment){
@@ -122,13 +122,29 @@ define(function(require){
 
         },
 
+        /** Return a promise for the post's creator
+         * @return {$.Defered.Promise}
+         */
+        getCreatorPromise: function(){
+          var that = this,
+          deferred = $.Deferred();
+          this.collection.collectionManager.getAllUsersCollectionPromise().done(
+              function(allUsersCollection) {
+                var creatorId = that.get('idCreator');
+                deferred.resolve(allUsersCollection.getById(creatorId));
+              }
+          );
+          return deferred.promise();
+        },
+        
         /**
          * Returns the post's creator
          * @return {User}
          */
-        getCreator: function(){
+        getCreatorDEPRECATED: function(){
             var creatorId = this.get('idCreator');
-            return assembl.users.getById(creatorId);
+            console.log(this);
+            return this.collection.collectionManager._allUsersCollection.getById(creatorId);
         },
 
         /**
@@ -169,6 +185,7 @@ define(function(require){
                 success: function(data){
                     that.trigger('change:read', [value]);
                     that.trigger('change', that);
+                    //So the unread count is updated in the ideaList
                     Assembl.reqres.request('ideas:update', [data.ideas]);
                 }
             });

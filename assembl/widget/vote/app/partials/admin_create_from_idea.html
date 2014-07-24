@@ -44,7 +44,7 @@
             The widget has been successfully created. Its URI is "<strong>{{ created_widget_uri }}</strong>" and its endpoint is "<strong>{{ created_widget_endpoint }}</strong>".
         </p>
         <p>
-            <a href="?admin=1#/admin/configure_from_idea?widget_uri={{ created_widget_uri }}">Configure it</a>
+            <a href="?admin=1#/admin/configure_instance?widget_uri={{ created_widget_uri }}&target={{ idea['@id'] }}">Configure it</a>
         </p>
         <p>
             The URL for users to vote is 

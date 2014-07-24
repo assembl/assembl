@@ -145,9 +145,9 @@ define(function(require){
             idea.trigger('change:parentId');
 
             if( parent ){
-                parent.updateChildrenOrder();
+              parent.updateChildrenOrder();
             } else {
-                Ctx.updateIdealistOrder();
+              this.collection.updateRootIdeasOrder();
             }
         },
 
@@ -167,9 +167,9 @@ define(function(require){
             idea.trigger('change:parentId');
 
             if( parent ){
-                parent.updateChildrenOrder();
+              parent.updateChildrenOrder();
             } else {
-                Ctx.updateIdealistOrder();
+              this.collection.updateRootIdeasOrder();
             }
         },
 
@@ -284,11 +284,26 @@ define(function(require){
             return this.getChildren().length + 1;
         },
 
+        /** Return a promise for all Extracts models for this idea
+         * @return {$.Defered.Promise}
+         */
+        getExtractsPromise: function(){
+          var that = this,
+          deferred = $.Deferred();
+          this.collection.collectionManager.getAllExtractsCollectionPromise().done(
+              function(allExtractsCollection) {
+                var extracts = allExtractsCollection.where({idIdea:that.getId()});
+                deferred.resolve(extracts);
+              }
+          );
+          return deferred.promise();
+        },
+        
         /**
          * @return {array<Segment>}
          */
-        getSegments: function(){
-            return Ctx.getSegmentsByIdea(this);
+        getSegmentsDEPRECATED: function(){
+          return this.collection.collectionManager._allExtractsCollection.where({idIdea:this.getId()});
         },
 
         /**
@@ -344,7 +359,7 @@ define(function(require){
               if (attrs['parentId'] === null && this.id !== undefined && attrs['root'] !== true) {
                 console.log("empty parent bug: ", _.clone(attrs));
                 var id = attrs['@id'];
-                var links = assembl.ideaList.ideaLinks.where({target: id});
+                var links = this.collection.collectionManager._allIdeaLinksCollection.where({target: id});
                 if (links.length > 0) {
                     console.log('corrected');
                     attrs['parents'] = _.map(links, function(l) {return l.get('source')});
@@ -389,7 +404,31 @@ define(function(require){
                 console.log(this);
             }
             return retval;
-        }
+        },
+        
+        /**
+         * Returns the order number for a new root idea
+         * @return {Number}
+         */
+        getOrderForNewRootIdea: function(){
+            var lastIdea = this.last();
+            return lastIdea ? lastIdea.get('order') + 1 : 0;
+        },
+        
+        /**
+         * Updates the order in the idea list
+         */
+        updateRootIdeasOrder: function(){
+            var children = this.where({ parentId: null }),
+                currentOrder = 1;
+
+            _.each(children, function(child){
+                child.set('order', currentOrder);
+                child.save();
+                currentOrder += 1;
+            });
+        },
+        
     });
 
     return {

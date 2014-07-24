@@ -26,7 +26,7 @@ define(function(require){
         },
 
         correctParentBug: function() {
-            var child = assembl.ideaList.ideas.get(this.get('target'));
+            var child = this.collection.collectionManager._allIdeasCollection.get(this.get('target'));
             if (child.get('parentId') === null) {
                 console.log("correct parent bug");
                 child.set('parentId', this.get('source'));

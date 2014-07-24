@@ -16,6 +16,8 @@
     "angular-sanitize": "~1.2.16",
     "jquery": "~2.1.0",
     "angular-translate": "~2.1.0",
-    "angular-translate-loader-static-files": "~2.1.0"
+    "angular-translate-loader-static-files": "~2.1.0",
+    "underscore": "~1.6.0",
+    "d3": "~3.4.11"
   }
 }

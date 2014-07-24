@@ -14,7 +14,8 @@ define(function(require){
             IdeaInSynthesisView = require('views/ideaInSynthesis'),
                            i18n = require('utils/i18n'),
                   EditableField = require('views/editableField'),
-                  CKEditorField = require('views/ckeditorField');
+                  CKEditorField = require('views/ckeditorField'),
+              CollectionManager = require('modules/collectionManager');
 
 
     var SynthesisPanel = Backbone.View.extend({
@@ -23,11 +24,35 @@ define(function(require){
          * @init
          */
         initialize: function(obj){
+          var that = this,
+              collectionManager = new CollectionManager();
+          
             if( obj.button ){
                 this.button = $(obj.button).on('click', Ctx.togglePanel.bind(this, 'synthesisPanel'));
             }
 
             this.ideas = new Idea.Collection();
+            collectionManager.getAllIdeasCollectionPromise().done(
+                function(allIdeasCollection) {
+                  var rootIdea = allIdeasCollection.getRootIdea(),
+                      raw_ideas = that.model.get('ideas');
+                  
+                  //console.log("Raw Ideas from model: ", raw_ideas)
+                  if( raw_ideas ){
+                      var ideas = [];
+                      _.each(raw_ideas, function (raw_idea){
+                          //console.log(raw_idea);
+                          var idea = allIdeasCollection.get(raw_idea['@id']);
+                          if(idea) {
+                              ideas.push(idea);
+                          }
+                          else {
+                              console.log("synthesisPanel:render():  This shoudn't happen, fix toombstone support?")
+                          }
+                      });
+                      that.ideas.reset(ideas);
+                  }
+                });
 
             this.listenTo(this.ideas, 'add remove reset', this.render);
 
@@ -61,111 +86,84 @@ define(function(require){
                 console.log("synthesisPanel:render() is firing");
             }
             var that = this,
-            rootIdea = null,
             view_data = {},
             order_lookup_table = [],
             roots = [],
-            synthesis_is_published = this.model.get("published_in_post")!=null;
-            Assembl.commands.execute('render');
+            synthesis_is_published = this.model.get("published_in_post")!=null,
+            collectionManager = new CollectionManager();
+
             Ctx.cleanTooltips(this.$el);
 
-            //Do NOT listen to reset, as it's called within this render
-            this.stopListening(this.ideas, 'reset', this.render);
-            
-            if(assembl.ideaList.ideas.length<1) {
-                //console.log("Idea list isn't available yet (we should at least have the root)");
-                this.listenTo(assembl.ideaList.ideas, 'reset', this.render);
-            }
-            else{
-                this.stopListening(assembl.ideaList.ideas, 'reset', this.render);
-                rootIdea = assembl.ideaList.ideas.getRootIdea();
-                var raw_ideas = this.model.get('ideas');
-                //console.log("Raw Ideas from model: ", raw_ideas)
-                if( raw_ideas ){
-                    var ideas = [];
-                    _.each(raw_ideas, function (raw_idea){
-                        //console.log(raw_idea);
-                        var idea = assembl.ideaList.ideas.get(raw_idea['@id']);
-                        if(idea) {
-                            ideas.push(idea);
-                        }
-                        else {
-                            console.log("synthesisPanel:render():  This shoudn't happen, fix toombstone support?")
-                        }
+            collectionManager.getAllIdeasCollectionPromise().done(
+                function(allIdeasCollection) {
+
+
+                // Getting the scroll position
+                var body = that.$('.body-synthesis'),
+                    y = body.get(0) ? body.get(0).scrollTop : 0,
+                    rootIdea = allIdeasCollection.getRootIdea(),
+                    data = that.model.toJSON();
+                    
+                data.canSend = Ctx.getCurrentUser().can(Permissions.SEND_SYNTHESIS);
+                data.canEdit = Ctx.getCurrentUser().can(Permissions.EDIT_SYNTHESIS);
+                that.$el.html( that.template(data) );
+                Ctx.initTooltips(that.$el);
+                function inSynthesis(idea) {
+                    if (idea.hidden) {
+                        return false;
+                    }
+                    var retval;
+                    if(that.model.get('is_next_synthesis')){
+                        //This special case is so we get instant feedback before
+                        //the socket sends changes
+                        retval = idea != rootIdea && idea.get('inNextSynthesis')
+                    }
+                    else {
+                        retval = idea != rootIdea && that.ideas.contains(idea)
+                    }
+                    //console.log("Checking",idea,"returning:", retval, "synthesis is next synthesis:", that.model.get('is_next_synthesis'));
+                    return retval
+                    };
+                if(rootIdea){
+                    rootIdea.visitDepthFirst(objectTreeRenderVisitor(view_data, order_lookup_table, roots, inSynthesis));
+                }
+                _.each(roots, function append_recursive(idea){
+                    var rendered_idea_view = new IdeaFamilyView(
+                            {model: idea,
+                                innerViewClass: IdeaInSynthesisView,
+                                innerViewClassInitializeParams: {synthesis: that.model}
+                                    }
+                            , view_data);
+                    that.$('.synthesisPanel-ideas').append( rendered_idea_view.render().el );
+                });
+                that.$('.body-synthesis').get(0).scrollTop = y;
+                if(data.canEdit && !synthesis_is_published) {
+                    var titleField = new EditableField({
+                        model: that.model,
+                        modelProp: 'subject'
                     });
-                    this.ideas.reset(ideas);
-                }
-            }
-            
-            //console.log("Synthesis idea collection: ", this.ideas)
+                    titleField.renderTo(that.$('.synthesisPanel-title'));
 
-            //var list = document.createDocumentFragment(),
-            var model = this.model;
+                    var introductionField = new CKEditorField({
+                        model: that.model,
+                        modelProp: 'introduction'
+                    });
+                    introductionField.renderTo(that.$('.synthesisPanel-introduction'));
 
-            // Getting the scroll position
-            var body = this.$('.body-synthesis'),
-                y = body.get(0) ? body.get(0).scrollTop : 0;
-            var data = model.toJSON();
-            data.canSend = Ctx.getCurrentUser().can(Permissions.SEND_SYNTHESIS);
-            data.canEdit = Ctx.getCurrentUser().can(Permissions.EDIT_SYNTHESIS);
-            this.$el.html( this.template(data) );
-            Ctx.initTooltips(this.$el);
-            function inSynthesis(idea) {
-                if (idea.hidden) {
-                    return false;
-                }
-                var retval;
-                if(that.model.get('is_next_synthesis')){
-                    //This special case is so we get instant feedback before
-                    //the socket sends changes
-                    retval = idea != rootIdea && idea.get('inNextSynthesis')
+                    var conclusionField = new CKEditorField({
+                        model: that.model,
+                        modelProp: 'conclusion'
+                    });
+                    conclusionField.renderTo(that.$('.synthesisPanel-conclusion'));
                 }
                 else {
-                    retval = idea != rootIdea && that.ideas.contains(idea)
+                    that.$('.synthesisPanel-title').append(that.model.get('subject'));
+                    that.$('.synthesisPanel-introduction').append(that.model.get('introduction'));
+                    that.$('.synthesisPanel-conclusion').append(that.model.get('conclusion'));
                 }
-                //console.log("Checking",idea,"returning:", retval, "synthesis is next synthesis:", that.model.get('is_next_synthesis'));
-                return retval
-                };
-            if(rootIdea){
-                rootIdea.visitDepthFirst(objectTreeRenderVisitor(view_data, order_lookup_table, roots, inSynthesis));
-            }
-            _.each(roots, function append_recursive(idea){
-                var rendered_idea_view = new IdeaFamilyView(
-                        {model: idea,
-                            innerViewClass: IdeaInSynthesisView,
-                            innerViewClassInitializeParams: {synthesis: that.model}
-                                }
-                        , view_data);
-                that.$('.synthesisPanel-ideas').append( rendered_idea_view.render().el );
             });
-            this.$('.body-synthesis').get(0).scrollTop = y;
-            if(data.canEdit && !synthesis_is_published) {
-                var titleField = new EditableField({
-                    model: model,
-                    modelProp: 'subject'
-                });
-                titleField.renderTo(this.$('.synthesisPanel-title'));
-
-                var introductionField = new CKEditorField({
-                    model: model,
-                    modelProp: 'introduction'
-                });
-                introductionField.renderTo(this.$('.synthesisPanel-introduction'));
-
-                var conclusionField = new CKEditorField({
-                    model: model,
-                    modelProp: 'conclusion'
-                });
-                conclusionField.renderTo(this.$('.synthesisPanel-conclusion'));
-            }
-            else {
-                this.$('.synthesisPanel-title').append(model.get('subject'));
-                this.$('.synthesisPanel-introduction').append(model.get('introduction'));
-                this.$('.synthesisPanel-conclusion').append(model.get('conclusion'));
-            }
             
-            //Restore callback inhibited above
-            this.listenTo(this.ideas, 'reset', this.render);
+
             return this;
         },
 

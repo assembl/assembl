@@ -31,6 +31,29 @@ define(function(require){
                 return this.id;
             }
         },
+        /**
+         * Get the innerText from the given `id` element
+         * Parses the json and execute `.reset` method in the Model
+         *
+         * @param {String} id The script tag id
+         */
+        fetchFromScriptTag: function(id){
+          var that = this,
+              script = document.getElementById(id),
+              json;
+            
+          if( !script ){
+            throw new Error(Ctx.format("Script tag #{0} doesn't exist", id));
+          }
+
+          try {
+            json = JSON.parse(script.textContent);
+          } catch(e){
+            console.log(script.textContent);
+            throw new Error("Invalid json. " + e.message);
+          }
+          this.set(json);
+        },
         
         url: function() {
             var base =
@@ -116,20 +139,26 @@ define(function(require){
          * @param {String} id The script tag id
          */
         fetchFromScriptTag: function(id){
-            var script = document.getElementById(id),
-                json;
-
-            if( !script ){
+            var that = this,
+                script = document.getElementById(id),
+                json,
+                deferred = $.Deferred();
+            setTimeout(function() {
+              if( !script ){
                 throw new Error(Ctx.format("Script tag #{0} doesn't exist", id));
-            }
+                deferred.reject();
+              }
 
-            try {
+              try {
                 json = JSON.parse(script.textContent);
-            } catch(e){
+              } catch(e){
                 throw new Error("Invalid json. " + e.message);
-            }
-
-            this.reset(json);
+                deferred.reject();
+              }
+              that.reset(json);
+              deferred.resolve(that);
+            }, 1);
+            return deferred.promise();
         },
 
         /**

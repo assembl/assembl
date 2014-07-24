@@ -6,15 +6,15 @@
 #}
 
 {% set segmentDate = '<%= ctx.getDateFormated(segment.get("creationDate")) %>' %}
-{% set segmentCreatorName = '<%= segment.getCreator().get("name") %>' %}
+{% set segmentCreatorName = '<%= segment.getCreatorDEPRECATED().get("name") %>' %}
 {% set harverterTooltip = gettext('Harvested by %(name)s %(date)s')|format(date=segmentDate, name=segmentCreatorName) %}
-{% set segmentCreatorAvatarImg = '<a class="profile-link" href="#" data-tooltip="'+harverterTooltip+'"><img src="<%= segment.getCreator().getAvatarUrl(24) %>" class="image-rounded" alt="" /></a>' %}
+{% set segmentCreatorAvatarImg = '<a class="profile-link" href="#" data-tooltip="'+harverterTooltip+'"><img src="<%= segment.getCreatorDEPRECATED().getAvatarUrl(24) %>" class="image-rounded" alt="" /></a>' %}
 {% set segmentLinkTooltip = gettext('Click here to see the original contribution this segment is quoted from.') %}
 {% set segmentTextLink = '<a class="segment-link" data-segmentid="<%= segment.cid %>" data-tooltip="'+segmentLinkTooltip+'">'+gettext('See&nbsp;in&nbsp;context')+'<%= segment.getTypeIcon() %>&nbsp;</a>' %}
 
 
 <div class="box postit" draggable="true" data-segmentid="<%= segment.cid %>">
-    <% if (canEditExtracts || (canEditMyExtracts && segment.getCreator() == ctx.getCurrentUser())) { %>
+    <% if (canEditExtracts || (canEditMyExtracts && segment.getCreatorDEPRECATED() == ctx.getCurrentUser())) { %>
         <span data-segmentid="<%= segment.cid %>" class="closebutton"></span>
     <% } %>
     
@@ -26,9 +26,9 @@
     <div class="segment-author">
         <%
         var type = segment.get("target")["@type"];
-        if ( type == "Email" || type == "Post" || type == "AssemblPost" || type == "ImportedPost") { var post = segment.getAssociatedPost(); %>
-            {% set postCreatorAvatarImg = '<img src="<%= post.getCreator().getAvatarUrl(35) %>" class="image-rounded" alt="" />' %}
-            {% set postCreatorName = '<%= post.getCreator().get("name") %>' %}
+        if ( type == "Email" || type == "Post" || type == "AssemblPost" || type == "ImportedPost") { %>
+            {% set postCreatorAvatarImg = '<img src="<%= postCreator.getAvatarUrl(35) %>" class="image-rounded" alt="" />' %}
+            {% set postCreatorName = '<%= postCreator.get("name") %>' %}
             {% set postDate = '<%= ctx.getDateFormated(post.get("date")) %>' %}
             
             {{ gettext('%(img)s Posted %(date)s by <strong>%(name)s</strong>')|format(name=postCreatorName, img=postCreatorAvatarImg, date=postDate)|safe }}

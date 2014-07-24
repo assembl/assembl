@@ -41,23 +41,26 @@ define(function(require){
             // once it creates the highlight
             this.attributes._ranges = _ranges;
             var that = this;
-            this.listenTo(this,"change:idIdea", function(){
-                var previousIdea, 
-                    idea;
-                if(that.previous("idIdea") !== null) {
-                    
-                    previousIdea = assembl.ideaList.ideas.get(that.previous("idIdea"));
-                    //console.log("Segment:initialize:triggering idea change (previous idea)");
-                    previousIdea.trigger('change');
-                }
-                if(that.get('idIdea') !== null) {
-                    
-                    idea = assembl.ideaList.ideas.get(that.get('idIdea'));
-                    //console.log("Segment:initialize:triggering idea change (new idea)");
-                    idea.trigger('change');
-                }
-            })
 
+            this.listenTo(this,"change:idIdea", function(){
+              that.collection.collectionManager.getAllIdeasCollectionPromise().done(
+                  function(allIdeasCollection) {
+                    var previousIdea, 
+                        idea;
+                    
+                    if(that.previous("idIdea") !== null) {
+                      previousIdea = allIdeasCollection.get(that.previous("idIdea"));
+                      //console.log("Segment:initialize:triggering idea change (previous idea)");
+                      previousIdea.trigger('change');
+                    }
+                    if(that.get('idIdea') !== null) {
+                    
+                      idea = allIdeasCollection.get(that.get('idIdea'));
+                      //console.log("Segment:initialize:triggering idea change (new idea)");
+                      idea.trigger('change');
+                    }
+                        });
+                  })
             // cleaning
             delete this.attributes.highlights;
         },
@@ -93,29 +96,21 @@ define(function(require){
             }
         },
 
-        /**
-         * @return {Idea} The Post the segments is associated to, if any
-         * 
-         * FIXME:  Once proper lazy loading is implemented, this must be changed
-         * to use it.  As it is, it will leak memory
-         * 
+        /** Return a promise for the Post the segments is associated to, if any
+         * @return {$.Defered.Promise}
          */
-        getAssociatedPost: function(){
-            var post = null,
-                idPost = this.attributes.idPost;
-
-            if (idPost) {
-                if(Ctx.segmentPostCache[idPost]) {
-                    return Ctx.segmentPostCache[idPost];
-                }
-                post = assembl.messageList.messages.get(idPost);
-                if( !post ){
-                    post = new Message.Model({'@id': idPost});
-                    post.fetch({async:false});
-                }
-                Ctx.segmentPostCache[idPost] = post;
-            }
-            return post;
+        getAssociatedPostPromise: function(){
+          var that = this,
+          deferred = $.Deferred();
+          this.collection.collectionManager.getAllMessageStructureCollectionPromise().done(
+              function(allMessageStructureCollection) {
+                var post = null,
+                idPost = that.get('idPost');
+                post = allMessageStructureCollection.get(idPost);
+                deferred.resolve(post);
+              }
+          );
+          return deferred.promise();
         },
 
         /**
@@ -156,9 +151,9 @@ define(function(require){
          * Returns the segent's creator
          * @return {User}
          */
-        getCreator: function(){
+        getCreatorDEPRECATED: function(){
             var creatorId = this.get('idCreator');
-            return assembl.users.getById(creatorId);
+            return this.collection.collectionManager._allUsersCollection.getById(creatorId);
         },
 
         /**
@@ -189,14 +184,7 @@ define(function(require){
          * @init
          */
         initialize: function(){
-            this.listenTo(this,"add remove", function(segment){
-                var idea;
-                if(segment.get('idIdea') !== null) {
-                    idea = assembl.ideaList.ideas.get(segment.get('idIdea'));
-                    //console.log("SegmentCollection:initialize:triggering idea change (new idea)");
-                    idea.trigger('change');
-                }
-            });
+         
         },
         
         /**
@@ -211,8 +199,7 @@ define(function(require){
                 if( item.get('idIdea') !== null ){
                     return false;
                 }
-
-                return item.getCreator().getId() == currentUser.getId();
+                return item.get('idCreator') == currentUser.id;
             });
         },
 

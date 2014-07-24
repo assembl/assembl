@@ -6,6 +6,8 @@
   @include box-sizing( border-box );
     position: relative;
     z-index: 10;
+    height: 100%;
+    border: 1px solid #d9d9d9;
     background-color: #fff;
     overflow: hidden;
     fieldset {
@@ -115,14 +117,14 @@
 // -----------
 .panel-body {
     //The scrollbars do not work with position relative
-    //position: absolute;
-    //top: $panel-header-height;
-    //right: 0;
-    //bottom: 0;
-    //left: 0;
+    position: absolute;
+    top: $panel-header-height;
+    right: 0;
+    bottom: 0;
+    left: 0;
     overflow-y: auto;
     overflow-x: hidden;
-    //box-sizing: border-box;
+    box-sizing: border-box;
 
     .panel.is-dragover & {
         background-color: $dragbox-background-color;
