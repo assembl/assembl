@@ -29,6 +29,10 @@ voteApp.config(['$routeProvider', function($routeProvider){
            templateUrl:'app/partials/admin_configure_instance_set_criteria.html',
            controller:'adminConfigureInstanceSetCriteriaCtl'
         }).
+        when('/admin/configure_instance_set_votable_ideas', {
+           templateUrl:'app/partials/admin_configure_instance_set_votable_ideas.html',
+           controller:'adminConfigureInstanceSetVotableIdeasCtl'
+        }).
         when('/admin/configure_instance_set_settings', {
            templateUrl:'app/partials/admin_configure_instance_set_settings.html',
            controller:'adminConfigureInstanceSetSettingsCtl'
