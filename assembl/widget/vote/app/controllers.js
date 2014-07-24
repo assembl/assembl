@@ -356,6 +356,13 @@ voteApp.controller('adminCtl',
         $("#criterion_remove_result")
       );
     });
+
+    $("#widget_delete").on("submit", function(){
+      $scope.deleteWidget(
+        $("#widget_delete_widget_endpoint").val(),
+        $("#widget_delete_result")
+      );
+    });
     
     
     
@@ -522,6 +529,20 @@ voteApp.controller('adminCtl',
         //data: $.param(post_data),
         headers: {'Content-Type': 'application/json'}
         //headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+    }).success(function(data, status, headers){
+        console.log("success");
+        result_holder.text("Success!");
+    }).error(function(status, headers){
+        console.log("error");
+        result_holder.text("Error");
+    });
+  };
+
+  $scope.deleteWidget = function(endpoint, result_holder){
+    $http({
+        method: 'DELETE',
+        url: endpoint,
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'}
     }).success(function(data, status, headers){
         console.log("success");
         result_holder.text("Success!");
