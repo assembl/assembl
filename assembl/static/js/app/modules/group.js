@@ -4,14 +4,8 @@ define(function(require){
            IdeaList = require('views/ideaList'),
           IdeaPanel = require('views/ideaPanel'),
         MessageList = require('views/messageList'),
-          Synthesis = require('models/synthesis'),
      SynthesisPanel = require('views/synthesisPanel'),
-               User = require('models/user'),
-                Ctx = require('modules/context'),
-               Idea = require('models/idea'),
-           IdeaLink = require('models/ideaLink'),
-                  $ = require('jquery'),
-            Message = require('views/message');
+                  $ = require('jquery');
 
    function _createGroupItem(collection){
        /**
@@ -24,7 +18,6 @@ define(function(require){
 
        var GridItem = Marionette.ItemView.extend({
            template: "#tmpl-item-template",
-           //className: 'panelItem',
            initialize: function(options){
                this.type = options.model.attributes.type;
            },
@@ -35,65 +28,34 @@ define(function(require){
 
                switch(this.type){
                    case 'idea-list':
-                       console.log('idea-list');
-                       this.ideas = new Idea.Collection();
                        var ideaList =  new IdeaList({
-                           ideas: this.ideas,
-                           ideaLinks: new IdeaLink.Collection()
+                           el: this.$el
                        });
-                       ideaList.ideas.fetchFromScriptTag('ideas-json');
                        this.$el.append(ideaList.render().el);
-
-                       console.log('wrapper', this.$el);
-
                        break;
                    case 'idea-panel':
-                       console.log('idea-panel');
-                       this.ideas = new Idea.Collection();
                        var ideaPanel = new IdeaPanel({
-                           ideas: this.ideas
+                           el: this.$el
                        });
-
                        this.$el.append(ideaPanel.render().el);
                        break;
                    case 'message':
-                       console.log('message');
-
-                       var segmentList = new SegmentList();
-                       segmentList.segments.fetchFromScriptTag('extracts-json');
-
                        var messageList = new MessageList({
-                           segmentList: segmentList
+                           el: this.$el
                        });
-                       messageList.messages.fetch({
-                           reset:true
-                       });
-
-                       /*var message = new Message({
-                           messageList: messageList
-                       })*/
-
                        this.$el.append(messageList.render().el);
-
                        break;
                    case 'clipboard':
-                       console.log('clipboard');
-
-                       var segmentList = new SegmentList();
-                       segmentList.segments.fetchFromScriptTag('extracts-json');
+                       var segmentList = new SegmentList({
+                           el: this.$el
+                       });
                        this.$el.append(segmentList.render().el);
                        break;
                    case 'synthesis':
-                       console.log('synthesis');
-                       /*window.assembl.syntheses = new Synthesis.Collection();
-                       var nextSynthesisModel = new Synthesis.Model({'@id': 'next_synthesis'});
-                       nextSynthesisModel.fetch();
-                       assembl.syntheses.add(nextSynthesisModel);
-                       view = new SynthesisPanel({
-                           el: '#synthesisPanel',
-                           button: '#button-synthesis',
-                           model: nextSynthesisModel
-                       }) */
+                       var synthesisPanel = new SynthesisPanel({
+                           el: this.$el
+                       });
+                       this.$el.append(synthesisPanel.render().el);
                        break;
                }
            }
@@ -107,10 +69,42 @@ define(function(require){
            initialize: function(){
 
            },
+           events:{
+             'click .add-group':'addGroup'
+           },
            onRenderTemplate: function(){
-               this.$el.css('height', '100%');
-               this.$el.css('display', 'inline-block');
+               this.$el.addClass('wrapper-group');
+           },
+           addGroup: function(){
+
+               console.log('add group');
+
+               var Modal = Backbone.Modal.extend({
+                   template: _.template($('#tmpl-create-group').html()),
+                   cancelEl:'.bbm-button',
+                   initialize: function(){
+                       this.$el.addClass('group-modal');
+                   },
+
+                   events:{
+                       'click .itemGroup a':'addToGroup'
+                   },
+
+                   addToGroup: function(e){
+
+                       var type = $(e.target).attr('data-item');
+
+
+                       console.log('add to group', type)
+                   }
+               });
+
+               var modalView = new Modal();
+
+               $('.modal').html(modalView.render().el);
+
            }
+
        });
 
        var items = new Items(collection.group);
@@ -120,7 +114,7 @@ define(function(require){
        });
    }
 
-   return function(){
+   function resolveGroup(){
 
        if(window.localStorage){
 
@@ -137,8 +131,7 @@ define(function(require){
            {
                group:[
                    {type:'idea-list'},
-                   {type:'idea-panel'},
-                   {type:'message'}
+                   {type:'idea-panel'}
                ]
            }
        ];
@@ -149,11 +142,9 @@ define(function(require){
 
            $('#panelarea').append(group.render().el);
 
-       })
-
-       //$('#group-content').append()
-
-       //return _createGroupItem(Data);
+       });
    }
+
+   return resolveGroup;
 
 });

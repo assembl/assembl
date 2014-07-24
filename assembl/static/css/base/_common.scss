@@ -10,12 +10,12 @@ html {
 @include scrollbar {
     background-color: #eeeeee;
     width:10px;
-    height:10px
+    height:15px
 }
 
 @include scrollbar-thumb {
-    background:#c2c2c2;
-    border-radius:6px;
+    background:#9A3FD5;
+    border-radius:4px;
     width:8px;
     min-height:40px;
     border:2px solid #eeeeee;

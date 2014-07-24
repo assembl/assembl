@@ -59,7 +59,7 @@ define(function(require){
     
 
     initialize: function(options){
-      ;
+
     },
     
 

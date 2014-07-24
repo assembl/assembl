@@ -15,14 +15,14 @@ define(function(require){
                User = require('models/user'),
              navBar = require('views/navBar'),
        Notification = require('views/notification'),
-         panelGroup = require('views/panelGroupContainer');
   CollectionManager = require('modules/collectionManager');
 
     var Controller = Marionette.Controller.extend({
 
         initialize: function(){
-            var $w = window.assembl = {},
-            collectionManager = new CollectionManager();
+           window.assembl = {};
+
+           var collectionManager = new CollectionManager();
             
             // User
             /**
@@ -44,44 +44,6 @@ define(function(require){
             loadCurrentUser();
             //We only need this here because we still use deprecated access functions
             collectionManager.getAllUsersCollectionPromise();
-
-            // The order of these initialisations matter...
-            // Segment List
-            //$w.segmentList = new SegmentList({el: '#segmentList', button: '#button-segmentList'});
-            //$w.segmentList.segments.fetchFromScriptTag('extracts-json');
-
-            // Idea list
-            //$w.ideaList = new IdeaList({el: '#ideaList', button: '#button-ideaList'});
-
-            // Idea panel
-            //$w.ideaPanel = new IdeaPanel({el: '#ideaPanel', button: '#button-ideaPanel'}).render();
-
-            // Message
-            //$w.messageList = new MessageList({el: '#messageList', button: '#button-messages'}).render();
-            //$w.messageList.messages.fetch({reset:true});
-
-            // Synthesis
-            //$w.syntheses = new Synthesis.Collection();
-            //var nextSynthesisModel = new Synthesis.Model({'@id': 'next_synthesis'});
-            //nextSynthesisModel.fetch();
-
-            /*$w.syntheses.add(nextSynthesisModel);
-            $w.synthesisPanel = new SynthesisPanel({
-                el: '#synthesisPanel',
-                button: '#button-synthesis',
-                model: nextSynthesisModel
-            });*/
-
-            //$w.ideaList.ideas.fetchFromScriptTag('ideas-json');
-
-            //init notification bar
-            //var notification = new Notification();
-
-            /*Assembl.vent.on('setLocale', function(locale){
-
-                console.log('setLocale', locale);
-
-            })*/
         },
 
         /**
@@ -95,10 +57,6 @@ define(function(require){
             if(!window.localStorage.getItem('showNotification')){
                Assembl.notificationRegion.show(new Notification());
             }
-
-            var groupLayout = new panelGroup();
-
-            Assembl.panelGroupControl.show(groupLayout);
 
             var resolveGroup = new Group();
 

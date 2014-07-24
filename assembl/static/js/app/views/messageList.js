@@ -76,9 +76,6 @@ define(function(require){
         initialize: function(obj){
             var that = this,
             collectionManager = new CollectionManager();
-            if( obj.button ){
-                this.button = $(obj.button).on('click', Ctx.togglePanel.bind(window, 'messageList'));
-            }
 
             PanelView.prototype.initialize.apply(this);
             this.renderedMessageViewsCurrent = {};
@@ -1274,7 +1271,7 @@ define(function(require){
          */
         onReturnButtonClick: function(ev){
             this.closeThread();
-        },
+        }
 
     });
 

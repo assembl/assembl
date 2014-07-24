@@ -46,12 +46,6 @@ CollectionManager = require('modules/collectionManager');
         template: Ctx.loadTemplate('segmentList'),
 
         /**
-         * The collection
-         * @type {SegmentCollection}
-         */
-        segments: new Segment.Collection(),
-
-        /**
          * The panel element
          * @type {jQuery}
          */
@@ -145,7 +139,7 @@ CollectionManager = require('modules/collectionManager');
          */
         addAnnotationAsSegment: function(annotation, idIdea){
           var that = this,
-              idPost = Ctx.getPostIdFromAnnotation(annotation)
+              idPost = Ctx.getPostIdFromAnnotation(annotation),
               collectionManager = new CollectionManager();
 
           var segment = new Segment.Model({
@@ -404,7 +398,7 @@ CollectionManager = require('modules/collectionManager');
 
             collectionManager.getAllExtractsCollectionPromise().done(
                 function(allExtractsCollection) {
-                  segment = allExtractsCollection.get(cid);
+                  var segment = allExtractsCollection.get(cid);
                   Ctx.showTargetBySegment(segment);
                 });
         }

@@ -5,10 +5,10 @@ $panelarea-min-height: 400px;
 // =================
 .panelarea  {
     position: absolute;
-    top: 77px;
-    right: 5px;
+    top: 76px;
+    right: 0;
     bottom: 4px;
-    left: 5px;
+    left: 0;
     min-height: $panelarea-min-height;
     display: block;
     overflow: { x: auto; y: hidden; }
@@ -52,7 +52,7 @@ $panelarea-min-height: 400px;
 .panelarea-col {
     @include box-sizing( border-box );
     display: none;
-    padding: 0 4px;
+    //padding: 0 4px;
     height: 100%;
     min-width: $panelarea-min-width;
 }

@@ -54,14 +54,9 @@ define(function(require){
         /**
          * @init
          */
-        initialize: function(obj){
+        initialize: function(options){
             var that = this,
                 collectionManager = new CollectionManager();
-
-            if( obj && obj.button ){
-                this.button = $(obj.button);
-                this.button.on('click', Ctx.togglePanel.bind(window, 'ideaList'));
-            }
 
             collectionManager.getAllIdeasCollectionPromise().done(
                 function(allIdeasCollection) {
@@ -174,7 +169,6 @@ define(function(require){
                 data.collapsed = that.collapsed;
 
                 data.filter = that.filter;
-
                 that.$el.html( that.template(data) );
                 Ctx.initTooltips(that.$el);
                 that.$('.idealist').append( list );

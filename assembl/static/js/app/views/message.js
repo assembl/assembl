@@ -53,7 +53,7 @@ CollectionManager = require('modules/collectionManager');
          * @init
          * @param {MessageModel} obj the model
          */
-        initialize: function(obj){
+        initialize: function(options){
             /*this.listenTo(this, "all", function(eventName) {
                 console.log("message event received: ", eventName);
             });
@@ -63,7 +63,7 @@ CollectionManager = require('modules/collectionManager');
             this.listenTo(this.model, 'replacedBy', this.onReplaced);
             this.listenTo(this.model, 'showBody', this.onShowBody);
             this.listenTo(this.model, 'change', this.render);
-            this.messageListView = obj.messageListView;
+            this.messageListView = options.messageListView;
             this.viewStyle = this.messageListView.defaultMessageStyle;
             this.messageListView.on('annotator:destroy', this.onAnnotatorDestroy, this);
             this.messageListView.on('annotator:initComplete', this.onAnnotatorInitComplete, this);
@@ -170,7 +170,9 @@ CollectionManager = require('modules/collectionManager');
                  * after a delay.  We have a reference to them in renderedMessageViewsCurrent
                  * Right now we just re-re-re call initAnnotator
                  */
-                assembl.messageList.initAnnotator();
+
+                that.messageListView.initAnnotator();
+
                 that.loadAnnotations();
                 if(that.replyBoxShown) {
                     that.openReplyBox();

@@ -427,7 +427,7 @@ define(function(require){
                 child.save();
                 currentOrder += 1;
             });
-        },
+        }
         
     });
 

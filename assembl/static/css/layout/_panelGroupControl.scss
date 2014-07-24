@@ -1,62 +1,29 @@
-#panelGroupControl {
-  position: absolute;
-  top: 77px;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  min-height: 400px;
-  display: block;
-  overflow-x: auto;
-  overflow-y: hidden;
-
-  #panelGroupContainer {
-    button {
-      border: none;
-      background-color: #FFFFFF;
-      color: #AAAAAA;
-      border-radius: 2px;
-      padding: 6px;
-      cursor: pointer;
-      outline: none;
+.wrapper-group{
+  position: relative;
+  height:100%;
+  width:100%;
+  display:inline-block;
+  box-sizing: border-box;
+  padding-top: 25px;
+  background-color: #FFFFFF;
+  .add-group {
+    cursor: pointer;
+    position: absolute;
+    left: 5px;
+    top: 5px;
+    line-height: 20px;
+    &:hover{
+      text-decoration: underline;
     }
-
-    .groupItem {
-      display:table-cell;
-      min-height: 400px;
-      height: 100%;
-      background-color: #ffffff;
-      //border-left: 3px solid #E3E1E6;
-      border-right: 5px solid #E3E1E6;
-      .header-close{
-        box-sizing: border-box;
-        height: 25px;
-        padding-right: 1px;
-        .close-panel{
-          text-decoration: none;
-          outline: none;
-          float: right;
-          line-height: 25px;
-          font-size: 20px;
-        }
-      }
-      .panelItem {
-        display:table-cell;
-        > div {
-          border-radius: 3px;
-          background-color: #efefef;
-        }
-      }
-
-      .panel.ideaList{
-         min-width: 450px;
-      }
-      .panel.ideaPanel{
-        min-width: 320px;
-      }
-      .panel.messagePanel{
-        min-width: 520px;
-      }
-    }
+  }
+  .close-group {
+    text-decoration: none;
+    cursor: pointer;
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    line-height: 20px;
+    font-size: 20px;
   }
 }
 

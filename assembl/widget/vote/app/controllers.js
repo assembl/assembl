@@ -68,7 +68,7 @@ voteApp.controller('adminConfigureInstanceSetCriteriaCtl',
 
     $http({
       method: 'GET',
-      url: $scope.widget_endpoint,
+      url: $scope.widget_endpoint
     }).success(function(data, status, headers){
       console.log(data);
       $scope.widget = data;
@@ -103,7 +103,7 @@ voteApp.controller('adminConfigureInstanceSetCriteriaCtl',
     var ideas_endpoint_url = AssemblToolsService.resourceToUrl($scope.discussion_uri) + '/ideas?view=default';
     $http({
       method: 'GET',
-      url: ideas_endpoint_url,
+      url: ideas_endpoint_url
     }).success(function(data, status, headers){
       console.log(data);
       $scope.current_substep = 2;
@@ -173,7 +173,7 @@ voteApp.controller('adminConfigureInstanceSetSettingsCtl',
 
     $http({
       method: 'GET',
-      url: $scope.widget_endpoint,
+      url: $scope.widget_endpoint
     }).success(function(data, status, headers){
       console.log(data);
       $scope.widget = data;
@@ -297,7 +297,7 @@ voteApp.controller('adminCreateFromIdeaCtl',
     $scope.url_parameter_idea = $routeParams.idea;
     $http({
       method: 'GET',
-      url: AssemblToolsService.resourceToUrl($scope.url_parameter_idea),
+      url: AssemblToolsService.resourceToUrl($scope.url_parameter_idea)
     }).success(function(data, status, headers){
       console.log(data);
       $scope.idea = data;
@@ -305,7 +305,7 @@ voteApp.controller('adminCreateFromIdeaCtl',
 
       $http({
         method: 'GET',
-        url: AssemblToolsService.resourceToUrl($scope.discussion_uri),
+        url: AssemblToolsService.resourceToUrl($scope.discussion_uri)
       }).success(function(data, status, headers){
         console.log(data);
         $scope.discussion = data;
@@ -456,7 +456,7 @@ voteApp.controller('adminCtl',
   $scope.ideaChildrenToCriteria = function(endpoint, result_holder){
     $http({
       method: 'GET',
-      url: endpoint,
+      url: endpoint
     }).success(function(data, status, headers){
       console.log("success");
       console.log("data:");
@@ -484,7 +484,7 @@ voteApp.controller('adminCtl',
   $scope.updateOnceWidgetIsCreated = function(){
     $http({
       method: 'GET',
-      url: $scope.widget_endpoint,
+      url: $scope.widget_endpoint
       //data: $.param(post_data),
       //headers: {'Content-Type': 'application/json'}
       //headers: {'Content-Type': 'application/x-www-form-urlencoded'}
