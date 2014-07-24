@@ -54,10 +54,6 @@ define(function(require){
         currentViewStyle: null,
 
         /**
-         * Is the view currently rendering
-         */
-        currentlyRendering: false,
-        /**
          * If there were any render requests inhibited while rendering was 
          * processed
          */
@@ -78,6 +74,8 @@ define(function(require){
          *  @init
          */
         initialize: function(obj){
+            var that = this,
+            collectionManager = new CollectionManager();
             if( obj.button ){
                 this.button = $(obj.button).on('click', Ctx.togglePanel.bind(window, 'messageList'));
             }
@@ -95,15 +93,22 @@ define(function(require){
              * Benoitg:  Why?  There is no way to know if the message is, or isn't relevent to the user, and worthy
              * of notification.  Everything else updates realtime, why make an exception for messages?
              * */
-            /*this.listenTo(this.messages, 'add reset', function(){
+            /* TODO:  PORT THIS TO NEW SYSTEM - benoitg -2014-07-23
+             * 
+             * this.listenTo(this.messages, 'add reset', function(){
                 that.invalidateResultsAndRender();
                 that.initAnnotator();
 
-            });
+            });*/
+            
 
-            this.listenTo(assembl.segmentList.segments, 'add remove reset', this.initAnnotator);
-            */
-            var that = this;
+            collectionManager.getAllExtractsCollectionPromise().done(
+                function(allExtractsCollection) {
+                  that.initAnnotator();
+                  that.listenTo(allExtractsCollection, 'add remove reset', that.initAnnotator);
+                }
+            );
+
             Assembl.vent.on('idea:selected', function(idea){
                 if(idea && that.currentQuery.isFilterInQuery(that.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, idea.getId())) {
                     //Filter is already in sync
@@ -612,7 +617,6 @@ define(function(require){
             // Resetting the messages
             this.resetOffsets();
             var collectionManager = new CollectionManager();
-            console.log('collectionManager: ', collectionManager);
             collectionManager.getAllMessageStructureCollectionPromise().done(
                 function(allMessageStructureCollection) {
                     that.allMessageStructureCollection = allMessageStructureCollection;
@@ -972,7 +976,6 @@ define(function(require){
 
             if ( arguments.length > 1 )
             {
-                console.log("applying unread: " + only_unread);
                 if ( only_unread === null )
                     this.currentQuery.clearFilter(this.currentQuery.availableFilters.POST_IS_UNREAD, null);
                 else
@@ -1132,71 +1135,67 @@ define(function(require){
          */
         showMessageById: function(id, callback){
             //TODO:  Use a promise here, it will crash most of the time... benoitg 2014-07-23
-            var message = this.messages.get(id),
-                 selector = Ctx.format('[id="message-{0}"]', id),
-                 el,
-                 messageIsDisplayed = false,
-                 that = this,
-                 requestedOffsets;
+            var that = this,
+                selector = Ctx.format('[id="message-{0}"]', id),
+                el,
+                messageIsDisplayed = false,
+                that = this,
+                requestedOffsets,
+                collectionManager = new CollectionManager();
             
-            if(this.currentlyRendering) {
-                var success = function() {
-                    console.log("showMessageById() panel was currently rendering, calling showMessageById() recursively");
-                    that.showMessageById(id, callback);
-                }
-                this.listenToOnce(this, "render_complete", success);
-                return;
-            }
-            
-            this.messageIdsToDisplay.forEach(function(displayedId){
-                if (displayedId == id){
-                    messageIsDisplayed = true;
-                }
-            });
-            
-            if(messageIsDisplayed && !this.isMessageOnscreen(id)) {
-                var success = function() {
-                    console.log("showMessageById() message " + id + " not onscreen, calling showMessageById() recursively");
-                    that.showMessageById(id, callback);
-                };
-                requestedOffsets = this.calculateRequestedOffsetToShowMessage(id);
-                this.showMessages(requestedOffsets);
-                this.listenToOnce(this, "render_complete", success);
-            }
-            if( !messageIsDisplayed ){
-                //The current filters might not include the message
-                this.showAllMessages();
-                var success = function() {
-                    console.log("showMessageById() message " + id + " not found, calling showMessageById() recursively");
-                    that.showMessageById(id, callback);
-                };
-                this.listenToOnce(this, "render_complete", success);
-                return;
-            }
-            var real_callback = function(){
-                    $(selector).highlight();
-                    if( _.isFunction(callback) ){
-                        callback();
-                    }
-                };
-
-            if( message ){
-                message.trigger('showBody');
-                el = $(selector);
-                if( el[0] ){
-                    var panelBody = this.$('.panel-body');
-                    var panelOffset = panelBody.offset().top;
-                    var offset = el.offset().top;
-                    // Scrolling to the element
-                    var target = offset - panelOffset + panelBody.scrollTop();
-                    panelBody.animate({ scrollTop: target }, { complete: real_callback });
-                } else {
-                    console.log("showMessageById(): ERROR:  Message " + id + " not found in the DOM with selector: " + selector);
-                }
-            }
-            else {
-                console.log("showMessageById(): ERROR:  Message " + id + " not found in collection");
-            }
+            collectionManager.getAllMessageStructureCollectionPromise().done(
+                function(allMessageStructureCollection) {
+                  var message = allMessageStructureCollection.get(id)
+                  that.messageIdsToDisplay.forEach(function(displayedId){
+                      if (displayedId == id){
+                          messageIsDisplayed = true;
+                      }
+                  });
+                  
+                  if(messageIsDisplayed && !that.isMessageOnscreen(id)) {
+                      var success = function() {
+                          console.log("showMessageById() message " + id + " not onscreen, calling showMessageById() recursively");
+                          that.showMessageById(id, callback);
+                      };
+                      requestedOffsets = that.calculateRequestedOffsetToShowMessage(id);
+                      that.showMessages(requestedOffsets);
+                      that.listenToOnce(that, "render_complete", success);
+                  }
+                  if( !messageIsDisplayed ){
+                      //The current filters might not include the message
+                    that.showAllMessages();
+                      var success = function() {
+                          console.log("showMessageById() message " + id + " not found, calling showMessageById() recursively");
+                          that.showMessageById(id, callback);
+                      };
+                      that.listenToOnce(that, "render_complete", success);
+                      return;
+                  }
+                  var real_callback = function(){
+                          $(selector).highlight();
+                          if( _.isFunction(callback) ){
+                              callback();
+                          }
+                      };
+      
+                  if( message ){
+                      message.trigger('showBody');
+                      el = $(selector);
+                      if( el[0] ){
+                          var panelBody = that.$('.panel-body');
+                          var panelOffset = panelBody.offset().top;
+                          var offset = el.offset().top;
+                          // Scrolling to the element
+                          var target = offset - panelOffset + panelBody.scrollTop();
+                          panelBody.animate({ scrollTop: target }, { complete: real_callback });
+                      } else {
+                          console.log("showMessageById(): ERROR:  Message " + id + " not found in the DOM with selector: " + selector);
+                      }
+                  }
+                  else {
+                      console.log("showMessageById(): ERROR:  Message " + id + " not found in collection");
+                  }
+                });
 
         },
 

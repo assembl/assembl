@@ -8,7 +8,9 @@ define(function(require){
              Ctx = require('modules/context'),
             i18n = require('utils/i18n'),
      Permissions = require('utils/permissions'),
- MessageSendView = require('views/messageSend');
+ MessageSendView = require('views/messageSend'),
+            User = require('models/user'),
+CollectionManager = require('modules/collectionManager');
 
 
     var MIN_TEXT_TO_TOOLTIP = 5,
@@ -101,79 +103,82 @@ define(function(require){
          * @return {MessageView}
          */
         render: function(){
-            Assembl.commands.execute('render');
-            var data = this.model.toJSON(),
-                children,
-                bodyFormatClass = null,
-                level;
-            level = this.currentLevel !== null ? this.currentLevel : 1;
-            if( ! _.isUndefined(level) ){
-                this.currentLevel = level;
-            }
-            Ctx.cleanTooltips(this.$el);
-            this.setViewStyle(this.viewStyle);
+          var that = this;
+
+          this.model.getCreatorPromise().done(
+              function (creator) {
+                var data = that.model.toJSON(),
+                    children,
+                    bodyFormatClass = null,
+                    level;
+                level = that.currentLevel !== null ? that.currentLevel : 1;
+                if( ! _.isUndefined(level) ){
+                    that.currentLevel = level;
+                }
+                Ctx.cleanTooltips(that.$el);
+                that.setViewStyle(that.viewStyle);
+                    
+                data['id'] = data['@id'];
+                data['date'] = Ctx.formatDate(data.date);
+                data['creator'] = creator;
+                if(that.model.get('bodyMimeType')) {
+                    bodyFormatClass = "body_format_"+that.model.get('bodyMimeType').replace("/", "_"); 
+                }
+                data['bodyFormatClass'] = bodyFormatClass;
+                data['viewStyle'] = that.viewStyle;
+                // Do NOT change this, it's the message id stored in the database 
+                // by annotator when storing message annotations
+                // It has to contain ONLY raw content of the message provided by the
+                // database for annotator to parse it back properly
+                data['messageBodyId'] = Ctx.ANNOTATOR_MESSAGE_BODY_ID_PREFIX + data['@id'];
+                data['isHoisted'] = that.isHoisted;
+    
+                data['ctx'] = Ctx;
                 
-            data['id'] = data['@id'];
-            data['date'] = Ctx.formatDate(data.date);
-            data['creator'] = this.model.getCreator();
-            if(this.model.get('bodyMimeType')) {
-                bodyFormatClass = "body_format_"+this.model.get('bodyMimeType').replace("/", "_"); 
-            }
-            data['bodyFormatClass'] = bodyFormatClass;
-            data['viewStyle'] = this.viewStyle;
-            // Do NOT change this, it's the message id stored in the database 
-            // by annotator when storing message annotations
-            // It has to contain ONLY raw content of the message provided by the
-            // database for annotator to parse it back properly
-            data['messageBodyId'] = Ctx.ANNOTATOR_MESSAGE_BODY_ID_PREFIX + data['@id'];
-            data['isHoisted'] = this.isHoisted;
-
-            data['ctx'] = Ctx;
-            
-            this.$el.attr("id","message-"+ data['@id']);
-            data['read'] = this.model.get('read')
-            data['user_is_connected'] = Ctx.getCurrentUser() !== assembl.users.getUnknownUser();
-            this.$el.addClass(data['@type']);
-            if (this.model.get('read') || !data['user_is_connected']) {
-                this.$el.addClass('read');
-                this.$el.removeClass('unread');
-            } else {
-                this.$el.addClass('unread');
-                this.$el.removeClass('read');
-            }
-            data = this.transformDataBeforeRender(data);
-            this.$el.html( this.template(data) );
-            Ctx.initTooltips(this.$el);
-            Ctx.initClipboard();
-
-            this.replyView = new MessageSendView({
-                'allow_setting_subject': false,
-                'reply_message': this.model,
-                'body_help_message': i18n.gettext('Type your response here...'),
-                'cancel_button_label': null,
-                'send_button_label': i18n.gettext('Send your reply'),
-                'subject_label': null,
-                'mandatory_body_missing_msg': i18n.gettext('You did not type a response yet...'),
-                'mandatory_subject_missing_msg': null
-            });
-            this.$('.message-replybox').append(this.replyView.render().el);
-
-            this.postRender();
-
-            /* TODO: BENOITG:  We should memorize which views are onscreen, and 
-             * re-call initAnnotator as needed (once) and loadAnnotations
-             * after a delay.  We have a reference to them in renderedMessageViewsCurrent
-             * Right now we just re-re-re call initAnnotator
-             */
-            assembl.messageList.initAnnotator();
-            this.loadAnnotations();
-            if(this.replyBoxShown) {
-                this.openReplyBox();
-            }
-            else {
-                this.closeReplyBox();
-            };
-            
+                that.$el.attr("id","message-"+ data['@id']);
+                data['read'] = that.model.get('read')
+                data['user_is_connected'] = !Ctx.getCurrentUser().isUnknownUser();
+                that.$el.addClass(data['@type']);
+                if (that.model.get('read') || !data['user_is_connected']) {
+                    that.$el.addClass('read');
+                    that.$el.removeClass('unread');
+                } else {
+                    that.$el.addClass('unread');
+                    that.$el.removeClass('read');
+                }
+                data = that.transformDataBeforeRender(data);
+                that.$el.html( that.template(data) );
+                Ctx.initTooltips(that.$el);
+                Ctx.initClipboard();
+    
+                that.replyView = new MessageSendView({
+                    'allow_setting_subject': false,
+                    'reply_message': that.model,
+                    'body_help_message': i18n.gettext('Type your response here...'),
+                    'cancel_button_label': null,
+                    'send_button_label': i18n.gettext('Send your reply'),
+                    'subject_label': null,
+                    'mandatory_body_missing_msg': i18n.gettext('You did not type a response yet...'),
+                    'mandatory_subject_missing_msg': null
+                });
+                that.$('.message-replybox').append(that.replyView.render().el);
+    
+                that.postRender();
+    
+                /* TODO: BENOITG:  We should memorize which views are onscreen, and 
+                 * re-call initAnnotator as needed (once) and loadAnnotations
+                 * after a delay.  We have a reference to them in renderedMessageViewsCurrent
+                 * Right now we just re-re-re call initAnnotator
+                 */
+                assembl.messageList.initAnnotator();
+                that.loadAnnotations();
+                if(that.replyBoxShown) {
+                    that.openReplyBox();
+                }
+                else {
+                    that.closeReplyBox();
+                };
+              });
             return this;
         },
         
@@ -208,6 +213,31 @@ define(function(require){
             }
         },
         
+
+        /**
+         * Shows the related segment from the given annotation
+         * @param  {annotation} annotation
+         */
+        showSegmentByAnnotation: function(annotation){
+          var collectionManager = new CollectionManager();
+
+          collectionManager.getAllExtractsCollectionPromise().done(
+              function(allExtractsCollection) {
+                var segment = allExtractsCollection.getByAnnotation(annotation);
+                if( !segment ){
+                  return;
+                }
+
+                if( segment.get('idIdea') ){
+                  assembl.ideaPanel.showSegment(segment);
+                } else {
+                  assembl.segmentList.showSegment(segment);
+                }
+              }
+          );
+
+        },
+        
         /**
          * Render annotator's annotations in the message body
          */
@@ -215,7 +245,7 @@ define(function(require){
             var that = this;
             _.each(annotations, function(annotation){
                 var highlights = annotation.highlights,
-                    func = Ctx.showSegmentByAnnotation.bind(window, annotation);
+                    func = that.showSegmentByAnnotation.bind(window, annotation);
 
                 _.each(highlights, function(highlight){
                     highlight.setAttribute('data-annotation-id', annotation['@id']);

@@ -91,38 +91,42 @@ function loadHypertreeInDiv(div) {
         style.left = (left - w / 2) + 'px';  
     },  
       
-    onComplete: function(){  
-        //console.log("done");  
+    onComplete: function(){
+      var collectionManager = new CollectionManager();
+      //console.log("done");  
 
-        //Build the right column relations list.  
-        //This is done by collecting the information (stored in the data property)   
-        //for all the nodes adjacent to the centered node.  
-        var node = ht.graph.getClosestNodeToOrigin("current");
-        var idea = assembl.ideaList.ideas.get(node.id);
-        var suffix = "";
-        if (idea !== undefined) {
-            Ctx.setCurrentIdea(idea);
-            var num_posts = idea.get('num_posts'),
-                num_read_posts = idea.get('num_read_posts');
-            if (num_read_posts == num_posts) {
+      //Build the right column relations list.  
+      //This is done by collecting the information (stored in the data property)   
+      //for all the nodes adjacent to the centered node.  
+      var node = ht.graph.getClosestNodeToOrigin("current");
+      collectionManager.getAllIdeasCollectionPromise().done(
+          function(allIdeasCollection) {
+            var idea = allIdeasCollection.get(node.id);
+            var suffix = "";
+            if (idea !== undefined) {
+              Ctx.setCurrentIdea(idea);
+              var num_posts = idea.get('num_posts'),
+              num_read_posts = idea.get('num_read_posts');
+              if (num_read_posts == num_posts) {
                 suffix = " ("+num_posts+")";
-            } else if (num_read_posts == 0) {
+              } else if (num_read_posts == 0) {
                 suffix = " (<b>"+num_posts+"</b>)";
-            } else {
+              } else {
                 suffix = " (<b>"+(num_posts - num_read_posts)+"</b>/"+num_posts+")";
+              }
             }
-        }
-        var html = "<h4>" + node.name + suffix + "</h4><b>Connections:</b>";
-        html += "<ul>";  
-        node.eachAdjacency(function(adj){  
-            var child = adj.nodeTo;  
-            if (child.data) {  
+            var html = "<h4>" + node.name + suffix + "</h4><b>Connections:</b>";
+            html += "<ul>";  
+            node.eachAdjacency(function(adj){  
+              var child = adj.nodeTo;  
+              if (child.data) {  
                 var rel = (child.data.band == node.name) ? child.data.relation : node.data.relation;  
                 html += "<li onmouseup='setIdea(\""+child.id+"\");'>" + child.name+"</li>";  
-            }  
-        });
-        html += "</ul>";  
-        $jit.id('inner-details').innerHTML = html;  
+              }  
+            });
+            html += "</ul>";  
+            $jit.id('inner-details').innerHTML = html;
+          });
     }
   });
     return ht;

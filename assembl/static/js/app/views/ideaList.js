@@ -11,10 +11,10 @@ define(function(require){
                          Assembl = require('modules/assembl'),
                              Ctx = require('modules/context'),
                             Idea = require('models/idea'),
-                        IdeaLink = require('models/ideaLink'),
                         IdeaView = require('views/idea'),
                  ideaGraphLoader = require('views/ideaGraph'),
-                               _ = require('underscore');
+                               _ = require('underscore'),
+               CollectionManager = require('modules/collectionManager');
 
     var FEATURED = 'featured',
         IN_SYNTHESIS = 'inNextSynthesis';
@@ -55,46 +55,28 @@ define(function(require){
          * @init
          */
         initialize: function(obj){
-            var that = this;
-            this.ideas = new Idea.Collection();
-            this.ideaLinks = new IdeaLink.Collection();
-
-            /*this.listenTo(this, "all", function(eventName) {
-                console.log("ideaList event received: ", eventName);
-            });
-            this.listenTo(this.ideas, "all", function(eventName) {
-                console.log("ideaList collection event received: ", eventName);
-            });*/
+            var that = this,
+                collectionManager = new CollectionManager();
 
             if( obj && obj.button ){
                 this.button = $(obj.button);
                 this.button.on('click', Ctx.togglePanel.bind(window, 'ideaList'));
             }
 
-            var events = ['reset', 'change:parentId', 'change:@id', 'change:inNextSynthesis', 'remove', 'add'];
-
-            this.listenTo(this.ideas, events.join(' '), this.render);
-
-            Assembl.commands.setHandler('idea:delete', function(){
-                if(Ctx.debugRender) {
-                    console.log("ideaList: triggering render because app.on('idea:delete') was triggered");
-                }
-                that.render();
-            });
-
-            Assembl.reqres.setHandler('ideas:update', function(ideas){
-                if(Ctx.debugRender) {
-                    console.log("ideaList: triggering render because app.on('ideas:update') was triggered");
-                }
-                that.ideas.add(ideas, {merge: true, silent: true});
-                that.render();
-            });
+            collectionManager.getAllIdeasCollectionPromise().done(
+                function(allIdeasCollection) {
+                  var events = ['reset', 'change:parentId', 'change:@id', 'change:inNextSynthesis', 'remove', 'add', 'destroy'];
+                  that.listenTo(allIdeasCollection, events.join(' '), this.render);
+                });
             
-            // Benoitg - 2014-05-05:  There is no need for this, if an idealink
-            // is associated with the idea, the idea itself will receive a change event
-            // on the socket
-            assembl.segmentList.segments.on('add change reset', this.render, this);
-            
+            collectionManager.getAllExtractsCollectionPromise().done(
+                function(allExtractsCollection) {
+                  // Benoitg - 2014-05-05:  There is no need for this, if an idealink
+                  // is associated with the idea, the idea itself will receive a change event
+                  // on the socket (unless it causes problem with local additions?)
+                  that.listenTo(allExtractsCollection, 'add change reset', that.render);
+                });
+                
             Assembl.commands.setHandler("panel:open", function(){
                 that.resizeGraphView();
             })
@@ -108,52 +90,53 @@ define(function(require){
          * The render
          */
         render: function(){
-            if(Ctx.debugRender) {
-                console.log("ideaList:render() is firing");
-            }
-            Assembl.commands.execute('render');
-            Ctx.cleanTooltips(this.$el);
-            this.body = this.$('.panel-body');
-            var y = 0,
-            rootIdea = null,
-            rootIdeaDirectChildrenModels = [],
-            filter = {},
-            view_data = {},
-            order_lookup_table = [],
-            roots = [];
+          if(Ctx.debugRender) {
+            console.log("ideaList:render() is firing");
+          }
+          Assembl.commands.execute('render');
+          Ctx.cleanTooltips(this.$el);
+          this.body = this.$('.panel-body');
+          var that = this,
+              y = 0,
+              rootIdea = null,
+              rootIdeaDirectChildrenModels = [],
+              filter = {},
+              view_data = {},
+              order_lookup_table = [],
+              roots = [],
+              collectionManager = new CollectionManager();
             
-            function excludeRoot(idea) {
-                return idea != rootIdea && !idea.hidden;
-            }
+          function excludeRoot(idea) {
+            return idea != rootIdea && !idea.hidden;
+          }
             
-            if( this.body.get(0) ){
-                y = this.body.get(0).scrollTop;
-            }
+          if( this.body.get(0) ){
+            y = this.body.get(0).scrollTop;
+          }
 
-            if( this.filter === FEATURED ){
-                filter.featured = true;
-            } else if ( this.filter === IN_SYNTHESIS ){
-                filter.inNextSynthesis = true;
-            }
+          if( this.filter === FEATURED ){
+            filter.featured = true;
+          }
+          else if ( this.filter === IN_SYNTHESIS ){
+            filter.inNextSynthesis = true;
+          }
 
-            var list = document.createDocumentFragment();
-            if(this.ideas.length<1) {
-                //console.log("Idea list isn't available yet (we should at least have the root)");
-            }
-            else{
-                rootIdea = this.ideas.getRootIdea();
+          var list = document.createDocumentFragment();
+          collectionManager.getAllIdeasCollectionPromise().done(
+              function(allIdeasCollection) {
+                rootIdea = allIdeasCollection.getRootIdea();
                 if(Object.keys(filter).length > 0) {
-                    rootIdeaDirectChildrenModels = this.ideas.where(filter);
+                    rootIdeaDirectChildrenModels = allIdeasCollection.where(filter);
                 }
                 else {
-                    rootIdeaDirectChildrenModels = this.ideas.models;
+                    rootIdeaDirectChildrenModels = allIdeasCollection.models;
                 }
     
                 rootIdeaDirectChildrenModels = rootIdeaDirectChildrenModels.filter(function(idea) {
                     return (idea.get("parentId") == rootIdea.id) || (idea.get("parentId") == null && idea.id != rootIdea.id); 
                     }
                 );
-    
+                
                 rootIdeaDirectChildrenModels = _.sortBy(rootIdeaDirectChildrenModels, function(idea){
                     return idea.get('order');
                 });
@@ -169,37 +152,37 @@ define(function(require){
                 
                 rootIdea.visitDepthFirst(objectTreeRenderVisitor(view_data, order_lookup_table, roots, excludeRoot));
                 rootIdea.visitDepthFirst(ideaSiblingChainVisitor(view_data));
-            }
+            
 
-            _.each(roots, function(idea){
-                var ideaView =  new IdeaView({model:idea}, view_data);
-                list.appendChild(ideaView.render().el);
-            });
+                _.each(roots, function(idea){
+                  var ideaView =  new IdeaView({model:idea}, view_data);
+                  list.appendChild(ideaView.render().el);
+                });
 
-            // Orphan messages pseudo-idea
-            var orphanView = new OrphanMessagesInIdeaListView({model: rootIdea});
-            list.appendChild(orphanView.render().el);
+                // Orphan messages pseudo-idea
+                var orphanView = new OrphanMessagesInIdeaListView({model: rootIdea});
+                list.appendChild(orphanView.render().el);
 
-            var data = {
-                tocTotal: this.ideas.length -1,//We don't count the root idea
-                featuredTotal: this.ideas.where({featured: true}).length,
-                synthesisTotal: this.ideas.where({inNextSynthesis: true}).length,
-                canAdd: Ctx.getCurrentUser().can(Permissions.ADD_IDEA)
-            };
+                var data = {
+                    tocTotal: allIdeasCollection.length -1,//We don't count the root idea
+                    featuredTotal: allIdeasCollection.where({featured: true}).length,
+                    synthesisTotal: allIdeasCollection.where({inNextSynthesis: true}).length,
+                    canAdd: Ctx.getCurrentUser().can(Permissions.ADD_IDEA)
+                };
 
-            data.title = data.tocTitle;
-            data.collapsed = this.collapsed;
+                data.title = data.tocTitle;
+                data.collapsed = that.collapsed;
 
-            data.filter = this.filter;
+                data.filter = that.filter;
 
-            this.$el.html( this.template(data) );
-            Ctx.initTooltips(this.$el);
-            this.$('.idealist').append( list );
+                that.$el.html( that.template(data) );
+                Ctx.initTooltips(that.$el);
+                that.$('.idealist').append( list );
 
-            this.body = this.$('.panel-body');
-            this.body.get(0).scrollTop = y;
-
-            return this;
+                that.body = that.$('.panel-body');
+                that.body.get(0).scrollTop = y;
+              });
+          return this;
         },
 
         /**
@@ -207,12 +190,12 @@ define(function(require){
          * @param  {Idea} idea
          */
         removeIdea: function(idea){
-            var parent = idea.get('parent');
+          var parent = idea.get('parent');
 
             if( parent ){
                 parent.get('children').remove(idea);
             } else {
-                this.ideas.remove(idea);
+                console.log("ERROR:  This shouldn't happen, only th root idea has no parent");
             }
         },
 
@@ -220,24 +203,29 @@ define(function(require){
          * Collapse ALL ideas
          */
         collapseIdeas: function(){
-            this.ideas.each(function(idea){
-                idea.attributes.isOpen = false;
-            });
-
+          var collectionManager = new CollectionManager();
             this.collapsed = true;
-            this.render();
+            collectionManager.getAllIdeasCollectionPromise().done(
+                function(allIdeasCollection) {
+                  allIdeasCollection.each(function(idea){
+                    idea.attributes.isOpen = false;
+                  });
+                  this.render();
+                });
         },
 
         /**
          * Expand ALL ideas
          */
         expandIdeas: function(){
-            this.ideas.each(function(idea){
-                idea.attributes.isOpen = true;
-            });
-
-            this.collapsed = false;
-            this.render();
+          this.collapsed = false;
+          collectionManager.getAllIdeasCollectionPromise().done(
+              function(allIdeasCollection) {
+                allIdeasCollection.each(function(idea){
+                  idea.attributes.isOpen = true;
+                });
+                this.render();
+              });
         },
 
         /**
@@ -305,6 +293,7 @@ define(function(require){
                 var that = this;
                 $.getJSON( Ctx.getApiUrl('generic')+"/Discussion/"+Ctx.getDiscussionId()+"/idea_graph_jit", function(data){
                     that.graphData = data['graph'];
+                    console.log(ideaGraphLoader);
                     that.hypertree = ideaGraphLoader(that.graphData);
                     try {
                         that.hypertree.onClick(Ctx.getCurrentIdea().getId(), {
@@ -368,18 +357,21 @@ define(function(require){
         addChildToSelected: function(){
             var currentIdea = Ctx.getCurrentIdea(),
                 newIdea = new Idea.Model(),
-                that = this;
+                that = this,
+                collectionManager = new CollectionManager();
 
-            if( this.ideas.get(currentIdea) ){
-                newIdea.set('order', currentIdea.getOrderForNewChild());
-                currentIdea.addChild(newIdea);
-            } else {
-                newIdea.set('order', Ctx.getOrderForNewRootIdea());
-                this.ideas.add(newIdea);
-                newIdea.save();
-            }
-
-            Ctx.setCurrentIdea(newIdea);
+            collectionManager.getAllIdeasCollectionPromise().done(
+                function(allIdeasCollection) {
+                  if( allIdeasCollection.get(currentIdea) ){
+                    newIdea.set('order', currentIdea.getOrderForNewChild());
+                    currentIdea.addChild(newIdea);
+                  } else {
+                    newIdea.set('order', allIdeasCollection.getOrderForNewRootIdea());
+                    allIdeasCollection.add(newIdea);
+                    newIdea.save();
+                  }
+                  Ctx.setCurrentIdea(newIdea);
+                });
         },
 
         /**

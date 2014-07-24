@@ -1,6 +1,5 @@
-define(["modules/assembl", 'modules/context', 'underscore', 'sockjs'], function(Assembl, Ctx, _, SockJS){
+define(["modules/assembl", 'modules/context', 'underscore', 'sockjs','modules/collectionManager'], function(Assembl, Ctx, _, SockJS, CollectionManager){
     'use strict';
-
     /**
      * @class Socket
      *
@@ -77,7 +76,8 @@ define(["modules/assembl", 'modules/context', 'underscore', 'sockjs'], function(
      * @param  {Object]} item
      */
     Socket.prototype.processData = function(item){
-        var collection = Ctx.getCollectionByType(item);
+      var collectionManager = new CollectionManager(),
+          collection = collectionManager.getCollectionByType(item);
 
         if (Ctx.debugSocket) {
             console.log( item['@id'] || item['@type'], item );
