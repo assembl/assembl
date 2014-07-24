@@ -135,7 +135,7 @@ define(function(require){
         syncWithCurrentIdea: function(){
             var currentIdea = Ctx.getCurrentIdea();
             //console.log("messageList:syncWithCurrentIdea(): New idea is now: ",currentIdea);
-            Ctx.openPanel(assembl.messageList);
+            Ctx.openPanel(this);
             if(currentIdea && this.currentQuery.isFilterInQuery(this.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, currentIdea.getId())) {
                 //Filter is already in sync
                 //TODO:  Detect the case where there is no idea selected, and we already have no filter on ideas

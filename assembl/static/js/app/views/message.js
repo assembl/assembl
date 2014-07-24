@@ -170,7 +170,7 @@ CollectionManager = require('modules/collectionManager');
                  * after a delay.  We have a reference to them in renderedMessageViewsCurrent
                  * Right now we just re-re-re call initAnnotator
                  */
-                assembl.messageList.initAnnotator();
+                that.messageListView.initAnnotator();
                 that.loadAnnotations();
                 if(that.replyBoxShown) {
                     that.openReplyBox();
@@ -341,8 +341,8 @@ CollectionManager = require('modules/collectionManager');
             var annotator = this.$el.closest('#messageList-list').data('annotator');
             annotator.onAdderClick.call(annotator);
 
-            if( assembl.messageList.annotatorEditor ){
-                assembl.messageList.annotatorEditor.element.css({
+            if( this.messageListView.annotatorEditor ){
+                this.messageListView.annotatorEditor.element.css({
                     'top': y,
                     'left': x
                 });
@@ -375,7 +375,7 @@ CollectionManager = require('modules/collectionManager');
          */
         onMessageHoistClick: function(ev){
             // we will hoist the post, or un-hoist it if it is already hoisted
-            this.isHoisted = assembl.messageList.toggleFilterByPostId(this.model.getId());
+            this.isHoisted = this.messageListView.toggleFilterByPostId(this.model.getId());
             this.render(); // so that the isHoisted property will now be considered
         },
         
