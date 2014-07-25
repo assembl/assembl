@@ -592,7 +592,7 @@ class MultiCriterionVotingWidget(Widget):
         class VotableCollection(CollectionDefinition):
             # The set of votable ideas.
             def __init__(self, cls):
-                super(VotabeCollection, self).__init__(
+                super(VotableCollection, self).__init__(
                     cls, cls.votable_ideas)
 
             def decorate_query(self, query, last_alias, parent_instance, ctx):
@@ -610,6 +610,7 @@ class MultiCriterionVotingWidget(Widget):
                     if isinstance(inst, Idea):
                         assocs.append(VotableIdeaWidgetLink(
                             idea=inst,
+                            widget=self.parent_instance,
                             **self.filter_kwargs(
                                 VotableIdeaWidgetLink, kwargs)))
 
