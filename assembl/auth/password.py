@@ -1,8 +1,10 @@
 from os import urandom
 from binascii import hexlify, unhexlify
 import hashlib
-from datetime import datetime
+from datetime import datetime, timedelta
 
+from assembl.lib import config
+from ..models import EmailAccount, User
 from ..lib import config
 
 SALT_SIZE = 8
@@ -57,3 +59,29 @@ def password_token(user):
     token_str = str(user.id)+now.isoformat()[:resolution]
     print "hashing "+token_str
     return str(user.id)+'e'+hash_password(token_str, True)
+
+
+def verify_email_token(token):
+    id, hash = token.split('f', 1)
+    email = EmailAccount.get(id=int(id))
+    if email and verify_password(
+        str(email.id) + email.email + config.get(
+            'security.email_token_salt'), hash, True):
+            return email
+
+
+def verify_password_change_token(token, duration):
+    id, hash = token.split('e', 1)
+    id = int(id)
+    user = User.get(id=id)
+    if not user:
+        return False, None
+    age = datetime.now() - user.last_login
+    if age > timedelta(duration/24.0):
+        return False, id
+    check = str(id)+user.last_login.isoformat()[:19]
+    valid = verify_password(
+        check, hash, True)
+    if not valid:
+        return False, id
+    return True, id

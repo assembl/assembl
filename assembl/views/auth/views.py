@@ -3,6 +3,8 @@ import simplejson as json
 
 from pyramid.i18n import TranslationStringFactory
 from pyramid.view import view_config
+from pyramid_mailer import get_mailer
+from pyramid_mailer.message import Message
 from pyramid.renderers import render_to_response
 from pyramid.security import (
     remember,
@@ -26,8 +28,8 @@ from assembl.models import (
 from assembl.auth import P_READ
 from assembl.auth.password import format_token
 from assembl.auth.operations import (
-    get_identity_provider, send_confirmation_email, verify_email_token,
-    verify_password_change_token, send_change_password_email)
+    verify_email_token, verify_password_change_token)
+from assembl.auth.util import get_identity_provider
 from ...lib import config
 from .. import get_default_context
 
@@ -713,3 +715,59 @@ def finish_password_change(request):
                     "Password changed")))))
 
     return dict(get_default_context(request), error=error)
+
+
+def send_confirmation_email(request, email):
+    mailer = get_mailer(request)
+    localizer = request.localizer
+    confirm_what = _('email')
+    if isinstance(email.profile, User) and not email.profile.verified:
+        confirm_what = _('account')
+    data = {
+        'name': email.profile.name,
+        'email': email.email,
+        'assembl': "Assembl",
+        'confirm_what': localizer.translate(confirm_what),
+        'confirm_url': request.route_url('user_confirm_email',
+                                         ticket=email_token(email))
+    }
+    message = Message(
+        subject=localizer.translate(_("Please confirm your ${confirm_what} with <${assembl}>"), mapping=data),
+        sender=config.get('assembl.admin_email'),
+        recipients=["%s <%s>" % (email.profile.name, email.email)],
+        body=localizer.translate(_(u"""Hello, ${name}!
+Please confirm your ${confirm_what} <${email}> with ${assembl} by clicking on the link below.
+<${confirm_url}>
+"""), mapping=data),
+        html=localizer.translate(_(u"""<p>Hello, ${name}!</p>
+<p>Please <a href="${confirm_url}">confirm your ${confirm_what}</a> &lt;${email}&gt; with <${assembl}>.</p>
+"""), mapping=data))
+    #if deferred:
+    #    mailer.send_to_queue(message)
+    #else:
+    mailer.send(message)
+
+
+def send_change_password_email(request, profile, email=None):
+    mailer = get_mailer(request)
+    localizer = request.localizer
+    data = dict(
+        name=profile.name, confirm_url=request.route_url(
+            'do_password_change', ticket=password_token(profile)),
+        assembl="Assembl")
+    message = Message(
+        subject=localizer.translate(_("Request for password change"), mapping=data),
+        sender=config.get('assembl.admin_email'),
+        recipients=["%s <%s>" % (profile.name, email or profile.get_preferred_email())],
+        body=localizer.translate(_(u"""Hello, ${name}!
+You asked to change your password on <${assembl}>. (We hope it was you!)\n
+You can do this by clicking on the link below.
+<${confirm_url}>
+"""), mapping=data),
+        html=localizer.translate(_(u"""<p>Hello, ${name}!</p>
+<p>You asked to <a href="${confirm_url}">change your password</a> on ${assembl} (We hope it was you!)</p>
+"""), mapping=data))
+    #if deferred:
+    #    mailer.send_to_queue(message)
+    #else:
+    mailer.send(message)
