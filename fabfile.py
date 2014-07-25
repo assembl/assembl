@@ -227,14 +227,7 @@ def compile_messages():
     """
     cmd = "python setup.py compile_catalog"
     venvcmd(cmd)
-    locale_path = join(env.projectpath, 'assembl', 'locale')
-    for dir in listdir(locale_path):
-        if not is_file(join(locale_path, dir)):
-            po_path = join(locale_path, dir, 'LC_MESSAGES', 'assembl.po')
-            json_path = join(locale_path, dir, 'LC_MESSAGES', 'assembl.jed.json')
-            print "Creating Jed json for ", po_path
-            cmd = "PATH=$(npm bin):$PATH po2json --format jed %s %s" % (po_path,json_path)
-            venvcmd(cmd)
+    venvcmd("python assembl/scripts/po2json.py")
 
 @task
 def compile_stylesheets():
