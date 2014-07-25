@@ -1159,6 +1159,13 @@ voteApp.controller('indexCtl',
 
       // define drag beavior
       var drag = d3.behavior.drag()
+        .origin(function(){
+          var point = d3.mouse(this);
+          var p = {x: point[0], y: point[1] };
+          // show cursor on the "pressed" position, without waiting for "release" event
+          setCirclePositionFromOutputRange(p.x, p.y);
+          return p;
+        })
         .on("drag", dragmove)
         .on("dragend", dragEnd);
 
