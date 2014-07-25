@@ -7,5 +7,5 @@ To migrate from virtuoso 6 to virtuoso 7:
     virtuoso_root = virtuoso
     virtuoso_src = ../virtuoso_src
     virtuoso_branch = develop/7
-3. fab devenv virtuoso_source_install_7
+3. fab devenv virtuoso_source_install
 6. fab devenv database_start
