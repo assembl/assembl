@@ -48,16 +48,16 @@ def send_confirmation_email(request, email):
                                          ticket=email_token(email))
     }
     message = Message(
-        subject=localizer.translate(_('confirm_title', default="Please confirm your ${confirm_what} with <${assembl}>", mapping=data)),
+        subject=localizer.translate(_("Please confirm your ${confirm_what} with <${assembl}>"), mapping=data),
         sender=config.get('assembl.admin_email'),
         recipients=["%s <%s>" % (email.profile.name, email.email)],
-        body=localizer.translate(_('confirm_email', default=u"""Hello, ${name}!
+        body=localizer.translate(_(u"""Hello, ${name}!
 Please confirm your ${confirm_what} <${email}> with ${assembl} by clicking on the link below.
 <${confirm_url}>
-""", mapping=data)),
-        html=localizer.translate(_('confirm_email_html', default=u"""<p>Hello, ${name}!</p>
+"""), mapping=data),
+        html=localizer.translate(_(u"""<p>Hello, ${name}!</p>
 <p>Please <a href="${confirm_url}">confirm your ${confirm_what}</a> &lt;${email}&gt; with <${assembl}>.</p>
-""", mapping=data)))
+"""), mapping=data))
     #if deferred:
     #    mailer.send_to_queue(message)
     #else:
@@ -71,17 +71,17 @@ def send_change_password_email(request, profile, email=None):
             'do_password_change', ticket=password_token(profile)),
         assembl="Assembl")
     message = Message(
-        subject=localizer.translate(_('confirm_password_title', default="Request for password change", mapping=data)),
+        subject=localizer.translate(_("Request for password change"), mapping=data),
         sender=config.get('assembl.admin_email'),
         recipients=["%s <%s>" % (profile.name, email or profile.get_preferred_email())],
-        body=localizer.translate(_('confirm_password_txt', default=u"""Hello, ${name}!
+        body=localizer.translate(_(u"""Hello, ${name}!
 You asked to change your password on <${assembl}>. (We hope it was you!)\n
 You can do this by clicking on the link below.
 <${confirm_url}>
-""", mapping=data)),
-        html=localizer.translate(_('confirm_password_html', default=u"""<p>Hello, ${name}!</p>
+"""), mapping=data),
+        html=localizer.translate(_(u"""<p>Hello, ${name}!</p>
 <p>You asked to <a href="${confirm_url}">change your password</a> on ${assembl} (We hope it was you!)</p>
-""", mapping=data)))
+"""), mapping=data))
     #if deferred:
     #    mailer.send_to_queue(message)
     #else:

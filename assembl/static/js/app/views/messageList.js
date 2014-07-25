@@ -76,6 +76,9 @@ define(function(require){
         initialize: function(obj){
             var that = this,
             collectionManager = new CollectionManager();
+            if( obj.button ){
+                this.button = $(obj.button).on('click', Ctx.togglePanel.bind(window, 'messageList'));
+            }
 
             PanelView.prototype.initialize.apply(this);
             this.renderedMessageViewsCurrent = {};
@@ -132,7 +135,7 @@ define(function(require){
         syncWithCurrentIdea: function(){
             var currentIdea = Ctx.getCurrentIdea();
             //console.log("messageList:syncWithCurrentIdea(): New idea is now: ",currentIdea);
-            //Ctx.openPanel(assembl.messageList);
+            Ctx.openPanel(this);
             if(currentIdea && this.currentQuery.isFilterInQuery(this.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, currentIdea.getId())) {
                 //Filter is already in sync
                 //TODO:  Detect the case where there is no idea selected, and we already have no filter on ideas
@@ -599,7 +602,6 @@ define(function(require){
 
             this.renderCollapseButton();
             this.renderDefaultMessageViewDropdown();
-            this.chk = this.$('#messageList-mainchk');
             this.newTopicView = new MessageSendView({
                 'allow_setting_subject': true,
                 'reply_idea': null,
@@ -1271,7 +1273,7 @@ define(function(require){
          */
         onReturnButtonClick: function(ev){
             this.closeThread();
-        }
+        },
 
     });
 

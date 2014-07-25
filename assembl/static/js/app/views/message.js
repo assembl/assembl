@@ -53,7 +53,7 @@ CollectionManager = require('modules/collectionManager');
          * @init
          * @param {MessageModel} obj the model
          */
-        initialize: function(options){
+        initialize: function(obj){
             /*this.listenTo(this, "all", function(eventName) {
                 console.log("message event received: ", eventName);
             });
@@ -63,7 +63,7 @@ CollectionManager = require('modules/collectionManager');
             this.listenTo(this.model, 'replacedBy', this.onReplaced);
             this.listenTo(this.model, 'showBody', this.onShowBody);
             this.listenTo(this.model, 'change', this.render);
-            this.messageListView = options.messageListView;
+            this.messageListView = obj.messageListView;
             this.viewStyle = this.messageListView.defaultMessageStyle;
             this.messageListView.on('annotator:destroy', this.onAnnotatorDestroy, this);
             this.messageListView.on('annotator:initComplete', this.onAnnotatorInitComplete, this);
@@ -170,9 +170,7 @@ CollectionManager = require('modules/collectionManager');
                  * after a delay.  We have a reference to them in renderedMessageViewsCurrent
                  * Right now we just re-re-re call initAnnotator
                  */
-
                 that.messageListView.initAnnotator();
-
                 that.loadAnnotations();
                 if(that.replyBoxShown) {
                     that.openReplyBox();
@@ -343,8 +341,8 @@ CollectionManager = require('modules/collectionManager');
             var annotator = this.$el.closest('#messageList-list').data('annotator');
             annotator.onAdderClick.call(annotator);
 
-            if( assembl.messageList.annotatorEditor ){
-                assembl.messageList.annotatorEditor.element.css({
+            if( this.messageListView.annotatorEditor ){
+                this.messageListView.annotatorEditor.element.css({
                     'top': y,
                     'left': x
                 });
@@ -377,7 +375,7 @@ CollectionManager = require('modules/collectionManager');
          */
         onMessageHoistClick: function(ev){
             // we will hoist the post, or un-hoist it if it is already hoisted
-            this.isHoisted = assembl.messageList.toggleFilterByPostId(this.model.getId());
+            this.isHoisted = this.messageListView.toggleFilterByPostId(this.model.getId());
             this.render(); // so that the isHoisted property will now be considered
         },
         

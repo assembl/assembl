@@ -12,27 +12,40 @@ define(function(require){
 
         getStorageGroupItem: function(){
 
-           var _defaults = [
-               {
-                   group:[{type:'idea-list'}, {type:'idea-panel'}, {type:'message'}]
-               }
-           ];
+           var data = [
+                {
+                    group:[
+                        {type:'idea-list'},
+                        {type:'idea-panel'},
+                        {type:'message'}
+                    ]
+                },
+                {
+                    group:[
+                        {type:'idea-list'},
+                        {type:'idea-panel'}
+                    ]
+                }
+            ];
+
 
            if(window.localStorage.getItem('groups')){
-               _defaults = window.localStorage.getItem('groups');
+               data = window.localStorage.getItem('groups');
            }
 
-           return defaults;
+           return data;
         },
 
-        createGroupItem: function(){
+        createGroupItem: function(collection){
             /**
              * PanelGroupItem Creation
              * */
-            var Item = Backbone.Model.extend(),
+             var Item = Backbone.Model.extend(),
                 Items = Backbone.Collection.extend({
                     model: Item
                 });
+
+            var groups = new Items(collection.group);
 
             var GridItem = Marionette.ItemView.extend({
                 template: "#tmpl-item-template",
@@ -125,24 +138,20 @@ define(function(require){
 
             });
 
-            var items = this.getStorageGroupItem();
-
-            var groups = new Items(items.group);
-
             return new Grid({
                 collection: groups
             });
-
         },
 
         getGroupItem: function(){
+            var items = this.getStorageGroupItem(),
+                 that = this;
 
-            var groups = this.createGroupItem();
+            items.forEach(function(item){
 
-            groups.forEach(function(group){
+                var group = that.createGroupItem(item);
 
                 $('#panelarea').append(group.render().el);
-
             });
         }
     });
