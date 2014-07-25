@@ -266,15 +266,17 @@
         "@extends": "Widget",
         "criteria_url": true
     },
-    "BinaryVote": {
+    "AbstractIdeaVote": {
         "idea": true,
-        "voter": true,
+        "widget": true,
+        "voter": true
+    },
+    "BinaryIdeaVote": {
+        "@extends": "AbstractIdeaVote",
         "vote_value": true
     },
-    "LickertVote": {
-        "idea": true,
-        "voter": true,
-        "vote_value": true,
-        "range": true
+    "LickertIdeaVote": {
+        "@extends": "AbstractIdeaVote",
+        "vote_value": true
     }
 }
