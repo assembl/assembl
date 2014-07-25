@@ -33,10 +33,6 @@ CollectionManager = require('modules/collectionManager');
 
             var that = this;
 
-            if( obj.button ){
-                this.button = $(obj.button).on('click', Ctx.togglePanel.bind(window, 'ideaPanel'));
-            }
-
             if( this.model ){
                 this.listenTo(this.model, 'change', this.render);
             }
@@ -269,7 +265,7 @@ CollectionManager = require('modules/collectionManager');
                 if( this.model !== null ){
                     //console.log("setCurrentIdea:  setting up new listeners for "+this.model.id);
                     this.listenTo(this.model, 'change', ideaChangeCallback);
-                    Ctx.openPanel(assembl.ideaPanel);
+                    //Ctx.openPanel(assembl.ideaPanel);
                 } else {
                     //TODO: More sophisticated behaviour here, depending 
                     //on if the panel was opened by selection, or by something else.
@@ -502,7 +498,6 @@ CollectionManager = require('modules/collectionManager');
                 Ctx.showTargetBySegment(segment);
               });
         }
-
     });
 
     return IdeaPanel;

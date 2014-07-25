@@ -4,6 +4,7 @@ define(function(require){
     var Base = require('models/base'),
          Ctx = require('modules/context'),
            _ = require('underscore'),
+        User = require('models/user'),
      Message = require('models/message');
 
     /**

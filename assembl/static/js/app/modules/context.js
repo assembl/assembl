@@ -4,11 +4,12 @@ define(function(require){
 
      var Assembl = require('modules/assembl'),
                $ = require('jquery'),
-           Types = require('utils/types'),
      Permissions = require('utils/permissions'),
           Moment = require('moment'),
             i18n = require('utils/i18n'),
-   Zeroclipboard = require('zeroclipboard');
+   Zeroclipboard = require('zeroclipboard'),
+     viewManager = require('modules/viewManager');
+
 
     var Context = function(){
 
@@ -620,9 +621,14 @@ define(function(require){
                     // ['Email', 'Post', 'AssemblPost', 'SynthesisPost', 'ImportedPost']
 
                     var selector = this.format('[data-annotation-id="{0}"]', segment.id);
-                    assembl.messageList.showMessageById(segment.get('idPost'), function(){
+
+                    viewManager.executeView('messageList', 'showMessageById',[segment.get('idPost'), function(){
                         $(selector).highlight();
-                    });
+                    }]);
+
+                    /*assembl.messageList.showMessageById(segment.get('idPost'), function(){
+                        $(selector).highlight();
+                    });*/
                     break;
             }
         },

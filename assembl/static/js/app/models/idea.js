@@ -370,6 +370,16 @@ define(function(require){
             } else {
                 return Backbone.Model.prototype.set.call(this, key, val, options);
             }
+        },
+
+        getVotableOnWhichWidgets: function(){
+            var widget_data = this.get('widget_data');
+            var widgets = _.filter(widget_data, function(o){
+                return o["@type"] == "votable";
+            });
+            return _.map(widgets, function(o){
+                return o.widget;
+            });
         }
 
     });

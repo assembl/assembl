@@ -1,4 +1,5 @@
 define(function(require){
+    'use strict';
 
     var SegmentList = require('views/segmentList'),
            IdeaList = require('views/ideaList'),
@@ -6,7 +7,6 @@ define(function(require){
         MessageList = require('views/messageList'),
      SynthesisPanel = require('views/synthesisPanel'),
                   $ = require('jquery');
-
 
     var groupManager = Marionette.Controller.extend({
 
@@ -99,9 +99,11 @@ define(function(require){
                 childViewContainer: ".panelarea-table",
                 initialize: function(){
 
+                    //console.log('this.getOption', this.getOption)
                 },
                 events:{
-                    'click .add-group':'addGroup'
+                   'click .add-group':'addGroup',
+                   'click .close-group':'closeGroup'
                 },
                 onRenderTemplate: function(){
                     this.$el.addClass('wrapper-group');
@@ -134,6 +136,13 @@ define(function(require){
 
                     $('.modal').html(modalView.render().el);
 
+                },
+
+                closeGroup: function(){
+                    console.log('close button');
+                    //TODO: delete reference to localStorage
+                    //this.unbind();
+                    //this.remove();
                 }
 
             });
@@ -154,8 +163,8 @@ define(function(require){
                 $('#panelarea').append(group.render().el);
             });
         }
-    });
 
+    });
 
     return new groupManager();
 

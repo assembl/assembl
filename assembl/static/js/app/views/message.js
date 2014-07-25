@@ -10,7 +10,8 @@ define(function(require){
      Permissions = require('utils/permissions'),
  MessageSendView = require('views/messageSend'),
             User = require('models/user'),
-CollectionManager = require('modules/collectionManager');
+CollectionManager = require('modules/collectionManager'),
+      viewManager = require('modules/viewManager');
 
 
     var MIN_TEXT_TO_TOOLTIP = 5,
@@ -229,9 +230,13 @@ CollectionManager = require('modules/collectionManager');
                 }
 
                 if( segment.get('idIdea') ){
-                  assembl.ideaPanel.showSegment(segment);
+
+                    viewManager.executeView('ideaPanel', 'showSegment',[segment]);
+
+                  //assembl.ideaPanel.showSegment(segment);
                 } else {
-                  assembl.segmentList.showSegment(segment);
+                    viewManager.executeView('segmentList', 'showSegment',[segment]);
+                    //assembl.segmentList.showSegment(segment);
                 }
               }
           );

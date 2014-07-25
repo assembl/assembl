@@ -1142,7 +1142,7 @@ define(function(require){
                 that = this,
                 requestedOffsets,
                 collectionManager = new CollectionManager();
-            
+
             collectionManager.getAllMessageStructureCollectionPromise().done(
                 function(allMessageStructureCollection) {
                   var message = allMessageStructureCollection.get(id)
@@ -1273,7 +1273,7 @@ define(function(require){
          */
         onReturnButtonClick: function(ev){
             this.closeThread();
-        },
+        }
 
     });
 

@@ -1,9 +1,11 @@
 define(function(require){
+    'use strict';
 
     var Marionette = require('marionette'),
            Assembl = require('modules/assembl'),
+       viewManager = require('modules/viewManager'),
                Ctx = require('modules/context'),
-        groupManager = require('modules/groupManager'),
+      groupManager = require('modules/groupManager'),
                  $ = require('jquery');
 
     var SegmentList = require('views/segmentList'),
@@ -42,6 +44,14 @@ define(function(require){
             loadCurrentUser();
             //We only need this here because we still use deprecated access functions
             collectionManager.getAllUsersCollectionPromise();
+
+            viewManager.init({
+                segmentList:SegmentList,
+                ideaList:IdeaList,
+                ideaPanel:IdeaPanel,
+                messageList:MessageList,
+                synthesisPanel:SynthesisPanel
+            });
         },
 
         /**
@@ -60,7 +70,6 @@ define(function(require){
              * Render the current group of view
              * */
             groupManager.getGroupItem();
-
 
             /*var panels = Ctx.getPanelsFromStorage();
             _.each(panels, function(value, name){
