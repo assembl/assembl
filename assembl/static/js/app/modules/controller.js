@@ -56,13 +56,11 @@ define(function(require){
                Assembl.notificationRegion.show(new Notification());
             }
 
-            var groupManager = new groupManager();
-
+            /**
+             * Render the current group of view
+             * */
             groupManager.getGroupItem();
 
-            /**
-             * end code
-             * */
 
             /*var panels = Ctx.getPanelsFromStorage();
             _.each(panels, function(value, name){
