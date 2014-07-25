@@ -5,7 +5,10 @@ from sqlalchemy import (
     Column, Integer, ForeignKey, Boolean, String, Float, DateTime)
 from sqlalchemy.orm import relationship
 
-from . import (Base, DiscussionBoundBase, Idea, User)
+from . import (Base, DiscussionBoundBase)
+from .synthesis import Idea
+from .auth import User
+from .widgets import MultiCriterionVotingWidget
 from ..semantic.virtuoso_mapping import QuadMapPatternS
 from ..semantic.namespaces import (VOTE, ASSEMBL, DCTERMS)
 
@@ -60,6 +63,13 @@ class AbstractIdeaVote(DiscussionBoundBase):
         info={'rdf': QuadMapPatternS(None, VOTE.voter)}
     )
     voter = relationship(User, backref="votes")
+
+    widget_id = Column(
+        Integer,
+        ForeignKey(MultiCriterionVotingWidget.id,
+                   ondelete="CASCADE", onupdate="CASCADE"),
+        nullable=False)
+    widget = relationship(MultiCriterionVotingWidget, backref="votes")
 
     def get_discussion_id(self):
         return self.idea.discussion_id

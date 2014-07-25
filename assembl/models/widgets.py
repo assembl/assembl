@@ -16,7 +16,6 @@ from .synthesis import (
     IdeaContentWidgetLink, IdeaLink)
 from .generic import Content
 from .post import Post, IdeaProposalPost
-from .votes import AbstractIdeaVote
 from ..auth import P_ADD_POST, P_ADMIN_DISC, Everyone, CrudPermissions
 from .auth import User
 from ..views.traversal import (
@@ -431,6 +430,7 @@ class MultiCriterionVotingWidget(Widget):
         my_votes = []
         vote_idea_ids = set()
         if user_id:
+            from .votes import AbstractIdeaVote
             my_votes = self.db.query(AbstractIdeaVote
                 ).join(AbstractIdeaVote.voter, AbstractIdeaVote.idea,
                        VotedIdeaWidgetLink, Widget
@@ -554,6 +554,7 @@ class MultiCriterionVotingWidget(Widget):
 
     @classmethod
     def extra_collections(cls):
+        from .votes import AbstractIdeaVote
         class CriterionCollection(CollectionDefinition):
             # The set of voting criterion ideas.
             # Not to be confused with http://www.criterion.com/
