@@ -3,7 +3,7 @@ define(function(require){
     var Marionette = require('marionette'),
            Assembl = require('modules/assembl'),
                Ctx = require('modules/context'),
-             Group = require('modules/group'),
+        groupManager = require('modules/groupManager'),
                  $ = require('jquery');
 
     var SegmentList = require('views/segmentList'),
@@ -23,16 +23,14 @@ define(function(require){
            window.assembl = {};
 
            var collectionManager = new CollectionManager();
-            
-            // User
             /**
              * fulfill app.currentUser
              */
             function loadCurrentUser(){
-              var user
+              var user;
                 if( Ctx.getCurrentUserId() ){
                   user = new User.Model();
-                  user.fetchFromScriptTag('current-user-json')
+                  user.fetchFromScriptTag('current-user-json');
                 }
                 else {
                   user = new User.Collection().getUnknownUser();
@@ -58,7 +56,9 @@ define(function(require){
                Assembl.notificationRegion.show(new Notification());
             }
 
-            var resolveGroup = new Group();
+            var groupManager = new groupManager();
+
+            groupManager.getGroupItem();
 
             /**
              * end code
