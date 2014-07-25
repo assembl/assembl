@@ -30,20 +30,6 @@ def backbone_include(config):
     config.add_route('graph_view', '/graph')
 
 
-"""
-TODO:  Rewrite this as a command line util and integrate in build system
-
-def js_message_ids():
-    from babel.messages.pofile import read_po
-    pot = read_po(open(os.path.join(os.path.dirname(__file__), '..', 'locale', 'assembl.pot')))
-    def is_js(msg):
-        for (filename, lineno) in msg.locations:
-            if filename.endswith('.js'):
-                return True
-    return [m.id for m in pot if is_js(m)]
-
-JS_MESSAGE_IDS = js_message_ids()"""
-
 def get_default_context(request):
     localizer = request.localizer
     _ = TranslationStringFactory('assembl')
