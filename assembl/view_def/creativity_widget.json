@@ -269,6 +269,7 @@
     "AbstractIdeaVote": {
         "idea": true,
         "widget": true,
+        "criterion": true,
         "voter": true
     },
     "BinaryIdeaVote": {

@@ -269,6 +269,7 @@
     },
     "AbstractIdeaVote": {
         "idea": true,
+        "criterion": true,
         "widget": true,
         "voter": true
     },
