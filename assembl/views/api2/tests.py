@@ -411,7 +411,7 @@ def test_voting_widget(
     db.flush()
     new_widget = Widget.get_instance(new_widget_loc.location)
     assert new_widget
-    db.expire(new_widget, ('criteria', ))
+    db.expire(new_widget, ('criteria', 'votable_ideas'))
     # Get the widget from the api
     widget_rep = test_app.get(
         local_to_absolute(new_widget.uri()),

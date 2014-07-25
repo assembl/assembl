@@ -640,7 +640,7 @@ class MultiCriterionVotingWidget(Widget):
                 return isinstance(instance, Idea)
 
         return {'criteria': CriterionCollection(cls),
-                'targets': VoteTargetsCollection(cls)}
+                'targets': VotableCollection(cls)}
 
     # @property
     # def criteria(self):
