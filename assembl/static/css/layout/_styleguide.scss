@@ -23,3 +23,26 @@
     left: 0px;
     max-width: 220px;
 }
+
+
+// styleguide components
+
+.button-content,.icons-content {
+  padding: 30px;
+}
+
+.icons-content{
+  .bx {
+    width: 10%;
+    text-align: center;
+    background-color: #FFFFFF;
+    border-radius: 3px;
+    float: left;
+    margin: 10px;
+    padding: 10px 0px;
+
+    [class^="icon-"], [class*=" icon-"]{
+      font-size: 3.3em;
+    }
+  }
+}
