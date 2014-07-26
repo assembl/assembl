@@ -74,10 +74,15 @@ define(function(require){
                 
             Assembl.commands.setHandler("panel:open", function(){
                 that.resizeGraphView();
-            })
+            });
+
             Assembl.commands.setHandler("panel:close", function(){
                 that.resizeGraphView();
-            })
+            });
+
+            Assembl.vent.on('ideaList:removeIdea', function(idea){
+               that.removeIdea(idea);
+            });
 
         },
 

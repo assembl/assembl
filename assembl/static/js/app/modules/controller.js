@@ -113,7 +113,7 @@ define(function(require){
         },
 
         idea: function(id){
-            Ctx.openPanel(assembl.ideaList);
+            //Ctx.openPanel(assembl.ideaList);
             collectionManager.getAllIdeasCollectionPromise().done(
                 function(allIdeasCollection) {
                   var idea = allIdeasCollection.get(id);

@@ -376,7 +376,8 @@ define(function(require){
          */
         getDraggedIdea: function(){
             if( this.ideaList && this.draggedIdea ){
-                assembl.ideaList.removeIdea(this.draggedIdea);
+
+                Assembl.vent.trigger('ideaList:removeIdea', this.draggedIdea);
             }
 
             var idea = this.draggedIdea;

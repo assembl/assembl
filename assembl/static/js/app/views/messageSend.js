@@ -2,6 +2,7 @@ define(function(require){
     'use strict';
 
     var Backbone = require('backbone'),
+         Assembl = require('modules/assembl'),
                _ = require('underscore'),
                $ = require('jquery'),
              Ctx = require('modules/context'),
@@ -110,7 +111,8 @@ define(function(require){
                         setTimeout(function(){
                             //TODO:  This delay will no longer be necessary once backbone sync is done below in sendPostToServer
                             //console.log("Calling showMessageById for "+data['@id']);
-                            assembl.messageList.showMessageById(data['@id']);
+                            Assembl.vent.trigger('messageList:showMessageById', data['@id']);
+
                         }, 1000);
                 });
                 setTimeout(function(){
