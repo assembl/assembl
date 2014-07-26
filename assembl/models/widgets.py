@@ -614,31 +614,6 @@ class MultiCriterionVotingWidget(Widget):
                             **self.filter_kwargs(
                                 VotableIdeaWidgetLink, kwargs)))
 
-        class VoteTargetsCollection(AbstractCollectionDefinition):
-            # The set of voting target ideas.
-            # Fake: There is no DB link here.
-            def __init__(self, cls):
-                super(VoteTargetsCollection, self).__init__(cls, Idea)
-
-            def decorate_query(self, query, last_alias, parent_instance, ctx):
-                return query.filter(
-                    last_alias.discussion_id == parent_instance.discussion_id
-                ).filter(last_alias.hidden == False)
-
-            def decorate_instance(
-                    self, instance, parent_instance, assocs, user_id, ctx, kwargs):
-                for inst in assocs[:]:
-                    if isinstance(inst, AbstractIdeaVote):
-                        #import pdb; pdb.set_trace()
-                        # How do I get the idea?
-                        assocs.append(VotedIdeaWidgetLink(
-                            widget=inst,
-                            **self.filter_kwargs(
-                                VotedIdeaWidgetLink, kwargs)))
-
-            def contains(self, parent_instance, instance):
-                return isinstance(instance, Idea)
-
         return {'criteria': CriterionCollection(cls),
                 'targets': VotableCollection(cls)}
 
