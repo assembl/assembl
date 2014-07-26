@@ -191,8 +191,11 @@ class AssemblClassPatternExtractor(ClassPatternExtractor):
     def set_defaults(self, qmp, subject_pattern, sqla_cls, column=None):
         rdf_section = sqla_cls.__dict__.get(
             'rdf_section', DISCUSSION_DATA_SECTION)
-        name = self.make_column_name(sqla_cls, column) if (
-            column is not None) else None
+        name = None
+        if column is not None:
+            name = self.make_column_name(sqla_cls, column)
+            if column.foreign_keys:
+                column = self.column_as_reference(column)
         condition = self.get_base_condition(sqla_cls)
         if condition is not None:
             qmp.and_condition(condition)
@@ -216,7 +219,7 @@ class AssemblQuadStorageManager(object):
     user_quad_storage = QUADNAMES.UserStorage
     user_graph = ASSEMBL.user_graph
     user_graph_iri = QUADNAMES.user_graph_iri
-    global_quad_storage = QUADNAMES.global_storage
+    global_storage = QUADNAMES.global_storage
     global_graph = ASSEMBL.global_graph
     global_graph_iri = QUADNAMES.global_graph_iri
     main_storage = QUADNAMES.main_storage
