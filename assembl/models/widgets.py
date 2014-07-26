@@ -598,8 +598,15 @@ class MultiCriterionVotingWidget(Widget):
             def decorate_query(self, query, last_alias, parent_instance, ctx):
                 widget = self.owner_alias
                 idea = last_alias
-                return query.join(idea.has_votable_links).join(
+                query = query.join(idea.has_votable_links).join(
                     widget).filter(widget.id == parent_instance.id)
+                # This is unhealthy knowledge, but best I can do now.
+                vote_coll = ctx.find_collection('CollectionDefinition.votes')
+                if vote_coll:
+                    query = query.filter(
+                        vote_coll.collection_class_alias.widget_id ==
+                        parent_instance.id)
+                return query
 
             def decorate_instance(
                     self, instance, parent_instance, assocs, user_id, ctx,
