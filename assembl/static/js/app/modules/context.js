@@ -622,13 +622,10 @@ define(function(require){
 
                     var selector = this.format('[data-annotation-id="{0}"]', segment.id);
 
-                    viewManager.executeView('messageList', 'showMessageById',[segment.get('idPost'), function(){
+                    Assembl.vent.trigger('messageList:showMessageById', segment.get('idPost'), function(){
                         $(selector).highlight();
-                    }]);
+                    });
 
-                    /*assembl.messageList.showMessageById(segment.get('idPost'), function(){
-                        $(selector).highlight();
-                    });*/
                     break;
             }
         },

@@ -52,14 +52,38 @@ define(function(require){
                 messageList:MessageList,
                 synthesisPanel:SynthesisPanel
             });
+
+
+            /*$w.segmentList = new SegmentList({el: '#segmentList', button: '#button-segmentList'}).render();
+
+            // Idea list
+            $w.ideaList = new IdeaList({el: '#ideaList', button: '#button-ideaList'}).render();
+
+            // Idea panel
+            $w.ideaPanel = new IdeaPanel({el: '#ideaPanel', button: '#button-ideaPanel'}).render();
+
+            // Message
+            $w.messageList = new MessageList({el: '#messageList', button: '#button-messages'}).render();
+
+            // Synthesis
+            $w.syntheses = new Synthesis.Collection();
+            var nextSynthesisModel = new Synthesis.Model({'@id': 'next_synthesis'});
+            nextSynthesisModel.fetch();
+
+            $w.syntheses.add(nextSynthesisModel);
+            $w.synthesisPanel = new SynthesisPanel({
+                el: '#synthesisPanel',
+                button: '#button-synthesis',
+                model: nextSynthesisModel
+            });*/
+
+
         },
 
         /**
          * Load the default view
          * */
         home: function(){
-            console.log("home controller");
-
             Assembl.headerRegions.show(new navBar());
 
             if(!window.localStorage.getItem('showNotification')){

@@ -230,13 +230,9 @@ CollectionManager = require('modules/collectionManager'),
                 }
 
                 if( segment.get('idIdea') ){
-
-                    viewManager.executeView('ideaPanel', 'showSegment',[segment]);
-
-                  //assembl.ideaPanel.showSegment(segment);
+                    Assembl.vent.trigger('ideaPanel:showSegment', segment);
                 } else {
-                    viewManager.executeView('segmentList', 'showSegment',[segment]);
-                    //assembl.segmentList.showSegment(segment);
+                    Assembl.vent.trigger('segmentList:showSegment', segment);
                 }
               }
           );

@@ -28,9 +28,7 @@ CollectionManager = require('modules/collectionManager');
         /**
          * @init
          */
-        initialize: function(obj){
-            obj = obj || {};
-
+        initialize: function(options){
             var that = this;
 
             if( this.model ){
@@ -43,6 +41,10 @@ CollectionManager = require('modules/collectionManager');
             Assembl.vent.on("idea:selected", function(idea){
                 that.setIdeaModel(idea);
 
+            });
+
+            Assembl.vent.on('ideaPanel:showSegment', function(segment){
+                 that.showSegment(segment);
             });
 
         },

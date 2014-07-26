@@ -121,7 +121,10 @@ define(function(require){
                     }, 'syncWithCurrentIdea');
                 }
             });
-            
+
+            Assembl.vent.on('messageList:showMessageById', function(id, callback){
+                 that.showMessageById(id, callback);
+            });
         },
         
         invalidateResultsAndRender: function(){
@@ -855,7 +858,11 @@ define(function(require){
 
             // TODO: Re-render message in messagelist if an annotation was added...
             this.annotator.subscribe('annotationCreated', function(annotation){
-                var segment = assembl.segmentList.addAnnotationAsSegment(annotation, Ctx.currentAnnotationIdIdea);
+                //TODO: delete after check behavior
+                //var segment = assembl.segmentList.addAnnotationAsSegment(annotation, Ctx.currentAnnotationIdIdea);
+
+                var segment = Assembl.reqres.request("segmentList:addAnnotationAsSegment", annotation, Ctx.currentAnnotationIdIdea);
+
                 if( !segment.isValid() ){
                     annotator.deleteAnnotation(annotation);
                 } else if( Ctx.currentAnnotationNewIdeaParentIdea ){

@@ -16,13 +16,10 @@ CollectionManager = require('modules/collectionManager');
         /**
          * @init
          */
-        initialize: function(obj){
+        initialize: function(options){
           var that = this,
               collectionManager = new CollectionManager();
 
-          if( obj && obj.button ){
-            this.button = $(obj.button).on('click', Ctx.togglePanel.bind(window, 'segmentList'));
-          }
           collectionManager.getAllExtractsCollectionPromise().done(
               function(allExtractsCollection) {
                 that.listenTo(allExtractsCollection, 'all', this.render);
@@ -36,7 +33,16 @@ CollectionManager = require('modules/collectionManager');
                 that.listenTo(allExtractsCollection, 'add', function(segment){
                   that.highlightSegment(segment);
                 });
-              });
+          });
+
+          Assembl.vent.on('segmentList:showSegment', function(segment){
+              that.showSegment(segment);
+          });
+
+          Assembl.reqres.setHandler("segmentList:addAnnotationAsSegment", function(annotation, currentAnnotationIdIdea){
+              return that.addAnnotationAsSegment(annotation, currentAnnotationIdIdea);
+          });
+
         },
 
         /**

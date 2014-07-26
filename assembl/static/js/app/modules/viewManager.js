@@ -17,19 +17,19 @@ define(function(require){
 
             switch(view){
                 case 'ideaList':
-                    this.ideaList.prototype[func].apply(this, params);
+                    this.ideaList.prototype[func].apply(params);
                     break;
                 case 'ideaPanel':
-                    this.ideaPanel.prototype[func].apply(this, params);
+                    this.ideaPanel.prototype[func].apply(params);
                     break;
                 case 'segmentList':
-                    this.segmentList.prototype[func].apply(this, params);
+                    this.segmentList.prototype[func].apply(params);
                     break;
                 case 'messageList':
-                    this.messageList.prototype[func].apply(this, params);
+                    this.messageList.prototype[func].apply(params);
                     break;
                 case 'synthesisPanel':
-                    this.synthesisPanel.prototype[func].apply(this, params);
+                    this.synthesisPanel.prototype[func].apply(params);
                     break;
             }
         }
