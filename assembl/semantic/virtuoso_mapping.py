@@ -228,6 +228,8 @@ class AssemblQuadStorageManager(object):
 
     def __init__(self, nsm):
         self.nsm = nsm
+        # Fails if not full schema
+        assert Base.metadata.schema.split('.')[1]
 
     def prepare_storage(self, quad_storage_name, imported=None):
         alias_manager = ClassAliasManager(Base._decl_class_registry)
