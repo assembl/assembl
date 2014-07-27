@@ -219,10 +219,10 @@ class AssemblQuadStorageManager(object):
     user_quad_storage = QUADNAMES.UserStorage
     user_graph = ASSEMBL.user_graph
     user_graph_iri = QUADNAMES.user_graph_iri
-    global_storage = QUADNAMES.global_storage
+    global_quad_storage = QUADNAMES.global_storage
     global_graph = ASSEMBL.global_graph
     global_graph_iri = QUADNAMES.global_graph_iri
-    main_storage = QUADNAMES.main_storage
+    main_quad_storage = QUADNAMES.main_storage
     main_graph = ASSEMBL.main_graph
     main_graph_iri = QUADNAMES.main_graph_iri
 
@@ -271,7 +271,10 @@ class AssemblQuadStorageManager(object):
 
     def drop_storage(self, session, storage_name, force=False):
         qs = QuadStorage(storage_name, nsm=self.nsm)
-        qs.drop(session, force)
+        try:
+            qs.drop(session, force)
+        except:
+            pass
 
     def drop_graph(self, session, graph_iri, force=False):
         gr = GraphQuadMapPattern(graph_iri, None, nsm=self.nsm)
@@ -290,7 +293,7 @@ class AssemblQuadStorageManager(object):
             discussion_id, section))
 
     def create_main_storage(self, session):
-        return self.create_storage(session, self.main_storage, [
+        return self.create_storage(session, self.main_quad_storage, [
             (MAIN_SECTION, self.main_graph, self.main_graph_iri, None)])
 
     def create_discussion_storage(self, session, discussion):
@@ -359,7 +362,7 @@ class AssemblQuadStorageManager(object):
             session, self.discussion_storage_name(discussion.id), force)
 
     def create_user_storage(self, session):
-        return self.create_storage(session, self.user_storage, [
+        return self.create_storage(session, self.user_quad_storage, [
             (USER_SECTION, self.user_graph, self.user_graph_iri, None)])
 
     def create_extract_graph(self, session, extract):
@@ -373,20 +376,20 @@ class AssemblQuadStorageManager(object):
         self.drop_graph(session, self.extract_iri(extract.id), force)
 
     def create_private_global_storage(self, session):
-        return self.create_storage(session, self.global_storage, [
+        return self.create_storage(session, self.global_quad_storage, [
             (None, self.global_graph, self.global_graph_iri, None)])
 
     def drop_private_global_storage(self, session, force=False):
-        return self.drop_storage(session, self.global_storage, force)
+        return self.drop_storage(session, self.global_quad_storage, force)
 
     def declare_functions(self, session):
         for stmt in iri_function_definition_stmts:
             session.execute(stmt)
 
     def drop_all(self, session, force=False):
-        self.drop_storage(session, self.global_storage, force)
-        self.drop_storage(session, self.main_storage, force)
-        self.drop_storage(session, self.user_storage, force)
+        self.drop_storage(session, self.global_quad_storage, force)
+        self.drop_storage(session, self.main_quad_storage, force)
+        self.drop_storage(session, self.user_quad_storage, force)
         from ..models import Discussion
         for (id,) in session.query(Discussion.id).all():
             self.drop_storage(session, self.discussion_storage_name(id), force)
