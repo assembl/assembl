@@ -130,11 +130,12 @@ class QuadMapPatternS(QuadMapPattern):
             subject, predicate, obj, graph_name, name, condition, nsm)
         self.section = section
 
-    def set_defaults(self, subject=None, obj=None, graph_name=None,
-                     name=None, condition=None, section=None):
-        super(QuadMapPatternS, self).set_defaults(
+    def clone_with_defaults(self, subject=None, obj=None, graph_name=None,
+                            name=None, condition=None, section=None):
+        qmp = super(QuadMapPatternS, self).clone_with_defaults(
             subject, obj, graph_name, name, condition)
-        self.section = self.section or section
+        qmp.section = self.section or section
+        return qmp
 
 
 class AssemblClassPatternExtractor(ClassPatternExtractor):
@@ -178,7 +179,7 @@ class AssemblClassPatternExtractor(ClassPatternExtractor):
         if 'special_quad_patterns' in sqla_cls.__dict__:
             # Only direct definition
             for qmp in sqla_cls.special_quad_patterns(self.alias_manager):
-                self.set_defaults(qmp, subject_pattern, sqla_cls)
+                qmp = self.qmp_with_defaults(qmp, subject_pattern, sqla_cls)
                 if qmp.graph_name == self.graph.name:
                     qmp.resolve(sqla_cls)
                     yield qmp
@@ -188,7 +189,7 @@ class AssemblClassPatternExtractor(ClassPatternExtractor):
         if self.discussion_id and issubclass(cls, DiscussionBoundBase):
             return cls.get_discussion_condition(self.discussion_id)
 
-    def set_defaults(self, qmp, subject_pattern, sqla_cls, column=None):
+    def qmp_with_defaults(self, qmp, subject_pattern, sqla_cls, column=None):
         rdf_section = sqla_cls.__dict__.get(
             'rdf_section', DISCUSSION_DATA_SECTION)
         name = None
@@ -204,8 +205,8 @@ class AssemblClassPatternExtractor(ClassPatternExtractor):
                 and "_d%d_" % (d_id,) not in qmp.name):
             # TODO: improve this
             qmp.name += "_d%d_" % (d_id,)
-        qmp.set_defaults(subject_pattern, column, self.graph.name, name,
-                         None, rdf_section)
+        return qmp.clone_with_defaults(
+            subject_pattern, column, self.graph.name, name, None, rdf_section)
 
     def extract_column_info(self, sqla_cls, subject_pattern):
         gen = self._extract_column_info(sqla_cls, subject_pattern)
