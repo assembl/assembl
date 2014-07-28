@@ -225,7 +225,7 @@ def test_api_get_posts_from_idea(
         res_data = json.loads(res.body)
         #print(repr(res_data))
         #TODO: BENOITG:  THERE IS A SESSION PROBLEM HERE
-        #assert res_data['total'] == expected_num, "post API returned %d but %s" % (res_data['total'],fail_msg)
+        assert res_data['total'] == expected_num, "post API returned %d but %s" % (res_data['total'],fail_msg)
 
     def check_total_and_orphans(expected_total, expected_orphans):
         #Check orphans from idea api
@@ -234,7 +234,7 @@ def test_api_get_posts_from_idea(
         res_data = json.loads(res.body)
         assert res_data['num_posts'] == expected_total
         # Known to fail. I get 0 on v6, ? on v7.
-        #assert res_data['num_orphan_posts'] == expected_orphans
+        assert res_data['num_orphan_posts'] == expected_orphans
     
     check_number_of_posts(subidea_1, 0, "Initially no posts are linked")
     check_number_of_posts(subidea_1_1, 0, "Initially no posts are linked")

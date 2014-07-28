@@ -264,14 +264,18 @@
         "@extends": "Widget",
         "criteria_url": true
     },
-    "BinaryVote": {
+    "AbstractIdeaVote": {
         "idea": true,
-        "voter": true,
+        "criterion": true,
+        "widget": true,
+        "voter": true
+    },
+    "BinaryIdeaVote": {
+        "@extends": "AbstractIdeaVote",
         "vote_value": true
     },
     "LickertIdeaVote": {
-        "idea": true,
-        "voter": true,
+        "@extends": "AbstractIdeaVote",
         "vote_value": true
     }
 }

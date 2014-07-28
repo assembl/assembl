@@ -121,16 +121,17 @@ class ClassContext(object):
 
     def create_object(self, typename=None, json=None, user_id=None, **kwargs):
         cls = self.get_class(typename)
-        if json is None:
-            cols = sqlainspect(cls).c
-            if 'user_id' in cols:
-                kwargs[user_id] = user_id
-            kwargs = {k: int(v) if k in cols and
-                      cols.get(k).type.python_type == int else v
-                      for k, v in kwargs.iteritems()}
-            return [cls(**kwargs)]
-        else:
-            return [cls.from_json(json, user_id)]
+        with cls.db.no_autoflush:
+            if json is None:
+                cols = sqlainspect(cls).c
+                if 'user_id' in cols:
+                    kwargs[user_id] = user_id
+                kwargs = {k: int(v) if k in cols and
+                          cols.get(k).type.python_type == int else v
+                          for k, v in kwargs.iteritems()}
+                return [cls(**kwargs)]
+            else:
+                return [cls.from_json(json, user_id)]
 
     def find_collection(self, collection_class_name):
         return None
@@ -312,18 +313,19 @@ class CollectionContext(object):
 
     def create_object(self, typename=None, json=None, user_id=None, **kwargs):
         cls = self.get_collection_class(typename)
-        if json is None:
-            cols = sqlainspect(cls).c
-            ob_kwargs = {k: int(v) if k in cols and
-                         cols.get(k).type.python_type == int else v
-                         for k, v in kwargs.iteritems()
-                         if k in cls.__dict__}
-            inst = cls(**ob_kwargs)
-            assocs = [inst]
-        else:
-            assocs = cls.from_json(json, user_id)
-            inst = assocs[0]
-        self.decorate_instance(inst, assocs, user_id, self, kwargs)
+        with cls.db.no_autoflush:
+            if json is None:
+                cols = sqlainspect(cls).c
+                ob_kwargs = {k: int(v) if k in cols and
+                             cols.get(k).type.python_type == int else v
+                             for k, v in kwargs.iteritems()
+                             if k in cls.__dict__}
+                inst = cls(**ob_kwargs)
+                assocs = [inst]
+            else:
+                assocs = cls.from_json(json, user_id)
+                inst = assocs[0]
+            self.decorate_instance(inst, assocs, user_id, self, kwargs)
         return assocs
 
     def __repr__(self):

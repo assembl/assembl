@@ -269,7 +269,7 @@ class IdeaGraphView(DiscussionBoundBase):
         Integer,
         ForeignKey('discussion.id', ondelete="CASCADE", onupdate="CASCADE"),
         nullable=False,
-        info = {'rdf': QuadMapPatternS(None, SIOC.has_container, Discussion.iri_class().apply())}
+        info = {'rdf': QuadMapPatternS(None, SIOC.has_container)}
     )
     discussion = relationship('Discussion', backref="views")
 
@@ -642,7 +642,7 @@ class Idea(DiscussionBoundBase):
         onupdate='CASCADE'),
         nullable=False,
         index=True,
-        info = {'rdf': QuadMapPatternS(None, SIOC.has_container, Discussion.iri_class().apply())})
+        info = {'rdf': QuadMapPatternS(None, SIOC.has_container)})
 
     discussion = relationship(
         "Discussion",
@@ -1211,11 +1211,11 @@ class IdeaLink(DiscussionBoundBase):
     source_id = Column(Integer, ForeignKey(
             'idea.id', ondelete="CASCADE", onupdate="CASCADE"),
         nullable=False, index=True,
-        info= {'rdf': QuadMapPatternS(None, IDEA.target_idea, Idea.iri_class().apply())})
+        info= {'rdf': QuadMapPatternS(None, IDEA.target_idea)})
     target_id = Column(Integer, ForeignKey(
         'idea.id', ondelete="CASCADE", onupdate="CASCADE"),
         nullable=False, index=True,
-        info= {'rdf': QuadMapPatternS(None, IDEA.source_idea, Idea.iri_class().apply())})
+        info= {'rdf': QuadMapPatternS(None, IDEA.source_idea)})
     source = relationship(
         'Idea',
         primaryjoin="and_(Idea.id==IdeaLink.source_id, "
@@ -1474,8 +1474,7 @@ class Extract(IdeaContentPositiveLink):
     discussion_id = Column(Integer, ForeignKey(
         'discussion.id', ondelete="CASCADE", onupdate="CASCADE"),
         nullable=False, index=True,
-        info = {'rdf': QuadMapPatternS(None, CATALYST.relevantToConversation,
-            Discussion.iri_class().apply())})
+        info = {'rdf': QuadMapPatternS(None, CATALYST.relevantToConversation)})
     discussion = relationship('Discussion', backref='extracts')
 
     def extract_graph_name(self):

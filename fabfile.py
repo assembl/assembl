@@ -44,6 +44,15 @@ def database_start():
     """
     execute(supervisor_process_start, 'virtuoso')
 
+@task
+def supervisor_restart():
+    with hide('running', 'stdout'):
+        supervisord_cmd_result = venvcmd("supervisorctl shutdown")
+    #Another supervisor,upstart, etc may be watching it, give it a little while
+    sleep(2); 
+    #If supervisor is already started, this will do nothing
+    execute(supervisor_process_start, 'virtuoso')
+        
 def supervisor_process_start(process_name):
     """
     Starts a supervisord process, and waits till it started to return
@@ -508,10 +517,10 @@ def install_builddeps():
     else:
         sudo('apt-get install -y build-essential python-dev ruby-builder')
         sudo('apt-get install -y nodejs nodejs-legacy  npm')
-        sudo('apt-get install -y aclocal autoconf autoheader automake libtoolize bison flex gperf')
+        sudo('apt-get install -y automake bison flex gperf  libxml2-dev libssl-dev libreadline-dev')
 
         #Runtime requirements (even in develop)
-        sudo('apt-get install -y redis-server memcached unixodbc-dev virtuoso-opensource')
+        sudo('apt-get install -y redis-server memcached unixodbc-dev')
     execute(update_python_package_builddeps)
 
 @task
@@ -1010,6 +1019,7 @@ def virtuoso_reconstruct_db():
 @task
 def virtuoso_source_install():
     "Install the virtuoso server locally"
+    execute(ensure_virtuoso_not_running)
     virtuoso_root = get_virtuoso_root()
     virtuoso_src = get_virtuoso_src()
     branch = get_config().get('virtuoso', 'virtuoso_branch')
@@ -1031,11 +1041,14 @@ def virtuoso_source_install():
     with cd(virtuoso_src):
         if not exists(join(virtuoso_src, 'configure')):
             run('./autogen.sh')
-        if exists(join(virtuoso_src, 'config.status')):
-            run('./config.status --recheck')
-        else:
-            run('./configure --with-readline --prefix '+virtuoso_root)
-        run('make')
+        #This does not work if we change the path or anything else in local.ini
+        #if exists(join(virtuoso_src, 'config.status')):
+        #    run('./config.status --recheck')
+        #else:
+        
+        run('./configure --with-readline --prefix '+virtuoso_root)
+        
+        run('make -j4')
         need_sudo = False
         if not exists(virtuoso_root):
             if not run('mkdir -p ' + virtuoso_root, quiet=True).succeeded:
@@ -1044,6 +1057,10 @@ def virtuoso_source_install():
         else:
             need_sudo = run('touch '+virtuoso_root, quiet=True).failed
         if need_sudo:
-            sudo('make install')
+            sudo('checkinstall')
         else:
             run('make install')
+        #If we ran this, there is a strong chance we just reconfigured the ini file
+        # Make sure the virtuoso.ini and supervisor.ini reflects the changes
+        execute(app_setup)
+        execute(supervisor_restart)

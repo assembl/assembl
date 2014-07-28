@@ -130,11 +130,12 @@ class QuadMapPatternS(QuadMapPattern):
             subject, predicate, obj, graph_name, name, condition, nsm)
         self.section = section
 
-    def set_defaults(self, subject=None, obj=None, graph_name=None,
-                     name=None, condition=None, section=None):
-        super(QuadMapPatternS, self).set_defaults(
+    def clone_with_defaults(self, subject=None, obj=None, graph_name=None,
+                            name=None, condition=None, section=None):
+        qmp = super(QuadMapPatternS, self).clone_with_defaults(
             subject, obj, graph_name, name, condition)
-        self.section = self.section or section
+        qmp.section = self.section or section
+        return qmp
 
 
 class AssemblClassPatternExtractor(ClassPatternExtractor):
@@ -189,7 +190,7 @@ class AssemblClassPatternExtractor(ClassPatternExtractor):
         if 'special_quad_patterns' in sqla_cls.__dict__:
             # Only direct definition
             for qmp in sqla_cls.special_quad_patterns(self.alias_manager):
-                self.set_defaults(qmp, subject_pattern, sqla_cls)
+                qmp = self.qmp_with_defaults(qmp, subject_pattern, sqla_cls)
                 if qmp.graph_name == self.graph.name:
                     qmp.resolve(sqla_cls)
                     yield qmp
@@ -199,11 +200,16 @@ class AssemblClassPatternExtractor(ClassPatternExtractor):
         if self.discussion_id and issubclass(cls, DiscussionBoundBase):
             return cls.get_discussion_condition(self.discussion_id)
 
-    def set_defaults(self, qmp, subject_pattern, sqla_cls, column=None):
+    def qmp_with_defaults(self, qmp, subject_pattern, sqla_cls, column=None):
         rdf_section = sqla_cls.__dict__.get(
             'rdf_section', DISCUSSION_DATA_SECTION)
-        name = self.make_column_name(sqla_cls, column) if (
-            column is not None) else None
+        name = None
+        if column is not None:
+            name = self.make_column_name(sqla_cls, column)
+            if column.foreign_keys:
+                column = self.column_as_reference(column)
+        qmp = qmp.clone_with_defaults(
+            subject_pattern, column, self.graph.name, name, None, rdf_section)
         condition = self.get_base_condition(sqla_cls)
         if condition is not None:
             qmp.and_condition(condition)
@@ -212,8 +218,7 @@ class AssemblClassPatternExtractor(ClassPatternExtractor):
                 and "_d%d_" % (d_id,) not in qmp.name):
             # TODO: improve this
             qmp.name += "_d%d_" % (d_id,)
-        qmp.set_defaults(subject_pattern, column, self.graph.name, name,
-                         None, rdf_section)
+        return qmp
 
     def extract_column_info(self, sqla_cls, subject_pattern):
         gen = self._extract_column_info(sqla_cls, subject_pattern)
@@ -230,12 +235,14 @@ class AssemblQuadStorageManager(object):
     global_quad_storage = QUADNAMES.global_storage
     global_graph = ASSEMBL.global_graph
     global_graph_iri = QUADNAMES.global_graph_iri
-    main_storage = QUADNAMES.main_storage
+    main_quad_storage = QUADNAMES.main_storage
     main_graph = ASSEMBL.main_graph
     main_graph_iri = QUADNAMES.main_graph_iri
 
     def __init__(self, nsm):
         self.nsm = nsm
+        # Fails if not full schema
+        assert Base.metadata.schema.split('.')[1]
 
     def prepare_storage(self, quad_storage_name, imported=None):
         alias_manager = ClassAliasManager(Base._decl_class_registry)
@@ -277,7 +284,10 @@ class AssemblQuadStorageManager(object):
 
     def drop_storage(self, session, storage_name, force=False):
         qs = QuadStorage(storage_name, nsm=self.nsm)
-        qs.drop(session, force)
+        try:
+            qs.drop(session, force)
+        except:
+            pass
 
     def drop_graph(self, session, graph_iri, force=False):
         gr = GraphQuadMapPattern(graph_iri, None, nsm=self.nsm)
@@ -296,7 +306,7 @@ class AssemblQuadStorageManager(object):
             discussion_id, section))
 
     def create_main_storage(self, session):
-        return self.create_storage(session, self.main_storage, [
+        return self.create_storage(session, self.main_quad_storage, [
             (MAIN_SECTION, self.main_graph, self.main_graph_iri, None)])
 
     def create_discussion_storage(self, session, discussion):
@@ -365,7 +375,7 @@ class AssemblQuadStorageManager(object):
             session, self.discussion_storage_name(discussion.id), force)
 
     def create_user_storage(self, session):
-        return self.create_storage(session, self.user_storage, [
+        return self.create_storage(session, self.user_quad_storage, [
             (USER_SECTION, self.user_graph, self.user_graph_iri, None)])
 
     def create_extract_graph(self, session, extract):
@@ -379,20 +389,20 @@ class AssemblQuadStorageManager(object):
         self.drop_graph(session, self.extract_iri(extract.id), force)
 
     def create_private_global_storage(self, session):
-        return self.create_storage(session, self.global_storage, [
+        return self.create_storage(session, self.global_quad_storage, [
             (None, self.global_graph, self.global_graph_iri, None)])
 
     def drop_private_global_storage(self, session, force=False):
-        return self.drop_storage(session, self.global_storage, force)
+        return self.drop_storage(session, self.global_quad_storage, force)
 
     def declare_functions(self, session):
         for stmt in iri_function_definition_stmts:
             session.execute(stmt)
 
     def drop_all(self, session, force=False):
-        self.drop_storage(session, self.global_storage, force)
-        self.drop_storage(session, self.main_storage, force)
-        self.drop_storage(session, self.user_storage, force)
+        self.drop_storage(session, self.global_quad_storage, force)
+        self.drop_storage(session, self.main_quad_storage, force)
+        self.drop_storage(session, self.user_quad_storage, force)
         from ..models import Discussion
         for (id,) in session.query(Discussion.id).all():
             self.drop_storage(session, self.discussion_storage_name(id), force)

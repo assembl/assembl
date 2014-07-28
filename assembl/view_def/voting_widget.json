@@ -267,15 +267,18 @@
         "criteria": ":",
         "votable_ideas": ":id_only"
     },
-    "BinaryVote": {
+    "AbstractIdeaVote": {
         "idea": true,
-        "voter": true,
+        "criterion": true,
+        "widget": true,
+        "voter": true
+    },
+    "BinaryIdeaVote": {
+        "@extends": "AbstractIdeaVote",
         "vote_value": true
     },
-    "LickertVote": {
-        "idea": true,
-        "voter": true,
-        "vote_value": true,
-        "range": true
+    "LickertIdeaVote": {
+        "@extends": "AbstractIdeaVote",
+        "vote_value": true
     }
 }

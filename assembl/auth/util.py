@@ -6,7 +6,8 @@ from pyramid.httpexceptions import HTTPNotFound
 from ..lib.sqla import get_session_maker
 from . import R_SYSADMIN, P_READ, SYSTEM_ROLES
 from ..models import (
-    User, Role, UserRole, LocalUserRole, Permission, DiscussionPermission)
+    User, Role, UserRole, LocalUserRole, Permission,
+    DiscussionPermission, IdentityProvider)
 
 
 def get_user(request):
@@ -145,3 +146,24 @@ def user_has_permission(discussion_id, user_id, permission):
                                         Permission.name == permission)
                 ).first()
     return permission is not None
+
+
+def get_identity_provider(request, create=True):
+    auth_context = request.context
+    trusted = request.registry.settings['trusted_login_providers']
+    provider = None
+    session = get_session_maker()()
+    provider = IdentityProvider.db.query(IdentityProvider).filter_by(
+        provider_type=auth_context.provider_type,
+        name=auth_context.provider_name
+    ).first()
+    if provider and not provider.trust_emails and provider.name in trusted:
+        provider.trust_emails = True
+        session.add(provider)
+    elif create and not provider:
+        provider = IdentityProvider(
+            provider_type=auth_context.provider_type,
+            name=auth_context.provider_name,
+            trust_emails=auth_context.provider_name in trusted)
+        session.add(provider)
+    return provider

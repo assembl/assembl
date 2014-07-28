@@ -2,10 +2,13 @@ from abc import abstractproperty
 from datetime import datetime
 
 from sqlalchemy import (
-    Column, Integer, ForeignKey, Boolean, String, Float, DateTime)
+    Column, Integer, ForeignKey, Boolean, String, Float, DateTime, and_)
 from sqlalchemy.orm import relationship
 
-from . import (Base, DiscussionBoundBase, Idea, User)
+from . import (Base, DiscussionBoundBase)
+from .synthesis import Idea
+from .auth import User
+from .widgets import MultiCriterionVotingWidget
 from ..semantic.virtuoso_mapping import QuadMapPatternS
 from ..semantic.namespaces import (VOTE, ASSEMBL, DCTERMS)
 
@@ -60,6 +63,17 @@ class AbstractIdeaVote(DiscussionBoundBase):
         info={'rdf': QuadMapPatternS(None, VOTE.voter)}
     )
     voter = relationship(User, backref="votes")
+
+    widget_id = Column(
+        Integer,
+        ForeignKey(MultiCriterionVotingWidget.id,
+                   ondelete="CASCADE", onupdate="CASCADE"),
+        nullable=False)
+    widget = relationship(
+        MultiCriterionVotingWidget,
+        primaryjoin="and_(MultiCriterionVotingWidget.id==AbstractIdeaVote.widget_id, "
+                         "AbstractIdeaVote.is_tombstone==False)",
+        backref="votes")
 
     def get_discussion_id(self):
         return self.idea.discussion_id

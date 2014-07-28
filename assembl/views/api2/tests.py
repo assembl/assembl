@@ -411,7 +411,7 @@ def test_voting_widget(
     db.flush()
     new_widget = Widget.get_instance(new_widget_loc.location)
     assert new_widget
-    db.expire(new_widget, ('criteria', ))
+    db.expire(new_widget, ('criteria', 'votable_ideas'))
     # Get the widget from the api
     widget_rep = test_app.get(
         local_to_absolute(new_widget.uri()),
@@ -478,6 +478,8 @@ def test_voting_widget(
         criterion_id=criteria[0].id).all()
     assert len(votes) == 2
     assert len([v for v in votes if v.is_tombstone]) == 1
+    for v in votes:
+        assert v.widget == new_widget
     # Get vote results again.
     vote_results_url = local_to_absolute(widget_rep['vote_results_url'])
     vote_results = test_app.get(vote_results_url)
