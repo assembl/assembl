@@ -41,13 +41,12 @@ class AgentProfile(Base):
     """
     __tablename__ = "agent_profile"
     rdf_class = FOAF.Agent
+    rdf_section = USER_SECTION
 
     id = Column(Integer, primary_key=True,
-        info={'rdf': QuadMapPatternS(
-            None, ASSEMBL.db_id, section=USER_SECTION)})
+        info={'rdf': QuadMapPatternS(None, ASSEMBL.db_id)})
     name = Column(Unicode(1024),
-        info={'rdf': QuadMapPatternS(
-            None, FOAF.name, section=USER_SECTION)})
+        info={'rdf': QuadMapPatternS(None, FOAF.name)})
     type = Column(String(60))
 
     __mapper_args__ = {
@@ -156,17 +155,16 @@ class AbstractAgentAccount(Base):
     """An abstract class for accounts that identify agents"""
     __tablename__ = "abstract_agent_account"
     rdf_class = SIOC.UserAccount
+    rdf_section = USER_SECTION
+
     id = Column(Integer, primary_key=True,
-        info={'rdf': QuadMapPatternS(
-            None, ASSEMBL.db_id, section=USER_SECTION)})
+        info={'rdf': QuadMapPatternS(None, ASSEMBL.db_id)})
     type = Column(String(60))
     profile_id = Column(
         Integer,
         ForeignKey('agent_profile.id', ondelete='CASCADE', onupdate='CASCADE'),
         nullable=False,
-        info={'rdf': QuadMapPatternS(
-                None, SIOC.account_of, section=USER_SECTION)}
-        )
+        info={'rdf': QuadMapPatternS(None, SIOC.account_of)})
     profile = relationship('AgentProfile',
         backref=backref('accounts', cascade="all, delete-orphan"))
 
@@ -193,8 +191,7 @@ class EmailAccount(AbstractAgentAccount):
         ondelete='CASCADE', onupdate='CASCADE'
     ), primary_key=True)
     email = Column(String(100), nullable=False, index=True,
-        info={'rdf': QuadMapPatternS(
-                None, SIOC.email, section=USER_SECTION)})
+        info={'rdf': QuadMapPatternS(None, SIOC.email)})
     verified = Column(Boolean(), default=False)
     preferred = Column(Boolean(), default=False)
     active = Column(Boolean(), default=True)
@@ -255,11 +252,12 @@ class IdentityProvider(Base):
     """An identity provider (or sometimes a category of identity providers.)"""
     __tablename__ = "identity_provider"
     rdf_class = SIOC.Usergroup
+    rdf_section = USER_SECTION
+
     id = Column(Integer, primary_key=True)
     provider_type = Column(String(20), nullable=False)
     name = Column(String(60), nullable=False,
-        info={'rdf': QuadMapPatternS(
-            None, SIOC.name, section=USER_SECTION)})
+        info={'rdf': QuadMapPatternS(None, SIOC.name)})
     # TODO: More complicated model, where trust also depends on realm.
     trust_emails = Column(Boolean, default=False)
 
@@ -278,20 +276,16 @@ class IdentityProviderAccount(AbstractAgentAccount):
         Integer,
         ForeignKey('identity_provider.id', ondelete='CASCADE', onupdate='CASCADE'),
         nullable=False,
-        info={'rdf': QuadMapPatternS(
-            None, SIOC.member_of, section=USER_SECTION)})
+        info={'rdf': QuadMapPatternS(None, SIOC.member_of)})
     provider = relationship(IdentityProvider)
     username = Column(String(200),
-        info={'rdf': QuadMapPatternS(
-            None, SIOC.name, section=USER_SECTION)})
+        info={'rdf': QuadMapPatternS(None, SIOC.name)})
     domain = Column(String(200))
     userid = Column(String(200),
-        info={'rdf': QuadMapPatternS(
-            None, SIOC.id, section=USER_SECTION)})
+        info={'rdf': QuadMapPatternS(None, SIOC.id)})
     profile_info = deferred(Column(Text()))
     picture_url = Column(String(300),
-        info={'rdf': QuadMapPatternS(
-            None, FOAF.img, section=USER_SECTION)})
+        info={'rdf': QuadMapPatternS(None, FOAF.img)})
     profile_i = relationship(AgentProfile, backref='identity_accounts')
 
     def signature(self):
@@ -381,16 +375,14 @@ class User(AgentProfile):
     )
 
     preferred_email = Column(Unicode(50),
-        info={'rdf': QuadMapPatternS(
-            None, FOAF.mbox, section=USER_SECTION)})
+        info={'rdf': QuadMapPatternS(None, FOAF.mbox)})
     verified = Column(Boolean(), default=False)
     password = deferred(Column(Binary(115)))
     timezone = Column(Time(True))
     last_login = Column(DateTime)
     login_failures = Column(Integer, default=0)
     creation_date = Column(DateTime, nullable=False, default=datetime.utcnow,
-        info={'rdf': QuadMapPatternS(
-            None, DCTERMS.created, section=USER_SECTION)})
+        info={'rdf': QuadMapPatternS(None, DCTERMS.created)})
 
     def __init__(self, **kwargs):
         if kwargs.get('password'):
@@ -509,12 +501,12 @@ class Role(Base):
     """A role that a user may have in a discussion"""
     __tablename__ = 'role'
     rdf_class = SIOC.Role
+    rdf_section = USER_SECTION
+
     id = Column(Integer, primary_key=True,
-        info={'rdf': QuadMapPatternS(
-            None, ASSEMBL.db_id, section=USER_SECTION)})
+        info={'rdf': QuadMapPatternS(None, ASSEMBL.db_id)})
     name = Column(String(20), nullable=False,
-        info={'rdf': QuadMapPatternS(
-            None, SIOC.name, section=USER_SECTION)})
+        info={'rdf': QuadMapPatternS(None, SIOC.name)})
 
     @classmethod
     def get_role(cls, session, name):
