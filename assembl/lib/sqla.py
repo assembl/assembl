@@ -259,6 +259,10 @@ class BaseOps(object):
         return cls._iri_class
 
     @classmethod
+    def base_condition(cls):
+        return None
+
+    @classmethod
     def special_quad_patterns(cls, alias_manager):
         # Note: If defined somewhere, override in subclasses to avoid inheritance.
         return []

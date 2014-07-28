@@ -84,6 +84,10 @@ class AbstractIdeaVote(DiscussionBoundBase):
             (Idea.discussion_id == discussion_id)
 
     @classmethod
+    def base_condition(cls):
+        return cls.is_tombstone == False
+
+    @classmethod
     def external_typename(cls):
         return "IdeaVote"
 
