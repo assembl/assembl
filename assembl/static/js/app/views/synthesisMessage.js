@@ -49,10 +49,22 @@ define(function(require){
             var synthesisPanel = new SynthesisPanel({
                 model: this.synthesis
                 //el: '#message_'+_.escape(this.model.getNumericId())+'_synthesis'
-            });
+                }),
+                body;
             synthesisPanel.template = Ctx.loadTemplate('synthesisPanelMessage');
             synthesisPanel.render();
-            this.$('.message-body').html(synthesisPanel.el);
+            
+            if(this.viewStyle == this.availableMessageViewStyles.PREVIEW) {
+                //Strip HTML from preview
+                //bodyFormat = "text/plain";
+                body = $(synthesisPanel.el).text();
+            }
+            else {
+              
+              body = synthesisPanel.el;
+            }
+            this.$('.message-body').html(body);
+            
             return;
         }
         

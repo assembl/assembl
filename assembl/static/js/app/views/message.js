@@ -109,6 +109,7 @@ CollectionManager = require('modules/collectionManager');
               function (creator) {
                 var data = that.model.toJSON(),
                     children,
+                    bodyFormat = null,
                     bodyFormatClass = null,
                     level;
                 level = that.currentLevel !== null ? that.currentLevel : 1;
@@ -121,11 +122,23 @@ CollectionManager = require('modules/collectionManager');
                 data['id'] = data['@id'];
                 data['date'] = Ctx.formatDate(data.date);
                 data['creator'] = creator;
-                if(that.model.get('bodyMimeType')) {
-                    bodyFormatClass = "body_format_"+that.model.get('bodyMimeType').replace("/", "_"); 
+                
+                data['viewStyle'] = that.viewStyle;
+                bodyFormat = that.model.get('bodyMimeType');
+                if(that.viewStyle == that.availableMessageViewStyles.PREVIEW) {
+                  if(bodyFormat == "text/html") {
+                    //Strip HTML from preview
+                    bodyFormat = "text/plain";
+                    // The div is just there in case there actually isn't any html
+                    // in which case jquery would crash without it
+                    data['body'] = $("<div>" + data['body'] + "</div>").text();
+                  }
+                }
+                if(bodyFormat !== null) {
+                  bodyFormatClass = "body_format_"+that.model.get('bodyMimeType').replace("/", "_"); 
                 }
                 data['bodyFormatClass'] = bodyFormatClass;
-                data['viewStyle'] = that.viewStyle;
+                
                 // Do NOT change this, it's the message id stored in the database 
                 // by annotator when storing message annotations
                 // It has to contain ONLY raw content of the message provided by the
