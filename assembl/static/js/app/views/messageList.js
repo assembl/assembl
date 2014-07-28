@@ -1,13 +1,13 @@
 define(function(require){
     'use strict';
 
-   var objectTreeRenderVisitor = require('views/visitors/objectTreeRenderVisitor'),
+                  var Backbone = require('backbone'),
+       objectTreeRenderVisitor = require('views/visitors/objectTreeRenderVisitor'),
              MessageFamilyView = require('views/messageFamily'),
                              _ = require('underscore'),
                              $ = require('jquery'),
                        Assembl = require('modules/assembl'),
                            Ctx = require('modules/context'),
-                     PanelView = require('views/panel'),
                        Message = require('models/message'),
                           i18n = require('utils/i18n'),
                      PostQuery = require('views/messageListPostQuery'),
@@ -32,7 +32,7 @@ define(function(require){
     /**
      * @class views.MessageList
      */
-    var MessageList = PanelView.extend({
+    var MessageList = Backbone.View.extend({
         ViewStyles: {
             THREADED: {
                 id: "threaded",
@@ -77,7 +77,6 @@ define(function(require){
             var that = this,
             collectionManager = new CollectionManager();
 
-            PanelView.prototype.initialize.apply(this);
             this.renderedMessageViewsCurrent = {};
             
             this.setViewStyle(this.getViewStyleDefById(this.storedMessageListConfig.viewStyleId) || this.ViewStyles.THREADED);
@@ -157,6 +156,11 @@ define(function(require){
                 ]);
             });
 
+            Assembl.vent.on('messageList:currentQuery', function(){
+                if(!that.groupManager.isGroupLocked()) {
+                    that.currentQuery.clearAllFilters();
+                }
+            });
         },
 
         /**
@@ -193,9 +197,6 @@ define(function(require){
                 var key = 'click #'+DEFAULT_MESSAGE_VIEW_LI_ID_PREFIX+messageViewStyle.id;
                 data[key] = 'onDefaultMessageViewStyle';
             } );
-
-            //FIXME: no need events panel is empty, en will be delete soon
-            _.extend(data, PanelView.prototype.events());
 
             return data;
         },
@@ -738,7 +739,6 @@ define(function(require){
                 console.log("messageList:render() is firing");
             }
 
-            this.renderPanelButton();
             // TODO:  Not clean, this is just so something is shown immediately.
             // Data not yet available should be handled in render_real - benoitg
             this.render_real();

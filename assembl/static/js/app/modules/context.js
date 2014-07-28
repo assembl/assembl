@@ -416,8 +416,9 @@ define(function(require){
          */
         saveCurrentAnnotationAsExtract: function(){
             if( this.getCurrentUser().can(Permissions.EDIT_EXTRACT) &&
-                assembl.messageList.annotatorEditor ){
 
+                //FIXME: don't understand where 'annotatorEditor' has been taked
+                assembl.messageList.annotatorEditor ){
                 assembl.messageList.annotatorEditor.element.find('.annotator-save').click();
             }
         },

@@ -1,13 +1,14 @@
 define(function(require){
     'use strict';
 
-    var Backbone = require('backbone'),
-               _ = require('underscore'),
-             Ctx = require('modules/context'),
-            i18n = require('utils/i18n'),
-     Permissions = require('utils/permissions'),
-   CKEditorField = require('views/ckeditorField'),
- MessageSendView = require('views/messageSend'),
+     var Backbone = require('backbone'),
+                _ = require('underscore'),
+          Assembl = require('modules/assembl'),
+              Ctx = require('modules/context'),
+             i18n = require('utils/i18n'),
+      Permissions = require('utils/permissions'),
+    CKEditorField = require('views/ckeditorField'),
+  MessageSendView = require('views/messageSend'),
 CollectionManager = require('modules/collectionManager');
 
     var IdeaInSynthesisView = Backbone.View.extend({
@@ -28,9 +29,9 @@ CollectionManager = require('modules/collectionManager');
         /**
          * @init
          */
-        initialize: function(obj){
+        initialize: function(options){
             this.listenTo(this.model, 'change:shortTitle change:longTitle change:segments', this.render);
-            this.synthesis = obj.synthesis || null;
+            this.synthesis = options.synthesis || null;
             this.editing = false;
         },
 
@@ -107,9 +108,7 @@ CollectionManager = require('modules/collectionManager');
         renderReplyView: function(){
             var that = this,
             send_callback = function() {
-                if(assembl.messageList.panelIsLocked === false) {
-                    assembl.messageList.currentQuery.clearAllFilters();
-                }
+                Assembl.vent.trigger('messageList:currentQuery');
                 Ctx.setCurrentIdea(that.model);
             };
             this.replyView = new MessageSendView({

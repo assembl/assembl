@@ -15,9 +15,13 @@ define(function(require){
          * A locked panel will not react to external UI state changes, such as
          * selecting a new current idea.
          */
-        _panelIsLocked:false,
+        _panelIsLocked: false,
 
         _unlockCallbackQueue: {},
+
+        isGroupLocked: function(){
+          return this._panelIsLocked;
+        },
 
         /**
          * Process a callback that can be inhibited by panel locking.

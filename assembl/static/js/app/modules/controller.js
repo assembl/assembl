@@ -5,18 +5,10 @@ define(function(require){
            Assembl = require('modules/assembl'),
                Ctx = require('modules/context'),
       groupManager = require('modules/groupManager'),
-                 $ = require('jquery');
-
-    var SegmentList = require('views/segmentList'),
-           IdeaList = require('views/ideaList'),
-          IdeaPanel = require('views/ideaPanel'),
-        MessageList = require('views/messageList'),
-          Synthesis = require('models/synthesis'),
-     SynthesisPanel = require('views/synthesisPanel'),
-               User = require('models/user'),
-             navBar = require('views/navBar'),
-       Notification = require('views/notification'),
-  CollectionManager = require('modules/collectionManager');
+              User = require('models/user'),
+            navBar = require('views/navBar'),
+      Notification = require('views/notification'),
+ CollectionManager = require('modules/collectionManager');
 
     var Controller = Marionette.Controller.extend({
 
@@ -44,30 +36,6 @@ define(function(require){
             //We only need this here because we still use deprecated access functions
             collectionManager.getAllUsersCollectionPromise();
 
-
-            /*$w.segmentList = new SegmentList({el: '#segmentList', button: '#button-segmentList'}).render();
-
-            // Idea list
-            $w.ideaList = new IdeaList({el: '#ideaList', button: '#button-ideaList'}).render();
-
-            // Idea panel
-            $w.ideaPanel = new IdeaPanel({el: '#ideaPanel', button: '#button-ideaPanel'}).render();
-
-            // Message
-            $w.messageList = new MessageList({el: '#messageList', button: '#button-messages'}).render();
-
-            // Synthesis
-            $w.syntheses = new Synthesis.Collection();
-            var nextSynthesisModel = new Synthesis.Model({'@id': 'next_synthesis'});
-            nextSynthesisModel.fetch();
-
-            $w.syntheses.add(nextSynthesisModel);
-            $w.synthesisPanel = new SynthesisPanel({
-                el: '#synthesisPanel',
-                button: '#button-synthesis',
-                model: nextSynthesisModel
-            });*/
-
         },
 
         /**
@@ -79,7 +47,6 @@ define(function(require){
             if(!window.localStorage.getItem('showNotification')){
                Assembl.notificationRegion.show(new Notification());
             }
-
             /**
              * Render the current group of view
              * */
