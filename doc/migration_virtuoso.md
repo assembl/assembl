@@ -8,4 +8,5 @@ To migrate from virtuoso 6 to virtuoso 7:
     virtuoso_src = ../virtuoso_src
     virtuoso_branch = develop/7
 3. fab devenv virtuoso_source_install
+7. fab devenv app_setup  #To regenerate supervisor init files for new virtuoso paths.
 6. fab devenv database_start
