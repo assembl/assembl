@@ -11,6 +11,10 @@ define(function(require){
 
     var groupManager = Marionette.Controller.extend({
 
+        initialize: function(){
+
+           this.stateButton = null;
+        },
         /**
          * A locked panel will not react to external UI state changes, such as
          * selecting a new current idea.
@@ -51,11 +55,9 @@ define(function(require){
          * lock the panel if unlocked
          */
         lockPanel: function(){
-            console.log('lockPanel', this._panelIsLocked)
             if(!this._panelIsLocked){
                 this._panelIsLocked = true;
-                //FIXME: move to groupItem
-                //this.renderPanelButton();
+                this.stateButton.addClass('icon-lock').removeClass('icon-lock-open');
             }
         },
 
@@ -63,13 +65,9 @@ define(function(require){
          * unlock the panel if locked
          */
         unlockPanel: function(){
-            console.log('unlockPanel', this._panelIsLocked)
             if(this._panelIsLocked){
                 this._panelIsLocked = false;
-                //FIXME: move to groupItem
-                //this.renderPanelButton();
-
-                console.log('this._unlockCallbackQueue', this._unlockCallbackQueue)
+                this.stateButton.addClass('icon-lock-open').removeClass('icon-lock');
 
                 if(_.size(this._unlockCallbackQueue) > 0) {
                     //console.log("Executing queued callbacks in queue: ",this.unlockCallbackQueue);
@@ -205,15 +203,15 @@ define(function(require){
                 childView: GridItem,
                 childViewContainer: ".panelarea-table",
                 childViewOptions: {
-                    groupManager: that
+                   groupManager: that
                 },
                 events:{
-                   'click .add-group':'addGroup',
-                   'click .close-group':'closeGroup',
-                   'click .lock-group':'lockGroup'
+                  'click .add-group':'addGroup',
+                  'click .close-group':'closeGroup',
+                  'click .lock-group':'lockGroup'
                 },
                 onRenderTemplate: function(){
-                    this.$el.addClass('wrapper-group');
+                   this.$el.addClass('wrapper-group');
                 },
                 addGroup: function(){
 
@@ -252,7 +250,10 @@ define(function(require){
                     //this.remove();
                 },
 
-                lockGroup: function(){
+                lockGroup: function(e){
+
+                   that.stateButton = $(e.target).children('i');
+
                    that.toggleLock();
                 }
 
