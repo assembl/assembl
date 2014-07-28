@@ -197,6 +197,8 @@ class AssemblClassPatternExtractor(ClassPatternExtractor):
             name = self.make_column_name(sqla_cls, column)
             if column.foreign_keys:
                 column = self.column_as_reference(column)
+        qmp = qmp.clone_with_defaults(
+            subject_pattern, column, self.graph.name, name, None, rdf_section)
         condition = self.get_base_condition(sqla_cls)
         if condition is not None:
             qmp.and_condition(condition)
@@ -205,8 +207,7 @@ class AssemblClassPatternExtractor(ClassPatternExtractor):
                 and "_d%d_" % (d_id,) not in qmp.name):
             # TODO: improve this
             qmp.name += "_d%d_" % (d_id,)
-        return qmp.clone_with_defaults(
-            subject_pattern, column, self.graph.name, name, None, rdf_section)
+        return qmp
 
     def extract_column_info(self, sqla_cls, subject_pattern):
         gen = self._extract_column_info(sqla_cls, subject_pattern)
