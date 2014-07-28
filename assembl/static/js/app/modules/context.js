@@ -417,6 +417,7 @@ define(function(require){
         saveCurrentAnnotationAsExtract: function(){
             if( this.getCurrentUser().can(Permissions.EDIT_EXTRACT) &&
                 assembl.messageList.annotatorEditor ){
+
                 assembl.messageList.annotatorEditor.element.find('.annotator-save').click();
             }
         },
@@ -692,6 +693,7 @@ define(function(require){
          * @param {Panel} targetPanel
          */
         setFullscreen: function(targetPanel){
+           //TODO: custom view for this
             var panels = [
                 assembl.ideaList,
                 assembl.segmentList,

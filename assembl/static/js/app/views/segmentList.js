@@ -222,7 +222,8 @@ CollectionManager = require('modules/collectionManager');
          * @param {Segment} segment
          */
         showSegment: function(segment){
-            Ctx.openPanel(assembl.segmentList);
+            //TODO: add a new behavior for this (popin...)
+            //Ctx.openPanel(assembl.segmentList);
             this.highlightSegment(segment);
         },
         

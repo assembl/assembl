@@ -684,7 +684,8 @@ define(function(require){
                 'send_button_label': i18n.gettext('Start a new topic in this discussion'),
                 'subject_label': i18n.gettext('New topic subject:'),
                 'mandatory_body_missing_msg': i18n.gettext('You need to type a comment first...'),
-                'mandatory_subject_missing_msg': i18n.gettext('You need to set a subject to add a new topic...')
+                'mandatory_subject_missing_msg': i18n.gettext('You need to set a subject to add a new topic...'),
+                'messageList':that
             });
 
             this.$('#messagelist-replybox').append( this.newTopicView.render().el );
@@ -702,7 +703,7 @@ define(function(require){
                 })
             
             this.scrollToPreviousScrollTarget(previousScrollTarget);
-            this.trigger("render_complete", "Render complete");
+            Assembl.vent.trigger("messageList:render_complete", "Render complete");
             
             return this;
         },
@@ -718,7 +719,7 @@ define(function(require){
             var successCallback = function(messageStructureCollection, resultMessageIdCollection){
                 that = that.render_real();
                 that.groupManager.unblockPanel.call(that);
-                that.trigger("render_complete", "Render complete");
+                Assembl.vent.trigger("messageList:render_complete", "Render complete");
             }
             /* This should be a listen to the returned collection */
             var changedDataCallback = function(messageStructureCollection, resultMessageIdCollection) {
@@ -928,9 +929,6 @@ define(function(require){
 
             // TODO: Re-render message in messagelist if an annotation was added...
             this.annotator.subscribe('annotationCreated', function(annotation){
-                //TODO: delete after check behavior
-                //var segment = assembl.segmentList.addAnnotationAsSegment(annotation, Ctx.currentAnnotationIdIdea);
-
                 var segment = Assembl.reqres.request("segmentList:addAnnotationAsSegment", annotation, Ctx.currentAnnotationIdIdea);
 
                 if( !segment.isValid() ){
@@ -1236,7 +1234,7 @@ define(function(require){
                       };
                       requestedOffsets = that.calculateRequestedOffsetToShowMessage(id);
                       that.showMessages(requestedOffsets);
-                      that.listenToOnce(that, "render_complete", success);
+                      that.listenToOnce(that, "messageList:render_complete", success);
                   }
                   if( !messageIsDisplayed ){
                       //The current filters might not include the message
@@ -1245,7 +1243,7 @@ define(function(require){
                           console.log("showMessageById() message " + id + " not found, calling showMessageById() recursively");
                           that.showMessageById(id, callback);
                       };
-                      that.listenToOnce(that, "render_complete", success);
+                      that.listenToOnce(that, "messageList:render_complete", success);
                       return;
                   }
                   var real_callback = function(){

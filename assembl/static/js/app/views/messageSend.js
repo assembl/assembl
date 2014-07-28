@@ -26,7 +26,10 @@ define(function(require){
          */
         initialize: function(options){
             this.options = options;
-            this.initialBody =  (this.options.body_help_message !== undefined) ? this.options.body_help_message: i18n.gettext('Type your message here...');
+            this.initialBody =  (this.options.body_help_message !== undefined) ?
+                this.options.body_help_message: i18n.gettext('Type your message here...');
+
+            this.messageList = options.messageList;
         },
         
         /**
@@ -103,7 +106,7 @@ define(function(require){
             
             success_callback = function(data, textStatus, jqXHR){
                 btn.text( i18n.gettext('Message posted!') );
-                that.listenToOnce(assembl.messageList, "render_complete", function() {
+                that.listenToOnce(that.messageList, "messageList:render_complete", function() {
                         if(_.isFunction(that.options.send_callback)) {
                             that.options.send_callback();
                         }

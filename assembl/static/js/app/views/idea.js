@@ -148,8 +148,6 @@ define(function(require){
             this.model.save({'inNextSynthesis': ev.currentTarget.checked});
             //Optimisation.  It would self render once the socket propagates, 
             //but this gives better responsiveness.
-
-            //assembl.synthesisPanel.render();
             Assembl.commands.execute('synthesisPanel:render');
         },
 
