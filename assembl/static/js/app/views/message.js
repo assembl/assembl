@@ -64,7 +64,7 @@ CollectionManager = require('modules/collectionManager');
             this.listenTo(this.model, 'showBody', this.onShowBody);
             this.listenTo(this.model, 'change', this.render);
             this.messageListView = obj.messageListView;
-            this.viewStyle = this.messageListView.defaultMessageStyle;
+            this.viewStyle = this.messageListView.getTargetMessageViewStyleFromMessageListConfig(this);
             this.messageListView.on('annotator:destroy', this.onAnnotatorDestroy, this);
             this.messageListView.on('annotator:initComplete', this.onAnnotatorInitComplete, this);
             
@@ -436,7 +436,7 @@ CollectionManager = require('modules/collectionManager');
         
         toggleViewStyle: function() {
             if(this.viewStyle == this.availableMessageViewStyles.FULL_BODY){
-                this.setViewStyle(this.messageListView.defaultMessageStyle);
+                this.setViewStyle(this.messageListView.getTargetMessageViewStyleFromMessageListConfig(this));
             }
             else {
                 var read = this.model.get('read');

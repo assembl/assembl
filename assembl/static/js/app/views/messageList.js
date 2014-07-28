@@ -20,6 +20,7 @@ define(function(require){
      */
     var DIV_ANNOTATOR_HELP = Ctx.format("<div class='annotator-draganddrop-help'>{0}</div>", i18n.gettext('You can drag the segment above directly to the table of ideas') ),
         DEFAULT_MESSAGE_VIEW_LI_ID_PREFIX = "defaultMessageView-",
+        MESSAGE_LIST_VIEW_LI_ID_PREFIX = "messageList-view-",
         /* The maximum number of messages that can be loaded at the same time
          * before being removed from memory
          */
@@ -34,21 +35,26 @@ define(function(require){
      */
     var MessageList = PanelView.extend({
         ViewStyles: {
-            THREADED: {
-                id: "threaded",
-                css_id: "messageList-view-threaded",
-                label: i18n.gettext('Threaded')
-            },
-            CHRONOLOGICAL: {
-                id: "chronological",
-                css_id: "messageList-view-chronological",
-                label: i18n.gettext('Chronological')
-            },
-            REVERSE_CHRONOLOGICAL: {
-                id: "reverse_chronological",
-                css_id: "messageList-view-activityfeed",
-                label: i18n.gettext('Reverse-Chronological')
-            }
+          THREADED: {
+            id: "threaded",
+            css_id: "messageList-view-threaded",
+            label: i18n.gettext('Threaded')
+          },
+          CHRONOLOGICAL: {
+            id: "chronological",
+            css_id: "messageList-view-chronological",
+            label: i18n.gettext('Chronological')
+          },
+          REVERSE_CHRONOLOGICAL: {
+            id: "reverse_chronological",
+            css_id: "messageList-view-activityfeed",
+            label: i18n.gettext('Reverse-Chronological')
+          },
+          NEW_MESSAGES: {
+            id: "new_messages",
+            css_id: "messageList-view-newmessages",
+            label: i18n.gettext('New Messages')
+          }
         },
         
         currentViewStyle: null,
@@ -68,6 +74,15 @@ define(function(require){
          */
         getViewStyleDefById: function(viewStyleId){
             var retval = _.find(this.ViewStyles, function(viewStyle){ return viewStyle.id == viewStyleId; });
+            return retval;
+        },
+        /**
+         * get a view style definition by css_id
+         * @param {viewStyle.id}
+         * @return {viewStyle or undefined}
+         */
+        getViewStyleDefByCssId: function(viewStyleId){
+            var retval = _.find(this.ViewStyles, function(viewStyle){ return viewStyle.css_id == viewStyleId; });
             return retval;
         },
         /**
@@ -453,7 +468,8 @@ define(function(require){
              */
             this.renderedMessageViewsCurrent = {};
             //console.log("requestedOffsets:",requestedOffsets);
-            if (this.currentViewStyle == this.ViewStyles.THREADED) {
+            if ((this.currentViewStyle == this.ViewStyles.THREADED) ||
+                (this.currentViewStyle == this.ViewStyles.NEW_MESSAGES)) {
                 models = this.visitorRootMessagesToDisplay;
                 returnedOffsets = this.calculateThreadedMessagesOffsets(this.visitorViewData, that.visitorOrderLookupTable, requestedOffsets);
                 views = this.getRenderedMessagesThreaded(models, 1, this.visitorViewData, returnedOffsets);
@@ -605,6 +621,8 @@ define(function(require){
 
             this.renderCollapseButton();
             this.renderDefaultMessageViewDropdown();
+            this.renderMessageListViewStyleDropdown();
+
             this.newTopicView = new MessageSendView({
                 'allow_setting_subject': true,
                 'reply_idea': null,
@@ -716,6 +734,26 @@ define(function(require){
             div.html(html);
         },
 
+        /**
+         * Renders the messagelist view style dropdown button
+         */
+        renderMessageListViewStyleDropdown: function(){
+            var that = this,
+                div = this.$('#js_messageListViewStyle-dropdown'),
+                html = "";
+
+            html += '<span class="dropdown-label text-bold">';
+            html += this.currentViewStyle.label;
+            html += '</span>';
+            html += '<ul class="dropdown-list">';
+            _.each(this.ViewStyles, function(messageListViewStyle) {
+                html += '<li id="' + messageListViewStyle.css_id + '" class="dropdown-listitem">'+ messageListViewStyle.label+'</li>';
+            });
+            html += '</ul>';
+            div.html(html);
+        
+        },
+        
         /**
          * Return a list with all views.el already rendered for a flat view
          * @param {Message.Model[]} messages
@@ -1027,83 +1065,91 @@ define(function(require){
          * 
          */
         setViewStyle: function(viewStyle){
-            if(viewStyle === this.ViewStyles.THREADED) {
-                this.currentViewStyle = this.ViewStyles.THREADED;
-                this.currentQuery.setView(this.currentQuery.availableViews.THREADED)
-            }
-            else if(viewStyle === this.ViewStyles.REVERSE_CHRONOLOGICAL) {
-                this.currentViewStyle = this.ViewStyles.REVERSE_CHRONOLOGICAL;
-                this.currentQuery.setView(this.currentQuery.availableViews.REVERSE_CHRONOLOGICAL)
-            }
-            else if(viewStyle === this.ViewStyles.CHRONOLOGICAL) {
-                this.currentViewStyle = this.ViewStyles.CHRONOLOGICAL;
-                this.currentQuery.setView(this.currentQuery.availableViews.CHRONOLOGICAL)
-            }
-            else {
-                throw "Unsupported view style";
-            }
-            if(this.storedMessageListConfig.viewStyleId != viewStyle.id) {
-                this.storedMessageListConfig.viewStyleId = viewStyle.id;
-                Ctx.setMessageListConfigToStorage(this.storedMessageListConfig);
-            }
-            
-        },
-        /**
-         * @event
-         * Set the view to threaded view
-         */
-        setViewStyleThreaded: function(){
-            this.setViewStyle(this.ViewStyles.THREADED);
-            this.render();
-        },
+          if(viewStyle === this.ViewStyles.THREADED) {
+            this.currentViewStyle = this.ViewStyles.THREADED;
+            this.currentQuery.setView(this.currentQuery.availableViews.THREADED);
+          }
+          else if(viewStyle === this.ViewStyles.REVERSE_CHRONOLOGICAL) {
+            this.currentViewStyle = this.ViewStyles.REVERSE_CHRONOLOGICAL;
+            this.currentQuery.setView(this.currentQuery.availableViews.REVERSE_CHRONOLOGICAL);
+          }
+          else if(viewStyle === this.ViewStyles.CHRONOLOGICAL) {
+            this.currentViewStyle = this.ViewStyles.CHRONOLOGICAL;
+            this.currentQuery.setView(this.currentQuery.availableViews.CHRONOLOGICAL);
+          }
+          else if(viewStyle === this.ViewStyles.NEW_MESSAGES) {
+            this.currentViewStyle = this.ViewStyles.NEW_MESSAGES;
+            this.currentQuery.setView(this.currentQuery.availableViews.THREADED);
+          }
+          else {
+            throw "Unsupported view style";
+          }
+          if(this.storedMessageListConfig.viewStyleId != viewStyle.id) {
+            this.storedMessageListConfig.viewStyleId = viewStyle.id;
+            Ctx.setMessageListConfigToStorage(this.storedMessageListConfig);
+          }
         
-        /**
-         * @event
-         * Set the view to a flat reverse chronological view
-         */
-        setViewStyleActivityFeed: function(){
-            this.setViewStyle(this.ViewStyles.REVERSE_CHRONOLOGICAL);
-            this.render();
-        },
-        
-        /**
-         * @event
-         * Set the view to a flat chronological view
-         */
-        setViewStyleChronological: function(){
-            this.setViewStyle(this.ViewStyles.CHRONOLOGICAL);
-            this.render();
         },
 
+        /**
+         * @event
+         */
+        onMessageListViewStyle: function(e){
+            var messageListViewStyleId = (e.currentTarget.id);
+            var messageListViewStyleSelected = this.getViewStyleDefByCssId(messageListViewStyleId);
+            this.setViewStyle(messageListViewStyleSelected);
+            this.render();
+        },
+        
         /**
          * @event
          */
         onDefaultMessageViewStyle: function(e){
             var messageViewStyleId = (e.currentTarget.id).replace(DEFAULT_MESSAGE_VIEW_LI_ID_PREFIX, '');
             var messageViewStyleSelected = Ctx.getMessageViewStyleDefById(messageViewStyleId);
-            //console.log("onDefaultMessageViewStyle: "+messageViewStyleSelected.label);
-            this.setDefaultMessageViewStyle(messageViewStyleSelected);
+            this.defaultMessageStyle = messageViewStyleSelected;
+            this.setIndividualMessageViewStyleForMessageListViewStyle(messageViewStyleSelected);
+            this.renderDefaultMessageViewDropdown();
+        },
+        
+        getTargetMessageViewStyleFromMessageListConfig: function(messageView){
+          var targetMessageViewStyle;
+          if(this.currentViewStyle == this.ViewStyles.NEW_MESSAGES) {
+            if(messageView.model.get('read')) {
+              targetMessageViewStyle = Ctx.AVAILABLE_MESSAGE_VIEW_STYLES.TITLE_ONLY;
+            }
+            else {
+              targetMessageViewStyle = this.defaultMessageStyle;
+            }
+          }
+          else {
+            targetMessageViewStyle = this.defaultMessageStyle;
+          }
+          return targetMessageViewStyle;
         },
         
         /**
          * @event
          * Set the default messageView, re-renders messages if the view doesn't match
+         * @param messageViewStyle (ex:  preview, title only, etc.)
          */
-        setDefaultMessageViewStyle: function(messageViewStyle){
-            this.defaultMessageStyle = messageViewStyle;
-            
-            _.each(this.renderedMessageViewsCurrent, function(messageView) {
-                if (messageView.viewStyle !== messageViewStyle)  {
-                    messageView.setViewStyle(messageViewStyle);
-                    messageView.render();
-                }
-            });
-
-            this.renderDefaultMessageViewDropdown();
-            if(this.storedMessageListConfig.messageStyleId != messageViewStyle.id) {
-                this.storedMessageListConfig.messageStyleId = messageViewStyle.id;
-                Ctx.setMessageListConfigToStorage(this.storedMessageListConfig);
+        setIndividualMessageViewStyleForMessageListViewStyle: function(messageViewStyle){
+          // ex: Chronological, Threaded, etc.
+          var that = this,
+              messageListViewStyle = this.currentViewStyle;
+          
+          _.each(this.renderedMessageViewsCurrent, function(messageView) {
+            var targetMessageViewStyle = that.getTargetMessageViewStyleFromMessageListConfig(messageView);
+            if (messageView.viewStyle !== targetMessageViewStyle)  {
+              messageView.setViewStyle(targetMessageViewStyle);
+              messageView.render();
             }
+          });
+
+          if(this.storedMessageListConfig.messageStyleId != messageViewStyle.id) {
+            this.storedMessageListConfig.messageStyleId = messageViewStyle.id;
+            Ctx.setMessageListConfigToStorage(this.storedMessageListConfig);
+          }
         },
         /** Return the message offset in the current view, in the set of filtered 
          * messages
@@ -1112,7 +1158,8 @@ define(function(require){
          */
         getMessageOffset: function(messageId){
             var messageOffset;
-            if (this.currentViewStyle == this.ViewStyles.THREADED) {
+            if ((this.currentViewStyle == this.ViewStyles.THREADED) ||
+                (this.currentViewStyle == this.ViewStyles.NEW_MESSAGES)) {
                 messageOffset = this.visitorViewData[messageId].traversal_order;
             } else {
                 messageOffset = this.messageIdsToDisplay.indexOf(messageId);
@@ -1218,10 +1265,6 @@ define(function(require){
                 'click #messageList-onlyorphan': 'addFilterIsOrphanMessage',
                 'click #messageList-onlysynthesis': 'addFilterIsSynthesMessage',
                 'click #messageList-isunread': 'addFilterIsUnreadMessage',
-
-                'click #messageList-view-threaded': 'setViewStyleThreaded',
-                'click #messageList-view-activityfeed': 'setViewStyleActivityFeed',
-                'click #messageList-view-chronological': 'setViewStyleChronological',
                 
                 'click #messageList-message-collapseButton': 'toggleThreadMessages',
 
@@ -1231,13 +1274,19 @@ define(function(require){
                 'click #messageList-prevbutton': 'showPreviousMessages',
                 'click #messageList-morebutton': 'showNextMessages'
             };
+            
+            _.each(this.ViewStyles, function(messageListViewStyle){
+                var key = 'click #'+messageListViewStyle.css_id;
+                data[key] = 'onMessageListViewStyle';
+            } );
+            _.extend(data, PanelView.prototype.events());
 
-            var messageDefaultViewStyle = '';
             _.each(Ctx.AVAILABLE_MESSAGE_VIEW_STYLES, function(messageViewStyle){
                 var key = 'click #'+DEFAULT_MESSAGE_VIEW_LI_ID_PREFIX+messageViewStyle.id;
                 data[key] = 'onDefaultMessageViewStyle';
             } );
             _.extend(data, PanelView.prototype.events());
+            
             return data;
         },
 

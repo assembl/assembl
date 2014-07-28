@@ -171,7 +171,7 @@ define(function(require){
             if(Ctx.debugRender) {
               console.log("ideaList: triggering render because app.on('ideas:update') was triggered");
             }
-            this._allIdeasCollection.add(ideas, {merge: true});
+            that._allIdeasCollection.add(ideas, {merge: true});
           });
           
           //End listener setup
