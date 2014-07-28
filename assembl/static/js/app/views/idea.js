@@ -32,13 +32,14 @@ define(function(require){
          * @param {dict} view_data: data from the render visitor
          *   are the last child of their respective parents.
          */
-        initialize: function(obj, view_data){
+        initialize: function(options, view_data){
             var that = this;
             this.view_data = view_data;
+
             this.listenTo(this.model, 'change', this.render);
             this.listenTo(this.model, 'replacedBy', this.onReplaced);
 
-            Assembl.vent.on('idea:selected', function(idea) {
+            this.listenTo(Assembl.vent,'idea:selected', function(idea){
                 that.onIsSelectedChange(idea);
             });
         },
@@ -147,7 +148,9 @@ define(function(require){
             this.model.save({'inNextSynthesis': ev.currentTarget.checked});
             //Optimisation.  It would self render once the socket propagates, 
             //but this gives better responsiveness.
-            assembl.synthesisPanel.render();
+
+            //assembl.synthesisPanel.render();
+            Assembl.commands.execute('synthesisPanel:render');
         },
 
         /**
@@ -155,14 +158,9 @@ define(function(require){
          * Select this idea as the current idea
          */
         onTitleClick: function(e){
-            var that = this;
             e.stopPropagation();
 
-            if( assembl.messageList ){
-                assembl.messageList.filterThroughPanelLock(function(){
-                    assembl.messageList.addFilterIsRelatedToIdea(that.model, null);
-                }, 'syncWithCurrentIdea');
-            }
+            Assembl.vent.trigger('messageList:addFilterIsRelatedToIdea', this.model, null);
 
             if( this.model === Ctx.getCurrentIdea() ){
                Ctx.setCurrentIdea(null);
@@ -175,14 +173,10 @@ define(function(require){
          * @event
          * Select this idea as the current idea, and show only unread messages of this idea
          */
-        onUnreadCountClick: function(ev){
-            var that = this;
-            ev.stopPropagation();
-            if( assembl.messageList ){
-                assembl.messageList.filterThroughPanelLock(function(){
-                    assembl.messageList.addFilterIsRelatedToIdea(that.model, true);
-                }, 'syncWithCurrentIdea');
-            }
+        onUnreadCountClick: function(e){
+            e.stopPropagation();
+
+            Assembl.vent.trigger('messageList:addFilterIsRelatedToIdea', this.model, null);
             Ctx.setCurrentIdea(this.model);
         },
 

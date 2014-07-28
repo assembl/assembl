@@ -10,9 +10,7 @@ define(function(require){
      Permissions = require('utils/permissions'),
  MessageSendView = require('views/messageSend'),
             User = require('models/user'),
-CollectionManager = require('modules/collectionManager'),
-      viewManager = require('modules/viewManager');
-
+CollectionManager = require('modules/collectionManager');
 
     var MIN_TEXT_TO_TOOLTIP = 5,
         TOOLTIP_TEXT_LENGTH = 10;
@@ -54,7 +52,7 @@ CollectionManager = require('modules/collectionManager'),
          * @init
          * @param {MessageModel} obj the model
          */
-        initialize: function(obj){
+        initialize: function(options){
             /*this.listenTo(this, "all", function(eventName) {
                 console.log("message event received: ", eventName);
             });
@@ -64,7 +62,8 @@ CollectionManager = require('modules/collectionManager'),
             this.listenTo(this.model, 'replacedBy', this.onReplaced);
             this.listenTo(this.model, 'showBody', this.onShowBody);
             this.listenTo(this.model, 'change', this.render);
-            this.messageListView = obj.messageListView;
+
+            this.messageListView = options.messageListView;
             this.viewStyle = this.messageListView.defaultMessageStyle;
             this.messageListView.on('annotator:destroy', this.onAnnotatorDestroy, this);
             this.messageListView.on('annotator:initComplete', this.onAnnotatorInitComplete, this);
@@ -75,6 +74,29 @@ CollectionManager = require('modules/collectionManager'),
              * @type {Annotation}
              */
             this.loadedAnnotations = {};
+        },
+
+        /**
+         * @event
+         */
+        events: {
+
+            'click .message-subheader': 'onMessageTitleClick',
+            'click .readmore': 'onMessageTitleClick',
+            'click .message-hoistbtn': 'onMessageHoistClick',
+
+            //
+            'click .message-replybox-openbtn': 'focusReplyBox',
+            'click .messageSend-cancelbtn': 'closeReplyBox',
+            //
+            'mousedown .message-body': 'startSelection',
+            'mousemove .message-body': 'doTheSelection',
+            'mouseleave .message-body': 'onMouseLeaveMessageBody',
+            'mouseenter .message-body': 'doTheSelection',
+
+            // menu
+            'click #message-markasunread': 'markAsUnread',
+            'click #message-markasread': 'markAsRead'
         },
 
         /**
@@ -350,30 +372,6 @@ CollectionManager = require('modules/collectionManager'),
             }
         },
 
-        events: {
-            
-            'click .message-subheader': 'onMessageTitleClick',
-            'click .readmore': 'onMessageTitleClick',
-            'click .message-hoistbtn': 'onMessageHoistClick',
-
-            //
-            'click .message-replybox-openbtn': 'focusReplyBox',
-            'click .messageSend-cancelbtn': 'closeReplyBox',
-            //
-            'mousedown .message-body': 'startSelection',
-            'mousemove .message-body': 'doTheSelection',
-            'mouseleave .message-body': 'onMouseLeaveMessageBody',
-            'mouseenter .message-body': 'doTheSelection',
-
-            // menu
-            'click #message-markasunread': 'markAsUnread',
-            'click #message-markasread': 'markAsRead'
-        },
-
-        
-        /**
-         * @event
-         */
         onMessageHoistClick: function(ev){
             // we will hoist the post, or un-hoist it if it is already hoisted
             this.isHoisted = this.messageListView.toggleFilterByPostId(this.model.getId());

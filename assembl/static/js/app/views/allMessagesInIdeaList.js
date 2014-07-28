@@ -44,11 +44,8 @@ define(function(require){
          * @event
          */
         onTitleClick: function(){
-            if( assembl.messageList ){
-                assembl.messageList.filterThroughPanelLock(function(){
-                    assembl.messageList.showAllMessages();
-                }, 'syncWithCurrentIdea');
-            }
+            Assembl.vent.trigger('messageList:showAllMessages');
+
             Ctx.setCurrentIdea(null);
         }
     });

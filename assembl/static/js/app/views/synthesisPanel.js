@@ -57,6 +57,8 @@ define(function(require){
             this.listenTo(this.ideas, 'add remove reset', this.render);
 
             this.listenTo(this.model, 'reset change', this.render);
+
+            Assembl.commands.setHandler('synthesisPanel:render', this.render);
         },
 
         /**

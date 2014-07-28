@@ -3,7 +3,6 @@ define(function(require){
 
     var Marionette = require('marionette'),
            Assembl = require('modules/assembl'),
-       viewManager = require('modules/viewManager'),
                Ctx = require('modules/context'),
       groupManager = require('modules/groupManager'),
                  $ = require('jquery');
@@ -45,14 +44,6 @@ define(function(require){
             //We only need this here because we still use deprecated access functions
             collectionManager.getAllUsersCollectionPromise();
 
-            viewManager.init({
-                segmentList:SegmentList,
-                ideaList:IdeaList,
-                ideaPanel:IdeaPanel,
-                messageList:MessageList,
-                synthesisPanel:SynthesisPanel
-            });
-
 
             /*$w.segmentList = new SegmentList({el: '#segmentList', button: '#button-segmentList'}).render();
 
@@ -77,7 +68,6 @@ define(function(require){
                 model: nextSynthesisModel
             });*/
 
-
         },
 
         /**
@@ -94,22 +84,6 @@ define(function(require){
              * Render the current group of view
              * */
             groupManager.getGroupItem();
-
-            /*var panels = Ctx.getPanelsFromStorage();
-            _.each(panels, function(value, name){
-                var panel = assembl[name];
-                if( panel && name !== 'ideaPanel' ){
-                    Ctx.openPanel(panel);
-                }
-            });
-            if(assembl.openedPanels < 1) {
-                /* If no panel would be opened on load, open the table of ideas
-                 * and the Message panel so the user isn't presented with a
-                 * blank screen
-
-                Ctx.openPanel(assembl.ideaList);
-                //Ctx.openPanel(assembl.messageList);
-            }*/
         },
 
         idea: function(id){
@@ -131,8 +105,9 @@ define(function(require){
         },
 
         message: function(id){
-            Ctx.openPanel(assembl.messageList);
-            assembl.messageList.showMessageById(id);
+            //TODO: add new behavior to show messageList Panel
+            //Ctx.openPanel(assembl.messageList);
+            Assembl.vent.trigger('messageList:showMessageById', id);
         },
 
         /**

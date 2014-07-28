@@ -5,7 +5,7 @@
   display:inline-block;
   box-sizing: border-box;
   padding-top: 25px;
-  background-color: #FFFFFF;
+  background-color: #EEEEEE;
   .add-group {
     cursor: pointer;
     position: absolute;
@@ -24,6 +24,21 @@
     top: 5px;
     line-height: 20px;
     font-size: 20px;
+  }
+  .lock-group{
+    position: absolute;
+    cursor: pointer;
+    margin-left: auto;
+    margin-right: auto;
+    left: 0;
+    right: 0;
+    top:5px;
+    text-align: center;
+    width: 175px;
+    i{
+      vertical-align: middle;
+      font-size: 18px;
+    }
   }
 }
 

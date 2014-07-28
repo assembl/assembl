@@ -7,8 +7,7 @@ define(function(require){
      Permissions = require('utils/permissions'),
           Moment = require('moment'),
             i18n = require('utils/i18n'),
-   Zeroclipboard = require('zeroclipboard'),
-     viewManager = require('modules/viewManager');
+   Zeroclipboard = require('zeroclipboard');
 
 
     var Context = function(){

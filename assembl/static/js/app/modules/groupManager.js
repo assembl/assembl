@@ -6,9 +6,104 @@ define(function(require){
           IdeaPanel = require('views/ideaPanel'),
         MessageList = require('views/messageList'),
      SynthesisPanel = require('views/synthesisPanel'),
-                  $ = require('jquery');
+                  $ = require('jquery'),
+                  _ = require('underscore');
 
     var groupManager = Marionette.Controller.extend({
+
+        /**
+         * A locked panel will not react to external UI state changes, such as
+         * selecting a new current idea.
+         */
+        _panelIsLocked:false,
+
+        _unlockCallbackQueue: {},
+
+        /**
+         * Process a callback that can be inhibited by panel locking.
+         * If the panel is unlocked, the callback will be called immediately.
+         * If the panel is locked, visual notifications will be shown, and the
+         * callback will be memorized in a queue, removing duplicates.
+         * Callbacks receive no parameters.
+         * If queued, they must assume that they can be called at a later time,
+         * and have the means of getting any updated information they need.
+         */
+        filterThroughPanelLock: function(callback, queueWithId){
+            if (!this._panelIsLocked){
+                callback();
+
+            } else {
+                if(queueWithId){
+                    if(this._unlockCallbackQueue[queueWithId]!==undefined){
+                    }
+                    else{
+                       this._unlockCallbackQueue[queueWithId]=callback;
+                    }
+                }
+            }
+        },
+
+        /**
+         * lock the panel if unlocked
+         */
+        lockPanel: function(){
+            console.log('lockPanel', this._panelIsLocked)
+            if(!this._panelIsLocked){
+                this._panelIsLocked = true;
+                //FIXME: move to groupItem
+                //this.renderPanelButton();
+            }
+        },
+
+        /**
+         * unlock the panel if locked
+         */
+        unlockPanel: function(){
+            console.log('unlockPanel', this._panelIsLocked)
+            if(this._panelIsLocked){
+                this._panelIsLocked = false;
+                //FIXME: move to groupItem
+                //this.renderPanelButton();
+
+                console.log('this._unlockCallbackQueue', this._unlockCallbackQueue)
+
+                if(_.size(this._unlockCallbackQueue) > 0) {
+                    //console.log("Executing queued callbacks in queue: ",this.unlockCallbackQueue);
+                    _.each(this._unlockCallbackQueue, function(callback){
+                        callback();
+                    });
+                    //We presume the callbacks have their own calls to render
+                    //this.render();
+                    this._unlockCallbackQueue = {};
+                }
+
+            }
+        },
+
+        /**
+         * Toggle the lock state of the panel
+         */
+        toggleLock: function(){
+            if(this._panelIsLocked){
+                this.unlockPanel();
+            } else {
+                this.lockPanel();
+            }
+        },
+
+        /**
+         * Blocks the panel
+         */
+        blockPanel: function(){
+            this.$('.panel').addClass('is-loading');
+        },
+
+        /**
+         * Unblocks the panel
+         */
+        unblockPanel: function(){
+            this.$('.panel').removeClass('is-loading');
+        },
 
         getStorageGroupItem: function(){
 
@@ -37,10 +132,11 @@ define(function(require){
         },
 
         createGroupItem: function(collection){
+            var that = this;
             /**
              * PanelGroupItem Creation
              * */
-             var Item = Backbone.Model.extend(),
+            var Item = Backbone.Model.extend(),
                 Items = Backbone.Collection.extend({
                     model: Item
                 });
@@ -50,39 +146,46 @@ define(function(require){
             var GridItem = Marionette.ItemView.extend({
                 template: "#tmpl-item-template",
                 initialize: function(options){
-                    this.type = options.model.attributes.type;
+                    this.views = options.model.toJSON();
+                    this.groupManager = options.groupManager;
                 },
                 onRender: function(){
                     this.$el = this.$el.children();
                     this.$el.unwrap();
                     this.setElement(this.$el);
 
-                    switch(this.type){
+                    switch(this.views.type){
                         case 'idea-list':
+                            console.log('idea-list');
                             var ideaList =  new IdeaList({
                                 el: this.$el
                             });
                             this.$el.append(ideaList.render().el);
                             break;
                         case 'idea-panel':
+                            console.log('idea-panel');
                             var ideaPanel = new IdeaPanel({
                                 el: this.$el
                             });
                             this.$el.append(ideaPanel.render().el);
                             break;
                         case 'message':
+                            console.log('message');
                             var messageList = new MessageList({
-                                el: this.$el
+                                el: this.$el,
+                                groupManager: this.groupManager
                             });
                             this.$el.append(messageList.render().el);
                             break;
                         case 'clipboard':
+                            console.log('clipboard');
                             var segmentList = new SegmentList({
                                 el: this.$el
                             });
                             this.$el.append(segmentList.render().el);
                             break;
                         case 'synthesis':
+                            console.log('synthesis');
                             var synthesisPanel = new SynthesisPanel({
                                 el: this.$el
                             });
@@ -97,13 +200,13 @@ define(function(require){
                 template: "#tmpl-grid-template",
                 childView: GridItem,
                 childViewContainer: ".panelarea-table",
-                initialize: function(){
-
-                    //console.log('this.getOption', this.getOption)
+                childViewOptions: {
+                    groupManager: that
                 },
                 events:{
                    'click .add-group':'addGroup',
-                   'click .close-group':'closeGroup'
+                   'click .close-group':'closeGroup',
+                   'click .lock-group':'lockGroup'
                 },
                 onRenderTemplate: function(){
                     this.$el.addClass('wrapper-group');
@@ -143,6 +246,10 @@ define(function(require){
                     //TODO: delete reference to localStorage
                     //this.unbind();
                     //this.remove();
+                },
+
+                lockGroup: function(){
+                   that.toggleLock();
                 }
 
             });

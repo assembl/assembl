@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "homepage": "https://github.com/ImaginationForPeople/assembl",
   "authors": [
-    "Andre Farzat <andrefarzat@gmail.com>"
+    "Andre Farzat <andrefarzat@gmail.com>",
+    "Gaby Hourlier <gaby.hourlier@gmail.com>"
   ],
   "description": "I4P online debate and synthesis platform",
   "license": "MIT",
@@ -17,7 +18,7 @@
   ],
   "dependencies": {
     "jquery": "~2.0.3",
-    "backbone": "~1.1.0",
+    "backbone": "~1.1.2",
     "ckeditor": "*",
     "cytoscape": "*",
     "jit": "~2.0.2",

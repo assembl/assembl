@@ -20,14 +20,6 @@ define(function(require){
         button: null,
         
         /**
-         * A locked panel will not react to external UI state changes, such as 
-         * selecting a new current idea.
-         */
-        panelIsLocked: false,
-        
-        unlockCallbackQueue: {},
-        
-        /**
          *  @init
          */
         initialize: function(){
@@ -52,75 +44,7 @@ define(function(require){
         events: function() {
 
         },
-        
-        /**
-         * Process a callback that can be inhibited by panel locking.
-         * If the panel is unlocked, the callback will be called immediately.
-         * If the panel is locked, visual notifications will be shown, and the
-         * callback will be memorized in a queue, removing duplicates.
-         * Callbacks receive no parameters.
-         * If queued, they must assume that they can be called at a later time,
-         * and have the means of getting any updated information they need.
-         * 
-         *
-         */
-        filterThroughPanelLock: function(callback, queueWithId){
-            if (!this.panelIsLocked){
-                callback();
-            }
-            else{
-                var lockButton = this.button.highlight();//.find('.lock-anchor');
-                if(queueWithId){
-                    if(this.unlockCallbackQueue[queueWithId]!==undefined){
-                    }
-                    else{
-                         this.unlockCallbackQueue[queueWithId]=callback;
-                    }
-                }
-            }
-        },
-        
-        /**
-         * Toggle the lock state of the panel
-         */
-        toggleLock: function(){
-            if(this.panelIsLocked){
-                this.unlockPanel();
-            } else {
-                this.lockPanel();
-            }
-        },
-        /**
-         * lock the panel if unlocked
-         */
-        lockPanel: function(){
-           if(!this.panelIsLocked){
-               this.panelIsLocked = true;
-               //FIXME: move to groupItem
-               //this.renderPanelButton();
-           }
-        },
 
-        /**
-         * unlock the panel if locked
-         */
-        unlockPanel: function(){
-           if(this.panelIsLocked){
-               this.panelIsLocked = false;
-               //FIXME: move to groupItem
-               //this.renderPanelButton();
-               if(_.size(this.unlockCallbackQueue) > 0) {
-                   //console.log("Executing queued callbacks in queue: ",this.unlockCallbackQueue);
-                   _.each(this.unlockCallbackQueue, function(callback){
-                       callback();
-                   });
-                   //We presume the callbacks have their own calls to render
-                   //this.render();
-                   this.unlockCallbackQueue = {};
-               }
-               
-           }
-        },
         
         /**
          * @event
@@ -146,20 +70,6 @@ define(function(require){
                 anchor.addClass('icon-lock-open');
                 anchor.removeClass('icon-lock');
             }*/
-        },
-        
-        /**
-         * Blocks the panel
-         */
-        blockPanel: function(){
-            this.$('.panel').addClass('is-loading');
-        },
-
-        /**
-         * Unblocks the panel
-         */
-        unblockPanel: function(){
-            this.$('.panel').removeClass('is-loading');
         },
 
         /**

@@ -45,15 +45,11 @@ define(function(require){
          * @event
          */
         onTitleClick: function(){
-            if( assembl.messageList ){
-                assembl.messageList.filterThroughPanelLock(function(){
-                    assembl.messageList.addFilterIsSynthesMessage();
-                }, 'syncWithCurrentIdea');
-            }
+            Assembl.vent.trigger('messageList:addFilterIsSynthesisMessage');
+
             Ctx.setCurrentIdea(null);
         }
     });
-
 
     return SynthesisIdeaView;
 });

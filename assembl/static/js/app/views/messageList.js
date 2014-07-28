@@ -73,12 +73,9 @@ define(function(require){
         /**
          *  @init
          */
-        initialize: function(obj){
+        initialize: function(options){
             var that = this,
             collectionManager = new CollectionManager();
-            if( obj.button ){
-                this.button = $(obj.button).on('click', Ctx.togglePanel.bind(window, 'messageList'));
-            }
 
             PanelView.prototype.initialize.apply(this);
             this.renderedMessageViewsCurrent = {};
@@ -86,6 +83,7 @@ define(function(require){
             this.setViewStyle(this.getViewStyleDefById(this.storedMessageListConfig.viewStyleId) || this.ViewStyles.THREADED);
             this.defaultMessageStyle = Ctx.getMessageViewStyleDefById(this.storedMessageListConfig.messageStyleId) || Ctx.AVAILABLE_MESSAGE_VIEW_STYLES.PREVIEW;
 
+            this.groupManager = options.groupManager;
             /**
              * @ghourlier
              * TODO: Usually it would necessary to push notification rather than fetch every time the model change
@@ -100,7 +98,6 @@ define(function(require){
                 that.initAnnotator();
 
             });*/
-            
 
             collectionManager.getAllExtractsCollectionPromise().done(
                 function(allExtractsCollection) {
@@ -114,17 +111,93 @@ define(function(require){
                     //Filter is already in sync
                     //TODO:  Detect the case where there is no idea selected, and we already have no filter on ideas
                     return;
-                }
-                else {
-                    that.filterThroughPanelLock(function(){
-                        that.syncWithCurrentIdea();
-                    }, 'syncWithCurrentIdea');
+
+                } else {
+                    that.groupManager.filterThroughPanelLock.apply(that.groupManager, [
+                        function(){
+                            that.syncWithCurrentIdea();
+                        }, 'syncWithCurrentIdea'
+                    ]);
                 }
             });
 
             Assembl.vent.on('messageList:showMessageById', function(id, callback){
-                 that.showMessageById(id, callback);
+                that.showMessageById(id, callback);
             });
+
+            Assembl.vent.on('messageList:addFilterIsRelatedToIdea', function(idea, only_unread){
+                that.groupManager.filterThroughPanelLock.apply(that.groupManager, [
+                    function(){
+                        that.addFilterIsRelatedToIdea(idea, only_unread)
+                    }, 'syncWithCurrentIdea'
+                ]);
+            });
+
+            Assembl.vent.on('messageList:addFilterIsOrphanMessage', function(){
+                that.groupManager.filterThroughPanelLock.apply(that.groupManager, [
+                    function(){
+                        that.addFilterIsOrphanMessage();
+                    }, 'syncWithCurrentIdea'
+                ]);
+            });
+
+            Assembl.vent.on('messageList:addFilterIsSynthesisMessage', function(){
+                that.groupManager.filterThroughPanelLock.apply(that.groupManager, [
+                    function(){
+                        that.addFilterIsSynthesMessage();
+                    }, 'syncWithCurrentIdea'
+                ]);
+            });
+
+            Assembl.vent.on('messageList:showAllMessages', function(){
+                that.groupManager.filterThroughPanelLock.apply(that.groupManager, [
+                    function(){
+                        that.showAllMessages();
+                    }, 'syncWithCurrentIdea'
+                ]);
+            });
+
+        },
+
+        /**
+         * The events
+         * @type {Object}
+         */
+        events: function() {
+            var data = {
+                'click .idealist-title': 'onTitleClick',
+                'click #post-query-filter-info .closebutton': 'onFilterDeleteClick',
+                'click #messageList-collapseButton': 'toggleMessageView',
+                'click #messageList-returnButton': 'onReturnButtonClick',
+
+                'click #messageList-allmessages': 'showAllMessages',
+                'click #messageList-onlyorphan': 'addFilterIsOrphanMessage',
+                'click #messageList-onlysynthesis': 'addFilterIsSynthesMessage',
+                'click #messageList-isunread': 'addFilterIsUnreadMessage',
+
+                'click #messageList-view-threaded': 'setViewStyleThreaded',
+                'click #messageList-view-activityfeed': 'setViewStyleActivityFeed',
+                'click #messageList-view-chronological': 'setViewStyleChronological',
+
+                'click #messageList-message-collapseButton': 'toggleThreadMessages',
+
+                'click #messageList-closeButton': 'closePanel',
+                'click #messageList-fullscreenButton': 'setFullscreen',
+
+                'click #messageList-prevbutton': 'showPreviousMessages',
+                'click #messageList-morebutton': 'showNextMessages'
+            };
+
+            var messageDefaultViewStyle = '';
+            _.each(Ctx.AVAILABLE_MESSAGE_VIEW_STYLES, function(messageViewStyle){
+                var key = 'click #'+DEFAULT_MESSAGE_VIEW_LI_ID_PREFIX+messageViewStyle.id;
+                data[key] = 'onDefaultMessageViewStyle';
+            } );
+
+            //FIXME: no need events panel is empty, en will be delete soon
+            _.extend(data, PanelView.prototype.events());
+
+            return data;
         },
         
         invalidateResultsAndRender: function(){
@@ -220,7 +293,6 @@ define(function(require){
          * @type {Annotator}
          */
         annotator: null,
-
         
         /**
          * The current server-side query applied to messages
@@ -645,7 +717,7 @@ define(function(require){
 
             var successCallback = function(messageStructureCollection, resultMessageIdCollection){
                 that = that.render_real();
-                that.unblockPanel();
+                that.groupManager.unblockPanel.call(that);
                 that.trigger("render_complete", "Render complete");
             }
             /* This should be a listen to the returned collection */
@@ -665,18 +737,16 @@ define(function(require){
                 console.log("messageList:render() is firing");
             }
 
-            //Assembl.commands.execute('render');
-
             this.renderPanelButton();
             // TODO:  Not clean, this is just so something is shown immediately.
             // Data not yet available should be handled in render_real - benoitg
             this.render_real();
-            this.blockPanel();
+
+            that.groupManager.blockPanel.call(that);
             
-            $.when(
-                    collectionManager.getAllMessageStructureCollectionPromise(), 
-                    this.currentQuery.getResultMessageIdCollectionPromise()
-                    ).done(changedDataCallback, successCallback)
+            $.when(collectionManager.getAllMessageStructureCollectionPromise(),
+                    this.currentQuery.getResultMessageIdCollectionPromise()).done(
+                changedDataCallback, successCallback);
 
             return this;
         },
@@ -1204,44 +1274,6 @@ define(function(require){
                   }
                 });
 
-        },
-
-        /**
-         * The events
-         * @type {Object}
-         */
-        events: function() {
-            var data = {
-                'click .idealist-title': 'onTitleClick',
-                'click #post-query-filter-info .closebutton': 'onFilterDeleteClick',
-                'click #messageList-collapseButton': 'toggleMessageView',
-                'click #messageList-returnButton': 'onReturnButtonClick',
-
-                'click #messageList-allmessages': 'showAllMessages',
-                'click #messageList-onlyorphan': 'addFilterIsOrphanMessage',
-                'click #messageList-onlysynthesis': 'addFilterIsSynthesMessage',
-                'click #messageList-isunread': 'addFilterIsUnreadMessage',
-
-                'click #messageList-view-threaded': 'setViewStyleThreaded',
-                'click #messageList-view-activityfeed': 'setViewStyleActivityFeed',
-                'click #messageList-view-chronological': 'setViewStyleChronological',
-                
-                'click #messageList-message-collapseButton': 'toggleThreadMessages',
-
-                'click #messageList-closeButton': 'closePanel',
-                'click #messageList-fullscreenButton': 'setFullscreen',
-
-                'click #messageList-prevbutton': 'showPreviousMessages',
-                'click #messageList-morebutton': 'showNextMessages'
-            };
-
-            var messageDefaultViewStyle = '';
-            _.each(Ctx.AVAILABLE_MESSAGE_VIEW_STYLES, function(messageViewStyle){
-                var key = 'click #'+DEFAULT_MESSAGE_VIEW_LI_ID_PREFIX+messageViewStyle.id;
-                data[key] = 'onDefaultMessageViewStyle';
-            } );
-            _.extend(data, PanelView.prototype.events());
-            return data;
         },
 
         /**
