@@ -592,6 +592,9 @@ define(function(require){
             console.log("messageIdsToDisplay is: ");
             console.log(that.messageIdsToDisplay);
             */
+            if( ! (Ctx.getCurrentUser().can(Permissions.ADD_EXTRACT))){
+              $("body").addClass("js_annotatorUserCanottAddExtract"); 
+            }
             Ctx.cleanTooltips(this.$el);
             previousScrollTarget = this.getPreviousScrollTarget();
             
@@ -645,6 +648,7 @@ define(function(require){
                 that.unblockPanel();
                 that.trigger("render_complete", "Render complete");
             }
+            
             /* This should be a listen to the returned collection */
             var changedDataCallback = function(messageStructureCollection, resultMessageIdCollection) {
                 function inFilter(message) {
