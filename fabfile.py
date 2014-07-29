@@ -370,10 +370,10 @@ def app_compile_noupdate():
 @task
 def app_compile_nodbupdate():
     "Separated mostly for tests, which need to run alembic manually"
+    execute(virtuoso_install_if_absent)
     execute(app_setup)
     execute(compile_stylesheets)
     execute(compile_messages)
-    execute(virtuoso_install_if_absent)
     
 ## Webserver
 def configure_webservers():
