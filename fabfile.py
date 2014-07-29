@@ -1072,21 +1072,17 @@ def virtuoso_source_install():
     virtuoso_root = get_virtuoso_root()
     virtuoso_src = get_virtuoso_src()
     branch = get_config().get('virtuoso', 'virtuoso_branch')
-    try:
-        tag = get_config().get('virtuoso', 'virtuoso_tag')
-    except:
-        tag = None
+
     if exists(virtuoso_src):
         with cd(virtuoso_src):
             run('git fetch')
-            run('git checkout '+(tag or branch))
+            run('git checkout '+branch)
     else:
-        branch_flag = ('-b ' + branch) if branch else ''
         run('mkdir -p ' + dirname(virtuoso_src))
         virtuso_github = 'https://github.com/openlink/virtuoso-opensource.git'
-        run('git clone -b %s %s %s' %(branch, virtuso_github, virtuoso_src))
+        run('git clone %s %s' %(virtuso_github, virtuoso_src))
         with cd(virtuoso_src):
-            run('git checkout '+(tag or branch))
+            run('git checkout '+branch)
     with cd(virtuoso_src):
         if not exists(join(virtuoso_src, 'configure')):
             run('./autogen.sh')
