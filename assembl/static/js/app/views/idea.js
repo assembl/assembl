@@ -249,7 +249,7 @@ define(function(require){
                 }
             }
 
-            if( Ctx.draggedSegment !== null || Ctx.draggedAnnotation !== null ){
+            if( Ctx.draggedSegment !== null || Ctx.getDraggedAnnotation() !== null ){
                 if( ev.target.classList.contains('idealist-dropzone') ){
                     this.$el.addClass('is-dragover-below');
                 } else {

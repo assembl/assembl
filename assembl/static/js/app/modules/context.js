@@ -87,7 +87,7 @@ define(function(require){
          * Current dragged annotation
          * @type {Annotation}
          */
-         this.draggedAnnotation = null;
+         this._draggedAnnotation = null;
 
         /**
          * The selection tooltip.
@@ -106,10 +106,6 @@ define(function(require){
          * @type {Number}
          */
          this.openedPanels = 0;
-
-
-         this.draggedAnnotation = null;
-
 
          this.AVAILABLE_MESSAGE_VIEW_STYLES = {
             TITLE_ONLY: {
@@ -164,11 +160,12 @@ define(function(require){
         },
 
         getDraggedAnnotation: function(){
-            return this.draggedAnnotation;
+            return this._draggedAnnotation;
         },
 
-        setDraggedAnnotation: function(annotation){
-            this.draggedAnnotation = annotation;
+        setDraggedAnnotation: function(annotation, annotatorEditor){
+            this._draggedAnnotation = annotation;
+            this._annotatorEditor = annotatorEditor;
         },
 
         /**
@@ -415,12 +412,9 @@ define(function(require){
          * Saves the current annotation if there is any
          */
         saveCurrentAnnotationAsExtract: function(){
-            if( this.getCurrentUser().can(Permissions.EDIT_EXTRACT) &&
-
-                //FIXME: don't understand where 'annotatorEditor' has been taked
-                assembl.messageList.annotatorEditor ){
-                assembl.messageList.annotatorEditor.element.find('.annotator-save').click();
-            }
+          if( this.getCurrentUser().can(Permissions.EDIT_EXTRACT) ) {
+            this._annotatorEditor.element.find('.annotator-save').click();
+          }
         },
 
         /**

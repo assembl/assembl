@@ -988,29 +988,30 @@ define(function(require){
                 Ctx.currentAnnotationIdIdea = null;
             });
 
-            this.annotator.subscribe('annotationEditorShown', function(editor, annotation){
-                $(document.body).append(editor.element);
-                var save = $(editor.element).find(".annotator-save");
+            this.annotator.subscribe('annotationEditorShown', function(annotatorEditor, annotation){
+                $(document.body).append(annotatorEditor.element);
+                var save = $(annotatorEditor.element).find(".annotator-save");
                 save.text(i18n.gettext('Send to clipboard'));
-                var textarea = editor.fields[0].element.firstChild,
+                var textarea = annotatorEditor.fields[0].element.firstChild,
                     div = $('<div>', { 'draggable': true, 'class': 'annotator-textarea' });
 
                 div.html(annotation.quote);
 
                 div.on('dragstart', function(ev){
                     Ctx.showDragbox(ev, annotation.quote);
-                    Ctx.draggedAnnotation = annotation;
+                    Ctx.setDraggedAnnotation(annotation, annotatorEditor);
                 });
 
                 div.on('dragend', function(ev){
-                    Ctx.draggedAnnotation = null;
+                    Ctx.setDraggedAnnotation(null, annotatorEditor);
                 });
 
                 $(textarea).replaceWith(div);
-                if( $(editor.element).find(".annotator-draganddrop-help").length === 0 ) {
-                    $(editor.element).find(".annotator-textarea").after(DIV_ANNOTATOR_HELP);
+                if( $(annotatorEditor.element).find(".annotator-draganddrop-help").length === 0 ) {
+                    $(annotatorEditor.element).find(".annotator-textarea").after(DIV_ANNOTATOR_HELP);
                 }
-                that.annotatorEditor = editor;
+                //Because the MessageView will need it
+                that.annotatorEditor = annotatorEditor;
             });
 
             this.annotator.subscribe('annotationViewerShown', function(viewer, annotation){

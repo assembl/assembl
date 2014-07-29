@@ -395,7 +395,7 @@ CollectionManager = require('modules/collectionManager');
         onDragOver: function(ev){
             //console.log("ideaPanel:onDragOver() fired");
             ev.preventDefault();
-            if( Ctx.draggedSegment !== null || Ctx.draggedAnnotation !== null){
+            if( Ctx.draggedSegment !== null || Ctx.getDraggedAnnotation() !== null){
                 this.panel.addClass("is-dragover");
             }
         },
