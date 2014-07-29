@@ -174,7 +174,7 @@ define(function(require){
         onUnreadCountClick: function(e){
             e.stopPropagation();
 
-            Assembl.vent.trigger('messageList:addFilterIsRelatedToIdea', this.model, null);
+            Assembl.vent.trigger('messageList:addFilterIsRelatedToIdea', this.model, true);
             Ctx.setCurrentIdea(this.model);
         },
 
