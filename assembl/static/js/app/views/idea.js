@@ -65,7 +65,6 @@ define(function(require){
          * @return {IdeaView}
          */
         render: function(){
-            Assembl.commands.execute('render');
             var view_data = this.view_data;
             var render_data = view_data[this.model.getId()];
             if (render_data === undefined) {
@@ -157,8 +156,6 @@ define(function(require){
          */
         onTitleClick: function(e){
             e.stopPropagation();
-
-            Assembl.vent.trigger('messageList:addFilterIsRelatedToIdea', this.model, null);
 
             if( this.model === Ctx.getCurrentIdea() ){
                Ctx.setCurrentIdea(null);

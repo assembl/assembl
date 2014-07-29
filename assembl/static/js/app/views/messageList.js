@@ -122,6 +122,7 @@ define(function(require){
             );
 
             Assembl.vent.on('idea:selected', function(idea){
+                //console.log("vent.on idea:selected fired");
                 if(idea && that.currentQuery.isFilterInQuery(that.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, idea.getId())) {
                     //Filter is already in sync
                     //TODO:  Detect the case where there is no idea selected, and we already have no filter on ideas
@@ -217,22 +218,25 @@ define(function(require){
             return data;
         },
         
-        invalidateResultsAndRender: function(){
-            this.currentQuery.invalidateResults();
-            this.render();
-        },
-        
         /**
          * Synchronizes the panel with the currently selected idea (possibly none)
          */
         syncWithCurrentIdea: function(){
-            var currentIdea = Ctx.getCurrentIdea();
-            //console.log("messageList:syncWithCurrentIdea(): New idea is now: ",currentIdea);
+            var currentIdea = Ctx.getCurrentIdea(),
+                filterValue;
+
             Ctx.openPanel(this);
+            //!currentIdea?filterValue=null:filterValue=currentIdea.getId();
+            //console.log("messageList:syncWithCurrentIdea(): New idea is now: ",currentIdea, this.currentQuery.isFilterInQuery(this.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, filterValue));
+            //TODO benoitg - this logic should really be un postQuery, not here - 2014-07-29
             if(currentIdea && this.currentQuery.isFilterInQuery(this.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, currentIdea.getId())) {
                 //Filter is already in sync
-                //TODO:  Detect the case where there is no idea selected, and we already have no filter on ideas
                 return;
+            }
+            else if (!currentIdea && (this.currentQuery.isFilterInQuery(this.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, null) == false)) {
+              //Filter is already in sync
+              //TODO:  Detect the case where there is no idea selected, and we already have no filter on ideas
+              return;
             }
             else {
                 this.currentQuery.clearFilter(this.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, null);
@@ -723,10 +727,11 @@ define(function(require){
                         offsetStart: 0,
                         offsetEnd: MORE_PAGES_NUMBER
                     })
+                    that.scrollToPreviousScrollTarget(previousScrollTarget);
+                    Assembl.vent.trigger("messageList:render_complete", "Render complete");
                 })
             
-            this.scrollToPreviousScrollTarget(previousScrollTarget);
-            Assembl.vent.trigger("messageList:render_complete", "Render complete");
+
             
             return this;
         },
@@ -742,7 +747,6 @@ define(function(require){
             var successCallback = function(messageStructureCollection, resultMessageIdCollection){
                 that = that.render_real();
                 that.groupManager.unblockPanel.call(that);
-                Assembl.vent.trigger("messageList:render_complete", "Render complete");
             }
             
             /* This should be a listen to the returned collection */
@@ -1080,6 +1084,7 @@ define(function(require){
          * Shows all messages (clears all filters)
          */
         showAllMessages: function(){
+            //console.log("messageList:showAllMessages() called");
             this.currentQuery.clearAllFilters();
             this.render();
         },

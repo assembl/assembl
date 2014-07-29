@@ -194,19 +194,26 @@ define(function(require){
         /**
          * Is the filter part of the current query?
          * @param {this.availableFilters} filterDef
-         * @param {String} value
+         * @param {String} The value for which to check.  If null
+         *  will return true if any filter of that type is present.
          * @return true if present, false otherwise
          */
         this.isFilterInQuery = function(filterDef, value){
-            retval = false;
-            if(filterDef.id in this._query) {
-                for (var i=0;i<this._query[filterDef.id].length;i++) {
-                    if(this._query[filterDef.id][i].value == value) {
-                        retval = true;
-                    }
-                }
+          retval = false;
+          //console.log("isFilterInQuery():",filterDef, value, this._query)
+          if(filterDef.id in this._query) {
+            if(value == null) {
+              retval = true;
             }
-            return retval;
+            else {
+              for (var i=0;i<this._query[filterDef.id].length;i++) {
+                if(this._query[filterDef.id][i].value == value) {
+                  retval = true;
+                }
+              }
+            }
+          }
+          return retval;
         }
         
         /**
@@ -272,6 +279,7 @@ define(function(require){
          * invalidate the Results
          */
         this.invalidateResults = function(){
+            //console.log("messageListPostQuery:invalidateResults called");
             this._resultsAreValid = false;
         };
         
@@ -347,7 +355,7 @@ define(function(require){
          * @param {function} success_data_changed callback to call when query is complete only
          * when the data actually changed.  Will be called before success
          */
-        this.execute = function(success, success_data_changed){
+        this._execute = function(success, success_data_changed){
             //console.log("messageListPostQuery:execute() called");
             var that = this,
                 url = Ctx.getApiUrl('posts'),
@@ -402,12 +410,12 @@ define(function(require){
         this.getResultMessageIdCollectionPromise = function() {
             var that = this,
                 deferred = $.Deferred();
-
+            //console.log("messageListPostQuery:getResultMessageIdCollectionPromise() called");
             if (this._resultsAreValid) {
                 deferred.resolve(this._results);
             }
             else {
-                this.execute(function(collection) {
+                this._execute(function(collection) {
                         //console.log('resolving getResultMessageIdCollectionPromise()');
                         deferred.resolve(collection);
                     });
@@ -477,7 +485,6 @@ define(function(require){
                         }
                         else{
                             if (filterDef._value_is_boolean) {
-                                console.log(filterDef.id, this._query);
                                 var filterQuery = this._query[filterDef.id][0];
                                 var span = '<span class="closebutton" data-filterid="'+filterDef.id+'" data-value="'+filterQuery.value+'"></span>\n';
                                 retval += i18n.sprintf((filterQuery.value===true)?i18n.gettext("%s"):i18n.gettext("NOT %s"), filterDef.name);

@@ -62,8 +62,6 @@ SynthesisMessageView = require('views/synthesisMessage'),
          * @return {MessageView}
          */
         render: function(level){
-
-            Assembl.commands.execute('render');
             var data = this.model.toJSON(),
                 children,
                 messageView;

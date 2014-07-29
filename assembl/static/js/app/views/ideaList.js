@@ -93,7 +93,6 @@ define(function(require){
           if(Ctx.debugRender) {
             console.log("ideaList:render() is firing");
           }
-          Assembl.commands.execute('render');
           Ctx.cleanTooltips(this.$el);
           this.body = this.$('.panel-body');
           var that = this,

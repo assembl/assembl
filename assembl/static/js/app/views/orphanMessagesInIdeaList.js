@@ -16,7 +16,6 @@ define(function(require){
          * The render
          */
         render: function(){
-            Assembl.commands.execute('render');
             Ctx.cleanTooltips(this.$el);
             var data = this.model.toJSON();
 

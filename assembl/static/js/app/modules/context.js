@@ -173,6 +173,7 @@ define(function(require){
          * @param  {Idea} [idea]
          */
         setCurrentIdea: function(idea){
+            //console.log("setCurrentIdea() fired", idea);
             if (idea != this.getCurrentIdea()) {
                 this.currentIdea = idea;
                 Assembl.vent.trigger("idea:selected", idea);
