@@ -373,6 +373,7 @@ def app_compile_nodbupdate():
     execute(app_setup)
     execute(compile_stylesheets)
     execute(compile_messages)
+    execute(virtuoso_install_if_absent)
     
 ## Webserver
 def configure_webservers():
@@ -792,8 +793,8 @@ def database_restore():
     # Restore data
     with prefix(venv_prefix()), cd(virtuoso_db_directory()):
         venvcmd("supervisorctl stop virtuoso")
-        run("%s/bin/virtuoso-t +configfile %s +restore-backup %s" % (
-            get_virtuoso_root(), join(virtuoso_db_directory(), 'virtuoso.ini'),
+        run("%s +configfile %s +restore-backup %s" % (
+            get_virtuoso_exec(), join(virtuoso_db_directory(), 'virtuoso.ini'),
         restore_dump_prefix))
         
     #clean up
@@ -828,6 +829,9 @@ def get_virtuoso_root():
         return normpath(join(env.projectpath, vroot))
     return vroot
 
+def get_virtuoso_exec():
+    virtuoso_exec = os.path.join(get_virtuoso_root(), 'bin', 'virtuoso-t')
+    return virtuoso_exec
 
 def get_virtuoso_src():
     config = get_config()
@@ -1034,7 +1038,7 @@ def ensure_virtuoso_not_running():
 def virtuoso_reconstruct_save_db():
     execute(ensure_virtuoso_not_running)
     with cd(virtuoso_db_directory()):
-        run('%s/bin/virtuoso-t +backup-dump +foreground' % (get_virtuoso_root()))
+        run('%s +backup-dump +foreground' % (get_virtuoso_exec()))
 
 @task
 def virtuoso_reconstruct_restore_db(transition_6_to_7=False):
@@ -1042,8 +1046,8 @@ def virtuoso_reconstruct_restore_db(transition_6_to_7=False):
     with cd(virtuoso_db_directory()):
         run('mv virtuoso.db virtuoso_backup.db')
     with cd(virtuoso_db_directory()):
-        r = run('%s/bin/virtuoso-t +restore-crash-dump +foreground' % (
-                get_virtuoso_root()), timeout=30)
+        r = run('%s +restore-crash-dump +foreground' % (
+                get_virtuoso_exec()), timeout=30)
     execute(supervisor_process_start, 'virtuoso')
     with cd(virtuoso_db_directory()):
         run('rm virtuoso_backup.db')
@@ -1052,6 +1056,14 @@ def virtuoso_reconstruct_restore_db(transition_6_to_7=False):
 def virtuoso_reconstruct_db():
     execute(virtuoso_reconstruct_save_db)
     execute(virtuoso_reconstruct_restore_db)
+
+
+def virtuoso_install_if_absent():
+    with settings(warn_only=True), hide('warnings', 'stdout', 'stderr'):
+        ls_cmd = run("ls %s" % get_virtuoso_exec())
+    if ls_cmd.failed:
+        print(red("Virtuso not installed, installing."))
+        execute(virtuoso_source_install)
 
 @task
 def virtuoso_source_install():
