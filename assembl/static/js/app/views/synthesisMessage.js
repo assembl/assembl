@@ -16,15 +16,15 @@ define(function(require){
          * @init
          */
         initialize: function(obj){
-            MessageView.prototype.initialize.apply(this, arguments);
-            this.stopListening(this.messageListView, 'annotator:initComplete', this.onAnnotatorInitComplete);
-            var synthesis_id = this.model.get('publishes_synthesis');
-            this.synthesis = assembl.syntheses.get(synthesis_id)
-            if(!this.synthesis) {
-                this.synthesis = new Synthesis.Model({'@id': synthesis_id});
-                this.synthesis.fetch();
-                assembl.syntheses.add(this.synthesis);
-            }
+          var that = this;
+          MessageView.prototype.initialize.apply(this, arguments);
+          this.stopListening(this.messageListView, 'annotator:initComplete', this.onAnnotatorInitComplete);
+          var synthesis_id = this.model.get('publishes_synthesis');
+          //this.synthesis = assembl.syntheses.get(synthesis_id)
+          if(!this.synthesis) {
+            this.synthesis = new Synthesis.Model({'@id': synthesis_id});
+            this.synthesisPromise = this.synthesis.fetch();
+          }
         },
 
         /**
@@ -38,7 +38,11 @@ define(function(require){
          * @type {}
          */
         transformDataBeforeRender: function(data) {
-            data['subject'] = this.synthesis.get('subject');
+            data['subject'] = '';
+            data['body'] = '';
+            if(this.viewStyle == this.availableMessageViewStyles.PREVIEW) {
+              data['bodyFormat'] = "text/plain";
+            }
             return data;
         },
         /**
@@ -46,24 +50,28 @@ define(function(require){
          * @type {}
          */
         postRender: function() {
-            var synthesisPanel = new SynthesisPanel({
-                model: this.synthesis
-                //el: '#message_'+_.escape(this.model.getNumericId())+'_synthesis'
-                }),
+            var that = this,
                 body;
-            synthesisPanel.template = Ctx.loadTemplate('synthesisPanelMessage');
-            synthesisPanel.render();
-            
-            if(this.viewStyle == this.availableMessageViewStyles.PREVIEW) {
-                //Strip HTML from preview
-                //bodyFormat = "text/plain";
-                body = $(synthesisPanel.el).text();
-            }
-            else {
-              
-              body = synthesisPanel.el;
-            }
-            this.$('.message-body').html(body);
+            this.synthesisPromise.done(
+                function() {
+                  that.$('.message-subject').html(that.synthesis.get('subject'));
+                  that.synthesisPanel = new SynthesisPanel({
+                    model: that.synthesis
+                  });
+                  that.synthesisPanel.template = Ctx.loadTemplate('synthesisPanelMessage');
+                  that.synthesisPanel.render();
+                  if(that.viewStyle == that.availableMessageViewStyles.PREVIEW) {
+                    //Strip HTML from preview
+                    //bodyFormat = "text/plain";
+                    body = $(that.synthesisPanel.el).text();
+                    that.$('.message-body > div').prepend(body);
+                  }
+                  else {
+                    body = that.synthesisPanel.el;
+                    that.$('.message-body').html(body);
+                  }
+                  
+                });
             
             return;
         }

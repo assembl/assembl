@@ -210,7 +210,6 @@ def app_db_update():
     print(cyan('Migrating database'))
     venvcmd('alembic -c %s upgrade head' % (env.ini_file))
 
-@task
 def app_db_install():
     """
     Install db the first time and fake migrations
@@ -279,7 +278,10 @@ def bootstrap_from_checkout():
     """
     execute(updatemaincode)
     execute(build_virtualenv)
-    execute(app_compile)
+    execute(app_compile_nodbupdate)
+    execute(app_db_install)
+    execute(reloadapp)
+    execute(webservers_reload)
 
 
 @task
@@ -779,7 +781,7 @@ def database_restore():
         venvcmd("supervisorctl stop virtuoso")
     # Drop db
     with cd(virtuoso_db_directory()), settings(warn_only=True):
-        run('rm *.db *.trx')
+        run('rm -f *.db *.trx')
 
     # Make symlink to latest
     #this MUST match the code in db_manage or virtuoso will refuse to restore
@@ -874,7 +876,7 @@ def commonenv(projectpath, venvpath=None):
     
     #Note to maintainers:  If you upgrade ruby, make sure you check that the 
     # ruby_build version below supports it...
-    env.ruby_version = "2.0.0-p247"
+    env.ruby_version = "2.0.0-p481"
     env.ruby_build_min_version = 20130628
 
 # Specific environments 

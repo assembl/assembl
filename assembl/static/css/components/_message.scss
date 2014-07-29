@@ -209,8 +209,8 @@ $ellipsiswidth: 3em !default;
 }
 
 // This is so annotator doesn't display a form for user's who aren't allowed
-body.js_annotatorUserCanottAddExtract > .textbubble {
-    display: none;
+body.js_annotatorUserCannotAddExtract > .textbubble {
+    display: none !important;
     } 
 
 

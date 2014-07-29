@@ -698,7 +698,7 @@ define(function(require){
             console.log(that.messageIdsToDisplay);
             */
             if( ! (Ctx.getCurrentUser().can(Permissions.ADD_EXTRACT))){
-              $("body").addClass("js_annotatorUserCanottAddExtract"); 
+              $("body").addClass("js_annotatorUserCannotAddExtract"); 
             }
             Ctx.cleanTooltips(this.$el);
             previousScrollTarget = this.getPreviousScrollTarget();
