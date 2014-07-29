@@ -6,33 +6,28 @@
   box-sizing: border-box;
   padding-top: 25px;
   background-color: #EEEEEE;
-  .add-group {
+  .add-group,
+  .close-group,
+  .lock-group {
     cursor: pointer;
     position: absolute;
+    text-decoration: none;
+    top:5px;
+  }
+  .add-group {
     left: 5px;
-    top: 5px;
     line-height: 20px;
-    &:hover{
-      text-decoration: underline;
-    }
   }
   .close-group {
-    text-decoration: none;
-    cursor: pointer;
-    position: absolute;
     right: 5px;
-    top: 5px;
     line-height: 20px;
     font-size: 20px;
   }
-  .lock-group{
-    position: absolute;
-    cursor: pointer;
+  .lock-group {
     margin-left: auto;
     margin-right: auto;
     left: 0;
     right: 0;
-    top:5px;
     text-align: center;
     width: 175px;
     i{
@@ -50,17 +45,19 @@
       padding: 0 20px;
        .itemGroup {
          position: relative;
-         list-style-type: none;
          height: 120px;
          width: 120px;
+         list-style-type: none;
          margin: 25px;
          display: inline-block;
          text-align: center;
          border: 1px solid transparent;
-         a{
-           cursor: pointer;
-           color:#484848;
+         article{
+           position: absolute;
            display: block;
+           cursor: pointer;
+           left:0;
+           top:0;
            height: 120px;
            width: 120px;
          }

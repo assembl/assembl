@@ -219,19 +219,18 @@ define(function(require){
 
                     var Modal = Backbone.Modal.extend({
                         template: _.template($('#tmpl-create-group').html()),
-                        cancelEl:'.bbm-button',
+                        cancelEl:'.btn-cancel',
                         initialize: function(){
                             this.$el.addClass('group-modal');
                         },
 
                         events:{
-                            'click .itemGroup a':'addToGroup'
+                           'click .itemGroup article':'addToGroup'
                         },
 
                         addToGroup: function(e){
 
                             var type = $(e.target).attr('data-item');
-
 
                             console.log('add to group', type)
                         }
