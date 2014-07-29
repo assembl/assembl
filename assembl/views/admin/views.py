@@ -9,7 +9,8 @@ from assembl.models import (
     LocalUserRole)
 from .. import get_default_context
 from assembl.models.mail import IMAPMailbox, MailingList
-from assembl.auth import (R_SYSADMIN, SYSTEM_ROLES, P_SYSADMIN, P_ADMIN_DISC)
+from assembl.auth import (
+    R_SYSADMIN, SYSTEM_ROLES, P_SYSADMIN, P_ADMIN_DISC, Everyone)
 from assembl.models.auth import (
     create_default_permissions, User, Username, AgentProfile)
 
@@ -224,7 +225,7 @@ def general_permissions(request):
         if 'submit_user_roles' in request.POST:
             user_ids = {u.id for u in users}
             for role in role_names:
-                if role == R_SYSADMIN:
+                if role == Everyone:
                     continue
                 prefix = 'has_'+role+'_'
                 for name in request.POST:
@@ -254,7 +255,7 @@ def general_permissions(request):
 
         elif 'submit_look_for_user' in request.POST:
             search_string = '%' + request.POST['user_search'] + '%'
-            other_users = db.query(User).join(AgentProfile).filter(AgentProfile.name.ilike(search_string)).union(
+            other_users = db.query(User).filter(AgentProfile.name.ilike(search_string)).union(
                 db.query(User).outerjoin(Username).filter(Username.username.ilike(search_string))).union(
                 db.query(User).filter(User.preferred_email.ilike(search_string))).all()
             users.update(other_users)
