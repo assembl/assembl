@@ -885,6 +885,10 @@ JOIN post AS family_posts ON (
     def get_discussion_condition(cls, discussion_id):
         return cls.discussion_id == discussion_id
 
+    @classmethod
+    def base_condition(cls):
+        return cls.is_tombstone == False
+
     def get_num_children(self):
         return len(self.children)
 
@@ -1272,6 +1276,10 @@ class IdeaLink(DiscussionBoundBase):
     @classmethod
     def get_discussion_condition(cls, discussion_id):
         return (cls.source_id == Idea.id) & (Idea.discussion_id == discussion_id)
+
+    @classmethod
+    def base_condition(cls):
+        return cls.is_tombstone == False
 
     crud_permissions = CrudPermissions(
             P_ADD_IDEA, P_READ, P_EDIT_IDEA, P_EDIT_IDEA,

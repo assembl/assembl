@@ -259,6 +259,10 @@ class BaseOps(object):
         return cls._iri_class
 
     @classmethod
+    def base_condition(cls):
+        return None
+
+    @classmethod
     def special_quad_patterns(cls, alias_manager):
         # Note: If defined somewhere, override in subclasses to avoid inheritance.
         return []
@@ -772,7 +776,7 @@ def configure_engine(settings, zope_tr=True, session_maker=None):
     engine = engine_from_config(settings, 'sqlalchemy.')
     session_maker.configure(bind=engine)
     global db_schema, _metadata, Base, TimestampedBase, ObsoleteBase, TimestampedObsolete
-    db_schema = settings['db_schema']
+    db_schema = '.'.join((settings['db_schema'], settings['db_user']))
     _metadata = MetaData(schema=db_schema)
     Base, TimestampedBase = declarative_bases(_metadata, class_registry)
     obsolete = MetaData(schema=db_schema)

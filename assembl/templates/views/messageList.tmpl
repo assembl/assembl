@@ -14,19 +14,7 @@
 
     <div class="panel-body">
         <div class="view-config">
-            <div class="dropdown">
-                <span class="dropdown-label text-bold">
-                    <%= currentViewStyle.label %>
-                </span>
-                <ul class="dropdown-list">
-                <% _.each(availableViewStyles, function(viewStyle) {
-                     print('<li id="' + viewStyle.css_id + '" class="dropdown-listitem">');
-                     print(viewStyle.label);
-                     print('</li>');
-                     });
-                %>
-                </ul>
-            </div>
+            <div id="js_messageListViewStyle-dropdown" class="dropdown"></div>
             
             <div id="defaultMessageView-dropdown" class="dropdown"></div>
             

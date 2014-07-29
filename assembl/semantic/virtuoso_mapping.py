@@ -197,8 +197,15 @@ class AssemblClassPatternExtractor(ClassPatternExtractor):
 
     def get_base_condition(self, cls):
         from ..models import DiscussionBoundBase
+        condition = cls.base_condition()
         if self.discussion_id and issubclass(cls, DiscussionBoundBase):
-            return cls.get_discussion_condition(self.discussion_id)
+            discussion_condition = cls.get_discussion_condition(self.discussion_id)
+            if discussion_condition is not None:
+                if condition is None:
+                    condition = discussion_condition
+                else:
+                    condition = condition & discussion_condition
+        return condition
 
     def qmp_with_defaults(self, qmp, subject_pattern, sqla_cls, column=None):
         rdf_section = sqla_cls.__dict__.get(

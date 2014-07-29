@@ -14,6 +14,7 @@ tm.attempts=2
 
 available_languages = fr en
 pyramid.default_locale_name = en
+
 # Should requirejs defeat browser caching?  Useful in development
 requirejs.cache_bust = false
 
@@ -36,9 +37,18 @@ assembl.validate_registration_emails = false
 mail.host = localhost
 assembl.admin_email = webmaster@assembl.net
 
+#The default theme.  If unset, will be set to "default"
+#default_theme = default
+
 # Each of these providers requires us to register a client app ID.
 # Also, we must give a visible callback URL.
 # Please contact maparent@acm.org for details.
+
+# Users from these providers (if enabled in login_providers) will not need
+# to verify their email
+trusted_login_providers = facebook
+ google
+ twitter
 
 login_providers =
 # facebook
@@ -52,7 +62,7 @@ login_providers =
 #
 # facebook.consumer_key =
 # facebook.consumer_secret =
-# facebook.scope =
+facebook.scope = public_profile,email
 
 # https://dev.twitter.com/apps/new
 #
@@ -64,12 +74,13 @@ login_providers =
 #
 # github.consumer_key =
 # github.consumer_secret =
-# github.scope = repo
+github.scope = repo
 
 # https://code.google.com/apis/console/ ; API Access; Create Client ID
 #
 # google.consumer_key =
 # google.consumer_secret =
+google.scope = userinfo.profile
 
 # This should be the front-facing URL
 # openid.realm=
@@ -80,17 +91,17 @@ login_providers =
 
 # What gravatar will use if email isn't found.
 # If not present, the image above will be used.
-# Typical values are:
+# Typical values are: 
 # identicon: a geometric pattern based on an email hash
 # monsterid: a generated 'monster' with different colors, faces, etc
-# wavatar: generated, 8-bit arcade-style pixelated faces
-# retro
-avatar.gravatar_default = wavatar
+# wavatar: generated faces with differing features and backgrounds
+# retro: generated, 8-bit arcade-style pixelated faces
+# mm: only show avatars for people who have one on gravatar
+avatar.gravatar_default = mm
 
 # Beaker settings
-# We should use memcache asap
-beaker.session.type = ext:database
-beaker.session.url = sqlite:///%(here)s/assembl.db
+beaker.session.type = ext:memcached
+beaker.session.url = 127.0.0.1:11211
 beaker.session.data_dir = %(here)s/data/sessions/data
 beaker.session.lock_dir = %(here)s/data/sessions/lock
 session.key = CHANGEME_enter_a_key
@@ -105,11 +116,12 @@ store.url = sqlite:///%(here)s/assembl.db
 
 # change this to the hostname visible from outside
 public_hostname = localhost
+#Typically 80 for prod, 6543 for dev
 public_port = 6543
 
 # ZMQ model changes socket
 changes.socket = ipc:///tmp/assembl_changes/0
-changes.multiplex = false
+changes.multiplex = true
 # The port to use for the websocket.
 # In prod, your firewall needs to allow this through or proxy it through nginx
 changes.websocket.port = 8085
@@ -195,7 +207,39 @@ format = %(asctime)s %(levelname)-5.5s [%(name)s][%(threadName)s] %(message)s
 # End logging configuration
 
 [virtuoso]
+# The path can be absolute, or relative to the project root
+virtuoso_src = src/virtuoso
+# If virtuoso_root = system, whatever version is installed by the OS will be used
+virtuoso_root = virtuoso
+# A commit can be put here instead of a branch
+
+# A known good version "Fixed issue with LDP", 2014-07-28
+virtuoso_branch = fd396ce395baa2be89a242c64ea543a1eb03747b
+#virtuoso_branch = develop/7
+
 # Standard port is 5132
 port = 5132
 # Standard port is 8892
 http_port = 8892
+
+[uwsgi]
+# Set this dangerous umask if uwsgi is not the same user as nginx. Alternately, use proper uid/gid and run as root.
+#umask = 000
+#uid = _www
+#gid = _www
+master = 1
+processes = 4
+lazy = 1
+die-on-term = 1
+# Do NOT use threads here, there are problems with pyodbc
+# Defining the threads variable with any value enables threading
+# threads = DO NOT USE
+buffer-size = 65535
+socket = %d/var/run/uwsgi.sock
+stats = %d/var/run/uwsgi_stats.sock
+plugin=python
+virtualenv=%dvenv
+pythonpath=%d
+paste=config://%d%s
+# Thunder-lock is only relevant in multiprocess+multithread mode
+# thunder-lock = true

@@ -719,7 +719,51 @@ voteApp.controller('indexCtl',
       
 
       // TODO (when the API is implemented): check that the user has the right to participate in this vote
+
+
+      // try to get previous vote of the user
+
+      if ( !configService.user_votes_url )
+      {
+        $scope.drawUI();
+      }
+      else
+      {
+        var my_votes_endpoint_url = AssemblToolsService.resourceToUrl(configService.user_votes_url);
+        $http({
+          method: 'GET',
+          url: my_votes_endpoint_url,
+        }).success(function(data, status, headers){
+          console.log(data);
+          var my_votes = data;
+          // override default value of given criteria
+          _.each($scope.settings.items, function(item, item_index){
+            _.each(item.criteria, function(criterion, criterion_index){
+              var entity_id = criterion.entity_id;
+              var my_vote_for_this_criterion = _.findWhere(my_votes, {"criterion": entity_id});
+              if ( my_vote_for_this_criterion )
+              {
+                console.log("value found: " + my_vote_for_this_criterion.vote_value);
+                var new_value = criterion.valueMin + my_vote_for_this_criterion.vote_value * (criterion.valueMax - criterion.valueMin);
+                $scope.settings.items[item_index].criteria[criterion_index].valueDefault = new_value;
+                console.log("value set: " + new_value);
+              }
+            });
+          });
+          console.log("settings after my votes:");
+          console.log($scope.settings);
+          $scope.drawUI();
+        }).error(function(status, headers){
+          console.log("error");
+          $scope.drawUI();
+        });
+      }
+
       
+    };
+
+    $scope.drawUI = function(){
+      // display the UI in a table of classic way depending on the settings
 
       if ( $scope.settings.displayStyle && $scope.settings.displayStyle == "table" )
       {
@@ -727,10 +771,8 @@ voteApp.controller('indexCtl',
       }
       else
       {
-        $scope.drawUI();
+        $scope.drawUIWithoutTable();
       }
-
-      $scope.computeMyVotes();
     };
 
     $scope.computeMyVotes = function(){
@@ -1382,8 +1424,8 @@ voteApp.controller('indexCtl',
     };
 
 
-    $scope.drawUI = function(){
-      console.log("drawUI()");
+    $scope.drawUIWithoutTable = function(){
+      console.log("drawUIWithoutTable()");
       var config = $scope.settings;
       var holder = d3.select("#d3_container");
       var jq_holder = $("#d3_container");
@@ -1432,7 +1474,7 @@ voteApp.controller('indexCtl',
         }
       }
 
-      console.log("drawUI() completed");
+      console.log("drawUIWithoutTable() completed");
     };
 
 }]);
