@@ -173,7 +173,7 @@ def discussion_permissions(request):
 
         elif 'submit_look_for_user' in request.POST:
             search_string = '%' + request.POST['user_search'] + '%'
-            other_users = db.query(User).join(AgentProfile).filter(AgentProfile.name.ilike(search_string)).union(
+            other_users = db.query(User).filter(AgentProfile.name.ilike(search_string)).union(
                 db.query(User).outerjoin(Username).filter(Username.username.ilike(search_string))).union(
                 db.query(User).filter(User.preferred_email.ilike(search_string))).all()
             users.update(other_users)
