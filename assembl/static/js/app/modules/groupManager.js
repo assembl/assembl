@@ -124,8 +124,6 @@ define(function(require){
                 }
             ];
 
-            window.localStorage.setItem('groups', data);
-
            if(window.localStorage.getItem('groups')){
                data = window.localStorage.getItem('groups');
            }
@@ -292,12 +290,13 @@ define(function(require){
             var items = this.getStorageGroupItem(),
                  that = this;
 
-            items.forEach(function(item){
+
+              items.forEach(function(item){
 
                 var group = that.createGroupItem(item);
 
                 $('#panelarea').append(group.render().el);
-            });
+              });
         }
 
     });
