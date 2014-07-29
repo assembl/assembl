@@ -64,22 +64,37 @@ cd assembl
 fab devenv install_builddeps
 fab devenv bootstrap_from_checkout
 ```
+**Running**
 
-**Dependencies:**
-The previous steps should install all required dependencies. Otherwise,
-
-``` sh
-fab devenv install_builddeps
-```
-
-**Compiling CSS**
-
-The previous steps should install compass and bower. Otherwise,
+Note:  memcached and redis must be running already.
 
 ``` sh
-fab devenv install_compass
-fab devenv install_bower
+cd ~/assembl
 ```
+
+Only the first time you run it:
+
+``` sh
+source venv/bin/activate
+supervisord
+#(wait for virtuoso to start)
+```
+Creating a user the first time you run assembl (so you have a superuser):
+
+``` sh
+assembl-add-user --email your_email@email.com --name "Your Name" --username desiredusername --password yourpassword
+```
+
+(NOTE: Just running $venv/bin/supervisord will NOT work,
+as celery will run command line tools, thus breaking out of the environment.
+You need to run source venv/bin/activate from the same terminal before
+running the above)
+
+On subsequent runs, just make sure supervisord is running.
+
+Then, start the development server and compass with this command:
+supervisorctl start dev:
+
 
 **Multiple environments**
 
@@ -104,63 +119,12 @@ http_port = 8892
 
 Most of these are ports, and it should be easy to find an unoccupied port; in the case of `changes.socket`, you simply need a different filename, and in the case of `celery.broker`, the final number has to be changed to another low integer.
 
-**Setup the database**
-
-Only the first time you run it...
-
-``` sh
-venv/bin/assembl-db-manage development.ini bootstrap
-```
-
-
-** Running **
-Note:  memcached, redis and postgres must be running already.
-
-
-Note that you should use virtuoso 6; there are some terrible regressions with subquery joins
-in virtuoso 7.
-
-You need to set the environment variable VIRTUOSO_ROOT to the root of your virtuoso install.
-On linux, this is probably /usr
-If you have installed it with MacPorts, it would be /opt/local.
-If you have installed it with a configure-make-make install, it would be
-/usr/local/virtuoso-opensource
+**Updating an environment**
 
 ``` sh
 cd ~/assembl
-```
-
-Only the first time you run it:
-
-``` sh
-source venv/bin/activate
-assembl-ini-files development.ini
-supervisord
-#(wait for virtuoso to start)
-assembl-db-manage development.ini bootstrap
-```
-Creating a user the first time you run assembl (so you have a superuser):
-
-``` sh
-assembl-add-user --email your_email@email.com --name "Your Name" --username desiredusername --password yourpassword
-```
-
-(NOTE: Just running $venv/bin/supervisord will NOT work,
-as celery will run command line tools, thus breaking out of the environment.
-You need to run source venv/bin/activate from the same terminal before
-running the above)
-
-On subsequent runs, just make sure supervisord is running.
-
-Then, start the development server and compass with this command:
-supervisorctl start dev:
-
-
-Updating an environment:
-
-``` sh
-cd ~/assembl
-fab devenv app_fullupdate
+#Any git operations (ex:  git pull)
+fab devenv app_compile
 $venv/bin/supervisorctl start dev:*
 ```
 You can monitor any of the processes, for example pserve, with these commands:
@@ -194,7 +158,7 @@ fab devenv app_fullupdate
 Schema migrations
 -----------------
 
-Upgrade to latest:
+Upgrade to latest manally:
 
 ``` sh
 alembic -c development.ini upgrade head
@@ -275,5 +239,5 @@ supervisorctl restart dev:pserve
 
 Do not commit the .mo files, because these are compiled binary files.
 
-If your .po file contains "msgid" lines which are preceeded by "#, fuzzy" lines, these sentences may appear in their original language in the application. If you are sure that these sentences are correctly translated, remove the "#, fuzzy" line and recompile the catalog. They will then be displayed normally.
+If your .po file contains "msgid" lines which are preceeded by "#, fuzzy" lines, these sentences may appear in their original language in the application. If you are sure that these sentences are correctly translated, remove the "#, fuzzy" line and recompile the catalog. They will then be displayed normally.  However, it is much easier to use a po editor like poedit...
 

@@ -210,7 +210,6 @@ def app_db_update():
     print(cyan('Migrating database'))
     venvcmd('alembic -c %s upgrade head' % (env.ini_file))
 
-@task
 def app_db_install():
     """
     Install db the first time and fake migrations
@@ -279,7 +278,10 @@ def bootstrap_from_checkout():
     """
     execute(updatemaincode)
     execute(build_virtualenv)
-    execute(app_compile)
+    execute(app_compile_nodbupdate)
+    execute(app_db_install)
+    execute(reloadapp)
+    execute(webservers_reload)
 
 
 @task
