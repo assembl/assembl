@@ -13,6 +13,7 @@ define(function(require){
                      PostQuery = require('views/messageListPostQuery'),
                    Permissions = require('utils/permissions'),
                MessageSendView = require('views/messageSend'),
+                   SegmentList = require('views/segmentList'),
              CollectionManager = require('modules/collectionManager');
 
     /**
@@ -971,7 +972,9 @@ define(function(require){
 
             // TODO: Re-render message in messagelist if an annotation was added...
             this.annotator.subscribe('annotationCreated', function(annotation){
-                var segment = Assembl.reqres.request("segmentList:addAnnotationAsSegment", annotation, Ctx.currentAnnotationIdIdea);
+                //FIXME: find another way to reach this function by events or call without instanciate the class
+                var segmentList = new SegmentList();
+                var segment = segmentList.addAnnotationAsSegment(annotation, Ctx.currentAnnotationIdIdea);
 
                 if( !segment.isValid() ){
                     annotator.deleteAnnotation(annotation);

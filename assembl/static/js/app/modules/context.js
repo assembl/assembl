@@ -447,7 +447,8 @@ define(function(require){
          */
         showDragbox: function(ev, text){
 
-            var dragbox_max_length = 25;
+            var dragbox_max_length = 25,
+                that = this;
 
             if( ev.originalEvent ){
                 ev = ev.originalEvent;
@@ -478,7 +479,7 @@ define(function(require){
             }
 
             $(ev.currentTarget).one("dragend", function(){
-                this.dragbox.setAttribute('hidden', 'hidden');
+                that.dragbox.setAttribute('hidden', 'hidden');
             });
         },
 

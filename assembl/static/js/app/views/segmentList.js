@@ -39,11 +39,6 @@ CollectionManager = require('modules/collectionManager');
               that.showSegment(segment);
           });
 
-          Assembl.reqres.setHandler("segmentList:addAnnotationAsSegment", function(annotation, currentAnnotationIdIdea){
-            console.log(" segmentList:addAnnotationAsSegment fired");
-              return that.addAnnotationAsSegment(annotation, currentAnnotationIdIdea);
-          });
-
         },
 
         /**
@@ -149,6 +144,7 @@ CollectionManager = require('modules/collectionManager');
               idPost = Ctx.getPostIdFromAnnotation(annotation),
               collectionManager = new CollectionManager();
           console.log("addAnnotationAsSegment called");
+
           var segment = new Segment.Model({
               target: { "@id": idPost, "@type": Types.EMAIL },
               text: annotation.text,
