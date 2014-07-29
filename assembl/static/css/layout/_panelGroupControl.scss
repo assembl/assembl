@@ -47,32 +47,66 @@
     max-width: 400px;
     .bbm-modal__section {
       height: auto;
-      padding: 0 25px;
+      padding: 0 20px;
        .itemGroup {
+         position: relative;
          list-style-type: none;
          height: 120px;
          width: 120px;
-         border: 1px solid #CCCCCC;
          margin: 25px;
          display: inline-block;
          text-align: center;
-         padding-top: 10px;
+         border: 1px solid transparent;
          a{
            cursor: pointer;
            color:#484848;
+           display: block;
+           height: 120px;
+           width: 120px;
          }
          i{
-           font-size: 4em;
+           font-size: 3.5em;
+         }
+         .icon-checkbox {
+           position: absolute;
+           font-size: 16px;
+           top: 5px;
+           left: 5px;
+           visibility: hidden;
+         }
+         &:hover{
+           @include border-radius(3px);
+           border: 1px solid #eeeeee;
+         }
+         &:hover .icon-checkbox {
+           visibility: visible;
+         }
+         .item-title {
+           font-size: 12px;
          }
        }
+       .item-section{
+         font-size: 12px;
+       }
+      .is-selected {
+        @include border-radius(3px);
+        background-color: #9A3FD5;
+        border: 1px solid transparent;
+        .icon-checkbox {
+          visibility: visible;
+        }
+        i, span{
+          color: #ffffff;
+        }
+      }
     }
     .bbm-modal__topbar {
       box-sizing: border-box;
-      padding: 0 10px 0 10px;
+      padding: 0 20px;
       border-bottom: none;
     }
     .bbm-modal__title{
-      font-size: 13px;
+      font-size: 14px;
       margin: 0;
     }
   }

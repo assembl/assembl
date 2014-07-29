@@ -1,7 +1,8 @@
 define(function(require){
 
    var Marionette = require('marionette'),
-    backboneModal = require('backboneModal');
+    backboneModal = require('backboneModal'),
+                $ = require('jquery');
 
    var Notification = Marionette.LayoutView.extend({
        template: '#tmpl-notification',
@@ -40,7 +41,9 @@ define(function(require){
            }
            this.remove();
            this.unbind();
-           $('#main .panelarea').css('top', '6em');
+           $('#wrapper #panelarea').animate({
+               top:'36px'
+           }, 600);
        }
    });
 
