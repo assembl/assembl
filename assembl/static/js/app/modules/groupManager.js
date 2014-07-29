@@ -12,7 +12,6 @@ define(function(require){
     var groupManager = Marionette.Controller.extend({
 
         initialize: function(){
-
            this.stateButton = null;
         },
         /**
@@ -125,6 +124,7 @@ define(function(require){
                 }
             ];
 
+            window.localStorage.setItem('groups', data);
 
            if(window.localStorage.getItem('groups')){
                data = window.localStorage.getItem('groups');
@@ -215,31 +215,57 @@ define(function(require){
                 },
                 addGroup: function(){
 
-                    console.log('add group');
-
                     var Modal = Backbone.Modal.extend({
                         template: _.template($('#tmpl-create-group').html()),
                         cancelEl:'.btn-cancel',
                         initialize: function(){
                             this.$el.addClass('group-modal');
+                            this.group = [];
                         },
-
                         events:{
-                           'click .itemGroup article':'addToGroup'
+                           'click .itemGroup a':'selectedGroup',
+                           'click .js_createGroup':'createGroup'
                         },
+                        selectedGroup: function(e){
 
-                        addToGroup: function(e){
+                            var elm  = $(e.target).parent();
 
-                            var type = $(e.target).attr('data-item');
+                            if(elm.hasClass('ideas')){
+                                if($('.itemGroup.synthesis').hasClass('is-selected')){
+                                   $('.itemGroup.synthesis').removeClass('is-selected');
+                                }
+                                elm.addClass('is-selected');
 
-                            console.log('add to group', type)
+                            } else if(elm.hasClass('synthesis')){
+                                if($('.itemGroup.ideas').hasClass('is-selected')){
+                                   $('.itemGroup.ideas').removeClass('is-selected')
+                                }
+                                elm.addClass('is-selected');
+
+                            } else {
+                                if(elm.hasClass('is-selected')){
+                                    elm.removeClass('is-selected');
+                                } else {
+                                    elm.addClass('is-selected');
+                                }
+                            }
+                        },
+                        createGroup: function(){
+                           var items = [];
+
+                           $('.itemGroup.is-selected').each(function(){
+                               var item = $(this).children('a').attr('data-item');
+                               items.push(item);
+                           });
+
+                           console.log('items', items);
                         }
+
                     });
 
                     var modalView = new Modal();
 
                     $('.modal').html(modalView.render().el);
-
                 },
 
                 closeGroup: function(){
@@ -252,7 +278,6 @@ define(function(require){
                 lockGroup: function(e){
 
                    that.stateButton = $(e.target).children('i');
-
                    that.toggleLock();
                 }
 

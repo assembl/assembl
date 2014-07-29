@@ -39,7 +39,7 @@
 
 .group-modal {
   .bbm-modal {
-    max-width: 400px;
+    max-width: 410px;
     .bbm-modal__section {
       height: auto;
       padding: 0 20px;
@@ -49,17 +49,18 @@
          width: 120px;
          list-style-type: none;
          margin: 25px;
-         display: inline-block;
+         float: left;
          text-align: center;
          border: 1px solid transparent;
-         article{
+         a{
            position: absolute;
            display: block;
            cursor: pointer;
            left:0;
            top:0;
-           height: 120px;
-           width: 120px;
+           height: 100%;
+           width: 100%;
+           z-index: 10;
          }
          i{
            font-size: 3.5em;
@@ -82,8 +83,14 @@
            font-size: 12px;
          }
        }
+       .separator-item {
+         float: left;
+         padding-top: 4em;
+         height: 120px;
+       }
        .item-section{
          font-size: 12px;
+         float: left;
        }
       .is-selected {
         @include border-radius(3px);
