@@ -106,36 +106,71 @@ define(function(require){
             this.$('.panel').removeClass('is-loading');
         },
 
+        /**
+         * Create a group of panels and store in localStorage
+         * */
+        createGroupItem: function(items, viewId){
+            var data = [],
+                 collection = [],
+                 groups = {};
+
+            if(items.length){
+                items.forEach(function(item){
+                   var i = {};
+                     i.type = item;
+                     i.viewId = viewId;
+
+                   data.push(i);
+                });
+            }
+
+            groups.group = data;
+
+            if(window.localStorage.getItem('groupItems')){
+
+               var groupOfItems = JSON.parse(window.localStorage.getItem('groupItems'));
+               groupOfItems.push(groups);
+
+               window.localStorage.removeItem('groupItems');
+               window.localStorage.setItem('groupItems', JSON.stringify(groupOfItems));
+
+            } else {
+
+               collection.push(groups);
+               window.localStorage.setItem('groupItems', JSON.stringify(collection));
+            }
+        },
+
         getStorageGroupItem: function(){
+           var data;
 
-           var data = [
-                {
-                    group:[
-                        {type:'idea-list'},
-                        {type:'idea-panel'},
-                        {type:'message'}
-                    ]
-                },
-                {
-                    group:[
-                        {type:'idea-list'},
-                        {type:'idea-panel'}
-                    ]
-                }
-            ];
+           if(window.localStorage.getItem('groupItems')){
+               data = JSON.parse(window.localStorage.getItem('groupItems'));
 
-           if(window.localStorage.getItem('groups')){
-               data = window.localStorage.getItem('groups');
+               console.log('getStorageGroupItem', data);
+
+           } else {
+
+               data = [
+                   {
+                       group:[
+                           {type:'idea-list'},
+                           {type:'idea-panel'},
+                           {type:'message'}
+                       ]
+                   }
+               ]
            }
 
            return data;
         },
 
-        createGroupItem: function(collection){
+        /**
+         * Wrapper CompositeView for a group
+         * */
+        createViewGroupItem: function(collection){
             var that = this;
-            /**
-             * PanelGroupItem Creation
-             * */
+
             var Item = Backbone.Model.extend(),
                 Items = Backbone.Collection.extend({
                     model: Item
@@ -193,7 +228,6 @@ define(function(require){
                             break;
                     }
                 }
-
             });
 
             var Grid = Marionette.CompositeView.extend({
@@ -202,6 +236,13 @@ define(function(require){
                 childViewContainer: ".panelarea-table",
                 childViewOptions: {
                    groupManager: that
+                },
+                initialize: function(){
+                    /**
+                     * Need this compositeView id
+                     * to identify which localStorage to delete
+                     * */
+                    this.viewId = this.cid;
                 },
                 events:{
                   'click .add-group':'addGroup',
@@ -212,20 +253,18 @@ define(function(require){
                    this.$el.addClass('wrapper-group');
                 },
                 addGroup: function(){
-
+                    var self = this;
                     var Modal = Backbone.Modal.extend({
                         template: _.template($('#tmpl-create-group').html()),
                         cancelEl:'.btn-cancel',
                         initialize: function(){
-                            this.$el.addClass('group-modal');
-                            this.group = [];
+                           this.$el.addClass('group-modal');
                         },
                         events:{
-                           'click .itemGroup a':'selectedGroup',
+                           'click .js_selectItemGroup':'selectItemGroup',
                            'click .js_createGroup':'createGroup'
                         },
-                        selectedGroup: function(e){
-
+                        selectItemGroup: function(e){
                             var elm  = $(e.target).parent();
 
                             if(elm.hasClass('ideas')){
@@ -256,7 +295,7 @@ define(function(require){
                                items.push(item);
                            });
 
-                           console.log('items', items);
+                           that.createGroupItem(items, self.viewId);
                         }
 
                     });
@@ -267,10 +306,11 @@ define(function(require){
                 },
 
                 closeGroup: function(){
-                    console.log('close button');
+
+                    console.log('close group', this.cid);
                     //TODO: delete reference to localStorage
-                    //this.unbind();
-                    //this.remove();
+                    this.unbind();
+                    this.remove();
                 },
 
                 lockGroup: function(e){
@@ -290,10 +330,9 @@ define(function(require){
             var items = this.getStorageGroupItem(),
                  that = this;
 
-
               items.forEach(function(item){
 
-                var group = that.createGroupItem(item);
+                var group = that.createViewGroupItem(item);
 
                 $('#panelarea').append(group.render().el);
               });
