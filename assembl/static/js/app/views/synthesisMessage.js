@@ -20,7 +20,6 @@ define(function(require){
           MessageView.prototype.initialize.apply(this, arguments);
           this.stopListening(this.messageListView, 'annotator:initComplete', this.onAnnotatorInitComplete);
           var synthesis_id = this.model.get('publishes_synthesis');
-          //this.synthesis = assembl.syntheses.get(synthesis_id)
           if(!this.synthesis) {
             this.synthesis = new Synthesis.Model({'@id': synthesis_id});
             this.synthesisPromise = this.synthesis.fetch();

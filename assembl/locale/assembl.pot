@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: assembl 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-07-24 17:38-0400\n"
+"POT-Creation-Date: 2014-07-29 20:34-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,53 +16,6 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 1.3\n"
-
-#: assembl/auth/operations.py:39
-msgid "email"
-msgstr ""
-
-#: assembl/auth/operations.py:41
-msgid "account"
-msgstr ""
-
-#: assembl/auth/operations.py:51
-msgid "Please confirm your ${confirm_what} with <${assembl}>"
-msgstr ""
-
-#: assembl/auth/operations.py:54
-msgid ""
-"Hello, ${name}!\n"
-"Please confirm your ${confirm_what} <${email}> with ${assembl} by clicking on"
-" the link below.\n"
-"<${confirm_url}>\n"
-msgstr ""
-
-#: assembl/auth/operations.py:58
-msgid ""
-"<p>Hello, ${name}!</p>\n"
-"<p>Please <a href=\"${confirm_url}\">confirm your ${confirm_what}</a> "
-"&lt;${email}&gt; with <${assembl}>.</p>\n"
-msgstr ""
-
-#: assembl/auth/operations.py:74
-msgid "Request for password change"
-msgstr ""
-
-#: assembl/auth/operations.py:77
-msgid ""
-"Hello, ${name}!\n"
-"You asked to change your password on <${assembl}>. (We hope it was you!)\n"
-"\n"
-"You can do this by clicking on the link below.\n"
-"<${confirm_url}>\n"
-msgstr ""
-
-#: assembl/auth/operations.py:82
-msgid ""
-"<p>Hello, ${name}!</p>\n"
-"<p>You asked to <a href=\"${confirm_url}\">change your password</a> on "
-"${assembl} (We hope it was you!)</p>\n"
-msgstr ""
 
 #: assembl/lib/types.py:62
 msgid "${val} cannot be serialized: ${err}"
@@ -138,17 +91,17 @@ msgid "ajax error message:"
 msgstr ""
 
 #: assembl/static/js/app/views/ideaInSynthesis.js:120
-#: assembl/static/js/app/views/message.js:157
+#: assembl/static/js/app/views/message.js:170
 msgid "Type your response here..."
 msgstr ""
 
 #: assembl/static/js/app/views/ideaInSynthesis.js:122
-#: assembl/static/js/app/views/message.js:159
+#: assembl/static/js/app/views/message.js:172
 msgid "Send your reply"
 msgstr ""
 
 #: assembl/static/js/app/views/ideaInSynthesis.js:125
-#: assembl/static/js/app/views/message.js:161
+#: assembl/static/js/app/views/message.js:174
 msgid "You did not type a response yet..."
 msgstr ""
 
@@ -187,7 +140,7 @@ msgid "Send your comment"
 msgstr ""
 
 #: assembl/static/js/app/views/ideaPanel.js:186
-#: assembl/static/js/app/views/messageList.js:611
+#: assembl/static/js/app/views/messageList.js:632
 msgid "You need to type a comment first..."
 msgstr ""
 
@@ -211,55 +164,59 @@ msgstr ""
 msgid "You can drag the segment above directly to the table of ideas"
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:40
+#: assembl/static/js/app/views/messageList.js:41
 msgid "Threaded"
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:45
+#: assembl/static/js/app/views/messageList.js:46
 #: assembl/static/js/app/views/messageListPostQuery.js:152
 msgid "Chronological"
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:50
+#: assembl/static/js/app/views/messageList.js:51
 msgid "Reverse-Chronological"
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:470
+#: assembl/static/js/app/views/messageList.js:56
+msgid "New Messages"
+msgstr ""
+
+#: assembl/static/js/app/views/messageList.js:486
 msgid "No messages"
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:608
+#: assembl/static/js/app/views/messageList.js:629
 msgid ""
 "You can start a new topic in this discussion by typing a subject above, and a"
 " first post here..."
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:609
+#: assembl/static/js/app/views/messageList.js:630
 msgid "Start a new topic in this discussion"
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:610
+#: assembl/static/js/app/views/messageList.js:631
 #: assembl/templates/views/messageSend.tmpl:11
 msgid "New topic subject:"
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:612
+#: assembl/static/js/app/views/messageList.js:633
 msgid "You need to set a subject to add a new topic..."
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:688
+#: assembl/static/js/app/views/messageList.js:710
 #: assembl/templates/views/ideaList.tmpl:27
 #: assembl/templates/views/messageList.tmpl:8
 msgid "Expand all"
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:691
+#: assembl/static/js/app/views/messageList.js:713
 #: assembl/templates/views/ideaList.tmpl:27
 #: assembl/templates/views/messageList.tmpl:8
 msgid "Collapse all"
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:877
+#: assembl/static/js/app/views/messageList.js:919
 msgid "Send to clipboard"
 msgstr ""
 
@@ -539,10 +496,6 @@ msgstr ""
 
 #: assembl/templates/login.jinja2:31
 msgid "Log in through one of these social networks"
-msgstr ""
-
-#: assembl/templates/login.jinja2:33
-msgid "Login with external tools"
 msgstr ""
 
 #: assembl/templates/login.jinja2:35 assembl/templates/profile.jinja2:152
@@ -933,27 +886,27 @@ msgstr ""
 msgid "Send an email to this user"
 msgstr ""
 
-#: assembl/templates/views/messageList.tmpl:36
+#: assembl/templates/views/messageList.tmpl:24
 msgid "Add filter"
 msgstr ""
 
-#: assembl/templates/views/messageList.tmpl:42
+#: assembl/templates/views/messageList.tmpl:30
 msgid "Orphan messages"
 msgstr ""
 
-#: assembl/templates/views/messageList.tmpl:43
+#: assembl/templates/views/messageList.tmpl:31
 msgid "Synthesis messages"
 msgstr ""
 
-#: assembl/templates/views/messageList.tmpl:44
+#: assembl/templates/views/messageList.tmpl:32
 msgid "Unread messages"
 msgstr ""
 
-#: assembl/templates/views/messageList.tmpl:63
+#: assembl/templates/views/messageList.tmpl:51
 msgid "Load previous messages"
 msgstr ""
 
-#: assembl/templates/views/messageList.tmpl:69
+#: assembl/templates/views/messageList.tmpl:57
 msgid "Load next messages"
 msgstr ""
 
@@ -1086,81 +1039,128 @@ msgstr ""
 msgid "Your message is empty"
 msgstr ""
 
-#: assembl/views/auth/views.py:145
+#: assembl/views/auth/views.py:146
 #, python-format
 msgid "The username %s is already used"
 msgstr ""
 
-#: assembl/views/auth/views.py:163 assembl/views/auth/views.py:707
+#: assembl/views/auth/views.py:164 assembl/views/auth/views.py:708
 msgid "The passwords are not identical"
 msgstr ""
 
-#: assembl/views/auth/views.py:229
+#: assembl/views/auth/views.py:230
 msgid "We already have a user with this email."
 msgstr ""
 
-#: assembl/views/auth/views.py:233
+#: assembl/views/auth/views.py:234
 msgid "The passwords should be identical"
 msgstr ""
 
-#: assembl/views/auth/views.py:308 assembl/views/auth/views.py:634
+#: assembl/views/auth/views.py:309 assembl/views/auth/views.py:635
 msgid "This user cannot be found"
 msgstr ""
 
-#: assembl/views/auth/views.py:327
+#: assembl/views/auth/views.py:328
 msgid "Invalid user and password"
 msgstr ""
 
-#: assembl/views/auth/views.py:501 assembl/views/auth/views.py:605
+#: assembl/views/auth/views.py:502 assembl/views/auth/views.py:606
 msgid "Confirmation requested"
 msgstr ""
 
-#: assembl/views/auth/views.py:502 assembl/views/auth/views.py:606
+#: assembl/views/auth/views.py:503 assembl/views/auth/views.py:607
 msgid ""
 "We have sent you a confirmation email. Please use the link to confirm your "
 "email to Assembl"
 msgstr ""
 
-#: assembl/views/auth/views.py:518
+#: assembl/views/auth/views.py:519
 msgid "Wrong email token."
 msgstr ""
 
-#: assembl/views/auth/views.py:564
+#: assembl/views/auth/views.py:565
 msgid "Login failed, try again"
 msgstr ""
 
-#: assembl/views/auth/views.py:613
+#: assembl/views/auth/views.py:614
 msgid "We do not know about this email."
 msgstr ""
 
-#: assembl/views/auth/views.py:627 assembl/views/auth/views.py:635
+#: assembl/views/auth/views.py:628 assembl/views/auth/views.py:636
 msgid "Find your account"
 msgstr ""
 
-#: assembl/views/auth/views.py:628 assembl/views/auth/views.py:636
+#: assembl/views/auth/views.py:629 assembl/views/auth/views.py:637
 msgid "Enter your email address or your username below"
 msgstr ""
 
-#: assembl/views/auth/views.py:659
+#: assembl/views/auth/views.py:660
 msgid "Password change requested"
 msgstr ""
 
-#: assembl/views/auth/views.py:660
+#: assembl/views/auth/views.py:661
 msgid ""
 "We have sent you an email with a temporary connection link. Please use that "
 "link to log in and change your password."
 msgstr ""
 
-#: assembl/views/auth/views.py:677
+#: assembl/views/auth/views.py:678
 msgid "Wrong password token."
 msgstr ""
 
-#: assembl/views/auth/views.py:682
+#: assembl/views/auth/views.py:683
 msgid "This token is expired. Do you want us to send another?"
 msgstr ""
 
-#: assembl/views/auth/views.py:712
+#: assembl/views/auth/views.py:713
 msgid "Password changed"
+msgstr ""
+
+#: assembl/views/auth/views.py:722
+msgid "email"
+msgstr ""
+
+#: assembl/views/auth/views.py:724
+msgid "account"
+msgstr ""
+
+#: assembl/views/auth/views.py:734
+msgid "Please confirm your ${confirm_what} with <${assembl}>"
+msgstr ""
+
+#: assembl/views/auth/views.py:737
+msgid ""
+"Hello, ${name}!\n"
+"Please confirm your ${confirm_what} <${email}> with ${assembl} by clicking on"
+" the link below.\n"
+"<${confirm_url}>\n"
+msgstr ""
+
+#: assembl/views/auth/views.py:741
+msgid ""
+"<p>Hello, ${name}!</p>\n"
+"<p>Please <a href=\"${confirm_url}\">confirm your ${confirm_what}</a> "
+"&lt;${email}&gt; with <${assembl}>.</p>\n"
+msgstr ""
+
+#: assembl/views/auth/views.py:758
+msgid "Request for password change"
+msgstr ""
+
+#: assembl/views/auth/views.py:761
+msgid ""
+"Hello, ${name}!\n"
+"You asked to change your password on <${assembl}>. (We hope it was you!)\n"
+"\n"
+"You can do this by clicking on the link below.\n"
+"<${confirm_url}>\n"
+msgstr ""
+
+#: assembl/views/auth/views.py:766
+msgid ""
+"<p>Hello, ${name}!</p>\n"
+"<p>You asked to <a href=\"${confirm_url}\">change your password</a> on "
+"${assembl} (We hope it was you!)</p>\n"
 msgstr ""
 
 #: assembl/views/backbone/views.py:30
