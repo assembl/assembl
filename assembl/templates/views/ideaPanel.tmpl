@@ -26,14 +26,18 @@
 
             {# List votable widgets of this idea #}
             <% _.each(votable_widgets, function(votable_widget, i){
-                var url = votable_widget+encodeURIComponent("?target="+idea.getId());
+                var url = votable_widget.widget_url+encodeURIComponent("?target="+idea.getId());
                 print("<a href=\""+url+"\" target=\"_blank\">{{gettext('Vote on this idea')}}</a>");
+                if ( canCreateWidgets ) {
+                    var configure_url = "/widget/vote/?admin=1#/admin/configure_instance?widget_uri="+votable_widget.widget_uri+"&target="+idea.getId();
+                    print(" <a href=\""+configure_url+"\" target=\"_blank\">{{gettext('Configure this widget')}}</a>");
+                }
              }); %>
 
             {# Instanciate a widget from this idea #}
             <% if ( canCreateWidgets ) {
                 var url = "/widget/vote/?admin=1#/admin/create_from_idea?idea="+encodeURIComponent(idea.getId()+"?view=creativity_widget");
-                print("<a href=\""+url+"\" target=\"_blank\">{{gettext('Create a vote widget on this idea')}}</a>");
+                print(" <a href=\""+url+"\" target=\"_blank\">{{gettext('Create a vote widget on this idea')}}</a>");
             } %>
 
         </fieldset>

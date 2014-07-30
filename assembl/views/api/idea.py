@@ -100,7 +100,8 @@ def _get_ideas_real(discussion, view_def=None, ids=None, user_id=None):
         url = widget.get_ui_endpoint()
         for data in widget.idea_data(user_id):
             try:
-                data['widget'] = url
+                data['widget_url'] = url
+                data['widget_uri'] = widget.uri()
                 widget_data[data['idea']].append(data)
             except KeyError as e:
                 pass
