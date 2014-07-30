@@ -53,18 +53,16 @@ $ellipsiswidth: 3em !default;
     position: relative;
     //padding: 20px 5px;
     padding: 8px 0px 2px 0px;
-    min-height: $messagelist-item-height - 12px;
-    //border-bottom: solid 1px $box-border-color;
-    //overflow-x: hidden;
+    min-height: 43px - 12px;
 
     &.is-highlighted {
-        background-color: $color-highlighting;
+        background-color: $yellow;
     }
     // A message block Header
     // --------------------
     .message-header {
         position: relative;
-        min-height: $messagelist-item-height - 12px;
+        min-height: 43px - 12px;
     }
     
     .message-subheader {
@@ -75,12 +73,12 @@ $ellipsiswidth: 3em !default;
         text-overflow: ellipsis;
         white-space: nowrap;
         text-align:  baseline;
-        max-height: $messagelist-item-height - 12px;
+        max-height: 43px - 12px;
         > span {
                 vertical-align: top;
                 }
         .message--collapsed & {
-            line-height: $icon-height;
+            line-height: 32px;
         }
 
     
@@ -151,14 +149,14 @@ $ellipsiswidth: 3em !default;
     &.viewStyleTitleOnly {
         .message-date {
             float: right;
-            line-height: $icon-height;
+            line-height: 32px;
         }
         .message-author {
             width: 10em;
             overflow:hidden;
             float: left;
             text-overflow: ellipsis;
-            min-height: $messagelist-item-height - 12px; /* To make sure the title wraps in front of the author */
+            min-height: 43px - 12px; /* To make sure the title wraps in front of the author */
             &:hover {
                 position: relative;
                 min-width: 10em;
@@ -173,7 +171,7 @@ $ellipsiswidth: 3em !default;
     &.viewStylePreview {
         .message-date {
             float: right;
-            line-height: $icon-height;
+            line-height: 32px;
             margin-right: 10px;
         }
         .message-author {
@@ -216,7 +214,7 @@ body.js_annotatorUserCannotAddExtract > .textbubble {
 
 #messageList-list.reverse_chronological, #messageList-list.chronological {
     .message-family-container {    
-        border-bottom: solid 1px $box-border-color;
+        border-bottom: solid 1px $gray;
     
         &:last-child {
             border-bottom: 0;
@@ -241,7 +239,7 @@ body.js_annotatorUserCannotAddExtract > .textbubble {
 // ------------
 .message-family-arrow.noarrow {
     display: block;
-    padding-left: $messagelist-arrow-width/2;
+    padding-left: 12px/2;
 }
 
 .link-img {
@@ -251,8 +249,8 @@ body.js_annotatorUserCannotAddExtract > .textbubble {
 }
 
 .message-family-arrow.arrow {
-    padding-left: $messagelist-arrow-width/2;
-    margin-left: $messagelist-arrow-width/2;
+    padding-left: 12px/2;
+    margin-left: 12px/2;
     display: block;
     cursor: pointer;
     .msg-img-closed {
@@ -263,8 +261,8 @@ body.js_annotatorUserCannotAddExtract > .textbubble {
     }
 
     .message--expanded > .message-family-container > & {
-        border-left: solid 1px $hry-line-color;
-        margin-left: $messagelist-arrow-width/2 - 1;
+        border-left: solid 1px $gray;
+        margin-left: 12px/2 - 1;
         .msg-img-closed {
             display: none;
         }
@@ -273,8 +271,8 @@ body.js_annotatorUserCannotAddExtract > .textbubble {
         }
     }
     .message--expanded > & {
-        border-left: solid 1px $hry-line-color;
-        margin-left: $messagelist-arrow-width/2 - 1;
+        border-left: solid 1px $gray;
+        margin-left: 12px/2 - 1;
         .msg-img-closed {
             display: none;
         }
@@ -288,17 +286,17 @@ body.js_annotatorUserCannotAddExtract > .textbubble {
 // --------------
 .messagelist-space {
     display: block;
-    padding-left: $messagelist-arrow-width/2;
-    margin-left: $messagelist-arrow-width/2;
+    padding-left: 12px/2;
+    margin-left: 12px/2;
 }
 
 // The bar to make an .messagelist-item looks like a child
 // --------------
 .messagelist-bar {
     display: block;
-    padding-left: $messagelist-arrow-width/2;
-    margin-left: $messagelist-arrow-width/2 - 1;
-    border-left: solid 1px $hry-line-color;
+    padding-left: 12px/2;
+    margin-left: 12px/2 - 1;
+    border-left: solid 1px $gray;
 }
 
 
@@ -308,8 +306,8 @@ body.js_annotatorUserCannotAddExtract > .textbubble {
     // background: url(#{$img-dir}/messagelist/messagelist-link.png) -6 top no-repeat;
     display: block;
     clear:left;
-    padding-left: $messagelist-arrow-width/2;
-    margin-left: $messagelist-arrow-width/2;
+    padding-left: 12px/2;
+    margin-left: 12px/2;
 
     &.root {
         //Root does not have border, bump it right
@@ -317,14 +315,14 @@ body.js_annotatorUserCannotAddExtract > .textbubble {
     }
     &.child {
         // background: url(#{$img-dir}/messagelist/messagelist-link-last.png) -6 top no-repeat;
-        border-left: solid 1px $hry-line-color;
+        border-left: solid 1px $gray;
         //Collapse border in the parent's border
-        margin-left: $messagelist-arrow-width/2 - 1;
+        margin-left: 12px/2 - 1;
         
         &.last-child {
             // background: url(#{$img-dir}/messagelist/messagelist-link-last.png) -6 top no-repeat;
             border-left: none;
-            margin-left: $messagelist-arrow-width/2
+            margin-left: 12px/2
         }
     }
 }
@@ -349,8 +347,8 @@ body.js_annotatorUserCannotAddExtract > .textbubble {
 //
 .message-body, .message-replybox {
     padding: {
-        right: $padding * 2;
-        left: $padding * 4;
+        right: 10px * 2;
+        left: 10px * 4;
     }
 }
 

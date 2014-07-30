@@ -6,31 +6,31 @@
     text-overflow: ellipsis;
     overflow: hidden;
     cursor: pointer;
-    padding-left: $padding-left;
+    padding-left: 10px;
 }
 .ideafamily-item {
     .ideafamily-body {
-        border-left: solid 1px $hry-line-color;
-        margin-left: $idealist-arrow-width/2 - 1;
+        border-left: solid 1px $gray;
+        margin-left: 30px/2 - 1;
         position: relative;
     
         > .ideafamily-link {
-            width: $idealist-arrow-width;
-            height: $idealist-arrow-height;
+            width: 30px;
+            height: 40px;
             position:absolute;
             margin: 0;
-            margin-left: -$idealist-arrow-width/2;
+            margin-left: -30px/2;
             background: url(#{$img-dir}/idealist/idealist-link-opaque.png) left top no-repeat;
         }
         > .ideafamily-idea {
-            margin-left: $idealist-arrow-width/2;
-            padding-left: $idealist-arrow-width/2;
+            margin-left: 30px/2;
+            padding-left: 30px/2;
         }
     }
     &.is-last-sibling {
         > .ideafamily-body {
             border-left: none;
-            margin-left: $idealist-arrow-width/2;
+            margin-left: 30px/2;
             > .ideafamily-link {
                 background: url(#{$img-dir}/idealist/idealist-link-last-opaque.png) left top no-repeat;
             }
@@ -38,11 +38,11 @@
     }
     &.skip_parent {
       > .ideafamily-body {
-        //margin-left: 3 * $idealist-arrow-width/2 - 1;
-        padding-left: 2 * $idealist-arrow-width/2 - 1;
+        //margin-left: 3 * 30px/2 - 1;
+        padding-left: 2 * 30px/2 - 1;
         > .ideafamily-link {
-            width: $idealist-arrow-width*2;
-            margin-left: -3*$idealist-arrow-width/2;
+            width: 30px*2;
+            margin-left: -3*30px/2;
             background: url(#{$img-dir}/idealist/idealist-link-skip-parent.svg) left top no-repeat;
         }
       }
@@ -50,12 +50,12 @@
 
     &.is-last-sibling.skip_parent {
       > .ideafamily-body {
-        //margin-left: 3 * $idealist-arrow-width/2 - 1;
+        //margin-left: 3 * 30px/2 - 1;
         //padding-left:
-        padding-left: 2 * $idealist-arrow-width/2 - 1;
+        padding-left: 2 * 30px/2 - 1;
         > .ideafamily-link {
-            width: $idealist-arrow-width*2;
-            margin-left: -3*$idealist-arrow-width/2;
+            width: 30px*2;
+            margin-left: -3*30px/2;
             background: url(#{$img-dir}/idealist/idealist-link-skip-parent-no-children.svg) left top no-repeat;
         }
       }
@@ -64,7 +64,7 @@
     &.level0 {
         > .ideafamily-body {
             border-left: none;
-            margin-left: $idealist-arrow-width/2;
+            margin-left: 30px/2;
             > .ideafamily-link {
                 background: url(#{$img-dir}/idealist/idealist-link-root.svg) left top no-repeat;
             }
@@ -81,8 +81,8 @@
     &.has-children {
         > .ideafamily-body {
             > .ideafamily-idea {
-                margin-left: $idealist-arrow-width/2 - 1;
-                border-left: solid 1px $hry-line-color;
+                margin-left: 30px/2 - 1;
+                border-left: solid 1px $gray;
             }
         }
     }

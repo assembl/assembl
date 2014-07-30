@@ -8,20 +8,20 @@
     @include clearfix();
 
     display: block;
-    line-height: $margin;
-    height: $margin;
+    line-height: 10px;
+    height: 10px;
 }
 
 // A big spacer
 // +++++++++++
 .spacer.spacer--big {
-    line-height: $margin * 2;
-    height: $margin * 2;
+    line-height: 10px * 2;
+    height: 10px * 2;
 }
 
 // A huge spacer
 // +++++++++++
 .spacer.spacer--huge {
-    line-height: $margin * 4;
-    height: $margin * 4;
+    line-height: 10px * 4;
+    height: 10px * 4;
 }

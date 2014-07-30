@@ -3,13 +3,12 @@
 .box {
     position: relative;
     overflow: hidden;
-
-    border: solid 1px $box-border-color;
-    background-color: #ffffff;
+    border: solid 1px $orange;
+    background-color: $white;
 
     @include transition(background-color 1s);
 
-    padding: $box-padding;
+    padding: 20px;
 }
 
 // Collapsed box
@@ -22,14 +21,14 @@
 // ++++++++++++++
 .box.box--bottomborder {
     border: none;
-    border-bottom: solid 1px $box-border-color;
+    border-bottom: solid 1px $orange;
 }
 
 // Only border on top
 // ++++++++++++++
 .box.box--topborder {
     border: none;
-    border-top: solid 1px $box-border-color;
+    border-top: solid 1px $orange;
 }
 
 // No border
@@ -42,7 +41,7 @@
 // Dashed box
 // +++++++++++++++
 .box.box--dashed {
-    border: dashed 2px $box-border-color;
+    border: dashed 2px $orange;
 }
 
 // Centered box
@@ -64,7 +63,7 @@
 .boxlist {
     .box:not(.box--dashed) {
         border: 0;
-        border-bottom: solid 1px $box-border-color;
+        border-bottom: solid 1px $orange;
     }
 
     .box:last-child:not(.box--dashed) {

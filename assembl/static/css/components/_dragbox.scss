@@ -9,9 +9,9 @@
     left: 10px;
     @include z-index("underground");
     
-    background-color: $dragbox-background-color;
+    background-color: $yellow1;
     @include box-shadow(0 3px 3px rgba(0,0,0,.15));
-    border: solid 1px $dragbox-border-color;
+    border: solid 1px $yellow;
 
     font-size: 11px;
     color: #c7a25a;

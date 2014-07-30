@@ -9,7 +9,7 @@ header {
   @include transform(translateZ(0));
   display: block;
   position: relative;
-  background-color: $bar-background-color;
+  background-color: $white;
 
   &.navbar-default {
     //This is set in the theme

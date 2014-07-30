@@ -1,11 +1,11 @@
 html {
     font-family: 'helvetica neue','Helvetica', sans-serif;
-    font-size: $font-size;
+    font-size: $baseFontSize;
    -webkit-font-smoothing: subpixel-antialiased;
 }
 
 @include selection {
-    background: $text-selection-color;
+    background: $white;
 }
 
 @include scrollbar {
@@ -23,32 +23,10 @@ html {
 }
 
 @include placeholder {
-    color: transparentize( $text-muted-color, 0.3 );
+    color: transparentize( $gray1, 0.3 );
 }
 
-.margin { margin: $margin; }
-.margin-top { margin-top: $margin-top; }
-.margin-right { margin-right: $margin-right; }
-.margin-bottom { margin-bottom: $margin-bottom; }
-.margin-left { margin-left: $margin-left; }
-
-.padding { padding: $padding; }
-.padding-top { padding-top: $padding-top; }
-.padding-right { padding-right: $padding-right; }
-.padding-bottom { padding-bottom: $padding-bottom; }
-.padding-left { padding-left: $padding-left; }
-
-.float-left { float: left; }
-.float-right { float: right; }
-
-.inline { display: inline-block; }
-
 .no-fx { @include transition( none !important ); }
-
-.no-border { border: 0 !important; }
-.border { border: solid 1px $box-border-color; }
-.border-bottom { border-bottom: solid 1px $box-border-color; }
-.rounded { border-radius: 4px; }
 
 .user-select-none {
     @include user-select(none);

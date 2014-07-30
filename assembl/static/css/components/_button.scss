@@ -9,11 +9,11 @@
 .button {
   @extend %button;
   @include box-sizing( border-box );
-  @include border-radius($button-border-radius);
+  @include border-radius(5px);
   padding: { right: 6px; left: 6px; }
-  line-height: $button-height;
+  line-height: 25px;
   background-color: #ebebeb;
-  font-size: $button-font-size;
+  font-size: 13px;
   text-align: center;
   color: #535353;
 }
@@ -22,22 +22,22 @@
 // ++++++++++++++++++++++
 .button.button--condensed {
     padding: { right: 4px; left: 4px; }
-    line-height: $button-condensed-height;
+    line-height: 26px;
 }
 
 // Primary button
 // ++++++++++++++
 .button.button--primary {
-    background-color: $color-success;
+    background-color: $purple;
     color: white;
     font-weight: bold;
 
     &:hover {
-        background-color: darken($color-success, 10);
+        background-color: darken($purple, 10);
     }
 
     &:active {
-        background-color: darken($color-success, 20);
+        background-color: darken($purple, 20);
     }
 }
 
@@ -73,16 +73,16 @@
 
     .button {
         border-radius: 0;
-        font-size: $button-font-size;
+        font-size: 13px;
     }
 
     .button:first-child {
-        border-radius: $button-border-radius 0 0 $button-border-radius;
+        border-radius: 5px 0 0 5px;
         border-right: 0;
     }
 
     .button:last-child {
-        border-radius: 0 $button-border-radius $button-border-radius 0;
+        border-radius: 0 5px 5px 0;
         border-left: 0;
     }
 }
@@ -94,7 +94,7 @@
     @include no-selection;
     position: relative;
     display: inline-block;
-    line-height: $icon-height;
+    line-height: 32px;
     font-size: 14px;
     vertical-align: middle;
     text-align: center;
@@ -152,19 +152,18 @@
     @extend %button;
 
     position: relative;
-    margin: 5px 0;
-    line-height: $arrowbutton-height;
-    height: $arrowbutton-height;
+    margin: 5px 0 0 14px;
+    line-height: 36px;
+    height: 36px;
     @include box-sizing( border-box );
     padding: 0 10px 0 5px;
-    margin-left: 14px;
 
     background-color: rgba(129,133,139,0);
     @include background-linear-gradient(bottom, #afa8cf, #c7c2dd);
-    //@include box-shadow(0 1px rgba(255,255,255,.15), inset 0 2px rgba(255,255,253,.2));
+
     color: white;
     border: solid 1px #8d88a6;
-    border-radius: 0 $arrowbutton-radius $arrowbutton-radius 0;
+    border-radius: 0 4px 4px 0;
 
     font-size: 14px;
     text-decoration: none;
@@ -180,7 +179,7 @@
 // Arrow button to right
 // +++++++++++++++++++++
 .arrowbutton.arrowbutton--right {
-    border-radius: $arrowbutton-radius 0 0 $arrowbutton-radius;
+    border-radius: 4px 0 0 4px;
     margin-left: 0;
     margin-right: 14px;
     padding: 0 5px 0 10px;

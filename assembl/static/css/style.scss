@@ -4,6 +4,7 @@
 @import "base/mixins.scss";
 @import "base/variables.scss";
 @import "base/common.scss";
+@import "base/helpers.scss";
 
 @import "lib/annotator.scss";
 @import "lib/ckeditor.scss";
@@ -22,7 +23,7 @@
 @import "components/dot.scss";
 @import "components/form.scss";
 @import "components/grid.scss";
-//@import "components/icon.scss";
+@import "components/icon.scss";
 @import "components/ideafamily.scss";
 @import "components/idealist.scss";
 @import "components/image.scss";
@@ -42,7 +43,6 @@
 
 @import "layout/content.scss";
 @import "layout/ideaPanel.scss";
-@import "layout/lateralmenu.scss";
 @import "layout/messagelist.scss";
 @import "layout/panelarea.scss";
 @import "layout/styleguide.scss";

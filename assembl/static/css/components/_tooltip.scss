@@ -7,9 +7,9 @@
     padding: 5px;
     text-align: center;
 
-    background-color: $dragbox-background-color;
+    background-color: $yellow1;
     @include box-shadow(0 3px 3px rgba(0,0,0,.15));
-    border: solid 1px $dragbox-border-color;
+    border: solid 1px $yellow;
 
     font-size: 11px;
     color: #c7a25a;
@@ -26,7 +26,7 @@
 
     &:after {
         border-color: rgba(252, 248, 227, 0);
-        border-bottom-color: $dragbox-background-color;
+        border-bottom-color: $yellow1;
         border-width: 8px;
         left: 50%;
         margin-left: -8px;
@@ -34,7 +34,7 @@
 
     &:before {
         border-color: rgba(240, 195, 109, 0);
-        border-bottom-color: $dragbox-border-color;
+        border-bottom-color: $yellow;
         border-width: 9px;
         left: 50%;
         margin-left: -9px;
@@ -55,13 +55,13 @@
     &:after {
         top: 50%;
         margin-top: -8px;
-        border-left-color: $dragbox-border-color;
+        border-left-color: $yellow;
     }
 
     &:before {
         top: 50%;
         margin-top: -9px;
-        border-left-color: $dragbox-border-color;
+        border-left-color: $yellow;
     }
     
 }

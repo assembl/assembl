@@ -4,8 +4,7 @@ html, body {
 
 body {
   overflow-x: hidden;
-  //background-color: rgba(187, 180, 193, 0.4);
-  color: $text-color;
+  color: $gray2;
   font-weight: normal;
   font-style: normal;
   line-height: 1;
@@ -18,11 +17,6 @@ body {
     min-width: 980px;
 
     @include transform( translateX(0) );
-
-    // When the lateral menu is open
-    .is-lateralmenu-open & {
-        @include transform( translateX($lateralmenu-width) );
-    }
 }
 
 body.is-modal {

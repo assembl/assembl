@@ -62,10 +62,10 @@
   @include no-selection;
   * { @include no-selection; }
   @include z-index("float");
-  line-height: $panel-header-height;
-  height: $panel-header-height;
+  line-height: 30px;
+  height: 30px;
   padding: 0 5px;
-  border-bottom: solid 1px $panel-border-color;
+  border-bottom: solid 1px $gray;
   position: relative;
 
 }
@@ -115,7 +115,7 @@
 .panel-body {
     //The scrollbars do not work with position relative
     position: absolute;
-    top: $panel-header-height;
+    top: 30px;
     right: 0;
     bottom: 0;
     left: 0;
@@ -124,12 +124,12 @@
     box-sizing: border-box;
 
     .panel.is-dragover & {
-        background-color: $dragbox-background-color;
+        background-color: $yellow1;
     }
 }
 
 .panel-body--has-footer {
-  //bottom: $panel-header-height;
+  //bottom: 30px;
 }
 
 // dropzone above the panel-body
@@ -140,7 +140,7 @@
     @include z-index("float");
 
     position: absolute;
-    top: $panel-header-height;
+    top: 30px;
     right: 0;
     left: 0;
     height: 10px;
@@ -154,7 +154,7 @@
     @include z-index("float");
 
     position: absolute;
-    bottom: $panel-header-height;
+    bottom: 30px;
     right: 0;
     left: 0;
     height: 15px;
@@ -169,6 +169,6 @@
     bottom: 0;
     left: 0;
     border-top: 1px solid #e4e4e3;
-    padding-right: $padding-right;
-    background-color: #FFFFFF;
+    padding-right: 10px;
+    background-color: $white;
 }

@@ -13,7 +13,7 @@
 
     &:after {
         display: inline-block;
-        font-family: $font-icon;
+        font-family: $baseFontFamily;
         content: '\e810';
         margin-left: 5px;
     }

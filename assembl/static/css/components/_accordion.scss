@@ -19,34 +19,23 @@
 .accordion-header {
     position: relative;
     background-color: #585858;
-    //@include box-shadow(inset 0 2px rgba(255,255,255,.15));
-    //border: solid 1px #2d2d2d;
-    //@include background-linear-gradient(top, #717171, #585858);
     height: 45px;
     line-height: 45px;
-
     color: #fff;
     cursor: pointer;
     @include transform( translateZ(0) );
 
     .accordion-area.is-open & {
         background-color: #738bb5;
-        //@include background-linear-gradient(bottom, #5c6f91, #738bb5);
-
         font-weight: bold;
-    }
-
-    .accordion--lateralmenu & {
-        padding-left: $lateralmenu-padding-left;
-        padding-right: $lateralmenu-padding-right;
     }
 }
 
 // The label for the accordion-header
 .accordion-label {
     display: inline-block;
-    padding-left: $icon-width + $padding-left;
-    line-height: $icon-height;
+    padding-left: 42px;
+    line-height: 32px;
 }
 
 // The body/content of an accordion-area
@@ -55,9 +44,6 @@
     background-color: #313131;
     overflow: hidden;
     height: 0;
-
-    //@include transition(max-height 0.8s ease);
-
     .accordion-area.is-open & {
         //max-height: 600px;
     }

@@ -1,13 +1,13 @@
 // The list of Ideas
 // =================
 .idealist {
-    background-color: $idealist-background-color;
+    background-color: 40px;
 }
 
 // A row within the list of ideas
 // -----------------
 .idealist-item {
-    line-height: $idealist-item-height;
+    line-height: 40px;
     &.hidden {
         display: none;
     }
@@ -51,16 +51,16 @@
     .idealist-item.is-dragover-below > & {
         border-color: transparent !important;
 
-        .idealist-abovedropzone { border-top: solid 1px $dragbox-border-color !important; }
-        .idealist-dropzone { border-color: $dragbox-border-color !important; }
+        .idealist-abovedropzone { border-top: solid 1px $yellow !important; }
+        .idealist-dropzone { border-color: $yellow !important; }
     }
 
     .idealist-item.is-dragover:not(.is-dragover-below) > & {
-        background-color: $dragbox-background-color;
+        background-color: $yellow1;
     }
 
     .idealist-item.is-selected > & {
-        background-color: $idealist-selected-bg-color;
+        background-color: $blue;
     }
 
 }
@@ -89,10 +89,10 @@
     right: 0;
     left: 0;
 
-    height: $padding-top;    
+    height: 10px;
 
     .idealist-item.is-dragover-above > .idealist-body & {
-        background-color: $dragbox-background-color;
+        background-color: $yellow1;
     }
 
 }
@@ -107,11 +107,11 @@
     bottom: -1px;
     left: 0;
 
-    height: $padding-bottom;
+    height: 10px;
     //border-bottom: $idealist-border;
 
     .idealist-item.is-dragover-below > .idealist-body & {
-        background-color: $dragbox-background-color;
+        background-color: $yellow1;
     }
 
 }
@@ -120,8 +120,8 @@
 // ----------------
 .idealist-subtitle {
     float: right;
-    color: $text-muted-color;
-    margin: 0 $margin;
+    color: $gray1;
+    margin: 0 10px;
 }
 
 // The title
@@ -132,7 +132,7 @@
     text-overflow: ellipsis;
     overflow: hidden;
     cursor: pointer;
-    padding-left: $padding-left;
+    padding-left: 10px;
 }
 
 .idealist-title-unread {
@@ -148,12 +148,11 @@
 .idealist-counter {
     float: right;
     padding: 0 12px 0 25px;
-    min-width: $idealist-counter-minwidth;
-
+    min-width: 30px;
     text-align: right;
     font-size: 14px;
     font-weight: bold;
-    color: $idealist-counter-color;
+    color: $gray;
     .idea-unread-posts {
         color:#555;
     }
@@ -175,8 +174,8 @@
         background: url(#{$img-dir}/idealist/idealist-arrow-closed-l1.png) center center no-repeat;
     }
 
-    width: $idealist-arrow-width;
-    height: $idealist-item-height;
+    width: 30px;
+    height: 40px;
     display: block;
     float: left;
     cursor: pointer;
@@ -200,8 +199,8 @@
 // Reserves the space if there are no children to maintain indentation
 .idealist-noarrow {
     background: url(#{$img-dir}/idealist/idealist-noarrow.png) center center no-repeat;
-    width: $idealist-arrow-width;
-    height: $idealist-item-height;
+    width: 30px;
+    height: 40px;
     display: block;
     float: left;
 }
@@ -210,8 +209,8 @@
 // --------------
 .idealist-space {
     display: block;
-    width: $idealist-arrow-width;
-    height: $idealist-item-height;
+    width: 30px;
+    height: 40px;
     float: left;
 }
 
@@ -220,8 +219,8 @@
 .idealist-bar {
     background: url(#{$img-dir}/idealist/idealist-bar.png) center center no-repeat;
     display: block;
-    width: $idealist-arrow-width;
-    height: $idealist-item-height;
+    width: 30px;
+    height: 40px;
     float: left;
 }
 
@@ -231,16 +230,16 @@
 .idealist-link {
     background: url(#{$img-dir}/idealist/idealist-link.png) center center no-repeat;
     display: block;
-    width: $idealist-arrow-width;
-    height: $idealist-item-height;
+    width: 30px;
+    height: 40px;
     float: left;
 }
 
 .idealist-link-last {
     background: url(#{$img-dir}/idealist/idealist-link-last.png) center center no-repeat;
     display: block;
-    width: $idealist-arrow-width;
-    height: $idealist-item-height;
+    width: 30px;
+    height: 40px;
     float: left;
 }
 

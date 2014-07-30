@@ -4,9 +4,8 @@
     position: relative;
     display: inline-block;
     padding: 2px 4px;
-    line-height: $dropdown-height;
+    line-height: 20px;
     overflow: visible;
-
     cursor: pointer;
     border: solid 1px transparent;
 }
@@ -25,7 +24,7 @@
         display: inline-block;
         @include opacity( 0.2 );
 
-        font-family: $font-icon;
+        font-family: $baseFontFamily;
         content: '\e808';
         margin-left: 5px;
     }
@@ -41,7 +40,7 @@
         padding: { right: 8px; left: 4px; }
 
         &:after {
-            font-family: $font-icon;
+            font-family: $baseFontFamily;
             content: '\e812';
             margin-left: 5px;
         }
@@ -52,8 +51,8 @@
 .dropdown-label.dropdown-label--arrow {
     @include box-sizing( border-box );
     background: url(#{$img-dir}/idealist/idealist-arrow.png) center center no-repeat;
-    width: $idealist-arrow-width;
-    height: $idealist-arrow-width;
+    width: 30px;
+    height: 30px;
     border-radius: 5px;
     border: solid 1px #ddd;
     opacity: 0.55;

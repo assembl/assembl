@@ -1,7 +1,7 @@
 // The commun output for a text
 // ======================
 .text {
-    color: $text-color;
+    color: $gray2;
     font-size: 13px;
 
     ol, ul {
@@ -19,7 +19,7 @@
 
 // A muted text
 // --------------
-.text-muted { color: $text-muted-color; }
+.text-muted { color: $gray1; }
 
 // Smaller text
 // ----------------
@@ -47,7 +47,7 @@
 
 // Dark text color
 // ---------------
-.text-dark { color: $text-dark-color; }
+.text-dark { color: $black; }
 
 // Opaque text
 // -----------

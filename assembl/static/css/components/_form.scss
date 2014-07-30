@@ -50,10 +50,10 @@ $text-muted: #999;
   @include border-radius(3px);
   min-width: 220px;
   height: 35px;
-  padding: 0 $padding;
+  padding: 0 10px;
 
   font-size: 14px;
-  color: $text-color;
+  color: $gray2;
 
   border: 1px solid #cccccc;
 

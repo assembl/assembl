@@ -5,11 +5,11 @@
     color: #484848;
     text-decoration: none;
     &:hover {
-        color: $link-hover-color;
+        color: $gray3;
     }
 
     &:active {
-        color: $link-active-color;
+        color: $gray1;
     }
 }
 

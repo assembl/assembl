@@ -1,122 +1,44 @@
-// Arrow Button
-$arrowbutton-height: 36px;
-$arrowbutton-width: 156px;
-$arrowbutton-radius: 4px;
-
-// Badge
-$badge-width: 16px;
-$badge-height: 16px;
-
-// Bar
-$bar-height: 55px;
-$bar-padding: 0px 5px;
-$bar-border-size: 1px;
-$bar-simple-height: 29px;
-$bar-background-color: #fff;
-$bar-border-color: #e4e4e3;
-$bar-title-background-color: #c7c2dd;
-
-// Box
-$box-background-color: #fff;
-$box-border-color: #e4e4e3;
-$box-padding: 20px;
-$hry-line-color: #bbb;
-
-// Colors
-//$color-success: #7C70AC;
-$color-success: #aea8c7;
-$color-highlighting: yellow;
-
-// Closebutton
-$closebutton-color: #e4e4e3;
-
-// Checkbox
-$checkbox-width: 20px;
-$checkbox-height: 20px;
-
-// Icons
-$icon-width: 32px;
-$icon-height: 32px;
-
-// Dragbox + tipsy
-$dragbox-background-color: #fcf8e3;
-$dragbox-border-color: #f0c36d;
-
-// Dropdown
-$dropdown-height: 20px;
-
-// Experimental
-$experimental-support-for-microsoft: true;
-
-// idea list
-$idealist-background-color: #fff;
-$idealist-border-color: #e4e4e3;
-$idealist-border: solid 1px $idealist-border-color;
-
-$idealist-selected-bg-color: #dbf2ff;
-
-$idealist-item-height: 40px;
-$idealist-arrow-width: 30px;
-$idealist-arrow-height: 40px;
-$idealist-arrow-image-width: 10px;
-$idealist-link-image-width: 12px;
-
-$idealist-counter-minwidth: 30px;
-$idealist-counter-color: #c8c9cc;
-
-// message list
-$messagelist-item-height: 43px;
-$messagelist-arrow-width: 12px;
-
-// Font
-$font-dir: "/static/font";
-$font-size: 12px;
-$font-icon: "fontello";
+/*** New design variable ***/
 
 // Image dir
 $img-dir: "/static/img";
 
-// Layout
-$lateralmenu-width: 453px;
-$lateralmenu-padding-left: 50px;
-$lateralmenu-padding-right: 30px;
+// Fonts
+$fonts-dir: "/static/css/fonts";
 
-// Legacy
-$legacy-support-for-ie9: true;
+// Spacing
+$spacingXs:         5px;
+$spacingS:          10px;
+$spacingM:          15px;
+$spacingL:          20px;
+$spacingXl:         30px;
 
-// Margin
-$margin: 10px;
-$margin-top: 10px;
-$margin-right: 10px;
-$margin-bottom: 10px;
-$margin-left: 10px;
+// Colors
+$purple:            #B879E2;
+$white:             #FFFFFF;
+$gray:              #7F8C8D;
+$orange:            #f0c36d;
+$black:             #000000;
+$yellow:            #F0C36D;
+$blue:              #dbf2ff;
 
-// Padding
-$padding: 10px;
-$padding-top: 10px;
-$padding-right: 10px;
-$padding-bottom: 10px;
-$padding-left: 10px;
+// Extended palette
 
-// Panel
-$panel-border-color: $box-border-color;
-$panel-header-height: 30px;
-$panel-header-bg-color: #f7f7f7;
+$gray1:             #888888;
+$gray2:             #515151;
+$gray3:             #ECF0F1;
+$purple1:           #6C0AAB;
+$yellow1:           #fcf8e3;
 
-// Text
-$text-color: #444; //#a4a3a1;
-$text-strong-color: #000;
-$text-selection-color: #dbf2ff;
-$text-muted-color: #c5c5c5;
-$text-dark-color: #2c2c2c;
+// Border Radius
+$borderRadiusXs: 2px;
+$borderRadiusS: 3px;
+$borderRadiusMS: 5px;
+$borderRadiusM: 6px;
+$borderRadiusL: 10px;
 
-// Link
-$link-color: $text-muted-color;
-$link-hover-color: darken($text-muted-color, 10);
-$link-active-color: darken($text-muted-color, 20);
-
-// Button
-$button-border-radius: 5px;
-$button-font-size: 13px;
-$button-height: 25px;
-$button-condensed-height: 26px;
+// Typography
+$baseFontSize:      12px;
+$smallFontSize:     $baseFontSize - 1;
+$baseFontFamily:    "Helvetica Neue", Helvetica, sans-serif !default;
+$baseLineHeight:    1.4em;

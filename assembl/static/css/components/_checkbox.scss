@@ -17,8 +17,8 @@
 // Designed to fit tin the .idealist-item
 // ++++++++++++++++
 .chk.chk--idealist {
-    height: $idealist-item-height;
-    line-height: $idealist-item-height;
+    height: 40px;
+    line-height: 40px;
     float: left;
     margin-left: 5px;
 
@@ -58,11 +58,11 @@
 
     .chk-checkbox:checked ~ & {
         @extend .icon-ok-squared;
-        color: $color-success;
+        color: $purple;
     }
 
     .chk--muted .chk-checkbox:checked ~ & {
-        color: $text-muted-color;
+        color: $gray1;
     }
 
     .chk--dropdown & {
