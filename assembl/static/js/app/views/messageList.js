@@ -975,12 +975,12 @@ define(function(require){
          * Inits the annotator instance
          */
         initAnnotator: function(){
+            var that = this;
+
             this.destroyAnnotator();
             //console.log("initAnnotator called");
             // Saving the annotator reference
             this.annotator = this.$('#messageList-list').annotator().data('annotator');
-
-            var that = this;
 
             // TODO: Re-render message in messagelist if an annotation was added...
             this.annotator.subscribe('annotationCreated', function(annotation){

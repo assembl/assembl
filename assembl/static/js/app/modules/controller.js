@@ -49,7 +49,7 @@ define(function(require){
                Assembl.notificationRegion.show(new Notification());
             }
             /**
-             * Render the current group of view
+             * Render the current group of views
              * */
             groupManager.getGroupItem();
         },

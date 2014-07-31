@@ -111,7 +111,7 @@ define(function(require){
             var left = $(document).outerWidth() - $(window).width();
             //$('body, html').scrollLeft(left);
 
-            $('body, html').animate({ scrollLeft: left}, 1000);
+            $('body, html').animate({ scrollLeft: -left}, 1000);
         },
 
         /**
@@ -121,7 +121,8 @@ define(function(require){
             var data = [],
                 collection = [],
                 groups = {},
-                store = window.localStorage;
+                store = window.localStorage,
+                that = this;
 
             //FIXME: viewId need to be uniq to delete the right storage group
 
@@ -150,9 +151,14 @@ define(function(require){
                 store.setItem('groupItems', JSON.stringify(groupOfItems));
             }
 
-            //this.getGroupItem();
+            setTimeout(function(){
 
-            //this.scrollToRight();
+                that.getGroupItem();
+
+                that.scrollToRight();
+
+            }, 2000);
+
         },
 
         getStorageGroupItem: function(){
@@ -259,7 +265,6 @@ define(function(require){
                      * Need this compositeView id
                      * to identify which localStorage to delete
                      * */
-                    this.viewId = this.cid;
                 },
                 events:{
                   'click .add-group':'addGroup',
@@ -341,7 +346,87 @@ define(function(require){
 
             });
 
+            /* Need to be improve
+            var GroupLayout = Marionette.LayoutView.extend({
+                template:'#tmpl-group-items',
+
+                regions:{
+                    ideaListRegion:'.ideaList',
+                    ideaRegion:'.ideaPanel',
+                    clipboardRegion:'.segmentList',
+                    messageRegion:'.messageList',
+                    synthesisRegion:'.synthesisPanel'
+                },
+                initialize: function(){
+
+                    this.views = this.collection.toJSON();
+                },
+                appendHtml: function(collectionView, buffer) {
+
+                    console.log(collectionView, buffer)
+
+                    collectionView.$el.append(buffer);
+                },
+                onRender: function(){
+                    var self = this;
+                    this.$el.addClass('wrapper-group');
+
+                    this.views.forEach(function(item){
+
+                        switch(item.type){
+                            case 'idea-list':
+                                console.log('idea-list');
+                                var ideaList =  new IdeaList({
+                                    el: self.$el
+                                });
+                                self.ideaListRegion.show(ideaList);
+                                //this.$el.append(ideaList.render().el);
+                                break;
+                            case 'idea-panel':
+                                //console.log('idea-panel');
+                                var ideaPanel = new IdeaPanel({
+                                    el: self.$el
+                                });
+                                self.ideaRegion.show(ideaPanel);
+                                //this.$el.append(ideaPanel.render().el);
+                                break;
+                            case 'message':
+                                //console.log('message');
+                                var messageList = new MessageList({
+                                    el: self.$el,
+                                    groupManager: that.groupManager
+                                });
+                                self.clipboardRegion.show(messageList);
+                                //this.$el.append(messageList.render().el);
+                                break;
+                            case 'clipboard':
+                                //console.log('clipboard');
+                                var segmentList = new SegmentList({
+                                    el: self.$el
+                                });
+                                self.messageRegion.show(segmentList);
+                                //this.$el.append(segmentList.render().el);
+                                break;
+                            case 'synthesis':
+                                //console.log('synthesis');
+                                var synthesisPanel = new SynthesisPanel({
+                                    el: self.$el
+                                });
+                                self.synthesisRegion.show(synthesisPanel);
+                                //this.$el.append(synthesisPanel.render().el);
+                                break;
+                        }
+
+                    });
+                }
+            }); */
+
             var groups = new Items(collection.group);
+
+            // test
+            /*return new GroupLayout({
+                collection: groups
+            });*/
 
             return new Grid({
                 collection: groups
@@ -351,13 +436,12 @@ define(function(require){
         getGroupItem: function(){
             var items = this.getStorageGroupItem(),
                  that = this;
-
-              items.forEach(function(item){
-                  var group = that.createViewGroupItem(item).render().el;
-
-                $('#panelarea').append(group);
-              });
-
+            // insure that the dom is empty before filling
+            //$('#panelarea').empty();
+            items.forEach(function(item){
+               var group = that.createViewGroupItem(item).render().el;
+               $('#panelarea').append(group);
+            });
         }
 
     });
