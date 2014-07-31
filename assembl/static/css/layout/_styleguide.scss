@@ -27,8 +27,12 @@
 
 // styleguide components
 
-.button-content,.icons-content {
+.button-content,
+.icons-content,
+.colors-content,
+.helpers-content{
   padding: 30px;
+  clear: both;
 }
 
 .icons-content{
@@ -44,5 +48,12 @@
     [class^="icon-"], [class*=" icon-"]{
       font-size: 3.3em;
     }
+  }
+}
+
+.colors-content{
+  .bx-color{
+    width: 40px;
+    height: 40px;
   }
 }

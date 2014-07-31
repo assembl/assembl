@@ -74,7 +74,7 @@
          }
          &:hover{
            @include border-radius(3px);
-           border: 1px solid #eeeeee;
+           border: 1px solid $gray;
          }
          &:hover .icon-checkbox {
            visibility: visible;
@@ -94,13 +94,13 @@
        }
       .is-selected {
         @include border-radius(3px);
-        background-color: #9A3FD5;
+        background-color: $purple;
         border: 1px solid transparent;
         .icon-checkbox {
           visibility: visible;
         }
         i, span{
-          color: #ffffff;
+          color: $white;
         }
       }
     }

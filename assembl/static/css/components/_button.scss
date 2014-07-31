@@ -251,7 +251,7 @@
 /************************/
 
 .btn-cancel {
-  color:#7F8C8D;
+  color:$gray;
   background-color: transparent;
 }
 .btn-cancel:hover {
@@ -267,7 +267,7 @@
 }
 /**********************/
 .btn-default {
-  color:#B879E2;
+  color:$purple;
   background-color: transparent;
 }
 .btn-default:hover{
@@ -283,8 +283,8 @@
 }
  /*********************/
 .btn-primary {
-  color: #ffffff;
-  background-color: #B879E2;
+  color: $white;
+  background-color: $purple;
 }
 .btn-primary:hover{
   opacity: 0.8;
@@ -299,13 +299,13 @@
 }
 /*********************/
 .btn-secondary {
-  color: #B879E2;
-  background-color: #FFFFFF;
-  border: 1px solid #B879E2;
+  color: $purple;
+  background-color: $white;
+  border: 1px solid $purple;
 }
 .btn-secondary:hover{
-  color: #ffffff;
-  background-color: #B879E2;
+  color: $white;
+  background-color: $purple;
 }
 .btn-secondary:focus{
   outline: 0;
@@ -313,8 +313,8 @@
 .btn-secondary:active,
 .btn-secondary.active {
   opacity: 0.8;
-  background-color: #B879E2;
-  color: #fff;
+  background-color: $purple;
+  color: $white;
   outline: 0;
 }
 
