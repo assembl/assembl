@@ -6,7 +6,7 @@ define(['marionette'], function (Marionette) {
         App.addRegions({
             headerRegions:'#header',
             notificationRegion:'#notification',
-            panelGroupControl:'#panelarea'
+            groupControl:'#panelarea'
         })
     });
 

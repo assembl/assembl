@@ -1,7 +1,8 @@
 define(function(require){
     'use strict';
 
-    var SegmentList = require('views/segmentList'),
+        var Assembl = require('modules/assembl'),
+        SegmentList = require('views/segmentList'),
            IdeaList = require('views/ideaList'),
           IdeaPanel = require('views/ideaPanel'),
         MessageList = require('views/messageList'),
@@ -106,19 +107,28 @@ define(function(require){
             this.$('.panel').removeClass('is-loading');
         },
 
+        scrollToRight: function(){
+            var left = $(document).outerWidth() - $(window).width();
+            //$('body, html').scrollLeft(left);
+
+            $('body, html').animate({ scrollLeft: left}, 1000);
+        },
+
         /**
          * Create a group of panels and store in localStorage
          * */
-        createGroupItem: function(items, viewId){
+        createGroupItem: function(items){
             var data = [],
-                 collection = [],
-                 groups = {};
+                collection = [],
+                groups = {},
+                store = window.localStorage;
+
+            //FIXME: viewId need to be uniq to delete the right storage group
 
             if(items.length){
                 items.forEach(function(item){
                    var i = {};
                      i.type = item;
-                     i.viewId = viewId;
 
                    data.push(i);
                 });
@@ -126,32 +136,32 @@ define(function(require){
 
             groups.group = data;
 
-            if(window.localStorage.getItem('groupItems')){
+            if(!store.getItem('groupItems')){
 
-               var groupOfItems = JSON.parse(window.localStorage.getItem('groupItems'));
-               groupOfItems.push(groups);
-
-               window.localStorage.removeItem('groupItems');
-               window.localStorage.setItem('groupItems', JSON.stringify(groupOfItems));
+                collection.push(groups);
+                store.setItem('groupItems', JSON.stringify(collection));
 
             } else {
 
-               collection.push(groups);
-               window.localStorage.setItem('groupItems', JSON.stringify(collection));
+                var groupOfItems = JSON.parse(store.getItem('groupItems'));
+                groupOfItems.push(groups);
+
+                store.removeItem('groupItems');
+                store.setItem('groupItems', JSON.stringify(groupOfItems));
             }
+
+            //this.getGroupItem();
+
+            //this.scrollToRight();
         },
 
         getStorageGroupItem: function(){
-           var data;
+           var data = null,
+               store = window.localStorage;
 
-           if(window.localStorage.getItem('groupItems')){
-               data = JSON.parse(window.localStorage.getItem('groupItems'));
+           if(!store.getItem('groupItems')){
 
-               console.log('getStorageGroupItem', data);
-
-           } else {
-
-               data = [
+               var defaults = [
                    {
                        group:[
                            {type:'idea-list'},
@@ -159,7 +169,16 @@ define(function(require){
                            {type:'message'}
                        ]
                    }
-               ]
+               ];
+
+               //Set default group
+               store.setItem('groupItems', JSON.stringify(defaults));
+
+               data = JSON.parse(store.getItem('groupItems'));
+
+           } else {
+
+              data = JSON.parse(store.getItem('groupItems'));
            }
 
            return data;
@@ -176,8 +195,6 @@ define(function(require){
                     model: Item
                 });
 
-            var groups = new Items(collection.group);
-
             var GridItem = Marionette.ItemView.extend({
                 template: "#tmpl-item-template",
                 initialize: function(options){
@@ -191,21 +208,21 @@ define(function(require){
 
                     switch(this.views.type){
                         case 'idea-list':
-                            console.log('idea-list');
+                            //console.log('idea-list');
                             var ideaList =  new IdeaList({
                                 el: this.$el
                             });
                             this.$el.append(ideaList.render().el);
                             break;
                         case 'idea-panel':
-                            console.log('idea-panel');
+                            //console.log('idea-panel');
                             var ideaPanel = new IdeaPanel({
                                 el: this.$el
                             });
                             this.$el.append(ideaPanel.render().el);
                             break;
                         case 'message':
-                            console.log('message');
+                            //console.log('message');
                             var messageList = new MessageList({
                                 el: this.$el,
                                 groupManager: this.groupManager
@@ -213,14 +230,14 @@ define(function(require){
                             this.$el.append(messageList.render().el);
                             break;
                         case 'clipboard':
-                            console.log('clipboard');
+                            //console.log('clipboard');
                             var segmentList = new SegmentList({
                                 el: this.$el
                             });
                             this.$el.append(segmentList.render().el);
                             break;
                         case 'synthesis':
-                            console.log('synthesis');
+                            //console.log('synthesis');
                             var synthesisPanel = new SynthesisPanel({
                                 el: this.$el
                             });
@@ -254,6 +271,7 @@ define(function(require){
                 },
                 addGroup: function(){
                     var self = this;
+
                     var Modal = Backbone.Modal.extend({
                         template: _.template($('#tmpl-create-group').html()),
                         cancelEl:'.btn-cancel',
@@ -295,7 +313,10 @@ define(function(require){
                                items.push(item);
                            });
 
-                           that.createGroupItem(items, self.viewId);
+                           that.createGroupItem(items);
+
+                           this.$el.unbind();
+                           this.$el.remove();
                         }
 
                     });
@@ -314,12 +335,13 @@ define(function(require){
                 },
 
                 lockGroup: function(e){
-
                    that.stateButton = $(e.target).children('i');
                    that.toggleLock();
                 }
 
             });
+
+            var groups = new Items(collection.group);
 
             return new Grid({
                 collection: groups
@@ -331,11 +353,11 @@ define(function(require){
                  that = this;
 
               items.forEach(function(item){
+                  var group = that.createViewGroupItem(item).render().el;
 
-                var group = that.createViewGroupItem(item);
-
-                $('#panelarea').append(group.render().el);
+                $('#panelarea').append(group);
               });
+
         }
 
     });
