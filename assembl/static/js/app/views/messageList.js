@@ -98,7 +98,7 @@ define(function(require){
             this.setViewStyle(this.getViewStyleDefById(this.storedMessageListConfig.viewStyleId) || this.ViewStyles.THREADED);
             this.defaultMessageStyle = Ctx.getMessageViewStyleDefById(this.storedMessageListConfig.messageStyleId) || Ctx.AVAILABLE_MESSAGE_VIEW_STYLES.PREVIEW;
 
-            this.groupManager = options.groupManager;
+            this.panelGroup = options.panelGroup;
             /**
              * @ghourlier
              * TODO: Usually it would necessary to push notification rather than fetch every time the model change
@@ -137,7 +137,7 @@ define(function(require){
                     return;
 
                 } else {
-                    that.groupManager.filterThroughPanelLock.apply(that.groupManager, [
+                    that.panelGroup.filterThroughPanelLock.apply(that.panelGroup, [
                         function(){
                             that.syncWithCurrentIdea();
                         }, 'syncWithCurrentIdea'
@@ -150,7 +150,7 @@ define(function(require){
             });
 
             Assembl.vent.on('messageList:addFilterIsRelatedToIdea', function(idea, only_unread){
-                that.groupManager.filterThroughPanelLock.apply(that.groupManager, [
+                that.panelGroup.filterThroughPanelLock.apply(that.panelGroup, [
                     function(){
                         that.addFilterIsRelatedToIdea(idea, only_unread)
                     }, 'syncWithCurrentIdea'
@@ -158,7 +158,7 @@ define(function(require){
             });
 
             Assembl.vent.on('messageList:addFilterIsOrphanMessage', function(){
-                that.groupManager.filterThroughPanelLock.apply(that.groupManager, [
+                that.panelGroup.filterThroughPanelLock.apply(that.panelGroup, [
                     function(){
                         that.addFilterIsOrphanMessage();
                     }, 'syncWithCurrentIdea'
@@ -166,7 +166,7 @@ define(function(require){
             });
 
             Assembl.vent.on('messageList:addFilterIsSynthesisMessage', function(){
-                that.groupManager.filterThroughPanelLock.apply(that.groupManager, [
+                that.panelGroup.filterThroughPanelLock.apply(that.panelGroup, [
                     function(){
                         that.addFilterIsSynthesMessage();
                     }, 'syncWithCurrentIdea'
@@ -174,7 +174,7 @@ define(function(require){
             });
 
             Assembl.vent.on('messageList:showAllMessages', function(){
-                that.groupManager.filterThroughPanelLock.apply(that.groupManager, [
+                that.panelGroup.filterThroughPanelLock.apply(that.panelGroup, [
                     function(){
                         that.showAllMessages();
                     }, 'syncWithCurrentIdea'
@@ -182,7 +182,7 @@ define(function(require){
             });
 
             Assembl.vent.on('messageList:currentQuery', function(){
-                if(!that.groupManager.isGroupLocked()) {
+                if(!that.panelGroup.isGroupLocked()) {
                     that.currentQuery.clearAllFilters();
                 }
             });
@@ -329,6 +329,20 @@ define(function(require){
          */
         currentQuery: new PostQuery(),
 
+        /**
+         * Blocks the panel
+         */
+        blockPanel: function(){
+            this.$('.panel').addClass('is-loading');
+        },
+
+        /**
+         * Unblocks the panel
+         */
+        unblockPanel: function(){
+            this.$('.panel').removeClass('is-loading');
+        },
+        
         /**
          * Reset the offset values to initial values
          */
@@ -754,7 +768,7 @@ define(function(require){
 
             var successCallback = function(messageStructureCollection, resultMessageIdCollection){
                 that = that.render_real();
-                that.groupManager.unblockPanel.call(that);
+                that.unblockPanel();
             }
             
             /* This should be a listen to the returned collection */
@@ -777,8 +791,7 @@ define(function(require){
             // TODO:  Not clean, this is just so something is shown immediately.
             // Data not yet available should be handled in render_real - benoitg
             this.render_real();
-
-            that.groupManager.blockPanel.call(that);
+            this.blockPanel();
             
             $.when(collectionManager.getAllMessageStructureCollectionPromise(),
                     this.currentQuery.getResultMessageIdCollectionPromise()).done(
@@ -992,7 +1005,7 @@ define(function(require){
                     annotator.deleteAnnotation(annotation);
                 } else if( Ctx.currentAnnotationNewIdeaParentIdea ){
                     //We asked to create a new idea from segment
-                    that.lockPanel();
+                    that.panelGroup.lockGroup();
                     var newIdea = Ctx.currentAnnotationNewIdeaParentIdea.addSegmentAsChild(segment);
                     Ctx.setCurrentIdea(newIdea);
                 }

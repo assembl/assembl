@@ -19,12 +19,12 @@ define(function(require){
          * A locked panel will not react to external UI state changes, such as
          * selecting a new current idea.
          */
-        _panelIsLocked: false,
+        _groupIsLocked: false,
 
         _unlockCallbackQueue: {},
 
         isGroupLocked: function(){
-          return this._panelIsLocked;
+          return this._groupIsLocked;
         },
 
         /**
@@ -37,7 +37,7 @@ define(function(require){
          * and have the means of getting any updated information they need.
          */
         filterThroughPanelLock: function(callback, queueWithId){
-            if (!this._panelIsLocked){
+            if (!this._groupIsLocked){
                 callback();
 
             } else {
@@ -54,9 +54,10 @@ define(function(require){
         /**
          * lock the panel if unlocked
          */
-        lockPanel: function(){
-            if(!this._panelIsLocked){
-                this._panelIsLocked = true;
+        lockGroup: function(){
+            if(!this._groupIsLocked){
+                this._groupIsLocked = true;
+                console.log(this.stateButton);
                 this.stateButton.addClass('icon-lock').removeClass('icon-lock-open');
             }
         },
@@ -64,9 +65,9 @@ define(function(require){
         /**
          * unlock the panel if locked
          */
-        unlockPanel: function(){
-            if(this._panelIsLocked){
-                this._panelIsLocked = false;
+        unlockGroup: function(){
+            if(this._groupIsLocked){
+                this._groupIsLocked = false;
                 this.stateButton.addClass('icon-lock-open').removeClass('icon-lock');
 
                 if(_.size(this._unlockCallbackQueue) > 0) {
@@ -86,25 +87,11 @@ define(function(require){
          * Toggle the lock state of the panel
          */
         toggleLock: function(){
-            if(this._panelIsLocked){
-                this.unlockPanel();
+            if(this._groupIsLocked){
+                this.unlockGroup();
             } else {
-                this.lockPanel();
+                this.lockGroup();
             }
-        },
-
-        /**
-         * Blocks the panel
-         */
-        blockPanel: function(){
-            this.$('.panel').addClass('is-loading');
-        },
-
-        /**
-         * Unblocks the panel
-         */
-        unblockPanel: function(){
-            this.$('.panel').removeClass('is-loading');
         },
 
         scrollToRight: function(){
@@ -204,7 +191,7 @@ define(function(require){
                 template: "#tmpl-item-template",
                 initialize: function(options){
                     this.views = options.model.toJSON();
-                    this.groupManager = options.groupManager;
+                    this.panelGroup = options.panelGroup;
                 },
                 onRender: function(){
                     this.$el = this.$el.children();
@@ -230,7 +217,7 @@ define(function(require){
                             this.$el.addClass('segmentList');
                             var messageList = new MessageList({
                                 el: this.$el,
-                                groupManager: this.groupManager
+                                panelGroup: this.panelGroup
                             });
                             this.$el.append(messageList.render().el);
                             break;
@@ -257,7 +244,7 @@ define(function(require){
                 childView: GridItem,
                 childViewContainer: ".panelarea-table",
                 childViewOptions: {
-                   groupManager: that
+                   panelGroup: that
                 },
                 initialize: function(){
                     /**
@@ -268,10 +255,11 @@ define(function(require){
                 events:{
                   'click .add-group':'addGroup',
                   'click .close-group':'closeGroup',
-                  'click .lock-group':'lockGroup'
+                  'click .lock-group':'lockGroupCb'
                 },
                 onRenderTemplate: function(){
                    this.$el.addClass('wrapper-group');
+                   that.stateButton = this.$el.find('.lock-group').children('i');
                 },
                 addGroup: function(){
                     var self = this;
@@ -311,7 +299,7 @@ define(function(require){
                         },
                         createGroup: function(){
                            var items = [];
-
+ 
                            $('.itemGroup.is-selected').each(function(){
                                var item = $(this).children('a').attr('data-item');
                                items.push(item);
@@ -337,8 +325,7 @@ define(function(require){
                     this.remove();
                 },
 
-                lockGroup: function(e){
-                   that.stateButton = $(e.target).children('i');
+                lockGroupCb: function(e){
                    that.toggleLock();
                 }
 
