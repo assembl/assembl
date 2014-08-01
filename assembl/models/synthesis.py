@@ -9,7 +9,7 @@ from datetime import datetime
 
 import anyjson as json
 from sqlalchemy.orm import (
-    relationship, backref, aliased, contains_eager, deferred)
+    relationship, backref, aliased, contains_eager, deferred, joinedload)
 from sqlalchemy.sql import text
 from pyramid.security import Allow, ALL_PERMISSIONS
 from sqlalchemy import (
@@ -1100,7 +1100,8 @@ JOIN post AS family_posts ON (
                     if isinstance(inst, AbstractIdeaVote):
                         other_votes = cls.db.query(AbstractIdeaVote).filter_by(
                             voter_id=user_id, idea_id = inst.idea.id,
-                            criterion_id=parent_instance.id, is_tombstone=False).all()
+                            criterion_id=parent_instance.id, is_tombstone=False
+                            ).options(joinedload(AbstractIdeaVote.idea)).all()
                         for other_vote in other_votes:
                             if other_vote == inst:
                                 # probably never happens
