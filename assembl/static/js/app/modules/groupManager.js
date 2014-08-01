@@ -108,10 +108,9 @@ define(function(require){
         },
 
         scrollToRight: function(){
-            var left = $(document).outerWidth() - $(window).width();
-            //$('body, html').scrollLeft(left);
+            var left = $('#panelarea').width();
 
-            $('body, html').animate({ scrollLeft: -left}, 1000);
+            $('#panelarea').animate({ scrollLeft: left}, 1000);
         },
 
         /**
@@ -151,9 +150,9 @@ define(function(require){
                 store.setItem('groupItems', JSON.stringify(groupOfItems));
             }
 
-            setTimeout(function(){
+            that.getGroupItem();
 
-                that.getGroupItem();
+            setTimeout(function(){
 
                 that.scrollToRight();
 
@@ -214,21 +213,21 @@ define(function(require){
 
                     switch(this.views.type){
                         case 'idea-list':
-                            //console.log('idea-list');
+                            this.$el.addClass('ideaList');
                             var ideaList =  new IdeaList({
                                 el: this.$el
                             });
                             this.$el.append(ideaList.render().el);
                             break;
                         case 'idea-panel':
-                            //console.log('idea-panel');
+                            this.$el.addClass('ideaPanel');
                             var ideaPanel = new IdeaPanel({
                                 el: this.$el
                             });
                             this.$el.append(ideaPanel.render().el);
                             break;
                         case 'message':
-                            //console.log('message');
+                            this.$el.addClass('segmentList');
                             var messageList = new MessageList({
                                 el: this.$el,
                                 groupManager: this.groupManager
@@ -236,14 +235,14 @@ define(function(require){
                             this.$el.append(messageList.render().el);
                             break;
                         case 'clipboard':
-                            //console.log('clipboard');
+                            this.$el.addClass('messageList');
                             var segmentList = new SegmentList({
                                 el: this.$el
                             });
                             this.$el.append(segmentList.render().el);
                             break;
                         case 'synthesis':
-                            //console.log('synthesis');
+                            this.$el.addClass('synthesisPanel');
                             var synthesisPanel = new SynthesisPanel({
                                 el: this.$el
                             });
@@ -333,7 +332,6 @@ define(function(require){
 
                 closeGroup: function(){
 
-                    console.log('close group', this.cid);
                     //TODO: delete reference to localStorage
                     this.unbind();
                     this.remove();
@@ -346,87 +344,7 @@ define(function(require){
 
             });
 
-            /* Need to be improve
-            var GroupLayout = Marionette.LayoutView.extend({
-                template:'#tmpl-group-items',
-
-                regions:{
-                    ideaListRegion:'.ideaList',
-                    ideaRegion:'.ideaPanel',
-                    clipboardRegion:'.segmentList',
-                    messageRegion:'.messageList',
-                    synthesisRegion:'.synthesisPanel'
-                },
-                initialize: function(){
-
-                    this.views = this.collection.toJSON();
-                },
-                appendHtml: function(collectionView, buffer) {
-
-                    console.log(collectionView, buffer)
-
-                    collectionView.$el.append(buffer);
-                },
-                onRender: function(){
-                    var self = this;
-                    this.$el.addClass('wrapper-group');
-
-                    this.views.forEach(function(item){
-
-                        switch(item.type){
-                            case 'idea-list':
-                                console.log('idea-list');
-                                var ideaList =  new IdeaList({
-                                    el: self.$el
-                                });
-                                self.ideaListRegion.show(ideaList);
-                                //this.$el.append(ideaList.render().el);
-                                break;
-                            case 'idea-panel':
-                                //console.log('idea-panel');
-                                var ideaPanel = new IdeaPanel({
-                                    el: self.$el
-                                });
-                                self.ideaRegion.show(ideaPanel);
-                                //this.$el.append(ideaPanel.render().el);
-                                break;
-                            case 'message':
-                                //console.log('message');
-                                var messageList = new MessageList({
-                                    el: self.$el,
-                                    groupManager: that.groupManager
-                                });
-                                self.clipboardRegion.show(messageList);
-                                //this.$el.append(messageList.render().el);
-                                break;
-                            case 'clipboard':
-                                //console.log('clipboard');
-                                var segmentList = new SegmentList({
-                                    el: self.$el
-                                });
-                                self.messageRegion.show(segmentList);
-                                //this.$el.append(segmentList.render().el);
-                                break;
-                            case 'synthesis':
-                                //console.log('synthesis');
-                                var synthesisPanel = new SynthesisPanel({
-                                    el: self.$el
-                                });
-                                self.synthesisRegion.show(synthesisPanel);
-                                //this.$el.append(synthesisPanel.render().el);
-                                break;
-                        }
-
-                    });
-                }
-            }); */
-
             var groups = new Items(collection.group);
-
-            // test
-            /*return new GroupLayout({
-                collection: groups
-            });*/
 
             return new Grid({
                 collection: groups
