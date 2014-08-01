@@ -121,7 +121,7 @@ class ClassContext(object):
 
     def create_object(self, typename=None, json=None, user_id=None, **kwargs):
         cls = self.get_class(typename)
-        with cls.db.no_autoflush:
+        with self.parent_instance.db().no_autoflush:
             if json is None:
                 cols = sqlainspect(cls).c
                 if 'user_id' in cols:
