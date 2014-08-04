@@ -496,6 +496,6 @@ CollectionManager = require('modules/collectionManager'),
               });
         }
     });
-    IdeaPanel.prototype.registerPanelType('idea-panel', IdeaPanel);
+
     return IdeaPanel;
 });

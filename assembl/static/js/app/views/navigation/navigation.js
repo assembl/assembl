@@ -74,7 +74,6 @@ sidebarNotification = require('views/navigation/notification'),
         }
 
     });
-    navigation.prototype.registerPanelType('navigation', navigation);
 
     return navigation;
 });

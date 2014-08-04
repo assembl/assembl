@@ -1395,7 +1395,6 @@ define(function(require){
         }
 
     });
-    MessageList.prototype.registerPanelType('message', MessageList);
 
     return MessageList;
 });

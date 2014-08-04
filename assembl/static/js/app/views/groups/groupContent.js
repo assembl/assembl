@@ -2,13 +2,7 @@ define(function (require) {
 
     var Marionette = require('marionette'),
            Storage = require('objects/storage'),
-      AssemblPanel = require('views/assemblPanel'),
-         panelSpec = require('models/panelSpec'),
-         IdeaPanel = require('views/ideaPanel'),
-        navigation = require('views/navigation/navigation'),
-       messageList = require('views/messageList'),
-         homePanel = require('views/navigation/home'),
-         GroupItem = require('views/groups/groupItem');
+     panelRegistry = require('views/panelRegistry');
 
     var groupContent = Marionette.CompositeView.extend({
         template: "#tmpl-groupContent",
@@ -94,8 +88,9 @@ define(function (require) {
             //that.toggleLock();
         },
         getChildView: function(child) {
-          return AssemblPanel.prototype.createPanel(child);
-        }
+          return panelRegistry(child);
+          //return AssemblPanel.prototype.createPanel(child);
+        },
     });
 
     return groupContent;

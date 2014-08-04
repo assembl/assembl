@@ -7,7 +7,6 @@ define(function (require) {
         template:'#tmpl-home'
 
     });
-    HomePanel.prototype.registerPanelType('home-panel', HomePanel);
 
     return HomePanel;
 });
