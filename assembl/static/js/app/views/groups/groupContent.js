@@ -6,6 +6,7 @@ define(function (require) {
          panelSpec = require('models/panelSpec'),
          IdeaPanel = require('views/ideaPanel'),
         navigation = require('views/navigation/navigation'),
+       messageList = require('views/messageList'),
          GroupItem = require('views/groups/groupItem');
 
     var groupContent = Marionette.CompositeView.extend({

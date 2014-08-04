@@ -14,6 +14,7 @@ define(function(require){
                    Permissions = require('utils/permissions'),
                MessageSendView = require('views/messageSend'),
                    SegmentList = require('views/segmentList'),
+                  AssemblPanel = require('views/assemblPanel'),
              CollectionManager = require('modules/collectionManager');
 
     /**
@@ -34,7 +35,7 @@ define(function(require){
     /**
      * @class views.MessageList
      */
-    var MessageList = Backbone.View.extend({
+    var MessageList = AssemblPanel.extend({
         ViewStyles: {
           THREADED: {
             id: "threaded",
@@ -1394,6 +1395,7 @@ define(function(require){
         }
 
     });
+    MessageList.prototype.registerPanelType('message', MessageList);
 
     return MessageList;
 });
