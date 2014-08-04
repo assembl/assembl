@@ -3,8 +3,7 @@ define(function(require) {
      var Marionette = require('marionette'),
            IdeaList = require('views/ideaList'),
 sidebarNotification = require('views/navigation/notification'),
-            Context = require('views/navigation/context'),
-          Dashboard = require('views/navigation/dashboard'),
+            HomePanel = require('views/navigation/home'),
        AssemblPanel = require('views/assemblPanel'),
                   $ = require('jquery');
 
@@ -55,16 +54,10 @@ sidebarNotification = require('views/navigation/notification'),
         },
         loadView: function(view){
            switch(view){
-               case 'context':
-                   console.log('load context');
-                   var context = new Context();
-                   this.context.show(context);
-
-                   break;
-               case 'dashboard':
-                   console.log('load dashboard');
-                   var dashboard = new Dashboard();
-                   this.dashboard.show(dashboard);
+               case 'home-panel':
+                   console.log('load home panel');
+                   var homePanel = new HomePanel();
+                   this.context.show(homePanel);
                    break;
                case 'ideaTable':
                    console.log('load idea table');
