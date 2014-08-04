@@ -5,9 +5,10 @@ define(function(require) {
 sidebarNotification = require('views/navigation/notification'),
             Context = require('views/navigation/context'),
           Dashboard = require('views/navigation/dashboard'),
+       AssemblPanel = require('views/assemblPanel'),
                   $ = require('jquery');
 
-    var navigation = Marionette.LayoutView.extend({
+    var navigation = AssemblPanel.extend({
         template: "#tmpl-navigation",
         className: "navSidebar",
         regions: {
@@ -80,6 +81,7 @@ sidebarNotification = require('views/navigation/notification'),
         }
 
     });
+    navigation.prototype.registerPanelType('navigation', navigation);
 
     return navigation;
 });

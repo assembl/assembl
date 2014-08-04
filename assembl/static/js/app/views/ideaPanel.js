@@ -10,10 +10,9 @@ define(function(require){
      Permissions = require('utils/permissions'),
  MessageSendView = require('views/messageSend'),
     Notification = require('views/notification'),
-CollectionManager = require('modules/collectionManager');
-
-
-    var Marionette = require('marionette');
+CollectionManager = require('modules/collectionManager'),
+     AssemblPanel = require('views/assemblPanel'),
+       Marionette = require('marionette');
 
     //2014/08/03 ghourlier, never use ? delete it ?
     //var LONG_TITLE_ID = 'ideaPanel-longtitle';
@@ -21,7 +20,7 @@ CollectionManager = require('modules/collectionManager');
     /**
      * @class IdeaPanel
      */
-    var IdeaPanel = Marionette.LayoutView.extend({
+    var IdeaPanel = AssemblPanel.extend({
         template: '#tmpl-ideaPanel',
         className:'panel',
         regions: {
@@ -33,6 +32,7 @@ CollectionManager = require('modules/collectionManager');
             if(!this.model){
                this.model = null;
             }
+            this.model = null;
 
             Assembl.vent.on("idea:selected", function(idea){
                 that.setIdeaModel(idea);
@@ -496,6 +496,6 @@ CollectionManager = require('modules/collectionManager');
               });
         }
     });
-
+    IdeaPanel.prototype.registerPanelType('idea-panel', IdeaPanel);
     return IdeaPanel;
 });

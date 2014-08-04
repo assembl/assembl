@@ -2,19 +2,31 @@ define(function (require) {
 
     var Marionette = require('marionette'),
            Storage = require('objects/storage'),
+      AssemblPanel = require('views/assemblPanel'),
+         panelSpec = require('models/panelSpec'),
+         IdeaPanel = require('views/ideaPanel'),
+        navigation = require('views/navigation/navigation'),
          GroupItem = require('views/groups/groupItem');
 
     var groupContent = Marionette.CompositeView.extend({
         template: "#tmpl-groupContent",
         className: "groupItem",
-        childView: GroupItem,
+        //childView: GroupItem,
         childViewContainer: ".groupBody",
         /*childViewOptions: {
             groupManager: this
         },*/
         initialize: function(options){
-
-            this.collection = new Backbone.Collection(_.toArray(this.model.attributes.group));
+            this.collection = this.model;
+        },
+        collectionEvents: {
+            'change reset add': 'test'
+        },
+        modelEvents: {
+            'change reset add': 'test'
+        },
+        test: function(x) {
+            console.log("x");
         },
         events:{
             'click .add-group':'addGroup',
@@ -88,9 +100,10 @@ define(function (require) {
         lockGroup: function(e){
             //that.stateButton = $(e.target).children('i');
             //that.toggleLock();
-        }
-
-
+        },
+        getChildView: function(child) {
+          return AssemblPanel.prototype.createPanel(child);
+        },
     });
 
     return groupContent;
