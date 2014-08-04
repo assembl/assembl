@@ -8,6 +8,8 @@ var requirejs_config = {
     'models':'app/models',
     'utils': 'app/utils',
     'modules': 'app/modules',
+    'controllers':'app/controllers',
+    'objects':'app/objects',
 
     'jquery': "bower/jquery/jquery",
     'tipsy': 'bower/tipsy/src/javascripts/jquery.tipsy',

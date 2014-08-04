@@ -2,13 +2,10 @@ define(function(require){
     'use strict';
 
         var Assembl = require('modules/assembl'),
-        SegmentList = require('views/segmentList'),
-           IdeaList = require('views/ideaList'),
-          IdeaPanel = require('views/ideaPanel'),
-        MessageList = require('views/messageList'),
-     SynthesisPanel = require('views/synthesisPanel'),
                   $ = require('jquery'),
-                  _ = require('underscore');
+                  _ = require('underscore'),
+            Storage = require('objects/storage'),
+       GroupContent = require('views/groups/groupContent');
 
     var groupManager = Marionette.Controller.extend({
 
@@ -87,17 +84,25 @@ define(function(require){
          * Toggle the lock state of the panel
          */
         toggleLock: function(){
-            if(this._groupIsLocked){
-                this.unlockGroup();
+            if(this._panelIsLocked){
+                this.unlockPanel();
             } else {
-                this.lockGroup();
+                this.lockPanel();
             }
         },
 
-        scrollToRight: function(){
-            var left = $('#panelarea').width();
+        /**
+         * Blocks the panel
+         */
+        blockPanel: function(){
+            this.$('.panel').addClass('is-loading');
+        },
 
-            $('#panelarea').animate({ scrollLeft: left}, 1000);
+        /**
+         * Unblocks the panel
+         */
+        unblockPanel: function(){
+            this.$('.panel').removeClass('is-loading');
         },
 
         /**
@@ -182,170 +187,26 @@ define(function(require){
         createViewGroupItem: function(collection){
             var that = this;
 
-            var Item = Backbone.Model.extend(),
-                Items = Backbone.Collection.extend({
-                    model: Item
-                });
+            var groups = new Backbone.Collection(collection);
 
-            var GridItem = Marionette.ItemView.extend({
-                template: "#tmpl-item-template",
-                initialize: function(options){
-                    this.views = options.model.toJSON();
-                    this.panelGroup = options.panelGroup;
-                },
-                onRender: function(){
-                    this.$el = this.$el.children();
-                    this.$el.unwrap();
-                    this.setElement(this.$el);
-
-                    switch(this.views.type){
-                        case 'idea-list':
-                            this.$el.addClass('ideaList');
-                            var ideaList =  new IdeaList({
-                                el: this.$el
-                            });
-                            this.$el.append(ideaList.render().el);
-                            break;
-                        case 'idea-panel':
-                            this.$el.addClass('ideaPanel');
-                            var ideaPanel = new IdeaPanel({
-                                el: this.$el
-                            });
-                            this.$el.append(ideaPanel.render().el);
-                            break;
-                        case 'message':
-                            this.$el.addClass('segmentList');
-                            var messageList = new MessageList({
-                                el: this.$el,
-                                panelGroup: this.panelGroup
-                            });
-                            this.$el.append(messageList.render().el);
-                            break;
-                        case 'clipboard':
-                            this.$el.addClass('messageList');
-                            var segmentList = new SegmentList({
-                                el: this.$el
-                            });
-                            this.$el.append(segmentList.render().el);
-                            break;
-                        case 'synthesis':
-                            this.$el.addClass('synthesisPanel');
-                            var synthesisPanel = new SynthesisPanel({
-                                el: this.$el
-                            });
-                            this.$el.append(synthesisPanel.render().el);
-                            break;
-                    }
-                }
-            });
-
-            var Grid = Marionette.CompositeView.extend({
-                template: "#tmpl-grid-template",
-                childView: GridItem,
-                childViewContainer: ".panelarea-table",
-                childViewOptions: {
-                   panelGroup: that
-                },
-                initialize: function(){
-                    /**
-                     * Need this compositeView id
-                     * to identify which localStorage to delete
-                     * */
-                },
-                events:{
-                  'click .add-group':'addGroup',
-                  'click .close-group':'closeGroup',
-                  'click .lock-group':'lockGroupCb'
-                },
-                onRenderTemplate: function(){
-                   this.$el.addClass('wrapper-group');
-                   that.stateButton = this.$el.find('.lock-group').children('i');
-                },
-                addGroup: function(){
-                    var self = this;
-
-                    var Modal = Backbone.Modal.extend({
-                        template: _.template($('#tmpl-create-group').html()),
-                        cancelEl:'.btn-cancel',
-                        initialize: function(){
-                           this.$el.addClass('group-modal');
-                        },
-                        events:{
-                           'click .js_selectItemGroup':'selectItemGroup',
-                           'click .js_createGroup':'createGroup'
-                        },
-                        selectItemGroup: function(e){
-                            var elm  = $(e.target).parent();
-
-                            if(elm.hasClass('ideas')){
-                                if($('.itemGroup.synthesis').hasClass('is-selected')){
-                                   $('.itemGroup.synthesis').removeClass('is-selected');
-                                }
-                                elm.addClass('is-selected');
-
-                            } else if(elm.hasClass('synthesis')){
-                                if($('.itemGroup.ideas').hasClass('is-selected')){
-                                   $('.itemGroup.ideas').removeClass('is-selected')
-                                }
-                                elm.addClass('is-selected');
-
-                            } else {
-                                if(elm.hasClass('is-selected')){
-                                    elm.removeClass('is-selected');
-                                } else {
-                                    elm.addClass('is-selected');
-                                }
-                            }
-                        },
-                        createGroup: function(){
-                           var items = [];
- 
-                           $('.itemGroup.is-selected').each(function(){
-                               var item = $(this).children('a').attr('data-item');
-                               items.push(item);
-                           });
-
-                           that.createGroupItem(items);
-
-                           this.$el.unbind();
-                           this.$el.remove();
-                        }
-
-                    });
-
-                    var modalView = new Modal();
-
-                    $('.modal').html(modalView.render().el);
-                },
-
-                closeGroup: function(){
-
-                    //TODO: delete reference to localStorage
-                    this.unbind();
-                    this.remove();
-                },
-
-                lockGroupCb: function(e){
-                   that.toggleLock();
-                }
-
-            });
-
-            var groups = new Items(collection.group);
-
-            return new Grid({
+            return new GroupContent({
                 collection: groups
             });
         },
 
         getGroupItem: function(){
-            var items = this.getStorageGroupItem(),
+            var items = Storage.getStorageGroupItem(),
                  that = this;
             // insure that the dom is empty before filling
             //$('#panelarea').empty();
+
+            //console.log(items)
+
             items.forEach(function(item){
-               var group = that.createViewGroupItem(item).render().el;
-               $('#panelarea').append(group);
+               var group = that.createViewGroupItem(item);
+
+               Assembl.groupContainer.show(group);
+               //$('#groupContainer').append(group.render().el);
             });
         }
 

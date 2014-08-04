@@ -10,7 +10,7 @@ define(function(require){
       Notification = require('views/notification'),
  CollectionManager = require('modules/collectionManager');
 
-    var Controller = Marionette.Controller.extend({
+    var routeController = Marionette.Controller.extend({
 
         initialize: function(){
            window.assembl = {};
@@ -45,7 +45,7 @@ define(function(require){
             Assembl.headerRegions.show(new navBar());
 
             if(!window.localStorage.getItem('showNotification')){
-               $('#wrapper #panelarea').css('top', '76px');
+               $('#wrapper #groupContainer').css('top', '76px');
                Assembl.notificationRegion.show(new Notification());
             }
             /**
@@ -87,6 +87,6 @@ define(function(require){
 
     });
 
-    return new Controller();
+    return new routeController();
 
 });

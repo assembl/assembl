@@ -1,7 +1,7 @@
-<div class="panel ideaPanel">
+
     <header class="panel-header">
         <strong data-tooltip="{{gettext('Detailled information about the currently selected idea in the Table of ideas')}}">{{ gettext('Idea') }}</strong>
-        <div class="float-right">
+        <div class="fr">
             <% if( idea ) { %>
                 {# Commented out, creates infinite loops
                 <a href="#" id="session-modal">Create session</a>
@@ -12,7 +12,7 @@
         </div>
     </header>
 
-    <div class="panel-body">
+    <div class="">
         <% if( idea ) { %>
         <fieldset id="ideaPanel-section-summary" class="panel-section">
             <div id="ideaPanel-shorttitle" class="text-bold" data-tooltip="{{gettext('The name of this idea in the table of ideas')}}"></div>
@@ -67,5 +67,3 @@
             </div>
         <% } %>
     </div>
-
-</div>

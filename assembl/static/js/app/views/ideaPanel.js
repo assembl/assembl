@@ -12,35 +12,30 @@ define(function(require){
     Notification = require('views/notification'),
 CollectionManager = require('modules/collectionManager');
 
-    var LONG_TITLE_ID = 'ideaPanel-longtitle';
+
+    var Marionette = require('marionette');
+
+    //2014/08/03 ghourlier, never use ? delete it ?
+    //var LONG_TITLE_ID = 'ideaPanel-longtitle';
 
     /**
      * @class IdeaPanel
      */
-    var IdeaPanel = Backbone.View.extend({
+    var IdeaPanel = Marionette.LayoutView.extend({
+        template: '#tmpl-ideaPanel',
+        className:'panel',
+        regions: {
 
-        /**
-         * The tempate
-         * @type {_.template}
-         */
-        template: Ctx.loadTemplate('ideaPanel'),
-
-        /**
-         * @init
-         */
+        },
         initialize: function(options){
             var that = this;
 
-            if( this.model ){
-                this.listenTo(this.model, 'change', this.render);
-            }
-            else {
+            if(!this.model){
                this.model = null;
             }
 
             Assembl.vent.on("idea:selected", function(idea){
                 that.setIdeaModel(idea);
-
             });
 
             Assembl.vent.on('ideaPanel:showSegment', function(segment){
@@ -48,6 +43,25 @@ CollectionManager = require('modules/collectionManager');
             });
 
         },
+        modelEvents:{
+           'change':'render'
+        },
+        events: {
+            'dragstart .box': 'onDragStart',
+            'dragend .box': "onDragEnd",
+            'dragover .panel': 'onDragOver',
+            'dragleave .panel': 'onDragLeave',
+            'drop .panel': 'onDrop',
+
+            'click .closebutton': 'onSegmentCloseButtonClick',
+            'click #ideaPanel-clearbutton': 'onClearAllClick',
+            'click #ideaPanel-closebutton': 'onTopCloseButtonClick',
+            'click #ideaPanel-deleteButton': 'onDeleteButtonClick',
+
+            'click .segment-link': "onSegmentLinkClick",
+            'click #session-modal': "createWidgetSession"
+        },
+
         /**
          * This is not inside the template beacuse babel wouldn't extract it in 
          * the pot file
@@ -75,119 +89,118 @@ CollectionManager = require('modules/collectionManager');
         /**
          * The render
          */
-        render: function(){
-            if(Ctx.debugRender) {
-                console.log("ideaPanel:render() is firing");
-            }
 
+        serializeData: function(){
             var that = this,
-            segments = {},
-            subIdeas = {},
-            votable_widgets = [],
-            currentUser = Ctx.getCurrentUser(),
-            canEdit = currentUser.can(Permissions.EDIT_IDEA) || false,
-            canEditNextSynthesis = currentUser.can(Permissions.EDIT_SYNTHESIS),
-            collectionManager = new CollectionManager();
+                segments = {},
+                subIdeas = {},
+                extracts = [],
+                votable_widgets = [],
+                currentUser = Ctx.getCurrentUser(),
+                canEdit = currentUser.can(Permissions.EDIT_IDEA) || false,
+                canEditNextSynthesis = currentUser.can(Permissions.EDIT_SYNTHESIS),
+                collectionManager = new CollectionManager();
 
+            collectionManager.getAllExtractsCollectionPromise().
+                done(function(allExtractsCollection) {
+
+                    if(that.model) {
+                        subIdeas = that.model.getChildren();
+                        votable_widgets = that.model.getVotableOnWhichWidgets();
+                        extracts = allExtractsCollection.where({idIdea:that.model.id});
+                    }
+
+                    if(that.model) {
+
+                        $.when( collectionManager.getAllUsersCollectionPromise(),
+                            collectionManager.getAllMessageStructureCollectionPromise()
+                        ).then(
+                            function( allUsersCollection, allMessagesCollection) {
+
+                                /* We need a real view for that benoitg - 2014-07-23 */
+                                var ideaExtractList = that.$('.postitlist'),
+                                    template = Ctx.loadTemplate('segment');
+
+                                _.each(extracts, function(extract) {
+                                    var post = allMessagesCollection.get(extract.get('idPost'));
+                                    ideaExtractList.append( template(
+                                        {segment: extract,
+                                            post: post,
+                                            postCreator: allUsersCollection.get(post.get('idCreator')),
+                                            canEditExtracts : currentUser.can(Permissions.EDIT_EXTRACT),
+                                            canEditMyExtracts : currentUser.can(Permissions.EDIT_MY_EXTRACT),
+                                            ctx : Ctx
+                                        }) );
+                                });
+                            }
+                        );
+                    }
+
+                    Ctx.initTooltips(that.$el);
+                    that.panel = that.$('.panel');
+                    Ctx.initClipboard();
+
+                    if(that.model) {
+                        var shortTitleField = new EditableField({
+                            'model': that.model,
+                            'modelProp': 'shortTitle',
+                            'class': 'panel-editablearea text-bold',
+                            'data-tooltip': i18n.gettext('Short expression (only a few words) of the idea in the table of ideas.'),
+                            'placeholder': i18n.gettext('New idea'),
+                            'canEdit': canEdit
+                        });
+                        shortTitleField.renderTo(that.$('#ideaPanel-shorttitle'));
+
+                        that.longTitleField = new CKEditorField({
+                            'model': that.model,
+                            'modelProp': 'longTitle',
+                            'placeholder': that.model.getLongTitleDisplayText(),
+                            'canEdit': canEditNextSynthesis
+                        });
+                        that.longTitleField.renderTo( that.$('#ideaPanel-longtitle'));
+
+                        that.definitionField = new CKEditorField({
+                            'model': that.model,
+                            'modelProp': 'definition',
+                            'placeholder': that.model.getDefinitionDisplayText(),
+                            'canEdit': canEdit
+                        });
+                        that.definitionField.renderTo( that.$('#ideaPanel-definition'));
+
+                        that.commentView = new MessageSendView({
+                            'allow_setting_subject': false,
+                            'reply_idea': that.model,
+                            'body_help_message': i18n.gettext('Comment on this idea here...'),
+                            'send_button_label': i18n.gettext('Send your comment'),
+                            'subject_label': null,
+                            'mandatory_body_missing_msg': i18n.gettext('You need to type a comment first...'),
+                            'mandatory_subject_missing_msg': null
+                        });
+                        that.$('#ideaPanel-comment').append( that.commentView.render().el );
+                    }
+
+                });
+
+            return {
+                 idea: this.model,
+                 segments: extracts,
+                 subIdeas: subIdeas,
+                 votable_widgets: votable_widgets,
+                 canEdit: canEdit,
+                 i18n: i18n,
+                 renderTemplateGetExtractsLabel: this.renderTemplateGetExtractsLabel,
+                 renderTemplateGetSubIdeasLabel: this.renderTemplateGetSubIdeasLabel,
+                 canDelete: currentUser.can(Permissions.EDIT_IDEA),
+                 canEditNextSynthesis: canEditNextSynthesis,
+                 canEditExtracts: currentUser.can(Permissions.EDIT_EXTRACT),
+                 canEditMyExtracts: currentUser.can(Permissions.EDIT_MY_EXTRACT),
+                 canAddExtracts: currentUser.can(Permissions.EDIT_EXTRACT), //TODO: This is a bit too coarse
+                 canCreateWidgets: currentUser.can(Permissions.ADMIN_DISCUSSION)
+             }
+        },
+
+        onRender: function(){
             Ctx.cleanTooltips(this.$el);
-            
-            collectionManager.getAllExtractsCollectionPromise().done(
-            function(allExtractsCollection) {
-            var extracts = [];
-              if(that.model) {
-                subIdeas = that.model.getChildren();
-                votable_widgets = that.model.getVotableOnWhichWidgets();
-                extracts = allExtractsCollection.where({idIdea:that.model.id});
-            }
-
-            that.$el.html( that.template( {
-                idea : that.model,
-                segments : extracts,
-                subIdeas : subIdeas,
-                votable_widgets : votable_widgets,
-                canEdit : canEdit,
-                i18n : i18n,
-                renderTemplateGetExtractsLabel : that.renderTemplateGetExtractsLabel,
-                renderTemplateGetSubIdeasLabel : that.renderTemplateGetSubIdeasLabel,
-                canDelete : currentUser.can(Permissions.EDIT_IDEA),
-                canEditNextSynthesis : canEditNextSynthesis,
-                canEditExtracts : currentUser.can(Permissions.EDIT_EXTRACT),
-                canEditMyExtracts : currentUser.can(Permissions.EDIT_MY_EXTRACT),
-                canAddExtracts : currentUser.can(Permissions.EDIT_EXTRACT), //TODO: This is a bit too coarse
-                canCreateWidgets : currentUser.can(Permissions.ADMIN_DISCUSSION)
-            } ) );
-
-            if(that.model) {
-              
-              $.when( collectionManager.getAllUsersCollectionPromise(),
-                      collectionManager.getAllMessageStructureCollectionPromise()
-                      ).then(
-                          function( allUsersCollection, allMessagesCollection) {
-                            
-                    /* We need a real view for that benoitg - 2014-07-23 */
-                    var ideaExtractList = that.$('.postitlist'),
-                        template = Ctx.loadTemplate('segment');
-                    
-                    _.each(extracts, function(extract) {
-                      var post = allMessagesCollection.get(extract.get('idPost'));
-                      ideaExtractList.append( template(
-                          {segment: extract,
-                           post: post,
-                           postCreator: allUsersCollection.get(post.get('idCreator')),
-                           canEditExtracts : currentUser.can(Permissions.EDIT_EXTRACT),
-                           canEditMyExtracts : currentUser.can(Permissions.EDIT_MY_EXTRACT),
-                           ctx : Ctx
-                          }) );
-                    });
-                  }
-              );
-            }
-
-            Ctx.initTooltips(that.$el);
-            that.panel = that.$('.panel');
-            Ctx.initClipboard();
-            if(that.model) {
-            var shortTitleField = new EditableField({
-                'model': that.model,
-                'modelProp': 'shortTitle',
-                'class': 'panel-editablearea text-bold',
-                'data-tooltip': i18n.gettext('Short expression (only a few words) of the idea in the table of ideas.'),
-                'placeholder': i18n.gettext('New idea'),
-                'canEdit': canEdit
-            });
-            shortTitleField.renderTo(that.$('#ideaPanel-shorttitle'));
-
-
-
-            that.longTitleField = new CKEditorField({
-                'model': that.model,
-                'modelProp': 'longTitle',
-                'placeholder': that.model.getLongTitleDisplayText(),
-                'canEdit': canEditNextSynthesis
-            });
-            that.longTitleField.renderTo( that.$('#ideaPanel-longtitle'));
-            
-            that.definitionField = new CKEditorField({
-                'model': that.model,
-                'modelProp': 'definition',
-                'placeholder': that.model.getDefinitionDisplayText(),
-                'canEdit': canEdit
-            });
-            that.definitionField.renderTo( that.$('#ideaPanel-definition'));
-
-            that.commentView = new MessageSendView({
-                'allow_setting_subject': false,
-                'reply_idea': that.model,
-                'body_help_message': i18n.gettext('Comment on this idea here...'),
-                'send_button_label': i18n.gettext('Send your comment'),
-                'subject_label': null,
-                'mandatory_body_missing_msg': i18n.gettext('You need to type a comment first...'),
-                'mandatory_subject_missing_msg': null
-            });
-            that.$('#ideaPanel-comment').append( that.commentView.render().el );
-            }
-            });
-            return this;
         },
 
         /**
@@ -303,24 +316,6 @@ CollectionManager = require('modules/collectionManager');
             }});
         },
 
-        /**
-         * Events
-         */
-        events: {
-            'dragstart .box': 'onDragStart',
-            'dragend .box': "onDragEnd",
-            'dragover .panel': 'onDragOver',
-            'dragleave .panel': 'onDragLeave',
-            'drop .panel': 'onDrop',
-
-            'click .closebutton': 'onSegmentCloseButtonClick',
-            'click #ideaPanel-clearbutton': 'onClearAllClick',
-            'click #ideaPanel-closebutton': 'onTopCloseButtonClick',
-            'click #ideaPanel-deleteButton': 'onDeleteButtonClick',
-
-            'click .segment-link': "onSegmentLinkClick",
-            'click #session-modal': "createWidgetSession"
-        },
 
         createWidgetSession: function(){
 
