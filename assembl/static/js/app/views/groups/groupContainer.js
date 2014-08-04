@@ -4,17 +4,8 @@ define(function (require) {
       GroupContent = require('views/groups/groupContent');
 
     var groupContainer = Marionette.CollectionView.extend({
-        className:'groupContent',
-        childView: GroupContent,
-        initialize: function(options){
-            /**
-             * Need this compositeView id
-             * to identify which localStorage to delete
-             * */
-
-            //console.log('groupContainer', this.collection);
-
-        }
+        className:'groupContainer',
+        childView: GroupContent
     });
 
     return groupContainer;

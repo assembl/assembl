@@ -1,4 +1,16 @@
-#groupContainer {
+/*#groupContainer {
+  position: absolute;
+  top: 36px;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  min-height: 400px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  white-space: nowrap;
+}*/
+
+.groupContainer{
   position: absolute;
   top: 36px;
   right: 0;
@@ -9,17 +21,25 @@
   overflow-y: hidden;
   white-space: nowrap;
 }
-.groupContent {
-  position: relative;
+
+.groupContent{
+  display: inline-block;
   height: 100%;
   width: 100%;
-  display: inline-block;
-  box-sizing: border-box;
+
+  .navNotification{
+    position: relative;
+    height: 150px;
+    background-color: $gray2;
+    color: $white;
+  }
+
 }
 
 .groupHeader{
   height: 25px;
   background-color: $gray3;
+  position: relative;
   .add-group,
   .close-group,
   .lock-group {
@@ -48,80 +68,51 @@
     }
   }
 }
+
 .groupBody {
-   display: table;
-   width: 100%;
-   height: 98%;
-  .groupItem{
-    @include box-sizing(border-box);
-    display: table-row;
-    height: 100%;
-    min-width: 320px;
-    .itemPanel{
-     position: relative;
-     height: 100%;
-     display:table-cell;
-      .navSidebar{
-        //accordion menu
-        position: absolute;
-        border-right: 1px solid $gray3;
-        bottom: 0;
-        top: 0;
-        left: 0;
-        width: 100%;
+  display: table;
+  height: 100%;
+  width: 100%;
 
-        .side-menu {
-          margin: 0;
-          padding: 0;
-          list-style: none;
-          height: 80%;
-          >li {
-            position: relative;
-            display: block;
-            >a {
-              position: relative;
-              display: block;
-              height: 35px;
-              text-decoration: none;
-              background-color: $gray3;
-              border-top: 1px solid $gray2;
-              color:$gray;
-              z-index: 2;
-            }
-            .second-level{
-              display:none;
-            }
-          }
-        }
-
-        .navNotification{
+  .navSidebar{
+    width: 300px;
+    .side-menu {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      height: 80%;
+      >li {
+        position: relative;
+        display: block;
+        >a {
           position: relative;
-          height: 150px;
-          background-color: $gray2;
-          color: $white;
+          display: block;
+          height: 35px;
+          text-decoration: none;
+          background-color: $gray3;
+          border-top: 1px solid $gray2;
+          color:$gray;
+          z-index: 2;
         }
-      }
-
-      .panel {
-        position: absolute;
-        width: 100%;
-        z-index: 10;
-        height: 100%;
-        background-color: $white;
-        overflow: hidden;
-        top: 0;
-        left: 0;
-        bottom: 0;
+        .second-level{
+          display:none;
+        }
       }
     }
-
-    .idea-list{
-      max-width: 300px;
+    .navNotification{
+      position: relative;
+      height: 150px;
+      background-color: $gray2;
+      color: $white;
     }
   }
+
+  .groupPanel {
+    display: table-cell;
+    width: 100%;
+    height: 100%;
+  }
 }
-
-
 
 
 

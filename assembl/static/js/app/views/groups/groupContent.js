@@ -12,23 +12,13 @@ define(function (require) {
 
     var groupContent = Marionette.CompositeView.extend({
         template: "#tmpl-groupContent",
-        className: "groupItem",
-        //childView: GroupItem,
+        className: "groupContent",
         childViewContainer: ".groupBody",
         /*childViewOptions: {
             groupManager: this
         },*/
         initialize: function(options){
             this.collection = this.model;
-        },
-        collectionEvents: {
-            'change reset add': 'test'
-        },
-        modelEvents: {
-            'change reset add': 'test'
-        },
-        test: function(x) {
-            console.log("x");
         },
         events:{
             'click .add-group':'addGroup',
@@ -105,7 +95,7 @@ define(function (require) {
         },
         getChildView: function(child) {
           return AssemblPanel.prototype.createPanel(child);
-        },
+        }
     });
 
     return groupContent;

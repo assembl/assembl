@@ -62,6 +62,14 @@ define(function (require) {
                             {type:'idea-panel'}
                             //{type:'message'}
                         ]
+                    },
+                    {
+                        group:[
+                            {type:'navigation'},
+                            //{type:'idea-list'}
+                            {type:'idea-panel'}
+                            //{type:'message'}
+                        ]
                     }
                 ];
 

@@ -19,6 +19,7 @@ panelTypeRegistry = {};
      */
     var AssemblPanel = Marionette.LayoutView.extend({
         template: "#tmpl-groupItem",
+        className:'itemPanel',
         registerPanelType: function(name, cls) {
             panelTypeRegistry[name] = cls.prototype;
         },
@@ -27,6 +28,9 @@ panelTypeRegistry = {};
             if (cls !== undefined) {
                 return cls.constructor;
             }
+
+            console.log('createPanel', panelTypeRegistry)
+
             return AssemblPanel;
         }
     });
