@@ -12,7 +12,7 @@ define(function (require) {
             groupManager: this
         },*/
         initialize: function(options){
-            this.collection = this.model;
+            this.collection = this.model.get('group');
         },
         events:{
             'click .add-group':'addGroup',

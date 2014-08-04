@@ -10,20 +10,23 @@ define(function(require){
     });
 
     var PanelSpecs = Base.Collection.extend({
-        // initialize: function(options){
-        //     this.models = this.parse(this.models);
-        // },
-        parse: function(model) {
-            return _.map(model.group, function(grp) {
-                return new PanelSpecModel(grp);
-            });
-        },
-
         model: PanelSpecModel
     });
 
+    var GroupSpec = Base.Model.extend({
+        parse: function(model) {
+            model.group = new PanelSpecs(model.group);
+            return model;
+        },
+
+        defaults: {
+           locked: false,
+           group: []
+        }
+    });
+
     var GroupSpecs = Base.Collection.extend({
-        model: PanelSpecs
+        model: GroupSpec
     });
 
     return {
