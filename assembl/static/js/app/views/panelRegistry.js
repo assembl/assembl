@@ -3,6 +3,8 @@ define(function (require) {
         IdeaPanel = require('views/ideaPanel'),
         MessageList = require('views/messageList'),
         HomePanel = require('views/navigation/home'),
+        SegmentList = require('views/segmentList'),
+        SynthesisPanel = require('views/synthesisPanel'),
         NavigationPanel = require('views/navigation/navigation');
     'use strict';
 
@@ -11,6 +13,8 @@ define(function (require) {
         'message': MessageList,
         'home-panel': HomePanel,
         'navigation': NavigationPanel,
+        'synthesisPanel': SynthesisPanel,
+        'segmentList': SegmentList
     };
 
     function createPanel(spec) {
