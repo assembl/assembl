@@ -85,6 +85,10 @@ def idea_view(request):
 def idea_slug_view(request):
     return home_view(request)
 
+@view_config(route_name='home_context', request_method='GET', http_cache=60)
+def context_view(request):
+    return home_view(request)
+
 @view_config(route_name='home_message', request_method='GET', http_cache=60)
 def message_view(request):
     return home_view(request)

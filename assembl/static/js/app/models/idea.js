@@ -377,9 +377,7 @@ define(function(require){
             var widgets = _.filter(widget_data, function(o){
                 return o["@type"] == "votable";
             });
-            return _.map(widgets, function(o){
-                return o.widget;
-            });
+           return widgets;
         }
 
     });

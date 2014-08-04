@@ -1,0 +1,30 @@
+{% extends 'base.jinja2' %}
+
+{% block content %}
+<h2>{% trans %}Edit discussion {% endtrans %} "{{discussion.topic}}"</h2>
+
+{% if admin_discussion_permissions_url %}
+<p><a href='{{ admin_discussion_permissions_url }}'>{{ gettext("Edit discussion permissions") }}</a></p>
+{% endif %}
+
+<form method="post" action="#">
+	<p>
+		<label for="topic">Topic</label>
+		<input type="text" name="topic" id="topic" {% if discussion.topic %}value="{{ discussion.topic }}"{% endif %} />
+	</p>
+
+	<p>
+		<label for="slug">Slug</label>
+		<input type="text" name="slug" id="slug" {% if discussion.slug %}value="{{ discussion.slug }}"{% endif %} />
+	</p>
+
+	<p>
+		<label for="objectives">Objectives</label>
+		<textarea name="objectives" id="objectives">{% if discussion.objectives %}{{ discussion.objectives }}{% endif %}</textarea>
+	</p>
+
+	<p>
+		<input type="submit" value="Edit"/>
+	</p>
+</form>
+{% endblock %}

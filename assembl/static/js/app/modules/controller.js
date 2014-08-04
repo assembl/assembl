@@ -7,6 +7,7 @@ define(function(require){
       groupManager = require('modules/groupManager'),
               User = require('models/user'),
             navBar = require('views/navBar'),
+       contextPage = require('views/contextPage'),
       Notification = require('views/notification'),
  CollectionManager = require('modules/collectionManager');
 
@@ -52,6 +53,13 @@ define(function(require){
              * Render the current group of views
              * */
             groupManager.getGroupItem();
+        },
+
+        contextPage: function(){
+          Assembl.headerRegions.show(new navBar());
+
+          var cp = new contextPage({});
+          $('#groupContainer').append( cp.render().el );
         },
 
         idea: function(id){

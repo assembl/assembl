@@ -44,7 +44,6 @@ from pyramid.security import authenticated_userid
 from pyramid.response import Response
 from pyld import jsonld
 
-from assembl.lib.sqla import get_session_maker
 from ..traversal import InstanceContext, CollectionContext, ClassContext
 from assembl.auth import P_READ, P_SYSADMIN, Everyone
 from assembl.auth.util import get_roles, get_permissions
@@ -139,12 +138,12 @@ def collection_add(request, args):
         session.autoflush = old_autoflush
         raise HTTPBadRequest(e)
     if instances:
-        db = get_session_maker()
+        first = instances[0]
+        db = first.db()
         for instance in instances:
             db.add(instance)
         session.autoflush = old_autoflush
         session.flush()
-        first = instances[0]
         return Response(location=first.uri_generic(first.id), status_code=201)
     raise HTTPBadRequest()
 
@@ -279,11 +278,11 @@ def class_add(request):
     except Exception as e:
         raise HTTPBadRequest(e)
     if instances:
-        db = get_session_maker()
+        first = instances[0]
+        db = first.db()
         for instance in instances:
             db.add(instance)
         db.flush()
-        first = instances[0]
         return Response(location=first.uri_generic(first.id), status_code=201)
     raise HTTPBadRequest()
 
@@ -306,11 +305,11 @@ def collection_add_json(request):
     except Exception as e:
         raise HTTPBadRequest(e)
     if instances:
-        db = get_session_maker()
+        first = instances[0]
+        db = first.db()
         for instance in instances:
             db.add(instance)
         db.flush()
-        first = instances[0]
         raise HTTPCreated(first.uri_generic(first.id))
 
 
@@ -352,11 +351,11 @@ def votes_collection_add_json(request):
     except Exception as e:
         raise HTTPBadRequest(e)
     if instances:
-        db = get_session_maker()
+        first = instances[0]
+        db = first.db()
         for instance in instances:
             db.add(instance)
         db.flush()
-        first = instances[0]
         raise HTTPCreated(first.uri_generic(first.id))
 
 @view_config(context=CollectionContext, request_method='POST',
@@ -383,10 +382,12 @@ def votes_collection_add(request):
     except Exception as e:
         raise HTTPBadRequest(e)
     if instances:
-        db = get_session_maker()
+        first = instances[0]
+        db = first.db()
         for instance in instances:
             db.add(instance)
+        print "before flush"
         db.flush()
-        first = instances[0]
+        print "after flush"
         return Response(location=first.uri_generic(first.id), status_code=201)
     raise HTTPBadRequest()
