@@ -9,7 +9,7 @@ from datetime import datetime
 
 import anyjson as json
 from sqlalchemy.orm import (
-    relationship, backref, aliased, contains_eager, deferred)
+    relationship, backref, aliased, contains_eager, deferred, joinedload)
 from sqlalchemy.sql import text
 from pyramid.security import Allow, ALL_PERMISSIONS
 from sqlalchemy import (
@@ -70,6 +70,8 @@ class Discussion(DiscussionBoundBase):
 
     creation_date = Column(DateTime, nullable=False, default=datetime.utcnow,
                            info={'rdf': QuadMapPatternS(None, DCTERMS.created)})
+    objectives = Column(UnicodeText)
+
 
     def read_post_ids(self, user_id):
         return (x[0] for x in self.db.query(Post.id).join(
@@ -1100,7 +1102,8 @@ JOIN post AS family_posts ON (
                     if isinstance(inst, AbstractIdeaVote):
                         other_votes = cls.db.query(AbstractIdeaVote).filter_by(
                             voter_id=user_id, idea_id = inst.idea.id,
-                            criterion_id=parent_instance.id, is_tombstone=False).all()
+                            criterion_id=parent_instance.id, is_tombstone=False
+                            ).options(joinedload(AbstractIdeaVote.idea)).all()
                         for other_vote in other_votes:
                             if other_vote == inst:
                                 # probably never happens

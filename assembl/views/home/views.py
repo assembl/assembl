@@ -31,7 +31,7 @@ def discussion_list_view(request):
             'slug': discussion.slug
         }
         if user_has_permission(discussion.id, user_id, P_ADMIN_DISC):
-            discussion_context['admin_url'] = request.route_url('discussion_permissions', discussion_id=discussion.id)
+            discussion_context['admin_url'] = request.route_url('discussion_edit', discussion_id=discussion.id)
         context['discussions'].append(discussion_context)
         if R_SYSADMIN in roles:
             context['discussions_admin_url'] = request.route_url('discussion_admin')

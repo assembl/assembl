@@ -73,6 +73,43 @@ def discussion_admin(request):
         context,
         request=request)
 
+@view_config(route_name='discussion_edit', permission=P_ADMIN_DISC)
+def discussion_edit(request):
+    user_id = authenticated_userid(request)
+    db = Discussion.db()
+    discussion_id = int(request.matchdict['discussion_id'])
+    discussion = Discussion.get_instance(discussion_id)
+
+    if not discussion:
+        raise HTTPNotFound("Discussion with id '%d' not found." % (
+            discussion_id,))
+
+    context = dict(
+        discussion=discussion,
+    )
+    context['admin_discussion_permissions_url'] = request.route_url('discussion_permissions', discussion_id=discussion.id)
+
+    if request.method == 'POST':
+
+        g = lambda x: request.POST.get(x, None)
+
+        (topic, slug, objectives) = (
+            g('topic'),
+            g('slug'),
+            g('objectives'),
+        )
+
+        discussion.topic = topic
+        discussion.slug = slug
+        discussion.objectives = objectives
+
+
+    return render_to_response(
+        'admin/discussion_edit.jinja2',
+        context,
+        request=request)
+
+
 
 @view_config(route_name='discussion_permissions', permission=P_ADMIN_DISC)
 def discussion_permissions(request):

@@ -25,6 +25,9 @@ assembl/locale/*/LC_MESSAGES/*.jed.json
 /lib
 /share
 /venv
+/src
+/virtuoso
+/assembl_dumps
 
 # local
 /local.ini

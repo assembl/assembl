@@ -118,6 +118,7 @@
         "topic": true,
         "permissions": "&get_roles_by_permission",
         "widget_collection_url": true,
+        "objectives": true,
         "sources": [":partial"]
     },
     "Idea": {
