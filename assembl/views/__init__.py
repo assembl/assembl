@@ -19,6 +19,7 @@ default_context = {
 
 def backbone_include(config):
     config.add_route('home', '/')
+    config.add_route('home_context', '/context')
     config.add_route('home_idea', '/idea/{idea_id}')
     config.add_route('home_idea_slug', '/idea/{idea_slug}/{idea_id}')
     config.add_route('home_message', '/message/{message_id}')
