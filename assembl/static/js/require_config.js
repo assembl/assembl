@@ -32,8 +32,7 @@ var requirejs_config = {
     'ckeditor': 'bower/ckeditor/ckeditor',
     'ckeditor-sharedspace': 'lib/ckeditor-sharedcontainer/plugin',
 
-    'moment': 'bower/momentjs/moment',
-    'moment_lang': 'bower/momentjs/lang/'+((assembl_locale=='en')?'fr':assembl_locale),
+    'moment': 'bower/momentjs/min/moment-with-langs.min',
     'zeroclipboard': 'bower/zeroclipboard/ZeroClipboard',
     'sockjs': 'bower/sockjs/sockjs',
     'cytoscape': 'bower/cytoscape/cytoscape',
@@ -107,10 +106,6 @@ var requirejs_config = {
     'annotator' : {
         deps: ['jquery'],
         exports: 'Annotator'
-    },
-    'moment_lang': {
-        deps: ['moment'],
-        exports: 'moment_lang'
     },
     'backboneModal': {
         deps:['backbone'],
