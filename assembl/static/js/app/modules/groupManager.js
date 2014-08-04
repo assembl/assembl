@@ -5,7 +5,7 @@ define(function(require){
                   $ = require('jquery'),
                   _ = require('underscore'),
             Storage = require('objects/storage'),
-       GroupContent = require('views/groups/groupContent');
+     GroupContainer = require('views/groups/groupContainer');
 
     var groupManager = Marionette.Controller.extend({
 
@@ -189,7 +189,7 @@ define(function(require){
 
             var groups = new Backbone.Collection(collection);
 
-            return new GroupContent({
+            return new GroupContainer({
                 collection: groups
             });
         },
@@ -202,12 +202,9 @@ define(function(require){
 
             //console.log(items)
 
-            items.forEach(function(item){
-               var group = that.createViewGroupItem(item);
+            Assembl.groupContainer.show(group);
+            //$('#groupContainer').append(group.render().el);
 
-               Assembl.groupContainer.show(group);
-               //$('#groupContainer').append(group.render().el);
-            });
         }
 
     });

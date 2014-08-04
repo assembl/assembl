@@ -1,23 +1,20 @@
 define(function (require) {
 
     var Marionette = require('marionette'),
-         GroupItem = require('views/groups/groupItem'),
-           Storage = require('objects/storage');
+           Storage = require('objects/storage'),
+         GroupItem = require('views/groups/groupItem');
 
     var groupContent = Marionette.CompositeView.extend({
         template: "#tmpl-groupContent",
-        className:'groupContent',
+        className: "groupItem",
         childView: GroupItem,
         childViewContainer: ".groupBody",
-        childViewOptions: {
+        /*childViewOptions: {
             groupManager: this
-        },
+        },*/
         initialize: function(options){
-            /**
-             * Need this compositeView id
-             * to identify which localStorage to delete
-             * */
-          //this.collection = options.collection.toJSON();
+
+            this.collection = new Backbone.Collection(_.toArray(this.model.attributes.group));
         },
         events:{
             'click .add-group':'addGroup',
@@ -93,8 +90,8 @@ define(function (require) {
             //that.toggleLock();
         }
 
-    });
 
+    });
 
     return groupContent;
 });

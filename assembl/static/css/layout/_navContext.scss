@@ -1,0 +1,28 @@
+.nav-container{
+  ul {
+    margin:0;
+    padding:0;
+    .label{
+      border-bottom:1px solid $gray1;
+    }
+    li{
+      list-style-type: none;
+      .panel-header {
+        border:none;
+      }
+    }
+
+    li > a {
+      display: block;
+      position: relative;
+      min-width: 110px;
+      padding: 8px;
+      background-color: $white;
+      //border-top: 1px solid $gray;
+      text-decoration: none;
+      color: $gray1;
+    }
+  }
+
+
+}

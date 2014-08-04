@@ -39,7 +39,7 @@ define(function (require) {
                 this._store.setItem('groupItems', JSON.stringify(groupOfItems));
             }
 
-            this.getGroupItem();
+            //this.getGroupItem();
 
             setTimeout(function(){
 
