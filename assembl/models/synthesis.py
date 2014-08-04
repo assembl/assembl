@@ -70,6 +70,8 @@ class Discussion(DiscussionBoundBase):
 
     creation_date = Column(DateTime, nullable=False, default=datetime.utcnow,
                            info={'rdf': QuadMapPatternS(None, DCTERMS.created)})
+    objectives = Column(UnicodeText)
+
 
     def read_post_ids(self, user_id):
         return (x[0] for x in self.db.query(Post.id).join(
