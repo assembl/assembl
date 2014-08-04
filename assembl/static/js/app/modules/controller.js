@@ -59,7 +59,7 @@ define(function(require){
           Assembl.headerRegions.show(new navBar());
 
           var cp = new contextPage({});
-          $('#panelarea').append( cp.render().el );
+          $('#groupContainer').append( cp.render().el );
         },
 
         idea: function(id){
