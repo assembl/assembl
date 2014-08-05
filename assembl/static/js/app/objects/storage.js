@@ -1,6 +1,7 @@
 define(function (require) {
 
-    var Marionette = require('marionette');
+    var Marionette = require('marionette'),
+        groupSpec = require('models/groupSpec');
 
     var storage = Marionette.Object.extend({
 
@@ -58,17 +59,17 @@ define(function (require) {
                     {
                         group:[
                             {type:'navigation'},
-                            //{type:'idea-list'}
-                            {type:'idea-panel'}
-                            //{type:'message'}
+                            //{type:'idea-list'},
+                            {type:'idea-panel'},
+                            {type:'message'},
                         ]
                     },
                     {
                         group:[
                             {type:'navigation'},
-                            //{type:'idea-list'}
-                            {type:'idea-panel'}
-                            //{type:'message'}
+                            //{type:'idea-list'},
+                            //{type:'idea-panel'},
+                            //{type:'message'},
                         ]
                     }
                 ];
@@ -82,8 +83,7 @@ define(function (require) {
 
                 data = JSON.parse(this._store.getItem('groupItems'));
             }
-
-            return data;
+            return new groupSpec.Collection(data, {'parse':true});
         },
 
         scrollToRight: function(){

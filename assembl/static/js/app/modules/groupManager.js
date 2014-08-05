@@ -3,10 +3,7 @@ define(function(require){
 
         var Assembl = require('modules/assembl'),
                   $ = require('jquery'),
-                  _ = require('underscore'),
-            Storage = require('objects/storage'),
-          groupSpec = require('models/groupSpec'),
-     GroupContainer = require('views/groups/groupContainer');
+                  _ = require('underscore');
 
     var groupManager = Marionette.Controller.extend({
 
@@ -106,35 +103,8 @@ define(function(require){
             this.$('.panel').removeClass('is-loading');
         },
 
-        /**
-         * Wrapper CompositeView for a group
-         * */
-        createViewGroupItem: function(collection){
-            var that = this;
-
-            var groups = new groupSpec.Collection(collection, {'parse':true});
-            //window.groups = groups;
-            return new GroupContainer({
-                collection: groups
-            });
-        },
-
-        getGroupItem: function(){
-            var items = Storage.getStorageGroupItem(),
-                 that = this;
-            // insure that the dom is empty before filling
-            //$('#panelarea').empty();
-
-            //console.log(items)
-            var group = this.createViewGroupItem(items);
-
-            Assembl.groupContainer.show(group);
-            //$('#groupContainer').append(group.render().el);
-
-        }
-
     });
 
-    return new groupManager();
+    return groupManager;
 
 });

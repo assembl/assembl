@@ -2,6 +2,7 @@ define(function (require) {
 
     var Marionette = require('marionette'),
            Storage = require('objects/storage'),
+      GroupManager = require('modules/groupManager'),
       viewsFactory = require('objects/viewsFactory');
 
     var groupContent = Marionette.CompositeView.extend({
@@ -13,6 +14,8 @@ define(function (require) {
         },*/
         initialize: function(options){
             this.collection = this.model.get('group');
+            this.groupManager = new GroupManager();
+            this.model.groupManager = this.groupManager;
         },
         events:{
             'click .add-group':'addGroup',

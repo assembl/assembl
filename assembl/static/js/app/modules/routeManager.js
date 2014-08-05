@@ -5,10 +5,12 @@ define(function(require){
            Assembl = require('modules/assembl'),
                Ctx = require('modules/context'),
       groupManager = require('modules/groupManager'),
+           Storage = require('objects/storage'),
               User = require('models/user'),
             navBar = require('views/navBar'),
        contextPage = require('views/contextPage'),
       Notification = require('views/notification'),
+    GroupContainer = require('views/groups/groupContainer'),
  CollectionManager = require('modules/collectionManager');
 
     var routeManager = Marionette.Controller.extend({
@@ -52,7 +54,17 @@ define(function(require){
             /**
              * Render the current group of views
              * */
-            groupManager.getGroupItem();
+            var items = Storage.getStorageGroupItem();
+            // insure that the dom is empty before filling
+            //$('#panelarea').empty();
+
+            //console.log(items)
+            var group = new GroupContainer({
+                collection: items
+            });
+
+            Assembl.groupContainer.show(group);
+            //$('#groupContainer').append(group.render().el);
         },
 
         contextPage: function(){
