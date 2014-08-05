@@ -11,7 +11,6 @@ sidebarNotification = require('views/navigation/notification'),
         template: "#tmpl-navigation",
         className: "groupPanel navSidebar",
         regions: {
-           context:'.context',
            dashboard:'.dashboard',
            ideaTable:'.ideasTable',
            synthesis:'.synthesis',
@@ -22,14 +21,17 @@ sidebarNotification = require('views/navigation/notification'),
         },
         initialize: function(){
             var that = this;
+
             $(window).resize(function(){
+                that.initVar();
                 that.setSideBarHeight();
             });
 
-            this.window_height = $(window).height() - 61;
-            this.adsBox_height = 150;
-            this.li_height = 144;
-            this.sizeMenu = (this.window_height - this.adsBox_height) - this.li_height;
+            this._window = null;
+            this._sideBarHeight = null;
+            this._accordion = null;
+
+            this.initVar();
         },
         onRender: function(){
            this.setSideBarHeight();
@@ -43,14 +45,13 @@ sidebarNotification = require('views/navigation/notification'),
 
             if(!elm.next('div.second-level').is(':visible')){
                 $('div.second-level').slideUp();
-                elm.next('div.second-level').css('height', this.sizeMenu).slideDown();
+                elm.next('div.second-level').slideDown();
             }
         },
         setSideBarHeight: function(){
-            var accordion = (this.window_height - this.adsBox_height);
+            this.$el.find('.side-menu').css('height', this._accordion);
+            this.$el.css('height', this._sideBarHeight);
 
-            this.$el.find('.side-menu').css('height', accordion);
-            //this.$el.css('height', this.window_height);
         },
         loadView: function(view){
            switch(view){
@@ -71,6 +72,16 @@ sidebarNotification = require('views/navigation/notification'),
                    break
 
            }
+        },
+
+        initVar: function(){
+            var _header = 60,
+                _adsBox = 150,
+                _li = 105;
+
+            this._window = $(window).height() - _header;
+            this._sideBarHeight = (this._window - _adsBox) - _li;
+            this._accordion = this._window - _adsBox;
         }
 
     });

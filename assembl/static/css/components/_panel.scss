@@ -62,12 +62,9 @@
   @include no-selection;
   * { @include no-selection; }
   @include z-index("float");
-  @include box-sizing(border-box);
-  height: 36px;
-  //padding: 10px 5px;
-  border-bottom: solid 1px $gray;
+  padding: 10px 5px;
+  //border-bottom: solid 1px $gray;
   position: relative;
-
 }
 
 // An editable area within the .panel-header

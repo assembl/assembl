@@ -38,7 +38,7 @@
 
 .groupHeader{
   height: 25px;
-  background-color: $gray3;
+  background-color: $gray2;
   position: relative;
   .add-group,
   .close-group,
@@ -46,7 +46,8 @@
     cursor: pointer;
     position: absolute;
     text-decoration: none;
-    top:5px;
+    top:3px;
+    color:$white;
   }
   .add-group {
     left: 5px;
@@ -90,14 +91,16 @@
         position: relative;
         display: block;
         >a {
+          @include box-sizing(border-box);
           position: relative;
           display: block;
           height: 35px;
           text-decoration: none;
           background-color: $gray3;
-          border-top: 1px solid $gray2;
+          border-bottom: 1px solid $white;
           color:$gray;
           z-index: 2;
+          padding: 10px;
         }
         .second-level{
           display:none;
