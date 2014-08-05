@@ -4,9 +4,10 @@
         <img src="<%= creator.getAvatarUrl(30) %>" alt="{{ gettext('User') }}"  class="image-rounded" width="30" height="30" />
     </div>
 {% set userName = "<%= creator.get('name') %>" %}
-{% set time = "<%= date %>" %}
+{% set precise_date = "<%= ctx.getReadableDateTime(date) %>" %}
+{% set nice_date = "<%= ctx.getNiceDateTime(date) %>" %}
 <% if ( viewStyle == ctx.AVAILABLE_MESSAGE_VIEW_STYLES.TITLE_ONLY ){ %>
-    <div class="message-date">{{ gettext('<time>%(time)s</time>')|format(time=time)|safe }}</div>
+    <div class="message-date">{{ gettext('<time title="%(precise_date)s">%(nice_date)s</time>')|format(nice_date=nice_date,precise_date=precise_date)|safe }}</div>
     <div class="message-subheader">
         <span class="message-author margin-right">{{ gettext('%(user)s')|format(user=userName)|safe }}
         </span>
@@ -23,7 +24,7 @@
 <% } else if ( viewStyle == ctx.AVAILABLE_MESSAGE_VIEW_STYLES.FULL_BODY ){ %>
     <div class="message-subheader">
         <span class="message-author fl">{{ gettext('%(user)s')|format(user=userName)|safe }}&nbsp;&nbsp;</span>
-        <span class="message-date">{{ gettext('<time>%(time)s</time>')|format(time=time)|safe }}</span>
+        <span class="message-date">{{ gettext('<time title="%(precise_date)s">%(nice_date)s</time>')|format(nice_date=nice_date,precise_date=precise_date)|safe }}</span>
         <div><span class="message-subject"><%= subject %></span></div>
     </div>
     <div class="message-menu">

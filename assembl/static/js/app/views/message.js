@@ -144,7 +144,7 @@ define(function(require){
             that.setViewStyle(that.viewStyle);
 
             data['id'] = data['@id'];
-            data['date'] = Ctx.formatDate(data.date);
+            data['date'] = data.date; //Ctx.formatDate(data.date);
             data['creator'] = creator;
 
             data['viewStyle'] = that.viewStyle;
