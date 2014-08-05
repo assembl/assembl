@@ -14,7 +14,7 @@ define(function (require) {
         },*/
         initialize: function(options){
             this.collection = this.model.get('panels');
-            this.groupManager = new GroupManager();
+            this.groupManager = new GroupManager({groupSpec: this.model});
             this.model.groupManager = this.groupManager;
         },
         events:{

@@ -7,19 +7,19 @@ define(function(require){
 
     var groupManager = Marionette.Controller.extend({
 
-        initialize: function(){
+        initialize: function(options){
            this.stateButton = null;
+           this.groupSpec = options.groupSpec;
         },
         /**
          * A locked panel will not react to external UI state changes, such as
          * selecting a new current idea.
          */
-        _groupIsLocked: false,
 
         _unlockCallbackQueue: {},
 
         isGroupLocked: function(){
-          return this._groupIsLocked;
+          return this.groupSpec.get('locked');
         },
 
         /**
@@ -32,7 +32,7 @@ define(function(require){
          * and have the means of getting any updated information they need.
          */
         filterThroughPanelLock: function(callback, queueWithId){
-            if (!this._groupIsLocked){
+            if (!this.groupSpec.get('locked')){
                 callback();
 
             } else {
@@ -50,8 +50,8 @@ define(function(require){
          * lock the panel if unlocked
          */
         lockGroup: function(){
-            if(!this._groupIsLocked){
-                this._groupIsLocked = true;
+            if(!this.groupSpec.get('locked')){
+                this.groupSpec.set('locked', true);
                 console.log(this.stateButton);
                 this.stateButton.addClass('icon-lock').removeClass('icon-lock-open');
             }
@@ -61,8 +61,8 @@ define(function(require){
          * unlock the panel if locked
          */
         unlockGroup: function(){
-            if(this._groupIsLocked){
-                this._groupIsLocked = false;
+            if(this.groupSpec.get('locked')){
+                this.groupSpec.set('locked', false);
                 this.stateButton.addClass('icon-lock-open').removeClass('icon-lock');
 
                 if(_.size(this._unlockCallbackQueue) > 0) {
