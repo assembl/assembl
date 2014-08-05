@@ -20,18 +20,18 @@
     @include no-glitch;
     display: inline-block;
 
-    &:after {
+    /*&:after {
         display: inline-block;
         @include opacity( 0.2 );
 
         font-family: $baseFontFamily;
         content: '\e808';
         margin-left: 5px;
-    }
+    }*/
 
-    .dropdown:hover &:after {
+    /*.dropdown:hover &:after {
         @include opacity( 1 );
-    }
+    } */
 
     .dropdown--button & {
         @extend .button;
