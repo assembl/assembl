@@ -14,8 +14,8 @@ define(function (require) {
         'message': MessageList,
         'home-panel': HomePanel,
         'navigation': NavigationPanel,
-        'synthesisPanel': SynthesisPanel,
-        'segmentList': SegmentList
+        'synthesis': SynthesisPanel,
+        'clipboard': SegmentList
     };
 
     function createPanel(panelSpecModel) {
