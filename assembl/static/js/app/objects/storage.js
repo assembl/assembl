@@ -38,7 +38,6 @@ define(function (require) {
 
                 this._store.removeItem('groupItems');
                 this._store.setItem('groupItems', JSON.stringify(groupOfPanels));
-
             }
 
             setTimeout(function(){

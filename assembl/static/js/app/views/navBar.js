@@ -56,8 +56,6 @@ define(function(require){
                         items.push(item);
                     });
 
-
-
                     Storage.createGroupItem(items);
 
                     this.$el.unbind();
