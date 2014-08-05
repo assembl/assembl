@@ -51,17 +51,13 @@ define(function(require){
              * Render the current group of views
              * */
             var groupSpecsP = collectionManager().getGroupSpecsCollectionPromise();
-            // insure that the dom is empty before filling
-            //$('#panelarea').empty();
 
-            //console.log(items)
             groupSpecsP.done(function(groupSpecs) {
               var group = new GroupContainer({
                   collection: groupSpecs
               });
 
               Assembl.groupContainer.show(group);
-              //$('#groupContainer').append(group.render().el);
             })
         },
 
@@ -73,7 +69,6 @@ define(function(require){
         },
 
         idea: function(id){
-            //Ctx.openPanel(assembl.ideaList);
             collectionManager.getAllIdeasCollectionPromise().done(
                 function(allIdeasCollection) {
                   var idea = allIdeasCollection.get(id);

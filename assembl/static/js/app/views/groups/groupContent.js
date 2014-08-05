@@ -26,6 +26,7 @@ define(function (require) {
             var Modal = Backbone.Modal.extend({
                 template: _.template($('#tmpl-create-group').html()),
                 cancelEl:'.btn-cancel',
+
                 initialize: function(){
                     this.$el.addClass('group-modal');
                 },
@@ -83,14 +84,8 @@ define(function (require) {
             this.unbind();
             this.remove();
         },
-
-        lockGroup: function(e){
-            //that.stateButton = $(e.target).children('i');
-            //that.toggleLock();
-        },
         getChildView: function(child) {
           return viewsFactory(child);
-          //return AssemblPanel.prototype.createPanel(child);
         }
     });
 

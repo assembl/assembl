@@ -39,8 +39,6 @@ define(function (require) {
                 this._store.setItem('groupItems', JSON.stringify(groupOfItems));
             }
 
-            //this.getGroupItem();
-
             setTimeout(function(){
 
                 that.scrollToRight();
