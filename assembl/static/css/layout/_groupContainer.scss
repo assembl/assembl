@@ -66,10 +66,11 @@
   .groupPanel {
     display: table-cell;
     height: 100%;
+    border-right: 1px solid $gray2;
   }
 
   .navSidebar{
-    min-width: 400px;
+    min-width: 300px;
     .side-menu {
       margin: 0;
       padding: 0;
@@ -96,10 +97,22 @@
       }
     }
   }
+  .ideaPanel {
+    min-width: 300px;
+    max-width: 320px;
+  }
 
   .messageList{
     position: relative;
     min-width: 500px;
+
+    .panel-body{
+      top:61px;
+    }
+    .options-filter{
+      height: 30px;
+      border-bottom: 1px solid $gray;
+    }
   }
 
 }

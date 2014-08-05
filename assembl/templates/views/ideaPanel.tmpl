@@ -1,6 +1,6 @@
 
 <header class="panel-header">
-    <strong data-tooltip="{{gettext('Detailled information about the currently selected idea in the Table of ideas')}}">{{ gettext('Idea') }}</strong>
+    <strong data-tooltip="{{gettext('Detailled information about the currently selected idea in the Table of ideas')}}">{{ gettext('Idea') }}</strong><i class="icon-options fr"></i>
     <div class="fr">
         <% if( idea ) { %>
             {# Commented out, creates infinite loops
@@ -61,15 +61,15 @@
         <div class="postitlist">
         </div>
         <% if (canAddExtracts) { %>
-        <div class="box box--dashed box--centered margin text-muted text-big">
-            {{ gettext('Add extracts by dragging them in this panel from the clipboard or messages') }}
+        <div>
+            <p>{{ gettext('Add extracts by dragging them in this panel from the clipboard or messages') }}</p>
         </div>
         <% } %>
     </fieldset>
 
     <fieldset id="ideaPanel-section-actions" class="panel-section">
         <% if (canDelete) { %>
-        <div class="float-right">
+        <div class="fr">
             <a id="ideaPanel-deleteButton" class="button" data-tooltip="{{gettext('Delete this idea completely')}}">{{ gettext('Delete idea') }}</a>
         </div>
         <% }
@@ -78,8 +78,8 @@
         <% } %>
     </fieldset>
     <% } else { %>
-        <div class="box box--centered margin  text-big">
-            {{ gettext('Please select an idea in the table of ideas') }}
+        <div>
+            <p>{{ gettext('Please select an idea in the table of ideas') }}</p>
         </div>
     <% } %>
 </div>

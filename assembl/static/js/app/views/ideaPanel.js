@@ -17,12 +17,9 @@ CollectionManager = require('modules/collectionManager'),
     //2014/08/03 ghourlier, never use ? delete it ?
     //var LONG_TITLE_ID = 'ideaPanel-longtitle';
 
-    /**
-     * @class IdeaPanel
-     */
     var IdeaPanel = AssemblPanel.extend({
         template: '#tmpl-ideaPanel',
-        className:'groupPanel',
+        className:'groupPanel ideaPanel',
         regions: {
 
         },

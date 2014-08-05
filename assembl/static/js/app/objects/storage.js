@@ -61,12 +61,14 @@ define(function (require) {
                             {type:'navigation'},
                             //{type:'idea-list'},
                             {type:'idea-panel'},
-                            {type:'message'},
+                            {type:'message'}
                         ]
                     },
                     {
                         panels:[
                             {type:'navigation'},
+                            {type:'idea-panel'},
+                            {type:'message'}
                             //{type:'idea-list'},
                             //{type:'idea-panel'},
                             //{type:'message'},

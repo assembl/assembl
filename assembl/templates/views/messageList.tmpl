@@ -1,7 +1,7 @@
 <header class="panel-header">
-    <span class="text-bold">{{ gettext('Messages') }}</span>
+    <span class="text-bold">{{ gettext('Messages') }}</span><i class="icon-options fr"></i>
 
-    <div class="float-right">
+    <div class="fr">
         <% if (currentViewStyle.id === 'threaded') { %>
             <a id="messageList-collapseButton" data-tooltip="<%= collapsed ? '{{gettext('Expand all')}}' : '{{gettext('Collapse all')}}' %>" class="iconbutton <%= collapsed ? 'icon-download-1' : 'icon-upload' %>"></a>
         <% } %>
@@ -9,6 +9,11 @@
         <a id="messageList-closeButton" data-tooltip="{{gettext('Close panel')}}" class="iconbutton icon-cancel"></a>
     </div>
 </header>
+<div class="options-filter">
+  <span class="dispb fl pas">Not read</span>
+  <span class="dispb fl pas">All</span>
+  <span class="dispb fr pas">Expand all</span>
+</div>
 
 <div class="panel-body">
     <div class="view-config">
@@ -34,7 +39,6 @@
                 #}
             </ul>
         </div>
-
     </div>
 
     {#

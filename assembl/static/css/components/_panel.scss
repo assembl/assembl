@@ -64,6 +64,7 @@
   @include z-index("float");
   padding: 10px 5px;
   position: relative;
+  background-color: $gray3;
 }
 
 // An editable area within the .panel-header
