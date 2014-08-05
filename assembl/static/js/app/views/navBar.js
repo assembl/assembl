@@ -8,12 +8,17 @@ define(function(require){
         tagName:'nav',
         className:'navbar navbar-default',
         events: {
-           'click .lang': 'setLocale'
+           'click .lang': 'setLocale',
+           'click .add-group':'addGroup'
         },
-
         setLocale: function(e){
             var lang = $(e.target).attr('data-locale');
             Ctx.setLocale(lang);
+        },
+        addGroup: function(){
+
+
+
         }
 
     });

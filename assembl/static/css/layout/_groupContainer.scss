@@ -28,7 +28,6 @@
   height: 25px;
   background-color: $gray2;
   position: relative;
-  .add-group,
   .close-group,
   .lock-group {
     cursor: pointer;
@@ -36,9 +35,6 @@
     text-decoration: none;
     top:3px;
     color:$white;
-  }
-  .add-group {
-    left: 5px;
   }
   .close-group {
     right: 5px;
