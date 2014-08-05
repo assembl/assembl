@@ -46,7 +46,7 @@ define(function(require){
             Assembl.headerRegions.show(new navBar());
 
             if(!window.localStorage.getItem('showNotification')){
-               $('#wrapper #groupContainer').css('top', '76px');
+               $('#wrapper .groupContainer').css('top', '76px');
                Assembl.notificationRegion.show(new Notification());
             }
             /**

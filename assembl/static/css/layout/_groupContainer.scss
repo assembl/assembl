@@ -74,8 +74,13 @@
   height: 100%;
   width: 100%;
 
+  .groupPanel {
+    display: table-cell;
+    height: 100%;
+  }
+
   .navSidebar{
-    width: 300px;
+    min-width: 400px;
     .side-menu {
       margin: 0;
       padding: 0;
@@ -99,18 +104,6 @@
         }
       }
     }
-    .navNotification{
-      position: relative;
-      height: 150px;
-      background-color: $gray2;
-      color: $white;
-    }
-  }
-
-  .groupPanel {
-    display: table-cell;
-    width: 100%;
-    height: 100%;
   }
 }
 

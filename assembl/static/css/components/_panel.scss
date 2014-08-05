@@ -62,9 +62,9 @@
   @include no-selection;
   * { @include no-selection; }
   @include z-index("float");
-  line-height: 36px;
+  @include box-sizing(border-box);
   height: 36px;
-  padding: 0 5px;
+  //padding: 10px 5px;
   border-bottom: solid 1px $gray;
   position: relative;
 

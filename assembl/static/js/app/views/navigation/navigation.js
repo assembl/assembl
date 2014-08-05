@@ -28,7 +28,7 @@ sidebarNotification = require('views/navigation/notification'),
 
             this.window_height = $(window).height() - 61;
             this.adsBox_height = 150;
-            this.li_height = 140;
+            this.li_height = 144;
             this.sizeMenu = (this.window_height - this.adsBox_height) - this.li_height;
         },
         onRender: function(){
@@ -50,7 +50,7 @@ sidebarNotification = require('views/navigation/notification'),
             var accordion = (this.window_height - this.adsBox_height);
 
             this.$el.find('.side-menu').css('height', accordion);
-            this.$el.css('height', this.window_height);
+            //this.$el.css('height', this.window_height);
         },
         loadView: function(view){
            switch(view){
