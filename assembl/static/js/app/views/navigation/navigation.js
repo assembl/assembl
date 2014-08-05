@@ -49,9 +49,9 @@ sidebarNotification = require('views/navigation/notification'),
             }
         },
         setSideBarHeight: function(){
+            $('div.second-level').height(this._sideBarHeight);
             this.$el.find('.side-menu').css('height', this._accordion);
             this.$el.css('height', this._sideBarHeight);
-
         },
         loadView: function(view){
            switch(view){
