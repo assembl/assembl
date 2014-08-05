@@ -61,7 +61,7 @@ define(function(require){
             collectionManager.getAllIdeasCollectionPromise().done(
                 function(allIdeasCollection) {
                   var events = ['reset', 'change:parentId', 'change:@id', 'change:inNextSynthesis', 'remove', 'add', 'destroy'];
-                  that.listenTo(allIdeasCollection, events.join(' '), this.render);
+                  that.listenTo(allIdeasCollection, events.join(' '), that.render);
                 });
             
             collectionManager.getAllExtractsCollectionPromise().done(
