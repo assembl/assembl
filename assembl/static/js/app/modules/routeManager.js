@@ -5,6 +5,7 @@ define(function(require){
            Assembl = require('modules/assembl'),
                Ctx = require('modules/context'),
       groupManager = require('modules/groupManager'),
+ collectionManager = require('modules/collectionManager'),
            Storage = require('objects/storage'),
               User = require('models/user'),
             navBar = require('views/navBar'),
@@ -54,17 +55,19 @@ define(function(require){
             /**
              * Render the current group of views
              * */
-            var items = Storage.getStorageGroupItem();
+            var groupSpecsP = collectionManager().getGroupSpecsCollectionPromise();
             // insure that the dom is empty before filling
             //$('#panelarea').empty();
 
             //console.log(items)
-            var group = new GroupContainer({
-                collection: items
-            });
+            groupSpecsP.done(function(groupSpecs) {
+              var group = new GroupContainer({
+                  collection: groupSpecs
+              });
 
-            Assembl.groupContainer.show(group);
-            //$('#groupContainer').append(group.render().el);
+              Assembl.groupContainer.show(group);
+              //$('#groupContainer').append(group.render().el);
+            })
         },
 
         contextPage: function(){

@@ -13,7 +13,11 @@ define(function(require){
 
         defaults: {
            locked: false,
-           panels: []
+           panels: new panelSpec.Collection([
+               {type:'navigation'},
+               {type:'idea-panel'},
+               {type:'message'}
+           ])
         }
     });
 

@@ -4,11 +4,13 @@ define(function(require){
 
   var Assembl = require('modules/assembl'),
       Message = require('models/message'),
+    groupSpec = require('models/groupSpec'),
          Idea = require('models/idea'),
      IdeaLink = require('models/ideaLink'),
       Segment = require('models/segment'),
          User = require('models/user'),
             $ = require('jquery'),
+      Storage = require('objects/storage'),
         Types = require('utils/types'),
          i18n = require('utils/i18n');
      
@@ -58,6 +60,12 @@ define(function(require){
     
     _allExtractsCollectionPromise : undefined,
     
+    /**
+     * Collectin with a definition of the user's view
+     * @type {GroupSpec}
+     */
+    _allGroupSpecsCollection : undefined,
+
 
     initialize: function(options){
 
@@ -216,6 +224,24 @@ define(function(require){
         });
       }
       return deferred.promise();
+    },
+
+    getGroupSpecsCollectionPromise : function() {
+      var deferred = $.Deferred();
+
+      if (this._allGroupSpecsCollectionPromise === undefined) {
+        var collection, data = Storage.getStorageGroupItem()
+        if (data !== undefined) {
+          collection = new groupSpec.Collection(data, {'parse':true});
+        } else {
+          collection = new groupSpec.Collection();
+          collection.add(new groupSpec.Model());
+        }
+        collection.collectionManager = this;
+        this._allGroupSpecsCollectionPromise = deferred.promise();
+        deferred.resolve(collection);
+      }
+      return this._allGroupSpecsCollectionPromise;
     }
   });
     
