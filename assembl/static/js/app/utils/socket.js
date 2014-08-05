@@ -77,13 +77,13 @@ define(["modules/assembl", 'modules/context', 'underscore', 'sockjs','modules/co
      */
     Socket.prototype.processData = function(item){
       var collectionManager = new CollectionManager(),
-          collection = collectionManager.getCollectionByType(item);
+          collPromise = collectionManager.getCollectionPromiseByType(item);
 
         if (Ctx.debugSocket) {
             console.log( item['@id'] || item['@type'], item );
         }
 
-        if( collection === null ){
+        if( collPromise === null ){
             if(item['@type'] == "Connection") {
                 //Ignore Connections
                 return;
@@ -96,7 +96,9 @@ define(["modules/assembl", 'modules/context', 'underscore', 'sockjs','modules/co
 
         }
         // Each collection must know what to do
-        collection.updateFromSocket(item);
+        collPromise.done(function(collection) {
+                collection.updateFromSocket(item);
+        });
     };
 
     return Socket;

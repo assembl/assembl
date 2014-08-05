@@ -5,6 +5,7 @@ define(function(require){
   var Assembl = require('modules/assembl'),
       Message = require('models/message'),
          Idea = require('models/idea'),
+     IdeaLink = require('models/ideaLink'),
       Segment = require('models/segment'),
          User = require('models/user'),
             $ = require('jquery'),
@@ -66,17 +67,16 @@ define(function(require){
     /**
      * Returns the collection from the giving object's @type .
      * Used by the socket to sync the collection.
-     * TODO:  REWRITE AS PROMISES
      * @param {BaseModel} item
      * @param {String} [type=item['@type']] The model type
      * @return {BaseCollection}
      */
-    getCollectionByType: function(item, type){
+    getCollectionPromiseByType: function(item, type){
         type = type || item['@type'];
 
         switch(type){
             case Types.EXTRACT:
-                return this._allExtractsCollection;
+                return this.getAllExtractsCollectionPromise();
 
             case Types.IDEA:
             case Types.ROOT_IDEA:
@@ -84,10 +84,10 @@ define(function(require){
             case Types.ISSUE:
             case Types.CRITERION:
             case Types.ARGUMENT:
-                return this._allIdeasCollection;
+                return this.getAllIdeasCollectionPromise();
 
             case Types.IDEA_LINK:
-                return this._allIdeaLinksCollection;
+                return this.getAllIdeaLinksCollectionPromise();
 
             case Types.POST:
             case Types.ASSEMBL_POST:
@@ -95,13 +95,13 @@ define(function(require){
             case Types.IMPORTED_POST:
             case Types.EMAIL:
             case Types.IDEA_PROPOSAL_POST:
-                return this._allMessageStructureCollection;
+                return this.getAllMessageStructureCollectionPromise();
 
             case Types.USER:
-                return this._allUsersCollection;
+                return this.getAllUsersCollectionPromise();
 
             case Types.SYNTHESIS:
-                return assembl.syntheses;
+                return assembl.syntheses.promise();
         }
 
         return null;
@@ -192,18 +192,10 @@ define(function(require){
       if (this._allIdeaLinksCollectionPromise === undefined) {
         this._allIdeaLinksCollection = new IdeaLink.Collection();
         this._allIdeaLinksCollection.collectionManager = this;
-        this._allIdeaLinksCollectionPromise = this._allIdeaLinksCollection.fetch({
-          success: function(collection, response, options) {
-            deferred.resolve(that._allIdeaLinksCollection);
-          }
-        });
+        this._allIdeaLinksCollectionPromise = deferred.promise();
+        deferred.resolve(this._allIdeaLinksCollection);
       }
-      else {
-        this._allIdeaLinksCollectionPromise.done(function(){
-          deferred.resolve(that._allIdeaLinksCollection);
-        });
-      }
-      return deferred.promise();
+      return this._allIdeaLinksCollectionPromise;
     },
     
     getAllExtractsCollectionPromise : function() {
