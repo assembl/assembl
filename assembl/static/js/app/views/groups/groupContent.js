@@ -2,7 +2,7 @@ define(function (require) {
 
     var Marionette = require('marionette'),
            Storage = require('objects/storage'),
-     panelRegistry = require('views/panelRegistry');
+      viewsFactory = require('objects/viewsFactory');
 
     var groupContent = Marionette.CompositeView.extend({
         template: "#tmpl-groupContent",
@@ -88,7 +88,7 @@ define(function (require) {
             //that.toggleLock();
         },
         getChildView: function(child) {
-          return panelRegistry(child);
+          return viewsFactory(child);
           //return AssemblPanel.prototype.createPanel(child);
         },
     });

@@ -1,31 +1,30 @@
-define(function(require) {
+define(function (require) {
+    var AssemblPanel = require('views/assemblPanel'),
+        IdeaPanel = require('views/ideaPanel'),
+        MessageList = require('views/messageList'),
+        HomePanel = require('views/navigation/home'),
+        SegmentList = require('views/segmentList'),
+        SynthesisPanel = require('views/synthesisPanel'),
+        NavigationPanel = require('views/navigation/navigation');
+    'use strict';
 
-    var Marionette = require('marionette'),
-       SegmentList = require('views/segmentList'),
-         IdeaPanel = require('views/ideaPanel'),
-       MessageList = require('views/messageList'),
-    SynthesisPanel = require('views/synthesisPanel'),
-        Navigation = require('views/navigation');
+    var panelTypeRegistry = {
+        'idea-panel': IdeaPanel,
+        'message': MessageList,
+        'home-panel': HomePanel,
+        'navigation': NavigationPanel,
+        'synthesisPanel': SynthesisPanel,
+        'segmentList': SegmentList
+    };
 
-    var viewsFactory = Marionette.Object.extend({
-
-        segmentList: function(){
-            return new SegmentList();
-        },
-        navigation: function(){
-            return Navigation;
-        },
-        ideaPanel: function(){
-            return new IdeaPanel();
-        },
-        messageList: function(){
-            return new MessageList();
-        },
-        synthesisPanel: function(){
-            return new SynthesisPanel();
+    function createPanel(panelSpecModel) {
+        try {
+            return panelTypeRegistry[panelSpecModel.get('type')];
+        } catch (err) {
+            console.log('invalid spec:', panelSpecModel);
         }
+        return AssemblPanel;
+    }
 
-    });
-
-    return new viewsFactory();
+    return createPanel;
 });
