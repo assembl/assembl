@@ -5,7 +5,7 @@ define(function(require){
                   $ = require('jquery'),
                   _ = require('underscore'),
             Storage = require('objects/storage'),
-          panelSpec = require('models/panelSpec'),
+          groupSpec = require('models/groupSpec'),
      GroupContainer = require('views/groups/groupContainer');
 
     var groupManager = Marionette.Controller.extend({
@@ -112,7 +112,7 @@ define(function(require){
         createViewGroupItem: function(collection){
             var that = this;
 
-            var groups = new panelSpec.CollectionOfCollection(collection, {'parse':true});
+            var groups = new groupSpec.Collection(collection, {'parse':true});
             //window.groups = groups;
             return new GroupContainer({
                 collection: groups

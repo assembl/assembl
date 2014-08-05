@@ -13,26 +13,8 @@ define(function(require){
         model: PanelSpecModel
     });
 
-    var GroupSpec = Base.Model.extend({
-        parse: function(model) {
-            model.group = new PanelSpecs(model.group);
-            return model;
-        },
-
-        defaults: {
-           locked: false,
-           group: []
-        }
-    });
-
-    var GroupSpecs = Base.Collection.extend({
-        model: GroupSpec
-    });
-
     return {
         Model: PanelSpecModel,
         Collection: PanelSpecs,
-        CollectionOfCollection: GroupSpecs
     };
-
 });
