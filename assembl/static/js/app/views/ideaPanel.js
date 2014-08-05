@@ -46,9 +46,9 @@ CollectionManager = require('modules/collectionManager'),
         events: {
             'dragstart .box': 'onDragStart',
             'dragend .box': "onDragEnd",
-            'dragover .panel': 'onDragOver',
-            'dragleave .panel': 'onDragLeave',
-            'drop .panel': 'onDrop',
+            'dragover .groupPanel': 'onDragOver',
+            'dragleave .groupPanel': 'onDragLeave',
+            'drop .groupPanel': 'onDrop',
 
             'click .closebutton': 'onSegmentCloseButtonClick',
             'click #ideaPanel-clearbutton': 'onClearAllClick',
@@ -88,100 +88,21 @@ CollectionManager = require('modules/collectionManager'),
          */
 
         serializeData: function(){
-            var that = this,
-                segments = {},
-                subIdeas = {},
-                extracts = [],
+            var subIdeas = {},
                 votable_widgets = [],
                 currentUser = Ctx.getCurrentUser(),
                 canEdit = currentUser.can(Permissions.EDIT_IDEA) || false,
-                canEditNextSynthesis = currentUser.can(Permissions.EDIT_SYNTHESIS),
-                collectionManager = new CollectionManager();
+                canEditNextSynthesis = currentUser.can(Permissions.EDIT_SYNTHESIS);
 
-            collectionManager.getAllExtractsCollectionPromise().
-                done(function(allExtractsCollection) {
-
-                    if(that.model) {
-                        subIdeas = that.model.getChildren();
-                        votable_widgets = that.model.getVotableOnWhichWidgets();
-                        extracts = allExtractsCollection.where({idIdea:that.model.id});
-                    }
-
-                    if(that.model) {
-
-                        $.when( collectionManager.getAllUsersCollectionPromise(),
-                            collectionManager.getAllMessageStructureCollectionPromise()
-                        ).then(
-                            function( allUsersCollection, allMessagesCollection) {
-
-                                /* We need a real view for that benoitg - 2014-07-23 */
-                                var ideaExtractList = that.$('.postitlist'),
-                                    template = Ctx.loadTemplate('segment');
-
-                                _.each(extracts, function(extract) {
-                                    var post = allMessagesCollection.get(extract.get('idPost'));
-                                    ideaExtractList.append( template(
-                                        {segment: extract,
-                                            post: post,
-                                            postCreator: allUsersCollection.get(post.get('idCreator')),
-                                            canEditExtracts : currentUser.can(Permissions.EDIT_EXTRACT),
-                                            canEditMyExtracts : currentUser.can(Permissions.EDIT_MY_EXTRACT),
-                                            ctx : Ctx
-                                        }) );
-                                });
-                            }
-                        );
-                    }
-
-                    Ctx.initTooltips(that.$el);
-                    that.panel = that.$('.panel');
-                    Ctx.initClipboard();
-
-                    if(that.model) {
-                        var shortTitleField = new EditableField({
-                            'model': that.model,
-                            'modelProp': 'shortTitle',
-                            'class': 'panel-editablearea text-bold',
-                            'data-tooltip': i18n.gettext('Short expression (only a few words) of the idea in the table of ideas.'),
-                            'placeholder': i18n.gettext('New idea'),
-                            'canEdit': canEdit
-                        });
-                        shortTitleField.renderTo(that.$('#ideaPanel-shorttitle'));
-
-                        that.longTitleField = new CKEditorField({
-                            'model': that.model,
-                            'modelProp': 'longTitle',
-                            'placeholder': that.model.getLongTitleDisplayText(),
-                            'canEdit': canEditNextSynthesis
-                        });
-                        that.longTitleField.renderTo( that.$('#ideaPanel-longtitle'));
-
-                        that.definitionField = new CKEditorField({
-                            'model': that.model,
-                            'modelProp': 'definition',
-                            'placeholder': that.model.getDefinitionDisplayText(),
-                            'canEdit': canEdit
-                        });
-                        that.definitionField.renderTo( that.$('#ideaPanel-definition'));
-
-                        that.commentView = new MessageSendView({
-                            'allow_setting_subject': false,
-                            'reply_idea': that.model,
-                            'body_help_message': i18n.gettext('Comment on this idea here...'),
-                            'send_button_label': i18n.gettext('Send your comment'),
-                            'subject_label': null,
-                            'mandatory_body_missing_msg': i18n.gettext('You need to type a comment first...'),
-                            'mandatory_subject_missing_msg': null
-                        });
-                        that.$('#ideaPanel-comment').append( that.commentView.render().el );
-                    }
-
-                });
+            if(this.model) {
+                subIdeas = this.model.getChildren();
+                votable_widgets = this.model.getVotableOnWhichWidgets();
+            }
 
             return {
                  idea: this.model,
-                 segments: extracts,
                  subIdeas: subIdeas,
+                 segments: [],
                  votable_widgets: votable_widgets,
                  canEdit: canEdit,
                  i18n: i18n,
@@ -198,20 +119,101 @@ CollectionManager = require('modules/collectionManager'),
 
         onRender: function(){
             Ctx.cleanTooltips(this.$el);
+            Ctx.initTooltips(this.$el);
+            this.panel = this.$('.groupPanel');
+            Ctx.initClipboard();
+
+            if(this.model) {
+
+              var that = this,
+                  extracts = [],
+                  currentUser = Ctx.getCurrentUser(),
+                  canEdit = currentUser.can(Permissions.EDIT_IDEA) || false,
+                  canEditNextSynthesis = currentUser.can(Permissions.EDIT_SYNTHESIS),
+                  collectionManager = new CollectionManager();
+
+              collectionManager.getAllExtractsCollectionPromise().
+                  done(function(allExtractsCollection) {
+
+                      if(that.model) {
+                          extracts = allExtractsCollection.where({idIdea:that.model.id});
+
+                          $.when( collectionManager.getAllUsersCollectionPromise(),
+                              collectionManager.getAllMessageStructureCollectionPromise()
+                          ).then(
+                              function( allUsersCollection, allMessagesCollection) {
+
+                                  /* We need a real view for that benoitg - 2014-07-23 */
+                                  var ideaExtractList = that.$('.postitlist'),
+                                      template = Ctx.loadTemplate('segment');
+
+                                  _.each(extracts, function(extract) {
+                                      var post = allMessagesCollection.get(extract.get('idPost'));
+                                      ideaExtractList.append( template(
+                                          {segment: extract,
+                                              post: post,
+                                              postCreator: allUsersCollection.get(post.get('idCreator')),
+                                              canEditExtracts : currentUser.can(Permissions.EDIT_EXTRACT),
+                                              canEditMyExtracts : currentUser.can(Permissions.EDIT_MY_EXTRACT),
+                                              ctx : Ctx
+                                          }) );
+                                  });
+                              }
+                          );
+                      }
+                    });
+
+                var shortTitleField = new EditableField({
+                    'model': this.model,
+                    'modelProp': 'shortTitle',
+                    'class': 'panel-editablearea text-bold',
+                    'data-tooltip': i18n.gettext('Short expression (only a few words) of the idea in the table of ideas.'),
+                    'placeholder': i18n.gettext('New idea'),
+                    'canEdit': canEdit
+                });
+                shortTitleField.renderTo(this.$('#ideaPanel-shorttitle'));
+
+                this.longTitleField = new CKEditorField({
+                    'model': this.model,
+                    'modelProp': 'longTitle',
+                    'placeholder': this.model.getLongTitleDisplayText(),
+                    'canEdit': canEditNextSynthesis
+                });
+                this.longTitleField.renderTo( this.$('#ideaPanel-longtitle'));
+
+                this.definitionField = new CKEditorField({
+                    'model': this.model,
+                    'modelProp': 'definition',
+                    'placeholder': this.model.getDefinitionDisplayText(),
+                    'canEdit': canEdit
+                });
+                this.definitionField.renderTo( this.$('#ideaPanel-definition'));
+
+                this.commentView = new MessageSendView({
+                    'allow_setting_subject': false,
+                    'reply_idea': this.model,
+                    'body_help_message': i18n.gettext('Comment on this idea here...'),
+                    'send_button_label': i18n.gettext('Send your comment'),
+                    'subject_label': null,
+                    'mandatory_body_missing_msg': i18n.gettext('You need to type a comment first...'),
+                    'mandatory_subject_missing_msg': null
+                });
+                this.$('#ideaPanel-comment').append( this.commentView.render().el );
+            }
         },
 
         /**
          * Blocks the panel
          */
         blockPanel: function(){
-            this.$('.panel').addClass('is-loading');
+            this.$('.groupPanel').addClass('is-loading');
         },
 
         /**
          * Unblocks the panel
          */
         unblockPanel: function(){
-            this.$('.panel').removeClass('is-loading');
+            this.$('.groupPanel').removeClass('is-loading');
         },
 
         /**

@@ -105,7 +105,7 @@ CollectionManager = require('modules/collectionManager');
                 }
                 that.$el.html(that.template(data));
                 Ctx.initTooltips(that.$el);
-                that.panel = that.$('.panel');
+                that.panel = that.$('.groupPanel');
       
                 if( top > 0 ){
                   that.panel.find('.panel-body')[0].scrollTop = top;
@@ -260,9 +260,9 @@ CollectionManager = require('modules/collectionManager');
         events: {
             'dragstart .postit': "onDragStart",
             'dragend .postit': "onDragEnd",
-            'dragover .panel': 'onDragOver',
-            'dragleave .panel': 'onDragLeave',
-            'drop .panel': 'onDrop',
+            'dragover .groupPanel': 'onDragOver',
+            'dragleave .groupPanel': 'onDragLeave',
+            'drop .groupPanel': 'onDrop',
 
             'click .closebutton': "onCloseButtonClick",
             'click #segmentList-clear': "onClearButtonClick",
