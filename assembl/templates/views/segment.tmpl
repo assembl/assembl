@@ -5,7 +5,7 @@
     the <%= segment %> variable should be given.
 #}
 
-{% set segmentDate = '<%= ctx.getDateFormated(segment.get("creationDate")) %>' %}
+{% set segmentDate = '<%= ctx.getNiceDateTime(segment.get("creationDate")) %>' %}
 {% set segmentCreatorName = '<%= segment.getCreatorDEPRECATED().get("name") %>' %}
 {% set harverterTooltip = gettext('Harvested by %(name)s %(date)s')|format(date=segmentDate, name=segmentCreatorName) %}
 {% set segmentCreatorAvatarImg = '<a class="profile-link" href="#" data-tooltip="'+harverterTooltip+'"><img src="<%= segment.getCreatorDEPRECATED().getAvatarUrl(24) %>" class="image-rounded" alt="" /></a>' %}
@@ -29,9 +29,10 @@
         if ( type == "Email" || type == "Post" || type == "AssemblPost" || type == "ImportedPost") { %>
             {% set postCreatorAvatarImg = '<img src="<%= postCreator.getAvatarUrl(35) %>" class="image-rounded" alt="" />' %}
             {% set postCreatorName = '<%= postCreator.get("name") %>' %}
-            {% set postDate = '<%= ctx.getDateFormated(post.get("date")) %>' %}
+            {% set nicePostDate = '<%= ctx.getNiceDateTime(post.get("date")) %>' %}
+            {% set precisePostDate = '<%= ctx.getReadableDateTime(post.get("date")) %>' %}
             
-            {{ gettext('%(img)s Posted %(date)s by <strong>%(name)s</strong>')|format(name=postCreatorName, img=postCreatorAvatarImg, date=postDate)|safe }}
+            {{ gettext('%(img)s Posted <time title="%(precise_date)s">%(nice_date)s</time> by <strong>%(name)s</strong>')|format(name=postCreatorName, img=postCreatorAvatarImg, nice_date=nicePostDate, precise_date=precisePostDate)|safe }}
         <% } else if (type == "Webpage") { %>
             <img src="/static/img/icon/search_document.svg" width="35" height="35" class="image-rounded" alt="{{ gettext('Document extracted from the web') }}" />
             {{ gettext('Harvested from webpage') }}

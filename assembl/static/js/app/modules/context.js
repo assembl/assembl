@@ -533,6 +533,39 @@ define(function(require){
         },
 
         /**
+         * Returns a fancy date (ex: a few seconds ago)
+         * @return {String}
+         */
+        getNiceDateTime: function(date, precise){
+            var momentDate = moment(date);
+            if ( momentDate )
+            {
+                if ( precise == true )
+                {
+                    return momentDate.format('LLLL');
+                }
+                var one_year_ago = moment().subtract('years', 1);
+                if ( momentDate.isBefore(one_year_ago) )
+                { // show the exact date
+                    return momentDate.format('L');
+                }
+                else
+                { // show "x days ago", or something like that
+                    return momentDate.fromNow();
+                }
+            }
+            return momentDate; // or date?
+        },
+
+        /**
+         * Returns a fancy date (ex: a few seconds ago)
+         * @return {String}
+         */
+        getReadableDateTime: function(date){
+            return this.getNiceDateTime(date, true);
+        },
+
+        /**
          * Shows the context menu given the options
          * @param {Number} x
          * @param {Number} y
@@ -659,15 +692,6 @@ define(function(require){
         formatAvatarUrl: function(userID, size){
             size = size || 44;
             return this.format("/user/id/{0}/avatar/{1}", userID, size);
-        },
-
-        /**
-         * Returns a fancy date (ex: a few seconds ago)
-         * @return {String}
-         */
-        getDateFormated: function(date){
-            var momentDate = moment(date);
-            return momentDate ? momentDate.fromNow() : momentDate;
         },
 
         /**
