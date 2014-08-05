@@ -101,7 +101,7 @@ define(function(require){
          */
         unblockPanel: function(){
             this.$('.panel').removeClass('is-loading');
-        },
+        }
 
     });
 

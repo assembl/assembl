@@ -26,7 +26,7 @@ define(function(require){
 
     return {
         Model: GroupSpecModel,
-        Collection: GroupSpecs,
+        Collection: GroupSpecs
     };
 
 });

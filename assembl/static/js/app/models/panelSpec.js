@@ -15,6 +15,6 @@ define(function(require){
 
     return {
         Model: PanelSpecModel,
-        Collection: PanelSpecs,
+        Collection: PanelSpecs
     };
 });

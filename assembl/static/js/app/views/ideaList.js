@@ -87,6 +87,25 @@ define(function(require){
         },
 
         /**
+         * The events
+         */
+        'events': {
+            'click .panel-body': 'onPanelBodyClick',
+            'dragover .panel-bodyabove': 'onAboveDragOver',
+            'dragover .panel-bodybelow': 'onBelowDragOver',
+
+            'click #ideaList-addbutton': 'addChildToSelected',
+            'click #ideaList-collapseButton': 'toggleIdeas',
+            'click #ideaList-graphButton': 'toggleGraphView',
+            'click #ideaList-closeButton': 'closePanel',
+            'click #ideaList-fullscreenButton': 'setFullscreen',
+
+            'click #ideaList-filterByFeatured': 'filterByFeatured',
+            'click #ideaList-filterByInNextSynthesis': 'filterByInNextSynthesis',
+            'click #ideaList-filterByToc': 'clearFilter'
+        },
+
+        /**
          * The render
          */
         render: function(){
@@ -319,26 +338,6 @@ define(function(require){
                     });
                 } catch (Exception) {}
             }
-        },
-
-
-        /**
-         * The events
-         */
-        'events': {
-            'click .panel-body': 'onPanelBodyClick',
-            'dragover .panel-bodyabove': 'onAboveDragOver',
-            'dragover .panel-bodybelow': 'onBelowDragOver',
-
-            'click #ideaList-addbutton': 'addChildToSelected',
-            'click #ideaList-collapseButton': 'toggleIdeas',
-            'click #ideaList-graphButton': 'toggleGraphView',
-            'click #ideaList-closeButton': 'closePanel',
-            'click #ideaList-fullscreenButton': 'setFullscreen',
-
-            'click #ideaList-filterByFeatured': 'filterByFeatured',
-            'click #ideaList-filterByInNextSynthesis': 'filterByInNextSynthesis',
-            'click #ideaList-filterByToc': 'clearFilter'
         },
 
         /**

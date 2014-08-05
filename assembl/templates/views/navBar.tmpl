@@ -1,39 +1,38 @@
-<nav class="navbar navbar-default" role="navigation">
-    <div class="navbar-left">
-        <a href="/" class="assembl-logo" class="sign-in">Assembl</a>
-        <i>|</i>
-        <span id="onlinedot" class="dot">
-            <small class="dot-offline">{{ gettext('Connecting...') }}</small>
-            <span class="dot-online title-debatname">{{ discussion.topic }}</span>
-        </span>
-    </div>
-    <div class="navbar-center tac">
-      <a class="add-group"><i class="icon-add"></i> Add a group of views</a>
-    </div>
-    <div class="navbar-right">
-        <div class="connexion">
-            {% if user %}
-                {% if user_profile_edit_url %}<a href="{{ user_profile_edit_url }}">{% endif %}
-                    <img height="25" width="25" src="/user/id/{{user.id}}/avatar/25" alt="{{ user.display_name() }}"/>
-                    <span>{{ user.display_name() }}</span>
-                {% if user_profile_edit_url %}</a>{% endif %}
-                <a href="/logout" class="sign-out iconbutton icon-logout-1" title="{{ gettext('Sign out') }}"></a>
-            {% else %}
-                {% if request.current_route_path() != "/login" %}
-                    {% if request.current_route_path() != "/register" %}
-                        <a href="/login?next_view={{request.current_route_path()}}" class="sign-in">{{ gettext('Sign in') }}</a>
-                    {% endif %}
+<div class="navbar-left">
+    <a href="/" class="assembl-logo" class="sign-in">Assembl</a>
+    <i>|</i>
+    <span id="onlinedot" class="dot">
+        <small class="dot-offline">{{ gettext('Connecting...') }}</small>
+        <span class="dot-online title-debatname">{{ discussion.topic }}</span>
+    </span>
+</div>
+<div class="navbar-center tac">
+  <a class="add-group"><i class="icon-add"></i> Add a group of views</a>
+</div>
+<div class="navbar-right">
+    <div class="connexion">
+        {% if user %}
+            {% if user_profile_edit_url %}<a href="{{ user_profile_edit_url }}">{% endif %}
+                <img height="25" width="25" src="/user/id/{{user.id}}/avatar/25" alt="{{ user.display_name() }}"/>
+                <span>{{ user.display_name() }}</span>
+            {% if user_profile_edit_url %}</a>{% endif %}
+            <a href="/logout" class="sign-out iconbutton icon-logout-1" title="{{ gettext('Sign out') }}"></a>
+        {% else %}
+            {% if request.current_route_path() != "/login" %}
+                {% if request.current_route_path() != "/register" %}
+                    <a href="/login?next_view={{request.current_route_path()}}" class="sign-in">{{ gettext('Sign in') }}</a>
                 {% endif %}
             {% endif %}
-            {% if locales.__len__ > 1 %}
-                <a href="#" class="locale active">{{locale | upper}}</a>
-                <span class="seperator"></span>
-                {% for loc in locales %}
-                    {% if (loc != locale) %}
-                        <a href="#" class='lang' data-locale='{{loc}}'>{{loc | upper}}</a>
-                    {% endif %}
-                {% endfor %}
-            {% endif %}
-        </div>
+        {% endif %}
+        {% if locales.__len__ > 1 %}
+            <a href="#" class="locale active">{{locale | upper}}</a>
+            <span class="seperator"></span>
+            {% for loc in locales %}
+                {% if (loc != locale) %}
+                    <a href="#" class='lang' data-locale='{{loc}}'>{{loc | upper}}</a>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
     </div>
-</nav>
+</div>
+

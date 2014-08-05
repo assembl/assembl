@@ -102,7 +102,7 @@ define(function(require){
             this.setViewStyle(this.getViewStyleDefById(this.storedMessageListConfig.viewStyleId) || this.ViewStyles.THREADED);
             this.defaultMessageStyle = Ctx.getMessageViewStyleDefById(this.storedMessageListConfig.messageStyleId) || Ctx.AVAILABLE_MESSAGE_VIEW_STYLES.PREVIEW;
 
-            this.panelGroup = options.parent.groupManager;
+            this.panelGroup = options.groupManager;
             /**
              * @ghourlier
              * TODO: Usually it would necessary to push notification rather than fetch every time the model change
@@ -829,7 +829,7 @@ define(function(require){
 
             html += '<span class="dropdown-label text-bold">';
             html += this.defaultMessageStyle.label;
-            html += '</span>';
+            html += '</span><i class="icon-arrowdown"></i>';
             html += '<ul class="dropdown-list">';
             _.each(Ctx.AVAILABLE_MESSAGE_VIEW_STYLES, function(messageViewStyle) {
                 html += '<li id="' + DEFAULT_MESSAGE_VIEW_LI_ID_PREFIX + messageViewStyle.id +'" class="dropdown-listitem">'+ messageViewStyle.label+'</li>';
@@ -848,7 +848,7 @@ define(function(require){
 
             html += '<span class="dropdown-label text-bold">';
             html += this.currentViewStyle.label;
-            html += '</span>';
+            html += '</span><i class="icon-arrowdown"></i>';
             html += '<ul class="dropdown-list">';
             _.each(this.ViewStyles, function(messageListViewStyle) {
                 html += '<li id="' + messageListViewStyle.css_id + '" class="dropdown-listitem">'+ messageListViewStyle.label+'</li>';

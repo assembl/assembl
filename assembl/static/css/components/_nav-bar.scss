@@ -31,64 +31,9 @@ header {
     left: 0;
     right: 0;
     width: 15%;
-    .menu {
-      list-style: none;
-      margin: 0;
-      padding: 0;
-      text-align: center;
-      box-sizing: border-box;
-      li {
-        display:inline-block;
-        margin-right:-4px;
-        > div {
-        color: #aaaaaa;
-        width: 130px;
-        height: 32px;
-        line-height:35px;
-        border-bottom: 3px solid transparent;
-        &:hover {
-          color: #484848;
-          border-bottom: 3px solid #6C0AAB;
-        }
-        &.active{
-          color: #484848;
-          border-bottom: 3px solid #6C0AAB;
-        }
-        .lock-button {
-          position: relative;
-          display: inline-block;
-          @include transition-property(background-color);
-          @include transition-duration(0.1s);
-          color:#ffffff;
-          margin-left:1em;
-
-          .lock-anchor{
-            @include border-radius(1em);
-            background-color: #AAAAAA;
-            font-size: 11px;
-            padding: 1px;
-            opacity: 0.5;
-            &:hover {
-              opacity: 1;
-            }
-          }
-
-          .icon-lock-open:active{
-            &:before{
-              content: '\e829';
-            }
-          }
-
-          .icon-lock:active{
-            &:before{
-              content: '\e828';
-            }
-          }
-
-        }
-      }
-        
-      }
+    .add-group{
+      text-decoration: none;
+      cursor: pointer;
     }
   }
 
