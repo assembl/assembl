@@ -36,6 +36,9 @@ define(function(require){
      * @class views.MessageList
      */
     var MessageList = AssemblPanel.extend({
+
+        className:'groupPanel messageList',
+
         ViewStyles: {
           THREADED: {
             id: "threaded",

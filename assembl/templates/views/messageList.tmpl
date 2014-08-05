@@ -1,71 +1,67 @@
-<div class="panel messagePanel">
+<header class="panel-header">
+    <span class="text-bold">{{ gettext('Messages') }}</span>
 
-    <header class="panel-header">
-        <span class="text-bold">{{ gettext('Messages') }}</span>
-        
-        <div class="float-right">
-            <% if (currentViewStyle.id === 'threaded') { %>
-                <a id="messageList-collapseButton" data-tooltip="<%= collapsed ? '{{gettext('Expand all')}}' : '{{gettext('Collapse all')}}' %>" class="iconbutton <%= collapsed ? 'icon-download-1' : 'icon-upload' %>"></a>
-            <% } %>
-            <a id="messageList-fullscreenButton" class="iconbutton iconbutton--resizefull" data-tooltip="{{ gettext('Fullsize') }}"></a>
-            <a id="messageList-closeButton" data-tooltip="{{gettext('Close panel')}}" class="iconbutton icon-cancel"></a>
-        </div>
-    </header>
-
-    <div class="panel-body">
-        <div class="view-config">
-            <div id="js_messageListViewStyle-dropdown" class="dropdown"></div>
-            
-            <div id="defaultMessageView-dropdown" class="dropdown"></div>
-            
-            <div class="dropdown">
-    
-                <span class="dropdown-label text-bold">
-                    {{ gettext('Add filter') }}
-                </span>
-                <ul class="dropdown-list">
-                    {# A "Clear filters" button is now displayed when at least one filter is active
-                    <li id="messageList-allmessages" class="dropdown-listitem">{{ gettext('All messages') }}</li>
-                    #}
-                    <li id="messageList-onlyorphan" class="dropdown-listitem">{{ gettext('Orphan messages') }}</li>
-                    <li id="messageList-onlysynthesis" class="dropdown-listitem">{{ gettext('Synthesis messages') }}</li>
-                    <li id="messageList-isunread" class="dropdown-listitem">{{ gettext('Unread messages') }}</li>
-                    {#
-                    <li class="dropdown-listitem">{{ gettext('Uncaught') }}</li>
-                    <li class="dropdown-listitem">{{ gettext('Followed') }}</li>
-                    #}
-                </ul>
-            </div>
-
-        </div>
-        
-        {#
-        <div class="inline text-muted margin-left">
-            {% set total = '<%= total %>' %}
-            {{ gettext('%(total)s messages')|format(total=total)|safe }}
-        </div>
-        #}
-
-        <div id="messageList-query-info" class=""><%= queryInfo %></div>
-        <div id="messageList-toparea" class="margin text-center hidden">
-            <a id="messageList-prevbutton" class="button">{{ gettext('Load previous messages') }}</a>
-        </div>
-        
-        <div id="messageList-list" class="idealist <%= currentViewStyle.id %>"></div>
-        
-        <div id="messageList-bottomarea" class="margin text-center hidden">
-            <a id="messageList-morebutton" class="button">{{ gettext('Load next messages') }}</a>
-        </div>
-        
-        <% if (canPost) { %>
-            <div id="messagelist-replybox"></div>
+    <div class="float-right">
+        <% if (currentViewStyle.id === 'threaded') { %>
+            <a id="messageList-collapseButton" data-tooltip="<%= collapsed ? '{{gettext('Expand all')}}' : '{{gettext('Collapse all')}}' %>" class="iconbutton <%= collapsed ? 'icon-download-1' : 'icon-upload' %>"></a>
         <% } %>
+        <a id="messageList-fullscreenButton" class="iconbutton iconbutton--resizefull" data-tooltip="{{ gettext('Fullsize') }}"></a>
+        <a id="messageList-closeButton" data-tooltip="{{gettext('Close panel')}}" class="iconbutton icon-cancel"></a>
+    </div>
+</header>
 
+<div class="panel-body">
+    <div class="view-config">
+        <div id="js_messageListViewStyle-dropdown" class="dropdown"></div>
+
+        <div id="defaultMessageView-dropdown" class="dropdown"></div>
+
+        <div class="dropdown">
+
+            <span class="dropdown-label text-bold">
+                {{ gettext('Add filter') }}
+            </span>
+            <ul class="dropdown-list">
+                {# A "Clear filters" button is now displayed when at least one filter is active
+                <li id="messageList-allmessages" class="dropdown-listitem">{{ gettext('All messages') }}</li>
+                #}
+                <li id="messageList-onlyorphan" class="dropdown-listitem">{{ gettext('Orphan messages') }}</li>
+                <li id="messageList-onlysynthesis" class="dropdown-listitem">{{ gettext('Synthesis messages') }}</li>
+                <li id="messageList-isunread" class="dropdown-listitem">{{ gettext('Unread messages') }}</li>
+                {#
+                <li class="dropdown-listitem">{{ gettext('Uncaught') }}</li>
+                <li class="dropdown-listitem">{{ gettext('Followed') }}</li>
+                #}
+            </ul>
+        </div>
 
     </div>
 
     {#
-    <footer class="panel-footer"></footer>
+    <div class="inline text-muted margin-left">
+        {% set total = '<%= total %>' %}
+        {{ gettext('%(total)s messages')|format(total=total)|safe }}
+    </div>
     #}
 
+    <div id="messageList-query-info" class=""><%= queryInfo %></div>
+    <div id="messageList-toparea" class="margin text-center hidden">
+        <a id="messageList-prevbutton" class="button">{{ gettext('Load previous messages') }}</a>
+    </div>
+
+    <div id="messageList-list" class="idealist <%= currentViewStyle.id %>"></div>
+
+    <div id="messageList-bottomarea" class="margin text-center hidden">
+        <a id="messageList-morebutton" class="button">{{ gettext('Load next messages') }}</a>
+    </div>
+
+    <% if (canPost) { %>
+        <div id="messagelist-replybox"></div>
+    <% } %>
+
+
 </div>
+
+{#
+<footer class="panel-footer"></footer>
+#}

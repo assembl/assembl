@@ -24,7 +24,9 @@ sidebarNotification = require('views/navigation/notification'),
 
             $(window).resize(function(){
                 that.initVar();
-                that.setSideBarHeight();
+                setTimeout(function(){
+                    that.setSideBarHeight();
+                }, 1000);
             });
 
             this._window = null;
@@ -32,6 +34,7 @@ sidebarNotification = require('views/navigation/notification'),
             this._accordion = null;
 
             this.initVar();
+            this.setSideBarHeight();
         },
         onRender: function(){
            this.setSideBarHeight();
@@ -45,20 +48,21 @@ sidebarNotification = require('views/navigation/notification'),
 
             if(!elm.next('div.second-level').is(':visible')){
                 $('div.second-level').slideUp();
+                elm.next('div.second-level').css('height', this._sideBarHeight);
                 elm.next('div.second-level').slideDown();
             }
         },
         setSideBarHeight: function(){
-            $('div.second-level').height(this._sideBarHeight);
+            //$('div.second-level').css('height', this._sideBarHeight);
             this.$el.find('.side-menu').css('height', this._accordion);
             this.$el.css('height', this._sideBarHeight);
         },
         loadView: function(view){
            switch(view){
-               case 'home-panel':
+               case 'dashboard':
                    console.log('load home panel');
                    var homePanel = new HomePanel();
-                   this.context.show(homePanel);
+                   this.dashboard.show(homePanel);
                    break;
                case 'ideaTable':
                    console.log('load idea table');
@@ -70,7 +74,6 @@ sidebarNotification = require('views/navigation/notification'),
                    break;
                default:
                    break
-
            }
         },
 
