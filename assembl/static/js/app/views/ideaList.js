@@ -202,13 +202,14 @@ define(function(require){
          */
         collapseIdeas: function(){
           var collectionManager = new CollectionManager();
+          var that = this;
             this.collapsed = true;
             collectionManager.getAllIdeasCollectionPromise().done(
                 function(allIdeasCollection) {
                   allIdeasCollection.each(function(idea){
                     idea.attributes.isOpen = false;
                   });
-                  this.render();
+                  that.render();
                 });
         },
 
@@ -217,12 +218,13 @@ define(function(require){
          */
         expandIdeas: function(){
           this.collapsed = false;
+          var that = this;
           collectionManager.getAllIdeasCollectionPromise().done(
               function(allIdeasCollection) {
                 allIdeasCollection.each(function(idea){
                   idea.attributes.isOpen = true;
                 });
-                this.render();
+                that.render();
               });
         },
 

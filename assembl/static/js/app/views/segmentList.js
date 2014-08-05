@@ -22,13 +22,13 @@ CollectionManager = require('modules/collectionManager');
 
           collectionManager.getAllExtractsCollectionPromise().done(
               function(allExtractsCollection) {
-                that.listenTo(allExtractsCollection, 'all', this.render);
+                that.listenTo(allExtractsCollection, 'all', that.render);
                 
                 that.listenTo(allExtractsCollection, 'invalid', function(model, error){
                   alert(error);
                 });
 
-                that.listenTo(allExtractsCollection, 'add remove destroy change reset', this.render);
+                that.listenTo(allExtractsCollection, 'add remove destroy change reset', that.render);
 
                 that.listenTo(allExtractsCollection, 'add', function(segment){
                   that.highlightSegment(segment);
