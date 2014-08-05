@@ -9,9 +9,9 @@ define(function(require){
               User = require('models/user'),
             navBar = require('views/navBar'),
        contextPage = require('views/contextPage'),
-      Notification = require('views/notification'),
     GroupContainer = require('views/groups/groupContainer'),
- CollectionManager = require('modules/collectionManager');
+ CollectionManager = require('modules/collectionManager'),
+                 $ = require('jquery');
 
     var routeManager = Marionette.Controller.extend({
 
@@ -46,25 +46,16 @@ define(function(require){
          * */
         home: function(){
             Assembl.headerRegions.show(new navBar());
-
-            if(!window.localStorage.getItem('showNotification')){
-               $('#wrapper .groupContainer').css('top', '76px');
-               Assembl.notificationRegion.show(new Notification());
-            }
             /**
              * Render the current group of views
              * */
             var items = Storage.getStorageGroupItem();
-            // insure that the dom is empty before filling
-            //$('#panelarea').empty();
 
-            //console.log(items)
             var group = new GroupContainer({
                 collection: items
             });
 
             Assembl.groupContainer.show(group);
-            //$('#groupContainer').append(group.render().el);
         },
 
         contextPage: function(){

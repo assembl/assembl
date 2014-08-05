@@ -6,9 +6,7 @@ define(function(require){
 
    var Notification = Marionette.LayoutView.extend({
        template: '#tmpl-notification',
-       initialize: function(){
-
-       },
+       className:'content-notification',
        events: {
          'click .close': 'close',
          'click .openSession':'openSession'
@@ -41,9 +39,10 @@ define(function(require){
            }
            this.remove();
            this.unbind();
-           $('#wrapper #panelarea').animate({
+
+           $('#wrapper #groupsContainer').animate({
                top:'36px'
-           }, 600);
+           }, 500);
        }
    });
 

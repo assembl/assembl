@@ -5,9 +5,10 @@ define(function(require){
 
     var navBar = Marionette.LayoutView.extend({
         template:'#tmpl-navBar',
-
+        tagName:'nav',
+        className:'navbar navbar-default',
         events: {
-            'click .lang': 'setLocale'
+           'click .lang': 'setLocale'
         },
 
         setLocale: function(e){
