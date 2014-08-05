@@ -6,14 +6,14 @@ define(function(require){
 
     var GroupSpecModel = Base.Model.extend({
         parse: function(model) {
-            model.group = new panelSpec.Collection(model.group);
-            model.group.groupSpec = this;
+            model.panels = new panelSpec.Collection(model.panels);
+            model.panels.groupSpec = this;
             return model;
         },
 
         defaults: {
            locked: false,
-           group: []
+           panels: []
         }
     });
 

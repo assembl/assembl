@@ -13,7 +13,7 @@ define(function (require) {
             groupManager: this
         },*/
         initialize: function(options){
-            this.collection = this.model.get('group');
+            this.collection = this.model.get('panels');
             this.groupManager = new GroupManager();
             this.model.groupManager = this.groupManager;
         },

@@ -24,7 +24,7 @@ define(function (require) {
                 });
             }
 
-            groups.group = data;
+            groups.panels = data;
 
             if(!this._store.getItem('groupItems')){
 
@@ -57,7 +57,7 @@ define(function (require) {
 
                 var defaults = [
                     {
-                        group:[
+                        panels:[
                             {type:'navigation'},
                             //{type:'idea-list'},
                             {type:'idea-panel'},
@@ -65,7 +65,7 @@ define(function (require) {
                         ]
                     },
                     {
-                        group:[
+                        panels:[
                             {type:'navigation'},
                             //{type:'idea-list'},
                             //{type:'idea-panel'},
