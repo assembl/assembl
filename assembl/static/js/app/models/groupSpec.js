@@ -7,7 +7,6 @@ define(function(require){
     var GroupSpecModel = Base.Model.extend({
         parse: function(model) {
             model.panels = new panelSpec.Collection(model.panels);
-            model.panels.groupSpec = this;
             return model;
         },
 
