@@ -1,4 +1,6 @@
 define(function (require) {
+    'use strict';
+
     var AssemblPanel = require('views/assemblPanel'),
         IdeaPanel = require('views/ideaPanel'),
         MessageList = require('views/messageList'),
@@ -6,7 +8,6 @@ define(function (require) {
         SegmentList = require('views/segmentList'),
         SynthesisPanel = require('views/synthesisPanel'),
         NavigationPanel = require('views/navigation/navigation');
-    'use strict';
 
     var panelTypeRegistry = {
         'idea-panel': IdeaPanel,

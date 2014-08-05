@@ -11,7 +11,7 @@ define(function(require){
       Notification = require('views/notification'),
  CollectionManager = require('modules/collectionManager');
 
-    var routeController = Marionette.Controller.extend({
+    var routeManager = Marionette.Controller.extend({
 
         initialize: function(){
            window.assembl = {};
@@ -95,6 +95,6 @@ define(function(require){
 
     });
 
-    return new routeController();
+    return new routeManager();
 
 });

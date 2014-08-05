@@ -2,15 +2,11 @@ define(function(require){
     'use strict';
 
     var Marionette = require('marionette'),
-        Controller = require('modules/controller');
+        RouteManager = require('modules/routeManager');
 
     var Router = Marionette.AppRouter.extend({
 
-        /**
-         * Router strings
-         * @type {Object}
-         */
-        controller: Controller,
+        controller: RouteManager,
         appRoutes: {
             ":slug/": "home",
             ":slug/context": "contextPage",

@@ -90,7 +90,7 @@ define(function (require) {
         getChildView: function(child) {
           return viewsFactory(child);
           //return AssemblPanel.prototype.createPanel(child);
-        },
+        }
     });
 
     return groupContent;
