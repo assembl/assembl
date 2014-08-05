@@ -9,13 +9,11 @@ define(function (require) {
         template: "#tmpl-groupContent",
         className: "groupContent",
         childViewContainer: ".groupBody",
-        /*childViewOptions: {
-            groupManager: this
-        },*/
+
         initialize: function(options){
+            this.childViewOptions = { parent:this };
             this.collection = this.model.get('panels');
             this.groupManager = new GroupManager({groupSpec: this.model});
-            this.model.groupManager = this.groupManager;
         },
         events:{
             'click .add-group':'addGroup',
