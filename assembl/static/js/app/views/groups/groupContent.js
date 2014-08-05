@@ -11,9 +11,12 @@ define(function (require) {
         childViewContainer: ".groupBody",
 
         initialize: function(options){
-            this.childViewOptions = { parent:this };
+
+            console.log(this.model.toJSON())
+
             this.collection = this.model.get('panels');
             this.groupManager = new GroupManager({groupSpec: this.model});
+            this.childViewOptions = { groupManager: this.groupManager };
         },
         events:{
             'click .add-group':'addGroup',
@@ -26,7 +29,6 @@ define(function (require) {
             var Modal = Backbone.Modal.extend({
                 template: _.template($('#tmpl-create-group').html()),
                 cancelEl:'.btn-cancel',
-
                 initialize: function(){
                     this.$el.addClass('group-modal');
                 },
@@ -81,8 +83,11 @@ define(function (require) {
         closeGroup: function(){
 
             //TODO: delete reference to localStorage
-            this.unbind();
-            this.remove();
+
+
+
+           //this.unbind();
+           //this.remove();
         },
         getChildView: function(child) {
           return viewsFactory(child);

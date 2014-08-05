@@ -9,7 +9,6 @@ define(function (require) {
         id:'groupsContainer',
         childView: GroupContent,
         onRender: function(){
-
             if(!window.localStorage.getItem('showNotification')){
                 this.$el.css('top', '75px');
                 Assembl.notificationRegion.show(new Notification());
