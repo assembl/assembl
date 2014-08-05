@@ -2,7 +2,8 @@ define(function(require){
 
     var Marionette = require('marionette'),
                Ctx = require('modules/context'),
-           Storage = require('objects/storage');
+         GroupSpec = require('models/groupSpec'),
+        CollectionManager = require('modules/collectionManager');
 
     var navBar = Marionette.LayoutView.extend({
         template:'#tmpl-navBar',
@@ -17,6 +18,11 @@ define(function(require){
             Ctx.setLocale(lang);
         },
         addGroup: function(){
+
+            var collectionManager = new CollectionManager();
+            var groupSpecsP = collectionManager.getGroupSpecsCollectionPromise();
+
+
             var Modal = Backbone.Modal.extend({
                 template: _.template($('#tmpl-create-group').html()),
                 className:'group-modal',
@@ -53,10 +59,16 @@ define(function(require){
 
                     $('.itemGroup.is-selected').each(function(){
                         var item = $(this).children('a').attr('data-item');
-                        items.push(item);
+                        items.push({type:item});
                     });
 
-                    Storage.createGroupItem(items);
+                    groupSpecsP.done(function(groupSpecs){
+                        var groupSpec = new GroupSpec.Model(
+                            {'panels': items}, {'parse': true});
+                        groupSpecs.add(groupSpec);
+                        console.log('createGroup', groupSpecs);
+                    });
+
 
                     this.$el.unbind();
                     this.$el.remove();

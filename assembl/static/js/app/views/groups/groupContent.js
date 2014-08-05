@@ -20,10 +20,7 @@ define(function (require) {
             'click .lock-group':'lockGroup'
         },
         closeGroup: function(){
-           //TODO: delete reference to localStorage and collection
-
-           this.unbind();
-           this.remove();
+           this.model.collection.remove(this.model);
         },
         getChildView: function(child) {
           return viewsFactory(child);
