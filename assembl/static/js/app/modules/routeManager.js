@@ -63,9 +63,9 @@ define(function (require) {
 
         contextPage: function () {
             Assembl.headerRegions.show(new navBar());
-
-            var cp = new contextPage();
-            $('#groupContainer').append(cp.render().el);
+            var cp = new contextPage({});
+            //$('#groupContainer').append( cp.render().el );
+            Assembl.groupContainer.show(cp);
         },
 
         idea: function (id) {
