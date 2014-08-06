@@ -1,7 +1,4 @@
 // Navigation bar
-header {
-
-}
 
 .navbar {
   @include no-selection;
@@ -27,11 +24,11 @@ header {
   .navbar-center {
     margin: 0 auto;
     position: absolute;
-    top:10px;
+    top: 10px;
     left: 0;
     right: 0;
     width: 15%;
-    .add-group{
+    .add-group {
       text-decoration: none;
       cursor: pointer;
     }
@@ -50,8 +47,8 @@ header {
         border-right: 1px solid #ccc;
         margin: 0 3px 0 0;
       }
-      a{
-        color:#484848;
+      a {
+        color: #484848;
         text-decoration: none;
       }
       .sign-out {
@@ -65,7 +62,7 @@ header {
 }
 
 .navbar-title {
-   padding: 10px;
+  padding: 10px;
 }
 
 .content-notification {
@@ -91,8 +88,8 @@ header {
     cursor: pointer;
   }
   p {
-    margin:0;
-    padding:0;
+    margin: 0;
+    padding: 0;
     line-height: 40px;
     color: #FFFFFF;
   }

@@ -1,16 +1,19 @@
 %button {
-    @include no-selection;
-    cursor: pointer;
-    display: inline-block;
+  @include no-selection;
+  cursor: pointer;
+  display: inline-block;
 }
 
 // Default button
 // ==============
 .button {
   @extend %button;
-  @include box-sizing( border-box );
+  @include box-sizing(border-box);
   @include border-radius(5px);
-  padding: { right: 6px; left: 6px; }
+  padding: {
+    right: 6px;
+    left: 6px;
+  }
   line-height: 25px;
   background-color: #ebebeb;
   font-size: 13px;
@@ -21,201 +24,203 @@
 // Reduce the size of the button
 // ++++++++++++++++++++++
 .button.button--condensed {
-    padding: { right: 4px; left: 4px; }
-    line-height: 26px;
+  padding: {
+    right: 4px;
+    left: 4px;
+  }
+  line-height: 26px;
 }
 
 // Primary button
 // ++++++++++++++
 .button.button--primary {
-    background-color: $purple;
-    color: white;
-    font-weight: bold;
+  background-color: $purple;
+  color: white;
+  font-weight: bold;
 
-    &:hover {
-        background-color: darken($purple, 10);
-    }
+  &:hover {
+    background-color: darken($purple, 10);
+  }
 
-    &:active {
-        background-color: darken($purple, 20);
-    }
+  &:active {
+    background-color: darken($purple, 20);
+  }
 }
 
 // Default button hover state
 // **************************
 .button:hover {
-    background-color: #dedede;
-    text-decoration: none;
+  background-color: #dedede;
+  text-decoration: none;
 }
 
 // Disabled button
 // ***************
 .button[disabled],
 .button.is-disabled {
-    @include opacity( 0.5 );
-    cursor: not-allowed;
+  @include opacity(0.5);
+  cursor: not-allowed;
 
-    background-color: #ebebeb !important;
+  background-color: #ebebeb !important;
 }
 
 // Default button active state
 // *******************
 .button:active {
-    background-color: #d2d2d2;
+  background-color: #d2d2d2;
 }
-
 
 // Create a button group
 // ===============
 .buttongroup {
-    font-size: 0;
-    display: inline-block;
+  font-size: 0;
+  display: inline-block;
 
-    .button {
-        border-radius: 0;
-        font-size: 13px;
-    }
+  .button {
+    border-radius: 0;
+    font-size: 13px;
+  }
 
-    .button:first-child {
-        border-radius: 5px 0 0 5px;
-        border-right: 0;
-    }
+  .button:first-child {
+    border-radius: 5px 0 0 5px;
+    border-right: 0;
+  }
 
-    .button:last-child {
-        border-radius: 0 5px 5px 0;
-        border-left: 0;
-    }
+  .button:last-child {
+    border-radius: 0 5px 5px 0;
+    border-left: 0;
+  }
 }
 
 // Iconed button
 // =============
 .iconbutton {
-    @extend %button;
-    @include no-selection;
-    position: relative;
-    display: inline-block;
-    line-height: 32px;
-    font-size: 14px;
-    vertical-align: middle;
-    text-align: center;
-    opacity: 0.55;
+  @extend %button;
+  @include no-selection;
+  position: relative;
+  display: inline-block;
+  line-height: 32px;
+  font-size: 14px;
+  vertical-align: middle;
+  text-align: center;
+  opacity: 0.55;
 
-    &:hover {
-        opacity: 1;
-    }
+  &:hover {
+    opacity: 1;
+  }
 
-    &:active {
-        @extend .iconbutton.is-activated;
-    }
+  &:active {
+    @extend .iconbutton.is-activated;
+  }
 }
 
 // Active state
 // ************
 .iconbutton.is-activated {
-    opacity: 1;
-    background-color: transparentize(#e5e5e5, 0.5);
+  opacity: 1;
+  background-color: transparentize(#e5e5e5, 0.5);
 }
 
 // Removes the hover fx on the button
 // +++++++++++++++++++
 .iconbutton.iconbutton--nofx {
-    opacity: 1;
-} 
+  opacity: 1;
+}
 
 // Enter fullscreen mode button
 // +++++++++++++++++
 .iconbutton.iconbutton--resizefull {
-    @extend %icon;
-    @extend .icon-resize-full;
+  @extend %icon;
+  @extend .icon-resize-full;
 
-    .is-fullscreen & {
-        display: none;
-    }
+  .is-fullscreen & {
+    display: none;
+  }
 }
 
 // Leave fullscreen mode button
 // +++++++++++++++++
 .iconbutton.iconbutton--resizesmall {
-    @extend %icon;
-    @extend .icon-resize-small;
+  @extend %icon;
+  @extend .icon-resize-small;
 
-    display: none;
-    
-    .is-fullscreen & {
-        display: inline-block;
-    }
+  display: none;
+
+  .is-fullscreen & {
+    display: inline-block;
+  }
 }
 
 // Arrow button
 // ==========
 .arrowbutton {
-    @extend %button;
+  @extend %button;
 
-    position: relative;
-    margin: 5px 0 0 14px;
-    line-height: 36px;
-    height: 36px;
-    @include box-sizing( border-box );
-    padding: 0 10px 0 5px;
+  position: relative;
+  margin: 5px 0 0 14px;
+  line-height: 36px;
+  height: 36px;
+  @include box-sizing(border-box);
+  padding: 0 10px 0 5px;
 
-    background-color: rgba(129,133,139,0);
-    @include background-linear-gradient(bottom, #afa8cf, #c7c2dd);
+  background-color: rgba(129, 133, 139, 0);
+  @include background-linear-gradient(bottom, #afa8cf, #c7c2dd);
 
-    color: white;
-    border: solid 1px #8d88a6;
-    border-radius: 0 4px 4px 0;
+  color: white;
+  border: solid 1px #8d88a6;
+  border-radius: 0 4px 4px 0;
 
-    font-size: 14px;
-    text-decoration: none;
+  font-size: 14px;
+  text-decoration: none;
 
-    &:before {
-        content: url(#{$img-dir}/button/arrowbutton.png);
-        position: absolute;
-        top: -1px;
-        left: -14px;
-    }
+  &:before {
+    content: url(#{$img-dir}/button/arrowbutton.png);
+    position: absolute;
+    top: -1px;
+    left: -14px;
+  }
 }
 
 // Arrow button to right
 // +++++++++++++++++++++
 .arrowbutton.arrowbutton--right {
-    border-radius: 4px 0 0 4px;
-    margin-left: 0;
-    margin-right: 14px;
-    padding: 0 5px 0 10px;
+  border-radius: 4px 0 0 4px;
+  margin-left: 0;
+  margin-right: 14px;
+  padding: 0 5px 0 10px;
 
-    &:before {
-        display: none;
-    }
+  &:before {
+    display: none;
+  }
 
-    &:after {
-        content: url(#{$img-dir}/button/arrowbutton-right.png);
-        position: absolute;
-        top: -1px;
-        right: -14px;
-    }
+  &:after {
+    content: url(#{$img-dir}/button/arrowbutton-right.png);
+    position: absolute;
+    top: -1px;
+    right: -14px;
+  }
 }
 
 // Button made to fit in a .bar
 // =========================
 .barbutton {
-    @extend %button;
-    @include no-selection;
-    font-size: 12px;
+  @extend %button;
+  @include no-selection;
+  font-size: 12px;
 
-    &:active {
-        @extend .barbutton.is-activated;
-    }
+  &:active {
+    @extend .barbutton.is-activated;
+  }
 }
 
 // Active state
 // =========================
 .barbutton.is-activated {
-    background-color: #ffffff;
-    color: black;
+  background-color: #ffffff;
+  color: black;
 }
 
-
+// DELETE OVER THIS LINE AFTER REFACTORING
 
 /* New design button */
 
@@ -240,9 +245,11 @@
   -ms-user-select: none;
   user-select: none;
 }
+
 .btn:hover {
 
 }
+
 .btn:active,
 .btn.active {
 
@@ -251,65 +258,80 @@
 /************************/
 
 .btn-cancel {
-  color:$gray;
+  color: $gray;
   background-color: transparent;
 }
+
 .btn-cancel:hover {
   text-decoration: underline;
 }
-.btn-cancel:focus{
+
+.btn-cancel:focus {
   outline: 0;
 }
+
 .btn-cancel:active,
 .btn-cancel.active {
   opacity: 0.8;
   outline: 0;
 }
+
 /**********************/
 .btn-default {
-  color:$purple;
+  color: $purple;
   background-color: transparent;
 }
-.btn-default:hover{
+
+.btn-default:hover {
   text-decoration: underline;
 }
-.btn-default:focus{
+
+.btn-default:focus {
   outline: 0;
 }
+
 .btn-default:active,
 .btn-default.active {
   opacity: 0.8;
   outline: 0;
 }
- /*********************/
+
+/*********************/
 .btn-primary {
   color: $white;
   background-color: $purple;
 }
-.btn-primary:hover{
+
+.btn-primary:hover {
   opacity: 0.8;
 }
-.btn-primary:focus{
+
+.btn-primary:focus {
   outline: 0;
 }
+
 .btn-primary:active,
 .btn-primary.active {
   opacity: 1;
   outline: 0;
 }
+
 /*********************/
 .btn-secondary {
   color: $purple;
   background-color: $white;
   border: 1px solid $purple;
 }
-.btn-secondary:hover{
+
+.btn-secondary:hover {
   color: $white;
   background-color: $purple;
 }
-.btn-secondary:focus{
+
+.btn-secondary:focus {
   outline: 0;
 }
+
 .btn-secondary:active,
 .btn-secondary.active {
   opacity: 0.8;

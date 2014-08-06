@@ -1,27 +1,28 @@
-
+// DELETE THIS FILE AFTER REFACTORING
 // The famous media element
 // =====================
-.media {}
+.media {
+}
 
 // To aling the object at the left
 // ---------------------
 .media-imgleft {
-    float: left;
-    margin: { 
-       right: 10px;
-       bottom: 10px;
-    }
+  float: left;
+  margin: {
+    right: 10px;
+    bottom: 10px;
+  }
 }
 
 // The content of the media
 // ---------------------
-.media-body {   
-    overflow: hidden;
+.media-body {
+  overflow: hidden;
 }
 
 // The title within a media
 // -------------------
 .media-title {
-    padding-top: 3px;
-    margin-bottom: 10px;
+  padding-top: 3px;
+  margin-bottom: 10px;
 }

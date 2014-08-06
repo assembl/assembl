@@ -1,32 +1,34 @@
+// DELETE THIS FILE AFTER REFACTORING
+
 // Default close button
 // =====================
 .closebutton {
-    position: absolute;
-    top: 10px;
-    right: 20px;
+  position: absolute;
+  top: 10px;
+  right: 20px;
 
-    cursor: pointer;
-    //color: $closebutton-color;
+  cursor: pointer;
+  //color: $closebutton-color;
 
-    font-size: 12px;
-    cursor: pointer;
+  font-size: 12px;
+  cursor: pointer;
 
-    &:after {
-        display: inline-block;
-        font-family: $baseFontFamily;
-        content: '\e810';
-        margin-left: 5px;
-    }
+  &:after {
+    display: inline-block;
+    font-family: $baseFontFamily;
+    content: '\e810';
+    margin-left: 5px;
+  }
 
-    &:hover {
-        //color: darken($closebutton-color, 20%);
-    }
+  &:hover {
+    //color: darken($closebutton-color, 20%);
+  }
 }
 
 // Made to fit with the ckeditor
 // ++++++++++++++++++++++
 .closebutton.closebutton--ckeditor {
-    top: 0px;
-    right: 30px;
-    z-index: 15;
+  top: 0px;
+  right: 30px;
+  z-index: 15;
 }

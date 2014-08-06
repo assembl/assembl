@@ -1,21 +1,22 @@
+// DELETE THIS FILE AFTER REFACTORING
+
 // Link component
 // ==============
 .link {
-    cursor: pointer;
-    color: #484848;
-    text-decoration: none;
-    &:hover {
-        color: $gray3;
-    }
+  cursor: pointer;
+  color: #484848;
+  text-decoration: none;
+  &:hover {
+    color: $gray3;
+  }
 
-    &:active {
-        color: $gray1;
-    }
+  &:active {
+    color: $gray1;
+  }
 }
-
 
 // Segment link
 // ============
 .segment-link {
-    @extend .link;
+  @extend .link;
 }

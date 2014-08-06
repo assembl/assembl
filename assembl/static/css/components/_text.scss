@@ -1,119 +1,138 @@
+// DELETE THIS FILE AFTER REFACTORING
+
 // The commun output for a text
 // ======================
 .text {
-    color: $gray2;
-    font-size: 13px;
+  color: $gray2;
+  font-size: 13px;
 
-    ol, ul {
-        margin: 0;
-    }
+  ol, ul {
+    margin: 0;
+  }
 
-    p:first-child {
-      margin-top: 0;
-    }
+  p:first-child {
+    margin-top: 0;
+  }
 
-    p:last-child {
-      margin-bottom: 0;
-    }
+  p:last-child {
+    margin-bottom: 0;
+  }
 }
 
 // A muted text
 // --------------
-.text-muted { color: $gray1; }
+.text-muted {
+  color: $gray1;
+}
 
 // Smaller text
 // ----------------
-.text-small { font-size: .9em; }
+.text-small {
+  font-size: .9em;
+}
 
 // Bigger text
 // ----------------
-.text-big { font-size: 18px; }
+.text-big {
+  font-size: 18px;
+}
 
 // Bold text
 // ----------------
-.text-bold { font-weight: bold; }
+.text-bold {
+  font-weight: bold;
+}
 
 // Align text to left
 // ------------------
-.text-left { text-align: left; }
+.text-left {
+  text-align: left;
+}
 
 // Align text to center
 // ------------------
-.text-center { text-align: center; }
+.text-center {
+  text-align: center;
+}
 
 // Align text to right
 // ------------------
-.text-right { text-align: right; }
+.text-right {
+  text-align: right;
+}
 
 // Dark text color
 // ---------------
-.text-dark { color: $black; }
+.text-dark {
+  color: $black;
+}
 
 // Opaque text
 // -----------
-.text-opaque { @include opacity( 0.5 ); }
+.text-opaque {
+  @include opacity(0.5);
+}
 
 // Quotation text
 // -----------
-.text-quotation {     
-    &:before {
-        //content: "\00AB\00a0 ";
-        content: "\275D\00a0 ";
-    }
+.text-quotation {
+  &:before {
+    //content: "\00AB\00a0 ";
+    content: "\275D\00a0 ";
+  }
 
-    &:after {
-        //content: "\00a0\00BB";
-        content: "\00a0\275E";
-    }
- }
-
+  &:after {
+    //content: "\00a0\00BB";
+    content: "\00a0\275E";
+  }
+}
 
 // The text bubble for when a text is selected
 // ====================
 .textbubble {
-    $textbubble-width: 150px;
-    $textbubble-height: 16px;
+  $textbubble-width: 150px;
+  $textbubble-height: 16px;
 
+  position: absolute;
+
+  background: white;
+  opacity: 0.9;
+
+  border: solid 4px #d3d3d6;
+  border-radius: 6px;
+
+  line-height: $textbubble-height;
+  padding: 5px;
+  margin-top: $textbubble-height * -4;
+
+  &:hover {
+    opacity: 1;
+  }
+
+  &:after,
+  &:before {
+    top: 100%;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
     position: absolute;
+    pointer-events: none;
+  }
 
-    background: white;
-    opacity: 0.9;
-
-    border: solid 4px #d3d3d6;
-    border-radius: 6px;
-    
-    line-height: $textbubble-height;
-    padding: 5px;
-    margin-top: $textbubble-height * -4;
-
-    &:hover {
-        opacity: 1;
-    }
-
-    &:after,
-    &:before {
-        top: 100%;
-        border: solid transparent;
-        content: " ";
-        height: 0;
-        width: 0;
-        position: absolute;
-        pointer-events: none;
-    }
-
-    &:after {
-        border-color: rgba(211, 211, 214, 0);
-        border-top-color: #d3d3d6;
-        border-width: 10px;
-        left: 50%;
-        margin-left: -10px;
-    }
-    &:before {
-        border-color: rgba(211, 211, 214, 0);
-        border-top-color: #d3d3d6;
-        border-width: 16px;
-        left: 50%;
-        margin-left: -16px;
-    }
+  &:after {
+    border-color: rgba(211, 211, 214, 0);
+    border-top-color: #d3d3d6;
+    border-width: 10px;
+    left: 50%;
+    margin-left: -10px;
+  }
+  &:before {
+    border-color: rgba(211, 211, 214, 0);
+    border-top-color: #d3d3d6;
+    border-width: 16px;
+    left: 50%;
+    margin-left: -16px;
+  }
 
 }

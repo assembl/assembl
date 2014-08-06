@@ -1,50 +1,55 @@
+// DELETE THIS FILE AFTER REFACTORING
+
 // The accordion
 // =============
-.accordion {}
+.accordion {
+}
 
 // Accordion specific in lateralmenu
-.accordion.accordion--lateralmenu {}
+.accordion.accordion--lateralmenu {
+}
 
 // An item within the accordion
 // ----------------
-.accordion-area {}
+.accordion-area {
+}
 
 // Open state for accordion-area
 // ***************
-.accordion-area.is-open {}
-
+.accordion-area.is-open {
+}
 
 // The accordion header
 // --------------------
 .accordion-header {
-    position: relative;
-    background-color: #585858;
-    height: 45px;
-    line-height: 45px;
-    color: #fff;
-    cursor: pointer;
-    @include transform( translateZ(0) );
+  position: relative;
+  background-color: #585858;
+  height: 45px;
+  line-height: 45px;
+  color: #fff;
+  cursor: pointer;
+  @include transform(translateZ(0));
 
-    .accordion-area.is-open & {
-        background-color: #738bb5;
-        font-weight: bold;
-    }
+  .accordion-area.is-open & {
+    background-color: #738bb5;
+    font-weight: bold;
+  }
 }
 
 // The label for the accordion-header
 .accordion-label {
-    display: inline-block;
-    padding-left: 42px;
-    line-height: 32px;
+  display: inline-block;
+  padding-left: 42px;
+  line-height: 32px;
 }
 
 // The body/content of an accordion-area
 // -----------------
 .accordion-body {
-    background-color: #313131;
-    overflow: hidden;
-    height: 0;
-    .accordion-area.is-open & {
-        //max-height: 600px;
-    }
+  background-color: #313131;
+  overflow: hidden;
+  height: 0;
+  .accordion-area.is-open & {
+    //max-height: 600px;
+  }
 }
