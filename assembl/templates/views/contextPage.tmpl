@@ -101,6 +101,35 @@ line {
     margin: 0;
 }
 
+
+
+
+
+/* CSS associated to the pie */
+
+#pie {
+    /*width: 500px;
+    height: 300px;*/
+}
+
+#code_hierarchy
+{
+    margin:0 auto;
+    width: 300px;
+}
+
+#code_hierarchy_legend
+{
+    height:80px;
+    text-align:center;
+}
+
+
+
+
+
+
+
 </style>
 
 
@@ -184,10 +213,16 @@ line {
 
     </div>
     <div class="row-major">
-        <div class="block-full">
+        <div class="block-half">
             <div class="block-content" id="statistics">
                 <h2>Statistiques</h2>
                 <p>Chargement...</p>
+            </div>
+        </div>
+        <div class="block-half">
+            <div class="block-content" id="pie">
+                <div id='code_hierarchy_legend'></div>
+                <div id='code_hierarchy'>
             </div>
         </div>
     </div>
