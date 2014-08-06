@@ -5,7 +5,7 @@ html {
 }
 
 @include selection {
-    background: $white;
+    background: $textSelectionBackgroundColor;
 }
 
 @include scrollbar {
