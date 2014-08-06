@@ -22,17 +22,6 @@ define(function(require){
         }
         */
 
-        /*
-        render: function(){
-            var data = {
-                body_help_message: "test"
-            }
-            
-            this.$el.html(this.template(data));
-            
-            return this;
-        }*/
-
         onRender: function(){
             console.log("contextPage::onRender()");
             this.computeStatistics();
@@ -40,6 +29,97 @@ define(function(require){
 
         initialize: function(options){
             console.log("contextPage::initialize()");
+        },
+
+        /*
+        * @param messages: [{'day': '2012-01-01', 'value': 1},...] sorted by date ascending
+        * @param threshold: Number
+        * @returns a period object {'period_type': 'last_2_weeks', 'date_min': Date, 'date_max': Date }
+        */
+        deduceGoodPeriod: function(messages, threshold){
+            var count = 0;
+            var sz = messages.length;
+            var date_threshold_min = messages[0].date;
+            var date_threshold_max = messages[sz-1].date; // or we could want it to be today
+            var threshold_passed = false;
+            for ( var i = sz-1; i >= 0; --i)
+            {
+                count += messages[i]['value'];
+                if ( count >= threshold )
+                {
+                    threshold_passed = true;
+                    date_threshold_min = messages[i]['date'];
+                    console.log("count:");
+                    console.log(count);
+                    break;
+                }
+            }
+
+            console.log("threshold_passed:");
+            console.log(threshold_passed);
+            console.log("date_threshold_max:");
+            console.log(date_threshold_max);
+            console.log("date_threshold_min:");
+            console.log(date_threshold_min);
+
+            // deduce the period to apply from the date_threshold_min and date_threshold_max values
+            var date_min = new Date(date_threshold_min);
+            var threshold_date = date_min;
+            var date_max = new Date(date_threshold_max);
+            var date_min_moment = Moment(date_threshold_min);
+            var date_max_moment = Moment(date_threshold_max);
+            var number_of_days = date_max_moment.diff(date_min_moment, 'days');
+            var period_type = 'last_week';
+            if ( number_of_days <= 7 )
+            {
+                period_type = 'last_week';
+                date_min_moment = date_max_moment.subtract('days', 7);
+                date_min = date_min_moment.toDate();
+            }
+            if ( number_of_days <= 14 )
+            {
+                period_type = 'last_2_weeks';
+                date_min_moment = date_max_moment.subtract('days', 14);
+                date_min = date_min_moment.toDate();
+            }
+            else if ( number_of_days <= 31 )
+            {
+                period_type = 'last_month';
+                date_min_moment = date_max_moment.subtract('months', 1);
+                date_min = date_min_moment.toDate();
+            }
+            else if ( number_of_days <= (31+30+30) )
+            {
+                period_type = 'last_3_months';
+                date_min_moment = date_max_moment.subtract('months', 3);
+                date_min = date_min_moment.toDate();
+            }
+            else if ( number_of_days <= (31+30)*3 )
+            {
+                period_type = 'last_6_months';
+                date_min_moment = date_max_moment.subtract('months', 6);
+                date_min = date_min_moment.toDate();
+            }
+            else
+            {
+                period_type = 'last_year';
+                date_min_moment = date_max_moment.subtract('years', 1);
+                date_min = date_min_moment.toDate();
+            }
+            console.log("period_type:");
+            console.log(period_type);
+            console.log("date_min:");
+            console.log(date_min);
+            console.log("date_max:");
+            console.log(date_max);
+            return {
+                "period_type": period_type,
+                "date_min": date_min,
+                "date_max": date_max,
+                "threshold_passed": threshold_passed,
+                "threshold_date": threshold_date,
+                "threshold_value": count
+            };
         },
 
         computeStatistics: function(){
@@ -79,11 +159,11 @@ define(function(require){
                 console.log("last_message_date: " + last_message_date);
 
 
-                // find which period is best to show the stats: the first period among week, month, debate which gathers at least 20% of the contributions
+                // find which period is best to show the stats: the first period among week, month, debate which gathers at least X% of the contributions
 
-                var messages_threshold = messages_total * 0.2;
-                console.log("messages_threshold:");
-                console.log(messages_threshold);
+                var messages_threshold = messages_total * 0.15;
+                //console.log("messages_threshold:");
+                //console.log(messages_threshold);
 
                 var messages_per_day = _.groupBy(messages_sorted_by_date, function(msg){
                     return convertDateTimeToDate(msg.date);
@@ -101,86 +181,11 @@ define(function(require){
                 //console.log("messages_per_day_totals_array:");
                 //console.log(messages_per_day_totals_array);
 
+                var period = that.deduceGoodPeriod(messages_per_day_totals_array, messages_threshold);
                 
-                var messages_per_day_totals_array_reverse = messages_per_day_totals_array.reverse();
-                //console.log("messages_per_day_totals_array_reverse:");
-                //console.log(messages_per_day_totals_array_reverse);
-
-                var count = 0;
-                var date_threshold_min = first_message_date;
-                var date_threshold_max = last_message_date; // or we could want it to be today
-                var threshold_passed = false;
-                var sz = messages_per_day_totals_array_reverse.length;
-                for ( var i = 0; i < sz; ++i)
-                {
-                    count += messages_per_day_totals_array_reverse[i]['value'];
-                    if ( count >= messages_threshold )
-                    {
-                        threshold_passed = true;
-                        date_threshold_min = messages_per_day_totals_array_reverse[i]['date'];
-                        console.log("count:");
-                        console.log(count);
-                        break;
-                    }
-                }
-
-                console.log("threshold_passed:");
-                console.log(threshold_passed);
-                console.log("date_threshold_max:");
-                console.log(date_threshold_max);
-                console.log("date_threshold_min:");
-                console.log(date_threshold_min);
-
-                // deduce the period to apply from the date_threshold_min and date_threshold_max values
-                var date_min = new Date(date_threshold_min);
-                var date_max = new Date(date_threshold_max);
-                var date_min_moment = Moment(date_threshold_min);
-                var date_max_moment = Moment(date_threshold_max);
-                var number_of_days = date_max_moment.diff(date_min_moment, 'days');
-                var period_type = 'last_week';
-                if ( number_of_days <= 7 )
-                {
-                    period_type = 'last_week';
-                    date_min_moment = date_max_moment.subtract('days', 7);
-                    date_min = date_min_moment.toDate();
-                }
-                if ( number_of_days <= 14 )
-                {
-                    period_type = 'last_2_weeks';
-                    date_min_moment = date_max_moment.subtract('days', 14);
-                    date_min = date_min_moment.toDate();
-                }
-                else if ( number_of_days <= 31 )
-                {
-                    period_type = 'last_month';
-                    date_min_moment = date_max_moment.subtract('months', 1);
-                    date_min = date_min_moment.toDate();
-                }
-                else if ( number_of_days <= (31+30+30) )
-                {
-                    period_type = 'last_3_months';
-                    date_min_moment = date_max_moment.subtract('months', 3);
-                    date_min = date_min_moment.toDate();
-                }
-                else if ( number_of_days <= (31+30)*3 )
-                {
-                    period_type = 'last_6_months';
-                    date_min_moment = date_max_moment.subtract('months', 6);
-                    date_min = date_min_moment.toDate();
-                }
-                else
-                {
-                    period_type = 'last_year';
-                    date_min_moment = date_max_moment.subtract('years', 1);
-                    date_min = date_min_moment.toDate();
-                }
-                console.log("period_type:");
-                console.log(period_type);
-                console.log("date_min:");
-                console.log(date_min);
-                console.log("date_max:");
-                console.log(date_max);
-                var statsPeriodName = period_type; // TODO: i18n
+                var statsPeriodName = period.period_type; // TODO: i18n
+                var date_min = period.date_min;
+                var date_max = period.date_max;
 
 
 
@@ -242,11 +247,11 @@ define(function(require){
                 var messages_in_period_total = 0;
                 _.each(messages_in_period, function(msg){
                     messages_in_period_total += msg.value;
-                    //msg.value = count;
+                    //msg.value = messages_in_period_total;
                 });
 
 
-                $("#statistics").html("<h2>Statistics since " + statsPeriodName + "</h2><div id='stats_messages'>Messages posted: " + messages_in_period_total + "<div id='chart'></div></div>");
+                $("#statistics").html("<h2>Statistics since " + statsPeriodName + "</h2><div id='stats_messages'>Messages posted: " + messages_in_period_total + " (" + messages_total + " since the beginning of the debate)<div id='chart'></div></div>");
                 
                 
                 //that.drawLineGraph(messages_per_day_totals_array);
@@ -279,7 +284,7 @@ define(function(require){
 
                 //var xAxis = d3.svg.axis().scale(x).tickSize(h - margin * 2).tickPadding(10).ticks(7).tickFormat(d3.time.format("%x"));
                 //var xAxis = d3.svg.axis().scale(x).tickSize(h - margin * 2).tickPadding(10).ticks(d3.time.week, 2).tickFormat(d3.time.format("%x"));
-                var xAxis = d3.svg.axis().scale(x).tickSize(h - margin * 2).tickPadding(10).ticks(5).tickFormat(d3.time.format("%x"));
+                var xAxis = d3.svg.axis().scale(x).tickSize(h - margin * 2).tickPadding(10).ticks(5).tickFormat(d3.time.format("%Y-%m-%d"));
                 var yAxis = d3.svg.axis().scale(y).orient('left').tickSize(-w + margin * 2).tickPadding(10).tickFormat(d3.format("d"));
                 var t = null;
 
