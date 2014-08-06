@@ -8,7 +8,6 @@ define(function(require){
     var groupManager = Marionette.Controller.extend({
 
         initialize: function(options){
-           this.stateButton = null;
            this.groupSpec = options.groupSpec;
         },
         /**
@@ -18,8 +17,14 @@ define(function(require){
 
         _unlockCallbackQueue: {},
 
-        isGroupLocked: function(){
-          return this.groupSpec.get('locked');
+        _stateButton: null,
+
+        isLocked: function(){
+            return this.groupSpec.get('locked');
+        },
+
+        setButtonState: function(dom){
+            this._stateButton = dom;
         },
 
         /**
@@ -52,8 +57,7 @@ define(function(require){
         lockGroup: function(){
             if(!this.groupSpec.get('locked')){
                 this.groupSpec.set('locked', true);
-                console.log(this.stateButton);
-                this.stateButton.addClass('icon-lock').removeClass('icon-lock-open');
+                this._stateButton.addClass('icon-lock').removeClass('icon-lock-open');
             }
         },
 
@@ -63,7 +67,7 @@ define(function(require){
         unlockGroup: function(){
             if(this.groupSpec.get('locked')){
                 this.groupSpec.set('locked', false);
-                this.stateButton.addClass('icon-lock-open').removeClass('icon-lock');
+                this._stateButton.addClass('icon-lock-open').removeClass('icon-lock');
 
                 if(_.size(this._unlockCallbackQueue) > 0) {
                     //console.log("Executing queued callbacks in queue: ",this.unlockCallbackQueue);
@@ -82,10 +86,10 @@ define(function(require){
          * Toggle the lock state of the panel
          */
         toggleLock: function(){
-            if(this._panelIsLocked){
-                this.unlockPanel();
+            if(this.isLocked()){
+                this.unlockGroup();
             } else {
-                this.lockPanel();
+                this.lockGroup();
             }
         },
 

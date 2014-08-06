@@ -69,7 +69,6 @@ define(function(require){
                         console.log('createGroup', groupSpecs);
                     });
 
-
                     this.$el.unbind();
                     this.$el.remove();
                 }

@@ -8,19 +8,25 @@ define(function (require) {
         template: "#tmpl-groupContent",
         className: "groupContent",
         childViewContainer: ".groupBody",
-
         initialize: function(options){
-            this.collection = this.model.get('panels');
-            this.groupManager = new GroupManager({groupSpec: this.model});
-            this.childViewOptions = { groupManager: this.groupManager };
+           this.collection = this.model.get('panels');
+           this.groupManager = new GroupManager({groupSpec: this.model});
+           this.childViewOptions = { groupManager: this.groupManager };
         },
         events:{
-            'click .add-group':'addGroup',
-            'click .close-group':'closeGroup',
-            'click .lock-group':'lockGroup'
+           'click .close-group':'closeGroup',
+           'click .lock-group':'lockGroup'
+        },
+        onRender: function(){
+           var elm = this.$('.lock-group i');
+           this.groupManager.setButtonState(elm);
         },
         closeGroup: function(){
+           this.unbind();
            this.model.collection.remove(this.model);
+        },
+        lockGroup: function(){
+           this.groupManager.toggleLock();
         },
         getChildView: function(child) {
           return viewsFactory(child);

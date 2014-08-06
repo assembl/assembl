@@ -11,11 +11,11 @@ define(function (require) {
 
     var panelTypeRegistry = {
         'idea-panel': IdeaPanel,
-        'message': MessageList,
+        'message'   : MessageList,
         'home-panel': HomePanel,
         'navigation': NavigationPanel,
-        'synthesis': SynthesisPanel,
-        'clipboard': SegmentList
+        'synthesis' : SynthesisPanel,
+        'clipboard' : SegmentList
     };
 
     function createPanel(panelSpecModel) {
