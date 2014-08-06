@@ -47,13 +47,12 @@ sidebarNotification = require('views/navigation/notification'),
             this.loadView(view);
 
             if(!elm.next('div.second-level').is(':visible')){
-                $('div.second-level').slideUp();
+                this.$('div.second-level').slideUp();
                 elm.next('div.second-level').css('height', this._sideBarHeight);
                 elm.next('div.second-level').slideDown();
             }
         },
         setSideBarHeight: function(){
-            //$('div.second-level').css('height', this._sideBarHeight);
             this.$el.find('.side-menu').css('height', this._accordion);
             this.$el.css('height', this._sideBarHeight);
         },
