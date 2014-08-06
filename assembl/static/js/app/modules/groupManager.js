@@ -1,14 +1,13 @@
-define(function(require){
+define(function (require) {
     'use strict';
 
-        var Assembl = require('modules/assembl'),
-                  $ = require('jquery'),
-                  _ = require('underscore');
+    var Marionette = require('marionette'),
+        _ = require('underscore');
 
     var groupManager = Marionette.Controller.extend({
 
-        initialize: function(options){
-           this.groupSpec = options.groupSpec;
+        initialize: function (options) {
+            this.groupSpec = options.groupSpec;
         },
         /**
          * A locked panel will not react to external UI state changes, such as
@@ -19,11 +18,11 @@ define(function(require){
 
         _stateButton: null,
 
-        isLocked: function(){
+        isLocked: function () {
             return this.groupSpec.get('locked');
         },
 
-        setButtonState: function(dom){
+        setButtonState: function (dom) {
             this._stateButton = dom;
         },
 
@@ -36,16 +35,16 @@ define(function(require){
          * If queued, they must assume that they can be called at a later time,
          * and have the means of getting any updated information they need.
          */
-        filterThroughPanelLock: function(callback, queueWithId){
-            if (!this.groupSpec.get('locked')){
+        filterThroughPanelLock: function (callback, queueWithId) {
+            if (!this.groupSpec.get('locked')) {
                 callback();
 
             } else {
-                if(queueWithId){
-                    if(this._unlockCallbackQueue[queueWithId]!==undefined){
+                if (queueWithId) {
+                    if (this._unlockCallbackQueue[queueWithId] !== undefined) {
                     }
-                    else{
-                       this._unlockCallbackQueue[queueWithId]=callback;
+                    else {
+                        this._unlockCallbackQueue[queueWithId] = callback;
                     }
                 }
             }
@@ -54,8 +53,8 @@ define(function(require){
         /**
          * lock the panel if unlocked
          */
-        lockGroup: function(){
-            if(!this.groupSpec.get('locked')){
+        lockGroup: function () {
+            if (!this.groupSpec.get('locked')) {
                 this.groupSpec.set('locked', true);
                 this._stateButton.addClass('icon-lock').removeClass('icon-lock-open');
             }
@@ -64,14 +63,14 @@ define(function(require){
         /**
          * unlock the panel if locked
          */
-        unlockGroup: function(){
-            if(this.groupSpec.get('locked')){
+        unlockGroup: function () {
+            if (this.groupSpec.get('locked')) {
                 this.groupSpec.set('locked', false);
                 this._stateButton.addClass('icon-lock-open').removeClass('icon-lock');
 
-                if(_.size(this._unlockCallbackQueue) > 0) {
+                if (_.size(this._unlockCallbackQueue) > 0) {
                     //console.log("Executing queued callbacks in queue: ",this.unlockCallbackQueue);
-                    _.each(this._unlockCallbackQueue, function(callback){
+                    _.each(this._unlockCallbackQueue, function (callback) {
                         callback();
                     });
                     //We presume the callbacks have their own calls to render
@@ -85,8 +84,8 @@ define(function(require){
         /**
          * Toggle the lock state of the panel
          */
-        toggleLock: function(){
-            if(this.isLocked()){
+        toggleLock: function () {
+            if (this.isLocked()) {
                 this.unlockGroup();
             } else {
                 this.lockGroup();
@@ -96,14 +95,14 @@ define(function(require){
         /**
          * Blocks the panel
          */
-        blockPanel: function(){
+        blockPanel: function () {
             this.$('.groupPanel').addClass('is-loading');
         },
 
         /**
          * Unblocks the panel
          */
-        unblockPanel: function(){
+        unblockPanel: function () {
             this.$('.groupPanel').removeClass('is-loading');
         }
 

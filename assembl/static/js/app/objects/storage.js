@@ -7,7 +7,7 @@ define(function (require) {
 
         _store: window.localStorage,
 
-        createGroupItem: function(items){
+        createGroupItem: function (items) {
             var data = [],
                 collection = [],
                 groups = {},
@@ -15,8 +15,8 @@ define(function (require) {
 
             //FIXME: viewId need to be uniq to delete the right storage group
 
-            if(items.length){
-                items.forEach(function(item){
+            if (items.length) {
+                items.forEach(function (item) {
                     var i = {};
                     i.type = item;
 
@@ -26,7 +26,7 @@ define(function (require) {
 
             groups.panels = data;
 
-            if(!this._store.getItem('groupItems')){
+            if (!this._store.getItem('groupItems')) {
 
                 collection.push(groups);
                 this._store.setItem('groupItems', JSON.stringify(collection));
@@ -40,16 +40,10 @@ define(function (require) {
                 this._store.setItem('groupItems', JSON.stringify(groupOfPanels));
             }
 
-            setTimeout(function(){
-
-                that.scrollToRight();
-
-            }, 2000);
-
         },
 
-        getStorageGroupItem: function(){
-            if(this._store.getItem('groupItems')){
+        getStorageGroupItem: function () {
+            if (this._store.getItem('groupItems')) {
                 return JSON.parse(this._store.getItem('groupItems'));
             }
         }
