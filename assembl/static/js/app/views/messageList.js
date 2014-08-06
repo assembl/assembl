@@ -128,7 +128,7 @@ define(function(require){
             
             collectionManager.getAllExtractsCollectionPromise().done(
                 function(allExtractsCollection) {
-                  that.initAnnotator();//Not sure if this is necessary anymore - benoitg-2014-07-29
+                  //that.initAnnotator();//Not sure if this is necessary anymore - benoitg-2014-07-29
                   that.listenTo(allExtractsCollection, 'add remove reset', that.initAnnotator);
                 }
             );
