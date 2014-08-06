@@ -141,11 +141,10 @@ define(function(require){
                     return;
 
                 } else {
-                    that.panelGroup.filterThroughPanelLock.apply(that.panelGroup, [
+                    that.panelGroup.filterThroughPanelLock(
                         function(){
                             that.syncWithCurrentIdea();
-                        }, 'syncWithCurrentIdea'
-                    ]);
+                        }, 'syncWithCurrentIdea');
                 }
             });
 
@@ -154,35 +153,31 @@ define(function(require){
             });
 
             Assembl.vent.on('messageList:addFilterIsRelatedToIdea', function(idea, only_unread){
-                that.panelGroup.filterThroughPanelLock.apply(that.panelGroup, [
+                that.panelGroup.filterThroughPanelLock(
                     function(){
                         that.addFilterIsRelatedToIdea(idea, only_unread)
-                    }, 'syncWithCurrentIdea'
-                ]);
+                    }, 'syncWithCurrentIdea');
             });
 
             Assembl.vent.on('messageList:addFilterIsOrphanMessage', function(){
-                that.panelGroup.filterThroughPanelLock.apply(that.panelGroup, [
+                that.panelGroup.filterThroughPanelLock(
                     function(){
                         that.addFilterIsOrphanMessage();
-                    }, 'syncWithCurrentIdea'
-                ]);
+                    }, 'syncWithCurrentIdea');
             });
 
             Assembl.vent.on('messageList:addFilterIsSynthesisMessage', function(){
-                that.panelGroup.filterThroughPanelLock.apply(that.panelGroup, [
+                that.panelGroup.filterThroughPanelLock(
                     function(){
                         that.addFilterIsSynthesMessage();
-                    }, 'syncWithCurrentIdea'
-                ]);
+                    }, 'syncWithCurrentIdea');
             });
 
             Assembl.vent.on('messageList:showAllMessages', function(){
-                that.panelGroup.filterThroughPanelLock.apply(that.panelGroup, [
+                that.panelGroup.filterThroughPanelLock(
                     function(){
                         that.showAllMessages();
-                    }, 'syncWithCurrentIdea'
-                ]);
+                    }, 'syncWithCurrentIdea');
             });
 
             Assembl.vent.on('messageList:currentQuery', function(){
