@@ -93,9 +93,9 @@
       }
     }
   }
+
   .ideaPanel {
     min-width: 300px;
-    //max-width: 320px;
   }
 
   .messageList{
@@ -109,6 +109,16 @@
       height: 30px;
       border-bottom: 1px solid $gray;
     }
+  }
+
+  .synthesisPanel{
+    position: relative;
+    min-width: 500px;
+  }
+
+  .clipboard {
+    position: relative;
+    min-width: 400px;
   }
 
 }

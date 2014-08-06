@@ -1,48 +1,47 @@
-<div class="panel">
-    <header class="panel-header">
-        <strong>{{ gettext('Synthesis') }}</strong>
+<header class="panel-header">
+    <strong>{{ gettext('Synthesis') }}</strong>
 
-        <div class="float-right">
-            <a class="synthesisPanel-fullscreenButton iconbutton iconbutton--resizefull" data-tooltip="{{ gettext('Fullsize') }}"></a>
-            {# <a class="synthesisPanel-collapseButton iconbutton <%= collapsed ? 'icon-plus-squared-small' : 'icon-minus-squared-small' %>"></a> #}
-            <a class="synthesisPanel-closeButton iconbutton icon-cancel" data-tooltip="{{ gettext('Close panel') }}"></a>
-        </div>
-    </header>
-
-    <div class="panel-body body-synthesis">
-        <div class="synthesis">
-            <div class="synthesisPanel-title"></div>
-    
-            <div class="spacer"></div>
-    
-            <div class="border-bottom introduction">
-                <div class="text-muted">{{ gettext('Introduction') }}</div>
-                <div class="synthesisPanel-introduction"></div>
-            </div>
-    
-            <div class="synthesisPanel-ideas">
-            </div>
-    
-            <div class="spacer"></div>
-    
-            <div class="conclusion">
-                <div class="text-muted">{{ gettext('Conclusion') }}</div>
-                <div class="synthesisPanel-conclusion"></div>
-            </div>
-        </div>
-
-        <% if (canSend) { %>
-        <div class="spacer"></div>
-        <div class="box box--noborder text-right">
-            <a id="segmentList-clear" class="button synthesisPanel-publishButton"> <i class="icon-edit"></i> {{ gettext('Publish') }} &nbsp;</a>
-        </div>
-        <% } %>
+    <div class="float-right">
+        <a class="synthesisPanel-fullscreenButton iconbutton iconbutton--resizefull" data-tooltip="{{ gettext('Fullsize') }}"></a>
+        {# <a class="synthesisPanel-collapseButton iconbutton <%= collapsed ? 'icon-plus-squared-small' : 'icon-minus-squared-small' %>"></a> #}
+        <a class="synthesisPanel-closeButton iconbutton icon-cancel" data-tooltip="{{ gettext('Close panel') }}"></a>
     </div>
-    {#
+</header>
+
+<div class="panel-body body-synthesis">
+    <div class="synthesis">
+        <div class="synthesisPanel-title"></div>
+
+        <div class="spacer"></div>
+
+        <div class="border-bottom introduction">
+            <div class="text-muted">{{ gettext('Introduction') }}</div>
+            <div class="synthesisPanel-introduction"></div>
+        </div>
+
+        <div class="synthesisPanel-ideas">
+        </div>
+
+        <div class="spacer"></div>
+
+        <div class="conclusion">
+            <div class="text-muted">{{ gettext('Conclusion') }}</div>
+            <div class="synthesisPanel-conclusion"></div>
+        </div>
+    </div>
+
     <% if (canSend) { %>
-    <footer class="panel-footer text-right">
-        <a class="synthesisPanel-publishButton" class="link">{{ gettext('Publish') }} <i class="icon-edit"></i></a>
-    </footer>
+    <div class="spacer"></div>
+    <div class="box box--noborder text-right">
+        <a id="segmentList-clear" class="button synthesisPanel-publishButton"> <i class="icon-edit"></i> {{ gettext('Publish') }} &nbsp;</a>
+    </div>
     <% } %>
-    #}
 </div>
+{#
+<% if (canSend) { %>
+<footer class="panel-footer text-right">
+    <a class="synthesisPanel-publishButton" class="link">{{ gettext('Publish') }} <i class="icon-edit"></i></a>
+</footer>
+<% } %>
+#}
+

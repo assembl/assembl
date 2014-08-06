@@ -13,6 +13,9 @@ define(function(require){
 CollectionManager = require('modules/collectionManager');
 
     var SegmentList = Backbone.View.extend({
+
+        className:'groupPanel clipboard',
+
         /**
          * @init
          */
