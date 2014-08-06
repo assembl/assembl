@@ -27,33 +27,29 @@
 
 // styleguide components
 
-.button-content,
-.icons-content,
-.colors-content,
-.helpers-content{
-  padding: 30px;
-  clear: both;
+.bx-color {
+  @include border-radius(50px);
+  width: 100px;
+  height: 100px;
+  line-height: 100px;
+  color: $white;
+  font-size: 14px;
 }
 
-.icons-content{
-  .bx {
-    width: 10%;
-    text-align: center;
-    background-color: #FFFFFF;
-    border-radius: 3px;
-    float: left;
-    margin: 10px;
-    padding: 10px 0px;
+.sg-section {
+  .icons-content {
+    .bx {
+      width: 10%;
+      text-align: center;
+      background-color: #FFFFFF;
+      border-radius: 3px;
+      float: left;
 
-    [class^="icon-"], [class*=" icon-"]{
-      font-size: 3.3em;
+      [class^="icon-"], [class*="icon-"] {
+        font-size: 3.3em;
+      }
     }
   }
+
 }
 
-.colors-content{
-  .bx-color{
-    width: 40px;
-    height: 40px;
-  }
-}

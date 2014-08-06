@@ -1,0 +1,12 @@
+<div class="row">
+    
+    {% set icon_list = ['up-dir', 'right-dir', 'down-dir', 'left-dir', 'edit', 'cancel', 'trash-1', 'star-empty', 'star', 'heart', 'pin-outline', 'pin', 'heart-empty', 'cog', 'reply', 'trash', 'menu', 'menu-1', 'download-1', 'upload', 'sort', 'plus-squared', 'plus-squared-small', 'minus-squared-small', 'minus-squared', 'ok-squared', 'collapse', 'collapse-top', 'user', 'download', 'search', 'play'] %}
+
+
+    {% for icon in icon_list %}
+    <div class="col-4 margin-bottom">
+        <i class="icon-{{icon}}"></i> i.icon-{{icon}}
+    </div>
+    {% endfor %}
+
+</div>
