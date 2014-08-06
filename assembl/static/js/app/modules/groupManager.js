@@ -97,14 +97,14 @@ define(function(require){
          * Blocks the panel
          */
         blockPanel: function(){
-            this.$('.panel').addClass('is-loading');
+            this.$('.groupPanel').addClass('is-loading');
         },
 
         /**
          * Unblocks the panel
          */
         unblockPanel: function(){
-            this.$('.panel').removeClass('is-loading');
+            this.$('.groupPanel').removeClass('is-loading');
         }
 
     });

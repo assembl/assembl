@@ -22,7 +22,6 @@ define(function(require){
             var collectionManager = new CollectionManager();
             var groupSpecsP = collectionManager.getGroupSpecsCollectionPromise();
 
-
             var Modal = Backbone.Modal.extend({
                 template: _.template($('#tmpl-create-group').html()),
                 className:'group-modal',
@@ -55,7 +54,8 @@ define(function(require){
                     }
                 },
                 createGroup: function(){
-                    var items = [];
+                    var items = [],
+                        that = this;
 
                     $('.itemGroup.is-selected').each(function(){
                         var item = $(this).children('a').attr('data-item');
@@ -66,11 +66,19 @@ define(function(require){
                         var groupSpec = new GroupSpec.Model(
                             {'panels': items}, {'parse': true});
                         groupSpecs.add(groupSpec);
-                        console.log('createGroup', groupSpecs);
                     });
 
-                    this.$el.unbind();
-                    this.$el.remove();
+                    setTimeout(function(){
+                        that.scrollToRight();
+
+                        that.$el.unbind();
+                        that.$el.remove();
+                    }, 1000);
+
+                },
+                scrollToRight: function(){
+                    var right = $('#groupsContainer').width();
+                    $('#groupsContainer').animate({ scrollLeft: right}, 1000);
                 }
             });
 

@@ -52,12 +52,6 @@ define(function (require) {
             if(this._store.getItem('groupItems')){
                 return JSON.parse(this._store.getItem('groupItems'));
             }
-        },
-
-        scrollToRight: function(){
-            var left = $('#groupsContainer').width();
-
-            $('#groupsContainer').animate({ scrollLeft: left}, 1000);
         }
 
     })
