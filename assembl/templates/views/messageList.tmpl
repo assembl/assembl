@@ -9,21 +9,20 @@
         <a id="messageList-closeButton" data-tooltip="{{gettext('Close panel')}}" class="iconbutton icon-cancel"></a>
     </div>
 </header>
-<div class="options-filter">
-  <span class="dispb fl pas">Not read</span>
-  <span class="dispb fl pas">All</span>
-  <span class="dispb fr pas">Expand all</span>
-</div>
 
 <div class="panel-body">
-    <div class="view-config">
+    <div class="options-filter">
+      <span id="defaultMessageView-viewStylePreview" class="option js_filterAll dispb fl tac pts">All</span>
+      <span class="option js_filterNotRead dispb fl tac pts">Not read</span>
+    </div>
+    <div class="view-config pls">
         <div id="js_messageListViewStyle-dropdown" class="dropdown"></div>
 
         <div id="defaultMessageView-dropdown" class="dropdown"></div>
 
         <div class="dropdown">
 
-            <span class="dropdown-label text-bold">
+            <span class="dropdown-label">
                 {{ gettext('Add filter') }}
             </span><i class="icon-arrowdown"></i>
             <ul class="dropdown-list">

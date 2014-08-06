@@ -822,7 +822,7 @@ define(function(require){
                 div = this.$('#defaultMessageView-dropdown'),
                 html = "";
 
-            html += '<span class="dropdown-label text-bold">';
+            html += '<span class="dropdown-label">';
             html += this.defaultMessageStyle.label;
             html += '</span><i class="icon-arrowdown"></i>';
             html += '<ul class="dropdown-list">';
@@ -841,7 +841,7 @@ define(function(require){
                 div = this.$('#js_messageListViewStyle-dropdown'),
                 html = "";
 
-            html += '<span class="dropdown-label text-bold">';
+            html += '<span class="dropdown-label">';
             html += this.currentViewStyle.label;
             html += '</span><i class="icon-arrowdown"></i>';
             html += '<ul class="dropdown-list">';

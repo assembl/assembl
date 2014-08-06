@@ -43,8 +43,6 @@
     }
 }
 
-#messageList.is-message-mode {}
-
 #messageList-list {
     display: block;
 
@@ -61,3 +59,31 @@
     }
 }
 
+.messageList {
+  position: relative;
+  min-width: 500px;
+
+  .panel-body {
+    top: 30px;
+  }
+
+  .options-filter,
+  .view-config {
+    @include box-sizing(border-box);
+    height: 30px;
+    border-bottom: 1px solid $gray;
+  }
+
+  .options-filter {
+    .option {
+      @include box-sizing(border-box);
+      width: 50%;
+      height: 30px;
+      cursor: pointer;
+    }
+    .option:first-child {
+      border-right: 1px solid $gray;
+    }
+  }
+
+}
