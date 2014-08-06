@@ -41,7 +41,6 @@ SynthesisMessageView = require('views/synthesisMessage'),
             //this.model.on('change:collapsed', this.onCollapsedChange, this);
             //this.listenTo(this.model, 'change:collapsed', this.onCollapsedChange);
 
-            this.segmentList = options.segmentList;
         },
 
         /**

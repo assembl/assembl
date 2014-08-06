@@ -996,23 +996,24 @@ define(function(require){
 
             // TODO: Re-render message in messagelist if an annotation was added...
             this.annotator.subscribe('annotationCreated', function(annotation){
-                //FIXME: find another way to reach this function by events or call without instanciate the class
-                var segmentList = new SegmentList();
-                var segment = segmentList.addAnnotationAsSegment(annotation, Ctx.currentAnnotationIdIdea);
-
-                if( !segment.isValid() ){
-                    annotator.deleteAnnotation(annotation);
-                } else if( Ctx.currentAnnotationNewIdeaParentIdea ){
-                    //We asked to create a new idea from segment
-                    that.panelGroup.lockGroup();
-                    var newIdea = Ctx.currentAnnotationNewIdeaParentIdea.addSegmentAsChild(segment);
-                    Ctx.setCurrentIdea(newIdea);
-                }
-                else {
-                    segment.save();
-                }
-                Ctx.currentAnnotationNewIdeaParentIdea = null;
-                Ctx.currentAnnotationIdIdea = null;
+              var collectionManager = new CollectionManager();
+              collectionManager.getAllExtractsCollectionPromise().done(
+                  function(allExtractsCollection) {
+                    var segment = allExtractsCollection.addAnnotationAsExtract(annotation, Ctx.currentAnnotationIdIdea);
+                    if( !segment.isValid() ){
+                      annotator.deleteAnnotation(annotation);
+                    } else if( Ctx.currentAnnotationNewIdeaParentIdea ){
+                      //We asked to create a new idea from segment
+                      that.panelGroup.lockGroup();
+                      var newIdea = Ctx.currentAnnotationNewIdeaParentIdea.addSegmentAsChild(segment);
+                      Ctx.setCurrentIdea(newIdea);
+                    }
+                    else {
+                      segment.save();
+                    }
+                    Ctx.currentAnnotationNewIdeaParentIdea = null;
+                    Ctx.currentAnnotationIdIdea = null;
+                  });
             });
 
             this.annotator.subscribe('annotationEditorShown', function(annotatorEditor, annotation){

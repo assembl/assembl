@@ -5,7 +5,7 @@ from cornice import Service
 
 from pyramid.security import authenticated_userid, Everyone, ACLDenied
 from pyramid.httpexceptions import (
-    HTTPNotFound, HTTPClientError, HTTPForbidden, HTTPServerError, HTTPBadRequest)
+    HTTPNotFound, HTTPClientError, HTTPForbidden, HTTPServerError, HTTPBadRequest, HTTPNoContent)
 from sqlalchemy import Unicode
 from sqlalchemy.sql.expression import cast
 from sqlalchemy.orm import aliased, joinedload, joinedload_all, contains_eager
@@ -31,13 +31,15 @@ extracts = Service(
     name='extracts',
     path=API_DISCUSSION_PREFIX + '/extracts',
     description="An extract from Content that is an expression of an Idea",
-    renderer='json', cors_policy=cors_policy
+    renderer='json',
+    cors_policy=cors_policy
 )
 
 extract = Service(
     name='extract',
     path=API_DISCUSSION_PREFIX + '/extracts/{id:.+}',
     description="Manipulate a single extract",
+    renderer='json',
     cors_policy=cors_policy
 )
 
@@ -235,7 +237,7 @@ def put_extract(request):
     return {'ok': True}
 
 
-@extract.delete()
+@extract.delete(permission=P_READ)
 def delete_extract(request):
     user_id = authenticated_userid(request)
     discussion_id = int(request.matchdict['discussion_id'])
@@ -253,18 +255,22 @@ def delete_extract(request):
 
     extract_id = request.matchdict['id']
     extract = Extract.get_instance(extract_id)
-    if not (user_has_permission(discussion_id, user_id, P_EDIT_EXTRACT)
-        or (user_has_permission(discussion_id, user_id, P_EDIT_MY_EXTRACT)
-            and user_id == extract.owner_id)):
+
+    if not user_has_permission(discussion_id, user_id, P_EDIT_EXTRACT):
         return HTTPForbidden()
 
     if not extract:
-        return {'ok': False}
+        request.response.status = HTTPNoContent.code
+        return None
+    
+    if not (user_has_permission(discussion_id, user_id, P_EDIT_MY_EXTRACT)
+            and user_id == extract.owner_id):
+        return HTTPForbidden()
 
     with transaction.manager:
         Extract.db.delete(extract)
-
-    return {'ok': True}
+    request.response.status = HTTPNoContent.code
+    return None
 
 
 @search_extracts.get(permission=P_READ)
