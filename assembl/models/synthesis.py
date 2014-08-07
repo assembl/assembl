@@ -138,6 +138,10 @@ class Discussion(DiscussionBoundBase):
         ).order_by(Synthesis.published_in_post.creation_date.desc()
                    ).first()
 
+    def get_all_syntheses(self):
+        return self.db().query(Synthesis).filter(
+            Synthesis.discussion_id == self.id).all()
+
     def get_permissions_by_role(self):
         roleperms = self.db().query(Role.name, Permission.name).select_from(
             DiscussionPermission).join(Role, Permission).filter(

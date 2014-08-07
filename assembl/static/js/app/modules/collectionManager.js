@@ -8,6 +8,7 @@ define(function(require){
          Idea = require('models/idea'),
      IdeaLink = require('models/ideaLink'),
       Segment = require('models/segment'),
+    Synthesis = require('models/synthesis'),
          User = require('models/user'),
             $ = require('jquery'),
       Storage = require('objects/storage'),
@@ -35,6 +36,14 @@ define(function(require){
     _allMessageStructureCollection : undefined,
     
     _allMessageStructureCollectionPromise : undefined,
+
+    /**
+     * Collection with all synthesis in the discussion.
+     * @type {SynthesisCollection}
+     */
+    _allSynthesisCollection : undefined,
+
+    _allSynthesisCollectionPromise : undefined,
 
     /**
      * Collection with all ideas in the discussion.
@@ -109,7 +118,7 @@ define(function(require){
                 return this.getAllUsersCollectionPromise();
 
             case Types.SYNTHESIS:
-                return assembl.syntheses.promise();
+                return this.getAllSynthesisCollectionPromise();
         }
 
         return null;
@@ -156,6 +165,27 @@ define(function(require){
       return deferred.promise();
     },
     
+    getAllSynthesisCollectionPromise : function() {
+      var that = this,
+      deferred = $.Deferred();
+
+      if (this._allSynthesisCollectionPromise === undefined) {
+        this._allSynthesisCollection = new Synthesis.Collection();
+        this._allSynthesisCollection.collectionManager = this;
+        this._allSynthesisCollectionPromise = this._allSynthesisCollection.fetch({
+          success: function(collection, response, options) {
+            deferred.resolve(that._allSynthesisCollection);
+          }
+        });
+      }
+      else {
+        this._allSynthesisCollectionPromise.done(function(){
+          deferred.resolve(that._allSynthesisCollection);
+        });
+      }
+      return deferred.promise();
+    },
+
     getAllIdeasCollectionPromise : function() {
       var that = this,
       deferred = $.Deferred();

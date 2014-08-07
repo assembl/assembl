@@ -1,15 +1,31 @@
 import json
 
 from cornice import Service
+from pyramid.httpexceptions import HTTPNotFound, HTTPBadRequest
 
 from . import API_DISCUSSION_PREFIX
 from assembl.auth import P_READ, P_EDIT_SYNTHESIS
 from assembl.models import Discussion, Synthesis
 
+syntheses = Service(name='syntheses',
+    path=API_DISCUSSION_PREFIX + '/explicit_subgraphs/synthesis',
+    description="List of synthesis", renderer='json')
 
 synthesis = Service(name='ExplicitSubgraphs',
     path=API_DISCUSSION_PREFIX + '/explicit_subgraphs/synthesis/{id:.+}',
     description="Manipulate a single synthesis")
+
+
+@syntheses.get(permission=P_READ)
+def get_syntheses(request):
+    discussion_id = request.matchdict['discussion_id']
+    discussion = Discussion.get(id=int(discussion_id))
+    if not discussion:
+        raise HTTPNotFound("Discussion with id '%s' not found." % discussion_id)
+    syntheses = discussion.get_all_syntheses()
+    view_def = request.GET.get('view') or 'default'
+    return [synthesis.generic_json(view_def) for synthesis in syntheses]
+
 
 @synthesis.get(permission=P_READ)
 def get_synthesis(request):
@@ -20,6 +36,8 @@ def get_synthesis(request):
         synthesis = discussion.get_next_synthesis()
     else:
         synthesis = Synthesis.get_instance(synthesis_id)
+    if not synthesis:
+        raise HTTPNotFound("Synthesis with id '%s' not found." % synthesis_id)
 
     view_def = request.GET.get('view') or 'default'
 
@@ -35,6 +53,8 @@ def save_synthesis(request):
         synthesis = discussion.get_next_synthesis()
     else:
         synthesis = Synthesis.get_instance(synthesis_id)
+    if not synthesis:
+        raise HTTPBadRequest("Synthesis with id '%s' not found." % synthesis_id)
 
     synthesis_data = json.loads(request.body)
 
