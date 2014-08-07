@@ -7,7 +7,32 @@ define(function (require) {
 
         _store: window.localStorage,
 
-        createGroupItem: function (items) {
+        bindGroupSpecs: function(groupSpecs) {
+            var that = this;
+            this.groupSpecs = groupSpecs;
+            this.listenTo(groupSpecs, 'add', this.addGroupSpec);
+            this.listenTo(groupSpecs, 'remove', this.removeGroupSpec);
+            this.listenTo(groupSpecs, 'reset change', this.saveGroupSpecs);
+            groupSpecs.models.forEach(function(m) {
+                that.listenTo(m.attributes.panels, 'add remove reset change', that.saveGroupSpecs);
+            });
+        },
+
+        addGroupSpec: function(groupSpec, groupSpecs) {
+            this.listenTo(groupSpec.attributes.panels, 'add remove reset change', this.saveGroupSpecs);
+            this.saveGroupSpecs();
+        },
+
+        removeGroupSpec: function(groupSpec, groupSpecs) {
+            this.stopListening(groupSpec);
+            this.saveGroupSpecs();
+        },
+
+        saveGroupSpecs: function() {
+            this._store.setItem('groupItems', JSON.stringify(this.groupSpecs));
+        },
+
+        createGroupItem: function(items) {
             var data = [],
                 collection = [],
                 groups = {},

@@ -238,6 +238,8 @@ define(function(require){
           collection.add(new groupSpec.Model());
         }
         collection.collectionManager = this;
+        Storage.bindGroupSpecs(collection);
+
         this._allGroupSpecsCollectionPromise = deferred.promise();
         deferred.resolve(collection);
       }
