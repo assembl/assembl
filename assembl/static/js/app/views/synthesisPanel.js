@@ -33,6 +33,11 @@ define(function(require){
             }
 
             this.ideas = new Idea.Collection();
+            collectionManager.getAllSynthesisCollectionPromise().done(
+              function(synthesisCollection) {
+                that.model = synthesisCollection.models[0];
+                that.render();
+              });
             collectionManager.getAllIdeasCollectionPromise().done(
                 function(allIdeasCollection) {
                   var rootIdea = allIdeasCollection.getRootIdea(),
@@ -106,7 +111,8 @@ define(function(require){
             order_lookup_table = [],
             roots = [],
             synthesis_is_published = this.model.get("published_in_post")!=null,
-            collectionManager = new CollectionManager();
+            collectionManager = new CollectionManager(),
+            canEdit = Ctx.getCurrentUser().can(Permissions.EDIT_SYNTHESIS);
 
             Ctx.removeCurrentlyDisplayedTooltips(this.$el);
 
@@ -117,8 +123,7 @@ define(function(require){
                 // Getting the scroll position
                 var body = that.$('.body-synthesis'),
                     y = body.get(0) ? body.get(0).scrollTop : 0,
-                    rootIdea = allIdeasCollection.getRootIdea(),
-                    data = that.model.toJSON();
+                    rootIdea = allIdeasCollection.getRootIdea();
                     
                 Ctx.initTooltips(that.$el);
                 function inSynthesis(idea) {
@@ -150,7 +155,7 @@ define(function(require){
                     that.$('.synthesisPanel-ideas').append( rendered_idea_view.render().el );
                 });
                 that.$('.body-synthesis').get(0).scrollTop = y;
-                if(data.canEdit && !synthesis_is_published) {
+                if(canEdit && !synthesis_is_published) {
                     var titleField = new EditableField({
                         model: that.model,
                         modelProp: 'subject'
