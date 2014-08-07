@@ -19,15 +19,15 @@ CollectionManager = require('modules/collectionManager'),
     ui: {
       body: ".panel-body",
       extractList: ".postitlist",
-      clipboardCount: ".clipboardCount",
+      clipboardCount: ".clipboardCount"
     },
 
-    /**
-     * @init
-     */
-    initialize: function(options){
-      var that = this,
-      collectionManager = new CollectionManager();
+        /**
+         * @init
+         */
+        initialize: function(options){
+          var that = this,
+              collectionManager = new CollectionManager();
 
       collectionManager.getAllExtractsCollectionPromise().done(
           function(allExtractsCollection) {

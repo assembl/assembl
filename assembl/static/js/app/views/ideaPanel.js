@@ -49,12 +49,10 @@ CollectionManager = require('modules/collectionManager'),
             'dragover .groupPanel': 'onDragOver',
             'dragleave .groupPanel': 'onDragLeave',
             'drop .groupPanel': 'onDrop',
-
-            'click .closebutton': 'onSegmentCloseButtonClick',
+            'click .js_closeExtract': 'onSegmentCloseButtonClick',
             'click #ideaPanel-clearbutton': 'onClearAllClick',
             'click #ideaPanel-closebutton': 'onTopCloseButtonClick',
             'click #ideaPanel-deleteButton': 'onDeleteButtonClick',
-
             'click .segment-link': "onSegmentLinkClick",
             'click #session-modal': "createWidgetSession"
         },

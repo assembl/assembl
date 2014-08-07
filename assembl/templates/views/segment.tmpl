@@ -15,7 +15,7 @@
 
 <div class="box postit" draggable="true" data-segmentid="<%= segment.cid %>">
     <% if (canEditExtracts || (canEditMyExtracts && segment.getCreatorDEPRECATED() == ctx.getCurrentUser())) { %>
-        <span data-segmentid="<%= segment.cid %>" class="icon-delete fr"></span>
+        <span data-segmentid="<%= segment.cid %>" class="js_closeExtract icon-delete fr"></span>
     <% } %>
     
 
