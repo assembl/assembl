@@ -264,6 +264,21 @@ define(function(require){
                 console.log(messages_authors);
                 messages_authors_total = messages_authors.length;
 
+                var messages_in_period_full = _.filter(messages_sorted_by_date, function(msg){
+                    var d = new Date(msg.date);
+                    return d >= date_min && d <= date_max;
+                });
+
+                var authors_in_period = _.map(messages_in_period_full, function(msg){return msg.idCreator;});
+                console.log("authors_in_period:");
+                console.log(authors_in_period);
+                authors_in_period = _.uniq(authors_in_period);
+                console.log("authors_in_period:");
+                console.log(authors_in_period);
+                authors_in_period_total = authors_in_period.length;
+                // TODO
+                //var new_authors_in_period = _.difference(authors_in_period - messages_authors;
+
 
                 // -----
                 // show results
