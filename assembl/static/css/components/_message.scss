@@ -1,5 +1,6 @@
 $message-bar-width: 15px;
 $twelve: 12px;
+$avatarSize: 30px;
 $fortythree: 43px;
 $ten: 10px;
 
@@ -150,19 +151,6 @@ $ellipsiswidth: 3em !default;
                 white-space: pre-line;
             }
         }
-
-      .indicator {
-        position: absolute;
-        right: 0;
-        top: 10px;
-        .indice {
-          width: 10px;
-          height: 10px;
-          border: 2px solid $gray3;
-          display: inline-block;
-          @include border-radius(50px);
-        }
-      }
     }
     
     &.viewStyleTitleOnly {
@@ -186,19 +174,6 @@ $ellipsiswidth: 3em !default;
         .message-subject {
             display: inline;
         }
-
-      .indicator {
-        position: absolute;
-        right: 0;
-        top: 10px;
-        .indice {
-          width: 10px;
-          height: 10px;
-          border: 2px solid $gray3;
-          display: inline-block;
-          @include border-radius(50px);
-        }
-      }
     }
     
     &.viewStylePreview {
@@ -225,18 +200,18 @@ $ellipsiswidth: 3em !default;
             white-space: normal;
             }
         }
-
-      .indicator {
-        position: absolute;
-        right: 0;
-        top: 10px;
-        .indice {
-          width: 10px;
-          height: 10px;
-          border: 2px solid $gray3;
-          display: inline-block;
-          @include border-radius(50px);
-        }
+    }
+    
+    .indicator {
+      position: absolute;
+      right: 0;
+      top: 10px;
+      .indice {
+        width: 10px;
+        height: 10px;
+        border: 2px solid $gray3;
+        display: inline-block;
+        @include border-radius(50px);
       }
     }
     
@@ -250,11 +225,7 @@ $ellipsiswidth: 3em !default;
 
       .indicator {
         .indice {
-          width: 10px;
-          height: 10px;
           background-color: $gray3;
-          display: inline-block;
-          @include border-radius(50px);
         }
       }
     }

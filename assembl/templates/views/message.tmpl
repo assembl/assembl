@@ -38,9 +38,6 @@
     <a class="readmore" href="#" alt="{{ gettext('Read More') }}">{{ gettext('Read More') }}</a>
 </div>
 </header>
-<div class="indicator fr mrs">
-    <span class="indice"></span>
-</div>
 <% } 
 else if( viewStyle == ctx.AVAILABLE_MESSAGE_VIEW_STYLES.FULL_BODY ){ %>
 <div class="message-body  <%= bodyFormatClass %>" id="<%= messageBodyId %>"><%= body %></div>
@@ -65,9 +62,9 @@ else if( viewStyle == ctx.AVAILABLE_MESSAGE_VIEW_STYLES.FULL_BODY ){ %>
         <ul class="dropdown-list dropdown-list--bottomright">
             <% if (user_is_connected){ %>
                 <% if (read){ %>
-                    <li id="message-markasunread" class="dropdown-listitem"><a class="iconbutton"></a> {{ gettext('Mark as unread') }}</li>
+                    <li class="js_message-markasunread dropdown-listitem"><a class="iconbutton"></a> {{ gettext('Mark as unread') }}</li>
                 <% } else { %>
-                    <li id="message-markasread" class="dropdown-listitem"><a class="iconbutton"></a> {{ gettext('Mark as read') }}</li>
+                    <li class="js_message-markasread dropdown-listitem"><a class="iconbutton"></a> {{ gettext('Mark as read') }}</li>
                 <% } %>
             <% } %>
 
@@ -88,8 +85,22 @@ else if( viewStyle == ctx.AVAILABLE_MESSAGE_VIEW_STYLES.FULL_BODY ){ %>
         </ul>
     </div>
 </div>
+<% } %>
+<% if ( user_is_connected && (viewStyle !== ctx.AVAILABLE_MESSAGE_VIEW_STYLES.TITLE_ONLY) ){ %>
 <div class="indicator fr mrs">
-    <span class="indice"></span>
+    <span class="indice 
+        <% if (read){ %>
+            js_message-markasunread
+        <% } else { %>
+            js_message-markasread
+        <% } %>"
+        data-tooltip="
+        <% if (read){ %>
+            {{ gettext('Mark as unread') }}
+        <% } else { %>
+            {{ gettext('Mark as read') }}
+        <% } %>"
+        >
+        </span>
 </div>
 <% } %>
-

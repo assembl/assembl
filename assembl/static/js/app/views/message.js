@@ -95,8 +95,8 @@ CollectionManager = require('modules/collectionManager');
       'mouseenter .message-body': 'doTheSelection',
 
       // menu
-      'click #message-markasunread': 'markAsUnread',
-      'click #message-markasread': 'markAsRead'
+      'click .js_message-markasunread': 'markAsUnread',
+      'click .js_message-markasread': 'markAsRead'
     },
 
     /**

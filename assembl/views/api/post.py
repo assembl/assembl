@@ -34,7 +34,8 @@ post = Service(name='post', path=API_DISCUSSION_PREFIX + '/posts/{id:.+}',
                description="Manipulate a single post")
 
 post_read = Service(name='post_read', path=API_DISCUSSION_PREFIX + '/post_read/{id:.+}',
-               description="Signal that a post was read")
+               description="Signal that a post was read",
+               renderer='json')
 
 _ = TranslationStringFactory('assembl')
 
