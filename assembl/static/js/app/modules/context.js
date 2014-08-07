@@ -775,7 +775,9 @@ define(function(require){
                 live: true,
                 gravity: function(){ return this.getAttribute('data-tooltip-position') || 's'; },
                 title: function() { return this.getAttribute('data-tooltip'); },
-                opacity: 0.95
+                opacity: 0.95,
+                offset: 0,       // pixel offset of tooltip from element
+
             });
         },
 
