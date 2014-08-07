@@ -12,13 +12,14 @@ define(function(require){
                     Permissions = require('utils/permissions'),
                  IdeaFamilyView = require('views/ideaFamily'),
             IdeaInSynthesisView = require('views/ideaInSynthesis'),
+                   AssemblPanel = require('views/assemblPanel'),
                            i18n = require('utils/i18n'),
                   EditableField = require('views/editableField'),
                   CKEditorField = require('views/ckeditorField'),
               CollectionManager = require('modules/collectionManager');
 
 
-    var SynthesisPanel = Backbone.View.extend({
+    var SynthesisPanel = AssemblPanel.extend({
 
         /**
          * @init
@@ -79,15 +80,26 @@ define(function(require){
          * The template
          * @type {_.template}
          */
-        template: Ctx.loadTemplate('synthesisPanel'),
+        template: '#tmpl-synthesisPanel',
+
+        serializeData: function(){
+          var currentUser = Ctx.getCurrentUser(),
+              canSend = currentUser.can(Permissions.SEND_SYNTHESIS),
+              canEdit = currentUser.can(Permissions.EDIT_SYNTHESIS),
+              data = this.model.toJSON();
+          data.canSend = canSend;
+          data.canEdit = canEdit;
+
+          return data;
+        },
 
         /**
          * The render
          * @return {SynthesisPanel}
          */
-        render: function(){
+        onRender: function(){
             if(Ctx.debugRender) {
-                console.log("synthesisPanel:render() is firing");
+                console.log("synthesisPanel:onRender() is firing");
             }
             var that = this,
             view_data = {},
@@ -108,9 +120,6 @@ define(function(require){
                     rootIdea = allIdeasCollection.getRootIdea(),
                     data = that.model.toJSON();
                     
-                data.canSend = Ctx.getCurrentUser().can(Permissions.SEND_SYNTHESIS);
-                data.canEdit = Ctx.getCurrentUser().can(Permissions.EDIT_SYNTHESIS);
-                that.$el.html( that.template(data) );
                 Ctx.initTooltips(that.$el);
                 function inSynthesis(idea) {
                     if (idea.hidden) {
@@ -166,7 +175,6 @@ define(function(require){
                     that.$('.synthesisPanel-conclusion').append(that.model.get('conclusion'));
                 }
             });
-            
 
             return this;
         },
