@@ -62,3 +62,33 @@
   }
 }
 
+table.table {
+  width: 100%;
+  padding: 0;
+  margin-bottom: 1.4em;
+  font-size: 12px;
+  border: 1px solid #ddd;
+  border-collapse: separate;
+  border-radius: 4px;
+
+  thead {
+    th {
+      padding-top: 9px;
+      font-weight: bold;
+      vertical-align: middle;
+      border-bottom: 1px solid #ddd;
+    }
+    th + th, th + td, td + td {
+      border-left: 1px solid #ddd;
+    }
+
+  }
+  th, td {
+    padding: 10px 10px 9px;
+    line-height: 1.4em;
+    text-align: left;
+    vertical-align: top;
+  }
+}
+
+

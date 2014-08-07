@@ -1,44 +1,62 @@
 html {
-    font-family: 'helvetica neue','Helvetica', sans-serif;
-    font-size: $baseFontSize;
-   -webkit-font-smoothing: subpixel-antialiased;
+  font-family: $baseFontFamily;
+  font-size: $baseFontSize;
+  -webkit-font-smoothing: subpixel-antialiased;
+  line-height: $baseLineHeight;
 }
 
 @include selection {
-    background: $textSelectionBackgroundColor;
+  background: $textSelectionBackgroundColor;
 }
 
 @include scrollbar {
-    background-color: #eeeeee;
-    width:10px;
-    height:15px
+  background-color: #eeeeee;
+  width: 10px;
+  height: 15px
 }
 
 @include scrollbar-thumb {
-    background:#AAAAAA;
-    border-radius:4px;
-    width:8px;
-    min-height:40px;
-    border:2px solid #eeeeee;
+  background: #AAAAAA;
+  border-radius: 4px;
+  width: 8px;
+  min-height: 40px;
+  border: 2px solid #eeeeee;
 }
 
 @include placeholder {
-    color: transparentize( $gray1, 0.3 );
+  color: transparentize($gray1, 0.3);
 }
 
-.no-fx { @include transition( none !important ); }
+.no-fx {
+  @include transition(none !important);
+}
 
 .user-select-none {
-    @include user-select(none);
-    &::selection { background: transparent; }
-    &::-moz-selection { background: transparent; }
+  @include user-select(none);
+  &::selection {
+    background: transparent;
+  }
+  &::-moz-selection {
+    background: transparent;
+  }
 }
 
-.cursor-nodrop { cursor: no-drop !important; }
+.cursor-nodrop {
+  cursor: no-drop !important;
+}
 
-.clearfix { @include clearfix; }
+.clearfix {
+  @include clearfix;
+}
 
-.visible { visibility: visible; }
-.invisible { visibility: hidden; }
+.visible {
+  visibility: visible;
+}
 
-.error-message { color: red; }
+.invisible {
+  visibility: hidden;
+}
+
+.error-message {
+  color: red;
+}
