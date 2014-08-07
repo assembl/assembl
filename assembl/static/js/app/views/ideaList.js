@@ -1,27 +1,27 @@
-define(function(require){
+define(function (require) {
     'use strict';
 
-   var AllMessagesInIdeaListView = require('views/allMessagesInIdeaList'),
-    OrphanMessagesInIdeaListView = require('views/orphanMessagesInIdeaList'),
-         SynthesisInIdeaListView = require('views/synthesisInIdeaList'),
-                     Permissions = require('utils/permissions'),
-         objectTreeRenderVisitor = require('views/visitors/objectTreeRenderVisitor'),
-         ideaSiblingChainVisitor = require('views/visitors/ideaSiblingChainVisitor'),
-                        Backbone = require('backbone'),
-                         Assembl = require('modules/assembl'),
-                             Ctx = require('modules/context'),
-                            Idea = require('models/idea'),
-                        IdeaView = require('views/idea'),
-                 ideaGraphLoader = require('views/ideaGraph'),
-                               _ = require('underscore'),
-               CollectionManager = require('modules/collectionManager');
+    var AllMessagesInIdeaListView = require('views/allMessagesInIdeaList'),
+        OrphanMessagesInIdeaListView = require('views/orphanMessagesInIdeaList'),
+        SynthesisInIdeaListView = require('views/synthesisInIdeaList'),
+        Permissions = require('utils/permissions'),
+        objectTreeRenderVisitor = require('views/visitors/objectTreeRenderVisitor'),
+        ideaSiblingChainVisitor = require('views/visitors/ideaSiblingChainVisitor'),
+        Backbone = require('backbone'),
+        Assembl = require('modules/assembl'),
+        Ctx = require('modules/context'),
+        Idea = require('models/idea'),
+        IdeaView = require('views/idea'),
+        ideaGraphLoader = require('views/ideaGraph'),
+        _ = require('underscore'),
+        CollectionManager = require('modules/collectionManager');
 
     var FEATURED = 'featured',
         IN_SYNTHESIS = 'inNextSynthesis';
 
 
     var IdeaList = Backbone.View.extend({
-
+        className: 'ideaList',
         /**
          * The filter applied to the idea list
          * @type {string}
@@ -54,34 +54,34 @@ define(function(require){
         /**
          * @init
          */
-        initialize: function(options){
+        initialize: function (options) {
             var that = this,
                 collectionManager = new CollectionManager();
 
             collectionManager.getAllIdeasCollectionPromise().done(
-                function(allIdeasCollection) {
-                  var events = ['reset', 'change:parentId', 'change:@id', 'change:inNextSynthesis', 'remove', 'add', 'destroy'];
-                  that.listenTo(allIdeasCollection, events.join(' '), that.render);
+                function (allIdeasCollection) {
+                    var events = ['reset', 'change:parentId', 'change:@id', 'change:inNextSynthesis', 'remove', 'add', 'destroy'];
+                    that.listenTo(allIdeasCollection, events.join(' '), that.render);
                 });
-            
+
             collectionManager.getAllExtractsCollectionPromise().done(
-                function(allExtractsCollection) {
-                  // Benoitg - 2014-05-05:  There is no need for this, if an idealink
-                  // is associated with the idea, the idea itself will receive a change event
-                  // on the socket (unless it causes problem with local additions?)
-                  that.listenTo(allExtractsCollection, 'add change reset', that.render);
+                function (allExtractsCollection) {
+                    // Benoitg - 2014-05-05:  There is no need for this, if an idealink
+                    // is associated with the idea, the idea itself will receive a change event
+                    // on the socket (unless it causes problem with local additions?)
+                    that.listenTo(allExtractsCollection, 'add change reset', that.render);
                 });
-                
-            Assembl.commands.setHandler("panel:open", function(){
+
+            Assembl.commands.setHandler("panel:open", function () {
                 that.resizeGraphView();
             });
 
-            Assembl.commands.setHandler("panel:close", function(){
+            Assembl.commands.setHandler("panel:close", function () {
                 that.resizeGraphView();
             });
 
-            Assembl.vent.on('ideaList:removeIdea', function(idea){
-               that.removeIdea(idea);
+            Assembl.vent.on('ideaList:removeIdea', function (idea) {
+                that.removeIdea(idea);
             });
 
         },
@@ -108,108 +108,108 @@ define(function(require){
         /**
          * The render
          */
-        render: function(){
-          if(Ctx.debugRender) {
-            console.log("ideaList:render() is firing");
-          }
-          Ctx.removeCurrentlyDisplayedTooltips(this.$el);
-          this.body = this.$('.panel-body');
-          var that = this,
-              y = 0,
-              rootIdea = null,
-              rootIdeaDirectChildrenModels = [],
-              filter = {},
-              view_data = {},
-              order_lookup_table = [],
-              roots = [],
-              collectionManager = new CollectionManager();
-            
-          function excludeRoot(idea) {
-            return idea != rootIdea && !idea.hidden;
-          }
-            
-          if( this.body.get(0) ){
-            y = this.body.get(0).scrollTop;
-          }
+        render: function () {
+            if (Ctx.debugRender) {
+                console.log("ideaList:render() is firing");
+            }
+            Ctx.removeCurrentlyDisplayedTooltips(this.$el);
+            this.body = this.$('.panel-body');
+            var that = this,
+                y = 0,
+                rootIdea = null,
+                rootIdeaDirectChildrenModels = [],
+                filter = {},
+                view_data = {},
+                order_lookup_table = [],
+                roots = [],
+                collectionManager = new CollectionManager();
 
-          if( this.filter === FEATURED ){
-            filter.featured = true;
-          }
-          else if ( this.filter === IN_SYNTHESIS ){
-            filter.inNextSynthesis = true;
-          }
+            function excludeRoot(idea) {
+                return idea != rootIdea && !idea.hidden;
+            }
 
-          var list = document.createDocumentFragment();
-          collectionManager.getAllIdeasCollectionPromise().done(
-              function(allIdeasCollection) {
-                rootIdea = allIdeasCollection.getRootIdea();
-                if(Object.keys(filter).length > 0) {
-                    rootIdeaDirectChildrenModels = allIdeasCollection.where(filter);
-                }
-                else {
-                    rootIdeaDirectChildrenModels = allIdeasCollection.models;
-                }
-    
-                rootIdeaDirectChildrenModels = rootIdeaDirectChildrenModels.filter(function(idea) {
-                    return (idea.get("parentId") == rootIdea.id) || (idea.get("parentId") == null && idea.id != rootIdea.id); 
+            if (this.body.get(0)) {
+                y = this.body.get(0).scrollTop;
+            }
+
+            if (this.filter === FEATURED) {
+                filter.featured = true;
+            }
+            else if (this.filter === IN_SYNTHESIS) {
+                filter.inNextSynthesis = true;
+            }
+
+            var list = document.createDocumentFragment();
+            collectionManager.getAllIdeasCollectionPromise().done(
+                function (allIdeasCollection) {
+                    rootIdea = allIdeasCollection.getRootIdea();
+                    if (Object.keys(filter).length > 0) {
+                        rootIdeaDirectChildrenModels = allIdeasCollection.where(filter);
                     }
-                );
-                
-                rootIdeaDirectChildrenModels = _.sortBy(rootIdeaDirectChildrenModels, function(idea){
-                    return idea.get('order');
+                    else {
+                        rootIdeaDirectChildrenModels = allIdeasCollection.models;
+                    }
+
+                    rootIdeaDirectChildrenModels = rootIdeaDirectChildrenModels.filter(function (idea) {
+                            return (idea.get("parentId") == rootIdea.id) || (idea.get("parentId") == null && idea.id != rootIdea.id);
+                        }
+                    );
+
+                    rootIdeaDirectChildrenModels = _.sortBy(rootIdeaDirectChildrenModels, function (idea) {
+                        return idea.get('order');
+                    });
+
+                    // Synthesis posts pseudo-idea
+                    var synthesisView = new SynthesisInIdeaListView({model: rootIdea});
+                    list.appendChild(synthesisView.render().el);
+
+                    // All posts pseudo-idea
+
+                    var allMessagesInIdeaListView = new AllMessagesInIdeaListView({model: rootIdea});
+                    list.appendChild(allMessagesInIdeaListView.render().el);
+
+                    rootIdea.visitDepthFirst(objectTreeRenderVisitor(view_data, order_lookup_table, roots, excludeRoot));
+                    rootIdea.visitDepthFirst(ideaSiblingChainVisitor(view_data));
+
+
+                    _.each(roots, function (idea) {
+                        var ideaView = new IdeaView({model: idea}, view_data);
+                        list.appendChild(ideaView.render().el);
+                    });
+
+                    // Orphan messages pseudo-idea
+                    var orphanView = new OrphanMessagesInIdeaListView({model: rootIdea});
+                    list.appendChild(orphanView.render().el);
+
+                    var data = {
+                        tocTotal: allIdeasCollection.length - 1,//We don't count the root idea
+                        featuredTotal: allIdeasCollection.where({featured: true}).length,
+                        synthesisTotal: allIdeasCollection.where({inNextSynthesis: true}).length,
+                        canAdd: Ctx.getCurrentUser().can(Permissions.ADD_IDEA)
+                    };
+
+                    data.title = data.tocTitle;
+                    data.collapsed = that.collapsed;
+
+                    data.filter = that.filter;
+                    that.$el.html(that.template(data));
+                    Ctx.initTooltips(that.$el);
+                    that.$('.idealist').append(list);
+
+                    that.body = that.$('.panel-body');
+                    that.body.get(0).scrollTop = y;
                 });
-    
-                // Synthesis posts pseudo-idea
-                var synthesisView = new SynthesisInIdeaListView({model:rootIdea});
-                list.appendChild(synthesisView.render().el);
-                
-                // All posts pseudo-idea
-
-                var allMessagesInIdeaListView = new AllMessagesInIdeaListView({model:rootIdea});
-                list.appendChild(allMessagesInIdeaListView.render().el);
-                
-                rootIdea.visitDepthFirst(objectTreeRenderVisitor(view_data, order_lookup_table, roots, excludeRoot));
-                rootIdea.visitDepthFirst(ideaSiblingChainVisitor(view_data));
-            
-
-                _.each(roots, function(idea){
-                  var ideaView =  new IdeaView({model:idea}, view_data);
-                  list.appendChild(ideaView.render().el);
-                });
-
-                // Orphan messages pseudo-idea
-                var orphanView = new OrphanMessagesInIdeaListView({model: rootIdea});
-                list.appendChild(orphanView.render().el);
-
-                var data = {
-                    tocTotal: allIdeasCollection.length -1,//We don't count the root idea
-                    featuredTotal: allIdeasCollection.where({featured: true}).length,
-                    synthesisTotal: allIdeasCollection.where({inNextSynthesis: true}).length,
-                    canAdd: Ctx.getCurrentUser().can(Permissions.ADD_IDEA)
-                };
-
-                data.title = data.tocTitle;
-                data.collapsed = that.collapsed;
-
-                data.filter = that.filter;
-                that.$el.html( that.template(data) );
-                Ctx.initTooltips(that.$el);
-                that.$('.idealist').append( list );
-
-                that.body = that.$('.panel-body');
-                that.body.get(0).scrollTop = y;
-              });
-          return this;
+            return this;
         },
 
         /**
          * Remove the given idea
          * @param  {Idea} idea
          */
-        removeIdea: function(idea){
-          var parent = idea.get('parent');
+        removeIdea: function (idea) {
+            var parent = idea.get('parent');
 
-            if( parent ){
+            if (parent) {
                 parent.get('children').remove(idea);
             } else {
                 console.log("ERROR:  This shouldn't happen, only th root idea has no parent");
@@ -219,38 +219,38 @@ define(function(require){
         /**
          * Collapse ALL ideas
          */
-        collapseIdeas: function(){
-          var collectionManager = new CollectionManager();
-          var that = this;
+        collapseIdeas: function () {
+            var collectionManager = new CollectionManager();
+            var that = this;
             this.collapsed = true;
             collectionManager.getAllIdeasCollectionPromise().done(
-                function(allIdeasCollection) {
-                  allIdeasCollection.each(function(idea){
-                    idea.attributes.isOpen = false;
-                  });
-                  that.render();
+                function (allIdeasCollection) {
+                    allIdeasCollection.each(function (idea) {
+                        idea.attributes.isOpen = false;
+                    });
+                    that.render();
                 });
         },
 
         /**
          * Expand ALL ideas
          */
-        expandIdeas: function(){
-          this.collapsed = false;
-          var that = this;
-          collectionManager.getAllIdeasCollectionPromise().done(
-              function(allIdeasCollection) {
-                allIdeasCollection.each(function(idea){
-                  idea.attributes.isOpen = true;
+        expandIdeas: function () {
+            this.collapsed = false;
+            var that = this;
+            collectionManager.getAllIdeasCollectionPromise().done(
+                function (allIdeasCollection) {
+                    allIdeasCollection.each(function (idea) {
+                        idea.attributes.isOpen = true;
+                    });
+                    that.render();
                 });
-                that.render();
-              });
         },
 
         /**
          * Filter the current idea list by featured
          */
-        filterByFeatured: function(){
+        filterByFeatured: function () {
             this.filter = FEATURED;
             this.render();
         },
@@ -258,7 +258,7 @@ define(function(require){
         /**
          * Filter the current idea list by inNextSynthesis
          */
-        filterByInNextSynthesis: function(){
+        filterByInNextSynthesis: function () {
             this.filter = IN_SYNTHESIS;
             this.render();
         },
@@ -266,7 +266,7 @@ define(function(require){
         /**
          * Clear the filter applied to the idea list
          */
-        clearFilter: function(){
+        clearFilter: function () {
             this.filter = '';
             this.render();
         },
@@ -274,25 +274,25 @@ define(function(require){
         /**
          * Blocks the panel
          */
-        blockPanel: function(){
+        blockPanel: function () {
             this.$el.addClass('is-loading');
         },
 
         /**
          * Unblocks the panel
          */
-        unblockPanel: function(){
+        unblockPanel: function () {
             this.$el.removeClass('is-loading');
         },
 
         /**
          * Sets the panel as full screen
          */
-        setFullscreen: function(){
+        setFullscreen: function () {
             Ctx.setFullscreen(this);
         },
 
-        toggleGraphView: function() {
+        toggleGraphView: function () {
             this.show_graph = !this.show_graph;
             if (this.show_graph) {
                 this.$('#idealist-graph').show();
@@ -307,10 +307,10 @@ define(function(require){
         /**
          * Load the graph view
          */
-        loadGraphView: function() {
+        loadGraphView: function () {
             if (this.show_graph) {
                 var that = this;
-                $.getJSON( Ctx.getApiUrl('generic')+"/Discussion/"+Ctx.getDiscussionId()+"/idea_graph_jit", function(data){
+                $.getJSON(Ctx.getApiUrl('generic') + "/Discussion/" + Ctx.getDiscussionId() + "/idea_graph_jit", function (data) {
                     that.graphData = data['graph'];
                     console.log(ideaGraphLoader);
                     that.hypertree = ideaGraphLoader(that.graphData);
@@ -321,7 +321,8 @@ define(function(require){
                             // },
                             duration: 0
                         });
-                    } catch (Exception) {}
+                    } catch (Exception) {
+                    }
                 });
             }
         },
@@ -329,22 +330,23 @@ define(function(require){
         /**
          * Load the graph view
          */
-        resizeGraphView: function() {
+        resizeGraphView: function () {
             if (this.show_graph && this.graphData !== undefined) {
                 try {
                     this.hypertree = ideaGraphLoader(this.graphData);
                     this.hypertree.onClick(Ctx.getCurrentIdea().getId(), {
                         duration: 0
                     });
-                } catch (Exception) {}
+                } catch (Exception) {
+                }
             }
         },
 
         /**
          * @event
          */
-        onPanelBodyClick: function(ev){
-            if( $(ev.target).hasClass('panel-body') ){
+        onPanelBodyClick: function (ev) {
+            if ($(ev.target).hasClass('panel-body')) {
                 Ctx.setCurrentIdea(null);
             }
         },
@@ -353,31 +355,31 @@ define(function(require){
          * Add a new child to the current selected.
          * If no idea is selected, add it at the root level ( no parent )
          */
-        addChildToSelected: function(){
+        addChildToSelected: function () {
             var currentIdea = Ctx.getCurrentIdea(),
                 newIdea = new Idea.Model(),
                 that = this,
                 collectionManager = new CollectionManager();
 
             collectionManager.getAllIdeasCollectionPromise().done(
-                function(allIdeasCollection) {
-                  if( allIdeasCollection.get(currentIdea) ){
-                    newIdea.set('order', currentIdea.getOrderForNewChild());
-                    currentIdea.addChild(newIdea);
-                  } else {
-                    newIdea.set('order', allIdeasCollection.getOrderForNewRootIdea());
-                    allIdeasCollection.add(newIdea);
-                    newIdea.save();
-                  }
-                  Ctx.setCurrentIdea(newIdea);
+                function (allIdeasCollection) {
+                    if (allIdeasCollection.get(currentIdea)) {
+                        newIdea.set('order', currentIdea.getOrderForNewChild());
+                        currentIdea.addChild(newIdea);
+                    } else {
+                        newIdea.set('order', allIdeasCollection.getOrderForNewRootIdea());
+                        allIdeasCollection.add(newIdea);
+                        newIdea.save();
+                    }
+                    Ctx.setCurrentIdea(newIdea);
                 });
         },
 
         /**
          * Collapse or expand the ideas
          */
-        toggleIdeas: function(){
-            if( this.collapsed ){
+        toggleIdeas: function () {
+            if (this.collapsed) {
                 this.expandIdeas();
             } else {
                 this.collapseIdeas();
@@ -387,8 +389,8 @@ define(function(require){
         /**
          * Closes the panel
          */
-        closePanel: function(){
-            if(this.button){
+        closePanel: function () {
+            if (this.button) {
                 this.button.trigger('click');
             }
         },
@@ -396,10 +398,10 @@ define(function(require){
         /**
          * @event
          */
-        onAboveDragOver: function(ev){
+        onAboveDragOver: function (ev) {
             var y = this.body.get(0).scrollTop;
 
-            if( y === 0 ){
+            if (y === 0) {
                 return;
             }
 
@@ -409,7 +411,7 @@ define(function(require){
         /**
          * @event
          */
-        onBelowDragOver: function(ev){
+        onBelowDragOver: function (ev) {
             this.body.get(0).scrollTop += 1;
         }
 

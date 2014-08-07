@@ -1,15 +1,12 @@
 @import "compass";
-
 @import "base/reset.scss";
 @import "base/mixins.scss";
 @import "base/variables.scss";
 @import "base/common.scss";
 @import "base/helpers.scss";
-
 @import "lib/annotator.scss";
 @import "lib/ckeditor.scss";
 @import "lib/tipsy.scss";
-
 @import "components/accordion.scss";
 @import "components/nav-bar.scss";
 @import "components/bookmarklet.scss";
@@ -40,11 +37,11 @@
 @import "components/text.scss";
 @import "components/title.scss";
 @import "components/tooltip.scss";
-
 @import "layout/content.scss";
 @import "layout/ideaPanel.scss";
 @import "layout/messagelist.scss";
 @import "layout/panelarea.scss";
 @import "layout/styleguide.scss";
 @import "layout/synthesis.scss";
+@import "layout/ideaList.scss";
 @import "layout/groupContainer.scss";
