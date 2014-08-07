@@ -84,8 +84,7 @@ $ellipsiswidth: 3em !default;
             line-height: 32px;
         }
 
-    
-        .message-author {
+      .message-author {
             display: inline-block;
             line-height: 17px;
             .iconbutton {
@@ -104,6 +103,11 @@ $ellipsiswidth: 3em !default;
         > div {
             margin-top: 4px;
         }
+
+      .m-section {
+
+      }
+
     }
     .message-subject {
         margin-top: 0;
@@ -147,12 +151,25 @@ $ellipsiswidth: 3em !default;
             }
         }
 
+      .indicator {
+        position: absolute;
+        right: 0;
+        top: 10px;
+        .indice {
+          width: 10px;
+          height: 10px;
+          border: 2px solid $gray3;
+          display: inline-block;
+          @include border-radius(50px);
+        }
+      }
     }
     
     &.viewStyleTitleOnly {
-        .message-date {
-            float: right;
-            line-height: 32px;
+
+      .message-date {
+        //float: right;
+        //line-height: 32px;
         }
         .message-author {
             width: 10em;
@@ -169,13 +186,27 @@ $ellipsiswidth: 3em !default;
         .message-subject {
             display: inline;
         }
+
+      .indicator {
+        position: absolute;
+        right: 0;
+        top: 10px;
+        .indice {
+          width: 10px;
+          height: 10px;
+          border: 2px solid $gray3;
+          display: inline-block;
+          @include border-radius(50px);
+        }
+      }
     }
     
     &.viewStylePreview {
-        .message-date {
-            float: right;
-            line-height: 32px;
-            margin-right: 10px;
+
+      .message-date {
+        //float: right;
+        //line-height: 32px;
+        //margin-right: 10px;
         }
         .message-author {
             width: auto;
@@ -183,10 +214,9 @@ $ellipsiswidth: 3em !default;
         @include multiline-ellipsis(3em, 1em, 3em);
         .message-body {
             @extend .text-muted;
-            margin-top: 0.2em;
-            padding-left: 1em;
+          margin-top: 0.6em;
+          padding-left: 3em;
             position: relative;
-            
         }
 
         .message-body.body_format_text_plain > div {
@@ -196,15 +226,37 @@ $ellipsiswidth: 3em !default;
             }
         }
 
+      .indicator {
+        position: absolute;
+        right: 0;
+        top: 10px;
+        .indice {
+          width: 10px;
+          height: 10px;
+          border: 2px solid $gray3;
+          display: inline-block;
+          @include border-radius(50px);
+        }
+      }
     }
     
     &.unread {
-        .message-author, .message-subject {
-            @extend .text-bold;
+      /*.message-author, .message-subject {
+          @extend .text-bold;
+      }*/
+      /*.message-author, .message-subject, .message-date {
+          @extend .text-bold;
+      } */
+
+      .indicator {
+        .indice {
+          width: 10px;
+          height: 10px;
+          background-color: $gray3;
+          display: inline-block;
+          @include border-radius(50px);
         }
-        .message-author, .message-subject, .message-date {
-            @extend .text-bold;
-        }
+      }
     }
 
 }
@@ -367,11 +419,11 @@ body.js_annotatorUserCannotAddExtract > .textbubble {
 
 //
 .message-menu {
-    position: absolute;
-    top: -2px;
-    right: 5px;
-    display: table;
-    vertical-align: top;
+  /*position: absolute;
+  top: -2px;
+  right: 5px;
+  display: table;
+  vertical-align: top;*/
 
     // used when buttons are to the left of the Reply button
     > .message-hoistbtn, > .message-linkbutton {
@@ -384,6 +436,7 @@ body.js_annotatorUserCannotAddExtract > .textbubble {
         margin-left: 6px;
         padding-left: 4px;
         padding-right: 6px;
+      cursor: pointer;
     }
     .dropdown {
         vertical-align: top;
