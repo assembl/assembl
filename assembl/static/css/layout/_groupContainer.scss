@@ -17,8 +17,7 @@
 
   .navNotification{
     position: relative;
-    height: 150px;
-    background-color: $gray2;
+    background-color: $gray3;
     color: $white;
   }
 
@@ -26,14 +25,14 @@
 
 .groupHeader{
   height: 25px;
-  background-color: $gray2;
+  background-color: $gray1;
   position: relative;
   .close-group,
   .lock-group {
     cursor: pointer;
     position: absolute;
     text-decoration: none;
-    top:3px;
+    top: 2px;
     color:$white;
   }
   .close-group {
@@ -43,12 +42,11 @@
   .lock-group {
     margin-left: auto;
     margin-right: auto;
-    left: 0;
-    right: 0;
+    right: 30px;
     text-align: center;
-    width: 175px;
+    width: 140px;
     i{
-      vertical-align: middle;
+      vertical-align: text-bottom;
       font-size: 18px;
     }
   }
