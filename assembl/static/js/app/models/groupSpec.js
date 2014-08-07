@@ -16,7 +16,8 @@ define(function(require){
                {type:'navigation'},
                {type:'idea-panel'},
                {type:'message'}
-           ])
+           ]),
+           navigationState: 'home'
         }
     });
 

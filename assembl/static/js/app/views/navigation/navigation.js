@@ -11,16 +11,18 @@ sidebarNotification = require('views/navigation/notification'),
         template: "#tmpl-navigation",
         className: "groupPanel navSidebar",
         regions: {
-           dashboard:'.dashboard',
-           ideaTable:'.ideasTable',
+           home:'.home',
+           debate:'.debate',
            synthesis:'.synthesis',
            notification:'.navNotification'
         },
         events: {
           'click .nav': 'toggleMenu'
         },
-        initialize: function(){
+        initialize: function(options){
             var that = this;
+
+            this.groupContent = options.groupContent;
 
             $(window).resize(function(){
                 that.initVar();
@@ -46,6 +48,8 @@ sidebarNotification = require('views/navigation/notification'),
 
             this.loadView(view);
 
+            this.groupContent.setNavigationState(view);
+
             if(!elm.next('div.second-level').is(':visible')){
                 this.$('div.second-level').slideUp();
                 elm.next('div.second-level').css('height', this._sideBarHeight);
@@ -58,15 +62,15 @@ sidebarNotification = require('views/navigation/notification'),
         },
         loadView: function(view){
            switch(view){
-               case 'dashboard':
+               case 'home':
                    console.log('load home panel');
                    var homePanel = new HomePanel();
-                   this.dashboard.show(homePanel);
+                   this.home.show(homePanel);
                    break;
-               case 'ideaTable':
+               case 'debate':
                    console.log('load idea table');
                    var idealist = new IdeaList();
-                   this.ideaTable.show(idealist);
+                   this.debate.show(idealist);
                    break;
                case 'synthesis':
                    console.log('load synthesis');
