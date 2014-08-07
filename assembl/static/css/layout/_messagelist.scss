@@ -1,5 +1,5 @@
 #messageList {
-    #messageList-query-info {
+    .messageList-query-info {
         white-space: normal;
         padding-left: 10px;
         .closebutton {
@@ -36,14 +36,14 @@
         top: 28px;
       }
     } 
-    #messageList-toparea, #messageList-bottomarea {
+    .messageList-toparea, .messageList-bottomarea {
         &.hidden {
             display: none;
         }
     }
 }
 
-#messageList-list {
+.messageList-list {
     display: block;
 
     #messageList.is-message-mode & {

@@ -374,7 +374,7 @@ CollectionManager = require('modules/collectionManager');
     showSelectionOptions: function(x, y){
       this.hideTooltip();
 
-      var annotator = this.$el.closest('#messageList-list').data('annotator');
+      var annotator = this.$el.closest('.messageList-list').data('annotator');
       annotator.onAdderClick.call(annotator);
 
       if( this.messageListView.annotatorEditor ){

@@ -21,8 +21,9 @@ define(function(require){
      * Constants
      */
     var DIV_ANNOTATOR_HELP = Ctx.format("<div class='annotator-draganddrop-help'>{0}</div>", i18n.gettext('You can drag the segment above directly to the table of ideas') ),
-        DEFAULT_MESSAGE_VIEW_LI_ID_PREFIX = "defaultMessageView-",
+        DEFAULT_MESSAGE_VIEW_LI_ID_PREFIX = "js_defaultMessageView-",
         MESSAGE_LIST_VIEW_LI_ID_PREFIX = "messageList-view-",
+        MESSAGE_LIST_VIEW_STYLES_CLASS_PREFIX = "js_messageList-view-",
         /* The maximum number of messages that can be loaded at the same time
          * before being removed from memory
          */
@@ -40,28 +41,36 @@ define(function(require){
         className:'groupPanel messageList',
 
         ui: {
-          panelBody: ".panel-body"
+          panelBody: ".panel-body",
+          queryInfo: ".messageList-query-info",
+          viewStyleDropdown: ".js_messageListViewStyle-dropdown",
+          defaultMessageViewDropdown: ".js_defaultMessageView-dropdown",
+          topArea: '.js_messageList-toparea',
+          bottomArea: '.js_messageList-bottomarea',
+          collapseButton: '.js_messageList-collapseButton',
+          loadPreviousMessagesButton: '.js_messageList-prevbutton',
+          loadNextMessagesButton: '.js_messageList-morebutton'
         },
         
         ViewStyles: {
           THREADED: {
             id: "threaded",
-            css_id: "messageList-view-threaded",
+            css_class: MESSAGE_LIST_VIEW_STYLES_CLASS_PREFIX+"threaded",
             label: i18n.gettext('Threaded')
           },
           CHRONOLOGICAL: {
             id: "chronological",
-            css_id: "messageList-view-chronological",
+            css_class: MESSAGE_LIST_VIEW_STYLES_CLASS_PREFIX+"chronological",
             label: i18n.gettext('Chronological')
           },
           REVERSE_CHRONOLOGICAL: {
             id: "reverse_chronological",
-            css_id: "messageList-view-activityfeed",
+            css_class: MESSAGE_LIST_VIEW_STYLES_CLASS_PREFIX+"activityfeed",
             label: i18n.gettext('Reverse-Chronological')
           },
           NEW_MESSAGES: {
             id: "new_messages",
-            css_id: "messageList-view-newmessages",
+            css_class: MESSAGE_LIST_VIEW_STYLES_CLASS_PREFIX+"newmessages",
             label: i18n.gettext('New Messages')
           }
         },
@@ -86,13 +95,30 @@ define(function(require){
             return retval;
         },
         /**
-         * get a view style definition by css_id
-         * @param {viewStyle.id}
-         * @return {viewStyle or undefined}
+         * get a view style css_class
+         * @param {messageViewStyle}
+         * @return {String}
          */
-        getViewStyleDefByCssId: function(viewStyleId){
-            var retval = _.find(this.ViewStyles, function(viewStyle){ return viewStyle.css_id == viewStyleId; });
-            return retval;
+        getMessageViewStyleCssClass: function(messageViewStyle){
+            return DEFAULT_MESSAGE_VIEW_LI_ID_PREFIX + messageViewStyle.id;
+        },
+        
+        /**
+         * get a view style definition by id
+         * @param {messageViewStyle.id}
+         * @return {messageViewStyle or undefined}
+         */
+        getMessageViewStyleDefByCssClass: function(messageViewStyleClass){
+          var that = this;
+          return  _.find(Ctx.AVAILABLE_MESSAGE_VIEW_STYLES, function(messageViewStyle){ return that.getMessageViewStyleCssClass(messageViewStyle) == messageViewStyleClass; });
+        },
+        /**
+         * get a view style definition by id
+         * @param {messageViewStyle.id}
+         * @return {messageViewStyle or undefined}
+         */
+        getMessageListViewStyleDefByCssClass: function(messageListViewStyleClass){
+            return  _.find(this.ViewStyles, function(viewStyle){ return viewStyle.css_class == messageListViewStyleClass; });
         },
         /**
          *  @init
@@ -196,10 +222,11 @@ define(function(require){
          * @type {Object}
          */
         events: function() {
-            var data = {
+            var that = this,
+                data = {
                 'click .idealist-title': 'onTitleClick',
                 'click #post-query-filter-info .closebutton': 'onFilterDeleteClick',
-                'click #messageList-collapseButton': 'toggleMessageView',
+                'click .js_messageList-collapseButton': 'toggleMessageView',
                 'click #messageList-returnButton': 'onReturnButtonClick',
 
                 'click #messageList-allmessages': 'showAllMessages',
@@ -209,20 +236,20 @@ define(function(require){
 
                 'click #messageList-message-collapseButton': 'toggleThreadMessages',
 
-                'click #messageList-closeButton': 'closePanel',
-                'click #messageList-fullscreenButton': 'setFullscreen',
+                'click .js_messageList-closeButton': 'closePanel',
+                'click .js_messageList-fullscreenButton': 'setFullscreen',
 
-                'click #messageList-prevbutton': 'showPreviousMessages',
-                'click #messageList-morebutton': 'showNextMessages'
+                'click .js_messageList-prevbutton': 'showPreviousMessages',
+                'click .js_messageList-morebutton': 'showNextMessages'
             };
 
             _.each(this.ViewStyles, function(messageListViewStyle){
-              var key = 'click #'+messageListViewStyle.css_id;
+              var key = 'click .'+messageListViewStyle.css_class;
               data[key] = 'onMessageListViewStyle';
             } );
             
             _.each(Ctx.AVAILABLE_MESSAGE_VIEW_STYLES, function(messageViewStyle){
-                var key = 'click #'+DEFAULT_MESSAGE_VIEW_LI_ID_PREFIX+messageViewStyle.id;
+                var key = 'click .' + that.getMessageViewStyleCssClass(messageViewStyle);
                 data[key] = 'onDefaultMessageViewStyle';
             } );
 
@@ -594,15 +621,15 @@ define(function(require){
             }
 
             if( this.offsetStart <= 0 ){
-                this.$('#messageList-toparea').addClass('hidden');
+                this.ui.topArea.addClass('hidden');
             } else {
-                this.$('#messageList-toparea').removeClass('hidden');
+                this.ui.topArea.removeClass('hidden');
             }
 
             if( this.offsetEnd >= (models.length-1) ){
-                this.$('#messageList-bottomarea').addClass('hidden');
+                this.ui.bottomArea.addClass('hidden');
             } else {
-                this.$('#messageList-bottomarea').removeClass('hidden');
+                this.ui.bottomArea.removeClass('hidden');
             }
 
             this.initAnnotator();
@@ -697,9 +724,7 @@ define(function(require){
           return {
             availableViewStyles: this.ViewStyles,
             currentViewStyle: this.currentViewStyle,
-            DEFAULT_MESSAGE_VIEW_LI_ID_PREFIX: DEFAULT_MESSAGE_VIEW_LI_ID_PREFIX,
             collapsed: this.collapsed,
-            queryInfo: this.currentQuery.getHtmlDescription(),
             canPost: Ctx.getCurrentUser().can(Permissions.ADD_POST)
           };
         },
@@ -721,7 +746,7 @@ define(function(require){
 
             Ctx.initTooltips(this.$el);
 
-
+            this.renderQueryInfo();
             this.renderCollapseButton();
             this.renderDefaultMessageViewDropdown();
             this.renderMessageListViewStyleDropdown();
@@ -737,7 +762,7 @@ define(function(require){
                 'messageList':that
             });
 
-            this.$('#messagelist-replybox').append( this.newTopicView.render().el );
+            this.$('.messagelist-replybox').append( this.newTopicView.render().el );
 
             // Resetting the messages
             this.resetOffsets();
@@ -804,20 +829,24 @@ define(function(require){
 
             return this;
         },
-
+        /**
+         * Renders the search result information
+         */
+        renderQueryInfo: function(){
+          this.ui.queryInfo.html(this.currentQuery.getHtmlDescription());
+        },
+        
         /**
          * Renders the collapse button
          */
         renderCollapseButton: function(){
-            var btn = this.$('#messageList-collapseButton');
-
-            if( this.collapsed ){
-                btn.attr('data-tooltip', i18n.gettext('Expand all'));
-                btn.removeClass('icon-upload').addClass('icon-download-1');
-            } else {
-                btn.attr('data-tooltip', i18n.gettext('Collapse all'));
-                btn.removeClass('icon-download-1').addClass('icon-upload');
-            }
+          if( this.collapsed ){
+            this.ui.collapseButton.attr('data-tooltip', i18n.gettext('Expand all'));
+            this.ui.collapseButton.removeClass('icon-upload').addClass('icon-download-1');
+          } else {
+            this.ui.collapseButton.attr('data-tooltip', i18n.gettext('Collapse all'));
+            this.ui.collapseButton.removeClass('icon-download-1').addClass('icon-upload');
+          }
         },
         
         /**
@@ -825,7 +854,6 @@ define(function(require){
          */
         renderDefaultMessageViewDropdown: function(){
             var that = this,
-                div = this.$('#defaultMessageView-dropdown'),
                 html = "";
 
             html += '<span class="dropdown-label">';
@@ -833,10 +861,10 @@ define(function(require){
             html += '</span><i class="icon-arrowdown"></i>';
             html += '<ul class="dropdown-list">';
             _.each(Ctx.AVAILABLE_MESSAGE_VIEW_STYLES, function(messageViewStyle) {
-                html += '<li id="' + DEFAULT_MESSAGE_VIEW_LI_ID_PREFIX + messageViewStyle.id +'" class="dropdown-listitem">'+ messageViewStyle.label+'</li>';
+                html += '<li class="' + that.getMessageViewStyleCssClass(messageViewStyle) + ' dropdown-listitem">'+ messageViewStyle.label+'</li>';
             });
             html += '</ul>';
-            div.html(html);
+            this.ui.defaultMessageViewDropdown.html(html);
         },
 
         /**
@@ -844,7 +872,6 @@ define(function(require){
          */
         renderMessageListViewStyleDropdown: function(){
             var that = this,
-                div = this.$('#js_messageListViewStyle-dropdown'),
                 html = "";
 
             html += '<span class="dropdown-label">';
@@ -852,10 +879,10 @@ define(function(require){
             html += '</span><i class="icon-arrowdown"></i>';
             html += '<ul class="dropdown-list">';
             _.each(this.ViewStyles, function(messageListViewStyle) {
-                html += '<li id="' + messageListViewStyle.css_id + '" class="dropdown-listitem">'+ messageListViewStyle.label+'</li>';
+                html += '<li class="' + messageListViewStyle.css_class + ' dropdown-listitem">'+ messageListViewStyle.label+'</li>';
             });
             html += '</ul>';
-            div.html(html);
+            this.ui.viewStyleDropdown.html(html);
         
         },
         
@@ -998,7 +1025,7 @@ define(function(require){
             this.destroyAnnotator();
             //console.log("initAnnotator called");
             // Saving the annotator reference
-            this.annotator = this.$('#messageList-list').annotator().data('annotator');
+            this.annotator = this.$('.messageList-list').annotator().data('annotator');
 
             // TODO: Re-render message in messagelist if an annotation was added...
             this.annotator.subscribe('annotationCreated', function(annotation){
@@ -1206,18 +1233,26 @@ define(function(require){
          * @event
          */
         onMessageListViewStyle: function(e){
-            var messageListViewStyleId = (e.currentTarget.id);
-            var messageListViewStyleSelected = this.getViewStyleDefByCssId(messageListViewStyleId);
+            var messageListViewStyleClass,
+                messageListViewStyleSelected,
+                classes = $(e.currentTarget).attr('class').split(" ");
+            messageListViewStyleClass = _.find(classes, function(cls){
+              return cls.indexOf(MESSAGE_LIST_VIEW_STYLES_CLASS_PREFIX) === 0; });
+            var messageListViewStyleSelected = this.getMessageListViewStyleDefByCssClass(messageListViewStyleClass);
             this.setViewStyle(messageListViewStyleSelected);
             this.render();
         },
+
         
         /**
          * @event
          */
         onDefaultMessageViewStyle: function(e){
-            var messageViewStyleId = (e.currentTarget.id).replace(DEFAULT_MESSAGE_VIEW_LI_ID_PREFIX, '');
-            var messageViewStyleSelected = Ctx.getMessageViewStyleDefById(messageViewStyleId);
+            var classes = $(e.currentTarget).attr('class').split(" "),
+                defaultMessageListViewStyleClass;
+            defaultMessageListViewStyleClass = _.find(classes, function(cls){
+              return cls.indexOf(DEFAULT_MESSAGE_VIEW_LI_ID_PREFIX) === 0; });
+            var messageViewStyleSelected = this.getMessageViewStyleDefByCssClass(defaultMessageListViewStyleClass);
             this.defaultMessageStyle = messageViewStyleSelected;
             this.setIndividualMessageViewStyleForMessageListViewStyle(messageViewStyleSelected);
             this.renderDefaultMessageViewDropdown();
