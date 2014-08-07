@@ -16,7 +16,7 @@ define(function(require){
          * The render
          */
         render: function(){
-            Ctx.cleanTooltips(this.$el);
+            Ctx.removeCurrentlyDisplayedTooltips(this.$el);
             var data = this.model.toJSON();
 
             this.$el.addClass('idealist-item');

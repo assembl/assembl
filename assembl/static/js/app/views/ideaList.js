@@ -112,7 +112,7 @@ define(function(require){
           if(Ctx.debugRender) {
             console.log("ideaList:render() is firing");
           }
-          Ctx.cleanTooltips(this.$el);
+          Ctx.removeCurrentlyDisplayedTooltips(this.$el);
           this.body = this.$('.panel-body');
           var that = this,
               y = 0,
@@ -275,14 +275,14 @@ define(function(require){
          * Blocks the panel
          */
         blockPanel: function(){
-            this.$('.groupPanel').addClass('is-loading');
+            this.$el.addClass('is-loading');
         },
 
         /**
          * Unblocks the panel
          */
         unblockPanel: function(){
-            this.$('.groupPanel').removeClass('is-loading');
+            this.$el.removeClass('is-loading');
         },
 
         /**

@@ -52,7 +52,7 @@ CollectionManager = require('modules/collectionManager');
                 ).then(
                 function(allMessageStructureCollection, allUsersCollection) {
                   that.$el.addClass('synthesis-idea');
-                  Ctx.cleanTooltips(that.$el);
+                  Ctx.removeCurrentlyDisplayedTooltips(that.$el);
                   segments.forEach(function(segment) {
                       var post = allMessageStructureCollection.get(segment.get('idPost'));
                       if(post) {

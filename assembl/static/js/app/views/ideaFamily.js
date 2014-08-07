@@ -52,7 +52,7 @@ define(function(require){
                 render_data = view_data[this.model.getId()],
                 ideaView = new this.innerViewClass(_.extend({model: this.model}, this.innerViewClassInitializeParams));
             _.extend(data, render_data);
-            Ctx.cleanTooltips(this.$el);
+            Ctx.removeCurrentlyDisplayedTooltips(this.$el);
             
             this.$el.addClass('ideafamily-item');
             if(render_data['is_last_sibling']) {

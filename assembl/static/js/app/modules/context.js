@@ -750,8 +750,8 @@ define(function(require){
          * tooltips (those currently displayed) will be left dangling
          * if the trigger element is removed from the dom.
          */
-        cleanTooltips: function(jqueryElement){
-            //console.log("cleanTooltips() called");
+        removeCurrentlyDisplayedTooltips: function(jqueryElement){
+            //console.log("removeCurrentlyDisplayedTooltips() called");
             //This really does need to be global.
             //Should be fast, they are at the top level and there is only
             //a few of them.  Maybe it can be more specific to be faster

@@ -1,6 +1,6 @@
 // The panel
 // =========
-.panel {
+.groupPanel {
   @include box-sizing( border-box );
     position: relative;
     z-index: 10;
@@ -29,11 +29,11 @@
 
 // When is dragging something on
 // ****************
-.panel.is-dragover {}
+.groupPanel.is-dragover {}
 
 // blocked and with a loading message
 // ****************
-.panel.is-loading {
+.groupPanel.is-loading {
     cursor: wait;
 
     &:after {
@@ -120,7 +120,7 @@
     overflow-x: hidden;
     box-sizing: border-box;
 
-    .panel.is-dragover & {
+    .groupPanel.is-dragover & {
         background-color: $yellow1;
     }
 }

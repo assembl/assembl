@@ -74,7 +74,7 @@ define(function(require){
             _.extend(data, render_data);
 
             this.$el.addClass('idealist-item');
-            Ctx.cleanTooltips(this.$el);
+            Ctx.removeCurrentlyDisplayedTooltips(this.$el);
             this.onIsSelectedChange(Ctx.getCurrentIdea());
 
             if( data.isOpen === true ){

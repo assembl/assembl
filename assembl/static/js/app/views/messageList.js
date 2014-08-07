@@ -39,6 +39,10 @@ define(function(require){
 
         className:'groupPanel messageList',
 
+        ui: {
+          panelBody: ".panel-body"
+        },
+        
         ViewStyles: {
           THREADED: {
             id: "threaded",
@@ -264,7 +268,7 @@ define(function(require){
          * The template
          * @type {_.template}
          */
-        template: Ctx.loadTemplate('messageList'),
+        template: '#tmpl-messageList',
 
         /**
          * The collapse/expand flag
@@ -332,14 +336,14 @@ define(function(require){
          * Blocks the panel
          */
         blockPanel: function(){
-            this.$('.groupPanel').addClass('is-loading');
+            this.$el.addClass('is-loading');
         },
 
         /**
          * Unblocks the panel
          */
         unblockPanel: function(){
-            this.$('.groupPanel').removeClass('is-loading');
+          this.$el.removeClass('is-loading');
         },
         
         /**
@@ -351,17 +355,16 @@ define(function(require){
         },
 
         getPreviousScrollTarget: function(){
-            var panelBody = this.$('.panel-body'),
-            panelOffset = null,
+            var panelOffset = null,
             panelScrollTop = 0,
             messageViewScrolledInto = null,
             messageViewScrolledIntoOffset = -Number.MAX_VALUE,
             retval = null;
             //We may have been called on the first render, so we have to check
-            if(panelBody.offset() !== undefined) {
-                panelOffset = panelBody.offset().top;
-                panelScrollTop = panelBody.scrollTop();
-                //console.log("panelBody", panelBody, "panelScrollTop", panelScrollTop);
+            if(this.ui.panelBody.size > 0 && (this.ui.panelBody.offset() !== undefined)) {
+                panelOffset = this.ui.panelBody.offset().top;
+                panelScrollTop = this.ui.panelBody.scrollTop();
+                //console.log("this.ui.panelBody", this.ui.panelBody, "panelScrollTop", panelScrollTop);
                 if(panelScrollTop !== 0){
                     // Scrolling to the element
                     //var target = offset - panelOffset + panelBody.scrollTop();
@@ -403,18 +406,18 @@ define(function(require){
             return retval;
         },
         
-        scrollToPreviousScrollTarget: function(previousScrollTarget){
-            var panelBody = this.$('.panel-body'),
-            panelOffset = null,
-            panelScrollTop = 0;
+        scrollToPreviousScrollTarget: function(){
+            var panelOffset = null,
+            panelScrollTop = 0,
+            previousScrollTarget = this.previousScrollTarget;
 
             if(previousScrollTarget) {
                 //console.log("scrollToPreviousScrollTarget(): Trying to scroll to:", previousScrollTarget)
                 //We may have been called on the first render, so we have to check
-                if(panelBody.offset() !== undefined) {
+                if(this.ui.panelBody.offset() !== undefined) {
                     //console.log("panelBody", panelBody);
-                    panelOffset = panelBody.offset().top;
-                    panelScrollTop = panelBody.scrollTop();
+                    panelOffset = this.ui.panelBody.offset().top;
+                    panelScrollTop = this.ui.panelBody.scrollTop();
                     //console.log("panelScrollTop", panelScrollTop, "panelOffset", panelOffset);
                     var selector = Ctx.format('[id="{0}"]', previousScrollTarget.messageHtmlId);
                     var message = this.$(selector);
@@ -428,7 +431,7 @@ define(function(require){
                     // Scrolling to the element
                     var target = messageCurrentOffset - panelOffset - previousScrollTarget.innerOffset;
                     //console.log("target",target);
-                    panelBody.animate({ scrollTop: target });
+                    this.ui.panelBody.animate({ scrollTop: target });
                 }
             }
         },
@@ -690,22 +693,24 @@ define(function(require){
             return ret;
         },
         
+        serializeData: function(){
+          return {
+            availableViewStyles: this.ViewStyles,
+            currentViewStyle: this.currentViewStyle,
+            DEFAULT_MESSAGE_VIEW_LI_ID_PREFIX: DEFAULT_MESSAGE_VIEW_LI_ID_PREFIX,
+            collapsed: this.collapsed,
+            queryInfo: this.currentQuery.getHtmlDescription(),
+            canPost: Ctx.getCurrentUser().can(Permissions.ADD_POST)
+          };
+        },
+        
         /**
          * The actual rendering for the render function
          * @return {views.Message}
          */
         render_real: function(){
             var that = this,
-                views = [],
-                data = {
-                    availableViewStyles: this.ViewStyles,
-                    currentViewStyle: this.currentViewStyle,
-                    DEFAULT_MESSAGE_VIEW_LI_ID_PREFIX: DEFAULT_MESSAGE_VIEW_LI_ID_PREFIX,
-                    collapsed: this.collapsed,
-                    queryInfo: this.currentQuery.getHtmlDescription(),
-                    canPost: Ctx.getCurrentUser().can(Permissions.ADD_POST)
-                },
-                previousScrollTarget = null;
+                views = [];
             /*
             console.log("messageIdsToDisplay is: ");
             console.log(that.messageIdsToDisplay);
@@ -713,10 +718,6 @@ define(function(require){
             if( ! (Ctx.getCurrentUser().can(Permissions.ADD_EXTRACT))){
               $("body").addClass("js_annotatorUserCannotAddExtract"); 
             }
-            Ctx.cleanTooltips(this.$el);
-            previousScrollTarget = this.getPreviousScrollTarget();
-            
-            this.$el.html( this.template(data) );
 
             Ctx.initTooltips(this.$el);
 
@@ -748,7 +749,7 @@ define(function(require){
                         offsetStart: 0,
                         offsetEnd: MORE_PAGES_NUMBER
                     })
-                    that.scrollToPreviousScrollTarget(previousScrollTarget);
+                    that.scrollToPreviousScrollTarget();
                     Assembl.vent.trigger("messageList:render_complete", "Render complete");
                 })
             
@@ -756,12 +757,17 @@ define(function(require){
             
             return this;
         },
-
+        
+        onBeforeRender: function(){
+          this.previousScrollTarget = this.getPreviousScrollTarget();
+          Ctx.removeCurrentlyDisplayedTooltips(this.$el);
+        },
+        
         /**
          * The render function
          * @return {views.Message}
          */
-        render: function(){
+        onRender: function(){
             var that = this,
                 collectionManager = new CollectionManager();
 
@@ -1338,12 +1344,11 @@ define(function(require){
                       message.trigger('showBody');
                       el = $(selector);
                       if( el[0] ){
-                          var panelBody = that.$('.panel-body');
-                          var panelOffset = panelBody.offset().top;
+                          var panelOffset = this.ui.panelBody.offset().top;
                           var offset = el.offset().top;
                           // Scrolling to the element
-                          var target = offset - panelOffset + panelBody.scrollTop();
-                          panelBody.animate({ scrollTop: target }, { complete: real_callback });
+                          var target = offset - panelOffset + this.ui.panelBody.scrollTop();
+                          this.ui.panelBody.animate({ scrollTop: target }, { complete: real_callback });
                       } else {
                           console.log("showMessageById(): ERROR:  Message " + id + " not found in the DOM with selector: " + selector);
                       }

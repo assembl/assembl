@@ -96,7 +96,7 @@ define(function(require){
             synthesis_is_published = this.model.get("published_in_post")!=null,
             collectionManager = new CollectionManager();
 
-            Ctx.cleanTooltips(this.$el);
+            Ctx.removeCurrentlyDisplayedTooltips(this.$el);
 
             collectionManager.getAllIdeasCollectionPromise().done(
                 function(allIdeasCollection) {
@@ -186,14 +186,14 @@ define(function(require){
          * Blocks the panel
          */
         blockPanel: function(){
-            this.$('.groupPanel').addClass('is-loading');
+            this.$el.addClass('is-loading');
         },
 
         /**
          * Unblocks the panel
          */
         unblockPanel: function(){
-            this.$('.groupPanel').removeClass('is-loading');
+            this.$el.removeClass('is-loading');
         },
 
         /**

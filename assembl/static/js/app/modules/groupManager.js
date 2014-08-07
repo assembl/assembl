@@ -91,21 +91,6 @@ define(function (require) {
                 this.lockGroup();
             }
         },
-
-        /**
-         * Blocks the panel
-         */
-        blockPanel: function () {
-            this.$('.groupPanel').addClass('is-loading');
-        },
-
-        /**
-         * Unblocks the panel
-         */
-        unblockPanel: function () {
-            this.$('.groupPanel').removeClass('is-loading');
-        }
-
     });
 
     return groupManager;

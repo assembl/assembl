@@ -16,6 +16,7 @@ CollectionManager = require('modules/collectionManager'),
   var SegmentList = AssemblPanel.extend({
 
     className:'groupPanel clipboard',
+    
     ui: {
       body: ".panel-body",
       extractList: ".postitlist",
@@ -53,8 +54,12 @@ CollectionManager = require('modules/collectionManager'),
      * The template
      * @type {_.template}
      */
-    template: Ctx.loadTemplate('segmentList'),
+    template: '#tmpl-segmentList',
 
+    onBeforeRender: function(){
+      Ctx.removeCurrentlyDisplayedTooltips(this.$el);
+    },
+    
     /**
      * The render
      * @return {segmentList}
@@ -65,7 +70,6 @@ CollectionManager = require('modules/collectionManager'),
       if(Ctx.debugRender) {
         console.log("segmentList:onRender() is firing");
       }
-      Ctx.cleanTooltips(this.$el);
       Ctx.initTooltips(this.$el);
       this.renderExtracts();
     },
@@ -215,9 +219,9 @@ CollectionManager = require('modules/collectionManager'),
     events: {
       'dragstart .postit': "onDragStart",
       'dragend .postit': "onDragEnd",
-      'dragover .groupPanel': 'onDragOver',
-      'dragleave .groupPanel': 'onDragLeave',
-      'drop .groupPanel': 'onDrop',
+      'dragover': 'onDragOver',
+      'dragleave': 'onDragLeave',
+      'drop': 'onDrop',
 
       'click .closebutton': "onCloseButtonClick",
       'click #segmentList-clear': "onClearButtonClick",

@@ -36,7 +36,7 @@ define(function(require){
          * The render
          */
         render: function(){
-            Ctx.cleanTooltips(this.$el);
+            Ctx.removeCurrentlyDisplayedTooltips(this.$el);
             var data = {
                     body_help_message: this.initialBody,
                     allow_setting_subject: this.options.allow_setting_subject || this.options.allow_setting_subject,

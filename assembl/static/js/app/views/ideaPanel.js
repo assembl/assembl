@@ -46,9 +46,9 @@ CollectionManager = require('modules/collectionManager'),
         events: {
             'dragstart .box': 'onDragStart',
             'dragend .box': "onDragEnd",
-            'dragover .groupPanel': 'onDragOver',
-            'dragleave .groupPanel': 'onDragLeave',
-            'drop .groupPanel': 'onDrop',
+            'dragover': 'onDragOver',
+            'dragleave': 'onDragLeave',
+            'drop': 'onDrop',
             'click .js_closeExtract': 'onSegmentCloseButtonClick',
             'click #ideaPanel-clearbutton': 'onClearAllClick',
             'click #ideaPanel-closebutton': 'onTopCloseButtonClick',
@@ -116,9 +116,9 @@ CollectionManager = require('modules/collectionManager'),
         },
 
         onRender: function(){
-            Ctx.cleanTooltips(this.$el);
+            Ctx.removeCurrentlyDisplayedTooltips(this.$el);
             Ctx.initTooltips(this.$el);
-            this.panel = this.$('.groupPanel');
+            this.panel = this.$el;
             Ctx.initClipboard();
 
             if(this.model) {
@@ -204,14 +204,14 @@ CollectionManager = require('modules/collectionManager'),
          * Blocks the panel
          */
         blockPanel: function(){
-            this.$('.groupPanel').addClass('is-loading');
+            this.$el.addClass('is-loading');
         },
 
         /**
          * Unblocks the panel
          */
         unblockPanel: function(){
-            this.$('.groupPanel').removeClass('is-loading');
+            this.$el.removeClass('is-loading');
         },
 
         /**
@@ -385,7 +385,7 @@ CollectionManager = require('modules/collectionManager'),
          * @event
          */
         onDragOver: function(ev){
-            //console.log("ideaPanel:onDragOver() fired");
+            console.log("ideaPanel:onDragOver() fired");
             ev.preventDefault();
             if( Ctx.draggedSegment !== null || Ctx.getDraggedAnnotation() !== null){
                 this.panel.addClass("is-dragover");

@@ -66,7 +66,7 @@ SynthesisMessageView = require('views/synthesisMessage'),
                 messageView;
 
             level = this.currentLevel !== null ? this.currentLevel : 1;
-            Ctx.cleanTooltips(this.$el);
+            Ctx.removeCurrentlyDisplayedTooltips(this.$el);
             if( ! _.isUndefined(level) ){
                 this.currentLevel = level;
             }
