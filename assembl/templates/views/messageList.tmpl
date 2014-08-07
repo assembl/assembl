@@ -5,7 +5,7 @@
         <% if (currentViewStyle.id === 'threaded') { %>
             <a data-tooltip="<%= collapsed ? '{{gettext('Expand all')}}' : '{{gettext('Collapse all')}}' %>" class="js_messageList-collapseButton iconbutton <%= collapsed ? 'icon-download-1' : 'icon-upload' %>"></a>
         <% } %>
-        <a class="js_messageList-fullscreenButton iconbutton iconbutton--resizefull" data-tooltip="{{ gettext('Fullsize') }}"></a>
+        <a class="js_messageList-fullScreenButton iconbutton iconbutton--resizefull" data-tooltip="{{ gettext('Fullsize') }}"></a>
         <a class="js_messageList-closeButton iconbutton icon-cancel"data-tooltip="{{gettext('Close panel')}}"></a>
     </div>
 </header>
@@ -27,11 +27,11 @@
             </span><i class="icon-arrowdown"></i>
             <ul class="dropdown-list">
                 {# A "Clear filters" button is now displayed when at least one filter is active
-                <li id="messageList-allmessages" class="dropdown-listitem">{{ gettext('All messages') }}</li>
+                <li class="js_messageList-allmessages dropdown-listitem">{{ gettext('All messages') }}</li>
                 #}
-                <li id="messageList-onlyorphan" class="dropdown-listitem">{{ gettext('Orphan messages') }}</li>
-                <li id="messageList-onlysynthesis" class="dropdown-listitem">{{ gettext('Synthesis messages') }}</li>
-                <li id="messageList-isunread" class="dropdown-listitem">{{ gettext('Unread messages') }}</li>
+                <li class="js_messageList-onlyorphan dropdown-listitem">{{ gettext('Orphan messages') }}</li>
+                <li class="js_messageList-onlysynthesis dropdown-listitem">{{ gettext('Synthesis messages') }}</li>
+                <li class="js_messageList-isunread dropdown-listitem">{{ gettext('Unread messages') }}</li>
                 {#
                 <li class="dropdown-listitem">{{ gettext('Uncaught') }}</li>
                 <li class="dropdown-listitem">{{ gettext('Followed') }}</li>

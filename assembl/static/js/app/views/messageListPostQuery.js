@@ -443,12 +443,12 @@ define(function(require){
             valuesText = [],
             numActiveFilters = _.keys(this._query).length;
             if(this._queryResultInfo == null) {
-                retval += '<div id="post-query-results-info">';
+                retval += '<div class="post-query-results-info">';
                 retval += i18n.gettext("No query has been executed yet");
                 retval += '</div>';
             }
             else{
-                retval += '<div id="post-query-results-info">';
+                retval += '<div class="post-query-results-info">';
                 if(this.getResultNumTotal() == 0) {
                     if(numActiveFilters > 0) {
                         retval += i18n.gettext("Found no message in the discussion that:");
@@ -471,7 +471,7 @@ define(function(require){
                 }
                 
                 retval += '</div>';
-                retval += '<ul id="post-query-filter-info">';
+                retval += '<ul class="post-query-filter-info">';
 
                 var nActiveFilters = 0;
                 for (var filterDefPropName in this.availableFilters) {
@@ -479,7 +479,7 @@ define(function(require){
 
                     if(filterDef.id in this._query) {
                         ++nActiveFilters;
-                        retval += '<li class="filter" id="'+filterDef.id+'">';
+                        retval += '<li class="filter">';
                         if(filterDef._filter_description) {
                             retval += filterDef._filter_description(filterDef, this._query[filterDef.id]);
                         }
@@ -507,7 +507,7 @@ define(function(require){
 
                 if ( nActiveFilters > 0 )
                 {
-                    retval += '<div class="actions"><a id="messageList-allmessages" class="button">' + i18n.gettext("Clear filters") + '</a></div>';
+                    retval += '<div class="actions"><a class="js_messageList-allmessages button">' + i18n.gettext("Clear filters") + '</a></div>';
                 }
             }
             return retval;

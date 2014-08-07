@@ -225,19 +225,16 @@ define(function(require){
             var that = this,
                 data = {
                 'click .idealist-title': 'onTitleClick',
-                'click #post-query-filter-info .closebutton': 'onFilterDeleteClick',
+                'click .post-query-filter-info .closebutton': 'onFilterDeleteClick',
                 'click .js_messageList-collapseButton': 'toggleMessageView',
-                'click #messageList-returnButton': 'onReturnButtonClick',
 
-                'click #messageList-allmessages': 'showAllMessages',
-                'click #messageList-onlyorphan': 'addFilterIsOrphanMessage',
-                'click #messageList-onlysynthesis': 'addFilterIsSynthesMessage',
-                'click #messageList-isunread': 'addFilterIsUnreadMessage',
-
-                'click #messageList-message-collapseButton': 'toggleThreadMessages',
+                'click .js_messageList-allmessages': 'showAllMessages',
+                'click .js_messageList-onlyorphan': 'addFilterIsOrphanMessage',
+                'click .js_messageList-onlysynthesis': 'addFilterIsSynthesMessage',
+                'click .js_messageList-isunread': 'addFilterIsUnreadMessage',
 
                 'click .js_messageList-closeButton': 'closePanel',
-                'click .js_messageList-fullscreenButton': 'setFullscreen',
+                'click .js_messageList-fullScreenButton': 'setFullscreen',
 
                 'click .js_messageList-prevbutton': 'showPreviousMessages',
                 'click .js_messageList-morebutton': 'showNextMessages'
@@ -1425,13 +1422,6 @@ define(function(require){
                 this.collapseMessages();
             }
         },
-
-        /**
-         * @event
-         */
-        onReturnButtonClick: function(ev){
-            this.closeThread();
-        }
 
     });
 
