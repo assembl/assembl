@@ -14,9 +14,6 @@
         {# <span class="text-muted"><%= ctx.stripHtml(body) %></span> #}
     </div>
 </header>
-<div class="indicator fr mrs">
-    <span class="indice"></span>
-</div>
 <% } else if ( viewStyle == ctx.AVAILABLE_MESSAGE_VIEW_STYLES.PREVIEW ){ %>
     <div class="message-date">{{ gettext('<time>%(time)s</time>')|format(time=time)|safe }}</div>
     <div class="message-subheader">

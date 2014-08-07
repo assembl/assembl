@@ -762,7 +762,7 @@ define(function(require){
                 'messageList':that
             });
 
-            this.$('.messagelist-replybox').append( this.newTopicView.render().el );
+            this.$('.messagelist-replybox').html( this.newTopicView.render().el );
 
             // Resetting the messages
             this.resetOffsets();
