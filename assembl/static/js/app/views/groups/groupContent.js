@@ -73,6 +73,7 @@ define(function (require) {
           });
         },
         ensureOnlyPanelsVisible: function(){
+          var that = this;
           var args = Array.prototype.slice.call(arguments);
           var panels = this.model.get('panels');
           // add missing panels
@@ -83,7 +84,24 @@ define(function (require) {
               panels.add(panel,{at:1});
             }
           });
-          // hide other panels
+          // show and hide panels
+          _.each(panels.models, function(aPanelSpec){
+            if ( aPanelSpec.get('type') == 'navigation')
+              return;
+            var view = that.children.findByModel(aPanelSpec);
+            if ( !view )
+              return;
+            var shouldBeVisible = _.contains(args, aPanelSpec.get('type'));
+            // TODO: compute isAlreadyVisible and show() or hide() with animation only if state is different
+            if ( shouldBeVisible )
+            {
+              view.$el.show();
+            }
+            else
+            {
+              view.$el.hide();
+            }
+          });
         },
     });
 
