@@ -719,6 +719,7 @@ define(function(require){
         
         serializeData: function(){
           return {
+            Ctx: Ctx,
             availableViewStyles: this.ViewStyles,
             currentViewStyle: this.currentViewStyle,
             collapsed: this.collapsed,

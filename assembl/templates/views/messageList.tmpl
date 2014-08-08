@@ -11,10 +11,15 @@
 </header>
 
 <div class="panel-body">
-    <div class="options-filter">
-      <span class="js_messageList-view-threaded option js_filterAll dispb fl tac pts">All</span>
-      <span class="js_messageList-view-newmessages option dispb fl tac pts">Not read</span>
-    </div>
+    
+  <% if (Ctx.getCurrentInterfaceType() === Ctx.InterfaceTypes.SIMPLE) { %>
+    <% if (!Ctx.getCurrentUser().isUnknownUser()) { %>
+      <div class="options-filter">
+        <span class="js_messageList-view-threaded option js_filterAll dispb fl tac pts">All</span>
+        <span class="js_messageList-view-newmessages option dispb fl tac pts">Not read</span>
+      </div>
+    <% } %>
+  <% } else { %>
     <div class="view-config pls">
         <div class="js_messageListViewStyle-dropdown dropdown"></div>
 
@@ -39,7 +44,7 @@
             </ul>
         </div>
     </div>
-
+  <% } %>
     {#
     <div class="inline text-muted margin-left">
         {% set total = '<%= total %>' %}

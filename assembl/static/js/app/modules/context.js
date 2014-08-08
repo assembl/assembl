@@ -578,20 +578,6 @@ define(function(require){
         },*/
 
         /**
-         * Removes all .contextmenu on the page
-         * @param {Event} [ev=null] If given, checks to see if it was clicked outside
-         */
-        //FIXME: this method never use in app, is a part of another one never use
-        /*hideContextMenu: function(ev){
-            if( ev && ev.target.classList.contains('contextmenu')){
-                return;
-            }
-
-            $('.contextmenu').remove();
-            $(document).off('click', this.hideContextMenu);
-        },*/
-
-        /**
          * Returns an array with all segments for the given idea
          * @param {Idea} idea
          * @return {Array<Segment>}
@@ -762,6 +748,53 @@ define(function(require){
         setLocale: function(locale){
             document.cookie = "_LOCALE_="+locale+"; path=/";
             location.reload(true);
+        },
+        InterfaceTypes: {
+            SIMPLE: "SIMPLE",
+            EXPERT: "EXPERT"
+        },
+        /** Set the user interface the user wants
+         * @param interface_id, one of SIMPLE, EXPERT
+         * */
+        setInterfaceType: function(interface_id){
+          document.cookie = "interface="+interface_id+"; path=/";
+          location.reload(true);
+        },
+        
+        getCookieItem: function (sKey) {
+          return decodeURIComponent(document.cookie.replace(new RegExp("(?:(?:^|.*;)\\s*" + encodeURIComponent(sKey).replace(/[\-\.\+\*]/g, "\\$&") + "\\s*\\=\\s*([^;]*).*$)|^.*$"), "$1")) || null;
+        },
+        
+        canUseExpertInterface: function() {
+          var user = this.getCurrentUser();
+          if( user.can(Permissions.ADD_EXTRACT) ||
+              user.can(Permissions.EDIT_EXTRACT) ||
+              user.can(Permissions.EDIT_MY_EXTRACT) ||
+              user.can(Permissions.ADD_IDEA) ||
+              user.can(Permissions.EDIT_IDEA) ||
+              user.can(Permissions.EDIT_SYNTHESIS) ||
+              user.can(Permissions.SEND_SYNTHESIS) ||
+              user.can(Permissions.ADMIN_DISCUSSION) ||
+              user.can(Permissions.SYSADMIN) 
+              ) {
+            return true;
+          }
+          else {
+            return false;
+          }
+        },
+        
+        getCurrentInterfaceType:  function(){
+          var interfaceType = this.getCookieItem('interface');
+          if(!this.canUseExpertInterface()) {
+            interfaceType = this.InterfaceTypes.SIMPLE
+          }
+          else {
+            if (interfaceType === null) {
+              interfaceType = this.InterfaceTypes.EXPERT
+            }
+          }
+          return interfaceType;
         },
 
         /**

@@ -11,11 +11,25 @@ define(function(require){
         className:'navbar navbar-default',
         events: {
            'click .lang': 'setLocale',
-           'click .add-group':'addGroup'
+           'click .add-group': 'addGroup',
+           'click .js_switchToExpertInterface': 'switchToExpertInterface',
+           'click .js_switchToSimpleInterface': 'switchToSimpleInterface',
         },
+        serializeData: function(){
+          return {
+            "Ctx": Ctx
+          };
+        },
+          
         setLocale: function(e){
             var lang = $(e.target).attr('data-locale');
             Ctx.setLocale(lang);
+        },
+        switchToExpertInterface: function(e){
+          Ctx.setInterfaceType(Ctx.InterfaceTypes.EXPERT);
+        },
+        switchToSimpleInterface: function(e){
+          Ctx.setInterfaceType(Ctx.InterfaceTypes.SIMPLE);
         },
         addGroup: function(){
 
