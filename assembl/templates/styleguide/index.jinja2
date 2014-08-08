@@ -9,7 +9,7 @@
     {% for name, path in styleguide_views.items() %}
         <div class="sg-section container">
             <div class="row">
-                <div class="col-3">
+                <div class="col-2">
                     <h2 class="sg-title">{{name}}</h2>
                 </div>
                 <div class="col-9">
@@ -20,13 +20,13 @@
     {% endfor %}
 
 
-    <script>
-    document.body.classList.remove('preload');
-    </script>
+<script>
+document.body.classList.remove('preload');
+</script>
 
-{% endblock %}
+{% block main_js %}
+    <script data-main="{{ STATIC_URL }}/js/styleguide.js" src="{{ STATIC_URL }}/js/bower/requirejs/require.js"></script>
+{% endblock main_js %}
 
-
-{% block extra_js %}
 
 {% endblock %}

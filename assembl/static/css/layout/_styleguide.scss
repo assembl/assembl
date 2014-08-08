@@ -53,6 +53,7 @@
 }
 
 .bs-example-popover {
+  height: 400px;
   .popover {
     position: relative;
     display: block;
@@ -60,6 +61,10 @@
     width: 260px;
     margin: 20px;
   }
+}
+
+.bs-example {
+  height: 100px;
 }
 
 table.table {
