@@ -19,7 +19,7 @@ CollectionManager = require('modules/collectionManager'),
 
     var IdeaPanel = AssemblPanel.extend({
         template: '#tmpl-ideaPanel',
-        className:'groupPanel ideaPanel',
+        className:'ideaPanel',
         regions: {
 
         },

@@ -107,6 +107,12 @@
   }
 }
 
+.panelContents, .ideaList, .ideaPanel, .messageList, .synthesisPanel, .navSidebar {
+    height: 100%;
+    top:0;
+    bottom:0;
+}
+
 // To put the content
 // -----------
 .panel-body {

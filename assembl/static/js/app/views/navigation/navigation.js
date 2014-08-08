@@ -9,7 +9,7 @@ sidebarNotification = require('views/navigation/notification'),
 
     var navigation = AssemblPanel.extend({
         template: "#tmpl-navigation",
-        className: "groupPanel navSidebar",
+        className: "navSidebar",
         regions: {
            home:'.home',
            debate:'.debate',

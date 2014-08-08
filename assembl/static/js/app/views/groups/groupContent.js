@@ -4,19 +4,17 @@ define(function (require) {
       GroupManager = require('modules/groupManager'),
       viewsFactory = require('objects/viewsFactory'),
                ctx = require('modules/context'),
-         panelSpec = require('models/panelSpec');
+         panelSpec = require('models/panelSpec'),
+      PanelWrapper = require('views/groups/panelWrapper');
 
     var groupContent = Marionette.CompositeView.extend({
         template: "#tmpl-groupContent",
         className: "groupContent",
         childViewContainer: ".groupBody",
+        childView: PanelWrapper,
         initialize: function(options){
           this.collection = this.model.get('panels');
           this.groupManager = new GroupManager({groupSpec: this.model});
-          this.childViewOptions = {
-            groupManager: this.groupManager,
-            groupContent: this
-          };
         },
         events:{
            'click .close-group':'closeGroup',
@@ -33,8 +31,15 @@ define(function (require) {
         lockGroup: function(){
            this.groupManager.toggleLock();
         },
-        getChildView: function(child) {
-          return viewsFactory(child);
+        /**
+         * Tell the panelWrapper which view to put in its contents
+         */
+        childViewOptions: function(child, index) {
+          return {
+            groupContent: this,
+            groupManager: this.groupManager,
+            contentSpec: child
+          }
         },
         setNavigationState: function(navigationAction){
           if ( navigationAction == 'debate' && ctx.getCurrentIdea() == undefined )

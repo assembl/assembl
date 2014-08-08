@@ -33,16 +33,19 @@ define(function(require){
             }
 
             this.ideas = new Idea.Collection();
-            collectionManager.getAllSynthesisCollectionPromise().done(
-              function(synthesisCollection) {
-                that.model = synthesisCollection.models[0];
-                that.render();
-              });
-            collectionManager.getAllIdeasCollectionPromise().done(
-                function(allIdeasCollection) {
-                  var rootIdea = allIdeasCollection.getRootIdea(),
-                      raw_ideas = that.model.get('ideas');
-                  
+            $.when( collectionManager.getAllSynthesisCollectionPromise(),
+                collectionManager.getAllIdeasCollectionPromise()
+            ).then(function(synthesisCollection, allIdeasCollection) {
+                var rootIdea = allIdeasCollection.getRootIdea(),
+                  raw_ideas,
+                  model = _.find(synthesisCollection.models, function(model) {
+                    return !model.get('published_in_post');
+                  });
+                  if (!model) {
+                    model = _.last(synthesisCollection.models);
+                  }
+                  that.model = model;
+                  raw_ideas = model.get('ideas');
                   //console.log("Raw Ideas from model: ", raw_ideas)
                   if( raw_ideas ){
                       var ideas = [];
@@ -58,16 +61,15 @@ define(function(require){
                       });
                       that.ideas.reset(ideas);
                   }
+                  that.listenTo(that.ideas, 'add remove reset', that.render);
+                  that.listenTo(model, 'reset change', that.render);
                 });
 
-            this.listenTo(this.ideas, 'add remove reset', this.render);
-
-            this.listenTo(this.model, 'reset change', this.render);
 
             Assembl.commands.setHandler('synthesisPanel:render', this.render);
         },
 
-        className:'groupPanel synthesisPanel',
+        className:'synthesisPanel',
 
         /**
          * The model
@@ -91,9 +93,9 @@ define(function(require){
           var currentUser = Ctx.getCurrentUser(),
               canSend = currentUser.can(Permissions.SEND_SYNTHESIS),
               canEdit = currentUser.can(Permissions.EDIT_SYNTHESIS),
-              data = this.model.toJSON();
-          data.canSend = canSend;
-          data.canEdit = canEdit;
+              data = {canSend: canSend, canEdit: canEdit};
+          if (this.model)
+              data = _.extend(this.model.toJSON(), data);
 
           return data;
         },
@@ -110,21 +112,24 @@ define(function(require){
             view_data = {},
             order_lookup_table = [],
             roots = [],
-            synthesis_is_published = this.model.get("published_in_post")!=null,
             collectionManager = new CollectionManager(),
             canEdit = Ctx.getCurrentUser().can(Permissions.EDIT_SYNTHESIS);
 
             Ctx.removeCurrentlyDisplayedTooltips(this.$el);
 
-            collectionManager.getAllIdeasCollectionPromise().done(
-                function(allIdeasCollection) {
-
-
+            $.when( collectionManager.getAllSynthesisCollectionPromise(),
+                collectionManager.getAllIdeasCollectionPromise()
+            ).then(function(synthesisCollection, allIdeasCollection) {
                 // Getting the scroll position
+                if (!that.model) {
+                  window.setTimeout(function(){that.render();}, 30);
+                  return;
+                }
                 var body = that.$('.body-synthesis'),
                     y = body.get(0) ? body.get(0).scrollTop : 0,
+                    synthesis_is_published = that.model.get("published_in_post")!=null,
                     rootIdea = allIdeasCollection.getRootIdea();
-                    
+
                 Ctx.initTooltips(that.$el);
                 function inSynthesis(idea) {
                     if (idea.hidden) {
