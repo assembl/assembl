@@ -4,10 +4,11 @@ define(function(require) {
            IdeaList = require('views/ideaList'),
 sidebarNotification = require('views/navigation/notification'),
             HomePanel = require('views/navigation/home'),
+SynthesisInNavigationPanel = require('views/navigation/synthesisInNavigation'),
        AssemblPanel = require('views/assemblPanel'),
                   $ = require('jquery');
 
-    var navigation = AssemblPanel.extend({
+    var NavigationView = AssemblPanel.extend({
         template: "#tmpl-navigation",
         className: "navSidebar",
         regions: {
@@ -23,7 +24,8 @@ sidebarNotification = require('views/navigation/notification'),
             var that = this;
 
             this.groupContent = options.groupContent;
-
+            this.groupManager = options.groupManager;
+            
             $(window).resize(function(){
                 that.initVar();
                 setTimeout(function(){
@@ -73,8 +75,12 @@ sidebarNotification = require('views/navigation/notification'),
                    this.debate.show(idealist);
                    break;
                case 'synthesis':
-                   console.log('load synthesis');
-                   break;
+                 var synthesisInNavigationPanel = new SynthesisInNavigationPanel({
+                   groupContent: this.groupContent,
+                   groupManager: this.groupManager,
+               });
+                 this.synthesis.show(synthesisInNavigationPanel);
+                 break;
                default:
                    break
            }
@@ -92,5 +98,5 @@ sidebarNotification = require('views/navigation/notification'),
 
     });
 
-    return navigation;
+    return NavigationView;
 });

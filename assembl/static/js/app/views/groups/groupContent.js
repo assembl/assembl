@@ -7,6 +7,7 @@ define(function (require) {
          panelSpec = require('models/panelSpec'),
       PanelWrapper = require('views/groups/panelWrapper');
 
+    /** Reprents the content of an entire group */
     var groupContent = Marionette.CompositeView.extend({
         template: "#tmpl-groupContent",
         className: "groupContent",
@@ -67,6 +68,10 @@ define(function (require) {
             break;
           }
         },
+        
+        /**
+         * @params list of panel names
+         */
         removePanels: function(){
           var args = Array.prototype.slice.call(arguments);
           var panels = this.model.get('panels');
@@ -77,6 +82,10 @@ define(function (require) {
             panels.remove(el);
           });
         },
+        
+        /**
+         * @params list of panel names
+         */
         ensureOnlyPanelsVisible: function(){
           var that = this;
           var args = Array.prototype.slice.call(arguments);

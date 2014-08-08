@@ -4,6 +4,10 @@ define(function (require) {
       GroupManager = require('modules/groupManager'),
       viewsFactory = require('objects/viewsFactory'),
          panelSpec = require('models/panelSpec');
+    
+    /** 
+     * A wrapper for a panel, used anywhere in a panelGroup
+     */
     var PanelWrapper = Marionette.LayoutView.extend({
         template: "#tmpl-panelWrapper",
         regions: {

@@ -7,13 +7,13 @@ define(function (require) {
   HomePanel = require('views/navigation/home'),
   SegmentList = require('views/segmentList'),
   SynthesisPanel = require('views/synthesisPanel'),
-  NavigationPanel = require('views/navigation/navigation');
+  NavigationView = require('views/navigation/navigation');
 
   var panelTypeRegistry = {
       'idea-panel': IdeaPanel,
       'message'   : MessageList,
       'home-panel': HomePanel,
-      'navigation': NavigationPanel,
+      'navigation': NavigationView,
       'synthesis' : SynthesisPanel,
       'clipboard' : SegmentList
   };

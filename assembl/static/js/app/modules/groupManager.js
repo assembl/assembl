@@ -4,6 +4,9 @@ define(function (require) {
     var Marionette = require('marionette'),
         _ = require('underscore');
 
+    /**
+     *  A group manager manges a SINGLE group of panel in the interface
+     */
     var groupManager = Marionette.Controller.extend({
 
         initialize: function (options) {
