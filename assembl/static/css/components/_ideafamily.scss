@@ -42,7 +42,7 @@ $marginLinkbis: 30px;
         //margin-left: 3 * 30px/2 - 1;
         padding-left: 2 * $marginLinkbis/2 - 1;
         > .ideafamily-link {
-            width: 30px*2;
+          width: $marginLinkbis*2;
           margin-left: -3 * $marginLinkbis/2;
             background: url(#{$img-dir}/idealist/idealist-link-skip-parent.svg) left top no-repeat;
         }
@@ -55,7 +55,7 @@ $marginLinkbis: 30px;
         //padding-left:
         padding-left: 2 * $marginLinkbis/2 - 1;
         > .ideafamily-link {
-            width: 30px*2;
+          width: $marginLinkbis*2;
           margin-left: -3* $marginLinkbis/2;
             background: url(#{$img-dir}/idealist/idealist-link-skip-parent-no-children.svg) left top no-repeat;
         }
