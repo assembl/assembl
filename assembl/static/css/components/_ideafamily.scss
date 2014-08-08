@@ -1,5 +1,6 @@
-// The title
-// ----------
+$marginLink: -30px;
+$marginLinkbis: 30px;
+
 .ideafamily-title {
     display: block;
     white-space: nowrap;
@@ -11,7 +12,7 @@
 .ideafamily-item {
     .ideafamily-body {
         border-left: solid 1px $gray;
-        margin-left: 30px/2 - 1;
+      margin-left: $marginLinkbis/2 - 1;
         position: relative;
     
         > .ideafamily-link {
@@ -19,18 +20,18 @@
             height: 40px;
             position:absolute;
             margin: 0;
-            margin-left: -30px/2;
+          margin-left: $marginLink/2;
             background: url(#{$img-dir}/idealist/idealist-link-opaque.png) left top no-repeat;
         }
         > .ideafamily-idea {
-            margin-left: 30px/2;
-            padding-left: 30px/2;
+          margin-left: $marginLinkbis/2;
+          padding-left: $marginLinkbis/2;
         }
     }
     &.is-last-sibling {
         > .ideafamily-body {
             border-left: none;
-            margin-left: 30px/2;
+          margin-left: $marginLinkbis/2;
             > .ideafamily-link {
                 background: url(#{$img-dir}/idealist/idealist-link-last-opaque.png) left top no-repeat;
             }
@@ -39,10 +40,10 @@
     &.skip_parent {
       > .ideafamily-body {
         //margin-left: 3 * 30px/2 - 1;
-        padding-left: 2 * 30px/2 - 1;
+        padding-left: 2 * $marginLinkbis/2 - 1;
         > .ideafamily-link {
             width: 30px*2;
-            margin-left: -3*30px/2;
+          margin-left: -3 * $marginLinkbis/2;
             background: url(#{$img-dir}/idealist/idealist-link-skip-parent.svg) left top no-repeat;
         }
       }
@@ -52,10 +53,10 @@
       > .ideafamily-body {
         //margin-left: 3 * 30px/2 - 1;
         //padding-left:
-        padding-left: 2 * 30px/2 - 1;
+        padding-left: 2 * $marginLinkbis/2 - 1;
         > .ideafamily-link {
             width: 30px*2;
-            margin-left: -3*30px/2;
+          margin-left: -3* $marginLinkbis/2;
             background: url(#{$img-dir}/idealist/idealist-link-skip-parent-no-children.svg) left top no-repeat;
         }
       }
@@ -64,7 +65,7 @@
     &.level0 {
         > .ideafamily-body {
             border-left: none;
-            margin-left: 30px/2;
+          margin-left: $marginLinkbis/2;
             > .ideafamily-link {
                 background: url(#{$img-dir}/idealist/idealist-link-root.svg) left top no-repeat;
             }
@@ -81,7 +82,7 @@
     &.has-children {
         > .ideafamily-body {
             > .ideafamily-idea {
-                margin-left: 30px/2 - 1;
+              margin-left: $marginLinkbis/2 - 1;
                 border-left: solid 1px $gray;
             }
         }
