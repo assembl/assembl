@@ -19,7 +19,7 @@ CollectionManager = require('modules/collectionManager'),
 
     var IdeaPanel = AssemblPanel.extend({
         template: '#tmpl-ideaPanel',
-        className:'ideaPanel',
+        className:'panel ideaPanel',
         regions: {
 
         },
@@ -199,21 +199,7 @@ CollectionManager = require('modules/collectionManager'),
                 this.$('#ideaPanel-comment').append( this.commentView.render().el );
             }
         },
-
-        /**
-         * Blocks the panel
-         */
-        blockPanel: function(){
-            this.$el.addClass('is-loading');
-        },
-
-        /**
-         * Unblocks the panel
-         */
-        unblockPanel: function(){
-            this.$el.removeClass('is-loading');
-        },
-
+        
         /**
          * Add a segment
          * @param  {Segment} segment

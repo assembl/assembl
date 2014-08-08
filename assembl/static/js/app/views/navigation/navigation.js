@@ -10,7 +10,7 @@ SynthesisInNavigationPanel = require('views/navigation/synthesisInNavigation'),
 
     var NavigationView = AssemblPanel.extend({
         template: "#tmpl-navigation",
-        className: "navSidebar",
+        className: "panel navSidebar",
         regions: {
            home:'.home',
            debate:'.debate',

@@ -29,11 +29,11 @@
 
 // When is dragging something on
 // ****************
-.groupPanel.is-dragover {}
+.panel.is-dragover {}
 
 // blocked and with a loading message
 // ****************
-.groupPanel.is-loading {
+.panel.is-loading {
     cursor: wait;
 
     &:after {
@@ -107,7 +107,7 @@
   }
 }
 
-.panelContents, .ideaList, .ideaPanel, .messageList, .synthesisPanel, .navSidebar {
+.panelContents, .panel {
     height: 100%;
     top:0;
     bottom:0;

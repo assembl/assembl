@@ -38,7 +38,7 @@ define(function(require){
      */
     var MessageList = AssemblPanel.extend({
 
-        className:'messageList',
+        className:'panel messageList',
 
         ui: {
           panelBody: ".panel-body",
@@ -49,7 +49,8 @@ define(function(require){
           bottomArea: '.js_messageList-bottomarea',
           collapseButton: '.js_messageList-collapseButton',
           loadPreviousMessagesButton: '.js_messageList-prevbutton',
-          loadNextMessagesButton: '.js_messageList-morebutton'
+          loadNextMessagesButton: '.js_messageList-morebutton',
+          messageList: '.messageList-list'
         },
         
         ViewStyles: {
@@ -356,19 +357,6 @@ define(function(require){
          */
         currentQuery: new PostQuery(),
 
-        /**
-         * Blocks the panel
-         */
-        blockPanel: function(){
-            this.$el.addClass('is-loading');
-        },
-
-        /**
-         * Unblocks the panel
-         */
-        unblockPanel: function(){
-          this.$el.removeClass('is-loading');
-        },
         
         /**
          * Reset the offset values to initial values
@@ -586,7 +574,6 @@ define(function(require){
          */
         showMessages: function(requestedOffsets){
             var that = this,
-                ideaList = this.$('.idealist'),
                 views,
                 models,
                 offsets,
@@ -609,12 +596,11 @@ define(function(require){
             //console.log("returnedOffsets:", returnedOffsets);
             this.offsetStart = returnedOffsets['offsetStart']
             this.offsetEnd = returnedOffsets['offsetEnd']
-            ideaList.empty();
 
             if( views.length === 0 ){
-                ideaList.append( Ctx.format("<div class='margin'>{0}</div>", i18n.gettext('No messages')) );
+              this.ui.messageList.append( Ctx.format("<div class='margin'>{0}</div>", i18n.gettext('No messages')) );
             } else {
-                ideaList.append( views );
+              this.ui.messageList.append( views );
             }
 
             if( this.offsetStart <= 0 ){
@@ -820,6 +806,8 @@ define(function(require){
             // Data not yet available should be handled in render_real - benoitg
             this.render_real();
             this.blockPanel();
+            //Some messages may be present from before
+            this.ui.messageList.empty();
             
             $.when(collectionManager.getAllMessageStructureCollectionPromise(),
                     this.currentQuery.getResultMessageIdCollectionPromise()).done(

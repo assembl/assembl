@@ -272,20 +272,6 @@ define(function (require) {
         },
 
         /**
-         * Blocks the panel
-         */
-        blockPanel: function () {
-            this.$el.addClass('is-loading');
-        },
-
-        /**
-         * Unblocks the panel
-         */
-        unblockPanel: function () {
-            this.$el.removeClass('is-loading');
-        },
-
-        /**
          * Sets the panel as full screen
          */
         setFullscreen: function () {

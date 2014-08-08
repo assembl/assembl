@@ -69,7 +69,7 @@ define(function(require){
             Assembl.commands.setHandler('synthesisPanel:render', this.render);
         },
 
-        className:'synthesisPanel',
+        className:'panel synthesisPanel',
 
         /**
          * The model
@@ -198,20 +198,6 @@ define(function(require){
             'click .synthesisPanel-closeButton': 'closePanel',
             'click .synthesisPanel-publishButton': 'publish',
             'click .synthesisPanel-fullscreenButton': 'setFullscreen'
-        },
-
-        /**
-         * Blocks the panel
-         */
-        blockPanel: function(){
-            this.$el.addClass('is-loading');
-        },
-
-        /**
-         * Unblocks the panel
-         */
-        unblockPanel: function(){
-            this.$el.removeClass('is-loading');
         },
 
         /**
