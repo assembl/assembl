@@ -113,34 +113,18 @@ define(function (require) {
                 }
             }
         },
-        setNavigationState: function(navigationAction){
-          if ( navigationAction == 'debate' && ctx.getCurrentIdea() == undefined )
-          {
-            navigationAction = 'debate0';
-          }
-          this.model.set('navigationState', navigationAction);
-          switch ( navigationAction )
-          {
-            case 'debate0':
-              this.removePanels('home-panel','synthesis');
-              this.ensurePanelsVisible('message');
-              this.ensurePanelsHidden('idea-panel');
-            break;
-            case 'debate':
-              this.removePanels('home-panel', 'synthesis');
-              this.ensurePanelsVisible('idea-panel', 'message');
-            break;
-            case 'home':
-              this.removePanels('synthesis');
-              this.ensureOnlyPanelsVisible('home-panel');
-            break;
-            case 'synthesis':
-              this.removePanels('home-panel');
-              this.ensureOnlyPanelsVisible('synthesis');
-            break;
+
+        resetDebateState: function() {
+          var currentIdea = ctx.getCurrentIdea();
+          this.removePanels('home-panel');
+          if (ctx.getCurrentIdea() === undefined) {
+            this.ensurePanelsVisible('message');
+            this.ensurePanelsHidden('idea-panel');
+          } else {
+            this.ensurePanelsVisible('idea-panel', 'message');
           }
         },
-        
+
         /**
          * @params list of panel names
          */

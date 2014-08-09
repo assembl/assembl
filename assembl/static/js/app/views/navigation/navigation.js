@@ -49,7 +49,22 @@ SynthesisInNavigationPanel = require('views/navigation/synthesisInNavigation'),
 
             this.loadView(view);
 
-            this.groupContent.setNavigationState(view);
+            //this.groupContent.setNavigationState(view);
+            this.groupContent.model.set('navigationState', view);
+
+            switch ( view )
+            {
+              case 'debate':
+                this.groupContent.resetDebateState();
+              break;
+              case 'home':
+                this.groupContent.ensureOnlyPanelsVisible('home-panel');
+              break;
+              case 'synthesis':
+                this.groupContent.removePanels('home-panel');
+                this.groupContent.ensurePanelsVisible('message');
+              break;
+            }
 
             if(!elm.next('div.second-level').is(':visible')){
                 this.$('div.second-level').slideUp();
