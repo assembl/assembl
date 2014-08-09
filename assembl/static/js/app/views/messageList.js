@@ -133,7 +133,7 @@ define(function(require){
             this.setViewStyle(this.getViewStyleDefById(this.storedMessageListConfig.viewStyleId) || this.ViewStyles.THREADED);
             this.defaultMessageStyle = Ctx.getMessageViewStyleDefById(this.storedMessageListConfig.messageStyleId) || Ctx.AVAILABLE_MESSAGE_VIEW_STYLES.PREVIEW;
 
-            this.panelGroup = options.groupManager;
+            this.groupContent = options.groupContent;
             /**
              * @ghourlier
              * TODO: Usually it would necessary to push notification rather than fetch every time the model change
@@ -172,7 +172,7 @@ define(function(require){
                     return;
 
                 } else {
-                    that.panelGroup.filterThroughPanelLock(
+                    that.groupContent.filterThroughPanelLock(
                         function(){
                             that.syncWithCurrentIdea();
                         }, 'syncWithCurrentIdea');
@@ -184,35 +184,35 @@ define(function(require){
             });
 
             Assembl.vent.on('messageList:addFilterIsRelatedToIdea', function(idea, only_unread){
-                that.panelGroup.filterThroughPanelLock(
+                that.groupContent.filterThroughPanelLock(
                     function(){
                         that.addFilterIsRelatedToIdea(idea, only_unread)
                     }, 'syncWithCurrentIdea');
             });
 
             Assembl.vent.on('messageList:addFilterIsOrphanMessage', function(){
-                that.panelGroup.filterThroughPanelLock(
+                that.groupContent.filterThroughPanelLock(
                     function(){
                         that.addFilterIsOrphanMessage();
                     }, 'syncWithCurrentIdea');
             });
 
             Assembl.vent.on('messageList:addFilterIsSynthesisMessage', function(){
-                that.panelGroup.filterThroughPanelLock(
+                that.groupContent.filterThroughPanelLock(
                     function(){
                         that.addFilterIsSynthesMessage();
                     }, 'syncWithCurrentIdea');
             });
 
             Assembl.vent.on('messageList:showAllMessages', function(){
-                that.panelGroup.filterThroughPanelLock(
+                that.groupContent.filterThroughPanelLock(
                     function(){
                         that.showAllMessages();
                     }, 'syncWithCurrentIdea');
             });
 
             Assembl.vent.on('messageList:currentQuery', function(){
-                if(!that.panelGroup.isGroupLocked()) {
+                if(!that.groupContent.isGroupLocked()) {
                     that.currentQuery.clearAllFilters();
                 }
             });
@@ -1023,7 +1023,7 @@ define(function(require){
                       annotator.deleteAnnotation(annotation);
                     } else if( Ctx.currentAnnotationNewIdeaParentIdea ){
                       //We asked to create a new idea from segment
-                      that.panelGroup.lockGroup();
+                      that.groupContent.lockGroup();
                       var newIdea = Ctx.currentAnnotationNewIdeaParentIdea.addSegmentAsChild(segment);
                       Ctx.setCurrentIdea(newIdea);
                     }

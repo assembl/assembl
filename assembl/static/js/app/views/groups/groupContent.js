@@ -1,7 +1,6 @@
 define(function (require) {
 
     var Marionette = require('marionette'),
-      GroupManager = require('modules/groupManager'),
       viewsFactory = require('objects/viewsFactory'),
                ctx = require('modules/context'),
          panelSpec = require('models/panelSpec'),
@@ -13,34 +12,106 @@ define(function (require) {
         className: "groupContent",
         childViewContainer: ".groupBody",
         childView: PanelWrapper,
+
+        _unlockCallbackQueue: {},
+
+        _stateButton: null,
+
         initialize: function(options){
           this.collection = this.model.get('panels');
-          this.groupManager = new GroupManager({groupSpec: this.model});
         },
         events:{
            'click .close-group':'closeGroup',
-           'click .lock-group':'lockGroup'
+           'click .lock-group':'toggleLock'
         },
         onRender: function(){
-           var elm = this.$('.lock-group i');
-           this.groupManager.setButtonState(elm);
+           this._stateButton = this.$('.lock-group i');
         },
         closeGroup: function(){
            this.unbind();
            this.model.collection.remove(this.model);
         },
-        lockGroup: function(){
-           this.groupManager.toggleLock();
-        },
+
         /**
          * Tell the panelWrapper which view to put in its contents
          */
         childViewOptions: function(child, index) {
           return {
             groupContent: this,
-            groupManager: this.groupManager,
             contentSpec: child
           }
+        },
+
+        /**
+         * lock the panel if unlocked
+         */
+        lockGroup: function () {
+            if (!this.model.get('locked')) {
+                this.model.set('locked', true);
+                this._stateButton.addClass('icon-lock').removeClass('icon-lock-open');
+            }
+        },
+
+        /**
+         * unlock the panel if locked
+         */
+        unlockGroup: function () {
+            if (this.model.get('locked')) {
+                this.model.set('locked', false);
+                this._stateButton.addClass('icon-lock-open').removeClass('icon-lock');
+
+                if (_.size(this._unlockCallbackQueue) > 0) {
+                    //console.log("Executing queued callbacks in queue: ",this.unlockCallbackQueue);
+                    _.each(this._unlockCallbackQueue, function (callback) {
+                        callback();
+                    });
+                    //We presume the callbacks have their own calls to render
+                    //this.render();
+                    this._unlockCallbackQueue = {};
+                }
+            }
+        },
+        /**
+         * Toggle the lock state of the panel
+         */
+        toggleLock: function () {
+            if (this.isLocked()) {
+                this.unlockGroup();
+            } else {
+                this.lockGroup();
+            }
+        },
+
+        isLocked: function () {
+            return this.model.get('locked');
+        },
+
+        setButtonState: function (dom) {
+            this._stateButton = dom;
+        },
+
+        /**
+         * Process a callback that can be inhibited by panel locking.
+         * If the panel is unlocked, the callback will be called immediately.
+         * If the panel is locked, visual notifications will be shown, and the
+         * callback will be memorized in a queue, removing duplicates.
+         * Callbacks receive no parameters.
+         * If queued, they must assume that they can be called at a later time,
+         * and have the means of getting any updated information they need.
+         */
+        filterThroughPanelLock: function (callback, queueWithId) {
+            if (!this.model.get('locked')) {
+                callback();
+
+            } else {
+                if (queueWithId) {
+                    if (this._unlockCallbackQueue[queueWithId] !== undefined) {
+                    }
+                    else {
+                        this._unlockCallbackQueue[queueWithId] = callback;
+                    }
+                }
+            }
         },
         setNavigationState: function(navigationAction){
           if ( navigationAction == 'debate' && ctx.getCurrentIdea() == undefined )
@@ -76,7 +147,13 @@ define(function (require) {
         removePanels: function(){
           this.model.removePanels.apply(this.model, arguments);
         },
-        
+
+        getViewByTypeName: function(typeName) {
+          var model = this.model.getPanelSpecByType(typeName);
+          if (model !== undefined)
+            return this.children.findByModel(model);
+        },
+
         /**
          * @params list of panel names
          */

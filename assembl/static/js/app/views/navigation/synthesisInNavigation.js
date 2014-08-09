@@ -16,7 +16,6 @@ define(function (require) {
         
         initialize: function(options){
           this.groupContent = options.groupContent;
-          this.groupManager = options.groupManager;
         },
 
         events: {
@@ -26,7 +25,7 @@ define(function (require) {
         onRender: function(){
           var that = this,
           collectionManager = new CollectionManager();
-          console.log(this.groupManager.groupSpec);
+          //console.log(this.groupContent.model);
           $.when(collectionManager.getAllMessageStructureCollectionPromise(), collectionManager.getAllSynthesisCollectionPromise()).done(
               function(allMessageStructureCollection, allSynthesisCollection) {
                 var synthesisMessages = allMessageStructureCollection.where({'@type': Types.SYNTHESIS_POST}),

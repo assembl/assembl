@@ -4,7 +4,6 @@ define(function (require) {
     var Marionette = require('marionette'),
         Assembl = require('modules/assembl'),
         Ctx = require('modules/context'),
-        groupManager = require('modules/groupManager'),
         collectionManager = require('modules/collectionManager'),
         User = require('models/user'),
         navBar = require('views/navBar'),

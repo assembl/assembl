@@ -24,8 +24,7 @@ SynthesisInNavigationPanel = require('views/navigation/synthesisInNavigation'),
             var that = this;
 
             this.groupContent = options.groupContent;
-            this.groupManager = options.groupManager;
-            
+
             $(window).resize(function(){
                 that.initVar();
                 setTimeout(function(){
@@ -79,8 +78,7 @@ SynthesisInNavigationPanel = require('views/navigation/synthesisInNavigation'),
                case 'synthesis':
                  var synthesisInNavigationPanel = new SynthesisInNavigationPanel({
                    groupContent: this.groupContent,
-                   groupManager: this.groupManager,
-               });
+                 });
                  this.synthesis.show(synthesisInNavigationPanel);
                  break;
                default:
