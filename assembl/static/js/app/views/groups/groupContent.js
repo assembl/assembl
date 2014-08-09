@@ -105,6 +105,7 @@ define(function (require) {
             }
           });
         },
+
         /**
          * @params list of panel names
          */
@@ -129,6 +130,7 @@ define(function (require) {
             }
           });
         },
+
         /**
          * @params list of panel names
          */
@@ -149,7 +151,7 @@ define(function (require) {
               view.$el.hide();
             }
           });
-
+        }
     });
 
     return groupContent;
