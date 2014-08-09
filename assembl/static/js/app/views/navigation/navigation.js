@@ -49,7 +49,6 @@ SynthesisInNavigationPanel = require('views/navigation/synthesisInNavigation'),
 
             this.loadView(view);
 
-            //this.groupContent.setNavigationState(view);
             this.groupContent.model.set('navigationState', view);
 
             switch ( view )

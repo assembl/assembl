@@ -46,7 +46,7 @@ define(function(require){
             Assembl.vent.trigger('messageList:showAllMessages');
 
             Ctx.setCurrentIdea(null);
-            this.groupContent.setNavigationState('debate');
+            this.groupContent.resetDebateState();
         }
     });
 

@@ -164,7 +164,7 @@ define(function(require){
             } else {
                Ctx.setCurrentIdea(this.model);
             }
-            this.groupContent.setNavigationState('debate');
+            this.groupContent.resetDebateState();
         },
 
         /**
