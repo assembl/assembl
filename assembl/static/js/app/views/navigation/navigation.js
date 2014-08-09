@@ -66,12 +66,14 @@ SynthesisInNavigationPanel = require('views/navigation/synthesisInNavigation'),
            switch(view){
                case 'home':
                    console.log('load home panel');
-                   var homePanel = new HomePanel();
+                   var homePanel = new HomePanel({
+                     groupContent: this.groupContent});
                    this.home.show(homePanel);
                    break;
                case 'debate':
                    console.log('load idea table');
-                   var idealist = new IdeaList();
+                   var idealist = new IdeaList({
+                     groupContent: this.groupContent});
                    this.debate.show(idealist);
                    break;
                case 'synthesis':
