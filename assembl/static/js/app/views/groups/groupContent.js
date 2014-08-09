@@ -117,7 +117,7 @@ define(function (require) {
         resetDebateState: function() {
           var currentIdea = ctx.getCurrentIdea();
           this.removePanels('home-panel');
-          if (ctx.getCurrentIdea() === undefined) {
+          if (ctx.getCurrentIdea() == undefined) {
             this.ensurePanelsVisible('message');
             this.ensurePanelsHidden('idea-panel');
           } else {
