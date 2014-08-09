@@ -33,7 +33,7 @@ define(function (require) {
                 if(synthesisMessages.length > 0) {
                   _.each(synthesisMessages, function(message) {
                     var synthesis = allSynthesisCollection.get(message.get('publishes_synthesis'));
-                    html += "<li data-mesage-id="+message.id+">" + message.get('date') + " " + synthesis.get('subject') + "</li>";
+                    html += "<li data-message-id="+message.id+">" + message.get('date') + " " + synthesis.get('subject') + "</li>";
                   });
                   that.ui.synthesisList.html(html);
                 }
@@ -45,12 +45,10 @@ define(function (require) {
         },
         
         onSynthesisClick: function(ev) {
-          console.log("onSynthesisClick fired", ev);
-          var messageId = ev.currentTarget.attributes['data-mesage-id'],
-              messageListView = "FIXMEMAGIC";
-          //FIXME:  Uncomment this once the messageListView is proprely instanciated/found in the current panelGroup.
-          //messageListView.toggleFilterByPostId(messageId);
-          
+          var messageId = ev.currentTarget.attributes['data-message-id'].value,
+              messageListView = this.groupContent.getViewByTypeName('message');
+          messageListView.toggleFilterByPostId(messageId);
+          // TODO: Make sure it's expanded
         }
          
     });

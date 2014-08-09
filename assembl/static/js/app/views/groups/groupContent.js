@@ -134,8 +134,14 @@ define(function (require) {
 
         getViewByTypeName: function(typeName) {
           var model = this.model.getPanelSpecByType(typeName);
-          if (model !== undefined)
-            return this.children.findByModel(model);
+          if (model !== undefined) {
+            var view = this.children.findByModel(model);
+            if (view.contents !== undefined) {
+              // wrapper
+              view = view.contents.currentView;
+            }
+            return view;
+          }
         },
 
         /**

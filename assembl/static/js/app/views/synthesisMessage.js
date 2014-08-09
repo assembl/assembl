@@ -54,8 +54,8 @@ define(function(require){
                 function(allSynthesisCollection) {
                   var synthesis = allSynthesisCollection.get(that.synthesisId);
                   if (!synthesis) {
-                    // TODO: This should not happen. find the cause.
-                    //debug();
+                    // TODO
+                    console.log("BUG: Could not get synthesis after post. Maybe too early.")
                     return;
                   }
                   that.$('.message-subject').html(synthesis.get('subject'));
