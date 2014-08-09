@@ -10,7 +10,8 @@ SynthesisInNavigationPanel = require('views/navigation/synthesisInNavigation'),
 
     var NavigationView = AssemblPanel.extend({
         template: "#tmpl-navigation",
-        className: "panel navSidebar",
+        panelType: "navSidebar",
+        className: "navSidebar",
         regions: {
            home:'.home',
            debate:'.debate',
@@ -57,11 +58,11 @@ SynthesisInNavigationPanel = require('views/navigation/synthesisInNavigation'),
                 this.groupContent.resetDebateState();
               break;
               case 'home':
-                this.groupContent.ensureOnlyPanelsVisible('home-panel');
+                this.groupContent.ensureOnlyPanelsVisible('homePanel');
               break;
               case 'synthesis':
-                this.groupContent.removePanels('home-panel');
-                this.groupContent.ensurePanelsVisible('message');
+                this.groupContent.removePanels('homePanel');
+                this.groupContent.ensurePanelsVisible('messageList');
               break;
             }
 

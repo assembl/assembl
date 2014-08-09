@@ -15,7 +15,8 @@ CollectionManager = require('modules/collectionManager'),
 
   var SegmentList = AssemblPanel.extend({
 
-    className:'panel clipboard',
+    panelType: 'clipboard',
+    className: 'clipboard',
     
     ui: {
       body: ".panel-body",

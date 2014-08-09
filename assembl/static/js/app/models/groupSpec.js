@@ -13,9 +13,9 @@ define(function(require){
         defaults: {
            locked: false,
            panels: new panelSpec.Collection([
-               {type:'navigation'},
-               {type:'idea-panel'},
-               {type:'message'}
+               {type:'navSidebar'},
+               {type:'ideaPanel'},
+               {type:'messageList'}
            ]),
            navigationState: 'home'
         },

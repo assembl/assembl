@@ -1,8 +1,8 @@
 define(function (require) {
 
-    var Marionette = require('marionette'),
-      viewsFactory = require('objects/viewsFactory'),
-         panelSpec = require('models/panelSpec');
+    var Marionette   = require('marionette'),
+panelClassByTypeName = require('objects/viewsFactory'),
+           panelSpec = require('models/panelSpec');
     
     /** 
      * A wrapper for a panel, used anywhere in a panelGroup
@@ -12,9 +12,10 @@ define(function (require) {
         regions: {
            contents:'.panelContents',
         },
+        panelType: "groupPanel",
         className: "groupPanel",
         initialize: function(options) {
-            var contentClass = viewsFactory(options.contentSpec);
+            var contentClass = panelClassByTypeName(options.contentSpec);
             this.contentsView = new contentClass({
                 groupContent: options.groupContent
             });

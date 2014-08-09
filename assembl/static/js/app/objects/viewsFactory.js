@@ -2,21 +2,31 @@ define(function (require) {
   'use strict';
 
   var AssemblPanel = require('views/assemblPanel'),
-  IdeaPanel = require('views/ideaPanel'),
-  MessageList = require('views/messageList'),
-  HomePanel = require('views/navigation/home'),
-  SegmentList = require('views/segmentList'),
-  SynthesisPanel = require('views/synthesisPanel'),
-  NavigationView = require('views/navigation/navigation');
+  _ = require('underscore'),
+  HomeNavPanel = require('views/navigation/home'),  // homeNavPanel
+  HomePanel = require('views/contextPage'),  // homePanel
+  IdeaList = require('views/ideaList'),  // ideaList
+  IdeaPanel = require('views/ideaPanel'),  // ideaPanel
+  MessageList = require('views/messageList'),  // messageList
+  NavigationView = require('views/navigation/navigation'),  // navSidebar
+  SegmentList = require('views/segmentList'),  // clipboard
+  SynthesisNavPanel = require('views/navigation/synthesisInNavigation'),  // synthesisNavPanel
+  SynthesisPanel = require('views/synthesisPanel');  // synthesisPanel
 
-  var panelTypeRegistry = {
-      'idea-panel': IdeaPanel,
-      'message'   : MessageList,
-      'home-panel': HomePanel,
-      'navigation': NavigationView,
-      'synthesis' : SynthesisPanel,
-      'clipboard' : SegmentList
-  };
+  // Design note: This requires our panels to have a panelType variable.
+  // I deliberately gave it the same values as panelClass, so we have less to remember.
+  // I almost used panelClass, but decided that variable overloading was error-prone.
+  // However, I will use the first CSS class in panelClass if panelType is absent. MAP
+  var panelTypeRegistry = {};
+  _.each([
+    HomeNavPanel, HomePanel, IdeaList, IdeaPanel, MessageList, NavigationView, SegmentList, SynthesisNavPanel, SynthesisPanel
+    ], function(panelClass) {
+      var panelType = panelClass.prototype.panelType || panelClass.prototype.panelClass;
+      if (panelType.indexOf(' ') > 0) {
+        panelType = panelType.split(' ')[0];
+      }
+      panelTypeRegistry[panelType] = panelClass;
+  });
 
   /**
    * Factory to create a view instance from the panelSpec passed as parameter
@@ -24,7 +34,7 @@ define(function (require) {
    * @param <PanelSpecs.Model> panelSpecModel
    * @return <AssemblPanel> AssemblPanel view
    */
-  function createPanel(panelSpecModel) {
+  function panelClassByTypeName(panelSpecModel) {
     try {
       return panelTypeRegistry[panelSpecModel.get('type')];
     } catch (err) {
@@ -33,5 +43,5 @@ define(function (require) {
     return AssemblPanel;
   }
 
-  return createPanel;
+  return panelClassByTypeName;
 });

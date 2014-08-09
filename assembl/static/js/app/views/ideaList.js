@@ -21,6 +21,7 @@ define(function (require) {
 
 
     var IdeaList = Backbone.View.extend({
+        panelType: 'ideaList',
         className: 'ideaList',
         /**
          * The filter applied to the idea list

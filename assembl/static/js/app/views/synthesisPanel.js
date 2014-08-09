@@ -69,7 +69,8 @@ define(function(require){
             Assembl.commands.setHandler('synthesisPanel:render', this.render);
         },
 
-        className:'panel synthesisPanel',
+        panelType: 'synthesisPanel',
+        className: 'synthesisPanel',
 
         /**
          * The model

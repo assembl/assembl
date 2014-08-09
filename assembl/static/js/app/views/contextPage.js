@@ -10,6 +10,8 @@ define(function(require){
 
     var contextPage = Marionette.LayoutView.extend({
         template:'#tmpl-contextPage',
+        panelType: 'homePanel',
+        className: 'homePanel',
 
         /*
         events: {

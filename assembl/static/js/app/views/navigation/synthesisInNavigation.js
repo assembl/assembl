@@ -7,7 +7,9 @@ define(function (require) {
               i18n = require('utils/i18n');
 
     var SynthesisInNavigationPanel = AssemblPanel.extend({
-        template:'#tmpl-synthesisInNavigationPanel',
+        template: '#tmpl-synthesisInNavigationPanel',
+        panelType: 'synthesisNavPanel',
+        className: 'synthesisNavPanel',
         
         ui: {
           synthesisList: ".synthesisList",
@@ -46,7 +48,7 @@ define(function (require) {
         
         onSynthesisClick: function(ev) {
           var messageId = ev.currentTarget.attributes['data-message-id'].value,
-              messageListView = this.groupContent.getViewByTypeName('message');
+              messageListView = this.groupContent.getViewByTypeName('messageList');
           messageListView.toggleFilterByPostId(messageId);
           // TODO: Make sure it's expanded
         }

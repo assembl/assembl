@@ -1,7 +1,6 @@
 define(function (require) {
 
     var Marionette = require('marionette'),
-      viewsFactory = require('objects/viewsFactory'),
                ctx = require('modules/context'),
          panelSpec = require('models/panelSpec'),
       PanelWrapper = require('views/groups/panelWrapper');
@@ -116,12 +115,12 @@ define(function (require) {
 
         resetDebateState: function() {
           var currentIdea = ctx.getCurrentIdea();
-          this.removePanels('home-panel');
+          this.removePanels('homePanel');
           if (ctx.getCurrentIdea() == undefined) {
-            this.ensurePanelsVisible('message');
-            this.ensurePanelsHidden('idea-panel');
+            this.ensurePanelsVisible('messageList');
+            this.ensurePanelsHidden('ideaPanel');
           } else {
-            this.ensurePanelsVisible('idea-panel', 'message');
+            this.ensurePanelsVisible('ideaPanel', 'messageList');
           }
         },
 
@@ -155,7 +154,7 @@ define(function (require) {
           this.model.ensurePanelsAt(args, 1);
           // show and hide panels
           _.each(this.model.get('panels').models, function(aPanelSpec){
-            if ( aPanelSpec.get('type') == 'navigation')
+            if ( aPanelSpec.get('type') == 'navSidebar')
               return;
             var view = that.children.findByModel(aPanelSpec);
             if ( !view )
@@ -184,7 +183,7 @@ define(function (require) {
           this.model.ensurePanelsAt(args, 1);
           // show and hide panels
           _.each(this.model.get('panels').models, function(aPanelSpec){
-            if ( aPanelSpec.get('type') == 'navigation')
+            if ( aPanelSpec.get('type') == 'navSidebar')
               return;
             var view = that.children.findByModel(aPanelSpec);
             if ( !view )
@@ -207,7 +206,7 @@ define(function (require) {
           var panels = this.model.get('panels');
           // show and hide panels
           _.each(this.model.get('panels').models, function(aPanelSpec){
-            if ( aPanelSpec.get('type') == 'navigation')
+            if ( aPanelSpec.get('type') == 'navSidebar')
               return;
             var view = that.children.findByModel(aPanelSpec);
             if ( !view )
