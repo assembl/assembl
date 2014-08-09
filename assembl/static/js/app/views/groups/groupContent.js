@@ -52,11 +52,12 @@ define(function (require) {
           {
             case 'debate0':
               this.removePanels('home-panel','synthesis');
-              this.ensureOnlyPanelsVisible('message');
+              this.ensurePanelsVisible('message');
+              this.ensurePanelsHidden('idea-panel');
             break;
             case 'debate':
               this.removePanels('home-panel', 'synthesis');
-              this.ensureOnlyPanelsVisible('idea-panel', 'message');
+              this.ensurePanelsVisible('idea-panel', 'message');
             break;
             case 'home':
               this.removePanels('synthesis');
@@ -73,14 +74,7 @@ define(function (require) {
          * @params list of panel names
          */
         removePanels: function(){
-          var args = Array.prototype.slice.call(arguments);
-          var panels = this.model.get('panels');
-          var panelsToRemove = _.filter ( panels.models, function(el){
-            return _.contains(args, el.get('type'));
-          } );
-          _.each( panelsToRemove, function(el){
-            panels.remove(el);
-          });
+          this.model.removePanels.apply(this.model, arguments);
         },
         
         /**
@@ -91,15 +85,9 @@ define(function (require) {
           var args = Array.prototype.slice.call(arguments);
           var panels = this.model.get('panels');
           // add missing panels
-          _.each (args, function(panelName){
-            if ( !_.any(panels.models, function(el){return el.get('type') == panelName}) )
-            {
-              var panel = new panelSpec.Model({'type':panelName});
-              panels.add(panel,{at:1});
-            }
-          });
+          this.model.ensurePanelsAt(args, 1);
           // show and hide panels
-          _.each(panels.models, function(aPanelSpec){
+          _.each(this.model.get('panels').models, function(aPanelSpec){
             if ( aPanelSpec.get('type') == 'navigation')
               return;
             var view = that.children.findByModel(aPanelSpec);
@@ -117,6 +105,51 @@ define(function (require) {
             }
           });
         },
+        /**
+         * @params list of panel names
+         */
+        ensurePanelsVisible: function(){
+          var that = this;
+          var args = Array.prototype.slice.call(arguments);
+          var panels = this.model.get('panels');
+          // add missing panels
+          this.model.ensurePanelsAt(args, 1);
+          // show and hide panels
+          _.each(this.model.get('panels').models, function(aPanelSpec){
+            if ( aPanelSpec.get('type') == 'navigation')
+              return;
+            var view = that.children.findByModel(aPanelSpec);
+            if ( !view )
+              return;
+            var shouldBeVisible = _.contains(args, aPanelSpec.get('type'));
+            // TODO: compute isAlreadyVisible and show() or hide() with animation only if state is different
+            if ( shouldBeVisible )
+            {
+              view.$el.show();
+            }
+          });
+        },
+        /**
+         * @params list of panel names
+         */
+        ensurePanelsHidden: function(){
+          var that = this;
+          var args = Array.prototype.slice.call(arguments);
+          var panels = this.model.get('panels');
+          // show and hide panels
+          _.each(this.model.get('panels').models, function(aPanelSpec){
+            if ( aPanelSpec.get('type') == 'navigation')
+              return;
+            var view = that.children.findByModel(aPanelSpec);
+            if ( !view )
+              return;
+            var shouldBeHidden = _.contains(args, aPanelSpec.get('type'));
+            if ( shouldBeHidden )
+            {
+              view.$el.hide();
+            }
+          });
+
     });
 
     return groupContent;

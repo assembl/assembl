@@ -18,6 +18,55 @@ define(function(require){
                {type:'message'}
            ]),
            navigationState: 'home'
+        },
+
+        /**
+         * @params list of panel type names
+         */
+        removePanels: function(){
+          var args = Array.prototype.slice.call(arguments);
+          var panels = this.get('panels');
+          var panelsToRemove = _.filter ( panels.models, function(el){
+            return _.contains(args, el.get('type'));
+          } );
+          _.each( panelsToRemove, function(el){
+            panels.remove(el);
+          });
+        },
+
+        addPanel: function(options, position) {
+          var panelSpec = new panelSpec.Model(options);
+          var panels = this.get('panels');
+          if (position === undefined) {
+            panels.add(panelSpec);
+          } else {
+            panels.add(panelSpec, {at: position});
+          }
+        },
+
+        getPanelSpecByType: function(typename) {
+          return _.find(this.get('panels').models, function(el) {
+            return el.get('type') == typename;
+          });
+        },
+
+        /**
+         * @params panel type name or panelSpec options or array of either
+         */
+        ensurePanelsAt: function(list_of_options, position) {
+          if (!Array.isArray(list_of_options)) {
+            list_of_options = [list_of_options];
+          }
+          if (_.any(list_of_options, function (el) {
+              return typeof(list_of_options) == 'string'})) {
+            list_of_options = map(list_of_options, function(el) {return {type: el};});
+          }
+          var that = this;
+          _.each(list_of_options, function(options) {
+            if (!that.getPanelSpecByType(options.type)) {
+              that.addPanel(options, position);
+            }
+          });
         }
     });
 
