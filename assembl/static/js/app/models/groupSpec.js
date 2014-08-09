@@ -35,12 +35,12 @@ define(function(require){
         },
 
         addPanel: function(options, position) {
-          var panelSpec = new panelSpec.Model(options);
+          var aPanelSpec = new panelSpec.Model(options);
           var panels = this.get('panels');
           if (position === undefined) {
-            panels.add(panelSpec);
+            panels.add(aPanelSpec);
           } else {
-            panels.add(panelSpec, {at: position});
+            panels.add(aPanelSpec, {at: position});
           }
         },
 
@@ -58,8 +58,8 @@ define(function(require){
             list_of_options = [list_of_options];
           }
           if (_.any(list_of_options, function (el) {
-              return typeof(list_of_options) == 'string'})) {
-            list_of_options = map(list_of_options, function(el) {return {type: el};});
+              return typeof(el) == 'string'})) {
+            list_of_options = _.map(list_of_options, function(el) {return {type: el};});
           }
           var that = this;
           _.each(list_of_options, function(options) {

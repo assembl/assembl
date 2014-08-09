@@ -53,6 +53,11 @@ define(function(require){
             this.allSynthesisCollectionPromise.done(
                 function(allSynthesisCollection) {
                   var synthesis = allSynthesisCollection.get(that.synthesisId);
+                  if (!synthesis) {
+                    // TODO: This should not happen. find the cause.
+                    //debug();
+                    return;
+                  }
                   that.$('.message-subject').html(synthesis.get('subject'));
                   that.synthesisPanel = new SynthesisPanel({
                     model: synthesis
