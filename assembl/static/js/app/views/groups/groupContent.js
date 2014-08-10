@@ -131,6 +131,14 @@ define(function (require) {
           this.model.removePanels.apply(this.model, arguments);
         },
 
+        addPanel: function(options, position) {
+          this.model.addPanel(options, position);
+        },
+
+        ensurePanel: function(options, position) {
+          this.model.ensurePanel(options, position);
+        },
+
         getViewByTypeName: function(typeName) {
           var model = this.model.getPanelSpecByType(typeName);
           if (model !== undefined) {
