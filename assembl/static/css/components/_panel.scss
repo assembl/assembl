@@ -29,11 +29,11 @@
 
 // When is dragging something on
 // ****************
-.groupPanel.is-dragover {}
+.panel.is-dragover {}
 
 // blocked and with a loading message
 // ****************
-.groupPanel.is-loading {
+.panel.is-loading {
     cursor: wait;
 
     &:after {
@@ -105,6 +105,12 @@
     @include box-shadow(rgba(0, 0, 0, 0.1) 0px 1px 1px inset);
     border:1px solid #cccccc;
   }
+}
+
+.panelContents, .panelContents > div {
+    height: 100%;
+    top:0;
+    bottom:0;
 }
 
 // To put the content

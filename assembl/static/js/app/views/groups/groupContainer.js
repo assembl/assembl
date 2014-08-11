@@ -4,7 +4,9 @@ define(function (require) {
            Assembl = require('modules/assembl'),
       GroupContent = require('views/groups/groupContent'),
       Notification = require('views/notification');
-
+/** 
+ * Manages all the groups in the interface
+ */
     var groupContainer = Marionette.CollectionView.extend({
         id:'groupsContainer',
         childView: GroupContent,

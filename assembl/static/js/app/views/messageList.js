@@ -38,7 +38,8 @@ define(function(require){
      */
     var MessageList = AssemblPanel.extend({
 
-        className:'groupPanel messageList',
+        panelType: 'messageList',
+        className: 'messageList',
 
         ui: {
           panelBody: ".panel-body",
@@ -49,7 +50,8 @@ define(function(require){
           bottomArea: '.js_messageList-bottomarea',
           collapseButton: '.js_messageList-collapseButton',
           loadPreviousMessagesButton: '.js_messageList-prevbutton',
-          loadNextMessagesButton: '.js_messageList-morebutton'
+          loadNextMessagesButton: '.js_messageList-morebutton',
+          messageList: '.messageList-list'
         },
         
         ViewStyles: {
@@ -132,7 +134,7 @@ define(function(require){
             this.setViewStyle(this.getViewStyleDefById(this.storedMessageListConfig.viewStyleId) || this.ViewStyles.THREADED);
             this.defaultMessageStyle = Ctx.getMessageViewStyleDefById(this.storedMessageListConfig.messageStyleId) || Ctx.AVAILABLE_MESSAGE_VIEW_STYLES.PREVIEW;
 
-            this.panelGroup = options.groupManager;
+            this.groupContent = options.groupContent;
             /**
              * @ghourlier
              * TODO: Usually it would necessary to push notification rather than fetch every time the model change
@@ -171,7 +173,7 @@ define(function(require){
                     return;
 
                 } else {
-                    that.panelGroup.filterThroughPanelLock(
+                    that.groupContent.filterThroughPanelLock(
                         function(){
                             that.syncWithCurrentIdea();
                         }, 'syncWithCurrentIdea');
@@ -183,35 +185,35 @@ define(function(require){
             });
 
             Assembl.vent.on('messageList:addFilterIsRelatedToIdea', function(idea, only_unread){
-                that.panelGroup.filterThroughPanelLock(
+                that.groupContent.filterThroughPanelLock(
                     function(){
                         that.addFilterIsRelatedToIdea(idea, only_unread)
                     }, 'syncWithCurrentIdea');
             });
 
             Assembl.vent.on('messageList:addFilterIsOrphanMessage', function(){
-                that.panelGroup.filterThroughPanelLock(
+                that.groupContent.filterThroughPanelLock(
                     function(){
                         that.addFilterIsOrphanMessage();
                     }, 'syncWithCurrentIdea');
             });
 
             Assembl.vent.on('messageList:addFilterIsSynthesisMessage', function(){
-                that.panelGroup.filterThroughPanelLock(
+                that.groupContent.filterThroughPanelLock(
                     function(){
                         that.addFilterIsSynthesMessage();
                     }, 'syncWithCurrentIdea');
             });
 
             Assembl.vent.on('messageList:showAllMessages', function(){
-                that.panelGroup.filterThroughPanelLock(
+                that.groupContent.filterThroughPanelLock(
                     function(){
                         that.showAllMessages();
                     }, 'syncWithCurrentIdea');
             });
 
             Assembl.vent.on('messageList:currentQuery', function(){
-                if(!that.panelGroup.isGroupLocked()) {
+                if(!that.groupContent.isGroupLocked()) {
                     that.currentQuery.clearAllFilters();
                 }
             });
@@ -356,19 +358,6 @@ define(function(require){
          */
         currentQuery: new PostQuery(),
 
-        /**
-         * Blocks the panel
-         */
-        blockPanel: function(){
-            this.$el.addClass('is-loading');
-        },
-
-        /**
-         * Unblocks the panel
-         */
-        unblockPanel: function(){
-          this.$el.removeClass('is-loading');
-        },
         
         /**
          * Reset the offset values to initial values
@@ -586,7 +575,6 @@ define(function(require){
          */
         showMessages: function(requestedOffsets){
             var that = this,
-                ideaList = this.$('.idealist'),
                 views,
                 models,
                 offsets,
@@ -609,12 +597,11 @@ define(function(require){
             //console.log("returnedOffsets:", returnedOffsets);
             this.offsetStart = returnedOffsets['offsetStart']
             this.offsetEnd = returnedOffsets['offsetEnd']
-            ideaList.empty();
 
             if( views.length === 0 ){
-                ideaList.append( Ctx.format("<div class='margin'>{0}</div>", i18n.gettext('No messages')) );
+              this.ui.messageList.append( Ctx.format("<div class='margin'>{0}</div>", i18n.gettext('No messages')) );
             } else {
-                ideaList.append( views );
+              this.ui.messageList.append( views );
             }
 
             if( this.offsetStart <= 0 ){
@@ -820,6 +807,8 @@ define(function(require){
             // Data not yet available should be handled in render_real - benoitg
             this.render_real();
             this.blockPanel();
+            //Some messages may be present from before
+            this.ui.messageList.empty();
             
             $.when(collectionManager.getAllMessageStructureCollectionPromise(),
                     this.currentQuery.getResultMessageIdCollectionPromise()).done(
@@ -1035,7 +1024,7 @@ define(function(require){
                       annotator.deleteAnnotation(annotation);
                     } else if( Ctx.currentAnnotationNewIdeaParentIdea ){
                       //We asked to create a new idea from segment
-                      that.panelGroup.lockGroup();
+                      that.groupContent.lockGroup();
                       var newIdea = Ctx.currentAnnotationNewIdeaParentIdea.addSegmentAsChild(segment);
                       Ctx.setCurrentIdea(newIdea);
                     }

@@ -10,6 +10,8 @@ define(function(require){
 
     var contextPage = Marionette.LayoutView.extend({
         template:'#tmpl-contextPage',
+        panelType: 'homePanel',
+        className: 'homePanel',
 
         /*
         events: {
@@ -24,11 +26,12 @@ define(function(require){
 
         onRender: function(){
             console.log("contextPage::onRender()");
-            this.computeStatistics();
+            this.draw();
         },
 
         initialize: function(options){
             console.log("contextPage::initialize()");
+            this.computeStatistics();
         },
 
         /*
@@ -279,16 +282,19 @@ define(function(require){
                 // TODO
                 //var new_authors_in_period = _.difference(authors_in_period - messages_authors;
 
-
                 // -----
                 // show results
                 // -----
+                //that.$el.find(".statistics").html("<h2>Statistics since " + statsPeriodName + "</h2><div id='stats_messages'>Messages posted: " + messages_in_period_total + " (" + messages_total + " since the beginning of the debate)");
+                that.stats = {
+                    "statsPeriodName": statsPeriodName,
+                    "messages_in_period_total": messages_in_period_total,
+                    "messages_total": messages_total
+                }
 
-                $("#statistics").html("<h2>Statistics since " + statsPeriodName + "</h2><div id='stats_messages'>Messages posted: " + messages_in_period_total + " (" + messages_total + " since the beginning of the debate)<div id='chart'></div>");
-                
-                
                 //that.drawLineGraph(messages_per_day_totals_array);
-                that.drawLineGraph(messages_in_period);
+                that.messages_in_period = messages_in_period;
+                //that.drawLineGraph(messages_in_period);
                 //that.drawLineGraph(messages_per_day_totals_filled_array);
 
                 var messages_from_new_authors_in_current_period = messages_in_period_total - 1; // TODO: real value
@@ -326,14 +332,28 @@ define(function(require){
                     }
                 ];
 
-
-                that.drawPieChart(pie_chart_data);
+                that.pie_chart_data = pie_chart_data;
+                //that.drawPieChart(pie_chart_data);
+                that.render();
             });
+        },
+
+        draw: function() {
+            // -----
+            // show results
+            // -----
+            if (this.pie_chart_data === undefined)
+                return;
+            var stats = this.stats;
+            this.$el.find(".statistics").html("<h2>Statistics since " + stats.statsPeriodName + "</h2><p class='stats_messages'>Messages posted: " + stats.messages_in_period_total + " (" + stats.messages_total + " since the beginning of the debate)</p>");
+            this.drawLineGraph(this.messages_in_period);
+            this.drawPieChart(this.pie_chart_data);
         },
 
         drawLineGraph: function(data){
             var w = 600,
-                h = 250;
+                h = 250,
+                that = this;
 
             var maxDataPointsForDots = 100,
                 transitionDuration = 1000;
@@ -358,16 +378,18 @@ define(function(require){
                 var xAxis = d3.svg.axis().scale(x).tickSize(h - margin * 2).tickPadding(10).ticks(5).tickFormat(d3.time.format("%Y-%m-%d"));
                 var yAxis = d3.svg.axis().scale(y).orient('left').tickSize(-w + margin * 2).tickPadding(10).tickFormat(d3.format("d"));
                 var t = null;
+                var chart_div = that.$el.find('.chart');
 
-                svg = d3.select('#chart').select('svg').select('g');
-                if (svg.empty()) {
-                    svg = d3.select('#chart')
+                if (chart_div.empty()) {
+                    svg = d3.select(chart_div[0])
                         .append('svg:svg')
                             .attr('width', w)
                             .attr('height', h)
                             .attr('class', 'viz')
                         .append('svg:g')
                             .attr('transform', 'translate(' + margin + ',' + margin + ')');
+                } else {
+                    svg = d3.select(chart_div).select('svg').select('g');
                 }
 
                 t = svg.transition().duration(transitionDuration);
@@ -440,17 +462,20 @@ define(function(require){
                      .style('opacity', 0.3)
                      .attr("d", line(data));
 
-                dataLines.transition()
-                    .attr("d", line)
-                    .duration(transitionDuration)
-                        .style('opacity', 1)
-                                    .attr("transform", function(d) { return "translate(" + x(d.date) + "," + y(d.value) + ")"; });
+                // BUG: d in the inner function is the whole array, not elements.
+                // dataLines.transition()
+                //     .attr("d", line)
+                //     .duration(transitionDuration)
+                //         .style('opacity', 1)
+                //                     .attr("transform", function(d) {
+                //                         return "translate(" + x(d.date) + "," + y(d.value) + ")"; });
 
                 dataLines.exit()
                     .transition()
                     .attr("d", line)
                     .duration(transitionDuration)
-                                    .attr("transform", function(d) { return "translate(" + x(d.date) + "," + y(0) + ")"; })
+                                    .attr("transform", function(d) {
+                                        return "translate(" + x(d.date) + "," + y(0) + ")"; })
                         .style('opacity', 1e-6)
                         .remove();
 
@@ -524,16 +549,16 @@ define(function(require){
             http://bl.ocks.org/adewes/4710330/94a7c0aeb6f09d681dbfdd0e5150578e4935c6ae
             http://www.andreas-dewes.de/code_is_beautiful/
             */
-            function init_code_hierarchy_plot(element_id,data)
+            var that = this;
+            function init_code_hierarchy_plot(element_name, data)
             {
-                var plot = document.getElementById(element_id);
-
+                var plot = that.$el.find('.'+element_name)[0];
                 while (plot.hasChildNodes())
                 {
                     plot.removeChild(plot.firstChild);
                 }
 
-                var width = plot.offsetWidth;
+                var width = Math.max(plot.offsetWidth, 250);
                 var height = width;
                 var x_margin = 40;
                 var y_margin = 40;
@@ -547,7 +572,7 @@ define(function(require){
                 var max_level = 4;
                 var color = d3.scale.category20c();
 
-                var svg = d3.select("#"+element_id).append("svg")
+                var svg = d3.select(plot).append("svg")
                     .attr("width", width)
                     .attr("height", height)
                     .append("g")
@@ -600,7 +625,7 @@ define(function(require){
                     .append("g");
                     slices.append("path")
                     .attr("d", arc)
-                    .attr("id",function(d,i){return element_id+i;})
+                    .attr("id",function(d,i){return element_name+i;})
                     .style("fill", function(d) { return color(d[2]);})
                     .on("click",animate)
                     .on("mouseover",update_legend)
@@ -609,7 +634,8 @@ define(function(require){
                     .append("svg:title")
                     .text(function(d) { return d[2]+","+d[3]; });
 
-                var legend = d3.select("#"+element_id+"_legend")
+                var legend_div = that.$el.find('.'+element_name+'_legend');
+                var legend = d3.select(legend_div);
                     
                 function update_legend(d)
                 {
@@ -758,8 +784,8 @@ define(function(require){
                 init_code_hierarchy_plot("code_hierarchy",code_hierarchy_data);
             }
 
-            window.onload = init_plots;
-            window.onresize = init_plots;
+            //window.onload = init_plots;
+            //window.onresize = init_plots;
             init_plots();
         }
 

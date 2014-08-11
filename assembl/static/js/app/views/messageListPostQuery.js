@@ -20,7 +20,7 @@ define(function(require){
             valuesText = [];
             for (var i=0;i<queryObjects.length;i++) {
                 var value = queryObjects[i].value,
-                //Yest, this is cheating - benoitg 2014-07-23
+                //Yes, this is cheating - benoitg 2014-07-23
                 idea = collectionManager._allIdeasCollection.get(value),
                 span = '<span class="closebutton" data-filterid="'+filterDef.id+'" data-value="'+value+'"></span>\n';
                 valuesText.push('"' + idea.get('shortTitle') + '"' + span);
@@ -36,7 +36,11 @@ define(function(require){
                 var value = queryObjects[i].value,
                 post = collectionManager._allMessageStructureCollection.get(value),
                 span = '<span class="closebutton" data-filterid="'+filterDef.id+'" data-value="'+value+'"></span>\n';
-                valuesText.push('"' + post.get('subject') + '"' + span);
+                if (post !== undefined) {
+                    // TODO
+                    console.log("BUG: could not find post", value );
+                    valuesText.push('"' + post.get('subject') + '"' + span);
+                }
             }
             retval += i18n.sprintf(i18n.ngettext("Are in the conversation that follows post %s",
                                                     "Are in the conversation that follows posts: %s",

@@ -47,6 +47,7 @@ define(function(require){
             Assembl.vent.trigger('messageList:addFilterIsSynthesisMessage');
 
             Ctx.setCurrentIdea(null);
+            this.groupContent.resetDebateState();
         }
     });
 

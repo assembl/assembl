@@ -21,6 +21,7 @@ define(function (require) {
 
 
     var IdeaList = Backbone.View.extend({
+        panelType: 'ideaList',
         className: 'ideaList',
         /**
          * The filter applied to the idea list
@@ -57,6 +58,8 @@ define(function (require) {
         initialize: function (options) {
             var that = this,
                 collectionManager = new CollectionManager();
+
+            this.groupContent = options.groupContent;
 
             collectionManager.getAllIdeasCollectionPromise().done(
                 function (allIdeasCollection) {
@@ -160,12 +163,14 @@ define(function (require) {
                     });
 
                     // Synthesis posts pseudo-idea
-                    var synthesisView = new SynthesisInIdeaListView({model: rootIdea});
+                    var synthesisView = new SynthesisInIdeaListView({
+                        model: rootIdea, groupContent: that.groupContent});
                     list.appendChild(synthesisView.render().el);
 
                     // All posts pseudo-idea
 
-                    var allMessagesInIdeaListView = new AllMessagesInIdeaListView({model: rootIdea});
+                    var allMessagesInIdeaListView = new AllMessagesInIdeaListView({
+                        model: rootIdea, groupContent: that.groupContent});
                     list.appendChild(allMessagesInIdeaListView.render().el);
 
                     rootIdea.visitDepthFirst(objectTreeRenderVisitor(view_data, order_lookup_table, roots, excludeRoot));
@@ -173,12 +178,14 @@ define(function (require) {
 
 
                     _.each(roots, function (idea) {
-                        var ideaView = new IdeaView({model: idea}, view_data);
+                        var ideaView = new IdeaView({
+                            model: idea, groupContent: that.groupContent}, view_data);
                         list.appendChild(ideaView.render().el);
                     });
 
                     // Orphan messages pseudo-idea
-                    var orphanView = new OrphanMessagesInIdeaListView({model: rootIdea});
+                    var orphanView = new OrphanMessagesInIdeaListView({
+                        model: rootIdea, groupContent: that.groupContent});
                     list.appendChild(orphanView.render().el);
 
                     var data = {
@@ -269,20 +276,6 @@ define(function (require) {
         clearFilter: function () {
             this.filter = '';
             this.render();
-        },
-
-        /**
-         * Blocks the panel
-         */
-        blockPanel: function () {
-            this.$el.addClass('is-loading');
-        },
-
-        /**
-         * Unblocks the panel
-         */
-        unblockPanel: function () {
-            this.$el.removeClass('is-loading');
         },
 
         /**

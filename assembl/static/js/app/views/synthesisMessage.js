@@ -5,7 +5,8 @@ define(function(require){
                 Ctx = require('modules/context'),
         MessageView = require('views/message'),
           Synthesis = require('models/synthesis'),
-     SynthesisPanel = require('views/synthesisPanel');
+     SynthesisPanel = require('views/synthesisPanel'),
+  CollectionManager = require('modules/collectionManager');
 
     /**
      * @class views.MessageView
@@ -16,14 +17,12 @@ define(function(require){
          * @init
          */
         initialize: function(obj){
-          var that = this;
+          var that = this,
+              collectionManager = new CollectionManager();
           MessageView.prototype.initialize.apply(this, arguments);
           this.stopListening(this.messageListView, 'annotator:initComplete', this.onAnnotatorInitComplete);
-          var synthesis_id = this.model.get('publishes_synthesis');
-          if(!this.synthesis) {
-            this.synthesis = new Synthesis.Model({'@id': synthesis_id});
-            this.synthesisPromise = this.synthesis.fetch();
-          }
+          this.synthesisId = this.model.get('publishes_synthesis');
+          this.allSynthesisCollectionPromise = collectionManager.getAllSynthesisCollectionPromise()
         },
 
         /**
@@ -51,11 +50,17 @@ define(function(require){
         postRender: function() {
             var that = this,
                 body;
-            this.synthesisPromise.done(
-                function() {
-                  that.$('.message-subject').html(that.synthesis.get('subject'));
+            this.allSynthesisCollectionPromise.done(
+                function(allSynthesisCollection) {
+                  var synthesis = allSynthesisCollection.get(that.synthesisId);
+                  if (!synthesis) {
+                    // TODO
+                    console.log("BUG: Could not get synthesis after post. Maybe too early.")
+                    return;
+                  }
+                  that.$('.message-subject').html(synthesis.get('subject'));
                   that.synthesisPanel = new SynthesisPanel({
-                    model: that.synthesis
+                    model: synthesis
                   });
                   that.synthesisPanel.template = Ctx.loadTemplate('synthesisPanelMessage');
                   that.synthesisPanel.render();

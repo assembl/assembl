@@ -45,6 +45,7 @@ define(function(require){
         onTitleClick: function(){
             Assembl.vent.trigger('messageList:addFilterIsOrphanMessage');
             Ctx.setCurrentIdea(null);
+            this.groupContent.resetDebateState();
         }
     });
 

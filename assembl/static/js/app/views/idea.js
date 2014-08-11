@@ -35,6 +35,7 @@ define(function(require){
         initialize: function(options, view_data){
             var that = this;
             this.view_data = view_data;
+            this.groupContent = options.groupContent;
 
             this.listenTo(this.model, 'change', this.render);
             this.listenTo(this.model, 'replacedBy', this.onReplaced);
@@ -65,8 +66,9 @@ define(function(require){
          * @return {IdeaView}
          */
         render: function(){
-            var view_data = this.view_data;
-            var render_data = view_data[this.model.getId()];
+            var that = this,
+                view_data = this.view_data,
+                render_data = view_data[this.model.getId()];
             if (render_data === undefined) {
                 return this;
             }
@@ -93,7 +95,7 @@ define(function(require){
             Ctx.initTooltips(this.$el);
             var rendered_children = [];
             _.each(data['children'], function(idea, i){
-                var ideaView = new IdeaView({model:idea}, view_data);
+                var ideaView = new IdeaView({model:idea, groupContent: that.groupContent}, view_data);
                 rendered_children.push( ideaView.render().el );
             });
             this.$('.idealist-children').append( rendered_children );
@@ -162,6 +164,7 @@ define(function(require){
             } else {
                Ctx.setCurrentIdea(this.model);
             }
+            this.groupContent.resetDebateState();
         },
 
         /**
