@@ -1,4 +1,4 @@
-#groupsContainer{
+#groupsContainer {
   position: absolute;
   top: 36px;
   right: 0;
@@ -10,12 +10,12 @@
   white-space: nowrap;
 }
 
-.groupContent{
+.groupContent {
   display: inline-block;
   height: 100%;
   width: 100%;
 
-  .navNotification{
+  .navNotification {
     position: relative;
     background-color: $gray3;
     color: $white;
@@ -23,7 +23,7 @@
 
 }
 
-.groupHeader{
+.groupHeader {
   height: 25px;
   background-color: $gray1;
   position: relative;
@@ -32,22 +32,28 @@
     cursor: pointer;
     position: absolute;
     text-decoration: none;
-    top: 2px;
-    color:$white;
+    top: 3px;
+    color: $white;
   }
   .close-group {
     right: 5px;
     font-size: 20px;
+    opacity: 0.8;
+    &:hover {
+      opacity: 1;
+    }
   }
   .lock-group {
     margin-left: auto;
     margin-right: auto;
     right: 30px;
-    text-align: center;
-    width: 140px;
-    i{
+    opacity: 0.8;
+    i {
       vertical-align: text-bottom;
       font-size: 18px;
+    }
+    &:hover {
+      opacity: 1;
     }
   }
 }
@@ -63,17 +69,17 @@
     border-right: 1px solid $gray2;
   }
 
-  .navSidebar{
+  .navSidebar {
     min-width: 300px;
     .side-menu {
       margin: 0;
       padding: 0;
       list-style: none;
       height: 80%;
-      >li {
+      > li {
         position: relative;
         display: block;
-        >a {
+        > a {
           @include box-sizing(border-box);
           position: relative;
           display: block;
@@ -81,12 +87,12 @@
           text-decoration: none;
           background-color: $gray3;
           border-bottom: 1px solid $white;
-          color:$gray;
+          color: $gray;
           z-index: 2;
           padding: 10px;
         }
-        .second-level{
-          display:none;
+        .second-level {
+          display: none;
         }
       }
     }
@@ -96,7 +102,7 @@
     min-width: 300px;
   }
 
-  .synthesisPanel{
+  .synthesisPanel {
     position: relative;
     min-width: 500px;
   }
@@ -109,63 +115,62 @@
 
 }
 
-
-
 .group-modal {
   .bbm-modal {
     max-width: 410px;
     .bbm-modal__section {
       height: auto;
       padding: 0 20px;
-       .itemGroup {
-         position: relative;
-         height: 120px;
-         width: 120px;
-         list-style-type: none;
-         margin: 25px;
-         float: left;
-         text-align: center;
-         border: 1px solid transparent;
-         a{
-           position: absolute;
-           display: block;
-           cursor: pointer;
-           left:0;
-           top:0;
-           height: 100%;
-           width: 100%;
-           z-index: 10;
-         }
-         i{
-           font-size: 3.5em;
-         }
-         .icon-checkbox {
-           position: absolute;
-           font-size: 16px;
-           top: 5px;
-           left: 5px;
-           visibility: hidden;
-         }
-         &:hover{
-           @include border-radius(3px);
-           border: 1px solid $gray;
-         }
-         &:hover .icon-checkbox {
-           visibility: visible;
-         }
-         .item-title {
-           font-size: 12px;
-         }
-       }
-       .separator-item {
-         float: left;
-         padding-top: 4em;
-         height: 120px;
-       }
-       .item-section{
-         font-size: 12px;
-         float: left;
-       }
+      .itemGroup {
+        position: relative;
+        height: 120px;
+        width: 120px;
+        list-style-type: none;
+        margin: 25px;
+        float: left;
+        text-align: center;
+        border: 1px solid transparent;
+        a {
+          position: absolute;
+          display: block;
+          cursor: pointer;
+          left: 0;
+          top: 0;
+          height: 100%;
+          width: 100%;
+          z-index: 10;
+        }
+        i {
+          font-size: 3.5em;
+        }
+        .icon-checkbox {
+          position: absolute;
+          font-size: 16px;
+          top: 5px;
+          left: 5px;
+          visibility: hidden;
+        }
+        &:hover {
+          @include border-radius(3px);
+          border: 1px solid $gray;
+        }
+        &:hover .icon-checkbox {
+          visibility: visible;
+        }
+        .item-title {
+          font-size: 12px;
+        }
+      }
+      .separator-item {
+        float: left;
+        padding-top: 4em;
+        height: 120px;
+      }
+      .item-section {
+        font-size: 12px;
+        float: left;
+        width: 100%;
+      }
       .is-selected {
         @include border-radius(3px);
         background-color: $purple;
@@ -173,7 +178,7 @@
         .icon-checkbox {
           visibility: visible;
         }
-        i, span{
+        i, span {
           color: $white;
         }
       }
@@ -183,7 +188,7 @@
       padding: 0 20px;
       border-bottom: none;
     }
-    .bbm-modal__title{
+    .bbm-modal__title {
       font-size: 14px;
       margin: 0;
     }

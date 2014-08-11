@@ -1,115 +1,120 @@
 // The dropdown
 // ============
 .dropdown {
-    position: relative;
-    display: inline-block;
-    padding: 2px 4px;
-    line-height: 20px;
-    overflow: visible;
-    cursor: pointer;
-    border: solid 1px transparent;
+  position: relative;
+  display: inline-block;
+  padding: 2px 0px;
+  line-height: 20px;
+  overflow: visible;
+  cursor: pointer;
+  border: solid 1px transparent;
 }
 
 // Change the appearacen to a button
 // ++++++++++++++++++++++
-.dropdown.dropdown--button {}
+.dropdown.dropdown--button {
+}
 
-.dropdown.is-open {}
+.dropdown.is-open {
+}
 
 .dropdown-label {
-    @include no-glitch;
-    display: inline-block;
+  @include no-glitch;
+  display: inline-block;
 
-    /*&:after {
-        display: inline-block;
-        @include opacity( 0.2 );
+  /*&:after {
+      display: inline-block;
+      @include opacity( 0.2 );
 
-        font-family: $baseFontFamily;
-        content: '\e808';
-        margin-left: 5px;
-    }*/
+      font-family: $baseFontFamily;
+      content: '\e808';
+      margin-left: 5px;
+  }*/
 
-    /*.dropdown:hover &:after {
-        @include opacity( 1 );
-    } */
+  /*.dropdown:hover &:after {
+      @include opacity( 1 );
+  } */
 
-    .dropdown--button & {
-        @extend .button;
-        @extend .button.button--condensed;
+  .dropdown--button & {
+    @extend .button;
+    @extend .button.button--condensed;
 
-        padding: { right: 8px; left: 4px; }
-
-        &:after {
-            font-family: $baseFontFamily;
-            content: '\e812';
-            margin-left: 5px;
-        }
+    padding: {
+      right: 8px;
+      left: 4px;
     }
+
+    &:after {
+      font-family: $baseFontFamily;
+      content: '\e812';
+      margin-left: 5px;
+    }
+  }
 }
 
 // +++++++
 .dropdown-label.dropdown-label--arrow {
-    @include box-sizing( border-box );
-    background: url(#{$img-dir}/idealist/idealist-arrow.png) center center no-repeat;
-    width: 30px;
-    height: 30px;
-    border-radius: 5px;
-    border: solid 1px #ddd;
-    opacity: 0.55;
+  @include box-sizing(border-box);
+  background: url(#{$img-dir}/idealist/idealist-arrow.png) center center no-repeat;
+  width: 30px;
+  height: 30px;
+  border-radius: 5px;
+  border: solid 1px #ddd;
+  opacity: 0.55;
 
-    &:hover {
-        opacity: 1;
-    }
+  &:hover {
+    opacity: 1;
+  }
 
-    &:after {
-        display: none;
-    }
+  &:after {
+    display: none;
+  }
 }
 
 // The option list
 // ---------------
 .dropdown-list {
-    $dropdown-time: 0.4s;
-    @extend .contextmenu;
+  $dropdown-time: 0.4s;
+  @extend .contextmenu;
 
-    position: absolute;
-    top: 0;
-    left: -10000px;
-    @include z-index("float");
-    min-width: 155px;
-    overflow: visible;
-    white-space: nowrap;
+  position: absolute;
+  top: 0;
+  left: -10000px;
+  @include z-index("float");
+  min-width: 155px;
+  overflow: visible;
+  white-space: nowrap;
 
-    @include transition( top $dropdown-time, opacity $dropdown-time, left 0 linear $dropdown-time, right 0 linear $dropdown-time );
-    @include opacity( 0 );
+  @include transition(top $dropdown-time, opacity $dropdown-time, left 0 linear $dropdown-time, right 0 linear $dropdown-time);
+  @include opacity(0);
 
-    .dropdown.is-open & {
-        @include transition( top $dropdown-time, opacity $dropdown-time, left 0 linear 0, right 0 linear 0 );
-        top: 8px;
-        @include opacity( 1 );
-        left: 0;
-    }
+  .dropdown.is-open & {
+    @include transition(top $dropdown-time, opacity $dropdown-time, left 0 linear 0, right 0 linear 0);
+    top: 8px;
+    @include opacity(1);
+    left: 0;
+  }
 
-    .dropdown--button.is-open & {
-        top: 16px;
-        left: 5px;
-    }
+  .dropdown--button.is-open & {
+    top: 16px;
+    left: 5px;
+  }
 }
 
 // +++++
 .dropdown-list.dropdown-list--bottomright {
-    left: auto;
-    right: -10000px;
+  left: auto;
+  right: -10000px;
 
-    .dropdown.is-open & {
-        top: 15px;
-        right: 5px;
-        left: auto;
-    }
+  .dropdown.is-open & {
+    top: 15px;
+    right: 5px;
+    left: auto;
+  }
 }
 
 //
 .dropdown-listitem {
-    @extend .contextmenu-item;
-    margin-top: 3px;
+  @extend .contextmenu-item;
+  margin-top: 3px;
 }
