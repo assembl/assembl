@@ -62,11 +62,11 @@
   display: table;
   height: 100%;
   width: 100%;
+  table-layout: auto;
 
   .groupPanel {
     display: table-cell;
     height: 100%;
-    border-right: 1px solid $gray2;
   }
 
   .navSidebar {
@@ -89,7 +89,8 @@
           border-bottom: 1px solid $white;
           color: $gray;
           z-index: 2;
-          padding: 10px;
+          line-height: 35px;
+          padding-left: 10px;
         }
         .second-level {
           display: none;
@@ -110,7 +111,6 @@
   .clipboard {
     position: relative;
     min-width: 400px;
-    max-width: 450px;
   }
 
 }

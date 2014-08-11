@@ -1,11 +1,11 @@
-define(function(require){
+define(function (require) {
     'use strict';
 
     var Backbone = require('backbone'),
-               _ = require('underscore'),
-         Assembl = require('modules/assembl'),
-             Ctx = require('modules/context'),
-     Permissions = require('utils/permissions');
+        _ = require('underscore'),
+        Assembl = require('modules/assembl'),
+        Ctx = require('modules/context'),
+        Permissions = require('utils/permissions');
 
     var IdeaView = Backbone.View.extend({
         /**
@@ -32,7 +32,7 @@ define(function(require){
          * @param {dict} view_data: data from the render visitor
          *   are the last child of their respective parents.
          */
-        initialize: function(options, view_data){
+        initialize: function (options, view_data) {
             var that = this;
             this.view_data = view_data;
             this.groupContent = options.groupContent;
@@ -40,7 +40,7 @@ define(function(require){
             this.listenTo(this.model, 'change', this.render);
             this.listenTo(this.model, 'replacedBy', this.onReplaced);
 
-            this.listenTo(Assembl.vent,'idea:selected', function(idea){
+            this.listenTo(Assembl.vent, 'idea:selected', function (idea) {
                 that.onIsSelectedChange(idea);
             });
         },
@@ -65,7 +65,7 @@ define(function(require){
          * The render
          * @return {IdeaView}
          */
-        render: function(){
+        render: function () {
             var that = this,
                 view_data = this.view_data,
                 render_data = view_data[this.model.getId()];
@@ -79,13 +79,13 @@ define(function(require){
             Ctx.removeCurrentlyDisplayedTooltips(this.$el);
             this.onIsSelectedChange(Ctx.getCurrentIdea());
 
-            if( data.isOpen === true ){
+            if (data.isOpen === true) {
                 this.$el.addClass('is-open');
             } else {
                 this.$el.removeClass('is-open');
             }
 
-            if( data.longTitle ){
+            if (data.longTitle) {
                 data.longTitle = ' - ' + data.longTitle.substr(0, 50);
             }
 
@@ -94,11 +94,11 @@ define(function(require){
             this.$el.html(this.template(data));
             Ctx.initTooltips(this.$el);
             var rendered_children = [];
-            _.each(data['children'], function(idea, i){
-                var ideaView = new IdeaView({model:idea, groupContent: that.groupContent}, view_data);
-                rendered_children.push( ideaView.render().el );
+            _.each(data['children'], function (idea, i) {
+                var ideaView = new IdeaView({model: idea, groupContent: that.groupContent}, view_data);
+                rendered_children.push(ideaView.render().el);
             });
-            this.$('.idealist-children').append( rendered_children );
+            this.$('.idealist-children').append(rendered_children);
 
             return this;
         },
@@ -106,7 +106,7 @@ define(function(require){
         /**
          * Show the childen
          */
-        open: function(){
+        open: function () {
             this.model.set('isOpen', true);
             this.$el.addClass('is-open');
         },
@@ -114,7 +114,7 @@ define(function(require){
         /**
          * Hide the childen
          */
-        close: function(){
+        close: function () {
             this.model.set('isOpen', false);
             this.$el.removeClass('is-open');
         },
@@ -122,9 +122,9 @@ define(function(require){
         /**
          * @event
          */
-        onIsSelectedChange: function(idea){
+        onIsSelectedChange: function (idea) {
             //console.log("IdeaView:onIsSelectedChange(): new: ", idea, "current: ", this.model, this);
-            if( idea === this.model ){
+            if (idea === this.model) {
                 this.$el.addClass('is-selected');
             } else {
                 this.$el.removeClass('is-selected');
@@ -134,7 +134,7 @@ define(function(require){
         /**
          * @event
          */
-        onReplaced: function(newObject){
+        onReplaced: function (newObject) {
             this.model = newObject;
             //That makes no sense, there is no way to know it's the current idea
             //app.setCurrentIdea(newObject);
@@ -144,7 +144,7 @@ define(function(require){
         /**
          * @event
          */
-        onCheckboxChange: function(ev){
+        onCheckboxChange: function (ev) {
             ev.stopPropagation();
             this.model.save({'inNextSynthesis': ev.currentTarget.checked});
             //Optimisation.  It would self render once the socket propagates, 
@@ -156,13 +156,13 @@ define(function(require){
          * @event
          * Select this idea as the current idea
          */
-        onTitleClick: function(e){
+        onTitleClick: function (e) {
             e.stopPropagation();
 
-            if( this.model === Ctx.getCurrentIdea() ){
-               Ctx.setCurrentIdea(null);
+            if (this.model === Ctx.getCurrentIdea()) {
+                Ctx.setCurrentIdea(null);
             } else {
-               Ctx.setCurrentIdea(this.model);
+                Ctx.setCurrentIdea(this.model);
             }
             this.groupContent.resetDebateState();
         },
@@ -171,7 +171,7 @@ define(function(require){
          * @event
          * Select this idea as the current idea, and show only unread messages of this idea
          */
-        onUnreadCountClick: function(e){
+        onUnreadCountClick: function (e) {
             e.stopPropagation();
 
             Assembl.vent.trigger('messageList:addFilterIsRelatedToIdea', this.model, true);
@@ -181,11 +181,11 @@ define(function(require){
         /**
          * @event
          */
-        onDragStart: function(ev){
-            if( ev ){
+        onDragStart: function (ev) {
+            if (ev) {
                 ev.stopPropagation();
             }
-            if(Ctx.getCurrentUser().can(Permissions.EDIT_IDEA)){
+            if (Ctx.getCurrentUser().can(Permissions.EDIT_IDEA)) {
                 ev.currentTarget.style.opacity = 0.4;
                 ev.originalEvent.dataTransfer.effectAllowed = 'move';
                 ev.originalEvent.dataTransfer.dropEffect = 'all';
@@ -198,8 +198,8 @@ define(function(require){
         /**
          * @event
          */
-        onDragEnd: function(ev){
-            if( ev ){
+        onDragEnd: function (ev) {
+            if (ev) {
                 ev.preventDefault();
                 ev.stopPropagation();
             }
@@ -210,47 +210,47 @@ define(function(require){
         /**
          * @event
          */
-        onDragOver: function(ev){
-            if( ev ){
+        onDragOver: function (ev) {
+            if (ev) {
                 ev.preventDefault();
                 ev.stopPropagation();
             }
 
-            if( ev.originalEvent ){
+            if (ev.originalEvent) {
                 ev = ev.originalEvent;
             }
 
-            if( this.dragOverCounter > 30 ){
+            if (this.dragOverCounter > 30) {
                 this.model.set('isOpen', true);
             }
 
             ev.dataTransfer.dropEffect = 'all';
 
-            if( Ctx.draggedIdea !== null ){
+            if (Ctx.draggedIdea !== null) {
 
                 // Do nothing if it is the same idea
-                if( Ctx.draggedIdea.cid === this.model.cid ){
+                if (Ctx.draggedIdea.cid === this.model.cid) {
                     ev.dataTransfer.dropEffect = 'none';
                     return;
                 }
 
                 // If it is a descendent, do nothing
-                if( this.model.isDescendantOf(Ctx.draggedIdea) ){
+                if (this.model.isDescendantOf(Ctx.draggedIdea)) {
                     ev.dataTransfer.dropEffect = 'none';
                     return;
                 }
 
-                if( ev.target.classList.contains('idealist-abovedropzone') ){
+                if (ev.target.classList.contains('idealist-abovedropzone')) {
                     this.$el.addClass('is-dragover-above');
-                } else if( ev.target.classList.contains('idealist-dropzone') ){
+                } else if (ev.target.classList.contains('idealist-dropzone')) {
                     this.$el.addClass('is-dragover-below');
                 } else {
                     this.$el.addClass('is-dragover');
                 }
             }
 
-            if( Ctx.draggedSegment !== null || Ctx.getDraggedAnnotation() !== null ){
-                if( ev.target.classList.contains('idealist-dropzone') ){
+            if (Ctx.draggedSegment !== null || Ctx.getDraggedAnnotation() !== null) {
+                if (ev.target.classList.contains('idealist-dropzone')) {
                     this.$el.addClass('is-dragover-below');
                 } else {
                     this.$el.addClass('is-dragover');
@@ -263,8 +263,8 @@ define(function(require){
         /**
          * @event
          */
-        onDragLeave: function(ev){
-            if( ev ){
+        onDragLeave: function (ev) {
+            if (ev) {
                 ev.preventDefault();
                 ev.stopPropagation();
             }
@@ -276,8 +276,8 @@ define(function(require){
         /**
          * @event
          */
-        onDrop: function(ev){
-            if( ev ){
+        onDrop: function (ev) {
+            if (ev) {
                 ev.preventDefault();
                 ev.stopPropagation();
             }
@@ -288,8 +288,8 @@ define(function(require){
             this.$('.idealist-body').trigger('dragleave');
 
             var segment = Ctx.getDraggedSegment();
-            if( segment ){
-                if( isDraggedBelow ){
+            if (segment) {
+                if (isDraggedBelow) {
                     // Add as a child idea
                     var newIdea = this.model.addSegmentAsChild(segment);
                     Ctx.setCurrentIdea(newIdea);
@@ -302,8 +302,8 @@ define(function(require){
             }
 
             var annotation = Ctx.getDraggedAnnotation();
-            if( annotation ){
-                if( isDraggedBelow ){
+            if (annotation) {
+                if (isDraggedBelow) {
                     // Add as a child idea
                     Ctx.currentAnnotationIdIdea = null;
                     Ctx.currentAnnotationNewIdeaParentIdea = this.model;
@@ -314,22 +314,22 @@ define(function(require){
                     Ctx.currentAnnotationNewIdeaParentIdea = null;
                     Ctx.saveCurrentAnnotationAsExtract();
                 }
-                
+
                 return;
             }
 
-            if( Ctx.draggedIdea && Ctx.draggedIdea.cid !== this.model.cid ){
+            if (Ctx.draggedIdea && Ctx.draggedIdea.cid !== this.model.cid) {
 
                 var idea = Ctx.getDraggedIdea();
 
                 // If it is a descendent, do nothing
-                if( this.model.isDescendantOf(idea) ){
+                if (this.model.isDescendantOf(idea)) {
                     return;
                 }
 
-                if( isDraggedAbove ){
+                if (isDraggedAbove) {
                     this.model.addSiblingAbove(idea);
-                } else if ( isDraggedBelow ){
+                } else if (isDraggedBelow) {
                     this.model.addSiblingBelow(idea);
                 } else {
                     this.model.addChild(idea);
@@ -343,13 +343,13 @@ define(function(require){
          * @event
          * @param  {Event} ev
          */
-        toggle: function(ev){
-            if( ev ){
+        toggle: function (ev) {
+            if (ev) {
                 ev.preventDefault();
                 ev.stopPropagation();
             }
 
-            if( this.$el.hasClass('is-open') ){
+            if (this.$el.hasClass('is-open')) {
                 this.close();
             } else {
                 this.open();

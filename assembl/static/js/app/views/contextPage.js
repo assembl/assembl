@@ -1,55 +1,53 @@
-define(function(require){
+define(function (require) {
 
-    var        Marionette = require('marionette'),
-                      Ctx = require('modules/context'),
+    var Marionette = require('marionette'),
+        Ctx = require('modules/context'),
         CollectionManager = require('modules/collectionManager')
-                        $ = require('jquery'),
-                        _ = require('underscore'),
-                       d3 = require('d3'),
-                   Moment = require('moment');
+    $ = require('jquery'),
+        _ = require('underscore'),
+        d3 = require('d3'),
+        Moment = require('moment');
 
     var contextPage = Marionette.LayoutView.extend({
-        template:'#tmpl-contextPage',
+        template: '#tmpl-contextPage',
         panelType: 'homePanel',
         className: 'homePanel',
 
         /*
-        events: {
-            'click .lang': 'setLocale'
-        },
+         events: {
+         'click .lang': 'setLocale'
+         },
 
-        setLocale: function(e){
-            var lang = $(e.target).attr('data-locale');
-            Ctx.setLocale(lang);
-        }
-        */
+         setLocale: function(e){
+         var lang = $(e.target).attr('data-locale');
+         Ctx.setLocale(lang);
+         }
+         */
 
-        onRender: function(){
+        onRender: function () {
             console.log("contextPage::onRender()");
             this.draw();
         },
 
-        initialize: function(options){
+        initialize: function (options) {
             console.log("contextPage::initialize()");
             this.computeStatistics();
         },
 
         /*
-        * @param messages: [{'day': '2012-01-01', 'value': 1},...] sorted by date ascending
-        * @param threshold: Number
-        * @returns a period object {'period_type': 'last_2_weeks', 'date_min': Date, 'date_max': Date }
-        */
-        deduceGoodPeriod: function(messages, threshold){
+         * @param messages: [{'day': '2012-01-01', 'value': 1},...] sorted by date ascending
+         * @param threshold: Number
+         * @returns a period object {'period_type': 'last_2_weeks', 'date_min': Date, 'date_max': Date }
+         */
+        deduceGoodPeriod: function (messages, threshold) {
             var count = 0;
             var sz = messages.length;
             var date_threshold_min = messages[0].date;
-            var date_threshold_max = messages[sz-1].date; // or we could want it to be today
+            var date_threshold_max = messages[sz - 1].date; // or we could want it to be today
             var threshold_passed = false;
-            for ( var i = sz-1; i >= 0; --i)
-            {
+            for (var i = sz - 1; i >= 0; --i) {
                 count += messages[i]['value'];
-                if ( count >= threshold )
-                {
+                if (count >= threshold) {
                     threshold_passed = true;
                     date_threshold_min = messages[i]['date'];
                     console.log("count:");
@@ -73,38 +71,32 @@ define(function(require){
             var date_max_moment = Moment(date_threshold_max);
             var number_of_days = date_max_moment.diff(date_min_moment, 'days');
             var period_type = 'last_week';
-            if ( number_of_days <= 7 )
-            {
+            if (number_of_days <= 7) {
                 period_type = 'last_week';
                 date_min_moment = date_max_moment.subtract('days', 7);
                 date_min = date_min_moment.toDate();
             }
-            if ( number_of_days <= 14 )
-            {
+            if (number_of_days <= 14) {
                 period_type = 'last_2_weeks';
                 date_min_moment = date_max_moment.subtract('days', 14);
                 date_min = date_min_moment.toDate();
             }
-            else if ( number_of_days <= 31 )
-            {
+            else if (number_of_days <= 31) {
                 period_type = 'last_month';
                 date_min_moment = date_max_moment.subtract('months', 1);
                 date_min = date_min_moment.toDate();
             }
-            else if ( number_of_days <= (31+30+30) )
-            {
+            else if (number_of_days <= (31 + 30 + 30)) {
                 period_type = 'last_3_months';
                 date_min_moment = date_max_moment.subtract('months', 3);
                 date_min = date_min_moment.toDate();
             }
-            else if ( number_of_days <= (31+30)*3 )
-            {
+            else if (number_of_days <= (31 + 30) * 3) {
                 period_type = 'last_6_months';
                 date_min_moment = date_max_moment.subtract('months', 6);
                 date_min = date_min_moment.toDate();
             }
-            else
-            {
+            else {
                 period_type = 'last_year';
                 date_min_moment = date_max_moment.subtract('years', 1);
                 date_min = date_min_moment.toDate();
@@ -125,220 +117,217 @@ define(function(require){
             };
         },
 
-        computeStatistics: function(){
+        computeStatistics: function () {
             var that = this;
             var collectionManager = new CollectionManager();
             //var users = collectionManager.getAllUsersCollectionPromise();
 
-            $.when( collectionManager.getAllUsersCollectionPromise(),
+            $.when(collectionManager.getAllUsersCollectionPromise(),
                 collectionManager.getAllMessageStructureCollectionPromise()
-            ).then( function( allUsersCollection, allMessagesCollection ){
-                console.log("collections allUsersCollection, allMessagesCollection are loaded");
-                //console.log(allMessagesCollection);
+            ).then(function (allUsersCollection, allMessagesCollection) {
+                    console.log("collections allUsersCollection, allMessagesCollection are loaded");
+                    //console.log(allMessagesCollection);
 
-                var messages_sorted_by_date = new Backbone.Collection(allMessagesCollection.toJSON()); // clone
-                messages_sorted_by_date.sortBy(function(msg){
-                    return msg.date;
-                });
-                //console.log("messages_sorted_by_date1:");
-                //console.log(messages_sorted_by_date);
+                    var messages_sorted_by_date = new Backbone.Collection(allMessagesCollection.toJSON()); // clone
+                    messages_sorted_by_date.sortBy(function (msg) {
+                        return msg.date;
+                    });
+                    //console.log("messages_sorted_by_date1:");
+                    //console.log(messages_sorted_by_date);
 
-                messages_sorted_by_date = messages_sorted_by_date.toJSON();
+                    messages_sorted_by_date = messages_sorted_by_date.toJSON();
 
-                console.log("messages_sorted_by_date2:");
-                console.log(messages_sorted_by_date);
+                    console.log("messages_sorted_by_date2:");
+                    console.log(messages_sorted_by_date);
 
-                var messages_total = messages_sorted_by_date.length;
-                console.log("messages_total: " + messages_total);
+                    var messages_total = messages_sorted_by_date.length;
+                    console.log("messages_total: " + messages_total);
 
-                // pick only day, because date field looks like "2012-06-19T15:14:56"
-                var convertDateTimeToDate = function (datetime){
-                    return datetime.substr(0, datetime.indexOf('T'));
-                };
-                
-                var first_message_date = convertDateTimeToDate(messages_sorted_by_date[0].date);
-                console.log("first_message_date: " + first_message_date);
-                var last_message_date = convertDateTimeToDate(messages_sorted_by_date[messages_total-1].date);
-                console.log("last_message_date: " + last_message_date);
+                    // pick only day, because date field looks like "2012-06-19T15:14:56"
+                    var convertDateTimeToDate = function (datetime) {
+                        return datetime.substr(0, datetime.indexOf('T'));
+                    };
 
-
-                // find which period is best to show the stats: the first period among week, month, debate which gathers at least X% of the contributions
-
-                var messages_threshold = messages_total * 0.15;
-                //console.log("messages_threshold:");
-                //console.log(messages_threshold);
-
-                var messages_per_day = _.groupBy(messages_sorted_by_date, function(msg){
-                    return convertDateTimeToDate(msg.date);
-                });
-                var messages_per_day_totals = {};
-                var messages_per_day_totals_array = [];
-                for ( k in messages_per_day )
-                {
-                    var sz = messages_per_day[k].length;
-                    messages_per_day_totals[k] = sz;
-                    messages_per_day_totals_array.push({ 'date': k, 'value': sz });
-                    //messages_per_day_totals_array.push({ 'date': new Date(k), 'value': sz });
-                }
-                messages_per_day_totals_array = _.sortBy(messages_per_day_totals_array, function(msg){return msg['date'];});
-                //console.log("messages_per_day_totals_array:");
-                //console.log(messages_per_day_totals_array);
-
-                var period = that.deduceGoodPeriod(messages_per_day_totals_array, messages_threshold);
-                
-                var statsPeriodName = period.period_type; // TODO: i18n
-                var date_min = period.date_min;
-                var date_max = period.date_max;
+                    var first_message_date = convertDateTimeToDate(messages_sorted_by_date[0].date);
+                    console.log("first_message_date: " + first_message_date);
+                    var last_message_date = convertDateTimeToDate(messages_sorted_by_date[messages_total - 1].date);
+                    console.log("last_message_date: " + last_message_date);
 
 
+                    // find which period is best to show the stats: the first period among week, month, debate which gathers at least X% of the contributions
 
-                // fill missing days
+                    var messages_threshold = messages_total * 0.15;
+                    //console.log("messages_threshold:");
+                    //console.log(messages_threshold);
 
-                /*
-                * data: { "2012-01-01" : 42 }
-                * first_date: Date object // was "2012-01-01"
-                * last_date: Date object // was "2012-01-01"
-                */
-                function fillMissingDays(data, first_date, last_date)
-                {
-                    //var first_date = new Date(first_day);
-                    //var last_date = new Date(last_day);
-                    // use new Date(first_date.getTime()) to clone the Date object
-                    for ( var d = new Date(first_date.getTime()); d <= last_date; d.setDate(d.getDate() + 1) )
-                    {
-                        var key = convertDateTimeToDate(d.toISOString());
-                        if (!( key in data))
-                        {
-                            data[key] = 0;
-                        }
+                    var messages_per_day = _.groupBy(messages_sorted_by_date, function (msg) {
+                        return convertDateTimeToDate(msg.date);
+                    });
+                    var messages_per_day_totals = {};
+                    var messages_per_day_totals_array = [];
+                    for (k in messages_per_day) {
+                        var sz = messages_per_day[k].length;
+                        messages_per_day_totals[k] = sz;
+                        messages_per_day_totals_array.push({ 'date': k, 'value': sz });
+                        //messages_per_day_totals_array.push({ 'date': new Date(k), 'value': sz });
                     }
-                    return data;
-                }
-                var messages_per_day_totals_filled = fillMissingDays(messages_per_day_totals, date_min, date_max);
-                //console.log("messages_per_day_totals_filled:");
-                //console.log(messages_per_day_totals_filled);
+                    messages_per_day_totals_array = _.sortBy(messages_per_day_totals_array, function (msg) {
+                        return msg['date'];
+                    });
+                    //console.log("messages_per_day_totals_array:");
+                    //console.log(messages_per_day_totals_array);
+
+                    var period = that.deduceGoodPeriod(messages_per_day_totals_array, messages_threshold);
+
+                    var statsPeriodName = period.period_type; // TODO: i18n
+                    var date_min = period.date_min;
+                    var date_max = period.date_max;
 
 
+                    // fill missing days
 
-                // convert object to array
-
-                var messages_per_day_totals_filled_array = [];
-                for ( v in messages_per_day_totals_filled )
-                {
-                    messages_per_day_totals_filled_array.push({ 'date': new Date(v), 'value': messages_per_day_totals_filled[v] });
-                }
-                //console.log("messages_per_day_totals_filled_array:");
-                //console.log(messages_per_day_totals_filled_array);
-
-
-
-                
-                var messages_in_period = _.filter(messages_per_day_totals_filled_array, function(msg){
-                    return (msg.date >= date_min && msg.date <= date_max);
-                });
-
-                console.log("messages_in_period:");
-                console.log(messages_in_period);
-
-
-                messages_in_period = _.sortBy(messages_in_period, function(msg){
-                    return msg.date;
-                });
-
-                
-                // accumulate messages. maybe we should not start at 0 but at the accumulated value on start date (accumulated from the beginning of the debate)
-                var messages_in_period_total = 0;
-                _.each(messages_in_period, function(msg){
-                    messages_in_period_total += msg.value;
-                    //msg.value = messages_in_period_total;
-                });
-
-
-
-                // -----
-                // compute messages authors for 2 periods: current period and since the beginning of the debate
-                // -----
-
-                var messages_authors = _.map(messages_sorted_by_date, function(msg){return msg.idCreator;});
-                console.log("messages_authors:");
-                console.log(messages_authors);
-                messages_authors = _.uniq(messages_authors);
-                console.log("messages_authors:");
-                console.log(messages_authors);
-                messages_authors_total = messages_authors.length;
-
-                var messages_in_period_full = _.filter(messages_sorted_by_date, function(msg){
-                    var d = new Date(msg.date);
-                    return d >= date_min && d <= date_max;
-                });
-
-                var authors_in_period = _.map(messages_in_period_full, function(msg){return msg.idCreator;});
-                console.log("authors_in_period:");
-                console.log(authors_in_period);
-                authors_in_period = _.uniq(authors_in_period);
-                console.log("authors_in_period:");
-                console.log(authors_in_period);
-                authors_in_period_total = authors_in_period.length;
-                // TODO
-                //var new_authors_in_period = _.difference(authors_in_period - messages_authors;
-
-                // -----
-                // show results
-                // -----
-                //that.$el.find(".statistics").html("<h2>Statistics since " + statsPeriodName + "</h2><div id='stats_messages'>Messages posted: " + messages_in_period_total + " (" + messages_total + " since the beginning of the debate)");
-                that.stats = {
-                    "statsPeriodName": statsPeriodName,
-                    "messages_in_period_total": messages_in_period_total,
-                    "messages_total": messages_total
-                }
-
-                //that.drawLineGraph(messages_per_day_totals_array);
-                that.messages_in_period = messages_in_period;
-                //that.drawLineGraph(messages_in_period);
-                //that.drawLineGraph(messages_per_day_totals_filled_array);
-
-                var messages_from_new_authors_in_current_period = messages_in_period_total - 1; // TODO: real value
-
-                var pie_chart_data = [
-                    "Messages since the beginning of the debate",
-                    messages_total,
-                    0,
-                    {
-                        "Messages posted during the current period": [
-                            "Messages posted during the current period",
-                            messages_in_period_total,
-                            0,
-                            {
-                                "Messages from new authors": [
-                                    "Messages from new authors",
-                                    messages_from_new_authors_in_current_period,
-                                    0,
-                                    {}
-                                ],
-                                "Messages from old authors": [
-                                    "Messages from old authors",
-                                    messages_in_period_total-messages_from_new_authors_in_current_period,
-                                    0,
-                                    {}
-                                ]
+                    /*
+                     * data: { "2012-01-01" : 42 }
+                     * first_date: Date object // was "2012-01-01"
+                     * last_date: Date object // was "2012-01-01"
+                     */
+                    function fillMissingDays(data, first_date, last_date) {
+                        //var first_date = new Date(first_day);
+                        //var last_date = new Date(last_day);
+                        // use new Date(first_date.getTime()) to clone the Date object
+                        for (var d = new Date(first_date.getTime()); d <= last_date; d.setDate(d.getDate() + 1)) {
+                            var key = convertDateTimeToDate(d.toISOString());
+                            if (!( key in data)) {
+                                data[key] = 0;
                             }
-                        ],
-                        "Messages posted before current period": [
-                            "Messages posted before current period",
-                            messages_total-messages_in_period_total,
-                            0,
-                            {}
-                        ]
+                        }
+                        return data;
                     }
-                ];
 
-                that.pie_chart_data = pie_chart_data;
-                //that.drawPieChart(pie_chart_data);
-                that.render();
-            });
+                    var messages_per_day_totals_filled = fillMissingDays(messages_per_day_totals, date_min, date_max);
+                    //console.log("messages_per_day_totals_filled:");
+                    //console.log(messages_per_day_totals_filled);
+
+
+                    // convert object to array
+
+                    var messages_per_day_totals_filled_array = [];
+                    for (v in messages_per_day_totals_filled) {
+                        messages_per_day_totals_filled_array.push({ 'date': new Date(v), 'value': messages_per_day_totals_filled[v] });
+                    }
+                    //console.log("messages_per_day_totals_filled_array:");
+                    //console.log(messages_per_day_totals_filled_array);
+
+
+                    var messages_in_period = _.filter(messages_per_day_totals_filled_array, function (msg) {
+                        return (msg.date >= date_min && msg.date <= date_max);
+                    });
+
+                    console.log("messages_in_period:");
+                    console.log(messages_in_period);
+
+
+                    messages_in_period = _.sortBy(messages_in_period, function (msg) {
+                        return msg.date;
+                    });
+
+
+                    // accumulate messages. maybe we should not start at 0 but at the accumulated value on start date (accumulated from the beginning of the debate)
+                    var messages_in_period_total = 0;
+                    _.each(messages_in_period, function (msg) {
+                        messages_in_period_total += msg.value;
+                        //msg.value = messages_in_period_total;
+                    });
+
+
+                    // -----
+                    // compute messages authors for 2 periods: current period and since the beginning of the debate
+                    // -----
+
+                    var messages_authors = _.map(messages_sorted_by_date, function (msg) {
+                        return msg.idCreator;
+                    });
+                    console.log("messages_authors:");
+                    console.log(messages_authors);
+                    messages_authors = _.uniq(messages_authors);
+                    console.log("messages_authors:");
+                    console.log(messages_authors);
+                    messages_authors_total = messages_authors.length;
+
+                    var messages_in_period_full = _.filter(messages_sorted_by_date, function (msg) {
+                        var d = new Date(msg.date);
+                        return d >= date_min && d <= date_max;
+                    });
+
+                    var authors_in_period = _.map(messages_in_period_full, function (msg) {
+                        return msg.idCreator;
+                    });
+                    console.log("authors_in_period:");
+                    console.log(authors_in_period);
+                    authors_in_period = _.uniq(authors_in_period);
+                    console.log("authors_in_period:");
+                    console.log(authors_in_period);
+                    authors_in_period_total = authors_in_period.length;
+                    // TODO
+                    //var new_authors_in_period = _.difference(authors_in_period - messages_authors;
+
+                    // -----
+                    // show results
+                    // -----
+                    //that.$el.find(".statistics").html("<h2>Statistics since " + statsPeriodName + "</h2><div id='stats_messages'>Messages posted: " + messages_in_period_total + " (" + messages_total + " since the beginning of the debate)");
+                    that.stats = {
+                        "statsPeriodName": statsPeriodName,
+                        "messages_in_period_total": messages_in_period_total,
+                        "messages_total": messages_total
+                    }
+
+                    //that.drawLineGraph(messages_per_day_totals_array);
+                    that.messages_in_period = messages_in_period;
+                    //that.drawLineGraph(messages_in_period);
+                    //that.drawLineGraph(messages_per_day_totals_filled_array);
+
+                    var messages_from_new_authors_in_current_period = messages_in_period_total - 1; // TODO: real value
+
+                    var pie_chart_data = [
+                        "Messages since the beginning of the debate",
+                        messages_total,
+                        0,
+                        {
+                            "Messages posted during the current period": [
+                                "Messages posted during the current period",
+                                messages_in_period_total,
+                                0,
+                                {
+                                    "Messages from new authors": [
+                                        "Messages from new authors",
+                                        messages_from_new_authors_in_current_period,
+                                        0,
+                                        {}
+                                    ],
+                                    "Messages from old authors": [
+                                        "Messages from old authors",
+                                            messages_in_period_total - messages_from_new_authors_in_current_period,
+                                        0,
+                                        {}
+                                    ]
+                                }
+                            ],
+                            "Messages posted before current period": [
+                                "Messages posted before current period",
+                                    messages_total - messages_in_period_total,
+                                0,
+                                {}
+                            ]
+                        }
+                    ];
+
+                    that.pie_chart_data = pie_chart_data;
+                    //that.drawPieChart(pie_chart_data);
+                    that.render();
+                });
         },
 
-        draw: function() {
+        draw: function () {
             // -----
             // show results
             // -----
@@ -350,7 +339,7 @@ define(function(require){
             this.drawPieChart(this.pie_chart_data);
         },
 
-        drawLineGraph: function(data){
+        drawLineGraph: function (data) {
             var w = 600,
                 h = 250,
                 that = this;
@@ -367,7 +356,9 @@ define(function(require){
             function draw() {
                 //var data = generateData();
                 var margin = 30;
-                var max = d3.max(data, function(d) { return d.value });
+                var max = d3.max(data, function (d) {
+                    return d.value
+                });
                 var min = 0;
                 var pointRadius = 3;
                 var x = d3.time.scale().range([0, w - margin * 2]).domain([data[0].date, data[data.length - 1].date]);
@@ -383,11 +374,11 @@ define(function(require){
                 if (chart_div.empty()) {
                     svg = d3.select(chart_div[0])
                         .append('svg:svg')
-                            .attr('width', w)
-                            .attr('height', h)
-                            .attr('class', 'viz')
+                        .attr('width', w)
+                        .attr('height', h)
+                        .attr('class', 'viz')
                         .append('svg:g')
-                            .attr('transform', 'translate(' + margin + ',' + margin + ')');
+                        .attr('transform', 'translate(' + margin + ',' + margin + ')');
                 } else {
                     svg = d3.select(chart_div).select('svg').select('g');
                 }
@@ -420,47 +411,47 @@ define(function(require){
                 }
 
                 var dataLines = dataLinesGroup.selectAll('.data-line')
-                        .data([data]);
+                    .data([data]);
 
                 var line = d3.svg.line()
                     // assign the X function to plot our line as we wish
-                    .x(function(d,i) { 
+                    .x(function (d, i) {
                         // verbose logging to show what's actually being done
                         //console.log('Plotting X value for date: ' + d.date + ' using index: ' + i + ' to be at: ' + x(d.date) + ' using our xScale.');
                         // return the X coordinate where we want to plot this datapoint
-                        return x(d.date); 
+                        return x(d.date);
                     })
-                    .y(function(d) { 
+                    .y(function (d) {
                         // verbose logging to show what's actually being done
                         //console.log('Plotting Y value for data value: ' + d.value + ' to be at: ' + y(d.value) + " using our yScale.");
                         // return the Y coordinate where we want to plot this datapoint
-                        return y(d.value); 
+                        return y(d.value);
                     })
                     .interpolate("linear");
 
 
                 var garea = d3.svg.area()
                     .interpolate("linear")
-                    .x(function(d) { 
+                    .x(function (d) {
                         // verbose logging to show what's actually being done
-                        return x(d.date); 
+                        return x(d.date);
                     })
-                            .y0(h - margin * 2)
-                    .y1(function(d) { 
+                    .y0(h - margin * 2)
+                    .y1(function (d) {
                         // verbose logging to show what's actually being done
-                        return y(d.value); 
+                        return y(d.value);
                     });
 
                 dataLines
                     .enter()
                     .append('svg:path')
-                            .attr("class", "area")
-                            .attr("d", garea(data));
+                    .attr("class", "area")
+                    .attr("d", garea(data));
 
                 dataLines.enter().append('path')
-                     .attr('class', 'data-line')
-                     .style('opacity', 0.3)
-                     .attr("d", line(data));
+                    .attr('class', 'data-line')
+                    .style('opacity', 0.3)
+                    .attr("d", line(data));
 
                 // BUG: d in the inner function is the whole array, not elements.
                 // dataLines.transition()
@@ -474,10 +465,11 @@ define(function(require){
                     .transition()
                     .attr("d", line)
                     .duration(transitionDuration)
-                                    .attr("transform", function(d) {
-                                        return "translate(" + x(d.date) + "," + y(0) + ")"; })
-                        .style('opacity', 1e-6)
-                        .remove();
+                    .attr("transform", function (d) {
+                        return "translate(" + x(d.date) + "," + y(0) + ")";
+                    })
+                    .style('opacity', 1e-6)
+                    .remove();
 
                 d3.selectAll(".area").transition()
                     .duration(transitionDuration)
@@ -493,68 +485,85 @@ define(function(require){
 
                 circles
                     .enter()
-                        .append('svg:circle')
-                            .attr('class', 'data-point')
-                            .attr('title', function() {
-                              var d = this.__data__;
-                              return d.date.toDateString() + '\n' + d.value; 
-                            })
-                            .style('opacity', 1e-6)
-                            .attr('cx', function(d) { return x(d.date) })
-                            .attr('cy', function() { return y(0) })
-                            .attr('r', function() { return (data.length <= maxDataPointsForDots) ? pointRadius : 0 })
-                        .transition()
-                        .duration(transitionDuration)
-                            .style('opacity', 1)
-                            .attr('cx', function(d) { return x(d.date) })
-                            .attr('cy', function(d) { return y(d.value) });
+                    .append('svg:circle')
+                    .attr('class', 'data-point')
+                    .attr('title', function () {
+                        var d = this.__data__;
+                        return d.date.toDateString() + '\n' + d.value;
+                    })
+                    .style('opacity', 1e-6)
+                    .attr('cx', function (d) {
+                        return x(d.date)
+                    })
+                    .attr('cy', function () {
+                        return y(0)
+                    })
+                    .attr('r', function () {
+                        return (data.length <= maxDataPointsForDots) ? pointRadius : 0
+                    })
+                    .transition()
+                    .duration(transitionDuration)
+                    .style('opacity', 1)
+                    .attr('cx', function (d) {
+                        return x(d.date)
+                    })
+                    .attr('cy', function (d) {
+                        return y(d.value)
+                    });
 
                 circles
                     .transition()
                     .duration(transitionDuration)
-                        .attr('cx', function(d) { return x(d.date) })
-                        .attr('cy', function(d) { return y(d.value) })
-                        .attr('r', function() { return (data.length <= maxDataPointsForDots) ? pointRadius : 0 })
-                        .style('opacity', 1);
+                    .attr('cx', function (d) {
+                        return x(d.date)
+                    })
+                    .attr('cy', function (d) {
+                        return y(d.value)
+                    })
+                    .attr('r', function () {
+                        return (data.length <= maxDataPointsForDots) ? pointRadius : 0
+                    })
+                    .style('opacity', 1);
 
                 circles
                     .exit()
-                        .transition()
-                        .duration(transitionDuration)
-                            // Leave the cx transition off. Allowing the points to fall where they lie is best.
-                            //.attr('cx', function(d, i) { return xScale(i) })
-                            .attr('cy', function() { return y(0) })
-                            .style("opacity", 1e-6)
-                            .remove();
+                    .transition()
+                    .duration(transitionDuration)
+                    // Leave the cx transition off. Allowing the points to fall where they lie is best.
+                    //.attr('cx', function(d, i) { return xScale(i) })
+                    .attr('cy', function () {
+                        return y(0)
+                    })
+                    .style("opacity", 1e-6)
+                    .remove();
                 /*
-                $('svg circle').tipsy({ 
-                    gravity: 'w', 
-                    html: true, 
-                    title: function() {
-                        var d = this.__data__;
-                        var pDate = d.date;
-                        return 'Date: ' + pDate + '<br>Value: ' + d.value; 
-                    }
-                });
-                */
+                 $('svg circle').tipsy({
+                 gravity: 'w',
+                 html: true,
+                 title: function() {
+                 var d = this.__data__;
+                 var pDate = d.date;
+                 return 'Date: ' + pDate + '<br>Value: ' + d.value;
+                 }
+                 });
+                 */
             }
 
             draw();
 
         },
 
-        drawPieChart: function(code_hierarchy_data){
+        drawPieChart: function (code_hierarchy_data) {
             /*
-            taken from:
-            http://bl.ocks.org/adewes/4710330/94a7c0aeb6f09d681dbfdd0e5150578e4935c6ae
-            http://www.andreas-dewes.de/code_is_beautiful/
-            */
+             taken from:
+             http://bl.ocks.org/adewes/4710330/94a7c0aeb6f09d681dbfdd0e5150578e4935c6ae
+             http://www.andreas-dewes.de/code_is_beautiful/
+             */
             var that = this;
-            function init_code_hierarchy_plot(element_name, data)
-            {
-                var plot = that.$el.find('.'+element_name)[0];
-                while (plot.hasChildNodes())
-                {
+
+            function init_code_hierarchy_plot(element_name, data) {
+                var plot = that.$el.find('.' + element_name)[0];
+                while (plot.hasChildNodes()) {
                     plot.removeChild(plot.firstChild);
                 }
 
@@ -565,9 +574,9 @@ define(function(require){
                 var name_index = 0;
                 var count_index = 1;
                 var children_index = 3;
-                
-                var max_depth=3;
-                
+
+                var max_depth = 3;
+
                 var data_slices = [];
                 var max_level = 4;
                 var color = d3.scale.category20c();
@@ -577,211 +586,202 @@ define(function(require){
                     .attr("height", height)
                     .append("g")
                     .attr("transform", "translate(" + width / 2 + "," + height * .52 + ")");
-                      
-                function process_data(data,level,start_deg,stop_deg)
-                {
+
+                function process_data(data, level, start_deg, stop_deg) {
                     var name = data[0];
                     var total = data[1];
                     var children = data[3];
                     var current_deg = start_deg;
-                    if (level > max_level)
-                    {
+                    if (level > max_level) {
                         return;
                     }
-                    if (start_deg == stop_deg)
-                    {
+                    if (start_deg == stop_deg) {
                         return;
                     }
-                    data_slices.push([start_deg,stop_deg,name,level,data[1],data[2]]);
-                    for (var key in children)
-                    {
+                    data_slices.push([start_deg, stop_deg, name, level, data[1], data[2]]);
+                    for (var key in children) {
                         child = children[key];
-                        var inc_deg = (stop_deg-start_deg)/total*child[count_index];
+                        var inc_deg = (stop_deg - start_deg) / total * child[count_index];
                         var child_start_deg = current_deg;
-                        current_deg+=inc_deg;
+                        current_deg += inc_deg;
                         var child_stop_deg = current_deg;
-                        var span_deg = child_stop_deg-child_start_deg;
-                        process_data(child,level+1,child_start_deg,child_stop_deg);
+                        var span_deg = child_stop_deg - child_start_deg;
+                        process_data(child, level + 1, child_start_deg, child_stop_deg);
                     }
                 }
-                
-                process_data(data,0,0,360./180.0*Math.PI);
+
+                process_data(data, 0, 0, 360. / 180.0 * Math.PI);
 
                 var ref = data_slices[0];
                 var next_ref = ref;
                 var last_refs = [];
 
-                var thickness = width/2.0/(max_level+2)*1.1;
-                    
+                var thickness = width / 2.0 / (max_level + 2) * 1.1;
+
                 var arc = d3.svg.arc()
-                .startAngle(function(d) { if(d[3]==0){return d[0];}return d[0]+0.01; })
-                .endAngle(function(d) { if(d[3]==0){return d[1];}return d[1]-0.01; })
-                .innerRadius(function(d) { return 1.1*d[3]*thickness; })
-                .outerRadius(function(d) { return (1.1*d[3]+1)*thickness; });    
+                    .startAngle(function (d) {
+                        if (d[3] == 0) {
+                            return d[0];
+                        }
+                        return d[0] + 0.01;
+                    })
+                    .endAngle(function (d) {
+                        if (d[3] == 0) {
+                            return d[1];
+                        }
+                        return d[1] - 0.01;
+                    })
+                    .innerRadius(function (d) {
+                        return 1.1 * d[3] * thickness;
+                    })
+                    .outerRadius(function (d) {
+                        return (1.1 * d[3] + 1) * thickness;
+                    });
 
                 var slices = svg.selectAll(".form")
-                    .data(function(d) { return data_slices; })
+                    .data(function (d) {
+                        return data_slices;
+                    })
                     .enter()
                     .append("g");
-                    slices.append("path")
+                slices.append("path")
                     .attr("d", arc)
-                    .attr("id",function(d,i){return element_name+i;})
-                    .style("fill", function(d) { return color(d[2]);})
-                    .on("click",animate)
-                    .on("mouseover",update_legend)
-                    .on("mouseout",remove_legend)
-                    .attr("class","form")
+                    .attr("id", function (d, i) {
+                        return element_name + i;
+                    })
+                    .style("fill", function (d) {
+                        return color(d[2]);
+                    })
+                    .on("click", animate)
+                    .on("mouseover", update_legend)
+                    .on("mouseout", remove_legend)
+                    .attr("class", "form")
                     .append("svg:title")
-                    .text(function(d) { return d[2]+","+d[3]; });
+                    .text(function (d) {
+                        return d[2] + "," + d[3];
+                    });
 
-                var legend_div = that.$el.find('.'+element_name+'_legend');
+                var legend_div = that.$el.find('.' + element_name + '_legend');
                 var legend = d3.select(legend_div);
-                    
-                function update_legend(d)
-                {
+
+                function update_legend(d) {
                     //legend.html("<h2>"+d[2]+"&nbsp;</h2><p>"+d[4]+" messages, by "+d[5]+" authors.</p>");
-                    legend.html("<h2>"+d[2]+"&nbsp;</h2><p>"+d[4]+" messages</p>");
-                    legend.transition().duration(200).style("opacity","1");
+                    legend.html("<h2>" + d[2] + "&nbsp;</h2><p>" + d[4] + " messages</p>");
+                    legend.transition().duration(200).style("opacity", "1");
                 }
-                
-                function remove_legend(d)
-                {
-                    legend.transition().duration(1000).style("opacity","0");
+
+                function remove_legend(d) {
+                    legend.transition().duration(1000).style("opacity", "0");
                     //legend.html("<h2>&nbsp;</h2>")
                 }
-                
-                function get_start_angle(d,ref)
-                {
-                    if (ref)
-                    {
-                        var ref_span = ref[1]-ref[0];
-                        return (d[0]-ref[0])/ref_span*Math.PI*2.0
+
+                function get_start_angle(d, ref) {
+                    if (ref) {
+                        var ref_span = ref[1] - ref[0];
+                        return (d[0] - ref[0]) / ref_span * Math.PI * 2.0
                     }
-                    else
-                    {
+                    else {
                         return d[0];
                     }
                 }
-                
-                function get_stop_angle(d,ref)
-                {
-                    if (ref)
-                    {
-                        var ref_span = ref[1]-ref[0];
-                        return (d[1]-ref[0])/ref_span*Math.PI*2.0
+
+                function get_stop_angle(d, ref) {
+                    if (ref) {
+                        var ref_span = ref[1] - ref[0];
+                        return (d[1] - ref[0]) / ref_span * Math.PI * 2.0
                     }
-                    else
-                    {
+                    else {
                         return d[0];
                     }
                 }
-                
-                function get_level(d,ref)
-                {
-                    if (ref)
-                    {
-                        return d[3]-ref[3];
+
+                function get_level(d, ref) {
+                    if (ref) {
+                        return d[3] - ref[3];
                     }
-                    else
-                    {
+                    else {
                         return d[3];
                     }
                 }
-                
-                function rebaseTween(new_ref)
-                {
-                    return function(d)
-                    {
-                        var level = d3.interpolate(get_level(d,ref),get_level(d,new_ref));
-                        var start_deg = d3.interpolate(get_start_angle(d,ref),get_start_angle(d,new_ref));
-                        var stop_deg = d3.interpolate(get_stop_angle(d,ref),get_stop_angle(d,new_ref));
-                        var opacity = d3.interpolate(100,0);
-                        return function(t)
-                        {
-                            return arc([start_deg(t),stop_deg(t),d[2],level(t)]);
+
+                function rebaseTween(new_ref) {
+                    return function (d) {
+                        var level = d3.interpolate(get_level(d, ref), get_level(d, new_ref));
+                        var start_deg = d3.interpolate(get_start_angle(d, ref), get_start_angle(d, new_ref));
+                        var stop_deg = d3.interpolate(get_stop_angle(d, ref), get_stop_angle(d, new_ref));
+                        var opacity = d3.interpolate(100, 0);
+                        return function (t) {
+                            return arc([start_deg(t), stop_deg(t), d[2], level(t)]);
                         }
                     }
                 }
-                
+
                 var animating = false;
-                
+
                 function animate(d) {
-                    if (animating)
-                    {
+                    if (animating) {
                         return;
                     }
                     animating = true;
                     var revert = false;
                     var new_ref;
-                    if (d == ref && last_refs.length > 0)
-                    {
+                    if (d == ref && last_refs.length > 0) {
                         revert = true;
                         last_ref = last_refs.pop();
                     }
-                    if (revert)
-                    {
+                    if (revert) {
                         d = last_ref;
                         new_ref = ref;
                         svg.selectAll(".form")
-                        .filter(
-                            function (b)
-                            {
-                                if (b[0] >= last_ref[0] && b[1] <= last_ref[1]  && b[3] >= last_ref[3])
-                                {
+                            .filter(
+                            function (b) {
+                                if (b[0] >= last_ref[0] && b[1] <= last_ref[1] && b[3] >= last_ref[3]) {
                                     return true;
                                 }
                                 return false;
                             }
                         )
-                        .transition().duration(1000).style("opacity","1").attr("pointer-events","all");
+                            .transition().duration(1000).style("opacity", "1").attr("pointer-events", "all");
                     }
-                    else
-                    {
+                    else {
                         new_ref = d;
                         svg.selectAll(".form")
-                        .filter(
-                            function (b)
-                            {
-                                if (b[0] < d[0] || b[1] > d[1] || b[3] < d[3])
-                                {
+                            .filter(
+                            function (b) {
+                                if (b[0] < d[0] || b[1] > d[1] || b[3] < d[3]) {
                                     return true;
                                 }
                                 return false;
                             }
                         )
-                        .transition().duration(1000).style("opacity","0").attr("pointer-events","none");
+                            .transition().duration(1000).style("opacity", "0").attr("pointer-events", "none");
                     }
                     svg.selectAll(".form")
-                    .filter(
-                        function (b)
-                        {
-                            if (b[0] >= new_ref[0] && b[1] <= new_ref[1] && b[3] >= new_ref[3])
-                            {
+                        .filter(
+                        function (b) {
+                            if (b[0] >= new_ref[0] && b[1] <= new_ref[1] && b[3] >= new_ref[3]) {
                                 return true;
                             }
                             return false;
                         }
                     )
-                    .transition().duration(1000).attrTween("d",rebaseTween(d));
-                    setTimeout(function(){
+                        .transition().duration(1000).attrTween("d", rebaseTween(d));
+                    setTimeout(function () {
                         animating = false;
-                        if (! revert)
-                        {
+                        if (!revert) {
                             last_refs.push(ref);
                             ref = d;
                         }
-                        else
-                        {
+                        else {
                             ref = d;
                         }
-                    },1000);
+                    }, 1000);
                 };
 
             }
 
-            function init_plots()
-            {
-                init_code_hierarchy_plot("code_hierarchy",code_hierarchy_data);
+            function init_plots() {
+                init_code_hierarchy_plot("code_hierarchy", code_hierarchy_data);
             }
 
             //window.onload = init_plots;

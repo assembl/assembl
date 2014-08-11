@@ -1,9 +1,9 @@
-define(function(require){
+define(function (require) {
     'use strict';
 
     var Assembl = require('modules/assembl'),
-            Ctx = require('modules/context'),
-       IdeaView = require('views/idea');
+        Ctx = require('modules/context'),
+        IdeaView = require('views/idea');
 
     var OrphanMessagesInIdeaListView = IdeaView.extend({
         /**
@@ -15,12 +15,12 @@ define(function(require){
         /**
          * The render
          */
-        render: function(){
+        render: function () {
             Ctx.removeCurrentlyDisplayedTooltips(this.$el);
             var data = this.model.toJSON();
 
             this.$el.addClass('idealist-item');
-            if(this.model.get('num_orphan_posts') == 0) {
+            if (this.model.get('num_orphan_posts') == 0) {
                 this.$el.addClass('hidden');
             }
             else {
@@ -42,7 +42,7 @@ define(function(require){
         /**
          * @event
          */
-        onTitleClick: function(){
+        onTitleClick: function () {
             Assembl.vent.trigger('messageList:addFilterIsOrphanMessage');
             Ctx.setCurrentIdea(null);
             this.groupContent.resetDebateState();

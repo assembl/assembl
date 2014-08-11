@@ -1,12 +1,12 @@
-define(function(require){
+define(function (require) {
     'use strict';
 
-       var ckeditor = require('ckeditor'),
-                Ctx = require('modules/context'),
+    var ckeditor = require('ckeditor'),
+        Ctx = require('modules/context'),
         MessageView = require('views/message'),
-          Synthesis = require('models/synthesis'),
-     SynthesisPanel = require('views/synthesisPanel'),
-  CollectionManager = require('modules/collectionManager');
+        Synthesis = require('models/synthesis'),
+        SynthesisPanel = require('views/synthesisPanel'),
+        CollectionManager = require('modules/collectionManager');
 
     /**
      * @class views.MessageView
@@ -16,13 +16,13 @@ define(function(require){
         /**
          * @init
          */
-        initialize: function(obj){
-          var that = this,
-              collectionManager = new CollectionManager();
-          MessageView.prototype.initialize.apply(this, arguments);
-          this.stopListening(this.messageListView, 'annotator:initComplete', this.onAnnotatorInitComplete);
-          this.synthesisId = this.model.get('publishes_synthesis');
-          this.allSynthesisCollectionPromise = collectionManager.getAllSynthesisCollectionPromise()
+        initialize: function (obj) {
+            var that = this,
+                collectionManager = new CollectionManager();
+            MessageView.prototype.initialize.apply(this, arguments);
+            this.stopListening(this.messageListView, 'annotator:initComplete', this.onAnnotatorInitComplete);
+            this.synthesisId = this.model.get('publishes_synthesis');
+            this.allSynthesisCollectionPromise = collectionManager.getAllSynthesisCollectionPromise()
         },
 
         /**
@@ -35,11 +35,11 @@ define(function(require){
          * Meant for derived classes to override
          * @type {}
          */
-        transformDataBeforeRender: function(data) {
+        transformDataBeforeRender: function (data) {
             data['subject'] = '';
             data['body'] = '';
-            if(this.viewStyle == this.availableMessageViewStyles.PREVIEW) {
-              data['bodyFormat'] = "text/plain";
+            if (this.viewStyle == this.availableMessageViewStyles.PREVIEW) {
+                data['bodyFormat'] = "text/plain";
             }
             return data;
         },
@@ -47,39 +47,39 @@ define(function(require){
          * Meant for derived classes to override
          * @type {}
          */
-        postRender: function() {
+        postRender: function () {
             var that = this,
                 body;
             this.allSynthesisCollectionPromise.done(
-                function(allSynthesisCollection) {
-                  var synthesis = allSynthesisCollection.get(that.synthesisId);
-                  if (!synthesis) {
-                    // TODO
-                    console.log("BUG: Could not get synthesis after post. Maybe too early.")
-                    return;
-                  }
-                  that.$('.message-subject').html(synthesis.get('subject'));
-                  that.synthesisPanel = new SynthesisPanel({
-                    model: synthesis
-                  });
-                  that.synthesisPanel.template = Ctx.loadTemplate('synthesisPanelMessage');
-                  that.synthesisPanel.render();
-                  if(that.viewStyle == that.availableMessageViewStyles.PREVIEW) {
-                    //Strip HTML from preview
-                    //bodyFormat = "text/plain";
-                    body = $(that.synthesisPanel.el).text();
-                    that.$('.message-body > div').prepend(body);
-                  }
-                  else {
-                    body = that.synthesisPanel.el;
-                    that.$('.message-body').html(body);
-                  }
-                  
+                function (allSynthesisCollection) {
+                    var synthesis = allSynthesisCollection.get(that.synthesisId);
+                    if (!synthesis) {
+                        // TODO
+                        console.log("BUG: Could not get synthesis after post. Maybe too early.")
+                        return;
+                    }
+                    that.$('.message-subject').html(synthesis.get('subject'));
+                    that.synthesisPanel = new SynthesisPanel({
+                        model: synthesis
+                    });
+                    that.synthesisPanel.template = Ctx.loadTemplate('synthesisPanelMessage');
+                    that.synthesisPanel.render();
+                    if (that.viewStyle == that.availableMessageViewStyles.PREVIEW) {
+                        //Strip HTML from preview
+                        //bodyFormat = "text/plain";
+                        body = $(that.synthesisPanel.el).text();
+                        that.$('.message-body > div').prepend(body);
+                    }
+                    else {
+                        body = that.synthesisPanel.el;
+                        that.$('.message-body').html(body);
+                    }
+
                 });
-            
+
             return;
         }
-        
+
     });
 
 

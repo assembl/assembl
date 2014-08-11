@@ -1,9 +1,9 @@
 define(function (require) {
 
     var Marionette = require('marionette'),
-               ctx = require('modules/context'),
-         panelSpec = require('models/panelSpec'),
-      PanelWrapper = require('views/groups/panelWrapper');
+        ctx = require('modules/context'),
+        panelSpec = require('models/panelSpec'),
+        PanelWrapper = require('views/groups/panelWrapper');
 
     /** Reprents the content of an entire group */
     var groupContent = Marionette.CompositeView.extend({
@@ -16,29 +16,29 @@ define(function (require) {
 
         _stateButton: null,
 
-        initialize: function(options){
-          this.collection = this.model.get('panels');
+        initialize: function (options) {
+            this.collection = this.model.get('panels');
         },
-        events:{
-           'click .close-group':'closeGroup',
-           'click .lock-group':'toggleLock'
+        events: {
+            'click .close-group': 'closeGroup',
+            'click .lock-group': 'toggleLock'
         },
-        onRender: function(){
-           this._stateButton = this.$('.lock-group i');
+        onRender: function () {
+            this._stateButton = this.$('.lock-group i');
         },
-        closeGroup: function(){
-           this.unbind();
-           this.model.collection.remove(this.model);
+        closeGroup: function () {
+            this.unbind();
+            this.model.collection.remove(this.model);
         },
 
         /**
          * Tell the panelWrapper which view to put in its contents
          */
-        childViewOptions: function(child, index) {
-          return {
-            groupContent: this,
-            contentSpec: child
-          }
+        childViewOptions: function (child, index) {
+            return {
+                groupContent: this,
+                contentSpec: child
+            }
         },
 
         /**
@@ -113,118 +113,115 @@ define(function (require) {
             }
         },
 
-        resetDebateState: function() {
-          var currentIdea = ctx.getCurrentIdea();
-          this.removePanels('homePanel');
-          if (ctx.getCurrentIdea() == undefined) {
-            this.ensurePanelsVisible('messageList');
-            this.ensurePanelsHidden('ideaPanel');
-          } else {
-            this.ensurePanelsVisible('ideaPanel', 'messageList');
-          }
+        resetDebateState: function () {
+            var currentIdea = ctx.getCurrentIdea();
+            this.removePanels('homePanel');
+            if (ctx.getCurrentIdea() == undefined) {
+                this.ensurePanelsVisible('messageList');
+                this.ensurePanelsHidden('ideaPanel');
+            } else {
+                this.ensurePanelsVisible('ideaPanel', 'messageList');
+            }
         },
 
         /**
          * @params list of panel names
          */
-        removePanels: function(){
-          this.model.removePanels.apply(this.model, arguments);
+        removePanels: function () {
+            this.model.removePanels.apply(this.model, arguments);
         },
 
-        addPanel: function(options, position) {
-          this.model.addPanel(options, position);
+        addPanel: function (options, position) {
+            this.model.addPanel(options, position);
         },
 
-        ensurePanel: function(options, position) {
-          this.model.ensurePanel(options, position);
+        ensurePanel: function (options, position) {
+            this.model.ensurePanel(options, position);
         },
 
-        getViewByTypeName: function(typeName) {
-          var model = this.model.getPanelSpecByType(typeName);
-          if (model !== undefined) {
-            var view = this.children.findByModel(model);
-            if (view.contents !== undefined) {
-              // wrapper
-              view = view.contents.currentView;
+        getViewByTypeName: function (typeName) {
+            var model = this.model.getPanelSpecByType(typeName);
+            if (model !== undefined) {
+                var view = this.children.findByModel(model);
+                if (view.contents !== undefined) {
+                    // wrapper
+                    view = view.contents.currentView;
+                }
+                return view;
             }
-            return view;
-          }
         },
 
         /**
          * @params list of panel names
          */
-        ensureOnlyPanelsVisible: function(){
-          var that = this;
-          var args = Array.prototype.slice.call(arguments);
-          var panels = this.model.get('panels');
-          // add missing panels
-          this.model.ensurePanelsAt(args, 1);
-          // show and hide panels
-          _.each(this.model.get('panels').models, function(aPanelSpec){
-            if ( aPanelSpec.get('type') == 'navSidebar')
-              return;
-            var view = that.children.findByModel(aPanelSpec);
-            if ( !view )
-              return;
-            var shouldBeVisible = _.contains(args, aPanelSpec.get('type'));
-            // TODO: compute isAlreadyVisible and show() or hide() with animation only if state is different
-            if ( shouldBeVisible )
-            {
-              view.$el.show();
-            }
-            else
-            {
-              view.$el.hide();
-            }
-          });
+        ensureOnlyPanelsVisible: function () {
+            var that = this;
+            var args = Array.prototype.slice.call(arguments);
+            var panels = this.model.get('panels');
+            // add missing panels
+            this.model.ensurePanelsAt(args, 1);
+            // show and hide panels
+            _.each(this.model.get('panels').models, function (aPanelSpec) {
+                if (aPanelSpec.get('type') == 'navSidebar')
+                    return;
+                var view = that.children.findByModel(aPanelSpec);
+                if (!view)
+                    return;
+                var shouldBeVisible = _.contains(args, aPanelSpec.get('type'));
+                // TODO: compute isAlreadyVisible and show() or hide() with animation only if state is different
+                if (shouldBeVisible) {
+                    view.$el.show();
+
+                } else {
+
+                    view.$el.hide();
+                }
+            });
         },
 
         /**
          * @params list of panel names
          */
-        ensurePanelsVisible: function(){
-          var that = this;
-          var args = Array.prototype.slice.call(arguments);
-          var panels = this.model.get('panels');
-          // add missing panels
-          this.model.ensurePanelsAt(args, 1);
-          // show and hide panels
-          _.each(this.model.get('panels').models, function(aPanelSpec){
-            if ( aPanelSpec.get('type') == 'navSidebar')
-              return;
-            var view = that.children.findByModel(aPanelSpec);
-            if ( !view )
-              return;
-            var shouldBeVisible = _.contains(args, aPanelSpec.get('type'));
-            // TODO: compute isAlreadyVisible and show() or hide() with animation only if state is different
-            if ( shouldBeVisible )
-            {
-              view.$el.show();
-            }
-          });
+        ensurePanelsVisible: function () {
+            var that = this;
+            var args = Array.prototype.slice.call(arguments);
+            var panels = this.model.get('panels');
+            // add missing panels
+            this.model.ensurePanelsAt(args, 1);
+            // show and hide panels
+            _.each(this.model.get('panels').models, function (aPanelSpec) {
+                if (aPanelSpec.get('type') == 'navSidebar')
+                    return;
+                var view = that.children.findByModel(aPanelSpec);
+                if (!view)
+                    return;
+                var shouldBeVisible = _.contains(args, aPanelSpec.get('type'));
+                // TODO: compute isAlreadyVisible and show() or hide() with animation only if state is different
+                if (shouldBeVisible) {
+                    view.$el.show();
+                }
+            });
         },
 
         /**
          * @params list of panel names
          */
-        ensurePanelsHidden: function(){
-          var that = this;
-          var args = Array.prototype.slice.call(arguments);
-          var panels = this.model.get('panels');
-          // show and hide panels
-          _.each(this.model.get('panels').models, function(aPanelSpec){
-            if ( aPanelSpec.get('type') == 'navSidebar')
-              return;
-            var view = that.children.findByModel(aPanelSpec);
-            if ( !view )
-              return;
-            var shouldBeHidden = _.contains(args, aPanelSpec.get('type'));
-            if ( shouldBeHidden )
-            {
-              view.$el.hide();
-            }
-          });
+        ensurePanelsHidden: function () {
+            var that = this;
+            var args = Array.prototype.slice.call(arguments);
+            var panels = this.model.get('panels');
+            // show and hide panels
+            _.each(this.model.get('panels').models, function (aPanelSpec) {
+                if (aPanelSpec.get('type') == 'navSidebar')
+                    return;
+                var view = that.children.findByModel(aPanelSpec);
+                if (!view)
+                    return;
+                var shouldBeHidden = _.contains(args, aPanelSpec.get('type'));
+                if (shouldBeHidden) {
+                    view.$el.hide();
+                }
+            });
         }
     });
 

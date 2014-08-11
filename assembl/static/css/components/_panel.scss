@@ -1,68 +1,73 @@
 // The panel
 // =========
 .groupPanel {
-  @include box-sizing( border-box );
+  @include box-sizing(border-box);
+  position: relative;
+  z-index: 10;
+  height: 100%;
+  border-right: 1px solid #d9d9d9;
+  background-color: #fff;
+  overflow: hidden;
+  fieldset {
+    margin: 10px 0;
     position: relative;
-    z-index: 10;
-    height: 100%;
-    border-right: 1px solid #d9d9d9;
-    background-color: #fff;
-    overflow: hidden;
-    fieldset {
-        margin: 10px 0;
-        position: relative;
-        legend {
-            height: 1.8em;
-            position: absolute;
-            top: -0.9em; // 1/2 x height
-            padding: 0;
-            font-weight: bold;
-            span {
-                line-height: 1.8em;
-                display: block;
-                margin: 0 0.5em 0.5em 0;
-            }
-        }
+    legend {
+      height: 1.8em;
+      position: absolute;
+      top: -0.9em; // 1/2 x height
+      padding: 0;
+      font-weight: bold;
+      span {
+        line-height: 1.8em;
+        display: block;
+        margin: 0 0.5em 0.5em 0;
+      }
     }
+  }
 
 }
 
 // When is dragging something on
 // ****************
-.panel.is-dragover {}
+.panel.is-dragover {
+}
 
 // blocked and with a loading message
 // ****************
 .panel.is-loading {
-    cursor: wait;
+  cursor: wait;
 
-    &:after {
-        position: absolute;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: 0;
-        @include z-index("float");
+  &:after {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    @include z-index("float");
 
-        display: block;
-        content: "";
+    display: block;
+    content: "";
 
-        @include border-radius( 5px );
-        background: rgba( 0, 0, 0, .15 ) url(#{$img-dir}/panel/loading.gif) no-repeat center center;
-    }
+    @include border-radius(5px);
+    background: rgba(0, 0, 0, .15) url(#{$img-dir}/panel/loading.gif) no-repeat center center;
+  }
 }
 
 // Vertical divisor
 // ----------------
-.panel-divisor {}
+.panel-divisor {
+}
 
 // The header
 // ----------
 .panel-header {
   @include no-selection;
-  * { @include no-selection; }
+  * {
+    @include no-selection;
+  }
   @include z-index("float");
-  padding: 10px 5px;
+  line-height: 35px;
+  padding-left: 10px;
   position: relative;
   background-color: $gray3;
 }
@@ -70,65 +75,63 @@
 // An editable area within the .panel-header
 // ----------------
 .panel-editablearea {
-    @extend .text;
-    @include box-sizing( border-box );
-    display: inline-block;
-    width: 100%;
-    border-radius: 4px;
-    margin: 10px 0;
-    cursor: text;
-    background-color: white;
-    min-height: 30px;
+  @extend .text;
+  @include box-sizing(border-box);
+  display: inline-block;
+  width: 100%;
+  border-radius: 4px;
+  margin: 10px 0;
+  cursor: text;
+  background-color: white;
+  min-height: 30px;
 }
 
 // +++++++
 .panel-editablearea.panel-editablearea--small {
-    width: auto;
-    max-width: 240px;
-    white-space: nowrap;
-    margin: auto;
+  width: auto;
+  max-width: 240px;
+  white-space: nowrap;
+  margin: auto;
 }
 
 // The container for an editablearea
 // ------------------
 .panel-editablebox {
-  border:1px solid transparent;
+  border: 1px solid transparent;
   position: relative;
   &.is-editing {
-      background-color: #dbf2ff;
+    background-color: #dbf2ff;
   }
 }
 
-.panel-editablearea.canEdit{
-  border:1px solid transparent;
+.panel-editablearea.canEdit {
+  border: 1px solid transparent;
   &:hover {
     @include box-shadow(rgba(0, 0, 0, 0.1) 0px 1px 1px inset);
-    border:1px solid #cccccc;
+    border: 1px solid #cccccc;
   }
 }
 
 .panelContents, .panelContents > div {
-    height: 100%;
-    top:0;
-    bottom:0;
+  height: 100%;
 }
 
 // To put the content
 // -----------
 .panel-body {
-    //The scrollbars do not work with position relative
-    position: absolute;
-    top: 30px;
-    right: 0;
-    bottom: 5px;
-    left: 0;
-    overflow-y: auto;
-    overflow-x: hidden;
-    box-sizing: border-box;
+  //The scrollbars do not work with position relative
+  position: absolute;
+  top: 30px;
+  right: 0;
+  bottom: 5px;
+  left: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  box-sizing: border-box;
 
-    .groupPanel.is-dragover & {
-        background-color: $yellow1;
-    }
+  .groupPanel.is-dragover & {
+    background-color: $yellow1;
+  }
 }
 
 .panel-body--has-footer {
@@ -138,40 +141,40 @@
 // dropzone above the panel-body
 // -------
 .panel-bodyabove {
-    //Currently non-functionnal, disabling: benoitg-2014-05-14
-    display: none;
-    @include z-index("float");
+  //Currently non-functionnal, disabling: benoitg-2014-05-14
+  display: none;
+  @include z-index("float");
 
-    position: absolute;
-    top: 30px;
-    right: 0;
-    left: 0;
-    height: 10px;
+  position: absolute;
+  top: 30px;
+  right: 0;
+  left: 0;
+  height: 10px;
 }
 
 // dropzone below the panel-body
 // -------
 .panel-bodybelow {
-    //Currently non-functionnal, disabling: benoitg-2014-05-14
-    display: none;
-    @include z-index("float");
+  //Currently non-functionnal, disabling: benoitg-2014-05-14
+  display: none;
+  @include z-index("float");
 
-    position: absolute;
-    bottom: 30px;
-    right: 0;
-    left: 0;
-    height: 15px;
+  position: absolute;
+  bottom: 30px;
+  right: 0;
+  left: 0;
+  height: 15px;
 }
 
 // The footer
 // ----------
 .panel-footer {
-    @extend .panel-header;
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    border-top: 1px solid #e4e4e3;
-    padding-right: 10px;
-    background-color: $white;
+  @extend .panel-header;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  border-top: 1px solid #e4e4e3;
+  padding-right: 10px;
+  background-color: $white;
 }
