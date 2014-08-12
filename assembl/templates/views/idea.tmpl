@@ -2,7 +2,8 @@
     <% if (hasCheckbox) { %>
     <label class="chk chk--idealist">
         <input type="checkbox" class="chk-checkbox" <% if(inNextSynthesis) { %>checked="checked"<% } %> />
-        <span class="chk-label" data-tooltip-position="w" <% if(inNextSynthesis) { %>data-tooltip="{{ gettext('Remove from next synthesis') }}"<% } else { %>data-tooltip="{{ gettext('Add to next synthesis') }}"<% } %> ></span>
+        <span class="chk-label" data-toggle="tooltip" data-placement="right"
+         <% if(inNextSynthesis) { %>title="{{ gettext('Remove from next synthesis') }}"<% } else { %>title="{{ gettext('Add to next synthesis') }}"<% } %> ></span>
     </label>
     <% }  %>
     <%  var i;
@@ -38,15 +39,15 @@
 
     <% var num_unread_posts = (num_posts - num_read_posts); %>
 
-    <div class="idealist-counter" data-tooltip="{{ gettext('Number of messages related to this idea or its descendants') }}">
+    <div class="idealist-counter" data-toggle="tooltip" title="{{ gettext('Number of messages related to this idea or its descendants') }}">
         <span><%= num_posts %></span>
     </div>
     <div class="idealist-title<% if (num_unread_posts > 0) { %> idealist-title-unread<% } %>" title="<%= shortTitle %>">
         <%= shortTitle %>
         <% if (num_unread_posts > 0) { %>
-        <span class="idealist-title-unread-count" data-tooltip="{{ gettext('Number of unread messages related to this idea or its descendants') }}">(<%= num_unread_posts %>)</span>
+        <span class="idealist-title-unread-count" data-toggle="tooltip" title="{{ gettext('Number of unread messages related to this idea or its descendants') }}">(<%= num_unread_posts %>)</span>
         <% } %>
-        {# (<span class="num-segments" data-tooltip="{{ gettext('Number of caught segments expressing this idea') }}"><%= segments.length %></span>) #}
+        {# (<span class="num-segments" data-toggle="tooltip" title="{{ gettext('Number of caught segments expressing this idea') }}"><%= segments.length %></span>) #}
         {# <small class="idealist-longtitle text-small text-muted"><%= app.stripHtml(longTitle) %></small> #}
     </div>
 

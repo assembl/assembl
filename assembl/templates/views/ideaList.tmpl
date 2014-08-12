@@ -23,10 +23,10 @@
         <span class="text-bold"><%= titles.toc %></span>
 
         <div class="float-right">
-            <a id="ideaList-graphButton" class="iconbutton icon-flow-tree" data-tooltip="{{gettext('Graph of ideas')}}"></a>
-            <a id="ideaList-collapseButton" data-tooltip="<%= collapsed ? '{{gettext('Expand all')}}' : '{{gettext('Collapse all')}}' %>" class="iconbutton <%= collapsed ? 'icon-download-1' : 'icon-upload' %>"></a>
-            <a id="ideaList-fullscreenButton" class="iconbutton iconbutton--resizefull" data-tooltip="{{gettext('Fullsize')}}"></a>
-            <a id="ideaList-closeButton" class="iconbutton icon-cancel" data-tooltip="{{gettext('Close panel')}}"></a>
+            <a id="ideaList-graphButton" class="iconbutton icon-flow-tree" data-toggle="tooltip" title="{{gettext('Graph of ideas')}}"></a>
+            <a id="ideaList-collapseButton" data-toggle="tooltip" title="<%= collapsed ? '{{gettext('Expand all')}}' : '{{gettext('Collapse all')}}' %>" class="iconbutton <%= collapsed ? 'icon-download-1' : 'icon-upload' %>"></a>
+            <a id="ideaList-fullscreenButton" class="iconbutton iconbutton--resizefull" data-toggle="tooltip" title="{{gettext('Fullsize')}}"></a>
+            <a id="ideaList-closeButton" class="iconbutton icon-cancel" data-toggle="tooltip" title="{{gettext('Close panel')}}"></a>
         </div>
     </header>
     

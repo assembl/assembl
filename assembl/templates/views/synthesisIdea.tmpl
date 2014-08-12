@@ -3,7 +3,7 @@
     <% if (hasCheckbox) { %>
     <label class="chk chk--idealist">
         <input type="checkbox" class="chk-checkbox" <% if(inNextSynthesis) { %>checked="checked"<% } %> />
-        <span class="chk-label" <% if(inNextSynthesis) { %>data-tooltip="{{ gettext('Deactivate') }}"<% } else { %>data-tooltip="{{ gettext('Activate') }}"<% } %>></span>
+        <span class="chk-label" <% if(inNextSynthesis) { %>data-toggle="tooltip" title="{{ gettext('Deactivate') }}"<% } else { %>data-toggle="tooltip" title="{{ gettext('Activate') }}"<% } %>></span>
     </label>
     <% }  %>
 

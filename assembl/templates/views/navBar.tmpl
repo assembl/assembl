@@ -25,7 +25,7 @@
                 <img height="25" width="25" src="/user/id/{{user.id}}/avatar/25" alt="{{ user.display_name() }}"/>
                 <span>{{ user.display_name() }}</span>
             {% if user_profile_edit_url %}</a>{% endif %}
-            <a href="/logout" class="sign-out iconbutton icon-logout-1" title="{{ gettext('Sign out') }}">Sign out icon missing...</a>
+            <a href="/logout" class="sign-out iconbutton icon-logout" title="{{ gettext('Sign out') }}"></a>
         {% else %}
             {% if request.current_route_path() != "/login" %}
                 {% if request.current_route_path() != "/register" %}

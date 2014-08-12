@@ -1,7 +1,7 @@
 <div class="idealist-body">
     <label class="chk chk--idealist chk--muted">
         <input type="checkbox" class="chk-checkbox" <%= checked ? 'checked="checked"' : '' %> />
-        <span class="chk-label" data-tooltip="<%= checked ? '{{gettext('Unselect')}}' : '{{gettext('Select')}}' %>"></span>
+        <span class="chk-label" data-toggle="tooltip" title="<%= checked ? '{{gettext('Unselect')}}' : '{{gettext('Select')}}' %>"></span>
     </label>
 
     <% for( var i=1; i<level; i+= 1) { %>

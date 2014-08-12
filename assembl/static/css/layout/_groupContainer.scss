@@ -80,16 +80,15 @@
         position: relative;
         display: block;
         > a {
-          @include box-sizing(border-box);
+          //@include box-sizing(border-box);
           position: relative;
           display: block;
-          height: 35px;
+          //height: 35px;
           text-decoration: none;
           background-color: $gray3;
           border-bottom: 1px solid $white;
           color: $gray;
-          z-index: 2;
-          line-height: 35px;
+          //line-height: 35px;
           padding-left: 10px;
         }
         .second-level {

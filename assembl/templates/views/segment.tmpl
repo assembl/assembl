@@ -8,7 +8,7 @@
 {% set segmentDate = '<%= ctx.getDateFormated(segment.get("creationDate")) %>' %}
 {% set segmentCreatorName = '<%= segment.getCreatorDEPRECATED().get("name") %>' %}
 {% set harverterTooltip = gettext('Harvested by %(name)s %(date)s')|format(date=segmentDate, name=segmentCreatorName) %}
-{% set segmentCreatorAvatarImg = '<a class="profile-link" href="#" data-tooltip="'+harverterTooltip+'"><img src="<%= segment.getCreatorDEPRECATED().getAvatarUrl(24) %>" class="image-rounded" alt="" /></a>' %}
+{% set segmentCreatorAvatarImg = '<a class="profile-link" href="#" data-toggle="tooltip" title="'+harverterTooltip+'"><img src="<%= segment.getCreatorDEPRECATED().getAvatarUrl(24) %>" class="image-rounded" alt="" /></a>' %}
 {% set segmentLinkTooltip = gettext('Click here to see the original contribution this segment is quoted from.') %}
 {% set segmentTextLink = '<a class="segment-link" data-segmentid="<%= segment.cid %>" data-tooltip="'+segmentLinkTooltip+'">'+gettext('See&nbsp;in&nbsp;context')+'<%= segment.getTypeIcon() %>&nbsp;</a>' %}
 

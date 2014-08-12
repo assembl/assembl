@@ -3,7 +3,7 @@
 
     <div class="fr">
         <% if (currentViewStyle.id === 'threaded') { %>
-            <a data-tooltip="<%= collapsed ? '{{gettext('Expand all')}}' : '{{gettext('Collapse all')}}' %>" class="js_messageList-collapseButton iconbutton <%= collapsed ? 'icon-download-1' : 'icon-upload' %>"></a>
+            <a data-toggle="tooltip" title="<%= collapsed ? '{{gettext('Expand all')}}' : '{{gettext('Collapse all')}}' %>" class="js_messageList-collapseButton iconbutton <%= collapsed ? 'icon-download-1' : 'icon-upload' %>"></a>
         <% } %>
         <a class="js_messageList-fullScreenButton iconbutton iconbutton--resizefull" data-tooltip="{{ gettext('Fullsize') }}"></a>
         <% if( !Ctx.displayCallToAction() ){ %>

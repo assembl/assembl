@@ -1,21 +1,21 @@
 'use strict';
 
-define(function(require){
+define(function (require) {
 
-     var Assembl = require('modules/assembl'),
-               $ = require('jquery'),
-     Permissions = require('utils/permissions'),
-          Moment = require('moment'),
-            i18n = require('utils/i18n'),
-         Zeroclipboard = require('zeroclipboard'),
-         bootstrap = require('bootstrap');
+    var Assembl = require('modules/assembl'),
+        $ = require('jquery'),
+        Permissions = require('utils/permissions'),
+        Moment = require('moment'),
+        i18n = require('utils/i18n'),
+        Zeroclipboard = require('zeroclipboard'),
+        bootstrap = require('bootstrap');
 
 
-    var Context = function(){
+    var Context = function () {
 
         this.DISCUSSION_SLUG = $('#discussion-slug').val();
-        this.DISCUSSION_ID   = $('#discussion-id').val();
-        this.SOCKET_URL      = $('#socket-url').val();
+        this.DISCUSSION_ID = $('#discussion-id').val();
+        this.SOCKET_URL = $('#socket-url').val();
         this.CURRENT_USER_ID = $('#user-id').val();
         /**
          * Send debugging output to console.log to observe when views render
@@ -33,14 +33,14 @@ define(function(require){
          * Prefix used to generate the id of the element used by annotator to find it's annotation
          * @type {string}
          */
-         this.ANNOTATOR_MESSAGE_BODY_ID_PREFIX = "message-body-";
+        this.ANNOTATOR_MESSAGE_BODY_ID_PREFIX = "message-body-";
 
         /**
          * The a cache for posts linked by segments
          * FIXME:  Remove once lazy loading is implemented
          * @type {string}
          */
-         this.segmentPostCache = {};
+        this.segmentPostCache = {};
 
         /**
          * Current user
@@ -140,28 +140,26 @@ define(function(require){
 
     Context.prototype = {
 
-        getDiscussionSlug: function(){
+        getDiscussionSlug: function () {
             return this.DISCUSSION_SLUG;
         },
 
-        getDiscussionPromise: function(){
+        getDiscussionPromise: function () {
 
             var deferred = $.Deferred();
             var that = this;
             //var url =  this.getApiUrl();
             var url = this.getApiV2Url() + '/Discussion/' + this.getDiscussionId();
 
-            if (this.discussionPromise === undefined)
-            {
+            if (this.discussionPromise === undefined) {
                 this.discussion = undefined;
-                this.discussionPromise = $.get(url, function(data){
+                this.discussionPromise = $.get(url, function (data) {
                     that.discussion = data;
                     deferred.resolve(that.discussion);
                 });
             }
-            else
-            {
-                this.discussionPromise.done(function(){
+            else {
+                this.discussionPromise.done(function () {
                     deferred.resolve(that.discussion);
                 });
             }
@@ -169,39 +167,39 @@ define(function(require){
             return deferred.promise();
         },
 
-        getSocketUrl: function(){
+        getSocketUrl: function () {
             return this.SOCKET_URL;
         },
 
-        getDiscussionId: function(){
+        getDiscussionId: function () {
             return this.DISCUSSION_ID;
         },
 
-        getCurrentUserId: function(){
+        getCurrentUserId: function () {
             return this.CURRENT_USER_ID;
         },
 
-        getCurrentUser: function(){
+        getCurrentUser: function () {
             return this.currentUser;
         },
 
-        setCurrentUser: function(user){
+        setCurrentUser: function (user) {
             this.currentUser = user;
         },
 
-        getCsrfToken: function(){
+        getCsrfToken: function () {
             return this.csrfToken || this.loadCsrfToken(false);
         },
 
-        setCsrfToken: function(token){
-           this.csrfToken = token;
+        setCsrfToken: function (token) {
+            this.csrfToken = token;
         },
 
-        getDraggedAnnotation: function(){
+        getDraggedAnnotation: function () {
             return this._draggedAnnotation;
         },
 
-        setDraggedAnnotation: function(annotation, annotatorEditor){
+        setDraggedAnnotation: function (annotation, annotatorEditor) {
             this._draggedAnnotation = annotation;
             this._annotatorEditor = annotatorEditor;
         },
@@ -223,7 +221,7 @@ define(function(require){
          * Set the given Idea as the current one to be edited
          * @param  {Idea} [idea]
          */
-        setCurrentIdea: function(idea){
+        setCurrentIdea: function (idea) {
             //console.log("setCurrentIdea() fired", idea);
             if (idea != this.getCurrentIdea()) {
                 this.currentIdea = idea;
@@ -231,8 +229,8 @@ define(function(require){
             }
         },
 
-        getCurrentIdea: function(){
-           return this.currentIdea;
+        getCurrentIdea: function () {
+            return this.currentIdea;
         },
 
         /**
@@ -240,8 +238,8 @@ define(function(require){
          * @param {string} id The id of the script tag
          * @return {function} The Underscore.js _.template return
          */
-        loadTemplate: function(id){
-            var template = _.template( $('#tmpl-'+id).html() );
+        loadTemplate: function (id) {
+            var template = _.template($('#tmpl-' + id).html());
             return template;
         },
 
@@ -250,8 +248,10 @@ define(function(require){
          * @param {messageViewStyle.id}
          * @return {messageViewStyle or undefined}
          */
-        getMessageViewStyleDefById: function(messageViewStyleId){
-            return  _.find(this.AVAILABLE_MESSAGE_VIEW_STYLES, function(messageViewStyle){ return messageViewStyle.id == messageViewStyleId; });
+        getMessageViewStyleDefById: function (messageViewStyleId) {
+            return  _.find(this.AVAILABLE_MESSAGE_VIEW_STYLES, function (messageViewStyle) {
+                return messageViewStyle.id == messageViewStyleId;
+            });
         },
 
         /**
@@ -259,16 +259,16 @@ define(function(require){
          * @param  {string} url
          * @return {string} The url formatted
          */
-        getApiUrl: function(url){
-            if ( url === undefined )
+        getApiUrl: function (url) {
+            if (url === undefined)
                 url = '/';
-            else if( url[0] !== '/' ){
+            else if (url[0] !== '/') {
                 url = '/' + url;
             }
             return '/api/v1/discussion/' + this.getDiscussionId() + url;
         },
 
-        getApiV2Url: function(){
+        getApiV2Url: function () {
             return '/data';
         },
 
@@ -281,22 +281,22 @@ define(function(require){
          */
         //FIXME: this method never use in app
         /*getGenericApiUrl: function(id){
-            var url = '/api/v1/discussion/' + this.getDiscussionId() + '/generic/';
-            return id.replace('local:', url);
-        },*/
+         var url = '/api/v1/discussion/' + this.getDiscussionId() + '/generic/';
+         return id.replace('local:', url);
+         },*/
 
         /**
          * Show or hide the given panel
          * @param  {String} panelName
          */
-        togglePanel: function(panelName){
+        togglePanel: function (panelName) {
             var panel = assembl[panelName],
                 ctx = new Context();
 
-            if( panel === undefined ){
+            if (panel === undefined) {
                 return false;
             }
-            if( panel.$el.hasClass('is-visible') ){
+            if (panel.$el.hasClass('is-visible')) {
                 ctx.closePanel(panel);
             } else {
                 ctx.openPanel(panel);
@@ -307,23 +307,23 @@ define(function(require){
          * Close the given panel
          * @param {backbone.View} panel
          */
-        closePanel: function(panel){
-            if( ! panel.$el.hasClass('is-visible') ){
+        closePanel: function (panel) {
+            if (!panel.$el.hasClass('is-visible')) {
                 return false;
             }
 
             assembl.openedPanels -= 1;
             $(document.body).attr('data-panel-qty', assembl.openedPanels);
 
-            if( this.isInFullscreen() ){
-               $(document.body).addClass('is-fullscreen');
+            if (this.isInFullscreen()) {
+                $(document.body).addClass('is-fullscreen');
             }
 
             panel.$el.removeClass('is-visible');
 
             this.removePanelFromStorage(panel.el.id);
 
-            if( panel.button ) {
+            if (panel.button) {
                 panel.button.removeClass('active');
             }
             Assembl.vent.trigger("panel:close", [panel]);
@@ -333,8 +333,8 @@ define(function(require){
          * Open the given panel
          * @param {backbone.View} panel
          */
-        openPanel: function(panel){
-            if( panel.$el.hasClass('is-visible') ){
+        openPanel: function (panel) {
+            if (panel.$el.hasClass('is-visible')) {
                 return false;
             }
             this.openedPanels += 1;
@@ -344,7 +344,7 @@ define(function(require){
 
             this.addPanelToStorage(panel.el.id);
 
-            if( panel.button ) {
+            if (panel.button) {
                 panel.button.addClass('active');
             }
             Assembl.vent.trigger("panel:open", [panel]);
@@ -353,7 +353,7 @@ define(function(require){
         /**
          * @return {Object} The Object with all panels in the localStorage
          */
-        getPanelsFromStorage: function(){
+        getPanelsFromStorage: function () {
             var panels = JSON.parse(localStorage.getItem('panels')) || {};
             return panels;
         },
@@ -363,7 +363,7 @@ define(function(require){
          * @param {string} panelId
          * @return {Object} The current object
          */
-        addPanelToStorage: function(panelId){
+        addPanelToStorage: function (panelId) {
             var panels = this.getPanelsFromStorage();
             panels[panelId] = 'open';
             localStorage.setItem('panels', JSON.stringify(panels));
@@ -376,7 +376,7 @@ define(function(require){
          * @param  {string} panelId
          * @return {Object} The remaining panels
          */
-        removePanelFromStorage: function(panelId){
+        removePanelFromStorage: function (panelId) {
             var panels = this.getPanelsFromStorage();
             delete panels[panelId];
             localStorage.setItem('panels', JSON.stringify(panels));
@@ -387,7 +387,7 @@ define(function(require){
         /**
          * @return {Object} The Object with mesagelistconfig in the localStorage
          */
-        getMessageListConfigFromStorage: function(){
+        getMessageListConfigFromStorage: function () {
             var messageListConfig = JSON.parse(localStorage.getItem('messageListConfig')) || {};
             return messageListConfig;
         },
@@ -397,7 +397,7 @@ define(function(require){
          * @param {Object} The Object with mesagelistconfig in the localStorage
          * @return {Object} The Object with mesagelistconfig in the localStorage
          */
-        setMessageListConfigToStorage: function(messageListConfig){
+        setMessageListConfigToStorage: function (messageListConfig) {
             localStorage.setItem('messageListConfig', JSON.stringify(messageListConfig));
             return messageListConfig;
         },
@@ -407,18 +407,18 @@ define(function(require){
          * ( i.e.: there is only one open )
          * @return {Boolean}
          */
-        isInFullscreen: function(){
+        isInFullscreen: function () {
             return this.openedPanels === 1;
         },
 
         /**
          * @return {Segment}
          */
-        getDraggedSegment: function(){
+        getDraggedSegment: function () {
             var segment = this.draggedSegment;
             this.draggedSegment = null;
 
-            if( segment ){
+            if (segment) {
                 delete segment.attributes.highlights;
             }
 
@@ -428,8 +428,8 @@ define(function(require){
         /**
          * @return {Idea}
          */
-        getDraggedIdea: function(){
-            if( this.ideaList && this.draggedIdea ){
+        getDraggedIdea: function () {
+            if (this.ideaList && this.draggedIdea) {
 
                 Assembl.vent.trigger('ideaList:removeIdea', this.draggedIdea);
             }
@@ -443,12 +443,12 @@ define(function(require){
         /**
          * fallback: synchronously load app.csrfToken
          */
-        loadCsrfToken: function(async){
+        loadCsrfToken: function (async) {
             var that = this;
             $.ajax('/api/v1/token', {
                 async: async,
                 dataType: 'text',
-                success: function(data) {
+                success: function (data) {
                     that.setCsrfToken(data);
                 }
             });
@@ -459,9 +459,9 @@ define(function(require){
          * @param {Annotation} annotation
          * @return {Message}
          */
-        getPostIdFromAnnotation: function(annotation){
+        getPostIdFromAnnotation: function (annotation) {
             var span = $(annotation.highlights[0]),
-                messageId = span.closest('[id^="'+this.ANNOTATOR_MESSAGE_BODY_ID_PREFIX+'"]').attr('id');
+                messageId = span.closest('[id^="' + this.ANNOTATOR_MESSAGE_BODY_ID_PREFIX + '"]').attr('id');
 
             return messageId.substr(this.ANNOTATOR_MESSAGE_BODY_ID_PREFIX.length);
         },
@@ -469,17 +469,17 @@ define(function(require){
         /**
          * Saves the current annotation if there is any
          */
-        saveCurrentAnnotationAsExtract: function(){
-          if( this.getCurrentUser().can(Permissions.EDIT_EXTRACT) ) {
-            this._annotatorEditor.element.find('.annotator-save').click();
-          }
+        saveCurrentAnnotationAsExtract: function () {
+            if (this.getCurrentUser().can(Permissions.EDIT_EXTRACT)) {
+                this._annotatorEditor.element.find('.annotator-save').click();
+            }
         },
 
         /**
          * Creates the selection tooltip
          */
-        createSelectionTooltip: function(){
-            this.selectionTooltip = $('<div>', { 'class': 'textbubble' } );
+        createSelectionTooltip: function () {
+            this.selectionTooltip = $('<div>', { 'class': 'textbubble' });
             $(document.body).append(this.selectionTooltip.hide());
         },
 
@@ -487,10 +487,10 @@ define(function(require){
          * Return the select text on the document
          * @return {Selection}
          */
-        getSelectedText: function(){
-            if( document.getSelection ){
+        getSelectedText: function () {
+            if (document.getSelection) {
                 return document.getSelection();
-            } else if( window.getSelection ){
+            } else if (window.getSelection) {
                 return window.getSelection();
             } else {
                 var selection = document.selection && document.selection.createRange();
@@ -503,16 +503,16 @@ define(function(require){
          * @param  {Event} ev The event object
          * @param  {String} text The text to be shown in the .dragbox
          */
-        showDragbox: function(ev, text){
+        showDragbox: function (ev, text) {
 
             var dragbox_max_length = 25,
                 that = this;
 
-            if( ev.originalEvent ){
+            if (ev.originalEvent) {
                 ev = ev.originalEvent;
             }
 
-            if( this.dragbox === null ){
+            if (this.dragbox === null) {
                 this.dragbox = document.createElement('div');
                 this.dragbox.className = 'dragbox';
                 this.dragbox.setAttribute('hidden', 'hidden');
@@ -524,19 +524,19 @@ define(function(require){
 
             text = text || i18n.gettext('Extract');
 
-            if( text.length > dragbox_max_length ){
+            if (text.length > dragbox_max_length) {
                 text = text.substring(0, dragbox_max_length) + '...';
             }
             this.dragbox.innerHTML = text;
 
-            if( ev.dataTransfer ) {
+            if (ev.dataTransfer) {
                 ev.dataTransfer.dropEffect = 'all';
                 ev.dataTransfer.effectAllowed = 'copy';
                 ev.dataTransfer.setData("text/plain", text);
                 ev.dataTransfer.setDragImage(this.dragbox, 10, 10);
             }
 
-            $(ev.currentTarget).one("dragend", function(){
+            $(ev.currentTarget).one("dragend", function () {
                 that.dragbox.setAttribute('hidden', 'hidden');
             });
         },
@@ -545,7 +545,7 @@ define(function(require){
          * Return the current time
          * @return {timestamp}
          */
-        getCurrentTime: function(){
+        getCurrentTime: function () {
             return (new Date()).getTime();
         },
 
@@ -555,10 +555,10 @@ define(function(require){
          * @param {string} ...
          * @return {string}
          */
-        format: function(str){
+        format: function (str) {
             var args = [].slice.call(arguments, 1);
 
-            return str.replace(/\{(\d+)\}/g, function(a,b){
+            return str.replace(/\{(\d+)\}/g, function (a, b) {
                 return typeof args[b] != 'undefined' ? args[b] : a;
             });
         },
@@ -569,10 +569,10 @@ define(function(require){
          * @param {string} [format=app.dateFormat] The format
          * @return {string}
          */
-        formatDate: function(date, format){
+        formatDate: function (date, format) {
             format = format || this.dateFormat;
 
-            if( date === null ){
+            if (date === null) {
                 return '';
             }
 
@@ -588,8 +588,8 @@ define(function(require){
          */
         //FIXME: this method never use in app
         /*formatDatetime: function(date, format){
-            return this.formatDate(date, format || this.datetimeFormat);
-        },*/
+         return this.formatDate(date, format || this.datetimeFormat);
+         },*/
 
         /**
          * Shows the context menu given the options
@@ -600,48 +600,48 @@ define(function(require){
          */
         //FIXME: this method never use in app
         /*showContextMenu: function(x, y, scope, items){
-            var menu_width = 150;
+         var menu_width = 150;
 
 
-            this.hideContextMenu();
+         this.hideContextMenu();
 
-            var menu = $('<div>').addClass('contextmenu');
+         var menu = $('<div>').addClass('contextmenu');
 
-            // Adjusting position
-            if( (x + menu_width) > (window.innerWidth - 50) ){
-                x = window.innerWidth - menu_width - 10;
-            }
+         // Adjusting position
+         if( (x + menu_width) > (window.innerWidth - 50) ){
+         x = window.innerWidth - menu_width - 10;
+         }
 
-            menu.css({'top': y, 'left': x});
+         menu.css({'top': y, 'left': x});
 
-            _.each(items, function(func, text){
-                var item = $('<a>').addClass('contextmenu-item').text(text);
-                item.on('click', func.bind(scope) );
-                menu.append( item );
-            });
+         _.each(items, function(func, text){
+         var item = $('<a>').addClass('contextmenu-item').text(text);
+         item.on('click', func.bind(scope) );
+         menu.append( item );
+         });
 
-            $(document.body).append( menu );
-            window.setTimeout(function(){
-                $(document).on("click", this.hideContextMenu);
-            });
+         $(document.body).append( menu );
+         window.setTimeout(function(){
+         $(document).on("click", this.hideContextMenu);
+         });
 
-            // Adjusting menu position
-            var menuY = menu.height() + y,
-                maxY = window.innerHeight - 50;
+         // Adjusting menu position
+         var menuY = menu.height() + y,
+         maxY = window.innerHeight - 50;
 
-            if( menuY >= maxY ){
-                menu.css({'top': maxY - menu.height() });
-            }
-        },*/
+         if( menuY >= maxY ){
+         menu.css({'top': maxY - menu.height() });
+         }
+         },*/
 
         /**
          * Returns an array with all segments for the given idea
          * @param {Idea} idea
          * @return {Array<Segment>}
          */
-        getSegmentsDEPRECATEDByIdea: function(idea){
+        getSegmentsDEPRECATEDByIdea: function (idea) {
             var id = idea.getId();
-            return _allExtractsCollection.where({idIdea:id});
+            return _allExtractsCollection.where({idIdea: id});
         },
 
         /**
@@ -649,10 +649,10 @@ define(function(require){
          * e.g.: If it is an email, opens it, if it is a webpage, open in another window ...
          * @param {Segment} segment
          */
-        showTargetBySegment: function(segment){
+        showTargetBySegment: function (segment) {
             var target = segment.get('target');
 
-            switch(target['@type']){
+            switch (target['@type']) {
                 case 'Webpage':
                     window.open(target.url, "_blank");
                     break;
@@ -663,7 +663,7 @@ define(function(require){
 
                     var selector = this.format('[data-annotation-id="{0}"]', segment.id);
 
-                    Assembl.vent.trigger('messageList:showMessageById', segment.get('idPost'), function(){
+                    Assembl.vent.trigger('messageList:showMessageById', segment.get('idPost'), function () {
                         $(selector).highlight();
                     });
 
@@ -677,27 +677,27 @@ define(function(require){
          */
         //FIXME: this method never use in app
         /*createUUID: function(){
-            var uuid = "", i = 0, random;
+         var uuid = "", i = 0, random;
 
-            for (; i < 32; i++) {
-                random = Math.random() * 16 | 0;
+         for (; i < 32; i++) {
+         random = Math.random() * 16 | 0;
 
-                if (i == 8 || i == 12 || i == 16 || i == 20) {
-                    uuid += "-";
-                }
+         if (i == 8 || i == 12 || i == 16 || i == 20) {
+         uuid += "-";
+         }
 
-                uuid += (i == 12 ? 4 : (i == 16 ? (random & 3 | 8) : random)).toString(16);
-            }
+         uuid += (i == 12 ? 4 : (i == 16 ? (random & 3 | 8) : random)).toString(16);
+         }
 
-            return uuid;
-        },*/
+         return uuid;
+         },*/
 
         /**
          * Given the string in the format "local:ModelName/{id}" returns the id
          * @param  {String} str
          * @return {String}
          */
-        extractId: function(str){
+        extractId: function (str) {
             return str.split('/')[1];
         },
 
@@ -706,7 +706,7 @@ define(function(require){
          * @param  {Number} [size=44] The avatar size
          * @return {String} The avatar's url formatted with the given size
          */
-        formatAvatarUrl: function(userID, size){
+        formatAvatarUrl: function (userID, size) {
             size = size || 44;
             return this.format("/user/id/{0}/avatar/{1}", userID, size);
         },
@@ -715,7 +715,7 @@ define(function(require){
          * Returns a fancy date (ex: a few seconds ago)
          * @return {String}
          */
-        getDateFormated: function(date){
+        getDateFormated: function (date) {
             var momentDate = moment(date);
             return momentDate ? momentDate.fromNow() : momentDate;
         },
@@ -724,16 +724,16 @@ define(function(require){
          * @param  {String} html
          * @return {String} The new string without html tags
          */
-        stripHtml: function(html){
-            return html ? $.trim( $('<div>'+html+'</div>').text() ) : html;
+        stripHtml: function (html) {
+            return html ? $.trim($('<div>' + html + '</div>').text()) : html;
         },
 
         /**
          * Sets the given panel as fullscreen closing all other ones
          * @param {Panel} targetPanel
          */
-        setFullscreen: function(targetPanel){
-           //TODO: custom view for this
+        setFullscreen: function (targetPanel) {
+            //TODO: custom view for this
             var panels = [
                 assembl.ideaList,
                 assembl.segmentList,
@@ -742,8 +742,8 @@ define(function(require){
                 assembl.synthesisPanel
             ];
 
-            _.each(panels, function(panel){
-                if( targetPanel !== panel ){
+            _.each(panels, function (panel) {
+                if (targetPanel !== panel) {
                     this.closePanel(panel);
                     $(document.body).addClass('is-fullscreen');
                 }
@@ -755,21 +755,21 @@ define(function(require){
         /**
          * @event
          */
-        onDropdownClick: function(e){
+        onDropdownClick: function (e) {
             var dropdown = $(e.target);
 
-            if( !dropdown.hasClass("dropdown-label") ){
+            if (!dropdown.hasClass("dropdown-label")) {
                 return;
             }
 
             var parent = dropdown.parent();
 
-            var onMouseLeave = function(e){
+            var onMouseLeave = function (e) {
                 parent.removeClass('is-open');
                 e.stopPropagation(); // so that onDropdownClick() is not called again immediately after when we click
             };
 
-            if( parent.hasClass('is-open') ){
+            if (parent.hasClass('is-open')) {
                 onMouseLeave();
                 return;
             }
@@ -781,11 +781,11 @@ define(function(require){
         /**
          * @event
          */
-        onAjaxError: function( ev, jqxhr, settings, exception ){
+        onAjaxError: function (ev, jqxhr, settings, exception) {
             var message = i18n.gettext('ajax error message:');
             message = "url: " + settings.url + "\n" + message + "\n" + exception;
 
-            alert( message );
+            alert(message);
         },
 
         /**
@@ -793,7 +793,7 @@ define(function(require){
          * tooltips (those currently displayed) will be left dangling
          * if the trigger element is removed from the dom.
          */
-        removeCurrentlyDisplayedTooltips: function(jqueryElement){
+        removeCurrentlyDisplayedTooltips: function (jqueryElement) {
             //console.log("removeCurrentlyDisplayedTooltips() called");
             //This really does need to be global.
             //Should be fast, they are at the top level and there is only
@@ -802,8 +802,8 @@ define(function(require){
             $('.tipsy').remove();
         },
 
-        setLocale: function(locale){
-            document.cookie = "_LOCALE_="+locale+"; path=/";
+        setLocale: function (locale) {
+            document.cookie = "_LOCALE_=" + locale + "; path=/";
             location.reload(true);
         },
         InterfaceTypes: {
@@ -813,45 +813,45 @@ define(function(require){
         /** Set the user interface the user wants
          * @param interface_id, one of SIMPLE, EXPERT
          * */
-        setInterfaceType: function(interface_id){
-          document.cookie = "interface="+interface_id+"; path=/";
-          location.reload(true);
+        setInterfaceType: function (interface_id) {
+            document.cookie = "interface=" + interface_id + "; path=/";
+            location.reload(true);
         },
-        
+
         getCookieItem: function (sKey) {
-          return decodeURIComponent(document.cookie.replace(new RegExp("(?:(?:^|.*;)\\s*" + encodeURIComponent(sKey).replace(/[\-\.\+\*]/g, "\\$&") + "\\s*\\=\\s*([^;]*).*$)|^.*$"), "$1")) || null;
+            return decodeURIComponent(document.cookie.replace(new RegExp("(?:(?:^|.*;)\\s*" + encodeURIComponent(sKey).replace(/[\-\.\+\*]/g, "\\$&") + "\\s*\\=\\s*([^;]*).*$)|^.*$"), "$1")) || null;
         },
-        
-        canUseExpertInterface: function() {
-          var user = this.getCurrentUser();
-          if( user.can(Permissions.ADD_EXTRACT) ||
-              user.can(Permissions.EDIT_EXTRACT) ||
-              user.can(Permissions.EDIT_MY_EXTRACT) ||
-              user.can(Permissions.ADD_IDEA) ||
-              user.can(Permissions.EDIT_IDEA) ||
-              user.can(Permissions.EDIT_SYNTHESIS) ||
-              user.can(Permissions.SEND_SYNTHESIS) ||
-              user.can(Permissions.ADMIN_DISCUSSION) ||
-              user.can(Permissions.SYSADMIN) 
-              ) {
-            return true;
-          }
-          else {
-            return false;
-          }
-        },
-        
-        getCurrentInterfaceType:  function(){
-          var interfaceType = this.getCookieItem('interface');
-          if(!this.canUseExpertInterface()) {
-            interfaceType = this.InterfaceTypes.SIMPLE
-          }
-          else {
-            if (interfaceType === null) {
-              interfaceType = this.InterfaceTypes.EXPERT
+
+        canUseExpertInterface: function () {
+            var user = this.getCurrentUser();
+            if (user.can(Permissions.ADD_EXTRACT) ||
+                user.can(Permissions.EDIT_EXTRACT) ||
+                user.can(Permissions.EDIT_MY_EXTRACT) ||
+                user.can(Permissions.ADD_IDEA) ||
+                user.can(Permissions.EDIT_IDEA) ||
+                user.can(Permissions.EDIT_SYNTHESIS) ||
+                user.can(Permissions.SEND_SYNTHESIS) ||
+                user.can(Permissions.ADMIN_DISCUSSION) ||
+                user.can(Permissions.SYSADMIN)
+                ) {
+                return true;
             }
-          }
-          return interfaceType;
+            else {
+                return false;
+            }
+        },
+
+        getCurrentInterfaceType: function () {
+            var interfaceType = this.getCookieItem('interface');
+            if (!this.canUseExpertInterface()) {
+                interfaceType = this.InterfaceTypes.SIMPLE
+            }
+            else {
+                if (interfaceType === null) {
+                    interfaceType = this.InterfaceTypes.EXPERT
+                }
+            }
+            return interfaceType;
         },
 
         /**
@@ -862,45 +862,42 @@ define(function(require){
             //console.log("initTooltips() called");
             /*elm.find('[data-tooltip]').tipsy({
              delayIn: 400,
-                live: true,
-                gravity: function(){ return this.getAttribute('data-tooltip-position') || 's'; },
-                title: function() { return this.getAttribute('data-tooltip'); },
-                opacity: 0.95,
-                offset: 0,       // pixel offset of tooltip from element
+             live: true,
+             gravity: function(){ return this.getAttribute('data-tooltip-position') || 's'; },
+             title: function() { return this.getAttribute('data-tooltip'); },
+             opacity: 0.95,
+             offset: 0,       // pixel offset of tooltip from element
 
              });*/
 
             elm.find('.bs-tooltip').hover(function () {
-                $(this).tooltip('toggle');
+                $(this).tooltip({
+                    container: 'body'
+                });
             });
-
-            /*$('.bs-tooltip').hover(function () {
-             $(this).tooltip('toggle');
-             })*/
-
         },
 
         /**
          * @init
          */
-        initClipboard: function(){
-            if( !assembl.clipboard ){
+        initClipboard: function () {
+            if (!assembl.clipboard) {
                 Zeroclipboard.setDefaults({
                     moviePath: '/static/js/bower/zeroclipboard/ZeroClipboard.swf'
                 });
                 assembl.clipboard = new Zeroclipboard();
 
-                assembl.clipboard.on(assembl.clipboard, 'mouseover', function(){
+                assembl.clipboard.on(assembl.clipboard, 'mouseover', function () {
                     $(this).trigger('mouseover');
                 });
 
-                assembl.clipboard.on('mouseout', function(){
+                assembl.clipboard.on('mouseout', function () {
                     $(this).trigger('mouseout');
                 });
             }
 
             var that = this;
-            $('[data-copy-text]').each(function(i, el){
+            $('[data-copy-text]').each(function (i, el) {
                 var text = el.getAttribute('data-copy-text');
                 text = that.format('{0}//{1}/{2}{3}', location.protocol, location.host, that.getDiscussionSlug(), text);
                 el.removeAttribute('data-copy-text');
@@ -914,7 +911,7 @@ define(function(require){
          * @init
          * inits ALL app components
          */
-        init: function(){
+        init: function () {
             //this.loadCurrentUser();
             Moment.lang(assembl_locale);
 
