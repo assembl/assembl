@@ -17,7 +17,10 @@ define(function (require) {
         _stateButton: null,
 
         initialize: function (options) {
+            var that = this;
             this.collection = this.model.get('panels');
+            this.listenTo(this.collection, 'add remove reset change', this.calculateGridSize);
+            setTimeout(function() {that.calculateGridSize();}, 200);
         },
 
         events: {
@@ -38,6 +41,22 @@ define(function (require) {
         closeGroup: function () {
             this.unbind();
             this.model.collection.remove(this.model);
+        },
+        calculateGridSize: function () {
+            var groupSize = 0, that = this;
+            _.each(this.collection.models, function (aPanelSpec) {
+                if (aPanelSpec.get('hidden'))
+                    return;
+                groupSize += aPanelSpec.get('gridWidth');
+            });
+            var className = 'groupGridSize-' + groupSize;
+            var found = this.$el[0].className.match(/\b(groupGridSize-[0-9]+)\b/);
+            if (found && found[0] != className) {
+                this.$el.removeClass(found[0]);
+            }
+            if ((!found) || found[0] != className) {
+                this.$el.addClass(className);
+            }
         },
 
         /**
@@ -122,13 +141,21 @@ define(function (require) {
             }
         },
 
+        hasNavigation: function () {
+            return this.model.getPanelSpecByType('navSidebar') != null;
+        },
+
         resetDebateState: function () {
-            this.removePanels('homePanel');
-            if (ctx.getCurrentIdea() == undefined) {
-                this.ensurePanelsVisible('messageList');
-                this.ensurePanelsHidden('ideaPanel');
+            if (this.hasNavigation()) {
+                this.removePanels('homePanel');
+                if (ctx.getCurrentIdea() == undefined) {
+                    this.ensurePanelsVisible('messageList');
+                    this.ensurePanelsHidden('ideaPanel');
+                } else {
+                    this.ensurePanelsVisible('ideaPanel', 'messageList');
+                }
             } else {
-                this.ensurePanelsVisible('ideaPanel', 'messageList');
+                // TODO: ensure visible if exists
             }
         },
 
@@ -151,6 +178,8 @@ define(function (require) {
             var model = this.model.getPanelSpecByType(typeName);
             if (model !== undefined) {
                 var view = this.children.findByModel(model);
+                if (view == null)
+                    return;
                 if (view.contents !== undefined) {
                     // wrapper
                     view = view.contents.currentView;
@@ -176,14 +205,7 @@ define(function (require) {
                 if (!view)
                     return;
                 var shouldBeVisible = _.contains(args, aPanelSpec.get('type'));
-                // TODO: compute isAlreadyVisible and show() or hide() with animation only if state is different
-                if (shouldBeVisible) {
-                    view.$el.show();
-
-                } else {
-
-                    view.$el.hide();
-                }
+                aPanelSpec.set('hidden', !shouldBeVisible);
             });
         },
 
@@ -200,14 +222,9 @@ define(function (require) {
             _.each(this.model.get('panels').models, function (aPanelSpec) {
                 if (aPanelSpec.get('type') == 'navSidebar')
                     return;
-                var view = that.children.findByModel(aPanelSpec);
-                if (!view)
-                    return;
                 var shouldBeVisible = _.contains(args, aPanelSpec.get('type'));
-                // TODO: compute isAlreadyVisible and show() or hide() with animation only if state is different
-                if (shouldBeVisible) {
-                    view.$el.show();
-                }
+                if (shouldBeVisible)
+                    aPanelSpec.set('hidden', false);
             });
         },
 
@@ -222,13 +239,9 @@ define(function (require) {
             _.each(this.model.get('panels').models, function (aPanelSpec) {
                 if (aPanelSpec.get('type') == 'navSidebar')
                     return;
-                var view = that.children.findByModel(aPanelSpec);
-                if (!view)
-                    return;
                 var shouldBeHidden = _.contains(args, aPanelSpec.get('type'));
-                if (shouldBeHidden) {
-                    view.$el.hide();
-                }
+                if (shouldBeHidden)
+                    aPanelSpec.set('hidden', true);
             });
         }
     });

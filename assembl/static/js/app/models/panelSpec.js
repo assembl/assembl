@@ -5,7 +5,9 @@ define(function(require){
 
     var PanelSpecModel = Base.Model.extend({
         defaults: {
-           type: ''
+            type: '',
+            hidden: false,
+            gridWidth: 1
         }
     });
 

@@ -14,6 +14,7 @@ define(function(require){
         template:'#tmpl-contextPage',
         panelType: 'homePanel',
         className: 'homePanel',
+        gridSize: 2,
 
         /*
         events: {
