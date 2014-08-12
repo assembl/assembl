@@ -24,6 +24,7 @@ define(function (require) {
             this.contentsView = new contentClass({
                 groupContent: options.groupContent
             });
+            this.model.set('gridWidth', this.contentsView.gridSize || 1);
             Marionette.bindEntityEvents(this, this.model, this.modelEvents);
         },
         onRender: function () {
@@ -40,7 +41,7 @@ define(function (require) {
         },
         setGridWidth: function() {
             // Grid width can only be 1 or 2
-            this.$el.removeClass("panelGridWidth-"+(2-this.model.get('gridWidth')));
+            this.$el.removeClass("panelGridWidth-"+(3-this.model.get('gridWidth')));
             this.$el.addClass("panelGridWidth-"+this.model.get('gridWidth'));
         }
     });

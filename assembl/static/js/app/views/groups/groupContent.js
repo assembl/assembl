@@ -151,13 +151,22 @@ define(function (require) {
                 if (ctx.getCurrentIdea() == undefined) {
                     this.ensurePanelsVisible('messageList');
                     this.ensurePanelsHidden('ideaPanel');
+                    this.setPanelWidthByType('messageList', 2);
                 } else {
                     this.ensurePanelsVisible('ideaPanel', 'messageList');
+                    this.setPanelWidthByType('messageList', 1);
                 }
             } else {
                 // TODO: ensure visible if exists
             }
         },
+
+        setPanelWidthByType: function (panelType, width) {
+            var panels = this.model.get('panels');
+            var panel = panels.findWhere({'type': panelType});
+            panel.set('gridWidth', width);
+        },
+
 
         /**
          * @params list of panel names
