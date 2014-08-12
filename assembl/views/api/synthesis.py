@@ -13,7 +13,7 @@ syntheses = Service(name='syntheses',
 
 synthesis = Service(name='ExplicitSubgraphs',
     path=API_DISCUSSION_PREFIX + '/explicit_subgraphs/synthesis/{id:.+}',
-    description="Manipulate a single synthesis")
+    description="Manipulate a single synthesis", renderer='json')
 
 
 @syntheses.get(permission=P_READ)
