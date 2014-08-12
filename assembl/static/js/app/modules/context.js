@@ -87,27 +87,27 @@ define(function(require){
          * Current dragged annotation
          * @type {Annotation}
          */
-         this._draggedAnnotation = null;
+        this._draggedAnnotation = null;
 
         /**
          * The selection tooltip.
          * @type {jQuery}
          */
-         this.selectionTooltip = null;
+        this.selectionTooltip = null;
 
         /**
          * Reference to dragbox
          * @type {HTMLDivElement}
          */
-         this.dragbox = null;
+        this.dragbox = null;
 
         /**
          * Qty of opened panels
          * @type {Number}
          */
-         this.openedPanels = 0;
+        this.openedPanels = 0;
 
-         this.AVAILABLE_MESSAGE_VIEW_STYLES = {
+        this.AVAILABLE_MESSAGE_VIEW_STYLES = {
             TITLE_ONLY: {
                 id: "viewStyleTitleOnly",
                 label: i18n.gettext('Message titles')
@@ -120,7 +120,19 @@ define(function(require){
                 id: "viewStyleFullBody",
                 label: i18n.gettext('Complete messages')
             }
-        }
+        };
+
+        /*
+         * Current discussion
+         * @type {Discussion}
+         */
+        this.discussion = undefined;
+
+        /*
+         * Current discussion Promise object
+         * @type {Promise}
+         */
+        this.discussionPromise = undefined;
 
         this.init();
     }
@@ -129,6 +141,31 @@ define(function(require){
 
         getDiscussionSlug: function(){
             return this.DISCUSSION_SLUG;
+        },
+
+        getDiscussionPromise: function(){
+
+            var deferred = $.Deferred();
+            var that = this;
+            //var url =  this.getApiUrl();
+            var url = this.getApiV2Url() + '/Discussion/' + this.getDiscussionId();
+
+            if (this.discussionPromise === undefined)
+            {
+                this.discussion = undefined;
+                this.discussionPromise = $.get(url, function(data){
+                    that.discussion = data;
+                    deferred.resolve(that.discussion);
+                });
+            }
+            else
+            {
+                this.discussionPromise.done(function(){
+                    deferred.resolve(that.discussion);
+                });
+            }
+
+            return deferred.promise();
         },
 
         getSocketUrl: function(){
@@ -209,10 +246,16 @@ define(function(require){
          * @return {string} The url formatted
          */
         getApiUrl: function(url){
-            if( url[0] !== '/' ){
+            if ( url === undefined )
+                url = '/';
+            else if( url[0] !== '/' ){
                 url = '/' + url;
             }
             return '/api/v1/discussion/' + this.getDiscussionId() + url;
+        },
+
+        getApiV2Url: function(){
+            return '/data';
         },
 
         /**
@@ -858,7 +901,6 @@ define(function(require){
 
             $(document).on('click', '.dropdown-label', this.onDropdownClick);
             $(document).on('ajaxError', this.onAjaxError);
-
         }
     }
 
