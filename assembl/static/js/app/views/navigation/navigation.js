@@ -42,7 +42,7 @@ define(function (require) {
         },
         onRender: function () {
             this.setSideBarHeight();
-            this.notification.show(new sidebarNotification());
+            //this.notification.show(new sidebarNotification());
         },
         toggleMenu: function (e) {
             var elm = $(e.target),
@@ -94,12 +94,12 @@ define(function (require) {
 
         initVar: function () {
             var _header = 60,
-                _adsBox = 43,
+                _searchBox = 43,
                 _li = 105;
 
             this._window = $(window).height() - _header;
-            this._sideBarHeight = (this._window - _adsBox) - _li;
-            this._accordion = this._window - _adsBox;
+            this._sideBarHeight = this._window - _li;
+            this._accordion = this._window;
         }
 
     });
