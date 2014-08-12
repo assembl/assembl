@@ -50,21 +50,6 @@ define(function (require) {
 
             this.loadView(view);
 
-            this.groupContent.model.set('navigationState', view);
-
-            switch (view) {
-                case 'debate':
-                    this.groupContent.resetDebateState();
-                    break;
-                case 'home':
-                    this.groupContent.ensureOnlyPanelsVisible('homePanel');
-                    break;
-                case 'synthesis':
-                    this.groupContent.removePanels('homePanel');
-                    this.groupContent.ensurePanelsVisible('messageList');
-                    break;
-            }
-
             if (!elm.next('div.second-level').is(':visible')) {
                 this.$('div.second-level').slideUp();
                 elm.next('div.second-level').css('height', this._sideBarHeight);
@@ -76,24 +61,30 @@ define(function (require) {
             this.$el.css('height', this._sideBarHeight);
         },
         loadView: function (view) {
+            this.groupContent.model.set('navigationState', view);
             switch (view) {
                 case 'home':
                     console.log('load home panel');
                     var homePanel = new HomePanel({
                         groupContent: this.groupContent});
                     this.home.show(homePanel);
+                    this.groupContent.ensureOnlyPanelsVisible('homePanel');
                     break;
                 case 'debate':
                     console.log('load idea table');
                     var idealist = new IdeaList({
                         groupContent: this.groupContent});
                     this.debate.show(idealist);
+                    this.groupContent.resetDebateState();
                     break;
                 case 'synthesis':
                     var synthesisInNavigationPanel = new SynthesisInNavigationPanel({
                         groupContent: this.groupContent
                     });
                     this.synthesis.show(synthesisInNavigationPanel);
+                    this.groupContent.removePanels('homePanel');
+                    this.groupContent.ensurePanelsVisible('messageList');
+                    this.groupContent.ensurePanelsHidden('ideaPanel');
                     break;
                 default:
                     break
