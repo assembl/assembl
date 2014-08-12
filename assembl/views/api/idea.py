@@ -19,7 +19,7 @@ ideas = Service(name='ideas', path=API_DISCUSSION_PREFIX + '/ideas',
                 renderer='json')
 
 idea = Service(name='idea', path=API_DISCUSSION_PREFIX + '/ideas/{id:.+}',
-               description="Manipulate a single idea")
+               description="Manipulate a single idea", renderer='json')
 
 idea_extracts = Service(
     name='idea_extracts',

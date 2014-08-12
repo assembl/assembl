@@ -34,7 +34,7 @@ permissions_for_role = Service(
     name='permissions_for_role',
     path=API_DISCUSSION_PREFIX + '/permissions/r/{role_name}',
     description="The permissions for a single role",
-    cors_policy=cors_policy
+    renderer='json', cors_policy=cors_policy
 )
 
 roles = Service(
