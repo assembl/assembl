@@ -116,6 +116,40 @@
   height: 100%;
 }
 
+@media (max-width: 1000px) {
+  .groupPanel {
+    &.panelGridWidth-1 {
+      width: 50%;
+    }
+    &.panelGridWidth-2 {
+      width: 100%;
+    }
+  }
+}
+
+@media (min-width: 1000px) and (max-width: 1500px) {
+  .groupPanel {
+    &.panelGridWidth-1 {
+      width: 33%;
+    }
+    &.panelGridWidth-2 {
+      width: 66%;
+    }
+  }
+}
+
+@media (min-width: 1500px) {
+  .groupPanel {
+    &.panelGridWidth-1 {
+      width: 25%;
+    }
+    &.panelGridWidth-2 {
+      width: 50%;
+    }
+  }
+}
+
+
 // To put the content
 // -----------
 .panel-body {

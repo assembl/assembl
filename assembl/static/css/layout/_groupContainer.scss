@@ -13,14 +13,81 @@
 .groupContent {
   display: inline-block;
   height: 100%;
-  width: 100%;
 
   .navNotification {
     position: relative;
     background-color: $gray3;
     color: $white;
   }
+}
 
+@media (max-width: 1000px) {
+  .groupContent {
+    &.groupGridSize-1 {
+      width: 50%;
+    }
+    &.groupGridSize-2 {
+      width: 100%;
+    }
+    &.groupGridSize-3 {
+      width: 150%;
+    }
+    &.groupGridSize-4 {
+      width: 200%;
+    }
+    &.groupGridSize-5 {
+      width: 250%;
+    }
+    &.groupGridSize-6 {
+      width: 300%;
+    }
+  }
+}
+
+@media (min-width: 1000px) and (max-width: 1500px) {
+  .groupContent {
+    &.groupGridSize-1 {
+      width: 33%;
+    }
+    &.groupGridSize-2 {
+      width: 66%;
+    }
+    &.groupGridSize-3 {
+      width: 100%;
+    }
+    &.groupGridSize-4 {
+      width: 133%;
+    }
+    &.groupGridSize-5 {
+      width: 166%;
+    }
+    &.groupGridSize-6 {
+      width: 200%;
+    }
+  }
+}
+
+@media (min-width: 1500px) {
+  .groupContent {
+    &.groupGridSize-1 {
+      width: 25%;
+    }
+    &.groupGridSize-2 {
+      width: 50%;
+    }
+    &.groupGridSize-3 {
+      width: 75%;
+    }
+    &.groupGridSize-4 {
+      width: 100%;
+    }
+    &.groupGridSize-5 {
+      width: 125%;
+    }
+    &.groupGridSize-6 {
+      width: 150%;
+    }
+  }
 }
 
 .groupHeader {
