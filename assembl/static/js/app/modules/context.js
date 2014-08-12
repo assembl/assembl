@@ -206,13 +206,17 @@ define(function(require){
             this._annotatorEditor = annotatorEditor;
         },
 
-        isSimpleUser: function () {
-            var isSimple = false;
+        displayCallToAction: function () {
+            var display = false;
 
-            if (!this.getCurrentUser().can(Permissions.EDIT_EXTRACT)) {
-                isSimple = true;
+            /**
+             * I don't know if necessary to check the unknown user
+             * because you can not reach permissions for an anonyme user
+             * */
+            if (this.getCurrentUser().isUnknownUser() || !this.getCurrentUser().can(Permissions.EDIT_EXTRACT)) {
+                display = true;
             }
-            return isSimple;
+            return display;
         },
 
         /**

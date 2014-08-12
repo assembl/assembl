@@ -94,7 +94,6 @@ define(function (require) {
             var currentUser = Ctx.getCurrentUser(),
                 canSend = currentUser.can(Permissions.SEND_SYNTHESIS),
                 canEdit = currentUser.can(Permissions.EDIT_SYNTHESIS),
-                isSimpleUser = Ctx.isSimpleUser(),
                 data = {
                     canSend: canSend,
                     canEdit: canEdit,

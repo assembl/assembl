@@ -2,7 +2,7 @@
     <strong>{{ gettext("Clipboard") }}</strong> <strong class="clipboardCount"></strong>
 
     <div class="fr">
-    <% if( !Ctx.isSimpleUser() ){ %>
+    <% if( !Ctx.displayCallToAction() ){ %>
         <a id="segmentList-closeButton" class="iconbutton icon-delete" data-tooltip="{{gettext('Close panel')}}"></a>
     <% } %>
     </div>

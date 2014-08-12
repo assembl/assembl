@@ -7,7 +7,7 @@
     </span>
 </div>
 <div class="navbar-center tac">
-<% if( !Ctx.isSimpleUser() ){ %>
+<% if( !Ctx.displayCallToAction() ){ %>
   <a class="add-group"><i class="icon-add"></i> {{ gettext('Add a group of views') }}</a>
   <% if( Ctx.getCurrentInterfaceType() === Ctx.InterfaceTypes.EXPERT ) { %>
     <a class="js_switchToSimpleInterface">{{ gettext('Switch to simple mode') }}</a>

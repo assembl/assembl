@@ -5,7 +5,7 @@
         <a class="synthesisPanel-fullscreenButton iconbutton iconbutton--resizefull" data-tooltip="{{ gettext('Fullsize') }}"></a>
         {# <a class="synthesisPanel-collapseButton iconbutton <%= collapsed ? 'icon-plus-squared-small' : 'icon-minus-squared-small' %>"></a> #}
 
-        <% if( !Ctx.isSimpleUser() ){ %>
+        <% if( !Ctx.displayCallToAction() ){ %>
         <a class="synthesisPanel-closeButton iconbutton icon-delete" data-tooltip="{{ gettext('Close panel') }}"></a>
         <% } %>
     </div>
