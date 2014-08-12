@@ -6,7 +6,9 @@
             <a data-tooltip="<%= collapsed ? '{{gettext('Expand all')}}' : '{{gettext('Collapse all')}}' %>" class="js_messageList-collapseButton iconbutton <%= collapsed ? 'icon-download-1' : 'icon-upload' %>"></a>
         <% } %>
         <a class="js_messageList-fullScreenButton iconbutton iconbutton--resizefull" data-tooltip="{{ gettext('Fullsize') }}"></a>
-        <a class="js_messageList-closeButton iconbutton icon-delete"data-tooltip="{{gettext('Close panel')}}"></a>
+        <% if( !Ctx.isSimpleUser ){ %>
+        <a class="js_messageList-closeButton iconbutton icon-delete" data-tooltip="{{gettext('Close panel')}}"></a>
+        <% } %>
     </div>
 </header>
 

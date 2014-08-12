@@ -19,13 +19,22 @@ define(function (require) {
         initialize: function (options) {
             this.collection = this.model.get('panels');
         },
+
         events: {
             'click .close-group': 'closeGroup',
             'click .lock-group': 'toggleLock'
         },
+
+        serializeData: function () {
+            return {
+                "Ctx": ctx
+            };
+        },
+
         onRender: function () {
             this._stateButton = this.$('.lock-group i');
         },
+
         closeGroup: function () {
             this.unbind();
             this.model.collection.remove(this.model);
@@ -114,7 +123,6 @@ define(function (require) {
         },
 
         resetDebateState: function () {
-            var currentIdea = ctx.getCurrentIdea();
             this.removePanels('homePanel');
             if (ctx.getCurrentIdea() == undefined) {
                 this.ensurePanelsVisible('messageList');

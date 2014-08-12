@@ -94,7 +94,13 @@ define(function (require) {
             var currentUser = Ctx.getCurrentUser(),
                 canSend = currentUser.can(Permissions.SEND_SYNTHESIS),
                 canEdit = currentUser.can(Permissions.EDIT_SYNTHESIS),
-                data = {canSend: canSend, canEdit: canEdit};
+                isSimpleUser = Ctx.isSimpleUser(),
+                data = {
+                    canSend: canSend,
+                    canEdit: canEdit,
+                    Ctx: Ctx
+                };
+
             if (this.model)
                 data = _.extend(this.model.toJSON(), data);
 

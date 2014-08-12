@@ -7,7 +7,8 @@ define(function(require){
      Permissions = require('utils/permissions'),
           Moment = require('moment'),
             i18n = require('utils/i18n'),
-   Zeroclipboard = require('zeroclipboard');
+         Zeroclipboard = require('zeroclipboard'),
+         bootstrap = require('bootstrap');
 
 
     var Context = function(){
@@ -203,6 +204,15 @@ define(function(require){
         setDraggedAnnotation: function(annotation, annotatorEditor){
             this._draggedAnnotation = annotation;
             this._annotatorEditor = annotatorEditor;
+        },
+
+        isSimpleUser: function () {
+            var isSimple = false;
+
+            if (!this.getCurrentUser().can(Permissions.EDIT_EXTRACT)) {
+                isSimple = true;
+            }
+            return isSimple;
         },
 
         /**
@@ -843,18 +853,27 @@ define(function(require){
         /**
          * @init
          */
-        initTooltips: function(jqueryElement){
+        initTooltips: function (elm) {
             // reference: http://onehackoranother.com/projects/jquery/tipsy/
             //console.log("initTooltips() called");
-            jqueryElement.find('[data-tooltip]').tipsy({
-                delayIn: 400,
+            /*elm.find('[data-tooltip]').tipsy({
+             delayIn: 400,
                 live: true,
                 gravity: function(){ return this.getAttribute('data-tooltip-position') || 's'; },
                 title: function() { return this.getAttribute('data-tooltip'); },
                 opacity: 0.95,
                 offset: 0,       // pixel offset of tooltip from element
 
+             });*/
+
+            elm.find('.bs-tooltip').hover(function () {
+                $(this).tooltip('toggle');
             });
+
+            /*$('.bs-tooltip').hover(function () {
+             $(this).tooltip('toggle');
+             })*/
+
         },
 
         /**

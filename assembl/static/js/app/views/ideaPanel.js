@@ -112,13 +112,16 @@ define(function (require) {
                 canEditExtracts: currentUser.can(Permissions.EDIT_EXTRACT),
                 canEditMyExtracts: currentUser.can(Permissions.EDIT_MY_EXTRACT),
                 canAddExtracts: currentUser.can(Permissions.EDIT_EXTRACT), //TODO: This is a bit too coarse
-                canCreateWidgets: currentUser.can(Permissions.ADMIN_DISCUSSION)
+                canCreateWidgets: currentUser.can(Permissions.ADMIN_DISCUSSION),
+                Ctx: Ctx
             }
         },
 
         onRender: function () {
             Ctx.removeCurrentlyDisplayedTooltips(this.$el);
+
             Ctx.initTooltips(this.$el);
+
             this.panel = this.$el;
             Ctx.initClipboard();
 

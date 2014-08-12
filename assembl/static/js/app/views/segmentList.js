@@ -57,6 +57,12 @@ define(function (require) {
          */
         template: '#tmpl-segmentList',
 
+        serializeData: function () {
+            return {
+                Ctx: Ctx
+            }
+        },
+
         onBeforeRender: function () {
             Ctx.removeCurrentlyDisplayedTooltips(this.$el);
         },
