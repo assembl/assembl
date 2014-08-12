@@ -85,7 +85,7 @@ define(function (require) {
                     this.groupContent.removePanels('homePanel');
                     this.groupContent.ensurePanelsVisible('messageList');
                     this.groupContent.ensurePanelsHidden('ideaPanel');
-                    this.setPanelWidthByType('messageList', 2);
+                    this.groupContent.setPanelWidthByType('messageList', 2);
                     break;
                 default:
                     break
