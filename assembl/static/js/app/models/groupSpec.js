@@ -34,6 +34,14 @@ define(function (require) {
             });
         },
 
+        /**
+         * @aPanelSpec panelSpec of panel to remove
+         */
+        removePanelByModel: function (aPanelSpec) {
+            this.get('panels').remove(aPanelSpec);
+        },
+
+
         addPanel: function (options, position) {
             var aPanelSpec = new panelSpec.Model(options);
             var panels = this.get('panels');
