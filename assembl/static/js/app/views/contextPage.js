@@ -37,10 +37,21 @@ define(function(require){
                     return this[field];
                 };
                 discussion.save = function(field, value){
-                    console.log("field:", field);
-                    console.log("value:", value);
                     this[field] = value;
-                    // TODO: PUT
+
+                    // PUT changed data to the discussion endpoint
+                    var endpoint_url = Ctx.getApiV2DiscussionUrl();
+                    var post_data = {};
+                    post_data[field] = value;
+                    $.ajax({
+                        method: 'PUT',
+                        url: endpoint_url,
+                        data: $.param(post_data),
+                        headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                    }).success(function(data){
+                        console.log("discussion PUT success:", data);
+                    });
+
                     return true;
                 };
 

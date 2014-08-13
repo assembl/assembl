@@ -149,7 +149,8 @@ define(function (require) {
             var deferred = $.Deferred();
             var that = this;
             //var url =  this.getApiUrl();
-            var url = this.getApiV2Url() + '/Discussion/' + this.getDiscussionId();
+            //var url = this.getApiV2Url() + '/Discussion/' + this.getDiscussionId();
+            var url = this.getApiV2DiscussionUrl();
 
             if (this.discussionPromise === undefined) {
                 this.discussion = undefined;
@@ -270,6 +271,10 @@ define(function (require) {
 
         getApiV2Url: function () {
             return '/data';
+        },
+
+        getApiV2DiscussionUrl: function(){
+            return this.getApiV2Url() + '/Discussion/' + this.getDiscussionId();
         },
 
         /**
