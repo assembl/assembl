@@ -70,15 +70,9 @@
   padding: 0 10px;
   position: relative;
   background-color: $gray3;
-  .panel-header-title {
-    position: absolute;
-    left: 10px;
-    top: 10px;
-  }
+  .panel-header-title,
   .panel-header-close {
-    position: absolute;
-    right: 10px;
-    top: 10px;
+    line-height: 35px;
   }
 }
 
