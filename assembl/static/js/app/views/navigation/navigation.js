@@ -30,7 +30,7 @@ define(function (require) {
                 that.initVar();
                 setTimeout(function () {
                     that.setSideBarHeight();
-                }, 100);
+                }, 0);
             });
 
             this._window = null;
