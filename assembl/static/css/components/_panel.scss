@@ -117,6 +117,7 @@
 }
 
 @media (max-width: 1000px) {
+  // window so small we only show two panels
   .groupPanel {
     &.panelGridWidth-1 {
       width: 50%;
@@ -128,6 +129,7 @@
 }
 
 @media (min-width: 1000px) and (max-width: 1500px) {
+  // Usual window size: Show three panels
   .groupPanel {
     &.panelGridWidth-1 {
       width: 33%;
@@ -139,6 +141,7 @@
 }
 
 @media (min-width: 1500px) {
+  // Large window: Show four panels
   .groupPanel {
     &.panelGridWidth-1 {
       width: 25%;
@@ -146,6 +149,28 @@
     &.panelGridWidth-2 {
       width: 50%;
     }
+  }
+  // Special case for small number of actual panels
+  #groupsContainer.allGroupsGridSize-3 .groupPanel {
+    &.panelGridWidth-1 {
+      width: 33%;
+    }
+    &.panelGridWidth-2 {
+      width: 66%;
+    }
+  }
+}
+
+// Special case for small number of actual panels
+#groupsContainer.allGroupsGridSize-1 .groupPanel {
+  width:100%;
+}
+#groupsContainer.allGroupsGridSize-2 .groupPanel {
+  &.panelGridWidth-1 {
+    width: 50%;
+  }
+  &.panelGridWidth-2 {
+    width: 100%;
   }
 }
 

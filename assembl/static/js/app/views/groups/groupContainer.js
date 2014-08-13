@@ -11,7 +11,7 @@ define(function (require) {
         id: 'groupsContainer',
         childView: GroupContent,
         initialize: function(options) {
-            this.listenTo(this.collection, 'change', this.calculateGridSize);
+            this.listenTo(this.collection, 'change reset add remove', this.calculateGridSize);
         },
         onRender: function () {
             if (!window.localStorage.getItem('showNotification')) {
@@ -20,9 +20,11 @@ define(function (require) {
             }
         },
         calculateGridSize: function () {
-            var gridSize = 0;
-            this.children.each(function (child) {
-                gridSize += child.gridSize || 0;
+            var that=this, gridSize = 0;
+            this.collection.each(function(aGroupSpec) {
+                var view = that.children.findByModel(aGroupSpec);
+                if (view)
+                    gridSize += view.calculateGridSize();
             });
             var className = 'allGroupsGridSize-' + gridSize;
             var found = this.$el[0].className.match(/\b(allGroupsGridSize-[0-9]+)\b/);

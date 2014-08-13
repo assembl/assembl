@@ -19,8 +19,8 @@ define(function (require) {
         initialize: function (options) {
             var that = this;
             this.collection = this.model.get('panels');
-            this.listenTo(this.collection, 'add remove reset change', this.calculateGridSize);
-            setTimeout(function() {that.calculateGridSize();}, 200);
+            this.listenTo(this.collection, 'add remove reset change', this.adjustGridSize);
+            setTimeout(function() {that.adjustGridSize();}, 200);
         },
 
         events: {
@@ -43,14 +43,17 @@ define(function (require) {
             this.model.collection.remove(this.model);
         },
         calculateGridSize: function () {
-            var groupSize = 0, that = this;
+            var gridSize = 0, that = this;
             _.each(this.collection.models, function (aPanelSpec) {
                 if (aPanelSpec.get('hidden'))
                     return;
-                groupSize += aPanelSpec.get('gridWidth');
+                gridSize += aPanelSpec.get('gridWidth');
             });
-            this.gridSize = groupSize;
-            var className = 'groupGridSize-' + groupSize;
+            return gridSize;
+        },
+        adjustGridSize: function () {
+            var gridSize = this.calculateGridSize();
+            var className = 'groupGridSize-' + gridSize;
             var found = this.$el[0].className.match(/\b(groupGridSize-[0-9]+)\b/);
             if (found && found[0] != className) {
                 this.$el.removeClass(found[0]);
@@ -60,7 +63,6 @@ define(function (require) {
                 this.model.collection.trigger('change');
             }
         },
-
         /**
          * Tell the panelWrapper which view to put in its contents
          */
