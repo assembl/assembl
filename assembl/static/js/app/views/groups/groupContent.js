@@ -49,6 +49,7 @@ define(function (require) {
                     return;
                 groupSize += aPanelSpec.get('gridWidth');
             });
+            this.gridSize = groupSize;
             var className = 'groupGridSize-' + groupSize;
             var found = this.$el[0].className.match(/\b(groupGridSize-[0-9]+)\b/);
             if (found && found[0] != className) {
@@ -56,6 +57,7 @@ define(function (require) {
             }
             if ((!found) || found[0] != className) {
                 this.$el.addClass(className);
+                this.model.collection.trigger('change');
             }
         },
 
