@@ -1371,11 +1371,11 @@ define(function (require) {
                         message.trigger('showBody');
                         el = $(selector);
                         if (el[0]) {
-                            var panelOffset = this.ui.panelBody.offset().top;
+                            var panelOffset = that.ui.panelBody.offset().top;
                             var offset = el.offset().top;
                             // Scrolling to the element
-                            var target = offset - panelOffset + this.ui.panelBody.scrollTop();
-                            this.ui.panelBody.animate({ scrollTop: target }, { complete: real_callback });
+                            var target = offset - panelOffset + that.ui.panelBody.scrollTop();
+                            that.ui.panelBody.animate({ scrollTop: target }, { complete: real_callback });
                         } else {
                             console.log("showMessageById(): ERROR:  Message " + id + " not found in the DOM with selector: " + selector);
                         }
