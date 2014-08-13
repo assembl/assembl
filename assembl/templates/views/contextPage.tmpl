@@ -46,7 +46,9 @@
 }
 
 
-#introduction-details, #introduction-button-see-less {
+#introduction-details,
+#introduction-button-see-less,
+#introduction-button-see-more {
     display: none;
 }
 
@@ -138,29 +140,22 @@ line {
         <div class="block-half">
             <div class="block-content">
                 <h2>{{ gettext('Introduction') }}</h2>
-                <p>
-                    {{ discussion.slug }}
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                </p>
-                <p>
-                    Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                </p>
+                <div class="introduction">
+                </div>
                 <div id="introduction-details">
-                    <p>
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                    </p>
-                    <p>
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                    </p>
+                    <div class="introduction-details">
+                    </div>
                 </div>
                 <button id="introduction-button-see-more" onclick="introductionToggle();">Voir plus</button>
                 <button id="introduction-button-see-less" onclick="introductionToggle();">Voir moins</button>
+                <div class="introduction-details-empty">
+                </div>
                 
             </div>
         </div>
         <div class="block-half">
             <div class="block-content">
-                <h2>{{ gettext('Objectifs') }}</h2>
+                <h2>{{ gettext('Objectives') }}</h2>
                 <div class="objectives">
                 </div>
             </div>
@@ -170,7 +165,7 @@ line {
     <div class="row-major">
         <div class="block-full">
             <div class="block-content">
-                <h2>{{ gettext('Ligne de temps') }}</h2>
+                <h2>{{ gettext('Timeline') }}</h2>
                 <p>
                     Blabla
                 </p>
@@ -181,17 +176,16 @@ line {
     <div class="row-minor">
         <div class="block-full">
             <div class="block-content">
-                <h2>{{ gettext('Initiateur') }}: Institut du Nouveau Monde</h2>
-                <p>
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                </p>
+                <h2>{{ gettext('Instigator') }}</h2>
+                <div class="instigator">
+                </div>
             </div>
         </div>
 
         {#
         <div class="block-half">
             <div class="block-content">
-                <h2>{{ gettext('Facilitateurs') }}</h2>
+                <h2>{{ gettext('Facilitators') }}</h2>
                 <p>
                     Blabla
                 </p>
@@ -204,7 +198,7 @@ line {
         <div class="block-half">
             <div class="block-content">
                 <div class="statistics">
-                    <h2>{{ gettext('Statistiques') }}</h2>
+                    <h2>{{ gettext('Statistics') }}</h2>
                     <p>&nbsp;</p>
                 </div>
                 <div class="chart">Chargement...</div>

@@ -55,6 +55,8 @@ define(function(require){
                     return true;
                 };
 
+
+                // add editable "objectives" field
                 this.objectivesField = new CKEditorField({
                     'model': discussion,
                     'modelProp': 'objectives',
@@ -62,6 +64,41 @@ define(function(require){
                     'canEdit': canEdit
                 });
                 this.objectivesField.renderTo( $('.objectives'));
+
+
+                // add editable "instigator" field
+                this.objectivesField = new CKEditorField({
+                    'model': discussion,
+                    'modelProp': 'instigator',
+                    'placeholder': 'Instigator',
+                    'canEdit': canEdit
+                });
+                this.objectivesField.renderTo( $('.instigator'));
+
+
+                // add editable "introduction" and "introductionDetails" fields
+                this.introductionField = new CKEditorField({
+                    'model': discussion,
+                    'modelProp': 'introduction',
+                    'placeholder': 'Introduction',
+                    'canEdit': canEdit
+                });
+                this.introductionField.renderTo( $('.introduction'));
+                this.introductionDetailsField = new CKEditorField({
+                    'model': discussion,
+                    'modelProp': 'introductionDetails',
+                    'placeholder': 'Introduction details',
+                    'canEdit': canEdit
+                });
+                if ( discussion["introductionDetails"] && discussion.introductionDetails.length > 0 )
+                {
+                    $('#introduction-button-see-more').show();
+                    this.introductionDetailsField.renderTo( $('.introduction-details'));
+                }
+                else if ( canEdit )
+                {
+                    this.introductionDetailsField.renderTo( $('.introduction-details-empty'));
+                }
             });
 
             this.draw();

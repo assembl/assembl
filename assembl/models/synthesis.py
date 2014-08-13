@@ -71,6 +71,9 @@ class Discussion(DiscussionBoundBase):
     creation_date = Column(DateTime, nullable=False, default=datetime.utcnow,
                            info={'rdf': QuadMapPatternS(None, DCTERMS.created)})
     objectives = Column(UnicodeText)
+    instigator = Column(UnicodeText)
+    introduction = Column(UnicodeText)
+    introductionDetails = Column(UnicodeText)
 
 
     def read_post_ids(self, user_id):

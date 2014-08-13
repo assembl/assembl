@@ -119,6 +119,9 @@
         "permissions": "&get_roles_by_permission",
         "widget_collection_url": true,
         "objectives": true,
+        "instigator": true,
+        "introduction": true,
+        "introductionDetails": true,
         "sources": [":partial"]
     },
     "Idea": {
