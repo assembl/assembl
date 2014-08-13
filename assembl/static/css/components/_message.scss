@@ -19,13 +19,15 @@ $ellipsiswidth: 3em !default;
         width: 5px; height: $height; }
 
     .ellipsis > *:first-child {
-        float: right;
-        width: 100%;
-        margin-left: -5px; }
+      //display: inline;
+      width: 100%;
+      //margin-left: -5px;
+      margin: 0;
+      white-space: normal;
+    }
 
     .ellipsis:after {
         content: "\02026";// Read More
-
         float: right; position: relative;
         top: -$lineheight;
         left: 100%;
@@ -39,11 +41,15 @@ $ellipsiswidth: 3em !default;
             linear-gradient(top left, rgba(255, 255, 255, 0), white 50%, white)
             );
     }
-    
-    .ellipsis a { position: absolute;
-        left: 0; top: 0;
-        width: 100%; height: 100%;
-        overflow: hidden; text-indent: -9999px; }
+
+  .ellipsis a {
+    //position: absolute;
+    //left: 0; top: 0;
+    //width: 100%;
+    //height: 100%;
+    //overflow: hidden;
+    //text-indent: -9999px;
+  }
     .ellipsis i, .ellipsis:after {
         font-style: normal; color: blue;}
 
@@ -132,7 +138,7 @@ $ellipsiswidth: 3em !default;
 
         .message-body.body_format_text_plain {
             white-space: pre-line;
-            &> {
+          & > {
             white-space: normal;
             }
         }
@@ -151,6 +157,14 @@ $ellipsiswidth: 3em !default;
                 white-space: pre-line;
             }
         }
+
+      .message-menu {
+        .dropdown {
+          position: absolute;
+          right: 5px;
+          top: 0;
+        }
+      }
     }
     
     &.viewStyleTitleOnly {
@@ -188,24 +202,29 @@ $ellipsiswidth: 3em !default;
         }
         @include multiline-ellipsis(3em, 1em, 3em);
         .message-body {
-            @extend .text-muted;
+          @extend .text-muted;
           margin-top: 0.6em;
           padding-left: 3em;
-            position: relative;
+          position: relative;
         }
 
         .message-body.body_format_text_plain > div {
-            white-space: pre-line;
-            &> {
+          white-space: normal;
+          //white-space: pre-line;
+          & > {
             white-space: normal;
-            }
+          }
         }
+
+      .message-menu {
+
+      }
     }
     
     .indicator {
       position: absolute;
       right: 0;
-      top: 10px;
+      top: 50%;
       .indice {
         width: 10px;
         height: 10px;
@@ -239,8 +258,8 @@ body.js_annotatorUserCannotAddExtract > .textbubble {
 
 
 .messageList-list.reverse_chronological, .messageList-list.chronological {
-    .message-family-container {    
-        border-bottom: solid 1px $gray;
+    .message-family-container {
+      border-bottom: solid 1px $gray3;
     
         &:last-child {
             border-bottom: 0;
@@ -249,7 +268,7 @@ body.js_annotatorUserCannotAddExtract > .textbubble {
 }
 
 // @for $i from 1 through 30 {
-//     .message[data-message-level="#{$i}"] {
+//     .message[data-message-level="#{$i}"] {                                                                                                                    c
 //         padding-left: ((21px * $i) + 5px) - 21px;
 //     }
 // }
@@ -408,6 +427,9 @@ body.js_annotatorUserCannotAddExtract > .textbubble {
         padding-left: 4px;
         padding-right: 6px;
       cursor: pointer;
+      i {
+        font-size: 10px;
+      }
     }
     .dropdown {
         vertical-align: top;

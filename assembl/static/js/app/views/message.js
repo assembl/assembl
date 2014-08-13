@@ -10,7 +10,8 @@ define(function(require){
      Permissions = require('utils/permissions'),
  MessageSendView = require('views/messageSend'),
             User = require('models/user'),
-CollectionManager = require('modules/collectionManager');
+      CollectionManager = require('modules/collectionManager'),
+      $ = require('jquery');
 
   var MIN_TEXT_TO_TOOLTIP = 5,
   TOOLTIP_TEXT_LENGTH = 10;
@@ -342,8 +343,14 @@ CollectionManager = require('modules/collectionManager');
      *  Focus on the reply box, and open it if closed
      **/
     focusReplyBox: function(){
-      this.openReplyBox();
 
+        if (this.viewStyle.id === 'viewStylePreview') {
+            this.onMessageTitleClick();
+            this.$('.messageSend-body').focus();
+            return;
+        }
+
+        this.openReplyBox();
       var that = this;
       window.setTimeout(function(){
         that.$('.messageSend-body').focus();
@@ -355,6 +362,7 @@ CollectionManager = require('modules/collectionManager');
      */
     openReplyBox: function(){
       this.$('.message-replybox').show();
+        this.$('.message-replybox').removeClass('hidden');
       this.replyBoxShown = true;
     },
 
