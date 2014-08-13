@@ -1,5 +1,5 @@
 <header class="panel-header">
-    <span class="text-bold">{{ gettext('Messages') }}</span>
+    <span class="panel-header-title">{{ gettext('Messages') }}</span>
 
     <div class="fr">
         <% if (currentViewStyle.id === 'threaded') { %>
@@ -7,7 +7,7 @@
         <% } %>
         <a class="js_messageList-fullScreenButton iconbutton iconbutton--resizefull" data-tooltip="{{ gettext('Fullsize') }}"></a>
         <% if( !Ctx.displayCallToAction() ){ %>
-        <a class="js_messageList-closeButton iconbutton icon-delete" data-tooltip="{{gettext('Close panel')}}"></a>
+        <a class="js_messageList-closeButton iconbutton icon-delete panel-header-close" data-tooltip="{{gettext('Close panel')}}"></a>
         <% } %>
     </div>
 </header>

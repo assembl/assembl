@@ -13,6 +13,8 @@
 .groupContent {
   display: inline-block;
   height: 100%;
+  border-right: 5px solid $white;
+  border-left: 3px solid $gray1;
   white-space: normal;
 
   .navNotification {
@@ -164,6 +166,7 @@
   .groupPanel {
     display: table-cell;
     height: 100%;
+    vertical-align: top;
   }
 
   .navSidebar {

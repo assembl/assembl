@@ -1,9 +1,9 @@
 <header class="panel-header">
-    <strong>{{ gettext("Clipboard") }}</strong> <strong class="clipboardCount"></strong>
+    <span class="panel-header-title">{{ gettext("Clipboard") }} <span class="clipboardCount"></span></span>
 
     <div class="fr">
     <% if( !Ctx.displayCallToAction() ){ %>
-        <a id="segmentList-closeButton" class="iconbutton icon-delete" data-toggle="tooltip" data-placement="top" title="{{gettext('Close panel')}}"></a>
+        <a id="segmentList-closeButton" class="iconbutton icon-delete panel-header-close" data-toggle="tooltip" data-placement="top" title="{{gettext('Close panel')}}"></a>
     <% } %>
     </div>
 </header>

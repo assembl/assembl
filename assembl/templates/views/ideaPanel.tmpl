@@ -10,7 +10,7 @@
             <a id="ideaPanel-linkbutton" class="iconbutton icon-link" data-copy-text="/idea/<%= escape(idea.getId()) %>" data-toggle="tooltip" title="{{gettext('Copy the link to this idea to clipboard')}}"></a>
         <% } %>
         <% if( !Ctx.displayCallToAction() ){ %>
-        <a id="ideaPanel-closebutton" class="iconbutton icon-delete" data-toggle="tooltip" data-placement="top" title="{{gettext('Close panel')}}"></a>
+        <a id="ideaPanel-closebutton" class="iconbutton icon-delete  panel-header-close" data-toggle="tooltip" data-placement="top" title="{{gettext('Close panel')}}"></a>
         <% } %>
     </div>
 </header>

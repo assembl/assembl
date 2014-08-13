@@ -1,12 +1,12 @@
 <header class="panel-header">
-    <strong>{{ gettext('Synthesis') }}</strong>
+    <span class="panel-header-title">{{ gettext('Synthesis') }}</span>
 
     <div class="fr">
         <a class="synthesisPanel-fullscreenButton iconbutton iconbutton--resizefull" data-toggle="tooltip" title="{{ gettext('Fullsize') }}"></a>
         {# <a class="synthesisPanel-collapseButton iconbutton <%= collapsed ? 'icon-plus-squared-small' : 'icon-minus-squared-small' %>"></a> #}
 
         <% if( !Ctx.displayCallToAction() ){ %>
-        <a class="synthesisPanel-closeButton iconbutton icon-delete" data-toggle="tooltip" title="{{ gettext('Close panel') }}"></a>
+        <a class="synthesisPanel-closeButton icon-delete panel-header-close" data-toggle="tooltip" title="{{ gettext('Close panel') }}"></a>
         <% } %>
     </div>
 </header>
