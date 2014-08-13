@@ -273,7 +273,7 @@ define(function (require) {
             return '/data';
         },
 
-        getApiV2DiscussionUrl: function(){
+        getApiV2DiscussionUrl: function () {
             return this.getApiV2Url() + '/Discussion/' + this.getDiscussionId();
         },
 
@@ -875,11 +875,10 @@ define(function (require) {
 
              });*/
 
-            elm.find('.bs-tooltip').hover(function () {
-                $(this).tooltip({
-                    container: 'body'
-                });
+            elm.find('[data-toggle="tooltip"]').tooltip({
+                container: 'body'
             });
+
         },
 
         /**
