@@ -9,9 +9,8 @@
 <% if ( viewStyle == ctx.AVAILABLE_MESSAGE_VIEW_STYLES.TITLE_ONLY ){ %>
     <div class="message-date">{{ gettext('<time title="%(precise_date)s">%(nice_date)s</time>')|format(nice_date=nice_date,precise_date=precise_date)|safe }}</div>
     <div class="message-subheader">
-        <span class="message-author margin-right">{{ gettext('%(user)s')|format(user=userName)|safe }}
-        </span>
-        <span class="message-subject margin-right"><%= subject %></span>
+        <span class="message-author margin-right">{{ gettext('%(user)s')|format(user=userName)|safe }}</span>
+        <p class="message-subject clr"><%= subject %></p>
         {# <span class="text-muted"><%= ctx.stripHtml(body) %></span> #}
     </div>
 </header>
@@ -19,13 +18,13 @@
     <div class="message-subheader">
         <span class="message-author fl">{{ gettext('%(user)s')|format(user=userName)|safe }}&nbsp;&nbsp;</span>
         <div class="message-date">{{ gettext('<time>%(time)s</time>')|format(time=time)|safe }}</div>
-        <span class="message-subject margin-right"><%= subject %></span>
+        <p class="message-subject clr"><%= subject %></p>
     </div>
 <% } else if ( viewStyle == ctx.AVAILABLE_MESSAGE_VIEW_STYLES.FULL_BODY ){ %>
     <div class="message-subheader">
         <span class="message-author fl">{{ gettext('%(user)s')|format(user=userName)|safe }}&nbsp;&nbsp;</span>
         <span class="message-date">{{ gettext('<time title="%(precise_date)s">%(nice_date)s</time>')|format(nice_date=nice_date,precise_date=precise_date)|safe }}</span>
-        <div><span class="message-subject"><%= subject %></span></div>
+        <p class="message-subject clr"><%= subject %></p>
     </div>
     <div class="message-menu">
         <div class="dropdown">
