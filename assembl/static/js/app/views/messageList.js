@@ -283,6 +283,8 @@ define(function (require) {
             }
             else {
                 this.currentQuery.clearFilter(this.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, null);
+                this.currentQuery.clearFilter(this.currentQuery.availableFilters.POST_IS_DESCENDENT_OF_POST, null);
+                this.currentQuery.clearFilter(this.currentQuery.availableFilters.POST_IS_SYNTHESIS, null);
 
                 if (currentIdea) {
                     this.currentQuery.clearFilter(this.currentQuery.availableFilters.POST_IS_ORPHAN, null);
@@ -1152,6 +1154,8 @@ define(function (require) {
             this.currentQuery.clearFilter(this.currentQuery.availableFilters.POST_IS_SYNTHESIS, null);
             this.currentQuery.clearFilter(this.currentQuery.availableFilters.POST_IS_ORPHAN, null);
             this.currentQuery.clearFilter(this.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, null);
+            // this was probably set before... eg by synthesis panel, and is cancelled when clicking an idea.
+            this.currentQuery.clearFilter(this.currentQuery.availableFilters.POST_IS_DESCENDENT_OF_POST, null);
 
             if (arguments.length > 1) {
                 if (only_unread === null)
