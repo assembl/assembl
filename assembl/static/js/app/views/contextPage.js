@@ -34,7 +34,7 @@ define(function(require){
             var canEdit = currentUser.can(Permissions.ADMIN_DISCUSSION) || false;
 
             $.when( Ctx.getDiscussionPromise() ).then( function(discussion){
-                console.log("discussion successfully loaded: ", discussion);
+                //console.log("discussion successfully loaded: ", discussion);
 
                 // we implement here get() and save() methods (needed by CKEditor), so we mock a model instance
                 // TODO: find a better solution, for example create and use a real Discussion model instead?
@@ -132,18 +132,18 @@ define(function(require){
                 {
                     threshold_passed = true;
                     date_threshold_min = messages[i]['date'];
-                    console.log("count:");
-                    console.log(count);
+                    //console.log("count:");
+                    //console.log(count);
                     break;
                 }
             }
 
-            console.log("threshold_passed:");
-            console.log(threshold_passed);
-            console.log("date_threshold_max:");
-            console.log(date_threshold_max);
-            console.log("date_threshold_min:");
-            console.log(date_threshold_min);
+            //console.log("threshold_passed:");
+            //console.log(threshold_passed);
+            //console.log("date_threshold_max:");
+            //console.log(date_threshold_max);
+            //console.log("date_threshold_min:");
+            //console.log(date_threshold_min);
 
             // deduce the period to apply from the date_threshold_min and date_threshold_max values
             var date_min = new Date(date_threshold_min);
@@ -341,28 +341,50 @@ define(function(require){
                 // compute messages authors for 2 periods: current period and since the beginning of the debate
                 // -----
 
-                var messages_authors = _.map(messages_sorted_by_date, function(msg){return msg.idCreator;});
-                //console.log("messages_authors:");
-                //console.log(messages_authors);
-                messages_authors = _.uniq(messages_authors);
-                //console.log("messages_authors:");
-                //console.log(messages_authors);
-                messages_authors_total = messages_authors.length;
+                var extractMessageAuthor = function(msg){
+                    return msg.idCreator;
+                };
+
+                var authors = _.map(messages_sorted_by_date, extractMessageAuthor);
+                //console.log("authors:");
+                //console.log(authors);
+                authors = _.uniq(authors);
+                //console.log("authors:");
+                //console.log(authors);
+                var authors_total = authors.length;
 
                 var messages_in_period_full = _.filter(messages_sorted_by_date, function(msg){
                     var d = new Date(msg.date);
                     return d >= date_min && d <= date_max;
                 });
 
-                var authors_in_period = _.map(messages_in_period_full, function(msg){return msg.idCreator;});
+                var messages_not_in_period_full = _.filter(messages_sorted_by_date, function(msg){
+                    var d = new Date(msg.date);
+                    return d < date_min || d > date_max;
+                });
+
+                var authors_in_period = _.map(messages_in_period_full, extractMessageAuthor);
                 //console.log("authors_in_period:");
                 //console.log(authors_in_period);
                 authors_in_period = _.uniq(authors_in_period);
                 //console.log("authors_in_period:");
                 //console.log(authors_in_period);
-                authors_in_period_total = authors_in_period.length;
-                // TODO
-                //var new_authors_in_period = _.difference(authors_in_period - messages_authors;
+                var authors_in_period_total = authors_in_period.length;
+
+                var authors_not_in_period = _.map(messages_not_in_period_full, extractMessageAuthor);
+                authors_not_in_period = _.uniq(authors_not_in_period);
+                var authors_not_in_period_total = authors_not_in_period.length;
+
+                //console.log("authors_not_in_period:",authors_not_in_period);
+                //console.log("authors_in_period:",authors_in_period);
+                var new_authors_in_period = _.difference(authors_in_period, authors_not_in_period);
+                //console.log("new_authors_in_period:",new_authors_in_period);
+                var new_authors_in_period_total = new_authors_in_period.length;
+
+                var messages_in_period_by_new_authors = _.filter(messages_in_period_full, function(msg){
+                    return _.contains(new_authors_in_period, msg.idCreator);
+                });
+                var messages_in_period_by_new_authors_total = messages_in_period_by_new_authors.length;
 
                 // -----
                 // show results
@@ -374,41 +396,36 @@ define(function(require){
                     "messages_total": messages_total
                 }
 
-                //that.drawLineGraph(messages_per_day_totals_array);
                 that.messages_per_day_for_line_graph = messages_per_day_totals_filled_array;
-                //that.drawLineGraph(messages_in_period);
-                //that.drawLineGraph(messages_per_day_totals_filled_array);
-
-                var messages_from_new_authors_in_current_period = messages_in_period_total - 1; // TODO: real value
                 
                 var pie_chart_data = [
                     "the title of the first element is purposely not used, only its data is used", //"Messages since the beginning of the debate",
                     messages_total,
-                    0,
+                    authors_total,
                     {
                         "messages_posted_during_current_period": [
                             "Messages posted since " + statsPeriodName,
                             messages_in_period_total,
-                            0,
+                            authors_in_period_total,
                             {
                                 "messages_from_new_authors": [
                                     "Messages from new authors",
-                                    messages_from_new_authors_in_current_period,
-                                    0,
+                                    messages_in_period_by_new_authors_total,
+                                    new_authors_in_period_total,
                                     {}
                                 ],
                                 "messages_from_old_authors": [
                                     "Messages from old authors",
-                                    messages_in_period_total-messages_from_new_authors_in_current_period,
-                                    0,
+                                    messages_in_period_total - messages_in_period_by_new_authors_total,
+                                    authors_in_period_total - new_authors_in_period_total,
                                     {}
                                 ]
                             }
                         ],
                         "messages_posted_before_current_period": [
                             "Messages posted before " + statsPeriodName,
-                            messages_total-messages_in_period_total,
-                            0,
+                            messages_total - messages_in_period_total,
+                            authors_not_in_period_total,
                             {}
                         ]
                     }
@@ -420,6 +437,7 @@ define(function(require){
                     "Messages since the beginning of the debate",
                     null,
                     messages_total,
+                    authors_total
                 ];
 
                 that.pie_chart_data = pie_chart_data;
@@ -657,7 +675,7 @@ define(function(require){
                 }
 
                 var width = Math.max(Math.min(plot.offsetWidth,plot.offsetHeight), 250);
-                console.log("plot width: ", width);
+                //console.log("plot width: ", width);
                 var height = width;
                 // var x_margin = 40; // not used
                 // var y_margin = 40; // not used
@@ -748,14 +766,14 @@ define(function(require){
                     
                 function update_legend(d)
                 {
-                    //legend.html("<h2>"+d[2]+"&nbsp;</h2><p>"+d[4]+" messages, by "+d[5]+" authors.</p>");
-                    legend.html("<h2>"+d[2]+"&nbsp;</h2><p>"+d[4]+" messages</p>");
+                    legend.html("<h2>"+d[2]+"&nbsp;</h2><p>"+d[4]+" messages, by "+d[5]+" authors</p>");
+                    //legend.html("<h2>"+d[2]+"&nbsp;</h2><p>"+d[4]+" messages</p>");
                     legend.transition().duration(200).style("opacity","1");
                 }
 
                 function get_slice_title(d)
                 {
-                    return d[2]+"\n"+d[4]+" messages";
+                    return d[2]+"\n"+d[4]+" messages, by "+d[5]+" authors";
                 }
                 
                 function remove_legend(d)
