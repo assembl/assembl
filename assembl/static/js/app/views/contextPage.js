@@ -289,10 +289,10 @@ define(function(require){
                     }
                     return data;
                 }
-                var messages_per_day_totals_filled = fillMissingDays(messages_per_day_totals, date_min, date_max);
+                //var messages_per_day_totals_filled = fillMissingDays(messages_per_day_totals, date_min, date_max);
+                var messages_per_day_totals_filled = fillMissingDays(messages_per_day_totals, new Date(first_message_date), new Date(last_message_date));
                 //console.log("messages_per_day_totals_filled:");
                 //console.log(messages_per_day_totals_filled);
-
 
 
                 // convert object to array
@@ -304,6 +304,8 @@ define(function(require){
                 }
                 //console.log("messages_per_day_totals_filled_array:");
                 //console.log(messages_per_day_totals_filled_array);
+
+                messages_per_day_totals_filled_array = _.sortBy(messages_per_day_totals_filled_array, function(msg){return msg['date'];});
 
 
 
@@ -360,7 +362,7 @@ define(function(require){
                 // -----
                 // show results
                 // -----
-                //that.$el.find(".statistics").html("<h2>Statistics since " + statsPeriodName + "</h2><div id='stats_messages'>Messages posted: " + messages_in_period_total + " (" + messages_total + " since the beginning of the debate)");
+
                 that.stats = {
                     "statsPeriodName": statsPeriodName,
                     "messages_in_period_total": messages_in_period_total,
@@ -368,7 +370,7 @@ define(function(require){
                 }
 
                 //that.drawLineGraph(messages_per_day_totals_array);
-                that.messages_in_period = messages_in_period;
+                that.messages_per_day_for_line_graph = messages_per_day_totals_filled_array;
                 //that.drawLineGraph(messages_in_period);
                 //that.drawLineGraph(messages_per_day_totals_filled_array);
 
@@ -421,12 +423,12 @@ define(function(require){
                 return;
             var stats = this.stats;
             this.$el.find(".statistics").html("<h2>Statistics since " + stats.statsPeriodName + "</h2><p class='stats_messages'>Messages posted: " + stats.messages_in_period_total + " (" + stats.messages_total + " since the beginning of the debate)</p>");
-            this.drawLineGraph(this.messages_in_period);
+            this.drawLineGraph(this.messages_per_day_for_line_graph);
             this.drawPieChart(this.pie_chart_data);
         },
 
         drawLineGraph: function(data){
-            var w = 600,
+            var w = 450,
                 h = 250,
                 that = this;
 
@@ -564,7 +566,15 @@ define(function(require){
                 }
 
                 var circles = dataCirclesGroup.selectAll('.data-point')
-                    .data(data);
+                    .data(data.filter(function(d){
+                        return d.value != 0;
+                    }));
+
+                var circleRadius = function(d){
+                    if ( d.value == 0 )
+                        return 0;
+                    return (data.length <= maxDataPointsForDots) ? pointRadius : 1;
+                };
 
                 circles
                     .enter()
@@ -577,7 +587,7 @@ define(function(require){
                             .style('opacity', 1e-6)
                             .attr('cx', function(d) { return x(d.date) })
                             .attr('cy', function() { return y(0) })
-                            .attr('r', function() { return (data.length <= maxDataPointsForDots) ? pointRadius : 0 })
+                            .attr('r', circleRadius)
                         .transition()
                         .duration(transitionDuration)
                             .style('opacity', 1)
@@ -589,7 +599,7 @@ define(function(require){
                     .duration(transitionDuration)
                         .attr('cx', function(d) { return x(d.date) })
                         .attr('cy', function(d) { return y(d.value) })
-                        .attr('r', function() { return (data.length <= maxDataPointsForDots) ? pointRadius : 0 })
+                        .attr('r', circleRadius)
                         .style('opacity', 1);
 
                 circles
