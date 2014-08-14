@@ -155,14 +155,18 @@ define(function (require) {
 
                                     _.each(extracts, function (extract) {
                                         var post = allMessagesCollection.get(extract.get('idPost'));
-                                        ideaExtractList.append(template(
-                                            {segment: extract,
-                                                post: post,
-                                                postCreator: allUsersCollection.get(post.get('idCreator')),
-                                                canEditExtracts: currentUser.can(Permissions.EDIT_EXTRACT),
-                                                canEditMyExtracts: currentUser.can(Permissions.EDIT_MY_EXTRACT),
-                                                ctx: Ctx
-                                            }));
+                                        if (post) {
+                                            ideaExtractList.append(template(
+                                                {segment: extract,
+                                                    post: post,
+                                                    postCreator: allUsersCollection.get(post.get('idCreator')),
+                                                    canEditExtracts: currentUser.can(Permissions.EDIT_EXTRACT),
+                                                    canEditMyExtracts: currentUser.can(Permissions.EDIT_MY_EXTRACT),
+                                                    ctx: Ctx
+                                                }));
+                                        } else {
+                                            console.log("Missing post for extract!", extract.get('id'), extract.get('idPost'));
+                                        }
                                     });
                                     that.$el.find('#ideaPanel-section-segments-legend').html(that.renderTemplateGetExtractsLabel(extracts));
                                 }
