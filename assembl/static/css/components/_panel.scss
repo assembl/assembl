@@ -120,8 +120,8 @@
   height: 100%;
 }
 
-@media (max-width: 1000px) {
-  // window so small we only show two panels
+@media (max-width: 900px) {
+  // Tiny window size: Show two panels units
   .groupPanel {
     &.panelGridWidth-1 {
       width: 50%;
@@ -129,11 +129,14 @@
     &.panelGridWidth-2 {
       width: 100%;
     }
+    &.panelGridWidth-3 {
+      width: 150%;
+    }
   }
 }
 
-@media (min-width: 1000px) and (max-width: 1500px) {
-  // Usual window size: Show three panels
+@media (min-width: 900px) and (max-width: 1200px) {
+  // Small window size: Show three panels units
   .groupPanel {
     &.panelGridWidth-1 {
       width: 33%;
@@ -141,11 +144,14 @@
     &.panelGridWidth-2 {
       width: 66%;
     }
+    &.panelGridWidth-3 {
+      width: 100%;
+    }
   }
 }
 
-@media (min-width: 1500px) and (max-width: 2000px) {
-  // Large window: Show four panels
+@media (min-width: 1200px) and (max-width: 1500px) {
+  // Basic window size: Show four panels units
   .groupPanel {
     &.panelGridWidth-1 {
       width: 25%;
@@ -153,6 +159,9 @@
     &.panelGridWidth-2 {
       width: 50%;
     }
+    &.panelGridWidth-3 {
+      width: 75%;
+    }
   }
   // Special case for small number of actual panels
   #groupsContainer.allGroupsGridSize-3 .groupPanel {
@@ -162,12 +171,14 @@
     &.panelGridWidth-2 {
       width: 66%;
     }
+    &.panelGridWidth-3 {
+      width: 100%;
+    }
   }
 }
 
-@media (min-width: 2000px) {
-  // Huge window: Show five panels
-
+@media (min-width: 1500px) {
+  // Large window: Show five panels units
   .groupPanel {
     &.panelGridWidth-1 {
       width: 20%;
@@ -175,6 +186,9 @@
     &.panelGridWidth-2 {
       width: 40%;
     }
+    &.panelGridWidth-3 {
+      width: 60%;
+    }
   }
   // Special case for small number of actual panels
   #groupsContainer.allGroupsGridSize-3 .groupPanel {
@@ -183,6 +197,9 @@
     }
     &.panelGridWidth-2 {
       width: 66%;
+    }
+    &.panelGridWidth-3 {
+      width: 100%;
     }
   }
   #groupsContainer.allGroupsGridSize-4 .groupPanel {
@@ -191,6 +208,9 @@
     }
     &.panelGridWidth-2 {
       width: 50%;
+    }
+    &.panelGridWidth-3 {
+      width: 75%;
     }
   }
 }
