@@ -114,7 +114,7 @@ line {
     vertical-align: top;
 }
 
-.code_hierarchy
+.pie_chart
 {
     margin:0 auto;
     width: 100%;
@@ -123,7 +123,7 @@ line {
     text-align: center;
 }
 
-.code_hierarchy_legend
+.pie_chart_legend
 {
     height:80px;
 }
@@ -153,8 +153,8 @@ line {
                     <div class="introduction-details">
                     </div>
                 </div>
-                <button id="introduction-button-see-more" onclick="introductionToggle();">Voir plus</button>
-                <button id="introduction-button-see-less" onclick="introductionToggle();">Voir moins</button>
+                <button id="introduction-button-see-more" onclick="introductionToggle();">{{ gettext('See more') }}</button>
+                <button id="introduction-button-see-less" onclick="introductionToggle();">{{ gettext('See less') }}</button>
                 <div class="introduction-details-empty">
                 </div>
                 
@@ -213,8 +213,8 @@ line {
         </div>
         <div class="block-half">
             <div class="block-content pie">
-                <div class='code_hierarchy_legend'></div>
-                <div class='code_hierarchy'>
+                <div class='pie_chart_legend'></div>
+                <div class='pie_chart'>
             </div>
         </div>
     </div>

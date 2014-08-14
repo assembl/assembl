@@ -119,7 +119,7 @@ define(function(require){
         /*
         * @param messages: [{'day': '2012-01-01', 'value': 1},...] sorted by date ascending
         * @param threshold: Number
-        * @returns a period object {'period_type': 'last_2_weeks', 'date_min': Date, 'date_max': Date }
+        * @returns a period object {'period_type': 'last 2 weeks', 'date_min': Date, 'date_max': Date }
         */
         deduceGoodPeriod: function(messages, threshold){
             var count = 0;
@@ -154,40 +154,40 @@ define(function(require){
             var date_min_moment = Moment(date_threshold_min);
             var date_max_moment = Moment(date_threshold_max);
             var number_of_days = date_max_moment.diff(date_min_moment, 'days');
-            var period_type = 'last_week';
+            var period_type = 'last week';
             if ( number_of_days <= 7 )
             {
-                period_type = 'last_week';
+                period_type = 'last week';
                 date_min_moment = date_max_moment.subtract('days', 7);
                 date_min = date_min_moment.toDate();
             }
             if ( number_of_days <= 14 )
             {
-                period_type = 'last_2_weeks';
+                period_type = 'last 2 weeks';
                 date_min_moment = date_max_moment.subtract('days', 14);
                 date_min = date_min_moment.toDate();
             }
             else if ( number_of_days <= 31 )
             {
-                period_type = 'last_month';
+                period_type = 'last month';
                 date_min_moment = date_max_moment.subtract('months', 1);
                 date_min = date_min_moment.toDate();
             }
             else if ( number_of_days <= (31+30+30) )
             {
-                period_type = 'last_3_months';
+                period_type = 'last 3 months';
                 date_min_moment = date_max_moment.subtract('months', 3);
                 date_min = date_min_moment.toDate();
             }
             else if ( number_of_days <= (31+30)*3 )
             {
-                period_type = 'last_6_months';
+                period_type = 'last 6 months';
                 date_min_moment = date_max_moment.subtract('months', 6);
                 date_min = date_min_moment.toDate();
             }
             else
             {
-                period_type = 'last_year';
+                period_type = 'last year';
                 date_min_moment = date_max_moment.subtract('years', 1);
                 date_min = date_min_moment.toDate();
             }
@@ -268,7 +268,7 @@ define(function(require){
 
                 var period = that.deduceGoodPeriod(messages_per_day_totals_array, messages_threshold);
                 
-                var statsPeriodName = period.period_type; // TODO: i18n
+                var statsPeriodName = i18n.gettext(period.period_type);
                 var date_min = period.date_min;
                 var date_max = period.date_max;
 
@@ -419,18 +419,18 @@ define(function(require){
                     authors_total,
                     {
                         "messages_posted_during_current_period": [
-                            "Messages posted since " + statsPeriodName,
+                            i18n.gettext('Messages posted since') + " " + statsPeriodName,
                             messages_in_period_total,
                             authors_in_period_total,
                             {
                                 "messages_from_new_authors": [
-                                    "Messages from new authors",
+                                    i18n.gettext("Messages from new authors"),
                                     messages_in_period_by_new_authors_total,
                                     new_authors_in_period_total,
                                     {}
                                 ],
                                 "messages_from_old_authors": [
-                                    "Messages from old authors",
+                                    i18n.gettext("Messages from old authors"),
                                     messages_in_period_total - messages_in_period_by_new_authors_total,
                                     authors_in_period_total - new_authors_in_period_total,
                                     {}
@@ -438,7 +438,7 @@ define(function(require){
                             }
                         ],
                         "messages_posted_before_current_period": [
-                            "Messages posted before " + statsPeriodName,
+                            i18n.gettext("Messages posted before") + " " + statsPeriodName,
                             messages_total - messages_in_period_total,
                             authors_not_in_period_total,
                             {}
@@ -449,7 +449,7 @@ define(function(require){
                 var pie_chart_default_legend_data = [
                     null,
                     null,
-                    "Messages since the beginning of the debate",
+                    i18n.gettext("Messages since the beginning of the debate"),
                     null,
                     messages_total,
                     authors_total
@@ -468,8 +468,8 @@ define(function(require){
             if (this.pie_chart_data === undefined)
                 return;
             var stats = this.stats;
-            var t = this.lineChartIsCumulative ? "Evolution of the total number of messages" : "Evolution of the number of messages posted"; // TODO: i18n
-            this.$el.find(".statistics").html("<h2>Statistics</h2><p class='stats_messages'>" + t + "</p>");
+            var t = this.lineChartIsCumulative ? i18n.gettext("Evolution of the total number of messages") : i18n.gettext("Evolution of the number of messages posted");
+            this.$el.find(".statistics").html("<h2>" + i18n.gettext("Statistics") + "</h2><p class='stats_messages'>" + t + "</p>");
             this.drawLineGraph(this.messages_per_day_for_line_graph);
             this.drawPieChart(this.pie_chart_data, this.pie_chart_default_legend_data);
         },
@@ -642,7 +642,7 @@ define(function(require){
                             .attr('class', 'data-point')
                             .attr('title', function() {
                               var d = this.__data__;
-                              return d.date.toDateString() + '\n' + d.value; 
+                              return d.date.toDateString() + '\n' + d.value; // could be i18n
                             })
                             .style('opacity', 1e-6)
                             .attr('cx', function(d) { return x(d.date) })
@@ -678,7 +678,7 @@ define(function(require){
                     title: function() {
                         var d = this.__data__;
                         var pDate = d.date;
-                        return 'Date: ' + pDate + '<br>Value: ' + d.value; 
+                        return 'Date: ' + pDate + '<br>Value: ' + d.value; // could be i18n
                     }
                 });
                 */
@@ -688,14 +688,14 @@ define(function(require){
 
         },
 
-        drawPieChart: function(code_hierarchy_data, default_legend_data){
+        drawPieChart: function(pie_chart_data, default_legend_data){
             /*
             taken from:
             http://bl.ocks.org/adewes/4710330/94a7c0aeb6f09d681dbfdd0e5150578e4935c6ae
             http://www.andreas-dewes.de/code_is_beautiful/
             */
             var that = this;
-            function init_code_hierarchy_plot(element_name, data)
+            function init_pie_chart_plot(element_name, data)
             {
                 var plot = that.$el.find('.'+element_name)[0];
                 while (plot.hasChildNodes())
@@ -795,14 +795,14 @@ define(function(require){
                     
                 function update_legend(d)
                 {
-                    legend.html("<h2>"+d[2]+"&nbsp;</h2><p>"+d[4]+" messages, by "+d[5]+" authors</p>");
+                    legend.html("<h2>"+d[2]+"</h2><p>"+d[4]+" " + i18n.gettext("messages, by") + " "+d[5]+" " + i18n.gettext("authors") + "</p>");
                     //legend.html("<h2>"+d[2]+"&nbsp;</h2><p>"+d[4]+" messages</p>");
                     legend.transition().duration(200).style("opacity","1");
                 }
 
                 function get_slice_title(d)
                 {
-                    return d[2]+"\n"+d[4]+" messages, by "+d[5]+" authors";
+                    return d[2]+"\n"+d[4]+" " + i18n.gettext("messages, by") + " "+d[5]+" " + i18n.gettext("authors");
                 }
                 
                 function remove_legend(d)
@@ -943,7 +943,7 @@ define(function(require){
 
             function init_plots()
             {
-                init_code_hierarchy_plot("code_hierarchy",code_hierarchy_data);
+                init_pie_chart_plot("pie_chart",pie_chart_data);
             }
 
             //window.onload = init_plots;
