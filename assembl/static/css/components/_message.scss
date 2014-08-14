@@ -107,7 +107,7 @@ $ellipsiswidth: 3em !default;
         }
 
         .message-date {
-            line-height: 17px;
+          //line-height: 17px;
         }
 
         > div {
@@ -178,23 +178,24 @@ $ellipsiswidth: 3em !default;
     &.viewStyleTitleOnly {
 
       .message-date {
-        float: right;
-        line-height: 32px;
-        }
+
+      }
         .message-author {
-            width: 10em;
+          //width: 10em;
             overflow:hidden;
             float: left;
             text-overflow: ellipsis;
-            min-height: $fortythree - 12; /* To make sure the title wraps in front of the author */
+          //min-height: $fortythree - 12; /* To make sure the title wraps in front of the author */
+          width: auto;
+          padding-left: .01em;
             &:hover {
-                position: relative;
-                min-width: 10em;
-                width: auto;
+              //position: relative;
+              //min-width: 10em;
+              //width: auto;
             }
         }
         .message-subject {
-            display: inline;
+
         }
     }
     

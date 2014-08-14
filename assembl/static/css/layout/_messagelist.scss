@@ -64,7 +64,7 @@
   min-width: 400px;
 
   .panel-body {
-    top: 35px;
+    top: 0px;
   }
 
   .options-filter,
@@ -78,7 +78,7 @@
     .option {
       @include box-sizing(border-box);
       width: 50%;
-      height: 25px;
+      height: 35px;
       cursor: pointer;
     }
     .option:first-child {
