@@ -371,10 +371,11 @@ class BaseOps(object):
         relns = {r.key: r for r in mapper.relationships}
         cols = {c.key: c for c in mapper.columns}
         fkeys = {c for c in mapper.columns if c.foreign_keys}
-        fkeys_of_reln = {
+        reln_of_fkeys = {
             frozenset(r._calculated_foreign_keys): r
             for r in mapper.relationships
         }
+        fkey_of_reln = {r.key: r._calculated_foreign_keys for r in mapper.relationships}
         methods = dict(pyinspect.getmembers(
             self.__class__, lambda m: pyinspect.ismethod(m)
             and m.func_code.co_argcount == 1))
@@ -485,9 +486,15 @@ class BaseOps(object):
                 continue
             elif prop_name in properties:
                 known.add(prop_name)
-                val = getattr(self, prop_name)
-                if val is not None:
-                    result[name] = translate_to_json(val)
+                if view_name or (prop_name not in fkey_of_reln):
+                    val = getattr(self, prop_name)
+                    if val is not None:
+                        result[name] = translate_to_json(val)
+                else:
+                    fkeys = list(fkey_of_reln[prop_name])
+                    assert(len(fkeys) == 1)
+                    fkey = fkeys[0]
+                    result[name] = relns[prop_name].mapper.class_.uri_generic(getattr(self, fkey.key))
                 continue
             assert prop_name in relns,\
                     "in viewdef %s, class %s, prop_name %s not a column, property or relation" % (
@@ -558,7 +565,7 @@ class BaseOps(object):
             for name, col in cols.items():
                 if name in known:
                     continue  # already done
-                as_rel = fkeys_of_reln.get(frozenset((col, )))
+                as_rel = reln_of_fkeys.get(frozenset((col, )))
                 if as_rel:
                     name = as_rel.key
                     if name in known:
