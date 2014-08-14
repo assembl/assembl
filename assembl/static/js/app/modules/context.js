@@ -819,7 +819,7 @@ define(function (require) {
             //Should be fast, they are at the top level and there is only
             //a few of them.  Maybe it can be more specific to be faster
             // ex: html > .tipsy I don't know jquery enough to know
-            $('.tipsy').remove();
+            $('.tooltip').remove();
         },
 
         setLocale: function (locale) {
@@ -936,7 +936,7 @@ define(function (require) {
 
             $(document.body).removeClass('preload');
             this.createSelectionTooltip();
-            this.initTooltips($("body"));
+            //this.initTooltips($("body"));
 
             $(document).on('click', '.dropdown-label', this.onDropdownClick);
             $(document).on('ajaxError', this.onAjaxError);

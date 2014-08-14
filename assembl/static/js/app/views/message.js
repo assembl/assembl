@@ -557,6 +557,7 @@ define(function(require){
      * Mark the current message as unread
      */
     markAsUnread: function(){
+        Ctx.removeCurrentlyDisplayedTooltips(this.$el);
       this.model.setRead(false);
     },
 
@@ -564,6 +565,7 @@ define(function(require){
      * Mark the current message as read
      */
     markAsRead: function(){
+        Ctx.removeCurrentlyDisplayedTooltips(this.$el);
       this.model.setRead(true);
     }
   });
