@@ -73,9 +73,15 @@ define(function (require) {
             }
         },
         setGridWidth: function() {
-            // Grid width can only be 1 or 2
-            this.$el.removeClass("panelGridWidth-"+(3-this.model.get('gridWidth')));
-            this.$el.addClass("panelGridWidth-"+this.model.get('gridWidth'));
+            var gridSize = this.model.get('gridWidth');
+            var className = 'panelGridWidth-' + gridSize;
+            var found = this.$el[0].className.match(/\b(panelGridWidth-[0-9]+)\b/);
+            if (found && found[0] != className) {
+                this.$el.removeClass(found[0]);
+            }
+            if ((!found) || found[0] != className) {
+                this.$el.addClass(className);
+            }
         }
     });
     return PanelWrapper;
