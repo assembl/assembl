@@ -375,24 +375,24 @@ define(function(require){
                 //that.drawLineGraph(messages_per_day_totals_filled_array);
 
                 var messages_from_new_authors_in_current_period = messages_in_period_total - 1; // TODO: real value
-
+                
                 var pie_chart_data = [
-                    "Messages since the beginning of the debate",
+                    "the title of the first element is purposely not used, only its data is used", //"Messages since the beginning of the debate",
                     messages_total,
                     0,
                     {
-                        "Messages posted during the current period": [
-                            "Messages posted during the current period",
+                        "messages_posted_during_current_period": [
+                            "Messages posted since " + statsPeriodName,
                             messages_in_period_total,
                             0,
                             {
-                                "Messages from new authors": [
+                                "messages_from_new_authors": [
                                     "Messages from new authors",
                                     messages_from_new_authors_in_current_period,
                                     0,
                                     {}
                                 ],
-                                "Messages from old authors": [
+                                "messages_from_old_authors": [
                                     "Messages from old authors",
                                     messages_in_period_total-messages_from_new_authors_in_current_period,
                                     0,
@@ -400,8 +400,8 @@ define(function(require){
                                 ]
                             }
                         ],
-                        "Messages posted before current period": [
-                            "Messages posted before current period",
+                        "messages_posted_before_current_period": [
+                            "Messages posted before " + statsPeriodName,
                             messages_total-messages_in_period_total,
                             0,
                             {}
@@ -409,8 +409,16 @@ define(function(require){
                     }
                 ];
 
+                var pie_chart_default_legend_data = [
+                    null,
+                    null,
+                    "Messages since the beginning of the debate",
+                    null,
+                    messages_total,
+                ];
+
                 that.pie_chart_data = pie_chart_data;
-                //that.drawPieChart(pie_chart_data);
+                that.pie_chart_default_legend_data = pie_chart_default_legend_data;
                 that.render();
             });
         },
@@ -422,9 +430,9 @@ define(function(require){
             if (this.pie_chart_data === undefined)
                 return;
             var stats = this.stats;
-            this.$el.find(".statistics").html("<h2>Statistics since " + stats.statsPeriodName + "</h2><p class='stats_messages'>Messages posted: " + stats.messages_in_period_total + " (" + stats.messages_total + " since the beginning of the debate)</p>");
+            this.$el.find(".statistics").html("<h2>Statistics</h2><p class='stats_messages'>Messages posted per day</p>");
             this.drawLineGraph(this.messages_per_day_for_line_graph);
-            this.drawPieChart(this.pie_chart_data);
+            this.drawPieChart(this.pie_chart_data, this.pie_chart_default_legend_data);
         },
 
         drawLineGraph: function(data){
@@ -628,7 +636,7 @@ define(function(require){
 
         },
 
-        drawPieChart: function(code_hierarchy_data){
+        drawPieChart: function(code_hierarchy_data, default_legend_data){
             /*
             taken from:
             http://bl.ocks.org/adewes/4710330/94a7c0aeb6f09d681dbfdd0e5150578e4935c6ae
@@ -643,18 +651,20 @@ define(function(require){
                     plot.removeChild(plot.firstChild);
                 }
 
-                var width = Math.max(plot.offsetWidth, 250);
+                var width = Math.max(Math.min(plot.offsetWidth,plot.offsetHeight), 250);
+                console.log("plot width: ", width);
                 var height = width;
-                var x_margin = 40;
-                var y_margin = 40;
-                var name_index = 0;
+                // var x_margin = 40; // not used
+                // var y_margin = 40; // not used
+                // var name_index = 0; // not used
                 var count_index = 1;
                 var children_index = 3;
                 
-                var max_depth=3;
+                // var max_depth=3; // not used
                 
                 var data_slices = [];
-                var max_level = 4;
+                // var max_level = 4;
+                var max_level = 2;
                 var color = d3.scale.category20c();
 
                 var svg = d3.select(plot).append("svg")
@@ -696,7 +706,14 @@ define(function(require){
                 var next_ref = ref;
                 var last_refs = [];
 
-                var thickness = width/2.0/(max_level+2)*1.1;
+                // Quentin: remove first element, and make the next one display as a disc (instead of having a hole)
+                data_slices.splice(0,1);
+                _.each (data_slices, function(el){
+                    el[3] -= 1; // decrease the "level"
+                });
+
+                //var thickness = width/2.0/(max_level+2)*1.1;
+                var thickness = width/2.0/(max_level+1)*1.1;
                     
                 var arc = d3.svg.arc()
                 .startAngle(function(d) { if(d[3]==0){return d[0];}return d[0]+0.01; })
@@ -717,10 +734,12 @@ define(function(require){
                     .on("mouseout",remove_legend)
                     .attr("class","form")
                     .append("svg:title")
-                    .text(function(d) { return d[2]+","+d[3]; });
+                    .text(get_slice_title);
 
-                var legend_div = that.$el.find('.'+element_name+'_legend');
+                var legend_div = that.$el.find('.'+element_name+'_legend')[0];
                 var legend = d3.select(legend_div);
+
+                remove_legend(null);
                     
                 function update_legend(d)
                 {
@@ -728,11 +747,17 @@ define(function(require){
                     legend.html("<h2>"+d[2]+"&nbsp;</h2><p>"+d[4]+" messages</p>");
                     legend.transition().duration(200).style("opacity","1");
                 }
+
+                function get_slice_title(d)
+                {
+                    return d[2]+"\n"+d[4]+" messages";
+                }
                 
                 function remove_legend(d)
                 {
-                    legend.transition().duration(1000).style("opacity","0");
+                    //legend.transition().duration(1000).style("opacity","0");
                     //legend.html("<h2>&nbsp;</h2>")
+                    update_legend(default_legend_data);
                 }
                 
                 function get_start_angle(d,ref)
