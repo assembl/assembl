@@ -174,7 +174,7 @@ define(function (require) {
                 }
             );
 
-            Assembl.vent.on('idea:selected', function (idea) {
+            this.listenTo(Assembl.vent, 'idea:selected', function (idea) {
                 //console.log("vent.on idea:selected fired");
                 if (idea && that.currentQuery.isFilterInQuery(that.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, idea.getId())) {
                     //Filter is already in sync
@@ -189,39 +189,39 @@ define(function (require) {
                 }
             });
 
-            Assembl.vent.on('messageList:showMessageById', function (id, callback) {
+            this.listenTo(Assembl.vent, 'messageList:showMessageById', function (id, callback) {
                 that.showMessageById(id, callback);
             });
 
-            Assembl.vent.on('messageList:addFilterIsRelatedToIdea', function (idea, only_unread) {
+            this.listenTo(Assembl.vent, 'messageList:addFilterIsRelatedToIdea', function (idea, only_unread) {
                 that.groupContent.filterThroughPanelLock(
                     function () {
                         that.addFilterIsRelatedToIdea(idea, only_unread)
                     }, 'syncWithCurrentIdea');
             });
 
-            Assembl.vent.on('messageList:addFilterIsOrphanMessage', function () {
+            this.listenTo(Assembl.vent, 'messageList:addFilterIsOrphanMessage', function () {
                 that.groupContent.filterThroughPanelLock(
                     function () {
                         that.addFilterIsOrphanMessage();
                     }, 'syncWithCurrentIdea');
             });
 
-            Assembl.vent.on('messageList:addFilterIsSynthesisMessage', function () {
+            this.listenTo(Assembl.vent, 'messageList:addFilterIsSynthesisMessage', function () {
                 that.groupContent.filterThroughPanelLock(
                     function () {
                         that.addFilterIsSynthesMessage();
                     }, 'syncWithCurrentIdea');
             });
 
-            Assembl.vent.on('messageList:showAllMessages', function () {
+            this.listenTo(Assembl.vent, 'messageList:showAllMessages', function () {
                 that.groupContent.filterThroughPanelLock(
                     function () {
                         that.showAllMessages();
                     }, 'syncWithCurrentIdea');
             });
 
-            Assembl.vent.on('messageList:currentQuery', function () {
+            this.listenTo(Assembl.vent, 'messageList:currentQuery', function () {
                 if (!that.groupContent.isGroupLocked()) {
                     that.currentQuery.clearAllFilters();
                 }

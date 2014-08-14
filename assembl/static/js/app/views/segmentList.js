@@ -45,7 +45,7 @@ define(function (require) {
                     });
                 });
 
-            Assembl.vent.on('segmentList:showSegment', function (segment) {
+            this.listenTo(Assembl.vent, 'segmentList:showSegment', function (segment) {
                 that.showSegment(segment);
             });
             this.panelWrapper = options.panelWrapper;

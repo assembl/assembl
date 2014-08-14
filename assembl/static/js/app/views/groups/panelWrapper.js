@@ -23,7 +23,7 @@ define(function (require) {
             title: ".panel-header-title"
         },
         events: {
-            'click .panel-header-close': 'onClose',
+            'click .panel-header-close': 'closePanel',
         },
         initialize: function (options) {
             var that = this,
@@ -52,12 +52,6 @@ define(function (require) {
          */
         closePanel: function () {
             this.model.collection.remove(this.model);
-        },
-        /**
-         * @event
-         */
-        onClose: function () {
-            this.closePanel();
         },
         onRender: function () {
             this.setGridWidth();

@@ -83,7 +83,7 @@ define(function (require) {
                 that.resizeGraphView();
             });
 
-            Assembl.vent.on('ideaList:removeIdea', function (idea) {
+            this.listenTo(Assembl.vent, 'ideaList:removeIdea', function (idea) {
                 that.removeIdea(idea);
             });
 

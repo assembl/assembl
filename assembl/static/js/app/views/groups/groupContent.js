@@ -39,7 +39,6 @@ define(function (require) {
         },
 
         closeGroup: function () {
-            this.unbind();
             this.model.collection.remove(this.model);
         },
         calculateGridSize: function () {

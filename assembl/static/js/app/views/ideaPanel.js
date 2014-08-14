@@ -32,11 +32,11 @@ define(function (require) {
             }
             this.model = null;
 
-            Assembl.vent.on("idea:selected", function (idea) {
+            this.listenTo(Assembl.vent, "idea:selected", function (idea) {
                 that.setIdeaModel(idea);
             });
 
-            Assembl.vent.on('ideaPanel:showSegment', function (segment) {
+            this.listenTo(Assembl.vent, 'ideaPanel:showSegment', function (segment) {
                 that.showSegment(segment);
             });
 
