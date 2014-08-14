@@ -21,6 +21,8 @@ define(function(require){
             return i18n.gettext('Home'); // unused
         },
 
+        lineChartIsCumulative: true,
+
         /*
         events: {
             'click .lang': 'setLocale'
@@ -335,6 +337,21 @@ define(function(require){
                     //msg.value = messages_in_period_total;
                 });
 
+                if ( that.lineChartIsCumulative )
+                {
+                    var i = 0;
+                    var messages_per_day_totals_filled_array_cumulative = $.extend(true, [], messages_per_day_totals_filled_array);
+                    _.each(messages_per_day_totals_filled_array_cumulative, function(msg){
+                        i += msg.value;
+                        msg.value = i;
+                    });
+                    that.messages_per_day_for_line_graph = messages_per_day_totals_filled_array_cumulative;
+                }
+                else
+                {
+                    that.messages_per_day_for_line_graph = messages_per_day_totals_filled_array;
+                }
+
 
 
                 // -----
@@ -395,8 +412,6 @@ define(function(require){
                     "messages_in_period_total": messages_in_period_total,
                     "messages_total": messages_total
                 }
-
-                that.messages_per_day_for_line_graph = messages_per_day_totals_filled_array;
                 
                 var pie_chart_data = [
                     "the title of the first element is purposely not used, only its data is used", //"Messages since the beginning of the debate",
@@ -453,7 +468,8 @@ define(function(require){
             if (this.pie_chart_data === undefined)
                 return;
             var stats = this.stats;
-            this.$el.find(".statistics").html("<h2>Statistics</h2><p class='stats_messages'>Messages posted per day</p>");
+            var t = this.lineChartIsCumulative ? "Evolution of the total number of messages" : "Evolution of the number of messages posted"; // TODO: i18n
+            this.$el.find(".statistics").html("<h2>Statistics</h2><p class='stats_messages'>" + t + "</p>");
             this.drawLineGraph(this.messages_per_day_for_line_graph);
             this.drawPieChart(this.pie_chart_data, this.pie_chart_default_legend_data);
         },
@@ -596,10 +612,23 @@ define(function(require){
                     dataCirclesGroup = svg.append('svg:g');
                 }
 
+                var previousValue = null;
                 var circles = dataCirclesGroup.selectAll('.data-point')
-                    .data(data.filter(function(d){
-                        return d.value != 0;
-                    }));
+                    .data(
+                        data.filter(
+                            that.lineChartIsCumulative
+                            ?
+                            function(d){
+                                var ret = (previousValue != d.value);
+                                previousValue = d.value;
+                                return ret;
+                            }
+                            :
+                            function(d){
+                                return d.value != 0;
+                            }
+                        )
+                    );
 
                 var circleRadius = function(d){
                     if ( d.value == 0 )
