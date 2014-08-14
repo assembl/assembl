@@ -160,7 +160,10 @@ define(function (require) {
             e.stopPropagation();
 
             if (this.model === Ctx.getCurrentIdea()) {
-                Ctx.setCurrentIdea(null);
+                // We want to avoid the "All messages" state,
+                // unless the user clicks explicitly on "All messages".
+                // TODO benoitg: Review this decision.
+                //Ctx.setCurrentIdea(null);
             } else {
                 Ctx.setCurrentIdea(this.model);
             }
