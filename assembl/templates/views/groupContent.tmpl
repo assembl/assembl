@@ -1,5 +1,5 @@
 <div class="groupHeader">
-<% if( !Ctx.displayCallToAction() ){ %>
+<% if( Ctx.userCanChangeUi() ){ %>
   <a class="lock-group phs"><i class="icon-lock-open"></i></a>
   <a class="close-group"><i class="icon-delete"></i></a>
 <% } %>

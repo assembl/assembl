@@ -12,6 +12,10 @@ define(function (require) {
         template: "#tmpl-navigation",
         panelType: "navSidebar",
         className: "navSidebar",
+        hideHeader: true,
+        getTitle: function() {
+            return 'Navigation'; // unused
+        },
         regions: {
             home: '.home',
             debate: '.debate',

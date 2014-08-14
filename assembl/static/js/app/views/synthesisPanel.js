@@ -71,6 +71,9 @@ define(function (require) {
 
         panelType: 'synthesisPanel',
         className: 'synthesisPanel',
+        getTitle: function() {
+            return i18n.gettext('Synthesis');
+        },
 
         /**
          * The model
@@ -202,7 +205,6 @@ define(function (require) {
          * @events
          */
         events: {
-            'click .synthesisPanel-closeButton': 'closePanel',
             'click .synthesisPanel-publishButton': 'publish',
             'click .synthesisPanel-fullscreenButton': 'setFullscreen'
         },
@@ -212,15 +214,6 @@ define(function (require) {
          */
         setFullscreen: function () {
             Ctx.setFullscreen(this);
-        },
-
-        /**
-         * Closes the panel
-         */
-        closePanel: function () {
-            if (this.button) {
-                this.button.trigger('click');
-            }
         },
 
         /**

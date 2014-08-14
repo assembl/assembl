@@ -1,17 +1,3 @@
-<header class="panel-header">
-    <span class="panel-header-title">{{ gettext('Messages') }}</span>
-
-    <div class="fr">
-        <% if (currentViewStyle.id === 'threaded') { %>
-            <a data-toggle="tooltip" title="<%= collapsed ? '{{gettext('Expand all')}}' : '{{gettext('Collapse all')}}' %>" class="js_messageList-collapseButton iconbutton <%= collapsed ? 'icon-download-1' : 'icon-upload' %>"></a>
-        <% } %>
-        <a class="js_messageList-fullScreenButton iconbutton iconbutton--resizefull" data-tooltip="{{ gettext('Fullsize') }}"></a>
-        <% if( !Ctx.displayCallToAction() ){ %>
-        <a class="js_messageList-closeButton iconbutton icon-delete panel-header-close" data-tooltip="{{gettext('Close panel')}}"></a>
-        <% } %>
-    </div>
-</header>
-
 <div class="panel-body">
     
   <% if (Ctx.getCurrentInterfaceType() === Ctx.InterfaceTypes.SIMPLE) { %>

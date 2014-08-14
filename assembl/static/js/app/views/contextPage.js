@@ -6,6 +6,7 @@ define(function(require){
                         $ = require('jquery'),
                         _ = require('underscore'),
                        d3 = require('d3'),
+                     i18n = require('utils/i18n'),
                    Moment = require('moment'),
               Permissions = require('utils/permissions'),
             CKEditorField = require('views/ckeditorField');
@@ -15,6 +16,10 @@ define(function(require){
         panelType: 'homePanel',
         className: 'homePanel',
         gridSize: 2,
+        hideHeader: true,
+        getTitle: function() {
+            return i18n.gettext('Home'); // unused
+        },
 
         /*
         events: {

@@ -52,11 +52,15 @@ define(function (require) {
             'drop': 'onDrop',
             'click .js_closeExtract': 'onSegmentCloseButtonClick',
             'click #ideaPanel-clearbutton': 'onClearAllClick',
-            'click #ideaPanel-closebutton': 'onTopCloseButtonClick',
             'click #ideaPanel-deleteButton': 'onDeleteButtonClick',
             'click .segment-link': "onSegmentLinkClick",
             'click #session-modal': "createWidgetSession"
         },
+
+        getTitle: function() {
+            return i18n.gettext('Idea');
+        },
+        tooltip: i18n.gettext('Detailled information about the currently selected idea in the Table of ideas'),
 
         /**
          * This is not inside the template beacuse babel wouldn't extract it in
@@ -443,20 +447,6 @@ define(function (require) {
             if (ok) {
                 this.model.get('segments').reset();
             }
-        },
-        /**
-         * Closes the panel
-         */
-        closePanel: function () {
-            if (this.button) {
-                this.button.trigger('click');
-            }
-        },
-        /**
-         * @event
-         */
-        onTopCloseButtonClick: function () {
-            this.closePanel();
         },
 
         /**

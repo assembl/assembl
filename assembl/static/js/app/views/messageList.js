@@ -53,6 +53,9 @@ define(function (require) {
             loadNextMessagesButton: '.js_messageList-morebutton',
             messageList: '.messageList-list'
         },
+        getTitle: function() {
+            return i18n.gettext('Messages');
+        },
 
         ViewStyles: {
             THREADED: {
@@ -241,7 +244,6 @@ define(function (require) {
                     'click .js_messageList-onlysynthesis': 'addFilterIsSynthesMessage',
                     'click .js_messageList-isunread': 'addFilterIsUnreadMessage',
 
-                    'click .js_messageList-closeButton': 'closePanel',
                     'click .js_messageList-fullScreenButton': 'setFullscreen',
 
                     'click .js_messageList-prevbutton': 'showPreviousMessages',

@@ -48,7 +48,7 @@ define(function (require) {
             Assembl.vent.on('segmentList:showSegment', function (segment) {
                 that.showSegment(segment);
             });
-
+            this.panelWrapper = options.panelWrapper;
         },
 
         /**
@@ -56,6 +56,9 @@ define(function (require) {
          * @type {_.template}
          */
         template: '#tmpl-segmentList',
+        getTitle: function() {
+            return i18n.gettext('Clipboard');
+        },
 
         serializeData: function () {
             return {
@@ -113,6 +116,7 @@ define(function (require) {
                                 ctx: Ctx
                             }));
                     });
+                    that.panelWrapper.resetTitle(i18n.gettext('Clipboard') + " ("+extracts.length+")");
                 }
             );
         },
@@ -209,15 +213,6 @@ define(function (require) {
             }
         },
 
-
-        /**
-         * Closes the panel
-         */
-        closePanel: function () {
-            if (this.button) {
-                this.button.trigger('click');
-            }
-        },
 
         /**
          * The events
