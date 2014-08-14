@@ -160,6 +160,7 @@ define(function (require) {
                                                 ctx: Ctx
                                             }));
                                     });
+                                    that.$el.find('#ideaPanel-section-segments-legend').html(that.renderTemplateGetExtractsLabel(extracts));
                                 }
                             );
                         }
