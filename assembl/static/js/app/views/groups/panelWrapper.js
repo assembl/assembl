@@ -63,6 +63,7 @@ define(function (require) {
             this.setGridWidth();
             this.contents.show(this.contentsView);
             this.setHidden();
+            Ctx.initTooltips(this.$el);
         },
         setHidden: function() {
             if (this.model.get('hidden')) {
