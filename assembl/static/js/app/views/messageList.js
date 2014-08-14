@@ -796,6 +796,14 @@ define(function (require) {
                 function inFilter(message) {
                     return that.messageIdsToDisplay.indexOf(message.getId()) >= 0;
                 };
+                that.destroyAnnotator();
+                //Some messages may be present from before
+                that.ui.messageList.empty();
+                // TODO: Destroy the message and messageFamily views, as they keep zombie listeners and DOM
+                // In particular, message.loadAnnotations gets called with different views on the same model,
+                // including zombie views, and we get nested annotator tags as a result.
+                // (Annotator looks at fresh DOM every time)
+                // TODO long term: Keep them with a real CompositeView.
                 that.messageIdsToDisplay = resultMessageIdCollection;
                 that.visitorViewData = {};
                 that.visitorOrderLookupTable = [];
