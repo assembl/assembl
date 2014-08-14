@@ -10,7 +10,7 @@ from pyramid.security import authenticated_userid
 from sqlalchemy import func, Integer, String, text, desc
 from sqlalchemy.dialects.postgresql.base import ARRAY
 
-from sqlalchemy.orm import aliased, joinedload, joinedload_all, contains_eager
+from sqlalchemy.orm import aliased, joinedload, joinedload_all, contains_eager, defer
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.sql.expression import literal_column, bindparam, and_
 from sqlalchemy.sql import cast, column
@@ -164,7 +164,12 @@ def get_posts(request):
                 _("You must be logged in to view which posts are read")))
         
     #posts = posts.options(contains_eager(Post.source))
-    posts = posts.options(joinedload_all(Post.creator))
+    # Horrible hack... But useful for structure load
+    if view_def == 'partial':
+        posts = posts.options(defer(Post.body))
+    else:
+        posts = posts.options(joinedload_all(Post.creator))
+    #posts = posts.options(joinedload_all(ImportedPost.source_id))
     if order == 'chronological':
         posts = posts.order_by(Content.creation_date)
     elif order == 'reverse_chronological':
