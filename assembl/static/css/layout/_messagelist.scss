@@ -35,7 +35,7 @@
         right: 8px;
         top: 28px;
       }
-    } 
+    }
     .messageList-toparea, .messageList-bottomarea {
         &.hidden {
             display: none;
@@ -64,13 +64,13 @@
   min-width: 400px;
 
   .panel-body {
-    top: 30px;
+    top: 35px;
   }
 
   .options-filter,
   .view-config {
     @include box-sizing(border-box);
-    height: 30px;
+    height: 35px;
     border-bottom: 1px solid $gray;
   }
 
@@ -78,7 +78,7 @@
     .option {
       @include box-sizing(border-box);
       width: 50%;
-      height: 30px;
+      height: 25px;
       cursor: pointer;
     }
     .option:first-child {
