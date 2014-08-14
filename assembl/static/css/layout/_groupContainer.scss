@@ -72,7 +72,7 @@
   }
 }
 
-@media (min-width: 1500px) {
+@media (min-width: 1500px) and (max-width: 2000px) {
   // Large window: Show four panels
   .groupContent {
     &.groupGridSize-1 {
@@ -107,6 +107,57 @@
     }
   }
 }
+
+@media (min-width: 2000px) {
+  // Huge window: Show five panels
+  .groupContent {
+    &.groupGridSize-1 {
+      width: 20%;
+    }
+    &.groupGridSize-2 {
+      width: 40%;
+    }
+    &.groupGridSize-3 {
+      width: 60%;
+    }
+    &.groupGridSize-4 {
+      width: 80%;
+    }
+    &.groupGridSize-5 {
+      width: 120%;
+    }
+    &.groupGridSize-6 {
+      width: 140%;
+    }
+  }
+  // Special case for small number of actual panels
+  #groupsContainer.allGroupsGridSize-3 .groupContent {
+    &.groupGridSize-1 {
+      width: 33%;
+    }
+    &.groupGridSize-2 {
+      width: 66%;
+    }
+    &.groupGridSize-3 {
+      width: 100%;
+    }
+  }
+  #groupsContainer.allGroupsGridSize-4 .groupContent {
+    &.groupGridSize-1 {
+      width: 25%;
+    }
+    &.groupGridSize-2 {
+      width: 50%;
+    }
+    &.groupGridSize-3 {
+      width: 75%;
+    }
+    &.groupGridSize-4 {
+      width: 100%;
+    }
+  }
+}
+
 
 // Special case for small number of actual panels
 #groupsContainer.allGroupsGridSize-1 .groupContent {

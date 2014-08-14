@@ -144,7 +144,7 @@
   }
 }
 
-@media (min-width: 1500px) {
+@media (min-width: 1500px) and (max-width: 2000px) {
   // Large window: Show four panels
   .groupPanel {
     &.panelGridWidth-1 {
@@ -161,6 +161,36 @@
     }
     &.panelGridWidth-2 {
       width: 66%;
+    }
+  }
+}
+
+@media (min-width: 2000px) {
+  // Huge window: Show five panels
+
+  .groupPanel {
+    &.panelGridWidth-1 {
+      width: 20%;
+    }
+    &.panelGridWidth-2 {
+      width: 40%;
+    }
+  }
+  // Special case for small number of actual panels
+  #groupsContainer.allGroupsGridSize-3 .groupPanel {
+    &.panelGridWidth-1 {
+      width: 33%;
+    }
+    &.panelGridWidth-2 {
+      width: 66%;
+    }
+  }
+  #groupsContainer.allGroupsGridSize-4 .groupPanel {
+    &.panelGridWidth-1 {
+      width: 25%;
+    }
+    &.panelGridWidth-2 {
+      width: 50%;
     }
   }
 }
