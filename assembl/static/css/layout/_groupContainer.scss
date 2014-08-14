@@ -161,8 +161,9 @@
 
 // Special case for small number of actual panels
 #groupsContainer.allGroupsGridSize-1 .groupContent {
-  width:100%;
+  width: 100%;
 }
+
 #groupsContainer.allGroupsGridSize-2 .groupContent {
   &.groupGridSize-1 {
     width: 50%;
@@ -171,7 +172,6 @@
     width: 100%;
   }
 }
-
 
 .groupHeader {
   height: 25px;
@@ -229,15 +229,24 @@
       height: 80%;
       > li {
         position: relative;
-        > a {
+        > a.nav {
           display: block;
           height: 35px;
           text-decoration: none;
           background-color: $gray3;
-          border-bottom: 1px solid $white;
+          border-bottom: 1px solid rgba(127, 140, 141, 0.2);
           color: $gray;
           line-height: 35px;
           padding-left: 10px;
+          font-size: 14px;
+          &.active {
+            background-color: $white;
+            color: $purple;
+          }
+          i {
+            font-size: 25px;
+            vertical-align: middle;
+          }
         }
         .second-level {
           display: none;

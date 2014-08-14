@@ -50,8 +50,10 @@ define(function (require) {
 
             this.loadView(view);
 
+            this.$('.nav').removeClass('active');
             if (!elm.next('div.second-level').is(':visible')) {
                 this.$('div.second-level').slideUp();
+                elm.addClass('active');
                 elm.next('div.second-level').css('height', this._sideBarHeight);
                 elm.next('div.second-level').slideDown();
             }

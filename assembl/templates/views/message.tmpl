@@ -15,15 +15,14 @@
     </div>
 </header>
 <% } else if ( viewStyle == ctx.AVAILABLE_MESSAGE_VIEW_STYLES.PREVIEW ){ %>
-    <div class="message-date">{{ gettext('<time>%(time)s</time>')|format(time=time)|safe }}</div>
     <div class="message-subheader">
-        <span class="message-author margin-right">{{ gettext('%(user)s')|format(user=userName)|safe }}
-        </span>
+        <span class="message-author fl">{{ gettext('%(user)s')|format(user=userName)|safe }}&nbsp;&nbsp;</span>
+        <div class="message-date">{{ gettext('<time>%(time)s</time>')|format(time=time)|safe }}</div>
         <span class="message-subject margin-right"><%= subject %></span>
     </div>
 <% } else if ( viewStyle == ctx.AVAILABLE_MESSAGE_VIEW_STYLES.FULL_BODY ){ %>
     <div class="message-subheader">
-        <span class="message-author">{{ gettext('%(user)s')|format(user=userName)|safe }}</span>
+        <span class="message-author fl">{{ gettext('%(user)s')|format(user=userName)|safe }}&nbsp;&nbsp;</span>
         <span class="message-date">{{ gettext('<time>%(time)s</time>')|format(time=time)|safe }}</span>
         <div><span class="message-subject"><%= subject %></span></div>
     </div>
@@ -67,7 +66,7 @@
     <a class="readmore" href="#" alt="{{ gettext('Read More') }}">{{ gettext('Read More') }}</a>
 </div>
 </header>
-<div class="message-menu mts">
+<div class="message-menu mvs">
     {#
     <% if( isHoisted == true ){ %>
         <a class="message-hoistbtn iconbutton icon-upload" data-id="<%= escape(id) %>" data-toggle="tooltip" title="{{gettext('Go back to the entire topic thread')}}"></a>
@@ -78,7 +77,7 @@
     <a class="message-linkbutton iconbutton icon-link" data-copy-text="/message/<%= escape(id) %>" data-toggle="tooltip" title="{{gettext('Copy the link to this message to clipboard')}}"></a>
     #}
 
-    <a class="message-replybox-openbtn"><i class="icon-answer"></i>{{ gettext("Reply") }}</a>
+    <a class="message-replybox-openbtn mlxl"><i class="icon-answer"></i>&nbsp;&nbsp;{{ gettext("Reply") }}</a>
 </div>
 <% } 
 else if( viewStyle == ctx.AVAILABLE_MESSAGE_VIEW_STYLES.FULL_BODY ){ %>
@@ -96,11 +95,8 @@ else if( viewStyle == ctx.AVAILABLE_MESSAGE_VIEW_STYLES.FULL_BODY ){ %>
 
     <a class="message-linkbutton iconbutton icon-link" data-copy-text="/message/<%= escape(id) %>" data-toggle="tooltip" title="{{gettext('Copy the link to this message to clipboard')}}"></a>
 
-    <a class="message-replybox-openbtn"><i class="icon-answer"></i>{{ gettext("Reply") }}</a>
+    <a class="message-replybox-openbtn mlxl"><i class="icon-answer"></i>{{ gettext("Reply") }}</a>
     #}
-
-
-
 </div>
 <% } %>
 <% if ( user_is_connected && (viewStyle !== ctx.AVAILABLE_MESSAGE_VIEW_STYLES.TITLE_ONLY) ){ %>

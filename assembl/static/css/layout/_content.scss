@@ -1,25 +1,13 @@
-html, body {
-  height: 100%;
-}
-
-body {
-  overflow-x: hidden;
-  color: $gray2;
-  font-weight: normal;
-  font-style: normal;
-  line-height: 1;
-}
-
 // The F* and powerful wrapper
 #wrapper {
-    position: relative;
-    min-height: 100%;
-    min-width: 980px;
+  position: relative;
+  min-height: 100%;
+  min-width: 980px;
 
-    @include transform( translateX(0) );
+  @include transform(translateX(0));
 }
 
 body.is-modal {
-    //overflow: hidden;
+  //overflow: hidden;
 }
 

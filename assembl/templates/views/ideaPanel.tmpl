@@ -17,15 +17,21 @@
 
 <div class="panel-body pas">
     <% if( idea ) { %>
-    <fieldset id="ideaPanel-section-summary" class="panel-section">
+    <fieldset id="ideaPanel-section-summary" class="panel-section mtn">
         <div id="ideaPanel-shorttitle" class="text-bold" data-toggle="tooltip" title="{{gettext('The name of this idea in the table of ideas')}}"></div>
         <% if (canEditNextSynthesis) { %>
-        <span>{{ gettext('Expression in next synthesis:') }}</span>
-        <div id="ideaPanel-longtitle" data-toggle="tooltip" title="{{gettext('Expression of this idea in the next synthesis.  You may want to edit them all together in the synthesis panel rather than here.')}}"></div>
+          <% if (Ctx.getCurrentInterfaceType() != Ctx.InterfaceTypes.SIMPLE) { %>
+            <span>{{ gettext('Expression in next synthesis:') }}</span>
+            <div id="ideaPanel-longtitle" data-toggle="tooltip" title="{{gettext('Expression of this idea in the next synthesis.  You may want to edit them all together in the synthesis panel rather than here.')}}"></div>
+          <% } %>
         <% } %>
+
         <div id="ideaPanel-definition" data-toggle="tooltip" title="{{gettext('A definition of this idea')}}"></div>
         <p class="text-muted margin">{% set creationDate = "<%= app.formatDate(idea.get('creationDate')) %>" %}</p>
-        <div id="ideaPanel-comment"></div>
+
+        <% if (Ctx.getCurrentInterfaceType() != Ctx.InterfaceTypes.SIMPLE) { %>
+          <div id="ideaPanel-comment"></div>
+        <% } %>
 
         {# List votable widgets of this idea #}
         <% _.each(votable_widgets, function(votable_widget, i){

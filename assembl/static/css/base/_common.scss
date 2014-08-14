@@ -5,6 +5,11 @@ html {
   line-height: $baseLineHeight;
 }
 
+html,
+body {
+  height: 100%;
+}
+
 @include selection {
   background: $textSelectionBackgroundColor;
 }

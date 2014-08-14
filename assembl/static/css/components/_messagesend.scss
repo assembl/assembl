@@ -2,60 +2,55 @@
 // ===========================
 
 .messageSend {
-    margin-top: 1em;
-    margin-bottom: 20px;
-    margin-left: 1%;
-    margin-right: 1%;
-    display: table;
-    width: 98%;
-    border: solid 1px $gray;
-    border-radius: 5px;
-    background-color: $white;
-    .hidden {
-        display: none;
+  margin: 1em 0 1em 0;
+  display: table;
+  width: 98%;
+  background-color: $white;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 10px;
+  .hidden {
+    display: none;
+  }
+  .avatar-container {
+    padding: 0 0.5em 0 0;
+    display: table-cell;
+    width: 1px;
+    vertical-align: top;
+  }
+  .interface-container {
+    display: table-cell;
+    .messageSend-subject, .messageSend-body {
+      margin: 0;
     }
-    .avatar-container {
-        padding: 0.5em;
+    .topic-subject {
+      display: table;
+      width: 100%;
+      margin-bottom: 0.5em;
+      .topic-subject-label {
         display: table-cell;
         width: 1px;
-        vertical-align:top;
-    }
-    .interface-container {
-        padding: 0.5em;
+        white-space: nowrap;
+        vertical-align: middle;
+      }
+      .topic-subject-input {
         display: table-cell;
-        padding-left: 0.5em;
-        .messageSend-subject, .messageSend-body {
-            margin: 0;
+        padding-left: 1em;
+        input {
+          width: 100%;
         }
-        .topic-subject {
-            display: table;
-            width: 100%;
-            margin-bottom: 0.5em;
-            .topic-subject-label {
-                display: table-cell;
-                width: 1px;
-                white-space: nowrap;
-                vertical-align:middle;
-            }
-            .topic-subject-input {
-                display: table-cell;
-                padding-left: 1em;
-                input {
-                    width: 100%;
-                }
-            }
-    
-        }
-        .messageSend-buttons {
-            width: 100%;
-            text-align: right;
-            margin: 0;
-            padding: 0;
-            a {
-                margin: 0.5em 0 0 0.5em;
-            }
-        }
-        
+      }
+
     }
-    
+    .messageSend-buttons {
+      width: 100%;
+      text-align: right;
+      margin: 0;
+      padding: 0;
+      a {
+        margin: 0.5em 0 0 0.5em;
+      }
+    }
+
+  }
+
 }
