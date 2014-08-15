@@ -166,7 +166,7 @@ def get_posts(request):
     #posts = posts.options(contains_eager(Post.source))
     # Horrible hack... But useful for structure load
     if view_def == 'partial':
-        posts = posts.options(defer(Post.body))
+        pass  # posts = posts.options(defer(Post.body))
     else:
         posts = posts.options(joinedload_all(Post.creator))
     #posts = posts.options(joinedload_all(ImportedPost.source_id))

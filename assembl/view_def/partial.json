@@ -96,7 +96,7 @@
         "parentId": "parent",
         "idCreator": "creator",
         "subject": true,
-        "body": false,
+        "body": "&get_body_preview",
         "import_date": false,
         "source": true
     },
@@ -146,7 +146,7 @@
         "parentId": "parent",
         "idCreator": "creator",
         "subject": true,
-        "body": false,
+        "body": "&get_body_preview",
         "import_date": false,
         "source": true,
         "recipients": true,

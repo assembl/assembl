@@ -1,4 +1,6 @@
 from datetime import datetime
+
+from bs4 import BeautifulSoup
 from sqlalchemy.orm import relationship, backref
 from sqlalchemy.sql import func
 from sqlalchemy import (
@@ -95,6 +97,13 @@ class Post(Content):
 
     def get_body(self):
         return self.body.strip()
+
+    def get_body_preview(self):
+        body = self.get_body()
+        body[:120].rsplit(' ', 1)[0]
+        if  self.get_body_mime_type() == 'text/html':
+            body = BeautifulSoup(body[:300]).get_text()
+        return body[:120].rsplit(' ', 1)[0]
 
     def _set_ancestry(self, new_ancestry):
         descendants = self.get_descendants()
