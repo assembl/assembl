@@ -58,7 +58,7 @@ define(function (require) {
             } else if (elm.next('div.second-level').is(':visible')) {
                 //
             }
-            //this.loadView(view);
+            this.loadView(view);
         },
         setSideBarHeight: function () {
             this.$el.css('height', this._sideBarHeight);
