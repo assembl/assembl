@@ -13,7 +13,7 @@ define(function (require) {
         panelType: "navSidebar",
         className: "navSidebar",
         hideHeader: true,
-        getTitle: function() {
+        getTitle: function () {
             return 'Navigation'; // unused
         },
         regions: {
@@ -32,12 +32,9 @@ define(function (require) {
 
             $(window).resize(function () {
                 that.initVar();
-                setTimeout(function () {
-                    that.setSideBarHeight();
-                }, 0);
+                that.setSideBarHeight();
             });
 
-            this._window = null;
             this._sideBarHeight = null;
             this._accordion = null;
 
@@ -52,19 +49,20 @@ define(function (require) {
             var elm = $(e.target),
                 view = elm.attr('data-view');
 
-            this.loadView(view);
-
-            this.$('.nav').removeClass('active');
-            if (!elm.next('div.second-level').is(':visible')) {
+            if (elm.next('div.second-level').is(':hidden')) {
+                this.$('.nav').removeClass('active');
                 this.$('div.second-level').slideUp();
                 elm.addClass('active');
-                elm.next('div.second-level').css('height', this._sideBarHeight);
                 elm.next('div.second-level').slideDown();
+
+            } else if (elm.next('div.second-level').is(':visible')) {
+                //
             }
+            //this.loadView(view);
         },
         setSideBarHeight: function () {
-            this.$el.find('.side-menu').css('height', this._accordion);
             this.$el.css('height', this._sideBarHeight);
+            this.$('div.second-level').css('height', this._accordion)
         },
         loadView: function (view) {
             this.groupContent.model.set('navigationState', view);
@@ -99,13 +97,14 @@ define(function (require) {
         },
 
         initVar: function () {
-            var _header = 60,
-                _searchBox = 43,
-                _li = 105;
+            var _header = $('#header').height(),
+                _window = $(window).height(),
+            //_searchBox = 43,
+                _li = 105,
+                _headerGroup = 25;
 
-            this._window = $(window).height() - _header;
-            this._sideBarHeight = this._window - _li;
-            this._accordion = this._window;
+            this._sideBarHeight = (_window - _header) - _headerGroup;
+            this._accordion = this._sideBarHeight - _li;
         }
 
     });
