@@ -50,7 +50,8 @@ define(function(require){
                 json;
 
             if( !script ){
-                throw new Error(Ctx.format("Script tag #{0} doesn't exist", id));
+                console.log(Ctx.format("Script tag #{0} doesn't exist", id));
+                return {};
             }
 
             try {

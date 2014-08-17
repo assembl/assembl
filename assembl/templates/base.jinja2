@@ -37,12 +37,13 @@
     </div>
 
     {% include 'includes/javascript.jinja2' %}
+    <script type="text/javascript">var start_application = false;</script>
+    {% block extra_js %}{% endblock %}
     {% block main_js %}
     <script data-main="{{ STATIC_URL }}/js/main.js" src="{{ STATIC_URL }}/js/bower/requirejs/require.js"></script>
     {% endblock main_js %}
     {% include 'includes/updatebrowser.jinja2' %}
 
-    {% block extra_js %}{% endblock %}
 </body>
 <div class="modal"></div>
 </html>

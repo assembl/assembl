@@ -231,8 +231,11 @@ define(function (require) {
          * @return {function} The Underscore.js _.template return
          */
         loadTemplate: function (id) {
-            var template = _.template($('#tmpl-' + id).html());
-            return template;
+            var template = $('#tmpl-' + id);
+            if (template.length) {
+                // Only for app page
+                return _.template(template.html());
+            }
         },
 
         /**

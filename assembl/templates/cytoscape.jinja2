@@ -5,6 +5,9 @@
 </div>
 {% endblock %}
 
+{% block main_js %}
+{% endblock %}
+
 {% block extra_js %}
 <script type="text/json" id="ideas-json">{{ discussion.generic_json("idea_graph", use_dumps=True) |safe }}</script>
 <script type="text/javascript">

@@ -43,7 +43,8 @@ define(function(require){
               json;
             
           if( !script ){
-            throw new Error(Ctx.format("Script tag #{0} doesn't exist", id));
+            console.login(Ctx.format("Script tag #{0} doesn't exist", id));
+            return {};
           }
 
           try {
@@ -145,8 +146,8 @@ define(function(require){
                 deferred = $.Deferred();
             setTimeout(function() {
               if( !script ){
-                throw new Error(Ctx.format("Script tag #{0} doesn't exist", id));
-                deferred.reject();
+                console.log(Ctx.format("Script tag #{0} doesn't exist", id));
+                return deferred.reject();
               }
 
               try {

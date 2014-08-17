@@ -6,7 +6,9 @@ define(["modules/assembl", 'modules/context', 'underscore', 'sockjs','modules/co
      * @param {string} url
      */
     var Socket = function(){
-        this.init();
+        if (start_application) {
+            this.init();
+        }
     };
 
     /**
