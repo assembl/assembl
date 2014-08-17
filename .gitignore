@@ -8,6 +8,8 @@
 *.swp
 *.mo
 assembl/locale/*/LC_MESSAGES/*.jed.json
+*.sublime-project
+*.sublime-workspace
 *.egg
 *.egg-info
 /.coverage
