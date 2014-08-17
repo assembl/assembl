@@ -10,7 +10,8 @@ from pyramid.security import authenticated_userid
 from sqlalchemy import func, Integer, String, text, desc
 from sqlalchemy.dialects.postgresql.base import ARRAY
 
-from sqlalchemy.orm import aliased, joinedload, joinedload_all, contains_eager, defer
+from sqlalchemy.orm import (
+    aliased, joinedload, joinedload_all, contains_eager, defer, undefer)
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.sql.expression import literal_column, bindparam, and_
 from sqlalchemy.sql import cast, column
@@ -22,7 +23,7 @@ from assembl.auth import P_READ, P_ADD_POST
 from assembl.models import (
     get_database_id, get_named_object, AgentProfile, Post, AssemblPost, SynthesisPost,
     Synthesis, Discussion, PostSource, Content, Idea, ViewPost, User, Action,
-    IdeaRelatedPostLink)
+    IdeaRelatedPostLink, Email)
 import uuid
 from jwzthreading import restrip_pat
 
@@ -168,8 +169,8 @@ def get_posts(request):
     if view_def == 'partial':
         pass  # posts = posts.options(defer(Post.body))
     else:
-        posts = posts.options(joinedload_all(Post.creator))
-    #posts = posts.options(joinedload_all(ImportedPost.source_id))
+        posts = posts.options(joinedload_all(Post.creator), undefer(Email.recipients))
+
     if order == 'chronological':
         posts = posts.order_by(Content.creation_date)
     elif order == 'reverse_chronological':
@@ -185,7 +186,8 @@ def get_posts(request):
         else:
             post, viewpost = query_result, None
         no_of_posts += 1
-        serializable_post = post.generic_json(view_def)
+        serializable_post = post.generic_json(view_def) or {}
+
         if viewpost:
             serializable_post['read'] = True
             no_of_posts_viewed_by_user += 1
