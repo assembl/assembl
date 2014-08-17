@@ -296,9 +296,6 @@ class BaseOps(object):
         return self.uri_generic(self.get_id_as_str(), base_uri)
 
     def change_class(self, newclass, **kwargs):
-        to_add = set()
-        to_delete = set()
-
         def table_list(cls):
             tables = []
             for cls in cls.mro():
@@ -327,7 +324,7 @@ class BaseOps(object):
         db.flush()
         db.expunge(self)
         for table in oldclass_tables:
-            db.execute(table.delete().where(table.c.id==id))
+            db.execute(table.delete().where(table.c.id == id))
 
         for table in newclass_tables:
             col_names = {c.key for c in table.c}
@@ -343,7 +340,6 @@ class BaseOps(object):
                      base_uri='local:', use_dumps=False):
         view_def = get_view_def(view_def_name)
         my_typename = self.external_typename()
-        my_id = self.uri(base_uri)
         result = {}
         local_view = view_def.get(my_typename, False)
         if local_view is False:
@@ -359,7 +355,7 @@ class BaseOps(object):
                 ex = view['@extends']
                 assert ex in view_def,\
                     "In viewdef %s, @extends reference to missing %s." % (
-                    view_def_name, ex)
+                        view_def_name, ex)
                 view = view_def[ex]
                 views.append(view)
             for view in reversed(views):
@@ -375,7 +371,8 @@ class BaseOps(object):
             frozenset(r._calculated_foreign_keys): r
             for r in mapper.relationships
         }
-        fkey_of_reln = {r.key: r._calculated_foreign_keys for r in mapper.relationships}
+        fkey_of_reln = {r.key: r._calculated_foreign_keys
+                        for r in mapper.relationships}
         methods = dict(pyinspect.getmembers(
             self.__class__, lambda m: pyinspect.ismethod(m)
             and m.func_code.co_argcount == 1))
@@ -494,7 +491,8 @@ class BaseOps(object):
                     fkeys = list(fkey_of_reln[prop_name])
                     assert(len(fkeys) == 1)
                     fkey = fkeys[0]
-                    result[name] = relns[prop_name].mapper.class_.uri_generic(getattr(self, fkey.key))
+                    result[name] = relns[prop_name].mapper.class_.uri_generic(
+                        getattr(self, fkey.key))
                 continue
             assert prop_name in relns,\
                     "in viewdef %s, class %s, prop_name %s not a column, property or relation" % (
@@ -517,7 +515,7 @@ class BaseOps(object):
                 else:
                     assert not isinstance(spec, dict),\
                         "in viewdef %s, class %s, dict without viewname for %s" % (
-                        view_def_name, my_typename, name)
+                            view_def_name, my_typename, name)
                     result[name] = [ob.uri(base_uri) for ob in vals]
                 continue
             assert not isinstance(spec, dict),\
