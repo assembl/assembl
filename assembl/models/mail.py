@@ -926,7 +926,7 @@ class Email(ImportedPost):
 
     # in virtuoso, varchar is 1024 bytes and sizeof(wchar)==4, so varchar is 256 chars
     recipients = deferred(Column(UnicodeText, nullable=False), group='raw_details')
-    sender = deferred(Column(Unicode(), nullable=False), group='raw_details')
+    sender = Column(Unicode(), nullable=False)
 
     full_message = deferred(Column(Binary), group='raw_details')
 

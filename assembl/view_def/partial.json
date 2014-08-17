@@ -89,7 +89,7 @@
     },
     "Email": {
         "@extends": "ImportedPost",
-        "recipients": true,
+        "recipients": false,
         "sender": true,
         "full_message": false,
         "in_reply_to": false

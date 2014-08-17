@@ -74,6 +74,7 @@ class Post(Content):
 
     __mapper_args__ = {
         'polymorphic_identity': 'post',
+        'with_polymorphic': '*'
     }
     
     def get_descendants(self):
