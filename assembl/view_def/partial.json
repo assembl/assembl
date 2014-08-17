@@ -46,7 +46,7 @@
         "@extends": "AbstractMailbox",
         "folder": true,
         "host": true,
-        "port": true,
+        "port": true
     },
     "MailingList": {
         "@extends": "IMAPMailbox",
