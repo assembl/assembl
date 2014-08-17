@@ -29,15 +29,14 @@ define(function(require){
         },
         */
 
-        onRender: function(){
-            console.log("contextPage::onRender()");
-
-            var currentUser = Ctx.getCurrentUser();
-            var canEdit = currentUser.can(Permissions.ADMIN_DISCUSSION) || false;
+        initialize: function(options){
+            //console.log("contextPage::initialize()");
+            // add editable "objectives" field
+            var that = this,
+                currentUser = Ctx.getCurrentUser(),
+                canEdit = currentUser.can(Permissions.ADMIN_DISCUSSION) || false;
 
             $.when( Ctx.getDiscussionPromise() ).then( function(discussion){
-                //console.log("discussion successfully loaded: ", discussion);
-
                 // we implement here get() and save() methods (needed by CKEditor), so we mock a model instance
                 // TODO: find a better solution, for example create and use a real Discussion model instead?
                 discussion.get = function(field){
@@ -56,64 +55,73 @@ define(function(require){
                         data: $.param(post_data),
                         headers: {'Content-Type': 'application/x-www-form-urlencoded'}
                     }).success(function(data){
-                        console.log("discussion PUT success:", data);
+                        //console.log("discussion PUT success:", data);
                     });
 
                     return true;
                 };
 
-
-                // add editable "objectives" field
-                this.objectivesField = new CKEditorField({
+                that.objectivesField = new CKEditorField({
                     'model': discussion,
                     'modelProp': 'objectives',
                     'placeholder': 'Objectives',
                     'canEdit': canEdit
                 });
-                this.objectivesField.renderTo( $('.objectives'));
-
-
                 // add editable "instigator" field
-                this.objectivesField = new CKEditorField({
+                that.instigatorField = new CKEditorField({
                     'model': discussion,
                     'modelProp': 'instigator',
                     'placeholder': 'Instigator',
                     'canEdit': canEdit
                 });
-                this.objectivesField.renderTo( $('.instigator'));
-
-
                 // add editable "introduction" and "introductionDetails" fields
-                this.introductionField = new CKEditorField({
+                that.introductionField = new CKEditorField({
                     'model': discussion,
                     'modelProp': 'introduction',
                     'placeholder': 'Introduction',
                     'canEdit': canEdit
                 });
-                this.introductionField.renderTo( $('.introduction'));
-                this.introductionDetailsField = new CKEditorField({
+                that.introductionDetailsField = new CKEditorField({
                     'model': discussion,
                     'modelProp': 'introductionDetails',
                     'placeholder': 'Introduction details',
                     'canEdit': canEdit
                 });
+            });
+
+            this.computeStatistics();
+        },
+
+        onRender: function(){
+            //console.log("contextPage::onRender()");
+            var that = this,
+                currentUser = Ctx.getCurrentUser(),
+                canEdit = currentUser.can(Permissions.ADMIN_DISCUSSION) || false;
+
+            $.when( Ctx.getDiscussionPromise() ).then( function(discussion){
+                //console.log("discussion successfully loaded: ", discussion);
+                that.objectivesField.renderTo( that.$('.objectives'));
+                that.instigatorField.renderTo( that.$('.instigator'));
+                that.introductionField.renderTo( that.$('.introduction'));
                 if ( discussion["introductionDetails"] && discussion.introductionDetails.length > 0 )
                 {
-                    $('#introduction-button-see-more').show();
-                    this.introductionDetailsField.renderTo( $('.introduction-details'));
+                    that.$('#introduction-button-see-more').show();
+                    that.introductionDetailsField.renderTo( that.$('.introduction-details'));
                 }
                 else if ( canEdit )
                 {
-                    this.introductionDetailsField.renderTo( $('.introduction-details-empty'));
+                    that.introductionDetailsField.renderTo( that.$('.introduction-details-empty'));
+                }
+                if (canEdit) {
+                    // Not clear why this is necessary.
+                    that.objectivesField.delegateEvents();
+                    that.instigatorField.delegateEvents();
+                    that.introductionField.delegateEvents();
+                    that.introductionDetailsField.delegateEvents();
                 }
             });
 
             this.draw();
-        },
-
-        initialize: function(options){
-            console.log("contextPage::initialize()");
-            this.computeStatistics();
         },
 
         /*
@@ -191,12 +199,12 @@ define(function(require){
                 date_min_moment = date_max_moment.subtract('years', 1);
                 date_min = date_min_moment.toDate();
             }
-            console.log("period_type:");
-            console.log(period_type);
-            console.log("date_min:");
-            console.log(date_min);
-            console.log("date_max:");
-            console.log(date_max);
+            // console.log("period_type:");
+            // console.log(period_type);
+            // console.log("date_min:");
+            // console.log(date_min);
+            // console.log("date_max:");
+            // console.log(date_max);
             return {
                 "period_type": period_type,
                 "date_min": date_min,
@@ -215,8 +223,8 @@ define(function(require){
             $.when( collectionManager.getAllUsersCollectionPromise(),
                 collectionManager.getAllMessageStructureCollectionPromise()
             ).then( function( allUsersCollection, allMessagesCollection ){
-                console.log("collections allUsersCollection, allMessagesCollection are loaded");
-                //console.log(allMessagesCollection);
+                // console.log("collections allUsersCollection, allMessagesCollection are loaded");
+                // console.log(allMessagesCollection);
 
                 var messages_sorted_by_date = new Backbone.Collection(allMessagesCollection.toJSON()); // clone
                 messages_sorted_by_date.sortBy(function(msg){
@@ -231,7 +239,7 @@ define(function(require){
                 //console.log(messages_sorted_by_date);
 
                 var messages_total = messages_sorted_by_date.length;
-                console.log("messages_total: " + messages_total);
+                // console.log("messages_total: " + messages_total);
 
                 // pick only day, because date field looks like "2012-06-19T15:14:56"
                 var convertDateTimeToDate = function (datetime){
@@ -239,9 +247,9 @@ define(function(require){
                 };
                 
                 var first_message_date = convertDateTimeToDate(messages_sorted_by_date[0].date);
-                console.log("first_message_date: " + first_message_date);
+                // console.log("first_message_date: " + first_message_date);
                 var last_message_date = convertDateTimeToDate(messages_sorted_by_date[messages_total-1].date);
-                console.log("last_message_date: " + last_message_date);
+                // console.log("last_message_date: " + last_message_date);
 
 
                 // find which period is best to show the stats: the first period among week, month, debate which gathers at least X% of the contributions
@@ -469,7 +477,7 @@ define(function(require){
                 return;
             var stats = this.stats;
             var t = this.lineChartIsCumulative ? i18n.gettext("Evolution of the total number of messages") : i18n.gettext("Evolution of the number of messages posted");
-            this.$el.find(".statistics").html("<h2>" + i18n.gettext("Statistics") + "</h2><p class='stats_messages'>" + t + "</p>");
+            this.$(".statistics").html("<h2>" + i18n.gettext("Statistics") + "</h2><p class='stats_messages'>" + t + "</p>");
             this.drawLineGraph(this.messages_per_day_for_line_graph);
             this.drawPieChart(this.pie_chart_data, this.pie_chart_default_legend_data);
         },
@@ -502,7 +510,7 @@ define(function(require){
                 var xAxis = d3.svg.axis().scale(x).tickSize(h - margin * 2).tickPadding(10).ticks(5).tickFormat(d3.time.format("%Y-%m-%d"));
                 var yAxis = d3.svg.axis().scale(y).orient('left').tickSize(-w + margin * 2).tickPadding(10).tickFormat(d3.format("d"));
                 var t = null;
-                var chart_div = that.$el.find('.chart');
+                var chart_div = that.$('.chart');
 
                 if (chart_div.empty()) {
                     svg = d3.select(chart_div[0])
@@ -697,7 +705,7 @@ define(function(require){
             var that = this;
             function init_pie_chart_plot(element_name, data)
             {
-                var plot = that.$el.find('.'+element_name)[0];
+                var plot = that.$('.'+element_name)[0];
                 while (plot.hasChildNodes())
                 {
                     plot.removeChild(plot.firstChild);
@@ -788,7 +796,7 @@ define(function(require){
                     .append("svg:title")
                     .text(get_slice_title);
 
-                var legend_div = that.$el.find('.'+element_name+'_legend')[0];
+                var legend_div = that.$('.'+element_name+'_legend')[0];
                 var legend = d3.select(legend_div);
 
                 remove_legend(null);
