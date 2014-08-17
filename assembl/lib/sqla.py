@@ -18,6 +18,7 @@ from sqlalchemy import (
 from sqlalchemy.exc import NoInspectionAvailable
 from sqlalchemy.ext.declarative import declarative_base, declared_attr
 from sqlalchemy.orm import mapper, scoped_session, sessionmaker
+from sqlalchemy.orm.interfaces import MANYTOONE
 from sqlalchemy.orm.util import has_identity
 from sqlalchemy.util import classproperty
 from sqlalchemy.orm.session import object_session, Session
@@ -426,6 +427,7 @@ class BaseOps(object):
                 assert get_view_def(view_name),\
                     "in viewdef %s, class %s, name %s, unknown viewdef %s" % (
                         view_def_name, my_typename, name, view_name)
+            #print prop_name, name, view_name
 
             def translate_to_json(v):
                 if isinstance(v, Base):
@@ -483,7 +485,8 @@ class BaseOps(object):
                 continue
             elif prop_name in properties:
                 known.add(prop_name)
-                if view_name or (prop_name not in fkey_of_reln):
+                if view_name or (prop_name not in fkey_of_reln) or (
+                        relns[prop_name].direction != MANYTOONE):
                     val = getattr(self, prop_name)
                     if val is not None:
                         result[name] = translate_to_json(val)
