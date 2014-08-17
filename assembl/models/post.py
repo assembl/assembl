@@ -99,11 +99,23 @@ class Post(Content):
         return self.body.strip()
 
     def get_body_preview(self):
-        body = self.get_body()
-        body[:120].rsplit(' ', 1)[0]
-        if  self.get_body_mime_type() == 'text/html':
-            body = BeautifulSoup(body[:300]).get_text()
-        return body[:120].rsplit(' ', 1)[0]
+        body = self.get_body().strip()
+        target_len = 120
+        shortened = False
+        if self.get_body_mime_type() == 'text/html':
+            html_len = 2 * target_len
+            while True:
+                text = BeautifulSoup(body[:html_len]).get_text().strip()
+                if html_len >= len(body) or len(text) > target_len:
+                    shortened = html_len < len(body)
+                    body = text
+                    break
+                html_len += target_len
+        if len(body) > target_len:
+            body = body[:target_len].rsplit(' ', 1)[0].rstrip() + ' '
+        elif shortened:
+            body += ' '
+        return body
 
     def _set_ancestry(self, new_ancestry):
         descendants = self.get_descendants()
