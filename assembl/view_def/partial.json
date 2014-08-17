@@ -75,7 +75,7 @@
         "proposes_idea": true
     },
     "SynthesisPost": {
-        "@extends": "Post",
+        "@extends": "AssemblPost",
         "publishes_synthesis": true
     },
     "ImportedPost": {
