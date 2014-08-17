@@ -966,7 +966,7 @@ def coeus_stagenv2():
     env.uses_apache = False
     env.uses_ngnix = True
     env.uses_uwsgi = True
-    env.gitbranch = "marionette"
+    env.gitbranch = "develop"
 
 @task    
 def inm_prodenv():
