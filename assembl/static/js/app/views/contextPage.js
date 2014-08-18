@@ -22,6 +22,7 @@ define(function(require){
         },
 
         lineChartIsCumulative: true,
+        lineChartShowPoints: false,
 
         /*
         events: {
@@ -277,6 +278,28 @@ define(function(require){
                 var period = that.deduceGoodPeriod(messages_per_day_totals_array, messages_threshold);
                 
                 var statsPeriodName = i18n.gettext(period.period_type);
+                // this switch is here just so that the i18n strings are correcly parsed and put into the .pot file
+                switch ( period.period_type ){
+                    case 'last week':
+                        statsPeriodName = i18n.gettext('last week');
+                    break;
+                    case 'last 2 weeks':
+                        statsPeriodName = i18n.gettext('last 2 weeks');
+                    break;
+                    case 'last month':
+                        statsPeriodName = i18n.gettext('last month');
+                    break;
+                    case 'last 3 months':
+                        statsPeriodName = i18n.gettext('last 3 months');
+                    break;
+                    case 'last 6 months':
+                        statsPeriodName = i18n.gettext('last 6 months');
+                    break;
+                    case 'last year':
+                        statsPeriodName = i18n.gettext('last year');
+                    break;
+                }
+
                 var date_min = period.date_min;
                 var date_max = period.date_max;
 
@@ -382,6 +405,7 @@ define(function(require){
                     var d = new Date(msg.date);
                     return d >= date_min && d <= date_max;
                 });
+                messages_in_period_total = messages_in_period_full.length;
 
                 var messages_not_in_period_full = _.filter(messages_sorted_by_date, function(msg){
                     var d = new Date(msg.date);
@@ -422,23 +446,23 @@ define(function(require){
                 }
                 
                 var pie_chart_data = [
-                    "the title of the first element is purposely not used, only its data is used", //"Messages since the beginning of the debate",
+                    "the title of the first element is purposely not used, only its data is used", //"posted since the beginning of the debate",
                     messages_total,
                     authors_total,
                     {
                         "messages_posted_during_current_period": [
-                            i18n.gettext('Messages posted since') + " " + statsPeriodName,
+                            i18n.gettext('authors since') + " " + statsPeriodName,
                             messages_in_period_total,
                             authors_in_period_total,
                             {
                                 "messages_from_new_authors": [
-                                    i18n.gettext("Messages from new authors"),
+                                    i18n.gettext("new authors since") + " " + statsPeriodName,
                                     messages_in_period_by_new_authors_total,
                                     new_authors_in_period_total,
                                     {}
                                 ],
                                 "messages_from_old_authors": [
-                                    i18n.gettext("Messages from old authors"),
+                                    i18n.gettext("already contributing authors since") + " " + statsPeriodName,
                                     messages_in_period_total - messages_in_period_by_new_authors_total,
                                     authors_in_period_total - new_authors_in_period_total,
                                     {}
@@ -446,7 +470,7 @@ define(function(require){
                             }
                         ],
                         "messages_posted_before_current_period": [
-                            i18n.gettext("Messages posted before") + " " + statsPeriodName,
+                            i18n.gettext("authors before") + " " + statsPeriodName,
                             messages_total - messages_in_period_total,
                             authors_not_in_period_total,
                             {}
@@ -457,7 +481,7 @@ define(function(require){
                 var pie_chart_default_legend_data = [
                     null,
                     null,
-                    i18n.gettext("Messages since the beginning of the debate"),
+                    i18n.gettext("authors since the beginning of the debate"),
                     null,
                     messages_total,
                     authors_total
@@ -624,16 +648,23 @@ define(function(require){
                 var circles = dataCirclesGroup.selectAll('.data-point')
                     .data(
                         data.filter(
-                            that.lineChartIsCumulative
-                            ?
-                            function(d){
-                                var ret = (previousValue != d.value);
-                                previousValue = d.value;
-                                return ret;
-                            }
+                            that.lineChartShowPoints
+                            ? (
+                                that.lineChartIsCumulative
+                                ?
+                                function(d){
+                                    var ret = (previousValue != d.value);
+                                    previousValue = d.value;
+                                    return ret;
+                                }
+                                :
+                                function(d){
+                                    return d.value != 0;
+                                }
+                            )
                             :
                             function(d){
-                                return d.value != 0;
+                                return false; 
                             }
                         )
                     );
@@ -803,14 +834,14 @@ define(function(require){
                     
                 function update_legend(d)
                 {
-                    legend.html("<h2>"+d[2]+"</h2><p>"+d[4]+" " + i18n.gettext("messages, by") + " "+d[5]+" " + i18n.gettext("authors") + "</p>");
-                    //legend.html("<h2>"+d[2]+"&nbsp;</h2><p>"+d[4]+" messages</p>");
+                    //legend.html("<h2>"+d[2]+"</h2><p>"+d[4]+" " + i18n.gettext("messages, by") + " "+d[5]+" " + i18n.gettext("authors") + "</p>");
+                    legend.html("<p>" + d[4] + " " + i18n.gettext("messages, posted by") + " " + d[5] + " " + d[2] + "</p>");
                     legend.transition().duration(200).style("opacity","1");
                 }
 
                 function get_slice_title(d)
                 {
-                    return d[2]+"\n"+d[4]+" " + i18n.gettext("messages, by") + " "+d[5]+" " + i18n.gettext("authors");
+                    return d[4] + " " + i18n.gettext("messages, posted by") + " " + d[5] + " " + d[2];
                 }
                 
                 function remove_legend(d)
