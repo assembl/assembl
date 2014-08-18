@@ -257,20 +257,19 @@ def delete_extract(request):
     extract = Extract.get_instance(extract_id)
 
     if not user_has_permission(discussion_id, user_id, P_EDIT_EXTRACT):
-        return HTTPForbidden()
+        raise HTTPForbidden()
 
     if not extract:
-        request.response.status = HTTPNoContent.code
-        return None
-    
+        return HTTPNoContent()
+
     if not (user_has_permission(discussion_id, user_id, P_EDIT_MY_EXTRACT)
             and user_id == extract.owner_id):
-        return HTTPForbidden()
+        raise HTTPForbidden()
 
     with transaction.manager:
         Extract.db.delete(extract)
     request.response.status = HTTPNoContent.code
-    return None
+    return HTTPNoContent()
 
 
 @search_extracts.get(permission=P_READ)

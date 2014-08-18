@@ -230,7 +230,7 @@ def delete_idea(request):
     db = Idea.db()
     db.delete(idea)
     request.response.status = HTTPNoContent.code
-    return None
+    return HTTPNoContent()
 
 
 @idea_extracts.get(permission=P_READ)

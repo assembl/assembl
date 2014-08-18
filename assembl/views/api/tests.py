@@ -78,11 +78,10 @@ def test_extracts(
     assert res.status_code == 200
     extract_json = json.loads(res.body)
     assert extract_json['idIdea'] == subidea_1_1.uri()
-    
-    
+
     #Delete
     res = test_app.delete(base_url + "/" + quote_plus(extract_id))
-    assert res.status_code == 200
+    assert res.status_code == 204
     #Check collection after delete
     res = test_app.get(base_url, json.dumps(extract_data))
     assert res.status_code == 200
@@ -305,9 +304,9 @@ def test_api_get_posts_from_idea(
     
     #Delete original extract and duplicate (check that toombstones have no effect
     res = test_app.delete(base_extract_url + "/" + quote_plus(extract_post_1_to_subidea_1_1_id))
-    assert res.status_code == 200
+    assert res.status_code == 204
     res = test_app.delete(base_extract_url + "/" + quote_plus(extract_post_1_to_subidea_1_1_bis_id))
-    assert res.status_code == 200
+    assert res.status_code == 204
     
     check_number_of_posts(subidea_1_1, 0, "Child idea should no longer have any post")
     check_number_of_posts(subidea_1, 1, "Parent idea should only have one post left")
