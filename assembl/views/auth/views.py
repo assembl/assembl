@@ -624,12 +624,14 @@ def request_password_change(request):
     localizer = request.localizer
     identifier = request.params.get('identifier', '')
     if not identifier:
-        return dict(get_default_context(request))
+        return dict(get_default_context(request),
+            title=localizer.translate(_('I forgot my password')))
     user, account = from_identifier(identifier)
     if not user:
         return dict(get_default_context(request),
                     identifier=identifier,
-                    error=localizer.translate(_("This user cannot be found")))
+                    error=localizer.translate(_("This user cannot be found")),
+                    title=localizer.translate(_('I forgot my password')))
     return HTTPFound(location=request.route_url(
         'password_change_sent', profile_id=user.id, _query=dict(
             email=identifier if '@' in identifier else '')))

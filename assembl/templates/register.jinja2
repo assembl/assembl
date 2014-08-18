@@ -3,27 +3,28 @@
 {% block content %}
 <div class="loginbox register">
     <header>
-        <p class="login-box-title">{{ gettext('Join assembl') }}</p>
+        <h1>{{ gettext('Join assembl') }}</h1>
     </header>
 
-    {% if error %}
-    <div class="error">{{error}}</div>
-    {% endif %}
+    <div class="content">
 
-    <form class="form" method="POST">
-        <input type="hidden" name="next_view" value="{{next_view}}" />
-        <input type="text" name="name" class="defaultfield" placeholder="{{ gettext('Name') }}" autofocus required />
-        <input type="text" name="email" class="defaultfield" placeholder="{{ gettext('email') }}" required />
-        <input type="password" name="password" class="defaultfield" placeholder="{{ gettext('Password') }}" required />
-        <input type="password" name="password2" class="defaultfield" placeholder="{{ gettext('Repeat password') }}" required />
-        <input type="submit" name="register" value="{{ gettext('Register') }}" class="btn-pink" />
-        <span>{{gettext("or")}} <a href="/login?next_view={{next_view}}">{{gettext("login")}}</a></span>
-    </form>
+        {% if error %}
+        <div class="error">{{error}}</div>
+        {% endif %}
 
-    <footer>
-        {% set caravan = "<a href='http://caravan.coop' class='link caravan'>"+gettext("Caravan")+"</a>" %}
-        {% set imaginationForPeople = "<a href='http://imaginationforpeople.org/' class='link i4p'>"+gettext("Imagination for people") +"</a>" %}
-        <p>{{ gettext("Designed by %(caravan)s and %(imaginationForPeople)s")|format(caravan=caravan, imaginationForPeople=imaginationForPeople)|safe }}</p>
-    </footer>
+        <form class="form" method="POST">
+            <input type="hidden" name="next_view" value="{{next_view}}" />
+            <input type="text" name="name" class="defaultfield" placeholder="{{ gettext('Name') }}" autofocus required />
+            <input type="text" name="email" class="defaultfield" placeholder="{{ gettext('email') }}" required />
+            <input type="password" name="password" class="defaultfield" placeholder="{{ gettext('Password') }}" required />
+            <input type="password" name="password2" class="defaultfield" placeholder="{{ gettext('Repeat password') }}" required />
+            <input type="submit" name="register" value="{{ gettext('Register') }}" class="btn btn-primary" />
+        </form>
+
+        <div class="subcontent">
+            {{gettext("Do you already have an account?")}} <a href="/login?next_view={{next_view}}">{{gettext("Log in!")}}</a>
+        </div>
+
+    </div>
 </div>
 {% endblock %}
