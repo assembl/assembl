@@ -19,13 +19,17 @@ define(function (require) {
         initialize: function (options) {
             var that = this;
             this.collection = this.model.get('panels');
-            this.listenTo(this.collection, 'add remove reset change', this.adjustGridSize);
-            setTimeout(function() {that.adjustGridSize();}, 200);
+            //this.listenTo(this.collection, 'add remove reset change', this.adjustGridSize);
+            setTimeout(function () {
+                that.adjustGridSize();
+            }, 200);
         },
-
         events: {
-            'click .close-group': 'closeGroup',
-            'click .lock-group': 'toggleLock'
+            'click .js_closeGroup': 'closeGroup',
+            'click .js_lockGroup': 'toggleLock'
+        },
+        collectionEvents: {
+            'add remove reset change': 'adjustGridSize'
         },
 
         serializeData: function () {
@@ -42,7 +46,8 @@ define(function (require) {
             this.model.collection.remove(this.model);
         },
         calculateGridSize: function () {
-            var gridSize = 0, that = this;
+            var gridSize = 0;
+
             _.each(this.collection.models, function (aPanelSpec) {
                 if (aPanelSpec.get('hidden'))
                     return;
@@ -51,9 +56,10 @@ define(function (require) {
             return gridSize;
         },
         adjustGridSize: function () {
-            var gridSize = this.calculateGridSize();
-            var className = 'groupGridSize-' + gridSize;
-            var found = this.$el[0].className.match(/\b(groupGridSize-[0-9]+)\b/);
+            var gridSize = this.calculateGridSize(),
+                className = 'groupGridSize-' + gridSize,
+                found = this.$el[0].className.match(/\b(groupGridSize-[0-9]+)\b/);
+
             if (found && found[0] != className) {
                 this.$el.removeClass(found[0]);
             }
@@ -204,9 +210,10 @@ define(function (require) {
          * @params list of panel names
          */
         ensureOnlyPanelsVisible: function () {
-            var that = this;
-            var args = Array.prototype.slice.call(arguments);
-            var panels = this.model.get('panels');
+            var that = this,
+                args = Array.prototype.slice.call(arguments),
+                panels = this.model.get('panels');
+
             // add missing panels
             this.model.ensurePanelsAt(args, 1);
             // show and hide panels

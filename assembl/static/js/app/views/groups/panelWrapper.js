@@ -16,18 +16,17 @@ define(function (require) {
         panelType: "groupPanel",
         className: "groupPanel",
         modelEvents: {
-          "change:hidden": "setHidden",
-          "change:gridWidth": "setGridWidth"
+            "change:hidden": "setHidden",
+            "change:gridWidth": "setGridWidth"
         },
         ui: {
             title: ".panel-header-title"
         },
         events: {
-            'click .panel-header-close': 'closePanel',
+            'click .panel-header-close': 'closePanel'
         },
         initialize: function (options) {
-            var that = this,
-                contentClass = panelClassByTypeName(options.contentSpec);
+            var contentClass = panelClassByTypeName(options.contentSpec);
             this.contentsView = new contentClass({
                 groupContent: options.groupContent,
                 panelWrapper: this
@@ -59,17 +58,18 @@ define(function (require) {
             this.setHidden();
             Ctx.initTooltips(this.$el);
         },
-        setHidden: function() {
+        setHidden: function () {
             if (this.model.get('hidden')) {
                 this.$el.hide();
             } else {
                 this.$el.css('display', 'table-cell');
             }
         },
-        setGridWidth: function() {
-            var gridSize = this.model.get('gridWidth');
-            var className = 'panelGridWidth-' + gridSize;
-            var found = this.$el[0].className.match(/\b(panelGridWidth-[0-9]+)\b/);
+        setGridWidth: function () {
+            var gridSize = this.model.get('gridWidth'),
+                className = 'panelGridWidth-' + gridSize,
+                found = this.$el[0].className.match(/\b(panelGridWidth-[0-9]+)\b/);
+
             if (found && found[0] != className) {
                 this.$el.removeClass(found[0]);
             }

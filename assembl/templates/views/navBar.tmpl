@@ -8,7 +8,7 @@
 </div>
 <div class="navbar-center tac">
 <% if( Ctx.userCanChangeUi() ){ %>
-  <a class="btn btn-default add-group"><i class="icon-add"></i> {{ gettext('Add a group of views') }}</a>
+  <a class="btn btn-default add-group js_addGroup"><i class="icon-add"></i> {{ gettext('Add a group of views') }}</a>
   <% if( Ctx.getCurrentInterfaceType() === Ctx.InterfaceTypes.EXPERT ) { %>
     <a class="js_switchToSimpleInterface">{{ gettext('Switch to simple mode') }}</a>
   <% } else { %>
@@ -40,7 +40,7 @@
             <span class="seperator"></span>
             {% for loc in locales %}
                 {% if (loc != locale) %}
-                    <a href="#" class='lang' data-locale='{{loc}}'>{{loc | upper}}</a>
+                    <a href="#" class='lang js_setLocale' data-locale='{{loc}}'>{{loc | upper}}</a>
                 {% endif %}
             {% endfor %}
         {% endif %}

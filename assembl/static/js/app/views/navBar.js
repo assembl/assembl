@@ -10,8 +10,8 @@ define(function (require) {
         tagName: 'nav',
         className: 'navbar navbar-default',
         events: {
-            'click .lang': 'setLocale',
-            'click .add-group': 'addGroup',
+            'click .js_setLocale': 'setLocale',
+            'click .js_addGroup': 'addGroup',
             'click .js_switchToExpertInterface': 'switchToExpertInterface',
             'click .js_switchToSimpleInterface': 'switchToSimpleInterface'
         },

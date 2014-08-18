@@ -10,8 +10,9 @@ define(function (require) {
     var groupContainer = Marionette.CollectionView.extend({
         id: 'groupsContainer',
         childView: GroupContent,
-        initialize: function(options) {
-            this.listenTo(this.collection, 'change reset add remove', this.calculateGridSize);
+        initialize: function (options) {
+            // boilerplate in marionette if you listen m/c here, use collectionEvents or modelEvents
+            //this.listenTo(this.collection, 'change reset add remove', this.calculateGridSize);
         },
         onRender: function () {
             if (!window.localStorage.getItem('showNotification')) {
@@ -19,9 +20,12 @@ define(function (require) {
                 Assembl.notificationRegion.show(new Notification());
             }
         },
+        collectionEvents: {
+            'change reset add remove': 'calculateGridSize'
+        },
         calculateGridSize: function () {
-            var that=this, gridSize = 0;
-            this.collection.each(function(aGroupSpec) {
+            var that = this, gridSize = 0;
+            this.collection.each(function (aGroupSpec) {
                 var view = that.children.findByModel(aGroupSpec);
                 if (view)
                     gridSize += view.calculateGridSize();

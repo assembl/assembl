@@ -63,7 +63,7 @@
 <% if( viewStyle == ctx.AVAILABLE_MESSAGE_VIEW_STYLES.PREVIEW ){ %>
 <div class="message-body <%= bodyFormatClass %> ellipsis" id="<%= messageBodyId %>">
     <p class="more"><%= body %></p>{# Do NOT introduce whitespace within this div #}
-    <a class="readmore" href="#" alt="{{ gettext('Read More') }}">{{ gettext('Read More') }}</a>
+    <a class="readmore" href="#" alt="{{ gettext('Read More') }}">...{{ gettext('Read More') }}</a>
 </div>
 </header>
 <div class="message-menu mvs">

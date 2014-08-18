@@ -17,7 +17,7 @@ body {
 @include scrollbar {
   background-color: #eeeeee;
   width: 10px;
-  height: 15px
+  height: 10px
 }
 
 @include scrollbar-thumb {

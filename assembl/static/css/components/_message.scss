@@ -6,43 +6,45 @@ $ten: 10px;
 
 @mixin multiline-ellipsis($height, $lineheight, $ellipsiswidth) {
 
-$ellipsiswidth: 3em !default;
+  $ellipsiswidth: 3em !default;
 
-    .ellipsis {
-        overflow: hidden;
-        height: $height;
-        line-height: $lineheight; }
+  .ellipsis {
+    overflow: hidden;
+    height: $height;
+    line-height: $lineheight;
+  }
 
-    .ellipsis:before {
-        content:"";
-        float: left;
-      //width: 5px;
-      height: $height;
-    }
+  .ellipsis:before {
+    content: "";
+    float: left;
+    //width: 5px;
+    height: $height;
+  }
 
-    .ellipsis > *:first-child {
-      //display: inline;
-      width: 100%;
-      //margin-left: -5px;
-      margin: 0;
-      white-space: normal;
-    }
+  .ellipsis > *:first-child {
+    //display: inline;
+    width: 100%;
+    //margin-left: -5px;
+    margin: 0;
+    white-space: normal;
+  }
 
-    .ellipsis:after {
-        content: "\02026";// Read More
-        float: right; position: relative;
-        top: -$lineheight;
-        left: 100%;
-        width: $ellipsiswidth;
-        margin-left: -$ellipsiswidth;
-        padding-right: 5px;
-        
-        text-align: right;
-        background: white;
-        @include background(
+  .ellipsis:after {
+    content: "\02026"; // Read More
+    float: right;
+    position: relative;
+    top: -$lineheight;
+    left: 100%;
+    width: $ellipsiswidth;
+    margin-left: -$ellipsiswidth;
+    padding-right: 5px;
+
+    text-align: right;
+    background: white;
+    @include background(
             linear-gradient(top left, rgba(255, 255, 255, 0), white 50%, white)
-            );
-    }
+    );
+  }
 
   .ellipsis a {
     //position: absolute;
@@ -52,235 +54,245 @@ $ellipsiswidth: 3em !default;
     //overflow: hidden;
     //text-indent: -9999px;
   }
-    .ellipsis i, .ellipsis:after {
-        font-style: normal; color: blue;}
+  .ellipsis i, .ellipsis:after {
+    font-style: normal;
+    color: blue;
+  }
 
-    .ellipsis i:before { content: "";}
+  .ellipsis i:before {
+    content: "";
+  }
 
 }
 
 // A message block
 // ================
 .message {
+  position: relative;
+  //padding: 20px 5px;
+  padding: 8px 0px 2px 0px;
+  min-height: $fortythree - 12px;
+
+  &.is-highlighted {
+    background-color: $yellow;
+  }
+  // A message block Header
+  // --------------------
+  .message-header {
     position: relative;
-    //padding: 20px 5px;
-    padding: 8px 0px 2px 0px;
     min-height: $fortythree - 12px;
+  }
 
-    &.is-highlighted {
-        background-color: $yellow;
+  .message-subheader {
+    line-height: 17px;
+    padding-left: 6px;
+    cursor: pointer;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-align: baseline;
+    max-height: $fortythree - 12;
+    > span {
+      vertical-align: top;
     }
-    // A message block Header
-    // --------------------
-    .message-header {
-        position: relative;
-        min-height: $fortythree - 12px;
+    .message--collapsed & {
+      line-height: 32px;
     }
-    
+
+    .message-author {
+      display: inline-block;
+      line-height: 17px;
+      padding-left: .2em;
+      .iconbutton {
+        width: 28px;
+        height: 20px;
+        line-height: 17px;
+        text-align: left;
+        vertical-align: top;
+      }
+    }
+
+    .message-date {
+      //line-height: 17px;
+    }
+
+    > div {
+      //margin-top: 4px;
+    }
+
+    .m-section {
+
+    }
+
+  }
+  .message-subject {
+    margin-top: 0;
+    white-space: normal;
+  }
+  .message-body {
+    margin-top: 1em;
+  }
+
+  &.viewStyleFullBody {
+    .message-date {
+      float: none;
+      color: #B3B3B3;
+    }
     .message-subheader {
-        line-height: 17px;
-      padding-left: 6px;
-        cursor: pointer;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        text-align:  baseline;
-        max-height: $fortythree - 12;
-        > span {
-                vertical-align: top;
-                }
-        .message--collapsed & {
-            line-height: 32px;
-        }
+      max-height: none;
+    }
+    .message-author {
+      width: auto;
+      padding-left: .01em;
+    }
 
-      .message-author {
-        display: inline-block;
-        line-height: 17px;
-        padding-left: .2em;
-        .iconbutton {
-                width: 28px;
-                height: 20px;
-                line-height: 17px;
-                text-align: left;
-                vertical-align: top;
-            }
-        }
-
-        .message-date {
-          //line-height: 17px;
-        }
-
-        > div {
-          //margin-top: 4px;
-        }
-
-      .m-section {
-
+    .message-body.body_format_text_plain {
+      white-space: pre-line;
+      & > {
+        white-space: normal;
+      }
+    }
+    .message-body.body_format_text_html {
+      white-space: normal;
+      p {
+        margin-top: 0.5em;
+        margin-bottom: 0.5em;
+      }
+      > div {
       }
 
     }
-    .message-subject {
-        margin-top: 0;
-        white-space: normal;
+    &.Email .message-body.body_format_text_html {
+      > div {
+        white-space: pre-line;
+      }
     }
     .message-body {
-        margin-top: 1em;
+      line-height: 1.4em
     }
 
-    
-    &.viewStyleFullBody {
-        .message-date {
-          float: none;
-          color: #B3B3B3;
-        }
-        .message-subheader {
-            max-height: none;
-        }
-        .message-author {
-          width: auto;
-          padding-left: .01em;
-        }
-
-        .message-body.body_format_text_plain {
-            white-space: pre-line;
-          & > {
-            white-space: normal;
-            }
-        }
-        .message-body.body_format_text_html {
-            white-space: normal;
-            p {
-                margin-top: 0.5em;
-                margin-bottom: 0.5em;
-            }
-            > div {
-            }
-            
-        }
-        &.Email .message-body.body_format_text_html {
-        > div {
-                white-space: pre-line;
-            }
-        }
-      .message-body {
-        line-height: 1.4em
-      }
-
-      .message-menu {
-        .dropdown {
-          position: absolute;
-          right: 5px;
-          top: 0;
-        }
+    .message-menu {
+      .dropdown {
+        position: absolute;
+        right: 5px;
+        top: 0;
       }
     }
-    
-    &.viewStyleTitleOnly {
+  }
 
-      .message-date {
+  &.viewStyleTitleOnly {
 
-      }
-        .message-author {
-          //width: 10em;
-            overflow:hidden;
-            float: left;
-            text-overflow: ellipsis;
-          //min-height: $fortythree - 12; /* To make sure the title wraps in front of the author */
-          width: auto;
-          padding-left: .01em;
-            &:hover {
-              //position: relative;
-              //min-width: 10em;
-              //width: auto;
-            }
-        }
-        .message-subject {
+    .message-date {
 
-        }
     }
-    
-    &.viewStylePreview {
-
-      .message-date {
-        color: #B3B3B3;
-        }
-        .message-author {
-          width: auto;
-          padding-left: .01em;
-        }
-      @include multiline-ellipsis(5em, 1em, 3em);
-        .message-body {
-          //@extend .text-muted;
-          margin-top: 0.6em;
-          padding-left: 3em;
-          position: relative;
-          color: #212f40;
-          padding-right: 40px;
-        }
-
-        .message-body.body_format_text_plain > div {
-          white-space: normal;
-          //white-space: pre-line;
-          & > {
-            white-space: normal;
-          }
-        }
-
-      .message-menu {
-
-      }
-      .message-body {
-        p {
-          line-height: 1.3em
-        }
+    .message-author {
+      //width: 10em;
+      overflow: hidden;
+      float: left;
+      text-overflow: ellipsis;
+      //min-height: $fortythree - 12; /* To make sure the title wraps in front of the author */
+      width: auto;
+      padding-left: .01em;
+      &:hover {
+        //position: relative;
+        //min-width: 10em;
+        //width: auto;
       }
     }
-    
+    .message-subject {
+
+    }
+  }
+
+  &.viewStylePreview {
+
+    .message-date {
+      color: #B3B3B3;
+    }
+    .message-author {
+      width: auto;
+      padding-left: .01em;
+    }
+    //@include multiline-ellipsis(5em, 1em, 3em);
+    .message-body {
+      //@extend .text-muted;
+      margin-top: 0.6em;
+      padding-left: 3em;
+      position: relative;
+      color: #212f40;
+      padding-right: 40px;
+    }
+
+    .message-body.body_format_text_plain > div {
+      white-space: normal;
+      //white-space: pre-line;
+      & > {
+        white-space: normal;
+      }
+    }
+
+    .message-menu {
+
+    }
+    .message-body {
+      .more {
+        display: inline;
+        line-height: 1.3em;
+      }
+      .readmore {
+        display: none;
+      }
+      .moretext {
+        text-decoration: none;
+        color: #b879e2;
+      }
+    }
+  }
+
+  .indicator {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    .indice {
+      width: 10px;
+      height: 10px;
+      border: 2px solid $gray3;
+      display: inline-block;
+      @include border-radius(50px);
+    }
+  }
+
+  &.unread {
+    /*.message-author, .message-subject {
+        @extend .text-bold;
+    }*/
+    /*.message-author, .message-subject, .message-date {
+        @extend .text-bold;
+    } */
+
     .indicator {
-      position: absolute;
-      right: 15px;
-      top: 50%;
       .indice {
-        width: 10px;
-        height: 10px;
-        border: 2px solid $gray3;
-        display: inline-block;
-        @include border-radius(50px);
+        background-color: $purple;
+        border: none;
       }
     }
-    
-    &.unread {
-      /*.message-author, .message-subject {
-          @extend .text-bold;
-      }*/
-      /*.message-author, .message-subject, .message-date {
-          @extend .text-bold;
-      } */
-
-      .indicator {
-        .indice {
-          background-color: $purple;
-          border: none;
-        }
-      }
-    }
+  }
 
 }
 
 // This is so annotator doesn't display a form for user's who aren't allowed
 body.js_annotatorUserCannotAddExtract > .textbubble {
-    display: none !important;
-    } 
-
+  display: none !important;
+}
 
 .messageList-list.reverse_chronological, .messageList-list.chronological {
-    .message-family-container {
-      border-bottom: solid 1px $gray3;
-    
-        &:last-child {
-            border-bottom: 0;
-        }
+  .message-family-container {
+    border-bottom: solid 1px $gray3;
+
+    &:last-child {
+      border-bottom: 0;
     }
+  }
 }
 
 // @for $i from 1 through 30 {
@@ -290,137 +302,132 @@ body.js_annotatorUserCannotAddExtract > .textbubble {
 // }
 
 .message-family-container.message--collapsed {
-    //padding: 5px;
-    //padding-bottom: 0px;
+  //padding: 5px;
+  //padding-bottom: 0px;
 }
-
-
 
 // The arrow
 // ------------
 .message-family-arrow.noarrow {
-    display: block;
-    padding-left: $twelve/2;
+  display: block;
+  padding-left: $twelve/2;
 }
 
 .link-img {
-    float:left;
-    margin-left: -13px;
-    margin-top:0;
+  float: left;
+  margin-left: -13px;
+  margin-top: 0;
 }
 
 .message-family-arrow.arrow {
-    padding-left: $twelve/2;
-    margin-left: $twelve/2;
+  padding-left: $twelve/2;
+  margin-left: $twelve/2;
+  display: block;
+  cursor: pointer;
+  .msg-img-closed {
     display: block;
-    cursor: pointer;
+  }
+  .msg-img-open {
+    display: none;
+  }
+
+  .message--expanded > .message-family-container > & {
+    border-left: solid 1px #C7C6C2;
+    margin-left: $twelve/2 - 1;
     .msg-img-closed {
-        display: block;
+      display: none;
     }
     .msg-img-open {
-        display: none;
+      display: block;
     }
-
-    .message--expanded > .message-family-container > & {
-        border-left: solid 1px #C7C6C2;
-        margin-left: $twelve/2 - 1;
-        .msg-img-closed {
-            display: none;
-        }
-        .msg-img-open {
-            display: block;
-        }
+  }
+  .message--expanded > & {
+    border-left: solid 1px #C7C6C2;
+    margin-left: $twelve/2 - 1;
+    .msg-img-closed {
+      display: none;
     }
-    .message--expanded > & {
-        border-left: solid 1px #C7C6C2;
-        margin-left: $twelve/2 - 1;
-        .msg-img-closed {
-            display: none;
-        }
-        .msg-img-open {
-            display: block;
-        }
+    .msg-img-open {
+      display: block;
     }
+  }
 }
 
 // An empty space for indentation
 // --------------
 .messagelist-space {
-    display: block;
-    padding-left: $twelve/2;
-    margin-left: $twelve/2;
+  display: block;
+  padding-left: $twelve/2;
+  margin-left: $twelve/2;
 }
 
 // The bar to make an .messagelist-item looks like a child
 // --------------
 .messagelist-bar {
-    display: block;
-    padding-left: $twelve/2;
-    margin-left: $twelve/2 - 1;
-    border-left: solid 1px #C7C6C2;
+  display: block;
+  padding-left: $twelve/2;
+  margin-left: $twelve/2 - 1;
+  border-left: solid 1px #C7C6C2;
 }
-
 
 // The link between an messagelist and its parent
 // --------------
 .message-family-container {
-    // background: url(#{$img-dir}/messagelist/messagelist-link.png) -6 top no-repeat;
-    display: block;
-    clear:left;
-    padding-left: $twelve/2;
-    margin-left: $twelve/2;
+  // background: url(#{$img-dir}/messagelist/messagelist-link.png) -6 top no-repeat;
+  display: block;
+  clear: left;
+  padding-left: $twelve/2;
+  margin-left: $twelve/2;
 
-    &.root {
-        //Root does not have border, bump it right
-        margin-left: 0;
+  &.root {
+    //Root does not have border, bump it right
+    margin-left: 0;
+  }
+  &.child {
+    // background: url(#{$img-dir}/messagelist/messagelist-link-last.png) -6 top no-repeat;
+    border-left: solid 1px #C7C6C2;
+    //Collapse border in the parent's border
+    margin-left: $twelve/2 - 1;
+
+    &.last-child {
+      // background: url(#{$img-dir}/messagelist/messagelist-link-last.png) -6 top no-repeat;
+      border-left: none;
+      margin-left: $twelve/2
     }
-    &.child {
-        // background: url(#{$img-dir}/messagelist/messagelist-link-last.png) -6 top no-repeat;
-        border-left: solid 1px #C7C6C2;
-        //Collapse border in the parent's border
-        margin-left: $twelve/2 - 1;
-        
-        &.last-child {
-            // background: url(#{$img-dir}/messagelist/messagelist-link-last.png) -6 top no-repeat;
-            border-left: none;
-            margin-left: $twelve/2
-        }
-    }
+  }
 }
 
 // ++++
 .message-bar.message-bar--100vertical {
-    position: absolute;
-    top: 4px;
-    bottom: 0;
-    height: auto;
+  position: absolute;
+  top: 4px;
+  bottom: 0;
+  height: auto;
 
-    @for $i from 1 through 30 {
+  @for $i from 1 through 30 {
 
-        &[data-bar-level="#{$i}"] {
-            left: ((21px * $i) + 5px) - 21px;
-        }
-
+    &[data-bar-level="#{$i}"] {
+      left: ((21px * $i) + 5px) - 21px;
     }
-}
 
+  }
+}
 
 //
 .message-body, .message-replybox {
-    padding: {
-        right: $ten * 2;
-      left: 36px;
-    }
+  padding: {
+    right: $ten * 2;
+    left: 36px;
+  }
 }
-
 
 //
 .message-replybox {
-    text-align: right;
-    margin-top: 1em;
-    &.hidden {
-        display: none;
-    }
+  text-align: right;
+  margin-top: 1em;
+  &.hidden {
+    display: none;
+  }
 }
 
 //
@@ -431,65 +438,65 @@ body.js_annotatorUserCannotAddExtract > .textbubble {
   display: table;
   vertical-align: top;*/
 
-    // used when buttons are to the left of the Reply button
-    > .message-hoistbtn, > .message-linkbutton {
-        vertical-align: top;
-        width: 26px;
-        line-height: 23px;
+  // used when buttons are to the left of the Reply button
+  > .message-hoistbtn, > .message-linkbutton {
+    vertical-align: top;
+    width: 26px;
+    line-height: 23px;
+  }
+  .message-replybox-openbtn {
+    vertical-align: top;
+    margin-left: 6px;
+    padding-left: 4px;
+    padding-right: 6px;
+    cursor: pointer;
+    i {
+      font-size: 10px;
     }
-    .message-replybox-openbtn {
-        vertical-align: top;
-        margin-left: 6px;
-        padding-left: 4px;
-        padding-right: 6px;
-      cursor: pointer;
-      i {
-        font-size: 10px;
-      }
+  }
+  .dropdown {
+    vertical-align: top;
+    //line-height: 10px;
+    padding: 0;
+    //margin-left: 6px;
+    .dropdown-label.dropdown-label--arrow {
+      width: 24px;
+      height: 24px;
     }
-    .dropdown {
-        vertical-align: top;
-        //line-height: 10px;
-        padding: 0;
-        //margin-left: 6px;
-        .dropdown-label.dropdown-label--arrow {
-            width: 24px;
-            height: 24px;
-        }
 
-        .iconbutton {
-            width: 20px !important;
-            height: 18px;
-            line-height: 14px;
-            padding-top: 2px;
-            padding-right: 4px;
-            vertical-align: top;
-        }
-
-        i.icon-mail {
-            font-size: 12px; /* icon-mail needs to have a smaller font size (than original 16px) because the icon is big in the font */
-        }
-        a:link, a:visited {
-            color: inherit; /* so that the icon is not purple when the "a" tag has an href attribute (link) */
-            text-decoration: inherit;
-        }
+    .iconbutton {
+      width: 20px !important;
+      height: 18px;
+      line-height: 14px;
+      padding-top: 2px;
+      padding-right: 4px;
+      vertical-align: top;
     }
+
+    i.icon-mail {
+      font-size: 12px; /* icon-mail needs to have a smaller font size (than original 16px) because the icon is big in the font */
+    }
+    a:link, a:visited {
+      color: inherit; /* so that the icon is not purple when the "a" tag has an href attribute (link) */
+      text-decoration: inherit;
+    }
+  }
 }
 
 // The child list
 // --------------
 .messagelist-children {
-    height: 0px;
-    overflow: hidden;
-    clear:left;
+  height: 0px;
+  overflow: hidden;
+  clear: left;
 
-    @include transition( height 0.4s );
-    @include transform( translateZ(0) );
+  @include transition(height 0.4s);
+  @include transform(translateZ(0));
 
-    height: auto;
+  height: auto;
 
-    &:empty {
-        display: none;
-    }
+  &:empty {
+    display: none;
+  }
 
 }
