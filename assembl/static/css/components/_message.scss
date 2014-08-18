@@ -213,7 +213,7 @@ $ten: 10px;
       width: auto;
       padding-left: .01em;
     }
-    //@include multiline-ellipsis(5em, 1em, 3em);
+    @include multiline-ellipsis(5em, 1em, 3em);
     .message-body {
       //@extend .text-muted;
       margin-top: 0.6em;
@@ -253,12 +253,16 @@ $ten: 10px;
     position: absolute;
     right: 15px;
     top: 50%;
+    cursor: pointer;
     .indice {
       width: 10px;
       height: 10px;
       border: 2px solid $gray3;
       display: inline-block;
       @include border-radius(50px);
+      &:hover {
+        background-color: $gray3;
+      }
     }
   }
 
@@ -416,7 +420,7 @@ body.js_annotatorUserCannotAddExtract > .textbubble {
 //
 .message-body, .message-replybox {
   padding: {
-    right: $ten * 2;
+    right: 36px;
     left: 36px;
   }
 }
