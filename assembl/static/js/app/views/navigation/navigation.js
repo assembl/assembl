@@ -25,6 +25,9 @@ define(function (require) {
         events: {
             'click .nav': 'toggleMenu'
         },
+        ui: {
+            level: 'div.second-level'
+        },
         initialize: function (options) {
             var that = this;
 
@@ -49,13 +52,13 @@ define(function (require) {
             var elm = $(e.target),
                 view = elm.attr('data-view');
 
-            if (elm.next('div.second-level').is(':hidden')) {
+            if (elm.next(this.ui.level).is(':hidden')) {
                 this.$('.nav').removeClass('active');
-                this.$('div.second-level').slideUp();
+                this.$(this.ui.level).slideUp();
                 elm.addClass('active');
-                elm.next('div.second-level').slideDown();
+                elm.next(this.ui.level).slideDown();
 
-            } else if (elm.next('div.second-level').is(':visible')) {
+            } else if (elm.next(this.ui.level).is(':visible')) {
                 //
             }
             this.loadView(view);
@@ -68,16 +71,17 @@ define(function (require) {
             this.groupContent.model.set('navigationState', view);
             switch (view) {
                 case 'home':
-                    console.log('load home panel');
                     var homePanel = new HomePanel({
-                        groupContent: this.groupContent});
+                        groupContent: this.groupContent
+                    });
                     this.home.show(homePanel);
                     this.groupContent.ensureOnlyPanelsVisible('homePanel');
                     break;
                 case 'debate':
-                    console.log('load idea table');
                     var idealist = new IdeaList({
-                        groupContent: this.groupContent});
+                        groupContent: this.groupContent,
+                        nav: true
+                    });
                     this.debate.show(idealist);
                     this.groupContent.resetDebateState();
                     break;

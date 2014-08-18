@@ -12,7 +12,7 @@
 
 .groupContent {
   display: inline-block;
-  height: 100%;
+  height: inherit;
   border-right: 5px solid $white;
   border-left: 3px solid $gray1;
   white-space: normal;

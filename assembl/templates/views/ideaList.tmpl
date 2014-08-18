@@ -11,6 +11,7 @@
     titles.synthesis = titles.synthesis.replace('{0}', synthesisTotal);
     %>
 
+  <% if(!nav){ %>
     <header class="">
         {# <div class="dropdown">
             <span class="dropdown-label text-bold"><%= filter === 'featured' ? titles.featured : filter === 'inNextSynthesis' ? titles.synthesis : titles.toc %></span>
@@ -29,7 +30,7 @@
             <a id="ideaList-closeButton" class="icon-cancel panel-header-close" data-toggle="tooltip" title="{{gettext('Close panel')}}"></a>
         </div>
     </header>
-    
+    <% } %>
     <div class="panel-body panel-body--has-footer">
 
         <div id="idealist-list" class="idealist"></div>

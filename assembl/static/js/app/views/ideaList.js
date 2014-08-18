@@ -60,6 +60,7 @@ define(function (require) {
                 collectionManager = new CollectionManager();
 
             this.groupContent = options.groupContent;
+            this.nav = options.nav;
 
             collectionManager.getAllIdeasCollectionPromise().done(
                 function (allIdeasCollection) {
@@ -197,6 +198,7 @@ define(function (require) {
 
                     data.title = data.tocTitle;
                     data.collapsed = that.collapsed;
+                    data.nav = that.nav;
 
                     data.filter = that.filter;
                     that.$el.html(that.template(data));
