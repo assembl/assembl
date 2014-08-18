@@ -36,9 +36,10 @@ define(function (require) {
                 var value = queryObjects[i].value,
                     post = collectionManager._allMessageStructureCollection.get(value),
                     span = '<span class="closebutton" data-filterid="' + filterDef.id + '" data-value="' + value + '"></span>\n';
-                if (post !== undefined) {
+                if (post == undefined) {
                     // TODO
                     console.log("BUG: could not find post", value);
+                } else {
                     valuesText.push('"' + post.get('subject') + '"' + span);
                 }
             }
