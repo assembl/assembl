@@ -53,13 +53,17 @@ define(function (require) {
 
         onSynthesisClick: function (ev) {
             this.displaySynthesis(ev.currentTarget.attributes['data-message-id'].value);
-            // TODO: Show that entry is selected.
         },
         displaySynthesis: function (messageId) {
+            var collectionManager = new CollectionManager();
             messageListView = this.groupContent.getViewByTypeName('messageList');
             messageListView.currentQuery.clearAllFilters();
             messageListView.toggleFilterByPostId(messageId);
-            // TODO: Make sure it's expanded
+            $.when(collectionManager.getAllMessageStructureCollectionPromise()).done(
+                function(allMessageStructureCollection) {
+                    var message = allMessageStructureCollection.get(messageId);
+                    message.set('collapsed', false);
+                });
         },
     });
 
