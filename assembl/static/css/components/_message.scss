@@ -213,7 +213,7 @@ $ten: 10px;
       width: auto;
       padding-left: .01em;
     }
-    @include multiline-ellipsis(5em, 1em, 3em);
+    //@include multiline-ellipsis(5em, 1em, 3em);
     .message-body {
       //@extend .text-muted;
       margin-top: 0.6em;
