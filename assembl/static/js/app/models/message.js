@@ -22,7 +22,7 @@ define(function(require){
          * @type {Object}
          */
         defaults: {
-            collapsed: false,
+            collapsed: true,
             checked: false,
             read: false,
             parentId: null,
