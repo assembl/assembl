@@ -5,7 +5,7 @@ from jasmine_runner.commands import run_specs_with_browser
 def test_some_browser_stuff(browser, test_server):
     """Test using real browser."""
     browser.visit(test_server.url)
-    assert browser.is_text_present('Assembl')
+    assert browser.title == 'Assembl'
 
 
 def test_jasmine(browser, test_server, discussion, test_session):
