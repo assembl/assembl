@@ -225,7 +225,7 @@
 /* New design button */
 
 .btn {
-  @include border-radius(4px);
+  @include border-radius(3px);
   display: inline-block;
   line-height: 1.42857143;
   margin-bottom: 0;
@@ -244,15 +244,6 @@
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
-}
-
-.btn:hover {
-
-}
-
-.btn:active,
-.btn.active {
-
 }
 
 /************************/

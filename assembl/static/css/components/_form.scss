@@ -70,3 +70,27 @@ $text-muted: #999;
     border: 1px solid #B978E4;
   }
 }
+
+/* New design Form */
+
+.form-control {
+  @include border-radius(3px);
+  @include placeholder {
+    color: $gray3;
+  }
+  display: block;
+  width: 100%;
+  height: 35px;
+  padding: 0 12px;
+  font-size: 14px;
+  line-height: 1.42857143;
+  color: $gray1;
+  background-color: $white;
+  background-image: none;
+  border: 1px solid $gray3;
+  &:focus {
+    outline: 0;
+    border: 1px solid $purple;
+    @include transition(border-color ease-in-out .15s);
+  }
+}
