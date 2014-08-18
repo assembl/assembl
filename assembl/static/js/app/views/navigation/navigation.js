@@ -104,7 +104,7 @@ define(function (require) {
                 _headerGroup = 25;
 
             this._sideBarHeight = (_window - _header) - _headerGroup;
-            this._accordion = this._sideBarHeight - _li;
+            this._accordion = (this._sideBarHeight - _li) - 15;
         }
 
     });
