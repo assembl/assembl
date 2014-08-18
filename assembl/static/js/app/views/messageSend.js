@@ -106,7 +106,8 @@ define(function(require){
             
             success_callback = function(data, textStatus, jqXHR){
                 btn.text( i18n.gettext('Message posted!') );
-                that.listenToOnce(that.messageList, "messageList:render_complete", function() {
+                if (that.messageList) {
+                    that.listenToOnce(that.messageList, "messageList:render_complete", function() {
                         if(_.isFunction(that.options.send_callback)) {
                             that.options.send_callback();
                         }
@@ -117,7 +118,8 @@ define(function(require){
                             Assembl.vent.trigger('messageList:showMessageById', data['@id']);
 
                         }, 1000);
-                });
+                    });
+                }
                 setTimeout(function(){
                     btn.text(btn_original_text);
                     that.$('.messageSend-cancelbtn').trigger('click');

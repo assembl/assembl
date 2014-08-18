@@ -198,6 +198,7 @@ define(function (require) {
                         'send_button_label': i18n.gettext('Send your reply'),
                         'subject_label': null,
                         'mandatory_body_missing_msg': i18n.gettext('You did not type a response yet...'),
+                        'messageList': that.messageListView,
                         'mandatory_subject_missing_msg': null
                     });
                     that.$('.message-replybox').append(that.replyView.render().el);
