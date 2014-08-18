@@ -212,16 +212,17 @@ define(function (require) {
                      */
                     that.messageListView.initAnnotator();
                     that.loadAnnotations();
+
                     if (that.replyBoxShown) {
                         that.openReplyBox();
                     }
                     else {
                         that.closeReplyBox();
                     }
-                    ;
 
-
-                    that.readMore();
+                    if (that.viewStyle == that.availableMessageViewStyles.PREVIEW) {
+                        that.readMore();
+                    }
 
                 });
             return this;
@@ -436,6 +437,8 @@ define(function (require) {
                 this.$el.addClass(this.availableMessageViewStyles.FULL_BODY.id);
                 this.model.set('collapsed', false);
                 this.viewStyle = style;
+                this.replyBoxShown = true;
+
             }
             else if (style == this.availableMessageViewStyles.PREVIEW) {
                 this.$el.removeClass(this.availableMessageViewStyles.TITLE_ONLY.id);
