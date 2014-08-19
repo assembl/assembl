@@ -158,7 +158,6 @@
   }
 }
 
-
 // Special case for small number of actual panels
 #groupsContainer.allGroupsGridSize-1 .groupContent {
   width: 100%;
@@ -186,9 +185,10 @@
     color: $white;
   }
   .close-group {
-    right: 5px;
-    font-size: 20px;
+    right: 12px;
+    font-size: 14px;
     opacity: 0.8;
+    top: 5px;
     &:hover {
       opacity: 1;
     }
@@ -198,9 +198,10 @@
     margin-right: auto;
     right: 30px;
     opacity: 0.8;
+    top: 5px;
     i {
       vertical-align: text-bottom;
-      font-size: 18px;
+      font-size: 14px;
     }
     &:hover {
       opacity: 1;
