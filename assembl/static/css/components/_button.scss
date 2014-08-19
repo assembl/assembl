@@ -235,7 +235,7 @@
   text-align: center;
   vertical-align: middle;
   padding: 6px 12px;
-  font-size: 12px;
+  font-size: 14px;
   cursor: pointer;
   background-image: none;
   border: 1px solid transparent;
@@ -331,3 +331,9 @@
   outline: 0;
 }
 
+.btn-sm {
+  padding: 5px 10px;
+  font-size: 12px;
+  line-height: 1.5;
+  border-radius: 3px;
+}
