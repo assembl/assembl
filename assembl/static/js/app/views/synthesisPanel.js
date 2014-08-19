@@ -37,15 +37,15 @@ define(function (require) {
                 collectionManager.getAllIdeasCollectionPromise()
             ).then(function (synthesisCollection, allIdeasCollection) {
                     var rootIdea = allIdeasCollection.getRootIdea(),
-                        raw_ideas,
-                        model = _.find(synthesisCollection.models, function (model) {
-                            return !model.get('published_in_post');
-                        });
-                    if (!model) {
-                        model = _.last(synthesisCollection.models);
+                        raw_ideas;
+                    
+                    if (!that.model) {
+                      //If unspecified, we edit the next_synthesis
+                      that.model = _.find(synthesisCollection.models, function (model) {
+                          return !model.get('is_next_synthesis');
+                      });
                     }
-                    that.model = model;
-                    raw_ideas = model.get('ideas');
+                    raw_ideas = that.model.get('ideas');
                     //console.log("Raw Ideas from model: ", raw_ideas)
                     if (raw_ideas) {
                         var ideas = [];
@@ -62,7 +62,7 @@ define(function (require) {
                         that.ideas.reset(ideas);
                     }
                     that.listenTo(that.ideas, 'add remove reset', that.render);
-                    that.listenTo(model, 'reset change', that.render);
+                    that.listenTo(that.model, 'reset change', that.render);
                 });
 
 
