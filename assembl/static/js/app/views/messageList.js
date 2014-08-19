@@ -39,7 +39,7 @@ define(function (require) {
     var MessageList = AssemblPanel.extend({
 
         panelType: 'messageList',
-        className: 'messageList',
+        className: 'panel messageList',
 
         ui: {
             panelBody: ".panel-body",
