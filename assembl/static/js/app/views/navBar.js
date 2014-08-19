@@ -3,7 +3,8 @@ define(function (require) {
     var Marionette = require('marionette'),
         Ctx = require('modules/context'),
         GroupSpec = require('models/groupSpec'),
-        CollectionManager = require('modules/collectionManager');
+        CollectionManager = require('modules/collectionManager'),
+        $ = require('jquery');
 
     var navBar = Marionette.LayoutView.extend({
         template: '#tmpl-navBar',
@@ -18,7 +19,7 @@ define(function (require) {
         serializeData: function () {
             return {
                 "Ctx": Ctx
-            };
+            }
         },
 
         setLocale: function (e) {
@@ -32,9 +33,8 @@ define(function (require) {
             Ctx.setInterfaceType(Ctx.InterfaceTypes.SIMPLE);
         },
         addGroup: function () {
-
-            var collectionManager = new CollectionManager();
-            var groupSpecsP = collectionManager.getGroupSpecsCollectionPromise();
+            var collectionManager = new CollectionManager(),
+                groupSpecsP = collectionManager.getGroupSpecsCollectionPromise();
 
             var Modal = Backbone.Modal.extend({
                 template: _.template($('#tmpl-create-group').html()),
