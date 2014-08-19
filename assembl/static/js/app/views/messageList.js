@@ -51,7 +51,9 @@ define(function (require) {
             collapseButton: '.js_messageList-collapseButton',
             loadPreviousMessagesButton: '.js_messageList-prevbutton',
             loadNextMessagesButton: '.js_messageList-morebutton',
-            messageList: '.messageList-list'
+            messageList: '.messageList-list',
+            userThreadedViewButton: '.messageListViewStyleUserThreaded',
+            userHighlightNewViewButton: '.messageListViewStyleUserHighlightNew'
         },
         getTitle: function() {
             return i18n.gettext('Messages');
@@ -140,7 +142,7 @@ define(function (require) {
 
             this.renderedMessageViewsCurrent = {};
 
-            this.setViewStyle(this.getViewStyleDefById(this.storedMessageListConfig.viewStyleId) || this.ViewStyles.THREADED);
+            this.setViewStyle(this.getViewStyleDefById(this.storedMessageListConfig.viewStyleId));
             this.defaultMessageStyle = Ctx.getMessageViewStyleDefById(this.storedMessageListConfig.messageStyleId) || Ctx.AVAILABLE_MESSAGE_VIEW_STYLES.PREVIEW;
 
             this.groupContent = options.groupContent;
@@ -731,17 +733,19 @@ define(function (require) {
         render_real: function () {
             var that = this,
                 views = [];
-            /*
-             console.log("messageIdsToDisplay is: ");
-             console.log(that.messageIdsToDisplay);
-             */
+
             if (!(Ctx.getCurrentUser().can(Permissions.ADD_EXTRACT))) {
                 $("body").addClass("js_annotatorUserCannotAddExtract");
             }
 
             Ctx.initTooltips(this.$el);
 
-            this.renderQueryInfo();
+            if (Ctx.getCurrentInterfaceType() === Ctx.InterfaceTypes.SIMPLE) {
+              this.renderUserViewButtons();
+            } else {
+              this.renderQueryInfo();
+            }
+
             this.renderCollapseButton();
             this.renderDefaultMessageViewDropdown();
             this.renderMessageListViewStyleDropdown();
@@ -840,6 +844,27 @@ define(function (require) {
             this.ui.queryInfo.html(this.currentQuery.getHtmlDescription());
         },
 
+        /**
+         * Renders the search result information
+         */
+        renderUserViewButtons: function () {
+          if (this.currentViewStyle == this.ViewStyles.THREADED) {
+            this.ui.userHighlightNewViewButton.removeClass('selected');
+            this.ui.userThreadedViewButton.addClass('selected');
+          }
+          else if (this.currentViewStyle == this.ViewStyles.NEW_MESSAGES) {
+            this.ui.userHighlightNewViewButton.addClass('selected');
+            this.ui.userThreadedViewButton.removeClass('selected');
+          }
+          else {
+            console.log("This viewstyle is unknown in user mode:", this.currentViewStyle);
+          }
+          
+          this.ui.userThreadedViewButton.html(i18n.sprintf(i18n.gettext('Normal (%s)'), this.currentQuery.getResultNumTotal() || ''));
+          this.ui.userHighlightNewViewButton.html(i18n.sprintf(i18n.gettext('New (%s)'), this.currentQuery.getResultNumUnread() || ''));
+        },
+
+        
         /**
          * Renders the collapse button
          */
@@ -1202,11 +1227,28 @@ define(function (require) {
 
         /**
          * @event
-         * Set the view to the selected viewStyle.
+         * Set the view to the selected viewStyle, if allowable by the current user
+         * Otherwise, sets the default style
          * Does NOT re-render
          *
          */
         setViewStyle: function (viewStyle) {
+            if (!viewStyle) {
+              //If invalid, set global default
+              viewStyle = this.ViewStyles.NEW_MESSAGES;
+            }
+            
+            if(Ctx.getCurrentInterfaceType() === Ctx.InterfaceTypes.SIMPLE) {
+              if (Ctx.getCurrentUser().isUnknownUser() && (viewStyle != this.ViewStyles.THREADED)){
+                //Only threaded view makes sence for annonymous users
+                viewStyle = this.ViewStyles.THREADED;
+              }
+              else if ((viewStyle != this.ViewStyles.NEW_MESSAGES) && (viewStyle != this.ViewStyles.THREADED)) {
+                //New messages is default view
+                viewStyle = this.ViewStyles.NEW_MESSAGES;
+              }
+            }
+            
             if (viewStyle === this.ViewStyles.THREADED) {
                 this.currentViewStyle = this.ViewStyles.THREADED;
                 this.currentQuery.setView(this.currentQuery.availableViews.THREADED);

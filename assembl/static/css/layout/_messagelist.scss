@@ -80,10 +80,17 @@
       width: 50%;
       height: 35px;
       cursor: pointer;
+      color: $gray1;
     }
     .option:first-child {
       border-right: 1px solid $gray;
     }
+    .option.selected {
+      color: $black;
+      font-weight: bold;
+      border-bottom: 3px solid $purple;
+    }
   }
+  
 
 }

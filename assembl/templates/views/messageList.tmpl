@@ -3,8 +3,8 @@
   <% if (Ctx.getCurrentInterfaceType() === Ctx.InterfaceTypes.SIMPLE) { %>
     <% if (!Ctx.getCurrentUser().isUnknownUser()) { %>
       <div class="options-filter">
-        <span class="js_messageList-view-threaded option js_filterAll dispb fl tac pts">All</span>
-        <span class="js_messageList-view-newmessages option dispb fl tac pts">Not read</span>
+        <span class="messageListViewStyleUserHighlightNew <%= availableViewStyles.NEW_MESSAGES.css_class %> option dispb fl tac pts"></span>
+        <span class="messageListViewStyleUserThreaded <%= availableViewStyles.THREADED.css_class %> option dispb fl tac pts"></span>
       </div>
     <% } %>
   <% } else { %>
@@ -33,18 +33,14 @@
         </div>
     </div>
   <% } %>
-    {#
-    <div class="inline text-muted margin-left">
-        {% set total = '<%= total %>' %}
-        {{ gettext('%(total)s messages')|format(total=total)|safe }}
-    </div>
-    #}
 
+<% if (Ctx.getCurrentInterfaceType() === Ctx.InterfaceTypes.EXPERT) { %>
     <div class="messageList-query-info"></div>
+<% } %>
     <div class="js_messageList-toparea messageList-toparea margin text-center hidden">
         <a class="js_messageList-prevbutton button">{{ gettext('Load previous messages') }}</a>
     </div>
-
+  
     <div class="messageList-list idealist <%= currentViewStyle.id %>"></div>
 
     <div class="messageList-bottomarea margin text-center hidden">
