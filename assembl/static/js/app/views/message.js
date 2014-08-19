@@ -220,9 +220,9 @@ define(function (require) {
                         that.closeReplyBox();
                     }
 
-                    if (that.viewStyle == that.availableMessageViewStyles.PREVIEW) {
-                        that.readMore();
-                    }
+                    /*if (that.viewStyle == that.availableMessageViewStyles.PREVIEW) {
+                     that.readMore();
+                     }*/
 
                 });
             return this;

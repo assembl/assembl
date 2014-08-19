@@ -17,16 +17,17 @@ $ten: 10px;
   .ellipsis:before {
     content: "";
     float: left;
-    //width: 5px;
+    width: 5px;
     height: $height;
   }
 
   .ellipsis > *:first-child {
     //display: inline;
     width: 100%;
-    //margin-left: -5px;
-    margin: 0;
-    white-space: normal;
+    float: right;
+    margin-left: -5px;
+    //margin: 0;
+    //white-space: normal;
   }
 
   .ellipsis:after {
@@ -47,11 +48,13 @@ $ten: 10px;
   }
 
   .ellipsis a {
-    //position: absolute;
+    position: absolute;
+    right: 0;
+    bottom: 0;
     //left: 0; top: 0;
     //width: 100%;
     //height: 100%;
-    //overflow: hidden;
+    overflow: hidden;
     //text-indent: -9999px;
   }
   .ellipsis i, .ellipsis:after {
@@ -120,10 +123,6 @@ $ten: 10px;
       //margin-top: 4px;
     }
 
-    .m-section {
-
-    }
-
   }
   .message-subject {
     margin-top: 0;
@@ -159,6 +158,7 @@ $ten: 10px;
         margin-bottom: 0.5em;
       }
       > div {
+
       }
 
     }
@@ -213,7 +213,7 @@ $ten: 10px;
       width: auto;
       padding-left: .01em;
     }
-    //@include multiline-ellipsis(5em, 1em, 3em);
+    @include multiline-ellipsis(5em, 1em, 3em);
     .message-body {
       //@extend .text-muted;
       margin-top: 0.6em;
@@ -225,9 +225,18 @@ $ten: 10px;
 
     .message-body.body_format_text_plain > div {
       white-space: normal;
-      //white-space: pre-line;
+      white-space: pre-line;
       & > {
         white-space: normal;
+      }
+      > div {
+        height: inherit;
+      }
+    }
+
+    .message-body.body_format_text_html {
+      > div {
+        height: inherit;
       }
     }
 
@@ -240,7 +249,7 @@ $ten: 10px;
         line-height: 1.3em;
       }
       .readmore {
-        display: none;
+        //display: none;
       }
       .moretext {
         text-decoration: none;
