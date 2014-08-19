@@ -53,13 +53,10 @@ define(function (require) {
                 view = elm.attr('data-view');
 
             if (elm.next(this.ui.level).is(':hidden')) {
+                this.$('.nav').next('div:visible').slideUp();
                 this.$('.nav').removeClass('active');
-                this.$(this.ui.level).slideUp();
                 elm.addClass('active');
                 elm.next(this.ui.level).slideDown();
-
-            } else if (elm.next(this.ui.level).is(':visible')) {
-                //
             }
             this.loadView(view);
         },
