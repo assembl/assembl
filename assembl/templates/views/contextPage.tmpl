@@ -6,11 +6,11 @@
 }
 .row-minor { 
     background: #ddd;
-    min-height: 200px;
+    /*min-height: 200px;*/
 }
 .row-major {
     background: #fff;
-    height: 300px;
+    /*height: 300px;*/
 }
 .block-half {
     width: 48%;
@@ -34,6 +34,10 @@
 #introduction-button-see-less,
 #introduction-button-see-more {
     display: none;
+}
+
+.discussion-title {
+    text-align: center;
 }
 
 
@@ -81,6 +85,13 @@ line {
 }
 
 
+/* override default CKEditor field appearance */
+
+.panel-editablearea {
+    background-color: initial;
+}
+
+
 /* CSS associated to the pie */
 
 .pie {
@@ -113,6 +124,13 @@ line {
 <div class="panelContents">
 <div class="panel-body body-context">
     <div class="row-minor">
+        <div class="block-full">
+            <div class="block-content">
+                <h3 class="discussion-title"></h3>
+            </div>
+        </div>
+    </div>
+    <div class="row-major">
         <div class="block-half">
             <div class="block-content">
                 <h2>{{ gettext('Introduction') }}</h2>
@@ -148,7 +166,7 @@ line {
         </div>
     </div>
     #}
-    <div class="row-minor">
+    <div class="row-major">
         <div class="block-full">
             <div class="block-content">
                 <h2>{{ gettext('Instigator') }}</h2>
