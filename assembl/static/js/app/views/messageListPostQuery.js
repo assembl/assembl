@@ -22,7 +22,7 @@ define(function (require) {
                 var value = queryObjects[i].value,
                 //Yes, this is cheating - benoitg 2014-07-23
                     idea = collectionManager._allIdeasCollection.get(value),
-                    span = '<span class="closebutton" data-filterid="' + filterDef.id + '" data-value="' + value + '"></span>\n';
+                    span = '<span class="icon-delete js_deleteFilter" data-filterid="' + filterDef.id + '" data-value="' + value + '"></span>\n';
                 valuesText.push('"' + idea.get('shortTitle') + '"' + span);
             }
             retval += i18n.sprintf(i18n.ngettext("Discuss idea %s", "Discuss ideas: %s", valuesText.length), valuesText.join(i18n.gettext(' AND ')));
@@ -35,7 +35,7 @@ define(function (require) {
             for (var i = 0; i < queryObjects.length; i++) {
                 var value = queryObjects[i].value,
                     post = collectionManager._allMessageStructureCollection.get(value),
-                    span = '<span class="closebutton" data-filterid="' + filterDef.id + '" data-value="' + value + '"></span>\n';
+                    span = '<span class="icon-delete js_deleteFilter" data-filterid="' + filterDef.id + '" data-value="' + value + '"></span>\n';
                 if (post == undefined) {
                     // TODO
                     console.log("BUG: could not find post", value);
@@ -56,7 +56,7 @@ define(function (require) {
                 if (queryObjects[0].hasOwnProperty("value"))
                     value = queryObjects[0].value;
                 var retval = '',
-                    closeBtn = '<span class="closebutton" data-filterid="' + filterDef.id + '" data-value="' + value + '"></span>\n';
+                    closeBtn = '<span class="icon-delete js_deleteFilter" data-filterid="' + filterDef.id + '" data-value="' + value + '"></span>\n';
 
                 if (value === true) {
                     retval += i18n.sprintf(i18n.gettext("%s %s"), "You haven't read yet", closeBtn);
@@ -71,7 +71,7 @@ define(function (require) {
             var retval = '',
                 valuesText = [];
             value = queryObjects[0].value,
-                span = '<span class="closebutton" data-filterid="' + filterDef.id + '" data-value=' + value + '></span>\n';
+                span = '<span class="icon-delete js_deleteFilter" data-filterid="' + filterDef.id + '" data-value=' + value + '></span>\n';
             valuesText.push(span);
 
             retval += i18n.sprintf(i18n.gettext("%s %s"), filterDef.name, valuesText.join(', '));
@@ -493,7 +493,7 @@ define(function (require) {
                         else {
                             if (filterDef._value_is_boolean) {
                                 var filterQuery = this._query[filterDef.id][0];
-                                var span = '<span class="closebutton" data-filterid="' + filterDef.id + '" data-value="' + filterQuery.value + '"></span>\n';
+                                var span = '<span class="icon-delete js_deleteFilter" data-filterid="' + filterDef.id + '" data-value="' + filterQuery.value + '"></span>\n';
                                 retval += i18n.sprintf((filterQuery.value === true) ? i18n.gettext("%s") : i18n.gettext("NOT %s"), filterDef.name);
                                 retval += span;
                             }
@@ -501,7 +501,7 @@ define(function (require) {
                             else {
                                 for (var i = 0; i < this._query[filterDef.id].length; i++) {
                                     var value = this._query[filterDef.id][i].value;
-                                    var span = '<span class="closebutton" data-filterid="' + filterDef.id + '" data-value="' + value + '"></span>\n';
+                                    var span = '<span class="icon-delete js_deleteFilter" data-filterid="' + filterDef.id + '" data-value="' + value + '"></span>\n';
                                     valuesText.push(value + span);
                                 }
                                 retval += i18n.sprintf(i18n.gettext("%s for values %s"), filterDef.name, valuesText.join(', '));

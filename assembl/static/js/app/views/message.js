@@ -602,7 +602,7 @@ define(function (require) {
 
             var elm = $(e.target),
                 moretext = i18n.gettext('Read More'),
-                lesstext = "less";
+                lesstext = i18n.gettext('Read Less');
 
             if (elm.hasClass("less")) {
                 elm.removeClass("less");

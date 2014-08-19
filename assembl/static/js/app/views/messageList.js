@@ -236,7 +236,7 @@ define(function (require) {
             var that = this,
                 data = {
                     'click .idealist-title': 'onTitleClick',
-                    'click .post-query-filter-info .closebutton': 'onFilterDeleteClick',
+                    'click .post-query-filter-info .js_deleteFilter ': 'onFilterDeleteClick',
                     'click .js_messageList-collapseButton': 'toggleMessageView',
 
                     'click .js_messageList-allmessages': 'showAllMessages',
