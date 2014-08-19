@@ -1,6 +1,7 @@
 define(function (require) {
 
-    var Marionette = require('marionette'),
+    var Assembl = require('modules/assembl'),
+        Marionette = require('marionette'),
         IdeaList = require('views/ideaList'),
         sidebarNotification = require('views/navigation/notification'),
         HomePanel = require('views/navigation/home'),
@@ -23,7 +24,7 @@ define(function (require) {
             notification: '.navNotification'
         },
         events: {
-            'click .nav': 'toggleMenu'
+            'click .nav': 'toggleMenuByEvent'
         },
         ui: {
             level: 'div.second-level'
@@ -43,14 +44,27 @@ define(function (require) {
 
             this.initVar();
             this.setSideBarHeight();
+
+            this.listenTo(Assembl.vent, 'navigation:selected', this.toggleMenuByName);
         },
         onRender: function () {
             this.setSideBarHeight();
             //this.notification.show(new sidebarNotification());
         },
-        toggleMenu: function (e) {
-            var elm = $(e.target),
-                view = elm.attr('data-view');
+        toggleMenuByName: function(itemName){
+            var elm = this.$('.nav[data-view='+itemName+']');
+            this.toggleMenuByElement(elm);
+        },
+        toggleMenuByEvent: function(evt){
+            var elm = $(evt.target);
+            this.toggleMenuByElement(elm);
+        },
+        /**
+         * Toggle a navigation accordion item
+         * @param  {jQuery selection of a DOM element} elm
+         */
+        toggleMenuByElement: function (elm) {
+            var view = elm.attr('data-view');
 
             if (elm.next(this.ui.level).is(':hidden')) {
                 this.$('.nav').next('div:visible').slideUp();

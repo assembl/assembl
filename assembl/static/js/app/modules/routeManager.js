@@ -57,14 +57,32 @@ define(function (require) {
                 });
 
                 Assembl.groupContainer.show(group);
-            })
+            });
         },
 
         contextPage: function () {
             Assembl.headerRegions.show(new navBar());
+
+            /*
             var cp = new contextPage({});
             //$('#groupContainer').append( cp.render().el );
             Assembl.groupContainer.show(cp);
+            */
+           
+            /**
+             * Render the current group of views
+             * */
+            var groupSpecsP = collectionManager().getGroupSpecsCollectionPromise();
+
+            groupSpecsP.done(function (groupSpecs) {
+                var group = new GroupContainer({
+                    collection: groupSpecs
+                });
+
+                Assembl.groupContainer.show(group);
+                // activate the home navigation item
+                Assembl.vent.trigger("navigation:selected", "home");
+            });
         },
 
         idea: function (id) {
