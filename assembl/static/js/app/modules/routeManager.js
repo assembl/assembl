@@ -44,30 +44,15 @@ define(function (require) {
         /**
          * Load the default view
          * */
-        home: function () {
-            Assembl.headerRegions.show(new navBar());
-            /**
-             * Render the current group of views
-             * */
-            var groupSpecsP = collectionManager().getGroupSpecsCollectionPromise();
-
-            groupSpecsP.done(function (groupSpecs) {
-                var group = new GroupContainer({
-                    collection: groupSpecs
-                });
-
-                Assembl.groupContainer.show(group);
-            });
+        home: function () { // a.k.a. "index", "discussion root"
+            // TODO: do (or redirect to) something different depending on:
+            // - wether the user is logged in
+            // - wether the last visit of the logged in user was a long time ago (restore previous state or show context)
+            this.contextPage();
         },
 
-        contextPage: function () {
+        contextPage: function () { // a.k.a. "home", "accueil" (according to the navigation menu) 
             Assembl.headerRegions.show(new navBar());
-
-            /*
-            var cp = new contextPage({});
-            //$('#groupContainer').append( cp.render().el );
-            Assembl.groupContainer.show(cp);
-            */
            
             /**
              * Render the current group of views
