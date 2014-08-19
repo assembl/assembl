@@ -52,7 +52,7 @@ define(function (require) {
         events: {
             'change [type="checkbox"]': 'onCheckboxChange',
             'click .idealist-title': 'onTitleClick',
-            'click .idealist-title-unread-count': 'onUnreadCountClick',
+            'click .js_idealist-title-unread-count': 'onUnreadCountClick',
             'click .idealist-arrow': 'toggle',
             'dragstart .idealist-body': 'onDragStart',
             'dragend .idealist-body': 'onDragEnd',

@@ -44,8 +44,14 @@
     </div>
     <div class="idealist-title<% if (num_unread_posts > 0) { %> idealist-title-unread<% } %>" title="<%= shortTitle %>">
         <%= shortTitle %>
-        <% if (num_unread_posts > 0) { %>
-        <span class="idealist-title-unread-count" data-toggle="tooltip" title="{{ gettext('Number of unread messages related to this idea or its descendants') }}">(<%= num_unread_posts %>)</span>
+        <% if (Ctx.getCurrentInterfaceType() === Ctx.InterfaceTypes.SIMPLE) { %>
+            <% if (num_unread_posts > 0) { %>
+            <span class="idealist-title-unread-count" data-toggle="tooltip" title="{{ gettext('Number of unread messages related to this idea or its descendants') }}">(<%= num_unread_posts %>)</span>
+            <% } %>
+        <% } else { %>
+            <% if (num_unread_posts > 0) { %>
+            <span class="idealist-title-unread-count js_idealist-title-unread-count" data-toggle="tooltip" title="{{ gettext('Number of unread messages related to this idea or its descendants.  Click on this number to view ONLY the new unread messages') }}">(<%= num_unread_posts %>)</span>
+            <% } %>
         <% } %>
         {# (<span class="num-segments" data-toggle="tooltip" title="{{ gettext('Number of caught segments expressing this idea') }}"><%= segments.length %></span>) #}
         {# <small class="idealist-longtitle text-small text-muted"><%= app.stripHtml(longTitle) %></small> #}
