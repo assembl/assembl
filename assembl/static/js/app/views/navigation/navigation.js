@@ -57,8 +57,9 @@ define(function (require) {
                 this.$('.nav').removeClass('active');
                 elm.addClass('active');
                 elm.next(this.ui.level).slideDown();
+
+                this.loadView(view);
             }
-            this.loadView(view);
         },
         setSideBarHeight: function () {
             this.$el.css('height', this._sideBarHeight);
