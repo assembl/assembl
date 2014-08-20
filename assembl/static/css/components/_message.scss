@@ -135,7 +135,7 @@ $ten: 10px;
   &.viewStyleFullBody {
     .message-date {
       float: none;
-      color: #B3B3B3;
+      color: $grayCounter;
     }
     .message-subheader {
       max-height: none;
@@ -207,7 +207,7 @@ $ten: 10px;
   &.viewStylePreview {
 
     .message-date {
-      color: #B3B3B3;
+      color: $grayCounter;
     }
     .message-author {
       width: auto;

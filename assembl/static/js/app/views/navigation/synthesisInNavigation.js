@@ -38,11 +38,10 @@ define(function (require) {
                         synthesisMessages.reverse();
                         _.each(synthesisMessages, function (message) {
                             var synthesis = allSynthesisCollection.get(message.get('publishes_synthesis'));
-                            html += "<li data-message-id=" + message.id + ">" + i18n.gettext("Synthesis of ") + Ctx.formatDate(message.get('date')) + " " + synthesis.get('subject') + "</li>";
+                            html += "<li data-message-id=\"" + message.id + "\"><div class=\"title\">" + synthesis.get('subject') + "</div><div class=\"date\">" + Ctx.formatDate(message.get('date')) + "</div></li>";
                         });
                         that.ui.synthesisList.html(html);
                         that.displaySynthesis(synthesisMessages[0].id);
-                        // TODO: Show that first entry is selected.
                     }
                     else {
                         that.ui.synthesisListHeader.html(i18n.gettext("No synthesis of the discussion has been published yet"));
@@ -52,7 +51,8 @@ define(function (require) {
         },
 
         onSynthesisClick: function (ev) {
-            this.displaySynthesis(ev.currentTarget.attributes['data-message-id'].value);
+            var messageId = ev.currentTarget.attributes['data-message-id'].value;
+            this.displaySynthesis(messageId);
         },
         displaySynthesis: function (messageId) {
             var collectionManager = new CollectionManager();
@@ -64,7 +64,13 @@ define(function (require) {
                     var message = allMessageStructureCollection.get(messageId);
                     message.set('collapsed', false);
                 });
+            // Show that entry is selected
+            this.selectSynthesisInMenu(messageId);
         },
+        selectSynthesisInMenu: function(messageId){
+            this.$("ul.synthesisList li").removeClass("selected");
+            this.$("ul.synthesisList li[data-message-id=\""+messageId+"\"]").addClass("selected");
+        }
     });
 
 

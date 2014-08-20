@@ -258,6 +258,43 @@
           top: 0;
         }
       }
+
+      .synthesisNavPanel {
+        ul.synthesisList {
+          list-style-type: none;
+          padding: 0;
+          
+          li:hover {
+            cursor: pointer;
+          }
+          li {
+            margin: 0;
+            padding: 10px;
+            clear: both;
+            min-height: 20px;
+            display: block;
+            border-bottom: 1px solid #ddd;
+            border-top: none;
+            position: relative;
+            
+            .title {
+              vertical-align: middle;
+              width: 80%;
+              display: inline-block;
+            }
+            .date {
+              vertical-align: middle;
+              color: #aaa;
+              display: inline-block;
+              width: 20%;
+              text-align: center;
+            }
+          }
+          li.selected {
+            background: $blue;
+          }
+        }
+      }
     }
   }
 
