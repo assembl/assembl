@@ -10,7 +10,7 @@ $ten: 10px;
 
   .ellipsis {
     overflow: hidden;
-    height: $height;
+    max-height: $height;
     line-height: $lineheight;
   }
 
@@ -49,7 +49,7 @@ $ten: 10px;
 
   .ellipsis a {
     position: absolute;
-    right: 0;
+    right: 3.5em;
     bottom: 0;
     //left: 0; top: 0;
     //width: 100%;
@@ -220,7 +220,8 @@ $ten: 10px;
       padding-left: 3em;
       position: relative;
       color: #212f40;
-      padding-right: 40px;
+      //padding-right: 40px;
+      padding-right: 8em;
     }
 
     .message-body.body_format_text_plain > div {
@@ -239,22 +240,8 @@ $ten: 10px;
         height: inherit;
       }
     }
-
-    .message-menu {
-
-    }
-    .message-body {
-      .more {
-        display: inline;
-        line-height: 1.3em;
-      }
-      .readmore {
-        //display: none;
-      }
-      .moretext {
-        text-decoration: none;
-        color: #b879e2;
-      }
+    .readmore {
+      margin-left: 35px;
     }
   }
 
