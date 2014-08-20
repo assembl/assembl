@@ -38,8 +38,8 @@
 // The label
 // --------------
 .chk-label {
-    @extend %icon;
-    @extend .icon-blank;
+    @extend %icon !optional;
+    @extend .icon-blank !optional;
 
     display: inline-block;
     position: absolute;
@@ -56,7 +56,7 @@
     }
 
     .chk-checkbox:checked ~ & {
-        @extend .icon-ok-squared;
+        @extend .icon-ok-squared !optional;
         color: $purple;
     }
 

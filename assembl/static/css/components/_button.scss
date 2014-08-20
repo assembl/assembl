@@ -130,8 +130,8 @@
 // Enter fullscreen mode button
 // +++++++++++++++++
 .iconbutton.iconbutton--resizefull {
-  @extend %icon;
-  @extend .icon-resize-full;
+  @extend %icon !optional;
+  @extend .icon-resize-full !optional;
 
   .is-fullscreen & {
     display: none;
@@ -141,8 +141,8 @@
 // Leave fullscreen mode button
 // +++++++++++++++++
 .iconbutton.iconbutton--resizesmall {
-  @extend %icon;
-  @extend .icon-resize-small;
+  @extend %icon !optional;
+  @extend .icon-resize-small !optional;
 
   display: none;
 
