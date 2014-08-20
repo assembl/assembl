@@ -17,7 +17,7 @@
 <% } else if ( viewStyle == ctx.AVAILABLE_MESSAGE_VIEW_STYLES.PREVIEW ){ %>
     <div class="message-subheader">
         <span class="message-author fl">{{ gettext('%(user)s')|format(user=userName)|safe }}&nbsp;&nbsp;</span>
-        <div class="message-date">{{ gettext('<time>%(time)s</time>')|format(time=time)|safe }}</div>
+        <span class="message-date">{{ gettext('<time title="%(precise_date)s">%(nice_date)s</time>')|format(nice_date=nice_date,precise_date=precise_date)|safe }}</span>
         <p class="message-subject clr"><%= subject %></p>
     </div>
 <% } else if ( viewStyle == ctx.AVAILABLE_MESSAGE_VIEW_STYLES.FULL_BODY ){ %>

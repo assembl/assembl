@@ -595,7 +595,13 @@ define(function (require) {
          * @return {String}
          */
         getNiceDateTime: function(date, precise){
-            var momentDate = moment(date);
+            //var momentDate = moment(date);
+            
+            // we assume that server datetimes are given in UTC format
+            // (Right now, the server gives UTC datetimes but is not explicit enough because it does not append "+0000". So Moment thinks that the date is not in UTC but in user's timezone. So we have to tell it explicitly, using .utc())
+            var momentDate = moment.utc(date);
+            momentDate.local(); // switch off UTC mode, which had been activated using .utc()
+
             if ( momentDate )
             {
                 if ( precise == true )
