@@ -220,9 +220,9 @@ define(function (require) {
                         that.closeReplyBox();
                     }
 
-                    /*if (that.viewStyle == that.availableMessageViewStyles.PREVIEW) {
-                     that.readMore();
-                     }*/
+                    if (that.viewStyle == that.availableMessageViewStyles.PREVIEW) {
+                        that.displayReadMore();
+                    }
 
                 });
             return this;
@@ -583,41 +583,15 @@ define(function (require) {
         /**
          * Temporary solution before implement on fly content more/less
          * */
-        readMore: function () {
-            var body = this.$el.find('.more').html(),
+        displayReadMore: function () {
+            var body = this.$('.more').text(),
                 showChar = 300;
 
-            if (body.length > showChar) {
-                var content = body.substr(0, showChar),
-                    hiddenContent = body.substr(showChar, body.length - showChar),
-                    html = content + '<span class="morecontent"><span class="hidden">' +
-                        hiddenContent + '</span>&nbsp;<a href="#" class="js_more moretext">' + i18n.gettext('Read More') + '</a></span>';
-
-                this.$('.more').html(html);
+            if (body.length < showChar) {
+                this.$('.readmore').hide();
             }
-        },
-
-        toggleMore: function (e) {
-            e.preventDefault();
-
-            var elm = $(e.target),
-                moretext = i18n.gettext('Read More'),
-                lesstext = i18n.gettext('Read Less');
-
-            if (elm.hasClass("less")) {
-                elm.removeClass("less");
-                elm.html(moretext);
-            } else {
-                this.$('morecontent span').show();
-                elm.addClass("less");
-                elm.html(lesstext);
-            }
-
-            elm.parent().prev().toggle();
-            elm.prev().toggle();
-
-            return false;
         }
+
 
     });
 

@@ -14,12 +14,12 @@ $ten: 10px;
     line-height: $lineheight;
   }
 
-  .ellipsis:before {
+  /*.ellipsis:before {
     content: "";
     float: left;
     width: 5px;
     height: $height;
-  }
+  } */
 
   .ellipsis > *:first-child {
     //display: inline;
@@ -30,7 +30,7 @@ $ten: 10px;
     //white-space: normal;
   }
 
-  .ellipsis:after {
+  /*.ellipsis:after {
     content: "\02026"; // Read More
     float: right;
     position: relative;
@@ -45,7 +45,7 @@ $ten: 10px;
     @include background(
             linear-gradient(top left, rgba(255, 255, 255, 0), white 50%, white)
     );
-  }
+  } */
 
   .ellipsis a {
     position: absolute;
@@ -215,13 +215,10 @@ $ten: 10px;
     }
     @include multiline-ellipsis(5em, 1em, 3em);
     .message-body {
-      //@extend .text-muted;
       margin-top: 0.6em;
-      padding-left: 3em;
       position: relative;
       color: #212f40;
-      //padding-right: 40px;
-      padding-right: 8em;
+      padding: 0 4em 0 3em;
     }
 
     .message-body.body_format_text_plain > div {

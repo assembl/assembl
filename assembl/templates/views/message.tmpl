@@ -62,7 +62,7 @@
 {# Note:  bodyFormatClass can currently have values body_format_text_plain or  body_format_text_html #}
 <% if( viewStyle == ctx.AVAILABLE_MESSAGE_VIEW_STYLES.PREVIEW ){ %>
 <div class="message-body <%= bodyFormatClass %> ellipsis" id="<%= messageBodyId %>">
-    <div><%= body %></div>{# Do NOT introduce whitespace within this div #}
+    <p class="mvn more"><%= body %></p>{# Do NOT introduce whitespace within this div #}
 </div>
 <div>
   <a class="readmore" href="#" alt="{{ gettext('Read More') }}">{{ gettext('Read More') }}</a>
