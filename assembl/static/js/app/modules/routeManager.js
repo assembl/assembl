@@ -6,6 +6,7 @@ define(function (require) {
         Ctx = require('modules/context'),
         collectionManager = require('modules/collectionManager'),
         User = require('models/user'),
+        storage = require('objects/storage'),
         navBar = require('views/navBar'),
         contextPage = require('views/contextPage'),
         GroupContainer = require('views/groups/groupContainer'),
@@ -46,15 +47,24 @@ define(function (require) {
          * Load the default view
          * */
         home: function () { // a.k.a. "index", "discussion root"
-            // TODO: do (or redirect to) something different depending on:
-            // - wether the user is logged in
-            // - wether the last visit of the logged in user was a long time ago (restore previous state or show context)
-            this.contextPage();
+            this.restoreViews();
+            var lastSave = storage.getDateOfLastViewSave();
+            if (!lastSave || (Date.now() - lastSave.getTime() > (7*24*60*60*1000))) {
+                this.contextPage();
+            }
         },
 
         contextPage: function () { // a.k.a. "home", "accueil" (according to the navigation menu) 
+            // activate the home navigation item
+            var groupSpecsP = collectionManager().getGroupSpecsCollectionPromise(viewsFactory);
+            groupSpecsP.done(function (groupSpecs) {
+                Assembl.vent.trigger("navigation:selected", "home");
+            });
+        },
+
+        restoreViews: function () {
             Assembl.headerRegions.show(new navBar());
-           
+
             /**
              * Render the current group of views
              * */
@@ -66,8 +76,6 @@ define(function (require) {
                 });
 
                 Assembl.groupContainer.show(group);
-                // activate the home navigation item
-                Assembl.vent.trigger("navigation:selected", "home");
             });
         },
 

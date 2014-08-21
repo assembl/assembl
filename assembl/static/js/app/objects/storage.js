@@ -30,6 +30,13 @@ define(function (require) {
 
         saveGroupSpecs: function() {
             this._store.setItem('groupItems', JSON.stringify(this.groupSpecs));
+            this._store.setItem('lastViewSave', Date.now());
+        },
+
+        getDateOfLastViewSave: function() {
+            var lastSave = this._store.getItem('lastViewSave');
+            if (lastSave)
+                return new Date(lastSave);
         },
 
         getStorageGroupItem: function () {
