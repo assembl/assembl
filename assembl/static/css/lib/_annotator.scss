@@ -565,8 +565,16 @@
     padding: 12px 8px;
     min-height: 4em;
 }
+.annotator-textarea[draggable="true"] {
+    cursor: move; /*cursor: crosshair;*/
+    border: 1px solid #eee;
+    margin: 10px;
+    border-radius: .5em;
+    background-color: #eee;
+}
 
 .annotator-draganddrop-help {
     font-weight: bold;
     text-align: center;
-    }
+    margin: 10px;
+}
