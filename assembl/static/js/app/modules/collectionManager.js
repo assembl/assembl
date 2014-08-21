@@ -14,7 +14,7 @@ define(function(require){
       Storage = require('objects/storage'),
         Types = require('utils/types'),
          i18n = require('utils/i18n');
-     
+
   /**
    * @class CollectionManager
    * 
@@ -256,14 +256,18 @@ define(function(require){
       return deferred.promise();
     },
 
-    getGroupSpecsCollectionPromise : function() {
+    getGroupSpecsCollectionPromise : function(viewsFactory) {
       var deferred = $.Deferred();
 
       if (this._allGroupSpecsCollectionPromise === undefined) {
         var collection, data = Storage.getStorageGroupItem()
         if (data !== undefined) {
           collection = new groupSpec.Collection(data, {'parse':true});
-        } else {
+          if (!collection.validate(viewsFactory)) {
+            collection = undefined;
+          }
+        }
+        if (collection === undefined) {
           collection = new groupSpec.Collection();
           collection.add(new groupSpec.Model());
         }

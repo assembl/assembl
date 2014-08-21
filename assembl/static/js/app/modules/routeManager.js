@@ -10,6 +10,7 @@ define(function (require) {
         contextPage = require('views/contextPage'),
         GroupContainer = require('views/groups/groupContainer'),
         CollectionManager = require('modules/collectionManager'),
+        viewsFactory = require('objects/viewsFactory'),
         $ = require('jquery');
 
     var routeManager = Marionette.Controller.extend({
@@ -57,7 +58,7 @@ define(function (require) {
             /**
              * Render the current group of views
              * */
-            var groupSpecsP = collectionManager().getGroupSpecsCollectionPromise();
+            var groupSpecsP = collectionManager().getGroupSpecsCollectionPromise(viewsFactory);
 
             groupSpecsP.done(function (groupSpecs) {
                 var group = new GroupContainer({

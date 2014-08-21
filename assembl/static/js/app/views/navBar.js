@@ -4,6 +4,7 @@ define(function (require) {
         Ctx = require('modules/context'),
         GroupSpec = require('models/groupSpec'),
         CollectionManager = require('modules/collectionManager'),
+        viewsFactory = require('objects/viewsFactory'),
         $ = require('jquery');
 
     var navBar = Marionette.LayoutView.extend({
@@ -34,7 +35,7 @@ define(function (require) {
         },
         addGroup: function () {
             var collectionManager = new CollectionManager(),
-                groupSpecsP = collectionManager.getGroupSpecsCollectionPromise();
+                groupSpecsP = collectionManager.getGroupSpecsCollectionPromise(viewsFactory);
 
             var Modal = Backbone.Modal.extend({
                 template: _.template($('#tmpl-create-group').html()),

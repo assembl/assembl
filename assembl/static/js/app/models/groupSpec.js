@@ -78,11 +78,27 @@ define(function (require) {
                     that.addPanel(options, position);
                 }
             });
+        },
+        validate: function(viewsFactory) {
+            var panels = this.get('panels');
+            return panels.validate(viewsFactory);
         }
     });
 
     var GroupSpecs = Base.Collection.extend({
-        model: GroupSpecModel
+        model: GroupSpecModel,
+        validate: function(viewsFactory) {
+            var invalid = [];
+            this.each(function (groupSpec) {
+                if (!groupSpec.validate(viewsFactory)) {
+                    invalid.push(panelSpec);
+                }
+            });
+            if (invalid.length) {
+                this.remove(invalid);
+            }
+            return (this.length > 0);
+        }
     });
 
     return {
