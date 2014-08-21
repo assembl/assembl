@@ -2,7 +2,7 @@ define(function(require){
 
     var        Marionette = require('marionette'),
                       Ctx = require('modules/context'),
-        CollectionManager = require('modules/collectionManager')
+        CollectionManager = require('modules/collectionManager'),
                         $ = require('jquery'),
                         _ = require('underscore'),
                        d3 = require('d3'),
