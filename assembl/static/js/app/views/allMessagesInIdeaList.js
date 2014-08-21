@@ -43,9 +43,11 @@ define(function (require) {
          * @event
          */
         onTitleClick: function () {
-            Assembl.vent.trigger('messageList:showAllMessages');
-
+            var messageListView = this.groupContent.getViewByTypeName('messageList');
+            messageListView.triggerMethod('messageList:clearAllFilters');
             Ctx.setCurrentIdea(null);
+            //Yes, this will cause double-renders in some cases.  Will be fixed once messageList observes it's result list.
+            messageListView.render();
             this.groupContent.resetDebateState();
         }
     });

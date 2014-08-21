@@ -435,7 +435,7 @@ define(function (require) {
 
         /** @return undefined if query isn't complete */
         this.getResultNumUnread = function () {
-          if(this._queryResultInfo) {
+          if(this._resultsAreValid) {
             return this._queryResultInfo.unread;
           }
           else {
@@ -445,7 +445,7 @@ define(function (require) {
 
         /** @return undefined if query isn't complete */
         this.getResultNumTotal = function () {
-          if(this._queryResultInfo) {
+          if(this._resultsAreValid) {
             return this._queryResultInfo.total;
             }
           else {

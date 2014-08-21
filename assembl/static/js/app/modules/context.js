@@ -217,8 +217,10 @@ define(function (require) {
             //console.log("setCurrentIdea() fired", idea);
             if (idea != this.getCurrentIdea()) {
                 this.currentIdea = idea;
+                //TODO:  Remove this, it will not respect group separation of context
                 Assembl.vent.trigger("idea:selected", idea);
             }
+
         },
 
         getCurrentIdea: function () {

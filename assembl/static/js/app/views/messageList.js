@@ -202,14 +202,21 @@ define(function (require) {
                     }, 'syncWithCurrentIdea');
             });
 
-            this.listenTo(Assembl.vent, 'messageList:addFilterIsOrphanMessage', function () {
+            this.listenTo(this, 'messageList:clearAllFilters', function () {
+              that.groupContent.filterThroughPanelLock(
+                  function () {
+                      that.currentQuery.clearAllFilters();
+                  }, 'clearAllFilters');
+          });
+            
+            this.listenTo(this, 'messageList:addFilterIsOrphanMessage', function () {
                 that.groupContent.filterThroughPanelLock(
                     function () {
                         that.addFilterIsOrphanMessage();
                     }, 'syncWithCurrentIdea');
             });
 
-            this.listenTo(Assembl.vent, 'messageList:addFilterIsSynthesisMessage', function () {
+            this.listenTo(this, 'messageList:addFilterIsSynthesisMessage', function () {
                 that.groupContent.filterThroughPanelLock(
                     function () {
                         that.addFilterIsSynthesMessage();
@@ -1425,9 +1432,8 @@ define(function (require) {
                             callback();
                         }
                     };
-                    console.log("checking message: ", message);
+
                     if (message) {
-                        console.log("triggering showBody on", message);
                         message.trigger('showBody');
                         el = $(selector);
                         if (el[0]) {

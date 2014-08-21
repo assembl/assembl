@@ -157,13 +157,18 @@ define(function (require) {
          * Select this idea as the current idea
          */
         onTitleClick: function (e) {
+            var messageListView;
             e.stopPropagation();
-
+            if(Ctx.getCurrentInterfaceType() === Ctx.InterfaceTypes.SIMPLE) {
+              messageListView = this.groupContent.getViewByTypeName('messageList');
+              messageListView.triggerMethod('messageList:clearAllFilters');
+            }
             if (this.model === Ctx.getCurrentIdea()) {
                 // We want to avoid the "All messages" state,
                 // unless the user clicks explicitly on "All messages".
                 // TODO benoitg: Review this decision.
                 //Ctx.setCurrentIdea(null);
+              //This is so the messageList refreshes.  
             } else {
                 Ctx.setCurrentIdea(this.model);
             }
