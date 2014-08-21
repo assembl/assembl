@@ -13,9 +13,10 @@
 .groupContent {
   display: inline-block;
   height: 100%;
-  border-right: 5px solid $white;
+  border-right: 2px solid $white;
   border-left: 3px solid $gray1;
   white-space: normal;
+  box-sizing: border-box;
 
   .navNotification {
     position: relative;
