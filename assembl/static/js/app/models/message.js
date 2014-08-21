@@ -186,7 +186,7 @@ define(function(require){
                     that.trigger('change:read', [value]);
                     that.trigger('change', that);
                     //So the unread count is updated in the ideaList
-                    Assembl.reqres.request('ideas:update', [data.ideas]);
+                    Assembl.reqres.request('ideas:update', data.ideas);
                 }
             });
         }
