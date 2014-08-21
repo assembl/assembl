@@ -94,7 +94,7 @@ define(function (require) {
          * The selection tooltip.
          * @type {jQuery}
          */
-        this.selectionTooltip = null;
+        this.annotatorSelectionTooltip = null;
 
         /**
          * Reference to dragbox
@@ -479,24 +479,9 @@ define(function (require) {
         /**
          * Creates the selection tooltip
          */
-        createSelectionTooltip: function () {
-            this.selectionTooltip = $('<div>', { 'class': 'textbubble' });
-            $(document.body).append(this.selectionTooltip.hide());
-        },
-
-        /**
-         * Return the select text on the document
-         * @return {Selection}
-         */
-        getSelectedText: function () {
-            if (document.getSelection) {
-                return document.getSelection();
-            } else if (window.getSelection) {
-                return window.getSelection();
-            } else {
-                var selection = document.selection && document.selection.createRange();
-                return selection.text ? selection.text : false;
-            }
+        __createAnnotatorSelectionTooltipDiv: function () {
+            this.annotatorSelectionTooltip = $('<div>', { 'class': 'textbubble' });
+            $(document.body).append(this.annotatorSelectionTooltip.hide());
         },
 
         /**
@@ -946,7 +931,7 @@ define(function (require) {
             Moment.lang(assembl_locale);
 
             $(document.body).removeClass('preload');
-            this.createSelectionTooltip();
+            this.__createAnnotatorSelectionTooltipDiv();
             //this.initTooltips($("body"));
 
             $(document).on('click', '.dropdown-label', this.onDropdownClick);

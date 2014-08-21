@@ -90,10 +90,10 @@ define(function (require) {
             'click .message-replybox-openbtn': 'focusReplyBox',
             'click .messageSend-cancelbtn': 'closeReplyBox',
             //
-            'mousedown .message-body': 'startSelection',
-            'mousemove .message-body': 'doTheSelection',
-            'mouseleave .message-body': 'onMouseLeaveMessageBody',
-            'mouseenter .message-body': 'doTheSelection',
+            'mousedown .js_messageBodyAnnotatorSelectionAllowed': 'startAnnotatorTextSelection',
+            'mousemove .js_messageBodyAnnotatorSelectionAllowed': 'updateAnnotatorTextSelection',
+            'mouseleave .js_messageBodyAnnotatorSelectionAllowed': 'onMouseLeaveMessageBodyAnnotatorSelectionAllowed',
+            'mouseenter .js_messageBodyAnnotatorSelectionAllowed': 'updateAnnotatorTextSelection',
 
             // menu
             'click .js_message-markasunread': 'markAsUnread',
@@ -323,29 +323,53 @@ define(function (require) {
         },
 
         /**
-         * Hide the selection tooltip
+         * Hide the annotator selection tooltip displayed during the selection, 
+         * before it completes
          */
-        hideTooltip: function () {
-            Ctx.selectionTooltip.hide();
+        hideAnnotatorSelectionTooltip: function () {
+            Ctx.annotatorSelectionTooltip.hide();
         },
 
         /**
-         * Shows the selection tooltip
+         * Show/update the annotator selection tooltip displayed during the selection, 
+         * before it completes.
          * @param  {number} x
          * @param  {number} y
          * @param  {string} text
          */
-        showTooltip: function (x, y, text) {
-            var marginLeft = Ctx.selectionTooltip.width() / -2,
+        showAnnotatorSelectionTooltip: function (x, y, text) {
+            var marginLeft = Ctx.annotatorSelectionTooltip.width() / -2,
                 segment = text;
 
             text = text.substr(0, TOOLTIP_TEXT_LENGTH) + '...' + text.substr(-TOOLTIP_TEXT_LENGTH);
 
-            Ctx.selectionTooltip
+            Ctx.annotatorSelectionTooltip
                 .show()
                 .attr('data-segment', segment)
                 .text(text)
                 .css({ top: y, left: x, 'margin-left': marginLeft });
+        },
+
+        /**
+         * Shows the save options to the selected text once the selection is complete
+         * @param  {Number} x
+         * @param  {Number} y
+         */
+        showAnnotatorSelectionSaveOptions: function (x, y) {
+            this.hideAnnotatorSelectionTooltip();
+
+            var annotator = this.$el.closest('.messageList-list').data('annotator');
+            annotator.onAdderClick.call(annotator);
+
+            //The annotatorEditor is the actual currently active annotatorEditor
+            //from the annotator object stored in the DOM of the messagelist.
+            //object from annotator
+            if (this.messageListView.annotatorEditor) {
+                this.messageListView.annotatorEditor.element.css({
+                    'top': y,
+                    'left': x
+                });
+            }
         },
 
         /**
@@ -381,25 +405,6 @@ define(function (require) {
         closeReplyBox: function () {
             this.$('.message-replybox').hide();
             this.replyBoxShown = false;
-        },
-
-        /**
-         * Shows the options to the selected text
-         * @param  {Number} x
-         * @param  {Number} y
-         */
-        showSelectionOptions: function (x, y) {
-            this.hideTooltip();
-
-            var annotator = this.$el.closest('.messageList-list').data('annotator');
-            annotator.onAdderClick.call(annotator);
-
-            if (this.messageListView.annotatorEditor) {
-                this.messageListView.annotatorEditor.element.css({
-                    'top': y,
-                    'left': x
-                });
-            }
         },
 
         onMessageHoistClick: function (ev) {
@@ -480,17 +485,17 @@ define(function (require) {
 
         /**
          * @event
-         * Starts the selection tooltip
+         * Starts annotator text selection process
          */
-        startSelection: function () {
-            this.hideTooltip();
+        startAnnotatorTextSelection: function () {
+            this.hideAnnotatorSelectionTooltip();
             this.isSelecting = true;
             this.$el.addClass('is-selecting');
 
             var that = this;
 
             $(document).one('mouseup', function (ev) {
-                that.stopSelection(ev);
+                that.finishAnnotatorTextSelection(ev);
             });
         },
 
@@ -498,7 +503,7 @@ define(function (require) {
          * @event
          * Does the selection
          */
-        doTheSelection: function (ev) {
+        updateAnnotatorTextSelection: function (ev) {
             if (!this.isSelecting) {
                 return;
             }
@@ -508,33 +513,62 @@ define(function (require) {
                 return;
             }
 
-            var selectedText = Ctx.getSelectedText(),
+            var selectedText = this.getSelectedText(),
                 text = selectedText.focusNode ? selectedText.getRangeAt(0).cloneContents() : '';
 
             text = text.textContent || '';
 
             if (text.length > MIN_TEXT_TO_TOOLTIP) {
-                this.showTooltip(ev.clientX, ev.clientY, text);
+                this.showAnnotatorSelectionTooltip(ev.clientX, ev.clientY, text);
             } else {
-                this.hideTooltip();
+                this.hideAnnotatorSelectionTooltip();
             }
         },
 
         /**
          * @event
          */
-        onMouseLeaveMessageBody: function () {
+        onMouseLeaveMessageBodyAnnotatorSelectionAllowed: function () {
             if (this.isSelecting) {
-                this.hideTooltip();
+                this.hideAnnotatorSelectionTooltip();
+                this.isSelecting = false;
+                this.$el.removeClass('is-selecting');
+                (function deselect(){
+                  var selection = ('getSelection' in window)
+                    ? window.getSelection()
+                    : ('selection' in document)
+                      ? document.selection
+                      : null;
+                  if ('removeAllRanges' in selection) selection.removeAllRanges();
+                  else if ('empty' in selection) selection.empty();
+                })();
             }
+            
         },
 
         /**
+         * Return the selected text on the document (DOM Selection, nothing
+         * annotator specific)
+         * @return {Selection}
+         */
+        getSelectedText: function () {
+            if (document.getSelection) {
+                return document.getSelection();
+            } else if (window.getSelection) {
+                return window.getSelection();
+            } else {
+                var selection = document.selection && document.selection.createRange();
+                return selection.text ? selection.text : false;
+            }
+        },
+        
+        /**
+         * Finish processing the annotator text selection
          * @event
          */
-        stopSelection: function (ev) {
+        finishAnnotatorTextSelection: function (ev) {
             var isInsideAMessage = false,
-                selectedText = Ctx.getSelectedText(),
+                selectedText = this.getSelectedText(),
                 user = Ctx.getCurrentUser(),
                 text = selectedText.focusNode ? selectedText.getRangeAt(0).cloneContents() : '';
 
@@ -545,7 +579,7 @@ define(function (require) {
             }
 
             if (user.can(Permissions.ADD_EXTRACT) && this.isSelecting && text.length > MIN_TEXT_TO_TOOLTIP && isInsideAMessage) {
-                this.showSelectionOptions(ev.clientX - 50, ev.clientY);
+                this.showAnnotatorSelectionSaveOptions(ev.clientX - 50, ev.clientY);
             } else if (!user.can(Permissions.ADD_EXTRACT)) {
                 console.warn('User cannot make extractions');
             }
