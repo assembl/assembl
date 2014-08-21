@@ -1449,7 +1449,7 @@ define(function (require) {
         onTitleClick: function (ev) {
             var id = ev.currentTarget.getAttribute('data-messageid');
 
-            this.openMessageByid(id);
+            this.openMessageByid(id); // FIXME: has this method disappeared?
         },
 
         /**
@@ -1468,9 +1468,9 @@ define(function (require) {
          */
         toggleMessageView: function () {
             if (this.collapsed) {
-                this.expandMessages();
+                this.expandMessages(); // FIXME: has this method disappeared?
             } else {
-                this.collapseMessages();
+                this.collapseMessages(); // FIXME: has this method disappeared?
             }
         }
 
