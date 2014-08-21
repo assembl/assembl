@@ -230,12 +230,12 @@
   line-height: 1.42857143;
   margin-bottom: 0;
   font-weight: 400;
-  font-family: arial;
+  font-family: $baseFontFamily;
   white-space: nowrap;
   text-align: center;
   vertical-align: middle;
   padding: 6px 12px;
-  font-size: 14px;
+  font-size: $baseFontSize;
   cursor: pointer;
   background-image: none;
   border: 1px solid transparent;
@@ -333,7 +333,7 @@
 
 .btn-sm {
   padding: 5px 10px;
-  font-size: 12px;
+  font-size: $smallFontSize;
   line-height: 1.5;
   border-radius: 3px;
 }
