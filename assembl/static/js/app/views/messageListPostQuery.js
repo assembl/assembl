@@ -466,7 +466,7 @@ define(function (require) {
                 retval += i18n.gettext("No query has been executed yet");
                 retval += '</div>';
             }
-            else {
+            else if(this._resultsAreValid) {
                 retval += '<div class="post-query-results-info">';
                 if (this.getResultNumTotal() == 0) {
                     if (numActiveFilters > 0) {
