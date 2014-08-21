@@ -5,6 +5,7 @@
   bottom: 0;
   left: 0;
   min-height: 400px;
+  height: calc(100vh - 36px);
   overflow-x: auto;
   overflow-y: hidden;
   white-space: nowrap;
@@ -212,7 +213,7 @@
 
 .groupBody {
   display: table;
-  height: 100%;
+  height: calc(100% - 25px); /* retain the height of .groupHeader */
   width: 100%;
   table-layout: auto;
 

@@ -116,7 +116,16 @@
   }
 }
 
-.panelContents, .panelContents > div {
+.groupPanel .panelContents {
+  /*height: 100%;*/
+  height: calc(100vh - 60px); /* retain the height of everything on top of it. probably not the best solution because not dynamic */
+  
+}
+.groupPanel header ~ .panelContents {
+  height: calc(100% - 35px); /* retain the height of the header */
+}
+
+.panelContents > div { /* probably not the best solution */
   height: 100%;
 }
 
@@ -236,7 +245,7 @@
   position: absolute;
   top: 30px;
   right: 0;
-  bottom: 5px;
+  bottom: 1px;
   left: 0;
   overflow-y: auto;
   overflow-x: hidden;
