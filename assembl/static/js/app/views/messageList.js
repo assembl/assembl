@@ -317,8 +317,10 @@ define(function (require) {
         /**
          * List of message id's to be displayed in the interface
          * @type {MessageCollection}
+         * 
+         * TODO:  THIS IS TO BE REPLACED WITH getResultMessageIdCollectionPromise(), which is the same data
          */
-        messageIdsToDisplay: [],
+        DEPRECATEDmessageIdsToDisplay: [],
 
         allMessageStructureCollection: undefined,
         //messages
@@ -569,7 +571,7 @@ define(function (require) {
                 model = null,
                 messages = this.allMessageStructureCollection;
 
-            that.messageIdsToDisplay.forEach(function (id) {
+            that.DEPRECATEDmessageIdsToDisplay.forEach(function (id) {
                 model = messages.get(id);
                 if (model) {
                     toReturn.push(model);
@@ -802,7 +804,7 @@ define(function (require) {
             /* This should be a listen to the returned collection */
             var changedDataCallback = function (messageStructureCollection, resultMessageIdCollection) {
                 function inFilter(message) {
-                    return that.messageIdsToDisplay.indexOf(message.getId()) >= 0;
+                    return that.DEPRECATEDmessageIdsToDisplay.indexOf(message.getId()) >= 0;
                 };
                 that.destroyAnnotator();
                 //Some messages may be present from before
@@ -812,7 +814,7 @@ define(function (require) {
                 // including zombie views, and we get nested annotator tags as a result.
                 // (Annotator looks at fresh DOM every time)
                 // TODO long term: Keep them with a real CompositeView.
-                that.messageIdsToDisplay = resultMessageIdCollection;
+                that.DEPRECATEDmessageIdsToDisplay = resultMessageIdCollection;
                 that.visitorViewData = {};
                 that.visitorOrderLookupTable = [];
                 that.visitorRootMessagesToDisplay = [];
@@ -1032,7 +1034,7 @@ define(function (require) {
         },
 
         hasDescendantsInFilter: function (model) {
-            if (this.messageIdsToDisplay.indexOf(model.getId()) >= 0) {
+            if (this.DEPRECATEDmessageIdsToDisplay.indexOf(model.getId()) >= 0) {
                 console.log("Valid descendant found (direct):", model)
                 return true;
             }
@@ -1356,7 +1358,7 @@ define(function (require) {
                 (this.currentViewStyle == this.ViewStyles.NEW_MESSAGES)) {
                 messageOffset = this.visitorViewData[messageId].traversal_order;
             } else {
-                messageOffset = this.messageIdsToDisplay.indexOf(messageId);
+                messageOffset = this.DEPRECATEDmessageIdsToDisplay.indexOf(messageId);
             }
             return messageOffset;
         },
@@ -1379,7 +1381,6 @@ define(function (require) {
          * @param {Function} [callback] The callback function to call if message is found
          */
         showMessageById: function (id, callback) {
-            //TODO:  Use a promise here, it will crash most of the time... benoitg 2014-07-23
             var that = this,
                 selector = Ctx.format('[id="message-{0}"]', id),
                 el,
@@ -1388,15 +1389,17 @@ define(function (require) {
                 requestedOffsets,
                 collectionManager = new CollectionManager();
 
-            collectionManager.getAllMessageStructureCollectionPromise().done(
-                function (allMessageStructureCollection) {
-                    var message = allMessageStructureCollection.get(id)
-                    that.messageIdsToDisplay.forEach(function (displayedId) {
+            $.when(collectionManager.getAllMessageStructureCollectionPromise(),
+                this.currentQuery.getResultMessageIdCollectionPromise()).done(
+                function (allMessageStructureCollection, resultMessageIdCollection) {
+                    var message = allMessageStructureCollection.get(id);
+
+                    resultMessageIdCollection.forEach(function (displayedId) {
                         if (displayedId == id) {
                             messageIsDisplayed = true;
                         }
                     });
-
+                    //Not entirely sure if isMessageOnscreen() is safe on first render, even inside the promise - benoitg - 2014-08-21
                     if (messageIsDisplayed && !that.isMessageOnscreen(id)) {
                         var success = function () {
                             console.log("showMessageById() message " + id + " not onscreen, calling showMessageById() recursively");
@@ -1422,8 +1425,9 @@ define(function (require) {
                             callback();
                         }
                     };
-
+                    console.log("checking message: ", message);
                     if (message) {
+                        console.log("triggering showBody on", message);
                         message.trigger('showBody');
                         el = $(selector);
                         if (el[0]) {

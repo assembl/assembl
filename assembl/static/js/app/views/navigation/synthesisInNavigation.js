@@ -59,15 +59,7 @@ define(function (require) {
             messageListView = this.groupContent.getViewByTypeName('messageList');
             messageListView.currentQuery.clearAllFilters();
             messageListView.toggleFilterByPostId(messageId);
-            $.when(collectionManager.getAllMessageStructureCollectionPromise()).done(
-                function(allMessageStructureCollection) {
-                    var message = allMessageStructureCollection.get(messageId);
-                    console.log("message:",message);
-                    message.set('collapsed', false); // TODO: use a method of the messageList view instead, like:
-                    // messageListView.openMessageByid(messageId); // but the method, although referenced elsewhere, does not seem to exist
-                    // or:
-                    // message.setViewStyle(Ctx.AVAILABLE_MESSAGE_VIEW_STYLES.FULL_BODY);
-                });
+            messageListView.showMessageById(messageId);
             // Show that entry is selected
             this.selectSynthesisInMenu(messageId);
         },
