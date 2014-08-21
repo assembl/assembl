@@ -698,14 +698,17 @@ def get_session_maker(zope_tr=True):
 
 
 class Tombstone(object):
-    def __init__(self, ob):
+    def __init__(self, ob, **kwargs):
         self.typename = ob.external_typename()
         self.uri = ob.uri()
+        self.extra_args = kwargs
 
     def generic_json(self, *vargs, **kwargs):
-        return {"@type": self.typename,
+        args = {"@type": self.typename,
                 "@id": self.uri,
                 "@tombstone": True}
+        args.update(self.extra_args)
+        return args
 
     def send_to_changes(self, connection):
         assert connection

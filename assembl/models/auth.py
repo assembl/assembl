@@ -26,7 +26,7 @@ from pyramid.security import Everyone, Authenticated
 from virtuoso.vmapping import IriClass
 
 from ..lib import config
-from . import Base, DiscussionBoundBase
+from . import Base, DiscussionBoundBase, DiscussionBoundTombstone
 from ..auth import *
 from ..semantic.namespaces import (
     SIOC, ASSEMBL, CATALYST, QUADNAMES, VERSION, FOAF, DCTERMS, RDF, VirtRDF)
@@ -734,6 +734,12 @@ class ViewPost(ActionOnPost):
         ForeignKey('action.id', ondelete="CASCADE", onupdate='CASCADE'),
         primary_key=True
     )
+
+    def tombstone(self):
+        from .generic import Content
+        return DiscussionBoundTombstone(
+            self, post=Content.uri_generic(self.post_id),
+            actor=User.uri_generic(self.actor_id))
 
     verb = 'viewed'
 

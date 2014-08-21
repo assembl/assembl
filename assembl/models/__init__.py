@@ -39,8 +39,8 @@ class DiscussionBoundBase(Base):
 
 
 class DiscussionBoundTombstone(Tombstone):
-    def __init__(self, ob):
-        super(DiscussionBoundTombstone, self).__init__(ob)
+    def __init__(self, ob, **kwargs):
+        super(DiscussionBoundTombstone, self).__init__(ob, **kwargs)
         self.discussion_id = ob.get_discussion_id()
 
     def send_to_changes(self, connection):
