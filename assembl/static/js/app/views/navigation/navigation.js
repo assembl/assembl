@@ -111,12 +111,13 @@ define(function (require) {
         // This method needs the DOM elements of the View to be rendered. So it should not be called in onRender(), but rather in onShow() or onDomRefresh()
         initVar: function () {
             // check wether DOM elements are already rendered
-            if ( this.$el && this.$el.height() )
+            if ( this.$el && this.$el.parent() && this.$el.parent().height() )
             {
                 var number_of_li = this.$('.side-menu > li').length;
                 var total_li_height = 35 * number_of_li;
 
-                var container_height = this.$el.height();
+                var container_height = this.$el.parent().height();
+
                 this._accordionContentHeight = container_height - total_li_height - 10;
             }
             else
