@@ -113,7 +113,6 @@ define(function (require) {
             // check wether DOM elements are already rendered
             if ( this.$el && this.$el.height() )
             {
-                console.log("initVar(): DOM is ready");
                 var number_of_li = this.$('.side-menu > li').length;
                 var total_li_height = 35 * number_of_li;
 
