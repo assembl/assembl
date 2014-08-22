@@ -127,7 +127,7 @@ define(function (require) {
                 _li = 35*3,
                 _headerGroup = 25;
                 _sideBarHeight = (_window - _header) - _headerGroup;
-                this._accordionContentHeight = (this._sideBarHeight - _li) - 15;
+                this._accordionContentHeight = (_sideBarHeight - _li) - 15;
             }
             
         }
