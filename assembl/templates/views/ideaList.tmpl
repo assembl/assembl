@@ -43,9 +43,9 @@
     <div class="panel-bodyabove"></div>
     <div class="panel-bodybelow"></div>
 
+    <% if (canAdd) { %>
     <footer class="panel-footer text-right">
-        <% if (canAdd) { %>
         <a class="link" id="ideaList-addbutton">{{ gettext('Add idea') }} <i class="icon-plus-squared"></i></a>
-        <% } %>
     </footer>
+    <% } %>
 
