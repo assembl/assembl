@@ -39,15 +39,12 @@ define(function (require) {
                 that.setSideBarHeight();
             });
 
-            this._sideBarHeight = null;
-            this._accordion = null;
-
-            this.initVar();
-            this.setSideBarHeight();
+            this._accordionContentHeight = null;
 
             this.listenTo(Assembl.vent, 'navigation:selected', this.toggleMenuByName);
         },
-        onRender: function () {
+        onShow: function () {
+            this.initVar();
             this.setSideBarHeight();
             //this.notification.show(new sidebarNotification());
         },
@@ -76,8 +73,7 @@ define(function (require) {
             }
         },
         setSideBarHeight: function () {
-            this.$el.css('height', this._sideBarHeight);
-            this.$('div.second-level').css('height', this._accordion)
+            this.$('div.second-level').css('height', this._accordionContentHeight);
         },
         loadView: function (view) {
             this.groupContent.model.set('navigationState', view);
@@ -112,15 +108,28 @@ define(function (require) {
             }
         },
 
+        // This method needs the DOM elements of the View to be rendered. So it should not be called in onRender(), but rather in onShow() or onDomRefresh()
         initVar: function () {
-            var _header = $('#header').height(),
-                _window = $(window).height(),
-            //_searchBox = 43,
-                _li = 105,
-                _headerGroup = 25;
+            // check wether DOM elements are already rendered
+            if ( this.$el && this.$el.height() )
+            {
+                console.log("initVar(): DOM is ready");
+                var number_of_li = this.$('.side-menu > li').length;
+                var total_li_height = 35 * number_of_li;
 
-            this._sideBarHeight = (_window - _header) - _headerGroup;
-            this._accordion = (this._sideBarHeight - _li) - 15;
+                var container_height = this.$el.height();
+                this._accordionContentHeight = container_height - total_li_height - 10;
+            }
+            else
+            { // fallback: set an initial estimation
+                var _header = $('#header').height(),
+                _window = $(window).height(),
+                _li = 35*3,
+                _headerGroup = 25;
+                _sideBarHeight = (_window - _header) - _headerGroup;
+                this._accordionContentHeight = (this._sideBarHeight - _li) - 15;
+            }
+            
         }
 
     });

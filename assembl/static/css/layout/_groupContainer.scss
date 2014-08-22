@@ -225,11 +225,12 @@
 
   .navSidebar {
     min-width: 300px;
+    height: 100%;
     .side-menu {
       margin: 0;
       padding: 0;
       list-style: none;
-      height: 80%;
+      height: 100%;
       > li {
         position: relative;
         > a.nav {
@@ -253,6 +254,7 @@
         }
         .second-level {
           display: none;
+          box-sizing: border-box;
         }
       }
       .debate {
