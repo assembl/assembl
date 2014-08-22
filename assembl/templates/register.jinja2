@@ -1,9 +1,15 @@
 {% extends 'base.jinja2' %}
 
 {% block content %}
+<style>
+body{
+    background: #eee;
+}
+</style>
+
 <div class="loginbox register">
     <header>
-        <h1>{{ gettext('Join assembl') }}</h1>
+        <h1>{{ gettext('Join Assembl') }}</h1>
     </header>
 
     <div class="content">
@@ -14,11 +20,11 @@
 
         <form class="form" method="POST">
             <input type="hidden" name="next_view" value="{{next_view}}" />
-            <input type="text" name="name" class="defaultfield" placeholder="{{ gettext('Name') }}" autofocus required />
-            <input type="text" name="email" class="defaultfield" placeholder="{{ gettext('email') }}" required />
-            <input type="password" name="password" class="defaultfield" placeholder="{{ gettext('Password') }}" required />
-            <input type="password" name="password2" class="defaultfield" placeholder="{{ gettext('Repeat password') }}" required />
-            <input type="submit" name="register" value="{{ gettext('Register') }}" class="btn btn-primary" />
+            <input type="text" name="name" class="form-control defaultfield" placeholder="{{ gettext('Name') }}" autofocus required />
+            <input type="text" name="email" class="form-control defaultfield" placeholder="{{ gettext('Email') }}" required />
+            <input type="password" name="password" class="form-control defaultfield" placeholder="{{ gettext('Password') }}" required />
+            <input type="password" name="password2" class="form-control defaultfield" placeholder="{{ gettext('Repeat password') }}" required />
+            <input type="submit" name="register" value="{{ gettext('Sign up') }}" class="btn btn-primary" />
         </form>
 
         <div class="subcontent">
