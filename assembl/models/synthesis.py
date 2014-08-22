@@ -945,8 +945,8 @@ JOIN post AS family_posts ON (
         result = []
         common_params = dict(discussion_id=discussion_id, user_id=user_id)
         for idea_id, post_ids in roots.iteritems():
-            stmt2 = ' UNION '.join(["""
-                SELECT  pa.id as post_id, action_view_post.id as view_id FROM (
+            stmt2 = ' UNION '.join([
+                """SELECT  pa.id as post_id, action_view_post.id as view_id FROM (
                     SELECT transitive t_in (1) t_out (2) T_DISTINCT T_NO_CYCLES
                         parent_id, id FROM post
                     UNION SELECT id AS parent_id, id FROM POST
@@ -957,7 +957,9 @@ JOIN post AS family_posts ON (
                 LEFT JOIN action_view_post ON (action.id = action_view_post.id)
                 WHERE parent_id = :post_id_%d AND content.discussion_id= :discussion_id
                 """ % n for n in range(len(post_ids))])
-            stmt2 = "SELECT COUNT(x.post_id), COUNT(x.view_id) FROM (%s) x" % (stmt2,)
+            # We have to specify distinct to avoid counting nulls. Go figure.
+            stmt2 = """SELECT COUNT(DISTINCT x.post_id),
+                COUNT(DISTINCT x.view_id) FROM (%s) x""" % (stmt2,)
             params = {'post_id_'+str(n): post_id for n, post_id in enumerate(post_ids)}
             params.update(common_params)
             cpost, cview = list(cls.db().execute(text(stmt2).params(params))).pop()
