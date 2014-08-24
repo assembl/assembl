@@ -48,10 +48,6 @@ define(function (require) {
          * */
         home: function () { // a.k.a. "index", "discussion root"
             this.restoreViews();
-            var lastSave = storage.getDateOfLastViewSave();
-            if (!lastSave || (Date.now() - lastSave.getTime() > (7*24*60*60*1000))) {
-                this.contextPage();
-            }
         },
 
         contextPage: function () { // a.k.a. "home", "accueil" (according to the navigation menu) 
@@ -74,7 +70,13 @@ define(function (require) {
                 var group = new GroupContainer({
                     collection: groupSpecs
                 });
-
+                var lastSave = storage.getDateOfLastViewSave();
+                if (!lastSave || (Date.now() - lastSave.getTime() > (7*24*60*60*1000))) {
+                    var navigableGroupSpec = groupSpecs.find(function (aGroupSpec) {
+                        return aGroupSpec.hasNavigation();
+                    });
+                    navigableGroupSpec.set('navigationState', 'home');
+                }
                 Assembl.groupContainer.show(group);
             });
         },

@@ -21,6 +21,11 @@ define(function (require) {
             this.collection = this.model.get('panels');
             //this.listenTo(this.collection, 'add remove reset change', this.adjustGridSize);
             setTimeout(function () {
+                var navView = that.getViewByTypeName('navSidebar');
+                if (navView) {
+                    //navView.loadView(that.model.get('navigationState'));
+                    navView.toggleMenuByName(that.model.get('navigationState'));
+                }
                 that.adjustGridSize();
             }, 200);
         },

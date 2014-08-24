@@ -41,6 +41,9 @@ define(function (require) {
             this.get('panels').remove(aPanelSpec);
         },
 
+        hasNavigation: function () {
+            return this.get('panels').where({type:'navSidebar'});
+        },
 
         addPanel: function (options, position) {
             var aPanelSpec = new panelSpec.Model(options);
