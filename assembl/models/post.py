@@ -1,4 +1,5 @@
 from datetime import datetime
+from abc import ABCMeta, abstractmethod
 
 from bs4 import BeautifulSoup
 from sqlalchemy.orm import relationship, backref
@@ -20,6 +21,15 @@ from ..semantic.virtuoso_mapping import QuadMapPatternS
 from .generic import Content, ContentSource
 from .auth import AgentProfile
 from ..semantic.namespaces import  SIOC, CATALYST, IDEA, ASSEMBL, DCTERMS, QUADNAMES
+
+
+class PostVisitor(object):
+    CUT_VISIT = object()
+    __metaclass__ = ABCMeta
+    @abstractmethod
+    def visit_post(self, post):
+        pass
+
 
 class Post(Content):
     """
@@ -173,6 +183,46 @@ class Post(Content):
 
         return ancestors
 
+    def prefetch_descendants(self):
+        pass  #TODO
+
+    def visit_posts_depth_first(self, post_visitor):
+        self.prefetch_descendants()
+        self._visit_posts_depth_first(post_visitor, set())
+
+    def _visit_posts_depth_first(self, post_visitor, visited):
+        if self in visited:
+            # not necessary in a tree, but let's start to think graph.
+            return False
+        result = post_visitor.visit_post(self)
+        visited.add(self)
+        if result is not PostVisitor.CUT_VISIT:
+            for child in self.children:
+                child._visit_posts_depth_first(post_visitor, visited)
+
+    def visit_posts_breadth_first(self, post_visitor):
+        self.prefetch_descendants()
+        result = post_visitor.visit_post(self)
+        visited = {self}
+        if result is not PostVisitor.CUT_VISIT:
+            self._visit_posts_breadth_first(post_visitor, visited)
+
+    def _visit_posts_breadth_first(self, post_visitor, visited):
+        children = []
+        for child in self.children:
+            if child in visited:
+                continue
+            result = post_visitor.visit_post(child)
+            visited.add(child)
+            if result != PostVisitor.CUT_VISIT:
+                children.append(child)
+        for child in children:
+            child._visit_posts_breadth_first(post_visitor, visited)
+
+    def has_next_sibling(self):
+        if self.parent_id:
+            return self != self.parent.children[-1]
+        return False
 
     def __repr__(self):
         return "<Post %s '%s'>" % (
