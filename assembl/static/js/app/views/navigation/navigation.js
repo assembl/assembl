@@ -76,7 +76,22 @@ define(function (require) {
             this.$('div.second-level').css('height', this._accordionContentHeight);
         },
         loadView: function (view) {
+            // clear aspects of current state
+            switch (this.groupContent.model.get('navigationState')) {
+                case 'synthesis':
+                    var messageListView = this.groupContent.getViewByTypeName('messageList');
+                    if (messageListView) {
+                        messageListView.currentQuery.clearAllFilters();
+                        if (view == 'debate') {
+                            setTimeout(function () {
+                                messageListView.render();
+                            });
+                        }
+                    }
+                    break
+            }
             this.groupContent.model.set('navigationState', view);
+            // set new state
             switch (view) {
                 case 'home':
                     var homePanel = new HomePanel({
