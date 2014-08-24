@@ -12,10 +12,6 @@ define(function (require) {
         childViewContainer: ".groupBody",
         childView: PanelWrapper,
 
-        _unlockCallbackQueue: {},
-
-        _stateButton: null,
-
         initialize: function (options) {
             var that = this;
             this.collection = this.model.get('panels');
@@ -31,7 +27,6 @@ define(function (require) {
         },
         events: {
             'click .js_closeGroup': 'closeGroup',
-            'click .js_lockGroup': 'toggleLock'
         },
         collectionEvents: {
             'add remove reset change': 'adjustGridSize'
@@ -41,10 +36,6 @@ define(function (require) {
             return {
                 "Ctx": ctx
             };
-        },
-
-        onRender: function () {
-            this._stateButton = this.$('.lock-group i');
         },
 
         closeGroup: function () {
@@ -80,78 +71,6 @@ define(function (require) {
             return {
                 groupContent: this,
                 contentSpec: child
-            }
-        },
-
-        /**
-         * lock the panel if unlocked
-         */
-        lockGroup: function () {
-            if (!this.model.get('locked')) {
-                this.model.set('locked', true);
-                this._stateButton.addClass('icon-lock').removeClass('icon-lock-open');
-            }
-        },
-
-        /**
-         * unlock the panel if locked
-         */
-        unlockGroup: function () {
-            if (this.model.get('locked')) {
-                this.model.set('locked', false);
-                this._stateButton.addClass('icon-lock-open').removeClass('icon-lock');
-
-                if (_.size(this._unlockCallbackQueue) > 0) {
-                    //console.log("Executing queued callbacks in queue: ",this.unlockCallbackQueue);
-                    _.each(this._unlockCallbackQueue, function (callback) {
-                        callback();
-                    });
-                    //We presume the callbacks have their own calls to render
-                    //this.render();
-                    this._unlockCallbackQueue = {};
-                }
-            }
-        },
-        /**
-         * Toggle the lock state of the panel
-         */
-        toggleLock: function () {
-            if (this.isLocked()) {
-                this.unlockGroup();
-            } else {
-                this.lockGroup();
-            }
-        },
-
-        isLocked: function () {
-            return this.model.get('locked');
-        },
-
-        setButtonState: function (dom) {
-            this._stateButton = dom;
-        },
-
-        /**
-         * Process a callback that can be inhibited by panel locking.
-         * If the panel is unlocked, the callback will be called immediately.
-         * If the panel is locked, visual notifications will be shown, and the
-         * callback will be memorized in a queue, removing duplicates.
-         * Callbacks receive no parameters.
-         * If queued, they must assume that they can be called at a later time,
-         * and have the means of getting any updated information they need.
-         */
-        filterThroughPanelLock: function (callback, queueWithId) {
-            if (!this.model.get('locked')) {
-                callback();
-
-            } else {
-                if (queueWithId) {
-                    if (this._unlockCallbackQueue[queueWithId] !== undefined) {
-                    }
-                    else {
-                        this._unlockCallbackQueue[queueWithId] = callback;
-                    }
-                }
             }
         },
 

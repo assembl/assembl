@@ -11,7 +11,6 @@ define(function (require) {
         },
 
         defaults: {
-            locked: false,
             panels: new panelSpec.Collection([
                 {type: 'navSidebar'},
                 {type: 'ideaPanel'},

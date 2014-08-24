@@ -6,6 +6,9 @@
     <% } %> ><%= title %></span>
     <div class="fr">
         <% if( userCanChangeUi ){ %>
+        <% if( hasLock ){ %>
+        <a class="js_lockPanel lock-group phs"><i class="icon-lock-open"></i></a>
+        <% } %>
         <a class="js_panel-fullScreenButton iconbutton iconbutton--resizefull" data-toggle="tooltip" data-placement="top"  title="{{ gettext('Fullsize') }}"></a>
         <a class="js_panel-closeButton iconbutton icon-delete panel-header-close" data-toggle="tooltip" data-placement="top" title="{{gettext('Close panel')}}"></a>
         <% } %>

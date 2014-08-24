@@ -9,6 +9,7 @@ define(function (require) {
      */
     var AssemblPanel = Marionette.LayoutView.extend({
         template: "#tmpl-groupItem",
+        lockable: false,
 
         /**
          * Show the panel is currently loading data
