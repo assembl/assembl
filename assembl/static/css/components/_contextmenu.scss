@@ -15,10 +15,10 @@
 .contextmenu-item {
     display: block;
     line-height: 22px;
-
     cursor: pointer;
+}
+.contextmenu-item, .contextmenu-item a {
     color: $gray1;
-
     &:hover { @extend .contextmenu-item.is-hovered; }
 }
 
