@@ -6,6 +6,7 @@
   @include transform(translateZ(0));
   display: block;
   position: relative;
+  z-index: 100; /* for dropdowns */
   background-color: $white;
 
   &.navbar-default {

@@ -105,16 +105,33 @@
 .dropdown-list.dropdown-list--bottomright {
   left: auto;
   right: -10000px;
+  display: none;
 
   .dropdown.is-open & {
     top: 15px;
     right: 5px;
     left: auto;
+    display: block;
   }
+}
+
+.dropdown-list.locales {
+  min-width: 20px;
+  right: 0 !important;
 }
 
 //
 .dropdown-listitem {
   @extend .contextmenu-item;
   margin-top: 3px;
+}
+
+
+// dropdown with small arrow
+
+.dropdown-arrow {
+  @extend .small;
+  @extend .small;
+  @extend .icon-arrowdown;
+  color: $gray;
 }

@@ -1,6 +1,7 @@
 <div class="navbar-left">
     <a href="/" class="assembl-logo" class="sign-in">Assembl</a>
-    <i>|</i>
+    {# <i>|</i> #}
+    &nbsp;&nbsp;&nbsp;&nbsp;
     <span id="onlinedot" class="dot">
         <small class="dot-offline">{{ gettext('Connecting...') }}</small>
         <span class="dot-online title-debatname">{{ discussion.topic }}</span>
@@ -36,13 +37,20 @@
             {% endif %}
         {% endif %}
         {% if locales.__len__ > 1 %}
-            <a href="#" class="locale active">{{locale | upper}}</a>
-            <span class="seperator"></span>
-            {% for loc in locales %}
-                {% if (loc != locale) %}
-                    <a href="#" class='lang js_setLocale' data-locale='{{loc}}'>{{loc | upper}}</a>
-                {% endif %}
-            {% endfor %}
+            <div class="dropdown">
+                <div class="dropdown-label">{{locale | upper}} <span class="dropdown-arrow icon-arrowdown"></span></div>
+                <ul class="dropdown-list dropdown-list--bottomright locales">
+                    {% for loc in locales %}
+                        {% if (loc != locale) %}
+                            <li class="dropdown-listitem">
+                                <a href="#" class="lang js_setLocale" data-locale='{{loc}}'>
+                            {{loc | upper}}
+                                </a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+            </div>
         {% endif %}
     </div>
 </div>

@@ -775,7 +775,13 @@ define(function (require) {
             var dropdown = $(e.target);
 
             if (!dropdown.hasClass("dropdown-label")) {
-                return;
+                var parent = $(e.target).parent();
+                if ( parent.hasClass("dropdown-label") )
+                {
+                    dropdown = parent;
+                }
+                else
+                    return;
             }
 
             var parent = dropdown.parent();
