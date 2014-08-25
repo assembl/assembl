@@ -88,9 +88,10 @@ $ten: 10px;
   }
   
   .avatar {
-      position: absolute;
-      margin: 0;
-      padding: 0;
+    //position: absolute;
+    margin: 0;
+    padding: 0;
+    float: left;
   }
   // A message block Header
   // --------------------
