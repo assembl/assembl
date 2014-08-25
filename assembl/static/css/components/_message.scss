@@ -1,7 +1,7 @@
 $message-bar-width: 15px;
 $twelve: 12px;
 $avatarSize: 30px;
-$fortythree: 43px;
+$mesageSpacing: 6px;
 $ten: 10px;
 
 @mixin multiline-ellipsis($height, $lineheight, $ellipsiswidth) {
@@ -72,29 +72,41 @@ $ten: 10px;
 // ================
 .message {
   position: relative;
-  //padding: 20px 5px;
-  padding: 8px 0px 2px 0px;
-  min-height: $fortythree - 12px;
-
+  padding: $mesageSpacing 0px $mesageSpacing 0px;
+  margin: 0px $mesageSpacing 0px $mesageSpacing;
+  min-height: $avatarSize;
+  color: $gray2;
+  border-bottom: solid 1px $gray3;
+  
   &.is-highlighted {
-    background-color: $yellow;
+    background-color: $orange;
+  }
+  
+  > * {
+    //So everything is aligned with the avatar
+    margin-left: $avatarSize + $mesageSpacing;
+  }
+  
+  .avatar {
+      position: absolute;
+      margin: 0;
+      padding: 0;
   }
   // A message block Header
   // --------------------
   .message-header {
     position: relative;
-    min-height: $fortythree - 12px;
-  }
-
-  .message-subheader {
+    //min-height: $avatarSize;
+    //max-height: $avatarSize;
+    font-size: 12px; //This should be rem or something - benoitg
     line-height: 17px;
-    padding-left: 6px;
+    padding: 0px;
     cursor: pointer;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
     text-align: baseline;
-    max-height: $fortythree - 12;
+    
     > span {
       vertical-align: top;
     }
@@ -117,6 +129,17 @@ $ten: 10px;
 
     .message-date {
       //line-height: 17px;
+      color: $gray1;
+      opacity: 0.5;
+            
+      margin-left: 1em;
+      &:before {
+        content: "\002022";//Unicode bullet
+        font-size: 50%;
+      }
+      time {
+        margin-left: 1em;
+      }
     }
 
     > div {
@@ -130,21 +153,23 @@ $ten: 10px;
   }
   .message-body {
     margin-top: 1em;
+    font-size: 13px; //This should be rem or something - benoitg
   }
+
+
 
   &.viewStyleFullBody {
     .message-date {
       float: none;
-      color: $grayCounter;
-    }
-    .message-subheader {
-      max-height: none;
     }
     .message-author {
       width: auto;
       padding-left: .01em;
     }
 
+    .message-subject {
+      display: block;
+    }
     .message-body.body_format_text_plain {
       white-space: pre-line;
       & > {
@@ -171,26 +196,18 @@ $ten: 10px;
       line-height: 1.4em
     }
 
-    .message-menu {
-      .dropdown {
-        position: absolute;
-        right: 5px;
-        top: 0;
-      }
-    }
   }
 
   &.viewStyleTitleOnly {
 
     .message-date {
-
     }
     .message-author {
       //width: 10em;
       overflow: hidden;
-      float: left;
+      //float: left;
       text-overflow: ellipsis;
-      //min-height: $fortythree - 12; /* To make sure the title wraps in front of the author */
+      //min-height:  $avatarSize + 2 * $mesageSpacing; /* To make sure the title wraps in front of the author */
       width: auto;
       padding-left: .01em;
       &:hover {
@@ -207,18 +224,20 @@ $ten: 10px;
   &.viewStylePreview {
 
     .message-date {
-      color: $grayCounter;
     }
     .message-author {
       width: auto;
       padding-left: .01em;
+    }
+    .message-subject {
+      display: block;
     }
     @include multiline-ellipsis(5em, 1em, 3em);
     .message-body {
       margin-top: 0.6em;
       position: relative;
       color: #212f40;
-      padding: 0 4em 0 3em;
+      padding: 0px;
     }
 
     .message-body.body_format_text_plain > div {
@@ -238,14 +257,11 @@ $ten: 10px;
       }
     }
     .readmore {
-      margin-left: 35px;
     }
   }
 
-  .indicator {
-    position: absolute;
-    right: 15px;
-    top: 50%;
+  .readUnreadIndicator {
+    display: inline-block;
     cursor: pointer;
     .indice {
       width: 10px;
@@ -260,17 +276,14 @@ $ten: 10px;
   }
 
   &.unread {
-    /*.message-author, .message-subject {
-        @extend .text-bold;
-    }*/
-    /*.message-author, .message-subject, .message-date {
-        @extend .text-bold;
-    } */
+    .message-author {
+        font-weight: bold;
+    }
 
-    .indicator {
+    .readUnreadIndicator {
       .indice {
         background-color: $purple;
-        border: none;
+        border: 2px solid $purple;
       }
     }
   }
@@ -282,6 +295,7 @@ body.js_annotatorUserCannotAddExtract > .textbubble {
   display: none !important;
 }
 
+/* This is not on the message itself, not the family
 .messageList-list.reverse_chronological, .messageList-list.chronological {
   .message-family-container {
     border-bottom: solid 1px $gray3;
@@ -291,7 +305,7 @@ body.js_annotatorUserCannotAddExtract > .textbubble {
     }
   }
 }
-
+*/
 // @for $i from 1 through 30 {
 //     .message[data-message-level="#{$i}"] {                                                                                                                    c
 //         padding-left: ((21px * $i) + 5px) - 21px;
@@ -413,8 +427,8 @@ body.js_annotatorUserCannotAddExtract > .textbubble {
 //
 .message-body, .message-replybox {
   padding: {
-    right: 36px;
-    left: 36px;
+    right: 0px;
+    left: 0px;
   }
 }
 
@@ -434,6 +448,15 @@ body.js_annotatorUserCannotAddExtract > .textbubble {
   right: 5px;
   display: table;
   vertical-align: top;*/
+  color: $gray1;
+  opacity: 0.7;
+  i {
+    opacity: 0.5;
+  }
+  &:hover {
+    color: $purple;
+    opacity: 1;
+  }
 
   // used when buttons are to the left of the Reply button
   > .message-hoistbtn, > .message-linkbutton {
@@ -443,15 +466,16 @@ body.js_annotatorUserCannotAddExtract > .textbubble {
   }
   .message-replybox-openbtn {
     vertical-align: top;
-    margin-left: 6px;
-    padding-left: 4px;
-    padding-right: 6px;
     cursor: pointer;
     i {
       font-size: 10px;
     }
   }
   .dropdown {
+    //Not all message-menus are dropdown
+    position: absolute;
+    right: 5px;
+    top: 0;
     vertical-align: top;
     //line-height: 10px;
     padding: 0;

@@ -51,8 +51,8 @@
     .idealist-item.is-dragover-below > & {
         border-color: transparent !important;
 
-        .idealist-abovedropzone { border-top: solid 1px $yellow !important; }
-        .idealist-dropzone { border-color: $yellow !important; }
+        .idealist-abovedropzone { border-top: solid 1px $orange !important; }
+        .idealist-dropzone { border-color: $orange !important; }
     }
 
     .idealist-item.is-dragover:not(.is-dragover-below) > & {
@@ -152,7 +152,7 @@
     text-align: right;
   font-size: 11px;
     font-weight: bold;
-  color: $grayCounter;
+  color: $gray1;
     .idea-unread-posts {
         color:#555;
     }

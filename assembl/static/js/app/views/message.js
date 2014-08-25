@@ -82,7 +82,7 @@ define(function (require) {
          */
         events: {
 
-            'click .message-subheader': 'onMessageTitleClick',
+            'click .message-header': 'onMessageTitleClick',
             'click .readmore': 'onMessageTitleClick',
             'click .message-hoistbtn': 'onMessageHoistClick',
 
@@ -601,7 +601,8 @@ define(function (require) {
         /**
          * Mark the current message as unread
          */
-        markAsUnread: function () {
+        markAsUnread: function (ev) {
+            ev.stopPropagation();
             Ctx.removeCurrentlyDisplayedTooltips(this.$el);
             this.model.setRead(false);
         },
@@ -609,7 +610,8 @@ define(function (require) {
         /**
          * Mark the current message as read
          */
-        markAsRead: function () {
+        markAsRead: function (ev) {
+            ev.stopPropagation();
             Ctx.removeCurrentlyDisplayedTooltips(this.$el);
             this.model.setRead(true);
         },

@@ -425,25 +425,48 @@
   color: #da4d4d;
 }
 
-//colors
+//colors.  Mostly for styleguide, you should not normally use these in the DOM
 .purple {
   background-color: $purple;
+}
+
+.purple {
+  background-color: $purple1;
+}
+
+.purple1 {
+  background-color: $purple1;
 }
 
 .gray {
   background-color: $gray;
 }
 
+.gray1 {
+  background-color: $gray1;
+}
+
+.gray2 {
+  background-color: $gray2;
+}
+
+.gray3 {
+  background-color: $gray3;
+}
 .white {
   background-color: $white;
+}
+
+.orange {
+  background-color: $orange;
 }
 
 .black {
   background-color: $black;
 }
 
-.yellow {
-  background-color: $yellow;
+.yellow1 {
+  background-color: $yellow1;
 }
 
 .blue {
