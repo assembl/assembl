@@ -81,13 +81,14 @@
 .panel-editablearea {
   @extend .text;
   @include box-sizing(border-box);
+  @include border-radius(3px);
   display: inline-block;
   width: 100%;
-  border-radius: 4px;
   margin: 10px 0;
   cursor: text;
   background-color: white;
-  min-height: 30px;
+  padding: 3px 0 3px 4px;
+  //min-height: 30px;
 }
 
 // +++++++

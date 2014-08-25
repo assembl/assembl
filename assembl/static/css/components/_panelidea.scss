@@ -22,7 +22,11 @@
 #ideaPanel-shorttitle, #ideaPanel-definition {
   .panel-editablearea {
     margin: 0px;
-    padding: 4px 0px;
+    padding: 3px 0px 3px 4px;
   }
 
+}
+
+.ideaPanel-legend {
+  padding-left: 5px;
 }
