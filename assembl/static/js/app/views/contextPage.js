@@ -23,6 +23,7 @@ define(function(require){
 
         lineChartIsCumulative: true,
         lineChartShowPoints: false,
+        pieChartShowMessages: false,
 
         /*
         events: {
@@ -259,7 +260,7 @@ define(function(require){
 
                 // find which period is best to show the stats: the first period among week, month, debate which gathers at least X% of the contributions
 
-                var messages_threshold = messages_total * 0.15;
+                var messages_threshold = messages_total * 0.10;
                 //console.log("messages_threshold:");
                 //console.log(messages_threshold);
 
@@ -428,6 +429,9 @@ define(function(require){
                 authors_not_in_period = _.uniq(authors_not_in_period);
                 var authors_not_in_period_total = authors_not_in_period.length;
 
+                var authors_except_those_in_period = _.difference(authors, authors_in_period);
+                var authors_except_those_in_period_total = authors_except_those_in_period.length;
+
                 //console.log("authors_not_in_period:",authors_not_in_period);
                 //console.log("authors_in_period:",authors_in_period);
                 var new_authors_in_period = _.difference(authors_in_period, authors_not_in_period);
@@ -451,32 +455,32 @@ define(function(require){
                 
                 var pie_chart_data = [
                     "the title of the first element is purposely not used, only its data is used", //"posted since the beginning of the debate",
-                    messages_total,
                     authors_total,
+                    messages_total,
                     {
-                        "messages_posted_during_current_period": [
-                            i18n.gettext('authors since') + " " + statsPeriodName,
-                            messages_in_period_total,
+                        "active_authors_during_current_period": [
+                            i18n.gettext('authors have contributed since') + " " + statsPeriodName,
                             authors_in_period_total,
+                            messages_in_period_total,
                             {
-                                "messages_from_new_authors": [
-                                    i18n.gettext("new authors since") + " " + statsPeriodName,
-                                    messages_in_period_by_new_authors_total,
+                                "new_authors": [
+                                    i18n.gettext("new authors started contributing since") + " " + statsPeriodName,
                                     new_authors_in_period_total,
+                                    messages_in_period_by_new_authors_total,
                                     {}
                                 ],
-                                "messages_from_old_authors": [
-                                    i18n.gettext("already contributing authors since") + " " + statsPeriodName,
-                                    messages_in_period_total - messages_in_period_by_new_authors_total,
+                                "still_active_authors": [
+                                    i18n.gettext("active authors were already contributing before") + " " + statsPeriodName,
                                     authors_in_period_total - new_authors_in_period_total,
+                                    messages_in_period_total - messages_in_period_by_new_authors_total,
                                     {}
                                 ]
                             }
                         ],
-                        "messages_posted_before_current_period": [
-                            i18n.gettext("authors before") + " " + statsPeriodName,
-                            messages_total - messages_in_period_total,
-                            authors_not_in_period_total,
+                        "inactive_authors_during_current_period": [
+                            i18n.gettext("authors' last contribution was before") + " " + statsPeriodName,
+                            authors_except_those_in_period_total,
+                            0, // not needed now
                             {}
                         ]
                     }
@@ -485,10 +489,10 @@ define(function(require){
                 var pie_chart_default_legend_data = [
                     null,
                     null,
-                    i18n.gettext("authors since the beginning of the debate"),
+                    i18n.gettext("authors have contributed since the beginning of the debate"),
                     null,
-                    messages_total,
-                    authors_total
+                    authors_total,
+                    messages_total
                 ];
 
                 that.pie_chart_data = pie_chart_data;
@@ -760,7 +764,8 @@ define(function(require){
                 var data_slices = [];
                 // var max_level = 4;
                 var max_level = 2;
-                var color = d3.scale.category20c();
+                //var color = d3.scale.category20c();
+                var color = d3.scale.category10();
 
                 var svg = d3.select(plot).append("svg")
                     .attr("width", width)
@@ -838,14 +843,19 @@ define(function(require){
                     
                 function update_legend(d)
                 {
-                    //legend.html("<h2>"+d[2]+"</h2><p>"+d[4]+" " + i18n.gettext("messages, by") + " "+d[5]+" " + i18n.gettext("authors") + "</p>");
-                    legend.html("<p>" + d[4] + " " + i18n.gettext("messages, posted by") + " " + d[5] + " " + d[2] + "</p>");
+                    if ( that.pieChartShowMessages === true )
+                        legend.html("<p>" + d[5] + " " + i18n.gettext("messages, posted by") + " " + d[4] + " " + d[2] + "</p>");
+                    else
+                        legend.html("<p>" + d[4] + " " + d[2] + "</p>");
                     legend.transition().duration(200).style("opacity","1");
                 }
 
                 function get_slice_title(d)
                 {
-                    return d[4] + " " + i18n.gettext("messages, posted by") + " " + d[5] + " " + d[2];
+                    if ( that.pieChartShowMessages === true )
+                        return d[5] + " " + i18n.gettext("messages, posted by") + " " + d[4] + " " + d[2];
+                    else
+                        return d[4] + " " + d[2];
                 }
                 
                 function remove_legend(d)
