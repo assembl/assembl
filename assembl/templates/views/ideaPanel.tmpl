@@ -18,9 +18,9 @@
         </div>
         <p class="text-muted margin">{% set creationDate = "<%= app.formatDate(idea.get('creationDate')) %>" %}</p>
 
-        <% if (Ctx.getCurrentInterfaceType() != Ctx.InterfaceTypes.SIMPLE) { %>
+        {#<% if (Ctx.getCurrentInterfaceType() != Ctx.InterfaceTypes.SIMPLE) { %>
           <div id="ideaPanel-comment"></div>
-        <% } %>
+        <% } %>#}
 
         {# List votable widgets of this idea #}
         <% _.each(votable_widgets, function(votable_widget, i){
