@@ -1,9 +1,14 @@
-<span class="bx-color purple1 dispb fl mls tac">purple1</span>
-<span class="bx-color gray dispb fl mls tac">gray</span>
-<span class="bx-color gray1 dispb fl mls tac">gray1</span>
-<span class="bx-color gray2 dispb fl mls tac">gray2</span>
-<span class="bx-color gray3 dispb fl mls tac">gray3</span>
-<span class="bx-color orange dispb fl mls tac">orange</span>
-<span class="bx-color black dispb fl mls tac">black</span>
-<span class="bx-color yellow1 dispb fl mls tac">yellow1</span>
-<span class="bx-color blue dispb fl mls tac">blue</span>
+
+{% set color_list = {'purple':'#B879E2','purple1':'#6C0AAB','gray':'#7F8C8D', 'gray1':'#888888', 'gray2':'#515151', 'gray3':'#ECF0F1', 'orange':'#f0c36d', 'black':'#000000', 'yellow1':'#fcf8e3', 'blue':'#dbf2ff'} %}
+
+
+{% for color in color_list %}
+
+  <div class="bx-color fl tac mbs">
+    <div class="color {{color}} tac"></div>
+    <code class="code">${{color}}</code>
+    <br>
+    <code class="code">{{color_list[color]}}</code>
+  </div>
+
+{% endfor %}

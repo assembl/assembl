@@ -58,12 +58,15 @@
 // styleguide components
 
 .bx-color {
-  @include border-radius(50px);
-  width: 100px;
-  height: 100px;
-  line-height: 100px;
-  color: $white;
-  font-size: 14px;
+  .color {
+    width: 100px;
+    height: 50px;
+  }
+  .code {
+    width: 100px;
+    height: 30px;
+    color: $black;
+  }
 }
 
 .icons-content {
@@ -114,6 +117,51 @@ table.table {
     text-align: left;
     vertical-align: top;
   }
+}
+
+//colors.  Mostly for styleguide, you should not normally use these in the DOM
+.purple {
+  background-color: $purple;
+}
+
+.purple1 {
+  background-color: $purple1;
+}
+
+.gray {
+  background-color: $gray;
+}
+
+.gray1 {
+  background-color: $gray1;
+}
+
+.gray2 {
+  background-color: $gray2;
+}
+
+.gray3 {
+  background-color: $gray3;
+}
+
+.white {
+  background-color: $white;
+}
+
+.orange {
+  background-color: $orange;
+}
+
+.black {
+  background-color: $black;
+}
+
+.yellow1 {
+  background-color: $yellow1;
+}
+
+.blue {
+  background-color: $blue;
 }
 
 
