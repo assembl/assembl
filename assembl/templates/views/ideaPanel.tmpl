@@ -9,7 +9,13 @@
           <% } %>
         <% } %>
 
+        <% if (Ctx.getCurrentInterfaceType() != Ctx.InterfaceTypes.SIMPLE) { %>
+          <span>{{ gettext('Definition of idea') }}</span>
+        <% } %>
         <div id="ideaPanel-definition" data-toggle="tooltip" title="{{gettext('A definition of this idea')}}"></div>
+        <div>
+          <span class="ideaPanel-seeMore">{{ gettext('See more') }}</span>
+        </div>
         <p class="text-muted margin">{% set creationDate = "<%= app.formatDate(idea.get('creationDate')) %>" %}</p>
 
         <% if (Ctx.getCurrentInterfaceType() != Ctx.InterfaceTypes.SIMPLE) { %>
