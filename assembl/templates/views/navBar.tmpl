@@ -42,10 +42,8 @@
                 <ul class="dropdown-list dropdown-list--bottomright locales">
                     {% for loc in locales %}
                         {% if (loc != locale) %}
-                            <li class="dropdown-listitem">
-                                <a href="#" class="lang js_setLocale" data-locale='{{loc}}'>
+                            <li class="dropdown-listitem lang js_setLocale" data-locale='{{loc}}'>
                             {{loc | upper}}
-                                </a>
                             </li>
                         {% endif %}
                     {% endfor %}
