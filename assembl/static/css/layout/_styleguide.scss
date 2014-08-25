@@ -5,7 +5,7 @@
 .container {
   @include box-sizing(border-box);
   margin: auto;
-  width: 980px;
+  width: 1020px;
 
   .container {
     max-width: 100.1%;
@@ -59,7 +59,7 @@
 
 .bx-color {
   .color {
-    width: 100px;
+    width: 107px;
     height: 50px;
   }
   .code {
