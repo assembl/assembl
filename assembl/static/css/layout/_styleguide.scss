@@ -2,6 +2,36 @@
  * Styleguide things are prefixed with `sg`
  */
 
+.container {
+  @include box-sizing(border-box);
+  margin: auto;
+  width: 980px;
+
+  .container {
+    max-width: 100.1%;
+  }
+
+  @include medium-only {
+    width: 724px;
+  }
+}
+
+.row {
+  @include clearfix();
+  margin-left: -2.762430939%;
+}
+
+.col {
+  @include col-span(12);
+}
+
+@for $i from 1 through 12 {
+  // The column of the grid
+  // ----------------------
+  .col-#{$i} {
+    @include col-span($i);
+  }
+}
 
 // A section to a component
 // =====================
@@ -36,19 +66,9 @@
   font-size: 14px;
 }
 
-.sg-section {
-  .icons-content {
-    .bx {
-      width: 10%;
-      text-align: center;
-      background-color: #FFFFFF;
-      border-radius: 3px;
-      float: left;
-
-      [class^="icon-"], [class*="icon-"] {
-        font-size: 3.3em;
-      }
-    }
+.icons-content {
+  .i[class^="icon-"], i[class*="icon-"] {
+    font-size: 2em;
   }
 }
 
