@@ -8,8 +8,8 @@
         <div class="interface-container">
             <% if(allow_setting_subject) { %>
             <div class="topic-subject">
-                <span class="topic-subject-label">{{gettext('New topic subject:')}}</span>
-                <span class="topic-subject-input"><input type="text" class="messageSend-subject formfield text" /></span>
+                {#<span class="topic-subject-label">{{gettext('New topic subject:')}}</span>#}
+                <span class="topic-subject-input"><input type="text" class="messageSend-subject formfield text" placeholder="{{gettext('New topic subject:')}}" /></span>
             </div>
             <% } %>
             <textarea class="formtextarea messageSend-body text text-muted"><%= body_help_message %></textarea>
