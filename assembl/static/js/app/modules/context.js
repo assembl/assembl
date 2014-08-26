@@ -581,27 +581,23 @@ define(function (require) {
          * Returns a fancy date (ex: a few seconds ago)
          * @return {String}
          */
-        getNiceDateTime: function(date, precise){
+        getNiceDateTime: function (date, precise) {
             //var momentDate = moment(date);
-            
+
             // we assume that server datetimes are given in UTC format
             // (Right now, the server gives UTC datetimes but is not explicit enough because it does not append "+0000". So Moment thinks that the date is not in UTC but in user's timezone. So we have to tell it explicitly, using .utc())
             var momentDate = moment.utc(date);
             momentDate.local(); // switch off UTC mode, which had been activated using .utc()
 
-            if ( momentDate )
-            {
-                if ( precise == true )
-                {
+            if (momentDate) {
+                if (precise == true) {
                     return momentDate.format('LLLL');
                 }
                 var one_year_ago = moment().subtract('years', 1);
-                if ( momentDate.isBefore(one_year_ago) )
-                { // show the exact date
+                if (momentDate.isBefore(one_year_ago)) { // show the exact date
                     return momentDate.format('L');
                 }
-                else
-                { // show "x days ago", or something like that
+                else { // show "x days ago", or something like that
                     return momentDate.fromNow();
                 }
             }
@@ -612,7 +608,7 @@ define(function (require) {
          * Returns a fancy date (ex: a few seconds ago)
          * @return {String}
          */
-        getReadableDateTime: function(date){
+        getReadableDateTime: function (date) {
             return this.getNiceDateTime(date, true);
         },
 
@@ -776,8 +772,7 @@ define(function (require) {
 
             if (!dropdown.hasClass("dropdown-label")) {
                 var parent = $(e.target).parent();
-                if ( parent.hasClass("dropdown-label") )
-                {
+                if (parent.hasClass("dropdown-label")) {
                     dropdown = parent;
                 }
                 else
@@ -808,20 +803,6 @@ define(function (require) {
             message = "url: " + settings.url + "\n" + message + "\n" + exception;
 
             alert(message);
-        },
-
-        /**
-         * Removes all tooltips from the screen.  Without this, active
-         * tooltips (those currently displayed) will be left dangling
-         * if the trigger element is removed from the dom.
-         */
-        removeCurrentlyDisplayedTooltips: function (jqueryElement) {
-            //console.log("removeCurrentlyDisplayedTooltips() called");
-            //This really does need to be global.
-            //Should be fast, they are at the top level and there is only
-            //a few of them.  Maybe it can be more specific to be faster
-            // ex: html > .tipsy I don't know jquery enough to know
-            $('.tooltip').remove();
         },
 
         setLocale: function (locale) {
@@ -880,22 +861,23 @@ define(function (require) {
          * @init
          */
         initTooltips: function (elm) {
-            // reference: http://onehackoranother.com/projects/jquery/tipsy/
-            //console.log("initTooltips() called");
-            /*elm.find('[data-tooltip]').tipsy({
-             delayIn: 400,
-             live: true,
-             gravity: function(){ return this.getAttribute('data-tooltip-position') || 's'; },
-             title: function() { return this.getAttribute('data-tooltip'); },
-             opacity: 0.95,
-             offset: 0,       // pixel offset of tooltip from element
-
-             });*/
-
             elm.find('[data-toggle="tooltip"]').tooltip({
                 container: 'body'
             });
+        },
 
+        /**
+         * Removes all tooltips from the screen.  Without this, active
+         * tooltips (those currently displayed) will be left dangling
+         * if the trigger element is removed from the dom.
+         */
+        removeCurrentlyDisplayedTooltips: function () {
+            //console.log("removeCurrentlyDisplayedTooltips() called");
+            //This really does need to be global.
+            //Should be fast, they are at the top level and there is only
+            //a few of them.  Maybe it can be more specific to be faster
+            // ex: html > .tipsy I don't know jquery enough to know
+            $('.tooltip').remove();
         },
 
         /**

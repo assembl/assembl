@@ -56,6 +56,7 @@ define(function (require) {
          * Closes the panel
          */
         closePanel: function () {
+            Ctx.removeCurrentlyDisplayedTooltips();
             this.model.collection.remove(this.model);
         },
         onRender: function () {
