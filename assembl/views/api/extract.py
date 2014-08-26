@@ -121,6 +121,7 @@ def post_extract(request):
         raise HTTPServerError("Anonymous extracts are not implemeted yet.")
     content = None
     uri = extract_data.get('uri')
+    important = extract_data.get('important', False)
     annotation_text = None
     if uri:
         # Straight from annotator
@@ -171,6 +172,7 @@ def post_extract(request):
         discussion_id=discussion_id,
         body=extract_body,
         idea=idea,
+        important=important,
         annotation_text=annotation_text,
         content=content
     )
@@ -221,6 +223,7 @@ def put_extract(request):
 
     extract.owner_id = user_id or get_database_id("User", extract.owner_id)
     extract.order = updated_extract_data.get('order', extract.order)
+    extract.important = updated_extract_data.get('important', extract.important)
     idea_id = updated_extract_data.get('idIdea', None)
     if idea_id:
         idea = Idea.get_instance(idea_id)

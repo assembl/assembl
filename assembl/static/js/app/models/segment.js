@@ -82,6 +82,7 @@ define(function(require){
       idIdea: null,
       creationDate: null,
       idCreator: null,
+      important: false,
       ranges: [],
       target: null
     },

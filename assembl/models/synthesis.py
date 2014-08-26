@@ -1497,6 +1497,8 @@ class Extract(IdeaContentPositiveLink):
         info = {'rdf': QuadMapPatternS(None, CATALYST.relevantToConversation)})
     discussion = relationship('Discussion', backref='extracts')
 
+    important = Column('important', Boolean, server_default='0')
+
     def extract_graph_name(self):
         from pyramid.threadlocal import get_current_registry
         reg = get_current_registry()

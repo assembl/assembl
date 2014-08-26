@@ -242,6 +242,7 @@
         "target": true,
         "created": "creation_date",
         "idCreator": "creator",
+        "important": true,
         "owner": true,
         "quote": "body",
         "order": true,

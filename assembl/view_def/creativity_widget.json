@@ -210,6 +210,7 @@
         "target": true,
         "created": "creation_date",
         "idCreator": "creator",
+        "important": true,
         "annotator_schema_version": "'\"v1.0\"",
         "owner": true,
         "quote": "body",
