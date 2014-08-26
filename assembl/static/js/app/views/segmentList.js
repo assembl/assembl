@@ -26,6 +26,7 @@ define(function (require) {
         initialize: function (options) {
             this.allUsersCollection = options.allUsersCollection;
             this.allMessagesCollection = options.allMessagesCollection;
+            this.closeDeletes = options.closeDeletes;
         },
         serializeData: function() {
             var post = this.allMessagesCollection.get(this.model.get('idPost')),
@@ -69,17 +70,21 @@ define(function (require) {
          */
         onCloseButtonClick: function (ev) {
             var cid = ev.currentTarget.getAttribute('data-segmentid');
-            this.model.destroy();
+            if (this.closeDeletes) {
+                this.model.destroy();
+            } else {
+                this.model.set('idIdea', null);
+            }
         },
     });
 
     var SegmentListView = Marionette.CollectionView.extend({
         childView: SegmentView,
         initialize: function(options) {
-            this.allUsersCollection = options.allUsersCollection;
             this.childViewOptions = {
                 allUsersCollection: options.allUsersCollection,
-                allMessagesCollection: options.allMessagesCollection
+                allMessagesCollection: options.allMessagesCollection,
+                closeDeletes: options.closeDeletes
             };
         }
     });
@@ -101,6 +106,20 @@ define(function (require) {
                 return myE1?-1:1;
             }
             return e1.get('creationDate') - e2.get('creationDate');
+        }
+    });
+
+    var IdeaSegmentList = Backbone.Subset.extend({
+        beforeInitialize: function (models, options) {
+          this.ideaId = options.ideaId;
+        },
+        name: 'IdeaSegmentList',
+        liveupdate_keys: ['idIdea'],
+        sieve: function(extract) {
+            return extract.get('idIdea') == this.ideaId;
+        },
+        comparator: function(segment) {
+            return -segment.get('creationDate');
         }
     });
 
@@ -136,7 +155,8 @@ define(function (require) {
                     that.clipboardView = new SegmentListView({
                         collection: that.clipboard,
                         allUsersCollection: allUsersCollection,
-                        allMessagesCollection: allMessagesCollection
+                        allMessagesCollection: allMessagesCollection,
+                        closeDeletes: true
                     });
                     that.listenTo(allExtractsCollection, 'invalid', function (model, error) {
                         alert(error);
@@ -387,6 +407,7 @@ define(function (require) {
 
     return {
         Clipboard: Clipboard,
+        IdeaSegmentList: IdeaSegmentList,
         SegmentView: SegmentView,
         SegmentListView: SegmentListView,
         SegmentListPanel:SegmentListPanel

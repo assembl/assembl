@@ -42,7 +42,7 @@
     {#
     <fieldset id="ideaPanel-section-subideas" class="panel-section">
         <legend data-toggle="tooltip" title="{{gettext('The children of this idea.')}}">
-            <span><% print(renderTemplateGetSubIdeasLabel(subIdeas)) %></span>
+            <span><% print(getSubIdeasLabel(subIdeas)) %></span>
         </legend>
         <div class="idealist">
             <% _.each(subIdeas, function(subIdea, i){ %>
@@ -54,7 +54,7 @@
 
     <fieldset id="ideaPanel-section-segments" class="panel-section">
         <legend class="plxs" id="ideaPanel-section-segments-legend" data-toggle="tooltip" title="{{gettext('Expressions of this idea in segments of posts or on the web')}}">
-            <span><% print(renderTemplateGetExtractsLabel(segments)) %></span>
+            <span><% print(getExtractsLabel()) %></span>
         </legend>
         <div class="postitlist">
         </div>

@@ -10,6 +10,7 @@ define(function (require) {
         Permissions = require('utils/permissions'),
         MessageSendView = require('views/messageSend'),
         Notification = require('views/notification'),
+        SegmentList = require('views/segmentList'),
         CollectionManager = require('modules/collectionManager'),
         AssemblPanel = require('views/assemblPanel'),
         Marionette = require('marionette');
@@ -22,7 +23,7 @@ define(function (require) {
         panelType: 'ideaPanel',
         className: 'ideaPanel',
         regions: {
-
+            segmentList: ".postitlist"
         },
         initialize: function (options) {
             var that = this;
@@ -66,7 +67,7 @@ define(function (require) {
          * This is not inside the template beacuse babel wouldn't extract it in
          * the pot file
          */
-        renderTemplateGetSubIdeasLabel: function (subIdeas) {
+        getSubIdeasLabel: function (subIdeas) {
             if (subIdeas.length == 0) {
                 return i18n.gettext('This idea has no sub-ideas');
             }
@@ -78,14 +79,21 @@ define(function (require) {
          * This is not inside the template beacuse babel wouldn't extract it in
          * the pot file
          */
-        renderTemplateGetExtractsLabel: function (extracts) {
-            if (extracts.length == 0) {
+        getExtractsLabel: function () {
+            if (!this.extractList || this.extractList.length == 0) {
                 return i18n.gettext('No extracts were harvested for this idea');
             }
             else {
-                return i18n.sprintf(i18n.ngettext('Harvested in %d extract', 'Harvested in %d extracts', extracts.length), extracts.length);
+                var len = this.extractList.length;
+                return i18n.sprintf(i18n.ngettext('Harvested in %d extract', 'Harvested in %d extracts', len), len);
             }
         },
+
+        renderTemplateGetExtractsLabel: function() {
+            this.$el.find('#ideaPanel-section-segments-legend').html(
+                this.getExtractsLabel());
+        },
+
         /**
          * The render
          */
@@ -105,12 +113,11 @@ define(function (require) {
             return {
                 idea: this.model,
                 subIdeas: subIdeas,
-                segments: [],
                 votable_widgets: votable_widgets,
                 canEdit: canEdit,
                 i18n: i18n,
-                renderTemplateGetExtractsLabel: this.renderTemplateGetExtractsLabel,
-                renderTemplateGetSubIdeasLabel: this.renderTemplateGetSubIdeasLabel,
+                getExtractsLabel: this.getExtractsLabel,
+                getSubIdeasLabel: this.getSubIdeasLabel,
                 canDelete: currentUser.can(Permissions.EDIT_IDEA),
                 canEditNextSynthesis: canEditNextSynthesis,
                 canEditExtracts: currentUser.can(Permissions.EDIT_EXTRACT),
@@ -138,41 +145,24 @@ define(function (require) {
                     canEditNextSynthesis = currentUser.can(Permissions.EDIT_SYNTHESIS),
                     collectionManager = new CollectionManager();
 
-                collectionManager.getAllExtractsCollectionPromise().
-                    done(function (allExtractsCollection) {
-
-                        if (that.model) {
-                            extracts = allExtractsCollection.where({idIdea: that.model.id});
-
-                            $.when(collectionManager.getAllUsersCollectionPromise(),
-                                collectionManager.getAllMessageStructureCollectionPromise()
-                            ).then(
-                                function (allUsersCollection, allMessagesCollection) {
-
-                                    /* We need a real view for that benoitg - 2014-07-23 */
-                                    var ideaExtractList = that.$('.postitlist'),
-                                        template = Ctx.loadTemplate('segment');
-
-                                    _.each(extracts, function (extract) {
-                                        var post = allMessagesCollection.get(extract.get('idPost'));
-                                        if (post) {
-                                            ideaExtractList.append(template(
-                                                {segment: extract,
-                                                    post: post,
-                                                    postCreator: allUsersCollection.get(post.get('idCreator')),
-                                                    canEditExtracts: currentUser.can(Permissions.EDIT_EXTRACT),
-                                                    canEditMyExtracts: currentUser.can(Permissions.EDIT_MY_EXTRACT),
-                                                    ctx: Ctx
-                                                }));
-                                        } else {
-                                            console.log("Missing post for extract!", extract.get('id'), extract.get('idPost'));
-                                        }
-                                    });
-                                    that.$el.find('#ideaPanel-section-segments-legend').html(that.renderTemplateGetExtractsLabel(extracts));
-                                }
-                            );
-                        }
-                    });
+                if (this.extractList) {
+                    $.when(
+                        collectionManager.getAllExtractsCollectionPromise(),
+                        collectionManager.getAllUsersCollectionPromise(),
+                        collectionManager.getAllMessageStructureCollectionPromise()
+                    ).then(
+                        function (allExtractsCollection, allUsersCollection, allMessagesCollection) {
+                            that.extractListView = new SegmentList.SegmentListView({
+                                collection: that.extractList,
+                                allUsersCollection: allUsersCollection,
+                                allMessagesCollection: allMessagesCollection
+                            });
+                            that.segmentList.show(that.extractListView);
+                            that.renderTemplateGetExtractsLabel();
+                        });
+                } else {
+                    this.renderTemplateGetExtractsLabel();
+                }
 
                 var shortTitleField = new EditableField({
                     'model': this.model,
@@ -264,6 +254,7 @@ define(function (require) {
          */
         setIdeaModel: function (idea) {
             var that = this,
+                collectionManager = new CollectionManager(),
                 ideaChangeCallback = function () {
                     //console.log("setCurrentIdea:ideaChangeCallback fired");
                     that.render();
@@ -273,16 +264,35 @@ define(function (require) {
                     this.stopListening(this.model, 'change', ideaChangeCallback);
                 }
                 this.model = idea;
+                if (this.extractList) {
+                    this.stopListening(this.extractList);
+                    this.extractList = null;
+                }
+                if (this.extractListView) {
+                    this.extractListView.unbind();
+                    this.extractListView = null;
+                }
                 if (this.model !== null) {
+                    this.segmentList.reset();
                     //console.log("setCurrentIdea:  setting up new listeners for "+this.model.id);
                     this.listenTo(this.model, 'change', ideaChangeCallback);
                     //Ctx.openPanel(assembl.ideaPanel);
+                    $.when(collectionManager.getAllExtractsCollectionPromise()).then(
+                        function (allExtractsCollection) {
+                            that.extractList = new SegmentList.IdeaSegmentList([], {
+                                parent: allExtractsCollection,
+                                ideaId: that.model.id
+                            });
+                            that.listenTo(that.extractList, "add remove reset change", that.renderTemplateGetExtractsLabel);
+                            that.render();
+                        });
                 } else {
                     //TODO: More sophisticated behaviour here, depending 
                     //on if the panel was opened by selection, or by something else.
                     //app.closePanel(app.ideaPanel);
+                    this.segmentList.empty();
+                    this.render();
                 }
-                this.render();
             }
         },
 
