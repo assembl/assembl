@@ -27,7 +27,7 @@ from assembl.models import (
     AgentProfile, User, Username)
 from assembl.auth import P_READ
 from assembl.auth.password import (format_token, verify_email_token, 
-    verify_password_change_token)
+    verify_password_change_token, password_token)
 from assembl.auth.util import get_identity_provider
 from ...lib import config
 from .. import get_default_context
