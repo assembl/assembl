@@ -18,7 +18,7 @@ $tooltip-arrow-color: $tooltip-bg !default;
   z-index: $zindex-tooltip;
   display: block;
   visibility: visible;
-  font-size: $baseFontSize;
+  font-size: $smallFontSize;
   line-height: 1.4;
   @include opacity(0);
 

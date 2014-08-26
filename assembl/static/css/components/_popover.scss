@@ -53,7 +53,7 @@ $popover-arrow-outer-color: fade_in($popover-border-color, 0.05) !default;
 .popover-title {
   margin: 0; // reset heading margin
   padding: 8px 14px;
-  font-size: $baseFontSize;
+  font-size: $smallFontSize;
   font-weight: normal;
   line-height: 18px;
   background-color: $popover-title-bg;
