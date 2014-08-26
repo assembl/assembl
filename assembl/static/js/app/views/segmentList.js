@@ -4,6 +4,7 @@ define(function (require) {
     var Backbone = require('backbone'),
         _ = require('underscore'),
         $ = require('jquery'),
+        BackboneSubset = require('BackboneSubset'),
         Assembl = require('modules/assembl'),
         Ctx = require('modules/context'),
         Segment = require('models/segment'),
@@ -13,15 +14,107 @@ define(function (require) {
         CollectionManager = require('modules/collectionManager'),
         AssemblPanel = require('views/assemblPanel');
 
-    var SegmentList = AssemblPanel.extend({
+    var SegmentView = Marionette.ItemView.extend({
+        template: '#tmpl-segment',
+        events: {
+            'dragstart .postit': "onDragStart",
+            //'drop': 'onDrop', // bubble up?
+            'click .js_closeExtract': 'onCloseButtonClick',
+
+            'click .segment-link': "onSegmentLinkClick"
+        },
+        initialize: function (options) {
+            this.allUsersCollection = options.allUsersCollection;
+            this.allMessagesCollection = options.allMessagesCollection;
+        },
+        serializeData: function() {
+            var post = this.allMessagesCollection.get(this.model.get('idPost')),
+                currentUser = Ctx.getCurrentUser();
+            return {segment: this.model,
+                    post: post,
+                    postCreator: this.allUsersCollection.get(post.get('idCreator')),
+                    canEditExtracts: currentUser.can(Permissions.EDIT_EXTRACT),
+                    canEditMyExtracts: currentUser.can(Permissions.EDIT_MY_EXTRACT),
+                    ctx: Ctx
+            };
+        },
+        /**
+         * @event
+         */
+        onDragStart: function (ev) {
+            ev.currentTarget.style.opacity = 0.4;
+
+            var cid = ev.currentTarget.getAttribute('data-segmentid'),
+                segment = this.model.collection.get(cid);
+
+            Ctx.showDragbox(ev, segment.getQuote());
+            Ctx.draggedSegment = segment;
+        },
+
+        /**
+         * @event
+         */
+        onSegmentLinkClick: function (ev) {
+            var cid = ev.currentTarget.getAttribute('data-segmentid'),
+                collectionManager = new CollectionManager();
+
+            collectionManager.getAllExtractsCollectionPromise().done(
+                function (allExtractsCollection) {
+                    var segment = allExtractsCollection.get(cid);
+                    Ctx.showTargetBySegment(segment);
+                });
+        },
+        /**
+         * @event
+         */
+        onCloseButtonClick: function (ev) {
+            var cid = ev.currentTarget.getAttribute('data-segmentid');
+            this.model.destroy();
+        },
+    });
+
+    var SegmentListView = Marionette.CollectionView.extend({
+        childView: SegmentView,
+        initialize: function(options) {
+            this.allUsersCollection = options.allUsersCollection;
+            this.childViewOptions = {
+                allUsersCollection: options.allUsersCollection,
+                allMessagesCollection: options.allMessagesCollection
+            };
+        }
+    });
+
+    var Clipboard = Backbone.Subset.extend({
+        beforeInitialize: function (models, options) {
+          this.currentUserId = options.currentUserId;
+        },
+        name: 'Clipboard',
+        liveupdate_keys: ['idIdea'],
+        sieve: function(extract) {
+            return extract.get('idIdea') == null;
+        },
+        comparator: function(e1, e2) {
+            var currentUserId = this.currentUserId,
+                myE1 = e1.get('idCreator') == currentUserId,
+                myE2 = e2.get('idCreator') == currentUserId;
+            if (myE1 != myE2) {
+                return myE1?-1:1;
+            }
+            return e1.get('creationDate') - e2.get('creationDate');
+        }
+    });
+
+    var SegmentListPanel = AssemblPanel.extend({
 
         panelType: 'clipboard',
         className: 'clipboard',
 
         ui: {
             body: ".panel-body",
-            extractList: ".postitlist",
             clipboardCount: ".clipboardCount"
+        },
+        regions: {
+            extractList: '.postitlist'
         },
 
         /**
@@ -31,21 +124,31 @@ define(function (require) {
             var that = this,
                 collectionManager = new CollectionManager();
 
-            collectionManager.getAllExtractsCollectionPromise().done(
-                function (allExtractsCollection) {
-
+            $.when(collectionManager.getAllExtractsCollectionPromise(),
+                collectionManager.getAllUsersCollectionPromise(),
+                collectionManager.getAllMessageStructureCollectionPromise()
+            ).then(
+                function (allExtractsCollection, allUsersCollection, allMessagesCollection) {
+                    that.clipboard = new Clipboard([], {
+                        parent: allExtractsCollection,
+                        currentUserId: Ctx.getCurrentUser().id
+                    });
+                    that.clipboardView = new SegmentListView({
+                        collection: that.clipboard,
+                        allUsersCollection: allUsersCollection,
+                        allMessagesCollection: allMessagesCollection
+                    });
                     that.listenTo(allExtractsCollection, 'invalid', function (model, error) {
                         alert(error);
                     });
 
-                    that.listenTo(allExtractsCollection, 'add remove destroy change reset', that.renderExtracts);
-
                     that.listenTo(allExtractsCollection, 'add', function (segment) {
                         that.highlightSegment(segment);
                     });
+                    that.render();
                 });
 
-            this.listenTo(Assembl.vent, 'segmentList:showSegment', function (segment) {
+            this.listenTo(Assembl.vent, 'segmentListPanel:showSegment', function (segment) {
                 that.showSegment(segment);
             });
             this.panelWrapper = options.panelWrapper;
@@ -78,47 +181,15 @@ define(function (require) {
             var that = this,
                 collectionManager = new CollectionManager();
             if (Ctx.debugRender) {
-                console.log("segmentList:onRender() is firing");
+                console.log("segmentListPanel:onRender() is firing");
             }
-            Ctx.initTooltips(this.$el);
-            this.renderExtracts();
-        },
-
-        renderExtracts: function () {
-            var that = this,
-                collectionManager = new CollectionManager(),
-                currentUser = Ctx.getCurrentUser();
-
-            if (Ctx.debugRender) {
-                console.log("segmentList:renderExtracts() is firing");
+            if (this.clipboard) {
+                var numExtracts = this.clipboard.models.length;
+                Ctx.initTooltips(this.$el);
+                this.extractList.show(this.clipboardView);
+                this.ui.clipboardCount.html("(" + numExtracts + ")");
+                this.panelWrapper.resetTitle(i18n.gettext('Clipboard') + " ("+numExtracts+")");
             }
-
-            $.when(collectionManager.getAllExtractsCollectionPromise(),
-                collectionManager.getAllUsersCollectionPromise(),
-                collectionManager.getAllMessageStructureCollectionPromise()
-            ).then(
-                function (allExtractsCollection, allUsersCollection, allMessagesCollection) {
-                    /* We need a real view for that benoitg - 2014-07-23 */
-                    var template = Ctx.loadTemplate('segment'),
-                        extracts = allExtractsCollection.getClipboard();
-
-                    that.ui.clipboardCount.html("(" + extracts.length + ")");
-
-                    that.ui.extractList.empty();
-                    _.each(extracts, function (extract) {
-                        var post = allMessagesCollection.get(extract.get('idPost'));
-                        that.ui.extractList.append(template(
-                            {segment: extract,
-                                post: post,
-                                postCreator: allUsersCollection.get(post.get('idCreator')),
-                                canEditExtracts: currentUser.can(Permissions.EDIT_EXTRACT),
-                                canEditMyExtracts: currentUser.can(Permissions.EDIT_MY_EXTRACT),
-                                ctx: Ctx
-                            }));
-                    });
-                    that.panelWrapper.resetTitle(i18n.gettext('Clipboard') + " ("+extracts.length+")");
-                }
-            );
         },
 
         /**
@@ -167,30 +238,12 @@ define(function (require) {
         },
 
         /**
-         * Removes a segment by its cid
-         * @param  {String} cid
-         */
-        removeSegmentByCid: function (cid) {
-            var that = this,
-                collectionManager = new CollectionManager();
-
-            collectionManager.getAllExtractsCollectionPromise().done(
-                function (allExtractsCollection) {
-                    var model = allExtractsCollection.get(cid);
-
-                    if (model) {
-                        model.destroy();
-                    }
-                });
-        },
-
-        /**
          * Shows the given segment
          * @param {Segment} segment
          */
         showSegment: function (segment) {
             //TODO: add a new behavior for this (popin...)
-            //Ctx.openPanel(assembl.segmentList);
+            //Ctx.openPanel(assembl.segmentListPanel);
             this.highlightSegment(segment);
         },
 
@@ -219,38 +272,13 @@ define(function (require) {
          * @type {Object}
          */
         events: {
-            'dragstart .postit': "onDragStart",
             'dragend .postit': "onDragEnd",
             'dragover': 'onDragOver',
             'dragleave': 'onDragLeave',
             'drop': 'onDrop',
 
-            'click .closebutton': "onCloseButtonClick",
             'click #segmentList-clear': "onClearButtonClick",
             'click #segmentList-closeButton': "closePanel",
-
-            'click .segment-link': "onSegmentLinkClick"
-        },
-
-        /**
-         * @event
-         */
-        onDragStart: function (ev) {
-            var that = this,
-                collectionManager = new CollectionManager();
-
-            collectionManager.getAllExtractsCollectionPromise().done(
-                function (allExtractsCollection) {
-                    ev.currentTarget.style.opacity = 0.4;
-
-                    var cid = ev.currentTarget.getAttribute('data-segmentid'),
-                        segment = allExtractsCollection.get(cid);
-
-                    Ctx.showDragbox(ev, segment.getQuote());
-                    Ctx.draggedSegment = segment;
-                });
-
-
         },
 
         /**
@@ -278,11 +306,11 @@ define(function (require) {
             }
 
             if (Ctx.draggedSegment !== null || isText) {
-                this.panel.addClass("is-dragover");
+                this.$el.addClass("is-dragover");
             }
 
             if (Ctx.getDraggedAnnotation() !== null) {
-                this.panel.addClass("is-dragover");
+                this.$el.addClass("is-dragover");
             }
         },
 
@@ -290,7 +318,7 @@ define(function (require) {
          * @event
          */
         onDragLeave: function () {
-            this.panel.removeClass('is-dragover');
+            this.$el.removeClass('is-dragover');
         },
 
         /**
@@ -302,7 +330,7 @@ define(function (require) {
                 ev.stopPropagation();
             }
 
-            this.panel.trigger('dragleave');
+            this.$el.trigger('dragleave');
 
             var idea = Ctx.getDraggedIdea();
             if (idea) {
@@ -331,14 +359,6 @@ define(function (require) {
         /**
          * @event
          */
-        onCloseButtonClick: function (ev) {
-            var cid = ev.currentTarget.getAttribute('data-segmentid');
-            this.removeSegmentByCid(cid);
-        },
-
-        /**
-         * @event
-         */
         onClearButtonClick: function (ev) {
             var collectionManager = new CollectionManager(),
                 ok = confirm(i18n.gettext('Are you sure you want to empty your entire clipboard?'));
@@ -352,22 +372,8 @@ define(function (require) {
                         });
                     });
             }
-        },
-
-        /**
-         * @event
-         */
-        onSegmentLinkClick: function (ev) {
-            var cid = ev.currentTarget.getAttribute('data-segmentid'),
-                collectionManager = new CollectionManager();
-
-            collectionManager.getAllExtractsCollectionPromise().done(
-                function (allExtractsCollection) {
-                    var segment = allExtractsCollection.get(cid);
-                    Ctx.showTargetBySegment(segment);
-                });
         }
     });
 
-    return SegmentList;
+    return SegmentListPanel;
 });

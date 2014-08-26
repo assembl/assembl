@@ -31,6 +31,7 @@
     "zeroclipboard": "~1.2.3",
     "tipsy": "~0.1.7",
     "jed": "~0.5.4",
+    "Backbone.Subset": "maparent/Backbone.Subset",
     "d3": "~3.4.11"
   }
 }

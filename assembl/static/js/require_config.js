@@ -16,7 +16,8 @@ var requirejs_config = {
         'jquery-highlight': 'lib/jquery-highlight/jquery.highlight',
 
         'backbone': 'bower/backbone/backbone',
-        'underscore': 'bower/underscore/underscore-min',
+        'BackboneSubset': 'bower/Backbone.Subset/backbone.subset',
+        'underscore': 'bower/underscore/underscore',
 
         'annotator': 'lib/annotator/annotator-full.min',
 
@@ -114,6 +115,10 @@ var requirejs_config = {
         'backboneModal': {
             deps: ['backbone'],
             exports: 'BackboneModal'
+        },
+        'BackboneSubset': {
+            deps: ['backbone'],
+            exports: 'BackboneSubset'
         },
         'modal': {
             deps: ['backbone'],

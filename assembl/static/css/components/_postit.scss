@@ -7,7 +7,7 @@ $postit-color-light: rgba(255, 255, 160, 1);
 // A wrapper for two or more .postit
 // ====================
 div.postitlist {
-  > div.postit {
+    div.postit {
     overflow: visible;
     min-width: 200px; //Width from the shadow below.
     margin: 1em;
@@ -81,6 +81,6 @@ div.postitlist {
   }
 }
 
-div.postitlist > div.postit.is-highlighted {
+div.postitlist div.postit.is-highlighted {
   @include box-shadow(0px 0px 10px rgba(0, 0, 0, .7));
 }
