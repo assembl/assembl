@@ -9,7 +9,7 @@ define(function (require) {
         IdeaPanel = require('views/ideaPanel'),  // ideaPanel
         MessageList = require('views/messageList'),  // messageList
         NavigationView = require('views/navigation/navigation'),  // navSidebar
-        SegmentList = require('views/segmentList'),  // clipboard
+        SegmentList = require('views/segmentList').SegmentListPanel,  // clipboard
         SynthesisNavPanel = require('views/navigation/synthesisInNavigation'),  // synthesisNavPanel
         SynthesisPanel = require('views/synthesisPanel');  // synthesisPanel
 

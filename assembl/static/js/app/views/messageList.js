@@ -13,7 +13,6 @@ define(function (require) {
         PostQuery = require('views/messageListPostQuery'),
         Permissions = require('utils/permissions'),
         MessageSendView = require('views/messageSend'),
-        SegmentList = require('views/segmentList'),
         AssemblPanel = require('views/assemblPanel'),
         CollectionManager = require('modules/collectionManager');
 

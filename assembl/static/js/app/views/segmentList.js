@@ -142,9 +142,10 @@ define(function (require) {
                         alert(error);
                     });
 
-                    that.listenTo(allExtractsCollection, 'add', function (segment) {
+                    that.listenTo(that.clipboard, 'add', function (segment) {
                         that.highlightSegment(segment);
                     });
+                    that.listenTo(that.clipboard, 'add remove reset change', that.resetTitle);
                     that.render();
                 });
 
@@ -184,11 +185,20 @@ define(function (require) {
                 console.log("segmentListPanel:onRender() is firing");
             }
             if (this.clipboard) {
-                var numExtracts = this.clipboard.models.length;
                 Ctx.initTooltips(this.$el);
                 this.extractList.show(this.clipboardView);
+            }
+            this.resetTitle();
+        },
+
+        resetTitle: function() {
+            if (this.clipboard) {
+                var numExtracts = this.clipboard.models.length;
                 this.ui.clipboardCount.html("(" + numExtracts + ")");
                 this.panelWrapper.resetTitle(i18n.gettext('Clipboard') + " ("+numExtracts+")");
+            } else {
+                this.ui.clipboardCount.html("");
+                this.panelWrapper.resetTitle(i18n.gettext('Clipboard') + " ("+i18n.gettext('empty')+")");
             }
         },
 
@@ -375,5 +385,10 @@ define(function (require) {
         }
     });
 
-    return SegmentListPanel;
+    return {
+        Clipboard: Clipboard,
+        SegmentView: SegmentView,
+        SegmentListView: SegmentListView,
+        SegmentListPanel:SegmentListPanel
+    };
 });
