@@ -215,29 +215,4 @@ If you use vagrant, we have a few processes that expect to use socket files in %
 
 ## Internationalization
 
-Here is some help in case you want to improve translations of Assembl.
-
-Extract i18n keys from source files and put them in .pot files
-```
-python setup.py extract_messages
-```
-
-Update all the existing translations catalogs based on their .pot file (PO template file). Running the command will update the .po files. These .po files can then be edited by translators.
-```
-python setup.py update_catalog
-```
-
-Compile .po files into .mo binary files, so that these translations can be used by the application
-```
-python setup.py compile_catalog
-```
-
-If you have made edits to the .po files, restart the pserve process to see how it displays in your browser
-```
-supervisorctl restart dev:pserve
-```
-
-Do not commit the .mo files, because these are compiled binary files.
-
-If your .po file contains "msgid" lines which are preceeded by "#, fuzzy" lines, these sentences may appear in their original language in the application. If you are sure that these sentences are correctly translated, remove the "#, fuzzy" line and recompile the catalog. They will then be displayed normally.  However, it is much easier to use a po editor like poedit...
-
+See (doc/localization.md)
