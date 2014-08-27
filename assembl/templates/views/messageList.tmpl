@@ -9,50 +9,41 @@
     <% } %>
   <% } else { %>
     <div class="view-config pls">
-        <div class="js_messageListViewStyle-dropdown dropdown"></div>
+      <div class="js_messageListViewStyle-dropdown dropdown"></div>
 
-        <div class="js_defaultMessageView-dropdown dropdown"></div>
+      <div class="js_defaultMessageView-dropdown dropdown"></div>
 
-        <div class="dropdown">
-
-            <span class="dropdown-label">
-                {{ gettext('Add filter') }}
-            </span><i class="icon-arrowdown"></i>
-            <ul class="dropdown-list">
-                {# A "Clear filters" button is now displayed when at least one filter is active
-                <li class="js_messageList-allmessages dropdown-listitem">{{ gettext('All messages') }}</li>
-                #}
-                <li class="js_messageList-onlyorphan dropdown-listitem">{{ gettext('Orphan messages') }}</li>
-                <li class="js_messageList-onlysynthesis dropdown-listitem">{{ gettext('Synthesis messages') }}</li>
-                <li class="js_messageList-isunread dropdown-listitem">{{ gettext('Unread messages') }}</li>
-                {#
-                <li class="dropdown-listitem">{{ gettext('Uncaught') }}</li>
-                <li class="dropdown-listitem">{{ gettext('Followed') }}</li>
-                #}
-            </ul>
-        </div>
+      <div class="dropdown">
+        <span class="dropdown-label">{{ gettext('Add filter') }}</span>
+        <i class="icon-arrowdown"></i>
+        <ul class="dropdown-list">
+          <li class="js_messageList-onlyorphan dropdown-listitem">{{ gettext('Orphan messages') }}</li>
+          <li class="js_messageList-onlysynthesis dropdown-listitem">{{ gettext('Synthesis messages') }}</li>
+          <li class="js_messageList-isunread dropdown-listitem">{{ gettext('Unread messages') }}</li>
+          {#
+          <li class="dropdown-listitem">{{ gettext('Uncaught') }}</li>
+          <li class="dropdown-listitem">{{ gettext('Followed') }}</li>
+          #}
+        </ul>
+      </div>
     </div>
   <% } %>
 
-<% if (Ctx.getCurrentInterfaceType() === Ctx.InterfaceTypes.EXPERT) { %>
+  <% if (Ctx.getCurrentInterfaceType() === Ctx.InterfaceTypes.EXPERT) { %>
     <div class="messageList-query-info"></div>
-<% } %>
-    <div class="js_messageList-toparea messageList-toparea margin text-center hidden">
-        <a class="js_messageList-prevbutton button">{{ gettext('Load previous messages') }}</a>
-    </div>
+  <% } %>
+  <div class="js_messageList-toparea messageList-toparea margin text-center hidden">
+    <a class="js_messageList-prevbutton button">{{ gettext('Load previous messages') }}</a>
+  </div>
   
-    <div class="messageList-list idealist <%= currentViewStyle.id %>"></div>
+  <div class="messageList-list idealist <%= currentViewStyle.id %>"></div>
 
-    <div class="messageList-bottomarea margin text-center hidden">
-        <a class="js_messageList-morebutton button">{{ gettext('Load next messages') }}</a>
-    </div>
+  <div class="js_messageList-bottomarea messageList-bottomarea margin text-center hidden">
+    <a class="js_messageList-morebutton button">{{ gettext('Load next messages') }}</a>
+  </div>
 
-    <% if (canPost) { %>
-        <div class="messagelist-replybox pls"></div>
-    <% } %>
+  <% if (canPost) { %>
+    <div class="messagelist-replybox pls"></div>
+  <% } %>
 
 </div>
-
-{#
-<footer class="panel-footer"></footer>
-#}

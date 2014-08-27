@@ -615,7 +615,7 @@ define(function (require) {
                 models = this.getAllMessagesToDisplay();
                 views = this.getRenderedMessagesFlat(models, requestedOffsets, returnedOffsets);
             }
-            //console.log("returnedOffsets:", returnedOffsets);
+            //console.log("returnedOffsets:", returnedOffsets, "models.length", models.length);
             this.offsetStart = returnedOffsets['offsetStart']
             this.offsetEnd = returnedOffsets['offsetEnd']
 
