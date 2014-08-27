@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: assembl 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-08-26 11:33-0400\n"
+"POT-Creation-Date: 2014-08-25 11:12-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -86,7 +86,7 @@ msgstr ""
 msgid "Extract"
 msgstr ""
 
-#: assembl/static/js/app/modules/context.js:802
+#: assembl/static/js/app/modules/context.js:807
 msgid "ajax error message:"
 msgstr ""
 
@@ -95,65 +95,65 @@ msgstr ""
 msgid "Home"
 msgstr ""
 
-#: assembl/static/js/app/views/contextPage.js:278
+#: assembl/static/js/app/views/contextPage.js:288
 msgid "last week"
 msgstr ""
 
-#: assembl/static/js/app/views/contextPage.js:281
+#: assembl/static/js/app/views/contextPage.js:291
 msgid "last 2 weeks"
 msgstr ""
 
-#: assembl/static/js/app/views/contextPage.js:284
+#: assembl/static/js/app/views/contextPage.js:294
 msgid "last month"
 msgstr ""
 
-#: assembl/static/js/app/views/contextPage.js:287
+#: assembl/static/js/app/views/contextPage.js:297
 msgid "last 3 months"
 msgstr ""
 
-#: assembl/static/js/app/views/contextPage.js:290
+#: assembl/static/js/app/views/contextPage.js:300
 msgid "last 6 months"
 msgstr ""
 
-#: assembl/static/js/app/views/contextPage.js:293
+#: assembl/static/js/app/views/contextPage.js:303
 msgid "last year"
 msgstr ""
 
-#: assembl/static/js/app/views/contextPage.js:444
-msgid "authors have contributed since"
-msgstr ""
-
-#: assembl/static/js/app/views/contextPage.js:449
-msgid "new authors started contributing since"
-msgstr ""
-
-#: assembl/static/js/app/views/contextPage.js:455
-msgid "active authors were already contributing before"
+#: assembl/static/js/app/views/contextPage.js:458
+msgid "authors since"
 msgstr ""
 
 #: assembl/static/js/app/views/contextPage.js:463
-msgid "authors' last contribution was before"
+msgid "new authors since"
 msgstr ""
 
-#: assembl/static/js/app/views/contextPage.js:474
-msgid "authors have contributed since the beginning of the debate"
+#: assembl/static/js/app/views/contextPage.js:469
+msgid "already contributing authors since"
 msgstr ""
 
-#: assembl/static/js/app/views/contextPage.js:493
+#: assembl/static/js/app/views/contextPage.js:477
+msgid "authors before"
+msgstr ""
+
+#: assembl/static/js/app/views/contextPage.js:488
+msgid "authors since the beginning of the debate"
+msgstr ""
+
+#: assembl/static/js/app/views/contextPage.js:507
 msgid "Evolution of the total number of messages"
 msgstr ""
 
-#: assembl/static/js/app/views/contextPage.js:493
+#: assembl/static/js/app/views/contextPage.js:507
 msgid "Evolution of the number of messages posted"
 msgstr ""
 
-#: assembl/static/js/app/views/contextPage.js:494
+#: assembl/static/js/app/views/contextPage.js:508
 #: assembl/templates/views/contextPage.tmpl:195
 msgid "Statistics"
 msgstr ""
 
-#: assembl/static/js/app/views/contextPage.js:860
-#: assembl/static/js/app/views/contextPage.js:868
+#: assembl/static/js/app/views/contextPage.js:842
+#: assembl/static/js/app/views/contextPage.js:848
 msgid "messages, posted by"
 msgstr ""
 

@@ -1,284 +1,286 @@
 // The list of Ideas
 // =================
 .idealist {
-    background-color: 40px;
+  background-color: 40px;
 }
 
 // A row within the list of ideas
 // -----------------
 .idealist-item {
-    line-height: 40px;
-    &.hidden {
-        display: none;
-    }
+  line-height: 40px;
+  &.hidden {
+    display: none;
+  }
 }
 
 // idea list open ( showing the children )
 // *********************
-.idealist-item.is-open {}
-
+.idealist-item.is-open {
+}
 
 // When there is something being dragged over
 // *********************
-.idealist-item.is-dragover {}
+.idealist-item.is-dragover {
+}
 
 // When there is something being dragged in above area
 // *********************
-.idealist-item.is-dragover-above {}
+.idealist-item.is-dragover-above {
+}
 
 // When there is something being dragged in below area
 // *********************
-.idealist-item.is-dragover-below {}
+.idealist-item.is-dragover-below {
+}
 
 // When it is selected
 // *********************
-.idealist-item.is-selected {}
-
+.idealist-item.is-selected {
+}
 
 // Where the content is placed
 // --------------
 .idealist-body {
-    position: relative;
-    //border-bottom: $idealist-border;
+  position: relative;
+  //border-bottom: $idealist-border;
 
-    &:first-child {
-        border-top: 0;
+  &:first-child {
+    border-top: 0;
+  }
+
+  .idealist-item.is-dragover-above > &,
+  .idealist-item.is-dragover > &,
+  .idealist-item.is-dragover-below > & {
+    border-color: transparent !important;
+
+    .idealist-abovedropzone {
+      border-top: solid 1px $orange !important;
     }
-
-
-    .idealist-item.is-dragover-above > &,
-    .idealist-item.is-dragover > &,
-    .idealist-item.is-dragover-below > & {
-        border-color: transparent !important;
-
-        .idealist-abovedropzone { border-top: solid 1px $orange !important; }
-        .idealist-dropzone { border-color: $orange !important; }
+    .idealist-dropzone {
+      border-color: $orange !important;
     }
+  }
 
-    .idealist-item.is-dragover:not(.is-dragover-below) > & {
-        background-color: $yellow1;
-    }
+  .idealist-item.is-dragover:not(.is-dragover-below) > & {
+    background-color: $yellow;
+  }
 
-    .idealist-item.is-selected > & {
-        background-color: $blue;
-    }
+  .idealist-item.is-selected > & {
+    background-color: $blue;
+  }
 
 }
 
 // For an root idea
 // +++++++
 .idealist-body.idealist-body--rootidea {
-    font-size: 12px;
-    line-height: 20px;
-    background-color: #e2f5ec;
+  font-size: 12px;
+  line-height: 20px;
+  background-color: #e2f5ec;
 }
 
 .idealist-body.idealist-body--synthesis {
-    @extend .idealist-body.idealist-body--rootidea;
+  @extend .idealist-body.idealist-body--rootidea;
 
-    border-bottom: solid 1px darken(#e2f5ec, 20%);
+  border-bottom: solid 1px darken(#e2f5ec, 20%);
 }
-
 
 // Area where to drop and create a sibling
 // --------------
 .idealist-abovedropzone {
-    @include box-sizing( border-box );
-    position: absolute;
-    top: 0px;
-    right: 0;
-    left: 0;
+  @include box-sizing(border-box);
+  position: absolute;
+  top: 0px;
+  right: 0;
+  left: 0;
 
-    height: 10px;
+  height: 10px;
 
-    .idealist-item.is-dragover-above > .idealist-body & {
-        background-color: $yellow1;
-    }
+  .idealist-item.is-dragover-above > .idealist-body & {
+    background-color: $yellow;
+  }
 
 }
-
 
 // Area where to drop and create a child
 // --------------
 .idealist-dropzone {
-    @include box-sizing( border-box );
-    position: absolute;
-    right: 0;
-    bottom: -1px;
-    left: 0;
+  @include box-sizing(border-box);
+  position: absolute;
+  right: 0;
+  bottom: -1px;
+  left: 0;
 
-    height: 10px;
-    //border-bottom: $idealist-border;
+  height: 10px;
+  //border-bottom: $idealist-border;
 
-    .idealist-item.is-dragover-below > .idealist-body & {
-        background-color: $yellow1;
-    }
+  .idealist-item.is-dragover-below > .idealist-body & {
+    background-color: $yellow;
+  }
 
 }
 
 // Subtitle ( which goes AFTER the title visually )
 // ----------------
 .idealist-subtitle {
-    float: right;
-    color: $gray1;
-    margin: 0 10px;
+  float: right;
+  color: $gray1;
+  margin: 0 10px;
 }
 
 // The title
 // ----------
 .idealist-title {
-    display: block;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    cursor: pointer;
-    padding-left: 10px;
+  display: block;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  cursor: pointer;
+  padding-left: 10px;
 }
 
 .idealist-title-unread {
-    font-weight: bold;
+  font-weight: bold;
 }
 
 .idealist-title-unread-count {
-    /* color: blue; */
+  /* color: blue; */
 }
 
 // The counter at the right
 // ------------------
 .idealist-counter {
-    float: right;
-    padding: 0 12px 0 25px;
-    min-width: 30px;
-    text-align: right;
+  float: right;
+  padding: 0 12px 0 25px;
+  min-width: 30px;
+  text-align: right;
   font-size: 11px;
-    font-weight: bold;
+  font-weight: bold;
   color: $gray1;
-    .idea-unread-posts {
-        color:#555;
-    }
+  .idea-unread-posts {
+    color: #555;
+  }
 }
 
 // Remove button
 // --------------
 .idealist-removebtn {
-    @extend .idealist-counter;
-    font-size: 18px;
-    cursor: pointer;
+  @extend .idealist-counter;
+  font-size: 18px;
+  cursor: pointer;
 }
 
 // The arrow
 // ------------
 .idealist-arrow {
-    background: url(#{$img-dir}/idealist/idealist-arrow-closed.png) center center no-repeat;
+  background: url(#{$img-dir}/idealist/idealist-arrow-closed.png) center center no-repeat;
+  &.level1 {
+    background: url(#{$img-dir}/idealist/idealist-arrow-closed-l1.png) center center no-repeat;
+  }
+
+  width: 30px;
+  height: 40px;
+  display: block;
+  float: left;
+  cursor: pointer;
+
+  // @include transition( transform 0.4s );
+  // @include transform( rotate(-90deg) );
+  // opacity: 0.55;
+
+  // &:hover {
+  //     opacity: 1;
+  // }
+
+  .idealist-item.is-open > .idealist-body & {
+    background: url(#{$img-dir}/idealist/idealist-arrow-open.png) center center no-repeat;
     &.level1 {
-        background: url(#{$img-dir}/idealist/idealist-arrow-closed-l1.png) center center no-repeat;
+      background: url(#{$img-dir}/idealist/idealist-arrow-open-l1.png) center center no-repeat;
     }
-
-    width: 30px;
-    height: 40px;
-    display: block;
-    float: left;
-    cursor: pointer;
-
-    // @include transition( transform 0.4s );
-    // @include transform( rotate(-90deg) );
-    // opacity: 0.55;
-
-    // &:hover {
-    //     opacity: 1;
-    // }
-
-    .idealist-item.is-open > .idealist-body & {
-        background: url(#{$img-dir}/idealist/idealist-arrow-open.png) center center no-repeat;
-        &.level1 {
-            background: url(#{$img-dir}/idealist/idealist-arrow-open-l1.png) center center no-repeat;
-        }
-        // @include transform( rotate(0deg) );
-    }
+    // @include transform( rotate(0deg) );
+  }
 }
+
 // Reserves the space if there are no children to maintain indentation
 .idealist-noarrow {
-    background: url(#{$img-dir}/idealist/idealist-noarrow.png) center center no-repeat;
-    width: 30px;
-    height: 40px;
-    display: block;
-    float: left;
+  background: url(#{$img-dir}/idealist/idealist-noarrow.png) center center no-repeat;
+  width: 30px;
+  height: 40px;
+  display: block;
+  float: left;
 }
 
 // An empty space for indentation
 // --------------
 .idealist-space {
-    display: block;
-    width: 30px;
-    height: 40px;
-    float: left;
+  display: block;
+  width: 30px;
+  height: 40px;
+  float: left;
 }
 
 // The bar to make an .idealist-item looks like a child
 // --------------
 .idealist-bar {
-    background: url(#{$img-dir}/idealist/idealist-bar.png) center center no-repeat;
-    display: block;
-    width: 30px;
-    height: 40px;
-    float: left;
+  background: url(#{$img-dir}/idealist/idealist-bar.png) center center no-repeat;
+  display: block;
+  width: 30px;
+  height: 40px;
+  float: left;
 }
-
 
 // The link between an idealist and its parent
 // --------------
 .idealist-link {
-    background: url(#{$img-dir}/idealist/idealist-link.png) center center no-repeat;
-    display: block;
-    width: 30px;
-    height: 40px;
-    float: left;
+  background: url(#{$img-dir}/idealist/idealist-link.png) center center no-repeat;
+  display: block;
+  width: 30px;
+  height: 40px;
+  float: left;
 }
 
 .idealist-link-last {
-    background: url(#{$img-dir}/idealist/idealist-link-last.png) center center no-repeat;
-    display: block;
-    width: 30px;
-    height: 40px;
-    float: left;
+  background: url(#{$img-dir}/idealist/idealist-link-last.png) center center no-repeat;
+  display: block;
+  width: 30px;
+  height: 40px;
+  float: left;
 }
-
 
 // the graph
 // ---------
 
 #idealist-graph {
+  height: 100%;
+  width: 100%;
+  display: none;
+  #infovis {
     height: 100%;
     width: 100%;
-    display:none;
-    #infovis {
-        height: 100%;
-        width: 100%;
-    }
-    #inner-details {
-        height: auto;
-        width: 100%;
-    }
+  }
+  #inner-details {
+    height: auto;
+    width: 100%;
+  }
 }
-
 
 // The child list
 // --------------
 .idealist-children {
-    height: 0px;
-    overflow: hidden;
+  height: 0px;
+  overflow: hidden;
+  display: none;
+
+  @include transition(height 0.4s);
+  @include transform(translateZ(0));
+
+  .idealist-item.is-open > & {
+    height: auto;
+    display: inline; // initial;
+  }
+
+  &:empty {
     display: none;
-
-    @include transition( height 0.4s );
-    @include transform( translateZ(0) );
-
-    .idealist-item.is-open > & {
-        height: auto;
-        display: inline; // initial;
-    }
-
-    &:empty {
-        display: none;
-    }
+  }
 
 }

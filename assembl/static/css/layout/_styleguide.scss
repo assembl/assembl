@@ -36,24 +36,23 @@
 // A section to a component
 // =====================
 .sg-section {
-    position: relative;
-    margin-top: 50px;
+  position: relative;
+  margin-top: 50px;
 }
 
 // Title of a section
 .sg-title {
-    margin: 0;
+  margin: 0;
 }
 
 // A description within an .sg-section
 // -----------------
 .sg-description {
-    position: absolute;
-    top: 2em;
-    left: 0px;
-    max-width: 220px;
+  position: absolute;
+  top: 2em;
+  left: 0px;
+  max-width: 220px;
 }
-
 
 // styleguide components
 
@@ -132,10 +131,6 @@ table.table {
   background-color: $purple2;
 }
 
-.purple3 {
-  background-color: $purple3;
-}
-
 .gray {
   background-color: $gray;
 }
@@ -172,16 +167,12 @@ table.table {
   background-color: $orange2;
 }
 
-.orange3 {
-  background-color: $orange3;
-}
-
 .black {
   background-color: $black;
 }
 
-.yellow1 {
-  background-color: $yellow1;
+.yellow {
+  background-color: $yellow;
 }
 
 .blue {

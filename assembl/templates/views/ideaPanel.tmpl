@@ -4,13 +4,13 @@
         <div id="ideaPanel-shorttitle" class="text-bold mbs" data-toggle="tooltip" title="{{gettext('The name of this idea in the table of ideas')}}"></div>
         <% if (canEditNextSynthesis) { %>
           <% if (Ctx.getCurrentInterfaceType() != Ctx.InterfaceTypes.SIMPLE) { %>
-            <span class="ideaPanel-legend">{{ gettext('Expression in next synthesis:') }}</span>
+            <span class="ideaPanel-legend legend">{{ gettext('Expression in next synthesis:') }}</span>
             <div id="ideaPanel-longtitle" class="mbs" data-toggle="tooltip" title="{{gettext('Expression of this idea in the next synthesis.  You may want to edit them all together in the synthesis panel rather than here.')}}"></div>
           <% } %>
         <% } %>
 
         <% if (Ctx.getCurrentInterfaceType() != Ctx.InterfaceTypes.SIMPLE) { %>
-          <span class="ideaPanel-legend">{{ gettext('Definition of idea') }}</span>
+          <span class="ideaPanel-legend legend">{{ gettext('Definition of idea') }}</span>
         <% } %>
         <div id="ideaPanel-definition" data-toggle="tooltip" title="{{gettext('A definition of this idea')}}"></div>
         <div>
@@ -33,10 +33,13 @@
          }); %>
 
         {# Instanciate a widget from this idea #}
-        <% if ( canCreateWidgets ) {
-            var url = "/widget/vote/?admin=1#/admin/create_from_idea?idea="+encodeURIComponent(idea.getId()+"?view=creativity_widget");
-            print(" <a class='plxs' href=\""+url+"\" target=\"_blank\">{{gettext('Create a vote widget on this idea')}}</a>");
-        } %>
+        <% if (Ctx.getCurrentInterfaceType() != Ctx.InterfaceTypes.SIMPLE){ %>
+          <% if ( canCreateWidgets ) {
+              var url = "/widget/vote/?admin=1#/admin/create_from_idea?idea="+encodeURIComponent(idea.getId()+"?view=creativity_widget");
+              print(" <a class='plxs' href=\""+url+"\" target=\"_blank\">{{gettext('Create a vote widget on this idea')}}</a>");
+
+          } %>
+        <% } %>
     </fieldset>
 
     {#
@@ -60,7 +63,7 @@
         </div>
         <% if (canAddExtracts) { %>
         <div>
-            <p>{{ gettext('Add extracts by dragging them in this panel from the clipboard or messages') }}</p>
+            <p class="mlxs">{{ gettext('Add extracts by dragging them in this panel from the clipboard or messages') }}</p>
         </div>
         <% } %>
     </fieldset>

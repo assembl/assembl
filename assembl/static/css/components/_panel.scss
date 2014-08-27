@@ -120,13 +120,15 @@
 .groupPanel .panelContents {
   /*height: 100%;*/
   height: calc(100vh - 60px); /* retain the height of everything on top of it. probably not the best solution because not dynamic */
-  
+
 }
+
 .groupPanel header ~ .panelContents {
   height: calc(100% - 35px); /* retain the height of the header */
 }
 
-.panelContents > div { /* probably not the best solution */
+.panelContents > div {
+  /* probably not the best solution */
   height: 100%;
 }
 
@@ -226,18 +228,22 @@
 }
 
 // Special case for small number of actual panels
-#groupsContainer.allGroupsGridSize-1 .groupPanel {
-  width:100%;
-}
-#groupsContainer.allGroupsGridSize-2 .groupPanel {
-  &.panelGridWidth-1 {
-    width: 50%;
-  }
-  &.panelGridWidth-2 {
+#groupsContainer.allGroupsGridSize-1 {
+  .groupPanel {
     width: 100%;
   }
 }
 
+#groupsContainer.allGroupsGridSize-2 {
+  .groupPanel {
+    &.panelGridWidth-1 {
+      width: 50%;
+    }
+    &.panelGridWidth-2 {
+      width: 100%;
+    }
+  }
+}
 
 // To put the content
 // -----------
@@ -248,12 +254,11 @@
   right: 0;
   bottom: 1px;
   left: 0;
+  box-sizing: border-box;
   overflow-y: auto;
   overflow-x: hidden;
-  box-sizing: border-box;
-
   .groupPanel.is-dragover & {
-    background-color: $yellow1;
+    background-color: $yellow;
   }
 }
 
