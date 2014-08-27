@@ -11,9 +11,9 @@ $marginLinkbis: 30px;
 }
 .ideafamily-item {
     .ideafamily-body {
-        border-left: solid 1px $gray;
+      border-left: solid 1px #CCCCCC;
       margin-left: $marginLinkbis/2 - 1;
-        position: relative;
+      position: relative;
     
         > .ideafamily-link {
             width: 30px;
@@ -83,7 +83,7 @@ $marginLinkbis: 30px;
         > .ideafamily-body {
             > .ideafamily-idea {
               margin-left: $marginLinkbis/2 - 1;
-                border-left: solid 1px $gray;
+              border-left: solid 1px #CCCCCC;
             }
         }
     }
