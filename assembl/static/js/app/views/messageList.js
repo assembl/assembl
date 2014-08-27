@@ -178,17 +178,21 @@ define(function (require) {
 
             this.listenTo(Assembl.vent, 'idea:selected', function (idea) {
                 //console.log("vent.on idea:selected fired");
-                if (idea && that.currentQuery.isFilterInQuery(that.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, idea.getId())) {
-                    //Filter is already in sync
-                    //TODO:  Detect the case where there is no idea selected, and we already have no filter on ideas
-                    return;
-
-                } else {
-                    that.panelWrapper.filterThroughPanelLock(
-                        function () {
-                            that.syncWithCurrentIdea();
-                        }, 'syncWithCurrentIdea');
+                if (idea) {
+                    if (idea.id) {
+                        if (that.currentQuery.isFilterInQuery(that.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, idea.getId())) {
+                            //Filter is already in sync
+                            //TODO:  Detect the case where there is no idea selected, and we already have no filter on ideas
+                            return;
+                        }
+                    } else {
+                        this.listenToOnce(idea, "acquiredId", function() {
+                            that.ideaChanged();
+                        });
+                        return;
+                    }
                 }
+                this.ideaChanged();
             });
 
             this.listenTo(Assembl.vent, 'messageList:showMessageById', function (id, callback) {
@@ -235,6 +239,14 @@ define(function (require) {
                     that.currentQuery.clearAllFilters();
                 }
             });
+        },
+
+        ideaChanged: function() {
+            var that = this;
+            this.panelWrapper.filterThroughPanelLock(
+                function () {
+                    that.syncWithCurrentIdea();
+                }, 'syncWithCurrentIdea');
         },
 
         /**
