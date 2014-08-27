@@ -40,12 +40,10 @@ define(function (require) {
                         raw_ideas;
                     
                     if (!that.model) {
-                      console.log("synthesisPanel:  not model specified, finding next synthesis");
-                      //If unspecified, we edit the next_synthesis
+                      //If unspecified, we find the next_synthesis
                       that.model = _.find(synthesisCollection.models, function (model) {
                           return model.get('is_next_synthesis');
                       });
-                      console.log("Found synthesis: ", that.model);
                     }
                     raw_ideas = that.model.get('ideas');
                     //console.log("Raw Ideas from model: ", raw_ideas)
