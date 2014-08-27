@@ -59,7 +59,7 @@ define(function (require) {
             messageListView = this.groupContent.getViewByTypeName('messageList');
             messageListView.currentQuery.clearAllFilters();
             messageListView.toggleFilterByPostId(messageId);
-            messageListView.showMessageById(messageId);
+            messageListView.showMessageById(messageId, undefined, false);
             // Show that entry is selected
             this.selectSynthesisInMenu(messageId);
         },

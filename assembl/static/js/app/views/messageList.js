@@ -1385,9 +1385,10 @@ define(function (require) {
         /**
          * Highlights the message by the given id
          * @param {String} id
-         * @param {Function} [callback] The callback function to call if message is found
+         * @param {Function} [callback] Optional: The callback function to call if message is found
+         * @param {Boolean} shouldHighlightMessageSelected, defaults to true
          */
-        showMessageById: function (id, callback) {
+        showMessageById: function (id, callback, shouldHighlightMessageSelected) {
             var that = this,
                 selector = Ctx.format('[id="message-{0}"]', id),
                 el,
@@ -1396,6 +1397,8 @@ define(function (require) {
                 requestedOffsets,
                 collectionManager = new CollectionManager();
 
+            shouldHighlightMessageSelected = (typeof shouldHighlightMessageSelected === "undefined") ? true : shouldHighlightMessageSelected;
+            
             $.when(collectionManager.getAllMessageStructureCollectionPromise(),
                 this.currentQuery.getResultMessageIdCollectionPromise()).done(
                 function (allMessageStructureCollection, resultMessageIdCollection) {
@@ -1427,7 +1430,9 @@ define(function (require) {
                         return;
                     }
                     var real_callback = function () {
-                        $(selector).highlight();
+                        if(shouldHighlightMessageSelected) {
+                          $(selector).highlight();
+                        }
                         if (_.isFunction(callback)) {
                             callback();
                         }
