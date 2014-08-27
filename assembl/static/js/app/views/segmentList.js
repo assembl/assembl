@@ -142,21 +142,13 @@ define(function (require) {
         initialize: function (options) {
             var that = this,
                 collectionManager = new CollectionManager();
+            this.panelWrapper = options.panelWrapper;
 
-            $.when(collectionManager.getAllExtractsCollectionPromise(),
-                collectionManager.getAllUsersCollectionPromise(),
-                collectionManager.getAllMessageStructureCollectionPromise()
-            ).then(
-                function (allExtractsCollection, allUsersCollection, allMessagesCollection) {
+            $.when(collectionManager.getAllExtractsCollectionPromise()).then(
+                function (allExtractsCollection) {
                     that.clipboard = new Clipboard([], {
                         parent: allExtractsCollection,
                         currentUserId: Ctx.getCurrentUser().id
-                    });
-                    that.clipboardView = new SegmentListView({
-                        collection: that.clipboard,
-                        allUsersCollection: allUsersCollection,
-                        allMessagesCollection: allMessagesCollection,
-                        closeDeletes: true
                     });
                     that.listenTo(allExtractsCollection, 'invalid', function (model, error) {
                         alert(error);
@@ -166,13 +158,14 @@ define(function (require) {
                         that.highlightSegment(segment);
                     });
                     that.listenTo(that.clipboard, 'add remove reset change', that.resetTitle);
-                    that.render();
+                    window.setTimeout(function() {
+                        that.render();
+                    }, 0);
                 });
 
             this.listenTo(Assembl.vent, 'segmentListPanel:showSegment', function (segment) {
                 that.showSegment(segment);
             });
-            this.panelWrapper = options.panelWrapper;
         },
 
         /**
@@ -206,7 +199,18 @@ define(function (require) {
             }
             if (this.clipboard) {
                 Ctx.initTooltips(this.$el);
-                this.extractList.show(this.clipboardView);
+                $.when(collectionManager.getAllExtractsCollectionPromise(),
+                    collectionManager.getAllUsersCollectionPromise(),
+                    collectionManager.getAllMessageStructureCollectionPromise()
+                ).then(
+                    function (allExtractsCollection, allUsersCollection, allMessagesCollection) {
+                        that.extractList.show(new SegmentListView({
+                            collection: that.clipboard,
+                            allUsersCollection: allUsersCollection,
+                            allMessagesCollection: allMessagesCollection,
+                            closeDeletes: true
+                        }));
+                    });
             }
             this.resetTitle();
         },
