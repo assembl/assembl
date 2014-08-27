@@ -46,28 +46,28 @@ roles = Service(
 
 global_roles_for_user = Service(
     name='generic_roles_for_user',
-    path=API_DISCUSSION_PREFIX + '/roles/globalfor/{user_id:.+}',
+    path=API_DISCUSSION_PREFIX + '/roles/globalfor/{user_id:[0-9]+}',
     description="The universal roles of a given user",
     renderer='json', cors_policy=cors_policy
 )
 
 discussion_roles_for_user = Service(
     name='discussion_roles_for_user',
-    path=API_DISCUSSION_PREFIX + '/roles/localfor/{user_id:.+}',
+    path=API_DISCUSSION_PREFIX + '/roles/localfor/{user_id:[0-9]+}',
     description="The per-discussion roles of a given user",
     renderer='json', cors_policy=cors_policy
 )
 
 permissions_for_user = Service(
     name='permissions_for_user',
-    path=API_DISCUSSION_PREFIX + '/permissions/u/{user_id:.+}',
+    path=API_DISCUSSION_PREFIX + '/permissions/u/{user_id:[0-9]+}',
     description="The per-discussion permissions of a given user",
     renderer='json', cors_policy=cors_policy
 )
 
 user_has_permission = Service(
     name='user_has_permission',
-    path=API_DISCUSSION_PREFIX + '/permissions/{permission}/u/{user_id:.+}',
+    path=API_DISCUSSION_PREFIX + '/permissions/{permission}/u/{user_id:[0-9]+}',
     description="Whether a given user has a specific permission",
     renderer='json'
 )
@@ -75,22 +75,22 @@ user_has_permission = Service(
 
 @permissions.get(permission=P_READ)
 def get_permissions_for_discussion(request):
-    discussion_id = request.matchdict['discussion_id']
+    discussion_id = int(request.matchdict['discussion_id'])
     session = Discussion.db()
     discussion = session.query(Discussion).get(discussion_id)
     if not discussion:
-        raise HTTPNotFound("Discussion %s does not exist" % (discussion_id,))
+        raise HTTPNotFound("Discussion %d does not exist" % (discussion_id,))
     return discussion.get_permissions_by_role()
 
 
 @permissions_for_role.get(permission=P_READ)
 def get_permissions_for_role(request):
-    discussion_id = request.matchdict['discussion_id']
+    discussion_id = int(request.matchdict['discussion_id'])
     role_name = request.matchdict['role_name']
     session = Discussion.db()
     discussion = session.query(Discussion).get(discussion_id)
     if not discussion:
-        raise HTTPNotFound("Discussion %s does not exist" % (discussion_id,))
+        raise HTTPNotFound("Discussion %d does not exist" % (discussion_id,))
     role = Role.get(name=role_name)
     if not role:
         raise HTTPNotFound("Role %s does not exist" % (role_name,))
@@ -99,12 +99,12 @@ def get_permissions_for_role(request):
 
 @permissions_for_role.put(permission=P_ADMIN_DISC)
 def put_permissions_for_role(request):
-    discussion_id = request.matchdict['discussion_id']
+    discussion_id = int(request.matchdict['discussion_id'])
     role_name = request.matchdict['role_name']
     session = Discussion.db()
     discussion = session.query(Discussion).get(discussion_id)
     if not discussion:
-        raise HTTPNotFound("Discussion %s does not exist" % (discussion_id,))
+        raise HTTPNotFound("Discussion %d does not exist" % (discussion_id,))
     role = Role.get(name=role_name)
     if not role:
         raise HTTPNotFound("Role %s does not exist" % (role_name,))
@@ -168,10 +168,10 @@ def put_roles(request):
 
 @global_roles_for_user.get(permission=P_READ)
 def get_global_roles_for_user(request):
-    user_id = request.matchdict['user_id']
+    user_id = int(request.matchdict['user_id'])
     session = User.db()
     if not session.query(User).get(user_id):
-        raise HTTPNotFound("User id %s does not exist" % (user_id,))
+        raise HTTPNotFound("User id %d does not exist" % (user_id,))
     rolenames = session.query(Role.name).join(
         UserRole).filter(UserRole.user_id == user_id)
     return [x[0] for x in rolenames]
@@ -179,11 +179,11 @@ def get_global_roles_for_user(request):
 
 @global_roles_for_user.put(permission=P_SYSADMIN)
 def put_global_roles_for_user(request):
-    user_id = request.matchdict['user_id']
+    user_id = int(request.matchdict['user_id'])
     user = User.get_instance(user_id)
     session = User.db()
     if not user:
-        raise HTTPNotFound("User id %s does not exist" % (user_id,))
+        raise HTTPNotFound("User id %d does not exist" % (user_id,))
     try:
         data = json.loads(request.body)
     except Exception as e:
@@ -211,11 +211,11 @@ def put_global_roles_for_user(request):
 
 @discussion_roles_for_user.get(permission=P_READ)
 def get_discussion_roles_for_user(request):
-    discussion_id = request.matchdict['discussion_id']
+    discussion_id = int(request.matchdict['discussion_id'])
     user_id = get_database_id("User", request.matchdict['user_id'])
     session = Discussion.db()
     if not session.query(User).get(user_id):
-        raise HTTPNotFound("User id %s does not exist" % (user_id,))
+        raise HTTPNotFound("User id %d does not exist" % (user_id,))
     rolenames = session.query(Role.name).join(
         LocalUserRole).filter(LocalUserRole.user_id == user_id,
                               LocalUserRole.discussion_id == discussion_id)
@@ -224,14 +224,14 @@ def get_discussion_roles_for_user(request):
 
 @discussion_roles_for_user.put(permission=P_ADMIN_DISC)
 def put_discussion_roles_for_user(request):
-    discussion_id = request.matchdict['discussion_id']
-    user_id = request.matchdict['user_id']
+    discussion_id = int(request.matchdict['discussion_id'])
+    user_id = int(request.matchdict['user_id'])
     discussion = Discussion.get_instance(discussion_id)
     if not discussion:
-        raise HTTPNotFound("Discussion %s does not exist" % (discussion_id,))
+        raise HTTPNotFound("Discussion %d does not exist" % (discussion_id,))
     user = User.get_instance(user_id)
     if not user:
-        raise HTTPNotFound("User id %s does not exist" % (user_id,))
+        raise HTTPNotFound("User id %d does not exist" % (user_id,))
     try:
         data = json.loads(request.body)
     except Exception as e:
@@ -261,29 +261,28 @@ def put_discussion_roles_for_user(request):
 
 @permissions_for_user.get()
 def get_permissions_for_user(request):
-    discussion_id = request.matchdict['discussion_id']
-    user_id = request.matchdict['user_id']
+    discussion_id = int(request.matchdict['discussion_id'])
+    user_id = int(request.matchdict['user_id'])
     discussion = Discussion.get_instance(discussion_id)
     if not discussion:
-        raise HTTPNotFound("Discussion %s does not exist" % (discussion_id,))
+        raise HTTPNotFound("Discussion %d does not exist" % (discussion_id,))
     if user_id not in (Authenticated, Everyone):
         user = User.get_instance(user_id)
         if not user:
-            raise HTTPNotFound("User id %s does not exist" % (user_id,))
+            raise HTTPNotFound("User id %d does not exist" % (user_id,))
     return get_permissions(user_id, discussion_id)
 
 
 @user_has_permission.get()
 def get_user_has_permission(request):
-    discussion_id = request.matchdict['discussion_id']
-    user_id = request.matchdict['user_id']
+    discussion_id = int(request.matchdict['discussion_id'])
+    user_id = int(request.matchdict['user_id'])
     permission = request.matchdict['permission']
     discussion = Discussion.get_instance(discussion_id)
     if not discussion:
-        raise HTTPNotFound("Discussion %s does not exist" % (discussion_id,))
+        raise HTTPNotFound("Discussion %d does not exist" % (discussion_id,))
     if user_id not in (Authenticated, Everyone):
         user = User.get_instance(user_id)
         if not user:
-            raise HTTPNotFound("User id %s does not exist" % (user_id,))
-        user_id = user.id
+            raise HTTPNotFound("User id %d does not exist" % (user_id,))
     return a_user_has_permission(discussion_id, user_id, permission)
