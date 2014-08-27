@@ -82,7 +82,7 @@ define(function (require) {
          */
         events: {
 
-            'click .message-header': 'onMessageTitleClick',
+            'click .js_messageHeader': 'onMessageTitleClick',
             'click .readmore': 'onMessageTitleClick',
             'click .message-hoistbtn': 'onMessageHoistClick',
 
@@ -151,7 +151,7 @@ define(function (require) {
 
                     data['viewStyle'] = that.viewStyle;
                     bodyFormat = that.model.get('bodyMimeType');
-                    if (that.viewStyle == that.availableMessageViewStyles.PREVIEW) {
+                    if (that.viewStyle == that.availableMessageViewStyles.PREVIEW || that.viewStyle == that.availableMessageViewStyles.TITLE_ONLY) {
                         if (bodyFormat == "text/html") {
                             //Strip HTML from preview
                             bodyFormat = "text/plain";

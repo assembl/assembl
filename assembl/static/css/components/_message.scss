@@ -1,8 +1,9 @@
 $message-bar-width: 15px;
-$twelve: 12px;
+$messageFamilyImageWidth: 12px;
 $avatarSize: 30px;
 $readUnreadIndicatorSize: 14px;
 $mesageSpacing: 6px;
+$mesageBodyLineHeight: 1.4em;
 $ten: 10px;
 $separatorBulletMargin: 1em;
 
@@ -73,10 +74,12 @@ $separatorBulletMargin: 1em;
 // A message block
 // ================
 .message {
-  position: relative;
+  //position: relative;
+  box-sizing: content-box;
   padding: $mesageSpacing 0px $mesageSpacing 0px;
   margin: 0px $mesageSpacing 0px $mesageSpacing;
   min-height: $avatarSize;
+  height: auto;
   color: $gray2;
   border-bottom: solid 1px $gray3;
   
@@ -84,109 +87,90 @@ $separatorBulletMargin: 1em;
     background-color: $orange;
   }
   
-  > * {
-    //So everything is aligned with the avatar
-    margin-left: $avatarSize + $mesageSpacing;
-  }
-  
   .avatar {
-    //position: absolute;
+    display: inline-block;
     margin: 0;
     padding: 0;
-    float: left;
   }
   // A message block Header
   // --------------------
-  .message-header {
-    position: relative;
-    //min-height: $avatarSize;
-    //max-height: $avatarSize;
+
+  .header_item_template {
     font-size: 12px; //This should be rem or something - benoitg
-    line-height: 17px;
-    padding: 0px;
     cursor: pointer;
     overflow: hidden;
     text-overflow: ellipsis;
-    white-space: nowrap;
-    text-align: baseline;
-    
-    > span {
-      vertical-align: top;
-    }
-    .message--collapsed & {
-      line-height: 32px;
-    }
-
-    .message-author {
-      line-height: 17px;
-      padding-left: .2em;
-      .iconbutton {
-        width: 28px;
-        height: 20px;
-        line-height: 17px;
-        text-align: left;
-        vertical-align: top;
-      }
-    }
-
-
-    .message-date {
-     
-      //line-height: 17px;
-      color: $gray1;
-      opacity: 0.5;
-            
-
-      time {
-        //margin-left: $separatorBulletMargin;
-      }
-    }
-
-    > div {
-      //margin-top: 4px;
-    }
-
   }
+  .message-author {
+    @extend .header_item_template
+  }
+
+
+  .message-date {
+    @extend .header_item_template;
+    color: $gray1;
+    opacity: 0.5;
+
+    time {
+    }
+  }
+    
   .message-subject {
-    margin-top: 0;
-    white-space: normal;
-  }
-  .message-body {
-    margin-top: 1em;
-    font-size: 13px; //This should be rem or something - benoitg
+    @extend .header_item_template;
   }
 
-
-  &.viewStyleFullBody, viewStylePreview {
-    .message-author {
+  .header-separator-bullet {
+    margin-left: $separatorBulletMargin;
+    &:before {
+      content: "\002022";//Unicode bullet
+      padding-right: $separatorBulletMargin;
+      
+    }
+  }
+  &.viewStyleFullBody, &.viewStylePreview {
+    /* Most styles are shared between the FullBody and Preview styles */
+    line-height: 17px;
+    > .avatar {
+      position: absolute;
+    }
+    > .readUnreadIndicator, > .readUnreadIndicator, > .message-subject,  > .message-body, > .message-menu, > .message-replybox, > .readmoreContainer {
+    //So the first element of each line is aligned with the avatar
+      margin-left: $avatarSize + $mesageSpacing;
+    }
+    > * {
+      vertical-align: middle;
+    }
+    .readUnreadIndicator {
       display: inline-block;
-      width: auto;
-      padding-left: .01em;
+
     }
-    
-    
-    .header-separator-bullet {
-      margin-left: $separatorBulletMargin;
-      &:before {
-        content: "\002022";//Unicode bullet
-        font-size: 50%;
-        margin-right: $separatorBulletMargin;
-      }
+    .message-author {
+      //display: inline-block;
     }
-    
+    .message-subject {
+      display: block;
+    }
     .message-date {
       @extend .header-separator-bullet;
     }
+    .message-body {
+      line-height: $mesageBodyLineHeight;
+      margin-top: $mesageSpacing;
+      font-size: 13px; //This should be rem or something - benoitg
+    }
+    
+    .message-menu-actions {
+      margin-top: $mesageSpacing;
+    }
   }
   &.viewStyleFullBody {
+    /* FullBody specific styles */
     .message-date {
       float: none;
     }
     
 
-    .message-subject {
-      display: block;
-    }
+
     .message-body.body_format_text_plain {
       white-space: pre-line;
       & > {
@@ -209,59 +193,34 @@ $separatorBulletMargin: 1em;
         white-space: pre-line;
       }
     }
-    .message-body {
-      line-height: 1.4em
-    }
 
-  }
 
-  &.viewStyleTitleOnly {
-
-    header {
-      height: $avatarSize;
-      display: table;
-
-      > * {
-        display: table-cell;
-        vertical-align: middle;
-        height: 100%;
-      }
-    }
-    .message-date {
-        
-    }
-    .message-author {
-      overflow: hidden;
-      text-overflow: ellipsis;
-      width: auto;
-      padding-left: .01em;
-      &:hover {
-        //position: relative;
-        //min-width: 10em;
-        //width: auto;
-      }
-    }
-    .message-subject {
-
-    }
   }
 
   &.viewStylePreview {
-
+    /* Preview specific styles */
+    &:hover {
+      .message-menu-actions {
+        visibility: visible;
+      }
+    }
+    .message-menu-actions {
+      visibility: hidden;
+      i {
+        visibility: visible;
+      }
+    }
+    
     .message-date {
     }
     .message-author {
       width: auto;
       padding-left: .01em;
     }
-    .message-subject {
-      display: block;
-    }
-    @include multiline-ellipsis(5em, 1em, 3em);
+
+    @include multiline-ellipsis(5em, $mesageBodyLineHeight, 3em);
     .message-body {
-      margin-top: 0.6em;
       position: relative;
-      color: #212f40;
       padding: 0px;
     }
 
@@ -282,6 +241,69 @@ $separatorBulletMargin: 1em;
       }
     }
     .readmore {
+    }
+  }
+  
+  &.viewStyleTitleOnly {
+    /* TitleOnly specific styles */
+    &.message {
+      width: 100%;
+      max-width: 100%;
+      max-height: $avatarSize;
+      line-height: $avatarSize; //So text doesn't wrap even if avatar is bigish
+    }
+    .leftSection{
+      float: left;
+      margin: 0px;
+    }
+    .rightSection{
+        float: right;
+        margin: 0px;
+    }
+    .centerSection{
+        margin: 0px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+    }
+    .avatar {
+      width: $avatarSize;
+    }
+    .message-author {
+      @extend .header_item_template;
+
+      white-space: nowrap;
+      margin: 0px 0px 0px $mesageSpacing; //No left margin because there is an element on the left
+    }
+      
+    .message-subject {
+      @extend .header_item_template;
+      overflow: hidden;
+      text-align: left;
+      > div {
+        height: $avatarSize;
+      }
+      > {
+        white-space: normal;
+      }
+      .message-title {
+        @extend .header_item_template;
+        @extend .header-separator-bullet;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .message-body {
+        @extend .header_item_template;
+        @extend .header-separator-bullet;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        color: $gray1;
+      }
+    }
+    
+    .message-date {
+      white-space: nowrap;
+      margin: 0px $mesageSpacing 0 $mesageSpacing;
     }
   }
 
@@ -315,40 +337,102 @@ $separatorBulletMargin: 1em;
     }
   }
 
+  //
+  .message-replybox {
+    text-align: right;
+    margin-top: 1em;
+    &.hidden {
+      display: none;
+    }
+  }
+  
+  //
+  .message-menu {
+    font-size: 13px; //This should be rem or something - benoitg
+    color: $gray1;
+    opacity: 0.7;
+    i {
+      opacity: 0.5;
+    }
+    >:hover {
+      color: $purple;
+      opacity: 1;
+    }
+  
+    // used when buttons are to the left of the Reply button
+    > .message-hoistbtn, > .message-linkbutton {
+      vertical-align: top;
+      width: 26px;
+      line-height: 23px;
+    }
+    .message-replybox-openbtn {
+      vertical-align: top;
+      cursor: pointer;
+      i {
+        font-size: 10px;
+      }
+    }
+    .dropdown {
+      //Not all message-menus are dropdown
+      position: absolute;
+      right: 5px;
+      top: 0;
+      vertical-align: top;
+      //line-height: 10px;
+      padding: 0;
+      //margin-left: 6px;
+      .dropdown-label.dropdown-label--arrow {
+        width: 24px;
+        height: 24px;
+      }
+  
+      .iconbutton {
+        width: 20px !important;
+        height: 18px;
+        line-height: 14px;
+        padding-top: 2px;
+        padding-right: 4px;
+        vertical-align: top;
+      }
+  
+      i.icon-mail {
+        font-size: 12px; /* icon-mail needs to have a smaller font size (than original 16px) because the icon is big in the font */
+      }
+      a:link, a:visited {
+        color: inherit; /* so that the icon is not purple when the "a" tag has an href attribute (link) */
+        text-decoration: inherit;
+      }
+    }
+  }
 }
 
 // This is so annotator doesn't display a form for user's who aren't allowed
 body.js_annotatorUserCannotAddExtract > .textbubble {
   display: none !important;
 }
-
-/* This is not on the message itself, not the family
-.messageList-list.reverse_chronological, .messageList-list.chronological {
-  .message-family-container {
-    border-bottom: solid 1px $gray3;
-
-    &:last-child {
-      border-bottom: 0;
-    }
+//
+.message-replybox {
+  padding: {
+    right: 0px;
+    left: 0px;
   }
 }
-*/
+
+
+/* ------------------- Start of message family section ---------------------- */
+
+
 // @for $i from 1 through 30 {
 //     .message[data-message-level="#{$i}"] {                                                                                                                    c
 //         padding-left: ((21px * $i) + 5px) - 21px;
 //     }
 // }
 
-.message-family-container.message--collapsed {
-  //padding: 5px;
-  //padding-bottom: 0px;
-}
-
 // The arrow
 // ------------
 .message-family-arrow.noarrow {
   display: block;
-  padding-left: $twelve/2;
+  padding-left: $messageFamilyImageWidth/2;
 }
 
 .link-img {
@@ -358,10 +442,12 @@ body.js_annotatorUserCannotAddExtract > .textbubble {
 }
 
 .message-family-arrow.arrow {
-  padding-left: $twelve/2;
-  margin-left: $twelve/2;
+  padding-left: $messageFamilyImageWidth/2;
+  margin-left: $messageFamilyImageWidth/2;
   display: block;
-  cursor: pointer;
+  .link-img {
+    cursor: pointer;
+  }
   .msg-img-closed {
     display: block;
   }
@@ -371,7 +457,7 @@ body.js_annotatorUserCannotAddExtract > .textbubble {
 
   .message--expanded > .message-family-container > & {
     border-left: solid 1px #C7C6C2;
-    margin-left: $twelve/2 - 1;
+    margin-left: $messageFamilyImageWidth/2 - 1;
     .msg-img-closed {
       display: none;
     }
@@ -381,7 +467,7 @@ body.js_annotatorUserCannotAddExtract > .textbubble {
   }
   .message--expanded > & {
     border-left: solid 1px #C7C6C2;
-    margin-left: $twelve/2 - 1;
+    margin-left: $messageFamilyImageWidth/2 - 1;
     .msg-img-closed {
       display: none;
     }
@@ -395,16 +481,16 @@ body.js_annotatorUserCannotAddExtract > .textbubble {
 // --------------
 .messagelist-space {
   display: block;
-  padding-left: $twelve/2;
-  margin-left: $twelve/2;
+  padding-left: $messageFamilyImageWidth/2;
+  margin-left: $messageFamilyImageWidth/2;
 }
 
 // The bar to make an .messagelist-item looks like a child
 // --------------
 .messagelist-bar {
   display: block;
-  padding-left: $twelve/2;
-  margin-left: $twelve/2 - 1;
+  padding-left: $messageFamilyImageWidth/2;
+  margin-left: $messageFamilyImageWidth/2 - 1;
   border-left: solid 1px #C7C6C2;
 }
 
@@ -413,9 +499,10 @@ body.js_annotatorUserCannotAddExtract > .textbubble {
 .message-family-container {
   // background: url(#{$img-dir}/messagelist/messagelist-link.png) -6 top no-repeat;
   display: block;
+  position: relative; //So using 100% inside the message works...
   clear: left;
-  padding-left: $twelve/2;
-  margin-left: $twelve/2;
+  padding-left: $messageFamilyImageWidth/2;
+  margin-left: $messageFamilyImageWidth/2;
 
   &.root {
     //Root does not have border, bump it right
@@ -425,18 +512,18 @@ body.js_annotatorUserCannotAddExtract > .textbubble {
     // background: url(#{$img-dir}/messagelist/messagelist-link-last.png) -6 top no-repeat;
     border-left: solid 1px #C7C6C2;
     //Collapse border in the parent's border
-    margin-left: $twelve/2 - 1;
+    margin-left: $messageFamilyImageWidth/2 - 1;
 
     &.last-child {
       // background: url(#{$img-dir}/messagelist/messagelist-link-last.png) -6 top no-repeat;
       border-left: none;
-      margin-left: $twelve/2
+      margin-left: $messageFamilyImageWidth/2
     }
   }
 }
 
 // ++++
-.message-bar.message-bar--100vertical {
+.message-bar.message-bar--vertical {
   position: absolute;
   top: 4px;
   bottom: 0;
@@ -448,86 +535,6 @@ body.js_annotatorUserCannotAddExtract > .textbubble {
       left: ((21px * $i) + 5px) - 21px;
     }
 
-  }
-}
-
-//
-.message-body, .message-replybox {
-  padding: {
-    right: 0px;
-    left: 0px;
-  }
-}
-
-//
-.message-replybox {
-  text-align: right;
-  margin-top: 1em;
-  &.hidden {
-    display: none;
-  }
-}
-
-//
-.message-menu {
-  /*position: absolute;
-  top: -2px;
-  right: 5px;
-  display: table;
-  vertical-align: top;*/
-  color: $gray1;
-  opacity: 0.7;
-  i {
-    opacity: 0.5;
-  }
-  &:hover {
-    color: $purple;
-    opacity: 1;
-  }
-
-  // used when buttons are to the left of the Reply button
-  > .message-hoistbtn, > .message-linkbutton {
-    vertical-align: top;
-    width: 26px;
-    line-height: 23px;
-  }
-  .message-replybox-openbtn {
-    vertical-align: top;
-    cursor: pointer;
-    i {
-      font-size: 10px;
-    }
-  }
-  .dropdown {
-    //Not all message-menus are dropdown
-    position: absolute;
-    right: 5px;
-    top: 0;
-    vertical-align: top;
-    //line-height: 10px;
-    padding: 0;
-    //margin-left: 6px;
-    .dropdown-label.dropdown-label--arrow {
-      width: 24px;
-      height: 24px;
-    }
-
-    .iconbutton {
-      width: 20px !important;
-      height: 18px;
-      line-height: 14px;
-      padding-top: 2px;
-      padding-right: 4px;
-      vertical-align: top;
-    }
-
-    i.icon-mail {
-      font-size: 12px; /* icon-mail needs to have a smaller font size (than original 16px) because the icon is big in the font */
-    }
-    a:link, a:visited {
-      color: inherit; /* so that the icon is not purple when the "a" tag has an href attribute (link) */
-      text-decoration: inherit;
-    }
   }
 }
 
@@ -548,3 +555,5 @@ body.js_annotatorUserCannotAddExtract > .textbubble {
   }
 
 }
+
+/* --------------------- End of message family section ---------------------- */

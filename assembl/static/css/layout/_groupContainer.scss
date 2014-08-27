@@ -8,7 +8,9 @@
   height: calc(100vh - 36px);
   overflow-x: auto;
   overflow-y: hidden;
-  white-space: nowrap;
+  > {
+    white-space: nowrap;
+  }
 }
 
 .groupContent {
