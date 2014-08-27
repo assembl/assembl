@@ -133,7 +133,7 @@ $separatorBulletMargin: 1em;
     > .avatar {
       position: absolute;
     }
-    > .readUnreadIndicator, > .readUnreadIndicator, > .message-subject,  > .message-body, > .message-menu, > .message-replybox, > .readmoreContainer {
+    > .readUnreadIndicator, > .readUnreadIndicator, > .message-author, > .message-subject,  > .message-body, > .message-menu, > .message-replybox, > .readmoreContainer {
     //So the first element of each line is aligned with the avatar
       margin-left: $avatarSize + $mesageSpacing;
     }
@@ -142,10 +142,12 @@ $separatorBulletMargin: 1em;
     }
     .readUnreadIndicator {
       display: inline-block;
-
+      /* Undo the avatar spacing when message indicator is there.  This hack is
+         necessary because there will be no indicator of annonymous users, 
+         so the margin on message-author must clear the avatar on it's own */
+      margin-right: -$avatarSize - $mesageSpacing;
     }
     .message-author {
-      //display: inline-block;
     }
     .message-subject {
       display: block;
@@ -165,12 +167,6 @@ $separatorBulletMargin: 1em;
   }
   &.viewStyleFullBody {
     /* FullBody specific styles */
-    .message-date {
-      float: none;
-    }
-    
-
-
     .message-body.body_format_text_plain {
       white-space: pre-line;
       & > {
@@ -212,10 +208,6 @@ $separatorBulletMargin: 1em;
     }
     
     .message-date {
-    }
-    .message-author {
-      width: auto;
-      padding-left: .01em;
     }
 
     @include multiline-ellipsis(5em, $mesageBodyLineHeight, 3em);
