@@ -439,30 +439,35 @@ define(function (require) {
                         "the title of the first element is purposely not used, only its data is used", //"posted since the beginning of the debate",
                         authors_total,
                         messages_total,
+                        "",
                         {
                             "active_authors_during_current_period": [
-                                    i18n.gettext('authors have contributed since') + " " + statsPeriodName,
+                                i18n.sprintf(i18n.gettext('%d authors have contributed since %s'),  authors_in_period_total, statsPeriodName),
                                 authors_in_period_total,
                                 messages_in_period_total,
+                                "#FFA700",
                                 {
                                     "new_authors": [
-                                            i18n.gettext("new authors started contributing since") + " " + statsPeriodName,
+                                        i18n.sprintf(i18n.gettext("%d new authors started contributing since %s"), new_authors_in_period_total, statsPeriodName),
                                         new_authors_in_period_total,
                                         messages_in_period_by_new_authors_total,
+                                        "#FFD37F",
                                         {}
                                     ],
                                     "still_active_authors": [
-                                            i18n.gettext("active authors were already contributing before") + " " + statsPeriodName,
-                                            authors_in_period_total - new_authors_in_period_total,
-                                            messages_in_period_total - messages_in_period_by_new_authors_total,
+                                        i18n.sprintf(i18n.gettext("%d active authors were already contributing before %s"), authors_in_period_total - new_authors_in_period_total, statsPeriodName),
+                                        authors_in_period_total - new_authors_in_period_total,
+                                        messages_in_period_total - messages_in_period_by_new_authors_total,
+                                        "#FFD37F",
                                         {}
                                     ]
                                 }
                             ],
                             "inactive_authors_during_current_period": [
-                                    i18n.gettext("authors' last contribution was before") + " " + statsPeriodName,
+                                i18n.sprintf(i18n.gettext("%d authors' last contribution was before %s"), authors_except_those_in_period_total, statsPeriodName),
                                 authors_except_those_in_period_total,
                                 0, // not needed now
+                                "#9A3FD5",
                                 {}
                             ]
                         }
@@ -471,7 +476,7 @@ define(function (require) {
                     var pie_chart_default_legend_data = [
                         null,
                         null,
-                        i18n.gettext("authors have contributed since the beginning of the debate"),
+                        i18n.sprintf(i18n.gettext("%d authors have contributed since the beginning of the debate"), authors_total),
                         null,
                         authors_total,
                         messages_total
@@ -749,32 +754,26 @@ define(function (require) {
                 }
 
                 var width = Math.max(Math.min(plot.offsetWidth, plot.offsetHeight), 250);
-                //console.log("plot width: ", width);
                 var height = width;
-                // var x_margin = 40; // not used
-                // var y_margin = 40; // not used
-                // var name_index = 0; // not used
+                var inner_width = width - Object.keys(pie_chart_data[4]).length * 20; // retain color legend height
                 var count_index = 1;
                 var children_index = 3;
-
-                // var max_depth=3; // not used
 
                 var data_slices = [];
                 // var max_level = 4;
                 var max_level = 2;
-                //var color = d3.scale.category20c();
                 var color = d3.scale.category10();
 
-                var svg = d3.select(plot).append("svg")
+                var svg_orig = d3.select(plot).append("svg")
                     .attr("width", width)
-                    .attr("height", height)
-                    .append("g")
-                    .attr("transform", "translate(" + width / 2 + "," + height * .52 + ")");
+                    .attr("height", height);
+                var svg = svg_orig.append("g")
+                    .attr("transform", "translate(" + inner_width / 2 + "," + inner_width / 2 + ")");
 
-                function process_data(data, level, start_deg, stop_deg) {
+                function process_data(data, level, start_deg, stop_deg, relative_ratio) {
                     var name = data[0];
                     var total = data[1];
-                    var children = data[3];
+                    var children = data[4];
                     var current_deg = start_deg;
                     if (level > max_level) {
                         return;
@@ -782,15 +781,16 @@ define(function (require) {
                     if (start_deg == stop_deg) {
                         return;
                     }
-                    data_slices.push([start_deg, stop_deg, name, level, data[1], data[2]]);
+                    data_slices.push([start_deg, stop_deg, name, level, data[1], data[2], data[3], relative_ratio]);
                     for (var key in children) {
                         child = children[key];
+                        var child_relative_ratio = child[count_index] / total;
                         var inc_deg = (stop_deg - start_deg) / total * child[count_index];
                         var child_start_deg = current_deg;
                         current_deg += inc_deg;
                         var child_stop_deg = current_deg;
                         var span_deg = child_stop_deg - child_start_deg;
-                        process_data(child, level + 1, child_start_deg, child_stop_deg);
+                        process_data(child, level + 1, child_start_deg, child_stop_deg, child_relative_ratio);
                     }
                 }
 
@@ -807,7 +807,7 @@ define(function (require) {
                 });
 
                 //var thickness = width/2.0/(max_level+2)*1.1;
-                var thickness = width / 2.0 / (max_level + 1) * 1.1;
+                var thickness = inner_width / 2.0 / (max_level + 1) * 1.1;
 
                 var arc = d3.svg.arc()
                     .startAngle(function (d) {
@@ -834,46 +834,120 @@ define(function (require) {
                         return data_slices;
                     })
                     .enter()
-                    .append("g");
+                    .append("g")
+                    .attr("class","formg");
                 slices.append("path")
                     .attr("d", arc)
                     .attr("id", function (d, i) {
                         return element_name + i;
                     })
-                    .style("fill", function (d) {
-                        return color(d[2]);
+                    .style("fill", function (d, i) {
+                        //return color(d[2]);
+                        return d[6];
                     })
-                    .on("click", animate)
+                    //.on("click", animate)
                     .on("mouseover", update_legend)
                     .on("mouseout", remove_legend)
                     .attr("class", "form")
                     .append("svg:title")
                     .text(get_slice_title);
 
+                
+
+                function addPercentText(customArc){
+                    svg.selectAll(".formg")
+                        .append("text")
+                        .attr("transform", function(d) { return "translate(" + arc.centroid(d) + ")"; })
+                        .attr("dy", ".01em")
+                        .attr("text-anchor", "middle")
+                        .attr("class", "percent")
+                        .attr("pointer-events", "none") // so that the text field does not interfere with the hover on the path element (for legend)
+                        .text(function(d) { return (d[7] * 100).toFixed(1) + " %"; })
+                    ;
+                }
+
+                function removePercentText(){
+                    svg.selectAll(".formg").selectAll(".percent").remove();
+                }
+
+                addPercentText();
+
                 var legend_div = that.$('.' + element_name + '_legend')[0];
                 var legend = d3.select(legend_div);
 
                 remove_legend(null);
 
+                // add fixed legend for color squares
+                var x_offset = 0;
+                var square_side = 16;
+                var y_margin = 6;
+                var y_offset = height - Object.keys(pie_chart_data[4]).length * (square_side+y_margin) +y_margin;
+                for ( key in pie_chart_data[4] )
+                {
+                    var item = pie_chart_data[4][key];
+                    svg_orig.append("rect")
+                        .attr("fill", item[3])
+                        .attr("x" ,x_offset)
+                        .attr("y", y_offset)
+                        .attr("width", square_side)
+                        .attr("height", square_side)
+                    ;
+                    svg_orig.append("text")
+                        .attr("x", x_offset + square_side + 5)
+                        .attr("y", y_offset + square_side*0.7)
+                        .attr("width", 200)
+                        .attr("height", 25)
+                        .text(item[0])
+                    ;
+                    //x_offset += 150;
+                    y_offset += (square_side+y_margin);
+                }
+
                 function update_legend(d) {
+                    fake_hover_first_level_elements(false);
                     if (that.pieChartShowMessages === true)
-                        legend.html("<p>" + d[5] + " " + i18n.gettext("messages, posted by") + " " + d[4] + " " + d[2] + "</p>");
+                    {
+                        //legend.html("<p>" + d[5] + " " + i18n.gettext("messages, posted by") + " " + d[4] + " " + d[2] + "</p>");
+                        legend.html("<p>" + d[5] + " " + i18n.gettext("messages, posted by") + " " + d[2] + "</p>");
+                    }
                     else
-                        legend.html("<p>" + d[4] + " " + d[2] + "</p>");
+                    {
+                        //legend.html("<p>" + d[4] + " " + d[2] + "</p>");
+                        legend.html("<p>" + d[2] + "</p>");
+                    }
                     legend.transition().duration(200).style("opacity", "1");
                 }
 
                 function get_slice_title(d) {
                     if (that.pieChartShowMessages === true)
-                        return d[5] + " " + i18n.gettext("messages, posted by") + " " + d[4] + " " + d[2];
+                    {
+                        //return d[5] + " " + i18n.gettext("messages, posted by") + " " + d[4] + " " + d[2];
+                        return d[5] + " " + i18n.gettext("messages, posted by") + d[2];
+                    }
                     else
-                        return d[4] + " " + d[2];
+                    {
+                        //return d[4] + " " + d[2];
+                        return d[2];
+                    }
                 }
 
                 function remove_legend(d) {
                     //legend.transition().duration(1000).style("opacity","0");
                     //legend.html("<h2>&nbsp;</h2>")
                     update_legend(default_legend_data);
+                    fake_hover_first_level_elements(true);
+                }
+
+                // toggle: bool
+                function fake_hover_first_level_elements(toggle)
+                {
+                    svg.selectAll(".form")
+                        .filter( // select all first-level elements
+                            function (d) {
+                                return ( d[3] == 0 );
+                            }
+                        )
+                        .classed("hover", toggle);
                 }
 
                 function get_start_angle(d, ref) {

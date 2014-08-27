@@ -54,16 +54,18 @@
     stroke-dasharray: 0;
 }
 
-path {
+.chart path.area {
+    fill: lightsteelblue;
+}
+
+
+.chart path {
     stroke: #eee;
     stroke-width: 2;
     stroke-dasharray: 0;
     fill: none;
 }
 
-.area {
-    fill: lightsteelblue;
-}
 
 text {
     font-family: Arial;
@@ -122,6 +124,24 @@ line {
     margin: 0 auto;
     text-align: center;
 }
+
+.pie_chart .formg text {
+    fill: white;
+    text-shadow: 0 1px 1px rgba(150, 150, 150, 1);
+}
+
+.pie_chart path.form:hover, .pie_chart path.form.hover {
+    stroke: #777;
+}
+
+.pie_chart path {
+    stroke: #eee;
+    stroke-dasharray: 0;
+    fill: none;
+    -webkit-transition: stroke 0.5s;
+    transition: stroke 0.5s;
+}
+
 </style>
 
 
