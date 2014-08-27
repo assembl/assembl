@@ -857,6 +857,9 @@ define(function (require) {
          * Renders the search result information
          */
         renderUserViewButtons: function () {
+          var resultNumTotal,
+              resultNumUnread;
+          
           if (this.currentViewStyle == this.ViewStyles.THREADED) {
             this.ui.userHighlightNewViewButton.removeClass('selected');
             this.ui.userThreadedViewButton.addClass('selected');
@@ -868,9 +871,10 @@ define(function (require) {
           else {
             console.log("This viewstyle is unknown in user mode:", this.currentViewStyle);
           }
-          
-          this.ui.userThreadedViewButton.html(i18n.sprintf(i18n.gettext('Normal (%s)'), this.currentQuery.getResultNumTotal() || ''));
-          this.ui.userHighlightNewViewButton.html(i18n.sprintf(i18n.gettext('New (%s)'), this.currentQuery.getResultNumUnread() || ''));
+          this.currentQuery.getResultNumTotal() === undefined ? resultNumTotal='' : resultNumTotal=i18n.sprintf("(%d)", this.currentQuery.getResultNumTotal()); 
+          this.ui.userThreadedViewButton.html(i18n.sprintf(i18n.gettext('Normal %s'), resultNumTotal));
+          this.currentQuery.getResultNumUnread() === undefined ? resultNumUnread='' : resultNumUnread=i18n.sprintf("(%d)", this.currentQuery.getResultNumUnread()); 
+          this.ui.userHighlightNewViewButton.html(i18n.sprintf(i18n.gettext('New %s'), resultNumUnread));
         },
 
         
