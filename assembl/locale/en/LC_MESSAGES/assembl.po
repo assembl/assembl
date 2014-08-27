@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: assembl 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-08-25 11:12-0400\n"
+"POT-Creation-Date: 2014-08-27 13:51-0400\n"
 "PO-Revision-Date: 2014-07-24 17:38-0500\n"
 "Last-Translator: Benoit Grégoire <benoitg@coeus.ca>\n"
 "Language-Team: en <LL@li.org>\n"
@@ -26,7 +26,7 @@ msgid "${val} is not a string: ${err}"
 msgstr ""
 
 #: assembl/static/js/app/models/idea.js:39
-#: assembl/static/js/app/views/ideaPanel.js:182
+#: assembl/static/js/app/views/ideaPanel.js:172
 msgid "New idea"
 msgstr ""
 
@@ -50,7 +50,7 @@ msgstr ""
 msgid "All posts"
 msgstr ""
 
-#: assembl/static/js/app/models/segment.js:97
+#: assembl/static/js/app/models/segment.js:98
 msgid "You must be logged in to create segments"
 msgstr ""
 
@@ -86,7 +86,7 @@ msgstr ""
 msgid "Extract"
 msgstr ""
 
-#: assembl/static/js/app/modules/context.js:807
+#: assembl/static/js/app/modules/context.js:815
 msgid "ajax error message:"
 msgstr ""
 
@@ -95,65 +95,70 @@ msgstr ""
 msgid "Home"
 msgstr ""
 
-#: assembl/static/js/app/views/contextPage.js:288
+#: assembl/static/js/app/views/contextPage.js:278
 msgid "last week"
 msgstr ""
 
-#: assembl/static/js/app/views/contextPage.js:291
+#: assembl/static/js/app/views/contextPage.js:281
 msgid "last 2 weeks"
 msgstr ""
 
-#: assembl/static/js/app/views/contextPage.js:294
+#: assembl/static/js/app/views/contextPage.js:284
 msgid "last month"
 msgstr ""
 
-#: assembl/static/js/app/views/contextPage.js:297
+#: assembl/static/js/app/views/contextPage.js:287
 msgid "last 3 months"
 msgstr ""
 
-#: assembl/static/js/app/views/contextPage.js:300
+#: assembl/static/js/app/views/contextPage.js:290
 msgid "last 6 months"
 msgstr ""
 
-#: assembl/static/js/app/views/contextPage.js:303
+#: assembl/static/js/app/views/contextPage.js:293
 msgid "last year"
 msgstr ""
 
+#: assembl/static/js/app/views/contextPage.js:445
+#, python-format
+msgid "%d authors have contributed since %s"
+msgstr ""
+
+#: assembl/static/js/app/views/contextPage.js:451
+#, python-format
+msgid "%d new authors started contributing since %s"
+msgstr ""
+
 #: assembl/static/js/app/views/contextPage.js:458
-msgid "authors since"
+#, python-format
+msgid "%d active authors were already contributing before %s"
 msgstr ""
 
-#: assembl/static/js/app/views/contextPage.js:463
-msgid "new authors since"
+#: assembl/static/js/app/views/contextPage.js:467
+#, python-format
+msgid "%d authors' last contribution was before %s"
 msgstr ""
 
-#: assembl/static/js/app/views/contextPage.js:469
-msgid "already contributing authors since"
+#: assembl/static/js/app/views/contextPage.js:479
+#, python-format
+msgid "%d authors have contributed since the beginning of the debate"
 msgstr ""
 
-#: assembl/static/js/app/views/contextPage.js:477
-msgid "authors before"
-msgstr ""
-
-#: assembl/static/js/app/views/contextPage.js:488
-msgid "authors since the beginning of the debate"
-msgstr ""
-
-#: assembl/static/js/app/views/contextPage.js:507
+#: assembl/static/js/app/views/contextPage.js:498
 msgid "Evolution of the total number of messages"
 msgstr ""
 
-#: assembl/static/js/app/views/contextPage.js:507
+#: assembl/static/js/app/views/contextPage.js:498
 msgid "Evolution of the number of messages posted"
 msgstr ""
 
-#: assembl/static/js/app/views/contextPage.js:508
-#: assembl/templates/views/contextPage.tmpl:195
+#: assembl/static/js/app/views/contextPage.js:499
+#: assembl/templates/views/contextPage.tmpl:231
 msgid "Statistics"
 msgstr ""
 
-#: assembl/static/js/app/views/contextPage.js:842
-#: assembl/static/js/app/views/contextPage.js:848
+#: assembl/static/js/app/views/contextPage.js:974
+#: assembl/static/js/app/views/contextPage.js:988
 msgid "messages, posted by"
 msgstr ""
 
@@ -172,142 +177,142 @@ msgstr ""
 msgid "You did not type a response yet..."
 msgstr ""
 
-#: assembl/static/js/app/views/ideaPanel.js:61
+#: assembl/static/js/app/views/ideaPanel.js:62
 #: assembl/static/js/app/views/messageListPostQuery.js:84
 msgid "Idea"
 msgstr ""
 
-#: assembl/static/js/app/views/ideaPanel.js:63
+#: assembl/static/js/app/views/ideaPanel.js:64
 msgid ""
 "Detailled information about the currently selected idea in the Table of "
 "ideas"
 msgstr ""
 
-#: assembl/static/js/app/views/ideaPanel.js:71
+#: assembl/static/js/app/views/ideaPanel.js:72
 msgid "This idea has no sub-ideas"
 msgstr ""
 
-#: assembl/static/js/app/views/ideaPanel.js:74
+#: assembl/static/js/app/views/ideaPanel.js:75
 #, python-format
 msgid "This idea has %d sub-idea"
 msgid_plural "This idea has %d sub-ideas"
 msgstr[0] ""
 msgstr[1] ""
 
-#: assembl/static/js/app/views/ideaPanel.js:83
+#: assembl/static/js/app/views/ideaPanel.js:84
 msgid "No extracts were harvested for this idea"
 msgstr ""
 
-#: assembl/static/js/app/views/ideaPanel.js:86
+#: assembl/static/js/app/views/ideaPanel.js:88
 #, python-format
 msgid "Harvested in %d extract"
 msgid_plural "Harvested in %d extracts"
 msgstr[0] ""
 msgstr[1] ""
 
-#: assembl/static/js/app/views/ideaPanel.js:181
+#: assembl/static/js/app/views/ideaPanel.js:171
 msgid "Short expression (only a few words) of the idea in the table of ideas."
 msgstr ""
 
-#: assembl/static/js/app/views/ideaPanel.js:206
+#: assembl/static/js/app/views/ideaPanel.js:196
 msgid "Comment on this idea here..."
 msgstr ""
 
-#: assembl/static/js/app/views/ideaPanel.js:207
+#: assembl/static/js/app/views/ideaPanel.js:197
 msgid "Send your comment"
 msgstr ""
 
-#: assembl/static/js/app/views/ideaPanel.js:209
-#: assembl/static/js/app/views/messageList.js:769
+#: assembl/static/js/app/views/ideaPanel.js:199
+#: assembl/static/js/app/views/messageList.js:768
 msgid "You need to type a comment first..."
 msgstr ""
 
-#: assembl/static/js/app/views/ideaPanel.js:299
+#: assembl/static/js/app/views/ideaPanel.js:309
 msgid "You cannot delete an idea while it has sub-ideas."
 msgstr ""
 
-#: assembl/static/js/app/views/ideaPanel.js:304
+#: assembl/static/js/app/views/ideaPanel.js:314
 msgid "You cannot delete an idea associated to extracts."
 msgstr ""
 
-#: assembl/static/js/app/views/ideaPanel.js:450
+#: assembl/static/js/app/views/ideaPanel.js:460
 msgid "Confirm that you want to send all extracts back to the clipboard."
 msgstr ""
 
-#: assembl/static/js/app/views/ideaPanel.js:460
+#: assembl/static/js/app/views/ideaPanel.js:470
 msgid "Confirm that you want to delete this idea."
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:23
+#: assembl/static/js/app/views/messageList.js:22
 msgid "You can drag the segment above directly to the table of ideas"
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:60
+#: assembl/static/js/app/views/messageList.js:59
 #: assembl/templates/views/create-group.tmpl:38
 msgid "Messages"
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:67
+#: assembl/static/js/app/views/messageList.js:66
 msgid "Threaded"
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:72
+#: assembl/static/js/app/views/messageList.js:71
 #: assembl/static/js/app/views/messageListPostQuery.js:156
 msgid "Chronological"
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:77
+#: assembl/static/js/app/views/messageList.js:76
 msgid "Reverse-Chronological"
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:82
+#: assembl/static/js/app/views/messageList.js:81
 msgid "New Messages"
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:624
+#: assembl/static/js/app/views/messageList.js:623
 msgid "No messages"
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:766
+#: assembl/static/js/app/views/messageList.js:765
 msgid ""
 "You can start a new topic in this discussion by typing a subject above, "
 "and a first post here..."
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:767
+#: assembl/static/js/app/views/messageList.js:766
 msgid "Start a new topic in this discussion"
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:768
+#: assembl/static/js/app/views/messageList.js:767
 #: assembl/templates/views/messageSend.tmpl:12
 msgid "New topic subject:"
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:770
+#: assembl/static/js/app/views/messageList.js:769
 msgid "You need to set a subject to add a new topic..."
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:873
+#: assembl/static/js/app/views/messageList.js:872
 #, python-format
 msgid "Normal (%s)"
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:874
+#: assembl/static/js/app/views/messageList.js:873
 #, python-format
 msgid "New (%s)"
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:883
+#: assembl/static/js/app/views/messageList.js:882
 #: assembl/templates/views/ideaList.tmpl:28
 msgid "Expand all"
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:886
+#: assembl/static/js/app/views/messageList.js:885
 #: assembl/templates/views/ideaList.tmpl:28
 msgid "Collapse all"
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:1095
+#: assembl/static/js/app/views/messageList.js:1094
 msgid "Send to clipboard"
 msgstr ""
 
@@ -470,13 +475,18 @@ msgstr ""
 msgid "Message posted!"
 msgstr ""
 
-#: assembl/static/js/app/views/segmentList.js:60
-#: assembl/static/js/app/views/segmentList.js:119
+#: assembl/static/js/app/views/segmentList.js:177
+#: assembl/static/js/app/views/segmentList.js:222
+#: assembl/static/js/app/views/segmentList.js:225
 #: assembl/templates/views/create-group.tmpl:46
 msgid "Clipboard"
 msgstr ""
 
-#: assembl/static/js/app/views/segmentList.js:344
+#: assembl/static/js/app/views/segmentList.js:225
+msgid "empty"
+msgstr ""
+
+#: assembl/static/js/app/views/segmentList.js:398
 msgid "Are you sure you want to empty your entire clipboard?"
 msgstr ""
 
@@ -786,30 +796,30 @@ msgstr ""
 msgid "View all posts in this discussion"
 msgstr ""
 
-#: assembl/templates/views/contextPage.tmpl:138
+#: assembl/templates/views/contextPage.tmpl:174
 #: assembl/templates/views/synthesisPanel.tmpl:8
 #: assembl/templates/views/synthesisPanelMessage.tmpl:5
 msgid "Introduction"
 msgstr ""
 
-#: assembl/templates/views/contextPage.tmpl:145
+#: assembl/templates/views/contextPage.tmpl:181
 #: assembl/templates/views/ideaPanel.tmpl:17
 msgid "See more"
 msgstr ""
 
-#: assembl/templates/views/contextPage.tmpl:146
+#: assembl/templates/views/contextPage.tmpl:182
 msgid "See less"
 msgstr ""
 
-#: assembl/templates/views/contextPage.tmpl:153
+#: assembl/templates/views/contextPage.tmpl:189
 msgid "Objectives"
 msgstr ""
 
-#: assembl/templates/views/contextPage.tmpl:174
+#: assembl/templates/views/contextPage.tmpl:210
 msgid "Instigator"
 msgstr ""
 
-#: assembl/templates/views/contextPage.tmpl:198
+#: assembl/templates/views/contextPage.tmpl:234
 msgid "Loading..."
 msgstr ""
 
@@ -861,11 +871,11 @@ msgstr ""
 msgid "Number of messages related to this idea or its descendants"
 msgstr ""
 
-#: assembl/templates/views/idea.tmpl:49
+#: assembl/templates/views/idea.tmpl:50
 msgid "Number of unread messages related to this idea or its descendants"
 msgstr ""
 
-#: assembl/templates/views/idea.tmpl:53
+#: assembl/templates/views/idea.tmpl:54
 msgid ""
 "Number of unread messages related to this idea or its descendants.  Click"
 " on this number to view ONLY the new unread messages"
@@ -943,111 +953,116 @@ msgstr ""
 msgid "Configure this widget"
 msgstr ""
 
-#: assembl/templates/views/ideaPanel.tmpl:38
+#: assembl/templates/views/ideaPanel.tmpl:39
 msgid "Create a vote widget on this idea"
 msgstr ""
 
-#: assembl/templates/views/ideaPanel.tmpl:56
+#: assembl/templates/views/ideaPanel.tmpl:59
 msgid "Expressions of this idea in segments of posts or on the web"
 msgstr ""
 
-#: assembl/templates/views/ideaPanel.tmpl:63
+#: assembl/templates/views/ideaPanel.tmpl:66
 msgid "Add extracts by dragging them in this panel from the clipboard or messages"
 msgstr ""
 
-#: assembl/templates/views/ideaPanel.tmpl:71
+#: assembl/templates/views/ideaPanel.tmpl:74
 msgid "Delete this idea completely"
 msgstr ""
 
-#: assembl/templates/views/ideaPanel.tmpl:71
+#: assembl/templates/views/ideaPanel.tmpl:74
 msgid "Delete idea"
 msgstr ""
 
-#: assembl/templates/views/ideaPanel.tmpl:75
+#: assembl/templates/views/ideaPanel.tmpl:78
 msgid ""
 "Remove all extracts from this idea.  Removed extracts will be available "
 "in your clipboard"
 msgstr ""
 
-#: assembl/templates/views/ideaPanel.tmpl:75
+#: assembl/templates/views/ideaPanel.tmpl:78
 msgid "Remove all extracts"
 msgstr ""
 
-#: assembl/templates/views/ideaPanel.tmpl:80
+#: assembl/templates/views/ideaPanel.tmpl:83
 msgid "Please select an idea in the table of ideas"
 msgstr ""
 
-#: assembl/templates/views/message.tmpl:5
+#: assembl/templates/views/message.tmpl:8
+#: assembl/templates/views/message.tmpl:26
 msgid "User"
 msgstr ""
 
 #: assembl/templates/views/message.tmpl:10
-#: assembl/templates/views/message.tmpl:35
+#: assembl/templates/views/message.tmpl:47
 #, python-format
 msgid "%(user)s"
 msgstr ""
 
-#: assembl/templates/views/message.tmpl:12
-#: assembl/templates/views/message.tmpl:36
+#: assembl/templates/views/message.tmpl:13
+#: assembl/templates/views/message.tmpl:48
 #, python-format
 msgid "<time title=\"%(precise_date)s\">%(nice_date)s</time>"
 msgstr ""
 
-#: assembl/templates/views/message.tmpl:25
-#: assembl/templates/views/message.tmpl:49
+#: assembl/templates/views/message.tmpl:38
+#: assembl/templates/views/message.tmpl:59
 msgid "Mark as unread"
 msgstr ""
 
-#: assembl/templates/views/message.tmpl:27
-#: assembl/templates/views/message.tmpl:51
+#: assembl/templates/views/message.tmpl:40
+#: assembl/templates/views/message.tmpl:61
 msgid "Mark as read"
 msgstr ""
 
-#: assembl/templates/views/message.tmpl:56
-msgid "Go back to the entire topic thread"
-msgstr ""
-
-#: assembl/templates/views/message.tmpl:58
-msgid "Show only this message and its replies"
-msgstr ""
-
-#: assembl/templates/views/message.tmpl:61
-msgid "Copy the link to this message to clipboard"
+#: assembl/templates/views/message.tmpl:55
+msgid "More options"
 msgstr ""
 
 #: assembl/templates/views/message.tmpl:66
+msgid "Go back to the entire topic thread"
+msgstr ""
+
+#: assembl/templates/views/message.tmpl:68
+msgid "Show only this message and its replies"
+msgstr ""
+
+#: assembl/templates/views/message.tmpl:71
+msgid "Copy the link to this message to clipboard"
+msgstr ""
+
+#: assembl/templates/views/message.tmpl:76
 msgid "Send an email to this user"
 msgstr ""
 
-#: assembl/templates/views/message.tmpl:82
+#: assembl/templates/views/message.tmpl:93
 msgid "Read More"
 msgstr ""
 
-#: assembl/templates/views/message.tmpl:99
+#: assembl/templates/views/message.tmpl:110
 msgid "Reply"
 msgstr ""
 
-#: assembl/templates/views/messageList.tmpl:19
+#: assembl/templates/views/messageList.tmpl:17
 msgid "Add filter"
 msgstr ""
 
-#: assembl/templates/views/messageList.tmpl:25
+#: assembl/templates/views/messageList.tmpl:20
 msgid "Orphan messages"
 msgstr ""
 
-#: assembl/templates/views/messageList.tmpl:26
+#: assembl/templates/views/messageList.tmpl:21
 msgid "Synthesis messages"
 msgstr ""
 
-#: assembl/templates/views/messageList.tmpl:27
+#: assembl/templates/views/messageList.tmpl:22
 msgid "Unread messages"
 msgstr ""
 
-#: assembl/templates/views/messageList.tmpl:41
+#: assembl/templates/views/messageList.tmpl:36
 msgid "Load previous messages"
 msgstr ""
 
-#: assembl/templates/views/messageList.tmpl:47
+#: assembl/templates/views/messageList.tmpl:42
 msgid "Load next messages"
 msgstr ""
 
@@ -1423,5 +1438,20 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "<time>%(time)s</time>"
+#~ msgstr ""
+
+#~ msgid "authors since"
+#~ msgstr ""
+
+#~ msgid "new authors since"
+#~ msgstr ""
+
+#~ msgid "already contributing authors since"
+#~ msgstr ""
+
+#~ msgid "authors before"
+#~ msgstr ""
+
+#~ msgid "authors since the beginning of the debate"
 #~ msgstr ""
 
