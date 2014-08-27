@@ -42,13 +42,19 @@ define(function (require) {
         /**
          * @event
          */
-        onTitleClick: function () {
-          messageListView.triggerMethod('messageList:clearAllFilters');
-          messageListView.triggerMethod('messageList:addFilterIsOrphanMessage');
-          Ctx.setCurrentIdea(null);
-          //Yes, this will cause double-renders in some cases.  Will be fixed once messageList observes it's result list.
-          messageListView.render();
-          this.groupContent.resetDebateState();
+        onTitleClick: function (e) {
+          var messageListView = this.groupContent.getViewByTypeName('messageList');
+          if (messageListView) {
+            e.stopPropagation();
+            
+            messageListView.triggerMethod('messageList:clearAllFilters');
+            messageListView.triggerMethod('messageList:addFilterIsOrphanMessage');
+            Ctx.setCurrentIdea(null);
+            //Yes, this will cause double-renders in some cases.  Will be fixed once messageList observes it's result list.
+            messageListView.render();
+            if(Ctx.getCurrentInterfaceType() === Ctx.InterfaceTypes.SIMPLE)
+              this.groupContent.resetDebateState();
+          }
         }
     });
 
