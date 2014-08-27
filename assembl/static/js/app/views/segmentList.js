@@ -29,11 +29,15 @@ define(function (require) {
             this.closeDeletes = options.closeDeletes;
         },
         serializeData: function() {
-            var post = this.allMessagesCollection.get(this.model.get('idPost')),
+            var post, postCreator, idPost = this.model.get('idPost'),
                 currentUser = Ctx.getCurrentUser();
+            if (idPost) {
+                post = this.allMessagesCollection.get(idPost);
+                postCreator = this.allUsersCollection.get(post.get('idCreator'));
+            }
             return {segment: this.model,
                     post: post,
-                    postCreator: this.allUsersCollection.get(post.get('idCreator')),
+                    postCreator: postCreator,
                     canEditExtracts: currentUser.can(Permissions.EDIT_EXTRACT),
                     canEditMyExtracts: currentUser.can(Permissions.EDIT_MY_EXTRACT),
                     ctx: Ctx
