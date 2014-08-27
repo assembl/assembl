@@ -306,12 +306,12 @@ define(function (require) {
                 that = this;
 
             if (children.length > 0) {
-                return alert(i18n.gettext('ideaPanel-cantDeleteByChildren'));
+                return alert(i18n.gettext('You cannot delete an idea while it has sub-ideas.'));
             }
 
             // Nor has any segments
             if (segments.length > 0) {
-                return alert(i18n.gettext('ideaPanel-cantDeleteBySegments'));
+                return alert(i18n.gettext('You cannot delete an idea associated to extracts.'));
             }
 
             // That's a bingo
@@ -457,7 +457,7 @@ define(function (require) {
          * @event
          */
         onClearAllClick: function (ev) {
-            var ok = confirm(i18n.gettext('ideaPanel-clearConfirmationMessage'));
+            var ok = confirm(i18n.gettext('Confirm that you want to send all extracts back to the clipboard.'));
             if (ok) {
                 this.model.get('segments').reset();
             }
@@ -467,7 +467,7 @@ define(function (require) {
          * @event
          */
         onDeleteButtonClick: function () {
-            var ok = confirm(i18n.gettext('ideaPanel-deleteIdeaConfirmMessage'));
+            var ok = confirm(i18n.gettext('Confirm that you want to delete this idea.'));
 
             if (ok) {
                 this.deleteCurrentIdea();
