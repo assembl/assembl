@@ -5,7 +5,7 @@ $readUnreadIndicatorSize: 14px;
 $mesageSpacing: 6px;
 $mesageBodyLineHeight: 1.4em;
 $ten: 10px;
-$separatorBulletMargin: 1em;
+$separatorBulletMargin: 0.6em;
 $previewNumLines: 4;
 
 
@@ -18,6 +18,7 @@ $previewNumLines: 4;
   $ellipsiswidth: 7em !default;
   
   .ellipsis {
+    position: relative;
     overflow: hidden;
     max-height: $height;
     line-height: $lineheight;
@@ -27,7 +28,7 @@ $previewNumLines: 4;
     content: "";
     float: left;
     width: 5px;
-    height: $height;
+    height: 100%;
   }
 
   .ellipsis > *:first-child {
@@ -91,12 +92,12 @@ $previewNumLines: 4;
 .message {
   //position: relative;
   box-sizing: content-box;
-  padding: $mesageSpacing 0px $mesageSpacing 0px;
-  margin: 0px $mesageSpacing 0px $mesageSpacing;
+  padding: $mesageSpacing 0px $mesageSpacing 0px; 
+  margin: 0px $mesageSpacing 0px $mesageSpacing; //TODO: fix scroolbar margin
   min-height: $avatarSize;
   height: auto;
   color: $gray2;
-  border-bottom: solid 1px $gray3;
+  border-top: solid 1px $gray3;
   
   &.is-highlighted {
     background-color: $orange;
@@ -104,8 +105,17 @@ $previewNumLines: 4;
   
   .avatar {
     display: inline-block;
+    vertical-align: middle;
+    width: $avatarSize;
+    height: $avatarSize;
     margin: 0;
     padding: 0;
+    img {
+      padding: 0;
+      margin: 0;
+      width: $avatarSize;
+      height: $avatarSize;
+    }
   }
   // A message block Header
   // --------------------
@@ -138,19 +148,21 @@ $previewNumLines: 4;
     margin-left: $separatorBulletMargin;
     &:before {
       content: "\002022";//Unicode bullet
+      color: $gray1;
+      opacity: 0.5;
       padding-right: $separatorBulletMargin;
       
     }
   }
   &.viewStyleFullBody, &.viewStylePreview {
     /* Most styles are shared between the FullBody and Preview styles */
-    line-height: 17px;
+    line-height: 19px;
     > .avatar {
       position: absolute;
     }
-    > .readUnreadIndicator, > .readUnreadIndicator, > .message-author, > .message-subject,  > .message-body, > .message-menu, > .message-replybox, > .readmoreContainer {
+    > .readUnreadIndicator, > .readUnreadIndicator, > .message-author, > .message-subject,  > .message-body, > .message-menu, > .message-replybox {
     //So the first element of each line is aligned with the avatar
-      margin-left: $avatarSize + $mesageSpacing;
+      margin-left: $avatarSize + $mesageSpacing*2;
     }
     > * {
       vertical-align: middle;
@@ -259,6 +271,9 @@ $previewNumLines: 4;
       max-height: $avatarSize;
       line-height: $avatarSize; //So text doesn't wrap even if avatar is bigish
     }
+    > * {
+      vertical-align: middle;
+    }
     .leftSection{
       float: left;
       margin: 0px;
@@ -274,7 +289,9 @@ $previewNumLines: 4;
         overflow: hidden;
     }
     .avatar {
-      width: $avatarSize;
+      img {
+        margin-top: -8px; //TODO:  I don't know why this is needed
+      }
     }
     .message-author {
       @extend .header_item_template;
@@ -362,7 +379,7 @@ $previewNumLines: 4;
       opacity: 0.5;
     }
     >:hover {
-      color: $purple;
+      color: $purple1;
       opacity: 1;
     }
   
@@ -419,6 +436,9 @@ body.js_annotatorUserCannotAddExtract > .textbubble {
 }
 //
 .message-replybox {
+  .messageSend-body {
+    height: $avatarSize+2px; //2px to compensate borders
+  }
   padding: {
     right: 0px;
     left: 0px;
