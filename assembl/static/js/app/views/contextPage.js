@@ -248,7 +248,7 @@ define(function (require) {
 
                     // find which period is best to show the stats: the first period among week, month, debate which gathers at least X% of the contributions
 
-                    var messages_threshold = messages_total * 0.10;
+                    var messages_threshold = messages_total * 0.15;
                     //console.log("messages_threshold:");
                     //console.log(messages_threshold);
 
@@ -526,9 +526,22 @@ define(function (require) {
                 var x = d3.time.scale().range([0, w - margin * 2]).domain([data[0].date, data[data.length - 1].date]);
                 var y = d3.scale.linear().range([h - margin * 2, 0]).domain([min, max]);
 
-                //var xAxis = d3.svg.axis().scale(x).tickSize(h - margin * 2).tickPadding(10).ticks(7).tickFormat(d3.time.format("%x"));
-                //var xAxis = d3.svg.axis().scale(x).tickSize(h - margin * 2).tickPadding(10).ticks(d3.time.week, 2).tickFormat(d3.time.format("%x"));
-                var xAxis = d3.svg.axis().scale(x).tickSize(h - margin * 2).tickPadding(10).ticks(5).tickFormat(d3.time.format("%Y-%m-%d"));
+
+                var xAxis = d3.svg.axis().scale(x).tickSize(h - margin * 2).tickPadding(10).tickFormat(function(d){return Ctx.getNiceDate(d);});
+
+                // set number of ticks
+                var time_span = data[data.length - 1].date - data[0].date; // in ms
+                var time_span_in_days = time_span / (1000 * 60 * 60 * 24);
+                if ( time_span_in_days <= 30 )
+                    xAxis.ticks(d3.time.day, 5);
+                else if ( time_span_in_days > 30 && time_span_in_days <= 3*30 )
+                    xAxis.ticks(d3.time.week, 2);
+                else if ( time_span_in_days > 3*30 && time_span_in_days <= 6*30 )
+                    xAxis.ticks(d3.time.month, 1);
+                else
+                    xAxis.ticks(4);
+
+
                 var yAxis = d3.svg.axis().scale(y).orient('left').tickSize(-w + margin * 2).tickPadding(10).tickFormat(d3.format("d"));
                 var t = null;
                 var chart_div = that.$('.chart');
@@ -540,10 +553,13 @@ define(function (require) {
                         .attr('height', h)
                         .attr('class', 'viz')
                         .append('svg:g')
-                        .attr('transform', 'translate(' + margin + ',' + margin + ')');
+                        .attr('transform', 'translate(' + margin + ',' + margin + ')')
+                    ;
                 } else {
                     svg = d3.select(chart_div).select('svg').select('g');
                 }
+
+                var bisectDate = d3.bisector(function(d) { return d.date; }).left;
 
                 t = svg.transition().duration(transitionDuration);
 
@@ -733,6 +749,53 @@ define(function (require) {
                  }
                  });
                  */
+                
+
+                var focus = svg.append("g")
+                    .attr("class", "focus")
+                    .style("display", "none");
+
+                focus.append("circle")
+                    .attr("r", 4.5);
+
+                focus.append("text")
+                  //.attr("x", 9)
+                  .attr("width", 200)
+                  .attr("dy", ".35em");
+
+
+                svg.append("rect")
+                  .attr("class", "overlay")
+                  .attr("width", w-margin*2)
+                  .attr("height", h-margin*2)
+                  .on("mouseover", function() { focus.style("display", null); })
+                  .on("mouseout", function() { focus.style("display", "none"); })
+                  .on("mousemove", mouse_move);
+
+                var data_length = data.length;
+                function mouse_move(){
+                    var mouse_position = d3.mouse(this);
+                    var x_position = mouse_position[0];
+                    var xInDomain = x.invert(x_position);
+                    var i = Math.min(data_length-1, bisectDate(data, xInDomain, 1)),
+                        d0 = data[i - 1],
+                        d1 = data[i],
+                        d = xInDomain - d0.date > d1.date - xInDomain ? d1 : d0;
+                    focus.attr("transform", "translate(" + x(d.date) + "," + y(d.value) + ")");
+                    var t = focus.select("text");
+                    t.text(d.value + " (" + Ctx.getNiceDate(d.date) + ")");
+                    if ( x(d.date) > (w-margin*2)-100 )
+                    {
+                        t.attr("transform", "translate(-9,0)");
+                        t.style("text-anchor","end");
+
+                    }
+                    else
+                    {
+                        t.attr("transform", "translate(9,0)");
+                        t.style("text-anchor","start");
+                    }
+                }
             }
 
             draw();

@@ -578,10 +578,13 @@ define(function (require) {
          },*/
 
         /**
-         * Returns a fancy date (ex: a few seconds ago)
+         * Returns a fancy date (ex: a few seconds ago), or a formatted precise date if precise is true
          * @return {String}
          */
-        getNiceDateTime: function (date, precise) {
+        getNiceDateTime: function (date, precise, with_time) {
+            // set default values
+            precise = (precise === undefined) ? false : precise;
+            with_time = (with_time === undefined) ? true : with_time;
             //var momentDate = moment(date);
 
             // we assume that server datetimes are given in UTC format
@@ -591,7 +594,10 @@ define(function (require) {
 
             if (momentDate) {
                 if (precise == true) {
-                    return momentDate.format('LLLL');
+                    if (with_time == true)
+                        return momentDate.format('LLLL');
+                    else
+                        return momentDate.format('LL');
                 }
                 var one_year_ago = moment().subtract('years', 1);
                 if (momentDate.isBefore(one_year_ago)) { // show the exact date
@@ -604,8 +610,15 @@ define(function (require) {
             return momentDate; // or date?
         },
 
+        // without time
+        getNiceDate: function(date, precise) {
+            if ( precise === undefined )
+                precise = true;
+            return this.getNiceDateTime(date, precise, false);
+        },
+
         /**
-         * Returns a fancy date (ex: a few seconds ago)
+         * Returns a nicely formatted date, but not an approximative expression (i.e. not "a few seconds ago")
          * @return {String}
          */
         getReadableDateTime: function (date) {

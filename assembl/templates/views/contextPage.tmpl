@@ -55,7 +55,8 @@
 }
 
 .chart path.area {
-    fill: lightsteelblue;
+    /*fill: lightsteelblue;*/
+    fill: #9a3fd5;
 }
 
 
@@ -88,6 +89,21 @@ line {
 
 #chart {
     margin: 0;
+}
+
+.overlay {
+  fill: none;
+  pointer-events: all;
+}
+
+.focus circle {
+  fill: rgba(255, 255, 255, 0.5);
+  stroke: #aaa;
+}
+
+.focus text {
+    fill: black;
+    text-shadow: 0 1px 1px rgba(150, 150, 150, 1);
 }
 
 
