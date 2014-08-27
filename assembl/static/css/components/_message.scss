@@ -6,23 +6,29 @@ $mesageSpacing: 6px;
 $mesageBodyLineHeight: 1.4em;
 $ten: 10px;
 $separatorBulletMargin: 1em;
+$previewNumLines: 4;
 
-@mixin multiline-ellipsis($height, $lineheight, $ellipsiswidth) {
 
-  $ellipsiswidth: 3em !default;
-
+@mixin multiline-ellipsis($height, $lineheight) {
+  // Largely inspired by http://www.mobify.com/blog/multiline-ellipsis-in-pure-css/
+  
+  /* This is problematic as the width depends on the "Read More" string, which 
+  depends on the translation...
+  */
+  $ellipsiswidth: 7em !default;
+  
   .ellipsis {
     overflow: hidden;
     max-height: $height;
     line-height: $lineheight;
   }
 
-  /*.ellipsis:before {
+  .ellipsis:before {
     content: "";
     float: left;
     width: 5px;
     height: $height;
-  } */
+  }
 
   .ellipsis > *:first-child {
     //display: inline;
@@ -33,9 +39,10 @@ $separatorBulletMargin: 1em;
     //white-space: normal;
   }
 
-  /*.ellipsis:after {
-    content: "\02026"; // Read More
+  .ellipsis:after {
+    content: " \02026  " attr(data-read-more-text); // Read More
     float: right;
+    cursor: pointer;
     position: relative;
     top: -$lineheight;
     left: 100%;
@@ -45,24 +52,32 @@ $separatorBulletMargin: 1em;
 
     text-align: right;
     background: white;
-    @include background(
+    /*@include background(
             linear-gradient(top left, rgba(255, 255, 255, 0), white 50%, white)
-    );
-  } */
+    );*/
+  }
+  .ellipsis:hover {
+    &:after {
+      text-decoration: underline;
+    }
+  }
 
-  .ellipsis a {
+  .ellipsis > a {
+    //We only want a link when the content actually overflows, so we put a &nbsp in content
     position: absolute;
+    cursor: default;
     right: 3.5em;
     bottom: 0;
-    //left: 0; top: 0;
-    //width: 100%;
-    //height: 100%;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
     overflow: hidden;
-    //text-indent: -9999px;
+    text-indent: -9999px;
   }
   .ellipsis i, .ellipsis:after {
     font-style: normal;
-    color: blue;
+    color: $purple1;
   }
 
   .ellipsis i:before {
@@ -210,7 +225,7 @@ $separatorBulletMargin: 1em;
     .message-date {
     }
 
-    @include multiline-ellipsis(5em, $mesageBodyLineHeight, 3em);
+    @include multiline-ellipsis($previewNumLines * $mesageBodyLineHeight, $mesageBodyLineHeight);
     .message-body {
       position: relative;
       padding: 0px;

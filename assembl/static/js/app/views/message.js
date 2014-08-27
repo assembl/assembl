@@ -83,7 +83,7 @@ define(function (require) {
         events: {
 
             'click .js_messageHeader': 'onMessageTitleClick',
-            'click .readmore': 'onMessageTitleClick',
+            'click .js_readMore': 'onMessageTitleClick',
             'click .message-hoistbtn': 'onMessageHoistClick',
 
             //

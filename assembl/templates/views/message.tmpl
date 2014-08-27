@@ -86,11 +86,9 @@
       Note:  bodyFormatClass can currently have values body_format_text_plain or  body_format_text_html 
   #}
   <% if( viewStyle == ctx.AVAILABLE_MESSAGE_VIEW_STYLES.PREVIEW ){ %>
-    <div class="message-body <%= bodyFormatClass %> ellipsis" id="<%= messageBodyId %>">
+    <div class="message-body <%= bodyFormatClass %> ellipsis" id="<%= messageBodyId %>" data-read-more-text="{{ gettext("Read more") }}">
       <p class="mvn more"><%= body %></p>{# Do NOT introduce whitespace within this div #}
-    </div>
-    <div class="readmoreContainer">
-      <a class="readmore" href="#" alt="{{ gettext('Read More') }}">{{ gettext('Read More') }}</a>
+      <a class="elipsisReadMoreLink js_readMore" href="#" alt="{{ gettext('Read More') }}">&nbsp;</a>
     </div>
   <% } else if( viewStyle == ctx.AVAILABLE_MESSAGE_VIEW_STYLES.FULL_BODY ){ %>
     <div class="message-body js_messageBodyAnnotatorSelectionAllowed <%= bodyFormatClass %>" id="<%= messageBodyId %>"><%= body %></div>
