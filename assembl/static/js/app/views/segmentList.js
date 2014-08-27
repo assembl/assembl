@@ -399,16 +399,19 @@ define(function (require) {
          * @event
          */
         onClearButtonClick: function (ev) {
-            var collectionManager = new CollectionManager(),
-                ok = confirm(i18n.gettext('Are you sure you want to empty your entire clipboard?'));
+            var that = this,
+                collectionManager = new CollectionManager(),
+                ok = confirm(i18n.gettext('Are you sure you want to empty your entire clipboard?')),
+                user_id = Ctx.getCurrentUser().id;
 
             if (ok) {
                 collectionManager.getAllExtractsCollectionPromise().done(
-                    function (allExtractsCollection) {
-                        var segments = allExtractsCollection.getClipboard();
-                        _.each(segments, function (segment) {
-                            segment.destroy();
-                        });
+                    function(allExtractsCollection) {
+                        that.clipboard.filter(function(s) {
+                                return s.get('idCreator') == user_id
+                            }).map(function (segment) {
+                                segment.destroy();
+                            });
                     });
             }
         }

@@ -191,22 +191,6 @@ define(function(require){
     },
 
     /**
-     * Return the segments to compose the clipboard
-     * @return {Array<Segment>}
-     */
-    getClipboard: function(){
-      var currentUser = Ctx.getCurrentUser(),
-      segments;
-
-      return this.filter(function(item){
-        if( item.get('idIdea') !== null ){
-          return false;
-        }
-        return item.get('idCreator') == currentUser.id;
-      });
-    },
-
-    /**
      * Returns the segment related to the annotation
      * @param  {annotation} annotation
      * @return {Segment}
