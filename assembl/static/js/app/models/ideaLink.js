@@ -27,6 +27,10 @@ define(function(require){
 
         correctParentBug: function() {
             var child = this.collection.collectionManager._allIdeasCollection.get(this.get('target'));
+            if (!child) {
+                console.log("correct parent bug: unknown child");
+                return;
+            }
             if (child.get('parentId') === null) {
                 console.log("correct parent bug");
                 child.set('parentId', this.get('source'));

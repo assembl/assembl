@@ -248,6 +248,13 @@ define(function (require) {
             );
         },
 
+        onReplaced: function (newObject) {
+            if (this.model !== null) {
+                this.stopListening(this.model, 'replacedBy acquiredId');
+            }
+            this.setIdeaModel(newObject);
+        },
+
         /**
          * Set the given idea as the current one
          * @param  {Idea} [idea=null]
@@ -261,7 +268,7 @@ define(function (require) {
                 };
             if (idea !== this.model) {
                 if (this.model !== null) {
-                    this.stopListening(this.model, 'change', ideaChangeCallback);
+                    this.stopListening(this.model, 'change replacedBy acquiredId');
                 }
                 this.model = idea;
                 if (this.extractList) {
@@ -276,16 +283,27 @@ define(function (require) {
                     this.segmentList.reset();
                     //console.log("setCurrentIdea:  setting up new listeners for "+this.model.id);
                     this.listenTo(this.model, 'change', ideaChangeCallback);
-                    //Ctx.openPanel(assembl.ideaPanel);
-                    $.when(collectionManager.getAllExtractsCollectionPromise()).then(
-                        function (allExtractsCollection) {
-                            that.extractList = new SegmentList.IdeaSegmentList([], {
-                                parent: allExtractsCollection,
-                                ideaId: that.model.id
+                    this.listenTo(this.model, 'replacedBy', function(m) {
+                        that.onReplaced(m);
+                    });
+                    this.listenTo(this.model, 'acquiredId', function(m) {
+                        // model has acquired an ID. Reset everything.
+                        var model = that.model;
+                        that.model = null;
+                        that.setIdeaModel(model);
+                    });
+                    if (this.model.id) {
+                        //Ctx.openPanel(assembl.ideaPanel);
+                        $.when(collectionManager.getAllExtractsCollectionPromise()).then(
+                            function (allExtractsCollection) {
+                                that.extractList = new SegmentList.IdeaSegmentList([], {
+                                    parent: allExtractsCollection,
+                                    ideaId: that.model.id
+                                });
+                                that.listenTo(that.extractList, "add remove reset change", that.renderTemplateGetExtractsLabel);
+                                that.render();
                             });
-                            that.listenTo(that.extractList, "add remove reset change", that.renderTemplateGetExtractsLabel);
-                            that.render();
-                        });
+                    }
                 } else {
                     //TODO: More sophisticated behaviour here, depending 
                     //on if the panel was opened by selection, or by something else.

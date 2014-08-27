@@ -92,6 +92,7 @@ define(function(require){
                     var existing = this.collection.get(id);
                     if (existing === null || existing === undefined) {
                         this.set(this.idAttribute, id);
+                        this.trigger("acquiredId");
                     } else if (existing !== this) {
                         /* Those websockets are fast!
                          * 
@@ -108,6 +109,7 @@ define(function(require){
                         //Normally this happens later, but we have to make sure
                         //the collection will see the duplicate
                         this.set(this.idAttribute, id);
+                        this.trigger("acquiredId", existing);
                         //Re-merge the object from the socket, it may have more
                         //information.  Since we haven't set anything except the
                         //id yey, there is no chance we overwrite anything we 
@@ -116,6 +118,7 @@ define(function(require){
                         
                         //Views should listen to this event an replace their model if necessary.
                         existing.trigger("replacedBy", this);
+                        //console.log('replacing '+existing.cid+' with '+this.cid);
                     } else {
                         console.log("base:parse(): this should not happen, but no harm...");
                     }
