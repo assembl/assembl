@@ -79,6 +79,7 @@ define(function (require) {
                 this.model.destroy();
             } else {
                 this.model.set('idIdea', null);
+                this.model.save('idIdea', null);
             }
         },
     });
