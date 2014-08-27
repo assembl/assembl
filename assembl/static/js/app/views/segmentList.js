@@ -33,7 +33,8 @@ define(function (require) {
                 currentUser = Ctx.getCurrentUser();
             if (idPost) {
                 post = this.allMessagesCollection.get(idPost);
-                postCreator = this.allUsersCollection.get(post.get('idCreator'));
+                if (post)
+                    postCreator = this.allUsersCollection.get(post.get('idCreator'));
             }
             return {segment: this.model,
                     post: post,
