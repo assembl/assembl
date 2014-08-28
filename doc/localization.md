@@ -14,8 +14,8 @@ vim .transifexrc
 ```
 Add the following to the .transifexrc file:
 ```
-[https://www.transifex.net]
-hostname = https://www.transifex.net
+[https://www.transifex.com]
+hostname = https://www.transifex.com
 username = <your_username>
 password = <your_password>
 token = <should be empty>
