@@ -52,27 +52,39 @@ $closebuttonColor: $gray;
 
 // panels
 
-// This makes a ridiculous-size file...
-// $grid_unit_min_size: 80px;
-// $max_panel_unit_size: 10;
-// $max_group_unit_size: 20;
-
-// 3/2 ratio for message/idea
-// $grid_unit_min_size: 140px;
-// $max_panel_unit_size: 5;
-// $max_group_unit_size: 7;
+// below this size we scroll
+$small_screen: 980px;
 
 // 2/1 ratio for message/idea
-$grid_unit_min_size: 245px;
+// the number of grid units taken by basic setup of navigation+messages+ideaPanel
+$min_num_grid_units: 4;
+// the number of grid units taken by largest panel
 $max_panel_unit_size: 3;
+// the number of grid units taken by largest group. Assume one message + 3 smaller panels.
 $max_group_unit_size: 5;
 
+
+// 5/3 ratio for message/idea
+// This makes a ridiculous-size file...
+// $min_num_grid_units: 11;
+// $deprecated_grid_unit_min_size: 80px; now 89
+// $max_panel_unit_size: 9;
+// $max_group_unit_size: 17;
+
+// 3/2 ratio for message/idea. Not bad.
+// $min_num_grid_units: 7;
+// $deprecated_grid_unit_min_size: 140px; accurate
+// $max_panel_unit_size: 5;
+// $max_group_unit_size: 9;
+
 // Equal panels
-// $grid_unit_min_size: 300px;
+// $deprecated_grid_unit_min_size: 300px; now 326
+// $min_num_grid_units: 3;
 // $max_panel_unit_size: 2;
 // $max_group_unit_size: 4;
 
-$min_num_grid_units: floor(980px/$grid_unit_min_size);
+$grid_unit_min_size: $small_screen / $min_num_grid_units;
+// huge screen
 $max_num_grid_units: round(2560px/$grid_unit_min_size);
 
 // message-list min 5, nav3, idea 4
