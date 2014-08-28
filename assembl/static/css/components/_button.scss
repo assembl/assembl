@@ -269,7 +269,7 @@
 
 /**********************/
 .btn-default, .btn-bright {
-  color: $purple;
+  color: $purple1;
   background-color: transparent;
 }
 
@@ -297,7 +297,7 @@
 /*********************/
 .btn-primary {
   color: $white;
-  background-color: $purple;
+  background-color: $purple1;
 }
 
 .btn-primary:hover {
@@ -316,14 +316,14 @@
 
 /*********************/
 .btn-secondary {
-  color: $purple;
+  color: $purple1;
   background-color: $white;
-  border: 1px solid $purple;
+  border: 1px solid $purple1;
 }
 
 .btn-secondary:hover {
   color: $white;
-  background-color: $purple;
+  background-color: $purple1;
 }
 
 .btn-secondary:focus {
@@ -333,7 +333,7 @@
 .btn-secondary:active,
 .btn-secondary.active {
   opacity: 0.8;
-  background-color: $purple;
+  background-color: $purple1;
   color: $white;
   outline: 0;
 }
