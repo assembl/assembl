@@ -47,11 +47,72 @@
 
     display: block;
     content: "";
-
-    @include border-radius(5px);
     background: rgba(0, 0, 0, .15) url(#{$img-dir}/panel/loading.gif) no-repeat center center;
   }
 }
+
+/* Animations */
+@include keyframes(spin) {
+  from {
+    @include transform(rotate(0deg));
+  }
+  to {
+    @include transform(rotate(360deg));
+  }
+}
+
+@include keyframes(spinreverse) {
+  from {
+    @include transform(rotate(0deg));
+  }
+  to {
+    @include transform(rotate(-360deg));
+  }
+}
+
+@include keyframes(grow) {
+  0% {
+    @include transform(scaleY(0));
+    opacity: 0;
+  }
+  50% {
+    @include transform(scaleY(1));
+    opacity: 1;
+  }
+  100% {
+    @include transform(scaleY(0));
+    opacity: 0;
+  }
+}
+
+@include keyframes(shatter) {
+  0% {
+    @include transform(scale(0));
+  }
+
+  50% {
+    @include transform(scale(.50));
+  }
+
+  65% {
+    @include transform(scale(.40));
+    background-color: rgba(255, 255, 255, 1);
+    border-width: 0px;
+  }
+
+  90% {
+    background-color: rgba(255, 255, 255, 0);
+    opacity: 1;
+  }
+
+  100% {
+    @include transform(scale(1));
+    border-width: 1px;
+    background-color: transparent;
+    opacity: 0;
+  }
+}
+
 
 // Vertical divisor
 // ----------------
@@ -182,8 +243,12 @@
   bottom: 1px;
   left: 0;
   box-sizing: border-box;
-  overflow-y: auto;
-  overflow-x: hidden;
+  //overflow-y: auto;
+  //overflow-x: hidden;
+  overflow: hidden;
+  &:hover {
+    overflow: auto;
+  }
   .groupPanel.is-dragover & {
     background-color: $yellow;
   }
