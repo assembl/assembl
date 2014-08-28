@@ -8,85 +8,6 @@ $ten: 10px;
 $separatorBulletMargin: 0.6em;
 $previewNumLines: 4;
 
-
-@mixin multiline-ellipsis($height, $lineheight) {
-  // Largely inspired by http://www.mobify.com/blog/multiline-ellipsis-in-pure-css/
-  
-  /* This is problematic as the width depends on the "Read More" string, which 
-  depends on the translation...
-  */
-  $ellipsiswidth: 7em !default;
-  
-  .ellipsis {
-    position: relative;
-    overflow: hidden;
-    max-height: $height;
-    line-height: $lineheight;
-  }
-
-  .ellipsis:before {
-    content: "";
-    float: left;
-    width: 5px;
-    height: 100%;
-  }
-
-  .ellipsis > *:first-child {
-    //display: inline;
-    width: 100%;
-    float: right;
-    margin-left: -5px;
-    //margin: 0;
-    //white-space: normal;
-  }
-
-  .ellipsis:after {
-    content: " \02026  " attr(data-read-more-text); // Read More
-    float: right;
-    cursor: pointer;
-    position: relative;
-    top: -$lineheight;
-    left: 100%;
-    width: $ellipsiswidth;
-    margin-left: -$ellipsiswidth;
-    padding-right: 5px;
-
-    text-align: right;
-    background: white;
-    /*@include background(
-            linear-gradient(top left, rgba(255, 255, 255, 0), white 50%, white)
-    );*/
-  }
-  .ellipsis:hover {
-    &:after {
-      text-decoration: underline;
-    }
-  }
-
-  .ellipsis > a {
-    //We only want a link when the content actually overflows, so we put a &nbsp in content
-    position: absolute;
-    cursor: default;
-    right: 3.5em;
-    bottom: 0;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    text-indent: -9999px;
-  }
-  .ellipsis i, .ellipsis:after {
-    font-style: normal;
-    color: $purple1;
-  }
-
-  .ellipsis i:before {
-    content: "";
-  }
-
-}
-
 // A message block
 // ================
 .message {
@@ -154,13 +75,23 @@ $previewNumLines: 4;
       
     }
   }
+  
+  a.readMoreOrLess {
+    font-style: normal;
+    color: $purple1;
+    text-decoration: none;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+  
   &.viewStyleFullBody, &.viewStylePreview {
     /* Most styles are shared between the FullBody and Preview styles */
     line-height: 19px;
     > .avatar {
       position: absolute;
     }
-    > .readUnreadIndicator, > .readUnreadIndicator, > .message-author, > .message-subject,  > .message-body, > .message-menu, > .message-replybox {
+    > .readUnreadIndicator, > .readUnreadIndicator, > .message-author, > .message-subject,  > .message-body, > .message-menu, > .readMoreOrLess, > .message-replybox {
     //So the first element of each line is aligned with the avatar
       margin-left: $avatarSize + $mesageSpacing*2;
     }
@@ -237,14 +168,14 @@ $previewNumLines: 4;
     .message-date {
     }
 
-    @include multiline-ellipsis($previewNumLines * $mesageBodyLineHeight, $mesageBodyLineHeight);
+    //@include multiline-ellipsis($previewNumLines * $mesageBodyLineHeight, $mesageBodyLineHeight);
     .message-body {
       position: relative;
       padding: 0px;
+      max-height: $previewNumLines * $mesageBodyLineHeight;
     }
 
-    .message-body.body_format_text_plain > div {
-      white-space: normal;
+    .message-body.body_format_text_plain > .elipsis > div {
       white-space: pre-line;
       & > {
         white-space: normal;
@@ -253,14 +184,15 @@ $previewNumLines: 4;
         height: inherit;
       }
     }
+        
+
 
     .message-body.body_format_text_html {
       > div {
         height: inherit;
       }
     }
-    .readmore {
-    }
+
   }
   
   &.viewStyleTitleOnly {

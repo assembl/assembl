@@ -796,13 +796,12 @@ define(function (require) {
                         offsetEnd: MORE_PAGES_NUMBER
                     })
                     that.scrollToPreviousScrollTarget();
-                    Assembl.vent.trigger("messageList:render_complete", "Render complete");
+
+                    that.trigger("messageList:render_complete", "Render complete");
                 })
-
-
             return this;
         },
-
+        
         onBeforeRender: function () {
             this.previousScrollTarget = this.getPreviousScrollTarget();
             Ctx.removeCurrentlyDisplayedTooltips(this.$el);

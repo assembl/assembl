@@ -17,7 +17,7 @@ require(["modules/assembl","modules/context","jquery","router","utils/socket"],
     Assembl.commands.setHandler('socket:close', function(){
         $('#onlinedot').removeClass('is-online');
     });
-
+    
     // Let the game begins...
     Backbone.history.start({hashChange: false, root: "/"});
     

@@ -84,6 +84,7 @@ define(function (require) {
 
             'click .js_messageHeader': 'onMessageTitleClick',
             'click .js_readMore': 'onMessageTitleClick',
+            'click .js_readLess': 'onMessageTitleClick',
             'click .message-hoistbtn': 'onMessageHoistClick',
 
             //
@@ -220,10 +221,32 @@ define(function (require) {
                         that.closeReplyBox();
                     }
 
-                    if (that.viewStyle == that.availableMessageViewStyles.PREVIEW) {
-                        that.displayReadMore();
+                    if (that.viewStyle == that.availableMessageViewStyles.FULL_BODY) {
+                        that.showReadLess();
                     }
-
+                    if (that.viewStyle == that.availableMessageViewStyles.PREVIEW) {
+                      /* We use https://github.com/MilesOkeefe/jQuery.dotdotdot to show 
+                       * Read More links for message previews
+                       */
+                      that.$(".ellipsis").dotdotdot({
+                        after: "a.readMore",
+                        callback: function( isTruncated, orgContent ) {
+                          //console.log(isTruncated, orgContent);
+                          if(isTruncated) {
+                            that.$(".ellipsis > a.readMore").removeClass('hidden');
+                          }
+                          else {
+                            that.$(".ellipsis > a.readMore").addClass('hidden');
+                          }
+                        },
+                        watch: "window"
+                        })
+                        
+                        that.listenTo(that.messageListView, "messageList:render_complete", function () {
+                          //console.log("Updating dotdotdot");
+                          that.$(".ellipsis").trigger('update.dot');
+                        });
+                    }
                 });
             return this;
         },
@@ -617,15 +640,10 @@ define(function (require) {
         },
 
         /**
-         * Temporary solution before implement on fly content more/less
+         * Show the read less link
          * */
-        displayReadMore: function () {
-            var body = this.$('.more').text(),
-                showChar = 300;
-
-            if (body.length < showChar) {
-                this.$('.readmore').hide();
-            }
+        showReadLess: function () {
+          this.$('.readLess').removeClass('hidden');
         }
 
 

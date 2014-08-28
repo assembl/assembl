@@ -14,6 +14,7 @@ var requirejs_config = {
         'jquery': "bower/jquery/jquery",
         'tipsy': 'bower/tipsy/src/javascripts/jquery.tipsy',
         'jquery-highlight': 'lib/jquery-highlight/jquery.highlight',
+        'jquery.dotdotdot': 'bower/jquery.dotdotdot/src/js/jquery.dotdotdot.min',
 
         'backbone': 'bower/backbone/backbone',
         'BackboneSubset': 'bower/Backbone.Subset/backbone.subset',
@@ -61,8 +62,12 @@ var requirejs_config = {
             deps: ['jquery'],
             exports: 'jQuery'
         },
+        'jquery.dotdotdot': {
+          deps: ['jquery'],
+          exports: 'jQuery'
+        },
         'modules/context': {
-            deps: ['annotator', 'ckeditor', 'tipsy', 'utils/i18n', 'jquery-highlight'],
+            deps: ['annotator', 'ckeditor', 'tipsy', 'utils/i18n', 'jquery-highlight', 'jquery.dotdotdot'],
             exports: 'context'
         },
         'utils/i18n': {
