@@ -245,9 +245,10 @@
   box-sizing: border-box;
   //overflow-y: auto;
   //overflow-x: hidden;
-  overflow: hidden;
+  //overflow: hidden;
+  overflow: auto;
   &:hover {
-    overflow: auto;
+    //overflow: auto;
   }
   .groupPanel.is-dragover & {
     background-color: $yellow;
