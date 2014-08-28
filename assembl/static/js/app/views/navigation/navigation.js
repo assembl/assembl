@@ -142,7 +142,7 @@ define(function (require) {
                 var _header = $('#header').height(),
                 _window = $(window).height(),
                 _li = 35*3,
-                _headerGroup = $(".groupHeader").first().height();
+                _headerGroup = $(".groupHeader").first().height() ? $(".groupHeader").first().height() : ( $(".groupHeader.editable").first() ? 25 : 3 );
                 _sideBarHeight = (_window - _header) - _headerGroup;
                 this._accordionContentHeight = (_sideBarHeight - _li) - 15;
                 if ( ++this._accordionHeightTries < 10 ) // prevent infinite loop
