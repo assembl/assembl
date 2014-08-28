@@ -268,21 +268,28 @@
 }
 
 /**********************/
-.btn-default {
+.btn-default, .btn-bright {
   color: $purple;
   background-color: transparent;
 }
 
-.btn-default:hover {
+.btn-bright {
+  color: $purple2;
+}
+
+.btn-default:hover, .btn-bright:hover {
   text-decoration: underline;
 }
 
-.btn-default:focus {
+.btn-default:focus, .btn-bright:focus {
   outline: 0;
 }
 
 .btn-default:active,
-.btn-default.active {
+.btn-default.active,
+.btn-bright:active,
+.btn-bright.active,
+ {
   opacity: 0.8;
   outline: 0;
 }

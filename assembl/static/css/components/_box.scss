@@ -71,7 +71,7 @@
   }
 }
 
-.warning-box {
+.warning-box, .warning-box-for-message-post {
   background-color: #f4eadc;
   padding: 3px 10px;
   margin: 10px 0;
@@ -81,4 +81,10 @@
     margin: 0;
     text-align: left;
   }
+}
+
+.warning-box-for-message-post {
+  border-left: 3px solid $orange1;
+  background-color: $orange;
+  padding: 0 10px;
 }
