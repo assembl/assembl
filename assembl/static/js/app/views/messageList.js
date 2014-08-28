@@ -1338,7 +1338,12 @@ define(function (require) {
                     targetMessageViewStyle = Ctx.AVAILABLE_MESSAGE_VIEW_STYLES.TITLE_ONLY;
                 }
                 else {
+                  if(this.defaultMessageStyle != Ctx.AVAILABLE_MESSAGE_VIEW_STYLES.TITLE_ONLY) {
                     targetMessageViewStyle = this.defaultMessageStyle;
+                  }
+                  else {
+                    targetMessageViewStyle = Ctx.AVAILABLE_MESSAGE_VIEW_STYLES.PREVIEW;
+                  }
                 }
             }
             else {

@@ -209,6 +209,7 @@ $previewNumLines: 4;
     .leftSection{
       float: left;
       margin: 0px;
+      text-align: left;
     }
     .rightSection{
         float: right;
@@ -266,30 +267,31 @@ $previewNumLines: 4;
   .readUnreadIndicator {
     display: inline-block;
     cursor: pointer;
+    box-sizing: border-box;
     width: $readUnreadIndicatorSize;
     height: $readUnreadIndicatorSize;
-    .indice {
-      width: $readUnreadIndicatorSize - 2*2px; //size - borders
-      height: $readUnreadIndicatorSize - 2*2px;
-      border: 2px solid $gray3;
-      display: inline-block;
-      @include border-radius(50px);
-      &:hover {
-        background-color: $gray3;
-      }
+    margin: 0px $mesageSpacing 0 $mesageSpacing*2;
+    vertical-align: middle;
+    border: 2px solid $gray3;
+    @include border-radius(50px);
+    &:hover {
+      background-color: $gray3;
     }
+
   }
 
   &.unread {
     .message-author {
         font-weight: bold;
+        color: $purple;
     }
-
+    .message-subject {
+        font-weight: bold;
+    }
+    
     .readUnreadIndicator {
-      .indice {
         background-color: $purple;
         border: 2px solid $purple;
-      }
     }
   }
 
@@ -305,16 +307,17 @@ $previewNumLines: 4;
   //
   .message-menu {
     font-size: 13px; //This should be rem or something - benoitg
-    color: $gray1;
-    opacity: 0.7;
-    i {
-      opacity: 0.5;
+    & > {
+      color: $gray1;
+      opacity: 0.7;
+      i {
+        opacity: 0.5;
+      }
     }
-    >:hover {
+    &:hover {
       color: $purple1;
       opacity: 1;
     }
-  
     // used when buttons are to the left of the Reply button
     > .message-hoistbtn, > .message-linkbutton {
       vertical-align: top;
@@ -328,36 +331,50 @@ $previewNumLines: 4;
         font-size: 10px;
       }
     }
-    .dropdown {
-      //Not all message-menus are dropdown
-      position: absolute;
-      right: 5px;
-      top: 0;
+  }
+  .dropdown {
+    //Not all message-menus are dropdown
+    position: absolute;
+    right: 5px;
+    top: 0;
+    vertical-align: top;
+    color: $gray2;
+    
+    
+    //line-height: 10px;
+    padding: 0;
+    //margin-left: 6px;
+    .dropdown-label {
+    color: $gray1;
+      opacity: 0.7;
+      i {
+        opacity: 0.5;
+      }
+      &:hover {
+        color: $purple1;
+        opacity: 1;
+      }
+    }
+    .dropdown-label.dropdown-label--arrow {
+      width: 24px;
+      height: 24px;
+    }
+
+    .iconbutton {
+      width: 20px !important;
+      height: 18px;
+      line-height: 14px;
+      padding-top: 2px;
+      padding-right: 4px;
       vertical-align: top;
-      //line-height: 10px;
-      padding: 0;
-      //margin-left: 6px;
-      .dropdown-label.dropdown-label--arrow {
-        width: 24px;
-        height: 24px;
-      }
-  
-      .iconbutton {
-        width: 20px !important;
-        height: 18px;
-        line-height: 14px;
-        padding-top: 2px;
-        padding-right: 4px;
-        vertical-align: top;
-      }
-  
-      i.icon-mail {
-        font-size: 12px; /* icon-mail needs to have a smaller font size (than original 16px) because the icon is big in the font */
-      }
-      a:link, a:visited {
-        color: inherit; /* so that the icon is not purple when the "a" tag has an href attribute (link) */
-        text-decoration: inherit;
-      }
+    }
+
+    i.icon-mail {
+      font-size: 12px; /* icon-mail needs to have a smaller font size (than original 16px) because the icon is big in the font */
+    }
+    a:link, a:visited {
+      color: inherit; /* so that the icon is not purple when the "a" tag has an href attribute (link) */
+      text-decoration: inherit;
     }
   }
 }
@@ -392,6 +409,7 @@ body.js_annotatorUserCannotAddExtract > .textbubble {
 .message-family-arrow.noarrow {
   display: block;
   padding-left: $messageFamilyImageWidth/2;
+  margin-left: $messageFamilyImageWidth/2;
 }
 
 .link-img {

@@ -221,7 +221,7 @@ define(function (require) {
                         that.closeReplyBox();
                     }
 
-                    if (that.viewStyle == that.availableMessageViewStyles.FULL_BODY) {
+                    if (that.viewStyle == that.availableMessageViewStyles.FULL_BODY && that.messageListView.defaultMessageStyle != that.availableMessageViewStyles.FULL_BODY) {
                         that.showReadLess();
                     }
                     if (that.viewStyle == that.availableMessageViewStyles.PREVIEW) {
