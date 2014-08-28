@@ -35,7 +35,7 @@
                         </li>
                     {% endif %}
                     <li class="dropdown-listitem">
-                        <a href="/logout" class="sign-out"><span class="iconbutton icon-logout mrs"></span>{{ gettext('Sign out') }}</a>
+                        <a href="/logout?next_view={{request.current_route_path()}}" class="sign-out"><span class="iconbutton icon-logout mrs"></span>{{ gettext('Sign out') }}</a>
                     </li>
                 </ul>
             </div>
