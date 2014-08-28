@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'icomoon';
-  src: url('#{$fonts-dir}/icomoon.eot?rtqrgm');
-  src: url('#{$fonts-dir}/icomoon.eot?#iefixrtqrgm') format('embedded-opentype'),
-  url('#{$fonts-dir}/icomoon.woff?rtqrgm') format('woff'),
-  url('#{$fonts-dir}/icomoon.ttf?rtqrgm') format('truetype'),
-  url('#{$fonts-dir}/icomoon.svg?rtqrgm#icomoon') format('svg');
+  src: url('#{$fonts-dir}/icomoon.eot?41kms9');
+  src: url('#{$fonts-dir}/icomoon.eot?#iefix41kms9') format('embedded-opentype'),
+  url('#{$fonts-dir}/icomoon.woff?41kms9') format('woff'),
+  url('#{$fonts-dir}/icomoon.ttf?41kms9') format('truetype'),
+  url('#{$fonts-dir}/icomoon.svg?41kms9#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -23,98 +23,81 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-minimize:before {
+  content: "\e600";
+}
+
+.icon-quote:before {
+  content: "\e613";
+}
+
 .icon-home:before {
   content: "\e612";
 }
 
-.icon-logout:before {
+.icon-book:before {
   content: "\e611";
 }
-
-.icon-book:before {
-  content: "\e600";
-}
-
 .icon-search:before {
   content: "\e60e";
 }
-
 .icon-bullet-point:before {
   content: "\e60f";
 }
-
 .icon-discuss:before {
   content: "\e610";
 }
-
 .icon-checkbox:before {
   content: "\e001";
 }
-
 .icon-collapse:before {
   content: "\e002";
 }
-
 .icon-delete:before {
   content: "\e003";
 }
-
 .icon-comment:before {
   content: "\e601";
 }
-
 .icon-timer:before {
   content: "\e602";
 }
-
 .icon-options:before {
   content: "\e603";
 }
-
 .icon-message:before {
   content: "\e604";
 }
-
 .icon-clipboard:before {
   content: "\e605";
 }
-
 .icon-synth:before {
   content: "\e606";
 }
-
 .icon-tableofideas:before {
   content: "\e607";
 }
-
 .icon-answer:before {
   content: "\e608";
 }
-
 .icon-lab:before {
   content: "\e609";
 }
-
 .icon-idea:before {
   content: "\e60a";
 }
-
 .icon-add:before {
   content: "\e60b";
 }
-
 .icon-arrowdown:before {
   content: "\e60c";
 }
-
 .icon-expand:before {
   content: "\e60d";
 }
-
 .icon-lock:before {
   content: "\e802";
 }
-
 .icon-lock-open:before {
   content: "\e803";
 }
