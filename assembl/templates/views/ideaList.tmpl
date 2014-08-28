@@ -31,7 +31,11 @@
         </div>
     </header>
     <% } %>
+    <% if (canAdd) { %>
     <div class="panel-body panel-body--has-footer">
+    <% } else { %>
+    <div class="panel-body">
+    <% } %>
 
         <div id="idealist-list" class="idealist"></div>
         <div id="idealist-graph" style="display: none;">
