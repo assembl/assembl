@@ -1,11 +1,11 @@
  
 .assembl-logo {
-  font-size: 15px;
+  font-size: 18px;
   font-weight: bold;
   text-decoration: none;
   line-height: 35px;
   margin-left: 10px;
-  color: #7100B1;
+  color: #9A3FD5;
 }
 .navbar {
   &.navbar-default {
@@ -14,3 +14,23 @@
     height: 35px;
     }
   }
+
+.title-debate-name {
+  font-size: 16px;
+  color: #B36FE0;
+  .debate-icon {
+    font-size: 145%;
+    vertical-align: middle;
+  }
+  .breadcrumb-level-indicator {
+    font-family: 'Comic Sans MS';
+    color: #aaa;
+    font-weight: bold;
+    margin: 0 4px;
+    font-size: 120%;
+  }
+
+  .breadcrumb-level-indicator:before {
+    content: ">";
+  }
+}

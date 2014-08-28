@@ -12,10 +12,10 @@ require(["modules/assembl","modules/context","jquery","router","utils/socket"],
     // The socket
     var socket = new Socket();
     Assembl.commands.setHandler('socket:open', function(){
-        $('#onlinedot').addClass('is-online').attr('title', 'online');
+        $('#onlinedot').addClass('is-online');
     });
     Assembl.commands.setHandler('socket:close', function(){
-        $('#onlinedot').removeClass('is-online').attr('title', 'offline');
+        $('#onlinedot').removeClass('is-online');
     });
 
     // Let the game begins...

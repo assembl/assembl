@@ -1,10 +1,10 @@
 
 // Adds a gray dot before the word
 // ========
-.dot {
+#onlinedot {
 
     .dot-offline {
-        display: inline; // initial;
+        display: initial;
     }
 
     .dot-online {
@@ -15,7 +15,7 @@
 
 // Online version
 // **********
-.is-online {
+#onlinedot.is-online {
 
     &:before {
         background-color: #13a89e;
@@ -26,7 +26,7 @@
     }
 
     .dot-online {
-        display: inline; // initial;
+        display: initial;
     }
 
 }
