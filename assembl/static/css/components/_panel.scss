@@ -132,115 +132,56 @@
   height: 100%;
 }
 
-@media (max-width: 900px) {
-  // Tiny window size: Show two panels units
+@media (max-width: $grid_unit_min_size * ($min_num_grid_units)) {
   .groupPanel {
-    &.panelGridWidth-1 {
-      width: 50%;
+    @for $panel_width from 1 through $min_num_grid_units {
+      &.panelGridWidth-#{$panel_width} {
+        width: $grid_unit_min_size * $panel_width;
+      }
     }
-    &.panelGridWidth-2 {
-      width: 100%;
-    }
-    &.panelGridWidth-3 {
-      width: 150%;
+    .groupContent {
+      @for $group_width from 1 through $max_group_unit_size {
+        &.groupGridSize-#{$group_width} {
+          width: $grid_unit_min_size * $group_width;
+        }
+      }
     }
   }
 }
 
-@media (min-width: 900px) and (max-width: 1200px) {
-  // Small window size: Show three panels units
-  .groupPanel {
-    &.panelGridWidth-1 {
-      width: 33%;
+@for $screen_grid_size from $min_num_grid_units  through $max_num_grid_units {
+  @media (min-width: $grid_unit_min_size * $screen_grid_size) and (max-width: $grid_unit_min_size * ($screen_grid_size+1)) {
+    .groupPanel {
+      @for $panel_width from 1 through $max_panel_unit_size {
+        &.panelGridWidth-#{$panel_width} {
+          width: 100% * $panel_width / $screen_grid_size;
+        }
+      }
     }
-    &.panelGridWidth-2 {
-      width: 66%;
+    .groupContent {
+      @for $group_width from 1 through $max_group_unit_size {
+        &.groupGridSize-#{$group_width} {
+          width: 100% * $group_width / $screen_grid_size;
+        }
+      }
     }
-    &.panelGridWidth-3 {
-      width: 100%;
-    }
-  }
-}
-
-@media (min-width: 1200px) and (max-width: 1500px) {
-  // Basic window size: Show four panels units
-  .groupPanel {
-    &.panelGridWidth-1 {
-      width: 25%;
-    }
-    &.panelGridWidth-2 {
-      width: 50%;
-    }
-    &.panelGridWidth-3 {
-      width: 75%;
-    }
-  }
-  // Special case for small number of actual panels
-  #groupsContainer.allGroupsGridSize-3 .groupPanel {
-    &.panelGridWidth-1 {
-      width: 33%;
-    }
-    &.panelGridWidth-2 {
-      width: 66%;
-    }
-    &.panelGridWidth-3 {
-      width: 100%;
-    }
-  }
-}
-
-@media (min-width: 1500px) {
-  // Large window: Show five panels units
-  .groupPanel {
-    &.panelGridWidth-1 {
-      width: 20%;
-    }
-    &.panelGridWidth-2 {
-      width: 40%;
-    }
-    &.panelGridWidth-3 {
-      width: 60%;
-    }
-  }
-  // Special case for small number of actual panels
-  #groupsContainer.allGroupsGridSize-3 .groupPanel {
-    &.panelGridWidth-1 {
-      width: 33%;
-    }
-    &.panelGridWidth-2 {
-      width: 66%;
-    }
-    &.panelGridWidth-3 {
-      width: 100%;
-    }
-  }
-  #groupsContainer.allGroupsGridSize-4 .groupPanel {
-    &.panelGridWidth-1 {
-      width: 25%;
-    }
-    &.panelGridWidth-2 {
-      width: 50%;
-    }
-    &.panelGridWidth-3 {
-      width: 75%;
-    }
-  }
-}
-
-// Special case for small number of actual panels
-#groupsContainer.allGroupsGridSize-1 {
-  .groupPanel {
-    width: 100%;
-  }
-}
-
-#groupsContainer.allGroupsGridSize-2 {
-  .groupPanel {
-    &.panelGridWidth-1 {
-      width: 50%;
-    }
-    &.panelGridWidth-2 {
-      width: 100%;
+    @for $panel_total_width from 1 through ($screen_grid_size - 1) {
+      #groupsContainer.allGroupsGridSize-#{$panel_total_width} {
+        .groupPanel {
+          @for $panel_width from 1 through min($max_panel_unit_size, $panel_total_width) {
+            &.panelGridWidth-#{$panel_width} {
+              width: 100% * $panel_width / $panel_total_width;
+            }
+          }
+        }
+        .groupContent {
+          @for $group_width from 1 through min($max_group_unit_size, $panel_total_width) {
+            &.groupGridSize-#{$group_width} {
+              width: 100% * $group_width / $panel_total_width;
+            }
+          }
+        }
+      }
     }
   }
 }

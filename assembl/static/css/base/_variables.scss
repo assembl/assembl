@@ -49,3 +49,20 @@ $baseLineHeight: 1.4em;
 // Usage variables
 $textSelectionBackgroundColor: $orange;
 $closebuttonColor: $gray;
+
+// panels
+
+// This makes a ridiculous-size file...
+// $grid_unit_size: 80px;
+// $min_num_grid_units: 11;
+// $max_num_grid_units: 32;
+// $max_panel_unit_size: 10;
+// $max_group_unit_size: 20;
+
+$grid_unit_min_size: 300px;
+$min_num_grid_units: 3;
+$max_num_grid_units: 8;
+$max_panel_unit_size: 2;
+$max_group_unit_size: 4;
+
+// message-list min 5, nav3, idea 4
