@@ -1,6 +1,10 @@
-<div class="groupHeader">
 <% if( Ctx.userCanChangeUi() ){ %>
-  <a class="js_closeGroup close-group"><i class="icon-delete"></i></a>
+	<div class="groupHeader editable">
+	  <a class="js_closeGroup close-group"><i class="icon-delete"></i></a>
+	</div>
+	<div class="groupBody editable"></div>
+<% } else { %>
+	<div class="groupHeader">
+	</div>
+	<div class="groupBody"></div>
 <% } %>
-</div>
-<div class="groupBody"></div>

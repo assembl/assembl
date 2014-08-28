@@ -36,16 +36,15 @@ define(function (require) {
             this.groupContent = options.groupContent;
 
             $(window).resize(function () {
-                that.initVar();
                 that.setSideBarHeight();
             });
 
             this._accordionContentHeight = null;
+            this._accordionHeightTries = 0;
 
             this.listenTo(Assembl.vent, 'navigation:selected', this.toggleMenuByName);
         },
         onShow: function () {
-            this.initVar();
             this.setSideBarHeight();
             //this.notification.show(new sidebarNotification());
         },
@@ -74,6 +73,7 @@ define(function (require) {
             }
         },
         setSideBarHeight: function () {
+            this.initVar();
             this.$('div.second-level').css('height', this._accordionContentHeight);
         },
         loadView: function (view) {
@@ -127,6 +127,7 @@ define(function (require) {
         // This method needs the DOM elements of the View to be rendered. So it should not be called in onRender(), but rather in onShow() or onDomRefresh()
         initVar: function () {
             // check wether DOM elements are already rendered
+            var that = this;
             if ( this.$el && this.$el.parent() && this.$el.parent().height() )
             {
                 var number_of_li = this.$('.side-menu > li').length;
@@ -141,9 +142,13 @@ define(function (require) {
                 var _header = $('#header').height(),
                 _window = $(window).height(),
                 _li = 35*3,
-                _headerGroup = 25;
+                _headerGroup = $(".groupHeader").first().height();
                 _sideBarHeight = (_window - _header) - _headerGroup;
                 this._accordionContentHeight = (_sideBarHeight - _li) - 15;
+                if ( ++this._accordionHeightTries < 10 ) // prevent infinite loop
+                {
+                    setTimeout(function(){that.setSideBarHeight()}, 500);
+                }
             }
             
         }

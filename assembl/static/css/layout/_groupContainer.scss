@@ -31,7 +31,10 @@
 
 
 .groupHeader {
-  height: 25px;
+  &.editable {
+    height: 25px;
+  }
+  height: 3px;
   background-color: $gray1;
   position: relative;
   .close-group,
@@ -69,7 +72,10 @@
 
 .groupBody {
   display: table;
-  height: calc(100% - 25px); /* retain the height of .groupHeader */
+  height: calc(100% - 3px); /* retain the height of .groupHeader */
+  &.editable {
+    height: calc(100% - 25px); /* retain the height of .groupHeader */
+  }
   width: 100%;
   table-layout: auto;
 

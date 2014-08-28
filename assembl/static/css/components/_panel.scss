@@ -117,13 +117,16 @@
   }
 }
 
-.groupPanel .panelContents {
+.groupBody .groupPanel .panelContents {
   /*height: 100%;*/
-  height: calc(100vh - 60px); /* retain the height of everything on top of it. probably not the best solution because not dynamic */
-
+  height: calc(100vh - 38px); /* retain the height of everything on top of it. probably not the best solution because not dynamic */
 }
 
-.groupPanel header ~ .panelContents {
+.groupBody.editable .groupPanel .panelContents {
+  height: calc(100vh - 60px); /* retain the height of everything on top of it. probably not the best solution because not dynamic */
+}
+
+.groupBody .groupPanel header ~ .panelContents {
   height: calc(100% - 35px); /* retain the height of the header */
 }
 
