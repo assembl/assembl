@@ -1,8 +1,5 @@
-html, body {
-  height: 100%;
-}
 
-body {
+html, body {
   font-family: $baseFontFamily;
   font-size: $smallFontSize;
   -webkit-font-smoothing: subpixel-antialiased;
@@ -14,7 +11,7 @@ body {
 }
 
 @include scrollbar {
-  background-color: #eeeeee;
+  background-color: #F7F9F9;
   width: 9px;
   height: 10px
 }
