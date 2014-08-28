@@ -8,43 +8,43 @@
 {% set segmentDate = '<%= ctx.getNiceDateTime(segment.get("creationDate")) %>' %}
 {% set segmentCreatorName = '<%= segment.getCreatorDEPRECATED().get("name") %>' %}
 {% set harverterTooltip = gettext('Harvested by %(name)s %(date)s')|format(date=segmentDate, name=segmentCreatorName) %}
+
 {% set segmentCreatorAvatarImg = '<a class="profile-link" href="#" data-toggle="tooltip" title="'+harverterTooltip+'"><img src="<%= segment.getCreatorDEPRECATED().getAvatarUrl(24) %>" class="image-rounded" alt="" width="24" height="24"/></a>' %}
 {% set segmentLinkTooltip = gettext('Click here to see the original contribution this segment is quoted from.') %}
-{% set segmentTextLink = '<a class="segment-link" data-segmentid="<%= segment.cid %>" data-tooltip="'+segmentLinkTooltip+'">'+gettext('See&nbsp;in&nbsp;context')+'<%= segment.getTypeIcon() %>&nbsp;</a>' %}
+{% set segmentTextLink = '<a class="segment-link" data-segmentid="<%= segment.cid %>" data-tooltip="'+segmentLinkTooltip+'">'+gettext('Show in original text')+'<%= segment.getTypeIcon() %>&nbsp;</a>' %}
 
 
 <div class="box postit" draggable="true" data-segmentid="<%= segment.cid %>">
-    <% if (canEditExtracts || (canEditMyExtracts && segment.getCreatorDEPRECATED() == ctx.getCurrentUser())) { %>
-        <span data-segmentid="<%= segment.cid %>" class="js_closeExtract icon-delete fr"></span>
-    <% } %>
-    
+  <% if (canEditExtracts || (canEditMyExtracts && segment.getCreatorDEPRECATED() == ctx.getCurrentUser())) { %>
+    <span data-segmentid="<%= segment.cid %>" class="js_closeExtract closeExtract icon-delete fr"></span>
+  <% } %>
 
-    <q class="text text-quotation"><%= segment.getQuote() %></q>
-    {{ segmentTextLink|safe }}
-    <div class="spacer spacer--big"></div>
-    <div class="postit-footer">
-    <div class="segment-author">
-        <%
-        var type = segment.get("target")["@type"];
-        if ( type == "Email" || type == "Post" || type == "AssemblPost" || type == "ImportedPost") { %>
-            {% set postCreatorAvatarImg = '<img src="<%= postCreator.getAvatarUrl(35) %>" class="image-rounded" alt="" width="35" height="35" />' %}
-            {% set postCreatorName = '<%= postCreator.get("name") %>' %}
-            {% set nicePostDate = '<%= ctx.getNiceDateTime(post.get("date")) %>' %}
-            {% set precisePostDate = '<%= ctx.getReadableDateTime(post.get("date")) %>' %}
-            
-            {{ gettext('%(img)s Posted <time title="%(precise_date)s">%(nice_date)s</time> by <strong>%(name)s</strong>')|format(name=postCreatorName, img=postCreatorAvatarImg, nice_date=nicePostDate, precise_date=precisePostDate)|safe }}
-        <% } else if (type == "Webpage") { %>
-            <img src="/static/img/icon/search_document.svg" width="35" height="35" class="image-rounded" alt="{{ gettext('Document extracted from the web') }}" />
-            {{ gettext('Harvested from webpage') }}
-        <% } else { %>
-            {{ gettext('Unknown segment type: ') }}<%= type %>
-        <% } %>
+  <q class="text text-quotation"><%= segment.getQuote() %></q>
+  <div class="postit-footer">
+    <div class="extractOrigin">
+      <% var type = segment.get("target")["@type"]; if ( type == "Email" || type == "Post" || type == "AssemblPost" || type == "ImportedPost") { %>
+        {% set postCreatorAvatarImg = '<img src="<%= postCreator.getAvatarUrl(30) %>" class="creatorAvatar image-rounded" alt="" width="30" height="30" />' %}
+        {% set postCreatorName = '<%= postCreator.get("name") %>' %}
+        {% set nicePostDate = '<%= ctx.getNiceDateTime(post.get("date")) %>' %}
+        {% set precisePostDate = '<%= ctx.getReadableDateTime(post.get("date")) %>' %}
+        {% set authorTooltip = gettext('%(img)s Posted <time title="%(precise_date)s">%(nice_date)s</time> by %(name)s')|format(name=postCreatorName, img=postCreatorAvatarImg, nice_date=nicePostDate, precise_date=precisePostDate)|safe %}
+        {{ postCreatorAvatarImg|safe }}
+        <span class="creatorName">{{ postCreatorName|safe }}</span>
+      <% } else if (type == "Webpage") { %>
+        <img src="/static/img/icon/search_document.svg" width="35" height="35" class="image-rounded" alt="{{ gettext('Document extracted from the web') }}" />
+        {{ gettext('Harvested from webpage') }}
+      <% } else { %>
+        {{ gettext('Unknown segment type: ') }}<%= type %>
+      <% } %>
+      <br>
+      {{ segmentTextLink|safe }}
     </div>
-    <div class="segment-harvester">
+    <% if(ctx.getCurrentInterfaceType() !== ctx.InterfaceTypes.SIMPLE) { %>
+      <div class="segment-harvester">
         <div class="text-small text-muted">
             {{ gettext('%(img)s')|format(img=segmentCreatorAvatarImg)|safe }}
         </div>
-    </div>
-    </div>
-
+      </div>
+    <% } %>
+  </div>
 </div>

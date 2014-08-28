@@ -73,20 +73,6 @@
   @include opacity(0.5);
 }
 
-// Quotation text
-// -----------
-.text-quotation {
-  &:before {
-    //content: "\00AB\00a0 ";
-    content: "\275D\00a0 ";
-  }
-
-  &:after {
-    //content: "\00a0\00BB";
-    content: "\00a0\275E";
-  }
-}
-
 // The text bubble for when a text is selected
 // ====================
 .textbubble {

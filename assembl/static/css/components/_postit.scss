@@ -1,22 +1,25 @@
 // Post it notes
 // =============
 
-$postit-color-dark: rgba(255, 255, 126, 1);
-$postit-color-light: rgba(255, 255, 160, 1);
+$postit-color-dark: #F7F9F9;
+$postit-color-light: #F7F9F9;
 
 // A wrapper for two or more .postit
 // ====================
 div.postitlist {
-    div.postit {
+  div.postit {
     overflow: visible;
     min-width: 200px; //Width from the shadow below.
     margin: 1em;
     padding: 1em;
+    color: $gray2;
+    font-size: 13px; //This should be rem or something - benoitg
+    
     position: relative;
     border-right: 1px solid #E8E8E8;
     border-bottom: 1px solid #E8E8E8;
     border-top: 0px none $postit-color-dark;
-    border-left: 0px none $postit-color-dark;
+    border-left: 5px solid $orange;
     @include border-bottom-right-radius(5px);
     display: block;
     background: $postit-color-dark;
@@ -24,14 +27,51 @@ div.postitlist {
             linear-gradient(top, $postit-color-dark, $postit-color-dark 40px, transparent 40px),
             linear-gradient(top left, $postit-color-light, $postit-color-dark)
     );
+    &:hover {
+      a.segment-link {
+        visibility: visible !important;
+      }
+    }
 
     @include transition(box-shadow 1s);
 
+    
+    // Quotation text
+    // -----------
+    .text-quotation {
+      &:before {
+        //content: "\00AB\00a0 ";
+        content: "\275D";
+        font-size: 400%;
+        vertical-align: middle;
+        padding-top: 0.1em;
+        padding-right:0.1em;
+        color: $orange;
+      }
+    
+      &:after {
+        //content: "\00a0\00BB";
+        content: "\275E";
+        font-size: 400%;
+        vertical-align: middle;
+        padding-top: 0.4em;
+        padding-left:0.1em;
+        color: $orange;
+      }
+    }
+    
     q {
-      margin-right: 0.8em;
-      display: inline-block;
+      margin: 0 0 1em 0;
     }
 
+    a {
+      font-style: normal;
+      color: $purple1;
+      text-decoration: none;
+      &:hover {
+        text-decoration: underline;
+      }
+    }
     &:after {
       content: "";
       position: absolute;
@@ -44,29 +84,30 @@ div.postitlist {
       @include box-shadow(2px 15px 5px rgba(0, 0, 0, 0.40));
       @include transform(matrix(-1, -0.1, 0, 1, 0, 0));
     }
-    a.segment-link {
-      display: block;
-    }
-    .closebutton {
-      position: absolute;
-      top: 10px;
-      right: 10px;
+    .closeExtract {
+      &:hover {
+        cursor: pointer;
+      }
     }
     .postit-footer {
       width: 100%;
       position: relative;
-      a.segment-link {
+      .extractOrigin {
+
         display: inline-block;
-      }
-      .segment-author {
+        padding-right: 1em;
+        width: 75%;
         > img {
           float: left;
           margin-right: 0.5em;
         }
-        display: inline-block;
-        vertical-align: bottom;
-        padding-right: 1em;
-        max-width: 75%;
+        .creatorName {
+
+        }
+        a.segment-link {
+          position: relative;
+          visibility: hidden;
+        }
       }
 
       .segment-harvester {
