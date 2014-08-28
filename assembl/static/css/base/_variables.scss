@@ -53,16 +53,26 @@ $closebuttonColor: $gray;
 // panels
 
 // This makes a ridiculous-size file...
-// $grid_unit_size: 80px;
-// $min_num_grid_units: 11;
-// $max_num_grid_units: 32;
+// $grid_unit_min_size: 80px;
 // $max_panel_unit_size: 10;
 // $max_group_unit_size: 20;
 
-$grid_unit_min_size: 300px;
-$min_num_grid_units: 3;
-$max_num_grid_units: 8;
-$max_panel_unit_size: 2;
-$max_group_unit_size: 4;
+// 3/2 ratio for message/idea
+// $grid_unit_min_size: 140px;
+// $max_panel_unit_size: 5;
+// $max_group_unit_size: 7;
+
+// 2/1 ratio for message/idea
+$grid_unit_min_size: 245px;
+$max_panel_unit_size: 3;
+$max_group_unit_size: 5;
+
+// Equal panels
+// $grid_unit_min_size: 300px;
+// $max_panel_unit_size: 2;
+// $max_group_unit_size: 4;
+
+$min_num_grid_units: floor(980px/$grid_unit_min_size);
+$max_num_grid_units: round(2560px/$grid_unit_min_size);
 
 // message-list min 5, nav3, idea 4

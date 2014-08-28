@@ -14,6 +14,7 @@ define(function (require) {
         panelType: "navSidebar",
         className: "navSidebar",
         hideHeader: true,
+        gridSize: AssemblPanel.prototype.NAVIGATION_PANEL_GRID_SIZE,
         getTitle: function () {
             return 'Navigation'; // unused
         },
@@ -116,7 +117,7 @@ define(function (require) {
                     this.groupContent.removePanels('homePanel');
                     this.groupContent.ensurePanelsVisible('messageList');
                     this.groupContent.ensurePanelsHidden('ideaPanel');
-                    this.groupContent.setPanelWidthByType('messageList', 2);
+                    this.groupContent.setPanelWidthByType('messageList', AssemblPanel.prototype.CONTEXT_PANEL_GRID_SIZE);
                     break;
                 default:
                     break

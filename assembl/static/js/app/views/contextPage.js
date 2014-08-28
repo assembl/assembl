@@ -9,13 +9,14 @@ define(function (require) {
         i18n = require('utils/i18n'),
         Moment = require('moment'),
         Permissions = require('utils/permissions'),
+        AssemblPanel = require('views/assemblPanel'),
         CKEditorField = require('views/ckeditorField');
 
     var contextPage = Marionette.LayoutView.extend({
         template: '#tmpl-contextPage',
         panelType: 'homePanel',
         className: 'homePanel',
-        gridSize: 2,
+        gridSize: AssemblPanel.prototype.CONTEXT_PANEL_GRID_SIZE,
         hideHeader: true,
         getTitle: function () {
             return i18n.gettext('Home'); // unused

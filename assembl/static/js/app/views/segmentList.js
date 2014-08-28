@@ -16,6 +16,7 @@ define(function (require) {
 
     var SegmentView = Marionette.ItemView.extend({
         template: '#tmpl-segment',
+        gridSize: AssemblPanel.prototype.CLIPBOARD_GRID_SIZE,
         events: {
             'dragstart .postit': "onDragStart",
             //'drop': 'onDrop', // bubble up?

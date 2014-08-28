@@ -22,6 +22,7 @@ define(function (require) {
         template: '#tmpl-ideaPanel',
         panelType: 'ideaPanel',
         className: 'ideaPanel',
+        gridSize: AssemblPanel.prototype.IDEA_PANEL_GRID_SIZE,
         regions: {
             segmentList: ".postitlist"
         },

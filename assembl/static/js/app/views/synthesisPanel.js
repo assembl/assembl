@@ -71,6 +71,7 @@ define(function (require) {
 
         panelType: 'synthesisPanel',
         className: 'synthesisPanel',
+        gridSize: AssemblPanel.prototype.SYNTHESIS_PANEL_GRID_SIZE,
         getTitle: function() {
             return i18n.gettext('Synthesis');
         },

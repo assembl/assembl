@@ -132,40 +132,39 @@
   height: 100%;
 }
 
-@media (max-width: $grid_unit_min_size * ($min_num_grid_units)) {
-  .groupPanel {
-    @for $panel_width from 1 through $min_num_grid_units {
-      &.panelGridWidth-#{$panel_width} {
-        width: $grid_unit_min_size * $panel_width;
-      }
+.groupPanel {
+  @for $panel_width from 1 through $min_num_grid_units {
+    &.panelGridWidth-#{$panel_width} {
+      width: $grid_unit_min_size * $panel_width;
     }
-    .groupContent {
-      @for $group_width from 1 through $max_group_unit_size {
-        &.groupGridSize-#{$group_width} {
-          width: $grid_unit_min_size * $group_width;
-        }
+  }
+  .groupContent {
+    @for $group_width from 1 through $max_group_unit_size {
+      &.groupGridSize-#{$group_width} {
+        width: $grid_unit_min_size * $group_width;
       }
     }
   }
 }
 
-@for $screen_grid_size from $min_num_grid_units  through $max_num_grid_units {
-  @media (min-width: $grid_unit_min_size * $screen_grid_size) and (max-width: $grid_unit_min_size * ($screen_grid_size+1)) {
-    .groupPanel {
-      @for $panel_width from 1 through $max_panel_unit_size {
-        &.panelGridWidth-#{$panel_width} {
-          width: 100% * $panel_width / $screen_grid_size;
-        }
-      }
-    }
-    .groupContent {
-      @for $group_width from 1 through $max_group_unit_size {
-        &.groupGridSize-#{$group_width} {
-          width: 100% * $group_width / $screen_grid_size;
-        }
-      }
-    }
-    @for $panel_total_width from 1 through ($screen_grid_size - 1) {
+
+@for $screen_grid_size from $min_num_grid_units  through ($max_num_grid_units - 1) {
+  @media (min-width: $grid_unit_min_size * $screen_grid_size) and (max-width: $grid_unit_min_size * ($screen_grid_size + 1)) {
+    // .groupPanel {
+    //   @for $panel_width from 1 through $max_panel_unit_size {
+    //     &.panelGridWidth-#{$panel_width} {
+    //       width: 100% * $panel_width / $screen_grid_size;
+    //     }
+    //   }
+    // }
+    // .groupContent {
+    //   @for $group_width from 1 through $max_group_unit_size {
+    //     &.groupGridSize-#{$group_width} {
+    //       width: 100% * $group_width / $screen_grid_size;
+    //     }
+    //   }
+    // }
+    @for $panel_total_width from 1 through ($screen_grid_size) {
       #groupsContainer.allGroupsGridSize-#{$panel_total_width} {
         .groupPanel {
           @for $panel_width from 1 through min($max_panel_unit_size, $panel_total_width) {
@@ -179,6 +178,27 @@
             &.groupGridSize-#{$group_width} {
               width: 100% * $group_width / $panel_total_width;
             }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (min-width: $grid_unit_min_size * ($max_num_grid_units)) {
+  @for $panel_total_width from 1 through ($max_num_grid_units) {
+    #groupsContainer.allGroupsGridSize-#{$panel_total_width} {
+      .groupPanel {
+        @for $panel_width from 1 through min($max_panel_unit_size, $panel_total_width) {
+          &.panelGridWidth-#{$panel_width} {
+            width: 100% * $panel_width / $panel_total_width;
+          }
+        }
+      }
+      .groupContent {
+        @for $group_width from 1 through min($max_group_unit_size, $panel_total_width) {
+          &.groupGridSize-#{$group_width} {
+            width: 100% * $group_width / $panel_total_width;
           }
         }
       }

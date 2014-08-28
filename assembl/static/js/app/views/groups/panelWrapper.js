@@ -3,6 +3,7 @@ define(function (require) {
     var Marionette = require('marionette'),
         panelClassByTypeName = require('objects/viewsFactory'),
         Ctx = require('modules/context'),
+        AssemblPanel = require('views/assemblPanel'),
         panelSpec = require('models/panelSpec');
 
     /**
@@ -36,7 +37,8 @@ define(function (require) {
                 groupContent: options.groupContent,
                 panelWrapper: this
             });
-            this.model.set('gridWidth', this.contentsView.gridSize || 1);
+            this.model.set('gridWidth',
+                this.contentsView.gridSize || AssemblPanel.prototype.DEFAULT_GRID_SIZE);
             Marionette.bindEntityEvents(this, this.model, this.modelEvents);
         },
         serializeData: function () {

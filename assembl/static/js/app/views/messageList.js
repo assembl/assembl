@@ -40,6 +40,7 @@ define(function (require) {
         panelType: 'messageList',
         className: 'panel messageList',
         lockable: true,
+        gridSize: AssemblPanel.prototype.MESSAGE_PANEL_GRID_SIZE,
 
         ui: {
             panelBody: ".panel-body",

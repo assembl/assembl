@@ -3,6 +3,7 @@ define(function (require) {
     var Marionette = require('marionette'),
         ctx = require('modules/context'),
         panelSpec = require('models/panelSpec'),
+        AssemblPanel = require('views/assemblPanel'),
         PanelWrapper = require('views/groups/panelWrapper');
 
     /** Reprents the content of an entire group */
@@ -84,10 +85,11 @@ define(function (require) {
                 if (ctx.getCurrentIdea() == undefined) {
                     this.ensurePanelsVisible('messageList');
                     this.ensurePanelsHidden('ideaPanel');
-                    this.setPanelWidthByType('messageList', 2);
+                    this.setPanelWidthByType('messageList',
+                        AssemblPanel.prototype.CONTEXT_PANEL_GRID_SIZE); // idea + message
                 } else {
                     this.ensurePanelsVisible('ideaPanel', 'messageList');
-                    this.setPanelWidthByType('messageList', 1);
+                    this.setPanelWidthByType('messageList', AssemblPanel.prototype.MESSAGE_PANEL_GRID_SIZE);
                 }
             } else {
                 // TODO: ensure visible if exists
