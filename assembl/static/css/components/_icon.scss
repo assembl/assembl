@@ -1,103 +1,178 @@
+@charset "UTF-8";
 @font-face {
-  font-family: 'icomoon';
-  src: url('#{$fonts-dir}/icomoon.eot?41kms9');
-  src: url('#{$fonts-dir}/icomoon.eot?#iefix41kms9') format('embedded-opentype'),
-  url('#{$fonts-dir}/icomoon.woff?41kms9') format('woff'),
-  url('#{$fonts-dir}/icomoon.ttf?41kms9') format('truetype'),
-  url('#{$fonts-dir}/icomoon.svg?41kms9#icomoon') format('svg');
+  font-family: 'fontello';
+  src: url('#{$fonts-dir}/fontello.eot?59577060');
+  src: url('#{$fonts-dir}/fontello.eot?59577060#iefix') format('embedded-opentype'),
+  url('#{$fonts-dir}/fontello.woff?59577060') format('woff'),
+  url('#{$fonts-dir}/fontello.ttf?59577060') format('truetype'),
+  url('#{$fonts-dir}/fontello.svg?59577060#fontello') format('svg');
   font-weight: normal;
   font-style: normal;
 }
 
-[class^="icon-"], [class*=" icon-"] {
-  font-family: 'icomoon';
-  speak: none;
+/* Chrome hack: SVG is rendered more smooth in Windozze. 100% magic, uncomment if you need it. */
+/* Note, that will break hinting! In other OS-es font will be not as sharp as it could be */
+
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+  @font-face {
+    font-family: 'fontello';
+    src: url('#{$fonts-dir}/fontello.svg?59577060#fontello') format('svg');
+  }
+}
+
+[class^="icon-"]:before, [class*=" icon-"]:before {
+  font-family: "fontello";
   font-style: normal;
   font-weight: normal;
+  speak: none;
+
+  display: inline-block;
+  text-decoration: inherit;
+  width: 1em;
+  margin-right: .2em;
+  text-align: center;
+  /* opacity: .8; */
+
+  /* For safety - reset parent styles, that can break glyph codes*/
   font-variant: normal;
   text-transform: none;
-  line-height: 1;
 
-  /* Better Font Rendering =========== */
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
+  /* fix buttons height, for twitter bootstrap */
+  line-height: 1em;
 
-.icon-minimize:before {
-  content: "\e600";
-}
+  /* Animation center compensation - margins should be symmetric */
+  /* remove if not needed */
+  margin-left: .2em;
 
-.icon-quote:before {
-  content: "\e613";
-}
+  /* you can be more comfortable with increased icons size */
+  /* font-size: 120%; */
 
-.icon-home:before {
-  content: "\e612";
+  /* Uncomment for 3D effect */
+  /* text-shadow: 1px 1px 1px rgba(127, 127, 127, 0.3); */
 }
 
-.icon-book:before {
-  content: "\e611";
-}
-.icon-search:before {
-  content: "\e60e";
-}
-.icon-bullet-point:before {
-  content: "\e60f";
-}
-.icon-discuss:before {
-  content: "\e610";
-}
 .icon-checkbox:before {
-  content: "\e001";
+  content: '\e800';
 }
+
+/* '' */
 .icon-collapse:before {
-  content: "\e002";
+  content: '\e801';
 }
+
+/* '' */
+.icon-home:before {
+  content: '\e802';
+}
+
+/* '' */
+.icon-book:before {
+  content: '\e803';
+}
+
+/* '' */
 .icon-delete:before {
-  content: "\e003";
+  content: '\e804';
 }
-.icon-comment:before {
-  content: "\e601";
+
+/* '' */
+.icon-quote:before {
+  content: '\e805';
 }
-.icon-timer:before {
-  content: "\e602";
-}
-.icon-options:before {
-  content: "\e603";
-}
-.icon-message:before {
-  content: "\e604";
-}
-.icon-clipboard:before {
-  content: "\e605";
-}
-.icon-synth:before {
-  content: "\e606";
-}
-.icon-tableofideas:before {
-  content: "\e607";
-}
-.icon-answer:before {
-  content: "\e608";
-}
-.icon-lab:before {
-  content: "\e609";
-}
-.icon-idea:before {
-  content: "\e60a";
-}
-.icon-add:before {
-  content: "\e60b";
-}
-.icon-arrowdown:before {
-  content: "\e60c";
-}
-.icon-expand:before {
-  content: "\e60d";
-}
+
+/* '' */
 .icon-lock:before {
-  content: "\e802";
+  content: '\e806';
 }
+
+/* '' */
 .icon-lock-open:before {
-  content: "\e803";
+  content: '\e807';
 }
+
+/* '' */
+.icon-minimize:before {
+  content: '\e808';
+}
+
+/* '' */
+.icon-comment:before {
+  content: '\e809';
+}
+
+/* '' */
+.icon-timer:before {
+  content: '\e80a';
+}
+
+/* '' */
+.icon-options:before {
+  content: '\e80b';
+}
+
+/* '' */
+.icon-message:before {
+  content: '\e80c';
+}
+
+/* '' */
+.icon-clipboard:before {
+  content: '\e80d';
+}
+
+/* '' */
+.icon-synth:before {
+  content: '\e80e';
+}
+
+/* '' */
+.icon-tableofideas:before {
+  content: '\e80f';
+}
+
+/* '' */
+.icon-answer:before {
+  content: '\e810';
+}
+
+/* '' */
+.icon-lab:before {
+  content: '\e811';
+}
+
+/* '' */
+.icon-idea:before {
+  content: '\e812';
+}
+
+/* '' */
+.icon-add:before {
+  content: '\e813';
+}
+
+/* '' */
+.icon-arrowdown:before {
+  content: '\e814';
+}
+
+/* '' */
+.icon-expand:before {
+  content: '\e815';
+}
+
+/* '' */
+.icon-search:before {
+  content: '\e816';
+}
+
+/* '' */
+.icon-bullet-point:before {
+  content: '\e817';
+}
+
+/* '' */
+.icon-discuss:before {
+  content: '\e818';
+}
+
+/* '' */
