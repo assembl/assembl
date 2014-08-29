@@ -2,7 +2,12 @@
 	<h3>{{ gettext('How it works') }}</h3>
 
 	<div>
-	{{ gettext('How it works text') }}
+	{{ gettext('<p>How to participate in the debate "%(debate_name)s":</p>
+	<ol>
+		<li>Explore the debate using the ideas that have already emerged (do you want to name this as the table of ideas?)</li>
+		<li>Join in the conversation by replying directly to the contributions of participants</li>
+		<li>Start a new topic of discussion if you wish to rejuvenate the debate around a particular idea</li>
+	</ol>')|format(debate_name=discussion.topic)|safe }}
 	</div>
 
 	<h3>{{ gettext('Join the debate') }}</h3>
