@@ -73,9 +73,14 @@ define(function (require) {
                 var lastSave = storage.getDateOfLastViewSave();
                 if (!lastSave || (Date.now() - lastSave.getTime() > (7*24*60*60*1000))) {
                     var navigableGroupSpec = groupSpecs.find(function (aGroupSpec) {
-                        return aGroupSpec.hasNavigation();
+                        return aGroupSpec.getNavigationSpec();
                     });
-                    navigableGroupSpec.set('navigationState', 'home');
+                    if (navigableGroupSpec) {
+                        window.setTimeout(function() {
+                            var groupContent = group.children.findByModel(navigableGroupSpec);
+                            groupContent.resetContextState();
+                        });
+                    }
                 }
                 Assembl.groupContainer.show(group);
             });

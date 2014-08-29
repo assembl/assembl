@@ -17,8 +17,7 @@ define(function (require) {
         panelType: "groupPanel",
         className: "groupPanel",
         modelEvents: {
-            "change:hidden": "setHidden",
-            "change:gridWidth": "setGridWidth"
+            "change:hidden": "setHidden"
         },
         ui: {
             title: ".panel-header-title"
@@ -33,12 +32,12 @@ define(function (require) {
 
         initialize: function (options) {
             var contentClass = panelClassByTypeName(options.contentSpec);
+            this.groupContent = options.groupContent;
             this.contentsView = new contentClass({
                 groupContent: options.groupContent,
                 panelWrapper: this
             });
-            this.model.set('gridWidth',
-                this.contentsView.gridSize || AssemblPanel.prototype.DEFAULT_GRID_SIZE);
+            this.gridSize = this.contentsView.gridSize || AssemblPanel.prototype.DEFAULT_GRID_SIZE;
             Marionette.bindEntityEvents(this, this.model, this.modelEvents);
         },
         serializeData: function () {
@@ -62,7 +61,7 @@ define(function (require) {
             this.model.collection.remove(this.model);
         },
         onRender: function () {
-            this.setGridWidth();
+            this.setGridSize(this.gridSize);
             this.contents.show(this.contentsView);
             this.setHidden();
             Ctx.initTooltips(this.$el);
@@ -75,17 +74,21 @@ define(function (require) {
                 this.$el.css('display', 'table-cell');
             }
         },
-        setGridWidth: function () {
-            var gridSize = this.model.get('gridWidth'),
+        setGridSize: function (gridSize) {
+            var changed = false,
                 className = 'panelGridWidth-' + gridSize,
                 found = this.$el[0].className.match(/\b(panelGridWidth-[0-9]+)\b/);
-
+            this.gridSize = gridSize;
             if (found && found[0] != className) {
+                changed = true;
                 this.$el.removeClass(found[0]);
             }
             if ((!found) || found[0] != className) {
+                changed = true;
                 this.$el.addClass(className);
             }
+            if (changed)
+                this.groupContent.adjustGridSize();
         },
 
         /**

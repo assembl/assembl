@@ -40,8 +40,8 @@ define(function (require) {
             this.get('panels').remove(aPanelSpec);
         },
 
-        hasNavigation: function () {
-            return this.get('panels').where({type:'navSidebar'});
+        getNavigationSpec: function () {
+            return this.get('panels').findWhere({type:'navSidebar'});
         },
 
         addPanel: function (options, position) {

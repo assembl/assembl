@@ -7,6 +7,7 @@ define(function (require) {
         HomePanel = require('views/navigation/home'),
         SynthesisInNavigationPanel = require('views/navigation/synthesisInNavigation'),
         AssemblPanel = require('views/assemblPanel'),
+        ctx = require('modules/context'),
         $ = require('jquery');
 
     var NavigationView = AssemblPanel.extend({
@@ -89,7 +90,7 @@ define(function (require) {
                             });
                         }
                     }
-                    break
+                    break;
             }
             this.groupContent.model.set('navigationState', view);
             // set new state
@@ -99,7 +100,7 @@ define(function (require) {
                         groupContent: this.groupContent
                     });
                     this.home.show(homePanel);
-                    this.groupContent.ensureOnlyPanelsVisible('homePanel');
+                    this.groupContent.resetContextState();
                     break;
                 case 'debate':
                     var idealist = new IdeaList({

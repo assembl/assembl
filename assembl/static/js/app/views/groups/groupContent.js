@@ -44,11 +44,10 @@ define(function (require) {
         },
         calculateGridSize: function () {
             var gridSize = 0;
-
-            _.each(this.collection.models, function (aPanelSpec) {
-                if (aPanelSpec.get('hidden'))
+            this.children.each(function (panelWrapper) {
+                if (panelWrapper.model.get('hidden'))
                     return;
-                gridSize += aPanelSpec.get('gridWidth');
+                gridSize += panelWrapper.gridSize;
             });
             return gridSize;
         },
@@ -75,31 +74,70 @@ define(function (require) {
             }
         },
 
-        hasNavigation: function () {
-            return this.model.getPanelSpecByType('navSidebar') != null;
+        getNavigationSpec: function () {
+            return this.model.getNavigationSpec();
         },
 
         resetDebateState: function () {
-            if (this.hasNavigation()) {
+            if (this.getNavigationSpec()) {
+                this.model.set('navigationState', 'debate');
                 this.removePanels('homePanel');
-                if (ctx.getCurrentIdea() == undefined) {
-                    this.ensurePanelsVisible('messageList');
+                this.resetMessagePanel();
+            }
+        },
+
+        resetContextState: function() {
+            var nav = this.getNavigationSpec();
+            if (nav) {
+                this.model.set('navigationState', 'home');
+                this.ensureOnlyPanelsVisible('homePanel');
+            }
+        },
+
+        resetMessagePanel: function() {
+            var nav = this.getNavigationSpec();
+            if (ctx.getCurrentIdea() == undefined) {
+                this.setPanelWidthByType('messageList',
+                    AssemblPanel.prototype.CONTEXT_PANEL_GRID_SIZE); // idea + message
+                if (nav && this.model.get('navigationState') == 'debate') {
                     this.ensurePanelsHidden('ideaPanel');
-                    this.setPanelWidthByType('messageList',
-                        AssemblPanel.prototype.CONTEXT_PANEL_GRID_SIZE); // idea + message
-                } else {
-                    this.ensurePanelsVisible('ideaPanel', 'messageList');
-                    this.setPanelWidthByType('messageList', AssemblPanel.prototype.MESSAGE_PANEL_GRID_SIZE);
+                    this.ensurePanelsVisible('messageList');
                 }
             } else {
-                // TODO: ensure visible if exists
+                this.setPanelWidthByType('messageList',
+                    AssemblPanel.prototype.MESSAGE_PANEL_GRID_SIZE);
+                if (nav && this.model.get('navigationState') == 'debate') {
+                    this.ensurePanelsVisible('ideaPanel', 'messageList');
+                }
             }
         },
 
         setPanelWidthByType: function (panelType, width) {
             var panels = this.model.get('panels');
             var panel = panels.findWhere({'type': panelType});
-            panel.set('gridWidth', width);
+            var view = this.children.findByModel(panel);
+            view.setGridSize(width);
+        },
+
+        resetNavigation: function() {
+            var that = this,
+                navigationSpec = this.getNavigationSpec(),
+                ideaPanel = this.model.getPanelSpecByType('ideaPanel'),
+                messagePanelSpec = this.model.getPanelSpecByType('messagePanel'),
+                messagePanelView = this.children.findByModel(messagePanelSpec);
+            if (navigationSpec && messagePanelSpec) {
+                function setSize() {
+                    messagePanelView = that.children.findByModel(messagePanel);
+                    if (ideaPanel == null || ideaPanel.get('hidden'))
+                        messagePanelView.setGridSize(AssemblPanel.prototype.CONTEXT_PANEL_GRID_SIZE);
+                    else
+                        messagePanelView.setGridSize(AssemblPanel.prototype.MESSAGE_PANEL_GRID_SIZE);
+                }
+                if (messagePanelView)
+                    setSize();
+                else
+                    window.setTimeout(setSize);
+            }
         },
 
 
