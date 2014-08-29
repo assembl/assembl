@@ -511,6 +511,7 @@ define(function (require) {
                 transitionDuration = 1000;
 
             var svg = null,
+                svg_orig = null,
                 yAxisGroup = null,
                 xAxisGroup = null,
                 dataCirclesGroup = null,
@@ -547,17 +548,18 @@ define(function (require) {
                 var t = null;
                 var chart_div = that.$('.chart');
 
+
                 if (chart_div.empty()) {
-                    svg = d3.select(chart_div[0])
-                        .append('svg:svg')
+                    svg_orig = d3.select(chart_div[0]).append('svg:svg')
                         .attr('width', w)
                         .attr('height', h)
-                        .attr('class', 'viz')
-                        .append('svg:g')
+                        .attr('class', 'viz');
+                    svg = svg_orig.append('svg:g')
                         .attr('transform', 'translate(' + margin + ',' + margin + ')')
                     ;
                 } else {
-                    svg = d3.select(chart_div).select('svg').select('g');
+                    svg_orig = d3.select(chart_div).select('svg');
+                    svg = svg_orig.select('g');
                 }
 
                 var bisectDate = d3.bisector(function(d) { return d.date; }).left;
@@ -752,12 +754,36 @@ define(function (require) {
                  */
                 
 
+
+                // define a gradient in the SVG (using a "linearGradient" tag inside the "defs" tag). 0% = top; 100% = bottom
+                var defs = svg_orig.append("defs");
+                var lg = defs.append("linearGradient")
+                  .attr("id","lineChartLegendGradient")
+                  .attr("x1","0%")
+                  .attr("y1","0%")
+                  .attr("x2","0%")
+                  .attr("y2","100%");
+                lg.append("stop")
+                    .attr("class","stop1")
+                    .attr("offset","0%");
+                lg.append("stop")
+                    .attr("class","stop2")
+                    .attr("offset","50%");
+                lg.append("stop")
+                    .attr("class","stop3")
+                    .attr("offset","100%");
+                
+
                 var focus = svg.append("g")
                     .attr("class", "focus")
                     .style("display", "none");
 
                 focus.append("circle")
                     .attr("r", 4.5);
+
+                focus.append("svg:rect")
+                    .attr("width", 1)
+                    .attr("height", 1);
 
                 focus.append("text")
                   //.attr("x", 9)
@@ -773,6 +799,7 @@ define(function (require) {
                   .on("mouseout", function() { focus.style("display", "none"); })
                   .on("mousemove", mouse_move);
 
+                var i18n_messages = i18n.gettext("messages");
                 var data_length = data.length;
                 function mouse_move(){
                     var mouse_position = d3.mouse(this);
@@ -784,18 +811,33 @@ define(function (require) {
                         d = xInDomain - d0.date > d1.date - xInDomain ? d1 : d0;
                     focus.attr("transform", "translate(" + x(d.date) + "," + y(d.value) + ")");
                     var t = focus.select("text");
-                    t.text(d.value + " (" + Ctx.getNiceDate(d.date) + ")");
-                    if ( x(d.date) > (w-margin*2)-100 )
+                    //t.text(d.value + " (" + Ctx.getNiceDate(d.date) + ")");
+                    //t.text(i18n.sprintf(i18n.gettext("%d messages (%s)"), d.value, Ctx.getNiceDate(d.date))); // may be too slow
+                    t.text(d.value + " " + i18n_messages + " (" + Ctx.getNiceDate(d.date) + ")"); // probably faster
+                    var bbox = t.node().getBBox();
+                    //if ( x(d.date) > (w-margin*2)-100 )
+                    if ( x(d.date) > bbox.width + 4 )
                     {
+                        focus.select("rect")
+                            .attr("transform", "translate(-9,0)");
                         t.attr("transform", "translate(-9,0)");
                         t.style("text-anchor","end");
 
                     }
                     else
                     {
+                        focus.select("rect")
+                            .attr("transform", "translate(9,0)");
                         t.attr("transform", "translate(9,0)");
                         t.style("text-anchor","start");
                     }
+
+                    bbox = t.node().getBBox(); // get new bbox
+                    focus.select("rect")
+                        .attr("x", bbox.x)
+                        .attr("y", bbox.y)
+                        .attr("width", bbox.width)
+                        .attr("height", bbox.height);
                 }
             }
 

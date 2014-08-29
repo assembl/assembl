@@ -103,7 +103,23 @@ line {
 
 .focus text {
     fill: black;
-    text-shadow: 0 1px 1px rgba(150, 150, 150, 1);
+    text-shadow: 0 0 2px rgba(220, 220, 220, 1);
+}
+
+.focus rect {
+    /*fill: #fff;
+    fill-opacity: 0.1;*/
+    fill: url(#lineChartLegendGradient);
+}
+
+#lineChartLegendGradient .stop1, #lineChartLegendGradient .stop2, #lineChartLegendGradient .stop3 {
+    stop-color: white;
+}
+#lineChartLegendGradient .stop1, #lineChartLegendGradient .stop3 {
+    stop-opacity: 0;
+}
+#lineChartLegendGradient .stop2 {
+    stop-opacity: 0.2;
 }
 
 
