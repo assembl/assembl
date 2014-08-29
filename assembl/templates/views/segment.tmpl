@@ -19,7 +19,7 @@
     <span data-segmentid="<%= segment.cid %>" class="js_closeExtract closeExtract icon-delete fr"></span>
   <% } %>
 
-  <q class="text text-quotation"><%= segment.getQuote() %></q>
+  <span class="text-quotation"><i class="icon-quote quoteLeft"></i><%= segment.getQuote() %><i class="icon-quote quoteRight"></i></span>
   <div class="postit-footer">
     <% if(ctx.getCurrentInterfaceType() !== ctx.InterfaceTypes.SIMPLE) { %>
       <div class="segment-harvester">

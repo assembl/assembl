@@ -40,31 +40,37 @@ div.postitlist {
     // Quotation text
     // -----------
     .text-quotation {
-      &:before {
-        //content: "\00AB\00a0 ";
-        content: "\275D";
-        font-size: 400%;
-        vertical-align: middle;
-        position:relative;
-        top: 0.08em;
-        right:0.1em;
-        color: $orange;
-      }
-    
-      &:after {
-        //content: "\00a0\00BB";
-        content: "\275E";
-        font-size: 400%;
-        vertical-align: middle;
-        position:relative;
-        top: 0.25em;
-        left:0.1em;
-        color: $orange;
-      }
-    }
-    
-    q {
       margin: 0 0 1em 0;
+      .icon-quote {
+        //content: "\00a0\00a0\00a0\00a0 ";//&nbsp;
+        //min-width: 1em;
+        max-height: 1.4em;
+        &:before {
+          font-size: 150%;
+          color: $orange;
+          position: relative;
+          margin-right: 0em;
+        }
+        vertical-align: middle;
+        
+        &.quoteLeft:before {
+          top: -0.12em;
+          right:0.3em;
+          margin-right: 0.2em;
+        }
+        &.quoteRight {
+        display: inline-block;
+        position: absolute;
+        vertical-align: top;
+          &:before{
+            @include transform(rotate(180deg));
+            top: 0.2em;
+            left: 0.3em;
+            margin-left: 0.2em;
+          }
+        }
+      }
+      
     }
 
     a {
