@@ -452,7 +452,7 @@ define(function (require) {
                                         i18n.sprintf(i18n.gettext("%d new authors started contributing since %s"), new_authors_in_period_total, statsPeriodName),
                                         new_authors_in_period_total,
                                         messages_in_period_by_new_authors_total,
-                                        "#FFD37F",
+                                        "#FFBD40",
                                         {}
                                     ],
                                     "still_active_authors": [
@@ -483,8 +483,20 @@ define(function (require) {
                         messages_total
                     ];
 
+                    var legend_squares_data = [
+                        {
+                            "color": "#FFA700",
+                            "title": i18n.gettext("Contributors active recently")
+                        },
+                        {
+                            "color": "#9A3FD5",
+                            "title": i18n.gettext("Contributors inactive recently")
+                        },
+                    ];
+
                     that.pie_chart_data = pie_chart_data;
                     that.pie_chart_default_legend_data = pie_chart_default_legend_data;
+                    that.legend_squares_data = legend_squares_data;
                     that.render();
                 });
         },
@@ -499,7 +511,7 @@ define(function (require) {
             var t = this.lineChartIsCumulative ? i18n.gettext("Evolution of the total number of messages") : i18n.gettext("Evolution of the number of messages posted");
             this.$(".statistics").html("<h2>" + i18n.gettext("Statistics") + "</h2><p class='stats_messages'>" + t + "</p>");
             this.drawLineGraph(this.messages_per_day_for_line_graph);
-            this.drawPieChart(this.pie_chart_data, this.pie_chart_default_legend_data);
+            this.drawPieChart(this.pie_chart_data, this.pie_chart_default_legend_data, this.legend_squares_data);
         },
 
         drawLineGraph: function (data) {
@@ -845,7 +857,7 @@ define(function (require) {
 
         },
 
-        drawPieChart: function (pie_chart_data, default_legend_data) {
+        drawPieChart: function (pie_chart_data, default_legend_data, legend_squares_data) {
             /*
              taken from:
              http://bl.ocks.org/adewes/4710330/94a7c0aeb6f09d681dbfdd0e5150578e4935c6ae
@@ -956,7 +968,8 @@ define(function (require) {
                     .on("mouseout", remove_legend)
                     .attr("class", "form")
                     .append("svg:title")
-                    .text(get_slice_title);
+                    .text(get_slice_title)
+                ;
 
                 
 
@@ -968,7 +981,7 @@ define(function (require) {
                         .attr("text-anchor", "middle")
                         .attr("class", "percent")
                         .attr("pointer-events", "none") // so that the text field does not interfere with the hover on the path element (for legend)
-                        .text(function(d) { return (d[7] * 100).toFixed(1) + " %"; })
+                        .text(function(d) { return (d[7] * 100).toFixed(0) + " %"; })
                     ;
                 }
 
@@ -984,30 +997,33 @@ define(function (require) {
                 remove_legend(null);
 
                 // add fixed legend for color squares
-                var x_offset = 0;
-                var square_side = 16;
-                var y_margin = 6;
-                var y_offset = height - Object.keys(pie_chart_data[4]).length * (square_side+y_margin) +y_margin;
-                for ( key in pie_chart_data[4] )
-                {
-                    var item = pie_chart_data[4][key];
-                    svg_orig.append("rect")
-                        .attr("fill", item[3])
-                        .attr("x" ,x_offset)
-                        .attr("y", y_offset)
-                        .attr("width", square_side)
-                        .attr("height", square_side)
-                    ;
-                    svg_orig.append("text")
-                        .attr("x", x_offset + square_side + 5)
-                        .attr("y", y_offset + square_side*0.7)
-                        .attr("width", 200)
-                        .attr("height", 25)
-                        .text(item[0])
-                    ;
-                    //x_offset += 150;
-                    y_offset += (square_side+y_margin);
+                function drawSquaresLegend(){
+                    var x_offset = 0;
+                    var square_side = 16;
+                    var y_margin = 6;
+                    var y_offset = height - legend_squares_data.length * (square_side+y_margin) +y_margin;
+                    for ( var i = 0; i < legend_squares_data.length; ++i )
+                    {
+                        var item = legend_squares_data[i];
+                        svg_orig.append("rect")
+                            .attr("fill", item["color"])
+                            .attr("x" ,x_offset)
+                            .attr("y", y_offset)
+                            .attr("width", square_side)
+                            .attr("height", square_side)
+                        ;
+                        svg_orig.append("text")
+                            .attr("x", x_offset + square_side + 5)
+                            .attr("y", y_offset + square_side*0.7)
+                            .attr("width", 200)
+                            .attr("height", 25)
+                            .text(item["title"])
+                        ;
+                        y_offset += (square_side+y_margin);
+                    }
                 }
+                drawSquaresLegend();
+                
 
                 function update_legend(d) {
                     fake_hover_first_level_elements(false);
