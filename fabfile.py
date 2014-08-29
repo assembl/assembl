@@ -664,6 +664,29 @@ def update_compass():
 
 
 @task
+def start_edit_fontello_fonts():
+    assert env.hosts == ['localhost'], "Meant to be run locally"
+    try:
+        import requests
+    except ImportError:
+        raise RuntimeError(
+            "Please 'pip install requests' in your main environment")
+    font_dir = join(
+        env.projectpath, 'assembl', 'static', 'css', 'fonts')
+    config_file = join(font_dir, 'config.json')
+    id_file = join(font_dir, 'fontello.id')
+    r=requests.post("http://fontello.com",
+                    files={'config': open(config_file)})
+    if not r.ok:
+        raise RuntimeError("Could not get the ID")
+    fid = r.text
+    with open(id_file, 'w') as f:
+        f.write(fid)
+    if (env.host_string == 'localhost'):
+        import webbrowser
+        webbrowser.open('http://fontello.com/'+fid)
+
+@task
 def compile_fontello_fonts():
     from zipfile import ZipFile
     from StringIO import StringIO
@@ -677,18 +700,9 @@ def compile_fontello_fonts():
         env.projectpath, 'assembl', 'static', 'css', 'fonts')
     config_file = join(font_dir, 'config.json')
     id_file = join(font_dir, 'fontello.id')
-    if (not os.path.exists(id_file) or
-            os.path.getmtime(id_file)>os.path.getmtime(config_file)):
-        r=requests.post("http://fontello.com",
-                        files={'config': open(config_file)})
-        if not r.ok:
-            raise RuntimeError("Could not get the ID")
-        fid = r.text
-        with open(id_file, 'w') as f:
-            f.write(fid)
-    else:
-        with open(id_file) as f:
-            fid = f.read()
+    assert os.path.exists(id_file)
+    with open(id_file) as f:
+        fid = f.read()
     r = requests.get("http://fontello.com/%s/get" % fid)
     if not r.ok:
         raise RuntimeError("Could not get the data")
@@ -696,13 +710,10 @@ def compile_fontello_fonts():
         for name in data.namelist():
             dirname, fname = split(name)
             dirname, subdir = split(dirname)
-            if fname and subdir == 'font':
+            if fname and (subdir == 'font' or fname == 'config.json'):
                 with data.open(name) as fdata:
                     with open(join(font_dir, fname), 'wb') as ffile:
                         ffile.write(fdata.read())
-    if (env.host_string == 'localhost'):
-        import webbrowser
-        webbrowser.open('http://fontello.com/'+fid)
 
 def database_create():
     """
