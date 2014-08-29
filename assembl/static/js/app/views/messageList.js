@@ -1332,24 +1332,32 @@ define(function (require) {
         },
 
         getTargetMessageViewStyleFromMessageListConfig: function (messageView) {
-            var targetMessageViewStyle;
-            if (this.currentViewStyle == this.ViewStyles.NEW_MESSAGES) {
-                if (messageView.model.get('read')) {
-                    targetMessageViewStyle = Ctx.AVAILABLE_MESSAGE_VIEW_STYLES.TITLE_ONLY;
-                }
-                else {
-                  if(this.defaultMessageStyle != Ctx.AVAILABLE_MESSAGE_VIEW_STYLES.TITLE_ONLY) {
-                    targetMessageViewStyle = this.defaultMessageStyle;
-                  }
-                  else {
-                    targetMessageViewStyle = Ctx.AVAILABLE_MESSAGE_VIEW_STYLES.PREVIEW;
-                  }
-                }
+          var defaultMessageStyle,
+              targetMessageViewStyle;
+          
+          if (Ctx.getCurrentInterfaceType() === Ctx.InterfaceTypes.SIMPLE) {
+            defaultMessageStyle = Ctx.AVAILABLE_MESSAGE_VIEW_STYLES.PREVIEW;
+          }
+          else {
+            defaultMessageStyle = this.defaultMessageStyle;
+          }
+          if (this.currentViewStyle === this.ViewStyles.NEW_MESSAGES) {
+            if (messageView.model.get('read') === true) {
+              targetMessageViewStyle = Ctx.AVAILABLE_MESSAGE_VIEW_STYLES.TITLE_ONLY;
             }
             else {
-                targetMessageViewStyle = this.defaultMessageStyle;
+              if(defaultMessageStyle !== Ctx.AVAILABLE_MESSAGE_VIEW_STYLES.TITLE_ONLY) {
+                targetMessageViewStyle = defaultMessageStyle;
+              }
+              else {
+                targetMessageViewStyle = Ctx.AVAILABLE_MESSAGE_VIEW_STYLES.PREVIEW;
+              }
             }
-            return targetMessageViewStyle;
+          }
+          else {
+            targetMessageViewStyle = defaultMessageStyle;
+          }
+          return targetMessageViewStyle;
         },
 
         /**
