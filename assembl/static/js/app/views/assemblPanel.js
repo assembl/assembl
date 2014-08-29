@@ -14,7 +14,7 @@ define(function (require) {
         gridSize: 3,
         IDEA_PANEL_GRID_SIZE: 3,
         MESSAGE_PANEL_GRID_SIZE: 5,
-        NAVIGATION_PANEL_GRID_SIZE: 3,
+        NAVIGATION_PANEL_GRID_SIZE: 4,
         CLIPBOARD_GRID_SIZE: 3,
         CONTEXT_PANEL_GRID_SIZE: 8, //MESSAGE_PANEL_GRID_SIZE + IDEA_PANEL_GRID_SIZE
         /**

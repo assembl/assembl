@@ -56,32 +56,21 @@ $closebuttonColor: $gray;
 // below this size we scroll
 $small_screen: 980px;
 
+// these variables are also in assemblPanel.js
+$idea_panel_grid_size: 3;
+$message_panel_grid_size: 5;
+$navigation_panel_grid_size: 4;
+$clipboard_grid_size: 3;
+$context_panel_grid_size: 8;
+$synthesis_panel_grid_size: 3;
+
 // 2/1 ratio for message/idea
 // the number of grid units taken by basic setup of navigation+messages+ideaPanel
-$min_num_grid_units: 4;
+$min_num_grid_units: $navigation_panel_grid_size + $idea_panel_grid_size + $message_panel_grid_size;
 // the number of grid units taken by largest panel
-$max_panel_unit_size: 3;
+$max_panel_unit_size: $message_panel_grid_size + $idea_panel_grid_size;
 // the number of grid units taken by largest group. Assume one message + 3 smaller panels.
-$max_group_unit_size: 5;
-
-
-// 5/3 ratio for message/idea
-$min_num_grid_units: 11;
-// $deprecated_grid_unit_min_size: 80px; // now 89
-$max_panel_unit_size: 9;
-$max_group_unit_size: 17;
-
-// 3/2 ratio for message/idea. Not bad.
-// $min_num_grid_units: 7;
-// $deprecated_grid_unit_min_size: 140px;// accurate
-// $max_panel_unit_size: 5;
-// $max_group_unit_size: 9;
-
-// Equal panels
-// $deprecated_grid_unit_min_size: 300px;// now 326
-// $min_num_grid_units: 3;
-// $max_panel_unit_size: 2;
-// $max_group_unit_size: 4;
+$max_group_unit_size: $navigation_panel_grid_size + $idea_panel_grid_size + $message_panel_grid_size + $clipboard_grid_size;
 
 $grid_unit_min_size: $small_screen / $min_num_grid_units;
 // huge screen

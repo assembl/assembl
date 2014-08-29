@@ -70,13 +70,13 @@ $panelarea-min-height: 400px;
 }
 
 #messageList {
-    min-width: 500px;
+    min-width: floor($grid_unit_min_size * $message_panel_grid_size);
 }
 
 #synthesisPanel {
-    min-width: 500px;
+    min-width: floor($grid_unit_min_size * $synthesis_panel_grid_size);
 }
 
 #ideaList {
-  min-width: 400px;
+  min-width: floor($grid_unit_min_size * $idea_panel_grid_size) - 10px;
 }

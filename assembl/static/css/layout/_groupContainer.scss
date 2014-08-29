@@ -94,7 +94,7 @@
   }
 
   .navSidebar {
-    min-width: 300px;
+    min-width: floor($grid_unit_min_size * $navigation_panel_grid_size);
     height: 100%;
     .side-menu {
       margin: 0;
@@ -174,17 +174,17 @@
   }
 
   .ideaPanel {
-    min-width: 300px;
+    min-width: floor($grid_unit_min_size * $idea_panel_grid_size);
   }
 
   .synthesisPanel {
     position: relative;
-    min-width: 400px;
+    min-width: floor($grid_unit_min_size * $synthesis_panel_grid_size);
   }
 
   .clipboard {
     position: relative;
-    min-width: 400px;
+    min-width: floor($grid_unit_min_size * $clipboard_grid_size);
   }
 
 }
