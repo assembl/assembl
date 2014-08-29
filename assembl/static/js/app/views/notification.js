@@ -29,7 +29,6 @@ define(function (require) {
 
             var modalView = new Modal();
             $('.modal').html(modalView.render().el);
-            // todo: test this.
             this.$('#groupsContainer').addClass('hasNotification');
         },
 
@@ -37,7 +36,7 @@ define(function (require) {
             if (window.localStorage) {
                 //benoitg:  Not good, this will close every notification for every discussion!
                 // TODO: should be id idea
-                window.localStorage.setItem('showNotification', false);
+                window.localStorage.removeItem('showNotification');
             }
             this.remove();
             this.unbind();

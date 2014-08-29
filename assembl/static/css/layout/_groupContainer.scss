@@ -1,12 +1,12 @@
 #groupsContainer {
   position: absolute;
-  top: 40px;
+  top: 35px;
   right: 0;
   bottom: 0;
   left: 0;
   min-height: 400px;
   height: 95%;
-  height: calc(100% - 40px);
+  height: calc(100% - 35px);
   overflow-x: auto;
   overflow-y: hidden;
   white-space: nowrap;
@@ -17,9 +17,9 @@
 
 #groupsContainer.hasNotification {
   position: absolute;
-  top: 80px;
+  top: 75px;
   height: 95%;
-  height: calc(100% - 80px);
+  height: calc(100% - 75px);
 }
 
 .groupContent {

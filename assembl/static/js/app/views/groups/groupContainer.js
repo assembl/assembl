@@ -15,8 +15,8 @@ define(function (require) {
             //this.listenTo(this.collection, 'change reset add remove', this.calculateGridSize);
         },
         onRender: function () {
-            if (!window.localStorage.getItem('showNotification')) {
-                this.$el.css('top', '75px');
+            if (window.localStorage.getItem('showNotification')) {
+                this.$el.addClass('hasNotification');
                 Assembl.notificationRegion.show(new Notification());
             }
         },
