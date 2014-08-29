@@ -674,7 +674,7 @@ def compile_fontello_fonts():
         raise RuntimeError(
             "Please 'pip install requests' in your main environment")
     font_dir = join(
-        env.projectpath, 'assembl', 'static', 'font', 'icon')
+        env.projectpath, 'assembl', 'static', 'css', 'fonts')
     config_file = join(font_dir, 'config.json')
     id_file = join(font_dir, 'fontello.id')
     if (not os.path.exists(id_file) or
