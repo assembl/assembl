@@ -46,6 +46,14 @@ define(function (require) {
             };
         },
         /**
+         * The render
+         * @return {segmentList}
+         */
+        onRender: function () {
+            Ctx.initTooltips(this.$el);
+        },
+
+        /**
          * @event
          */
         onDragStart: function (ev) {

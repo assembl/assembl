@@ -9,7 +9,7 @@
 {% set segmentCreatorName = '<%= segment.getCreatorDEPRECATED().get("name") %>' %}
 {% set harverterTooltip = gettext('Harvested by %(name)s %(date)s')|format(date=segmentDate, name=segmentCreatorName) %}
 
-{% set segmentCreatorAvatarImg = '<a class="profile-link" href="#" data-toggle="tooltip" data-placement="left" title="'+harverterTooltip+'"><img src="<%= segment.getCreatorDEPRECATED().getAvatarUrl(24) %>" class="image-rounded" alt="" width="24" height="24"/></a>' %}
+{% set segmentCreatorAvatarImg = '<img src="<%= segment.getCreatorDEPRECATED().getAvatarUrl(24) %>" class="image-rounded" alt="" width="24" height="24" data-toggle="tooltip" data-placement="left" title="'+harverterTooltip+'"/>' %}
 {% set segmentLinkTooltip = gettext('Click here to see the original contribution this segment is quoted from.') %}
 {% set segmentTextLink = '<a class="segment-link" data-segmentid="<%= segment.cid %>" data-tooltip="'+segmentLinkTooltip+'">'+gettext('Show in original text')+'<%= segment.getTypeIcon() %>&nbsp;</a>' %}
 
@@ -21,6 +21,11 @@
 
   <q class="text text-quotation"><%= segment.getQuote() %></q>
   <div class="postit-footer">
+    <% if(ctx.getCurrentInterfaceType() !== ctx.InterfaceTypes.SIMPLE) { %>
+      <div class="segment-harvester">
+        {{ gettext('%(img)s')|format(img=segmentCreatorAvatarImg)|safe }}
+      </div>
+    <% } %>
     <div class="extractOrigin">
       <% var type = segment.get("target")["@type"]; if ( type == "Email" || type == "Post" || type == "AssemblPost" || type == "ImportedPost") { %>
         {% set postCreatorAvatarImg = '<img src="<%= postCreator.getAvatarUrl(30) %>" class="creatorAvatar image-rounded" alt="" width="30" height="30" />' %}
@@ -39,12 +44,5 @@
       <br>
       {{ segmentTextLink|safe }}
     </div>
-    <% if(ctx.getCurrentInterfaceType() !== ctx.InterfaceTypes.SIMPLE) { %>
-      <div class="segment-harvester">
-        <div class="text-small text-muted">
-            {{ gettext('%(img)s')|format(img=segmentCreatorAvatarImg)|safe }}
-        </div>
-      </div>
-    <% } %>
   </div>
 </div>

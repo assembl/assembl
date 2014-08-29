@@ -3,6 +3,7 @@
 
 $postit-color-dark: #F7F9F9;
 $postit-color-light: #F7F9F9;
+$harvesterAvatarSize: 24px;
 
 // A wrapper for two or more .postit
 // ====================
@@ -44,8 +45,9 @@ div.postitlist {
         content: "\275D";
         font-size: 400%;
         vertical-align: middle;
-        padding-top: 0.1em;
-        padding-right:0.1em;
+        position:relative;
+        top: 0.08em;
+        right:0.1em;
         color: $orange;
       }
     
@@ -54,8 +56,9 @@ div.postitlist {
         content: "\275E";
         font-size: 400%;
         vertical-align: middle;
-        padding-top: 0.4em;
-        padding-left:0.1em;
+        position:relative;
+        top: 0.25em;
+        left:0.1em;
         color: $orange;
       }
     }
@@ -85,6 +88,7 @@ div.postitlist {
       @include transform(matrix(-1, -0.1, 0, 1, 0, 0));
     }
     .closeExtract {
+      margin-left: 1em;
       &:hover {
         cursor: pointer;
       }
@@ -92,11 +96,12 @@ div.postitlist {
     .postit-footer {
       width: 100%;
       position: relative;
+      margin-top: 1em;
       .extractOrigin {
 
         display: inline-block;
         padding-right: 1em;
-        width: 75%;
+        width: 80%;
         > img {
           float: left;
           margin-right: 0.5em;
@@ -111,12 +116,8 @@ div.postitlist {
       }
 
       .segment-harvester {
-        display: inline-block;
-        position: absolute;
-        bottom: 0px;
-        right: 0px;
-        max-width: 35%;
-        vertical-align: bottom;
+        float: right;
+        max-width: $harvesterAvatarSize;
       }
     }
   }
