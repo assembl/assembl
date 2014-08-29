@@ -1,11 +1,15 @@
+#wrapper {
+  height: 100vh;
+}
+
 #groupsContainer {
   position: absolute;
-  top: 36px;
+  top: 40px;
   right: 0;
   bottom: 0;
   left: 0;
   min-height: 400px;
-  height: calc(100vh - 36px);
+  height: calc(100% - 40px);
   overflow-x: auto;
   overflow-y: hidden;
   white-space: nowrap;
