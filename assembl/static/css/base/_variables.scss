@@ -43,8 +43,9 @@ $borderRadiusL: 10px;
 // Typography
 $baseFontSize: 14px;
 $smallFontSize: $baseFontSize - 2;
-$baseFontFamily: "Helvetica Neue", "Helvetica", sans-serif !default;
-$baseLineHeight: 1.4em;
+//Uses google font service
+$baseFontFamily: "Open Sans", sans-serif !default;
+$baseLineHeight: 1.3em;
 
 // Usage variables
 $textSelectionBackgroundColor: $orange;
