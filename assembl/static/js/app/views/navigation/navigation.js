@@ -54,7 +54,7 @@ define(function (require) {
             this.toggleMenuByElement(elm);
         },
         toggleMenuByEvent: function(evt){
-            var elm = $(evt.target);
+            var elm = $(evt.currentTarget); // use currentTarget instead of target, so that we are sure that it is a .nav element
             this.toggleMenuByElement(elm);
         },
         /**
