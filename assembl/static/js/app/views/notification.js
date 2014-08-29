@@ -29,6 +29,8 @@ define(function (require) {
 
             var modalView = new Modal();
             $('.modal').html(modalView.render().el);
+            // todo: test this.
+            this.$('#groupsContainer').addClass('hasNotification');
         },
 
         closeNotification: function () {
@@ -43,6 +45,7 @@ define(function (require) {
             $('#wrapper #groupsContainer').animate({
                 top: '36px'
             }, 500);
+            this.$('#groupsContainer').removeClass('hasNotification');
         }
     });
 
