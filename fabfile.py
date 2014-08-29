@@ -700,6 +700,9 @@ def compile_fontello_fonts():
                 with data.open(name) as fdata:
                     with open(join(font_dir, fname), 'wb') as ffile:
                         ffile.write(fdata.read())
+    if (env.host_string == 'localhost'):
+        import webbrowser
+        webbrowser.open('http://fontello.com/'+fid)
 
 def database_create():
     """
