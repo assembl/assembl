@@ -259,10 +259,17 @@ define(function (require) {
             if (this.annotator && (this.viewStyle == this.availableMessageViewStyles.FULL_BODY)) {
                 var that = this,
                     annotations = this.model.getAnnotations(),
-                    annotationsToLoad = [];
+                    annotationsToLoad = [],
+                    filter = function() {return true;};
+                // Is this the right permission to see the clipboard?
+                if (!Ctx.getCurrentUser().can(Permissions.ADD_EXTRACT)) {
+                    filter = function(extract) {
+                        return extract.idIdea;
+                    }
+                }
 
                 _.each(annotations, function (annotation) {
-                    if (!(annotation['@id'] in that.loadedAnnotations)) {
+                    if (filter(annotation) && !(annotation['@id'] in that.loadedAnnotations)) {
                         annotationsToLoad.push(annotation);
                     }
                 });
