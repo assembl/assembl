@@ -409,7 +409,12 @@ define(function (require) {
 
             if (this.viewStyle.id === 'viewStylePreview') {
                 this.onMessageTitleClick();
-                this.$('.messageSend-body').focus();
+                if ( this.$('.messageSend-body').length )
+                    this.$('.messageSend-body').focus();
+                else
+                { // if the .messageSend-body field is not present, this means the user is not logged in, so we scroll to the alert box
+                    this.messageListView.scrollToElement(this.$(".message-replybox"));
+                }
                 return;
             }
 

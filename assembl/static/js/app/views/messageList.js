@@ -483,6 +483,17 @@ define(function (require) {
             }
         },
 
+        scrollToElement: function(el){
+            if (this.ui.panelBody.offset() !== undefined) {
+                var panelOffset = this.ui.panelBody.offset().top;
+                var panelScrollTop = this.ui.panelBody.scrollTop();
+                var elOffset = el.offset().top;
+                var margin = 30;
+                var target = elOffset - panelOffset + panelScrollTop - margin;
+                this.ui.panelBody.animate({ scrollTop: target });
+            }
+        },
+
         /**
          *
 
