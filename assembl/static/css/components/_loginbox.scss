@@ -87,6 +87,14 @@
       width: 100%;
     }
 
+    .submitButtons td:nth-child(2) {
+      text-align: right;
+      a { /* align vertically with "Log in" button on the left */
+        position: relative;
+        top: -1px;
+      }
+    }
+
     .submitButtons input {
       width: auto;
     }
@@ -126,19 +134,25 @@
 
 .loginbox.register {
   width: 400px;
+  font-size: 13px;
 
   .content {
     padding: 10px 20px 10px;
   }
 
   .subcontent {
-    margin: 10px 0;
+    margin: 17px 0 10px;
     text-align: center;
     a {
       text-decoration: none;
     }
     a:hover {
       text-decoration: underline;
+    }
+
+    .btn-sm { /* use same text line and font size as the text on th eleft of the button */
+      font-size: 13px;
+      margin-top: -3px;
     }
   }
 
