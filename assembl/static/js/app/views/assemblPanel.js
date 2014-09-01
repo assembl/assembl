@@ -10,6 +10,8 @@ define(function (require) {
     var AssemblPanel = Marionette.LayoutView.extend({
         template: "#tmpl-groupItem",
         lockable: false,
+        minimizeable: false,
+        closeable: true,
         DEFAULT_GRID_SIZE: 3,
         gridSize: 3,
         IDEA_PANEL_GRID_SIZE: 3,

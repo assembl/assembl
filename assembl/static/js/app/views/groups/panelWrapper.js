@@ -4,6 +4,7 @@ define(function (require) {
         panelClassByTypeName = require('objects/viewsFactory'),
         Ctx = require('modules/context'),
         AssemblPanel = require('views/assemblPanel'),
+        i18n = require('utils/i18n'),
         panelSpec = require('models/panelSpec');
 
     /**
@@ -24,11 +25,15 @@ define(function (require) {
         },
         events: {
             'click .panel-header-close': 'closePanel',
-            'click .js_lockPanel': 'toggleLock'
+            'click .js_lockPanel': 'toggleLock',
+            'click .js_minimizePanel': 'toggleMinimize'
         },
 
         _unlockCallbackQueue: {},
         _stateButton: null,
+        _minimizedStateButton: null,
+        _originalWidth: null,
+        _nextElementOriginalWidth: null,
 
         initialize: function (options) {
             var contentClass = panelClassByTypeName(options.contentSpec);
@@ -39,6 +44,8 @@ define(function (require) {
             });
             this.gridSize = this.contentsView.gridSize || AssemblPanel.prototype.DEFAULT_GRID_SIZE;
             Marionette.bindEntityEvents(this, this.model, this.modelEvents);
+
+            this.model.set('minimized', false); // TODO: memorize previous state and apply it
         },
         serializeData: function () {
             return {
@@ -47,7 +54,9 @@ define(function (require) {
                 tooltip: this.contentsView.tooltip || '',
                 headerClass: this.contentsView.headerClass || '',
                 userCanChangeUi: Ctx.userCanChangeUi(),
-                hasLock: this.contentsView.lockable
+                hasLock: this.contentsView.lockable,
+                hasMinimize: this.contentsView.minimizeable,
+                hasClose: this.contentsView.closeable,
             }
         },
         resetTitle: function (newTitle) {
@@ -66,6 +75,7 @@ define(function (require) {
             this.setHidden();
             Ctx.initTooltips(this.$el);
             this._stateButton = this.$('.lock-group i');
+            this._minimizedStateButton = this.$('.panel-header-minimize');
         },
         setHidden: function () {
             if (this.model.get('hidden')) {
@@ -133,6 +143,70 @@ define(function (require) {
 
         isPanelLocked: function () {
             return this.model.get('locked');
+        },
+
+        toggleMinimize: function() {
+            this.model.set('minimized', !this.isPanelMinimized());
+            this.applyMinimizationState();
+        },
+
+        applyMinimizationState: function(){
+            if ( this.isPanelMinimized() )
+            {
+                this.minimizePanel();
+            }
+            else
+            {
+                this.unminimizePanel();
+            }
+        },
+
+        isPanelMinimized: function () {
+            return this.model.get('minimized');
+        },
+
+        unminimizePanel: function () {
+            this.model.set('minimized', false);
+            this._minimizedStateButton
+                .addClass('icon-collapse')
+                .removeClass('icon-expand')
+                .attr('title', i18n.gettext('Minimize panel'))
+                .attr('data-original-title', i18n.gettext('Minimize panel'));
+
+            this.$el.css("width", this._originalWidth+"px");
+            this.$el.next().css("width", this._nextElementOriginalWidth+"px");
+            var el = this.$el;
+            setTimeout(function(){
+                el.removeClass("minimized");
+            }, 200);
+
+            this.$el.children(".panelContents").show();
+            this.$el.find("header span.panel-header-title").show();
+            this.$el.children(".panelContentsWhenMinimized").hide();
+        },
+
+        minimizePanel: function () {
+            this._originalWidth = this.$el.width();
+            this._nextElementOriginalWidth = this.$el.next().width();
+            this.model.set('minimized', true);
+            this._minimizedStateButton
+                .addClass('icon-expand')
+                .removeClass('icon-collapse')
+                .attr('title', i18n.gettext('Maximize panel'))
+                .attr('data-original-title', i18n.gettext('Maximize panel'));
+
+            
+            var targetWidth = 40;
+            var currentWidth = this.$el.width();
+            var diffWidth = currentWidth - targetWidth;
+            var nextElementCurrentWidth = this.$el.next().width();
+            this.$el.css("width", targetWidth+"px");
+            this.$el.next().css("width", (nextElementCurrentWidth+diffWidth) + "px");
+            this.$el.addClass("minimized");
+
+            this.$el.children(".panelContents").hide();
+            this.$el.find("header span.panel-header-title").hide();
+            this.$el.children(".panelContentsWhenMinimized").show();
         },
 
         setButtonState: function (dom) {

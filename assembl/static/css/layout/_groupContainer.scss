@@ -91,6 +91,13 @@
     display: table-cell;
     height: 100%;
     vertical-align: top;
+    .panelContentsWhenMinimized {
+      display: none;
+      span {
+        font-size: 25px;
+        position: absolute;
+      }
+    }
   }
 
   .navSidebar {
@@ -187,6 +194,20 @@
     min-width: floor($grid_unit_min_size * $clipboard_grid_size);
   }
 
+}
+
+.groupPanel.minimized {
+  .ideaPanel {
+    min-width: initial !important;
+  }
+  .panel-header {
+    a {
+      display: none;
+    }
+    a.panel-header-minimize {
+      display: initial;
+    }
+  }
 }
 
 .group-modal {
