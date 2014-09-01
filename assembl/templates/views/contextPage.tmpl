@@ -45,6 +45,19 @@
 }
 
 
+/* override default CKEditor field appearance */
+
+.panel-editablearea {
+    background-color: initial;
+    color: initial;
+    padding: 0;
+}
+
+.panel-editablearea .canEdit { /* align vertically with titles and paragraphs (compensate for transparent border) */
+    margin-left: -1px;
+}
+
+
 /* CSS associated to the line chart */
 
 .data-line {
@@ -123,13 +136,6 @@ line {
 }
 
 
-/* override default CKEditor field appearance */
-
-.panel-editablearea {
-    background-color: initial;
-}
-
-
 /* CSS associated to the pie */
 
 .pie {
@@ -190,6 +196,7 @@ line {
                 <h2>{{ gettext('Introduction') }}</h2>
                 <div class="introduction">
                 </div>
+                {# hidden until the "Read more" popin is implemented
                 <div id="introduction-details">
                     <div class="introduction-details">
                     </div>
@@ -198,6 +205,7 @@ line {
                 <button id="introduction-button-see-less" onclick="introductionToggle();">{{ gettext('See less') }}</button>
                 <div class="introduction-details-empty">
                 </div>
+                #}
             </div>
         </div>
         <div class="block-half">
