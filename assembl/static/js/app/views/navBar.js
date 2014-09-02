@@ -40,7 +40,7 @@ define(function (require) {
             var Modal = Backbone.Modal.extend({
                 template: _.template($('#tmpl-create-group').html()),
                 className: 'group-modal',
-                cancelEl: '.btn-cancel',
+                cancelEl: '.popin-close, .btn-cancel',
                 events: {
                     'click .js_selectItemGroup': 'selectItemGroup',
                     'click .js_createGroup': 'createGroup'
@@ -93,7 +93,9 @@ define(function (require) {
                 },
                 scrollToRight: function () {
                     var right = $('#groupsContainer').width();
-                    $('#groupsContainer').animate({ scrollLeft: right}, 1000);
+                    $('#groupsContainer').animate({
+                        scrollLeft: right
+                    }, 1000);
                 }
             });
 

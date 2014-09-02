@@ -213,6 +213,7 @@
 .group-modal {
   .bbm-modal {
     max-width: 410px;
+    margin: 10px auto;
     .bbm-modal__section {
       height: auto;
       padding: 0 20px;
@@ -280,12 +281,16 @@
     }
     .bbm-modal__topbar {
       box-sizing: border-box;
-      padding: 0 20px;
+      padding: 0 15px;
       border-bottom: none;
     }
     .bbm-modal__title {
       font-size: 14px;
       margin: 0;
+    }
+    .popin-close {
+      font-size: 14px;
+      color: $white;
     }
   }
 }
