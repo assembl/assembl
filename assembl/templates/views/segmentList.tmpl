@@ -1,7 +1,11 @@
 <div class="panel-body">
-    <div class="box box--bottomborder">
-        <a class="bookmarklet" data-toggle="tooltip" title="{{gettext('Drag this button to your bookmark bar to create a bookmarklet. You can then capture selections from most webpages (those that are not secured with https) by 1. Clicking on the bookmarklet and 2. Highlighting the section of text you wish to send to the discussion.')}}" href="javascript:(function(a,b){r='http://{{ request.server_name }}:{{ request.server_port }}',a._annotatorConfig={root:r,discussion:{{ discussion.id }}},s=b.body.appendChild(b.createElement('script')),s.language='javascript',s.src=r+'/static/js/annotator_bkmklet.min.js'})(this,this.document);">{{ gettext('Web capture to') }} {{ discussion.slug }}</a>
+
+    <div>
+         <h4 class="pls">{{ gettext('Annotation on the web') }}</h4>
+         <p class="pls">{{ gettext('If you desire catching extracts out of assembl (exemple : Wikipedia),') }}</p>
+         <a href="#" class="btn btn-default btn-sm js_bookmark">{{ gettext('click here to activate the annotation') }}</a>
     </div>
+
     <div class="postitlist">
     </div>
     {#

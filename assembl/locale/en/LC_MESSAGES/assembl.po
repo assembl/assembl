@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: assembl 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-08-29 18:12-0400\n"
+"POT-Creation-Date: 2014-09-02 16:03+0200\n"
 "PO-Revision-Date: 2014-07-24 17:38-0500\n"
 "Last-Translator: Benoit Grégoire <benoitg@coeus.ca>\n"
 "Language-Team: en <LL@li.org>\n"
@@ -26,7 +26,7 @@ msgid "${val} is not a string: ${err}"
 msgstr ""
 
 #: assembl/static/js/app/models/idea.js:39
-#: assembl/static/js/app/views/ideaPanel.js:173
+#: assembl/static/js/app/views/ideaPanel.js:175
 msgid "New idea"
 msgstr ""
 
@@ -161,7 +161,7 @@ msgid "Evolution of the number of messages posted"
 msgstr ""
 
 #: assembl/static/js/app/views/contextPage.js:512
-#: assembl/templates/views/contextPage.tmpl:247
+#: assembl/templates/views/contextPage.tmpl:255
 msgid "Statistics"
 msgstr ""
 
@@ -189,69 +189,69 @@ msgstr ""
 msgid "You did not type a response yet..."
 msgstr ""
 
-#: assembl/static/js/app/views/ideaPanel.js:63
+#: assembl/static/js/app/views/ideaPanel.js:65
 #: assembl/static/js/app/views/messageListPostQuery.js:84
 msgid "Idea"
 msgstr ""
 
-#: assembl/static/js/app/views/ideaPanel.js:65
+#: assembl/static/js/app/views/ideaPanel.js:67
 msgid ""
 "Detailled information about the currently selected idea in the Table of "
 "ideas"
 msgstr ""
 
-#: assembl/static/js/app/views/ideaPanel.js:73
+#: assembl/static/js/app/views/ideaPanel.js:75
 msgid "This idea has no sub-ideas"
 msgstr ""
 
-#: assembl/static/js/app/views/ideaPanel.js:76
+#: assembl/static/js/app/views/ideaPanel.js:78
 #, python-format
 msgid "This idea has %d sub-idea"
 msgid_plural "This idea has %d sub-ideas"
 msgstr[0] ""
 msgstr[1] ""
 
-#: assembl/static/js/app/views/ideaPanel.js:85
+#: assembl/static/js/app/views/ideaPanel.js:87
 msgid "No extracts were harvested for this idea"
 msgstr ""
 
-#: assembl/static/js/app/views/ideaPanel.js:89
+#: assembl/static/js/app/views/ideaPanel.js:91
 #, python-format
 msgid "Harvested in %d extract"
 msgid_plural "Harvested in %d extracts"
 msgstr[0] ""
 msgstr[1] ""
 
-#: assembl/static/js/app/views/ideaPanel.js:172
+#: assembl/static/js/app/views/ideaPanel.js:174
 msgid "Short expression (only a few words) of the idea in the table of ideas."
 msgstr ""
 
-#: assembl/static/js/app/views/ideaPanel.js:197
+#: assembl/static/js/app/views/ideaPanel.js:199
 msgid "Comment on this idea here..."
 msgstr ""
 
-#: assembl/static/js/app/views/ideaPanel.js:198
+#: assembl/static/js/app/views/ideaPanel.js:200
 msgid "Send your comment"
 msgstr ""
 
-#: assembl/static/js/app/views/ideaPanel.js:200
-#: assembl/static/js/app/views/messageList.js:781
+#: assembl/static/js/app/views/ideaPanel.js:202
+#: assembl/static/js/app/views/messageList.js:792
 msgid "You need to type a comment first..."
 msgstr ""
 
-#: assembl/static/js/app/views/ideaPanel.js:328
+#: assembl/static/js/app/views/ideaPanel.js:330
 msgid "You cannot delete an idea while it has sub-ideas."
 msgstr ""
 
-#: assembl/static/js/app/views/ideaPanel.js:333
+#: assembl/static/js/app/views/ideaPanel.js:335
 msgid "You cannot delete an idea associated to extracts."
 msgstr ""
 
-#: assembl/static/js/app/views/ideaPanel.js:479
+#: assembl/static/js/app/views/ideaPanel.js:481
 msgid "Confirm that you want to send all extracts back to the clipboard."
 msgstr ""
 
-#: assembl/static/js/app/views/ideaPanel.js:489
+#: assembl/static/js/app/views/ideaPanel.js:491
 msgid "Confirm that you want to delete this idea."
 msgstr ""
 
@@ -260,7 +260,7 @@ msgid "You can drag the segment above directly to the table of ideas"
 msgstr ""
 
 #: assembl/static/js/app/views/messageList.js:60
-#: assembl/templates/views/create-group.tmpl:38
+#: assembl/templates/views/create-group.tmpl:39
 msgid "Messages"
 msgstr ""
 
@@ -281,50 +281,50 @@ msgstr ""
 msgid "New Messages"
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:636
+#: assembl/static/js/app/views/messageList.js:647
 msgid "No messages"
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:778
+#: assembl/static/js/app/views/messageList.js:789
 msgid ""
 "You can start a new topic in this discussion by typing a subject above, "
 "and a first post here..."
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:779
+#: assembl/static/js/app/views/messageList.js:790
 msgid "Start a new topic in this discussion"
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:780
+#: assembl/static/js/app/views/messageList.js:791
 #: assembl/templates/views/messageSend.tmpl:12
 msgid "New topic subject:"
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:782
+#: assembl/static/js/app/views/messageList.js:793
 msgid "You need to set a subject to add a new topic..."
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:887
+#: assembl/static/js/app/views/messageList.js:898
 #, python-format
 msgid "Normal %s"
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:889
+#: assembl/static/js/app/views/messageList.js:900
 #, python-format
 msgid "New %s"
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:898
+#: assembl/static/js/app/views/messageList.js:909
 #: assembl/templates/views/ideaList.tmpl:28
 msgid "Expand all"
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:901
+#: assembl/static/js/app/views/messageList.js:912
 #: assembl/templates/views/ideaList.tmpl:28
 msgid "Collapse all"
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:1110
+#: assembl/static/js/app/views/messageList.js:1121
 msgid "Send to clipboard"
 msgstr ""
 
@@ -455,8 +455,9 @@ msgid "Type your message here..."
 msgstr ""
 
 #: assembl/static/js/app/views/messageSend.js:43
+#: assembl/templates/views/bookmarket.tmpl:11
 #: assembl/templates/views/ckeditorField.tmpl:8
-#: assembl/templates/views/create-group.tmpl:52
+#: assembl/templates/views/create-group.tmpl:53
 #: assembl/templates/views/synthesisIdea.tmpl:33
 msgid "Cancel"
 msgstr ""
@@ -487,23 +488,23 @@ msgstr ""
 msgid "Message posted!"
 msgstr ""
 
-#: assembl/static/js/app/views/segmentList.js:192
-#: assembl/static/js/app/views/segmentList.js:237
-#: assembl/static/js/app/views/segmentList.js:240
-#: assembl/templates/views/create-group.tmpl:46
+#: assembl/static/js/app/views/segmentList.js:201
+#: assembl/static/js/app/views/segmentList.js:246
+#: assembl/static/js/app/views/segmentList.js:249
+#: assembl/templates/views/create-group.tmpl:47
 msgid "Clipboard"
 msgstr ""
 
-#: assembl/static/js/app/views/segmentList.js:240
+#: assembl/static/js/app/views/segmentList.js:249
 msgid "empty"
 msgstr ""
 
-#: assembl/static/js/app/views/segmentList.js:414
+#: assembl/static/js/app/views/segmentList.js:405
 msgid "Are you sure you want to empty your entire clipboard?"
 msgstr ""
 
 #: assembl/static/js/app/views/synthesisPanel.js:76
-#: assembl/templates/views/create-group.tmpl:21
+#: assembl/templates/views/create-group.tmpl:22
 #: assembl/templates/views/navigation.tmpl:11
 msgid "Synthesis"
 msgstr ""
@@ -514,6 +515,17 @@ msgstr ""
 
 #: assembl/static/js/app/views/synthesisPanel.js:252
 msgid "Synthesis published!"
+msgstr ""
+
+#: assembl/static/js/app/views/groups/panelWrapper.js:173
+#: assembl/static/js/app/views/groups/panelWrapper.js:174
+#: assembl/templates/views/panelWrapper.tmpl:19
+msgid "Minimize panel"
+msgstr ""
+
+#: assembl/static/js/app/views/groups/panelWrapper.js:195
+#: assembl/static/js/app/views/groups/panelWrapper.js:196
+msgid "Maximize panel"
 msgstr ""
 
 #: assembl/static/js/app/views/navigation/synthesisInNavigation.js:47
@@ -808,30 +820,30 @@ msgstr ""
 msgid "View all posts in this discussion"
 msgstr ""
 
-#: assembl/templates/views/contextPage.tmpl:190
+#: assembl/templates/views/bookmarket.tmpl:2
+msgid "activate web annotation"
+msgstr ""
+
+#: assembl/templates/views/bookmarket.tmpl:10
+#: assembl/templates/views/create-group.tmpl:52
+msgid "Validate"
+msgstr ""
+
+#: assembl/templates/views/contextPage.tmpl:196
 #: assembl/templates/views/synthesisPanel.tmpl:8
 #: assembl/templates/views/synthesisPanelMessage.tmpl:5
 msgid "Introduction"
 msgstr ""
 
-#: assembl/templates/views/contextPage.tmpl:197
-#: assembl/templates/views/ideaPanel.tmpl:17
-msgid "See more"
-msgstr ""
-
-#: assembl/templates/views/contextPage.tmpl:198
-msgid "See less"
-msgstr ""
-
-#: assembl/templates/views/contextPage.tmpl:205
+#: assembl/templates/views/contextPage.tmpl:213
 msgid "Objectives"
 msgstr ""
 
-#: assembl/templates/views/contextPage.tmpl:226
+#: assembl/templates/views/contextPage.tmpl:234
 msgid "Instigator"
 msgstr ""
 
-#: assembl/templates/views/contextPage.tmpl:250
+#: assembl/templates/views/contextPage.tmpl:258
 msgid "Loading..."
 msgstr ""
 
@@ -839,20 +851,16 @@ msgstr ""
 msgid "Create a panel group"
 msgstr ""
 
-#: assembl/templates/views/create-group.tmpl:5
+#: assembl/templates/views/create-group.tmpl:6
 msgid "Choose a navigation panel:"
 msgstr ""
 
-#: assembl/templates/views/create-group.tmpl:12
+#: assembl/templates/views/create-group.tmpl:13
 msgid "Navigation"
 msgstr ""
 
-#: assembl/templates/views/create-group.tmpl:30
+#: assembl/templates/views/create-group.tmpl:31
 msgid "Idea Panel"
-msgstr ""
-
-#: assembl/templates/views/create-group.tmpl:51
-msgid "Validate"
 msgstr ""
 
 #: assembl/templates/views/home.tmpl:2
@@ -937,7 +945,7 @@ msgid "Fullsize"
 msgstr ""
 
 #: assembl/templates/views/ideaList.tmpl:30
-#: assembl/templates/views/panelWrapper.tmpl:13
+#: assembl/templates/views/panelWrapper.tmpl:14
 msgid "Close panel"
 msgstr ""
 
@@ -965,6 +973,10 @@ msgstr ""
 
 #: assembl/templates/views/ideaPanel.tmpl:15
 msgid "A definition of this idea"
+msgstr ""
+
+#: assembl/templates/views/ideaPanel.tmpl:17
+msgid "See more"
 msgstr ""
 
 #: assembl/templates/views/ideaPanel.tmpl:28
@@ -1189,7 +1201,7 @@ msgstr ""
 msgid "Unknown segment type: "
 msgstr ""
 
-#: assembl/templates/views/segmentList.tmpl:3
+#: assembl/templates/views/segmentList.tmpl:6
 msgid ""
 "Drag this button to your bookmark bar to create a bookmarklet. You can "
 "then capture selections from most webpages (those that are not secured "
@@ -1197,11 +1209,11 @@ msgid ""
 "section of text you wish to send to the discussion."
 msgstr ""
 
-#: assembl/templates/views/segmentList.tmpl:3
+#: assembl/templates/views/segmentList.tmpl:6
 msgid "Web capture to"
 msgstr ""
 
-#: assembl/templates/views/segmentList.tmpl:13
+#: assembl/templates/views/segmentList.tmpl:16
 msgid "Clear"
 msgstr ""
 
@@ -1503,9 +1515,6 @@ msgstr ""
 #~ msgid "See&nbsp;in&nbsp;context"
 #~ msgstr ""
 
-#~ msgid ""
-#~ "%(img)s Posted <time "
-#~ "title=\"%(precise_date)s\">%(nice_date)s</time> by "
-#~ "<strong>%(name)s</strong>"
+#~ msgid "See less"
 #~ msgstr ""
 

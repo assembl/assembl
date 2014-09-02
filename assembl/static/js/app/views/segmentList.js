@@ -90,7 +90,7 @@ define(function (require) {
                 this.model.set('idIdea', null);
                 this.model.save('idIdea', null);
             }
-        },
+        }
     });
 
     var SegmentListView = Marionette.CollectionView.extend({
@@ -139,7 +139,7 @@ define(function (require) {
     });
 
     var SegmentListPanel = AssemblPanel.extend({
-
+        template: '#tmpl-segmentList',
         panelType: 'clipboard',
         className: 'clipboard',
 
@@ -184,10 +184,19 @@ define(function (require) {
         },
 
         /**
-         * The template
-         * @type {_.template}
+         * The events
+         * @type {Object}
          */
-        template: '#tmpl-segmentList',
+        events: {
+            'dragend .postit': "onDragEnd",
+            'dragover': 'onDragOver',
+            'dragleave': 'onDragLeave',
+            'drop': 'onDrop',
+            'click #segmentList-clear': "onClearButtonClick",
+            'click #segmentList-closeButton': "closePanel",
+            'click .js_bookmark': 'bookmark'
+        },
+
         getTitle: function() {
             return i18n.gettext('Clipboard');
         },
@@ -315,24 +324,6 @@ define(function (require) {
             }
         },
 
-
-        /**
-         * The events
-         * @type {Object}
-         */
-        events: {
-            'dragend .postit': "onDragEnd",
-            'dragover': 'onDragOver',
-            'dragleave': 'onDragLeave',
-            'drop': 'onDrop',
-
-            'click #segmentList-clear': "onClearButtonClick",
-            'click #segmentList-closeButton': "closePanel",
-        },
-
-        /**
-         * @event
-         */
         onDragEnd: function (ev) {
             if (ev) {
                 ev.preventDefault();
@@ -424,7 +415,21 @@ define(function (require) {
                             });
                     });
             }
+        },
+
+        bookmark: function (e) {
+            e.preventDefault();
+
+            var Modal = Backbone.Modal.extend({
+                template: _.template($('#tmpl-bookmarket').html()),
+                className: 'group-modal',
+                cancelEl: '.popin-close, .btn-primary'
+            });
+
+            var modalView = new Modal();
+            $('.modal').html(modalView.render().el);
         }
+
     });
 
     return {
