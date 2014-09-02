@@ -701,7 +701,7 @@ class ActionOnPost(Action):
 
     post = relationship(
         'Content',
-        backref=backref('views')
+        backref=backref('actions', cascade="all, delete-orphan"),
     )
 
     object_type = 'post'
@@ -740,6 +740,11 @@ class ViewPost(ActionOnPost):
         return DiscussionBoundTombstone(
             self, post=Content.uri_generic(self.post_id),
             actor=User.uri_generic(self.actor_id))
+
+    post_from_view = relationship(
+        'Content',
+        backref=backref('views'),
+    )
 
     verb = 'viewed'
 
