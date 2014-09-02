@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: assembl 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-09-02 16:03+0200\n"
+"POT-Creation-Date: 2014-09-02 15:58-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -35,7 +35,7 @@ msgid "The root idea will not be in the synthesis"
 msgstr ""
 
 #: assembl/static/js/app/models/idea.js:76
-msgid "Add a definition for this idea"
+msgid "Add a description of this idea"
 msgstr ""
 
 #: assembl/static/js/app/models/idea.js:89
@@ -121,27 +121,27 @@ msgstr ""
 
 #: assembl/static/js/app/views/contextPage.js:446
 #, python-format
-msgid "%d authors have contributed since %s"
+msgid "%d participants have contributed in the %s"
 msgstr ""
 
 #: assembl/static/js/app/views/contextPage.js:452
 #, python-format
-msgid "%d new authors started contributing since %s"
+msgid "%d new participants started contributing in the %s"
 msgstr ""
 
 #: assembl/static/js/app/views/contextPage.js:459
 #, python-format
-msgid "%d active authors were already contributing before %s"
+msgid "%d active participants had contributed before %s"
 msgstr ""
 
 #: assembl/static/js/app/views/contextPage.js:468
 #, python-format
-msgid "%d authors' last contribution was before %s"
+msgid "%d participants' last contribution was prior to %s"
 msgstr ""
 
 #: assembl/static/js/app/views/contextPage.js:480
 #, python-format
-msgid "%d authors have contributed since the beginning of the debate"
+msgid "%d participants have contributed since the beginning of the debate"
 msgstr ""
 
 #: assembl/static/js/app/views/contextPage.js:489
@@ -284,18 +284,15 @@ msgid "No messages"
 msgstr ""
 
 #: assembl/static/js/app/views/messageList.js:789
-msgid ""
-"You can start a new topic in this discussion by typing a subject above, and a"
-" first post here..."
-msgstr ""
-
-#: assembl/static/js/app/views/messageList.js:790
 msgid "Start a new topic in this discussion"
 msgstr ""
 
+#: assembl/static/js/app/views/messageList.js:790
+msgid "Subject"
+msgstr ""
+
 #: assembl/static/js/app/views/messageList.js:791
-#: assembl/templates/views/messageSend.tmpl:12
-msgid "New topic subject:"
+msgid "Add a subject above and start a new topic here"
 msgstr ""
 
 #: assembl/static/js/app/views/messageList.js:793
@@ -304,7 +301,7 @@ msgstr ""
 
 #: assembl/static/js/app/views/messageList.js:898
 #, python-format
-msgid "Normal %s"
+msgid "All %s"
 msgstr ""
 
 #: assembl/static/js/app/views/messageList.js:900
@@ -453,7 +450,6 @@ msgid "Type your message here..."
 msgstr ""
 
 #: assembl/static/js/app/views/messageSend.js:43
-#: assembl/templates/views/bookmarket.tmpl:11
 #: assembl/templates/views/ckeditorField.tmpl:8
 #: assembl/templates/views/create-group.tmpl:53
 #: assembl/templates/views/synthesisIdea.tmpl:33
@@ -503,7 +499,7 @@ msgstr ""
 
 #: assembl/static/js/app/views/synthesisPanel.js:76
 #: assembl/templates/views/create-group.tmpl:22
-#: assembl/templates/views/navigation.tmpl:11
+#: assembl/templates/views/navigation.tmpl:15
 msgid "Synthesis"
 msgstr ""
 
@@ -515,14 +511,23 @@ msgstr ""
 msgid "Synthesis published!"
 msgstr ""
 
-#: assembl/static/js/app/views/groups/panelWrapper.js:173
-#: assembl/static/js/app/views/groups/panelWrapper.js:174
+#: assembl/static/js/app/views/groups/panelWrapper.js:113
+msgid "Unlock panel"
+msgstr ""
+
+#: assembl/static/js/app/views/groups/panelWrapper.js:126
+#: assembl/templates/views/panelWrapper.tmpl:10
+msgid "Lock panel"
+msgstr ""
+
+#: assembl/static/js/app/views/groups/panelWrapper.js:182
+#: assembl/templates/views/navigation.tmpl:5
 #: assembl/templates/views/panelWrapper.tmpl:19
 msgid "Minimize panel"
 msgstr ""
 
-#: assembl/static/js/app/views/groups/panelWrapper.js:195
-#: assembl/static/js/app/views/groups/panelWrapper.js:196
+#: assembl/static/js/app/views/groups/panelWrapper.js:211
+#: assembl/templates/views/panelWrapper.tmpl:31
 msgid "Maximize panel"
 msgstr ""
 
@@ -718,8 +723,8 @@ msgid "Accounts"
 msgstr ""
 
 #: assembl/templates/profile.jinja2:144
-#: assembl/templates/admin/discussion_permissions.jinja2:40
-#: assembl/templates/admin/discussion_permissions.jinja2:75
+#: assembl/templates/admin/discussion_permissions.jinja2:46
+#: assembl/templates/admin/discussion_permissions.jinja2:81
 #: assembl/templates/admin/global_permissions.jinja2:37
 #: assembl/templates/views/ckeditorField.tmpl:9
 #: assembl/templates/views/synthesisIdea.tmpl:34
@@ -759,33 +764,33 @@ msgid "Role permissions:"
 msgstr ""
 
 #: assembl/templates/admin/discussion_permissions.jinja2:9
-#: assembl/templates/admin/discussion_permissions.jinja2:46
+msgid "Permissions"
+msgstr ""
+
+#: assembl/templates/admin/discussion_permissions.jinja2:9
+#: assembl/templates/admin/discussion_permissions.jinja2:52
 #: assembl/templates/admin/global_permissions.jinja2:8
 msgid "Roles"
 msgstr ""
 
-#: assembl/templates/admin/discussion_permissions.jinja2:9
-msgid "Permissions"
-msgstr ""
-
-#: assembl/templates/admin/discussion_permissions.jinja2:15
+#: assembl/templates/admin/discussion_permissions.jinja2:31
 msgid "delete role"
 msgstr ""
 
-#: assembl/templates/admin/discussion_permissions.jinja2:35
+#: assembl/templates/admin/discussion_permissions.jinja2:41
 msgid "Add a role"
 msgstr ""
 
-#: assembl/templates/admin/discussion_permissions.jinja2:42
+#: assembl/templates/admin/discussion_permissions.jinja2:48
 msgid "User roles specific to this discussion:"
 msgstr ""
 
-#: assembl/templates/admin/discussion_permissions.jinja2:46
+#: assembl/templates/admin/discussion_permissions.jinja2:52
 #: assembl/templates/admin/global_permissions.jinja2:8
 msgid "Users"
 msgstr ""
 
-#: assembl/templates/admin/discussion_permissions.jinja2:70
+#: assembl/templates/admin/discussion_permissions.jinja2:76
 #: assembl/templates/admin/global_permissions.jinja2:32
 msgid "Search for users"
 msgstr ""
@@ -821,23 +826,52 @@ msgstr ""
 msgid "activate web annotation"
 msgstr ""
 
-#: assembl/templates/views/bookmarket.tmpl:10
-#: assembl/templates/views/create-group.tmpl:52
-msgid "Validate"
+#: assembl/templates/views/bookmarket.tmpl:8
+msgid "how it works"
+msgstr ""
+
+#: assembl/templates/views/bookmarket.tmpl:9
+msgid ""
+"1 - Drag the button below into your bookmarks bar and / or tab on your "
+"browser."
+msgstr ""
+
+#: assembl/templates/views/bookmarket.tmpl:11
+msgid ""
+"Drag this button to your bookmark bar to create a bookmarklet. You can then "
+"capture selections from most webpages (those that are not secured with https)"
+" by 1. Clicking on the bookmarklet and 2. Highlighting the section of text "
+"you wish to send to the discussion."
+msgstr ""
+
+#: assembl/templates/views/bookmarket.tmpl:11
+msgid "Web capture to"
+msgstr ""
+
+#: assembl/templates/views/bookmarket.tmpl:13
+msgid ""
+"2 - Click here where you will come to move on your browser to enable web "
+"annotation"
+msgstr ""
+
+#: assembl/templates/views/bookmarket.tmpl:14
+msgid "3 - Whether you unearth extracts"
+msgstr ""
+
+#: assembl/templates/views/bookmarket.tmpl:20
+msgid "I understand"
 msgstr ""
 
 #: assembl/templates/views/contextPage.tmpl:196
-#: assembl/templates/views/synthesisPanel.tmpl:8
-#: assembl/templates/views/synthesisPanelMessage.tmpl:5
-msgid "Introduction"
+msgid "Context"
 msgstr ""
 
 #: assembl/templates/views/contextPage.tmpl:213
-msgid "Objectives"
+msgid "Debate objectives"
 msgstr ""
 
 #: assembl/templates/views/contextPage.tmpl:234
-msgid "Instigator"
+msgid "Instigated by"
 msgstr ""
 
 #: assembl/templates/views/contextPage.tmpl:258
@@ -860,6 +894,10 @@ msgstr ""
 msgid "Idea Panel"
 msgstr ""
 
+#: assembl/templates/views/create-group.tmpl:52
+msgid "Validate"
+msgstr ""
+
 #: assembl/templates/views/home.tmpl:2
 msgid "How it works"
 msgstr ""
@@ -869,21 +907,27 @@ msgstr ""
 msgid ""
 "<p>How to participate in the debate \"%(debate_name)s\":</p>\n"
 "\t<ol>\n"
-"\t\t<li>Explore the debate using the ideas that have already emerged (do you "
-"want to name this as the table of ideas?)</li>\n"
+"\t\t<li>Explore the debate using the ideas that have already emerged</li>\n"
 "\t\t<li>Join in the conversation by replying directly to the contributions of"
 " participants</li>\n"
 "\t\t<li>Start a new topic of discussion if you wish to rejuvenate the debate "
 "around a particular idea</li>\n"
+"\t</ol>\n"
+"\t<p>How the process works:</p>\n"
+"\t<ol>\n"
+"\t\t<li>As you contribute, Harvesters will select the key ideas from your "
+"messages – they are here to make sure your contributions get noticed</li>\n"
+"\t\t<li>Based on these ideas, they will reorganize the ideas into a table of "
+"contents of the ideas shared</li>\n"
 "\t</ol>"
 msgstr ""
 
-#: assembl/templates/views/home.tmpl:13 assembl/templates/views/home.tmpl:18
+#: assembl/templates/views/home.tmpl:18 assembl/templates/views/home.tmpl:23
 msgid "Join the debate"
 msgstr ""
 
-#: assembl/templates/views/home.tmpl:15
-msgid "Because your opinion merits to be heard."
+#: assembl/templates/views/home.tmpl:20
+msgid "Your opinion deserves to be heard"
 msgstr ""
 
 #: assembl/templates/views/idea.tmpl:6
@@ -965,11 +1009,11 @@ msgid ""
 msgstr ""
 
 #: assembl/templates/views/ideaPanel.tmpl:13
-msgid "Definition of idea"
+msgid "Description of idea"
 msgstr ""
 
 #: assembl/templates/views/ideaPanel.tmpl:15
-msgid "A definition of this idea"
+msgid "A description of this idea"
 msgstr ""
 
 #: assembl/templates/views/ideaPanel.tmpl:17
@@ -1053,7 +1097,7 @@ msgid "Show only this message and its replies"
 msgstr ""
 
 #: assembl/templates/views/message.tmpl:71
-msgid "Copy the link to this message to clipboard"
+msgid "Copy the link to share this message"
 msgstr ""
 
 #: assembl/templates/views/message.tmpl:76
@@ -1093,7 +1137,7 @@ msgid "Load previous messages"
 msgstr ""
 
 #: assembl/templates/views/messageList.tmpl:42
-msgid "Load next messages"
+msgid "Load more messages"
 msgstr ""
 
 #: assembl/templates/views/messageListItem.tmpl:4
@@ -1102,6 +1146,10 @@ msgstr ""
 
 #: assembl/templates/views/messageListItem.tmpl:4
 msgid "Select"
+msgstr ""
+
+#: assembl/templates/views/messageSend.tmpl:12
+msgid "New topic subject:"
 msgstr ""
 
 #: assembl/templates/views/messageSend.tmpl:24
@@ -1117,11 +1165,11 @@ msgid "Connecting..."
 msgstr ""
 
 #: assembl/templates/views/navBar.tmpl:11
-msgid "Add a group of views"
+msgid "Add a new panel group"
 msgstr ""
 
 #: assembl/templates/views/navBar.tmpl:12
-msgid "Switch to simple mode"
+msgid "Switch to participant mode"
 msgstr ""
 
 #: assembl/templates/views/navBar.tmpl:15
@@ -1136,7 +1184,7 @@ msgstr ""
 msgid "Sign out"
 msgstr ""
 
-#: assembl/templates/views/navigation.tmpl:7
+#: assembl/templates/views/navigation.tmpl:11
 msgid "Debate"
 msgstr ""
 
@@ -1193,19 +1241,19 @@ msgstr ""
 msgid "Unknown segment type: "
 msgstr ""
 
-#: assembl/templates/views/segmentList.tmpl:6
-msgid ""
-"Drag this button to your bookmark bar to create a bookmarklet. You can then "
-"capture selections from most webpages (those that are not secured with https)"
-" by 1. Clicking on the bookmarklet and 2. Highlighting the section of text "
-"you wish to send to the discussion."
+#: assembl/templates/views/segmentList.tmpl:4
+msgid "Annotation on the web"
+msgstr ""
+
+#: assembl/templates/views/segmentList.tmpl:5
+msgid "If you desire catching extracts out of assembl (exemple : Wikipedia),"
 msgstr ""
 
 #: assembl/templates/views/segmentList.tmpl:6
-msgid "Web capture to"
+msgid "click here to activate the annotation"
 msgstr ""
 
-#: assembl/templates/views/segmentList.tmpl:16
+#: assembl/templates/views/segmentList.tmpl:17
 msgid "Clear"
 msgstr ""
 
@@ -1224,6 +1272,11 @@ msgstr ""
 #: assembl/templates/views/synthesisInIdeaList.tmpl:4
 #: assembl/templates/views/synthesisInIdeaList.tmpl:5
 msgid "View syntheses"
+msgstr ""
+
+#: assembl/templates/views/synthesisPanel.tmpl:8
+#: assembl/templates/views/synthesisPanelMessage.tmpl:5
+msgid "Introduction"
 msgstr ""
 
 #: assembl/templates/views/synthesisPanel.tmpl:18
