@@ -12,10 +12,10 @@
     background-color: #FFFFFF;
     color: #484848;
     height: 35px;
-    }
   }
+}
 
-.title-debate-name {
+.theme_navbarDebateName {
   font-size: 16px;
   color: #B36FE0;
   .debate-icon {
@@ -34,5 +34,12 @@
 
   .breadcrumb-level-indicator:before {
     content: ">";
+  }
+}
+
+.theme_homePanelTitleZone {
+  background: #ddd;
+  .theme_homePanelDiscussionTitle {
+    text-align: center;
   }
 }

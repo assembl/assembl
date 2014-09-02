@@ -103,7 +103,7 @@ define(function (require) {
                 //console.log("discussion successfully loaded: ", discussion);
 
                 // show discussion title
-                that.$(".discussion-title").html(discussion.topic);
+                that.$(".js_discussionTitle").html(discussion.topic);
 
                 that.objectivesField.renderTo(that.$('.objectives'));
                 that.instigatorField.renderTo(that.$('.instigator'));
