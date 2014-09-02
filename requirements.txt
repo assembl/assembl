@@ -46,6 +46,7 @@ kombu==3.0.21
 lingua==3.2
 lxml==3.3.6
 meld3==1.0.0
+mock==1.0.1
 oauthlib==0.6.3
 paramiko==1.14.1
 pinocchio==0.4.1
@@ -66,6 +67,7 @@ pyramid-tm==0.7
 pytest==2.6.1
 pytest-cov==1.8.0
 pytest-localserver==0.3.3
+pytest-mock==0.3.0
 pytest-splinter==1.0.3
 python-memcached==1.53
 python-openid==2.2.5
