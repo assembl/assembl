@@ -151,7 +151,9 @@ define(function (require) {
             return this.model.get('locked');
         },
 
-        toggleMinimize: function() {
+        toggleMinimize: function(evt) {
+            evt.stopPropagation();
+            evt.preventDefault();
             this.model.set('minimized', !this.isPanelMinimized());
             this.applyMinimizationState();
         },
@@ -172,18 +174,25 @@ define(function (require) {
         },
 
         unminimizePanel: function () {
+            var compensateElement = this.$el.nextAll(":not(.minimized)").last();
             this.model.set('minimized', false);
             this._minimizedStateButton
                 //.addClass('icon-collapse')
                 //.removeClass('icon-expand')
                 .attr('data-original-title', i18n.gettext('Minimize panel'));
 
-            this.$el.css("width", this._originalWidth+"px");
-            this.$el.next().css("width", this._nextElementOriginalWidth+"px");
+            //this.$el.css("width", this._originalWidth+"px");
+            this.$el.animate({ "width": this._originalWidth+"px"}, 1000);
+            //compensateElement.css("width", this._nextElementOriginalWidth+"px");
+            compensateElement.animate({"width": this._nextElementOriginalWidth+"px"}, 1000);
             var el = this.$el;
             setTimeout(function(){
                 el.removeClass("minimized");
             }, 200);
+            setTimeout(function(){ // reset width
+                el.css("width", "");
+                //compensateElement.css("width", "");
+            }, 1050);
 
             this.$el.children(".panelContents").show();
             this.$el.find("header span.panel-header-title").show();
@@ -191,8 +200,10 @@ define(function (require) {
         },
 
         minimizePanel: function () {
+            var compensateElement = this.$el.nextAll(":not(.minimized)").last();
             this._originalWidth = this.$el.width();
-            this._nextElementOriginalWidth = this.$el.next().width();
+            this._nextElementOriginalWidth = compensateElement.width();
+            
             this.model.set('minimized', true);
             this._minimizedStateButton
                 //.addClass('icon-expand')
@@ -203,9 +214,11 @@ define(function (require) {
             var targetWidth = 40;
             var currentWidth = this.$el.width();
             var diffWidth = currentWidth - targetWidth;
-            var nextElementCurrentWidth = this.$el.next().width();
-            this.$el.css("width", targetWidth+"px");
-            this.$el.next().css("width", (nextElementCurrentWidth+diffWidth) + "px");
+            var nextElementCurrentWidth = compensateElement.width();
+            //this.$el.css("width", targetWidth+"px");
+            this.$el.animate({ "width": targetWidth+"px"}, 1000);
+            //compensateElement.css("width", (nextElementCurrentWidth+diffWidth) + "px");
+            compensateElement.animate({ "width": (nextElementCurrentWidth+diffWidth) + "px"}, 1000);
             this.$el.addClass("minimized");
 
             this.$el.children(".panelContents").hide();

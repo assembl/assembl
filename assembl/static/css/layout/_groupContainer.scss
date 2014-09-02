@@ -78,6 +78,13 @@
   }
 }
 
+.groupBody .groupPanel .navSidebar {
+  min-width: floor($grid_unit_min_size * $navigation_panel_grid_size);
+}
+.groupBody .groupPanel.minimized .navSidebar {
+  min-width: initial !important;
+}
+
 .groupBody {
   display: table;
   height: calc(100% - 3px); /* retain the height of .groupHeader */
@@ -101,7 +108,6 @@
   }
 
   .navSidebar {
-    min-width: floor($grid_unit_min_size * $navigation_panel_grid_size);
     height: 100%;
     .side-menu {
       margin: 0;
@@ -196,7 +202,8 @@
 
 }
 
-.groupPanel .panel-header a.panel-header-minimize {
+.groupPanel .panel-header a.panel-header-minimize,
+.groupPanel .navSidebar .nav span.panel-header-minimize {
   background: url(#{$img-dir}/icon/panel_collapse.svg) center center no-repeat;
   background-size: 18px;
   position: absolute;
@@ -213,15 +220,45 @@
     a {
       display: none;
     }
-    a.panel-header-minimize {
-      display: initial;
-      background: url(#{$img-dir}/icon/panel_expand.svg) center center no-repeat;
-      background-size: 18px;
-      position: absolute;
-      width: 36px;
-      height: 35px;
-    }
   }
+}
+
+
+/* temporary: use CSS to show/hide the right icons in the minimized panel => TODO: template system for minimized view */
+
+.groupPanel.minimized .panelContentsWhenMinimized.hasHeader span.icon-home {
+  display: none;
+}
+
+.groupPanel.minimized .panelContentsWhenMinimized.hasHeader span.icon-idea {
+  display: initial;
+}
+
+.groupPanel.minimized .panelContentsWhenMinimized.hasNoHeader span.icon-idea {
+  display: none;
+}
+
+.groupPanel.minimized .panelContentsWhenMinimized.hasNoHeader span.icon-home {
+  display: initial;
+}
+
+/* end temporary */
+
+/*
+.groupPanel.minimized .panelContentsWhenMinimized a.panel-header-minimize {
+  display: none;
+}
+*/
+
+.groupPanel.minimized .panel-header a.panel-header-minimize,
+.groupPanel.minimized .navSidebar .nav span.panel-header-minimize,
+.groupPanel.minimized .panelContentsWhenMinimized.hasNoHeader a.panel-header-minimize {
+  display: initial;
+  background: url(#{$img-dir}/icon/panel_expand.svg) center center no-repeat;
+  background-size: 18px;
+  position: absolute;
+  width: 36px;
+  height: 35px;
 }
 
 .group-modal {

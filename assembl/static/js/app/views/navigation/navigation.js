@@ -54,6 +54,8 @@ define(function (require) {
             this.toggleMenuByElement(elm);
         },
         toggleMenuByEvent: function(evt){
+            if ( $(evt.target).hasClass("panel-header-minimize") )
+                return;
             var elm = $(evt.currentTarget); // use currentTarget instead of target, so that we are sure that it is a .nav element
             this.toggleMenuByElement(elm);
         },
@@ -152,6 +154,13 @@ define(function (require) {
                 }
             }
             
+        },
+
+        serializeData: function () {
+            return {
+                Ctx: ctx,
+                hasMinimize: ctx.userCanChangeUi()
+            }
         }
 
     });

@@ -23,6 +23,13 @@
 <% } %>
 
 <div class="panelContents"></div>
-<div class="panelContentsWhenMinimized">
-<span class="icon-idea"></span>
+
+{# TODO: template system for minified state of each panel #}
+<div class="panelContentsWhenMinimized <% if ( hideHeader ) { %>hasNoHeader<% } else { %>hasHeader<% } %>">
+<% if ( hideHeader ) { %>
+    <header class="panel-header">
+        <a class="js_minimizePanel iconbutton panel-header-minimize" data-toggle="tooltip" data-placement="top" title="{{gettext('Maximize panel')}}"></a>
+    </header>
+<% } %>
+<span class="icon-idea"></span><span class="icon-home"></span>
 </div>
