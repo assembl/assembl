@@ -786,9 +786,9 @@ define(function (require) {
             this.newTopicView = new MessageSendView({
                 'allow_setting_subject': true,
                 'reply_idea': null,
-                'body_help_message': i18n.gettext('You can start a new topic in this discussion by typing a subject above, and a first post here...'),
                 'send_button_label': i18n.gettext('Start a new topic in this discussion'),
-                'subject_label': i18n.gettext('New topic subject:'),
+                'subject_label': i18n.gettext('Subject'),
+                'body_help_message': i18n.gettext('Add a subject above and start a new topic here'),
                 'mandatory_body_missing_msg': i18n.gettext('You need to type a comment first...'),
                 'mandatory_subject_missing_msg': i18n.gettext('You need to set a subject to add a new topic...'),
                 'messageList': that
@@ -895,7 +895,7 @@ define(function (require) {
             console.log("This viewstyle is unknown in user mode:", this.currentViewStyle);
           }
           this.currentQuery.getResultNumTotal() === undefined ? resultNumTotal='' : resultNumTotal=i18n.sprintf("(%d)", this.currentQuery.getResultNumTotal()); 
-          this.ui.userThreadedViewButton.html(i18n.sprintf(i18n.gettext('Normal %s'), resultNumTotal));
+          this.ui.userThreadedViewButton.html(i18n.sprintf(i18n.gettext('All %s'), resultNumTotal));
           this.currentQuery.getResultNumUnread() === undefined ? resultNumUnread='' : resultNumUnread=i18n.sprintf("(%d)", this.currentQuery.getResultNumUnread()); 
           this.ui.userHighlightNewViewButton.html(i18n.sprintf(i18n.gettext('New %s'), resultNumUnread));
         },

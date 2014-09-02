@@ -73,7 +73,7 @@ define(function(require){
             } else if( Ctx.stripHtml(this.get('longTitle')) !== '' ){
                 return this.get('longTitle');
             } else {
-                return i18n.gettext('Add a definition for this idea');
+                return i18n.gettext('Add a description of this idea');
             }
         },
 

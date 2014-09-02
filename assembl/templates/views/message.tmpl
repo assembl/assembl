@@ -68,7 +68,7 @@
           <li class="dropdown-listitem message-hoistbtn" data-id="<%= escape(id) %>"><a class="iconbutton icon-download"></a> {{gettext('Show only this message and its replies')}}</li>
         <% } %>
 
-        <li class="dropdown-listitem message-linkbutton" data-copy-text="/message/<%= escape(id) %>"><a class="iconbutton icon-link"></a> {{gettext('Copy the link to this message to clipboard')}}</li>
+        <li class="dropdown-listitem message-linkbutton" data-copy-text="/message/<%= escape(id) %>"><a class="iconbutton icon-link"></a> {{gettext('Copy the link to share this message')}}</li>
 
         <% if (creator.get('email')) { %>
         <li class="dropdown-listitem">

@@ -443,20 +443,20 @@ define(function (require) {
                         "",
                         {
                             "active_authors_during_current_period": [
-                                i18n.sprintf(i18n.gettext('%d authors have contributed since %s'),  authors_in_period_total, statsPeriodName),
+                                i18n.sprintf(i18n.gettext('%d participants have contributed in the %s'),  authors_in_period_total, statsPeriodName),
                                 authors_in_period_total,
                                 messages_in_period_total,
                                 "#FFA700",
                                 {
                                     "new_authors": [
-                                        i18n.sprintf(i18n.gettext("%d new authors started contributing since %s"), new_authors_in_period_total, statsPeriodName),
+                                        i18n.sprintf(i18n.gettext("%d new participants started contributing in the %s"), new_authors_in_period_total, statsPeriodName),
                                         new_authors_in_period_total,
                                         messages_in_period_by_new_authors_total,
                                         "#FFBD40",
                                         {}
                                     ],
                                     "still_active_authors": [
-                                        i18n.sprintf(i18n.gettext("%d active authors were already contributing before %s"), authors_in_period_total - new_authors_in_period_total, statsPeriodName),
+                                        i18n.sprintf(i18n.gettext("%d active participants had contributed before %s"), authors_in_period_total - new_authors_in_period_total, statsPeriodName),
                                         authors_in_period_total - new_authors_in_period_total,
                                         messages_in_period_total - messages_in_period_by_new_authors_total,
                                         "#FFD37F",
@@ -465,7 +465,7 @@ define(function (require) {
                                 }
                             ],
                             "inactive_authors_during_current_period": [
-                                i18n.sprintf(i18n.gettext("%d authors' last contribution was before %s"), authors_except_those_in_period_total, statsPeriodName),
+                                i18n.sprintf(i18n.gettext("%d participants' last contribution was prior to %s"), authors_except_those_in_period_total, statsPeriodName),
                                 authors_except_those_in_period_total,
                                 0, // not needed now
                                 "#9A3FD5",
@@ -477,7 +477,7 @@ define(function (require) {
                     var pie_chart_default_legend_data = [
                         null,
                         null,
-                        i18n.sprintf(i18n.gettext("%d authors have contributed since the beginning of the debate"), authors_total),
+                        i18n.sprintf(i18n.gettext("%d participants have contributed since the beginning of the debate"), authors_total),
                         null,
                         authors_total,
                         messages_total

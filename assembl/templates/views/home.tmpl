@@ -4,15 +4,20 @@
 	<div>
 	{{ gettext('<p>How to participate in the debate "%(debate_name)s":</p>
 	<ol>
-		<li>Explore the debate using the ideas that have already emerged (do you want to name this as the table of ideas?)</li>
+		<li>Explore the debate using the ideas that have already emerged</li>
 		<li>Join in the conversation by replying directly to the contributions of participants</li>
 		<li>Start a new topic of discussion if you wish to rejuvenate the debate around a particular idea</li>
+	</ol>
+	<p>How the process works:</p>
+	<ol>
+		<li>As you contribute, Harvesters will select the key ideas from your messages – they are here to make sure your contributions get noticed</li>
+		<li>Based on these ideas, they will reorganize the ideas into a table of contents of the ideas shared</li>
 	</ol>')|format(debate_name=discussion.topic)|safe }}
 	</div>
 
 	<h3>{{ gettext('Join the debate') }}</h3>
 
-	<p>{{ gettext('Because your opinion merits to be heard.') }}</p>
+	<p>{{ gettext('Your opinion deserves to be heard') }}</p>
 
 	<div class="mal bac tac">
 		<input type="submit" value="{{ gettext('Join the debate') }}" class="btn btn-primary btn-sm go-to-debate" />
