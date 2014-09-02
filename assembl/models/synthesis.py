@@ -1349,7 +1349,8 @@ class IdeaContentLink(DiscussionBoundBase):
     content_id = Column(Integer, ForeignKey(
         'content.id', ondelete="CASCADE", onupdate="CASCADE"),
         nullable=False, index=True)
-    content = relationship(Content)
+    content = relationship(Content, backref=backref(
+        'idea_links_of_content', cascade="all, delete-orphan"))
 
     order = Column(Float, nullable=False, default=0.0)
 
@@ -1683,7 +1684,8 @@ class TextFragmentIdentifier(DiscussionBoundBase):
     offset_start = Column(Integer)
     xpath_end = Column(String)
     offset_end = Column(Integer)
-    extract = relationship(Extract, backref='text_fragment_identifiers')
+    extract = relationship(Extract, backref=backref(
+        'text_fragment_identifiers', cascade="all, delete-orphan"))
 
     @classmethod
     def special_quad_patterns(cls, alias_manager):
