@@ -12,9 +12,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  Assembl\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-09-02 16:49-0400\n"
-"PO-Revision-Date: 2014-09-02 16:03+0100\n"
-"Last-Translator: Quentin Grimaud <quentin.grimaud@gmail.com>\n"
+"POT-Creation-Date: 2014-09-02 19:42-0400\n"
+"PO-Revision-Date: 2014-09-02 20:51+0000\n"
+"Last-Translator: Marc-Antoine Parent <maparent@acm.org>\n"
 "Language-Team: French "
 "(http://www.transifex.com/projects/p/assembl/language/fr/)\n"
 "Plural-Forms: nplurals=2; plural=(n > 1)\n"
@@ -152,11 +152,11 @@ msgstr "%d participants ont contribué depuis le début du débat"
 
 #: assembl/static/js/app/views/contextPage.js:489
 msgid "Contributors active recently"
-msgstr ""
+msgstr "Participants actifs récemment"
 
 #: assembl/static/js/app/views/contextPage.js:493
 msgid "Contributors inactive recently"
-msgstr ""
+msgstr "Participants non actifs récemment"
 
 #: assembl/static/js/app/views/contextPage.js:511
 msgid "Evolution of the total number of messages"
@@ -167,13 +167,13 @@ msgid "Evolution of the number of messages posted"
 msgstr "Évolution du nombre de messages postés"
 
 #: assembl/static/js/app/views/contextPage.js:512
-#: assembl/templates/views/contextPage.tmpl:255
+#: assembl/templates/views/contextPage.tmpl:70
 msgid "Statistics"
 msgstr "Statistiques"
 
 #: assembl/static/js/app/views/contextPage.js:814
 msgid "messages"
-msgstr "Messages"
+msgstr "messages"
 
 #: assembl/static/js/app/views/contextPage.js:1033
 #: assembl/static/js/app/views/contextPage.js:1047
@@ -206,7 +206,7 @@ msgid ""
 "ideas"
 msgstr ""
 "Information détaillée sur l'idée qui est sélectionnée dans la table des "
-"matières"
+"idées"
 
 #: assembl/static/js/app/views/ideaPanel.js:75
 msgid "This idea has no sub-ideas"
@@ -232,7 +232,7 @@ msgstr[1] "Attrapé dans %d extraits"
 
 #: assembl/static/js/app/views/ideaPanel.js:174
 msgid "Short expression (only a few words) of the idea in the table of ideas."
-msgstr "Expression brève (quelques mots) de l'idée dans la table des matières"
+msgstr "Expression brève (quelques mots) de l'idée dans la table des idées"
 
 #: assembl/static/js/app/views/ideaPanel.js:199
 msgid "Comment on this idea here..."
@@ -265,9 +265,7 @@ msgstr "Confirmez que vous souhaitez supprimer cette idée."
 
 #: assembl/static/js/app/views/messageList.js:22
 msgid "You can drag the segment above directly to the table of ideas"
-msgstr ""
-"Vous pouvez glisser l'extrait ci-dessus directement sur la table des "
-"matières"
+msgstr "Vous pouvez glisser l'extrait ci-dessus directement sur la table des idées"
 
 #: assembl/static/js/app/views/messageList.js:60
 #: assembl/templates/views/create-group.tmpl:39
@@ -301,11 +299,11 @@ msgstr "Lancez un nouveau sujet de discussion"
 
 #: assembl/static/js/app/views/messageList.js:790
 msgid "Subject"
-msgstr "Sujet:"
+msgstr "Sujet"
 
 #: assembl/static/js/app/views/messageList.js:791
 msgid "Add a subject above and start a new topic here"
-msgstr "Vous devez ajouter un titre pour lancer un sujet de discussion..."
+msgstr "Lancez un nouvau sujet ici, en donnant le titre ci-dessus"
 
 #: assembl/static/js/app/views/messageList.js:793
 msgid "You need to set a subject to add a new topic..."
@@ -314,12 +312,12 @@ msgstr "Vous devez ajouter un titre pour lancer un sujet de discussion..."
 #: assembl/static/js/app/views/messageList.js:898
 #, python-format
 msgid "All %s"
-msgstr "Tous (%s)"
+msgstr "Tous %s"
 
 #: assembl/static/js/app/views/messageList.js:900
 #, python-format
 msgid "New %s"
-msgstr "Nouveaux (%s)"
+msgstr "Nouveau %s"
 
 #: assembl/static/js/app/views/messageList.js:909
 #: assembl/templates/views/ideaList.tmpl:28
@@ -370,7 +368,7 @@ msgid ""
 "recursive:  Messages related to ideas that are descendents of the idea "
 "are included."
 msgstr ""
-"N'incluez que les messages relatifs à une idée spéciique. Le filtre est "
+"N'incluez que les messages relatifs à une idée spécifique. Le filtre est "
 "récursif: Les messages liés à des idées en-dessous de l'idée courante "
 "seront inclus."
 
@@ -422,7 +420,7 @@ msgstr "Aucune requête n'a été formulée"
 
 #: assembl/static/js/app/views/messageListPostQuery.js:473
 msgid "Found no message in the discussion that:"
-msgstr "Aucun message trouvé dans la discussion suivante:"
+msgstr "Aucun message trouvé dans la discussion tel que:"
 
 #: assembl/static/js/app/views/messageListPostQuery.js:476
 msgid "There are no messages in the discussion."
@@ -546,7 +544,7 @@ msgstr "Minimiser le panneau"
 #: assembl/static/js/app/views/groups/panelWrapper.js:211
 #: assembl/templates/views/panelWrapper.tmpl:31
 msgid "Maximize panel"
-msgstr ""
+msgstr "Maximiser le panneau"
 
 #: assembl/static/js/app/views/navigation/synthesisInNavigation.js:47
 msgid "No synthesis of the discussion has been published yet"
@@ -830,7 +828,7 @@ msgid ""
 "For the best experience, please <span style=\"text-decoration: "
 "underline;\">update your browser</span>."
 msgstr ""
-"Pour une expérinence optimale, veuillez <span style=\"text-decoration: "
+"Pour une expérience optimale, veuillez <span style=\"text-decoration: "
 "underline;\">mettre votre fureteur à jour</span>."
 
 #: assembl/templates/views/allMessagesInIdeaList.tmpl:4
@@ -842,64 +840,19 @@ msgstr "Nombre de messages dans toute la discussion"
 msgid "View all posts in this discussion"
 msgstr "Voir tous les messages de la discussion"
 
-#: assembl/templates/views/bookmarket.tmpl:2
-msgid "activate web annotation"
-msgstr ""
-
-#: assembl/templates/views/bookmarket.tmpl:8
-msgid "how it works"
-msgstr "Comment ça marche ?"
-
-#: assembl/templates/views/bookmarket.tmpl:9
-msgid ""
-"1 - Drag the button below into your bookmarks bar and / or tab on your "
-"browser."
-msgstr ""
-
-#: assembl/templates/views/bookmarket.tmpl:11
-msgid ""
-"Drag this button to your bookmark bar to create a bookmarklet. You can "
-"then capture selections from most webpages (those that are not secured "
-"with https) by 1. Clicking on the bookmarklet and 2. Highlighting the "
-"section of text you wish to send to the discussion."
-msgstr ""
-"Glissez ce boutton sur votre barre de favoris pour créer un bookmarklet."
-"  Vous pouvez ensuite aller chercher un extrait sur la majorité des pages"
-" web (celles qui ne sont pas sécurisées par https) en 1. Cliquant sur le "
-"bookmarklet et 2. Mettant en surbrillance la section de texte que vous "
-"voulez envoyer à la discussion."
-
-#: assembl/templates/views/bookmarket.tmpl:11
-msgid "Web capture to"
-msgstr "Capture du Web vers"
-
-#: assembl/templates/views/bookmarket.tmpl:13
-msgid ""
-"2 - Click here where you will come to move on your browser to enable web "
-"annotation"
-msgstr ""
-
-#: assembl/templates/views/bookmarket.tmpl:14
-msgid "3 - Whether you unearth extracts"
-msgstr ""
-
-#: assembl/templates/views/bookmarket.tmpl:20
-msgid "I understand"
-msgstr ""
-
-#: assembl/templates/views/contextPage.tmpl:196
+#: assembl/templates/views/contextPage.tmpl:11
 msgid "Context"
-msgstr ""
+msgstr "Contexte"
 
-#: assembl/templates/views/contextPage.tmpl:213
+#: assembl/templates/views/contextPage.tmpl:28
 msgid "Debate objectives"
 msgstr "Objectifs du débat"
 
-#: assembl/templates/views/contextPage.tmpl:234
+#: assembl/templates/views/contextPage.tmpl:49
 msgid "Instigated by"
 msgstr "Initié par"
 
-#: assembl/templates/views/contextPage.tmpl:258
+#: assembl/templates/views/contextPage.tmpl:73
 msgid "Loading..."
 msgstr "Chargement..."
 
@@ -956,7 +909,15 @@ msgstr ""
 " participants</li>\n"
 "<li>Lancez un nouveau sujet de discussion si vous souhaitez relancer le "
 "débat sur une idée en particulier</li>\n"
-"</ul>"
+"</ul>\n"
+"<p>Comment ça fonctionne:</p>\n"
+"\t<ol>\n"
+"\t\t<li>Au fur et à mesure que vous contribuez, des attrapeurs vont "
+"sélectionner les idées clés de vos messages – Ils sont là pour s'assurer "
+"que vos contributions sont remarquées</li>\n"
+"\t\t<li>À partir de ces idées, ils vont réorganiser ces idées dans une "
+"table des matières des idées identifiées</li>\n"
+"\t</ol>"
 
 #: assembl/templates/views/home.tmpl:18 assembl/templates/views/home.tmpl:23
 msgid "Join the debate"
@@ -964,7 +925,7 @@ msgstr "Rejoindre le débat"
 
 #: assembl/templates/views/home.tmpl:20
 msgid "Your opinion deserves to be heard"
-msgstr "Votre opinion mérite d'être entendue."
+msgstr "Votre opinion mérite d'être entendue"
 
 #: assembl/templates/views/idea.tmpl:6
 msgid "Remove from next synthesis"
@@ -1034,7 +995,7 @@ msgstr "Ajouter une idée"
 
 #: assembl/templates/views/ideaPanel.tmpl:4
 msgid "The name of this idea in the table of ideas"
-msgstr "Nom de cette idée dans la table des matières"
+msgstr "Nom de cette idée dans la table des idées"
 
 #: assembl/templates/views/ideaPanel.tmpl:7
 msgid "Expression in next synthesis:"
@@ -1159,7 +1120,7 @@ msgstr "Lire plus"
 
 #: assembl/templates/views/message.tmpl:95
 msgid "Read less"
-msgstr "Voir moins"
+msgstr "Lire moins"
 
 #: assembl/templates/views/message.tmpl:108
 msgid "Reply"
@@ -1207,7 +1168,7 @@ msgstr "Vous devez être connecté pour commenter."
 
 #: assembl/templates/views/messageSend.tmpl:24
 msgid "Click here to log in"
-msgstr ""
+msgstr "Cliquez ici pour vous connecter."
 
 #: assembl/templates/views/navBar.tmpl:4
 msgid "Connecting..."
@@ -1251,7 +1212,7 @@ msgstr "Nombre de messages"
 #: assembl/templates/views/orphanMessagesInIdeaList.tmpl:4
 #: assembl/templates/views/orphanMessagesInIdeaList.tmpl:5
 msgid "View posts not yet sorted anywhere"
-msgstr "Voir les messages qui n'ont pas encore été classés"
+msgstr "Voir les messages non-classés"
 
 #: assembl/templates/views/segment.tmpl:10
 #, python-format
@@ -1266,7 +1227,7 @@ msgstr ""
 
 #: assembl/templates/views/segment.tmpl:14
 msgid "Show in original text"
-msgstr ""
+msgstr "Voir dans son contexte d'origine"
 
 #: assembl/templates/views/segment.tmpl:26
 #, python-format
@@ -1280,7 +1241,7 @@ msgid ""
 "%(name)s"
 msgstr ""
 "%(img)s Posté <time title=\"%(precise_date)s\">%(nice_date)s</time> par "
-"<strong>%(name)s</strong>"
+"%(name)s"
 
 #: assembl/templates/views/segment.tmpl:39
 msgid "Document extracted from the web"
@@ -1510,18 +1471,35 @@ msgstr ""
 msgid "No discussion found for slug=%s"
 msgstr "Nous n'avons pas de discussion sous le code=%s"
 
-#~ msgid "See&nbsp;in&nbsp;context"
-#~ msgstr "Voir&nbsp;en&nbsp;contexte"
+#~ msgid "activate web annotation"
+#~ msgstr "activer l'annotation Web"
+
+#~ msgid "how it works"
+#~ msgstr "Comment ça marche ?"
 
 #~ msgid ""
+#~ "Drag this button to your bookmark "
+#~ "bar to create a bookmarklet. You "
+#~ "can then capture selections from most"
+#~ " webpages (those that are not secured"
+#~ " with https) by 1. Clicking on "
+#~ "the bookmarklet and 2. Highlighting the"
+#~ " section of text you wish to "
+#~ "send to the discussion."
 #~ msgstr ""
+#~ "Glissez ce boutton sur votre barre "
+#~ "de favoris pour créer un applisignet."
+#~ "  Vous pouvez ensuite aller chercher "
+#~ "un extrait sur la majorité des "
+#~ "pages web (celles qui ne sont pas"
+#~ " sécurisées par https) en 1. Cliquant"
+#~ " sur l'applisignet et 2. Mettant en"
+#~ " surbrillance la section de texte que"
+#~ " vous voulez envoyer à la discussion."
 
-#~ msgid "See less"
-#~ msgstr "Voir moins"
+#~ msgid "Web capture to"
+#~ msgstr "Capture du Web vers"
 
-#~ msgid "Add a group of views"
-#~ msgstr "Ajouter un groupe de panneaux"
-
-#~ msgid "Switch to simple mode"
-#~ msgstr "Passer au mode simple"
+#~ msgid "I understand"
+#~ msgstr "Je comprends"
 

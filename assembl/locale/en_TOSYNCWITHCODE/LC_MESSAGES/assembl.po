@@ -5,13 +5,14 @@
 # Translators:
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2014
 # François Burra <francoisburra@imaginationforpeople.org>, 2014
+# Marc-Antoine Parent <maparent@acm.org>, 2014
 msgid ""
 msgstr ""
 "Project-Id-Version:  Assembl\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-09-02 16:49-0400\n"
-"PO-Revision-Date: 2014-08-28 18:41+0000\n"
-"Last-Translator: François Burra <francoisburra@imaginationforpeople.org>\n"
+"POT-Creation-Date: 2014-09-02 19:42-0400\n"
+"PO-Revision-Date: 2014-09-02 20:51+0000\n"
+"Last-Translator: Marc-Antoine Parent <maparent@acm.org>\n"
 "Language-Team: English (Canada) "
 "(http://www.transifex.com/projects/p/assembl/language/en_CA/)\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
@@ -38,9 +39,8 @@ msgid "The root idea will not be in the synthesis"
 msgstr ""
 
 #: assembl/static/js/app/models/idea.js:76
-#, fuzzy
 msgid "Add a description of this idea"
-msgstr "Add a description of this idea"
+msgstr ""
 
 #: assembl/static/js/app/models/idea.js:89
 msgid "The root idea will never be in the synthesis"
@@ -124,29 +124,29 @@ msgid "last year"
 msgstr ""
 
 #: assembl/static/js/app/views/contextPage.js:446
-#, fuzzy, python-format
+#, python-format
 msgid "%d participants have contributed in the %s"
-msgstr "%d participants have contributed in the %s"
+msgstr ""
 
 #: assembl/static/js/app/views/contextPage.js:452
-#, fuzzy, python-format
+#, python-format
 msgid "%d new participants started contributing in the %s"
-msgstr "%d new participants started contributing in the %s"
+msgstr ""
 
 #: assembl/static/js/app/views/contextPage.js:459
-#, fuzzy, python-format
+#, python-format
 msgid "%d active participants had contributed before %s"
-msgstr "%d active participants had contributed before %s"
+msgstr ""
 
 #: assembl/static/js/app/views/contextPage.js:468
-#, fuzzy, python-format
+#, python-format
 msgid "%d participants' last contribution was prior to %s"
-msgstr "%d participants' last contribution was prior to %s"
+msgstr ""
 
 #: assembl/static/js/app/views/contextPage.js:480
-#, fuzzy, python-format
+#, python-format
 msgid "%d participants have contributed since the beginning of the debate"
-msgstr "%d participants have contributed since the beginning of the debate"
+msgstr ""
 
 #: assembl/static/js/app/views/contextPage.js:489
 msgid "Contributors active recently"
@@ -165,14 +165,13 @@ msgid "Evolution of the number of messages posted"
 msgstr ""
 
 #: assembl/static/js/app/views/contextPage.js:512
-#: assembl/templates/views/contextPage.tmpl:255
+#: assembl/templates/views/contextPage.tmpl:70
 msgid "Statistics"
 msgstr ""
 
 #: assembl/static/js/app/views/contextPage.js:814
-#, fuzzy
 msgid "messages"
-msgstr "Load more messages"
+msgstr ""
 
 #: assembl/static/js/app/views/contextPage.js:1033
 #: assembl/static/js/app/views/contextPage.js:1047
@@ -299,13 +298,12 @@ msgid "Subject"
 msgstr ""
 
 #: assembl/static/js/app/views/messageList.js:791
-#, fuzzy
 msgid "Add a subject above and start a new topic here"
-msgstr "You need to add a subject to post a new message"
+msgstr ""
 
 #: assembl/static/js/app/views/messageList.js:793
 msgid "You need to set a subject to add a new topic..."
-msgstr "You need to add a subject to post a new message"
+msgstr ""
 
 #: assembl/static/js/app/views/messageList.js:898
 #, python-format
@@ -831,60 +829,19 @@ msgstr ""
 msgid "View all posts in this discussion"
 msgstr ""
 
-#: assembl/templates/views/bookmarket.tmpl:2
-msgid "activate web annotation"
-msgstr ""
-
-#: assembl/templates/views/bookmarket.tmpl:8
-msgid "how it works"
-msgstr ""
-
-#: assembl/templates/views/bookmarket.tmpl:9
-msgid ""
-"1 - Drag the button below into your bookmarks bar and / or tab on your "
-"browser."
-msgstr ""
-
-#: assembl/templates/views/bookmarket.tmpl:11
-msgid ""
-"Drag this button to your bookmark bar to create a bookmarklet. You can "
-"then capture selections from most webpages (those that are not secured "
-"with https) by 1. Clicking on the bookmarklet and 2. Highlighting the "
-"section of text you wish to send to the discussion."
-msgstr ""
-
-#: assembl/templates/views/bookmarket.tmpl:11
-msgid "Web capture to"
-msgstr ""
-
-#: assembl/templates/views/bookmarket.tmpl:13
-msgid ""
-"2 - Click here where you will come to move on your browser to enable web "
-"annotation"
-msgstr ""
-
-#: assembl/templates/views/bookmarket.tmpl:14
-msgid "3 - Whether you unearth extracts"
-msgstr ""
-
-#: assembl/templates/views/bookmarket.tmpl:20
-msgid "I understand"
-msgstr ""
-
-#: assembl/templates/views/contextPage.tmpl:196
+#: assembl/templates/views/contextPage.tmpl:11
 msgid "Context"
 msgstr ""
 
-#: assembl/templates/views/contextPage.tmpl:213
+#: assembl/templates/views/contextPage.tmpl:28
 msgid "Debate objectives"
 msgstr ""
 
-#: assembl/templates/views/contextPage.tmpl:234
-#, fuzzy
+#: assembl/templates/views/contextPage.tmpl:49
 msgid "Instigated by"
-msgstr "Initiated by"
+msgstr ""
 
-#: assembl/templates/views/contextPage.tmpl:258
+#: assembl/templates/views/contextPage.tmpl:73
 msgid "Loading..."
 msgstr ""
 
@@ -939,9 +896,8 @@ msgid "Join the debate"
 msgstr ""
 
 #: assembl/templates/views/home.tmpl:20
-#, fuzzy
 msgid "Your opinion deserves to be heard"
-msgstr "Your opinion deserves to be heard"
+msgstr ""
 
 #: assembl/templates/views/idea.tmpl:6
 msgid "Remove from next synthesis"
@@ -1022,14 +978,12 @@ msgid ""
 msgstr ""
 
 #: assembl/templates/views/ideaPanel.tmpl:13
-#, fuzzy
 msgid "Description of idea"
-msgstr "Description of the idea"
+msgstr ""
 
 #: assembl/templates/views/ideaPanel.tmpl:15
-#, fuzzy
 msgid "A description of this idea"
-msgstr "Description of this idea"
+msgstr ""
 
 #: assembl/templates/views/ideaPanel.tmpl:17
 msgid "See more"
@@ -1117,9 +1071,8 @@ msgid "Show only this message and its replies"
 msgstr ""
 
 #: assembl/templates/views/message.tmpl:71
-#, fuzzy
 msgid "Copy the link to share this message"
-msgstr "Copy the link to share this message"
+msgstr ""
 
 #: assembl/templates/views/message.tmpl:76
 msgid "Send an email to this user"
@@ -1158,9 +1111,8 @@ msgid "Load previous messages"
 msgstr ""
 
 #: assembl/templates/views/messageList.tmpl:42
-#, fuzzy
 msgid "Load more messages"
-msgstr "Load more messages"
+msgstr ""
 
 #: assembl/templates/views/messageListItem.tmpl:4
 msgid "Unselect"
@@ -1172,7 +1124,7 @@ msgstr ""
 
 #: assembl/templates/views/messageSend.tmpl:12
 msgid "New topic subject:"
-msgstr "Title of new message"
+msgstr ""
 
 #: assembl/templates/views/messageSend.tmpl:24
 msgid "You must be logged in to add a comment."
@@ -1191,9 +1143,8 @@ msgid "Add a new panel group"
 msgstr ""
 
 #: assembl/templates/views/navBar.tmpl:12
-#, fuzzy
 msgid "Switch to participant mode"
-msgstr "Switch to participant mode"
+msgstr ""
 
 #: assembl/templates/views/navBar.tmpl:15
 msgid "Switch to expert mode"
@@ -1457,49 +1408,41 @@ msgstr ""
 msgid "No discussion found for slug=%s"
 msgstr ""
 
-#~ msgid "Normal (%s)"
+#~ msgid "activate web annotation"
 #~ msgstr ""
 
-#~ msgid "New (%s)"
-#~ msgstr ""
-
-#~ msgid "How it works text"
-#~ msgstr ""
-
-#~ msgid "Read More"
-#~ msgstr ""
-
-#~ msgid "You must be signed in to add a comment"
-#~ msgstr ""
-
-#~ msgid "See&nbsp;in&nbsp;context"
+#~ msgid "how it works"
 #~ msgstr ""
 
 #~ msgid ""
-#~ msgstr ""
-
-#~ msgid "See less"
-#~ msgstr ""
-
-#~ msgid "Normal %s"
-#~ msgstr ""
-
-#~ msgid "Objectives"
-#~ msgstr ""
-
-#~ msgid "Add a group of views"
-#~ msgstr "Add new panel group"
-
-#~ msgid "Number of messages related to this idea or its descendants"
-#~ msgstr ""
-
-#~ msgid "Number of unread messages related to this idea or its descendants"
+#~ "1 - Drag the button below into "
+#~ "your bookmarks bar and / or tab"
+#~ " on your browser."
 #~ msgstr ""
 
 #~ msgid ""
-#~ "Number of unread messages related to "
-#~ "this idea or its descendants.  Click "
-#~ "on this number to view ONLY the"
-#~ " new unread messages"
+#~ "Drag this button to your bookmark "
+#~ "bar to create a bookmarklet. You "
+#~ "can then capture selections from most"
+#~ " webpages (those that are not secured"
+#~ " with https) by 1. Clicking on "
+#~ "the bookmarklet and 2. Highlighting the"
+#~ " section of text you wish to "
+#~ "send to the discussion."
+#~ msgstr ""
+
+#~ msgid "Web capture to"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "2 - Click here where you will "
+#~ "come to move on your browser to"
+#~ " enable web annotation"
+#~ msgstr ""
+
+#~ msgid "3 - Whether you unearth extracts"
+#~ msgstr ""
+
+#~ msgid "I understand"
 #~ msgstr ""
 

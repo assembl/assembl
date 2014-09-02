@@ -5,13 +5,17 @@
 
 <div class="bbm-modal__section">
   <div class="web-capture">
-    <p>{{ gettext('how it works') }}</p>
-    <p>{{ gettext('1 - Drag the button below into your bookmarks bar and / or tab on your browser.') }}</p>
+    {{ gettext('<p>How it works:</p>
+    <p>Drag the button below into your bookmark bar to create a bookmarklet.') }}</p>
     <div>
         <a class="bookmarklet" data-toggle="tooltip" title="{{gettext('Drag this button to your bookmark bar to create a bookmarklet. You can then capture selections from most webpages (those that are not secured with https) by 1. Clicking on the bookmarklet and 2. Highlighting the section of text you wish to send to the discussion.')}}" href="javascript:(function(a,b){r='http://{{ request.server_name }}:{{ request.server_port }}',a._annotatorConfig={root:r,discussion:{{ discussion.id }}},s=b.body.appendChild(b.createElement('script')),s.language='javascript',s.src=r+'/static/js/annotator_bkmklet.min.js'})(this,this.document);">{{ gettext('Web capture to') }} {{ discussion.slug }}</a>
     </div>
-    <p>{{ gettext('2 - Click here where you will come to move on your browser to enable web annotation') }} </p>
-    <p>{{ gettext('3 - Whether you unearth extracts') }}</p>
+    {{ gettext('<p>You can then capture selections from most webpages (those that are not secured with https) this way:</p>
+    <ol>
+    <li>Click on the bookmarklet to enable annotations</li>
+    <li>Highligt the section of text you wish to send to the discussion</li>
+    <li>Click the "send" button that appears</li>
+    </ol>'}}
   </div>
 </div>
 

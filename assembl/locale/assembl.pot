@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: assembl 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-09-02 16:49-0400\n"
+"POT-Creation-Date: 2014-09-02 19:42-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -161,7 +161,7 @@ msgid "Evolution of the number of messages posted"
 msgstr ""
 
 #: assembl/static/js/app/views/contextPage.js:512
-#: assembl/templates/views/contextPage.tmpl:255
+#: assembl/templates/views/contextPage.tmpl:70
 msgid "Statistics"
 msgstr ""
 
@@ -822,59 +822,19 @@ msgstr ""
 msgid "View all posts in this discussion"
 msgstr ""
 
-#: assembl/templates/views/bookmarket.tmpl:2
-msgid "activate web annotation"
-msgstr ""
-
-#: assembl/templates/views/bookmarket.tmpl:8
-msgid "how it works"
-msgstr ""
-
-#: assembl/templates/views/bookmarket.tmpl:9
-msgid ""
-"1 - Drag the button below into your bookmarks bar and / or tab on your "
-"browser."
-msgstr ""
-
-#: assembl/templates/views/bookmarket.tmpl:11
-msgid ""
-"Drag this button to your bookmark bar to create a bookmarklet. You can then "
-"capture selections from most webpages (those that are not secured with https)"
-" by 1. Clicking on the bookmarklet and 2. Highlighting the section of text "
-"you wish to send to the discussion."
-msgstr ""
-
-#: assembl/templates/views/bookmarket.tmpl:11
-msgid "Web capture to"
-msgstr ""
-
-#: assembl/templates/views/bookmarket.tmpl:13
-msgid ""
-"2 - Click here where you will come to move on your browser to enable web "
-"annotation"
-msgstr ""
-
-#: assembl/templates/views/bookmarket.tmpl:14
-msgid "3 - Whether you unearth extracts"
-msgstr ""
-
-#: assembl/templates/views/bookmarket.tmpl:20
-msgid "I understand"
-msgstr ""
-
-#: assembl/templates/views/contextPage.tmpl:196
+#: assembl/templates/views/contextPage.tmpl:11
 msgid "Context"
 msgstr ""
 
-#: assembl/templates/views/contextPage.tmpl:213
+#: assembl/templates/views/contextPage.tmpl:28
 msgid "Debate objectives"
 msgstr ""
 
-#: assembl/templates/views/contextPage.tmpl:234
+#: assembl/templates/views/contextPage.tmpl:49
 msgid "Instigated by"
 msgstr ""
 
-#: assembl/templates/views/contextPage.tmpl:258
+#: assembl/templates/views/contextPage.tmpl:73
 msgid "Loading..."
 msgstr ""
 
