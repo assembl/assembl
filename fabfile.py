@@ -310,8 +310,8 @@ def updatemaincode():
     with cd(join(env.projectpath)):
         run('git fetch')
         run('git checkout %s' % env.gitbranch)
-        run('git submodule update --init')
         run('git pull %s %s' % (env.gitrepo, env.gitbranch))
+        run('git submodule update --init')
 
 def app_setup():
      venvcmd('pip install -U "pip>=1.5.1"')
