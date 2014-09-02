@@ -165,6 +165,13 @@ define(function(require){
      */
     getQuote: function(){
       return this.get('quote') || this.get('text');
+    },
+
+    getCreatedTime: function() {
+      if (!this.createdTime) {
+        this.createdTime = (new Date(this.get('created'))).getTime();
+      }
+      return this.createdTime;
     }
   });
 

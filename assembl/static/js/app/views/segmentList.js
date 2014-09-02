@@ -120,7 +120,7 @@ define(function (require) {
             if (myE1 != myE2) {
                 return myE1?-1:1;
             }
-            return e1.get('creationDate') - e2.get('creationDate');
+            return e2.getCreatedTime() - e1.getCreatedTime();
         }
     });
 
@@ -134,7 +134,7 @@ define(function (require) {
             return extract.get('idIdea') == this.ideaId;
         },
         comparator: function(segment) {
-            return -segment.get('creationDate');
+            return -segment.getCreatedTime();
         }
     });
 
