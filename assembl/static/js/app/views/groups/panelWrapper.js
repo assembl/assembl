@@ -168,8 +168,8 @@ define(function (require) {
         unminimizePanel: function () {
             this.model.set('minimized', false);
             this._minimizedStateButton
-                .addClass('icon-collapse')
-                .removeClass('icon-expand')
+                //.addClass('icon-collapse')
+                //.removeClass('icon-expand')
                 .attr('title', i18n.gettext('Minimize panel'))
                 .attr('data-original-title', i18n.gettext('Minimize panel'));
 
@@ -190,8 +190,8 @@ define(function (require) {
             this._nextElementOriginalWidth = this.$el.next().width();
             this.model.set('minimized', true);
             this._minimizedStateButton
-                .addClass('icon-expand')
-                .removeClass('icon-collapse')
+                //.addClass('icon-expand')
+                //.removeClass('icon-collapse')
                 .attr('title', i18n.gettext('Maximize panel'))
                 .attr('data-original-title', i18n.gettext('Maximize panel'));
 

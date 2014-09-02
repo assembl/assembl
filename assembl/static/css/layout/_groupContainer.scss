@@ -196,6 +196,15 @@
 
 }
 
+.groupPanel .panel-header a.panel-header-minimize {
+  background: url(#{$img-dir}/icon/panel_collapse.svg) center center no-repeat;
+  background-size: 18px;
+  position: absolute;
+  width: 36px;
+  height: 35px;
+  right: 0;
+}
+
 .groupPanel.minimized {
   .ideaPanel {
     min-width: initial !important;
@@ -206,6 +215,11 @@
     }
     a.panel-header-minimize {
       display: initial;
+      background: url(#{$img-dir}/icon/panel_expand.svg) center center no-repeat;
+      background-size: 18px;
+      position: absolute;
+      width: 36px;
+      height: 35px;
     }
   }
 }
