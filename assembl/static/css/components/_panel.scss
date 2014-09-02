@@ -190,7 +190,11 @@
 }
 
 .groupBody .groupPanel header ~ .panelContents {
-  height: calc(100% - 35px); /* retain the height of the header */
+  height: calc(100% - 34px) !important; /* retain the height of the header */
+}
+
+.groupBody.editable .groupPanel header ~ .panelContents {
+  height: calc(100% - 34px) !important; /* retain the height of everything on top of it. probably not the best solution because not dynamic */
 }
 
 .panelContents > div {
