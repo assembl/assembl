@@ -107,7 +107,10 @@ define(function (require) {
         lockPanel: function () {
             if (!this.model.get('locked')) {
                 this.model.set('locked', true);
-                this._stateButton.addClass('icon-lock').removeClass('icon-lock-open');
+                this._stateButton
+                    .addClass('icon-lock')
+                    .removeClass('icon-lock-open')
+                    .attr('data-original-title', i18n.gettext('Unlock panel'));
             }
         },
 
@@ -117,7 +120,10 @@ define(function (require) {
         unlockPanel: function () {
             if (this.model.get('locked')) {
                 this.model.set('locked', false);
-                this._stateButton.addClass('icon-lock-open').removeClass('icon-lock');
+                this._stateButton
+                    .addClass('icon-lock-open')
+                    .removeClass('icon-lock')
+                    .attr('data-original-title', i18n.gettext('Lock panel'));
 
                 if (_.size(this._unlockCallbackQueue) > 0) {
                     //console.log("Executing queued callbacks in queue: ",this.unlockCallbackQueue);
@@ -170,7 +176,6 @@ define(function (require) {
             this._minimizedStateButton
                 //.addClass('icon-collapse')
                 //.removeClass('icon-expand')
-                .attr('title', i18n.gettext('Minimize panel'))
                 .attr('data-original-title', i18n.gettext('Minimize panel'));
 
             this.$el.css("width", this._originalWidth+"px");
@@ -192,7 +197,6 @@ define(function (require) {
             this._minimizedStateButton
                 //.addClass('icon-expand')
                 //.removeClass('icon-collapse')
-                .attr('title', i18n.gettext('Maximize panel'))
                 .attr('data-original-title', i18n.gettext('Maximize panel'));
 
             

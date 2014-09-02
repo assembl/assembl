@@ -7,7 +7,7 @@
         <div class="fr">
             <% if( userCanChangeUi ){ %>
                 <% if( hasLock ){ %>
-                    <a class="js_lockPanel lock-group phs"><i class="icon-lock-open"></i></a>
+                    <a class="js_lockPanel lock-group phs"><i class="iconbutton icon-lock-open" data-toggle="tooltip" data-placement="top"  title="{{ gettext('Lock panel') }}"></i></a>
                 <% } %>
                 <a class="js_panel-fullScreenButton iconbutton iconbutton--resizefull" data-toggle="tooltip" data-placement="top"  title="{{ gettext('Fullsize') }}"></a>
                 <% if ( hasClose ){ %>
