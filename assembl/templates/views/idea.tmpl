@@ -39,7 +39,7 @@
 
     <% var num_unread_posts = (num_posts - num_read_posts); %>
 
-    <div class="idealist-counter" data-toggle="tooltip" title="{{ gettext('Number of messages related to this idea or its descendants') }}">
+    <div class="idealist-counter" data-toggle="tooltip" title="{{ gettext('Number of messages related to this idea, or any of its sub-ideas') }}">
         <span><%= num_posts %></span>
     </div>
     <div class="idealist-title<% if (num_unread_posts > 0 && !Ctx.getCurrentUser().isUnknownUser()) { %> idealist-title-unread<% } %>" title="<%= shortTitle %>">
@@ -47,11 +47,11 @@
         <% if (!Ctx.getCurrentUser().isUnknownUser()) { %>
           <% if (Ctx.getCurrentInterfaceType() === Ctx.InterfaceTypes.SIMPLE) { %>
               <% if (num_unread_posts > 0) { %>
-              <span class="idealist-title-unread-count" data-toggle="tooltip" title="{{ gettext('Number of unread messages related to this idea or its descendants') }}">(<%= num_unread_posts %>)</span>
+              <span class="idealist-title-unread-count" data-toggle="tooltip" title="{{ gettext('Number of unread messages related to this idea, or any of its sub-ideas') }}">(<%= num_unread_posts %>)</span>
               <% } %>
           <% } else { %>
               <% if (num_unread_posts > 0) { %>
-              <span class="idealist-title-unread-count js_idealist-title-unread-count" data-toggle="tooltip" title="{{ gettext('Number of unread messages related to this idea or its descendants.  Click on this number to view ONLY the new unread messages') }}">(<%= num_unread_posts %>)</span>
+              <span class="idealist-title-unread-count js_idealist-title-unread-count" data-toggle="tooltip" title="{{ gettext('Number of unread messages related to this idea, or any of its sub-ideas.  Click on this number to view ONLY the new unread messages') }}">(<%= num_unread_posts %>)</span>
               <% } %>
           <% } %>
         <% } %>

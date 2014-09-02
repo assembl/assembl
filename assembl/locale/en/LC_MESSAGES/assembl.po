@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: assembl 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-09-02 15:58-0400\n"
+"POT-Creation-Date: 2014-09-02 16:49-0400\n"
 "PO-Revision-Date: 2014-07-24 17:38-0500\n"
 "Last-Translator: Benoit Grégoire <benoitg@coeus.ca>\n"
 "Language-Team: en <LL@li.org>\n"
@@ -944,17 +944,17 @@ msgid "Add to next synthesis"
 msgstr ""
 
 #: assembl/templates/views/idea.tmpl:42
-msgid "Number of messages related to this idea or its descendants"
+msgid "Number of messages related to this idea, or any of its sub-ideas"
 msgstr ""
 
 #: assembl/templates/views/idea.tmpl:50
-msgid "Number of unread messages related to this idea or its descendants"
+msgid "Number of unread messages related to this idea, or any of its sub-ideas"
 msgstr ""
 
 #: assembl/templates/views/idea.tmpl:54
 msgid ""
-"Number of unread messages related to this idea or its descendants.  Click"
-" on this number to view ONLY the new unread messages"
+"Number of unread messages related to this idea, or any of its sub-ideas."
+"  Click on this number to view ONLY the new unread messages"
 msgstr ""
 
 #: assembl/templates/views/ideaInSynthesis.tmpl:11
@@ -1591,12 +1591,6 @@ msgstr ""
 #~ msgid "%d authors have contributed since the beginning of the debate"
 #~ msgstr ""
 
-#~ msgid ""
-#~ "You can start a new topic in "
-#~ "this discussion by typing a subject "
-#~ "above, and a first post here..."
-#~ msgstr ""
-
 #~ msgid "Normal %s"
 #~ msgstr ""
 
@@ -1604,23 +1598,6 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "Instigator"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "<p>How to participate in the debate \"%(debate_name)s\":</p>\n"
-#~ "\t<ol>\n"
-#~ "\t\t<li>Explore the debate using the "
-#~ "ideas that have already emerged (do "
-#~ "you want to name this as the "
-#~ "table of ideas?)</li>\n"
-#~ "\t\t<li>Join in the conversation by "
-#~ "replying directly to the contributions "
-#~ "of participants</li>\n"
-#~ "\t\t<li>Start a new topic of "
-#~ "discussion if you wish to rejuvenate "
-#~ "the debate around a particular idea</li>"
-#~ "\n"
-#~ "\t</ol>"
 #~ msgstr ""
 
 #~ msgid "Because your opinion merits to be heard."
@@ -1642,5 +1619,18 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "Switch to simple mode"
+#~ msgstr ""
+
+#~ msgid "Number of messages related to this idea or its descendants"
+#~ msgstr ""
+
+#~ msgid "Number of unread messages related to this idea or its descendants"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Number of unread messages related to "
+#~ "this idea or its descendants.  Click "
+#~ "on this number to view ONLY the"
+#~ " new unread messages"
 #~ msgstr ""
 

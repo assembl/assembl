@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  Assembl\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-09-02 15:58-0400\n"
+"POT-Creation-Date: 2014-09-02 16:49-0400\n"
 "PO-Revision-Date: 2014-09-02 16:03+0100\n"
 "Last-Translator: Quentin Grimaud <quentin.grimaud@gmail.com>\n"
 "Language-Team: French "
@@ -41,7 +41,6 @@ msgid "The root idea will not be in the synthesis"
 msgstr "L'idée-racine ne fera pas partie de la synthèse"
 
 #: assembl/static/js/app/models/idea.js:76
-#| msgid "Add a definition for this idea"
 msgid "Add a description of this idea"
 msgstr "Ajouter une description de cette idée"
 
@@ -976,19 +975,19 @@ msgid "Add to next synthesis"
 msgstr "Ajouter à la prochaine synthèse"
 
 #: assembl/templates/views/idea.tmpl:42
-msgid "Number of messages related to this idea or its descendants"
-msgstr "Nombre de messages liés à cette idée ou à ses descendants"
+msgid "Number of messages related to this idea, or any of its sub-ideas"
+msgstr "Nombre de messages liés à cette idée ou à une de ses sous-idées"
 
 #: assembl/templates/views/idea.tmpl:50
-msgid "Number of unread messages related to this idea or its descendants"
-msgstr "Nombre de messages non-lus liés à cette idée ou à ses descendants"
+msgid "Number of unread messages related to this idea, or any of its sub-ideas"
+msgstr "Nombre de messages non-lus liés à cette idée ou à une de ses sous-idées"
 
 #: assembl/templates/views/idea.tmpl:54
 msgid ""
-"Number of unread messages related to this idea or its descendants.  Click"
-" on this number to view ONLY the new unread messages"
+"Number of unread messages related to this idea, or any of its sub-ideas."
+"  Click on this number to view ONLY the new unread messages"
 msgstr ""
-"Nombre de messages non-lus liés à cette idée ou à ses descendants.  "
+"Nombre de messages non-lus liés à cette idée ou à une de ses sous-idées. "
 "Cliquez sur ce nombre pour voir SEULEMENT les messages non-lus."
 
 #: assembl/templates/views/ideaInSynthesis.tmpl:11
@@ -1515,30 +1514,10 @@ msgstr "Nous n'avons pas de discussion sous le code=%s"
 #~ msgstr "Voir&nbsp;en&nbsp;contexte"
 
 #~ msgid ""
-#~ "You can start a new topic in "
-#~ "this discussion by typing a subject "
-#~ "above, and a first post here..."
-#~ msgstr "Composer votre message pour donner un nouvel élan à la discussion"
+#~ msgstr ""
 
 #~ msgid "See less"
 #~ msgstr "Voir moins"
-
-#~ msgid ""
-#~ "<p>How to participate in the debate \"%(debate_name)s\":</p>\n"
-#~ "\t<ol>\n"
-#~ "\t\t<li>Explore the debate using the "
-#~ "ideas that have already emerged (do "
-#~ "you want to name this as the "
-#~ "table of ideas?)</li>\n"
-#~ "\t\t<li>Join in the conversation by "
-#~ "replying directly to the contributions "
-#~ "of participants</li>\n"
-#~ "\t\t<li>Start a new topic of "
-#~ "discussion if you wish to rejuvenate "
-#~ "the debate around a particular idea</li>"
-#~ "\n"
-#~ "\t</ol>"
-#~ msgstr ""
 
 #~ msgid "Add a group of views"
 #~ msgstr "Ajouter un groupe de panneaux"

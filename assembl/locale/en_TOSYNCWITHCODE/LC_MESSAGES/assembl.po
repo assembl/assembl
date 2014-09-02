@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  Assembl\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-09-02 15:58-0400\n"
+"POT-Creation-Date: 2014-09-02 16:49-0400\n"
 "PO-Revision-Date: 2014-08-28 18:41+0000\n"
 "Last-Translator: François Burra <francoisburra@imaginationforpeople.org>\n"
 "Language-Team: English (Canada) "
@@ -39,7 +39,6 @@ msgstr ""
 
 #: assembl/static/js/app/models/idea.js:76
 #, fuzzy
-#| msgid "Add a definition for this idea"
 msgid "Add a description of this idea"
 msgstr "Add a description of this idea"
 
@@ -126,31 +125,26 @@ msgstr ""
 
 #: assembl/static/js/app/views/contextPage.js:446
 #, fuzzy, python-format
-#| msgid "%d authors have contributed since %s"
 msgid "%d participants have contributed in the %s"
 msgstr "%d participants have contributed in the %s"
 
 #: assembl/static/js/app/views/contextPage.js:452
 #, fuzzy, python-format
-#| msgid "%d new authors started contributing since %s"
 msgid "%d new participants started contributing in the %s"
 msgstr "%d new participants started contributing in the %s"
 
 #: assembl/static/js/app/views/contextPage.js:459
 #, fuzzy, python-format
-#| msgid "%d active authors were already contributing before %s"
 msgid "%d active participants had contributed before %s"
 msgstr "%d active participants had contributed before %s"
 
 #: assembl/static/js/app/views/contextPage.js:468
 #, fuzzy, python-format
-#| msgid "%d authors' last contribution was before %s"
 msgid "%d participants' last contribution was prior to %s"
 msgstr "%d participants' last contribution was prior to %s"
 
 #: assembl/static/js/app/views/contextPage.js:480
 #, fuzzy, python-format
-#| msgid "%d authors have contributed since the beginning of the debate"
 msgid "%d participants have contributed since the beginning of the debate"
 msgstr "%d participants have contributed since the beginning of the debate"
 
@@ -306,7 +300,6 @@ msgstr ""
 
 #: assembl/static/js/app/views/messageList.js:791
 #, fuzzy
-#| msgid "You need to set a subject to add a new topic..."
 msgid "Add a subject above and start a new topic here"
 msgstr "You need to add a subject to post a new message"
 
@@ -888,7 +881,6 @@ msgstr ""
 
 #: assembl/templates/views/contextPage.tmpl:234
 #, fuzzy
-#| msgid "Instigator"
 msgid "Instigated by"
 msgstr "Initiated by"
 
@@ -948,7 +940,6 @@ msgstr ""
 
 #: assembl/templates/views/home.tmpl:20
 #, fuzzy
-#| msgid "Because your opinion merits to be heard."
 msgid "Your opinion deserves to be heard"
 msgstr "Your opinion deserves to be heard"
 
@@ -961,17 +952,17 @@ msgid "Add to next synthesis"
 msgstr ""
 
 #: assembl/templates/views/idea.tmpl:42
-msgid "Number of messages related to this idea or its descendants"
+msgid "Number of messages related to this idea, or any of its sub-ideas"
 msgstr ""
 
 #: assembl/templates/views/idea.tmpl:50
-msgid "Number of unread messages related to this idea or its descendants"
+msgid "Number of unread messages related to this idea, or any of its sub-ideas"
 msgstr ""
 
 #: assembl/templates/views/idea.tmpl:54
 msgid ""
-"Number of unread messages related to this idea or its descendants.  Click"
-" on this number to view ONLY the new unread messages"
+"Number of unread messages related to this idea, or any of its sub-ideas."
+"  Click on this number to view ONLY the new unread messages"
 msgstr ""
 
 #: assembl/templates/views/ideaInSynthesis.tmpl:11
@@ -1032,13 +1023,11 @@ msgstr ""
 
 #: assembl/templates/views/ideaPanel.tmpl:13
 #, fuzzy
-#| msgid "Definition of idea"
 msgid "Description of idea"
 msgstr "Description of the idea"
 
 #: assembl/templates/views/ideaPanel.tmpl:15
 #, fuzzy
-#| msgid "A definition of this idea"
 msgid "A description of this idea"
 msgstr "Description of this idea"
 
@@ -1129,7 +1118,6 @@ msgstr ""
 
 #: assembl/templates/views/message.tmpl:71
 #, fuzzy
-#| msgid "Copy the link to this message to clipboard"
 msgid "Copy the link to share this message"
 msgstr "Copy the link to share this message"
 
@@ -1171,7 +1159,6 @@ msgstr ""
 
 #: assembl/templates/views/messageList.tmpl:42
 #, fuzzy
-#| msgid "Load next messages"
 msgid "Load more messages"
 msgstr "Load more messages"
 
@@ -1205,7 +1192,6 @@ msgstr ""
 
 #: assembl/templates/views/navBar.tmpl:12
 #, fuzzy
-#| msgid "Switch to simple mode"
 msgid "Switch to participant mode"
 msgstr "Switch to participant mode"
 
@@ -1495,35 +1481,25 @@ msgstr ""
 #~ msgid "See less"
 #~ msgstr ""
 
-#~ msgid ""
-#~ "You can start a new topic in "
-#~ "this discussion by typing a subject "
-#~ "above, and a first post here..."
-#~ msgstr "Compose your message to rejuvenate the discussion"
-
 #~ msgid "Normal %s"
 #~ msgstr ""
 
 #~ msgid "Objectives"
 #~ msgstr ""
 
-#~ msgid ""
-#~ "<p>How to participate in the debate \"%(debate_name)s\":</p>\n"
-#~ "\t<ol>\n"
-#~ "\t\t<li>Explore the debate using the "
-#~ "ideas that have already emerged (do "
-#~ "you want to name this as the "
-#~ "table of ideas?)</li>\n"
-#~ "\t\t<li>Join in the conversation by "
-#~ "replying directly to the contributions "
-#~ "of participants</li>\n"
-#~ "\t\t<li>Start a new topic of "
-#~ "discussion if you wish to rejuvenate "
-#~ "the debate around a particular idea</li>"
-#~ "\n"
-#~ "\t</ol>"
-#~ msgstr ""
-
 #~ msgid "Add a group of views"
 #~ msgstr "Add new panel group"
+
+#~ msgid "Number of messages related to this idea or its descendants"
+#~ msgstr ""
+
+#~ msgid "Number of unread messages related to this idea or its descendants"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Number of unread messages related to "
+#~ "this idea or its descendants.  Click "
+#~ "on this number to view ONLY the"
+#~ " new unread messages"
+#~ msgstr ""
 
