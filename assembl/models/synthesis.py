@@ -1415,7 +1415,8 @@ class IdeaContentWidgetLink(IdeaContentLink):
     }
 
 Idea.widget_owned_contents = relationship(IdeaContentWidgetLink)
-Content.widget_idea_links = relationship(IdeaContentWidgetLink)
+Content.widget_idea_links = relationship(
+    IdeaContentWidgetLink, cascade="all, delete-orphan")
 
 
 class IdeaContentPositiveLink(IdeaContentLink):
