@@ -4,36 +4,42 @@
 <h2>{% trans %}Discussion {% endtrans %}{{discussion.topic}}</h2>
 <h3>{% trans %}Role permissions:{% endtrans %}</h3>
 <form method="POST" action="#">
-<table>
+<table id="role_permissions">
     <thead>
-        <th>{% trans %}Roles{% endtrans %}\{% trans %}Permissions{% endtrans %}</th>
-        {% for permission in permissions %}
+        <th>{% trans %}Permissions{% endtrans %}\{% trans %}Roles{% endtrans %}</th>
+        {% for role in roles %}
         <th>
-            {{permission}}
+            {{role}}
         </th>
         {% endfor %}
-        <th>{% trans %}delete role{% endtrans %}</th>
     </thead>
     <tbody>
-        {% for role in roles %}
+        {% for permission in permissions %}
         <tr>
-            <th>{{role}}</th>
-            {% for permission in permissions %}
+            <th>{{permission}}</th>
+            {% for role in roles %}
             <td>
                 <input type="checkbox" name="allowed_{{role}}_{{permission}}" 
-                {% if allowed(role,permission) %} checked {% endif %}>
+                {% if allowed(role,permission) %} checked {% endif %}
+                {% if role == 'r:sysadmin' %}disabled="true"{% endif %}
+                >
             </td>
             {% endfor %}
-            <td>
-                {% if not is_system_role(role) %}
-                <input type="checkbox" name="delete_{{role}}">
-                {% endif %}
-            </td>
         </tr>
         {% endfor %}
         <tr>
+        <th>{% trans %}delete role{% endtrans %}</th>
+        {% for role in roles %}
+            <td>
+                <input type="checkbox" name="delete_{{role}}"
+                {% if is_system_role(role) %}disabled="true"{% endif %}
+                >
+            </td>
+        {% endfor %}
+        </tr>
+        <tr>
             <th><input type="submit" name="submit_add_role" value="{% trans %}Add a role{% endtrans %}"></th>
-            <th colspan="{{permissions|length}}">r:<input name="new_role"/></th>
+            <th colspan="{{roles|length}}">r:<input name="new_role"/></th>
         </tr>
     </tbody>
 </table>
@@ -75,3 +81,14 @@
 <input type="submit" name="submit_user_roles" value="{% trans %}Save{% endtrans %}">
 </form>
 {% endblock %}
+
+{% block extra_css %}
+<style>
+table, th, td {
+   border: 1px solid grey;
+}
+th {
+   padding: 3px;
+}
+</style>
+{% endblock extra_css %}
