@@ -11,16 +11,7 @@
             <h2>{{ gettext('Context') }}</h2>
             <div class="introduction">
             </div>
-            {# hidden until the "Read more" popin is implemented
-            <div id="introduction-details">
-                <div class="introduction-details">
-                </div>
-            </div>
-            <button id="introduction-button-see-more" onclick="introductionToggle();">{{ gettext('See more') }}</button>
-            <button id="introduction-button-see-less" onclick="introductionToggle();">{{ gettext('See less') }}</button>
-            <div class="introduction-details-empty">
-            </div>
-            #}
+            <button id="introduction-button-see-more" class="btn btn-secondary btn-sm">{{ gettext('See more') }}</button>
         </div>
     </div>
     <div class="block-half">
@@ -92,10 +83,3 @@
 
 <div style="margin-top: 100px;"></div>
 
-<script>
-function introductionToggle(){
-    $('#introduction-details').toggle(200);
-    $('#introduction-button-see-more').toggle();
-    $('#introduction-button-see-less').toggle();
-}
-</script>

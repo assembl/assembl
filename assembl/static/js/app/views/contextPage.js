@@ -27,7 +27,7 @@ define(function (require) {
         pieChartShowMessages: false,
 
         events: {
-
+            'click #introduction-button-see-more': 'introductionShowMore'
         },
 
         initialize: function (options) {
@@ -75,26 +75,48 @@ define(function (require) {
                     'placeholder': 'Instigator',
                     'canEdit': canEdit
                 });
-                // add editable "introduction" and "introductionDetails" fields
+                // add editable "introduction" field
                 that.introductionField = new CKEditorField({
                     'model': discussion,
                     'modelProp': 'introduction',
                     'placeholder': 'Introduction',
                     'canEdit': canEdit
                 });
-                that.introductionDetailsField = new CKEditorField({
-                    'model': discussion,
-                    'modelProp': 'introductionDetails',
-                    'placeholder': 'Introduction details',
-                    'canEdit': canEdit
-                });
+
+
+                // FIXME: here we try to apply the dots again after text has been edited but it does not seem to work
+                var onCKEditorChange = function(){
+                    console.log("Updating dotdotdot");
+                    that.$(".ckeditorField-mainfield").trigger('update.dot');
+                    that.$(".ckeditorField-mainfield").trigger('update');
+                };
+                that.listenTo(that.introductionField, "save", onCKEditorChange);
+                that.listenTo(that.introductionField, "cancel", onCKEditorChange);
+                // end of FIXME
+
             });
 
             this.computeStatistics();
         },
 
+        introductionShowMore: function(){
+            $.when(Ctx.getDiscussionPromise()).then(function (discussion) {
+                var model = new Backbone.Model();
+                model.set("introduction", discussion.introduction);
+
+                var Modal = Backbone.Modal.extend({
+                    template: _.template($('#tmpl-homeIntroductionDetail').html()),
+                    className: 'group-modal',
+                    model: model,
+                    cancelEl: '.popin-close'
+                });
+
+                var modalView = new Modal();
+                $('.modal').html(modalView.render().el);
+            });
+        },
+
         onRender: function () {
-            //console.log("contextPage::onRender()");
             var that = this,
                 currentUser = Ctx.getCurrentUser(),
                 canEdit = currentUser.can(Permissions.ADMIN_DISCUSSION) || false;
@@ -108,20 +130,35 @@ define(function (require) {
                 that.objectivesField.renderTo(that.$('.objectives'));
                 that.instigatorField.renderTo(that.$('.instigator'));
                 that.introductionField.renderTo(that.$('.introduction'));
-                if (discussion["introductionDetails"] && discussion.introductionDetails.length > 0) {
-                    that.$('#introduction-button-see-more').show();
-                    that.introductionDetailsField.renderTo(that.$('.introduction-details'));
-                }
-                else if (canEdit) {
-                    that.introductionDetailsField.renderTo(that.$('.introduction-details-empty'));
-                }
+                
                 if (canEdit) {
                     // Not clear why this is necessary.
                     that.objectivesField.delegateEvents();
                     that.instigatorField.delegateEvents();
                     that.introductionField.delegateEvents();
-                    that.introductionDetailsField.delegateEvents();
                 }
+
+
+                /* We use https://github.com/MilesOkeefe/jQuery.dotdotdot to show 
+                 * Read More links for introduction preview
+                 */
+                that.$(".introduction .ckeditorField-mainfield").dotdotdot({
+                    after: "#introduction-button-see-more",
+                    height: 70,
+                    callback: function( isTruncated, orgContent )
+                    {
+                      console.log("dotdotdot callback: ", isTruncated, orgContent);
+                      if(isTruncated) {
+                        that.$('#introduction-button-see-more').show();
+                      }
+                      else {
+                        that.$('#introduction-button-see-more').hide();
+                      }
+                    },
+                    watch: "window"
+                });
+                
+               
             });
 
             this.draw();

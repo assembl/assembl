@@ -321,6 +321,9 @@
         float: left;
         width: 100%;
       }
+      .content {
+        font-size: 12px;
+      }
       .is-selected {
         @include border-radius(3px);
         background-color: $purple;
