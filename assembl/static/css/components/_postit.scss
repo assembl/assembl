@@ -15,7 +15,7 @@ div.postitlist {
     padding: 1em;
     color: $gray2;
     font-size: 13px; //This should be rem or something - benoitg
-    
+
     position: relative;
     border-right: 1px solid #E8E8E8;
     border-bottom: 1px solid #E8E8E8;
@@ -36,7 +36,6 @@ div.postitlist {
 
     @include transition(box-shadow 1s);
 
-    
     // Quotation text
     // -----------
     .text-quotation {
@@ -46,23 +45,23 @@ div.postitlist {
         //min-width: 1em;
         max-height: 1.4em;
         &:before {
-          font-size: 150%;
+          font-size: 95%;
           color: $orange;
           position: relative;
           margin-right: 0em;
         }
         vertical-align: middle;
-        
+
         &.quoteLeft:before {
           top: -0.12em;
-          right:0.3em;
+          right: 0.3em;
           margin-right: 0.2em;
         }
         &.quoteRight {
-        display: inline-block;
-        position: absolute;
-        vertical-align: top;
-          &:before{
+          display: inline-block;
+          position: absolute;
+          vertical-align: top;
+          &:before {
             @include transform(rotate(180deg));
             top: 0.2em;
             left: 0.3em;
@@ -70,7 +69,7 @@ div.postitlist {
           }
         }
       }
-      
+
     }
 
     a {
