@@ -12,7 +12,8 @@ define(function (require) {
         GroupContainer = require('views/groups/groupContainer'),
         CollectionManager = require('modules/collectionManager'),
         viewsFactory = require('objects/viewsFactory'),
-        $ = require('jquery');
+        $ = require('jquery'),
+        Notification = require('views/notification');
 
     var routeManager = Marionette.Controller.extend({
 
@@ -61,6 +62,11 @@ define(function (require) {
         restoreViews: function () {
             Assembl.headerRegions.show(new navBar());
 
+            if (!window.localStorage.getItem('showNotification')) {
+                $('#wrapper .groupContainer').css('top', '76px');
+                Assembl.notificationRegion.show(new Notification());
+            }
+
             /**
              * Render the current group of views
              * */
@@ -71,12 +77,12 @@ define(function (require) {
                     collection: groupSpecs
                 });
                 var lastSave = storage.getDateOfLastViewSave();
-                if (!lastSave || (Date.now() - lastSave.getTime() > (7*24*60*60*1000))) {
+                if (!lastSave || (Date.now() - lastSave.getTime() > (7 * 24 * 60 * 60 * 1000))) {
                     var navigableGroupSpec = groupSpecs.find(function (aGroupSpec) {
                         return aGroupSpec.getNavigationSpec();
                     });
                     if (navigableGroupSpec) {
-                        window.setTimeout(function() {
+                        window.setTimeout(function () {
                             var groupContent = group.children.findByModel(navigableGroupSpec);
                             groupContent.resetContextState();
                         });

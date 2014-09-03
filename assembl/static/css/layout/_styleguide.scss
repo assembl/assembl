@@ -40,9 +40,8 @@
   margin-top: 50px;
 }
 
-// Title of a section
-.sg-title {
-  margin: 0;
+code[class*="language-"], pre[class*="language-"] {
+  white-space: pre-wrap;
 }
 
 // A description within an .sg-section
