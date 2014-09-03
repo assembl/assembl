@@ -1,0 +1,132 @@
+html, body {
+  padding: 0;
+  margin: 0;
+}
+
+.navbar.navbar-inverse {
+  -webkit-border-radius: 0px;
+  border-radius: 0px;
+  -moz-border-radius: 0px;
+  display: none;
+}
+
+.inactive {
+  color: #ddd;
+}
+
+.widget-container {
+  position: relative;
+}
+
+#loader {
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, .5);;
+  position: absolute;
+  left: 0;
+  top: 0;
+
+  .loader-bars {
+    position: absolute;
+    margin-left: auto;
+    margin-right: auto;
+    left: 50%;
+    right: 50%;
+    top: 50%;
+
+    &:before,
+    &:after,
+    span {
+      content: '';
+      display: block;
+      position: absolute;
+      left: 0px;
+      top: 0;
+      width: 10px;
+      height: 30px;
+      background-color: #FFF;
+      -webkit-animation: grow 1s linear infinite;
+      -moz-animation: grow 1s linear infinite;
+      animation: grow 1s linear infinite;
+    }
+
+    &:after {
+      left: 15px;
+      -webkit-animation-delay: -0.66s;
+      -moz-animation-delay: -0.66s;
+      animation-delay: -0.66s;
+    }
+
+    span {
+      left: 30px;
+      -webkit-animation-delay: -0.33s;
+      -moz-animation-delay: -0.33s;
+      animation-delay: -0.33s;
+    }
+  }
+}
+
+@-webkit-keyframes grow {
+  0% {
+    -webkit-transform: scaleY(0);
+    opacity: 0;
+  }
+
+  50% {
+    -webkit-transform: scaleY(1);
+    opacity: 1;
+  }
+
+  100% {
+    -webkit-transform: scaleY(0);
+    opacity: 0;
+  }
+}
+
+@-moz-keyframes grow {
+  0% {
+    -moz-transform: scaleY(0);
+    opacity: 0;
+  }
+
+  50% {
+    -moz-transform: scaleY(1);
+    opacity: 1;
+  }
+
+  100% {
+    -moz-transform: scaleY(0);
+    opacity: 0;
+  }
+}
+
+@keyframes grow {
+  0% {
+    -webkit-transform: scaleY(0);
+    -moz-transform: scaleY(0);
+    -ms-transform: scaleY(0);
+    -o-transform: scaleY(0);
+    transform: scaleY(0);
+    opacity: 0;
+  }
+
+  50% {
+    -webkit-transform: scaleY(1);
+    -moz-transform: scaleY(1);
+    -ms-transform: scaleY(1);
+    -o-transform: scaleY(1);
+    transform: scaleY(1);
+    opacity: 1;
+  }
+
+  100% {
+    -webkit-transform: scaleY(0);
+    -moz-transform: scaleY(0);
+    -ms-transform: scaleY(0);
+    -o-transform: scaleY(0);
+    transform: scaleY(0);
+    opacity: 0;
+  }
+}
+
+

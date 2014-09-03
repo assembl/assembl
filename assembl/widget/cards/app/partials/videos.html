@@ -1,0 +1,81 @@
+<div id="JukeTube" ng-init="init()">
+    <div id="player">
+        <div id="placeholder"></div>
+
+        <div id="playlist">
+            <p id="current">{{ youtube.videoTitle }}</p>
+
+            <div class="card-comment">
+                <p>
+                    {{ 'videoDoesThisVideoInspireYou' | translate }}
+                </p>
+
+                <form role="form">
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="messageTitle"
+                               placeholder="{{ 'videoCommentTitlePlaceholder' | translate }}">
+                    </div>
+                    <div class="form-group">
+                        <textarea class="form-control" rows="3"
+                                  placeholder="{{ 'videoCommentContentPlaceholder' | translate }}"
+                                  id="messageContent"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary" ng-click="sendIdea()">{{ 'videoSendIdeaButton' |
+                        translate }}
+                    </button>
+                </form>
+            </div>
+        </div>
+
+    </div>
+
+    <div id="results">
+        <p>
+            {{ 'videoTopExplanation' | translate: {idea: idea.shortTitle, discussion: discussion.topic} }}
+        </p>
+
+        <ul class="keywords">
+            <li class="keyword" ng-repeat="keyword in inspiration_keywords" ng-click="keywordClick($event)"
+                ng-show="inspiration_keywords_used[keyword] != true">{{keyword}}
+            </li>
+        </ul>
+        <!--
+        <p>
+          {{ 'videoTopExplanationSecondRowKeywords' | translate }}
+        </p>
+
+        <ul class="keywords">
+          <li class="keyword" ng-repeat="keyword in inspiration_keywords_related" ng-click="keywordClick($event)" ng-show="inspiration_keywords_used[keyword] != true">{{keyword}}</li>
+        </ul>
+        -->
+
+        <form id="search" data-ng-submit="search()">
+            <input id="query" class="select2-offscreen" type="hidden" value=""
+                   placeholder="Entrez ici votre recherche..."/>
+            <input type="submit" id="search-button" value="Rechercher" class="btn btn-default"/>
+        </form>
+
+        <div class="video" data-ng-repeat="video in results"
+             data-ng-click="scrollToPlayerAndLaunch(video.id, video.title)">
+            <img class="video-image" data-ng-src="{{ video.thumbnail }}">
+
+            <p class="video-title">{{ video.title }}</p>
+
+            <p class="video-author">{{ 'videoByVideoAuthor' | translate }} <strong>{{ video.author }}</strong> &nbsp;&#183;&nbsp;
+                {{ video.publishedAt }}</p>
+
+            <p class="video-description">{{ video.description }}</p>
+        </div>
+
+        <div class="pagination" ng-if="pageInfo.totalResults > 0">
+            <button type="button" class="btn btn-default" ng-disabled="pageInfo.prevPageToken == ''"
+                    ng-click="search(pageInfo.prevPageToken)">{{ 'videoPreviousPage' | translate }}
+            </button>
+            <button type="button" class="btn btn-default" ng-disabled="pageInfo.nextPageToken == ''"
+                    ng-click="search(pageInfo.nextPageToken)">{{ 'videoNextPage' | translate }}
+            </button>
+        </div>
+    </div>
+
+
+</div>
