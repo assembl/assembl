@@ -108,11 +108,11 @@ define(function (require) {
                     template: _.template($('#tmpl-homeIntroductionDetail').html()),
                     className: 'group-modal',
                     model: model,
-                    cancelEl: '.popin-close'
+                    cancelEl: '.close'
                 });
 
                 var modalView = new Modal();
-                $('.modal').html(modalView.render().el);
+                $('.popin-container').html(modalView.render().el);
             });
         },
 
