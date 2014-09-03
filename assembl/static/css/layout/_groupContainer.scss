@@ -151,6 +151,10 @@
       }
 
       .synthesisNavPanel {
+        .synthesisListHeader {
+          padding: 15px;
+          position: absolute;
+        }
         ul.synthesisList {
           list-style-type: none;
           padding: 0;

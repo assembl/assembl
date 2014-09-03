@@ -147,7 +147,7 @@ define(function (require) {
                     height: 70,
                     callback: function( isTruncated, orgContent )
                     {
-                      console.log("dotdotdot callback: ", isTruncated, orgContent);
+                      //console.log("dotdotdot callback: ", isTruncated, orgContent);
                       if(isTruncated) {
                         that.$('#introduction-button-see-more').show();
                       }
