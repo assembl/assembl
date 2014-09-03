@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  Assembl\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-09-02 19:42-0400\n"
+"POT-Creation-Date: 2014-09-02 19:59-0400\n"
 "PO-Revision-Date: 2014-09-02 20:51+0000\n"
 "Last-Translator: Marc-Antoine Parent <maparent@acm.org>\n"
 "Language-Team: English (Canada) "
@@ -829,6 +829,45 @@ msgstr ""
 msgid "View all posts in this discussion"
 msgstr ""
 
+#: assembl/templates/views/bookmarket.tmpl:2
+msgid "activate web annotation"
+msgstr ""
+
+#: assembl/templates/views/bookmarket.tmpl:8
+msgid ""
+"<p>How it works:</p>\n"
+"    <p>Drag the button below into your bookmark bar to create a "
+"bookmarklet."
+msgstr ""
+
+#: assembl/templates/views/bookmarket.tmpl:11
+msgid ""
+"Drag this button to your bookmark bar to create a bookmarklet. You can "
+"then capture selections from most webpages (those that are not secured "
+"with https) by 1. Clicking on the bookmarklet and 2. Highlighting the "
+"section of text you wish to send to the discussion."
+msgstr ""
+
+#: assembl/templates/views/bookmarket.tmpl:11
+msgid "Web capture to"
+msgstr ""
+
+#: assembl/templates/views/bookmarket.tmpl:13
+msgid ""
+"<p>You can then capture selections from most webpages (those that are not"
+" secured with https) this way:</p>\n"
+"    <ol>\n"
+"    <li>Click on the bookmarklet to enable annotations</li>\n"
+"    <li>Highligt the section of text you wish to send to the "
+"discussion</li>\n"
+"    <li>Click the \"send\" button that appears</li>\n"
+"    </ol>"
+msgstr ""
+
+#: assembl/templates/views/bookmarket.tmpl:24
+msgid "I understand"
+msgstr ""
+
 #: assembl/templates/views/contextPage.tmpl:11
 msgid "Context"
 msgstr ""
@@ -1407,42 +1446,3 @@ msgstr ""
 #, python-format
 msgid "No discussion found for slug=%s"
 msgstr ""
-
-#~ msgid "activate web annotation"
-#~ msgstr ""
-
-#~ msgid "how it works"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "1 - Drag the button below into "
-#~ "your bookmarks bar and / or tab"
-#~ " on your browser."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Drag this button to your bookmark "
-#~ "bar to create a bookmarklet. You "
-#~ "can then capture selections from most"
-#~ " webpages (those that are not secured"
-#~ " with https) by 1. Clicking on "
-#~ "the bookmarklet and 2. Highlighting the"
-#~ " section of text you wish to "
-#~ "send to the discussion."
-#~ msgstr ""
-
-#~ msgid "Web capture to"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "2 - Click here where you will "
-#~ "come to move on your browser to"
-#~ " enable web annotation"
-#~ msgstr ""
-
-#~ msgid "3 - Whether you unearth extracts"
-#~ msgstr ""
-
-#~ msgid "I understand"
-#~ msgstr ""
-

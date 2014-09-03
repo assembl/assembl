@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  Assembl\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-09-02 19:42-0400\n"
+"POT-Creation-Date: 2014-09-02 19:59-0400\n"
 "PO-Revision-Date: 2014-09-02 20:51+0000\n"
 "Last-Translator: Marc-Antoine Parent <maparent@acm.org>\n"
 "Language-Team: French "
@@ -840,6 +840,60 @@ msgstr "Nombre de messages dans toute la discussion"
 msgid "View all posts in this discussion"
 msgstr "Voir tous les messages de la discussion"
 
+#: assembl/templates/views/bookmarket.tmpl:2
+msgid "activate web annotation"
+msgstr "activer l'annotation Web"
+
+#: assembl/templates/views/bookmarket.tmpl:8
+msgid ""
+"<p>How it works:</p>\n"
+"    <p>Drag the button below into your bookmark bar to create a "
+"bookmarklet."
+msgstr ""
+"<p>Comment faire:</p>\n"
+"    <p>Glissez ce boutton sur votre barre de favoris pour créer un bookmarklet."
+
+#: assembl/templates/views/bookmarket.tmpl:11
+msgid ""
+"Drag this button to your bookmark bar to create a bookmarklet. You can "
+"then capture selections from most webpages (those that are not secured "
+"with https) by 1. Clicking on the bookmarklet and 2. Highlighting the "
+"section of text you wish to send to the discussion."
+msgstr ""
+"Glissez ce boutton sur votre barre de favoris pour créer un applisignet."
+"  Vous pouvez ensuite aller chercher un extrait sur la majorité des pages"
+" web (celles qui ne sont pas sécurisées par https) en 1. Cliquant sur "
+"l'applisignet et 2. Mettant en surbrillance la section de texte que vous "
+"voulez envoyer à la discussion."
+
+#: assembl/templates/views/bookmarket.tmpl:11
+msgid "Web capture to"
+msgstr "Capture du Web vers"
+
+#: assembl/templates/views/bookmarket.tmpl:13
+msgid ""
+"<p>You can then capture selections from most webpages (those that are not"
+" secured with https) this way:</p>\n"
+"    <ol>\n"
+"    <li>Click on the bookmarklet to enable annotations</li>\n"
+"    <li>Highligt the section of text you wish to send to the "
+"discussion</li>\n"
+"    <li>Click the \"send\" button that appears</li>\n"
+"    </ol>"
+msgstr ""
+"<p>Vous pouvez ensuite aller chercher un extrait sur la majorité des pages"
+" web (celles qui ne sont pas sécurisées par https) de la façon suivante:</p>\n"
+"    <ol>\n"
+"    <li>Cliquez sur l'applisignet pour activer les annotations</li>\n"
+"    <li>Mettez en surbrillance la section de texte que vous "
+"voulez envoyer à la discussion.</li>\n"
+"    <li>Cliquez sur le bouton \"Send\" qui apparaît alors</li>\n"
+"    </ol>"
+
+#: assembl/templates/views/bookmarket.tmpl:24
+msgid "I understand"
+msgstr "Je comprends"
+
 #: assembl/templates/views/contextPage.tmpl:11
 msgid "Context"
 msgstr "Contexte"
@@ -1092,7 +1146,7 @@ msgstr "%(user)s"
 #: assembl/templates/views/message.tmpl:48
 #, python-format
 msgid "<time title=\"%(precise_date)s\">%(nice_date)s</time>"
-msgstr ""
+msgstr "<time title=\"%(precise_date)s\">%(nice_date)s</time>"
 
 #: assembl/templates/views/message.tmpl:55
 msgid "More options"
@@ -1257,15 +1311,15 @@ msgstr "Extrait de type inconnu:"
 
 #: assembl/templates/views/segmentList.tmpl:4
 msgid "Annotation on the web"
-msgstr ""
+msgstr "Annotation sur le Web"
 
 #: assembl/templates/views/segmentList.tmpl:5
 msgid "If you desire catching extracts out of assembl (exemple : Wikipedia),"
-msgstr ""
+msgstr "Si vous désirez attrapper des etraits hors d'Assembl (exemple: Wikipedia),"
 
 #: assembl/templates/views/segmentList.tmpl:6
 msgid "click here to activate the annotation"
-msgstr ""
+msgstr "cliquez ici pour active l'annotation"
 
 #: assembl/templates/views/segmentList.tmpl:17
 msgid "Clear"
@@ -1470,36 +1524,3 @@ msgstr ""
 #, python-format
 msgid "No discussion found for slug=%s"
 msgstr "Nous n'avons pas de discussion sous le code=%s"
-
-#~ msgid "activate web annotation"
-#~ msgstr "activer l'annotation Web"
-
-#~ msgid "how it works"
-#~ msgstr "Comment ça marche ?"
-
-#~ msgid ""
-#~ "Drag this button to your bookmark "
-#~ "bar to create a bookmarklet. You "
-#~ "can then capture selections from most"
-#~ " webpages (those that are not secured"
-#~ " with https) by 1. Clicking on "
-#~ "the bookmarklet and 2. Highlighting the"
-#~ " section of text you wish to "
-#~ "send to the discussion."
-#~ msgstr ""
-#~ "Glissez ce boutton sur votre barre "
-#~ "de favoris pour créer un applisignet."
-#~ "  Vous pouvez ensuite aller chercher "
-#~ "un extrait sur la majorité des "
-#~ "pages web (celles qui ne sont pas"
-#~ " sécurisées par https) en 1. Cliquant"
-#~ " sur l'applisignet et 2. Mettant en"
-#~ " surbrillance la section de texte que"
-#~ " vous voulez envoyer à la discussion."
-
-#~ msgid "Web capture to"
-#~ msgstr "Capture du Web vers"
-
-#~ msgid "I understand"
-#~ msgstr "Je comprends"
-

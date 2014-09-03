@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: assembl 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-09-02 19:42-0400\n"
+"POT-Creation-Date: 2014-09-02 19:59-0400\n"
 "PO-Revision-Date: 2014-07-24 17:38-0500\n"
 "Last-Translator: Benoit Grégoire <benoitg@coeus.ca>\n"
 "Language-Team: en <LL@li.org>\n"
@@ -825,6 +825,45 @@ msgstr ""
 msgid "View all posts in this discussion"
 msgstr ""
 
+#: assembl/templates/views/bookmarket.tmpl:2
+msgid "activate web annotation"
+msgstr ""
+
+#: assembl/templates/views/bookmarket.tmpl:8
+msgid ""
+"<p>How it works:</p>\n"
+"    <p>Drag the button below into your bookmark bar to create a "
+"bookmarklet."
+msgstr ""
+
+#: assembl/templates/views/bookmarket.tmpl:11
+msgid ""
+"Drag this button to your bookmark bar to create a bookmarklet. You can "
+"then capture selections from most webpages (those that are not secured "
+"with https) by 1. Clicking on the bookmarklet and 2. Highlighting the "
+"section of text you wish to send to the discussion."
+msgstr ""
+
+#: assembl/templates/views/bookmarket.tmpl:11
+msgid "Web capture to"
+msgstr ""
+
+#: assembl/templates/views/bookmarket.tmpl:13
+msgid ""
+"<p>You can then capture selections from most webpages (those that are not"
+" secured with https) this way:</p>\n"
+"    <ol>\n"
+"    <li>Click on the bookmarklet to enable annotations</li>\n"
+"    <li>Highligt the section of text you wish to send to the "
+"discussion</li>\n"
+"    <li>Click the \"send\" button that appears</li>\n"
+"    </ol>"
+msgstr ""
+
+#: assembl/templates/views/bookmarket.tmpl:24
+msgid "I understand"
+msgstr ""
+
 #: assembl/templates/views/contextPage.tmpl:11
 msgid "Context"
 msgstr ""
@@ -1403,225 +1442,3 @@ msgstr ""
 #, python-format
 msgid "No discussion found for slug=%s"
 msgstr ""
-
-#~ msgid "Login with external tools"
-#~ msgstr ""
-
-#~ msgid ""
-#~ msgstr ""
-
-#~ msgid "Table of Ideas"
-#~ msgstr ""
-
-#~ msgid "Log in through one of these social networks"
-#~ msgstr ""
-
-#~ msgid "Log in"
-#~ msgstr ""
-
-#~ msgid "Forgot your password?"
-#~ msgstr ""
-
-#~ msgid "Sign up"
-#~ msgstr ""
-
-#~ msgid "Create my account"
-#~ msgstr ""
-
-#~ msgid "Do you already have an account?"
-#~ msgstr ""
-
-#~ msgid "Log in!"
-#~ msgstr ""
-
-#~ msgid "Copy the link to this idea to clipboard"
-#~ msgstr ""
-
-#~ msgid "Logout"
-#~ msgstr ""
-
-#~ msgid "%(img)s Posted %(date)s by <strong>%(name)s</strong>"
-#~ msgstr ""
-
-#~ msgid "Clipboard (%(quantity)s)"
-#~ msgstr ""
-
-#~ msgid "Find your account"
-#~ msgstr ""
-
-#~ msgid "Enter your email address or your username below"
-#~ msgstr ""
-
-#~ msgid "Messages posted since"
-#~ msgstr ""
-
-#~ msgid "Messages from new authors"
-#~ msgstr ""
-
-#~ msgid "Messages from old authors"
-#~ msgstr ""
-
-#~ msgid "Messages posted before"
-#~ msgstr ""
-
-#~ msgid "Messages since the beginning of the debate"
-#~ msgstr ""
-
-#~ msgid "messages, by"
-#~ msgstr ""
-
-#~ msgid "authors"
-#~ msgstr ""
-
-#~ msgid "Synthesis of "
-#~ msgstr ""
-
-#~ msgid "Enter"
-#~ msgstr ""
-
-#~ msgid "register"
-#~ msgstr ""
-
-#~ msgid "Join assembl"
-#~ msgstr ""
-
-#~ msgid "Register"
-#~ msgstr ""
-
-#~ msgid "or"
-#~ msgstr ""
-
-#~ msgid "login"
-#~ msgstr ""
-
-#~ msgid "<time>%(time)s</time>"
-#~ msgstr ""
-
-#~ msgid "authors since"
-#~ msgstr ""
-
-#~ msgid "new authors since"
-#~ msgstr ""
-
-#~ msgid "already contributing authors since"
-#~ msgstr ""
-
-#~ msgid "authors before"
-#~ msgstr ""
-
-#~ msgid "authors since the beginning of the debate"
-#~ msgstr ""
-
-#~ msgid "Normal (%s)"
-#~ msgstr ""
-
-#~ msgid "New (%s)"
-#~ msgstr ""
-
-#~ msgid "How it works text"
-#~ msgstr ""
-
-#~ msgid "Read More"
-#~ msgstr ""
-
-#~ msgid "You must be signed in to add a comment"
-#~ msgstr ""
-
-#~ msgid "See&nbsp;in&nbsp;context"
-#~ msgstr ""
-
-#~ msgid "See less"
-#~ msgstr ""
-
-#~ msgid "Add a definition for this idea"
-#~ msgstr ""
-
-#~ msgid "%d authors have contributed since %s"
-#~ msgstr ""
-
-#~ msgid "%d new authors started contributing since %s"
-#~ msgstr ""
-
-#~ msgid "%d active authors were already contributing before %s"
-#~ msgstr ""
-
-#~ msgid "%d authors' last contribution was before %s"
-#~ msgstr ""
-
-#~ msgid "%d authors have contributed since the beginning of the debate"
-#~ msgstr ""
-
-#~ msgid "Normal %s"
-#~ msgstr ""
-
-#~ msgid "Objectives"
-#~ msgstr ""
-
-#~ msgid "Instigator"
-#~ msgstr ""
-
-#~ msgid "Because your opinion merits to be heard."
-#~ msgstr ""
-
-#~ msgid "Definition of idea"
-#~ msgstr ""
-
-#~ msgid "A definition of this idea"
-#~ msgstr ""
-
-#~ msgid "Copy the link to this message to clipboard"
-#~ msgstr ""
-
-#~ msgid "Load next messages"
-#~ msgstr ""
-
-#~ msgid "Add a group of views"
-#~ msgstr ""
-
-#~ msgid "Switch to simple mode"
-#~ msgstr ""
-
-#~ msgid "Number of messages related to this idea or its descendants"
-#~ msgstr ""
-
-#~ msgid "Number of unread messages related to this idea or its descendants"
-#~ msgstr ""
-
-#~ msgid "activate web annotation"
-#~ msgstr ""
-
-#~ msgid "how it works"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "1 - Drag the button below into "
-#~ "your bookmarks bar and / or tab"
-#~ " on your browser."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Drag this button to your bookmark "
-#~ "bar to create a bookmarklet. You "
-#~ "can then capture selections from most"
-#~ " webpages (those that are not secured"
-#~ " with https) by 1. Clicking on "
-#~ "the bookmarklet and 2. Highlighting the"
-#~ " section of text you wish to "
-#~ "send to the discussion."
-#~ msgstr ""
-
-#~ msgid "Web capture to"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "2 - Click here where you will "
-#~ "come to move on your browser to"
-#~ " enable web annotation"
-#~ msgstr ""
-
-#~ msgid "3 - Whether you unearth extracts"
-#~ msgstr ""
-
-#~ msgid "I understand"
-#~ msgstr ""
-
