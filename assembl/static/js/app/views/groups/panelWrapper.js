@@ -174,7 +174,7 @@ define(function (require) {
         },
 
         unminimizePanel: function () {
-            var compensateElement = this.$el.nextAll(":not(.minimized)").last();
+            var compensateElement = this.$el.nextAll(":visible:not(.minimized)").last();
             this.model.set('minimized', false);
             this._minimizedStateButton
                 //.addClass('icon-collapse')
@@ -200,7 +200,7 @@ define(function (require) {
         },
 
         minimizePanel: function () {
-            var compensateElement = this.$el.nextAll(":not(.minimized)").last();
+            var compensateElement = this.$el.nextAll(":visible:not(.minimized)").last();
             this._originalWidth = this.$el.width();
             this._nextElementOriginalWidth = compensateElement.width();
             
