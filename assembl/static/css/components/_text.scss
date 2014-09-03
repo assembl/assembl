@@ -1,5 +1,3 @@
-// DELETE THIS FILE AFTER REFACTORING
-
 // The commun output for a text
 // ======================
 .text {
@@ -25,52 +23,10 @@
   color: $gray1;
 }
 
-// Smaller text
-// ----------------
-.text-small {
-  font-size: .9em;
-}
-
-// Bigger text
-// ----------------
-.text-big {
-  font-size: 18px;
-}
-
 // Bold text
 // ----------------
 .text-bold {
   font-weight: bold;
-}
-
-// Align text to left
-// ------------------
-.text-left {
-  text-align: left;
-}
-
-// Align text to center
-// ------------------
-.text-center {
-  text-align: center;
-}
-
-// Align text to right
-// ------------------
-.text-right {
-  text-align: right;
-}
-
-// Dark text color
-// ---------------
-.text-dark {
-  color: $black;
-}
-
-// Opaque text
-// -----------
-.text-opaque {
-  @include opacity(0.5);
 }
 
 // The text bubble for when a text is selected
@@ -78,15 +34,11 @@
 .textbubble {
   $textbubble-width: 150px;
   $textbubble-height: 16px;
-
   position: absolute;
-
   background: white;
   opacity: 0.9;
-
   border: solid 4px #d3d3d6;
   border-radius: 6px;
-
   line-height: $textbubble-height;
   padding: 5px;
   margin-top: $textbubble-height * -4;
@@ -125,4 +77,58 @@
 
 .legend {
   color: $gray1;
+}
+
+//new design type
+
+// Links
+
+a {
+  color: $purple1;
+  text-decoration: none;
+  cursor: pointer;
+
+  &:hover, &:focus {
+    text-decoration: underline;
+  }
+}
+
+// Headings
+
+h1, .h1, h2, .h2, h3, .h3, h4, .h4, h5, .h5, h6, .h6 {
+  font-family: $baseFontFamily;
+  font-weight: bold;
+  margin-bottom: ($baseLineHeight / 2.5);
+  color: lighten($baseFontColor, 10%);
+}
+
+.h1, .h2, .h3, .h4, .h5, .h6, .h-lead {
+  font-family: $baseFontFamily;
+  font-weight: normal;
+}
+
+h1, .h1 {
+  font-size: 20px;
+}
+
+h2, .h2 {
+  font-size: 18px;
+}
+
+h3, .h3 {
+  font-size: 16px;
+}
+
+h4, .h4 {
+  font-size: 15px;
+}
+
+h5, .h5 {
+  font-size: 14px;
+  padding-bottom: ($baseLineHeight / 3);
+}
+
+h6, .h6 {
+  font-size: 13px;
+  padding-bottom: ($baseLineHeight / 3);
 }
