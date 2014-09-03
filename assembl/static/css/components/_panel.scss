@@ -169,7 +169,13 @@
   position: relative;
   &.is-editing {
     background-color: initial;
+    border: 1px solid #ddd;
   }
+}
+
+.panel-editablebox.is-editing > div:first-child,
+.panel-editablebox.is-editing > div:last-child {
+    background: #ddd;
 }
 
 .panel-editablearea.canEdit {
