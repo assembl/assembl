@@ -16,7 +16,6 @@ define(function (require) {
         initialize: function (options) {
             var that = this;
             this.collection = this.model.get('panels');
-            //this.listenTo(this.collection, 'add remove reset change', this.adjustGridSize);
             setTimeout(function () {
                 var navView = that.getViewByTypeName('navSidebar');
                 if (navView) {
@@ -27,7 +26,7 @@ define(function (require) {
             }, 200);
         },
         events: {
-            'click .js_closeGroup': 'closeGroup',
+            'click .js_closeGroup': 'closeGroup'
         },
         collectionEvents: {
             'add remove reset change': 'adjustGridSize'
@@ -86,7 +85,7 @@ define(function (require) {
             }
         },
 
-        resetContextState: function() {
+        resetContextState: function () {
             var nav = this.getNavigationSpec();
             if (nav) {
                 this.model.set('navigationState', 'home');
@@ -94,7 +93,7 @@ define(function (require) {
             }
         },
 
-        resetMessagePanel: function() {
+        resetMessagePanel: function () {
             var nav = this.getNavigationSpec();
             if (ctx.getCurrentIdea() == undefined) {
                 this.setPanelWidthByType('messageList',
@@ -119,7 +118,7 @@ define(function (require) {
             view.setGridSize(width);
         },
 
-        resetNavigation: function() {
+        resetNavigation: function () {
             var that = this,
                 navigationSpec = this.getNavigationSpec(),
                 ideaPanel = this.model.getPanelSpecByType('ideaPanel'),
@@ -133,6 +132,7 @@ define(function (require) {
                     else
                         messagePanelView.setGridSize(AssemblPanel.prototype.MESSAGE_PANEL_GRID_SIZE);
                 }
+
                 if (messagePanelView)
                     setSize();
                 else
