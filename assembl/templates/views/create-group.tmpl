@@ -1,9 +1,11 @@
-<div class="bbm-modal__topbar">
-    <p class="bbm-modal__title">{{ gettext('Create a panel group') }}</p>
-    <a href="#" class="fr mts popin-close"><i class="icon-delete"></i></a>
+<div class="popin-header">
+    <a href="#" class="close"><i class="icon-delete"></i></a>
+    <h3 class="h3">{{ gettext('Create a panel group') }}</h3>
 </div>
-<div class="bbm-modal__section">
-    <span class="item-section">{{ gettext('Choose a navigation panel:')}}</span>
+
+<div class="popin-body">
+  <div class="selectedGroup">
+    <span class="item-section dispb">{{ gettext('Choose a navigation panel:')}}</span>
     <div class="itemGroup ideas">
       <a class="js_selectItemGroup" data-item="navSidebar"></a>
       <i class="icon-checkbox"></i>
@@ -46,9 +48,11 @@
       <br>
       <span class="item-title">{{ gettext('Clipboard') }}</span>
     </div>
+  </div>
+  <div class="clr"></div>
 </div>
-<div style="clear:left"></div>
-<div class="bbm-modal__bottombar">
-  <a href="#" class="btn btn-primary js_createGroup">{{ gettext('Validate') }}</a>
-  <a href="#" class="btn btn-cancel">{{ gettext('Cancel') }}</a>
+
+<div class="popin-footer">
+  <button class="btn btn-cancel btn-sm fr">{{ gettext('Cancel') }}</button>
+  <button class="btn btn-primary btn-sm fr js_createGroup">{{ gettext('Validate') }}</button>
 </div>

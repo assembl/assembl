@@ -2,127 +2,152 @@
 //
 // @param $size=1 {number} The column size
 // @param $total-col=12 {number} The total column size of the grid
-@mixin col-span($size: 1, $total-col: 12){
-    $col-width: $size / $total-col;
-    $gutter-width: 2.762430939%;
-    $width: 100%;
-    @if $size < $total-col {
-        $width: percentage($col-width) - $gutter-width;
-    }
+@mixin col-span($size: 1, $total-col: 12) {
+  $col-width: $size / $total-col;
+  $gutter-width: 2.762430939%;
+  $width: 100%;
+  @if $size < $total-col {
+    $width: percentage($col-width) - $gutter-width;
+  }
 
-    float: left;
-    @include box-sizing( border-box );
-    margin-left: 2.762430939%;
-    width: $width;
+  float: left;
+  @include box-sizing(border-box);
+  margin-left: 2.762430939%;
+  width: $width;
 }
 
 // Alias for `@include background-image(linear-gradient(...))`
-@mixin background-linear-gradient($params...){
-    $previous-value: $experimental-support-for-svg;
-    $experimental-support-for-svg: true;
-    background-image: -ms-linear-gradient($params);
-    @include background-image(linear-gradient($params...));
+@mixin background-linear-gradient($params...) {
+  $previous-value: $experimental-support-for-svg;
+  $experimental-support-for-svg: true;
+  background-image: -ms-linear-gradient($params);
+  @include background-image(linear-gradient($params...));
 
-    $experimental-support-for-svg: $previous-value;
+  $experimental-support-for-svg: $previous-value;
 }
 
 // Alias for ::placeholder
 @mixin placeholder {
-    ::-webkit-input-placeholder { @content; }
-    ::-moz-placeholder { @content; }
-    :-ms-input-placholder { @content; }
+  ::-webkit-input-placeholder {
+    @content;
+  }
+  ::-moz-placeholder {
+    @content;
+  }
+  :-ms-input-placholder {
+    @content;
+  }
 }
 
 // Alias for ::selection
 @mixin selection {
-    ::selection { @content; }
-    ::-moz-selection { @content; }
+  ::selection {
+    @content;
+  }
+  ::-moz-selection {
+    @content;
+  }
 }
 
 // Alias for ::scrollbar
 @mixin scrollbar {
-    ::-webkit-scrollbar { @content; }    
+  ::-webkit-scrollbar {
+    @content;
+  }
 }
 
 // Alias for ::scrollbar-thumb
 @mixin scrollbar-thumb {
-    ::-webkit-scrollbar-thumb { @content; }
+  ::-webkit-scrollbar-thumb {
+    @content;
+  }
 }
-
 
 // prefixer for user-select
 // @param $value=text {string}
-@mixin user-select($value: text){
-    -webkit-user-select: $value;
-    -moz-user-select: $value;
-    -ms-user-select: $value;
-    /* No support for these yet, use at own risk */
-    -o-user-select: $value;
-    user-select: $value; 
+@mixin user-select($value: text) {
+  -webkit-user-select: $value;
+  -moz-user-select: $value;
+  -ms-user-select: $value;
+  /* No support for these yet, use at own risk */
+  -o-user-select: $value;
+  user-select: $value;
 }
 
 // Remove the selection background 
 @mixin no-selection {
-    &::-moz-selection { background-color: transparent !important; }
-    &::selection { background-color: transparent !important; }
+  &::-moz-selection {
+    background-color: transparent !important;
+  }
+  &::selection {
+    background-color: transparent !important;
+  }
 }
 
 // Workaround to avoid the glich made by the css3
 @mixin no-glitch {
-    @include transform( translatez(0) );
+  @include transform(translatez(0));
 }
 
 // Adds the right z-index value second the zIndex scale
 // @param $value=text {string}
-@mixin z-index($value){
-    $z-index-value: false;
+@mixin z-index($value) {
+  $z-index-value: false;
 
-    @if( $value == "float" ){
-        $z-index-value: 2;
-    }
+  @if ($value == "float") {
+    $z-index-value: 2;
+  }
 
-    @if( $value == "floor" ){
-        $z-index-value: 1;
-    }
+  @if ($value == "floor") {
+    $z-index-value: 1;
+  }
 
-    @if( $value == "underground" ){
-        $z-index-value: -1;
-    }
+  @if ($value == "underground") {
+    $z-index-value: -1;
+  }
 
-    @if( $z-index-value == false ){
-        @warn "Invalid $value for z-index mixin (given: #{$value})"
-    } @else {
-        z-index: $z-index-value;
-    }
+  @if ($z-index-value == false) {
+    @warn "Invalid $value for z-index mixin (given: #{$value})"
+  } @else {
+    z-index: $z-index-value;
+  }
 }
 
 // Check the $legacy-support-for-ie9 variable
 // If it is true, add the .ie9 class
 @mixin ie9 {
-    @if $legacy-support-for-ie9 {
-        .ie9 & { @content; }
+  @if $legacy-support-for-ie9 {
+    .ie9 & {
+      @content;
     }
+  }
 }
 
 // Only in medium resolution
 @mixin medium-only {
-    @media (min-width: 768px) and (max-width: 979px) { @content; }
+  @media (min-width: 768px) and (max-width: 979px) {
+    @content;
+  }
 }
 
 // Only in large resolution
 @mixin large-only {
-    @media (min-width: 980px) and (max-width: 1199px) { @content; }
+  @media (min-width: 980px) and (max-width: 1199px) {
+    @content;
+  }
 }
 
 // Only in xlarge resolution
 @mixin xlarge-only {
-    @media (min-width: 1200) { @content; }
+  @media (min-width: 1200) {
+    @content;
+  }
 }
 
 /** New Design Mixins **/
 
 // Clearfix for clearing floats like a boss h5bp.com/q -> No presentational code needed :)
-@mixin clearfixHack(){
+@mixin clearfixHack() {
   zoom: 1;
   &:before,
   &:after {
@@ -137,26 +162,47 @@
 }
 
 // Border Radius
-@mixin border-radius($values){
+@mixin border-radius($values) {
   border-radius: $values;
 }
-@mixin border-radius-topleft($size){
+
+@mixin border-radius-topleft($size) {
   border-top-left-radius: $size;
 }
-@mixin border-radius-topright($size){
+
+@mixin border-radius-topright($size) {
   border-top-right-radius: $size;
 }
-@mixin border-radius-bottomright($size){
+
+@mixin border-radius-bottomright($size) {
   border-bottom-right-radius: $size;
 }
-@mixin border-radius-bottomleft($size){
+
+@mixin border-radius-bottomleft($size) {
   border-bottom-left-radius: $size;
 }
-@mixin border-radius-top($size){
+
+@mixin border-radius-top($size) {
   @include border-radius-topleft($size);
   @include border-radius-topright($size);
 }
-@mixin border-radius-right($size){
+
+@mixin border-radius-right($size) {
   @include border-radius-topright($size);
   @include border-radius-bottomright($size);
+}
+
+@mixin keyframes($name) {
+  @-webkit-keyframes #{$name} {
+    @content;
+  }
+  @-moz-keyframes #{$name} {
+    @content;
+  }
+  @-ms-keyframes #{$name} {
+    @content;
+  }
+  @keyframes #{$name} {
+    @content;
+  }
 }

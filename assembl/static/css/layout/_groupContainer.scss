@@ -265,88 +265,71 @@
 }
 
 .group-modal {
-  .bbm-modal {
-    max-width: 410px;
-    margin: 10px auto;
-    .bbm-modal__section {
-      height: auto;
-      padding: 0 20px;
-      .itemGroup {
-        position: relative;
-        height: 120px;
-        width: 120px;
-        list-style-type: none;
-        margin: 25px;
-        float: left;
-        text-align: center;
-        border: 1px solid transparent;
-        a {
-          position: absolute;
-          display: block;
-          cursor: pointer;
-          left: 0;
-          top: 0;
-          height: 100%;
-          width: 100%;
-          z-index: 10;
-        }
-        i {
-          font-size: 3.5em;
-        }
-        .icon-checkbox {
-          position: absolute;
-          font-size: 16px;
-          top: 5px;
-          left: 5px;
-          visibility: hidden;
-        }
-        &:hover {
-          @include border-radius(3px);
-          border: 1px solid $gray;
-        }
-        &:hover .icon-checkbox {
-          visibility: visible;
-        }
-        .item-title {
-          font-size: 12px;
-        }
-      }
-      .separator-item {
-        float: left;
-        padding-top: 4em;
-        height: 120px;
-      }
-      .item-section {
-        font-size: 12px;
-        float: left;
-        width: 100%;
-      }
-      .content {
-        font-size: 12px;
-      }
-      .is-selected {
-        @include border-radius(3px);
-        background-color: $purple;
-        border: 1px solid transparent;
-        .icon-checkbox {
-          visibility: visible;
-        }
-        i, span {
-          color: $white;
-        }
-      }
+  .popin {
+    width: 400px;
+  }
+}
+
+.selectedGroup {
+  width: 400px;
+  .itemGroup {
+    position: relative;
+    height: 120px;
+    width: 120px;
+    list-style-type: none;
+    margin: 10px;
+    float: left;
+    text-align: center;
+    border: 1px solid transparent;
+    a {
+      position: absolute;
+      display: block;
+      cursor: pointer;
+      left: 0;
+      top: 0;
+      height: 100%;
+      width: 100%;
+      z-index: 10;
     }
-    .bbm-modal__topbar {
-      box-sizing: border-box;
-      padding: 0 15px;
-      border-bottom: none;
+    i {
+      font-size: 3.5em;
     }
-    .bbm-modal__title {
-      font-size: 14px;
-      margin: 0;
+    .icon-checkbox {
+      position: absolute;
+      font-size: 16px;
+      top: 5px;
+      left: 5px;
+      visibility: hidden;
     }
-    .popin-close {
-      font-size: 14px;
+    &:hover {
+      @include border-radius(3px);
+      border: 1px solid $gray;
+    }
+    &:hover .icon-checkbox {
+      visibility: visible;
+    }
+    .item-title {
+      font-size: 12px;
+    }
+  }
+  .separator-item {
+    float: left;
+    padding-top: 4em;
+    height: 120px;
+  }
+  .item-section {
+    font-size: 12px;
+    float: left;
+    width: 100%;
+  }
+  .is-selected {
+    @include border-radius(3px);
+    background-color: $purple;
+    border: 1px solid transparent;
+    .icon-checkbox {
+      visibility: visible;
+    }
+    i, span {
       color: $white;
     }
   }

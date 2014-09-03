@@ -28,7 +28,7 @@ define(function (require) {
             });
 
             var modalView = new Modal();
-            $('.modal').html(modalView.render().el);
+            $('.popin-container').html(modalView.render().el);
             this.$('#groupsContainer').addClass('hasNotification');
         },
 

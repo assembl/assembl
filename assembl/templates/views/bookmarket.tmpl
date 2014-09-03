@@ -1,9 +1,9 @@
-<div class="bbm-modal__topbar">
-    <p class="bbm-modal__title">{{ gettext('activate web annotation') }}</p>
-    <a href="#" class="fr mts popin-close"><i class="icon-delete"></i></a>
+<div class="popin-header">
+    <a href="#" class="close"><i class="icon-delete"></i></a>
+    <h3 class="h3">{{ gettext('activate web annotation') }}</h3>
 </div>
 
-<div class="bbm-modal__section">
+<div class="popin-body">
   <div class="web-capture">
     {{ gettext('<p>How it works:</p> <p>Drag the button below into your bookmark bar to create a bookmarklet.')|safe }}</p>
     <div>
@@ -16,9 +16,10 @@
     <li>Click the "send" button that appears</li>
     </ol>') | safe}}
   </div>
+  <div class="clr"></div>
 </div>
 
-<div class="clr"></div>
-<div class="bbm-modal__bottombar">
-  <a href="#" class="btn btn-primary">{{ gettext('I understand') }}</a>
+<div class="popin-footer">
+ <a href="#" class="btn btn-primary fr">{{ gettext('I understand') }}</a>
 </div>
+

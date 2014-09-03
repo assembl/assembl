@@ -40,7 +40,7 @@ define(function (require) {
             var Modal = Backbone.Modal.extend({
                 template: _.template($('#tmpl-create-group').html()),
                 className: 'group-modal',
-                cancelEl: '.popin-close, .btn-cancel',
+                cancelEl: '.close, .btn-cancel',
                 events: {
                     'click .js_selectItemGroup': 'selectItemGroup',
                     'click .js_createGroup': 'createGroup'
@@ -100,8 +100,7 @@ define(function (require) {
             });
 
             var modalView = new Modal();
-
-            $('.modal').html(modalView.render().el);
+            $('.popin-container').html(modalView.render().el);
         }
 
     });

@@ -29,7 +29,7 @@ define(function (require) {
             this.allMessagesCollection = options.allMessagesCollection;
             this.closeDeletes = options.closeDeletes;
         },
-        serializeData: function() {
+        serializeData: function () {
             var post, postCreator, idPost = this.model.get('idPost'),
                 currentUser = Ctx.getCurrentUser();
             if (idPost) {
@@ -38,11 +38,11 @@ define(function (require) {
                     postCreator = this.allUsersCollection.get(post.get('idCreator'));
             }
             return {segment: this.model,
-                    post: post,
-                    postCreator: postCreator,
-                    canEditExtracts: currentUser.can(Permissions.EDIT_EXTRACT),
-                    canEditMyExtracts: currentUser.can(Permissions.EDIT_MY_EXTRACT),
-                    ctx: Ctx
+                post: post,
+                postCreator: postCreator,
+                canEditExtracts: currentUser.can(Permissions.EDIT_EXTRACT),
+                canEditMyExtracts: currentUser.can(Permissions.EDIT_MY_EXTRACT),
+                ctx: Ctx
             };
         },
         /**
@@ -95,7 +95,7 @@ define(function (require) {
 
     var SegmentListView = Marionette.CollectionView.extend({
         childView: SegmentView,
-        initialize: function(options) {
+        initialize: function (options) {
             this.childViewOptions = {
                 allUsersCollection: options.allUsersCollection,
                 allMessagesCollection: options.allMessagesCollection,
@@ -106,19 +106,19 @@ define(function (require) {
 
     var Clipboard = Backbone.Subset.extend({
         beforeInitialize: function (models, options) {
-          this.currentUserId = options.currentUserId;
+            this.currentUserId = options.currentUserId;
         },
         name: 'Clipboard',
         liveupdate_keys: ['idIdea'],
-        sieve: function(extract) {
+        sieve: function (extract) {
             return extract.get('idIdea') == null;
         },
-        comparator: function(e1, e2) {
+        comparator: function (e1, e2) {
             var currentUserId = this.currentUserId,
                 myE1 = e1.get('idCreator') == currentUserId,
                 myE2 = e2.get('idCreator') == currentUserId;
             if (myE1 != myE2) {
-                return myE1?-1:1;
+                return myE1 ? -1 : 1;
             }
             return e2.getCreatedTime() - e1.getCreatedTime();
         }
@@ -126,14 +126,14 @@ define(function (require) {
 
     var IdeaSegmentList = Backbone.Subset.extend({
         beforeInitialize: function (models, options) {
-          this.ideaId = options.ideaId;
+            this.ideaId = options.ideaId;
         },
         name: 'IdeaSegmentList',
         liveupdate_keys: ['idIdea'],
-        sieve: function(extract) {
+        sieve: function (extract) {
             return extract.get('idIdea') == this.ideaId;
         },
-        comparator: function(segment) {
+        comparator: function (segment) {
             return -segment.getCreatedTime();
         }
     });
@@ -173,7 +173,7 @@ define(function (require) {
                         that.highlightSegment(segment);
                     });
                     that.listenTo(that.clipboard, 'add remove reset change', that.resetTitle);
-                    window.setTimeout(function() {
+                    window.setTimeout(function () {
                         that.render();
                     }, 0);
                 });
@@ -197,7 +197,7 @@ define(function (require) {
             'click .js_bookmark': 'bookmark'
         },
 
-        getTitle: function() {
+        getTitle: function () {
             return i18n.gettext('Clipboard');
         },
 
@@ -239,14 +239,14 @@ define(function (require) {
             this.resetTitle();
         },
 
-        resetTitle: function() {
+        resetTitle: function () {
             if (this.clipboard) {
                 var numExtracts = this.clipboard.models.length;
                 this.ui.clipboardCount.html("(" + numExtracts + ")");
-                this.panelWrapper.resetTitle(i18n.gettext('Clipboard') + " ("+numExtracts+")");
+                this.panelWrapper.resetTitle(i18n.gettext('Clipboard') + " (" + numExtracts + ")");
             } else {
                 this.ui.clipboardCount.html("");
-                this.panelWrapper.resetTitle(i18n.gettext('Clipboard') + " ("+i18n.gettext('empty')+")");
+                this.panelWrapper.resetTitle(i18n.gettext('Clipboard') + " (" + i18n.gettext('empty') + ")");
             }
         },
 
@@ -407,12 +407,12 @@ define(function (require) {
 
             if (ok) {
                 collectionManager.getAllExtractsCollectionPromise().done(
-                    function(allExtractsCollection) {
-                        that.clipboard.filter(function(s) {
-                                return s.get('idCreator') == user_id
-                            }).map(function (segment) {
-                                segment.destroy();
-                            });
+                    function (allExtractsCollection) {
+                        that.clipboard.filter(function (s) {
+                            return s.get('idCreator') == user_id
+                        }).map(function (segment) {
+                            segment.destroy();
+                        });
                     });
             }
         },
@@ -422,12 +422,12 @@ define(function (require) {
 
             var Modal = Backbone.Modal.extend({
                 template: _.template($('#tmpl-bookmarket').html()),
-                className: 'group-modal',
-                cancelEl: '.popin-close, .btn-primary'
+                className: 'capture',
+                cancelEl: '.close, .btn-primary'
             });
 
             var modalView = new Modal();
-            $('.modal').html(modalView.render().el);
+            $('.popin-container').html(modalView.render().el);
         }
 
     });
@@ -437,6 +437,6 @@ define(function (require) {
         IdeaSegmentList: IdeaSegmentList,
         SegmentView: SegmentView,
         SegmentListView: SegmentListView,
-        SegmentListPanel:SegmentListPanel
+        SegmentListPanel: SegmentListPanel
     };
 });
