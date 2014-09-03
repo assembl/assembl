@@ -3,6 +3,7 @@ $messageFamilyImageWidth: 12px;
 $avatarSize: 30px;
 $readUnreadIndicatorSize: 14px;
 $mesageSpacing: 6px;
+$messageBodyFontSize: 13px;
 $mesageBodyLineHeight: $baseLineHeight;
 $ten: 10px;
 $separatorBulletMargin: 0.6em;
@@ -116,7 +117,7 @@ $previewNumLines: 4;
     .message-body {
       line-height: $mesageBodyLineHeight;
       margin-top: $mesageSpacing;
-      font-size: 13px; //This should be rem or something - benoitg
+      font-size: $messageBodyFontSize;
     }
     
     .message-menu-actions {
@@ -168,11 +169,10 @@ $previewNumLines: 4;
     .message-date {
     }
 
-    //@include multiline-ellipsis($previewNumLines * $mesageBodyLineHeight, $mesageBodyLineHeight);
     .message-body {
       position: relative;
       padding: 0px;
-      max-height: $previewNumLines * $mesageBodyLineHeight;
+      max-height: $previewNumLines * $mesageBodyLineHeight * $messageBodyFontSize;
     }
 
     .message-body.body_format_text_plain > .elipsis > div {
