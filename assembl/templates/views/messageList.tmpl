@@ -32,13 +32,13 @@
   <% if (Ctx.getCurrentInterfaceType() === Ctx.InterfaceTypes.EXPERT) { %>
     <div class="messageList-query-info"></div>
   <% } %>
-  <div class="js_messageList-toparea messageList-toparea margin text-center hidden">
+  <div class="js_messageList-toparea messageList-toparea margin tac hidden">
     <a class="js_messageList-prevbutton button">{{ gettext('Load previous messages') }}</a>
   </div>
   
   <div class="messageList-list idealist <%= currentViewStyle.id %>"></div>
 
-  <div class="js_messageList-bottomarea messageList-bottomarea margin text-center hidden">
+  <div class="js_messageList-bottomarea messageList-bottomarea margin tac hidden">
     <a class="js_messageList-morebutton button">{{ gettext('Load more messages') }}</a>
   </div>
 
