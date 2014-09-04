@@ -19,6 +19,33 @@ time, mark, audio, video {
   vertical-align: baseline;
 }
 
+// Display in IE6-9 and FF3
+// Source: http://github.com/necolas/normalize.css
+html {
+  overflow-y: scroll;
+  font-size: 100%;
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+}
+
+// Display in IE6-9 and FF3
+// Source: http://github.com/necolas/normalize.css
+main,
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+nav,
+section,
+summary,
+menu {
+  display: block;
+}
+
 table {
   border-collapse: collapse;
   border-spacing: 0;
@@ -36,10 +63,6 @@ a img {
 
 img {
   vertical-align: middle;
-}
-
-article, aside, details, figcaption, figure, footer, header, hgroup, main, menu, nav, section, summary {
-  display: block;
 }
 
 .preload * {
@@ -85,4 +108,9 @@ output {
     padding: 0;
     display: inline;
   }
+}
+
+textarea {
+  overflow: auto; // Remove vertical scrollbar in IE6-9
+  vertical-align: top; // Readability and alignment cross-browser
 }
