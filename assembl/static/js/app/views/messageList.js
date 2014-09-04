@@ -57,7 +57,7 @@ define(function (require) {
             userHighlightNewViewButton: '.messageListViewStyleUserHighlightNew'
         },
         getTitle: function() {
-            return i18n.gettext('Conversation');
+            return i18n.gettext('Conversations');
         },
 
         ViewStyles: {
