@@ -62,7 +62,7 @@ define(function (require) {
         restoreViews: function () {
             Assembl.headerRegions.show(new navBar());
 
-            if (!window.localStorage.getItem('showNotification')) {
+            if (window.localStorage.getItem('showNotification')) {
                 $('#wrapper .groupContainer').css('top', '76px');
                 Assembl.notificationRegion.show(new Notification());
             }
