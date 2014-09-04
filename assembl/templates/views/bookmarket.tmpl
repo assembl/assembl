@@ -5,16 +5,18 @@
 
 <div class="popin-body">
   <div class="web-capture">
-    <p>{{ gettext('How it works:</p> <p>Drag the button below into your bookmark bar to create a bookmarklet.')|safe }}</p>
+    <p>{{ gettext('How it works:')}}</p>
+    <p>{{ gettext('1 - Drag the button') }}</p>
     <div>
         <a class="bookmarklet" data-toggle="tooltip" title="{{gettext('Drag this button to your bookmark bar to create a bookmarklet. You can then capture selections from most webpages (those that are not secured with https) by 1. Clicking on the bookmarklet and 2. Highlighting the section of text you wish to send to the discussion.')}}" href="javascript:(function(a,b){r='http://{{ request.server_name }}:{{ request.server_port }}',a._annotatorConfig={root:r,discussion:{{ discussion.id }}},s=b.body.appendChild(b.createElement('script')),s.language='javascript',s.src=r+'/static/js/annotator_bkmklet.min.js'})(this,this.document);">{{ gettext('Web capture to') }} {{ discussion.slug }}</a>
     </div>
-    <p>{{ gettext('You can then capture selections from most webpages (those that are not secured with https) this way:') }}</p>
-    <ol>
+    <p>{{ gettext('2 - click on and move to your browser') }}</p>
+    <p>{{ gettext('3 - find the extract') }}</p>
+    <ul>
       <li>{{ gettext('Click on the bookmarklet to enable annotations') }}</li>
       <li>{{ gettext('Highligt the section of text you wish to send to the discussion') }}</li>
       <li>{{ gettext('Click the "send" button that appears') }}</li>
-    </ol>
+    </ul>
   </div>
   <div class="clr"></div>
 </div>
