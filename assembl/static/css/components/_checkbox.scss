@@ -1,29 +1,29 @@
 // A fancier checkbox
 // ==================
 .chk {
-    cursor: pointer;
+  cursor: pointer;
 
-    display: inline-block;
-    @include box-sizing( border-box );
-    width: 20px;
-    height: 20px;
-    line-height: 20px;
-    float: left;
+  display: inline-block;
+  @include box-sizing(border-box);
+  width: 20px;
+  height: 20px;
+  line-height: 20px;
+  float: left;
 
-    position: relative;
-    @include z-index("floor");
+  position: relative;
+  @include z-index("floor");
 }
 
 // Designed to fit tin the .idealist-item
 // ++++++++++++++++
 .chk.chk--idealist {
-    height: 40px;
-    line-height: 40px;
-    float: left;
-    margin-left: 5px;
+  height: 40px;
+  line-height: 40px;
+  float: left;
+  margin-left: 5px;
 
-    // Don't ask
-    padding-top: 4.25px; 
+  // Don't ask
+  padding-top: 4.25px;
 }
 
 // Change the selected color to the muted color
@@ -33,47 +33,48 @@
 // The checkbox
 // ---------------
 .chk-checkbox {
+  display: none;
 }
 
 // The label
 // --------------
 .chk-label {
-    @extend %icon !optional;
-    @extend .icon-blank !optional;
+  @extend %icon;
+  @extend .icon-blank;
 
-    display: inline-block;
-    position: absolute;
-    top: -5px;
-    left: -5px;
-    font-size: 20px;
+  display: inline-block;
+  position: absolute;
+  top: -2px;
+  left: -5px;
+  font-size: 20px;
 
-    color: #eceef1;
+  color: #eceef1;
 
-    .chk--idealist & {
-        top: 10px;
-        left: 0;
-        line-height: 20px;
-    }
+  .chk--idealist & {
+    top: 10px;
+    left: 0;
+    line-height: 20px;
+  }
 
-    .chk-checkbox:checked ~ & {
-        @extend .icon-ok-squared !optional;
-        color: $purple;
-    }
+  .chk-checkbox:checked ~ & {
+    @extend .icon-ok-squared;
+    color: $purple;
+  }
 
-    .chk--muted .chk-checkbox:checked ~ & {
-        color: $gray1;
-    }
+  .chk--muted .chk-checkbox:checked ~ & {
+    color: $gray1;
+  }
 
-    .chk--dropdown & {
-        font-size: 16px;
-        color: white !important;
-        top: 3px;
-        left: -2px;
-    }
+  .chk--dropdown & {
+    font-size: 16px;
+    color: white !important;
+    top: 3px;
+    left: -2px;
+  }
 }
 
 // Hover state
 // ++++++++++++++++
 .chk-label:hover {
-    //background-color: #ffc694;
+  //background-color: #ffc694;
 }
