@@ -33,7 +33,7 @@
 
   .popin-header {
     position: relative;
-    padding: 18px;
+    padding: 15px;
     min-height: 1.3em;
     background: $purple1;
     color: $white;
@@ -72,20 +72,11 @@
         color: $white;
         vertical-align: top;
       }
-
-      &:hover {
-        /*background: $black;
-
-        span {
-          width: auto;
-          max-width: 10em;
-        }*/
-      }
     }
   }
 
   .popin-body {
-    padding: 10px;
+    padding: 15px;
     background: $white;
 
     &:last-child {
@@ -95,7 +86,7 @@
 
   .popin-footer {
     @include clearfixHack();
-    padding: 10px;
+    padding: 15px;
     background: $white;
     border-radius: 0 0 $borderRadiusM $borderRadiusM;
   }
