@@ -40,7 +40,7 @@
 // --------------
 .chk-label {
   @extend %icon;
-  @extend .icon-blank;
+  @extend .icon-check-empty;
 
   display: inline-block;
   position: absolute;
@@ -57,7 +57,7 @@
   }
 
   .chk-checkbox:checked ~ & {
-    @extend .icon-ok-squared;
+    @extend .icon-check;
     color: $purple;
   }
 
