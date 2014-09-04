@@ -1,20 +1,20 @@
 <div class="popin-header">
     <a href="#" class="close"><i class="icon-delete"></i></a>
-    <h3 class="h3">{{ gettext('activate web annotation') }}</h3>
+    <h4 class="h4">{{ gettext('activate web annotation') }}</h4>
 </div>
 
 <div class="popin-body">
   <div class="web-capture">
-    {{ gettext('<p>How it works:</p> <p>Drag the button below into your bookmark bar to create a bookmarklet.')|safe }}</p>
+    <p>{{ gettext('How it works:</p> <p>Drag the button below into your bookmark bar to create a bookmarklet.')|safe }}</p>
     <div>
         <a class="bookmarklet" data-toggle="tooltip" title="{{gettext('Drag this button to your bookmark bar to create a bookmarklet. You can then capture selections from most webpages (those that are not secured with https) by 1. Clicking on the bookmarklet and 2. Highlighting the section of text you wish to send to the discussion.')}}" href="javascript:(function(a,b){r='http://{{ request.server_name }}:{{ request.server_port }}',a._annotatorConfig={root:r,discussion:{{ discussion.id }}},s=b.body.appendChild(b.createElement('script')),s.language='javascript',s.src=r+'/static/js/annotator_bkmklet.min.js'})(this,this.document);">{{ gettext('Web capture to') }} {{ discussion.slug }}</a>
     </div>
-    {{ gettext('<p>You can then capture selections from most webpages (those that are not secured with https) this way:</p>
+    <p>{{ gettext('You can then capture selections from most webpages (those that are not secured with https) this way:') }}</p>
     <ol>
-    <li>Click on the bookmarklet to enable annotations</li>
-    <li>Highligt the section of text you wish to send to the discussion</li>
-    <li>Click the "send" button that appears</li>
-    </ol>') | safe}}
+      <li>{{ gettext('Click on the bookmarklet to enable annotations') }}</li>
+      <li>{{ gettext('Highligt the section of text you wish to send to the discussion') }}</li>
+      <li>{{ gettext('Click the "send" button that appears') }}</li>
+    </ol>
   </div>
   <div class="clr"></div>
 </div>
