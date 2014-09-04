@@ -72,23 +72,26 @@ define(function (require) {
                     var items = [],
                         that = this;
 
-                    $('.itemGroup.is-selected').each(function () {
-                        var item = $(this).children('a').attr('data-item');
-                        items.push({type: item});
-                    });
+                    if ($('.itemGroup').hasClass('is-selected')) {
 
-                    groupSpecsP.done(function (groupSpecs) {
-                        var groupSpec = new GroupSpec.Model(
-                            {'panels': items}, {'parse': true});
-                        groupSpecs.add(groupSpec);
-                    });
+                        $('.itemGroup.is-selected').each(function () {
+                            var item = $(this).children('a').attr('data-item');
+                            items.push({type: item});
+                        });
 
-                    setTimeout(function () {
-                        that.scrollToRight();
+                        groupSpecsP.done(function (groupSpecs) {
+                            var groupSpec = new GroupSpec.Model(
+                                {'panels': items}, {'parse': true});
+                            groupSpecs.add(groupSpec);
+                        });
 
-                        that.$el.unbind();
-                        that.$el.remove();
-                    }, 1000);
+                        setTimeout(function () {
+                            that.scrollToRight();
+
+                            that.$el.unbind();
+                            that.$el.remove();
+                        }, 1000);
+                    }
 
                 },
                 scrollToRight: function () {
