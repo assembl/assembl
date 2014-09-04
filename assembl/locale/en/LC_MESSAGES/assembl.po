@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: assembl 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-09-03 10:12+0200\n"
+"POT-Creation-Date: 2014-09-04 11:15-0400\n"
 "PO-Revision-Date: 2014-07-24 17:38-0500\n"
 "Last-Translator: Benoit Grégoire <benoitg@coeus.ca>\n"
 "Language-Team: en <LL@li.org>\n"
@@ -95,82 +95,82 @@ msgstr ""
 msgid "Home"
 msgstr ""
 
-#: assembl/static/js/app/views/contextPage.js:279
+#: assembl/static/js/app/views/contextPage.js:316
 msgid "last week"
 msgstr ""
 
-#: assembl/static/js/app/views/contextPage.js:282
+#: assembl/static/js/app/views/contextPage.js:319
 msgid "last 2 weeks"
 msgstr ""
 
-#: assembl/static/js/app/views/contextPage.js:285
+#: assembl/static/js/app/views/contextPage.js:322
 msgid "last month"
 msgstr ""
 
-#: assembl/static/js/app/views/contextPage.js:288
+#: assembl/static/js/app/views/contextPage.js:325
 msgid "last 3 months"
 msgstr ""
 
-#: assembl/static/js/app/views/contextPage.js:291
+#: assembl/static/js/app/views/contextPage.js:328
 msgid "last 6 months"
 msgstr ""
 
-#: assembl/static/js/app/views/contextPage.js:294
+#: assembl/static/js/app/views/contextPage.js:331
 msgid "last year"
 msgstr ""
 
-#: assembl/static/js/app/views/contextPage.js:446
+#: assembl/static/js/app/views/contextPage.js:483
 #, python-format
 msgid "%d participants have contributed in the %s"
 msgstr ""
 
-#: assembl/static/js/app/views/contextPage.js:452
+#: assembl/static/js/app/views/contextPage.js:489
 #, python-format
 msgid "%d new participants started contributing in the %s"
 msgstr ""
 
-#: assembl/static/js/app/views/contextPage.js:459
+#: assembl/static/js/app/views/contextPage.js:496
 #, python-format
 msgid "%d active participants had contributed before %s"
 msgstr ""
 
-#: assembl/static/js/app/views/contextPage.js:468
+#: assembl/static/js/app/views/contextPage.js:505
 #, python-format
 msgid "%d participants' last contribution was prior to %s"
 msgstr ""
 
-#: assembl/static/js/app/views/contextPage.js:480
+#: assembl/static/js/app/views/contextPage.js:517
 #, python-format
 msgid "%d participants have contributed since the beginning of the debate"
 msgstr ""
 
-#: assembl/static/js/app/views/contextPage.js:489
+#: assembl/static/js/app/views/contextPage.js:526
 msgid "Contributors active recently"
 msgstr ""
 
-#: assembl/static/js/app/views/contextPage.js:493
+#: assembl/static/js/app/views/contextPage.js:530
 msgid "Contributors inactive recently"
 msgstr ""
 
-#: assembl/static/js/app/views/contextPage.js:511
+#: assembl/static/js/app/views/contextPage.js:548
 msgid "Evolution of the total number of messages"
 msgstr ""
 
-#: assembl/static/js/app/views/contextPage.js:511
+#: assembl/static/js/app/views/contextPage.js:548
 msgid "Evolution of the number of messages posted"
 msgstr ""
 
-#: assembl/static/js/app/views/contextPage.js:512
-#: assembl/templates/views/contextPage.tmpl:70
+#: assembl/static/js/app/views/contextPage.js:549
+#: assembl/templates/views/contextPage.tmpl:61
 msgid "Statistics"
 msgstr ""
 
-#: assembl/static/js/app/views/contextPage.js:814
+#: assembl/static/js/app/views/contextPage.js:851
 msgid "messages"
 msgstr ""
 
-#: assembl/static/js/app/views/contextPage.js:1033
-#: assembl/static/js/app/views/contextPage.js:1047
+#: assembl/static/js/app/views/contextPage.js:1070
+#: assembl/static/js/app/views/contextPage.js:1084
 msgid "messages, posted by"
 msgstr ""
 
@@ -260,8 +260,7 @@ msgid "You can drag the segment above directly to the table of ideas"
 msgstr ""
 
 #: assembl/static/js/app/views/messageList.js:60
-#: assembl/templates/views/create-group.tmpl:39
-msgid "Messages"
+msgid "Conversations"
 msgstr ""
 
 #: assembl/static/js/app/views/messageList.js:67
@@ -452,8 +451,9 @@ msgid "Type your message here..."
 msgstr ""
 
 #: assembl/static/js/app/views/messageSend.js:43
+#: assembl/templates/styleguide/components/popin.jinja2:21
 #: assembl/templates/views/ckeditorField.tmpl:8
-#: assembl/templates/views/create-group.tmpl:53
+#: assembl/templates/views/create-group.tmpl:56
 #: assembl/templates/views/synthesisIdea.tmpl:33
 msgid "Cancel"
 msgstr ""
@@ -487,7 +487,7 @@ msgstr ""
 #: assembl/static/js/app/views/segmentList.js:201
 #: assembl/static/js/app/views/segmentList.js:246
 #: assembl/static/js/app/views/segmentList.js:249
-#: assembl/templates/views/create-group.tmpl:47
+#: assembl/templates/views/create-group.tmpl:49
 msgid "Clipboard"
 msgstr ""
 
@@ -500,7 +500,7 @@ msgid "Are you sure you want to empty your entire clipboard?"
 msgstr ""
 
 #: assembl/static/js/app/views/synthesisPanel.js:76
-#: assembl/templates/views/create-group.tmpl:22
+#: assembl/templates/views/create-group.tmpl:24
 #: assembl/templates/views/navigation.tmpl:15
 msgid "Synthesis"
 msgstr ""
@@ -816,6 +816,11 @@ msgid ""
 "underline;\">update your browser</span>."
 msgstr ""
 
+#: assembl/templates/styleguide/components/popin.jinja2:22
+#: assembl/templates/views/create-group.tmpl:57
+msgid "Validate"
+msgstr ""
+
 #: assembl/templates/views/allMessagesInIdeaList.tmpl:4
 msgid "Number of posts in the entire discussion"
 msgstr ""
@@ -825,18 +830,17 @@ msgstr ""
 msgid "View all posts in this discussion"
 msgstr ""
 
-#: assembl/templates/views/bookmarket.tmpl:2
+#: assembl/templates/views/bookmarket.tmpl:3
 msgid "activate web annotation"
 msgstr ""
 
 #: assembl/templates/views/bookmarket.tmpl:8
 msgid ""
-"<p>How it works:</p>\n"
-"    <p>Drag the button below into your bookmark bar to create a "
-"bookmarklet."
+"<p>How it works:</p> <p>Drag the button below into your bookmark bar to "
+"create a bookmarklet."
 msgstr ""
 
-#: assembl/templates/views/bookmarket.tmpl:11
+#: assembl/templates/views/bookmarket.tmpl:10
 msgid ""
 "Drag this button to your bookmark bar to create a bookmarklet. You can "
 "then capture selections from most webpages (those that are not secured "
@@ -844,11 +848,11 @@ msgid ""
 "section of text you wish to send to the discussion."
 msgstr ""
 
-#: assembl/templates/views/bookmarket.tmpl:11
+#: assembl/templates/views/bookmarket.tmpl:10
 msgid "Web capture to"
 msgstr ""
 
-#: assembl/templates/views/bookmarket.tmpl:13
+#: assembl/templates/views/bookmarket.tmpl:12
 msgid ""
 "<p>You can then capture selections from most webpages (those that are not"
 " secured with https) this way:</p>\n"
@@ -860,44 +864,50 @@ msgid ""
 "    </ol>"
 msgstr ""
 
-#: assembl/templates/views/bookmarket.tmpl:24
+#: assembl/templates/views/bookmarket.tmpl:23
 msgid "I understand"
 msgstr ""
 
 #: assembl/templates/views/contextPage.tmpl:11
+#: assembl/templates/views/homeIntroductionDetail.tmpl:3
 msgid "Context"
 msgstr ""
 
-#: assembl/templates/views/contextPage.tmpl:28
+#: assembl/templates/views/contextPage.tmpl:14
+#: assembl/templates/views/ideaPanel.tmpl:17
+msgid "See more"
+msgstr ""
+
+#: assembl/templates/views/contextPage.tmpl:19
 msgid "Debate objectives"
 msgstr ""
 
-#: assembl/templates/views/contextPage.tmpl:49
+#: assembl/templates/views/contextPage.tmpl:40
 msgid "Instigated by"
 msgstr ""
 
-#: assembl/templates/views/contextPage.tmpl:73
+#: assembl/templates/views/contextPage.tmpl:64
 msgid "Loading..."
 msgstr ""
 
-#: assembl/templates/views/create-group.tmpl:2
+#: assembl/templates/views/create-group.tmpl:3
 msgid "Create a panel group"
 msgstr ""
 
-#: assembl/templates/views/create-group.tmpl:6
+#: assembl/templates/views/create-group.tmpl:8
 msgid "Choose a navigation panel:"
 msgstr ""
 
-#: assembl/templates/views/create-group.tmpl:13
+#: assembl/templates/views/create-group.tmpl:15
 msgid "Navigation"
 msgstr ""
 
-#: assembl/templates/views/create-group.tmpl:31
+#: assembl/templates/views/create-group.tmpl:33
 msgid "Idea Panel"
 msgstr ""
 
-#: assembl/templates/views/create-group.tmpl:52
-msgid "Validate"
+#: assembl/templates/views/create-group.tmpl:41
+msgid "Messages"
 msgstr ""
 
 #: assembl/templates/views/home.tmpl:2
@@ -1018,10 +1028,6 @@ msgstr ""
 
 #: assembl/templates/views/ideaPanel.tmpl:15
 msgid "A description of this idea"
-msgstr ""
-
-#: assembl/templates/views/ideaPanel.tmpl:17
-msgid "See more"
 msgstr ""
 
 #: assembl/templates/views/ideaPanel.tmpl:28
@@ -1262,7 +1268,11 @@ msgstr ""
 msgid "click here to activate the annotation"
 msgstr ""
 
-#: assembl/templates/views/segmentList.tmpl:17
+#: assembl/templates/views/segmentList.tmpl:9
+msgid "Extracts not yet associated with an idea"
+msgstr ""
+
+#: assembl/templates/views/segmentList.tmpl:18
 msgid "Clear"
 msgstr ""
 
@@ -1442,4 +1452,10 @@ msgstr ""
 #, python-format
 msgid "No discussion found for slug=%s"
 msgstr ""
+
+#~ msgid ""
+#~ msgstr ""
+
+#~ msgid "Extract catching"
+#~ msgstr ""
 

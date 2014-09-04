@@ -87,8 +87,8 @@ define(function (require) {
                 // FIXME: here we try to apply the dots again after text has been edited but it does not seem to work
                 var onCKEditorChange = function(){
                     console.log("Updating dotdotdot");
-                    that.$(".ckeditorField-mainfield").trigger('update.dot');
-                    that.$(".ckeditorField-mainfield").trigger('update');
+                    that.$(".introduction .ckeditorField-mainfield").trigger('update.dot');
+                    that.$(".introduction .ckeditorField-mainfield").trigger('update');
                 };
                 that.listenTo(that.introductionField, "save", onCKEditorChange);
                 that.listenTo(that.introductionField, "cancel", onCKEditorChange);
