@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: assembl 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-09-04 11:15-0400\n"
+"POT-Creation-Date: 2014-09-04 21:12+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -832,12 +832,14 @@ msgid "activate web annotation"
 msgstr ""
 
 #: assembl/templates/views/bookmarket.tmpl:8
-msgid ""
-"<p>How it works:</p> <p>Drag the button below into your bookmark bar to "
-"create a bookmarklet."
+msgid "How it works:"
 msgstr ""
 
-#: assembl/templates/views/bookmarket.tmpl:10
+#: assembl/templates/views/bookmarket.tmpl:9
+msgid "1 - Drag the button"
+msgstr ""
+
+#: assembl/templates/views/bookmarket.tmpl:11
 msgid ""
 "Drag this button to your bookmark bar to create a bookmarklet. You can then "
 "capture selections from most webpages (those that are not secured with https)"
@@ -845,22 +847,31 @@ msgid ""
 "you wish to send to the discussion."
 msgstr ""
 
-#: assembl/templates/views/bookmarket.tmpl:10
+#: assembl/templates/views/bookmarket.tmpl:11
 msgid "Web capture to"
 msgstr ""
 
-#: assembl/templates/views/bookmarket.tmpl:12
-msgid ""
-"<p>You can then capture selections from most webpages (those that are not "
-"secured with https) this way:</p>\n"
-"    <ol>\n"
-"    <li>Click on the bookmarklet to enable annotations</li>\n"
-"    <li>Highligt the section of text you wish to send to the discussion</li>\n"
-"    <li>Click the \"send\" button that appears</li>\n"
-"    </ol>"
+#: assembl/templates/views/bookmarket.tmpl:13
+msgid "2 - click on and move to your browser"
 msgstr ""
 
-#: assembl/templates/views/bookmarket.tmpl:23
+#: assembl/templates/views/bookmarket.tmpl:14
+msgid "3 - find the extract"
+msgstr ""
+
+#: assembl/templates/views/bookmarket.tmpl:16
+msgid "Click on the bookmarklet to enable annotations"
+msgstr ""
+
+#: assembl/templates/views/bookmarket.tmpl:17
+msgid "Highligt the section of text you wish to send to the discussion"
+msgstr ""
+
+#: assembl/templates/views/bookmarket.tmpl:18
+msgid "Click the \"send\" button that appears"
+msgstr ""
+
+#: assembl/templates/views/bookmarket.tmpl:25
 msgid "I understand"
 msgstr ""
 
