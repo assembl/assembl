@@ -115,6 +115,10 @@ table.table {
     text-align: left;
     vertical-align: top;
   }
+
+  h1, h2, h3, h4, h5, h6 {
+    margin: 0;
+  }
 }
 
 //colors.  Mostly for styleguide, you should not normally use these in the DOM
@@ -178,4 +182,7 @@ table.table {
   background-color: $blue;
 }
 
-
+.demo-popin {
+  width: 500px;
+  height: 350px;
+}
