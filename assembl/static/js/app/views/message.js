@@ -295,6 +295,12 @@ define(function (require) {
          * @param  {annotation} annotation
          */
         showSegmentByAnnotation: function (annotation) {
+            var currentIdea = Ctx.getCurrentIdea().toJSON();
+
+            if (currentIdea['@id'] !== annotation.idIdea) {
+                alert(i18n.gettext('You will be redirected to another idea in connection with the nugget on which you clicked.'))
+            }
+
             var collectionManager = new CollectionManager();
 
             collectionManager.getAllExtractsCollectionPromise().done(
