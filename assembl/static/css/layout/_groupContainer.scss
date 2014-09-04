@@ -37,7 +37,6 @@
   }
 }
 
-
 .groupHeader {
   &.editable {
     height: 25px;
@@ -81,6 +80,7 @@
 .groupBody .groupPanel .navSidebar {
   min-width: floor($grid_unit_min_size * $navigation_panel_grid_size);
 }
+
 .groupBody .groupPanel.minimized .navSidebar {
   min-width: initial !important;
 }
@@ -122,7 +122,7 @@
           text-decoration: none;
           background-color: $gray3;
           border-bottom: 1px solid rgba(127, 140, 141, 0.2);
-          color: $gray;
+          color: #999999;
           line-height: 35px;
           padding-left: 10px;
           font-size: 14px;
@@ -158,7 +158,7 @@
         ul.synthesisList {
           list-style-type: none;
           padding: 0;
-          
+
           li:hover {
             cursor: pointer;
           }
@@ -171,7 +171,7 @@
             border-bottom: 1px solid #ddd;
             border-top: none;
             position: relative;
-            
+
             .title {
               vertical-align: middle;
               width: 80%;
@@ -229,7 +229,6 @@
     }
   }
 }
-
 
 /* temporary: use CSS to show/hide the right icons in the minimized panel => TODO: template system for minimized view */
 

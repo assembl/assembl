@@ -137,6 +137,7 @@
   overflow: hidden;
   cursor: pointer;
   padding-left: 10px;
+  color: #333333;
 }
 
 .idealist-title-unread {
@@ -156,7 +157,7 @@
   text-align: right;
   font-size: 11px;
   font-weight: bold;
-  color: $gray1;
+  color: #cccccc;
   .idea-unread-posts {
     color: #555;
   }

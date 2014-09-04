@@ -1,58 +1,58 @@
 #messageList {
-    .messageList-query-info {
-        white-space: normal;
-        padding-left: 10px;
+  .messageList-query-info {
+    white-space: normal;
+    padding-left: 10px;
 
-      .post-query-filter-info {
-        padding: 0;
-        margin-top: 8px;
-        margin-bottom: 12px;
-         li {
-           display: inline-block;
-           padding: .5em .6em .5em;
-           font-size: 85%;
-           line-height: 1;
-           color: #ffffff;
-           text-align: center;
-           white-space: nowrap;
-           vertical-align: baseline;
-           border-radius: .25em;
-           background-color: #999999;
-           margin-right: 5px;
-           margin-bottom: 2px;
-         }
-      }
-      .post-query-results-info {
-        margin-top: 5px;
-      }
-
-      .actions {
-        position: absolute;
-        right: 8px;
-        top: 28px;
+    .post-query-filter-info {
+      padding: 0;
+      margin-top: 8px;
+      margin-bottom: 12px;
+      li {
+        display: inline-block;
+        padding: .5em .6em .5em;
+        font-size: 85%;
+        line-height: 1;
+        color: #ffffff;
+        text-align: center;
+        white-space: nowrap;
+        vertical-align: baseline;
+        border-radius: .25em;
+        background-color: #999999;
+        margin-right: 5px;
+        margin-bottom: 2px;
       }
     }
-    .messageList-toparea, .messageList-bottomarea {
-        &.hidden {
-            display: none;
-        }
+    .post-query-results-info {
+      margin-top: 5px;
     }
+
+    .actions {
+      position: absolute;
+      right: 8px;
+      top: 28px;
+    }
+  }
+  .messageList-toparea, .messageList-bottomarea {
+    &.hidden {
+      display: none;
+    }
+  }
 }
 
 .messageList-list {
-    display: block;
+  display: block;
 
-    #messageList.is-message-mode & {
-        display: none;
-    }
+  #messageList.is-message-mode & {
+    display: none;
+  }
 }
 
 #messageList-messages {
-    display: none;
+  display: none;
 
-    #messageList.is-message-mode & {
-        display: block;
-    }
+  #messageList.is-message-mode & {
+    display: block;
+  }
 }
 
 .messageList {
@@ -76,17 +76,16 @@
       width: 50%;
       height: 35px;
       cursor: pointer;
-      color: $gray1;
+      color: #cccccc;
     }
     .option:first-child {
       border-right: 1px solid $gray;
     }
     .option.selected {
-      color: $black;
-      font-weight: bold;
+      color: #333333;
+      font-weight: 600;
       border-bottom: 3px solid $purple;
     }
   }
-  
 
 }
