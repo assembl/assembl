@@ -1,6 +1,6 @@
 var gulp = require('gulp'),
     watch = require('gulp-watch'),
-	sass =  require('gulp-sass'),
+    sass = require('gulp-sass'),
     clean = require('gulp-clean');
 
 gulp.task('sass', function () {
@@ -17,11 +17,11 @@ gulp.task('watch', function () {
     })
 })
 
-gulp.task('clean', function() {
+gulp.task('clean', function () {
     return gulp.src(['./app/css/'], {read: false})
         .pipe(clean());
 });
 
-gulp.task('default',['clean'], function(){
+gulp.task('default', ['clean'], function () {
     gulp.start('sass', 'watch');
 })

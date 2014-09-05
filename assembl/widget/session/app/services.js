@@ -13,7 +13,7 @@ appSession.factory('cardGameService', function ($http) {
 /**
  * Resolve configuration before access to a controller
  * */
-appSession.factory('configService', function ($q, $http, utils, $location) {
+appSession.factory('configService', function ($q, $http, utils) {
     return {
         data: {},
         getWidget: function (url) {

@@ -21,12 +21,12 @@ html, body {
 #loader {
   width: 100%;
   height: 100%;
-  background:rgba(0,0,0,.5);;
+  background: rgba(0, 0, 0, .5);;
   position: absolute;
   left: 0;
-  top:0;
+  top: 0;
 
-  .loader-bars{
+  .loader-bars {
     position: absolute;
     margin-left: auto;
     margin-right: auto;
@@ -36,8 +36,8 @@ html, body {
 
     &:before,
     &:after,
-    span{
-      content:'';
+    span {
+      content: '';
       display: block;
       position: absolute;
       left: 0px;
@@ -50,14 +50,14 @@ html, body {
       animation: grow 1s linear infinite;
     }
 
-    &:after{
+    &:after {
       left: 15px;
       -webkit-animation-delay: -0.66s;
       -moz-animation-delay: -0.66s;
       animation-delay: -0.66s;
     }
 
-    span{
+    span {
       left: 30px;
       -webkit-animation-delay: -0.33s;
       -moz-animation-delay: -0.33s;
@@ -69,28 +69,35 @@ html, body {
 @-webkit-keyframes grow {
   0% {
     -webkit-transform: scaleY(0);
-    opacity: 0; }
+    opacity: 0;
+  }
 
   50% {
     -webkit-transform: scaleY(1);
-    opacity: 1; }
+    opacity: 1;
+  }
 
   100% {
     -webkit-transform: scaleY(0);
-    opacity: 0; }
+    opacity: 0;
+  }
 }
+
 @-moz-keyframes grow {
   0% {
     -moz-transform: scaleY(0);
-    opacity: 0; }
+    opacity: 0;
+  }
 
   50% {
     -moz-transform: scaleY(1);
-    opacity: 1; }
+    opacity: 1;
+  }
 
   100% {
     -moz-transform: scaleY(0);
-    opacity: 0; }
+    opacity: 0;
+  }
 }
 
 @keyframes grow {
@@ -100,7 +107,8 @@ html, body {
     -ms-transform: scaleY(0);
     -o-transform: scaleY(0);
     transform: scaleY(0);
-    opacity: 0; }
+    opacity: 0;
+  }
 
   50% {
     -webkit-transform: scaleY(1);
@@ -108,7 +116,8 @@ html, body {
     -ms-transform: scaleY(1);
     -o-transform: scaleY(1);
     transform: scaleY(1);
-    opacity: 1; }
+    opacity: 1;
+  }
 
   100% {
     -webkit-transform: scaleY(0);
@@ -116,7 +125,8 @@ html, body {
     -ms-transform: scaleY(0);
     -o-transform: scaleY(0);
     transform: scaleY(0);
-    opacity: 0; }
+    opacity: 0;
+  }
 }
 
 

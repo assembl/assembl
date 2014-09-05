@@ -7,11 +7,13 @@
                 <div class="card-bottom"></div>
             </div>
             <div id="slot-machine" ng-class="{'pointer': cards.length > 0}" ng-click="shuffle()">
-               <img src="app/img/slot-machine.png">  
+                <img src="app/img/slot-machine.png">
             </div>
             <div id="card-bottom-control">
-                <a id="previousCardButton" class="glyphicon glyphicon-chevron-left pointer" ng-class="{'inactive': displayed_card_index == 0}" ng-click="previousCard()"></a>
-                <a id="nextCardButton" class="glyphicon glyphicon-chevron-right pointer" ng-class="{'inactive': displayed_card_index == displayed_cards.length-1}" ng-click="nextCard()"></a>
+                <a id="previousCardButton" class="glyphicon glyphicon-chevron-left pointer"
+                   ng-class="{'inactive': displayed_card_index == 0}" ng-click="previousCard()"></a>
+                <a id="nextCardButton" class="glyphicon glyphicon-chevron-right pointer"
+                   ng-class="{'inactive': displayed_card_index == displayed_cards.length-1}" ng-click="nextCard()"></a>
                 <!--
                 <a class="glyphicon glyphicon-random pointer" ng-click="shuffle()" ng-class="{'inactive': cards.length == 0}"></a>
                 -->
@@ -24,10 +26,12 @@
     <div class="card-comment">
         <form role="form" ng-submit="sendIdea()">
             <div class="form-group">
-                <input type="text" ng-model="formData.title" class="form-control" id="inputEmail1" placeholder="{{'title' | translate}}" required>
+                <input type="text" ng-model="formData.title" class="form-control" id="inputEmail1"
+                       placeholder="{{'title' | translate}}" required>
             </div>
             <div class="form-group">
-                <textarea ng-model="formData.description" class="form-control" rows="3" placeholder="description"  required></textarea>
+                <textarea ng-model="formData.description" class="form-control" rows="3" placeholder="description"
+                          required></textarea>
             </div>
             <button type="submit" class="btn btn-primary">{{'send' | translate}}</button>
         </form>

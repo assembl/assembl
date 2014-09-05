@@ -1,11 +1,11 @@
 'use strict';
 
-describe('creativityApp', function(){
+describe('creativityApp', function () {
 
     var scope, ratingCtl, $httpBackend, sessionCtl, configService;
 
     beforeEach(module("creativityApp"));
-    beforeEach(inject(function(_$httpBackend_, $controller, $rootScope, _configService_){
+    beforeEach(inject(function (_$httpBackend_, $controller, $rootScope, _configService_) {
 
         $rootScope = $rootScope;
         scope = $rootScope.$new();
@@ -20,13 +20,13 @@ describe('creativityApp', function(){
 
         var $controller = $controller;
 
-        ratingCtl = function(){
+        ratingCtl = function () {
             return $controller('ratingCtl', {
                 '$scope': scope
             })
         }
 
-        sessionCtl = function(){
+        sessionCtl = function () {
             return $controller('sessionCtl', {
                 '$scope': scope
             })
@@ -34,45 +34,45 @@ describe('creativityApp', function(){
 
     }));
 
-    afterEach(function(){
-       $httpBackend.verifyNoOutstandingExpectation();
-       $httpBackend.verifyNoOutstandingRequest();
+    afterEach(function () {
+        $httpBackend.verifyNoOutstandingExpectation();
+        $httpBackend.verifyNoOutstandingRequest();
 
     });
 
-    it('Should set local', function(){
+    it('Should set local', function () {
         $httpBackend.expectGET('app/locales/fr.json');
         $httpBackend.flush();
     });
 
-    describe('rating controller : ', function(){
+    describe('rating controller : ', function () {
 
         expect(angular.isFunction(configService.getWidget())).toBe(true);
 
-        it('Should return data', function(){
+        it('Should return data', function () {
 
             //$httpBackend.when('GET', '/data/Discussion/1/widgets/1/base_idea/-/children')
-              //  .respond(200, [{}]);
+            //  .respond(200, [{}]);
 
             //$httpBackend.expect('GET', '/data/Discussion/1/widgets/1/base_idea/-/children');
             //$httpBackend.flush();
 
             /*scope.$apply(function(){
-                scope.runTest();
-            });*/
+             scope.runTest();
+             });*/
 
         })
 
     });
 
-    describe('session controller : ', function(){
-        sessionCtl = function(){
+    describe('session controller : ', function () {
+        sessionCtl = function () {
             return $controller('sessionCtl', {
                 '$scope': scope
             })
         }
 
-        it('Variable should defined', function(){
+        it('Variable should defined', function () {
 
 
         });
