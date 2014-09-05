@@ -56,8 +56,6 @@ $previewNumLines: 4;
   .message-date {
     @extend .header_item_template;
     color: #cccccc;
-    opacity: 0.5;
-
     time {
     }
   }
