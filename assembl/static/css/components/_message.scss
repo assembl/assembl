@@ -170,6 +170,7 @@ $previewNumLines: 4;
       position: relative;
       padding: 0px;
       max-height: $previewNumLines * $mesageBodyLineHeight * $messageBodyFontSize;
+      overflow: hidden;
     }
 
     .message-body.body_format_text_plain > .elipsis > div {

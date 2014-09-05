@@ -225,6 +225,7 @@ define(function (require) {
                         that.showReadLess();
                     }
                     if (that.viewStyle == that.availableMessageViewStyles.PREVIEW) {
+                      that.listenToOnce(that.messageListView, "messageList:render_complete", function () {
                       /* We use https://github.com/MilesOkeefe/jQuery.dotdotdot to show 
                        * Read More links for message previews
                        */
@@ -242,9 +243,11 @@ define(function (require) {
                         watch: "window"
                         })
                         
-                        that.listenTo(that.messageListView, "messageList:render_complete", function () {
+
                           //console.log("Updating dotdotdot");
+                        that.listenTo(that.messageListView, "messageList:render_complete", function () {
                           that.$(".ellipsis").trigger('update.dot');
+                        });
                         });
                     }
                 });

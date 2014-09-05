@@ -662,6 +662,7 @@ define(function (require) {
             }
 
             this.initAnnotator();
+            that.trigger("messageList:render_complete", "Render complete");
         },
 
         /**
@@ -808,7 +809,7 @@ define(function (require) {
                     })
                     that.scrollToPreviousScrollTarget();
 
-                    that.trigger("messageList:render_complete", "Render complete");
+                    
                 })
             return this;
         },
