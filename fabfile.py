@@ -248,12 +248,11 @@ def compile_stylesheets():
         with cd('assembl/widget/card/app'):
             run('bundle exec compass compile --force --sass-dir scss --css-dir css', shell=True)
 
-        with cd('assembl/widget/session/app'):
+        with cd('assembl/widget/session'):
             run('bundle exec compass compile --force --sass-dir scss --css-dir css', shell=True)
 
         with cd('assembl/widget/video/app'):
             run('bundle exec compass compile --force --sass-dir scss --css-dir css', shell=True)
-
 
 def tests():
     """
@@ -524,18 +523,10 @@ def bower_cmd(cmd, relative_path='.'):
 @task
 def bower_install():
     bower_cmd('install')
-    bower_cmd('install', 'assembl/widget/creativity')
+    bower_cmd('install', 'assembl/widget/card')
+    bower_cmd('install', 'assembl/widget/session')
+    bower_cmd('install', 'assembl/widget/video')
     bower_cmd('install', 'assembl/widget/vote')
-    bower_cmd('install', 'assembl/widget/session')
-
-
-@task
-def bower_update():
-    bower_cmd('update')
-    bower_cmd('update', 'assembl/widget/creativity')
-    bower_cmd('update', 'assembl/widget/vote')
-    bower_cmd('install', 'assembl/widget/session')
-
 
 @task
 def install_builddeps():
