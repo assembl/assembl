@@ -245,9 +245,13 @@ def compile_stylesheets():
     execute(update_compass)
     with cd(env.projectpath):
         run('bundle exec compass compile --force', shell=True)
-        with cd('assembl/widget/creativity/app'):
+        with cd('assembl/widget/card/app'):
             run('bundle exec compass compile --force --sass-dir scss --css-dir css', shell=True)
-        with cd('assembl/widget/session'):
+
+        with cd('assembl/widget/session/app'):
+            run('bundle exec compass compile --force --sass-dir scss --css-dir css', shell=True)
+
+        with cd('assembl/widget/video/app'):
             run('bundle exec compass compile --force --sass-dir scss --css-dir css', shell=True)
 
 
