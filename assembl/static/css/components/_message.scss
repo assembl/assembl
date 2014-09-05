@@ -304,17 +304,20 @@ $previewNumLines: 4;
   //
   .message-menu {
     font-size: 13px; //This should be rem or something - benoitg
-    & > {
+    a {
       color: $gray1;
       opacity: 0.7;
       i {
         opacity: 0.5;
       }
+      &:hover {
+        color: $purple1;
+        opacity: 1;
+        text-decoration: none;
+      }
     }
-    &:hover {
-      color: $purple1;
-      opacity: 1;
-    }
+
+
     // used when buttons are to the left of the Reply button
     > .message-hoistbtn, > .message-linkbutton {
       vertical-align: top;
@@ -331,6 +334,15 @@ $previewNumLines: 4;
   }
   .dropdown {
     //Not all message-menus are dropdown
+          color: $gray1;
+      opacity: 0.7;
+      i {
+        opacity: 0.5;
+      }
+          &:hover {
+      color: $purple1;
+      opacity: 1;
+    }
     position: absolute;
     right: 5px;
     top: 0;
