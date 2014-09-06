@@ -27,6 +27,7 @@ define(function(require){
         defaults: {
             id: null,
             name: '',
+            description: '',
             avatarUrl: ''
         },
 

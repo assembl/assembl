@@ -19,6 +19,7 @@ define([], function(){
         SYNTHESIS: 'Synthesis',
         TABLE_OF_CONTENTS: 'TableOfIdeas',
         USER: 'User',
+        PARTNER_ORGANIZATION: 'PartnerOrganization',
         WEBPAGE: 'Webpage'
     };
 

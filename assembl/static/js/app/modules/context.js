@@ -265,12 +265,22 @@ define(function (require) {
             return '/api/v1/discussion/' + this.getDiscussionId() + url;
         },
 
-        getApiV2Url: function () {
-            return '/data';
+        getApiV2Url: function (url) {
+            if (url === undefined)
+                url = '/';
+            else if (url[0] !== '/') {
+                url = '/' + url;
+            }
+            return '/data' + url;
         },
 
-        getApiV2DiscussionUrl: function () {
-            return this.getApiV2Url() + '/Discussion/' + this.getDiscussionId();
+        getApiV2DiscussionUrl: function (url) {
+            if (url === undefined)
+                url = '/';
+            else if (url[0] !== '/') {
+                url = '/' + url;
+            }
+            return this.getApiV2Url('Discussion/' + this.getDiscussionId() + url);
         },
 
         /**

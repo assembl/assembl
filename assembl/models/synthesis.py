@@ -44,7 +44,7 @@ from .auth import (
     DiscussionPermission, Role, Permission, AgentProfile, User,
     UserRole, LocalUserRole, ViewPost)
 from ..semantic.namespaces import (
-    SIOC, CATALYST, IDEA, ASSEMBL, DCTERMS, OA, QUADNAMES, RDF, VirtRDF)
+    SIOC, CATALYST, IDEA, ASSEMBL, DCTERMS, OA, QUADNAMES, RDF, FOAF, VirtRDF)
 from assembl.views.traversal import AbstractCollectionDefinition
 
 
@@ -1753,3 +1753,39 @@ class TextFragmentIdentifier(DiscussionBoundBase):
     crud_permissions = CrudPermissions(
             P_ADD_EXTRACT, P_READ, P_EDIT_EXTRACT, P_EDIT_EXTRACT,
             P_EDIT_MY_EXTRACT, P_EDIT_MY_EXTRACT)
+
+
+class PartnerOrganization(DiscussionBoundBase):
+    """A corporate entity"""
+    __tablename__ = "partner_organization"
+    id = Column(Integer, primary_key=True,
+        info={'rdf': QuadMapPatternS(None, ASSEMBL.db_id)})
+
+    discussion_id = Column(Integer, ForeignKey(
+        "discussion.id", ondelete='CASCADE'),
+        info={'rdf': QuadMapPatternS(None, DCTERMS.contributor)})
+    discussion = relationship("Discussion", backref='partner_organizations')
+
+    name = Column(Unicode(256),
+        info={'rdf': QuadMapPatternS(None, FOAF.name)})
+
+    description = Column(UnicodeText,
+        info={'rdf': QuadMapPatternS(None, DCTERMS.description)})
+
+    logo = Column(String(256),
+        info={'rdf': QuadMapPatternS(None, FOAF.logo)})
+
+    homepage = Column(String(256),
+        info={'rdf': QuadMapPatternS(None, FOAF.homepage)})
+
+    is_initiator = Column(Boolean)
+
+    def get_discussion_id(self):
+        return self.discussion_id
+
+    @classmethod
+    def get_discussion_condition(cls, discussion_id):
+        return cls.discussion_id == discussion_id
+
+    crud_permissions = CrudPermissions(P_ADMIN_DISC)
+

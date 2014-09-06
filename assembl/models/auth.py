@@ -11,6 +11,7 @@ from sqlalchemy import (
     ForeignKey,
     Integer,
     Unicode,
+    UnicodeText,
     DateTime,
     Time,
     Binary,
@@ -47,6 +48,8 @@ class AgentProfile(Base):
         info={'rdf': QuadMapPatternS(None, ASSEMBL.db_id)})
     name = Column(Unicode(1024),
         info={'rdf': QuadMapPatternS(None, FOAF.name)})
+    description = Column(UnicodeText,
+        info= {'rdf': QuadMapPatternS(None, DCTERMS.description)})
     type = Column(String(60))
 
     __mapper_args__ = {

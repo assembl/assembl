@@ -10,6 +10,7 @@
         "name": true
     },
     "AgentProfile": {
+        "description": true,
         "preferred_email": false
     },
     "User": {
@@ -265,5 +266,12 @@
     "ViewPost": {
         "actor": true,
         "post": true
+    },
+    "PartnerOrganization": {
+            "name": true,
+            "description": true,
+            "homepage": true,
+            "logo": true,
+            "is_initiator": true
     }
 }

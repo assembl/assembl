@@ -11,6 +11,7 @@
         "name": true
     },
     "AgentProfile": {
+        "description": true,
         "preferred_email": false
     },
     "User": {
@@ -280,5 +281,12 @@
     "LickertIdeaVote": {
         "@extends": "AbstractIdeaVote",
         "vote_value": true
+    },
+    "PartnerOrganization": {
+            "name": true,
+            "description": true,
+            "homepage": true,
+            "logo": true,
+            "is_initiator": true
     }
 }

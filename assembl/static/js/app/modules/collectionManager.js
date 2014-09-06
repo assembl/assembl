@@ -9,6 +9,7 @@ define(function(require){
      IdeaLink = require('models/ideaLink'),
       Segment = require('models/segment'),
     Synthesis = require('models/synthesis'),
+   PartnerOrg = require('models/partner_organization'),
          User = require('models/user'),
             $ = require('jquery'),
       Storage = require('objects/storage'),
@@ -75,6 +76,16 @@ define(function(require){
      */
     _allGroupSpecsCollection : undefined,
 
+    _allGroupSpecsCollectionPromise: undefined,
+
+    /**
+     * Collection with all partner organization in the discussion.
+     * @type {PartnerOrganizationCollection}
+     */
+    _allPartnerOrganizationCollection : undefined,
+
+    _allPartnerOrganizationCollectionPromise: undefined,
+
 
     initialize: function(options){
 
@@ -119,6 +130,9 @@ define(function(require){
 
             case Types.SYNTHESIS:
                 return this.getAllSynthesisCollectionPromise();
+
+            case Types.PARTNER_ORGANIZATION:
+                return this.getAllPartnerOrganizationCollectionPromise();
         }
 
         return null;
@@ -251,6 +265,26 @@ define(function(require){
       else {
         this._allExtractsCollectionPromise.done(function(){
           deferred.resolve(that._allExtractsCollection);
+        });
+      }
+      return deferred.promise();
+    },
+
+    getAllPartnerOrganizationCollectionPromise : function() {
+      var that = this,
+      deferred = $.Deferred();
+
+      if (this._allPartnerOrganizationCollectionPromise === undefined) {
+        this._allPartnerOrganizationCollection = new PartnerOrg.Collection();
+        this._allPartnerOrganizationCollection.collectionManager = this;
+        this._allPartnerOrganizationCollectionPromise = this._allPartnerOrganizationCollection.fetch();
+        this._allPartnerOrganizationCollectionPromise.done(function() {
+          deferred.resolve(that._allPartnerOrganizationCollection);
+        });
+      }
+      else {
+        this._allPartnerOrganizationCollectionPromise.done(function(){
+          deferred.resolve(that._allPartnerOrganizationCollection);
         });
       }
       return deferred.promise();
