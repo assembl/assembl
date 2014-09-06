@@ -694,6 +694,12 @@ class ActionOnPost(Action):
     """
     An action that is taken on a post. (Mixin)
     """
+    __tablename__ = 'action_on_post'
+    id = Column(
+        Integer,
+        ForeignKey('action.id', ondelete="CASCADE", onupdate='CASCADE'),
+        primary_key=True
+    )
 
     post_id = Column(
         Integer,
@@ -727,16 +733,9 @@ class ViewPost(ActionOnPost):
     """
     A view action on a post.
     """
-    __tablename__ = 'action_view_post'
     __mapper_args__ = {
         'polymorphic_identity': 'version:ReadStatusChange'
     }
-
-    id = Column(
-        Integer,
-        ForeignKey('action.id', ondelete="CASCADE", onupdate='CASCADE'),
-        primary_key=True
-    )
 
     def tombstone(self):
         from .generic import Content
@@ -756,16 +755,9 @@ class ExpandPost(ActionOnPost):
     """
     An expansion action on a post.
     """
-    __tablename__ = 'action_expand_post'
     __mapper_args__ = {
         'polymorphic_identity': 'version:ExpandPost'
     }
-
-    id = Column(
-        Integer,
-        ForeignKey('action.id', ondelete="CASCADE", onupdate='CASCADE'),
-        primary_key=True
-    )
 
     verb = 'expanded'
 
@@ -774,15 +766,8 @@ class CollapsePost(ActionOnPost):
     """
     A collapse action on a post.
     """
-    __tablename__ = 'action_collapse_post'
     __mapper_args__ = {
         'polymorphic_identity': 'version:CollapsePost'
     }
-
-    id = Column(
-        Integer,
-        ForeignKey('action.id', ondelete="CASCADE", onupdate='CASCADE'),
-        primary_key=True
-    )
 
     verb = 'collapsed'

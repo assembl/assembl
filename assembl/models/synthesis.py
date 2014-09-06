@@ -805,9 +805,10 @@ JOIN post AS family_posts ON (
         user_id = connection.info.get('userid', None)
         if not user_id:
             return 0
-        join = """JOIN action ON (action.post_id = family_posts.id)
-                  JOIN action_view_post ON (action.id = action_view_post.id)
-                  WHERE action.actor_id = :user_id"""
+        join = """JOIN action_on_post ON (action_on_post.post_id = family_posts.id)
+                  JOIN action ON (action.id = action_on_post.id)
+                  WHERE action.actor_id = :user_id
+                  AND action.type = 'version:ReadStatusChange'"""
 
         result = self.db.execute(text(
             Idea._get_count_related_posts_statement() + join),
@@ -946,16 +947,18 @@ JOIN post AS family_posts ON (
         common_params = dict(discussion_id=discussion_id, user_id=user_id)
         for idea_id, post_ids in roots.iteritems():
             stmt2 = ' UNION '.join([
-                """SELECT  pa.id as post_id, action_view_post.id as view_id FROM (
+                """SELECT  pa.id as post_id, action_on_post.id as view_id FROM (
                     SELECT transitive t_in (1) t_out (2) T_DISTINCT T_NO_CYCLES
                         parent_id, id FROM post
                     UNION SELECT id AS parent_id, id FROM POST
                     ) pa 
                 JOIN content USING (id) 
-                LEFT JOIN action ON (action.post_id = pa.id
-                                     AND action.actor_id = :user_id)
-                LEFT JOIN action_view_post ON (action.id = action_view_post.id)
+                LEFT JOIN action ON (action.actor_id = :user_id
+                                     AND action.type = 'version:ReadStatusChange')
+                LEFT JOIN action_on_post ON (
+                    action.id = action_on_post.id AND action_on_post.post_id = pa.id)
                 WHERE parent_id = :post_id_%d AND content.discussion_id= :discussion_id
+
                 """ % n for n in range(len(post_ids))])
             # We have to specify distinct to avoid counting nulls. Go figure.
             stmt2 = """SELECT COUNT(DISTINCT x.post_id),
@@ -966,13 +969,14 @@ JOIN post AS family_posts ON (
             result.append((idea_id, cpost, cview))
         stmt3 = """SELECT MIN(root_idea.id) as idea_id,
             COUNT(DISTINCT post.id) as total_count,
-            COUNT(DISTINCT action_view_post.id) as read_count
+            COUNT(DISTINCT action_on_post.id) as read_count
             FROM root_idea
             JOIN idea ON (idea.id = root_idea.id)
             CROSS JOIN post
             JOIN content ON (post.id = content.id)
-            LEFT JOIN action ON (action.post_id = post.id AND action.actor_id = :user_id)
-            LEFT JOIN action_view_post ON (action.id = action_view_post.id)
+            LEFT JOIN action ON (action.actor_id = :user_id)
+            LEFT JOIN action_on_post ON (
+                action.id = action_on_post.id AND action_on_post.post_id = post.id)
             WHERE idea.discussion_id = :discussion_id
             AND content.discussion_id = :discussion_id"""
         result.append(list(cls.db().execute(text(stmt3).params(common_params))).pop())
