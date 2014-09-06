@@ -7,7 +7,7 @@ from ..lib.sqla import configure_engine, get_session_maker
 from ..lib.zmqlib import configure_zmq
 
 # broker specified
-app = Celery()
+celery_queue = Celery()
 
 _inited = False
 
@@ -16,7 +16,7 @@ def configure(settings):
     configure_zmq(settings['changes.socket'], False)
     engine = configure_engine(settings, False)
     DBSession = get_session_maker(False)
-    app.config_from_object({"BROKER_URL":settings['celery.broker']})
+    celery_queue.config_from_object({"BROKER_URL":settings['celery.broker']})
 
 def init():
     global _inited

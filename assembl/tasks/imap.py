@@ -1,6 +1,6 @@
-from . import app, init
+from . import celery_queue, init
 
-@app.task
+@celery_queue.task
 def import_mails(mbox_id, only_new=True):
     init()
     from ..models import IMAPMailbox
