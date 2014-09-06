@@ -3,7 +3,7 @@ Beaker==1.6.4
 Chameleon==2.16
 ColanderAlchemy==0.3.1
 DateTime==4.0.1
-Fabric==1.9.1
+Fabric==1.10.0
 Jinja2==2.7.3
 Mako==1.0.0
 MarkupSafe==0.23
@@ -42,7 +42,7 @@ isodate==0.5.0
 iso8601==0.1.10
 -e git+https://github.com/maparent/jasmine-splinter-runner.git#egg=jasmine-splinter-runner
 -e git+https://github.com/benoitg/jwzthreading.git@master#egg=jwzthreading
-kombu==3.0.21
+kombu==3.0.22
 lingua==3.2
 lxml==3.3.6
 meld3==1.0.0
@@ -51,7 +51,7 @@ oauthlib==0.6.3
 paramiko==1.14.1
 pinocchio==0.4.1
 polib==1.0.5
-py==1.4.23
+py==1.4.24
 pyOpenSSL==0.14
 pycparser==2.10
 pycrypto==2.6.1
@@ -64,14 +64,14 @@ pyramid-jinja2==2.3.3
 pyramid-mailer==0.13
 pyramid-mako==1.0.2
 pyramid-tm==0.7
-pytest==2.6.1
+pytest==2.6.2
 pytest-cov==1.8.0
 pytest-localserver==0.3.3
 pytest-mock==0.3.0
 pytest-splinter==1.0.3
 python-memcached==1.53
 python-openid==2.2.5
-pytz==2014.4
+pytz==2014.7
 pyzmq==14.3.1
 rdflib==4.1.2
 redis==2.10.3
