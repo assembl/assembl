@@ -30,6 +30,7 @@ def main(global_config, **settings):
 
     from views.traversal import root_factory
     config = Configurator(settings=settings, root_factory=root_factory)
+    config.hook_zca()
     config.add_translation_dirs('assembl:locale/')
 
     def my_locale_negotiator(request):
