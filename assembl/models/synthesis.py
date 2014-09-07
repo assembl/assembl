@@ -42,7 +42,8 @@ from ..auth import (
     P_EDIT_MY_EXTRACT, Authenticated, Everyone)
 from .auth import (
     DiscussionPermission, Role, Permission, AgentProfile, User,
-    UserRole, LocalUserRole, ViewPost)
+    UserRole, LocalUserRole)
+from .action import ViewPost
 from ..semantic.namespaces import (
     SIOC, CATALYST, IDEA, ASSEMBL, DCTERMS, OA, QUADNAMES, RDF, FOAF, VirtRDF)
 from assembl.views.traversal import AbstractCollectionDefinition

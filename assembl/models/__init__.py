@@ -53,13 +53,9 @@ class DiscussionBoundTombstone(Tombstone):
 
 from .auth import (
     AbstractAgentAccount,
-    Action,
-    ActionOnPost,
     AgentProfile,
-    CollapsePost,
     DiscussionPermission,
     EmailAccount,
-    ExpandPost,
     IdentityProvider,
     IdentityProviderAccount,
     LocalUserRole,
@@ -68,6 +64,12 @@ from .auth import (
     User,
     UserRole,
     Username,
+)
+from .action import (
+    Action,
+    ActionOnPost,
+    CollapsePost,
+    ExpandPost,
     ViewPost,
 )
 from .generic import (
