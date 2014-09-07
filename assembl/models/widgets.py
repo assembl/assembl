@@ -11,9 +11,9 @@ import uuid
 from ..auth import (
     CrudPermissions, P_ADD_IDEA, P_READ, P_EDIT_IDEA)
 from . import DiscussionBoundBase
-from .synthesis import (
-    Discussion, ExplicitSubGraphView, SubGraphIdeaAssociation, Idea,
-    IdeaContentWidgetLink, IdeaLink)
+from .discussion import Discussion
+from .idea import (
+    Idea, IdeaContentWidgetLink, IdeaLink)
 from .generic import Content
 from .post import Post, IdeaProposalPost
 from ..auth import P_ADD_POST, P_ADMIN_DISC, Everyone, CrudPermissions

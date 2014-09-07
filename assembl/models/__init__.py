@@ -72,6 +72,7 @@ from .action import (
     ExpandPost,
     ViewPost,
 )
+from .discussion import Discussion
 from .generic import (
     AnnotatorSource,
     Content,
@@ -93,10 +94,9 @@ from .mail import (
     MaildirMailbox,
     MailingList,
 )
-from .synthesis import (
+from .idea import (
     Argument,
     Criterion,
-    Discussion,
     ExplicitSubGraphView,
     Extract,
     Idea,

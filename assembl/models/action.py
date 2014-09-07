@@ -23,7 +23,7 @@ from . import Base, DiscussionBoundBase, DiscussionBoundTombstone
 from ..semantic.namespaces import (
     SIOC, ASSEMBL, CATALYST, QUADNAMES, VERSION, FOAF, DCTERMS, RDF, VirtRDF)
 from ..semantic.virtuoso_mapping import QuadMapPatternS, USER_SECTION
-
+from .auth import User
 
 class Action(DiscussionBoundBase):
     """
@@ -50,7 +50,7 @@ class Action(DiscussionBoundBase):
     )
 
     actor = relationship(
-        "User",
+        User,
         backref=backref('actions', order_by=creation_date)
     )
 

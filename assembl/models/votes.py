@@ -6,7 +6,7 @@ from sqlalchemy import (
 from sqlalchemy.orm import relationship
 
 from . import (Base, DiscussionBoundBase)
-from .synthesis import Idea
+from .idea import Idea
 from .auth import User
 from .widgets import MultiCriterionVotingWidget
 from ..semantic.virtuoso_mapping import QuadMapPatternS

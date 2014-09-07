@@ -107,6 +107,7 @@ class AgentProfile(Base):
         if other_profile.name and not self.name:
             self.name = other_profile.name
         # TODO: similarly for posts
+        from .action import Action
         for action in session.query(Action).filter_by(
             actor_id=other_profile.id).all():
                 action.actor = self
@@ -468,7 +469,7 @@ class User(AgentProfile):
 
     def get_all_permissions(self):
         from ..auth.util import get_permissions
-        from .synthesis import Discussion
+        from .discussion import Discussion
         permissions = {
             Discussion.uri_generic(d_id): get_permissions(self.id, d_id)
             for (d_id,) in self.db.query(Discussion.id)}

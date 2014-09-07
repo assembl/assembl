@@ -17,6 +17,8 @@ from ..auth import (
     CrudPermissions, P_ADD_POST, P_READ, P_EDIT_POST, P_ADMIN_DISC,
     P_EDIT_POST, P_ADMIN_DISC)
 from ..semantic.namespaces import  SIOC, CATALYST, IDEA, ASSEMBL, DCTERMS, QUADNAMES
+from .discussion import Discussion
+#from ..lib.history_meta import Versioned
 
 class ContentSource(DiscussionBoundBase):
     """
@@ -41,7 +43,6 @@ class ContentSource(DiscussionBoundBase):
 
     @classmethod
     def special_quad_patterns(cls, alias_manager):
-        from .synthesis import Discussion
         return [
             QuadMapPatternS(
                 Discussion.iri_class().apply(cls.discussion_id),
@@ -215,7 +216,7 @@ class Content(DiscussionBoundBase):
     widget_idea_links = relationship('IdeaContentWidgetLink')
 
     def widget_ideas(self):
-        from .synthesis import Idea
+        from .idea import Idea
         return [Idea.uri_generic(wil.idea_id) for wil in self.widget_idea_links]
 
     crud_permissions = CrudPermissions(
