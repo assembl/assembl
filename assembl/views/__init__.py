@@ -10,7 +10,6 @@ from pyramid.i18n import TranslationStringFactory
 from ..lib.json import json_renderer_factory
 from ..lib import config
 from ..auth import R_SYSADMIN
-from ..auth.util import get_user
 
 default_context = {
     'STATIC_URL': '/static'
@@ -32,6 +31,7 @@ def backbone_include(config):
 
 
 def get_default_context(request):
+    from ..auth.util import get_user
     localizer = request.localizer
     _ = TranslationStringFactory('assembl')
     user=get_user(request)

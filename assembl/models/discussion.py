@@ -19,7 +19,6 @@ from . import DiscussionBoundBase
 from ..semantic.virtuoso_mapping import QuadMapPatternS
 from ..auth import (
     P_READ, R_SYSADMIN, P_ADMIN_DISC, Authenticated, Everyone)
-from ..auth.util import get_permissions, user_has_permission
 from .auth import (
     DiscussionPermission, Role, Permission, User, UserRole, LocalUserRole)
 from .action import ViewPost
@@ -169,6 +168,7 @@ class Discussion(DiscussionBoundBase):
 
     def get_all_agents_preload(self, user=None):
         from assembl.views.api.agent import _get_agents_real
+        from ..auth.util import user_has_permission
         return json.dumps(_get_agents_real(
             discussion=self,
             include_email=user and user_has_permission(
@@ -199,6 +199,7 @@ class Discussion(DiscussionBoundBase):
         return json.dumps(_get_extracts_real(discussion=self))
 
     def get_user_permissions(self, user_id):
+        from ..auth.util import get_permissions
         return get_permissions(user_id, self.id)
 
     def get_user_permissions_preload(self, user_id):
