@@ -719,18 +719,24 @@ class Tombstone(object):
 
 
 def orm_update_listener(mapper, connection, target):
+    if getattr(target, '__history_table__', None):
+        return
     session = object_session(target)
     if session.is_modified(target, include_collections=False):
         target.send_to_changes(connection)
 
 
 def orm_insert_listener(mapper, connection, target):
+    if getattr(target, '__history_table__', None):
+        return
     target.send_to_changes(connection)
 
 
 def orm_delete_listener(mapper, connection, target):
     if 'cdict' not in connection.info:
         connection.info['cdict'] = {}
+    if getattr(target, '__history_table__', None):
+        return
     target.tombstone().send_to_changes(connection)
 
 

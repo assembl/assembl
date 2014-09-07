@@ -5,6 +5,7 @@ from ..lib.abc import abstractclassmethod
 from ..lib.sqla import (
     Base, TimestampedBase, get_metadata, get_session_maker,
     get_named_object, get_database_id, Tombstone)
+from ..lib.history_meta import declare_history_mappers
 
 
 class DeclarativeAbstractMeta(DeclarativeMeta, ABCMeta):
@@ -147,3 +148,5 @@ from .widgets import (
     Widget,
     WidgetUserConfig,
 )
+
+declare_history_mappers()
