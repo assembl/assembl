@@ -643,3 +643,37 @@ def create_default_permissions(session, discussion):
     add_perm(P_ADMIN_DISC, [R_ADMINISTRATOR])
     add_perm(P_SYSADMIN, [R_ADMINISTRATOR])
 
+
+class PartnerOrganization(DiscussionBoundBase):
+    """A corporate entity"""
+    __tablename__ = "partner_organization"
+    id = Column(Integer, primary_key=True,
+        info={'rdf': QuadMapPatternS(None, ASSEMBL.db_id)})
+
+    discussion_id = Column(Integer, ForeignKey(
+        "discussion.id", ondelete='CASCADE'),
+        info={'rdf': QuadMapPatternS(None, DCTERMS.contributor)})
+    discussion = relationship('Discussion', backref='partner_organizations')
+
+    name = Column(Unicode(256),
+        info={'rdf': QuadMapPatternS(None, FOAF.name)})
+
+    description = Column(UnicodeText,
+        info={'rdf': QuadMapPatternS(None, DCTERMS.description)})
+
+    logo = Column(String(256),
+        info={'rdf': QuadMapPatternS(None, FOAF.logo)})
+
+    homepage = Column(String(256),
+        info={'rdf': QuadMapPatternS(None, FOAF.homepage)})
+
+    is_initiator = Column(Boolean)
+
+    def get_discussion_id(self):
+        return self.discussion_id
+
+    @classmethod
+    def get_discussion_condition(cls, discussion_id):
+        return cls.discussion_id == discussion_id
+
+    crud_permissions = CrudPermissions(P_ADMIN_DISC)

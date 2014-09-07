@@ -59,6 +59,7 @@ from .auth import (
     IdentityProvider,
     IdentityProviderAccount,
     LocalUserRole,
+    PartnerOrganization,
     Permission,
     Role,
     User,
@@ -97,25 +98,30 @@ from .mail import (
 from .idea import (
     Argument,
     Criterion,
-    ExplicitSubGraphView,
+    Idea,
+    IdeaLink,
+    Issue,
+    Position,
+    RootIdea,
+)
+from .idea_content_link import (
     Extract,
     Idea,
     IdeaContentLink,
     IdeaContentNegativeLink,
     IdeaContentPositiveLink,
     IdeaContentWidgetLink,
-    IdeaGraphView,
-    IdeaLink,
     IdeaRelatedPostLink,
     IdeaThreadContextBreakLink,
-    Issue,
-    Position,
-    RootIdea,
+    TextFragmentIdentifier,
+)
+from .idea_graph_view import (
+    ExplicitSubGraphView,
+    IdeaGraphView,
     SubGraphIdeaAssociation,
     SubGraphIdeaLinkAssociation,
     Synthesis,
     TableOfContents,
-    TextFragmentIdentifier,
 )
 from .votes import (
     AbstractIdeaVote,

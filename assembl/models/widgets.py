@@ -12,8 +12,8 @@ from ..auth import (
     CrudPermissions, P_ADD_IDEA, P_READ, P_EDIT_IDEA)
 from . import DiscussionBoundBase
 from .discussion import Discussion
-from .idea import (
-    Idea, IdeaContentWidgetLink, IdeaLink)
+from .idea import (Idea, IdeaLink)
+from .idea_content_link import IdeaContentWidgetLink
 from .generic import Content
 from .post import Post, IdeaProposalPost
 from ..auth import P_ADD_POST, P_ADMIN_DISC, Everyone, CrudPermissions

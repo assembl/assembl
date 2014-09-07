@@ -77,7 +77,8 @@ class Discussion(DiscussionBoundBase):
         super(Discussion, self).__init__(*args, **kwargs)
         self.db.add(self)
         self.db.flush()
-        from .idea import RootIdea, TableOfContents, Synthesis
+        from .idea import RootIdea
+        from .idea_graph_view import TableOfContents, Synthesis
         self.root_idea = RootIdea(discussion_id=self.id)
         table_of_contents = TableOfContents(discussion=self)
         synthesis = Synthesis(discussion=self)
@@ -102,7 +103,7 @@ class Discussion(DiscussionBoundBase):
         return cls.id == discussion_id
 
     def get_next_synthesis(self):
-        from .idea import Synthesis
+        from .idea_graph_view import Synthesis
         next_synthesis = self.db().query(Synthesis).filter(
             and_(Synthesis.discussion_id == self.id,
                  Synthesis.published_in_post == None)
@@ -112,7 +113,7 @@ class Discussion(DiscussionBoundBase):
         return next_synthesis[0]
 
     def get_last_published_synthesis(self):
-        from .idea import Synthesis
+        from .idea_graph_view import Synthesis
         return self.db().query(Synthesis).filter(
             Synthesis.discussion_id == self.id and
             Synthesis.published_in_post != None
@@ -120,7 +121,7 @@ class Discussion(DiscussionBoundBase):
                    ).first()
 
     def get_all_syntheses(self):
-        from .idea import Synthesis
+        from .idea_graph_view import Synthesis
         return self.db().query(Synthesis).filter(
             Synthesis.discussion_id == self.id).all()
 
@@ -239,4 +240,3 @@ def slugify_topic_if_slug_is_empty(discussion, topic, oldvalue, initiator):
 
 
 event.listen(Discussion.topic, 'set', slugify_topic_if_slug_is_empty)
-
