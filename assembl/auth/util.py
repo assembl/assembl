@@ -5,7 +5,7 @@ from pyramid.httpexceptions import HTTPNotFound
 
 from ..lib.sqla import get_session_maker
 from . import R_SYSADMIN, P_READ, SYSTEM_ROLES
-from ..models import (
+from ..models.auth import (
     User, Role, UserRole, LocalUserRole, Permission,
     DiscussionPermission, IdentityProvider)
 
