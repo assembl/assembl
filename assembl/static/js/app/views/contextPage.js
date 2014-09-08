@@ -1,6 +1,7 @@
 define(function (require) {
 
     var Marionette = require('marionette'),
+        Assembl = require('modules/assembl'),
         Ctx = require('modules/context'),
         CollectionManager = require('modules/collectionManager'),
         $ = require('jquery'),
@@ -1247,8 +1248,7 @@ define(function (require) {
         },
 
         readSynthesis: function () {
-            //need specification: redirect ? popin ?
-
+            Assembl.vent.trigger("navigation:selected", "synthesis");
         }
 
     });
