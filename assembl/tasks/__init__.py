@@ -1,24 +1,27 @@
 from os.path import join, dirname, realpath, exists
 
-from celery import Celery
+from celery import current_app
 from pyramid.paster import get_appsettings
 
 from ..lib.sqla import configure_engine, get_session_maker
 from ..lib.zmqlib import configure_zmq
-
-# broker specified
-celery_queue = Celery()
+from zope.component import getGlobalSiteManager
+from ..lib.model_watcher import configure_model_watcher
 
 _inited = False
 
 
-def configure(settings):
+def configure(registry, task_name):
+    settings = registry.settings
     configure_zmq(settings['changes.socket'], False)
     engine = configure_engine(settings, False)
     DBSession = get_session_maker(False)
-    celery_queue.config_from_object({"BROKER_URL":settings['celery.broker']})
+    current_app.config_from_object({"BROKER_URL":settings['celery.broker']})
+    # temporary solution
+    configure_model_watcher(registry, task_name)
 
-def init():
+
+def init_task_config():
     global _inited
     if _inited:
         return
@@ -27,9 +30,11 @@ def init():
         settings = get_appsettings(join(rootdir, 'local.ini'))
     else:
         settings = get_appsettings(join(rootdir, 'development.ini'))
-    configure(settings)
+    registry = getGlobalSiteManager()
+    registry.settings = settings
+    configure(registry, current_app.main)
     _inited = True
 
 
 def includeme(config):
-    configure(config.registry.settings)
+    configure(config.registry, 'assembl')
