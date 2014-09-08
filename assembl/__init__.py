@@ -9,6 +9,7 @@ from pyramid.authentication import SessionAuthenticationPolicy
 from pyramid.authorization import ACLAuthorizationPolicy
 from pyramid_beaker import session_factory_from_settings
 from pyramid.i18n import default_locale_negotiator
+from zope.component import getGlobalSiteManager
 
 from .lib.sqla import configure_engine
 
@@ -29,8 +30,8 @@ def main(global_config, **settings):
     configure_engine(settings)
 
     from views.traversal import root_factory
-    config = Configurator(settings=settings, root_factory=root_factory)
-    config.hook_zca()
+    config = Configurator(registry=getGlobalSiteManager())
+    config.setup_registry(settings=settings, root_factory=root_factory)
     config.add_translation_dirs('assembl:locale/')
 
     def my_locale_negotiator(request):
