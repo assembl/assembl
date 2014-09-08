@@ -99,6 +99,24 @@ define(function (require) {
             this.computeStatistics();
         },
 
+        getLastSynthesis: function () {
+            var collectionManager = new CollectionManager(),
+                that = this;
+
+            $.when(collectionManager.getAllSynthesisCollectionPromise()
+            ).then(function (synthesisCollection) {
+
+                    if (!that.model) {
+                        //If unspecified, we find the next_synthesis
+                        that.model = _.find(synthesisCollection.models, function (model) {
+                            return model.get('is_next_synthesis');
+                        });
+                    }
+
+                    that.$(".lastSynthesis").html(that.model.get('introduction'));
+                });
+        },
+
         introductionShowMore: function(){
             $.when(Ctx.getDiscussionPromise()).then(function (discussion) {
                 var model = new Backbone.Model();
@@ -162,6 +180,8 @@ define(function (require) {
             });
 
             this.draw();
+
+            this.getLastSynthesis();
         },
 
         /*
@@ -528,7 +548,7 @@ define(function (require) {
                         {
                             "color": "#9A3FD5",
                             "title": i18n.gettext("Contributors inactive recently")
-                        },
+                        }
                     ];
 
                     that.pie_chart_data = pie_chart_data;

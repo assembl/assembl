@@ -28,22 +28,18 @@ define(function (require) {
             var that = this,
                 collectionManager = new CollectionManager();
 
-            if (obj.button) {
-                this.button = $(obj.button).on('click', Ctx.togglePanel.bind(this, 'synthesisPanel'));
-            }
-
             this.ideas = new Idea.Collection();
             $.when(collectionManager.getAllSynthesisCollectionPromise(),
                 collectionManager.getAllIdeasCollectionPromise()
             ).then(function (synthesisCollection, allIdeasCollection) {
                     var rootIdea = allIdeasCollection.getRootIdea(),
                         raw_ideas;
-                    
+
                     if (!that.model) {
-                      //If unspecified, we find the next_synthesis
-                      that.model = _.find(synthesisCollection.models, function (model) {
-                          return model.get('is_next_synthesis');
-                      });
+                        //If unspecified, we find the next_synthesis
+                        that.model = _.find(synthesisCollection.models, function (model) {
+                            return model.get('is_next_synthesis');
+                        });
                     }
                     raw_ideas = that.model.get('ideas');
                     //console.log("Raw Ideas from model: ", raw_ideas)
@@ -72,7 +68,7 @@ define(function (require) {
         panelType: 'synthesisPanel',
         className: 'synthesisPanel',
         gridSize: AssemblPanel.prototype.SYNTHESIS_PANEL_GRID_SIZE,
-        getTitle: function() {
+        getTitle: function () {
             return i18n.gettext('Synthesis');
         },
 

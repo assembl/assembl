@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  Assembl\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-09-04 21:12+0200\n"
+"POT-Creation-Date: 2014-09-08 11:11+0200\n"
 "PO-Revision-Date: 2014-09-04 11:16-0500\n"
 "Last-Translator: Benoit Grégoire <benoitg@coeus.ca>\n"
 "Language-Team: French "
@@ -101,82 +101,82 @@ msgstr "message d'erreur ajax:"
 msgid "Home"
 msgstr "Accueil"
 
-#: assembl/static/js/app/views/contextPage.js:316
+#: assembl/static/js/app/views/contextPage.js:336
 msgid "last week"
 msgstr "la semaine dernière"
 
-#: assembl/static/js/app/views/contextPage.js:319
+#: assembl/static/js/app/views/contextPage.js:339
 msgid "last 2 weeks"
 msgstr "les 2 dernières semaines"
 
-#: assembl/static/js/app/views/contextPage.js:322
+#: assembl/static/js/app/views/contextPage.js:342
 msgid "last month"
 msgstr "le mois dernier"
 
-#: assembl/static/js/app/views/contextPage.js:325
+#: assembl/static/js/app/views/contextPage.js:345
 msgid "last 3 months"
 msgstr "les 3 derniers mois"
 
-#: assembl/static/js/app/views/contextPage.js:328
+#: assembl/static/js/app/views/contextPage.js:348
 msgid "last 6 months"
 msgstr "les 6 derniers mois"
 
-#: assembl/static/js/app/views/contextPage.js:331
+#: assembl/static/js/app/views/contextPage.js:351
 msgid "last year"
 msgstr "l'année dernière"
 
-#: assembl/static/js/app/views/contextPage.js:483
+#: assembl/static/js/app/views/contextPage.js:503
 #, python-format
 msgid "%d participants have contributed in the %s"
 msgstr "%d participants ont contribué pendant %s"
 
-#: assembl/static/js/app/views/contextPage.js:489
+#: assembl/static/js/app/views/contextPage.js:509
 #, python-format
 msgid "%d new participants started contributing in the %s"
 msgstr "%d nouveaux participants ont contribué pendant %s"
 
-#: assembl/static/js/app/views/contextPage.js:496
+#: assembl/static/js/app/views/contextPage.js:516
 #, python-format
 msgid "%d active participants had contributed before %s"
 msgstr "%d contributeurs actifs avaient participé avant %s"
 
-#: assembl/static/js/app/views/contextPage.js:505
+#: assembl/static/js/app/views/contextPage.js:525
 #, python-format
 msgid "%d participants' last contribution was prior to %s"
 msgstr "%d participants ont contribué pour la dernière fois avant %s"
 
-#: assembl/static/js/app/views/contextPage.js:517
+#: assembl/static/js/app/views/contextPage.js:537
 #, python-format
 msgid "%d participants have contributed since the beginning of the debate"
 msgstr "%d participants ont contribué depuis le début du débat"
 
-#: assembl/static/js/app/views/contextPage.js:526
+#: assembl/static/js/app/views/contextPage.js:546
 msgid "Contributors active recently"
 msgstr "Participants actifs récemment"
 
-#: assembl/static/js/app/views/contextPage.js:530
+#: assembl/static/js/app/views/contextPage.js:550
 msgid "Contributors inactive recently"
 msgstr "Participants non actifs récemment"
 
-#: assembl/static/js/app/views/contextPage.js:548
+#: assembl/static/js/app/views/contextPage.js:568
 msgid "Evolution of the total number of messages"
 msgstr "Évolution du nombre total de messages"
 
-#: assembl/static/js/app/views/contextPage.js:548
+#: assembl/static/js/app/views/contextPage.js:568
 msgid "Evolution of the number of messages posted"
 msgstr "Évolution du nombre de messages postés"
 
-#: assembl/static/js/app/views/contextPage.js:549
+#: assembl/static/js/app/views/contextPage.js:569
 #: assembl/templates/views/contextPage.tmpl:61
 msgid "Statistics"
 msgstr "Statistiques"
 
-#: assembl/static/js/app/views/contextPage.js:851
+#: assembl/static/js/app/views/contextPage.js:871
 msgid "messages"
 msgstr "messages"
 
-#: assembl/static/js/app/views/contextPage.js:1070
-#: assembl/static/js/app/views/contextPage.js:1084
+#: assembl/static/js/app/views/contextPage.js:1090
+#: assembl/static/js/app/views/contextPage.js:1104
 msgid "messages, posted by"
 msgstr "messages, postés par"
 
@@ -262,6 +262,12 @@ msgstr "Confirmez que vous souhaitez renvoyer tous les extraits au presse-papier
 #: assembl/static/js/app/views/ideaPanel.js:491
 msgid "Confirm that you want to delete this idea."
 msgstr "Confirmez que vous souhaitez supprimer cette idée."
+
+#: assembl/static/js/app/views/message.js:301
+msgid ""
+"You will be redirected to another idea in connection with the nugget on "
+"which you clicked."
+msgstr ""
 
 #: assembl/static/js/app/views/messageList.js:22
 msgid "You can drag the segment above directly to the table of ideas"
@@ -512,17 +518,17 @@ msgstr "vide"
 msgid "Are you sure you want to empty your entire clipboard?"
 msgstr "Êtes-vous certain de vouloir vider tout votre presse-papier?"
 
-#: assembl/static/js/app/views/synthesisPanel.js:76
+#: assembl/static/js/app/views/synthesisPanel.js:72
 #: assembl/templates/views/create-group.tmpl:24
 #: assembl/templates/views/navigation.tmpl:15
 msgid "Synthesis"
 msgstr "Synthèse"
 
-#: assembl/static/js/app/views/synthesisPanel.js:224
+#: assembl/static/js/app/views/synthesisPanel.js:220
 msgid "Do you want to publish the synthesis?"
 msgstr "Voulez-vous publier la synthèse?"
 
-#: assembl/static/js/app/views/synthesisPanel.js:252
+#: assembl/static/js/app/views/synthesisPanel.js:248
 msgid "Synthesis published!"
 msgstr "Synthèse publiée!"
 
@@ -851,7 +857,6 @@ msgstr "Activer l'annotation Web"
 
 #: assembl/templates/views/bookmarket.tmpl:8
 #, fuzzy
-#| msgid "How it works"
 msgid "How it works:"
 msgstr "Comment ça marche ?"
 
@@ -886,7 +891,6 @@ msgstr ""
 
 #: assembl/templates/views/bookmarket.tmpl:16
 #, fuzzy
-#| msgid "click here to activate the annotation"
 msgid "Click on the bookmarklet to enable annotations"
 msgstr "cliquez ici pour activer l'annotation web."
 
@@ -923,6 +927,12 @@ msgstr "Initié par"
 #: assembl/templates/views/contextPage.tmpl:64
 msgid "Loading..."
 msgstr "Chargement..."
+
+#: assembl/templates/views/contextPage.tmpl:77
+#, fuzzy
+#| msgid "Synthesis"
+msgid "Last synthesis"
+msgstr "Synthèse"
 
 #: assembl/templates/views/create-group.tmpl:3
 msgid "Create a panel group"
@@ -1540,37 +1550,5 @@ msgid "No discussion found for slug=%s"
 msgstr "Nous n'avons pas de discussion sous le code=%s"
 
 #~ msgid ""
-#~ "<p>How it works:</p> <p>Drag the button"
-#~ " below into your bookmark bar to "
-#~ "create a bookmarklet."
 #~ msgstr ""
-#~ "<p>Comment faire:</p>\n"
-#~ "    <p>Glissez ce boutton sur votre "
-#~ "barre de favoris pour créer un "
-#~ "bookmarklet."
-
-#~ msgid ""
-#~ "<p>You can then capture selections from"
-#~ " most webpages (those that are not"
-#~ " secured with https) this way:</p>\n"
-#~ "    <ol>\n"
-#~ "    <li>Click on the bookmarklet to enable annotations</li>\n"
-#~ "    <li>Highligt the section of text "
-#~ "you wish to send to the "
-#~ "discussion</li>\n"
-#~ "    <li>Click the \"send\" button that appears</li>\n"
-#~ "    </ol>"
-#~ msgstr ""
-#~ "<p>Vous pouvez ensuite aller chercher un"
-#~ " extrait sur la majorité des pages"
-#~ " web (celles qui ne sont pas "
-#~ "sécurisées par https) de la façon "
-#~ "suivante:</p>\n"
-#~ "    <ol>\n"
-#~ "    <li>Cliquez sur l'applisignet pour activer les annotations</li>\n"
-#~ "    <li>Mettez en surbrillance la "
-#~ "section de texte que vous voulez "
-#~ "envoyer à la discussion.</li>\n"
-#~ "    <li>Cliquez sur le bouton \"Send\" qui apparaît alors</li>\n"
-#~ "    </ol>"
 

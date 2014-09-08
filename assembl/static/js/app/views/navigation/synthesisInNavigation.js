@@ -22,7 +22,7 @@ define(function (require) {
         },
 
         events: {
-            'click .synthesisList > li': 'onSynthesisClick'
+            'click .js_synthesisList > li': 'onSynthesisClick'
         },
 
         onRender: function () {
