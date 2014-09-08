@@ -27,7 +27,8 @@ define(function (require) {
         pieChartShowMessages: false,
 
         events: {
-            'click #introduction-button-see-more': 'introductionShowMore'
+            'click #introduction-button-see-more': 'introductionShowMore',
+            'click #js_readSynthesis': 'readSynthesis'
         },
 
         initialize: function (options) {
@@ -1241,6 +1242,11 @@ define(function (require) {
             //window.onload = init_plots;
             //window.onresize = init_plots;
             init_plots();
+        },
+
+        readSynthesis: function () {
+            //need specification: redirect ? popin ?
+
         }
 
     });
