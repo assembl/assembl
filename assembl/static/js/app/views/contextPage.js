@@ -114,8 +114,9 @@ define(function (require) {
                         });
                     }
 
-                    that.$(".creationDate").html(Ctx.formatDate(that.model.get('creation_date')));
+                    that.$(".lastSynthesisTitle").html(i18n.gettext('Last synthesis') + "- <small><time class='creationDate'>" + Ctx.formatDate(that.model.get('creation_date')) + "</time></small>");
                     that.$(".lastSynthesis").html(that.model.get('introduction'));
+
                 });
         },
 
