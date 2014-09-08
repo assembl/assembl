@@ -114,6 +114,7 @@ define(function (require) {
                         });
                     }
 
+                    that.$(".creationDate").html(Ctx.formatDate(that.model.get('creation_date')));
                     that.$(".lastSynthesis").html(that.model.get('introduction'));
                 });
         },
