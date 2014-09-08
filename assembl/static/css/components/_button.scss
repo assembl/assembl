@@ -31,22 +31,6 @@
   line-height: 26px;
 }
 
-// Primary button
-// ++++++++++++++
-.button.button--primary {
-  background-color: $purple;
-  color: white;
-  font-weight: bold;
-
-  &:hover {
-    background-color: darken($purple, 10);
-  }
-
-  &:active {
-    background-color: darken($purple, 20);
-  }
-}
-
 // Default button hover state
 // **************************
 .button:hover {
@@ -122,104 +106,6 @@
   background-color: transparentize(#e5e5e5, 0.5);
 }
 
-// Removes the hover fx on the button
-// +++++++++++++++++++
-.iconbutton.iconbutton--nofx {
-  opacity: 1;
-}
-
-// Enter fullscreen mode button
-// +++++++++++++++++
-.iconbutton.iconbutton--resizefull {
-  @extend %icon !optional;
-  @extend .icon-resize-full !optional;
-
-  .is-fullscreen & {
-    display: none;
-  }
-}
-
-// Leave fullscreen mode button
-// +++++++++++++++++
-.iconbutton.iconbutton--resizesmall {
-  @extend %icon !optional;
-  @extend .icon-resize-small !optional;
-
-  display: none;
-
-  .is-fullscreen & {
-    display: inline-block;
-  }
-}
-
-// Arrow button
-// ==========
-.arrowbutton {
-  @extend %button;
-
-  position: relative;
-  margin: 5px 0 0 14px;
-  line-height: 36px;
-  height: 36px;
-  @include box-sizing(border-box);
-  padding: 0 10px 0 5px;
-
-  background-color: rgba(129, 133, 139, 0);
-  @include background-linear-gradient(bottom, #afa8cf, #c7c2dd);
-
-  color: white;
-  border: solid 1px #8d88a6;
-  border-radius: 0 4px 4px 0;
-
-  font-size: 14px;
-  text-decoration: none;
-
-  &:before {
-    content: url(#{$img-dir}/button/arrowbutton.png);
-    position: absolute;
-    top: -1px;
-    left: -14px;
-  }
-}
-
-// Arrow button to right
-// +++++++++++++++++++++
-.arrowbutton.arrowbutton--right {
-  border-radius: 4px 0 0 4px;
-  margin-left: 0;
-  margin-right: 14px;
-  padding: 0 5px 0 10px;
-
-  &:before {
-    display: none;
-  }
-
-  &:after {
-    content: url(#{$img-dir}/button/arrowbutton-right.png);
-    position: absolute;
-    top: -1px;
-    right: -14px;
-  }
-}
-
-// Button made to fit in a .bar
-// =========================
-.barbutton {
-  @extend %button;
-  @include no-selection;
-  font-size: 12px;
-
-  &:active {
-    @extend .barbutton.is-activated;
-  }
-}
-
-// Active state
-// =========================
-.barbutton.is-activated {
-  background-color: #ffffff;
-  color: black;
-}
 
 // DELETE OVER THIS LINE AFTER REFACTORING
 
@@ -279,7 +165,7 @@
 }
 
 .btn-default:hover, .btn-bright:hover {
-  text-decoration: underline;
+  text-decoration: none;
 }
 
 .btn-default:focus, .btn-bright:focus {
@@ -289,8 +175,7 @@
 .btn-default:active,
 .btn-default.active,
 .btn-bright:active,
-.btn-bright.active,
-{
+.btn-bright.active {
   opacity: 0.8;
   outline: 0;
 }
@@ -303,6 +188,7 @@
 
 .btn-primary:hover {
   opacity: 0.8;
+  text-decoration: none;
 }
 
 .btn-primary:focus {
@@ -325,6 +211,7 @@
 .btn-secondary:hover {
   color: $white;
   background-color: $purple1;
+  text-decoration: none;
 }
 
 .btn-secondary:focus {
