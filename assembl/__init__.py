@@ -49,6 +49,9 @@ def main(global_config, **settings):
         'assembl.tweens.virtuoso_deadlock.transient_deadlock_tween_factory',
         under="pyramid_tm.tm_tween_factory")
 
+    # Tasks first, because it includes ZCA registration (for now)
+    config.include('.tasks')
+
     config.include('.lib.zmqlib')
     session_factory = session_factory_from_settings(settings)
     config.set_session_factory(session_factory)
@@ -83,9 +86,6 @@ def main(global_config, **settings):
 
     # Mailer
     config.include('pyramid_mailer')
-
-    # Tasks
-    config.include('.tasks')
 
     config.include('.view_def')
 

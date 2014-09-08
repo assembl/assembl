@@ -57,7 +57,6 @@ class CelerySendModelEventWatcher(object):
 def configure_model_watcher(registry, task_name):
     # This is a temporary hack.
     settings = registry.settings
-    print task_name + '.imodeleventwatcher'
     class_name = settings.get(
         task_name + '.imodeleventwatcher',
         '.model_watcher.PassiveModelEventWatcher')

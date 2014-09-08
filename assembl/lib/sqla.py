@@ -26,6 +26,7 @@ from sqlalchemy.engine import strategies
 from virtuoso.vmapping import PatternIriClass
 from zope.sqlalchemy import ZopeTransactionExtension
 from zope.sqlalchemy.datamanager import mark_changed as z_mark_changed
+from zope.component import getGlobalSiteManager
 
 from pyramid.paster import get_appsettings, setup_logging
 
@@ -803,6 +804,11 @@ def configure_engine(settings, zope_tr=True, session_maker=None):
     event.listen(Session, 'after_rollback', session_rollback_listener)
     event.listen(engine, 'rollback', engine_rollback_listener)
     return engine
+
+
+def get_model_watcher():
+    from .model_watcher import IModelEventWatcher
+    model_watcher = getGlobalSiteManager().queryUtility(IModelEventWatcher)
 
 
 def is_zopish():
