@@ -4,8 +4,7 @@ import sys
 from platform import system
 from os import getenv, listdir, mkdir
 from os.path import exists, join, dirname, abspath
-from ConfigParser import ConfigParser
-
+from ConfigParser import ConfigParser, NoSectionError
 
 def main():
     if len(sys.argv) < 2:
@@ -48,6 +47,14 @@ def main():
         vname = names[0]
     assert exists(join(vroot_var, 'lib', vname, 'vsp')),\
         "Cannot identify the VSP directory"
+    try:
+        metrics_code_dir = config.get('metrics', 'metrics_code_dir')
+        metrics_cl = config.get('metrics', 'metrics_cl')
+        has_metrics_server = metrics_code_dir and exists(metrics_code_dir) and exists(metrics_cl)
+    except NoSectionError:
+        has_metrics_server = False
+        metrics_cl = '/bin/ls'  # innocuous
+        metrics_code_dir = ''
     vars = {
         'VIRTUOSO_SERVER_PORT': config.getint('virtuoso', 'http_port'),
         'VIRTUOSO_HOSTNAME': config.get('app:main', 'public_hostname'),
@@ -58,7 +65,10 @@ def main():
         'VIRTUOSO_SUBDIR_NAME': vname,
         'CELERY_BROKER': config.get('app:main', 'celery.broker'),
         'here': dirname(abspath('supervisord.conf')),
-        'CONFIG_FILE': config_uri
+        'CONFIG_FILE': config_uri,
+        'has_metrics_server': 'true' if has_metrics_server else 'false',
+        'metrics_code_dir': metrics_code_dir,
+        'metrics_cl': metrics_cl
     }
     for fname in ('var/db/virtuoso.ini', 'odbc.ini', 'supervisord.conf',):
         tmpl = open(fname+'.tmpl').read()
@@ -71,3 +81,6 @@ def main():
         mkdir('var/log')
     if not exists('var/run'):
         mkdir('var/run')
+
+if __name__ == '__main__':
+    main()
