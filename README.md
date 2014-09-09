@@ -109,7 +109,8 @@ The variables that have to be different between instances are the following:
 public_port = 6543
 changes.socket = ipc:///tmp/assembl_changes/0
 changes.websocket.port = 8085
-celery.broker = redis://localhost:6379/0
+celery_tasks.imap.broker.broker = redis://localhost:6379/0
+celery_tasks.notification_dispatch.broker = redis://localhost:6379/1
 [server:main]
 port = 6543
 [virtuoso]
@@ -117,7 +118,7 @@ port = 5132
 http_port = 8892
 ```
 
-Most of these are ports, and it should be easy to find an unoccupied port; in the case of `changes.socket`, you simply need a different filename, and in the case of `celery.broker`, the final number has to be changed to another low integer.
+Most of these are ports, and it should be easy to find an unoccupied port; in the case of `changes.socket`, you simply need a different filename, and in the case of `celery_task.*.broker`, the final number has to be changed to another low integer.
 
 **Updating an environment**
 

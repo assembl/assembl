@@ -3,7 +3,7 @@ from celery import Celery
 from . import init_task_config, config_celery_app
 
 # broker specified
-imap_celery_app = Celery('assembl.tasks.imap')
+imap_celery_app = Celery('celery_tasks.imap')
 
 @imap_celery_app.task(ignore_result=True)
 def import_mails(mbox_id, only_new=True):

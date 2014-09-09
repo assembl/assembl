@@ -20,7 +20,8 @@ def configure(registry, task_name):
     configure_model_watcher(registry, task_name)
 
 def config_celery_app(celery_app, settings):
-    celery_app.config_from_object({"BROKER_URL":settings['celery.broker']})
+    celery_app.config_from_object({
+        "BROKER_URL":settings['%s.broker' % (celery_app.main,)]})
 
 def init_task_config():
     global _inited

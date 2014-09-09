@@ -32,12 +32,6 @@ class IModelEventWatcher(interface.Interface):
         pass
 
 
-class PassiveModelEventWatcher(object):
-    interface.implements(IModelEventWatcher)
-    def __init__(self):
-        pass
-
-
 class ModelEventWatcherPrinter(object):
     interface.implements(IModelEventWatcher)
 
@@ -74,6 +68,6 @@ def configure_model_watcher(registry, task_name):
     settings = registry.settings
     class_name = settings.get(
         task_name + '.imodeleventwatcher',
-        '.model_watcher.PassiveModelEventWatcher')
+        '.model_watcher.ModelEventWatcherPrinter')
     cls = resolver.resolve(class_name)
     registry.registerUtility(cls(), IModelEventWatcher)

@@ -7,7 +7,7 @@ from ..lib.model_watcher import IModelEventWatcher
 from ..lib.sqla import get_model_watcher
 
 # broker specified
-notif_dispatch_celery_app = Celery('assembl.tasks.notification_dispatch')
+notif_dispatch_celery_app = Celery('celery_tasks.notification_dispatch')
 
 watcher = None
 
