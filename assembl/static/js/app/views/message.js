@@ -186,6 +186,9 @@ define(function (require) {
                         that.$el.addClass('unread');
                         that.$el.removeClass('read');
                     }
+
+                    data['nuggets'] = data.extracts.length;
+
                     data = that.transformDataBeforeRender(data);
                     that.$el.html(that.template(data));
                     Ctx.initTooltips(that.$el);
@@ -225,29 +228,29 @@ define(function (require) {
                         that.showReadLess();
                     }
                     if (that.viewStyle == that.availableMessageViewStyles.PREVIEW) {
-                      that.listenToOnce(that.messageListView, "messageList:render_complete", function () {
-                      /* We use https://github.com/MilesOkeefe/jQuery.dotdotdot to show 
-                       * Read More links for message previews
-                       */
-                      that.$(".ellipsis").dotdotdot({
-                        after: "a.readMore",
-                        callback: function( isTruncated, orgContent ) {
-                          //console.log(isTruncated, orgContent);
-                          if(isTruncated) {
-                            that.$(".ellipsis > a.readMore").removeClass('hidden');
-                          }
-                          else {
-                            that.$(".ellipsis > a.readMore").addClass('hidden');
-                          }
-                        },
-                        watch: "window"
-                        })
-                        
+                        that.listenToOnce(that.messageListView, "messageList:render_complete", function () {
+                            /* We use https://github.com/MilesOkeefe/jQuery.dotdotdot to show
+                             * Read More links for message previews
+                             */
+                            that.$(".ellipsis").dotdotdot({
+                                after: "a.readMore",
+                                callback: function (isTruncated, orgContent) {
+                                    //console.log(isTruncated, orgContent);
+                                    if (isTruncated) {
+                                        that.$(".ellipsis > a.readMore").removeClass('hidden');
+                                    }
+                                    else {
+                                        that.$(".ellipsis > a.readMore").addClass('hidden');
+                                    }
+                                },
+                                watch: "window"
+                            })
 
-                          //console.log("Updating dotdotdot");
-                        that.listenTo(that.messageListView, "messageList:render_complete", function () {
-                          that.$(".ellipsis").trigger('update.dot');
-                        });
+
+                            //console.log("Updating dotdotdot");
+                            that.listenTo(that.messageListView, "messageList:render_complete", function () {
+                                that.$(".ellipsis").trigger('update.dot');
+                            });
                         });
                     }
                 });
@@ -263,10 +266,12 @@ define(function (require) {
                 var that = this,
                     annotations = this.model.getAnnotations(),
                     annotationsToLoad = [],
-                    filter = function() {return true;};
+                    filter = function () {
+                        return true;
+                    };
                 // Is this the right permission to see the clipboard?
                 if (!Ctx.getCurrentUser().can(Permissions.ADD_EXTRACT)) {
-                    filter = function(extract) {
+                    filter = function (extract) {
                         return extract.idIdea;
                     }
                 }
@@ -362,7 +367,7 @@ define(function (require) {
         },
 
         /**
-         * Hide the annotator selection tooltip displayed during the selection, 
+         * Hide the annotator selection tooltip displayed during the selection,
          * before it completes
          */
         hideAnnotatorSelectionTooltip: function () {
@@ -370,7 +375,7 @@ define(function (require) {
         },
 
         /**
-         * Show/update the annotator selection tooltip displayed during the selection, 
+         * Show/update the annotator selection tooltip displayed during the selection,
          * before it completes.
          * @param  {number} x
          * @param  {number} y
@@ -418,10 +423,9 @@ define(function (require) {
 
             if (this.viewStyle.id === 'viewStylePreview') {
                 this.onMessageTitleClick();
-                if ( this.$('.messageSend-body').length )
+                if (this.$('.messageSend-body').length)
                     this.$('.messageSend-body').focus();
-                else
-                { // if the .messageSend-body field is not present, this means the user is not logged in, so we scroll to the alert box
+                else { // if the .messageSend-body field is not present, this means the user is not logged in, so we scroll to the alert box
                     this.messageListView.scrollToElement(this.$(".message-replybox"));
                 }
                 return;
@@ -577,17 +581,17 @@ define(function (require) {
                 this.hideAnnotatorSelectionTooltip();
                 this.isSelecting = false;
                 this.$el.removeClass('is-selecting');
-                (function deselect(){
-                  var selection = ('getSelection' in window)
-                    ? window.getSelection()
-                    : ('selection' in document)
-                      ? document.selection
-                      : null;
-                  if ('removeAllRanges' in selection) selection.removeAllRanges();
-                  else if ('empty' in selection) selection.empty();
+                (function deselect() {
+                    var selection = ('getSelection' in window)
+                        ? window.getSelection()
+                        : ('selection' in document)
+                        ? document.selection
+                        : null;
+                    if ('removeAllRanges' in selection) selection.removeAllRanges();
+                    else if ('empty' in selection) selection.empty();
                 })();
             }
-            
+
         },
 
         /**
@@ -605,7 +609,7 @@ define(function (require) {
                 return selection.text ? selection.text : false;
             }
         },
-        
+
         /**
          * Finish processing the annotator text selection
          * @event
@@ -664,7 +668,7 @@ define(function (require) {
          * Show the read less link
          * */
         showReadLess: function () {
-          this.$('.readLess').removeClass('hidden');
+            this.$('.readLess').removeClass('hidden');
         }
 
 

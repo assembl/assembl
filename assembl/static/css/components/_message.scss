@@ -84,6 +84,16 @@ $previewNumLines: 4;
     }
   }
 
+  .nb-nuggets {
+    color: $gray1;
+    i {
+      font-size: 140%;
+    }
+    span {
+      vertical-align: top;
+    }
+  }
+
   &.viewStyleFullBody, &.viewStylePreview {
     /* Most styles are shared between the FullBody and Preview styles */
     line-height: 19px;
@@ -154,13 +164,15 @@ $previewNumLines: 4;
     &:hover {
       .message-menu-actions {
         visibility: visible;
+        opacity: 1;
       }
     }
     .message-menu-actions {
       visibility: hidden;
-      i {
+      opacity: 0;
+      /*i {
         visibility: visible;
-      }
+      }*/
     }
 
     .message-date {

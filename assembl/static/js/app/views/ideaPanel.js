@@ -148,6 +148,13 @@ define(function (require) {
                     canEditNextSynthesis = currentUser.can(Permissions.EDIT_SYNTHESIS),
                     collectionManager = new CollectionManager();
 
+                // display only important extract for simple user
+                if (!Ctx.userCanChangeUi) {
+                    this.extractList.models = _.filter(this.extractList.models, function (model) {
+                        return model.get('important');
+                    });
+                }
+
                 if (this.extractList) {
                     $.when(
                         collectionManager.getAllExtractsCollectionPromise(),

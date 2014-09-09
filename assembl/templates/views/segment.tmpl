@@ -13,7 +13,6 @@
 {% set segmentLinkTooltip = gettext('Click here to see the original contribution this segment is quoted from.') %}
 {% set segmentTextLink = '<a class="segment-link" data-segmentid="<%= segment.cid %>" data-tooltip="'+segmentLinkTooltip+'">'+gettext('Show in original text')+'<%= segment.getTypeIcon() %>&nbsp;</a>' %}
 
-
 <div class="box postit" draggable="true" data-segmentid="<%= segment.cid %>">
   <% if (canEditExtracts || (canEditMyExtracts && segment.getCreatorDEPRECATED() == ctx.getCurrentUser())) { %>
     <span data-segmentid="<%= segment.cid %>" class="js_closeExtract closeExtract icon-delete fr"></span>
@@ -22,6 +21,7 @@
   <span class="text-quotation"><i class="icon-quote quoteLeft"></i><%= segment.getQuote() %><i class="icon-quote quoteRight"></i></span>
   <div class="postit-footer">
     <% if(ctx.getCurrentInterfaceType() !== ctx.InterfaceTypes.SIMPLE) { %>
+      <div class="ideaPanelNuggets tar js_selectAsNugget <% (important) ? isSelected :''  %>  "><i class="icon-diamond"></i></div>
       <div class="segment-harvester">
         {{ gettext('%(img)s')|format(img=segmentCreatorAvatarImg)|safe }}
       </div>

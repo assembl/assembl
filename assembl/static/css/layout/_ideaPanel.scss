@@ -18,4 +18,25 @@
   .panel-body {
     top: 30px;
   }
+
+  .ideaPanelNuggets {
+    cursor: pointer;
+    color: $gray;
+
+    i:before {
+      font-size: 233%;
+      margin: 0;
+      padding: 0;
+      width: 28px;
+    }
+
+    &:hover .icon-diamond {
+      color: $orange1;
+    }
+  }
+
+  .ideaPanelNuggets.isSelected {
+    color: $orange1;
+  }
+
 }

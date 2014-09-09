@@ -56,11 +56,13 @@
     #}
 
     <fieldset id="ideaPanel-section-segments" class="panel-section">
+      <% if(Ctx.getCurrentInterfaceType() != Ctx.InterfaceTypes.SIMPLE){ %>
         <legend class="plxs" id="ideaPanel-section-segments-legend" data-toggle="tooltip" title="{{gettext('Expressions of this idea in segments of posts or on the web')}}">
             <span><% print(getExtractsLabel()) %></span>
         </legend>
-        <div class="postitlist">
-        </div>
+      <% } %>
+
+        <div class="postitlist"></div>
         <% if (canAddExtracts) { %>
         <div>
             <p class="mlxs">{{ gettext('Add extracts by dragging them in this panel from the clipboard or messages') }}</p>
@@ -78,6 +80,8 @@
         <a id="ideaPanel-clearbutton" class="button" data-toggle="tooltip" title="{{gettext('Remove all extracts from this idea.  Removed extracts will be available in your clipboard')}}">{{ gettext('Remove all extracts') }}</a>
         <% } %>
     </fieldset>
+
+
     <% } else { %>
         <div>
             <p>{{ gettext('Please select an idea in the table of ideas') }}</p>

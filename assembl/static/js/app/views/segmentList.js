@@ -21,8 +21,8 @@ define(function (require) {
             'dragstart .postit': "onDragStart",
             //'drop': 'onDrop', // bubble up?
             'click .js_closeExtract': 'onCloseButtonClick',
-
-            'click .segment-link': "onSegmentLinkClick"
+            'click .segment-link': "onSegmentLinkClick",
+            'click .js_selectAsNugget': 'selectAsNugget'
         },
         initialize: function (options) {
             this.allUsersCollection = options.allUsersCollection;
@@ -34,16 +34,18 @@ define(function (require) {
                 currentUser = Ctx.getCurrentUser();
             if (idPost) {
                 post = this.allMessagesCollection.get(idPost);
-                if (post)
+                if (post) {
                     postCreator = this.allUsersCollection.get(post.get('idCreator'));
+                }
             }
-            return {segment: this.model,
+            return {
+                segment: this.model,
                 post: post,
                 postCreator: postCreator,
                 canEditExtracts: currentUser.can(Permissions.EDIT_EXTRACT),
                 canEditMyExtracts: currentUser.can(Permissions.EDIT_MY_EXTRACT),
                 ctx: Ctx
-            };
+            }
         },
         /**
          * The render
@@ -90,7 +92,21 @@ define(function (require) {
                 this.model.set('idIdea', null);
                 this.model.save('idIdea', null);
             }
+        },
+
+        selectAsNugget: function (e) {
+            e.preventDefault();
+
+            this.model.set('important', true);
+
+            this.model.save({}, {
+                success: function () {
+                    $('.ideaPanelNuggets').addClass('isSelected');
+                }
+            });
         }
+
+
     });
 
     var SegmentListView = Marionette.CollectionView.extend({
@@ -100,7 +116,7 @@ define(function (require) {
                 allUsersCollection: options.allUsersCollection,
                 allMessagesCollection: options.allMessagesCollection,
                 closeDeletes: options.closeDeletes
-            };
+            }
         }
     });
 
