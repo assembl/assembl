@@ -34,13 +34,13 @@ stopsignal = INT
 
 [program:celery_imap]
 directory = %(here)s
-command = celery worker -l info -A assembl.tasks.imap -b %(CELERY_BROKER)s
+command = celery worker -l info -A assembl.tasks.imap -b %(IMAP_CELERY_BROKER)s
 autorestart = true
 startsecs = 2
 
 [program:celery_notification_dispatch]
 directory = %(here)s
-command = celery worker -l info -A assembl.tasks.notification_dispatch -b %(CELERY_BROKER)s
+command = celery worker -l info -A assembl.tasks.notification_dispatch -b %(NOTIF_DISPATCH_CELERY_BROKER)s
 autorestart = true
 startsecs = 2
 
