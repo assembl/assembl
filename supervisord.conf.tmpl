@@ -38,6 +38,12 @@ command = celery worker -l info -A assembl.tasks.imap -b %(CELERY_BROKER)s
 autorestart = true
 startsecs = 2
 
+[program:celery_notification_dispatch]
+directory = %(here)s
+command = celery worker -l info -A assembl.tasks.notification_dispatch -b %(CELERY_BROKER)s
+autorestart = true
+startsecs = 2
+
 [program:changes_router]
 directory = %(here)s
 command = python assembl/tasks/changes_router.py %(CONFIG_FILE)s

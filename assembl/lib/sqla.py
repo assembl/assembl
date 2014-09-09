@@ -808,7 +808,7 @@ def configure_engine(settings, zope_tr=True, session_maker=None):
 
 def get_model_watcher():
     from .model_watcher import IModelEventWatcher
-    model_watcher = getGlobalSiteManager().queryUtility(IModelEventWatcher)
+    return getGlobalSiteManager().queryUtility(IModelEventWatcher)
 
 
 def is_zopish():

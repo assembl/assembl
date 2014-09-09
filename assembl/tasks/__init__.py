@@ -16,10 +16,11 @@ def configure(registry, task_name):
     configure_zmq(settings['changes.socket'], False)
     engine = configure_engine(settings, False)
     DBSession = get_session_maker(False)
-    current_app.config_from_object({"BROKER_URL":settings['celery.broker']})
     # temporary solution
     configure_model_watcher(registry, task_name)
 
+def config_celery_app(celery_app, settings):
+    celery_app.config_from_object({"BROKER_URL":settings['celery.broker']})
 
 def init_task_config():
     global _inited
@@ -33,8 +34,11 @@ def init_task_config():
     registry = getGlobalSiteManager()
     registry.settings = settings
     configure(registry, current_app.main)
+    config_celery_app(current_app, settings)
     _inited = True
 
 
 def includeme(config):
     configure(config.registry, 'assembl')
+    config.include('.imap')
+    config.include('.notification_dispatch')
