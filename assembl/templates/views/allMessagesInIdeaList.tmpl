@@ -1,10 +1,8 @@
 <div class="idealist-body idealist-body--rootidea">
-
-    <div class="idealist-counter">
-      <span data-toggle="tooltip" data-placement="top" title="{{ gettext('Number of posts in the entire discussion') }}"><%= num_posts %></span>
-    </div>
     <div class="idealist-title" title="{{ gettext('View all posts in this discussion') }}">
         {{ gettext('View all posts in this discussion') }}
+        <span class="idealist-counter" data-toggle="tooltip" data-placement="top" title="{{ gettext('Number of posts in the entire discussion') }}">(<%= num_posts %>)</span>
+        <i class="icon-arrowright"></i>
     </div>
 </div>
 

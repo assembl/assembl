@@ -163,31 +163,33 @@ define(function (require) {
                         return idea.get('order');
                     });
 
-                    // Synthesis posts pseudo-idea
-                    var synthesisView = new SynthesisInIdeaListView({
-                        model: rootIdea, groupContent: that.groupContent});
-                    list.appendChild(synthesisView.render().el);
-
-                    // All posts pseudo-idea
-
-                    var allMessagesInIdeaListView = new AllMessagesInIdeaListView({
-                        model: rootIdea, groupContent: that.groupContent});
-                    list.appendChild(allMessagesInIdeaListView.render().el);
-
                     rootIdea.visitDepthFirst(objectTreeRenderVisitor(view_data, order_lookup_table, roots, excludeRoot));
                     rootIdea.visitDepthFirst(ideaSiblingChainVisitor(view_data));
 
-
                     _.each(roots, function (idea) {
                         var ideaView = new IdeaView({
-                            model: idea, groupContent: that.groupContent}, view_data);
+                            model: idea, groupContent: that.groupContent
+                        }, view_data);
                         list.appendChild(ideaView.render().el);
                     });
 
+                    // Synthesis posts pseudo-idea
+                    var synthesisView = new SynthesisInIdeaListView({
+                        model: rootIdea, groupContent: that.groupContent
+                    });
+                    list.appendChild(synthesisView.render().el);
+
                     // Orphan messages pseudo-idea
                     var orphanView = new OrphanMessagesInIdeaListView({
-                        model: rootIdea, groupContent: that.groupContent});
+                        model: rootIdea, groupContent: that.groupContent
+                    });
                     list.appendChild(orphanView.render().el);
+
+                    // All posts pseudo-idea
+                    var allMessagesInIdeaListView = new AllMessagesInIdeaListView({
+                        model: rootIdea, groupContent: that.groupContent
+                    });
+                    list.appendChild(allMessagesInIdeaListView.render().el);
 
                     var data = {
                         tocTotal: allIdeasCollection.length - 1,//We don't count the root idea

@@ -1,7 +1,7 @@
 // The list of Ideas
 // =================
 .idealist {
-  background-color: 40px;
+  background-color: #F4F4F4;
 }
 
 // A row within the list of ideas
@@ -66,23 +66,35 @@
   }
 
   .idealist-item.is-selected > & {
-    background-color: $blue;
+    background-color: $orange;
   }
 
 }
 
 // For an root idea
 // +++++++
-.idealist-body.idealist-body--rootidea {
+.idealist-body.idealist-body--rootidea,
+.idealist-body.idealist-body--synthesis {
   font-size: 12px;
   line-height: 20px;
-  background-color: #e2f5ec;
-}
-
-.idealist-body.idealist-body--synthesis {
-  @extend .idealist-body.idealist-body--rootidea;
-
-  border-bottom: solid 1px darken(#e2f5ec, 20%);
+  .idealist-counter {
+    padding: 0;
+    min-width: 0;
+    float: none;
+    color: inherit;
+    font-weight: normal;
+  }
+  .idealist-title:hover {
+    color: $orange2;
+    i.icon-arrowright {
+      visibility: visible;
+      opacity: 1;
+    }
+  }
+  i.icon-arrowright {
+    visibility: hidden;
+    opacity: 0;
+  }
 }
 
 // Area where to drop and create a sibling
