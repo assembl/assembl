@@ -121,7 +121,7 @@ define(function (require) {
                     that.$('.lastSynthesis').dotdotdot({
                         height: 70,
                         ellipsis: '... '
-                });
+                    });
 
                 });
         },
