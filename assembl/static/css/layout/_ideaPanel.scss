@@ -21,7 +21,6 @@
 
   .ideaPanelNuggets {
     cursor: pointer;
-    color: $gray;
 
     i:before {
       font-size: 233%;
@@ -30,13 +29,19 @@
       width: 28px;
     }
 
+    .icon-diamond {
+      color: $gray;
+    }
+
     &:hover .icon-diamond {
       color: $orange1;
     }
   }
 
   .ideaPanelNuggets.isSelected {
-    color: $orange1;
+    .icon-diamond {
+      color: $orange1;
+    }
   }
 
 }

@@ -38,6 +38,7 @@ define(function (require) {
                     postCreator = this.allUsersCollection.get(post.get('idCreator'));
                 }
             }
+
             return {
                 segment: this.model,
                 post: post,
@@ -96,12 +97,21 @@ define(function (require) {
 
         selectAsNugget: function (e) {
             e.preventDefault();
+            var that = this;
 
-            this.model.set('important', true);
+            if (!this.model.get('important')) {
+                this.model.set('important', true);
+            } else {
+                this.model.set('important', false);
+            }
 
             this.model.save({}, {
-                success: function () {
-                    $('.ideaPanelNuggets').addClass('isSelected');
+                success: function (m) {
+                    if (m.get('important')) {
+                        that.$('.ideaPanelNuggets').addClass('isSelected');
+                    } else {
+                        that.$('.ideaPanelNuggets').removeClass('isSelected');
+                }
                 }
             });
         }
