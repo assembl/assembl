@@ -32,12 +32,16 @@ db_schema = assembl_test
 
 jinja2.directories = assembl:templates
 
+#WHAT IS THIS USED FOR?
 assembl.domain = assembl.net
+
+#If false, every user will be immediately validated
 assembl.validate_registration_emails = false
 mail.host = localhost
 assembl.admin_email = webmaster@assembl.net
 
 #The default theme.  If unset, will be set to "default"
+#The themes must be stored in a folder assembl/static/css/themes/name_of_theme
 #default_theme = default
 
 # Each of these providers requires us to register a client app ID.
@@ -87,6 +91,8 @@ google.scope = userinfo.profile
 
 # Absolute url of image to show for users that do not have an avatar.
 # If not present, assembl default will be used.
+# Conflicts with avatar.gravatar_default, you cannot define both.
+# Gravatar caches the image aggressively; change the filename to change the image.
 #avatar.default_image_url = none
 
 # What gravatar will use if email isn't found.
@@ -114,29 +120,61 @@ security.email_token_salt = [enter a key]
 store = sqlalchemy
 store.url = sqlite:///%(here)s/assembl.db
 
-# change this to the hostname visible from outside
+# Change this to the hostname visible from outside
 public_hostname = localhost
-#Typically 80 for prod, 6543 for dev
+# Change this to the port visible from the outside
+# Typically 80 for prod, 6543 for dev
 public_port = 6543
 
-# ZMQ model changes socket
+# ZMQ Websockets are used for frontend to backend communication
+
+# ZMQ model changes local socket (backend will connect to this)
+# UNIQUE_PER_SERVER
+# However, for running tests in development, the same socket can be used
+# Convention:
+# /0 thru /2: reserved for development
+# /3 thru /4: reserved for automated testing
+# /5-: production
 changes.socket = ipc:///tmp/assembl_changes/0
 changes.multiplex = true
-# The port to use for the websocket.
+
+# The port to use for the websocket (client frontends will connect to this)
 # In prod, your firewall needs to allow this through or proxy it through nginx
+# UNIQUE_PER_SERVER
+# However, for running tests in development, the same socket can be used
+# Convention:
+# 8085 thru 8087: reserved for development
+# 8088 thru 8089: reserved for automated testing
+# 8090-: production
 changes.websocket.port = 8085
 changes.prefix = /socket
 # Use the second version if proxying through nginx
 changes.websocket.url = http://localhost:%(changes.websocket.port)s%(changes.prefix)s/
 #changes.websocket.url = http://%(public_hostname)s:%(public_port)s%(changes.prefix)s/
 
-# celery brokers
+# celery brokers.  Used for server jobs
+
 # direct for testing
 assembl.imodeleventwatcher = assembl.lib.model_watcher.ModelEventWatcherPrinter
-
+# ZMQ model changes local socket (backend will connect to this)
+# TODO:  There are only 15 databases available in a default redis install.
+# We should use the same redis and just change the default queue in celery
+# http://celery.readthedocs.org/en/latest/userguide/routing.html#routing-changing-default-queue
+# UNIQUE_PER_SERVER
+# However, for running tests in development, the same socket can be used
+# Convention:
+# /0, /2, /4: reserved for development
+# /6, /8: reserved for automated testing
+# /10, /12: production
 celery_tasks.imap.broker = redis://localhost:6379/0
 celery_tasks.imap.imodeleventwatcher = assembl.tasks.notification_dispatch.ModelEventWatcherCelerySender
 
+# UNIQUE_PER_SERVER
+# However, for running tests in development, the same socket can be used
+# Convention:
+# /1, /3, /5: reserved for development
+# /7 thru /9: reserved for automated testing
+# /11, /13: production
 celery_tasks.notification_dispatch.broker = redis://localhost:6379/1
 celery_tasks.notification_dispatch.imodeleventwatcher = assembl.lib.model_watcher.ModelEventWatcherPrinter
 
@@ -167,7 +205,14 @@ transaction_per_migration = true
 [server:main]
 use = egg:waitress#main
 host = 0.0.0.0
-#Default port is 6543
+# If not proxied by nginx or something, public_port in app:main needs to match
+# this value
+# UNIQUE_PER_SERVER
+# Default port is 6543.  
+# Convention:
+# 6543 thru 6545: reserved for development
+# 6546 thru 6547: reserved for automated testing
+# 6548-: production
 port = 6543
 
 # Begin logging configuration
@@ -225,9 +270,21 @@ virtuoso_root = virtuoso
 virtuoso_branch = fd396ce395baa2be89a242c64ea543a1eb03747b
 #virtuoso_branch = develop/7
 
-# Standard port is 5132
+# The ODBC port.  Standard virtuoso port is 5132
+# UNIQUE_PER_SERVER
+# Convention:
+# 5132 thru 5134: reserved for development
+# 5135 thru 5136: reserved for automated testing
+# 5137-: production
 port = 5132
-# Standard port is 8892
+
+# The admin interface.  Standard virtuoso port is 8892
+# UNIQUE_PER_SERVER
+# Convention:
+# 8892 thru 8894: reserved for development
+# 8895 thru 8896: reserved for automated testing
+# 8897-: production
+
 http_port = 8892
 
 [uwsgi]

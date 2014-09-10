@@ -2,7 +2,7 @@ server {
     server_name assembl.yourdomain.com;
 
     location /socket {
-        proxy_pass http://localhost:8086/socket;
+        proxy_pass http://localhost:8090/socket;
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection "upgrade";

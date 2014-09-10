@@ -98,11 +98,12 @@ supervisorctl start dev:
 
 **Multiple environments**
 
-If you want to run multiple environments on your machine, you should have different values for various parameters in `development.ini`. In that case, you would it to a `local.ini` file, and customize the values there; substitute `local.ini` for `development.ini` in the following commands.
+If you want to run multiple environments on your machine, you should have different values for various parameters in `development.ini`.
+In that case, you would copy it to a `local.ini` file, and customize the values there; substitute `local.ini` for `development.ini` in the rest of the instructions in this file.
 
-Also change the `env.ini_file = 'development.ini'` line in the `def devenv` function in `fabfile.py`, and re-run the `fab devenv app_setup` step.
+Once you create your local.ini, re-run the `fab devenv app_setup` step.
 
-The variables that have to be different between instances are the following:
+The variables that have to be different between instances are the following (for convenience they are marked with UNIQUE_PER_SERVER in the ini file):
 
 ``` ini
 [app:main]
