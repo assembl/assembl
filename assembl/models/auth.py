@@ -480,7 +480,7 @@ class User(AgentProfile):
         super(User, self).send_to_changes(connection, operation)
         watcher = get_model_watcher()
         if operation == UPDATE_OP:
-            watcher.processAccountModified(self.id, 0)  # no versions
+            watcher.processAccountModified(self.id)
         elif operation == INSERT_OP:
             watcher.processAccountCreated(self.id)
 
