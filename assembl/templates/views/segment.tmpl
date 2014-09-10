@@ -21,7 +21,7 @@
   <span class="text-quotation"><i class="icon-quote quoteLeft"></i><%= segment.getQuote() %><i class="icon-quote quoteRight"></i></span>
   <div class="postit-footer">
     <% if(ctx.getCurrentInterfaceType() !== ctx.InterfaceTypes.SIMPLE) { %>
-      <div class="ideaPanelNuggets tar js_selectAsNugget <% (important) ? isSelected :''  %>  "><i class="icon-diamond"></i></div>
+      <div class="ideaPanelNuggets tar js_selectAsNugget <% (segment.important) ? isSelected :''  %>  "><i class="icon-diamond"></i></div>
       <div class="segment-harvester">
         {{ gettext('%(img)s')|format(img=segmentCreatorAvatarImg)|safe }}
       </div>
