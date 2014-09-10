@@ -81,7 +81,8 @@
 // For an root idea
 // +++++++
 .idealist-body.idealist-body--rootidea,
-.idealist-body.idealist-body--synthesis {
+.idealist-body.idealist-body--synthesis,
+.idealist-body--others {
   font-size: 12px;
   line-height: 20px;
   .idealist-counter {
@@ -92,7 +93,6 @@
     font-weight: normal;
   }
   .idealist-title {
-    padding-left: 12px;
     &:hover {
       color: $orange2;
       i.icon-arrowright {

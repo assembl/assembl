@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  Assembl\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-09-10 16:09+0200\n"
+"POT-Creation-Date: 2014-09-10 17:16+0200\n"
 "PO-Revision-Date: 2014-09-04 11:16-0500\n"
 "Last-Translator: Benoit Grégoire <benoitg@coeus.ca>\n"
 "Language-Team: French "
@@ -935,7 +935,6 @@ msgstr "Chargement..."
 
 #: assembl/templates/views/contextPage.tmpl:79
 #, fuzzy
-#| msgid "Last synthesis"
 msgid "Read the synthesis"
 msgstr "Synthèse"
 
@@ -1048,7 +1047,6 @@ msgstr "commentaire"
 
 #: assembl/templates/views/ideaList.tmpl:4
 #, fuzzy
-#| msgid "Table of ideas ({0})"
 msgid "Table of ideas"
 msgstr "Table des idées ({0})"
 
@@ -1366,11 +1364,17 @@ msgid "Activate"
 msgstr "Activer"
 
 #: assembl/templates/views/synthesisInIdeaList.tmpl:2
-#: assembl/templates/views/synthesisInIdeaList.tmpl:3
+#, fuzzy
+#| msgid "Synthesis messages"
+msgid "others messages"
+msgstr "Synthèses"
+
+#: assembl/templates/views/synthesisInIdeaList.tmpl:5
+#: assembl/templates/views/synthesisInIdeaList.tmpl:6
 msgid "View syntheses"
 msgstr "Voir les synthèses"
 
-#: assembl/templates/views/synthesisInIdeaList.tmpl:4
+#: assembl/templates/views/synthesisInIdeaList.tmpl:7
 msgid "Number of syntheses in the discussion"
 msgstr "Nombre de synthèses dans la discussion"
 

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: assembl 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-09-10 16:09+0200\n"
+"POT-Creation-Date: 2014-09-10 17:16+0200\n"
 "PO-Revision-Date: 2014-07-24 17:38-0500\n"
 "Last-Translator: Benoit Grégoire <benoitg@coeus.ca>\n"
 "Language-Team: en <LL@li.org>\n"
@@ -1310,11 +1310,15 @@ msgid "Activate"
 msgstr ""
 
 #: assembl/templates/views/synthesisInIdeaList.tmpl:2
-#: assembl/templates/views/synthesisInIdeaList.tmpl:3
+msgid "others messages"
+msgstr ""
+
+#: assembl/templates/views/synthesisInIdeaList.tmpl:5
+#: assembl/templates/views/synthesisInIdeaList.tmpl:6
 msgid "View syntheses"
 msgstr ""
 
-#: assembl/templates/views/synthesisInIdeaList.tmpl:4
+#: assembl/templates/views/synthesisInIdeaList.tmpl:7
 msgid "Number of syntheses in the discussion"
 msgstr ""
 
