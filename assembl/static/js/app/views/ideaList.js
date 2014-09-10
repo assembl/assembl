@@ -14,7 +14,8 @@ define(function (require) {
         IdeaView = require('views/idea'),
         ideaGraphLoader = require('views/ideaGraph'),
         _ = require('underscore'),
-        CollectionManager = require('modules/collectionManager');
+        CollectionManager = require('modules/collectionManager'),
+        i18n = require('utils/i18n');
 
     var FEATURED = 'featured',
         IN_SYNTHESIS = 'inNextSynthesis';

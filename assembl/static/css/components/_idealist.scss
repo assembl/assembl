@@ -79,10 +79,9 @@
 }
 
 // For an root idea
-// +++++++
-.idealist-body.idealist-body--rootidea,
-.idealist-body.idealist-body--synthesis,
-.idealist-body--others {
+.idealist-bottom.idealist-body--rootidea,
+.idealist-bottom.idealist-body--synthesis,
+.idealist-bottom.idealist-body--others {
   font-size: 12px;
   line-height: 20px;
   .idealist-counter {
@@ -95,6 +94,7 @@
   .idealist-title {
     &:hover {
       color: $orange2;
+      background-color: none;
       i.icon-arrowright {
         visibility: visible;
         opacity: 1;
