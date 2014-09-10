@@ -1,12 +1,12 @@
 
     <%
     var titles = {
-        'toc': "{{ gettext('Table of ideas ({0})') }}",
+        'toc': "{{ gettext('Table of ideas') }}",
         'featured': "{{ gettext('Featured ({0})') }}",
         'synthesis': "{{ gettext('In next Synthesis ({0})') }}"
     };
 
-    titles.toc = titles.toc.replace('{0}', tocTotal);
+    {#titles.toc = titles.toc.replace('{0}', tocTotal);#}
     titles.featured = titles.featured.replace('{0}', featuredTotal);
     titles.synthesis = titles.synthesis.replace('{0}', synthesisTotal);
     %>
@@ -37,7 +37,9 @@
     <% } %>
         <div class="pvxs">
           <span class="pls"><%= titles.toc %></span>
+          <% if (canAdd) { %>
           <a href="#" class="prs fr" id="ideaList-addbutton"><i class="icon-add"></i> {{ gettext('Add idea') }}</a>
+          <% } %>
         </div>
         <div id="idealist-list" class="idealist"></div>
         <div id="idealist-graph" style="display: none;">
@@ -50,8 +52,8 @@
     <div class="panel-bodybelow"></div>
 
     <% if (canAdd) { %>
-    <footer class="panel-footer tar">
+    <!--<footer class="panel-footer tar">
         <button class="btn btn-default" id="ideaList-addbutton"><span class="icon-add"></span>{{ gettext('Add idea') }}</button>
-    </footer>
+    </footer>-->
     <% } %>
 
