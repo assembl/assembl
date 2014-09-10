@@ -16,6 +16,7 @@ from ..semantic.virtuoso_mapping import QuadMapPatternS
 from ..auth import (
     CrudPermissions, P_ADD_POST, P_READ, P_EDIT_POST, P_ADMIN_DISC,
     P_EDIT_POST, P_ADMIN_DISC)
+from ..lib.sqla import (INSERT_OP, UPDATE_OP, get_model_watcher)
 from ..semantic.namespaces import  SIOC, CATALYST, IDEA, ASSEMBL, DCTERMS, QUADNAMES
 from .discussion import Discussion
 #from ..lib.history_meta import Versioned
@@ -205,6 +206,12 @@ class Content(DiscussionBoundBase):
 
     def get_title(self):
         return ""
+
+    def send_to_changes(self, connection=None, operation=UPDATE_OP):
+        super(Content, self).send_to_changes(connection, operation)
+        watcher = get_model_watcher()
+        if operation == INSERT_OP:
+            watcher.processPostCreated(self.id)
 
     def get_discussion_id(self):
         return self.discussion_id

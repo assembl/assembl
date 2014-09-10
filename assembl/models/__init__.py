@@ -4,7 +4,7 @@ from sqlalchemy.ext.declarative import DeclarativeMeta
 from ..lib.abc import abstractclassmethod
 from ..lib.sqla import (
     Base, TimestampedBase, get_metadata, get_session_maker,
-    get_named_object, get_database_id, Tombstone)
+    get_named_object, get_database_id, Tombstone, UPDATE_OP, DELETE_OP)
 from ..lib.history_meta import declare_history_mappers
 
 
@@ -21,7 +21,7 @@ class DiscussionBoundBase(Base):
         "Get the ID of an associated discussion object, if any."
         return self.discussion_id
 
-    def send_to_changes(self, connection=None):
+    def send_to_changes(self, connection=None, operation=UPDATE_OP):
         if not connection:
             # WARNING: invalidate has to be called within an active transaction.
             # This should be the case in general, no need to add a transaction manager.
@@ -44,7 +44,7 @@ class DiscussionBoundTombstone(Tombstone):
         super(DiscussionBoundTombstone, self).__init__(ob, **kwargs)
         self.discussion_id = ob.get_discussion_id()
 
-    def send_to_changes(self, connection):
+    def send_to_changes(self, connection, operation=DELETE_OP):
         assert connection
         if 'cdict' not in connection.info:
             connection.info['cdict'] = {}

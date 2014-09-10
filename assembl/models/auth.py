@@ -27,6 +27,7 @@ from pyramid.security import Everyone, Authenticated
 from virtuoso.vmapping import IriClass
 
 from ..lib import config
+from ..lib.sqla import (UPDATE_OP, INSERT_OP, get_model_watcher)
 from . import Base, DiscussionBoundBase, DiscussionBoundTombstone
 from ..auth import *
 from ..semantic.namespaces import (
@@ -474,6 +475,14 @@ class User(AgentProfile):
             Discussion.uri_generic(d_id): get_permissions(self.id, d_id)
             for (d_id,) in self.db.query(Discussion.id)}
         return permissions
+
+    def send_to_changes(self, connection=None, operation=UPDATE_OP):
+        super(User, self).send_to_changes(connection, operation)
+        watcher = get_model_watcher()
+        if operation == UPDATE_OP:
+            watcher.processAccountModified(self.id, 0)  # no versions
+        elif operation == INSERT_OP:
+            watcher.processAccountCreated(self.id)
 
     def serializable(self, use_email=None):
         ser = super(User, self).serializable()

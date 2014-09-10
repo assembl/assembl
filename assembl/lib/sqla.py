@@ -37,6 +37,9 @@ from ..auth import *
 
 atexit_engines = []
 
+DELETE_OP = -1
+UPDATE_OP = 0
+INSERT_OP = 1
 
 class CleanupStrategy(strategies.PlainEngineStrategy):
     name = 'atexit_cleanup'
@@ -214,7 +217,7 @@ class BaseOps(object):
     def tombstone(self):
         return Tombstone(self)
 
-    def send_to_changes(self, connection=None):
+    def send_to_changes(self, connection=None, operation=UPDATE_OP):
         if not connection:
             # WARNING: invalidate has to be called within an active transaction.
             # This should be the case in general, no need to add a transaction manager.
@@ -711,7 +714,7 @@ class Tombstone(object):
         args.update(self.extra_args)
         return args
 
-    def send_to_changes(self, connection):
+    def send_to_changes(self, connection, operation=DELETE_OP):
         assert connection
         if 'cdict' not in connection.info:
             connection.info['cdict'] = {}
@@ -724,13 +727,13 @@ def orm_update_listener(mapper, connection, target):
         return
     session = object_session(target)
     if session.is_modified(target, include_collections=False):
-        target.send_to_changes(connection)
+        target.send_to_changes(connection, UPDATE_OP)
 
 
 def orm_insert_listener(mapper, connection, target):
     if getattr(target, '__history_table__', None):
         return
-    target.send_to_changes(connection)
+    target.send_to_changes(connection, INSERT_OP)
 
 
 def orm_delete_listener(mapper, connection, target):
@@ -738,7 +741,7 @@ def orm_delete_listener(mapper, connection, target):
         connection.info['cdict'] = {}
     if getattr(target, '__history_table__', None):
         return
-    target.tombstone().send_to_changes(connection)
+    target.tombstone().send_to_changes(connection, DELETE_OP)
 
 
 def before_commit_listener(session):

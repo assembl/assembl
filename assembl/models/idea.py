@@ -28,6 +28,7 @@ from ..auth import (
     P_ADD_IDEA)
 from ..semantic.namespaces import (
     SIOC, IDEA, ASSEMBL, DCTERMS, QUADNAMES, RDF, VirtRDF)
+from ..lib.sqla import (UPDATE_OP, DELETE_OP, INSERT_OP, get_model_watcher)
 from assembl.views.traversal import AbstractCollectionDefinition
 
 
@@ -354,12 +355,19 @@ JOIN post AS family_posts ON (
         next_synthesis = self.discussion.get_next_synthesis()
         return True if self in next_synthesis.ideas else False
 
-    def send_to_changes(self, connection=None):
+    def send_to_changes(self, connection=None, operation=UPDATE_OP):
         connection = connection or self.db().connection()
         if self.is_tombstone:
             self.tombstone().send_to_changes(connection)
         else:
             super(Idea, self).send_to_changes(connection)
+        watcher = get_model_watcher()
+        if operation == UPDATE_OP:
+            watcher.processIdeaModified(self.id, 0)  # no versions yet.
+        elif operation == DELETE_OP:
+            watcher.processIdeaDeleted(self.id)
+        elif operation == INSERT_OP:
+            watcher.processIdeaCreated(self.id)
 
     def __repr__(self):
         if self.short_title:
@@ -735,7 +743,7 @@ class IdeaLink(DiscussionBoundBase):
         else:
             return Idea.get(id=self.source_id).get_discussion_id()
 
-    def send_to_changes(self, connection=None):
+    def send_to_changes(self, connection=None, operation=UPDATE_OP):
         connection = connection or self.db().connection()
         if self.is_tombstone:
             self.tombstone().send_to_changes(connection)

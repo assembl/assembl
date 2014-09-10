@@ -15,6 +15,7 @@ import simplejson as json
 import assembl
 from assembl.lib.migration import bootstrap_db, bootstrap_db_data
 from assembl.lib.sqla import get_session_maker
+from assembl.tasks import configure as configure_tasks
 from .utils import clear_rows, drop_tables
 from assembl.auth import R_SYSADMIN, R_PARTICIPANT
 
@@ -80,9 +81,20 @@ def test_session(request, db_default_data):
     request.addfinalizer(fin)
     return session
 
+@pytest.fixture(scope="function")
+def test_app_no_perm(request, app_settings):
+    global_config = {
+        '__file__': request.config.getoption('test_settings_file'),
+        'here': get_distribution('assembl').location
+    }
+    app = TestApp(assembl.main(
+        global_config, nosecurity=True, **app_settings))
+    configure_tasks(app.app.registry, 'assembl')
+    return app
+
 
 @pytest.fixture(scope="function")
-def discussion(request, test_session):
+def discussion(request, test_session, test_app_no_perm):
     from assembl.models import Discussion
     d = Discussion(topic=u"Jack Layton", slug="jacklayton2")
     test_session.add(d)
@@ -109,22 +121,16 @@ def admin_user(request, test_session):
 
 
 @pytest.fixture(scope="function")
-def test_app(request, app_settings, admin_user):
-    global_config = {
-        '__file__': request.config.getoption('test_settings_file'),
-        'here': get_distribution('assembl').location
-    }
-    app = TestApp(assembl.main(
-        global_config, nosecurity=True, **app_settings))
+def test_app(request, admin_user, app_settings, test_app_no_perm):
     config = testing.setUp(
-        registry=app.app.registry,
+        registry=test_app_no_perm.app.registry,
         settings=app_settings,
     )
     dummy_policy = config.testing_securitypolicy(
         userid=admin_user.id, permissive=True)
     config.set_authorization_policy(dummy_policy)
     config.set_authentication_policy(dummy_policy)
-    return app
+    return test_app_no_perm
 
 
 @pytest.fixture(scope="function")

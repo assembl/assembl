@@ -19,6 +19,7 @@ from virtuoso.vmapping import PatternIriClass
 
 from . import DiscussionBoundBase
 from ..semantic.virtuoso_mapping import QuadMapPatternS
+from ..lib.sqla import (UPDATE_OP, DELETE_OP, INSERT_OP, get_model_watcher)
 from .discussion import Discussion
 from .auth import AgentProfile
 from .idea import Idea
@@ -331,6 +332,16 @@ class Extract(IdeaContentPositiveLink):
         tfi.offset_start = start
         tfi.offset_end = start+len(quote)
         return tfi
+
+    def send_to_changes(self, connection=None, operation=UPDATE_OP):
+        super(Extract, self).send_to_changes(connection, operation)
+        watcher = get_model_watcher()
+        if operation == UPDATE_OP:
+            watcher.processExtractModified(self.id, 0)  # no versions yet.
+        elif operation == DELETE_OP:
+            watcher.processExtractDeleted(self.id)
+        elif operation == INSERT_OP:
+            watcher.processExtractCreated(self.id)
 
     def get_discussion_id(self):
         return self.discussion_id
