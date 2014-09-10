@@ -111,7 +111,7 @@ define(function (require) {
                         that.$('.ideaPanelNuggets').addClass('isSelected');
                     } else {
                         that.$('.ideaPanelNuggets').removeClass('isSelected');
-                }
+                    }
                 }
             });
         }

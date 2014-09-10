@@ -84,11 +84,14 @@
     color: inherit;
     font-weight: normal;
   }
-  .idealist-title:hover {
-    color: $orange2;
-    i.icon-arrowright {
-      visibility: visible;
-      opacity: 1;
+  .idealist-title {
+    padding-left: 12px;
+    &:hover {
+      color: $orange2;
+      i.icon-arrowright {
+        visibility: visible;
+        opacity: 1;
+      }
     }
   }
   i.icon-arrowright {
