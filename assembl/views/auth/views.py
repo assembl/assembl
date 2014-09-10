@@ -718,6 +718,7 @@ def send_confirmation_email(request, email):
     confirm_what = _('email')
     if isinstance(email.profile, User) and not email.profile.verified:
         confirm_what = _('account')
+    from assembl.auth.password import email_token
     data = {
         'name': email.profile.name,
         'email': email.email,
