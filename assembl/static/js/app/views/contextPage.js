@@ -115,8 +115,13 @@ define(function (require) {
                         });
                     }
 
-                    that.$(".lastSynthesisTitle").html(i18n.gettext('Last synthesis') + "- <small><time class='creationDate'>" + Ctx.formatDate(that.model.get('creation_date')) + "</time></small>");
+                    that.$(".lastSynthesisTitle").html("<span>" + i18n.gettext('Last synthesis') + "</span><span class='message-date vam mlxs'><time>" + Ctx.formatDate(that.model.get('creation_date')) + "</time></span>");
                     that.$(".lastSynthesis").html(that.model.get('introduction'));
+
+                    that.$('.lastSynthesis').dotdotdot({
+                        height: 70,
+                        ellipsis: '... '
+                });
 
                 });
         },

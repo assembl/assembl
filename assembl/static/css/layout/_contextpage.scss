@@ -171,3 +171,16 @@ line {
     transition: stroke 0.5s;
 }
 }
+
+.lastSynthesisTitle {
+  .message-date {
+    color: $gray1;
+    font-size: 11px;
+    opacity: 0.5;
+    &:before {
+      content: "\002022";
+      padding-right: 0.3em;
+    }
+  }
+
+}
