@@ -269,6 +269,7 @@ class Extract(IdeaContentPositiveLink):
             'ranges': [tfi.__json__() for tfi
                        in self.text_fragment_identifiers],
             'target': self.target,
+            'important': self.important,
             'created': self.creation_date.isoformat(),
             'idCreator': AgentProfile.uri_generic(self.creator_id),
             #'user': self.creator.get_uri(),
