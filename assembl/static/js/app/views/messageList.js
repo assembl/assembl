@@ -56,7 +56,7 @@ define(function (require) {
             userThreadedViewButton: '.messageListViewStyleUserThreaded',
             userHighlightNewViewButton: '.messageListViewStyleUserHighlightNew'
         },
-        getTitle: function() {
+        getTitle: function () {
             return i18n.gettext('Conversations');
         },
 
@@ -187,7 +187,7 @@ define(function (require) {
                             return;
                         }
                     } else {
-                        this.listenToOnce(idea, "acquiredId", function() {
+                        this.listenToOnce(idea, "acquiredId", function () {
                             that.ideaChanged();
                         });
                         return;
@@ -208,12 +208,12 @@ define(function (require) {
             });
 
             this.listenTo(this, 'messageList:clearAllFilters', function () {
-              that.panelWrapper.filterThroughPanelLock(
-                  function () {
-                      that.currentQuery.clearAllFilters();
-                  }, 'clearAllFilters');
-          });
-            
+                that.panelWrapper.filterThroughPanelLock(
+                    function () {
+                        that.currentQuery.clearAllFilters();
+                    }, 'clearAllFilters');
+            });
+
             this.listenTo(this, 'messageList:addFilterIsOrphanMessage', function () {
                 that.panelWrapper.filterThroughPanelLock(
                     function () {
@@ -242,7 +242,7 @@ define(function (require) {
             });
         },
 
-        ideaChanged: function() {
+        ideaChanged: function () {
             var that = this;
             this.panelWrapper.filterThroughPanelLock(
                 function () {
@@ -337,7 +337,7 @@ define(function (require) {
         /**
          * List of message id's to be displayed in the interface
          * @type {MessageCollection}
-         * 
+         *
          * TODO:  THIS IS TO BE REPLACED WITH getResultMessageIdCollectionPromise(), which is the same data
          */
         DEPRECATEDmessageIdsToDisplay: [],
@@ -483,7 +483,7 @@ define(function (require) {
             }
         },
 
-        scrollToElement: function(el){
+        scrollToElement: function (el) {
             if (this.ui.panelBody.offset() !== undefined) {
                 var panelOffset = this.ui.panelBody.offset().top;
                 var panelScrollTop = this.ui.panelBody.scrollTop();
@@ -775,9 +775,9 @@ define(function (require) {
             Ctx.initTooltips(this.$el);
 
             if (Ctx.getCurrentInterfaceType() === Ctx.InterfaceTypes.SIMPLE) {
-              this.renderUserViewButtons();
+                this.renderUserViewButtons();
             } else {
-              this.renderQueryInfo();
+                this.renderQueryInfo();
             }
 
             this.renderCollapseButton();
@@ -809,11 +809,11 @@ define(function (require) {
                     })
                     that.scrollToPreviousScrollTarget();
 
-                    
+
                 })
             return this;
         },
-        
+
         onBeforeRender: function () {
             this.previousScrollTarget = this.getPreviousScrollTarget();
             Ctx.removeCurrentlyDisplayedTooltips(this.$el);
@@ -881,27 +881,27 @@ define(function (require) {
          * Renders the search result information
          */
         renderUserViewButtons: function () {
-          var resultNumTotal,
-              resultNumUnread;
-          
-          if (this.currentViewStyle == this.ViewStyles.THREADED) {
-            this.ui.userHighlightNewViewButton.removeClass('selected');
-            this.ui.userThreadedViewButton.addClass('selected');
-          }
-          else if (this.currentViewStyle == this.ViewStyles.NEW_MESSAGES) {
-            this.ui.userHighlightNewViewButton.addClass('selected');
-            this.ui.userThreadedViewButton.removeClass('selected');
-          }
-          else {
-            console.log("This viewstyle is unknown in user mode:", this.currentViewStyle);
-          }
-          this.currentQuery.getResultNumTotal() === undefined ? resultNumTotal='' : resultNumTotal=i18n.sprintf("(%d)", this.currentQuery.getResultNumTotal()); 
-          this.ui.userThreadedViewButton.html(i18n.sprintf(i18n.gettext('All %s'), resultNumTotal));
-          this.currentQuery.getResultNumUnread() === undefined ? resultNumUnread='' : resultNumUnread=i18n.sprintf("(%d)", this.currentQuery.getResultNumUnread()); 
-          this.ui.userHighlightNewViewButton.html(i18n.sprintf(i18n.gettext('New %s'), resultNumUnread));
+            var resultNumTotal,
+                resultNumUnread;
+
+            if (this.currentViewStyle == this.ViewStyles.THREADED) {
+                this.ui.userHighlightNewViewButton.removeClass('selected');
+                this.ui.userThreadedViewButton.addClass('selected');
+            }
+            else if (this.currentViewStyle == this.ViewStyles.NEW_MESSAGES) {
+                this.ui.userHighlightNewViewButton.addClass('selected');
+                this.ui.userThreadedViewButton.removeClass('selected');
+            }
+            else {
+                console.log("This viewstyle is unknown in user mode:", this.currentViewStyle);
+            }
+            this.currentQuery.getResultNumTotal() === undefined ? resultNumTotal = '' : resultNumTotal = i18n.sprintf("(%d)", this.currentQuery.getResultNumTotal());
+            this.ui.userThreadedViewButton.html(i18n.sprintf(i18n.gettext('All %s'), resultNumTotal));
+            this.currentQuery.getResultNumUnread() === undefined ? resultNumUnread = '' : resultNumUnread = i18n.sprintf("(%d)", this.currentQuery.getResultNumUnread());
+            this.ui.userHighlightNewViewButton.html(i18n.sprintf(i18n.gettext('New %s'), resultNumUnread));
         },
 
-        
+
         /**
          * Renders the collapse button
          */
@@ -1035,9 +1035,6 @@ define(function (require) {
 
             for (i; i < len; i++) {
                 model = messages[i];
-
-                console.log('getRenderedMessagesThreaded', model)
-
                 current_message_info = data_by_object[model.getId()];
                 if ((current_message_info['traversal_order'] >= offsets['offsetStart'])
                     && (current_message_info['traversal_order'] <= offsets['offsetEnd'])) {
@@ -1274,21 +1271,21 @@ define(function (require) {
          */
         setViewStyle: function (viewStyle) {
             if (!viewStyle) {
-              //If invalid, set global default
-              viewStyle = this.ViewStyles.NEW_MESSAGES;
-            }
-            
-            if(Ctx.getCurrentInterfaceType() === Ctx.InterfaceTypes.SIMPLE) {
-              if (Ctx.getCurrentUser().isUnknownUser() && (viewStyle != this.ViewStyles.THREADED)){
-                //Only threaded view makes sence for annonymous users
-                viewStyle = this.ViewStyles.THREADED;
-              }
-              else if ((viewStyle != this.ViewStyles.NEW_MESSAGES) && (viewStyle != this.ViewStyles.THREADED)) {
-                //New messages is default view
+                //If invalid, set global default
                 viewStyle = this.ViewStyles.NEW_MESSAGES;
-              }
             }
-            
+
+            if (Ctx.getCurrentInterfaceType() === Ctx.InterfaceTypes.SIMPLE) {
+                if (Ctx.getCurrentUser().isUnknownUser() && (viewStyle != this.ViewStyles.THREADED)) {
+                    //Only threaded view makes sence for annonymous users
+                    viewStyle = this.ViewStyles.THREADED;
+                }
+                else if ((viewStyle != this.ViewStyles.NEW_MESSAGES) && (viewStyle != this.ViewStyles.THREADED)) {
+                    //New messages is default view
+                    viewStyle = this.ViewStyles.NEW_MESSAGES;
+                }
+            }
+
             if (viewStyle === this.ViewStyles.THREADED) {
                 this.currentViewStyle = this.ViewStyles.THREADED;
                 this.currentQuery.setView(this.currentQuery.availableViews.THREADED);
@@ -1347,32 +1344,32 @@ define(function (require) {
         },
 
         getTargetMessageViewStyleFromMessageListConfig: function (messageView) {
-          var defaultMessageStyle,
-              targetMessageViewStyle;
-          
-          if (Ctx.getCurrentInterfaceType() === Ctx.InterfaceTypes.SIMPLE) {
-            defaultMessageStyle = Ctx.AVAILABLE_MESSAGE_VIEW_STYLES.PREVIEW;
-          }
-          else {
-            defaultMessageStyle = this.defaultMessageStyle;
-          }
-          if (this.currentViewStyle === this.ViewStyles.NEW_MESSAGES) {
-            if (messageView.model.get('read') === true) {
-              targetMessageViewStyle = Ctx.AVAILABLE_MESSAGE_VIEW_STYLES.TITLE_ONLY;
+            var defaultMessageStyle,
+                targetMessageViewStyle;
+
+            if (Ctx.getCurrentInterfaceType() === Ctx.InterfaceTypes.SIMPLE) {
+                defaultMessageStyle = Ctx.AVAILABLE_MESSAGE_VIEW_STYLES.PREVIEW;
             }
             else {
-              if(defaultMessageStyle !== Ctx.AVAILABLE_MESSAGE_VIEW_STYLES.TITLE_ONLY) {
-                targetMessageViewStyle = defaultMessageStyle;
-              }
-              else {
-                targetMessageViewStyle = Ctx.AVAILABLE_MESSAGE_VIEW_STYLES.PREVIEW;
-              }
+                defaultMessageStyle = this.defaultMessageStyle;
             }
-          }
-          else {
-            targetMessageViewStyle = defaultMessageStyle;
-          }
-          return targetMessageViewStyle;
+            if (this.currentViewStyle === this.ViewStyles.NEW_MESSAGES) {
+                if (messageView.model.get('read') === true) {
+                    targetMessageViewStyle = Ctx.AVAILABLE_MESSAGE_VIEW_STYLES.TITLE_ONLY;
+                }
+                else {
+                    if (defaultMessageStyle !== Ctx.AVAILABLE_MESSAGE_VIEW_STYLES.TITLE_ONLY) {
+                        targetMessageViewStyle = defaultMessageStyle;
+                    }
+                    else {
+                        targetMessageViewStyle = Ctx.AVAILABLE_MESSAGE_VIEW_STYLES.PREVIEW;
+                    }
+                }
+            }
+            else {
+                targetMessageViewStyle = defaultMessageStyle;
+            }
+            return targetMessageViewStyle;
         },
 
         /**
@@ -1442,7 +1439,7 @@ define(function (require) {
                 collectionManager = new CollectionManager();
 
             shouldHighlightMessageSelected = (typeof shouldHighlightMessageSelected === "undefined") ? true : shouldHighlightMessageSelected;
-            
+
             $.when(collectionManager.getAllMessageStructureCollectionPromise(),
                 this.currentQuery.getResultMessageIdCollectionPromise()).done(
                 function (allMessageStructureCollection, resultMessageIdCollection) {
@@ -1474,8 +1471,8 @@ define(function (require) {
                         return;
                     }
                     var real_callback = function () {
-                        if(shouldHighlightMessageSelected) {
-                          $(selector).highlight();
+                        if (shouldHighlightMessageSelected) {
+                            $(selector).highlight();
                         }
                         if (_.isFunction(callback)) {
                             callback();
