@@ -900,6 +900,13 @@
   }
 }
 
+/*.fluid-container {
+  width: $pageWidth;
+  max-width: 1020px;
+  margin: 0 auto;
+  @include clearfixHack();
+} */
+
 // Zebra grid guide for "visual debugging" (to be used in conjunction with .grid-row)
 .gr-zebra {
   .gu {
