@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: assembl 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-09-11 18:49-0400\n"
+"POT-Creation-Date: 2014-09-11 18:56-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1300,7 +1300,7 @@ msgid "Activate"
 msgstr ""
 
 #: assembl/templates/views/synthesisInIdeaList.tmpl:2
-msgid "others messages"
+msgid "Other messages"
 msgstr ""
 
 #: assembl/templates/views/synthesisInIdeaList.tmpl:5
