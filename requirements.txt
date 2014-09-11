@@ -14,7 +14,7 @@ PyStemmer==1.3.0
 Pygments==1.6
 SPARQLWrapper==1.6.4
 SQLAlchemy==0.9.7
-Sphinx==1.2.2
+Sphinx==1.2.3
 Unidecode==0.04.16
 WebOb==1.4
 WebTest==2.0.15
@@ -26,7 +26,7 @@ anykeystore==0.2
 backports.ssl-match-hostname==3.4.0.2
 beautifulsoup4==4.3.2
 billiard==3.3.0.18
-celery==3.1.13
+celery==3.1.14
 cffi==0.8.6
 colander==1.0b1
 -e git+https://github.com/mozilla-services/cornice.git@master#egg=cornice
@@ -35,7 +35,7 @@ coverage==3.7.1
 cryptography==0.5.4
 # distribute==0.7.3 # This fails with latest pip. Installed properly as a dependency.
 ecdsa==0.11
-greenlet==0.4.3
+greenlet==0.4.4
 html5lib==0.999
 imaplib2==2.28.3
 isodate==0.5.0
@@ -44,7 +44,7 @@ iso8601==0.1.10
 -e git+https://github.com/benoitg/jwzthreading.git@master#egg=jwzthreading
 kombu==3.0.22
 lingua==3.2
-lxml==3.3.6
+lxml==3.4.0
 meld3==1.0.0
 mock==1.0.1
 oauthlib==0.6.3
@@ -68,7 +68,7 @@ pytest==2.6.2
 pytest-cov==1.8.0
 pytest-localserver==0.3.3
 pytest-mock==0.3.0
-pytest-splinter==1.0.3
+pytest-splinter==1.1.0
 python-memcached==1.53
 python-openid==2.2.5
 pytz==2014.7
@@ -78,17 +78,17 @@ redis==2.10.3
 docutils==0.12
 repoze.lru==0.6
 repoze.sendmail==4.2
-requests==2.4.0
+requests==2.4.1
 requests-oauthlib==0.4.1
-selenium==2.42.1
+selenium==2.43.0
 simplejson==3.6.3
 six==1.7.3
 -e git+https://github.com/mrjoes/sockjs-tornado.git@master#egg=sockjs_tornado
 sockjsproxy==0.7.1
 sphinx-bootstrap-theme==0.4.1
 splinter==0.6.0
-supervisor==3.1.1
-tornado==4.0.1
+supervisor==3.1.2
+tornado==4.0.2
 transaction==1.4.3
 translationstring==1.1
 uricore==0.1.2
