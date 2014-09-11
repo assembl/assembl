@@ -1,22 +1,17 @@
-# French translations for assembl.
+# French translations for PROJECT.
 # Copyright (C) 2014 ORGANIZATION
-# This file is distributed under the same license as the assembl project.
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2014.
 #
-# Translators:
-# Benoit Grégoire <benoitg@coeus.ca>, 2014
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2014
-# François Burra <francoisburra@imaginationforpeople.org>, 2014
-# Marc-Antoine Parent <maparent@acm.org>, 2014
-# Quentin Grimaud <quentin.grimaud@gmail.com>, 2014
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version:  Assembl\n"
+"Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-09-10 17:16+0200\n"
-"PO-Revision-Date: 2014-09-04 11:16-0500\n"
-"Last-Translator: Benoit Grégoire <benoitg@coeus.ca>\n"
-"Language-Team: French "
-"(http://www.transifex.com/projects/p/assembl/language/fr/)\n"
+"POT-Creation-Date: 2014-09-11 18:49-0400\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: fr <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n > 1)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
@@ -102,9 +97,8 @@ msgid "Home"
 msgstr "Accueil"
 
 #: assembl/static/js/app/views/contextPage.js:118
-#, fuzzy
 msgid "Last synthesis"
-msgstr "Synthèse"
+msgstr "Dernière synthèse"
 
 #: assembl/static/js/app/views/contextPage.js:351
 msgid "last week"
@@ -172,7 +166,7 @@ msgid "Evolution of the number of messages posted"
 msgstr "Évolution du nombre de messages postés"
 
 #: assembl/static/js/app/views/contextPage.js:584
-#: assembl/templates/views/contextPage.tmpl:61
+#: assembl/templates/views/contextPage.tmpl:57
 msgid "Statistics"
 msgstr "Statistiques"
 
@@ -273,6 +267,8 @@ msgid ""
 "You will be redirected to another idea in connection with the nugget on "
 "which you clicked."
 msgstr ""
+"Vous serez redirigé vers une autre idée en lien avec l'extrait sur lequel"
+" vous venez de cliquer."
 
 #: assembl/static/js/app/views/messageList.js:22
 msgid "You can drag the segment above directly to the table of ideas"
@@ -850,7 +846,7 @@ msgstr "Valider"
 #: assembl/templates/views/allMessagesInIdeaList.tmpl:2
 #: assembl/templates/views/allMessagesInIdeaList.tmpl:3
 msgid "View all posts in this discussion"
-msgstr "Voir tous les messages de la discussion"
+msgstr "Tous les messages"
 
 #: assembl/templates/views/allMessagesInIdeaList.tmpl:4
 msgid "Number of posts in the entire discussion"
@@ -861,9 +857,8 @@ msgid "activate web annotation"
 msgstr "Activer l'annotation Web"
 
 #: assembl/templates/views/bookmarket.tmpl:8
-#, fuzzy
 msgid "How it works:"
-msgstr "Comment ça marche ?"
+msgstr "Comment ça marche:"
 
 #: assembl/templates/views/bookmarket.tmpl:9
 msgid "1 - Drag the button"
@@ -895,9 +890,8 @@ msgid "3 - find the extract"
 msgstr ""
 
 #: assembl/templates/views/bookmarket.tmpl:16
-#, fuzzy
 msgid "Click on the bookmarklet to enable annotations"
-msgstr "cliquez ici pour activer l'annotation web."
+msgstr "Cliquez sur le l'applisignet pour activer l'annotation web"
 
 #: assembl/templates/views/bookmarket.tmpl:17
 msgid "Highligt the section of text you wish to send to the discussion"
@@ -911,32 +905,31 @@ msgstr ""
 msgid "I understand"
 msgstr "Je comprends"
 
-#: assembl/templates/views/contextPage.tmpl:11
+#: assembl/templates/views/contextPage.tmpl:16
 #: assembl/templates/views/homeIntroductionDetail.tmpl:3
 msgid "Context"
 msgstr "Contexte"
 
-#: assembl/templates/views/contextPage.tmpl:14
+#: assembl/templates/views/contextPage.tmpl:18
 #: assembl/templates/views/ideaPanel.tmpl:17
 msgid "See more"
 msgstr "Voir plus"
 
-#: assembl/templates/views/contextPage.tmpl:19
+#: assembl/templates/views/contextPage.tmpl:23
 msgid "Debate objectives"
 msgstr "Objectifs du débat"
 
-#: assembl/templates/views/contextPage.tmpl:40
+#: assembl/templates/views/contextPage.tmpl:41
 msgid "Instigated by"
 msgstr "Initié par"
 
-#: assembl/templates/views/contextPage.tmpl:64
+#: assembl/templates/views/contextPage.tmpl:60
 msgid "Loading..."
 msgstr "Chargement..."
 
-#: assembl/templates/views/contextPage.tmpl:79
-#, fuzzy
+#: assembl/templates/views/contextPage.tmpl:76
 msgid "Read the synthesis"
-msgstr "Synthèse"
+msgstr "Lire la synthèse"
 
 #: assembl/templates/views/create-group.tmpl:3
 msgid "Create a panel group"
@@ -1046,9 +1039,8 @@ msgid "comment"
 msgstr "commentaire"
 
 #: assembl/templates/views/ideaList.tmpl:4
-#, fuzzy
 msgid "Table of ideas"
-msgstr "Table des idées ({0})"
+msgstr "Table des idées"
 
 #: assembl/templates/views/ideaList.tmpl:5
 msgid "Featured ({0})"
@@ -1349,7 +1341,7 @@ msgstr "cliquez ici pour activer l'annotation web."
 
 #: assembl/templates/views/segmentList.tmpl:9
 msgid "Extracts not yet associated with an idea"
-msgstr "Extraits qui n'ont pas encore été associés à une idée"
+msgstr "Extraits non associés à une idée"
 
 #: assembl/templates/views/segmentList.tmpl:18
 msgid "Clear"
@@ -1364,10 +1356,8 @@ msgid "Activate"
 msgstr "Activer"
 
 #: assembl/templates/views/synthesisInIdeaList.tmpl:2
-#, fuzzy
-#| msgid "Synthesis messages"
 msgid "others messages"
-msgstr "Synthèses"
+msgstr "autres messages"
 
 #: assembl/templates/views/synthesisInIdeaList.tmpl:5
 #: assembl/templates/views/synthesisInIdeaList.tmpl:6
@@ -1503,11 +1493,11 @@ msgstr "courriel"
 msgid "account"
 msgstr "compte"
 
-#: assembl/views/auth/views.py:730
+#: assembl/views/auth/views.py:731
 msgid "Please confirm your ${confirm_what} with <${assembl}>"
 msgstr "Veuillez confirmer votre ${confirm_what} auprès de ${assembl}"
 
-#: assembl/views/auth/views.py:733
+#: assembl/views/auth/views.py:734
 msgid ""
 "Hello, ${name}!\n"
 "Please confirm your ${confirm_what} <${email}> with ${assembl} by "
@@ -1519,7 +1509,7 @@ msgstr ""
 "${assembl} en suivant le lien ci-dessous:\n"
 "<${confirm_url}>\n"
 
-#: assembl/views/auth/views.py:737
+#: assembl/views/auth/views.py:738
 msgid ""
 "<p>Hello, ${name}!</p>\n"
 "<p>Please <a href=\"${confirm_url}\">confirm your ${confirm_what}</a> "
@@ -1529,11 +1519,11 @@ msgstr ""
 "<p>Veuillez <a href=\"${confirm_url}\">confirmer votre "
 "${confirm_what}</a> &lt;${email}&gt; auprès de ${assembl}.</p>\n"
 
-#: assembl/views/auth/views.py:754
+#: assembl/views/auth/views.py:755
 msgid "Request for password change"
 msgstr "Requête de changement de mot de passe"
 
-#: assembl/views/auth/views.py:757
+#: assembl/views/auth/views.py:758
 msgid ""
 "Hello, ${name}!\n"
 "You asked to change your password on <${assembl}>. (We hope it was you!)\n"
@@ -1546,7 +1536,7 @@ msgstr ""
 " bien vous, suivez le lien ci-dessous:\n"
 "<${confirm_url}>\n"
 
-#: assembl/views/auth/views.py:762
+#: assembl/views/auth/views.py:763
 msgid ""
 "<p>Hello, ${name}!</p>\n"
 "<p>You asked to <a href=\"${confirm_url}\">change your password</a> on "
@@ -1560,7 +1550,4 @@ msgstr ""
 #, python-format
 msgid "No discussion found for slug=%s"
 msgstr "Nous n'avons pas de discussion sous le code=%s"
-
-#~ msgid ""
-#~ msgstr ""
 
