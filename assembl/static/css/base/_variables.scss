@@ -7,54 +7,64 @@ $img-dir: "/static/img";
 $fonts-dir: "/static/css/fonts";
 
 // Spacing
-$spacingXs: 5px;
-$spacingS: 10px;
-$spacingM: 15px;
-$spacingL: 20px;
-$spacingXl: 30px;
+$spacingXs: 5px !default;
+$spacingS: 10px !default;
+$spacingM: 15px !default;
+$spacingL: 20px !default;
+$spacingXl: 30px !default;
 
 // Colors
-$purple: #CC9FEA;
-$white: #FFFFFF;
-$gray: #7F8C8D;
-$orange: #FFD37F;
-$black: #000000;
-$blue: #dbf2ff;
-$yellow: #fcf8e3;
-$red: #da4d4d;
+$purple: #CC9FEA !default;
+$white: #FFFFFF !default;
+$gray: #7F8C8D !default;
+$orange: #FFD37F !default;
+$black: #000000 !default;
+$blue: #dbf2ff !default;
+$yellow: #fcf8e3 !default;
+$red: #da4d4d !default;
 
 // Extended palette
-$gray1: #888888;
-$gray2: #515151;
-$gray3: #ECF0F1;
-$gray4: #484848;
-$purple1: #B36FE0;
-$purple2: #9A3FD5;
-$orange1: #FFBD40;
-$orange2: #FFA700;
+$gray1: #888888 !default;
+$gray2: #515151 !default;
+$gray3: #ECF0F1 !default;
+$gray4: #484848 !default;
+
+$purple1: #B36FE0 !default;
+$purple2: #9A3FD5 !default;
+
+$orange1: #FFBD40 !default;
+$orange2: #FFA700 !default;
 
 // Border Radius
-$borderRadiusXs: 2px;
-$borderRadiusS: 3px;
-$borderRadiusMS: 5px;
-$borderRadiusM: 6px;
-$borderRadiusL: 10px;
+$borderRadiusXs: 2px !default;
+$borderRadiusS: 3px !default;
+$borderRadiusMS: 5px !default;
+$borderRadiusM: 6px !default;
+$borderRadiusL: 10px !default;
 
 // Typography
-$baseFontSize: 14px;
+$baseFontSize: 14px !default;
 $smallFontSize: $baseFontSize - 2;
 
 //Uses google font service
 $baseFontFamily: "Open Sans", sans-serif !default;
-$baseLineHeight: 1.3;
-$baseFontColor: lighten($black, 15%);
+$baseLineHeight: 1.3 !default;
+$baseFontColor: lighten($black, 15%) !default;
+
+//text color
+$txtGray: #CCCCCC !default;
+$txtGray1: #999999 !default;
+$txtGray2: #333333 !default;
+
+/**
+ * Other variable
+ **/
 
 // Usage variables
 $textSelectionBackgroundColor: $orange;
 $closebuttonColor: $gray;
 
 // panels
-
 // below this size we scroll
 $small_screen: 980px;
 
@@ -79,6 +89,3 @@ $grid_unit_min_size: $small_screen / $min_num_grid_units;
 $max_num_grid_units: round(2560px/$grid_unit_min_size);
 // message-list min 5, nav3, idea 4
 
-$txtGray: #CCCCCC;
-$txtGray1: #999999;
-$txtGray2: #333333;
