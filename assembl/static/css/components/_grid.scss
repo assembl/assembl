@@ -118,19 +118,12 @@
 }
 
 // Grid System
-// This grid system is retro-compatiable with the old one, but the
-// old one must not be used in new projects.
 
 // Grid Row
 .gr, .line {
   width: 100%;
   @include clearfixHack();
 }
-
-// Grid Units
-// NOTE: When ready to remove IE6/7 support, all selectors beginning with .grs
-// can be removed, and add direct decendant indicators (>) to the grid units
-// contained within the spaced grid row containers declared after these rules
 
 .gu, .gridUnit {
   float: left;
