@@ -1,84 +1,80 @@
-<div class="theme_homePanelTitleZone row-minor">
-    <div class="block-full">
+<div class="gr">
+  <div class="gu gu-1of1">
+    <div class="theme_homePanelTitleZone">
+      <div class="block-full">
         <div class="block-content">
-            <h3 class="js_discussionTitle theme_homePanelDiscussionTitle"></h3>
+          <h3 class="js_discussionTitle theme_homePanelDiscussionTitle"></h3>
         </div>
+      </div>
     </div>
+  </div>
 </div>
-<div class="row-major">
-    <div class="block-half">
-        <div class="block-content">
-            <h2>{{ gettext('Context') }}</h2>
-            <div class="introduction">
-            </div>
-            <button id="introduction-button-see-more" class="btn btn-default btn-sm">{{ gettext('See more') }}</button>
-        </div>
+
+<div class="gr">
+  <div class="gu gu-1of2">
+    <div class="block-content">
+      <h2>{{ gettext('Context') }}</h2>
+      <div class="introduction"></div>
+      <button id="introduction-button-see-more" class="btn btn-default btn-sm">{{ gettext('See more') }}</button>
     </div>
-    <div class="block-half">
-        <div class="block-content">
-            <h2>{{ gettext('Debate objectives') }}</h2>
-            <div class="objectives">
-            </div>
-        </div>
-    </div>
+  </div>
+  <div class="gu gu-last">
+   <div class="block-content">
+     <h2>{{ gettext('Debate objectives') }}</h2>
+     <div class="objectives"></div>
+   </div>
+  </div>
 </div>
 {#
-<div class="row-major">
-    <div class="block-full">
-        <div class="block-content">
-            <h2>{{ gettext('Timeline') }}</h2>
-            <p>
-                Blabla
-            </p>
-        </div>
-    </div>
+<div class="gr mts">
+ <div class="gu gu-1of1">
+  <div class="block-content">
+      <h2>{{ gettext('Timeline') }}</h2>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+  </div>
+ </div>
 </div>
 #}
-<div class="row-major">
-    <div class="block-full">
-        <div class="block-content">
-            <h2>{{ gettext('Instigated by') }}</h2>
-            <div class="instigator">
-            </div>
-        </div>
-    </div>
-
-    {#
-    <div class="block-half">
-        <div class="block-content">
-            <h2>{{ gettext('Facilitators') }}</h2>
-            <p>
-                Blabla
-            </p>
-        </div>
-    </div>
-    #}
-</div>
-<div class="row-major">
-    <div class="block-half">
-        <div class="block-content">
-            <div class="statistics">
-                <h2>{{ gettext('Statistics') }}</h2>
-                <p>&nbsp;</p>
-            </div>
-            <div class="chart">{{ gettext('Loading...') }}</div>
-        </div>
-    </div>
-    <div class="block-half">
-        <div class="block-content pie">
-            <div class='pie_chart_legend'></div>
-            <div class='pie_chart'>
-        </div>
-    </div>
+<div class="gr mts">
+ <div class="gu gu-1of2">
+  <div class="block-content">
+    <h2>{{ gettext('Instigated by') }}</h2>
+    <div class="instigator"></div>
+  </div>
+ </div>
+ <div class="gu gu-last">
+  {#<div class="block-content">
+    <h2>{{ gettext('Facilitators') }}</h2>
+    <p>Vestibulum et dolor quam. Integer pretium faucibus dapibus.</p>
+  </div>#}
+ </div>
 </div>
 
-<div class="row-major">
-    <div class="block-half mtl">
-        <h2 class="lastSynthesisTitle"></h2>
-        <p class="lastSynthesis mbs"></p>
-        <button id="js_readSynthesis" class="btn btn-secondary btn-sm fr">{{ gettext('Read the synthesis') }}</button>
+<div class="gr mts">
+  <div class="gu gu-1of2">
+    <div class="block-content">
+        <div class="statistics">
+            <h2>{{ gettext('Statistics') }}</h2>
+            <p>Vivamus bibendum pretium sem</p>
+        </div>
+        <div class="chart">{{ gettext('Loading...') }}</div>
     </div>
+  </div>
+  <div class="gu gu-last">
+    <div class="block-content pie">
+      <div class='pie_chart_legend'></div>
+      <div class='pie_chart'></div>
+    </div>
+  </div>
 </div>
 
-<div style="margin-top: 100px;"></div>
+<div class="gr mtxl">
+  <div class="gu gu-1of1">
+    <div class="block-content">
+      <h2 class="lastSynthesisTitle"></h2>
+      <p class="lastSynthesis mbs"></p>
+      <button id="js_readSynthesis" class="btn btn-secondary btn-sm fr">{{ gettext('Read the synthesis') }}</button>
+    </div>
+  </div>
+</div>
 
