@@ -36,3 +36,882 @@
     @include col-span($i);
   }
 }
+
+/** New System grid **/
+
+@mixin grid-unit($span, $total) {
+  width: (100% / $total) * $span;
+  margin: 0;
+}
+
+@mixin grid-margin($spacing) {
+  margin-right: $spacing;
+}
+
+// Determine width and margin for grid unit with spacing
+//
+// span: the column span of the grid unit (required)
+// total: the total number of columns in the grid row (required)
+// spacing: the ammount of spacing required between grid units (required)
+// parentSpan: the column span of the parent grid unit, used for nested grids (optional)
+// parentTotal: the total number of columns in the parent grid unit's grid row (optional)
+// parentSpacing: the ammount of spacing between grid units in the parent unit's grid row (optional)
+//
+// The width of the grid unit is a percentage value, and the margin is in pixels.
+// We therefore need to first calculate the margin as a percentage of the parent
+// grid row and compensate in the width percentage value of each grid unit.
+
+@mixin grid-unitWithSpacing($span, $total, $spacing, $parentSpan: 1, $parentTotal: 1, $parentSpacing: 0px) {
+
+  // Calculate the width of the parent element, in pixels
+
+  // Get the parent width percentage.
+  // Uses exactly the same logic as the section below ("Calculate the width
+  // of the grid unit, in percentage"), just concatinated.
+
+  $parentWidthPercentage: ((100% / $parentTotal) * $parentSpan) - ((((1% * (($parentSpacing / $siteWidth) * 100)) * ($parentTotal - 1)) / $parentTotal) / $parentSpan);
+
+  // Calculate the parent element width in pixels
+
+  $parentWidth: ($siteWidth / 100) * $parentWidthPercentage;
+
+  // Calculate the width of the grid unit, in percentage
+
+  // Calculate the spacing width as a percentage of the parent width.
+  // There is no LESS function to change a variable from pixels to percentage,
+  // so we just multiply 1% by the percentage value in pixels (math hack)
+
+  $spacingPercentage: 1% * (($spacing / $parentWidth) * 100);
+
+  // Calculate the base width (as if there were no spacing)
+
+  $baseWidth: percentage($span / $total);
+
+  // As we are using margin-right, the number of units with spacing should be
+  // one less than the total number of units
+
+  $unitsWithSpacing: ($total - 1);
+
+  // Calculate the proporsion of the grid row consumed by spacing (percentage)
+
+  $totalRowSpacing: ($spacingPercentage * $unitsWithSpacing);
+
+  // To calculate how much width to subtract from each one of the units with
+  // spacing, we take the total ammount of spacing in the grid row, divide it
+  // by the total number of columns, then divide that by the the number of columns
+  // that the unit in question consumes :)
+
+  $widthToSubtract: (($totalRowSpacing / $total) / $span);
+
+  // Set the CSS properties
+  width: ($baseWidth - $widthToSubtract);
+  @include grid-margin($spacing);
+}
+
+@mixin grid-last() {
+  display: table-cell;
+  float: none;
+  width: 2000px;
+  *display: block;
+  *zoom: 1;
+  *width: auto;
+}
+
+// Grid System
+// This grid system is retro-compatiable with the old one, but the
+// old one must not be used in new projects.
+
+// Grid Row
+.gr, .line {
+  width: 100%;
+  @include clearfixHack();
+}
+
+// Grid Units
+// NOTE: When ready to remove IE6/7 support, all selectors beginning with .grs
+// can be removed, and add direct decendant indicators (>) to the grid units
+// contained within the spaced grid row containers declared after these rules
+
+.gu, .gridUnit {
+  float: left;
+}
+
+.gu-1of1, .grid1of1 {
+  @include grid-unit(1, 1);
+}
+
+.gu-1of2, .grid1of2, .gu-2of4, .grid2of4, .gu-3of6 {
+  @include grid-unit(1, 2);
+}
+
+.gu-1of3, .gu-2of6, .grid1of3 {
+  @include grid-unit(1, 3);
+}
+
+.gu-2of3, .gu-4of6, .grid2of3 {
+  @include grid-unit(2, 3);
+}
+
+.gu-1of4, .grid1of4 {
+  @include grid-unit(1, 4);
+}
+
+.gu-3of4, .grid3of4 {
+  @include grid-unit(3, 4);
+}
+
+.gu-1of5, .grid1of5 {
+  @include grid-unit(1, 5);
+}
+
+.gu-2of5, .grid2of5 {
+  @include grid-unit(2, 5);
+}
+
+.gu-3of5, .grid3of5 {
+  @include grid-unit(3, 5);
+}
+
+.gu-4of5, .grid4of5 {
+  @include grid-unit(4, 5);
+}
+
+.gu-1of6 {
+  @include grid-unit(1, 6);
+}
+
+.gu-5of6 {
+  @include grid-unit(5, 6);
+}
+
+.gu-last, .gridLastUnit {
+  @include grid-last();
+}
+
+.grsxs {
+  > .gu-1of2, > .gu-2of4, > .grid1of2, > .grid2of4, > .gu-3of6 {
+    @include grid-unitWithSpacing(1, 2, $spacingXs);
+  }
+  > .gu-1of3, > .grid1of3, > .gu-2of6 {
+    @include grid-unitWithSpacing(1, 3, $spacingXs);
+  }
+  > .gu-2of3, > .grid2of3, > .gu-4of6 {
+    @include grid-unitWithSpacing(2, 3, $spacingXs);
+  }
+  > .gu-1of4, > .grid1of4 {
+    @include grid-unitWithSpacing(1, 4, $spacingXs);
+  }
+  > .gu-3of4, > .grid3of4 {
+    @include grid-unitWithSpacing(3, 4, $spacingXs);
+  }
+  > .gu-1of5, > .grid1of5 {
+    @include grid-unitWithSpacing(1, 5, $spacingXs);
+  }
+  > .gu-2of5, > .grid2of5 {
+    @include grid-unitWithSpacing(2, 5, $spacingXs);
+  }
+  > .gu-3of5, > .grid3of5 {
+    @include grid-unitWithSpacing(3, 5, $spacingXs);
+  }
+  > .gu-4of5, > .grid4of5 {
+    @include grid-unitWithSpacing(4, 5, $spacingXs);
+  }
+  > .gu-1of6 {
+    @include grid-unitWithSpacing(1, 6, $spacingXs);
+  }
+  > .gu-5of6 {
+    @include grid-unitWithSpacing(5, 6, $spacingXs);
+  }
+}
+
+.grss {
+  > .gu-1of2, > .gu-2of4, > .grid1of2, > .grid2of4, > .gu-3of6 {
+    @include grid-unitWithSpacing(1, 2, $spacingS);
+  }
+  > .gu-1of3, > .grid1of3, > .gu-2of6 {
+    @include grid-unitWithSpacing(1, 3, $spacingS);
+  }
+  > .gu-2of3, > .grid2of3, > .gu-4of6 {
+    @include grid-unitWithSpacing(2, 3, $spacingS);
+  }
+  > .gu-1of4, > .grid1of4 {
+    @include grid-unitWithSpacing(1, 4, $spacingS);
+  }
+  > .gu-3of4, > .grid3of4 {
+    @include grid-unitWithSpacing(3, 4, $spacingS);
+  }
+  > .gu-1of5, > .grid1of5 {
+    @include grid-unitWithSpacing(1, 5, $spacingS);
+  }
+  > .gu-2of5, > .grid2of5 {
+    @include grid-unitWithSpacing(2, 5, $spacingS);
+  }
+  > .gu-3of5, > .grid3of5 {
+    @include grid-unitWithSpacing(3, 5, $spacingS);
+  }
+  > .gu-4of5, > .grid4of5 {
+    @include grid-unitWithSpacing(4, 5, $spacingS);
+  }
+  > .gu-1of6 {
+    @include grid-unitWithSpacing(1, 6, $spacingS);
+  }
+  > .gu-5of6 {
+    @include grid-unitWithSpacing(5, 6, $spacingS);
+  }
+}
+
+.grsm {
+  > .gu-1of2, > .gu-2of4, > .grid1of2, > .grid2of4, > .gu-3of6 {
+    @include grid-unitWithSpacing(1, 2, $spacingM);
+  }
+  > .gu-1of3, > .grid1of3, > .gu-2of6 {
+    @include grid-unitWithSpacing(1, 3, $spacingM);
+  }
+  > .gu-2of3, > .grid2of3, > .gu-4of6 {
+    @include grid-unitWithSpacing(2, 3, $spacingM);
+  }
+  > .gu-1of4, > .grid1of4 {
+    @include grid-unitWithSpacing(1, 4, $spacingM);
+  }
+  > .gu-3of4, > .grid3of4 {
+    @include grid-unitWithSpacing(3, 4, $spacingM);
+  }
+  > .gu-1of5, > .grid1of5 {
+    @include grid-unitWithSpacing(1, 5, $spacingM);
+  }
+  > .gu-2of5, > .grid2of5 {
+    @include grid-unitWithSpacing(2, 5, $spacingM);
+  }
+  > .gu-3of5, > .grid3of5 {
+    @include grid-unitWithSpacing(3, 5, $spacingM);
+  }
+  > .gu-4of5, > .grid4of5 {
+    @include grid-unitWithSpacing(4, 5, $spacingM);
+  }
+  > .gu-1of6 {
+    @include grid-unitWithSpacing(1, 6, $spacingM);
+  }
+  > .gu-5of6 {
+    @include grid-unitWithSpacing(5, 6, $spacingM);
+  }
+}
+
+.grsl {
+  > .gu-1of2, > .gu-2of4, > .grid1of2, > .grid2of4, > .gu-3of6 {
+    @include grid-unitWithSpacing(1, 2, $spacingL);
+  }
+  > .gu-1of3, > .grid1of3, > .gu-2of6 {
+    @include grid-unitWithSpacing(1, 3, $spacingL);
+  }
+  > .gu-2of3, > .grid2of3, > .gu-4of6 {
+    @include grid-unitWithSpacing(2, 3, $spacingL);
+  }
+  > .gu-1of4, > .grid1of4 {
+    @include grid-unitWithSpacing(1, 4, $spacingL);
+  }
+  > .gu-3of4, > .grid3of4 {
+    @include grid-unitWithSpacing(3, 4, $spacingL);
+  }
+  > .gu-1of5, > .grid1of5 {
+    @include grid-unitWithSpacing(1, 5, $spacingL);
+  }
+  > .gu-2of5, > .grid2of5 {
+    @include grid-unitWithSpacing(2, 5, $spacingL);
+  }
+  > .gu-3of5, > .grid3of5 {
+    @include grid-unitWithSpacing(3, 5, $spacingL);
+  }
+  > .gu-4of5, > .grid4of5 {
+    @include grid-unitWithSpacing(4, 5, $spacingL);
+  }
+  > .gu-1of6 {
+    @include grid-unitWithSpacing(1, 6, $spacingL);
+  }
+  > .gu-5of6 {
+    @include grid-unitWithSpacing(5, 6, $spacingL);
+  }
+}
+
+.grsxl {
+  > .gu-1of2, > .gu-2of4, > .grid1of2, > .grid2of4, > .gu-3of6 {
+    @include grid-unitWithSpacing(1, 2, $spacingXl);
+  }
+  > .gu-1of3, > .gu-2of6 {
+    @include grid-unitWithSpacing(1, 3, $spacingXl);
+  }
+  > .gu-2of3, > .gu-4of6 {
+    @include grid-unitWithSpacing(2, 3, $spacingXl);
+  }
+  > .gu-1of4 {
+    @include grid-unitWithSpacing(1, 4, $spacingXl);
+  }
+  > .gu-3of4 {
+    @include grid-unitWithSpacing(3, 4, $spacingXl);
+  }
+  > .gu-1of5 {
+    @include grid-unitWithSpacing(1, 5, $spacingXl);
+  }
+  > .gu-2of5 {
+    @include grid-unitWithSpacing(2, 5, $spacingXl);
+  }
+  > .gu-3of5 {
+    @include grid-unitWithSpacing(3, 5, $spacingXl);
+  }
+  > .gu-4of5 {
+    @include grid-unitWithSpacing(4, 5, $spacingXl);
+  }
+  > .gu-1of6 {
+    @include grid-unitWithSpacing(1, 6, $spacingXl);
+  }
+  > .gu-5of6 {
+    @include grid-unitWithSpacing(5, 6, $spacingXl);
+  }
+}
+
+// Medium responsive breakpoint
+
+@media screen and (max-width: $breakpointM) {
+  .fluid-container {
+    width: $pageWidthM;
+  }
+
+  .gu-m-1of1 {
+    clear: both;
+    display: block;
+    @include grid-unit(1, 1);
+  }
+  .gu-m-last {
+    @include grid-last();
+  }
+
+  .gu-m-1of2, .gu-m-2of4, .gu-m-3of6 {
+    @include grid-unit(1, 2);
+  }
+  .gu-m-1of3, .gu-m-2of6 {
+    @include grid-unit(1, 3);
+  }
+  .gu-m-2of3, .gu-m-4of6 {
+    @include grid-unit(2, 3);
+  }
+  .gu-m-1of4 {
+    @include grid-unit(1, 4);
+  }
+  .gu-m-3of4 {
+    @include grid-unit(3, 4);
+  }
+  .gu-m-1of5 {
+    @include grid-unit(1, 5);
+  }
+  .gu-m-2of5 {
+    @include grid-unit(2, 5);
+  }
+  .gu-m-3of5 {
+    @include grid-unit(3, 5);
+  }
+  .gu-m-4of5 {
+    @include grid-unit(4, 5);
+  }
+  .gu-m-1of6 {
+    @include grid-unit(1, 6);
+  }
+  .gu-m-5of6 {
+    @include grid-unit(5, 6);
+  }
+
+  .grsxs {
+    > .gu-m-1of1 {
+      @include grid-unitWithSpacing(1, 1, 0px);
+    }
+    > .gu-m-last {
+      @include grid-last();
+    }
+
+    > .gu-m-1of2, > .gu-m-2of4, > .gu-m-3of6 {
+      @include grid-unitWithSpacing(1, 2, $spacingXs);
+    }
+    > .gu-m-1of3, > .gu-m-2of6 {
+      @include grid-unitWithSpacing(1, 3, $spacingXs);
+    }
+    > .gu-m-2of3, > .gu-m-4of6 {
+      @include grid-unitWithSpacing(2, 3, $spacingXs);
+    }
+    > .gu-m-1of4 {
+      @include grid-unitWithSpacing(1, 4, $spacingXs);
+    }
+    > .gu-m-3of4 {
+      @include grid-unitWithSpacing(3, 4, $spacingXs);
+    }
+    > .gu-m-1of5 {
+      @include grid-unitWithSpacing(1, 5, $spacingXs);
+    }
+    > .gu-m-2of5 {
+      @include grid-unitWithSpacing(2, 5, $spacingXs);
+    }
+    > .gu-m-3of5 {
+      @include grid-unitWithSpacing(3, 5, $spacingXs);
+    }
+    > .gu-m-4of5 {
+      @include grid-unitWithSpacing(4, 5, $spacingXs);
+    }
+    > .gu-m-1of6 {
+      @include grid-unitWithSpacing(1, 6, $spacingXs);
+    }
+    > .gu-m-5of6 {
+      @include grid-unitWithSpacing(5, 6, $spacingXs);
+    }
+  }
+
+  .grss {
+    > .gu-m-1of1 {
+      @include grid-unitWithSpacing(1, 1, 0px);
+    }
+    > .gu-m-last {
+      @include grid-last();
+    }
+
+    > .gu-m-1of2, > .gu-m-2of4, > .gu-m-3of6 {
+      @include grid-unitWithSpacing(1, 2, $spacingS);
+    }
+    > .gu-m-1of3, > .gu-m-2of6 {
+      @include grid-unitWithSpacing(1, 3, $spacingS);
+    }
+    > .gu-m-2of3, > .gu-m-4of6 {
+      @include grid-unitWithSpacing(2, 3, $spacingS);
+    }
+    > .gu-m-1of4 {
+      @include grid-unitWithSpacing(1, 4, $spacingS);
+    }
+    > .gu-m-3of4 {
+      @include grid-unitWithSpacing(3, 4, $spacingS);
+    }
+    > .gu-m-1of5 {
+      @include grid-unitWithSpacing(1, 5, $spacingS);
+    }
+    > .gu-m-2of5 {
+      @include grid-unitWithSpacing(2, 5, $spacingS);
+    }
+    > .gu-m-3of5 {
+      @include grid-unitWithSpacing(3, 5, $spacingS);
+    }
+    > .gu-m-4of5 {
+      @include grid-unitWithSpacing(4, 5, $spacingS);
+    }
+    > .gu-m-1of6 {
+      @include grid-unitWithSpacing(1, 6, $spacingS);
+    }
+    > .gu-m-5of6 {
+      @include grid-unitWithSpacing(5, 6, $spacingS);
+    }
+  }
+
+  .grsm {
+    > .gu-m-1of1 {
+      @include grid-unitWithSpacing(1, 1, 0px);
+    }
+    > .gu-m-last {
+      @include grid-last();
+    }
+
+    > .gu-m-1of2, > .gu-m-2of4, > .gu-m-3of6 {
+      @include grid-unitWithSpacing(1, 2, $spacingM);
+    }
+    > .gu-m-1of3, > .gu-m-2of6 {
+      @include grid-unitWithSpacing(1, 3, $spacingM);
+    }
+    > .gu-m-2of3, > .gu-m-4of6 {
+      @include grid-unitWithSpacing(2, 3, $spacingM);
+    }
+    > .gu-m-1of4 {
+      @include grid-unitWithSpacing(1, 4, $spacingM);
+    }
+    > .gu-m-3of4 {
+      @include grid-unitWithSpacing(3, 4, $spacingM);
+    }
+    > .gu-m-1of5 {
+      @include grid-unitWithSpacing(1, 5, $spacingM);
+    }
+    > .gu-m-2of5 {
+      @include grid-unitWithSpacing(2, 5, $spacingM);
+    }
+    > .gu-m-3of5 {
+      @include grid-unitWithSpacing(3, 5, $spacingM);
+    }
+    > .gu-m-4of5 {
+      @include grid-unitWithSpacing(4, 5, $spacingM);
+    }
+    > .gu-m-1of6 {
+      @include grid-unitWithSpacing(1, 6, $spacingM);
+    }
+    > .gu-m-5of6 {
+      @include grid-unitWithSpacing(5, 6, $spacingM);
+    }
+  }
+
+  .grsl {
+    > .gu-m-1of1 {
+      @include grid-unitWithSpacing(1, 1, 0px);
+    }
+    > .gu-m-last {
+      @include grid-last();
+    }
+
+    > .gu-m-1of2, > .gu-m-2of4, > .gu-m-3of6 {
+      @include grid-unitWithSpacing(1, 2, $spacingL);
+    }
+    > .gu-m-1of3, > .gu-m-2of6 {
+      @include grid-unitWithSpacing(1, 3, $spacingL);
+    }
+    > .gu-m-2of3, > .gu-m-4of6 {
+      @include grid-unitWithSpacing(2, 3, $spacingL);
+    }
+    > .gu-m-1of4 {
+      @include grid-unitWithSpacing(1, 4, $spacingL);
+    }
+    > .gu-m-3of4 {
+      @include grid-unitWithSpacing(3, 4, $spacingL);
+    }
+    > .gu-m-1of5 {
+      @include grid-unitWithSpacing(1, 5, $spacingL);
+    }
+    > .gu-m-2of5 {
+      @include grid-unitWithSpacing(2, 5, $spacingL);
+    }
+    > .gu-m-3of5 {
+      @include grid-unitWithSpacing(3, 5, $spacingL);
+    }
+    > .gu-m-4of5 {
+      @include grid-unitWithSpacing(4, 5, $spacingL);
+    }
+    > .gu-m-1of6 {
+      @include grid-unitWithSpacing(1, 6, $spacingL);
+    }
+    > .gu-m-5of6 {
+      @include grid-unitWithSpacing(5, 6, $spacingL);
+    }
+  }
+
+  .grsxl {
+    > .gu-m-1of1 {
+      @include grid-unitWithSpacing(1, 1, 0px);
+    }
+    > .gu-m-last {
+      @include grid-last();
+    }
+
+    > .gu-m-1of2, > .gu-m-2of4, > .gu-m-3of6 {
+      @include grid-unitWithSpacing(1, 2, $spacingXl);
+    }
+    > .gu-m-1of3, > .gu-m-2of6 {
+      @include grid-unitWithSpacing(1, 3, $spacingXl);
+    }
+    > .gu-m-2of3, > .gu-m-4of6 {
+      @include grid-unitWithSpacing(2, 3, $spacingXl);
+    }
+    > .gu-m-1of4 {
+      @include grid-unitWithSpacing(1, 4, $spacingXl);
+    }
+    > .gu-m-3of4 {
+      @include grid-unitWithSpacing(3, 4, $spacingXl);
+    }
+    > .gu-m-1of5 {
+      @include grid-unitWithSpacing(1, 5, $spacingXl);
+    }
+    > .gu-m-2of5 {
+      @include grid-unitWithSpacing(2, 5, $spacingXl);
+    }
+    > .gu-m-3of5 {
+      @include grid-unitWithSpacing(3, 5, $spacingXl);
+    }
+    > .gu-m-4of5 {
+      @include grid-unitWithSpacing(4, 5, $spacingXl);
+    }
+    > .gu-m-1of6 {
+      @include grid-unitWithSpacing(1, 6, $spacingXl);
+    }
+    > .gu-m-5of6 {
+      @include grid-unitWithSpacing(5, 6, $spacingXl);
+    }
+  }
+}
+
+// Small responsive breakpoint
+
+@media screen and (max-width: $breakpointS) {
+  .fluid-container {
+    width: $pageWidthS;
+  }
+
+  .gu-s-1of1 {
+    clear: both;
+    display: block;
+    @include grid-unit(1, 1);
+  }
+  .gu-s-last {
+    @include grid-last();
+  }
+
+  .gu-s-1of2, > .gu-s-2of4, > .gu-s-3of6 {
+    @include grid-unit(1, 2);
+  }
+  .gu-s-1of3, > .gu-s-2of6 {
+    @include grid-unit(1, 3);
+  }
+  .gu-s-2of3, > .gu-s-4of6 {
+    @include grid-unit(2, 3);
+  }
+  .gu-s-1of4 {
+    @include grid-unit(1, 4);
+  }
+  .gu-s-3of4 {
+    @include grid-unit(3, 4);
+  }
+  .gu-s-1of5 {
+    @include grid-unit(1, 5);
+  }
+  .gu-s-2of5 {
+    @include grid-unit(2, 5);
+  }
+  .gu-s-3of5 {
+    @include grid-unit(3, 5);
+  }
+  .gu-s-4of5 {
+    @include grid-unit(4, 5);
+  }
+  .gu-s-1of6 {
+    @include grid-unit(1, 6);
+  }
+  .gu-s-5of6 {
+    @include grid-unit(5, 6);
+  }
+
+  .grsxs {
+    > .gu-s-1of1 {
+      @include grid-unitWithSpacing(1, 1, 0px);
+    }
+    > .gu-s-last {
+      @include grid-last();
+    }
+
+    > .gu-s-1of2, > .gu-s-2of4, > .gu-s-3of6 {
+      @include grid-unitWithSpacing(1, 2, $spacingXs);
+    }
+    > .gu-s-1of3, > .gu-s-2of6 {
+      @include grid-unitWithSpacing(1, 3, $spacingXs);
+    }
+    > .gu-s-2of3, > .gu-s-4of6 {
+      @include grid-unitWithSpacing(2, 3, $spacingXs);
+    }
+    > .gu-s-1of4 {
+      @include grid-unitWithSpacing(1, 4, $spacingXs);
+    }
+    > .gu-s-3of4 {
+      @include grid-unitWithSpacing(3, 4, $spacingXs);
+    }
+    > .gu-s-1of5 {
+      @include grid-unitWithSpacing(1, 5, $spacingXs);
+    }
+    > .gu-s-2of5 {
+      @include grid-unitWithSpacing(2, 5, $spacingXs);
+    }
+    > .gu-s-3of5 {
+      @include grid-unitWithSpacing(3, 5, $spacingXs);
+    }
+    > .gu-s-4of5 {
+      @include grid-unitWithSpacing(4, 5, $spacingXs);
+    }
+    > .gu-s-1of6 {
+      @include grid-unitWithSpacing(1, 6, $spacingXs);
+    }
+    > .gu-s-5of6 {
+      @include grid-unitWithSpacing(5, 6, $spacingXs);
+    }
+  }
+
+  .grss {
+    > .gu-s-1of1 {
+      @include grid-unitWithSpacing(1, 1, 0px);
+    }
+    > .gu-s-last {
+      @include grid-last();
+    }
+
+    > .gu-s-1of2, > .gu-s-2of4, > .gu-s-3of6 {
+      @include grid-unitWithSpacing(1, 2, $spacingS);
+    }
+    > .gu-s-1of3, > .gu-s-2of6 {
+      @include grid-unitWithSpacing(1, 3, $spacingS);
+    }
+    > .gu-s-2of3, > .gu-s-4of6 {
+      @include grid-unitWithSpacing(2, 3, $spacingS);
+    }
+    > .gu-s-1of4 {
+      @include grid-unitWithSpacing(1, 4, $spacingS);
+    }
+    > .gu-s-3of4 {
+      @include grid-unitWithSpacing(3, 4, $spacingS);
+    }
+    > .gu-s-1of5 {
+      @include grid-unitWithSpacing(1, 5, $spacingS);
+    }
+    > .gu-s-2of5 {
+      @include grid-unitWithSpacing(2, 5, $spacingS);
+    }
+    > .gu-s-3of5 {
+      @include grid-unitWithSpacing(3, 5, $spacingS);
+    }
+    > .gu-s-4of5 {
+      @include grid-unitWithSpacing(4, 5, $spacingS);
+    }
+    > .gu-s-1of6 {
+      @include grid-unitWithSpacing(1, 6, $spacingS);
+    }
+    > .gu-s-5of6 {
+      @include grid-unitWithSpacing(5, 6, $spacingS);
+    }
+  }
+
+  .grsm {
+    > .gu-s-1of1 {
+      @include grid-unitWithSpacing(1, 1, 0px);
+    }
+    > .gu-s-last {
+      @include grid-last();
+    }
+
+    > .gu-s-1of2, > .gu-s-2of4, > .gu-s-3of6 {
+      @include grid-unitWithSpacing(1, 2, $spacingM);
+    }
+    > .gu-s-1of3, > .gu-s-2of6 {
+      @include grid-unitWithSpacing(1, 3, $spacingM);
+    }
+    > .gu-s-2of3, > .gu-s-4of6 {
+      @include grid-unitWithSpacing(2, 3, $spacingM);
+    }
+    > .gu-s-1of4 {
+      @include grid-unitWithSpacing(1, 4, $spacingM);
+    }
+    > .gu-s-3of4 {
+      @include grid-unitWithSpacing(3, 4, $spacingM);
+    }
+    > .gu-s-1of5 {
+      @include grid-unitWithSpacing(1, 5, $spacingM);
+    }
+    > .gu-s-2of5 {
+      @include grid-unitWithSpacing(2, 5, $spacingM);
+    }
+    > .gu-s-3of5 {
+      @include grid-unitWithSpacing(3, 5, $spacingM);
+    }
+    > .gu-s-4of5 {
+      @include grid-unitWithSpacing(4, 5, $spacingM);
+    }
+    > .gu-s-1of6 {
+      @include grid-unitWithSpacing(1, 6, $spacingM);
+    }
+    > .gu-s-5of6 {
+      @include grid-unitWithSpacing(5, 6, $spacingM);
+    }
+  }
+
+  .grsl {
+    > .gu-s-1of1 {
+      @include grid-unitWithSpacing(1, 1, 0px);
+    }
+    > .gu-s-last {
+      @include grid-last();
+    }
+
+    > .gu-s-1of2, > .gu-s-2of4, > .gu-s-3of6 {
+      @include grid-unitWithSpacing(1, 2, $spacingL);
+    }
+    > .gu-s-1of3, > .gu-s-2of6 {
+      @include grid-unitWithSpacing(1, 3, $spacingL);
+    }
+    > .gu-s-2of3, > .gu-s-4of6 {
+      @include grid-unitWithSpacing(2, 3, $spacingL);
+    }
+    > .gu-s-1of4 {
+      @include grid-unitWithSpacing(1, 4, $spacingL);
+    }
+    > .gu-s-3of4 {
+      @include grid-unitWithSpacing(3, 4, $spacingL);
+    }
+    > .gu-s-1of5 {
+      @include grid-unitWithSpacing(1, 5, $spacingL);
+    }
+    > .gu-s-2of5 {
+      @include grid-unitWithSpacing(2, 5, $spacingL);
+    }
+    > .gu-s-3of5 {
+      @include grid-unitWithSpacing(3, 5, $spacingL);
+    }
+    > .gu-s-4of5 {
+      @include grid-unitWithSpacing(4, 5, $spacingL);
+    }
+    > .gu-s-1of6 {
+      @include grid-unitWithSpacing(1, 6, $spacingL);
+    }
+    > .gu-s-5of6 {
+      @include grid-unitWithSpacing(5, 6, $spacingL);
+    }
+  }
+
+  .grsxl {
+    > .gu-s-1of1 {
+      @include grid-unitWithSpacing(1, 1, 0px);
+    }
+    > .gu-s-last {
+      @include grid-last();
+    }
+
+    > .gu-s-1of2, > .gu-s-2of4, > .gu-s-3of6 {
+      @include grid-unitWithSpacing(1, 2, $spacingXl);
+    }
+    > .gu-s-1of3, > .gu-s-2of6 {
+      @include grid-unitWithSpacing(1, 3, $spacingXl);
+    }
+    > .gu-s-2of3, > .gu-s-4of6 {
+      @include grid-unitWithSpacing(2, 3, $spacingXl);
+    }
+    > .gu-s-1of4 {
+      @include grid-unitWithSpacing(1, 4, $spacingXl);
+    }
+    > .gu-s-3of4 {
+      @include grid-unitWithSpacing(3, 4, $spacingXl);
+    }
+    > .gu-s-1of5 {
+      @include grid-unitWithSpacing(1, 5, $spacingXl);
+    }
+    > .gu-s-2of5 {
+      @include grid-unitWithSpacing(2, 5, $spacingXl);
+    }
+    > .gu-s-3of5 {
+      @include grid-unitWithSpacing(3, 5, $spacingXl);
+    }
+    > .gu-s-4of5 {
+      @include grid-unitWithSpacing(4, 5, $spacingXl);
+    }
+    > .gu-s-1of6 {
+      @include grid-unitWithSpacing(1, 6, $spacingXl);
+    }
+    > .gu-s-5of6 {
+      @include grid-unitWithSpacing(5, 6, $spacingXl);
+    }
+  }
+}
+
+// Zebra grid guide for "visual debugging" (to be used in conjunction with .grid-row)
+.gr-zebra {
+  .gu {
+    text-align: center;
+    padding: $spacingS 0;
+    *background-color: lighten($black, 90%);
+
+    &:nth-child(even) {
+      background-color: lighten($black, 90%);
+    }
+    &:nth-child(odd) {
+      background-color: lighten($black, 95%);
+    }
+  }
+}

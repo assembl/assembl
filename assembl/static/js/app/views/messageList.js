@@ -1035,6 +1035,9 @@ define(function (require) {
 
             for (i; i < len; i++) {
                 model = messages[i];
+
+                console.log('getRenderedMessagesThreaded', model)
+
                 current_message_info = data_by_object[model.getId()];
                 if ((current_message_info['traversal_order'] >= offsets['offsetStart'])
                     && (current_message_info['traversal_order'] <= offsets['offsetEnd'])) {

@@ -56,6 +56,20 @@ $txtGray: #CCCCCC !default;
 $txtGray1: #999999 !default;
 $txtGray2: #333333 !default;
 
+// Layout
+$siteWidth: 980px !default;
+$breakpointM: 768px !default;
+// breakpoint for tablets
+$breakpointS: 480px !default;
+// breakpoint for smartphones
+
+// Responsive
+$pageWidth: 85% !default;
+$pageWidthM: 90% !default;
+// when reaching the tablet breakpoint
+$pageWidthS: 97% !default;
+// when reaching the smartphone breakpoint
+
 /**
  * Other variable
  **/
