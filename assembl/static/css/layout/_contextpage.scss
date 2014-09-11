@@ -1,181 +1,175 @@
 .homePanel {
-    height: 100%;
-    overflow-y: auto;
+  height: 100%;
+  overflow-y: auto;
 
-.row-major, .row-minor {
+  .row-major, .row-minor {
     clear: both;
     padding: 0px 4px 8px 4px;
-}
-.row-minor { 
+  }
+  .row-minor {
     /*min-height: 200px;*/
-}
-.row-major {
+  }
+  .row-major {
     background: #fff;
     /*height: 300px;*/
-}
-.block-half {
+  }
+  .block-half {
     width: 48%;
     display: inline-block;
     /*float: left;*/
     vertical-align: top;
-}
-.block-full {
+  }
+  .block-full {
     width: 100%;
-}
+  }
 
-.block-content {
+  .block-content {
     padding: 2px 10px;
-}
+  }
 
-.block-content ul li {
+  .block-content ul li {
     margin-bottom: 6px;
-}
+  }
 
-#introduction-button-see-more {
+  #introduction-button-see-more {
     display: none;
-}
+  }
 
+  /* override default CKEditor field appearance */
 
-/* override default CKEditor field appearance */
-
-.panel-editablearea {
+  .panel-editablearea {
     background-color: initial;
     color: initial;
     padding: 0;
-}
+  }
 
-.panel-editablearea .canEdit { /* align vertically with titles and paragraphs (compensate for transparent border) */
+  .panel-editablearea .canEdit {
+    /* align vertically with titles and paragraphs (compensate for transparent border) */
     margin-left: -1px;
-}
+  }
 
+  /* CSS associated to the line chart */
 
-/* CSS associated to the line chart */
-
-.data-line {
+  .data-line {
     stroke: steelblue;
     stroke-width: 2;
     fill: none;
     stroke-dasharray: 0;
-}
+  }
 
-.chart path.area {
+  .chart path.area {
     /*fill: lightsteelblue;*/
     fill: #9a3fd5;
-}
+  }
 
-
-.chart path {
+  .chart path {
     stroke: #eee;
     stroke-width: 2;
     stroke-dasharray: 0;
     fill: none;
-}
+  }
 
-
-text {
+  text {
     font-family: Arial;
     font-size: 8pt;
     fill: #787878;
-}
+  }
 
-line {
+  line {
     stroke: #CDCDCD;
     stroke-width: 0.5;
     /* stroke-dasharray: 3 3; */
     fill: none;
-}
+  }
 
-.data-point {
+  .data-point {
     stroke: steelblue;
     stroke-width: 2;
     fill: #FFF;
-}
+  }
 
-#chart {
+  #chart {
     margin: 0;
-}
+  }
 
-.overlay {
-  fill: none;
-  pointer-events: all;
-}
+  .overlay {
+    fill: none;
+    pointer-events: all;
+  }
 
-.focus circle {
-  fill: rgba(255, 255, 255, 0.5);
-  stroke: #aaa;
-}
+  .focus circle {
+    fill: rgba(255, 255, 255, 0.5);
+    stroke: #aaa;
+  }
 
-.focus text {
+  .focus text {
     fill: black;
     text-shadow: 0 0 2px rgba(220, 220, 220, 1);
-}
+  }
 
-.focus rect {
+  .focus rect {
     /*fill: #fff;
     fill-opacity: 0.1;*/
     fill: url(#lineChartLegendGradient);
-}
+  }
 
-#lineChartLegendGradient .stop1, #lineChartLegendGradient .stop2, #lineChartLegendGradient .stop3 {
+  #lineChartLegendGradient .stop1, #lineChartLegendGradient .stop2, #lineChartLegendGradient .stop3 {
     stop-color: white;
-}
-#lineChartLegendGradient .stop1, #lineChartLegendGradient .stop3 {
+  }
+  #lineChartLegendGradient .stop1, #lineChartLegendGradient .stop3 {
     stop-opacity: 0;
-}
-#lineChartLegendGradient .stop2 {
+  }
+  #lineChartLegendGradient .stop2 {
     stop-opacity: 0.2;
-}
+  }
 
+  /* CSS associated to the pie */
 
-/* CSS associated to the pie */
-
-.pie {
+  .pie {
     height: 300px;
     vertical-align: top;
-}
+  }
 
-.pie_chart
-{
-    margin:0 auto;
+  .pie_chart {
+    margin: 0 auto;
     width: 100%;
     height: 100%;
     vertical-align: top;
     text-align: center;
-}
+  }
 
-.pie_chart_legend
-{
+  .pie_chart_legend {
     margin-top: 45px;
     height: 35px;
-}
+  }
 
-.pie svg {
+  .pie svg {
     margin: 0 auto;
     text-align: center;
-}
+  }
 
-.pie_chart .formg text {
+  .pie_chart .formg text {
     fill: white;
     text-shadow: 0 1px 1px rgba(150, 150, 150, 1);
-}
+  }
 
-.pie_chart path.form:hover, .pie_chart path.form.hover {
+  .pie_chart path.form:hover, .pie_chart path.form.hover {
     stroke: #777;
-}
+  }
 
-.pie_chart path {
+  .pie_chart path {
     stroke: #eee;
     stroke-dasharray: 0;
     fill: none;
     -webkit-transition: stroke 0.5s;
     transition: stroke 0.5s;
-}
+  }
 }
 
 .lastSynthesisTitle {
   .message-date {
     color: $gray1;
-    font-size: 11px;
+    font-size: 12px;
     opacity: 0.5;
     &:before {
       content: "\002022";
