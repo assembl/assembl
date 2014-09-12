@@ -133,6 +133,12 @@ from .votes import (
 from .annotation import (
     Webpage,
 )
+from .timeline import (
+    DiscussionMilestone,
+    DiscussionPhase,
+    DiscussionSession,
+    TimelineEvent,
+)
 from .widgets import (
     BaseIdeaWidget,
     BaseIdeaWidgetLink,

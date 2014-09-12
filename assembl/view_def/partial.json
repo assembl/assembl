@@ -232,10 +232,29 @@
         "vote_value": true
     },
     "PartnerOrganization": {
-            "name": true,
-            "description": false,
-            "homepage": true,
-            "logo": true,
-            "is_initiator": true
+        "name": true,
+        "description": false,
+        "homepage": true,
+        "logo": true,
+        "is_initiator": true
+    },
+    "TimelineEvent": {
+        "title": true,
+        "description": true,
+        "previous_event": true
+    },
+    "DiscussionPhase": {
+        "@extends": "TimelineEvent",
+        "start": true,
+        "end": true
+    },
+    "DiscussionSession": {
+        "@extends": "TimelineEvent",
+        "start": true,
+        "end": true
+    },
+    "DiscussionMilestone": {
+        "@extends": "TimelineEvent",
+        "start": true
     }
 }
