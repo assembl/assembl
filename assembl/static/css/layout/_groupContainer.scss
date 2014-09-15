@@ -269,19 +269,18 @@
 
 .group-modal {
   .popin {
-    width: 400px;
+    max-width: 500px;
   }
 }
 
 .selectedGroup {
-  width: 400px;
+  max-width: 500px;
   .itemGroup {
     position: relative;
     height: 100px;
     width: 100px;
     list-style-type: none;
-    margin: 10px;
-    float: left;
+    margin: 0px auto;
     text-align: center;
     border: 1px solid transparent;
     color: $gray2;
@@ -315,6 +314,17 @@
     .item-title {
       font-size: 12px;
     }
+
+    input.item {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      left: 0;
+      opacity: 0;
+      cursor: pointer;
+      margin: 0;
+    }
+
   }
   .separator-item {
     float: left;
@@ -325,16 +335,28 @@
     font-size: 12px;
     float: left;
     width: 100%;
+    padding: 10px 0;
   }
   .is-selected {
     @include border-radius(3px);
     background-color: $purple;
     border: 1px solid transparent;
+    cursor: pointer;
     .icon-checkbox {
       visibility: visible;
     }
     i, span {
       color: $white;
+    }
+  }
+
+  .is-disabled {
+    color: $gray;
+    pointer-events: none;
+    opacity: 0.6;
+    &:hover {
+      border: none;
+      border-radius: 0px
     }
   }
 }

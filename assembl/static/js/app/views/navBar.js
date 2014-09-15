@@ -5,7 +5,8 @@ define(function (require) {
         GroupSpec = require('models/groupSpec'),
         CollectionManager = require('modules/collectionManager'),
         viewsFactory = require('objects/viewsFactory'),
-        $ = require('jquery');
+        $ = require('jquery'),
+        _ = require('underscore');
 
     var navBar = Marionette.LayoutView.extend({
         template: '#tmpl-navBar',
@@ -42,32 +43,58 @@ define(function (require) {
                 className: 'group-modal',
                 cancelEl: '.close, .btn-cancel',
                 events: {
-                    'click .js_selectItemGroup': 'selectItemGroup',
+                    'click .js_selectItem': 'selectItemGroup',
                     'click .js_createGroup': 'createGroup'
                 },
                 selectItemGroup: function (e) {
-                    var elm = $(e.target).parent();
+                    var elm = $(e.target);
 
-                    if (elm.hasClass('ideas')) {
-                        if ($('.itemGroup.synthesis').hasClass('is-selected')) {
-                            $('.itemGroup.synthesis').removeClass('is-selected');
-                        }
-                        elm.addClass('is-selected');
-
-                    } else if (elm.hasClass('synthesis')) {
-                        if ($('.itemGroup.ideas').hasClass('is-selected')) {
-                            $('.itemGroup.ideas').removeClass('is-selected')
-                        }
-                        elm.addClass('is-selected');
-
+                    if (elm.is(':checked')) {
+                        elm.parent().addClass('is-selected');
+                        this.setStateItem(elm, true);
                     } else {
-                        if (elm.hasClass('is-selected')) {
-                            elm.removeClass('is-selected');
-                        } else {
-                            elm.addClass('is-selected');
-                        }
+                        elm.parent().removeClass('is-selected');
+                        this.setStateItem(elm, false);
                     }
                 },
+
+                setStateItem: function (elm, state) {
+                    var item = elm.attr('data-item');
+
+                    if (item === 'simpleView') {
+                        if (state) {
+                            this.disableItem(
+                                ['navSidebar', 'ideaList', 'synthesisPanel', 'ideaPanel', 'messageList', 'clipboard'],
+                                true);
+
+                        } else {
+                            this.disableItem(['navSidebar', 'ideaList', 'synthesisPanel', 'clipboard'], false);
+                            this.disableItem(['ideaPanel', 'messageList'], true);
+                        }
+                    } else if (item === 'ideaList' || item === 'synthesisPanel') {
+
+                        if (state) {
+                            this.disableItem(['ideaPanel', 'messageList'], false);
+                        } else {
+                            this.disableItem(['ideaPanel', 'messageList'], true);
+                        }
+                    }
+
+                },
+
+                disableItem: function (item, boolean) {
+                    if (boolean) {
+                        _.each(item, function (i) {
+                            $('.item-' + i).addClass('is-disabled');
+                            $('.item-' + i).removeClass('is-selected');
+                        })
+                    } else {
+                        _.each(item, function (i) {
+                            $('.item-' + i).removeClass('is-disabled');
+                        })
+                    }
+                },
+
                 createGroup: function () {
                     var items = [],
                         that = this;
@@ -100,6 +127,7 @@ define(function (require) {
                         scrollLeft: right
                     }, 1000);
                 }
+
             });
 
             var modalView = new Modal();
