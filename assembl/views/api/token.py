@@ -6,7 +6,7 @@ from pyramid.httpexceptions import HTTPUnauthorized
 from pyramid.view import view_config
 from pyramid.response import Response
 
-from assembl.lib.token import encode_token
+from assembl.lib.web_token import encode_token
 
 _ac = 'Access-Control-'
 option_headers = [

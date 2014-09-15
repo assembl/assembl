@@ -16,8 +16,6 @@ from assembl.auth import (
 from assembl.auth.util import (
     user_has_permission as a_user_has_permission, get_permissions,
     users_with_permission as a_users_with_permission)
-from assembl.lib.token import decode_token
-
 
 cors_policy = dict(
     enabled=True, origins=('*',), credentials=True, max_age=86400,

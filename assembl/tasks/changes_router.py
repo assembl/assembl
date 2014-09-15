@@ -14,7 +14,7 @@ from sockjs.tornado import SockJSRouter, SockJSConnection
 from tornado.httpserver import HTTPServer
 
 from assembl.lib.zmqlib import INTERNAL_SOCKET
-from assembl.lib.token import decode_token, TokenInvalid
+from assembl.lib.web_token import decode_token, TokenInvalid
 
 # Inspired by socksproxy.
 

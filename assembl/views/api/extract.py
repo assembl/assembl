@@ -16,7 +16,7 @@ from assembl.models import (
     get_named_object, get_database_id, Extract, TextFragmentIdentifier,
     Discussion, AgentProfile, User, ContentSource, AnnotatorSource, Content, Post, Webpage, Idea)
 from assembl.auth.util import (get_permissions, user_has_permission)
-from assembl.lib.token import decode_token
+from assembl.lib.web_token import decode_token
 from assembl.lib import sqla
 
 cors_policy = dict(
