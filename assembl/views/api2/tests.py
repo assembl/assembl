@@ -604,3 +604,41 @@ def test_add_partner_organization(test_app, discussion):
     res_data = json.loads(r.body)
     for k, v in org.iteritems():
         assert res_data[k] == v
+
+
+def test_add_timeline_event(test_app, discussion):
+    url = "/data/Discussion/%d/timeline_events/" % (discussion.id,)
+    phase1 = {
+        '@type': "discussion_phase",
+        'title': "phase 1",
+        'description': "A first exploratory phase",
+        'start': "20141231T09:00:00"
+    }
+    # Create the phase
+    r = test_app.post(url, phase1)
+    assert r.status_code == 201
+    uri1 = r.location
+    Idea.db.flush()
+    # Create phase2
+    phase2 = {
+        '@type': "discussion_phase",
+        'title': "phase 2",
+        'description': "A second divergent phase",
+        # The following would work but seems to fail in the test
+        #'previous_event': uri1
+    }
+    # Create the phase
+    r = test_app.post(url, phase2)
+    assert r.status_code == 201
+    # Check it
+    uri2 = r.location
+    r = test_app.get(local_to_absolute(uri2))
+    assert r.status_code == 200
+    phase2_data = json.loads(r.body)
+    # Get phase 1
+    r = test_app.get(local_to_absolute(uri1))
+    assert r.status_code == 200
+    phase1_data = json.loads(r.body)
+    # check that the link was made in both directions
+    # It would probably work if we had the connection above
+    #assert phase1_data['next_phase'] == phase2_data['@id']

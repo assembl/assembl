@@ -1,4 +1,6 @@
-from sqlalchemy import select, type_coerce
+from traceback import print_exc
+
+from sqlalchemy import select
 from sqlalchemy.orm import aliased
 from sqlalchemy.orm.attributes import InstrumentedAttribute
 from sqlalchemy.inspection import inspect as sqlainspect
@@ -80,18 +82,30 @@ class Api2Context(object):
         return self._class_cache[cls]
 
 
-def coerce(argument, column):
-    if column is None:
-        return argument
-    try:
-        if column.type.python_type == int:
-            return int(argument)
-        elif column.type.python_type == bool:
-            return asbool(argument)
-    except ValueError as e:
-        print "COERCE ERROR: ", argument, column, column.type
-    return argument
-
+def process_args(args, cls):
+    mapper = sqlainspect(cls)
+    for key, value in args.iteritems():
+        column = mapper.c.get(key)
+        if column is not None:
+            if column.type.python_type == int:
+                yield (key, int(value))
+            elif column.type.python_type == float:
+                yield (key, float(value))
+            elif column.type.python_type == bool:
+                yield (key, asbool(value))
+            else:
+                yield (key, value)
+            continue
+        reln = mapper.relationships.get(key)
+        if (reln is not None and reln.direction.name == 'MANYTOONE'
+                and isinstance(value, (str, unicode))):
+            assert(len(reln.local_columns) == 1)
+            key = next(reln.local_columns.__iter__()).key
+            yield (key, reln.mapper.class_.get_database_id(value))
+            continue
+        if isinstance(getattr(cls, key, None), property):
+            yield (key, value)
+            continue
 
 class ClassContext(object):
     def __init__(self, parent, cls):
@@ -137,12 +151,14 @@ class ClassContext(object):
         cls = self.get_class(typename)
         with self.parent_instance.db().no_autoflush:
             if json is None:
-                cols = sqlainspect(cls).c
-                if 'user_id' in cols:
+                mapper = sqlainspect(cls)
+                if 'user_id' in mapper.c:
                     kwargs[user_id] = user_id
-                kwargs = {k: coerce(v, cols.get(k))
-                          for k, v in kwargs.iteritems()}
-                return [cls(**kwargs)]
+                try:
+                    return [cls(**dict(process_args(kwargs, cls)))]
+                except Exception as e:
+                    print_exc()
+                    raise e
             else:
                 return [cls.from_json(json, user_id)]
 
@@ -328,12 +344,12 @@ class CollectionContext(object):
         cls = self.get_collection_class(typename)
         with cls.db.no_autoflush:
             if json is None:
-                cols = sqlainspect(cls).c
-                ob_kwargs = {k: coerce(v, cols.get(k))
-                             for k, v in kwargs.iteritems()
-                             if k in cls.__dict__}
-                inst = cls(**ob_kwargs)
-                assocs = [inst]
+                try:
+                    inst = cls(**dict(process_args(kwargs, cls)))
+                    assocs = [inst]
+                except Exception as e:
+                    print_exc()
+                    raise e
             else:
                 assocs = cls.from_json(json, user_id)
                 inst = assocs[0]
