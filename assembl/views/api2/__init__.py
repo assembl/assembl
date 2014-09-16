@@ -185,8 +185,10 @@ def instance_put(request):
     discussion_id = None
     if isinstance(context._instance, DiscussionBoundBase):
         discussion_id = context._instance.get_discussion_id()
-    elif isinstance(context.parent_instance, DiscussionBoundBase):
-        discussion_id = context.parent_instance.get_discussion_id()
+    else:
+        parent = getattr(context.__parent__, 'parent_instance', None)
+        if parent and isinstance(parent, DiscussionBoundBase):
+            discussion_id = context.parent_instance.get_discussion_id()
     permissions = get_permissions(user_id, discussion_id)
     instance = context._instance
     if P_SYSADMIN not in permissions:

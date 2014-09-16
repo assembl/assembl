@@ -298,7 +298,7 @@ def test_widget_basic_interaction(
     post_endpoint = post_endpoint[widget_rep["@id"]]
     # Create a new post attached to the sub-idea
     new_post_create = test_app.post(local_to_absolute(post_endpoint), {
-        "type": "Post", "message_id": "bogus",
+        "type": "Post", "message_id": 0,
         "body": "body", "creator_id": participant1_user.id})
     assert new_post_create.status_code == 201
     # Get the new post from the db
@@ -349,7 +349,7 @@ def test_widget_basic_interaction(
     assert new_idea2.proposed_in_post.hidden
     # Create a second post.
     new_post_create = test_app.post(local_to_absolute(post_endpoint), {
-        "type": "Post", "message_id": "bogus",
+        "type": "Post", "message_id": 0,
         "body": "body", "creator_id": participant1_user.id})
     assert new_post_create.status_code == 201
     Post.db.flush()
@@ -570,3 +570,37 @@ def test_voting_widget_criteria(
     assert test.status_code == 200
     assert len(test.json) == 2
     assert {x['@id'] for x in test.json} == {c.uri() for c in criteria}
+
+
+def test_add_user_description(test_app, discussion, participant1_user):
+    url = "/data/AgentProfile/%d" % (participant1_user.id,)
+    description = 'Lorem ipsum Aliqua est irure eu id.'
+    # Add the description
+    r = test_app.put(url, {'description': description})
+    assert r.status_code == 200
+    # Check it
+    r = test_app.get(url)
+    assert r.status_code == 200
+    res_data = json.loads(r.body)
+    assert res_data['description'] == description
+
+
+def test_add_partner_organization(test_app, discussion):
+    url = "/data/Discussion/%d/partner_organizations/" % (discussion.id,)
+    org = {
+        'name': "Our organizer",
+        'description': "We organize discussions!",
+        'logo': "http://example.org/logo.png",
+        'homepage': "http://example.org/",
+        'is_initiator': True
+    }
+    # Create the org
+    r = test_app.post(url, org)
+    assert r.status_code == 201
+    # Check it
+    link = local_to_absolute(r.location)
+    r = test_app.get(link)
+    assert r.status_code == 200
+    res_data = json.loads(r.body)
+    for k, v in org.iteritems():
+        assert res_data[k] == v

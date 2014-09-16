@@ -1,8 +1,9 @@
-from sqlalchemy import select
+from sqlalchemy import select, type_coerce
 from sqlalchemy.orm import aliased
 from sqlalchemy.orm.attributes import InstrumentedAttribute
 from sqlalchemy.inspection import inspect as sqlainspect
 from pyramid.security import Allow, Everyone, ALL_PERMISSIONS, DENY_ALL
+from pyramid.settings import asbool
 from pyramid.httpexceptions import HTTPNotFound
 from abc import ABCMeta, abstractmethod
 
@@ -79,6 +80,19 @@ class Api2Context(object):
         return self._class_cache[cls]
 
 
+def coerce(argument, column):
+    if column is None:
+        return argument
+    try:
+        if column.type.python_type == int:
+            return int(argument)
+        elif column.type.python_type == bool:
+            return asbool(argument)
+    except ValueError as e:
+        print "COERCE ERROR: ", argument, column, column.type
+    return argument
+
+
 class ClassContext(object):
     def __init__(self, parent, cls):
         # permission on class context are quite restrictive. review.
@@ -126,8 +140,7 @@ class ClassContext(object):
                 cols = sqlainspect(cls).c
                 if 'user_id' in cols:
                     kwargs[user_id] = user_id
-                kwargs = {k: int(v) if k in cols and
-                          cols.get(k).type.python_type == int else v
+                kwargs = {k: coerce(v, cols.get(k))
                           for k, v in kwargs.iteritems()}
                 return [cls(**kwargs)]
             else:
@@ -316,8 +329,7 @@ class CollectionContext(object):
         with cls.db.no_autoflush:
             if json is None:
                 cols = sqlainspect(cls).c
-                ob_kwargs = {k: int(v) if k in cols and
-                             cols.get(k).type.python_type == int else v
+                ob_kwargs = {k: coerce(v, cols.get(k))
                              for k, v in kwargs.iteritems()
                              if k in cls.__dict__}
                 inst = cls(**ob_kwargs)
