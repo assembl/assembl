@@ -13,6 +13,7 @@ from sqlalchemy import (
     event,
     and_,
 )
+from sqlalchemy.orm import relationship
 
 from assembl.lib.utils import slugify
 from . import DiscussionBoundBase
@@ -75,15 +76,26 @@ class Discussion(DiscussionBoundBase):
 
     def __init__(self, *args, **kwargs):
         super(Discussion, self).__init__(*args, **kwargs)
-        self.db.add(self)
-        self.db.flush()
-        from .idea import RootIdea
-        from .idea_graph_view import TableOfContents, Synthesis
-        self.root_idea = RootIdea(discussion_id=self.id)
-        table_of_contents = TableOfContents(discussion=self)
-        synthesis = Synthesis(discussion=self)
-        self.db.add(table_of_contents)
-        self.db.add(synthesis)
+        root_idea = kwargs.get('root_idea')
+        if root_idea:
+            root_idea.discussion = this
+        else:
+            from .idea import RootIdea
+            self.root_idea = RootIdea(discussion=self)
+
+        table_of_contents = kwargs.get('table_of_contents')
+        if table_of_contents:
+            table_of_contents.discussion = this
+        else:
+            from .idea_graph_view import TableOfContents
+            self.table_of_contents = TableOfContents(discussion=self)
+        next_synthesis = kwargs.get('next_synthesis')
+        if next_synthesis:
+            next_synthesis.discussion = this
+        else:
+            from .idea_graph_view import Synthesis
+            synthesis = Synthesis(discussion=self)
+            self.db.add(synthesis)
 
     def serializable(self):
         return {
@@ -103,14 +115,15 @@ class Discussion(DiscussionBoundBase):
         return cls.id == discussion_id
 
     def get_next_synthesis(self):
-        from .idea_graph_view import Synthesis
-        next_synthesis = self.db().query(Synthesis).filter(
-            and_(Synthesis.discussion_id == self.id,
-                 Synthesis.published_in_post == None)
-        ).all()
-        #There should only be a single next synthesis
-        assert len(next_synthesis) == 1
-        return next_synthesis[0]
+        return self.next_synthesis
+
+    syntheses = relationship('Synthesis')
+
+    next_synthesis = relationship('Synthesis',
+        uselist=False, secondary="outerjoin(Synthesis, SynthesisPost)",
+        primaryjoin="Discussion.id == Synthesis.discussion_id",
+        secondaryjoin='SynthesisPost.id == None',
+        viewonly=True)
 
     def get_last_published_synthesis(self):
         from .idea_graph_view import Synthesis

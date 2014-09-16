@@ -2,7 +2,7 @@ from collections import defaultdict
 from datetime import datetime
 
 from sqlalchemy.orm import (
-    relationship)
+    relationship, backref)
 from sqlalchemy import (
     Column,
     Integer,
@@ -261,6 +261,9 @@ class TableOfContents(IdeaGraphView):
     __mapper_args__ = {
         'polymorphic_identity': 'table_of_contents',
     }
+
+    discussion = relationship(
+        Discussion, backref=backref("table_of_contents", uselist=False))
 
     def serializable(self):
         return {

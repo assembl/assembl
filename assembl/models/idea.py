@@ -6,6 +6,7 @@ from datetime import datetime
 
 from sqlalchemy.orm import (
     relationship, backref, aliased, contains_eager, joinedload)
+from sqlalchemy.orm.attributes import NO_VALUE
 from sqlalchemy.sql import text
 from sqlalchemy import (
     Column,
@@ -16,6 +17,7 @@ from sqlalchemy import (
     UnicodeText,
     DateTime,
     ForeignKey,
+    inspect,
 )
 from virtuoso.vmapping import PatternIriClass, IriClass
 
@@ -738,7 +740,7 @@ class IdeaLink(DiscussionBoundBase):
         return retval
 
     def get_discussion_id(self):
-        if self.source:
+        if inspect(self).attrs.source.loaded_value != NO_VALUE:
             return self.source.get_discussion_id()
         else:
             return Idea.get(id=self.source_id).get_discussion_id()
