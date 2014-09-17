@@ -107,7 +107,8 @@ define(function (require) {
                     if ($('.itemGroup').hasClass('is-selected')) {
 
                         $('.itemGroup.is-selected').each(function () {
-                            var item = $(this).children('a').attr('data-item');
+                            var item = $(this).attr('data-view');
+                            items.push({type: item});
                         });
 
                         groupSpecsP.done(function (groupSpecs) {
