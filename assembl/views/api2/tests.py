@@ -609,7 +609,7 @@ def test_add_partner_organization(test_app, discussion):
 def test_add_timeline_event(test_app, discussion):
     url = "/data/Discussion/%d/timeline_events/" % (discussion.id,)
     phase1 = {
-        '@type': "discussion_phase",
+        'type': "DiscussionPhase",
         'title': "phase 1",
         'description': "A first exploratory phase",
         'start': "20141231T09:00:00"
@@ -621,7 +621,7 @@ def test_add_timeline_event(test_app, discussion):
     Idea.db.flush()
     # Create phase2
     phase2 = {
-        '@type': "discussion_phase",
+        'type': "DiscussionPhase",
         'title': "phase 2",
         'description': "A second divergent phase",
         'previous_event': uri1
@@ -643,3 +643,4 @@ def test_add_timeline_event(test_app, discussion):
     phase1_data = json.loads(r.body)
     # check that the link was made in both directions
     assert phase1_data['next_event'] == phase2_data['@id']
+    assert phase1_data['@type'] == 'DiscussionPhase'
