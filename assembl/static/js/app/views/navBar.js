@@ -43,56 +43,61 @@ define(function (require) {
                 className: 'group-modal',
                 cancelEl: '.close, .btn-cancel',
                 events: {
-                    'click .js_selectItem': 'selectItemGroup',
+                    'click .js_selectItem': 'selectItem',
                     'click .js_createGroup': 'createGroup'
                 },
-                selectItemGroup: function (e) {
-                    var elm = $(e.target);
+                selectItem: function (e) {
+                    var elm = $(e.currentTarget),
+                        item = elm.parent().attr('data-view');
 
-                    if (elm.is(':checked')) {
-                        elm.parent().addClass('is-selected');
-                        this.setStateItem(elm, true);
+                    elm.parent().toggleClass('is-selected');
+
+                    if (elm.parent().hasClass('is-selected')) {
+                        switch (item) {
+                            case 'navSidebar':
+                                this.disableView(['ideaList', 'synthesisPanel', 'clipboard', 'messageList', 'ideaPanel']);
+                                break;
+                            case 'synthesisPanel':
+                                this.disableView(['ideaList', 'navSidebar']);
+                                this.enableView(['ideaPanel', 'messageList']);
+                                break;
+                            case 'ideaList':
+                                this.disableView(['synthesisPanel', 'navSidebar']);
+                                this.enableView(['ideaPanel', 'messageList']);
+                                break;
+                        }
+
                     } else {
-                        elm.parent().removeClass('is-selected');
-                        this.setStateItem(elm, false);
+                        switch (item) {
+                            case 'navSidebar':
+                                this.enableView(['ideaList', 'synthesisPanel', 'clipboard']);
+                                break;
+                            case 'synthesisPanel':
+                                this.enableView(['ideaList', 'navSidebar']);
+                                this.disableView(['ideaPanel', 'messageList']);
+                                break;
+                            case 'ideaList':
+                                this.disableView(['ideaPanel', 'messageList']);
+                                this.enableView(['synthesisPanel', 'navSidebar']);
+                                break;
+                        }
                     }
+
                 },
 
-                setStateItem: function (elm, state) {
-                    var item = elm.attr('data-item');
-
-                    if (item === 'simpleView') {
-                        if (state) {
-                            this.disableItem(
-                                ['navSidebar', 'ideaList', 'synthesisPanel', 'ideaPanel', 'messageList', 'clipboard'],
-                                true);
-
-                        } else {
-                            this.disableItem(['navSidebar', 'ideaList', 'synthesisPanel', 'clipboard'], false);
-                            this.disableItem(['ideaPanel', 'messageList'], true);
-                        }
-                    } else if (item === 'ideaList' || item === 'synthesisPanel') {
-
-                        if (state) {
-                            this.disableItem(['ideaPanel', 'messageList'], false);
-                        } else {
-                            this.disableItem(['ideaPanel', 'messageList'], true);
-                        }
-                    }
-
+                disableView: function (items) {
+                    items.forEach(function (item) {
+                        var panel = $(".itemGroup[data-view='" + item + "']");
+                        panel.removeClass('is-selected');
+                        panel.addClass('is-disabled');
+                    });
                 },
 
-                disableItem: function (item, boolean) {
-                    if (boolean) {
-                        _.each(item, function (i) {
-                            $('.item-' + i).addClass('is-disabled');
-                            $('.item-' + i).removeClass('is-selected');
-                        })
-                    } else {
-                        _.each(item, function (i) {
-                            $('.item-' + i).removeClass('is-disabled');
-                        })
-                    }
+                enableView: function (items) {
+                    items.forEach(function (item) {
+                        var panel = $(".itemGroup[data-view='" + item + "']");
+                        panel.removeClass('is-disabled');
+                    });
                 },
 
                 createGroup: function () {
@@ -103,7 +108,6 @@ define(function (require) {
 
                         $('.itemGroup.is-selected').each(function () {
                             var item = $(this).children('a').attr('data-item');
-                            items.push({type: item});
                         });
 
                         groupSpecsP.done(function (groupSpecs) {

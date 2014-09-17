@@ -5,84 +5,87 @@
 
 <div class="popin-body">
   <div class="selectedGroup">
-    <span class="item-section dispb">{{ gettext('Choose a navigation panel:')}}</span>
+    <span class="item-section dispb">{{ gettext('Navigation:')}}</span>
 
     <div class="gr">
-      <div class="gu gu-1of4">
-        <div class="itemGroup item-navSidebar">
-          <input class="item js_selectItem" type="checkbox" data-item="navSidebar">
+      <div class="gu gu-1of3">
+
+        <div class="itemGroup" data-view="navSidebar">
           <i class="icon-checkbox"></i>
           <br>
           <i class="icon-tableofideas"></i>
           <br>
-          <span class="item-title">{{ gettext('Navigation') }}</span>
+          <span class="item-title">{{ gettext('simpleView') }}</span>
+          <a href="#" class="item js_selectItem"></a>
         </div>
+
       </div>
-      <div class="gu gu-1of4">
-        <div class="itemGroup item-ideaList">
-          <input class="item js_selectItem" type="checkbox" data-item="ideaList">
+      <div class="gu gu-1of3">
+
+        <div class="itemGroup" data-view="ideaList">
           <i class="icon-checkbox"></i>
           <br>
-          <i class="icon-tableofideas"></i>
+          <i class="icon-discuss"></i>
           <br>
           <span class="item-title">{{ gettext('Table of idea') }}</span>
+          <a href="#" class="item js_selectItem"></a>
         </div>
-      </div>
-      <div class="gu gu-1of4">
-        <div class="itemGroup item-synthesisPanel">
-         <input class="item js_selectItem" type="checkbox" data-item="synthesisPanel">
-         <i class="icon-checkbox"></i>
-         <br>
-         <i class="icon-synth"></i>
-         <br>
-         <span class="item-title">{{ gettext('Synthesis') }}</span>
-        </div>
+
       </div>
       <div class="gu gu-last">
-        <div class="itemGroup item-simpleView">
-         <input class="item js_selectItem" type="checkbox" data-item="simpleView">
+
+        <div class="itemGroup" data-view="synthesisPanel">
          <i class="icon-checkbox"></i>
          <br>
-         <i class="icon-synth"></i>
+         <i class="icon-book"></i>
          <br>
-         <span class="item-title">{{ gettext('simpleView') }}</span>
+         <span class="item-title">{{ gettext('Synthesis') }}</span>
+         <a href="#" class="item js_selectItem"></a>
         </div>
+
       </div>
+
     </div>
 
     <!--<div class="separator-item">ou</div>-->
-    <span class="item-section">Choississez des panneaux standards :</span>
+    <span class="item-section">{{ gettext('Others:')}}</span>
 
     <div class="gr">
       <div class="gu gu-1of3">
-        <div class="itemGroup item-ideaPanel is-disabled">
-          <input class="item js_selectItem" type="checkbox" data-item="ideaPanel">
-          <i class="icon-checkbox"></i>
-          <br>
-          <i class="icon-idea"></i>
-          <br>
-          <span class="item-title">{{ gettext('Idea Panel') }}</span>
+
+        <div class="itemGroup is-disabled" data-view="ideaPanel">
+         <i class="icon-checkbox"></i>
+         <br>
+         <i class="icon-idea"></i>
+         <br>
+         <span class="item-title">{{ gettext('Idea Panel') }}</span>
+         <a href="#" class="item js_selectItem"></a>
         </div>
+
       </div>
       <div class="gu gu-1of3">
-         <div class="itemGroup item-messageList is-disabled">
-           <input class="item js_selectItem" type="checkbox" data-item="messageList">
-           <i class="icon-checkbox"></i>
-           <br>
-           <i class="icon-message"></i>
-           <br>
-           <span class="item-title">{{ gettext('Conversation') }}</span>
-         </div>
+
+        <div class="itemGroup is-disabled" data-view="messageList">
+         <i class="icon-checkbox"></i>
+         <br>
+         <i class="icon-message"></i>
+         <br>
+         <span class="item-title">{{ gettext('Conversation') }}</span>
+         <a href="#" class="item js_selectItem"></a>
+        </div>
+
       </div>
       <div class="gu gu-last">
-        <div class="itemGroup item-clipboard">
-          <input class="item js_selectItem" type="checkbox" data-item="clipboard">
-          <i class="icon-checkbox"></i>
-          <br>
-          <i class="icon-clipboard"></i>
-          <br>
-          <span class="item-title">{{ gettext('Clipboard') }}</span>
+
+        <div class="itemGroup" data-view="clipboard">
+         <i class="icon-checkbox"></i>
+         <br>
+         <i class="icon-clipboard"></i>
+         <br>
+         <span class="item-title">{{ gettext('Clipboard') }}</span>
+         <a href="#" class="item js_selectItem"></a>
         </div>
+
       </div>
     </div>
   </div>
