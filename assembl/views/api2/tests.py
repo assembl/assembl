@@ -624,12 +624,14 @@ def test_add_timeline_event(test_app, discussion):
         '@type': "discussion_phase",
         'title': "phase 2",
         'description': "A second divergent phase",
-        # The following would work but seems to fail in the test
-        #'previous_event': uri1
+        'previous_event': uri1
     }
     # Create the phase
     r = test_app.post(url, phase2)
     assert r.status_code == 201
+    Idea.db.flush()
+    Idea.db.expunge_all()
+
     # Check it
     uri2 = r.location
     r = test_app.get(local_to_absolute(uri2))
@@ -640,5 +642,4 @@ def test_add_timeline_event(test_app, discussion):
     assert r.status_code == 200
     phase1_data = json.loads(r.body)
     # check that the link was made in both directions
-    # It would probably work if we had the connection above
-    #assert phase1_data['next_phase'] == phase2_data['@id']
+    assert phase1_data['next_event'] == phase2_data['@id']

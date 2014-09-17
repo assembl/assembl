@@ -10,6 +10,7 @@ from sqlalchemy import (
     String,
     DateTime,
     ForeignKey,
+    inspect,
 )
 
 from . import DiscussionBoundBase
@@ -100,8 +101,11 @@ class TimelineEvent(DiscussionBoundBase):
                 existing = self.__class__.get(previous_event_id=previous_event_id)
                 if existing:
                     existing.previous_event = self
+            if inspect(self).persistent:
+                self.db.expire(self, ['previous_event'])
+            elif 'previous_event' in self.__dict__:
+                del self.__dict__['previous_event']
             self.previous_event_id = previous_event_id
-            self.db.expire(self, ['previous_event'])
 
     def get_discussion_id(self):
         return self.discussion_id
