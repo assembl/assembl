@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: assembl 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-09-11 18:56-0400\n"
+"POT-Creation-Date: 2014-09-17 16:32+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -461,7 +461,7 @@ msgstr ""
 #: assembl/static/js/app/views/messageSend.js:43
 #: assembl/templates/styleguide/components/popin.jinja2:21
 #: assembl/templates/views/ckeditorField.tmpl:9
-#: assembl/templates/views/create-group.tmpl:56
+#: assembl/templates/views/create-group.tmpl:96
 #: assembl/templates/views/synthesisIdea.tmpl:34
 msgid "Cancel"
 msgstr ""
@@ -495,7 +495,7 @@ msgstr ""
 #: assembl/static/js/app/views/segmentList.js:227
 #: assembl/static/js/app/views/segmentList.js:272
 #: assembl/static/js/app/views/segmentList.js:275
-#: assembl/templates/views/create-group.tmpl:49
+#: assembl/templates/views/create-group.tmpl:85
 msgid "Clipboard"
 msgstr ""
 
@@ -508,7 +508,7 @@ msgid "Are you sure you want to empty your entire clipboard?"
 msgstr ""
 
 #: assembl/static/js/app/views/synthesisPanel.js:72
-#: assembl/templates/views/create-group.tmpl:24
+#: assembl/templates/views/create-group.tmpl:42
 #: assembl/templates/views/navigation.tmpl:15
 msgid "Synthesis"
 msgstr ""
@@ -824,7 +824,7 @@ msgid ""
 msgstr ""
 
 #: assembl/templates/styleguide/components/popin.jinja2:22
-#: assembl/templates/views/create-group.tmpl:57
+#: assembl/templates/views/create-group.tmpl:97
 msgid "Validate"
 msgstr ""
 
@@ -916,19 +916,27 @@ msgid "Create a panel group"
 msgstr ""
 
 #: assembl/templates/views/create-group.tmpl:8
-msgid "Choose a navigation panel:"
+msgid "Navigation:"
 msgstr ""
 
-#: assembl/templates/views/create-group.tmpl:15
-msgid "Navigation"
+#: assembl/templates/views/create-group.tmpl:18
+msgid "simpleView"
 msgstr ""
 
-#: assembl/templates/views/create-group.tmpl:33
+#: assembl/templates/views/create-group.tmpl:30
+msgid "Table of idea"
+msgstr ""
+
+#: assembl/templates/views/create-group.tmpl:51
+msgid "Others:"
+msgstr ""
+
+#: assembl/templates/views/create-group.tmpl:61
 msgid "Idea Panel"
 msgstr ""
 
-#: assembl/templates/views/create-group.tmpl:41
-msgid "Messages"
+#: assembl/templates/views/create-group.tmpl:73
+msgid "Conversation"
 msgstr ""
 
 #: assembl/templates/views/home.tmpl:2
