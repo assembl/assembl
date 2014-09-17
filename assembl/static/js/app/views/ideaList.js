@@ -110,6 +110,10 @@ define(function (require) {
             'click #ideaList-filterByToc': 'clearFilter'
         },
 
+        getTitle: function () {
+            return i18n.gettext(' ');
+        },
+
         /**
          * The render
          */
