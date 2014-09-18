@@ -209,8 +209,6 @@ define(function (require) {
 
                     that.postRender();
 
-                    that.messageListView.requestAnnotatorRefresh();
-
                     if (that.replyBoxShown) {
                         that.openReplyBox();
                     }
@@ -218,6 +216,11 @@ define(function (require) {
                         that.closeReplyBox();
                     }
 
+                    if (that.viewStyle == that.availableMessageViewStyles.FULL_BODY) {
+                      //Only the full body view uses annotator
+                      that.messageListView.requestAnnotatorRefresh();
+                    }
+                    
                     if (that.viewStyle == that.availableMessageViewStyles.FULL_BODY && that.messageListView.defaultMessageStyle != that.availableMessageViewStyles.FULL_BODY) {
                         that.showReadLess();
                     }
