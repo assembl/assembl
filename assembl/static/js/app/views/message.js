@@ -144,6 +144,7 @@ define(function (require) {
                         that.currentLevel = level;
                     }
                     Ctx.removeCurrentlyDisplayedTooltips(that.$el);
+                    that.clearAnnotationsToLoadCache();
                     that.setViewStyle(that.viewStyle);
 
                     data['id'] = data['@id'];
@@ -255,34 +256,58 @@ define(function (require) {
         },
 
         /**
+         * Should be called each render
+         */
+        clearAnnotationsToLoadCache : function () {
+          this.annotationsToLoad = undefined;
+        },
+        
+        /**
+         * Get the list of annotations to render in the message body
+         */
+        getAnnotationsToLoad : function () {
+          var that = this,
+              annotations = this.model.getAnnotations(), //TODO:  This is fairly CPU intensive, and may be worth caching.
+              annotationsToLoad = [],
+              filter;
+          if(this.annotationsToLoad === undefined) {
+            // Is this the right permission to see the clipboard?
+            if (!Ctx.getCurrentUser().can(Permissions.ADD_EXTRACT)) {
+                filter = function (extract) {
+                    return extract.idIdea;
+                }
+            }
+            else {
+              filter = function () {
+                return true;
+              };
+            }
+  
+            _.each(annotations, function (annotation) {
+                if (filter(annotation) && !(annotation['@id'] in that.loadedAnnotations)) {
+                    annotationsToLoad.push(annotation);
+                }
+            });
+            this.annotationsToLoad = annotationsToLoad;
+          }
+
+          return this.annotationsToLoad;
+        },
+
+        /**
          * Render annotator's annotations in the message body
          * Safe to call multiple times, will not double load annotations.
          */
         loadAnnotations: function () {
+          var that = this,
+              annotationsToLoad;
             if (this.annotator && (this.viewStyle == this.availableMessageViewStyles.FULL_BODY)) {
-                var that = this,
-                    annotations = this.model.getAnnotations(), //TODO:  This is fairly CPU intensive, and may be worth caching.
-                    annotationsToLoad = [],
-                    filter = function () {
-                        return true;
-                    };
-                // Is this the right permission to see the clipboard?
-                if (!Ctx.getCurrentUser().can(Permissions.ADD_EXTRACT)) {
-                    filter = function (extract) {
-                        return extract.idIdea;
-                    }
-                }
-
-                _.each(annotations, function (annotation) {
-                    if (filter(annotation) && !(annotation['@id'] in that.loadedAnnotations)) {
-                        annotationsToLoad.push(annotation);
-                    }
-                });
+              annotationsToLoad = this.getAnnotationsToLoad();
 
                 // Loading the annotations
                 if (annotationsToLoad.length) {
                     // This call is synchronous I believe - benoitg
-                    that.annotator.loadAnnotations(_.clone(annotationsToLoad));
+                  this.annotator.loadAnnotations(_.clone(annotationsToLoad));
                     _.each(annotationsToLoad, function (annotation) {
                         that.loadedAnnotations[annotation['@id']] = annotation;
                     });
