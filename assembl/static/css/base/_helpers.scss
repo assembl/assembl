@@ -394,6 +394,7 @@
 
 .clear, .clr {
   clear: both;
+  @include clearfixHack();
 }
 
 .hidden {
