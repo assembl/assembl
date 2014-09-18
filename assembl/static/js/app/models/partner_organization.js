@@ -1,9 +1,9 @@
-define(function(require){
+define(function (require) {
     'use strict';
 
     var Base = require('models/base'),
-         Ctx = require('modules/context'),
-           $ = require('jquery'),
+        Ctx = require('modules/context'),
+        $ = require('jquery'),
         i18n = require('utils/i18n');
 
     /**
@@ -14,7 +14,7 @@ define(function(require){
         /**
          * @type {String}
          */
-        url: Ctx.getApiV2DiscussionUrl('partner_organizations/'),
+        url: Ctx.getApiV2DiscussionUrl('partner_organizations/?view=default'),
 
         /**
          * Defaults
@@ -38,13 +38,13 @@ define(function(require){
         /**
          * @type {String}
          */
-        url: Ctx.getApiV2DiscussionUrl('partner_organizations/'),
+        url: Ctx.getApiV2DiscussionUrl('partner_organizations/?view=default'),
 
         /**
          * The model
          * @type {PartnerOrganizationModel}
          */
-        model: PartnerOrganizationModel,
+        model: PartnerOrganizationModel
     });
 
     return {

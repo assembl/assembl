@@ -101,7 +101,15 @@ define(function (require) {
             this.computeStatistics();
         },
 
-        getLastSynthesis: function () {
+        serializeData: function () {
+            return {
+                contextPage: this.model,
+                partners: this.collection,
+                ctx: Ctx
+            }
+        },
+
+        displayLastSynthesis: function () {
             var collectionManager = new CollectionManager(),
                 that = this;
 
@@ -115,21 +123,26 @@ define(function (require) {
                         });
                     }
 
-                    var date = "<span>" + i18n.gettext('Last synthesis') +
-                        "</span><span class='message-date vam mlxs'><time title=" +
-                        Ctx.getReadableDateTime(that.model.get('creation_date')) + ">" +
-                        Ctx.getNiceDateTime(that.model.get('creation_date')) +
-                        "</time></span>";
-
-                    that.$(".lastSynthesisTitle").html(date);
-                    that.$(".lastSynthesis").html(that.model.get('introduction'));
-
                     that.$('.lastSynthesis').dotdotdot({
                         height: 70,
                         ellipsis: '... '
                     });
 
                 });
+        },
+
+        displayPartners: function () {
+            var collectionManager = new CollectionManager(),
+                that = this;
+
+            $.when(collectionManager.getAllPartnerOrganizationCollectionPromise()
+            ).then(function (Organization) {
+
+                    if (!that.collection) {
+                        that.collection = Organization.models;
+                    }
+                });
+
         },
 
         introductionShowMore: function(){
@@ -196,7 +209,9 @@ define(function (require) {
 
             this.draw();
 
-            this.getLastSynthesis();
+            this.displayLastSynthesis();
+
+            this.displayPartners();
         },
 
         /*

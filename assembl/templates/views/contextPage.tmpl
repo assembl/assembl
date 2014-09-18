@@ -71,12 +71,51 @@
 <div class="gr mvxl">
   <div class="gu gu-1of2">
     <div class="block-content">
-      <h2 class="lastSynthesisTitle"></h2>
-      <p class="lastSynthesis mbs"></p>
+      <% if(contextPage){ %>
+      <h2 class="lastSynthesisTitle">
+        <span>{{ gettext('Last synthesis') }}</span>
+        <span class='message-date vam mlxs'>
+          <time title=<%= ctx.getReadableDateTime(contextPage.get('creation_date')) %> >
+          <%= ctx.getNiceDateTime(contextPage.get('creation_date')) %>
+          </time>
+        </span>
+      </h2>
+      <p class="lastSynthesis mbs">
+        <%= contextPage.get('introduction') %>
+      </p>
       <button id="js_readSynthesis" class="btn btn-secondary btn-sm fr">{{ gettext('Read the synthesis') }}</button>
+      <% } %>
     </div>
   </div>
   <div class="gu gu-last">
   </div>
 </div>
 
+
+<div class="gr mvxl">
+<% if(partners){ %>
+  <div class="block-content">
+    <h2>{{ gettext('Partners') }}</h2>
+  </div>
+  <div class="gu gu-1of1">
+    <div class="block-content">
+         <div class="gr">
+          <% _.each(partners, function(partner) { %>
+            <div class="gu gu-1of6">
+              <a class="popover-display">
+                <img width="100" src="<%= partner.get('logo')  %>" />
+                <span class="popover">
+                  <span class="popover-header"><%= partner.get('name') %></span>
+                  <span class="popover-content">
+                    <%= partner.get('description') %>
+                    <%= partner.get('homepage') %>
+                  </span>
+                </span>
+              </a>
+            </div>
+          <% }) %>
+         </div>
+    </div>
+  </div>
+<% } %>
+</div>
