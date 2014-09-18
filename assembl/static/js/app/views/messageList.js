@@ -623,6 +623,7 @@ define(function (require) {
                 views,
                 models,
                 offsets,
+                numMessages,
                 returnedOffsets = {};
 
             /* The MessageFamilyView will re-fill the renderedMessageViewsCurrent
@@ -630,17 +631,20 @@ define(function (require) {
              */
             this.renderedMessageViewsCurrent = {};
             this.suspendAnnotatorRefresh();
-            //console.log("requestedOffsets:",requestedOffsets);
+            this.previousScrollTarget = this.getPreviousScrollTarget();
+            
             if ((this.currentViewStyle == this.ViewStyles.THREADED) ||
                 (this.currentViewStyle == this.ViewStyles.NEW_MESSAGES)) {
                 models = this.visitorRootMessagesToDisplay;
+                numMessages = _.size(that.visitorOrderLookupTable);
                 returnedOffsets = this.calculateThreadedMessagesOffsets(this.visitorViewData, that.visitorOrderLookupTable, requestedOffsets);
                 views = this.getRenderedMessagesThreaded(models, 1, this.visitorViewData, returnedOffsets);
             } else {
                 models = this.getAllMessagesToDisplay();
+                numMessages = _.size(models);
                 views = this.getRenderedMessagesFlat(models, requestedOffsets, returnedOffsets);
             }
-            //console.log("returnedOffsets:", returnedOffsets, "models.length", models.length);
+            //console.log("requestedOffsets:",requestedOffsets, "returnedOffsets:", returnedOffsets, "numMessages", numMessages);
             this.offsetStart = returnedOffsets['offsetStart']
             this.offsetEnd = returnedOffsets['offsetEnd']
 
@@ -649,14 +653,14 @@ define(function (require) {
             } else {
                 this.ui.messageList.append(views);
             }
-
+            this.scrollToPreviousScrollTarget();
             if (this.offsetStart <= 0) {
                 this.ui.topArea.addClass('hidden');
             } else {
                 this.ui.topArea.removeClass('hidden');
             }
 
-            if (this.offsetEnd >= (models.length - 1)) {
+            if (this.offsetEnd >= (numMessages - 1)) {
                 this.ui.bottomArea.addClass('hidden');
             } else {
                 this.ui.bottomArea.removeClass('hidden');
@@ -855,7 +859,6 @@ define(function (require) {
                         offsetStart: 0,
                         offsetEnd: MORE_PAGES_NUMBER
                     })
-                    that.scrollToPreviousScrollTarget();
 
 
                 })
@@ -863,7 +866,6 @@ define(function (require) {
         },
 
         onBeforeRender: function () {
-            this.previousScrollTarget = this.getPreviousScrollTarget();
             Ctx.removeCurrentlyDisplayedTooltips(this.$el);
         },
 
