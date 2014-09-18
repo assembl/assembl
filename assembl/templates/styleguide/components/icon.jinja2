@@ -1,18 +1,28 @@
-<div class="row icons-content">
-  <h3>Update font</h3>
-  <p>fab devenv compile_fontello_fonts()</p>
-</div>
+<div class="icons-content">
+    <div>
+      <h3>Update font</h3>
+      <p>fab devenv compile_fontello_fonts()</p>
+    </div>
 
-<div class="row icons-content">
-    
     {% set icon_list = ['arrowdown', 'arrowright', 'minimize','checkbox', 'collapse', 'expand', 'delete', 'comment', 'timer', 'options', 'lock', 'lock-open', 'message', 'clipboard', 'synth', 'tableofideas', 'answer', 'lab', 'idea','add', 'search', 'home', 'logout', 'book', 'bullet-point', 'discuss', 'quote', 'check', 'check-empty', 'diamond'] %}
 
-    {% for icon in icon_list %}
+    {#{% for icon in icon_list %}
     <div class="col-4 tac mbs">
         <i class="icon-{{icon}}"></i>
         <br>
         <span>.icon-{{icon}}</span>
     </div>
-    {% endfor %}
+    {% endfor %}#}
+
+    <div class="gr">
+      {% for icon in icon_list %}
+      <div class="gu gu-1of5 gu-m-1of1 icon">
+        <div class="bx tac">
+          <i class="icon icon-{{icon}} mbm"></i><br>
+          <span class="gray">.icon-{{icon}}</span>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
 
 </div>

@@ -36,40 +36,57 @@
 // A section to a component
 // =====================
 .sg-section {
-  position: relative;
-  margin-top: 50px;
+  padding: 20px;
+  border-bottom: 1px dashed $gray1;
 }
 
+.sg-sidebar {
+  background-color: $gray4;
+  position: fixed;
+  top: 0;
+  z-index: 1000;
+  min-height: 100%;
+  .sg-sidebar-nav {
+
+  }
+  .logo {
+    color: $purple2;
+  }
+}
+
+.sg-main {
+  margin-left: 20%;
+  min-height: 100%;
+  overflow: hidden;
+}
+
+.sg-title > * {
+  color: $white;
+}
+
+//-----------
 code[class*="language-"], pre[class*="language-"] {
   white-space: pre-wrap;
-}
-
-// A description within an .sg-section
-// -----------------
-.sg-description {
-  position: absolute;
-  top: 2em;
-  left: 0px;
-  max-width: 220px;
 }
 
 // styleguide components
 
 .bx-color {
-  .color {
-    width: 107px;
-    height: 50px;
-  }
-  .code {
-    width: 100px;
-    height: 30px;
-    color: $black;
+  .bg {
+    height: 40px;
   }
 }
 
 .icons-content {
-  .i[class^="icon-"], i[class*="icon-"] {
-    font-size: 2em;
+  .bx {
+    padding: 20px;
+    margin-bottom: 20px;
+    background: #ffffff;
+    border-radius: 3px;
+    i.icon {
+      font-size: 1.5em;
+      color: #404040;
+    }
   }
 }
 
@@ -122,63 +139,63 @@ table.table {
 }
 
 //colors.  Mostly for styleguide, you should not normally use these in the DOM
-.purple {
+.bg-purple {
   background-color: $purple;
 }
 
-.purple1 {
+.bg-purple1 {
   background-color: $purple1;
 }
 
-.purple2 {
+.bg-purple2 {
   background-color: $purple2;
 }
 
-.gray {
+.bg-gray {
   background-color: $gray;
 }
 
-.gray1 {
+.bg-gray1 {
   background-color: $gray1;
 }
 
-.gray2 {
+.bg-gray2 {
   background-color: $gray2;
 }
 
-.gray3 {
+.bg-gray3 {
   background-color: $gray3;
 }
 
-.gray4 {
+.bg-gray4 {
   background-color: $gray4;
 }
 
-.white {
+.bg-white {
   background-color: $white;
 }
 
-.orange {
+.bg-orange {
   background-color: $orange;
 }
 
-.orange1 {
+.bg-orange1 {
   background-color: $orange1;
 }
 
-.orange2 {
+.bg-orange2 {
   background-color: $orange2;
 }
 
-.black {
+.bg-black {
   background-color: $black;
 }
 
-.yellow {
+.bg-yellow {
   background-color: $yellow;
 }
 
-.blue {
+.bg-blue {
   background-color: $blue;
 }
 

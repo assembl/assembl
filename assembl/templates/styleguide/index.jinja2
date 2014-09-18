@@ -1,32 +1,41 @@
-{% extends 'base.jinja2' %}
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+<head>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700' rel='stylesheet' type='text/css'>
+    <title>{% block title %}Assembl UI{% endblock %}</title>
 
-{% block title %}Assembl UI{% endblock %}
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-{% block content %}
+    <link type="text/css" rel="stylesheet" href="/static/css/style.css" />
+    <link type="text/css" rel="stylesheet" href="/static/css/themes/{{theme}}/theme.css" />
 
-    {# todo: add feature detection #}
+    {% block extra_css %}{% endblock extra_css %}
+</head>
+<body>
 
-    {% for name, path in styleguide_views.items() %}
-        <div class="sg-section container">
-            <div class="row">
-                <div class="col-2">
-                    <h2 class="sg-title h2">{{name}}</h2>
-                </div>
-                <div class="col-9">
-                    {% include path %}
-                </div>
-            </div>
-        </div>
-    {% endfor %}
+<aside class="sg-sidebar gu gu-1of5">
+    <h1 class="logo tac pas h1">Assembl UI</h1>
+    <nav class="sg-sidebar-nav paxl">
+      {% for name, path in styleguide_views.items() %}
+        <h2 class="h3 sg-title"><a href="#{{name}}">{{name}}</a></h2>
+      {% endfor %}
+    </nav>
+</aside>
 
-
-<script>
-document.body.classList.remove('preload');
-</script>
+<main class="sg-main">
+  <div class="fluid-container">
+   {% for name, path in styleguide_views.items() %}
+    <div class="sg-section phxl">
+      <h5>test</h5>
+      {% include path %}
+    </div>
+   {% endfor %}
+  </div>
+</main>
 
 {% block main_js %}
-    <script data-main="{{ STATIC_URL }}/js/styleguide.js" src="{{ STATIC_URL }}/js/bower/requirejs/require.js"></script>
+    <script src="{{ STATIC_URL }}/js/styleguide.js" src="{{ STATIC_URL }}/js/bower/requirejs/require.js"></script>
 {% endblock main_js %}
-
-
-{% endblock %}
+</body>
+</html>
