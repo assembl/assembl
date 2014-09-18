@@ -206,3 +206,15 @@
     @content;
   }
 }
+
+@mixin gradient-vertical($startColor: #555, $endColor: #333) {
+  background-color: $endColor;
+  background-repeat: repeat-x;
+  background-image: -moz-linear-gradient(top, $startColor, $endColor); // FF 3.6+
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, $startColor), color-stop(100%, $endColor)); // Safari 4+, Chrome 2+
+  background-image: -webkit-linear-gradient(top, $startColor, $endColor); // Safari 5.1+, Chrome 10+
+  background-image: -o-linear-gradient(top, $startColor, $endColor); // Opera 11.10
+  background-image: linear-gradient(to bottom, $startColor, $endColor); // IE 10 supports the unprefixed form
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#{ie-hex-str($startColor)}', endColorstr='#{ie-hex-str($endColor)}', GradientType=0); // IE9 and down
+  *filter: none;
+}

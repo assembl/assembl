@@ -1,0 +1,161 @@
+.popover-display {
+  position: relative;
+  *z-index: 10;
+
+  &:hover,
+  &:focus {
+    .popover {
+      visibility: visible;
+      margin-bottom: 7px;
+      opacity: 1;
+    }
+  }
+}
+
+.popover {
+  position: absolute;
+  visibility: hidden;
+  left: 0;
+  bottom: 100%;
+  z-index: 1000;
+
+  width: 230px;
+  margin: 0 0 -7px 0;
+
+  border-radius: $borderRadiusM;
+  box-shadow: 1px 1px 12px rgba(0, 0, 0, 0.3);
+
+  background: $white;
+  border: 2px solid #bcc8d1;
+
+  opacity: 0;
+
+  color: $black;
+  font-size: 12px;
+
+  font-weight: normal;
+  font-style: normal;
+  text-decoration: none;
+  text-shadow: none;
+  text-align: left;
+  white-space: normal;
+  word-wrap: break-word;
+  text-transform: none;
+
+  pointer-events: none;
+
+  -moz-transition: opacity .3s, margin .3s;
+  -o-transition: opacity .3s, margin .3s;
+  -webkit-transition: opacity .3s, margin .3s;
+  transition: opacity .3s, margin .3s;
+
+  &:before {
+    content: '';
+    position: absolute;
+    left: 10px;
+    bottom: -10px;
+    width: 0;
+    height: 0;
+    border-color: #b7c8d6 transparent transparent;
+    border-style: solid;
+    border-width: 10px 11px 0;
+  }
+
+  &:after {
+    content: '';
+    position: absolute;
+    left: 14px;
+    bottom: -7px;
+    width: 0;
+    height: 0;
+    border-color: #f5f7f9 transparent transparent;
+    border-style: solid;
+    border-width: 7px 7px 0;
+  }
+
+  .popover-header {
+    display: block;
+    padding: $spacingS $spacingS $spacingXs;
+    border-bottom: 1px solid #d1dce5;
+  }
+
+  .popover-content {
+    display: block;
+    padding: $spacingS;
+  }
+
+  .popover-footer {
+    display: block;
+    padding: $spacingS;
+    background: #f5f7f9;
+    border-top: 1px solid #e4eaf0;
+    border-bottom-left-radius: $borderRadiusS;
+    border-bottom-right-radius: $borderRadiusS;
+  }
+}
+
+/* On bottom */
+
+.popover-display.popover-bottom {
+  &:hover,
+  &:focus {
+    .popover {
+      margin-top: 7px;
+    }
+  }
+}
+
+.popover-bottom .popover {
+  top: 100%;
+  bottom: auto;
+  margin: -7px 0 0 0;
+
+  &:before {
+    top: -10px;
+    border-color: transparent transparent #b7c8d6;
+    border-style: solid;
+    border-width: 0 11px 10px;
+  }
+
+  &:after {
+    top: -7px;
+    border-color: transparent transparent $white;
+    border-style: solid;
+    border-width: 0 7px 7px;
+  }
+}
+
+/* On left */
+
+.popover-left .popover {
+  right: 0;
+  left: auto;
+
+  &:before {
+    right: 10px;
+    left: auto;
+  }
+
+  &:after {
+    right: 14px;
+    left: auto;
+  }
+}
+
+/* Popover sizes */
+
+.popover-s {
+  width: 230px;
+}
+
+.popover-m {
+  width: 300px;
+}
+
+.popover-l {
+  width: 400px;
+}
+
+.popover-xl {
+  width: 530px;
+}

@@ -75,6 +75,11 @@ code[class*="language-"], pre[class*="language-"] {
   .bg {
     height: 40px;
   }
+  .code {
+    width: 100px;
+    height: 30px;
+    color: $black;
+  }
 }
 
 .icons-content {
@@ -367,4 +372,15 @@ https://github.com/isagalaev/highlight.js/tree/master/src/styles
 
 .hljs-chunk {
   color: #aaa;
+}
+
+.tooltip-container {
+  //height: 50px;
+  padding: 50px 0 50px 0;
+}
+
+.popover-container {
+  height: 50px;
+  //padding-bottom: 20%;
+  //padding-top: 22%;
 }
