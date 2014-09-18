@@ -209,13 +209,7 @@ define(function (require) {
 
                     that.postRender();
 
-                    /* TODO: BENOITG:  We should memorize which views are onscreen, and
-                     * re-call initAnnotator as needed (once) and loadAnnotations
-                     * after a delay.  We have a reference to them in renderedMessageViewsCurrent
-                     * Right now we just re-re-re call initAnnotator
-                     */
-                    that.messageListView.initAnnotator();
-                    that.loadAnnotations();
+                    that.messageListView.requestAnnotatorRefresh();
 
                     if (that.replyBoxShown) {
                         that.openReplyBox();
@@ -264,7 +258,7 @@ define(function (require) {
         loadAnnotations: function () {
             if (this.annotator && (this.viewStyle == this.availableMessageViewStyles.FULL_BODY)) {
                 var that = this,
-                    annotations = this.model.getAnnotations(),
+                    annotations = this.model.getAnnotations(), //TODO:  This is fairly CPU intensive, and may be worth caching.
                     annotationsToLoad = [],
                     filter = function () {
                         return true;

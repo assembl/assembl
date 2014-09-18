@@ -629,6 +629,7 @@ define(function (require) {
              * array with the newly calculated rendered MessageViews.
              */
             this.renderedMessageViewsCurrent = {};
+            this.suspendAnnotatorRefresh();
             //console.log("requestedOffsets:",requestedOffsets);
             if ((this.currentViewStyle == this.ViewStyles.THREADED) ||
                 (this.currentViewStyle == this.ViewStyles.NEW_MESSAGES)) {
@@ -661,10 +662,57 @@ define(function (require) {
                 this.ui.bottomArea.removeClass('hidden');
             }
 
-            this.initAnnotator();
+            this.resumeAnnotatorRefresh();
             that.trigger("messageList:render_complete", "Render complete");
         },
 
+        /**
+         * Re-init Annotator.  Needs to be done for all messages when any 
+         * single message has been re-rendered.  Otherwise, the annotations 
+         * will not be shown.
+         */
+        doAnnotatorRefresh: function () {
+          if (Ctx.debugRender) {
+            console.log("messageList:doAnnotatorRefresh() called for "+_.size(this.renderedMessageViewsCurrent)+" messages");
+          }
+          this.annotatorRefreshRequested = false;
+          this.initAnnotator();
+          _.each(this.renderedMessageViewsCurrent, function(messageView){
+            messageView.loadAnnotations();
+            });
+        },
+        
+        /**
+         * Should be called by a messageview anytime it has annotations and has 
+         * rendered a view that shows annotations.
+         */
+        requestAnnotatorRefresh: function () {
+          if(this.annotatorRefreshSuspended === true) {
+            this.annotatorRefreshRequested = true;
+          }
+          else {
+            this.doAnnotatorRefresh();
+          }
+          
+        },
+        
+        /**
+         * =
+         */
+        suspendAnnotatorRefresh: function () {
+          this.annotatorRefreshSuspended = true;
+        },
+        /**
+         * Will call a refresh synchronously if any refresh was requested 
+         * while suspended
+         */
+        resumeAnnotatorRefresh: function () {
+          this.annotatorRefreshSuspended = false;
+          if (this.annotatorRefreshRequested === true) {
+            this.doAnnotatorRefresh();
+          }
+        },
+        
         /**
          * Show the next bunch of messages to be displayed.
          */
