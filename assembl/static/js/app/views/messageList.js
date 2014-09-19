@@ -623,7 +623,7 @@ define(function (require) {
          */
         showMessages: function (requestedOffsets) {
             var that = this,
-                views,
+                views_promise,
                 models,
                 offsets,
                 numMessages,
@@ -641,36 +641,39 @@ define(function (require) {
                 models = this.visitorRootMessagesToDisplay;
                 numMessages = _.size(that.visitorOrderLookupTable);
                 returnedOffsets = this.calculateThreadedMessagesOffsets(this.visitorViewData, that.visitorOrderLookupTable, requestedOffsets);
-                views = this.getRenderedMessagesThreaded(models, 1, this.visitorViewData, returnedOffsets);
+                views_promise = this.getRenderedMessagesThreaded(models, 1, this.visitorViewData, returnedOffsets);
             } else {
                 models = this.getAllMessagesToDisplay();
                 numMessages = _.size(models);
-                views = this.getRenderedMessagesFlat(models, requestedOffsets, returnedOffsets);
+                views_promise = this.getRenderedMessagesFlat(models, requestedOffsets, returnedOffsets);
             }
-            //console.log("requestedOffsets:",requestedOffsets, "returnedOffsets:", returnedOffsets, "numMessages", numMessages);
-            this.offsetStart = returnedOffsets['offsetStart']
-            this.offsetEnd = returnedOffsets['offsetEnd']
+            $.when( views_promise ).done(function(views) {
+              //console.log("requestedOffsets:",requestedOffsets, "returnedOffsets:", returnedOffsets, "numMessages", numMessages);
+              that.offsetStart = returnedOffsets['offsetStart']
+              that.offsetEnd = returnedOffsets['offsetEnd']
 
-            if (views.length === 0) {
-                this.ui.messageList.append(Ctx.format("<div class='margin'>{0}</div>", i18n.gettext('No messages')));
-            } else {
-                this.ui.messageList.append(views);
-            }
-            this.scrollToPreviousScrollTarget();
-            if (this.offsetStart <= 0) {
-                this.ui.topArea.addClass('hidden');
-            } else {
-                this.ui.topArea.removeClass('hidden');
-            }
+              if (views.length === 0) {
+                that.ui.messageList.append(Ctx.format("<div class='margin'>{0}</div>", i18n.gettext('No messages')));
+              } else {
+                that.ui.messageList.append(views);
+              }
+              that.scrollToPreviousScrollTarget();
+              if (that.offsetStart <= 0) {
+                that.ui.topArea.addClass('hidden');
+              } else {
+                that.ui.topArea.removeClass('hidden');
+              }
 
-            if (this.offsetEnd >= (numMessages - 1)) {
-                this.ui.bottomArea.addClass('hidden');
-            } else {
-                this.ui.bottomArea.removeClass('hidden');
-            }
+              if (that.offsetEnd >= (numMessages - 1)) {
+                that.ui.bottomArea.addClass('hidden');
+              } else {
+                that.ui.bottomArea.removeClass('hidden');
+              }
 
-            this.resumeAnnotatorRefresh();
-            that.trigger("messageList:render_complete", "Render complete");
+              that.resumeAnnotatorRefresh();
+              that.trigger("messageList:render_complete", "Render complete");
+            });
+
         },
 
         /**
@@ -1062,21 +1065,21 @@ define(function (require) {
 
             return list;
         },
-
+        
         /**
          * Return a list with all views.el already rendered for threaded views
-         * @param {Message.Model[]} list of root messages to render at the current level
+         * @param {Message.Model[]} list of messages to render at the current level
          * @param {Number} [level=1] The current hierarchy level
          * @param {Object[]} data_by_object render information from ideaRendervisitor
-         * @return {HTMLDivElement[]}
+         * @return {jquery.promise}
          */
-        getRenderedMessagesThreaded: function (messages, level, data_by_object, offsets) {
+        getRenderedMessagesThreaded: function (sibblings, level, data_by_object, offsets) {
             var list = [],
                 i = 0,
-                len = messages.length,
                 view, model, children, prop, isValid,
                 last_sibling_chain,
-                current_message_info;
+                current_message_info,
+                defer = $.Deferred();
 
             /**  [last_sibling_chain] which of the view's ancestors are the last child of their respective parents.
              *
@@ -1101,40 +1104,72 @@ define(function (require) {
             if (_.isUndefined(level)) {
                 level = 1;
             }
-
-            for (i; i < len; i++) {
-                model = messages[i];
-                current_message_info = data_by_object[model.getId()];
-                if ((current_message_info['traversal_order'] >= offsets['offsetStart'])
-                    && (current_message_info['traversal_order'] <= offsets['offsetEnd'])) {
-                    if (current_message_info['last_sibling_chain'] == undefined) {
-                        current_message_info['last_sibling_chain'] = buildLastSibblingChain(model, data_by_object);
-                    }
-                    last_sibling_chain = current_message_info['last_sibling_chain']
-                    //console.log(last_sibling_chain);
-                    view = new MessageFamilyView({model: model, messageListView: this}, last_sibling_chain);
-                    view.currentLevel = level;
-                    children = current_message_info['children'];
-                    var subviews = this.getRenderedMessagesThreaded(children, level + 1, data_by_object, offsets);
-                    view.hasChildren = (subviews.length > 0);
-                    list.push(view.render().el);
-                    view.$('.messagelist-children').append(subviews);
-
-                    /* TODO:  benoitg:  We need good handling when we skip a grandparent, but I haven't ported this code yet.
-                     * We should also handle the case where 2 messages have the same parent, but the parent isn't in the set */
-                    /*if (!isValid && this.hasDescendantsInFilter(model)) {
-                     //Generate ghost message
-                     var ghost_element = $('<div class="message message--skip"><div class="skipped-message"></div><div class="messagelist-children"></div></div>');
-                     console.log("Invalid message was:",model);
-                     list.push(ghost_element);
-                     children = model.getChildren();
-                     ghost_element.find('.messagelist-children').append( this.getRenderedMessagesThreaded(
-                     children, level+1, data_by_object) );
-                     }
-                     */
-                }
+            //console.log("sibblings",sibblings.length);
+            //This actually replaces the for loop for sibblings
+            model = sibblings.shift();
+            //console.log("model",model);
+            if(!model) {
+              return list;
             }
-            return list;
+            current_message_info = data_by_object[model.getId()];
+            
+            //Only process if message is within requested offsets
+            if ((current_message_info['traversal_order'] >= offsets['offsetStart'])
+                && (current_message_info['traversal_order'] <= offsets['offsetEnd'])) {
+              
+                if (current_message_info['last_sibling_chain'] === undefined) {
+                    current_message_info['last_sibling_chain'] = buildLastSibblingChain(model, data_by_object);
+                }
+                last_sibling_chain = current_message_info['last_sibling_chain']
+                //console.log(last_sibling_chain);
+                view = new MessageFamilyView({model: model, messageListView: this}, last_sibling_chain);
+                view.currentLevel = level;
+                children = current_message_info['children'];
+                
+                //Process children, if any
+                if(_.size(children)>0) {
+                  var subviews_promise = this.getRenderedMessagesThreaded(children, level + 1, data_by_object, offsets);
+                }
+                else {
+                  var subviews_promise = [];
+                }
+
+                //Process sibblings, if any (this is for-loop rewritten as recursive calls to avoid locking the browser)
+                if(sibblings.length > 0) {
+                  var sibblingsviews_promise = this.getRenderedMessagesThreaded(sibblings, level, data_by_object, offsets);
+                }
+                else {
+                  var sibblingsviews_promise = [];
+                }
+                
+                $.when(subviews_promise, sibblingsviews_promise).done(function(subviews, sibblingsviews) {
+                  //Note:  benoitg: We could put a setTimeout here, but apparently the promise is enough to unlock the browser
+                  view.hasChildren = (subviews.length > 0);
+                  list.push(view.render().el);
+                  view.$('.messagelist-children').append(subviews);
+
+                  /* TODO:  benoitg:  We need good handling when we skip a grandparent, but I haven't ported this code yet.
+                   * We should also handle the case where 2 messages have the same parent, but the parent isn't in the set */
+                  /*if (!isValid && this.hasDescendantsInFilter(model)) {
+                   //Generate ghost message
+                   var ghost_element = $('<div class="message message--skip"><div class="skipped-message"></div><div class="messagelist-children"></div></div>');
+                   console.log("Invalid message was:",model);
+                   list.push(ghost_element);
+                   children = model.getChildren();
+                   ghost_element.find('.messagelist-children').append( this.getRenderedMessagesThreaded(
+                   children, level+1, data_by_object) );
+                   }
+                   */
+                  if(sibblingsviews.length > 0) {
+                    list = list.concat(sibblingsviews);
+                  }
+                  defer.resolve(list);
+                });
+            }
+            else{
+              return list;
+            }
+            return defer.promise();
         },
 
         hasDescendantsInFilter: function (model) {
