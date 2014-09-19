@@ -187,7 +187,7 @@ def test_next_synthesis_idea_management(discussion, test_app, test_session,
 
 
 def test_api_register(test_app, discussion):
-    # Register
+    test_app.app.registry.settings['assembl.validate_registration_emails']='true'
     with mock.patch('repoze.sendmail.mailer.SMTPMailer.smtp') as mock_mail:
         mailer = mock_mail.return_value
         mailer.set_debuglevel.return_value = None
@@ -198,6 +198,7 @@ def test_api_register(test_app, discussion):
         mailer.sendmail.return_value = {}
         mailer.quit.return_value = (221, 'Service closing transmission channel')
 
+        # Register
         r = test_app.post("/register", {
             'name': "John Smith",
             'email': "jsmith@example.com",
@@ -207,15 +208,19 @@ def test_api_register(test_app, discussion):
         assert r.status_code == 302
         User.db.flush()
         User.db.expunge_all()
+        # Register step 2
         r = test_app.get(r.location)
+        # Sent
         assert r.status_code == 200
         assert mailer.sendmail.call_count == 1
+        # Get token
         mail_text = mailer.sendmail.call_args[0][2]
         token = re.search(r'email_confirm/([^>]+)>',mailer.sendmail.call_args[0][2], re.MULTILINE)
         assert token
         token = token.group(1)
         token = ''.join(token.split('=\n'))
         assert token
+        # Confirm token
         r = test_app.get("/users/email_confirm/"+token)
         assert r.status_code == 302
 
