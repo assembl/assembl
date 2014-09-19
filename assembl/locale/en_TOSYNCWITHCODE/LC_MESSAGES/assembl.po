@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  Assembl\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-09-19 14:18-0400\n"
+"POT-Creation-Date: 2014-09-19 16:50-0400\n"
 "PO-Revision-Date: 2014-09-11 22:58+0000\n"
 "Last-Translator: Benoit Grégoire <benoitg@coeus.ca>\n"
 "Language-Team: English (Canada) "
@@ -243,7 +243,7 @@ msgid "Send your comment"
 msgstr ""
 
 #: assembl/static/js/app/views/ideaPanel.js:209
-#: assembl/static/js/app/views/messageList.js:848
+#: assembl/static/js/app/views/messageList.js:851
 msgid "You need to type a comment first..."
 msgstr ""
 
@@ -294,47 +294,47 @@ msgstr ""
 msgid "New Messages"
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:655
+#: assembl/static/js/app/views/messageList.js:656
 msgid "No messages"
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:845
+#: assembl/static/js/app/views/messageList.js:848
 msgid "Start a new topic in this discussion"
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:846
+#: assembl/static/js/app/views/messageList.js:849
 msgid "Subject"
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:847
+#: assembl/static/js/app/views/messageList.js:850
 msgid "Add a subject above and start a new topic here"
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:849
+#: assembl/static/js/app/views/messageList.js:852
 msgid "You need to set a subject to add a new topic..."
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:968
+#: assembl/static/js/app/views/messageList.js:971
 #, python-format
 msgid "All %s"
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:970
+#: assembl/static/js/app/views/messageList.js:973
 #, python-format
 msgid "Unread %s"
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:979
+#: assembl/static/js/app/views/messageList.js:982
 #: assembl/templates/views/ideaList.tmpl:27
 msgid "Expand all"
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:982
+#: assembl/static/js/app/views/messageList.js:985
 #: assembl/templates/views/ideaList.tmpl:27
 msgid "Collapse all"
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:1191
+#: assembl/static/js/app/views/messageList.js:1226
 msgid "Send to clipboard"
 msgstr ""
 
@@ -1513,3 +1513,4 @@ msgstr ""
 #, python-format
 msgid "No discussion found for slug=%s"
 msgstr ""
+

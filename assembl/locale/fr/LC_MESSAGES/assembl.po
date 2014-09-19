@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  Assembl\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-09-19 14:18-0400\n"
-"PO-Revision-Date: 2014-09-12 20:12+0000\n"
+"POT-Creation-Date: 2014-09-19 16:50-0400\n"
+"PO-Revision-Date: 2014-09-19 20:11+0000\n"
 "Last-Translator: François Burra <francoisburra@imaginationforpeople.org>\n"
 "Language-Team: French "
 "(http://www.transifex.com/projects/p/assembl/language/fr/)\n"
@@ -247,7 +247,7 @@ msgid "Send your comment"
 msgstr "Envoyez votre commentaire"
 
 #: assembl/static/js/app/views/ideaPanel.js:209
-#: assembl/static/js/app/views/messageList.js:848
+#: assembl/static/js/app/views/messageList.js:851
 msgid "You need to type a comment first..."
 msgstr "Vous devez d'abord écrire un commentaire..."
 
@@ -300,47 +300,47 @@ msgstr "Chronologique-inverse"
 msgid "New Messages"
 msgstr "Nouveaux Messages"
 
-#: assembl/static/js/app/views/messageList.js:655
+#: assembl/static/js/app/views/messageList.js:656
 msgid "No messages"
 msgstr "Pas de messages"
 
-#: assembl/static/js/app/views/messageList.js:845
+#: assembl/static/js/app/views/messageList.js:848
 msgid "Start a new topic in this discussion"
 msgstr "Lancez un nouveau sujet de discussion"
 
-#: assembl/static/js/app/views/messageList.js:846
+#: assembl/static/js/app/views/messageList.js:849
 msgid "Subject"
 msgstr "Sujet"
 
-#: assembl/static/js/app/views/messageList.js:847
+#: assembl/static/js/app/views/messageList.js:850
 msgid "Add a subject above and start a new topic here"
 msgstr "Lancez un nouvau sujet ici, en donnant le titre ci-dessus"
 
-#: assembl/static/js/app/views/messageList.js:849
+#: assembl/static/js/app/views/messageList.js:852
 msgid "You need to set a subject to add a new topic..."
 msgstr "Vous devez ajouter un titre pour lancer un sujet de discussion..."
 
-#: assembl/static/js/app/views/messageList.js:968
+#: assembl/static/js/app/views/messageList.js:971
 #, python-format
 msgid "All %s"
 msgstr "Tous %s"
 
-#: assembl/static/js/app/views/messageList.js:970
+#: assembl/static/js/app/views/messageList.js:973
 #, python-format
 msgid "Unread %s"
 msgstr "Non-lus %s"
 
-#: assembl/static/js/app/views/messageList.js:979
+#: assembl/static/js/app/views/messageList.js:982
 #: assembl/templates/views/ideaList.tmpl:27
 msgid "Expand all"
 msgstr "Tout déployer"
 
-#: assembl/static/js/app/views/messageList.js:982
+#: assembl/static/js/app/views/messageList.js:985
 #: assembl/templates/views/ideaList.tmpl:27
 msgid "Collapse all"
 msgstr "Tout replier"
 
-#: assembl/static/js/app/views/messageList.js:1191
+#: assembl/static/js/app/views/messageList.js:1226
 msgid "Send to clipboard"
 msgstr "Ajouter au presse-papier"
 
@@ -956,7 +956,7 @@ msgstr "Lire la synthèse"
 
 #: assembl/templates/views/contextPage.tmpl:98
 msgid "Partners"
-msgstr ""
+msgstr "Partenaires"
 
 #: assembl/templates/views/create-group.tmpl:3
 msgid "Create a panel group"
@@ -972,11 +972,11 @@ msgstr "Table des idées"
 
 #: assembl/templates/views/create-group.tmpl:42
 msgid "simpleView"
-msgstr ""
+msgstr "Vue classique"
 
 #: assembl/templates/views/create-group.tmpl:51
 msgid "Others:"
-msgstr ""
+msgstr "Autres panneaux :"
 
 #: assembl/templates/views/create-group.tmpl:61
 msgid "Conversation"
@@ -1589,3 +1589,4 @@ msgstr ""
 #, python-format
 msgid "No discussion found for slug=%s"
 msgstr "Nous n'avons pas de discussion sous le code=%s"
+
