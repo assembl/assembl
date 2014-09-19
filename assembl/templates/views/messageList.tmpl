@@ -48,6 +48,8 @@
 
 </div>
 
-<div class="sticky-box tac">
-    <a href="#" class="js_scrollToMsgBox"><i class="icon-comment"></i> {{ gettext('React to the ongoing discussion') }} </a>
-</div>
+<% if (canPost) { %>
+  <div class="sticky-box tac">
+      <a href="#" class="js_scrollToMsgBox"><i class="icon-comment"></i> {{ gettext('React to the ongoing discussion') }} </a>
+  </div>
+<% } %>
