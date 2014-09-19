@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
+import smtplib
+import re
 
 import json
 import pytest
 from urllib import urlencode, quote_plus
+import mock
 
 from assembl.models import (
     Idea, Post, Email, User
@@ -181,8 +184,40 @@ def test_next_synthesis_idea_management(discussion, test_app, test_session,
     assert res.status_code == 200
     res_data = json.loads(res.body)
     assert len(res_data['ideas']) == 2, 'Idea wasn\'t added to the synthesis'
-    
 
+
+def test_api_register(test_app, discussion):
+    # Register
+    with mock.patch('repoze.sendmail.mailer.SMTPMailer.smtp') as mock_mail:
+        mailer = mock_mail.return_value
+        mailer.set_debuglevel.return_value = None
+        mailer.has_extn.return_value = False
+        mailer.connect.return_value = (220, 'Service ready')
+        mailer.ehlo.return_value = (250, 'Completed')
+        mailer.does_esmtp.return_value = False
+        mailer.sendmail.return_value = {}
+        mailer.quit.return_value = (221, 'Service closing transmission channel')
+
+        r = test_app.post("/register", {
+            'name': "John Smith",
+            'email': "jsmith@example.com",
+            'password': '1234',
+            'password2': '1234',
+            })
+        assert r.status_code == 302
+        User.db.flush()
+        User.db.expunge_all()
+        r = test_app.get(r.location)
+        assert r.status_code == 200
+        assert mailer.sendmail.call_count == 1
+        mail_text = mailer.sendmail.call_args[0][2]
+        token = re.search(r'email_confirm/([^>]+)>',mailer.sendmail.call_args[0][2], re.MULTILINE)
+        assert token
+        token = token.group(1)
+        token = ''.join(token.split('=\n'))
+        assert token
+        r = test_app.get("/users/email_confirm/"+token)
+        assert r.status_code == 302
 
 #@pytest.mark.xfail
 def test_api_get_posts_from_idea(
