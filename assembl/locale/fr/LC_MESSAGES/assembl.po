@@ -12,9 +12,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  Assembl\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-09-19 18:47+0200\n"
-"PO-Revision-Date: 2014-09-11 18:56-0500\n"
-"Last-Translator: Benoit Grégoire <benoitg@coeus.ca>\n"
+"POT-Creation-Date: 2014-09-19 14:18-0400\n"
+"PO-Revision-Date: 2014-09-12 20:12+0000\n"
+"Last-Translator: François Burra <francoisburra@imaginationforpeople.org>\n"
 "Language-Team: French "
 "(http://www.transifex.com/projects/p/assembl/language/fr/)\n"
 "Plural-Forms: nplurals=2; plural=(n > 1)\n"
@@ -327,8 +327,8 @@ msgstr "Tous %s"
 
 #: assembl/static/js/app/views/messageList.js:970
 #, python-format
-msgid "New %s"
-msgstr "Nouveau %s"
+msgid "Unread %s"
+msgstr "Non-lus %s"
 
 #: assembl/static/js/app/views/messageList.js:979
 #: assembl/templates/views/ideaList.tmpl:27
@@ -865,11 +865,13 @@ msgstr "Activer l'annotation Web"
 msgid "How it works:"
 msgstr "Comment ça marche:"
 
-#: assembl/templates/views/bookmarket.tmpl:9
-msgid "1 - Drag the button"
+#: assembl/templates/views/bookmarket.tmpl:10
+msgid "Drag the following button in your browser's bookmark bar."
 msgstr ""
+"Faites glisser le bouton ci-dessous dans votre barre de favoris sur votre"
+" fureteur."
 
-#: assembl/templates/views/bookmarket.tmpl:11
+#: assembl/templates/views/bookmarket.tmpl:12
 msgid ""
 "Drag this button to your bookmark bar to create a bookmarklet. You can "
 "then capture selections from most webpages (those that are not secured "
@@ -882,31 +884,43 @@ msgstr ""
 "l'applisignet et 2. Mettant en surbrillance la section de texte que vous "
 "voulez envoyer à la discussion."
 
-#: assembl/templates/views/bookmarket.tmpl:11
+#: assembl/templates/views/bookmarket.tmpl:12
 msgid "Web capture to"
 msgstr "Capture du Web vers"
 
-#: assembl/templates/views/bookmarket.tmpl:13
-msgid "2 - click on and move to your browser"
-msgstr ""
-
 #: assembl/templates/views/bookmarket.tmpl:14
-msgid "3 - find the extract"
+msgid ""
+"Find extracts that will add value to the current debate. For example, you"
+" could find extracts for:"
 msgstr ""
+"Dénichez des extraits qui apporteront de la valeur au débat en cours. Par"
+" exemple, vous pourriez trouver des extraits pour :"
 
 #: assembl/templates/views/bookmarket.tmpl:16
-msgid "Click on the bookmarklet to enable annotations"
-msgstr "Cliquez sur le l'applisignet pour activer l'annotation web"
+msgid "Dig deeper in an existing idea"
+msgstr "Approfondir une idée existante"
 
 #: assembl/templates/views/bookmarket.tmpl:17
-msgid "Highligt the section of text you wish to send to the discussion"
-msgstr ""
+msgid "Bring supplementary information relative to an idea"
+msgstr "Apporter des informations complémentaires à une idée"
 
 #: assembl/templates/views/bookmarket.tmpl:18
-msgid "Click the \"send\" button that appears"
-msgstr ""
+msgid "Find new viewpoints and arguments"
+msgstr "Trouver des nouveaux points de vue et arguments"
 
-#: assembl/templates/views/bookmarket.tmpl:25
+#: assembl/templates/views/bookmarket.tmpl:19
+msgid "Add in inspiring quote"
+msgstr "Ajouter une citation inspirante"
+
+#: assembl/templates/views/bookmarket.tmpl:22
+msgid ""
+"Click on the button, where you had dragged it in your browser, to "
+"activate web annotation."
+msgstr ""
+"Cliquez sur le bouton, là où vous l'aviez déplacé sur votre fureteur, "
+"afin d’activer l'annotation Web."
+
+#: assembl/templates/views/bookmarket.tmpl:28
 msgid "I understand"
 msgstr "Je comprends"
 
@@ -949,12 +963,10 @@ msgid "Create a panel group"
 msgstr "Ajouter un groupe de panneaux"
 
 #: assembl/templates/views/create-group.tmpl:8
-#, fuzzy
-msgid "Navigation:"
-msgstr "Navigation"
+msgid "Choose a navigation panel:"
+msgstr "Choisissez un panneau de navigation"
 
 #: assembl/templates/views/create-group.tmpl:18
-#, fuzzy
 msgid "Table of idea"
 msgstr "Table des idées"
 
@@ -967,7 +979,6 @@ msgid "Others:"
 msgstr ""
 
 #: assembl/templates/views/create-group.tmpl:61
-#, fuzzy
 msgid "Conversation"
 msgstr "Conversations"
 
@@ -1247,10 +1258,8 @@ msgid "Load more messages"
 msgstr "Charger plus de messages"
 
 #: assembl/templates/views/messageList.tmpl:53
-#, fuzzy
-#| msgid "Create a new discussion"
 msgid "React to the ongoing discussion"
-msgstr "Créer une nouvelle discussion"
+msgstr "Réagir à la discussion en cours"
 
 #: assembl/templates/views/messageListItem.tmpl:4
 msgid "Unselect"
@@ -1367,7 +1376,7 @@ msgstr "Si vous désirez attrapper des etraits hors d'Assembl (exemple: Wikipedi
 
 #: assembl/templates/views/segmentList.tmpl:6
 msgid "click here to activate the annotation"
-msgstr "cliquez ici pour activer l'annotation web."
+msgstr "cliquez ici pour activer l'annotation Web."
 
 #: assembl/templates/views/segmentList.tmpl:9
 msgid "Extracts not yet associated with an idea"
@@ -1580,10 +1589,3 @@ msgstr ""
 #, python-format
 msgid "No discussion found for slug=%s"
 msgstr "Nous n'avons pas de discussion sous le code=%s"
-
-#~ msgid "Choose a navigation panel:"
-#~ msgstr "Choisissez un panneau de navigation"
-
-#~ msgid "Messages"
-#~ msgstr "Messages"
-

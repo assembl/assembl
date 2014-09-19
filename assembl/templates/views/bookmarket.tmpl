@@ -6,17 +6,20 @@
 <div class="popin-body">
   <div class="web-capture">
     <p>{{ gettext('How it works:')}}</p>
-    <p>{{ gettext('1 - Drag the button') }}</p>
+    <ol>
+    <li>{{ gettext("Drag the following button in your browser's bookmark bar.") }}</li>
     <div>
         <a class="bookmarklet" data-toggle="tooltip" title="{{gettext('Drag this button to your bookmark bar to create a bookmarklet. You can then capture selections from most webpages (those that are not secured with https) by 1. Clicking on the bookmarklet and 2. Highlighting the section of text you wish to send to the discussion.')}}" href="javascript:(function(a,b){r='http://{{ request.server_name }}:{{ request.server_port }}',a._annotatorConfig={root:r,discussion:{{ discussion.id }}},s=b.body.appendChild(b.createElement('script')),s.language='javascript',s.src=r+'/static/js/annotator_bkmklet.min.js'})(this,this.document);">{{ gettext('Web capture to') }} {{ discussion.slug }}</a>
     </div>
-    <p>{{ gettext('2 - click on and move to your browser') }}</p>
-    <p>{{ gettext('3 - find the extract') }}</p>
-    <ul>
-      <li>{{ gettext('Click on the bookmarklet to enable annotations') }}</li>
-      <li>{{ gettext('Highligt the section of text you wish to send to the discussion') }}</li>
-      <li>{{ gettext('Click the "send" button that appears') }}</li>
-    </ul>
+    <li>{{ gettext("Find extracts that will add value to the current debate. For example, you could find extracts for:") }}
+      <ul>
+        <li>{{ gettext("Dig deeper in an existing idea") }}</li>
+        <li>{{ gettext("Bring supplementary information relative to an idea") }}</li>
+        <li>{{ gettext("Find new viewpoints and arguments") }}</li>
+        <li>{{ gettext("Add in inspiring quote") }}</li>
+      </ul>
+    </li>
+    <li>{{ gettext("Click on the button, where you had dragged it in your browser, to activate web annotation.") }}</li>
   </div>
   <div class="clr"></div>
 </div>

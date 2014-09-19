@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: assembl 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-09-19 18:47+0200\n"
+"POT-Creation-Date: 2014-09-19 14:18-0400\n"
 "PO-Revision-Date: 2014-07-24 17:38-0500\n"
 "Last-Translator: Benoit Grégoire <benoitg@coeus.ca>\n"
 "Language-Team: en <LL@li.org>\n"
@@ -317,7 +317,7 @@ msgstr ""
 
 #: assembl/static/js/app/views/messageList.js:970
 #, python-format
-msgid "New %s"
+msgid "Unread %s"
 msgstr ""
 
 #: assembl/static/js/app/views/messageList.js:979
@@ -848,11 +848,11 @@ msgstr ""
 msgid "How it works:"
 msgstr ""
 
-#: assembl/templates/views/bookmarket.tmpl:9
-msgid "1 - Drag the button"
+#: assembl/templates/views/bookmarket.tmpl:10
+msgid "Drag the following button in your browser's bookmark bar."
 msgstr ""
 
-#: assembl/templates/views/bookmarket.tmpl:11
+#: assembl/templates/views/bookmarket.tmpl:12
 msgid ""
 "Drag this button to your bookmark bar to create a bookmarklet. You can "
 "then capture selections from most webpages (those that are not secured "
@@ -860,31 +860,39 @@ msgid ""
 "section of text you wish to send to the discussion."
 msgstr ""
 
-#: assembl/templates/views/bookmarket.tmpl:11
+#: assembl/templates/views/bookmarket.tmpl:12
 msgid "Web capture to"
 msgstr ""
 
-#: assembl/templates/views/bookmarket.tmpl:13
-msgid "2 - click on and move to your browser"
-msgstr ""
-
 #: assembl/templates/views/bookmarket.tmpl:14
-msgid "3 - find the extract"
+msgid ""
+"Find extracts that will add value to the current debate. For example, you"
+" could find extracts for:"
 msgstr ""
 
 #: assembl/templates/views/bookmarket.tmpl:16
-msgid "Click on the bookmarklet to enable annotations"
+msgid "Dig deeper in an existing idea"
 msgstr ""
 
 #: assembl/templates/views/bookmarket.tmpl:17
-msgid "Highligt the section of text you wish to send to the discussion"
+msgid "Bring supplementary information relative to an idea"
 msgstr ""
 
 #: assembl/templates/views/bookmarket.tmpl:18
-msgid "Click the \"send\" button that appears"
+msgid "Find new viewpoints and arguments"
 msgstr ""
 
-#: assembl/templates/views/bookmarket.tmpl:25
+#: assembl/templates/views/bookmarket.tmpl:19
+msgid "Add in inspiring quote"
+msgstr ""
+
+#: assembl/templates/views/bookmarket.tmpl:22
+msgid ""
+"Click on the button, where you had dragged it in your browser, to "
+"activate web annotation."
+msgstr ""
+
+#: assembl/templates/views/bookmarket.tmpl:28
 msgid "I understand"
 msgstr ""
 
@@ -927,7 +935,7 @@ msgid "Create a panel group"
 msgstr ""
 
 #: assembl/templates/views/create-group.tmpl:8
-msgid "Navigation:"
+msgid "Choose a navigation panel:"
 msgstr ""
 
 #: assembl/templates/views/create-group.tmpl:18
@@ -1501,25 +1509,3 @@ msgstr ""
 #, python-format
 msgid "No discussion found for slug=%s"
 msgstr ""
-
-#~ msgid ""
-#~ msgstr ""
-
-#~ msgid "Extract catching"
-#~ msgstr ""
-
-#~ msgid "Table of ideas ({0})"
-#~ msgstr ""
-
-#~ msgid "others messages"
-#~ msgstr ""
-
-#~ msgid "Choose a navigation panel:"
-#~ msgstr ""
-
-#~ msgid "Navigation"
-#~ msgstr ""
-
-#~ msgid "Messages"
-#~ msgstr ""
-
