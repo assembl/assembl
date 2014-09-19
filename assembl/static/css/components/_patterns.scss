@@ -1,0 +1,73 @@
+.rc, .richcontainer {
+  display: block;
+  @include clearfixHack();
+
+  .bd {
+    display: table-cell;
+    *display: inline-block;
+    zoom: 1;
+
+    &:after {
+      clear: both;
+      display: block;
+      visibility: hidden;
+      overflow: hidden;
+      height: 0 !important;
+      line-height: 0;
+      font-size: xx-large;
+      content: " x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x ";
+    }
+    > :first-child {
+      margin-top: 0;
+    }
+    > :last-child {
+      margin-bottom: 0;
+    }
+  }
+  .img, .img-left {
+    float: left;
+  }
+  .img-right, .imgRight {
+    float: right;
+  }
+}
+
+.rcsxs .img, .rcsxs .img-left {
+  margin-right: $spacingXs;
+}
+
+.rcss .img, .small .img, .rcss .img-left, .small .img-left {
+  margin-right: $spacingS;
+}
+
+.rcsm .img, .medium .img, .rcsm .img-left, .medium .img-left {
+  margin-right: $spacingM;
+}
+
+.rcsl .img, .large .img, .rcsl .img-left, .large .img-left {
+  margin-right: $spacingL;
+}
+
+.rcsxl .img, .xlarge .img, .rcsxl .img-left, .xlarge .img-left {
+  margin-right: $spacingXl;
+}
+
+.rcsxs .img-right, .rcsxs .imgRight {
+  margin-left: $spacingXs;
+}
+
+.rcss .img-right, .small .img-right, .rcss .imgRight, .small .imgRight {
+  margin-left: $spacingS;
+}
+
+.rcsm .img-right, .medium .img-right, .rcsm .imgRight, .medium .imgRight {
+  margin-left: $spacingM;
+}
+
+.rcsl .img-right, .large .img-right, .rcsl .imgRight, .large .imgRight {
+  margin-left: $spacingL;
+}
+
+.rcsxl .img-right, .xlarge .img-right, .rcsxl .imgRight, .xlarge .imgRight {
+  margin-left: $spacingXl;
+}

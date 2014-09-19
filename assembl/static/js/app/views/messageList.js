@@ -54,89 +54,10 @@ define(function (require) {
             loadNextMessagesButton: '.js_messageList-morebutton',
             messageList: '.messageList-list',
             userThreadedViewButton: '.messageListViewStyleUserThreaded',
-            userHighlightNewViewButton: '.messageListViewStyleUserHighlightNew'
-        },
-        getTitle: function () {
-            return i18n.gettext('Conversations');
+            userHighlightNewViewButton: '.messageListViewStyleUserHighlightNew',
+            stickyBar: '.sticky-box'
         },
 
-        ViewStyles: {
-            THREADED: {
-                id: "threaded",
-                css_class: MESSAGE_LIST_VIEW_STYLES_CLASS_PREFIX + "threaded",
-                label: i18n.gettext('Threaded')
-            },
-            CHRONOLOGICAL: {
-                id: "chronological",
-                css_class: MESSAGE_LIST_VIEW_STYLES_CLASS_PREFIX + "chronological",
-                label: i18n.gettext('Chronological')
-            },
-            REVERSE_CHRONOLOGICAL: {
-                id: "reverse_chronological",
-                css_class: MESSAGE_LIST_VIEW_STYLES_CLASS_PREFIX + "activityfeed",
-                label: i18n.gettext('Reverse-Chronological')
-            },
-            NEW_MESSAGES: {
-                id: "new_messages",
-                css_class: MESSAGE_LIST_VIEW_STYLES_CLASS_PREFIX + "newmessages",
-                label: i18n.gettext('New Messages')
-            }
-        },
-
-        currentViewStyle: null,
-
-        /**
-         * If there were any render requests inhibited while rendering was
-         * processed
-         */
-        numRenderInhibitedDuringRendering: 0,
-
-
-        storedMessageListConfig: Ctx.getMessageListConfigFromStorage(),
-        /**
-         * get a view style definition by id
-         * @param {viewStyle.id}
-         * @return {viewStyle or undefined}
-         */
-        getViewStyleDefById: function (viewStyleId) {
-            var retval = _.find(this.ViewStyles, function (viewStyle) {
-                return viewStyle.id == viewStyleId;
-            });
-            return retval;
-        },
-        /**
-         * get a view style css_class
-         * @param {messageViewStyle}
-         * @return {String}
-         */
-        getMessageViewStyleCssClass: function (messageViewStyle) {
-            return DEFAULT_MESSAGE_VIEW_LI_ID_PREFIX + messageViewStyle.id;
-        },
-
-        /**
-         * get a view style definition by id
-         * @param {messageViewStyle.id}
-         * @return {messageViewStyle or undefined}
-         */
-        getMessageViewStyleDefByCssClass: function (messageViewStyleClass) {
-            var that = this;
-            return  _.find(Ctx.AVAILABLE_MESSAGE_VIEW_STYLES, function (messageViewStyle) {
-                return that.getMessageViewStyleCssClass(messageViewStyle) == messageViewStyleClass;
-            });
-        },
-        /**
-         * get a view style definition by id
-         * @param {messageViewStyle.id}
-         * @return {messageViewStyle or undefined}
-         */
-        getMessageListViewStyleDefByCssClass: function (messageListViewStyleClass) {
-            return  _.find(this.ViewStyles, function (viewStyle) {
-                return viewStyle.css_class == messageListViewStyleClass;
-            });
-        },
-        /**
-         *  @init
-         */
         initialize: function (options) {
             var that = this,
                 collectionManager = new CollectionManager();
@@ -155,7 +76,7 @@ define(function (require) {
              * of notification.  Everything else updates realtime, why make an exception for messages?
              * */
             /* TODO:  PORT THIS TO NEW SYSTEM - benoitg -2014-07-23
-             * 
+             *
              * this.listenTo(this.messages, 'add reset', function(){
              that.invalidateResultsAndRender();
              that.initAnnotator();
@@ -242,14 +163,6 @@ define(function (require) {
             });
         },
 
-        ideaChanged: function () {
-            var that = this;
-            this.panelWrapper.filterThroughPanelLock(
-                function () {
-                    that.syncWithCurrentIdea();
-                }, 'syncWithCurrentIdea');
-        },
-
         /**
          * The events
          * @type {Object}
@@ -269,7 +182,9 @@ define(function (require) {
                     'click .js_messageList-fullScreenButton': 'setFullscreen',
 
                     'click .js_messageList-prevbutton': 'showPreviousMessages',
-                    'click .js_messageList-morebutton': 'showNextMessages'
+                    'click .js_messageList-morebutton': 'showNextMessages',
+
+                    'click .js_scrollToMsgBox': 'scrollToMsgBox'
                 };
 
             _.each(this.ViewStyles, function (messageListViewStyle) {
@@ -283,6 +198,93 @@ define(function (require) {
             });
 
             return data;
+        },
+
+        getTitle: function () {
+            return i18n.gettext('Conversations');
+        },
+
+        ViewStyles: {
+            THREADED: {
+                id: "threaded",
+                css_class: MESSAGE_LIST_VIEW_STYLES_CLASS_PREFIX + "threaded",
+                label: i18n.gettext('Threaded')
+            },
+            CHRONOLOGICAL: {
+                id: "chronological",
+                css_class: MESSAGE_LIST_VIEW_STYLES_CLASS_PREFIX + "chronological",
+                label: i18n.gettext('Chronological')
+            },
+            REVERSE_CHRONOLOGICAL: {
+                id: "reverse_chronological",
+                css_class: MESSAGE_LIST_VIEW_STYLES_CLASS_PREFIX + "activityfeed",
+                label: i18n.gettext('Reverse-Chronological')
+            },
+            NEW_MESSAGES: {
+                id: "new_messages",
+                css_class: MESSAGE_LIST_VIEW_STYLES_CLASS_PREFIX + "newmessages",
+                label: i18n.gettext('New Messages')
+            }
+        },
+
+        currentViewStyle: null,
+
+        /**
+         * If there were any render requests inhibited while rendering was
+         * processed
+         */
+        numRenderInhibitedDuringRendering: 0,
+
+
+        storedMessageListConfig: Ctx.getMessageListConfigFromStorage(),
+        /**
+         * get a view style definition by id
+         * @param {viewStyle.id}
+         * @return {viewStyle or undefined}
+         */
+        getViewStyleDefById: function (viewStyleId) {
+            var retval = _.find(this.ViewStyles, function (viewStyle) {
+                return viewStyle.id == viewStyleId;
+            });
+            return retval;
+        },
+        /**
+         * get a view style css_class
+         * @param {messageViewStyle}
+         * @return {String}
+         */
+        getMessageViewStyleCssClass: function (messageViewStyle) {
+            return DEFAULT_MESSAGE_VIEW_LI_ID_PREFIX + messageViewStyle.id;
+        },
+
+        /**
+         * get a view style definition by id
+         * @param {messageViewStyle.id}
+         * @return {messageViewStyle or undefined}
+         */
+        getMessageViewStyleDefByCssClass: function (messageViewStyleClass) {
+            var that = this;
+            return  _.find(Ctx.AVAILABLE_MESSAGE_VIEW_STYLES, function (messageViewStyle) {
+                return that.getMessageViewStyleCssClass(messageViewStyle) == messageViewStyleClass;
+            });
+        },
+        /**
+         * get a view style definition by id
+         * @param {messageViewStyle.id}
+         * @return {messageViewStyle or undefined}
+         */
+        getMessageListViewStyleDefByCssClass: function (messageListViewStyleClass) {
+            return  _.find(this.ViewStyles, function (viewStyle) {
+                return viewStyle.css_class == messageListViewStyleClass;
+            });
+        },
+
+        ideaChanged: function () {
+            var that = this;
+            this.panelWrapper.filterThroughPanelLock(
+                function () {
+                    that.syncWithCurrentIdea();
+                }, 'syncWithCurrentIdea');
         },
 
         /**
@@ -485,11 +487,12 @@ define(function (require) {
 
         scrollToElement: function (el) {
             if (this.ui.panelBody.offset() !== undefined) {
-                var panelOffset = this.ui.panelBody.offset().top;
-                var panelScrollTop = this.ui.panelBody.scrollTop();
-                var elOffset = el.offset().top;
-                var margin = 30;
-                var target = elOffset - panelOffset + panelScrollTop - margin;
+                var panelOffset = this.ui.panelBody.offset().top,
+                    panelScrollTop = this.ui.panelBody.scrollTop(),
+                    elOffset = el.offset().top,
+                    margin = 30,
+                    target = elOffset - panelOffset + panelScrollTop - margin;
+
                 this.ui.panelBody.animate({ scrollTop: target });
             }
         },
@@ -847,6 +850,9 @@ define(function (require) {
                 'messageList': that
             });
 
+
+            //this.newTopicView = new MessageBoxView({ });
+
             this.$('.messagelist-replybox').html(this.newTopicView.render().el);
 
             // Resetting the messages
@@ -918,7 +924,20 @@ define(function (require) {
                 this.currentQuery.getResultMessageIdCollectionPromise()).done(
                 changedDataCallback, successCallback);
 
-            return this;
+            this.ui.panelBody.scroll(function () {
+
+                var msgBox = that.$('.messagelist-replybox').height(),
+                    scrollH = $(this)[0].scrollHeight - (msgBox + 25),
+                    panelScrollTop = $(this).scrollTop() + $(this).innerHeight();
+
+                if (panelScrollTop >= scrollH) {
+                    that.ui.stickyBar.fadeOut();
+                } else {
+                    that.ui.stickyBar.fadeIn();
+                }
+
+            })
+
         },
         /**
          * Renders the search result information
@@ -1578,6 +1597,11 @@ define(function (require) {
             } else {
                 this.collapseMessages(); // FIXME: has this method disappeared?
             }
+        },
+
+        scrollToMsgBox: function () {
+            this.scrollToElement(this.$('.messagelist-replybox'));
+            this.$('.messageSend-subject').focus();
         }
 
     });

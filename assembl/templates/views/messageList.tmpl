@@ -38,7 +38,7 @@
   
   <div class="messageList-list idealist <%= currentViewStyle.id %>"></div>
 
-  <div class="js_messageList-bottomarea messageList-bottomarea margin tac hidden">
+  <div class="js_messageList-bottomarea messageList-bottomarea tac hidden">
     <a class="js_messageList-morebutton button">{{ gettext('Load more messages') }}</a>
   </div>
 
@@ -46,4 +46,8 @@
     <div class="messagelist-replybox pls"></div>
   <% } %>
 
+</div>
+
+<div class="sticky-box tac">
+    <a href="#" class="js_scrollToMsgBox"><i class="icon-comment"></i> {{ gettext('React to the ongoing discussion') }} </a>
 </div>
