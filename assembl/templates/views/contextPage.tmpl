@@ -102,13 +102,12 @@
          <div class="gr">
           <% _.each(partners, function(partner) { %>
             <div class="gu gu-1of6">
-              <a class="popover-display">
+              <a href="<%= partner.get('homepage') %>" class="popover-display" target="_blank">
                 <img width="100" src="<%= partner.get('logo')  %>" />
                 <span class="popover">
                   <span class="popover-header"><%= partner.get('name') %></span>
                   <span class="popover-content">
                     <%= partner.get('description') %>
-                    <%= partner.get('homepage') %>
                   </span>
                 </span>
               </a>
