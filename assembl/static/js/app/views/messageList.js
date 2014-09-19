@@ -30,7 +30,8 @@ define(function (require) {
     /* The number of messages to load each time the user reaches scrools to
      * the end or beginning of the list.
      */
-        MORE_PAGES_NUMBER = 20;
+        MORE_PAGES_NUMBER = 20,
+        SLOW_WORKER_DELAY_VALUE = 20;
 
     /**
      * @class views.MessageList
@@ -677,6 +678,51 @@ define(function (require) {
         },
 
         /**
+         * Used for processing costly operations that needs to happen after 
+         * the dom is displayed to the user.
+         * 
+         * It will be processed with a delay between each call to avoid locaking the browser
+         */
+        requestPostRenderSlowCallback: function (callback) {
+          this._postRenderSlowCallbackStack.push(callback);
+          
+        },
+        
+        /**
+         * The worker
+         */
+        _postRenderSlowCallbackWorker: function (messageListView) {
+          var that = this;
+          //console.log("_postRenderSlowCallbackWorker fired, stack length: ", this._postRenderSlowCallbackStack.length)
+          
+          if(this._postRenderSlowCallbackStack.length > 0) {
+            //console.log("_postRenderSlowCallbackWorker fired with non-empty stack, popping a callback from stack of length: ", this._postRenderSlowCallbackStack.length)
+            var callback = this._postRenderSlowCallbackStack.shift();
+            callback();
+          }
+          this._postRenderSlowCallbackWorkerInterval = setTimeout(function() {
+            that._postRenderSlowCallbackWorker();
+          }, this.SLOW_WORKER_DELAY_VALUE)
+        },
+        
+        /**
+         * 
+         */
+        _startPostRenderSlowCallbackProcessing: function () {
+          var that = this;
+          this._postRenderSlowCallbackWorkerInterval = setTimeout(function() {
+              that._postRenderSlowCallbackWorker();
+            }, this.SLOW_WORKER_DELAY_VALUE);
+        },
+        /**
+         * Stops processing and clears the queue
+         */
+        _clearPostRenderSlowCallbacksCallbackProcessing: function () {
+          clearTimeout(this._postRenderSlowCallbackWorkerInterval);
+          this._postRenderSlowCallbackStack = [];
+        },
+
+        /**
          * Re-init Annotator.  Needs to be done for all messages when any 
          * single message has been re-rendered.  Otherwise, the annotations 
          * will not be shown.
@@ -707,7 +753,7 @@ define(function (require) {
         },
         
         /**
-         * =
+         * Suspends annotator refresh during initial render
          */
         suspendAnnotatorRefresh: function () {
           this.annotatorRefreshSuspended = true;
@@ -871,10 +917,12 @@ define(function (require) {
 
 
                 })
+            this._startPostRenderSlowCallbackProcessing();
             return this;
         },
 
         onBeforeRender: function () {
+            this._clearPostRenderSlowCallbacksCallbackProcessing();
             Ctx.removeCurrentlyDisplayedTooltips(this.$el);
         },
 
@@ -891,7 +939,7 @@ define(function (require) {
                 that.unblockPanel();
             }
 
-            /* This should be a listen to the returned collection */
+            /* TODO:  This should be a listen to the returned collection */
             var changedDataCallback = function (messageStructureCollection, resultMessageIdCollection) {
                 function inFilter(message) {
                     return that.DEPRECATEDmessageIdsToDisplay.indexOf(message.getId()) >= 0;
@@ -902,7 +950,7 @@ define(function (require) {
                 // TODO: Destroy the message and messageFamily views, as they keep zombie listeners and DOM
                 // In particular, message.loadAnnotations gets called with different views on the same model,
                 // including zombie views, and we get nested annotator tags as a result.
-                // (Annotator looks at fresh DOM every time)
+                // (Annotator looks at fresh DOM every time).  Is that still the case?  Benoitg - 2014-09-19
                 // TODO long term: Keep them with a real CompositeView.
                 that.DEPRECATEDmessageIdsToDisplay = resultMessageIdCollection;
                 that.visitorViewData = {};

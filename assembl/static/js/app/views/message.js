@@ -131,7 +131,9 @@ define(function (require) {
          */
         render: function () {
             var that = this;
-
+            if (Ctx.debugRender) {
+              console.log("message:render() is firing for message", this.model.id);
+            }
             this.model.getCreatorPromise().done(
                 function (creator) {
                     var data = that.model.toJSON(),
@@ -226,10 +228,11 @@ define(function (require) {
                         that.showReadLess();
                     }
                     if (that.viewStyle == that.availableMessageViewStyles.PREVIEW) {
-                        that.listenToOnce(that.messageListView, "messageList:render_complete", function () {
+                          that.messageListView.requestPostRenderSlowCallback(function(){
                             /* We use https://github.com/MilesOkeefe/jQuery.dotdotdot to show
                              * Read More links for message previews
                              */
+                            //console.log("Initializing dotdotdot on message", that.model.id);
                             that.$(".ellipsis").dotdotdot({
                                 after: "a.readMore",
                                 callback: function (isTruncated, orgContent) {
@@ -241,15 +244,18 @@ define(function (require) {
                                         that.$(".ellipsis > a.readMore").addClass('hidden');
                                     }
                                 },
-                                watch: "window"
+                                watch: "window" //TODO:  We should trigger updates from the panel algorithm instead
                             })
 
-
-                            //console.log("Updating dotdotdot");
-                            that.listenTo(that.messageListView, "messageList:render_complete", function () {
+                            /* We no longer need this, but probably now need to 
+                             * update when the panels change size with the 
+                             * new system benoitg-2014-09-18
+                             * 
+                             * that.listenTo(that.messageListView, "messageList:render_complete", function () {
                                 that.$(".ellipsis").trigger('update.dot');
-                            });
+                            });*/
                         });
+
                     }
                 });
             return this;
@@ -510,7 +516,6 @@ define(function (require) {
                 this.$el.removeClass(this.availableMessageViewStyles.TITLE_ONLY.id);
                 this.$el.removeClass(this.availableMessageViewStyles.PREVIEW.id);
                 this.$el.addClass(this.availableMessageViewStyles.FULL_BODY.id);
-                this.model.set('collapsed', false);
                 this.viewStyle = style;
                 this.replyBoxShown = true;
 
@@ -519,7 +524,6 @@ define(function (require) {
                 this.$el.removeClass(this.availableMessageViewStyles.TITLE_ONLY.id);
                 this.$el.removeClass(this.availableMessageViewStyles.FULL_BODY.id);
                 this.$el.addClass(this.availableMessageViewStyles.PREVIEW.id);
-                this.model.set('collapsed', false);
                 this.viewStyle = style;
             }
             else {
