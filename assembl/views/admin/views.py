@@ -14,6 +14,10 @@ from assembl.auth import (
 from assembl.models.auth import (
     create_default_permissions, User, Username, AgentProfile)
 
+default_context = {
+    'STATIC_URL': '/static'
+}
+
 
 @view_config(route_name='discussion_admin', permission=P_SYSADMIN)
 def discussion_admin(request):
@@ -84,7 +88,7 @@ def discussion_edit(request):
         raise HTTPNotFound("Discussion with id '%d' not found." % (
             discussion_id,))
 
-    context = dict(
+    context = dict(default_context,
         discussion=discussion,
     )
     context['admin_discussion_permissions_url'] = request.route_url('discussion_permissions', discussion_id=discussion.id)
