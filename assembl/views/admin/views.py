@@ -14,10 +14,6 @@ from assembl.auth import (
 from assembl.models.auth import (
     create_default_permissions, User, Username, AgentProfile)
 
-default_context = {
-    'STATIC_URL': '/static'
-}
-
 
 @view_config(route_name='discussion_admin', permission=P_SYSADMIN)
 def discussion_admin(request):
@@ -29,8 +25,8 @@ def discussion_admin(request):
     session = User.db
     user = session.query(User).filter_by(id=user_id).one()
 
-    context = get_default_context(request)
-    context['discussions'] = session.query(Discussion)
+    context = dict(get_default_context(request),
+        discussions = session.query(Discussion))
 
     if request.method == 'POST':
 
@@ -88,10 +84,10 @@ def discussion_edit(request):
         raise HTTPNotFound("Discussion with id '%d' not found." % (
             discussion_id,))
 
-    context = dict(default_context,
+    context = dict(get_default_context(request),
         discussion=discussion,
-    )
-    context['admin_discussion_permissions_url'] = request.route_url('discussion_permissions', discussion_id=discussion.id)
+        admin_discussion_permissions_url = request.route_url(
+            'discussion_permissions', discussion_id=discussion.id))
 
     if request.method == 'POST':
 
@@ -228,6 +224,7 @@ def discussion_permissions(request):
         return (user_id, role) in local_roles_as_set
 
     context = dict(
+        get_default_context(request),
         discussion=discussion,
         allowed=allowed,
         roles=role_names,
@@ -305,6 +302,7 @@ def general_permissions(request):
         return (user_id, role) in user_roles_as_set
 
     context = dict(
+        get_default_context(request),
         roles=role_names,
         permissions=permission_names,
         users=users,
