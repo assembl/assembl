@@ -109,15 +109,16 @@ $message_panel_grid_size: 5;
 $navigation_panel_grid_size: 4;
 $clipboard_grid_size: 3;
 $context_panel_grid_size: 8;
-$synthesis_panel_grid_size: 3;
+$synthesis_panel_grid_size: 8;
+$default_grid_size: 3;
 
 // 2/1 ratio for message/idea
-// the number of grid units taken by basic setup of navigation+messages+ideaPanel
-$min_num_grid_units: $navigation_panel_grid_size + $idea_panel_grid_size + $message_panel_grid_size;
+// the number of grid units taken by basic setup of navigation+messages+ideaPanel or TableOfIdeas+Messages (in admin mode)
+$min_num_grid_units: $default_grid_size + $synthesis_panel_grid_size;
 // the number of grid units taken by largest panel
 $max_panel_unit_size: $message_panel_grid_size + $idea_panel_grid_size;
 // the number of grid units taken by largest group. Assume one message + 3 smaller panels.
-$max_group_unit_size: $navigation_panel_grid_size + $idea_panel_grid_size + $message_panel_grid_size + $clipboard_grid_size;
+$max_group_unit_size: $synthesis_panel_grid_size + $idea_panel_grid_size + $message_panel_grid_size + $clipboard_grid_size;
 
 $grid_unit_min_size: $small_screen / $min_num_grid_units;
 // huge screen
