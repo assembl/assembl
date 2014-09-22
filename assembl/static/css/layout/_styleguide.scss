@@ -244,6 +244,12 @@ table.table {
   margin: 10px 0 0 0;
 }
 
+.typo-content {
+  pre {
+    background: $white;
+  }
+}
+
 pre {
   padding: 15px;
   margin: 0 0 20px 0;

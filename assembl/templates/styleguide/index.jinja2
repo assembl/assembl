@@ -18,7 +18,7 @@
     <h1 class="logo tac pas h1">Assembl UI</h1>
     <nav class="sg-sidebar-nav paxl">
       {% for name, path in styleguide_views.items() %}
-        <h2 class="h3 sg-title"><a href="#{{name}}">{{name}}</a></h2>
+        <h2 class="h3 sg-title"><a href="#{{name}}">{{name | title}}</a></h2>
       {% endfor %}
     </nav>
 </aside>
