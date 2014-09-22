@@ -50,7 +50,7 @@ define(function (require) {
          * @type {Object}
          */
         events: {
-            'change [type="checkbox"]': 'onCheckboxChange',
+            'change input[type="checkbox"]': 'onCheckboxChange',
             'click .idealist-title': 'onTitleClick',
             'click .js_idealist-title-unread-count': 'onUnreadCountClick',
             'click .idealist-arrow': 'toggle',

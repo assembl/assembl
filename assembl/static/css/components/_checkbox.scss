@@ -80,10 +80,9 @@
 
   input[type=checkbox] {
     opacity: 0;
-    width: 20px;
 
     &:focus + .custom-checkbox-element {
-
+      // if behavior necessary
     }
 
     &:checked + .custom-checkbox-element {

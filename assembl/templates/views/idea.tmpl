@@ -1,10 +1,17 @@
 <div class="idealist-body" draggable="true">
     <% if (hasCheckbox) { %>
-    <label class="chk chk--idealist">
+    <!--<label class="chk chk--idealist">
         <input type="checkbox" class="chk-checkbox" <% if(inNextSynthesis) { %>checked="checked"<% } %> />
         <span class="chk-label" data-toggle="tooltip" data-placement="right"
          <% if(inNextSynthesis) { %>title="{{ gettext('Remove from next synthesis') }}"<% } else { %>title="{{ gettext('Add to next synthesis') }}"<% } %> ></span>
+    </label>-->
+
+    <label class="checkbox inline custom-checkbox">
+      <input type="checkbox" <% if(inNextSynthesis) { %>checked="checked"<% } %>>
+      <span class="custom-checkbox-element"  data-toggle="tooltip" data-placement="right"
+          <% if(inNextSynthesis) { %>title="{{ gettext('Remove from next synthesis') }}"<% } else { %>title="{{ gettext('Add to next synthesis') }}"<% } %> ></span>
     </label>
+
     <% }  %>
     <%  var i;
     for( var i=1; i<level; i+= 1) { 
