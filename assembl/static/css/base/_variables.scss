@@ -35,6 +35,8 @@ $purple2: #9A3FD5 !default;
 $orange1: #FFBD40 !default;
 $orange2: #FFA700 !default;
 
+$black1: lighten($black, 18%) !default;
+
 // Border Radius
 $borderRadiusXs: 2px !default;
 $borderRadiusS: 3px !default;
@@ -56,9 +58,28 @@ $txtGray: #CCCCCC !default;
 $txtGray1: #999999 !default;
 $txtGray2: #333333 !default;
 
+// Forms
+$inputBackground: $white !default;
+$inputBorder: #c5c7c5 !default;
+$inputBorderFocus: $purple1 !default;
+$inputDisabledBackground: $gray3 !default;
+$inputSelectedControl: #344957 !default;
+$inputBaseLineHeight: 1.3em !default;
+
+// Form states and alerts
+// -------------------------
+$warningText: #c09853 !default;
+$warningBackground: #fcf8e3 !default;
+$warningBorder: darken(adjust-hue($warningBackground, -10), 3%) !default;
+
+$errorText: #d54243 !default;
+$errorBackground: lighten($errorText, 58%) !default;
+$errorBorder: $errorText !default;
+
 // Layout
 $siteWidth: 980px !default;
 $breakpointM: 768px !default;
+
 // breakpoint for tablets
 $breakpointS: 480px !default;
 // breakpoint for smartphones

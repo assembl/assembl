@@ -38,6 +38,10 @@
 .sg-section {
   padding: 20px;
   border-bottom: 1px dashed $gray1;
+
+  .sg-section-title {
+    color: $purple1;
+  }
 }
 
 .sg-sidebar {
@@ -236,11 +240,15 @@ table.table {
 
 //doc
 
+.code-content {
+  margin: 10px 0 0 0;
+}
+
 pre {
   padding: 15px;
   margin: 0 0 20px 0;
   overflow: auto;
-  background: $white;
+  background: #f5f2f0;
 }
 
 code[class*="language-"],
@@ -380,7 +388,7 @@ https://github.com/isagalaev/highlight.js/tree/master/src/styles
 }
 
 .popover-container {
-  height: 50px;
-  //padding-bottom: 20%;
-  //padding-top: 22%;
+  height: 160px;
+  line-height: 150px;
+  @include box-sizing(border-box);
 }

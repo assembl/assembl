@@ -38,128 +38,204 @@
 
 {% block content %}
 
-    <div class="panelarea">
-        <div class="error-message">{{error}}</div>
-        <div class="spacer spacer--big"></div>
+<div class="form-profile">
+    <form class="core-form form-horizontal" method="POST">
+      <fieldset>
+        <div class="control-group">
+          <label for="username" class="control-label">{{ gettext('Username') }}</label>
+          <div class="controls">
+            {% if the_user.username %}
+              <input class="input-xlarge" type="text" name="username" value="{{ the_user.username.username }}" />
+            {% else %}
+              <input class="input-xlarge" type="text" name="username" placeholder="{{ gettext('Desired username') }}" />
+            {% endif %}
+          </div>
+        </div>
 
-        <form class="form" method="POST">
-            <table>
-                <tr>
-                    <th><label>{{ gettext('Username') }}:</label></th>
-                    <td>
-                        {% if the_user.username %}
-                        <input type="text" name="username" value="{{ the_user.username.username }}" autofocus />
-                        {% else %}
-                        <input type="text" name="username" placeholder="{{ gettext('Desired username') }}" autofocus />
-                        {% endif %}
-                    </td>
-                </tr>
-                <tr>
-                    <th><label>{{ gettext('Name') }}:</label></th>
-                    <td>
-                        {% if the_user.name %}
-                        <input type="text" name="name" autofocus value="{{ the_user.name }}" />
-                        {% else %}
-                        <input type="text" name="name" autofocus placeholder="{{ gettext('Your name') }}" />
-                        {% endif %}
-                    </td>
-                </tr>
-                <tr>
-                    <th>
-                        <label>{{ gettext('Change password') }}</label>
-                    </th>
-                    <td>
-                        <input type="password" name="password1" placeholder="{{ gettext('New Password') }}" autofocus />
-                    </td>
-                </tr>
-                <tr>
-                    <th>
-                        <label>{{ gettext('Repeat password') }}</label>
-                    </th>
-                    <td>
-                    <input type="password" name="password2" placeholder="{{ gettext('Repeat password') }}" autofocus />
-                    <div class="spacer spacer--large"></div>
-                    </td>
-                </tr>
-                {% if the_user.email_accounts %}
-                <tr>
-                    <th>
-                        <label>{{ gettext('Emails') }}:</label>
-                    </th>
-                    <td>
-                    <!-- TODO: Preferred email logic. -->
-                        <ul>
-                        {% for email_account in the_user.email_accounts %}
-                            <li>{{ email_account.email }}
-                            {% if not email_account.verified %}
-                                {% if email_account.other_account() %}
-                                    (in conflict with {{email_account.other_account().display_name() }})
-                                    <button name="confirm_email" value="{{email_account.id}}">{{ gettext('Confirm and fuse accounts') }}</button>
-                                {% else %}
-                                    ({{ gettext('unconfirmed') }})
-                                    <button name="confirm_email" value="{{email_account.id}}">{{ gettext('Send confirmation message') }}</button>
-                                {% endif %}
-                            {% endif %}
-                            </li>
-                        {% endfor %}
-                        </ul>
-                    </td>
-                </tr>
+        <div class="control-group">
+          <label for="name" class="control-label">{{ gettext('Name') }}</label>
+          <div class="controls">
+            {% if the_user.name %}
+              <input class="input-xlarge" type="text" name="name" value="{{ the_user.name }}" />
+            {% else %}
+              <input class="input-xlarge" type="text" name="name" placeholder="{{ gettext('Your name') }}" />
+            {% endif %}
+          </div>
+        </div>
+
+        <div class="control-group">
+          <label for="password1" class="control-label">{{ gettext('Change password') }}</label>
+          <div class="controls">
+            <input class="input-xlarge" type="password" name="password1" placeholder="{{ gettext('New Password') }}" />
+          </div>
+        </div>
+
+        <div class="control-group">
+          <label for="password2" class="control-label">{{ gettext('Repeat password') }}</label>
+          <div class="controls">
+            <input class="input-xlarge" type="password" name="password2" placeholder="{{ gettext('Repeat password') }}" />
+          </div>
+        </div>
+
+        <div class="control-group">
+          <label for="#" class="control-label">{{ gettext('Emails') }}</label>
+          <div class="controls">
+            <input class="input-xlarge" type="password" name="password2" placeholder="{{ gettext('Repeat password') }}" />
+            {% for email_account in the_user.email_accounts %}
+                <li class="mvs">{{ email_account.email }}
+                {% if not email_account.verified %}
+                    {% if email_account.other_account() %}
+                        (in conflict with {{email_account.other_account().display_name() }})
+                        <button name="confirm_email" value="{{email_account.id}}">{{ gettext('Confirm and fuse accounts') }}</button>
+                    {% else %}
+                        ({{ gettext('unconfirmed') }})
+                        <button name="confirm_email" value="{{email_account.id}}">{{ gettext('Send confirmation message') }}</button>
+                    {% endif %}
                 {% endif %}
-                <tr>
-                    <th>
-                        <label>{{ gettext('Add an email account') }}</label>
-                    </th>
-                    <td>
-                        <input type="email" name="add_email" placeholder="{{ gettext('Email') }}" autofocus />
-                    </td>
-                </tr>
-                {% if the_user.identity_accounts %}
-                <tr>
-                    <th>
-                        <label>{{ gettext('Accounts') }}:</label>
-                    <!-- TODO: Handle the case where the token expired 
-                    and the user may be offered to re-login. -->
-                    </th>
-                    <td>
-                        <dl compact="compact">
-                        {% for account in the_user.identity_accounts %}
-                            <dt><em>{{ account.provider.provider_type }}</em></dt>
-                            <dd>
-                            {% if account.username %}
-                                {{account.username}}
+                </li>
+            {% endfor %}
+          </div>
+        </div>
+
+        <div class="control-group">
+          <label for="add_email" class="control-label">{{ gettext('Add an email account') }}</label>
+          <div class="controls">
+             <input class="input-xlarge" type="email" name="add_email" placeholder="{{ gettext('Email') }}" />
+          </div>
+        </div>
+
+        <div class="form-actions ptm">
+          <button class="btn btn-secondary" type="submit">{{ gettext('Save') }}</button>
+        </div>
+      </fieldset>
+    </form>
+</div>
+
+
+
+{#<div class="panelarea">
+    <div class="error-message">{{error}}</div>
+    <div class="spacer spacer--big"></div>
+
+    <form class="form" method="POST">
+        <table>
+            <tr>
+                <th><label>{{ gettext('Username') }}:</label></th>
+                <td>
+                    {% if the_user.username %}
+                    <input type="text" name="username" value="{{ the_user.username.username }}" autofocus />
+                    {% else %}
+                    <input type="text" name="username" placeholder="{{ gettext('Desired username') }}" autofocus />
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <th><label>{{ gettext('Name') }}:</label></th>
+                <td>
+                    {% if the_user.name %}
+                    <input type="text" name="name" autofocus value="{{ the_user.name }}" />
+                    {% else %}
+                    <input type="text" name="name" autofocus placeholder="{{ gettext('Your name') }}" />
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    <label>{{ gettext('Change password') }}</label>
+                </th>
+                <td>
+                    <input type="password" name="password1" placeholder="{{ gettext('New Password') }}" autofocus />
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    <label>{{ gettext('Repeat password') }}</label>
+                </th>
+                <td>
+                <input type="password" name="password2" placeholder="{{ gettext('Repeat password') }}" autofocus />
+                <div class="spacer spacer--large"></div>
+                </td>
+            </tr>
+            {% if the_user.email_accounts %}
+            <tr>
+                <th>
+                    <label>{{ gettext('Emails') }}:</label>
+                </th>
+                <td>
+                <!-- TODO: Preferred email logic. -->
+                    <ul>
+                    {% for email_account in the_user.email_accounts %}
+                        <li>{{ email_account.email }}
+                        {% if not email_account.verified %}
+                            {% if email_account.other_account() %}
+                                (in conflict with {{email_account.other_account().display_name() }})
+                                <button name="confirm_email" value="{{email_account.id}}">{{ gettext('Confirm and fuse accounts') }}</button>
                             {% else %}
-                                {{account.userid}}
+                                ({{ gettext('unconfirmed') }})
+                                <button name="confirm_email" value="{{email_account.id}}">{{ gettext('Send confirmation message') }}</button>
                             {% endif %}
-                            </dd>
-                        {% endfor %}
-                        </dl>
-                    </td>
-                </tr>
-                {% endif %}
-            </table>
+                        {% endif %}
+                        </li>
+                    {% endfor %}
+                    </ul>
+                </td>
+            </tr>
+            {% endif %}
+            <tr>
+                <th>
+                    <label>{{ gettext('Add an email account') }}</label>
+                </th>
+                <td>
+                    <input type="email" name="add_email" placeholder="{{ gettext('Email') }}" autofocus />
+                </td>
+            </tr>
+            {% if the_user.identity_accounts %}
+            <tr>
+                <th>
+                    <label>{{ gettext('Accounts') }}:</label>
+                <!-- TODO: Handle the case where the token expired
+                and the user may be offered to re-login. -->
+                </th>
+                <td>
+                    <dl compact="compact">
+                    {% for account in the_user.identity_accounts %}
+                        <dt><em>{{ account.provider.provider_type }}</em></dt>
+                        <dd>
+                        {% if account.username %}
+                            {{account.username}}
+                        {% else %}
+                            {{account.userid}}
+                        {% endif %}
+                        </dd>
+                    {% endfor %}
+                    </dl>
+                </td>
+            </tr>
+            {% endif %}
+        </table>
 
-            <!-- TODO Avatar logic -->
+        <!-- TODO Avatar logic -->
 
-            <input type="submit" value="{{ gettext('Save') }}" />
+        <input type="submit" value="{{ gettext('Save') }}" />
 
-            <div class="spacer"></div>
-        </form>
+        <div class="spacer"></div>
+    </form>#}
 
-        {% if providers %}
-        <p>{{ gettext("Connect other accounts to Assembl")|safe }}</p>
-        {% endif %}
-        {{form('google', gettext('Login with Google'), true)}}
-        {{form('twitter', gettext('Login with Twitter'), true)}}
-        {{form('facebook', gettext('Login with Facebook'), true)}}
-        {{form('yahoo', gettext('Login with Yahoo'), true,
-                oauth='true', openid_identifier='yahoo.com')}}
-        {{form('live', gettext('Login with Windows Live'), false)}}
-        {{form('github', gettext('Login with Github'), false)}}
-        {{form('bitbucket', gettext('Login with Bitbucket'), false)}}
-        {{form('openid', gettext('Login with OpenID'), true)}}
-        <div class="spacer spacer--huge"></div>
-        </form>
-    </div>
+    {% if providers %}
+    <p>{{ gettext("Connect other accounts to Assembl")|safe }}</p>
+    {% endif %}
+
+    {{form('google', gettext('Login with Google'), true)}}
+    {{form('twitter', gettext('Login with Twitter'), true)}}
+    {{form('facebook', gettext('Login with Facebook'), true)}}
+    {{form('yahoo', gettext('Login with Yahoo'), true,
+            oauth='true', openid_identifier='yahoo.com')}}
+    {{form('live', gettext('Login with Windows Live'), false)}}
+    {{form('github', gettext('Login with Github'), false)}}
+    {{form('bitbucket', gettext('Login with Bitbucket'), false)}}
+    {{form('openid', gettext('Login with OpenID'), true)}}
+    <div class="spacer spacer--huge"></div>
+    </form>
+</div>
 
 {% endblock %}

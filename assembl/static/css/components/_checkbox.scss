@@ -1,6 +1,6 @@
 // A fancier checkbox
 // ==================
-.chk {
+/*.chk {
   cursor: pointer;
 
   display: inline-block;
@@ -47,7 +47,6 @@
   top: -2px;
   left: -5px;
   font-size: 20px;
-
   color: #cccccc;
 
   .chk--idealist & {
@@ -71,10 +70,56 @@
     top: 3px;
     left: -2px;
   }
-}
+} */
 
-// Hover state
-// ++++++++++++++++
-.chk-label:hover {
-  //background-color: #ffc694;
+// Custom checkboxes
+
+// rule filter to block browsers that don't support that selector from applying rules they shouldn't
+.custom-checkbox:not(#unsupported) {
+  cursor: pointer;
+
+  input[type=checkbox] {
+    opacity: 0;
+    width: 20px;
+
+    &:focus + .custom-checkbox-element {
+
+    }
+
+    &:checked + .custom-checkbox-element {
+      @extend %icon;
+      @extend .icon-check;
+      color: $purple;
+    }
+
+  }
+
+  .custom-checkbox-element {
+    @extend %icon;
+    @extend .icon-check-empty;
+    display: inline-block;
+    width: 17px;
+    height: 17px;
+    line-height: 16px;
+    margin: 0 0 2px 0;
+    margin-right: $spacingXs;
+    margin-left: -20px;
+    border-radius: 2px;
+    vertical-align: middle;
+    text-align: center;
+    color: #cccccc;
+    font-size: 20px;
+  }
+
+  &:hover {
+    .custom-checkbox-element {
+      border-color: mix(#000000, $inputBorder, 25%);
+    }
+  }
+
+  input:checked + .custom-checkbox-element {
+    &:after {
+      visibility: visible;
+    }
+  }
 }

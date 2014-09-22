@@ -27,7 +27,7 @@
   <div class="fluid-container">
    {% for name, path in styleguide_views.items() %}
     <div id="{{name}}" class="sg-section phxl">
-      <h5>{{name}}</h5>
+      <h1 class="h1 sg-section-title mbl">{{name}}</h1>
       {% include path %}
     </div>
    {% endfor %}
