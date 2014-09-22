@@ -125,13 +125,19 @@ class AgentProfile(Base):
         ).one()
 
     def avatar_url(self, size=32, app_url=None, email=None):
+        default = config.get('avatar.default_image_url') or \
+            (app_url and app_url+'/static/img/icon/user.png')
+        
+        offline_mode = config.get('offline_mode')
+        if offline_mode == "true":
+            return default
+        
+
         for acc in self.identity_accounts:
             url = acc.avatar_url(size)
             if url:
                 return url
         # Otherwise: Use the gravatar URL
-        default = config.get('avatar.default_image_url') or \
-            (app_url and app_url+'/static/img/icon/user.png')
         email = email or self.get_preferred_email()
         if not email:
             return default
