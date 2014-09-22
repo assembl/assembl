@@ -1,30 +1,47 @@
 {% extends 'base.jinja2' %}
 
+<div class="admin-content">
 {% block content %}
 <h2>{% trans %}Edit discussion {% endtrans %} "{{discussion.topic}}"</h2>
 
 {% if admin_discussion_permissions_url %}
-<p><a href='{{ admin_discussion_permissions_url }}'>{{ gettext("Edit discussion permissions") }}</a></p>
+  <p>
+    <a href='{{ admin_discussion_permissions_url }}'>{{ gettext("Edit discussion permissions") }}</a>
+  </p>
 {% endif %}
 
-<form method="post" action="#">
-	<p>
-		<label for="topic">Topic</label>
-		<input type="text" name="topic" id="topic" {% if discussion.topic %}value="{{ discussion.topic }}"{% endif %} />
-	</p>
+<form class="core-form form-horizontal" method="post" action="#">
+  <fieldset>
 
-	<p>
-		<label for="slug">Slug</label>
-		<input type="text" name="slug" id="slug" {% if discussion.slug %}value="{{ discussion.slug }}"{% endif %} />
-	</p>
+    <div class="control-group">
+      <label for="topic" class="control-label">Topic</label>
+      <div class="controls">
+        <input type="text" id="topic" name="topic" class="input-xlarge" {% if discussion.topic %}value="{{ discussion.topic }}"{% endif %} />
+      </div>
+    </div>
 
-	<p>
-		<label for="objectives">Objectives</label>
-		<textarea name="objectives" id="objectives">{% if discussion.objectives %}{{ discussion.objectives }}{% endif %}</textarea>
-	</p>
+    <div class="control-group">
+      <label for="slug" class="control-label">Slug</label>
+      <div class="controls">
+        <input type="text" id="slug" name="slug" class="input-xlarge" {% if discussion.slug %}value="{{ discussion.slug }}"{% endif %} />
+      </div>
+    </div>
 
-	<p>
-		<input type="submit" value="Edit"/>
-	</p>
+    <div class="control-group">
+      <label for="objectives" class="control-label">Objectives</label>
+      <div class="controls">
+        <textarea rows="3" id="objectives" name="objectives" class="input-xlarge">
+          {% if discussion.objectives %}{{ discussion.objectives }}{% endif %}
+        </textarea>
+      </div>
+    </div>
+
+    <div class="form-actions ptm">
+      <button class="btn btn-secondary" type="submit">Save changes</button>
+    </div>
+
+  </fieldset>
 </form>
+
 {% endblock %}
+</div>

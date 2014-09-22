@@ -111,9 +111,9 @@
   }
 
   &:hover {
-    .custom-checkbox-element {
+    /*.custom-checkbox-element {
       border-color: mix(#000000, $inputBorder, 25%);
-    }
+    }*/
   }
 
   input:checked + .custom-checkbox-element {
