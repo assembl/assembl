@@ -1,10 +1,11 @@
 {% extends 'base.jinja2' %}
 
 {% block content %}
+<div class="admin-permissions">
 <h2>{% trans %}Discussion {% endtrans %}{{discussion.topic}}</h2>
 <h3>{% trans %}Role permissions:{% endtrans %}</h3>
 <form method="POST" action="#">
-<table id="role_permissions">
+<table id="role_permissions" class="table">
     <thead>
         <th>{% trans %}Permissions{% endtrans %}\{% trans %}Roles{% endtrans %}</th>
         {% for role in roles %}
@@ -80,15 +81,16 @@
 </table>
 <input type="submit" name="submit_user_roles" value="{% trans %}Save{% endtrans %}">
 </form>
+</div>
 {% endblock %}
 
 {% block extra_css %}
-<style>
+{#<style>
 table, th, td {
    border: 1px solid grey;
 }
 th {
    padding: 3px;
 }
-</style>
+</style>#}
 {% endblock extra_css %}

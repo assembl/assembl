@@ -1,11 +1,12 @@
 {% extends 'base.jinja2' %}
 
-<div class="admin-content">
 {% block content %}
+<div class="admin-discussion-edit">
+
 <h2>{% trans %}Edit discussion {% endtrans %} "{{discussion.topic}}"</h2>
 
 {% if admin_discussion_permissions_url %}
-  <p>
+  <p class="mbl">
     <a href='{{ admin_discussion_permissions_url }}'>{{ gettext("Edit discussion permissions") }}</a>
   </p>
 {% endif %}
@@ -43,5 +44,45 @@
   </fieldset>
 </form>
 
-{% endblock %}
+<form class="core-form form-horizontal" method="post" action="">
+ <h3 class="h3">Add Partners</h3>
+
+ <div class="control-group">
+   <label for="partner-name" class="control-label">name</label>
+   <div class="controls">
+     <input type="text" id="partner-name" name="partner-name" class="input-xlarge"  />
+   </div>
+ </div>
+
+ <div class="control-group">
+   <label for="partner-description" class="control-label">description</label>
+   <div class="controls">
+     <textarea rows="3" id="partner-description" name="partner-description" class="input-xlarge">
+       {% if discussion.slug %}{{ discussion.partner_organizations }}{% endif %}
+     </textarea>
+   </div>
+ </div>
+
+ <div class="control-group">
+   <label for="partner-homepage" class="control-label">homepage</label>
+   <div class="controls">
+     <input type="text" id="partner-homepage" name="partner-homepage" class="input-xlarge"  />
+   </div>
+ </div>
+
+ <div class="control-group">
+   <label for="partner-logo" class="control-label">logo</label>
+   <div class="controls">
+     <input type="text" id="partner-logo" name="partner-logo" class="input-xlarge"  />
+   </div>
+ </div>
+
+ <div class="form-actions ptm">
+    <button class="btn btn-secondary" type="submit">Save changes</button>
+ </div>
+
+</form>
+
 </div>
+{% endblock %}
+
