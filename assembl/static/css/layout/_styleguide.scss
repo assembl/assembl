@@ -37,10 +37,10 @@
 // =====================
 .sg-section {
   padding: 20px;
-  border-bottom: 1px dashed $gray1;
 
   .sg-section-title {
-    color: $purple1;
+    color: $gray1;
+    border-bottom: 2px solid $gray4;
   }
 }
 
@@ -244,7 +244,7 @@ table.table {
   margin: 10px 0 0 0;
 }
 
-.typo-content {
+.typo-content, #text {
   pre {
     background: $white;
   }
