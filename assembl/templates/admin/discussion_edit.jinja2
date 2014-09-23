@@ -86,3 +86,17 @@
 </div>
 {% endblock %}
 
+{% block main_js %}
+<script data-main="{{ STATIC_URL }}/js/main.js" src="{{ STATIC_URL }}/js/bower/requirejs/require.js"></script>
+<script type="text/javascript">
+  requirejs(['app/models/partner_organization'], function (po) {
+    partners = new po.Collection();
+    partners.fetchFromScriptTag('partners-json');
+    console.log(partners);
+  });
+</script>
+{% endblock %}
+
+{% block extra_js %}
+<script type="text/json" id="partners-json">{{ partners |safe }}</script>
+{% endblock %}
