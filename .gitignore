@@ -83,3 +83,7 @@ var/db/virtuoso.pxa
 var/db/virtuoso.trx
 var/db/virtuoso.lck
 assembl-virtuoso-backup.bp
+
+#test 
+junit.xml
+htmlcov/

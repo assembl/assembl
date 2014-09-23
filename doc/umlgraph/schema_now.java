@@ -125,28 +125,28 @@ class RootIdea extends Idea {
 	
 }
 
-/**
+/** @hidden
  * 
  */
 class Issue extends Idea {
 	
 }
 
-/**
+/** @hidden
  * 
  */
 class Position extends Idea {
 	
 }
 
-/**
+/** @hidden
  * 
  */
 class Argument extends Idea {
 	
 }
 
-/**
+/** @hidden
  * 
  */
 class Criterion extends Idea {
@@ -163,7 +163,7 @@ abstract class IdeaLink {
 }
 
 
-/**
+/** @hidden
  * 
  */
 class PositionRespondsToIssue extends IdeaLink {
@@ -171,7 +171,7 @@ class PositionRespondsToIssue extends IdeaLink {
 }
 
 
-/**
+/** @hidden
  * 
  */
 class ArgumentSupportsIdea extends IdeaLink {
@@ -179,7 +179,7 @@ class ArgumentSupportsIdea extends IdeaLink {
 }
 
 
-/**
+/** @hidden
  * 
  */
 class ArgumentOpposesIdea extends IdeaLink {
@@ -187,17 +187,17 @@ class ArgumentOpposesIdea extends IdeaLink {
 }
 
 
-/**
+/** @hidden
  * 
  */
 class IssueAppliesTo extends IdeaLink {
 	
 }
 
-/**
+/** @hidden
  * 
  */
-class IssueAppliesTo extends IssueQuestions {
+class IssueQuestions extends IssueAppliesTo {
 	
 }
 

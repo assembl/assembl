@@ -155,4 +155,10 @@ from .widgets import (
     WidgetUserConfig,
 )
 
+from .notification import (
+    NotificationSubscription,
+    NotificationSubscriptionFollowSyntheses,
+    Notification
+    )
+
 declare_history_mappers()

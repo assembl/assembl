@@ -449,9 +449,3 @@ Yes!
     check_striping_plaintext(original, expected, "Gmail plaintext, circa 2012")
 
     
-def test_delete_widget(
-        test_session, creativity_session_widget,
-        creativity_session_widget_new_idea):
-    test_session.flush()
-    test_session.delete(creativity_session_widget)
-    test_session.flush()
