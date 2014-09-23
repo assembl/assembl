@@ -18,30 +18,29 @@
   .panel-body {
     top: 30px;
   }
+}
 
-  .ideaPanelNuggets {
-    cursor: pointer;
+.ideaPanelNuggets {
+  cursor: pointer;
 
-    i:before {
-      font-size: 233%;
-      margin: 0;
-      padding: 0;
-      width: 28px;
-    }
+  i:before {
+    font-size: 233%;
+    margin: 0;
+    padding: 0;
+    width: 28px;
+  }
 
+  .icon-diamond {
+    color: $gray;
+  }
+
+  &:hover .icon-diamond {
+    color: $orange1;
+  }
+
+  &.isSelected {
     .icon-diamond {
-      color: $gray;
-    }
-
-    &:hover .icon-diamond {
       color: $orange1;
     }
   }
-
-  .ideaPanelNuggets.isSelected {
-    .icon-diamond {
-      color: $orange1;
-    }
-  }
-
 }
