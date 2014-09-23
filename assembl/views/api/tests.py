@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import smtplib
 import re
+import quopri
 
 import json
 import pytest
@@ -215,10 +216,10 @@ def test_api_register(test_app, discussion):
         assert mailer.sendmail.call_count == 1
         # Get token
         mail_text = mailer.sendmail.call_args[0][2]
-        token = re.search(r'email_confirm/([^>]+)>',mailer.sendmail.call_args[0][2], re.MULTILINE)
+        mail_text = quopri.decodestring(mail_text)
+        token = re.search(r'email_confirm/([^>]+)>', mail_text)
         assert token
         token = token.group(1)
-        token = ''.join(token.split('=\n'))
         assert token
         # Confirm token
         r = test_app.get("/users/email_confirm/"+token)
