@@ -1,4 +1,5 @@
 import transaction
+import json
 from pyramid.view import view_config
 from pyramid.renderers import render_to_response
 from pyramid.security import authenticated_userid
@@ -6,7 +7,7 @@ from pyramid.httpexceptions import HTTPFound
 
 from assembl.models import (
     Discussion, DiscussionPermission, Role, Permission, UserRole,
-    LocalUserRole)
+    LocalUserRole, PartnerOrganization)
 from .. import get_default_context
 from assembl.models.mail import IMAPMailbox, MailingList
 from assembl.auth import (
@@ -79,15 +80,18 @@ def discussion_edit(request):
     db = Discussion.db()
     discussion_id = int(request.matchdict['discussion_id'])
     discussion = Discussion.get_instance(discussion_id)
+    partners = json.dumps([p.generic_json() for p in discussion.partner_organizations])
 
     if not discussion:
         raise HTTPNotFound("Discussion with id '%d' not found." % (
             discussion_id,))
 
+
     context = dict(get_default_context(request),
         discussion=discussion,
         admin_discussion_permissions_url = request.route_url(
-            'discussion_permissions', discussion_id=discussion.id))
+            'discussion_permissions', discussion_id=discussion.id),
+        partners=partners)
 
     if request.method == 'POST':
 
