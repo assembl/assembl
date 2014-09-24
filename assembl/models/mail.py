@@ -690,7 +690,7 @@ class IMAPMailbox(AbstractMailbox):
     password = Column(UnicodeText, nullable=False)
     
     __mapper_args__ = {
-        'polymorphic_identity': 'source_mailinglist',
+        'polymorphic_identity': 'source_imapmailbox',
     }
     @staticmethod
     def do_import_content(mbox, only_new=True):
