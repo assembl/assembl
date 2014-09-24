@@ -298,9 +298,10 @@ def general_permissions(request):
 
         elif 'submit_look_for_user' in request.POST:
             search_string = '%' + request.POST['user_search'] + '%'
-            other_users = db.query(User).filter(AgentProfile.name.ilike(search_string)).union(
-                db.query(User).outerjoin(Username).filter(Username.username.ilike(search_string))).union(
-                db.query(User).filter(User.preferred_email.ilike(search_string))).all()
+            other_users = db.query(User).outerjoin(Username).filter(
+                AgentProfile.name.ilike(search_string)
+                | Username.username.ilike(search_string)
+                | User.preferred_email.ilike(search_string)).all()
             users.update(other_users)
 
     def has_role(user_id, role):
