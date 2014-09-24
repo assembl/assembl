@@ -47,7 +47,6 @@ define(function(require){
                 that = this,
                 data = this.model.toJSON(),
                 authors = [],
-                //segments = Ctx.getSegmentsDEPRECATEDByIdea(this.model),
                 view_data = this.view_data,
                 render_data = view_data[this.model.getId()],
                 ideaView = new this.innerViewClass(_.extend({model: this.model}, this.innerViewClassInitializeParams));

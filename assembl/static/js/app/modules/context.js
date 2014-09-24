@@ -679,16 +679,6 @@ define(function (require) {
          },*/
 
         /**
-         * Returns an array with all segments for the given idea
-         * @param {Idea} idea
-         * @return {Array<Segment>}
-         */
-        getSegmentsDEPRECATEDByIdea: function (idea) {
-            var id = idea.getId();
-            return _allExtractsCollection.where({idIdea: id});
-        },
-
-        /**
          * Shows the segment source in the better way related to the source
          * e.g.: If it is an email, opens it, if it is a webpage, open in another window ...
          * @param {Segment} segment

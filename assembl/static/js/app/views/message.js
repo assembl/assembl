@@ -273,7 +273,7 @@ define(function (require) {
          */
         getAnnotationsToLoad : function () {
           var that = this,
-              annotations = this.model.getAnnotations(), //TODO:  This is fairly CPU intensive, and may be worth caching.
+              annotations = this.model.getAnnotationsDEPRECATED(), //TODO:  This is fairly CPU intensive, and may be worth caching.
               annotationsToLoad = [],
               filter;
           if(this.annotationsToLoad === undefined) {

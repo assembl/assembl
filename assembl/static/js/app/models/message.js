@@ -71,19 +71,11 @@ define(function(require){
         },
 
         /**
-         * Return all segments related to this message
-         * @return {Segment[]}
-         */
-        getSegmentsDEPRECATED: function(){
-            return this.collection.collectionManager._allExtractsCollection.where({ idPost: this.getId() });
-        },
-
-        /**
          * Return all segments in the annotator format
          * @return {Object[]}
          */
-        getAnnotations: function(){
-            var segments = this.getSegmentsDEPRECATED(),
+        getAnnotationsDEPRECATED: function(){
+            var segments = this.collection.collectionManager._allExtractsCollection.where({ idPost: this.getId() }),
                 ret = [];
 
             _.each(segments, function(segment){
@@ -135,16 +127,6 @@ define(function(require){
               }
           );
           return deferred.promise();
-        },
-        
-        /**
-         * Returns the post's creator
-         * @return {User}
-         */
-        getCreatorDEPRECATED: function(){
-            var creatorId = this.get('idCreator');
-            console.log(this);
-            return this.collection.collectionManager._allUsersCollection.getById(creatorId);
         },
 
         /**
@@ -209,20 +191,6 @@ define(function(require){
         /** Our data is inside the posts array */
         parse: function(response) {
           return response.posts;
-        },
-    
-        /**
-         * Return all segments in all messages in the annotator format
-         * @return {Object[]}
-         */
-        getAnnotations: function(){
-            var ret = [];
-
-            _.each(this.models, function(model){
-                ret = _.union(ret, model.getAnnotations() );
-            });
-
-            return ret;
         },
     
         /**
