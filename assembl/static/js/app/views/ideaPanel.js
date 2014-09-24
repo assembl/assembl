@@ -329,25 +329,39 @@ define(function (require) {
          */
         deleteCurrentIdea: function () {
             // to be deleted, an idea cannot have any children nor segments
-            var children = this.model.getChildren(),
-                segments = this.model.getSegmentsDEPRECATED(),
-                that = this;
-
-            if (children.length > 0) {
-                return alert(i18n.gettext('You cannot delete an idea while it has sub-ideas.'));
-            }
-
-            // Nor has any segments
-            if (segments.length > 0) {
-                return alert(i18n.gettext('You cannot delete an idea associated to extracts.'));
-            }
-
-            // That's a bingo
+            var that = this,
+                children = this.model.getChildren();
+            
             this.blockPanel();
-            this.model.destroy({ success: function () {
-                that.unblockPanel();
-                Ctx.setCurrentIdea(null);
-            }});
+            $.when(
+                this.model.getExtractsPromise()
+                ).then(
+                function(ideaExtracts) {
+                  that.unblockPanel();
+                  if (children.length > 0) {
+                    that.unblockPanel();
+                    alert(i18n.gettext('You cannot delete an idea while it has sub-ideas.'));
+                  }
+                  // Nor has any segments
+                  else if (ideaExtracts.length > 0) {
+                    that.unblockPanel();
+                    alert(i18n.gettext('You cannot delete an idea associated to extracts.'));
+                  }
+                  else {
+                    // That's a bingo
+                    var ok = confirm(i18n.gettext('Confirm that you want to delete this idea.'));
+                    
+                    if (ok) {
+                      that.model.destroy({ success: function () {
+                        that.unblockPanel();
+                        Ctx.setCurrentIdea(null);
+                      }});
+                    }
+                    else {
+                      that.unblockPanel();
+                    }
+                  }
+                });
         },
 
 
@@ -495,11 +509,7 @@ define(function (require) {
          * @event
          */
         onDeleteButtonClick: function () {
-            var ok = confirm(i18n.gettext('Confirm that you want to delete this idea.'));
-
-            if (ok) {
-                this.deleteCurrentIdea();
-            }
+            this.deleteCurrentIdea();
         },
 
         /**

@@ -44,16 +44,16 @@ CollectionManager = require('modules/collectionManager');
             var that = this,
                 data = this.model.toJSON(),
                 authors = [],
-                collectionManager = new CollectionManager(),
-                segments = this.model.getSegmentsDEPRECATED();
+                collectionManager = new CollectionManager();
 
             $.when( collectionManager.getAllMessageStructureCollectionPromise(),
-                collectionManager.getAllUsersCollectionPromise()
+                collectionManager.getAllUsersCollectionPromise(),
+                this.model.getExtractsPromise()
                 ).then(
-                function(allMessageStructureCollection, allUsersCollection) {
+                function(allMessageStructureCollection, allUsersCollection, ideaExtracts) {
                   that.$el.addClass('synthesis-idea');
                   Ctx.removeCurrentlyDisplayedTooltips(that.$el);
-                  segments.forEach(function(segment) {
+                  ideaExtracts.forEach(function(segment) {
                       var post = allMessageStructureCollection.get(segment.get('idPost'));
                       if(post) {
                           var creator = allUsersCollection.get(post.get('idCreator'));

@@ -298,13 +298,6 @@ define(function(require){
           );
           return deferred.promise();
         },
-        
-        /**
-         * @return {array<Segment>}
-         */
-        getSegmentsDEPRECATED: function(){
-          return this.collection.collectionManager._allExtractsCollection.where({idIdea:this.getId()});
-        },
 
         /**
          * Adds a segment

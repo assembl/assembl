@@ -89,7 +89,6 @@ define(function (require) {
                 data.longTitle = ' - ' + data.longTitle.substr(0, 50);
             }
 
-            data.segments = this.model.getSegmentsDEPRECATED();
             data.shortTitle = this.model.getShortTitleDisplayText();
             this.$el.html(this.template(data));
             Ctx.initTooltips(this.$el);
