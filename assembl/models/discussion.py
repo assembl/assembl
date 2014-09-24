@@ -67,8 +67,10 @@ class Discussion(DiscussionBoundBase):
     def import_from_sources(self, only_new=True):
         from .generic import PostSource
         for source in self.sources:
-            # refetch after calling
+            # refresh after calling
             source = PostSource.db.merge(source)
+            assert source != None
+            assert source.id
             try:
                 source.import_content(only_new=only_new)
             except:

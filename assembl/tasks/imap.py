@@ -10,6 +10,7 @@ def import_mails(mbox_id, only_new=True):
     init_task_config()
     from ..models import IMAPMailbox
     mailbox = IMAPMailbox.get(id=mbox_id)
+    assert mailbox != None
     IMAPMailbox.do_import_content(mailbox, only_new)
 
 def includeme(config):

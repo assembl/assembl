@@ -68,6 +68,7 @@ class AbstractMailbox(PostSource):
 
     __mapper_args__ = {
         'polymorphic_identity': 'mailbox',
+        'with_polymorphic': '*'
     }
 
     def mangle_mail_subject(self, subject):
@@ -594,6 +595,7 @@ FROM post WHERE post.id IN (SELECT MAX(post.id) as max_post_id FROM imported_pos
         
     def import_content(self, only_new=True):
         #Mailbox.do_import_content(self, only_new)
+        assert self.id
         import_mails.delay(self.id, only_new)
 
 
@@ -669,7 +671,7 @@ FROM post WHERE post.id IN (SELECT MAX(post.id) as max_post_id FROM imported_pos
         smtp_connection.quit()
 
     def __repr__(self):
-        return "<Mailbox %s>" % repr(self.name)
+        return "<%s %s: %s>" % (type(self).__name__ , repr(self.id),repr(self.name))
 
 class IMAPMailbox(AbstractMailbox):
     """
@@ -691,6 +693,7 @@ class IMAPMailbox(AbstractMailbox):
     
     __mapper_args__ = {
         'polymorphic_identity': 'source_imapmailbox',
+        'with_polymorphic': '*'
     }
     @staticmethod
     def do_import_content(mbox, only_new=True):
@@ -819,6 +822,7 @@ class MailingList(IMAPMailbox):
 
     __mapper_args__ = {
         'polymorphic_identity': 'source_mailinglist',
+        'with_polymorphic': '*'
     }
 
     def get_send_address(self):
