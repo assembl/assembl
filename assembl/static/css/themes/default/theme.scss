@@ -1,12 +1,13 @@
- 
+
 .assembl-logo {
   font-size: 18px;
   font-weight: bold;
   text-decoration: none;
   line-height: 35px;
   margin-left: 10px;
-  color: #9A3FD5;
+  color: #513850;
 }
+
 .navbar {
   &.navbar-default {
     background-color: #FFFFFF;
@@ -37,7 +38,7 @@
   }
 }
 
-.homePanel  .theme_homePanelTitleZone {
+.homePanel .theme_homePanelTitleZone {
   background: url(img/crowd.jpg) center center no-repeat;
   background-size: auto;
   height: 227px;

@@ -10,9 +10,10 @@
   overflow: hidden;
   /*-webkit-transition: width 1s;
   transition: width 1s;*/
-  fieldset {
+  .panel-section {
     margin: 10px 0;
     position: relative;
+    padding: 0 10px;
     legend {
       height: 1.8em;
       //position: absolute;
@@ -23,6 +24,18 @@
         line-height: 1.8em;
         display: block;
         margin: 0 0.5em 0.5em 0;
+      }
+    }
+  }
+  .panel-section:first-child {
+    background-color: $green;
+    padding: 10px;
+    .panel-editablearea {
+      background-color: $green;
+    }
+    .panel-editablebox.is-editing {
+      .panel-editablearea {
+        background-color: $white;
       }
     }
   }
@@ -146,7 +159,6 @@
 .panel-editablearea {
   @extend .text;
   @include box-sizing(border-box);
-  @include border-radius(3px);
   display: inline-block;
   width: 100%;
   margin: 10px 0;

@@ -1,4 +1,4 @@
-<div class="panel-body pas">
+<div class="panel-body">
     <% if( idea ) { %>
     <fieldset id="ideaPanel-section-summary" class="panel-section mtn">
         <div id="ideaPanel-shorttitle" class="text-bold mbs" data-toggle="tooltip" title="{{gettext('The name of this idea in the table of ideas')}}"></div>
@@ -73,11 +73,11 @@
     <fieldset id="ideaPanel-section-actions" class="panel-section">
         <% if (canDelete) { %>
         <div class="fr">
-            <a id="ideaPanel-deleteButton" class="button" data-toggle="tooltip" title="{{gettext('Delete this idea completely')}}">{{ gettext('Delete idea') }}</a>
+            <a id="ideaPanel-deleteButton" class="btn btn-default btn-sm" data-toggle="tooltip" title="{{gettext('Delete this idea completely')}}">{{ gettext('Delete idea') }}</a>
         </div>
         <% }
         if (canEditExtracts) { %>
-        <a id="ideaPanel-clearbutton" class="button" data-toggle="tooltip" title="{{gettext('Remove all extracts from this idea.  Removed extracts will be available in your clipboard')}}">{{ gettext('Remove all extracts') }}</a>
+        <a id="ideaPanel-clearbutton" class="btn btn-default btn-sm" data-toggle="tooltip" title="{{gettext('Remove all extracts from this idea.  Removed extracts will be available in your clipboard')}}">{{ gettext('Remove all extracts') }}</a>
         <% } %>
     </fieldset>
 

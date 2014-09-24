@@ -1,11 +1,12 @@
 // The idea panel specific CSS
 // ===========================
 
-#ideaPanel {
-  #ideaPanel-section-summary > legend > span {
-    background: url(#{$img-dir}/icon/idea.svg) no-repeat left center;
-    padding-left: 2em;
-    background-size: auto 90%;
+.ideaPanel {
+  #ideaPanel-section-summary > * {
+    //background: url(#{$img-dir}/icon/idea.svg) no-repeat left center;
+    //padding-left: 2em;
+    //background-size: auto 90%;
+    background-color: $green;
   }
   #ideaPanel-section-segments > legend > span {
     //background: #fff url(#{$img-dir}/icon/quotes.svg) no-repeat left center;
