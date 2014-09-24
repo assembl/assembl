@@ -16,7 +16,7 @@
 
 .ideaPanel {
   .panel-body {
-    top: 35px;
+    top: 50px;
   }
 }
 
@@ -42,5 +42,15 @@
     .icon-diamond {
       color: $orange1;
     }
+  }
+}
+
+#ideaPanel-shorttitle > * {
+  color: $white;
+}
+
+#ideaPanel-definition {
+  .panel-editablearea > * {
+    color: $white;
   }
 }

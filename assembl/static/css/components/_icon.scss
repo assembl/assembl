@@ -32,8 +32,6 @@
   width: 1em;
   margin-right: .2em;
   text-align: center;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
   /* opacity: .8; */
 
   /* For safety - reset parent styles, that can break glyph codes*/
@@ -184,6 +182,11 @@
 }
 
 /* '' */
+.icon-add-2:before {
+  content: '\e81a';
+}
+
+/* '' */
 .icon-check:before {
   content: '\e81b';
 }

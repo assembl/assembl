@@ -1,6 +1,6 @@
 #groupsContainer {
   position: absolute;
-  top: 35px;
+  top: 50px;
   right: 0;
   bottom: 0;
   left: 0;
@@ -118,7 +118,7 @@
         position: relative;
         > a.nav {
           display: block;
-          height: 35px;
+          height: 50px;
           text-decoration: none;
           background-color: $purple3;
           color: $white;
@@ -126,7 +126,7 @@
           padding-left: 10px;
           font-size: $smallFontSize;
           &.active {
-            background-color: $purple4;
+            background-color: $purple5;
             color: $green;
             i:not(.icon-arrowleft) {
               color: $white;
@@ -134,7 +134,7 @@
           }
           i {
             font-size: 22px;
-            vertical-align: middle;
+            //vertical-align: middle;
             color: $green;
           }
         }
@@ -215,15 +215,17 @@
 }
 
 .groupPanel .panel-header a.panel-header-minimize,
-.groupPanel .navSidebar .nav span.panel-header-minimize {
+.groupPanel .navSidebar .nav .panel-header-minimize {
   //background: url(#{$img-dir}/icon/panel_collapse.svg) center center no-repeat;
   //background-size: 18px;
-  position: absolute;
-  width: 36px;
-  height: 35px;
-  right: 0;
-  font-size: 150%;
+  //position: absolute;
+  //width: 36px;
+  //height: 35px;
+  //right: 0;
   color: $green;
+  //line-height: 33px;
+  font-size: 22px;
+  float: right;
 }
 
 .groupPanel.minimized {
