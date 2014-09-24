@@ -396,11 +396,11 @@ JOIN post AS family_posts ON (
                     UNION SELECT id AS parent_id, id FROM POST
                     ) pa 
                 JOIN content USING (id) WHERE id = :post_id AND content.discussion_id = :discussion_id)"""
-        roots = defaultdict(list)
+        roots = defaultdict(set)
         for idea_id, post_id in cls.db().execute(text(stmt1).params(
             {'post_id': post_id,
              "discussion_id": discussion_id})):
-            roots[idea_id].append(post_id)
+            roots[idea_id].add(post_id)
         result = []
         common_params = dict(discussion_id=discussion_id, user_id=user_id)
         for idea_id, post_ids in roots.iteritems():
