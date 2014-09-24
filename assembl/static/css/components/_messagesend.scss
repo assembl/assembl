@@ -5,9 +5,8 @@
   margin: 1em 0 1em 0;
   display: table;
   width: 98%;
-  background-color: $white;
-  border-bottom: 1px solid #eee;
-  padding-bottom: 10px;
+  background-color: $gray3;
+  padding: 15px 10px 10px 10px;
   .hidden {
     display: none;
   }
@@ -51,6 +50,9 @@
       }
     }
 
+  }
+  .rc {
+    border: none;
   }
 
 }

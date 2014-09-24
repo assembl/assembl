@@ -19,24 +19,28 @@
 </div>
 <div class="navbar-right">
     <div class="connexion">
-        {% if user %}
-            <div class="dropdown">
-                <div class="dropdown-label">
-                    <img height="25" width="25" src="/user/id/{{user.id}}/avatar/25" alt="{{ user.display_name() }}"/>
-                    <span class="mlxs">{{ user.display_name() }}</span>
-                    <span class="dropdown-arrow icon-arrowdown"></span>
-                </div>
-                <ul class="dropdown-list dropdown-list--bottomright">
-                    {% if user_profile_edit_url %}
-                        <li class="dropdown-listitem">
-                            <a href="{{ user_profile_edit_url }}"><span class="iconbutton icon-options mrs"></span>{{ gettext('Edit your profile') }}</a>
-                        </li>
-                    {% endif %}
-                    <li class="dropdown-listitem">
-                        <a href="/logout?next_view={{request.current_route_path()}}" class="sign-out"><span class="iconbutton icon-logout mrs"></span>{{ gettext('Sign out') }}</a>
-                    </li>
-                </ul>
+      {% if user %}
+        <div class="avatar img-rounded fl ptxs">
+          <img height="25" width="25" src="/user/id/{{user.id}}/avatar/25" alt="{{ user.display_name() }}"/>
+        </div>
+        <div class="fl">
+          <span class="mlxs">{{ user.display_name() }}</span>
+        </div>
+        <div class="dropdown">
+            <div class="dropdown-label">
+                <span class="dropdown-arrow icon-arrowdown"></span>
             </div>
+            <ul class="dropdown-list dropdown-list--bottomright">
+                {% if user_profile_edit_url %}
+                    <li class="dropdown-listitem">
+                        <a href="{{ user_profile_edit_url }}"><span class="iconbutton icon-options mrs"></span>{{ gettext('Edit your profile') }}</a>
+                    </li>
+                {% endif %}
+                <li class="dropdown-listitem">
+                    <a href="/logout?next_view={{request.current_route_path()}}" class="sign-out"><span class="iconbutton icon-logout mrs"></span>{{ gettext('Sign out') }}</a>
+                </li>
+            </ul>
+        </div>
         {% else %}
             {% if request.current_route_path() != "/login" %}
                 {% if request.current_route_path() != "/register" %}

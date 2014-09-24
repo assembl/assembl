@@ -8,6 +8,7 @@ define(function (require) {
         SynthesisInNavigationPanel = require('views/navigation/synthesisInNavigation'),
         AssemblPanel = require('views/assemblPanel'),
         ctx = require('modules/context'),
+        Permissions = require('utils/permissions'),
         $ = require('jquery');
 
     var NavigationView = AssemblPanel.extend({
@@ -26,7 +27,8 @@ define(function (require) {
             notification: '.navNotification'
         },
         events: {
-            'click .nav': 'toggleMenuByEvent'
+            'click .nav': 'toggleMenuByEvent',
+            'click .js_addIdeaFromIdeaList': 'addIdeaFromIdeaList'
         },
         ui: {
             level: 'div.second-level'
@@ -134,7 +136,7 @@ define(function (require) {
             if ( this.$el && this.$el.parent() && this.$el.parent().height() )
             {
                 var number_of_li = this.$('.side-menu > li').length;
-                var total_li_height = 35 * number_of_li;
+                var total_li_height = 50 * number_of_li;
 
                 var container_height = this.$el.parent().height();
 
@@ -144,7 +146,7 @@ define(function (require) {
             { // fallback: set an initial estimation
                 var _header = $('#header').height(),
                 _window = $(window).height(),
-                _li = 35*3,
+                    _li = 50 * 3,
                 _headerGroup = $(".groupHeader").first().height() ? $(".groupHeader").first().height() : ( $(".groupHeader.editable").first() ? 25 : 3 );
                 _sideBarHeight = (_window - _header) - _headerGroup;
                 this._accordionContentHeight = (_sideBarHeight - _li) - 15;
@@ -159,9 +161,15 @@ define(function (require) {
         serializeData: function () {
             return {
                 Ctx: ctx,
-                hasMinimize: ctx.userCanChangeUi()
+                hasMinimize: ctx.userCanChangeUi(),
+                canAdd: ctx.getCurrentUser().can(Permissions.ADD_IDEA)
             }
+        },
+
+        addIdeaFromIdeaList: function () {
+            Assembl.vent.trigger('ideaList:addChildToSelected');
         }
+
 
     });
 

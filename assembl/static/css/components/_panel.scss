@@ -142,14 +142,14 @@
     @include no-selection;
   }
   @include z-index("float");
-  height: 35px;
+  height: 50px;
   padding: 0 10px;
   position: relative;
   background-color: $purple3;
   color: $white;
   .panel-header-title,
   .panel-header-close {
-    line-height: 35px;
+    line-height: 50px;
     color: $white;
   }
 }

@@ -1,6 +1,6 @@
 {% set userName = "<%= creator.get('name') %>" %}
 {% set precise_date = "<%= ctx.getReadableDateTime(date) %>" %}
-{% set nice_date = "<%= ctx.getNiceDateTime(date) %>" %}
+{% set nice_date = "<%= ctx.getNiceDate(date) %>" %}
 {% macro readUnreadIndicator() -%}
   <% if ( user_is_connected ){ %>{# Strip whitespace ...
       #}<span class="readUnreadIndicator indice 
@@ -40,18 +40,20 @@
   </div>
 
 <% } else { %>
-  <div class="avatar img-rounded">
-    <img src="<%= creator.getAvatarUrl(30) %>" alt="{{ gettext('User') }}"  class="image-rounded" width="30" height="30" />
+
+  <div class="rc rcss pbxs mbxs head">
+    <a class="img-left avatar img-rounded" href="#"><img src="<%= creator.getAvatarUrl(30) %>" alt="{{ gettext('User') }}" width="30" height="30"></a>
+    <div class="bd">
+      <div class="message-author js_messageHeader">{{ gettext('%(user)s')|format(user=userName)|safe }} {{ readUnreadIndicator() }}</div>
+      <div class="message-date js_messageHeader">{{ gettext('<time title="%(precise_date)s">%(nice_date)s</time>')|format(nice_date=nice_date,precise_date=precise_date)|safe }}</div>
+    </div>
   </div>
-  {{ readUnreadIndicator() }}
-  <span class="message-author js_messageHeader">{{ gettext('%(user)s')|format(user=userName)|safe }}</span>
-  <span class="message-date js_messageHeader">{{ gettext('<time title="%(precise_date)s">%(nice_date)s</time>')|format(nice_date=nice_date,precise_date=precise_date)|safe }}</span>
-  <span class="message-subject js_messageHeader"><%= subject %></span>
+
 <% } %>
 
 <% if ( viewStyle == ctx.AVAILABLE_MESSAGE_VIEW_STYLES.FULL_BODY ){ %>
   <div class="message-menu">
-    <div class="dropdown">
+    <div class="dropdown mrxl mtxs">
       <span class="dropdown-label">{{ gettext('More options') }}&nbsp;<i class="icon-arrowdown"></i></span>
       <ul class="dropdown-list dropdown-list--bottomright">
         <% if (user_is_connected){ %>
@@ -86,11 +88,13 @@
       Note:  bodyFormatClass can currently have values body_format_text_plain or  body_format_text_html 
   #}
   <% if( viewStyle == ctx.AVAILABLE_MESSAGE_VIEW_STYLES.PREVIEW ){ %>
+    <h4 class="message-subject js_messageHeader h4"><%= subject %></h4>
     <div class="message-body <%= bodyFormatClass %> ellipsis" id="<%= messageBodyId %>">
       <p class="mvn more"><%= body %></p>{# Do NOT introduce whitespace within this div #}
       <a class="readMore readMoreOrLess js_readMore hidden" href="#" alt="{{ gettext('Read more') }}">{{ gettext('Read more') }}</a>
     </div>
   <% } else if( viewStyle == ctx.AVAILABLE_MESSAGE_VIEW_STYLES.FULL_BODY ){ %>
+    <h4 class="message-subject js_messageHeader h4"><%= subject %></h4>
     <div class="message-body js_messageBodyAnnotatorSelectionAllowed <%= bodyFormatClass %>" id="<%= messageBodyId %>"><%= body %></div>
     <a class="readLess readMoreOrLess js_readLess hidden" href="#" alt="{{ gettext('Read less') }}">{{ gettext('Read less') }}</a>
     <div class="message-replybox"></div>

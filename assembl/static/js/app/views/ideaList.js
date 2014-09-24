@@ -89,6 +89,10 @@ define(function (require) {
                 that.removeIdea(idea);
             });
 
+            this.listenTo(Assembl.vent, 'ideaList:addChildToSelected', function () {
+                that.addChildToSelected();
+            });
+
         },
 
         /**
@@ -99,7 +103,7 @@ define(function (require) {
             'dragover .panel-bodyabove': 'onAboveDragOver',
             'dragover .panel-bodybelow': 'onBelowDragOver',
 
-            'click #ideaList-addbutton': 'addChildToSelected',
+            //'click #ideaList-addbutton': 'addChildToSelected',
             'click #ideaList-collapseButton': 'toggleIdeas',
             'click #ideaList-graphButton': 'toggleGraphView',
             'click #ideaList-closeButton': 'closePanel',

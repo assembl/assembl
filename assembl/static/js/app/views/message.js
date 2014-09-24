@@ -132,7 +132,7 @@ define(function (require) {
         render: function () {
             var that = this;
             if (Ctx.debugRender) {
-              console.log("message:render() is firing for message", this.model.id);
+                console.log("message:render() is firing for message", this.model.id);
             }
             this.model.getCreatorPromise().done(
                 function (creator) {
@@ -190,8 +190,7 @@ define(function (require) {
                         that.$el.removeClass('read');
                     }
 
-                    //TODO:  Make this asynchronous
-                    data['nuggets'] = that.model.getAnnotationsDEPRECATED().length;
+                    data['nuggets'] = data.extracts.length;
 
                     data = that.transformDataBeforeRender(data);
                     that.$el.html(that.template(data));
@@ -221,8 +220,8 @@ define(function (require) {
                     }
 
                     if (that.viewStyle == that.availableMessageViewStyles.FULL_BODY) {
-                      //Only the full body view uses annotator
-                      that.messageListView.requestAnnotatorRefresh();
+                        //Only the full body view uses annotator
+                        that.messageListView.requestAnnotatorRefresh();
                     }
                     
                     if (that.viewStyle == that.availableMessageViewStyles.FULL_BODY && that.messageListView.defaultMessageStyle != that.availableMessageViewStyles.FULL_BODY) {

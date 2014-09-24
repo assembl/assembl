@@ -48,7 +48,7 @@
     background-color: $white1;
     border-right: 4px solid #4eba7d;
     .idealist-counter {
-      color: $white;
+      color: $black;
     }
     .idealist-title-unread-count {
       //find the best solution for radius hover
@@ -177,7 +177,7 @@
   overflow: hidden;
   cursor: pointer;
   padding-left: 10px;
-  color: $white;
+  color: $black;
 }
 
 .idealist-title-unread {
@@ -335,4 +335,12 @@
     // Don't ask
     //padding-top: 4.25px;
   }
+}
+
+.title-counter {
+  color: $green;
+}
+
+#ideaList-addbutton {
+
 }

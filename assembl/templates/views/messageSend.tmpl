@@ -1,22 +1,25 @@
 <% if (canPost) { %>
     <div class="messageSend">
-        {% if user %}
-        <div class="avatar img-rounded img-left">
-            <img height="32" width="32" src="/user/id/{{user.id}}/avatar/32" alt="{{ user.display_name() }}" class="avatar image-rounded" />
-        </div>
-        {% endif %}
-        <div class="interface-container">
-            <% if(allow_setting_subject) { %>
-            <div class="topic-subject">
-                {#<span class="topic-subject-label">{{gettext('New topic subject:')}}</span>#}
-                <span class="topic-subject-input"><input type="text" class="messageSend-subject formfield text" placeholder="{{gettext('New topic subject:')}}" /></span>
+        <div class="rc rcss">
+          {% if user %}
+          <a class="img-left avatar img-rounded" href="#"><img src="/user/id/12/avatar/30" width="30" height="30"></a>
+          {% endif %}
+          <div class="bd">
+            <div>
+              <% if(allow_setting_subject) { %>
+                <div class="topic-subject">
+                    <span class="topic-subject-input"><input type="text" class="messageSend-subject formfield text" placeholder="{{gettext('New topic subject:')}}" /></span>
+                </div>
+              <% } %>
             </div>
-            <% } %>
-            <textarea class="formtextarea messageSend-body text text-muted"><%= body_help_message %></textarea>
-            <div  class="messageSend-buttons">
-                <a class="btn btn-primary btn-sm messageSend-sendbtn hidden"><%= send_button_label %></a>
-                <a class="btn btn-cancel btn-sm messageSend-cancelbtn hidden"><%= cancel_button_label %></a>
+            <div>
+              <textarea class="formtextarea messageSend-body text text-muted mbxs"><%= body_help_message %></textarea>
+              <div  class="messageSend-buttons">
+                  <a class="btn btn-primary btn-xs messageSend-sendbtn hidden"><%= send_button_label %></a>
+                  <a class="btn btn-cancel btn-sm messageSend-cancelbtn hidden"><%= cancel_button_label %></a>
+              </div>
             </div>
+          </div>
         </div>
     </div>
 <% } else { %>

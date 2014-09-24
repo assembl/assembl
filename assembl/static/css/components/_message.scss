@@ -1,7 +1,7 @@
 $message-bar-width: 15px;
 $messageFamilyImageWidth: 12px;
 $avatarSize: 30px;
-$readUnreadIndicatorSize: 14px;
+$readUnreadIndicatorSize: 10px;
 $mesageSpacing: 6px;
 $messageBodyFontSize: 13px;
 $mesageBodyLineHeight: $baseLineHeight;
@@ -14,12 +14,12 @@ $previewNumLines: 4;
 .message {
   //position: relative;
   box-sizing: content-box;
-  padding: $mesageSpacing 0px $mesageSpacing 0px;
-  margin: 0px $mesageSpacing 0px $mesageSpacing; //TODO: fix scroolbar margin
+  padding: 10px;
+  //margin: 0px $mesageSpacing 0px $mesageSpacing; //TODO: fix scroolbar margin
   min-height: $avatarSize;
   height: auto;
   color: $gray2;
-  border-top: solid 1px $gray3;
+  //border-top: solid 1px $gray3;
 
   &.is-highlighted {
     background-color: $orange;
@@ -49,13 +49,13 @@ $previewNumLines: 4;
     text-overflow: ellipsis;
   }
   .message-author {
-    color: #333333;
+    color: $purple5;
     @extend .header_item_template
   }
 
   .message-date {
     @extend .header_item_template;
-    color: #cccccc;
+    color: $gray4;
     time {
     }
   }
@@ -112,7 +112,7 @@ $previewNumLines: 4;
       /* Undo the avatar spacing when message indicator is there.  This hack is
          necessary because there will be no indicator of annonymous users, 
          so the margin on message-author must clear the avatar on it's own */
-      margin-right: -$avatarSize - $mesageSpacing;
+      //margin-right: -$avatarSize - $mesageSpacing;
     }
     .message-author {
     }
@@ -120,18 +120,21 @@ $previewNumLines: 4;
       display: block;
     }
     .message-date {
-      @extend .header-separator-bullet;
+      //@extend .header-separator-bullet;
     }
     .message-body {
       line-height: $mesageBodyLineHeight;
       margin-top: $mesageSpacing;
       font-size: $messageBodyFontSize;
     }
-
     .message-menu-actions {
       margin-top: $mesageSpacing;
     }
+    .head {
+      border-bottom: 2px solid $green;
+    }
   }
+
   &.viewStyleFullBody {
     /* FullBody specific styles */
     .message-body.body_format_text_plain {
@@ -281,10 +284,11 @@ $previewNumLines: 4;
     height: $readUnreadIndicatorSize;
     margin: 0px $mesageSpacing 0 $mesageSpacing*2;
     vertical-align: middle;
-    border: 2px solid $gray3;
+    border: 1px solid $gray;
+    float: right;
     @include border-radius(50px);
     &:hover {
-      background-color: $gray3;
+      background-color: $gray;
     }
 
   }
@@ -292,15 +296,15 @@ $previewNumLines: 4;
   &.unread {
     .message-author {
       font-weight: bold;
-      color: $purple;
+      color: $purple5;
     }
     .message-subject {
-      font-weight: bold;
+      font-weight: 600;
     }
 
     .readUnreadIndicator {
-      background-color: $purple;
-      border: 2px solid $purple;
+      background-color: $green;
+      border: 1px solid transparent;
     }
   }
 
@@ -329,7 +333,6 @@ $previewNumLines: 4;
       }
     }
 
-
     // used when buttons are to the left of the Reply button
     > .message-hoistbtn, > .message-linkbutton {
       vertical-align: top;
@@ -346,12 +349,11 @@ $previewNumLines: 4;
   }
   .dropdown {
     //Not all message-menus are dropdown
-          color: $gray1;
-      opacity: 0.7;
-      i {
-        opacity: 0.5;
-      }
-          &:hover {
+    opacity: 0.7;
+    i {
+      opacity: 0.5;
+    }
+    &:hover {
       color: $purple1;
       opacity: 1;
     }
@@ -359,13 +361,9 @@ $previewNumLines: 4;
     right: 5px;
     top: 0;
     vertical-align: top;
-    color: $gray2;
-
-    //line-height: 10px;
     padding: 0;
-    //margin-left: 6px;
     .dropdown-label {
-      color: $gray1;
+      color: $gray4;
       opacity: 0.7;
       i {
         opacity: 0.5;
