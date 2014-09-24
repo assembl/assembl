@@ -1,7 +1,7 @@
 <% if (canPost) { %>
     <div class="messageSend">
         {% if user %}
-        <div class="avatar-container">
+        <div class="avatar img-rounded img-left">
             <img height="32" width="32" src="/user/id/{{user.id}}/avatar/32" alt="{{ user.display_name() }}" class="avatar image-rounded" />
         </div>
         {% endif %}

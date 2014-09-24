@@ -25,8 +25,8 @@
 .groupContent {
   display: inline-block;
   height: 100%;
-  border-right: 2px solid $white;
-  border-left: 3px solid $gray1;
+  //border-right: 2px solid $white;
+  //border-left: 3px solid $gray1;
   white-space: normal;
   box-sizing: border-box;
 
@@ -120,19 +120,22 @@
           display: block;
           height: 35px;
           text-decoration: none;
-          background-color: $gray3;
-          border-bottom: 1px solid rgba(127, 140, 141, 0.2);
-          color: #999999;
+          background-color: $purple3;
+          color: $white;
           line-height: 35px;
           padding-left: 10px;
-          font-size: 14px;
+          font-size: $smallFontSize;
           &.active {
-            background-color: $white;
-            color: $purple;
+            background-color: $purple4;
+            color: $green;
+            i:not(.icon-arrowleft) {
+              color: $white;
+            }
           }
           i {
-            font-size: 25px;
+            font-size: 22px;
             vertical-align: middle;
+            color: $green;
           }
         }
         .second-level {
@@ -148,6 +151,8 @@
           top: 0;
           bottom: 0;
         }
+        background-color: $purple4;
+
       }
 
       .synthesisNavPanel {
@@ -211,12 +216,14 @@
 
 .groupPanel .panel-header a.panel-header-minimize,
 .groupPanel .navSidebar .nav span.panel-header-minimize {
-  background: url(#{$img-dir}/icon/panel_collapse.svg) center center no-repeat;
-  background-size: 18px;
+  //background: url(#{$img-dir}/icon/panel_collapse.svg) center center no-repeat;
+  //background-size: 18px;
   position: absolute;
   width: 36px;
   height: 35px;
   right: 0;
+  font-size: 150%;
+  color: $green;
 }
 
 .groupPanel.minimized {
@@ -260,11 +267,13 @@
 .groupPanel.minimized .navSidebar .nav span.panel-header-minimize,
 .groupPanel.minimized .panelContentsWhenMinimized.hasNoHeader a.panel-header-minimize {
   display: initial;
-  background: url(#{$img-dir}/icon/panel_expand.svg) center center no-repeat;
-  background-size: 18px;
+  //background: url(#{$img-dir}/icon/panel_expand.svg) center center no-repeat;
+  //background-size: 18px;
   position: absolute;
   width: 36px;
   height: 35px;
+  font-size: 150%;
+  color: $green;
 }
 
 .group-modal {

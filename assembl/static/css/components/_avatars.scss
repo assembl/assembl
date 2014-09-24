@@ -1,0 +1,38 @@
+// Avatars
+
+.avatar {
+  display: block;
+  border: 1px solid transparent;
+  padding: 1px;
+
+  img {
+    display: block;
+    border-radius: $borderRadiusMS;
+    opacity: 1;
+    @include transition(opacity 0.2s);
+  }
+
+  &:hover,
+  &:focus {
+    img {
+      opacity: 0.8;
+    }
+  }
+
+  &.img-rounded {
+    padding: 0;
+
+    img {
+      border-radius: 50%;
+      //border: 3px solid $blue2;
+    }
+  }
+}
+
+a:hover, a:focus {
+  .avatar {
+    img {
+      opacity: 0.8;
+    }
+  }
+}

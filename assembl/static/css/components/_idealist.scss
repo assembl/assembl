@@ -45,9 +45,17 @@
   //border-bottom: $idealist-border;
 
   &:hover {
-    background-color: $orange;
+    background-color: $white1;
+    border-right: 4px solid #4eba7d;
     .idealist-counter {
-      color: $txtGray1;
+      color: $white;
+    }
+    .idealist-title-unread-count {
+      //find the best solution for radius hover
+      color: $gray4;
+      background-color: $white;
+      border-radius: 25%;
+      padding: 1px 2px;
     }
   }
 
@@ -73,7 +81,17 @@
   }
 
   .idealist-item.is-selected > & {
-    background-color: $orange;
+    background-color: $white1;
+    border-right: 4px solid #4eba7d;
+    .idealist-counter {
+      color: $white;
+    }
+    .idealist-title-unread-count {
+      color: $gray4;
+      background-color: $white;
+      border-radius: 25%;
+      padding: 1px 2px;
+    }
   }
 
 }
@@ -159,7 +177,7 @@
   overflow: hidden;
   cursor: pointer;
   padding-left: 10px;
-  color: #333333;
+  color: $white;
 }
 
 .idealist-title-unread {
@@ -167,7 +185,7 @@
 }
 
 .idealist-title-unread-count {
-  /* color: blue; */
+  color: $green;
 }
 
 // The counter at the right

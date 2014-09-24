@@ -5,7 +5,7 @@
   position: relative;
   z-index: 10;
   height: 100%;
-  border-right: 3px solid $gray1;
+  border-right: 1px solid $gray1;
   background-color: #fff;
   overflow: hidden;
   /*-webkit-transition: width 1s;
@@ -132,10 +132,12 @@
   height: 35px;
   padding: 0 10px;
   position: relative;
-  background-color: $gray3;
+  background-color: $purple3;
+  color: $white;
   .panel-header-title,
   .panel-header-close {
     line-height: 35px;
+    color: $white;
   }
 }
 

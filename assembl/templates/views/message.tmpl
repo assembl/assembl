@@ -23,7 +23,7 @@
 
 <% if ( viewStyle == ctx.AVAILABLE_MESSAGE_VIEW_STYLES.TITLE_ONLY ){ %>
   <div class="leftSection">
-    <div class="avatar">
+    <div class="avatar img-rounded">
       <img src="<%= creator.getAvatarUrl(30) %>" alt="{{ gettext('User') }}"  class="image-rounded" width="30" height="30" />
     </div>{# Strip whitespace ...
     #}{{ readUnreadIndicator() }}{# Strip whitespace ...
@@ -40,7 +40,7 @@
   </div>
 
 <% } else { %>
-  <div class="avatar">
+  <div class="avatar img-rounded">
     <img src="<%= creator.getAvatarUrl(30) %>" alt="{{ gettext('User') }}"  class="image-rounded" width="30" height="30" />
   </div>
   {{ readUnreadIndicator() }}
