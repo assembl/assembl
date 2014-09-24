@@ -405,24 +405,23 @@ JOIN post AS family_posts ON (
         common_params = dict(discussion_id=discussion_id, user_id=user_id)
         for idea_id, post_ids in roots.iteritems():
             stmt2 = ' UNION '.join([
-                """SELECT  pa.id as post_id, action_on_post.id as view_id FROM (
+                """SELECT  pa.id as post_id FROM (
                     SELECT transitive t_in (1) t_out (2) T_DISTINCT T_NO_CYCLES
                         parent_id, id FROM post
                     UNION SELECT id AS parent_id, id FROM POST
                     ) pa 
-                JOIN content USING (id) 
-                LEFT JOIN action ON (action.actor_id = :user_id
-                                     AND action.type = 'version:ReadStatusChange')
-                LEFT JOIN action_on_post ON (
-                    action.id = action_on_post.id AND action_on_post.post_id = pa.id)
-                WHERE parent_id = :post_id_%d AND content.discussion_id= :discussion_id
-
+                WHERE parent_id = :post_id_%d
                 """ % n for n in range(len(post_ids))])
             # We have to specify distinct to avoid counting nulls. Go figure.
             stmt2 = """SELECT COUNT(DISTINCT x.post_id),
-                COUNT(DISTINCT x.view_id) FROM (%s) x""" % (stmt2,)
+                COUNT(DISTINCT action.id) FROM (%s) x
+                LEFT JOIN action_on_post ON (
+                     action_on_post.post_id = x.post_id)
+                LEFT JOIN action ON (action.actor_id = :user_id
+                        AND action.id = action_on_post.id
+                        AND action.type = 'version:ReadStatusChange')""" % (stmt2,)
             params = {'post_id_'+str(n): post_id for n, post_id in enumerate(post_ids)}
-            params.update(common_params)
+            params['user_id'] = user_id
             cpost, cview = list(cls.db().execute(text(stmt2).params(params))).pop()
             result.append((idea_id, cpost, cview))
         stmt3 = """SELECT MIN(root_idea.id) as idea_id,
