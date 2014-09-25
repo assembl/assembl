@@ -78,22 +78,26 @@ class Discussion(DiscussionBoundBase):
 
     def __init__(self, *args, **kwargs):
         super(Discussion, self).__init__(*args, **kwargs)
-        root_idea = kwargs.get('root_idea')
-        if root_idea:
-            root_idea.discussion = this
+        # create unless explicitly set to None
+        if 'root_idea' in kwargs:
+            root_idea = kwargs.get('root_idea')
+            if root_idea:
+                root_idea.discussion = this
         else:
             from .idea import RootIdea
             self.root_idea = RootIdea(discussion=self)
 
-        table_of_contents = kwargs.get('table_of_contents')
-        if table_of_contents:
-            table_of_contents.discussion = this
+        if 'table_of_contents' in kwargs:
+            table_of_contents = kwargs.get('table_of_contents')
+            if table_of_contents:
+                table_of_contents.discussion = this
         else:
             from .idea_graph_view import TableOfContents
             self.table_of_contents = TableOfContents(discussion=self)
-        next_synthesis = kwargs.get('next_synthesis')
-        if next_synthesis:
-            next_synthesis.discussion = this
+        if 'next_synthesis' in kwargs:
+            next_synthesis = kwargs.get('next_synthesis')
+            if next_synthesis:
+                next_synthesis.discussion = this
         else:
             from .idea_graph_view import Synthesis
             synthesis = Synthesis(discussion=self)

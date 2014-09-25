@@ -235,7 +235,8 @@ def orm_insert_listener(mapper, connection, target):
     """ This is to allow the root idea to send update to "All posts", 
     "Synthesis posts" and "orphan posts" in the table of ideas", if the post
     isn't otherwise linked to the table of idea """
-    target.discussion.root_idea.send_to_changes(connection)
+    if target.discussion.root_idea:
+        target.discussion.root_idea.send_to_changes(connection)
         
 event.listen(Post, 'after_insert', orm_insert_listener, propagate=True)
     

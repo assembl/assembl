@@ -355,6 +355,7 @@ JOIN post AS family_posts ON (
 
     def is_in_next_synthesis(self):
         next_synthesis = self.discussion.get_next_synthesis()
+        if not next_synthesis: return False
         return True if self in next_synthesis.ideas else False
 
     def send_to_changes(self, connection=None, operation=UPDATE_OP):
