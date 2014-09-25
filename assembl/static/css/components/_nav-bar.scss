@@ -15,10 +15,12 @@
 
   .navbar-left {
     float: left;
-    .logo-wrapper {
-      border-right: 2px solid #484840;
-      padding-right: 10px;
-      margin-right: 10px;
+    position: relative;
+    i.icon-infinite {
+      position: absolute;
+      right: -25px;
+      top: -6px;
+      color: $green;
     }
   }
 

@@ -1,7 +1,7 @@
 // The F* and powerful wrapper
 #wrapper {
   position: relative;
-  height: 100vh;
+  height: 99vh;
   min-width: $small_screen;
 
   @include transform(translateX(0));
