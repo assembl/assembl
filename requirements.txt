@@ -48,10 +48,10 @@ lxml==3.4.0
 meld3==1.0.0
 mock==1.0.1
 oauthlib==0.6.3
-paramiko==1.15.0
+paramiko==1.15.1
 pinocchio==0.4.1
 polib==1.0.5
-py==1.4.24
+py==1.4.25
 pyOpenSSL==0.14
 pycparser==2.10
 pycrypto==2.6.1
@@ -64,7 +64,7 @@ pyramid-jinja2==2.3.3
 pyramid-mailer==0.13
 pyramid-mako==1.0.2
 pyramid-tm==0.7
-pytest==2.6.2
+pytest==2.6.3
 pytest-cov==1.8.0
 pytest-localserver==0.3.3
 pytest-mock==0.4.0
@@ -85,7 +85,7 @@ simplejson==3.6.3
 six==1.8.0
 -e git+https://github.com/mrjoes/sockjs-tornado.git@master#egg=sockjs_tornado
 sockjsproxy==0.7.1
-sphinx-bootstrap-theme==0.4.1
+sphinx-bootstrap-theme==0.4.2
 splinter==0.6.0
 supervisor==3.1.2
 tornado==4.0.2
