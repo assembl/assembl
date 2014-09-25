@@ -7,67 +7,38 @@ $harvesterAvatarSize: 24px;
 
 // A wrapper for two or more .postit
 // ====================
-div.postitlist {
-  div.postit {
+.postitlist {
+
+  .postit {
     overflow: visible;
     min-width: 200px; //Width from the shadow below.
     margin: 1em;
-    padding: 1em;
     color: $gray2;
     font-size: 13px; //This should be rem or something - benoitg
-
     position: relative;
-    border-right: 1px solid #E8E8E8;
-    border-bottom: 1px solid #E8E8E8;
-    border-top: 0px none $postit-color-dark;
-    border-left: 5px solid $orange;
-    @include border-bottom-right-radius(5px);
     display: block;
-    background: $postit-color-dark;
-    @include background(
-            linear-gradient(top, $postit-color-dark, $postit-color-dark 40px, transparent 40px),
-            linear-gradient(top left, $postit-color-light, $postit-color-dark)
-    );
+    background-color: $purple4;
     &:hover {
       a.segment-link {
         visibility: visible !important;
       }
     }
 
-    @include transition(box-shadow 1s);
-
     // Quotation text
     // -----------
     .text-quotation {
+      @extend %icon;
       margin: 0 0 1em 0;
-      .icon-quote {
-        //content: "\00a0\00a0\00a0\00a0 ";//&nbsp;
-        //min-width: 1em;
-        max-height: 1.4em;
-        &:before {
-          font-size: 150%;
-          color: $orange;
-          position: relative;
-          margin-right: 0em;
-        }
-        vertical-align: middle;
 
-        &.quoteLeft:before {
-          top: -0.12em;
-          right: 0.3em;
-          margin-right: 0.2em;
-        }
-        &.quoteRight {
-          display: inline-block;
-          position: absolute;
-          vertical-align: top;
-          &:before {
-            @include transform(rotate(180deg));
-            top: 0.2em;
-            left: 0.3em;
-            margin-left: 0.2em;
-          }
-        }
+      &:before, &:after {
+        content: '\e805';
+        font-size: 9px;
+        margin-right: 10px;
+        color: $green;
+      }
+      &:after {
+        @include rotate(180);
+        margin-left: 10px;
       }
 
     }
@@ -80,54 +51,45 @@ div.postitlist {
         text-decoration: underline;
       }
     }
-    &:after {
-      content: "";
-      position: absolute;
-      z-index: -1;
-      right: -0px;
-      bottom: 20px;
-      width: 200px;
-      height: 25px;
-      background: rgba(0, 0, 0, 0.2);
-      @include box-shadow(2px 15px 5px rgba(0, 0, 0, 0.40));
-      @include transform(matrix(-1, -0.1, 0, 1, 0, 0));
-    }
-    .closeExtract {
-      margin-left: 1em;
-      &:hover {
-        cursor: pointer;
-      }
-    }
     .postit-footer {
       width: 100%;
       position: relative;
       margin-top: 0.5em;
       .extractOrigin {
-
         display: inline-block;
         padding-right: 1em;
-        width: 80%;
-        > img {
-          float: left;
-          margin-right: 0.5em;
-        }
-        .creatorName {
-
-        }
+        max-width: 60px;
         a.segment-link {
           position: relative;
           visibility: hidden;
         }
+        .creatorName {
+          color: $purple6;
+          font-size: 11px;
+        }
       }
-
       .segment-harvester {
         float: right;
-        max-width: $harvesterAvatarSize;
+        max-width: 60px;
+        .creatorName {
+          color: $gray4;
+          font-size: 11px;
+        }
       }
+      .avatar > * {
+        margin: 0 auto;
+      }
+    }
+
+    .extractOrigin {
+      max-width: 60px;
+
     }
   }
 }
 
-div.postitlist div.postit.is-highlighted {
-  @include box-shadow(0px 0px 10px rgba(0, 0, 0, .7));
+.postitlist {
+  .postit.is-highlighted {
+    @include box-shadow(0px 0px 10px rgba(0, 0, 0, .7));
+  }
 }

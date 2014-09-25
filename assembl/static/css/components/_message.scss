@@ -282,7 +282,7 @@ $previewNumLines: 4;
     box-sizing: border-box;
     width: $readUnreadIndicatorSize;
     height: $readUnreadIndicatorSize;
-    margin: 0px $mesageSpacing 0 $mesageSpacing*2;
+    margin: 0 0 0 $mesageSpacing*2;
     vertical-align: middle;
     border: 1px solid $gray;
     float: right;

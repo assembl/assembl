@@ -71,3 +71,105 @@
 .rcsxl .img-right, .xlarge .img-right, .rcsxl .imgRight, .xlarge .imgRight {
   margin-left: $spacingXl;
 }
+
+/*.ui-label {
+  display: inline-block;
+  margin: 0 1px $spacingXs 0;
+  padding: 1px 14px;
+  font-size: 11px;
+  background: $panelBackground;
+  //border: 1px solid $borderColor;
+  border-radius: 12px;
+
+  .vicon {
+    margin-right: -9px;
+    color: $borderColor;
+    font-size: 8px;
+  }
+
+  &:hover {
+    background: $panelBorder;
+
+    .vicon {
+      color: darken($borderColor, 25%);
+
+      &:hover {
+        color: $errorText;
+      }
+    }
+  }
+
+  a:hover,
+  a:focus {
+    .vicon {
+      color: $errorText;
+    }
+  }
+} */
+
+/*.ui-label-premium {
+  background: mix(#ffffff, $black, 24%);
+  border: none;
+  color: $white;
+  font-family: MuseoSlab, Arial, sans-serif;
+  padding: 3px 13px;
+  border-radius: 14px;
+  overflow: hidden;
+  height: 17px;
+
+  a {
+    color: $white;
+  }
+
+  &:hover {
+    background: mix(#ffffff, $black, 24%);
+  }
+}*/
+
+.ui-badge {
+  //@include gradient-vertical(#FF7919, #F56600);
+  background-color: $green;
+  border: 1px solid $gray3;
+  color: $white;
+  display: inline-block;
+  font-weight: 600;
+  padding: 1px 3px;
+  @extend .bras;
+}
+
+.ui-badge.ui-badge-alt {
+  //@include gradient-vertical(lighten($blueBright, 10%), $blueBright);
+  //border-color: $blueBright;
+}
+
+/*.ui-tag {
+  position: relative;
+  display: inline-block;
+  margin: 0 $spacingXs $spacingXs 0;
+  @include padding($rtl, $spacingXs, $spacingXl, $spacingXs, $spacingS);
+  border-radius: $borderRadiusS;
+  background: $green2;
+  color: $white;
+  white-space: nowrap;
+
+  .remove {
+    position: absolute;
+    top: 0;
+    @include right($rtl, 0);
+    height: 100%;
+    background: mix(#000000, $green2, 10%);
+    @include border-radius-right($rtl, $borderRadiusS);
+    padding: 0 ($spacingXs / 2);
+    line-height: 2.1em;
+
+    .vicon {
+      font-size: 8px;
+      color: white;
+    }
+
+    &:hover,
+    &:focus {
+      background: mix(#000000, $green2, 25%);
+    }
+  }
+} */

@@ -132,3 +132,10 @@ h6, .h6 {
   font-size: 13px;
   padding-bottom: (1em * $baseLineHeight / 3);
 }
+
+.h-bx {
+  border-bottom: 3px solid $purple3;
+  font-size: 16px;
+  padding: 0 0 7px 0;
+  font-family: $baseFontFamily;
+}

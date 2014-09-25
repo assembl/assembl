@@ -6,12 +6,12 @@
     //background: url(#{$img-dir}/icon/idea.svg) no-repeat left center;
     //padding-left: 2em;
     //background-size: auto 90%;
-    background-color: $green;
+
   }
   #ideaPanel-section-segments > legend > span {
     //background: #fff url(#{$img-dir}/icon/quotes.svg) no-repeat left center;
     //padding-left: 2em;
-    background-size: auto 90%;
+    //background-size: auto 90%;
   }
   #ideaPanel-section-synthesis > legend > span {
     //background: #fff url(#{$img-dir}/icon/map.svg) no-repeat left center;
@@ -26,6 +26,21 @@
     padding: 3px 0px 3px 4px;
   }
 
+}
+
+#ideaPanel-shorttitle {
+  @extend %icon;
+  .panel-editablearea {
+    font-size: 20px;
+  }
+  &:before, &:after {
+    font-size: 9px;
+    content: '\e805';
+  }
+  &:after {
+    float: right;
+    @include rotate(180);
+  }
 }
 
 .ideaPanel-legend {

@@ -5,13 +5,13 @@
   position: relative;
   z-index: 10;
   height: 100%;
-  border-right: 1px solid $gray1;
+  border-right: 1px solid $gray3;
   background-color: #fff;
   overflow: hidden;
   /*-webkit-transition: width 1s;
   transition: width 1s;*/
   .panel-section {
-    margin: 10px 0;
+    margin: 0;
     position: relative;
     padding: 0 10px;
     legend {
@@ -35,7 +35,8 @@
     }
     .panel-editablebox.is-editing {
       .panel-editablearea {
-        background-color: $white;
+        //background-color: $white;
+        color: $black;
       }
     }
   }
@@ -142,14 +143,14 @@
     @include no-selection;
   }
   @include z-index("float");
-  height: 50px;
+  height: 40px;
   padding: 0 10px;
   position: relative;
   background-color: $purple3;
   color: $white;
   .panel-header-title,
   .panel-header-close {
-    line-height: 50px;
+    line-height: 40px;
     color: $white;
   }
 }

@@ -36,6 +36,8 @@ $purple3: #432b42 !default;
 $purple4: #f2ecf8 !default;
 $purple5: #88698e !default;
 
+$purple6: #8047be !default;
+
 $orange1: #FFBD40 !default;
 $orange2: #FFA700 !default;
 
@@ -131,3 +133,7 @@ $grid_unit_min_size: $small_screen / $min_num_grid_units;
 $max_num_grid_units: round(2560px/$grid_unit_min_size);
 // message-list min 5, nav3, idea 4
 
+//badges
+
+$panelBackground: $white;
+$borderColor: #d1dce5;

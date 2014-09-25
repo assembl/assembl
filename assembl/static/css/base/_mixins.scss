@@ -234,3 +234,9 @@
   outline: 5px auto -webkit-focus-ring-color;
   outline-offset: -2px;
 }
+
+// rotate
+@mixin rotate($deg) {
+  @include transform(rotate(#{$deg}deg));
+}
+
