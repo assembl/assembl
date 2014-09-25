@@ -387,6 +387,10 @@
   vertical-align: bottom;
 }
 
+.vat {
+  vertical-align: top;
+}
+
 // Miscellaneous
 .cf, .clearfix {
   @include clearfixHack();

@@ -29,13 +29,13 @@ $gray1: #888888 !default;
 $gray2: #515151 !default;
 $gray3: #ECF0F1 !default;
 $gray4: #484848 !default;
+$gray5: #ebeaea !default;
 
 $purple1: #B36FE0 !default;
 $purple2: #9A3FD5 !default;
 $purple3: #432b42 !default;
 $purple4: #f2ecf8 !default;
 $purple5: #88698e !default;
-
 $purple6: #8047be !default;
 
 $orange1: #FFBD40 !default;
@@ -43,7 +43,7 @@ $orange2: #FFA700 !default;
 
 $black1: lighten($black, 18%) !default;
 
-$white1: rgba($white, 0.3) !default;
+$green1: rgba($green, 0.2) !default;
 
 // Border Radius
 $borderRadiusXs: 2px !default;
