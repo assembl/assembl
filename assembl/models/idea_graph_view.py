@@ -84,7 +84,8 @@ class SubGraphIdeaAssociation(DiscussionBoundBase):
     # reference to the "Idea" object for proxying
     idea = relationship("Idea")
 
-    def __init__(self, idea=None, sub_graph=None):
+    def __init__(self, idea=None, sub_graph=None, **kwargs):
+        super(SubGraphIdeaAssociation, self).__init__(**kwargs)
         self.idea = idea
         self.sub_graph = sub_graph
 
@@ -126,7 +127,8 @@ class SubGraphIdeaLinkAssociation(DiscussionBoundBase):
     # reference to the "IdeaLink" object for proxying
     idea_link = relationship("IdeaLink")
 
-    def __init__(self, idea_link=None, sub_graph=None):
+    def __init__(self, idea_link=None, sub_graph=None, **kwargs):
+        super(SubGraphIdeaLinkAssociation, self).__init__(**kwargs)
         self.idea_link = idea_link
         self.sub_graph = sub_graph
 
