@@ -190,7 +190,8 @@ define(function (require) {
                         that.$el.removeClass('read');
                     }
 
-                    data['nuggets'] = data.extracts.length;
+                    //TODO:  Make this asynchronous
+                    data['nuggets'] = that.model.getAnnotationsDEPRECATED().length;
 
                     data = that.transformDataBeforeRender(data);
                     that.$el.html(that.template(data));
