@@ -135,7 +135,7 @@ define(function (require) {
             var that = this;
             if (this.$el && this.$el.parent() && this.$el.parent().height()) {
                 var number_of_li = this.$('.side-menu > li').length;
-                var total_li_height = 40 * number_of_li;
+                var total_li_height = 38 * number_of_li;
 
                 var container_height = this.$el.parent().height();
 
@@ -144,7 +144,7 @@ define(function (require) {
             else { // fallback: set an initial estimation
                 var _header = $('#header').height(),
                     _window = $(window).height(),
-                    _li = 40 * 3,
+                    _li = 38 * 3,
                     _headerGroup = $(".groupHeader").first().height() ? $(".groupHeader").first().height() : ( $(".groupHeader.editable").first() ? 25 : 3 );
                 _sideBarHeight = (_window - _header) - _headerGroup;
                 this._accordionContentHeight = (_sideBarHeight - _li) - 15;
