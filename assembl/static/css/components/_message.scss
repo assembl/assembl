@@ -77,17 +77,22 @@ $previewNumLines: 4;
 
   a.readMoreOrLess {
     font-style: normal;
-    color: $purple1;
+    color: $gray4;
     text-decoration: none;
     &:hover {
       text-decoration: underline;
     }
+    i {
+      color: $green;
+      font-size: 14px;
+    }
   }
 
   .nb-nuggets {
-    color: $gray1;
+    color: $gray4;
     i {
       font-size: 140%;
+      color: $green;
     }
     span {
       vertical-align: top;
@@ -173,12 +178,6 @@ $previewNumLines: 4;
     .message-menu-actions {
       visibility: hidden;
       opacity: 0;
-      /*i {
-        visibility: visible;
-      }*/
-    }
-
-    .message-date {
     }
 
     .message-body {
@@ -319,15 +318,13 @@ $previewNumLines: 4;
 
   //
   .message-menu {
-    font-size: 13px; //This should be rem or something - benoitg
+    font-size: 1rem; //This should be rem or something - benoitg
     a {
-      color: $gray1;
-      opacity: 0.7;
+      color: $gray4;
       i {
-        opacity: 0.5;
+        color: $green;
       }
       &:hover {
-        color: $purple1;
         opacity: 1;
         text-decoration: none;
       }
@@ -501,7 +498,13 @@ body.js_annotatorUserCannotAddExtract > .textbubble {
   &.root {
     //Root does not have border, bump it right
     margin-left: 0;
+    :before {
+      border-right-color: #999;
+      border-right-color: rgba(0, 0, 0, .25);
+      border-left-width: 0;
+    }
   }
+
   &.child {
     // background: url(#{$img-dir}/messagelist/messagelist-link-last.png) -6 top no-repeat;
     border-left: solid 1px #C7C6C2;

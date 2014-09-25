@@ -37,7 +37,6 @@ define(function (require) {
      * @class views.MessageList
      */
     var MessageList = AssemblPanel.extend({
-
         panelType: 'messageList',
         className: 'panel messageList',
         lockable: true,
@@ -636,7 +635,7 @@ define(function (require) {
             this.renderedMessageViewsCurrent = {};
             this.suspendAnnotatorRefresh();
             this.previousScrollTarget = this.getPreviousScrollTarget();
-            
+
             if ((this.currentViewStyle == this.ViewStyles.THREADED) ||
                 (this.currentViewStyle == this.ViewStyles.NEW_MESSAGES)) {
                 models = this.visitorRootMessagesToDisplay;
@@ -648,127 +647,127 @@ define(function (require) {
                 numMessages = _.size(models);
                 views_promise = this.getRenderedMessagesFlat(models, requestedOffsets, returnedOffsets);
             }
-            $.when( views_promise ).done(function(views) {
-              //console.log("requestedOffsets:",requestedOffsets, "returnedOffsets:", returnedOffsets, "numMessages", numMessages);
-              that.offsetStart = returnedOffsets['offsetStart']
-              that.offsetEnd = returnedOffsets['offsetEnd']
+            $.when(views_promise).done(function (views) {
+                //console.log("requestedOffsets:",requestedOffsets, "returnedOffsets:", returnedOffsets, "numMessages", numMessages);
+                that.offsetStart = returnedOffsets['offsetStart']
+                that.offsetEnd = returnedOffsets['offsetEnd']
 
-              if (views.length === 0) {
-                that.ui.messageList.append(Ctx.format("<div class='margin'>{0}</div>", i18n.gettext('No messages')));
-              } else {
-                that.ui.messageList.append(views);
-              }
-              that.scrollToPreviousScrollTarget();
-              if (that.offsetStart <= 0) {
-                that.ui.topArea.addClass('hidden');
-              } else {
-                that.ui.topArea.removeClass('hidden');
-              }
+                if (views.length === 0) {
+                    that.ui.messageList.append(Ctx.format("<div class='margin'>{0}</div>", i18n.gettext('No messages')));
+                } else {
+                    that.ui.messageList.append(views);
+                }
+                that.scrollToPreviousScrollTarget();
+                if (that.offsetStart <= 0) {
+                    that.ui.topArea.addClass('hidden');
+                } else {
+                    that.ui.topArea.removeClass('hidden');
+                }
 
-              if (that.offsetEnd >= (numMessages - 1)) {
-                that.ui.bottomArea.addClass('hidden');
-              } else {
-                that.ui.bottomArea.removeClass('hidden');
-              }
+                if (that.offsetEnd >= (numMessages - 1)) {
+                    that.ui.bottomArea.addClass('hidden');
+                } else {
+                    that.ui.bottomArea.removeClass('hidden');
+                }
 
-              that.resumeAnnotatorRefresh();
-              that.trigger("messageList:render_complete", "Render complete");
+                that.resumeAnnotatorRefresh();
+                that.trigger("messageList:render_complete", "Render complete");
             });
 
         },
 
         /**
-         * Used for processing costly operations that needs to happen after 
+         * Used for processing costly operations that needs to happen after
          * the dom is displayed to the user.
-         * 
+         *
          * It will be processed with a delay between each call to avoid locaking the browser
          */
         requestPostRenderSlowCallback: function (callback) {
-          this._postRenderSlowCallbackStack.push(callback);
-          
+            this._postRenderSlowCallbackStack.push(callback);
+
         },
-        
+
         /**
          * The worker
          */
         _postRenderSlowCallbackWorker: function (messageListView) {
-          var that = this;
-          //console.log("_postRenderSlowCallbackWorker fired, stack length: ", this._postRenderSlowCallbackStack.length)
-          
-          if(this._postRenderSlowCallbackStack.length > 0) {
-            //console.log("_postRenderSlowCallbackWorker fired with non-empty stack, popping a callback from stack of length: ", this._postRenderSlowCallbackStack.length)
-            var callback = this._postRenderSlowCallbackStack.shift();
-            callback();
-          }
-          this._postRenderSlowCallbackWorkerInterval = setTimeout(function() {
-            that._postRenderSlowCallbackWorker();
-          }, this.SLOW_WORKER_DELAY_VALUE)
+            var that = this;
+            //console.log("_postRenderSlowCallbackWorker fired, stack length: ", this._postRenderSlowCallbackStack.length)
+
+            if (this._postRenderSlowCallbackStack.length > 0) {
+                //console.log("_postRenderSlowCallbackWorker fired with non-empty stack, popping a callback from stack of length: ", this._postRenderSlowCallbackStack.length)
+                var callback = this._postRenderSlowCallbackStack.shift();
+                callback();
+            }
+            this._postRenderSlowCallbackWorkerInterval = setTimeout(function () {
+                that._postRenderSlowCallbackWorker();
+            }, this.SLOW_WORKER_DELAY_VALUE)
         },
-        
+
         /**
-         * 
+         *
          */
         _startPostRenderSlowCallbackProcessing: function () {
-          var that = this;
-          this._postRenderSlowCallbackWorkerInterval = setTimeout(function() {
-              that._postRenderSlowCallbackWorker();
+            var that = this;
+            this._postRenderSlowCallbackWorkerInterval = setTimeout(function () {
+                that._postRenderSlowCallbackWorker();
             }, this.SLOW_WORKER_DELAY_VALUE);
         },
         /**
          * Stops processing and clears the queue
          */
         _clearPostRenderSlowCallbacksCallbackProcessing: function () {
-          clearTimeout(this._postRenderSlowCallbackWorkerInterval);
-          this._postRenderSlowCallbackStack = [];
+            clearTimeout(this._postRenderSlowCallbackWorkerInterval);
+            this._postRenderSlowCallbackStack = [];
         },
 
         /**
-         * Re-init Annotator.  Needs to be done for all messages when any 
-         * single message has been re-rendered.  Otherwise, the annotations 
+         * Re-init Annotator.  Needs to be done for all messages when any
+         * single message has been re-rendered.  Otherwise, the annotations
          * will not be shown.
          */
         doAnnotatorRefresh: function () {
-          if (Ctx.debugRender) {
-            console.log("messageList:doAnnotatorRefresh() called for "+_.size(this.renderedMessageViewsCurrent)+" messages");
-          }
-          this.annotatorRefreshRequested = false;
-          this.initAnnotator();
-          _.each(this.renderedMessageViewsCurrent, function(messageView){
-            messageView.loadAnnotations();
+            if (Ctx.debugRender) {
+                console.log("messageList:doAnnotatorRefresh() called for " + _.size(this.renderedMessageViewsCurrent) + " messages");
+            }
+            this.annotatorRefreshRequested = false;
+            this.initAnnotator();
+            _.each(this.renderedMessageViewsCurrent, function (messageView) {
+                messageView.loadAnnotations();
             });
         },
-        
+
         /**
-         * Should be called by a messageview anytime it has annotations and has 
+         * Should be called by a messageview anytime it has annotations and has
          * rendered a view that shows annotations.
          */
         requestAnnotatorRefresh: function () {
-          if(this.annotatorRefreshSuspended === true) {
-            this.annotatorRefreshRequested = true;
-          }
-          else {
-            this.doAnnotatorRefresh();
-          }
-          
+            if (this.annotatorRefreshSuspended === true) {
+                this.annotatorRefreshRequested = true;
+            }
+            else {
+                this.doAnnotatorRefresh();
+            }
+
         },
-        
+
         /**
          * Suspends annotator refresh during initial render
          */
         suspendAnnotatorRefresh: function () {
-          this.annotatorRefreshSuspended = true;
+            this.annotatorRefreshSuspended = true;
         },
         /**
-         * Will call a refresh synchronously if any refresh was requested 
+         * Will call a refresh synchronously if any refresh was requested
          * while suspended
          */
         resumeAnnotatorRefresh: function () {
-          this.annotatorRefreshSuspended = false;
-          if (this.annotatorRefreshRequested === true) {
-            this.doAnnotatorRefresh();
-          }
+            this.annotatorRefreshSuspended = false;
+            if (this.annotatorRefreshRequested === true) {
+                this.doAnnotatorRefresh();
+            }
         },
-        
+
         /**
          * Show the next bunch of messages to be displayed.
          */
@@ -1113,7 +1112,7 @@ define(function (require) {
 
             return list;
         },
-        
+
         /**
          * Return a list with all views.el already rendered for threaded views
          * @param {Message.Model[]} list of messages to render at the current level
@@ -1156,15 +1155,15 @@ define(function (require) {
             //This actually replaces the for loop for sibblings
             model = sibblings.shift();
             //console.log("model",model);
-            if(!model) {
-              return list;
+            if (!model) {
+                return list;
             }
             current_message_info = data_by_object[model.getId()];
-            
+
             //Only process if message is within requested offsets
             if ((current_message_info['traversal_order'] >= offsets['offsetStart'])
                 && (current_message_info['traversal_order'] <= offsets['offsetEnd'])) {
-              
+
                 if (current_message_info['last_sibling_chain'] === undefined) {
                     current_message_info['last_sibling_chain'] = buildLastSibblingChain(model, data_by_object);
                 }
@@ -1173,49 +1172,49 @@ define(function (require) {
                 view = new MessageFamilyView({model: model, messageListView: this}, last_sibling_chain);
                 view.currentLevel = level;
                 children = current_message_info['children'];
-                
+
                 //Process children, if any
-                if(_.size(children)>0) {
-                  var subviews_promise = this.getRenderedMessagesThreaded(children, level + 1, data_by_object, offsets);
+                if (_.size(children) > 0) {
+                    var subviews_promise = this.getRenderedMessagesThreaded(children, level + 1, data_by_object, offsets);
                 }
                 else {
-                  var subviews_promise = [];
+                    var subviews_promise = [];
                 }
 
                 //Process sibblings, if any (this is for-loop rewritten as recursive calls to avoid locking the browser)
-                if(sibblings.length > 0) {
-                  var sibblingsviews_promise = this.getRenderedMessagesThreaded(sibblings, level, data_by_object, offsets);
+                if (sibblings.length > 0) {
+                    var sibblingsviews_promise = this.getRenderedMessagesThreaded(sibblings, level, data_by_object, offsets);
                 }
                 else {
-                  var sibblingsviews_promise = [];
+                    var sibblingsviews_promise = [];
                 }
-                
-                $.when(subviews_promise, sibblingsviews_promise).done(function(subviews, sibblingsviews) {
-                  //Note:  benoitg: We could put a setTimeout here, but apparently the promise is enough to unlock the browser
-                  view.hasChildren = (subviews.length > 0);
-                  list.push(view.render().el);
-                  view.$('.messagelist-children').append(subviews);
 
-                  /* TODO:  benoitg:  We need good handling when we skip a grandparent, but I haven't ported this code yet.
-                   * We should also handle the case where 2 messages have the same parent, but the parent isn't in the set */
-                  /*if (!isValid && this.hasDescendantsInFilter(model)) {
-                   //Generate ghost message
-                   var ghost_element = $('<div class="message message--skip"><div class="skipped-message"></div><div class="messagelist-children"></div></div>');
-                   console.log("Invalid message was:",model);
-                   list.push(ghost_element);
-                   children = model.getChildren();
-                   ghost_element.find('.messagelist-children').append( this.getRenderedMessagesThreaded(
-                   children, level+1, data_by_object) );
-                   }
-                   */
-                  if(sibblingsviews.length > 0) {
-                    list = list.concat(sibblingsviews);
-                  }
-                  defer.resolve(list);
+                $.when(subviews_promise, sibblingsviews_promise).done(function (subviews, sibblingsviews) {
+                    //Note:  benoitg: We could put a setTimeout here, but apparently the promise is enough to unlock the browser
+                    view.hasChildren = (subviews.length > 0);
+                    list.push(view.render().el);
+                    view.$('.messagelist-children').append(subviews);
+
+                    /* TODO:  benoitg:  We need good handling when we skip a grandparent, but I haven't ported this code yet.
+                     * We should also handle the case where 2 messages have the same parent, but the parent isn't in the set */
+                    /*if (!isValid && this.hasDescendantsInFilter(model)) {
+                     //Generate ghost message
+                     var ghost_element = $('<div class="message message--skip"><div class="skipped-message"></div><div class="messagelist-children"></div></div>');
+                     console.log("Invalid message was:",model);
+                     list.push(ghost_element);
+                     children = model.getChildren();
+                     ghost_element.find('.messagelist-children').append( this.getRenderedMessagesThreaded(
+                     children, level+1, data_by_object) );
+                     }
+                     */
+                    if (sibblingsviews.length > 0) {
+                        list = list.concat(sibblingsviews);
+                    }
+                    defer.resolve(list);
                 });
             }
-            else{
-              return list;
+            else {
+                return list;
             }
             return defer.promise();
         },

@@ -2,11 +2,11 @@
 // ===========================
 
 .messageSend {
-  margin: 1em 0 1em 0;
+  margin: 1em 0 0.5em 0;
   display: table;
-  width: 98%;
-  background-color: $gray3;
-  padding: 15px 10px 10px 10px;
+  //width: 98%;
+  background-color: #cccccc;
+  padding: 15px;
   .hidden {
     display: none;
   }

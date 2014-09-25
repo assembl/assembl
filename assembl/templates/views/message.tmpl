@@ -91,12 +91,12 @@
     <h4 class="message-subject js_messageHeader h4"><%= subject %></h4>
     <div class="message-body <%= bodyFormatClass %> ellipsis" id="<%= messageBodyId %>">
       <p class="mvn more"><%= body %></p>{# Do NOT introduce whitespace within this div #}
-      <a class="readMore readMoreOrLess js_readMore hidden" href="#" alt="{{ gettext('Read more') }}">{{ gettext('Read more') }}</a>
+      <a class="readMore readMoreOrLess js_readMore hidden" href="#" alt="{{ gettext('Read more') }}"><i class="icon-arrowdown"></i> {{ gettext('Read more') }}</a>
     </div>
   <% } else if( viewStyle == ctx.AVAILABLE_MESSAGE_VIEW_STYLES.FULL_BODY ){ %>
     <h4 class="message-subject js_messageHeader h4"><%= subject %></h4>
     <div class="message-body js_messageBodyAnnotatorSelectionAllowed <%= bodyFormatClass %>" id="<%= messageBodyId %>"><%= body %></div>
-    <a class="readLess readMoreOrLess js_readLess hidden" href="#" alt="{{ gettext('Read less') }}">{{ gettext('Read less') }}</a>
+    <a class="readLess readMoreOrLess js_readLess hidden" href="#" alt="{{ gettext('Read less') }}"><i class="icon-arrowup"></i> {{ gettext('Read less') }}</a>
     <div class="message-replybox"></div>
   <% } %>
   <div class="message-menu message-menu-actions">
