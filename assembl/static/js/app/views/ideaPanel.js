@@ -61,9 +61,10 @@ define(function (require) {
             'click #session-modal': "createWidgetSession"
         },
 
-        getTitle: function() {
+        getTitle: function () {
             return i18n.gettext('Idea');
         },
+
         tooltip: i18n.gettext('Detailled information about the currently selected idea in the Table of ideas'),
 
         /**
@@ -92,7 +93,7 @@ define(function (require) {
             }
         },
 
-        renderTemplateGetExtractsLabel: function() {
+        renderTemplateGetExtractsLabel: function () {
             this.$el.find('#ideaPanel-section-segments-legend').html(
                 this.getExtractsLabel());
         },
@@ -293,10 +294,10 @@ define(function (require) {
                     this.segmentList.reset();
                     //console.log("setCurrentIdea:  setting up new listeners for "+this.model.id);
                     this.listenTo(this.model, 'change', ideaChangeCallback);
-                    this.listenTo(this.model, 'replacedBy', function(m) {
+                    this.listenTo(this.model, 'replacedBy', function (m) {
                         that.onReplaced(m);
                     });
-                    this.listenTo(this.model, 'acquiredId', function(m) {
+                    this.listenTo(this.model, 'acquiredId', function (m) {
                         // model has acquired an ID. Reset everything.
                         var model = that.model;
                         that.model = null;

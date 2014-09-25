@@ -8,16 +8,12 @@
   border-right: 1px solid $gray3;
   background-color: #fff;
   overflow: hidden;
-  /*-webkit-transition: width 1s;
-  transition: width 1s;*/
   .panel-section {
     margin: 0;
     position: relative;
     padding: 0 10px;
     legend {
       height: 1.8em;
-      //position: absolute;
-      //top: -0.9em; // 1/2 x height
       padding: 0;
       font-weight: bold;
       span {
@@ -129,7 +125,6 @@
   }
 }
 
-
 // Vertical divisor
 // ----------------
 .panel-divisor {
@@ -148,10 +143,18 @@
   position: relative;
   background-color: $purple3;
   color: $white;
+
   .panel-header-title,
   .panel-header-close {
     line-height: 40px;
     color: $white;
+  }
+
+  .panel-header-title {
+    i {
+      font-size: 22px;
+      color: $green;
+    }
   }
 }
 
@@ -190,7 +193,7 @@
 
 .panel-editablebox.is-editing > div:first-child,
 .panel-editablebox.is-editing > div:last-child {
-    background: #ddd;
+  background: #ddd;
 }
 
 .panel-editablearea.canEdit {
@@ -220,7 +223,7 @@
 
 .panelContents > div {
   /* probably not the best solution */
-  height: 100%;
+  height: 99%;
 }
 
 .groupPanel {
@@ -238,9 +241,8 @@
   }
 }
 
-
-@for $screen_grid_size from $min_num_grid_units  through ($max_num_grid_units) {
-  @media (min-width: floor($grid_unit_min_size * $screen_grid_size) + 1px ) {
+@for $screen_grid_size from $min_num_grid_units through ($max_num_grid_units) {
+  @media (min-width: floor($grid_unit_min_size * $screen_grid_size) + 1px) {
     #groupsContainer.allGroupsGridSize-#{$screen_grid_size} {
       .groupPanel {
         @for $panel_width from 1 through min($max_panel_unit_size, $screen_grid_size) {

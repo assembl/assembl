@@ -269,7 +269,7 @@ define(function (require) {
             if (this.clipboard) {
                 var numExtracts = this.clipboard.models.length;
                 this.ui.clipboardCount.html("(" + numExtracts + ")");
-                this.panelWrapper.resetTitle(i18n.gettext('Clipboard') + " (" + numExtracts + ")");
+                this.panelWrapper.resetTitle("<i class='icon-clipboard'></i> " + i18n.gettext('Clipboard') + " (" + numExtracts + ")");
             } else {
                 this.ui.clipboardCount.html("");
                 this.panelWrapper.resetTitle(i18n.gettext('Clipboard') + " (" + i18n.gettext('empty') + ")");
