@@ -45,8 +45,8 @@
   //border-bottom: $idealist-border;
 
   &:hover {
-    background-color: $white1;
-    border-right: 4px solid #4eba7d;
+    background-color: $green1;
+    border-right: 4px solid $green;
     .idealist-counter {
       color: $black;
     }
@@ -81,8 +81,8 @@
   }
 
   .idealist-item.is-selected > & {
-    background-color: $white1;
-    border-right: 4px solid #4eba7d;
+    background-color: $green1;
+    border-right: 4px solid $green;
     .idealist-counter {
       color: $white;
     }

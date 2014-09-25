@@ -115,7 +115,7 @@ define(function (require) {
         },
 
         getTitle: function () {
-            return i18n.gettext(' ');
+            return i18n.gettext('Debate');
         },
 
         /**
