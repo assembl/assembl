@@ -6,15 +6,94 @@ from sqlalchemy.orm import class_mapper, undefer, with_polymorphic
 from sqlalchemy.orm.session import make_transient
 from sqlalchemy.orm.properties import ColumnProperty
 
-from ..models import DiscussionBoundBase, Discussion, AgentProfile, Webpage, Permission, Role
+from ..models import (
+    DiscussionBoundBase, Discussion, AgentProfile, Webpage, Permission,
+    Role, IdentityProvider, IdentityProviderAccount, EmailAccount, User)
 from assembl.lib.sqla import class_registry
 
-no_traverse = (AgentProfile, Webpage, Permission, Role)
-early_relations = {
-    Discussion.__class__: {
-        Discussion.root_idea.property,
-        Discussion.table_of_contents.property}
-}
+def find_or_create_object_by_keys(db, obj, keys, columns=None):
+    args = {key: getattr(obj, key) for key in keys}
+    eq = db.query(obj.__class__).filter_by(**args).first()
+    if eq is None:
+        if columns is not None:
+            args.update({key: getattr(obj, key) for key in columns})
+        eq = obj.__class__(**args)
+        db.add(eq)
+    return eq
+
+def find_or_create_permission(db, perm):
+    assert isinstance(perm, Permission)
+    return find_or_create_object_by_keys(db, perm, ['name'])
+
+def find_or_create_role(db, role):
+    assert isinstance(role, Role)
+    return find_or_create_object_by_keys(db, role, ['name'])
+
+def find_or_create_webpage(db, page):
+    assert isinstance(page, Webpage)
+    page = find_or_create_object_by_keys(db, page, ['url'])
+    # Do something with last_modified_date?
+    return page
+
+def find_or_create_identity_provider(db, provider):
+    assert isinstance(provider, IdentityProvider)
+    return find_or_create_object_by_keys(db, obj, ['provider_type', 'name'])
+
+def find_or_create_email_account(db, account):
+    assert isinstance(account, EmailAccount)
+    return find_or_create_object_by_keys(db, obj, ['email'], ['preferred'])
+
+def find_or_create_provider_account(db, account):
+    assert isinstance(account, IdentityProviderAccount)
+    provider = find_or_create_identity_provider(account.provider)
+    args = {
+        "provider": provider,
+        "userid": account.userid,
+        "username": account.username,
+        "domain": account.domain
+    }
+    account = db.query(IdentityProviderAccount).filter_by(**args).first()
+    if account is None:
+        for k in ['profile_info', 'picture_url']:
+        args[k] = getattr(account, k)
+        account = IdentityProvider(**args)
+        db.add(account)
+    return account
+
+def find_or_create_agent_profile(db, profile):
+    assert isinstance(profile, AgentProfile)
+    accounts = []
+    profiles = set()
+    for account in profile.accounts:
+        if isinstance(account, EmailAccount):
+            eq = find_or_create_email_account(account)
+        elif isinstance(account, IdentityProviderAccount):
+            eq= find_or_create_provider_account(account)
+        if eq.profile:
+            profiles.add(eq.profile)
+        accounts.append(eq)
+    if not profiles:
+        cols = ['name', 'description']
+        if isinstance(profile, User):
+            cols += ["preferred_email", "timezone"]
+        new_profile = AgentProfile(**{k: getattr(profile, k) for k in cols})
+        db.add(new_profile)
+    else:
+        new_profile = profiles.pop()
+        while profiles:
+            new_profile = new_profile.merge(profiles.pop())
+    for account in accounts:
+        if account.profile is None:
+            account.profile = new_profile
+            db.add(account)
+    return new_profile
+
+special_classes = {
+    AgentProfile: find_or_create_agent_profile,
+    User: find_or_create_agent_profile,
+    Webpage: find_or_create_webpage,
+    Permission: find_or_create_permission,
+    Role: find_or_create_role}
 
 def print_path(path):
     print [(x, y.__class__.__name__, y.id) for (x,y) in path]
@@ -48,7 +127,7 @@ def recursive_fetch(ob, visited=None):
             if subob in visited:
                 continue
             visited.add(subob)
-            if isinstance(subob, no_traverse):
+            if isinstance(subob, special_classes.keys()):
                 continue
             recursive_fetch(subob, visited)
 
@@ -101,7 +180,6 @@ def clone_discussion(from_session, discussion_id, to_session=None, new_slug=None
         changes[discussion]['slug'] = new_slug or (discussion.slug + "_copy")
     else:
         changes[discussion]['slug'] = new_slug or discussion.slug
-    excludeClasses = no_traverse
     copies_of = {}
     copies = set()
     in_process = set()
@@ -122,9 +200,13 @@ def clone_discussion(from_session, discussion_id, to_session=None, new_slug=None
         if ob in in_process:
             print "in process", ob.__class__, ob.id
             return None
-        if isinstance(ob, excludeClasses):
-            copies_of[ob] = ob
-            return ob
+        if isinstance(ob, special_classes.keys()):
+            if from_session == to_session:
+                copy = ob
+            else:
+                copy = special_classes[ob.__class__](ob)
+            copies_of[ob] = copy
+            return copy
         if isinstance(ob, DiscussionBoundBase):
             assert discussion_id == ob.get_discussion_id()
         print "recursive_clone",
@@ -185,8 +267,13 @@ def clone_discussion(from_session, discussion_id, to_session=None, new_slug=None
     def stage_2_rec_clone(ob, path):
         if ob in treating:
             return
-        if isinstance(ob, excludeClasses):
-            return
+        if isinstance(ob, special_classes.keys()):
+            if from_session == to_session:
+                copy = ob
+            else:
+                copy = special_classes[ob.__class__](ob)
+            copies_of[ob] = copy
+            return copy
         print "stage_2_rec_clone",
         print_path(path)
         treating.add(ob)
