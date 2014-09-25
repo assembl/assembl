@@ -51,12 +51,12 @@ define(function (require) {
             this.setSideBarHeight();
             //this.notification.show(new sidebarNotification());
         },
-        toggleMenuByName: function(itemName){
-            var elm = this.$('.nav[data-view='+itemName+']');
+        toggleMenuByName: function (itemName) {
+            var elm = this.$('.nav[data-view=' + itemName + ']');
             this.toggleMenuByElement(elm);
         },
-        toggleMenuByEvent: function(evt){
-            if ( $(evt.target).hasClass("panel-header-minimize") )
+        toggleMenuByEvent: function (evt) {
+            if ($(evt.target).hasClass("panel-header-minimize"))
                 return;
             var elm = $(evt.currentTarget); // use currentTarget instead of target, so that we are sure that it is a .nav element
             this.toggleMenuByElement(elm);
@@ -133,29 +133,29 @@ define(function (require) {
         initVar: function () {
             // check wether DOM elements are already rendered
             var that = this;
-            if ( this.$el && this.$el.parent() && this.$el.parent().height() )
-            {
+            if (this.$el && this.$el.parent() && this.$el.parent().height()) {
                 var number_of_li = this.$('.side-menu > li').length;
-                var total_li_height = 50 * number_of_li;
+                var total_li_height = 40 * number_of_li;
 
                 var container_height = this.$el.parent().height();
 
                 this._accordionContentHeight = container_height - total_li_height - 10;
             }
-            else
-            { // fallback: set an initial estimation
+            else { // fallback: set an initial estimation
                 var _header = $('#header').height(),
-                _window = $(window).height(),
-                    _li = 50 * 3,
-                _headerGroup = $(".groupHeader").first().height() ? $(".groupHeader").first().height() : ( $(".groupHeader.editable").first() ? 25 : 3 );
+                    _window = $(window).height(),
+                    _li = 40 * 3,
+                    _headerGroup = $(".groupHeader").first().height() ? $(".groupHeader").first().height() : ( $(".groupHeader.editable").first() ? 25 : 3 );
                 _sideBarHeight = (_window - _header) - _headerGroup;
                 this._accordionContentHeight = (_sideBarHeight - _li) - 15;
-                if ( ++this._accordionHeightTries < 10 ) // prevent infinite loop
+                if (++this._accordionHeightTries < 10) // prevent infinite loop
                 {
-                    setTimeout(function(){that.setSideBarHeight()}, 500);
+                    setTimeout(function () {
+                        that.setSideBarHeight()
+                    }, 500);
                 }
             }
-            
+
         },
 
         serializeData: function () {

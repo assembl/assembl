@@ -2,7 +2,7 @@
   <li>
     <a href="#" class="nav" data-view="home"><i class="icon-home"></i>&nbsp;&nbsp;{{ gettext('Home') }}
     <% if ( hasMinimize ){ %>
-      <span class="js_minimizePanel panel-header-minimize btn" data-toggle="tooltip" data-placement="top" title="{{gettext('Minimize panel')}}">
+      <span class="js_minimizePanel panel-header-minimize btn btn-xs" data-toggle="tooltip" data-placement="top" title="{{gettext('Minimize panel')}}">
         <i class="icon-arrowleft"></i>
       </span>
     <% } %>
@@ -12,7 +12,7 @@
   <li>
     <a href="#" class="nav" data-view="debate"><i class="icon-discuss"></i>&nbsp;&nbsp;{{ gettext('Debate') }}
       <% if (canAdd) { %>
-      <span id="ideaList-addbutton" class="btn fr js_addIdeaFromIdeaList" data-toggle="tooltip" data-placement="top" title="{{ gettext('Add idea') }}">
+      <span id="ideaList-addbutton" class="btn btn-xs fr js_addIdeaFromIdeaList" data-toggle="tooltip" data-placement="top" title="{{ gettext('Add idea') }}">
         <i class="icon-add-2"></i>
       </span>
       <% } %>
