@@ -1,11 +1,11 @@
 #groupsContainer {
   position: absolute;
-  top: 50px;
+  top: 40px;
   right: 0;
   bottom: 0;
   left: 0;
   min-height: 400px;
-  height: 95%;
+  //height: 95%;
   height: calc(100% - 35px);
   overflow-x: auto;
   overflow-y: hidden;
@@ -118,11 +118,11 @@
         position: relative;
         > a.nav {
           display: block;
-          height: 50px;
+          height: 40px;
           text-decoration: none;
           background-color: $purple3;
           color: $white;
-          line-height: 35px;
+          //line-height: 40px;
           padding-left: 10px;
           font-size: $smallFontSize;
           &.active {
@@ -134,7 +134,6 @@
           }
           i {
             font-size: 22px;
-            //vertical-align: middle;
             color: $green;
           }
         }

@@ -16,31 +16,40 @@
 
 .ideaPanel {
   .panel-body {
-    top: 50px;
+    top: 40px;
   }
 }
 
-.ideaPanelNuggets {
-  cursor: pointer;
+.nugget-indice {
+  position: relative;
+  left: 20px;
+  float: right;
+  border: 1px solid $purple5;
+  @include border-radius(50%);
+  padding: 2px 0px;
 
-  i:before {
-    font-size: 150%;
-    margin: 0;
-    padding: 0;
-    width: 24px;
-  }
+  .nugget {
+    cursor: pointer;
 
-  .icon-diamond {
-    color: $gray;
-  }
+    i:before {
+      font-size: 150%;
+      margin: 0;
+      padding: 0;
+      width: 24px;
+    }
 
-  &:hover .icon-diamond {
-    color: $orange1;
-  }
-
-  &.isSelected {
     .icon-diamond {
+      color: $gray;
+    }
+
+    &:hover .icon-diamond {
       color: $orange1;
+    }
+
+    &.isSelected {
+      .icon-diamond {
+        color: $orange1;
+      }
     }
   }
 }
@@ -52,5 +61,18 @@
 #ideaPanel-definition {
   .panel-editablearea > * {
     color: $white;
+  }
+}
+
+.ideaPanel-section-contributors {
+  background-color: #f5f5f5;
+  .ideaPanel-contributors {
+    i.icon-user {
+      color: $green;
+      font-size: 20px;
+    }
+    .contributor {
+      font-size: 30px;
+    }
   }
 }

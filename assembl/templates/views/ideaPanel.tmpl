@@ -42,6 +42,25 @@
         <% } %>
     </fieldset>
 
+
+    {#<fieldset class="ideaPanel-section-contributors panel-section pvs">
+      <span class="ideaPanel-contributors"><i class="icon-user"></i> {{ gettext('contributor') }}</span>
+      <div class="gr">
+         <div class="gu gu1of6 contributor">
+          <i class="icon-user"></i>
+         </div>
+         <div class="gu gu1of6 contributor">
+           <i class="icon-user"></i>
+         </div>
+         <div class="gu gu1of6 contributor">
+           <i class="icon-user"></i>
+         </div>
+         <div class="gu gu1of6 contributor">
+           <i class="icon-user"></i>
+         </div>
+      </div>
+    </fieldset>#}
+
     {#
     <fieldset id="ideaPanel-section-subideas" class="panel-section">
         <legend data-toggle="tooltip" title="{{gettext('The children of this idea.')}}">
@@ -58,16 +77,20 @@
     <fieldset id="ideaPanel-section-segments" class="panel-section">
       <% if(Ctx.userCanChangeUi()){ %>
         <legend class="plxs" id="ideaPanel-section-segments-legend" data-toggle="tooltip" title="{{gettext('Expressions of this idea in segments of posts or on the web')}}">
-            <span><% print(getExtractsLabel()) %></span>
+           <span><% print(getExtractsLabel()) %></span>
         </legend>
+      <% } else { %>
+      <legend class="plxs" id="ideaPanel-section-segments-legend" data-toggle="tooltip" title="">
+          <span><i class="icon-diamond"></i>{{ gettext('highlights for') }}</span>
+      </legend>
       <% } %>
 
-        <div class="postitlist"></div>
-        <% if (canAddExtracts) { %>
-        <div>
-            <p class="mlxs">{{ gettext('Add extracts by dragging them in this panel from the clipboard or messages') }}</p>
-        </div>
-        <% } %>
+      <div class="postitlist"></div>
+      <% if (canAddExtracts) { %>
+      <div>
+          <p class="mlxs">{{ gettext('Add extracts by dragging them in this panel from the clipboard or messages') }}</p>
+      </div>
+      <% } %>
     </fieldset>
 
     <fieldset id="ideaPanel-section-actions" class="panel-section">

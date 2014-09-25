@@ -108,9 +108,9 @@ define(function (require) {
             this.model.save({}, {
                 success: function (m) {
                     if (m.get('important')) {
-                        that.$('.ideaPanelNuggets').addClass('isSelected');
+                        that.$('.nugget-indice .nugget').addClass('isSelected');
                     } else {
-                        that.$('.ideaPanelNuggets').removeClass('isSelected');
+                        that.$('.nugget-indice .nugget').removeClass('isSelected');
                     }
                 }
             });
