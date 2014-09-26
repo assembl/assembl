@@ -167,7 +167,8 @@ define(function (require) {
             if (message_subject) {
                 this.$('.messageSend-body').removeClass("hidden");
             }
-            else if (message_body && message_body != this.initialBody) {
+
+            if (message_body && message_body != this.initialBody) {
                 this.$('.messageSend-body').removeClass("text-muted");
                 this.$('.messageSend-sendbtn').removeClass("hidden");
                 this.$('.messageSend-cancelbtn').removeClass("hidden");

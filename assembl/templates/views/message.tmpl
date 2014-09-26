@@ -21,6 +21,38 @@
       #}<% } %>
 {%- endmacro %}
 
+{% macro menuAction() -%}
+   <div class="message-menu">
+     <div class="dropdown mrxl mtxs">
+       <span class="dropdown-label">{{ gettext('More options') }}&nbsp;<i class="icon-arrowdown"></i></span>
+       <ul class="dropdown-list dropdown-list--bottomright">
+         <% if (user_is_connected){ %>
+           <% if (read){ %>
+             <li class="js_message-markasunread dropdown-listitem"><a class="iconbutton"></a> {{ gettext('Mark as unread') }}</li>
+           <% } else { %>
+             <li class="js_message-markasread dropdown-listitem"><a class="iconbutton"></a> {{ gettext('Mark as read') }}</li>
+           <% } %>
+         <% } %>
+
+         <% if( isHoisted == true ){ %>
+           <li class="dropdown-listitem message-hoistbtn" data-id="<%= escape(id) %>"><a class="iconbutton icon-upload"></a> {{gettext('Go back to the entire topic thread')}}</li>
+         <% } else { %>
+           <li class="dropdown-listitem message-hoistbtn" data-id="<%= escape(id) %>"><a class="iconbutton icon-download"></a> {{gettext('Show only this message and its replies')}}</li>
+         <% } %>
+
+         <li class="dropdown-listitem message-linkbutton" data-copy-text="/message/<%= escape(id) %>"><a class="iconbutton icon-link"></a> {{gettext('Copy the link to share this message')}}</li>
+
+         <% if (creator.get('email')) { %>
+         <li class="dropdown-listitem">
+           <a title="<%= creator.get('email') %>" href="mailto:<%= creator.get('email') %>"><i class="iconbutton icon-mail"></i>
+           {{gettext('Send an email to this user')}}</a>
+         </li>
+         <% } %>
+       </ul>
+     </div>
+   </div>
+{%- endmacro %}
+
 <% if ( viewStyle == ctx.AVAILABLE_MESSAGE_VIEW_STYLES.TITLE_ONLY ){ %>
   <div class="leftSection">
     <div class="avatar img-rounded">
@@ -52,35 +84,7 @@
 <% } %>
 
 <% if ( viewStyle == ctx.AVAILABLE_MESSAGE_VIEW_STYLES.FULL_BODY ){ %>
-  <div class="message-menu">
-    <div class="dropdown mrxl mtxs">
-      <span class="dropdown-label">{{ gettext('More options') }}&nbsp;<i class="icon-arrowdown"></i></span>
-      <ul class="dropdown-list dropdown-list--bottomright">
-        <% if (user_is_connected){ %>
-          <% if (read){ %>
-            <li class="js_message-markasunread dropdown-listitem"><a class="iconbutton"></a> {{ gettext('Mark as unread') }}</li>
-          <% } else { %>
-            <li class="js_message-markasread dropdown-listitem"><a class="iconbutton"></a> {{ gettext('Mark as read') }}</li>
-          <% } %>
-        <% } %>
-
-        <% if( isHoisted == true ){ %>
-          <li class="dropdown-listitem message-hoistbtn" data-id="<%= escape(id) %>"><a class="iconbutton icon-upload"></a> {{gettext('Go back to the entire topic thread')}}</li>
-        <% } else { %>
-          <li class="dropdown-listitem message-hoistbtn" data-id="<%= escape(id) %>"><a class="iconbutton icon-download"></a> {{gettext('Show only this message and its replies')}}</li>
-        <% } %>
-
-        <li class="dropdown-listitem message-linkbutton" data-copy-text="/message/<%= escape(id) %>"><a class="iconbutton icon-link"></a> {{gettext('Copy the link to share this message')}}</li>
-
-        <% if (creator.get('email')) { %>
-        <li class="dropdown-listitem">
-          <a title="<%= creator.get('email') %>" href="mailto:<%= creator.get('email') %>"><i class="iconbutton icon-mail"></i>
-          {{gettext('Send an email to this user')}}</a>
-        </li>
-        <% } %>
-      </ul>
-    </div>
-  </div>
+   {{ menuAction() }}
 <% } %>
 
 <% if( viewStyle == ctx.AVAILABLE_MESSAGE_VIEW_STYLES.PREVIEW || viewStyle == ctx.AVAILABLE_MESSAGE_VIEW_STYLES.FULL_BODY ){ %>
