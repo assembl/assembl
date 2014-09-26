@@ -75,6 +75,12 @@ define(function(require){
             return id != UNKNOWN_USER_ID ? Ctx.formatAvatarUrl(Ctx.extractId(id), size) : Ctx.format(AVATAR_PLACEHOLDER, size);
         },
 
+        getAvatarColor: function() {
+            var numColors = 10;
+            var hue = Math.round(360.0 * (this.getNumericId() % numColors) / numColors);
+            return "hsl("+hue+", 60%, 65%)";
+        },
+
         /**
          * @param  {String}  permission The permission name
          * @return {Boolean} True if the user has the given permission
