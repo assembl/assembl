@@ -490,7 +490,7 @@ define(function (require) {
                 }
 
                 retval += '</div>';
-                retval += '<ul class="post-query-filter-info mll pan">';
+                retval += '<ul class="post-query-filter-info pan">';
 
                 var nActiveFilters = 0;
                 for (var filterDefPropName in this.availableFilters) {
@@ -525,7 +525,7 @@ define(function (require) {
                 retval += '</ul>';
 
                 if (nActiveFilters > 0) {
-                    retval += '<div class="actions"><a class="js_messageList-allmessages button">' + i18n.gettext("Clear filters") + '</a></div>';
+                    retval += '<div class="actions"><a class="js_messageList-allmessages btn btn-cancel btn-xs">' + i18n.gettext("Clear filters") + '</a></div>';
                 }
             }
             return retval;
