@@ -1014,9 +1014,9 @@ define(function (require) {
             else {
                 console.log("This viewstyle is unknown in user mode:", this.currentViewStyle);
             }
-            this.currentQuery.getResultNumTotal() === undefined ? resultNumTotal = '' : resultNumTotal = i18n.sprintf("(%d)", this.currentQuery.getResultNumTotal());
+            this.currentQuery.getResultNumTotal() === undefined ? resultNumTotal = '' : resultNumTotal = i18n.sprintf("%d", this.currentQuery.getResultNumTotal());
             this.ui.userThreadedViewButton.html(i18n.sprintf(i18n.gettext('All %s'), resultNumTotal));
-            this.currentQuery.getResultNumUnread() === undefined ? resultNumUnread = '' : resultNumUnread = i18n.sprintf("(%d)", this.currentQuery.getResultNumUnread());
+            this.currentQuery.getResultNumUnread() === undefined ? resultNumUnread = '' : resultNumUnread = i18n.sprintf("%d", this.currentQuery.getResultNumUnread());
             this.ui.userHighlightNewViewButton.html(i18n.sprintf(i18n.gettext('Unread %s'), resultNumUnread));
         },
 

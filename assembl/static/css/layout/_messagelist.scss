@@ -76,13 +76,13 @@
       width: 50%;
       height: 36px;
       cursor: pointer;
-      color: #cccccc;
+      color: $green;
     }
     .option:first-child {
       border-right: 1px solid $gray;
     }
     .option.selected {
-      color: #333333;
+      color: $gray4;
       font-weight: 600;
       border-bottom: 3px solid $green;
     }
