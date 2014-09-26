@@ -57,8 +57,6 @@ $harvesterAvatarSize: 24px;
       margin-top: 0.5em;
       .extractOrigin {
         display: inline-block;
-        padding-right: 1em;
-        max-width: 60px;
         a.segment-link {
           position: relative;
           visibility: hidden;
@@ -66,25 +64,18 @@ $harvesterAvatarSize: 24px;
         .creatorName {
           color: $purple6;
           font-size: 11px;
+          vertical-align: text-bottom;
         }
       }
       .segment-harvester {
         float: right;
-        max-width: 60px;
         .creatorName {
           color: $gray4;
           font-size: 11px;
         }
       }
-      .avatar > * {
-        margin: 0 auto;
-      }
     }
 
-    .extractOrigin {
-      max-width: 60px;
-
-    }
   }
 }
 
