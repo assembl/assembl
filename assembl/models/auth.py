@@ -161,15 +161,6 @@ class AgentProfile(Base):
             result = self.serializable()
         return json.dumps(result)
 
-    def random_color(self):
-        h = self.id
-        # murmur
-        h *= 0xc6a4a7935bd1e995L
-        h ^= (h >> 47)
-        h *= 0xc6a4a7935bd1e995L
-        hue = float(h & ((1<<32) - 1)) / (1<<32)
-        return chroma.Color((hue, 0.5, 0.5), "HSV").hex
-
 
 class AbstractAgentAccount(Base):
     """An abstract class for accounts that identify agents"""

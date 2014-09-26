@@ -12,7 +12,6 @@
     },
     "AgentProfile": {
         "description": true,
-        "avatar_color": "&random_color",
         "preferred_email": false
     },
     "User": {
