@@ -113,12 +113,15 @@
     #}
 
     <% if( viewStyle == ctx.AVAILABLE_MESSAGE_VIEW_STYLES.PREVIEW ){ %>
-      <a class="message-replybox-openbtn"><i class="icon-answer"></i>&nbsp;&nbsp;{{ gettext("Reply") }}</a>
+      <a href="#" class="message-replybox-openbtn"><i class="icon-answer"></i>&nbsp;&nbsp;{{ gettext("Reply") }}</a>
+      &nbsp;&nbsp;{#<a href="#"><i class="icon-heart"></i>{{ gettext("I love") }}</a> #}
+
       <div class="fr">
         <% if(nuggets){ %>
           <span class="nb-nuggets"><i class="icon-diamond"></i><span><%= nuggets %></span></span>
         <% } %>
       </div>
     <% } %>
+
   </div>
 <% } %>
