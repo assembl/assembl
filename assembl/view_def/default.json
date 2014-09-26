@@ -12,7 +12,7 @@
     },
     "AgentProfile": {
         "description": true,
-        "colour": "&random_colour",
+        "avatar_color": "&random_color",
         "preferred_email": false
     },
     "User": {
