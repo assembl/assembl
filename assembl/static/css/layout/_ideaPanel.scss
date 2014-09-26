@@ -22,8 +22,9 @@
 
 .nugget-indice {
   position: relative;
-  left: 20px;
-  float: right;
+  left: -10px;
+  top: -10px;
+  float: left;
   border: 1px solid $purple5;
   @include border-radius(50%);
   padding: 2px 0px;
