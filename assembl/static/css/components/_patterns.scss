@@ -142,34 +142,34 @@
   //border-color: $blueBright;
 }
 
-/*.ui-tag {
+.ui-tag {
   position: relative;
   display: inline-block;
   margin: 0 $spacingXs $spacingXs 0;
-  @include padding($rtl, $spacingXs, $spacingXl, $spacingXs, $spacingS);
+  padding: $spacingXs $spacingXl $spacingXs $spacingS;
   border-radius: $borderRadiusS;
-  background: $green2;
+  background: $green;
   color: $white;
   white-space: nowrap;
 
   .remove {
     position: absolute;
     top: 0;
-    @include right($rtl, 0);
+    right: 0;
     height: 100%;
-    background: mix(#000000, $green2, 10%);
-    @include border-radius-right($rtl, $borderRadiusS);
+    background: mix(#000000, $green, 10%);
+    @include border-radius-right($borderRadiusS);
     padding: 0 ($spacingXs / 2);
     line-height: 2.1em;
 
-    .vicon {
-      font-size: 8px;
-      color: white;
+    i {
+      font-size: 12px;
+      color: $white;
     }
 
     &:hover,
     &:focus {
-      background: mix(#000000, $green2, 25%);
+      background: mix(#000000, $green, 25%);
     }
   }
-} */
+}
