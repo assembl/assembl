@@ -4,11 +4,12 @@ import re
 from json import load
 from datetime import datetime
 
-from pyramid.paster import get_appsettings
+from pyramid.paster import get_appsettings, bootstrap
 import transaction
 
 from ..lib.sqla import configure_engine, mark_changed
 from ..lib.zmqlib import configure_zmq
+from ..lib.model_watcher import configure_model_watcher
 from ..lib.config import set_config
 
 global all_roles
@@ -139,9 +140,11 @@ def main():
     parser.add_argument("-d", "--discussion",
                         help="slug of discussion context for local user role")
     args = parser.parse_args()
+    env = bootstrap(args.configuration)
     settings = get_appsettings(args.configuration)
     set_config(settings)
     configure_zmq(settings['changes.socket'], False)
+    configure_model_watcher(env['registry'], 'assembl')
     engine = configure_engine(settings, True)
     from assembl.models import Role
     all_roles = {r.name: r for r in Role.db.query(Role).all()}
