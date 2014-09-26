@@ -107,7 +107,7 @@ $previewNumLines: 4;
     }
     > .readUnreadIndicator, > .readUnreadIndicator, > .message-author, > .message-subject, > .message-body, > .message-menu, > .readMoreOrLess, > .message-replybox {
       //So the first element of each line is aligned with the avatar
-      margin-left: $avatarSize + $mesageSpacing*2;
+      //margin-left: $avatarSize + $mesageSpacing*2;
     }
     > * {
       vertical-align: middle;
@@ -163,6 +163,13 @@ $previewNumLines: 4;
     &.Email .message-body.body_format_text_html {
       > div {
         white-space: pre-line;
+      }
+    }
+
+    .message-body.body_format_text_plain,
+    .message-body.body_format_text_html {
+      .synthesisPanel {
+        min-width: 0;
       }
     }
 
@@ -495,6 +502,10 @@ body.js_annotatorUserCannotAddExtract > .textbubble {
   clear: left;
   padding-left: $messageFamilyImageWidth/2;
   margin-left: $messageFamilyImageWidth/2;
+
+  &.bx {
+    padding-top: 0;
+  }
 
   &.root {
     //Root does not have border, bump it right

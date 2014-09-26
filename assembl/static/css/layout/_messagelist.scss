@@ -89,13 +89,13 @@
   }
 
   .sticky-box {
-    height: 40px;
+    height: 45px;
     box-shadow: 0px -2px 1px rgba(0, 0, 0, 0.3);
     border-bottom: 1px solid #ccc;
     @include box-sizing(border-box);
     background-color: $white;
     position: absolute;
-    bottom: 11px;
+    bottom: 0px;
     width: 100%;
     left: 0;
 
