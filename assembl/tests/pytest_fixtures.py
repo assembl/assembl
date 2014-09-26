@@ -229,6 +229,20 @@ def root_post_1(request, participant1_user, discussion, test_session):
         test_session.delete(p)
     return p
 
+@pytest.fixture(scope="function")
+def synthesis_post_1(request, participant1_user, discussion, test_session, synthesis_1):
+    from assembl.models import SynthesisPost
+    p = SynthesisPost(
+        discussion=discussion, creator=participant1_user,
+        subject=u"a synthesis post", body=u"post body (unused, it's a synthesis...)",
+        message_id="msg1",
+        publishes_synthesis = synthesis_1)
+    test_session.add(p)
+    test_session.flush()
+
+    def fin():
+        test_session.delete(p)
+    return p
 
 @pytest.fixture(scope="function")
 def reply_post_1(request, participant2_user, discussion,

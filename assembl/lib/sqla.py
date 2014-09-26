@@ -169,6 +169,11 @@ class BaseOps(object):
         Throw an exception on record not found and `raise_` == True, else
         return None.
 
+        TODO:  This method should be renamed, as it's api and behavior is quite 
+            different from the method with the same name:
+            http://docs.sqlalchemy.org/en/rel_0_9/orm/query.html#sqlalchemy.orm.query.Query.get
+            all sqlalchemy derived classes normally have
+            benoitg-2014-09-26
         """
         q = _session_maker.query(cls).filter_by(**criteria)
         return raise_ and q.one() or q.first()
