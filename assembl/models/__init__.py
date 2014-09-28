@@ -158,6 +158,7 @@ from .widgets import (
 from .notification import (
     NotificationSubscription,
     NotificationSubscriptionFollowSyntheses,
+    NotificationSubscriptionFollowAllMessages,
     Notification
     )
 

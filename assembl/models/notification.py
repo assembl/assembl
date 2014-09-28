@@ -1,5 +1,6 @@
 # coding=UTF-8
 from datetime import datetime
+from collections import defaultdict
 from . import  Base, DiscussionBoundBase
 from sqlalchemy.orm import (
     relationship, backref, aliased, contains_eager, joinedload)
@@ -123,6 +124,7 @@ class NotificationSubscription(DiscussionBoundBase):
         return cls.discussion_id == discussion_id
     
 
+    @abstractmethod
     def wouldCreateNotification(self, discussion_id, verb, object):
         return False
         
@@ -141,6 +143,9 @@ class NotificationSubscription(DiscussionBoundBase):
             if(subscription.wouldCreateNotification(object.get_discussion_id(), verb, object)):
                 applicable_subscriptions.append(subscription)
         return applicable_subscriptions
+    @abstractmethod
+    def process(self, discussion_id, verb, objectInstance, otherApplicableSubscriptions):
+        pass
 
 class NotificationSubscriptionFollowSyntheses(NotificationSubscription):
     priority = 1
@@ -149,11 +154,11 @@ class NotificationSubscriptionFollowSyntheses(NotificationSubscription):
     def wouldCreateNotification(self, discussion_id, verb, object):
         return (verb == CrudVerbs.CREATE) & isinstance(object, SynthesisPost)
     
-    def process(self, discussion_id, verb, object):
-        assert self.wouldCreateNotification(discussion_id, verb, object)
+    def process(self, discussion_id, verb, objectInstance, otherApplicableSubscriptions):
+        assert self.wouldCreateNotification(discussion_id, verb, objectInstance)
         notification = Notification(
             event_source_type = NotificationEventSourceType.MESSAGE_POSTED,
-            event_source_object_id = object.id,
+            event_source_object_id = objectInstance.id,
             first_matching_subscription = self,
             push_method = NotificationPushMethodType.EMAIL,
             #push_address = TODO
@@ -165,25 +170,55 @@ class NotificationSubscriptionFollowSyntheses(NotificationSubscription):
         'with_polymorphic': '*'
     }
     
+class NotificationSubscriptionFollowAllMessages(NotificationSubscription):
+    priority = 1
+    unsubscribe_allowed = True
+    
+    def wouldCreateNotification(self, discussion_id, verb, object):
+        return (verb == CrudVerbs.CREATE) & isinstance(object, Post)
+    
+    def process(self, discussion_id, verb, objectInstance, otherApplicableSubscriptions):
+        assert self.wouldCreateNotification(discussion_id, verb, objectInstance)
+        notification = Notification(
+            event_source_type = NotificationEventSourceType.MESSAGE_POSTED,
+            event_source_object_id = objectInstance.id,
+            first_matching_subscription = self,
+            push_method = NotificationPushMethodType.EMAIL,
+            #push_address = TODO
+            )
+        self.db.add(notification)
+        
+    __mapper_args__ = {
+        'polymorphic_identity': NotificationSubscriptionClasses.FOLLOW_ALL_MESSAGES,
+        'with_polymorphic': '*'
+    }
 class ModelEventWatcherNotificationSubscriptionDispatcher(object):
     interface.implements(IModelEventWatcher)
-    @staticmethod
-    def get_subclasses(c):
-        subclasses = c.__subclasses__()
-        for d in list(subclasses):
-            subclasses.extend(ModelEventWatcherNotificationSubscriptionDispatcher.get_subclasses(d))
-        return subclasses
+
+    def processEvent(self, verb, objectClass, objectId):
+        def get_subclasses(c):
+            subclasses = c.__subclasses__()
+            for d in list(subclasses):
+                subclasses.extend(get_subclasses(d))
+            return subclasses
+        objectInstance = objectClass.get(id=objectId)
+        assert objectInstance
+        #We need the discussion id
+        assert isinstance(objectInstance, DiscussionBoundBase)
+        applicableInstancesByUser = defaultdict(list)
+        subscriptionClasses = get_subclasses(NotificationSubscription)
+        for subscriptionClass in subscriptionClasses:
+            applicableInstances = subscriptionClass.findApplicableInstances(objectInstance.get_discussion_id(), CrudVerbs.CREATE, objectInstance)
+            for subscription in applicableInstances:
+                applicableInstancesByUser[subscription.user_id].append(subscription)
+        for userId, applicableInstances in applicableInstancesByUser.iteritems():
+            if(len(applicableInstances) > 0):
+                applicableInstances.sort(cmp=lambda x,y: cmp(x.priority, y.priority))
+                applicableInstances[0].process(objectInstance.get_discussion_id, verb, objectInstance, applicableInstances[1:])
 
     def processPostCreated(self, id):
         print "processPostCreated", id
-        assert id
-        post = Post.get(id=id)
-        assert post
-        subscriptionClasses = ModelEventWatcherNotificationSubscriptionDispatcher.get_subclasses(NotificationSubscription)
-        for subscriptionClass in subscriptionClasses:
-            applicableInstances = subscriptionClass.findApplicableInstances(post.get_discussion_id(), CrudVerbs.CREATE, post)
-            for subscription in applicableInstances:
-                subscription.process(post.get_discussion_id, CrudVerbs.CREATE, post)
+        self.processEvent(CrudVerbs.CREATE, Post, id)
 
     def processIdeaCreated(self, id):
         print "processIdeaCreated", id
