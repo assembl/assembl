@@ -54,11 +54,11 @@
         <% if (!Ctx.getCurrentUser().isUnknownUser()) { %>
           <% if (Ctx.getCurrentInterfaceType() === Ctx.InterfaceTypes.SIMPLE) { %>
               <% if (num_unread_posts > 0) { %>
-              <span class="idealist-title-unread-count" data-toggle="tooltip" title="{{ gettext('Number of unread messages related to this idea, or any of its sub-ideas') }}"> <%= num_unread_posts %> </span>
+              <span class="idealist-title-unread-count mlxs" data-toggle="tooltip" title="{{ gettext('Number of unread messages related to this idea, or any of its sub-ideas') }}"> <%= num_unread_posts %> </span>
               <% } %>
           <% } else { %>
               <% if (num_unread_posts > 0) { %>
-              <span class="idealist-title-unread-count js_idealist-title-unread-count" data-toggle="tooltip" title="{{ gettext('Number of unread messages related to this idea, or any of its sub-ideas.  Click on this number to view ONLY the new unread messages') }}"> <%= num_unread_posts %> </span>
+              <span class="idealist-title-unread-count js_idealist-title-unread-count mlxs" data-toggle="tooltip" title="{{ gettext('Number of unread messages related to this idea, or any of its sub-ideas.  Click on this number to view ONLY the new unread messages') }}"> <%= num_unread_posts %> </span>
               <% } %>
           <% } %>
         <% } %>

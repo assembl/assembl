@@ -1,7 +1,7 @@
 $message-bar-width: 15px;
 $messageFamilyImageWidth: 12px;
 $avatarSize: 30px;
-$readUnreadIndicatorSize: 10px;
+$readUnreadIndicatorSize: 7px;
 $mesageSpacing: 6px;
 $messageBodyFontSize: 13px;
 $mesageBodyLineHeight: $baseLineHeight;
@@ -124,9 +124,11 @@ $previewNumLines: 4;
     .message-subject {
       display: block;
       font-size: 15px;
+      margin-top: 0.52em;
     }
     .message-date {
       //@extend .header-separator-bullet;
+      font-size: 11px;
     }
     .message-body {
       line-height: $mesageBodyLineHeight;
