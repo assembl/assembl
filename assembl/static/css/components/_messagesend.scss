@@ -2,10 +2,11 @@
 // ===========================
 
 .messageSend {
+  @include border-radius(3px);
   margin: 1em 0 0.5em 0;
   display: table;
   //width: 98%;
-  background-color: #cccccc;
+  background-color: #ededed;
   padding: 10px 15px 5px;
   .hidden {
     display: none;
