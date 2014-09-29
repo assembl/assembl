@@ -235,6 +235,41 @@ define(function (require) {
             this._stateButton = dom;
         },
 
+        getExtraPixels: function (include_embedded_idea_panel) {
+            if (this.model.get('minimized')) {
+                return this.minimized_size;
+            }
+            return 0;
+        },
+
+        useCurrentSize: function() {
+            this.$el.width(this.$el.width());
+            this.$el.addClass("animating");
+        },
+
+        animateTowardsPixels: function(pixels_per_unit, percent_per_unit, extra_pixels, num_units, group_units) {
+            if (this.model.get('minimized')) {
+                var target = pixels_per_unit * gridSize;
+                this.$el.animate({'width': this.minimized_size}, 1000, 'swing', function() {
+                    this.$el.removeClass("animating");
+                });
+            } else {
+                var gridSize = this.gridSize;
+                var myCorrection = extra_pixels / num_units;
+                if (this.groupContent.groupContainer.isOneNavigationGroup()
+                    && this.model.get('type') == 'messageList'
+                    && this.groupContent.model.getPanelSpecByType('ideaPanel').get('minimized')) {
+                        myCorrection += this.minimized_size;
+                }
+                var target = pixels_per_unit * gridSize;
+                this.$el.animate({'width': target}, 1000, 'swing', function() {
+                    this.$el.width("calc("+(percent_per_unit*gridSize)+"% - "+myCorrection+"px)");
+                    console.log(this, target, this.$el.width());
+                    this.$el.removeClass("animating");
+                });
+            }
+        },
+
         /**
          * Process a callback that can be inhibited by panel locking.
          * If the panel is unlocked, the callback will be called immediately.

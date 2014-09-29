@@ -54,6 +54,58 @@ define(function (require) {
             });
             return gridSize;
         },
+
+        calculateMinSize: function () {
+            var minSize = 0;
+            this.children.each(function (panelWrapper) {
+                if (panelWrapper.model.get('hidden'))
+                    return;
+                if (panelWrapper.model.get('minimized'))
+                    minSize += 40;
+                else
+                    minSize += panelWrapper.minSize;
+            });
+            return minSize;
+        },
+
+        getExtraPixels: function (include_embedded_idea_panel) {
+            var extraPixels = 0;
+            this.children.each(function (panelWrapper) {
+                if (panelWrapper.model.get('hidden'))
+                    return;
+                if (panelWrapper.model.get('minimized')) {
+                    if (!include_embedded_idea_panel
+                        && panelWrapper.model.get('minimized')
+                        && this.groupContainer.isOneNavigationGroup()
+                        && panelWrapper.model.get('type') == 'idea') {
+                        return;
+                    }
+                }
+                extraPixels += this.panel_borders_size + panelWrapper.getExtraPixels(include_embedded_idea_panel);
+            });
+            return extraPixels;
+        },
+
+        useCurrentSize: function() {
+            this.children.each(function (panelWrapper) {
+                panelWrapper.useCurrentSize();
+            });
+            // this.$el.width(this.$el.width());
+            // this.$el.addClass("animating");
+        },
+
+        animateTowardsPixels: function(pixels_per_unit, percent_per_unit, extra_pixels, num_units) {
+            var gridSize = this.calculateGridSize();
+            // var num_minimized_panels = this.num_minimized_panels();
+            this.collection.each(function (panelWrapper) {
+                panelWrapper.animateTowardsPixels(pixels_per_unit, percent_per_unit, extra_pixels, num_units, gridSize);
+            });
+            // var myCorrection = extra_pixels / gridSize;
+            // this.$el.animate({'width': pixels_per_unit * gridSize}, 1000, 'swing', function() {
+            //     this.$el.width("calc("+(100*gridSize/group_units)+"% - "+myCorrection"px)");
+            // });
+        },
+
         adjustGridSize: function () {
             var gridSize = this.calculateGridSize(),
                 className = 'groupGridSize-' + gridSize,
