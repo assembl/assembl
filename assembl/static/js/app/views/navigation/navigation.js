@@ -27,7 +27,7 @@ define(function (require) {
             notification: '.navNotification'
         },
         events: {
-            'click .nav': 'toggleMenuByEvent',
+            'click .js_navigation': 'toggleMenuByEvent',
             'click .js_addIdeaFromIdeaList': 'addIdeaFromIdeaList'
         },
         ui: {

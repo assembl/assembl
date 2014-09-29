@@ -129,11 +129,28 @@
             i:not(.icon-arrowleft) {
               color: $white;
             }
+            #ideaList-addbutton {
+              visibility: visible;
+            }
           }
           i {
             font-size: 22px;
             color: $green;
+            vertical-align: sub;
           }
+          i.icon-add-2 {
+            color: $white;
+          }
+          .icon-arrowleft {
+            font-size: 14px;
+          }
+
+          #ideaList-addbutton {
+            visibility: hidden;
+          }
+        }
+        > a:first-child {
+          border-right: 1px solid $purple5;
         }
         .second-level {
           display: none;
@@ -220,16 +237,11 @@
 
 .groupPanel .panel-header a.panel-header-minimize,
 .groupPanel .navSidebar .nav .panel-header-minimize {
-  //background: url(#{$img-dir}/icon/panel_collapse.svg) center center no-repeat;
-  //background-size: 18px;
-  //position: absolute;
-  //width: 36px;
-  //height: 35px;
-  //right: 0;
   color: $green;
-  //line-height: 33px;
-  font-size: 22px;
   float: right;
+  i.icon-arrowleft {
+    font-size: 14px;
+  }
 }
 
 .groupPanel.minimized {
@@ -272,13 +284,13 @@
 .groupPanel.minimized .panel-header a.panel-header-minimize,
 .groupPanel.minimized .navSidebar .nav span.panel-header-minimize,
 .groupPanel.minimized .panelContentsWhenMinimized.hasNoHeader a.panel-header-minimize {
-  display: initial;
+  display: block;
   //background: url(#{$img-dir}/icon/panel_expand.svg) center center no-repeat;
   //background-size: 18px;
-  position: absolute;
-  width: 36px;
-  height: 35px;
-  font-size: 150%;
+  //position: absolute;
+  //width: 36px;
+  //height: 35px;
+  //font-size: 150%;
   color: $green;
 }
 

@@ -1,18 +1,16 @@
 <ul class="side-menu">
   <li>
-    <a href="#" class="nav" data-view="home"><i class="icon-home"></i>&nbsp;&nbsp;{{ gettext('Home') }}
+    <a href="#" class="nav js_navigation" data-view="home"><i class="icon-home btn btn-xs"></i>&nbsp;&nbsp;{{ gettext('Home') }}
     <% if ( hasMinimize ){ %>
-      <span class="js_minimizePanel panel-header-minimize btn btn-xs" data-toggle="tooltip" data-placement="top" title="{{gettext('Minimize panel')}}">
-        <i class="icon-arrowleft"></i>
-      </span>
+      <span class="js_minimizePanel panel-header-minimize btn btn-sm icon-arrowleft" data-toggle="tooltip" data-placement="top" title="{{gettext('Minimize panel')}}"></span>
     <% } %>
     </a>
     <div class="second-level home"></div>
   </li>
   <li>
-    <a href="#" class="nav" data-view="debate"><i class="icon-discuss"></i>&nbsp;&nbsp;{{ gettext('Debate') }}
+    <a href="#" class="nav js_navigation" data-view="debate"><i class="icon-discuss btn btn-xs"></i>&nbsp;&nbsp;{{ gettext('Debate') }}
       <% if (canAdd) { %>
-      <span id="ideaList-addbutton" class="btn btn-xs fr js_addIdeaFromIdeaList" data-toggle="tooltip" data-placement="top" title="{{ gettext('Add idea') }}">
+      <span id="ideaList-addbutton" class="btn btn-xs fr js_addIdeaFromIdeaList iconbutton" data-toggle="tooltip" data-placement="top" title="{{ gettext('Add idea') }}">
         <i class="icon-add-2"></i>
       </span>
       <% } %>
@@ -20,7 +18,7 @@
     <div class="second-level debate"></div>
   </li>
   <li>
-    <a href="#" class="nav" data-view="synthesis"><i class="icon-doc"></i>&nbsp;&nbsp;{{ gettext('Synthesis') }}</a>
+    <a href="#" class="nav js_navigation" data-view="synthesis"><i class="icon-doc btn btn-xs"></i>&nbsp;&nbsp;{{ gettext('Synthesis') }}</a>
     <div class="second-level synthesis"></div>
   </li>
 </ul>

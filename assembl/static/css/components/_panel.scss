@@ -5,7 +5,6 @@
   position: relative;
   z-index: 10;
   height: 100%;
-  border-right: 1px solid $gray3;
   background-color: #fff;
   overflow: hidden;
   .panel-section {
@@ -139,10 +138,11 @@
   }
   @include z-index("float");
   height: 40px;
-  padding: 0 10px;
+  padding: 0 0 0 10px;
   position: relative;
   background-color: $purple3;
   color: $white;
+  border-right: 1px solid $purple5;
 
   .panel-header-title,
   .panel-header-close {

@@ -10,12 +10,14 @@
                 <% } %>
                 <a class="js_panel-fullScreenButton iconbutton--resizefull fr " data-toggle="tooltip" data-placement="top"  title="{{ gettext('Fullsize') }}"></a>
                 <% if ( hasClose ){ %>
-                    <a class="js_panel-closeButton icon-delete panel-header-close fr " data-toggle="tooltip" data-placement="top" title="{{gettext('Close panel')}}"></a>
+                    <a class="js_panel-closeButton panel-header-close fr iconbutton" data-toggle="tooltip" data-placement="top" title="{{gettext('Close panel')}}">
+                    <i class="icon-delete"></i>
+                    </a>
                 <% } %>
             <% } %>
 
             <% if ( hasMinimize ){ %>
-                <a class="js_minimizePanel panel-header-minimize btn btn-xs" data-toggle="tooltip" data-placement="top" title="{{gettext('Minimize panel')}}">
+                <a class="js_minimizePanel panel-header-minimize btn btn-sm" data-toggle="tooltip" data-placement="top" title="{{gettext('Minimize panel')}}">
                   <i class="icon-arrowleft"></i>
                 </a>
             <% } %>
@@ -29,7 +31,7 @@
 <div class="panelContentsWhenMinimized <% if ( hideHeader ) { %>hasNoHeader<% } else { %>hasHeader<% } %>">
 <% if ( hideHeader ) { %>
     <header class="panel-header">
-        <a class="js_minimizePanel panel-header-minimize" data-toggle="tooltip" data-placement="top" title="{{gettext('Maximize panel')}}">
+        <a class="js_minimizePanel panel-header-minimize btn btn-sm" data-toggle="tooltip" data-placement="top" title="{{gettext('Maximize panel')}}">
           <i class="icon-arrowright"></i>
         </a>
     </header>

@@ -89,6 +89,7 @@
   text-align: center;
   opacity: 0.55;
   color: $white;
+  text-decoration: none;
 
   &:hover {
     opacity: 1;
@@ -105,7 +106,6 @@
   opacity: 1;
   background-color: transparentize(#e5e5e5, 0.5);
 }
-
 
 // DELETE OVER THIS LINE AFTER REFACTORING
 
