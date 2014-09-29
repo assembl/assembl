@@ -69,7 +69,7 @@ pytest==2.6.3
 pytest-cov==1.8.0
 pytest-localserver==0.3.3
 pytest-mock==0.4.0
-pytest-splinter==1.2.3
+pytest-splinter==1.1.1
 python-memcached==1.53
 python-openid==2.2.5
 pytz==2014.7
