@@ -34,6 +34,8 @@ define(function (require) {
         _minimizedStateButton: null,
         _originalWidth: null,
         _nextElementOriginalWidth: null,
+        minimized_size: 40,
+        minSize: 40,
 
         initialize: function (options) {
             var contentClass = panelClassByTypeName(options.contentSpec);
@@ -43,6 +45,7 @@ define(function (require) {
                 panelWrapper: this
             });
             this.gridSize = this.contentsView.gridSize || AssemblPanel.prototype.DEFAULT_GRID_SIZE;
+            this.minSize = this.contentsView.minSize || AssemblPanel.prototype.DEFAULT_MIN_SIZE;
             Marionette.bindEntityEvents(this, this.model, this.modelEvents);
 
             this.model.set('minimized', false); // TODO: memorize previous state and apply it

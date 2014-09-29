@@ -12,10 +12,12 @@ define(function (require) {
         className: "groupContent",
         childViewContainer: ".groupBody",
         childView: PanelWrapper,
+        panel_borders_size: 0,
 
         initialize: function (options) {
             var that = this;
             this.collection = this.model.get('panels');
+            this.groupContainer = options['groupContainer'];
             setTimeout(function () {
                 var navView = that.getViewByTypeName('navSidebar');
                 if (navView) {
@@ -45,6 +47,8 @@ define(function (require) {
             var gridSize = 0;
             this.children.each(function (panelWrapper) {
                 if (panelWrapper.model.get('hidden'))
+                    return;
+                if (panelWrapper.model.get('minimized'))
                     return;
                 gridSize += panelWrapper.gridSize;
             });
