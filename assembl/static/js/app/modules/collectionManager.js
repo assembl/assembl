@@ -290,11 +290,15 @@ define(function(require){
       return deferred.promise();
     },
 
+    /* 
+     * Gets the stored configutation of groups and panels
+     */
     getGroupSpecsCollectionPromise : function(viewsFactory) {
       var deferred = $.Deferred();
 
       if (this._allGroupSpecsCollectionPromise === undefined) {
-        var collection, data = Storage.getStorageGroupItem()
+        var collection,
+            data = Storage.getStorageGroupItem();
         if (data !== undefined) {
           collection = new groupSpec.Collection(data, {'parse':true});
           if (!collection.validate(viewsFactory)) {
