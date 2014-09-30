@@ -15,9 +15,7 @@ default_context = {
     'STATIC_URL': '/static'
 }
 
-
 TEMPLATE_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'templates')
-
 
 def backbone_include(config):
     config.add_route('home', '/')

@@ -17,8 +17,10 @@ from .. import get_template_views, get_default_context as base_default_context
 FIXTURE = os.path.join(os.path.dirname(__file__),
                        '../../static/js/fixtures/nodes.json')
 
-
 _ = TranslationStringFactory('assembl')
+
+TEMPLATE_PATH = os.path.join(os.path.dirname(__file__), '..', '..', 'templates')
+
 
 def get_default_context(request):
     base = base_default_context(request)
@@ -28,7 +30,6 @@ def get_default_context(request):
     except NoResultFound:
         raise HTTPNotFound(_("No discussion found for slug=%s") % slug)
     return dict(base, templates=get_template_views(), discussion=discussion)
-
 
 
 def get_styleguide_components():

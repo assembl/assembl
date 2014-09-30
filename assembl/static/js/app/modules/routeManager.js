@@ -13,7 +13,8 @@ define(function (require) {
         CollectionManager = require('modules/collectionManager'),
         viewsFactory = require('objects/viewsFactory'),
         $ = require('jquery'),
-        Notification = require('views/notification');
+        Notification = require('views/notification'),
+        adminView = require('views/admin/adminDiscussion');
 
     var routeManager = Marionette.Controller.extend({
 
@@ -116,6 +117,11 @@ define(function (require) {
          */
         messageSlug: function (slug, id) {
             return this.message(slug + '/' + id);
+        },
+
+        adminDiscussion: function () {
+            var admin = new adminView();
+            Assembl.adminContainer.show(admin);
         }
 
     });
