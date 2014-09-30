@@ -50,7 +50,7 @@ define(function (require) {
         },
 
         isOneNavigationGroup: function() {
-            if (this.models.size() == 1 && this.models.first().getPanelSpecByType('navSidebar')) {
+            if (this.collection.size() == 1 && this.collection.first().getPanelSpecByType('navSidebar')) {
                 return true;
             }
             return false;
@@ -59,30 +59,30 @@ define(function (require) {
 
         resizeAllPanels: function() {
             // pixels from borders, or minimized panels except (boolean) those counted below.
-            var extra_pixels = getExtraPixels(false); // global
-            var min_idea_pixels = getMinIdeaPixels(); // minimized idea panels that are absorbed by their message panel
-            var num_units = getTotalGridSize(); // global
-            var current_size = useCurrentSize(); // get current sizes and override min/% with current size
-            var window_width = window.width;
-            var total_min_size = calculateMinSize();
+            var extra_pixels = this.getExtraPixels(false); // global
+            var min_idea_pixels = this.getMinIdeaPixels(); // minimized idea panels that are absorbed by their message panel
+            var num_units = this.getTotalGridSize(); // global
+            this.useCurrentSize(); // get current sizes and override min/% with current size
+            var window_width = window.innerWidth;
+            var total_min_size = this.calculateMinSize();
             var use_percent = (total_min_size + extra_pixels + min_idea_pixels < window_width);
             var unit_pixels = (window_width - extra_pixels) / num_units;
-            animateTowardsPixels(use_percent?unit_pixels:0);
-            useWidth(100.0/num_units, float(extra_pixels), num_units); // reestablish min_pixels, and % width based on param. (remove size)
+            this.animateTowardsPixels(use_percent?unit_pixels:0, 100.0/num_units, extra_pixels, num_units); // reestablish min_pixels, and % width based on param. (remove size)
         },
 
 
         getExtraPixels: function(include_embedded_idea_panel) {
-            var extraPixels = 0;
+            var extraPixels = 0,
+                that = this;
             this.children.each(function (groupContent) {
-                extraPixels += this.group_borders_size + groupContent.getExtraPixels(include_embedded_idea_panel);
+                extraPixels += that.group_borders_size + groupContent.getExtraPixels(include_embedded_idea_panel);
             });
             return extraPixels;
         },
 
         getMinIdeaPixels: function() {
-            if (isOneNavigationGroup()) {
-                if (this.models.first().getPanelSpecByType('ideaPanel').get('minimized')) {
+            if (this.isOneNavigationGroup()) {
+                if (this.collection.first().getPanelSpecByType('ideaPanel').get('minimized')) {
                     return AssemblPanel.minimized_size;
                 }
             }
@@ -90,34 +90,32 @@ define(function (require) {
         },
 
         getTotalGridSize: function() {
-            var gridSize = 0;
-            this.collection.each(function (aGroupSpec) {
-                var view = that.children.findByModel(aGroupSpec);
-                if (view)
-                    gridSize += view.calculateGridSize();
+            var gridSize = 0,
+                that = this;
+            this.children.each(function (child) {
+                gridSize += child.calculateGridSize();
             });
             return gridSize;
         },
 
         useCurrentSize: function() {
-            this.collection.each(function (aGroupSpec) {
-                aGroupSpec.useCurrentSize();
+            this.children.each(function (child) {
+                child.useCurrentSize();
             });
         },
 
         calculateMinSize: function() {
-            var minSize = 0;
-            this.collection.each(function (aGroupSpec) {
-                var view = that.children.findByModel(aGroupSpec);
-                if (view)
-                    minSize += view.calculateMinSize();
+            var minSize = 0,
+                that = this;
+            this.children.each(function (child) {
+                minSize += child.calculateMinSize();
             });
             return minSize;
         },
 
         animateTowardsPixels: function(pixels_per_unit, percent_per_unit, extra_pixels, num_units) {
-            this.collection.each(function (aGroupSpec) {
-                aGroupSpec.animateTowardsPixels(pixels_per_unit, percent_per_unit, extra_pixels, num_units);
+            this.children.each(function (child) {
+                child.animateTowardsPixels(pixels_per_unit, percent_per_unit, extra_pixels, num_units);
             });
         },
 

@@ -72,6 +72,7 @@ define(function (require) {
         closePanel: function () {
             Ctx.removeCurrentlyDisplayedTooltips();
             this.model.collection.remove(this.model);
+            this.groupContent.groupContainer.resizeAllPanels();
         },
         onRender: function () {
             this.setGridSize(this.gridSize);
@@ -87,6 +88,7 @@ define(function (require) {
             } else {
                 this.$el.css('display', 'table-cell');
             }
+            this.groupContent.groupContainer.resizeAllPanels();
         },
         setGridSize: function (gridSize) {
             var changed = false,
@@ -201,6 +203,7 @@ define(function (require) {
             this.$el.children(".panelContents").show();
             this.$el.find("header span.panel-header-title").show();
             this.$el.children(".panelContentsWhenMinimized").hide();
+            this.groupContent.groupContainer.resizeAllPanels();
         },
 
         minimizePanel: function () {
@@ -228,6 +231,7 @@ define(function (require) {
             this.$el.children(".panelContents").hide();
             this.$el.find("header span.panel-header-title").hide();
             this.$el.children(".panelContentsWhenMinimized").show();
+            this.groupContent.groupContainer.resizeAllPanels();
         },
 
         setButtonState: function (dom) {
@@ -260,11 +264,12 @@ define(function (require) {
                     && this.groupContent.model.getPanelSpecByType('ideaPanel').get('minimized')) {
                         myCorrection += this.minimized_size;
                 }
-                var target = pixels_per_unit * gridSize;
+                var target = pixels_per_unit * gridSize,
+                    that = this;
                 this.$el.animate({'width': target}, 1000, 'swing', function() {
-                    this.$el.width("calc("+(percent_per_unit*gridSize)+"% - "+myCorrection+"px)");
-                    console.log(this, target, this.$el.width());
-                    this.$el.removeClass("animating");
+                    that.$el.width("calc("+(percent_per_unit*gridSize)+"% - "+myCorrection+"px)");
+                    console.log(that, target, that.$el.width());
+                    that.$el.removeClass("animating");
                 });
             }
         },

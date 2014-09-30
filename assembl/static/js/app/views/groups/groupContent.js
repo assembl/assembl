@@ -42,6 +42,7 @@ define(function (require) {
 
         closeGroup: function () {
             this.model.collection.remove(this.model);
+            this.groupContainer.resizeAllPanels();
         },
         calculateGridSize: function () {
             var gridSize = 0;
@@ -69,7 +70,7 @@ define(function (require) {
         },
 
         getExtraPixels: function (include_embedded_idea_panel) {
-            var extraPixels = 0;
+            var extraPixels = 0, that = this;
             this.children.each(function (panelWrapper) {
                 if (panelWrapper.model.get('hidden'))
                     return;
@@ -79,7 +80,7 @@ define(function (require) {
                     && panelWrapper.model.get('type') == 'idea') {
                     return;
                 }
-                extraPixels += this.panel_borders_size + panelWrapper.getExtraPixels(include_embedded_idea_panel);
+                extraPixels += that.panel_borders_size + panelWrapper.getExtraPixels(include_embedded_idea_panel);
             });
             return extraPixels;
         },
@@ -95,7 +96,7 @@ define(function (require) {
         animateTowardsPixels: function(pixels_per_unit, percent_per_unit, extra_pixels, num_units) {
             var gridSize = this.calculateGridSize();
             // var num_minimized_panels = this.num_minimized_panels();
-            this.collection.each(function (panelWrapper) {
+            this.children.each(function (panelWrapper) {
                 panelWrapper.animateTowardsPixels(pixels_per_unit, percent_per_unit, extra_pixels, num_units, gridSize);
             });
             // var myCorrection = extra_pixels / gridSize;
@@ -200,14 +201,17 @@ define(function (require) {
          */
         removePanels: function () {
             this.model.removePanels.apply(this.model, arguments);
+            this.groupContainer.resizeAllPanels();
         },
 
         addPanel: function (options, position) {
             this.model.addPanel(options, position);
+            this.groupContainer.resizeAllPanels();
         },
 
         ensurePanel: function (options, position) {
             this.model.ensurePanel(options, position);
+            this.groupContainer.resizeAllPanels();
         },
 
         getViewByTypeName: function (typeName) {
