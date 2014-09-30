@@ -259,7 +259,7 @@ define(function (require) {
                         myCorrection += AssemblPanel.prototype.minimized_size;
                 }
                 if (isNaN(myCorrection))
-                    alert("error");
+                    console.log("error in myCorrection");
                 myCorrection = Math.round(myCorrection);
                 var target = pixels_per_unit * gridSize;
                 this.$el.animate({'width': target}, 1000, 'swing', function() {
@@ -269,7 +269,7 @@ define(function (require) {
                         width = "calc("+width+" - "+Math.round(myCorrection)+"px)";
                     }
                     that.$el.width(width);
-                    console.log(that.model.get('type'), target, before, that.$el.width(), width);
+                    //console.log(that.model.get('type'), target, before, that.$el.width(), width);
                     that.$el.removeClass("animating");
                     that.$el.css("min-width", that.minWidth);
                 });

@@ -49,22 +49,22 @@ define(function (require) {
 
 
         resizeAllPanels: function() {
-            console.trace();
+            //console.trace();
             // pixels from borders, or minimized panels except (boolean) those counted below.
             var extra_pixels = this.getExtraPixels(false); // global
             if (isNaN(extra_pixels))
-                alert("error");
+                console.log("error in extra_pixels");
             var min_idea_pixels = this.getMinIdeaPixels(); // minimized idea panels that are absorbed by their message panel
             if (isNaN(min_idea_pixels))
-                alert("error");
+                console.log("error in min_idea_pixels");
             var num_units = this.getTotalGridSize(); // global
             if (isNaN(num_units))
-                alert("error");
+                console.log("error in num_units");
             this.useCurrentSize(); // get current sizes and override min/% with current size
             var window_width = window.innerWidth;
             var total_min_size = this.calculateMinWidth();
             if (isNaN(total_min_size))
-                alert("error");
+                console.log("error in total_min_size");
             var use_percent = (total_min_size + extra_pixels + min_idea_pixels < window_width);
             var unit_pixels = (window_width - extra_pixels) / num_units;
             this.animateTowardsPixels(use_percent?unit_pixels:0, 100.0/num_units, extra_pixels, num_units); // reestablish min_pixels, and % width based on param. (remove size)
