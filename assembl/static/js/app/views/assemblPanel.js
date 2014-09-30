@@ -22,6 +22,7 @@ define(function (require) {
         CLIPBOARD_GRID_SIZE: 3,
         CONTEXT_PANEL_GRID_SIZE: 8, //MESSAGE_PANEL_GRID_SIZE + IDEA_PANEL_GRID_SIZE
         SYNTHESIS_PANEL_GRID_SIZE: 8,
+        minimized_size: 40,
         /**
          * Show the panel is currently loading data
          */

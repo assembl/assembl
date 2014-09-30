@@ -3,6 +3,7 @@ define(function (require) {
     var Marionette = require('marionette'),
         Assembl = require('modules/assembl'),
         GroupContent = require('views/groups/groupContent'),
+        AssemblPanel = require('views/assemblPanel'),
         Notification = require('views/notification');
     /**
      * Manages all the groups in the interface
@@ -10,6 +11,7 @@ define(function (require) {
     var groupContainer = Marionette.CollectionView.extend({
         id: 'groupsContainer',
         childView: GroupContent,
+        group_borders_size: 0,
         initialize: function (options) {
             // boilerplate in marionette if you listen m/c here, use collectionEvents or modelEvents
             //this.listenTo(this.collection, 'change reset add remove', this.calculateGridSize);
@@ -81,7 +83,7 @@ define(function (require) {
         getMinIdeaPixels: function() {
             if (isOneNavigationGroup()) {
                 if (this.models.first().getPanelSpecByType('ideaPanel').get('minimized')) {
-                    return 40;
+                    return AssemblPanel.minimized_size;
                 }
             }
             return 0;

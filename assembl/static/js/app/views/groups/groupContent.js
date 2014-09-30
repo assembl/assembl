@@ -12,7 +12,7 @@ define(function (require) {
         className: "groupContent",
         childViewContainer: ".groupBody",
         childView: PanelWrapper,
-        panel_borders_size: 0,
+        panel_borders_size: 1,
 
         initialize: function (options) {
             var that = this;
@@ -73,13 +73,11 @@ define(function (require) {
             this.children.each(function (panelWrapper) {
                 if (panelWrapper.model.get('hidden'))
                     return;
-                if (panelWrapper.model.get('minimized')) {
-                    if (!include_embedded_idea_panel
-                        && panelWrapper.model.get('minimized')
-                        && this.groupContainer.isOneNavigationGroup()
-                        && panelWrapper.model.get('type') == 'idea') {
-                        return;
-                    }
+                if (!include_embedded_idea_panel
+                    && panelWrapper.model.get('minimized')
+                    && this.groupContainer.isOneNavigationGroup()
+                    && panelWrapper.model.get('type') == 'idea') {
+                    return;
                 }
                 extraPixels += this.panel_borders_size + panelWrapper.getExtraPixels(include_embedded_idea_panel);
             });

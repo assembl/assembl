@@ -34,7 +34,6 @@ define(function (require) {
         _minimizedStateButton: null,
         _originalWidth: null,
         _nextElementOriginalWidth: null,
-        minimized_size: 40,
         minSize: 40,
 
         initialize: function (options) {
@@ -237,7 +236,7 @@ define(function (require) {
 
         getExtraPixels: function (include_embedded_idea_panel) {
             if (this.model.get('minimized')) {
-                return this.minimized_size;
+                return AssemblPanel.minimized_size;
             }
             return 0;
         },
