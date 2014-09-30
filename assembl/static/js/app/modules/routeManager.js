@@ -63,30 +63,35 @@ define(function (require) {
         },
 
         restoreViews: function () {
-            Assembl.headerRegions.show(new navBar());
-            /**
-             * Render the current group of views
-             * */
-            var groupSpecsP = collectionManager().getGroupSpecsCollectionPromise(viewsFactory);
+          Assembl.headerRegions.show(new navBar());
+          /**
+           * Render the current group of views
+           * */
+          var groupSpecsP = collectionManager().getGroupSpecsCollectionPromise(viewsFactory);
 
-            groupSpecsP.done(function (groupSpecs) {
-                var group = new GroupContainer({
-                    collection: groupSpecs
-                });
-                var lastSave = storage.getDateOfLastViewSave();
-                if (!lastSave || (Date.now() - lastSave.getTime() > (7 * 24 * 60 * 60 * 1000))) {
-                    var navigableGroupSpec = groupSpecs.find(function (aGroupSpec) {
-                        return aGroupSpec.getNavigationSpec();
-                    });
-                    if (navigableGroupSpec) {
-                        window.setTimeout(function () {
-                            var groupContent = group.children.findByModel(navigableGroupSpec);
-                            groupContent.resetContextState();
-                        });
-                    }
+          groupSpecsP.done(function (groupSpecs) {
+              var group = new GroupContainer({
+                  collection: groupSpecs
+              });
+              var lastSave = storage.getDateOfLastViewSave();
+              if (!lastSave
+                  || (Date.now() - lastSave.getTime() > (7 * 24 * 60 * 60 * 1000))
+                  ) {
+                /* Reset the context of the user view, if it's too old to be 
+                  usable, or if it wasn't initialized before */
+                // Find if a group exists that has a navigation panel
+                var navigableGroupSpec = groupSpecs.find(function (aGroupSpec) {
+                  return aGroupSpec.getNavigationPanelSpec();
+                  });
+                if (navigableGroupSpec) {
+                  window.setTimeout(function () {
+                    var groupContent = group.children.findByModel(navigableGroupSpec);
+                    groupContent.resetContextState();
+                  });
                 }
-                Assembl.groupContainer.show(group);
-            });
+              }
+              Assembl.groupContainer.show(group);
+          });
         },
 
         idea: function (id) {

@@ -14,6 +14,13 @@ define(function (require) {
             // boilerplate in marionette if you listen m/c here, use collectionEvents or modelEvents
             //this.listenTo(this.collection, 'change reset add remove', this.calculateGridSize);
         },
+
+        childViewOptions: function (child, index) {
+            return {
+                groupContainer: this
+            }
+        },
+
         onRender: function () {
             if (window.localStorage.getItem('showNotification')) {
                 this.$el.addClass('hasNotification');

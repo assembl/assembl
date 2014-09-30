@@ -40,7 +40,11 @@ define(function (require) {
             this.get('panels').remove(aPanelSpec);
         },
 
-        getNavigationSpec: function () {
+        /** 
+         * Return the part of the groupSpec that contains the navigation panel
+         * (if any)
+         */
+        getNavigationPanelSpec: function () {
             return this.get('panels').findWhere({type:'navSidebar'});
         },
 

@@ -12,10 +12,12 @@ define(function (require) {
         className: "groupContent",
         childViewContainer: ".groupBody",
         childView: PanelWrapper,
+        panel_borders_size: 0,
 
         initialize: function (options) {
             var that = this;
             this.collection = this.model.get('panels');
+            this.groupContainer = options['groupContainer'];
             setTimeout(function () {
                 var navView = that.getViewByTypeName('navSidebar');
                 if (navView) {
@@ -46,6 +48,8 @@ define(function (require) {
             this.children.each(function (panelWrapper) {
                 if (panelWrapper.model.get('hidden'))
                     return;
+                if (panelWrapper.model.get('minimized'))
+                    return;
                 gridSize += panelWrapper.gridSize;
             });
             return gridSize;
@@ -73,12 +77,12 @@ define(function (require) {
             }
         },
 
-        getNavigationSpec: function () {
-            return this.model.getNavigationSpec();
+        getNavigationPanelSpec: function () {
+            return this.model.getNavigationPanelSpec();
         },
 
         resetDebateState: function () {
-            if (this.getNavigationSpec()) {
+            if (this.getNavigationPanelSpec()) {
                 this.model.set('navigationState', 'debate');
                 this.removePanels('homePanel');
                 this.resetMessagePanel();
@@ -86,7 +90,7 @@ define(function (require) {
         },
 
         resetContextState: function () {
-            var nav = this.getNavigationSpec();
+            var nav = this.getNavigationPanelSpec();
             if (nav) {
                 this.model.set('navigationState', 'home');
                 this.ensureOnlyPanelsVisible('homePanel');
@@ -94,7 +98,7 @@ define(function (require) {
         },
 
         resetMessagePanel: function () {
-            var nav = this.getNavigationSpec();
+            var nav = this.getNavigationPanelSpec();
             if (ctx.getCurrentIdea() == undefined) {
                 this.setPanelWidthByType('messageList',
                     AssemblPanel.prototype.CONTEXT_PANEL_GRID_SIZE); // idea + message
@@ -120,7 +124,7 @@ define(function (require) {
 
         resetNavigation: function () {
             var that = this,
-                navigationSpec = this.getNavigationSpec(),
+                navigationSpec = this.getNavigationPanelSpec(),
                 ideaPanel = this.model.getPanelSpecByType('ideaPanel'),
                 messagePanelSpec = this.model.getPanelSpecByType('messagePanel'),
                 messagePanelView = this.children.findByModel(messagePanelSpec);
