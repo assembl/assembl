@@ -144,7 +144,7 @@ define(function (require) {
             if (this.getNavigationPanelSpec()) {
                 this.model.set('navigationState', 'debate');
                 this.removePanels('homePanel');
-                this.resetMessagePanel();
+                this.resetMessagePanelState();
             }
         },
 
@@ -156,11 +156,10 @@ define(function (require) {
             }
         },
 
-        resetMessagePanel: function () {
-            var nav = this.getNavigationPanelSpec(),
-                ideaPanel = this.getWrapperByTypeName('ideaPanel');
+        resetMessagePanelWidth: function() {
             if (this.groupContainer.isOneNavigationGroup()) {
-                var messagePanel = this.getWrapperByTypeName('messageList');
+                var ideaPanel = this.getWrapperByTypeName('ideaPanel'),
+                    messagePanel = this.getWrapperByTypeName('messageList');
                 if (ctx.getCurrentIdea() == undefined) {
                     messagePanel.setGridSize(AssemblPanel.prototype.CONTEXT_PANEL_GRID_SIZE); // idea + message
                     messagePanel.minSize = messagePanel.contents.currentView.getMinWidthWithOffset(ideaPanel.minWidth);
@@ -169,6 +168,12 @@ define(function (require) {
                     messagePanel.minSize = messagePanel.contents.currentView.getMinWidthWithOffset();
                 }
             }
+        },
+
+        resetMessagePanelState: function () {
+            var nav = this.getNavigationPanelSpec(),
+                ideaPanel = this.getWrapperByTypeName('ideaPanel');
+            this.resetMessagePanelWidth();
             if (ideaPanel != null && !ideaPanel.model.get('locked') && (!nav || this.model.get('navigationState') == 'debate')) {
                 if (ctx.getCurrentIdea() == undefined) {
                     ideaPanel.minimizePanel();
@@ -239,7 +244,7 @@ define(function (require) {
 
         getViewByTypeName: function (typeName) {
             var wrapper = this.getWrapperByTypeName(typeName);
-            if (wrapper !== null && wrapper.contents !== undefined) {
+            if (wrapper != null && wrapper.contents !== undefined) {
                 return wrapper.contents.currentView;
             }
             return wrapper;

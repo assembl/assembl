@@ -173,6 +173,11 @@ define(function (require) {
         unminimizePanel: function () {
             if (!this.model.get('minimized'))
                 return;
+            if (this.model.get("type") == "ideaPanel" && Ctx.getCurrentIdea() == undefined) {
+                // do not accept to unminimize if no idea to show
+                return;
+            }
+
             var compensateElement = this.$el.nextAll(":visible:not(.minimized)").last();
             this.model.set('minimized', false);
             this._minimizedStateButton
@@ -190,6 +195,9 @@ define(function (require) {
             this.$el.children(".panelContents").show();
             this.$el.find("header span.panel-header-title").show();
             this.$el.children(".panelContentsWhenMinimized").hide();
+            if (this.model.get("type") == "ideaPanel") {
+                this.groupContent.resetMessagePanelWidth();
+            }
             this.groupContent.groupContainer.resizeAllPanels();
         },
 
@@ -220,6 +228,9 @@ define(function (require) {
             this.$el.children(".panelContents").hide();
             this.$el.find("header span.panel-header-title").hide();
             this.$el.children(".panelContentsWhenMinimized").show();
+            if (this.model.get("type") == "ideaPanel") {
+                this.groupContent.resetMessagePanelWidth();
+            }
             this.groupContent.groupContainer.resizeAllPanels();
         },
 
@@ -262,8 +273,7 @@ define(function (require) {
                 if (isNaN(myCorrection))
                     alert("error");
                 myCorrection = Math.round(myCorrection);
-                var target = pixels_per_unit * gridSize,
-                    that = this;
+                var target = pixels_per_unit * gridSize;
                 this.$el.animate({'width': target}, 1000, 'swing', function() {
                     var before = that.$el.width();
                     var width = Math.round(100*gridSize/group_units)+"%";
