@@ -159,18 +159,10 @@ define(function (require) {
         toggleMinimize: function(evt) {
             evt.stopPropagation();
             evt.preventDefault();
-            this.model.set('minimized', !this.isPanelMinimized());
-            this.applyMinimizationState();
-        },
-
-        applyMinimizationState: function(){
-            if ( this.isPanelMinimized() )
-            {
-                this.minimizePanel();
-            }
-            else
-            {
+            if (this.isPanelMinimized()) {
                 this.unminimizePanel();
+            } else {
+                this.minimizePanel();
             }
         },
 
@@ -179,6 +171,8 @@ define(function (require) {
         },
 
         unminimizePanel: function () {
+            if (!this.model.get('minimized'))
+                return;
             var compensateElement = this.$el.nextAll(":visible:not(.minimized)").last();
             this.model.set('minimized', false);
             this._minimizedStateButton
@@ -187,9 +181,9 @@ define(function (require) {
                 .attr('data-original-title', i18n.gettext('Minimize panel'));
 
             //this.$el.css("width", this._originalWidth+"px");
-            this.$el.animate({ "width": this._originalWidth+"px"}, 1000);
+            //this.$el.animate({ "width": this._originalWidth+"px"}, 1000);
             //compensateElement.css("width", this._nextElementOriginalWidth+"px");
-            compensateElement.animate({"width": this._nextElementOriginalWidth+"px"}, 1000);
+            //compensateElement.animate({"width": this._nextElementOriginalWidth+"px"}, 1000);
             var el = this.$el;
             this.$el.addClass("minimizing");
 
@@ -200,6 +194,8 @@ define(function (require) {
         },
 
         minimizePanel: function () {
+            if (this.model.get('minimized'))
+                return;
             var compensateElement = this.$el.nextAll(":visible:not(.minimized)").last();
             this._originalWidth = this.$el.width();
             this._nextElementOriginalWidth = compensateElement.width();
@@ -216,9 +212,9 @@ define(function (require) {
             var diffWidth = currentWidth - targetWidth;
             var nextElementCurrentWidth = compensateElement.width();
             //this.$el.css("width", targetWidth+"px");
-            this.$el.animate({ "width": targetWidth+"px"}, 1000);
+            //this.$el.animate({ "width": targetWidth+"px"}, 1000);
             //compensateElement.css("width", (nextElementCurrentWidth+diffWidth) + "px");
-            compensateElement.animate({ "width": (nextElementCurrentWidth+diffWidth) + "px"}, 1000);
+            //compensateElement.animate({ "width": (nextElementCurrentWidth+diffWidth) + "px"}, 1000);
             this.$el.addClass("minimizing");
 
             this.$el.children(".panelContents").hide();

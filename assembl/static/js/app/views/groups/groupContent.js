@@ -172,13 +172,14 @@ define(function (require) {
                 this.setPanelWidthByType('messageList',
                     AssemblPanel.prototype.CONTEXT_PANEL_GRID_SIZE); // idea + message
                 if (nav && this.model.get('navigationState') == 'debate') {
-                    this.ensurePanelsHidden('ideaPanel');
-                    this.ensurePanelsVisible('messageList');
+                    this.getWrapperByTypeName('ideaPanel').minimizePanel();
+                    this.ensurePanelsVisible('messageList', 'ideaPanel');
                 }
             } else {
                 this.setPanelWidthByType('messageList',
                     AssemblPanel.prototype.MESSAGE_PANEL_GRID_SIZE);
                 if (nav && this.model.get('navigationState') == 'debate') {
+                    this.getWrapperByTypeName('ideaPanel').unminimizePanel();
                     this.ensurePanelsVisible('ideaPanel', 'messageList');
                 }
             }
@@ -232,18 +233,22 @@ define(function (require) {
             this.groupContainer.resizeAllPanels();
         },
 
-        getViewByTypeName: function (typeName) {
+        getWrapperByTypeName: function (typeName) {
             var model = this.model.getPanelSpecByType(typeName);
             if (model !== undefined) {
                 var view = this.children.findByModel(model);
                 if (view == null)
                     return;
-                if (view.contents !== undefined) {
-                    // wrapper
-                    view = view.contents.currentView;
-                }
                 return view;
             }
+        },
+
+        getViewByTypeName: function (typeName) {
+            var wrapper = this.getWrapperByTypeName(typeName);
+            if (wrapper !== null && wrapper.contents !== undefined) {
+                return wrapper.contents.currentView;
+            }
+            return wrapper;
         },
 
         /**
