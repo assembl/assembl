@@ -57,7 +57,8 @@
   color: $white;
 }
 
-#ideaPanel-definition {
+#ideaPanel-definition,
+#ideaPanel-longtitle {
   .panel-editablearea > * {
     color: $white;
   }
@@ -84,5 +85,6 @@
   }
   .legend {
     color: $gray4;
+    font-weight: 600;
   }
 }

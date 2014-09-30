@@ -94,9 +94,8 @@ define(function (require) {
         },
 
         renderTemplateGetExtractsLabel: function () {
-            this.$el.find('#ideaPanel-section-segments-legend .legend').html(
-                this.getExtractsLabel()
-            );
+            this.$('.ideaPanel-section-segments-legend .legend').html(
+                this.getExtractsLabel());
         },
 
         /**
