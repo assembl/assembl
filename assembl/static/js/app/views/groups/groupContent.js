@@ -160,12 +160,12 @@ define(function (require) {
             if (this.groupContainer.isOneNavigationGroup()) {
                 var ideaPanel = this.getWrapperByTypeName('ideaPanel'),
                     messagePanel = this.getWrapperByTypeName('messageList');
-                if (ctx.getCurrentIdea() == undefined) {
+                if (ideaPanel.isPanelMinimized()) {
                     messagePanel.setGridSize(AssemblPanel.prototype.CONTEXT_PANEL_GRID_SIZE); // idea + message
-                    messagePanel.minSize = messagePanel.contents.currentView.getMinWidthWithOffset(ideaPanel.minWidth);
+                    messagePanel.minWidth = messagePanel.contents.currentView.getMinWidthWithOffset(ideaPanel.minWidth);
                 } else {
                     messagePanel.setGridSize(AssemblPanel.prototype.MESSAGE_PANEL_GRID_SIZE);
-                    messagePanel.minSize = messagePanel.contents.currentView.getMinWidthWithOffset();
+                    messagePanel.minWidth = messagePanel.contents.currentView.getMinWidthWithOffset(0);
                 }
             }
         },

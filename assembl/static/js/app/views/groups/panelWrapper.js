@@ -90,20 +90,8 @@ define(function (require) {
             this.groupContent.groupContainer.resizeAllPanels();
         },
         setGridSize: function (gridSize) {
-            var changed = false,
-                className = 'panelGridWidth-' + gridSize,
-                found = this.$el[0].className.match(/\b(panelGridWidth-[0-9]+)\b/);
             this.gridSize = gridSize;
-            if (found && found[0] != className) {
-                changed = true;
-                this.$el.removeClass(found[0]);
-            }
-            if ((!found) || found[0] != className) {
-                changed = true;
-                this.$el.addClass(className);
-            }
-            if (changed)
-                this.groupContent.adjustGridSize();
+            //this.groupContent.adjustGridSize();
         },
 
         /**
