@@ -13,8 +13,8 @@ $previewNumLines: 4;
 // ================
 .message {
   //position: relative;
-  box-sizing: content-box;
-  padding: 10px;
+  box-sizing: border-box;
+  padding: 7px 10px;
   //margin: 0px $mesageSpacing 0px $mesageSpacing; //TODO: fix scroolbar margin
   min-height: $avatarSize;
   height: auto;
@@ -29,7 +29,7 @@ $previewNumLines: 4;
     display: inline-block;
     vertical-align: middle;
     width: $avatarSize;
-    height: $avatarSize;
+    //height: $avatarSize;
     margin: 0;
     padding: 0;
     img {
@@ -139,7 +139,7 @@ $previewNumLines: 4;
       margin-top: $mesageSpacing;
     }
     .head {
-      border-bottom: 2px solid $green;
+      border-bottom: 2px solid $gray3;
     }
   }
 
@@ -230,10 +230,16 @@ $previewNumLines: 4;
       float: left;
       margin: 0px;
       text-align: left;
+      .avatar {
+        vertical-align: bottom;
+      }
     }
     .rightSection {
       float: right;
       margin: 0px;
+      .readUnreadIndicator {
+        margin-top: 10px;
+      }
     }
     .centerSection {
       margin: 0px;
@@ -314,6 +320,10 @@ $previewNumLines: 4;
     .readUnreadIndicator {
       background-color: $green;
       border: 1px solid transparent;
+    }
+
+    .head {
+      border-bottom: 2px solid $green;
     }
   }
 
