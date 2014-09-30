@@ -34,7 +34,6 @@ define(function (require) {
         _minimizedStateButton: null,
         _originalWidth: null,
         _nextElementOriginalWidth: null,
-        minSize: 40,
 
         initialize: function (options) {
             var contentClass = panelClassByTypeName(options.contentSpec);
@@ -44,7 +43,7 @@ define(function (require) {
                 panelWrapper: this
             });
             this.gridSize = this.contentsView.gridSize || AssemblPanel.prototype.DEFAULT_GRID_SIZE;
-            this.minSize = this.contentsView.minSize || AssemblPanel.prototype.DEFAULT_MIN_SIZE;
+            this.minWidth = this.contentsView.minWidth || AssemblPanel.prototype.DEFAULT_MIN_SIZE;
             Marionette.bindEntityEvents(this, this.model, this.modelEvents);
 
             this.model.set('minimized', false); // TODO: memorize previous state and apply it
@@ -253,6 +252,7 @@ define(function (require) {
                     that.$el.removeClass("animating");
                     that.$el.addClass("minimized");
                     that.$el.removeClass("minimizing");
+                    that.$el.css("min-width", AssemblPanel.prototype.minimized_size);
                 });
             } else {
                 that.$el.removeClass("minimized");
@@ -270,13 +270,14 @@ define(function (require) {
                     that = this;
                 this.$el.animate({'width': target}, 1000, 'swing', function() {
                     var before = that.$el.width();
-                    var width = Math.round(percent_per_unit * gridSize)+"%";
+                    var width = Math.round(100*gridSize/group_units)+"%";
                     if (myCorrection > 0) {
                         width = "calc("+width+" - "+Math.round(myCorrection)+"px)";
                     }
                     that.$el.width(width);
                     console.log(that.model.get('type'), target, before, that.$el.width(), width);
                     that.$el.removeClass("animating");
+                    that.$el.css("min-width", that.minWidth);
                 });
             }
         },

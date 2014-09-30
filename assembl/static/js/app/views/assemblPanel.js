@@ -15,7 +15,7 @@ define(function (require) {
         DEFAULT_GRID_SIZE: 3, // grid units
         DEFAULT_MIN_SIZE: 200, // pixels
         gridSize: 3,
-        minSize: 200,
+        minWidth: 200,
         IDEA_PANEL_GRID_SIZE: 3,
         MESSAGE_PANEL_GRID_SIZE: 5,
         NAVIGATION_PANEL_GRID_SIZE: 4,

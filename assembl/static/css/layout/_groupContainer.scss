@@ -88,6 +88,7 @@
 .groupBody {
   display: table;
   height: calc(100% - 3px); /* retain the height of .groupHeader */
+  width: 100%;
   &.editable {
     height: calc(100% - 25px); /* retain the height of .groupHeader */
   }

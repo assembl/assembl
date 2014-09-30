@@ -70,7 +70,7 @@ define(function (require) {
                 alert("error");
             this.useCurrentSize(); // get current sizes and override min/% with current size
             var window_width = window.innerWidth;
-            var total_min_size = this.calculateMinSize();
+            var total_min_size = this.calculateMinWidth();
             if (isNaN(total_min_size))
                 alert("error");
             var use_percent = (total_min_size + extra_pixels + min_idea_pixels < window_width);
@@ -112,13 +112,13 @@ define(function (require) {
             });
         },
 
-        calculateMinSize: function() {
-            var minSize = 0,
+        calculateMinWidth: function() {
+            var min_width = 0,
                 that = this;
             this.children.each(function (child) {
-                minSize += child.calculateMinSize();
+                min_width += child.calculateMinWidth();
             });
-            return minSize;
+            return min_width;
         },
 
         animateTowardsPixels: function(pixels_per_unit, percent_per_unit, extra_pixels, num_units) {

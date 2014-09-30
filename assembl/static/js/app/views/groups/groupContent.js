@@ -56,17 +56,17 @@ define(function (require) {
             return gridSize;
         },
 
-        calculateMinSize: function () {
-            var minSize = 0;
+        calculateMinWidth: function () {
+            var minWidth = 0;
             this.children.each(function (panelWrapper) {
                 if (panelWrapper.model.get('hidden'))
                     return;
                 if (panelWrapper.model.get('minimized'))
-                    minSize += 40;
+                    minWidth += 40;
                 else
-                    minSize += panelWrapper.minSize;
+                    minWidth += panelWrapper.minWidth;
             });
-            return minSize;
+            return minWidth;
         },
 
         getExtraPixels: function (include_embedded_idea_panel) {
@@ -91,22 +91,36 @@ define(function (require) {
                     return;
                 panelWrapper.useCurrentSize();
             });
-            // this.$el.width(this.$el.width());
-            // this.$el.addClass("animating");
+            this.$el.width(this.$el.width());
+            this.$el.addClass("animating");
         },
 
         animateTowardsPixels: function(pixels_per_unit, percent_per_unit, extra_pixels, num_units) {
-            var gridSize = this.calculateGridSize();
-            // var num_minimized_panels = this.num_minimized_panels();
+            var that = this,
+                group_extra_pixels = this.getExtraPixels(false),
+                group_units = this.calculateGridSize(),
+                myCorrection = Math.round(group_extra_pixels - (extra_pixels * group_units / num_units)),
+                width = Math.round(100 * group_units / num_units) + "%",
+                target = (window.innerWidth * group_units / num_units) + myCorrection,
+                group_min_size = this.calculateMinWidth();
+
+            if (myCorrection != 0) {
+                var sign = (myCorrection > 0)?"+":"-";
+                myCorrection = Math.abs(myCorrection);
+                width = "calc("+width + " "+sign+" "+ myCorrection +"px)";
+            }
+            this.$el.animate({'width': target}, 1000, 'swing', function() {
+                var before = that.$el.width();
+                that.$el.width(width);
+                console.log("group", target, before, that.$el.width(), width);
+                that.$el.removeClass("animating");
+                that.$el.css("min-width", group_min_size);
+            });
             this.children.each(function (panelWrapper) {
                 if (panelWrapper.model.get('hidden'))
                     return;
-                panelWrapper.animateTowardsPixels(pixels_per_unit, percent_per_unit, extra_pixels, num_units, gridSize);
+                panelWrapper.animateTowardsPixels(pixels_per_unit, percent_per_unit, extra_pixels, num_units, group_units);
             });
-            // var myCorrection = extra_pixels / gridSize;
-            // this.$el.animate({'width': pixels_per_unit * gridSize}, 1000, 'swing', function() {
-            //     this.$el.width("calc("+(100*gridSize/group_units)+"% - "+myCorrection"px)");
-            // });
         },
 
         adjustGridSize: function () {
