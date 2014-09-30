@@ -22,10 +22,9 @@
 
 .nugget-indice {
   position: relative;
-  left: -10px;
-  top: -10px;
   float: left;
   padding: 2px 0px;
+  margin-top: 6px;
 
   .nugget {
     cursor: pointer;
@@ -61,6 +60,7 @@
 #ideaPanel-longtitle {
   .panel-editablearea > * {
     color: $white;
+    font-weight: 300;
   }
 }
 

@@ -57,14 +57,8 @@
   </button>
   <% } %>
 
-  <% if(ctx.userCanChangeUi()) { %>
-    <div class="nugget-indice">
-      <a href="#" class="nugget js_selectAsNugget <%= segment.get('important') ? 'isSelected':'' %>"><i class="icon-diamond"></i></a>
-    </div>
-  <% } %>
-
   <div class="postit-footer">
-    <p class="text-quotation clr"><%= segment.getQuote() %></p>
+    <p class="text-quotation"><%= segment.getQuote() %></p>
 
     <% if(ctx.userCanChangeUi()) { %>
       <div class="segment-harvester tac">
@@ -72,6 +66,12 @@
           {{ gettext('%(img)s')|format(img=segmentCreatorAvatarImg)|safe }}
           {#<span class="creatorName">{{ segmentCreatorName|safe }}</span>#}
         </div>
+
+        <% if(ctx.userCanChangeUi()) { %>
+          <div class="nugget-indice">
+            <a href="#" class="nugget js_selectAsNugget <%= segment.get('important') ? 'isSelected':'' %>"><i class="icon-diamond"></i></a>
+          </div>
+        <% } %>
       </div>
     <% } %>
 

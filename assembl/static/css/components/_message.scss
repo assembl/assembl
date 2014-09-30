@@ -297,7 +297,7 @@ $previewNumLines: 4;
     box-sizing: border-box;
     width: $readUnreadIndicatorSize;
     height: $readUnreadIndicatorSize;
-    margin: 0 0 0 $mesageSpacing*2;
+    margin: $mesageSpacing 0 0 $mesageSpacing*2;
     vertical-align: middle;
     border: 1px solid $gray;
     float: right;
@@ -324,6 +324,32 @@ $previewNumLines: 4;
 
     .head {
       border-bottom: 2px solid $green;
+    }
+  }
+
+  &.SynthesisPost {
+    .message-subject {
+      background-color: $green;
+      margin: 0;
+      padding: 10px;
+      color: $white;
+    }
+    .message-body {
+      margin-top: 0;
+    }
+    .synthesisPanel-introduction,
+    .synthesisPanel-conclusion,
+    .message-subject {
+      color: $white;
+    }
+  }
+
+  &.SynthesisPost {
+    &.viewStyleTitleOnly {
+      .message-subject {
+        margin-left: 5px;
+        padding: 0 10px;
+      }
     }
   }
 
