@@ -30,7 +30,6 @@
     }
     .panel-editablebox.is-editing {
       .panel-editablearea {
-        //background-color: $white;
         color: $black;
       }
     }
@@ -161,7 +160,6 @@
 // An editable area within the .panel-header
 // ----------------
 .panel-editablearea {
-  @extend .text;
   @include box-sizing(border-box);
   display: inline-block;
   width: 100%;
@@ -169,7 +167,7 @@
   cursor: text;
   background-color: white;
   padding: 3px 0 3px 4px;
-  //min-height: 30px;
+  color: $white;
 }
 
 // +++++++
