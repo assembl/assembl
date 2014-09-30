@@ -1,16 +1,13 @@
 <div class="panel-body body-synthesis">
     <div class="synthesis">
-        <div class="synthesisPanel-title"></div>
-
-        <div class="spacer"></div>
 
         <div class="border-bottom introduction">
-            <div class="text-muted">{{ gettext('Introduction') }}</div>
+            <!--<div class="text-muted">{{ gettext('Introduction') }}</div>-->
+            <div class="synthesisPanel-title"></div>
             <div class="synthesisPanel-introduction"></div>
         </div>
 
-        <div class="synthesisPanel-ideas">
-        </div>
+        <div class="synthesisPanel-ideas"></div>
 
         <div class="spacer"></div>
 
@@ -21,9 +18,8 @@
     </div>
 
     <% if (canSend) { %>
-    <div class="spacer"></div>
-    <div class="box box--noborder tar">
-        <a id="segmentList-clear" class="button synthesisPanel-publishButton"> <i class="icon-edit"></i> {{ gettext('Publish') }} &nbsp;</a>
+    <div class="mas tar">
+        <a id="segmentList-clear" class="synthesisPanel-publishButton btn btn-primary btn-sm"> <i class="icon-edit"></i> {{ gettext('Publish') }} &nbsp;</a>
     </div>
     <% } %>
 </div>

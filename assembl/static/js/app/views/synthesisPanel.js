@@ -20,7 +20,10 @@ define(function (require) {
 
 
     var SynthesisPanel = AssemblPanel.extend({
-
+        template: '#tmpl-synthesisPanel',
+        panelType: 'synthesisPanel',
+        className: 'synthesisPanel',
+        gridSize: AssemblPanel.prototype.SYNTHESIS_PANEL_GRID_SIZE,
         /**
          * @init
          */
@@ -65,9 +68,11 @@ define(function (require) {
             Assembl.commands.setHandler('synthesisPanel:render', this.render);
         },
 
-        panelType: 'synthesisPanel',
-        className: 'synthesisPanel',
-        gridSize: AssemblPanel.prototype.SYNTHESIS_PANEL_GRID_SIZE,
+        events: {
+            'click .synthesisPanel-publishButton': 'publish',
+            'click .synthesisPanel-fullscreenButton': 'setFullscreen'
+        },
+
         getTitle: function () {
             return i18n.gettext('Synthesis');
         },
@@ -83,12 +88,6 @@ define(function (require) {
          * @type {Boolean}
          */
         collapsed: false,
-
-        /**
-         * The template
-         * @type {_.template}
-         */
-        template: '#tmpl-synthesisPanel',
 
         serializeData: function () {
             var currentUser = Ctx.getCurrentUser(),
@@ -195,15 +194,6 @@ define(function (require) {
                 });
 
             return this;
-        },
-
-
-        /**
-         * @events
-         */
-        events: {
-            'click .synthesisPanel-publishButton': 'publish',
-            'click .synthesisPanel-fullscreenButton': 'setFullscreen'
         },
 
         /**

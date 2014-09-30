@@ -11,10 +11,21 @@
         {{ gettext('By') }}
     <% } %>
     <% _.each(authors, function(author, index, list) { %>
-        <img src="<%= author.getAvatarUrl(20) %>" alt="{{ gettext('Avatar for') }} <%= author.get('name') %>"  class="image-rounded" width="20" height="20" />
-        <i style='font-style: italic;font-size:80%;'><%= author.get('name') %></i><% if( index < list.length-1 ) { %>,<% } %>
+        <!--<img src="<%= author.getAvatarUrl(20) %>" alt="{{ gettext('Avatar for') }} <%= author.get('name') %>"  class="image-rounded" width="20" height="20" />
+        <i style='font-style: italic;font-size:80%;'><%= author.get('name') %></i><% if( index < list.length-1 ) { %>,<% } %>-->
+
+        <a class="popover-display">
+          <%= author.get('name') %>
+          <span class="popover">
+            <span class="popover-content">
+               <img src="<%= author.getAvatarUrl(20) %>" alt="{{ gettext('Avatar for') }} <%= author.get('name') %>"  class="img-rounded" width="20" height="20" />
+               <%= author.get('name') %>
+            </span>
+          </span>
+        </a>
+
     <% }) %>
-    <a class = "synthesisIdea-replybox-openbtn icon-comment" href="#">{{ gettext('comment') }}</a>
+    <a href="#" class="synthesisIdea-replybox-openbtn icon-comment fr mrs"></a> {#{{ gettext('comment') }}#}
     <span class="synthesisIdea-replybox hidden"></span>
 </span>
 
