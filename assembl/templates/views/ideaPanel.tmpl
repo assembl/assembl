@@ -76,13 +76,13 @@
 
     <fieldset id="ideaPanel-section-segments" class="panel-section">
       <% if(Ctx.userCanChangeUi()){ %>
-        <legend class="plxs pts" id="ideaPanel-section-segments-legend" data-toggle="tooltip" title="{{gettext('Expressions of this idea in segments of posts or on the web')}}">
-           <span><% print(getExtractsLabel()) %></span>
-        </legend>
+        <div class="plxs pts ideaPanel-section-segments-legend plxs pts" data-toggle="tooltip" title="{{gettext('Expressions of this idea in segments of posts or on the web')}}">
+           <i class="icon-diamond"></i><span class="legend"><% print(getExtractsLabel()) %></span>
+        </div>
       <% } else { %>
-      <legend class="plxs" id="ideaPanel-section-segments-legend" data-toggle="tooltip" title="">
-          <span><i class="icon-diamond"></i>{{ gettext('highlights for') }}</span>
-      </legend>
+      <div class="ideaPanel-section-segments-legend plxs pts" data-toggle="tooltip" title="">
+          <i class="icon-diamond"></i><span class="legend">{{ gettext('highlights for') }}</span>
+      </div>
       <% } %>
 
       <div class="postitlist"></div>
