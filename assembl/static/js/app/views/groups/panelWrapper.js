@@ -246,15 +246,17 @@ define(function (require) {
         },
 
         useCurrentSize: function() {
+            this.$el.stop();
             this.$el.width(this.$el.width());
             this.$el.addClass("animating");
         },
 
         animateTowardsPixels: function(pixels_per_unit, percent_per_unit, extra_pixels, num_units, group_units) {
+            var that = this;
             if (this.model.get('minimized')) {
                 var target = pixels_per_unit * gridSize;
                 this.$el.animate({'width': this.minimized_size}, 1000, 'swing', function() {
-                    this.$el.removeClass("animating");
+                    that.$el.removeClass("animating");
                 });
             } else {
                 var gridSize = this.gridSize;
@@ -267,8 +269,10 @@ define(function (require) {
                 var target = pixels_per_unit * gridSize,
                     that = this;
                 this.$el.animate({'width': target}, 1000, 'swing', function() {
-                    that.$el.width("calc("+(percent_per_unit*gridSize)+"% - "+myCorrection+"px)");
-                    console.log(that, target, that.$el.width());
+                    var before = that.$el.width();
+                    var calc = "calc("+(percent_per_unit*gridSize)+"% - "+myCorrection+"px)";
+                    that.$el.width(calc);
+                    console.log(that.model.get('type'), target, before, that.$el.width(), calc);
                     that.$el.removeClass("animating");
                 });
             }

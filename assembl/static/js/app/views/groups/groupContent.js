@@ -76,7 +76,7 @@ define(function (require) {
                     return;
                 if (!include_embedded_idea_panel
                     && panelWrapper.model.get('minimized')
-                    && this.groupContainer.isOneNavigationGroup()
+                    && that.groupContainer.isOneNavigationGroup()
                     && panelWrapper.model.get('type') == 'idea') {
                     return;
                 }
@@ -87,6 +87,8 @@ define(function (require) {
 
         useCurrentSize: function() {
             this.children.each(function (panelWrapper) {
+                if (panelWrapper.model.get('hidden'))
+                    return;
                 panelWrapper.useCurrentSize();
             });
             // this.$el.width(this.$el.width());
@@ -97,6 +99,8 @@ define(function (require) {
             var gridSize = this.calculateGridSize();
             // var num_minimized_panels = this.num_minimized_panels();
             this.children.each(function (panelWrapper) {
+                if (panelWrapper.model.get('hidden'))
+                    return;
                 panelWrapper.animateTowardsPixels(pixels_per_unit, percent_per_unit, extra_pixels, num_units, gridSize);
             });
             // var myCorrection = extra_pixels / gridSize;
