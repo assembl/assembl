@@ -13,8 +13,12 @@ define(function (require) {
         childView: GroupContent,
         group_borders_size: 0,
         initialize: function (options) {
+            var that = this;
             // boilerplate in marionette if you listen m/c here, use collectionEvents or modelEvents
             //this.listenTo(this.collection, 'change reset add remove', this.calculateGridSize);
+            setTimeout(function () {
+                that.resizeAllPanels();
+            }, 200);
         },
 
         childViewOptions: function (child, index) {
@@ -45,6 +49,7 @@ define(function (require) {
 
 
         resizeAllPanels: function() {
+            console.trace();
             // pixels from borders, or minimized panels except (boolean) those counted below.
             var extra_pixels = this.getExtraPixels(false); // global
             if (isNaN(extra_pixels))

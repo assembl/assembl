@@ -24,7 +24,6 @@ define(function (require) {
                     //navView.loadView(that.model.get('navigationState'));
                     navView.toggleMenuByName(that.model.get('navigationState'));
                 }
-                that.adjustGridSize();
             }, 200);
         },
         events: {
@@ -86,6 +85,7 @@ define(function (require) {
         },
 
         useCurrentSize: function() {
+            this.$el.stop();
             this.children.each(function (panelWrapper) {
                 if (panelWrapper.model.get('hidden'))
                     return;
