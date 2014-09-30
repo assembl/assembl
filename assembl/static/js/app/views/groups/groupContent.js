@@ -48,9 +48,9 @@ define(function (require) {
             var gridSize = 0;
             this.children.each(function (panelWrapper) {
                 if (panelWrapper.model.get('hidden'))
-                    return;
+                    return 0;
                 if (panelWrapper.model.get('minimized'))
-                    return;
+                    return 0;
                 gridSize += panelWrapper.gridSize;
             });
             return gridSize;

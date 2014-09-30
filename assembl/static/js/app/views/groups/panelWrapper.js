@@ -192,13 +192,7 @@ define(function (require) {
             //compensateElement.css("width", this._nextElementOriginalWidth+"px");
             compensateElement.animate({"width": this._nextElementOriginalWidth+"px"}, 1000);
             var el = this.$el;
-            setTimeout(function(){
-                el.removeClass("minimized");
-            }, 200);
-            setTimeout(function(){ // reset width
-                el.css("width", "");
-                //compensateElement.css("width", "");
-            }, 1050);
+            this.$el.addClass("minimizing");
 
             this.$el.children(".panelContents").show();
             this.$el.find("header span.panel-header-title").show();
@@ -226,7 +220,7 @@ define(function (require) {
             this.$el.animate({ "width": targetWidth+"px"}, 1000);
             //compensateElement.css("width", (nextElementCurrentWidth+diffWidth) + "px");
             compensateElement.animate({ "width": (nextElementCurrentWidth+diffWidth) + "px"}, 1000);
-            this.$el.addClass("minimized");
+            this.$el.addClass("minimizing");
 
             this.$el.children(".panelContents").hide();
             this.$el.find("header span.panel-header-title").hide();
@@ -240,7 +234,7 @@ define(function (require) {
 
         getExtraPixels: function (include_embedded_idea_panel) {
             if (this.model.get('minimized')) {
-                return AssemblPanel.minimized_size;
+                return AssemblPanel.prototype.minimized_size;
             }
             return 0;
         },
@@ -254,25 +248,34 @@ define(function (require) {
         animateTowardsPixels: function(pixels_per_unit, percent_per_unit, extra_pixels, num_units, group_units) {
             var that = this;
             if (this.model.get('minimized')) {
-                var target = pixels_per_unit * gridSize;
-                this.$el.animate({'width': this.minimized_size}, 1000, 'swing', function() {
+                var target = AssemblPanel.prototype.minimized_size;
+                this.$el.animate({'width': target}, 1000, 'swing', function() {
                     that.$el.removeClass("animating");
+                    that.$el.addClass("minimized");
+                    that.$el.removeClass("minimizing");
                 });
             } else {
+                that.$el.removeClass("minimized");
                 var gridSize = this.gridSize;
                 var myCorrection = extra_pixels / num_units;
                 if (this.groupContent.groupContainer.isOneNavigationGroup()
                     && this.model.get('type') == 'messageList'
                     && this.groupContent.model.getPanelSpecByType('ideaPanel').get('minimized')) {
-                        myCorrection += this.minimized_size;
+                        myCorrection += AssemblPanel.prototype.minimized_size;
                 }
+                if (isNaN(myCorrection))
+                    alert("error");
+                myCorrection = Math.round(myCorrection);
                 var target = pixels_per_unit * gridSize,
                     that = this;
                 this.$el.animate({'width': target}, 1000, 'swing', function() {
                     var before = that.$el.width();
-                    var calc = "calc("+(percent_per_unit*gridSize)+"% - "+myCorrection+"px)";
-                    that.$el.width(calc);
-                    console.log(that.model.get('type'), target, before, that.$el.width(), calc);
+                    var width = Math.round(percent_per_unit * gridSize)+"%";
+                    if (myCorrection > 0) {
+                        width = "calc("+width+" - "+Math.round(myCorrection)+"px)";
+                    }
+                    that.$el.width(width);
+                    console.log(that.model.get('type'), target, before, that.$el.width(), width);
                     that.$el.removeClass("animating");
                 });
             }

@@ -230,40 +230,8 @@
   height: 99%;
 }
 
-.groupPanel {
-  @for $panel_width from 1 through $min_num_grid_units {
-    &.panelGridWidth-#{$panel_width} {
-      width: floor($grid_unit_min_size * $panel_width);
-    }
-  }
-  .groupContent {
-    @for $group_width from 1 through $max_group_unit_size {
-      &.groupGridSize-#{$group_width} {
-        width: floor($grid_unit_min_size * $group_width);
-      }
-    }
-  }
-}
-
-@for $screen_grid_size from $min_num_grid_units through ($max_num_grid_units) {
-  @media (min-width: floor($grid_unit_min_size * $screen_grid_size) + 1px) {
-    #groupsContainer.allGroupsGridSize-#{$screen_grid_size} {
-      .groupPanel {
-        @for $panel_width from 1 through min($max_panel_unit_size, $screen_grid_size) {
-          &.panelGridWidth-#{$panel_width} {
-            width: 100% * $panel_width / $screen_grid_size;
-          }
-        }
-      }
-      .groupContent {
-        @for $group_width from 1 through min($max_group_unit_size, $screen_grid_size) {
-          &.groupGridSize-#{$group_width} {
-            width: 100% * $group_width / $screen_grid_size;
-          }
-        }
-      }
-    }
-  }
+#groupsContainer {
+  width: 100%;
 }
 
 // To put the content
