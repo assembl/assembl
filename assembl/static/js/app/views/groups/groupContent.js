@@ -124,17 +124,7 @@ define(function (require) {
         },
 
         adjustGridSize: function () {
-            var gridSize = this.calculateGridSize(),
-                className = 'groupGridSize-' + gridSize,
-                found = this.$el[0].className.match(/\b(groupGridSize-[0-9]+)\b/);
-
-            if (found && found[0] != className) {
-                this.$el.removeClass(found[0]);
-            }
-            if ((!found) || found[0] != className) {
-                this.$el.addClass(className);
-                this.model.collection.trigger('change');
-            }
+            this.groupContainer.resizeAllPanels();
         },
         /**
          * Tell the panelWrapper which view to put in its contents
@@ -167,22 +157,26 @@ define(function (require) {
         },
 
         resetMessagePanel: function () {
-            var nav = this.getNavigationPanelSpec();
-            if (ctx.getCurrentIdea() == undefined) {
-                this.setPanelWidthByType('messageList',
-                    AssemblPanel.prototype.CONTEXT_PANEL_GRID_SIZE); // idea + message
-                if (nav && this.model.get('navigationState') == 'debate') {
-                    this.getWrapperByTypeName('ideaPanel').minimizePanel();
-                    this.ensurePanelsVisible('messageList', 'ideaPanel');
-                }
-            } else {
-                this.setPanelWidthByType('messageList',
-                    AssemblPanel.prototype.MESSAGE_PANEL_GRID_SIZE);
-                if (nav && this.model.get('navigationState') == 'debate') {
-                    this.getWrapperByTypeName('ideaPanel').unminimizePanel();
-                    this.ensurePanelsVisible('ideaPanel', 'messageList');
+            var nav = this.getNavigationPanelSpec(),
+                ideaPanel = this.getWrapperByTypeName('ideaPanel');
+            if (this.groupContainer.isOneNavigationGroup()) {
+                var messagePanel = this.getWrapperByTypeName('messageList');
+                if (ctx.getCurrentIdea() == undefined) {
+                    messagePanel.setGridSize(AssemblPanel.prototype.CONTEXT_PANEL_GRID_SIZE); // idea + message
+                    messagePanel.minSize = messagePanel.contents.currentView.getMinWidthWithOffset(ideaPanel.minWidth);
+                } else {
+                    messagePanel.setGridSize(AssemblPanel.prototype.MESSAGE_PANEL_GRID_SIZE);
+                    messagePanel.minSize = messagePanel.contents.currentView.getMinWidthWithOffset();
                 }
             }
+            if (ideaPanel != null && !ideaPanel.model.get('locked') && (!nav || this.model.get('navigationState') == 'debate')) {
+                if (ctx.getCurrentIdea() == undefined) {
+                    ideaPanel.minimizePanel();
+                } else {
+                    ideaPanel.unminimizePanel();
+                }
+            }
+            this.ensurePanelsVisible('ideaPanel', 'messageList');
         },
 
         setPanelWidthByType: function (panelType, width) {

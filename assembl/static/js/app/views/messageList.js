@@ -41,6 +41,7 @@ define(function (require) {
         className: 'panel messageList',
         lockable: true,
         gridSize: AssemblPanel.prototype.MESSAGE_PANEL_GRID_SIZE,
+        minWidth: 400, // basic, may receive idea offset.
 
         ui: {
             panelBody: ".panel-body",
@@ -483,6 +484,10 @@ define(function (require) {
                     this.ui.panelBody.animate({ scrollTop: target });
                 }
             }
+        },
+
+        getMinWidthWithOffset: function(offset) {
+            return this.minWidth + offset;
         },
 
         scrollToElement: function (el) {
