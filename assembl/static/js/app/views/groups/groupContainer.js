@@ -41,8 +41,12 @@ define(function (require) {
         },
 
         isOneNavigationGroup: function() {
-            if (this.collection.size() == 1 && this.collection.first().getPanelSpecByType('navSidebar')) {
-                return true;
+            if (this.collection.size() == 1) {
+                var group1 = this.collection.first();
+                var panel1 = group1.get('panels').first();
+                if (    panel1.get('type') == 'navSidebar'
+                    ||  panel1.get('type') == 'ideaList')
+                    return true;
             }
             return false;
         },
