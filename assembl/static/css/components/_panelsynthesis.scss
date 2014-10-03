@@ -18,10 +18,10 @@
       min-height: 40px;
       padding-top: 10px;
       &:hover {
-        .synthesisIdea-replybox-openbtn {
+        /*.synthesisIdea-replybox-openbtn {
           visibility: visible;
           opacity: 1;
-        }
+        } */
       }
       .panel-editablearea {
         width: 100%;
@@ -41,8 +41,8 @@
         .synthesisIdea-replybox-openbtn {
           text-decoration: none;
           font-size: 20px;
-          visibility: hidden;
-          opacity: 0;
+          //visibility: hidden;
+          //opacity: 0;
         }
       }
     }
