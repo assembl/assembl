@@ -156,6 +156,10 @@ define(function (require) {
             return this.model.get('minimized');
         },
 
+        isPanelHidden: function () {
+            return this.model.get('hidden');
+        },
+
         unminimizePanel: function () {
             if (!this.model.get('minimized'))
                 return;

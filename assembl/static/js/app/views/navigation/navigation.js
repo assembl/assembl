@@ -119,13 +119,8 @@ define(function (require) {
                     var synthesisInNavigationPanel = new SynthesisInNavigationPanel({
                         groupContent: this.groupContent
                     });
-                    this.groupContent.groupContainer.suspendResize();
                     this.synthesis.show(synthesisInNavigationPanel);
-                    this.groupContent.removePanels('homePanel');
-                    this.groupContent.ensurePanelsVisible('messageList');
-                    this.groupContent.ensurePanelsHidden('ideaPanel');
-                    this.groupContent.setPanelWidthByType('messageList', AssemblPanel.prototype.CONTEXT_PANEL_GRID_SIZE);
-                    this.groupContent.groupContainer.resumeResize();
+                    this.groupContent.resetSynthesisMessagesState(synthesisInNavigationPanel);
                     break;
                 default:
                     break

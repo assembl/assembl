@@ -163,11 +163,22 @@ define(function (require) {
             }
         },
 
+        resetSynthesisMessagesState: function (synthesisInNavigationPanel) {
+            if (this.getNavigationPanelSpec()) {
+                this.groupContainer.suspendResize();
+                this.removePanels('homePanel');
+                this.ensurePanelsVisible('messageList');
+                this.ensurePanelsHidden('ideaPanel');
+                this.resetMessagePanelWidth();
+                this.groupContainer.resumeResize();
+            }
+        },
+
         resetMessagePanelWidth: function() {
             if (this.groupContainer.isOneNavigationGroup()) {
                 var ideaPanel = this.getWrapperByTypeName('ideaPanel'),
                     messagePanel = this.getWrapperByTypeName('messageList');
-                if (ideaPanel.isPanelMinimized()) {
+                if (ideaPanel.isPanelMinimized() || ideaPanel.isPanelHidden()) {
                     messagePanel.setGridSize(AssemblPanel.prototype.CONTEXT_PANEL_GRID_SIZE); // idea + message
                     messagePanel.minWidth = messagePanel.contents.currentView.getMinWidthWithOffset(ideaPanel.minWidth);
                 } else {
