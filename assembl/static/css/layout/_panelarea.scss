@@ -38,31 +38,6 @@ $panelarea-min-height: 400px;
     }
 }
 
-
-// The table to align the .panelarea-col
-// ---------------
-.panelarea-table {
-    display: table;
-    width: 100%;
-    height: 100%;
-}
-
-// The table to align the .panel
-// ---------------
-.panelarea-col {
-    @include box-sizing( border-box );
-    display: none;
-    //padding: 0 4px;
-    height: 100%;
-    min-width: $panelarea-min-width;
-}
-
-// Shows the .panelarea-col
-// ++++++++++++++++
-.panelarea-col.is-visible {
-    display: table-cell;
-}
-
 // Specific areas
 #segmentList { 
     width: $panelarea-min-width;

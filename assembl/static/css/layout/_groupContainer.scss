@@ -211,18 +211,12 @@
     }
   }
 
-  .ideaPanel {
-    min-width: floor($grid_unit_min_size * $idea_panel_grid_size);
-  }
-
   .synthesisPanel {
     position: relative;
-    min-width: floor($grid_unit_min_size * $synthesis_panel_grid_size);
   }
 
   .clipboard {
     position: relative;
-    min-width: floor($grid_unit_min_size * $clipboard_grid_size);
   }
 
 }
