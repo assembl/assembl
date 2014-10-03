@@ -21,25 +21,6 @@
         {#<% if (Ctx.getCurrentInterfaceType() != Ctx.InterfaceTypes.SIMPLE) { %>
           <div id="ideaPanel-comment"></div>
         <% } %>#}
-
-        {# List votable widgets of this idea #}
-        <% _.each(votable_widgets, function(votable_widget, i){
-            var url = votable_widget.widget_url+encodeURIComponent("?target="+idea.getId());
-            print("<a class='plxs' href=\""+url+"\" target=\"_blank\">{{gettext('Vote on this idea')}}</a>");
-            if ( canCreateWidgets ) {
-                var configure_url = "/widget/vote/?admin=1#/admin/configure_instance?widget_uri="+votable_widget.widget_uri+"&target="+idea.getId();
-                print(" <a href=\""+configure_url+"\" target=\"_blank\">{{gettext('Configure this widget')}}</a>");
-            }
-         }); %>
-
-        {# Instanciate a widget from this idea #}
-        <% if (Ctx.getCurrentInterfaceType() != Ctx.InterfaceTypes.SIMPLE){ %>
-          <% if ( canCreateWidgets ) {
-              var url = "/widget/vote/?admin=1#/admin/create_from_idea?idea="+encodeURIComponent(idea.getId()+"?view=creativity_widget");
-              print(" <a class='plxs' href=\""+url+"\" target=\"_blank\">{{gettext('Create a vote widget on this idea')}}</a>");
-
-          } %>
-        <% } %>
     </fieldset>
 
     {# section contributor #}
@@ -76,13 +57,13 @@
 
     <fieldset id="ideaPanel-section-segments" class="panel-section">
       <% if(Ctx.userCanChangeUi()){ %>
-        <legend class="plxs pts" id="ideaPanel-section-segments-legend" data-toggle="tooltip" title="{{gettext('Expressions of this idea in segments of posts or on the web')}}">
-           <span><% print(getExtractsLabel()) %></span>
-        </legend>
+        <div class="plxs pts ideaPanel-section-segments-legend plxs pts" data-toggle="tooltip" title="{{gettext('Expressions of this idea in segments of posts or on the web')}}">
+           <i class="icon-diamond"></i><span class="legend"><% print(getExtractsLabel()) %></span>
+        </div>
       <% } else { %>
-      <legend class="plxs" id="ideaPanel-section-segments-legend" data-toggle="tooltip" title="">
-          <span><i class="icon-diamond"></i>{{ gettext('highlights for') }}</span>
-      </legend>
+      <div class="ideaPanel-section-segments-legend plxs pts" data-toggle="tooltip" title="">
+          <i class="icon-diamond"></i><span class="legend">{{ gettext('highlights for') }}</span>
+      </div>
       <% } %>
 
       <div class="postitlist"></div>
@@ -104,6 +85,24 @@
         <% } %>
     </fieldset>
 
+    {# Instanciate a widget from this idea #}
+    <% if (Ctx.getCurrentInterfaceType() != Ctx.InterfaceTypes.SIMPLE){ %>
+      <% if ( canCreateWidgets ) {
+          var url = "/widget/vote/?admin=1#/admin/create_from_idea?idea="+encodeURIComponent(idea.getId()+"?view=creativity_widget");
+          print(" <a class='plxs' href=\""+url+"\" target=\"_blank\">{{gettext('Create a vote widget on this idea')}}</a>");
+
+      } %>
+    <% } %>
+
+    {# List votable widgets of this idea #}
+    <% _.each(votable_widgets, function(votable_widget, i){
+        var url = votable_widget.widget_url+encodeURIComponent("?target="+idea.getId());
+        print("<a class='plxs' href=\""+url+"\" target=\"_blank\">{{gettext('Vote on this idea')}}</a>");
+        if ( canCreateWidgets ) {
+            var configure_url = "/widget/vote/?admin=1#/admin/configure_instance?widget_uri="+votable_widget.widget_uri+"&target="+idea.getId();
+            print(" <a href=\""+configure_url+"\" target=\"_blank\">{{gettext('Configure this widget')}}</a>");
+        }
+     }); %>
 
     <% } else { %>
         <div>

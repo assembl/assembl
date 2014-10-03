@@ -230,11 +230,18 @@ define(function (require) {
             this.groupContainer.resizeAllPanels();
         },
 
+        /**
+         * create the model (and corresponding view) if it does not exist.
+         */
         ensurePanel: function (options, position) {
             this.model.ensurePanel(options, position);
             this.groupContainer.resizeAllPanels();
         },
 
+        /* Typenames are available in the panelType class attribute of each
+         * panel class
+         * 
+         */
         getWrapperByTypeName: function (typeName) {
             var model = this.model.getPanelSpecByType(typeName);
             if (model !== undefined) {

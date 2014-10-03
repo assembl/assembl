@@ -15,6 +15,7 @@ default_context = {
     'STATIC_URL': '/static'
 }
 
+TEMPLATE_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'templates')
 
 def backbone_include(config):
     config.add_route('home', '/')
@@ -51,6 +52,19 @@ def get_default_context(request):
         #translations=json.dumps({
         #    id:localizer.translate(_(id)) for id in JS_MESSAGE_IDS}))
         )
+
+
+def get_template_views():
+    """ get all .tmpl files from templates/views directory """
+    views_path = os.path.join(TEMPLATE_PATH, 'views')
+    views = []
+
+    for (dirpath, dirname, filenames) in os.walk(views_path):
+        for filename in filenames:
+            if filename.endswith('.tmpl'):
+                views.append(filename.split('.')[0])
+
+    return views
 
 
 def includeme(config):

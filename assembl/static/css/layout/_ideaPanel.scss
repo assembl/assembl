@@ -22,10 +22,9 @@
 
 .nugget-indice {
   position: relative;
-  left: -10px;
-  top: -10px;
   float: left;
   padding: 2px 0px;
+  margin-top: 6px;
 
   .nugget {
     cursor: pointer;
@@ -57,9 +56,11 @@
   color: $white;
 }
 
-#ideaPanel-definition {
+#ideaPanel-definition,
+#ideaPanel-longtitle {
   .panel-editablearea > * {
     color: $white;
+    font-weight: 300;
   }
 }
 
@@ -73,5 +74,17 @@
     .contributor {
       font-size: 30px;
     }
+  }
+}
+
+.ideaPanel-section-segments-legend {
+  i.icon-diamond {
+    color: $green;
+    font-size: 150%;
+    font-weight: 600;
+  }
+  .legend {
+    color: $gray4;
+    font-weight: 600;
   }
 }

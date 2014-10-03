@@ -8,13 +8,16 @@ from pyramid.httpexceptions import HTTPFound
 from assembl.models import (
     Discussion, DiscussionPermission, Role, Permission, UserRole,
     LocalUserRole, PartnerOrganization)
-from .. import get_default_context
+from .. import get_template_views, get_default_context as base_default_context
 from assembl.models.mail import IMAPMailbox, MailingList
 from assembl.auth import (
     R_SYSADMIN, SYSTEM_ROLES, P_SYSADMIN, P_ADMIN_DISC, Everyone)
 from assembl.models.auth import (
     create_default_permissions, User, Username, AgentProfile)
 
+def get_default_context(request):
+    base = base_default_context(request)
+    return dict(base, templates=get_template_views())
 
 @view_config(route_name='discussion_admin', permission=P_SYSADMIN)
 def discussion_admin(request):

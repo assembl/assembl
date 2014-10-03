@@ -1,4 +1,4 @@
-define(function(require){
+define(function (require) {
     'use strict';
 
     var Marionette = require('marionette'),
@@ -10,10 +10,11 @@ define(function(require){
         appRoutes: {
             ":slug/": "home",
             ":slug/context": "contextPage",
-            ":slug/idea/:id" : "idea",
-            ":slug/idea/:slug/:id" : "ideaSlug",
+            ":slug/idea/:id": "idea",
+            ":slug/idea/:slug/:id": "ideaSlug",
             ":slug/message/:id": "message",
-            ":slug/message/:slug/:id" : "messageSlug"
+            ":slug/message/:slug/:id": "messageSlug",
+            "admin/discussion/edit/:id": 'adminDiscussion'
         }
     });
 

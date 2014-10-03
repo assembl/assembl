@@ -1,7 +1,7 @@
 <% if(editing){ %>
     <div class="panel-editablebox is-editing">
         <div id="<%= topId %>"></div>
-        <div id="<%= fieldId %>" class="text margin panel-editablearea" contenteditable="true"><%= text %></div>
+        <div id="<%= fieldId %>" class="margin panel-editablearea" contenteditable="true"><%= text %></div>
         {# <div id="<%= bottomId %>"></div> #}
         
         <div class="paxs tar">
@@ -11,6 +11,6 @@
     </div>
 <% } else { %>
     <div class="panel-editablebox">
-        <div class="ckeditorField-mainfield text panel-editablearea <% if(canEdit){ %>canEdit<% } %> mvn"><%= text ? text : placeholder %></div>
+        <div class="ckeditorField-mainfield panel-editablearea <% if(canEdit){ %>canEdit<% } %> mvn"><%= text ? text : placeholder %></div>
     </div>
 <% } %>

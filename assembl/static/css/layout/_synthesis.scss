@@ -1,31 +1,48 @@
-.body-synthesis{
+.body-synthesis {
   .sudject {
     padding: 10px 0 0 10px;
   }
   .synthesisPanel-title {
-    padding-left: 10px;
+    font-size: 20px;
+    margin-bottom: 10px;
+    .panel-editablearea {
+      @extend %icon;
+      &:before, &:after {
+        font-size: 7px;
+        content: '\e805';
+        color: $black;
+      }
+      &:after {
+        @include rotate(180);
+        margin-left: 13px;
+      }
+      &:before {
+        float: left;
+        margin-right: 7px;
+      }
+    }
   }
   .introduction {
-    background-color: #c7c2dd;
+    background-color: $green;
     padding: 10px;
     .text-muted {
-      color: #FFFFFF;
+      color: $white;
     }
     .panel-editablearea {
-      border-left: 3px solid #ffffff;
+      background-color: $green;
       border-radius: 0px;
       margin: 0;
     }
   }
   .conclusion {
-    background-color: #c7c2dd;
+    background-color: $green;
     padding: 10px;
     .text-muted {
-       color: #FFFFFF;
+      color: $white;
     }
     .panel-editablearea {
       margin: 0;
-      border-left: 3px solid #ffffff;
+      background-color: $green;
       border-radius: 0px;
     }
   }

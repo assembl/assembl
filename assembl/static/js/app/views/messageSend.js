@@ -60,8 +60,7 @@ define(function (require) {
             'click .messageSend-cancelbtn': 'onCancelMessageButtonClick',
             'focus .messageSend-body': 'onFocusMessage',
             'blur .messageSend-body': 'onBlurMessage',
-            'keyup .messageSend-body': 'onChangeBody',
-            'keyup .messageSend-subject': 'onChangeBody'
+            'keyup .messageSend-body': 'onChangeBody'
         },
 
         /**
@@ -161,12 +160,7 @@ define(function (require) {
          * @event
          */
         onChangeBody: function () {
-            var message_body = this.$('.messageSend-body').val(),
-                message_subject = this.$('.messageSend-subject').val();
-
-            if (message_subject) {
-                this.$('.messageSend-body').removeClass("hidden");
-            }
+            var message_body = this.$('.messageSend-body').val();
 
             if (message_body && message_body != this.initialBody) {
                 this.$('.messageSend-body').removeClass("text-muted");

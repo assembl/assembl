@@ -11,15 +11,16 @@ from sqlalchemy.orm.exc import NoResultFound
 from assembl.models import Discussion
 from assembl.auth import P_READ, P_ADD_EXTRACT
 from assembl.auth.util import user_has_permission
-from .. import get_default_context as base_default_context
+from .. import get_template_views, get_default_context as base_default_context
 
 
 FIXTURE = os.path.join(os.path.dirname(__file__),
                        '../../static/js/fixtures/nodes.json')
 
+_ = TranslationStringFactory('assembl')
+
 TEMPLATE_PATH = os.path.join(os.path.dirname(__file__), '..', '..', 'templates')
 
-_ = TranslationStringFactory('assembl')
 
 def get_default_context(request):
     base = base_default_context(request)
@@ -29,19 +30,6 @@ def get_default_context(request):
     except NoResultFound:
         raise HTTPNotFound(_("No discussion found for slug=%s") % slug)
     return dict(base, templates=get_template_views(), discussion=discussion)
-
-
-def get_template_views():
-    """ get all .tmpl files from templates/views directory """
-    views_path = os.path.join(TEMPLATE_PATH, 'views')
-    views = []
-
-    for (dirpath, dirname, filenames) in os.walk(views_path):
-        for filename in filenames:
-            if filename.endswith('.tmpl'):
-                views.append(filename.split('.')[0])
-
-    return views
 
 
 def get_styleguide_components():

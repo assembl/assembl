@@ -29,17 +29,25 @@
 }
 
 #ideaPanel-shorttitle {
-  @extend %icon;
   .panel-editablearea {
     font-size: 20px;
+    font-style: italic;
   }
-  &:before, &:after {
-    font-size: 9px;
-    content: '\e805';
-  }
-  &:after {
-    float: right;
-    @include rotate(180);
+  .panel-editablearea {
+    @extend %icon;
+    &:before, &:after {
+      font-size: 7px;
+      content: '\e805';
+      color: $black;
+    }
+    &:after {
+      @include rotate(180);
+      margin-left: 13px;
+    }
+    &:before {
+      float: left;
+      margin-right: 7px;
+    }
   }
 }
 

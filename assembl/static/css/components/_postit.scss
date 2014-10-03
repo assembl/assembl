@@ -8,16 +8,16 @@ $harvesterAvatarSize: 24px;
 // A wrapper for two or more .postit
 // ====================
 .postitlist {
-
   .postit {
     overflow: visible;
     min-width: 200px; //Width from the shadow below.
-    margin: 1em;
     color: $gray2;
     font-size: 13px; //This should be rem or something - benoitg
     position: relative;
     display: block;
     background-color: $purple4;
+    padding-bottom: 0;
+    margin: 1em 0;
     &:hover {
       a.segment-link {
         visibility: visible !important;
@@ -29,6 +29,7 @@ $harvesterAvatarSize: 24px;
     .text-quotation {
       @extend %icon;
       margin: 0 0 1em 0;
+      font-style: italic;
 
       &:before, &:after {
         content: '\e805';
@@ -54,12 +55,12 @@ $harvesterAvatarSize: 24px;
     .postit-footer {
       width: 100%;
       position: relative;
-      margin-top: 0.5em;
       .extractOrigin {
         display: inline-block;
         a.segment-link {
           position: relative;
           visibility: hidden;
+          font-size: 12px;
         }
         .creatorName {
           color: $purple6;

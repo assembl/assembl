@@ -4,20 +4,25 @@
 .synthesis {
   position: relative;
   display: block;
-  //height: auto;
   div {
     margin: 0;
     padding: 0;
   }
   .synthesisIdea-replybox {
-      &.hidden {
-          display: none;
-      }
+    &.hidden {
+      display: none;
+    }
   }
   .synthesisPanel-ideas {
-    .synthesis-idea{
+    .synthesis-idea {
       min-height: 40px;
       padding-top: 10px;
+      &:hover {
+        .synthesisIdea-replybox-openbtn {
+          visibility: visible;
+          opacity: 1;
+        }
+      }
       .panel-editablearea {
         width: 100%;
       }
@@ -25,19 +30,21 @@
         display: inline;
         margin: 0;
         & > *:first-child {
-            margin-top: 0px;
+          margin-top: 0px;
         }
         & > *:last-child {
-            display: inline;
+          display: inline;
         }
       }
       .comment {
-        font-size: 12px;
-        a{
+        font-size: 11px;
+        .synthesisIdea-replybox-openbtn {
           text-decoration: none;
+          font-size: 20px;
+          visibility: hidden;
+          opacity: 0;
         }
       }
-
     }
 
     .idealist-item {

@@ -95,7 +95,7 @@ define(function (require) {
         },
 
         renderTemplateGetExtractsLabel: function () {
-            this.$el.find('#ideaPanel-section-segments-legend').html(
+            this.$('.ideaPanel-section-segments-legend .legend').html(
                 this.getExtractsLabel());
         },
 
@@ -333,36 +333,36 @@ define(function (require) {
             // to be deleted, an idea cannot have any children nor segments
             var that = this,
                 children = this.model.getChildren();
-            
+
             this.blockPanel();
             $.when(
                 this.model.getExtractsPromise()
-                ).then(
-                function(ideaExtracts) {
-                  that.unblockPanel();
-                  if (children.length > 0) {
+            ).then(
+                function (ideaExtracts) {
                     that.unblockPanel();
-                    alert(i18n.gettext('You cannot delete an idea while it has sub-ideas.'));
-                  }
-                  // Nor has any segments
-                  else if (ideaExtracts.length > 0) {
-                    that.unblockPanel();
-                    alert(i18n.gettext('You cannot delete an idea associated to extracts.'));
-                  }
-                  else {
-                    // That's a bingo
-                    var ok = confirm(i18n.gettext('Confirm that you want to delete this idea.'));
-                    
-                    if (ok) {
-                      that.model.destroy({ success: function () {
+                    if (children.length > 0) {
                         that.unblockPanel();
-                        Ctx.setCurrentIdea(null);
-                      }});
+                        alert(i18n.gettext('You cannot delete an idea while it has sub-ideas.'));
+                    }
+                    // Nor has any segments
+                    else if (ideaExtracts.length > 0) {
+                        that.unblockPanel();
+                        alert(i18n.gettext('You cannot delete an idea associated to extracts.'));
                     }
                     else {
-                      that.unblockPanel();
+                        // That's a bingo
+                        var ok = confirm(i18n.gettext('Confirm that you want to delete this idea.'));
+
+                        if (ok) {
+                            that.model.destroy({ success: function () {
+                                that.unblockPanel();
+                                Ctx.setCurrentIdea(null);
+                            }});
+                        }
+                        else {
+                            that.unblockPanel();
+                        }
                     }
-                  }
                 });
         },
 
