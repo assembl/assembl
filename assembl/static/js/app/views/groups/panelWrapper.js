@@ -235,6 +235,7 @@ define(function (require) {
 
         useCurrentSize: function() {
             this.$el.stop();
+            console.log("  panel ", this.model.get('type'), "useCurrentSize:", this.$el.width());
             this.$el.width(this.$el.width());
             this.$el.addClass("animating");
         },
@@ -261,11 +262,12 @@ define(function (require) {
                 }
                 if (isNaN(myCorrection))
                     console.log("error in myCorrection");
-                var target = Math.round(pixels_per_unit * gridSize - myCorrection);
-                myCorrection = Math.round(myCorrection);
-                var width = Math.round(100*gridSize/group_units)+"%";
-                if (myCorrection > 0) {
+                var target = (pixels_per_unit * gridSize);
+                var width = (100*gridSize/group_units)+"%";
+                // minimize use of calc
+                if (myCorrection > 3) {
                     width = "calc("+width+" - "+myCorrection+"px)";
+                    target -= myCorrection;
                 }
                 console.log("  panel ", that.model.get('type'), "target width:", width, "=", target, "actual:", that.$el.width());
                 this.$el.animate({'width': target}, 1000, 'swing', function() {

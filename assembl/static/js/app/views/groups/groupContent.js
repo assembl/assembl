@@ -100,12 +100,14 @@ define(function (require) {
                 group_extra_pixels = this.getExtraPixels(false),
                 group_units = this.calculateGridSize(),
                 myCorrection = group_extra_pixels - (extra_pixels * group_units / num_units),
-                width = Math.round(100 * group_units / num_units) + "%",
-                target = Math.round((window.innerWidth * group_units / num_units) + myCorrection),
+                width = (100 * group_units / num_units) + "%",
+                target = window.innerWidth * group_units / num_units,
                 group_min_size = this.calculateMinWidth();
 
             myCorrection = Math.round(myCorrection);
-            if (myCorrection != 0) {
+            // minimize use of calc
+            if (Math.abs(myCorrection) > 3) {
+                target += myCorrection;
                 var sign = (myCorrection > 0)?"+":"-";
                 myCorrection = Math.abs(myCorrection);
                 width = "calc("+width + " "+sign+" "+ myCorrection +"px)";
