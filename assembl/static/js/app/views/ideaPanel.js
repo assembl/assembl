@@ -35,7 +35,6 @@ define(function (require) {
             if (!this.model) {
                 this.model = null;
             }
-            this.model = null;
 
             this.listenTo(Assembl.vent, "idea:selected", function (idea) {
                 that.setIdeaModel(idea);
