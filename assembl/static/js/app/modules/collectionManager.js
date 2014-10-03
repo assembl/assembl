@@ -22,6 +22,8 @@ define(function(require){
    * A singleton to manage lazy loading of server collections
    */
   var CollectionManager = Marionette.Controller.extend({
+    FETCH_WORKERS_LIFETIME: 30,
+    
     /**
      * Collection with all users in the discussion.
      * @type {UserCollection}
@@ -176,6 +178,130 @@ define(function(require){
           deferred.resolve(that._allMessageStructureCollection);
         });
       }
+      return deferred.promise();
+    },
+    
+    _waitingWorker : undefined,
+    
+    getMessageFullModelRequestWorker : function(collectionManager) {
+      this.collectionManager = collectionManager,
+
+      this.requests = {},
+      
+      this.addRequest = function(id, promise) {
+        if(this.requests[id] === undefined) {
+          this.requests[id] = []
+        }
+        this.requests[id].push(promise);
+        //console.log("Added request for id:"+id+", queue size is now:"+_.size(this.requests));
+      },
+      
+      this.executeRequest = function() {
+        var that = this,
+            allMessageStructureCollectionPromise = this.collectionManager.getAllMessageStructureCollectionPromise();
+        console.log("executeRequest fired, unregistering worker from collection Manager");
+        //TODO:  If another request arrives while this one is executing, 
+        //an extra request will eventually fire
+        this.collectionManager._waitingWorker = undefined;
+        allMessageStructureCollectionPromise.done(function(allMessageStructureCollection){
+          var PostQuery = require('views/messageListPostQuery'),
+              postQuery = new PostQuery(),
+              ids = [],
+              viewDef = 'default';
+          
+          _.each(that.requests, function(deferredList, id){
+            var structureModel = allMessageStructureCollection.get(id);
+            ids.push(id);
+          });
+          
+          postQuery.addFilter(postQuery.availableFilters.POST_HAS_ID_IN, ids);
+          postQuery.setViewDef(viewDef); //We want the full messages
+          postQuery.getResultRawDataPromise().done(function(results) {
+            //console.log(results);
+            _.each(results, function(jsonData){
+              var id = jsonData['@id'],
+                  structureModel = allMessageStructureCollection.get(id),
+                  deferredList = that.requests[id];
+              console.log("executeRequest resolving for id", id, deferredList.length, "deferred for that id");
+              structureModel.set(jsonData);
+              structureModel.viewDef = viewDef;
+              //console.log(that.requests[id], that.requests);
+              
+              _.each(deferredList, function(deferred){
+                deferred.resolve(structureModel);
+              });
+              
+            });
+          });
+        });
+      }
+      
+      //Constructor
+      console.log("Spawning new _getMessageFullModelsRequestWorker");
+      var that = this;
+      this.executeTimeout = setTimeout(function () {
+        that.executeRequest();
+      }, collectionManager.FETCH_WORKERS_LIFETIME);
+    },
+    
+
+    getMessageFullModelPromise : function(id) {
+      var that = this,
+      deferred = $.Deferred(),
+      allMessageStructureCollectionPromise = this.getAllMessageStructureCollectionPromise();
+
+      
+      allMessageStructureCollectionPromise.done(function(allMessageStructureCollection){
+          var structureModel = allMessageStructureCollection.get(id),
+              returnedModel = undefined;
+          if(structureModel) {
+            if(structureModel.viewDef !== undefined && structureModel.viewDef == "default") {
+              //console.log("getMessageFullModelPromise CACHE HIT!")
+              deferred.resolve(structureModel);
+            }
+            else {
+              //console.log("getMessageFullModelPromise CACHE MISS!")
+              if(that._waitingWorker === undefined) {
+                that._waitingWorker = new that.getMessageFullModelRequestWorker(that);
+              }
+              that._waitingWorker.addRequest(id, deferred);
+            }
+            
+          }
+          else {
+            deferred.reject();
+          }
+      });
+      return deferred.promise();
+    },
+    
+    /**
+     * Retrieve fully populated models for the list of id's given
+     * @param ids[] array of message id's
+     * @return Message.Model{}
+     */
+    getMessageFullModelsPromise : function(ids) {
+      var that = this,
+      deferred = $.Deferred(),
+      allMessageStructureCollectionPromise = this.getAllMessageStructureCollectionPromise(),
+      returnedModelsPromises = [];
+      allMessageStructureCollectionPromise.done(function(allMessageStructureCollection){
+        _.each(ids, function(id){
+          returnedModelsPromises.push(that.getMessageFullModelPromise(id));
+          });
+        //TODO:  Put as arguments of a big when
+        //console.log("getMessageFullModelsPromise() resolving with:", returnedModels);
+        $.when.apply($, returnedModelsPromises).then( 
+            function() {
+              var args = Array.slice(arguments);
+              deferred.resolve(args);
+            },
+            function() {
+                console.log("getMessageFullModelsPromise: One of the id's couldn't be retrieved")
+                deferred.reject();
+            }
+        );
+      });
       return deferred.promise();
     },
     

@@ -298,7 +298,7 @@ define(function (require) {
             Ctx.openPanel(this);
             //!currentIdea?filterValue=null:filterValue=currentIdea.getId();
             //console.log("messageList:syncWithCurrentIdea(): New idea is now: ",currentIdea, this.currentQuery.isFilterInQuery(this.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, filterValue));
-            //TODO benoitg - this logic should really be un postQuery, not here - 2014-07-29
+            //TODO benoitg - this logic should really be in postQuery, not here - 2014-07-29
             if (currentIdea && this.currentQuery.isFilterInQuery(this.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, currentIdea.getId())) {
                 //Filter is already in sync
                 return;
@@ -632,7 +632,9 @@ define(function (require) {
                 models,
                 offsets,
                 numMessages,
-                returnedOffsets = {};
+                returnedOffsets = {},
+                messageIdsToShow = [],
+                messageFullModelsToShowPromise;
 
             /* The MessageFamilyView will re-fill the renderedMessageViewsCurrent
              * array with the newly calculated rendered MessageViews.
@@ -646,6 +648,11 @@ define(function (require) {
                 models = this.visitorRootMessagesToDisplay;
                 numMessages = _.size(that.visitorOrderLookupTable);
                 returnedOffsets = this.calculateThreadedMessagesOffsets(this.visitorViewData, that.visitorOrderLookupTable, requestedOffsets);
+                messageIdsToShow = this.visitorOrderLookupTable.slice(returnedOffsets['offsetStart'], returnedOffsets['offsetEnd']);
+                var collectionManager = new CollectionManager();
+                
+                messageFullModelsToShowPromise = collectionManager.getMessageFullModelsPromise(messageIdsToShow);
+                
                 views_promise = this.getRenderedMessagesThreaded(models, 1, this.visitorViewData, returnedOffsets);
             } else {
                 models = this.getAllMessagesToDisplay();
@@ -1126,12 +1133,18 @@ define(function (require) {
          * @return {jquery.promise}
          */
         getRenderedMessagesThreaded: function (sibblings, level, data_by_object, offsets) {
-            var list = [],
+            var that = this,
+                list = [],
                 i = 0,
-                view, model, children, prop, isValid,
+                view, 
+                messageStructureModel,
+                children,
+                prop,
+                isValid,
                 last_sibling_chain,
                 current_message_info,
-                defer = $.Deferred();
+                defer = $.Deferred(),
+                collectionManager = new CollectionManager();
 
             /**  [last_sibling_chain] which of the view's ancestors are the last child of their respective parents.
              *
@@ -1158,24 +1171,24 @@ define(function (require) {
             }
             //console.log("sibblings",sibblings.length);
             //This actually replaces the for loop for sibblings
-            model = sibblings.shift();
-            //console.log("model",model);
-            if (!model) {
-                return list;
-            }
-            current_message_info = data_by_object[model.getId()];
 
+            messageStructureModel = sibblings.shift();
+            //console.log("messageStructureModel",messageStructureModel);
+            if(!messageStructureModel) {
+              return list;
+            }
+            current_message_info = data_by_object[messageStructureModel.getId()];
+            
             //Only process if message is within requested offsets
             if ((current_message_info['traversal_order'] >= offsets['offsetStart'])
                 && (current_message_info['traversal_order'] <= offsets['offsetEnd'])) {
 
                 if (current_message_info['last_sibling_chain'] === undefined) {
-                    current_message_info['last_sibling_chain'] = buildLastSibblingChain(model, data_by_object);
+                    current_message_info['last_sibling_chain'] = buildLastSibblingChain(messageStructureModel, data_by_object);
                 }
                 last_sibling_chain = current_message_info['last_sibling_chain']
                 //console.log(last_sibling_chain);
-                view = new MessageFamilyView({model: model, messageListView: this}, last_sibling_chain);
-                view.currentLevel = level;
+
                 children = current_message_info['children'];
 
                 //Process children, if any
@@ -1193,49 +1206,37 @@ define(function (require) {
                 else {
                     var sibblingsviews_promise = [];
                 }
+                
+                $.when(subviews_promise, sibblingsviews_promise, collectionManager.getMessageFullModelPromise(messageStructureModel.id)).done(function (subviews, sibblingsviews, messageFullModel) {
+                  view = new MessageFamilyView({model: messageFullModel, messageListView: that}, last_sibling_chain);
+                  view.currentLevel = level;
+                  //Note:  benoitg: We could put a setTimeout here, but apparently the promise is enough to unlock the browser
+                  view.hasChildren = (subviews.length > 0);
+                  list.push(view.render().el);
+                  view.$('.messagelist-children').append(subviews);
 
-                $.when(subviews_promise, sibblingsviews_promise).done(function (subviews, sibblingsviews) {
-                    //Note:  benoitg: We could put a setTimeout here, but apparently the promise is enough to unlock the browser
-                    view.hasChildren = (subviews.length > 0);
-                    list.push(view.render().el);
-                    view.$('.messagelist-children').append(subviews);
-
-                    /* TODO:  benoitg:  We need good handling when we skip a grandparent, but I haven't ported this code yet.
-                     * We should also handle the case where 2 messages have the same parent, but the parent isn't in the set */
-                    /*if (!isValid && this.hasDescendantsInFilter(model)) {
-                     //Generate ghost message
-                     var ghost_element = $('<div class="message message--skip"><div class="skipped-message"></div><div class="messagelist-children"></div></div>');
-                     console.log("Invalid message was:",model);
-                     list.push(ghost_element);
-                     children = model.getChildren();
-                     ghost_element.find('.messagelist-children').append( this.getRenderedMessagesThreaded(
-                     children, level+1, data_by_object) );
-                     }
-                     */
-                    if (sibblingsviews.length > 0) {
-                        list = list.concat(sibblingsviews);
-                    }
-                    defer.resolve(list);
+                  /* TODO:  benoitg:  We need good handling when we skip a grandparent, but I haven't ported this code yet.
+                   * We should also handle the case where 2 messages have the same parent, but the parent isn't in the set */
+                  /*if (!isValid && this.hasDescendantsInFilter(model)) {
+                   //Generate ghost message
+                   var ghost_element = $('<div class="message message--skip"><div class="skipped-message"></div><div class="messagelist-children"></div></div>');
+                   console.log("Invalid message was:",model);
+                   list.push(ghost_element);
+                   children = model.getChildren();
+                   ghost_element.find('.messagelist-children').append( this.getRenderedMessagesThreaded(
+                   children, level+1, data_by_object) );
+                   }
+                   */
+                  if (sibblingsviews.length > 0) {
+                      list = list.concat(sibblingsviews);
+                  }
+                  defer.resolve(list);
                 });
             }
             else {
                 return list;
             }
             return defer.promise();
-        },
-
-        hasDescendantsInFilter: function (model) {
-            if (this.DEPRECATEDmessageIdsToDisplay.indexOf(model.getId()) >= 0) {
-                console.log("Valid descendant found (direct):", model)
-                return true;
-            }
-            var children = model.getChildren();
-            for (var i = children.length - 1; i >= 0; i--) {
-                if (this.hasDescendantsInFilter(children[i])) {
-                    return true;
-                }
-            }
-            return false;
         },
 
 

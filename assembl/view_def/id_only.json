@@ -14,15 +14,31 @@
     "PostSource": {},
     "AnnotatorSource": {},
     "Content": {},
-    "Post": {},
-    "AssemblPost": {},
-    "IdeaProposalPost": {},
-    "SynthesisPost": {},
-    "ImportedPost": {},
+    "Post": {
+        "@extends": "Content",
+        "date": "creation_date",
+        "parentId": "parent",
+        "idCreator": "creator"
+    },
+    "AssemblPost": {
+        "@extends": "Post"
+    },
+    "IdeaProposalPost": {
+        "@extends": "AssemblPost"
+    },
+    "SynthesisPost": {
+        "@extends": "AssemblPost",
+        "publishes_synthesis": true
+    },
+    "ImportedPost": {
+        "@extends": "Post"
+    },
     "Webpage": {},
     "IMAPMailbox": {},
     "MailingList": {},
-    "Email": {},
+    "Email": {
+        "@extends": "ImportedPost"
+    },
     "Discussion": {},
     "Idea": {},
     "RootIdea": {},

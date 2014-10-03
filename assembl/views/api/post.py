@@ -91,7 +91,7 @@ def get_posts(request):
     if root_idea_id:
         root_idea_id = get_database_id("Idea", root_idea_id[0])
 
-    ids = request.GET.getall('ids')
+    ids = request.GET.getall('ids[]')
     if ids:
         ids = [get_database_id("Post", id) for id in ids]
 

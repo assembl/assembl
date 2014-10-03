@@ -202,7 +202,7 @@ define(function(require){
          * The url
          * @type {String}
          */
-        url: Ctx.getApiUrl("posts"),
+        url: Ctx.getApiUrl("posts?view=id_only"),
 
         /**
          * The model

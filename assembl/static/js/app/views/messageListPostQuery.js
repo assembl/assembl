@@ -1,8 +1,7 @@
 define(function (require) {
 
     var Ctx = require('modules/context'),
-        i18n = require('utils/i18n'),
-        CollectionManager = require('modules/collectionManager');
+        i18n = require('utils/i18n');
 
     /**
      * @class PostQuery
@@ -13,7 +12,8 @@ define(function (require) {
      * be done inside this class, to ease unit testing and code clarity.
      */
     var PostQuery = function () {
-        var collectionManager = new CollectionManager();
+        var CollectionManager = require('modules/collectionManager'),
+            collectionManager = new CollectionManager();
         this._returnHtmlDescriptionPostInContextOfIdea = function (filterDef, queryObjects) {
             var retval = '',
                 idea = null,
@@ -79,6 +79,16 @@ define(function (require) {
             return retval;
         }
         this.availableFilters = {
+            POST_HAS_ID_IN: {
+              id: 'post_has_id_in',
+              name: i18n.gettext('Posts with specific ids'),
+              help_text: i18n.gettext('Only include posts that are in a range of specific ids'),
+              _value_is_boolean: false,
+              _can_be_reversed: true,
+              _server_param: 'ids',
+              _client_side_implementation: null,
+              _filter_description: null
+          },
             POST_IS_IN_CONTEXT_OF_IDEA: {
                 id: 'post_in_context_of_idea',
                 name: i18n.gettext('Idea'),
@@ -138,7 +148,7 @@ define(function (require) {
          */
         this._query = {};
 
-        this._results = [];
+        this._resultIds = [];
 
         this._resultsAreValid = false;
 
@@ -166,6 +176,7 @@ define(function (require) {
                 _client_side_implementation: null
             }
         };
+        
         /**
          * Has a property with the name of the filterDef id for each active
          * filter, containing then a list of objects with a propery "value"
@@ -173,6 +184,11 @@ define(function (require) {
          */
         this._view = this.availableViews.REVERSE_CHRONOLOGICAL;
 
+        /** 
+         * The server viewDef used to fulfill the data
+         */
+        this._viewDef = 'id_only';
+        
         /**
          * Information on the query result once executed, such as the number of
          * read/unread posts found.
@@ -337,24 +353,42 @@ define(function (require) {
 
         /**
          * The order the posts are sorted for.
-         * @param {viewDef} viewDef
+         * @param {viewDef} viewDef from this.availableViews
          * @return true on success, false on failure
          */
-        this.setView = function (viewDef) {
+        this.setView = function (view) {
             var retval = false;
-            if (viewDef) {
-                if (this._view._server_order_param_value !== viewDef._server_order_param_value) {
-                    this._view = viewDef;
+            if (view) {
+                if (this._view._server_order_param_value !== view._server_order_param_value) {
+                    this._view = view;
                     this.invalidateResults();
                 }
                 retval = true;
             }
             else {
-                console.log("ERROR:  setView() viewDef is empty");
+                console.log("ERROR:  setView() view is empty");
             }
             return retval;
         };
 
+       /* The viewDef name used by the server to send data
+        * @param {string} the name of a viewDef from assemal/view_defs
+        * @return true on success, false on failure
+        */
+       this.setViewDef = function (viewDef) {
+           var retval = false;
+           if (viewDef) {
+               if (this._viewDef !== viewDef) {
+                   this._viewDef = viewDef;
+                   this.invalidateResults();
+               }
+               retval = true;
+           }
+           else {
+               console.log("ERROR:  setViewDef() viewDef is empty");
+           }
+           return retval;
+       };
         /**
          * Execute the query
          * @param {function} success callback to call when query is complete
@@ -372,7 +406,7 @@ define(function (require) {
 
             if (this._resultsAreValid) {
                 if (_.isFunction(success)) {
-                    success(that._results);
+                    success(that._resultIds);
                 }
             } else {
                 for (var filterDefPropName in this.availableFilters) {
@@ -386,7 +420,7 @@ define(function (require) {
                 }
 
                 params.order = this._view._server_order_param_value;
-                params.view = 'id_only';
+                params.view = this._viewDef;
                 that._queryResultInfo = null;
                 $.getJSON(url, params, function (data) {
                     that._queryResultInfo = {};
@@ -400,14 +434,15 @@ define(function (require) {
                     _.each(data.posts, function (post) {
                         ids.push(post['@id']);
                     });
-                    that._results = ids;
+                    that._resultIds = ids;
+                    that._rawResults = data.posts;
                     that._resultsAreValid = true;
 
                     if (_.isFunction(success_data_changed)) {
-                        success_data_changed(that._results);
+                        success_data_changed(that._resultIds);
                     }
                     if (_.isFunction(success)) {
-                        success(that._results);
+                        success(that._resultIds);
                     }
                 });
             }
@@ -418,7 +453,7 @@ define(function (require) {
                 deferred = $.Deferred();
             //console.log("messageListPostQuery:getResultMessageIdCollectionPromise() called");
             if (this._resultsAreValid) {
-                deferred.resolve(this._results);
+                deferred.resolve(this._resultIds);
             }
             else {
                 this._execute(function (collection) {
@@ -432,6 +467,30 @@ define(function (require) {
             // the Deferred object
             return deferred.promise();
         };
+        
+        /**
+         * A promise for an array for JSON data, one per post
+         */
+        this.getResultRawDataPromise = function () {
+          var that = this,
+              deferred = $.Deferred();
+          //console.log("messageListPostQuery:getResultMessageIdCollectionPromise() called");
+          if (this._resultsAreValid) {
+              deferred.resolve(this._rawResults);
+          }
+          else {
+              this._execute(function () {
+                  //console.log('resolving getResultMessageIdCollectionPromise()');
+                  deferred.resolve(that._rawResults);
+              });
+          }
+          ;
+
+          // Returning a Promise so that only this function can modify
+          // the Deferred object
+          return deferred.promise();
+      };
+
 
         /** @return undefined if query isn't complete */
         this.getResultNumUnread = function () {

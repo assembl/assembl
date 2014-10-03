@@ -5,7 +5,7 @@ define([],function(){
    * @param data_by_object: output param, dict containing for each object traversed the 
    *    render information indexed by the object id.  See the data variable inside
    *    the function body for definition of the structure
-   * @paramorder_lookup_table output param, a list containing every object id retaines
+   * @paramorder_lookup_table output param, a list containing every object id retained
    * indexed by traversal order
    * @paramroots: output param. The objects that have no parents in the set
    * @paramfilter_function:  The object is passed to this callback.  If it returns:

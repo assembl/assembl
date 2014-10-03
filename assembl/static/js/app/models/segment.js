@@ -105,15 +105,7 @@ define(function(require){
     getAssociatedPostPromise: function(){
       var that = this,
       deferred = $.Deferred();
-      this.collection.collectionManager.getAllMessageStructureCollectionPromise().done(
-          function(allMessageStructureCollection) {
-            var post = null,
-            idPost = that.get('idPost');
-            post = allMessageStructureCollection.get(idPost);
-            deferred.resolve(post);
-          }
-      );
-      return deferred.promise();
+      return this.collection.collectionManager.getMessageFullModelPromise(this.get('idPost'));
     },
 
     /**
