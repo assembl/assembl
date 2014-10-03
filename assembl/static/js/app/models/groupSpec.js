@@ -81,7 +81,7 @@ define(function (require) {
             var that = this;
             _.each(list_of_options, function (options) {
                 if (!that.getPanelSpecByType(options.type)) {
-                    that.addPanel(options, position);
+                    that.addPanel(options, position++);
                 }
             });
         },
