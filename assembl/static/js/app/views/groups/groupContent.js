@@ -30,7 +30,7 @@ define(function (require) {
             'click .js_closeGroup': 'closeGroup'
         },
         collectionEvents: {
-            'add remove reset': 'adjustGridSize'
+            'add remove reset change': 'adjustGridSize'
         },
 
         serializeData: function () {
@@ -115,7 +115,7 @@ define(function (require) {
             var before = that.$el.width();
             this.$el.animate({'width': target}, 1000, 'swing', function() {
                 that.$el.width(width);
-                console.log(" group. target width:", width, "=", target, "actual:", before, "->", that.$el.width());
+                // console.log(" group. target width:", width, "=", target, "actual:", before, "->", that.$el.width());
                 that.$el.removeClass("animating");
                 that.$el.css("min-width", group_min_size);
             });
@@ -127,7 +127,7 @@ define(function (require) {
         },
 
         adjustGridSize: function () {
-            this.groupContainer.resizeAllPanels();
+            this.groupContainer.calculateGridSize();
         },
         /**
          * Tell the panelWrapper which view to put in its contents
@@ -145,17 +145,21 @@ define(function (require) {
 
         resetDebateState: function () {
             if (this.getNavigationPanelSpec()) {
+                this.groupContainer.suspendResize();
                 this.model.set('navigationState', 'debate');
                 this.removePanels('homePanel');
                 this.resetMessagePanelState();
+                this.groupContainer.resumeResize();
             }
         },
 
         resetContextState: function () {
             var nav = this.getNavigationPanelSpec();
             if (nav) {
+                this.groupContainer.suspendResize();
                 this.model.set('navigationState', 'home');
                 this.ensureOnlyPanelsVisible('homePanel');
+                this.groupContainer.resumeResize();
             }
         },
 
@@ -174,6 +178,7 @@ define(function (require) {
         },
 
         resetMessagePanelState: function () {
+            this.groupContainer.suspendResize();
             var nav = this.getNavigationPanelSpec(),
                 ideaPanel = this.getWrapperByTypeName('ideaPanel');
             this.ensurePanelsVisible('ideaPanel', 'messageList');
@@ -185,6 +190,7 @@ define(function (require) {
                     ideaPanel.unminimizePanel();
                 }
             }
+            this.groupContainer.resumeResize();
         },
 
         setPanelWidthByType: function (panelType, width) {
@@ -222,12 +228,10 @@ define(function (require) {
          */
         removePanels: function () {
             this.model.removePanels.apply(this.model, arguments);
-            this.groupContainer.resizeAllPanels();
         },
 
         addPanel: function (options, position) {
             this.model.addPanel(options, position);
-            this.groupContainer.resizeAllPanels();
         },
 
         /**
@@ -235,7 +239,6 @@ define(function (require) {
          */
         ensurePanel: function (options, position) {
             this.model.ensurePanel(options, position);
-            this.groupContainer.resizeAllPanels();
         },
 
         /* Typenames are available in the panelType class attribute of each

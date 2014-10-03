@@ -12,6 +12,7 @@ define(function (require) {
         id: 'groupsContainer',
         childView: GroupContent,
         group_borders_size: 0,
+        resizeSuspended: false,
         initialize: function (options) {
             var that = this;
             // boilerplate in marionette if you listen m/c here, use collectionEvents or modelEvents
@@ -34,12 +35,19 @@ define(function (require) {
             }
         },
         collectionEvents: {
-            'change reset add remove': 'calculateGridSize'
+            'reset add remove': 'calculateGridSize'
         },
         calculateGridSize: function () {
+            if (!this.resizeSuspended)
+                this.resizeAllPanels();
+        },
+        suspendResize: function() {
+            this.resizeSuspended = true;
+        },
+        resumeResize: function() {
+            this.resizeSuspended = false;
             this.resizeAllPanels();
         },
-
         isOneNavigationGroup: function() {
             if (this.collection.size() == 1) {
                 var group1 = this.collection.first();
@@ -74,11 +82,11 @@ define(function (require) {
                 console.log("error in total_min_size");
             var total_pixel_size = total_min_size + extra_pixels + min_idea_pixels;
             var unit_pixels = (window_width - extra_pixels) / num_units;
-            console.log("window_width:", window_width);
-            console.log("total_pixel_size:", total_pixel_size);
-            console.log("total_min_size:", total_min_size, "extra_pixels:", extra_pixels, "min_idea_pixels:", min_idea_pixels);
-            console.log("num_units:", num_units);
-            console.log("unit_pixels", unit_pixels);
+            // console.log("window_width:", window_width);
+            // console.log("total_pixel_size:", total_pixel_size);
+            // console.log("total_min_size:", total_min_size, "extra_pixels:", extra_pixels, "min_idea_pixels:", min_idea_pixels);
+            // console.log("num_units:", num_units);
+            // console.log("unit_pixels", unit_pixels);
             this.animateTowardsPixels(unit_pixels, 100.0/num_units, extra_pixels, num_units); // reestablish min_pixels, and % width based on param. (remove size)
         },
 
