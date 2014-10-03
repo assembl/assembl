@@ -65,8 +65,14 @@ define(function (require) {
             var total_min_size = this.calculateMinWidth();
             if (isNaN(total_min_size))
                 console.log("error in total_min_size");
-            var use_percent = (total_min_size + extra_pixels + min_idea_pixels < window_width);
+            var total_pixel_size = total_min_size + extra_pixels + min_idea_pixels;
+            var use_percent = (total_pixel_size < window_width);
             var unit_pixels = (window_width - extra_pixels) / num_units;
+            console.log("window_width:", window_width);
+            console.log("total_pixel_size:", total_pixel_size);
+            console.log("total_min_size:", total_min_size, "extra_pixels:", extra_pixels, "min_idea_pixels:", min_idea_pixels);
+            console.log("num_units:", num_units);
+            console.log("unit_pixels", unit_pixels);
             this.animateTowardsPixels(use_percent?unit_pixels:0, 100.0/num_units, extra_pixels, num_units); // reestablish min_pixels, and % width based on param. (remove size)
         },
 

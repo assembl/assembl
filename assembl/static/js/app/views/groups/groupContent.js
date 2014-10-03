@@ -99,20 +99,21 @@ define(function (require) {
             var that = this,
                 group_extra_pixels = this.getExtraPixels(false),
                 group_units = this.calculateGridSize(),
-                myCorrection = Math.round(group_extra_pixels - (extra_pixels * group_units / num_units)),
+                myCorrection = group_extra_pixels - (extra_pixels * group_units / num_units),
                 width = Math.round(100 * group_units / num_units) + "%",
-                target = (window.innerWidth * group_units / num_units) + myCorrection,
+                target = Math.round((window.innerWidth * group_units / num_units) + myCorrection),
                 group_min_size = this.calculateMinWidth();
 
+            myCorrection = Math.round(myCorrection);
             if (myCorrection != 0) {
                 var sign = (myCorrection > 0)?"+":"-";
-                myCorrection = Math.abs(myCorrection);
+                myCorrection = MathMath.abs(myCorrection);
                 width = "calc("+width + " "+sign+" "+ myCorrection +"px)";
             }
             this.$el.animate({'width': target}, 1000, 'swing', function() {
                 var before = that.$el.width();
                 that.$el.width(width);
-                console.log("group", target, before, that.$el.width(), width);
+                console.log(" group. target width:", width, "=", target, "actual:", before, "->", that.$el.width());
                 that.$el.removeClass("animating");
                 that.$el.css("min-width", group_min_size);
             });

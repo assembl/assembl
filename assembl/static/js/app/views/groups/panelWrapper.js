@@ -227,7 +227,7 @@ define(function (require) {
         },
 
         getExtraPixels: function (include_embedded_idea_panel) {
-            if (this.model.get('minimized')) {
+            if (include_embedded_idea_panel && this.model.get('minimized')) {
                 return AssemblPanel.prototype.minimized_size;
             }
             return 0;
@@ -252,7 +252,9 @@ define(function (require) {
             } else {
                 that.$el.removeClass("minimized");
                 var gridSize = this.gridSize;
-                var myCorrection = extra_pixels / num_units;
+                //var myCorrection = extra_pixels / num_units;
+                var myCorrection = extra_pixels * gridSize/ num_units;
+                // probably group_extra_pixels * my_units / group_units... Could 
                 if (this.groupContent.groupContainer.isOneNavigationGroup()
                     && this.model.get('type') == 'messageList'
                     && this.groupContent.model.getPanelSpecByType('ideaPanel').get('minimized')) {
@@ -260,16 +262,16 @@ define(function (require) {
                 }
                 if (isNaN(myCorrection))
                     console.log("error in myCorrection");
+                var target = Math.round(pixels_per_unit * gridSize - myCorrection);
                 myCorrection = Math.round(myCorrection);
-                var target = pixels_per_unit * gridSize;
+                var width = Math.round(100*gridSize/group_units)+"%";
+                if (myCorrection > 0) {
+                    width = "calc("+width+" - "+myCorrection+"px)";
+                }
                 this.$el.animate({'width': target}, 1000, 'swing', function() {
                     var before = that.$el.width();
-                    var width = Math.round(100*gridSize/group_units)+"%";
-                    if (myCorrection > 0) {
-                        width = "calc("+width+" - "+Math.round(myCorrection)+"px)";
-                    }
                     that.$el.width(width);
-                    //console.log(that.model.get('type'), target, before, that.$el.width(), width);
+                    console.log("  panel ", that.model.get('type'), "target width:", width, "=", target, "actual:", before, "->", that.$el.width());
                     that.$el.removeClass("animating");
                     that.$el.css("min-width", that.minWidth);
                 });
