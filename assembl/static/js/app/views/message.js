@@ -271,33 +271,39 @@ define(function (require) {
         /**
          * Get the list of annotations to render in the message body
          */
-        getAnnotationsToLoad : function () {
+        getAnnotationsToLoadPromise : function () {
           var that = this,
-              annotations = this.model.getAnnotationsDEPRECATED(), //TODO:  This is fairly CPU intensive, and may be worth caching.
+              deferred = $.Deferred(),
+              annotationsPromise = this.model.getAnnotationsPromise(), //TODO:  This is fairly CPU intensive, and may be worth caching.
               annotationsToLoad = [],
               filter;
-          if(this.annotationsToLoad === undefined) {
-            // Is this the right permission to see the clipboard?
-            if (!Ctx.getCurrentUser().can(Permissions.ADD_EXTRACT)) {
-                filter = function (extract) {
-                    return extract.idIdea;
-                }
+          
+          annotationsPromise.done(function(annotations) {
+            if(this.annotationsToLoad === undefined) {
+              // Is this the right permission to see the clipboard?
+              if (!Ctx.getCurrentUser().can(Permissions.ADD_EXTRACT)) {
+                  filter = function (extract) {
+                      return extract.idIdea;
+                  }
+              }
+              else {
+                filter = function () {
+                  return true;
+                };
+              }
+    
+              _.each(annotations, function (annotation) {
+                  if (filter(annotation) && !(annotation['@id'] in that.loadedAnnotations)) {
+                      annotationsToLoad.push(annotation);
+                  }
+              });
+              this.annotationsToLoad = annotationsToLoad;
             }
-            else {
-              filter = function () {
-                return true;
-              };
-            }
-  
-            _.each(annotations, function (annotation) {
-                if (filter(annotation) && !(annotation['@id'] in that.loadedAnnotations)) {
-                    annotationsToLoad.push(annotation);
-                }
-            });
-            this.annotationsToLoad = annotationsToLoad;
-          }
+            deferred.resolve(this.annotationsToLoad);
+          });
+          
 
-          return this.annotationsToLoad;
+          return deferred.promise();
         },
 
         /**
@@ -308,12 +314,11 @@ define(function (require) {
           var that = this,
               annotationsToLoad;
             if (this.annotator && (this.viewStyle == this.availableMessageViewStyles.FULL_BODY)) {
-              annotationsToLoad = this.getAnnotationsToLoad();
-
+              this.getAnnotationsToLoadPromise().done(function(annotationsToLoad) {
                 // Loading the annotations
                 if (annotationsToLoad.length) {
-                    // This call is synchronous I believe - benoitg
-                  this.annotator.loadAnnotations(_.clone(annotationsToLoad));
+                  // This call is synchronous I believe - benoitg
+                  that.annotator.loadAnnotations(_.clone(annotationsToLoad));
                     _.each(annotationsToLoad, function (annotation) {
                         that.loadedAnnotations[annotation['@id']] = annotation;
                     });
@@ -322,38 +327,65 @@ define(function (require) {
                         that.renderAnnotations(annotationsToLoad);
                     }, 1);
                 }
+              });
+
             }
         },
 
 
         /**
-         * Shows the related segment from the given annotation
+         * Shows the related extract from the given annotation
          * @param  {annotation} annotation
          */
         showSegmentByAnnotation: function (annotation) {
-            var currentIdea = Ctx.getCurrentIdea().toJSON();
-
-            if (currentIdea['@id'] !== annotation.idIdea) {
-                alert(i18n.gettext('You will be redirected to another idea in connection with the nugget on which you clicked.'))
+            var that = this,
+                currentIdea = Ctx.getCurrentIdea(),
+                collectionManager = new CollectionManager(),
+                ok = true;
+            
+            if (currentIdea) {
+              if (currentIdea.id !== annotation.idIdea) {
+                ok = confirm(i18n.gettext('You will be redirected to another idea in connection with the nugget on which you clicked.'))
+              }
+              else {
+                //It's already the current idea, do nothing
+                ok = false;
+              }
             }
 
-            var collectionManager = new CollectionManager();
-
-            collectionManager.getAllExtractsCollectionPromise().done(
-                function (allExtractsCollection) {
-                    var segment = allExtractsCollection.getByAnnotation(annotation);
-                    if (!segment) {
-                        return;
-                    }
-
-                    if (segment.get('idIdea')) {
-                        Assembl.vent.trigger('ideaPanel:showSegment', segment);
-                    } else {
-                        Assembl.vent.trigger('segmentList:showSegment', segment);
-                    }
-                }
-            );
-
+            if(ok) {
+              $.when(
+                  collectionManager.getAllExtractsCollectionPromise(),
+                  collectionManager.getAllIdeasCollectionPromise()
+                  ).then(
+                  function (allExtractsCollection, allIdeasCollection) {
+                      var segment = allExtractsCollection.getByAnnotation(annotation);
+                      if (!segment) {
+                          console.log("message::showSegmentByAnnotation() ERROR, the extract doesn't exist")
+                          return;
+                      }
+                      console.log(that);
+                      if (segment.get('idIdea')) {
+                        if(that.messageListView.panelWrapper.groupContent.getViewByTypeName("ideaPanel")) {
+                          //FIXME:  We don't want to affect every panel, only the one in the current group
+                          Ctx.setCurrentIdea(allIdeasCollection.get(annotation.idIdea));
+                          Assembl.vent.trigger('ideaPanel:showSegment', segment);
+                        }
+                        else {
+                          console.log("TODO:  NOT implemented yet.  Should pop panel in a lightbox.  See example at the end of Modal object in navigation.js ")
+                        }
+                      } else {
+                        if(that.messageListView.panelWrapper.groupContent.getViewByTypeName("clipboard")) {
+                          //FIXME:  We don't want to affect every panel, only the one in the current group
+                          Assembl.vent.trigger('segmentList:showSegment', segment);
+                        }
+                        else {
+                          console.log("TODO:  NOT implemented yet.  Should pop panel in a lightbox.  See example at the end of Modal object in navigation.js ")
+                        }
+                      }
+                  }
+              );
+            }
         },
 
         /**
@@ -363,7 +395,7 @@ define(function (require) {
             var that = this;
             _.each(annotations, function (annotation) {
                 var highlights = annotation.highlights,
-                    func = that.showSegmentByAnnotation.bind(window, annotation);
+                    func = that.showSegmentByAnnotation.bind(that, annotation);
 
                 _.each(highlights, function (highlight) {
                     highlight.setAttribute('data-annotation-id', annotation['@id']);

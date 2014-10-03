@@ -74,17 +74,27 @@ define(function(require){
          * Return all segments in the annotator format
          * @return {Object[]}
          */
-        getAnnotationsDEPRECATED: function(){
-            var extracts = this.collection.collectionManager._allExtractsCollection.where({ idPost: this.getId() }),
+        getAnnotationsPromise: function(){
+          var that = this,
+          deferred = $.Deferred();
+          this.collection.collectionManager.getAllExtractsCollectionPromise().done(
+              function(allExtractsCollection) {
+                var extracts = allExtractsCollection.where({ idPost: that.getId() }),
                 ret = [];
 
-            _.each(extracts, function(extract){
-                //Why this next line?  Benoitg-2014-10-03
-                extract.attributes.ranges = extract.attributes._ranges;
-                ret.push( _.clone(extract.attributes) );
-            });
-
-            return ret;
+                _.each(extracts, function(extract){
+                    //Why this next line?  Benoitg-2014-10-03
+                    extract.attributes.ranges = extract.attributes._ranges;
+                    ret.push( _.clone(extract.attributes) );
+                  });
+    
+                deferred.resolve(ret);
+              }
+          );
+          return deferred.promise();
+          
+          
+            
         },
 
 

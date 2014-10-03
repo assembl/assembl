@@ -156,10 +156,17 @@ define(function (require) {
             this.model.addPanel(options, position);
         },
 
+        /**
+         * 
+         */
         ensurePanel: function (options, position) {
             this.model.ensurePanel(options, position);
         },
 
+        /* Typenames are available in the panelType class attribute of each
+         * panel class
+         * 
+         */
         getViewByTypeName: function (typeName) {
             var model = this.model.getPanelSpecByType(typeName);
             if (model !== undefined) {
