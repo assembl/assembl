@@ -32,8 +32,6 @@ define(function (require) {
         _unlockCallbackQueue: {},
         _stateButton: null,
         _minimizedStateButton: null,
-        _originalWidth: null,
-        _nextElementOriginalWidth: null,
 
         initialize: function (options) {
             var contentClass = panelClassByTypeName(options.contentSpec);
@@ -166,17 +164,12 @@ define(function (require) {
                 return;
             }
 
-            var compensateElement = this.$el.nextAll(":visible:not(.minimized)").last();
             this.model.set('minimized', false);
             this._minimizedStateButton
                 //.addClass('icon-collapse')
                 //.removeClass('icon-expand')
                 .attr('data-original-title', i18n.gettext('Minimize panel'));
 
-            //this.$el.css("width", this._originalWidth+"px");
-            //this.$el.animate({ "width": this._originalWidth+"px"}, 1000);
-            //compensateElement.css("width", this._nextElementOriginalWidth+"px");
-            //compensateElement.animate({"width": this._nextElementOriginalWidth+"px"}, 1000);
             var el = this.$el;
             this.$el.addClass("minimizing");
 
@@ -192,9 +185,6 @@ define(function (require) {
         minimizePanel: function () {
             if (this.model.get('minimized'))
                 return;
-            var compensateElement = this.$el.nextAll(":visible:not(.minimized)").last();
-            this._originalWidth = this.$el.width();
-            this._nextElementOriginalWidth = compensateElement.width();
             
             this.model.set('minimized', true);
             this._minimizedStateButton
@@ -202,15 +192,6 @@ define(function (require) {
                 //.removeClass('icon-collapse')
                 .attr('data-original-title', i18n.gettext('Maximize panel'));
 
-            
-            var targetWidth = 40;
-            var currentWidth = this.$el.width();
-            var diffWidth = currentWidth - targetWidth;
-            var nextElementCurrentWidth = compensateElement.width();
-            //this.$el.css("width", targetWidth+"px");
-            //this.$el.animate({ "width": targetWidth+"px"}, 1000);
-            //compensateElement.css("width", (nextElementCurrentWidth+diffWidth) + "px");
-            //compensateElement.animate({ "width": (nextElementCurrentWidth+diffWidth) + "px"}, 1000);
             this.$el.addClass("minimizing");
 
             this.$el.children(".panelContents").hide();

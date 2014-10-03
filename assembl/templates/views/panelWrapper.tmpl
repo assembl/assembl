@@ -27,14 +27,15 @@
 
 <div class="panelContents"></div>
 
-{# TODO: template system for minified state of each panel #}
+{# A minimized panel only shows an arrow in its title bar, and as panel content it uses the icon shown in its maximized title bar #}
+{# A possible improvement is to create a template system for minified state of each panel #}
 <div class="panelContentsWhenMinimized <% if ( hideHeader ) { %>hasNoHeader<% } else { %>hasHeader<% } %>">
-<% if ( hideHeader ) { %>
-    <header class="panel-header">
-        <a class="js_minimizePanel panel-header-minimize btn btn-sm" data-toggle="tooltip" data-placement="top" title="{{gettext('Maximize panel')}}">
-          <i class="icon-arrowright"></i>
-        </a>
-    </header>
-<% } %>
-<span class="icon-idea"></span><span class="icon-home"></span>
+    <% if ( hideHeader ) { %>
+        <header class="panel-header">
+            <a class="js_minimizePanel panel-header-minimize btn btn-sm" data-toggle="tooltip" data-placement="top" title="{{gettext('Maximize panel')}}">
+              <i class="icon-arrowright"></i>
+            </a>
+        </header>
+    <% } %>
+    <span class="<%= icon %>"></span>
 </div>
