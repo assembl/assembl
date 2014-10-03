@@ -134,8 +134,10 @@ define(function (require) {
             if (Ctx.debugRender) {
                 console.log("message:render() is firing for message", this.model.id);
             }
-            this.model.getCreatorPromise().done(
-                function (creator) {
+            $.when(this.model.getCreatorPromise(),
+                this.model.getExtractsPromise()
+                ).then(
+                function (creator, extracts) {
                     var data = that.model.toJSON(),
                         children,
                         bodyFormat = null,
@@ -190,7 +192,7 @@ define(function (require) {
                         that.$el.removeClass('read');
                     }
 
-                    data['nuggets'] = data.extracts.length;
+                    data['nuggets'] = extracts.length;
 
                     data = that.transformDataBeforeRender(data);
                     that.$el.html(that.template(data));
@@ -364,7 +366,6 @@ define(function (require) {
                           console.log("message::showSegmentByAnnotation() ERROR, the extract doesn't exist")
                           return;
                       }
-                      console.log(that);
                       if (segment.get('idIdea')) {
                         if(that.messageListView.panelWrapper.groupContent.getViewByTypeName("ideaPanel")) {
                           //FIXME:  We don't want to affect every panel, only the one in the current group

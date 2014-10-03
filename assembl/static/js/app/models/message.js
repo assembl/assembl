@@ -77,10 +77,9 @@ define(function(require){
         getAnnotationsPromise: function(){
           var that = this,
           deferred = $.Deferred();
-          this.collection.collectionManager.getAllExtractsCollectionPromise().done(
-              function(allExtractsCollection) {
-                var extracts = allExtractsCollection.where({ idPost: that.getId() }),
-                ret = [];
+          this.getExtractsPromise().done(
+              function(extracts) {
+                var ret = [];
 
                 _.each(extracts, function(extract){
                     //Why this next line?  Benoitg-2014-10-03
@@ -92,11 +91,23 @@ define(function(require){
               }
           );
           return deferred.promise();
-          
-          
-            
         },
 
+        /**
+         * Return all segments in the annotator format
+         * @return {Object[]}
+         */
+        getExtractsPromise: function(){
+          var that = this,
+          deferred = $.Deferred();
+          this.collection.collectionManager.getAllExtractsCollectionPromise().done(
+              function(allExtractsCollection) {
+                var extracts = allExtractsCollection.where({ idPost: that.getId() });
+                deferred.resolve(extracts);
+              }
+          );
+          return deferred.promise();
+        },
 
         /**
          * Returns the toppest parent
