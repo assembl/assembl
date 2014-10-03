@@ -57,7 +57,7 @@ define(function (require) {
                 headerClass: this.contentsView.headerClass || '',
                 userCanChangeUi: Ctx.userCanChangeUi(),
                 hasLock: this.contentsView.lockable,
-                hasMinimize: this.contentsView.minimizeable,
+                hasMinimize: this.contentsView.minimizeable || Ctx.userCanChangeUi(),
                 hasClose: this.contentsView.closeable,
                 icon: this.getIcon()
             }
