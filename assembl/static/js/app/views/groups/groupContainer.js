@@ -42,6 +42,7 @@ define(function (require) {
                 this.resizeAllPanels();
         },
         suspendResize: function() {
+            this.useCurrentSize();
             this.resizeSuspended = true;
         },
         resumeResize: function() {
