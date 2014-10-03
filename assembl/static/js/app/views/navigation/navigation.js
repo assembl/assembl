@@ -17,7 +17,7 @@ define(function (require) {
         className: "navSidebar",
         hideHeader: true,
         gridSize: AssemblPanel.prototype.NAVIGATION_PANEL_GRID_SIZE,
-        minWidth: 356,
+        minWidth: 350,
         getTitle: function () {
             return 'Navigation'; // unused
         },

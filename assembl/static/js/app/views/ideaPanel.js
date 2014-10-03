@@ -25,6 +25,7 @@ define(function (require) {
         minimizeable: true,
         closeable: false,
         gridSize: AssemblPanel.prototype.IDEA_PANEL_GRID_SIZE,
+        minWidth: 270,
         regions: {
             segmentList: ".postitlist"
         },

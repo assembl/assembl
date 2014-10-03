@@ -77,14 +77,6 @@
   }
 }
 
-.groupBody .groupPanel .navSidebar {
-  min-width: floor($grid_unit_min_size * $navigation_panel_grid_size);
-}
-
-.groupBody .groupPanel.minimized .navSidebar {
-  min-width: initial !important;
-}
-
 .groupBody {
   display: table;
   height: calc(100% - 3px); /* retain the height of .groupHeader */
