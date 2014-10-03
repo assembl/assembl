@@ -176,6 +176,7 @@ define(function (require) {
         resetMessagePanelState: function () {
             var nav = this.getNavigationPanelSpec(),
                 ideaPanel = this.getWrapperByTypeName('ideaPanel');
+            this.ensurePanelsVisible('ideaPanel', 'messageList');
             this.resetMessagePanelWidth();
             if (ideaPanel != null && !ideaPanel.model.get('locked') && (!nav || this.model.get('navigationState') == 'debate')) {
                 if (ctx.getCurrentIdea() == undefined) {
@@ -184,7 +185,6 @@ define(function (require) {
                     ideaPanel.unminimizePanel();
                 }
             }
-            this.ensurePanelsVisible('ideaPanel', 'messageList');
         },
 
         setPanelWidthByType: function (panelType, width) {
