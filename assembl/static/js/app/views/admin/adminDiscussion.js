@@ -33,7 +33,7 @@ define(function (require) {
         onRender: function () {
             var that = this,
                 collectionManager = new CollectionManager();
-
+            //need a solution to pass data to the template after complete promise
             $.when(collectionManager.getAllPartnerOrganizationCollectionPromise()).then(
                 function (allPartnerOrganizationCollection) {
                     allPartnerOrganizationCollection.forEach(function (model) {
