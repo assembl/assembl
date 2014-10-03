@@ -242,31 +242,13 @@
   }
 }
 
-/* temporary: use CSS to show/hide the right icons in the minimized panel => TODO: template system for minimized view */
-
-.groupPanel.minimized .panelContentsWhenMinimized.hasHeader span.icon-home {
+.groupPanel.minimizing .panel-header a {
   display: none;
 }
 
-.groupPanel.minimized .panelContentsWhenMinimized.hasHeader span.icon-idea {
-  display: initial;
+.groupPanel.minimizing .panel-header a.panel-header-minimize {
+  display: block;
 }
-
-.groupPanel.minimized .panelContentsWhenMinimized.hasNoHeader span.icon-idea {
-  display: none;
-}
-
-.groupPanel.minimized .panelContentsWhenMinimized.hasNoHeader span.icon-home {
-  display: initial;
-}
-
-/* end temporary */
-
-/*
-.groupPanel.minimized .panelContentsWhenMinimized a.panel-header-minimize {
-  display: none;
-}
-*/
 
 .groupPanel.minimized .panel-header a.panel-header-minimize,
 .groupPanel.minimized .navSidebar .nav span.panel-header-minimize,

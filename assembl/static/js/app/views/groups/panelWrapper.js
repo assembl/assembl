@@ -164,6 +164,7 @@ define(function (require) {
                 // do not accept to unminimize if no idea to show
                 return;
             }
+            var animationDuration = 1000;
 
             this.model.set('minimized', false);
             this._minimizedStateIcon
@@ -187,6 +188,7 @@ define(function (require) {
         minimizePanel: function () {
             if (this.model.get('minimized'))
                 return;
+            var animationDuration = 1000;
             
             this.model.set('minimized', true);
             this._minimizedStateIcon
@@ -197,9 +199,20 @@ define(function (require) {
 
             this.$el.addClass("minimizing");
 
-            this.$el.children(".panelContents").hide();
+            var panelContents = this.$el.children(".panelContents");
+            // fix the width of the panel content div (.panelContents), so that its animation does not change the positioning of its content (line returns, etc)
+            panelContents.css("width", panelContents.width());
+
+            //panelContents.hide();
+            panelContents.fadeOut(animationDuration, function(){
+                // once the animation is over, set its width back to 100%, so that it remains adaptative 
+                panelContents.css("width", "100%");
+            });
+
             this.$el.find("header span.panel-header-title").hide();
-            this.$el.children(".panelContentsWhenMinimized").show();
+            this.$el.children(".panelContentsWhenMinimized").fadeIn(animationDuration);
+
+
             if (this.model.get("type") == "ideaPanel") {
                 this.groupContent.resetMessagePanelWidth();
             }
