@@ -43,9 +43,12 @@ define(function (require) {
         isOneNavigationGroup: function() {
             if (this.collection.size() == 1) {
                 var group1 = this.collection.first();
-                var panel1 = group1.get('panels').first();
-                if (    panel1.get('type') == 'navSidebar'
-                    ||  panel1.get('type') == 'ideaList')
+                var panel_types = group1.get('panels').pluck('type');
+                if (panel_types.length == 3
+                    && (panel_types[0] == 'navSidebar'
+                    ||  panel_types[0] == 'ideaList')
+                    && panel_types[1] == 'ideaPanel'
+                    && panel_types[2] == 'messageList')
                     return true;
             }
             return false;
