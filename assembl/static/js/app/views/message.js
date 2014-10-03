@@ -192,7 +192,9 @@ define(function (require) {
                         that.$el.removeClass('read');
                     }
 
-                    data['nuggets'] = extracts.length;
+                    data['nuggets'] = _.filter(extracts, function(extract){
+                      return(extract.get('important'))
+                    });
 
                     data = that.transformDataBeforeRender(data);
                     that.$el.html(that.template(data));

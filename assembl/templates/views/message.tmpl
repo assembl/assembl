@@ -116,8 +116,8 @@
       {#&nbsp;&nbsp;<a href="#"><i class="icon-heart"></i>{{ gettext("I love") }}</a>
       &nbsp;&nbsp;<a href="#"><i class="icon-download"></i>{{ gettext("share") }}</a>#}
       <div class="fr">
-        <% if(nuggets){ %>
-          <span class="nb-nuggets"><i class="icon-diamond"></i><span><%= nuggets %></span></span>
+        <% if(nuggets.length > 0){ %>
+          <span class="nb-nuggets"><i class="icon-diamond"></i><span><%= nuggets.length %></span></span>
         <% } %>
       </div>
     <% } %>
