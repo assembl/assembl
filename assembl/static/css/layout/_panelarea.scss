@@ -38,20 +38,3 @@ $panelarea-min-height: 400px;
     }
 }
 
-// Specific areas
-#segmentList { 
-    width: $panelarea-min-width;
-    max-width: $panelarea-min-width;
-}
-
-#messageList {
-    min-width: floor($grid_unit_min_size * $message_panel_grid_size);
-}
-
-#synthesisPanel {
-    min-width: floor($grid_unit_min_size * $synthesis_panel_grid_size);
-}
-
-#ideaList {
-  min-width: floor($grid_unit_min_size * $idea_panel_grid_size) - 10px;
-}
