@@ -905,9 +905,12 @@ define(function (require) {
                     var x_position = mouse_position[0];
                     var xInDomain = x.invert(x_position);
                     var i = Math.min(data_length-1, bisectDate(data, xInDomain, 1)),
-                        d0 = data[i - 1],
-                        d1 = data[i],
-                        d = xInDomain - d0.date > d1.date - xInDomain ? d1 : d0;
+                        d = data[i];
+                    if (i > 0 && i < data.length) {
+                        var d0 = data[i - 1];
+                        if (xInDomain - d0.date < d.date - xInDomain)
+                            d = d0;
+                    }
                     focus.attr("transform", "translate(" + x(d.date) + "," + y(d.value) + ")");
                     var t = focus.select("text");
                     //t.text(d.value + " (" + Ctx.getNiceDate(d.date) + ")");
