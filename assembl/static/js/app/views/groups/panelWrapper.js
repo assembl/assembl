@@ -78,6 +78,7 @@ define(function (require) {
             Ctx.initTooltips(this.$el);
             this._stateButton = this.$('.lock-group i');
             this._minimizedStateButton = this.$('.panel-header-minimize');
+            this._minimizedStateIcon = this.$('.panel-header-minimize i');
         },
         setHidden: function () {
             if (this.model.get('hidden')) {
@@ -165,9 +166,10 @@ define(function (require) {
             }
 
             this.model.set('minimized', false);
+            this._minimizedStateIcon
+                .addClass('icon-arrowleft')
+                .removeClass('icon-arrowright');
             this._minimizedStateButton
-                //.addClass('icon-collapse')
-                //.removeClass('icon-expand')
                 .attr('data-original-title', i18n.gettext('Minimize panel'));
 
             var el = this.$el;
@@ -187,9 +189,10 @@ define(function (require) {
                 return;
             
             this.model.set('minimized', true);
+            this._minimizedStateIcon
+                .addClass('icon-arrowright')
+                .removeClass('icon-arrowleft');
             this._minimizedStateButton
-                //.addClass('icon-expand')
-                //.removeClass('icon-collapse')
                 .attr('data-original-title', i18n.gettext('Maximize panel'));
 
             this.$el.addClass("minimizing");

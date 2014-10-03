@@ -225,7 +225,8 @@
 .groupPanel .navSidebar .nav .panel-header-minimize {
   color: $green;
   float: right;
-  i.icon-arrowleft {
+  i.icon-arrowleft,
+  i.icon-arrowright {
     font-size: 14px;
   }
 }

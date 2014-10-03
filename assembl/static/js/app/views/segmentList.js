@@ -168,6 +168,7 @@ define(function (require) {
         template: '#tmpl-segmentList',
         panelType: 'clipboard',
         className: 'clipboard',
+        minWidth: 270,
 
         ui: {
             body: ".panel-body",
