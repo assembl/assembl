@@ -30,7 +30,7 @@ define(function (require) {
             'click .js_closeGroup': 'closeGroup'
         },
         collectionEvents: {
-            'add remove reset change': 'adjustGridSize'
+            'add remove reset': 'adjustGridSize'
         },
 
         serializeData: function () {
