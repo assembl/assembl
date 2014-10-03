@@ -6,16 +6,16 @@
 #}
 
 {% set segmentDate = '<%= ctx.getNiceDateTime(segment.get("creationDate")) %>' %}
-{% set segmentCreatorName = '<%= segment.getCreatorDEPRECATED().get("name") %>' %}
+{% set segmentCreatorName = '<%= harvester.get("name") %>' %}
 {% set harverterTooltip = gettext('Harvested by %(name)s %(date)s')|format(date=segmentDate, name=segmentCreatorName) %}
 
-{% set segmentCreatorAvatarImg = '<img src="<%= segment.getCreatorDEPRECATED().getAvatarUrl(24) %>" class="image-rounded" alt="" width="24" height="24" data-toggle="tooltip" data-placement="left" title="'+harverterTooltip+'"/>' %}
+{% set segmentCreatorAvatarImg = '<img src="<%= harvester.getAvatarUrl(24) %>" class="image-rounded" alt="" width="24" height="24" data-toggle="tooltip" data-placement="left" title="'+harverterTooltip+'"/>' %}
 {% set segmentLinkTooltip = gettext('Click here to see the original contribution this segment is quoted from.') %}
 {% set segmentTextLink = '<a class="segment-link" data-segmentid="<%= segment.cid %>" data-tooltip="'+segmentLinkTooltip+'">'+gettext('Show in original text')+'<%= segment.getTypeIcon() %>&nbsp;</a>' %}
 
 {#<div class="box postit" draggable="true" data-segmentid="<%= segment.cid %>">
 
-  <% if (canEditExtracts || (canEditMyExtracts && segment.getCreatorDEPRECATED() == ctx.getCurrentUser())) { %>
+  <% if (canEditExtracts || (canEditMyExtracts && harvester == ctx.getCurrentUser())) { %>
     <span data-segmentid="<%= segment.cid %>" class="js_closeExtract closeExtract icon-delete fr"></span>
   <% } %>
 
@@ -51,7 +51,7 @@
 </div> #}
 
 <div class="bx bx-default postit" draggable="true" data-segmentid="<%= segment.cid %>">
-  <% if (canEditExtracts || (canEditMyExtracts && segment.getCreatorDEPRECATED() == ctx.getCurrentUser())) { %>
+  <% if (canEditExtracts || (canEditMyExtracts && harvester == ctx.getCurrentUser())) { %>
   <button class="btn btn-cancel btn-xs bx-close js_closeExtract" type="button" data-segmentid="<%= segment.cid %>">
     <i class="icon-delete"></i>
   </button>

@@ -151,12 +151,14 @@ define(function(require){
     },
 
     /**
-     * Returns the segent's creator
+     * Returns the extract's creator from a collection provided
+     * @param {Collection} The collection to get the user models from
      * @return {User}
      */
-    getCreatorDEPRECATED: function(){
-      var creatorId = this.get('idCreator');
-      return this.collection.collectionManager._allUsersCollection.getById(creatorId);
+    getCreatorFromUsersCollection: function(usersCollection){
+      var creatorId = this.get('idCreator'),
+          creator = usersCollection.getById(creatorId);
+      return creator;
     },
 
     /**

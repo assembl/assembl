@@ -75,12 +75,13 @@ define(function(require){
          * @return {Object[]}
          */
         getAnnotationsDEPRECATED: function(){
-            var segments = this.collection.collectionManager._allExtractsCollection.where({ idPost: this.getId() }),
+            var extracts = this.collection.collectionManager._allExtractsCollection.where({ idPost: this.getId() }),
                 ret = [];
 
-            _.each(segments, function(segment){
-                segment.attributes.ranges = segment.attributes._ranges;
-                ret.push( _.clone(segment.attributes) );
+            _.each(extracts, function(extract){
+                //Why this next line?  Benoitg-2014-10-03
+                extract.attributes.ranges = extract.attributes._ranges;
+                ret.push( _.clone(extract.attributes) );
             });
 
             return ret;

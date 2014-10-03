@@ -30,8 +30,12 @@ define(function (require) {
             this.closeDeletes = options.closeDeletes;
         },
         serializeData: function () {
-            var post, postCreator, idPost = this.model.get('idPost'),
-                currentUser = Ctx.getCurrentUser();
+            var post,
+                postCreator,
+                idPost = this.model.get('idPost'),
+                currentUser = Ctx.getCurrentUser(),
+                harvester = this.model.getCreatorFromUsersCollection(this.allUsersCollection);
+            
             if (idPost) {
                 post = this.allMessagesCollection.get(idPost);
                 if (post) {
@@ -43,6 +47,8 @@ define(function (require) {
                 segment: this.model,
                 post: post,
                 postCreator: postCreator,
+                harvester: harvester,
+                allUsersCollection: this.allUsersCollection,
                 canEditExtracts: currentUser.can(Permissions.EDIT_EXTRACT),
                 canEditMyExtracts: currentUser.can(Permissions.EDIT_MY_EXTRACT),
                 ctx: Ctx
@@ -82,7 +88,7 @@ define(function (require) {
                     Ctx.showTargetBySegment(segment);
                 });
         },
-        /**
+        /**this
          * @event
          */
         onCloseButtonClick: function (ev) {

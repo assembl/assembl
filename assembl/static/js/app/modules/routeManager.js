@@ -41,10 +41,6 @@ define(function (require) {
             }
 
             loadCurrentUser();
-            /* FIXME: We only need this here because we still use deprecated 
-             * access functions for segments (getCreatorDEPRECATED)
-             */
-            collectionManager.getAllUsersCollectionPromise();
         },
 
         /**
