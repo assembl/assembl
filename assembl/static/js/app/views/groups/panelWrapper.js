@@ -251,10 +251,9 @@ define(function (require) {
                 });
             } else {
                 that.$el.removeClass("minimized");
+                that.$el.removeClass("minimizing");
                 var gridSize = this.gridSize;
-                //var myCorrection = extra_pixels / num_units;
                 var myCorrection = extra_pixels * gridSize/ num_units;
-                // probably group_extra_pixels * my_units / group_units... Could 
                 if (this.groupContent.groupContainer.isOneNavigationGroup()
                     && this.model.get('type') == 'messageList'
                     && this.groupContent.model.getPanelSpecByType('ideaPanel').get('minimized')) {
@@ -268,10 +267,12 @@ define(function (require) {
                 if (myCorrection > 0) {
                     width = "calc("+width+" - "+myCorrection+"px)";
                 }
+                var before = that.$el.width();
                 this.$el.animate({'width': target}, 1000, 'swing', function() {
-                    var before = that.$el.width();
                     that.$el.width(width);
-                    console.log("  panel ", that.model.get('type'), "target width:", width, "=", target, "actual:", before, "->", that.$el.width());
+                    window.setTimeout(function() {
+                        console.log("  panel ", that.model.get('type'), "target width:", width, "=", target, "actual:", before, "->", that.$el.width());
+                    });
                     that.$el.removeClass("animating");
                     that.$el.css("min-width", that.minWidth);
                 });
