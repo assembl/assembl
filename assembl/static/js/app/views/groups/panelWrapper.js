@@ -267,11 +267,11 @@ define(function (require) {
                 if (myCorrection > 0) {
                     width = "calc("+width+" - "+myCorrection+"px)";
                 }
-                var before = that.$el.width();
+                console.log("  panel ", that.model.get('type'), "target width:", width, "=", target, "actual:", that.$el.width());
                 this.$el.animate({'width': target}, 1000, 'swing', function() {
                     that.$el.width(width);
                     window.setTimeout(function() {
-                        console.log("  panel ", that.model.get('type'), "target width:", width, "=", target, "actual:", before, "->", that.$el.width());
+                        console.log("  panel ", that.model.get('type'), "final width:", that.$el.width());
                     });
                     that.$el.removeClass("animating");
                     that.$el.css("min-width", that.minWidth);
