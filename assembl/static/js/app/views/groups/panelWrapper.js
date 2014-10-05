@@ -169,6 +169,8 @@ define(function (require) {
             }
             
             this.model.set('minimized', false);
+
+            this.$el.addClass("unminimizing");
             
             if (this.model.get("type") == "ideaPanel") {
                 this.groupContent.resetMessagePanelWidth();
@@ -182,6 +184,8 @@ define(function (require) {
                 return;
             
             this.model.set('minimized', true);
+
+            this.$el.addClass("minimizing");
 
             if (this.model.get("type") == "ideaPanel") {
                 this.groupContent.resetMessagePanelWidth();
@@ -220,7 +224,7 @@ define(function (require) {
                 this._minimizedStateButton
                     .attr('data-original-title', i18n.gettext('Maximize panel'));
 
-                this.$el.addClass("minimizing");
+                
 
                 var panelContents = this.$el.children(".panelContents");
                 // fix the width of the panel content div (.panelContents), so that its animation does not change the positioning of its content (line returns, etc)
@@ -272,8 +276,6 @@ define(function (require) {
                 this._minimizedStateButton
                     .attr('data-original-title', i18n.gettext('Minimize panel'));
 
-                this.$el.addClass("minimizing");
-
                 var panelContents = this.$el.children(".panelContents");
                 // fix the width of the panel content div (.panelContents), so that its animation does not change the positioning of its content (line returns, etc)
                 panelContents.css("width", target);
@@ -297,7 +299,7 @@ define(function (require) {
                     // });
                     that.$el.removeClass("animating");
                     that.$el.removeClass("minimized");
-                    that.$el.removeClass("minimizing");
+                    that.$el.removeClass("unminimizing");
                     that.$el.css("min-width", that.minWidth);
                 });
 
