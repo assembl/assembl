@@ -141,6 +141,7 @@ celery_tasks.notification_dispatch.broker = redis://localhost:6379/1
 celery_tasks.notification_dispatch.imodeleventwatcher = assembl.lib.model_watcher.ModelEventWatcherPrinter
 
 cache_viewdefs = true
+minified_js = false
 
 test_with_zope = false
 
