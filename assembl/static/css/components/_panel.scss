@@ -160,10 +160,11 @@
       color: $green;
     }
   }
+}
 
-  .panel-header-minimize {
-      padding: 8px;
-  }
+.navSidebar .nav .panel-header-minimize,
+.panel-header .panel-header-minimize {
+  padding: 8px;
 }
 
 // An editable area within the .panel-header
