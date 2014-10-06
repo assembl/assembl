@@ -312,7 +312,7 @@ define(function(require){
         //console.log("getMessageFullModelsPromise() resolving with:", returnedModels);
         $.when.apply($, returnedModelsPromises).then( 
             function() {
-              var args = Array.slice(arguments);
+              var args = Array.prototype.slice(arguments);
               deferred.resolve(args);
             },
             function() {

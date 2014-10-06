@@ -1125,7 +1125,7 @@ define(function (require) {
             
             $.when.apply($, returnedModelsPromises).then( 
                 function() {
-                  var fullMessageModels = Array.slice(arguments),
+                  var fullMessageModels = Array.prototype.slice(arguments),
                       list = [];
                   _.each(fullMessageModels, function(fullMessageModel){
                     view = new MessageFamilyView({
