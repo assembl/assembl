@@ -198,8 +198,8 @@ define(function (require) {
             this._stateButton = dom;
         },
 
-        getExtraPixels: function (include_embedded_idea_panel) {
-            if (include_embedded_idea_panel && this.model.get('minimized')) {
+        getExtraPixels: function () {
+            if (this.model.get('minimized')) {
                 return AssemblPanel.prototype.minimized_size;
             }
             return 0;

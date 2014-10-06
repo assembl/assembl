@@ -79,7 +79,7 @@ define(function (require) {
                     && panelWrapper.model.get('type') == 'idea') {
                     return;
                 }
-                extraPixels += that.panel_borders_size + panelWrapper.getExtraPixels(include_embedded_idea_panel);
+                extraPixels += that.panel_borders_size + panelWrapper.getExtraPixels();
             });
             return extraPixels;
         },
