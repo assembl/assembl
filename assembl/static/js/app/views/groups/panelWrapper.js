@@ -205,10 +205,14 @@ define(function (require) {
             return 0;
         },
 
+        /**
+         * during animation, freeze the percentage width of panels into pixels
+         */
         useCurrentSize: function() {
             this.$el.stop();
-            // console.log("  panel ", this.model.get('type'), "useCurrentSize:", this.$el.width());
             var width = this.$el[0].style.width;
+            // console.log("  panel ", this.model.get('type'), "useCurrentSize:", this.$el.width(), width);
+            // If %, we already applied this, and the browser may have changed pixels on us.
             if (width == "" || width.indexOf('%') >= 0) {
                 this.$el.width(this.$el.width());
             }
