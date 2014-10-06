@@ -64,12 +64,13 @@
     </tbody>
   </table>
   <div>
-    <form class="core-form form-inline">
-      <input type="text" placeholder="Name of partner" required>
-      <input type="text" placeholder="Description" required>
-      <input type="text" placeholder="Home page" required>
-      <input type="text" placeholder="Url logo" required>
-      <button type="submit" class="btn btn-primary btn-sm">Add partner</button>
+    <form class="core-form form-inline" method="post" action=".">
+      <input type="text" class="partner-name" placeholder="Name of partner" name="name" required>
+      <input type="text" class="partner-description" placeholder="Description" name="description" required>
+      <input type="text" class="partner-homepage" placeholder="Home page" name="homepage" required>
+      <input type="text" class="partner-name" placeholder="Url logo" name="logo" required>
+      <input type="checkbox" class="partner-initiator" name="is_initiator"  required>
+      <button type="submit" class="btn btn-primary btn-sm js_add-partner">Add partner</button>
     </form>
   </div>
 </div>

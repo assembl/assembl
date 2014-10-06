@@ -4,8 +4,8 @@ define(function (require) {
 
     var Marionette = require('marionette'),
         CollectionManager = require('modules/collectionManager'),
-        _ = require('underscore'),
-        Ctx = require('modules/context');
+        Ctx = require('modules/context'),
+        $ = require('jquery');
 
     var adminDiscussion = Marionette.LayoutView.extend({
         template: '#tmpl-adminDiscussion',
@@ -20,13 +20,14 @@ define(function (require) {
             'add': 'render'
         },
 
-        modelEvents: {
-            //'add change':'render'
+        events: {
+            'click .js_add-partner': 'addPartner'
         },
 
         serializeData: function () {
             return {
-                partners: this.collection.models
+                partners: this.collection.models,
+                ctx: Ctx
             }
         },
 
@@ -40,12 +41,23 @@ define(function (require) {
                         that.collection.add(model)
                     });
                 });
+        },
 
+        addPartner: function (e) {
+            e.preventDefault();
 
-            /*$.when(Ctx.getDiscussionPromise()).then(function(discussion) {
+            var dataPartner = $(e.target).parent('form').serialize(),
+                urlPartner = '/data/Discussion/' + Ctx.getDiscussionId() + '/partner_organizations/';
 
-
-             });*/
+            $.ajax({
+                url: urlPartner,
+                type: "post",
+                data: dataPartner,
+                success: function () {
+                },
+                error: function () {
+                }
+            });
         }
 
     });
