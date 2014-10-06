@@ -127,7 +127,7 @@ define(function (require) {
         },
 
         adjustGridSize: function () {
-            this.groupContainer.calculateGridSize();
+            this.groupContainer.adjustGridSize();
         },
         /**
          * Tell the panelWrapper which view to put in its contents

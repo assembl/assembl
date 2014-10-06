@@ -16,7 +16,7 @@ define(function (require) {
         initialize: function (options) {
             var that = this;
             // boilerplate in marionette if you listen m/c here, use collectionEvents or modelEvents
-            //this.listenTo(this.collection, 'change reset add remove', this.calculateGridSize);
+            //this.listenTo(this.collection, 'change reset add remove', this.adjustGridSize);
             setTimeout(function () {
                 that.resizeAllPanels();
             }, 200);
@@ -35,11 +35,15 @@ define(function (require) {
             }
         },
         collectionEvents: {
-            'reset add remove': 'calculateGridSize'
+            'reset add remove': 'adjustGridSize'
         },
-        calculateGridSize: function () {
-            if (!this.resizeSuspended)
-                this.resizeAllPanels();
+        adjustGridSize: function () {
+            var that = this;
+            if (!this.resizeSuspended) {
+                window.setTimeout(function() {
+                    that.resizeAllPanels();
+                });
+            }
         },
         suspendResize: function() {
             this.useCurrentSize();
