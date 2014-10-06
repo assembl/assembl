@@ -208,7 +208,9 @@ define(function (require) {
         useCurrentSize: function() {
             this.$el.stop();
             // console.log("  panel ", this.model.get('type'), "useCurrentSize:", this.$el.width());
-            this.$el.width(this.$el.width());
+            if (this.$el[0].style.width.contains('%')) {
+                this.$el.width(this.$el.width());
+            }
             this.$el.addClass("animating");
         },
 

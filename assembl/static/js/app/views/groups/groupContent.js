@@ -85,13 +85,16 @@ define(function (require) {
         },
 
         useCurrentSize: function() {
+            var that = this;
             this.$el.stop();
             this.children.each(function (panelWrapper) {
                 if (panelWrapper.model.get('hidden'))
                     return;
                 panelWrapper.useCurrentSize();
             });
-            this.$el.width(this.$el.width());
+            if (that.$el[0].style.width.contains('%')) {
+                this.$el.width(this.$el.width());
+            }
             this.$el.addClass("animating");
         },
 
