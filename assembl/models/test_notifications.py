@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-#py.test assembl/models/test_notifications.py 
+#py.test assembl/models/test_notifications.py -s
 import pytest
 from assembl.models import (
     Idea,
@@ -47,7 +47,9 @@ def test_notification_follow_synthesis(test_session,
     dispatcher.processPostCreated(reply_post_2.id)
     notification_count = test_session.query(Notification).count() 
     assert notification_count == initial_notification_count, "The post wasn't a synthesis and shouldn't have been caught"
+    initial_last_status_change_date = subscription.last_status_change_date
     subscription.status = NotificationStatus.UNSUBSCRIBED
+    assert subscription.last_status_change_date > initial_last_status_change_date, "The last status change date should have auto-updated"
     dispatcher.processPostCreated(synthesis_post_1.id)
     notification_count = test_session.query(Notification).count() 
     assert notification_count == initial_notification_count, "The synthesis shouldn't have created a notification, because the subscription is unsubscribed"

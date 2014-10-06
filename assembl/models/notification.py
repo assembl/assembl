@@ -13,6 +13,7 @@ from sqlalchemy import (
     UnicodeText,
     DateTime,
     ForeignKey,
+    event
 )
 from ..lib.model_watcher import IModelEventWatcher
 from ..lib.decl_enums import DeclEnum
@@ -136,13 +137,13 @@ class NotificationSubscription(DiscussionBoundBase):
         'polymorphic_on': 'type',
         'with_polymorphic': '*'
     }
+    
     def get_discussion_id(self):
         return self.discussion_id
 
     @classmethod
     def get_discussion_condition(cls, discussion_id):
         return cls.discussion_id == discussion_id
-    
 
     @abstractmethod
     def wouldCreateNotification(self, discussion_id, verb, object):
@@ -166,6 +167,11 @@ class NotificationSubscription(DiscussionBoundBase):
     @abstractmethod
     def process(self, discussion_id, verb, objectInstance, otherApplicableSubscriptions):
         pass
+    
+@event.listens_for(NotificationSubscription.status, 'set', propagate=True)
+def update_last_status_change_date(target, value, oldvalue, initiator):
+    target.last_status_change_date = datetime.utcnow()
+
 
 class CrudVerbs():
     CREATE = "CREATE"
@@ -217,6 +223,7 @@ class NotificationSubscriptionFollowAllMessages(NotificationSubscription):
         'polymorphic_identity': NotificationSubscriptionClasses.FOLLOW_ALL_MESSAGES,
         'with_polymorphic': '*'
     }
+    
 class ModelEventWatcherNotificationSubscriptionDispatcher(object):
     interface.implements(IModelEventWatcher)
 
