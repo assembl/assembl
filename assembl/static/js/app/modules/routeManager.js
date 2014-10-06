@@ -86,7 +86,7 @@ define(function (require) {
                   });
                 }
               }
-              Assembl.groupContainer.resizeAllPanels();
+              group.resizeAllPanels();
               Assembl.groupContainer.show(group);
           });
         },
