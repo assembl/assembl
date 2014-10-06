@@ -289,7 +289,6 @@ define(function(require){
         _.each(ids, function(id){
           returnedModelsPromises.push(that.getMessageFullModelPromise(id));
           });
-        //TODO:  Put as arguments of a big when
         //console.log("getMessageFullModelsPromise() resolving with:", returnedModels);
         $.when.apply($, returnedModelsPromises).then( 
             function() {

@@ -604,7 +604,7 @@ define(function (require) {
          * Returns the messages to be rendered
          * @return {Message[]}
          */
-        getAllMessagesToDisplay: function () {
+        getAllMessageStructureModelsToDisplay: function () {
             var toReturn = [],
                 that = this,
                 model = null,
@@ -615,7 +615,7 @@ define(function (require) {
                 if (model) {
                     toReturn.push(model);
                 } else {
-                    console.log('ERROR:  getAllMessagesToDisplay():  Message with id ' + id + ' not found!');
+                    console.log('ERROR:  getAllMessageStructureModelsToDisplay():  Message with id ' + id + ' not found!');
                 }
             });
 
@@ -655,7 +655,7 @@ define(function (require) {
                 
                 views_promise = this.getRenderedMessagesThreaded(models, 1, this.visitorViewData, returnedOffsets);
             } else {
-                models = this.getAllMessagesToDisplay();
+                models = this.getAllMessageStructureModelsToDisplay();
                 numMessages = _.size(models);
                 views_promise = this.getRenderedMessagesFlat(models, requestedOffsets, returnedOffsets);
             }
@@ -1092,11 +1092,18 @@ define(function (require) {
          * @return {HTMLDivElement[]}
          */
         getRenderedMessagesFlat: function (messages, requestedOffsets, returnedDataOffsets) {
-            var list = [],
+            var that = this,
                 filter = this.currentFilter,
                 len = messages.length,
                 i = _.isUndefined(requestedOffsets['offsetStart']) ? 0 : requestedOffsets['offsetStart'],
-                view, model, children, prop, isValid;
+                view,
+                messageStructureModel,
+                children,
+                prop,
+                isValid,
+                defer = $.Deferred(),
+                collectionManager = new CollectionManager(),
+                returnedModelsPromises = [];
 
             returnedDataOffsets['offsetStart'] = i;
             returnedDataOffsets['offsetEnd'] = _.isUndefined(requestedOffsets['offsetEnd']) ? MORE_PAGES_NUMBER : requestedOffsets['offsetEnd'];
@@ -1107,22 +1114,36 @@ define(function (require) {
             else {
                 returnedDataOffsets['offsetEnd'] = len - 1;
             }
-
             for (; i < len; i++) {
-                model = messages[i];
-                if (_.isUndefined(model)) {
-                    continue;
-                }
-
-                view = new MessageFamilyView({
-                    model: model,
-                    messageListView: this
-                });
-                view.hasChildren = false;
-                list.push(view.render().el);
+              messageStructureModel = messages[i];
+              if (_.isUndefined(messageStructureModel)) {
+                console.log("FIXME:  This should NOT happen!");
+                continue;
+              }
+              returnedModelsPromises.push(collectionManager.getMessageFullModelPromise(messageStructureModel.id));
             }
-
-            return list;
+            
+            $.when.apply($, returnedModelsPromises).then( 
+                function() {
+                  var fullMessageModels = Array.slice(arguments),
+                      list = [];
+                  _.each(fullMessageModels, function(fullMessageModel){
+                    view = new MessageFamilyView({
+                        model: fullMessageModel,
+                        messageListView: that
+                    });
+                    view.hasChildren = false;
+                    list.push(view.render().el);
+                  });
+                  defer.resolve(list);
+                },
+                function() {
+                  defer.reject();
+                }
+                
+              );
+            
+            return defer.promise();
         },
 
         /**
