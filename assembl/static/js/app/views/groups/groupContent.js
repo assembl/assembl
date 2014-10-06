@@ -61,7 +61,7 @@ define(function (require) {
                 if (panelWrapper.model.get('hidden'))
                     return;
                 if (panelWrapper.model.get('minimized'))
-                    minWidth += 40;
+                    minWidth += AssemblPanel.prototype.minimized_size;
                 else
                     minWidth += panelWrapper.minWidth;
             });
@@ -115,6 +115,7 @@ define(function (require) {
                 myCorrection = Math.abs(myCorrection);
                 width = "calc("+width + " "+sign+" "+ myCorrection +"px)";
             }
+            target = Math.max(target, group_min_size);
             var before = that.$el.width();
             this.$el.animate({'width': target}, 1000, 'swing', function() {
                 that.$el.width(width);

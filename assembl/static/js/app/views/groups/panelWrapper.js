@@ -231,8 +231,6 @@ define(function (require) {
                 this._minimizedStateButton
                     .attr('data-original-title', i18n.gettext('Maximize panel'));
 
-                
-
                 var panelContents = this.$el.children(".panelContents");
                 // fix the width of the panel content div (.panelContents), so that its animation does not change the positioning of its content (line returns, etc)
                 panelContents.css("width", panelContents.width());
@@ -266,7 +264,7 @@ define(function (require) {
                 }
                 if (isNaN(myCorrection))
                     console.log("error in myCorrection");
-                var target = (pixels_per_unit * gridSize);
+                var target = Math.max(pixels_per_unit * gridSize, this.minWidth);
                 var width = (100*gridSize/group_units)+"%";
                 // minimize use of calc
                 if (myCorrection > 3) {
