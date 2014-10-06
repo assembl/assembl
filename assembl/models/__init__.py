@@ -159,7 +159,9 @@ from .notification import (
     NotificationSubscription,
     NotificationSubscriptionFollowSyntheses,
     NotificationSubscriptionFollowAllMessages,
-    Notification
+    Notification,
+    NotificationCreationOrigin,
+    NotificationStatus
     )
 
 declare_history_mappers()

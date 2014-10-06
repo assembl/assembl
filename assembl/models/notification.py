@@ -22,18 +22,6 @@ from zope import interface
 from .post import Post, SynthesisPost
 from abc import abstractmethod
 
-class CrudVerbs():
-    CREATE = "CREATE"
-    UPDATE = "UPDATE"
-    DELETE = "DELETE"
-    
-class NotificationSubscriptionType(DiscussionBoundBase):
-    """
-    Currently this table only exists to enforce referential integrity
-    """
-    __tablename__ = "notification_subscription_type"
-    id = Column(Integer, primary_key=True)
-
 class NotificationSubscriptionClasses(DeclEnum):
     #System notifications (can't unsubscribe)
     #EMAIL_BOUNCED = "EMAIL_BOUNCED", "Mandatory"
@@ -42,6 +30,7 @@ class NotificationSubscriptionClasses(DeclEnum):
     #RECOVER_PASSWORD = "", ""
     #PARTICIPATED_FOR_FIRST_TIME_WELCOME = "", "Mandatory"
     #SUBSCRIPTION_WELCOME = "", "Mandatory"
+    
     # Core notification (unsubscribe strongly discuraged)
     FOLLOW_SYNTHESES = "FOLLOW_SYNTHESES", ""
     FOLLOW_OWN_MESSAGES_REPLIES = "FOLLOW_OWN_MESSAGES_REPLIES", "Mandatory?"
@@ -57,9 +46,19 @@ class NotificationSubscriptionClasses(DeclEnum):
     #FOLLOW_ALL_THREAD_NEWLY_PARTICIPATED_IN = "FOLLOW_ALL_THREAD_NEWLY_PARTICIPATED_IN", "Pseudo-notification, that will create new FOLLOW_THREAD_DISCUSSION notifications (so one can unsubscribe)"
     FOLLOW_THREAD_DISCUSSION = "FOLLOW_THREAD_DISCUSSION", ""
     #FOLLOW_USER_POSTS = "FOLLOW_USER_POSTS", ""
-    #System notifications (can't unsubscribe)
-    #SYSTEM_ERRORST = "", ""
-     
+    
+    #System error notifications
+    #SYSTEM_ERRORS = "", ""
+
+class NotificationCreationOrigin(DeclEnum):
+    USER_REQUEST = "USER_REQUESTED", "A direct user action created the notification subscription"
+    DISCUSSION_DEFAULT = "DISCUSSION_DEFAULT", "The notification subscription was created by the default discussion configuration"
+    PARENT_NOTIFICATION = "PARENT_NOTIFICATION", "The notification subscription was created by another subscription (such as following all message threads a user participated in"
+    
+class NotificationStatus(DeclEnum):
+    ACTIVE = "ACTIVE", "Normal status, subscription will create notifications"
+    UNSUBSCRIBED = "UNSUBSCRIBED", "The user explicitely unsubscribed from this notification"
+
 class NotificationSubscription(DiscussionBoundBase):
     """
     a subscription to a specific type of notification. Subclasses will implement the actual code
@@ -81,12 +80,33 @@ class NotificationSubscription(DiscussionBoundBase):
         nullable=False,
         index=True,
     )
-
     discussion = relationship(
         Discussion,
         backref=backref('notificationSubscriptions')
     )
     creation_date = Column(
+        DateTime,
+        nullable = False,
+        default = datetime.utcnow)
+    creation_origin = Column(
+        NotificationCreationOrigin.db_type(),
+        nullable = False)
+    parent_subscription_id = Column(
+        Integer,
+        ForeignKey(
+            'notification_subscription.id',
+            ondelete='CASCADE',
+            onupdate='CASCADE'),
+            nullable = True)
+    parent_subscription = relationship(
+        'NotificationSubscription'
+    )
+    status = Column(
+        NotificationStatus.db_type(),
+        nullable = False,
+        index = True,
+        default = NotificationStatus.ACTIVE)
+    last_status_change_date = Column(
         DateTime,
         nullable = False,
         default = datetime.utcnow)
@@ -133,12 +153,12 @@ class NotificationSubscription(DiscussionBoundBase):
         """
         Returns all subscriptions that would fire on the object, and verb given
         
-        This naive implementation instanciates every subscription for every user, 
+        This naive implementation instanciates every ACTIVE subscription for every user, 
         and calls "would fire" for each.  It is expected that most subclasses will 
         override this with a more optimal implementation 
         """
         applicable_subscriptions = []
-        subscriptions = cls.db.query(cls);
+        subscriptions = cls.db.query(cls).filter(cls.status==NotificationStatus.ACTIVE);
         for subscription in subscriptions:
             if(subscription.wouldCreateNotification(object.get_discussion_id(), verb, object)):
                 applicable_subscriptions.append(subscription)
@@ -146,6 +166,11 @@ class NotificationSubscription(DiscussionBoundBase):
     @abstractmethod
     def process(self, discussion_id, verb, objectInstance, otherApplicableSubscriptions):
         pass
+
+class CrudVerbs():
+    CREATE = "CREATE"
+    UPDATE = "UPDATE"
+    DELETE = "DELETE"
 
 class NotificationSubscriptionFollowSyntheses(NotificationSubscription):
     priority = 1
