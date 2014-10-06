@@ -85,14 +85,14 @@ define(function (require) {
         },
 
         useCurrentSize: function() {
-            var that = this;
             this.$el.stop();
             this.children.each(function (panelWrapper) {
                 if (panelWrapper.model.get('hidden'))
                     return;
                 panelWrapper.useCurrentSize();
             });
-            if (that.$el[0].style.width.contains('%')) {
+            var width = this.$el[0].style.width;
+            if (width == "" || width.indexOf('%') >= 0) {
                 this.$el.width(this.$el.width());
             }
             this.$el.addClass("animating");
@@ -204,7 +204,6 @@ define(function (require) {
                     ideaPanel.unminimizePanel();
                 }
             }
-            this.groupContainer.resumeResize();
         },
 
         setPanelWidthByType: function (panelType, width) {
