@@ -14,7 +14,8 @@ define(function (require) {
         viewsFactory = require('objects/viewsFactory'),
         $ = require('jquery'),
         Notification = require('views/notification'),
-        adminView = require('views/admin/adminDiscussion');
+        adminView = require('views/admin/adminDiscussion'),
+        Partners = require('models/partner_organization');
 
     var routeManager = Marionette.Controller.extend({
 

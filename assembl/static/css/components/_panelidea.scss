@@ -20,7 +20,8 @@
   }
 }
 
-#ideaPanel-shorttitle, #ideaPanel-definition {
+#ideaPanel-shorttitle,
+#ideaPanel-definition {
   .panel-editablearea {
     margin: 0px;
     padding: 3px 0px 3px 4px;
@@ -33,7 +34,7 @@
     font-size: 20px;
     font-style: italic;
   }
-  .panel-editablearea {
+  .panel-editablearea, div {
     @extend %icon;
     &:before, &:after {
       font-size: 7px;

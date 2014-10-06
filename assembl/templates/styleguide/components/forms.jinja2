@@ -1,18 +1,3 @@
-{#<table class="table">
-<thead>
-  <tr>
-    <th>Value</th>
-    <th>Description</th>
-  </tr>
-</thead>
-<tbody>
-  <tr>
-    <td><code>.form-control</code></td>
-    <td><input type="text" class="form-control" placeholder="Enter your username" /></td>
-  </tr>
-</tbody>
-</table> #}
-
 <blockquote class="mbl">
   <p><strong>Vertical</strong>: .core-form<br>
   <strong>Inline</strong>: .core-form .form-inline<br>
@@ -123,18 +108,6 @@
   </fieldset>
 </form>
 
-
-
-
-{#<form>
-<label class="chk">
-    <input type="checkbox" class="chk-checkbox" />
-    <span class="chk-label"></span>
-</label>
-.chk
-</form>#}
-
-
 <h3 class="h3">Extending form</h3>
 <form class="core-form form-horizontal">
   <fieldset>
@@ -166,14 +139,6 @@
 These custom radio buttons are pure CSS3, no JavaScript required.</p>
 
 <form class="core-form form-horizontal">
-
-{#<label class="chk">
-    <input type="checkbox" class="chk-checkbox" />
-    <span class="chk-label"></span>
-</label>
-.chk#}
-
-
 <div class="control-group">
   <label class="control-label">Horizontal checkboxes</label>
   <div class="controls">
@@ -189,5 +154,30 @@ These custom radio buttons are pure CSS3, no JavaScript required.</p>
     </label>
   </div>
 </div>
-
 </form>
+
+
+<h3 class="h3">Message Box</h3>
+
+<div class="messageSend">
+  <div class="rc rcss">
+    <a class="img-left avatar img-rounded" href="#"><img src="/user/id/12/avatar/30" width="30" height="30"></a>
+    <div class="bd">
+      <div>
+        <div class="topic-subject">
+            <span class="topic-subject-input">
+              <input type="text" class="messageSend-subject formfield text bras" placeholder="Titre du nouveau message">
+            </span>
+        </div>
+      </div>
+      <div>
+        <textarea class="formtextarea messageSend-body text text-muted mbxs">Écrivez votre réponse ici...</textarea>
+        <div class="messageSend-buttons fr">
+            <a class="btn btn-primary btn-xs messageSend-sendbtn hidden">Envoyez votre réponse</a>
+            <a class="btn btn-cancel btn-sm messageSend-cancelbtn hidden">Annuler</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

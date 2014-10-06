@@ -5,7 +5,6 @@
   @include border-radius(3px);
   margin: 1em 0 0.5em 0;
   display: table;
-  //width: 98%;
   background-color: #ededed;
   padding: 10px 15px 5px;
   .hidden {
@@ -19,7 +18,8 @@
   }
   .interface-container {
     display: table-cell;
-    .messageSend-subject, .messageSend-body {
+    .messageSend-subject,
+    .messageSend-body {
       margin: 0;
     }
     .topic-subject {
@@ -39,7 +39,6 @@
           width: 100%;
         }
       }
-
     }
     .messageSend-buttons {
       width: 100%;
