@@ -12,6 +12,7 @@ define(function (require) {
         Ctx = require('modules/context'),
         Idea = require('models/idea'),
         IdeaView = require('views/idea'),
+        AssemblPanel = require('views/assemblPanel'),
         ideaGraphLoader = require('views/ideaGraph'),
         _ = require('underscore'),
         CollectionManager = require('modules/collectionManager'),
@@ -21,7 +22,7 @@ define(function (require) {
         IN_SYNTHESIS = 'inNextSynthesis';
 
 
-    var IdeaList = Backbone.View.extend({
+    var IdeaList = AssemblPanel.extend({
         panelType: 'ideaList',
         className: 'ideaList',
         /**
@@ -52,6 +53,8 @@ define(function (require) {
          * @type {Boolean}
          */
         show_graph: false,
+        minWidth: 320,
+        gridSize: AssemblPanel.prototype.NAVIGATION_PANEL_GRID_SIZE,
 
         /**
          * @init
