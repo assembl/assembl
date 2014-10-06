@@ -92,9 +92,12 @@
     vertical-align: top;
     .panelContentsWhenMinimized {
       display: none;
-      span {
+      span { /* the icon */
         font-size: 25px;
         position: absolute;
+        width: 40px;
+        text-align: center;
+        padding-top: 2px;
       }
     }
   }
