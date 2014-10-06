@@ -193,12 +193,12 @@ def update_requirements(force=False):
     update external dependencies on remote host
     """
     print(cyan('Updating requirements using PIP'))
-    venvcmd('pip install -U "pip>=1.5.1"')
+    venvcmd('pip install -U "pip>=1.5.1" --download-cache ~/.pip/cache')
     
     if force:
-        cmd = "%(venvpath)s/bin/pip install -I -r %(projectpath)s/requirements.txt" % env
+        cmd = "%(venvpath)s/bin/pip install -I -r %(projectpath)s/requirements.txt --download-cache ~/.pip/cache" % env
     else:
-        cmd = "%(venvpath)s/bin/pip install -r %(projectpath)s/requirements.txt" % env
+        cmd = "%(venvpath)s/bin/pip install -r %(projectpath)s/requirements.txt --download-cache ~/.pip/cache" % env
     run("yes w | %s" % cmd)
 
 @task
@@ -342,7 +342,7 @@ def updatemaincode():
         run('git submodule update --init')
 
 def app_setup():
-     venvcmd('pip install -U "pip>=1.5.1"')
+     venvcmd('pip install -U "pip>=1.5.1" --download-cache ~/.pip/cache')
      venvcmd('pip install -e ./')
      venvcmd('assembl-ini-files %s' % (env.ini_file))
 
@@ -513,7 +513,7 @@ def install_basetools():
     if env.mac:
         run('cd /tmp; curl -O https://raw.github.com/pypa/pip/master/contrib/get-pip.py')
         sudo('python /tmp/get-pip.py')
-        sudo('pip install virtualenv')
+        sudo('pip install virtualenv --download-cache ~/.pip/cache')
     else:
         sudo('apt-get install -y python-virtualenv python-pip')
         sudo('apt-get install -y git')
