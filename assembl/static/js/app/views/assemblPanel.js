@@ -11,7 +11,7 @@ define(function (require) {
         template: "#tmpl-groupItem",
         lockable: false,
         minimizeable: false,
-        closeable: true,
+        closeable: false,
         DEFAULT_GRID_SIZE: 3, // grid units
         DEFAULT_MIN_SIZE: 200, // pixels
         gridSize: 3,

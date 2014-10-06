@@ -91,7 +91,10 @@ define(function (require) {
                     return;
                 panelWrapper.useCurrentSize();
             });
-            this.$el.width(this.$el.width());
+            var width = this.$el[0].style.width;
+            if (width == "" || width.indexOf('%') >= 0) {
+                this.$el.width(this.$el.width());
+            }
             this.$el.addClass("animating");
         },
 
@@ -201,7 +204,6 @@ define(function (require) {
                     ideaPanel.unminimizePanel();
                 }
             }
-            this.groupContainer.resumeResize();
         },
 
         setPanelWidthByType: function (panelType, width) {

@@ -80,17 +80,31 @@ define(function (require) {
             }
         },
         /**
-         * This is not inside the template beacuse babel wouldn't extract it in
+         * This is not inside the template because babel wouldn't extract it in
          * the pot file
          */
         getExtractsLabel: function () {
-            if (!this.extractList || this.extractList.length == 0) {
-                return i18n.gettext('No extracts were harvested for this idea');
+          var len = 0;
+          
+          if (this.extractList) {
+            len = this.extractList.models.length;
+          }
+          if (len == 0) {
+            if (Ctx.userCanChangeUi()) {
+              return i18n.gettext('No extract was harvested');
             }
             else {
-                var len = this.extractList.length;
-                return i18n.sprintf(i18n.ngettext('Harvested in %d extract', 'Harvested in %d extracts', len), len);
+              return i18n.gettext('No important nugget was harvested');
             }
+          }
+          else {
+              if (Ctx.userCanChangeUi()) {
+                return i18n.sprintf(i18n.ngettext('%d extract was harvested', '%d extracts were harvested', len), len);
+              }
+              else {
+                return i18n.sprintf(i18n.ngettext('%d important nugget was harvested', '%d important nuggets were harvested', len), len);
+              }
+          }
         },
 
         renderTemplateGetExtractsLabel: function () {
