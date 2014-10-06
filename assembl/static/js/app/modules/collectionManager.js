@@ -25,6 +25,13 @@ define(function(require){
     FETCH_WORKERS_LIFETIME: 30,
     
     /**
+     * Send debugging output to console.log to observe the activity of lazy 
+     * loading
+     * @type {boolean}
+     */
+    DEBUG_LAZY_LOADING: false,
+  
+    /**
      * Collection with all users in the discussion.
      * @type {UserCollection}
      */
@@ -193,15 +200,22 @@ define(function(require){
           this.requests[id] = []
         }
         this.requests[id].push(promise);
-        //console.log("Added request for id:"+id+", queue size is now:"+_.size(this.requests));
+        if(CollectionManager.prototype.DEBUG_LAZY_LOADING) {
+          console.log("Added request for id:"+id+", queue size is now:"+_.size(this.requests));
+        }
       },
       
       this.executeRequest = function() {
         var that = this,
             allMessageStructureCollectionPromise = this.collectionManager.getAllMessageStructureCollectionPromise();
-        console.log("executeRequest fired, unregistering worker from collection Manager");
+        if(CollectionManager.prototype.DEBUG_LAZY_LOADING) {
+          console.log("executeRequest fired, unregistering worker from collection Manager");
+        }
         //TODO:  If another request arrives while this one is executing, 
-        //an extra request will eventually fire
+        //an extra request will eventually fire.  (The time window is the entire
+        //server interaction, which is significant.
+        //We should remember previous
+        //workers and look into them before creating a new request.
         this.collectionManager._waitingWorker = undefined;
         allMessageStructureCollectionPromise.done(function(allMessageStructureCollection){
           var PostQuery = require('views/messageListPostQuery'),
@@ -217,15 +231,15 @@ define(function(require){
           postQuery.addFilter(postQuery.availableFilters.POST_HAS_ID_IN, ids);
           postQuery.setViewDef(viewDef); //We want the full messages
           postQuery.getResultRawDataPromise().done(function(results) {
-            //console.log(results);
             _.each(results, function(jsonData){
               var id = jsonData['@id'],
                   structureModel = allMessageStructureCollection.get(id),
                   deferredList = that.requests[id];
-              console.log("executeRequest resolving for id", id, deferredList.length, "deferred for that id");
+              if(CollectionManager.prototype.DEBUG_LAZY_LOADING) {
+                console.log("executeRequest resolving for id", id, deferredList.length, "deferred queued for that id");
+              }
               structureModel.set(jsonData);
               structureModel.viewDef = viewDef;
-              //console.log(that.requests[id], that.requests);
               
               _.each(deferredList, function(deferred){
                 deferred.resolve(structureModel);
@@ -237,11 +251,13 @@ define(function(require){
       }
       
       //Constructor
-      console.log("Spawning new _getMessageFullModelsRequestWorker");
+      if(CollectionManager.prototype.DEBUG_LAZY_LOADING) {
+        console.log("Spawning new _getMessageFullModelsRequestWorker");
+      }
       var that = this;
       this.executeTimeout = setTimeout(function () {
         that.executeRequest();
-      }, collectionManager.FETCH_WORKERS_LIFETIME);
+        }, collectionManager.FETCH_WORKERS_LIFETIME);
     },
     
 
@@ -256,11 +272,15 @@ define(function(require){
               returnedModel = undefined;
           if(structureModel) {
             if(structureModel.viewDef !== undefined && structureModel.viewDef == "default") {
-              //console.log("getMessageFullModelPromise CACHE HIT!")
+              if(CollectionManager.prototype.DEBUG_LAZY_LOADING) {
+                console.log("getMessageFullModelPromise CACHE HIT!")
+              }
               deferred.resolve(structureModel);
             }
             else {
-              //console.log("getMessageFullModelPromise CACHE MISS!")
+              if(CollectionManager.prototype.DEBUG_LAZY_LOADING) {
+                console.log("getMessageFullModelPromise CACHE MISS!")
+              }
               if(that._waitingWorker === undefined) {
                 that._waitingWorker = new that.getMessageFullModelRequestWorker(that);
               }
@@ -350,7 +370,6 @@ define(function(require){
             }
             that._allIdeasCollection.add(ideas, {merge: true});
           });
-          
           //End listener setup
         });
       }
@@ -416,7 +435,7 @@ define(function(require){
     },
 
     /* 
-     * Gets the stored configutation of groups and panels
+     * Gets the stored configuration of groups and panels
      */
     getGroupSpecsCollectionPromise : function(viewsFactory) {
       var deferred = $.Deferred();
