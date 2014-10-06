@@ -190,9 +190,9 @@ define(function (require) {
 
         resetMessagePanelState: function () {
             this.groupContainer.suspendResize();
+            this.ensurePanelsVisible('ideaPanel', 'messageList');
             var nav = this.getNavigationPanelSpec(),
                 ideaPanel = this.getWrapperByTypeName('ideaPanel');
-            this.ensurePanelsVisible('ideaPanel', 'messageList');
             this.resetMessagePanelWidth();
             if (ideaPanel != null && !ideaPanel.model.get('locked') && (!nav || this.model.get('navigationState') == 'debate')) {
                 if (ctx.getCurrentIdea() == undefined) {

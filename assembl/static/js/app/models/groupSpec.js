@@ -13,7 +13,7 @@ define(function (require) {
         defaults: {
             panels: new panelSpec.Collection([
                 {type: 'navSidebar'},
-                {type: 'ideaPanel'},
+                {type: 'ideaPanel', minimized: true},
                 {type: 'messageList'}
             ]),
             navigationState: 'home'
