@@ -13,28 +13,21 @@ $panelarea-min-height: 400px;
     display: block;
     overflow: { x: auto; y: hidden; }
     white-space: nowrap;
+}
 
-    .discussionlist {
-      li{
-        list-style-type: none;
-        float: left;
-        border-bottom: 5px solid #c7c2dd;
-        width: 170px;
-        height: 170px;
-        margin: 10px;
-        text-align: center;
-        border-radius: 50%;
-        box-sizing: border-box;
-        display: table;
-        .discussion {
-          display: table-cell;
-          vertical-align: middle;
-          a{
-            text-decoration: none;
-            color: #000000;
-          }
-        }
+.discussionlist {
+  .bx {
+    width: 180px;
+    height: 180px;
+    margin: 10px;
+    text-align: center;
+    box-sizing: border-box;
+    .discussion {
+      a {
+        text-decoration: none;
+        color: #000000;
       }
     }
+  }
 }
 
