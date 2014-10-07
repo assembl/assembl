@@ -275,24 +275,27 @@ define(function (require) {
 
                 // show, hide, resize and restyle DOM elements using animations
                 
-                this._minimizedStateIcon
-                    .addClass('icon-arrowleft')
-                    .removeClass('icon-arrowright');
-                this._minimizedStateButton
-                    .attr('data-original-title', i18n.gettext('Minimize panel'));
+                if ( this.$el.hasClass("unminimizing") )
+                {
+                    this._minimizedStateIcon
+                        .addClass('icon-arrowleft')
+                        .removeClass('icon-arrowright');
+                    this._minimizedStateButton
+                        .attr('data-original-title', i18n.gettext('Minimize panel'));
 
-                var panelContents = this.$el.children(".panelContents");
-                // fix the width of the panel content div (.panelContents), so that its animation does not change the positioning of its content (line returns, etc)
-                panelContents.css("width", target);
+                    var panelContents = this.$el.children(".panelContents");
+                    // fix the width of the panel content div (.panelContents), so that its animation does not change the positioning of its content (line returns, etc)
+                    panelContents.css("width", target);
 
-                //panelContents.delay(animationDuration*0.3).fadeIn(animationDuration*0.7, function(){
-                panelContents.delay(animationDuration*0.2).fadeIn(animationDuration*0.8, function(){
-                    // once the animation is over, set its width back to 100%, so that it remains adaptative 
-                    panelContents.css("width", "100%");
-                });
+                    //panelContents.delay(animationDuration*0.3).fadeIn(animationDuration*0.7, function(){
+                    panelContents.delay(animationDuration*0.2).fadeIn(animationDuration*0.8, function(){
+                        // once the animation is over, set its width back to 100%, so that it remains adaptative 
+                        panelContents.css("width", "100%");
+                    });
 
-                this.$el.find("header span.panel-header-title").delay(animationDuration*0.5).fadeIn(animationDuration*0.5);
-                this.$el.children(".panelContentsWhenMinimized").fadeOut(animationDuration*0.3);
+                    this.$el.find("header span.panel-header-title").delay(animationDuration*0.5).fadeIn(animationDuration*0.5);
+                    this.$el.children(".panelContentsWhenMinimized").fadeOut(animationDuration*0.3);
+                }
 
 
 
