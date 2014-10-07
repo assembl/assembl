@@ -105,24 +105,42 @@ define(function (require) {
                 myCorrection = group_extra_pixels - (extra_pixels * group_units / num_units),
                 width = (100 * group_units / num_units) + "%",
                 target = window.innerWidth * group_units / num_units,
-                group_min_size = this.calculateMinWidth();
+                group_min_size = this.calculateMinWidth()
+                animationDuration = 1000;
 
             myCorrection = Math.round(myCorrection);
             // minimize use of calc
             if (Math.abs(myCorrection) > 3) {
                 target += myCorrection;
                 var sign = (myCorrection > 0)?"+":"-";
-                myCorrection = Math.abs(myCorrection);
-                width = "calc("+width + " "+sign+" "+ myCorrection +"px)";
+                width = "calc("+width + " "+sign+" "+ Math.abs(myCorrection) +"px)";
             }
             target = Math.max(target, group_min_size);
             var before = that.$el.width();
-            this.$el.animate({'width': target}, 1000, 'swing', function() {
+
+            var currentRatio = this.$el.width() / this.$el.parent().width();
+            var targetRatio = (group_units / num_units) + (myCorrection / this.$el.parent().width());
+            var shouldNotResize = false;
+            if ( Math.abs(currentRatio - targetRatio) < 0.05 )
+            {
+                shouldNotResize = true;
+            }
+
+            var onAnimationComplete = function(){
                 that.$el.width(width);
                 // console.log(" group. target width:", width, "=", target, "actual:", before, "->", that.$el.width());
                 that.$el.removeClass("animating");
                 that.$el.css("min-width", group_min_size);
-            });
+            };
+            if ( shouldNotResize )
+            {
+                window.setTimeout(onAnimationComplete, animationDuration);
+            }
+            else
+            {
+                this.$el.animate({'width': target}, animationDuration, 'swing', onAnimationComplete);
+            }
+            
             this.children.each(function (panelWrapper) {
                 if (panelWrapper.model.get('hidden'))
                     return;
