@@ -219,9 +219,10 @@ define(function (require) {
             this.$el.addClass("animating");
         },
 
-        animateTowardsPixels: function(pixels_per_unit, percent_per_unit, extra_pixels, num_units, group_units) {
+        animateTowardsPixels: function(pixels_per_unit, percent_per_unit, extra_pixels, num_units, group_units, skip_animation) {
             var that = this;
             var animationDuration = 1000;
+            var panelContents = this.$el.children(".panelContents");
 
             if (this.model.get('minimized')) { // execute minimization animation
 
@@ -230,26 +231,43 @@ define(function (require) {
                     .removeClass('icon-arrowleft');
                 this._minimizedStateButton
                     .attr('data-original-title', i18n.gettext('Maximize panel'));
-
-                var panelContents = this.$el.children(".panelContents");
-                // fix the width of the panel content div (.panelContents), so that its animation does not change the positioning of its content (line returns, etc)
-                panelContents.css("width", panelContents.width());
-
-                panelContents.fadeOut(animationDuration*0.9, function(){
-                    // once the animation is over, set its width back to 100%, so that it remains adaptative 
-                    panelContents.css("width", "100%");
-                });
-
-                this.$el.find("header span.panel-header-title").fadeOut(animationDuration*0.4); // hide header title rapidly, so we avoid unwanted line feeds for header icons during resize
-                this.$el.children(".panelContentsWhenMinimized").delay(animationDuration*0.6).fadeIn(animationDuration*0.4);
-
+                
                 var target = AssemblPanel.prototype.minimized_size;
-                this.$el.animate({'width': target}, animationDuration, 'swing', function() {
+                if ( skip_animation )
+                {
+                    panelContents.css("width", "100%");
+                    panelContents.hide();
+                    this.$el.find("header span.panel-header-title").hide();
+                    this.$el.children(".panelContentsWhenMinimized").show();
+
+                    that.$el.width(target);
                     that.$el.removeClass("animating");
                     that.$el.addClass("minimized");
                     that.$el.removeClass("minimizing");
                     that.$el.css("min-width", AssemblPanel.prototype.minimized_size);
-                });
+                }
+                else
+                {
+                    // fix the width of the panel content div (.panelContents), so that its animation does not change the positioning of its content (line returns, etc)
+                    panelContents.css("width", panelContents.width());
+
+                    panelContents.fadeOut(animationDuration*0.9, function(){
+                        // once the animation is over, set its width back to 100%, so that it remains adaptative 
+                        panelContents.css("width", "100%");
+                    });
+
+                    this.$el.find("header span.panel-header-title").fadeOut(animationDuration*0.4); // hide header title rapidly, so we avoid unwanted line feeds for header icons during resize
+                    this.$el.children(".panelContentsWhenMinimized").delay(animationDuration*0.6).fadeIn(animationDuration*0.4);
+
+                    this.$el.animate({'width': target}, animationDuration, 'swing', function() {
+                        that.$el.removeClass("animating");
+                        that.$el.addClass("minimized");
+                        that.$el.removeClass("minimizing");
+                        that.$el.css("min-width", AssemblPanel.prototype.minimized_size);
+                    });
+                }
+
+                
 
             } else { // execute de-minimization animation
 
@@ -272,10 +290,7 @@ define(function (require) {
                     target -= myCorrection;
                 }
 
-
-                // show, hide, resize and restyle DOM elements using animations
-                
-                if ( this.$el.hasClass("unminimizing") )
+                if ( skip_animation )
                 {
                     this._minimizedStateIcon
                         .addClass('icon-arrowleft')
@@ -283,33 +298,56 @@ define(function (require) {
                     this._minimizedStateButton
                         .attr('data-original-title', i18n.gettext('Minimize panel'));
 
-                    var panelContents = this.$el.children(".panelContents");
-                    // fix the width of the panel content div (.panelContents), so that its animation does not change the positioning of its content (line returns, etc)
-                    panelContents.css("width", target);
+                    panelContents.css("width", "100%");
 
-                    //panelContents.delay(animationDuration*0.3).fadeIn(animationDuration*0.7, function(){
-                    panelContents.delay(animationDuration*0.2).fadeIn(animationDuration*0.8, function(){
-                        // once the animation is over, set its width back to 100%, so that it remains adaptative 
-                        panelContents.css("width", "100%");
-                    });
+                    this.$el.find("header span.panel-header-title").show();
+                    this.$el.children(".panelContentsWhenMinimized").hide();
 
-                    this.$el.find("header span.panel-header-title").delay(animationDuration*0.5).fadeIn(animationDuration*0.5);
-                    this.$el.children(".panelContentsWhenMinimized").fadeOut(animationDuration*0.3);
-                }
-
-
-
-                // console.log("  panel ", that.model.get('type'), "target width:", width, "=", target, "actual:", that.$el.width());
-                this.$el.animate({'width': target}, animationDuration, 'swing', function() {
-                    that.$el.width(width);
-                    // window.setTimeout(function() {
-                    //     console.log("  panel ", that.model.get('type'), "final width:", that.$el.width());
-                    // });
+                    this.$el.width(width);
                     that.$el.removeClass("animating");
                     that.$el.removeClass("minimized");
                     that.$el.removeClass("unminimizing");
                     that.$el.css("min-width", that.minWidth);
-                });
+                }
+                else
+                {
+                    // show, hide, resize and restyle DOM elements using animations
+                    
+                    if ( this.$el.hasClass("unminimizing") )
+                    {
+                        this._minimizedStateIcon
+                            .addClass('icon-arrowleft')
+                            .removeClass('icon-arrowright');
+                        this._minimizedStateButton
+                            .attr('data-original-title', i18n.gettext('Minimize panel'));
+
+                        // fix the width of the panel content div (.panelContents), so that its animation does not change the positioning of its content (line returns, etc)
+                        panelContents.css("width", target);
+
+                        //panelContents.delay(animationDuration*0.3).fadeIn(animationDuration*0.7, function(){
+                        panelContents.delay(animationDuration*0.2).fadeIn(animationDuration*0.8, function(){
+                            // once the animation is over, set its width back to 100%, so that it remains adaptative 
+                            panelContents.css("width", "100%");
+                        });
+
+                        this.$el.find("header span.panel-header-title").delay(animationDuration*0.5).fadeIn(animationDuration*0.5);
+                        this.$el.children(".panelContentsWhenMinimized").fadeOut(animationDuration*0.3);
+                    }
+
+
+
+                    // console.log("  panel ", that.model.get('type'), "target width:", width, "=", target, "actual:", that.$el.width());
+                    this.$el.animate({'width': target}, animationDuration, 'swing', function() {
+                        that.$el.width(width);
+                        // window.setTimeout(function() {
+                        //     console.log("  panel ", that.model.get('type'), "final width:", that.$el.width());
+                        // });
+                        that.$el.removeClass("animating");
+                        that.$el.removeClass("minimized");
+                        that.$el.removeClass("unminimizing");
+                        that.$el.css("min-width", that.minWidth);
+                    });
+                }
 
             }
         },

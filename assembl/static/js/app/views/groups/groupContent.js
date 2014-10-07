@@ -121,9 +121,15 @@ define(function (require) {
             var currentRatio = this.$el.width() / this.$el.parent().width();
             var targetRatio = (group_units / num_units) + (myCorrection / this.$el.parent().width());
             var shouldNotResize = false;
+            var skipAnimation = false;
             if ( Math.abs(currentRatio - targetRatio) < 0.05 )
             {
                 shouldNotResize = true;
+            }
+            else if ( Math.abs(currentRatio - targetRatio) > 0.75 && this.groupContainer.collection.size() == 1 )
+            { // big expand of a single group, for example when the user arrives on the website
+                skipAnimation = true;
+                that.$el.width(width);
             }
 
             var onAnimationComplete = function(){
@@ -144,7 +150,7 @@ define(function (require) {
             this.children.each(function (panelWrapper) {
                 if (panelWrapper.model.get('hidden'))
                     return;
-                panelWrapper.animateTowardsPixels(pixels_per_unit, percent_per_unit, extra_pixels, num_units, group_units);
+                panelWrapper.animateTowardsPixels(pixels_per_unit, percent_per_unit, extra_pixels, num_units, group_units, skipAnimation);
             });
         },
 
