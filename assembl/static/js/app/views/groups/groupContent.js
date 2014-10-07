@@ -179,9 +179,9 @@ define(function (require) {
         },
 
         resetMessagePanelWidth: function() {
+            var messagePanel = this.getWrapperByTypeName('messageList');
             if (this.groupContainer.isOneNavigationGroup()) {
-                var ideaPanel = this.getWrapperByTypeName('ideaPanel'),
-                    messagePanel = this.getWrapperByTypeName('messageList');
+                var ideaPanel = this.getWrapperByTypeName('ideaPanel');
                 if (ideaPanel.isPanelMinimized() || ideaPanel.isPanelHidden()) {
                     messagePanel.setGridSize(AssemblPanel.prototype.CONTEXT_PANEL_GRID_SIZE); // idea + message
                     messagePanel.minWidth = messagePanel.contents.currentView.getMinWidthWithOffset(ideaPanel.minWidth);
@@ -189,6 +189,9 @@ define(function (require) {
                     messagePanel.setGridSize(AssemblPanel.prototype.MESSAGE_PANEL_GRID_SIZE);
                     messagePanel.minWidth = messagePanel.contents.currentView.getMinWidthWithOffset(0);
                 }
+            } else if (messagePanel != null) {
+                messagePanel.setGridSize(AssemblPanel.prototype.MESSAGE_PANEL_GRID_SIZE);
+                messagePanel.minWidth = messagePanel.contents.currentView.getMinWidthWithOffset(0);
             }
         },
 
