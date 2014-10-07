@@ -146,9 +146,9 @@ define(function (require) {
             evt.stopPropagation();
             evt.preventDefault();
             if (this.isPanelMinimized()) {
-                this.unminimizePanel();
+                this.unminimizePanel(evt);
             } else {
-                this.minimizePanel();
+                this.minimizePanel(evt);
             }
         },
 
@@ -160,11 +160,17 @@ define(function (require) {
             return this.model.get('hidden');
         },
 
-        unminimizePanel: function () {
+        unminimizePanel: function (evt) {
             if (!this.model.get('minimized'))
                 return;
             if (this.model.get("type") == "ideaPanel" && Ctx.getCurrentIdea() == undefined) {
                 // do not accept to unminimize if no idea to show
+                
+                $(evt.currentTarget).attr("data-original-title", i18n.gettext('Please select an idea in the table of ideas to open the idea panel.'));
+                $(evt.currentTarget).tooltip('destroy');
+                $(evt.currentTarget).tooltip({container: 'body'});
+                $(evt.currentTarget).tooltip('show');
+                
                 return;
             }
             
@@ -179,7 +185,7 @@ define(function (require) {
             this.groupContent.groupContainer.resizeAllPanels();
         },
 
-        minimizePanel: function () {
+        minimizePanel: function (evt) {
             if (this.model.get('minimized'))
                 return;
             
