@@ -3,12 +3,12 @@ var requirejs_config = {
     urlArgs: urlArgs,
     waitSeconds: 20,
     packages: [
-        { name: 'modules', location: 'app/modules' },
-        { name: 'views', location: 'app/views' },
-        { name: 'models', location: 'app/models' },
-        { name: 'utils', location: 'app/utils' },
-        { name: 'controllers', location: 'app/controllers' },
-        { name: 'objects', location: 'app/objects' }
+        //{ name: 'modules', location: 'app/modules' },
+        //{ name: 'views', location: 'app/views' },
+        //{ name: 'models', location: 'app/models' },
+        //{ name: 'utils', location: 'app/utils' },
+        //{ name: 'controllers', location: 'app/controllers' },
+        //{ name: 'objects', location: 'app/objects' }
     ],
     paths: {
 
