@@ -51,7 +51,7 @@ define(function (require) {
         },
         resumeResize: function(skip_animation) {
             this.resizeSuspended = false;
-            this.resizeAllPanels();
+            this.resizeAllPanels(skip_animation);
         },
         isOneNavigationGroup: function() {
             if (this.collection.size() == 1) {
@@ -140,7 +140,7 @@ define(function (require) {
 
         animateTowardsPixels: function(pixels_per_unit, percent_per_unit, extra_pixels, num_units, skip_animation) {
             this.children.each(function (child) {
-                child.animateTowardsPixels(pixels_per_unit, percent_per_unit, extra_pixels, num_units);
+                child.animateTowardsPixels(pixels_per_unit, percent_per_unit, extra_pixels, num_units, skip_animation);
             });
         },
 

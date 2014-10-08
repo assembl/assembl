@@ -171,13 +171,18 @@ define(function (require) {
             return this.model.getNavigationPanelSpec();
         },
 
-        resetDebateState: function () {
+        resetDebateState: function (skip_animation) {
             if (this.getNavigationPanelSpec()) {
                 this.groupContainer.suspendResize();
                 this.model.set('navigationState', 'debate');
                 this.removePanels('homePanel');
+                this.ensurePanelsVisible('ideaPanel', 'messageList');
                 this.resetMessagePanelState();
-                this.groupContainer.resumeResize();
+
+                if ( skip_animation === false )
+                    this.groupContainer.resumeResize(false);
+                else
+                    this.groupContainer.resumeResize(true);
             }
         },
 
@@ -193,12 +198,11 @@ define(function (require) {
 
         resetSynthesisMessagesState: function (synthesisInNavigationPanel) {
             if (this.getNavigationPanelSpec()) {
-                this.groupContainer.suspendResize();
                 this.removePanels('homePanel');
                 this.ensurePanelsVisible('messageList');
                 this.ensurePanelsHidden('ideaPanel');
                 this.resetMessagePanelWidth();
-                this.groupContainer.resumeResize();
+                this.groupContainer.resizeAllPanels(true);
             }
         },
 
@@ -214,6 +218,7 @@ define(function (require) {
                     messagePanel.minWidth = messagePanel.contents.currentView.getMinWidthWithOffset(0);
                 }
             } else if (messagePanel != null) {
+                console.log("coucou ", this.model.get("navigationState"));
                 messagePanel.setGridSize(AssemblPanel.prototype.MESSAGE_PANEL_GRID_SIZE);
                 messagePanel.minWidth = messagePanel.contents.currentView.getMinWidthWithOffset(0);
             }
@@ -234,6 +239,7 @@ define(function (require) {
             }
         },
 
+        // not used?
         setPanelWidthByType: function (panelType, width) {
             var panels = this.model.get('panels');
             var panel = panels.findWhere({'type': panelType});
