@@ -2,14 +2,15 @@ var requirejs_config = {
     baseUrl: "/static/js/",
     urlArgs: urlArgs,
     waitSeconds: 20,
+    packages: [
+        { name: 'modules', location: 'app/modules' },
+        { name: 'views', location: 'app/views' },
+        { name: 'models', location: 'app/models' },
+        { name: 'utils', location: 'app/utils' },
+        { name: 'controllers', location: 'app/controllers' },
+        { name: 'objects', location: 'app/objects' }
+    ],
     paths: {
-        'router': 'app/router',
-        'views': 'app/views',
-        'models': 'app/models',
-        'utils': 'app/utils',
-        'modules': 'app/modules',
-        'controllers': 'app/controllers',
-        'objects': 'app/objects',
 
         'jquery': "bower/jquery/jquery",
         'tipsy': 'bower/tipsy/src/javascripts/jquery.tipsy',
@@ -63,8 +64,8 @@ var requirejs_config = {
             exports: 'jQuery'
         },
         'jquery.dotdotdot': {
-          deps: ['jquery'],
-          exports: 'jQuery'
+            deps: ['jquery'],
+            exports: 'jQuery'
         },
         'modules/context': {
             deps: ['annotator', 'ckeditor', 'tipsy', 'utils/i18n', 'jquery-highlight', 'jquery.dotdotdot'],
