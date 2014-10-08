@@ -98,7 +98,7 @@ define(function (require) {
             this.$el.addClass("animating");
         },
 
-        animateTowardsPixels: function(pixels_per_unit, percent_per_unit, extra_pixels, num_units) {
+        animateTowardsPixels: function(pixels_per_unit, percent_per_unit, extra_pixels, num_units, skip_animation) {
             var that = this,
                 group_extra_pixels = this.getExtraPixels(false),
                 group_units = this.calculateGridSize(),
@@ -121,7 +121,7 @@ define(function (require) {
             var currentRatio = this.$el.width() / this.$el.parent().width();
             var targetRatio = (group_units / num_units) + (myCorrection / this.$el.parent().width());
             var shouldNotResize = false;
-            var skipAnimation = false;
+            var skipAnimation = skip_animation;
             if ( Math.abs(currentRatio - targetRatio) < 0.05 )
             {
                 shouldNotResize = true;
@@ -171,13 +171,19 @@ define(function (require) {
             return this.model.getNavigationPanelSpec();
         },
 
-        resetDebateState: function () {
+        resetDebateState: function (skip_animation) {
+            console.log("resetDebateState");
             if (this.getNavigationPanelSpec()) {
                 this.groupContainer.suspendResize();
                 this.model.set('navigationState', 'debate');
                 this.removePanels('homePanel');
+                this.ensurePanelsVisible('ideaPanel', 'messageList');
                 this.resetMessagePanelState();
-                this.groupContainer.resumeResize();
+                
+                if ( skip_animation === false )
+                    this.groupContainer.resumeResize(false);
+                else
+                    this.groupContainer.resumeResize(true);
             }
         },
 
@@ -193,12 +199,11 @@ define(function (require) {
 
         resetSynthesisMessagesState: function (synthesisInNavigationPanel) {
             if (this.getNavigationPanelSpec()) {
-                this.groupContainer.suspendResize();
                 this.removePanels('homePanel');
                 this.ensurePanelsVisible('messageList');
                 this.ensurePanelsHidden('ideaPanel');
                 this.resetMessagePanelWidth();
-                this.groupContainer.resumeResize();
+                this.groupContainer.resizeAllPanels(true);
             }
         },
 
@@ -234,6 +239,7 @@ define(function (require) {
             }
         },
 
+        // not used?
         setPanelWidthByType: function (panelType, width) {
             var panels = this.model.get('panels');
             var panel = panels.findWhere({'type': panelType});

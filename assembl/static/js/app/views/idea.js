@@ -171,7 +171,7 @@ define(function (require) {
             } else {
                 Ctx.setCurrentIdea(this.model);
             }
-            this.groupContent.resetDebateState();
+            this.groupContent.resetDebateState(false);
         },
 
         /**

@@ -48,7 +48,7 @@ define(function (require) {
             Ctx.setCurrentIdea(null);
             //Yes, this will cause double-renders in some cases.  Will be fixed once messageList observes it's result list.
             messageListView.render();
-            this.groupContent.resetDebateState();
+            this.groupContent.resetDebateState(false);
         }
     });
 

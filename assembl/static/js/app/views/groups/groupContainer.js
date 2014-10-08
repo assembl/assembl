@@ -49,9 +49,9 @@ define(function (require) {
             this.useCurrentSize();
             this.resizeSuspended = true;
         },
-        resumeResize: function() {
+        resumeResize: function(skip_animation) {
             this.resizeSuspended = false;
-            this.resizeAllPanels();
+            this.resizeAllPanels(skip_animation);
         },
         isOneNavigationGroup: function() {
             if (this.collection.size() == 1) {
@@ -68,7 +68,7 @@ define(function (require) {
         },
 
 
-        resizeAllPanels: function() {
+        resizeAllPanels: function(skip_animation) {
             //console.trace();
             // pixels from borders, or minimized panels except (boolean) those counted below.
             var extra_pixels = this.getExtraPixels(false); // global
@@ -92,7 +92,7 @@ define(function (require) {
             // console.log("total_min_size:", total_min_size, "extra_pixels:", extra_pixels, "min_idea_pixels:", min_idea_pixels);
             // console.log("num_units:", num_units);
             // console.log("unit_pixels", unit_pixels);
-            this.animateTowardsPixels(unit_pixels, 100.0/num_units, extra_pixels, num_units); // reestablish min_pixels, and % width based on param. (remove size)
+            this.animateTowardsPixels(unit_pixels, 100.0/num_units, extra_pixels, num_units, skip_animation); // reestablish min_pixels, and % width based on param. (remove size)
         },
 
 
@@ -138,9 +138,9 @@ define(function (require) {
             return min_width;
         },
 
-        animateTowardsPixels: function(pixels_per_unit, percent_per_unit, extra_pixels, num_units) {
+        animateTowardsPixels: function(pixels_per_unit, percent_per_unit, extra_pixels, num_units, skip_animation) {
             this.children.each(function (child) {
-                child.animateTowardsPixels(pixels_per_unit, percent_per_unit, extra_pixels, num_units);
+                child.animateTowardsPixels(pixels_per_unit, percent_per_unit, extra_pixels, num_units, skip_animation);
             });
         },
 
