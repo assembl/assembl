@@ -227,6 +227,11 @@
   height: calc(100% - 34px) !important; /* retain the height of the header */
 }
 
+/* CSS hack to target specificly IE >= 10 (see browserhacks.com). IE uses wrong 100% value in previous rule */
+_:-ms-input-placeholder, :root .groupBody .groupPanel header ~ .panelContents {
+  height: calc(100vh - 76px) !important;
+}
+
 .groupBody.editable .groupPanel header ~ .panelContents {
   height: calc(100% - 34px) !important; /* retain the height of everything on top of it. probably not the best solution because not dynamic */
 }
