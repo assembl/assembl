@@ -2,7 +2,7 @@ from datetime import datetime
 from abc import ABCMeta, abstractmethod
 
 from bs4 import BeautifulSoup
-from sqlalchemy.orm import relationship, backref
+from sqlalchemy.orm import relationship, backref, aliased
 from sqlalchemy.sql import func
 from sqlalchemy import (
     Column,
@@ -86,13 +86,13 @@ class Post(Content):
         'polymorphic_identity': 'post',
         'with_polymorphic': '*'
     }
-    
-    def get_descendants(self):
-        ancestry_query_string = "%s%d,%%" % (self.ancestry or '', self.id)
 
-        descendants = self.db.query(Post).filter(
-            Post.ancestry.like(ancestry_query_string)
-        ).order_by(Content.creation_date)
+    def get_descendants(self):
+        as_parent = aliased(Post)
+        descendants = self.db.query(Post).join(
+            as_parent, Post.parent_id == as_parent.id).filter(
+            as_parent.id == self.id).order_by(
+            Content.creation_date)
 
         return descendants
 
@@ -102,7 +102,7 @@ class Post(Content):
 
     def get_title(self):
         return self.subject
-    
+
     def get_subject(self):
         return self.subject
 
@@ -129,18 +129,13 @@ class Post(Content):
         return body
 
     def _set_ancestry(self, new_ancestry):
-        descendants = self.get_descendants()
-        old_ancestry = self.ancestry or ''
         self.ancestry = new_ancestry
 
-        for descendant in descendants:
-            updated_ancestry = descendant.ancestry.replace(
-                "%s%d," % (old_ancestry, self.id),
-                "%s%d," % (new_ancestry, self.id),
-                1
-            )
-            descendant.ancestry = updated_ancestry
-            
+        descendant_ancestry = "%s%d," % (
+            self.ancestry, self.id)
+        for descendant in self.get_descendants():
+            descendant._set_ancestry(descendant_ancestry)
+
     def set_parent(self, parent):
         self.parent = parent
 
