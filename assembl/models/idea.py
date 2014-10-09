@@ -19,7 +19,7 @@ from sqlalchemy import (
     ForeignKey,
     inspect,
 )
-from virtuoso.vmapping import PatternIriClass, IriClass
+from virtuoso.vmapping import IriClass
 
 from ..nlp.wordcounter import WordCounter
 from . import DiscussionBoundBase
@@ -38,9 +38,11 @@ class defaultdictlist(defaultdict):
     def __init__(self):
         super(defaultdictlist, self).__init__(list)
 
+
 class IdeaVisitor(object):
     CUT_VISIT = object()
     __metaclass__ = ABCMeta
+
     @abstractmethod
     def visit_idea(self, idea):
         pass
@@ -49,6 +51,7 @@ class IdeaVisitor(object):
 class IdeaLinkVisitor(object):
     CUT_VISIT = object()
     __metaclass__ = ABCMeta
+
     @abstractmethod
     def visit_link(self, link):
         pass
@@ -82,19 +85,22 @@ class Idea(DiscussionBoundBase):
 
     long_title = Column(
         UnicodeText,
-        info= {'rdf': QuadMapPatternS(None, DCTERMS.alternative)})
-    short_title = Column(UnicodeText,
-        info= {'rdf': QuadMapPatternS(None, DCTERMS.title)})
-    definition = Column(UnicodeText,
-        info= {'rdf': QuadMapPatternS(None, DCTERMS.description)})
+        info={'rdf': QuadMapPatternS(None, DCTERMS.alternative)})
+    short_title = Column(
+        UnicodeText,
+        info={'rdf': QuadMapPatternS(None, DCTERMS.title)})
+    definition = Column(
+        UnicodeText,
+        info={'rdf': QuadMapPatternS(None, DCTERMS.description)})
     hidden = Column(Boolean, server_default='0')
     is_tombstone = Column(Boolean, server_default='0')
 
-    id = Column(Integer, primary_key=True,
-                info= {'rdf': QuadMapPatternS(None, ASSEMBL.db_id)})
+    id = Column(
+        Integer, primary_key=True,
+        info={'rdf': QuadMapPatternS(None, ASSEMBL.db_id)})
     creation_date = Column(
         DateTime, nullable=False, default=datetime.utcnow,
-        info = {'rdf': QuadMapPatternS(None, DCTERMS.created)})
+        info={'rdf': QuadMapPatternS(None, DCTERMS.created)})
 
     discussion_id = Column(Integer, ForeignKey(
         'discussion.id',
@@ -102,7 +108,7 @@ class Idea(DiscussionBoundBase):
         onupdate='CASCADE'),
         nullable=False,
         index=True,
-        info = {'rdf': QuadMapPatternS(None, SIOC.has_container)})
+        info={'rdf': QuadMapPatternS(None, SIOC.has_container)})
 
     discussion = relationship(
         Discussion,
@@ -122,8 +128,8 @@ class Idea(DiscussionBoundBase):
 
     @classmethod
     def special_quad_patterns(cls, alias_manager):
-        return [QuadMapPatternS(None,
-            RDF.type, IriClass(VirtRDF.QNAME_ID).apply(Idea.sqla_type),
+        return [QuadMapPatternS(
+            None, RDF.type, IriClass(VirtRDF.QNAME_ID).apply(Idea.sqla_type),
             name=QUADNAMES.class_Idea_class)]
 
     @property
@@ -143,7 +149,7 @@ class Idea(DiscussionBoundBase):
         }
 
     def get_all_ancestors(self):
-        """ Get all ancestors of this idea by following source links.  
+        """ Get all ancestors of this idea by following source links.
         This is naive and slow, but not used very much for now.
         TODO:  Rewrite once we migrate to virtuoso"""
         sql = '''SELECT * FROM idea JOIN (
@@ -154,10 +160,10 @@ class Idea(DiscussionBoundBase):
                   WHERE dag_idea.discussion_id = :discussion_id
                   AND ia.target_id=:idea_id) x on (id=source_id)'''
         ancestors = self.db().query(Idea).from_statement(text(sql).bindparams(
-            discussion_id= self.discussion_id, idea_id= self.id))
+            discussion_id=self.discussion_id, idea_id=self.id))
 
         return ancestors.all()
-    
+
     def get_order_from_first_parent(self):
         return self.source_links[0].order if self.source_links else None
 
@@ -238,7 +244,8 @@ JOIN post AS family_posts ON (
     @staticmethod
     def _get_orphan_posts_statement():
         """ Requires discussion_id bind parameters """
-        return Idea._get_orphan_posts_statement_no_select("SELECT post.id as post_id")
+        return Idea._get_orphan_posts_statement_no_select(
+            "SELECT post.id as post_id")
 
     @property
     def num_posts(self):
@@ -268,7 +275,7 @@ JOIN post AS family_posts ON (
         return int(result.first()['total_count'])
 
     def prefetch_descendants(self):
-        pass  #TODO
+        pass  # TODO
 
     def visit_ideas_depth_first(self, idea_visitor):
         self.prefetch_descendants()
@@ -355,7 +362,8 @@ JOIN post AS family_posts ON (
 
     def is_in_next_synthesis(self):
         next_synthesis = self.discussion.get_next_synthesis()
-        if not next_synthesis: return False
+        if not next_synthesis:
+            return False
         return True if self in next_synthesis.ideas else False
 
     def send_to_changes(self, connection=None, operation=UPDATE_OP):
@@ -410,7 +418,7 @@ JOIN post AS family_posts ON (
                     SELECT transitive t_in (1) t_out (2) T_DISTINCT T_NO_CYCLES
                         parent_id, id FROM post
                     UNION SELECT id AS parent_id, id FROM POST
-                    ) pa 
+                    ) pa
                 WHERE parent_id = :post_id_%d
                 """ % n for n in range(len(post_ids))])
             # We have to specify distinct to avoid counting nulls. Go figure.
@@ -421,9 +429,11 @@ JOIN post AS family_posts ON (
                 LEFT JOIN action ON (action.actor_id = :user_id
                         AND action.id = action_on_post.id
                         AND action.type = 'version:ReadStatusChange')""" % (stmt2,)
-            params = {'post_id_'+str(n): post_id for n, post_id in enumerate(post_ids)}
+            params = {'post_id_'+str(n): post_id
+                      for n, post_id in enumerate(post_ids)}
             params['user_id'] = user_id
-            cpost, cview = list(cls.db().execute(text(stmt2).params(params))).pop()
+            cpost, cview = list(
+                cls.db().execute(text(stmt2).params(params))).pop()
             result.append((idea_id, cpost, cview))
         stmt3 = """SELECT MIN(root_idea.id) as idea_id,
             COUNT(DISTINCT post.id) as total_count,
@@ -437,7 +447,8 @@ JOIN post AS family_posts ON (
                 action.id = action_on_post.id AND action_on_post.post_id = post.id)
             WHERE idea.discussion_id = :discussion_id
             AND content.discussion_id = :discussion_id"""
-        result.append(list(cls.db().execute(text(stmt3).params(common_params))).pop())
+        result.append(list(
+            cls.db().execute(text(stmt3).params(common_params))).pop())
         return result
 
     def get_widget_creation_urls(self):
@@ -459,17 +470,18 @@ JOIN post AS family_posts ON (
         source = aliased(cls)
         return cls.db().query(
             IdeaLink).join(
-                source, source.id == IdeaLink.source_id).join(
-                    target, target.id == IdeaLink.target_id).filter(
-                        target.discussion_id == discussion_id).filter(
-                            source.discussion_id == discussion_id).filter(
-                                IdeaLink.is_tombstone == False).all()
+            source, source.id == IdeaLink.source_id).join(
+            target, target.id == IdeaLink.target_id).filter(
+            target.discussion_id == discussion_id).filter(
+            source.discussion_id == discussion_id).filter(
+            IdeaLink.is_tombstone == False).all()
 
     @classmethod
     def extra_collections(cls):
         from .votes import AbstractIdeaVote
         from .widgets import VotedIdeaWidgetLink
-        from .idea_content_link import IdeaRelatedPostLink, IdeaContentWidgetLink
+        from .idea_content_link import (
+            IdeaRelatedPostLink, IdeaContentWidgetLink)
         from .generic import Content
 
         class ChildIdeaCollectionDefinition(AbstractCollectionDefinition):
@@ -479,34 +491,38 @@ JOIN post AS family_posts ON (
             def decorate_query(self, query, last_alias, parent_instance, ctx):
                 parent = self.owner_alias
                 children = last_alias
-                return query.join(IdeaLink, IdeaLink.target_id == children.id).join(
+                return query.join(
+                    IdeaLink, IdeaLink.target_id == children.id).join(
                     parent, IdeaLink.source_id == parent.id).filter(
                     IdeaLink.source_id == parent_instance.id)
 
             def decorate_instance(
-                    self, instance, parent_instance, assocs, user_id, ctx, kwargs):
+                    self, instance, parent_instance, assocs, user_id,
+                    ctx, kwargs):
                 if isinstance(instance, Idea):
                     assocs.append(IdeaLink(
-                            source=parent_instance, target=instance,
-                            **self.filter_kwargs(
-                                IdeaLink, kwargs)))
+                        source=parent_instance, target=instance,
+                        **self.filter_kwargs(
+                            IdeaLink, kwargs)))
 
             def contains(self, parent_instance, instance):
                 return IdeaLink.db.query(
                     IdeaLink).filter_by(
-                        source=parent_instance, target=instance
+                    source=parent_instance, target=instance
                     ).count() > 0
 
         class LinkedPostCollectionDefinition(AbstractCollectionDefinition):
             def __init__(self, cls):
-                super(LinkedPostCollectionDefinition, self).__init__(cls, Content)
+                super(LinkedPostCollectionDefinition, self).__init__(
+                    cls, Content)
 
             def decorate_query(self, query, last_alias, parent_instance, ctx):
                 idea = self.owner_alias
                 return query.join(IdeaRelatedPostLink, idea)
 
             def decorate_instance(
-                    self, instance, parent_instance, assocs, user_id, ctx, kwargs):
+                    self, instance, parent_instance, assocs, user_id,
+                    ctx, kwargs):
                 # This is going to spell trouble: Sometimes we'll have creator,
                 # other times creator_id
                 if isinstance(instance, Content):
@@ -520,26 +536,29 @@ JOIN post AS family_posts ON (
             def contains(self, parent_instance, instance):
                 return IdeaRelatedPostLink.db.query(
                     IdeaRelatedPostLink).filter_by(
-                        content=instance, idea=parent_instance
+                    content=instance, idea=parent_instance
                     ).count() > 0
 
         class WidgetPostCollectionDefinition(AbstractCollectionDefinition):
             def __init__(self, cls):
-                super(WidgetPostCollectionDefinition, self).__init__(cls, Content)
+                super(WidgetPostCollectionDefinition, self).__init__(
+                    cls, Content)
 
             def decorate_query(self, query, last_alias, parent_instance, ctx):
                 idea = self.owner_alias
                 query = query.join(IdeaContentWidgetLink).join(
                     idea,
                     IdeaContentWidgetLink.idea_id == parent_instance.id)
-                if Content in chain(*(mapper.entities for mapper in query._entities)):
+                if Content in chain(*(
+                        mapper.entities for mapper in query._entities)):
                     query = query.options(
                         contains_eager(Content.widget_idea_links))
                         # contains_eager(Content.extracts) seems to slow things down instead
                 return query
 
             def decorate_instance(
-                    self, instance, parent_instance, assocs, user_id, ctx, kwargs):
+                    self, instance, parent_instance, assocs, user_id,
+                    ctx, kwargs):
                 # This is going to spell trouble: Sometimes we'll have creator,
                 # other times creator_id
                 if isinstance(instance, Content):
@@ -554,7 +573,7 @@ JOIN post AS family_posts ON (
             def contains(self, parent_instance, instance):
                 return IdeaContentWidgetLink.db.query(
                     IdeaContentWidgetLink).filter_by(
-                        content=instance, idea=parent_instance
+                    content=instance, idea=parent_instance
                     ).count() > 0
 
         class VoteTargetsCollection(AbstractCollectionDefinition):
@@ -567,15 +586,17 @@ JOIN post AS family_posts ON (
                 assert parent_instance.has_criterion_links
                 return query.filter(
                     last_alias.discussion_id == parent_instance.discussion_id
-                ).filter(last_alias.hidden==False)
+                    ).filter(last_alias.hidden==False)
 
             def decorate_instance(
-                    self, instance, parent_instance, assocs, user_id, ctx, kwargs):
+                    self, instance, parent_instance, assocs, user_id, ctx,
+                    kwargs):
                 for inst in assocs[:]:
-                    widgets_coll = ctx.find_collection('CriterionCollection.criteria')
+                    widgets_coll = ctx.find_collection(
+                        'CriterionCollection.criteria')
                     if isinstance(inst, AbstractIdeaVote):
                         other_votes = cls.db.query(AbstractIdeaVote).filter_by(
-                            voter_id=user_id, idea_id = inst.idea.id,
+                            voter_id=user_id, idea_id=inst.idea.id,
                             criterion_id=parent_instance.id, is_tombstone=False
                             ).options(joinedload(AbstractIdeaVote.idea)).all()
                         for other_vote in other_votes:
@@ -584,7 +605,8 @@ JOIN post AS family_posts ON (
                                 continue
                             other_vote.is_tombstone = True
                         assocs.append(VotedIdeaWidgetLink(
-                            widget=widgets_coll.parent_instance, idea=inst.idea,
+                            widget=widgets_coll.parent_instance,
+                            idea=inst.idea,
                             **self.filter_kwargs(
                                 VotedIdeaWidgetLink, kwargs)))
 
@@ -597,8 +619,9 @@ JOIN post AS family_posts ON (
                 'vote_targets': VoteTargetsCollection(cls)}
 
     crud_permissions = CrudPermissions(
-            P_ADD_IDEA, P_READ, P_EDIT_IDEA, P_ADMIN_DISC,
-            P_ADMIN_DISC, P_ADMIN_DISC)
+        P_ADD_IDEA, P_READ, P_EDIT_IDEA, P_ADMIN_DISC, P_ADMIN_DISC,
+        P_ADMIN_DISC)
+
 
 class RootIdea(Idea):
     """
@@ -637,9 +660,9 @@ class RootIdea(Idea):
         "The number of posts unrelated to any idea in the current discussion"
         result = self.db.execute(text(
             Idea._get_count_orphan_posts_statement()).params(
-                discussion_id=self.discussion_id))
+            discussion_id=self.discussion_id))
         return int(result.first()['total_count'])
-    
+
     @property
     def num_synthesis_posts(self):
         """ In the root idea, this is the count of all mesages in the system """
@@ -688,33 +711,37 @@ class IdeaLink(DiscussionBoundBase):
     """
     __tablename__ = 'idea_idea_link'
     rdf_class = IDEA.InclusionRelation
-    id = Column(Integer, primary_key=True,
-                info= {'rdf': QuadMapPatternS(None, ASSEMBL.db_id)})
-    sqla_type = Column(String(60), nullable=False, default="idea:InclusionRelation")
-    source_id = Column(Integer, ForeignKey(
+    id = Column(
+        Integer, primary_key=True,
+        info={'rdf': QuadMapPatternS(None, ASSEMBL.db_id)})
+    sqla_type = Column(String(60), nullable=False,
+                       default="idea:InclusionRelation")
+    source_id = Column(
+        Integer, ForeignKey(
             'idea.id', ondelete="CASCADE", onupdate="CASCADE"),
         nullable=False, index=True,
-        info= {'rdf': QuadMapPatternS(None, IDEA.target_idea)})
+        info={'rdf': QuadMapPatternS(None, IDEA.target_idea)})
     target_id = Column(Integer, ForeignKey(
         'idea.id', ondelete="CASCADE", onupdate="CASCADE"),
         nullable=False, index=True,
-        info= {'rdf': QuadMapPatternS(None, IDEA.source_idea)})
+        info={'rdf': QuadMapPatternS(None, IDEA.source_idea)})
     source = relationship(
         'Idea',
         primaryjoin="and_(Idea.id==IdeaLink.source_id, "
-                        "IdeaLink.is_tombstone==False, "
-                        "Idea.is_tombstone==False)",
+                    "IdeaLink.is_tombstone==False, "
+                    "Idea.is_tombstone==False)",
         backref=backref('target_links', cascade="all, delete-orphan"),
         foreign_keys=(source_id))
     target = relationship(
         'Idea',
         primaryjoin="and_(Idea.id==IdeaLink.target_id, "
-                        "IdeaLink.is_tombstone==False, "
-                        "Idea.is_tombstone==False)",
+                    "IdeaLink.is_tombstone==False, "
+                    "Idea.is_tombstone==False)",
         backref=backref('source_links', cascade="all, delete-orphan"),
         foreign_keys=(target_id))
-    order = Column(Float, nullable=False, default=0.0,
-        info= {'rdf': QuadMapPatternS(None, ASSEMBL.link_order)})
+    order = Column(
+        Float, nullable=False, default=0.0,
+        info={'rdf': QuadMapPatternS(None, ASSEMBL.link_order)})
     is_tombstone = Column(Boolean, nullable=False, default=False, index=True)
 
     __mapper_args__ = {
@@ -754,15 +781,15 @@ class IdeaLink(DiscussionBoundBase):
 
     @classmethod
     def get_discussion_condition(cls, discussion_id):
-        return (cls.source_id == Idea.id) & (Idea.discussion_id == discussion_id)
+        return (cls.source_id == Idea.id) \
+            & (Idea.discussion_id == discussion_id)
 
     @classmethod
     def base_condition(cls):
         return cls.is_tombstone == False
 
     crud_permissions = CrudPermissions(
-            P_ADD_IDEA, P_READ, P_EDIT_IDEA, P_EDIT_IDEA,
-            P_EDIT_IDEA, P_EDIT_IDEA)
+        P_ADD_IDEA, P_READ, P_EDIT_IDEA, P_EDIT_IDEA, P_EDIT_IDEA, P_EDIT_IDEA)
 
 
 class PositionRespondsToIssue(IdeaLink):
@@ -793,4 +820,3 @@ class IssueQuestions(IssueAppliesTo):
     __mapper_args__ = {
         'polymorphic_identity': 'ibis:IssueQuestions',
     }
-
