@@ -207,13 +207,17 @@ define(function (require) {
                 });
                 this.longTitleField.renderTo(this.$('#ideaPanel-longtitle'));
 
-                this.definitionField = new CKEditorField({
-                    'model': this.model,
-                    'modelProp': 'definition',
-                    'placeholder': this.model.getDefinitionDisplayText(),
-                    'canEdit': canEdit
-                });
-                this.definitionField.renderTo(this.$('#ideaPanel-definition'));
+                var definitionText = this.model.getDefinitionDisplayText();
+                if ( definitionText.length > 0 )
+                {
+                    this.definitionField = new CKEditorField({
+                        'model': this.model,
+                        'modelProp': 'definition',
+                        'placeholder': this.model.getDefinitionDisplayText(),
+                        'canEdit': canEdit
+                    });
+                    this.definitionField.renderTo(this.$('#ideaPanel-definition'));
+                }
 
                 this.commentView = new MessageSendView({
                     'allow_setting_subject': false,
