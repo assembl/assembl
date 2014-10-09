@@ -1,10 +1,14 @@
 // The F* and powerful wrapper
 #wrapper {
   position: relative;
-  height: 99vh;
+  height: 100vh;
   min-width: $small_screen;
 
   @include transform(translateX(0));
+}
+
+#header {
+	height: 36px;
 }
 
 body.is-modal {
