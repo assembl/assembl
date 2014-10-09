@@ -1,26 +1,27 @@
 {% extends 'base.jinja2' %}
 
 {% block content %}
-<div class="loginbox">
+<style>
+body{
+    background: #eee;
+}
+</style>
+
+<div class="loginbox request_password_change">
     <header>
-        <p class="login-box-title">{{title}}</p>
+        <h1>{{title}}</h1>
     </header>
 
-    {% if error %}
-    <div class="error">{{error}}</div>
-    {% endif %}
-    <p>{{description}}</p>
-
-    <form class="form" method="POST">
-        <input type="hidden" name="next_view" value="{{next_view}}" />
-        <input type="hidden" name="email" value="{{email}}" />
-        <input type="submit" name="resend" value="{{ gettext('Resend the email') }}" class="btn-pink" />
-    </form>
-
-    <footer>
-        {% set caravan = "<a href='http://caravan.coop' class='link caravan'>"+gettext("Caravan")+"</a>" %}
-        {% set imaginationForPeople = "<a href='http://imaginationforpeople.org/' class='link i4p'>"+gettext("Imagination for people") +"</a>" %}
-        <p>{{ gettext("Designed by %(caravan)s and %(imaginationForPeople)s")|format(caravan=caravan, imaginationForPeople=imaginationForPeople)|safe }}</p>
-    </footer>
+    <div class="content">
+        {% if error %}
+        <div class="error">{{error}}</div>
+        {% endif %}
+        <p class="login-box-title">{{description}}</p>
+        <form class="form" method="POST">
+            <input type="hidden" name="next_view" value="{{next_view}}" />
+            <input type="hidden" name="email" value="{{email}}" />
+            <input type="submit" name="resend" value="{{ gettext('Resend the email') }}" class="btn-pink" />
+        </form>
+    </div>
 </div>
 {% endblock %}
