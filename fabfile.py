@@ -1077,7 +1077,6 @@ def virtuoso_install_if_absent():
 @task
 def virtuoso_source_install():
     "Install the virtuoso server locally"
-    execute(ensure_virtuoso_not_running)
     virtuoso_root = get_virtuoso_root()
     virtuoso_src = get_virtuoso_src()
     branch = get_config().get('virtuoso', 'virtuoso_branch')
@@ -1110,6 +1109,7 @@ def virtuoso_source_install():
                 sudo('mkdir -p ' + virtuoso_root)
         else:
             need_sudo = run('touch '+virtuoso_root, quiet=True).failed
+        execute(ensure_virtuoso_not_running)
         if need_sudo:
             sudo('checkinstall')
         else:
