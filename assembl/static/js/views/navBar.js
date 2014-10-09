@@ -122,7 +122,7 @@ define(function (require) {
 
                             that.$el.unbind();
                             that.$el.remove();
-                        }, 1000);
+                        }, 100);
                     }
 
                 },

@@ -198,6 +198,7 @@ define(function (require) {
 
         resetSynthesisMessagesState: function (synthesisInNavigationPanel) {
             if (this.getNavigationPanelSpec()) {
+                this.groupContainer.suspendResize();
                 this.removePanels('homePanel');
                 this.ensurePanelsVisible('messageList');
                 this.ensurePanelsHidden('ideaPanel');
