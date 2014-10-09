@@ -150,7 +150,7 @@ define(function (require) {
             this.children.each(function (panelWrapper) {
                 if (panelWrapper.model.get('hidden'))
                     return;
-                panelWrapper.animateTowardsPixels(pixels_per_unit, percent_per_unit, extra_pixels, num_units, group_units, skipAnimation);
+                panelWrapper.animateTowardsPixels(pixels_per_unit, percent_per_unit, group_extra_pixels, num_units, group_units, skipAnimation);
             });
         },
 
@@ -203,7 +203,7 @@ define(function (require) {
                 this.ensurePanelsVisible('messageList');
                 this.ensurePanelsHidden('ideaPanel');
                 this.resetMessagePanelWidth();
-                this.groupContainer.resizeAllPanels(true);
+                this.groupContainer.resumeResize(true);
             }
         },
 
