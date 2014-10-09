@@ -28,10 +28,11 @@
     .panel-editablearea {
       background-color: $green;
     }
-    .panel-editablebox.is-editing {
-      .panel-editablearea {
-        color: $black;
-      }
+  }
+
+  .panel-editablebox.is-editing {
+    .panel-editablearea {
+      color: $black;
     }
   }
 
