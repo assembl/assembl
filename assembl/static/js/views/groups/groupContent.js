@@ -122,7 +122,7 @@ define(function (require) {
             var targetRatio = (group_units / num_units) + (myCorrection / this.$el.parent().width());
             var shouldNotResize = false;
             var skipAnimation = skip_animation;
-            if ( Math.abs(currentRatio - targetRatio) < 0.05 )
+            if ( Math.abs(currentRatio - targetRatio) < 0.05 && this.groupContainer.collection.size() == 1 )
             {
                 shouldNotResize = true;
             }
@@ -219,7 +219,6 @@ define(function (require) {
                     messagePanel.minWidth = messagePanel.contents.currentView.getMinWidthWithOffset(0);
                 }
             } else if (messagePanel != null) {
-                console.log("coucou ", this.model.get("navigationState"));
                 messagePanel.setGridSize(AssemblPanel.prototype.MESSAGE_PANEL_GRID_SIZE);
                 messagePanel.minWidth = messagePanel.contents.currentView.getMinWidthWithOffset(0);
             }

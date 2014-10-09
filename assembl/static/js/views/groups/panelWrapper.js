@@ -277,7 +277,8 @@ define(function (require) {
                 // compute target width (expressed in pixels in "target" variable, and in calc(%+px) in "width" variable)
 
                 var gridSize = this.gridSize;
-                var myCorrection = extra_pixels * gridSize / num_units;
+                //var myCorrection = extra_pixels * gridSize / num_units;
+                var myCorrection = extra_pixels * gridSize / group_units;
                 if (this.groupContent.groupContainer.isOneNavigationGroup()
                     && this.model.get('type') == 'messageList'
                     && this.groupContent.model.getPanelSpecByType('ideaPanel').get('minimized')) {
