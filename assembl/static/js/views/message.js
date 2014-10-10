@@ -98,9 +98,7 @@ define(function (require) {
 
             // menu
             'click .js_message-markasunread': 'markAsUnread',
-            'click .js_message-markasread': 'markAsRead',
-
-            'click .js_more': 'toggleMore'
+            'click .js_message-markasread': 'markAsRead'
         },
 
         /**
