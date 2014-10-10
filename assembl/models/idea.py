@@ -347,7 +347,10 @@ JOIN post AS family_posts ON (
             for criterion, votes in latest_by_criterion.iteritems()
         }
 
-    def get_contributors(self, indirect=True):
+    def get_contributors(self):
+        return self._get_contributors()
+
+    def _get_contributors(self, indirect=True):
         from .post import Post
         from .auth import AgentProfile
         from .idea_content_link import Extract
