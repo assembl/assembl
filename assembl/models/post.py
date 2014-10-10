@@ -89,9 +89,9 @@ class Post(Content):
 
     def get_descendants(self):
         as_parent = aliased(Post)
-        descendants = self.db.query(Post).join(
-            as_parent, Post.parent_id == as_parent.id).filter(
-            as_parent.id == self.id).order_by(
+        assert self.id
+        descendants = self.db.query(Post).filter(
+            Post.parent_id == self.id).order_by(
             Content.creation_date)
 
         return descendants
