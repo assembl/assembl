@@ -139,13 +139,13 @@ class Post(Content):
     def set_parent(self, parent):
         self.parent = parent
 
+        self.db.add(self)
+        self.db.flush()
+
         self._set_ancestry("%s%d," % (
             parent.ancestry or '',
             parent.id
         ))
-        
-        self.db.add(self)
-        self.db.flush()
 
     def last_updated(self):
         ancestry_query_string = "%s%d,%%" % (self.ancestry or '', self.id)
