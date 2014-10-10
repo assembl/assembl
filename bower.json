@@ -1,38 +1,37 @@
 {
-  "name": "assembl",
-  "version": "0.0.0",
-  "homepage": "https://github.com/ImaginationForPeople/assembl",
-  "authors": [
-    "Andre Farzat <andrefarzat@gmail.com>",
-    "Gaby Hourlier <gaby.hourlier@gmail.com>"
-  ],
-  "description": "I4P online debate and synthesis platform",
-  "license": "MIT",
-  "private": true,
-  "ignore": [
-    "**/.*",
-    "node_modules",
-    "bower_components",
-    "test",
-    "tests"
-  ],
-  "dependencies": {
-    "jquery": "~2.0.3",
-    "jquery.dotdotdot": "~1.6.16",
-    "backbone": "~1.1.2",
-    "ckeditor": "*",
-    "cytoscape": "*",
-    "jit": "~2.0.2",
-    "jasmine": "2.0.3",
-    "marionette": "~2.1.0",
-    "momentjs": "~2.5.0",
-    "requirejs": "~2.1.9",
-    "sockjs": "~0.3.4",
-    "underscore": "~1.5.2",
-    "zeroclipboard": "~1.2.3",
-    "tipsy": "~0.1.7",
-    "jed": "~0.5.4",
-    "Backbone.Subset": "maparent/Backbone.Subset",
-    "d3": "~3.4.11"
-  }
+    "name": "assembl",
+    "version": "0.0.9",
+    "homepage": "https://github.com/ImaginationForPeople/assembl",
+    "authors": [
+        "Andre Farzat <andrefarzat@gmail.com>",
+        "Gaby Hourlier <gaby.hourlier@gmail.com>"
+    ],
+    "description": "I4P online debate and synthesis platform",
+    "license": "MIT",
+    "private": true,
+    "ignore": [
+        "**/.*",
+        "node_modules",
+        "bower_components",
+        "test",
+        "tests"
+    ],
+    "dependencies": {
+        "jquery": "~2.0.3",
+        "jquery.dotdotdot": "~1.6.16",
+        "backbone": "~1.1.2",
+        "ckeditor": "*",
+        "cytoscape": "*",
+        "jit": "~2.0.2",
+        "jasmine": "2.0.3",
+        "marionette": "~2.2.1",
+        "momentjs": "~2.8.3",
+        "requirejs": "~2.1.15",
+        "sockjs": "~0.3.4",
+        "underscore": "~1.7.0",
+        "zeroclipboard": "~1.2.3",
+        "jed": "~0.5.4",
+        "Backbone.Subset": "maparent/Backbone.Subset",
+        "d3": "~3.4.11"
+    }
 }
