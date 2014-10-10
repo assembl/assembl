@@ -7,7 +7,7 @@ from ..lib.sqla import get_session_maker
 from . import R_SYSADMIN, P_READ, SYSTEM_ROLES
 from ..models.auth import (
     User, Role, UserRole, LocalUserRole, Permission,
-    DiscussionPermission, IdentityProvider)
+    DiscussionPermission, IdentityProvider, AgentProfile)
 
 
 def get_user(request):
@@ -146,6 +146,22 @@ def user_has_permission(discussion_id, user_id, permission):
                                         Permission.name == permission)
                 ).first()
     return permission is not None
+
+
+def users_with_permission(discussion_id, permission, id_only=True):
+    from ..models import Discussion
+    # assume all ids valid
+    db = Discussion.db()
+    user_ids = db.query(User.id).join(
+        LocalUserRole, Role, DiscussionPermission, Permission).union(
+            db.query(User.id).join(
+                UserRole, Role, DiscussionPermission, Permission)).filter(
+        Permission.name == permission,
+        DiscussionPermission.discussion_id == discussion_id).distinct()
+    if id_only:
+        return [AgentProfile.uri_generic(id) for (id, ) in user_ids]
+    else:
+        return db.query(AgentProfile).filter(AgentProfile.id.in_(user_ids)).all()
 
 
 def get_identity_provider(request, create=True):

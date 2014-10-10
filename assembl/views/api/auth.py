@@ -14,7 +14,8 @@ from assembl.models import (
 from assembl.auth import (
     P_READ, P_ADMIN_DISC, P_SYSADMIN, R_SYSADMIN, SYSTEM_ROLES)
 from assembl.auth.util import (
-    user_has_permission as a_user_has_permission, get_permissions)
+    user_has_permission as a_user_has_permission, get_permissions,
+    users_with_permission as a_users_with_permission)
 from assembl.lib.token import decode_token
 
 
@@ -69,6 +70,14 @@ user_has_permission = Service(
     name='user_has_permission',
     path=API_DISCUSSION_PREFIX + '/permissions/{permission}/u/{user_id:.+}',
     description="Whether a given user has a specific permission",
+    renderer='json'
+)
+
+
+users_with_permission = Service(
+    name='user_has_permission',
+    path=API_DISCUSSION_PREFIX + '/permissions/{permission}/u/',
+    description="Which users have a specific permission",
     renderer='json'
 )
 
@@ -289,3 +298,13 @@ def get_user_has_permission(request):
             raise HTTPNotFound("User id %s does not exist" % (user_id,))
         user_id = user.id
     return a_user_has_permission(discussion_id, user_id, permission)
+
+
+@users_with_permission.get()
+def get_user_has_permission(request):
+    discussion_id = int(request.matchdict['discussion_id'])
+    permission = request.matchdict['permission']
+    discussion = Discussion.get_instance(discussion_id)
+    if not discussion:
+        raise HTTPNotFound("Discussion %d does not exist" % (discussion_id,))
+    return a_users_with_permission(discussion_id, permission)
