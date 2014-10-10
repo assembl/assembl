@@ -88,7 +88,6 @@ class Post(Content):
     }
 
     def get_descendants(self):
-        as_parent = aliased(Post)
         assert self.id
         descendants = self.db.query(Post).filter(
             Post.parent_id == self.id).order_by(
