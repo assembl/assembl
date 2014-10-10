@@ -63,7 +63,11 @@ def home_view(request):
     canAddExtract = user_has_permission(context["discussion"].id, user_id, P_ADD_EXTRACT)
     context['canAddExtract'] = canAddExtract
     context['canDisplayTabs'] = True
-    return render_to_response('../../templates/index.jinja2', context, request=request)
+    response = render_to_response('../../templates/index.jinja2', context, request=request)
+    # Prevent caching the home, especially for proper login/logout
+    response.cache_control.max_age = 0
+    response.cache_control.prevent_auto = True
+    return response
 
 @view_config(route_name='home_idea', request_method='GET', http_cache=60)
 def idea_view(request):
