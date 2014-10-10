@@ -52,6 +52,7 @@ oauthlib==0.6.3
 paramiko==1.15.1
 pinocchio==0.4.1
 polib==1.0.5
+premailer==2.7.0
 py==1.4.25
 pyOpenSSL==0.14
 pycparser==2.10
