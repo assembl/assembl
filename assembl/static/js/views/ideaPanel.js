@@ -203,7 +203,8 @@ define(function (require) {
                     'model': this.model,
                     'modelProp': 'longTitle',
                     'placeholder': this.model.getLongTitleDisplayText(),
-                    'canEdit': canEditNextSynthesis
+                    'canEdit': canEditNextSynthesis,
+                    'showPlaceholderOnEditIfEmpty': true
                 });
                 this.longTitleField.renderTo(this.$('#ideaPanel-longtitle'));
 
@@ -213,8 +214,9 @@ define(function (require) {
                     this.definitionField = new CKEditorField({
                         'model': this.model,
                         'modelProp': 'definition',
-                        'placeholder': this.model.getDefinitionDisplayText(),
-                        'canEdit': canEdit
+                        //'placeholder': this.model.getDefinitionDisplayText(),
+                        'canEdit': canEdit,
+                        //'showPlaceholderOnEditIfEmpty': true
                     });
                     this.definitionField.renderTo(this.$('#ideaPanel-definition'));
                 }

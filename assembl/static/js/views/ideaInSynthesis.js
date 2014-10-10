@@ -90,7 +90,8 @@ define(function (require) {
             this.ckeditor = new CKEditorField({
                 'model': this.model,
                 'modelProp': 'longTitle',
-                'placeholder': this.model.getLongTitleDisplayText()
+                'placeholder': this.model.getLongTitleDisplayText(),
+                'showPlaceholderOnEditIfEmpty': true
             });
 
             this.ckeditor.on('save cancel', function () {

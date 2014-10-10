@@ -41,6 +41,9 @@ define(function (require) {
          */
         placeholder: '',
 
+
+        showPlaceholderOnEditIfEmpty: false,
+
         /**
          * Ckeditor default configuration
          * @type {object}
@@ -70,6 +73,10 @@ define(function (require) {
                 this.placeholder = obj.placeholder;
             }
 
+            if ('showPlaceholderOnEditIfEmpty' in obj) {
+                this.showPlaceholderOnEditIfEmpty = obj.showPlaceholderOnEditIfEmpty;
+            }
+
             if ('canEdit' in obj) {
                 this.canEdit = obj.canEdit;
             } else {
@@ -92,11 +99,12 @@ define(function (require) {
                 editing = false;
             }
 
+            var textToShow = this.showPlaceholderOnEditIfEmpty ? this.placeholder : this.model.get(this.modelProp);
             var data = {
                 topId: this.topId,
                 fieldId: this.fieldId,
                 bottomId: this.bottomId,
-                text: this.model.get(this.modelProp),
+                text: textToShow,
                 editing: editing,
                 canEdit: this.canEdit,
                 placeholder: this.placeholder
@@ -125,6 +133,12 @@ define(function (require) {
             window.setTimeout(function () {
                 editingArea.focus();
             }, 100);
+            /*
+            We do not enable save on blur, because:
+            - we have a Save and a Cancel button
+            - the save on blur feature until now was called even when the user clicked on Save or Cancel button, so the content was saved anyway and the buttons were useless
+            - an editor may blur by mistake (which saves new content) but maybe he wanted to revert his changes afterwards
+            
             this.ckInstance.element.on('blur', function () {
 
                 // Firefox triggers the blur event if we paste (ctrl+v)
@@ -142,6 +156,7 @@ define(function (require) {
                 }, 100);
 
             });
+            */
         },
 
         /**
