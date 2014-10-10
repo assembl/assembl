@@ -9,7 +9,6 @@ define(function (require) {
         controller: RouteManager,
         appRoutes: {
             ":slug/": "home",
-            ":slug/context": "contextPage",
             ":slug/idea/:id": "idea",
             ":slug/idea/:slug/:id": "ideaSlug",
             ":slug/message/:id": "message",

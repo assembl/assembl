@@ -8,36 +8,37 @@ define(function (require) {
         User = require('models/user'),
         storage = require('objects/storage'),
         navBar = require('views/navBar'),
-        contextPage = require('views/contextPage'),
+    //contextPage = require('views/contextPage'),
         GroupContainer = require('views/groups/groupContainer'),
         CollectionManager = require('modules/collectionManager'),
         viewsFactory = require('objects/viewsFactory'),
-        $ = require('jquery'),
         Notification = require('views/notification'),
-        adminView = require('views/admin/adminDiscussion'),
-        Partners = require('models/partner_organization');
+        adminView = require('views/admin/adminDiscussion');
 
     var routeManager = Marionette.Controller.extend({
 
         initialize: function () {
             window.assembl = {};
 
-            var collectionManager = new CollectionManager();
+            var collectionManager = new CollectionManager(),
+                that = this;
+
+            this.user = null,
+
 
             /**
              * fulfill app.currentUser
              */
             function loadCurrentUser() {
-                var user;
                 if (Ctx.getCurrentUserId()) {
-                    user = new User.Model();
-                    user.fetchFromScriptTag('current-user-json');
+                    that.user = new User.Model();
+                    that.user.fetchFromScriptTag('current-user-json');
                 }
                 else {
-                    user = new User.Collection().getUnknownUser();
+                    that.user = new User.Collection().getUnknownUser();
                 }
-                user.fetchPermissionsFromScripTag();
-                Ctx.setCurrentUser(user);
+                that.user.fetchPermissionsFromScripTag();
+                Ctx.setCurrentUser(that.user);
                 Ctx.loadCsrfToken(true);
             }
 
@@ -48,15 +49,39 @@ define(function (require) {
          * Load the default view
          * */
         home: function () { // a.k.a. "index", "discussion root"
+
+            this.isNewProfile();
+
             this.restoreViews();
         },
 
-        contextPage: function () { // a.k.a. "home", "accueil" (according to the navigation menu) 
-            // activate the home navigation item
-            var groupSpecsP = collectionManager().getGroupSpecsCollectionPromise(viewsFactory);
-            groupSpecsP.done(function (groupSpecs) {
-                Assembl.vent.trigger("navigation:selected", "home");
-            });
+        idea: function (id) {
+            collectionManager.getAllIdeasCollectionPromise().done(
+                function (allIdeasCollection) {
+                    var idea = allIdeasCollection.get(id);
+                    if (idea) {
+                        Ctx.setCurrentIdea(idea);
+                    }
+                });
+        },
+
+        ideaSlug: function (slug, id) {
+            return this.idea(slug + '/' + id);
+        },
+
+        message: function (id) {
+            //TODO: add new behavior to show messageList Panel
+            //Ctx.openPanel(assembl.messageList);
+            Assembl.vent.trigger('messageList:showMessageById', id);
+        },
+
+        messageSlug: function (slug, id) {
+            return this.message(slug + '/' + id);
+        },
+
+        adminDiscussion: function () {
+            var admin = new adminView();
+            Assembl.adminContainer.show(admin);
         },
 
         restoreViews: function () {
@@ -92,39 +117,18 @@ define(function (require) {
             });
         },
 
-        idea: function (id) {
-            collectionManager.getAllIdeasCollectionPromise().done(
-                function (allIdeasCollection) {
-                    var idea = allIdeasCollection.get(id);
-                    if (idea) {
-                        Ctx.setCurrentIdea(idea);
-                    }
-                });
-        },
+        isNewProfile: function () {
 
-        /**
-         * Alias for `idea`
-         */
-        ideaSlug: function (slug, id) {
-            return this.idea(slug + '/' + id);
-        },
+            var currentUser = window.localStorage.getItem('lastCurrentUser');
 
-        message: function (id) {
-            //TODO: add new behavior to show messageList Panel
-            //Ctx.openPanel(assembl.messageList);
-            Assembl.vent.trigger('messageList:showMessageById', id);
-        },
-
-        /**
-         * Alias for `message`
-         */
-        messageSlug: function (slug, id) {
-            return this.message(slug + '/' + id);
-        },
-
-        adminDiscussion: function () {
-            var admin = new adminView();
-            Assembl.adminContainer.show(admin);
+            if (currentUser) {
+                if (this.user.get('@id') != currentUser) {
+                    window.localStorage.removeItem('expertInterfacegroupItems');
+                    window.localStorage.removeItem('simpleInterfacegroupItems');
+                }
+            } else {
+                window.localStorage.setItem('lastCurrentUser', this.user.get('@id'));
+            }
         }
 
     });
