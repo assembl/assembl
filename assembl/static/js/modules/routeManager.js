@@ -118,10 +118,11 @@ define(function (require) {
 
         isNewProfile: function () {
 
-            var currentUser = window.localStorage.getItem('lastCurrentUser');
+            var currentUser = window.localStorage.getItem('lastCurrentUser').split('/')[1],
+                connectedUser = this.user.get('@id').split('/')[1];
 
             if (currentUser) {
-                if (this.user.get('@id') != currentUser) {
+                if (connectedUser != currentUser) {
                     window.localStorage.removeItem('expertInterfacegroupItems');
                     window.localStorage.removeItem('simpleInterfacegroupItems');
                 }
