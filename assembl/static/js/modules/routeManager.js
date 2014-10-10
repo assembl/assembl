@@ -25,24 +25,10 @@ define(function (require) {
 
             this.user = null;
 
-
             /**
              * fulfill app.currentUser
              */
-            function loadCurrentUser() {
-                if (Ctx.getCurrentUserId()) {
-                    that.user = new User.Model();
-                    that.user.fetchFromScriptTag('current-user-json');
-                }
-                else {
-                    that.user = new User.Collection().getUnknownUser();
-                }
-                that.user.fetchPermissionsFromScripTag();
-                Ctx.setCurrentUser(that.user);
-                Ctx.loadCsrfToken(true);
-            }
-
-            loadCurrentUser();
+            this.loadCurrentUser();
         },
 
         /**
@@ -82,6 +68,19 @@ define(function (require) {
         adminDiscussion: function () {
             var admin = new adminView();
             Assembl.adminContainer.show(admin);
+        },
+
+        loadCurrentUser: function () {
+            if (Ctx.getCurrentUserId()) {
+                this.user = new User.Model();
+                this.user.fetchFromScriptTag('current-user-json');
+            }
+            else {
+                this.user = new User.Collection().getUnknownUser();
+            }
+            this.user.fetchPermissionsFromScripTag();
+            Ctx.setCurrentUser(this.user);
+            Ctx.loadCsrfToken(true);
         },
 
         restoreViews: function () {
