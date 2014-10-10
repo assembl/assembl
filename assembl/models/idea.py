@@ -351,6 +351,7 @@ JOIN post AS family_posts ON (
         from .post import Post
         from .auth import AgentProfile
         from .idea_content_link import Extract
+        # Get extracts related to the idea
         extracts = self.db.query(Extract).join(
             Idea).filter(Idea.id == self.id).options(
             joinedload(Extract.extract_source)).all()
@@ -358,11 +359,14 @@ JOIN post AS family_posts ON (
         for e in extracts:
             extracts_by_author[e.extract_source.creator_id].append(e)
         author_ids = extracts_by_author.keys()
+
         def priority(author_id):
             extracts = extracts_by_author[author_id]
             return (-len([e for e in extracts if e.important]), -len(extracts))
+        # Sort authors by number of important extracts, then extracts
         author_ids.sort(key=priority)
         if indirect and extracts:
+            # Get ids of all messages replying one of those extracts's messages
             root_posts = list({e.content_id for e in extracts})
             pattern = """SELECT id FROM (
                     SELECT transitive t_in (1) t_out (2) T_DISTINCT T_NO_CYCLES
@@ -375,10 +379,13 @@ JOIN post AS family_posts ON (
                       for n, id in enumerate(root_posts)])
             else:
                 union = text(pattern % (0, 0)).columns(
-                        column('id')).bindparams(post_id0=root_posts[0])
-            indirect_authors = self.db.query(AgentProfile.id).join(Post).filter(
-                Post.id.in_(union)).order_by(Post.creation_date.desc()).all()
-            indirect_authors = [x for (x,) in indirect_authors if x not in author_ids]
+                    column('id')).bindparams(post_id0=root_posts[0])
+            # get those messages' authors. Sort by most recent
+            indirect_authors = self.db.query(AgentProfile.id).join(
+                Post).filter(Post.id.in_(union)).order_by(
+                Post.creation_date.desc()).all()
+            indirect_authors = [x for (x,) in indirect_authors
+                                if x not in author_ids]
             author_ids.extend(indirect_authors)
         return [AgentProfile.uri_generic(id) for id in author_ids]
 
