@@ -6,7 +6,8 @@ define(function (require) {
         _ = require('underscore'),
         User = require('models/user'),
         Message = require('models/message'),
-        Types = require('utils/types');
+        Types = require('utils/types'),
+        Annotator = require('annotator');
 
     /**
      * @class SegmentModel

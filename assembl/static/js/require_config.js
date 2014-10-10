@@ -2,16 +2,7 @@ var requirejs_config = {
     baseUrl: "/static/js/",
     urlArgs: urlArgs,
     waitSeconds: 20,
-    packages: [
-        //{ name: 'modules', location: 'app/modules' },
-        //{ name: 'views', location: 'app/views' },
-        //{ name: 'models', location: 'app/models' },
-        //{ name: 'utils', location: 'app/utils' },
-        //{ name: 'controllers', location: 'app/controllers' },
-        //{ name: 'objects', location: 'app/objects' }
-    ],
     paths: {
-
         'jquery': "bower/jquery/jquery",
         'tipsy': 'bower/tipsy/src/javascripts/jquery.tipsy',
         'jquery-highlight': 'lib/jquery-highlight/jquery.highlight',
@@ -30,7 +21,7 @@ var requirejs_config = {
         'ckeditor': 'bower/ckeditor/ckeditor',
         'ckeditor-sharedspace': 'lib/ckeditor-sharedcontainer/plugin',
 
-        'moment': 'bower/momentjs/min/moment-with-langs.min',
+        'moment': 'bower/momentjs/min/moment-with-locales.min',
         'zeroclipboard': 'bower/zeroclipboard/ZeroClipboard',
         'sockjs': 'bower/sockjs/sockjs',
         'cytoscape': 'bower/cytoscape/cytoscape',
@@ -39,22 +30,12 @@ var requirejs_config = {
         'backboneModal': 'lib/backbone-modal/backbone.modal',
         'marionette': 'bower/marionette/lib/backbone.marionette.min',
         'd3': 'bower/d3/d3.min',
-        'bootstrap': 'lib/bootstrap'
+        'bootstrap': 'lib/bootstrap',
+        'swal': 'bower/sweetalert/lib/sweet-alert.min'
     },
     shim: {
-        backbone: {
-            deps: ['underscore', 'jquery'],
-            exports: 'Backbone'
-        },
         'underscore': {
             exports: '_'
-        },
-        marionette: {
-            deps: ['backbone', 'jquery'],
-            exports: 'Marionette'
-        },
-        babysitter: {
-            deps: ['backbone', 'jquery']
         },
         'jquery': {
             exports: 'jQuery'
@@ -68,7 +49,7 @@ var requirejs_config = {
             exports: 'jQuery'
         },
         'modules/context': {
-            deps: ['annotator', 'ckeditor', 'tipsy', 'utils/i18n', 'jquery-highlight', 'jquery.dotdotdot'],
+            deps: ['annotator', 'ckeditor', 'utils/i18n', 'jquery-highlight', 'jquery.dotdotdot'],
             exports: 'context'
         },
         'utils/i18n': {
@@ -131,6 +112,9 @@ var requirejs_config = {
             exports: 'Modal'
         },
         'bootstrap': {
+            deps: ['jquery']
+        },
+        'swal': {
             deps: ['jquery']
         }
     }

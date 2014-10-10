@@ -1,7 +1,7 @@
+// /js -> r.js -o build/build.js
 ({
     paths: {
         'jquery': "bower/jquery/jquery",
-        'tipsy': 'bower/tipsy/src/javascripts/jquery.tipsy',
         'jquery-highlight': 'lib/jquery-highlight/jquery.highlight',
         'jquery.dotdotdot': 'bower/jquery.dotdotdot/src/js/jquery.dotdotdot.min',
         'backbone': 'bower/backbone/backbone',
@@ -13,10 +13,10 @@
         'jasmine-boot': 'bower/jasmine/lib/jasmine-core/boot',
         'ckeditor': 'bower/ckeditor/ckeditor',
         'ckeditor-sharedspace': 'lib/ckeditor-sharedcontainer/plugin',
-        'moment': 'bower/momentjs/min/moment-with-langs.min',
+        'moment': 'bower/momentjs/min/moment-with-locales.min',
         'zeroclipboard': 'bower/zeroclipboard/ZeroClipboard',
         'sockjs': 'bower/sockjs/sockjs',
-        'cytoscape': 'bower/cytoscape/cytoscape',
+        'cytoscape': 'bower/cytoscape/dist/cytoscape.min',
         'jit': 'bower/jit/Jit/jit',
         'jed': 'bower/jed/jed',
         'backboneModal': 'lib/backbone-modal/backbone.modal',
@@ -24,21 +24,12 @@
         'd3': 'bower/d3/d3.min',
         'bootstrap': 'lib/bootstrap'
     },
-
     shim: {
-        backbone: {
-            deps: ['underscore', 'jquery'],
+        'backbone': {
             exports: 'Backbone'
         },
         'underscore': {
             exports: '_'
-        },
-        marionette: {
-            deps: ['backbone', 'jquery'],
-            exports: 'Marionette'
-        },
-        babysitter: {
-            deps: ['backbone', 'jquery']
         },
         'jquery': {
             exports: 'jQuery'
@@ -52,7 +43,7 @@
             exports: 'jQuery'
         },
         'modules/context': {
-            deps: ['annotator', 'ckeditor', 'tipsy', 'utils/i18n', 'jquery-highlight', 'jquery.dotdotdot'],
+            deps: ['annotator', 'ckeditor', 'utils/i18n', 'jquery-highlight', 'jquery.dotdotdot'],
             exports: 'context'
         },
         'utils/i18n': {
@@ -118,13 +109,22 @@
             deps: ['jquery']
         }
     },
-
-    baseUrl: ".",
-    name: "main",
-    out: "main-built.js",
-    optimize: "uglify",
+    baseUrl: "..",
+    removeCombined: false,
+    optimize: "uglify2",
     findNestedDependencies: true,
-    useStrict: true
-    //removeCombined: true
-
+    dir: 'dist',
+    generateSourceMaps: true,
+    preserveLicenseComments: false,
+    modules: [
+        {
+            name: "infrastructure"
+        },
+        {
+            name: "main",
+            exclude: [
+                "infrastructure"
+            ]
+        }
+    ]
 })
