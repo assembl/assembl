@@ -5,16 +5,25 @@
         <% if (canEditNextSynthesis) { %>
           <% if (Ctx.getCurrentInterfaceType() != Ctx.InterfaceTypes.SIMPLE) { %>
             <span class="ideaPanel-legend legend">{{ gettext('Expression in next synthesis:') }}</span>
-            <div id="ideaPanel-longtitle" class="mbs" data-toggle="tooltip" title="{{gettext('Expression of this idea in the next synthesis.  You may want to edit them all together in the synthesis panel rather than here.')}}"></div>
+            <div class="ideaPanel-longtitle" class="mbs" data-toggle="tooltip" title="{{gettext('Expression of this idea in the next synthesis.  You may want to edit them all together in the synthesis panel rather than here.')}}"></div>
           <% } %>
         <% } %>
 
         <% if (Ctx.getCurrentInterfaceType() != Ctx.InterfaceTypes.SIMPLE) { %>
           <span class="ideaPanel-legend legend">{{ gettext('Description of idea') }}</span>
         <% } %>
-        <div id="ideaPanel-definition" data-toggle="tooltip" title="{{gettext('A description of this idea')}}"></div>
-        <div>
-          <span class="ideaPanel-seeMore">{{ gettext('See more') }}</span>
+        <!--<div id="ideaPanel-definition" data-toggle="tooltip" title="{{gettext('A description of this idea')}}"></div>-->
+
+        <% if( editing ) { %>
+            <div class="ideaPanel-definition-editor"></div>
+        <% } else { %>
+            <div class="ideaPanel-definition js_edit-definition" data-toggle="tooltip" title="{{gettext('A description of this idea')}}">
+              <%= idea.get('definition') %>
+            </div>
+        <% } %>
+
+        <div class="ideaPanel-seeMore mts">
+          <a href="#" class="seeMore js_seeMore">{{ gettext('See more') }} <i class="icon-arrowdown"></i></a>
         </div>
         <p class="text-muted">{% set creationDate = "<%= app.formatDate(idea.get('creationDate')) %>" %}</p>
 

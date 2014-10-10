@@ -30,6 +30,8 @@ define(function (require) {
             segmentList: ".postitlist"
         },
         initialize: function (options) {
+            this.editing = false;
+
             var that = this;
 
             if (!this.model) {
@@ -58,7 +60,10 @@ define(function (require) {
             'click #ideaPanel-clearbutton': 'onClearAllClick',
             'click #ideaPanel-deleteButton': 'onDeleteButtonClick',
             'click .segment-link': "onSegmentLinkClick",
-            'click #session-modal': "createWidgetSession"
+            'click #session-modal': "createWidgetSession",// need to have another selector in the dom
+            'click .js_seeMore': 'seeMoreOrLess',
+            'click .js_seeLess': 'seeMoreOrLess',
+            'click .js_edit-definition': 'editDefinition'
         },
 
         getTitle: function () {
@@ -142,7 +147,8 @@ define(function (require) {
                 canEditMyExtracts: currentUser.can(Permissions.EDIT_MY_EXTRACT),
                 canAddExtracts: currentUser.can(Permissions.EDIT_EXTRACT), //TODO: This is a bit too coarse
                 canCreateWidgets: currentUser.can(Permissions.ADMIN_DISCUSSION),
-                Ctx: Ctx
+                Ctx: Ctx,
+                editing: this.editing
             }
         },
 
@@ -208,18 +214,17 @@ define(function (require) {
                 });
                 this.longTitleField.renderTo(this.$('#ideaPanel-longtitle'));
 
-                var definitionText = this.model.getDefinitionDisplayText();
-                if ( definitionText.length > 0 )
-                {
-                    this.definitionField = new CKEditorField({
-                        'model': this.model,
+                /*var definitionText = this.model.getDefinitionDisplayText();
+                 if ( definitionText.length > 0 ){
+                 this.definitionField = new CKEditorField({
+                 'model': this.model,
                         'modelProp': 'definition',
                         //'placeholder': this.model.getDefinitionDisplayText(),
                         'canEdit': canEdit,
                         //'showPlaceholderOnEditIfEmpty': true
                     });
                     this.definitionField.renderTo(this.$('#ideaPanel-definition'));
-                }
+                 }*/
 
                 this.commentView = new MessageSendView({
                     'allow_setting_subject': false,
@@ -231,6 +236,11 @@ define(function (require) {
                     'mandatory_subject_missing_msg': null
                 });
                 this.$('#ideaPanel-comment').append(this.commentView.render().el);
+
+
+                if (that.editing) {
+                    that.renderCKEditor();
+                }
             }
         },
 
@@ -545,7 +555,61 @@ define(function (require) {
                     var segment = allExtractsCollection.get(cid);
                     Ctx.showTargetBySegment(segment);
                 });
+        },
+
+        seeMoreOrLess: function (e) {
+            e.preventDefault();
+
+            var elm = $(e.target),
+                readMore = '<a href="#" class="seeMore js_seeMore">' + i18n.gettext('See more') + '<i class="icon-arrowdown"></i></a>',
+                readLess = '<a href="#" class="seeLess js_seeLess">' + i18n.gettext('See less') + '<i class="icon-arrowup"></i></a>',
+                btnContent = this.$('.ideaPanel-seeMore'),
+                definition = this.$('.ideaPanel-definition');
+
+            if (elm.hasClass('seeMore')) {
+                btnContent.html(readLess);
+                definition.css('height', 'auto');
+            }
+
+            if (elm.hasClass('seeLess')) {
+                btnContent.html(readMore);
+                definition.css('height', '95px');
+            }
+        },
+
+        editDefinition: function () {
+            if (Ctx.getCurrentUser().can(Permissions.EDIT_IDEA)) {
+                this.editing = true;
+                this.render();
+            }
+        },
+
+        /**
+         * renders the ckEditor if there is one editable field
+         */
+        renderCKEditor: function () {
+
+            var that = this,
+                area = this.$('.ideaPanel-definition-editor');
+
+            var definitionText = this.model.getDefinitionDisplayText();
+            if (definitionText.length > 0) {
+
+                this.ckeditor = new CKEditorField({
+                    'model': this.model,
+                    'modelProp': 'definition'
+                });
+            }
+
+            this.ckeditor.on('save cancel', function () {
+                that.editing = false;
+                that.render();
+            });
+
+            this.ckeditor.renderTo(area);
+            this.ckeditor.changeToEditMode();
         }
+
     });
 
     return IdeaPanel;

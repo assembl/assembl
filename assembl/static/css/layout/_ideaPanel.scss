@@ -4,14 +4,19 @@
   right: 5px;
 }
 
-.seeMore {
-  height: 56px;
-  overflow-y: hidden;
-}
-
 .ideaPanel-seeMore {
-  padding-left: 3px;
-  display: none;
+  .seeMore,
+  .seeLess {
+    color: $white;
+    cursor: pointer;
+    text-decoration: none;
+    float: right;
+    font-size: 11px;
+    i.icon-arrowdown,
+    i.icon-arrowup {
+      color: $black;
+    }
+  }
 }
 
 .nugget-indice {
@@ -50,11 +55,23 @@
   color: $white;
 }
 
-#ideaPanel-definition,
-#ideaPanel-longtitle {
+.ideaPanel-longtitle {
   .panel-editablearea > * {
     color: $white;
     font-weight: 300;
+  }
+}
+
+.ideaPanel-definition {
+  color: $white;
+  font-weight: 300;
+  border: 1px solid transparent;
+  padding: 9px 0px 9px 6px;
+  height: 95px;
+  overflow-y: hidden;
+  &:hover {
+    @include box-shadow(rgba(0, 0, 0, 0.1) 0px 1px 1px inset);
+    border: 1px solid #cccccc;
   }
 }
 
