@@ -15,9 +15,11 @@ from assembl.auth import (
 from assembl.models.auth import (
     create_default_permissions, User, Username, AgentProfile)
 
-def get_default_context(request):
+def get_default_context(request, include_templates = True):
     base = base_default_context(request)
-    return dict(base, templates=get_template_views())
+    if include_templates:
+        base = dict(base, templates=get_template_views())
+    return base
 
 @view_config(route_name='discussion_admin', permission=P_SYSADMIN)
 def discussion_admin(request):
@@ -311,7 +313,7 @@ def general_permissions(request):
         return (user_id, role) in user_roles_as_set
 
     context = dict(
-        get_default_context(request),
+        get_default_context(request, False),
         roles=role_names,
         permissions=permission_names,
         users=users,
