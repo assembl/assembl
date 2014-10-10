@@ -23,7 +23,7 @@ define(function (require) {
             var collectionManager = new CollectionManager(),
                 that = this;
 
-            this.user = null,
+            this.user = null;
 
 
             /**
