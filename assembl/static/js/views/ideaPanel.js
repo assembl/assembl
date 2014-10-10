@@ -573,7 +573,7 @@ define(function (require) {
 
             if (elm.hasClass('seeLess')) {
                 btnContent.html(readMore);
-                definition.css('height', '95px');
+                definition.css('height', 95);
             }
         },
 
