@@ -7,7 +7,8 @@ from datetime import datetime
 from sqlalchemy.orm import (
     relationship, backref, aliased, contains_eager, joinedload)
 from sqlalchemy.orm.attributes import NO_VALUE
-from sqlalchemy.sql import text
+from sqlalchemy.sql import text, column
+from sqlalchemy.sql.expression import union_all
 from sqlalchemy import (
     Column,
     Boolean,
@@ -345,6 +346,41 @@ JOIN post AS family_posts ON (
             sum((v.vote_value for v in votes))/len(votes)
             for criterion, votes in latest_by_criterion.iteritems()
         }
+
+    def get_contributors(self, indirect=True):
+        from .post import Post
+        from .auth import AgentProfile
+        from .idea_content_link import Extract
+        extracts = self.db.query(Extract).join(
+            Idea).filter(Idea.id == self.id).options(
+            joinedload(Extract.extract_source)).all()
+        extracts_by_author = defaultdict(list)
+        for e in extracts:
+            extracts_by_author[e.extract_source.creator_id].append(e)
+        author_ids = extracts_by_author.keys()
+        def priority(author_id):
+            extracts = extracts_by_author[author_id]
+            return (-len([e for e in extracts if e.important]), -len(extracts))
+        author_ids.sort(key=priority)
+        if indirect and extracts:
+            root_posts = list({e.content_id for e in extracts})
+            pattern = """SELECT id FROM (
+                    SELECT transitive t_in (1) t_out (2) T_DISTINCT T_NO_CYCLES
+                        id, parent_id FROM post ) pa%d
+                WHERE parent_id = :post_id%d"""
+            if len(root_posts) > 1:
+                union = union_all(
+                    *[text(pattern % (n, n)).columns(
+                        column('id')).bindparams(**{'post_id'+str(n): id})
+                      for n, id in enumerate(root_posts)])
+            else:
+                union = text(pattern % (0, 0)).columns(
+                        column('id')).bindparams(post_id0=root_posts[0])
+            indirect_authors = self.db.query(AgentProfile.id).join(Post).filter(
+                Post.id.in_(union)).order_by(Post.creation_date.desc()).all()
+            indirect_authors = [x for (x,) in indirect_authors if x not in author_ids]
+            author_ids.extend(indirect_authors)
+        return [AgentProfile.uri_generic(id) for id in author_ids]
 
     def get_discussion_id(self):
         return self.discussion_id
