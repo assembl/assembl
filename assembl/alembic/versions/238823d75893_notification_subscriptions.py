@@ -19,6 +19,7 @@ from assembl.lib import config
 from assembl.models.notification import *
 
 def upgrade(pyramid_env):
+    schema = config.get('db_schema')+"."+config.get('db_user')
     with context.begin_transaction():
         op.create_table('notification_subscription',
             sa.Column('id',
@@ -74,6 +75,7 @@ def upgrade(pyramid_env):
             sa.Column('followed_object_id',
                        sa.Integer,
                        nullable=True,),
+            schema=schema
         )
         op.create_table('notification',
             sa.Column('id',
@@ -121,6 +123,7 @@ def upgrade(pyramid_env):
                       sa.DateTime,
                       nullable=True,
                       default = datetime.utcnow),
+            schema=schema
         )
 
 

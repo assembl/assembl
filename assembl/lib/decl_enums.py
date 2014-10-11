@@ -75,8 +75,10 @@ class DeclEnumType(SchemaType, TypeDecorator):
                                     enum.__name__)
                     )
 
-    def _set_table(self, table, column):
-        self.impl._set_table(table, column)
+    def _set_table(self, column, table):
+        self.impl.name = "ck_%s_%s_%s" % (
+            '_'.join(table.schema.split('.')), table.name, self.impl.name[3:])
+        self.impl._set_table(column, table)
 
     def copy(self):
         return DeclEnumType(self.enum)
