@@ -16,7 +16,7 @@
         'moment': 'bower/momentjs/min/moment-with-locales.min',
         'zeroclipboard': 'bower/zeroclipboard/ZeroClipboard',
         'sockjs': 'bower/sockjs/sockjs',
-        'cytoscape': 'bower/cytoscape/dist/cytoscape.min',
+        'cytoscape': 'bower/cytoscape/dist/cytoscape',
         'jit': 'bower/jit/Jit/jit',
         'jed': 'bower/jed/jed',
         'backboneModal': 'lib/backbone-modal/backbone.modal',
@@ -111,11 +111,11 @@
     },
     baseUrl: "..",
     removeCombined: false,
-    optimize: "uglify2",
+    optimize: "uglify",
     findNestedDependencies: true,
     dir: 'dist',
-    generateSourceMaps: true,
-    preserveLicenseComments: false,
+    generateSourceMaps: false,
+    preserveLicenseComments: true,
     modules: [
         {
             name: "infrastructure"

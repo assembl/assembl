@@ -34,7 +34,12 @@
     <script type="text/javascript">var start_application = false;</script>
     {% block extra_js %}{% endblock %}
     {% block main_js %}
-    <script data-main="{{ STATIC_URL }}/js/main.js" src="{{ STATIC_URL }}/js/bower/requirejs/require.js"></script>
+        {% if minified_js == 'true' or minified_js == 'debug' %}
+            <script data-main="{{ STATIC_URL }}/js/build/dist/infrastructure.js" src="{{ STATIC_URL }}/js/build/dist/bower/requirejs/require.js"></script>
+            <script src="{{ STATIC_URL }}/js/build/dist/main.js"></script>
+        {% else %}
+            <script data-main="{{ STATIC_URL }}/js/main.js" src="{{ STATIC_URL }}/js/bower/requirejs/require.js"></script>
+        {% endif %}
     {% endblock main_js %}
     {% include 'includes/updatebrowser.jinja2' %}
 

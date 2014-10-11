@@ -47,6 +47,7 @@ def get_default_context(request):
         locale=localizer.locale_name,
         locales=config.get('available_languages').split(),
         theme=config.get('default_theme') or 'default',
+        minified_js=config.get('minified_js') or False,
         translations=codecs.open(os.path.join(os.path.dirname(__file__), '..', 'locale', localizer.locale_name, 'LC_MESSAGES', 'assembl.jed.json'), encoding='utf-8').read()
         #TODO:  batch strip json not from js files
         #translations=json.dumps({

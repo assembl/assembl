@@ -1,26 +1,18 @@
-var requirejs_config = {
-    baseUrl: "/static/js/",
-    urlArgs: urlArgs,
-    waitSeconds: 20,
+// /js -> r.js -o build/build.js
+({
     paths: {
         'jquery': "bower/jquery/jquery",
-        'tipsy': 'bower/tipsy/src/javascripts/jquery.tipsy',
         'jquery-highlight': 'lib/jquery-highlight/jquery.highlight',
         'jquery.dotdotdot': 'bower/jquery.dotdotdot/src/js/jquery.dotdotdot.min',
-
         'backbone': 'bower/backbone/backbone',
         'BackboneSubset': 'bower/Backbone.Subset/backbone.subset',
         'underscore': 'bower/underscore/underscore',
-
         'annotator': 'lib/annotator/annotator-full.min',
-
         'jasmine': 'bower/jasmine/lib/jasmine-core/jasmine',
         'jasmine-html': 'bower/jasmine/lib/jasmine-core/jasmine-html',
         'jasmine-boot': 'bower/jasmine/lib/jasmine-core/boot',
-
         'ckeditor': 'bower/ckeditor/ckeditor',
         'ckeditor-sharedspace': 'lib/ckeditor-sharedcontainer/plugin',
-
         'moment': 'bower/momentjs/min/moment-with-locales.min',
         'zeroclipboard': 'bower/zeroclipboard/ZeroClipboard',
         'sockjs': 'bower/sockjs/sockjs',
@@ -30,10 +22,12 @@ var requirejs_config = {
         'backboneModal': 'lib/backbone-modal/backbone.modal',
         'marionette': 'bower/marionette/lib/backbone.marionette.min',
         'd3': 'bower/d3/d3.min',
-        'bootstrap': 'lib/bootstrap',
-        'swal': 'bower/sweetalert/lib/sweet-alert.min'
+        'bootstrap': 'lib/bootstrap'
     },
     shim: {
+        'backbone': {
+            exports: 'Backbone'
+        },
         'underscore': {
             exports: '_'
         },
@@ -113,9 +107,24 @@ var requirejs_config = {
         },
         'bootstrap': {
             deps: ['jquery']
-        },
-        'swal': {
-            deps: ['jquery']
         }
-    }
-};
+    },
+    baseUrl: "..",
+    removeCombined: false,
+    optimize: "uglify2",
+    findNestedDependencies: true,
+    dir: 'dist',
+    generateSourceMaps: true,
+    preserveLicenseComments: false,
+    modules: [
+        {
+            name: "infrastructure"
+        },
+        {
+            name: "main",
+            exclude: [
+                "infrastructure"
+            ]
+        }
+    ]
+})

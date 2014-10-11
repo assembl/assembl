@@ -6,7 +6,7 @@ from os import getenv
 from platform import system
 from time import sleep, strftime
 import pipes
-from ConfigParser import ConfigParser
+from ConfigParser import ConfigParser, NoOptionError
 from StringIO import StringIO
 # Importing the "safe" os.path commands
 from os.path import join, dirname, split, normpath
@@ -254,6 +254,32 @@ def compile_stylesheets():
         with cd('assembl/widget/video/app'):
             run('bundle exec compass compile --force --sass-dir scss --css-dir css', shell=True)
 
+
+@task
+def minify_javascript_maybe():
+    config = get_config()
+    try:
+        minify = config.get('app:main', 'minified_js')
+        if minify == 'debug':
+            execute(minify_javascript_debug)
+        elif minify:
+            execute(minify_javascript)
+    except NoOptionError:
+        pass
+
+
+@task
+def minify_javascript():
+    with cd(join(env.projectpath, 'assembl', 'static', 'js')):
+        run('../../../node_modules/requirejs/bin/r.js -o build/build.js')
+
+
+@task
+def minify_javascript_debug():
+    with cd(join(env.projectpath, 'assembl', 'static', 'js')):
+        run('../../../node_modules/requirejs/bin/r.js -o build/build_with_map.js')
+
+
 def tests():
     """
     Run all tests on remote
@@ -265,7 +291,6 @@ def tests():
     venvcmd('./manage.py harvest --verbosity=2')
 
 
-    
 @task
 def bootstrap():
     """
@@ -372,6 +397,7 @@ def app_compile_noupdate():
     execute(reloadapp)
     execute(webservers_reload)
 
+
 @task
 def app_compile_nodbupdate():
     "Separated mostly for tests, which need to run alembic manually"
@@ -379,6 +405,7 @@ def app_compile_nodbupdate():
     execute(app_setup)
     execute(compile_stylesheets)
     execute(compile_messages)
+    execute(minify_javascript_maybe)
 
 ## Webserver
 def configure_webservers():
@@ -495,12 +522,12 @@ def install_basetools():
 @task
 def install_bower():
     with cd(env.projectpath):
-        run('npm install bower po2json')
+        run('npm install bower po2json requirejs')
 
 @task
 def update_bower():
     with cd(env.projectpath):
-        run('npm update bower po2json')
+        run('npm update bower po2json requirejs')
 
 
 def bower_cmd(cmd, relative_path='.'):
@@ -746,7 +773,6 @@ def database_dump():
         print(red('Virtuoso backup did not error, but unable to move the file from %s to %s.\nYou may need to clear the file %s manually or your next backup will fail.' % (backup_file_path, absolute_path, backup_file_path)))
         exit()
 
-    
     # Make symlink to latest
     with cd(env.dbdumps_dir):
         run('ln -sf %s %s' % (absolute_path, remote_db_path()))
@@ -772,7 +798,7 @@ def database_upload():
     if(env.wsginame != 'dev.wsgi'):
         put(get_db_dump_name(), remote_db_path())
 
-@task    
+@task
 def database_restore():
     """
     Restores the database backed up on the remote server
@@ -783,7 +809,7 @@ def database_restore():
                 "have to temporarily declare env.is_production_env = False " +
                 "in the environment"))
     env.debug = True
-    
+
     #if(env.wsginame != 'dev.wsgi'):
     #    execute(webservers_stop)
     with prefix(venv_prefix()), cd(virtuoso_db_directory()):
