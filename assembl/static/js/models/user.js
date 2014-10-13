@@ -25,7 +25,6 @@ define(function (require) {
          * @type {Object}
          */
         defaults: {
-            id: null,
             name: '',
             description: '',
             avatarUrl: ''
@@ -145,7 +144,7 @@ define(function (require) {
      * @type {UserModel}
      */
     var UNKNOWN_USER = new UserModel({
-        id: UNKNOWN_USER_ID,
+        '@id': UNKNOWN_USER_ID,
         name: i18n.gettext('Unknown user')
     });
 
