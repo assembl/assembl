@@ -3,18 +3,24 @@ $panelarea-min-height: 400px;
 
 // The wrapper for all .panel
 // =================
-.panelarea  {
-    position: absolute;
-    top: 36px;
-    right: 0;
-    bottom: 4px;
-    left: 0;
-    min-height: $panelarea-min-height;
-    display: block;
-    overflow: { x: auto; y: hidden; }
-    white-space: nowrap;
+.panelarea {
+  position: absolute;
+  top: 36px;
+  right: 0;
+  bottom: 4px;
+  left: 0;
+  min-height: $panelarea-min-height;
+  display: block;
+  overflow: {
+    x: auto;
+    y: hidden;
+  }
+  white-space: nowrap;
 }
+
 .discussionlist {
+  width: 1200px;
+  margin: 0 auto;
   .bx {
     width: 220px;
     height: 150px;
@@ -29,4 +35,3 @@ $panelarea-min-height: 400px;
     }
   }
 }
-
