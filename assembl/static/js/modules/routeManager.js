@@ -36,7 +36,7 @@ define(function (require) {
          * */
         home: function () { // a.k.a. "index", "discussion root"
 
-            this.isNewProfile();
+            this.isNewUser();
 
             this.restoreViews();
         },
@@ -116,12 +116,16 @@ define(function (require) {
             });
         },
 
-        isNewProfile: function () {
+        isNewUser: function () {
             var currentUser = null,
-                connectedUser = this.user.get('@id').split('/')[1];
+                connectedUser = null;
 
             if (window.localStorage.getItem('lastCurrentUser')) {
                 currentUser = window.localStorage.getItem('lastCurrentUser').split('/')[1];
+            }
+
+            if (this.user.get('@id')) {
+                connectedUser = this.user.get('@id').split('/')[1];
             }
 
             if (currentUser) {
@@ -132,6 +136,7 @@ define(function (require) {
             } else {
                 window.localStorage.setItem('lastCurrentUser', this.user.get('@id'));
             }
+
         }
 
     });
