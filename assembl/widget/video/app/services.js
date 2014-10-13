@@ -101,8 +101,16 @@ widgetServices.service('JukeTubeVideosService', ['$window', '$rootScope', '$log'
 
         var tag = $window.document.createElement('script');
         tag.src = "http://www.youtube.com/iframe_api";
-        var firstScriptTag = $window.document.getElementsByTagName('script')[0];
-        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+        var scriptTags = $window.document.getElementsByTagName('script');
+        if ( scriptTags && scriptTags[0] )
+        {
+            scriptTags[0].parentNode.insertBefore(tag, scriptTags[0]);
+        }
+        else
+        {
+            console.log("Error: could not find script tag");
+        }
+        
 
         initialized = true;
     }

@@ -9,6 +9,7 @@ videosApp.controller('videosCtl',
             $scope.init = function () {
 
                 var Widget = configService.data.widget;
+                $scope.widget = Widget;
 
 
                 // set default model fields
@@ -48,14 +49,14 @@ videosApp.controller('videosCtl',
 
                 // get inspiration keywords from the idea URL given in the configuration JSON
 
-                $scope.idea_api_url = utils.urlApi(Widget.settings.idea) + '?view=creativity_widget';
+                $scope.idea_api_url = utils.urlApi($scope.widget.settings.idea) + '?view=creativity_widget';
                 console.log("idea_api_url: " + $scope.idea_api_url);
                 $scope.discussion_api_url = 'discussion api url';
 
                 var
                     Idea = $resource($scope.idea_api_url),
                     Discussion = null,
-                    discussionId = Widget.discussion.split('/')[1];
+                    discussionId = $scope.widget.discussion.split('/')[1];
 
                 $scope.idea = Idea.get({}, function () { // this function is executed once the AJAX request is received and the variable is assigned
                     console.log("idea:");
@@ -299,7 +300,7 @@ videosApp.controller('videosCtl',
                 };
                 $http({
                     method: 'POST',
-                    url: utils.urlApi(Widget.ideas_url),
+                    url: utils.urlApi($scope.widget.ideas_url),
                     data: $.param(message),
                     headers: {'Content-Type': 'application/x-www-form-urlencoded'}
                 }).success(function (data, status, headers, config) {
@@ -377,7 +378,7 @@ videosApp.controller('videosCtl',
                     // user_state_url accepts only GET and PUT actions, and accepts only headers: {'Content-Type': 'application/json'}
                     $http({
                         method: 'PUT',
-                        url: utils.urlApi(Widget.user_state_url),
+                        url: utils.urlApi($scope.widget.user_state_url),
                         data: initial_data,
                         async: true,
                         headers: {'Content-Type': 'application/json'}
@@ -393,7 +394,7 @@ videosApp.controller('videosCtl',
 
                 $http({
                     method: 'GET',
-                    url: utils.urlApi(Widget.user_state_url),
+                    url: utils.urlApi($scope.widget.user_state_url),
                     //data: obj,
                     async: true,
                     headers: {'Content-Type': 'application/json'}
