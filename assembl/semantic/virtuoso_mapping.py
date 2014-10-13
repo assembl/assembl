@@ -138,12 +138,16 @@ class QuadMapPatternS(QuadMapPattern):
         return qmp
 
 
+def assembl_iri_accessor(cls):
+    return cls.iri_class()
+    # TODO: Special case for special class accessors
+
 class AssemblClassPatternExtractor(ClassPatternExtractor):
 
     def __init__(self, alias_manager, graph=None,
                  section=None, discussion_id=None):
         super(AssemblClassPatternExtractor, self).__init__(
-            alias_manager, graph)
+            alias_manager, assembl_iri_accessor, graph=graph)
         self.section = section
         self.discussion_id = discussion_id
 
