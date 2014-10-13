@@ -124,7 +124,7 @@ define(function (require) {
                 currentUser = window.localStorage.getItem('lastCurrentUser').split('/')[1];
             }
 
-            if (this.user.get('@id')) {
+            if (this.user.get('@id') !== 'system.Everyone') {
                 connectedUser = this.user.get('@id').split('/')[1];
             }
 
