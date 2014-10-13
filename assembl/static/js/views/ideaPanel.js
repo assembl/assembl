@@ -13,7 +13,9 @@ define(function (require) {
         SegmentList = require('views/segmentList'),
         CollectionManager = require('modules/collectionManager'),
         AssemblPanel = require('views/assemblPanel'),
-        Marionette = require('marionette');
+        Marionette = require('marionette'),
+        $ = require('jquery'),
+        _ = require('underscore');
 
     //2014/08/03 ghourlier, never use ? delete it ?
     //var LONG_TITLE_ID = 'ideaPanel-longtitle';
@@ -46,6 +48,7 @@ define(function (require) {
                 that.showSegment(segment);
             });
 
+
         },
         modelEvents: {
             'change': 'render'
@@ -57,10 +60,10 @@ define(function (require) {
             'dragleave': 'onDragLeave',
             'drop': 'onDrop',
             'click .js_closeExtract': 'onSegmentCloseButtonClick',
-            'click #ideaPanel-clearbutton': 'onClearAllClick',
-            'click #ideaPanel-deleteButton': 'onDeleteButtonClick',
+            'click .js_ideaPanel-clearBtn': 'onClearAllClick',
+            'click .js_ideaPanel-deleteBtn': 'onDeleteButtonClick',
             'click .segment-link': "onSegmentLinkClick",
-            'click #session-modal': "createWidgetSession",// need to have another selector in the dom
+            //'click #session-modal': "createWidgetSession", need to have another selector in the dom
             'click .js_seeMore': 'seeMoreOrLess',
             'click .js_seeLess': 'seeMoreOrLess',
             'click .js_edit-definition': 'editDefinition'
@@ -126,15 +129,18 @@ define(function (require) {
                 votable_widgets = [],
                 currentUser = Ctx.getCurrentUser(),
                 canEdit = currentUser.can(Permissions.EDIT_IDEA) || false,
-                canEditNextSynthesis = currentUser.can(Permissions.EDIT_SYNTHESIS);
+                canEditNextSynthesis = currentUser.can(Permissions.EDIT_SYNTHESIS),
+                contributors = null;
 
             if (this.model) {
                 subIdeas = this.model.getChildren();
-                votable_widgets = this.model.getVotableOnWhichWidgets();
+                votable_widgets = this.model.getVotableOnWhichWidgets(),
+                    contributors = this.model.get('contributors');
             }
 
             return {
                 idea: this.model,
+                contributors: contributors,
                 subIdeas: subIdeas,
                 votable_widgets: votable_widgets,
                 canEdit: canEdit,
@@ -152,6 +158,15 @@ define(function (require) {
             }
         },
 
+        onBeforeRender: function () {
+            if (this.model) {
+                /**
+                 * We need more information about the initial model -> add contributors
+                 * */
+                this.model.fetch({ data: $.param({ view: 'contributors'}) });
+            }
+        },
+
         onRender: function () {
             Ctx.removeCurrentlyDisplayedTooltips(this.$el);
 
@@ -161,7 +176,6 @@ define(function (require) {
             Ctx.initClipboard();
 
             if (this.model) {
-
                 // display only important extract for simple user
                 if (!Ctx.userCanChangeUi()) {
                     this.extractList.models = _.filter(this.extractList.models, function (model) {
@@ -366,9 +380,6 @@ define(function (require) {
             }
         },
 
-        /**
-         * Delete the current idea
-         */
         deleteCurrentIdea: function () {
             // to be deleted, an idea cannot have any children nor segments
             var that = this,
@@ -567,9 +578,6 @@ define(function (require) {
             }
         },
 
-        /**
-         * renders the ckEditor if there is one editable field
-         */
         renderCKEditor: function () {
 
             var that = this,

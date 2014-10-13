@@ -33,24 +33,18 @@
     </fieldset>
 
     {# section contributor #}
-    {#<fieldset class="ideaPanel-section-contributors panel-section pvs">
+    <% if( _.size(contributors) ){ %>
+    <fieldset class="ideaPanel-section-contributors panel-section pvs">
       <span class="ideaPanel-contributors"><i class="icon-user"></i> {{ gettext('contributor') }}</span>
-      <div class="gr">
-         <div class="gu gu1of6 contributor">
-          <i class="icon-user"></i>
+      <div class="gr mts">
+         <% _.each(contributors, function(contributor, index, list){ %>
+         <div class="gu gu1of6 contributor mrxs">
+          <a class="img-left avatar img-rounded" href="#"><img src="<%= contributor.avatar_url_base %>30" width="30" height="30"></a>
          </div>
-         <div class="gu gu1of6 contributor">
-           <i class="icon-user"></i>
-         </div>
-         <div class="gu gu1of6 contributor">
-           <i class="icon-user"></i>
-         </div>
-         <div class="gu gu1of6 contributor">
-           <i class="icon-user"></i>
-         </div>
+         <% }) %>
       </div>
-    </fieldset>#}
-
+    </fieldset>
+    <% } %>
     {#
     <fieldset id="ideaPanel-section-subideas" class="panel-section">
         <legend data-toggle="tooltip" title="{{gettext('The children of this idea.')}}">
@@ -86,11 +80,11 @@
     <fieldset id="ideaPanel-section-actions" class="panel-section">
         <% if (canDelete) { %>
         <div class="fr">
-            <a id="ideaPanel-deleteButton" class="btn btn-default btn-sm" data-toggle="tooltip" title="{{gettext('Delete this idea completely')}}">{{ gettext('Delete idea') }}</a>
+            <a class="btn btn-default btn-sm js_ideaPanel-deleteBtn" data-toggle="tooltip" title="{{gettext('Delete this idea completely')}}">{{ gettext('Delete idea') }}</a>
         </div>
         <% }
         if (canEditExtracts) { %>
-        <a id="ideaPanel-clearbutton" class="btn btn-default btn-sm" data-toggle="tooltip" title="{{gettext('Remove all extracts from this idea.  Removed extracts will be available in your clipboard')}}">{{ gettext('Remove all extracts') }}</a>
+        <a class="btn btn-default btn-sm js_ideaPanel-clearBtn" data-toggle="tooltip" title="{{gettext('Remove all extracts from this idea.  Removed extracts will be available in your clipboard')}}">{{ gettext('Remove all extracts') }}</a>
         <% } %>
     </fieldset>
 

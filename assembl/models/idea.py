@@ -390,6 +390,8 @@ JOIN post AS family_posts ON (
             indirect_authors = [x for (x,) in indirect_authors
                                 if x not in author_ids]
             author_ids.extend(indirect_authors)
+        if not author_ids:
+          return []
         if id_only:
             return [AgentProfile.uri_generic(id) for id in author_ids]
         else:
