@@ -66,8 +66,7 @@
   color: $white;
   font-weight: 300;
   border: 1px solid transparent;
-  padding: 9px 0px 9px 6px;
-  height: 95px;
+  padding: 0px 0px 9px 6px;
   overflow-y: hidden;
   &:hover {
     @include box-shadow(rgba(0, 0, 0, 0.1) 0px 1px 1px inset);

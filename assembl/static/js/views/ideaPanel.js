@@ -162,13 +162,6 @@ define(function (require) {
 
             if (this.model) {
 
-                var that = this,
-                    extracts = [],
-                    currentUser = Ctx.getCurrentUser(),
-                    canEdit = currentUser.can(Permissions.EDIT_IDEA) || false,
-                    canEditNextSynthesis = currentUser.can(Permissions.EDIT_SYNTHESIS),
-                    collectionManager = new CollectionManager();
-
                 // display only important extract for simple user
                 if (!Ctx.userCanChangeUi()) {
                     this.extractList.models = _.filter(this.extractList.models, function (model) {
@@ -176,72 +169,90 @@ define(function (require) {
                     });
                 }
 
-                if (this.extractList) {
-                    $.when(
-                        collectionManager.getAllExtractsCollectionPromise(),
-                        collectionManager.getAllUsersCollectionPromise(),
-                        collectionManager.getAllMessageStructureCollectionPromise()
-                    ).then(
-                        function (allExtractsCollection, allUsersCollection, allMessagesCollection) {
-                            that.extractListView = new SegmentList.SegmentListView({
-                                collection: that.extractList,
-                                allUsersCollection: allUsersCollection,
-                                allMessagesCollection: allMessagesCollection
-                            });
-                            that.segmentList.show(that.extractListView);
-                            that.renderTemplateGetExtractsLabel();
-                        });
-                } else {
-                    this.renderTemplateGetExtractsLabel();
-                }
+                this.getExtractslist();
 
-                var shortTitleField = new EditableField({
-                    'model': this.model,
-                    'modelProp': 'shortTitle',
-                    'class': 'panel-editablearea text-bold',
-                    'data-tooltip': i18n.gettext('Short expression (only a few words) of the idea in the table of ideas.'),
-                    'placeholder': i18n.gettext('New idea'),
-                    'canEdit': canEdit
-                });
-                shortTitleField.renderTo(this.$('#ideaPanel-shorttitle'));
+                this.displayEditableFields();
 
-                this.longTitleField = new CKEditorField({
-                    'model': this.model,
-                    'modelProp': 'longTitle',
-                    'placeholder': this.model.getLongTitleDisplayText(),
-                    'canEdit': canEditNextSynthesis,
-                    'showPlaceholderOnEditIfEmpty': true
-                });
-                this.longTitleField.renderTo(this.$('#ideaPanel-longtitle'));
-
-                /*var definitionText = this.model.getDefinitionDisplayText();
-                 if ( definitionText.length > 0 ){
-                 this.definitionField = new CKEditorField({
-                 'model': this.model,
-                        'modelProp': 'definition',
-                        //'placeholder': this.model.getDefinitionDisplayText(),
-                        'canEdit': canEdit,
-                        //'showPlaceholderOnEditIfEmpty': true
-                    });
-                    this.definitionField.renderTo(this.$('#ideaPanel-definition'));
-                 }*/
-
-                this.commentView = new MessageSendView({
-                    'allow_setting_subject': false,
-                    'reply_idea': this.model,
-                    'body_help_message': i18n.gettext('Comment on this idea here...'),
-                    'send_button_label': i18n.gettext('Send your comment'),
-                    'subject_label': null,
-                    'mandatory_body_missing_msg': i18n.gettext('You need to type a comment first...'),
-                    'mandatory_subject_missing_msg': null
-                });
-                this.$('#ideaPanel-comment').append(this.commentView.render().el);
-
-
-                if (that.editing) {
-                    that.renderCKEditor();
-                }
+                this.defaultRenderIdeaDefinition();
             }
+
+        },
+
+        defaultRenderIdeaDefinition: function () {
+            var def = this.model.get('definition').length;
+
+            if (this.editing) {
+                this.renderCKEditor();
+            }
+
+            if (def < 400) {
+                this.$('.ideaPanel-seeMore').hide();
+            } else {
+                this.$('.ideaPanel-definition').css('height', 95);
+                this.$('.ideaPanel-seeMore').show();
+            }
+        },
+
+        getExtractslist: function () {
+            var that = this,
+                collectionManager = new CollectionManager();
+
+            if (this.extractList) {
+                $.when(
+                    collectionManager.getAllExtractsCollectionPromise(),
+                    collectionManager.getAllUsersCollectionPromise(),
+                    collectionManager.getAllMessageStructureCollectionPromise()
+                ).then(
+                    function (allExtractsCollection, allUsersCollection, allMessagesCollection) {
+                        that.extractListView = new SegmentList.SegmentListView({
+                            collection: that.extractList,
+                            allUsersCollection: allUsersCollection,
+                            allMessagesCollection: allMessagesCollection
+                        });
+                        that.segmentList.show(that.extractListView);
+                        that.renderTemplateGetExtractsLabel();
+                    });
+            } else {
+                this.renderTemplateGetExtractsLabel();
+            }
+        },
+
+        displayEditableFields: function () {
+
+            var currentUser = Ctx.getCurrentUser(),
+                canEdit = currentUser.can(Permissions.EDIT_IDEA) || false,
+                canEditNextSynthesis = currentUser.can(Permissions.EDIT_SYNTHESIS);
+
+            var shortTitleField = new EditableField({
+                'model': this.model,
+                'modelProp': 'shortTitle',
+                'class': 'panel-editablearea text-bold',
+                'data-tooltip': i18n.gettext('Short expression (only a few words) of the idea in the table of ideas.'),
+                'placeholder': i18n.gettext('New idea'),
+                'canEdit': canEdit
+            });
+            shortTitleField.renderTo(this.$('#ideaPanel-shorttitle'));
+
+            this.longTitleField = new CKEditorField({
+                'model': this.model,
+                'modelProp': 'longTitle',
+                'placeholder': this.model.getLongTitleDisplayText(),
+                'canEdit': canEditNextSynthesis,
+                'showPlaceholderOnEditIfEmpty': true
+            });
+            this.longTitleField.renderTo(this.$('#ideaPanel-longtitle'));
+
+            this.commentView = new MessageSendView({
+                'allow_setting_subject': false,
+                'reply_idea': this.model,
+                'body_help_message': i18n.gettext('Comment on this idea here...'),
+                'send_button_label': i18n.gettext('Send your comment'),
+                'subject_label': null,
+                'mandatory_body_missing_msg': i18n.gettext('You need to type a comment first...'),
+                'mandatory_subject_missing_msg': null
+            });
+            this.$('#ideaPanel-comment').append(this.commentView.render().el);
+
         },
 
         /**
@@ -395,7 +406,6 @@ define(function (require) {
                 });
         },
 
-
         createWidgetSession: function () {
 
             if (this.model) {
@@ -433,9 +443,6 @@ define(function (require) {
 
         },
 
-        /**
-         * @event
-         */
         onDragStart: function (ev) {
             var that = this,
                 collectionManager = new CollectionManager();
@@ -455,17 +462,11 @@ define(function (require) {
 
         },
 
-        /**
-         * @event
-         */
         onDragEnd: function (ev) {
             ev.currentTarget.style.opacity = '';
             Ctx.draggedSegment = null;
         },
 
-        /**
-         * @event
-         */
         onDragOver: function (ev) {
             console.log("ideaPanel:onDragOver() fired");
             ev.preventDefault();
@@ -474,17 +475,11 @@ define(function (require) {
             }
         },
 
-        /**
-         * @event
-         */
         onDragLeave: function () {
             //console.log("ideaPanel:onDragLeave() fired");
             this.panel.removeClass('is-dragover');
         },
 
-        /**
-         * @event
-         */
         onDrop: function (ev) {
             //console.log("ideaPanel:onDrop() fired");
             if (ev) {
@@ -509,9 +504,6 @@ define(function (require) {
 
         },
 
-        /**
-         * @event
-         */
         onSegmentCloseButtonClick: function (ev) {
             var that = this,
                 cid = ev.currentTarget.getAttribute('data-segmentid'),
@@ -526,9 +518,6 @@ define(function (require) {
                 });
         },
 
-        /**
-         * @event
-         */
         onClearAllClick: function (ev) {
             var ok = confirm(i18n.gettext('Confirm that you want to send all extracts back to the clipboard.'));
             if (ok) {
@@ -536,16 +525,10 @@ define(function (require) {
             }
         },
 
-        /**
-         * @event
-         */
         onDeleteButtonClick: function () {
             this.deleteCurrentIdea();
         },
 
-        /**
-         * @event
-         */
         onSegmentLinkClick: function (ev) {
             var cid = ev.currentTarget.getAttribute('data-segmentid'),
                 collectionManager = new CollectionManager();
@@ -593,6 +576,7 @@ define(function (require) {
                 area = this.$('.ideaPanel-definition-editor');
 
             var definitionText = this.model.getDefinitionDisplayText();
+
             if (definitionText.length > 0) {
 
                 this.ckeditor = new CKEditorField({
