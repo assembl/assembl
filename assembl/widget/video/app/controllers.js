@@ -145,6 +145,15 @@ videosApp.controller('videosCtl',
                     });
                 });
 
+                
+
+                $('#search input.select2-input').on('keyup', function(e) {
+                    if(e.keyCode === 13) // press Enter
+                    {
+                        $scope.search();
+                    }
+                });
+
 
                 // activate the right tab
 
