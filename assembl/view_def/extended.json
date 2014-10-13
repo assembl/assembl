@@ -138,7 +138,7 @@
         "numChildIdea": "&get_num_children",
         "num_posts": true,
         "num_read_posts": true,
-        "contributors": "&get_contributors",
+        "contributors": "&get_contributors:default",
         "notifications": "&get_notifications",
         "widget_add_post_endpoint": true
     },

@@ -348,9 +348,9 @@ JOIN post AS family_posts ON (
         }
 
     def get_contributors(self):
-        return self._get_contributors()
+        return self._get_contributors(True, False)
 
-    def _get_contributors(self, indirect=True):
+    def _get_contributors(self, indirect=True, id_only=True):
         from .post import Post
         from .auth import AgentProfile
         from .idea_content_link import Extract
@@ -390,7 +390,11 @@ JOIN post AS family_posts ON (
             indirect_authors = [x for (x,) in indirect_authors
                                 if x not in author_ids]
             author_ids.extend(indirect_authors)
-        return [AgentProfile.uri_generic(id) for id in author_ids]
+        if id_only:
+            return [AgentProfile.uri_generic(id) for id in author_ids]
+        else:
+            return AgentProfile.db.query(AgentProfile).filter(
+                AgentProfile.id.in_(author_ids)).all()
 
     def get_discussion_id(self):
         return self.discussion_id
