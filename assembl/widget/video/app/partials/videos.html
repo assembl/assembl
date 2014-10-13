@@ -56,7 +56,7 @@
         </form>
 
         <div class="video" data-ng-repeat="video in results"
-             data-ng-click="scrollToPlayerAndLaunch(video.id, video.title)">
+             data-ng-click="scrollToPlayerAndLaunch(video.id, video.title)" data-ng-class="{selected: video.id == currentVideoId}">
             <img class="video-image" data-ng-src="{{ video.thumbnail }}">
 
             <p class="video-title">{{ video.title }}</p>

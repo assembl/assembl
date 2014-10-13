@@ -116,7 +116,10 @@
     line-height: 1.5;
     margin: 2px 0 2px;
   }
-  .video:hover {
+  .video.selected {
+    background: #ccc;
+  }
+  .video:hover, .video.selected:hover {
     background: #22242a;
     color: white;
   }
