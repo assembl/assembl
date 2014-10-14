@@ -531,7 +531,8 @@ JOIN post AS family_posts ON (
     @classmethod
     def extra_collections(cls):
         from .votes import AbstractIdeaVote
-        from .widgets import VotedIdeaWidgetLink
+        from .widgets import (
+            Widget, IdeaWidgetLink, VotedIdeaWidgetLink, InspirationWidget)
         from .idea_content_link import (
             IdeaRelatedPostLink, IdeaContentWidgetLink)
         from .generic import Content
@@ -562,6 +563,51 @@ JOIN post AS family_posts ON (
                     IdeaLink).filter_by(
                     source=parent_instance, target=instance
                     ).count() > 0
+
+        class AncestorWidgetsCollectionDefinition(AbstractCollectionDefinition):
+            # For widgets which represent general configuration.
+            ancestry = text("""SELECT id from (SELECT source_id as id FROM (
+                        SELECT transitive t_in (1) t_out (2) T_DISTINCT T_NO_CYCLES
+                            source_id, target_id FROM idea_idea_link WHERE is_tombstone=0
+                        ) il
+                    WHERE il.target_id = :idea_id
+                    UNION SELECT :idea_id as id) recid""").columns(column('id'))
+
+            def __init__(self, cls, widget_subclass=None):
+                super(AncestorWidgetsCollectionDefinition, self).__init__(cls, Widget)
+                self.widget_subclass = widget_subclass
+
+            def decorate_query(self, query, last_alias, parent_instance, ctx):
+                parent = self.owner_alias
+                widgets = last_alias
+                ancestry = self.ancestry.bindparams(
+                    idea_id=parent_instance.id).alias('ancestry')
+                # ideally, we should be able to bind to parent.id
+                ancestors = aliased(Idea)
+                iwlink = aliased(IdeaWidgetLink)
+                query = query.join(iwlink).join(ancestors).filter(
+                    ancestors.id.in_(ancestry)).join(
+                    parent, parent.id == parent_instance.id)
+                if self.widget_subclass is not None:
+                    query = query.filter(iwlink.widget.of_type(self.widget_subclass))
+                return query
+
+            def decorate_instance(
+                    self, instance, parent_instance, assocs, user_id,
+                    ctx, kwargs):
+                pass
+
+            def contains(self, parent_instance, instance):
+                ancestors = aliased(Idea)
+                iwlink = aliased(IdeaWidgetLink)
+                ancestry = self.ancestry.bindparams(
+                    idea_id=parent_instance.id).alias('ancestry')
+                query = Widget.db.query(Widget).join(iwlink).join(
+                    ancestors).filter(ancestors.id.in_(ancestry)).filter(
+                    Widget.id == instance.id)
+                if self.widget_subclass is not None:
+                    query = query.filter(iwlink.widget.of_type(self.widget_subclass))
+                return query.count() > 0
 
         class LinkedPostCollectionDefinition(AbstractCollectionDefinition):
             def __init__(self, cls):
@@ -668,6 +714,9 @@ JOIN post AS family_posts ON (
         return {'children': ChildIdeaCollectionDefinition(cls),
                 'linkedposts': LinkedPostCollectionDefinition(cls),
                 'widgetposts': WidgetPostCollectionDefinition(cls),
+                'ancestor_widgets': AncestorWidgetsCollectionDefinition(cls),
+                'ancestor_inspiration_widgets': AncestorWidgetsCollectionDefinition(
+                    cls, InspirationWidget),
                 'vote_targets': VoteTargetsCollection(cls)}
 
     crud_permissions = CrudPermissions(
