@@ -130,13 +130,13 @@ define(function (require) {
         // This method needs the DOM elements of the View to be rendered. So it should not be called in onRender(), but rather in onShow() or onDomRefresh()
         initVar: function () {
             // check wether DOM elements are already rendered
-            var that = this;
 
             var _header = $('#header').height(),
                 _window = $(window).height(),
                 _li = 40 * 3,
                 _headerGroup = $(".groupHeader").first().height() ? $(".groupHeader").first().height() : ( $(".groupHeader").first().hasClass('editable') ? 25 : 3 ),
-                _sideBarHeight = (_window - _header) - _headerGroup;
+                _sideBarHeight = (_window - _header) - _headerGroup,
+                that = this;
 
             if (this.$el && this.$el.parent() && this.$el.parent().height()) {
 
