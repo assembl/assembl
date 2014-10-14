@@ -79,7 +79,7 @@ widgetServices.service('JukeTubeVideosService', ['$window', '$rootScope', '$log'
 
     var results = [];
     var upcoming = [
-        {id: 'Pjzr1zI830c', title: 'Imagination for People (English)'}
+        //{id: 'Pjzr1zI830c', title: 'Imagination for People (English)'}
     ];
     var pageInfo = {
         //currentPage: 1,
